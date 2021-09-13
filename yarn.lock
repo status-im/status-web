@@ -609,6 +609,14 @@ resolve@^1.10.0:
   languageName: node
   linkType: hard
 
+"status-communities@workspace:packages/status-communities":
+  version: 0.0.0-use.local
+  resolution: "status-communities@workspace:packages/status-communities"
+  dependencies:
+    typescript: ^4.4.3
+  languageName: unknown
+  linkType: soft
+
 "string.prototype.padend@npm:^3.0.0":
   version: 3.1.2
   resolution: "string.prototype.padend@npm:3.1.2"
@@ -653,6 +661,26 @@ resolve@^1.10.0:
   dependencies:
     has-flag: ^3.0.0
   checksum: 95f6f4ba5afdf92f495b5a912d4abee8dcba766ae719b975c56c084f5004845f6f5a5f7769f52d53f40e21952a6d87411bafe34af4a01e65f9926002e38e1dac
+  languageName: node
+  linkType: hard
+
+typescript@^4.4.3:
+  version: 4.4.3
+  resolution: "typescript@npm:4.4.3"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 05823f21796d450531a7e4ab299715d38fd9ded0e4ce7400876053f4b5166ca3dde7a68cecfe72d9086039f03c0b6edba36516fb10ed83c5837d9600532ea4c2
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>":
+  version: 4.4.3
+  resolution: "typescript@patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=d8b4e7"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 215a59742afb7e0c3668e2c50ca19813deb24b3cc0d16ac3591990e033728050aaa99e159a72b54cb43653f16c778a5cf9dfeed1f51c3b105710ae082c064af7
   languageName: node
   linkType: hard
 

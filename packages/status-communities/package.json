@@ -1,0 +1,7 @@
+{
+  "name": "status-communities",
+  "packageManager": "yarn@3.0.1",
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}
