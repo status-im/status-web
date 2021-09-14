@@ -3,11 +3,11 @@
   "packageManager": "yarn@3.0.1",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "fix": "run-s fix:*",
-    "fix:prettier": "prettier \"src/**/*.ts\" \"./*.json\" \"*.conf.js\" --write",
+    "fix": "run-s 'fix:*'",
+    "fix:prettier": "prettier \"src/**/*.ts\" \"./*.json\" --write",
     "fix:lint": "eslint src --ext .ts --fix",
     "test:lint": "eslint src --ext .ts",
-    "test:prettier": "prettier \"src/**/*.ts\" \"./*.json\" \"*.conf.js\" --list-different",
+    "test:prettier": "prettier \"src/**/*.ts\" \"./*.json\" --list-different",
     "test:spelling": "cspell \"{README.md,.github/*.md,guides/*.md,src/**/*.ts}\"",
     "test:unit": "nyc --silent mocha",
     "proto": "run-s 'proto:*'",
@@ -15,7 +15,16 @@
     "proto:build": "buf generate"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-functional": "^3.7.0",
+    "eslint-plugin-import": "^2.24.2",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.4.0",
     "ts-proto": "^1.83.0",
     "typescript": "^4.4.3"
   },

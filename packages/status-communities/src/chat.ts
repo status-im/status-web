@@ -1,42 +1,40 @@
-import {ChatMessage} from "./chat_message";
-
+import { ChatMessage } from "./chat_message";
 
 export class Chat {
-    private lastClockValue?: number;
-    private lastMessage?: ChatMessage;
-    public id: string;
+  private lastClockValue?: number;
+  private lastMessage?: ChatMessage;
+  public id: string;
 
-    constructor(id: string) {
-        this.id = id
+  constructor(id: string) {
+    this.id = id;
+  }
+
+  public createMessage(text: string) {
+    const { timestamp, clock } = this.nextClockAndTimestamp();
+
+    return ChatMessage.createMessage(clock, timestamp, text, this.id);
+  }
+
+  private nextClockAndTimestamp() {
+    let clock = this.lastClockValue;
+    const timestamp = Date.now();
+
+    if (!clock || clock < timestamp) {
+      clock = timestamp;
+    } else {
+      clock += 1;
     }
 
-    public createMessage(text: string) {
+    return { clock, timestamp };
+  }
 
-        const {timestamp, clock} = this.nextClockAndTimestamp();
-
-        return ChatMessage.createMessage(clock, timestamp, text, this.id)
+  private updateFromMessage(message: ChatMessage) {
+    if (!this.lastMessage || this.lastMessage.clock <= message.clock) {
+      this.lastMessage = message;
     }
 
-    private nextClockAndTimestamp() {
-        let clock = this.lastClockValue;
-        const timestamp = Date.now();
-
-        if (!clock || clock < timestamp) {
-            clock = timestamp
-        } else {
-            clock += 1;
-        }
-
-        return {clock, timestamp}
+    if (this.lastClockValue < message.clock) {
+      this.lastClockValue = message.clock;
     }
-
-    private updateFromMessage(message: ChatMessage) {
-        if (!this.lastMessage || this.lastMessage.clock <= message.clock {
-            this.lastMessage = message
-        }
-
-        if (this.lastClockValue < message.clock) {
-            this.lastClockValue = message.clock
-        }
-    }
+  }
 }

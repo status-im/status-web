@@ -1,5 +1,1 @@
-
-
-export class Community {
-
-}
+export class Community {}
