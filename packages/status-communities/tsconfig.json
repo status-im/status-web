@@ -37,10 +37,10 @@
     // Due to broken types in indirect dependencies
     "skipLibCheck": true,
 
-    "lib": ["es2017", "dom"],
+    "lib": ["es6", "dom"],
     "typeRoots": ["./node_modules/@types", "./src/types", "../../node_modules/@types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src"],
   "exclude": ["node_modules/**"],
   "types": ["mocha"],
   "compileOnSave": false
