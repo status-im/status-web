@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package communities.v2;
+
+enum MessageType {
+  MESSAGE_TYPE_UNKNOWN_UNSPECIFIED = 0;
+  MESSAGE_TYPE_ONE_TO_ONE = 1;
+  MESSAGE_TYPE_MESSAGE_TYPE_PUBLIC_GROUP = 2;
+  MESSAGE_TYPE_PRIVATE_GROUP = 3;
+  // Only local
+  MESSAGE_TYPE_SYSTEM_MESSAGE_PRIVATE_GROUP = 4;
+  MESSAGE_TYPE_COMMUNITY_CHAT = 5;
+  // Only local
+  MESSAGE_TYPE_SYSTEM_MESSAGE_GAP = 6;
+}
+
+enum ImageType {
+  IMAGE_TYPE_UNKNOWN_UNSPECIFIED = 0;
+
+  // Raster image files is payload data that can be read as a raster image
+  IMAGE_TYPE_PNG = 1;
+  IMAGE_TYPE_JPEG = 2;
+  IMAGE_TYPE_WEBP = 3;
+  IMAGE_TYPE_GIF = 4;
+}

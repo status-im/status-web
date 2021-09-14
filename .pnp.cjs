@@ -46,6 +46,134 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
+      ["@protobufjs/aspromise", [
+        ["npm:1.1.2", {
+          "packageLocation": "./.yarn/cache/@protobufjs-aspromise-npm-1.1.2-71d00b938f-011fe7ef08.zip/node_modules/@protobufjs/aspromise/",
+          "packageDependencies": [
+            ["@protobufjs/aspromise", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/base64", [
+        ["npm:1.1.2", {
+          "packageLocation": "./.yarn/cache/@protobufjs-base64-npm-1.1.2-cd8ca6814a-67173ac34d.zip/node_modules/@protobufjs/base64/",
+          "packageDependencies": [
+            ["@protobufjs/base64", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/codegen", [
+        ["npm:2.0.4", {
+          "packageLocation": "./.yarn/cache/@protobufjs-codegen-npm-2.0.4-36e188bbe6-59240c850b.zip/node_modules/@protobufjs/codegen/",
+          "packageDependencies": [
+            ["@protobufjs/codegen", "npm:2.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/eventemitter", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/@protobufjs-eventemitter-npm-1.1.0-029cc7d431-0369163a3d.zip/node_modules/@protobufjs/eventemitter/",
+          "packageDependencies": [
+            ["@protobufjs/eventemitter", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/fetch", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/@protobufjs-fetch-npm-1.1.0-ca857b7df4-3fce7e09eb.zip/node_modules/@protobufjs/fetch/",
+          "packageDependencies": [
+            ["@protobufjs/fetch", "npm:1.1.0"],
+            ["@protobufjs/aspromise", "npm:1.1.2"],
+            ["@protobufjs/inquire", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/float", [
+        ["npm:1.0.2", {
+          "packageLocation": "./.yarn/cache/@protobufjs-float-npm-1.0.2-5678f64d08-5781e12412.zip/node_modules/@protobufjs/float/",
+          "packageDependencies": [
+            ["@protobufjs/float", "npm:1.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/inquire", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/@protobufjs-inquire-npm-1.1.0-3c7759e9ce-ca06f02eaf.zip/node_modules/@protobufjs/inquire/",
+          "packageDependencies": [
+            ["@protobufjs/inquire", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/path", [
+        ["npm:1.1.2", {
+          "packageLocation": "./.yarn/cache/@protobufjs-path-npm-1.1.2-641d08de76-856eeb532b.zip/node_modules/@protobufjs/path/",
+          "packageDependencies": [
+            ["@protobufjs/path", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/pool", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/@protobufjs-pool-npm-1.1.0-47a76f96a1-d6a34fbbd2.zip/node_modules/@protobufjs/pool/",
+          "packageDependencies": [
+            ["@protobufjs/pool", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@protobufjs/utf8", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/@protobufjs-utf8-npm-1.1.0-02c590807c-f9bf3163d1.zip/node_modules/@protobufjs/utf8/",
+          "packageDependencies": [
+            ["@protobufjs/utf8", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/long", [
+        ["npm:4.0.1", {
+          "packageLocation": "./.yarn/cache/@types-long-npm-4.0.1-022c8b6e77-ff9653c33f.zip/node_modules/@types/long/",
+          "packageDependencies": [
+            ["@types/long", "npm:4.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/node", [
+        ["npm:16.9.1", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.9.1-bde6d3b0c9-41afcf183a.zip/node_modules/@types/node/",
+          "packageDependencies": [
+            ["@types/node", "npm:16.9.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/object-hash", [
+        ["npm:1.3.4", {
+          "packageLocation": "./.yarn/cache/@types-object-hash-npm-1.3.4-3b3e2e44e8-fe4aa04142.zip/node_modules/@types/object-hash/",
+          "packageDependencies": [
+            ["@types/object-hash", "npm:1.3.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/prettier", [
+        ["npm:1.19.1", {
+          "packageLocation": "./.yarn/cache/@types-prettier-npm-1.19.1-396f22bcd2-d34229c37d.zip/node_modules/@types/prettier/",
+          "packageDependencies": [
+            ["@types/prettier", "npm:1.19.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["ansi-styles", [
         ["npm:3.2.1", {
           "packageLocation": "./.yarn/cache/ansi-styles-npm-3.2.1-8cb8107983-d85ade01c1.zip/node_modules/ansi-styles/",
@@ -150,6 +278,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["prettier", "npm:2.3.2"]
           ],
           "linkType": "SOFT",
+        }]
+      ]],
+      ["dataloader", [
+        ["npm:1.4.0", {
+          "packageLocation": "./.yarn/cache/dataloader-npm-1.4.0-ba03bd2183-e2c93d43af.zip/node_modules/dataloader/",
+          "packageDependencies": [
+            ["dataloader", "npm:1.4.0"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["define-properties", [
@@ -457,6 +594,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["lodash", [
+        ["npm:4.17.21", {
+          "packageLocation": "./.yarn/cache/lodash-npm-4.17.21-6382451519-eb835a2e51.zip/node_modules/lodash/",
+          "packageDependencies": [
+            ["lodash", "npm:4.17.21"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["long", [
+        ["npm:4.0.0", {
+          "packageLocation": "./.yarn/cache/long-npm-4.0.0-ecd96a31ed-16afbe8f74.zip/node_modules/long/",
+          "packageDependencies": [
+            ["long", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["memorystream", [
         ["npm:0.3.1", {
           "packageLocation": "./.yarn/cache/memorystream-npm-0.3.1-ae973f1d16-f18b42440d.zip/node_modules/memorystream/",
@@ -512,6 +667,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["read-pkg", "npm:3.0.0"],
             ["shell-quote", "npm:1.7.2"],
             ["string.prototype.padend", "npm:3.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["object-hash", [
+        ["npm:1.3.1", {
+          "packageLocation": "./.yarn/cache/object-hash-npm-1.3.1-ea495b8e52-fdcb957a2f.zip/node_modules/object-hash/",
+          "packageDependencies": [
+            ["object-hash", "npm:1.3.1"]
           ],
           "linkType": "HARD",
         }]
@@ -609,6 +773,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/prettier-npm-2.3.2-4467ec48dc-17ce5784ac.zip/node_modules/prettier/",
           "packageDependencies": [
             ["prettier", "npm:2.3.2"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.4.0", {
+          "packageLocation": "./.yarn/cache/prettier-npm-2.4.0-9f056d9529-ac1bf07566.zip/node_modules/prettier/",
+          "packageDependencies": [
+            ["prettier", "npm:2.4.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["protobufjs", [
+        ["npm:6.11.2", {
+          "packageLocation": "./.yarn/unplugged/protobufjs-npm-6.11.2-9b422ce98e/node_modules/protobufjs/",
+          "packageDependencies": [
+            ["protobufjs", "npm:6.11.2"],
+            ["@protobufjs/aspromise", "npm:1.1.2"],
+            ["@protobufjs/base64", "npm:1.1.2"],
+            ["@protobufjs/codegen", "npm:2.0.4"],
+            ["@protobufjs/eventemitter", "npm:1.1.0"],
+            ["@protobufjs/fetch", "npm:1.1.0"],
+            ["@protobufjs/float", "npm:1.0.2"],
+            ["@protobufjs/inquire", "npm:1.1.0"],
+            ["@protobufjs/path", "npm:1.1.2"],
+            ["@protobufjs/pool", "npm:1.1.0"],
+            ["@protobufjs/utf8", "npm:1.1.0"],
+            ["@types/long", "npm:4.0.1"],
+            ["@types/node", "npm:16.9.1"],
+            ["long", "npm:4.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -730,6 +923,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/status-communities/",
           "packageDependencies": [
             ["status-communities", "workspace:packages/status-communities"],
+            ["npm-run-all", "npm:4.1.5"],
+            ["protobufjs", "npm:6.11.2"],
+            ["ts-proto", "npm:1.83.0"],
             ["typescript", "patch:typescript@npm%3A4.4.3#~builtin<compat/typescript>::version=4.4.3&hash=d8b4e7"]
           ],
           "linkType": "SOFT",
@@ -784,6 +980,44 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["supports-color", "npm:5.5.0"],
             ["has-flag", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ts-poet", [
+        ["npm:4.5.0", {
+          "packageLocation": "./.yarn/unplugged/ts-poet-npm-4.5.0-5771bc00e9/node_modules/ts-poet/",
+          "packageDependencies": [
+            ["ts-poet", "npm:4.5.0"],
+            ["@types/prettier", "npm:1.19.1"],
+            ["lodash", "npm:4.17.21"],
+            ["prettier", "npm:2.4.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ts-proto", [
+        ["npm:1.83.0", {
+          "packageLocation": "./.yarn/cache/ts-proto-npm-1.83.0-06a74570ad-57797769b3.zip/node_modules/ts-proto/",
+          "packageDependencies": [
+            ["ts-proto", "npm:1.83.0"],
+            ["@types/object-hash", "npm:1.3.4"],
+            ["dataloader", "npm:1.4.0"],
+            ["object-hash", "npm:1.3.1"],
+            ["protobufjs", "npm:6.11.2"],
+            ["ts-poet", "npm:4.5.0"],
+            ["ts-proto-descriptors", "npm:1.3.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["ts-proto-descriptors", [
+        ["npm:1.3.1", {
+          "packageLocation": "./.yarn/cache/ts-proto-descriptors-npm-1.3.1-9f5c70fd7f-ef8acf9231.zip/node_modules/ts-proto-descriptors/",
+          "packageDependencies": [
+            ["ts-proto-descriptors", "npm:1.3.1"],
+            ["long", "npm:4.0.0"],
+            ["protobufjs", "npm:6.11.2"]
           ],
           "linkType": "HARD",
         }]
