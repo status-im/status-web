@@ -1,10 +1,5 @@
 import * as proto from "./proto/communities/v2/chat_message";
-import {
-  AudioMessage,
-  ChatMessage_ContentType,
-  ImageMessage,
-  StickerMessage,
-} from "./proto/communities/v2/chat_message";
+import { ChatMessage_ContentType } from "./proto/communities/v2/chat_message";
 import { MessageType } from "./proto/communities/v2/enums";
 
 export class ChatMessage {

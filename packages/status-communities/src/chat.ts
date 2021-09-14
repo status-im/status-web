@@ -9,7 +9,7 @@ export class Chat {
     this.id = id;
   }
 
-  public createMessage(text: string) {
+  private createMessage(text: string) {
     const { timestamp, clock } = this.nextClockAndTimestamp();
 
     return ChatMessage.createMessage(clock, timestamp, text, this.id);
@@ -33,7 +33,7 @@ export class Chat {
       this.lastMessage = message;
     }
 
-    if (this.lastClockValue < message.clock) {
+    if (!this.lastClockValue || this.lastClockValue < message.clock) {
       this.lastClockValue = message.clock;
     }
   }
