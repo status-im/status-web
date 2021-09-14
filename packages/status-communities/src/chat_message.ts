@@ -1,3 +1,5 @@
+import { Reader } from "protobufjs";
+
 import * as proto from "./proto/communities/v2/chat_message";
 import { ChatMessage_ContentType } from "./proto/communities/v2/chat_message";
 import { MessageType } from "./proto/communities/v2/enums";
@@ -36,6 +38,12 @@ export class ChatMessage {
     };
 
     return new ChatMessage(proto);
+  }
+
+  static decode(bytes: Uint8Array): ChatMessage {
+    const protoBuf = proto.ChatMessage.decode(Reader.create(bytes));
+
+    return new ChatMessage(protoBuf);
   }
 
   public get clock() {

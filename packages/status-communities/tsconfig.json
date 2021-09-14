@@ -38,9 +38,10 @@
     "skipLibCheck": true,
 
     "lib": ["es2017", "dom"],
-    "typeRoots": ["node_modules/@types", "src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types", "../../node_modules/@types"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules/**"],
+  "types": ["mocha"],
   "compileOnSave": false
 }

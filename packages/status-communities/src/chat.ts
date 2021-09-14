@@ -1,4 +1,5 @@
 import { ChatMessage } from "./chat_message";
+import { chatIdToContentTopic } from "./contentTopic";
 
 export class Chat {
   private lastClockValue?: number;
@@ -9,13 +10,23 @@ export class Chat {
     this.id = id;
   }
 
-  private createMessage(text: string) {
+  public get contentTopic(): string {
+    return chatIdToContentTopic(this.id);
+  }
+
+  private createMessage(text: string): ChatMessage {
     const { timestamp, clock } = this.nextClockAndTimestamp();
 
     return ChatMessage.createMessage(clock, timestamp, text, this.id);
   }
 
-  private nextClockAndTimestamp() {
+  public handleNewMessage(message: ChatMessage) {
+    this.updateFromMessage(message);
+
+    // TODO: emit message
+  }
+
+  private nextClockAndTimestamp(): { clock: number; timestamp: number } {
     let clock = this.lastClockValue;
     const timestamp = Date.now();
 
@@ -28,7 +39,7 @@ export class Chat {
     return { clock, timestamp };
   }
 
-  private updateFromMessage(message: ChatMessage) {
+  private updateFromMessage(message: ChatMessage): void {
     if (!this.lastMessage || this.lastMessage.clock <= message.clock) {
       this.lastMessage = message;
     }
