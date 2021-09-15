@@ -1,4 +1,5 @@
-import waku, { Waku, WakuMessage } from "js-waku";
+import  { Waku, WakuMessage } from "js-waku";
+import {CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku";
 
 import { Chat } from "./chat";
 import { ChatMessage } from "./chat_message";
@@ -13,7 +14,7 @@ export class Messenger {
     this.chatsById = new Map();
   }
 
-  public static async create(wakuOptions?: waku.CreateOptions) {
+  public static async create(wakuOptions?: WakuCreateOptions) {
     const _wakuOptions = Object.assign({ bootstrap: true }, wakuOptions);
     const waku = await Waku.create(_wakuOptions);
     const messenger = new Messenger(waku);

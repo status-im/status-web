@@ -511,6 +511,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mocha@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "@types/mocha@npm:9.0.0"
+  checksum: 73e6edaba045bc250b69085a770d5029edfed006ed8e75344435474a2cb8d38064acd7b34b6cc62756caa845a5cf335bde66db11e8c8c6565c62a790e933704a
+  languageName: node
+  linkType: hard
+
 "@types/ms@npm:*":
   version: 0.7.31
   resolution: "@types/ms@npm:0.7.31"
@@ -5524,6 +5531,7 @@ fsevents@~2.3.2:
   version: 0.0.0-use.local
   resolution: "status-communities@workspace:packages/status-communities"
   dependencies:
+    "@types/mocha": ^9.0.0
     "@typescript-eslint/eslint-plugin": ^4.31.1
     "@typescript-eslint/parser": ^4.31.1
     buffer: ^6.0.3
