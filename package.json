@@ -1,6 +1,6 @@
 {
   "name": "dappconnect-sdks",
-  "packageManager": "yarn@3.0.1",
+  "packageManager": "yarn@3.0.2",
   "license": "MIT OR Apache-2.0",
   "scripts": {
     "fix": "run-s 'fix:*'",
