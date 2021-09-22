@@ -46,7 +46,15 @@ export class ChatMessage {
     return new ChatMessage(protoBuf);
   }
 
+  encode(): Uint8Array {
+    return proto.ChatMessage.encode(this.proto).finish();
+  }
+
   public get clock() {
     return this.proto.clock;
+  }
+
+  get text(): string | undefined {
+    return this.proto.text;
   }
 }

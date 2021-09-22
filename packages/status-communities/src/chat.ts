@@ -14,19 +14,21 @@ export class Chat {
     return chatIdToContentTopic(this.id);
   }
 
-  private createMessage(text: string): ChatMessage {
-    const { timestamp, clock } = this.nextClockAndTimestamp();
+  public createMessage(text: string): ChatMessage {
+    const { timestamp, clock } = this._nextClockAndTimestamp();
 
-    return ChatMessage.createMessage(clock, timestamp, text, this.id);
+    const message = ChatMessage.createMessage(clock, timestamp, text, this.id);
+
+    this._updateFromMessage(message);
+
+    return message;
   }
 
   public handleNewMessage(message: ChatMessage) {
-    this.updateFromMessage(message);
-
-    // TODO: emit message
+    this._updateFromMessage(message);
   }
 
-  private nextClockAndTimestamp(): { clock: number; timestamp: number } {
+  private _nextClockAndTimestamp(): { clock: number; timestamp: number } {
     let clock = this.lastClockValue;
     const timestamp = Date.now();
 
@@ -39,7 +41,7 @@ export class Chat {
     return { clock, timestamp };
   }
 
-  private updateFromMessage(message: ChatMessage): void {
+  private _updateFromMessage(message: ChatMessage): void {
     if (!this.lastMessage || this.lastMessage.clock <= message.clock) {
       this.lastMessage = message;
     }

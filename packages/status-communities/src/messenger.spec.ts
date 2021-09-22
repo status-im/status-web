@@ -1,7 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: No types available
-import TCP from "libp2p-tcp";
+import { expect } from "chai";
 
+import { ChatMessage } from "./chat_message";
 import { Messenger } from "./messenger";
 
 const testChatId = "test-chat-id";
@@ -38,9 +37,25 @@ describe("Messenger", () => {
     ]);
   });
 
-  it("Sends message in public chat", function () {
+  it("Sends & Receive message in public chat", async function () {
     messenger1.joinChat(testChatId);
     messenger2.joinChat(testChatId);
+
+    const text = "This is a message.";
+
+    const receivedMessagePromise: Promise<ChatMessage> = new Promise(
+      (resolve) => {
+        messenger2.addObserver((message) => {
+          resolve(message);
+        }, testChatId);
+      }
+    );
+
+    messenger1.sendMessage(text, testChatId);
+
+    const receivedMessage = await receivedMessagePromise;
+
+    expect(receivedMessage?.text).to.eq(text);
   });
 
   afterEach(async function () {

@@ -448,6 +448,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/chai@npm:^4.2.22":
+  version: 4.2.22
+  resolution: "@types/chai@npm:4.2.22"
+  checksum: dca66a263b25c26112c0a8c6df20316412fa54b557443a108836c07cee961aa56cc5b1763273f69eb450c83ca9f28069ff78b617bffc01806cdd83afc1c20c2a
+  languageName: node
+  linkType: hard
+
 "@types/debug@npm:^4.1.5":
   version: 4.1.7
   resolution: "@types/debug@npm:4.1.7"
@@ -5531,6 +5538,7 @@ fsevents@~2.3.2:
   version: 0.0.0-use.local
   resolution: "status-communities@workspace:packages/status-communities"
   dependencies:
+    "@types/chai": ^4.2.22
     "@types/mocha": ^9.0.0
     "@typescript-eslint/eslint-plugin": ^4.31.1
     "@typescript-eslint/parser": ^4.31.1
