@@ -10,6 +10,8 @@ describe("Messenger", () => {
   let messenger2: Messenger;
 
   beforeEach(async function () {
+    this.timeout(10_000);
+
     [messenger1, messenger2] = await Promise.all([
       Messenger.create(),
       Messenger.create({
@@ -38,6 +40,8 @@ describe("Messenger", () => {
   });
 
   it("Sends & Receive message in public chat", async function () {
+    this.timeout(10_000);
+
     messenger1.joinChat(testChatId);
     messenger2.joinChat(testChatId);
 
@@ -51,7 +55,7 @@ describe("Messenger", () => {
       }
     );
 
-    messenger1.sendMessage(text, testChatId);
+    await messenger1.sendMessage(text, testChatId);
 
     const receivedMessage = await receivedMessagePromise;
 
