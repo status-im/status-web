@@ -84,11 +84,10 @@ export class Messenger {
       this.identity
     );
 
-    // TODO: Add signature
     const wakuMessage = await WakuMessage.fromBytes(
       appMetadataMessage.encode(),
       chat.contentTopic,
-      { symKey: chat.symKey }
+      { symKey: chat.symKey, sigPrivKey: this.identity.privateKey }
     );
 
     await this.waku.relay.send(wakuMessage);
