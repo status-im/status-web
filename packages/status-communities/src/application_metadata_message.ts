@@ -1,4 +1,7 @@
+import { keccak256 } from "js-sha3";
+import { utils } from "js-waku";
 import { Reader } from "protobufjs";
+import secp256k1 from "secp256k1";
 
 import { ChatMessage } from "./chat_message";
 import { Identity } from "./identity";
@@ -57,5 +60,15 @@ export class ApplicationMetadataMessage {
     if (!this.payload) return;
 
     return ChatMessage.decode(this.payload);
+  }
+
+  public get signer(): Uint8Array | undefined {
+    if (!this.signature || !this.payload) return;
+
+    const signature = this.signature.slice(0, 64);
+    const recid = this.signature.slice(64)[0];
+    const hash = keccak256(this.payload);
+
+    return secp256k1.ecdsaRecover(signature, recid, utils.hexToBuf(hash));
   }
 }

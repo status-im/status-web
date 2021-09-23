@@ -26,4 +26,11 @@ export class Identity {
 
     return Buffer.concat([signature, Buffer.from([recid])]);
   }
+
+  /**
+   * Returns the compressed public key.
+   */
+  public get publicKey(): Uint8Array {
+    return secp256k1.publicKeyCreate(this.privateKey, true);
+  }
 }
