@@ -19,13 +19,13 @@ export class Chat {
 
     const message = ChatMessage.createMessage(clock, timestamp, text, this.id);
 
-    this._updateFromMessage(message);
+    this._updateClockFromMessage(message);
 
     return message;
   }
 
   public handleNewMessage(message: ChatMessage) {
-    this._updateFromMessage(message);
+    this._updateClockFromMessage(message);
   }
 
   private _nextClockAndTimestamp(): { clock: number; timestamp: number } {
@@ -41,7 +41,7 @@ export class Chat {
     return { clock, timestamp };
   }
 
-  private _updateFromMessage(message: ChatMessage): void {
+  private _updateClockFromMessage(message: ChatMessage): void {
     if (!this.lastMessage || this.lastMessage.clock <= message.clock) {
       this.lastMessage = message;
     }

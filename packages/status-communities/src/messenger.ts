@@ -1,26 +1,37 @@
+import debug from "debug";
 import { Waku, WakuMessage } from "js-waku";
 import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku";
 
+import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { Chat } from "./chat";
 import { ChatMessage } from "./chat_message";
+import { Identity } from "./identity";
+import { ApplicationMetadataMessage_Type } from "./proto/status/v1/application_metadata_message";
+
+const dbg = debug("communities:messenger");
 
 export class Messenger {
   waku: Waku;
   chatsById: Map<string, Chat>;
   observers: {
-    [chatId: string]: Set<(chatMessage: ChatMessage) => void>;
+    [chatId: string]: Set<(message: ApplicationMetadataMessage) => void>;
   };
+  identity: Identity;
 
-  private constructor(waku: Waku) {
+  private constructor(identity: Identity, waku: Waku) {
+    this.identity = identity;
     this.waku = waku;
     this.chatsById = new Map();
     this.observers = {};
   }
 
-  public static async create(wakuOptions?: WakuCreateOptions) {
+  public static async create(
+    identity: Identity,
+    wakuOptions?: WakuCreateOptions
+  ) {
     const _wakuOptions = Object.assign({ bootstrap: true }, wakuOptions);
     const waku = await Waku.create(_wakuOptions);
-    return new Messenger(waku);
+    return new Messenger(identity, waku);
   }
 
   /**
@@ -37,14 +48,14 @@ export class Messenger {
       (wakuMessage: WakuMessage) => {
         if (!wakuMessage.payload) return;
 
-        const chatMessage = ChatMessage.decode(wakuMessage.payload);
+        const message = ApplicationMetadataMessage.decode(wakuMessage.payload);
 
-        chat.handleNewMessage(chatMessage);
-
-        if (this.observers[chatId]) {
-          this.observers[chatId].forEach((observer) => {
-            observer(chatMessage);
-          });
+        switch (message.type) {
+          case ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE:
+            this._handleNewChatMessage(chat, message);
+            break;
+          default:
+            dbg("Received unsupported message type", message.type);
         }
       },
       [chat.contentTopic]
@@ -63,10 +74,17 @@ export class Messenger {
     const chat = this.chatsById.get(chatId);
     if (!chat) throw `Chat not joined: ${chatId}`;
 
-    const message = chat.createMessage(text);
+    const chatMessage = chat.createMessage(text);
 
+    const appMetadataMessage = ApplicationMetadataMessage.create(
+      chatMessage.encode(),
+      ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE,
+      this.identity
+    );
+
+    // TODO: Use version 1 with signature
     const wakuMessage = await WakuMessage.fromBytes(
-      message.encode(),
+      appMetadataMessage.encode(),
       chat.contentTopic
     );
 
@@ -74,12 +92,12 @@ export class Messenger {
   }
 
   /**
-   * Add an observer of new messages received on the chat.
+   * Add an observer of new messages received on the given chat id.
    *
    * @throws string If the chat has not been joined first using [joinChat].
    */
   public addObserver(
-    observer: (chatMessage: ChatMessage) => void,
+    observer: (message: ApplicationMetadataMessage) => void,
     chatId: string
   ) {
     // Not sure this is the best design here. Maybe `addObserver` and `joinChat` should be merged.
@@ -94,13 +112,13 @@ export class Messenger {
   }
 
   /**
-   * Add an observer of new messages received on the chat.
+   * Delete an observer of new messages received on the given chat id.
    *
    * @throws string If the chat has not been joined first using [joinChat].
    */
 
   deleteObserver(
-    observer: (chatMessage: ChatMessage) => void,
+    observer: (message: ApplicationMetadataMessage) => void,
     chatId: string
   ): void {
     if (this.observers[chatId]) {
@@ -113,5 +131,21 @@ export class Messenger {
    */
   public async stop(): Promise<void> {
     await this.waku.stop();
+  }
+
+  private _handleNewChatMessage(
+    chat: Chat,
+    message: ApplicationMetadataMessage
+  ) {
+    if (!message.payload || !message.type || !message.signature) return;
+
+    const chatMessage = ChatMessage.decode(message.payload);
+    chat.handleNewMessage(chatMessage);
+
+    if (this.observers[chat.id]) {
+      this.observers[chat.id].forEach((observer) => {
+        observer(message);
+      });
+    }
   }
 }

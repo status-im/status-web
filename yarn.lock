@@ -604,6 +604,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/secp256k1@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "@types/secp256k1@npm:4.0.3"
+  dependencies:
+    "@types/node": "*"
+  checksum: 1bd10b9afa724084b655dc81b7b315def3d2d0e272014ef16009fa76e17537411c07c0695fdea412bc7b36d2a02687f5fea33522d55b8ef29eda42992f812913
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 20.2.1
   resolution: "@types/yargs-parser@npm:20.2.1"
@@ -5621,6 +5630,7 @@ fsevents@~2.3.2:
   dependencies:
     "@types/chai": ^4.2.22
     "@types/mocha": ^9.0.0
+    "@types/secp256k1": ^4.0.3
     "@typescript-eslint/eslint-plugin": ^4.31.1
     "@typescript-eslint/parser": ^4.31.1
     buffer: ^6.0.3
@@ -5637,6 +5647,7 @@ fsevents@~2.3.2:
     npm-run-all: ^4.1.5
     prettier: ^2.4.0
     protobufjs: ^6.11.2
+    secp256k1: ^4.0.2
     ts-node: ^10.2.1
     ts-proto: ^1.83.0
     typescript: ^4.4.3
