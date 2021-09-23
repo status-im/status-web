@@ -1,13 +1,23 @@
 import { ChatMessage } from "./chat_message";
 import { chatIdToContentTopic } from "./contentTopic";
+import { createSymKeyFromPassword } from "./encryption";
 
+/**
+ * Represent a chat room. Only public chats are currently supported.
+ */
 export class Chat {
   private lastClockValue?: number;
   private lastMessage?: ChatMessage;
-  public id: string;
 
-  constructor(id: string) {
-    this.id = id;
+  private constructor(public id: string, public symKey: Uint8Array) {}
+
+  /**
+   * Create a public chat room.
+   */
+  public static async create(id: string) {
+    const symKey = await createSymKeyFromPassword(id);
+
+    return new Chat(id, symKey);
   }
 
   public get contentTopic(): string {

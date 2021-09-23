@@ -47,8 +47,8 @@ describe("Messenger", () => {
   it("Sends & Receive message in public chat", async function () {
     this.timeout(10_000);
 
-    messengerAlice.joinChat(testChatId);
-    messengerBob.joinChat(testChatId);
+    await messengerAlice.joinChat(testChatId);
+    await messengerBob.joinChat(testChatId);
 
     const text = "This is a message.";
 
