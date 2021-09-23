@@ -1,8 +1,8 @@
 import { Reader } from "protobufjs";
 
-import * as proto from "./proto/communities/v2/chat_message";
-import { ChatMessage_ContentType } from "./proto/communities/v2/chat_message";
-import { MessageType } from "./proto/communities/v2/enums";
+import * as proto from "./proto/communities/v1/chat_message";
+import { ChatMessage_ContentType } from "./proto/communities/v1/chat_message";
+import { MessageType } from "./proto/communities/v1/enums";
 
 export class ChatMessage {
   private constructor(public proto: proto.ChatMessage) {}

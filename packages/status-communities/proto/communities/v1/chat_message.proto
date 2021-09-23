@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package communities.v2;
+package communities.v1;
 
-import "communities/v2/enums.proto";
+import "communities/v1/enums.proto";
 
 message StickerMessage {
   string hash = 1;

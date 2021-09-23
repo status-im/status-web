@@ -8,9 +8,9 @@ import {
   imageTypeToJSON,
   messageTypeFromJSON,
   messageTypeToJSON,
-} from "../../communities/v2/enums";
+} from "../../communities/v1/enums";
 
-export const protobufPackage = "communities.v2";
+export const protobufPackage = "communities.v1";
 
 export interface StickerMessage {
   hash: string;

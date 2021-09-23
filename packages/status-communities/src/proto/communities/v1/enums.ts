@@ -2,7 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "communities.v2";
+export const protobufPackage = "communities.v1";
 
 export enum MessageType {
   MESSAGE_TYPE_UNKNOWN_UNSPECIFIED = 0,

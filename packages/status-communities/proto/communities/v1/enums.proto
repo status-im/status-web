@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package communities.v2;
+package communities.v1;
 
 enum MessageType {
   MESSAGE_TYPE_UNKNOWN_UNSPECIFIED = 0;
