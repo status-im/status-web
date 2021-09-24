@@ -6,6 +6,7 @@
     "fix": "run-s 'fix:*'",
     "fix:prettier": "prettier \"./*.json\" --write",
     "build": "wsrun -e -c -s build",
+    "test": "wsrun -e -c -s test",
     "sc": "yarn workspace status-communities"
   },
   "devDependencies": {
