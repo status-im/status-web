@@ -1,0 +1,52 @@
+{
+  "name": "@dappconnect/react-chat",
+  "main": "dist/cjs/src/index.js",
+  "module": "dist/esm/src/index.js",
+  "types": "dist/esm/src/index.d.ts",
+  "version": "0.1.0",
+  "repository": "https://github.com/status-im/dappconnect-chat-sdk/",
+  "license": "MIT OR Apache-2.0",
+  "packageManager": "yarn@3.0.1",
+  "scripts": {
+    "build": "run-s 'build:*'",
+    "build:esm": "tsc --module es2020 --target es2017 --outDir dist/esm",
+    "build:cjs": "tsc --outDir dist/cjs",
+    "fix": "run-s 'fix:*'",
+    "fix:prettier": "prettier './{src,test}/**/*.{ts,tsx}' \"./*.json\" --write",
+    "fix:lint": "eslint './{src,test}/**/*.{ts,tsx}' --fix",
+    "test": "run-s 'test:*'",
+    "test:lint": "eslint './{src,test}/**/*.{ts,tsx}'",
+    "test:prettier": "prettier './{src,test}/**/*.{ts,tsx}' \"./*.json\" --list-different",
+    "proto": "run-s 'proto:*'",
+    "proto:lint": "buf lint",
+    "proto:build": "buf generate"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.6",
+    "@types/react": "^17.0.16",
+    "@types/styled-components": "^5.1.12",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "chai": "^4.3.4",
+    "copyfiles": "^2.4.1",
+    "eslint": "^7.32.0",
+    "jsdom": "^16.7.0",
+    "jsdom-global": "^3.0.2",
+    "mocha": "^9.0.3",
+    "npm-run-all": "^4.1.5",
+    "npm-watch": "^0.11.0",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
+    "status-communities": "^0.1.0",
+    "styled-components": "^5.3.1"
+  }
+}
