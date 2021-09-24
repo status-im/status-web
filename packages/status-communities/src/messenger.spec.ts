@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import { utils } from "js-waku";
 
 import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { Identity } from "./identity";
@@ -9,12 +10,14 @@ const testChatId = "test-chat-id";
 describe("Messenger", () => {
   let messengerAlice: Messenger;
   let messengerBob: Messenger;
+  let identityAlice: Identity;
+  let identityBob: Identity;
 
   beforeEach(async function () {
     this.timeout(10_000);
 
-    const identityAlice = Identity.generate();
-    const identityBob = Identity.generate();
+    identityAlice = Identity.generate();
+    identityBob = Identity.generate();
 
     [messengerAlice, messengerBob] = await Promise.all([
       Messenger.create(identityAlice),
@@ -44,11 +47,11 @@ describe("Messenger", () => {
     ]);
   });
 
-  it("Sends & Receive message in public chat", async function () {
+  it("Sends & Receive public chat messages", async function () {
     this.timeout(10_000);
 
-    messengerAlice.joinChat(testChatId);
-    messengerBob.joinChat(testChatId);
+    await messengerAlice.joinChat(testChatId);
+    await messengerBob.joinChat(testChatId);
 
     const text = "This is a message.";
 
@@ -64,6 +67,30 @@ describe("Messenger", () => {
     const receivedMessage = await receivedMessagePromise;
 
     expect(receivedMessage.chatMessage?.text).to.eq(text);
+  });
+
+  it("public chat messages have signers", async function () {
+    this.timeout(10_000);
+
+    await messengerAlice.joinChat(testChatId);
+    await messengerBob.joinChat(testChatId);
+
+    const text = "This is a message.";
+
+    const receivedMessagePromise: Promise<ApplicationMetadataMessage> =
+      new Promise((resolve) => {
+        messengerBob.addObserver((message) => {
+          resolve(message);
+        }, testChatId);
+      });
+
+    await messengerAlice.sendMessage(text, testChatId);
+
+    const receivedMessage = await receivedMessagePromise;
+
+    expect(utils.bufToHex(receivedMessage.signer!)).to.eq(
+      utils.bufToHex(identityAlice.publicKey)
+    );
   });
 
   afterEach(async function () {

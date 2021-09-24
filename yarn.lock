@@ -1734,7 +1734,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ecies-geth@npm:^1.5.2":
+"ecies-geth@npm:^1.5.2, ecies-geth@npm:^1.5.3":
   version: 1.5.3
   resolution: "ecies-geth@npm:1.5.3"
   dependencies:
@@ -5635,6 +5635,7 @@ fsevents@~2.3.2:
     "@typescript-eslint/parser": ^4.31.1
     buffer: ^6.0.3
     chai: ^4.3.4
+    ecies-geth: ^1.5.3
     eslint: ^7.32.0
     eslint-config-prettier: ^8.3.0
     eslint-import-resolver-node: ^0.3.6

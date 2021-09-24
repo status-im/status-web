@@ -6,7 +6,7 @@ import { utils } from "js-waku";
 import * as secp256k1 from "secp256k1";
 
 export class Identity {
-  public constructor(private privateKey: Uint8Array) {}
+  public constructor(public privateKey: Uint8Array) {}
 
   public static generate(): Identity {
     const privateKey = generatePrivateKey();
@@ -25,5 +25,12 @@ export class Identity {
     );
 
     return Buffer.concat([signature, Buffer.from([recid])]);
+  }
+
+  /**
+   * Returns the compressed public key.
+   */
+  public get publicKey(): Uint8Array {
+    return secp256k1.publicKeyCreate(this.privateKey, true);
   }
 }

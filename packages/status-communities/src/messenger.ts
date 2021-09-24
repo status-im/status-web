@@ -39,10 +39,12 @@ export class Messenger {
    *
    * Use `addListener` to get messages received on this chat.
    */
-  public joinChat(chatId: string) {
+  public async joinChat(chatId: string) {
     if (this.chatsById.has(chatId)) throw "Chat already joined";
 
-    const chat = new Chat(chatId);
+    const chat = await Chat.create(chatId);
+
+    this.waku.relay.addDecryptionKey(chat.symKey);
 
     this.waku.relay.addObserver(
       (wakuMessage: WakuMessage) => {
@@ -72,7 +74,7 @@ export class Messenger {
    */
   public async sendMessage(text: string, chatId: string): Promise<void> {
     const chat = this.chatsById.get(chatId);
-    if (!chat) throw `Chat not joined: ${chatId}`;
+    if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
 
     const chatMessage = chat.createMessage(text);
 
@@ -82,10 +84,10 @@ export class Messenger {
       this.identity
     );
 
-    // TODO: Use version 1 with signature
     const wakuMessage = await WakuMessage.fromBytes(
       appMetadataMessage.encode(),
-      chat.contentTopic
+      chat.contentTopic,
+      { symKey: chat.symKey, sigPrivKey: this.identity.privateKey }
     );
 
     await this.waku.relay.send(wakuMessage);
