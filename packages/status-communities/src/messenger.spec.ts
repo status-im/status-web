@@ -1,4 +1,5 @@
 import { expect } from "chai";
+import debug from "debug";
 import { utils } from "js-waku";
 
 import { ApplicationMetadataMessage } from "./application_metadata_message";
@@ -6,6 +7,8 @@ import { Identity } from "./identity";
 import { Messenger } from "./messenger";
 
 const testChatId = "test-chat-id";
+
+const dbg = debug("communities:test:messenger");
 
 describe("Messenger", () => {
   let messengerAlice: Messenger;
@@ -16,8 +19,11 @@ describe("Messenger", () => {
   beforeEach(async function () {
     this.timeout(10_000);
 
+    dbg("Generate keys");
     identityAlice = Identity.generate();
     identityBob = Identity.generate();
+
+    dbg("Create messengers");
 
     [messengerAlice, messengerBob] = await Promise.all([
       Messenger.create(identityAlice),
@@ -26,12 +32,14 @@ describe("Messenger", () => {
       }),
     ]);
 
+    dbg("Connect messengers");
     // Connect both messengers together for test purposes
     messengerAlice.waku.addPeerToAddressBook(
       messengerBob.waku.libp2p.peerId,
       messengerBob.waku.libp2p.multiaddrs
     );
 
+    dbg("Wait for pubsub connection");
     await Promise.all([
       new Promise((resolve) =>
         messengerAlice.waku.libp2p.pubsub.once(
@@ -45,6 +53,7 @@ describe("Messenger", () => {
         )
       ),
     ]);
+    dbg("Messengers ready");
   });
 
   it("Sends & Receive public chat messages", async function () {
