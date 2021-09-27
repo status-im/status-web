@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Theme } from "../styles/themes";
 
 import { Channels } from "./Channels";
-import { ChatBody } from "./ChatBody";
+import { ChatBody } from "./Chat/ChatBody";
 import { Members } from "./Members";
 
 interface ChatProps {
