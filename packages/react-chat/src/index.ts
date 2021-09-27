@@ -1,3 +1,3 @@
-import { ReactChat } from "./components/ReactChat";
+import { ReactChat } from './components/ReactChat';
 
 export { ReactChat };
