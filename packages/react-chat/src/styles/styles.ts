@@ -1,1 +1,1 @@
-export const Font = 'Inter, sans-serif';
+export const Font = "Inter, sans-serif";

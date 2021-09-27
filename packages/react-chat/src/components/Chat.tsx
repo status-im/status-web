@@ -1,9 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Channels } from './Channels';
-import { ChatBody } from './ChatBody';
-import { Members } from './Members';
-import { Theme } from '../styles/themes';
+import React from "react";
+import styled from "styled-components";
+
+import { Theme } from "../styles/themes";
+
+import { Channels } from "./Channels";
+import { ChatBody } from "./ChatBody";
+import { Members } from "./Members";
 
 interface ChatProps {
   theme: Theme;
