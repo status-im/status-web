@@ -1,13 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
+import { Theme } from "../../styles/themes";
 import { ChatMessage } from "../models/ChatMessage";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
+  theme: Theme;
 };
 
-export function ChatMessages({ messages }: ChatMessagesProps) {
+export function ChatMessages({ messages, theme }: ChatMessagesProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     if (ref && ref.current) {
@@ -19,15 +21,15 @@ export function ChatMessages({ messages }: ChatMessagesProps) {
     <MessagesWrapper ref={ref}>
       {messages.map((message) => (
         <MessageWrapper key={message.date.toDateString()}>
-          <IconWrapper>
-            <Icon />
-          </IconWrapper>
+          <Icon />
           <ContentWrapper>
             <MessageHeaderWrapper>
-              <UserNameWrapper>{message.sender}</UserNameWrapper>
-              <TimeWrapper>{message.date.toLocaleTimeString()}</TimeWrapper>
+              <UserNameWrapper theme={theme}>{message.sender}</UserNameWrapper>
+              <TimeWrapper theme={theme}>
+                {message.date.toLocaleTimeString()}
+              </TimeWrapper>
             </MessageHeaderWrapper>
-            <MessageText>{message.content}</MessageText>
+            <MessageText theme={theme}>{message.content}</MessageText>
           </ContentWrapper>
         </MessageWrapper>
       ))}
@@ -35,64 +37,59 @@ export function ChatMessages({ messages }: ChatMessagesProps) {
   );
 }
 
-const MessageText = styled.div`
-  overflow-wrap: anywhere;
+interface ThemeProps {
+  theme: Theme;
+}
+
+const MessagesWrapper = styled.div`
+  height: calc(100% - 44px);
+  overflow: auto;
+  padding: 8px 16px 0;
+`;
+
+const MessageWrapper = styled.div`
   width: 100%;
-`;
-
-const MessageHeaderWrapper = styled.div`
   display: flex;
-`;
-
-const TimeWrapper = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 10px;
-  line-height: 14px;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
-  color: #939ba1;
-
-  text-align: center;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 4px;
-`;
-
-const UserNameWrapper = styled.div`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 22px;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 8px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 8px;
+`;
+
+const MessageHeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Icon = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: blue;
+  background-color: #bcbdff;
 `;
 
-const IconWrapper = styled.div`
-  margin-left: 16px;
-  margin-right: 8px;
+const UserNameWrapper = styled.div<ThemeProps>`
+  font-size: 15px;
+  line-height: 22px;
+  color: ${({ theme }) => theme.memberNameColor};
 `;
 
-const MessageWrapper = styled.div`
+const TimeWrapper = styled.div<ThemeProps>`
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.textSecondaryColor};
+  margin-left: 4px;
+`;
+
+const MessageText = styled.div<ThemeProps>`
+  overflow-wrap: anywhere;
   width: 100%;
-  display: flex;
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
-const MessagesWrapper = styled.div`
-  height: calc(100% - 44px);
-  overflow: auto;
+  color: ${({ theme }) => theme.textPrimaryColor};
 `;
