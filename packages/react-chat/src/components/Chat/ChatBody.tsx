@@ -24,8 +24,10 @@ export function ChatBody({ theme, channel }: ChatBodyProps) {
 
   return (
     <ChatBodyWrapper theme={theme}>
-      <Channel channel={channel} theme={theme} isActive={true} activeView={true} />
-      <ChatMessages messages={messages} />
+      <ChannelWrapper>
+        <Channel channel={channel} theme={theme} isActive={true} activeView={true} />
+      </ChannelWrapper>
+      <ChatMessages messages={messages} theme={theme} />
       <ChatInput addMessage={addMessage} />
     </ChatBodyWrapper>
   );
@@ -39,6 +41,9 @@ const ChatBodyWrapper = styled.div<ThemeProps>`
   flex-direction: column;
   flex: 1;
   height: 100%;
-  max-width: 50%;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+`;
+
+const ChannelWrapper = styled.div`
+  padding-left: 8px;
 `;
