@@ -9,24 +9,24 @@ export type ChannelData = {
 export const channels = [
   {
     id: 1,
-    name: 'welcome',
-    icon: 'https://www.cryptokitties.co/icons/logo.svg',
+    name: "welcome",
+    icon: "https://www.cryptokitties.co/icons/logo.svg",
     members: 7,
   },
   {
     id: 2,
-    name: 'general',
+    name: "general",
     members: 15,
   },
   {
     id: 3,
-    name: 'beginners',
+    name: "beginners",
     members: 3,
     notifications: 1,
   },
   {
     id: 4,
-    name: 'random',
+    name: "random",
     members: 6,
   },
 ];

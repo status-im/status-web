@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Theme } from '../styles/themes';
-import { Channels } from './Channels';
-import { ChatBody } from './ChatBody';
-import { Members } from './Members';
+
 import { ChannelData, channels } from '../helpers/channelsMock';
+import { Theme } from '../styles/themes';
+
+import { Channels } from './Channels';
+import { ChatBody } from './Chat/ChatBody';
+import { Members } from './Members';
 
 interface ChatProps {
   theme: Theme;

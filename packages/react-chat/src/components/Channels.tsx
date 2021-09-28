@@ -1,7 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ChannelData, channels } from '../helpers/channelsMock';
-import { Theme } from '../styles/themes';
+import React from "react";
+import styled from "styled-components";
+
+import { ChannelData, channels } from "../helpers/channelsMock";
+import { Theme } from "../styles/themes";
 
 interface ChannelsProps {
   theme: Theme;
@@ -12,7 +13,14 @@ interface ChannelsProps {
   activeChannelId: number;
 }
 
-export function Channels({ theme, icon, name, members, setActiveChannel, activeChannelId }: ChannelsProps) {
+export function Channels({
+  theme,
+  icon,
+  name,
+  members,
+  setActiveChannel,
+  activeChannelId,
+}: ChannelsProps) {
   return (
     <ChannelsWrapper theme={theme}>
       <Community>
@@ -23,7 +31,7 @@ export function Channels({ theme, icon, name, members, setActiveChannel, activeC
         </CommunityInfo>
       </Community>
       <ChannelList>
-        {channels.map(channel => (
+        {channels.map((channel) => (
           <Channel
             key={channel.id}
             channel={channel}
@@ -47,27 +55,50 @@ interface ChannelProps {
   onClick?: () => void;
 }
 
-export function Channel({ theme, channel, isActive, activeView, onClick }: ChannelProps) {
+export function Channel({
+  theme,
+  channel,
+  isActive,
+  activeView,
+  onClick,
+}: ChannelProps) {
   return (
-    <ChannelWrapper className={isActive && !activeView ? 'active' : ''} theme={theme} onClick={onClick}>
+    <ChannelWrapper
+      className={isActive && !activeView ? "active" : ""}
+      theme={theme}
+      onClick={onClick}
+    >
       <ChannelInfo>
         <ChannelLogo
           style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : '',
+            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
           }}
-          className={activeView ? 'active' : ''}
-          theme={theme}>
+          className={activeView ? "active" : ""}
+          theme={theme}
+        >
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogo>
         <ChannelTextInfo>
-          <ChannelName theme={theme} className={isActive ? 'active' : channel.notifications ? 'notified' : ''}>
+          <ChannelName
+            theme={theme}
+            className={
+              isActive ? "active" : channel.notifications ? "notified" : ""
+            }
+          >
             # {channel.name}
           </ChannelName>
-          {activeView && <MembersAmount theme={theme}> {channel.members} members</MembersAmount>}
+          {activeView && (
+            <MembersAmount theme={theme}>
+              {" "}
+              {channel.members} members
+            </MembersAmount>
+          )}
         </ChannelTextInfo>
       </ChannelInfo>
       {channel.notifications && !activeView && (
-        <NotificationBagde theme={theme}>{channel.notifications}</NotificationBagde>
+        <NotificationBagde theme={theme}>
+          {channel.notifications}
+        </NotificationBagde>
       )}
     </ChannelWrapper>
   );
