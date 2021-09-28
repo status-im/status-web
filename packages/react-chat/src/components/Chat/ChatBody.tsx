@@ -28,7 +28,7 @@ export function ChatBody({ theme, channel }: ChatBodyProps) {
         <Channel channel={channel} theme={theme} isActive={true} activeView={true} />
       </ChannelWrapper>
       <ChatMessages messages={messages} theme={theme} />
-      <ChatInput addMessage={addMessage} />
+      <ChatInput theme={theme} addMessage={addMessage} />
     </ChatBodyWrapper>
   );
 }
