@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
+import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
-import { ChatMessage } from "../models/ChatMessage";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
@@ -19,14 +19,16 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
 
   return (
     <MessagesWrapper ref={ref}>
-      {messages.map((message) => (
-        <MessageWrapper key={message.date.toDateString()}>
+      {messages.map((message, idx) => (
+        <MessageWrapper key={idx}>
           <Icon />
           <ContentWrapper>
             <MessageHeaderWrapper>
-              <UserNameWrapper theme={theme}>{message.sender}</UserNameWrapper>
+              <UserNameWrapper theme={theme}>
+                {message.sender.slice(0, 10)}
+              </UserNameWrapper>
               <TimeWrapper theme={theme}>
-                {message.date.toLocaleTimeString()}
+                {message.date.toLocaleString()}
               </TimeWrapper>
             </MessageHeaderWrapper>
             <MessageText theme={theme}>{message.content}</MessageText>
