@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../../helpers/channelsMock";
+import { useMessenger } from "../../hooks/useMessenger";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
-import { ChatMessage } from "../models/ChatMessage";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
@@ -15,17 +15,7 @@ interface ChatBodyProps {
 }
 
 export function ChatBody({ theme, channel }: ChatBodyProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-
-  const addMessage = useCallback(
-    (message: string) => {
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: "User1", date: new Date(), content: message },
-      ]);
-    },
-    [messages]
-  );
+  const { messages, sendMessage } = useMessenger(channel.name);
 
   return (
     <ChatBodyWrapper theme={theme}>
@@ -38,7 +28,7 @@ export function ChatBody({ theme, channel }: ChatBodyProps) {
         />
       </ChannelWrapper>
       <ChatMessages messages={messages} theme={theme} />
-      <ChatInput theme={theme} addMessage={addMessage} />
+      <ChatInput theme={theme} addMessage={sendMessage} />
     </ChatBodyWrapper>
   );
 }
