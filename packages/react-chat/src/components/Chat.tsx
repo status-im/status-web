@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import { ChannelData, channels } from '../helpers/channelsMock';
-import { Theme } from '../styles/themes';
+import { ChannelData, channels } from "../helpers/channelsMock";
+import { Theme } from "../styles/themes";
 
-import { Channels } from './Channels';
-import { ChatBody } from './Chat/ChatBody';
-import { Members } from './Members';
+import { Channels } from "./Channels";
+import { ChatBody } from "./Chat/ChatBody";
+import { Members } from "./Members";
 
 interface ChatProps {
   theme: Theme;
@@ -22,8 +22,8 @@ export function Chat({ theme, channelsON, membersON }: ChatProps) {
       {channelsON && (
         <Channels
           theme={theme}
-          icon={'https://www.cryptokitties.co/icons/logo.svg'}
-          name={'CryptoKitties'}
+          icon={"https://www.cryptokitties.co/icons/logo.svg"}
+          name={"CryptoKitties"}
           members={186}
           setActiveChannel={setActiveChannel}
           activeChannelId={activeChannel.id}

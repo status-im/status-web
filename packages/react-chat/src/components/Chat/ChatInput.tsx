@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Theme } from '../../styles/themes';
+import React, { useState } from "react";
+import styled from "styled-components";
+
+import { Theme } from "../../styles/themes";
 
 type ChatInputProps = {
   theme: Theme;
@@ -8,19 +9,19 @@ type ChatInputProps = {
 };
 
 export function ChatInput({ theme, addMessage }: ChatInputProps) {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
 
   return (
     <InputWrapper>
       <Input
         theme={theme}
-        placeholder={'Message'}
+        placeholder={"Message"}
         value={content}
-        onChange={e => setContent(e.target.value)}
-        onKeyPress={e => {
-          if (e.key == 'Enter') {
+        onChange={(e) => setContent(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key == "Enter") {
             addMessage(content);
-            setContent('');
+            setContent("");
           }
         }}
       />

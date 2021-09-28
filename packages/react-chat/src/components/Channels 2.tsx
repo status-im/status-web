@@ -1,6 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Theme } from '../styles/themes';
+import React from "react";
+import styled from "styled-components";
+
+import { Theme } from "../styles/themes";
 
 interface ChannelsProps {
   theme: Theme;
