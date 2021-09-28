@@ -9,7 +9,7 @@ export function ReactChat() {
   return (
     <div>
       <GlobalStyle />
-      <Chat channels={true} members={true} theme={lightTheme} />
+      <Chat channelsON={true} membersON={true} theme={lightTheme} />
     </div>
   );
 }

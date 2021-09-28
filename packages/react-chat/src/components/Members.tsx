@@ -1,12 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-export function Members() {
-  return <MembersWrapper></MembersWrapper>;
+import { Theme } from "../styles/themes";
+
+interface MembersProps {
+  theme: Theme;
 }
 
-const MembersWrapper = styled.div`
-  width: 33%;
+export function Members({ theme }: MembersProps) {
+  return <MembersWrapper theme={theme}>Members</MembersWrapper>;
+}
+
+const MembersWrapper = styled.div<MembersProps>`
+  width: 18%;
   height: 100%;
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
 `;
