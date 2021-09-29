@@ -12,11 +12,12 @@ import { Members } from "./Members";
 interface ChatProps {
   theme: Theme;
   channelsON?: boolean;
-  membersON?: boolean;
 }
 
-export function Chat({ theme, channelsON, membersON }: ChatProps) {
+export function Chat({ theme, channelsON }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
+  const [showMembers, setShowMembers] = useState(true);
+
   const {
     messenger,
     messages,
@@ -48,11 +49,13 @@ export function Chat({ theme, channelsON, membersON }: ChatProps) {
           channel={activeChannel}
           messages={messages}
           sendMessage={sendMessage}
+          onClick={() => setShowMembers(!showMembers)}
+          showMembers={showMembers}
         />
       ) : (
         <Loading>Connecting to waku</Loading>
       )}
-      {membersON && <Members theme={theme} />}
+      {showMembers && <Members theme={theme} />}
     </ChatWrapper>
   );
 }
