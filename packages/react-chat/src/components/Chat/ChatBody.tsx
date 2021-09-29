@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../../helpers/channelsMock";
-import { useMessenger } from "../../hooks/useMessenger";
+import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 
@@ -12,11 +12,11 @@ import { ChatMessages } from "./ChatMessages";
 interface ChatBodyProps {
   theme: Theme;
   channel: ChannelData;
+  messages: ChatMessage[]
+  sendMessage: (text:string) => void
 }
 
-export function ChatBody({ theme, channel }: ChatBodyProps) {
-  const { messages, sendMessage } = useMessenger(channel.name);
-
+export function ChatBody({ theme, channel, messages, sendMessage }: ChatBodyProps) {
   return (
     <ChatBodyWrapper theme={theme}>
       <ChannelWrapper>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { ChannelData, channels } from "../helpers/channelsMock";
@@ -8,6 +8,8 @@ interface ChannelsProps {
   theme: Theme;
   icon: string;
   name: string;
+  notifications: { [id:string]: number }
+  clearNotifications: (id:string) => void
   members: number;
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
@@ -18,9 +20,21 @@ export function Channels({
   icon,
   name,
   members,
+  notifications,
   setActiveChannel,
+  clearNotifications,
   activeChannelId,
 }: ChannelsProps) {
+
+  useEffect(() => {
+    const channel = channels.find((channel) => channel.id === activeChannelId)
+    if(channel){
+      if(notifications[channel.name] > 0){
+        clearNotifications(channel.name)
+      }
+    }
+  },[notifications,activeChannelId])
+
   return (
     <ChannelsWrapper theme={theme}>
       <Community>
@@ -37,6 +51,7 @@ export function Channels({
             channel={channel}
             theme={theme}
             isActive={channel.id === activeChannelId}
+            notification={notifications[channel.name] > 0 ? notifications[channel.name] : undefined}
             onClick={() => {
               setActiveChannel(channel);
             }}
@@ -50,6 +65,7 @@ export function Channels({
 interface ChannelProps {
   theme: Theme;
   channel: ChannelData;
+  notification?: number;
   isActive: boolean;
   activeView?: boolean;
   onClick?: () => void;
@@ -61,6 +77,7 @@ export function Channel({
   isActive,
   activeView,
   onClick,
+  notification,
 }: ChannelProps) {
   return (
     <ChannelWrapper
@@ -82,7 +99,7 @@ export function Channel({
           <ChannelName
             theme={theme}
             className={
-              isActive ? "active" : channel.notifications ? "notified" : ""
+              isActive ? "active" : (notification && notification > 0) ? "notified" : ""
             }
           >
             # {channel.name}
@@ -95,9 +112,9 @@ export function Channel({
           )}
         </ChannelTextInfo>
       </ChannelInfo>
-      {channel.notifications && !activeView && (
+      {(notification && notification > 0) && !activeView && (
         <NotificationBagde theme={theme}>
-          {channel.notifications}
+          {notification}
         </NotificationBagde>
       )}
     </ChannelWrapper>
