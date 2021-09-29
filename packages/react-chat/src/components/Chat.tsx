@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { ChannelData, channels } from "../helpers/channelsMock";
-import { Theme } from "../styles/themes";
 import { useMessenger } from "../hooks/useMessenger";
+import { Theme } from "../styles/themes";
+
 import { Channels } from "./Channels";
 import { ChatBody } from "./Chat/ChatBody";
 import { Members } from "./Members";
@@ -16,7 +17,16 @@ interface ChatProps {
 
 export function Chat({ theme, channelsON, membersON }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
-  const { messenger, messages, sendMessage, notifications, clearNotifications } = useMessenger(activeChannel.name, channels.map((channel) => channel.name));
+  const {
+    messenger,
+    messages,
+    sendMessage,
+    notifications,
+    clearNotifications,
+  } = useMessenger(
+    activeChannel.name,
+    channels.map((channel) => channel.name)
+  );
 
   return (
     <ChatWrapper>
@@ -32,9 +42,16 @@ export function Chat({ theme, channelsON, membersON }: ChatProps) {
           activeChannelId={activeChannel.id}
         />
       )}
-      {messenger 
-      ? <ChatBody theme={theme} channel={activeChannel} messages={messages} sendMessage={sendMessage}/>
-      : <Loading>Connecting to waku</Loading>}
+      {messenger ? (
+        <ChatBody
+          theme={theme}
+          channel={activeChannel}
+          messages={messages}
+          sendMessage={sendMessage}
+        />
+      ) : (
+        <Loading>Connecting to waku</Loading>
+      )}
       {membersON && <Members theme={theme} />}
     </ChatWrapper>
   );

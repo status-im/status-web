@@ -12,11 +12,16 @@ import { ChatMessages } from "./ChatMessages";
 interface ChatBodyProps {
   theme: Theme;
   channel: ChannelData;
-  messages: ChatMessage[]
-  sendMessage: (text:string) => void
+  messages: ChatMessage[];
+  sendMessage: (text: string) => void;
 }
 
-export function ChatBody({ theme, channel, messages, sendMessage }: ChatBodyProps) {
+export function ChatBody({
+  theme,
+  channel,
+  messages,
+  sendMessage,
+}: ChatBodyProps) {
   return (
     <ChatBodyWrapper theme={theme}>
       <ChannelWrapper>

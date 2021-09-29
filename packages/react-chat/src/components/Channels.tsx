@@ -8,8 +8,8 @@ interface ChannelsProps {
   theme: Theme;
   icon: string;
   name: string;
-  notifications: { [id:string]: number }
-  clearNotifications: (id:string) => void
+  notifications: { [id: string]: number };
+  clearNotifications: (id: string) => void;
   members: number;
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
@@ -25,15 +25,14 @@ export function Channels({
   clearNotifications,
   activeChannelId,
 }: ChannelsProps) {
-
   useEffect(() => {
-    const channel = channels.find((channel) => channel.id === activeChannelId)
-    if(channel){
-      if(notifications[channel.name] > 0){
-        clearNotifications(channel.name)
+    const channel = channels.find((channel) => channel.id === activeChannelId);
+    if (channel) {
+      if (notifications[channel.name] > 0) {
+        clearNotifications(channel.name);
       }
     }
-  },[notifications,activeChannelId])
+  }, [notifications, activeChannelId]);
 
   return (
     <ChannelsWrapper theme={theme}>
@@ -51,7 +50,11 @@ export function Channels({
             channel={channel}
             theme={theme}
             isActive={channel.id === activeChannelId}
-            notification={notifications[channel.name] > 0 ? notifications[channel.name] : undefined}
+            notification={
+              notifications[channel.name] > 0
+                ? notifications[channel.name]
+                : undefined
+            }
             onClick={() => {
               setActiveChannel(channel);
             }}
@@ -99,7 +102,11 @@ export function Channel({
           <ChannelName
             theme={theme}
             className={
-              isActive ? "active" : (notification && notification > 0) ? "notified" : ""
+              isActive
+                ? "active"
+                : notification && notification > 0
+                ? "notified"
+                : ""
             }
           >
             # {channel.name}
@@ -112,10 +119,8 @@ export function Channel({
           )}
         </ChannelTextInfo>
       </ChannelInfo>
-      {(notification && notification > 0) && !activeView && (
-        <NotificationBagde theme={theme}>
-          {notification}
-        </NotificationBagde>
+      {notification && notification > 0 && !activeView && (
+        <NotificationBagde theme={theme}>{notification}</NotificationBagde>
       )}
     </ChannelWrapper>
   );
