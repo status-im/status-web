@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import { ChannelData } from "../../helpers/channelsMock";
-import { ChatMessage } from "../../models/ChatMessage";
-import { Theme } from "../../styles/themes";
-import { Channel } from "../Channels";
+import { ChannelData } from '../../helpers/channelsMock';
+import { ChatMessage } from '../../models/ChatMessage';
+import { Theme } from '../../styles/themes';
+import { Channel } from '../Channels';
 
-import { ChatInput } from "./ChatInput";
-import { ChatMessages } from "./ChatMessages";
+import { ChatInput } from './ChatInput';
+import { ChatMessages } from './ChatMessages';
 
 interface ChatBodyProps {
   theme: Theme;
@@ -16,21 +16,11 @@ interface ChatBodyProps {
   sendMessage: (text: string) => void;
 }
 
-export function ChatBody({
-  theme,
-  channel,
-  messages,
-  sendMessage,
-}: ChatBodyProps) {
+export function ChatBody({ theme, channel, messages, sendMessage }: ChatBodyProps) {
   return (
     <ChatBodyWrapper theme={theme}>
       <ChannelWrapper>
-        <Channel
-          channel={channel}
-          theme={theme}
-          isActive={true}
-          activeView={true}
-        />
+        <Channel channel={channel} theme={theme} isActive={true} activeView={true} isMuted={false} />
       </ChannelWrapper>
       <ChatMessages messages={messages} theme={theme} />
       <ChatInput theme={theme} addMessage={sendMessage} />

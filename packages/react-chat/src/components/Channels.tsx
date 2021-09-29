@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 
-import { ChannelData, channels } from "../helpers/channelsMock";
-import { Theme } from "../styles/themes";
+import { ChannelData, channels } from '../helpers/channelsMock';
+import { Theme } from '../styles/themes';
+import { MutedIcon } from './Icons/MutedIcon';
 
 interface ChannelsProps {
   theme: Theme;
@@ -26,7 +27,7 @@ export function Channels({
   activeChannelId,
 }: ChannelsProps) {
   useEffect(() => {
-    const channel = channels.find((channel) => channel.id === activeChannelId);
+    const channel = channels.find(channel => channel.id === activeChannelId);
     if (channel) {
       if (notifications[channel.name] > 0) {
         clearNotifications(channel.name);
@@ -44,17 +45,14 @@ export function Channels({
         </CommunityInfo>
       </Community>
       <ChannelList>
-        {channels.map((channel) => (
+        {channels.map(channel => (
           <Channel
             key={channel.id}
             channel={channel}
             theme={theme}
             isActive={channel.id === activeChannelId}
-            notification={
-              notifications[channel.name] > 0
-                ? notifications[channel.name]
-                : undefined
-            }
+            isMuted={channel.isMuted || false}
+            notification={notifications[channel.name] > 0 ? notifications[channel.name] : undefined}
             onClick={() => {
               setActiveChannel(channel);
             }}
@@ -70,58 +68,36 @@ interface ChannelProps {
   channel: ChannelData;
   notification?: number;
   isActive: boolean;
+  isMuted: boolean;
   activeView?: boolean;
   onClick?: () => void;
 }
 
-export function Channel({
-  theme,
-  channel,
-  isActive,
-  activeView,
-  onClick,
-  notification,
-}: ChannelProps) {
+export function Channel({ theme, channel, isActive, isMuted, activeView, onClick, notification }: ChannelProps) {
   return (
-    <ChannelWrapper
-      className={isActive && !activeView ? "active" : ""}
-      theme={theme}
-      onClick={onClick}
-    >
+    <ChannelWrapper className={isActive && !activeView ? 'active' : ''} theme={theme} onClick={onClick}>
       <ChannelInfo>
         <ChannelLogo
           style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
+            backgroundImage: channel.icon ? `url(${channel.icon}` : '',
           }}
-          className={activeView ? "active" : ""}
-          theme={theme}
-        >
+          className={activeView ? 'active' : ''}
+          theme={theme}>
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogo>
         <ChannelTextInfo>
           <ChannelName
             theme={theme}
-            className={
-              isActive
-                ? "active"
-                : notification && notification > 0
-                ? "notified"
-                : ""
-            }
-          >
+            className={isActive ? 'active' : notification && notification > 0 ? 'notified' : isMuted ? 'muted' : ''}>
             # {channel.name}
           </ChannelName>
-          {activeView && (
-            <MembersAmount theme={theme}>
-              {" "}
-              {channel.members} members
-            </MembersAmount>
-          )}
+          {activeView && <MembersAmount theme={theme}> {channel.members} members</MembersAmount>}
         </ChannelTextInfo>
       </ChannelInfo>
       {notification && notification > 0 && !activeView && (
         <NotificationBagde theme={theme}>{notification}</NotificationBagde>
       )}
+      {isMuted && !notification && <MutedIcon theme={theme} />}
     </ChannelWrapper>
   );
 }
