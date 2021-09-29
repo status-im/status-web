@@ -71,7 +71,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         }}
       />
       <AddEmojiBtn onClick={() => setShowEmoji(!showEmoji)}>
-        <EmojiIcon theme={theme} />
+        <EmojiIcon theme={theme} isActive={showEmoji} />
       </AddEmojiBtn>
       <AddStickerBtn>
         <StickerIcon theme={theme} />
