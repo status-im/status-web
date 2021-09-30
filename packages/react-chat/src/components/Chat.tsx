@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import { ChannelData, channels } from '../helpers/channelsMock';
-import { useMessenger } from '../hooks/useMessenger';
-import { Theme } from '../styles/themes';
+import { ChannelData, channels } from "../helpers/channelsMock";
+import { useMessenger } from "../hooks/useMessenger";
+import { Theme } from "../styles/themes";
 
-import { Channels } from './Channels';
-import { ChatBody } from './Chat/ChatBody';
-import { Members } from './Members';
+import { Channels } from "./Channels";
+import { ChatBody } from "./Chat/ChatBody";
+import { Members } from "./Members";
 
 interface ChatProps {
   theme: Theme;
@@ -18,9 +18,15 @@ export function Chat({ theme, channelsON }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
   const [showMembers, setShowMembers] = useState(true);
 
-  const { messenger, messages, sendMessage, notifications, clearNotifications } = useMessenger(
+  const {
+    messenger,
+    messages,
+    sendMessage,
+    notifications,
+    clearNotifications,
+  } = useMessenger(
     activeChannel.name,
-    channels.map(channel => channel.name)
+    channels.map((channel) => channel.name)
   );
 
   return (
@@ -30,8 +36,8 @@ export function Chat({ theme, channelsON }: ChatProps) {
           notifications={notifications}
           clearNotifications={clearNotifications}
           theme={theme}
-          icon={'https://www.cryptokitties.co/icons/logo.svg'}
-          name={'CryptoKitties'}
+          icon={"https://www.cryptokitties.co/icons/logo.svg"}
+          name={"CryptoKitties"}
           members={186}
           setActiveChannel={setActiveChannel}
           activeChannelId={activeChannel.id}

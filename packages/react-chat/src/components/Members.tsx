@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ChannelData } from '../helpers/channelsMock';
+import React from "react";
+import styled from "styled-components";
+import { ChannelData } from "../helpers/channelsMock";
 
-import { Theme } from '../styles/themes';
-import { Icon } from './Chat/ChatMessages';
-import { UserIcon } from './Icons/UserIcon';
+import { Theme } from "../styles/themes";
+import { Icon } from "./Chat/ChatMessages";
+import { UserIcon } from "./Icons/UserIcon";
 
 interface MembersProps {
   theme: Theme;
@@ -28,17 +28,25 @@ export function Members({ theme, channel }: MembersProps) {
         <MemberCategory>
           <MemberCategoryName theme={theme}>Online</MemberCategoryName>
           {channel.membersList
-            .filter(member => member.isOnline)
-            .map(member => (
-              <Member theme={theme} member={member} isOnline={member.isOnline} />
+            .filter((member) => member.isOnline)
+            .map((member) => (
+              <Member
+                theme={theme}
+                member={member}
+                isOnline={member.isOnline}
+              />
             ))}
         </MemberCategory>
         <MemberCategory>
           <MemberCategoryName theme={theme}>Offline</MemberCategoryName>
           {channel.membersList
-            .filter(member => !member.isOnline)
-            .map(member => (
-              <Member theme={theme} member={member} isOnline={member.isOnline} />
+            .filter((member) => !member.isOnline)
+            .map((member) => (
+              <Member
+                theme={theme}
+                member={member}
+                isOnline={member.isOnline}
+              />
             ))}
         </MemberCategory>
       </MembersList>
@@ -57,10 +65,11 @@ export function Member({ theme, member, isOnline }: MemberProps) {
     <MemberData>
       <MemberIcon
         style={{
-          backgroundImage: member.avatar ? `url(${member.avatar})` : 'unset',
+          backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",
         }}
-        className={isOnline ? 'online' : ''}
-        theme={theme}>
+        className={isOnline ? "online" : ""}
+        theme={theme}
+      >
         {!member.avatar && <UserIcon theme={theme} />}
       </MemberIcon>
       <MemberName theme={theme}>{member.name}</MemberName>
@@ -130,7 +139,7 @@ const MemberIcon = styled(Icon)<ThemeProps>`
 
   &.online {
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       right: -1px;
       bottom: 1px;
