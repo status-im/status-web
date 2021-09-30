@@ -5,6 +5,7 @@ import { ChannelData } from "../../helpers/channelsMock";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
+import { MembersIcon } from "../Icons/MembersIcon";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
@@ -14,6 +15,8 @@ interface ChatBodyProps {
   channel: ChannelData;
   messages: ChatMessage[];
   sendMessage: (text: string) => void;
+  onClick: () => void;
+  showMembers: boolean;
 }
 
 export function ChatBody({
@@ -21,6 +24,8 @@ export function ChatBody({
   channel,
   messages,
   sendMessage,
+  onClick,
+  showMembers,
 }: ChatBodyProps) {
   return (
     <ChatBodyWrapper theme={theme}>
@@ -30,7 +35,15 @@ export function ChatBody({
           theme={theme}
           isActive={true}
           activeView={true}
+          isMuted={false}
         />
+        <MemberBtn
+          onClick={onClick}
+          className={showMembers ? "active" : ""}
+          theme={theme}
+        >
+          <MembersIcon theme={theme} />
+        </MemberBtn>
       </ChannelWrapper>
       <ChatMessages messages={messages} theme={theme} />
       <ChatInput theme={theme} addMessage={sendMessage} />
@@ -50,5 +63,19 @@ const ChatBodyWrapper = styled.div<ThemeProps>`
 `;
 
 const ChannelWrapper = styled.div`
-  padding-left: 8px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 8px;
+`;
+
+const MemberBtn = styled.button<ThemeProps>`
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  padding: 0;
+  margin-top: 12px;
+
+  &.active {
+    background: ${({ theme }) => theme.inputColor};
+  }
 `;

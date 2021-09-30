@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
+import { UserIcon } from "../Icons/UserIcon";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
@@ -21,7 +22,10 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
     <MessagesWrapper ref={ref}>
       {messages.map((message, idx) => (
         <MessageWrapper key={idx}>
-          <Icon />
+          <Icon>
+            <UserIcon theme={theme} />
+          </Icon>
+
           <ContentWrapper>
             <MessageHeaderWrapper>
               <UserNameWrapper theme={theme}>
@@ -71,6 +75,9 @@ const MessageHeaderWrapper = styled.div`
 const Icon = styled.div`
   width: 40px;
   height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
   border-radius: 50%;
   background-color: #bcbdff;
 `;

@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { ChannelData, channels } from "../helpers/channelsMock";
 import { Theme } from "../styles/themes";
 
+import { MutedIcon } from "./Icons/MutedIcon";
+
 interface ChannelsProps {
   theme: Theme;
   icon: string;
@@ -50,6 +52,7 @@ export function Channels({
             channel={channel}
             theme={theme}
             isActive={channel.id === activeChannelId}
+            isMuted={channel.isMuted || false}
             notification={
               notifications[channel.name] > 0
                 ? notifications[channel.name]
@@ -70,6 +73,7 @@ interface ChannelProps {
   channel: ChannelData;
   notification?: number;
   isActive: boolean;
+  isMuted: boolean;
   activeView?: boolean;
   onClick?: () => void;
 }
@@ -78,6 +82,7 @@ export function Channel({
   theme,
   channel,
   isActive,
+  isMuted,
   activeView,
   onClick,
   notification,
@@ -106,6 +111,8 @@ export function Channel({
                 ? "active"
                 : notification && notification > 0
                 ? "notified"
+                : isMuted
+                ? "muted"
                 : ""
             }
           >
@@ -122,6 +129,7 @@ export function Channel({
       {notification && notification > 0 && !activeView && (
         <NotificationBagde theme={theme}>{notification}</NotificationBagde>
       )}
+      {isMuted && !notification && <MutedIcon theme={theme} />}
     </ChannelWrapper>
   );
 }

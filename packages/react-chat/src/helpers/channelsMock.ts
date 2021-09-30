@@ -4,6 +4,7 @@ export type ChannelData = {
   icon?: string;
   members: number;
   notifications?: number;
+  isMuted?: boolean;
 };
 
 export const channels = [
@@ -28,5 +29,6 @@ export const channels = [
     id: 4,
     name: "random",
     members: 6,
+    isMuted: true,
   },
 ];
