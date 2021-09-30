@@ -69,7 +69,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
       const messenger = await Messenger.create(identity, {
         bootstrap: getBootstrapNodes.bind({}, [
           "fleets",
-          "wakuv2.prod",
+          "wakuv2.test",
           "waku-websocket",
         ]),
       });
