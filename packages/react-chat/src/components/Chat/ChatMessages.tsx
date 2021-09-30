@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
@@ -12,6 +12,7 @@ type ChatMessagesProps = {
 
 export function ChatMessages({ messages, theme }: ChatMessagesProps) {
   const ref = useRef<HTMLHeadingElement>(null);
+  const today = useMemo(() => new Date().getDay(), []);
   useEffect(() => {
     if (ref && ref.current) {
       ref.current.scrollTop = ref.current.scrollHeight;
@@ -21,23 +22,33 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
   return (
     <MessagesWrapper ref={ref}>
       {messages.map((message, idx) => (
-        <MessageWrapper key={idx}>
-          <Icon>
-            <UserIcon theme={theme} />
-          </Icon>
+        <MessageOuterWrapper>
+          {(idx === 0 ||
+            messages[idx - 1].date.getDay() != messages[idx].date.getDay()) && (
+            <DateSeparator>
+              {message.date.getDay() === today
+                ? "Today"
+                : message.date.toLocaleDateString()}
+            </DateSeparator>
+          )}
+          <MessageWrapper key={idx}>
+            <Icon>
+              <UserIcon theme={theme} />
+            </Icon>
 
-          <ContentWrapper>
-            <MessageHeaderWrapper>
-              <UserNameWrapper theme={theme}>
-                {message.sender.slice(0, 10)}
-              </UserNameWrapper>
-              <TimeWrapper theme={theme}>
-                {message.date.toLocaleString()}
-              </TimeWrapper>
-            </MessageHeaderWrapper>
-            <MessageText theme={theme}>{message.content}</MessageText>
-          </ContentWrapper>
-        </MessageWrapper>
+            <ContentWrapper>
+              <MessageHeaderWrapper>
+                <UserNameWrapper theme={theme}>
+                  {message.sender.slice(0, 10)}
+                </UserNameWrapper>
+                <TimeWrapper theme={theme}>
+                  {message.date.toLocaleString()}
+                </TimeWrapper>
+              </MessageHeaderWrapper>
+              <MessageText theme={theme}>{message.content}</MessageText>
+            </ContentWrapper>
+          </MessageWrapper>
+        </MessageOuterWrapper>
       ))}
     </MessagesWrapper>
   );
@@ -59,6 +70,30 @@ const MessageWrapper = styled.div`
   align-items: center;
   padding: 8px 0;
   margin-bottom: 8px;
+`;
+
+const MessageOuterWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const DateSeparator = styled.div`
+  width: 100%;
+  display: flex;
+  flex: 1;
+  height: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+  color: #939ba1;
+  margin-top: 16px;
+  margin-bottom: 16px;
 `;
 
 const ContentWrapper = styled.div`
