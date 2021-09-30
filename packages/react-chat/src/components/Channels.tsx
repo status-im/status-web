@@ -121,7 +121,7 @@ export function Channel({
           {activeView && (
             <MembersAmount theme={theme}>
               {" "}
-              {channel.members} members
+              {channel.membersList.length} members
             </MembersAmount>
           )}
         </ChannelTextInfo>

@@ -113,7 +113,7 @@ const MessageHeaderWrapper = styled.div`
   align-items: center;
 `;
 
-const Icon = styled.div`
+export const Icon = styled.div`
   width: 40px;
   height: 40px;
   display: flex;

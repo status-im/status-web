@@ -91,7 +91,9 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
           if (chat) {
             const messages = await messenger.waku.store.queryHistory(
               [chat.contentTopic],
-              { decryptionKeys: [chat.symKey] }
+              {
+                decryptionKeys: [chat.symKey],
+              }
             );
             messages.sort((a, b) =>
               (a?.timestamp?.getTime() ?? 0) > (b?.timestamp?.getTime() ?? 0)
