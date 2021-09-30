@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import styled from "styled-components";
+import React, { useEffect, useMemo, useRef } from 'react';
+import styled from 'styled-components';
 
-import { ChatMessage } from "../../models/ChatMessage";
-import { Theme } from "../../styles/themes";
-import { UserIcon } from "../Icons/UserIcon";
+import { ChatMessage } from '../../models/ChatMessage';
+import { Theme } from '../../styles/themes';
+import { UserIcon } from '../Icons/UserIcon';
 
-import { ChatMessageContent } from "./ChatMessageContent";
+import { ChatMessageContent } from './ChatMessageContent';
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
@@ -25,13 +25,9 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
       {messages.map((message, idx) => {
         return (
           <MessageOuterWrapper key={idx}>
-            {(idx === 0 ||
-              messages[idx - 1].date.getDay() !=
-                messages[idx].date.getDay()) && (
+            {(idx === 0 || messages[idx - 1].date.getDay() != messages[idx].date.getDay()) && (
               <DateSeparator>
-                {message.date.getDay() === today
-                  ? "Today"
-                  : message.date.toLocaleDateString()}
+                {message.date.getDay() === today ? 'Today' : message.date.toLocaleDateString()}
               </DateSeparator>
             )}
             <MessageWrapper>
@@ -41,12 +37,8 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
 
               <ContentWrapper>
                 <MessageHeaderWrapper>
-                  <UserNameWrapper theme={theme}>
-                    {message.sender.slice(0, 10)}
-                  </UserNameWrapper>
-                  <TimeWrapper theme={theme}>
-                    {message.date.toLocaleString()}
-                  </TimeWrapper>
+                  <UserNameWrapper theme={theme}>{message.sender.slice(0, 10)}</UserNameWrapper>
+                  <TimeWrapper theme={theme}>{message.date.toLocaleString()}</TimeWrapper>
                 </MessageHeaderWrapper>
                 <MessageText theme={theme}>
                   <ChatMessageContent content={message.content} />
@@ -113,7 +105,7 @@ const MessageHeaderWrapper = styled.div`
   align-items: center;
 `;
 
-const Icon = styled.div`
+export const Icon = styled.div`
   width: 40px;
   height: 40px;
   display: flex;

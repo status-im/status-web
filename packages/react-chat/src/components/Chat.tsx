@@ -55,7 +55,7 @@ export function Chat({ theme, channelsON }: ChatProps) {
       ) : (
         <Loading>Connecting to waku</Loading>
       )}
-      {showMembers && <Members theme={theme} />}
+      {showMembers && <Members theme={theme} channel={activeChannel} />}
     </ChatWrapper>
   );
 }
