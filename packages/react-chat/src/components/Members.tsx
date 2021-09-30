@@ -32,6 +32,7 @@ export function Members({ theme, channel }: MembersProps) {
             .filter((member) => member.isOnline)
             .map((member) => (
               <Member
+                key={member.id}
                 theme={theme}
                 member={member}
                 isOnline={member.isOnline}
@@ -44,6 +45,7 @@ export function Members({ theme, channel }: MembersProps) {
             .filter((member) => !member.isOnline)
             .map((member) => (
               <Member
+                key={member.id}
                 theme={theme}
                 member={member}
                 isOnline={member.isOnline}
