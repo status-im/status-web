@@ -5,6 +5,8 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
 import { UserIcon } from "../Icons/UserIcon";
 
+import { ChatMessageContent } from "./ChatMessageContent";
+
 type ChatMessagesProps = {
   messages: ChatMessage[];
   theme: Theme;
@@ -18,38 +20,42 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
   }, [messages]);
-
   return (
     <MessagesWrapper ref={ref}>
-      {messages.map((message, idx) => (
-        <MessageOuterWrapper>
-          {(idx === 0 ||
-            messages[idx - 1].date.getDay() != messages[idx].date.getDay()) && (
-            <DateSeparator>
-              {message.date.getDay() === today
-                ? "Today"
-                : message.date.toLocaleDateString()}
-            </DateSeparator>
-          )}
-          <MessageWrapper key={idx}>
-            <Icon>
-              <UserIcon theme={theme} />
-            </Icon>
+      {messages.map((message, idx) => {
+        return (
+          <MessageOuterWrapper key={idx}>
+            {(idx === 0 ||
+              messages[idx - 1].date.getDay() !=
+                messages[idx].date.getDay()) && (
+              <DateSeparator>
+                {message.date.getDay() === today
+                  ? "Today"
+                  : message.date.toLocaleDateString()}
+              </DateSeparator>
+            )}
+            <MessageWrapper>
+              <Icon>
+                <UserIcon theme={theme} />
+              </Icon>
 
-            <ContentWrapper>
-              <MessageHeaderWrapper>
-                <UserNameWrapper theme={theme}>
-                  {message.sender.slice(0, 10)}
-                </UserNameWrapper>
-                <TimeWrapper theme={theme}>
-                  {message.date.toLocaleString()}
-                </TimeWrapper>
-              </MessageHeaderWrapper>
-              <MessageText theme={theme}>{message.content}</MessageText>
-            </ContentWrapper>
-          </MessageWrapper>
-        </MessageOuterWrapper>
-      ))}
+              <ContentWrapper>
+                <MessageHeaderWrapper>
+                  <UserNameWrapper theme={theme}>
+                    {message.sender.slice(0, 10)}
+                  </UserNameWrapper>
+                  <TimeWrapper theme={theme}>
+                    {message.date.toLocaleString()}
+                  </TimeWrapper>
+                </MessageHeaderWrapper>
+                <MessageText theme={theme}>
+                  <ChatMessageContent content={message.content} />
+                </MessageText>
+              </ContentWrapper>
+            </MessageWrapper>
+          </MessageOuterWrapper>
+        );
+      })}
     </MessagesWrapper>
   );
 }
