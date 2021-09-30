@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { ChannelData } from "../helpers/channelsMock";
 
+import { ChannelData } from "../helpers/channelsMock";
 import { Theme } from "../styles/themes";
+
 import { Icon } from "./Chat/ChatMessages";
 import { UserIcon } from "./Icons/UserIcon";
 
