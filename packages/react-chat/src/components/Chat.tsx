@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { ChannelData, channels } from "../helpers/channelsMock";
+import { CommunityData } from "../helpers/communityMock";
 import { useMessenger } from "../hooks/useMessenger";
 import { Theme } from "../styles/themes";
 
@@ -11,12 +12,13 @@ import { Members } from "./Members";
 
 interface ChatProps {
   theme: Theme;
-  channelsON?: boolean;
+  community: CommunityData;
 }
 
-export function Chat({ theme, channelsON }: ChatProps) {
+export function Chat({ theme, community }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
   const [showMembers, setShowMembers] = useState(true);
+  const [showChannels, setShowChannels] = useState(false);
 
   const {
     messenger,
@@ -31,14 +33,12 @@ export function Chat({ theme, channelsON }: ChatProps) {
 
   return (
     <ChatWrapper>
-      {channelsON && (
+      {showChannels && (
         <Channels
           notifications={notifications}
           clearNotifications={clearNotifications}
           theme={theme}
-          icon={"https://www.cryptokitties.co/icons/logo.svg"}
-          name={"CryptoKitties"}
-          members={186}
+          community={community}
           setActiveChannel={setActiveChannel}
           activeChannelId={activeChannel.id}
         />
@@ -51,11 +51,19 @@ export function Chat({ theme, channelsON }: ChatProps) {
           sendMessage={sendMessage}
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
+          community={community}
+          showCommunity={!showChannels}
         />
       ) : (
         <Loading>Connecting to waku</Loading>
       )}
-      {showMembers && <Members theme={theme} channel={activeChannel} />}
+      {showMembers && (
+        <Members
+          theme={theme}
+          channel={activeChannel}
+          setShowChannels={setShowChannels}
+        />
+      )}
     </ChatWrapper>
   );
 }
