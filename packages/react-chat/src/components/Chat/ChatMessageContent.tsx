@@ -5,7 +5,7 @@ import { Theme } from "../../styles/themes";
 
 /* eslint-disable no-useless-escape */
 const regEx =
-  /(?:(?:http|https):\/\/)?(?:[-a-z0-9]+\.)+[a-z]+(?::\d+)?(?:(?:\/[-\+~%/\.\w]+)?\/?(?:[&?][-\+=&;%@\.\w]+)?(?:#[\w]+)?)?/gi;
+    /(?:(?:http|https):\/\/)?(?:[-a-z0-9]+\.)+[a-z]+(?::\d+)?(?:(?:\/[-\+~%/\.\w]+)?\/?(?:[&?][-\+=&;%@\.\w]+)?(?:#[\w]+)?)?/gi;
 /* eslint-enable no-useless-escape */
 
 type ChatMessageContentProps = {
@@ -20,6 +20,8 @@ export function ChatMessageContent({
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
     content,
   ]);
+  const [link, setLink] = useState<string | undefined>(undefined)
+  const [ openGraph , setOpenGraph ] = useState<{'og:site_name':string, 'og:title':string, 'og:image':string} | undefined>(undefined)
 
   useEffect(() => {
     const split = content.split(regEx);
@@ -44,12 +46,59 @@ export function ChatMessageContent({
           split[idx + 1]
         );
       });
+      const match = matches[0]
+      const link =
+          match.startsWith("http://") || match.startsWith("https://")
+              ? match
+              : "https://" + match;
+      setLink(link)
       setElements(newSplit);
     }
   }, [content]);
 
-  return <>{elements.map((el) => el)}</>;
+    useEffect(() => {
+        const updatePreview = async () => {
+            if (link) {
+                const response = await fetch('https://localhost:3000',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 'site': link })
+                    })
+                const body = await response.text()
+                console.log(body)
+                try{
+                    const parsedBody = JSON.parse(body)
+                    if('og:image' in parsedBody && 'og:site_name' in parsedBody && 'og:title' in parsedBody){
+                        setOpenGraph(JSON.parse(body))
+                    }
+                } catch{
+
+                }
+            }
+        }
+        updatePreview()
+    }, [link])
+    if(openGraph){
+        return (
+            <ContentWrapper>
+                <div>{elements.map((el) => el)}</div>
+                <img src={openGraph["og:image"]}/>
+            </ContentWrapper>
+        )
+    } else {
+        return <>{elements.map((el) => el)}</>;
+    }
 }
+
+
+
+const ContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+`
 
 const Link = styled.a`
   text-decoration: underline;
