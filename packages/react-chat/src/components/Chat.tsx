@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
-import { ChannelData, channels } from '../helpers/channelsMock';
-import { CommunityData } from '../helpers/communityMock';
-import { useMessenger } from '../hooks/useMessenger';
-import { Theme } from '../styles/themes';
+import { ChannelData, channels } from "../helpers/channelsMock";
+import { CommunityData } from "../helpers/communityMock";
+import { useMessenger } from "../hooks/useMessenger";
+import { Theme } from "../styles/themes";
 
-import { Channels } from './Channels';
-import { ChatBody } from './Chat/ChatBody';
-import { Members } from './Members';
+import { Channels } from "./Channels";
+import { ChatBody } from "./Chat/ChatBody";
+import { Members } from "./Members";
 
 interface ChatProps {
   theme: Theme;
@@ -20,9 +20,15 @@ export function Chat({ theme, community }: ChatProps) {
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(false);
 
-  const { messenger, messages, sendMessage, notifications, clearNotifications } = useMessenger(
+  const {
+    messenger,
+    messages,
+    sendMessage,
+    notifications,
+    clearNotifications,
+  } = useMessenger(
     activeChannel.name,
-    channels.map(channel => channel.name)
+    channels.map((channel) => channel.name)
   );
 
   return (
@@ -51,7 +57,13 @@ export function Chat({ theme, community }: ChatProps) {
       ) : (
         <Loading>Connecting to waku</Loading>
       )}
-      {showMembers && <Members theme={theme} channel={activeChannel} setShowChannels={setShowChannels} />}
+      {showMembers && (
+        <Members
+          theme={theme}
+          channel={activeChannel}
+          setShowChannels={setShowChannels}
+        />
+      )}
     </ChatWrapper>
   );
 }
