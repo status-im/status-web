@@ -72,7 +72,7 @@ const ChatBodyWrapper = styled.div<ThemeProps>`
   flex-direction: column;
   flex: 1;
   height: 100%;
-  background: ${({ theme }) => theme.textPrimaryColor};
+  background: ${({ theme }) => theme.bodyBackgroundColor};
 `;
 
 const ChannelWrapper = styled.div`
@@ -100,7 +100,7 @@ const CommunityWrap = styled.div<ThemeProps>`
     height: 24px;
     transform: translateY(-50%);
     border-radius: 1px;
-    background: ${({ theme }) => theme.bodyBackgroundColor};
+    background: ${({ theme }) => theme.textPrimaryColor};
     opacity: 0.1;
   }
 `;
