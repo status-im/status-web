@@ -2,26 +2,25 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { ChannelData, channels } from "../helpers/channelsMock";
+import { CommunityData } from "../helpers/communityMock";
 import { Theme } from "../styles/themes";
 
+import { Community, MembersAmount } from "./Community";
 import { MutedIcon } from "./Icons/MutedIcon";
 
 interface ChannelsProps {
   theme: Theme;
-  icon: string;
-  name: string;
+  community: CommunityData;
   notifications: { [id: string]: number };
   clearNotifications: (id: string) => void;
-  members: number;
+
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
 }
 
 export function Channels({
   theme,
-  icon,
-  name,
-  members,
+  community,
   notifications,
   setActiveChannel,
   clearNotifications,
@@ -38,13 +37,7 @@ export function Channels({
 
   return (
     <ChannelsWrapper theme={theme}>
-      <Community>
-        <CommunityLogo src={icon} alt={`${name} logo`} />
-        <CommunityInfo>
-          <CommunityName theme={theme}>{name}</CommunityName>
-          <MembersAmount theme={theme}>{members} members</MembersAmount>
-        </CommunityInfo>
-      </Community>
+      <Community community={community} theme={theme} />
       <ChannelList>
         {channels.map((channel) => (
           <Channel
@@ -146,41 +139,10 @@ const ChannelsWrapper = styled.div<ThemeProps>`
   flex-direction: column;
 `;
 
-const Community = styled.div`
-  display: flex;
-  margin-bottom: 16px;
-`;
-
-const CommunityLogo = styled.img`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  margin-left: 10px;
-`;
-
-const CommunityInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 8px;
-`;
-
-const CommunityName = styled.h1<ThemeProps>`
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 22px;
-  color: ${({ theme }) => theme.textPrimaryColor};
-`;
-
-const MembersAmount = styled.p<ThemeProps>`
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.1px;
-  color: ${({ theme }) => theme.textSecondaryColor};
-`;
-
 const ChannelList = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 16px;
 `;
 
 const ChannelWrapper = styled.div<ThemeProps>`

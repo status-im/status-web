@@ -1,5 +1,6 @@
 import React from "react";
 
+import { community } from "../helpers/communityMock";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { lightTheme } from "../styles/themes";
 
@@ -9,7 +10,7 @@ export function ReactChat() {
   return (
     <div>
       <GlobalStyle />
-      <Chat channelsON={true} theme={lightTheme} />
+      <Chat theme={lightTheme} community={community} />
     </div>
   );
 }

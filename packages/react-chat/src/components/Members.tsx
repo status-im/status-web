@@ -10,9 +10,10 @@ import { UserIcon } from "./Icons/UserIcon";
 interface MembersProps {
   theme: Theme;
   channel: ChannelData;
+  setShowChannels: (val: boolean) => void;
 }
 
-export function Members({ theme, channel }: MembersProps) {
+export function Members({ theme, channel, setShowChannels }: MembersProps) {
   return (
     <MembersWrapper theme={theme}>
       <MemberHeading theme={theme}>Members</MemberHeading>
@@ -36,6 +37,7 @@ export function Members({ theme, channel }: MembersProps) {
                 theme={theme}
                 member={member}
                 isOnline={member.isOnline}
+                setShowChannels={setShowChannels}
               />
             ))}
         </MemberCategory>
@@ -49,6 +51,7 @@ export function Members({ theme, channel }: MembersProps) {
                 theme={theme}
                 member={member}
                 isOnline={member.isOnline}
+                setShowChannels={setShowChannels}
               />
             ))}
         </MemberCategory>
@@ -61,11 +64,17 @@ interface MemberProps {
   theme: Theme;
   member: any;
   isOnline: boolean;
+  setShowChannels: (val: boolean) => void;
 }
 
-export function Member({ theme, member, isOnline }: MemberProps) {
+export function Member({
+  theme,
+  member,
+  isOnline,
+  setShowChannels,
+}: MemberProps) {
   return (
-    <MemberData>
+    <MemberData onClick={() => setShowChannels(true)}>
       <MemberIcon
         style={{
           backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",
