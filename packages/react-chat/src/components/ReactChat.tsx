@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
-import { community } from "../helpers/communityMock";
+import { CommunityData } from "../helpers/communityMock";
+import { useRefWidthBreak } from "../hooks/useRefWidthBreak";
 import { GlobalStyle } from "../styles/GlobalStyle";
-import { lightTheme } from "../styles/themes";
+import { Theme } from "../styles/themes";
 
 import { Chat } from "./Chat";
 
-export function ReactChat() {
+interface ReactChatProps {
+  theme: Theme;
+  community: CommunityData;
+}
+
+export function ReactChat({ theme, community }: ReactChatProps) {
+  const ref = useRef<HTMLHeadingElement>(null);
+  const narrow = useRefWidthBreak(ref, 735);
+  useEffect(() => {
+    console.log(narrow);
+  }, [narrow]);
   return (
-    <div>
+    <div ref={ref}>
       <GlobalStyle />
-      <Chat theme={lightTheme} community={community} />
+      <Chat theme={theme} community={community} />
     </div>
   );
 }

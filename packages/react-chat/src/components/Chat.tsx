@@ -18,7 +18,7 @@ interface ChatProps {
 export function Chat({ theme, community }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
   const [showMembers, setShowMembers] = useState(true);
-  const [showChannels, setShowChannels] = useState(false);
+  const [showChannels, setShowChannels] = useState(true);
 
   const {
     messenger,
