@@ -100,7 +100,7 @@ export const channels = [
       },
       {
         id: 3,
-        name: "Guest",
+        name: "Merry Silvester Christmas",
         isOnline: true,
       },
     ],
