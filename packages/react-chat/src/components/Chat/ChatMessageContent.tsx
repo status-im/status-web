@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+
+import { Theme } from "../../styles/themes";
 
 /* eslint-disable no-useless-escape */
 const regEx =
@@ -7,9 +10,13 @@ const regEx =
 
 type ChatMessageContentProps = {
   content: string;
+  theme: Theme;
 };
 
-export function ChatMessageContent({ content }: ChatMessageContentProps) {
+export function ChatMessageContent({
+  content,
+  theme,
+}: ChatMessageContentProps) {
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
     content,
   ]);
@@ -25,9 +32,15 @@ export function ChatMessageContent({ content }: ChatMessageContentProps) {
             ? match
             : "https://" + match;
         newSplit.push(
-          <a key={idx} href={link}>
+          <Link
+            key={idx}
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            theme={theme}
+          >
             {match}
-          </a>,
+          </Link>,
           split[idx + 1]
         );
       });
@@ -37,3 +50,8 @@ export function ChatMessageContent({ content }: ChatMessageContentProps) {
 
   return <>{elements.map((el) => el)}</>;
 }
+
+const Link = styled.a`
+  text-decoration: underline;
+  color: ${({ theme }) => theme.memberNameColor};
+`;

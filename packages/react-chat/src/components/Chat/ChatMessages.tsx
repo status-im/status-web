@@ -49,7 +49,7 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
                   </TimeWrapper>
                 </MessageHeaderWrapper>
                 <MessageText theme={theme}>
-                  <ChatMessageContent content={message.content} />
+                  <ChatMessageContent content={message.content} theme={theme} />
                 </MessageText>
               </ContentWrapper>
             </MessageWrapper>

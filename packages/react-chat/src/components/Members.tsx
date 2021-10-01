@@ -116,6 +116,9 @@ const MemberName = styled.p<ThemeProps>`
   color: ${({ theme }) => theme.textPrimaryColor};
   opacity: 0.7;
   margin-left: 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const MembersList = styled.div`
@@ -139,6 +142,7 @@ const MemberIcon = styled(Icon)<ThemeProps>`
   position: relative;
   background-size: contain;
   background-position: center;
+  flex-shrink: 0;
 
   &.online {
     &::after {
