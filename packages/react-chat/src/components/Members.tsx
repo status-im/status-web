@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { ChannelData } from '../helpers/channelsMock';
-import { Theme } from '../styles/themes';
+import { ChannelData } from "../helpers/channelsMock";
+import { Theme } from "../styles/themes";
 
-import { Icon } from './Chat/ChatMessages';
-import { UserIcon } from './Icons/UserIcon';
+import { Icon } from "./Chat/ChatMessages";
+import { UserIcon } from "./Icons/UserIcon";
 
 interface MembersProps {
   theme: Theme;
@@ -30,8 +30,8 @@ export function Members({ theme, channel, setShowChannels }: MembersProps) {
         <MemberCategory>
           <MemberCategoryName theme={theme}>Online</MemberCategoryName>
           {channel.membersList
-            .filter(member => member.isOnline)
-            .map(member => (
+            .filter((member) => member.isOnline)
+            .map((member) => (
               <Member
                 key={member.id}
                 theme={theme}
@@ -44,8 +44,8 @@ export function Members({ theme, channel, setShowChannels }: MembersProps) {
         <MemberCategory>
           <MemberCategoryName theme={theme}>Offline</MemberCategoryName>
           {channel.membersList
-            .filter(member => !member.isOnline)
-            .map(member => (
+            .filter((member) => !member.isOnline)
+            .map((member) => (
               <Member
                 key={member.id}
                 theme={theme}
@@ -67,15 +67,21 @@ interface MemberProps {
   setShowChannels: (val: boolean) => void;
 }
 
-export function Member({ theme, member, isOnline, setShowChannels }: MemberProps) {
+export function Member({
+  theme,
+  member,
+  isOnline,
+  setShowChannels,
+}: MemberProps) {
   return (
     <MemberData onClick={() => setShowChannels(true)}>
       <MemberIcon
         style={{
-          backgroundImage: member.avatar ? `url(${member.avatar})` : 'unset',
+          backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",
         }}
-        className={isOnline ? 'online' : ''}
-        theme={theme}>
+        className={isOnline ? "online" : ""}
+        theme={theme}
+      >
         {!member.avatar && <UserIcon theme={theme} memberView={true} />}
       </MemberIcon>
       <MemberName theme={theme}>{member.name}</MemberName>
@@ -128,6 +134,7 @@ const MemberName = styled.p<ThemeProps>`
 const MembersList = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 `;
 
 const MemberCategory = styled.div`
@@ -152,7 +159,7 @@ const MemberIcon = styled(Icon)<ThemeProps>`
 
   &.online {
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       right: -1px;
       bottom: 1px;

@@ -14,6 +14,6 @@ interface NarrowProviderProps {
 }
 
 export function NarrowProvider({ children, myRef }: NarrowProviderProps) {
-  const narrow = useRefWidthBreak(myRef, 735);
+  const narrow = useRefWidthBreak(myRef, 736);
   return <NarrowContext.Provider value={narrow} children={children} />;
 }
