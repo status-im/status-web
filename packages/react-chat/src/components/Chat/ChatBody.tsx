@@ -9,6 +9,7 @@ import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
 import { MembersIcon } from "../Icons/MembersIcon";
+import { NarrowChannels } from "../NarrowChannels";
 import { NarrowTopbar } from "../NarrowTopbar";
 
 import { ChatInput } from "./ChatInput";
@@ -23,6 +24,9 @@ interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
   showCommunity: boolean;
+  notifications: { [id: string]: number };
+  setActiveChannel: (val: ChannelData) => void;
+  activeChannelId: number;
 }
 
 export function ChatBody({
@@ -34,9 +38,13 @@ export function ChatBody({
   onClick,
   showMembers,
   showCommunity,
+  notifications,
+  setActiveChannel,
+  activeChannelId,
 }: ChatBodyProps) {
   const narrow = useNarrow();
-  const [showChannels, setShowChannels] = useState(false);
+  const [showChannelsList, setShowChannels] = useState(false);
+  const [showMembersList, setShowMembersList] = useState(false);
 
   return (
     <ChatBodyWrapper theme={theme}>
@@ -53,26 +61,35 @@ export function ChatBody({
             isActive={true}
             activeView={true}
             isMuted={false}
-            onClick={() => setShowChannels(true)}
+            onClick={() => (narrow ? setShowChannels(true) : undefined)}
           />
         </ChannelWrapper>
         <MemberBtn
-          onClick={onClick}
+          onClick={narrow ? () => setShowMembersList(true) : onClick}
           className={showMembers ? "active" : ""}
           theme={theme}
         >
           <MembersIcon theme={theme} />
         </MemberBtn>
       </ChatTopbar>
-      {!showChannels && (
+      {!showChannelsList && !showMembersList && (
         <>
           <ChatMessages messages={messages} theme={theme} />
           <ChatInput theme={theme} addMessage={sendMessage} />
         </>
       )}
-      {showChannels && (
-        <NarrowTopbar theme={theme} onClick={() => setShowChannels(false)}>
-          Chats
+      {showChannelsList && narrow && (
+        <NarrowChannels
+          theme={theme}
+          notifications={notifications}
+          setActiveChannel={setActiveChannel}
+          setShowChannels={setShowChannels}
+          activeChannelId={activeChannelId}
+        />
+      )}
+      {showMembersList && narrow && (
+        <NarrowTopbar theme={theme} onClick={() => setShowMembersList(false)}>
+          Community members
         </NarrowTopbar>
       )}
     </ChatBodyWrapper>
@@ -115,7 +132,7 @@ const CommunityWrap = styled.div<ThemeProps>`
     height: 24px;
     transform: translateY(-50%);
     border-radius: 1px;
-    background: ${({ theme }) => theme.textPrimaryColor};
+    background: ${({ theme }) => theme.primary};
     opacity: 0.1;
   }
 `;

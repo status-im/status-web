@@ -52,6 +52,9 @@ export function Chat({ theme, community }: ChatProps) {
           channel={activeChannel}
           messages={messages}
           sendMessage={sendMessage}
+          notifications={notifications}
+          setActiveChannel={setActiveChannel}
+          activeChannelId={activeChannel.id}
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
           community={community}

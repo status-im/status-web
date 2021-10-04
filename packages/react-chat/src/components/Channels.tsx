@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useMemo } from "react";
+import styled from "styled-components";
 
-import { ChannelData, channels } from '../helpers/channelsMock';
-import { CommunityData } from '../helpers/communityMock';
-import { Theme } from '../styles/themes';
+import { useNarrow } from "../contexts/narrowProvider";
+import { ChannelData, channels } from "../helpers/channelsMock";
+import { CommunityData } from "../helpers/communityMock";
+import { Theme } from "../styles/themes";
 
-import { Community } from './Community';
-import { MutedIcon } from './Icons/MutedIcon';
-import { textMediumStyles } from './Text';
+import { Community } from "./Community";
+import { MutedIcon } from "./Icons/MutedIcon";
+import { textMediumStyles } from "./Text";
 
 interface ChannelsProps {
   theme: Theme;
@@ -28,7 +29,7 @@ export function Channels({
   activeChannelId,
 }: ChannelsProps) {
   useEffect(() => {
-    const channel = channels.find(channel => channel.id === activeChannelId);
+    const channel = channels.find((channel) => channel.id === activeChannelId);
     if (channel) {
       if (notifications[channel.name] > 0) {
         clearNotifications(channel.name);
@@ -40,14 +41,18 @@ export function Channels({
     <ChannelsWrapper theme={theme}>
       <StyledCommunity theme={theme} community={community} />
       <ChannelList>
-        {channels.map(channel => (
+        {channels.map((channel) => (
           <Channel
             key={channel.id}
             channel={channel}
             theme={theme}
             isActive={channel.id === activeChannelId}
             isMuted={channel.isMuted || false}
-            notification={notifications[channel.name] > 0 && !channel.isMuted ? notifications[channel.name] : undefined}
+            notification={
+              notifications[channel.name] > 0 && !channel.isMuted
+                ? notifications[channel.name]
+                : undefined
+            }
             onClick={() => {
               setActiveChannel(channel);
             }}
@@ -68,25 +73,58 @@ interface ChannelProps {
   onClick?: () => void;
 }
 
-export function Channel({ theme, channel, isActive, isMuted, activeView, onClick, notification }: ChannelProps) {
+export function Channel({
+  theme,
+  channel,
+  isActive,
+  isMuted,
+  activeView,
+  onClick,
+  notification,
+}: ChannelProps) {
+  const narrow = useNarrow();
+  const className = useMemo(
+    () => (narrow && !activeView ? "narrow" : activeView ? "active" : ""),
+    [narrow]
+  );
+
   return (
-    <ChannelWrapper className={isActive && !activeView ? 'active' : ''} theme={theme} onClick={onClick}>
+    <ChannelWrapper
+      className={isActive && !activeView ? "active" : ""}
+      theme={theme}
+      onClick={onClick}
+    >
       <ChannelInfo>
         <ChannelLogo
           style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : '',
+            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
           }}
-          className={activeView ? 'active' : ''}
-          theme={theme}>
+          className={className}
+          theme={theme}
+        >
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogo>
         <ChannelTextInfo>
           <ChannelName
             theme={theme}
-            className={isActive ? 'active' : notification && notification > 0 ? 'notified' : isMuted ? 'muted' : ''}>
+            className={
+              isActive
+                ? "active"
+                : notification && notification > 0
+                ? "notified"
+                : isMuted
+                ? "muted"
+                : ""
+            }
+          >
             # {channel.name}
           </ChannelName>
-          {activeView && <MembersAmount theme={theme}> {channel.membersList.length} members</MembersAmount>}
+          {activeView && (
+            <MembersAmount theme={theme}>
+              {" "}
+              {channel.membersList.length} members
+            </MembersAmount>
+          )}
         </ChannelTextInfo>
       </ChannelInfo>
       {notification && notification > 0 && !activeView && (
@@ -111,7 +149,7 @@ const ChannelsWrapper = styled.div<ThemeProps>`
 `;
 
 const StyledCommunity = styled(Community)`
-  padding-left: 0 0 0 10px;
+  padding: 0 0 0 10px;
   margin: 0 0 16px;
 `;
 
@@ -122,10 +160,9 @@ const MembersAmount = styled.p<ThemeProps>`
   color: ${({ theme }) => theme.secondary};
 `;
 
-const ChannelList = styled.div`
+export const ChannelList = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 16px;
   overflow: scroll;
 `;
 
@@ -171,6 +208,13 @@ const ChannelLogo = styled.div<ThemeProps>`
   &.active {
     width: 36px;
     height: 36px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  &.narrow {
+    width: 40px;
+    height: 40px;
     font-size: 20px;
     line-height: 20px;
   }
