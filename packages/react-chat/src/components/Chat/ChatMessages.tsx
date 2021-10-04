@@ -141,5 +141,6 @@ const TimeWrapper = styled.div<ThemeProps>`
 const MessageText = styled.div<ThemeProps>`
   overflow-wrap: anywhere;
   width: 100%;
+  white-space: pre;
   color: ${({ theme }) => theme.textPrimaryColor};
 `;
