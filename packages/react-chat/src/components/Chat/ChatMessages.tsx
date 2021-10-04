@@ -73,7 +73,6 @@ const MessagesWrapper = styled.div`
 const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
   padding: 8px 0;
   margin-bottom: 8px;
 `;
@@ -121,6 +120,7 @@ export const Icon = styled.div`
   align-items: end;
   border-radius: 50%;
   background-color: #bcbdff;
+  flex-shrink: 0;
 `;
 
 const UserNameWrapper = styled.div<ThemeProps>`

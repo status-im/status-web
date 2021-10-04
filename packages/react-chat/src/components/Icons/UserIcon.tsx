@@ -3,19 +3,19 @@ import styled from "styled-components";
 
 import { Theme } from "../../styles/themes";
 
-interface ThemeProps {
+interface UserIconProps {
   theme: Theme;
+  memberView?: boolean;
 }
 
-export const UserIcon = ({ theme }: ThemeProps) => {
+export const UserIcon = ({ theme, memberView }: UserIconProps) => {
   return (
     <Icon
-      width="34"
-      height="34"
       viewBox="0 0 34 34"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       theme={theme}
+      memberView={memberView}
     >
       <ellipse cx="17" cy="10.3883" rx="6.94445" ry="6.94445" />
       <path
@@ -27,7 +27,10 @@ export const UserIcon = ({ theme }: ThemeProps) => {
   );
 };
 
-const Icon = styled.svg<ThemeProps>`
+const Icon = styled.svg<UserIconProps>`
+  width: ${({ memberView }) => (memberView ? "20px" : "34px")};
+  height: ${({ memberView }) => (memberView ? "20px" : "34px")};
+
   & > path,
   & > ellipse {
     fill: ${({ theme }) => theme.iconUserColor};
