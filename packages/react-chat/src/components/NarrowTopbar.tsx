@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { Theme } from "../styles/themes";
@@ -7,18 +7,27 @@ import { BackIcon } from "./Icons/BackIcon";
 
 interface NarrowTopbarProps {
   theme: Theme;
-  children: ReactNode;
+  list: string;
+  community: string;
   onClick: () => void;
 }
 
-export function NarrowTopbar({ theme, children, onClick }: NarrowTopbarProps) {
+export function NarrowTopbar({
+  theme,
+  list,
+  community,
+  onClick,
+}: NarrowTopbarProps) {
   return (
     <TopbarWrapper theme={theme}>
       <GoBackBtn onClick={onClick}>
         <BackIcon theme={theme} />
       </GoBackBtn>
 
-      <HeadingWrapper>{children}</HeadingWrapper>
+      <HeadingWrapper>
+        <Heading theme={theme}>{list}</Heading>
+        <SubHeading theme={theme}>{community}</SubHeading>
+      </HeadingWrapper>
     </TopbarWrapper>
   );
 }
@@ -39,6 +48,16 @@ const HeadingWrapper = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
+`;
+
+const Heading = styled.p<ThemeProps>`
+  font-weight: 500;
+  color: ${({ theme }) => theme.primary};
+`;
+
+const SubHeading = styled.p<ThemeProps>`
+  font-weight: 500;
+  color: ${({ theme }) => theme.secondary};
 `;
 
 const GoBackBtn = styled.button`

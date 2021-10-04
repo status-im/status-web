@@ -9,7 +9,7 @@ import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowChannelsProps {
   theme: Theme;
-  name: string;
+  community: string;
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
@@ -18,7 +18,7 @@ interface NarrowChannelsProps {
 
 export function NarrowChannels({
   theme,
-  name,
+  community,
   notifications,
   setActiveChannel,
   activeChannelId,
@@ -26,10 +26,12 @@ export function NarrowChannels({
 }: NarrowChannelsProps) {
   return (
     <ListWrapper>
-      <NarrowTopbar theme={theme} onClick={() => setShowChannels(false)}>
-        <Heading theme={theme}>Channels</Heading>
-        <SubHeading theme={theme}>{name}</SubHeading>
-      </NarrowTopbar>
+      <NarrowTopbar
+        theme={theme}
+        list="Channels"
+        community={community}
+        onClick={() => setShowChannels(false)}
+      />
       <ChannelList>
         {channels.map((channel) => (
           <Channel
@@ -54,20 +56,6 @@ export function NarrowChannels({
   );
 }
 
-interface ThemeProps {
-  theme: Theme;
-}
-
 const ListWrapper = styled.div`
   padding: 18px;
-`;
-
-const Heading = styled.p<ThemeProps>`
-  font-weight: 500;
-  color: ${({ theme }) => theme.primary};
-`;
-
-const SubHeading = styled.p<ThemeProps>`
-  font-weight: 500;
-  color: ${({ theme }) => theme.secondary};
 `;

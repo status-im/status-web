@@ -81,7 +81,7 @@ export function ChatBody({
       {showChannelsList && narrow && (
         <NarrowChannels
           theme={theme}
-          name={community.name}
+          community={community.name}
           notifications={notifications}
           setActiveChannel={setActiveChannel}
           setShowChannels={setShowChannels}
@@ -89,9 +89,12 @@ export function ChatBody({
         />
       )}
       {showMembersList && narrow && (
-        <NarrowTopbar theme={theme} onClick={() => setShowMembersList(false)}>
-          Community members
-        </NarrowTopbar>
+        <NarrowTopbar
+          theme={theme}
+          list="Community members"
+          community={community.name}
+          onClick={() => setShowMembersList(false)}
+        />
       )}
     </ChatBodyWrapper>
   );
