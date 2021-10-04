@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useNarrow } from "../contexts/narrowProvider";
 import { ChannelData, channels } from "../helpers/channelsMock";
 import { CommunityData } from "../helpers/communityMock";
 import { useMessenger } from "../hooks/useMessenger";
@@ -18,7 +19,9 @@ interface ChatProps {
 export function Chat({ theme, community }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
   const [showMembers, setShowMembers] = useState(true);
-  const [showChannels, setShowChannels] = useState(false);
+  const [showChannels, setShowChannels] = useState(true);
+  const narrow = useNarrow();
+  // const className = useMemo(() => (narrow ? 'narrow' : ''), [narrow]);
 
   const {
     messenger,
@@ -33,7 +36,7 @@ export function Chat({ theme, community }: ChatProps) {
 
   return (
     <ChatWrapper>
-      {showChannels && (
+      {showChannels && !narrow && (
         <Channels
           notifications={notifications}
           clearNotifications={clearNotifications}
@@ -57,7 +60,7 @@ export function Chat({ theme, community }: ChatProps) {
       ) : (
         <Loading>Connecting to waku</Loading>
       )}
-      {showMembers && (
+      {showMembers && !narrow && (
         <Members
           theme={theme}
           channel={activeChannel}

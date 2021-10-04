@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useRef } from "react";
 
-import { community } from "../helpers/communityMock";
+import { NarrowProvider } from "../contexts/narrowProvider";
+import { CommunityData } from "../helpers/communityMock";
 import { GlobalStyle } from "../styles/GlobalStyle";
-import { lightTheme } from "../styles/themes";
+import { Theme } from "../styles/themes";
 
 import { Chat } from "./Chat";
 
-export function ReactChat() {
+interface ReactChatProps {
+  theme: Theme;
+  community: CommunityData;
+}
+
+export function ReactChat({ theme, community }: ReactChatProps) {
+  const ref = useRef<HTMLHeadingElement>(null);
   return (
-    <div>
-      <GlobalStyle />
-      <Chat theme={lightTheme} community={community} />
-    </div>
+    <NarrowProvider myRef={ref}>
+      <div ref={ref}>
+        <GlobalStyle />
+        <Chat theme={theme} community={community} />
+      </div>
+    </NarrowProvider>
   );
 }
