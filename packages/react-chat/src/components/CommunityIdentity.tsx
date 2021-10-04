@@ -43,6 +43,7 @@ const Logo = styled.img`
 `;
 
 const Name = styled.p`
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   color: ${({ theme }) => theme.primary};
 
