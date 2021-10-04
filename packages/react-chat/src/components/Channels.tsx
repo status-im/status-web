@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 
-import { ChannelData, channels } from "../helpers/channelsMock";
-import { CommunityData } from "../helpers/communityMock";
-import { Theme } from "../styles/themes";
+import { ChannelData, channels } from '../helpers/channelsMock';
+import { CommunityData } from '../helpers/communityMock';
+import { Theme } from '../styles/themes';
 
-import { Community } from "./Community";
-import { MutedIcon } from "./Icons/MutedIcon";
-import { textMediumStyles } from "./Text";
+import { Community } from './Community';
+import { MutedIcon } from './Icons/MutedIcon';
+import { textMediumStyles } from './Text';
 
 interface ChannelsProps {
   theme: Theme;
@@ -28,7 +28,7 @@ export function Channels({
   activeChannelId,
 }: ChannelsProps) {
   useEffect(() => {
-    const channel = channels.find((channel) => channel.id === activeChannelId);
+    const channel = channels.find(channel => channel.id === activeChannelId);
     if (channel) {
       if (notifications[channel.name] > 0) {
         clearNotifications(channel.name);
@@ -40,18 +40,14 @@ export function Channels({
     <ChannelsWrapper theme={theme}>
       <StyledCommunity theme={theme} community={community} />
       <ChannelList>
-        {channels.map((channel) => (
+        {channels.map(channel => (
           <Channel
             key={channel.id}
             channel={channel}
             theme={theme}
             isActive={channel.id === activeChannelId}
             isMuted={channel.isMuted || false}
-            notification={
-              notifications[channel.name] > 0 && !channel.isMuted
-                ? notifications[channel.name]
-                : undefined
-            }
+            notification={notifications[channel.name] > 0 && !channel.isMuted ? notifications[channel.name] : undefined}
             onClick={() => {
               setActiveChannel(channel);
             }}
@@ -72,52 +68,25 @@ interface ChannelProps {
   onClick?: () => void;
 }
 
-export function Channel({
-  theme,
-  channel,
-  isActive,
-  isMuted,
-  activeView,
-  onClick,
-  notification,
-}: ChannelProps) {
+export function Channel({ theme, channel, isActive, isMuted, activeView, onClick, notification }: ChannelProps) {
   return (
-    <ChannelWrapper
-      className={isActive && !activeView ? "active" : ""}
-      theme={theme}
-      onClick={onClick}
-    >
+    <ChannelWrapper className={isActive && !activeView ? 'active' : ''} theme={theme} onClick={onClick}>
       <ChannelInfo>
         <ChannelLogo
           style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
+            backgroundImage: channel.icon ? `url(${channel.icon}` : '',
           }}
-          className={activeView ? "active" : ""}
-          theme={theme}
-        >
+          className={activeView ? 'active' : ''}
+          theme={theme}>
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogo>
         <ChannelTextInfo>
           <ChannelName
             theme={theme}
-            className={
-              isActive
-                ? "active"
-                : notification && notification > 0
-                ? "notified"
-                : isMuted
-                ? "muted"
-                : ""
-            }
-          >
+            className={isActive ? 'active' : notification && notification > 0 ? 'notified' : isMuted ? 'muted' : ''}>
             # {channel.name}
           </ChannelName>
-          {activeView && (
-            <MembersAmount theme={theme}>
-              {" "}
-              {channel.membersList.length} members
-            </MembersAmount>
-          )}
+          {activeView && <MembersAmount theme={theme}> {channel.membersList.length} members</MembersAmount>}
         </ChannelTextInfo>
       </ChannelInfo>
       {notification && notification > 0 && !activeView && (
@@ -134,6 +103,7 @@ interface ThemeProps {
 const ChannelsWrapper = styled.div<ThemeProps>`
   width: 21%;
   height: 100%;
+  min-width: 196px;
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
   padding: 10px 0.6%;
   display: flex;
