@@ -47,7 +47,7 @@ export function Channels({
             isActive={channel.id === activeChannelId}
             isMuted={channel.isMuted || false}
             notification={
-              notifications[channel.name] > 0
+              notifications[channel.name] > 0 && !channel.isMuted
                 ? notifications[channel.name]
                 : undefined
             }

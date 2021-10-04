@@ -24,7 +24,7 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
     <MessagesWrapper ref={ref}>
       {messages.map((message, idx) => {
         return (
-          <MessageOuterWrapper key={idx}>
+          <MessageOuterWrapper key={message.date.getTime()}>
             {(idx === 0 ||
               messages[idx - 1].date.getDay() !=
                 messages[idx].date.getDay()) && (

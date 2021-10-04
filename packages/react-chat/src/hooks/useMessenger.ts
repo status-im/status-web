@@ -12,6 +12,7 @@ import { ChatMessage } from "../models/ChatMessage";
 
 export function useMessenger(chatId: string, chatIdList: string[]) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
+  const [activeMessages, setActiveMessages] = useState<ChatMessage[]>([]);
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
     {}
   );
@@ -153,9 +154,13 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     [chatId, messenger]
   );
 
+  useEffect(() => {
+    setActiveMessages(messages?.[chatId] ?? []);
+  }, [messages, chatId]);
+
   return {
     messenger,
-    messages: messages?.[chatId] ?? [],
+    messages: activeMessages,
     sendMessage,
     notifications,
     clearNotifications,
