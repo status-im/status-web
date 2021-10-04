@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -13,7 +13,6 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: normal;
     font-size: 15px;
     line-height: 22px;
-    overflow-x: hidden;
   }
 
   html,
