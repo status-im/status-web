@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../helpers/channelsMock";
 import { CommunityData } from "../../helpers/communityMock";
 import { ChatMessage } from "../../models/ChatMessage";
@@ -8,6 +9,7 @@ import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
 import { MembersIcon } from "../Icons/MembersIcon";
+import { NarrowTopbar } from "../NarrowTopbar";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
@@ -33,11 +35,14 @@ export function ChatBody({
   showMembers,
   showCommunity,
 }: ChatBodyProps) {
+  const narrow = useNarrow();
+  const [showChannels, setShowChannels] = useState(false);
+
   return (
     <ChatBodyWrapper theme={theme}>
       <ChatTopbar>
         <ChannelWrapper>
-          {showCommunity && (
+          {(showCommunity || narrow) && (
             <CommunityWrap theme={theme}>
               <Community community={community} theme={theme} />
             </CommunityWrap>
@@ -48,6 +53,7 @@ export function ChatBody({
             isActive={true}
             activeView={true}
             isMuted={false}
+            onClick={() => setShowChannels(true)}
           />
         </ChannelWrapper>
         <MemberBtn
@@ -58,8 +64,17 @@ export function ChatBody({
           <MembersIcon theme={theme} />
         </MemberBtn>
       </ChatTopbar>
-      <ChatMessages messages={messages} theme={theme} />
-      <ChatInput theme={theme} addMessage={sendMessage} />
+      {!showChannels && (
+        <>
+          <ChatMessages messages={messages} theme={theme} />
+          <ChatInput theme={theme} addMessage={sendMessage} />
+        </>
+      )}
+      {showChannels && (
+        <NarrowTopbar theme={theme} onClick={() => setShowChannels(false)}>
+          Chats
+        </NarrowTopbar>
+      )}
     </ChatBodyWrapper>
   );
 }
