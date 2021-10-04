@@ -58,13 +58,19 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         />
       </AddPictureBtn>
       <Input
-        type="text"
         theme={theme}
         placeholder={"Message"}
         value={content}
-        onChange={(e) => setContent(e.target.value)}
-        onKeyPress={(e) => {
-          if (e.key == "Enter") {
+        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+          const target = e.target;
+          target.style.height = "40px";
+          target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+          setContent(target.value);
+        }}
+        onKeyPress={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+          if (e.key == "Enter" && !e.getModifierState("Shift")) {
+            e.preventDefault();
+            (e.target as HTMLTextAreaElement).style.height = "40px";
             addMessage(content);
             setContent("");
           }
@@ -94,7 +100,7 @@ const InputWrapper = styled.div`
   position: relative;
 `;
 
-const Input = styled.input<ThemeProps>`
+const Input = styled.textarea<ThemeProps>`
   width: 100%;
   height: 40px;
   background: ${({ theme }) => theme.inputColor};
@@ -102,9 +108,16 @@ const Input = styled.input<ThemeProps>`
   border: 1px solid ${({ theme }) => theme.inputColor};
   color: ${({ theme }) => theme.textPrimaryColor};
   margin-left: 10px;
+  padding-top: 9px;
+  padding-bottom: 9px;
   padding-left: 12px;
   padding-right: 112px;
   outline: none;
+  resize: none;
+
+  font-family: Inter;
+  font-style: normal;
+  font-weight: normal;
   font-size: 15px;
   line-height: 22px;
 
