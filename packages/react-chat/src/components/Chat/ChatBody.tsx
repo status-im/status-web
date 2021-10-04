@@ -81,6 +81,7 @@ export function ChatBody({
       {showChannelsList && narrow && (
         <NarrowChannels
           theme={theme}
+          name={community.name}
           notifications={notifications}
           setActiveChannel={setActiveChannel}
           setShowChannels={setShowChannels}

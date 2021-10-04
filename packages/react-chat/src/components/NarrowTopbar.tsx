@@ -13,16 +13,13 @@ interface NarrowTopbarProps {
 
 export function NarrowTopbar({ theme, children, onClick }: NarrowTopbarProps) {
   return (
-    <ChannelsWrapper theme={theme}>
-      <ChannelsTopbar>
-        <Wrapper>
-          <GoBackBtn onClick={onClick}>
-            <BackIcon theme={theme} />
-          </GoBackBtn>
-          {children}
-        </Wrapper>
-      </ChannelsTopbar>
-    </ChannelsWrapper>
+    <TopbarWrapper theme={theme}>
+      <GoBackBtn onClick={onClick}>
+        <BackIcon theme={theme} />
+      </GoBackBtn>
+
+      <HeadingWrapper>{children}</HeadingWrapper>
+    </TopbarWrapper>
   );
 }
 
@@ -30,25 +27,26 @@ interface ThemeProps {
   theme: Theme;
 }
 
-const ChannelsWrapper = styled.div<ThemeProps>`
+const TopbarWrapper = styled.div<ThemeProps>`
+  display: flex;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.bodyBackgroundColor};
+  padding: 14px 0;
+  position: relative;
+`;
+
+const HeadingWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.bodyBackgroundColor};
-  padding: 18px 18px 0;
-`;
-
-const ChannelsTopbar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 0;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
+  text-align: center;
 `;
 
 const GoBackBtn = styled.button`
   width: 24px;
   height: 24px;
   margin-right: 18px;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 `;

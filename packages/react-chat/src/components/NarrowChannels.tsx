@@ -5,11 +5,11 @@ import { ChannelData, channels } from "../helpers/channelsMock";
 import { Theme } from "../styles/themes";
 
 import { Channel, ChannelList } from "./Channels";
-import { TagIcon } from "./Icons/TagIcon";
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowChannelsProps {
   theme: Theme;
+  name: string;
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
@@ -18,6 +18,7 @@ interface NarrowChannelsProps {
 
 export function NarrowChannels({
   theme,
+  name,
   notifications,
   setActiveChannel,
   activeChannelId,
@@ -26,8 +27,8 @@ export function NarrowChannels({
   return (
     <ListWrapper>
       <NarrowTopbar theme={theme} onClick={() => setShowChannels(false)}>
-        <TagIcon theme={theme} />
-        <ListName theme={theme}>Chats</ListName>
+        <Heading theme={theme}>Channels</Heading>
+        <SubHeading theme={theme}>{name}</SubHeading>
       </NarrowTopbar>
       <ChannelList>
         {channels.map((channel) => (
@@ -58,10 +59,15 @@ interface ThemeProps {
 }
 
 const ListWrapper = styled.div`
-  padding: 0 18px;
+  padding: 18px;
 `;
 
-const ListName = styled.p<ThemeProps>`
-  margin-left: 10px;
+const Heading = styled.p<ThemeProps>`
+  font-weight: 500;
   color: ${({ theme }) => theme.primary};
+`;
+
+const SubHeading = styled.p<ThemeProps>`
+  font-weight: 500;
+  color: ${({ theme }) => theme.secondary};
 `;
