@@ -69,6 +69,10 @@ const MessagesWrapper = styled.div`
   height: calc(100% - 44px);
   overflow: auto;
   padding: 8px 16px 0;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const MessageWrapper = styled.div`

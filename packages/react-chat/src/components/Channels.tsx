@@ -163,7 +163,11 @@ const MembersAmount = styled.p<ThemeProps>`
 export const ChannelList = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const ChannelWrapper = styled.div<ThemeProps>`

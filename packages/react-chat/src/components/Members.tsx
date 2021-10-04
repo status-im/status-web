@@ -134,7 +134,11 @@ const MemberName = styled.p<ThemeProps>`
 const MembersList = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const MemberCategory = styled.div`
