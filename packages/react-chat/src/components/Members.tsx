@@ -21,9 +21,9 @@ export function Members({ theme, channel, setShowChannels }: MembersProps) {
         <MemberCategory>
           <MemberCategoryName theme={theme}>You</MemberCategoryName>
           <MemberData>
-            <Icon>
-              <UserIcon theme={theme} />
-            </Icon>
+            <MemberIcon>
+              <UserIcon theme={theme} memberView={true} />
+            </MemberIcon>
             <MemberName theme={theme}>Guest564732</MemberName>
           </MemberData>
         </MemberCategory>
@@ -82,7 +82,7 @@ export function Member({
         className={isOnline ? "online" : ""}
         theme={theme}
       >
-        {!member.avatar && <UserIcon theme={theme} />}
+        {!member.avatar && <UserIcon theme={theme} memberView={true} />}
       </MemberIcon>
       <MemberName theme={theme}>{member.name}</MemberName>
     </MemberData>
@@ -148,6 +148,8 @@ const MemberData = styled.div`
 `;
 
 const MemberIcon = styled(Icon)<ThemeProps>`
+  width: 24px;
+  height: 24px;
   position: relative;
   background-size: contain;
   background-position: center;
@@ -159,8 +161,8 @@ const MemberIcon = styled(Icon)<ThemeProps>`
       position: absolute;
       right: -1px;
       bottom: 1px;
-      width: 9px;
-      height: 9px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background-color: #4ebc60;
       border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
