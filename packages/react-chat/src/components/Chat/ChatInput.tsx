@@ -34,13 +34,13 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
             onSelect={addEmoji}
             theme={theme === lightTheme ? "light" : "dark"}
             set="apple"
-            color={theme.memberNameColor}
+            color={theme.tertiary}
             emojiSize={26}
             style={{
               position: "absolute",
               bottom: "100%",
               right: "0",
-              color: theme.textSecondaryColor,
+              color: theme.secondary,
             }}
             showPreview={false}
             showSkinTones={false}
@@ -106,7 +106,7 @@ const Input = styled.textarea<ThemeProps>`
   background: ${({ theme }) => theme.inputColor};
   border-radius: 36px 16px 4px 36px;
   border: 1px solid ${({ theme }) => theme.inputColor};
-  color: ${({ theme }) => theme.textPrimaryColor};
+  color: ${({ theme }) => theme.primary};
   margin-left: 10px;
   padding-top: 9px;
   padding-bottom: 9px;

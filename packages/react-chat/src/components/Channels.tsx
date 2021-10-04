@@ -5,8 +5,9 @@ import { ChannelData, channels } from "../helpers/channelsMock";
 import { CommunityData } from "../helpers/communityMock";
 import { Theme } from "../styles/themes";
 
-import { Community, MembersAmount } from "./Community";
+import { Community } from "./Community";
 import { MutedIcon } from "./Icons/MutedIcon";
+import { textMediumStyles } from "./Text";
 
 interface ChannelsProps {
   theme: Theme;
@@ -37,7 +38,7 @@ export function Channels({
 
   return (
     <ChannelsWrapper theme={theme}>
-      <Community community={community} theme={theme} />
+      <StyledCommunity theme={theme} community={community} />
       <ChannelList>
         {channels.map((channel) => (
           <Channel
@@ -139,6 +140,18 @@ const ChannelsWrapper = styled.div<ThemeProps>`
   flex-direction: column;
 `;
 
+const StyledCommunity = styled(Community)`
+  padding-left: 0 0 0 10px;
+  margin: 0 0 16px;
+`;
+
+const MembersAmount = styled.p<ThemeProps>`
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.1px;
+  color: ${({ theme }) => theme.secondary};
+`;
+
 const ChannelList = styled.div`
   display: flex;
   flex-direction: column;
@@ -193,11 +206,10 @@ const ChannelLogo = styled.div<ThemeProps>`
 `;
 
 const ChannelName = styled.p<ThemeProps>`
-  color: ${({ theme }) => theme.textPrimaryColor};
   font-weight: 500;
-  font-size: 15px;
-  line-height: 22px;
   opacity: 0.7;
+  color: ${({ theme }) => theme.primary};
+  ${textMediumStyles}
 
   &.active,
   &.notified {

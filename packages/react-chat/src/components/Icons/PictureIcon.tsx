@@ -32,6 +32,6 @@ export const PictureIcon = ({ theme }: ThemeProps) => {
 
 const Icon = styled.svg<ThemeProps>`
   & > path {
-    fill: ${({ theme }) => theme.textSecondaryColor};
+    fill: ${({ theme }) => theme.secondary};
   }
 `;
