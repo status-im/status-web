@@ -107,7 +107,7 @@ const MemberHeading = styled.h2<ThemeProps>`
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
-  color: ${({ theme }) => theme.textPrimaryColor};
+  color: ${({ theme }) => theme.primary};
   margin-bottom: 16px;
 `;
 
@@ -115,7 +115,7 @@ const MemberCategoryName = styled.h3<ThemeProps>`
   font-weight: normal;
   font-size: 13px;
   line-height: 18px;
-  color: ${({ theme }) => theme.textSecondaryColor};
+  color: ${({ theme }) => theme.secondary};
   margin-bottom: 8px;
 `;
 
@@ -123,7 +123,7 @@ const MemberName = styled.p<ThemeProps>`
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
-  color: ${({ theme }) => theme.textPrimaryColor};
+  color: ${({ theme }) => theme.primary};
   opacity: 0.7;
   margin-left: 8px;
   text-overflow: ellipsis;
