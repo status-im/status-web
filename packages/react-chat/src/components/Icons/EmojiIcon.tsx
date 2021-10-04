@@ -41,10 +41,10 @@ export const EmojiIcon = ({ theme, isActive }: ThemeProps) => {
 
 const Icon = styled.svg<ThemeProps>`
   & > path {
-    fill: ${({ theme }) => theme.textSecondaryColor};
+    fill: ${({ theme }) => theme.secondary};
   }
 
   & > path.active {
-    fill: ${({ theme }) => theme.memberNameColor};
+    fill: ${({ theme }) => theme.tertiary};
   }
 `;

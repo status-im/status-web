@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
 import { UserIcon } from "../Icons/UserIcon";
+import { textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
 
@@ -94,11 +95,11 @@ const DateSeparator = styled.div`
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 18px;
   color: #939ba1;
   margin-top: 16px;
   margin-bottom: 16px;
+
+  ${textSmallStyles}
 `;
 
 const ContentWrapper = styled.div`
@@ -126,7 +127,7 @@ export const Icon = styled.div`
 const UserNameWrapper = styled.div<ThemeProps>`
   font-size: 15px;
   line-height: 22px;
-  color: ${({ theme }) => theme.memberNameColor};
+  color: ${({ theme }) => theme.tertiary};
 `;
 
 const TimeWrapper = styled.div<ThemeProps>`
@@ -134,7 +135,7 @@ const TimeWrapper = styled.div<ThemeProps>`
   line-height: 14px;
   letter-spacing: 0.2px;
   text-transform: uppercase;
-  color: ${({ theme }) => theme.textSecondaryColor};
+  color: ${({ theme }) => theme.secondary};
   margin-left: 4px;
 `;
 
@@ -142,5 +143,5 @@ const MessageText = styled.div<ThemeProps>`
   overflow-wrap: anywhere;
   width: 100%;
   white-space: pre;
-  color: ${({ theme }) => theme.textPrimaryColor};
+  color: ${({ theme }) => theme.primary};
 `;

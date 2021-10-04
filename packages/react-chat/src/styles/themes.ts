@@ -1,9 +1,9 @@
 export type Theme = {
-  textPrimaryColor: string;
-  textSecondaryColor: string;
+  primary: string;
+  secondary: string;
   bodyBackgroundColor: string;
   sectionBackgroundColor: string;
-  memberNameColor: string;
+  tertiary: string;
   guestNameColor: string;
   iconColor: string;
   iconUserColor: string;
@@ -11,14 +11,16 @@ export type Theme = {
   activeChannelBackground: string;
   notificationColor: string;
   inputColor: string;
+  border: string;
+  buttonBg: string;
 };
 
 export const lightTheme: Theme = {
-  textPrimaryColor: "#000",
-  textSecondaryColor: "#939BA1",
+  primary: "#000",
+  secondary: "#939BA1",
+  tertiary: "#4360DF",
   bodyBackgroundColor: "#fff",
   sectionBackgroundColor: "#F6F8FA",
-  memberNameColor: "#4360DF",
   guestNameColor: "#887AF9",
   iconColor: "#D37EF4",
   iconUserColor: "#717199",
@@ -26,14 +28,16 @@ export const lightTheme: Theme = {
   activeChannelBackground: "#E9EDF1",
   notificationColor: "#4360DF",
   inputColor: "#EEF2F5",
+  border: "#EEF2F5",
+  buttonBg: "rgba(67, 96, 223, 0.2)",
 };
 
 export const darkTheme: Theme = {
-  textPrimaryColor: "#fff",
-  textSecondaryColor: "#909090",
+  primary: "#fff",
+  secondary: "#909090",
+  tertiary: "#88B0FF",
   bodyBackgroundColor: "#000",
   sectionBackgroundColor: "#252525",
-  memberNameColor: "#88B0FF",
   guestNameColor: "#887AF9",
   iconColor: "#D37EF4",
   iconUserColor: "#717199",
@@ -41,6 +45,8 @@ export const darkTheme: Theme = {
   activeChannelBackground: "#2C2C2C",
   notificationColor: "#887AF9",
   inputColor: "#373737",
+  border: "#373737",
+  buttonBg: "rgba(134, 158, 255, 0.3)",
 };
 
 export default { lightTheme, darkTheme };
