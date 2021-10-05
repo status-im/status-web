@@ -8,14 +8,13 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
+import { EmptyChannel } from "../EmptyChannel";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowTopbar } from "../NarrowMode/NarrowTopbar";
 
-
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
-import { EmptyChannel } from "./EmptyChannel";
 
 interface ChatBodyProps {
   theme: Theme;

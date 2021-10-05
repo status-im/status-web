@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChannelData } from "../../helpers/channelsMock";
-import { Theme } from "../../styles/themes";
-import { ChannelInfo, ChannelLogo, ChannelName } from "../Channels";
-import { textMediumStyles } from "../Text";
+import { ChannelData } from "../helpers/channelsMock";
+import { Theme } from "../styles/themes";
+
+import { ChannelInfo, ChannelLogo, ChannelName } from "./Channels";
+import { textMediumStyles } from "./Text";
 
 type EmptyChannelProps = {
   theme: Theme;
