@@ -9,8 +9,8 @@ import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
 import { MembersIcon } from "../Icons/MembersIcon";
-import { NarrowChannels } from "../NarrowChannels";
-import { NarrowTopbar } from "../NarrowTopbar";
+import { NarrowChannels } from "../NarrowMode/NarrowChannels";
+import { NarrowTopbar } from "../NarrowMode/NarrowTopbar";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";

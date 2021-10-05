@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../styles/themes";
-
-import { BackIcon } from "./Icons/BackIcon";
+import { Theme } from "../../styles/themes";
+import { BackIcon } from "../Icons/BackIcon";
 
 interface NarrowTopbarProps {
   theme: Theme;

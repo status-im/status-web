@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChannelData, channels } from "../helpers/channelsMock";
-import { Theme } from "../styles/themes";
+import { ChannelData, channels } from "../../helpers/channelsMock";
+import { Theme } from "../../styles/themes";
+import { Channel, ChannelList } from "../Channels";
 
-import { Channel, ChannelList } from "./Channels";
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowChannelsProps {
