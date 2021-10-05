@@ -23,16 +23,22 @@ export const CommunityIdentity = ({
   return (
     <Row className={className}>
       <Logo src={icon} alt={`${name} logo`} />
-      <div>
+      <Column>
         <Name theme={theme}>{name}</Name>
         <Subtitle theme={theme}>{subtitle}</Subtitle>
-      </div>
+      </Column>
     </Row>
   );
 };
 
 const Row = styled.div`
   display: flex;
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const Logo = styled.img`
@@ -51,6 +57,7 @@ const Name = styled.p`
 `;
 
 const Subtitle = styled.p`
+  font-family: "Inter", sans-serif;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.1px;
