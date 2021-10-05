@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
@@ -11,7 +11,7 @@ import { Community } from "../Community";
 import { EmptyChannel } from "../EmptyChannel";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
-import { NarrowTopbar } from "../NarrowMode/NarrowTopbar";
+import { NarrowMembers } from "../NarrowMode/NarrowMembers";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
@@ -44,30 +44,58 @@ export function ChatBody({
   activeChannelId,
 }: ChatBodyProps) {
   const narrow = useNarrow();
-  const [showChannelsList, setShowChannels] = useState(false);
+  const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
+  const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
+
+  const switchChannelList = () => {
+    if (!showChannelsList && showMembersList) {
+      setShowChannelsList(true);
+      setShowMembersList(false);
+    }
+    if (!showChannelsList && !showMembersList) {
+      setShowChannelsList(true);
+    }
+  };
+
+  const switchMemberList = () => {
+    if (!showChannelsList && !showMembersList) {
+      setShowMembersList(true);
+    }
+    if (!showChannelsList && showMembersList) {
+      setShowMembersList(false);
+    }
+    if (showChannelsList && !showMembersList) {
+      setShowChannelsList(false);
+      setShowMembersList(true);
+    }
+  };
 
   return (
     <ChatBodyWrapper theme={theme}>
       <ChatTopbar>
         <ChannelWrapper>
           {(showCommunity || narrow) && (
-            <CommunityWrap theme={theme}>
+            <CommunityWrap theme={theme} className={className}>
               <Community community={community} theme={theme} />
             </CommunityWrap>
           )}
           <Channel
             channel={channel}
             theme={theme}
-            isActive={true}
+            isActive={narrow ? showChannelsList : true}
             activeView={true}
             isMuted={false}
-            onClick={() => (narrow ? setShowChannels(true) : undefined)}
+            onClick={() => (narrow ? switchChannelList() : undefined)}
           />
         </ChannelWrapper>
         <MemberBtn
-          onClick={narrow ? () => setShowMembersList(true) : onClick}
-          className={showMembers ? "active" : ""}
+          onClick={narrow ? () => switchMemberList() : onClick}
+          className={
+            (showMembers && !narrow) || (showMembersList && narrow)
+              ? "active"
+              : ""
+          }
           theme={theme}
         >
           <MembersIcon theme={theme} />
@@ -87,16 +115,16 @@ export function ChatBody({
           community={community.name}
           notifications={notifications}
           setActiveChannel={setActiveChannel}
-          setShowChannels={setShowChannels}
+          setShowChannels={setShowChannelsList}
           activeChannelId={activeChannelId}
         />
       )}
       {showMembersList && narrow && (
-        <NarrowTopbar
+        <NarrowMembers
           theme={theme}
-          list="Community members"
-          community={community.name}
-          onClick={() => setShowMembersList(false)}
+          community={community}
+          setShowChannels={setShowChannelsList}
+          setShowMembersList={setShowMembersList}
         />
       )}
     </ChatBodyWrapper>
@@ -117,18 +145,23 @@ const ChatBodyWrapper = styled.div<ThemeProps>`
 const ChannelWrapper = styled.div`
   display: flex;
   align-items: center;
+  margin-right: 6px;
 `;
 
 const ChatTopbar = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 8px;
+  padding: 5px 8px;
 `;
 
 const CommunityWrap = styled.div<ThemeProps>`
-  padding-right: 16px;
+  padding-right: 10px;
   margin-right: 16px;
   position: relative;
+
+  &.narrow {
+    margin-right: 8px;
+  }
 
   &:after {
     content: "";
