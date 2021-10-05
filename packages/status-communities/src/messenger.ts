@@ -40,11 +40,12 @@ export class Messenger {
    * Use `addListener` to get messages received on this chat.
    */
   public async joinChat(chatId: string) {
-    if (this.chatsById.has(chatId)) throw "Chat already joined";
+    if (this.chatsById.has(chatId))
+      throw `Failed to join chat, it is already joined: ${chatId}`;
 
     const chat = await Chat.create(chatId);
 
-    this.waku.relay.addDecryptionKey(chat.symKey);
+    this.waku.addDecryptionKey(chat.symKey);
 
     this.waku.relay.addObserver(
       (wakuMessage: WakuMessage) => {
@@ -133,6 +134,54 @@ export class Messenger {
    */
   public async stop(): Promise<void> {
     await this.waku.stop();
+  }
+
+  /**
+   * Retrieve previous messages from a Waku Store node for the given chat Id.
+   *
+   * Note: note sure what is the preferred interface: callback or returning all messages
+   * Callback is more flexible and allow processing messages as they are retrieved instead of waiting for the
+   * full retrieval via paging to be done.
+   */
+  public async retrievePreviousMessages(
+    chatId: string,
+    startTime: Date,
+    endTime: Date,
+    callback: (messages: ApplicationMetadataMessage[]) => void
+  ): Promise<void> {
+    const chat = this.chatsById.get(chatId);
+    if (!chat)
+      throw `Failed to retrieve messages, chat is not joined: ${chatId}`;
+
+    const _callback = (wakuMessages: WakuMessage[]) => {
+      const isDefined = (
+        msg: ApplicationMetadataMessage | undefined
+      ): msg is ApplicationMetadataMessage => {
+        return !!msg;
+      };
+
+      const messages = wakuMessages.map((wakuMessage: WakuMessage) => {
+        if (!wakuMessage.payload) return;
+
+        const message = ApplicationMetadataMessage.decode(wakuMessage.payload);
+
+        switch (message.type) {
+          case ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE:
+            this._handleNewChatMessage(chat, message);
+            return message;
+          default:
+            dbg("Retrieved unsupported message type", message.type);
+            return;
+        }
+      });
+
+      callback(messages.filter(isDefined));
+    };
+
+    await this.waku.store.queryHistory([chat.contentTopic], {
+      timeFilter: { startTime, endTime },
+      callback: _callback,
+    });
   }
 
   private _handleNewChatMessage(
