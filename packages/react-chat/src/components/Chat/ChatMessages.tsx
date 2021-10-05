@@ -20,7 +20,7 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
     if (ref && ref.current) {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, messages.length]);
   return (
     <MessagesWrapper ref={ref}>
       {messages.map((message, idx) => {
