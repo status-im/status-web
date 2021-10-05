@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../helpers/channelsMock";
 import { CommunityData } from "../../helpers/communityMock";
 import { ChatMessage } from "../../models/ChatMessage";
@@ -8,6 +9,8 @@ import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
 import { MembersIcon } from "../Icons/MembersIcon";
+import { NarrowChannels } from "../NarrowMode/NarrowChannels";
+import { NarrowTopbar } from "../NarrowMode/NarrowTopbar";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
@@ -21,6 +24,9 @@ interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
   showCommunity: boolean;
+  notifications: { [id: string]: number };
+  setActiveChannel: (val: ChannelData) => void;
+  activeChannelId: number;
 }
 
 export function ChatBody({
@@ -32,12 +38,19 @@ export function ChatBody({
   onClick,
   showMembers,
   showCommunity,
+  notifications,
+  setActiveChannel,
+  activeChannelId,
 }: ChatBodyProps) {
+  const narrow = useNarrow();
+  const [showChannelsList, setShowChannels] = useState(false);
+  const [showMembersList, setShowMembersList] = useState(false);
+
   return (
     <ChatBodyWrapper theme={theme}>
       <ChatTopbar>
         <ChannelWrapper>
-          {showCommunity && (
+          {(showCommunity || narrow) && (
             <CommunityWrap theme={theme}>
               <Community community={community} theme={theme} />
             </CommunityWrap>
@@ -48,18 +61,41 @@ export function ChatBody({
             isActive={true}
             activeView={true}
             isMuted={false}
+            onClick={() => (narrow ? setShowChannels(true) : undefined)}
           />
         </ChannelWrapper>
         <MemberBtn
-          onClick={onClick}
+          onClick={narrow ? () => setShowMembersList(true) : onClick}
           className={showMembers ? "active" : ""}
           theme={theme}
         >
           <MembersIcon theme={theme} />
         </MemberBtn>
       </ChatTopbar>
-      <ChatMessages messages={messages} theme={theme} />
-      <ChatInput theme={theme} addMessage={sendMessage} />
+      {!showChannelsList && !showMembersList && (
+        <>
+          <ChatMessages messages={messages} theme={theme} />
+          <ChatInput theme={theme} addMessage={sendMessage} />
+        </>
+      )}
+      {showChannelsList && narrow && (
+        <NarrowChannels
+          theme={theme}
+          community={community.name}
+          notifications={notifications}
+          setActiveChannel={setActiveChannel}
+          setShowChannels={setShowChannels}
+          activeChannelId={activeChannelId}
+        />
+      )}
+      {showMembersList && narrow && (
+        <NarrowTopbar
+          theme={theme}
+          list="Community members"
+          community={community.name}
+          onClick={() => setShowMembersList(false)}
+        />
+      )}
     </ChatBodyWrapper>
   );
 }
@@ -100,7 +136,7 @@ const CommunityWrap = styled.div<ThemeProps>`
     height: 24px;
     transform: translateY(-50%);
     border-radius: 1px;
-    background: ${({ theme }) => theme.textPrimaryColor};
+    background: ${({ theme }) => theme.primary};
     opacity: 0.1;
   }
 `;

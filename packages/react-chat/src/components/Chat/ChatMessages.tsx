@@ -69,6 +69,10 @@ const MessagesWrapper = styled.div`
   height: calc(100% - 44px);
   overflow: auto;
   padding: 8px 16px 0;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const MessageWrapper = styled.div`
@@ -142,6 +146,6 @@ const TimeWrapper = styled.div<ThemeProps>`
 const MessageText = styled.div<ThemeProps>`
   overflow-wrap: anywhere;
   width: 100%;
-  white-space: pre;
+  white-space: pre-wrap;
   color: ${({ theme }) => theme.primary};
 `;

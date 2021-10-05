@@ -125,6 +125,10 @@ const Input = styled.textarea<ThemeProps>`
     outline: none;
     caret-color: ${({ theme }) => theme.notificationColor};
   }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const AddPictureBtn = styled.label`

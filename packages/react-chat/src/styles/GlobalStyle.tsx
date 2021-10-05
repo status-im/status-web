@@ -13,7 +13,6 @@ export const GlobalStyle = createGlobalStyle`
     font-weight: normal;
     font-size: 15px;
     line-height: 22px;
-    overflow-x: hidden;
   }
 
   html,

@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import styled from "styled-components";
 
+import { useNarrow } from "../contexts/narrowProvider";
 import { ChannelData, channels } from "../helpers/channelsMock";
 import { CommunityData } from "../helpers/communityMock";
 import { Theme } from "../styles/themes";
@@ -81,6 +82,12 @@ export function Channel({
   onClick,
   notification,
 }: ChannelProps) {
+  const narrow = useNarrow();
+  const className = useMemo(
+    () => (narrow && !activeView ? "narrow" : activeView ? "active" : ""),
+    [narrow]
+  );
+
   return (
     <ChannelWrapper
       className={isActive && !activeView ? "active" : ""}
@@ -92,7 +99,7 @@ export function Channel({
           style={{
             backgroundImage: channel.icon ? `url(${channel.icon}` : "",
           }}
-          className={activeView ? "active" : ""}
+          className={className}
           theme={theme}
         >
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
@@ -134,6 +141,7 @@ interface ThemeProps {
 const ChannelsWrapper = styled.div<ThemeProps>`
   width: 21%;
   height: 100%;
+  min-width: 196px;
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
   padding: 10px 0.6%;
   display: flex;
@@ -141,7 +149,7 @@ const ChannelsWrapper = styled.div<ThemeProps>`
 `;
 
 const StyledCommunity = styled(Community)`
-  padding-left: 0 0 0 10px;
+  padding: 0 0 0 10px;
   margin: 0 0 16px;
 `;
 
@@ -152,10 +160,14 @@ const MembersAmount = styled.p<ThemeProps>`
   color: ${({ theme }) => theme.secondary};
 `;
 
-const ChannelList = styled.div`
+export const ChannelList = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 16px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 const ChannelWrapper = styled.div<ThemeProps>`
@@ -200,6 +212,13 @@ const ChannelLogo = styled.div<ThemeProps>`
   &.active {
     width: 36px;
     height: 36px;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
+  &.narrow {
+    width: 40px;
+    height: 40px;
     font-size: 20px;
     line-height: 20px;
   }
