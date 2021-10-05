@@ -4,6 +4,10 @@ export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 
   body,
