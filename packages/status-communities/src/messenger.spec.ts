@@ -2,10 +2,10 @@ import { expect } from "chai";
 import debug from "debug";
 import { utils } from "js-waku";
 
-import { ApplicationMetadataMessage } from "./application_metadata_message";
-import { ContentType } from "./chat_message";
 import { Identity } from "./identity";
 import { Messenger } from "./messenger";
+import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
+import { ContentType } from "./wire/chat_message";
 
 const testChatId = "test-chat-id";
 

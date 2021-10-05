@@ -1,6 +1,6 @@
-import { ChatMessage, Content } from "./chat_message";
 import { chatIdToContentTopic } from "./contentTopic";
 import { createSymKeyFromPassword } from "./encryption";
+import { ChatMessage, Content } from "./wire/chat_message";
 
 /**
  * Represent a chat room. Only public chats are currently supported.

@@ -2,11 +2,11 @@ import debug from "debug";
 import { Waku, WakuMessage } from "js-waku";
 import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku";
 
-import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { Chat } from "./chat";
-import { ChatMessage, Content } from "./chat_message";
 import { Identity } from "./identity";
 import { ApplicationMetadataMessage_Type } from "./proto/status/v1/application_metadata_message";
+import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
+import { ChatMessage, Content } from "./wire/chat_message";
 
 const dbg = debug("communities:messenger");
 
