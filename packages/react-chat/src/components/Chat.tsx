@@ -66,7 +66,7 @@ export function Chat({ theme, community }: ChatProps) {
       {showMembers && !narrow && (
         <Members
           theme={theme}
-          channel={activeChannel}
+          community={community}
           setShowChannels={setShowChannels}
         />
       )}

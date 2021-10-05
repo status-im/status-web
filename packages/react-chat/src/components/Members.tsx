@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChannelData } from "../helpers/channelsMock";
+import { CommunityData } from "../helpers/communityMock";
 import { Theme } from "../styles/themes";
 
 import { Icon } from "./Chat/ChatMessages";
@@ -9,11 +9,11 @@ import { UserIcon } from "./Icons/UserIcon";
 
 interface MembersProps {
   theme: Theme;
-  channel: ChannelData;
+  community: CommunityData;
   setShowChannels: (val: boolean) => void;
 }
 
-export function Members({ theme, channel, setShowChannels }: MembersProps) {
+export function Members({ theme, community, setShowChannels }: MembersProps) {
   return (
     <MembersWrapper theme={theme}>
       <MemberHeading theme={theme}>Members</MemberHeading>
@@ -29,7 +29,7 @@ export function Members({ theme, channel, setShowChannels }: MembersProps) {
         </MemberCategory>
         <MemberCategory>
           <MemberCategoryName theme={theme}>Online</MemberCategoryName>
-          {channel.membersList
+          {community.membersList
             .filter((member) => member.isOnline)
             .map((member) => (
               <Member
@@ -43,7 +43,7 @@ export function Members({ theme, channel, setShowChannels }: MembersProps) {
         </MemberCategory>
         <MemberCategory>
           <MemberCategoryName theme={theme}>Offline</MemberCategoryName>
-          {channel.membersList
+          {community.membersList
             .filter((member) => !member.isOnline)
             .map((member) => (
               <Member
