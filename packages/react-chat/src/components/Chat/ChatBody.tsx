@@ -72,9 +72,9 @@ export function ChatBody({
   };
 
   return (
-    <ChatBodyWrapper theme={theme}>
+    <ChatBodyWrapper theme={theme} className={className}>
       <ChatTopbar>
-        <ChannelWrapper>
+        <ChannelWrapper className={className}>
           {(showCommunity || narrow) && (
             <CommunityWrap theme={theme} className={className}>
               <Community community={community} theme={theme} />
@@ -140,12 +140,19 @@ const ChatBodyWrapper = styled.div<ThemeProps>`
   flex: 1;
   height: 100%;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+
+  &.narrow {
+    width: 100%;
+  }
 `;
 
 const ChannelWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 6px;
+
+  &.narrow {
+    width: calc(100% - 46px);
+  }
 `;
 
 const ChatTopbar = styled.div`

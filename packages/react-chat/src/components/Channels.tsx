@@ -90,7 +90,10 @@ export function Channel({
 
   return (
     <ChannelWrapper
-      className={isActive && !activeView ? "active" : ""}
+      className={
+        (isActive && !activeView) || (isActive && narrow) ? "active" : ""
+      }
+      style={{ width: narrow && activeView ? "calc(100% - 162px)" : "100%" }}
       theme={theme}
       onClick={onClick}
     >
@@ -108,7 +111,7 @@ export function Channel({
           <ChannelName
             theme={theme}
             className={
-              isActive
+              isActive || narrow
                 ? "active"
                 : notification && notification > 0
                 ? "notified"
@@ -158,6 +161,9 @@ const ChannelDescription = styled.p<ThemeProps>`
   line-height: 16px;
   letter-spacing: 0.1px;
   color: ${({ theme }) => theme.secondary};
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 export const ChannelList = styled.div`
@@ -186,11 +192,14 @@ const ChannelWrapper = styled.div<ThemeProps>`
 export const ChannelInfo = styled.div`
   display: flex;
   align-items: center;
+  overflow: hidden;
 `;
 
 const ChannelTextInfo = styled.div`
   display: flex;
   flex-direction: column;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
 export const ChannelLogo = styled.div<ThemeProps>`
