@@ -120,10 +120,10 @@ export function Channel({
             # {channel.name}
           </ChannelName>
           {activeView && (
-            <MembersAmount theme={theme}>
+            <ChannelDescription theme={theme}>
               {" "}
-              {channel.membersList.length} members
-            </MembersAmount>
+              {channel.description}
+            </ChannelDescription>
           )}
         </ChannelTextInfo>
       </ChannelInfo>
@@ -153,7 +153,7 @@ const StyledCommunity = styled(Community)`
   margin: 0 0 16px;
 `;
 
-const MembersAmount = styled.p<ThemeProps>`
+const ChannelDescription = styled.p<ThemeProps>`
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.1px;
@@ -199,6 +199,7 @@ const ChannelLogo = styled.div<ThemeProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   margin-right: 10px;
   border-radius: 50%;
   font-weight: bold;
