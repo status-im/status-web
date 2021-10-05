@@ -15,7 +15,7 @@ export class ChatMessage {
     timestamp: number,
     text: string,
     chatId: string
-  ) {
+  ): ChatMessage {
     const proto = {
       clock, // ms?
       timestamp, //ms?
@@ -50,7 +50,7 @@ export class ChatMessage {
     return proto.ChatMessage.encode(this.proto).finish();
   }
 
-  public get clock() {
+  public get clock(): number | undefined {
     return this.proto.clock;
   }
 
