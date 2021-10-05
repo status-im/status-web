@@ -1,14 +1,32 @@
 // import { StoreCodec } from "js-waku";
 import { getBootstrapNodes, StoreCodec } from "js-waku";
 import { useCallback, useEffect, useState } from "react";
-import {
-  ChatMessage as ApiChatMessage,
-  ApplicationMetadataMessage,
-  Identity,
-  Messenger,
-} from "status-communities/dist/cjs";
+import { Identity, Messenger } from "status-communities/dist/cjs";
+import { ApplicationMetadataMessage } from "status-communities/dist/cjs/application_metadata_message";
 
 import { ChatMessage } from "../models/ChatMessage";
+
+function binarySetInsert<T>(
+  arr: T[],
+  val: T,
+  compFunc: (a: T, b: T) => boolean,
+  eqFunc: (a: T, b: T) => boolean
+) {
+  let low = 0;
+  let high = arr.length;
+  while (low < high) {
+    const mid = (low + high) >> 1;
+    if (compFunc(arr[mid], val)) {
+      low = mid + 1;
+    } else {
+      high = mid;
+    }
+  }
+  if (arr.length === low || !eqFunc(arr[low], val)) {
+    arr.splice(low, 0, val);
+  }
+  return arr;
+}
 
 export function useMessenger(chatId: string, chatIdList: string[]) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
@@ -29,38 +47,40 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     });
   }, []);
 
-  const addNewMessage = useCallback(
-    (sender: Uint8Array, content: string, date: Date, id: string) => {
-      let signer = "0x";
-      sender.forEach((e) => {
-        signer = signer + e.toString(16);
-      });
-      setMessages((prevMessages) => {
-        const newMessage = {
-          sender: signer,
-          content: content,
-          date: date,
-        };
-        if (prevMessages?.[id]) {
-          return {
-            ...prevMessages,
-            [id]: [...prevMessages[id], newMessage],
-          };
-        } else {
-          return {
-            ...prevMessages,
-            [id]: [newMessage],
-          };
-        }
-      });
-      setNotifications((prevNotifications) => {
+  const addNewMessageRaw = useCallback(
+    (signer: Uint8Array, content: string, date: Date, id: string) => {
+      const sender = signer.reduce((p, c) => p + c.toString(16), "0x");
+      const newMessage = { sender, content, date };
+      setMessages((prev) => {
         return {
-          ...prevNotifications,
-          [id]: prevNotifications[id] + 1,
+          ...prev,
+          [id]: binarySetInsert(
+            prev?.[id] ?? [],
+            newMessage,
+            (a, b) => a.date < b.date,
+            (a, b) => a.date.getTime() === b.date.getTime()
+          ),
+        };
+      });
+      setNotifications((prev) => {
+        return {
+          ...prev,
+          [id]: prev[id] + 1,
         };
       });
     },
     []
+  );
+
+  const addNewMessage = useCallback(
+    (msg: ApplicationMetadataMessage, id: string) => {
+      if (msg.signer && msg.chatMessage?.text) {
+        const content = msg.chatMessage.text;
+        const date = new Date(msg.chatMessage.clock);
+        addNewMessageRaw(msg.signer, content, date, id);
+      }
+    },
+    [addNewMessageRaw]
   );
 
   useEffect(() => {
@@ -86,54 +106,19 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
       });
 
       await Promise.all(
+        chatIdList.map(async (id) => await messenger.joinChat(id))
+      );
+
+      Promise.all(
         chatIdList.map(async (id) => {
-          await messenger.joinChat(id);
-          const chat = messenger.chatsById.get(id);
-          if (chat) {
-            const messages = await messenger.waku.store.queryHistory(
-              [chat.contentTopic],
-              {
-                decryptionKeys: [chat.symKey],
-              }
-            );
-            messages.sort((a, b) =>
-              (a?.timestamp?.getTime() ?? 0) > (b?.timestamp?.getTime() ?? 0)
-                ? 1
-                : -1
-            );
-            messages.forEach((message) => {
-              if (message.payload) {
-                const metadata = ApplicationMetadataMessage.decode(
-                  message.payload
-                );
-                if (metadata.payload) {
-                  const chatMessage = ApiChatMessage.decode(metadata.payload);
-                  if (
-                    metadata.signer &&
-                    chatMessage.text &&
-                    chatMessage.proto.timestamp
-                  ) {
-                    addNewMessage(
-                      metadata.signer,
-                      chatMessage.text,
-                      new Date(chatMessage.proto.timestamp ?? 0),
-                      id
-                    );
-                  }
-                }
-              }
-              return undefined;
-            });
-          }
+          await messenger.retrievePreviousMessages(
+            id,
+            new Date(0),
+            new Date(),
+            (messages) => messages.forEach((msg) => addNewMessage(msg, id))
+          );
           clearNotifications(id);
-          messenger.addObserver((message) => {
-            addNewMessage(
-              message.signer ?? new Uint8Array(),
-              message.chatMessage?.text ?? "",
-              new Date(message.chatMessage?.proto.timestamp ?? 0),
-              id
-            );
-          }, id);
+          messenger.addObserver((msg) => addNewMessage(msg, id), id);
         })
       );
       setMessenger(messenger);
@@ -144,7 +129,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   const sendMessage = useCallback(
     async (messageText: string) => {
       await messenger?.sendMessage(messageText, chatId);
-      addNewMessage(
+      addNewMessageRaw(
         messenger?.identity.publicKey ?? new Uint8Array(),
         messageText,
         new Date(),
