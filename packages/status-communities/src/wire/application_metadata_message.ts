@@ -1,11 +1,11 @@
 import { keccak256 } from "js-sha3";
-import { utils } from "js-waku";
 import { Reader } from "protobufjs";
 import secp256k1 from "secp256k1";
 
 import { Identity } from "../identity";
 import * as proto from "../proto/status/v1/application_metadata_message";
 import { ApplicationMetadataMessage_Type } from "../proto/status/v1/application_metadata_message";
+import { hexToBuf } from "../utils";
 
 import { ChatMessage } from "./chat_message";
 
@@ -70,6 +70,6 @@ export class ApplicationMetadataMessage {
     const recid = this.signature.slice(64)[0];
     const hash = keccak256(this.payload);
 
-    return secp256k1.ecdsaRecover(signature, recid, utils.hexToBuf(hash));
+    return secp256k1.ecdsaRecover(signature, recid, hexToBuf(hash));
   }
 }
