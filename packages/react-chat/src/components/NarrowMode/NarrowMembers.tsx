@@ -26,7 +26,6 @@ export function NarrowMembers({
         theme={theme}
         list="Community members"
         community={community.name}
-        onClick={() => setShowMembersList(false)}
       />
       <MembersList
         theme={theme}
