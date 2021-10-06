@@ -28,6 +28,8 @@ interface ChatBodyProps {
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
+  loadNextDay: () => void;
+  lastMessage: Date;
 }
 
 export function ChatBody({
@@ -42,6 +44,8 @@ export function ChatBody({
   notifications,
   setActiveChannel,
   activeChannelId,
+  loadNextDay,
+  lastMessage,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -90,7 +94,9 @@ export function ChatBody({
       </ChatTopbar>
       {!showChannelsList && !showMembersList && (
         <>
-          {" "}
+          <button onClick={loadNextDay}>
+            Last message date {lastMessage.toDateString()}
+          </button>{" "}
           {messages.length > 0 ? (
             <ChatMessages messages={messages} theme={theme} />
           ) : (
