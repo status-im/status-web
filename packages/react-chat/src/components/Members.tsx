@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 
+import { useNarrow } from "../contexts/narrowProvider";
 import { CommunityData } from "../helpers/communityMock";
 import { Theme } from "../styles/themes";
 
@@ -30,12 +31,14 @@ interface MembersListProps {
   theme: Theme;
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
+  setShowMembers?: (val: boolean) => void;
 }
 
 export function MembersList({
   theme,
   community,
   setShowChannels,
+  setShowMembers,
 }: MembersListProps) {
   return (
     <MembersListWrap>
@@ -59,6 +62,7 @@ export function MembersList({
               member={member}
               isOnline={member.isOnline}
               setShowChannels={setShowChannels}
+              setShowMembers={setShowMembers}
             />
           ))}
       </MemberCategory>
@@ -73,6 +77,7 @@ export function MembersList({
               member={member}
               isOnline={member.isOnline}
               setShowChannels={setShowChannels}
+              setShowMembers={setShowMembers}
             />
           ))}
       </MemberCategory>
@@ -85,6 +90,7 @@ interface MemberProps {
   member: any;
   isOnline: boolean;
   setShowChannels: (val: boolean) => void;
+  setShowMembers?: (val: boolean) => void;
 }
 
 export function Member({
@@ -92,9 +98,21 @@ export function Member({
   member,
   isOnline,
   setShowChannels,
+  setShowMembers,
 }: MemberProps) {
+  const narrow = useNarrow();
+
+  const switchMemberList = useCallback(() => {
+    setShowChannels(false);
+    if (setShowMembers) setShowMembers(false);
+  }, [setShowMembers]);
+
   return (
-    <MemberData onClick={() => setShowChannels(true)}>
+    <MemberData
+      onClick={() =>
+        narrow && setShowMembers ? switchMemberList() : setShowChannels(true)
+      }
+    >
       <MemberIcon
         style={{
           backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",

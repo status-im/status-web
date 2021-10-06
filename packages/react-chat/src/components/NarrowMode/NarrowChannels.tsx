@@ -25,7 +25,7 @@ export function NarrowChannels({
   setShowChannels,
 }: NarrowChannelsProps) {
   return (
-    <ListWrapper>
+    <ListWrapper theme={theme}>
       <NarrowTopbar
         theme={theme}
         list="Channels"
@@ -56,6 +56,11 @@ export function NarrowChannels({
   );
 }
 
-const ListWrapper = styled.div`
+interface ThemeProps {
+  theme: Theme;
+}
+
+const ListWrapper = styled.div<ThemeProps>`
   padding: 18px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
 `;

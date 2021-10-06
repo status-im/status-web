@@ -21,7 +21,7 @@ export function NarrowMembers({
   setShowMembersList,
 }: NarrowMembersProps) {
   return (
-    <ListWrapper>
+    <ListWrapper theme={theme}>
       <NarrowTopbar
         theme={theme}
         list="Community members"
@@ -32,11 +32,17 @@ export function NarrowMembers({
         theme={theme}
         community={community}
         setShowChannels={setShowChannels}
+        setShowMembers={setShowMembersList}
       />
     </ListWrapper>
   );
 }
 
-const ListWrapper = styled.div`
+interface ThemeProps {
+  theme: Theme;
+}
+
+const ListWrapper = styled.div<ThemeProps>`
   padding: 18px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
 `;
