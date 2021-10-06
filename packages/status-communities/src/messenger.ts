@@ -28,7 +28,7 @@ export class Messenger {
   public static async create(
     identity: Identity,
     wakuOptions?: WakuCreateOptions
-  ) {
+  ): Promise<Messenger> {
     const _wakuOptions = Object.assign({ bootstrap: true }, wakuOptions);
     const waku = await Waku.create(_wakuOptions);
     return new Messenger(identity, waku);
@@ -39,7 +39,7 @@ export class Messenger {
    *
    * Use `addListener` to get messages received on this chat.
    */
-  public async joinChat(chatId: string) {
+  public async joinChat(chatId: string): Promise<void> {
     if (this.chatsById.has(chatId))
       throw `Failed to join chat, it is already joined: ${chatId}`;
 
@@ -102,7 +102,7 @@ export class Messenger {
   public addObserver(
     observer: (message: ApplicationMetadataMessage) => void,
     chatId: string
-  ) {
+  ): void {
     // Not sure this is the best design here. Maybe `addObserver` and `joinChat` should be merged.
 
     if (!this.chatsById.has(chatId))
@@ -153,7 +153,7 @@ export class Messenger {
     if (!chat)
       throw `Failed to retrieve messages, chat is not joined: ${chatId}`;
 
-    const _callback = (wakuMessages: WakuMessage[]) => {
+    const _callback = (wakuMessages: WakuMessage[]): void => {
       const isDefined = (
         msg: ApplicationMetadataMessage | undefined
       ): msg is ApplicationMetadataMessage => {
@@ -187,7 +187,7 @@ export class Messenger {
   private _handleNewChatMessage(
     chat: Chat,
     message: ApplicationMetadataMessage
-  ) {
+  ): void {
     if (!message.payload || !message.type || !message.signature) return;
 
     const chatMessage = ChatMessage.decode(message.payload);

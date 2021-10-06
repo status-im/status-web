@@ -14,7 +14,7 @@ export class Chat {
   /**
    * Create a public chat room.
    */
-  public static async create(id: string) {
+  public static async create(id: string): Promise<Chat> {
     const symKey = await createSymKeyFromPassword(id);
 
     return new Chat(id, symKey);
@@ -34,7 +34,7 @@ export class Chat {
     return message;
   }
 
-  public handleNewMessage(message: ChatMessage) {
+  public handleNewMessage(message: ChatMessage): void {
     this._updateClockFromMessage(message);
   }
 
@@ -52,11 +52,18 @@ export class Chat {
   }
 
   private _updateClockFromMessage(message: ChatMessage): void {
-    if (!this.lastMessage || this.lastMessage.clock <= message.clock) {
+    if (
+      !this.lastMessage ||
+      !this.lastMessage.clock ||
+      (message.clock && this.lastMessage.clock <= message.clock)
+    ) {
       this.lastMessage = message;
     }
 
-    if (!this.lastClockValue || this.lastClockValue < message.clock) {
+    if (
+      !this.lastClockValue ||
+      (message.clock && this.lastClockValue < message.clock)
+    ) {
       this.lastClockValue = message.clock;
     }
   }
