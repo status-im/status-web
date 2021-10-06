@@ -56,6 +56,6 @@ interface ThemeProps {
 }
 
 const ListWrapper = styled.div<ThemeProps>`
-  padding: 18px;
+  padding: 82px 18px 18px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
 `;
