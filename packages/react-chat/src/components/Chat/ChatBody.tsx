@@ -53,18 +53,10 @@ export function ChatBody({
       setShowChannelsList(true);
   },[]);
 
-  const switchMemberList = () => {
-    if (!showChannelsList && !showMembersList) {
-      setShowMembersList(true);
-    }
-    if (!showChannelsList && showMembersList) {
-      setShowMembersList(false);
-    }
-    if (showChannelsList && !showMembersList) {
+  const switchMemberList = useCallback(() => {
       setShowChannelsList(false);
-      setShowMembersList(true);
-    }
-  };
+      setShowMembersList(!showMembersList);
+  },[showMembersList]);
 
   return (
     <ChatBodyWrapper theme={theme} className={className}>
