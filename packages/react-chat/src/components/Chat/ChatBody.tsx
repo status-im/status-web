@@ -54,8 +54,8 @@ export function ChatBody({
 
   const switchChannelList = useCallback(() => {
     setShowMembersList(false);
-    setShowChannelsList(true);
-  }, []);
+    setShowChannelsList(!showChannelsList);
+  }, [showChannelsList]);
 
   const switchMemberList = useCallback(() => {
     setShowChannelsList(false);
