@@ -13,6 +13,7 @@ export class Chat {
 
   /**
    * Create a public chat room.
+   * [[Community.instantiateChat]] MUST be used for chats belonging to a community.
    */
   public static async create(id: string): Promise<Chat> {
     const symKey = await createSymKeyFromPassword(id);

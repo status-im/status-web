@@ -1,7 +1,9 @@
 import debug from "debug";
 import { Waku } from "js-waku";
 
+import { Chat } from "./chat";
 import { bufToHex, hexToBuf } from "./utils";
+import { CommunityChat } from "./wire/community_chat";
 import { CommunityDescription } from "./wire/community_description";
 
 const dbg = debug("communities:community");
@@ -25,6 +27,7 @@ export class Community {
    *
    * @param publicKey The community's public key in hex format.
    * Can be found in the community's invite link: https://join.status.im/c/<public key>
+   * @param waku The Waku instance, used to retrieve Community information from the network.
    */
   public async instantiateCommunity(
     publicKey: string,
@@ -57,5 +60,36 @@ export class Community {
     }
 
     this.description = desc;
+  }
+
+  /**
+   * Instantiate [[Chat]] object based on the passed chat name.
+   * The Chat MUST already be part of the Community and the name MUST be exact (including casing).
+   *
+   * @throws string If the Community Description is unavailable or the chat is not found;
+   */
+  public async instantiateChat(chatName: string): Promise<Chat> {
+    if (!this.description) {
+      await this.refreshCommunityDescription();
+      if (!this.description)
+        throw "Failed to retrieve community description, cannot instantiate chat";
+    }
+
+    let communityChat: CommunityChat | undefined;
+    let chatId: string | undefined;
+
+    this.description.chats.forEach((_chat, _id) => {
+      if (chatId) return;
+
+      if (_chat.identity?.displayName === chatName) {
+        chatId = _id;
+        communityChat = _chat;
+      }
+    });
+
+    if (!communityChat || !chatId)
+      throw `Failed to retrieve community community chat with name ${chatName}`;
+
+    return Chat.create(chatId);
   }
 }
