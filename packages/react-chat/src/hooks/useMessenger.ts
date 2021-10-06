@@ -74,7 +74,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   const addNewMessage = useCallback(
     (msg: ApplicationMetadataMessage, id: string) => {
-      if (msg.signer && msg.chatMessage?.text) {
+      if (msg.signer && msg.chatMessage?.text && msg.chatMessage.clock) {
         const content = msg.chatMessage.text;
         const date = new Date(msg.chatMessage.clock);
         addNewMessageRaw(msg.signer, content, date, id);
