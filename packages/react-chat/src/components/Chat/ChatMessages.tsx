@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
@@ -14,13 +14,34 @@ type ChatMessagesProps = {
 };
 
 export function ChatMessages({ messages, theme }: ChatMessagesProps) {
+  const [scrollOnBot, setScrollOnBot] = useState(false);
   const ref = useRef<HTMLHeadingElement>(null);
   const today = useMemo(() => new Date().getDay(), []);
   useEffect(() => {
-    if (ref && ref.current) {
+    if (ref && ref.current && scrollOnBot) {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
-  }, [messages, messages.length]);
+  }, [messages, messages.length, scrollOnBot]);
+
+  useEffect(() => {
+    const setScroll = () => {
+      if (ref && ref.current) {
+        if (
+          ref.current.scrollTop + ref.current.clientHeight ==
+          ref.current.scrollHeight
+        ) {
+          setScrollOnBot(true);
+        } else {
+          if (scrollOnBot == true) {
+            setScrollOnBot(false);
+          }
+        }
+      }
+    };
+    ref.current?.addEventListener("scroll", setScroll);
+    return () => ref.current?.removeEventListener("scroll", setScroll);
+  }, [ref, scrollOnBot]);
+
   return (
     <MessagesWrapper ref={ref}>
       {messages.map((message, idx) => {

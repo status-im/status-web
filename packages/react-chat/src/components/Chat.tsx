@@ -29,6 +29,8 @@ export function Chat({ theme, community }: ChatProps) {
     sendMessage,
     notifications,
     clearNotifications,
+    loadNextDay,
+    lastMessage,
   } = useMessenger(
     activeChannel.name,
     channels.map((channel) => channel.name)
@@ -59,6 +61,8 @@ export function Chat({ theme, community }: ChatProps) {
           showMembers={showMembers}
           community={community}
           showCommunity={!showChannels}
+          loadNextDay={() => loadNextDay(activeChannel.name)}
+          lastMessage={lastMessage}
         />
       ) : (
         <Loading>Connecting to waku</Loading>

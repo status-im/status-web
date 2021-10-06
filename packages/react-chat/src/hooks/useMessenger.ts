@@ -37,6 +37,9 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   const [notifications, setNotifications] = useState<{
     [chatId: string]: number;
   }>({});
+  const [lastLoadTime, setLastLoadTime] = useState<{
+    [chatId: string]: Date;
+  }>({});
 
   const clearNotifications = useCallback((id: string) => {
     setNotifications((prevNotifications) => {
@@ -111,10 +114,20 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
       Promise.all(
         chatIdList.map(async (id) => {
+          const today = new Date();
+          const yesterday = new Date();
+          yesterday.setDate(today.getDate() - 1);
+          yesterday.setHours(0, 0, 0, 0);
+          setLastLoadTime((prev) => {
+            return {
+              ...prev,
+              [id]: yesterday,
+            };
+          });
           await messenger.retrievePreviousMessages(
             id,
-            new Date(0),
-            new Date(),
+            yesterday,
+            today,
             (messages) => messages.forEach((msg) => addNewMessage(msg, id))
           );
           clearNotifications(id);
@@ -125,6 +138,29 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     };
     createMessenger();
   }, []);
+
+  const loadNextDay = useCallback(
+    (id: string) => {
+      console.log(id);
+      if (messenger) {
+        const endTime = lastLoadTime[id];
+        const startTime = new Date();
+        startTime.setDate(endTime.getDate() - 1);
+        startTime.setHours(0, 0, 0, 0);
+
+        messenger.retrievePreviousMessages(id, startTime, endTime, (messages) =>
+          messages.forEach((msg) => addNewMessage(msg, id))
+        );
+        setLastLoadTime((prev) => {
+          return {
+            ...prev,
+            [id]: startTime,
+          };
+        });
+      }
+    },
+    [lastLoadTime, messenger]
+  );
 
   const sendMessage = useCallback(
     async (messageText: string) => {
@@ -149,5 +185,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     sendMessage,
     notifications,
     clearNotifications,
+    loadNextDay,
+    lastMessage: lastLoadTime[chatId],
   };
 }
