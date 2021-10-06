@@ -183,7 +183,7 @@ const ChannelWrapper = styled.div<ThemeProps>`
   }
 `;
 
-const ChannelInfo = styled.div`
+export const ChannelInfo = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -193,7 +193,7 @@ const ChannelTextInfo = styled.div`
   flex-direction: column;
 `;
 
-const ChannelLogo = styled.div<ThemeProps>`
+export const ChannelLogo = styled.div<ThemeProps>`
   width: 24px;
   height: 24px;
   display: flex;
@@ -225,7 +225,7 @@ const ChannelLogo = styled.div<ThemeProps>`
   }
 `;
 
-const ChannelName = styled.p<ThemeProps>`
+export const ChannelName = styled.p<ThemeProps>`
   font-weight: 500;
   opacity: 0.7;
   color: ${({ theme }) => theme.primary};

@@ -8,6 +8,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
+import { EmptyChannel } from "../EmptyChannel";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowTopbar } from "../NarrowMode/NarrowTopbar";
@@ -72,12 +73,14 @@ export function ChatBody({
           <MembersIcon theme={theme} />
         </MemberBtn>
       </ChatTopbar>
-      {!showChannelsList && !showMembersList && (
-        <>
+      {!showChannelsList &&
+        !showMembersList &&
+        (messages.length > 0 ? (
           <ChatMessages messages={messages} theme={theme} />
-          <ChatInput theme={theme} addMessage={sendMessage} />
-        </>
-      )}
+        ) : (
+          <EmptyChannel theme={theme} channel={channel} />
+        ))}
+      <ChatInput theme={theme} addMessage={sendMessage} />
       {showChannelsList && narrow && (
         <NarrowChannels
           theme={theme}
