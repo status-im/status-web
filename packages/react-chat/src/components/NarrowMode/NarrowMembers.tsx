@@ -26,7 +26,6 @@ export function NarrowMembers({
         theme={theme}
         list="Community members"
         community={community.name}
-        onClick={() => setShowMembersList(false)}
       />
       <MembersList
         theme={theme}
@@ -43,6 +42,6 @@ interface ThemeProps {
 }
 
 const ListWrapper = styled.div<ThemeProps>`
-  padding: 18px;
+  padding: 82px 18px 18px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
 `;

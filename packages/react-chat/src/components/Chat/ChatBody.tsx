@@ -54,8 +54,8 @@ export function ChatBody({
 
   const switchChannelList = useCallback(() => {
     setShowMembersList(false);
-    setShowChannelsList(true);
-  }, []);
+    setShowChannelsList(!showChannelsList);
+  }, [showChannelsList]);
 
   const switchMemberList = useCallback(() => {
     setShowChannelsList(false);
@@ -64,7 +64,12 @@ export function ChatBody({
 
   return (
     <ChatBodyWrapper theme={theme} className={className}>
-      <ChatTopbar>
+      <ChatTopbar
+        className={
+          narrow && (showChannelsList || showMembersList) ? "narrow" : ""
+        }
+        theme={theme}
+      >
         <ChannelWrapper className={className}>
           {(showCommunity || narrow) && (
             <CommunityWrap theme={theme} className={className}>
@@ -152,10 +157,19 @@ const ChannelWrapper = styled.div`
   }
 `;
 
-const ChatTopbar = styled.div`
+const ChatTopbar = styled.div<ThemeProps>`
   display: flex;
   justify-content: space-between;
   padding: 5px 8px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+
+  &.narrow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+  }
 `;
 
 const CommunityWrap = styled.div<ThemeProps>`

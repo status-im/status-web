@@ -26,12 +26,7 @@ export function NarrowChannels({
 }: NarrowChannelsProps) {
   return (
     <ListWrapper theme={theme}>
-      <NarrowTopbar
-        theme={theme}
-        list="Channels"
-        community={community}
-        onClick={() => setShowChannels(false)}
-      />
+      <NarrowTopbar theme={theme} list="Channels" community={community} />
       <ChannelList>
         {channels.map((channel) => (
           <Channel
@@ -61,6 +56,6 @@ interface ThemeProps {
 }
 
 const ListWrapper = styled.div<ThemeProps>`
-  padding: 18px;
+  padding: 82px 18px 18px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
 `;
