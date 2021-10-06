@@ -47,25 +47,24 @@ export function Chat({ theme, community }: ChatProps) {
           activeChannelId={activeChannel.id}
         />
       )}
-      {messenger ? (
-        <ChatBody
-          theme={theme}
-          channel={activeChannel}
-          messages={messages}
-          sendMessage={sendMessage}
-          notifications={notifications}
-          setActiveChannel={setActiveChannel}
-          activeChannelId={activeChannel.id}
-          onClick={() => setShowMembers(!showMembers)}
-          showMembers={showMembers}
-          community={community}
-          showCommunity={!showChannels}
-          loadNextDay={() => loadNextDay(activeChannel.name)}
-          lastMessage={lastMessage}
-        />
-      ) : (
-        <Loading>Connecting to waku</Loading>
-      )}
+
+      <ChatBody
+        theme={theme}
+        channel={activeChannel}
+        messenger={messenger}
+        messages={messages}
+        sendMessage={sendMessage}
+        notifications={notifications}
+        setActiveChannel={setActiveChannel}
+        activeChannelId={activeChannel.id}
+        onClick={() => setShowMembers(!showMembers)}
+        showMembers={showMembers}
+        community={community}
+        showCommunity={!showChannels}
+        loadNextDay={() => loadNextDay(activeChannel.name)}
+        lastMessage={lastMessage}
+      />
+
       {showMembers && !narrow && (
         <Members
           theme={theme}
@@ -76,16 +75,6 @@ export function Chat({ theme, community }: ChatProps) {
     </ChatWrapper>
   );
 }
-
-const Loading = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  height: 100%;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-`;
 
 const ChatWrapper = styled.div`
   width: 100%;
