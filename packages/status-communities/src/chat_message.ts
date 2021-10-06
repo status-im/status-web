@@ -1,7 +1,12 @@
 import { Reader } from "protobufjs";
 
 import * as proto from "./proto/communities/v1/chat_message";
-import { ChatMessage_ContentType } from "./proto/communities/v1/chat_message";
+import {
+  AudioMessage,
+  ChatMessage_ContentType,
+  ImageMessage,
+  StickerMessage,
+} from "./proto/communities/v1/chat_message";
 import { MessageType } from "./proto/communities/v1/enums";
 
 export class ChatMessage {
@@ -50,11 +55,80 @@ export class ChatMessage {
     return proto.ChatMessage.encode(this.proto).finish();
   }
 
+  /** Lamport timestamp of the chat message */
   public get clock(): number | undefined {
     return this.proto.clock;
   }
 
-  get text(): string | undefined {
+  /**
+   * Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
+   * so that we don't rely on it
+   */
+  public get timestamp(): number | undefined {
+    return this.proto.timestamp;
+  }
+
+  /**
+   * Text of the message
+   */
+  public get text(): string | undefined {
     return this.proto.text;
+  }
+
+  /**
+   * Id of the message that we are replying to
+   */
+  public get responseTo(): string | undefined {
+    return this.proto.responseTo;
+  }
+
+  /**
+   * Ens name of the sender
+   */
+  public get ensName(): string | undefined {
+    return this.proto.ensName;
+  }
+
+  /**
+   * Chat id, this field is symmetric for public-chats and private group chats,
+   * but asymmetric in case of one-to-ones, as the sender will use the chat-id
+   * of the received, while the receiver will use the chat-id of the sender.
+   * Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
+   */
+  public get chatId(): string {
+    return this.proto.chatId;
+  }
+
+  /**
+   * The type of message (public/one-to-one/private-group-chat)
+   */
+  public get messageType(): MessageType | undefined {
+    return this.proto.messageType;
+  }
+
+  /**
+   * The type of the content of the message
+   */
+  public get contentType(): ChatMessage_ContentType | undefined {
+    return this.proto.contentType;
+  }
+
+  public get sticker(): StickerMessage | undefined {
+    return this.proto.sticker;
+  }
+
+  public get image(): ImageMessage | undefined {
+    return this.proto.image;
+  }
+
+  public get audio(): AudioMessage | undefined {
+    return this.proto.audio;
+  }
+
+  /**
+   * Used when sharing a community via a chat message.
+   */
+  public get community(): Uint8Array | undefined {
+    return this.proto.community;
   }
 }
