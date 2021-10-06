@@ -1,4 +1,4 @@
-import { chatIdToContentTopic } from "./contentTopic";
+import { idToContentTopic } from "./contentTopic";
 import { createSymKeyFromPassword } from "./encryption";
 import { ChatMessage, Content } from "./wire/chat_message";
 
@@ -21,7 +21,7 @@ export class Chat {
   }
 
   public get contentTopic(): string {
-    return chatIdToContentTopic(this.id);
+    return idToContentTopic(this.id);
   }
 
   public createMessage(content: Content): ChatMessage {
