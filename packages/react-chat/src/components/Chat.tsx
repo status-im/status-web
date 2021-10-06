@@ -21,7 +21,6 @@ export function Chat({ theme, community }: ChatProps) {
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const narrow = useNarrow();
-  // const className = useMemo(() => (narrow ? 'narrow' : ''), [narrow]);
 
   const {
     messenger,
