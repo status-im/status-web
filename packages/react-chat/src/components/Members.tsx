@@ -17,46 +17,66 @@ export function Members({ theme, community, setShowChannels }: MembersProps) {
   return (
     <MembersWrapper theme={theme}>
       <MemberHeading theme={theme}>Members</MemberHeading>
-      <MembersList>
-        <MemberCategory>
-          <MemberCategoryName theme={theme}>You</MemberCategoryName>
-          <MemberData>
-            <MemberIcon>
-              <UserIcon theme={theme} memberView={true} />
-            </MemberIcon>
-            <MemberName theme={theme}>Guest564732</MemberName>
-          </MemberData>
-        </MemberCategory>
-        <MemberCategory>
-          <MemberCategoryName theme={theme}>Online</MemberCategoryName>
-          {community.membersList
-            .filter((member) => member.isOnline)
-            .map((member) => (
-              <Member
-                key={member.id}
-                theme={theme}
-                member={member}
-                isOnline={member.isOnline}
-                setShowChannels={setShowChannels}
-              />
-            ))}
-        </MemberCategory>
-        <MemberCategory>
-          <MemberCategoryName theme={theme}>Offline</MemberCategoryName>
-          {community.membersList
-            .filter((member) => !member.isOnline)
-            .map((member) => (
-              <Member
-                key={member.id}
-                theme={theme}
-                member={member}
-                isOnline={member.isOnline}
-                setShowChannels={setShowChannels}
-              />
-            ))}
-        </MemberCategory>
-      </MembersList>
+      <MembersList
+        theme={theme}
+        community={community}
+        setShowChannels={setShowChannels}
+      />
     </MembersWrapper>
+  );
+}
+
+interface MembersListProps {
+  theme: Theme;
+  community: CommunityData;
+  setShowChannels: (val: boolean) => void;
+}
+
+export function MembersList({
+  theme,
+  community,
+  setShowChannels,
+}: MembersListProps) {
+  return (
+    <MembersListWrap>
+      <MemberCategory>
+        <MemberCategoryName theme={theme}>You</MemberCategoryName>
+        <MemberData>
+          <MemberIcon>
+            <UserIcon theme={theme} memberView={true} />
+          </MemberIcon>
+          <MemberName theme={theme}>Guest564732</MemberName>
+        </MemberData>
+      </MemberCategory>
+      <MemberCategory>
+        <MemberCategoryName theme={theme}>Online</MemberCategoryName>
+        {community.membersList
+          .filter((member) => member.isOnline)
+          .map((member) => (
+            <Member
+              key={member.id}
+              theme={theme}
+              member={member}
+              isOnline={member.isOnline}
+              setShowChannels={setShowChannels}
+            />
+          ))}
+      </MemberCategory>
+      <MemberCategory>
+        <MemberCategoryName theme={theme}>Offline</MemberCategoryName>
+        {community.membersList
+          .filter((member) => !member.isOnline)
+          .map((member) => (
+            <Member
+              key={member.id}
+              theme={theme}
+              member={member}
+              isOnline={member.isOnline}
+              setShowChannels={setShowChannels}
+            />
+          ))}
+      </MemberCategory>
+    </MembersListWrap>
   );
 }
 
@@ -131,7 +151,7 @@ const MemberName = styled.p<ThemeProps>`
   white-space: nowrap;
 `;
 
-const MembersList = styled.div`
+const MembersListWrap = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
