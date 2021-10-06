@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
@@ -49,14 +49,14 @@ export function ChatBody({
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
   const switchChannelList = useCallback(() => {
-      setShowMembersList(false);
-      setShowChannelsList(true);
-  },[]);
+    setShowMembersList(false);
+    setShowChannelsList(true);
+  }, []);
 
   const switchMemberList = useCallback(() => {
-      setShowChannelsList(false);
-      setShowMembersList(!showMembersList);
-  },[showMembersList]);
+    setShowChannelsList(false);
+    setShowMembersList(!showMembersList);
+  }, [showMembersList]);
 
   return (
     <ChatBodyWrapper theme={theme} className={className}>
@@ -88,14 +88,18 @@ export function ChatBody({
           <MembersIcon theme={theme} />
         </MemberBtn>
       </ChatTopbar>
-      {!showChannelsList &&
-        !showMembersList &&
-        (messages.length > 0 ? (
-          <ChatMessages messages={messages} theme={theme} />
-        ) : (
-          <EmptyChannel theme={theme} channel={channel} />
-        ))}
-      <ChatInput theme={theme} addMessage={sendMessage} />
+      {!showChannelsList && !showMembersList && (
+        <>
+          {" "}
+          {messages.length > 0 ? (
+            <ChatMessages messages={messages} theme={theme} />
+          ) : (
+            <EmptyChannel theme={theme} channel={channel} />
+          )}
+          <ChatInput theme={theme} addMessage={sendMessage} />
+        </>
+      )}
+
       {showChannelsList && narrow && (
         <NarrowChannels
           theme={theme}
