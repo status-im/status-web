@@ -32,15 +32,7 @@ describe("Messenger", () => {
       }),
     ]);
 
-    dbg("Connect messengers");
-    // Connect both messengers together for test purposes
-    messengerAlice.waku.addPeerToAddressBook(
-      messengerBob.waku.libp2p.peerId,
-      messengerBob.waku.libp2p.multiaddrs
-    );
-
-    dbg("Wait for pubsub connection");
-    await Promise.all([
+    const pubsubPromises = [
       new Promise((resolve) =>
         messengerAlice.waku.libp2p.pubsub.once(
           "pubsub:subscription-change",
@@ -52,7 +44,17 @@ describe("Messenger", () => {
           resolve(null)
         )
       ),
-    ]);
+    ];
+
+    dbg("Connect messengers");
+    // Connect both messengers together for test purposes
+    messengerAlice.waku.addPeerToAddressBook(
+      messengerBob.waku.libp2p.peerId,
+      messengerBob.waku.libp2p.multiaddrs
+    );
+
+    dbg("Wait for pubsub connection");
+    await Promise.all(pubsubPromises);
     dbg("Messengers ready");
   });
 
