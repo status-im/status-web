@@ -48,15 +48,10 @@ export function ChatBody({
   const [showMembersList, setShowMembersList] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
-  const switchChannelList = () => {
-    if (!showChannelsList && showMembersList) {
-      setShowChannelsList(true);
+  const switchChannelList = useCallback(() => {
       setShowMembersList(false);
-    }
-    if (!showChannelsList && !showMembersList) {
       setShowChannelsList(true);
-    }
-  };
+  },[]);
 
   const switchMemberList = () => {
     if (!showChannelsList && !showMembersList) {
