@@ -1,4 +1,4 @@
-import { ChatMessage } from "./chat_message";
+import { ChatMessage, MediaContent } from "./chat_message";
 import { chatIdToContentTopic } from "./contentTopic";
 import { createSymKeyFromPassword } from "./encryption";
 
@@ -24,10 +24,16 @@ export class Chat {
     return chatIdToContentTopic(this.id);
   }
 
-  public createMessage(text: string): ChatMessage {
+  public createMessage(text: string, mediaContent?: MediaContent): ChatMessage {
     const { timestamp, clock } = this._nextClockAndTimestamp();
 
-    const message = ChatMessage.createMessage(clock, timestamp, text, this.id);
+    const message = ChatMessage.createMessage(
+      clock,
+      timestamp,
+      text,
+      this.id,
+      mediaContent
+    );
 
     this._updateClockFromMessage(message);
 

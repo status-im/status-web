@@ -3,24 +3,103 @@ import { Reader } from "protobufjs";
 import * as proto from "./proto/communities/v1/chat_message";
 import {
   AudioMessage,
+  AudioMessage_AudioType,
   ChatMessage_ContentType,
   ImageMessage,
   StickerMessage,
 } from "./proto/communities/v1/chat_message";
-import { MessageType } from "./proto/communities/v1/enums";
+import { ImageType, MessageType } from "./proto/communities/v1/enums";
+
+export type MediaContent = StickerContent | ImageContent | AudioContent;
+
+export enum ContentType {
+  Sticker,
+  Image,
+  Audio,
+}
+
+export interface StickerContent {
+  hash: string;
+  pack: number;
+  contentType: ContentType.Sticker;
+}
+
+export interface ImageContent {
+  image: Uint8Array;
+  imageType: ImageType;
+  contentType: ContentType.Image;
+}
+
+export interface AudioContent {
+  audio: Uint8Array;
+  audioType: AudioMessage_AudioType;
+  durationMs: number;
+  contentType: ContentType.Audio;
+}
+
+function isSticker(content: MediaContent): content is StickerContent {
+  return content.contentType === ContentType.Sticker;
+}
+
+function isImage(content: MediaContent): content is ImageContent {
+  return content.contentType === ContentType.Image;
+}
+
+function isAudio(content: MediaContent): content is AudioContent {
+  return content.contentType === ContentType.Audio;
+}
 
 export class ChatMessage {
   private constructor(public proto: proto.ChatMessage) {}
 
   /**
-   * Create a chat message to be sent to an Open (permission = no membership) community
+   * Create a chat message to be sent to an Open (permission = no membership) community.
+   *
+   * @throws string If mediaContent is malformed
    */
   public static createMessage(
     clock: number,
     timestamp: number,
     text: string,
-    chatId: string
+    chatId: string,
+    mediaContent?: MediaContent
   ): ChatMessage {
+    let sticker, image, audio;
+    let contentType = ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN;
+
+    if (mediaContent) {
+      if (isSticker(mediaContent)) {
+        if (!mediaContent.hash || !mediaContent.pack)
+          throw "Malformed Sticker Content";
+        sticker = {
+          hash: mediaContent.hash,
+          pack: mediaContent.pack,
+        };
+        contentType = ChatMessage_ContentType.CONTENT_TYPE_STICKER;
+      } else if (isImage(mediaContent)) {
+        if (!mediaContent.image || !mediaContent.imageType)
+          throw "Malformed Image Content";
+        image = {
+          payload: mediaContent.image,
+          type: mediaContent.imageType,
+        };
+        contentType = ChatMessage_ContentType.CONTENT_TYPE_IMAGE;
+      } else if (isAudio(mediaContent)) {
+        if (
+          !mediaContent.audio ||
+          !mediaContent.audioType ||
+          !mediaContent.durationMs
+        )
+          throw "Malformed Audio Content";
+        audio = {
+          payload: mediaContent.audio,
+          type: mediaContent.audioType,
+          durationMs: mediaContent.durationMs,
+        };
+        contentType = ChatMessage_ContentType.CONTENT_TYPE_AUDIO;
+      }
+    }
+
     const proto = {
       clock, // ms?
       timestamp, //ms?
@@ -34,10 +113,10 @@ export class ChatMessage {
       /** The type of message (public/one-to-one/private-group-chat) */
       messageType: MessageType.MESSAGE_TYPE_COMMUNITY_CHAT,
       /** The type of the content of the message */
-      contentType: ChatMessage_ContentType.CONTENT_TYPE_COMMUNITY,
-      sticker: undefined,
-      image: undefined,
-      audio: undefined,
+      contentType,
+      sticker,
+      image,
+      audio,
       community: undefined, // Used to share a community
       grant: undefined,
     };
