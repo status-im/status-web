@@ -13,6 +13,8 @@ export type Theme = {
   inputColor: string;
   border: string;
   buttonBg: string;
+  skeletonLight: string;
+  skeletonDark: string;
 };
 
 export const lightTheme: Theme = {
@@ -30,6 +32,8 @@ export const lightTheme: Theme = {
   inputColor: "#EEF2F5",
   border: "#EEF2F5",
   buttonBg: "rgba(67, 96, 223, 0.2)",
+  skeletonLight: "#F6F8FA",
+  skeletonDark: "#E9EDF1",
 };
 
 export const darkTheme: Theme = {
@@ -47,6 +51,8 @@ export const darkTheme: Theme = {
   inputColor: "#373737",
   border: "#373737",
   buttonBg: "rgba(134, 158, 255, 0.3)",
+  skeletonLight: "#2E2F31",
+  skeletonDark: "#141414",
 };
 
 export default { lightTheme, darkTheme };

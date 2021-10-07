@@ -13,6 +13,8 @@ import { EmptyChannel } from "../EmptyChannel";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowMembers } from "../NarrowMode/NarrowMembers";
+import { Loading } from "../Skeleton/Loading";
+import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
 
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
@@ -21,6 +23,7 @@ interface ChatBodyProps {
   theme: Theme;
   channel: ChannelData;
   community: CommunityData;
+  messenger: any;
   messages: ChatMessage[];
   sendMessage: (text: string) => void;
   onClick: () => void;
@@ -38,6 +41,7 @@ export function ChatBody({
   theme,
   channel,
   community,
+  messenger,
   messages,
   sendMessage,
   onClick,
@@ -99,42 +103,56 @@ export function ChatBody({
         >
           <MembersIcon theme={theme} />
         </MemberBtn>
+        {!messenger && <Loading theme={theme} />}
       </ChatTopbar>
-      {!showChannelsList && !showMembersList && (
+      {messenger ? (
         <>
-          <button onClick={loadNextDay}>
-            Last message date {lastMessage.toDateString()}
-          </button>{" "}
-          {messages.length > 0 ? (
-            <ChatMessages
-              messages={messages}
-              theme={theme}
-              fetchMetadata={fetchMetadata}
-            />
-          ) : (
-            <EmptyChannel theme={theme} channel={channel} />
+          {!showChannelsList && !showMembersList && (
+            <>
+              <button onClick={loadNextDay}>
+                Last message date {lastMessage.toDateString()}
+              </button>{" "}
+              {messages.length > 0 ? (
+                messenger ? (
+                  <ChatMessages
+                    messages={messages}
+                    theme={theme}
+                    fetchMetadata={fetchMetadata}
+                  />
+                ) : (
+                  <LoadingSkeleton theme={theme} />
+                )
+              ) : (
+                <EmptyChannel theme={theme} channel={channel} />
+              )}
+              <ChatInput theme={theme} addMessage={sendMessage} />
+            </>
           )}
+
+          {showChannelsList && narrow && (
+            <NarrowChannels
+              theme={theme}
+              community={community.name}
+              notifications={notifications}
+              setActiveChannel={setActiveChannel}
+              setShowChannels={setShowChannelsList}
+              activeChannelId={activeChannelId}
+            />
+          )}
+          {showMembersList && narrow && (
+            <NarrowMembers
+              theme={theme}
+              community={community}
+              setShowChannels={setShowChannelsList}
+              setShowMembersList={setShowMembersList}
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <LoadingSkeleton theme={theme} />
           <ChatInput theme={theme} addMessage={sendMessage} />
         </>
-      )}
-
-      {showChannelsList && narrow && (
-        <NarrowChannels
-          theme={theme}
-          community={community.name}
-          notifications={notifications}
-          setActiveChannel={setActiveChannel}
-          setShowChannels={setShowChannelsList}
-          activeChannelId={activeChannelId}
-        />
-      )}
-      {showMembersList && narrow && (
-        <NarrowMembers
-          theme={theme}
-          community={community}
-          setShowChannels={setShowChannelsList}
-          setShowMembersList={setShowMembersList}
-        />
       )}
     </ChatBodyWrapper>
   );
@@ -169,6 +187,7 @@ const ChatTopbar = styled.div<ThemeProps>`
   justify-content: space-between;
   padding: 5px 8px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 
   &.narrow {
     position: fixed;
