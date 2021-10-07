@@ -49,7 +49,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
           activeChannelId={activeChannel.id}
         />
       )}
-
       <ChatBody
         theme={theme}
         channel={activeChannel}
@@ -67,7 +66,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         lastMessage={lastMessage}
         fetchMetadata={fetchMetadata}
       />
-
       {showMembers && !narrow && (
         <Members
           theme={theme}
