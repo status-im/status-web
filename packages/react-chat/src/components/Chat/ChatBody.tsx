@@ -12,6 +12,7 @@ import { EmptyChannel } from "../EmptyChannel";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowMembers } from "../NarrowMode/NarrowMembers";
+import { Loading } from "../Skeleton/Loading";
 import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
 
 import { ChatInput } from "./ChatInput";
@@ -99,6 +100,7 @@ export function ChatBody({
         >
           <MembersIcon theme={theme} />
         </MemberBtn>
+        {!messenger && <Loading theme={theme} />}
       </ChatTopbar>
       {messenger ? (
         <>
@@ -178,6 +180,7 @@ const ChatTopbar = styled.div<ThemeProps>`
   justify-content: space-between;
   padding: 5px 8px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 
   &.narrow {
     position: fixed;
