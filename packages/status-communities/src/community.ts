@@ -76,20 +76,20 @@ export class Community {
     }
 
     let communityChat: CommunityChat | undefined;
-    let chatId: string | undefined;
+    let chatUuid: string | undefined;
 
     this.description.chats.forEach((_chat, _id) => {
-      if (chatId) return;
+      if (chatUuid) return;
 
       if (_chat.identity?.displayName === chatName) {
-        chatId = _id;
+        chatUuid = _id;
         communityChat = _chat;
       }
     });
 
-    if (!communityChat || !chatId)
+    if (!communityChat || !chatUuid)
       throw `Failed to retrieve community community chat with name ${chatName}`;
 
-    return Chat.create(chatId);
+    return Chat.create(this.publicKeyStr + chatUuid);
   }
 }
