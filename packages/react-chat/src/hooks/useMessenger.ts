@@ -83,7 +83,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   );
 
   const addNewMessage = useCallback(
-    (msg: ApplicationMetadataMessage, id: string) => {
+    (msg: ApplicationMetadataMessage, id: string, date: Date) => {
       if (
         msg.signer &&
         (msg.chatMessage?.text || msg.chatMessage?.image) &&
@@ -94,11 +94,35 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
         if (msg.chatMessage?.image) {
           img = uintToImgUrl(msg.chatMessage?.image.payload);
         }
-        const date = new Date(msg.chatMessage.clock);
         addNewMessageRaw(msg.signer, content, date, id, img);
       }
     },
     [addNewMessageRaw]
+  );
+
+  const loadNextDay = useCallback(
+    (id: string) => {
+      if (messenger) {
+        const endTime = lastLoadTime[id];
+        const startTime = new Date();
+        startTime.setDate(endTime.getDate() - 1);
+        startTime.setHours(0, 0, 0, 0);
+
+        messenger.retrievePreviousMessages(
+          id,
+          startTime,
+          endTime,
+          () => undefined
+        );
+        setLastLoadTime((prev) => {
+          return {
+            ...prev,
+            [id]: startTime,
+          };
+        });
+      }
+    },
+    [lastLoadTime, messenger]
   );
 
   useEffect(() => {
@@ -124,29 +148,19 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
       });
 
       await Promise.all(
-        chatIdList.map(async (id) => await messenger.joinChat(id))
-      );
-
-      Promise.all(
         chatIdList.map(async (id) => {
-          const today = new Date();
-          const yesterday = new Date();
-          yesterday.setDate(today.getDate() - 1);
-          yesterday.setHours(0, 0, 0, 0);
+          await messenger.joinChat(id);
           setLastLoadTime((prev) => {
             return {
               ...prev,
-              [id]: yesterday,
+              [id]: new Date(),
             };
           });
-          await messenger.retrievePreviousMessages(
-            id,
-            yesterday,
-            today,
-            (messages) => messages.forEach((msg) => addNewMessage(msg, id))
+          messenger.addObserver(
+            (msg, date) => addNewMessage(msg, id, date),
+            id
           );
           clearNotifications(id);
-          messenger.addObserver((msg) => addNewMessage(msg, id), id);
         })
       );
       setMessenger(messenger);
@@ -154,40 +168,22 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     createMessenger();
   }, []);
 
-  const loadNextDay = useCallback(
-    (id: string) => {
-      if (messenger) {
-        const endTime = lastLoadTime[id];
-        const startTime = new Date();
-        startTime.setDate(endTime.getDate() - 1);
-        startTime.setHours(0, 0, 0, 0);
-
-        messenger.retrievePreviousMessages(id, startTime, endTime, (messages) =>
-          messages.forEach((msg) => addNewMessage(msg, id))
-        );
-        setLastLoadTime((prev) => {
-          return {
-            ...prev,
-            [id]: startTime,
-          };
-        });
-      }
-    },
-    [lastLoadTime, messenger]
-  );
+  useEffect(() => {
+    if (messenger) {
+      chatIdList.forEach(loadNextDay);
+    }
+  }, [messenger]);
 
   const sendMessage = useCallback(
     async (messageText: string, image?: Uint8Array) => {
-      let mediaContent = undefined;
-      if (image) {
-        mediaContent = {
-          image,
-          imageType: 1,
-          contentType: 1,
-        };
-      }
+      const mediaContent = image
+        ? {
+            image,
+            imageType: 1,
+            contentType: 1,
+          }
+        : undefined;
       await messenger?.sendMessage(messageText, chatId, mediaContent);
-
       addNewMessageRaw(
         messenger?.identity.publicKey ?? new Uint8Array(),
         messageText,
