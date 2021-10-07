@@ -33,6 +33,7 @@ interface ChatBodyProps {
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
   loadNextDay: () => void;
+  onCommunityClick: () => void;
   lastMessage: Date;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
@@ -51,6 +52,7 @@ export function ChatBody({
   setActiveChannel,
   activeChannelId,
   loadNextDay,
+  onCommunityClick,
   lastMessage,
   fetchMetadata,
 }: ChatBodyProps) {
@@ -80,7 +82,11 @@ export function ChatBody({
         <ChannelWrapper className={className}>
           {(showCommunity || narrow) && (
             <CommunityWrap theme={theme} className={className}>
-              <Community community={community} theme={theme} />
+              <Community
+                onClick={onCommunityClick}
+                community={community}
+                theme={theme}
+              />
             </CommunityWrap>
           )}
           <Channel
