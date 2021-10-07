@@ -31,6 +31,7 @@ const LoadingBlock = styled.div<LoadingProps>`
   box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
     0px 4px 12px rgba(0, 34, 51, 0.08);
   border-radius: 8px;
+  z-index: 2;
 `;
 
 const LoadingText = styled.p<LoadingProps>`
