@@ -1,56 +1,45 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 import { MessageSkeleton } from "./MessageSkeleton";
 import { Skeleton } from "./Skeleton";
 
-interface LoadingSkeletonProps {
-  theme: Theme;
-}
-
-export const LoadingSkeleton = ({ theme }: LoadingSkeletonProps) => {
+export const LoadingSkeleton = () => {
   return (
     <Loading>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} />
+      <MessageSkeleton>
+        <Skeleton />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} />
+      <MessageSkeleton>
+        <Skeleton />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} />
+      <MessageSkeleton>
+        <Skeleton />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} />
+      <MessageSkeleton>
+        <Skeleton />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} />
-        <Skeleton theme={theme} width="30%" />
+      <MessageSkeleton>
+        <Skeleton />
+        <Skeleton width="30%" />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} width="70%" />
+      <MessageSkeleton>
+        <Skeleton width="70%" />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} width="40%" />
-        <Skeleton theme={theme} width="25%" />
-        <Skeleton theme={theme} width="30%" />
+      <MessageSkeleton>
+        <Skeleton width="40%" />
+        <Skeleton width="25%" />
+        <Skeleton width="30%" />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} width="50%" />
-        <Skeleton
-          theme={theme}
-          width="147px"
-          height="196px"
-          borderRadius="16px"
-        />
+      <MessageSkeleton>
+        <Skeleton width="50%" />
+        <Skeleton width="147px" height="196px" borderRadius="16px" />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} width="50%" />
+      <MessageSkeleton>
+        <Skeleton width="50%" />
       </MessageSkeleton>
-      <MessageSkeleton theme={theme}>
-        <Skeleton theme={theme} width="70%" />
+      <MessageSkeleton>
+        <Skeleton width="70%" />
       </MessageSkeleton>
     </Loading>
   );

@@ -26,39 +26,29 @@ export const CommunityModal = ({
   subtitle,
   description,
   publicKey,
-  theme,
 }: CommunityModalProps) => {
   const narrow = useNarrow();
 
   return (
-    <Modal theme={theme} isVisible={isVisible} onClose={onClose}>
-      <Section theme={theme}>
-        <CommunityIdentity
-          theme={theme}
-          icon={icon}
-          name={name}
-          subtitle={subtitle}
-        />
+    <Modal isVisible={isVisible} onClose={onClose}>
+      <Section>
+        <CommunityIdentity icon={icon} name={name} subtitle={subtitle} />
       </Section>
-      <Section theme={theme}>
-        <Text theme={theme}>{description}</Text>
+      <Section>
+        <Text>{description}</Text>
       </Section>
-      <Section theme={theme}>
-        <CopyInput
-          theme={theme}
-          value={publicKey}
-          label="Community public key"
-        />
-        <Hint theme={theme}>
+      <Section>
+        <CopyInput value={publicKey} label="Community public key" />
+        <Hint>
           To access this community, paste community public key in Status desktop
           or mobile app.
-          {narrow && <StyledDownloadButton theme={theme} />}
+          {narrow && <StyledDownloadButton />}
         </Hint>
       </Section>
       {!narrow && (
-        <BottomSection theme={theme}>
-          <StatusLogo theme={theme} />
-          <DownloadButton theme={theme} />
+        <BottomSection>
+          <StatusLogo />
+          <DownloadButton />
         </BottomSection>
       )}
     </Modal>

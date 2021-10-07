@@ -1,15 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../styles/themes";
-
 import { textMediumStyles } from "./Text";
 
 export interface CommunityIdentityProps {
   icon: string;
   name: string;
   subtitle: string;
-  theme: Theme;
   className?: string;
 }
 
@@ -18,14 +15,13 @@ export const CommunityIdentity = ({
   name,
   subtitle,
   className,
-  theme,
 }: CommunityIdentityProps) => {
   return (
     <Row className={className}>
       <Logo src={icon} alt={`${name} logo`} />
       <Column>
-        <Name theme={theme}>{name}</Name>
-        <Subtitle theme={theme}>{subtitle}</Subtitle>
+        <Name>{name}</Name>
+        <Subtitle>{subtitle}</Subtitle>
       </Column>
     </Row>
   );

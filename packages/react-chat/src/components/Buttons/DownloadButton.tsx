@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 const userAgent = window.navigator.userAgent;
 const platform = window.navigator.platform;
 const macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"];
@@ -10,11 +8,10 @@ const windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"];
 const iosPlatforms = ["iPhone", "iPad", "iPod"];
 
 interface DownloadButtonProps {
-  theme: Theme;
   className?: string;
 }
 
-export const DownloadButton = ({ theme, className }: DownloadButtonProps) => {
+export const DownloadButton = ({ className }: DownloadButtonProps) => {
   const [link, setlink] = useState("https://status.im/get/");
   const [os, setOs] = useState<string | null>(null);
 
@@ -51,7 +48,6 @@ export const DownloadButton = ({ theme, className }: DownloadButtonProps) => {
     <Link
       className={className}
       href={link}
-      theme={theme}
       target="_blank"
       rel="noopener noreferrer"
     >

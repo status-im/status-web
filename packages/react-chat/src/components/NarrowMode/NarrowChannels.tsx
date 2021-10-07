@@ -2,13 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 import { ChannelData, channels } from "../../helpers/channelsMock";
-import { Theme } from "../../styles/themes";
 import { Channel, ChannelList } from "../Channels";
 
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowChannelsProps {
-  theme: Theme;
   community: string;
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
@@ -17,7 +15,6 @@ interface NarrowChannelsProps {
 }
 
 export function NarrowChannels({
-  theme,
   community,
   notifications,
   setActiveChannel,
@@ -25,14 +22,13 @@ export function NarrowChannels({
   setShowChannels,
 }: NarrowChannelsProps) {
   return (
-    <ListWrapper theme={theme}>
-      <NarrowTopbar theme={theme} list="Channels" community={community} />
+    <ListWrapper>
+      <NarrowTopbar list="Channels" community={community} />
       <ChannelList>
         {channels.map((channel) => (
           <Channel
             key={channel.id}
             channel={channel}
-            theme={theme}
             isActive={channel.id === activeChannelId}
             isMuted={channel.isMuted || false}
             notification={
@@ -51,11 +47,7 @@ export function NarrowChannels({
   );
 }
 
-interface ThemeProps {
-  theme: Theme;
-}
-
-const ListWrapper = styled.div<ThemeProps>`
+const ListWrapper = styled.div`
   padding: 82px 18px 18px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
 `;

@@ -42,7 +42,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
           <Picker
             onSelect={addEmoji}
             theme={theme === lightTheme ? "light" : "dark"}
-            set="apple"
+            set="twitter"
             color={theme.tertiary}
             emojiSize={26}
             style={{
@@ -59,7 +59,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
       )}
 
       <AddPictureBtn>
-        <PictureIcon theme={theme} />
+        <PictureIcon />
         <AddPictureInput
           type="file"
           multiple={true}
@@ -77,14 +77,12 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         />
       </AddPictureBtn>
       <InputImageWrapper
-        theme={theme}
         style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}
       >
         {image && (
           <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
         )}
         <Input
-          theme={theme}
           placeholder={"Message"}
           value={content}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -107,20 +105,16 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         />
       </InputImageWrapper>
       <AddEmojiBtn onClick={() => setShowEmoji(!showEmoji)}>
-        <EmojiIcon theme={theme} isActive={showEmoji} />
+        <EmojiIcon isActive={showEmoji} />
       </AddEmojiBtn>
       <AddStickerBtn>
-        <StickerIcon theme={theme} />
+        <StickerIcon />
       </AddStickerBtn>
       <AddGifBtn>
-        <GifIcon theme={theme} />
+        <GifIcon />
       </AddGifBtn>
     </InputWrapper>
   );
-}
-
-interface ThemeProps {
-  theme: Theme;
 }
 
 const InputWrapper = styled.div`
@@ -138,7 +132,7 @@ const ImagePreview = styled.img`
   margin-top: 9px;
 `;
 
-const InputImageWrapper = styled.div<ThemeProps>`
+const InputImageWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -149,7 +143,7 @@ const InputImageWrapper = styled.div<ThemeProps>`
   margin-left: 10px;
 `;
 
-const Input = styled.textarea<ThemeProps>`
+const Input = styled.textarea`
   width: 100%;
   height: 40px;
   background: ${({ theme }) => theme.inputColor};

@@ -1,20 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 interface UserIconProps {
-  theme: Theme;
   memberView?: boolean;
 }
 
-export const UserIcon = ({ theme, memberView }: UserIconProps) => {
+export const UserIcon = ({ memberView }: UserIconProps) => {
   return (
     <Icon
       viewBox="0 0 34 34"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      theme={theme}
       memberView={memberView}
     >
       <ellipse cx="17" cy="10.3883" rx="6.94445" ry="6.94445" />

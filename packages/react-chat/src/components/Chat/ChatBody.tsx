@@ -72,26 +72,20 @@ export function ChatBody({
   }, [showMembersList]);
 
   return (
-    <ChatBodyWrapper theme={theme} className={className}>
+    <ChatBodyWrapper className={className}>
       <ChatTopbar
         className={
           narrow && (showChannelsList || showMembersList) ? "narrow" : ""
         }
-        theme={theme}
       >
         <ChannelWrapper className={className}>
           {(showCommunity || narrow) && (
-            <CommunityWrap theme={theme} className={className}>
-              <Community
-                onClick={onCommunityClick}
-                community={community}
-                theme={theme}
-              />
+            <CommunityWrap className={className}>
+              <Community onClick={onCommunityClick} community={community} />
             </CommunityWrap>
           )}
           <Channel
             channel={channel}
-            theme={theme}
             isActive={narrow ? showChannelsList : true}
             activeView={true}
             isMuted={false}
@@ -105,11 +99,10 @@ export function ChatBody({
               ? "active"
               : ""
           }
-          theme={theme}
         >
-          <MembersIcon theme={theme} />
+          <MembersIcon />
         </MemberBtn>
-        {!messenger && <Loading theme={theme} />}
+        {!messenger && <Loading />}
       </ChatTopbar>
       {messenger ? (
         <>
@@ -122,22 +115,20 @@ export function ChatBody({
                 messenger ? (
                   <ChatMessages
                     messages={messages}
-                    theme={theme}
                     fetchMetadata={fetchMetadata}
                   />
                 ) : (
-                  <LoadingSkeleton theme={theme} />
+                  <LoadingSkeleton />
                 )
               ) : (
-                <EmptyChannel theme={theme} channel={channel} />
+                <EmptyChannel channel={channel} />
               )}
-              <ChatInput theme={theme} addMessage={sendMessage} />
+              <ChatInput addMessage={sendMessage} theme={theme} />
             </>
           )}
 
           {showChannelsList && narrow && (
             <NarrowChannels
-              theme={theme}
               community={community.name}
               notifications={notifications}
               setActiveChannel={setActiveChannel}
@@ -147,7 +138,6 @@ export function ChatBody({
           )}
           {showMembersList && narrow && (
             <NarrowMembers
-              theme={theme}
               community={community}
               setShowChannels={setShowChannelsList}
               setShowMembersList={setShowMembersList}
@@ -156,18 +146,15 @@ export function ChatBody({
         </>
       ) : (
         <>
-          <LoadingSkeleton theme={theme} />
-          <ChatInput theme={theme} addMessage={sendMessage} />
+          <LoadingSkeleton />
+          <ChatInput addMessage={sendMessage} theme={theme} />
         </>
       )}
     </ChatBodyWrapper>
   );
 }
-interface ThemeProps {
-  theme: Theme;
-}
 
-const ChatBodyWrapper = styled.div<ThemeProps>`
+const ChatBodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -188,7 +175,7 @@ const ChannelWrapper = styled.div`
   }
 `;
 
-const ChatTopbar = styled.div<ThemeProps>`
+const ChatTopbar = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 5px 8px;
@@ -204,7 +191,7 @@ const ChatTopbar = styled.div<ThemeProps>`
   }
 `;
 
-const CommunityWrap = styled.div<ThemeProps>`
+const CommunityWrap = styled.div`
   padding-right: 10px;
   margin-right: 16px;
   position: relative;
@@ -227,7 +214,7 @@ const CommunityWrap = styled.div<ThemeProps>`
   }
 `;
 
-const MemberBtn = styled.button<ThemeProps>`
+const MemberBtn = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 8px;

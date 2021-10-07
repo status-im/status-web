@@ -4,14 +4,12 @@ import styled from "styled-components";
 import { useNarrow } from "../contexts/narrowProvider";
 import { ChannelData, channels } from "../helpers/channelsMock";
 import { CommunityData } from "../helpers/communityMock";
-import { Theme } from "../styles/themes";
 
 import { Community } from "./Community";
 import { MutedIcon } from "./Icons/MutedIcon";
 import { textMediumStyles } from "./Text";
 
 interface ChannelsProps {
-  theme: Theme;
   community: CommunityData;
   notifications: { [id: string]: number };
   clearNotifications: (id: string) => void;
@@ -21,7 +19,6 @@ interface ChannelsProps {
 }
 
 export function Channels({
-  theme,
   community,
   notifications,
   setActiveChannel,
@@ -39,18 +36,13 @@ export function Channels({
   }, [notifications, activeChannelId]);
 
   return (
-    <ChannelsWrapper theme={theme}>
-      <StyledCommunity
-        onClick={onCommunityClick}
-        theme={theme}
-        community={community}
-      />
+    <ChannelsWrapper>
+      <StyledCommunity onClick={onCommunityClick} community={community} />
       <ChannelList>
         {channels.map((channel) => (
           <Channel
             key={channel.id}
             channel={channel}
-            theme={theme}
             isActive={channel.id === activeChannelId}
             isMuted={channel.isMuted || false}
             notification={
@@ -69,7 +61,6 @@ export function Channels({
 }
 
 interface ChannelProps {
-  theme: Theme;
   channel: ChannelData;
   notification?: number;
   isActive: boolean;
@@ -79,7 +70,6 @@ interface ChannelProps {
 }
 
 export function Channel({
-  theme,
   channel,
   isActive,
   isMuted,
@@ -99,7 +89,6 @@ export function Channel({
         (isActive && !activeView) || (isActive && narrow) ? "active" : ""
       }
       style={{ width: narrow && activeView ? "calc(100% - 162px)" : "100%" }}
-      theme={theme}
       onClick={onClick}
     >
       <ChannelInfo>
@@ -108,13 +97,11 @@ export function Channel({
             backgroundImage: channel.icon ? `url(${channel.icon}` : "",
           }}
           className={className}
-          theme={theme}
         >
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogo>
         <ChannelTextInfo>
           <ChannelName
-            theme={theme}
             className={
               isActive || narrow
                 ? "active"
@@ -128,25 +115,19 @@ export function Channel({
             # {channel.name}
           </ChannelName>
           {activeView && (
-            <ChannelDescription theme={theme}>
-              {" "}
-              {channel.description}
-            </ChannelDescription>
+            <ChannelDescription> {channel.description}</ChannelDescription>
           )}
         </ChannelTextInfo>
       </ChannelInfo>
       {notification && notification > 0 && !activeView && (
-        <NotificationBagde theme={theme}>{notification}</NotificationBagde>
+        <NotificationBagde>{notification}</NotificationBagde>
       )}
-      {isMuted && !notification && <MutedIcon theme={theme} />}
+      {isMuted && !notification && <MutedIcon />}
     </ChannelWrapper>
   );
 }
-interface ThemeProps {
-  theme: Theme;
-}
 
-const ChannelsWrapper = styled.div<ThemeProps>`
+const ChannelsWrapper = styled.div`
   width: 21%;
   height: 100%;
   min-width: 196px;
@@ -161,7 +142,7 @@ const StyledCommunity = styled(Community)`
   margin: 0 0 16px;
 `;
 
-const ChannelDescription = styled.p<ThemeProps>`
+const ChannelDescription = styled.p`
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.1px;
@@ -181,7 +162,7 @@ export const ChannelList = styled.div`
   }
 `;
 
-const ChannelWrapper = styled.div<ThemeProps>`
+const ChannelWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -207,7 +188,7 @@ const ChannelTextInfo = styled.div`
   overflow: hidden;
 `;
 
-export const ChannelLogo = styled.div<ThemeProps>`
+export const ChannelLogo = styled.div`
   width: 24px;
   height: 24px;
   display: flex;
@@ -239,7 +220,7 @@ export const ChannelLogo = styled.div<ThemeProps>`
   }
 `;
 
-export const ChannelName = styled.p<ThemeProps>`
+export const ChannelName = styled.p`
   font-weight: 500;
   opacity: 0.7;
   color: ${({ theme }) => theme.primary};
@@ -259,7 +240,7 @@ export const ChannelName = styled.p<ThemeProps>`
   }
 `;
 
-const NotificationBagde = styled.div<ThemeProps>`
+const NotificationBagde = styled.div`
   width: 24px;
   height: 24px;
   border-radius: 50%;

@@ -1,8 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 const rotation = keyframes`
   from {
     transform: rotate(0deg);
@@ -12,13 +10,12 @@ const rotation = keyframes`
   }
 `;
 
-export const LoadingIcon = ({ theme }: { theme: Theme }) => (
+export const LoadingIcon = () => (
   <Icon
     width="13"
     height="12"
     viewBox="0 0 13 12"
     xmlns="http://www.w3.org/2000/svg"
-    theme={theme}
   >
     <path
       fillRule="evenodd"

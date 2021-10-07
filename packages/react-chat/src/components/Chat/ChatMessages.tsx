@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
-import { Theme } from "../../styles/themes";
 import { UserIcon } from "../Icons/UserIcon";
 import { textSmallStyles } from "../Text";
 
@@ -11,15 +10,10 @@ import { ChatMessageContent } from "./ChatMessageContent";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
-  theme: Theme;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
-export function ChatMessages({
-  messages,
-  theme,
-  fetchMetadata,
-}: ChatMessagesProps) {
+export function ChatMessages({ messages, fetchMetadata }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(false);
   const ref = useRef<HTMLHeadingElement>(null);
   const today = useMemo(() => new Date().getDay(), []);
@@ -64,22 +58,19 @@ export function ChatMessages({
             )}
             <MessageWrapper>
               <Icon>
-                <UserIcon theme={theme} />
+                <UserIcon />
               </Icon>
 
               <ContentWrapper>
                 <MessageHeaderWrapper>
-                  <UserNameWrapper theme={theme}>
+                  <UserNameWrapper>
                     {message.sender.slice(0, 10)}
                   </UserNameWrapper>
-                  <TimeWrapper theme={theme}>
-                    {message.date.toLocaleString()}
-                  </TimeWrapper>
+                  <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
                 </MessageHeaderWrapper>
-                <MessageText theme={theme}>
+                <MessageText>
                   <ChatMessageContent
                     message={message}
-                    theme={theme}
                     fetchMetadata={fetchMetadata}
                   />
                 </MessageText>
@@ -90,10 +81,6 @@ export function ChatMessages({
       })}
     </MessagesWrapper>
   );
-}
-
-interface ThemeProps {
-  theme: Theme;
 }
 
 const MessagesWrapper = styled.div`
@@ -159,13 +146,13 @@ export const Icon = styled.div`
   flex-shrink: 0;
 `;
 
-const UserNameWrapper = styled.div<ThemeProps>`
+const UserNameWrapper = styled.div`
   font-size: 15px;
   line-height: 22px;
   color: ${({ theme }) => theme.tertiary};
 `;
 
-const TimeWrapper = styled.div<ThemeProps>`
+const TimeWrapper = styled.div`
   font-size: 10px;
   line-height: 14px;
   letter-spacing: 0.2px;
@@ -174,7 +161,7 @@ const TimeWrapper = styled.div<ThemeProps>`
   margin-left: 4px;
 `;
 
-const MessageText = styled.div<ThemeProps>`
+const MessageText = styled.div`
   overflow-wrap: anywhere;
   width: 100%;
   white-space: pre-wrap;

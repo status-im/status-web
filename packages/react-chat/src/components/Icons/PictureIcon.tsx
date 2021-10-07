@@ -1,20 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
-interface ThemeProps {
-  theme: Theme;
-}
-
-export const PictureIcon = ({ theme }: ThemeProps) => {
+export const PictureIcon = () => {
   return (
     <Icon
       width="20"
       height="18"
       viewBox="0 0 20 18"
       xmlns="http://www.w3.org/2000/svg"
-      theme={theme}
     >
       <path
         fillRule="evenodd"
@@ -30,7 +23,7 @@ export const PictureIcon = ({ theme }: ThemeProps) => {
   );
 };
 
-const Icon = styled.svg<ThemeProps>`
+const Icon = styled.svg`
   & > path {
     fill: ${({ theme }) => theme.secondary};
   }

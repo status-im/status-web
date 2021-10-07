@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
-export const StatusLogo = ({ theme }: { theme: Theme }) => (
+export const StatusLogo = () => (
   <Icon
-    theme={theme}
     width="171"
     height="64"
     viewBox="0 0 171 64"

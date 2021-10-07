@@ -47,7 +47,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         <Channels
           notifications={notifications}
           clearNotifications={clearNotifications}
-          theme={theme}
           community={community}
           setActiveChannel={setActiveChannel}
           activeChannelId={activeChannel.id}
@@ -73,11 +72,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         fetchMetadata={fetchMetadata}
       />
       {showMembers && !narrow && (
-        <Members
-          theme={theme}
-          community={community}
-          setShowChannels={setShowChannels}
-        />
+        <Members community={community} setShowChannels={setShowChannels} />
       )}
       <CommunityModal
         isVisible={isModalVisible}

@@ -1,21 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 interface ThemeProps {
-  theme: Theme;
   isActive?: boolean;
 }
 
-export const GifIcon = ({ theme, isActive }: ThemeProps) => {
+export const GifIcon = ({ isActive }: ThemeProps) => {
   return (
     <Icon
       width="20"
       height="20"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
-      theme={theme}
     >
       <path
         className={isActive ? "active" : ""}
@@ -39,7 +35,7 @@ export const GifIcon = ({ theme, isActive }: ThemeProps) => {
   );
 };
 
-const Icon = styled.svg<ThemeProps>`
+const Icon = styled.svg`
   & > path {
     fill: ${({ theme }) => theme.secondary};
   }
