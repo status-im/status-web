@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useNarrow } from "../../contexts/narrowProvider";
 import { DownloadButton } from "../Buttons/DownloadButton";
 import {
   CommunityIdentity,
@@ -27,6 +28,8 @@ export const CommunityModal = ({
   publicKey,
   theme,
 }: CommunityModalProps) => {
+  const narrow = useNarrow();
+
   return (
     <Modal theme={theme} isVisible={isVisible} onClose={onClose}>
       <Section theme={theme}>
@@ -48,13 +51,16 @@ export const CommunityModal = ({
         />
         <Hint theme={theme}>
           To access this community, paste community public key in Status desktop
-          or mobile app
+          or mobile app.
+          {narrow && <StyledDownloadButton theme={theme} />}
         </Hint>
       </Section>
-      <BottomSection theme={theme}>
-        <StatusLogo theme={theme} />
-        <DownloadButton theme={theme} />
-      </BottomSection>
+      {!narrow && (
+        <BottomSection theme={theme}>
+          <StatusLogo theme={theme} />
+          <DownloadButton theme={theme} />
+        </BottomSection>
+      )}
     </Modal>
   );
 };
@@ -84,4 +90,15 @@ const BottomSection = styled(Section)`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const StyledDownloadButton = styled(DownloadButton)`
+  display: inline;
+  padding: 0;
+  margin-left: 4px;
+  background: none;
+  font-size: 13px;
+  line-height: 18px;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.secondary};
 `;

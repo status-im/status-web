@@ -15,7 +15,7 @@ interface ChannelsProps {
   community: CommunityData;
   notifications: { [id: string]: number };
   clearNotifications: (id: string) => void;
-
+  onCommunityClick: () => void;
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
 }
@@ -27,6 +27,7 @@ export function Channels({
   setActiveChannel,
   clearNotifications,
   activeChannelId,
+  onCommunityClick,
 }: ChannelsProps) {
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);
@@ -39,7 +40,11 @@ export function Channels({
 
   return (
     <ChannelsWrapper theme={theme}>
-      <StyledCommunity theme={theme} community={community} />
+      <StyledCommunity
+        onClick={onCommunityClick}
+        theme={theme}
+        community={community}
+      />
       <ChannelList>
         {channels.map((channel) => (
           <Channel

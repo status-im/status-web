@@ -11,6 +11,7 @@ import { Theme } from "../styles/themes";
 import { Channels } from "./Channels";
 import { ChatBody } from "./Chat/ChatBody";
 import { Members } from "./Members";
+import { CommunityModal } from "./Modals/CommunityModal";
 
 interface ChatProps {
   theme: Theme;
@@ -37,6 +38,9 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
     channels.map((channel) => channel.name)
   );
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const showModal = () => setIsModalVisible(true);
+
   return (
     <ChatWrapper>
       {showChannels && !narrow && (
@@ -47,6 +51,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
           community={community}
           setActiveChannel={setActiveChannel}
           activeChannelId={activeChannel.id}
+          onCommunityClick={showModal}
         />
       )}
       <ChatBody
@@ -63,6 +68,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         community={community}
         showCommunity={!showChannels}
         loadNextDay={() => loadNextDay(activeChannel.name)}
+        onCommunityClick={showModal}
         lastMessage={lastMessage}
         fetchMetadata={fetchMetadata}
       />
@@ -73,6 +79,16 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
           setShowChannels={setShowChannels}
         />
       )}
+      <CommunityModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        icon={community.icon}
+        name={community.name}
+        theme={theme}
+        subtitle="Public Community"
+        description={community.description}
+        publicKey="0xD95DBdaB08A9FED2D71ac9C3028AAc40905d8CF3"
+      />
     </ChatWrapper>
   );
 }

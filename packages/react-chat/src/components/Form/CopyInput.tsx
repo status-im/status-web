@@ -17,7 +17,7 @@ export const CopyInput = ({ label, value, theme }: CopyInputProps) => (
     <Label theme={theme}>{label}</Label>
     <Wrapper theme={theme}>
       <Text theme={theme}>{reduceString(value, 15, 15)}</Text>
-      <CopyButtonWrapper>
+      <CopyButtonWrapper theme={theme}>
         <CopyButton theme={theme} onClick={() => copy(value)}>
           Copy
         </CopyButton>

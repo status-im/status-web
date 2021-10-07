@@ -9,7 +9,12 @@ const macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"];
 const windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"];
 const iosPlatforms = ["iPhone", "iPad", "iPod"];
 
-export const DownloadButton = ({ theme }: { theme: Theme }) => {
+interface DownloadButtonProps {
+  theme: Theme;
+  className?: string;
+}
+
+export const DownloadButton = ({ theme, className }: DownloadButtonProps) => {
   const [link, setlink] = useState("https://status.im/get/");
   const [os, setOs] = useState<string | null>(null);
 
@@ -43,7 +48,13 @@ export const DownloadButton = ({ theme }: { theme: Theme }) => {
   }, []);
 
   return (
-    <Link href={link} theme={theme} target="_blank" rel="noopener noreferrer">
+    <Link
+      className={className}
+      href={link}
+      theme={theme}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {os ? `Download Status for ${os}` : "Download Status"}
     </Link>
   );
