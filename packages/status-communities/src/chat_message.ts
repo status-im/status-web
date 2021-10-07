@@ -10,53 +10,96 @@ import {
 } from "./proto/communities/v1/chat_message";
 import { ImageType, MessageType } from "./proto/communities/v1/enums";
 
+export type MediaContent = StickerContent | ImageContent | AudioContent;
+
+export enum ContentType {
+  Sticker,
+  Image,
+  Audio,
+}
+
+export interface StickerContent {
+  hash: string;
+  pack: number;
+  contentType: ContentType.Sticker;
+}
+
+export interface ImageContent {
+  image: Uint8Array;
+  imageType: ImageType;
+  contentType: ContentType.Image;
+}
+
+export interface AudioContent {
+  audio: Uint8Array;
+  audioType: AudioMessage_AudioType;
+  durationMs: number;
+  contentType: ContentType.Audio;
+}
+
+function isSticker(content: MediaContent): content is StickerContent {
+  return content.contentType === ContentType.Sticker;
+}
+
+function isImage(content: MediaContent): content is ImageContent {
+  return content.contentType === ContentType.Image;
+}
+
+function isAudio(content: MediaContent): content is AudioContent {
+  return content.contentType === ContentType.Audio;
+}
+
 export class ChatMessage {
   private constructor(public proto: proto.ChatMessage) {}
 
   /**
-   * Create a chat message to be sent to an Open (permission = no membership) community
+   * Create a chat message to be sent to an Open (permission = no membership) community.
+   *
+   * @throws string If mediaContent is malformed
    */
   public static createMessage(
     clock: number,
     timestamp: number,
     text: string,
-    chatId: string
-  ): ChatMessage {
-    const proto = {
-      clock, // ms?
-      timestamp, //ms?
-      text,
-      /** Id of the message that we are replying to */
-      responseTo: "",
-      /** Ens name of the sender */
-      ensName: "",
-      /** Public Key of the community (TBC) **/
-      chatId,
-      /** The type of message (public/one-to-one/private-group-chat) */
-      messageType: MessageType.MESSAGE_TYPE_COMMUNITY_CHAT,
-      /** The type of the content of the message */
-      contentType: ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN,
-      sticker: undefined,
-      image: undefined,
-      audio: undefined,
-      community: undefined, // Used to share a community
-      grant: undefined,
-    };
-
-    return new ChatMessage(proto);
-  }
-
-  /**
-   * Create a an image chat message to be sent to an Open (permission = no membership) community
-   */
-  public static createImageMessage(
-    clock: number,
-    timestamp: number,
-    text: string,
     chatId: string,
-    image: Uint8Array,
-    imageType: ImageType
+    mediaContent?: MediaContent
   ): ChatMessage {
+    let sticker, image, audio;
+    let contentType = ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN;
+
+    if (mediaContent) {
+      if (isSticker(mediaContent)) {
+        if (!mediaContent.hash || !mediaContent.pack)
+          throw "Malformed Sticker Content";
+        sticker = {
+          hash: mediaContent.hash,
+          pack: mediaContent.pack,
+        };
+        contentType = ChatMessage_ContentType.CONTENT_TYPE_STICKER;
+      } else if (isImage(mediaContent)) {
+        if (!mediaContent.image || !mediaContent.imageType)
+          throw "Malformed Image Content";
+        image = {
+          payload: mediaContent.image,
+          type: mediaContent.imageType,
+        };
+        contentType = ChatMessage_ContentType.CONTENT_TYPE_IMAGE;
+      } else if (isAudio(mediaContent)) {
+        if (
+          !mediaContent.audio ||
+          !mediaContent.audioType ||
+          !mediaContent.durationMs
+        )
+          throw "Malformed Audio Content";
+        audio = {
+          payload: mediaContent.audio,
+          type: mediaContent.audioType,
+          durationMs: mediaContent.durationMs,
+        };
+        contentType = ChatMessage_ContentType.CONTENT_TYPE_AUDIO;
+      }
+    }
+
     const proto = {
       clock, // ms?
       timestamp, //ms?
@@ -70,91 +113,10 @@ export class ChatMessage {
       /** The type of message (public/one-to-one/private-group-chat) */
       messageType: MessageType.MESSAGE_TYPE_COMMUNITY_CHAT,
       /** The type of the content of the message */
-      contentType: ChatMessage_ContentType.CONTENT_TYPE_IMAGE,
-      sticker: undefined,
-      image: {
-        payload: image,
-        type: imageType,
-      },
-      audio: undefined,
-      community: undefined, // Used to share a community
-      grant: undefined,
-    };
-
-    return new ChatMessage(proto);
-  }
-
-  /**
-   * Create a a sticker chat message to be sent to an Open (permission = no membership) community
-   */
-  public static createStickerMessage(
-    clock: number,
-    timestamp: number,
-    text: string,
-    chatId: string,
-    stickerHash: string,
-    stickerPack: number
-  ): ChatMessage {
-    const proto = {
-      clock, // ms?
-      timestamp, //ms?
-      text,
-      /** Id of the message that we are replying to */
-      responseTo: "",
-      /** Ens name of the sender */
-      ensName: "",
-      /** Public Key of the community (TBC) **/
-      chatId,
-      /** The type of message (public/one-to-one/private-group-chat) */
-      messageType: MessageType.MESSAGE_TYPE_COMMUNITY_CHAT,
-      /** The type of the content of the message */
-      contentType: ChatMessage_ContentType.CONTENT_TYPE_STICKER,
-      sticker: {
-        hash: stickerHash,
-        pack: stickerPack,
-      },
-      image: undefined,
-      audio: undefined,
-      community: undefined, // Used to share a community
-      grant: undefined,
-    };
-
-    return new ChatMessage(proto);
-  }
-
-  /**
-   * Create a a sticker chat message to be sent to an Open (permission = no membership) community
-   */
-  public static createAudioMessage(
-    clock: number,
-    timestamp: number,
-    text: string,
-    chatId: string,
-    audio: Uint8Array,
-    audioType: AudioMessage_AudioType,
-    audioDurationMs: number
-  ): ChatMessage {
-    const proto = {
-      clock, // ms?
-      timestamp, //ms?
-      text,
-      /** Id of the message that we are replying to */
-      responseTo: "",
-      /** Ens name of the sender */
-      ensName: "",
-      /** Public Key of the community (TBC) **/
-      chatId,
-      /** The type of message (public/one-to-one/private-group-chat) */
-      messageType: MessageType.MESSAGE_TYPE_COMMUNITY_CHAT,
-      /** The type of the content of the message */
-      contentType: ChatMessage_ContentType.CONTENT_TYPE_AUDIO,
-      sticker: undefined,
-      image: undefined,
-      audio: {
-        payload: audio,
-        type: audioType,
-        durationMs: audioDurationMs,
-      },
+      contentType,
+      sticker,
+      image,
+      audio,
       community: undefined, // Used to share a community
       grant: undefined,
     };

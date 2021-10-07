@@ -4,7 +4,7 @@ import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku"
 
 import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { Chat } from "./chat";
-import { ChatMessage } from "./chat_message";
+import { ChatMessage, MediaContent } from "./chat_message";
 import { Identity } from "./identity";
 import { ApplicationMetadataMessage_Type } from "./proto/status/v1/application_metadata_message";
 
@@ -71,15 +71,16 @@ export class Messenger {
 
   /**
    * Sends a message on the given chat Id.
-   *
-   * @param text
-   * @param chatId
    */
-  public async sendMessage(text: string, chatId: string): Promise<void> {
+  public async sendMessage(
+    text: string,
+    chatId: string,
+    mediaContent?: MediaContent
+  ): Promise<void> {
     const chat = this.chatsById.get(chatId);
     if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
 
-    const chatMessage = chat.createMessage(text);
+    const chatMessage = chat.createMessage(text, mediaContent);
 
     const appMetadataMessage = ApplicationMetadataMessage.create(
       chatMessage.encode(),
