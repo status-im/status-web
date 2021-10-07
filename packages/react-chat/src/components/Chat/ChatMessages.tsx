@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
+import { Metadata } from "../../models/Metadata";
 import { Theme } from "../../styles/themes";
 import { UserIcon } from "../Icons/UserIcon";
 import { textSmallStyles } from "../Text";
@@ -11,9 +12,14 @@ import { ChatMessageContent } from "./ChatMessageContent";
 type ChatMessagesProps = {
   messages: ChatMessage[];
   theme: Theme;
+  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
-export function ChatMessages({ messages, theme }: ChatMessagesProps) {
+export function ChatMessages({
+  messages,
+  theme,
+  fetchMetadata,
+}: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(false);
   const ref = useRef<HTMLHeadingElement>(null);
   const today = useMemo(() => new Date().getDay(), []);
@@ -71,7 +77,11 @@ export function ChatMessages({ messages, theme }: ChatMessagesProps) {
                   </TimeWrapper>
                 </MessageHeaderWrapper>
                 <MessageText theme={theme}>
-                  <ChatMessageContent content={message.content} theme={theme} />
+                  <ChatMessageContent
+                    content={message.content}
+                    theme={theme}
+                    fetchMetadata={fetchMetadata}
+                  />
                 </MessageText>
               </ContentWrapper>
             </MessageWrapper>
