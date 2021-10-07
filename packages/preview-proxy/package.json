@@ -1,0 +1,16 @@
+{
+  "name": "@dappconnect/preview-proxy",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "node-fetch": "^3.0.0"
+  },
+  "scripts": {
+    "start": "yarn node src/index.js",
+    "fix": "",
+    "build": "",
+    "test": ""
+  }
+}

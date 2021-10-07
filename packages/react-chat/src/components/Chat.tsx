@@ -5,6 +5,7 @@ import { useNarrow } from "../contexts/narrowProvider";
 import { ChannelData, channels } from "../helpers/channelsMock";
 import { CommunityData } from "../helpers/communityMock";
 import { useMessenger } from "../hooks/useMessenger";
+import { Metadata } from "../models/Metadata";
 import { Theme } from "../styles/themes";
 
 import { Channels } from "./Channels";
@@ -14,9 +15,10 @@ import { Members } from "./Members";
 interface ChatProps {
   theme: Theme;
   community: CommunityData;
+  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function Chat({ theme, community }: ChatProps) {
+export function Chat({ theme, community, fetchMetadata }: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
@@ -62,6 +64,7 @@ export function Chat({ theme, community }: ChatProps) {
           showCommunity={!showChannels}
           loadNextDay={() => loadNextDay(activeChannel.name)}
           lastMessage={lastMessage}
+          fetchMetadata={fetchMetadata}
         />
       ) : (
         <Loading>Connecting to waku</Loading>

@@ -5,6 +5,7 @@ import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../helpers/channelsMock";
 import { CommunityData } from "../../helpers/communityMock";
 import { ChatMessage } from "../../models/ChatMessage";
+import { Metadata } from "../../models/Metadata";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels";
 import { Community } from "../Community";
@@ -30,6 +31,7 @@ interface ChatBodyProps {
   activeChannelId: number;
   loadNextDay: () => void;
   lastMessage: Date;
+  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
 export function ChatBody({
@@ -46,6 +48,7 @@ export function ChatBody({
   activeChannelId,
   loadNextDay,
   lastMessage,
+  fetchMetadata,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -103,7 +106,11 @@ export function ChatBody({
             Last message date {lastMessage.toDateString()}
           </button>{" "}
           {messages.length > 0 ? (
-            <ChatMessages messages={messages} theme={theme} />
+            <ChatMessages
+              messages={messages}
+              theme={theme}
+              fetchMetadata={fetchMetadata}
+            />
           ) : (
             <EmptyChannel theme={theme} channel={channel} />
           )}
