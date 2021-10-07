@@ -1,7 +1,8 @@
 import { Picker } from "emoji-mart";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { uintToImgUrl } from "../../helpers/uintToImgUrl";
 import { lightTheme, Theme } from "../../styles/themes";
 import { EmojiIcon } from "../Icons/EmojiIcon";
 import { GifIcon } from "../Icons/GifIcon";
@@ -11,13 +12,21 @@ import "emoji-mart/css/emoji-mart.css";
 
 type ChatInputProps = {
   theme: Theme;
-  addMessage: (message: string) => void;
+  addMessage: (message: string, image?: Uint8Array) => void;
 };
 
 export function ChatInput({ theme, addMessage }: ChatInputProps) {
   const [content, setContent] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
-
+  const [inputHeight, setInputHeight] = useState(40);
+  const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
+  const image = useMemo(() => {
+    if (imageUint) {
+      return uintToImgUrl(imageUint);
+    } else {
+      return "";
+    }
+  }, [imageUint]);
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
     const codesArray: any[] = [];
@@ -55,27 +64,48 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
           type="file"
           multiple={true}
           accept="image/png, image/jpeg"
+          onChange={(e) => {
+            const fileReader = new FileReader();
+            fileReader.onloadend = (s) => {
+              const arr = new Uint8Array(s.target?.result as ArrayBuffer);
+              setImageUint(arr);
+            };
+            if (e?.target?.files?.[0]) {
+              fileReader.readAsArrayBuffer(e.target.files[0]);
+            }
+          }}
         />
       </AddPictureBtn>
-      <Input
+      <InputImageWrapper
         theme={theme}
-        placeholder={"Message"}
-        value={content}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-          const target = e.target;
-          target.style.height = "40px";
-          target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
-          setContent(target.value);
-        }}
-        onKeyPress={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-          if (e.key == "Enter" && !e.getModifierState("Shift")) {
-            e.preventDefault();
-            (e.target as HTMLTextAreaElement).style.height = "40px";
-            addMessage(content);
-            setContent("");
-          }
-        }}
-      />
+        style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}
+      >
+        {image && (
+          <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
+        )}
+        <Input
+          theme={theme}
+          placeholder={"Message"}
+          value={content}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            const target = e.target;
+            target.style.height = "40px";
+            target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
+            setInputHeight(target.scrollHeight);
+            setContent(target.value);
+          }}
+          onKeyPress={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            if (e.key == "Enter" && !e.getModifierState("Shift")) {
+              e.preventDefault();
+              (e.target as HTMLTextAreaElement).style.height = "40px";
+              setInputHeight(40);
+              addMessage(content, imageUint);
+              setImageUint(undefined);
+              setContent("");
+            }
+          }}
+        />
+      </InputImageWrapper>
       <AddEmojiBtn onClick={() => setShowEmoji(!showEmoji)}>
         <EmojiIcon theme={theme} isActive={showEmoji} />
       </AddEmojiBtn>
@@ -100,20 +130,39 @@ const InputWrapper = styled.div`
   position: relative;
 `;
 
+const ImagePreview = styled.img`
+  width: 64px;
+  height: 64px;
+  border-radius: 16px 16px 4px 16px;
+  margin-left: 8px;
+  margin-top: 9px;
+`;
+
+const InputImageWrapper = styled.div<ThemeProps>`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: ${({ theme }) => theme.inputColor};
+  border-radius: 36px 16px 4px 36px;
+  height: 40px;
+  margin-right: 8px;
+  margin-left: 10px;
+`;
+
 const Input = styled.textarea<ThemeProps>`
   width: 100%;
   height: 40px;
   background: ${({ theme }) => theme.inputColor};
-  border-radius: 36px 16px 4px 36px;
   border: 1px solid ${({ theme }) => theme.inputColor};
   color: ${({ theme }) => theme.primary};
-  margin-left: 10px;
+  border-radius: 36px 16px 4px 36px;
+  outline: none;
+  resize: none;
+
   padding-top: 9px;
   padding-bottom: 9px;
   padding-left: 12px;
   padding-right: 112px;
-  outline: none;
-  resize: none;
 
   font-family: Inter;
   font-style: normal;

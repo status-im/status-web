@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Identity, Messenger } from "status-communities/dist/cjs";
 import { ApplicationMetadataMessage } from "status-communities/dist/cjs/application_metadata_message";
 
+import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { ChatMessage } from "../models/ChatMessage";
 
 function binarySetInsert<T>(
@@ -51,9 +52,15 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   }, []);
 
   const addNewMessageRaw = useCallback(
-    (signer: Uint8Array, content: string, date: Date, id: string) => {
+    (
+      signer: Uint8Array,
+      content: string,
+      date: Date,
+      id: string,
+      image?: string
+    ) => {
       const sender = signer.reduce((p, c) => p + c.toString(16), "0x");
-      const newMessage = { sender, content, date };
+      const newMessage = { sender, content, date, image };
       setMessages((prev) => {
         return {
           ...prev,
@@ -77,10 +84,18 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   const addNewMessage = useCallback(
     (msg: ApplicationMetadataMessage, id: string) => {
-      if (msg.signer && msg.chatMessage?.text && msg.chatMessage.clock) {
-        const content = msg.chatMessage.text;
+      if (
+        msg.signer &&
+        (msg.chatMessage?.text || msg.chatMessage?.image) &&
+        msg.chatMessage.clock
+      ) {
+        const content = msg.chatMessage.text ?? "";
+        let img: string | undefined = undefined;
+        if (msg.chatMessage?.image) {
+          img = uintToImgUrl(msg.chatMessage?.image.payload);
+        }
         const date = new Date(msg.chatMessage.clock);
-        addNewMessageRaw(msg.signer, content, date, id);
+        addNewMessageRaw(msg.signer, content, date, id, img);
       }
     },
     [addNewMessageRaw]
@@ -141,7 +156,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   const loadNextDay = useCallback(
     (id: string) => {
-      console.log(id);
       if (messenger) {
         const endTime = lastLoadTime[id];
         const startTime = new Date();
@@ -163,13 +177,23 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   );
 
   const sendMessage = useCallback(
-    async (messageText: string) => {
-      await messenger?.sendMessage(messageText, chatId);
+    async (messageText: string, image?: Uint8Array) => {
+      let mediaContent = undefined;
+      if (image) {
+        mediaContent = {
+          image,
+          imageType: 1,
+          contentType: 1,
+        };
+      }
+      await messenger?.sendMessage(messageText, chatId, mediaContent);
+
       addNewMessageRaw(
         messenger?.identity.publicKey ?? new Uint8Array(),
         messageText,
         new Date(),
-        chatId
+        chatId,
+        image ? uintToImgUrl(image) : undefined
       );
     },
     [chatId, messenger]

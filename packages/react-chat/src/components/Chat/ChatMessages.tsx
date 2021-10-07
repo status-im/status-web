@@ -78,7 +78,7 @@ export function ChatMessages({
                 </MessageHeaderWrapper>
                 <MessageText theme={theme}>
                   <ChatMessageContent
-                    content={message.content}
+                    message={message}
                     theme={theme}
                     fetchMetadata={fetchMetadata}
                   />

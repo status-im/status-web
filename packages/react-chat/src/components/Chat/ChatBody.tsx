@@ -25,7 +25,7 @@ interface ChatBodyProps {
   community: CommunityData;
   messenger: any;
   messages: ChatMessage[];
-  sendMessage: (text: string) => void;
+  sendMessage: (text: string, image?: Uint8Array) => void;
   onClick: () => void;
   showMembers: boolean;
   showCommunity: boolean;
