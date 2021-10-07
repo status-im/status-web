@@ -79,7 +79,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         onClose={() => setIsModalVisible(false)}
         icon={community.icon}
         name={community.name}
-        theme={theme}
         subtitle="Public Community"
         description={community.description}
         publicKey="0xD95DBdaB08A9FED2D71ac9C3028AAc40905d8CF3"
