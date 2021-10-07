@@ -14,7 +14,9 @@ export class Messenger {
   waku: Waku;
   chatsById: Map<string, Chat>;
   observers: {
-    [chatId: string]: Set<(message: ApplicationMetadataMessage) => void>;
+    [chatId: string]: Set<
+      (message: ApplicationMetadataMessage, timestamp: Date) => void
+    >;
   };
   identity: Identity;
 
@@ -49,13 +51,13 @@ export class Messenger {
 
     this.waku.relay.addObserver(
       (wakuMessage: WakuMessage) => {
-        if (!wakuMessage.payload) return;
+        if (!wakuMessage.payload || !wakuMessage.timestamp) return;
 
         const message = ApplicationMetadataMessage.decode(wakuMessage.payload);
 
         switch (message.type) {
           case ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE:
-            this._handleNewChatMessage(chat, message);
+            this._handleNewChatMessage(chat, message, wakuMessage.timestamp);
             break;
           default:
             dbg("Received unsupported message type", message.type);
@@ -100,7 +102,7 @@ export class Messenger {
    * @throws string If the chat has not been joined first using [joinChat].
    */
   public addObserver(
-    observer: (message: ApplicationMetadataMessage) => void,
+    observer: (message: ApplicationMetadataMessage, timestamp: Date) => void,
     chatId: string
   ): void {
     // Not sure this is the best design here. Maybe `addObserver` and `joinChat` should be merged.
@@ -161,13 +163,13 @@ export class Messenger {
       };
 
       const messages = wakuMessages.map((wakuMessage: WakuMessage) => {
-        if (!wakuMessage.payload) return;
+        if (!wakuMessage.payload || !wakuMessage.timestamp) return;
 
         const message = ApplicationMetadataMessage.decode(wakuMessage.payload);
 
         switch (message.type) {
           case ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE:
-            this._handleNewChatMessage(chat, message);
+            this._handleNewChatMessage(chat, message, wakuMessage.timestamp);
             return message;
           default:
             dbg("Retrieved unsupported message type", message.type);
@@ -186,7 +188,8 @@ export class Messenger {
 
   private _handleNewChatMessage(
     chat: Chat,
-    message: ApplicationMetadataMessage
+    message: ApplicationMetadataMessage,
+    timestamp: Date
   ): void {
     if (!message.payload || !message.type || !message.signature) return;
 
@@ -195,7 +198,7 @@ export class Messenger {
 
     if (this.observers[chat.id]) {
       this.observers[chat.id].forEach((observer) => {
-        observer(message);
+        observer(message, timestamp);
       });
     }
   }
