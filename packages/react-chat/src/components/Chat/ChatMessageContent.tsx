@@ -1,7 +1,8 @@
 import { decode } from "html-entities";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { Theme } from "../../styles/themes";
 
@@ -11,16 +12,17 @@ const regEx =
 /* eslint-enable no-useless-escape */
 
 type ChatMessageContentProps = {
-  content: string;
+  message: ChatMessage;
   theme: Theme;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
 export function ChatMessageContent({
-  content,
+  message,
   theme,
   fetchMetadata,
 }: ChatMessageContentProps) {
+  const { content, image } = useMemo(() => message, [message]);
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
     content,
   ]);
@@ -75,10 +77,11 @@ export function ChatMessageContent({
     };
     updatePreview();
   }, [link]);
-  if (openGraph) {
-    return (
-      <ContentWrapper>
-        <div>{elements.map((el) => el)}</div>
+  return (
+    <ContentWrapper>
+      <div>{elements.map((el) => el)}</div>
+      {image && <MessageImage src={image} />}
+      {openGraph && (
         <PreviewWrapper
           onClick={() => window?.open(link, "_blank", "noopener")?.focus()}
         >
@@ -88,12 +91,17 @@ export function ChatMessageContent({
             {openGraph["og:site_name"]}
           </PreviewSiteNameWrapper>
         </PreviewWrapper>
-      </ContentWrapper>
-    );
-  } else {
-    return <>{elements.map((el) => el)}</>;
-  }
+      )}
+    </ContentWrapper>
+  );
 }
+
+const MessageImage = styled.img`
+  width: 147px;
+  height: 196px;
+  border-radius: 16px;
+  margin-top: 8px;
+`;
 
 const PreviewSiteNameWrapper = styled.div`
   font-family: Inter;
