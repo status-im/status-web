@@ -115,6 +115,7 @@ export function ChatBody({
                 messenger ? (
                   <ChatMessages
                     messages={messages}
+                    loadNextDay={loadNextDay}
                     fetchMetadata={fetchMetadata}
                   />
                 ) : (
