@@ -10,11 +10,16 @@ import { ChatMessageContent } from "./ChatMessageContent";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
+  loadNextDay: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
-export function ChatMessages({ messages, fetchMetadata }: ChatMessagesProps) {
-  const [scrollOnBot, setScrollOnBot] = useState(false);
+export function ChatMessages({
+  messages,
+  loadNextDay,
+  fetchMetadata,
+}: ChatMessagesProps) {
+  const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
   const today = useMemo(() => new Date().getDay(), []);
   useEffect(() => {
@@ -26,6 +31,9 @@ export function ChatMessages({ messages, fetchMetadata }: ChatMessagesProps) {
   useEffect(() => {
     const setScroll = () => {
       if (ref && ref.current) {
+        if (ref.current.scrollTop <= 0) {
+          loadNextDay();
+        }
         if (
           ref.current.scrollTop + ref.current.clientHeight ==
           ref.current.scrollHeight
