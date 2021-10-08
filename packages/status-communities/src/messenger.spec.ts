@@ -1,10 +1,11 @@
 import { expect } from "chai";
 import debug from "debug";
-import { utils } from "js-waku";
 
-import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { Identity } from "./identity";
 import { Messenger } from "./messenger";
+import { bufToHex } from "./utils";
+import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
+import { ContentType } from "./wire/chat_message";
 
 const testChatId = "test-chat-id";
 
@@ -61,8 +62,8 @@ describe("Messenger", () => {
   it("Sends & Receive public chat messages", async function () {
     this.timeout(10_000);
 
-    await messengerAlice.joinChat(testChatId);
-    await messengerBob.joinChat(testChatId);
+    await messengerAlice.joinChatById(testChatId);
+    await messengerBob.joinChatById(testChatId);
 
     const text = "This is a message.";
 
@@ -73,7 +74,10 @@ describe("Messenger", () => {
         }, testChatId);
       });
 
-    await messengerAlice.sendMessage(text, testChatId);
+    await messengerAlice.sendMessage(testChatId, {
+      text,
+      contentType: ContentType.Text,
+    });
 
     const receivedMessage = await receivedMessagePromise;
 
@@ -83,8 +87,8 @@ describe("Messenger", () => {
   it("public chat messages have signers", async function () {
     this.timeout(10_000);
 
-    await messengerAlice.joinChat(testChatId);
-    await messengerBob.joinChat(testChatId);
+    await messengerAlice.joinChatById(testChatId);
+    await messengerBob.joinChatById(testChatId);
 
     const text = "This is a message.";
 
@@ -95,12 +99,15 @@ describe("Messenger", () => {
         }, testChatId);
       });
 
-    await messengerAlice.sendMessage(text, testChatId);
+    await messengerAlice.sendMessage(testChatId, {
+      text,
+      contentType: ContentType.Text,
+    });
 
     const receivedMessage = await receivedMessagePromise;
 
-    expect(utils.bufToHex(receivedMessage.signer!)).to.eq(
-      utils.bufToHex(identityAlice.publicKey)
+    expect(bufToHex(receivedMessage.signer!)).to.eq(
+      bufToHex(identityAlice.publicKey)
     );
   });
 

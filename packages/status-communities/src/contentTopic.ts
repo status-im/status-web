@@ -4,8 +4,13 @@ import { keccak256 } from "js-sha3";
 
 const TopicLength = 4;
 
-export function chatIdToContentTopic(chatId: string): string {
-  const hash = keccak256.arrayBuffer(chatId);
+/**
+ * Get the content topic of for a given Chat or Community
+ * @param id The Chat id or Community id (hex string prefixed with 0x).
+ * @returns string The Waku v2 Content Topic.
+ */
+export function idToContentTopic(id: string): string {
+  const hash = keccak256.arrayBuffer(id);
 
   const topic = Buffer.from(hash).slice(0, TopicLength);
 

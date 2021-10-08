@@ -2,7 +2,7 @@
 import { getBootstrapNodes, StoreCodec } from "js-waku";
 import { useCallback, useEffect, useState } from "react";
 import { Identity, Messenger } from "status-communities/dist/cjs";
-import { ApplicationMetadataMessage } from "status-communities/dist/cjs/application_metadata_message";
+import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { ChatMessage } from "../models/ChatMessage";
@@ -149,7 +149,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
       await Promise.all(
         chatIdList.map(async (id) => {
-          await messenger.joinChat(id);
+          await messenger.joinChatById(id);
           setLastLoadTime((prev) => {
             return {
               ...prev,
@@ -176,14 +176,18 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   const sendMessage = useCallback(
     async (messageText: string, image?: Uint8Array) => {
-      const mediaContent = image
+      // TODO: A message can either contain text or media, not both.
+      const content = image
         ? {
             image,
             imageType: 1,
-            contentType: 1,
+            contentType: 2,
           }
-        : undefined;
-      await messenger?.sendMessage(messageText, chatId, mediaContent);
+        : {
+            text: messageText,
+            contentType: 0,
+          };
+      await messenger?.sendMessage(chatId, content);
       addNewMessageRaw(
         messenger?.identity.publicKey ?? new Uint8Array(),
         messageText,

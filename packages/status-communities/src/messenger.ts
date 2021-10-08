@@ -2,11 +2,11 @@ import debug from "debug";
 import { Waku, WakuMessage } from "js-waku";
 import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku";
 
-import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { Chat } from "./chat";
-import { ChatMessage, MediaContent } from "./chat_message";
 import { Identity } from "./identity";
 import { ApplicationMetadataMessage_Type } from "./proto/status/v1/application_metadata_message";
+import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
+import { ChatMessage, Content } from "./wire/chat_message";
 
 const dbg = debug("communities:messenger");
 
@@ -37,15 +37,26 @@ export class Messenger {
   }
 
   /**
+   * Joins a public chat using its id.
+   *
+   * For community chats, prefer [[joinChat]].
+   *
+   * Use `addListener` to get messages received on this chat.
+   */
+  public async joinChatById(chatId: string): Promise<void> {
+    const chat = await Chat.create(chatId);
+
+    await this.joinChat(chat);
+  }
+
+  /**
    * Joins a public chat.
    *
    * Use `addListener` to get messages received on this chat.
    */
-  public async joinChat(chatId: string): Promise<void> {
-    if (this.chatsById.has(chatId))
-      throw `Failed to join chat, it is already joined: ${chatId}`;
-
-    const chat = await Chat.create(chatId);
+  public async joinChat(chat: Chat): Promise<void> {
+    if (this.chatsById.has(chat.id))
+      throw `Failed to join chat, it is already joined: ${chat.id}`;
 
     this.waku.addDecryptionKey(chat.symKey);
 
@@ -66,21 +77,17 @@ export class Messenger {
       [chat.contentTopic]
     );
 
-    this.chatsById.set(chatId, chat);
+    this.chatsById.set(chat.id, chat);
   }
 
   /**
    * Sends a message on the given chat Id.
    */
-  public async sendMessage(
-    text: string,
-    chatId: string,
-    mediaContent?: MediaContent
-  ): Promise<void> {
+  public async sendMessage(chatId: string, content: Content): Promise<void> {
     const chat = this.chatsById.get(chatId);
     if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
 
-    const chatMessage = chat.createMessage(text, mediaContent);
+    const chatMessage = chat.createMessage(content);
 
     const appMetadataMessage = ApplicationMetadataMessage.create(
       chatMessage.encode(),

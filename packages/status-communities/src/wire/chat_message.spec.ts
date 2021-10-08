@@ -1,17 +1,18 @@
 import { expect } from "chai";
 
 import {
+  AudioMessage_AudioType,
+  ChatMessage_ContentType,
+} from "../proto/communities/v1/chat_message";
+import { ImageType } from "../proto/communities/v1/enums";
+
+import {
   AudioContent,
   ChatMessage,
   ContentType,
   ImageContent,
   StickerContent,
 } from "./chat_message";
-import {
-  AudioMessage_AudioType,
-  ChatMessage_ContentType,
-} from "./proto/communities/v1/chat_message";
-import { ImageType } from "./proto/communities/v1/enums";
 
 describe("Chat Message", () => {
   it("Encode & decode Image message", () => {
@@ -23,13 +24,7 @@ describe("Chat Message", () => {
       contentType: ContentType.Image,
     };
 
-    const message = ChatMessage.createMessage(
-      1,
-      1,
-      "Some text",
-      "chat-id",
-      imageContent
-    );
+    const message = ChatMessage.createMessage(1, 1, "chat-id", imageContent);
 
     const buf = message.encode();
     const dec = ChatMessage.decode(buf);
@@ -50,13 +45,7 @@ describe("Chat Message", () => {
       contentType: ContentType.Audio,
     };
 
-    const message = ChatMessage.createMessage(
-      1,
-      1,
-      "Some text",
-      "chat-id",
-      audioContent
-    );
+    const message = ChatMessage.createMessage(1, 1, "chat-id", audioContent);
 
     const buf = message.encode();
     const dec = ChatMessage.decode(buf);
@@ -77,13 +66,7 @@ describe("Chat Message", () => {
       contentType: ContentType.Sticker,
     };
 
-    const message = ChatMessage.createMessage(
-      1,
-      1,
-      "Some text",
-      "chat-id",
-      stickerContent
-    );
+    const message = ChatMessage.createMessage(1, 1, "chat-id", stickerContent);
 
     const buf = message.encode();
     const dec = ChatMessage.decode(buf);
