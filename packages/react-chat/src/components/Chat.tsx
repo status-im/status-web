@@ -12,6 +12,7 @@ import { Channels } from "./Channels";
 import { ChatBody } from "./Chat/ChatBody";
 import { Members } from "./Members";
 import { CommunityModal } from "./Modals/CommunityModal";
+import { PictureModal } from "./Modals/PictureModal";
 
 interface ChatProps {
   theme: Theme;
@@ -40,6 +41,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => setIsModalVisible(true);
+  const [image, setImage] = useState("");
 
   return (
     <ChatWrapper>
@@ -70,6 +72,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         onCommunityClick={showModal}
         lastMessage={lastMessage}
         fetchMetadata={fetchMetadata}
+        setImage={setImage}
       />
       {showMembers && !narrow && (
         <Members community={community} setShowChannels={setShowChannels} />
@@ -82,6 +85,11 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         subtitle="Public Community"
         description={community.description}
         publicKey="0xD95DBdaB08A9FED2D71ac9C3028AAc40905d8CF3"
+      />
+      <PictureModal
+        isVisible={!!image}
+        onClose={() => setImage("")}
+        image={image}
       />
     </ChatWrapper>
   );

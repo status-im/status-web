@@ -13,11 +13,15 @@ const regEx =
 type ChatMessageContentProps = {
   message: ChatMessage;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
+
+  setImage: (image: string) => void;
 };
 
 export function ChatMessageContent({
   message,
   fetchMetadata,
+
+  setImage,
 }: ChatMessageContentProps) {
   const { content, image } = useMemo(() => message, [message]);
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
@@ -71,7 +75,15 @@ export function ChatMessageContent({
   return (
     <ContentWrapper>
       <div>{elements.map((el) => el)}</div>
-      {image && <MessageImage src={image} />}
+      {image && (
+        <MessageImageWrapper
+          onClick={() => {
+            setImage(image);
+          }}
+        >
+          <MessageImage src={image} />
+        </MessageImageWrapper>
+      )}
       {openGraph && (
         <PreviewWrapper
           onClick={() => window?.open(link, "_blank", "noopener")?.focus()}
@@ -87,11 +99,17 @@ export function ChatMessageContent({
   );
 }
 
-const MessageImage = styled.img`
+const MessageImageWrapper = styled.div`
   width: 147px;
   height: 196px;
-  border-radius: 16px;
   margin-top: 8px;
+`;
+
+const MessageImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
 `;
 
 const PreviewSiteNameWrapper = styled.div`
