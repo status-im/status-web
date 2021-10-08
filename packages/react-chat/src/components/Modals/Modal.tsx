@@ -44,7 +44,7 @@ export const Modal = ({
     <ModalView>
       <ModalOverlay onClick={onClose} />
       <ModalBody className={className}>
-        <CloseButton onClick={onClose}>
+        <CloseButton onClick={onClose} className={className}>
           <CrossIcon />
         </CloseButton>
         {children}
@@ -75,6 +75,11 @@ const ModalBody = styled.div`
   background: ${({ theme }) => theme.bodyBackgroundColor};
   border-radius: 8px;
   overflow-y: auto;
+
+  &.picture {
+    max-width: 820px;
+    border-radius: 0;
+  }
 `;
 
 const ModalOverlay = styled.div`
@@ -94,4 +99,8 @@ const CloseButton = styled.button`
   top: 12px;
   right: 12px;
   padding: 10px;
+
+  &.picture {
+    display: none;
+  }
 `;
