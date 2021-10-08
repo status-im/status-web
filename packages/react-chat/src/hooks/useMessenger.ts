@@ -176,14 +176,18 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   const sendMessage = useCallback(
     async (messageText: string, image?: Uint8Array) => {
-      const mediaContent = image
+      // TODO: A message can either contain text or media, not both.
+      const content = image
         ? {
             image,
             imageType: 1,
-            contentType: 1,
+            contentType: 2,
           }
-        : undefined;
-      await messenger?.sendMessage(messageText, chatId, mediaContent);
+        : {
+            text: messageText,
+            contentType: 0,
+          };
+      await messenger?.sendMessage(chatId, content);
       addNewMessageRaw(
         messenger?.identity.publicKey ?? new Uint8Array(),
         messageText,

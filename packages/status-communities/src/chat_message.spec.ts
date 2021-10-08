@@ -23,13 +23,7 @@ describe("Chat Message", () => {
       contentType: ContentType.Image,
     };
 
-    const message = ChatMessage.createMessage(
-      1,
-      1,
-      "Some text",
-      "chat-id",
-      imageContent
-    );
+    const message = ChatMessage.createMessage(1, 1, "chat-id", imageContent);
 
     const buf = message.encode();
     const dec = ChatMessage.decode(buf);
@@ -50,13 +44,7 @@ describe("Chat Message", () => {
       contentType: ContentType.Audio,
     };
 
-    const message = ChatMessage.createMessage(
-      1,
-      1,
-      "Some text",
-      "chat-id",
-      audioContent
-    );
+    const message = ChatMessage.createMessage(1, 1, "chat-id", audioContent);
 
     const buf = message.encode();
     const dec = ChatMessage.decode(buf);
@@ -77,13 +65,7 @@ describe("Chat Message", () => {
       contentType: ContentType.Sticker,
     };
 
-    const message = ChatMessage.createMessage(
-      1,
-      1,
-      "Some text",
-      "chat-id",
-      stickerContent
-    );
+    const message = ChatMessage.createMessage(1, 1, "chat-id", stickerContent);
 
     const buf = message.encode();
     const dec = ChatMessage.decode(buf);

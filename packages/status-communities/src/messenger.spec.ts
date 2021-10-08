@@ -3,6 +3,7 @@ import debug from "debug";
 import { utils } from "js-waku";
 
 import { ApplicationMetadataMessage } from "./application_metadata_message";
+import { ContentType } from "./chat_message";
 import { Identity } from "./identity";
 import { Messenger } from "./messenger";
 
@@ -73,7 +74,10 @@ describe("Messenger", () => {
         }, testChatId);
       });
 
-    await messengerAlice.sendMessage(text, testChatId);
+    await messengerAlice.sendMessage(testChatId, {
+      text,
+      contentType: ContentType.Text,
+    });
 
     const receivedMessage = await receivedMessagePromise;
 
@@ -95,7 +99,10 @@ describe("Messenger", () => {
         }, testChatId);
       });
 
-    await messengerAlice.sendMessage(text, testChatId);
+    await messengerAlice.sendMessage(testChatId, {
+      text,
+      contentType: ContentType.Text,
+    });
 
     const receivedMessage = await receivedMessagePromise;
 
