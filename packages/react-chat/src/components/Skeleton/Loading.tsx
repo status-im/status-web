@@ -1,24 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { textSmallStyles } from "../Text";
 
-interface LoadingProps {
-  theme: Theme;
-}
-
-export const Loading = ({ theme }: LoadingProps) => {
+export const Loading = () => {
   return (
-    <LoadingBlock theme={theme}>
-      <LoadingIcon theme={theme} />
+    <LoadingBlock>
+      <LoadingIcon />
       <LoadingText>Loading messages...</LoadingText>
     </LoadingBlock>
   );
 };
 
-const LoadingBlock = styled.div<LoadingProps>`
+const LoadingBlock = styled.div`
   display: flex;
   align-items: center;
   position: absolute;
@@ -34,7 +29,7 @@ const LoadingBlock = styled.div<LoadingProps>`
   z-index: 2;
 `;
 
-const LoadingText = styled.p<LoadingProps>`
+const LoadingText = styled.p`
   color: ${({ theme }) => theme.primary};
   margin-left: 8px;
   font-weight: 500;

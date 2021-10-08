@@ -1,28 +1,20 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 import { Skeleton } from "./Skeleton";
 
 interface MessageSkeletonProps {
-  theme: Theme;
   children: ReactNode;
 }
 
-export const MessageSkeleton = ({ theme, children }: MessageSkeletonProps) => {
+export const MessageSkeleton = ({ children }: MessageSkeletonProps) => {
   return (
     <MessageWrapper>
-      <AvatarSkeleton
-        width="40px"
-        height="40px"
-        borderRadius="50%"
-        theme={theme}
-      />
+      <AvatarSkeleton width="40px" height="40px" borderRadius="50%" />
       <ContentWrapper>
         <MessageHeaderWrapper>
-          <UserNameSkeleton theme={theme} width="132px" />
-          <TimeSkeleton theme={theme} width="47px" height="14px" />
+          <UserNameSkeleton width="132px" />
+          <TimeSkeleton width="47px" height="14px" />
         </MessageHeaderWrapper>
         <MessageBodyWrapper>{children}</MessageBodyWrapper>
       </ContentWrapper>

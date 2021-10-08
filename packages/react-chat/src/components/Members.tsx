@@ -3,39 +3,31 @@ import styled from "styled-components";
 
 import { useNarrow } from "../contexts/narrowProvider";
 import { CommunityData } from "../helpers/communityMock";
-import { Theme } from "../styles/themes";
 
 import { Icon } from "./Chat/ChatMessages";
 import { UserIcon } from "./Icons/UserIcon";
 
 interface MembersProps {
-  theme: Theme;
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
 }
 
-export function Members({ theme, community, setShowChannels }: MembersProps) {
+export function Members({ community, setShowChannels }: MembersProps) {
   return (
-    <MembersWrapper theme={theme}>
-      <MemberHeading theme={theme}>Members</MemberHeading>
-      <MembersList
-        theme={theme}
-        community={community}
-        setShowChannels={setShowChannels}
-      />
+    <MembersWrapper>
+      <MemberHeading>Members</MemberHeading>
+      <MembersList community={community} setShowChannels={setShowChannels} />
     </MembersWrapper>
   );
 }
 
 interface MembersListProps {
-  theme: Theme;
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
 }
 
 export function MembersList({
-  theme,
   community,
   setShowChannels,
   setShowMembers,
@@ -43,22 +35,21 @@ export function MembersList({
   return (
     <MembersListWrap>
       <MemberCategory>
-        <MemberCategoryName theme={theme}>You</MemberCategoryName>
+        <MemberCategoryName>You</MemberCategoryName>
         <MemberData>
           <MemberIcon>
-            <UserIcon theme={theme} memberView={true} />
+            <UserIcon memberView={true} />
           </MemberIcon>
-          <MemberName theme={theme}>Guest564732</MemberName>
+          <MemberName>Guest564732</MemberName>
         </MemberData>
       </MemberCategory>
       <MemberCategory>
-        <MemberCategoryName theme={theme}>Online</MemberCategoryName>
+        <MemberCategoryName>Online</MemberCategoryName>
         {community.membersList
           .filter((member) => member.isOnline)
           .map((member) => (
             <Member
               key={member.id}
-              theme={theme}
               member={member}
               isOnline={member.isOnline}
               setShowChannels={setShowChannels}
@@ -67,13 +58,12 @@ export function MembersList({
           ))}
       </MemberCategory>
       <MemberCategory>
-        <MemberCategoryName theme={theme}>Offline</MemberCategoryName>
+        <MemberCategoryName>Offline</MemberCategoryName>
         {community.membersList
           .filter((member) => !member.isOnline)
           .map((member) => (
             <Member
               key={member.id}
-              theme={theme}
               member={member}
               isOnline={member.isOnline}
               setShowChannels={setShowChannels}
@@ -86,7 +76,6 @@ export function MembersList({
 }
 
 interface MemberProps {
-  theme: Theme;
   member: any;
   isOnline: boolean;
   setShowChannels: (val: boolean) => void;
@@ -94,7 +83,6 @@ interface MemberProps {
 }
 
 export function Member({
-  theme,
   member,
   isOnline,
   setShowChannels,
@@ -118,20 +106,15 @@ export function Member({
           backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",
         }}
         className={isOnline ? "online" : ""}
-        theme={theme}
       >
-        {!member.avatar && <UserIcon theme={theme} memberView={true} />}
+        {!member.avatar && <UserIcon memberView={true} />}
       </MemberIcon>
-      <MemberName theme={theme}>{member.name}</MemberName>
+      <MemberName>{member.name}</MemberName>
     </MemberData>
   );
 }
 
-interface ThemeProps {
-  theme: Theme;
-}
-
-const MembersWrapper = styled.div<ThemeProps>`
+const MembersWrapper = styled.div`
   width: 18%;
   height: 100%;
   min-width: 164px;
@@ -141,7 +124,7 @@ const MembersWrapper = styled.div<ThemeProps>`
   padding: 16px;
 `;
 
-const MemberHeading = styled.h2<ThemeProps>`
+const MemberHeading = styled.h2`
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
@@ -149,7 +132,7 @@ const MemberHeading = styled.h2<ThemeProps>`
   margin-bottom: 16px;
 `;
 
-const MemberCategoryName = styled.h3<ThemeProps>`
+const MemberCategoryName = styled.h3`
   font-weight: normal;
   font-size: 13px;
   line-height: 18px;
@@ -157,7 +140,7 @@ const MemberCategoryName = styled.h3<ThemeProps>`
   margin-bottom: 8px;
 `;
 
-const MemberName = styled.p<ThemeProps>`
+const MemberName = styled.p`
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
@@ -191,7 +174,7 @@ const MemberData = styled.div`
   margin-bottom: 16px;
 `;
 
-const MemberIcon = styled(Icon)<ThemeProps>`
+const MemberIcon = styled(Icon)`
   width: 24px;
   height: 24px;
   position: relative;

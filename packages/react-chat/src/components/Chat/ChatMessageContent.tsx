@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
-import { Theme } from "../../styles/themes";
 
 /* eslint-disable no-useless-escape */
 const regEx =
@@ -13,13 +12,11 @@ const regEx =
 
 type ChatMessageContentProps = {
   message: ChatMessage;
-  theme: Theme;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
 export function ChatMessageContent({
   message,
-  theme,
   fetchMetadata,
 }: ChatMessageContentProps) {
   const { content, image } = useMemo(() => message, [message]);
@@ -40,13 +37,7 @@ export function ChatMessageContent({
             ? match
             : "https://" + match;
         newSplit.push(
-          <Link
-            key={idx}
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            theme={theme}
-          >
+          <Link key={idx} href={link} target="_blank" rel="noopener noreferrer">
             {match}
           </Link>,
           split[idx + 1]

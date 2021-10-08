@@ -1,9 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 interface SkeletonProps {
-  theme: Theme;
   width?: string;
   height?: string;
   borderRadius?: string;

@@ -2,17 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../helpers/channelsMock";
-import { Theme } from "../styles/themes";
 
 import { ChannelInfo, ChannelLogo, ChannelName } from "./Channels";
 import { textMediumStyles } from "./Text";
 
 type EmptyChannelProps = {
-  theme: Theme;
   channel: ChannelData;
 };
 
-export function EmptyChannel({ theme, channel }: EmptyChannelProps) {
+export function EmptyChannel({ channel }: EmptyChannelProps) {
   return (
     <Wrapper>
       <ChannelInfoEmpty>
@@ -20,24 +18,17 @@ export function EmptyChannel({ theme, channel }: EmptyChannelProps) {
           style={{
             backgroundImage: channel.icon ? `url(${channel.icon}` : "",
           }}
-          theme={theme}
         >
           {" "}
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogoEmpty>
-        <ChannelNameEmpty theme={theme} className={"active"}>
-          {channel.name}
-        </ChannelNameEmpty>
+        <ChannelNameEmpty className={"active"}>{channel.name}</ChannelNameEmpty>
       </ChannelInfoEmpty>
-      <EmptyText theme={theme}>
+      <EmptyText>
         Welcome to the beginning of the <span>#{channel.name}</span> channel!
       </EmptyText>
     </Wrapper>
   );
-}
-
-interface ThemeProps {
-  theme: Theme;
 }
 
 const Wrapper = styled.div`
@@ -68,7 +59,7 @@ const ChannelNameEmpty = styled(ChannelName)`
   margin-bottom: 16px;
 `;
 
-const EmptyText = styled.p<ThemeProps>`
+const EmptyText = styled.p`
   display: inline-block;
   color: ${({ theme }) => theme.secondary};
 

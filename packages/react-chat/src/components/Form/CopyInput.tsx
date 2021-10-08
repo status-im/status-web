@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
 import { copy } from "../../utils/copy";
 import { reduceString } from "../../utils/reduceString";
 import { textMediumStyles, textSmallStyles } from "../Text";
@@ -9,18 +8,15 @@ import { textMediumStyles, textSmallStyles } from "../Text";
 interface CopyInputProps {
   label: string;
   value: string;
-  theme: Theme;
 }
 
-export const CopyInput = ({ label, value, theme }: CopyInputProps) => (
+export const CopyInput = ({ label, value }: CopyInputProps) => (
   <div>
-    <Label theme={theme}>{label}</Label>
-    <Wrapper theme={theme}>
-      <Text theme={theme}>{reduceString(value, 15, 15)}</Text>
-      <CopyButtonWrapper theme={theme}>
-        <CopyButton theme={theme} onClick={() => copy(value)}>
-          Copy
-        </CopyButton>
+    <Label>{label}</Label>
+    <Wrapper>
+      <Text>{reduceString(value, 15, 15)}</Text>
+      <CopyButtonWrapper>
+        <CopyButton onClick={() => copy(value)}>Copy</CopyButton>
       </CopyButtonWrapper>
     </Wrapper>
   </div>

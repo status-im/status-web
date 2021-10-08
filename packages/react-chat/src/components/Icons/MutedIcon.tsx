@@ -1,20 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
-interface ThemeProps {
-  theme: Theme;
-}
-
-export const MutedIcon = ({ theme }: ThemeProps) => {
+export const MutedIcon = () => {
   return (
     <Icon
       width="14"
       height="14"
       viewBox="0 0 14 14"
       xmlns="http://www.w3.org/2000/svg"
-      theme={theme}
     >
       <path
         d="M8.70186 2.11736C8.91545 1.90377 8.89277 1.54794 8.62625 1.40578C8.13934 1.14607 7.58479 0.999998 7.00002 0.999998C5.27863 0.999998 3.8192 2.26576 3.57576 3.96984L3.14144 7.01005C3.11619 7.18684 3.43245 7.38677 3.55873 7.26049L8.70186 2.11736Z"
@@ -28,7 +21,7 @@ export const MutedIcon = ({ theme }: ThemeProps) => {
   );
 };
 
-const Icon = styled.svg<ThemeProps>`
+const Icon = styled.svg`
   & > path {
     fill: ${({ theme }) => theme.primary};
   }

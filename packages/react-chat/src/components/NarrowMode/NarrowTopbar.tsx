@@ -1,28 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
 interface NarrowTopbarProps {
-  theme: Theme;
   list: string;
   community: string;
 }
 
-export function NarrowTopbar({ theme, list, community }: NarrowTopbarProps) {
+export function NarrowTopbar({ list, community }: NarrowTopbarProps) {
   return (
-    <TopbarWrapper theme={theme}>
-      <Heading theme={theme}>{list}</Heading>
-      <SubHeading theme={theme}>{community}</SubHeading>
+    <TopbarWrapper>
+      <Heading>{list}</Heading>
+      <SubHeading>{community}</SubHeading>
     </TopbarWrapper>
   );
 }
 
-interface ThemeProps {
-  theme: Theme;
-}
-
-const TopbarWrapper = styled.div<ThemeProps>`
+const TopbarWrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -32,12 +25,12 @@ const TopbarWrapper = styled.div<ThemeProps>`
   position: relative;
 `;
 
-const Heading = styled.p<ThemeProps>`
+const Heading = styled.p`
   font-weight: 500;
   color: ${({ theme }) => theme.primary};
 `;
 
-const SubHeading = styled.p<ThemeProps>`
+const SubHeading = styled.p`
   font-weight: 500;
   color: ${({ theme }) => theme.secondary};
 `;

@@ -1,11 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
-
-export const CrossIcon = ({ theme }: { theme: Theme }) => (
+export const CrossIcon = () => (
   <Icon
-    theme={theme}
     width="12"
     height="12"
     viewBox="0 0 12 12"

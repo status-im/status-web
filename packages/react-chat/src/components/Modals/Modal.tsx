@@ -2,14 +2,12 @@ import React, { ReactNode, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 
-import { Theme } from "../../styles/themes";
 import { CrossIcon } from "../Icons/CrossIcon";
 
 export interface BasicModalProps {
   isVisible: boolean;
   onClose: () => void;
   className?: string;
-  theme: Theme;
 }
 
 export interface ModalProps extends BasicModalProps {
@@ -21,7 +19,6 @@ export const Modal = ({
   onClose,
   children,
   className,
-  theme,
 }: ModalProps) => {
   const listenKeyboard = useCallback(
     (event: KeyboardEvent) => {
@@ -45,10 +42,10 @@ export const Modal = ({
 
   return createPortal(
     <ModalView>
-      <ModalOverlay onClick={onClose} theme={theme} />
-      <ModalBody theme={theme} className={className}>
+      <ModalOverlay onClick={onClose} />
+      <ModalBody className={className}>
         <CloseButton onClick={onClose}>
-          <CrossIcon theme={theme} />
+          <CrossIcon />
         </CloseButton>
         {children}
       </ModalBody>
