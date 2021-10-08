@@ -37,15 +37,26 @@ export class Messenger {
   }
 
   /**
+   * Joins a public chat using its id.
+   *
+   * For community chats, prefer [[joinChat]].
+   *
+   * Use `addListener` to get messages received on this chat.
+   */
+  public async joinChatById(chatId: string): Promise<void> {
+    const chat = await Chat.create(chatId);
+
+    await this.joinChat(chat);
+  }
+
+  /**
    * Joins a public chat.
    *
    * Use `addListener` to get messages received on this chat.
    */
-  public async joinChat(chatId: string): Promise<void> {
-    if (this.chatsById.has(chatId))
-      throw `Failed to join chat, it is already joined: ${chatId}`;
-
-    const chat = await Chat.create(chatId);
+  public async joinChat(chat: Chat): Promise<void> {
+    if (this.chatsById.has(chat.id))
+      throw `Failed to join chat, it is already joined: ${chat.id}`;
 
     this.waku.addDecryptionKey(chat.symKey);
 
@@ -66,7 +77,7 @@ export class Messenger {
       [chat.contentTopic]
     );
 
-    this.chatsById.set(chatId, chat);
+    this.chatsById.set(chat.id, chat);
   }
 
   /**

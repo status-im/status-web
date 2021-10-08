@@ -149,7 +149,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
       await Promise.all(
         chatIdList.map(async (id) => {
-          await messenger.joinChat(id);
+          await messenger.joinChatById(id);
           setLastLoadTime((prev) => {
             return {
               ...prev,

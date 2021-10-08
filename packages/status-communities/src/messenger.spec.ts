@@ -62,8 +62,8 @@ describe("Messenger", () => {
   it("Sends & Receive public chat messages", async function () {
     this.timeout(10_000);
 
-    await messengerAlice.joinChat(testChatId);
-    await messengerBob.joinChat(testChatId);
+    await messengerAlice.joinChatById(testChatId);
+    await messengerBob.joinChatById(testChatId);
 
     const text = "This is a message.";
 
@@ -87,8 +87,8 @@ describe("Messenger", () => {
   it("public chat messages have signers", async function () {
     this.timeout(10_000);
 
-    await messengerAlice.joinChat(testChatId);
-    await messengerBob.joinChat(testChatId);
+    await messengerAlice.joinChatById(testChatId);
+    await messengerBob.joinChatById(testChatId);
 
     const text = "This is a message.";
 
