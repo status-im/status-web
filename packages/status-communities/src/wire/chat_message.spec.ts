@@ -3,15 +3,16 @@ import { expect } from "chai";
 import {
   AudioMessage_AudioType,
   ChatMessage_ContentType,
-} from "./proto/communities/v1/chat_message";
-import { ImageType } from "./proto/communities/v1/enums";
+} from "../proto/communities/v1/chat_message";
+import { ImageType } from "../proto/communities/v1/enums";
+
 import {
   AudioContent,
   ChatMessage,
   ContentType,
   ImageContent,
   StickerContent,
-} from "./wire/chat_message";
+} from "./chat_message";
 
 describe("Chat Message", () => {
   it("Encode & decode Image message", () => {
