@@ -2,8 +2,9 @@ import { Buffer } from "buffer";
 
 import { keccak256 } from "js-sha3";
 import { generatePrivateKey } from "js-waku";
-import { utils } from "js-waku";
 import * as secp256k1 from "secp256k1";
+
+import { hexToBuf } from "./utils";
 
 export class Identity {
   public constructor(public privateKey: Uint8Array) {}
@@ -20,7 +21,7 @@ export class Identity {
     const hash = keccak256(payload);
 
     const { signature, recid } = secp256k1.ecdsaSign(
-      utils.hexToBuf(hash),
+      hexToBuf(hash),
       this.privateKey
     );
 

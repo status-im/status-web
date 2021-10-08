@@ -2,7 +2,7 @@
 import { getBootstrapNodes, StoreCodec } from "js-waku";
 import { useCallback, useEffect, useState } from "react";
 import { Identity, Messenger } from "status-communities/dist/cjs";
-import { ApplicationMetadataMessage } from "status-communities/dist/cjs/application_metadata_message";
+import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { ChatMessage } from "../models/ChatMessage";

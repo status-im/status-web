@@ -1,11 +1,11 @@
 import { expect } from "chai";
 import debug from "debug";
-import { utils } from "js-waku";
 
-import { ApplicationMetadataMessage } from "./application_metadata_message";
-import { ContentType } from "./chat_message";
 import { Identity } from "./identity";
 import { Messenger } from "./messenger";
+import { bufToHex } from "./utils";
+import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
+import { ContentType } from "./wire/chat_message";
 
 const testChatId = "test-chat-id";
 
@@ -106,8 +106,8 @@ describe("Messenger", () => {
 
     const receivedMessage = await receivedMessagePromise;
 
-    expect(utils.bufToHex(receivedMessage.signer!)).to.eq(
-      utils.bufToHex(identityAlice.publicKey)
+    expect(bufToHex(receivedMessage.signer!)).to.eq(
+      bufToHex(identityAlice.publicKey)
     );
   });
 
