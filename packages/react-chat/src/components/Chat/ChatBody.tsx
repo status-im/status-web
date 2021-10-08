@@ -108,14 +108,12 @@ export function ChatBody({
         <>
           {!showChannelsList && !showMembersList && (
             <>
-              <button onClick={loadNextDay}>
-                Last message date {lastMessage.toDateString()}
-              </button>{" "}
               {messages.length > 0 ? (
                 messenger ? (
                   <ChatMessages
                     messages={messages}
                     loadNextDay={loadNextDay}
+                    lastMessage={lastMessage}
                     fetchMetadata={fetchMetadata}
                   />
                 ) : (

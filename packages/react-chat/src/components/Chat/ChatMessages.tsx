@@ -4,7 +4,11 @@ import styled from "styled-components";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { UserIcon } from "../Icons/UserIcon";
+<<<<<<< HEAD
 import { PictureModal } from "../Modals/PictureModal";
+=======
+import { LoadingButton } from "../Skeleton/LoadingButton";
+>>>>>>> 387d83c (Ad loading messages btn)
 import { textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
@@ -12,12 +16,14 @@ import { ChatMessageContent } from "./ChatMessageContent";
 type ChatMessagesProps = {
   messages: ChatMessage[];
   loadNextDay: () => void;
+  lastMessage: Date;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
 export function ChatMessages({
   messages,
   loadNextDay,
+  lastMessage,
   fetchMetadata,
 }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(true);
@@ -101,6 +107,8 @@ export function ChatMessages({
 }
 
 const MessagesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   height: calc(100% - 44px);
   overflow: auto;
   padding: 8px 16px 0;
