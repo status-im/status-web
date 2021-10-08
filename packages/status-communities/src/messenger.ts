@@ -157,8 +157,8 @@ export class Messenger {
     chatId: string,
     startTime: Date,
     endTime: Date,
-    callback: (messages: ApplicationMetadataMessage[]) => void
-  ): Promise<void> {
+    callback?: (messages: ApplicationMetadataMessage[]) => void
+  ): Promise<number> {
     const chat = this.chatsById.get(chatId);
     if (!chat)
       throw `Failed to retrieve messages, chat is not joined: ${chatId}`;
@@ -184,14 +184,19 @@ export class Messenger {
             return;
         }
       });
-
-      callback(messages.filter(isDefined));
+      if (callback) {
+        callback(messages.filter(isDefined));
+      }
     };
 
-    await this.waku.store.queryHistory([chat.contentTopic], {
-      timeFilter: { startTime, endTime },
-      callback: _callback,
-    });
+    const allMessages = await this.waku.store.queryHistory(
+      [chat.contentTopic],
+      {
+        timeFilter: { startTime, endTime },
+        callback: _callback,
+      }
+    );
+    return allMessages.length;
   }
 
   private _handleNewChatMessage(

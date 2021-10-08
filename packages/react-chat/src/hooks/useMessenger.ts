@@ -1,11 +1,13 @@
 // import { StoreCodec } from "js-waku";
 import { getBootstrapNodes, StoreCodec } from "js-waku";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Identity, Messenger } from "status-communities/dist/cjs";
 import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { ChatMessage } from "../models/ChatMessage";
+
+const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
 function binarySetInsert<T>(
   arr: T[],
@@ -31,16 +33,25 @@ function binarySetInsert<T>(
 
 export function useMessenger(chatId: string, chatIdList: string[]) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
-  const [activeMessages, setActiveMessages] = useState<ChatMessage[]>([]);
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
     {}
   );
   const [notifications, setNotifications] = useState<{
     [chatId: string]: number;
   }>({});
-  const [lastLoadTime, setLastLoadTime] = useState<{
+  const loadingPreviousMessages = useRef<{
+    [chatId: string]: boolean;
+  }>({});
+  const lastLoadTime = useRef<{
     [chatId: string]: Date;
   }>({});
+  const [lastMessage, setLastMessage] = useState(new Date());
+
+  useEffect(() => {
+    if (lastLoadTime.current?.[chatId]) {
+      setLastMessage(lastLoadTime.current?.[chatId]);
+    }
+  }, [chatId]);
 
   const clearNotifications = useCallback((id: string) => {
     setNotifications((prevNotifications) => {
@@ -101,28 +112,34 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   );
 
   const loadNextDay = useCallback(
-    (id: string) => {
+    async (id: string) => {
       if (messenger) {
-        const endTime = lastLoadTime[id];
-        const startTime = new Date();
-        startTime.setDate(endTime.getDate() - 1);
-        startTime.setHours(0, 0, 0, 0);
-
-        messenger.retrievePreviousMessages(
-          id,
-          startTime,
-          endTime,
-          () => undefined
+        const endTime = lastLoadTime.current[id];
+        const startTime = new Date(endTime.getTime() - _MS_PER_DAY);
+        const timeDiff = Math.floor(
+          (new Date().getTime() - endTime.getTime()) / _MS_PER_DAY
         );
-        setLastLoadTime((prev) => {
-          return {
-            ...prev,
-            [id]: startTime,
-          };
-        });
+        if (timeDiff < 30) {
+          if (!loadingPreviousMessages.current[id]) {
+            loadingPreviousMessages.current[id] = true;
+            const amountOfMessages = await messenger.retrievePreviousMessages(
+              id,
+              startTime,
+              endTime
+            );
+            lastLoadTime.current[id] = startTime;
+            if (id === chatId) {
+              setLastMessage(startTime);
+            }
+            loadingPreviousMessages.current[id] = false;
+            if (amountOfMessages === 0) {
+              loadNextDay(id);
+            }
+          }
+        }
       }
     },
-    [lastLoadTime, messenger]
+    [lastLoadTime, messenger, chatId]
   );
 
   useEffect(() => {
@@ -150,12 +167,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
       await Promise.all(
         chatIdList.map(async (id) => {
           await messenger.joinChatById(id);
-          setLastLoadTime((prev) => {
-            return {
-              ...prev,
-              [id]: new Date(),
-            };
-          });
+          lastLoadTime.current[id] = new Date();
           messenger.addObserver(
             (msg, date) => addNewMessage(msg, id, date),
             id
@@ -199,9 +211,10 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     [chatId, messenger]
   );
 
-  useEffect(() => {
-    setActiveMessages(messages?.[chatId] ?? []);
-  }, [messages, chatId]);
+  const activeMessages = useMemo(
+    () => messages?.[chatId] ?? [],
+    [messages, chatId]
+  );
 
   return {
     messenger,
@@ -210,6 +223,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     notifications,
     clearNotifications,
     loadNextDay,
-    lastMessage: lastLoadTime[chatId],
+    lastMessage,
   };
 }
