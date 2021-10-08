@@ -72,7 +72,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         onCommunityClick={showModal}
         lastMessage={lastMessage}
         fetchMetadata={fetchMetadata}
-        setIsModalVisible={setIsModalVisible}
         setImage={setImage}
       />
       {showMembers && !narrow && (
@@ -88,8 +87,8 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         publicKey="0xD95DBdaB08A9FED2D71ac9C3028AAc40905d8CF3"
       />
       <PictureModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        isVisible={!!image}
+        onClose={() => setImage("")}
         image={image}
       />
     </ChatWrapper>

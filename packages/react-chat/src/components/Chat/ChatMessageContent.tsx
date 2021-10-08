@@ -13,14 +13,14 @@ const regEx =
 type ChatMessageContentProps = {
   message: ChatMessage;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-  setIsModalVisible: (val: boolean) => void;
+
   setImage: (image: string) => void;
 };
 
 export function ChatMessageContent({
   message,
   fetchMetadata,
-  setIsModalVisible,
+
   setImage,
 }: ChatMessageContentProps) {
   const { content, image } = useMemo(() => message, [message]);
@@ -78,7 +78,7 @@ export function ChatMessageContent({
       {image && (
         <MessageImageWrapper
           onClick={() => {
-            setImage(image), setIsModalVisible(true);
+            setImage(image);
           }}
         >
           <MessageImage src={image} />

@@ -12,7 +12,7 @@ type ChatMessagesProps = {
   messages: ChatMessage[];
   loadNextDay: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-  setIsModalVisible: (val: boolean) => void;
+
   setImage: (image: string) => void;
 };
 
@@ -20,7 +20,7 @@ export function ChatMessages({
   messages,
   loadNextDay,
   fetchMetadata,
-  setIsModalVisible,
+
   setImage,
 }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(true);
@@ -84,7 +84,6 @@ export function ChatMessages({
                   <ChatMessageContent
                     message={message}
                     fetchMetadata={fetchMetadata}
-                    setIsModalVisible={setIsModalVisible}
                     setImage={setImage}
                   />
                 </MessageText>

@@ -36,7 +36,6 @@ interface ChatBodyProps {
   onCommunityClick: () => void;
   lastMessage: Date;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-  setIsModalVisible: (val: boolean) => void;
   setImage: (image: string) => void;
 }
 
@@ -57,7 +56,6 @@ export function ChatBody({
   onCommunityClick,
   lastMessage,
   fetchMetadata,
-  setIsModalVisible,
   setImage,
 }: ChatBodyProps) {
   const narrow = useNarrow();
@@ -121,7 +119,6 @@ export function ChatBody({
                     messages={messages}
                     loadNextDay={loadNextDay}
                     fetchMetadata={fetchMetadata}
-                    setIsModalVisible={setIsModalVisible}
                     setImage={setImage}
                   />
                 ) : (
