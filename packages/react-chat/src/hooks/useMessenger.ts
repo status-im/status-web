@@ -62,37 +62,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     });
   }, []);
 
-  const addNewMessageRaw = useCallback(
-    (
-      signer: Uint8Array,
-      content: string,
-      date: Date,
-      id: string,
-      image?: string
-    ) => {
-      const sender = signer.reduce((p, c) => p + c.toString(16), "0x");
-      const newMessage = { sender, content, date, image };
-      setMessages((prev) => {
-        return {
-          ...prev,
-          [id]: binarySetInsert(
-            prev?.[id] ?? [],
-            newMessage,
-            (a, b) => a.date < b.date,
-            (a, b) => a.date.getTime() === b.date.getTime()
-          ),
-        };
-      });
-      setNotifications((prev) => {
-        return {
-          ...prev,
-          [id]: prev[id] + 1,
-        };
-      });
-    },
-    []
-  );
-
   const addNewMessage = useCallback(
     (msg: ApplicationMetadataMessage, id: string, date: Date) => {
       if (
@@ -101,14 +70,35 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
         msg.chatMessage.clock
       ) {
         const content = msg.chatMessage.text ?? "";
-        let img: string | undefined = undefined;
+        let image: string | undefined = undefined;
         if (msg.chatMessage?.image) {
-          img = uintToImgUrl(msg.chatMessage?.image.payload);
+          image = uintToImgUrl(msg.chatMessage?.image.payload);
         }
-        addNewMessageRaw(msg.signer, content, date, id, img);
+        const sender = msg.signer.reduce(
+          (p: string, c: number): string => p + c.toString(16),
+          "0x"
+        );
+        const newMessage = { sender, content, date, image };
+        setMessages((prev) => {
+          return {
+            ...prev,
+            [id]: binarySetInsert(
+              prev?.[id] ?? [],
+              newMessage,
+              (a, b) => a.date < b.date,
+              (a, b) => a.date.getTime() === b.date.getTime()
+            ),
+          };
+        });
+        setNotifications((prev) => {
+          return {
+            ...prev,
+            [id]: prev[id] + 1,
+          };
+        });
       }
     },
-    [addNewMessageRaw]
+    []
   );
 
   const loadNextDay = useCallback(
@@ -147,6 +137,14 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
       const identity = Identity.generate();
 
       const messenger = await Messenger.create(identity, {
+        libp2p: {
+          config: {
+            pubsub: {
+              enabled: true,
+              emitSelf: true,
+            },
+          },
+        },
         bootstrap: getBootstrapNodes.bind({}, [
           "fleets",
           "wakuv2.test",
@@ -200,13 +198,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
             contentType: 0,
           };
       await messenger?.sendMessage(chatId, content);
-      addNewMessageRaw(
-        messenger?.identity.publicKey ?? new Uint8Array(),
-        messageText,
-        new Date(),
-        chatId,
-        image ? uintToImgUrl(image) : undefined
-      );
     },
     [chatId, messenger]
   );
