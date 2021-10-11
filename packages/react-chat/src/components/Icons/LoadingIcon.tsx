@@ -10,12 +10,17 @@ const rotation = keyframes`
   }
 `;
 
-export const LoadingIcon = () => (
+interface LoadingIconProps {
+  className?: string;
+}
+
+export const LoadingIcon = ({ className }: LoadingIconProps) => (
   <Icon
     width="13"
     height="12"
     viewBox="0 0 13 12"
     xmlns="http://www.w3.org/2000/svg"
+    className={className}
   >
     <path
       fillRule="evenodd"
@@ -30,4 +35,10 @@ const Icon = styled.svg`
     fill: ${({ theme }) => theme.primary};
   }
   animation: ${rotation} 2s linear infinite;
+
+  &.message {
+    & > path {
+      fill: ${({ theme }) => theme.secondary};
+    }
+  }
 `;

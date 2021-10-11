@@ -3,12 +3,9 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
+import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
-<<<<<<< HEAD
 import { PictureModal } from "../Modals/PictureModal";
-=======
-import { LoadingButton } from "../Skeleton/LoadingButton";
->>>>>>> 387d83c (Ad loading messages btn)
 import { textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
@@ -16,14 +13,12 @@ import { ChatMessageContent } from "./ChatMessageContent";
 type ChatMessagesProps = {
   messages: ChatMessage[];
   loadNextDay: () => void;
-  lastMessage: Date;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
 export function ChatMessages({
   messages,
   loadNextDay,
-  lastMessage,
   fetchMetadata,
 }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(true);
@@ -66,6 +61,9 @@ export function ChatMessages({
         onClose={() => setImage("")}
         image={image}
       />
+      <LoadingWrapper>
+        <LoadingIcon className="message" />
+      </LoadingWrapper>
       {messages.map((message, idx) => {
         return (
           <MessageOuterWrapper key={message.date.getTime()}>
@@ -191,4 +189,13 @@ const MessageText = styled.div`
   width: 100%;
   white-space: pre-wrap;
   color: ${({ theme }) => theme.primary};
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 `;
