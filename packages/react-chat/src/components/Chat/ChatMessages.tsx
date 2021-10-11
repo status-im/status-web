@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
+import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { PictureModal } from "../Modals/PictureModal";
 import { textSmallStyles } from "../Text";
@@ -60,6 +61,9 @@ export function ChatMessages({
         onClose={() => setImage("")}
         image={image}
       />
+      <LoadingWrapper>
+        <LoadingIcon className="message" />
+      </LoadingWrapper>
       {messages.map((message, idx) => {
         return (
           <MessageOuterWrapper key={message.date.getTime()}>
@@ -101,6 +105,8 @@ export function ChatMessages({
 }
 
 const MessagesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   height: calc(100% - 44px);
   overflow: auto;
   padding: 8px 16px 0;
@@ -183,4 +189,13 @@ const MessageText = styled.div`
   width: 100%;
   white-space: pre-wrap;
   color: ${({ theme }) => theme.primary};
+`;
+
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 `;

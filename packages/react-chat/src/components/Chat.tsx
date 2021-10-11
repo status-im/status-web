@@ -32,7 +32,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
     notifications,
     clearNotifications,
     loadNextDay,
-    lastMessage,
   } = useMessenger(
     activeChannel.name,
     channels.map((channel) => channel.name)
@@ -68,7 +67,6 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         showCommunity={!showChannels}
         loadNextDay={() => loadNextDay(activeChannel.name)}
         onCommunityClick={showModal}
-        lastMessage={lastMessage}
         fetchMetadata={fetchMetadata}
       />
       {showMembers && !narrow && (

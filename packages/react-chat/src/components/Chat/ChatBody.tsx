@@ -34,7 +34,6 @@ interface ChatBodyProps {
   activeChannelId: number;
   loadNextDay: () => void;
   onCommunityClick: () => void;
-  lastMessage: Date;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
@@ -53,7 +52,6 @@ export function ChatBody({
   activeChannelId,
   loadNextDay,
   onCommunityClick,
-  lastMessage,
   fetchMetadata,
 }: ChatBodyProps) {
   const narrow = useNarrow();
@@ -108,9 +106,6 @@ export function ChatBody({
         <>
           {!showChannelsList && !showMembersList && (
             <>
-              <button onClick={loadNextDay}>
-                Last message date {lastMessage.toDateString()}
-              </button>{" "}
               {messages.length > 0 ? (
                 messenger ? (
                   <ChatMessages
