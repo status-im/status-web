@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
+import { Menu } from "../Form/Menu";
 
 /* eslint-disable no-useless-escape */
 const regEx =
@@ -13,14 +14,12 @@ const regEx =
 type ChatMessageContentProps = {
   message: ChatMessage;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-
   setImage: (image: string) => void;
 };
 
 export function ChatMessageContent({
   message,
   fetchMetadata,
-
   setImage,
 }: ChatMessageContentProps) {
   const { content, image } = useMemo(() => message, [message]);
@@ -72,16 +71,20 @@ export function ChatMessageContent({
     };
     updatePreview();
   }, [link]);
+
   return (
     <ContentWrapper>
       <div>{elements.map((el) => el)}</div>
       {image && (
-        <MessageImageWrapper
-          onClick={() => {
-            setImage(image);
-          }}
-        >
-          <MessageImage src={image} />
+        <MessageImageWrapper>
+          <MessageImage
+            src={image}
+            id={image}
+            onClick={() => {
+              setImage(image);
+            }}
+          />
+          <Menu image={image} />
         </MessageImageWrapper>
       )}
       {openGraph && (
@@ -103,6 +106,7 @@ const MessageImageWrapper = styled.div`
   width: 147px;
   height: 196px;
   margin-top: 8px;
+  position: relative;
 `;
 
 const MessageImage = styled.img`
