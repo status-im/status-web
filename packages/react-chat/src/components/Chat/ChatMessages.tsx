@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { UserIcon } from "../Icons/UserIcon";
+import { PictureModal } from "../Modals/PictureModal";
 import { textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
@@ -12,16 +13,12 @@ type ChatMessagesProps = {
   messages: ChatMessage[];
   loadNextDay: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-
-  setImage: (image: string) => void;
 };
 
 export function ChatMessages({
   messages,
   loadNextDay,
   fetchMetadata,
-
-  setImage,
 }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
@@ -54,8 +51,15 @@ export function ChatMessages({
     return () => ref.current?.removeEventListener("scroll", setScroll);
   }, [ref, scrollOnBot]);
 
+  const [image, setImage] = useState("");
+
   return (
     <MessagesWrapper ref={ref}>
+      <PictureModal
+        isVisible={!!image}
+        onClose={() => setImage("")}
+        image={image}
+      />
       {messages.map((message, idx) => {
         return (
           <MessageOuterWrapper key={message.date.getTime()}>
