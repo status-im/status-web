@@ -1,11 +1,4 @@
-const createImage = (options: any) => {
-  options = options || {};
-  const img = document.createElement("img");
-  if (options.src) {
-    img.src = options.src;
-  }
-  return img;
-};
+import { createImg } from "./createImg";
 
 const copyToClipboard = async (pngBlob: any) => {
   try {
@@ -22,7 +15,7 @@ const copyToClipboard = async (pngBlob: any) => {
 const convertToPng = (imgBlob: any) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  const imageEl = createImage({ src: window.URL.createObjectURL(imgBlob) });
+  const imageEl = createImg({ src: window.URL.createObjectURL(imgBlob) });
   imageEl.onload = (e: any) => {
     canvas.width = e.target.width;
     canvas.height = e.target.height;

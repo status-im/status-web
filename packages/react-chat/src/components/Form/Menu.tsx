@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useContextMenu } from "../../hooks/useContextMenu";
 import { copyImg } from "../../utils/copyImg";
+import { downloadImg } from "../../utils/downloadImg";
 import { CopyIcon } from "../Icons/CopyIcon";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { textSmallStyles } from "../Text";
@@ -20,7 +21,7 @@ export const Menu = ({ image }: MenuProps) => {
         <MenuItem onClick={() => copyImg(image)}>
           <CopyIcon /> <MenuText>Copy image</MenuText>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={() => downloadImg(image)}>
           <DownloadIcon />
           <MenuText> Download image</MenuText>
         </MenuItem>
