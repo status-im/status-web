@@ -114,6 +114,7 @@ const MessageImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 16px;
+  cursor; pointer;
 `;
 
 const PreviewSiteNameWrapper = styled.div`
