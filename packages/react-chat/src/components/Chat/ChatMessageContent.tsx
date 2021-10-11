@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
-import { Menu } from "../Form/Menu";
+import { ImageMenu } from "../Form/ImageMenu";
 
 /* eslint-disable no-useless-escape */
 const regEx =
@@ -84,7 +84,7 @@ export function ChatMessageContent({
               setImage(image);
             }}
           />
-          <Menu image={image} />
+          <ImageMenu imageId={image} />
         </MessageImageWrapper>
       )}
       {openGraph && (

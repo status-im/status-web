@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 
-export const useContextMenu = (image: string) => {
+export const useContextMenu = (elementId: string) => {
   const [showMenu, setShowMenu] = useState(false);
-  const imageEl = document.getElementById(image) || document;
+  const element = document.getElementById(elementId) || document;
 
   const handleContextMenu = useCallback(
     (event) => {
@@ -18,12 +18,12 @@ export const useContextMenu = (image: string) => {
   );
 
   useEffect(() => {
-    imageEl.addEventListener("click", handleClick);
-    imageEl.addEventListener("contextmenu", handleContextMenu);
+    element.addEventListener("click", handleClick);
+    element.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("click", () => setShowMenu(false));
     return () => {
-      imageEl.removeEventListener("click", handleClick);
-      imageEl.removeEventListener("contextmenu", handleContextMenu);
+      element.removeEventListener("click", handleClick);
+      element.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("click", () => setShowMenu(false));
     };
   });

@@ -8,22 +8,22 @@ import { CopyIcon } from "../Icons/CopyIcon";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 import { textSmallStyles } from "../Text";
 
-interface MenuProps {
-  image: string;
+interface ImageMenuProps {
+  imageId: string;
 }
 
-export const Menu = ({ image }: MenuProps) => {
-  const { showMenu } = useContextMenu(image);
+export const ImageMenu = ({ imageId }: ImageMenuProps) => {
+  const { showMenu } = useContextMenu(imageId);
 
   return showMenu ? (
     <MenuBlock>
       <MenuList>
-        <MenuItem onClick={() => copyImg(image)}>
-          <CopyIcon /> <MenuText>Copy image</MenuText>
+        <MenuItem onClick={() => copyImg(imageId)}>
+          <CopyIcon /> <MenuText>Copy imageId</MenuText>
         </MenuItem>
-        <MenuItem onClick={() => downloadImg(image)}>
+        <MenuItem onClick={() => downloadImg(imageId)}>
           <DownloadIcon />
-          <MenuText> Download image</MenuText>
+          <MenuText> Download imageId</MenuText>
         </MenuItem>
       </MenuList>
     </MenuBlock>
