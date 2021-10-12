@@ -20,6 +20,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
+
   const image = useMemo(() => {
     if (imageUint) {
       return uintToImgUrl(imageUint);
@@ -27,6 +28,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
       return "";
     }
   }, [imageUint]);
+
   const addEmoji = (e: any) => {
     const sym = e.unified.split("-");
     const codesArray: any[] = [];
@@ -35,8 +37,27 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
     setContent(content + emoji);
   };
 
+  const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const target = e.target;
+    target.style.height = "40px";
+    target.style.height = `${Math.min(target.scrollHeight, 438)}px`;
+    setInputHeight(target.scrollHeight);
+    setContent(target.value);
+  };
+
+  const onInputKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key == "Enter" && !e.getModifierState("Shift")) {
+      e.preventDefault();
+      (e.target as HTMLTextAreaElement).style.height = "40px";
+      setInputHeight(40);
+      addMessage(content, imageUint);
+      setImageUint(undefined);
+      setContent("");
+    }
+  };
+
   return (
-    <InputWrapper>
+    <View>
       {showEmoji && (
         <div>
           <Picker
@@ -58,7 +79,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         </div>
       )}
 
-      <AddPictureBtn>
+      <AddPictureInputWrapper>
         <PictureIcon />
         <AddPictureInput
           type="file"
@@ -75,56 +96,85 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
             }
           }}
         />
-      </AddPictureBtn>
-      <InputImageWrapper
-        style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}
-      >
+      </AddPictureInputWrapper>
+      <Row style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}>
         {image && (
-          <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
+          <ImagePreviewWrapper>
+            <ImagePreviewOverlay />
+            <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
+          </ImagePreviewWrapper>
         )}
         <Input
-          placeholder={"Message"}
+          placeholder="Message"
           value={content}
-          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-            const target = e.target;
-            target.style.height = "40px";
-            target.style.height = `${Math.min(target.scrollHeight, 160)}px`;
-            setInputHeight(target.scrollHeight);
-            setContent(target.value);
-          }}
-          onKeyPress={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-            if (e.key == "Enter" && !e.getModifierState("Shift")) {
-              e.preventDefault();
-              (e.target as HTMLTextAreaElement).style.height = "40px";
-              setInputHeight(40);
-              addMessage(content, imageUint);
-              setImageUint(undefined);
-              setContent("");
-            }
-          }}
+          onChange={onInputChange}
+          onKeyPress={onInputKeyPress}
         />
-      </InputImageWrapper>
-      <AddEmojiBtn onClick={() => setShowEmoji(!showEmoji)}>
-        <EmojiIcon isActive={showEmoji} />
-      </AddEmojiBtn>
-      <AddStickerBtn>
-        <StickerIcon />
-      </AddStickerBtn>
-      <AddGifBtn>
-        <GifIcon />
-      </AddGifBtn>
-    </InputWrapper>
+        <InputButtons>
+          <ChatButton onClick={() => setShowEmoji(!showEmoji)}>
+            <EmojiIcon isActive={showEmoji} />
+          </ChatButton>
+          <ChatButton>
+            <StickerIcon />
+          </ChatButton>
+          <ChatButton>
+            <GifIcon />
+          </ChatButton>
+        </InputButtons>
+      </Row>
+    </View>
   );
 }
 
-const InputWrapper = styled.div`
+const View = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding: 6px 8px 6px 10px;
   position: relative;
 `;
 
+const Row = styled.div`
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  max-height: 438px;
+  padding-right: 6px;
+  background: ${({ theme }) => theme.inputColor};
+  border-radius: 16px 16px 4px 16px;
+`;
+
+const InputButtons = styled.div`
+  display: flex;
+  align-items: center;
+
+  button + button {
+    margin-left: 4px;
+  }
+`;
+
+const ImagePreviewWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 82px;
+  z-index: 1;
+`;
+
+const ImagePreviewOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #eef2f5;
+  border-radius: 16px 16px 4px 16px;
+  opacity: 0.9;
+`;
+
 const ImagePreview = styled.img`
+  position: relative;
   width: 64px;
   height: 64px;
   border-radius: 16px 16px 4px 16px;
@@ -132,32 +182,17 @@ const ImagePreview = styled.img`
   margin-top: 9px;
 `;
 
-const InputImageWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  background: ${({ theme }) => theme.inputColor};
-  border-radius: 36px 16px 4px 36px;
-  height: 40px;
-  margin-right: 8px;
-  margin-left: 10px;
-`;
-
 const Input = styled.textarea`
   width: 100%;
   height: 40px;
+  max-height: 438px;
+  padding: 8px 0 8px 12px;
   background: ${({ theme }) => theme.inputColor};
   border: 1px solid ${({ theme }) => theme.inputColor};
   color: ${({ theme }) => theme.primary};
-  border-radius: 36px 16px 4px 36px;
+  border-radius: 16px 16px 4px 16px;
   outline: none;
   resize: none;
-
-  padding-top: 9px;
-  padding-bottom: 9px;
-  padding-left: 12px;
-  padding-right: 112px;
-
   font-family: Inter;
   font-style: normal;
   font-weight: normal;
@@ -174,36 +209,26 @@ const Input = styled.textarea`
   }
 `;
 
-const AddPictureBtn = styled.label`
-  cursor: pointer;
+const AddPictureInputWrapper = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: 4px;
 `;
 
 const AddPictureInput = styled.input`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   opacity: 0;
-  position: absolute;
-  z-index: -1;
 `;
 
-const AddEmojiBtn = styled.label`
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  right: 94px;
-  transform: translateX(-50%);
-`;
-
-const AddStickerBtn = styled.label`
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  right: 58px;
-  transform: translateX(-50%);
-`;
-
-const AddGifBtn = styled.label`
-  cursor: pointer;
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
-  transform: translateX(-50%);
+const ChatButton = styled.button`
+  width: 32px;
+  height: 32px;
 `;
