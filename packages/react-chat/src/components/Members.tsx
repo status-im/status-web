@@ -105,7 +105,7 @@ export function Member({
         style={{
           backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",
         }}
-        className={isOnline ? "online" : ""}
+        className={isOnline ? "online" : "offline"}
       >
         {!member.avatar && <UserIcon memberView={true} />}
       </MemberIcon>
@@ -182,12 +182,26 @@ const MemberIcon = styled(Icon)`
   background-position: center;
   flex-shrink: 0;
 
+  &.offline {
+    &::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      bottom: -2px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: ${({ theme }) => theme.secondary};
+      border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
+    }
+  }
+
   &.online {
     &::after {
       content: "";
       position: absolute;
       right: -1px;
-      bottom: 1px;
+      bottom: -2px;
       width: 7px;
       height: 7px;
       border-radius: 50%;
