@@ -15,12 +15,14 @@ type ChatMessageContentProps = {
   message: ChatMessage;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   setImage: (image: string) => void;
+  setLinkOpen: (link: string) => void;
 };
 
 export function ChatMessageContent({
   message,
   fetchMetadata,
   setImage,
+  setLinkOpen,
 }: ChatMessageContentProps) {
   const { content, image } = useMemo(() => message, [message]);
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
@@ -40,7 +42,7 @@ export function ChatMessageContent({
             ? match
             : "https://" + match;
         newSplit.push(
-          <Link key={idx} href={link} target="_blank" rel="noopener noreferrer">
+          <Link key={idx} onClick={() => setLinkOpen(link)}>
             {match}
           </Link>,
           split[idx + 1]
@@ -88,9 +90,7 @@ export function ChatMessageContent({
         </MessageImageWrapper>
       )}
       {openGraph && (
-        <PreviewWrapper
-          onClick={() => window?.open(link, "_blank", "noopener")?.focus()}
-        >
+        <PreviewWrapper onClick={() => setLinkOpen(link ?? "")}>
           <PreviewImage src={decodeURI(decode(openGraph["og:image"]))} />
           <PreviewTitleWrapper>{openGraph["og:title"]}</PreviewTitleWrapper>
           <PreviewSiteNameWrapper>
@@ -167,7 +167,7 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Link = styled.a`
+const Link = styled.div`
   text-decoration: underline;
   color: ${({ theme }) => theme.memberNameColor};
 `;

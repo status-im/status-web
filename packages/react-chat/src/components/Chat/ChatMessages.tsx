@@ -5,6 +5,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
+import { LinkModal } from "../Modals/LinkModal";
 import { PictureModal } from "../Modals/PictureModal";
 import { textSmallStyles } from "../Text";
 
@@ -53,7 +54,7 @@ export function ChatMessages({
   }, [ref, scrollOnBot]);
 
   const [image, setImage] = useState("");
-
+  const [link, setLink] = useState("");
   return (
     <MessagesWrapper ref={ref}>
       <PictureModal
@@ -61,6 +62,7 @@ export function ChatMessages({
         onClose={() => setImage("")}
         image={image}
       />
+      <LinkModal isVisible={!!link} onClose={() => setLink("")} link={link} />
       <LoadingWrapper>
         <LoadingIcon className="message" />
       </LoadingWrapper>
@@ -93,6 +95,7 @@ export function ChatMessages({
                     message={message}
                     fetchMetadata={fetchMetadata}
                     setImage={setImage}
+                    setLinkOpen={setLink}
                   />
                 </MessageText>
               </ContentWrapper>

@@ -56,7 +56,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         setContent("");
       }
     },
-    []
+    [content, imageUint]
   );
 
   return (
