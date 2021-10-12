@@ -185,19 +185,21 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   }, [messenger]);
 
   const sendMessage = useCallback(
-    async (messageText: string, image?: Uint8Array) => {
+    async (messageText?: string, image?: Uint8Array) => {
       // TODO: A message can either contain text or media, not both.
-      const content = image
-        ? {
-            image,
-            imageType: 1,
-            contentType: 2,
-          }
-        : {
-            text: messageText,
-            contentType: 0,
-          };
-      await messenger?.sendMessage(chatId, content);
+      if (messageText) {
+        await messenger?.sendMessage(chatId, {
+          text: messageText,
+          contentType: 0,
+        });
+      }
+      if (image) {
+        await messenger?.sendMessage(chatId, {
+          image,
+          imageType: 1,
+          contentType: 2,
+        });
+      }
     },
     [chatId, messenger]
   );
