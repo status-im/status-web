@@ -19,11 +19,11 @@ export const ImageMenu = ({ imageId }: ImageMenuProps) => {
     <MenuBlock>
       <MenuList>
         <MenuItem onClick={() => copyImg(imageId)}>
-          <CopyIcon /> <MenuText>Copy imageId</MenuText>
+          <CopyIcon /> <MenuText>Copy image</MenuText>
         </MenuItem>
         <MenuItem onClick={() => downloadImg(imageId)}>
           <DownloadIcon />
-          <MenuText> Download imageId</MenuText>
+          <MenuText> Download image</MenuText>
         </MenuItem>
       </MenuList>
     </MenuBlock>
