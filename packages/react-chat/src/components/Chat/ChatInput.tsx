@@ -1,5 +1,5 @@
 import { Picker } from "emoji-mart";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { uintToImgUrl } from "../../helpers/uintToImgUrl";
@@ -21,40 +21,43 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
 
-  const image = useMemo(() => {
-    if (imageUint) {
-      return uintToImgUrl(imageUint);
-    } else {
-      return "";
-    }
-  }, [imageUint]);
+  const image = useMemo(
+    () => (imageUint ? uintToImgUrl(imageUint) : ""),
+    [imageUint]
+  );
 
-  const addEmoji = (e: any) => {
+  const addEmoji = useCallback((e: any) => {
     const sym = e.unified.split("-");
     const codesArray: any[] = [];
     sym.forEach((el: string) => codesArray.push("0x" + el));
     const emoji = String.fromCodePoint(...codesArray);
-    setContent(content + emoji);
-  };
+    setContent((p) => p + emoji);
+  }, []);
 
-  const onInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const target = e.target;
-    target.style.height = "40px";
-    target.style.height = `${Math.min(target.scrollHeight, 438)}px`;
-    setInputHeight(target.scrollHeight);
-    setContent(target.value);
-  };
+  const onInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const target = e.target;
+      target.style.height = "40px";
+      target.style.height = `${Math.min(target.scrollHeight, 438)}px`;
+      setInputHeight(target.scrollHeight);
+      setContent(target.value);
+    },
+    []
+  );
 
-  const onInputKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key == "Enter" && !e.getModifierState("Shift")) {
-      e.preventDefault();
-      (e.target as HTMLTextAreaElement).style.height = "40px";
-      setInputHeight(40);
-      addMessage(content, imageUint);
-      setImageUint(undefined);
-      setContent("");
-    }
-  };
+  const onInputKeyPress = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key == "Enter" && !e.getModifierState("Shift")) {
+        e.preventDefault();
+        (e.target as HTMLTextAreaElement).style.height = "40px";
+        setInputHeight(40);
+        addMessage(content, imageUint);
+        setImageUint(undefined);
+        setContent("");
+      }
+    },
+    []
+  );
 
   return (
     <View>
