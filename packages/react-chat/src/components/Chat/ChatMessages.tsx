@@ -15,12 +15,14 @@ type ChatMessagesProps = {
   messages: ChatMessage[];
   loadNextDay: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
+  loadingMessages: boolean;
 };
 
 export function ChatMessages({
   messages,
   loadNextDay,
   fetchMetadata,
+  loadingMessages,
 }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
@@ -30,6 +32,12 @@ export function ChatMessages({
       ref.current.scrollTop = ref.current.scrollHeight;
     }
   }, [messages, messages.length, scrollOnBot]);
+
+  useEffect(() => {
+    if ((ref?.current?.clientHeight ?? 0) < (ref?.current?.scrollHeight ?? 0)) {
+      loadNextDay();
+    }
+  }, [messages, messages.length]);
 
   useEffect(() => {
     const setScroll = () => {
@@ -63,9 +71,11 @@ export function ChatMessages({
         image={image}
       />
       <LinkModal isVisible={!!link} onClose={() => setLink("")} link={link} />
-      <LoadingWrapper>
-        <LoadingIcon className="message" />
-      </LoadingWrapper>
+      {loadingMessages && (
+        <LoadingWrapper>
+          <LoadingIcon className="message" />
+        </LoadingWrapper>
+      )}
       {messages.map((message, idx) => {
         return (
           <MessageOuterWrapper key={message.date.getTime()}>
