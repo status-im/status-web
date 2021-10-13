@@ -46,6 +46,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     [chatId: string]: Date;
   }>({});
   const [lastMessage, setLastMessage] = useState(new Date());
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   useEffect(() => {
     if (lastLoadTime.current?.[chatId]) {
@@ -112,6 +113,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
         if (timeDiff < 30) {
           if (!loadingPreviousMessages.current[id]) {
             loadingPreviousMessages.current[id] = true;
+            setLoadingMessages(true);
             const amountOfMessages = await messenger.retrievePreviousMessages(
               id,
               startTime,
@@ -122,6 +124,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
               setLastMessage(startTime);
             }
             loadingPreviousMessages.current[id] = false;
+            setLoadingMessages(false);
             if (amountOfMessages === 0) {
               loadNextDay(id);
             }
@@ -186,7 +189,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   const sendMessage = useCallback(
     async (messageText?: string, image?: Uint8Array) => {
-      // TODO: A message can either contain text or media, not both.
       if (messageText) {
         await messenger?.sendMessage(chatId, {
           text: messageText,
@@ -209,6 +211,10 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     [messages, chatId]
   );
 
+  useEffect(() => {
+    setLoadingMessages(loadingPreviousMessages.current[chatId]);
+  }, [chatId]);
+
   return {
     messenger,
     messages: activeMessages,
@@ -217,5 +223,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     clearNotifications,
     loadNextDay,
     lastMessage,
+    loadingMessages,
   };
 }

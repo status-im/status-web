@@ -35,6 +35,7 @@ interface ChatBodyProps {
   loadNextDay: () => void;
   onCommunityClick: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
+  loadingMessages: boolean;
 }
 
 export function ChatBody({
@@ -53,6 +54,7 @@ export function ChatBody({
   loadNextDay,
   onCommunityClick,
   fetchMetadata,
+  loadingMessages,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -112,6 +114,7 @@ export function ChatBody({
                     messages={messages}
                     loadNextDay={loadNextDay}
                     fetchMetadata={fetchMetadata}
+                    loadingMessages={loadingMessages}
                   />
                 ) : (
                   <LoadingSkeleton />

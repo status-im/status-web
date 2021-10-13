@@ -32,6 +32,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
     notifications,
     clearNotifications,
     loadNextDay,
+    loadingMessages,
   } = useMessenger(
     activeChannel.name,
     channels.map((channel) => channel.name)
@@ -68,6 +69,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         loadNextDay={() => loadNextDay(activeChannel.name)}
         onCommunityClick={showModal}
         fetchMetadata={fetchMetadata}
+        loadingMessages={loadingMessages}
       />
       {showMembers && !narrow && (
         <Members community={community} setShowChannels={setShowChannels} />
