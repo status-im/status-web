@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
+import styled from "styled-components";
 
 import { NarrowProvider } from "../contexts/narrowProvider";
 import { CommunityData } from "../helpers/communityMock";
@@ -20,15 +21,20 @@ export function ReactChat({ theme, community, fetchMetadata }: ReactChatProps) {
   return (
     <ThemeProvider theme={theme}>
       <NarrowProvider myRef={ref}>
-        <div ref={ref}>
+        <Wrapper ref={ref}>
           <GlobalStyle />
           <Chat
             community={community}
             fetchMetadata={fetchMetadata}
             theme={theme}
           />
-        </div>
+        </Wrapper>
       </NarrowProvider>
     </ThemeProvider>
   );
 }
+
+const Wrapper = styled.div`
+  height: 100%;
+  overflow: hidden;
+`;
