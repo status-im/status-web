@@ -34,10 +34,14 @@ export function ChatMessages({
   }, [messages, messages.length, scrollOnBot]);
 
   useEffect(() => {
-    if ((ref?.current?.clientHeight ?? 0) < (ref?.current?.scrollHeight ?? 0)) {
-      loadNextDay();
+    if (!loadingMessages) {
+      if (
+        (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
+      ) {
+        loadNextDay();
+      }
     }
-  }, [messages, messages.length]);
+  }, [messages, messages.length, loadingMessages]);
 
   useEffect(() => {
     const setScroll = () => {

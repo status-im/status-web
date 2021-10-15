@@ -3,28 +3,22 @@ import styled from "styled-components";
 
 import { useNarrow } from "../contexts/narrowProvider";
 import { ChannelData, channels } from "../helpers/channelsMock";
-import { CommunityData } from "../helpers/communityMock";
 
-import { Community } from "./Community";
 import { MutedIcon } from "./Icons/MutedIcon";
 import { textMediumStyles } from "./Text";
 
 interface ChannelsProps {
-  community: CommunityData;
   notifications: { [id: string]: number };
   clearNotifications: (id: string) => void;
-  onCommunityClick: () => void;
-  setActiveChannel: (val: ChannelData) => void;
+  onCommunityClick: (val: ChannelData) => void;
   activeChannelId: number;
 }
 
 export function Channels({
-  community,
   notifications,
-  setActiveChannel,
+  onCommunityClick,
   clearNotifications,
   activeChannelId,
-  onCommunityClick,
 }: ChannelsProps) {
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);
@@ -36,27 +30,24 @@ export function Channels({
   }, [notifications, activeChannelId]);
 
   return (
-    <ChannelsWrapper>
-      <StyledCommunity onClick={onCommunityClick} community={community} />
-      <ChannelList>
-        {channels.map((channel) => (
-          <Channel
-            key={channel.id}
-            channel={channel}
-            isActive={channel.id === activeChannelId}
-            isMuted={channel.isMuted || false}
-            notification={
-              notifications[channel.name] > 0 && !channel.isMuted
-                ? notifications[channel.name]
-                : undefined
-            }
-            onClick={() => {
-              setActiveChannel(channel);
-            }}
-          />
-        ))}
-      </ChannelList>
-    </ChannelsWrapper>
+    <ChannelList>
+      {channels.map((channel) => (
+        <Channel
+          key={channel.id}
+          channel={channel}
+          isActive={channel.id === activeChannelId}
+          isMuted={channel.isMuted || false}
+          notification={
+            notifications[channel.name] > 0 && !channel.isMuted
+              ? notifications[channel.name]
+              : undefined
+          }
+          onClick={() => {
+            onCommunityClick(channel);
+          }}
+        />
+      ))}
+    </ChannelList>
   );
 }
 
@@ -126,21 +117,6 @@ export function Channel({
     </ChannelWrapper>
   );
 }
-
-const ChannelsWrapper = styled.div`
-  width: 21%;
-  height: 100%;
-  min-width: 196px;
-  background-color: ${({ theme }) => theme.sectionBackgroundColor};
-  padding: 10px 0.6%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledCommunity = styled(Community)`
-  padding: 0 0 0 10px;
-  margin: 0 0 16px;
-`;
 
 const ChannelDescription = styled.p`
   font-size: 12px;

@@ -23,7 +23,6 @@ const fetchMetadata = async (link: string) => {
 };
 
 function DragDiv() {
-  console.log();
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [width, setWidth] = useState(window.innerWidth - 50);
