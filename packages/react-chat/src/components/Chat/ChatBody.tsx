@@ -36,6 +36,7 @@ interface ChatBodyProps {
   onCommunityClick: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   loadingMessages: boolean;
+  clearNotifications: (id: string) => void;
 }
 
 export function ChatBody({
@@ -55,6 +56,7 @@ export function ChatBody({
   onCommunityClick,
   fetchMetadata,
   loadingMessages,
+  clearNotifications,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -140,6 +142,7 @@ export function ChatBody({
               setActiveChannel={setActiveChannel}
               setShowChannels={setShowChannelsList}
               activeChannelId={activeChannelId}
+              clearNotifications={clearNotifications}
             />
           )}
           {showMembersList && narrow && (

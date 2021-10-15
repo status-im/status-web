@@ -10,6 +10,7 @@ import { Theme } from "../styles/themes";
 
 import { Channels } from "./Channels";
 import { ChatBody } from "./Chat/ChatBody";
+import { Community } from "./Community";
 import { Members } from "./Members";
 import { CommunityModal } from "./Modals/CommunityModal";
 
@@ -44,14 +45,15 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
   return (
     <ChatWrapper>
       {showChannels && !narrow && (
-        <Channels
-          notifications={notifications}
-          clearNotifications={clearNotifications}
-          community={community}
-          setActiveChannel={setActiveChannel}
-          activeChannelId={activeChannel.id}
-          onCommunityClick={showModal}
-        />
+        <ChannelsWrapper>
+          <StyledCommunity onClick={showModal} community={community} />
+          <Channels
+            notifications={notifications}
+            clearNotifications={clearNotifications}
+            onCommunityClick={(e) => setActiveChannel(e)}
+            activeChannelId={activeChannel.id}
+          />
+        </ChannelsWrapper>
       )}
       <ChatBody
         theme={theme}
@@ -70,6 +72,7 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         onCommunityClick={showModal}
         fetchMetadata={fetchMetadata}
         loadingMessages={loadingMessages}
+        clearNotifications={clearNotifications}
       />
       {showMembers && !narrow && (
         <Members community={community} setShowChannels={setShowChannels} />
@@ -91,4 +94,19 @@ const ChatWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+`;
+
+const ChannelsWrapper = styled.div`
+  width: 21%;
+  height: 100%;
+  min-width: 196px;
+  background-color: ${({ theme }) => theme.sectionBackgroundColor};
+  padding: 10px 0.6%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledCommunity = styled(Community)`
+  padding: 0 0 0 10px;
+  margin: 0 0 16px;
 `;

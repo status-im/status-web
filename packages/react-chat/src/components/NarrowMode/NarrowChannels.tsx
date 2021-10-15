@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChannelData, channels } from "../../helpers/channelsMock";
-import { Channel, ChannelList } from "../Channels";
+import { ChannelData } from "../../helpers/channelsMock";
+import { Channels } from "../Channels";
 
 import { NarrowTopbar } from "./NarrowTopbar";
 
@@ -12,6 +12,7 @@ interface NarrowChannelsProps {
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: number;
   setShowChannels: (val: boolean) => void;
+  clearNotifications: (id: string) => void;
 }
 
 export function NarrowChannels({
@@ -20,29 +21,20 @@ export function NarrowChannels({
   setActiveChannel,
   activeChannelId,
   setShowChannels,
+  clearNotifications,
 }: NarrowChannelsProps) {
   return (
     <ListWrapper>
       <NarrowTopbar list="Channels" community={community} />
-      <ChannelList>
-        {channels.map((channel) => (
-          <Channel
-            key={channel.id}
-            channel={channel}
-            isActive={channel.id === activeChannelId}
-            isMuted={channel.isMuted || false}
-            notification={
-              notifications[channel.name] > 0 && !channel.isMuted
-                ? notifications[channel.name]
-                : undefined
-            }
-            onClick={() => {
-              setActiveChannel(channel);
-              setShowChannels(false);
-            }}
-          />
-        ))}
-      </ChannelList>
+      <Channels
+        notifications={notifications}
+        clearNotifications={clearNotifications}
+        onCommunityClick={(e) => {
+          setActiveChannel(e);
+          setShowChannels(false);
+        }}
+        activeChannelId={activeChannelId}
+      />
     </ListWrapper>
   );
 }
