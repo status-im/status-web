@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from "react";
 
-import { useRefWidthBreak } from "../hooks/useRefWidthBreak";
+import { useRefBreak } from "../hooks/useRefBreak";
 
 const NarrowContext = createContext<boolean>(false);
 
@@ -14,6 +14,6 @@ interface NarrowProviderProps {
 }
 
 export function NarrowProvider({ children, myRef }: NarrowProviderProps) {
-  const narrow = useRefWidthBreak(myRef, 736);
+  const narrow = useRefBreak(myRef?.current?.offsetWidth ?? 0, 736);
   return <NarrowContext.Provider value={narrow} children={children} />;
 }

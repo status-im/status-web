@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export function useRefWidthBreak(
-  myRef: React.RefObject<HTMLHeadingElement>,
-  sizeThreshold: number
-) {
+export function useRefBreak(dimension: number, sizeThreshold: number) {
   const [widthBreak, setWidthBreak] = useState(false);
 
   useEffect(() => {
     const checkDimensions = () => {
-      const width = myRef?.current?.offsetWidth ?? 0;
-      if (width && width < sizeThreshold && width > 0) {
+      if (dimension && dimension < sizeThreshold && dimension > 0) {
         if (widthBreak === false) {
           setWidthBreak(true);
         }
@@ -24,7 +20,7 @@ export function useRefWidthBreak(
     return () => {
       window.removeEventListener("resize", checkDimensions);
     };
-  }, [myRef, widthBreak, myRef?.current?.offsetWidth]);
+  }, [dimension, widthBreak]);
 
   return widthBreak;
 }
