@@ -182,11 +182,7 @@ const ChatTopbar = styled.div`
   position: relative;
 
   &.narrow {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    z-index: 2;
   }
 `;
 
