@@ -27,8 +27,9 @@ describe("Messenger", () => {
     dbg("Create messengers");
 
     [messengerAlice, messengerBob] = await Promise.all([
-      Messenger.create(identityAlice),
+      Messenger.create(identityAlice, { bootstrap: false }),
       Messenger.create(identityBob, {
+        bootstrap: false,
         libp2p: { addresses: { listen: ["/ip4/0.0.0.0/tcp/0/ws"] } },
       }),
     ]);
