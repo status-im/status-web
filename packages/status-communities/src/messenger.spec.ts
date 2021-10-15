@@ -18,7 +18,7 @@ describe("Messenger", () => {
   let identityBob: Identity;
 
   beforeEach(async function () {
-    this.timeout(10_000);
+    this.timeout(20_000);
 
     dbg("Generate keys");
     identityAlice = Identity.generate();
@@ -27,8 +27,9 @@ describe("Messenger", () => {
     dbg("Create messengers");
 
     [messengerAlice, messengerBob] = await Promise.all([
-      Messenger.create(identityAlice),
+      Messenger.create(identityAlice, { bootstrap: false }),
       Messenger.create(identityBob, {
+        bootstrap: false,
         libp2p: { addresses: { listen: ["/ip4/0.0.0.0/tcp/0/ws"] } },
       }),
     ]);
