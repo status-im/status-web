@@ -2,6 +2,7 @@ import { Picker } from "emoji-mart";
 import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { useLow } from "../../contexts/lowProvider";
 import { uintToImgUrl } from "../../helpers/uintToImgUrl";
 import { lightTheme, Theme } from "../../styles/themes";
 import { EmojiIcon } from "../Icons/EmojiIcon";
@@ -59,6 +60,8 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
     [content, imageUint]
   );
 
+  const low = useLow();
+
   return (
     <View>
       {showEmoji && (
@@ -74,6 +77,8 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
               bottom: "100%",
               right: "0",
               color: theme.secondary,
+              height: low ? "200px" : "355px",
+              overflow: "auto",
             }}
             showPreview={false}
             showSkinTones={false}
