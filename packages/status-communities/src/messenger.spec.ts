@@ -18,7 +18,7 @@ describe("Messenger", () => {
   let identityBob: Identity;
 
   beforeEach(async function () {
-    this.timeout(10_000);
+    this.timeout(20_000);
 
     dbg("Generate keys");
     identityAlice = Identity.generate();
