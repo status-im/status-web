@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
@@ -70,6 +70,13 @@ export function ChatBody({
     setShowChannelsList(false);
     setShowMembersList(!showMembersList);
   }, [showMembersList]);
+
+  useEffect(() => {
+    if (!narrow) {
+      setShowChannelsList(false);
+      setShowMembersList(false);
+    }
+  }, [narrow]);
 
   return (
     <ChatBodyWrapper className={className}>
