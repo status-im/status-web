@@ -30,6 +30,6 @@ export function NarrowMembers({
 }
 
 const ListWrapper = styled.div`
-  padding: 82px 18px 18px;
+  padding: 0px 18px 18px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
 `;

@@ -22,7 +22,6 @@ const TopbarWrapper = styled.div`
   text-align: center;
   background-color: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 14px 0;
-  position: relative;
 `;
 
 const Heading = styled.p`
