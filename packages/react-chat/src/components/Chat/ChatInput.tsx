@@ -2,7 +2,7 @@ import { Picker } from "emoji-mart";
 import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useLow } from "../../contexts/lowProvider";
+import { useLow } from "../../contexts/narrowProvider";
 import { uintToImgUrl } from "../../helpers/uintToImgUrl";
 import { lightTheme, Theme } from "../../styles/themes";
 import { EmojiIcon } from "../Icons/EmojiIcon";
