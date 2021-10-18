@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { CommunityData } from "../../helpers/communityMock";
-import { MembersList } from "../Members";
+import { MembersList } from "../Members/MembersList";
 
 import { NarrowTopbar } from "./NarrowTopbar";
 
