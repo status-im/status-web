@@ -8,7 +8,7 @@ import { useMessenger } from "../hooks/useMessenger";
 import { Metadata } from "../models/Metadata";
 import { Theme } from "../styles/themes";
 
-import { Channels } from "./Channels";
+import { Channels } from "./Channels/Channels";
 import { ChatBody } from "./Chat/ChatBody";
 import { Community } from "./Community";
 import { Members } from "./Members";

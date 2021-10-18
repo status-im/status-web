@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../../helpers/channelsMock";
-import { Channels } from "../Channels";
+import { Channels } from "../Channels/Channels";
 
 import { NarrowTopbar } from "./NarrowTopbar";
 
