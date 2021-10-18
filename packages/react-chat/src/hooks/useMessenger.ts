@@ -1,5 +1,5 @@
 // import { StoreCodec } from "js-waku";
-import { getBootstrapNodes, StoreCodec } from "js-waku";
+import { StoreCodec } from "js-waku";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Identity, Messenger } from "status-communities/dist/cjs";
 import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
@@ -53,7 +53,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
       setLastMessage(lastLoadTime.current?.[chatId]);
     }
   }, [chatId]);
-
   const clearNotifications = useCallback((id: string) => {
     setNotifications((prevNotifications) => {
       return {
@@ -148,11 +147,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
             },
           },
         },
-        bootstrap: getBootstrapNodes.bind({}, [
-          "fleets",
-          "wakuv2.test",
-          "waku-websocket",
-        ]),
       });
       await new Promise((resolve) => {
         messenger.waku.libp2p.peerStore.on(
