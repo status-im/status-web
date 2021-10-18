@@ -29,7 +29,7 @@ export class Community {
    * Can be found in the community's invite link: https://join.status.im/c/<public key>
    * @param waku The Waku instance, used to retrieve Community information from the network.
    */
-  public async instantiateCommunity(
+  public static async instantiateCommunity(
     publicKey: string,
     waku: Waku
   ): Promise<Community> {
