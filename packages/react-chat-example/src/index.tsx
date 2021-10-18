@@ -62,29 +62,34 @@ function DragDiv() {
           document.addEventListener("mouseup", onMouseUp);
         }}
       />
+      <FloatingDiv className={showChat ? "" : "hide"}>
+        <ReactChat
+          theme={lightTheme}
+          community={community}
+          fetchMetadata={fetchMetadata}
+        />
+      </FloatingDiv>
       {showChat && (
-        <>
-          <div
-            style={{ height: "calc(100% - 50px)", border: "1px solid black" }}
-          >
-            <ReactChat
-              theme={lightTheme}
-              community={community}
-              fetchMetadata={fetchMetadata}
-            />
-          </div>
-          <SizeSet
-            onMouseDown={() => {
-              setting.current = "size";
-              document.addEventListener("mousemove", onMouseMove);
-              document.addEventListener("mouseup", onMouseUp);
-            }}
-          ></SizeSet>
-        </>
+        <SizeSet
+          onMouseDown={() => {
+            setting.current = "size";
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
+          }}
+        ></SizeSet>
       )}
     </Drag>
   );
 }
+
+const FloatingDiv = styled.div`
+  height: calc(100% - 50px);
+  border: 1px solid black;
+
+  &.hide {
+    display: none;
+  }
+`;
 
 const SizeSet = styled.div`
   margin-left: auto;
