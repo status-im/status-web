@@ -169,5 +169,6 @@ const ContentWrapper = styled.div`
 
 const Link = styled.div`
   text-decoration: underline;
+  cursor: pointer;
   color: ${({ theme }) => theme.memberNameColor};
 `;
