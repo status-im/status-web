@@ -11,7 +11,7 @@ import { Theme } from "../styles/themes";
 import { Channels } from "./Channels/Channels";
 import { ChatBody } from "./Chat/ChatBody";
 import { Community } from "./Community";
-import { Members } from "./Members";
+import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
 
 interface ChatProps {
