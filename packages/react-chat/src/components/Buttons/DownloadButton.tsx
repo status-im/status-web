@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { buttonStyles } from "./buttonStyle";
+
 const userAgent = window.navigator.userAgent;
 const platform = window.navigator.platform;
 const macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"];
@@ -59,11 +61,6 @@ export const DownloadButton = ({ className }: DownloadButtonProps) => {
 const Link = styled.a`
   margin-top: 24px;
   padding: 11px 32px;
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 22px;
-  text-align: center;
-  color: ${({ theme }) => theme.tertiary};
-  background: ${({ theme }) => theme.buttonBg};
-  border-radius: 8px;
+
+  ${buttonStyles}
 `;
