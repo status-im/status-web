@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { buttonStyles } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
 
 import { BasicModalProps, Modal } from "./Modal";
@@ -13,7 +14,10 @@ export const LinkModal = ({ isVisible, onClose, link }: LinkModalProps) => {
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Section>
-        <Text>Are you sure you want to visit {link}</Text>
+        <Question>Are you sure you want to visit this website?</Question>
+      </Section>
+      <Section>
+        <Link>{link}</Link>
       </Section>
       <ButtonSection>
         <ButtonNo onClick={onClose}>No</ButtonNo>
@@ -23,45 +27,52 @@ export const LinkModal = ({ isVisible, onClose, link }: LinkModalProps) => {
             onClose();
           }}
         >
-          Yes
+          Yes, take me there
         </ButtonYes>
       </ButtonSection>
     </Modal>
   );
 };
 
-const ButtonSection = styled.div`
-  display: flex;
-`;
-
 const Section = styled.div`
-  padding: 20px 16px;
+  padding: 16px;
 
   & + & {
     border-top: 1px solid ${({ theme }) => theme.border};
   }
 `;
 
-const Text = styled.p`
+const Question = styled.p`
+  color: ${({ theme }) => theme.primary};
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 24px;
+`;
+
+const Link = styled.a`
+  text-decoration: none;
+  word-break: break-all;
   color: ${({ theme }) => theme.primary};
 
   ${textMediumStyles}
 `;
 
-const ButtonYes = styled.button`
-  background-color: ${({ theme }) => theme.tertiary};
-  padding: 10px;
-  width: 50px;
-  height: 40px;
-  border-radius: 10px;
-  margin: 10px;
+const ButtonSection = styled(Section)`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const ButtonNo = styled.button`
-  background-color: ${({ theme }) => theme.secondary};
-  padding: 10px;
-  width: 50px;
-  height: 40px;
-  border-radius: 10px;
-  margin: 10px;
+  padding: 11px 24px;
+  margin-right: 16px;
+
+  ${buttonStyles}
+  background: rgba(255, 45, 85, 0.1);
+  color: #ff2d55;
+`;
+
+const ButtonYes = styled.button`
+  padding: 11px 24px;
+
+  ${buttonStyles}
 `;
