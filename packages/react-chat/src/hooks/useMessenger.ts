@@ -6,6 +6,7 @@ import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { ChatMessage } from "../models/ChatMessage";
+import { loadIdentity, saveIdentity } from "../utils/identityStorage";
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -136,8 +137,13 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
 
   useEffect(() => {
     const createMessenger = async () => {
-      const identity = Identity.generate();
-
+      // Test password for now
+      // Need design for password input
+      let identity = await loadIdentity("test");
+      if (!identity) {
+        identity = Identity.generate();
+        await saveIdentity(identity, "test");
+      }
       const messenger = await Messenger.create(identity, {
         libp2p: {
           config: {
