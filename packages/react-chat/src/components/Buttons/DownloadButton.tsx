@@ -63,4 +63,8 @@ const Link = styled.a`
   padding: 11px 32px;
 
   ${buttonStyles}
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
+  }
 `;
