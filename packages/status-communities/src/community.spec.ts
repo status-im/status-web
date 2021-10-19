@@ -4,8 +4,15 @@ import { Waku } from "js-waku";
 import { Community } from "./community";
 import { CommunityDescription } from "./wire/community_description";
 
-describe("Community", () => {
-  it.skip("Retrieves community description For DappConnect Test from Waku prod fleet", async function () {
+describe("Community live data", () => {
+  before(function () {
+    if (process.env.CI) {
+      // Skip live data test in CI
+      this.skip();
+    }
+  });
+
+  it("Retrieves community description For DappConnect Test from Waku prod fleet", async function () {
     this.timeout(20000);
     const waku = await Waku.create({ bootstrap: true });
 
