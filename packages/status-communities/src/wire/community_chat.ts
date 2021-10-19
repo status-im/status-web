@@ -1,11 +1,12 @@
 import { Reader } from "protobufjs";
 
-import { ChatIdentity } from "../proto/communities/v1/chat_identity";
 import * as proto from "../proto/communities/v1/communities";
 import {
   CommunityMember,
   CommunityPermissions,
 } from "../proto/communities/v1/communities";
+
+import { ChatIdentity } from "./chat_identity";
 
 export class CommunityChat {
   public constructor(public proto: proto.CommunityChat) {}
@@ -41,7 +42,9 @@ export class CommunityChat {
   }
 
   public get identity(): ChatIdentity | undefined {
-    return this.proto.identity;
+    if (!this.proto.identity) return;
+
+    return new ChatIdentity(this.proto.identity);
   }
 
   // TODO: Document this

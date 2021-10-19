@@ -22,6 +22,7 @@ export interface ChatIdentity {
   /** description is the user set description, valid only for organisations */
   description: string;
   color: string;
+  emoji: string;
 }
 
 export interface ChatIdentity_ImagesEntry {
@@ -98,6 +99,7 @@ const baseChatIdentity: object = {
   displayName: "",
   description: "",
   color: "",
+  emoji: "",
 };
 
 export const ChatIdentity = {
@@ -125,6 +127,9 @@ export const ChatIdentity = {
     }
     if (message.color !== "") {
       writer.uint32(50).string(message.color);
+    }
+    if (message.emoji !== "") {
+      writer.uint32(58).string(message.emoji);
     }
     return writer;
   },
@@ -160,6 +165,9 @@ export const ChatIdentity = {
           break;
         case 6:
           message.color = reader.string();
+          break;
+        case 7:
+          message.emoji = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -202,6 +210,11 @@ export const ChatIdentity = {
     } else {
       message.color = "";
     }
+    if (object.emoji !== undefined && object.emoji !== null) {
+      message.emoji = String(object.emoji);
+    } else {
+      message.emoji = "";
+    }
     return message;
   },
 
@@ -220,6 +233,7 @@ export const ChatIdentity = {
     message.description !== undefined &&
       (obj.description = message.description);
     message.color !== undefined && (obj.color = message.color);
+    message.emoji !== undefined && (obj.emoji = message.emoji);
     return obj;
   },
 
@@ -257,6 +271,11 @@ export const ChatIdentity = {
       message.color = object.color;
     } else {
       message.color = "";
+    }
+    if (object.emoji !== undefined && object.emoji !== null) {
+      message.emoji = object.emoji;
+    } else {
+      message.emoji = "";
     }
     return message;
   },

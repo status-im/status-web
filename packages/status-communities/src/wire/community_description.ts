@@ -3,9 +3,11 @@ import { WakuMessage, WakuStore } from "js-waku";
 import { Reader } from "protobufjs";
 
 import { idToContentTopic } from "../contentTopic";
+import { createSymKeyFromPassword } from "../encryption";
 import * as proto from "../proto/communities/v1/communities";
 import { bufToHex } from "../utils";
 
+import { ApplicationMetadataMessage } from "./application_metadata_message";
 import { ChatIdentity } from "./chat_identity";
 import { CommunityChat } from "./community_chat";
 
@@ -45,8 +47,11 @@ export class CommunityDescription {
       orderedMessages.forEach((message: WakuMessage) => {
         if (!message.payload) return;
         try {
+          const metadata = ApplicationMetadataMessage.decode(message.payload);
+          if (!metadata.payload) return;
+
           const _communityDescription = CommunityDescription.decode(
-            message.payload
+            metadata.payload
           );
 
           if (!_communityDescription.identity) return;
@@ -61,9 +66,12 @@ export class CommunityDescription {
       });
     };
 
+    const symKey = await createSymKeyFromPassword(hexCommunityPublicKey);
+
     await wakuStore
       .queryHistory([contentTopic], {
         callback,
+        decryptionKeys: [symKey],
       })
       .catch((e) => {
         dbg(
