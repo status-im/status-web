@@ -938,6 +938,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pbkdf2@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "@types/pbkdf2@npm:3.1.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: d15024b1957c21cf3b8887329d9bd8dfde754cf13a09d76ae25f1391cfc62bb8b8d7b760773c5dbaa748172fba8b3e0c3dbe962af6ccbd69b76df12a48dfba40
+  languageName: node
+  linkType: hard
+
 "@types/prettier@npm:^1.19.0":
   version: 1.19.1
   resolution: "@types/prettier@npm:1.19.1"
@@ -8755,7 +8764,7 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
-"pbkdf2@npm:^3.0.3":
+"pbkdf2@npm:^3.0.3, pbkdf2@npm:^3.1.2":
   version: 3.1.2
   resolution: "pbkdf2@npm:3.1.2"
   dependencies:
@@ -10487,6 +10496,7 @@ resolve@^2.0.0-next.3:
   dependencies:
     "@types/chai": ^4.2.22
     "@types/mocha": ^9.0.0
+    "@types/pbkdf2": ^3.1.0
     "@types/secp256k1": ^4.0.3
     "@typescript-eslint/eslint-plugin": ^4.31.1
     "@typescript-eslint/parser": ^4.31.1
@@ -10503,6 +10513,7 @@ resolve@^2.0.0-next.3:
     js-waku: ^0.13.1
     mocha: ^9.1.1
     npm-run-all: ^4.1.5
+    pbkdf2: ^3.1.2
     prettier: ^2.4.0
     protobufjs: ^6.11.2
     secp256k1: ^4.0.2
