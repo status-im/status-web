@@ -26,8 +26,15 @@ describe("Community live data", () => {
     expect(desc).to.not.be.undefined;
 
     expect(desc.identity?.displayName).to.eq("DappConnect Test");
-    const chats = Array.from(desc.chats.values()).map(
+
+    const descChats = Array.from(desc.chats.values()).map(
       (chat) => chat?.identity?.displayName
+    );
+    expect(descChats).to.include("foobar");
+    expect(descChats).to.include("another-channel!");
+
+    const chats = Array.from(community.chats.values()).map(
+      (chat) => chat?.communityChat?.identity?.displayName
     );
     expect(chats).to.include("foobar");
     expect(chats).to.include("another-channel!");

@@ -1,6 +1,7 @@
 import { idToContentTopic } from "./contentTopic";
 import { createSymKeyFromPassword } from "./encryption";
 import { ChatMessage, Content } from "./wire/chat_message";
+import { CommunityChat } from "./wire/community_chat";
 
 /**
  * Represent a chat room. Only public chats are currently supported.
@@ -9,16 +10,23 @@ export class Chat {
   private lastClockValue?: number;
   private lastMessage?: ChatMessage;
 
-  private constructor(public id: string, public symKey: Uint8Array) {}
+  private constructor(
+    public id: string,
+    public symKey: Uint8Array,
+    public communityChat?: CommunityChat
+  ) {}
 
   /**
    * Create a public chat room.
    * [[Community.instantiateChat]] MUST be used for chats belonging to a community.
    */
-  public static async create(id: string): Promise<Chat> {
+  public static async create(
+    id: string,
+    communityChat?: CommunityChat
+  ): Promise<Chat> {
     const symKey = await createSymKeyFromPassword(id);
 
-    return new Chat(id, symKey);
+    return new Chat(id, symKey, communityChat);
   }
 
   public get contentTopic(): string {

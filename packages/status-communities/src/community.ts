@@ -11,12 +11,13 @@ const dbg = debug("communities:community");
 export class Community {
   public publicKey: Uint8Array;
   private waku: Waku;
-
+  public chats: Map<string, Chat>; // Chat id, Chat
   public description?: CommunityDescription;
 
   constructor(publicKey: Uint8Array, waku: Waku) {
     this.publicKey = publicKey;
     this.waku = waku;
+    this.chats = new Map();
   }
 
   /**
@@ -60,6 +61,12 @@ export class Community {
     }
 
     this.description = desc;
+
+    await Promise.all(
+      Array.from(this.description.chats).map(([chatUuid, communityChat]) => {
+        return this.instantiateChat(chatUuid, communityChat);
+      })
+    );
   }
 
   /**
@@ -68,28 +75,18 @@ export class Community {
    *
    * @throws string If the Community Description is unavailable or the chat is not found;
    */
-  public async instantiateChat(chatName: string): Promise<Chat> {
-    if (!this.description) {
-      await this.refreshCommunityDescription();
-      if (!this.description)
-        throw "Failed to retrieve community description, cannot instantiate chat";
-    }
+  private async instantiateChat(
+    chatUuid: string,
+    communityChat: CommunityChat
+  ): Promise<void> {
+    if (!this.description)
+      throw "Failed to retrieve community description, cannot instantiate chat";
 
-    let communityChat: CommunityChat | undefined;
-    let chatUuid: string | undefined;
+    const chatId = this.publicKeyStr + chatUuid;
+    if (this.chats.get(chatId)) return;
 
-    this.description.chats.forEach((_chat, _id) => {
-      if (chatUuid) return;
+    const chat = await Chat.create(chatId, communityChat);
 
-      if (_chat.identity?.displayName === chatName) {
-        chatUuid = _id;
-        communityChat = _chat;
-      }
-    });
-
-    if (!communityChat || !chatUuid)
-      throw `Failed to retrieve community community chat with name ${chatName}`;
-
-    return Chat.create(this.publicKeyStr + chatUuid);
+    this.chats.set(chatId, chat);
   }
 }
