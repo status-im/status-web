@@ -1,9 +1,8 @@
 export type ChannelData = {
-  id: number;
+  id: string;
   name: string;
   description: string;
   icon?: string;
-  notifications?: number;
   isMuted?: boolean;
 };
 

@@ -10,9 +10,10 @@ interface NarrowChannelsProps {
   community: string;
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
-  activeChannelId: number;
+  activeChannelId: string;
   setShowChannels: (val: boolean) => void;
   clearNotifications: (id: string) => void;
+  channels: ChannelData[];
 }
 
 export function NarrowChannels({
@@ -22,6 +23,7 @@ export function NarrowChannels({
   activeChannelId,
   setShowChannels,
   clearNotifications,
+  channels,
 }: NarrowChannelsProps) {
   return (
     <ListWrapper>
@@ -34,6 +36,7 @@ export function NarrowChannels({
           setShowChannels(false);
         }}
         activeChannelId={activeChannelId}
+        channels={channels}
       />
     </ListWrapper>
   );

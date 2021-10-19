@@ -1,7 +1,7 @@
 // import { StoreCodec } from "js-waku";
 import { StoreCodec } from "js-waku";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Identity, Messenger } from "status-communities/dist/cjs";
+import { Community, Identity, Messenger } from "status-communities/dist/cjs";
 import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../helpers/uintToImgUrl";
@@ -32,11 +32,12 @@ function binarySetInsert<T>(
   return arr;
 }
 
-export function useMessenger(chatId: string, chatIdList: string[]) {
+export function useMessenger(chatId: string, communityKey: string) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
     {}
   );
+  const [community, setCommunity] = useState<Community | undefined>(undefined);
   const [notifications, setNotifications] = useState<{
     [chatId: string]: number;
   }>({});
@@ -105,7 +106,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   const loadNextDay = useCallback(
     async (id: string) => {
       if (messenger) {
-        const endTime = lastLoadTime.current[id];
+        const endTime = lastLoadTime.current[id] ?? new Date();
         const startTime = new Date(endTime.getTime() - _MS_PER_DAY);
         const timeDiff = Math.floor(
           (new Date().getTime() - endTime.getTime()) / _MS_PER_DAY
@@ -139,6 +140,7 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     const createMessenger = async () => {
       // Test password for now
       // Need design for password input
+
       let identity = await loadIdentity("test");
       if (!identity) {
         identity = Identity.generate();
@@ -164,16 +166,20 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
           }
         );
       });
-
+      const community = await Community.instantiateCommunity(
+        communityKey,
+        messenger.waku
+      );
+      setCommunity(community);
       await Promise.all(
-        chatIdList.map(async (id) => {
-          await messenger.joinChatById(id);
-          lastLoadTime.current[id] = new Date();
+        Array.from(community.chats.values()).map(async (chat) => {
+          await messenger.joinChat(chat);
+          lastLoadTime.current[chat.id] = new Date();
           messenger.addObserver(
-            (msg, date) => addNewMessage(msg, id, date),
-            id
+            (msg, date) => addNewMessage(msg, chat.id, date),
+            chat.id
           );
-          clearNotifications(id);
+          clearNotifications(chat.id);
         })
       );
       setMessenger(messenger);
@@ -182,8 +188,10 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
   }, []);
 
   useEffect(() => {
-    if (messenger) {
-      chatIdList.forEach(loadNextDay);
+    if (messenger && community?.chats) {
+      Array.from(community?.chats.values()).forEach(({ id }) =>
+        loadNextDay(id)
+      );
     }
   }, [messenger]);
 
@@ -224,5 +232,6 @@ export function useMessenger(chatId: string, chatIdList: string[]) {
     loadNextDay,
     lastMessage,
     loadingMessages,
+    community,
   };
 }

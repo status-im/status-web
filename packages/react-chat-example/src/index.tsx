@@ -1,4 +1,4 @@
-import { community, lightTheme, ReactChat } from "@dappconnect/react-chat";
+import { lightTheme, ReactChat } from "@dappconnect/react-chat";
 import React, { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
@@ -65,7 +65,9 @@ function DragDiv() {
       <FloatingDiv className={showChat ? "" : "hide"}>
         <ReactChat
           theme={lightTheme}
-          community={community}
+          communityKey={
+            "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd"
+          }
           fetchMetadata={fetchMetadata}
         />
       </FloatingDiv>

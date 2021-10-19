@@ -31,12 +31,13 @@ interface ChatBodyProps {
   showCommunity: boolean;
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
-  activeChannelId: number;
+  activeChannelId: string;
   loadNextDay: () => void;
   onCommunityClick: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   loadingMessages: boolean;
   clearNotifications: (id: string) => void;
+  channels: ChannelData[];
 }
 
 export function ChatBody({
@@ -57,6 +58,7 @@ export function ChatBody({
   fetchMetadata,
   loadingMessages,
   clearNotifications,
+  channels,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -137,6 +139,7 @@ export function ChatBody({
 
           {showChannelsList && narrow && (
             <NarrowChannels
+              channels={channels}
               community={community.name}
               notifications={notifications}
               setActiveChannel={setActiveChannel}
