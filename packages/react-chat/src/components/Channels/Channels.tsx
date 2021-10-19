@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
-import { ChannelData, channels } from "../../helpers/channelsMock";
+import { ChannelData } from "../../helpers/channelsMock";
 
 import { Channel } from "./Channel";
 
@@ -9,7 +9,8 @@ interface ChannelsProps {
   notifications: { [id: string]: number };
   clearNotifications: (id: string) => void;
   onCommunityClick: (val: ChannelData) => void;
-  activeChannelId: number;
+  activeChannelId: string;
+  channels: ChannelData[];
 }
 
 export function Channels({
@@ -17,6 +18,7 @@ export function Channels({
   onCommunityClick,
   clearNotifications,
   activeChannelId,
+  channels,
 }: ChannelsProps) {
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);

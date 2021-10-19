@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../contexts/narrowProvider";
-import { ChannelData, channels } from "../helpers/channelsMock";
-import { CommunityData } from "../helpers/communityMock";
+import { ChannelData } from "../helpers/channelsMock";
+import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { useMessenger } from "../hooks/useMessenger";
 import { Metadata } from "../models/Metadata";
 import { Theme } from "../styles/themes";
@@ -16,12 +16,16 @@ import { CommunityModal } from "./Modals/CommunityModal";
 
 interface ChatProps {
   theme: Theme;
-  community: CommunityData;
+  communityKey: string;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function Chat({ theme, community, fetchMetadata }: ChatProps) {
-  const [activeChannel, setActiveChannel] = useState<ChannelData>(channels[0]);
+export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
+  const [activeChannel, setActiveChannel] = useState<ChannelData>({
+    id: "",
+    name: "",
+    description: "",
+  });
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const narrow = useNarrow();
@@ -34,24 +38,67 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
     clearNotifications,
     loadNextDay,
     loadingMessages,
-  } = useMessenger(
-    activeChannel.name,
-    channels.map((channel) => channel.name)
-  );
+    community,
+  } = useMessenger(activeChannel?.id ?? "", communityKey);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => setIsModalVisible(true);
+
+  const communityData = useMemo(() => {
+    if (community?.description) {
+      return {
+        id: 1,
+        name: community.description.identity?.displayName ?? "",
+        icon: uintToImgUrl(
+          community.description?.identity?.images?.thumbnail.payload ??
+            new Uint8Array()
+        ),
+        members: 0,
+        membersList: [],
+        description: community.description.identity?.description ?? "",
+      };
+    } else {
+      return {
+        id: 1,
+        name: "",
+        icon: "",
+        members: 0,
+        membersList: [],
+        description: "",
+      };
+    }
+  }, [community]);
+
+  const channels = useMemo(() => {
+    console.log(community?.chats);
+    if (community?.chats) {
+      return Array.from(community.chats.values()).map((chat) => {
+        return {
+          id: chat.id,
+          name: chat.communityChat?.identity?.displayName ?? "",
+          description: chat.communityChat?.identity?.description ?? "",
+        };
+      });
+    } else {
+      return [];
+    }
+  }, [community]);
+
+  useEffect(() => {
+    if (channels.length > 0) setActiveChannel(channels[0]);
+  }, [channels]);
 
   return (
     <ChatWrapper>
       {showChannels && !narrow && (
         <ChannelsWrapper>
-          <StyledCommunity onClick={showModal} community={community} />
+          <StyledCommunity onClick={showModal} community={communityData} />
           <Channels
             notifications={notifications}
             clearNotifications={clearNotifications}
             onCommunityClick={(e) => setActiveChannel(e)}
-            activeChannelId={activeChannel.id}
+            activeChannelId={activeChannel?.id ?? ""}
+            channels={channels}
           />
         </ChannelsWrapper>
       )}
@@ -66,25 +113,26 @@ export function Chat({ theme, community, fetchMetadata }: ChatProps) {
         activeChannelId={activeChannel.id}
         onClick={() => setShowMembers(!showMembers)}
         showMembers={showMembers}
-        community={community}
+        community={communityData}
         showCommunity={!showChannels}
         loadNextDay={() => loadNextDay(activeChannel.name)}
         onCommunityClick={showModal}
         fetchMetadata={fetchMetadata}
         loadingMessages={loadingMessages}
         clearNotifications={clearNotifications}
+        channels={channels}
       />
       {showMembers && !narrow && (
-        <Members community={community} setShowChannels={setShowChannels} />
+        <Members community={communityData} setShowChannels={setShowChannels} />
       )}
       <CommunityModal
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}
-        icon={community.icon}
-        name={community.name}
+        icon={communityData.icon}
+        name={communityData.name}
         subtitle="Public Community"
-        description={community.description}
-        publicKey="0xD95DBdaB08A9FED2D71ac9C3028AAc40905d8CF3"
+        description={communityData.description}
+        publicKey={communityKey}
       />
     </ChatWrapper>
   );

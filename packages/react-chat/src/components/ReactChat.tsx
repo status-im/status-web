@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import styled from "styled-components";
 
 import { NarrowProvider } from "../contexts/narrowProvider";
-import { CommunityData } from "../helpers/communityMock";
 import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
@@ -12,11 +11,15 @@ import { Chat } from "./Chat";
 
 interface ReactChatProps {
   theme: Theme;
-  community: CommunityData;
+  communityKey: string;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function ReactChat({ theme, community, fetchMetadata }: ReactChatProps) {
+export function ReactChat({
+  theme,
+  communityKey,
+  fetchMetadata,
+}: ReactChatProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   return (
     <ThemeProvider theme={theme}>
@@ -24,7 +27,7 @@ export function ReactChat({ theme, community, fetchMetadata }: ReactChatProps) {
         <Wrapper ref={ref}>
           <GlobalStyle />
           <Chat
-            community={community}
+            communityKey={communityKey}
             fetchMetadata={fetchMetadata}
             theme={theme}
           />
