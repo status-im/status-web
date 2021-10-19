@@ -67,12 +67,20 @@ const ButtonNo = styled.button`
   margin-right: 16px;
 
   ${buttonStyles}
-  background: rgba(255, 45, 85, 0.1);
-  color: #ff2d55;
+  background: ${({ theme }) => theme.buttonNoBg};
+  color: ${({ theme }) => theme.redColor};
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonNoBgHover};
+  }
 `;
 
 const ButtonYes = styled.button`
   padding: 11px 24px;
 
   ${buttonStyles}
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
+  }
 `;

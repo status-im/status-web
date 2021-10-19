@@ -1,9 +1,9 @@
 export type Theme = {
   primary: string;
   secondary: string;
+  tertiary: string;
   bodyBackgroundColor: string;
   sectionBackgroundColor: string;
-  tertiary: string;
   guestNameColor: string;
   iconColor: string;
   iconUserColor: string;
@@ -13,8 +13,12 @@ export type Theme = {
   inputColor: string;
   border: string;
   buttonBg: string;
+  buttonBgHover: string;
+  buttonNoBg: string;
+  buttonNoBgHover: string;
   skeletonLight: string;
   skeletonDark: string;
+  redColor: string;
 };
 
 export const lightTheme: Theme = {
@@ -31,9 +35,13 @@ export const lightTheme: Theme = {
   notificationColor: "#4360DF",
   inputColor: "#EEF2F5",
   border: "#EEF2F5",
-  buttonBg: "rgba(67, 96, 223, 0.2)",
+  buttonBg: "rgba(67, 96, 223, 0.1)",
+  buttonBgHover: "rgba(67, 96, 223, 0.2)",
+  buttonNoBg: "rgba(255, 45, 85, 0.1)",
+  buttonNoBgHover: "rgba(255, 45, 85, 0.2)",
   skeletonLight: "#F6F8FA",
   skeletonDark: "#E9EDF1",
+  redColor: "#FF2D55",
 };
 
 export const darkTheme: Theme = {
@@ -50,9 +58,13 @@ export const darkTheme: Theme = {
   notificationColor: "#887AF9",
   inputColor: "#373737",
   border: "#373737",
-  buttonBg: "rgba(134, 158, 255, 0.3)",
+  buttonBg: "rgba(134, 158, 255, 0.2)",
+  buttonBgHover: "rgba(67, 96, 223, 0.3)",
+  buttonNoBg: "rgba(255, 92, 123, 0.2)",
+  buttonNoBgHover: "rgba(255, 45, 85, 0.3)",
   skeletonLight: "#2E2F31",
   skeletonDark: "#141414",
+  redColor: "#FF5C7B",
 };
 
 export default { lightTheme, darkTheme };
