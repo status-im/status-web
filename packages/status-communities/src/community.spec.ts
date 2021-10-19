@@ -22,7 +22,6 @@ describe("Community live data", () => {
       "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd",
       waku
     );
-    await community.refreshCommunityDescription();
     const desc = community.description as CommunityDescription;
     expect(desc).to.not.be.undefined;
 
