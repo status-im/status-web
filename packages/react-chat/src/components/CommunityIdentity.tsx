@@ -31,7 +31,7 @@ const Row = styled.div`
   display: flex;
 `;
 
-const Column = styled.div`
+export const Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
