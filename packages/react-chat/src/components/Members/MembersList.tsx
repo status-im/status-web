@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { CommunityData } from "../../helpers/communityMock";
+import { CommunityData } from "../../models/CommunityData";
 import { UserIcon } from "../Icons/UserIcon";
 
 import { Member, MemberData, MemberIcon } from "./Member";
@@ -31,12 +31,12 @@ export function MembersList({
       <MemberCategory>
         <MemberCategoryName>Online</MemberCategoryName>
         {community.membersList
-          .filter((member) => member.isOnline)
+          .filter(() => false)
           .map((member) => (
             <Member
-              key={member.id}
+              key={member}
               member={member}
-              isOnline={member.isOnline}
+              isOnline={false}
               setShowChannels={setShowChannels}
               setShowMembers={setShowMembers}
             />
@@ -44,17 +44,15 @@ export function MembersList({
       </MemberCategory>
       <MemberCategory>
         <MemberCategoryName>Offline</MemberCategoryName>
-        {community.membersList
-          .filter((member) => !member.isOnline)
-          .map((member) => (
-            <Member
-              key={member.id}
-              member={member}
-              isOnline={member.isOnline}
-              setShowChannels={setShowChannels}
-              setShowMembers={setShowMembers}
-            />
-          ))}
+        {community.membersList.map((member) => (
+          <Member
+            key={member}
+            member={member}
+            isOnline={false}
+            setShowChannels={setShowChannels}
+            setShowMembers={setShowMembers}
+          />
+        ))}
       </MemberCategory>
     </MembersListWrap>
   );

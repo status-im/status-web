@@ -6,7 +6,7 @@ import { Icon } from "../Chat/ChatMessages";
 import { UserIcon } from "../Icons/UserIcon";
 
 interface MemberProps {
-  member: any;
+  member: string;
   isOnline: boolean;
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
@@ -33,13 +33,13 @@ export function Member({
     >
       <MemberIcon
         style={{
-          backgroundImage: member.avatar ? `url(${member.avatar})` : "unset",
+          backgroundImage: "unset",
         }}
         className={isOnline ? "online" : "offline"}
       >
-        {!member.avatar && <UserIcon memberView={true} />}
+        <UserIcon memberView={true} />
       </MemberIcon>
-      <MemberName>{member.name}</MemberName>
+      <MemberName>{member}</MemberName>
     </MemberData>
   );
 }

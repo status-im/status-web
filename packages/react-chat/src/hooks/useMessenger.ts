@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Community, Identity, Messenger } from "status-communities/dist/cjs";
 import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
 
-import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { ChatMessage } from "../models/ChatMessage";
 import { loadIdentity, saveIdentity } from "../utils/identityStorage";
+import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24;
 

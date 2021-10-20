@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CommunityData } from "../helpers/communityMock";
+import { CommunityData } from "../models/CommunityData";
 
 import { CommunityIdentity } from "./CommunityIdentity";
 

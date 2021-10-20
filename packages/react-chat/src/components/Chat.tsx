@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../contexts/narrowProvider";
-import { ChannelData } from "../helpers/channelsMock";
-import { uintToImgUrl } from "../helpers/uintToImgUrl";
 import { useMessenger } from "../hooks/useMessenger";
+import { ChannelData } from "../models/ChannelData";
 import { Metadata } from "../models/Metadata";
 import { Theme } from "../styles/themes";
+import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 import { Channels } from "./Channels/Channels";
 import { ChatBody } from "./Chat/ChatBody";
@@ -46,6 +46,7 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
 
   const communityData = useMemo(() => {
     if (community?.description) {
+      console.log(Object.keys(community.description.proto.members));
       return {
         id: 1,
         name: community.description.identity?.displayName ?? "",
@@ -54,7 +55,7 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
             new Uint8Array()
         ),
         members: 0,
-        membersList: [],
+        membersList: Object.keys(community.description.proto.members),
         description: community.description.identity?.description ?? "",
       };
     } else {
@@ -70,7 +71,6 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
   }, [community]);
 
   const channels = useMemo(() => {
-    console.log(community?.chats);
     if (community?.chats) {
       return Array.from(community.chats.values()).map((chat) => {
         return {

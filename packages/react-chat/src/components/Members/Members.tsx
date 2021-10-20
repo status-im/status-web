@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { CommunityData } from "../../helpers/communityMock";
+import { CommunityData } from "../../models/CommunityData";
 
 import { MembersList } from "./MembersList";
 
