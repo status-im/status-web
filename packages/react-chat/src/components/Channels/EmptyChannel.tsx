@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChannelData } from "../../helpers/channelsMock";
+import { ChannelData } from "../../models/ChannelData";
 import { textMediumStyles } from "../Text";
 
 import { ChannelInfo, ChannelLogo, ChannelName } from "./Channel";

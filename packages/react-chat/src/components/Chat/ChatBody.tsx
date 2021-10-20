@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
-import { ChannelData } from "../../helpers/channelsMock";
-import { CommunityData } from "../../helpers/communityMock";
+import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
+import { CommunityData } from "../../models/CommunityData";
 import { Metadata } from "../../models/Metadata";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels/Channel";

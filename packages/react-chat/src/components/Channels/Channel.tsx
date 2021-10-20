@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
-import { ChannelData } from "../../helpers/channelsMock";
+import { ChannelData } from "../../models/ChannelData";
 import { MutedIcon } from "../Icons/MutedIcon";
 import { textMediumStyles } from "../Text";
 
