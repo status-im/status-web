@@ -13,14 +13,14 @@ import { ChatMessageContent } from "./ChatMessageContent";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
-  loadNextDay: () => void;
+  loadPrevDay: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   loadingMessages: boolean;
 };
 
 export function ChatMessages({
   messages,
-  loadNextDay,
+  loadPrevDay,
   fetchMetadata,
   loadingMessages,
 }: ChatMessagesProps) {
@@ -38,7 +38,7 @@ export function ChatMessages({
       if (
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
-        loadNextDay();
+        loadPrevDay();
       }
     }
   }, [messages, messages.length, loadingMessages]);
@@ -47,7 +47,7 @@ export function ChatMessages({
     const setScroll = () => {
       if (ref && ref.current) {
         if (ref.current.scrollTop <= 0) {
-          loadNextDay();
+          loadPrevDay();
         }
         if (
           ref.current.scrollTop + ref.current.clientHeight ==
