@@ -136,7 +136,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
 
 const View = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   padding: 6px 8px 6px 10px;
   position: relative;
 `;
@@ -144,7 +144,7 @@ const View = styled.div`
 const Row = styled.div`
   position: relative;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   width: 100%;
   max-height: 438px;
   padding-right: 6px;
