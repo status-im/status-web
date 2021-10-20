@@ -1,5 +1,5 @@
 import { Picker } from "emoji-mart";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useLow } from "../../contexts/narrowProvider";
@@ -21,6 +21,13 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
+
+  useEffect(() => {
+    window.addEventListener("click", () => setShowEmoji(false));
+    return () => {
+      window.removeEventListener("click", () => setShowEmoji(false));
+    };
+  }, []);
 
   const image = useMemo(
     () => (imageUint ? uintToImgUrl(imageUint) : ""),
@@ -119,7 +126,12 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
           onKeyPress={onInputKeyPress}
         />
         <InputButtons>
-          <ChatButton onClick={() => setShowEmoji(!showEmoji)}>
+          <ChatButton
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowEmoji(!showEmoji);
+            }}
+          >
             <EmojiIcon isActive={showEmoji} />
           </ChatButton>
           <ChatButton>
