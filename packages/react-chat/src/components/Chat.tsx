@@ -13,6 +13,7 @@ import { ChatBody } from "./Chat/ChatBody";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
+import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
   theme: Theme;
@@ -92,7 +93,11 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
     <ChatWrapper>
       {showChannels && !narrow && (
         <ChannelsWrapper>
-          <StyledCommunity onClick={showModal} community={communityData} />
+          {messenger ? (
+            <StyledCommunity onClick={showModal} community={communityData} />
+          ) : (
+            <CommunitySkeleton />
+          )}
           <Channels
             notifications={notifications}
             clearNotifications={clearNotifications}
