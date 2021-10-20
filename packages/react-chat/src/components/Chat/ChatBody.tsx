@@ -13,6 +13,7 @@ import { Community } from "../Community";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowMembers } from "../NarrowMode/NarrowMembers";
+import { CommunitySkeleton } from "../Skeleton/CommunitySkeleton";
 import { Loading } from "../Skeleton/Loading";
 import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
 
@@ -90,19 +91,26 @@ export function ChatBody({
         }
       >
         <ChannelWrapper className={className}>
-          {(showCommunity || narrow) && (
-            <CommunityWrap className={className}>
-              <Community onClick={onCommunityClick} community={community} />
-            </CommunityWrap>
+          {messenger ? (
+            <>
+              {(showCommunity || narrow) && (
+                <CommunityWrap className={className}>
+                  <Community onClick={onCommunityClick} community={community} />
+                </CommunityWrap>
+              )}
+              <Channel
+                channel={channel}
+                isActive={narrow ? showChannelsList : true}
+                activeView={true}
+                isMuted={false}
+                onClick={() => (narrow ? switchChannelList() : undefined)}
+              />
+            </>
+          ) : (
+            <CommunitySkeleton />
           )}
-          <Channel
-            channel={channel}
-            isActive={narrow ? showChannelsList : true}
-            activeView={true}
-            isMuted={false}
-            onClick={() => (narrow ? switchChannelList() : undefined)}
-          />
         </ChannelWrapper>
+
         <MemberBtn
           onClick={narrow ? () => switchMemberList() : onClick}
           className={
