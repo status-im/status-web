@@ -33,7 +33,7 @@ interface ChatBodyProps {
   notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: string;
-  loadNextDay: () => void;
+  loadPrevDay: () => void;
   onCommunityClick: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   loadingMessages: boolean;
@@ -54,7 +54,7 @@ export function ChatBody({
   notifications,
   setActiveChannel,
   activeChannelId,
-  loadNextDay,
+  loadPrevDay,
   onCommunityClick,
   fetchMetadata,
   loadingMessages,
@@ -131,7 +131,7 @@ export function ChatBody({
                 messenger ? (
                   <ChatMessages
                     messages={messages}
-                    loadNextDay={loadNextDay}
+                    loadPrevDay={loadPrevDay}
                     fetchMetadata={fetchMetadata}
                     loadingMessages={loadingMessages}
                   />

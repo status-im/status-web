@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../contexts/narrowProvider";
-import { useMessenger } from "../hooks/useMessenger";
+import { useMessenger } from "../hooks/messenger/useMessenger";
 import { ChannelData } from "../models/ChannelData";
 import { Metadata } from "../models/Metadata";
 import { Theme } from "../styles/themes";
@@ -37,7 +37,7 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
     sendMessage,
     notifications,
     clearNotifications,
-    loadNextDay,
+    loadPrevDay,
     loadingMessages,
     community,
   } = useMessenger(activeChannel?.id ?? "", communityKey);
@@ -120,7 +120,7 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
         showMembers={showMembers}
         community={communityData}
         showCommunity={!showChannels}
-        loadNextDay={() => loadNextDay(activeChannel.name)}
+        loadPrevDay={() => loadPrevDay(activeChannel.name)}
         onCommunityClick={showModal}
         fetchMetadata={fetchMetadata}
         loadingMessages={loadingMessages}
