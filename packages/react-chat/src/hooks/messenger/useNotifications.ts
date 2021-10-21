@@ -8,7 +8,7 @@ export function useNotifications() {
     setNotifications((prevNotifications) => {
       return {
         ...prevNotifications,
-        [id]: prevNotifications[id] + 1,
+        [id]: (prevNotifications?.[id] ?? 0) + 1,
       };
     });
   }, []);
