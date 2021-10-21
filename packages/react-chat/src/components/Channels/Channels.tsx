@@ -23,8 +23,8 @@ export function Channels({
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);
     if (channel) {
-      if (notifications[channel.name] > 0) {
-        clearNotifications(channel.name);
+      if (notifications[channel.id] > 0) {
+        clearNotifications(channel.id);
       }
     }
   }, [notifications, activeChannelId]);
@@ -38,8 +38,8 @@ export function Channels({
           isActive={channel.id === activeChannelId}
           isMuted={channel.isMuted || false}
           notification={
-            notifications[channel.name] > 0 && !channel.isMuted
-              ? notifications[channel.name]
+            notifications[channel.id] > 0 && !channel.isMuted
+              ? notifications[channel.id]
               : undefined
           }
           onClick={() => {

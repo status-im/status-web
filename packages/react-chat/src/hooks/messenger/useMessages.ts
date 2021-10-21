@@ -28,6 +28,7 @@ export function useMessages(chatId: string) {
             ),
           };
         });
+        console.log(`increase noti ${id}`);
         incNotification(id);
       }
     },

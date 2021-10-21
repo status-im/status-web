@@ -1,9 +1,8 @@
 // import { StoreCodec } from "js-waku";
-import { StoreCodec } from "js-waku";
 import { useCallback, useEffect, useState } from "react";
-import { Community, Identity, Messenger } from "status-communities/dist/cjs";
+import { Community, Messenger } from "status-communities/dist/cjs";
 
-import { loadIdentity, saveIdentity } from "../../utils";
+import { createCommunityMessenger } from "../../utils/createCommunityMessenger";
 
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
@@ -16,53 +15,10 @@ export function useMessenger(chatId: string, communityKey: string) {
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(chatId, messenger);
 
   useEffect(() => {
-    const createMessenger = async () => {
-      // Test password for now
-      // Need design for password input
-
-      let identity = await loadIdentity("test");
-      if (!identity) {
-        identity = Identity.generate();
-        await saveIdentity(identity, "test");
-      }
-      const messenger = await Messenger.create(identity, {
-        libp2p: {
-          config: {
-            pubsub: {
-              enabled: true,
-              emitSelf: true,
-            },
-          },
-        },
-      });
-      await new Promise((resolve) => {
-        messenger.waku.libp2p.peerStore.on(
-          "change:protocols",
-          ({ protocols }) => {
-            if (protocols.includes(StoreCodec)) {
-              resolve("");
-            }
-          }
-        );
-      });
-      const community = await Community.instantiateCommunity(
-        communityKey,
-        messenger.waku
-      );
-      setCommunity(community);
-      await Promise.all(
-        Array.from(community.chats.values()).map(async (chat) => {
-          await messenger.joinChat(chat);
-          messenger.addObserver(
-            (msg, date) => addMessage(msg, chat.id, date),
-            chat.id
-          );
-          clearNotifications(chat.id);
-        })
-      );
-      setMessenger(messenger);
-    };
-    createMessenger();
+    createCommunityMessenger(communityKey, addMessage).then((result) => {
+      setCommunity(result.community);
+      setMessenger(result.messenger);
+    });
   }, []);
 
   useEffect(() => {
