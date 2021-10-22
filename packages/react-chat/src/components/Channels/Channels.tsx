@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../../models/ChannelData";
-import { Member } from "../Members/Member";
 
 import { Channel } from "./Channel";
 
@@ -54,7 +53,21 @@ export function Channels({
       {membersList.length > 0 && (
         <Dialogues>
           {membersList.map((member) => (
-            <Member key={member} member={member} setShowChannels={() => true} />
+            <Channel
+              key={member}
+              channel={{
+                id: member,
+                name: member.slice(0, 10),
+              }}
+              isActive={member === activeChannelId}
+              isMuted={false}
+              onClick={() => {
+                onCommunityClick({
+                  id: member,
+                  name: member.slice(0, 10),
+                });
+              }}
+            />
           ))}
         </Dialogues>
       )}

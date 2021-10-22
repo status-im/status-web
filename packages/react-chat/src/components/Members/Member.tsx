@@ -28,17 +28,21 @@ export function Member({
   }, [setShowMembers]);
 
   const startDialog = (member: string) => {
-    setMembersList((previous: any) => {
-      [...previous, member];
+    setMembersList((prevMembers: string[]) => {
+      if (prevMembers.find((chat) => chat === member)) {
+        return prevMembers;
+      } else {
+        return [...prevMembers, member];
+      }
     });
     setShowChannels(true);
   };
 
   return (
     <MemberData
-      onClick={() =>
-        narrow && setShowMembers ? switchMemberList() : startDialog(member)
-      }
+      onClick={() => {
+        narrow && setShowMembers ? switchMemberList() : startDialog(member);
+      }}
     >
       <MemberIcon
         style={{
