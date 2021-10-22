@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import debug from "debug";
 
+import { Community } from "./community";
 import { Identity } from "./identity";
 import { Messenger } from "./messenger";
 import { bufToHex } from "./utils";
@@ -116,5 +117,70 @@ describe("Messenger", () => {
     this.timeout(5000);
     await messengerAlice.stop();
     await messengerBob.stop();
+  });
+});
+
+describe("Messenger [live data]", () => {
+  before(function () {
+    if (process.env.CI) {
+      // Skip live data test in CI
+      this.skip();
+    }
+  });
+
+  let messenger: Messenger;
+  let identity: Identity;
+
+  beforeEach(async function () {
+    this.timeout(20_000);
+
+    dbg("Generate keys");
+    identity = Identity.generate();
+
+    dbg("Create messengers");
+
+    messenger = await Messenger.create(identity, { bootstrap: true });
+
+    dbg("Wait to be connected to a peer");
+    await messenger.waku.waitForConnectedPeer();
+    dbg("Messengers ready");
+  });
+
+  it("Receive public chat messages", async function () {
+    this.timeout(20_000);
+
+    const community = await Community.instantiateCommunity(
+      "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd",
+      messenger.waku
+    );
+
+    await messenger.joinChats(community.chats.values());
+
+    const startTime = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const endTime = new Date();
+
+    const chat = Array.from(community.chats.values()).find(
+      (chat) => chat.communityChat?.identity?.displayName === "foobar"
+    );
+
+    if (!chat) throw "Could not find foobar chat";
+
+    console.log(chat);
+
+    await messenger.retrievePreviousMessages(
+      chat.id,
+      startTime,
+      endTime,
+      (metadata) => {
+        metadata.forEach((m) => {
+          console.log("Message", m.chatMessage?.text);
+        });
+      }
+    );
+  });
+
+  afterEach(async function () {
+    this.timeout(5000);
+    await messenger.stop();
   });
 });
