@@ -14,6 +14,7 @@ interface NarrowChannelsProps {
   setShowChannels: (val: boolean) => void;
   clearNotifications: (id: string) => void;
   channels: ChannelData[];
+  showDialogues: boolean;
 }
 
 export function NarrowChannels({
@@ -24,6 +25,7 @@ export function NarrowChannels({
   setShowChannels,
   clearNotifications,
   channels,
+  showDialogues,
 }: NarrowChannelsProps) {
   return (
     <ListWrapper>
@@ -37,6 +39,7 @@ export function NarrowChannels({
         }}
         activeChannelId={activeChannelId}
         channels={channels}
+        showDialogues={showDialogues}
       />
     </ListWrapper>
   );

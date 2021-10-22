@@ -39,6 +39,8 @@ interface ChatBodyProps {
   loadingMessages: boolean;
   clearNotifications: (id: string) => void;
   channels: ChannelData[];
+  showDialogues: boolean;
+  setShowDialogues: (val: boolean) => void;
 }
 
 export function ChatBody({
@@ -60,6 +62,8 @@ export function ChatBody({
   loadingMessages,
   clearNotifications,
   channels,
+  showDialogues,
+  setShowDialogues,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -154,6 +158,7 @@ export function ChatBody({
               setShowChannels={setShowChannelsList}
               activeChannelId={activeChannelId}
               clearNotifications={clearNotifications}
+              showDialogues={showDialogues}
             />
           )}
           {showMembersList && narrow && (
@@ -161,6 +166,7 @@ export function ChatBody({
               community={community}
               setShowChannels={setShowChannelsList}
               setShowMembersList={setShowMembersList}
+              setShowDialogues={setShowDialogues}
             />
           )}
         </>

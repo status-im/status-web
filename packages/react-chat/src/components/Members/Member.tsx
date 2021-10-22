@@ -10,6 +10,7 @@ interface MemberProps {
   isOnline: boolean;
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
+  setShowDialogues: (val: boolean) => void;
 }
 
 export function Member({
@@ -17,6 +18,7 @@ export function Member({
   isOnline,
   setShowChannels,
   setShowMembers,
+  setShowDialogues,
 }: MemberProps) {
   const narrow = useNarrow();
 
@@ -25,10 +27,15 @@ export function Member({
     if (setShowMembers) setShowMembers(false);
   }, [setShowMembers]);
 
+  const startDialog = () => {
+    setShowChannels(true);
+    setShowDialogues(true);
+  };
+
   return (
     <MemberData
       onClick={() =>
-        narrow && setShowMembers ? switchMemberList() : setShowChannels(true)
+        narrow && setShowMembers ? switchMemberList() : startDialog()
       }
     >
       <MemberIcon
