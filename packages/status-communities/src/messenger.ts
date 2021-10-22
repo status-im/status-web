@@ -15,7 +15,11 @@ export class Messenger {
   chatsById: Map<string, Chat>;
   observers: {
     [chatId: string]: Set<
-      (message: ApplicationMetadataMessage, timestamp: Date) => void
+      (
+        message: ApplicationMetadataMessage,
+        timestamp: Date,
+        chatId: string
+      ) => void
     >;
   };
   identity: Identity;
@@ -47,6 +51,19 @@ export class Messenger {
     const chat = await Chat.create(chatId);
 
     await this.joinChat(chat);
+  }
+
+  /**
+   * Joins several of public chats.
+   *
+   * Use `addListener` to get messages received on these chats.
+   */
+  public async joinChats(chats: Iterable<Chat>): Promise<void> {
+    await Promise.all(
+      Array.from(chats).map((chat) => {
+        return this.joinChat(chat);
+      })
+    );
   }
 
   /**
@@ -110,18 +127,30 @@ export class Messenger {
    * @throws string If the chat has not been joined first using [joinChat].
    */
   public addObserver(
-    observer: (message: ApplicationMetadataMessage, timestamp: Date) => void,
-    chatId: string
+    observer: (
+      message: ApplicationMetadataMessage,
+      timestamp: Date,
+      chatId: string
+    ) => void,
+    chatId: string | string[]
   ): void {
-    // Not sure this is the best design here. Maybe `addObserver` and `joinChat` should be merged.
+    let chats = [];
 
-    if (!this.chatsById.has(chatId))
-      throw "Cannot add observer on a chat that is not joined.";
-    if (!this.observers[chatId]) {
-      this.observers[chatId] = new Set();
+    if (typeof chatId === "string") {
+      chats.push(chatId);
+    } else {
+      chats = [...chatId];
     }
 
-    this.observers[chatId].add(observer);
+    chats.forEach((id) => {
+      if (!this.chatsById.has(id))
+        throw "Cannot add observer on a chat that is not joined.";
+      if (!this.observers[id]) {
+        this.observers[id] = new Set();
+      }
+
+      this.observers[id].add(observer);
+    });
   }
 
   /**
@@ -211,7 +240,7 @@ export class Messenger {
 
     if (this.observers[chat.id]) {
       this.observers[chat.id].forEach((observer) => {
-        observer(message, timestamp);
+        observer(message, timestamp, chat.id);
       });
     }
   }
