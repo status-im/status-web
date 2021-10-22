@@ -7,7 +7,7 @@ import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
 
-import { Chat } from "./Chat";
+import { ChatLoader } from "./ChatLoader";
 
 interface ReactChatProps {
   theme: Theme;
@@ -26,7 +26,7 @@ export function ReactChat({
       <NarrowProvider myRef={ref}>
         <Wrapper ref={ref}>
           <GlobalStyle />
-          <Chat
+          <ChatLoader
             communityKey={communityKey}
             fetchMetadata={fetchMetadata}
             theme={theme}

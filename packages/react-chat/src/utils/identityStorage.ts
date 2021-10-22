@@ -24,18 +24,8 @@ export async function saveIdentity(identity: Identity, password: string) {
   localStorage.setItem("cipherIdentity", JSON.stringify(data));
 }
 
-export async function loadIdentity(
-  password: string
-): Promise<Identity | undefined> {
-  const str = localStorage.getItem("cipherIdentity");
-  if (!str) return;
-  const data = JSON.parse(str);
-
-  const salt = hexToBuf(data.salt);
-  const iv = hexToBuf(data.iv);
-  const cipher = hexToBuf(data.cipher);
-
-  return await decryptIdentity(salt, iv, cipher, password);
+export function loadEncryptedIdentity(): string | null {
+  return localStorage.getItem("cipherIdentity");
 }
 
 async function getWrapKey(password: string, salt: Uint8Array) {
@@ -61,12 +51,16 @@ async function getWrapKey(password: string, salt: Uint8Array) {
   );
 }
 
-async function decryptIdentity(
-  salt: Buffer,
-  iv: Buffer,
-  cipherKeyPair: Buffer,
+export async function decryptIdentity(
+  encryptedIdentity: string,
   password: string
 ): Promise<Identity | undefined> {
+  const data = JSON.parse(encryptedIdentity);
+
+  const salt = hexToBuf(data.salt);
+  const iv = hexToBuf(data.iv);
+  const cipherKeyPair = hexToBuf(data.cipher);
+
   const key = await getWrapKey(password, salt);
 
   try {

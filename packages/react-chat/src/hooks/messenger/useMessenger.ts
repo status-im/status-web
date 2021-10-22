@@ -1,13 +1,17 @@
 // import { StoreCodec } from "js-waku";
 import { useCallback, useEffect, useState } from "react";
-import { Community, Messenger } from "status-communities/dist/cjs";
+import { Community, Identity, Messenger } from "status-communities/dist/cjs";
 
 import { createCommunityMessenger } from "../../utils/createCommunityMessenger";
 
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
 
-export function useMessenger(chatId: string, communityKey: string) {
+export function useMessenger(
+  chatId: string,
+  communityKey: string,
+  identity: Identity
+) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
   const { addMessage, clearNotifications, notifications, messages } =
     useMessages(chatId);
@@ -15,10 +19,12 @@ export function useMessenger(chatId: string, communityKey: string) {
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(chatId, messenger);
 
   useEffect(() => {
-    createCommunityMessenger(communityKey, addMessage).then((result) => {
-      setCommunity(result.community);
-      setMessenger(result.messenger);
-    });
+    createCommunityMessenger(communityKey, addMessage, identity).then(
+      (result) => {
+        setCommunity(result.community);
+        setMessenger(result.messenger);
+      }
+    );
   }, []);
 
   useEffect(() => {

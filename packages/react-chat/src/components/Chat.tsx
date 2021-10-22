@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useNarrow } from "../contexts/narrowProvider";
@@ -19,9 +20,15 @@ interface ChatProps {
   theme: Theme;
   communityKey: string;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
+  identity: Identity;
 }
 
-export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
+export function Chat({
+  theme,
+  communityKey,
+  fetchMetadata,
+  identity,
+}: ChatProps) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>({
     id: "",
     name: "",
@@ -40,14 +47,13 @@ export function Chat({ theme, communityKey, fetchMetadata }: ChatProps) {
     loadPrevDay,
     loadingMessages,
     community,
-  } = useMessenger(activeChannel?.id ?? "", communityKey);
+  } = useMessenger(activeChannel?.id ?? "", communityKey, identity);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => setIsModalVisible(true);
 
   const communityData = useMemo(() => {
     if (community?.description) {
-      console.log(Object.keys(community.description.proto.members));
       return {
         id: 1,
         name: community.description.identity?.displayName ?? "",
