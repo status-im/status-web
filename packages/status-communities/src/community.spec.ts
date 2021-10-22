@@ -4,7 +4,7 @@ import { Waku } from "js-waku";
 import { Community } from "./community";
 import { CommunityDescription } from "./wire/community_description";
 
-describe("Community live data", () => {
+describe("Community [live data]", () => {
   before(function () {
     if (process.env.CI) {
       // Skip live data test in CI
