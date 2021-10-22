@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../../models/ChannelData";
+import { Member } from "../Members/Member";
 
 import { Channel } from "./Channel";
 
@@ -11,7 +12,7 @@ interface ChannelsProps {
   onCommunityClick: (val: ChannelData) => void;
   activeChannelId: string;
   channels: ChannelData[];
-  showDialogues: boolean;
+  membersList: string[];
 }
 
 export function Channels({
@@ -20,7 +21,7 @@ export function Channels({
   clearNotifications,
   activeChannelId,
   channels,
-  showDialogues,
+  membersList,
 }: ChannelsProps) {
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);
@@ -49,22 +50,12 @@ export function Channels({
           }}
         />
       ))}
-      {showDialogues && (
+
+      {membersList.length > 0 && (
         <Dialogues>
-          <Channel
-            key={channels[0].id}
-            channel={channels[0]}
-            isActive={channels[0].id === activeChannelId}
-            isMuted={channels[0].isMuted || false}
-            notification={
-              notifications[channels[0].name] > 0 && !channels[0].isMuted
-                ? notifications[channels[0].name]
-                : undefined
-            }
-            onClick={() => {
-              onCommunityClick(channels[0]);
-            }}
-          />
+          {membersList.map((member) => (
+            <Member key={member} member={member} setShowChannels={() => true} />
+          ))}
         </Dialogues>
       )}
     </ChannelList>

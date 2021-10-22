@@ -10,14 +10,14 @@ interface MembersListProps {
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
-  setShowDialogues: (val: boolean) => void;
+  setMembersList: any;
 }
 
 export function MembersList({
   community,
   setShowChannels,
   setShowMembers,
-  setShowDialogues,
+  setMembersList,
 }: MembersListProps) {
   return (
     <MembersListWrap>
@@ -41,7 +41,7 @@ export function MembersList({
               isOnline={false}
               setShowChannels={setShowChannels}
               setShowMembers={setShowMembers}
-              setShowDialogues={setShowDialogues}
+              setMembersList={setMembersList}
             />
           ))}
       </MemberCategory>
@@ -54,7 +54,7 @@ export function MembersList({
             isOnline={false}
             setShowChannels={setShowChannels}
             setShowMembers={setShowMembers}
-            setShowDialogues={setShowDialogues}
+            setMembersList={setMembersList}
           />
         ))}
       </MemberCategory>
