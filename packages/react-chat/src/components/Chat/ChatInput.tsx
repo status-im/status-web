@@ -10,6 +10,7 @@ import { GifIcon } from "../Icons/GifIcon";
 import { PictureIcon } from "../Icons/PictureIcon";
 import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
+import { Modal } from "../Modals/Modal";
 
 type ChatInputProps = {
   theme: Theme;
@@ -21,7 +22,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
-
+  const [showSizeLimit, setShowSizeLimit] = useState(false);
   useEffect(() => {
     window.addEventListener("click", () => setShowEmoji(false));
     return () => {
@@ -71,6 +72,14 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
 
   return (
     <View>
+      <Modal onClose={() => setShowSizeLimit(false)} isVisible={showSizeLimit}>
+        <div
+          onClick={() => setShowSizeLimit(false)}
+          style={{ padding: "20px" }}
+        >
+          File size must be less than 1MB
+        </div>
+      </Modal>
       {showEmoji && (
         <div>
           <Picker
@@ -106,8 +115,13 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
               const arr = new Uint8Array(s.target?.result as ArrayBuffer);
               setImageUint(arr);
             };
+
             if (e?.target?.files?.[0]) {
-              fileReader.readAsArrayBuffer(e.target.files[0]);
+              if (e.target.files[0].size < 1024 * 1024) {
+                fileReader.readAsArrayBuffer(e.target.files[0]);
+              } else {
+                setShowSizeLimit(true);
+              }
             }
           }}
         />
