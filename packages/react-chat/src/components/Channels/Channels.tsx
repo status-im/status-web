@@ -58,6 +58,7 @@ export function Channels({
               channel={{
                 id: member,
                 name: member.slice(0, 10),
+                description: "Contact",
               }}
               isActive={member === activeChannelId}
               isMuted={false}
@@ -65,6 +66,7 @@ export function Channels({
                 onCommunityClick({
                   id: member,
                   name: member.slice(0, 10),
+                  description: "Contact",
                 });
               }}
             />

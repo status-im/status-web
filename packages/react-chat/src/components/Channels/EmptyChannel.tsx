@@ -24,9 +24,17 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         </ChannelLogoEmpty>
         <ChannelNameEmpty className={"active"}>{channel.name}</ChannelNameEmpty>
       </ChannelInfoEmpty>
-      <EmptyText>
-        Welcome to the beginning of the <span>#{channel.name}</span> channel!
-      </EmptyText>
+
+      {channel.description === "Contact" ? (
+        <EmptyText>
+          Any messages you send here are encrypted and can only be read by you
+          and <span>{channel.name}</span>.
+        </EmptyText>
+      ) : (
+        <EmptyText>
+          Welcome to the beginning of the <span>#{channel.name}</span> channel!
+        </EmptyText>
+      )}
     </Wrapper>
   );
 }
@@ -62,6 +70,8 @@ const ChannelNameEmpty = styled(ChannelName)`
 const EmptyText = styled.p`
   display: inline-block;
   color: ${({ theme }) => theme.secondary};
+  max-width: 310px;
+  text-align: center;
 
   & > span {
     color: ${({ theme }) => theme.primary};
