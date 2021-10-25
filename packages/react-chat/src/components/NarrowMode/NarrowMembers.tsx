@@ -10,12 +10,14 @@ interface NarrowMembersProps {
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
   setShowMembersList: (val: boolean) => void;
+  setMembersList: any;
 }
 
 export function NarrowMembers({
   community,
   setShowChannels,
   setShowMembersList,
+  setMembersList,
 }: NarrowMembersProps) {
   return (
     <ListWrapper>
@@ -24,6 +26,7 @@ export function NarrowMembers({
         community={community}
         setShowChannels={setShowChannels}
         setShowMembers={setShowMembersList}
+        setMembersList={setMembersList}
       />
     </ListWrapper>
   );

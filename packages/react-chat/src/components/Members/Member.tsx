@@ -7,9 +7,10 @@ import { UserIcon } from "../Icons/UserIcon";
 
 interface MemberProps {
   member: string;
-  isOnline: boolean;
+  isOnline?: boolean;
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
+  setMembersList?: any;
 }
 
 export function Member({
@@ -17,6 +18,7 @@ export function Member({
   isOnline,
   setShowChannels,
   setShowMembers,
+  setMembersList,
 }: MemberProps) {
   const narrow = useNarrow();
 
@@ -25,11 +27,22 @@ export function Member({
     if (setShowMembers) setShowMembers(false);
   }, [setShowMembers]);
 
+  const startDialog = (member: string) => {
+    setMembersList((prevMembers: string[]) => {
+      if (prevMembers.find((chat) => chat === member)) {
+        return prevMembers;
+      } else {
+        return [...prevMembers, member];
+      }
+    });
+    setShowChannels(true);
+  };
+
   return (
     <MemberData
-      onClick={() =>
-        narrow && setShowMembers ? switchMemberList() : setShowChannels(true)
-      }
+      onClick={() => {
+        narrow && setShowMembers ? switchMemberList() : startDialog(member);
+      }}
     >
       <MemberIcon
         style={{

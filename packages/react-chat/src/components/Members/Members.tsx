@@ -8,13 +8,22 @@ import { MembersList } from "./MembersList";
 interface MembersProps {
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
+  setMembersList: any;
 }
 
-export function Members({ community, setShowChannels }: MembersProps) {
+export function Members({
+  community,
+  setShowChannels,
+  setMembersList,
+}: MembersProps) {
   return (
     <MembersWrapper>
       <MemberHeading>Members</MemberHeading>
-      <MembersList community={community} setShowChannels={setShowChannels} />
+      <MembersList
+        community={community}
+        setShowChannels={setShowChannels}
+        setMembersList={setMembersList}
+      />
     </MembersWrapper>
   );
 }

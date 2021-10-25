@@ -36,6 +36,8 @@ export function Chat({
   });
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
+  const [membersList, setMembersList] = useState([]);
+
   const narrow = useNarrow();
 
   const {
@@ -110,6 +112,7 @@ export function Chat({
             onCommunityClick={(e) => setActiveChannel(e)}
             activeChannelId={activeChannel?.id ?? ""}
             channels={channels}
+            membersList={membersList}
           />
         </ChannelsWrapper>
       )}
@@ -132,9 +135,15 @@ export function Chat({
         loadingMessages={loadingMessages}
         clearNotifications={clearNotifications}
         channels={channels}
+        membersList={membersList}
+        setMembersList={setMembersList}
       />
       {showMembers && !narrow && (
-        <Members community={communityData} setShowChannels={setShowChannels} />
+        <Members
+          community={communityData}
+          setShowChannels={setShowChannels}
+          setMembersList={setMembersList}
+        />
       )}
       <CommunityModal
         isVisible={isModalVisible}
