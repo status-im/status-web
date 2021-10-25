@@ -47,6 +47,7 @@ const Logo = styled.img`
 const Name = styled.p`
   font-family: "Inter", sans-serif;
   font-weight: 500;
+  text-align: left;
   color: ${({ theme }) => theme.primary};
 
   ${textMediumStyles}
