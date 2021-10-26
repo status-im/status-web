@@ -41,6 +41,7 @@ interface ChatBodyProps {
   channels: ChannelData[];
   membersList: string[];
   setMembersList: any;
+  setCreateChat: (val: boolean) => void;
 }
 
 export function ChatBody({
@@ -64,6 +65,7 @@ export function ChatBody({
   channels,
   membersList,
   setMembersList,
+  setCreateChat,
 }: ChatBodyProps) {
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
@@ -159,6 +161,7 @@ export function ChatBody({
               activeChannelId={activeChannelId}
               clearNotifications={clearNotifications}
               membersList={membersList}
+              setCreateChat={setCreateChat}
             />
           )}
           {showMembersList && narrow && (
@@ -243,6 +246,11 @@ const MemberBtn = styled.button`
   padding: 0;
   margin-top: 12px;
 
+  &:hover {
+    background: ${({ theme }) => theme.border};
+  }
+
+  &:active,
   &.active {
     background: ${({ theme }) => theme.inputColor};
   }
