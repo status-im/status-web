@@ -169,12 +169,12 @@ const ChannelsWrapper = styled.div`
   height: 100%;
   min-width: 196px;
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
-  padding: 10px 0.6%;
+  padding: 10px 16px;
   display: flex;
   flex-direction: column;
 `;
 
 const StyledCommunity = styled(Community)`
-  padding: 0 0 0 10px;
+  padding: 0 0 0 8px;
   margin: 0 0 16px;
 `;

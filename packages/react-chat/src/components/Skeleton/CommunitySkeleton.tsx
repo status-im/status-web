@@ -20,6 +20,7 @@ export const CommunitySkeleton = () => {
 const LogoSkeleton = styled(Skeleton)`
   border-radius: 50%;
   margin-right: 8px;
+  flex-shrink: 0;
 `;
 
 const Loading = styled.div`
