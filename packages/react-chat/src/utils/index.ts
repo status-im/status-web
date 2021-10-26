@@ -9,3 +9,4 @@ export {
 } from "./identityStorage";
 export { reduceString } from "./reduceString";
 export { uintToImgUrl } from "./uintToImgUrl";
+export { equalDate } from "./equalDate";

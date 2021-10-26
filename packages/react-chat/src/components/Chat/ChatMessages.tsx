@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
+import { equalDate } from "../../utils";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal } from "../Modals/LinkModal";
@@ -26,7 +27,7 @@ export function ChatMessages({
 }: ChatMessagesProps) {
   const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
-  const today = useMemo(() => new Date().getDay(), []);
+  const today = useMemo(() => new Date(), []);
   useEffect(() => {
     if (ref && ref.current && scrollOnBot) {
       ref.current.scrollTop = ref.current.scrollHeight;
@@ -38,6 +39,7 @@ export function ChatMessages({
       if (
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
+        setScrollOnBot(true);
         loadPrevDay();
       }
     }
@@ -84,10 +86,9 @@ export function ChatMessages({
         return (
           <MessageOuterWrapper key={message.date.getTime()}>
             {(idx === 0 ||
-              messages[idx - 1].date.getDay() !=
-                messages[idx].date.getDay()) && (
+              !equalDate(messages[idx - 1].date, message.date)) && (
               <DateSeparator>
-                {message.date.getDay() === today
+                {equalDate(message.date, today)
                   ? "Today"
                   : message.date.toLocaleDateString()}
               </DateSeparator>

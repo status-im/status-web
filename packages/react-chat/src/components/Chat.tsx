@@ -129,7 +129,7 @@ export function Chat({
         showMembers={showMembers}
         community={communityData}
         showCommunity={!showChannels}
-        loadPrevDay={() => loadPrevDay(activeChannel.name)}
+        loadPrevDay={() => loadPrevDay(activeChannel.id)}
         onCommunityClick={showModal}
         fetchMetadata={fetchMetadata}
         loadingMessages={loadingMessages}
