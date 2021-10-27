@@ -23,6 +23,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
   const [showSizeLimit, setShowSizeLimit] = useState(false);
+
   useEffect(() => {
     window.addEventListener("click", () => setShowEmoji(false));
     return () => {
@@ -127,18 +128,17 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         />
       </AddPictureInputWrapper>
       <Row style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}>
-        {image && (
-          <ImagePreviewWrapper>
-            <ImagePreviewOverlay />
+        <InputWrapper>
+          {image && (
             <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
-          </ImagePreviewWrapper>
-        )}
-        <Input
-          placeholder="Message"
-          value={content}
-          onChange={onInputChange}
-          onKeyPress={onInputKeyPress}
-        />
+          )}
+          <Input
+            placeholder="Message"
+            value={content}
+            onChange={onInputChange}
+            onKeyPress={onInputKeyPress}
+          />
+        </InputWrapper>
         <InputButtons>
           <ChatButton
             onClick={(e) => {
@@ -159,6 +159,12 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
     </View>
   );
 }
+
+const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
 
 const View = styled.div`
   display: flex;
@@ -187,28 +193,7 @@ const InputButtons = styled.div`
   }
 `;
 
-const ImagePreviewWrapper = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 82px;
-  z-index: 1;
-`;
-
-const ImagePreviewOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #eef2f5;
-  border-radius: 16px 16px 4px 16px;
-  opacity: 0.9;
-`;
-
 const ImagePreview = styled.img`
-  position: relative;
   width: 64px;
   height: 64px;
   border-radius: 16px 16px 4px 16px;

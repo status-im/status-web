@@ -1,12 +1,15 @@
 import { useCallback, useMemo, useState } from "react";
-import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
+import {
+  ApplicationMetadataMessage,
+  Contacts,
+} from "status-communities/dist/cjs";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { binarySetInsert } from "../../utils";
 
 import { useNotifications } from "./useNotifications";
 
-export function useMessages(chatId: string) {
+export function useMessages(chatId: string, contacts?: Contacts) {
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
     {}
   );
@@ -17,6 +20,9 @@ export function useMessages(chatId: string) {
     (msg: ApplicationMetadataMessage, id: string, date: Date) => {
       const newMessage = ChatMessage.fromMetadataMessage(msg, date);
       if (newMessage) {
+        if (contacts) {
+          contacts.addContact(newMessage.sender);
+        }
         setMessages((prev) => {
           return {
             ...prev,
@@ -31,7 +37,7 @@ export function useMessages(chatId: string) {
         incNotification(id);
       }
     },
-    []
+    [contacts]
   );
 
   const activeMessages = useMemo(

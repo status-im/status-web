@@ -1,4 +1,4 @@
-import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
+import { ApplicationMetadataMessage, utils } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../utils";
 
@@ -29,10 +29,7 @@ export class ChatMessage {
       if (msg.chatMessage?.image) {
         image = uintToImgUrl(msg.chatMessage?.image.payload);
       }
-      const sender = msg.signer.reduce(
-        (p: string, c: number): string => p + c.toString(16),
-        "0x"
-      );
+      const sender = utils.bufToHex(msg.signer);
       return new ChatMessage(content, date, sender, image);
     } else {
       return undefined;

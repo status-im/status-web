@@ -16,3 +16,7 @@ export function idToContentTopic(id: string): string {
 
   return "/waku/1/" + "0x" + topic.toString("hex") + "/rfc26";
 }
+
+export function idToContactCodeTopic(id: string): string {
+  return idToContentTopic(id + "-contact-code");
+}

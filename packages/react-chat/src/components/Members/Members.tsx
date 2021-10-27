@@ -1,18 +1,21 @@
 import React from "react";
+import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
-import { CommunityData } from "../../models/CommunityData";
+import { Contact } from "../../models/Contact";
 
 import { MembersList } from "./MembersList";
 
 interface MembersProps {
-  community: CommunityData;
+  identity: Identity;
+  contacts: Contact[];
   setShowChannels: (val: boolean) => void;
   setMembersList: any;
 }
 
 export function Members({
-  community,
+  identity,
+  contacts,
   setShowChannels,
   setMembersList,
 }: MembersProps) {
@@ -20,7 +23,8 @@ export function Members({
     <MembersWrapper>
       <MemberHeading>Members</MemberHeading>
       <MembersList
-        community={community}
+        identity={identity}
+        contacts={contacts}
         setShowChannels={setShowChannels}
         setMembersList={setMembersList}
       />
