@@ -151,7 +151,14 @@ export function Chat({
           setMembersList={setMembersList}
         />
       )}
-      {createChat && <ChatCreation community={communityData} />}
+      {createChat && (
+        <ChatCreation
+          community={communityData}
+          setMembersList={setMembersList}
+          setActiveChannel={setActiveChannel}
+          setCreateChat={setCreateChat}
+        />
+      )}
       <CommunityModal
         isVisible={isModalVisible}
         onClose={() => setIsModalVisible(false)}

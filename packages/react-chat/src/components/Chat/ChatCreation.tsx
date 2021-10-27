@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { ChannelData } from "../../models/ChannelData";
 import { CommunityData } from "../../models/CommunityData";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { Channel } from "../Channels/Channel";
@@ -8,11 +9,43 @@ import { CrossIcon } from "../Icons/CrossIcon";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
   community: CommunityData;
+  setMembersList: any;
+  setActiveChannel: (val: ChannelData) => void;
+  setCreateChat: (val: boolean) => void;
 }
 
-export function ChatCreation({ community }: ChatCreationProps) {
+export function ChatCreation({
+  community,
+  setMembersList,
+  setActiveChannel,
+  setCreateChat,
+}: ChatCreationProps) {
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
+
+  const addMember = (member: string) => {
+    setStyledGroup((prevMembers: string[]) => {
+      if (prevMembers.find((mem) => mem === member)) {
+        return prevMembers;
+      } else {
+        return [...prevMembers, member.slice(0, 10)];
+      }
+    });
+  };
+
+  const removeMember = (member: string) => {
+    const idx = styledGroup.indexOf(member);
+    styledGroup.splice(idx, 1);
+  };
+
+  const createChat = (group: string[]) => {
+    setMembersList(group);
+    setActiveChannel({
+      id: group.join(""),
+      name: group.join(", "),
+    });
+    setCreateChat(false);
+  };
 
   return (
     <CreationWrapper>
@@ -22,23 +55,50 @@ export function ChatCreation({ community }: ChatCreationProps) {
           {styledGroup.length > 0 && (
             <StyledList>
               {styledGroup.map((member) => (
-                <StyledMember>
+                <StyledMember key={member}>
                   <StyledName>{member}</StyledName>
-                  <CloseButton>
+                  <CloseButton onClick={() => removeMember(member)}>
                     <CrossIcon memberView={true} />
                   </CloseButton>
                 </StyledMember>
               ))}
             </StyledList>
           )}
-          <Input
-            value={query}
-            onInput={(e) => setQuery(e.currentTarget.value)}
-          />
+          <SearchMembers>
+            <Input
+              value={query}
+              onInput={(e) => setQuery(e.currentTarget.value)}
+            />
+            {query && (
+              <SearchContacts>
+                <ContactsList>
+                  {community.membersList
+                    .filter((member) => member.includes(query))
+                    .map((member) => (
+                      <Channel
+                        key={member}
+                        channel={{
+                          id: member,
+                          name: member.slice(0, 10),
+                        }}
+                        isActive={false}
+                        isMuted={false}
+                        onClick={() => addMember(member)}
+                      />
+                    ))}
+                </ContactsList>
+              </SearchContacts>
+            )}
+          </SearchMembers>
         </InputBar>
-        <CreationBtn disabled={styledGroup.length === 0}>Create</CreationBtn>
+        <CreationBtn
+          disabled={styledGroup.length === 0}
+          onClick={() => createChat(styledGroup)}
+        >
+          Confirm
+        </CreationBtn>
       </CreationBar>
-      {!query && (
+      {!query && styledGroup.length === 0 && (
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
@@ -48,51 +108,14 @@ export function ChatCreation({ community }: ChatCreationProps) {
                 channel={{
                   id: member,
                   name: member.slice(0, 10),
-                  description: "Contact",
                 }}
                 isActive={false}
                 isMuted={false}
-                onClick={() =>
-                  setStyledGroup((prevMembers: string[]) => {
-                    if (prevMembers.find((mem) => mem === member)) {
-                      return prevMembers;
-                    } else {
-                      return [...prevMembers, member.slice(0, 10)];
-                    }
-                  })
-                }
+                onClick={() => addMember(member)}
               />
             ))}
           </ContactsList>
         </Contacts>
-      )}
-
-      {query && (
-        <ContactsList>
-          {community.membersList
-            .filter((member) => member.includes(query))
-            .map((member) => (
-              <Channel
-                key={member}
-                channel={{
-                  id: member,
-                  name: member.slice(0, 10),
-                  description: "Contact",
-                }}
-                isActive={false}
-                isMuted={false}
-                onClick={() =>
-                  setStyledGroup((prevMembers: string[]) => {
-                    if (prevMembers.find((mem) => mem === member)) {
-                      return prevMembers;
-                    } else {
-                      return [...prevMembers, member.slice(0, 10)];
-                    }
-                  })
-                }
-              />
-            ))}
-        </ContactsList>
       )}
     </CreationWrapper>
   );
@@ -193,4 +216,22 @@ const ContactsHeading = styled.p`
 const ContactsList = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const SearchMembers = styled.div`
+  position: relative;
+`;
+
+const SearchContacts = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  padding: 8px;
+  background-color: ${({ theme }) => theme.bodyBackgroundColor};
+  box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
+    0px 4px 12px rgba(0, 34, 51, 0.08);
+  border-radius: 8px;
+  position: absolute;
+  left: 0;
+  top: calc(100% + 24px);
 `;
