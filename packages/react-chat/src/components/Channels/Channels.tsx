@@ -49,6 +49,7 @@ export function Channels({
           }
           onClick={() => {
             onCommunityClick(channel);
+            setCreateChat(false);
           }}
         />
       ))}
@@ -79,6 +80,7 @@ export function Channels({
                     name: member.slice(0, 10),
                     description: "Contact",
                   });
+                  setCreateChat(false);
                 }}
               />
             ))}
