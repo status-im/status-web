@@ -66,32 +66,39 @@ export function ChatCreation({
             </StyledList>
           )}
           <SearchMembers>
-            <Input
-              value={query}
-              onInput={(e) => setQuery(e.currentTarget.value)}
-            />
-            {query && (
-              <SearchContacts>
-                <ContactsList>
-                  {community.membersList
-                    .filter((member) => member.includes(query))
-                    .map((member) => (
-                      <Channel
-                        key={member}
-                        channel={{
-                          id: member,
-                          name: member.slice(0, 10),
-                          type: "dm",
-                        }}
-                        isActive={false}
-                        isMuted={false}
-                        onClick={() => addMember(member)}
-                      />
-                    ))}
-                </ContactsList>
-              </SearchContacts>
+            {styledGroup.length < 5 && (
+              <>
+                <Input
+                  value={query}
+                  onInput={(e) => setQuery(e.currentTarget.value)}
+                />
+                {query && (
+                  <SearchContacts>
+                    <ContactsList>
+                      {community.membersList
+                        .filter((member) => member.includes(query))
+                        .map((member) => (
+                          <Channel
+                            key={member}
+                            channel={{
+                              id: member,
+                              name: member.slice(0, 10),
+                              type: "dm",
+                            }}
+                            isActive={false}
+                            isMuted={false}
+                            onClick={() => addMember(member)}
+                          />
+                        ))}
+                    </ContactsList>
+                  </SearchContacts>
+                )}
+              </>
             )}
           </SearchMembers>
+          {styledGroup.length === 5 && (
+            <LimitAlert>5 user Limit reached</LimitAlert>
+          )}
         </InputBar>
         <CreationBtn
           disabled={styledGroup.length === 0}
@@ -237,4 +244,10 @@ const SearchContacts = styled.div`
   position: absolute;
   left: 0;
   top: calc(100% + 24px);
+`;
+
+const LimitAlert = styled.p`
+  text-transform: uppercase;
+  margin-left: auto;
+  color: ${({ theme }) => theme.redColor};
 `;
