@@ -68,7 +68,7 @@ export function Channels({
                 channel={{
                   id: member,
                   name: member,
-                  type: "dm",
+                  type: "group",
                   description: "Contact",
                 }}
                 isActive={member === activeChannelId}

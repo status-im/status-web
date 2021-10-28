@@ -25,10 +25,15 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         <ChannelNameEmpty className={"active"}>{channel.name}</ChannelNameEmpty>
       </ChannelInfoEmpty>
 
-      {channel.description === "Contact" ? (
+      {channel.type === "dm" ? (
         <EmptyText>
           Any messages you send here are encrypted and can only be read by you
           and <span>{channel.name}</span>.
+        </EmptyText>
+      ) : channel.type === "group" ? (
+        <EmptyText>
+          You created a group with <span>{channel.name.slice(1, -1)}</span> and{" "}
+          <span>{channel.name.at(-1)}</span>
         </EmptyText>
       ) : (
         <EmptyText>
