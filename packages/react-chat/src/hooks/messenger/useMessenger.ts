@@ -5,7 +5,6 @@ import {
   Contacts,
   Identity,
   Messenger,
-  utils,
 } from "status-communities/dist/cjs";
 
 import { Contact } from "../../models/Contact";
@@ -37,7 +36,6 @@ export function useMessenger(
           });
         }
       );
-      newContacts.addContact(utils.bufToHex(identity.publicKey));
       return newContacts;
     }
   }, [messenger]);
