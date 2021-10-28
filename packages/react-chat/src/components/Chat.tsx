@@ -149,7 +149,7 @@ export function Chat({
           setMembersList={setMembersList}
         />
       )}
-      {createChat && (
+      {createChat && communityData && (
         <ChatCreation
           community={communityData}
           setMembersList={setMembersList}
