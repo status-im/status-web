@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
+import { GroupIcon } from "../Icons/GroupIcon";
 import { MutedIcon } from "../Icons/MutedIcon";
 import { textMediumStyles } from "../Text";
 
@@ -58,7 +59,14 @@ export function Channel({
                 : ""
             }
           >
-            # {channel.name}
+            {channel.type && channel.type === "group" ? (
+              <GroupIcon />
+            ) : channel.type === "dm" ? (
+              ""
+            ) : (
+              "#"
+            )}{" "}
+            {channel.name}
           </ChannelName>
           {activeView && (
             <ChannelDescription> {channel.description}</ChannelDescription>
@@ -131,10 +139,14 @@ export const ChannelLogo = styled.div`
   }
 `;
 
-export const ChannelName = styled.p`
+export const ChannelName = styled.div`
   font-weight: 500;
   opacity: 0.7;
   color: ${({ theme }) => theme.primary};
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+
   ${textMediumStyles}
 
   &.active,

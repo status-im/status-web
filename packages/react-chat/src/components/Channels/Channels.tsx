@@ -67,7 +67,8 @@ export function Channels({
                 key={member}
                 channel={{
                   id: member,
-                  name: member.slice(0, 10),
+                  name: member,
+                  type: "dm",
                   description: "Contact",
                 }}
                 isActive={member === activeChannelId}

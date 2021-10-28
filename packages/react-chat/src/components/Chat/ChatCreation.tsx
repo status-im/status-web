@@ -43,6 +43,7 @@ export function ChatCreation({
     setActiveChannel({
       id: group.join(""),
       name: group.join(", "),
+      type: "dm",
     });
     setCreateChat(false);
   };
@@ -80,6 +81,7 @@ export function ChatCreation({
                         channel={{
                           id: member,
                           name: member.slice(0, 10),
+                          type: "dm",
                         }}
                         isActive={false}
                         isMuted={false}
@@ -108,6 +110,7 @@ export function ChatCreation({
                 channel={{
                   id: member,
                   name: member.slice(0, 10),
+                  type: "dm",
                 }}
                 isActive={false}
                 isMuted={false}
