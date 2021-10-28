@@ -1,20 +1,24 @@
 import React from "react";
+import { Identity, utils } from "status-communities/dist/cjs";
+import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { CommunityData } from "../../models/CommunityData";
+import { Contact } from "../../models/Contact";
 import { UserIcon } from "../Icons/UserIcon";
 
 import { Member, MemberData, MemberIcon } from "./Member";
 
 interface MembersListProps {
-  community: CommunityData;
+  identity: Identity;
+  contacts: Contact[];
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
   setMembersList: any;
 }
 
 export function MembersList({
-  community,
+  identity,
+  contacts,
   setShowChannels,
   setShowMembers,
   setMembersList,
@@ -27,18 +31,19 @@ export function MembersList({
           <MemberIcon>
             <UserIcon memberView={true} />
           </MemberIcon>
-          <MemberName>Guest564732</MemberName>
+          <MemberName>{utils.bufToHex(identity.publicKey)}</MemberName>
         </MemberData>
       </MemberCategory>
       <MemberCategory>
         <MemberCategoryName>Online</MemberCategoryName>
-        {community.membersList
-          .filter(() => false)
-          .map((member) => (
+        {contacts
+          .filter((e) => e.id != bufToHex(identity.publicKey))
+          .filter((e) => e.online)
+          .map((contact) => (
             <Member
-              key={member}
-              member={member}
-              isOnline={false}
+              key={contact.id}
+              member={contact.id}
+              isOnline={contact.online}
               setShowChannels={setShowChannels}
               setShowMembers={setShowMembers}
               setMembersList={setMembersList}
@@ -47,16 +52,19 @@ export function MembersList({
       </MemberCategory>
       <MemberCategory>
         <MemberCategoryName>Offline</MemberCategoryName>
-        {community.membersList.map((member) => (
-          <Member
-            key={member}
-            member={member}
-            isOnline={false}
-            setShowChannels={setShowChannels}
-            setShowMembers={setShowMembers}
-            setMembersList={setMembersList}
-          />
-        ))}
+        {contacts
+          .filter((e) => e.id != bufToHex(identity.publicKey))
+          .filter((e) => !e.online)
+          .map((contact) => (
+            <Member
+              key={contact.id}
+              member={contact.id}
+              isOnline={contact.online}
+              setShowChannels={setShowChannels}
+              setShowMembers={setShowMembers}
+              setMembersList={setMembersList}
+            />
+          ))}
       </MemberCategory>
     </MembersListWrap>
   );

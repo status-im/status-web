@@ -51,6 +51,7 @@ export function Chat({
     loadPrevDay,
     loadingMessages,
     community,
+    contacts,
   } = useMessenger(activeChannel?.id ?? "", communityKey, identity);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -70,14 +71,7 @@ export function Chat({
         description: community.description.identity?.description ?? "",
       };
     } else {
-      return {
-        id: 1,
-        name: "",
-        icon: "",
-        members: 0,
-        membersList: [],
-        description: "",
-      };
+      return undefined;
     }
   }, [community]);
 
@@ -103,7 +97,7 @@ export function Chat({
     <ChatWrapper>
       {showChannels && !narrow && (
         <ChannelsWrapper>
-          {messenger ? (
+          {community && communityData ? (
             <StyledCommunity onClick={showModal} community={communityData} />
           ) : (
             <CommunitySkeleton />
@@ -119,8 +113,11 @@ export function Chat({
           />
         </ChannelsWrapper>
       )}
+
       {!createChat && (
         <ChatBody
+          identity={identity}
+          contacts={contacts}
           theme={theme}
           channel={activeChannel}
           messenger={messenger}
@@ -146,7 +143,8 @@ export function Chat({
       )}
       {showMembers && !narrow && !createChat && (
         <Members
-          community={communityData}
+          identity={identity}
+          contacts={contacts}
           setShowChannels={setShowChannels}
           setMembersList={setMembersList}
         />
@@ -159,15 +157,17 @@ export function Chat({
           setCreateChat={setCreateChat}
         />
       )}
-      <CommunityModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        icon={communityData.icon}
-        name={communityData.name}
-        subtitle="Public Community"
-        description={communityData.description}
-        publicKey={communityKey}
-      />
+      {communityData && (
+        <CommunityModal
+          isVisible={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+          icon={communityData.icon}
+          name={communityData.name}
+          subtitle="Public Community"
+          description={communityData.description}
+          publicKey={communityKey}
+        />
+      )}
     </ChatWrapper>
   );
 }

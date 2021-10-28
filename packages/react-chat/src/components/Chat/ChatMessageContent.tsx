@@ -8,7 +8,7 @@ import { ImageMenu } from "../Form/ImageMenu";
 
 /* eslint-disable no-useless-escape */
 const regEx =
-  /(?:(?:http|https):\/\/)?(?:[-a-z0-9]+\.)+[a-z]+(?::\d+)?(?:(?:\/[-\+~%/\.\w]+)?\/?(?:[&?][-\+=&;%@\.\w]+)?(?:#[\w]+)?)?/gi;
+  /(?:(?:http|https):\/\/)?(?:[-a-z0-9]+\.)+[a-z]+(?::\d+)?(?:(?:\/[-\+~%/\.\w]+)?\/?(?:[&?][-\+=&;%@\.\w]+)?(?:#[\w-]+)?)?/gi;
 /* eslint-enable no-useless-escape */
 
 type ChatMessageContentProps = {
