@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { CommunityData } from "../../models/CommunityData";
+import { Contact } from "../../models/Contact";
 import { Metadata } from "../../models/Metadata";
 import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels/Channel";
@@ -21,9 +23,11 @@ import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
 
 interface ChatBodyProps {
+  identity: Identity;
+  contacts: Contact[];
   theme: Theme;
   channel: ChannelData;
-  community: CommunityData;
+  community: CommunityData | undefined;
   messenger: any;
   messages: ChatMessage[];
   sendMessage: (text: string, image?: Uint8Array) => void;
@@ -44,6 +48,8 @@ interface ChatBodyProps {
 }
 
 export function ChatBody({
+  identity,
+  contacts,
   theme,
   channel,
   community,
@@ -95,7 +101,7 @@ export function ChatBody({
         }
       >
         <ChannelWrapper className={className}>
-          {messenger ? (
+          {messenger && community ? (
             <>
               {(showCommunity || narrow) && (
                 <CommunityWrap className={className}>
@@ -125,14 +131,14 @@ export function ChatBody({
         >
           <MembersIcon />
         </MemberBtn>
-        {!messenger && <Loading />}
+        {!community && <Loading />}
       </ChatTopbar>
-      {messenger ? (
+      {messenger && community ? (
         <>
           {!showChannelsList && !showMembersList && (
             <>
               {messages.length > 0 ? (
-                messenger ? (
+                messenger && community ? (
                   <ChatMessages
                     messages={messages}
                     loadPrevDay={loadPrevDay}
@@ -163,6 +169,8 @@ export function ChatBody({
           )}
           {showMembersList && narrow && (
             <NarrowMembers
+              identity={identity}
+              contacts={contacts}
               community={community}
               setShowChannels={setShowChannelsList}
               setShowMembersList={setShowMembersList}

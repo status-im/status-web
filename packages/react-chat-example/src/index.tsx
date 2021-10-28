@@ -1,4 +1,4 @@
-import { lightTheme, ReactChat } from "@dappconnect/react-chat";
+import { darkTheme, lightTheme, ReactChat } from "@dappconnect/react-chat";
 import React, { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
@@ -32,6 +32,8 @@ function DragDiv() {
   const moved = useRef(false);
   const setting = useRef("");
 
+  const [theme, setTheme] = useState(true);
+
   const onMouseMove = (e: MouseEvent) => {
     if (setting.current === "position") {
       e.preventDefault();
@@ -54,33 +56,42 @@ function DragDiv() {
   };
 
   return (
-    <Drag style={{ left: x, top: y, width: width, height: height }} ref={ref}>
-      <Bubble
-        onMouseDown={() => {
-          setting.current = "position";
-          document.addEventListener("mousemove", onMouseMove);
-          document.addEventListener("mouseup", onMouseUp);
+    <>
+      <button
+        onClick={() => {
+          setTheme(!theme);
         }}
-      />
-      <FloatingDiv className={showChat ? "" : "hide"}>
-        <ReactChat
-          theme={lightTheme}
-          communityKey={
-            "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd"
-          }
-          fetchMetadata={fetchMetadata}
-        />
-      </FloatingDiv>
-      {showChat && (
-        <SizeSet
+      >
+        Change theme
+      </button>
+      <Drag style={{ left: x, top: y, width: width, height: height }} ref={ref}>
+        <Bubble
           onMouseDown={() => {
-            setting.current = "size";
+            setting.current = "position";
             document.addEventListener("mousemove", onMouseMove);
             document.addEventListener("mouseup", onMouseUp);
           }}
-        ></SizeSet>
-      )}
-    </Drag>
+        />
+        <FloatingDiv className={showChat ? "" : "hide"}>
+          <ReactChat
+            theme={theme ? lightTheme : darkTheme}
+            communityKey={
+              "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd"
+            }
+            fetchMetadata={fetchMetadata}
+          />
+        </FloatingDiv>
+        {showChat && (
+          <SizeSet
+            onMouseDown={() => {
+              setting.current = "size";
+              document.addEventListener("mousemove", onMouseMove);
+              document.addEventListener("mouseup", onMouseUp);
+            }}
+          ></SizeSet>
+        )}
+      </Drag>
+    </>
   );
 }
 

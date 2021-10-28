@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export function useRefBreak(dimension: number, sizeThreshold: number) {
-  const [widthBreak, setWidthBreak] = useState(false);
+  const [widthBreak, setWidthBreak] = useState(dimension < sizeThreshold);
 
   useEffect(() => {
     const checkDimensions = () => {
