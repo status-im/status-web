@@ -6,6 +6,7 @@ import { CommunityData } from "../../models/CommunityData";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { Channel } from "../Channels/Channel";
 import { CrossIcon } from "../Icons/CrossIcon";
+import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
   community: CommunityData;
@@ -28,7 +29,7 @@ export function ChatCreation({
       if (prevMembers.find((mem) => mem === member)) {
         return prevMembers;
       } else {
-        return [...prevMembers, member.slice(0, 10)];
+        return [...prevMembers, member];
       }
     });
   };
@@ -57,7 +58,7 @@ export function ChatCreation({
             <StyledList>
               {styledGroup.map((member) => (
                 <StyledMember key={member}>
-                  <StyledName>{member}</StyledName>
+                  <StyledName>{member.slice(0, 10)}</StyledName>
                   <CloseButton onClick={() => removeMember(member)}>
                     <CrossIcon memberView={true} />
                   </CloseButton>
@@ -73,25 +74,12 @@ export function ChatCreation({
                   onInput={(e) => setQuery(e.currentTarget.value)}
                 />
                 {query && (
-                  <SearchContacts>
-                    <ContactsList>
-                      {community.membersList
-                        .filter((member) => member.includes(query))
-                        .map((member) => (
-                          <Channel
-                            key={member}
-                            channel={{
-                              id: member,
-                              name: member.slice(0, 10),
-                              type: "dm",
-                            }}
-                            isActive={false}
-                            isMuted={false}
-                            onClick={() => addMember(member)}
-                          />
-                        ))}
-                    </ContactsList>
-                  </SearchContacts>
+                  <SearchBlock
+                    community={community}
+                    query={query}
+                    styledGroup={styledGroup}
+                    setStyledGroup={setStyledGroup}
+                  />
                 )}
               </>
             )}
@@ -223,27 +211,13 @@ const ContactsHeading = styled.p`
   ${textMediumStyles}
 `;
 
-const ContactsList = styled.div`
+export const ContactsList = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 const SearchMembers = styled.div`
   position: relative;
-`;
-
-const SearchContacts = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 360px;
-  padding: 8px;
-  background-color: ${({ theme }) => theme.bodyBackgroundColor};
-  box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
-    0px 4px 12px rgba(0, 34, 51, 0.08);
-  border-radius: 8px;
-  position: absolute;
-  left: 0;
-  top: calc(100% + 24px);
 `;
 
 const LimitAlert = styled.p`
