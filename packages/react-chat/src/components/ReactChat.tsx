@@ -29,7 +29,6 @@ export function ReactChat({
           <ChatLoader
             communityKey={communityKey}
             fetchMetadata={fetchMetadata}
-            theme={theme}
           />
         </Wrapper>
       </NarrowProvider>

@@ -3,7 +3,6 @@ import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { CommunityData } from "../../models/CommunityData";
-import { Contact } from "../../models/Contact";
 import { MembersList } from "../Members/MembersList";
 
 import { NarrowTopbar } from "./NarrowTopbar";
@@ -11,7 +10,6 @@ import { NarrowTopbar } from "./NarrowTopbar";
 interface NarrowMembersProps {
   identity: Identity;
   community: CommunityData;
-  contacts: Contact[];
   setShowChannels: (val: boolean) => void;
   setShowMembersList: (val: boolean) => void;
   setMembersList: any;
@@ -20,7 +18,6 @@ interface NarrowMembersProps {
 export function NarrowMembers({
   identity,
   community,
-  contacts,
   setShowChannels,
   setShowMembersList,
   setMembersList,
@@ -30,7 +27,6 @@ export function NarrowMembers({
       <NarrowTopbar list="Community members" community={community.name} />
       <MembersList
         identity={identity}
-        contacts={contacts}
         setShowChannels={setShowChannels}
         setShowMembers={setShowMembersList}
         setMembersList={setMembersList}

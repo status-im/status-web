@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { EditIcon } from "../Icons/EditIcon";
 
 import { Channel } from "./Channel";
 
 interface ChannelsProps {
-  notifications: { [id: string]: number };
-  clearNotifications: (id: string) => void;
   onCommunityClick: (val: ChannelData) => void;
   activeChannelId: string;
   channels: ChannelData[];
@@ -17,14 +16,14 @@ interface ChannelsProps {
 }
 
 export function Channels({
-  notifications,
   onCommunityClick,
-  clearNotifications,
   activeChannelId,
   channels,
   membersList,
   setCreateChat,
 }: ChannelsProps) {
+  const { clearNotifications, notifications } = useMessengerContext();
+
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);
     if (channel) {

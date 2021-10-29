@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { equalDate } from "../../utils";
@@ -14,17 +15,16 @@ import { ChatMessageContent } from "./ChatMessageContent";
 
 type ChatMessagesProps = {
   messages: ChatMessage[];
-  loadPrevDay: () => void;
+  activeChannelId: string;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-  loadingMessages: boolean;
 };
 
 export function ChatMessages({
   messages,
-  loadPrevDay,
+  activeChannelId,
   fetchMetadata,
-  loadingMessages,
 }: ChatMessagesProps) {
+  const { loadPrevDay, loadingMessages } = useMessengerContext();
   const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
   const today = useMemo(() => new Date(), []);
@@ -40,7 +40,7 @@ export function ChatMessages({
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
         setScrollOnBot(true);
-        loadPrevDay();
+        loadPrevDay(activeChannelId);
       }
     }
   }, [messages, messages.length, loadingMessages]);
@@ -49,7 +49,7 @@ export function ChatMessages({
     const setScroll = () => {
       if (ref && ref.current) {
         if (ref.current.scrollTop <= 0) {
-          loadPrevDay();
+          loadPrevDay(activeChannelId);
         }
         if (
           ref.current.scrollTop + ref.current.clientHeight ==
