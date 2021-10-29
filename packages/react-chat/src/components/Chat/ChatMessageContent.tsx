@@ -2,10 +2,10 @@ import { decode } from "html-entities";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { ImageMenu } from "../Form/ImageMenu";
-
 /* eslint-disable no-useless-escape */
 const regEx =
   /(?:(?:http|https):\/\/)?(?:[-a-z0-9]+\.)+[a-z]+(?::\d+)?(?:(?:\/[-\+~%/\.\w]+)?\/?(?:[&?][-\+=&;%@\.\w]+)?(?:#[\w-]+)?)?/gi;
@@ -13,17 +13,16 @@ const regEx =
 
 type ChatMessageContentProps = {
   message: ChatMessage;
-  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   setImage: (image: string) => void;
   setLinkOpen: (link: string) => void;
 };
 
 export function ChatMessageContent({
   message,
-  fetchMetadata,
   setImage,
   setLinkOpen,
 }: ChatMessageContentProps) {
+  const fetchMetadata = useFetchMetadata();
   const { content, image } = useMemo(() => message, [message]);
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
     content,

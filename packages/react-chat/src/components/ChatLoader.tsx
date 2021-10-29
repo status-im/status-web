@@ -3,17 +3,15 @@ import { Identity } from "status-communities/dist/cjs";
 
 import { MessengerProvider } from "../contexts/messengerProvider";
 import { ChannelData } from "../models/ChannelData";
-import { Metadata } from "../models/Metadata";
 
 import { Chat } from "./Chat";
 import { IdentityLoader } from "./Form/IdentityLoader";
 
 interface ChatLoaderProps {
   communityKey: string;
-  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function ChatLoader({ communityKey, fetchMetadata }: ChatLoaderProps) {
+export function ChatLoader({ communityKey }: ChatLoaderProps) {
   const [identity, setIdentity] = useState<Identity | undefined>(undefined);
   const [activeChannel, setActiveChannel] = useState<ChannelData>({
     id: "",
@@ -32,7 +30,6 @@ export function ChatLoader({ communityKey, fetchMetadata }: ChatLoaderProps) {
           communityKey={communityKey}
           activeChannel={activeChannel}
           setActiveChannel={setActiveChannel}
-          fetchMetadata={fetchMetadata}
           identity={identity}
         />
       </MessengerProvider>

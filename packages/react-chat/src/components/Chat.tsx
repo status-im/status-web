@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { useMessengerContext } from "../contexts/messengerProvider";
 import { useNarrow } from "../contexts/narrowProvider";
 import { ChannelData } from "../models/ChannelData";
-import { Metadata } from "../models/Metadata";
 import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 import { Channels } from "./Channels/Channels";
@@ -18,7 +17,6 @@ import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
   communityKey: string;
-  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   identity: Identity;
   setActiveChannel: (channel: ChannelData) => void;
   activeChannel: ChannelData;
@@ -26,7 +24,6 @@ interface ChatProps {
 
 export function Chat({
   communityKey,
-  fetchMetadata,
   identity,
   setActiveChannel,
   activeChannel,
@@ -109,7 +106,6 @@ export function Chat({
           community={communityData}
           showCommunity={!showChannels}
           onCommunityClick={showModal}
-          fetchMetadata={fetchMetadata}
           channels={channels}
           membersList={membersList}
           setMembersList={setMembersList}

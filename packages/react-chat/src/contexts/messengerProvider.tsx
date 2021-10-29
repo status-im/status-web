@@ -19,7 +19,7 @@ export function useMessengerContext() {
   return useContext(MessengerContext);
 }
 
-interface NarrowProviderProps {
+interface MessengerProviderProps {
   children: React.ReactNode;
   activeChannel: string;
   communityKey?: string;
@@ -31,7 +31,7 @@ export function MessengerProvider({
   activeChannel,
   communityKey,
   identity,
-}: NarrowProviderProps) {
+}: MessengerProviderProps) {
   const messenger = useMessenger(activeChannel, communityKey, identity);
   return <MessengerContext.Provider value={messenger} children={children} />;
 }

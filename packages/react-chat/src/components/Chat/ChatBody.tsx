@@ -6,7 +6,6 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { CommunityData } from "../../models/CommunityData";
-import { Metadata } from "../../models/Metadata";
 import { Channel } from "../Channels/Channel";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { Community } from "../Community";
@@ -30,7 +29,6 @@ interface ChatBodyProps {
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: string;
   onCommunityClick: () => void;
-  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   channels: ChannelData[];
   membersList: string[];
   setMembersList: any;
@@ -47,7 +45,6 @@ export function ChatBody({
   setActiveChannel,
   activeChannelId,
   onCommunityClick,
-  fetchMetadata,
   channels,
   membersList,
   setMembersList,
@@ -125,7 +122,6 @@ export function ChatBody({
                   <ChatMessages
                     messages={messages}
                     activeChannelId={activeChannelId}
-                    fetchMetadata={fetchMetadata}
                   />
                 ) : (
                   <LoadingSkeleton />
