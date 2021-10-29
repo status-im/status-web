@@ -9,7 +9,9 @@ import { CommunityData } from "../../models/CommunityData";
 import { Channel } from "../Channels/Channel";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { Community } from "../Community";
+import { ChannelMenu } from "../Form/ChannelMenu";
 import { MembersIcon } from "../Icons/MembersIcon";
+import { MoreIcon } from "../Icons/MoreIcon";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowMembers } from "../NarrowMode/NarrowMembers";
 import { CommunitySkeleton } from "../Skeleton/CommunitySkeleton";
@@ -54,6 +56,7 @@ export function ChatBody({
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
+  const [showChannelMenu, setShowChannelMenu] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
   const switchChannelList = useCallback(() => {
@@ -101,17 +104,28 @@ export function ChatBody({
           )}
         </ChannelWrapper>
 
-        <MemberBtn
-          onClick={narrow ? () => switchMemberList() : onClick}
-          className={
-            (showMembers && !narrow) || (showMembersList && narrow)
-              ? "active"
-              : ""
-          }
-        >
-          <MembersIcon />
-        </MemberBtn>
+        <MenuWrapper>
+          {!narrow && (
+            <MemberBtn
+              onClick={onClick}
+              className={showMembers && !narrow ? "active" : ""}
+            >
+              <MembersIcon />
+            </MemberBtn>
+          )}
+          <MoreBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
+            <MoreIcon />
+          </MoreBtn>
+        </MenuWrapper>
         {!community && <Loading />}
+        {showChannelMenu && (
+          <ChannelMenu
+            channel={channel}
+            messages={messages}
+            switchMemberList={switchMemberList}
+            setShowChannelMenu={setShowChannelMenu}
+          />
+        )}
       </ChatTopbar>
       {messenger && community ? (
         <>
@@ -220,12 +234,33 @@ const CommunityWrap = styled.div`
   }
 `;
 
+const MenuWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const MemberBtn = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 8px;
   padding: 0;
-  margin-top: 12px;
+
+  &:hover {
+    background: ${({ theme }) => theme.border};
+  }
+
+  &:active,
+  &.active {
+    background: ${({ theme }) => theme.inputColor};
+  }
+`;
+
+const MoreBtn = styled.button`
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  padding: 0;
+  margin: 0 8px;
 
   &:hover {
     background: ${({ theme }) => theme.border};
