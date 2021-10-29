@@ -8,7 +8,7 @@ import { textSmallStyles } from "../Text";
 
 interface ChannelMenuProps {
   channel: ChannelData;
-  notifications: { [id: string]: number };
+  clearNotifications: (id: string) => void;
   messages: ChatMessage[];
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
@@ -16,7 +16,7 @@ interface ChannelMenuProps {
 
 export const ChannelMenu = ({
   channel,
-  notifications,
+  clearNotifications,
   messages,
   switchMemberList,
   setShowChannelMenu,
@@ -66,7 +66,7 @@ export const ChannelMenu = ({
           </svg>
           <MenuText>Mute Chat</MenuText>
         </MenuItem>
-        <MenuItem onClick={() => notifications[channel.id] === 0}>
+        <MenuItem onClick={() => clearNotifications(channel.id)}>
           <svg
             width="16"
             height="16"
