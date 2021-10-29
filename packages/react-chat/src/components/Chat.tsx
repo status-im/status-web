@@ -2,11 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../contexts/messengerProvider";
 import { useNarrow } from "../contexts/narrowProvider";
-import { useMessenger } from "../hooks/messenger/useMessenger";
 import { ChannelData } from "../models/ChannelData";
 import { Metadata } from "../models/Metadata";
-import { Theme } from "../styles/themes";
 import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 import { Channels } from "./Channels/Channels";
@@ -18,23 +17,20 @@ import { CommunityModal } from "./Modals/CommunityModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
-  theme: Theme;
   communityKey: string;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
   identity: Identity;
+  setActiveChannel: (channel: ChannelData) => void;
+  activeChannel: ChannelData;
 }
 
 export function Chat({
-  theme,
   communityKey,
   fetchMetadata,
   identity,
+  setActiveChannel,
+  activeChannel,
 }: ChatProps) {
-  const [activeChannel, setActiveChannel] = useState<ChannelData>({
-    id: "",
-    name: "",
-    description: "",
-  });
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
@@ -42,20 +38,10 @@ export function Chat({
 
   const narrow = useNarrow();
 
-  const {
-    messenger,
-    messages,
-    sendMessage,
-    notifications,
-    clearNotifications,
-    loadPrevDay,
-    loadingMessages,
-    community,
-    contacts,
-  } = useMessenger(activeChannel?.id ?? "", communityKey, identity);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => setIsModalVisible(true);
+
+  const { community } = useMessengerContext();
 
   const communityData = useMemo(() => {
     if (community?.description) {
@@ -103,8 +89,6 @@ export function Chat({
             <CommunitySkeleton />
           )}
           <Channels
-            notifications={notifications}
-            clearNotifications={clearNotifications}
             onCommunityClick={(e) => setActiveChannel(e)}
             activeChannelId={activeChannel?.id ?? ""}
             channels={channels}
@@ -117,24 +101,15 @@ export function Chat({
       {!createChat && (
         <ChatBody
           identity={identity}
-          contacts={contacts}
-          theme={theme}
           channel={activeChannel}
-          messenger={messenger}
-          messages={messages}
-          sendMessage={sendMessage}
-          notifications={notifications}
           setActiveChannel={setActiveChannel}
           activeChannelId={activeChannel.id}
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
           community={communityData}
           showCommunity={!showChannels}
-          loadPrevDay={() => loadPrevDay(activeChannel.id)}
           onCommunityClick={showModal}
           fetchMetadata={fetchMetadata}
-          loadingMessages={loadingMessages}
-          clearNotifications={clearNotifications}
           channels={channels}
           membersList={membersList}
           setMembersList={setMembersList}
@@ -144,7 +119,6 @@ export function Chat({
       {showMembers && !narrow && !createChat && (
         <Members
           identity={identity}
-          contacts={contacts}
           setShowChannels={setShowChannels}
           setMembersList={setMembersList}
         />

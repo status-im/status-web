@@ -1,7 +1,8 @@
 import { Picker } from "emoji-mart";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useLow } from "../../contexts/narrowProvider";
 import { lightTheme, Theme } from "../../styles/themes";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
@@ -12,12 +13,9 @@ import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
 import { Modal } from "../Modals/Modal";
 
-type ChatInputProps = {
-  theme: Theme;
-  addMessage: (message: string, image?: Uint8Array) => void;
-};
-
-export function ChatInput({ theme, addMessage }: ChatInputProps) {
+export function ChatInput() {
+  const { sendMessage } = useMessengerContext();
+  const theme = useTheme() as Theme;
   const [content, setContent] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
@@ -61,7 +59,7 @@ export function ChatInput({ theme, addMessage }: ChatInputProps) {
         e.preventDefault();
         (e.target as HTMLTextAreaElement).style.height = "40px";
         setInputHeight(40);
-        addMessage(content, imageUint);
+        sendMessage(content, imageUint);
         setImageUint(undefined);
         setContent("");
       }

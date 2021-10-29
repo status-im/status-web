@@ -2,20 +2,16 @@ import React from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
-import { Contact } from "../../models/Contact";
-
 import { MembersList } from "./MembersList";
 
 interface MembersProps {
   identity: Identity;
-  contacts: Contact[];
   setShowChannels: (val: boolean) => void;
   setMembersList: any;
 }
 
 export function Members({
   identity,
-  contacts,
   setShowChannels,
   setMembersList,
 }: MembersProps) {
@@ -24,7 +20,6 @@ export function Members({
       <MemberHeading>Members</MemberHeading>
       <MembersList
         identity={identity}
-        contacts={contacts}
         setShowChannels={setShowChannels}
         setMembersList={setMembersList}
       />

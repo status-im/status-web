@@ -2,13 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
-import { ChatMessage } from "../../models/ChatMessage";
 import { CommunityData } from "../../models/CommunityData";
-import { Contact } from "../../models/Contact";
 import { Metadata } from "../../models/Metadata";
-import { Theme } from "../../styles/themes";
 import { Channel } from "../Channels/Channel";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { Community } from "../Community";
@@ -24,24 +22,15 @@ import { ChatMessages } from "./ChatMessages";
 
 interface ChatBodyProps {
   identity: Identity;
-  contacts: Contact[];
-  theme: Theme;
   channel: ChannelData;
   community: CommunityData | undefined;
-  messenger: any;
-  messages: ChatMessage[];
-  sendMessage: (text: string, image?: Uint8Array) => void;
   onClick: () => void;
   showMembers: boolean;
   showCommunity: boolean;
-  notifications: { [id: string]: number };
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: string;
-  loadPrevDay: () => void;
   onCommunityClick: () => void;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
-  loadingMessages: boolean;
-  clearNotifications: (id: string) => void;
   channels: ChannelData[];
   membersList: string[];
   setMembersList: any;
@@ -50,29 +39,21 @@ interface ChatBodyProps {
 
 export function ChatBody({
   identity,
-  contacts,
-  theme,
   channel,
   community,
-  messenger,
-  messages,
-  sendMessage,
   onClick,
   showMembers,
   showCommunity,
-  notifications,
   setActiveChannel,
   activeChannelId,
-  loadPrevDay,
   onCommunityClick,
   fetchMetadata,
-  loadingMessages,
-  clearNotifications,
   channels,
   membersList,
   setMembersList,
   setCreateChat,
 }: ChatBodyProps) {
+  const { messenger, messages } = useMessengerContext();
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
@@ -143,9 +124,8 @@ export function ChatBody({
                 messenger && community ? (
                   <ChatMessages
                     messages={messages}
-                    loadPrevDay={loadPrevDay}
+                    activeChannelId={activeChannelId}
                     fetchMetadata={fetchMetadata}
-                    loadingMessages={loadingMessages}
                   />
                 ) : (
                   <LoadingSkeleton />
@@ -153,7 +133,7 @@ export function ChatBody({
               ) : (
                 <EmptyChannel channel={channel} />
               )}
-              <ChatInput addMessage={sendMessage} theme={theme} />
+              <ChatInput />
             </>
           )}
 
@@ -161,11 +141,9 @@ export function ChatBody({
             <NarrowChannels
               channels={channels}
               community={community.name}
-              notifications={notifications}
               setActiveChannel={setActiveChannel}
               setShowChannels={setShowChannelsList}
               activeChannelId={activeChannelId}
-              clearNotifications={clearNotifications}
               membersList={membersList}
               setCreateChat={setCreateChat}
             />
@@ -173,7 +151,6 @@ export function ChatBody({
           {showMembersList && narrow && (
             <NarrowMembers
               identity={identity}
-              contacts={contacts}
               community={community}
               setShowChannels={setShowChannelsList}
               setShowMembersList={setShowMembersList}
@@ -184,7 +161,7 @@ export function ChatBody({
       ) : (
         <>
           <LoadingSkeleton />
-          <ChatInput addMessage={sendMessage} theme={theme} />
+          <ChatInput />
         </>
       )}
     </ChatBodyWrapper>

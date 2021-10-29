@@ -7,6 +7,7 @@ import {
   Messenger,
 } from "status-communities/dist/cjs";
 
+import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
 import { createCommunity } from "../../utils/createCommunity";
 import { createMessenger } from "../../utils/createMessenger";
@@ -14,10 +15,25 @@ import { createMessenger } from "../../utils/createMessenger";
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
 
+export type MessengerType = {
+  messenger: Messenger | undefined;
+  messages: ChatMessage[];
+  sendMessage: (
+    messageText?: string | undefined,
+    image?: Uint8Array | undefined
+  ) => Promise<void>;
+  notifications: { [chatId: string]: number };
+  clearNotifications: (id: string) => void;
+  loadPrevDay: (id: string) => Promise<void>;
+  loadingMessages: boolean;
+  community: Community | undefined;
+  contacts: Contact[];
+};
+
 export function useMessenger(
   chatId: string,
-  communityKey: string,
-  identity: Identity
+  communityKey: string | undefined,
+  identity: Identity | undefined
 ) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
 
@@ -26,7 +42,7 @@ export function useMessenger(
   }>({});
 
   const contactsClass = useMemo(() => {
-    if (messenger) {
+    if (messenger && identity) {
       const newContacts = new Contacts(
         identity,
         messenger.waku,
@@ -38,7 +54,7 @@ export function useMessenger(
       );
       return newContacts;
     }
-  }, [messenger]);
+  }, [messenger, identity]);
 
   const contacts = useMemo<Contact[]>(() => {
     const now = Date.now();
@@ -58,13 +74,15 @@ export function useMessenger(
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(chatId, messenger);
 
   useEffect(() => {
-    createMessenger(identity).then((e) => {
-      setMessenger(e);
-    });
-  }, []);
+    if (identity) {
+      createMessenger(identity).then((e) => {
+        setMessenger(e);
+      });
+    }
+  }, [identity]);
 
   useEffect(() => {
-    if (messenger && contactsClass) {
+    if (messenger && contactsClass && communityKey) {
       createCommunity(communityKey, addMessage, messenger).then((e) => {
         setCommunity(e);
       });
