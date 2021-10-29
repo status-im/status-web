@@ -121,7 +121,6 @@ export function ChatBody({
         {showChannelMenu && (
           <ChannelMenu
             channel={channel}
-            clearNotifications={clearNotifications}
             messages={messages}
             switchMemberList={switchMemberList}
             setShowChannelMenu={setShowChannelMenu}

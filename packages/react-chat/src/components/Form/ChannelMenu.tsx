@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
@@ -8,7 +9,7 @@ import { textSmallStyles } from "../Text";
 
 interface ChannelMenuProps {
   channel: ChannelData;
-  clearNotifications: (id: string) => void;
+
   messages: ChatMessage[];
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
@@ -16,12 +17,13 @@ interface ChannelMenuProps {
 
 export const ChannelMenu = ({
   channel,
-  clearNotifications,
+
   messages,
   switchMemberList,
   setShowChannelMenu,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
+  const { clearNotifications } = useMessengerContext();
 
   return (
     <MenuBlock>
