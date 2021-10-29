@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import styled from "styled-components";
 
+import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
 import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
@@ -24,13 +25,12 @@ export function ReactChat({
   return (
     <ThemeProvider theme={theme}>
       <NarrowProvider myRef={ref}>
-        <Wrapper ref={ref}>
-          <GlobalStyle />
-          <ChatLoader
-            communityKey={communityKey}
-            fetchMetadata={fetchMetadata}
-          />
-        </Wrapper>
+        <FetchMetadataProvider fetchMetadata={fetchMetadata}>
+          <Wrapper ref={ref}>
+            <GlobalStyle />
+            <ChatLoader communityKey={communityKey} />
+          </Wrapper>
+        </FetchMetadataProvider>
       </NarrowProvider>
     </ThemeProvider>
   );

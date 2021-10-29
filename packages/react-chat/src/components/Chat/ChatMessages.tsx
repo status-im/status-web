@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChatMessage } from "../../models/ChatMessage";
-import { Metadata } from "../../models/Metadata";
 import { equalDate } from "../../utils";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
@@ -16,14 +15,9 @@ import { ChatMessageContent } from "./ChatMessageContent";
 type ChatMessagesProps = {
   messages: ChatMessage[];
   activeChannelId: string;
-  fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 };
 
-export function ChatMessages({
-  messages,
-  activeChannelId,
-  fetchMetadata,
-}: ChatMessagesProps) {
+export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
   const { loadPrevDay, loadingMessages } = useMessengerContext();
   const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
@@ -108,7 +102,6 @@ export function ChatMessages({
                 <MessageText>
                   <ChatMessageContent
                     message={message}
-                    fetchMetadata={fetchMetadata}
                     setImage={setImage}
                     setLinkOpen={setLink}
                   />
