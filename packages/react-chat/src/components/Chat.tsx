@@ -11,6 +11,7 @@ import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 import { Channels } from "./Channels/Channels";
 import { ChatBody } from "./Chat/ChatBody";
+import { ChatCreation } from "./Chat/ChatCreation";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
@@ -37,6 +38,7 @@ export function Chat({
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
+  const [createChat, setCreateChat] = useState(false);
 
   const narrow = useNarrow();
 
@@ -107,39 +109,52 @@ export function Chat({
             activeChannelId={activeChannel?.id ?? ""}
             channels={channels}
             membersList={membersList}
+            setCreateChat={setCreateChat}
           />
         </ChannelsWrapper>
       )}
-      <ChatBody
-        identity={identity}
-        contacts={contacts}
-        theme={theme}
-        channel={activeChannel}
-        messenger={messenger}
-        messages={messages}
-        sendMessage={sendMessage}
-        notifications={notifications}
-        setActiveChannel={setActiveChannel}
-        activeChannelId={activeChannel.id}
-        onClick={() => setShowMembers(!showMembers)}
-        showMembers={showMembers}
-        community={communityData}
-        showCommunity={!showChannels}
-        loadPrevDay={() => loadPrevDay(activeChannel.id)}
-        onCommunityClick={showModal}
-        fetchMetadata={fetchMetadata}
-        loadingMessages={loadingMessages}
-        clearNotifications={clearNotifications}
-        channels={channels}
-        membersList={membersList}
-        setMembersList={setMembersList}
-      />
-      {showMembers && !narrow && (
+
+      {!createChat && (
+        <ChatBody
+          identity={identity}
+          contacts={contacts}
+          theme={theme}
+          channel={activeChannel}
+          messenger={messenger}
+          messages={messages}
+          sendMessage={sendMessage}
+          notifications={notifications}
+          setActiveChannel={setActiveChannel}
+          activeChannelId={activeChannel.id}
+          onClick={() => setShowMembers(!showMembers)}
+          showMembers={showMembers}
+          community={communityData}
+          showCommunity={!showChannels}
+          loadPrevDay={() => loadPrevDay(activeChannel.id)}
+          onCommunityClick={showModal}
+          fetchMetadata={fetchMetadata}
+          loadingMessages={loadingMessages}
+          clearNotifications={clearNotifications}
+          channels={channels}
+          membersList={membersList}
+          setMembersList={setMembersList}
+          setCreateChat={setCreateChat}
+        />
+      )}
+      {showMembers && !narrow && !createChat && (
         <Members
           identity={identity}
           contacts={contacts}
           setShowChannels={setShowChannels}
           setMembersList={setMembersList}
+        />
+      )}
+      {createChat && communityData && (
+        <ChatCreation
+          community={communityData}
+          setMembersList={setMembersList}
+          setActiveChannel={setActiveChannel}
+          setCreateChat={setCreateChat}
         />
       )}
       {communityData && (
