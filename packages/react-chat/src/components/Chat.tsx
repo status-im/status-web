@@ -13,6 +13,7 @@ import { ChatCreation } from "./Chat/ChatCreation";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
+import { EditModal } from "./Modals/EdtModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
@@ -105,7 +106,7 @@ export function Chat({
           showMembers={showMembers}
           community={communityData}
           showCommunity={!showChannels}
-          onCommunityClick={showModal}
+          onModalClick={showModal}
           channels={channels}
           membersList={membersList}
           setMembersList={setMembersList}
@@ -138,6 +139,10 @@ export function Chat({
           publicKey={communityKey}
         />
       )}
+      <EditModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+      />
     </ChatWrapper>
   );
 }
