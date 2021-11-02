@@ -22,13 +22,15 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
           {" "}
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogoEmpty>
-        <ChannelNameEmpty className={"active"}>{channel.name}</ChannelNameEmpty>
+        <ChannelNameEmpty className={"active"}>
+          {channel.name.slice(0, 10)}
+        </ChannelNameEmpty>
       </ChannelInfoEmpty>
 
       {channel.type === "dm" ? (
         <EmptyText>
           Any messages you send here are encrypted and can only be read by you
-          and <span>{channel.name}</span>.
+          and <span>{channel.name.slice(0, 10)}</span>.
         </EmptyText>
       ) : channel.type === "group" ? (
         <EmptyText>
@@ -70,6 +72,9 @@ const ChannelNameEmpty = styled(ChannelName)`
   font-size: 22px;
   line-height: 30px;
   margin-bottom: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 const EmptyText = styled.p`
