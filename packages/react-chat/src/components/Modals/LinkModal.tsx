@@ -5,6 +5,7 @@ import { buttonStyles } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
 
 import { BasicModalProps, Modal } from "./Modal";
+import { Heading, Section } from "./ModalStyle";
 
 interface LinkModalProps extends BasicModalProps {
   link: string;
@@ -14,7 +15,7 @@ export const LinkModal = ({ isVisible, onClose, link }: LinkModalProps) => {
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Section>
-        <Question>Are you sure you want to visit this website?</Question>
+        <Heading>Are you sure you want to visit this website?</Heading>
       </Section>
       <Section>
         <Link>{link}</Link>
@@ -33,21 +34,6 @@ export const LinkModal = ({ isVisible, onClose, link }: LinkModalProps) => {
     </Modal>
   );
 };
-
-const Section = styled.div`
-  padding: 16px;
-
-  & + & {
-    border-top: 1px solid ${({ theme }) => theme.border};
-  }
-`;
-
-const Question = styled.p`
-  color: ${({ theme }) => theme.primary};
-  font-weight: bold;
-  font-size: 17px;
-  line-height: 24px;
-`;
 
 const Link = styled.a`
   text-decoration: none;
