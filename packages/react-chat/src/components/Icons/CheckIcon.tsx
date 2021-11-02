@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export const CheckIcon = () => {
+interface CheckIconProps {
+  isHovered:
+    | boolean
+    | {
+        onMouseOver(): void;
+        onMouseOut(): void;
+      };
+}
+
+export const CheckIcon = ({ isHovered }: CheckIconProps) => {
   return (
     <Icon
       width="16"
@@ -9,6 +18,7 @@ export const CheckIcon = () => {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={isHovered ? "isHovered" : ""}
     >
       <path d="M11.0826 5.61085C11.2358 5.38108 11.1737 5.07065 10.9439 4.91747C10.7142 4.7643 10.4037 4.82638 10.2506 5.05615L6.58887 10.5487L5.02014 8.97994C4.82488 8.78468 4.50829 8.78468 4.31303 8.97994C4.11777 9.17521 4.11777 9.49179 4.31303 9.68705L6.31303 11.687C6.41895 11.793 6.56679 11.8458 6.71585 11.8311C6.86492 11.8163 6.99952 11.7355 7.08261 11.6108L11.0826 5.61085Z" />
       <path
@@ -25,7 +35,7 @@ const Icon = styled.svg`
     fill: ${({ theme }) => theme.tertiary};
   }
 
-  &:hover > path {
+  &.isHovered > path {
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 `;

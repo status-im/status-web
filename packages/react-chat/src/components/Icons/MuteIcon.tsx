@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export const MuteIcon = () => {
+interface MuteIconProps {
+  isHovered:
+    | boolean
+    | {
+        onMouseOver(): void;
+        onMouseOut(): void;
+      };
+}
+
+export const MuteIcon = ({ isHovered }: MuteIconProps) => {
   return (
     <Icon
       width="16"
@@ -9,6 +18,7 @@ export const MuteIcon = () => {
       viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={isHovered ? "isHovered" : ""}
     >
       <path
         fillRule="evenodd"
@@ -20,11 +30,9 @@ export const MuteIcon = () => {
 };
 
 const Icon = styled.svg`
-  & > path {
-    fill: ${({ theme }) => theme.tertiary};
-  }
+  fill: ${({ theme }) => theme.tertiary};
 
-  &:hover > path {
+  &.isHovered {
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 `;

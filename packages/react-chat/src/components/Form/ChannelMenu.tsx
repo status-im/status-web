@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -29,6 +29,26 @@ export const ChannelMenu = ({
   const narrow = useNarrow();
   const { clearNotifications } = useMessengerContext();
 
+  const useHover = () => {
+    const [hovered, setHovered] = useState(false);
+
+    const eventHandlers = useMemo(
+      () => ({
+        onMouseOver() {
+          setHovered(true);
+        },
+        onMouseOut() {
+          setHovered(false);
+        },
+      }),
+      []
+    );
+
+    return [hovered, eventHandlers];
+  };
+
+  const [hovered, eventHandlers] = useHover();
+
   return (
     <MenuBlock>
       <MenuList>
@@ -43,16 +63,19 @@ export const ChannelMenu = ({
             <MenuText>View members</MenuText>
           </MenuItem>
         )}
-        <MenuItem onClick={() => channel.isMuted === true}>
-          <MuteIcon />
+        <MenuItem onClick={() => channel.isMuted === true} {...eventHandlers}>
+          <MuteIcon isHovered={hovered} />
           <MenuText>Mute Chat</MenuText>
         </MenuItem>
-        <MenuItem onClick={() => clearNotifications(channel.id)}>
-          <CheckIcon />
+        <MenuItem
+          onClick={() => clearNotifications(channel.id)}
+          {...eventHandlers}
+        >
+          <CheckIcon isHovered={hovered} />
           <MenuText>Mark as Read</MenuText>
         </MenuItem>
-        <MenuItem onClick={() => messages.length === 0}>
-          <ClearIcon />
+        <MenuItem onClick={() => (messages.length = 0)} {...eventHandlers}>
+          <ClearIcon isHovered={hovered} />
           <MenuText>Clear History</MenuText>
         </MenuItem>
       </MenuList>
@@ -88,14 +111,6 @@ const MenuItem = styled.li`
   &:hover {
     background: ${({ theme }) => theme.tertiary};
     color: ${({ theme }) => theme.bodyBackgroundColor};
-  }
-
-  & > svg {
-    fill: ${({ theme }) => theme.tertiary};
-  }
-
-  &:hover > svg {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 `;
 
