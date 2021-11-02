@@ -34,6 +34,7 @@ interface ChannelMenuProps {
   messages: ChatMessage[];
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
+  setEditGroup: (val: boolean) => void;
 }
 
 export const ChannelMenu = ({
@@ -42,6 +43,7 @@ export const ChannelMenu = ({
   messages,
   switchMemberList,
   setShowChannelMenu,
+  setEditGroup,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
   const { clearNotifications } = useMessengerContext();
@@ -62,7 +64,7 @@ export const ChannelMenu = ({
         {channel.type === "group" && (
           <>
             <MenuItem
-              onClick={() => channel}
+              onClick={() => setEditGroup(true)}
               Svg={AddMemberIconSvg}
               text="Add / remove from group"
             />

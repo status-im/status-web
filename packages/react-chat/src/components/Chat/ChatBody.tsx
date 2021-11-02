@@ -18,6 +18,7 @@ import { CommunitySkeleton } from "../Skeleton/CommunitySkeleton";
 import { Loading } from "../Skeleton/Loading";
 import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
 
+import { ChatCreation } from "./ChatCreation";
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
 
@@ -57,6 +58,7 @@ export function ChatBody({
   const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
   const [showChannelMenu, setShowChannelMenu] = useState(false);
+  const [editGroup, setEditGroup] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
   const switchChannelList = useCallback(() => {
@@ -78,55 +80,69 @@ export function ChatBody({
 
   return (
     <ChatBodyWrapper className={className}>
-      <ChatTopbar
-        className={
-          narrow && (showChannelsList || showMembersList) ? "narrow" : ""
-        }
-      >
-        <ChannelWrapper className={className}>
-          {messenger && community ? (
-            <>
-              {(showCommunity || narrow) && (
-                <CommunityWrap className={className}>
-                  <Community onClick={onCommunityClick} community={community} />
-                </CommunityWrap>
-              )}
-              <Channel
-                channel={channel}
-                isActive={narrow ? showChannelsList : true}
-                activeView={true}
-                isMuted={false}
-                onClick={() => (narrow ? switchChannelList() : undefined)}
-              />
-            </>
-          ) : (
-            <CommunitySkeleton />
-          )}
-        </ChannelWrapper>
+      {editGroup && community ? (
+        <ChatCreation
+          community={community}
+          setMembersList={setMembersList}
+          setActiveChannel={setActiveChannel}
+          setCreateChat={setCreateChat}
+          editGroup={editGroup}
+        />
+      ) : (
+        <ChatTopbar
+          className={
+            narrow && (showChannelsList || showMembersList) ? "narrow" : ""
+          }
+        >
+          <ChannelWrapper className={className}>
+            {messenger && community ? (
+              <>
+                {(showCommunity || narrow) && (
+                  <CommunityWrap className={className}>
+                    <Community
+                      onClick={onCommunityClick}
+                      community={community}
+                    />
+                  </CommunityWrap>
+                )}
+                <Channel
+                  channel={channel}
+                  isActive={narrow ? showChannelsList : true}
+                  activeView={true}
+                  isMuted={false}
+                  onClick={() => (narrow ? switchChannelList() : undefined)}
+                />
+              </>
+            ) : (
+              <CommunitySkeleton />
+            )}
+          </ChannelWrapper>
 
-        <MenuWrapper>
-          {!narrow && (
-            <MemberBtn
-              onClick={onClick}
-              className={showMembers && !narrow ? "active" : ""}
-            >
-              <MembersIcon />
-            </MemberBtn>
+          <MenuWrapper>
+            {!narrow && (
+              <MemberBtn
+                onClick={onClick}
+                className={showMembers && !narrow ? "active" : ""}
+              >
+                <MembersIcon />
+              </MemberBtn>
+            )}
+            <MoreBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
+              <MoreIcon />
+            </MoreBtn>
+          </MenuWrapper>
+          {!community && <Loading />}
+          {showChannelMenu && (
+            <ChannelMenu
+              channel={channel}
+              messages={messages}
+              switchMemberList={switchMemberList}
+              setShowChannelMenu={setShowChannelMenu}
+              setEditGroup={setEditGroup}
+            />
           )}
-          <MoreBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
-            <MoreIcon />
-          </MoreBtn>
-        </MenuWrapper>
-        {!community && <Loading />}
-        {showChannelMenu && (
-          <ChannelMenu
-            channel={channel}
-            messages={messages}
-            switchMemberList={switchMemberList}
-            setShowChannelMenu={setShowChannelMenu}
-          />
-        )}
-      </ChatTopbar>
+        </ChatTopbar>
+      )}
       {messenger && community ? (
         <>
           {!showChannelsList && !showMembersList && (

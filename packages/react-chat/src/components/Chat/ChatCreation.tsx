@@ -13,6 +13,7 @@ interface ChatCreationProps {
   setMembersList: any;
   setActiveChannel: (val: ChannelData) => void;
   setCreateChat: (val: boolean) => void;
+  editGroup?: boolean;
 }
 
 export function ChatCreation({
@@ -20,6 +21,7 @@ export function ChatCreation({
   setMembersList,
   setActiveChannel,
   setCreateChat,
+  editGroup,
 }: ChatCreationProps) {
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
@@ -90,12 +92,14 @@ export function ChatCreation({
         </InputBar>
         <CreationBtn
           disabled={styledGroup.length === 0}
-          onClick={() => createChat(styledGroup)}
+          onClick={() =>
+            editGroup ? setMembersList(styledGroup) : createChat(styledGroup)
+          }
         >
           Confirm
         </CreationBtn>
       </CreationBar>
-      {!query && styledGroup.length === 0 && (
+      {!editGroup && !query && styledGroup.length === 0 && (
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
