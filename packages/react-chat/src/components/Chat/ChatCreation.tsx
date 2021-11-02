@@ -44,7 +44,7 @@ export function ChatCreation({
     setActiveChannel({
       id: group.join(""),
       name: group.join(", "),
-      type: "dm",
+      type: "group",
     });
     setCreateChat(false);
   };

@@ -5,8 +5,11 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
+import { AddMemberIconSvg } from "../Icons/AddMemberIcon";
 import { CheckSvg } from "../Icons/CheckIcon";
 import { ClearSvg } from "../Icons/ClearIcon";
+import { EgitGroupSvg } from "../Icons/EditGroupIcon";
+import { LeftIconSvg } from "../Icons/LeftIcon";
 import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
 import { MuteSvg } from "../Icons/MuteIcon";
 import { textSmallStyles } from "../Text";
@@ -28,7 +31,6 @@ function MenuItem({ Svg, text, onClick }: MenuItemProps) {
 
 interface ChannelMenuProps {
   channel: ChannelData;
-
   messages: ChatMessage[];
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
@@ -57,6 +59,20 @@ export const ChannelMenu = ({
             text="View Members"
           />
         )}
+        {channel.type === "group" && (
+          <>
+            <MenuItem
+              onClick={() => channel}
+              Svg={AddMemberIconSvg}
+              text="Add / remove from group"
+            />
+            <MenuItem
+              onClick={() => channel}
+              Svg={EgitGroupSvg}
+              text="Edit name and image"
+            />
+          </>
+        )}
         <MenuItem
           onClick={() => channel.isMuted === true}
           Svg={MuteSvg}
@@ -72,6 +88,16 @@ export const ChannelMenu = ({
           Svg={ClearSvg}
           text="Clear History"
         />
+        {channel.type === "group" && (
+          <MenuSection>
+            {" "}
+            <MenuItem
+              onClick={() => channel}
+              Svg={LeftIconSvg}
+              text="Leave Group"
+            />
+          </MenuSection>
+        )}
       </MenuList>
     </MenuBlock>
   );
@@ -82,7 +108,7 @@ const MenuBlock = styled.div`
   background: ${({ theme }) => theme.bodyBackgroundColor};
   box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
     0px 4px 12px rgba(0, 34, 51, 0.08);
-  borderradius: 8px;
+  border-radius: 8px;
   padding: 8px 0;
   position: absolute;
   right: 8px;
@@ -120,4 +146,10 @@ const MenuText = styled.span`
   margin-left: 6px;
 
   ${textSmallStyles}
+`;
+
+const MenuSection = styled.div`
+  margin-top: 5px;
+  padding-top: 5px;
+  border-top: 1px solid ${({ theme }) => theme.inputColor};
 `;
