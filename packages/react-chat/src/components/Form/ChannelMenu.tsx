@@ -28,7 +28,6 @@ function MenuItem({ Svg, text, onClick }: MenuItemProps) {
 
 interface ChannelMenuProps {
   channel: ChannelData;
-
   messages: ChatMessage[];
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
@@ -36,7 +35,6 @@ interface ChannelMenuProps {
 
 export const ChannelMenu = ({
   channel,
-
   messages,
   switchMemberList,
   setShowChannelMenu,
@@ -58,7 +56,10 @@ export const ChannelMenu = ({
           />
         )}
         <MenuItem
-          onClick={() => channel.isMuted === true}
+          onClick={() => {
+            channel.isMuted = true;
+            setShowChannelMenu(false);
+          }}
           Svg={MuteSvg}
           text="Mute Chat"
         />
