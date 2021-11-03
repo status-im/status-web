@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
+import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
+import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal } from "../Modals/LinkModal";
@@ -12,6 +14,60 @@ import { textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
 
+const today = new Date();
+
+type ChatUiMessageProps = {
+  idx: number;
+  message: ChatMessage;
+  prevMessage: ChatMessage;
+  setImage: (img: string) => void;
+  setLink: (link: string) => void;
+};
+
+function ChatUiMessage({
+  message,
+  idx,
+  prevMessage,
+  setImage,
+  setLink,
+}: ChatUiMessageProps) {
+  const [showMenu, setShowMenu] = useState(false);
+
+  return (
+    <MessageOuterWrapper>
+      {(idx === 0 || !equalDate(prevMessage.date, message.date)) && (
+        <DateSeparator>
+          {equalDate(message.date, today)
+            ? "Today"
+            : message.date.toLocaleDateString()}
+        </DateSeparator>
+      )}
+      <MessageWrapper>
+        <Icon onClick={() => setShowMenu((e) => !e)}>
+          {showMenu && (
+            <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
+          )}
+          <UserIcon />
+        </Icon>
+
+        <ContentWrapper>
+          <MessageHeaderWrapper>
+            <UserNameWrapper>{message.sender.slice(0, 10)}</UserNameWrapper>
+            <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
+          </MessageHeaderWrapper>
+          <MessageText>
+            <ChatMessageContent
+              message={message}
+              setImage={setImage}
+              setLinkOpen={setLink}
+            />
+          </MessageText>
+        </ContentWrapper>
+      </MessageWrapper>
+    </MessageOuterWrapper>
+  );
+}
+
 type ChatMessagesProps = {
   messages: ChatMessage[];
   activeChannelId: string;
@@ -19,9 +75,10 @@ type ChatMessagesProps = {
 
 export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
   const { loadPrevDay, loadingMessages } = useMessengerContext();
+
   const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
-  const today = useMemo(() => new Date(), []);
+
   useEffect(() => {
     if (ref && ref.current && scrollOnBot) {
       ref.current.scrollTop = ref.current.scrollHeight;
@@ -38,6 +95,12 @@ export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
       }
     }
   }, [messages, messages.length, loadingMessages]);
+
+  const { blockedUsers } = useBlockedUsers();
+
+  const shownMessages = useMemo(() => {
+    return messages.filter((message) => !blockedUsers.includes(message.sender));
+  }, [messages, blockedUsers, messages.length]);
 
   useEffect(() => {
     const setScroll = () => {
@@ -76,39 +139,16 @@ export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
           <LoadingIcon className="message" />
         </LoadingWrapper>
       )}
-      {messages.map((message, idx) => {
+      {shownMessages.map((message, idx) => {
         return (
-          <MessageOuterWrapper key={message.date.getTime()}>
-            {(idx === 0 ||
-              !equalDate(messages[idx - 1].date, message.date)) && (
-              <DateSeparator>
-                {equalDate(message.date, today)
-                  ? "Today"
-                  : message.date.toLocaleDateString()}
-              </DateSeparator>
-            )}
-            <MessageWrapper>
-              <Icon>
-                <UserIcon />
-              </Icon>
-
-              <ContentWrapper>
-                <MessageHeaderWrapper>
-                  <UserNameWrapper>
-                    {message.sender.slice(0, 10)}
-                  </UserNameWrapper>
-                  <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
-                </MessageHeaderWrapper>
-                <MessageText>
-                  <ChatMessageContent
-                    message={message}
-                    setImage={setImage}
-                    setLinkOpen={setLink}
-                  />
-                </MessageText>
-              </ContentWrapper>
-            </MessageWrapper>
-          </MessageOuterWrapper>
+          <ChatUiMessage
+            key={message.date.getTime()}
+            message={message}
+            idx={idx}
+            prevMessage={shownMessages[idx - 1]}
+            setLink={setLink}
+            setImage={setImage}
+          />
         );
       })}
     </MessagesWrapper>
@@ -178,6 +218,7 @@ export const Icon = styled.div`
   border-radius: 50%;
   background-color: #bcbdff;
   flex-shrink: 0;
+  position: relative;
 `;
 
 const UserNameWrapper = styled.div`

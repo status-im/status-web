@@ -1,8 +1,9 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
 import { Icon } from "../Chat/ChatMessages";
+import { ContactMenu } from "../Form/ContactMenu";
 import { UserIcon } from "../Icons/UserIcon";
 
 interface MemberProps {
@@ -38,6 +39,8 @@ export function Member({
     setShowChannels(true);
   };
 
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
     <MemberData
       onClick={() => {
@@ -49,7 +52,9 @@ export function Member({
           backgroundImage: "unset",
         }}
         className={isOnline ? "online" : "offline"}
+        onClick={() => setShowMenu((e) => !e)}
       >
+        {showMenu && <ContactMenu id={member} setShowMenu={setShowMenu} />}
         <UserIcon memberView={true} />
       </MemberIcon>
       <MemberName>{member}</MemberName>
