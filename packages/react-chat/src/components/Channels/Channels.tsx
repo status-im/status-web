@@ -12,6 +12,7 @@ interface ChannelsProps {
   activeChannelId: string;
   channels: ChannelData[];
   membersList: string[];
+  groupList: string[];
   setCreateChat: (val: boolean) => void;
 }
 
@@ -20,6 +21,7 @@ export function Channels({
   activeChannelId,
   channels,
   membersList,
+  groupList,
   setCreateChat,
 }: ChannelsProps) {
   const { clearNotifications, notifications } = useMessengerContext();
@@ -61,6 +63,28 @@ export function Channels({
           </EditBtn>
         </ChatsBar>
         <ChatsList>
+          {groupList.length > 0 &&
+            groupList.map((group) => (
+              <Channel
+                key={group}
+                channel={{
+                  id: group,
+                  name: group,
+                  type: "group",
+                  description: "Contact",
+                }}
+                isActive={group === activeChannelId}
+                isMuted={false}
+                onClick={() => {
+                  onCommunityClick({
+                    id: group,
+                    name: group.slice(0, 10),
+                    description: "Contact",
+                  });
+                  setCreateChat(false);
+                }}
+              />
+            ))}
           {membersList.length > 0 &&
             membersList.map((member) => (
               <Channel
@@ -68,7 +92,7 @@ export function Channels({
                 channel={{
                   id: member,
                   name: member,
-                  type: "group",
+                  type: "dm",
                   description: "Contact",
                 }}
                 isActive={member === activeChannelId}

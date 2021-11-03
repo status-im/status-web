@@ -11,6 +11,7 @@ import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
   community: CommunityData;
   setMembersList: any;
+  setGroupList: any;
   setActiveChannel: (val: ChannelData) => void;
   setCreateChat: (val: boolean) => void;
   editGroup?: boolean;
@@ -19,6 +20,7 @@ interface ChatCreationProps {
 export function ChatCreation({
   community,
   setMembersList,
+  setGroupList,
   setActiveChannel,
   setCreateChat,
   editGroup,
@@ -42,12 +44,27 @@ export function ChatCreation({
   };
 
   const createChat = (group: string[]) => {
-    setMembersList(group);
-    setActiveChannel({
-      id: group.join(""),
-      name: group.join(", "),
-      type: "group",
-    });
+    group.length > 1
+      ? (setGroupList((prevGroups: string[]) => {
+          [...prevGroups, group];
+        }),
+        setActiveChannel({
+          id: group.join(""),
+          name: group.join(", "),
+          type: "group",
+        }))
+      : (setMembersList((prevMembers: string[]) => {
+          if (prevMembers.find((chat) => chat === group[0])) {
+            return prevMembers;
+          } else {
+            return [...prevMembers, group[0]];
+          }
+        }),
+        setActiveChannel({
+          id: group[0],
+          name: group[0],
+          type: "dm",
+        }));
     setCreateChat(false);
   };
 

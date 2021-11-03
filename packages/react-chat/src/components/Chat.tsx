@@ -32,7 +32,10 @@ export function Chat({
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
+  const [groupList, setGroupList] = useState([]);
   const [createChat, setCreateChat] = useState(false);
+
+  console.log(membersList, groupList);
 
   const narrow = useNarrow();
 
@@ -94,6 +97,7 @@ export function Chat({
             activeChannelId={activeChannel?.id ?? ""}
             channels={channels}
             membersList={membersList}
+            groupList={groupList}
             setCreateChat={setCreateChat}
           />
         </ChannelsWrapper>
@@ -113,7 +117,9 @@ export function Chat({
           onEditClick={showEditModal}
           channels={channels}
           membersList={membersList}
+          groupList={groupList}
           setMembersList={setMembersList}
+          setGroupList={setGroupList}
           setCreateChat={setCreateChat}
         />
       )}
@@ -128,6 +134,7 @@ export function Chat({
         <ChatCreation
           community={communityData}
           setMembersList={setMembersList}
+          setGroupList={setGroupList}
           setActiveChannel={setActiveChannel}
           setCreateChat={setCreateChat}
         />

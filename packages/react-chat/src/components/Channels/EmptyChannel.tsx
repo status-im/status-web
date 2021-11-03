@@ -82,6 +82,7 @@ const EmptyText = styled.p`
   color: ${({ theme }) => theme.secondary};
   max-width: 310px;
   text-align: center;
+  word-break: break-all;
 
   & > span {
     color: ${({ theme }) => theme.primary};

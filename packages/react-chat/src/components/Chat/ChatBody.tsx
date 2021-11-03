@@ -35,7 +35,9 @@ interface ChatBodyProps {
   onEditClick: () => void;
   channels: ChannelData[];
   membersList: string[];
+  groupList: string[];
   setMembersList: any;
+  setGroupList: any;
   setCreateChat: (val: boolean) => void;
 }
 
@@ -52,7 +54,9 @@ export function ChatBody({
   onEditClick,
   channels,
   membersList,
+  groupList,
   setMembersList,
+  setGroupList,
   setCreateChat,
 }: ChatBodyProps) {
   const { messenger, messages } = useMessengerContext();
@@ -86,6 +90,7 @@ export function ChatBody({
         <ChatCreation
           community={community}
           setMembersList={setMembersList}
+          setGroupList={setGroupList}
           setActiveChannel={setActiveChannel}
           setCreateChat={setCreateChat}
           editGroup={editGroup}
@@ -174,6 +179,7 @@ export function ChatBody({
               setShowChannels={setShowChannelsList}
               activeChannelId={activeChannelId}
               membersList={membersList}
+              groupList={groupList}
               setCreateChat={setCreateChat}
             />
           )}
