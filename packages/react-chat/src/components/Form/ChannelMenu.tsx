@@ -1,18 +1,19 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
-import { useMessengerContext } from '../../contexts/messengerProvider';
-import { useNarrow } from '../../contexts/narrowProvider';
-import { ChannelData } from '../../models/ChannelData';
-import { ChatMessage } from '../../models/ChatMessage';
-import { AddMemberIconSvg } from '../Icons/AddMemberIcon';
-import { CheckSvg } from '../Icons/CheckIcon';
-import { ClearSvg } from '../Icons/ClearIcon';
-import { EgitGroupSvg } from '../Icons/EditGroupIcon';
-import { LeftIconSvg } from '../Icons/LeftIcon';
-import { MembersSmallSvg } from '../Icons/MembersSmallIcon';
-import { MuteSvg } from '../Icons/MuteIcon';
 
-import { DropdownMenu, MenuItem, MenuText } from './DropdownMenu';
+import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useNarrow } from "../../contexts/narrowProvider";
+import { ChannelData } from "../../models/ChannelData";
+import { ChatMessage } from "../../models/ChatMessage";
+import { AddMemberIconSvg } from "../Icons/AddMemberIcon";
+import { CheckSvg } from "../Icons/CheckIcon";
+import { ClearSvg } from "../Icons/ClearIcon";
+import { EgitGroupSvg } from "../Icons/EditGroupIcon";
+import { LeftIconSvg } from "../Icons/LeftIcon";
+import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
+import { MuteSvg } from "../Icons/MuteIcon";
+
+import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
 interface ChannelMenuProps {
   channel: ChannelData;
@@ -41,12 +42,13 @@ export const ChannelMenu = ({
           onClick={() => {
             switchMemberList();
             setShowChannelMenu(false);
-          }}>
+          }}
+        >
           <MembersSmallSvg height={16} width={16} />
           <MenuText>View Members</MenuText>
         </MenuItem>
       )}
-      {channel.type === 'group' && (
+      {channel.type === "group" && (
         <>
           <MenuItem onClick={() => setEditGroup(true)}>
             <AddMemberIconSvg width={16} height={16} />
@@ -62,7 +64,8 @@ export const ChannelMenu = ({
         onClick={() => {
           channel.isMuted = true;
           setShowChannelMenu(false);
-        }}>
+        }}
+      >
         <MuteSvg width={16} height={16} />
         <MenuText>Mute Chat</MenuText>
       </MenuItem>
@@ -74,9 +77,9 @@ export const ChannelMenu = ({
         <ClearSvg width={16} height={16} />
         <MenuText>Clear History</MenuText>
       </MenuItem>
-      {channel.type === 'group' && (
+      {channel.type === "group" && (
         <MenuSection>
-          {' '}
+          {" "}
           <MenuItem onClick={() => channel}>
             <LeftIconSvg width={16} height={16} />
             <MenuText>Leave Group</MenuText>
