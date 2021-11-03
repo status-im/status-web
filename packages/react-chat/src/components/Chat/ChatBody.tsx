@@ -31,7 +31,8 @@ interface ChatBodyProps {
   showCommunity: boolean;
   setActiveChannel: (val: ChannelData) => void;
   activeChannelId: string;
-  onModalClick: () => void;
+  onCommunityClick: () => void;
+  onEditClick: () => void;
   channels: ChannelData[];
   membersList: string[];
   setMembersList: any;
@@ -47,7 +48,8 @@ export function ChatBody({
   showCommunity,
   setActiveChannel,
   activeChannelId,
-  onModalClick,
+  onCommunityClick,
+  onEditClick,
   channels,
   membersList,
   setMembersList,
@@ -99,7 +101,10 @@ export function ChatBody({
               <>
                 {(showCommunity || narrow) && (
                   <CommunityWrap className={className}>
-                    <Community onClick={onModalClick} community={community} />
+                    <Community
+                      onClick={onCommunityClick}
+                      community={community}
+                    />
                   </CommunityWrap>
                 )}
                 <Channel
@@ -136,7 +141,7 @@ export function ChatBody({
               switchMemberList={switchMemberList}
               setShowChannelMenu={setShowChannelMenu}
               setEditGroup={setEditGroup}
-              onModalClick={onModalClick}
+              onEditClick={onEditClick}
             />
           )}
         </ChatTopbar>

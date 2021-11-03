@@ -35,7 +35,7 @@ interface ChannelMenuProps {
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
   setEditGroup: (val: boolean) => void;
-  onModalClick: () => void;
+  onEditClick: () => void;
 }
 
 export const ChannelMenu = ({
@@ -45,7 +45,7 @@ export const ChannelMenu = ({
   switchMemberList,
   setShowChannelMenu,
   setEditGroup,
-  onModalClick,
+  onEditClick,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
   const { clearNotifications } = useMessengerContext();
@@ -71,7 +71,7 @@ export const ChannelMenu = ({
               text="Add / remove from group"
             />
             <MenuItem
-              onClick={() => onModalClick}
+              onClick={onEditClick}
               Svg={EgitGroupSvg}
               text="Edit name and image"
             />

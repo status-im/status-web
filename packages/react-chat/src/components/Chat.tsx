@@ -39,6 +39,9 @@ export function Chat({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => setIsModalVisible(true);
 
+  const [isEditVisible, setIsEditVisible] = useState(false);
+  const showEditModal = () => setIsEditVisible(true);
+
   const { community } = useMessengerContext();
 
   const communityData = useMemo(() => {
@@ -106,7 +109,8 @@ export function Chat({
           showMembers={showMembers}
           community={communityData}
           showCommunity={!showChannels}
-          onModalClick={showModal}
+          onCommunityClick={showModal}
+          onEditClick={showEditModal}
           channels={channels}
           membersList={membersList}
           setMembersList={setMembersList}
@@ -140,8 +144,9 @@ export function Chat({
         />
       )}
       <EditModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
+        isVisible={isEditVisible}
+        onClose={() => setIsEditVisible(false)}
+        channel={activeChannel}
       />
     </ChatWrapper>
   );
