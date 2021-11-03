@@ -13,7 +13,7 @@ import { ChatCreation } from "./Chat/ChatCreation";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
-import { EditModal } from "./Modals/EdtModal";
+import { EditModal } from "./Modals/EditModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
@@ -34,8 +34,6 @@ export function Chat({
   const [membersList, setMembersList] = useState([]);
   const [groupList, setGroupList] = useState([]);
   const [createChat, setCreateChat] = useState(false);
-
-  console.log(membersList, groupList);
 
   const narrow = useNarrow();
 
