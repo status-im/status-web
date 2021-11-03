@@ -9,9 +9,10 @@ import {
 } from "../CommunityIdentity";
 import { CopyInput } from "../Form/CopyInput";
 import { StatusLogo } from "../Icons/StatusLogo";
-import { textMediumStyles, textSmallStyles } from "../Text";
+import { textSmallStyles } from "../Text";
 
 import { BasicModalProps, Modal } from "./Modal";
+import { Section, Text } from "./ModalStyle";
 
 interface CommunityModalProps extends BasicModalProps, CommunityIdentityProps {
   description: string;
@@ -55,27 +56,6 @@ export const CommunityModal = ({
   );
 };
 
-const Section = styled.div`
-  padding: 20px 16px;
-
-  & + & {
-    border-top: 1px solid ${({ theme }) => theme.border};
-  }
-`;
-
-const Text = styled.p`
-  color: ${({ theme }) => theme.primary};
-
-  ${textMediumStyles}
-`;
-
-const Hint = styled.p`
-  margin-top: 16px;
-  color: ${({ theme }) => theme.secondary};
-
-  ${textSmallStyles}
-`;
-
 const BottomSection = styled(Section)`
   display: flex;
   flex-direction: column;
@@ -91,4 +71,11 @@ const StyledDownloadButton = styled(DownloadButton)`
   line-height: 18px;
   text-decoration: underline;
   color: ${({ theme }) => theme.secondary};
+`;
+
+const Hint = styled.p`
+  margin-top: 16px;
+  color: ${({ theme }) => theme.secondary};
+
+  ${textSmallStyles}
 `;

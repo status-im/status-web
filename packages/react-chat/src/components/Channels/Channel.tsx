@@ -66,7 +66,7 @@ export function Channel({
             ) : (
               "#"
             )}{" "}
-            {channel.name}
+            {channel.name.slice(0, 10)}
           </ChannelName>
           {activeView && (
             <ChannelDescription> {channel.description}</ChannelDescription>

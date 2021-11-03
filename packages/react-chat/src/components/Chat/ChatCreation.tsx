@@ -11,15 +11,19 @@ import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
   community: CommunityData;
   setMembersList: any;
+  setGroupList: any;
   setActiveChannel: (val: ChannelData) => void;
   setCreateChat: (val: boolean) => void;
+  editGroup?: boolean;
 }
 
 export function ChatCreation({
   community,
   setMembersList,
+  setGroupList,
   setActiveChannel,
   setCreateChat,
+  editGroup,
 }: ChatCreationProps) {
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
@@ -40,12 +44,27 @@ export function ChatCreation({
   };
 
   const createChat = (group: string[]) => {
-    setMembersList(group);
-    setActiveChannel({
-      id: group.join(""),
-      name: group.join(", "),
-      type: "dm",
-    });
+    group.length > 1
+      ? (setGroupList((prevGroups: string[]) => {
+          [...prevGroups, group];
+        }),
+        setActiveChannel({
+          id: group.join(""),
+          name: group.join(", "),
+          type: "group",
+        }))
+      : (setMembersList((prevMembers: string[]) => {
+          if (prevMembers.find((chat) => chat === group[0])) {
+            return prevMembers;
+          } else {
+            return [...prevMembers, group[0]];
+          }
+        }),
+        setActiveChannel({
+          id: group[0],
+          name: group[0],
+          type: "dm",
+        }));
     setCreateChat(false);
   };
 
@@ -90,12 +109,14 @@ export function ChatCreation({
         </InputBar>
         <CreationBtn
           disabled={styledGroup.length === 0}
-          onClick={() => createChat(styledGroup)}
+          onClick={() =>
+            editGroup ? setMembersList(styledGroup) : createChat(styledGroup)
+          }
         >
           Confirm
         </CreationBtn>
       </CreationBar>
-      {!query && styledGroup.length === 0 && (
+      {!editGroup && !query && styledGroup.length === 0 && (
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>

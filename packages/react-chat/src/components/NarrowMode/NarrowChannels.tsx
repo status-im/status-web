@@ -13,6 +13,7 @@ interface NarrowChannelsProps {
   setShowChannels: (val: boolean) => void;
   channels: ChannelData[];
   membersList: string[];
+  groupList: string[];
   setCreateChat: (val: boolean) => void;
 }
 
@@ -23,6 +24,7 @@ export function NarrowChannels({
   setShowChannels,
   channels,
   membersList,
+  groupList,
   setCreateChat,
 }: NarrowChannelsProps) {
   return (
@@ -36,6 +38,7 @@ export function NarrowChannels({
         activeChannelId={activeChannelId}
         channels={channels}
         membersList={membersList}
+        groupList={groupList}
         setCreateChat={setCreateChat}
       />
     </ListWrapper>

@@ -13,6 +13,7 @@ import { ChatCreation } from "./Chat/ChatCreation";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
+import { EditModal } from "./Modals/EditModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
@@ -31,12 +32,16 @@ export function Chat({
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
+  const [groupList, setGroupList] = useState([]);
   const [createChat, setCreateChat] = useState(false);
 
   const narrow = useNarrow();
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const showModal = () => setIsModalVisible(true);
+
+  const [isEditVisible, setIsEditVisible] = useState(false);
+  const showEditModal = () => setIsEditVisible(true);
 
   const { community } = useMessengerContext();
 
@@ -90,6 +95,7 @@ export function Chat({
             activeChannelId={activeChannel?.id ?? ""}
             channels={channels}
             membersList={membersList}
+            groupList={groupList}
             setCreateChat={setCreateChat}
           />
         </ChannelsWrapper>
@@ -106,9 +112,12 @@ export function Chat({
           community={communityData}
           showCommunity={!showChannels}
           onCommunityClick={showModal}
+          onEditClick={showEditModal}
           channels={channels}
           membersList={membersList}
+          groupList={groupList}
           setMembersList={setMembersList}
+          setGroupList={setGroupList}
           setCreateChat={setCreateChat}
         />
       )}
@@ -123,6 +132,7 @@ export function Chat({
         <ChatCreation
           community={communityData}
           setMembersList={setMembersList}
+          setGroupList={setGroupList}
           setActiveChannel={setActiveChannel}
           setCreateChat={setCreateChat}
         />
@@ -138,6 +148,11 @@ export function Chat({
           publicKey={communityKey}
         />
       )}
+      <EditModal
+        isVisible={isEditVisible}
+        onClose={() => setIsEditVisible(false)}
+        channel={activeChannel}
+      />
     </ChatWrapper>
   );
 }
