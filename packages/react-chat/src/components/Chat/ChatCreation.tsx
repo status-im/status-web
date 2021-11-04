@@ -75,7 +75,6 @@ export function ChatCreation({
           description: "Contact",
         }));
     setCreateChat(false);
-    console.log(group.join(", "));
   };
 
   return (
