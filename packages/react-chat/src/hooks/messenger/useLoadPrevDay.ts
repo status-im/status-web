@@ -27,7 +27,7 @@ export function useLoadPrevDay(
         const timeDiff = Math.floor(
           (new Date().getTime() - endTime.getTime()) / _MS_PER_DAY
         );
-        if (timeDiff < 30) {
+        if (timeDiff < 28) {
           if (!loadingPreviousMessages.current[id]) {
             loadingPreviousMessages.current[id] = true;
             setLoadingMessages(true);
@@ -46,7 +46,7 @@ export function useLoadPrevDay(
         }
       }
     },
-    [lastLoadTime, messenger]
+    [messenger]
   );
   return { loadingMessages, loadPrevDay };
 }
