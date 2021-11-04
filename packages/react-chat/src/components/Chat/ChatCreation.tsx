@@ -173,6 +173,7 @@ const InputBar = styled.div`
 `;
 
 const Input = styled.input`
+  width: 100%;
   background-color: ${({ theme }) => theme.inputColor};
   border: 1px solid ${({ theme }) => theme.inputColor};
   outline: none;
@@ -245,6 +246,7 @@ export const ContactsList = styled.div`
 
 const SearchMembers = styled.div`
   position: relative;
+  flex: 1;
 `;
 
 const LimitAlert = styled.p`
