@@ -66,7 +66,7 @@ export function Channel({
             ) : (
               "#"
             )}{" "}
-            {channel.name.slice(0, 10)}
+            {channel.name}
           </ChannelName>
           {activeView && (
             <ChannelDescription> {channel.description}</ChannelDescription>
@@ -103,8 +103,6 @@ export const ChannelInfo = styled.div`
 const ChannelTextInfo = styled.div`
   display: flex;
   flex-direction: column;
-  text-overflow: ellipsis;
-  overflow: hidden;
 `;
 
 export const ChannelLogo = styled.div`

@@ -11,6 +11,8 @@ type EmptyChannelProps = {
 };
 
 export function EmptyChannel({ channel }: EmptyChannelProps) {
+  const groupName = channel.name.split(", ");
+
   return (
     <Wrapper>
       <ChannelInfoEmpty>
@@ -34,8 +36,9 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         </EmptyText>
       ) : channel.type === "group" ? (
         <EmptyText>
-          You created a group with <span>{channel.name.slice(1, -1)}</span> and{" "}
-          <span>{channel.name.at(-1)}</span>
+          You created a group with{" "}
+          <span>{groupName.slice(groupName.length - 1)}</span> and{" "}
+          <span>{groupName.at(-1)}</span>
         </EmptyText>
       ) : (
         <EmptyText>

@@ -35,7 +35,7 @@ interface ChatBodyProps {
   onEditClick: () => void;
   channels: ChannelData[];
   membersList: string[];
-  groupList: string[];
+  groupList: [][];
   setMembersList: any;
   setGroupList: any;
   setCreateChat: (val: boolean) => void;
@@ -88,6 +88,7 @@ export function ChatBody({
     <ChatBodyWrapper className={className}>
       {editGroup && community ? (
         <ChatCreation
+          identity={identity}
           community={community}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
@@ -112,6 +113,7 @@ export function ChatBody({
                     />
                   </CommunityWrap>
                 )}
+
                 <Channel
                   channel={channel}
                   isActive={narrow ? showChannelsList : true}
