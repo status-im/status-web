@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import { Identity } from "status-communities/dist/cjs";
+import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { CommunityData } from "../../models/CommunityData";
 import { buttonStyles } from "../Buttons/buttonStyle";
-import { Channel } from "../Channels/Channel";
 import { CrossIcon } from "../Icons/CrossIcon";
+import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
+  identity: Identity;
   community: CommunityData;
   setMembersList: any;
   setGroupList: any;
@@ -18,6 +22,7 @@ interface ChatCreationProps {
 }
 
 export function ChatCreation({
+  identity,
   community,
   setMembersList,
   setGroupList,
@@ -27,6 +32,8 @@ export function ChatCreation({
 }: ChatCreationProps) {
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
+
+  const { contacts } = useMessengerContext();
 
   const addMember = (member: string) => {
     setStyledGroup((prevMembers: string[]) => {
@@ -40,13 +47,14 @@ export function ChatCreation({
 
   const removeMember = (member: string) => {
     const idx = styledGroup.indexOf(member);
-    styledGroup.splice(idx, 1);
+    setStyledGroup(styledGroup.splice(idx, 1));
   };
 
   const createChat = (group: string[]) => {
     group.length > 1
-      ? (setGroupList((prevGroups: string[]) => {
-          [...prevGroups, group];
+      ? (setGroupList((prevGroups: string[][]) => {
+          prevGroups.push(group);
+          return prevGroups;
         }),
         setActiveChannel({
           id: group.join(""),
@@ -64,8 +72,10 @@ export function ChatCreation({
           id: group[0],
           name: group[0],
           type: "dm",
+          description: "Contact",
         }));
     setCreateChat(false);
+    console.log(group.join(", "));
   };
 
   return (
@@ -120,19 +130,16 @@ export function ChatCreation({
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
-            {community.membersList.map((member) => (
-              <Channel
-                key={member}
-                channel={{
-                  id: member,
-                  name: member.slice(0, 10),
-                  type: "dm",
-                }}
-                isActive={false}
-                isMuted={false}
-                onClick={() => addMember(member)}
-              />
-            ))}
+            {contacts
+              .filter((e) => e.id != bufToHex(identity.publicKey))
+              .map((contact) => (
+                <Member
+                  key={contact.id}
+                  member={contact.id}
+                  isOnline={contact.online}
+                  onClick={() => addMember(contact.id)}
+                />
+              ))}
           </ContactsList>
         </Contacts>
       )}

@@ -13,7 +13,7 @@ interface NarrowChannelsProps {
   setShowChannels: (val: boolean) => void;
   channels: ChannelData[];
   membersList: string[];
-  groupList: string[];
+  groupList: string[][];
   setCreateChat: (val: boolean) => void;
 }
 

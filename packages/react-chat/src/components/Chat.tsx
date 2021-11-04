@@ -130,6 +130,7 @@ export function Chat({
       )}
       {createChat && communityData && (
         <ChatCreation
+          identity={identity}
           community={communityData}
           setMembersList={setMembersList}
           setGroupList={setGroupList}

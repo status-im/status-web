@@ -9,9 +9,10 @@ import { UserIcon } from "../Icons/UserIcon";
 interface MemberProps {
   member: string;
   isOnline?: boolean;
-  setShowChannels: (val: boolean) => void;
+  setShowChannels?: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
   setMembersList?: any;
+  onClick?: () => void;
 }
 
 export function Member({
@@ -20,11 +21,12 @@ export function Member({
   setShowChannels,
   setShowMembers,
   setMembersList,
+  onClick,
 }: MemberProps) {
   const narrow = useNarrow();
 
   const switchMemberList = useCallback(() => {
-    setShowChannels(false);
+    if (setShowChannels) setShowChannels(false);
     if (setShowMembers) setShowMembers(false);
   }, [setShowMembers]);
 
@@ -36,17 +38,17 @@ export function Member({
         return [...prevMembers, member];
       }
     });
-    setShowChannels(true);
+    if (setShowChannels) setShowChannels(true);
   };
 
   const [showMenu, setShowMenu] = useState(false);
 
+  const onMemberClick = () => {
+    narrow && setShowMembers ? switchMemberList() : startDialog(member);
+  };
+
   return (
-    <MemberData
-      onClick={() => {
-        narrow && setShowMembers ? switchMemberList() : startDialog(member);
-      }}
-    >
+    <MemberData onClick={onClick ? onClick : onMemberClick}>
       <MemberIcon
         style={{
           backgroundImage: "unset",
@@ -66,6 +68,7 @@ export const MemberData = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+  cursor: pointer;
 `;
 
 export const MemberName = styled.p`

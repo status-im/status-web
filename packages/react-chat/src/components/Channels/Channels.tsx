@@ -12,7 +12,7 @@ interface ChannelsProps {
   activeChannelId: string;
   channels: ChannelData[];
   membersList: string[];
-  groupList: string[];
+  groupList: string[][];
   setCreateChat: (val: boolean) => void;
 }
 
@@ -66,20 +66,18 @@ export function Channels({
           {groupList.length > 0 &&
             groupList.map((group) => (
               <Channel
-                key={group}
+                key={group.join("")}
                 channel={{
-                  id: group,
-                  name: group,
+                  id: group.join(""),
+                  name: group.join(", "),
                   type: "group",
-                  description: "Contact",
                 }}
-                isActive={group === activeChannelId}
+                isActive={group.join("") === activeChannelId}
                 isMuted={false}
                 onClick={() => {
                   onCommunityClick({
-                    id: group,
-                    name: group.slice(0, 10),
-                    description: "Contact",
+                    id: group.join(""),
+                    name: group.join(", ").slice(0, 10),
                   });
                   setCreateChat(false);
                 }}
