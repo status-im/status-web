@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ContactMenu } from "../Form/ContactMenu";
@@ -74,55 +74,14 @@ type ChatMessagesProps = {
 };
 
 export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
-  const { loadPrevDay, loadingMessages } = useMessengerContext();
-
-  const [scrollOnBot, setScrollOnBot] = useState(true);
   const ref = useRef<HTMLHeadingElement>(null);
-
-  useEffect(() => {
-    if (ref && ref.current && scrollOnBot) {
-      ref.current.scrollTop = ref.current.scrollHeight;
-    }
-  }, [messages, messages.length, scrollOnBot]);
-
-  useEffect(() => {
-    if (!loadingMessages) {
-      if (
-        (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
-      ) {
-        setScrollOnBot(true);
-        loadPrevDay(activeChannelId);
-      }
-    }
-  }, [messages, messages.length, loadingMessages]);
+  const loadingMessages = useChatScrollHandle(messages, ref, activeChannelId);
 
   const { blockedUsers } = useBlockedUsers();
 
   const shownMessages = useMemo(() => {
     return messages.filter((message) => !blockedUsers.includes(message.sender));
-  }, [messages, blockedUsers, messages.length]);
-
-  useEffect(() => {
-    const setScroll = () => {
-      if (ref && ref.current) {
-        if (ref.current.scrollTop <= 0) {
-          loadPrevDay(activeChannelId);
-        }
-        if (
-          ref.current.scrollTop + ref.current.clientHeight ==
-          ref.current.scrollHeight
-        ) {
-          setScrollOnBot(true);
-        } else {
-          if (scrollOnBot == true) {
-            setScrollOnBot(false);
-          }
-        }
-      }
-    };
-    ref.current?.addEventListener("scroll", setScroll);
-    return () => ref.current?.removeEventListener("scroll", setScroll);
-  }, [ref, scrollOnBot]);
+  }, [blockedUsers, messages.length]);
 
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");

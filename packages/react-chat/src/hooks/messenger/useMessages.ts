@@ -20,9 +20,7 @@ export function useMessages(chatId: string, contacts?: Contacts) {
     (msg: ApplicationMetadataMessage, id: string, date: Date) => {
       const newMessage = ChatMessage.fromMetadataMessage(msg, date);
       if (newMessage) {
-        if (contacts) {
-          contacts.addContact(newMessage.sender);
-        }
+        contacts?.addContact(newMessage.sender);
         setMessages((prev) => {
           return {
             ...prev,

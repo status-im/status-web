@@ -58,14 +58,12 @@ export function useMessenger(
 
   const contacts = useMemo<Contact[]>(() => {
     const now = Date.now();
-    const newContacts: Contact[] = [];
-    Object.entries(internalContacts).forEach(([id, clock]) => {
-      newContacts.push({
+    return Object.entries(internalContacts).map(([id, clock]) => {
+      return {
         id,
         online: clock > now - 301000,
-      });
+      };
     });
-    return newContacts;
   }, [internalContacts]);
 
   const { addMessage, clearNotifications, notifications, messages } =
@@ -82,9 +80,9 @@ export function useMessenger(
   }, [identity]);
 
   useEffect(() => {
-    if (messenger && contactsClass && communityKey) {
-      createCommunity(communityKey, addMessage, messenger).then((e) => {
-        setCommunity(e);
+    if (messenger && communityKey && contactsClass) {
+      createCommunity(communityKey, addMessage, messenger).then((comm) => {
+        setCommunity(comm);
       });
     }
   }, [messenger, communityKey, addMessage, contactsClass]);
