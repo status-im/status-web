@@ -7,6 +7,7 @@ import {
   Messenger,
 } from "status-communities/dist/cjs";
 
+import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
 import { createCommunity } from "../../utils/createCommunity";
@@ -28,13 +29,23 @@ export type MessengerType = {
   loadingMessages: boolean;
   community: Community | undefined;
   contacts: Contact[];
+  channels: ChannelData[];
+  activeChannel: ChannelData;
+  setActiveChannel: (channel: ChannelData) => void;
 };
 
 export function useMessenger(
-  chatId: string,
   communityKey: string | undefined,
   identity: Identity | undefined
 ) {
+  const [activeChannel, setActiveChannel] = useState<ChannelData>({
+    id: "",
+    name: "",
+    description: "",
+  });
+
+  const chatId = useMemo(() => activeChannel.id, [activeChannel]);
+
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
 
   const [internalContacts, setInternalContacts] = useState<{
@@ -114,6 +125,25 @@ export function useMessenger(
     [chatId, messenger]
   );
 
+  const channels = useMemo<ChannelData[]>(() => {
+    if (community?.chats) {
+      return Array.from(community.chats.values()).map((chat) => {
+        return {
+          id: chat.id,
+          name: chat.communityChat?.identity?.displayName ?? "",
+          description: chat.communityChat?.identity?.description ?? "",
+          type: "channel",
+        };
+      });
+    } else {
+      return [];
+    }
+  }, [community]);
+
+  useEffect(() => {
+    if (channels.length > 0) setActiveChannel(channels[0]);
+  }, [channels]);
+
   return {
     messenger,
     messages,
@@ -124,5 +154,8 @@ export function useMessenger(
     loadingMessages,
     community,
     contacts,
+    channels,
+    activeChannel,
+    setActiveChannel,
   };
 }

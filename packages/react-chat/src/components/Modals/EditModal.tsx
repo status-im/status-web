@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { ChannelData } from "../../models/ChannelData";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ChannelLogo } from "../Channels/Channel";
 import { AddIcon } from "../Icons/AddIcon";
@@ -10,11 +10,8 @@ import { textMediumStyles } from "../Text";
 import { BasicModalProps, Modal } from "./Modal";
 import { Heading, Section } from "./ModalStyle";
 
-interface EditModalProps extends BasicModalProps {
-  channel: ChannelData;
-}
-
-export const EditModal = ({ isVisible, onClose, channel }: EditModalProps) => {
+export const EditModal = ({ isVisible, onClose }: BasicModalProps) => {
+  const { activeChannel } = useMessengerContext();
   const [groupName, setGroupName] = useState("");
   const [image, setImage] = useState("");
 
@@ -25,8 +22,8 @@ export const EditModal = ({ isVisible, onClose, channel }: EditModalProps) => {
   };
 
   const handleUpload = () => {
-    channel.icon = image;
-    channel.name = groupName;
+    activeChannel.icon = image;
+    activeChannel.name = groupName;
     onClose();
   };
 
@@ -57,12 +54,14 @@ export const EditModal = ({ isVisible, onClose, channel }: EditModalProps) => {
             style={{
               backgroundImage: image
                 ? `url(${image}`
-                : channel.icon
-                ? `url(${channel.icon}`
+                : activeChannel.icon
+                ? `url(${activeChannel.icon}`
                 : "",
             }}
           >
-            {!channel.icon && !image && channel.name.slice(0, 1).toUpperCase()}
+            {!activeChannel.icon &&
+              !image &&
+              activeChannel.name.slice(0, 1).toUpperCase()}
             <AddPictureInputWrapper>
               <AddIcon />
               <AddPictureInput

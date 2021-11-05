@@ -13,6 +13,12 @@ const MessengerContext = createContext<MessengerType>({
   loadingMessages: false,
   community: undefined,
   contacts: [],
+  activeChannel: {
+    id: "",
+    name: "",
+  },
+  channels: [],
+  setActiveChannel: () => undefined,
 });
 
 export function useMessengerContext() {
@@ -21,17 +27,15 @@ export function useMessengerContext() {
 
 interface MessengerProviderProps {
   children: React.ReactNode;
-  activeChannel: string;
   communityKey?: string;
   identity?: Identity;
 }
 
 export function MessengerProvider({
   children,
-  activeChannel,
   communityKey,
   identity,
 }: MessengerProviderProps) {
-  const messenger = useMessenger(activeChannel, communityKey, identity);
+  const messenger = useMessenger(communityKey, identity);
   return <MessengerContext.Provider value={messenger} children={children} />;
 }

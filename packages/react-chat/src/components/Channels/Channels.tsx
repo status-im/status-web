@@ -1,31 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { ChannelData } from "../../models/ChannelData";
 import { EditIcon } from "../Icons/EditIcon";
 
 import { Channel } from "./Channel";
 
 interface ChannelsProps {
-  onCommunityClick: (val: ChannelData) => void;
-  activeChannelId: string;
-  channels: ChannelData[];
   membersList: string[];
   groupList: string[][];
   setCreateChat: (val: boolean) => void;
+  onCommunityClick?: () => void;
 }
 
 export function Channels({
-  onCommunityClick,
-  activeChannelId,
-  channels,
   membersList,
   groupList,
   setCreateChat,
+  onCommunityClick,
 }: ChannelsProps) {
-  const { clearNotifications, notifications } = useMessengerContext();
-
+  const {
+    clearNotifications,
+    notifications,
+    activeChannel,
+    setActiveChannel,
+    channels,
+  } = useMessengerContext();
+  const activeChannelId = useMemo(() => activeChannel.id, [activeChannel]);
   useEffect(() => {
     const channel = channels.find((channel) => channel.id === activeChannelId);
     if (channel) {
@@ -49,7 +50,10 @@ export function Channels({
               : undefined
           }
           onClick={() => {
-            onCommunityClick(channel);
+            setActiveChannel(channel);
+            if (onCommunityClick) {
+              onCommunityClick();
+            }
             setCreateChat(false);
           }}
         />
@@ -75,11 +79,14 @@ export function Channels({
                 isActive={group.join("") === activeChannelId}
                 isMuted={false}
                 onClick={() => {
-                  onCommunityClick({
+                  setActiveChannel({
                     id: group.join(""),
                     name: group.join(", ").slice(0, 10),
                   });
                   setCreateChat(false);
+                  if (onCommunityClick) {
+                    onCommunityClick();
+                  }
                 }}
               />
             ))}
@@ -96,11 +103,14 @@ export function Channels({
                 isActive={member === activeChannelId}
                 isMuted={false}
                 onClick={() => {
-                  onCommunityClick({
+                  setActiveChannel({
                     id: member,
                     name: member.slice(0, 10),
                     description: "Contact",
                   });
+                  if (onCommunityClick) {
+                    onCommunityClick();
+                  }
                   setCreateChat(false);
                 }}
               />

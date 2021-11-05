@@ -4,7 +4,6 @@ import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { ChannelData } from "../../models/ChannelData";
 import { CommunityData } from "../../models/CommunityData";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { CrossIcon } from "../Icons/CrossIcon";
@@ -16,7 +15,6 @@ interface ChatCreationProps {
   community: CommunityData;
   setMembersList: any;
   setGroupList: any;
-  setActiveChannel: (val: ChannelData) => void;
   setCreateChat: (val: boolean) => void;
   editGroup?: boolean;
 }
@@ -26,14 +24,13 @@ export function ChatCreation({
   community,
   setMembersList,
   setGroupList,
-  setActiveChannel,
   setCreateChat,
   editGroup,
 }: ChatCreationProps) {
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
 
-  const { contacts } = useMessengerContext();
+  const { contacts, setActiveChannel } = useMessengerContext();
 
   const addMember = (member: string) => {
     setStyledGroup((prevMembers: string[]) => {
