@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
-import { ChannelData } from "../../models/ChannelData";
 import { CommunityData } from "../../models/CommunityData";
 import { Channel } from "../Channels/Channel";
 import { EmptyChannel } from "../Channels/EmptyChannel";
@@ -24,16 +23,12 @@ import { ChatMessages } from "./ChatMessages";
 
 interface ChatBodyProps {
   identity: Identity;
-  channel: ChannelData;
   community: CommunityData | undefined;
   onClick: () => void;
   showMembers: boolean;
   showCommunity: boolean;
-  setActiveChannel: (val: ChannelData) => void;
-  activeChannelId: string;
   onCommunityClick: () => void;
   onEditClick: () => void;
-  channels: ChannelData[];
   membersList: string[];
   groupList: [][];
   setMembersList: any;
@@ -43,23 +38,19 @@ interface ChatBodyProps {
 
 export function ChatBody({
   identity,
-  channel,
   community,
   onClick,
   showMembers,
   showCommunity,
-  setActiveChannel,
-  activeChannelId,
   onCommunityClick,
   onEditClick,
-  channels,
   membersList,
   groupList,
   setMembersList,
   setGroupList,
   setCreateChat,
 }: ChatBodyProps) {
-  const { messenger, messages } = useMessengerContext();
+  const { messenger, messages, activeChannel } = useMessengerContext();
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
@@ -92,7 +83,6 @@ export function ChatBody({
           community={community}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
-          setActiveChannel={setActiveChannel}
           setCreateChat={setCreateChat}
           editGroup={editGroup}
         />
@@ -115,7 +105,7 @@ export function ChatBody({
                 )}
 
                 <Channel
-                  channel={channel}
+                  channel={activeChannel}
                   isActive={narrow ? showChannelsList : true}
                   activeView={true}
                   isMuted={false}
@@ -143,7 +133,7 @@ export function ChatBody({
           {!community && <Loading />}
           {showChannelMenu && (
             <ChannelMenu
-              channel={channel}
+              channel={activeChannel}
               messages={messages}
               switchMemberList={switchMemberList}
               setShowChannelMenu={setShowChannelMenu}
@@ -161,13 +151,13 @@ export function ChatBody({
                 messenger && community ? (
                   <ChatMessages
                     messages={messages}
-                    activeChannelId={activeChannelId}
+                    activeChannelId={activeChannel.id}
                   />
                 ) : (
                   <LoadingSkeleton />
                 )
               ) : (
-                <EmptyChannel channel={channel} />
+                <EmptyChannel channel={activeChannel} />
               )}
               <ChatInput />
             </>
@@ -175,11 +165,8 @@ export function ChatBody({
 
           {showChannelsList && narrow && (
             <NarrowChannels
-              channels={channels}
               community={community.name}
-              setActiveChannel={setActiveChannel}
               setShowChannels={setShowChannelsList}
-              activeChannelId={activeChannelId}
               membersList={membersList}
               groupList={groupList}
               setCreateChat={setCreateChat}

@@ -1,10 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../contexts/messengerProvider";
 import { useNarrow } from "../contexts/narrowProvider";
-import { ChannelData } from "../models/ChannelData";
 import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 import { Channels } from "./Channels/Channels";
@@ -19,16 +18,9 @@ import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 interface ChatProps {
   communityKey: string;
   identity: Identity;
-  setActiveChannel: (channel: ChannelData) => void;
-  activeChannel: ChannelData;
 }
 
-export function Chat({
-  communityKey,
-  identity,
-  setActiveChannel,
-  activeChannel,
-}: ChatProps) {
+export function Chat({ communityKey, identity }: ChatProps) {
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
@@ -63,24 +55,6 @@ export function Chat({
     }
   }, [community]);
 
-  const channels = useMemo(() => {
-    if (community?.chats) {
-      return Array.from(community.chats.values()).map((chat) => {
-        return {
-          id: chat.id,
-          name: chat.communityChat?.identity?.displayName ?? "",
-          description: chat.communityChat?.identity?.description ?? "",
-        };
-      });
-    } else {
-      return [];
-    }
-  }, [community]);
-
-  useEffect(() => {
-    if (channels.length > 0) setActiveChannel(channels[0]);
-  }, [channels]);
-
   return (
     <ChatWrapper>
       {showChannels && !narrow && (
@@ -91,9 +65,6 @@ export function Chat({
             <CommunitySkeleton />
           )}
           <Channels
-            onCommunityClick={(e) => setActiveChannel(e)}
-            activeChannelId={activeChannel?.id ?? ""}
-            channels={channels}
             membersList={membersList}
             groupList={groupList}
             setCreateChat={setCreateChat}
@@ -104,16 +75,12 @@ export function Chat({
       {!createChat && (
         <ChatBody
           identity={identity}
-          channel={activeChannel}
-          setActiveChannel={setActiveChannel}
-          activeChannelId={activeChannel.id}
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
           community={communityData}
           showCommunity={!showChannels}
           onCommunityClick={showModal}
           onEditClick={showEditModal}
-          channels={channels}
           membersList={membersList}
           groupList={groupList}
           setMembersList={setMembersList}
@@ -134,7 +101,6 @@ export function Chat({
           community={communityData}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
-          setActiveChannel={setActiveChannel}
           setCreateChat={setCreateChat}
         />
       )}
@@ -152,7 +118,6 @@ export function Chat({
       <EditModal
         isVisible={isEditVisible}
         onClose={() => setIsEditVisible(false)}
-        channel={activeChannel}
       />
     </ChatWrapper>
   );

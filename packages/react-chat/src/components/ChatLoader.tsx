@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 
 import { MessengerProvider } from "../contexts/messengerProvider";
-import { ChannelData } from "../models/ChannelData";
 
 import { Chat } from "./Chat";
 import { IdentityLoader } from "./Form/IdentityLoader";
@@ -13,25 +12,11 @@ interface ChatLoaderProps {
 
 export function ChatLoader({ communityKey }: ChatLoaderProps) {
   const [identity, setIdentity] = useState<Identity | undefined>(undefined);
-  const [activeChannel, setActiveChannel] = useState<ChannelData>({
-    id: "",
-    name: "",
-    description: "",
-  });
 
   if (identity) {
     return (
-      <MessengerProvider
-        identity={identity}
-        communityKey={communityKey}
-        activeChannel={activeChannel.id}
-      >
-        <Chat
-          communityKey={communityKey}
-          activeChannel={activeChannel}
-          setActiveChannel={setActiveChannel}
-          identity={identity}
-        />
+      <MessengerProvider identity={identity} communityKey={communityKey}>
+        <Chat communityKey={communityKey} identity={identity} />
       </MessengerProvider>
     );
   } else {
