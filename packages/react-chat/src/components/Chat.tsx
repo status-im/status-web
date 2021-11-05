@@ -60,7 +60,9 @@ export function Chat({ identity }: ChatProps) {
           {communityData ? (
             <StyledCommunity onClick={showModal} community={communityData} />
           ) : (
-            <CommunitySkeleton />
+            <SkeletonWrapper>
+              <CommunitySkeleton />
+            </SkeletonWrapper>
           )}
           <Channels
             membersList={membersList}
@@ -132,6 +134,10 @@ const ChannelsWrapper = styled.div`
   padding: 10px 16px;
   display: flex;
   flex-direction: column;
+`;
+
+const SkeletonWrapper = styled.div`
+  margin-bottom: 16px;
 `;
 
 const StyledCommunity = styled(Community)`

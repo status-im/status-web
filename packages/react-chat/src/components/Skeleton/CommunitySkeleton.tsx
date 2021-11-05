@@ -26,5 +26,4 @@ const LogoSkeleton = styled(Skeleton)`
 const Loading = styled.div`
   display: flex;
   padding: 0 0 0 10px;
-  margin: 0 0 16px;
 `;

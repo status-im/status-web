@@ -112,7 +112,9 @@ export function ChatBody({
                 />
               </>
             ) : (
-              <CommunitySkeleton />
+              <SkeletonWrapper>
+                <CommunitySkeleton />
+              </SkeletonWrapper>
             )}
           </ChannelWrapper>
 
@@ -209,9 +211,14 @@ const ChannelWrapper = styled.div`
   }
 `;
 
+const SkeletonWrapper = styled.div`
+  padding: 8px;
+`;
+
 const ChatTopbar = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 5px 8px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   position: relative;
