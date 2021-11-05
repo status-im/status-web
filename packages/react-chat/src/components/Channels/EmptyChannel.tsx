@@ -32,7 +32,8 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
       {channel.type === "dm" ? (
         <EmptyText>
           Any messages you send here are encrypted and can only be read by you
-          and <span>{channel.name.slice(0, 10)}</span>.
+          and <br />
+          <span>{channel.name.slice(0, 10)}</span>.
         </EmptyText>
       ) : channel.type === "group" ? (
         <EmptyText>
@@ -42,7 +43,8 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         </EmptyText>
       ) : (
         <EmptyText>
-          Welcome to the beginning of the <span>#{channel.name}</span> channel!
+          Welcome to the beginning of the <span>#{channel.name}</span> <br />
+          channel!
         </EmptyText>
       )}
     </Wrapper>
@@ -53,8 +55,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(100% - 44px);
-  padding: 8px 16px 0;
+  margin-bottom: 32px;
 `;
 
 const ChannelInfoEmpty = styled(ChannelInfo)`
@@ -85,7 +86,6 @@ const EmptyText = styled.p`
   color: ${({ theme }) => theme.secondary};
   max-width: 310px;
   text-align: center;
-  word-break: break-all;
 
   & > span {
     color: ${({ theme }) => theme.primary};

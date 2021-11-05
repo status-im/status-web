@@ -6,7 +6,6 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { CommunityData } from "../../models/CommunityData";
 import { Channel } from "../Channels/Channel";
-import { EmptyChannel } from "../Channels/EmptyChannel";
 import { Community } from "../Community";
 import { ChannelMenu } from "../Form/ChannelMenu";
 import { MembersIcon } from "../Icons/MembersIcon";
@@ -147,17 +146,14 @@ export function ChatBody({
         <>
           {!showChannelsList && !showMembersList && (
             <>
-              {messages.length > 0 ? (
-                messenger && community ? (
-                  <ChatMessages
-                    messages={messages}
-                    activeChannelId={activeChannel.id}
-                  />
-                ) : (
-                  <LoadingSkeleton />
-                )
+              {messenger && community ? (
+                <ChatMessages
+                  messages={messages}
+                  activeChannelId={activeChannel.id}
+                  channel={activeChannel}
+                />
               ) : (
-                <EmptyChannel channel={activeChannel} />
+                <LoadingSkeleton />
               )}
               <ChatInput />
             </>

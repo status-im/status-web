@@ -82,6 +82,7 @@ export function Channels({
                   setActiveChannel({
                     id: group.join(""),
                     name: group.join(", ").slice(0, 10),
+                    type: "group",
                   });
                   setCreateChat(false);
                   if (onCommunityClick) {
@@ -106,6 +107,7 @@ export function Channels({
                   setActiveChannel({
                     id: member,
                     name: member.slice(0, 10),
+                    type: "dm",
                     description: "Contact",
                   });
                   if (onCommunityClick) {
