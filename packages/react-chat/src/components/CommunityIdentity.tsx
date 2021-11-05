@@ -1,26 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 
-import { CommunityData } from "../models/CommunityData";
+import { useMessengerContext } from "../contexts/messengerProvider";
 
 import { textMediumStyles } from "./Text";
 
 export interface CommunityIdentityProps {
-  community: CommunityData;
   subtitle: string;
   className?: string;
 }
 
 export const CommunityIdentity = ({
-  community,
   subtitle,
   className,
 }: CommunityIdentityProps) => {
+  const { communityData } = useMessengerContext();
   return (
     <Row className={className}>
-      <Logo src={community.icon} alt={`${name} logo`} />
+      <Logo src={communityData?.icon} alt={`${communityData?.name} logo`} />
       <Column>
-        <Name>{community.name}</Name>
+        <Name>{communityData?.name}</Name>
         <Subtitle>{subtitle}</Subtitle>
       </Column>
     </Row>

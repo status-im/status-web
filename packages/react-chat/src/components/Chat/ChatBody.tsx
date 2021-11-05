@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
-import { CommunityData } from "../../models/CommunityData";
 import { Channel } from "../Channels/Channel";
 import { Community } from "../Community";
 import { ChannelMenu } from "../Form/ChannelMenu";
@@ -20,7 +19,6 @@ import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
 
 interface ChatBodyProps {
-  community: CommunityData | undefined;
   onClick: () => void;
   showMembers: boolean;
   showCommunity: boolean;
@@ -34,7 +32,6 @@ interface ChatBodyProps {
 }
 
 export function ChatBody({
-  community,
   onClick,
   showMembers,
   showCommunity,
@@ -46,7 +43,8 @@ export function ChatBody({
   setGroupList,
   setCreateChat,
 }: ChatBodyProps) {
-  const { messenger, messages, activeChannel } = useMessengerContext();
+  const { messenger, messages, activeChannel, communityData } =
+    useMessengerContext();
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
@@ -73,9 +71,8 @@ export function ChatBody({
 
   return (
     <ChatBodyWrapper className={className}>
-      {editGroup && community ? (
+      {editGroup && communityData ? (
         <ChatCreation
-          community={community}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
           setCreateChat={setCreateChat}
@@ -88,14 +85,11 @@ export function ChatBody({
           }
         >
           <ChannelWrapper className={className}>
-            {messenger && community ? (
+            {messenger && communityData ? (
               <>
                 {(showCommunity || narrow) && (
                   <CommunityWrap className={className}>
-                    <Community
-                      onClick={onCommunityClick}
-                      community={community}
-                    />
+                    <Community onClick={onCommunityClick} />
                   </CommunityWrap>
                 )}
 
@@ -127,7 +121,7 @@ export function ChatBody({
               <MoreIcon />
             </MoreBtn>
           </MenuWrapper>
-          {!community && <Loading />}
+          {!messenger && !communityData && <Loading />}
           {showChannelMenu && (
             <ChannelMenu
               channel={activeChannel}
@@ -140,11 +134,11 @@ export function ChatBody({
           )}
         </ChatTopbar>
       )}
-      {messenger && community ? (
+      {messenger ? (
         <>
           {!showChannelsList && !showMembersList && (
             <>
-              {messenger && community ? (
+              {messenger && communityData ? (
                 <ChatMessages
                   messages={messages}
                   activeChannelId={activeChannel.id}
@@ -159,7 +153,6 @@ export function ChatBody({
 
           {showChannelsList && narrow && (
             <NarrowChannels
-              community={community.name}
               setShowChannels={setShowChannelsList}
               membersList={membersList}
               groupList={groupList}
@@ -168,7 +161,6 @@ export function ChatBody({
           )}
           {showMembersList && narrow && (
             <NarrowMembers
-              community={community}
               setShowChannels={setShowChannelsList}
               setShowMembersList={setShowMembersList}
               setMembersList={setMembersList}
