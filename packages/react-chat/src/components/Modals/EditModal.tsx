@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { ChannelData } from "../../models/ChannelData";
-import { uintToImgUrl } from "../../utils/uintToImgUrl";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ChannelLogo } from "../Channels/Channel";
 import { AddIcon } from "../Icons/AddIcon";
@@ -17,8 +16,19 @@ interface EditModalProps extends BasicModalProps {
 
 export const EditModal = ({ isVisible, onClose, channel }: EditModalProps) => {
   const [groupName, setGroupName] = useState("");
-  const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
-  const [showSizeLimit, setShowSizeLimit] = useState(false);
+  const [image, setImage] = useState("");
+
+  const handleChange = (e: any) => {
+    if (e.target.files.length) {
+      setImage(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
+  const handleUpload = () => {
+    channel.icon = image;
+    channel.name = groupName;
+    onClose();
+  };
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
@@ -45,43 +55,27 @@ export const EditModal = ({ isVisible, onClose, channel }: EditModalProps) => {
           <Label>Group image</Label>
           <GroupLogo
             style={{
-              backgroundImage: channel.icon
+              backgroundImage: image
+                ? `url(${image}`
+                : channel.icon
                 ? `url(${channel.icon}`
-                : imageUint
-                ? uintToImgUrl(imageUint)
                 : "",
             }}
           >
-            {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
+            {!channel.icon && !image && channel.name.slice(0, 1).toUpperCase()}
             <AddPictureInputWrapper>
               <AddIcon />
               <AddPictureInput
                 type="file"
-                multiple={true}
                 accept="image/png, image/jpeg"
-                onChange={(e) => {
-                  const fileReader = new FileReader();
-                  fileReader.onloadend = (s) => {
-                    const arr = new Uint8Array(s.target?.result as ArrayBuffer);
-                    setImageUint(arr);
-                  };
-
-                  if (e?.target?.files?.[0]) {
-                    if (e.target.files[0].size < 1024 * 1024) {
-                      fileReader.readAsArrayBuffer(e.target.files[0]);
-                    } else {
-                      setShowSizeLimit(true);
-                    }
-                  }
-                }}
+                onChange={handleChange}
               />
             </AddPictureInputWrapper>
           </GroupLogo>
-          {showSizeLimit && <Label>File size must be less than 1MB</Label>}
         </LogoSection>
       </Section>
       <ButtonSection>
-        <SaveBtn>Save changes</SaveBtn>
+        <SaveBtn onClick={handleUpload}>Save changes</SaveBtn>
       </ButtonSection>
     </Modal>
   );
