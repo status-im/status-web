@@ -36,11 +36,11 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
           <span>{channel.name.slice(0, 10)}</span>.
         </EmptyText>
       ) : channel.type === "group" ? (
-        <EmptyText>
+        <EmptyTextGroup>
           You created a group with{" "}
           <span>{groupName.slice(groupName.length - 1)}</span> and{" "}
           <span>{groupName.at(-1)}</span>
-        </EmptyText>
+        </EmptyTextGroup>
       ) : (
         <EmptyText>
           Welcome to the beginning of the <span>#{channel.name}</span> <br />
@@ -92,4 +92,8 @@ const EmptyText = styled.p`
   }
 
   ${textMediumStyles}
+`;
+
+const EmptyTextGroup = styled(EmptyText)`
+  word-break: break-all;
 `;

@@ -103,6 +103,9 @@ export const ChannelInfo = styled.div`
 const ChannelTextInfo = styled.div`
   display: flex;
   flex-direction: column;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;
 
 export const ChannelLogo = styled.div`
