@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -21,7 +20,6 @@ import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
 
 interface ChatBodyProps {
-  identity: Identity;
   community: CommunityData | undefined;
   onClick: () => void;
   showMembers: boolean;
@@ -36,7 +34,6 @@ interface ChatBodyProps {
 }
 
 export function ChatBody({
-  identity,
   community,
   onClick,
   showMembers,
@@ -78,7 +75,6 @@ export function ChatBody({
     <ChatBodyWrapper className={className}>
       {editGroup && community ? (
         <ChatCreation
-          identity={identity}
           community={community}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
@@ -170,7 +166,6 @@ export function ChatBody({
           )}
           {showMembersList && narrow && (
             <NarrowMembers
-              identity={identity}
               community={community}
               setShowChannels={setShowChannelsList}
               setShowMembersList={setShowMembersList}

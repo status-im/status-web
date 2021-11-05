@@ -1,27 +1,27 @@
 import React from "react";
-import { Identity, utils } from "status-communities/dist/cjs";
+import { utils } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { UserIcon } from "../Icons/UserIcon";
 
 import { Member, MemberData, MemberIcon } from "./Member";
 
 interface MembersListProps {
-  identity: Identity;
   setShowChannels: (val: boolean) => void;
   setShowMembers?: (val: boolean) => void;
   setMembersList: any;
 }
 
 export function MembersList({
-  identity,
   setShowChannels,
   setShowMembers,
   setMembersList,
 }: MembersListProps) {
   const { contacts } = useMessengerContext();
+  const identity = useIdentity();
 
   return (
     <MembersListWrap>

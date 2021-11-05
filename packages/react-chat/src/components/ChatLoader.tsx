@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 
+import { IdentityProvider } from "../contexts/identityProvider";
 import { MessengerProvider } from "../contexts/messengerProvider";
 
 import { Chat } from "./Chat";
@@ -15,9 +16,11 @@ export function ChatLoader({ communityKey }: ChatLoaderProps) {
 
   if (identity) {
     return (
-      <MessengerProvider identity={identity} communityKey={communityKey}>
-        <Chat identity={identity} />
-      </MessengerProvider>
+      <IdentityProvider identity={identity}>
+        <MessengerProvider identity={identity} communityKey={communityKey}>
+          <Chat />
+        </MessengerProvider>
+      </IdentityProvider>
     );
   } else {
     return <IdentityLoader setIdentity={setIdentity} />;
