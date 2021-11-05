@@ -3,8 +3,10 @@ import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
+import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
+import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
@@ -71,9 +73,14 @@ function ChatUiMessage({
 type ChatMessagesProps = {
   messages: ChatMessage[];
   activeChannelId: string;
+  channel: ChannelData;
 };
 
-export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
+export function ChatMessages({
+  messages,
+  activeChannelId,
+  channel,
+}: ChatMessagesProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref, activeChannelId);
 
@@ -93,6 +100,7 @@ export function ChatMessages({ messages, activeChannelId }: ChatMessagesProps) {
         image={image}
       />
       <LinkModal isVisible={!!link} onClose={() => setLink("")} link={link} />
+      <EmptyChannel channel={channel} />
       {loadingMessages && (
         <LoadingWrapper>
           <LoadingIcon className="message" />
