@@ -16,7 +16,7 @@ export function ChatLoader({ communityKey }: ChatLoaderProps) {
   if (identity) {
     return (
       <MessengerProvider identity={identity} communityKey={communityKey}>
-        <Chat communityKey={communityKey} identity={identity} />
+        <Chat identity={identity} />
       </MessengerProvider>
     );
   } else {

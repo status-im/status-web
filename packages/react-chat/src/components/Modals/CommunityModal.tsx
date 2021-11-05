@@ -14,32 +14,26 @@ import { textSmallStyles } from "../Text";
 import { BasicModalProps, Modal } from "./Modal";
 import { Section, Text } from "./ModalStyle";
 
-interface CommunityModalProps extends BasicModalProps, CommunityIdentityProps {
-  description: string;
-  publicKey: string;
-}
+interface CommunityModalProps extends BasicModalProps, CommunityIdentityProps {}
 
 export const CommunityModal = ({
   isVisible,
   onClose,
-  icon,
-  name,
+  community,
   subtitle,
-  description,
-  publicKey,
 }: CommunityModalProps) => {
   const narrow = useNarrow();
 
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Section>
-        <CommunityIdentity icon={icon} name={name} subtitle={subtitle} />
+        <CommunityIdentity community={community} subtitle={subtitle} />
       </Section>
       <Section>
-        <Text>{description}</Text>
+        <Text>{community.description}</Text>
       </Section>
       <Section>
-        <CopyInput value={publicKey} label="Community public key" />
+        <CopyInput value={community.id} label="Community public key" />
         <Hint>
           To access this community, paste community public key in Status desktop
           or mobile app.

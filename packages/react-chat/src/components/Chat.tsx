@@ -16,11 +16,10 @@ import { EditModal } from "./Modals/EditModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface ChatProps {
-  communityKey: string;
   identity: Identity;
 }
 
-export function Chat({ communityKey, identity }: ChatProps) {
+export function Chat({ identity }: ChatProps) {
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
@@ -36,11 +35,10 @@ export function Chat({ communityKey, identity }: ChatProps) {
   const showEditModal = () => setIsEditVisible(true);
 
   const { community } = useMessengerContext();
-
   const communityData = useMemo(() => {
     if (community?.description) {
       return {
-        id: 1,
+        id: community.publicKeyStr,
         name: community.description.identity?.displayName ?? "",
         icon: uintToImgUrl(
           community.description?.identity?.images?.thumbnail.payload ??
@@ -59,7 +57,7 @@ export function Chat({ communityKey, identity }: ChatProps) {
     <ChatWrapper>
       {showChannels && !narrow && (
         <ChannelsWrapper>
-          {community && communityData ? (
+          {communityData ? (
             <StyledCommunity onClick={showModal} community={communityData} />
           ) : (
             <CommunitySkeleton />
@@ -108,11 +106,8 @@ export function Chat({ communityKey, identity }: ChatProps) {
         <CommunityModal
           isVisible={isModalVisible}
           onClose={() => setIsModalVisible(false)}
-          icon={communityData.icon}
-          name={communityData.name}
+          community={communityData}
           subtitle="Public Community"
-          description={communityData.description}
-          publicKey={communityKey}
         />
       )}
       <EditModal

@@ -1,26 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 
+import { CommunityData } from "../models/CommunityData";
+
 import { textMediumStyles } from "./Text";
 
 export interface CommunityIdentityProps {
-  icon: string;
-  name: string;
+  community: CommunityData;
   subtitle: string;
   className?: string;
 }
 
 export const CommunityIdentity = ({
-  icon,
-  name,
+  community,
   subtitle,
   className,
 }: CommunityIdentityProps) => {
   return (
     <Row className={className}>
-      <Logo src={icon} alt={`${name} logo`} />
+      <Logo src={community.icon} alt={`${name} logo`} />
       <Column>
-        <Name>{name}</Name>
+        <Name>{community.name}</Name>
         <Subtitle>{subtitle}</Subtitle>
       </Column>
     </Row>

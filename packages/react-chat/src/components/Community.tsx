@@ -11,15 +11,12 @@ interface CommunityProps {
 }
 
 export function Community({ community, onClick, className }: CommunityProps) {
-  const { name, icon, members } = community;
-
   return (
     <>
       <button className={className} onClick={onClick}>
         <CommunityIdentity
-          name={name}
-          icon={icon}
-          subtitle={`${members} members`}
+          community={community}
+          subtitle={`${community.members} members`}
         />
       </button>
     </>
