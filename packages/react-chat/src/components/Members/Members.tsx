@@ -1,25 +1,18 @@
 import React from "react";
-import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { MembersList } from "./MembersList";
 
 interface MembersProps {
-  identity: Identity;
   setShowChannels: (val: boolean) => void;
   setMembersList: any;
 }
 
-export function Members({
-  identity,
-  setShowChannels,
-  setMembersList,
-}: MembersProps) {
+export function Members({ setShowChannels, setMembersList }: MembersProps) {
   return (
     <MembersWrapper>
       <MemberHeading>Members</MemberHeading>
       <MembersList
-        identity={identity}
         setShowChannels={setShowChannels}
         setMembersList={setMembersList}
       />

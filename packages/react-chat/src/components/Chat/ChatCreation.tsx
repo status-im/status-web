@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Identity } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { CommunityData } from "../../models/CommunityData";
 import { buttonStyles } from "../Buttons/buttonStyle";
@@ -11,7 +11,6 @@ import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
-  identity: Identity;
   community: CommunityData;
   setMembersList: any;
   setGroupList: any;
@@ -20,13 +19,13 @@ interface ChatCreationProps {
 }
 
 export function ChatCreation({
-  identity,
   community,
   setMembersList,
   setGroupList,
   setCreateChat,
   editGroup,
 }: ChatCreationProps) {
+  const identity = useIdentity();
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
 
