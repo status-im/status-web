@@ -1,5 +1,5 @@
 export type CommunityData = {
-  id: number;
+  id: string;
   name: string;
   icon: string;
   members: number;
