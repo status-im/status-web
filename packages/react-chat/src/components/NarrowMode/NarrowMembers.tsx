@@ -1,5 +1,4 @@
 import React from "react";
-import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { CommunityData } from "../../models/CommunityData";
@@ -8,7 +7,6 @@ import { MembersList } from "../Members/MembersList";
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowMembersProps {
-  identity: Identity;
   community: CommunityData;
   setShowChannels: (val: boolean) => void;
   setShowMembersList: (val: boolean) => void;
@@ -16,7 +14,6 @@ interface NarrowMembersProps {
 }
 
 export function NarrowMembers({
-  identity,
   community,
   setShowChannels,
   setShowMembersList,
@@ -26,7 +23,6 @@ export function NarrowMembers({
     <ListWrapper>
       <NarrowTopbar list="Community members" community={community.name} />
       <MembersList
-        identity={identity}
         setShowChannels={setShowChannels}
         setShowMembers={setShowMembersList}
         setMembersList={setMembersList}

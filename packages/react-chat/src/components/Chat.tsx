@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../contexts/messengerProvider";
@@ -15,11 +14,7 @@ import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
-interface ChatProps {
-  identity: Identity;
-}
-
-export function Chat({ identity }: ChatProps) {
+export function Chat() {
   const [showMembers, setShowMembers] = useState(true);
   const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
@@ -72,7 +67,6 @@ export function Chat({ identity }: ChatProps) {
 
       {!createChat && (
         <ChatBody
-          identity={identity}
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
           community={communityData}
@@ -88,14 +82,12 @@ export function Chat({ identity }: ChatProps) {
       )}
       {showMembers && !narrow && !createChat && (
         <Members
-          identity={identity}
           setShowChannels={setShowChannels}
           setMembersList={setMembersList}
         />
       )}
       {createChat && communityData && (
         <ChatCreation
-          identity={identity}
           community={communityData}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
