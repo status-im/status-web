@@ -1,27 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 
-import { CommunityData } from "../../models/CommunityData";
 import { MembersList } from "../Members/MembersList";
 
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowMembersProps {
-  community: CommunityData;
   setShowChannels: (val: boolean) => void;
   setShowMembersList: (val: boolean) => void;
   setMembersList: any;
 }
 
 export function NarrowMembers({
-  community,
   setShowChannels,
   setShowMembersList,
   setMembersList,
 }: NarrowMembersProps) {
   return (
     <ListWrapper>
-      <NarrowTopbar list="Community members" community={community.name} />
+      <NarrowTopbar list="Community members" />
       <MembersList
         setShowChannels={setShowChannels}
         setShowMembers={setShowMembersList}

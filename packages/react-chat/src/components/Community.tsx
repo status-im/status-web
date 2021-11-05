@@ -1,24 +1,36 @@
 import React from "react";
+import styled from "styled-components";
 
-import { CommunityData } from "../models/CommunityData";
+import { useMessengerContext } from "../contexts/messengerProvider";
 
 import { CommunityIdentity } from "./CommunityIdentity";
+import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface CommunityProps {
-  community: CommunityData;
   onClick: () => void;
   className?: string;
 }
 
-export function Community({ community, onClick, className }: CommunityProps) {
+export function Community({ onClick, className }: CommunityProps) {
+  const { communityData } = useMessengerContext();
+
+  if (!communityData) {
+    return (
+      <SkeletonWrapper>
+        <CommunitySkeleton />
+      </SkeletonWrapper>
+    );
+  }
+
   return (
     <>
       <button className={className} onClick={onClick}>
-        <CommunityIdentity
-          community={community}
-          subtitle={`${community.members} members`}
-        />
+        <CommunityIdentity subtitle={`${communityData.members} members`} />
       </button>
     </>
   );
 }
+
+const SkeletonWrapper = styled.div`
+  margin-bottom: 16px;
+`;

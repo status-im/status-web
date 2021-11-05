@@ -4,14 +4,12 @@ import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { CommunityData } from "../../models/CommunityData";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { CrossIcon } from "../Icons/CrossIcon";
 import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
-  community: CommunityData;
   setMembersList: any;
   setGroupList: any;
   setCreateChat: (val: boolean) => void;
@@ -19,7 +17,6 @@ interface ChatCreationProps {
 }
 
 export function ChatCreation({
-  community,
   setMembersList,
   setGroupList,
   setCreateChat,
@@ -99,7 +96,6 @@ export function ChatCreation({
                 />
                 {query && (
                   <SearchBlock
-                    community={community}
                     query={query}
                     styledGroup={styledGroup}
                     setStyledGroup={setStyledGroup}

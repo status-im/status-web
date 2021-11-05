@@ -9,9 +9,11 @@ import {
 
 import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
+import { CommunityData } from "../../models/CommunityData";
 import { Contact } from "../../models/Contact";
 import { createCommunity } from "../../utils/createCommunity";
 import { createMessenger } from "../../utils/createMessenger";
+import { uintToImgUrl } from "../../utils/uintToImgUrl";
 
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
@@ -27,7 +29,7 @@ export type MessengerType = {
   clearNotifications: (id: string) => void;
   loadPrevDay: (id: string) => Promise<void>;
   loadingMessages: boolean;
-  community: Community | undefined;
+  communityData: CommunityData | undefined;
   contacts: Contact[];
   channels: ChannelData[];
   activeChannel: ChannelData;
@@ -144,6 +146,24 @@ export function useMessenger(
     if (channels.length > 0) setActiveChannel(channels[0]);
   }, [channels]);
 
+  const communityData = useMemo(() => {
+    if (community?.description) {
+      return {
+        id: community.publicKeyStr,
+        name: community.description.identity?.displayName ?? "",
+        icon: uintToImgUrl(
+          community.description?.identity?.images?.thumbnail.payload ??
+            new Uint8Array()
+        ),
+        members: 0,
+        membersList: Object.keys(community.description.proto.members),
+        description: community.description.identity?.description ?? "",
+      };
+    } else {
+      return undefined;
+    }
+  }, [community]);
+
   return {
     messenger,
     messages,
@@ -152,7 +172,7 @@ export function useMessenger(
     clearNotifications,
     loadPrevDay,
     loadingMessages,
-    community,
+    communityData,
     contacts,
     channels,
     activeChannel,

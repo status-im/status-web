@@ -6,7 +6,6 @@ import { Channels } from "../Channels/Channels";
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowChannelsProps {
-  community: string;
   setShowChannels: (val: boolean) => void;
   membersList: string[];
   groupList: string[][];
@@ -14,7 +13,6 @@ interface NarrowChannelsProps {
 }
 
 export function NarrowChannels({
-  community,
   setShowChannels,
   membersList,
   groupList,
@@ -22,7 +20,7 @@ export function NarrowChannels({
 }: NarrowChannelsProps) {
   return (
     <ListWrapper>
-      <NarrowTopbar list="Channels" community={community} />
+      <NarrowTopbar list="Channels" />
       <Channels
         onCommunityClick={() => setShowChannels(false)}
         membersList={membersList}

@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { DownloadButton } from "../Buttons/DownloadButton";
 import {
@@ -19,21 +20,23 @@ interface CommunityModalProps extends BasicModalProps, CommunityIdentityProps {}
 export const CommunityModal = ({
   isVisible,
   onClose,
-  community,
   subtitle,
 }: CommunityModalProps) => {
   const narrow = useNarrow();
-
+  const { communityData } = useMessengerContext();
   return (
     <Modal isVisible={isVisible} onClose={onClose}>
       <Section>
-        <CommunityIdentity community={community} subtitle={subtitle} />
+        <CommunityIdentity subtitle={subtitle} />
       </Section>
       <Section>
-        <Text>{community.description}</Text>
+        <Text>{communityData?.description}</Text>
       </Section>
       <Section>
-        <CopyInput value={community.id} label="Community public key" />
+        <CopyInput
+          value={communityData?.id ?? ""}
+          label="Community public key"
+        />
         <Hint>
           To access this community, paste community public key in Status desktop
           or mobile app.

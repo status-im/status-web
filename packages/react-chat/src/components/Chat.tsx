@@ -1,9 +1,7 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { useMessengerContext } from "../contexts/messengerProvider";
 import { useNarrow } from "../contexts/narrowProvider";
-import { uintToImgUrl } from "../utils/uintToImgUrl";
 
 import { Channels } from "./Channels/Channels";
 import { ChatBody } from "./Chat/ChatBody";
@@ -12,7 +10,6 @@ import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
-import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 export function Chat() {
   const [showMembers, setShowMembers] = useState(true);
@@ -29,36 +26,11 @@ export function Chat() {
   const [isEditVisible, setIsEditVisible] = useState(false);
   const showEditModal = () => setIsEditVisible(true);
 
-  const { community } = useMessengerContext();
-  const communityData = useMemo(() => {
-    if (community?.description) {
-      return {
-        id: community.publicKeyStr,
-        name: community.description.identity?.displayName ?? "",
-        icon: uintToImgUrl(
-          community.description?.identity?.images?.thumbnail.payload ??
-            new Uint8Array()
-        ),
-        members: 0,
-        membersList: Object.keys(community.description.proto.members),
-        description: community.description.identity?.description ?? "",
-      };
-    } else {
-      return undefined;
-    }
-  }, [community]);
-
   return (
     <ChatWrapper>
       {showChannels && !narrow && (
         <ChannelsWrapper>
-          {communityData ? (
-            <StyledCommunity onClick={showModal} community={communityData} />
-          ) : (
-            <SkeletonWrapper>
-              <CommunitySkeleton />
-            </SkeletonWrapper>
-          )}
+          <StyledCommunity onClick={showModal} />
           <Channels
             membersList={membersList}
             groupList={groupList}
@@ -71,7 +43,6 @@ export function Chat() {
         <ChatBody
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
-          community={communityData}
           showCommunity={!showChannels}
           onCommunityClick={showModal}
           onEditClick={showEditModal}
@@ -88,22 +59,18 @@ export function Chat() {
           setMembersList={setMembersList}
         />
       )}
-      {createChat && communityData && (
+      {createChat && (
         <ChatCreation
-          community={communityData}
           setMembersList={setMembersList}
           setGroupList={setGroupList}
           setCreateChat={setCreateChat}
         />
       )}
-      {communityData && (
-        <CommunityModal
-          isVisible={isModalVisible}
-          onClose={() => setIsModalVisible(false)}
-          community={communityData}
-          subtitle="Public Community"
-        />
-      )}
+      <CommunityModal
+        isVisible={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
+        subtitle="Public Community"
+      />
       <EditModal
         isVisible={isEditVisible}
         onClose={() => setIsEditVisible(false)}
@@ -126,10 +93,6 @@ const ChannelsWrapper = styled.div`
   padding: 10px 16px;
   display: flex;
   flex-direction: column;
-`;
-
-const SkeletonWrapper = styled.div`
-  margin-bottom: 16px;
 `;
 
 const StyledCommunity = styled(Community)`

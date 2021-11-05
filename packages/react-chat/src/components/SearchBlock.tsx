@@ -1,29 +1,33 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { CommunityData } from "../models/CommunityData";
+import { useMessengerContext } from "../contexts/messengerProvider";
 
 import { Channel } from "./Channels/Channel";
 import { ContactsList } from "./Chat/ChatCreation";
 
 interface SearchBlockProps {
-  community: CommunityData;
   query: string;
   styledGroup: string[];
   setStyledGroup: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const SearchBlock = ({
-  community,
   query,
   styledGroup,
   setStyledGroup,
 }: SearchBlockProps) => {
+  const { communityData } = useMessengerContext();
+
+  if (!communityData) {
+    return null;
+  }
+
   const searchList = useMemo(() => {
-    return community.membersList
+    return communityData.membersList
       .filter((member) => member.includes(query))
       .filter((member) => !styledGroup.includes(member));
-  }, [query, styledGroup, community.membersList]);
+  }, [query, styledGroup, communityData.membersList]);
 
   const addMember = (member: string) => {
     setStyledGroup((prevMembers: string[]) => {
@@ -40,7 +44,7 @@ export const SearchBlock = ({
   return (
     <SearchContacts>
       <ContactsList>
-        {community.membersList
+        {communityData.membersList
           .filter((member) => member.includes(query))
           .filter((member) => !styledGroup.includes(member))
           .map((member) => (

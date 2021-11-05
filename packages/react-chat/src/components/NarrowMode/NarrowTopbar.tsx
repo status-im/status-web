@@ -1,16 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
+
 interface NarrowTopbarProps {
   list: string;
-  community: string;
 }
 
-export function NarrowTopbar({ list, community }: NarrowTopbarProps) {
+export function NarrowTopbar({ list }: NarrowTopbarProps) {
+  const { communityData } = useMessengerContext();
   return (
     <TopbarWrapper>
       <Heading>{list}</Heading>
-      <SubHeading>{community}</SubHeading>
+      <SubHeading>{communityData?.name}</SubHeading>
     </TopbarWrapper>
   );
 }
