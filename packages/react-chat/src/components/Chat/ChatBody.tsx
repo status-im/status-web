@@ -191,6 +191,7 @@ export function ChatBody({
 }
 
 const ChatBodyWrapper = styled.div`
+  width: 61%;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -205,6 +206,7 @@ const ChatBodyWrapper = styled.div`
 const ChannelWrapper = styled.div`
   display: flex;
   align-items: center;
+  max-width: 85%;
 
   &.narrow {
     width: calc(100% - 46px);
