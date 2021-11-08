@@ -1,39 +1,44 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import { ChannelData } from '../../models/ChannelData';
-import { textMediumStyles } from '../Text';
+import { ChannelData } from "../../models/ChannelData";
+import { textMediumStyles } from "../Text";
 
-import { ChannelInfo, ChannelLogo, ChannelName } from './Channel';
+import { ChannelInfo, ChannelLogo, ChannelName } from "./Channel";
 
 type EmptyChannelProps = {
   channel: ChannelData;
 };
 
 export function EmptyChannel({ channel }: EmptyChannelProps) {
-  const groupName = channel.name.split(', ');
+  const groupName = channel.name.split(", ");
 
   return (
     <Wrapper>
       <ChannelInfoEmpty>
         <ChannelLogoEmpty
           style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : '',
-          }}>
-          {' '}
+            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
+          }}
+        >
+          {" "}
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogoEmpty>
-        <ChannelNameEmpty className={'active'}>{channel.name.slice(0, 10)}</ChannelNameEmpty>
+        <ChannelNameEmpty className={"active"}>
+          {channel.name.slice(0, 10)}
+        </ChannelNameEmpty>
       </ChannelInfoEmpty>
 
-      {channel.type === 'dm' ? (
+      {channel.type === "dm" ? (
         <EmptyText>
-          Any messages you send here are encrypted and can only be read by you and <br />
+          Any messages you send here are encrypted and can only be read by you
+          and <br />
           <span>{channel.name.slice(0, 10)}</span>.
         </EmptyText>
-      ) : channel.type === 'group' ? (
+      ) : channel.type === "group" ? (
         <EmptyTextGroup>
-          You created a group with <span>{groupName.slice(groupName.length - 1)}</span> and{' '}
+          You created a group with{" "}
+          <span>{groupName.slice(groupName.length - 1)}</span> and{" "}
           <span>{groupName.at(-1)}</span>
         </EmptyTextGroup>
       ) : (
