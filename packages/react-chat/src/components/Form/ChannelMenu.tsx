@@ -22,6 +22,7 @@ interface ChannelMenuProps {
   setShowChannelMenu: (val: boolean) => void;
   setEditGroup: (val: boolean) => void;
   onEditClick: () => void;
+  setGroupList: any;
 }
 
 export const ChannelMenu = ({
@@ -31,6 +32,7 @@ export const ChannelMenu = ({
   setShowChannelMenu,
   setEditGroup,
   onEditClick,
+  setGroupList,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
   const { clearNotifications } = useMessengerContext();
@@ -80,7 +82,14 @@ export const ChannelMenu = ({
       {channel.type === "group" && (
         <MenuSection>
           {" "}
-          <MenuItem onClick={() => channel}>
+          <MenuItem
+            onClick={() =>
+              setGroupList((prevGroups: string[][]) => {
+                const idx = prevGroups.indexOf(channel.name.split(", "));
+                return prevGroups.splice(idx, 1);
+              })
+            }
+          >
             <LeftIconSvg width={16} height={16} />
             <MenuText>Leave Group</MenuText>
           </MenuItem>
