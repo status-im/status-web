@@ -152,7 +152,7 @@ export function useMessenger(
         id: community.publicKeyStr,
         name: community.description.identity?.displayName ?? "",
         icon: uintToImgUrl(
-          community.description?.identity?.images?.thumbnail.payload ??
+          community.description?.identity?.images?.thumbnail?.payload ??
             new Uint8Array()
         ),
         members: 0,
