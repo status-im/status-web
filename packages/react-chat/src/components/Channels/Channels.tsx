@@ -81,7 +81,7 @@ export function Channels({
                 onClick={() => {
                   setActiveChannel({
                     id: group.join(""),
-                    name: group.join(", ").slice(0, 10),
+                    name: group.join(", "),
                     type: "group",
                   });
                   setCreateChat(false);
