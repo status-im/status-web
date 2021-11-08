@@ -43,8 +43,7 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         </EmptyTextGroup>
       ) : (
         <EmptyText>
-          Welcome to the beginning of the <span>#{channel.name}</span> <br />
-          channel!
+          Welcome to the beginning of the <span>#{channel.name}</span> channel!
         </EmptyText>
       )}
     </Wrapper>

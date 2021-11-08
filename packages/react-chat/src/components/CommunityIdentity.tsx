@@ -15,9 +15,20 @@ export const CommunityIdentity = ({
   className,
 }: CommunityIdentityProps) => {
   const { communityData } = useMessengerContext();
+
   return (
     <Row className={className}>
-      <Logo src={communityData?.icon} alt={`${communityData?.name} logo`} />
+      <Logo
+        style={{
+          backgroundImage: communityData?.icon
+            ? `url(${communityData?.icon}`
+            : "",
+        }}
+      >
+        {" "}
+        {communityData?.icon === undefined &&
+          communityData?.name.slice(0, 1).toUpperCase()}
+      </Logo>
       <Column>
         <Name>{communityData?.name}</Name>
         <Subtitle>{subtitle}</Subtitle>
@@ -36,11 +47,22 @@ export const Column = styled.div`
   align-items: flex-start;
 `;
 
-const Logo = styled.img`
+const Logo = styled.div`
   width: 36px;
   height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: 50%;
   margin-right: 8px;
+  background-color: ${({ theme }) => theme.tertiary};
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: ${({ theme }) => theme.iconTextColor};
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 20px;
 `;
 
 const Name = styled.p`

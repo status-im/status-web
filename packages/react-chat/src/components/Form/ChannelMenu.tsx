@@ -22,6 +22,7 @@ interface ChannelMenuProps {
   setShowChannelMenu: (val: boolean) => void;
   setEditGroup: (val: boolean) => void;
   onEditClick: () => void;
+  setGroupList: any;
 }
 
 export const ChannelMenu = ({
@@ -31,9 +32,11 @@ export const ChannelMenu = ({
   setShowChannelMenu,
   setEditGroup,
   onEditClick,
+  setGroupList,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
-  const { clearNotifications } = useMessengerContext();
+  const { clearNotifications, setActiveChannel, channels } =
+    useMessengerContext();
 
   return (
     <DropdownMenu>
@@ -50,7 +53,12 @@ export const ChannelMenu = ({
       )}
       {channel.type === "group" && (
         <>
-          <MenuItem onClick={() => setEditGroup(true)}>
+          <MenuItem
+            onClick={() => {
+              setEditGroup(true);
+              setShowChannelMenu(false);
+            }}
+          >
             <AddMemberIconSvg width={16} height={16} />
             <MenuText>Add / remove from group</MenuText>
           </MenuItem>
@@ -80,7 +88,16 @@ export const ChannelMenu = ({
       {channel.type === "group" && (
         <MenuSection>
           {" "}
-          <MenuItem onClick={() => channel}>
+          <MenuItem
+            onClick={() => {
+              setGroupList((prevGroups: string[][]) => {
+                const idx = prevGroups.indexOf(channel.name.split(", "));
+                return idx >= 0 ? prevGroups.splice(idx, 1) : [];
+              });
+              setActiveChannel(channels[0]);
+              setShowChannelMenu(false);
+            }}
+          >
             <LeftIconSvg width={16} height={16} />
             <MenuText>Leave Group</MenuText>
           </MenuItem>

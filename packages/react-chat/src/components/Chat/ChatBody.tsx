@@ -130,6 +130,7 @@ export function ChatBody({
               setShowChannelMenu={setShowChannelMenu}
               setEditGroup={setEditGroup}
               onEditClick={onEditClick}
+              setGroupList={setGroupList}
             />
           )}
         </ChatTopbar>
