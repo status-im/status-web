@@ -43,7 +43,7 @@ export const ChannelMenu = ({
             setShowChannelMenu(false);
           }}
         >
-          <MembersSmallSvg height={16} width={16} />
+          <MembersSmallSvg width={16} height={16} />
           <MenuText>View Members</MenuText>
         </MenuItem>
       )}

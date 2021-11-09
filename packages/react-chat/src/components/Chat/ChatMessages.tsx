@@ -13,7 +13,7 @@ import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal, LinkModalName } from "../Modals/LinkModal";
 import { PictureModal, PictureModalName } from "../Modals/PictureModal";
-import { textSmallStyles } from "../Text";
+import { textMediumStyles, textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
 
@@ -48,7 +48,7 @@ function ChatUiMessage({
       <MessageWrapper>
         <Icon onClick={() => setShowMenu((e) => !e)}>
           {showMenu && (
-            <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
+            <ContactMenu message={message} setShowMenu={setShowMenu} />
           )}
           <UserIcon />
         </Icon>
@@ -186,14 +186,16 @@ export const Icon = styled.div`
   align-items: end;
   border-radius: 50%;
   background-color: #bcbdff;
+  background-size: contain;
+  background-position: center;
   flex-shrink: 0;
   position: relative;
 `;
 
 const UserNameWrapper = styled.div`
-  font-size: 15px;
-  line-height: 22px;
   color: ${({ theme }) => theme.tertiary};
+
+  ${textMediumStyles}
 `;
 
 const TimeWrapper = styled.div`
