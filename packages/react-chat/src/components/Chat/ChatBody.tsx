@@ -18,10 +18,15 @@ import { ChatCreation } from "./ChatCreation";
 import { ChatInput } from "./ChatInput";
 import { ChatMessages } from "./ChatMessages";
 
+enum ChatBodyState {
+  Chat,
+  Channels,
+  Members,
+}
+
 interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
-  showCommunity: boolean;
   onCommunityClick: () => void;
   onEditClick: () => void;
   membersList: string[];
@@ -34,7 +39,6 @@ interface ChatBodyProps {
 export function ChatBody({
   onClick,
   showMembers,
-  showCommunity,
   onCommunityClick,
   onEditClick,
   membersList,
@@ -45,26 +49,24 @@ export function ChatBody({
 }: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
   const narrow = useNarrow();
-  const [showChannelsList, setShowChannelsList] = useState(false);
-  const [showMembersList, setShowMembersList] = useState(false);
   const [showChannelMenu, setShowChannelMenu] = useState(false);
+  const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat);
+
   const [editGroup, setEditGroup] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
-  const switchChannelList = useCallback(() => {
-    setShowMembersList(false);
-    setShowChannelsList(!showChannelsList);
-  }, [showChannelsList]);
-
-  const switchMemberList = useCallback(() => {
-    setShowChannelsList(false);
-    setShowMembersList(!showMembersList);
-  }, [showMembersList]);
+  const switchShowState = useCallback(
+    (state: ChatBodyState) => {
+      if (narrow) {
+        setShowState((prev) => (prev === state ? ChatBodyState.Chat : state));
+      }
+    },
+    [narrow]
+  );
 
   useEffect(() => {
     if (!narrow) {
-      setShowChannelsList(false);
-      setShowMembersList(false);
+      setShowState(ChatBodyState.Chat);
     }
   }, [narrow]);
 
@@ -79,14 +81,12 @@ export function ChatBody({
         />
       ) : (
         <ChatTopbar
-          className={
-            narrow && (showChannelsList || showMembersList) ? "narrow" : ""
-          }
+          className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
         >
           <ChannelWrapper className={className}>
             {messenger && communityData ? (
               <>
-                {(showCommunity || narrow) && (
+                {narrow && (
                   <CommunityWrap className={className}>
                     <Community onClick={onCommunityClick} />
                   </CommunityWrap>
@@ -94,10 +94,12 @@ export function ChatBody({
 
                 <Channel
                   channel={activeChannel}
-                  isActive={narrow ? showChannelsList : true}
+                  isActive={
+                    narrow ? showState === ChatBodyState.Channels : true
+                  }
                   activeView={true}
                   isMuted={false}
-                  onClick={() => (narrow ? switchChannelList() : undefined)}
+                  onClick={() => switchShowState(ChatBodyState.Channels)}
                 />
               </>
             ) : (
@@ -124,7 +126,7 @@ export function ChatBody({
           {showChannelMenu && (
             <ChannelMenu
               channel={activeChannel}
-              switchMemberList={switchMemberList}
+              switchMemberList={() => switchShowState(ChatBodyState.Members)}
               setShowChannelMenu={setShowChannelMenu}
               setEditGroup={setEditGroup}
               onEditClick={onEditClick}
@@ -135,7 +137,7 @@ export function ChatBody({
       )}
       {messenger ? (
         <>
-          {!showChannelsList && !showMembersList && (
+          {showState === ChatBodyState.Chat && (
             <>
               {messenger && communityData ? (
                 <ChatMessages />
@@ -146,18 +148,19 @@ export function ChatBody({
             </>
           )}
 
-          {showChannelsList && narrow && (
+          {showState === ChatBodyState.Channels && (
             <NarrowChannels
-              setShowChannels={setShowChannelsList}
+              setShowChannels={() => switchShowState(ChatBodyState.Channels)}
               membersList={membersList}
               groupList={groupList}
               setCreateChat={setCreateChat}
             />
           )}
-          {showMembersList && narrow && (
+          {showState === ChatBodyState.Members && (
             <NarrowMembers
-              setShowChannels={setShowChannelsList}
-              setShowMembersList={setShowMembersList}
+              switchShowMembersList={() =>
+                switchShowState(ChatBodyState.Members)
+              }
               setMembersList={setMembersList}
             />
           )}
