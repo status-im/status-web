@@ -4,18 +4,14 @@ import styled from "styled-components";
 import { MembersList } from "./MembersList";
 
 interface MembersProps {
-  setShowChannels: (val: boolean) => void;
   setMembersList: any;
 }
 
-export function Members({ setShowChannels, setMembersList }: MembersProps) {
+export function Members({ setMembersList }: MembersProps) {
   return (
     <MembersWrapper>
       <MemberHeading>Members</MemberHeading>
-      <MembersList
-        setShowChannels={setShowChannels}
-        setMembersList={setMembersList}
-      />
+      <MembersList setMembersList={setMembersList} />
     </MembersWrapper>
   );
 }

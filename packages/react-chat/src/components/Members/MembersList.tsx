@@ -10,14 +10,12 @@ import { UserIcon } from "../Icons/UserIcon";
 import { Member, MemberData, MemberIcon } from "./Member";
 
 interface MembersListProps {
-  setShowChannels: (val: boolean) => void;
-  setShowMembers?: (val: boolean) => void;
+  switchShowMembers?: () => void;
   setMembersList: any;
 }
 
 export function MembersList({
-  setShowChannels,
-  setShowMembers,
+  switchShowMembers,
   setMembersList,
 }: MembersListProps) {
   const { contacts } = useMessengerContext();
@@ -44,8 +42,7 @@ export function MembersList({
               key={contact.id}
               member={contact.id}
               isOnline={contact.online}
-              setShowChannels={setShowChannels}
-              setShowMembers={setShowMembers}
+              switchShowMembers={switchShowMembers}
               setMembersList={setMembersList}
             />
           ))}
@@ -60,8 +57,7 @@ export function MembersList({
               key={contact.id}
               member={contact.id}
               isOnline={contact.online}
-              setShowChannels={setShowChannels}
-              setShowMembers={setShowMembers}
+              switchShowMembers={switchShowMembers}
               setMembersList={setMembersList}
             />
           ))}

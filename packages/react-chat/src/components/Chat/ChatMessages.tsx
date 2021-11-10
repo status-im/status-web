@@ -79,7 +79,7 @@ export function ChatMessages() {
 
   const shownMessages = useMemo(
     () => messages.filter((message) => !blockedUsers.includes(message.sender)),
-    [blockedUsers, messages]
+    [blockedUsers, messages, messages.length]
   );
 
   const [image, setImage] = useState("");

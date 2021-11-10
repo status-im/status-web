@@ -1,7 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { useNarrow } from "../../contexts/narrowProvider";
 import { Icon } from "../Chat/ChatMessages";
 import { ContactMenu } from "../Form/ContactMenu";
 import { UserIcon } from "../Icons/UserIcon";
@@ -9,8 +8,7 @@ import { UserIcon } from "../Icons/UserIcon";
 interface MemberProps {
   member: string;
   isOnline?: boolean;
-  setShowChannels?: (val: boolean) => void;
-  setShowMembers?: (val: boolean) => void;
+  switchShowMembers?: () => void;
   setMembersList?: any;
   onClick?: () => void;
 }
@@ -18,18 +16,10 @@ interface MemberProps {
 export function Member({
   member,
   isOnline,
-  setShowChannels,
-  setShowMembers,
+  switchShowMembers,
   setMembersList,
   onClick,
 }: MemberProps) {
-  const narrow = useNarrow();
-
-  const switchMemberList = useCallback(() => {
-    if (setShowChannels) setShowChannels(false);
-    if (setShowMembers) setShowMembers(false);
-  }, [setShowMembers]);
-
   const startDialog = (member: string) => {
     setMembersList((prevMembers: string[]) => {
       if (prevMembers.find((chat) => chat === member)) {
@@ -38,13 +28,13 @@ export function Member({
         return [...prevMembers, member];
       }
     });
-    if (setShowChannels) setShowChannels(true);
   };
 
   const [showMenu, setShowMenu] = useState(false);
 
   const onMemberClick = () => {
-    narrow && setShowMembers ? switchMemberList() : startDialog(member);
+    switchShowMembers?.();
+    startDialog(member);
   };
 
   return (

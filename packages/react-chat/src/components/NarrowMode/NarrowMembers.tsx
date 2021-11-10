@@ -6,22 +6,19 @@ import { MembersList } from "../Members/MembersList";
 import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowMembersProps {
-  setShowChannels: (val: boolean) => void;
-  setShowMembersList: (val: boolean) => void;
+  switchShowMembersList: () => void;
   setMembersList: any;
 }
 
 export function NarrowMembers({
-  setShowChannels,
-  setShowMembersList,
+  switchShowMembersList,
   setMembersList,
 }: NarrowMembersProps) {
   return (
     <ListWrapper>
       <NarrowTopbar list="Community members" />
       <MembersList
-        setShowChannels={setShowChannels}
-        setShowMembers={setShowMembersList}
+        switchShowMembers={switchShowMembersList}
         setMembersList={setMembersList}
       />
     </ListWrapper>

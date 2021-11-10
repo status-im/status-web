@@ -13,7 +13,6 @@ import { EditModal } from "./Modals/EditModal";
 
 export function Chat() {
   const [showMembers, setShowMembers] = useState(true);
-  const [showChannels, setShowChannels] = useState(true);
   const [membersList, setMembersList] = useState([]);
   const [groupList, setGroupList] = useState([]);
   const [createChat, setCreateChat] = useState(false);
@@ -28,7 +27,7 @@ export function Chat() {
 
   return (
     <ChatWrapper>
-      {showChannels && !narrow && (
+      {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity onClick={showModal} />
           <Channels
@@ -43,7 +42,6 @@ export function Chat() {
         <ChatBody
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
-          showCommunity={!showChannels}
           onCommunityClick={showModal}
           onEditClick={showEditModal}
           membersList={membersList}
@@ -54,10 +52,7 @@ export function Chat() {
         />
       )}
       {showMembers && !narrow && !createChat && (
-        <Members
-          setShowChannels={setShowChannels}
-          setMembersList={setMembersList}
-        />
+        <Members setMembersList={setMembersList} />
       )}
       {createChat && (
         <ChatCreation
