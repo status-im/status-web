@@ -29,7 +29,7 @@ export function Channel({
     () => (narrow && !activeView ? "narrow" : activeView ? "active" : ""),
     [narrow]
   );
-
+  const mention = false;
   return (
     <ChannelWrapper
       className={
@@ -73,7 +73,7 @@ export function Channel({
           )}
         </ChannelTextInfo>
       </ChannelInfo>
-      {notification && notification > 0 && !activeView && (
+      {notification && notification > 0 && !activeView && mention && (
         <NotificationBagde>{notification}</NotificationBagde>
       )}
       {isMuted && !notification && <MutedIcon />}

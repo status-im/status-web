@@ -4,10 +4,8 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
-import { ChatMessage } from "../../models/ChatMessage";
 import { AddMemberIconSvg } from "../Icons/AddMemberIcon";
 import { CheckSvg } from "../Icons/CheckIcon";
-import { ClearSvg } from "../Icons/ClearIcon";
 import { EgitGroupSvg } from "../Icons/EditGroupIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
@@ -17,7 +15,6 @@ import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
 interface ChannelMenuProps {
   channel: ChannelData;
-  messages: ChatMessage[];
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
   setEditGroup: (val: boolean) => void;
@@ -27,7 +24,6 @@ interface ChannelMenuProps {
 
 export const ChannelMenu = ({
   channel,
-  messages,
   switchMemberList,
   setShowChannelMenu,
   setEditGroup,
@@ -80,10 +76,6 @@ export const ChannelMenu = ({
       <MenuItem onClick={() => clearNotifications(channel.id)}>
         <CheckSvg width={16} height={16} />
         <MenuText>Mark as Read</MenuText>
-      </MenuItem>
-      <MenuItem onClick={() => messages.length === 0}>
-        <ClearSvg width={16} height={16} />
-        <MenuText>Clear History</MenuText>
       </MenuItem>
       {channel.type === "group" && (
         <MenuSection>

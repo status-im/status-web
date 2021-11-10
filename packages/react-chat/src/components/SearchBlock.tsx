@@ -17,17 +17,13 @@ export const SearchBlock = ({
   styledGroup,
   setStyledGroup,
 }: SearchBlockProps) => {
-  const { communityData } = useMessengerContext();
-
-  if (!communityData) {
-    return null;
-  }
+  const { contacts } = useMessengerContext();
 
   const searchList = useMemo(() => {
-    return communityData.membersList
-      .filter((member) => member.includes(query))
-      .filter((member) => !styledGroup.includes(member));
-  }, [query, styledGroup, communityData.membersList]);
+    return contacts
+      .filter((member) => member.id.includes(query))
+      .filter((member) => !styledGroup.includes(member.id));
+  }, [query, styledGroup, contacts]);
 
   const addMember = (member: string) => {
     setStyledGroup((prevMembers: string[]) => {
@@ -44,20 +40,20 @@ export const SearchBlock = ({
   return (
     <SearchContacts>
       <ContactsList>
-        {communityData.membersList
-          .filter((member) => member.includes(query))
-          .filter((member) => !styledGroup.includes(member))
+        {contacts
+          .filter((member) => member.id.includes(query))
+          .filter((member) => !styledGroup.includes(member.id))
           .map((member) => (
             <Channel
-              key={member}
+              key={member.id}
               channel={{
-                id: member,
-                name: member.slice(0, 10),
+                id: member.id,
+                name: member.id.slice(0, 10),
                 type: "dm",
               }}
               isActive={false}
               isMuted={false}
-              onClick={() => addMember(member)}
+              onClick={() => addMember(member.id)}
             />
           ))}
       </ContactsList>

@@ -148,6 +148,9 @@ export function useMessenger(
 
   const communityData = useMemo(() => {
     if (community?.description) {
+      Object.keys(community.description.proto.members).forEach((contact) =>
+        contactsClass?.addContact(contact)
+      );
       return {
         id: community.publicKeyStr,
         name: community.description.identity?.displayName ?? "",
