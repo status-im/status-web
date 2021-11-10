@@ -2,8 +2,8 @@ import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
-import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
@@ -70,25 +70,17 @@ function ChatUiMessage({
   );
 }
 
-type ChatMessagesProps = {
-  messages: ChatMessage[];
-  activeChannelId: string;
-  channel: ChannelData;
-};
-
-export function ChatMessages({
-  messages,
-  activeChannelId,
-  channel,
-}: ChatMessagesProps) {
+export function ChatMessages() {
+  const { messages, activeChannel } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
-  const loadingMessages = useChatScrollHandle(messages, ref, activeChannelId);
+  const loadingMessages = useChatScrollHandle(messages, ref, activeChannel.id);
 
   const { blockedUsers } = useBlockedUsers();
 
-  const shownMessages = useMemo(() => {
-    return messages.filter((message) => !blockedUsers.includes(message.sender));
-  }, [blockedUsers, messages.length]);
+  const shownMessages = useMemo(
+    () => messages.filter((message) => !blockedUsers.includes(message.sender)),
+    [blockedUsers, messages]
+  );
 
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");
@@ -100,24 +92,22 @@ export function ChatMessages({
         image={image}
       />
       <LinkModal isVisible={!!link} onClose={() => setLink("")} link={link} />
-      <EmptyChannel channel={channel} />
+      <EmptyChannel channel={activeChannel} />
       {loadingMessages && (
         <LoadingWrapper>
           <LoadingIcon className="message" />
         </LoadingWrapper>
       )}
-      {shownMessages.map((message, idx) => {
-        return (
-          <ChatUiMessage
-            key={message.date.getTime()}
-            message={message}
-            idx={idx}
-            prevMessage={shownMessages[idx - 1]}
-            setLink={setLink}
-            setImage={setImage}
-          />
-        );
-      })}
+      {shownMessages.map((message, idx) => (
+        <ChatUiMessage
+          key={message.date.getTime().toString() + message.content}
+          message={message}
+          idx={idx}
+          prevMessage={shownMessages[idx - 1]}
+          setLink={setLink}
+          setImage={setImage}
+        />
+      ))}
     </MessagesWrapper>
   );
 }

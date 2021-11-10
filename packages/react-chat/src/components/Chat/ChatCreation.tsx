@@ -39,8 +39,7 @@ export function ChatCreation({
   };
 
   const removeMember = (member: string) => {
-    const idx = styledGroup.indexOf(member);
-    setStyledGroup(styledGroup.splice(idx, 1));
+    setStyledGroup((prev) => prev.filter((e) => e != member));
   };
 
   const createChat = (group: string[]) => {
@@ -117,12 +116,16 @@ export function ChatCreation({
           Confirm
         </CreationBtn>
       </CreationBar>
-      {!editGroup && !query && styledGroup.length === 0 && (
+      {!editGroup && !query && (
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
             {contacts
-              .filter((e) => e.id != bufToHex(identity.publicKey))
+              .filter(
+                (e) =>
+                  e.id != bufToHex(identity.publicKey) &&
+                  !styledGroup.includes(e.id)
+              )
               .map((contact) => (
                 <Member
                   key={contact.id}

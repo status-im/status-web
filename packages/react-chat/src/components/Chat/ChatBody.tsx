@@ -43,8 +43,7 @@ export function ChatBody({
   setGroupList,
   setCreateChat,
 }: ChatBodyProps) {
-  const { messenger, messages, activeChannel, communityData } =
-    useMessengerContext();
+  const { messenger, activeChannel, communityData } = useMessengerContext();
   const narrow = useNarrow();
   const [showChannelsList, setShowChannelsList] = useState(false);
   const [showMembersList, setShowMembersList] = useState(false);
@@ -125,7 +124,6 @@ export function ChatBody({
           {showChannelMenu && (
             <ChannelMenu
               channel={activeChannel}
-              messages={messages}
               switchMemberList={switchMemberList}
               setShowChannelMenu={setShowChannelMenu}
               setEditGroup={setEditGroup}
@@ -140,11 +138,7 @@ export function ChatBody({
           {!showChannelsList && !showMembersList && (
             <>
               {messenger && communityData ? (
-                <ChatMessages
-                  messages={messages}
-                  activeChannelId={activeChannel.id}
-                  channel={activeChannel}
-                />
+                <ChatMessages />
               ) : (
                 <LoadingSkeleton />
               )}
