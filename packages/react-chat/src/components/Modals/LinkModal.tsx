@@ -6,7 +6,7 @@ import { buttonStyles } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
 
 import { Modal } from "./Modal";
-import { Heading, Section } from "./ModalStyle";
+import { ButtonSection, Heading, Section } from "./ModalStyle";
 
 export const LinkModalName = "LinkModal";
 
@@ -45,11 +45,6 @@ const Link = styled.a`
   color: ${({ theme }) => theme.primary};
 
   ${textMediumStyles}
-`;
-
-const ButtonSection = styled(Section)`
-  display: flex;
-  justify-content: flex-end;
 `;
 
 const ButtonNo = styled.button`

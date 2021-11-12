@@ -22,3 +22,8 @@ export const Text = styled.p`
 
   ${textMediumStyles}
 `;
+
+export const ButtonSection = styled(Section)`
+  display: flex;
+  justify-content: flex-end;
+`;
