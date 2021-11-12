@@ -10,6 +10,7 @@ import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
+import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal, LinkModalName } from "../Modals/LinkModal";
 import { PictureModal, PictureModalName } from "../Modals/PictureModal";
@@ -35,6 +36,7 @@ function ChatUiMessage({
   setLink,
 }: ChatUiMessageProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const [isUntrustworthy, setIsUntrustworthy] = useState(false);
 
   return (
     <MessageOuterWrapper>
@@ -48,14 +50,22 @@ function ChatUiMessage({
       <MessageWrapper>
         <Icon onClick={() => setShowMenu((e) => !e)}>
           {showMenu && (
-            <ContactMenu message={message} setShowMenu={setShowMenu} />
+            <ContactMenu
+              message={message}
+              setShowMenu={setShowMenu}
+              isUntrustworthy={isUntrustworthy}
+              setIsUntrustworthy={setIsUntrustworthy}
+            />
           )}
           <UserIcon />
         </Icon>
 
         <ContentWrapper>
           <MessageHeaderWrapper>
-            <UserNameWrapper>{message.sender.slice(0, 10)}</UserNameWrapper>
+            <UserNameWrapper>
+              <UserName>{message.sender.slice(0, 10)}</UserName>
+              {isUntrustworthy && <UntrustworthIcon />}
+            </UserNameWrapper>
             <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
           </MessageHeaderWrapper>
           <MessageText>
@@ -190,10 +200,17 @@ export const Icon = styled.div`
   background-position: center;
   flex-shrink: 0;
   position: relative;
+  cursor: pointer;
 `;
 
 const UserNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const UserName = styled.p`
   color: ${({ theme }) => theme.tertiary};
+  margin-right: 4px;
 
   ${textMediumStyles}
 `;

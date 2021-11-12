@@ -34,6 +34,10 @@ export const WarningIcon = () => {
 
 const Icon = styled(WarningSvg)`
   & > path {
+    fill: ${({ theme }) => theme.tertiary};
+  }
+
+  &.red > path {
     fill: ${({ theme }) => theme.redColor};
   }
 
