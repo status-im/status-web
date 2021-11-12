@@ -27,8 +27,6 @@ enum ChatBodyState {
 interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
-  onCommunityClick: () => void;
-  onEditClick: () => void;
   membersList: string[];
   groupList: [][];
   setMembersList: any;
@@ -39,8 +37,6 @@ interface ChatBodyProps {
 export function ChatBody({
   onClick,
   showMembers,
-  onCommunityClick,
-  onEditClick,
   membersList,
   groupList,
   setMembersList,
@@ -88,7 +84,7 @@ export function ChatBody({
               <>
                 {narrow && (
                   <CommunityWrap className={className}>
-                    <Community onClick={onCommunityClick} />
+                    <Community />
                   </CommunityWrap>
                 )}
 
@@ -113,7 +109,7 @@ export function ChatBody({
             {!narrow && (
               <MemberBtn
                 onClick={onClick}
-                className={showMembers && !narrow ? "active" : ""}
+                className={showMembers ? "active" : ""}
               >
                 <MembersIcon />
               </MemberBtn>
@@ -129,7 +125,6 @@ export function ChatBody({
               switchMemberList={() => switchShowState(ChatBodyState.Members)}
               setShowChannelMenu={setShowChannelMenu}
               setEditGroup={setEditGroup}
-              onEditClick={onEditClick}
               setGroupList={setGroupList}
             />
           )}

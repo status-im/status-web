@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled, { useTheme } from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useModal } from "../../contexts/modalProvider";
 import { useLow } from "../../contexts/narrowProvider";
 import { lightTheme, Theme } from "../../styles/themes";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
@@ -11,7 +12,7 @@ import { GifIcon } from "../Icons/GifIcon";
 import { PictureIcon } from "../Icons/PictureIcon";
 import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
-import { Modal } from "../Modals/Modal";
+import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
 
 export function ChatInput() {
   const { sendMessage } = useMessengerContext();
@@ -20,7 +21,6 @@ export function ChatInput() {
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
-  const [showSizeLimit, setShowSizeLimit] = useState(false);
 
   useEffect(() => {
     window.addEventListener("click", () => setShowEmoji(false));
@@ -69,16 +69,11 @@ export function ChatInput() {
 
   const low = useLow();
 
+  const { setModal } = useModal(SizeLimitModalName);
+
   return (
     <View>
-      <Modal onClose={() => setShowSizeLimit(false)} isVisible={showSizeLimit}>
-        <div
-          onClick={() => setShowSizeLimit(false)}
-          style={{ padding: "20px" }}
-        >
-          File size must be less than 1MB
-        </div>
-      </Modal>
+      <SizeLimitModal />
       {showEmoji && (
         <div>
           <Picker
@@ -119,7 +114,7 @@ export function ChatInput() {
               if (e.target.files[0].size < 1024 * 1024) {
                 fileReader.readAsArrayBuffer(e.target.files[0]);
               } else {
-                setShowSizeLimit(true);
+                setModal(true);
               }
             }
           }}

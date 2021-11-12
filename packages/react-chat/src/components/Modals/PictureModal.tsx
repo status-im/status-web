@@ -1,19 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-import { BasicModalProps, Modal } from "./Modal";
+import { Modal } from "./Modal";
 
-interface PictureModalProps extends BasicModalProps {
+export const PictureModalName = "PictureModal";
+
+interface PictureModalProps {
   image: string;
 }
 
-export const PictureModal = ({
-  isVisible,
-  onClose,
-  image,
-}: PictureModalProps) => {
+export const PictureModal = ({ image }: PictureModalProps) => {
   return (
-    <Modal isVisible={isVisible} onClose={onClose} className="picture">
+    <Modal name={PictureModalName} className="picture">
       <ModalImageWrapper>
         <ModalImage src={image}></ModalImage>
       </ModalImageWrapper>

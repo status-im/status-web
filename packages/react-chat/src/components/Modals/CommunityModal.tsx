@@ -12,20 +12,18 @@ import { CopyInput } from "../Form/CopyInput";
 import { StatusLogo } from "../Icons/StatusLogo";
 import { textSmallStyles } from "../Text";
 
-import { BasicModalProps, Modal } from "./Modal";
+import { Modal } from "./Modal";
 import { Section, Text } from "./ModalStyle";
 
-interface CommunityModalProps extends BasicModalProps, CommunityIdentityProps {}
+export const CommunityModalName = "CommunityModal";
 
-export const CommunityModal = ({
-  isVisible,
-  onClose,
-  subtitle,
-}: CommunityModalProps) => {
+type CommunityModalProps = CommunityIdentityProps;
+
+export const CommunityModal = ({ subtitle }: CommunityModalProps) => {
   const narrow = useNarrow();
   const { communityData } = useMessengerContext();
   return (
-    <Modal isVisible={isVisible} onClose={onClose}>
+    <Modal name={CommunityModalName}>
       <Section>
         <CommunityIdentity subtitle={subtitle} />
       </Section>

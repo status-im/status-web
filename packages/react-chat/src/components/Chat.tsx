@@ -19,17 +19,11 @@ export function Chat() {
 
   const narrow = useNarrow();
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => setIsModalVisible(true);
-
-  const [isEditVisible, setIsEditVisible] = useState(false);
-  const showEditModal = () => setIsEditVisible(true);
-
   return (
     <ChatWrapper>
       {!narrow && (
         <ChannelsWrapper>
-          <StyledCommunity onClick={showModal} />
+          <StyledCommunity />
           <Channels
             membersList={membersList}
             groupList={groupList}
@@ -42,8 +36,6 @@ export function Chat() {
         <ChatBody
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
-          onCommunityClick={showModal}
-          onEditClick={showEditModal}
           membersList={membersList}
           groupList={groupList}
           setMembersList={setMembersList}
@@ -61,15 +53,8 @@ export function Chat() {
           setCreateChat={setCreateChat}
         />
       )}
-      <CommunityModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        subtitle="Public Community"
-      />
-      <EditModal
-        isVisible={isEditVisible}
-        onClose={() => setIsEditVisible(false)}
-      />
+      <CommunityModal subtitle="Public Community" />
+      <EditModal />
     </ChatWrapper>
   );
 }

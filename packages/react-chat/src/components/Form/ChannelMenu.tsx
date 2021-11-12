@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useModal } from "../../contexts/modalProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { AddMemberIconSvg } from "../Icons/AddMemberIcon";
@@ -10,6 +11,7 @@ import { EgitGroupSvg } from "../Icons/EditGroupIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
 import { MuteSvg } from "../Icons/MuteIcon";
+import { EditModalName } from "../Modals/EditModal";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
@@ -18,7 +20,6 @@ interface ChannelMenuProps {
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
   setEditGroup: (val: boolean) => void;
-  onEditClick: () => void;
   setGroupList: any;
 }
 
@@ -27,13 +28,12 @@ export const ChannelMenu = ({
   switchMemberList,
   setShowChannelMenu,
   setEditGroup,
-  onEditClick,
   setGroupList,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
   const { clearNotifications, setActiveChannel, channels } =
     useMessengerContext();
-
+  const { setModal } = useModal(EditModalName);
   return (
     <DropdownMenu>
       {narrow && (
@@ -58,7 +58,7 @@ export const ChannelMenu = ({
             <AddMemberIconSvg width={16} height={16} />
             <MenuText>Add / remove from group</MenuText>
           </MenuItem>
-          <MenuItem onClick={onEditClick}>
+          <MenuItem onClick={() => setModal(true)}>
             <EgitGroupSvg width={16} height={16} />
             <MenuText>Edit name and image</MenuText>
           </MenuItem>
