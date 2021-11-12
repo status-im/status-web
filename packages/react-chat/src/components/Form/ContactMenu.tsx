@@ -6,7 +6,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Icon } from "../Chat/ChatMessages";
 import { AddContactSvg } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
-import { EgitGroupSvg } from "../Icons/EditGroupIcon";
+import { EditSvg } from "../Icons/EditIcon";
 import { ProfileSvg } from "../Icons/ProfileIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
@@ -20,6 +20,7 @@ type ContactMenuProps = {
   setShowMenu: (val: boolean) => void;
   isUntrustworthy: boolean;
   setIsUntrustworthy: (val: boolean) => void;
+  viewProfile: () => void;
 };
 
 export function ContactMenu({
@@ -27,6 +28,7 @@ export function ContactMenu({
   setShowMenu,
   isUntrustworthy,
   setIsUntrustworthy,
+  viewProfile,
 }: ContactMenuProps) {
   const id = message.sender;
   const { blockedUsers, setBlockedUsers } = useBlockedUsers();
@@ -57,7 +59,7 @@ export function ContactMenu({
         </UserAddress>
       </ContactInfo>
       <MenuSection>
-        <MenuItem>
+        <MenuItem onClick={viewProfile}>
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
@@ -66,7 +68,7 @@ export function ContactMenu({
           <MenuText>Send Contact Request</MenuText>
         </MenuItem>
         <MenuItem>
-          <EgitGroupSvg width={16} height={16} />
+          <EditSvg width={16} height={16} />
           <MenuText>Rename</MenuText>
         </MenuItem>
       </MenuSection>
