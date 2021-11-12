@@ -1,19 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
 
-import { BasicModalProps, Modal } from "./Modal";
+import { Modal } from "./Modal";
 import { Heading, Section } from "./ModalStyle";
 
-interface LinkModalProps extends BasicModalProps {
+export const LinkModalName = "LinkModal";
+
+interface LinkModalProps {
   link: string;
 }
 
-export const LinkModal = ({ isVisible, onClose, link }: LinkModalProps) => {
+export const LinkModal = ({ link }: LinkModalProps) => {
+  const { setModal } = useModal(LinkModalName);
   return (
-    <Modal isVisible={isVisible} onClose={onClose}>
+    <Modal name={LinkModalName}>
       <Section>
         <Heading>Are you sure you want to visit this website?</Heading>
       </Section>
@@ -21,11 +25,11 @@ export const LinkModal = ({ isVisible, onClose, link }: LinkModalProps) => {
         <Link>{link}</Link>
       </Section>
       <ButtonSection>
-        <ButtonNo onClick={onClose}>No</ButtonNo>
+        <ButtonNo onClick={() => setModal(false)}>No</ButtonNo>
         <ButtonYes
           onClick={() => {
             window?.open(link, "_blank", "noopener")?.focus();
-            onClose();
+            setModal(false);
           }}
         >
           Yes, take me there

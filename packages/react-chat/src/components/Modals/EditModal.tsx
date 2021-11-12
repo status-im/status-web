@@ -2,15 +2,18 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ChannelLogo } from "../Channels/Channel";
 import { AddIcon } from "../Icons/AddIcon";
 import { textMediumStyles } from "../Text";
 
-import { BasicModalProps, Modal } from "./Modal";
+import { Modal } from "./Modal";
 import { Heading, Section } from "./ModalStyle";
 
-export const EditModal = ({ isVisible, onClose }: BasicModalProps) => {
+export const EditModalName = "editModal";
+
+export const EditModal = () => {
   const { activeChannel } = useMessengerContext();
   const [groupName, setGroupName] = useState("");
   const [image, setImage] = useState("");
@@ -21,14 +24,16 @@ export const EditModal = ({ isVisible, onClose }: BasicModalProps) => {
     }
   };
 
+  const { setModal } = useModal(EditModalName);
+
   const handleUpload = () => {
     activeChannel.icon = image;
     activeChannel.name = groupName;
-    onClose();
+    setModal(false);
   };
 
   return (
-    <Modal isVisible={isVisible} onClose={onClose}>
+    <Modal name={EditModalName}>
       <Section>
         <Heading>Edit group name and image</Heading>
       </Section>

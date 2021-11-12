@@ -1,8 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
@@ -10,8 +11,8 @@ import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { UserIcon } from "../Icons/UserIcon";
-import { LinkModal } from "../Modals/LinkModal";
-import { PictureModal } from "../Modals/PictureModal";
+import { LinkModal, LinkModalName } from "../Modals/LinkModal";
+import { PictureModal, PictureModalName } from "../Modals/PictureModal";
 import { textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
@@ -84,14 +85,17 @@ export function ChatMessages() {
 
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");
+
+  const { setModal: setPictureModal } = useModal(PictureModalName);
+  const { setModal: setLinkModal } = useModal(LinkModalName);
+
+  useEffect(() => (!image ? undefined : setPictureModal(true)), [image]);
+  useEffect(() => (!link ? undefined : setLinkModal(true)), [link]);
+
   return (
     <MessagesWrapper ref={ref}>
-      <PictureModal
-        isVisible={!!image}
-        onClose={() => setImage("")}
-        image={image}
-      />
-      <LinkModal isVisible={!!link} onClose={() => setLink("")} link={link} />
+      <PictureModal image={image} />
+      <LinkModal link={link} />
       <EmptyChannel channel={activeChannel} />
       {loadingMessages && (
         <LoadingWrapper>

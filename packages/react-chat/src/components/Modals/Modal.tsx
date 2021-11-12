@@ -2,11 +2,11 @@ import React, { ReactNode, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import styled from "styled-components";
 
+import { useModal } from "../../contexts/modalProvider";
 import { CrossIcon } from "../Icons/CrossIcon";
 
 export interface BasicModalProps {
-  isVisible: boolean;
-  onClose: () => void;
+  name: string;
   className?: string;
 }
 
@@ -14,19 +14,16 @@ export interface ModalProps extends BasicModalProps {
   children: ReactNode;
 }
 
-export const Modal = ({
-  isVisible,
-  onClose,
-  children,
-  className,
-}: ModalProps) => {
+export const Modal = ({ name, children, className }: ModalProps) => {
+  const { isVisible, setModal } = useModal(name);
+
   const listenKeyboard = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape" || event.keyCode === 27) {
-        onClose();
+        setModal(false);
       }
     },
-    [onClose]
+    [setModal]
   );
 
   useEffect(() => {
@@ -40,18 +37,23 @@ export const Modal = ({
 
   if (!isVisible) return null;
 
-  return createPortal(
-    <ModalView>
-      <ModalOverlay onClick={onClose} />
-      <ModalBody className={className}>
-        <CloseButton onClick={onClose} className={className}>
-          <CrossIcon />
-        </CloseButton>
-        {children}
-      </ModalBody>
-    </ModalView>,
-    document.body
-  );
+  const element = document.getElementById("modal-root");
+
+  if (element) {
+    return createPortal(
+      <ModalView>
+        <ModalOverlay onClick={() => setModal(false)} />
+        <ModalBody className={className}>
+          <CloseButton onClick={() => setModal(false)} className={className}>
+            <CrossIcon />
+          </CloseButton>
+          {children}
+        </ModalBody>
+      </ModalView>,
+      element
+    );
+  }
+  return null;
 };
 
 const ModalView = styled.div`

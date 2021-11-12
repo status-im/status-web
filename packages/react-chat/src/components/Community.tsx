@@ -2,17 +2,19 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../contexts/messengerProvider";
+import { useModal } from "../contexts/modalProvider";
 
 import { CommunityIdentity } from "./CommunityIdentity";
+import { CommunityModalName } from "./Modals/CommunityModal";
 import { CommunitySkeleton } from "./Skeleton/CommunitySkeleton";
 
 interface CommunityProps {
-  onClick: () => void;
   className?: string;
 }
 
-export function Community({ onClick, className }: CommunityProps) {
+export function Community({ className }: CommunityProps) {
   const { communityData } = useMessengerContext();
+  const { setModal } = useModal(CommunityModalName);
 
   if (!communityData) {
     return (
@@ -24,7 +26,7 @@ export function Community({ onClick, className }: CommunityProps) {
 
   return (
     <>
-      <button className={className} onClick={onClick}>
+      <button className={className} onClick={() => setModal(true)}>
         <CommunityIdentity subtitle={`${communityData.members} members`} />
       </button>
     </>

@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { BlockedUsersProvider } from "../contexts/blockedUsersProvider";
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
+import { ModalProvider } from "../contexts/modalProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
 import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
@@ -28,10 +29,13 @@ export function ReactChat({
       <NarrowProvider myRef={ref}>
         <FetchMetadataProvider fetchMetadata={fetchMetadata}>
           <BlockedUsersProvider>
-            <Wrapper ref={ref}>
-              <GlobalStyle />
-              <ChatLoader communityKey={communityKey} />
-            </Wrapper>
+            <ModalProvider>
+              <Wrapper ref={ref}>
+                <GlobalStyle />
+                <ChatLoader communityKey={communityKey} />
+                <div id="modal-root" />
+              </Wrapper>
+            </ModalProvider>
           </BlockedUsersProvider>
         </FetchMetadataProvider>
       </NarrowProvider>
