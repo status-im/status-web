@@ -9,10 +9,12 @@ import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { textMediumStyles } from "../Text";
 
-import { BasicModalProps, Modal } from "./Modal";
+import { Modal } from "./Modal";
 import { ButtonSection, Heading, Section } from "./ModalStyle";
 
-interface ProfileModalProps extends BasicModalProps {
+export const ProfileModalName = "profileModal";
+
+interface ProfileModalProps {
   user: string;
   image?: string;
   isUntrustworthy: boolean;
@@ -20,15 +22,13 @@ interface ProfileModalProps extends BasicModalProps {
 }
 
 export const ProfileModal = ({
-  isVisible,
-  onClose,
   user,
   image,
   isUntrustworthy,
   setIsUntrustworthy,
 }: ProfileModalProps) => {
   return (
-    <Modal isVisible={isVisible} onClose={onClose} className="profile">
+    <Modal name={ProfileModalName} className="profile">
       <Section>
         <Heading>{user.slice(0, 10)}’s Profile</Heading>
       </Section>

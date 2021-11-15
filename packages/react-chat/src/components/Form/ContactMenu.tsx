@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
+import { useModal } from "../../contexts/modalProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Icon } from "../Chat/ChatMessages";
 import { AddContactSvg } from "../Icons/AddContactIcon";
@@ -11,6 +12,7 @@ import { ProfileSvg } from "../Icons/ProfileIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { WarningSvg } from "../Icons/WarningIcon";
+import { ProfileModalName } from "../Modals/ProfileModal";
 import { textMediumStyles } from "../Text";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
@@ -20,7 +22,6 @@ type ContactMenuProps = {
   setShowMenu: (val: boolean) => void;
   isUntrustworthy: boolean;
   setIsUntrustworthy: (val: boolean) => void;
-  viewProfile: () => void;
 };
 
 export function ContactMenu({
@@ -28,7 +29,6 @@ export function ContactMenu({
   setShowMenu,
   isUntrustworthy,
   setIsUntrustworthy,
-  viewProfile,
 }: ContactMenuProps) {
   const id = message.sender;
   const { blockedUsers, setBlockedUsers } = useBlockedUsers();
@@ -37,6 +37,8 @@ export function ContactMenu({
     () => blockedUsers.includes(id),
     [blockedUsers, id]
   );
+
+  const { setModal } = useModal(ProfileModalName);
 
   return (
     <ContactDropdown>
@@ -59,7 +61,7 @@ export function ContactMenu({
         </UserAddress>
       </ContactInfo>
       <MenuSection>
-        <MenuItem onClick={viewProfile}>
+        <MenuItem onClick={() => setModal(true)}>
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>

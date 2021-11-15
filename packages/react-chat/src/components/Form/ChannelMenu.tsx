@@ -58,13 +58,8 @@ export const ChannelMenu = ({
             <AddMemberIconSvg width={16} height={16} />
             <MenuText>Add / remove from group</MenuText>
           </MenuItem>
-<<<<<<< HEAD
           <MenuItem onClick={() => setModal(true)}>
-            <EgitGroupSvg width={16} height={16} />
-=======
-          <MenuItem onClick={onEditClick}>
             <EditSvg width={16} height={16} />
->>>>>>> 1b1d9f9 (Add profile modal)
             <MenuText>Edit name and image</MenuText>
           </MenuItem>
         </>

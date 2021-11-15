@@ -38,8 +38,6 @@ function ChatUiMessage({
 }: ChatUiMessageProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [isUntrustworthy, setIsUntrustworthy] = useState(false);
-  const [isProfileVisible, setIsProfileVisible] = useState(false);
-  const showProfileModal = () => setIsProfileVisible(true);
 
   return (
     <MessageOuterWrapper>
@@ -50,13 +48,13 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
+
       <ProfileModal
-        isVisible={isProfileVisible}
-        onClose={() => setIsProfileVisible(false)}
         user={message.sender}
         isUntrustworthy={isUntrustworthy}
         setIsUntrustworthy={setIsUntrustworthy}
       />
+
       <MessageWrapper>
         <Icon onClick={() => setShowMenu((e) => !e)}>
           {showMenu && (
@@ -65,7 +63,6 @@ function ChatUiMessage({
               setShowMenu={setShowMenu}
               isUntrustworthy={isUntrustworthy}
               setIsUntrustworthy={setIsUntrustworthy}
-              viewProfile={showProfileModal}
             />
           )}
           <UserIcon />
