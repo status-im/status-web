@@ -27,6 +27,8 @@ export type MessengerType = {
   ) => Promise<void>;
   notifications: { [chatId: string]: number };
   clearNotifications: (id: string) => void;
+  mentions: { [chatId: string]: number };
+  clearMentions: (id: string) => void;
   loadPrevDay: (id: string) => Promise<void>;
   loadingMessages: boolean;
   communityData: CommunityData | undefined;
@@ -79,8 +81,14 @@ export function useMessenger(
     });
   }, [internalContacts]);
 
-  const { addMessage, clearNotifications, notifications, messages } =
-    useMessages(chatId, contactsClass);
+  const {
+    addMessage,
+    clearNotifications,
+    notifications,
+    messages,
+    mentions,
+    clearMentions,
+  } = useMessages(chatId, identity, contactsClass);
   const [community, setCommunity] = useState<Community | undefined>(undefined);
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(chatId, messenger);
 
@@ -180,5 +188,7 @@ export function useMessenger(
     channels,
     activeChannel,
     setActiveChannel,
+    mentions,
+    clearMentions,
   };
 }

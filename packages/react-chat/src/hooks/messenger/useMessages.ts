@@ -2,19 +2,27 @@ import { useCallback, useMemo, useState } from "react";
 import {
   ApplicationMetadataMessage,
   Contacts,
+  Identity,
 } from "status-communities/dist/cjs";
+import { bufToHex } from "status-communities/dist/cjs/utils";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { binarySetInsert } from "../../utils";
 
 import { useNotifications } from "./useNotifications";
 
-export function useMessages(chatId: string, contacts?: Contacts) {
+export function useMessages(
+  chatId: string,
+  identity: Identity | undefined,
+  contacts?: Contacts
+) {
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
     {}
   );
   const { notifications, incNotification, clearNotifications } =
     useNotifications();
+
+  const mentions = useNotifications();
 
   const addMessage = useCallback(
     (msg: ApplicationMetadataMessage, id: string, date: Date) => {
@@ -33,9 +41,15 @@ export function useMessages(chatId: string, contacts?: Contacts) {
           };
         });
         incNotification(id);
+        if (
+          identity &&
+          newMessage.content.includes(`@${bufToHex(identity.publicKey)}`)
+        ) {
+          mentions.incNotification(id);
+        }
       }
     },
-    [contacts]
+    [contacts, identity]
   );
 
   const activeMessages = useMemo(
@@ -48,5 +62,7 @@ export function useMessages(chatId: string, contacts?: Contacts) {
     addMessage,
     notifications,
     clearNotifications,
+    mentions: mentions.notifications,
+    clearMentions: mentions.clearNotifications,
   };
 }

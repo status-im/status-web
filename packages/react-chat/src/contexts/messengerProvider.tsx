@@ -9,6 +9,8 @@ const MessengerContext = createContext<MessengerType>({
   sendMessage: async () => undefined,
   notifications: {},
   clearNotifications: () => undefined,
+  mentions: {},
+  clearMentions: () => undefined,
   loadPrevDay: async () => undefined,
   loadingMessages: false,
   communityData: undefined,
