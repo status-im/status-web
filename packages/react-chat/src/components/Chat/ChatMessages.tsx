@@ -86,11 +86,19 @@ export function ChatMessages() {
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");
 
-  const { setModal: setPictureModal } = useModal(PictureModalName);
-  const { setModal: setLinkModal } = useModal(LinkModalName);
+  const { setModal: setPictureModal, isVisible: showPictureModal } =
+    useModal(PictureModalName);
+  const { setModal: setLinkModal, isVisible: showLinkModal } =
+    useModal(LinkModalName);
 
   useEffect(() => (!image ? undefined : setPictureModal(true)), [image]);
   useEffect(() => (!link ? undefined : setLinkModal(true)), [link]);
+
+  useEffect(
+    () => (!showPictureModal ? setImage("") : undefined),
+    [showPictureModal]
+  );
+  useEffect(() => (!showLinkModal ? setLink("") : undefined), [showLinkModal]);
 
   return (
     <MessagesWrapper ref={ref}>

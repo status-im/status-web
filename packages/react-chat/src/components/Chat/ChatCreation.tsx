@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
@@ -28,15 +28,18 @@ export function ChatCreation({
 
   const { contacts, setActiveChannel } = useMessengerContext();
 
-  const addMember = (member: string) => {
-    setStyledGroup((prevMembers: string[]) => {
-      if (prevMembers.find((mem) => mem === member)) {
-        return prevMembers;
-      } else {
-        return [...prevMembers, member];
-      }
-    });
-  };
+  const addMember = useCallback(
+    (member: string) => {
+      setStyledGroup((prevMembers: string[]) => {
+        if (prevMembers.find((mem) => mem === member)) {
+          return prevMembers;
+        } else {
+          return [...prevMembers, member];
+        }
+      });
+    },
+    [setStyledGroup, styledGroup]
+  );
 
   const removeMember = (member: string) => {
     setStyledGroup((prev) => prev.filter((e) => e != member));
@@ -96,8 +99,8 @@ export function ChatCreation({
                 {query && (
                   <SearchBlock
                     query={query}
-                    styledGroup={styledGroup}
-                    setStyledGroup={setStyledGroup}
+                    dsicludeList={styledGroup}
+                    onClick={addMember}
                   />
                 )}
               </>

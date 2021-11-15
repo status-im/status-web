@@ -1,5 +1,11 @@
 import { Picker } from "emoji-mart";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styled, { useTheme } from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -13,14 +19,24 @@ import { PictureIcon } from "../Icons/PictureIcon";
 import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
 import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
+import { SearchBlock } from "../SearchBlock";
 
 export function ChatInput() {
   const { sendMessage } = useMessengerContext();
   const theme = useTheme() as Theme;
   const [content, setContent] = useState("");
+  const [clearComponent, setClearComponent] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
+
+  const low = useLow();
+
+  const { setModal } = useModal(SizeLimitModalName);
+
+  const [query, setQuery] = useState("");
+
+  const inputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     window.addEventListener("click", () => setShowEmoji(false));
@@ -39,37 +55,139 @@ export function ChatInput() {
     const codesArray: any[] = [];
     sym.forEach((el: string) => codesArray.push("0x" + el));
     const emoji = String.fromCodePoint(...codesArray);
+    if (inputRef.current) {
+      inputRef.current.appendChild(document.createTextNode(emoji));
+    }
     setContent((p) => p + emoji);
   }, []);
 
-  const onInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const target = e.target;
-      target.style.height = "40px";
-      target.style.height = `${Math.min(target.scrollHeight, 438)}px`;
-      setInputHeight(target.scrollHeight);
-      setContent(target.value);
-    },
-    []
-  );
+  const resizeTextArea = useCallback((target: HTMLDivElement) => {
+    target.style.height = "40px";
+    target.style.height = `${Math.min(target.scrollHeight, 438)}px`;
+    setInputHeight(target.scrollHeight);
+  }, []);
+
+  const onInputChange = useCallback((e: React.ChangeEvent<HTMLDivElement>) => {
+    const element = document.getSelection();
+    const inputElement = inputRef.current;
+    if (inputElement && element && element.rangeCount > 0) {
+      const selection = element?.getRangeAt(0)?.startOffset;
+      const parentElement = element.anchorNode?.parentElement;
+      if (parentElement && parentElement.tagName === "B") {
+        parentElement.outerHTML = parentElement.innerText;
+        const range = document.createRange();
+        const sel = window.getSelection();
+        if (element.anchorNode.firstChild) {
+          const childNumber =
+            element.focusOffset === 0 ? 0 : element.focusOffset - 1;
+          range.setStart(element.anchorNode.childNodes[childNumber], selection);
+        }
+        range.collapse(true);
+
+        sel?.removeAllRanges();
+        sel?.addRange(range);
+      }
+    }
+    const target = e.target;
+    resizeTextArea(target);
+    setContent(target.textContent ?? "");
+  }, []);
 
   const onInputKeyPress = useCallback(
-    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
       if (e.key == "Enter" && !e.getModifierState("Shift")) {
         e.preventDefault();
-        (e.target as HTMLTextAreaElement).style.height = "40px";
+        (e.target as HTMLDivElement).style.height = "40px";
         setInputHeight(40);
         sendMessage(content, imageUint);
         setImageUint(undefined);
+        setClearComponent("");
+        if (inputRef.current) {
+          inputRef.current.innerHTML = "";
+        }
         setContent("");
       }
     },
     [content, imageUint]
   );
 
-  const low = useLow();
+  const [selectedElement, setSelectedElement] = useState<{
+    element: Selection | null;
+    start: number;
+    end: number;
+    text: string;
+    node: Node | null;
+  }>({ element: null, start: 0, end: 0, text: "", node: null });
 
-  const { setModal } = useModal(SizeLimitModalName);
+  const handleCursorChange = useCallback(() => {
+    const element = document.getSelection();
+    if (element && element.rangeCount > 0) {
+      const selection = element?.getRangeAt(0)?.startOffset;
+      const text = element?.anchorNode?.textContent;
+      if (selection && text) {
+        const end = text.indexOf(" ", selection);
+        const start = text.lastIndexOf(" ", selection - 1);
+        setSelectedElement({
+          element,
+          start,
+          end,
+          text,
+          node: element.anchorNode,
+        });
+        const substring = text.substring(
+          start > -1 ? start + 1 : 0,
+          end > -1 ? end : undefined
+        );
+        if (substring.startsWith("@")) {
+          setQuery(substring.slice(1));
+        } else {
+          setQuery("");
+        }
+      }
+    }
+  }, []);
+
+  useEffect(handleCursorChange, [content]);
+
+  const addMention = useCallback(
+    (contact: string) => {
+      if (inputRef?.current) {
+        const { element, start, end, text, node } = selectedElement;
+        if (element && text && node) {
+          const firstSlice = text.slice(0, start > -1 ? start : 0);
+          const secondSlice = text.slice(end > -1 ? end : content.length);
+          const replaceContent = `${firstSlice} @${contact}${secondSlice}`;
+          const spaceElement = document.createTextNode(" ");
+          const contactElement = document.createElement("b");
+          contactElement.innerText = `@${contact}`;
+
+          if (contactElement && element.rangeCount > 0) {
+            const range = element.getRangeAt(0);
+            range.setStart(node, start > -1 ? start : 0);
+            if (end === -1 || end > text.length) {
+              range.setEnd(node, text.length);
+            } else {
+              range.setEnd(node, end);
+            }
+            range.deleteContents();
+            if (end === -1) {
+              range.insertNode(spaceElement.cloneNode());
+            }
+            range.insertNode(contactElement);
+            if (start > -1) {
+              range.insertNode(spaceElement.cloneNode());
+            }
+            range.collapse();
+          }
+          inputRef.current.focus();
+          setQuery("");
+          setContent(replaceContent);
+          resizeTextArea(inputRef.current);
+        }
+      }
+    },
+    [inputRef, inputRef?.current, content, selectedElement]
+  );
 
   return (
     <View>
@@ -126,11 +244,22 @@ export function ChatInput() {
             <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
           )}
           <Input
-            placeholder="Message"
-            value={content}
-            onChange={onInputChange}
-            onKeyPress={onInputKeyPress}
+            contentEditable
+            onInput={onInputChange}
+            onKeyDown={onInputKeyPress}
+            onKeyUp={handleCursorChange}
+            ref={inputRef}
+            onClick={handleCursorChange}
+            dangerouslySetInnerHTML={{ __html: clearComponent }}
           />
+          {query && (
+            <SearchBlock
+              query={query}
+              dsicludeList={[]}
+              onClick={addMention}
+              onBotttom
+            />
+          )}
         </InputWrapper>
         <InputButtons>
           <ChatButton
@@ -157,6 +286,7 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  position: relative;
 `;
 
 const View = styled.div`
@@ -194,17 +324,20 @@ const ImagePreview = styled.img`
   margin-top: 9px;
 `;
 
-const Input = styled.textarea`
+const Input = styled.div`
+  display: block;
   width: 100%;
   height: 40px;
   max-height: 438px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   padding: 8px 0 8px 12px;
   background: ${({ theme }) => theme.inputColor};
   border: 1px solid ${({ theme }) => theme.inputColor};
   color: ${({ theme }) => theme.primary};
   border-radius: 16px 16px 4px 16px;
   outline: none;
-  resize: none;
   font-family: Inter;
   font-style: normal;
   font-weight: normal;
