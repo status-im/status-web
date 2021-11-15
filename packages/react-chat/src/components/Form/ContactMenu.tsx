@@ -8,6 +8,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Icon } from "../Chat/ChatMessages";
 import { AddContactSvg } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
+import { ChatSvg } from "../Icons/ChatIcon";
 import { EditSvg } from "../Icons/EditIcon";
 import { ProfileSvg } from "../Icons/ProfileIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
@@ -39,7 +40,7 @@ export function ContactMenu({
     [blockedUsers, id]
   );
 
-  const { friends } = useFriends();
+  const { friends, setFriends } = useFriends();
 
   const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
 
@@ -71,9 +72,15 @@ export function ContactMenu({
           <MenuText>View Profile</MenuText>
         </MenuItem>
         {!userIsFriend && (
-          <MenuItem>
+          <MenuItem onClick={() => setFriends((prev) => [...prev, id])}>
             <AddContactSvg width={16} height={16} />
             <MenuText>Send Contact Request</MenuText>
+          </MenuItem>
+        )}
+        {userIsFriend && (
+          <MenuItem>
+            <ChatSvg width={16} height={16} />
+            <MenuText>Send Message</MenuText>
           </MenuItem>
         )}
         <MenuItem>
