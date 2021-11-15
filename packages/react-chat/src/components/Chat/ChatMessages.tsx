@@ -27,6 +27,7 @@ type ChatUiMessageProps = {
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
+  setUser: (user: string) => void;
 };
 
 function ChatUiMessage({
@@ -35,6 +36,7 @@ function ChatUiMessage({
   prevMessage,
   setImage,
   setLink,
+  setUser,
 }: ChatUiMessageProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [isUntrustworthy, setIsUntrustworthy] = useState(false);
@@ -48,15 +50,13 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-
-      <ProfileModal
-        user={message.sender}
-        isUntrustworthy={isUntrustworthy}
-        setIsUntrustworthy={setIsUntrustworthy}
-      />
-
       <MessageWrapper>
-        <Icon onClick={() => setShowMenu((e) => !e)}>
+        <Icon
+          onClick={() => {
+            setShowMenu((e) => !e);
+            setUser(message.sender);
+          }}
+        >
           {showMenu && (
             <ContactMenu
               message={message}
@@ -103,6 +103,7 @@ export function ChatMessages() {
 
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");
+  const [user, setUser] = useState("");
 
   const { setModal: setPictureModal, isVisible: showPictureModal } =
     useModal(PictureModalName);
@@ -122,6 +123,7 @@ export function ChatMessages() {
     <MessagesWrapper ref={ref}>
       <PictureModal image={image} />
       <LinkModal link={link} />
+      <ProfileModal user={user} />
       <EmptyChannel channel={activeChannel} />
       {loadingMessages && (
         <LoadingWrapper>
@@ -136,6 +138,7 @@ export function ChatMessages() {
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
           setImage={setImage}
+          setUser={setUser}
         />
       ))}
     </MessagesWrapper>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { copy } from "../../utils";
@@ -17,16 +17,11 @@ export const ProfileModalName = "profileModal";
 interface ProfileModalProps {
   user: string;
   image?: string;
-  isUntrustworthy: boolean;
-  setIsUntrustworthy: (val: boolean) => void;
 }
 
-export const ProfileModal = ({
-  user,
-  image,
-  isUntrustworthy,
-  setIsUntrustworthy,
-}: ProfileModalProps) => {
+export const ProfileModal = ({ user, image }: ProfileModalProps) => {
+  const [isUntrustworthy, setIsUntrustworthy] = useState(false);
+
   return (
     <Modal name={ProfileModalName} className="profile">
       <Section>
