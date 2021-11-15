@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
+import { useFriends } from "../../contexts/friendsProvider";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { CopySvg } from "../Icons/CopyIcon";
@@ -21,6 +23,17 @@ interface ProfileModalProps {
 
 export const ProfileModal = ({ user, image }: ProfileModalProps) => {
   const [isUntrustworthy, setIsUntrustworthy] = useState(false);
+
+  const { blockedUsers, setBlockedUsers } = useBlockedUsers();
+
+  const userInBlocked = useMemo(
+    () => blockedUsers.includes(user),
+    [blockedUsers, user]
+  );
+
+  const { friends, setFriends } = useFriends();
+
+  const userIsFriend = useMemo(() => friends.includes(user), [friends, user]);
 
   return (
     <Modal name={ProfileModalName} className="profile">
@@ -57,7 +70,26 @@ export const ProfileModal = ({ user, image }: ProfileModalProps) => {
         <EmojiKey>🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱</EmojiKey>
       </Section>
       <ButtonSection>
-        <ProfileBtn className="red">Remove Contact</ProfileBtn>
+        {!userIsFriend && (
+          <ProfileBtn
+            className={userInBlocked ? "" : "red"}
+            onClick={() => {
+              userInBlocked
+                ? setBlockedUsers((prev) => prev.filter((e) => e != user))
+                : setBlockedUsers((prev) => [...prev, user]);
+            }}
+          >
+            {userInBlocked ? "Unblock" : "Block"}
+          </ProfileBtn>
+        )}
+        {userIsFriend && (
+          <ProfileBtn
+            className="red"
+            onClick={() => setFriends((prev) => prev.filter((e) => e != user))}
+          >
+            Remove Contact
+          </ProfileBtn>
+        )}
         <ProfileBtn
           className={isUntrustworthy ? "" : "red"}
           onClick={() => setIsUntrustworthy(!isUntrustworthy)}
@@ -66,6 +98,11 @@ export const ProfileModal = ({ user, image }: ProfileModalProps) => {
             ? "Remove Untrustworthy Mark"
             : "Mark as Untrustworthy"}
         </ProfileBtn>
+        {!userIsFriend && (
+          <Btn onClick={() => setFriends((prev) => [...prev, user])}>
+            Send Contact Request
+          </Btn>
+        )}
       </ButtonSection>
     </Modal>
   );
@@ -151,6 +188,10 @@ const ProfileBtn = styled.button`
     color: ${({ theme }) => theme.redColor};
   }
 
+  &.red:hover {
+    background: ${({ theme }) => theme.buttonNoBgHover};
+  }
+
   &:hover {
     background: ${({ theme }) => theme.buttonBgHover};
   }
@@ -159,5 +200,15 @@ const ProfileBtn = styled.button`
 const CopyButton = styled.button`
   & > svg {
     fill: ${({ theme }) => theme.tertiary};
+  }
+`;
+
+const Btn = styled.button`
+  padding: 11px 24px;
+  margin-left: 8px;
+  ${buttonStyles}
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
   }
 `;

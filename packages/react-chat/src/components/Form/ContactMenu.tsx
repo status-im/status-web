@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
+import { useFriends } from "../../contexts/friendsProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Icon } from "../Chat/ChatMessages";
@@ -38,6 +39,10 @@ export function ContactMenu({
     [blockedUsers, id]
   );
 
+  const { friends } = useFriends();
+
+  const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
+
   const { setModal } = useModal(ProfileModalName);
 
   return (
@@ -65,10 +70,12 @@ export function ContactMenu({
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
-        <MenuItem>
-          <AddContactSvg width={16} height={16} />
-          <MenuText>Send Contact Request</MenuText>
-        </MenuItem>
+        {!userIsFriend && (
+          <MenuItem>
+            <AddContactSvg width={16} height={16} />
+            <MenuText>Send Contact Request</MenuText>
+          </MenuItem>
+        )}
         <MenuItem>
           <EditSvg width={16} height={16} />
           <MenuText>Rename</MenuText>
@@ -88,7 +95,7 @@ export function ContactMenu({
           </MenuText>
         </MenuItem>
 
-        {!userInBlocked && (
+        {!userIsFriend && (
           <MenuItem
             onClick={() => {
               userInBlocked
