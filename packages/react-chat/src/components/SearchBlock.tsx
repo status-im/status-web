@@ -8,41 +8,36 @@ import { ContactsList } from "./Chat/ChatCreation";
 
 interface SearchBlockProps {
   query: string;
-  styledGroup: string[];
-  setStyledGroup: React.Dispatch<React.SetStateAction<string[]>>;
+  dsicludeList: string[];
+  onClick: (member: string) => void;
+  onBotttom?: boolean;
 }
 
 export const SearchBlock = ({
   query,
-  styledGroup,
-  setStyledGroup,
+  dsicludeList,
+  onClick,
+  onBotttom,
 }: SearchBlockProps) => {
   const { contacts } = useMessengerContext();
 
   const searchList = useMemo(() => {
     return contacts
       .filter((member) => member.id.includes(query))
-      .filter((member) => !styledGroup.includes(member.id));
-  }, [query, styledGroup, contacts]);
+      .filter((member) => !dsicludeList.includes(member.id));
+  }, [query, dsicludeList, contacts]);
 
-  const addMember = (member: string) => {
-    setStyledGroup((prevMembers: string[]) => {
-      if (prevMembers.find((mem) => mem === member)) {
-        return prevMembers;
-      } else {
-        return [...prevMembers, member];
-      }
-    });
-  };
   if (searchList.length === 0) {
     return null;
   }
   return (
-    <SearchContacts>
+    <SearchContacts
+      style={{ [onBotttom ? "bottom" : "top"]: "calc(100% + 24px)" }}
+    >
       <ContactsList>
         {contacts
           .filter((member) => member.id.includes(query))
-          .filter((member) => !styledGroup.includes(member.id))
+          .filter((member) => !dsicludeList.includes(member.id))
           .map((member) => (
             <Channel
               key={member.id}
@@ -53,7 +48,7 @@ export const SearchBlock = ({
               }}
               isActive={false}
               isMuted={false}
-              onClick={() => addMember(member.id)}
+              onClick={() => onClick(member.id)}
             />
           ))}
       </ContactsList>
@@ -72,5 +67,6 @@ const SearchContacts = styled.div`
   border-radius: 8px;
   position: absolute;
   left: 0;
-  top: calc(100% + 24px);
+  max-height: 200px;
+  overflow: auto;
 `;
