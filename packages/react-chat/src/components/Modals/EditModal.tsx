@@ -9,7 +9,7 @@ import { AddIcon } from "../Icons/AddIcon";
 import { textMediumStyles } from "../Text";
 
 import { Modal } from "./Modal";
-import { Heading, Section } from "./ModalStyle";
+import { ButtonSection, Heading, Section } from "./ModalStyle";
 
 export const EditModalName = "editModal";
 
@@ -165,11 +165,6 @@ const AddPictureInput = styled.input`
   opacity: 0;
   z-index: 2;
   cursor: pointer;
-`;
-
-const ButtonSection = styled(Section)`
-  display: flex;
-  justify-content: flex-end;
 `;
 
 const SaveBtn = styled.button`

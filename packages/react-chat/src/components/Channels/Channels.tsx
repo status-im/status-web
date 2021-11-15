@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { EditIcon } from "../Icons/EditIcon";
+import { CreateIcon } from "../Icons/CreateIcon";
 
 import { Channel } from "./Channel";
 
@@ -63,7 +63,7 @@ export function Channels({
         <ChatsBar>
           <Heading>Chat</Heading>
           <EditBtn onClick={() => setCreateChat(true)}>
-            <EditIcon />
+            <CreateIcon />
           </EditBtn>
         </ChatsBar>
         <ChatsList>

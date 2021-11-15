@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { Icon } from "../Chat/ChatMessages";
-import { ContactMenu } from "../Form/ContactMenu";
+// import { ContactMenu } from '../Form/ContactMenu';
 import { UserIcon } from "../Icons/UserIcon";
 
 interface MemberProps {
@@ -30,7 +30,7 @@ export function Member({
     });
   };
 
-  const [showMenu, setShowMenu] = useState(false);
+  // const [showMenu, setShowMenu] = useState(false);
 
   const onMemberClick = () => {
     switchShowMembers?.();
@@ -44,9 +44,9 @@ export function Member({
           backgroundImage: "unset",
         }}
         className={isOnline ? "online" : "offline"}
-        onClick={() => setShowMenu((e) => !e)}
+        // onClick={() => setShowMenu(e => !e)}
       >
-        {showMenu && <ContactMenu id={member} setShowMenu={setShowMenu} />}
+        {/* {showMenu && <ContactMenu id={member} setShowMenu={setShowMenu} />} */}
         <UserIcon memberView={true} />
       </MemberIcon>
       <MemberName>{member}</MemberName>

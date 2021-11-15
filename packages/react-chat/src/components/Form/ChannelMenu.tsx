@@ -7,7 +7,7 @@ import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { AddMemberIconSvg } from "../Icons/AddMemberIcon";
 import { CheckSvg } from "../Icons/CheckIcon";
-import { EgitGroupSvg } from "../Icons/EditGroupIcon";
+import { EditSvg } from "../Icons/EditIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
 import { MuteSvg } from "../Icons/MuteIcon";
@@ -43,7 +43,7 @@ export const ChannelMenu = ({
             setShowChannelMenu(false);
           }}
         >
-          <MembersSmallSvg height={16} width={16} />
+          <MembersSmallSvg width={16} height={16} />
           <MenuText>View Members</MenuText>
         </MenuItem>
       )}
@@ -59,7 +59,7 @@ export const ChannelMenu = ({
             <MenuText>Add / remove from group</MenuText>
           </MenuItem>
           <MenuItem onClick={() => setModal(true)}>
-            <EgitGroupSvg width={16} height={16} />
+            <EditSvg width={16} height={16} />
             <MenuText>Edit name and image</MenuText>
           </MenuItem>
         </>

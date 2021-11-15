@@ -20,17 +20,22 @@ export const MenuItem = styled.li`
   width: 100%;
   display: flex;
   align-items: center;
-  padding: 8px 14px;
+  padding: 8px 8px 8px 14px;
   cursor: pointer;
   color: ${({ theme }) => theme.primary};
 
-  &:hover {
+  &:hover,
+  &:hover > span {
     background: ${({ theme }) => theme.tertiary};
     color: ${({ theme }) => theme.bodyBackgroundColor};
   }
 
   & > svg {
     fill: ${({ theme }) => theme.tertiary};
+  }
+
+  & > svg.red {
+    fill: ${({ theme }) => theme.redColor};
   }
 
   &:hover > svg {
@@ -40,9 +45,15 @@ export const MenuItem = styled.li`
 
 export const MenuText = styled.span`
   margin-left: 6px;
+  color: ${({ theme }) => theme.tertiary};
+
+  &.red {
+    color: ${({ theme }) => theme.redColor};
+  }
 
   ${textSmallStyles}
 `;
+
 const MenuBlock = styled.div`
   width: 207px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
