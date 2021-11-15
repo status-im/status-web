@@ -6,10 +6,6 @@ import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { ImageMenu } from "../Form/ImageMenu";
-/* eslint-disable no-useless-escape */
-const regEx =
-  /(?:(?:http|https):\/\/)?(?:[-a-z0-9]+\.)+[a-z]+(?::\d+)?(?:(?:\/[-\+~%/\.\w]+)?\/?(?:[&?][-\+=&;%@\.\w]+)?(?:#[\w-]+)?)?/gi;
-/* eslint-enable no-useless-escape */
 
 type ChatMessageContentProps = {
   message: ChatMessage;
@@ -31,30 +27,26 @@ export function ChatMessageContent({
   const [openGraph, setOpenGraph] = useState<Metadata | undefined>(undefined);
 
   useEffect(() => {
-    const split = content.split(regEx);
-    const newSplit: (string | React.ReactElement)[] = [split[0]];
-    const matches = content.match(regEx);
-    if (matches) {
-      matches.forEach((match, idx) => {
-        const link =
-          match.startsWith("http://") || match.startsWith("https://")
-            ? match
-            : "https://" + match;
-        newSplit.push(
-          <Link key={idx} onClick={() => setLinkOpen(link)}>
-            {match}
+    let link;
+    const split = content.split(" ");
+    const newSplit = split.flatMap((element, idx) => {
+      if (element.startsWith("http://") || element.startsWith("https://")) {
+        link = element;
+        return [
+          <Link key={idx} onClick={() => setLinkOpen(element)}>
+            {element}
           </Link>,
-          split[idx + 1]
-        );
-      });
-      const match = matches[0];
-      const link =
-        match.startsWith("http://") || match.startsWith("https://")
-          ? match
-          : "https://" + match;
-      setLink(link);
-      setElements(newSplit);
-    }
+          " ",
+        ];
+      }
+      if (element.startsWith("@")) {
+        return [<Mention key={idx}>{element}</Mention>, " "];
+      }
+      return [element, " "];
+    });
+    newSplit.pop();
+    setLink(link);
+    setElements(newSplit);
   }, [content]);
 
   useEffect(() => {
@@ -166,7 +158,12 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Link = styled.div`
+const Mention = styled.span`
+  color: blue;
+  font-weight: 500;
+`;
+
+const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
   color: ${({ theme }) => theme.memberNameColor};
