@@ -21,6 +21,8 @@ export function Channels({
 }: ChannelsProps) {
   const {
     clearNotifications,
+    clearMentions,
+    mentions,
     notifications,
     activeChannel,
     setActiveChannel,
@@ -32,6 +34,7 @@ export function Channels({
     if (channel) {
       if (notifications[channel.id] > 0) {
         clearNotifications(channel.id);
+        clearMentions(channel.id);
       }
     }
   }, [notifications, activeChannelId]);
@@ -47,6 +50,11 @@ export function Channels({
           notification={
             notifications[channel.id] > 0 && !channel.isMuted
               ? notifications[channel.id]
+              : undefined
+          }
+          mention={
+            mentions[channel.id] > 0 && !channel.isMuted
+              ? mentions[channel.id]
               : undefined
           }
           onClick={() => {

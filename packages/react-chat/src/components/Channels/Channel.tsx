@@ -10,6 +10,7 @@ import { textMediumStyles } from "../Text";
 interface ChannelProps {
   channel: ChannelData;
   notification?: number;
+  mention?: number;
   isActive: boolean;
   isMuted: boolean;
   activeView?: boolean;
@@ -23,13 +24,13 @@ export function Channel({
   activeView,
   onClick,
   notification,
+  mention,
 }: ChannelProps) {
   const narrow = useNarrow();
   const className = useMemo(
     () => (narrow && !activeView ? "narrow" : activeView ? "active" : ""),
     [narrow]
   );
-  const mention = false;
   return (
     <ChannelWrapper
       className={
@@ -74,7 +75,7 @@ export function Channel({
         </ChannelTextInfo>
       </ChannelInfo>
       {notification && notification > 0 && !activeView && mention && (
-        <NotificationBagde>{notification}</NotificationBagde>
+        <NotificationBagde>{mention}</NotificationBagde>
       )}
       {isMuted && !notification && <MutedIcon />}
     </ChannelWrapper>
