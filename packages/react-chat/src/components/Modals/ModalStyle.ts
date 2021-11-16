@@ -26,4 +26,6 @@ export const Text = styled.p`
 export const ButtonSection = styled(Section)`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  position: relative;
 `;

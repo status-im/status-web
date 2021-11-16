@@ -13,7 +13,6 @@ export function ClearSvg({ height, width, className }: ClearSvgProps) {
       width={width}
       height={height}
       viewBox="0 0 16 16"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
@@ -34,6 +33,14 @@ export const ClearIcon = () => {
 const Icon = styled(ClearSvg)`
   & > path {
     fill: ${({ theme }) => theme.tertiary};
+  }
+
+  &.profile {
+    fill: ${({ theme }) => theme.secondary};
+  }
+
+  &.profile > path {
+    fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 
   &:hover > path {
