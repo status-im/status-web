@@ -21,13 +21,25 @@ export const ProfileModalName = "profileModal";
 interface ProfileModalProps {
   user: string;
   image?: string;
+  renaming: boolean;
+  customName?: string;
+  trueName?: string;
+  setRenaming: (val: boolean) => void;
+  setTrueName: (val: string) => void;
+  setCustomName: (val: string) => void;
 }
 
-export const ProfileModal = ({ user, image }: ProfileModalProps) => {
+export const ProfileModal = ({
+  user,
+  image,
+  renaming,
+  customName,
+  trueName,
+  setRenaming,
+  setTrueName,
+  setCustomName,
+}: ProfileModalProps) => {
   const [isUntrustworthy, setIsUntrustworthy] = useState(false);
-  const [renaming, setRenaming] = useState(false);
-  const [customName, setCustomName] = useState("");
-  const [trueName, setTrueName] = useState("");
 
   const { blockedUsers, setBlockedUsers } = useBlockedUsers();
 
@@ -306,8 +318,6 @@ const ClearBtn = styled.button`
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  // width: 44px;
-  // height: 44px;
   border-radius: 50%;
 
   & > svg {
