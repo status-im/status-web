@@ -2,11 +2,13 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
+import { useFriends } from "../../contexts/friendsProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Icon } from "../Chat/ChatMessages";
 import { AddContactSvg } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
+import { ChatSvg } from "../Icons/ChatIcon";
 import { EditSvg } from "../Icons/EditIcon";
 import { ProfileSvg } from "../Icons/ProfileIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
@@ -38,6 +40,10 @@ export function ContactMenu({
     [blockedUsers, id]
   );
 
+  const { friends, setFriends } = useFriends();
+
+  const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
+
   const { setModal } = useModal(ProfileModalName);
 
   return (
@@ -65,10 +71,18 @@ export function ContactMenu({
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
-        <MenuItem>
-          <AddContactSvg width={16} height={16} />
-          <MenuText>Send Contact Request</MenuText>
-        </MenuItem>
+        {!userIsFriend && (
+          <MenuItem onClick={() => setFriends((prev) => [...prev, id])}>
+            <AddContactSvg width={16} height={16} />
+            <MenuText>Send Contact Request</MenuText>
+          </MenuItem>
+        )}
+        {userIsFriend && (
+          <MenuItem>
+            <ChatSvg width={16} height={16} />
+            <MenuText>Send Message</MenuText>
+          </MenuItem>
+        )}
         <MenuItem>
           <EditSvg width={16} height={16} />
           <MenuText>Rename</MenuText>
@@ -88,7 +102,7 @@ export function ContactMenu({
           </MenuText>
         </MenuItem>
 
-        {!userInBlocked && (
+        {!userIsFriend && (
           <MenuItem
             onClick={() => {
               userInBlocked
