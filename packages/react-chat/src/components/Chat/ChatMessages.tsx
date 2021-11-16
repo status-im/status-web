@@ -28,6 +28,9 @@ type ChatUiMessageProps = {
   setImage: (img: string) => void;
   setLink: (link: string) => void;
   setUser: (user: string) => void;
+  customName?: string;
+  trueName?: string;
+  setRenaming: (val: boolean) => void;
 };
 
 function ChatUiMessage({
@@ -37,6 +40,9 @@ function ChatUiMessage({
   setImage,
   setLink,
   setUser,
+  customName,
+  trueName,
+  setRenaming,
 }: ChatUiMessageProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [isUntrustworthy, setIsUntrustworthy] = useState(false);
@@ -63,6 +69,9 @@ function ChatUiMessage({
               setShowMenu={setShowMenu}
               isUntrustworthy={isUntrustworthy}
               setIsUntrustworthy={setIsUntrustworthy}
+              customName={customName}
+              trueName={trueName}
+              setRenaming={setRenaming}
             />
           )}
           <UserIcon />
@@ -71,7 +80,15 @@ function ChatUiMessage({
         <ContentWrapper>
           <MessageHeaderWrapper>
             <UserNameWrapper>
-              <UserName>{message.sender.slice(0, 10)}</UserName>
+              <UserName>
+                {" "}
+                {customName ? customName : message.sender.slice(0, 10)}
+              </UserName>
+              {customName && (
+                <UserAddress>
+                  {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
+                </UserAddress>
+              )}
               {isUntrustworthy && <UntrustworthIcon />}
             </UserNameWrapper>
             <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
@@ -119,11 +136,23 @@ export function ChatMessages() {
   );
   useEffect(() => (!showLinkModal ? setLink("") : undefined), [showLinkModal]);
 
+  const [renaming, setRenaming] = useState(false);
+  const [customName, setCustomName] = useState("");
+  const [trueName, setTrueName] = useState("");
+
   return (
     <MessagesWrapper ref={ref}>
       <PictureModal image={image} />
       <LinkModal link={link} />
-      <ProfileModal user={user} />
+      <ProfileModal
+        user={user}
+        renaming={renaming}
+        setRenaming={setRenaming}
+        customName={customName}
+        setCustomName={setCustomName}
+        trueName={trueName}
+        setTrueName={setTrueName}
+      />
       <EmptyChannel channel={activeChannel} />
       {loadingMessages && (
         <LoadingWrapper>
@@ -139,6 +168,9 @@ export function ChatMessages() {
           setLink={setLink}
           setImage={setImage}
           setUser={setUser}
+          customName={customName}
+          trueName={trueName}
+          setRenaming={setRenaming}
         />
       ))}
     </MessagesWrapper>
@@ -224,6 +256,27 @@ const UserName = styled.p`
   margin-right: 4px;
 
   ${textMediumStyles}
+`;
+
+export const UserAddress = styled.p`
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.2px;
+  color: ${({ theme }) => theme.secondary};
+  position: relative;
+  padding-right: 8px;
+
+  &:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: ${({ theme }) => theme.secondary};
+  }
 `;
 
 const TimeWrapper = styled.div`
