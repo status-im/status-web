@@ -3,9 +3,28 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
+import { ContactMenu } from "../Form/ContactMenu";
 import { ImageMenu } from "../Form/ImageMenu";
+
+interface MentionProps {
+  id: string;
+}
+
+function Mention({ id }: MentionProps) {
+  const { contacts } = useMessengerContext();
+  const contact = useMemo(() => contacts[id.slice(1)], [id, contacts]);
+  const [showMenu, setShowMenu] = useState(false);
+  if (!contact) return <>{id}</>;
+  return (
+    <MentionSpan onClick={() => setShowMenu(!showMenu)}>
+      {`@${contact.customName ?? contact.id}`}
+      {showMenu && <ContactMenu id={id.slice(1)} setShowMenu={setShowMenu} />}
+    </MentionSpan>
+  );
+}
 
 type ChatMessageContentProps = {
   message: ChatMessage;
@@ -40,7 +59,7 @@ export function ChatMessageContent({
         ];
       }
       if (element.startsWith("@")) {
-        return [<Mention key={idx}>{element}</Mention>, " "];
+        return [<Mention key={idx} id={element} />, " "];
       }
       return [element, " "];
     });
@@ -158,9 +177,10 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-const Mention = styled.span`
+const MentionSpan = styled.span`
   color: blue;
   font-weight: 500;
+  position: relative;
 `;
 
 const Link = styled.a`

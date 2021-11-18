@@ -14,7 +14,8 @@ const MessengerContext = createContext<MessengerType>({
   loadPrevDay: async () => undefined,
   loadingMessages: false,
   communityData: undefined,
-  contacts: [],
+  contacts: {},
+  setContacts: () => undefined,
   activeChannel: {
     id: "",
     name: "",

@@ -34,13 +34,13 @@ export function MembersList({
       </MemberCategory>
       <MemberCategory>
         <MemberCategoryName>Online</MemberCategoryName>
-        {contacts
+        {Object.values(contacts)
           .filter((e) => e.id != bufToHex(identity.publicKey))
           .filter((e) => e.online)
           .map((contact) => (
             <Member
               key={contact.id}
-              member={contact.id}
+              contact={contact}
               isOnline={contact.online}
               switchShowMembers={switchShowMembers}
               setMembersList={setMembersList}
@@ -49,13 +49,13 @@ export function MembersList({
       </MemberCategory>
       <MemberCategory>
         <MemberCategoryName>Offline</MemberCategoryName>
-        {contacts
+        {Object.values(contacts)
           .filter((e) => e.id != bufToHex(identity.publicKey))
           .filter((e) => !e.online)
           .map((contact) => (
             <Member
               key={contact.id}
-              member={contact.id}
+              contact={contact}
               isOnline={contact.online}
               switchShowMembers={switchShowMembers}
               setMembersList={setMembersList}

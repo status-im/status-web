@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Community,
-  Contacts,
+  Contacts as ContactsClass,
   Identity,
   Messenger,
 } from "status-communities/dist/cjs";
@@ -10,7 +10,7 @@ import {
 import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { CommunityData } from "../../models/CommunityData";
-import { Contact } from "../../models/Contact";
+import { Contacts } from "../../models/Contact";
 import { createCommunity } from "../../utils/createCommunity";
 import { createMessenger } from "../../utils/createMessenger";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
@@ -32,7 +32,8 @@ export type MessengerType = {
   loadPrevDay: (id: string) => Promise<void>;
   loadingMessages: boolean;
   communityData: CommunityData | undefined;
-  contacts: Contact[];
+  contacts: Contacts;
+  setContacts: React.Dispatch<React.SetStateAction<Contacts>>;
   channels: ChannelData[];
   activeChannel: ChannelData;
   setActiveChannel: (channel: ChannelData) => void;
@@ -58,7 +59,7 @@ export function useMessenger(
 
   const contactsClass = useMemo(() => {
     if (messenger && identity) {
-      const newContacts = new Contacts(
+      const newContacts = new ContactsClass(
         identity,
         messenger.waku,
         (id, clock) => {
@@ -71,13 +72,25 @@ export function useMessenger(
     }
   }, [messenger, identity]);
 
-  const contacts = useMemo<Contact[]>(() => {
+  const [contacts, setContacts] = useState<Contacts>({});
+
+  useEffect(() => {
     const now = Date.now();
-    return Object.entries(internalContacts).map(([id, clock]) => {
-      return {
-        id,
-        online: clock > now - 301000,
-      };
+    setContacts((prev) => {
+      const newContacts: Contacts = {};
+      Object.entries(internalContacts).forEach(([id, clock]) => {
+        newContacts[id] = {
+          id,
+          online: clock > now - 301000,
+          trueName: id.slice(0, 10),
+          isUntrustworthy: false,
+          blocked: false,
+        };
+        if (prev[id]) {
+          newContacts[id] = { ...prev[id], ...newContacts[id] };
+        }
+      });
+      return newContacts;
     });
   }, [internalContacts]);
 
@@ -185,6 +198,7 @@ export function useMessenger(
     loadingMessages,
     communityData,
     contacts,
+    setContacts,
     channels,
     activeChannel,
     setActiveChannel,

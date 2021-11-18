@@ -1,11 +1,12 @@
 import React, { useMemo } from "react";
+import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
 import { useFriends } from "../../contexts/friendsProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
-import { ChatMessage } from "../../models/ChatMessage";
-import { Icon, UserAddress } from "../Chat/ChatMessages";
+import { useManageContact } from "../../hooks/useManageContact";
+import { UserAddress } from "../Chat/ChatMessages";
 import { AddContactSvg } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
 import { ChatSvg } from "../Icons/ChatIcon";
@@ -20,63 +21,45 @@ import { textMediumStyles } from "../Text";
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
 type ContactMenuProps = {
-  message: ChatMessage;
+  id: string;
   setShowMenu: (val: boolean) => void;
-  isUntrustworthy: boolean;
-  setIsUntrustworthy: (val: boolean) => void;
-  customName?: string;
-  trueName?: string;
-  setRenaming: (val: boolean) => void;
 };
 
-export function ContactMenu({
-  message,
-  setShowMenu,
-  isUntrustworthy,
-  setIsUntrustworthy,
-  customName,
-  trueName,
-  setRenaming,
-}: ContactMenuProps) {
-  const id = message.sender;
-  const { blockedUsers, setBlockedUsers } = useBlockedUsers();
-
-  const userInBlocked = useMemo(
-    () => blockedUsers.includes(id),
-    [blockedUsers, id]
+export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
+  const identity = useIdentity();
+  const isUser = useMemo(
+    () => id === bufToHex(identity.publicKey),
+    [id, identity]
   );
 
+  const { setModal } = useModal(ProfileModalName);
   const { friends, setFriends } = useFriends();
 
   const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
+  const { contact, setBlocked, setIsUntrustworthy } = useManageContact(id);
 
-  const { setModal } = useModal(ProfileModalName);
-
+  if (!contact) return null;
   return (
     <ContactDropdown>
       <ContactInfo>
-        {message.image ? (
-          <Icon
-            style={{
-              backgroundImage: `url(${message.image}`,
-            }}
-          />
-        ) : (
-          <UserIcon />
-        )}
+        <UserIcon />
         <UserNameWrapper>
-          <UserName>
-            {customName ? customName : message.sender.slice(0, 10)}
-          </UserName>
-          {isUntrustworthy && <UntrustworthIcon />}
+          <UserName>{contact.customName ?? id.slice(0, 10)}</UserName>
+          {contact.isUntrustworthy && <UntrustworthIcon />}
         </UserNameWrapper>
-        {trueName && <UserTrueName>({trueName})</UserTrueName>}
+        {contact.customName && (
+          <UserTrueName>({contact.trueName})</UserTrueName>
+        )}
         <UserAddress>
-          {message.sender.slice(0, 10)}...{message.sender.slice(-3)}
+          {id.slice(0, 10)}...{id.slice(-3)}
         </UserAddress>
       </ContactInfo>
       <MenuSection>
-        <MenuItem onClick={() => setModal(true)}>
+        <MenuItem
+          onClick={() => {
+            setModal({ id, renamingState: false });
+          }}
+        >
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
@@ -94,8 +77,7 @@ export function ContactMenu({
         )}
         <MenuItem
           onClick={() => {
-            setModal(true);
-            setRenaming(true);
+            setModal({ id, renamingState: true });
           }}
         >
           <EditSvg width={16} height={16} />
@@ -103,30 +85,30 @@ export function ContactMenu({
         </MenuItem>
       </MenuSection>
       <MenuSection>
-        <MenuItem onClick={() => setIsUntrustworthy(!isUntrustworthy)}>
+        <MenuItem onClick={() => setIsUntrustworthy(!contact.isUntrustworthy)}>
           <WarningSvg
             width={16}
             height={16}
-            className={isUntrustworthy ? "" : "red"}
+            className={contact.isUntrustworthy ? "" : "red"}
           />
-          <MenuText className={isUntrustworthy ? "" : "red"}>
-            {isUntrustworthy
+          <MenuText className={contact.isUntrustworthy ? "" : "red"}>
+            {contact.isUntrustworthy
               ? "Remove Untrustworthy Mark"
               : "Mark as Untrustworthy"}
           </MenuText>
         </MenuItem>
 
-        {!userIsFriend && (
+        {!userIsFriend && !isUser && (
           <MenuItem
             onClick={() => {
-              userInBlocked
-                ? setBlockedUsers((prev) => prev.filter((e) => e != id))
-                : setBlockedUsers((prev) => [...prev, id]);
+              setBlocked(!contact.blocked);
               setShowMenu(false);
             }}
           >
             <BlockSvg width={16} height={16} className="red" />
-            <MenuText className="red">Block User</MenuText>
+            <MenuText className="red">
+              {contact.blocked ? "Unblock User" : "Block User"}
+            </MenuText>
           </MenuItem>
         )}
       </MenuSection>

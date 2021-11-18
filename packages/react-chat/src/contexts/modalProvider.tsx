@@ -6,8 +6,17 @@ import React, {
   useState,
 } from "react";
 
-type ModalsState = {
-  [name: string]: boolean;
+import {
+  ProfileModalName,
+  ProfileModalProps,
+} from "../components/Modals/ProfileModal";
+
+type TypeMap = {
+  [ProfileModalName]?: ProfileModalProps;
+};
+
+type ModalsState = TypeMap & {
+  [name: string]: boolean | undefined;
 };
 
 type ModalContextType = [
@@ -17,11 +26,18 @@ type ModalContextType = [
 
 const ModalContext = createContext<ModalContextType>([{}, () => undefined]);
 
-export function useModal(name: string) {
+export function useModal<T extends string>(name: T) {
   const [modals, setModals] = useContext(ModalContext);
+
   const setModal = useCallback(
-    (state: boolean) => {
+    (state: T extends keyof TypeMap ? TypeMap[T] | false : boolean) => {
       setModals((prev) => {
+        if (!state) {
+          return {
+            ...prev,
+            [name]: undefined,
+          };
+        }
         return {
           ...prev,
           [name]: state,
@@ -30,8 +46,11 @@ export function useModal(name: string) {
     },
     [name, modals]
   );
-  const isVisible = useMemo(() => modals?.[name] ?? false, [modals, name]);
-  return { isVisible, setModal };
+  const isVisible = useMemo(() => !!modals?.[name], [modals, name]);
+
+  const props = useMemo(() => modals?.[name], [modals, name]);
+
+  return { isVisible, setModal, props };
 }
 
 interface IdentityProviderProps {

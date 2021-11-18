@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import styled from "styled-components";
 
-import { BlockedUsersProvider } from "../contexts/blockedUsersProvider";
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
 import { FriendsProvider } from "../contexts/friendsProvider";
 import { ModalProvider } from "../contexts/modalProvider";
@@ -29,17 +28,15 @@ export function ReactChat({
     <ThemeProvider theme={theme}>
       <NarrowProvider myRef={ref}>
         <FetchMetadataProvider fetchMetadata={fetchMetadata}>
-          <BlockedUsersProvider>
-            <FriendsProvider>
-              <ModalProvider>
-                <Wrapper ref={ref}>
-                  <GlobalStyle />
-                  <ChatLoader communityKey={communityKey} />
-                  <div id="modal-root" />
-                </Wrapper>
-              </ModalProvider>
-            </FriendsProvider>
-          </BlockedUsersProvider>
+          <FriendsProvider>
+            <ModalProvider>
+              <Wrapper ref={ref}>
+                <GlobalStyle />
+                <ChatLoader communityKey={communityKey} />
+                <div id="modal-root" />
+              </Wrapper>
+            </ModalProvider>
+          </FriendsProvider>
         </FetchMetadataProvider>
       </NarrowProvider>
     </ThemeProvider>

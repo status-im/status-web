@@ -123,7 +123,7 @@ export function ChatCreation({
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
-            {contacts
+            {Object.values(contacts)
               .filter(
                 (e) =>
                   e.id != bufToHex(identity.publicKey) &&
@@ -132,7 +132,7 @@ export function ChatCreation({
               .map((contact) => (
                 <Member
                   key={contact.id}
-                  member={contact.id}
+                  contact={contact}
                   isOnline={contact.online}
                   onClick={() => addMember(contact.id)}
                 />
