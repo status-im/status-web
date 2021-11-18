@@ -27,30 +27,22 @@ enum ChatBodyState {
 interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
-  membersList: string[];
-  groupList: [][];
-  setMembersList: any;
-  setGroupList: any;
   setCreateChat: (val: boolean) => void;
 }
 
 export function ChatBody({
   onClick,
   showMembers,
-  membersList,
-  groupList,
-  setMembersList,
-  setGroupList,
   setCreateChat,
 }: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
-  const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat);
 
   const [editGroup, setEditGroup] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
+  const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat);
   const switchShowState = useCallback(
     (state: ChatBodyState) => {
       if (narrow) {
@@ -69,12 +61,7 @@ export function ChatBody({
   return (
     <ChatBodyWrapper className={className}>
       {editGroup && communityData ? (
-        <ChatCreation
-          setMembersList={setMembersList}
-          setGroupList={setGroupList}
-          setCreateChat={setCreateChat}
-          editGroup={editGroup}
-        />
+        <ChatCreation setCreateChat={setCreateChat} editGroup={editGroup} />
       ) : (
         <ChatTopbar
           className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
@@ -125,7 +112,6 @@ export function ChatBody({
               switchMemberList={() => switchShowState(ChatBodyState.Members)}
               setShowChannelMenu={setShowChannelMenu}
               setEditGroup={setEditGroup}
-              setGroupList={setGroupList}
             />
           )}
         </ChatTopbar>
@@ -146,8 +132,6 @@ export function ChatBody({
           {showState === ChatBodyState.Channels && (
             <NarrowChannels
               setShowChannels={() => switchShowState(ChatBodyState.Channels)}
-              membersList={membersList}
-              groupList={groupList}
               setCreateChat={setCreateChat}
             />
           )}
@@ -156,7 +140,6 @@ export function ChatBody({
               switchShowMembersList={() =>
                 switchShowState(ChatBodyState.Members)
               }
-              setMembersList={setMembersList}
             />
           )}
         </>

@@ -10,23 +10,16 @@ import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
-  setMembersList: any;
-  setGroupList: any;
   setCreateChat: (val: boolean) => void;
   editGroup?: boolean;
 }
 
-export function ChatCreation({
-  setMembersList,
-  setGroupList,
-  setCreateChat,
-  editGroup,
-}: ChatCreationProps) {
+export function ChatCreation({ setCreateChat, editGroup }: ChatCreationProps) {
   const identity = useIdentity();
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
 
-  const { contacts, setActiveChannel } = useMessengerContext();
+  const { contacts, setChannel } = useMessengerContext();
 
   const addMember = useCallback(
     (member: string) => {
@@ -47,28 +40,17 @@ export function ChatCreation({
 
   const createChat = (group: string[]) => {
     group.length > 1
-      ? (setGroupList((prevGroups: string[][]) => {
-          prevGroups.push(group);
-          return prevGroups;
-        }),
-        setActiveChannel({
+      ? setChannel({
           id: group.join(""),
           name: group.join(", "),
           type: "group",
-        }))
-      : (setMembersList((prevMembers: string[]) => {
-          if (prevMembers.find((chat) => chat === group[0])) {
-            return prevMembers;
-          } else {
-            return [...prevMembers, group[0]];
-          }
-        }),
-        setActiveChannel({
+        })
+      : setChannel({
           id: group[0],
           name: group[0],
           type: "dm",
           description: "Contact",
-        }));
+        });
     setCreateChat(false);
   };
 
@@ -112,9 +94,7 @@ export function ChatCreation({
         </InputBar>
         <CreationBtn
           disabled={styledGroup.length === 0}
-          onClick={() =>
-            editGroup ? setMembersList(styledGroup) : createChat(styledGroup)
-          }
+          onClick={() => createChat(styledGroup)}
         >
           Confirm
         </CreationBtn>

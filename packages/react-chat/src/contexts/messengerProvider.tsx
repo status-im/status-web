@@ -20,7 +20,9 @@ const MessengerContext = createContext<MessengerType>({
     id: "",
     name: "",
   },
-  channels: [],
+  channels: {},
+  setChannel: () => undefined,
+  removeChannel: () => undefined,
   setActiveChannel: () => undefined,
 });
 

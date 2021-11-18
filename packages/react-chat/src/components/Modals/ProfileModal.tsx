@@ -89,7 +89,7 @@ export const ProfileModal = () => {
           <NameInputWrapper>
             <NameInput
               placeholder="Only you will see this nickname"
-              value={contact.customName}
+              value={customNameInput}
               onChange={(e) => setCustomNameInput(e.currentTarget.value)}
             />
             {contact.customName && (

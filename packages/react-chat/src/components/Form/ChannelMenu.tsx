@@ -20,7 +20,6 @@ interface ChannelMenuProps {
   switchMemberList: () => void;
   setShowChannelMenu: (val: boolean) => void;
   setEditGroup: (val: boolean) => void;
-  setGroupList: any;
 }
 
 export const ChannelMenu = ({
@@ -28,11 +27,9 @@ export const ChannelMenu = ({
   switchMemberList,
   setShowChannelMenu,
   setEditGroup,
-  setGroupList,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
-  const { clearNotifications, setActiveChannel, channels } =
-    useMessengerContext();
+  const { clearNotifications, removeChannel } = useMessengerContext();
   const { setModal } = useModal(EditModalName);
   return (
     <DropdownMenu>
@@ -77,16 +74,12 @@ export const ChannelMenu = ({
         <CheckSvg width={16} height={16} />
         <MenuText>Mark as Read</MenuText>
       </MenuItem>
-      {channel.type === "group" && (
+      {(channel.type === "group" || channel.type === "dm") && (
         <MenuSection>
           {" "}
           <MenuItem
             onClick={() => {
-              setGroupList((prevGroups: string[][]) => {
-                const idx = prevGroups.indexOf(channel.name.split(", "));
-                return idx >= 0 ? prevGroups.splice(idx, 1) : [];
-              });
-              setActiveChannel(channels[0]);
+              removeChannel(channel.id);
               setShowChannelMenu(false);
             }}
           >

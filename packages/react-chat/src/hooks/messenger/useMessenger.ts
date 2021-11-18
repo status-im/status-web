@@ -7,7 +7,7 @@ import {
   Messenger,
 } from "status-communities/dist/cjs";
 
-import { ChannelData } from "../../models/ChannelData";
+import { ChannelData, ChannelsData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { CommunityData } from "../../models/CommunityData";
 import { Contacts } from "../../models/Contact";
@@ -34,7 +34,9 @@ export type MessengerType = {
   communityData: CommunityData | undefined;
   contacts: Contacts;
   setContacts: React.Dispatch<React.SetStateAction<Contacts>>;
-  channels: ChannelData[];
+  channels: ChannelsData;
+  setChannel: (channel: ChannelData) => void;
+  removeChannel: (channelId: string) => void;
   activeChannel: ChannelData;
   setActiveChannel: (channel: ChannelData) => void;
 };
@@ -148,24 +150,56 @@ export function useMessenger(
     [chatId, messenger]
   );
 
-  const channels = useMemo<ChannelData[]>(() => {
+  const [channels, setChannels] = useState<ChannelsData>({});
+
+  const setChannel = useCallback((channel: ChannelData) => {
+    setChannels((prev) => {
+      return { ...prev, [channel.id]: channel };
+    });
+    setActiveChannel(channel);
+  }, []);
+
+  const removeChannel = useCallback(
+    (channelId: string) => {
+      setChannels((prev) => {
+        delete prev[channelId];
+        return prev;
+      });
+      const newActiveChannel: ChannelData = Object.values(channels)?.[0] ?? {
+        id: "",
+        name: "",
+      };
+      setActiveChannel(newActiveChannel);
+    },
+    [channels]
+  );
+
+  useEffect(() => {
     if (community?.chats) {
-      return Array.from(community.chats.values()).map((chat) => {
-        return {
+      for (const chat of community.chats.values()) {
+        setChannel({
           id: chat.id,
           name: chat.communityChat?.identity?.displayName ?? "",
           description: chat.communityChat?.identity?.description ?? "",
           type: "channel",
-        };
-      });
-    } else {
-      return [];
+        });
+      }
     }
   }, [community]);
 
   useEffect(() => {
-    if (channels.length > 0) setActiveChannel(channels[0]);
-  }, [channels]);
+    Object.values(channels)
+      .filter((channel) => channel.type === "dm")
+      .forEach((channel) => {
+        const contact = contacts?.[channel?.members?.[0]?.id ?? ""];
+        if (contact && channel.name !== (contact?.customName ?? channel.name)) {
+          setChannel({
+            ...channel,
+            name: contact?.customName ?? channel.name,
+          });
+        }
+      });
+  }, [contacts]);
 
   const communityData = useMemo(() => {
     if (community?.description) {
@@ -200,6 +234,8 @@ export function useMessenger(
     contacts,
     setContacts,
     channels,
+    setChannel,
+    removeChannel,
     activeChannel,
     setActiveChannel,
     mentions,

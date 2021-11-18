@@ -3,15 +3,11 @@ import styled from "styled-components";
 
 import { MembersList } from "./MembersList";
 
-interface MembersProps {
-  setMembersList: any;
-}
-
-export function Members({ setMembersList }: MembersProps) {
+export function Members() {
   return (
     <MembersWrapper>
       <MemberHeading>Members</MemberHeading>
-      <MembersList setMembersList={setMembersList} />
+      <MembersList />
     </MembersWrapper>
   );
 }

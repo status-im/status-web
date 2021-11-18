@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -7,65 +7,73 @@ import { CreateIcon } from "../Icons/CreateIcon";
 import { Channel } from "./Channel";
 
 interface ChannelsProps {
-  membersList: string[];
-  groupList: string[][];
   setCreateChat: (val: boolean) => void;
   onCommunityClick?: () => void;
 }
 
-export function Channels({
-  membersList,
-  groupList,
-  setCreateChat,
+type GenerateChannelsProps = ChannelsProps & {
+  type: string;
+};
+
+function GenerateChannels({
+  type,
   onCommunityClick,
-}: ChannelsProps) {
-  const {
-    clearNotifications,
-    clearMentions,
-    mentions,
-    notifications,
-    activeChannel,
-    setActiveChannel,
-    channels,
-  } = useMessengerContext();
-  const activeChannelId = useMemo(() => activeChannel.id, [activeChannel]);
+  setCreateChat,
+}: GenerateChannelsProps) {
+  const { mentions, notifications, activeChannel, setActiveChannel, channels } =
+    useMessengerContext();
+  return (
+    <>
+      {Object.values(channels)
+        .filter((channel) => channel.type === type)
+        .map((channel) => (
+          <Channel
+            key={channel.id}
+            channel={channel}
+            isActive={channel.id === activeChannel.id}
+            isMuted={channel.isMuted || false}
+            notification={
+              notifications[channel.id] > 0 && !channel.isMuted
+                ? notifications[channel.id]
+                : undefined
+            }
+            mention={
+              mentions[channel.id] > 0 && !channel.isMuted
+                ? mentions[channel.id]
+                : undefined
+            }
+            onClick={() => {
+              setActiveChannel(channel);
+              if (onCommunityClick) {
+                onCommunityClick();
+              }
+              setCreateChat(false);
+            }}
+          />
+        ))}
+    </>
+  );
+}
+
+export function Channels({ setCreateChat, onCommunityClick }: ChannelsProps) {
+  const { clearNotifications, clearMentions, notifications, activeChannel } =
+    useMessengerContext();
   useEffect(() => {
-    const channel = channels.find((channel) => channel.id === activeChannelId);
-    if (channel) {
-      if (notifications[channel.id] > 0) {
-        clearNotifications(channel.id);
-        clearMentions(channel.id);
+    if (activeChannel) {
+      if (notifications[activeChannel.id] > 0) {
+        clearNotifications(activeChannel.id);
+        clearMentions(activeChannel.id);
       }
     }
-  }, [notifications, activeChannelId]);
+  }, [notifications, activeChannel]);
 
   return (
     <ChannelList>
-      {channels.map((channel) => (
-        <Channel
-          key={channel.id}
-          channel={channel}
-          isActive={channel.id === activeChannelId}
-          isMuted={channel.isMuted || false}
-          notification={
-            notifications[channel.id] > 0 && !channel.isMuted
-              ? notifications[channel.id]
-              : undefined
-          }
-          mention={
-            mentions[channel.id] > 0 && !channel.isMuted
-              ? mentions[channel.id]
-              : undefined
-          }
-          onClick={() => {
-            setActiveChannel(channel);
-            if (onCommunityClick) {
-              onCommunityClick();
-            }
-            setCreateChat(false);
-          }}
-        />
-      ))}
+      <GenerateChannels
+        type={"channel"}
+        onCommunityClick={onCommunityClick}
+        setCreateChat={setCreateChat}
+      />
 
       <Chats>
         <ChatsBar>
@@ -75,56 +83,16 @@ export function Channels({
           </EditBtn>
         </ChatsBar>
         <ChatsList>
-          {groupList.length > 0 &&
-            groupList.map((group) => (
-              <Channel
-                key={group.join("")}
-                channel={{
-                  id: group.join(""),
-                  name: group.join(", "),
-                  type: "group",
-                }}
-                isActive={group.join("") === activeChannelId}
-                isMuted={false}
-                onClick={() => {
-                  setActiveChannel({
-                    id: group.join(""),
-                    name: group.join(", "),
-                    type: "group",
-                  });
-                  setCreateChat(false);
-                  if (onCommunityClick) {
-                    onCommunityClick();
-                  }
-                }}
-              />
-            ))}
-          {membersList.length > 0 &&
-            membersList.map((member) => (
-              <Channel
-                key={member}
-                channel={{
-                  id: member,
-                  name: member,
-                  type: "dm",
-                  description: "Contact",
-                }}
-                isActive={member === activeChannelId}
-                isMuted={false}
-                onClick={() => {
-                  setActiveChannel({
-                    id: member,
-                    name: member.slice(0, 10),
-                    type: "dm",
-                    description: "Contact",
-                  });
-                  if (onCommunityClick) {
-                    onCommunityClick();
-                  }
-                  setCreateChat(false);
-                }}
-              />
-            ))}
+          <GenerateChannels
+            type={"group"}
+            onCommunityClick={onCommunityClick}
+            setCreateChat={setCreateChat}
+          />
+          <GenerateChannels
+            type={"dm"}
+            onCommunityClick={onCommunityClick}
+            setCreateChat={setCreateChat}
+          />
         </ChatsList>
       </Chats>
     </ChannelList>
