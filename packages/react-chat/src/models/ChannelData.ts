@@ -1,3 +1,5 @@
+import { Contact } from "./Contact";
+
 export type ChannelData = {
   id: string;
   name: string;
@@ -5,4 +7,9 @@ export type ChannelData = {
   description?: string;
   icon?: string;
   isMuted?: boolean;
+  members?: Contact[];
+};
+
+export type ChannelsData = {
+  [id: string]: ChannelData;
 };

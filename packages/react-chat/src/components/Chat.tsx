@@ -12,10 +12,18 @@ import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
 import { ProfileModal } from "./Modals/ProfileModal";
 
+function Modals() {
+  return (
+    <>
+      <CommunityModal subtitle="Public Community" />
+      <EditModal />
+      <ProfileModal />
+    </>
+  );
+}
+
 export function Chat() {
   const [showMembers, setShowMembers] = useState(true);
-  const [membersList, setMembersList] = useState([]);
-  const [groupList, setGroupList] = useState([]);
   const [createChat, setCreateChat] = useState(false);
 
   const narrow = useNarrow();
@@ -25,38 +33,19 @@ export function Chat() {
       {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity />
-          <Channels
-            membersList={membersList}
-            groupList={groupList}
-            setCreateChat={setCreateChat}
-          />
+          <Channels setCreateChat={setCreateChat} />
         </ChannelsWrapper>
       )}
-
       {!createChat && (
         <ChatBody
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
-          membersList={membersList}
-          groupList={groupList}
-          setMembersList={setMembersList}
-          setGroupList={setGroupList}
           setCreateChat={setCreateChat}
         />
       )}
-      {showMembers && !narrow && !createChat && (
-        <Members setMembersList={setMembersList} />
-      )}
-      {createChat && (
-        <ChatCreation
-          setMembersList={setMembersList}
-          setGroupList={setGroupList}
-          setCreateChat={setCreateChat}
-        />
-      )}
-      <CommunityModal subtitle="Public Community" />
-      <EditModal />
-      <ProfileModal />
+      {showMembers && !narrow && !createChat && <Members />}
+      {createChat && <ChatCreation setCreateChat={setCreateChat} />}
+      <Modals />
     </ChatWrapper>
   );
 }

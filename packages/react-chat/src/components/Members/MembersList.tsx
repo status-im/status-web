@@ -11,13 +11,9 @@ import { Member, MemberData, MemberIcon } from "./Member";
 
 interface MembersListProps {
   switchShowMembers?: () => void;
-  setMembersList: any;
 }
 
-export function MembersList({
-  switchShowMembers,
-  setMembersList,
-}: MembersListProps) {
+export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
 
@@ -43,7 +39,6 @@ export function MembersList({
               contact={contact}
               isOnline={contact.online}
               switchShowMembers={switchShowMembers}
-              setMembersList={setMembersList}
             />
           ))}
       </MemberCategory>
@@ -58,7 +53,6 @@ export function MembersList({
               contact={contact}
               isOnline={contact.online}
               switchShowMembers={switchShowMembers}
-              setMembersList={setMembersList}
             />
           ))}
       </MemberCategory>

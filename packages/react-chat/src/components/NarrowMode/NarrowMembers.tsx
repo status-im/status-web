@@ -7,20 +7,13 @@ import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowMembersProps {
   switchShowMembersList: () => void;
-  setMembersList: any;
 }
 
-export function NarrowMembers({
-  switchShowMembersList,
-  setMembersList,
-}: NarrowMembersProps) {
+export function NarrowMembers({ switchShowMembersList }: NarrowMembersProps) {
   return (
     <ListWrapper>
       <NarrowTopbar list="Community members" />
-      <MembersList
-        switchShowMembers={switchShowMembersList}
-        setMembersList={setMembersList}
-      />
+      <MembersList switchShowMembers={switchShowMembersList} />
     </ListWrapper>
   );
 }

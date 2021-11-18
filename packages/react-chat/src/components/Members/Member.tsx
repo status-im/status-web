@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Contact } from "../../models/Contact";
 import { Icon } from "../Chat/ChatMessages";
 import { ContactMenu } from "../Form/ContactMenu";
@@ -10,7 +11,6 @@ interface MemberProps {
   contact: Contact;
   isOnline?: boolean;
   switchShowMembers?: () => void;
-  setMembersList?: any;
   onClick?: () => void;
 }
 
@@ -18,24 +18,21 @@ export function Member({
   contact,
   isOnline,
   switchShowMembers,
-  setMembersList,
   onClick,
 }: MemberProps) {
-  const startDialog = (member: string) => {
-    setMembersList((prevMembers: string[]) => {
-      if (prevMembers.find((chat) => chat === member)) {
-        return prevMembers;
-      } else {
-        return [...prevMembers, member];
-      }
-    });
-  };
+  const { setChannel } = useMessengerContext();
 
   const [showMenu, setShowMenu] = useState(false);
 
   const onMemberClick = () => {
     switchShowMembers?.();
-    startDialog(contact.id);
+    setChannel({
+      id: contact.id,
+      name: contact.customName ?? contact.trueName,
+      type: "dm",
+      description: "DM",
+      members: [contact],
+    });
   };
 
   return (
