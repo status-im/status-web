@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
+import { Contact } from "../../models/Contact";
 import { Icon } from "../Chat/ChatMessages";
-// import { ContactMenu } from '../Form/ContactMenu';
+import { ContactMenu } from "../Form/ContactMenu";
 import { UserIcon } from "../Icons/UserIcon";
 
 interface MemberProps {
-  member: string;
+  contact: Contact;
   isOnline?: boolean;
   switchShowMembers?: () => void;
   setMembersList?: any;
@@ -14,7 +15,7 @@ interface MemberProps {
 }
 
 export function Member({
-  member,
+  contact,
   isOnline,
   switchShowMembers,
   setMembersList,
@@ -30,11 +31,11 @@ export function Member({
     });
   };
 
-  // const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
 
   const onMemberClick = () => {
     switchShowMembers?.();
-    startDialog(member);
+    startDialog(contact.id);
   };
 
   return (
@@ -44,12 +45,12 @@ export function Member({
           backgroundImage: "unset",
         }}
         className={isOnline ? "online" : "offline"}
-        // onClick={() => setShowMenu(e => !e)}
+        onClick={() => setShowMenu((e) => !e)}
       >
-        {/* {showMenu && <ContactMenu id={member} setShowMenu={setShowMenu} />} */}
+        {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
         <UserIcon memberView={true} />
       </MemberIcon>
-      <MemberName>{member}</MemberName>
+      <MemberName>{contact.customName ?? contact.id}</MemberName>
     </MemberData>
   );
 }

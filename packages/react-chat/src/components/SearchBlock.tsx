@@ -22,7 +22,7 @@ export const SearchBlock = ({
   const { contacts } = useMessengerContext();
 
   const searchList = useMemo(() => {
-    return contacts
+    return Object.values(contacts)
       .filter((member) => member.id.includes(query))
       .filter((member) => !dsicludeList.includes(member.id));
   }, [query, dsicludeList, contacts]);
@@ -35,7 +35,7 @@ export const SearchBlock = ({
       style={{ [onBotttom ? "bottom" : "top"]: "calc(100% + 24px)" }}
     >
       <ContactsList>
-        {contacts
+        {Object.values(contacts)
           .filter((member) => member.id.includes(query))
           .filter((member) => !dsicludeList.includes(member.id))
           .map((member) => (

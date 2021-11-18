@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 import { Modal } from "./Modal";
 
-export const PictureModalName = "PictureModal";
+export const PictureModalName = "PictureModal" as const;
 
-interface PictureModalProps {
+export interface PictureModalProps {
   image: string;
 }
 

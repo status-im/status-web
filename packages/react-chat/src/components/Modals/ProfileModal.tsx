@@ -1,8 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
 import { useFriends } from "../../contexts/friendsProvider";
+import { useIdentity } from "../../contexts/identityProvider";
+import { useModal } from "../../contexts/modalProvider";
+import { useManageContact } from "../../hooks/useManageContact";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ClearSvg } from "../Icons/ClearIcon";
@@ -16,46 +19,45 @@ import { textMediumStyles } from "../Text";
 import { Modal } from "./Modal";
 import { ButtonSection, Heading, Section } from "./ModalStyle";
 
-export const ProfileModalName = "profileModal";
+export const ProfileModalName = "profileModal" as const;
 
-interface ProfileModalProps {
-  user: string;
+export type ProfileModalProps = {
+  id: string;
   image?: string;
-  renaming: boolean;
-  customName?: string;
-  trueName?: string;
-  setRenaming: (val: boolean) => void;
-  setTrueName: (val: string) => void;
-  setCustomName: (val: string) => void;
-}
+  renamingState?: boolean;
+};
 
-export const ProfileModal = ({
-  user,
-  image,
-  renaming,
-  customName,
-  trueName,
-  setRenaming,
-  setTrueName,
-  setCustomName,
-}: ProfileModalProps) => {
-  const [isUntrustworthy, setIsUntrustworthy] = useState(false);
+export const ProfileModal = () => {
+  const { props } = useModal(ProfileModalName);
+  const { id, image, renamingState } = useMemo(
+    () => (props ? props : { id: "" }),
+    [props]
+  );
 
-  const { blockedUsers, setBlockedUsers } = useBlockedUsers();
-
-  const userInBlocked = useMemo(
-    () => blockedUsers.includes(user),
-    [blockedUsers, user]
+  const identity = useIdentity();
+  const isUser = useMemo(
+    () => id === bufToHex(identity.publicKey),
+    [id, identity]
   );
 
   const { friends, setFriends } = useFriends();
 
-  const userIsFriend = useMemo(() => friends.includes(user), [friends, user]);
+  const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
 
+  const [renaming, setRenaming] = useState(renamingState ?? false);
+  useEffect(() => {
+    setRenaming(renamingState ?? false);
+  }, [renamingState]);
+
+  const { contact, setBlocked, setCustomName, setIsUntrustworthy } =
+    useManageContact(id);
+  const [customNameInput, setCustomNameInput] = useState("");
+
+  if (!contact) return null;
   return (
     <Modal name={ProfileModalName} className="profile">
       <Section>
-        <Heading>{user.slice(0, 10)}’s Profile</Heading>
+        <Heading>{id.slice(0, 10)}’s Profile</Heading>
       </Section>
 
       <ProfileSection>
@@ -70,8 +72,8 @@ export const ProfileModal = ({
             <UserIcon />
           )}
           <UserNameWrapper>
-            <UserName>{customName ? customName : user.slice(0, 10)}</UserName>
-            {isUntrustworthy && <UntrustworthIcon />}
+            <UserName>{contact.customName ?? id.slice(0, 10)}</UserName>
+            {contact.isUntrustworthy && <UntrustworthIcon />}
             {!renaming && (
               <button onClick={() => setRenaming(true)}>
                 {" "}
@@ -79,21 +81,22 @@ export const ProfileModal = ({
               </button>
             )}
           </UserNameWrapper>
-          {trueName && <UserTrueName>{trueName}</UserTrueName>}
-          {trueName && <button onClick={() => setTrueName("")}></button>}
+          {contact.customName && (
+            <UserTrueName>{contact.trueName}</UserTrueName>
+          )}
         </NameSection>
         {renaming ? (
           <NameInputWrapper>
             <NameInput
               placeholder="Only you will see this nickname"
-              value={customName}
-              onChange={(e) => setCustomName(e.currentTarget.value)}
+              value={contact.customName}
+              onChange={(e) => setCustomNameInput(e.currentTarget.value)}
             />
-            {customName && (
+            {contact.customName && (
               <ClearBtn
                 onClick={() => {
-                  setCustomName("");
-                  setTrueName("");
+                  setCustomName(undefined);
+                  setCustomNameInput("");
                 }}
               >
                 <ClearSvg width={16} height={16} className="profile" />
@@ -103,9 +106,9 @@ export const ProfileModal = ({
         ) : (
           <>
             <UserAddressWrapper>
-              <UserAddress>Chatkey: {user.slice(0, 30)}</UserAddress>
+              <UserAddress>Chatkey: {id.slice(0, 30)}</UserAddress>
 
-              <CopyButton onClick={() => copy(user)}>
+              <CopyButton onClick={() => copy(id)}>
                 <CopySvg width={24} height={24} />
               </CopyButton>
             </UserAddressWrapper>
@@ -120,9 +123,9 @@ export const ProfileModal = ({
               <LeftIconSvg width={28} height={28} />
             </BackBtn>
             <Btn
-              disabled={!customName}
+              disabled={!customNameInput}
               onClick={() => {
-                setTrueName(user.slice(0, 10));
+                setCustomName(customNameInput);
                 setRenaming(false);
               }}
             >
@@ -131,38 +134,36 @@ export const ProfileModal = ({
           </>
         ) : (
           <>
-            {!userIsFriend && (
+            {!userIsFriend && !isUser && (
               <ProfileBtn
-                className={userInBlocked ? "" : "red"}
+                className={contact.blocked ? "" : "red"}
                 onClick={() => {
-                  userInBlocked
-                    ? setBlockedUsers((prev) => prev.filter((e) => e != user))
-                    : setBlockedUsers((prev) => [...prev, user]);
+                  setBlocked(!contact.blocked);
                 }}
               >
-                {userInBlocked ? "Unblock" : "Block"}
+                {contact.blocked ? "Unblock" : "Block"}
               </ProfileBtn>
             )}
             {userIsFriend && (
               <ProfileBtn
                 className="red"
                 onClick={() =>
-                  setFriends((prev) => prev.filter((e) => e != user))
+                  setFriends((prev) => prev.filter((e) => e != id))
                 }
               >
                 Remove Contact
               </ProfileBtn>
             )}
             <ProfileBtn
-              className={isUntrustworthy ? "" : "red"}
-              onClick={() => setIsUntrustworthy(!isUntrustworthy)}
+              className={contact.isUntrustworthy ? "" : "red"}
+              onClick={() => setIsUntrustworthy(!contact.isUntrustworthy)}
             >
-              {isUntrustworthy
+              {contact.isUntrustworthy
                 ? "Remove Untrustworthy Mark"
                 : "Mark as Untrustworthy"}
             </ProfileBtn>
             {!userIsFriend && (
-              <Btn onClick={() => setFriends((prev) => [...prev, user])}>
+              <Btn onClick={() => setFriends((prev) => [...prev, id])}>
                 Send Contact Request
               </Btn>
             )}

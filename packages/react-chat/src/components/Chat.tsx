@@ -10,6 +10,7 @@ import { Community } from "./Community";
 import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
+import { ProfileModal } from "./Modals/ProfileModal";
 
 export function Chat() {
   const [showMembers, setShowMembers] = useState(true);
@@ -55,6 +56,7 @@ export function Chat() {
       )}
       <CommunityModal subtitle="Public Community" />
       <EditModal />
+      <ProfileModal />
     </ChatWrapper>
   );
 }

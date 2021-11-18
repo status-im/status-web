@@ -6,7 +6,7 @@ import { StatusUpdate_StatusType } from "./proto/communities/v1/status_update";
 import { bufToHex } from "./utils";
 import { StatusUpdate } from "./wire/status_update";
 
-const STATUS_BROADCAST_INTERVAL = 300000;
+const STATUS_BROADCAST_INTERVAL = 30000;
 
 export class Contacts {
   waku: Waku;

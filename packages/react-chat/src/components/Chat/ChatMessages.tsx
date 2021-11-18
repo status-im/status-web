@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { useBlockedUsers } from "../../contexts/blockedUsersProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
@@ -14,7 +13,6 @@ import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal, LinkModalName } from "../Modals/LinkModal";
 import { PictureModal, PictureModalName } from "../Modals/PictureModal";
-import { ProfileModal } from "../Modals/ProfileModal";
 import { textMediumStyles, textSmallStyles } from "../Text";
 
 import { ChatMessageContent } from "./ChatMessageContent";
@@ -27,10 +25,6 @@ type ChatUiMessageProps = {
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
-  setUser: (user: string) => void;
-  customName?: string;
-  trueName?: string;
-  setRenaming: (val: boolean) => void;
 };
 
 function ChatUiMessage({
@@ -39,13 +33,13 @@ function ChatUiMessage({
   prevMessage,
   setImage,
   setLink,
-  setUser,
-  customName,
-  trueName,
-  setRenaming,
 }: ChatUiMessageProps) {
+  const { contacts } = useMessengerContext();
+  const contact = useMemo(
+    () => contacts[message.sender],
+    [message.sender, contacts]
+  );
   const [showMenu, setShowMenu] = useState(false);
-  const [isUntrustworthy, setIsUntrustworthy] = useState(false);
 
   return (
     <MessageOuterWrapper>
@@ -60,19 +54,10 @@ function ChatUiMessage({
         <Icon
           onClick={() => {
             setShowMenu((e) => !e);
-            setUser(message.sender);
           }}
         >
           {showMenu && (
-            <ContactMenu
-              message={message}
-              setShowMenu={setShowMenu}
-              isUntrustworthy={isUntrustworthy}
-              setIsUntrustworthy={setIsUntrustworthy}
-              customName={customName}
-              trueName={trueName}
-              setRenaming={setRenaming}
-            />
+            <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
           )}
           <UserIcon />
         </Icon>
@@ -82,14 +67,14 @@ function ChatUiMessage({
             <UserNameWrapper>
               <UserName>
                 {" "}
-                {customName ? customName : message.sender.slice(0, 10)}
+                {contact.customName ?? message.sender.slice(0, 10)}
               </UserName>
-              {customName && (
+              {contact.customName && (
                 <UserAddress>
                   {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
                 </UserAddress>
               )}
-              {isUntrustworthy && <UntrustworthIcon />}
+              {contact.isUntrustworthy && <UntrustworthIcon />}
             </UserNameWrapper>
             <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
           </MessageHeaderWrapper>
@@ -107,20 +92,20 @@ function ChatUiMessage({
 }
 
 export function ChatMessages() {
-  const { messages, activeChannel } = useMessengerContext();
+  const { messages, activeChannel, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref, activeChannel.id);
 
-  const { blockedUsers } = useBlockedUsers();
-
   const shownMessages = useMemo(
-    () => messages.filter((message) => !blockedUsers.includes(message.sender)),
-    [blockedUsers, messages, messages.length]
+    () =>
+      messages.filter(
+        (message) => !contacts?.[message.sender]?.blocked ?? true
+      ),
+    [contacts, messages, messages.length]
   );
 
   const [image, setImage] = useState("");
   const [link, setLink] = useState("");
-  const [user, setUser] = useState("");
 
   const { setModal: setPictureModal, isVisible: showPictureModal } =
     useModal(PictureModalName);
@@ -136,23 +121,10 @@ export function ChatMessages() {
   );
   useEffect(() => (!showLinkModal ? setLink("") : undefined), [showLinkModal]);
 
-  const [renaming, setRenaming] = useState(false);
-  const [customName, setCustomName] = useState("");
-  const [trueName, setTrueName] = useState("");
-
   return (
     <MessagesWrapper ref={ref}>
       <PictureModal image={image} />
       <LinkModal link={link} />
-      <ProfileModal
-        user={user}
-        renaming={renaming}
-        setRenaming={setRenaming}
-        customName={customName}
-        setCustomName={setCustomName}
-        trueName={trueName}
-        setTrueName={setTrueName}
-      />
       <EmptyChannel channel={activeChannel} />
       {loadingMessages && (
         <LoadingWrapper>
@@ -167,10 +139,6 @@ export function ChatMessages() {
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
           setImage={setImage}
-          setUser={setUser}
-          customName={customName}
-          trueName={trueName}
-          setRenaming={setRenaming}
         />
       ))}
     </MessagesWrapper>
