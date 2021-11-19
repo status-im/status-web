@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
+import { ChatState, useChatState } from "../../contexts/chatStateProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
@@ -10,16 +11,16 @@ import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
-  setCreateChat: (val: boolean) => void;
   editGroup?: boolean;
 }
 
-export function ChatCreation({ setCreateChat, editGroup }: ChatCreationProps) {
+export function ChatCreation({ editGroup }: ChatCreationProps) {
   const identity = useIdentity();
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
 
   const { contacts, setChannel } = useMessengerContext();
+  const setChatState = useChatState()[1];
 
   const addMember = useCallback(
     (member: string) => {
@@ -51,7 +52,7 @@ export function ChatCreation({ setCreateChat, editGroup }: ChatCreationProps) {
           type: "dm",
           description: "Contact",
         });
-    setCreateChat(false);
+    setChatState(ChatState.ChatBody);
   };
 
   return (

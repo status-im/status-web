@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { useNarrow } from "../../contexts/narrowProvider";
@@ -7,12 +7,51 @@ import { GroupIcon } from "../Icons/GroupIcon";
 import { MutedIcon } from "../Icons/MutedIcon";
 import { textMediumStyles } from "../Text";
 
+function RenderChannelName({
+  channel,
+  className,
+}: {
+  channel: ChannelData;
+  className?: string;
+}) {
+  switch (channel.type) {
+    case "group":
+      return (
+        <div className={className}>
+          <GroupIcon />
+          {channel.name}
+        </div>
+      );
+    case "channel":
+      return <div className={className}>{`# ${channel.name}`}</div>;
+    case "dm":
+      return <div className={className}>{channel.name}</div>;
+  }
+}
+
+function ChannelIcon({
+  channel,
+  activeView,
+}: {
+  channel: ChannelData;
+  activeView?: boolean;
+}) {
+  const narrow = useNarrow();
+  return (
+    <ChannelLogo
+      icon={channel.icon}
+      className={activeView ? "active" : narrow ? "narrow" : ""}
+    >
+      {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
+    </ChannelLogo>
+  );
+}
+
 interface ChannelProps {
   channel: ChannelData;
-  notification?: number;
+  notified?: boolean;
   mention?: number;
   isActive: boolean;
-  isMuted: boolean;
   activeView?: boolean;
   onClick?: () => void;
 }
@@ -20,75 +59,48 @@ interface ChannelProps {
 export function Channel({
   channel,
   isActive,
-  isMuted,
   activeView,
   onClick,
-  notification,
+  notified,
   mention,
 }: ChannelProps) {
   const narrow = useNarrow();
-  const className = useMemo(
-    () => (narrow && !activeView ? "narrow" : activeView ? "active" : ""),
-    [narrow]
-  );
+
   return (
     <ChannelWrapper
-      className={
-        (isActive && !activeView) || (isActive && narrow) ? "active" : ""
-      }
-      style={{ width: narrow && activeView ? "calc(100% - 162px)" : "100%" }}
+      className={`${isActive && "active"}`}
+      isNarrow={narrow && activeView}
       onClick={onClick}
     >
       <ChannelInfo>
-        <ChannelLogo
-          style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
-          }}
-          className={className}
-        >
-          {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
-        </ChannelLogo>
+        <ChannelIcon channel={channel} activeView={activeView} />
         <ChannelTextInfo>
           <ChannelName
-            className={
-              isActive || narrow
-                ? "active"
-                : notification && notification > 0
-                ? "notified"
-                : isMuted
-                ? "muted"
-                : ""
-            }
-          >
-            {channel.type && channel.type === "group" ? (
-              <GroupIcon />
-            ) : channel.type === "dm" ? (
-              ""
-            ) : (
-              "#"
-            )}{" "}
-            {channel.name}
-          </ChannelName>
+            channel={channel}
+            active={isActive || narrow}
+            muted={channel?.isMuted}
+            notified={notified}
+          />
           {activeView && (
-            <ChannelDescription> {channel.description}</ChannelDescription>
+            <ChannelDescription>{channel.description}</ChannelDescription>
           )}
         </ChannelTextInfo>
       </ChannelInfo>
-      {notification && notification > 0 && !activeView && mention && (
+      {!activeView && !!mention && mention > 0 && !channel?.isMuted && (
         <NotificationBagde>{mention}</NotificationBagde>
       )}
-      {isMuted && !notification && <MutedIcon />}
+      {channel?.isMuted && <MutedIcon />}
     </ChannelWrapper>
   );
 }
 
-const ChannelWrapper = styled.div`
+const ChannelWrapper = styled.div<{ isNarrow?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px;
   cursor: pointer;
-
+  width: ${({ isNarrow }) => (isNarrow ? "calc(100% - 162px)" : "100%")};
   &.active {
     background-color: ${({ theme }) => theme.activeChannelBackground};
     border-radius: 8px;
@@ -109,7 +121,7 @@ const ChannelTextInfo = styled.div`
   white-space: nowrap;
 `;
 
-export const ChannelLogo = styled.div`
+export const ChannelLogo = styled.div<{ icon?: string }>`
   width: 24px;
   height: 24px;
   display: flex;
@@ -124,45 +136,37 @@ export const ChannelLogo = styled.div`
   background-color: ${({ theme }) => theme.iconColor};
   background-size: cover;
   background-repeat: no-repeat;
+  backgroundimage: ${({ icon }) => icon && `url(${icon}`};
   color: ${({ theme }) => theme.iconTextColor};
 
   &.active {
     width: 36px;
     height: 36px;
     font-size: 20px;
-    line-height: 20px;
   }
 
   &.narrow {
     width: 40px;
     height: 40px;
     font-size: 20px;
-    line-height: 20px;
   }
 `;
 
-export const ChannelName = styled.div`
-  font-weight: 500;
-  opacity: 0.7;
+export const ChannelName = styled(RenderChannelName)<{
+  muted?: boolean;
+  notified?: boolean;
+  active?: boolean;
+}>`
+  font-weight: ${({ notified, muted, active }) =>
+    notified && !muted && !active ? "600" : "500"};
+  opacity: ${({ notified, muted, active }) =>
+    muted ? "0.4" : notified || active ? "1.0" : "0.7"};
   color: ${({ theme }) => theme.primary};
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 
   ${textMediumStyles}
-
-  &.active,
-  &.notified {
-    opacity: 1;
-  }
-
-  &.muted {
-    opacity: 0.4;
-  }
-
-  &.notified {
-    font-weight: 600;
-  }
 `;
 
 const ChannelDescription = styled.p`

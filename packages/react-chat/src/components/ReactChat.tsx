@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import styled from "styled-components";
 
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
-import { FriendsProvider } from "../contexts/friendsProvider";
 import { ModalProvider } from "../contexts/modalProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
 import { Metadata } from "../models/Metadata";
@@ -28,15 +27,13 @@ export function ReactChat({
     <ThemeProvider theme={theme}>
       <NarrowProvider myRef={ref}>
         <FetchMetadataProvider fetchMetadata={fetchMetadata}>
-          <FriendsProvider>
-            <ModalProvider>
-              <Wrapper ref={ref}>
-                <GlobalStyle />
-                <ChatLoader communityKey={communityKey} />
-                <div id="modal-root" />
-              </Wrapper>
-            </ModalProvider>
-          </FriendsProvider>
+          <ModalProvider>
+            <Wrapper ref={ref}>
+              <GlobalStyle />
+              <ChatLoader communityKey={communityKey} />
+              <div id="modal-root" />
+            </Wrapper>
+          </ModalProvider>
         </FetchMetadataProvider>
       </NarrowProvider>
     </ThemeProvider>

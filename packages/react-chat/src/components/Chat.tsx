@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { ChatState, useChatState } from "../contexts/chatStateProvider";
 import { useNarrow } from "../contexts/narrowProvider";
 
 import { Channels } from "./Channels/Channels";
@@ -23,9 +24,8 @@ function Modals() {
 }
 
 export function Chat() {
-  const [showMembers, setShowMembers] = useState(true);
-  const [createChat, setCreateChat] = useState(false);
-
+  const [state] = useChatState();
+  const [showMembers, setShowMembers] = useState(false);
   const narrow = useNarrow();
 
   return (
@@ -33,18 +33,17 @@ export function Chat() {
       {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity />
-          <Channels setCreateChat={setCreateChat} />
+          <Channels />
         </ChannelsWrapper>
       )}
-      {!createChat && (
+      {state === ChatState.ChatBody && (
         <ChatBody
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
-          setCreateChat={setCreateChat}
         />
       )}
-      {showMembers && !narrow && !createChat && <Members />}
-      {createChat && <ChatCreation setCreateChat={setCreateChat} />}
+      {showMembers && !narrow && state === ChatState.ChatBody && <Members />}
+      {state === ChatState.ChatCreation && <ChatCreation />}
       <Modals />
     </ChatWrapper>
   );

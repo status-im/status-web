@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useFriends } from "../../contexts/friendsProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useManageContact } from "../../hooks/useManageContact";
@@ -33,10 +32,8 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
   );
 
   const { setModal } = useModal(ProfileModalName);
-  const { friends, setFriends } = useFriends();
-
-  const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
-  const { contact, setBlocked, setIsUntrustworthy } = useManageContact(id);
+  const { contact, setBlocked, setIsUntrustworthy, setIsUserFriend } =
+    useManageContact(id);
 
   if (!contact) return null;
   return (
@@ -63,13 +60,13 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
-        {!userIsFriend && (
-          <MenuItem onClick={() => setFriends((prev) => [...prev, id])}>
+        {!contact.isFriend && (
+          <MenuItem onClick={() => setIsUserFriend(true)}>
             <AddContactSvg width={16} height={16} />
             <MenuText>Send Contact Request</MenuText>
           </MenuItem>
         )}
-        {userIsFriend && (
+        {contact.isFriend && (
           <MenuItem>
             <ChatSvg width={16} height={16} />
             <MenuText>Send Message</MenuText>
@@ -98,7 +95,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
           </MenuText>
         </MenuItem>
 
-        {!userIsFriend && !isUser && (
+        {!contact.isFriend && !isUser && (
           <MenuItem
             onClick={() => {
               setBlocked(!contact.blocked);
