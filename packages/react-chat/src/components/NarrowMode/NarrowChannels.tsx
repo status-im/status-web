@@ -7,20 +7,13 @@ import { NarrowTopbar } from "./NarrowTopbar";
 
 interface NarrowChannelsProps {
   setShowChannels: (val: boolean) => void;
-  setCreateChat: (val: boolean) => void;
 }
 
-export function NarrowChannels({
-  setShowChannels,
-  setCreateChat,
-}: NarrowChannelsProps) {
+export function NarrowChannels({ setShowChannels }: NarrowChannelsProps) {
   return (
     <ListWrapper>
       <NarrowTopbar list="Channels" />
-      <Channels
-        onCommunityClick={() => setShowChannels(false)}
-        setCreateChat={setCreateChat}
-      />
+      <Channels onCommunityClick={() => setShowChannels(false)} />
     </ListWrapper>
   );
 }

@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
+import { ChatState, useChatState } from "../../contexts/chatStateProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { CreateIcon } from "../Icons/CreateIcon";
 
 import { Channel } from "./Channel";
 
 interface ChannelsProps {
-  setCreateChat: (val: boolean) => void;
   onCommunityClick?: () => void;
 }
 
@@ -15,13 +15,10 @@ type GenerateChannelsProps = ChannelsProps & {
   type: string;
 };
 
-function GenerateChannels({
-  type,
-  onCommunityClick,
-  setCreateChat,
-}: GenerateChannelsProps) {
+function GenerateChannels({ type, onCommunityClick }: GenerateChannelsProps) {
   const { mentions, notifications, activeChannel, setActiveChannel, channels } =
     useMessengerContext();
+  const setChatState = useChatState()[1];
   return (
     <>
       {Object.values(channels)
@@ -31,23 +28,14 @@ function GenerateChannels({
             key={channel.id}
             channel={channel}
             isActive={channel.id === activeChannel.id}
-            isMuted={channel.isMuted || false}
-            notification={
-              notifications[channel.id] > 0 && !channel.isMuted
-                ? notifications[channel.id]
-                : undefined
-            }
-            mention={
-              mentions[channel.id] > 0 && !channel.isMuted
-                ? mentions[channel.id]
-                : undefined
-            }
+            notified={notifications?.[channel.id] > 0}
+            mention={mentions?.[channel.id]}
             onClick={() => {
               setActiveChannel(channel);
               if (onCommunityClick) {
                 onCommunityClick();
               }
-              setCreateChat(false);
+              setChatState(ChatState.ChatBody);
             }}
           />
         ))}
@@ -55,7 +43,7 @@ function GenerateChannels({
   );
 }
 
-export function Channels({ setCreateChat, onCommunityClick }: ChannelsProps) {
+export function Channels({ onCommunityClick }: ChannelsProps) {
   const { clearNotifications, clearMentions, notifications, activeChannel } =
     useMessengerContext();
   useEffect(() => {
@@ -66,19 +54,15 @@ export function Channels({ setCreateChat, onCommunityClick }: ChannelsProps) {
       }
     }
   }, [notifications, activeChannel]);
-
+  const setChatState = useChatState()[1];
   return (
     <ChannelList>
-      <GenerateChannels
-        type={"channel"}
-        onCommunityClick={onCommunityClick}
-        setCreateChat={setCreateChat}
-      />
+      <GenerateChannels type={"channel"} onCommunityClick={onCommunityClick} />
 
       <Chats>
         <ChatsBar>
           <Heading>Chat</Heading>
-          <EditBtn onClick={() => setCreateChat(true)}>
+          <EditBtn onClick={() => setChatState(ChatState.ChatCreation)}>
             <CreateIcon />
           </EditBtn>
         </ChatsBar>
@@ -86,13 +70,8 @@ export function Channels({ setCreateChat, onCommunityClick }: ChannelsProps) {
           <GenerateChannels
             type={"group"}
             onCommunityClick={onCommunityClick}
-            setCreateChat={setCreateChat}
           />
-          <GenerateChannels
-            type={"dm"}
-            onCommunityClick={onCommunityClick}
-            setCreateChat={setCreateChat}
-          />
+          <GenerateChannels type={"dm"} onCommunityClick={onCommunityClick} />
         </ChatsList>
       </Chats>
     </ChannelList>

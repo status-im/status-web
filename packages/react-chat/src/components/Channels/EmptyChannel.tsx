@@ -16,17 +16,11 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
   return (
     <Wrapper>
       <ChannelInfoEmpty>
-        <ChannelLogoEmpty
-          style={{
-            backgroundImage: channel.icon ? `url(${channel.icon}` : "",
-          }}
-        >
+        <ChannelLogoEmpty icon={channel.icon}>
           {" "}
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogoEmpty>
-        <ChannelNameEmpty className={"active"}>
-          {channel.name.slice(0, 10)}
-        </ChannelNameEmpty>
+        <ChannelNameEmpty active={true} channel={channel} />
       </ChannelInfoEmpty>
 
       {channel.type === "dm" ? (

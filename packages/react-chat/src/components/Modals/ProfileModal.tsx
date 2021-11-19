@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useFriends } from "../../contexts/friendsProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useManageContact } from "../../hooks/useManageContact";
@@ -40,17 +39,18 @@ export const ProfileModal = () => {
     [id, identity]
   );
 
-  const { friends, setFriends } = useFriends();
-
-  const userIsFriend = useMemo(() => friends.includes(id), [friends, id]);
-
   const [renaming, setRenaming] = useState(renamingState ?? false);
   useEffect(() => {
     setRenaming(renamingState ?? false);
   }, [renamingState]);
 
-  const { contact, setBlocked, setCustomName, setIsUntrustworthy } =
-    useManageContact(id);
+  const {
+    contact,
+    setBlocked,
+    setCustomName,
+    setIsUntrustworthy,
+    setIsUserFriend,
+  } = useManageContact(id);
   const [customNameInput, setCustomNameInput] = useState("");
 
   if (!contact) return null;
@@ -134,7 +134,7 @@ export const ProfileModal = () => {
           </>
         ) : (
           <>
-            {!userIsFriend && !isUser && (
+            {!contact.isFriend && !isUser && (
               <ProfileBtn
                 className={contact.blocked ? "" : "red"}
                 onClick={() => {
@@ -144,12 +144,10 @@ export const ProfileModal = () => {
                 {contact.blocked ? "Unblock" : "Block"}
               </ProfileBtn>
             )}
-            {userIsFriend && (
+            {contact.isFriend && (
               <ProfileBtn
                 className="red"
-                onClick={() =>
-                  setFriends((prev) => prev.filter((e) => e != id))
-                }
+                onClick={() => setIsUserFriend(false)}
               >
                 Remove Contact
               </ProfileBtn>
@@ -162,8 +160,8 @@ export const ProfileModal = () => {
                 ? "Remove Untrustworthy Mark"
                 : "Mark as Untrustworthy"}
             </ProfileBtn>
-            {!userIsFriend && (
-              <Btn onClick={() => setFriends((prev) => [...prev, id])}>
+            {!contact.isFriend && (
+              <Btn onClick={() => setIsUserFriend(true)}>
                 Send Contact Request
               </Btn>
             )}

@@ -5,6 +5,7 @@ export type Contact = {
   customName?: string;
   isUntrustworthy: boolean;
   blocked: boolean;
+  isFriend?: boolean;
 };
 
 export type Contacts = {

@@ -55,15 +55,7 @@ export const EditModal = () => {
         </NameSection>
         <LogoSection>
           <Label>Group image</Label>
-          <GroupLogo
-            style={{
-              backgroundImage: image
-                ? `url(${image}`
-                : activeChannel.icon
-                ? `url(${activeChannel.icon}`
-                : "",
-            }}
-          >
+          <GroupLogo icon={image || activeChannel.icon}>
             {!activeChannel.icon &&
               !image &&
               activeChannel.name.slice(0, 1).toUpperCase()}

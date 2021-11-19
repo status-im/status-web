@@ -27,14 +27,9 @@ enum ChatBodyState {
 interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
-  setCreateChat: (val: boolean) => void;
 }
 
-export function ChatBody({
-  onClick,
-  showMembers,
-  setCreateChat,
-}: ChatBodyProps) {
+export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
@@ -61,7 +56,7 @@ export function ChatBody({
   return (
     <ChatBodyWrapper className={className}>
       {editGroup && communityData ? (
-        <ChatCreation setCreateChat={setCreateChat} editGroup={editGroup} />
+        <ChatCreation editGroup={editGroup} />
       ) : (
         <ChatTopbar
           className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
@@ -78,10 +73,9 @@ export function ChatBody({
                 <Channel
                   channel={activeChannel}
                   isActive={
-                    narrow ? showState === ChatBodyState.Channels : true
+                    narrow ? showState === ChatBodyState.Channels : false
                   }
                   activeView={true}
-                  isMuted={false}
                   onClick={() => switchShowState(ChatBodyState.Channels)}
                 />
               </>
@@ -132,7 +126,6 @@ export function ChatBody({
           {showState === ChatBodyState.Channels && (
             <NarrowChannels
               setShowChannels={() => switchShowState(ChatBodyState.Channels)}
-              setCreateChat={setCreateChat}
             />
           )}
           {showState === ChatBodyState.Members && (

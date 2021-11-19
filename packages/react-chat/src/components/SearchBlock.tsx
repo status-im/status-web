@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../contexts/messengerProvider";
 
-import { Channel } from "./Channels/Channel";
 import { ContactsList } from "./Chat/ChatCreation";
+import { Member } from "./Members/Member";
 
 interface SearchBlockProps {
   query: string;
@@ -39,15 +39,9 @@ export const SearchBlock = ({
           .filter((member) => member.id.includes(query))
           .filter((member) => !dsicludeList.includes(member.id))
           .map((member) => (
-            <Channel
+            <Member
               key={member.id}
-              channel={{
-                id: member.id,
-                name: member.id.slice(0, 10),
-                type: "dm",
-              }}
-              isActive={false}
-              isMuted={false}
+              contact={member}
               onClick={() => onClick(member.id)}
             />
           ))}

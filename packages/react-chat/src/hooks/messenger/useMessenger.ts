@@ -49,6 +49,7 @@ export function useMessenger(
     id: "",
     name: "",
     description: "",
+    type: "channel",
   });
 
   const chatId = useMemo(() => activeChannel.id, [activeChannel]);

@@ -38,5 +38,23 @@ export function useManageContact(id: string) {
     },
     [id]
   );
-  return { contact, setCustomName, setBlocked, setIsUntrustworthy };
+
+  const setIsUserFriend = useCallback(
+    (isFriend: boolean) => {
+      setContacts((prev) => {
+        const prevUser = prev[id];
+        if (!prevUser) return prev;
+        return { ...prev, [id]: { ...prevUser, isFriend } };
+      });
+    },
+    [id]
+  );
+
+  return {
+    contact,
+    setCustomName,
+    setBlocked,
+    setIsUntrustworthy,
+    setIsUserFriend,
+  };
 }
