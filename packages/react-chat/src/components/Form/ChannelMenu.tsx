@@ -63,12 +63,12 @@ export const ChannelMenu = ({
       )}
       <MenuItem
         onClick={() => {
-          channel.isMuted = true;
+          channel.isMuted = !channel.isMuted;
           setShowChannelMenu(false);
         }}
       >
         <MuteSvg width={16} height={16} />
-        <MenuText>Mute Chat</MenuText>
+        <MenuText>{channel.isMuted ? "Unmute Chat" : "Mute Chat"}</MenuText>
       </MenuItem>
       <MenuItem onClick={() => clearNotifications(channel.id)}>
         <CheckSvg width={16} height={16} />
