@@ -45,6 +45,7 @@ export function ChatCreation({ editGroup }: ChatCreationProps) {
           id: group.join(""),
           name: group.join(", "),
           type: "group",
+          description: `${group.length} members`,
         })
       : setChannel({
           id: group[0],
