@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-export const GroupIcon = () => {
+interface GroupIconProps {
+  activeView?: boolean;
+}
+
+export const GroupIcon = ({ activeView }: GroupIconProps) => {
   return (
     <Icon
       width="14"
@@ -9,6 +13,7 @@ export const GroupIcon = () => {
       viewBox="0 0 14 10"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={`${activeView && "active"}`}
     >
       <path d="M7 4.5C8.24265 4.5 9.25 3.49264 9.25 2.25C9.25 1.00736 8.24265 0 7 0C5.75736 0 4.75 1.00736 4.75 2.25C4.75 3.49264 5.75736 4.5 7 4.5Z" />
       <path d="M3.12343 9.01012C3.56395 7.27976 5.13252 6 7 6C8.86749 6 10.4361 7.27976 10.8766 9.01012C11.0128 9.54533 10.5523 10 10 10H4C3.44772 10 2.98718 9.54533 3.12343 9.01012Z" />
@@ -19,7 +24,9 @@ export const GroupIcon = () => {
 };
 
 const Icon = styled.svg`
-  & > path {
-    fill: ${({ theme }) => theme.secondary};
+  fill: ${({ theme }) => theme.secondary};
+
+  &.active {
+    fill: ${({ theme }) => theme.primary};
   }
 `;

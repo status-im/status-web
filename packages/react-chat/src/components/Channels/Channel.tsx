@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { GroupIcon } from "../Icons/GroupIcon";
@@ -14,11 +15,12 @@ function RenderChannelName({
   channel: ChannelData;
   className?: string;
 }) {
+  const { activeChannel } = useMessengerContext();
   switch (channel.type) {
     case "group":
       return (
         <div className={className}>
-          <GroupIcon />
+          <GroupIcon activeView={channel.id === activeChannel.id} />
           {` ${channel.name}`}
         </div>
       );
