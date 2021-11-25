@@ -124,11 +124,11 @@ const MessageImage = styled.img`
   height: 100%;
   object-fit: cover;
   border-radius: 16px;
-  cursor; pointer;
+  cursor: pointer;
 `;
 
 const PreviewSiteNameWrapper = styled.div`
-  font-family: Inter;
+  font-family: "Inter";
   font-style: normal;
   font-weight: normal;
   font-size: 12px;

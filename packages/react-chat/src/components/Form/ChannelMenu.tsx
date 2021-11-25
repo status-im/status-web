@@ -31,8 +31,9 @@ export const ChannelMenu = ({
   const narrow = useNarrow();
   const { clearNotifications, removeChannel } = useMessengerContext();
   const { setModal } = useModal(EditModalName);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu closeMenu={setShowChannelMenu}>
       {narrow && (
         <MenuItem
           onClick={() => {

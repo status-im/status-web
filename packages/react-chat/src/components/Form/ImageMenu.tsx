@@ -14,10 +14,10 @@ interface ImageMenuProps {
 }
 
 export const ImageMenu = ({ imageId }: ImageMenuProps) => {
-  const { showMenu } = useContextMenu(imageId);
+  const { showMenu, setShowMenu } = useContextMenu(imageId);
 
   return showMenu ? (
-    <ImageDropdown>
+    <ImageDropdown closeMenu={setShowMenu}>
       <MenuItem onClick={() => copyImg(imageId)}>
         <CopySvg height={16} width={16} /> <MenuText>Copy image</MenuText>
       </MenuItem>
