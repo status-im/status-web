@@ -68,7 +68,10 @@ export const ChannelMenu = ({
         }}
       >
         <MuteSvg width={16} height={16} />
-        <MenuText>{channel.isMuted ? "Unmute Chat" : "Mute Chat"}</MenuText>
+        <MenuText>
+          {(channel.isMuted ? "Unmute" : "Mute") +
+            (channel.type === "group" ? " Group" : " Chat")}
+        </MenuText>
       </MenuItem>
       <MenuItem onClick={() => clearNotifications(channel.id)}>
         <CheckSvg width={16} height={16} />
