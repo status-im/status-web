@@ -70,6 +70,7 @@ const Name = styled.p`
   font-weight: 500;
   text-align: left;
   color: ${({ theme }) => theme.primary};
+  white-space: nowrap;
 
   ${textMediumStyles}
 `;
