@@ -19,6 +19,9 @@ export type Theme = {
   skeletonLight: string;
   skeletonDark: string;
   redColor: string;
+  mentionColor: string;
+  mentionBg: string;
+  mentionBgHover: string;
 };
 
 export const lightTheme: Theme = {
@@ -42,6 +45,9 @@ export const lightTheme: Theme = {
   skeletonLight: "#F6F8FA",
   skeletonDark: "#E9EDF1",
   redColor: "#FF2D55",
+  mentionColor: "#0DA4C9",
+  mentionBg: "#E5F8FD",
+  mentionBgHover: "#BDE7F2",
 };
 
 export const darkTheme: Theme = {
@@ -65,6 +71,9 @@ export const darkTheme: Theme = {
   skeletonLight: "#2E2F31",
   skeletonDark: "#141414",
   redColor: "#FF5C7B",
+  mentionColor: "#0DA4C9",
+  mentionBg: "#E5F8FD",
+  mentionBgHover: "#BDE7F2",
 };
 
 export default { lightTheme, darkTheme };

@@ -8,6 +8,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { ContactMenu } from "../Form/ContactMenu";
 import { ImageMenu } from "../Form/ImageMenu";
+import { textMediumStyles, textSmallStyles } from "../Text";
 
 interface MentionProps {
   id: string;
@@ -19,10 +20,10 @@ function Mention({ id }: MentionProps) {
   const [showMenu, setShowMenu] = useState(false);
   if (!contact) return <>{id}</>;
   return (
-    <MentionSpan onClick={() => setShowMenu(!showMenu)}>
+    <MentionBLock onClick={() => setShowMenu(!showMenu)}>
       {`@${contact.customName ?? contact.id}`}
       {showMenu && <ContactMenu id={id.slice(1)} setShowMenu={setShowMenu} />}
-    </MentionSpan>
+    </MentionBLock>
   );
 }
 
@@ -147,10 +148,10 @@ const PreviewTitleWrapper = styled.div`
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
   width: 290px;
-  line-height: 18px;
   margin-left: 12px;
+
+  ${textSmallStyles}
 `;
 
 const PreviewImage = styled.img`
@@ -177,10 +178,21 @@ const ContentWrapper = styled.div`
   flex-direction: column;
 `;
 
-const MentionSpan = styled.span`
-  color: blue;
+const MentionBLock = styled.div`
+  display: inline-block;
+  color: ${({ theme }) => theme.mentionColor};
+  background: ${({ theme }) => theme.mentionBg};
+  border-radius: 4px;
   font-weight: 500;
   position: relative;
+  padding: 0 2px;
+  cursor: pointer;
+
+  &:hover {
+    background: ${({ theme }) => theme.mentionBgHover};
+  }
+
+  ${textMediumStyles}
 `;
 
 const Link = styled.a`
