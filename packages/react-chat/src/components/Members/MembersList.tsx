@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { utils } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
@@ -16,11 +16,21 @@ interface MembersListProps {
 export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
-  const userContacts = Object.values(contacts).filter(
-    (e) => e.id != bufToHex(identity.publicKey)
+  const userContacts = useMemo(
+    () =>
+      Object.values(contacts).filter(
+        (e) => e.id != bufToHex(identity.publicKey)
+      ),
+    [contacts, identity]
   );
-  const onlineContacts = userContacts.filter((e) => e.online);
-  const offlineContacts = userContacts.filter((e) => !e.online);
+  const onlineContacts = useMemo(
+    () => userContacts.filter((e) => e.online),
+    [userContacts]
+  );
+  const offlineContacts = useMemo(
+    () => userContacts.filter((e) => !e.online),
+    [userContacts]
+  );
 
   return (
     <MembersListWrap>
