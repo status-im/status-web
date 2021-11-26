@@ -15,6 +15,7 @@ import { createCommunity } from "../../utils/createCommunity";
 import { createMessenger } from "../../utils/createMessenger";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 
+import { useGroupChats } from "./useGroupChats";
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
 
@@ -39,6 +40,7 @@ export type MessengerType = {
   removeChannel: (channelId: string) => void;
   activeChannel: ChannelData;
   setActiveChannel: (channel: ChannelData) => void;
+  createGroupChat: (members: string[]) => void;
 };
 
 export function useMessenger(
@@ -98,6 +100,7 @@ export function useMessenger(
   }, [internalContacts]);
 
   const {
+    addChatMessage,
     addMessage,
     clearNotifications,
     notifications,
@@ -132,25 +135,6 @@ export function useMessenger(
     }
   }, [messenger, community]);
 
-  const sendMessage = useCallback(
-    async (messageText?: string, image?: Uint8Array) => {
-      if (messageText) {
-        await messenger?.sendMessage(chatId, {
-          text: messageText,
-          contentType: 0,
-        });
-      }
-      if (image) {
-        await messenger?.sendMessage(chatId, {
-          image,
-          imageType: 1,
-          contentType: 2,
-        });
-      }
-    },
-    [chatId, messenger]
-  );
-
   const [channels, setChannels] = useState<ChannelsData>({});
 
   const setChannel = useCallback((channel: ChannelData) => {
@@ -159,21 +143,6 @@ export function useMessenger(
     });
     setActiveChannel(channel);
   }, []);
-
-  const removeChannel = useCallback(
-    (channelId: string) => {
-      setChannels((prev) => {
-        delete prev[channelId];
-        return prev;
-      });
-      const newActiveChannel: ChannelData = Object.values(channels)?.[0] ?? {
-        id: "",
-        name: "",
-      };
-      setActiveChannel(newActiveChannel);
-    },
-    [channels]
-  );
 
   useEffect(() => {
     if (community?.chats) {
@@ -223,6 +192,38 @@ export function useMessenger(
     }
   }, [community]);
 
+  const { groupChat, removeChannel, createGroupChat } = useGroupChats(
+    messenger,
+    identity,
+    setChannels,
+    setActiveChannel,
+    addChatMessage,
+    channels
+  );
+
+  const sendMessage = useCallback(
+    async (messageText?: string, image?: Uint8Array) => {
+      if (activeChannel.type === "group") {
+        groupChat?.sendMessage(activeChannel.id, messageText ?? "");
+      } else {
+        if (messageText) {
+          await messenger?.sendMessage(activeChannel.id, {
+            text: messageText,
+            contentType: 0,
+          });
+        }
+        if (image) {
+          await messenger?.sendMessage(activeChannel.id, {
+            image,
+            imageType: 1,
+            contentType: 2,
+          });
+        }
+      }
+    },
+    [messenger, groupChat, activeChannel]
+  );
+
   return {
     messenger,
     messages,
@@ -241,5 +242,6 @@ export function useMessenger(
     setActiveChannel,
     mentions,
     clearMentions,
+    createGroupChat,
   };
 }
