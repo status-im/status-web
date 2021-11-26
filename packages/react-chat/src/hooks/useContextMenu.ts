@@ -28,5 +28,5 @@ export const useContextMenu = (elementId: string) => {
     };
   });
 
-  return { showMenu };
+  return { showMenu, setShowMenu };
 };

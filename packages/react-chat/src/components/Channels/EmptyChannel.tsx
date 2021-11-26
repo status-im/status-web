@@ -1,6 +1,8 @@
 import React from "react";
+import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
+import { useIdentity } from "../../contexts/identityProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { textMediumStyles } from "../Text";
 
@@ -12,6 +14,7 @@ type EmptyChannelProps = {
 
 export function EmptyChannel({ channel }: EmptyChannelProps) {
   const groupName = channel.name.split(", ");
+  const identity = useIdentity();
 
   return (
     <Wrapper>
@@ -31,7 +34,7 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         </EmptyText>
       ) : channel.type === "group" ? (
         <EmptyTextGroup>
-          You created a group with{" "}
+          <span>{utils.bufToHex(identity.publicKey)}</span> created a group with{" "}
           <span>{groupName.slice(groupName.length - 1)}</span> and{" "}
           <span>{groupName.at(-1)}</span>
         </EmptyTextGroup>
@@ -88,5 +91,7 @@ const EmptyText = styled.p`
 `;
 
 const EmptyTextGroup = styled(EmptyText)`
-  word-break: break-all;
+  & > span {
+    word-break: break-all;
+  }
 `;

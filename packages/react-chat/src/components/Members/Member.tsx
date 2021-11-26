@@ -30,7 +30,7 @@ export function Member({
       id: contact.id,
       name: contact.customName ?? contact.trueName,
       type: "dm",
-      description: "DM",
+      description: "Contact",
       members: [contact],
     });
   };

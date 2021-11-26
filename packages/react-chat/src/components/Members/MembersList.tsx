@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { utils } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
@@ -16,6 +16,21 @@ interface MembersListProps {
 export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
+  const userContacts = useMemo(
+    () =>
+      Object.values(contacts).filter(
+        (e) => e.id != bufToHex(identity.publicKey)
+      ),
+    [contacts, identity]
+  );
+  const onlineContacts = useMemo(
+    () => userContacts.filter((e) => e.online),
+    [userContacts]
+  );
+  const offlineContacts = useMemo(
+    () => userContacts.filter((e) => !e.online),
+    [userContacts]
+  );
 
   return (
     <MembersListWrap>
@@ -28,12 +43,10 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
           <MemberName>{utils.bufToHex(identity.publicKey)}</MemberName>
         </MemberData>
       </MemberCategory>
-      <MemberCategory>
-        <MemberCategoryName>Online</MemberCategoryName>
-        {Object.values(contacts)
-          .filter((e) => e.id != bufToHex(identity.publicKey))
-          .filter((e) => e.online)
-          .map((contact) => (
+      {onlineContacts.length > 0 && (
+        <MemberCategory>
+          <MemberCategoryName>Online</MemberCategoryName>
+          {onlineContacts.map((contact) => (
             <Member
               key={contact.id}
               contact={contact}
@@ -41,13 +54,12 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
               switchShowMembers={switchShowMembers}
             />
           ))}
-      </MemberCategory>
-      <MemberCategory>
-        <MemberCategoryName>Offline</MemberCategoryName>
-        {Object.values(contacts)
-          .filter((e) => e.id != bufToHex(identity.publicKey))
-          .filter((e) => !e.online)
-          .map((contact) => (
+        </MemberCategory>
+      )}
+      {offlineContacts.length > 0 && (
+        <MemberCategory>
+          <MemberCategoryName>Offline</MemberCategoryName>
+          {offlineContacts.map((contact) => (
             <Member
               key={contact.id}
               contact={contact}
@@ -55,7 +67,8 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
               switchShowMembers={switchShowMembers}
             />
           ))}
-      </MemberCategory>
+        </MemberCategory>
+      )}
     </MembersListWrap>
   );
 }

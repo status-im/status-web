@@ -37,7 +37,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
 
   if (!contact) return null;
   return (
-    <ContactDropdown>
+    <ContactDropdown closeMenu={setShowMenu}>
       <ContactInfo>
         <UserIcon />
         <UserNameWrapper>

@@ -31,8 +31,9 @@ export const ChannelMenu = ({
   const narrow = useNarrow();
   const { clearNotifications, removeChannel } = useMessengerContext();
   const { setModal } = useModal(EditModalName);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu closeMenu={setShowChannelMenu}>
       {narrow && (
         <MenuItem
           onClick={() => {
@@ -63,12 +64,15 @@ export const ChannelMenu = ({
       )}
       <MenuItem
         onClick={() => {
-          channel.isMuted = true;
+          channel.isMuted = !channel.isMuted;
           setShowChannelMenu(false);
         }}
       >
         <MuteSvg width={16} height={16} />
-        <MenuText>Mute Chat</MenuText>
+        <MenuText>
+          {(channel.isMuted ? "Unmute" : "Mute") +
+            (channel.type === "group" ? " Group" : " Chat")}
+        </MenuText>
       </MenuItem>
       <MenuItem onClick={() => clearNotifications(channel.id)}>
         <CheckSvg width={16} height={16} />

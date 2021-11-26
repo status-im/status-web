@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { GroupIcon } from "../Icons/GroupIcon";
@@ -14,12 +15,13 @@ function RenderChannelName({
   channel: ChannelData;
   className?: string;
 }) {
+  const { activeChannel } = useMessengerContext();
   switch (channel.type) {
     case "group":
       return (
         <div className={className}>
-          <GroupIcon />
-          {channel.name}
+          <GroupIcon activeView={channel.id === activeChannel.id} />
+          {` ${channel.name}`}
         </div>
       );
     case "channel":
@@ -77,7 +79,7 @@ export function Channel({
         <ChannelTextInfo>
           <ChannelName
             channel={channel}
-            active={isActive || narrow}
+            active={isActive || activeView || narrow}
             muted={channel?.isMuted}
             notified={notified}
           />
@@ -89,7 +91,7 @@ export function Channel({
       {!activeView && !!mention && mention > 0 && !channel?.isMuted && (
         <NotificationBagde>{mention}</NotificationBagde>
       )}
-      {channel?.isMuted && <MutedIcon />}
+      {channel?.isMuted && !activeView && <MutedIcon />}
     </ChannelWrapper>
   );
 }
@@ -101,6 +103,7 @@ const ChannelWrapper = styled.div<{ isNarrow?: boolean }>`
   padding: 8px;
   cursor: pointer;
   width: ${({ isNarrow }) => (isNarrow ? "calc(100% - 162px)" : "100%")};
+
   &.active {
     background-color: ${({ theme }) => theme.activeChannelBackground};
     border-radius: 8px;
@@ -136,7 +139,7 @@ export const ChannelLogo = styled.div<{ icon?: string }>`
   background-color: ${({ theme }) => theme.iconColor};
   background-size: cover;
   background-repeat: no-repeat;
-  backgroundimage: ${({ icon }) => icon && `url(${icon}`};
+  background-image: ${({ icon }) => icon && `url(${icon}`};
   color: ${({ theme }) => theme.iconTextColor};
 
   &.active {
