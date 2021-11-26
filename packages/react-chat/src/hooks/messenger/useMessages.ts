@@ -24,9 +24,8 @@ export function useMessages(
 
   const mentions = useNotifications();
 
-  const addMessage = useCallback(
-    (msg: ApplicationMetadataMessage, id: string, date: Date) => {
-      const newMessage = ChatMessage.fromMetadataMessage(msg, date);
+  const addChatMessage = useCallback(
+    (newMessage: ChatMessage | undefined, id: string) => {
       if (newMessage) {
         contacts?.addContact(newMessage.sender);
         setMessages((prev) => {
@@ -52,6 +51,14 @@ export function useMessages(
     [contacts, identity]
   );
 
+  const addMessage = useCallback(
+    (msg: ApplicationMetadataMessage, id: string, date: Date) => {
+      const newMessage = ChatMessage.fromMetadataMessage(msg, date);
+      addChatMessage(newMessage, id);
+    },
+    [contacts, identity]
+  );
+
   const activeMessages = useMemo(
     () => messages?.[chatId] ?? [],
     [messages, chatId]
@@ -64,5 +71,6 @@ export function useMessages(
     clearNotifications,
     mentions: mentions.notifications,
     clearMentions: mentions.clearNotifications,
+    addChatMessage,
   };
 }

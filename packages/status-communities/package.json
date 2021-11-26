@@ -6,7 +6,7 @@
   "version": "0.1.0",
   "repository": "https://github.com/status-im/dappconnect-chat-sdk/",
   "license": "MIT OR Apache-2.0",
-  "packageManager": "yarn@3.0.1",
+  "packageManager": "yarn@3.1.0",
   "scripts": {
     "build": "run-s 'build:*'",
     "build:esm": "tsc --module es2020 --target es2017 --outDir dist/esm",
@@ -23,10 +23,13 @@
     "proto:build": "buf generate"
   },
   "devDependencies": {
+    "@types/bn.js": "^5.1.0",
     "@types/chai": "^4.2.22",
+    "@types/elliptic": "^6.4.14",
     "@types/mocha": "^9.0.0",
     "@types/pbkdf2": "^3.1.0",
     "@types/secp256k1": "^4.0.3",
+    "@types/uuid": "^8.3.3",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "chai": "^4.3.4",
@@ -44,12 +47,15 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "bn.js": "^5.2.0",
     "buffer": "^6.0.3",
     "ecies-geth": "^1.5.3",
+    "elliptic": "^6.5.4",
     "js-sha3": "^0.8.0",
     "js-waku": "^0.13.1",
     "pbkdf2": "^3.1.2",
     "protobufjs": "^6.11.2",
-    "secp256k1": "^4.0.2"
+    "secp256k1": "^4.0.2",
+    "uuid": "^8.3.2"
   }
 }

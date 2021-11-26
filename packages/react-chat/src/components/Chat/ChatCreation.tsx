@@ -18,8 +18,7 @@ export function ChatCreation({ editGroup }: ChatCreationProps) {
   const identity = useIdentity();
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>([]);
-
-  const { contacts, setChannel } = useMessengerContext();
+  const { contacts, createGroupChat } = useMessengerContext();
   const setChatState = useChatState()[1];
 
   const addMember = useCallback(
@@ -40,19 +39,9 @@ export function ChatCreation({ editGroup }: ChatCreationProps) {
   };
 
   const createChat = (group: string[]) => {
-    group.length > 1
-      ? setChannel({
-          id: group.join(""),
-          name: group.join(", "),
-          type: "group",
-          description: `${group.length + 1} members`,
-        })
-      : setChannel({
-          id: group[0],
-          name: group[0],
-          type: "dm",
-          description: "Contact",
-        });
+    const newGroup = group.slice();
+    newGroup.push(bufToHex(identity.publicKey));
+    group.length > 1 ? createGroupChat(newGroup) : createGroupChat(newGroup);
     setChatState(ChatState.ChatBody);
   };
 
