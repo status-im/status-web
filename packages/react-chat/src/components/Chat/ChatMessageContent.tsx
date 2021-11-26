@@ -1,8 +1,10 @@
 import { decode } from "html-entities";
 import React, { useEffect, useMemo, useState } from "react";
+import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
@@ -12,13 +14,18 @@ import { textMediumStyles, textSmallStyles } from "../Text";
 
 interface MentionProps {
   id: string;
+  setMentioned: (val: boolean) => void;
 }
 
-function Mention({ id }: MentionProps) {
+function Mention({ id, setMentioned }: MentionProps) {
   const { contacts } = useMessengerContext();
   const contact = useMemo(() => contacts[id.slice(1)], [id, contacts]);
   const [showMenu, setShowMenu] = useState(false);
+  const identity = useIdentity();
+
   if (!contact) return <>{id}</>;
+  if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
+
   return (
     <MentionBLock onClick={() => setShowMenu(!showMenu)}>
       {`@${contact.customName ?? contact.id}`}
@@ -31,12 +38,14 @@ type ChatMessageContentProps = {
   message: ChatMessage;
   setImage: (image: string) => void;
   setLinkOpen: (link: string) => void;
+  setMentioned: (val: boolean) => void;
 };
 
 export function ChatMessageContent({
   message,
   setImage,
   setLinkOpen,
+  setMentioned,
 }: ChatMessageContentProps) {
   const fetchMetadata = useFetchMetadata();
   const { content, image } = useMemo(() => message, [message]);
@@ -60,7 +69,10 @@ export function ChatMessageContent({
         ];
       }
       if (element.startsWith("@")) {
-        return [<Mention key={idx} id={element} />, " "];
+        return [
+          <Mention key={idx} id={element} setMentioned={setMentioned} />,
+          " ",
+        ];
       }
       return [element, " "];
     });

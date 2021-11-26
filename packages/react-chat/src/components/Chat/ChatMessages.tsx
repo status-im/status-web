@@ -40,6 +40,7 @@ function ChatUiMessage({
     [message.sender, contacts]
   );
   const [showMenu, setShowMenu] = useState(false);
+  const [mentioned, setMentioned] = useState(false);
 
   return (
     <MessageOuterWrapper>
@@ -50,7 +51,7 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-      <MessageWrapper>
+      <MessageWrapper className={`${mentioned && "mention"}`}>
         <Icon
           onClick={() => {
             setShowMenu((e) => !e);
@@ -83,6 +84,7 @@ function ChatUiMessage({
               message={message}
               setImage={setImage}
               setLinkOpen={setLink}
+              setMentioned={setMentioned}
             />
           </MessageText>
         </ContentWrapper>
@@ -150,7 +152,7 @@ const MessagesWrapper = styled.div`
   flex-direction: column;
   height: calc(100% - 44px);
   overflow: auto;
-  padding: 8px 16px 0;
+  padding: 8px 0;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -160,8 +162,19 @@ const MessagesWrapper = styled.div`
 const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
-  padding: 8px 0;
-  margin-bottom: 8px;
+  padding: 8px 16px;
+  border-left: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
+
+  &:hover {
+    background: ${({ theme }) => theme.inputColor};
+    border-color: ${({ theme }) => theme.inputColor};
+  }
+
+  &.mention,
+  &.mention:hover {
+    background: #d4f3fa;
+    border-color: #0da4c9;
+  }
 `;
 
 const MessageOuterWrapper = styled.div`
