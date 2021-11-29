@@ -107,7 +107,6 @@ const Input = styled.input`
 const Button = styled.button`
   padding: 5px;
   margin: 5px;
-
   box-shadow: 5px 5px 10px -4px rgba(197, 197, 255, 1);
   border-radius: 5px;
   background-color: ${({ theme }) => theme.buttonBg};

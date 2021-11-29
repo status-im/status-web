@@ -20,6 +20,7 @@ import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
 import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
 import { SearchBlock } from "../SearchBlock";
+import { textMediumStyles } from "../Text";
 
 export function ChatInput() {
   const { sendMessage } = useMessengerContext();
@@ -158,7 +159,7 @@ export function ChatInput() {
           const secondSlice = text.slice(end > -1 ? end : content.length);
           const replaceContent = `${firstSlice} @${contact}${secondSlice}`;
           const spaceElement = document.createTextNode(" ");
-          const contactElement = document.createElement("b");
+          const contactElement = document.createElement("span");
           contactElement.innerText = `@${contact}`;
 
           if (contactElement && element.rangeCount > 0) {
@@ -338,11 +339,11 @@ const Input = styled.div`
   color: ${({ theme }) => theme.primary};
   border-radius: 16px 16px 4px 16px;
   outline: none;
-  font-family: Inter;
+  font-family: "Inter";
   font-style: normal;
   font-weight: normal;
-  font-size: 15px;
-  line-height: 22px;
+
+  ${textMediumStyles};
 
   &:focus {
     outline: none;
@@ -351,6 +352,21 @@ const Input = styled.div`
 
   &::-webkit-scrollbar {
     width: 0;
+  }
+
+  & > span {
+    display: inline-block;
+    color: ${({ theme }) => theme.mentionColor};
+    background: ${({ theme }) => theme.mentionBg};
+    border-radius: 4px;
+    font-weight: 500;
+    position: relative;
+    padding: 0 2px;
+    cursor: pointer;
+
+    &:hover {
+      background: ${({ theme }) => theme.mentionBgHover};
+    }
   }
 `;
 

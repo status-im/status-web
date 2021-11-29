@@ -178,7 +178,7 @@ const DateSeparator = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  font-family: Inter;
+  font-family: "Inter";
   font-style: normal;
   font-weight: 500;
   color: #939ba1;
