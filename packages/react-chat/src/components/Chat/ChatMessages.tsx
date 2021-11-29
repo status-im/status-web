@@ -172,8 +172,8 @@ const MessageWrapper = styled.div`
 
   &.mention,
   &.mention:hover {
-    background: #d4f3fa;
-    border-color: #0da4c9;
+    background: ${({ theme }) => theme.mentionBg};
+    border-color: ${({ theme }) => theme.mentionBgHover};
   }
 `;
 
