@@ -246,4 +246,41 @@ export class GroupChats {
     );
     wakuMessages.forEach((msg) => this.waku.relay.send(msg));
   }
+
+  /**
+   * Retrieve previous messages from a Waku Store node for the given chat Id.
+   *
+   */
+  public async retrievePreviousMessages(
+    chatId: string,
+    startTime: Date,
+    endTime: Date
+  ): Promise<number> {
+    const chat = this.chats[chatId];
+
+    if (!chat)
+      throw `Failed to retrieve messages, chat is not joined: ${chatId}`;
+
+    const _callback = (wakuMessages: WakuMessage[], member: string): void => {
+      wakuMessages.forEach((wakuMessage: WakuMessage) =>
+        this.handleWakuChatMessage(wakuMessage, chat, member)
+      );
+    };
+
+    const amountOfMessages: number[] = [];
+
+    await Promise.all(
+      chat.members.map(async (member) => {
+        const topic = await getNegotiatedTopic(this.identity, member);
+        const msgLength = (
+          await this.waku.store.queryHistory([topic], {
+            timeFilter: { startTime, endTime },
+            callback: (msg) => _callback(msg, member),
+          })
+        ).length;
+        amountOfMessages.push(msgLength);
+      })
+    );
+    return amountOfMessages.reduce((a, b) => a + b);
+  }
 }

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 
 import { useMessengerContext } from "../contexts/messengerProvider";
+import { ChannelData } from "../models/ChannelData";
 import { ChatMessage } from "../models/ChatMessage";
 
 export function useChatScrollHandle(
   messages: ChatMessage[],
   ref: React.RefObject<HTMLHeadingElement>,
-  activeChannelId: string
+  activeChannel: ChannelData
 ) {
   const { loadPrevDay, loadingMessages } = useMessengerContext();
   const [scrollOnBot, setScrollOnBot] = useState(true);
@@ -23,7 +24,7 @@ export function useChatScrollHandle(
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
         setScrollOnBot(true);
-        loadPrevDay(activeChannelId);
+        loadPrevDay(activeChannel.id, activeChannel.type === "group");
       }
     }
   }, [messages.length, loadingMessages]);
@@ -32,7 +33,7 @@ export function useChatScrollHandle(
     const setScroll = () => {
       if (ref?.current) {
         if (ref.current.scrollTop <= 0) {
-          loadPrevDay(activeChannelId);
+          loadPrevDay(activeChannel.id, activeChannel.type === "group");
         }
         if (
           ref.current.scrollTop + ref.current.clientHeight ==

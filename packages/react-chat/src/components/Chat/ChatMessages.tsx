@@ -94,7 +94,7 @@ function ChatUiMessage({
 export function ChatMessages() {
   const { messages, activeChannel, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
-  const loadingMessages = useChatScrollHandle(messages, ref, activeChannel.id);
+  const loadingMessages = useChatScrollHandle(messages, ref, activeChannel);
 
   const shownMessages = useMemo(
     () =>
