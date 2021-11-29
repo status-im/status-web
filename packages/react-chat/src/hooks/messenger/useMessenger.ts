@@ -30,7 +30,7 @@ export type MessengerType = {
   clearNotifications: (id: string) => void;
   mentions: { [chatId: string]: number };
   clearMentions: (id: string) => void;
-  loadPrevDay: (id: string) => Promise<void>;
+  loadPrevDay: (id: string, groupChat?: boolean) => Promise<void>;
   loadingMessages: boolean;
   communityData: CommunityData | undefined;
   contacts: Contacts;
@@ -109,7 +109,6 @@ export function useMessenger(
     clearMentions,
   } = useMessages(chatId, identity, contactsClass);
   const [community, setCommunity] = useState<Community | undefined>(undefined);
-  const { loadPrevDay, loadingMessages } = useLoadPrevDay(chatId, messenger);
 
   useEffect(() => {
     if (identity) {
@@ -126,14 +125,6 @@ export function useMessenger(
       });
     }
   }, [messenger, communityKey, addMessage, contactsClass]);
-
-  useEffect(() => {
-    if (messenger && community?.chats) {
-      Array.from(community?.chats.values()).forEach(({ id }) =>
-        loadPrevDay(id)
-      );
-    }
-  }, [messenger, community]);
 
   const [channels, setChannels] = useState<ChannelsData>({});
 
@@ -200,6 +191,19 @@ export function useMessenger(
     addChatMessage,
     channels
   );
+
+  const { loadPrevDay, loadingMessages } = useLoadPrevDay(
+    chatId,
+    messenger,
+    groupChat
+  );
+  useEffect(() => {
+    if (messenger && community?.chats) {
+      Array.from(community?.chats.values()).forEach(({ id }) =>
+        loadPrevDay(id)
+      );
+    }
+  }, [messenger, community]);
 
   const sendMessage = useCallback(
     async (messageText?: string, image?: Uint8Array) => {
