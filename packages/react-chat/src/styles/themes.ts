@@ -75,7 +75,7 @@ export const darkTheme: Theme = {
   redColor: "#FF5C7B",
   mentionColor: "#51D0F0",
   mentionHover: "#004E60",
-  mentionBg: "#002630",
+  mentionBg: "#004050",
   mentionBgHover: "#002D39",
 };
 
