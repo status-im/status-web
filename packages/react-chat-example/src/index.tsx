@@ -123,7 +123,6 @@ const Bubble = styled.div`
 
 const Drag = styled.div`
   position: absolute;
-  overflow: hidden;
 `;
 
 ReactDOM.render(

@@ -9,7 +9,13 @@ import { AddIcon } from "../Icons/AddIcon";
 import { textMediumStyles } from "../Text";
 
 import { Modal } from "./Modal";
-import { ButtonSection, Heading, Section } from "./ModalStyle";
+import {
+  ButtonSection,
+  Heading,
+  Hint,
+  inputStyles,
+  Section,
+} from "./ModalStyle";
 
 export const EditModalName = "editModal";
 
@@ -96,26 +102,10 @@ const Label = styled.p`
   ${textMediumStyles}
 `;
 
-const Hint = styled.p`
-  color: ${({ theme }) => theme.secondary};
-  font-size: 12px;
-  line-height: 16px;
-`;
-
 const NameInput = styled.input`
   padding: 14px 70px 14px 8px;
-  background: ${({ theme }) => theme.inputColor};
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.inputColor};
-  color: ${({ theme }) => theme.primary};
-  outline: none;
 
-  ${textMediumStyles}
-
-  &:focus {
-    outline: none;
-    caret-color: ${({ theme }) => theme.notificationColor};
-  }
+  ${inputStyles}
 `;
 
 const LogoSection = styled.div`

@@ -32,8 +32,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
   );
 
   const { setModal } = useModal(ProfileModalName);
-  const { contact, setBlocked, setIsUntrustworthy, setIsUserFriend } =
-    useManageContact(id);
+  const { contact, setBlocked, setIsUntrustworthy } = useManageContact(id);
 
   if (!contact) return null;
   return (
@@ -54,14 +53,18 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
       <MenuSection>
         <MenuItem
           onClick={() => {
-            setModal({ id, renamingState: false });
+            setModal({ id, renamingState: false, requestState: false });
           }}
         >
           <ProfileSvg width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
         {!contact.isFriend && (
-          <MenuItem onClick={() => setIsUserFriend(true)}>
+          <MenuItem
+            onClick={() => {
+              setModal({ id, requestState: true });
+            }}
+          >
             <AddContactSvg width={16} height={16} />
             <MenuText>Send Contact Request</MenuText>
           </MenuItem>

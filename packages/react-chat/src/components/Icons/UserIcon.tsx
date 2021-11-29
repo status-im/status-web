@@ -3,15 +3,17 @@ import styled from "styled-components";
 
 interface UserIconProps {
   memberView?: boolean;
+  modalView?: boolean;
 }
 
-export const UserIcon = ({ memberView }: UserIconProps) => {
+export const UserIcon = ({ memberView, modalView }: UserIconProps) => {
   return (
     <Icon
       viewBox="0 0 34 34"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       memberView={memberView}
+      modalView={modalView}
     >
       <ellipse cx="17" cy="10.3883" rx="6.94445" ry="6.94445" />
       <path
@@ -24,8 +26,10 @@ export const UserIcon = ({ memberView }: UserIconProps) => {
 };
 
 const Icon = styled.svg<UserIconProps>`
-  width: ${({ memberView }) => (memberView ? "20px" : "34px")};
-  height: ${({ memberView }) => (memberView ? "20px" : "34px")};
+  width: ${({ memberView, modalView }) =>
+    memberView ? "20px" : modalView ? "80px" : "34px"};
+  height: ${({ memberView, modalView }) =>
+    memberView ? "20px" : modalView ? "80px" : "34px"};
 
   & > path,
   & > ellipse {
