@@ -86,7 +86,7 @@ export const ProfileModal = () => {
               className={`${requestCreation && "small"}`}
             />
           ) : (
-            <UserIcon modalView={requestCreation ? false : true} />
+            <UserIcon modalView={!requestCreation} />
           )}
           <UserNameWrapper>
             <UserName className={`${requestCreation && "small"}`}>
