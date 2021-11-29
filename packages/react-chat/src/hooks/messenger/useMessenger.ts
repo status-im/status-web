@@ -1,6 +1,7 @@
 // import { StoreCodec } from "js-waku";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  ApplicationMetadataMessage,
   Community,
   Contacts as ContactsClass,
   Identity,
@@ -15,6 +16,7 @@ import { createCommunity } from "../../utils/createCommunity";
 import { createMessenger } from "../../utils/createMessenger";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 
+import { useContacts } from "./useContacts";
 import { useGroupChats } from "./useGroupChats";
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
@@ -43,6 +45,57 @@ export type MessengerType = {
   createGroupChat: (members: string[]) => void;
 };
 
+function useCreateMessenger(identity: Identity | undefined) {
+  const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
+  useEffect(() => {
+    if (identity) {
+      createMessenger(identity).then((e) => {
+        setMessenger(e);
+      });
+    }
+  }, [identity]);
+  return messenger;
+}
+
+function useCreateCommunity(
+  messenger: Messenger | undefined,
+  communityKey: string | undefined,
+  addMessage: (msg: ApplicationMetadataMessage, id: string, date: Date) => void,
+  contactsClass: ContactsClass | undefined
+) {
+  const [community, setCommunity] = useState<Community | undefined>(undefined);
+  useEffect(() => {
+    if (messenger && communityKey && contactsClass) {
+      createCommunity(communityKey, addMessage, messenger).then((comm) => {
+        setCommunity(comm);
+      });
+    }
+  }, [messenger, communityKey, addMessage, contactsClass]);
+
+  const communityData = useMemo(() => {
+    if (community?.description) {
+      Object.keys(community.description.proto.members).forEach((contact) =>
+        contactsClass?.addContact(contact)
+      );
+      return {
+        id: community.publicKeyStr,
+        name: community.description.identity?.displayName ?? "",
+        icon: uintToImgUrl(
+          community.description?.identity?.images?.thumbnail?.payload ??
+            new Uint8Array()
+        ),
+        members: 0,
+        membersList: Object.keys(community.description.proto.members),
+        description: community.description.identity?.description ?? "",
+      };
+    } else {
+      return undefined;
+    }
+  }, [community]);
+
+  return { community, communityData };
+}
+
 export function useMessenger(
   communityKey: string | undefined,
   identity: Identity | undefined
@@ -54,50 +107,12 @@ export function useMessenger(
     type: "channel",
   });
 
-  const chatId = useMemo(() => activeChannel.id, [activeChannel]);
+  const messenger = useCreateMessenger(identity);
 
-  const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
-
-  const [internalContacts, setInternalContacts] = useState<{
-    [id: string]: number;
-  }>({});
-
-  const contactsClass = useMemo(() => {
-    if (messenger && identity) {
-      const newContacts = new ContactsClass(
-        identity,
-        messenger.waku,
-        (id, clock) => {
-          setInternalContacts((prev) => {
-            return { ...prev, [id]: clock };
-          });
-        }
-      );
-      return newContacts;
-    }
-  }, [messenger, identity]);
-
-  const [contacts, setContacts] = useState<Contacts>({});
-
-  useEffect(() => {
-    const now = Date.now();
-    setContacts((prev) => {
-      const newContacts: Contacts = {};
-      Object.entries(internalContacts).forEach(([id, clock]) => {
-        newContacts[id] = {
-          id,
-          online: clock > now - 301000,
-          trueName: id.slice(0, 10),
-          isUntrustworthy: false,
-          blocked: false,
-        };
-        if (prev[id]) {
-          newContacts[id] = { ...prev[id], ...newContacts[id] };
-        }
-      });
-      return newContacts;
-    });
-  }, [internalContacts]);
+  const { contacts, setContacts, contactsClass } = useContacts(
+    messenger,
+    identity
+  );
 
   const {
     addChatMessage,
@@ -107,24 +122,14 @@ export function useMessenger(
     messages,
     mentions,
     clearMentions,
-  } = useMessages(chatId, identity, contactsClass);
-  const [community, setCommunity] = useState<Community | undefined>(undefined);
+  } = useMessages(activeChannel.id, identity, contactsClass);
 
-  useEffect(() => {
-    if (identity) {
-      createMessenger(identity).then((e) => {
-        setMessenger(e);
-      });
-    }
-  }, [identity]);
-
-  useEffect(() => {
-    if (messenger && communityKey && contactsClass) {
-      createCommunity(communityKey, addMessage, messenger).then((comm) => {
-        setCommunity(comm);
-      });
-    }
-  }, [messenger, communityKey, addMessage, contactsClass]);
+  const { community, communityData } = useCreateCommunity(
+    messenger,
+    communityKey,
+    addMessage,
+    contactsClass
+  );
 
   const [channels, setChannels] = useState<ChannelsData>({});
 
@@ -162,27 +167,6 @@ export function useMessenger(
       });
   }, [contacts]);
 
-  const communityData = useMemo(() => {
-    if (community?.description) {
-      Object.keys(community.description.proto.members).forEach((contact) =>
-        contactsClass?.addContact(contact)
-      );
-      return {
-        id: community.publicKeyStr,
-        name: community.description.identity?.displayName ?? "",
-        icon: uintToImgUrl(
-          community.description?.identity?.images?.thumbnail?.payload ??
-            new Uint8Array()
-        ),
-        members: 0,
-        membersList: Object.keys(community.description.proto.members),
-        description: community.description.identity?.description ?? "",
-      };
-    } else {
-      return undefined;
-    }
-  }, [community]);
-
   const { groupChat, removeChannel, createGroupChat } = useGroupChats(
     messenger,
     identity,
@@ -193,10 +177,11 @@ export function useMessenger(
   );
 
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(
-    chatId,
+    activeChannel.id,
     messenger,
     groupChat
   );
+
   useEffect(() => {
     if (messenger && community?.chats) {
       Array.from(community?.chats.values()).forEach(({ id }) =>
