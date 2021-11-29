@@ -13,10 +13,16 @@ import { EditSvg } from "../Icons/EditIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
-import { textMediumStyles } from "../Text";
+import { textMediumStyles, textSmallStyles } from "../Text";
 
 import { Modal } from "./Modal";
-import { ButtonSection, Heading, Section } from "./ModalStyle";
+import {
+  ButtonSection,
+  Heading,
+  Hint,
+  inputStyles,
+  Section,
+} from "./ModalStyle";
 
 export const ProfileModalName = "profileModal" as const;
 
@@ -24,11 +30,12 @@ export type ProfileModalProps = {
   id: string;
   image?: string;
   renamingState?: boolean;
+  requestState?: boolean;
 };
 
 export const ProfileModal = () => {
   const { props } = useModal(ProfileModalName);
-  const { id, image, renamingState } = useMemo(
+  const { id, image, renamingState, requestState } = useMemo(
     () => (props ? props : { id: "" }),
     [props]
   );
@@ -44,6 +51,12 @@ export const ProfileModal = () => {
     setRenaming(renamingState ?? false);
   }, [renamingState]);
 
+  const [request, setRequest] = useState("");
+  const [requestCreation, setRequestCreation] = useState(requestState ?? false);
+  useEffect(() => {
+    setRequestCreation(requestState ?? false);
+  }, [requestState]);
+
   const {
     contact,
     setBlocked,
@@ -55,29 +68,35 @@ export const ProfileModal = () => {
 
   if (!contact) return null;
   return (
-    <Modal name={ProfileModalName} className="profile">
+    <Modal
+      name={ProfileModalName}
+      className={`${!requestCreation && "profile"}`}
+    >
       <Section>
         <Heading>{id.slice(0, 10)}’s Profile</Heading>
       </Section>
 
       <ProfileSection>
-        <NameSection>
+        <NameSection className={`${requestCreation && "small"}`}>
           {image ? (
             <ProfileIcon
               style={{
                 backgroundImage: `url(${image}`,
               }}
+              className={`${requestCreation && "small"}`}
             />
           ) : (
-            <UserIcon />
+            <UserIcon modalView={requestCreation ? false : true} />
           )}
           <UserNameWrapper>
-            <UserName>{contact.customName ?? id.slice(0, 10)}</UserName>
+            <UserName className={`${requestCreation && "small"}`}>
+              {contact.customName ?? id.slice(0, 10)}
+            </UserName>
             {contact.isUntrustworthy && <UntrustworthIcon />}
             {!renaming && (
               <button onClick={() => setRenaming(true)}>
                 {" "}
-                <EditSvg width={24} height={24} />
+                {!requestCreation && <EditSvg width={24} height={24} />}
               </button>
             )}
           </UserNameWrapper>
@@ -105,15 +124,39 @@ export const ProfileModal = () => {
           </NameInputWrapper>
         ) : (
           <>
-            <UserAddressWrapper>
-              <UserAddress>Chatkey: {id.slice(0, 30)}</UserAddress>
+            <UserAddressWrapper className={`${requestCreation && "small"}`}>
+              {requestCreation ? (
+                <UserAddress>
+                  {id.slice(0, 10)}...{id.slice(-3)}
+                </UserAddress>
+              ) : (
+                <>
+                  <UserAddress className={`${requestCreation && "small"}`}>
+                    Chatkey: {id.slice(0, 30)}
+                  </UserAddress>
 
-              <CopyButton onClick={() => copy(id)}>
-                <CopySvg width={24} height={24} />
-              </CopyButton>
+                  <CopyButton onClick={() => copy(id)}>
+                    <CopySvg width={24} height={24} />
+                  </CopyButton>
+                </>
+              )}
             </UserAddressWrapper>
-            <EmojiKey>🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱</EmojiKey>{" "}
+            <EmojiKey className={`${requestCreation && "small"}`}>
+              🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱
+            </EmojiKey>{" "}
           </>
+        )}
+        {requestCreation && (
+          <RequestSection>
+            <Hint>{request.length}/280</Hint>
+            <RequestInput
+              value={request}
+              placeholder="Say who you are / why you want to became a contact..."
+              maxLength={280}
+              onInput={(e) => setRequest(e.currentTarget.value)}
+              required
+            />
+          </RequestSection>
         )}
       </ProfileSection>
       <ButtonSection>
@@ -130,6 +173,22 @@ export const ProfileModal = () => {
               }}
             >
               Apply nickname
+            </Btn>
+          </>
+        ) : requestCreation ? (
+          <>
+            <BackBtn onClick={() => setRequestCreation(false)}>
+              <LeftIconSvg width={28} height={28} />
+            </BackBtn>
+            <Btn
+              disabled={!request}
+              onClick={() => {
+                setIsUserFriend(true),
+                  setRequestCreation(false),
+                  setRequest("");
+              }}
+            >
+              Send Contact Request
             </Btn>
           </>
         ) : (
@@ -161,7 +220,7 @@ export const ProfileModal = () => {
                 : "Mark as Untrustworthy"}
             </ProfileBtn>
             {!contact.isFriend && (
-              <Btn onClick={() => setIsUserFriend(true)}>
+              <Btn onClick={() => setRequestCreation(true)}>
                 Send Contact Request
               </Btn>
             )}
@@ -184,6 +243,10 @@ const NameSection = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 16px;
+
+  &.small {
+    margin-bottom: 0;
+  }
 `;
 
 const ProfileIcon = styled.div`
@@ -199,6 +262,11 @@ const ProfileIcon = styled.div`
   flex-shrink: 0;
   position: relative;
   cursor: pointer;
+
+  &.small {
+    width: 64px;
+    height: 64px;
+  }
 `;
 
 const UserNameWrapper = styled.div`
@@ -219,6 +287,12 @@ const UserName = styled.p`
   line-height: 30px;
   letter-spacing: -0.2px;
   margin-right: 8px;
+
+  &.small {
+    font-size: 17px;
+    line-height: 24px;
+    margin-right: 0;
+  }
 `;
 
 const UserTrueName = styled.p`
@@ -234,6 +308,10 @@ const UserAddressWrapper = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 24px;
+
+  &.small {
+    margin-bottom: 8px;
+  }
 `;
 
 const UserAddress = styled.p`
@@ -243,6 +321,12 @@ const UserAddress = styled.p`
   color: ${({ theme }) => theme.secondary};
 
   ${textMediumStyles}
+
+  &.small {
+    margin-right: 0;
+
+    ${textSmallStyles}
+  }
 `;
 const EmojiKey = styled.div`
   display: flex;
@@ -253,6 +337,10 @@ const EmojiKey = styled.div`
   font-size: 15px;
   line-height: 14px;
   letter-spacing: 0.2px;
+
+  &.small {
+    ${textSmallStyles}
+  }
 `;
 
 const ProfileBtn = styled.button`
@@ -331,16 +419,25 @@ const NameInputWrapper = styled.div`
 const NameInput = styled.input`
   width: 328px;
   padding: 11px 16px;
-  background: ${({ theme }) => theme.inputColor};
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.border};
-  color: ${({ theme }) => theme.primary};
-  outline: none;
 
-  ${textMediumStyles}
+  ${inputStyles}
+`;
 
-  &:focus {
-    outline: 1px solid ${({ theme }) => theme.tertiary};
-    caret-color: ${({ theme }) => theme.notificationColor};
-  }
+const RequestSection = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 16px 0;
+`;
+
+const RequestInput = styled.textarea`
+  width: 100%;
+  height: 152px;
+  padding: 10px 16px;
+  resize: none;
+  margin-top: 16px;
+  font-family: "Inter";
+
+  ${inputStyles}
 `;
