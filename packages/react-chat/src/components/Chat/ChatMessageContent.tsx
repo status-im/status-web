@@ -193,7 +193,7 @@ const ContentWrapper = styled.div`
 const MentionBLock = styled.div`
   display: inline-block;
   color: ${({ theme }) => theme.mentionColor};
-  background: ${({ theme }) => theme.mentionBg};
+  background: ${({ theme }) => theme.mentionBgHover};
   border-radius: 4px;
   font-weight: 500;
   position: relative;
@@ -201,7 +201,7 @@ const MentionBLock = styled.div`
   cursor: pointer;
 
   &:hover {
-    background: ${({ theme }) => theme.mentionBgHover};
+    background: ${({ theme }) => theme.mentionHover};
   }
 
   ${textMediumStyles}
