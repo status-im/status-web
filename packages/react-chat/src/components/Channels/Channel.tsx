@@ -188,6 +188,7 @@ const NotificationBagde = styled.div`
   border-radius: 50%;
   font-size: 12px;
   line-height: 16px;
+  font-weight: 500;
   background-color: ${({ theme }) => theme.notificationColor};
   color: ${({ theme }) => theme.bodyBackgroundColor};
   display: flex;
