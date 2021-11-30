@@ -19,6 +19,7 @@ export type Theme = {
   skeletonLight: string;
   skeletonDark: string;
   redColor: string;
+  greenColor: string;
   mentionColor: string;
   mentionHover: string;
   mentionBg: string;
@@ -46,6 +47,7 @@ export const lightTheme: Theme = {
   skeletonLight: "#F6F8FA",
   skeletonDark: "#E9EDF1",
   redColor: "#FF2D55",
+  greenColor: "#4EBC60",
   mentionColor: "#0DA4C9",
   mentionHover: "#BDE7F2",
   mentionBg: "#E5F8FD",
@@ -73,6 +75,7 @@ export const darkTheme: Theme = {
   skeletonLight: "#2E2F31",
   skeletonDark: "#141414",
   redColor: "#FF5C7B",
+  greenColor: "#60C370",
   mentionColor: "#51D0F0",
   mentionHover: "#004E60",
   mentionBg: "#004050",
