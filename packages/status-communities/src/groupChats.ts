@@ -11,6 +11,8 @@ import { ChatMessage, ContentType } from ".";
 export type GroupChat = {
   chatId: string;
   members: string[];
+  admins?: string[];
+  name?: string;
 };
 
 export type GroupChatsType = {
@@ -91,37 +93,52 @@ export class GroupChats {
         const membershipUpdate = MembershipUpdateMessage.decode(
           message?.payload
         );
-        if (membershipUpdate.events.length > 0) {
-          if (
-            membershipUpdate.events[0].event.type ==
-            MembershipUpdateEvent_EventType.CHAT_CREATED
-          ) {
-            await this.addChat(
-              {
-                chatId: membershipUpdate.chatId,
-                members: membershipUpdate.events[0].event.members,
-              },
-              useCallback
-            );
-          }
-          if (
-            membershipUpdate.events[0].event.type ==
-            MembershipUpdateEvent_EventType.MEMBER_REMOVED
-          ) {
-            if (
-              membershipUpdate.events[0].event.members[0] ==
-              bufToHex(this.identity.publicKey)
-            ) {
-              await this.removeChat(
-                {
-                  chatId: membershipUpdate.chatId,
-                  members: membershipUpdate.events[0].event.members,
-                },
-                useCallback
-              );
+        await Promise.all(
+          membershipUpdate.events.map(async (event) => {
+            const bufSigner = event.signer;
+            const signer = bufSigner ? bufToHex(bufSigner) : "";
+            const chatId = membershipUpdate.chatId;
+            if (signer) {
+              switch (event.event.type) {
+                case MembershipUpdateEvent_EventType.CHAT_CREATED: {
+                  await this.addChat(
+                    {
+                      chatId: chatId,
+                      members: event.event.members,
+                      admins: [signer],
+                    },
+                    useCallback
+                  );
+                  break;
+                }
+                case MembershipUpdateEvent_EventType.MEMBER_REMOVED: {
+                  if (
+                    event.event.members[0] == bufToHex(this.identity.publicKey)
+                  ) {
+                    await this.removeChat(
+                      {
+                        chatId: chatId,
+                        members: event.event.members,
+                      },
+                      useCallback
+                    );
+                  }
+                  break;
+                }
+                case MembershipUpdateEvent_EventType.NAME_CHANGED: {
+                  const chat = this.chats[chatId];
+                  if (chat) {
+                    if (chat.admins?.includes(signer)) {
+                      chat.name = event.event.name;
+                      this.callback(chat);
+                    }
+                  }
+                  break;
+                }
+              }
             }
-          }
-        }
+          })
+        );
       }
     } catch {
       return;
@@ -207,6 +224,28 @@ export class GroupChats {
     );
   }
 
+  private async sendUpdateMessage(
+    payload: Uint8Array,
+    members: string[]
+  ): Promise<void> {
+    const wakuMessages = await Promise.all(
+      members.map(
+        async (member) =>
+          await WakuMessage.fromBytes(payload, getPartitionedTopic(member))
+      )
+    );
+    wakuMessages.forEach((msg) => this.waku.relay.send(msg));
+  }
+
+  public async changeChatName(chatId: string, name: string): Promise<void> {
+    const payload = MembershipUpdateMessage.create(chatId, this.identity);
+    const chat = this.chats[chatId];
+    if (chat && payload) {
+      payload.addNameChangeEvent(name);
+      await this.sendUpdateMessage(payload.encode(), chat.members);
+    }
+  }
+
   /**
    * Sends a create group chat membership update message with given members
    *
@@ -217,13 +256,7 @@ export class GroupChats {
       this.identity,
       members
     ).encode();
-    const wakuMessages = await Promise.all(
-      members.map(
-        async (member) =>
-          await WakuMessage.fromBytes(payload, getPartitionedTopic(member))
-      )
-    );
-    wakuMessages.forEach((msg) => this.waku.relay.send(msg));
+    await this.sendUpdateMessage(payload, members);
   }
 
   /**
@@ -235,16 +268,7 @@ export class GroupChats {
     const payload = MembershipUpdateMessage.create(chatId, this.identity);
     const chat = this.chats[chatId];
     payload.addMemberRemovedEvent(bufToHex(this.identity.publicKey));
-    const wakuMessages = await Promise.all(
-      chat.members.map(
-        async (member) =>
-          await WakuMessage.fromBytes(
-            payload.encode(),
-            getPartitionedTopic(member)
-          )
-      )
-    );
-    wakuMessages.forEach((msg) => this.waku.relay.send(msg));
+    await this.sendUpdateMessage(payload.encode(), chat.members);
   }
 
   /**

@@ -34,7 +34,7 @@ export function useGroupChats(
         const members = chat.members.map(contactFromId);
         const channel: ChannelData = {
           id: chat.chatId,
-          name: chat.chatId,
+          name: chat.name ?? chat.chatId,
           type: "group",
           members: members,
         };
@@ -78,6 +78,15 @@ export function useGroupChats(
     [groupChat]
   );
 
+  const changeGroupChatName = useCallback(
+    (name: string, chatId: string) => {
+      if (groupChat) {
+        groupChat.changeChatName(chatId, name);
+      }
+    },
+    [groupChat]
+  );
+
   const removeChannel = useCallback(
     (channelId: string) => {
       if (groupChat) {
@@ -87,5 +96,5 @@ export function useGroupChats(
     [channels, groupChat]
   );
 
-  return { createGroupChat, removeChannel, groupChat };
+  return { createGroupChat, removeChannel, groupChat, changeGroupChatName };
 }
