@@ -19,7 +19,6 @@ export class Identity {
    */
   public sign(payload: Uint8Array): Uint8Array {
     const hash = keccak256(payload);
-
     const { signature, recid } = secp256k1.ecdsaSign(
       hexToBuf(hash),
       this.privateKey

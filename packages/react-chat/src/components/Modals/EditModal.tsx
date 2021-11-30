@@ -20,7 +20,7 @@ import {
 export const EditModalName = "editModal";
 
 export const EditModal = () => {
-  const { activeChannel } = useMessengerContext();
+  const { activeChannel, changeGroupChatName } = useMessengerContext();
   const [groupName, setGroupName] = useState("");
   const [image, setImage] = useState("");
 
@@ -34,7 +34,7 @@ export const EditModal = () => {
 
   const handleUpload = () => {
     activeChannel.icon = image;
-    activeChannel.name = groupName;
+    changeGroupChatName(groupName, activeChannel.id);
     setModal(false);
   };
 

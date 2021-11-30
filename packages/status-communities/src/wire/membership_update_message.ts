@@ -1,4 +1,6 @@
+import { keccak256 } from "js-sha3";
 import { Reader } from "protobufjs";
+import * as secp256k1 from "secp256k1";
 import { v4 as uuidV4 } from "uuid";
 
 import { Identity } from "..";
@@ -31,6 +33,35 @@ export class MembershipUpdateEvent {
 
   public get type(): proto.MembershipUpdateEvent_EventType {
     return this.proto.type;
+  }
+}
+
+export class MembershipSignedEvent {
+  public sig: Uint8Array;
+  public event: MembershipUpdateEvent;
+  private chatId: string;
+
+  public constructor(
+    sig: Uint8Array,
+    event: MembershipUpdateEvent,
+    chatId: string
+  ) {
+    this.sig = sig;
+    this.event = event;
+    this.chatId = chatId;
+  }
+
+  public get signer(): Uint8Array | undefined {
+    const encEvent = this.event.encode();
+    const eventToSign = Buffer.concat([hexToBuf(this.chatId), encEvent]);
+
+    if (!this.sig || !eventToSign) return;
+
+    const signature = this.sig.slice(0, 64);
+    const recid = this.sig.slice(64)[0];
+    const hash = keccak256(eventToSign);
+
+    return secp256k1.ecdsaRecover(signature, recid, hexToBuf(hash));
   }
 }
 
@@ -150,15 +181,13 @@ export class MembershipUpdateMessage {
     return new MembershipUpdateMessage(protoBuf);
   }
 
-  public get events(): {
-    sig: Uint8Array;
-    event: MembershipUpdateEvent;
-  }[] {
+  public get events(): MembershipSignedEvent[] {
     return this.proto.events.map((bufArray) => {
-      return {
-        sig: bufArray.slice(0, 65),
-        event: MembershipUpdateEvent.decode(bufArray.slice(65)),
-      };
+      return new MembershipSignedEvent(
+        bufArray.slice(0, 65),
+        MembershipUpdateEvent.decode(bufArray.slice(65)),
+        this.chatId
+      );
     });
   }
 
