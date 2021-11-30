@@ -214,7 +214,7 @@ const MessagesWrapper = styled.div`
   }
 `;
 
-const MessageWrapper = styled.div`
+export const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -242,7 +242,7 @@ const MessageWrapper = styled.div`
   }
 `;
 
-const MessageOuterWrapper = styled.div`
+export const MessageOuterWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -254,7 +254,7 @@ const UserMessageWrapper = styled.div`
   display: flex;
 `;
 
-const DateSeparator = styled.div`
+export const DateSeparator = styled.div`
   width: 100%;
   display: flex;
   flex: 1;
@@ -272,13 +272,13 @@ const DateSeparator = styled.div`
   ${textSmallStyles}
 `;
 
-const ContentWrapper = styled.div`
+export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 8px;
 `;
 
-const MessageHeaderWrapper = styled.div`
+export const MessageHeaderWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -298,12 +298,12 @@ export const Icon = styled.div`
   cursor: pointer;
 `;
 
-const UserNameWrapper = styled.div`
+export const UserNameWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const UserName = styled.p`
+export const UserName = styled.p`
   color: ${({ theme }) => theme.tertiary};
   margin-right: 4px;
 
@@ -331,7 +331,7 @@ export const UserAddress = styled.p`
   }
 `;
 
-const TimeWrapper = styled.div`
+export const TimeWrapper = styled.div`
   font-size: 10px;
   line-height: 14px;
   letter-spacing: 0.2px;
@@ -340,7 +340,7 @@ const TimeWrapper = styled.div`
   margin-left: 4px;
 `;
 
-const MessageText = styled.div`
+export const MessageText = styled.div`
   overflow-wrap: anywhere;
   width: 100%;
   white-space: pre-wrap;
