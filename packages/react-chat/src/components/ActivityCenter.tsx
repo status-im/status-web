@@ -24,6 +24,7 @@ import { ClearSvg } from "./Icons/ClearIcon";
 import { GroupIcon } from "./Icons/GroupIcon";
 import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
+import { ReplyIcon } from "./Icons/ReplyIcon";
 // import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
 import { textMediumStyles, textSmallStyles } from "./Text";
@@ -89,12 +90,16 @@ function ActivityMessage({ type }: ActivityMessageProps) {
               line?
             </MessageText>
             {type === "mention" && activeChannel.type !== "dm" && (
-              <ChannelTag>
+              <Tag>
                 {activeChannel.type === "group" ? <GroupIcon /> : "#"}{" "}
                 {` ${activeChannel.name}`}
-              </ChannelTag>
+              </Tag>
             )}
-           
+            {type === "reply" && (
+              <Tag>
+                <ReplyIcon /> wdyt about this design?
+              </Tag>
+            )}
           </ActivityContent>
         </>
         {type === "request" && !accepted && !declined && (
@@ -131,7 +136,7 @@ function ActivityMessage({ type }: ActivityMessageProps) {
         {type === "request" && declined && (
           <RequestStatus className="declined">Declined</RequestStatus>
         )}
-        {type === "mention" && (
+        {type !== "request" && (
           <ActivityBtn
             onClick={() => {
               setRead(true);
@@ -278,15 +283,17 @@ const MessageWrapper = styled.div`
   }
 `;
 
-const ChannelTag = styled.div`
+const Tag = styled.div`
   width: fit-content;
   max-width: 70%;
+  display: flex;
+  align-items: center;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   border: 1px solid ${({ theme }) => theme.secondary};
   border-radius: 11px;
-  padding: 2px 6px;
+  padding: 0 6px;
   margin-top: 8px;
   cursor: pointer;
 
