@@ -22,9 +22,11 @@ import { ContactMenu } from "./Form/ContactMenu";
 import { CheckSvg } from "./Icons/CheckIcon";
 import { ClearSvg } from "./Icons/ClearIcon";
 import { GroupIcon } from "./Icons/GroupIcon";
+import { HideIcon } from "./Icons/HideIcon";
 import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
 import { ReplyIcon } from "./Icons/ReplyIcon";
+import { ShowIcon } from "./Icons/ShowIcon";
 // import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
 import { textMediumStyles, textSmallStyles } from "./Text";
@@ -159,6 +161,8 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
   const ref = useRef(null);
   useClickOutside(ref, () => setShowActivityCenter(false));
 
+  const [hideRead, setHideRead] = useState(false);
+
   return (
     <ActivityBlock ref={ref}>
       <ActivityFilter>
@@ -168,9 +172,18 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
           <Filter>Replies</Filter>
           <Filter>Contact requests</Filter>
         </Filters>
-        <ActivityBtn>
-          <ReadIcon />
-        </ActivityBtn>
+        <Btns>
+          <ActivityBtn>
+            <ReadIcon />
+          </ActivityBtn>
+          <ActivityBtn
+            onClick={() => {
+              setHideRead((e) => !e);
+            }}
+          >
+            {hideRead ? <ShowIcon /> : <HideIcon />}
+          </ActivityBtn>
+        </Btns>
       </ActivityFilter>
       <Activities>
         {/* {shownActivities.map((activity, idx) => (
@@ -258,6 +271,10 @@ const ActivityBtn = styled.button`
       background: rgba(255, 45, 85, 0.1);
     }
   }
+
+  & + & {
+    margin-left: 8px;
+  }
 `;
 
 const Activities = styled.div`
@@ -323,4 +340,9 @@ const RequestStatus = styled.p`
 
 const ActivityContent = styled(ContentWrapper)`
   max-width: calc(100% - 80px);
+`;
+
+const Btns = styled.div`
+  display: flex;
+  align-items: center;
 `;
