@@ -21,6 +21,7 @@ import {
 import { ContactMenu } from "./Form/ContactMenu";
 import { CheckSvg } from "./Icons/CheckIcon";
 import { ClearSvg } from "./Icons/ClearIcon";
+import { GroupIcon } from "./Icons/GroupIcon";
 import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
 // import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
@@ -28,6 +29,7 @@ import { UserIcon } from "./Icons/UserIcon";
 import { textMediumStyles, textSmallStyles } from "./Text";
 
 const today = new Date();
+const mockDate = new Date(1628286358060);
 
 type ActivityMessageProps = {
   type: string;
@@ -44,9 +46,7 @@ function ActivityMessage({ type }: ActivityMessageProps) {
   return (
     <MessageOuterWrapper>
       <ActivityDate>
-        {equalDate(new Date(1628286358060), today)
-          ? "Today"
-          : new Date(1628286358060).toLocaleDateString()}
+        {equalDate(mockDate, today) ? "Today" : mockDate.toLocaleDateString()}
       </ActivityDate>
 
       <MessageWrapper className={`${!read && "unread"}`}>
@@ -55,7 +55,7 @@ function ActivityMessage({ type }: ActivityMessageProps) {
             <UserIcon />
           </Icon>
 
-          <ContentWrapper>
+          <ActivityContent>
             <MessageHeaderWrapper>
               <UserNameWrapper>
                 <UserName>
@@ -73,7 +73,11 @@ function ActivityMessage({ type }: ActivityMessageProps) {
               </UserNameWrapper>
               <TimeWrapper>
                 {/* {message.date.toLocaleString()} */}
-                {new Date(1628286358060).toLocaleDateString()}
+                {mockDate.toLocaleString("en-US", {
+                  hour: "numeric",
+                  minute: "numeric",
+                  hour12: true,
+                })}
               </TimeWrapper>
             </MessageHeaderWrapper>
             {type === "request" && (
@@ -84,10 +88,14 @@ function ActivityMessage({ type }: ActivityMessageProps) {
               the list item is going to look like when its too long for a single
               line?
             </MessageText>
-            {type === "mention" && (
-              <ChannelTag>{`# ${activeChannel.name}`}</ChannelTag>
+            {type === "mention" && activeChannel.type !== "dm" && (
+              <ChannelTag>
+                {activeChannel.type === "group" ? <GroupIcon /> : "#"}{" "}
+                {` ${activeChannel.name}`}
+              </ChannelTag>
             )}
-          </ContentWrapper>
+           
+          </ActivityContent>
         </>
         {type === "request" && !accepted && !declined && (
           <>
@@ -271,10 +279,15 @@ const MessageWrapper = styled.div`
 `;
 
 const ChannelTag = styled.div`
-  width: max-content;
+  width: fit-content;
+  max-width: 70%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
   border: 1px solid ${({ theme }) => theme.secondary};
   border-radius: 11px;
   padding: 2px 6px;
+  margin-top: 8px;
   cursor: pointer;
 
   font-weight: 500;
@@ -299,4 +312,8 @@ const RequestStatus = styled.p`
   &.declined {
     color: ${({ theme }) => theme.redColor};
   }
+`;
+
+const ActivityContent = styled(ContentWrapper)`
+  max-width: calc(100% - 80px);
 `;

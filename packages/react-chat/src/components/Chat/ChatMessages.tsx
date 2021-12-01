@@ -304,6 +304,7 @@ export const UserNameWrapper = styled.div`
 `;
 
 export const UserName = styled.p`
+  font-weight: 500;
   color: ${({ theme }) => theme.tertiary};
   margin-right: 4px;
 
