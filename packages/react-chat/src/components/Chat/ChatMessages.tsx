@@ -9,6 +9,8 @@ import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
+import { ReactionSvg } from "../Icons/ReactionIcon";
+import { ReplySvg } from "../Icons/ReplyIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal, LinkModalName } from "../Modals/LinkModal";
@@ -88,6 +90,14 @@ function ChatUiMessage({
             />
           </MessageText>
         </ContentWrapper>
+        <Reactions>
+          <ReactionBtn>
+            <ReactionSvg />
+          </ReactionBtn>
+          <ReactionBtn>
+            <ReplySvg />
+          </ReactionBtn>
+        </Reactions>
       </MessageWrapper>
     </MessageOuterWrapper>
   );
@@ -164,10 +174,15 @@ const MessageWrapper = styled.div`
   display: flex;
   padding: 8px 16px;
   border-left: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 
   &:hover {
     background: ${({ theme }) => theme.inputColor};
     border-color: ${({ theme }) => theme.inputColor};
+  }
+
+  &:hover > div {
+    visibility: visible;
   }
 
   &.mention {
@@ -185,6 +200,7 @@ const MessageOuterWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 const DateSeparator = styled.div`
@@ -287,4 +303,33 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   position: relative;
+`;
+
+const Reactions = styled.div`
+  display: flex;
+  position: absolute;
+  right: 20px;
+  top: -18px;
+  box-shadow: 0px 4px 12px rgba(0, 34, 51, 0.08);
+  border-radius: 8px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  visibility: hidden;
+`;
+
+const ReactionBtn = styled.button`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  align-self: center;
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
+  }
+
+  &:hover > svg {
+    fill: ${({ theme }) => theme.tertiary};
+  }
 `;
