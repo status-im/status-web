@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
+import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
@@ -27,6 +28,7 @@ type ChatUiMessageProps = {
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
+  setReply: (val: Reply | undefined) => void;
 };
 
 function ChatUiMessage({
@@ -35,6 +37,7 @@ function ChatUiMessage({
   prevMessage,
   setImage,
   setLink,
+  setReply,
 }: ChatUiMessageProps) {
   const { contacts } = useMessengerContext();
   const contact = useMemo(
@@ -94,7 +97,11 @@ function ChatUiMessage({
           <ReactionBtn>
             <ReactionSvg />
           </ReactionBtn>
-          <ReactionBtn>
+          <ReactionBtn
+            onClick={() =>
+              setReply({ sender: message.sender, content: message.content })
+            }
+          >
             <ReplySvg width={22} height={22} />
           </ReactionBtn>
         </Reactions>
@@ -103,7 +110,11 @@ function ChatUiMessage({
   );
 }
 
-export function ChatMessages() {
+interface ChatMessagesProps {
+  setReply: (val: Reply | undefined) => void;
+}
+
+export function ChatMessages({ setReply }: ChatMessagesProps) {
   const { messages, activeChannel, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref, activeChannel);
@@ -151,6 +162,7 @@ export function ChatMessages() {
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
           setImage={setImage}
+          setReply={setReply}
         />
       ))}
     </MessagesWrapper>

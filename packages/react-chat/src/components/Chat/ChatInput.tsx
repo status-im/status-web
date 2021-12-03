@@ -11,6 +11,7 @@ import styled, { useTheme } from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useLow } from "../../contexts/narrowProvider";
+import { Reply } from "../../hooks/useReply";
 import { lightTheme, Theme } from "../../styles/themes";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 import { ClearSvg } from "../Icons/ClearIcon";
@@ -24,7 +25,12 @@ import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles, textSmallStyles } from "../Text";
 
-export function ChatInput() {
+interface ChatInputProps {
+  reply: Reply | undefined;
+  setReply: (val: Reply | undefined) => void;
+}
+
+export function ChatInput({ reply, setReply }: ChatInputProps) {
   const { sendMessage } = useMessengerContext();
   const theme = useTheme() as Theme;
   const [content, setContent] = useState("");
@@ -32,7 +38,6 @@ export function ChatInput() {
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
-  const [reply, setReply] = useState(true);
 
   const low = useLow();
 
@@ -247,16 +252,11 @@ export function ChatInput() {
           <ReplyWrapper>
             <ReplyTo>
               {" "}
-              <ReplySvg width={18} height={18} className="input" /> vitalik
+              <ReplySvg width={18} height={18} className="input" />{" "}
+              {reply.sender}
             </ReplyTo>
-            <ReplyOn>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. In
-              arcu cursus Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua. In arcu cursus
-            </ReplyOn>
-            <CloseButton onClick={() => setReply(false)}>
+            <ReplyOn>{reply.content}</ReplyOn>
+            <CloseButton onClick={() => setReply(undefined)}>
               {" "}
               <ClearSvg width={20} height={20} className="input" />
             </CloseButton>
@@ -440,7 +440,8 @@ const CloseButton = styled(ChatButton)`
 const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: calc(100% - 24px);
+  width: 100%;
+  max-width: calc(100% - 24px);
   max-height: 96px;
   padding: 6px 12px;
   background: rgba(0, 0, 0, 0.1);
@@ -457,6 +458,7 @@ const ReplyTo = styled.div`
 `;
 
 const ReplyOn = styled.div`
+  width: calc(100% - 24px);
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
