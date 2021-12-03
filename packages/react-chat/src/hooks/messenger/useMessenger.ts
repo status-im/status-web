@@ -44,6 +44,7 @@ export type MessengerType = {
   setActiveChannel: (channel: ChannelData) => void;
   createGroupChat: (members: string[]) => void;
   changeGroupChatName: (name: string, chatId: string) => void;
+  addMembers: (members: string[], chatId: string) => void;
 };
 
 function useCreateMessenger(identity: Identity | undefined) {
@@ -168,15 +169,20 @@ export function useMessenger(
       });
   }, [contacts]);
 
-  const { groupChat, removeChannel, createGroupChat, changeGroupChatName } =
-    useGroupChats(
-      messenger,
-      identity,
-      setChannels,
-      setActiveChannel,
-      addChatMessage,
-      channels
-    );
+  const {
+    groupChat,
+    removeChannel,
+    createGroupChat,
+    changeGroupChatName,
+    addMembers,
+  } = useGroupChats(
+    messenger,
+    identity,
+    setChannels,
+    setActiveChannel,
+    addChatMessage,
+    channels
+  );
 
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(
     activeChannel.id,
@@ -235,5 +241,6 @@ export function useMessenger(
     clearMentions,
     createGroupChat,
     changeGroupChatName,
+    addMembers,
   };
 }

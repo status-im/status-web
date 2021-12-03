@@ -56,7 +56,10 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
   return (
     <ChatBodyWrapper className={className}>
       {editGroup && communityData ? (
-        <ChatCreation editGroup={editGroup} />
+        <ChatCreation
+          setEditGroup={setEditGroup}
+          activeChannel={activeChannel}
+        />
       ) : (
         <ChatTopbar
           className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
