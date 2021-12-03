@@ -115,6 +115,7 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
           inputRef.current.innerHTML = "";
         }
         setContent("");
+        setReply(undefined);
       }
     },
     [content, imageUint]
@@ -451,14 +452,15 @@ const ReplyWrapper = styled.div`
 
   ${textSmallStyles};
 `;
-const ReplyTo = styled.div`
+
+export const ReplyTo = styled.div`
   display: flex;
   align-items: center;
   font-weight: 500;
 `;
 
-const ReplyOn = styled.div`
-  width: calc(100% - 24px);
+export const ReplyOn = styled.div`
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

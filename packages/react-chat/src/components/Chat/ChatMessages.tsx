@@ -10,6 +10,7 @@ import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
+import { QuoteSvg } from "../Icons/QuoteIcon";
 import { ReactionSvg } from "../Icons/ReactionIcon";
 import { ReplySvg } from "../Icons/ReplyIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
@@ -18,6 +19,7 @@ import { LinkModal, LinkModalName } from "../Modals/LinkModal";
 import { PictureModal, PictureModalName } from "../Modals/PictureModal";
 import { textMediumStyles, textSmallStyles } from "../Text";
 
+import { ReplyOn, ReplyTo } from "./ChatInput";
 import { ChatMessageContent } from "./ChatMessageContent";
 
 const today = new Date();
@@ -26,6 +28,7 @@ type ChatUiMessageProps = {
   idx: number;
   message: ChatMessage;
   prevMessage: ChatMessage;
+  reply: Reply | undefined;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
   setReply: (val: Reply | undefined) => void;
@@ -35,6 +38,7 @@ function ChatUiMessage({
   message,
   idx,
   prevMessage,
+  reply,
   setImage,
   setLink,
   setReply,
@@ -56,43 +60,60 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-      <MessageWrapper className={`${mentioned && "mention"}`}>
-        <Icon
-          onClick={() => {
-            setShowMenu((e) => !e);
-          }}
-        >
-          {showMenu && (
-            <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
-          )}
-          <UserIcon />
-        </Icon>
 
-        <ContentWrapper>
-          <MessageHeaderWrapper>
-            <UserNameWrapper>
-              <UserName>
-                {" "}
-                {contact.customName ?? message.sender.slice(0, 10)}
-              </UserName>
-              {contact.customName && (
-                <UserAddress>
-                  {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
-                </UserAddress>
-              )}
-              {contact.isUntrustworthy && <UntrustworthIcon />}
-            </UserNameWrapper>
-            <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
-          </MessageHeaderWrapper>
-          <MessageText>
-            <ChatMessageContent
-              message={message}
-              setImage={setImage}
-              setLinkOpen={setLink}
-              setMentioned={setMentioned}
-            />
-          </MessageText>
-        </ContentWrapper>
+      <MessageWrapper className={`${mentioned && "mention"}`}>
+        {reply && (
+          <QuoteWrapper>
+            <QuoteSvg width={22} height={25} />
+            <QuoteAuthor>
+              {" "}
+              <UserIcon memberView={true} /> vitalik
+            </QuoteAuthor>
+            <Quote>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. In
+              arcu cursus euismod quis viverra nibh cras pulvinar mattis.{" "}
+            </Quote>
+          </QuoteWrapper>
+        )}
+        <UserMessageWrapper>
+          <Icon
+            onClick={() => {
+              setShowMenu((e) => !e);
+            }}
+          >
+            {showMenu && (
+              <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
+            )}
+            <UserIcon />
+          </Icon>
+
+          <ContentWrapper>
+            <MessageHeaderWrapper>
+              <UserNameWrapper>
+                <UserName>
+                  {" "}
+                  {contact.customName ?? message.sender.slice(0, 10)}
+                </UserName>
+                {contact.customName && (
+                  <UserAddress>
+                    {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
+                  </UserAddress>
+                )}
+                {contact.isUntrustworthy && <UntrustworthIcon />}
+              </UserNameWrapper>
+              <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
+            </MessageHeaderWrapper>
+            <MessageText>
+              <ChatMessageContent
+                message={message}
+                setImage={setImage}
+                setLinkOpen={setLink}
+                setMentioned={setMentioned}
+              />
+            </MessageText>
+          </ContentWrapper>
+        </UserMessageWrapper>
         <Reactions>
           <ReactionBtn>
             <ReactionSvg />
@@ -111,10 +132,11 @@ function ChatUiMessage({
 }
 
 interface ChatMessagesProps {
+  reply: Reply | undefined;
   setReply: (val: Reply | undefined) => void;
 }
 
-export function ChatMessages({ setReply }: ChatMessagesProps) {
+export function ChatMessages({ reply, setReply }: ChatMessagesProps) {
   const { messages, activeChannel, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref, activeChannel);
@@ -160,6 +182,7 @@ export function ChatMessages({ setReply }: ChatMessagesProps) {
           message={message}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
+          reply={reply}
           setLink={setLink}
           setImage={setImage}
           setReply={setReply}
@@ -184,6 +207,7 @@ const MessagesWrapper = styled.div`
 const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   padding: 8px 16px;
   border-left: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
   position: relative;
@@ -213,6 +237,11 @@ const MessageOuterWrapper = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
+`;
+
+const UserMessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
 `;
 
 const DateSeparator = styled.div`
@@ -344,4 +373,19 @@ const ReactionBtn = styled.button`
   &:hover > svg {
     fill: ${({ theme }) => theme.tertiary};
   }
+`;
+
+const QuoteWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 48px;
+  position: relative;
+`;
+
+const QuoteAuthor = styled(ReplyTo)`
+  color: ${({ theme }) => theme.secondary};
+`;
+
+const Quote = styled(ReplyOn)`
+  color: ${({ theme }) => theme.secondary};
 `;
