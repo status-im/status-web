@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 type ReplyProps = {
+  width: number;
+  height: number;
   className?: string;
 };
 
-export function ReplySvg({ className }: ReplyProps) {
+export function ReplySvg({ width, height, className }: ReplyProps) {
   return (
     <Icon
-      width="22"
-      height="22"
+      width={width}
+      height={height}
       viewBox="0 0 22 22"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -22,7 +24,7 @@ export function ReplySvg({ className }: ReplyProps) {
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.secondary};
 
-  &:hover {
-    fill: ${({ theme }) => theme.tertiary};
+  &.input {
+    fill: ${({ theme }) => theme.primary};
   }
 `;

@@ -13,14 +13,16 @@ import { useModal } from "../../contexts/modalProvider";
 import { useLow } from "../../contexts/narrowProvider";
 import { lightTheme, Theme } from "../../styles/themes";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
+import { ClearSvg } from "../Icons/ClearIcon";
 import { EmojiIcon } from "../Icons/EmojiIcon";
 import { GifIcon } from "../Icons/GifIcon";
 import { PictureIcon } from "../Icons/PictureIcon";
+import { ReplySvg } from "../Icons/ReplyIcon";
 import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
 import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
 import { SearchBlock } from "../SearchBlock";
-import { textMediumStyles } from "../Text";
+import { textMediumStyles, textSmallStyles } from "../Text";
 
 export function ChatInput() {
   const { sendMessage } = useMessengerContext();
@@ -30,6 +32,7 @@ export function ChatInput() {
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
+  const [reply, setReply] = useState(true);
 
   const low = useLow();
 
@@ -239,46 +242,70 @@ export function ChatInput() {
           }}
         />
       </AddPictureInputWrapper>
-      <Row style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}>
-        <InputWrapper>
-          {image && (
-            <ImagePreview src={image} onClick={() => setImageUint(undefined)} />
-          )}
-          <Input
-            contentEditable
-            onInput={onInputChange}
-            onKeyDown={onInputKeyPress}
-            onKeyUp={handleCursorChange}
-            ref={inputRef}
-            onClick={handleCursorChange}
-            dangerouslySetInnerHTML={{ __html: clearComponent }}
-          />
-          {query && (
-            <SearchBlock
-              query={query}
-              dsicludeList={[]}
-              onClick={addMention}
-              onBotttom
+      <InputArea>
+        {reply && (
+          <ReplyWrapper>
+            <ReplyTo>
+              {" "}
+              <ReplySvg width={18} height={18} className="input" /> vitalik
+            </ReplyTo>
+            <ReplyOn>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. In
+              arcu cursus Lorem ipsum dolor sit amet, consectetur adipiscing
+              elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. In arcu cursus
+            </ReplyOn>
+            <CloseButton onClick={() => setReply(false)}>
+              {" "}
+              <ClearSvg width={20} height={20} className="input" />
+            </CloseButton>
+          </ReplyWrapper>
+        )}
+        <Row style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}>
+          <InputWrapper>
+            {image && (
+              <ImagePreview
+                src={image}
+                onClick={() => setImageUint(undefined)}
+              />
+            )}
+            <Input
+              contentEditable
+              onInput={onInputChange}
+              onKeyDown={onInputKeyPress}
+              onKeyUp={handleCursorChange}
+              ref={inputRef}
+              onClick={handleCursorChange}
+              dangerouslySetInnerHTML={{ __html: clearComponent }}
             />
-          )}
-        </InputWrapper>
-        <InputButtons>
-          <ChatButton
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowEmoji(!showEmoji);
-            }}
-          >
-            <EmojiIcon isActive={showEmoji} />
-          </ChatButton>
-          <ChatButton>
-            <StickerIcon />
-          </ChatButton>
-          <ChatButton>
-            <GifIcon />
-          </ChatButton>
-        </InputButtons>
-      </Row>
+            {query && (
+              <SearchBlock
+                query={query}
+                dsicludeList={[]}
+                onClick={addMention}
+                onBotttom
+              />
+            )}
+          </InputWrapper>
+          <InputButtons>
+            <ChatButton
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowEmoji(!showEmoji);
+              }}
+            >
+              <EmojiIcon isActive={showEmoji} />
+            </ChatButton>
+            <ChatButton>
+              <StickerIcon />
+            </ChatButton>
+            <ChatButton>
+              <GifIcon />
+            </ChatButton>
+          </InputButtons>
+        </Row>
+      </InputArea>
     </View>
   );
 }
@@ -295,6 +322,17 @@ const View = styled.div`
   align-items: center;
   padding: 6px 8px 6px 10px;
   position: relative;
+`;
+
+const InputArea = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 438px;
+  padding: 2px;
+  background: ${({ theme }) => theme.inputColor};
+  border-radius: 16px 16px 4px 16px;
 `;
 
 const Row = styled.div`
@@ -392,4 +430,34 @@ const AddPictureInput = styled.input`
 const ChatButton = styled.button`
   width: 32px;
   height: 32px;
+`;
+
+const CloseButton = styled(ChatButton)`
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
+const ReplyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 24px);
+  max-height: 96px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.1);
+  color: ${({ theme }) => theme.primary};
+  border-radius: 14px 14px 4px 14px;
+  position: relative;
+
+  ${textSmallStyles};
+`;
+const ReplyTo = styled.div`
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+`;
+
+const ReplyOn = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;

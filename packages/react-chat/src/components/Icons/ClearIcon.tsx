@@ -39,6 +39,10 @@ const Icon = styled(ClearSvg)`
     fill: ${({ theme }) => theme.secondary};
   }
 
+  &.input {
+    fill: ${({ theme }) => theme.primary};
+  }
+
   &.profile > path {
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }

@@ -95,7 +95,7 @@ function ChatUiMessage({
             <ReactionSvg />
           </ReactionBtn>
           <ReactionBtn>
-            <ReplySvg />
+            <ReplySvg width={22} height={22} />
           </ReactionBtn>
         </Reactions>
       </MessageWrapper>
