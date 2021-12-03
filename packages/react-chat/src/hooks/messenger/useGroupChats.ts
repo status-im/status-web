@@ -10,6 +10,7 @@ import {
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
+import { uintToImgUrl } from "../../utils";
 
 export function useGroupChats(
   messenger: Messenger | undefined,
@@ -54,11 +55,21 @@ export function useGroupChats(
           type: "channel",
         } as ChannelData);
       };
-      const handleMessage = (msg: StatusChatMessage, sender: string) =>
+      const handleMessage = (msg: StatusChatMessage, sender: string) => {
+        let image: string | undefined = undefined;
+        if (msg.image) {
+          image = uintToImgUrl(msg.image.payload);
+        }
         addChatMessage(
-          new ChatMessage(msg.text ?? "", new Date(msg.clock ?? 0), sender),
+          new ChatMessage(
+            msg.text ?? "",
+            new Date(msg.clock ?? 0),
+            sender,
+            image
+          ),
           msg.chatId
         );
+      };
       return new GroupChats(
         identity,
         messenger.waku,

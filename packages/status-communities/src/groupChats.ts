@@ -4,9 +4,12 @@ import { Identity } from "./identity";
 import { MembershipUpdateEvent_EventType } from "./proto/communities/v1/membership_update_message";
 import { getNegotiatedTopic, getPartitionedTopic } from "./topics";
 import { bufToHex } from "./utils";
-import { MembershipUpdateMessage } from "./wire/membership_update_message";
+import {
+  MembershipSignedEvent,
+  MembershipUpdateMessage,
+} from "./wire/membership_update_message";
 
-import { ChatMessage, ContentType } from ".";
+import { ChatMessage, Content } from ".";
 
 export type GroupChat = {
   chatId: string;
@@ -65,16 +68,18 @@ export class GroupChats {
    *
    * @param text text message to send
    */
-  public async sendMessage(chatId: string, text: string): Promise<void> {
+  public async sendMessage(chatId: string, content: Content): Promise<void> {
     const now = Date.now();
     const chat = this.chats[chatId];
     if (chat) {
       await Promise.all(
         chat.members.map(async (member) => {
-          const chatMessage = ChatMessage.createMessage(now, now, chatId, {
-            text,
-            contentType: ContentType.Text,
-          });
+          const chatMessage = ChatMessage.createMessage(
+            now,
+            now,
+            chatId,
+            content
+          );
           const wakuMessage = await WakuMessage.fromBytes(
             chatMessage.encode(),
             await getNegotiatedTopic(this.identity, member)
@@ -85,82 +90,90 @@ export class GroupChats {
     }
   }
 
+  private async handleUpdateEvent(
+    chatId: string,
+    event: MembershipSignedEvent,
+    useCallback: boolean
+  ): Promise<void> {
+    const signer = event.signer ? bufToHex(event.signer) : "";
+    const thisUser = bufToHex(this.identity.publicKey);
+    const chat: GroupChat | undefined = this.chats[chatId];
+    if (signer) {
+      switch (event.event.type) {
+        case MembershipUpdateEvent_EventType.CHAT_CREATED: {
+          await this.addChat(
+            {
+              chatId: chatId,
+              members: event.event.members,
+              admins: [signer],
+              removed: false,
+            },
+            useCallback
+          );
+          break;
+        }
+        case MembershipUpdateEvent_EventType.MEMBER_REMOVED: {
+          if (chat) {
+            chat.members = chat.members.filter(
+              (member) => !event.event.members.includes(member)
+            );
+            if (event.event.members.includes(thisUser)) {
+              await this.removeChat(
+                {
+                  ...chat,
+                  removed: true,
+                },
+                useCallback
+              );
+            } else {
+              if (!chat.removed && useCallback) {
+                this.callback(this.chats[chatId]);
+              }
+            }
+          }
+          break;
+        }
+        case MembershipUpdateEvent_EventType.MEMBERS_ADDED: {
+          if (chat && chat.admins?.includes(signer)) {
+            chat.members.push(...event.event.members);
+            if (chat.members.includes(thisUser)) {
+              chat.removed = false;
+              await this.addChat(chat, useCallback);
+            }
+          }
+          break;
+        }
+        case MembershipUpdateEvent_EventType.NAME_CHANGED: {
+          if (chat) {
+            if (chat.admins?.includes(signer)) {
+              chat.name = event.event.name;
+              this.callback(chat);
+            }
+          }
+          break;
+        }
+      }
+    }
+  }
+
   private async decodeUpdateMessage(
     message: WakuMessage,
     useCallback: boolean
   ): Promise<void> {
     try {
-      if (message.payload) {
+      if (message?.payload) {
         const membershipUpdate = MembershipUpdateMessage.decode(
-          message?.payload
+          message.payload
         );
         await Promise.all(
-          membershipUpdate.events.map(async (event) => {
-            const signer = event.signer ? bufToHex(event.signer) : "";
-            const thisUser = bufToHex(this.identity.publicKey);
-            const chatId = membershipUpdate.chatId;
-            const chat: GroupChat | undefined = this.chats[chatId];
-
-            if (signer) {
-              switch (event.event.type) {
-                case MembershipUpdateEvent_EventType.CHAT_CREATED: {
-                  await this.addChat(
-                    {
-                      chatId: chatId,
-                      members: event.event.members,
-                      admins: [signer],
-                      removed: false,
-                    },
-                    useCallback
-                  );
-                  break;
-                }
-                case MembershipUpdateEvent_EventType.MEMBER_REMOVED: {
-                  if (chat) {
-                    chat.members = chat.members.filter(
-                      (member) => !event.event.members.includes(member)
-                    );
-                    if (event.event.members.includes(thisUser)) {
-                      await this.removeChat(
-                        {
-                          ...chat,
-                          removed: true,
-                        },
-                        useCallback
-                      );
-                    } else {
-                      if (!chat.removed && useCallback) {
-                        this.callback(this.chats[chatId]);
-                      }
-                    }
-                  }
-                  break;
-                }
-                case MembershipUpdateEvent_EventType.MEMBERS_ADDED: {
-                  if (chat) {
-                    chat.members.push(...event.event.members);
-                    if (
-                      chat.members.includes(thisUser) &&
-                      chat.admins?.includes(signer)
-                    ) {
-                      chat.removed = false;
-                      await this.addChat(chat, useCallback);
-                    }
-                  }
-                  break;
-                }
-                case MembershipUpdateEvent_EventType.NAME_CHANGED: {
-                  if (chat) {
-                    if (chat.admins?.includes(signer)) {
-                      chat.name = event.event.name;
-                      this.callback(chat);
-                    }
-                  }
-                  break;
-                }
-              }
-            }
-          })
+          membershipUpdate.events.map(
+            async (event) =>
+              await this.handleUpdateEvent(
+                membershipUpdate.chatId,
+                event,
+                useCallback
+              )
+          )
         );
       }
     } catch {
@@ -224,6 +237,7 @@ export class GroupChats {
   ): Promise<void> {
     this.chats[chat.chatId] = chat;
     if (useCallback) {
+      await this.handleChatObserver(chat, true);
       this.removeCallback(chat);
     }
   }
@@ -268,6 +282,13 @@ export class GroupChats {
     wakuMessages.forEach((msg) => this.waku.relay.send(msg));
   }
 
+  /**
+   * Sends a change chat name chat membership update message
+   *
+   * @param chatId a chat id to which message is to be sent
+   *
+   * @param name a name which chat should be changed to
+   */
   public async changeChatName(chatId: string, name: string): Promise<void> {
     const payload = MembershipUpdateMessage.create(chatId, this.identity);
     const chat = this.chats[chatId];
@@ -277,6 +298,13 @@ export class GroupChats {
     }
   }
 
+  /**
+   * Sends a add members group chat membership update message with given members
+   *
+   * @param chatId a chat id to which message is to be sent
+   *
+   * @param members a list of members to be added
+   */
   public async addMembers(chatId: string, members: string[]): Promise<void> {
     const payload = MembershipUpdateMessage.create(chatId, this.identity);
     const chat = this.chats[chatId];

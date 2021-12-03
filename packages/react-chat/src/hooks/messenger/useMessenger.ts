@@ -200,21 +200,25 @@ export function useMessenger(
 
   const sendMessage = useCallback(
     async (messageText?: string, image?: Uint8Array) => {
-      if (activeChannel.type === "group") {
-        groupChat?.sendMessage(activeChannel.id, messageText ?? "");
-      } else {
-        if (messageText) {
-          await messenger?.sendMessage(activeChannel.id, {
-            text: messageText,
-            contentType: 0,
-          });
-        }
-        if (image) {
-          await messenger?.sendMessage(activeChannel.id, {
-            image,
-            imageType: 1,
-            contentType: 2,
-          });
+      let content;
+      if (messageText) {
+        content = {
+          text: messageText,
+          contentType: 0,
+        };
+      }
+      if (image) {
+        content = {
+          image,
+          imageType: 1,
+          contentType: 2,
+        };
+      }
+      if (content) {
+        if (activeChannel.type === "group") {
+          await groupChat?.sendMessage(activeChannel.id, content);
+        } else {
+          await messenger?.sendMessage(activeChannel.id, content);
         }
       }
     },
