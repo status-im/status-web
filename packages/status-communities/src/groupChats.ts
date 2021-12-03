@@ -13,6 +13,7 @@ export type GroupChat = {
   members: string[];
   admins?: string[];
   name?: string;
+  removed: boolean;
 };
 
 export type GroupChatsType = {
@@ -95,9 +96,11 @@ export class GroupChats {
         );
         await Promise.all(
           membershipUpdate.events.map(async (event) => {
-            const bufSigner = event.signer;
-            const signer = bufSigner ? bufToHex(bufSigner) : "";
+            const signer = event.signer ? bufToHex(event.signer) : "";
+            const thisUser = bufToHex(this.identity.publicKey);
             const chatId = membershipUpdate.chatId;
+            const chat: GroupChat | undefined = this.chats[chatId];
+
             if (signer) {
               switch (event.event.type) {
                 case MembershipUpdateEvent_EventType.CHAT_CREATED: {
@@ -106,27 +109,47 @@ export class GroupChats {
                       chatId: chatId,
                       members: event.event.members,
                       admins: [signer],
+                      removed: false,
                     },
                     useCallback
                   );
                   break;
                 }
                 case MembershipUpdateEvent_EventType.MEMBER_REMOVED: {
-                  if (
-                    event.event.members[0] == bufToHex(this.identity.publicKey)
-                  ) {
-                    await this.removeChat(
-                      {
-                        chatId: chatId,
-                        members: event.event.members,
-                      },
-                      useCallback
+                  if (chat) {
+                    chat.members = chat.members.filter(
+                      (member) => !event.event.members.includes(member)
                     );
+                    if (event.event.members.includes(thisUser)) {
+                      await this.removeChat(
+                        {
+                          ...chat,
+                          removed: true,
+                        },
+                        useCallback
+                      );
+                    } else {
+                      if (!chat.removed && useCallback) {
+                        this.callback(this.chats[chatId]);
+                      }
+                    }
+                  }
+                  break;
+                }
+                case MembershipUpdateEvent_EventType.MEMBERS_ADDED: {
+                  if (chat) {
+                    chat.members.push(...event.event.members);
+                    if (
+                      chat.members.includes(thisUser) &&
+                      chat.admins?.includes(signer)
+                    ) {
+                      chat.removed = false;
+                      await this.addChat(chat, useCallback);
+                    }
                   }
                   break;
                 }
                 case MembershipUpdateEvent_EventType.NAME_CHANGED: {
-                  const chat = this.chats[chatId];
                   if (chat) {
                     if (chat.admins?.includes(signer)) {
                       chat.name = event.event.name;
@@ -181,10 +204,17 @@ export class GroupChats {
   }
 
   private async addChat(chat: GroupChat, useCallback: boolean): Promise<void> {
-    this.chats[chat.chatId] = chat;
-    if (useCallback) {
-      await this.handleChatObserver(chat);
-      this.callback(chat);
+    if (this.chats[chat.chatId]) {
+      this.chats[chat.chatId] = chat;
+      if (useCallback) {
+        this.callback(chat);
+      }
+    } else {
+      this.chats[chat.chatId] = chat;
+      if (useCallback) {
+        await this.handleChatObserver(chat);
+        this.callback(chat);
+      }
     }
   }
 
@@ -192,9 +222,8 @@ export class GroupChats {
     chat: GroupChat,
     useCallback: boolean
   ): Promise<void> {
-    delete this.chats[chat.chatId];
+    this.chats[chat.chatId] = chat;
     if (useCallback) {
-      await this.handleChatObserver(chat, true);
       this.removeCallback(chat);
     }
   }
@@ -214,8 +243,10 @@ export class GroupChats {
     );
     await Promise.all(
       Object.values(this.chats).map(async (chat) => {
-        await this.handleChatObserver(chat);
-        this.callback(chat);
+        if (!chat?.removed) {
+          await this.handleChatObserver(chat);
+          this.callback(chat);
+        }
       })
     );
     this.waku.relay.addObserver(
@@ -243,6 +274,21 @@ export class GroupChats {
     if (chat && payload) {
       payload.addNameChangeEvent(name);
       await this.sendUpdateMessage(payload.encode(), chat.members);
+    }
+  }
+
+  public async addMembers(chatId: string, members: string[]): Promise<void> {
+    const payload = MembershipUpdateMessage.create(chatId, this.identity);
+    const chat = this.chats[chatId];
+    if (chat && payload) {
+      const newMembers = members.filter(
+        (member) => !chat.members.includes(member)
+      );
+      payload.addMembersAddedEvent(newMembers);
+      await this.sendUpdateMessage(payload.encode(), [
+        ...chat.members,
+        ...newMembers,
+      ]);
     }
   }
 

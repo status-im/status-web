@@ -96,5 +96,20 @@ export function useGroupChats(
     [channels, groupChat]
   );
 
-  return { createGroupChat, removeChannel, groupChat, changeGroupChatName };
+  const addMembers = useCallback(
+    (members: string[], chatId: string) => {
+      if (groupChat) {
+        groupChat.addMembers(chatId, members);
+      }
+    },
+    [groupChat]
+  );
+
+  return {
+    createGroupChat,
+    removeChannel,
+    groupChat,
+    changeGroupChatName,
+    addMembers,
+  };
 }

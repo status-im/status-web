@@ -5,20 +5,28 @@ import styled from "styled-components";
 import { ChatState, useChatState } from "../../contexts/chatStateProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { ChannelData } from "../../models/ChannelData";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { CrossIcon } from "../Icons/CrossIcon";
 import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 interface ChatCreationProps {
-  editGroup?: boolean;
+  setEditGroup?: (val: boolean) => void;
+  activeChannel?: ChannelData;
 }
 
-export function ChatCreation({ editGroup }: ChatCreationProps) {
+export function ChatCreation({
+  setEditGroup,
+  activeChannel,
+}: ChatCreationProps) {
   const identity = useIdentity();
   const [query, setQuery] = useState("");
-  const [styledGroup, setStyledGroup] = useState<string[]>([]);
-  const { contacts, createGroupChat } = useMessengerContext();
+  const [styledGroup, setStyledGroup] = useState<string[]>(
+    activeChannel?.members?.map((member) => member?.customName ?? member.id) ??
+      []
+  );
+  const { contacts, createGroupChat, addMembers } = useMessengerContext();
   const setChatState = useChatState()[1];
 
   const addMember = useCallback(
@@ -33,7 +41,6 @@ export function ChatCreation({ editGroup }: ChatCreationProps) {
     },
     [setStyledGroup, styledGroup]
   );
-
   const removeMember = (member: string) => {
     setStyledGroup((prev) => prev.filter((e) => e != member));
   };
@@ -85,12 +92,19 @@ export function ChatCreation({ editGroup }: ChatCreationProps) {
         </InputBar>
         <CreationBtn
           disabled={styledGroup.length === 0}
-          onClick={() => createChat(styledGroup)}
+          onClick={() => {
+            if (!activeChannel) {
+              createChat(styledGroup);
+            } else {
+              addMembers(styledGroup, activeChannel.id);
+            }
+            setEditGroup?.(false);
+          }}
         >
           Confirm
         </CreationBtn>
       </CreationBar>
-      {!editGroup && !query && (
+      {!setEditGroup && !query && (
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
