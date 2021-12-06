@@ -1,3 +1,4 @@
+import { keccak256 } from "js-sha3";
 import { ApplicationMetadataMessage, utils } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../utils";
@@ -7,23 +8,22 @@ export class ChatMessage {
   date: Date;
   sender: string;
   image?: string;
-  quote?: {
-    author: string;
-    content: string;
-  };
+  responseTo?: string;
+  id: string;
 
   constructor(
     content: string,
     date: Date,
     sender: string,
     image?: string,
-    quote?: { author: string; content: string }
+    responseTo?: string
   ) {
     this.content = content;
     this.date = date;
     this.sender = sender;
     this.image = image;
-    this.quote = quote;
+    this.responseTo = responseTo;
+    this.id = keccak256(date.getTime().toString() + content);
   }
 
   public static fromMetadataMessage(
@@ -41,7 +41,13 @@ export class ChatMessage {
         image = uintToImgUrl(msg.chatMessage?.image.payload);
       }
       const sender = utils.bufToHex(msg.signer);
-      return new ChatMessage(content, date, sender, image);
+      return new ChatMessage(
+        content,
+        date,
+        sender,
+        image,
+        msg.chatMessage.responseTo
+      );
     } else {
       return undefined;
     }

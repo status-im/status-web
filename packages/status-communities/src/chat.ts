@@ -33,14 +33,15 @@ export class Chat {
     return idToContentTopic(this.id);
   }
 
-  public createMessage(content: Content): ChatMessage {
+  public createMessage(content: Content, responseTo?: string): ChatMessage {
     const { timestamp, clock } = this._nextClockAndTimestamp();
 
     const message = ChatMessage.createMessage(
       clock,
       timestamp,
       this.id,
-      content
+      content,
+      responseTo
     );
 
     this._updateClockFromMessage(message);

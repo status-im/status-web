@@ -100,11 +100,15 @@ export class Messenger {
   /**
    * Sends a message on the given chat Id.
    */
-  public async sendMessage(chatId: string, content: Content): Promise<void> {
+  public async sendMessage(
+    chatId: string,
+    content: Content,
+    responseTo?: string
+  ): Promise<void> {
     const chat = this.chatsById.get(chatId);
     if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
 
-    const chatMessage = chat.createMessage(content);
+    const chatMessage = chat.createMessage(content, responseTo);
 
     const appMetadataMessage = ApplicationMetadataMessage.create(
       chatMessage.encode(),
