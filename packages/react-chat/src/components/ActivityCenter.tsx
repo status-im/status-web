@@ -90,7 +90,7 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
             {type === "request" && (
               <RequestHeading>Contact request:</RequestHeading>
             )}
-            <MessageText>{activity.request}</MessageText>
+            <ActivityText>{activity.message?.content}</ActivityText>
             {type === "mention" &&
               activity.channel &&
               activity.channel.type !== "dm" && (
@@ -319,6 +319,10 @@ const MessageWrapper = styled.div`
   &.unread {
     background: ${({ theme }) => theme.buttonBgHover};
   }
+`;
+
+const ActivityText = styled(MessageText)`
+  white-space: unset;
 `;
 
 const Tag = styled.div`
