@@ -28,7 +28,6 @@ type ChatUiMessageProps = {
   idx: number;
   message: ChatMessage;
   prevMessage: ChatMessage;
-  reply: Reply | undefined;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
   setReply: (val: Reply | undefined) => void;
@@ -38,7 +37,6 @@ function ChatUiMessage({
   message,
   idx,
   prevMessage,
-  reply,
   setImage,
   setLink,
   setReply,
@@ -62,18 +60,14 @@ function ChatUiMessage({
       )}
 
       <MessageWrapper className={`${mentioned && "mention"}`}>
-        {reply && (
+        {message.quote && (
           <QuoteWrapper>
             <QuoteSvg width={22} height={25} />
             <QuoteAuthor>
               {" "}
-              <UserIcon memberView={true} /> vitalik
+              <UserIcon memberView={true} /> {message.quote.author}
             </QuoteAuthor>
-            <Quote>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. In
-              arcu cursus euismod quis viverra nibh cras pulvinar mattis.{" "}
-            </Quote>
+            <Quote>{message.quote.content} </Quote>
           </QuoteWrapper>
         )}
         <UserMessageWrapper>
@@ -132,11 +126,10 @@ function ChatUiMessage({
 }
 
 interface ChatMessagesProps {
-  reply: Reply | undefined;
   setReply: (val: Reply | undefined) => void;
 }
 
-export function ChatMessages({ reply, setReply }: ChatMessagesProps) {
+export function ChatMessages({ setReply }: ChatMessagesProps) {
   const { messages, activeChannel, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref, activeChannel);
@@ -182,7 +175,6 @@ export function ChatMessages({ reply, setReply }: ChatMessagesProps) {
           message={message}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
-          reply={reply}
           setLink={setLink}
           setImage={setImage}
           setReply={setReply}

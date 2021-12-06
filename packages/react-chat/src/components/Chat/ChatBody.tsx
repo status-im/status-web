@@ -121,7 +121,7 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
           {showState === ChatBodyState.Chat && (
             <>
               {messenger && communityData ? (
-                <ChatMessages reply={reply} setReply={setReply} />
+                <ChatMessages setReply={setReply} />
               ) : (
                 <LoadingSkeleton />
               )}

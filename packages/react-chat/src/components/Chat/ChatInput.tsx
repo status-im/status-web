@@ -442,7 +442,6 @@ const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: calc(100% - 24px);
   max-height: 96px;
   padding: 6px 12px;
   background: rgba(0, 0, 0, 0.1);
