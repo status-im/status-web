@@ -4,17 +4,22 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
+import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
 import { LoadingIcon } from "../Icons/LoadingIcon";
+import { QuoteSvg } from "../Icons/QuoteIcon";
+import { ReactionSvg } from "../Icons/ReactionIcon";
+import { ReplySvg } from "../Icons/ReplyIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { LinkModal, LinkModalName } from "../Modals/LinkModal";
 import { PictureModal, PictureModalName } from "../Modals/PictureModal";
 import { textMediumStyles, textSmallStyles } from "../Text";
 
+import { ReplyOn, ReplyTo } from "./ChatInput";
 import { ChatMessageContent } from "./ChatMessageContent";
 
 const today = new Date();
@@ -25,6 +30,7 @@ type ChatUiMessageProps = {
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
+  setReply: (val: Reply | undefined) => void;
 };
 
 function ChatUiMessage({
@@ -33,6 +39,7 @@ function ChatUiMessage({
   prevMessage,
   setImage,
   setLink,
+  setReply,
 }: ChatUiMessageProps) {
   const { contacts } = useMessengerContext();
   const contact = useMemo(
@@ -51,49 +58,78 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-      <MessageWrapper className={`${mentioned && "mention"}`}>
-        <Icon
-          onClick={() => {
-            setShowMenu((e) => !e);
-          }}
-        >
-          {showMenu && (
-            <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
-          )}
-          <UserIcon />
-        </Icon>
 
-        <ContentWrapper>
-          <MessageHeaderWrapper>
-            <UserNameWrapper>
-              <UserName>
-                {" "}
-                {contact.customName ?? message.sender.slice(0, 10)}
-              </UserName>
-              {contact.customName && (
-                <UserAddress>
-                  {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
-                </UserAddress>
-              )}
-              {contact.isUntrustworthy && <UntrustworthIcon />}
-            </UserNameWrapper>
-            <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
-          </MessageHeaderWrapper>
-          <MessageText>
-            <ChatMessageContent
-              message={message}
-              setImage={setImage}
-              setLinkOpen={setLink}
-              setMentioned={setMentioned}
-            />
-          </MessageText>
-        </ContentWrapper>
+      <MessageWrapper className={`${mentioned && "mention"}`}>
+        {message.quote && (
+          <QuoteWrapper>
+            <QuoteSvg width={22} height={25} />
+            <QuoteAuthor>
+              {" "}
+              <UserIcon memberView={true} /> {message.quote.author}
+            </QuoteAuthor>
+            <Quote>{message.quote.content} </Quote>
+          </QuoteWrapper>
+        )}
+        <UserMessageWrapper>
+          <Icon
+            onClick={() => {
+              setShowMenu((e) => !e);
+            }}
+          >
+            {showMenu && (
+              <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
+            )}
+            <UserIcon />
+          </Icon>
+
+          <ContentWrapper>
+            <MessageHeaderWrapper>
+              <UserNameWrapper>
+                <UserName>
+                  {" "}
+                  {contact.customName ?? message.sender.slice(0, 10)}
+                </UserName>
+                {contact.customName && (
+                  <UserAddress>
+                    {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
+                  </UserAddress>
+                )}
+                {contact.isUntrustworthy && <UntrustworthIcon />}
+              </UserNameWrapper>
+              <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>
+            </MessageHeaderWrapper>
+            <MessageText>
+              <ChatMessageContent
+                message={message}
+                setImage={setImage}
+                setLinkOpen={setLink}
+                setMentioned={setMentioned}
+              />
+            </MessageText>
+          </ContentWrapper>
+        </UserMessageWrapper>
+        <Reactions>
+          <ReactionBtn>
+            <ReactionSvg />
+          </ReactionBtn>
+          <ReactionBtn
+            onClick={() =>
+              setReply({ sender: message.sender, content: message.content })
+            }
+          >
+            <ReplySvg width={22} height={22} />
+          </ReactionBtn>
+        </Reactions>
       </MessageWrapper>
     </MessageOuterWrapper>
   );
 }
 
-export function ChatMessages() {
+interface ChatMessagesProps {
+  setReply: (val: Reply | undefined) => void;
+}
+
+export function ChatMessages({ setReply }: ChatMessagesProps) {
   const { messages, activeChannel, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref, activeChannel);
@@ -141,6 +177,7 @@ export function ChatMessages() {
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
           setImage={setImage}
+          setReply={setReply}
         />
       ))}
     </MessagesWrapper>
@@ -162,12 +199,18 @@ const MessagesWrapper = styled.div`
 const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   padding: 8px 16px;
   border-left: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 
   &:hover {
     background: ${({ theme }) => theme.inputColor};
     border-color: ${({ theme }) => theme.inputColor};
+  }
+
+  &:hover > div {
+    visibility: visible;
   }
 
   &.mention {
@@ -185,6 +228,12 @@ const MessageOuterWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
+`;
+
+const UserMessageWrapper = styled.div`
+  width: 100%;
+  display: flex;
 `;
 
 const DateSeparator = styled.div`
@@ -287,4 +336,48 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   position: relative;
+`;
+
+const Reactions = styled.div`
+  display: flex;
+  position: absolute;
+  right: 20px;
+  top: -18px;
+  box-shadow: 0px 4px 12px rgba(0, 34, 51, 0.08);
+  border-radius: 8px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  visibility: hidden;
+`;
+
+const ReactionBtn = styled.button`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  align-self: center;
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
+  }
+
+  &:hover > svg {
+    fill: ${({ theme }) => theme.tertiary};
+  }
+`;
+
+const QuoteWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-left: 48px;
+  position: relative;
+`;
+
+const QuoteAuthor = styled(ReplyTo)`
+  color: ${({ theme }) => theme.secondary};
+`;
+
+const Quote = styled(ReplyOn)`
+  color: ${({ theme }) => theme.secondary};
 `;

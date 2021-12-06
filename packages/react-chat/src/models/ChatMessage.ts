@@ -7,12 +7,23 @@ export class ChatMessage {
   date: Date;
   sender: string;
   image?: string;
+  quote?: {
+    author: string;
+    content: string;
+  };
 
-  constructor(content: string, date: Date, sender: string, image?: string) {
+  constructor(
+    content: string,
+    date: Date,
+    sender: string,
+    image?: string,
+    quote?: { author: string; content: string }
+  ) {
     this.content = content;
     this.date = date;
     this.sender = sender;
     this.image = image;
+    this.quote = quote;
   }
 
   public static fromMetadataMessage(

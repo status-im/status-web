@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
+import { Reply } from "../../hooks/useReply";
 import { Channel } from "../Channels/Channel";
 import { Community } from "../Community";
 import { ChannelMenu } from "../Form/ChannelMenu";
@@ -52,6 +53,8 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
       setShowState(ChatBodyState.Chat);
     }
   }, [narrow]);
+
+  const [reply, setReply] = useState<Reply | undefined>(undefined);
 
   return (
     <ChatBodyWrapper className={className}>
@@ -118,11 +121,11 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
           {showState === ChatBodyState.Chat && (
             <>
               {messenger && communityData ? (
-                <ChatMessages />
+                <ChatMessages setReply={setReply} />
               ) : (
                 <LoadingSkeleton />
               )}
-              <ChatInput />
+              <ChatInput reply={reply} setReply={setReply} />
             </>
           )}
 
@@ -142,7 +145,7 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
       ) : (
         <>
           <LoadingSkeleton />
-          <ChatInput />
+          <ChatInput reply={reply} setReply={setReply} />
         </>
       )}
     </ChatBodyWrapper>
