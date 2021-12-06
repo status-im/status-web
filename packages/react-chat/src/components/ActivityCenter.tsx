@@ -1,8 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
+import { useActivities } from "../contexts/activityProvider";
 import { useMessengerContext } from "../contexts/messengerProvider";
 import { useClickOutside } from "../hooks/useClickOutside";
+import { Activity } from "../models/Activity";
 import { equalDate } from "../utils/equalDate";
 
 import { buttonStyles } from "./Buttons/buttonStyle";
@@ -27,32 +29,40 @@ import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
 import { ReplyIcon } from "./Icons/ReplyActivityIcon";
 import { ShowIcon } from "./Icons/ShowIcon";
-// import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
+import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
 import { textMediumStyles, textSmallStyles } from "./Text";
 
 const today = new Date();
-const mockDate = new Date(1628286358060);
 
 type ActivityMessageProps = {
-  type: string;
+  activity: Activity;
 };
 
-function ActivityMessage({ type }: ActivityMessageProps) {
-  const { activeChannel } = useMessengerContext();
+function ActivityMessage({ activity }: ActivityMessageProps) {
+  const { contacts } = useMessengerContext();
 
   const [showMenu, setShowMenu] = useState(false);
-  const [read, setRead] = useState(false);
-  const [accepted, setAccepted] = useState(false);
-  const [declined, setDeclined] = useState(false);
+  // const [read, setRead] = useState(false);
+  // const [accepted, setAccepted] = useState(false);
+  // const [declined, setDeclined] = useState(false);
+
+  const type = activity.type;
+
+  const contact = useMemo(
+    () => contacts[activity.user],
+    [activity.user, contacts]
+  );
 
   return (
     <MessageOuterWrapper>
       <ActivityDate>
-        {equalDate(mockDate, today) ? "Today" : mockDate.toLocaleDateString()}
+        {equalDate(activity.date, today)
+          ? "Today"
+          : activity.date.toLocaleDateString()}
       </ActivityDate>
 
-      <MessageWrapper className={`${!read && "unread"}`}>
+      <MessageWrapper className={`${!activity.isRead && "unread"}`}>
         <>
           <Icon>
             <UserIcon />
@@ -63,20 +73,17 @@ function ActivityMessage({ type }: ActivityMessageProps) {
               <UserNameWrapper>
                 <UserName>
                   {" "}
-                  {/* {contact.customName ?? message.sender.slice(0, 10)} */}
-                  Carmen
+                  {contact.customName ?? activity.user.slice(0, 10)}
                 </UserName>
-                {/* {contact.customName && ( */}
-                <UserAddress>
-                  {/* {message.sender.slice(0, 5)}...{message.sender.slice(-3)} */}
-                  0x045…d71
-                </UserAddress>
-                {/* )} */}
-                {/* {contact.isUntrustworthy && <UntrustworthIcon />} */}
+                {contact.customName && (
+                  <UserAddress>
+                    {activity.user.slice(0, 5)}...{activity.user.slice(-3)}
+                  </UserAddress>
+                )}
+                {contact.isUntrustworthy && <UntrustworthIcon />}
               </UserNameWrapper>
               <TimeWrapper>
-                {/* {message.date.toLocaleString()} */}
-                {mockDate.toLocaleString("en-US", {
+                {activity.date.toLocaleString("en-US", {
                   hour: "numeric",
                   minute: "numeric",
                   hour12: true,
@@ -86,29 +93,28 @@ function ActivityMessage({ type }: ActivityMessageProps) {
             {type === "request" && (
               <RequestHeading>Contact request:</RequestHeading>
             )}
-            <MessageText>
-              Hey it’s Anna from Status, do you remeber when we talked about how
-              the list item is going to look like when its too long for a single
-              line?
-            </MessageText>
-            {type === "mention" && activeChannel.type !== "dm" && (
+            <MessageText>{activity.request}</MessageText>
+            {type === "mention" &&
+              activity.channel &&
+              activity.channel.type !== "dm" && (
+                <Tag>
+                  {activity.channel.type === "group" ? <GroupIcon /> : "#"}{" "}
+                  {` ${activity.channel.name}`}
+                </Tag>
+              )}
+            {type === "reply" && activity.message && (
               <Tag>
-                {activeChannel.type === "group" ? <GroupIcon /> : "#"}{" "}
-                {` ${activeChannel.name}`}
-              </Tag>
-            )}
-            {type === "reply" && (
-              <Tag>
-                <ReplyIcon /> wdyt about this design?
+                <ReplyIcon /> {activity.message.content}
               </Tag>
             )}
           </ActivityContent>
         </>
-        {type === "request" && !accepted && !declined && (
+        {type === "request" && !activity.status && (
           <>
             <ActivityBtn
               onClick={() => {
-                setRead(true), setAccepted(true);
+                activity.isRead = true;
+                activity.status = "accepted";
               }}
               className="accept"
             >
@@ -116,7 +122,8 @@ function ActivityMessage({ type }: ActivityMessageProps) {
             </ActivityBtn>
             <ActivityBtn
               onClick={() => {
-                setRead(true), setDeclined(true);
+                activity.isRead = true;
+                activity.status = "declined";
               }}
               className="decline"
             >
@@ -132,20 +139,20 @@ function ActivityMessage({ type }: ActivityMessageProps) {
             </ActivityBtn>
           </>
         )}
-        {type === "request" && accepted && (
+        {type === "request" && activity.status === "accepted" && (
           <RequestStatus className="accepted">Accepted</RequestStatus>
         )}
-        {type === "request" && declined && (
+        {type === "request" && activity.status === "declined" && (
           <RequestStatus className="declined">Declined</RequestStatus>
         )}
         {type !== "request" && (
           <ActivityBtn
             onClick={() => {
-              setRead(true);
+              activity.isRead = true;
             }}
-            className={`${read && "read"}`}
+            className={`${activity.isRead && "read"}`}
           >
-            <ReadIcon isRead={read} />
+            <ReadIcon isRead={activity.isRead} />
           </ActivityBtn>
         )}
       </MessageWrapper>
@@ -158,6 +165,17 @@ interface ActivityCenterProps {
 }
 
 export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
+  const { activities } = useActivities();
+  const { contacts } = useMessengerContext();
+
+  const shownActivities = useMemo(
+    () =>
+      activities.filter(
+        (activity) => !contacts?.[activity.user]?.blocked ?? true
+      ),
+    [contacts, activities, activities.length]
+  );
+
   const ref = useRef(null);
   useClickOutside(ref, () => setShowActivityCenter(false));
 
@@ -173,32 +191,27 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
           <Filter>Contact requests</Filter>
         </Filters>
         <Btns>
-          <ActivityBtn>
-            <ReadIcon />
-          </ActivityBtn>
           <ActivityBtn
             onClick={() => {
-              setHideRead((e) => !e);
+              shownActivities.map((activity) => activity.isRead === true);
             }}
           >
+            <ReadIcon />
+          </ActivityBtn>
+          <ActivityBtn onClick={() => setHideRead(true)}>
             {hideRead ? <ShowIcon /> : <HideIcon />}
           </ActivityBtn>
         </Btns>
       </ActivityFilter>
-      <Activities>
-        {/* {shownActivities.map((activity, idx) => (
-          <ActivityMessage
-            key={activity.date.getTime().toString() + activity.content}
-            message={activity}
-            idx={idx}
-            prevMessage={shownActivities[idx - 1]}
-            type="mention"
-         
-        ))} */}
-        <ActivityMessage type="mention" />
-        <ActivityMessage type="request" />
-        <ActivityMessage type="reply" />
-      </Activities>
+      {shownActivities.length > 0 ? (
+        <Activities>
+          {shownActivities.map((activity) => (
+            <ActivityMessage key={activity.id} activity={activity} />
+          ))}
+        </Activities>
+      ) : (
+        <EmptyActivities>Notifications will appear here</EmptyActivities>
+      )}
     </ActivityBlock>
   );
 }
@@ -206,6 +219,8 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
 const ActivityBlock = styled.div`
   width: 600px;
   height: 770px;
+  display: flex;
+  flex-direction: column;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   box-shadow: 0px 12px 24px rgba(0, 34, 51, 0.1);
   border-radius: 8px;
@@ -281,6 +296,15 @@ const Activities = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`;
+
+const EmptyActivities = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  color: ${({ theme }) => theme.secondary};
 `;
 
 const ActivityDate = styled(DateSeparator)`
