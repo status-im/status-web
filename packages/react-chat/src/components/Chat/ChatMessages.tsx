@@ -31,6 +31,7 @@ type ChatUiMessageProps = {
   setImage: (img: string) => void;
   setLink: (link: string) => void;
   setReply: (val: Reply | undefined) => void;
+  quote?: ChatMessage;
 };
 
 function ChatUiMessage({
@@ -40,6 +41,7 @@ function ChatUiMessage({
   setImage,
   setLink,
   setReply,
+  quote,
 }: ChatUiMessageProps) {
   const { contacts } = useMessengerContext();
   const contact = useMemo(
@@ -60,14 +62,14 @@ function ChatUiMessage({
       )}
 
       <MessageWrapper className={`${mentioned && "mention"}`}>
-        {message.quote && (
+        {quote && (
           <QuoteWrapper>
             <QuoteSvg width={22} height={25} />
             <QuoteAuthor>
               {" "}
-              <UserIcon memberView={true} /> {message.quote.author}
+              <UserIcon memberView={true} /> {quote.sender}
             </QuoteAuthor>
-            <Quote>{message.quote.content} </Quote>
+            <Quote>{quote.content} </Quote>
           </QuoteWrapper>
         )}
         <UserMessageWrapper>
@@ -114,7 +116,11 @@ function ChatUiMessage({
           </ReactionBtn>
           <ReactionBtn
             onClick={() =>
-              setReply({ sender: message.sender, content: message.content })
+              setReply({
+                sender: message.sender,
+                content: message.content,
+                id: message.id,
+              })
             }
           >
             <ReplySvg width={22} height={22} />
@@ -171,13 +177,14 @@ export function ChatMessages({ setReply }: ChatMessagesProps) {
       )}
       {shownMessages.map((message, idx) => (
         <ChatUiMessage
-          key={message.date.getTime().toString() + message.content}
+          key={message.id}
           message={message}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
           setImage={setImage}
           setReply={setReply}
+          quote={shownMessages.find((msg) => msg.id == message?.responseTo)}
         />
       ))}
     </MessagesWrapper>

@@ -108,7 +108,7 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
         e.preventDefault();
         (e.target as HTMLDivElement).style.height = "40px";
         setInputHeight(40);
-        sendMessage(content, imageUint);
+        sendMessage(content, imageUint, reply?.id);
         setImageUint(undefined);
         setClearComponent("");
         if (inputRef.current) {

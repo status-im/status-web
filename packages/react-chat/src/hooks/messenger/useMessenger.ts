@@ -26,7 +26,8 @@ export type MessengerType = {
   messages: ChatMessage[];
   sendMessage: (
     messageText?: string | undefined,
-    image?: Uint8Array | undefined
+    image?: Uint8Array | undefined,
+    responseTo?: string
   ) => Promise<void>;
   notifications: { [chatId: string]: number };
   clearNotifications: (id: string) => void;
@@ -199,7 +200,7 @@ export function useMessenger(
   }, [messenger, community]);
 
   const sendMessage = useCallback(
-    async (messageText?: string, image?: Uint8Array) => {
+    async (messageText?: string, image?: Uint8Array, responseTo?: string) => {
       let content;
       if (messageText) {
         content = {
@@ -218,7 +219,7 @@ export function useMessenger(
         if (activeChannel.type === "group") {
           await groupChat?.sendMessage(activeChannel.id, content);
         } else {
-          await messenger?.sendMessage(activeChannel.id, content);
+          await messenger?.sendMessage(activeChannel.id, content, responseTo);
         }
       }
     },

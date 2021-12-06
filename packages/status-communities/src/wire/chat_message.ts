@@ -75,7 +75,8 @@ export class ChatMessage {
     clock: number,
     timestamp: number,
     chatId: string,
-    content: Content
+    content: Content,
+    responseTo?: string
   ): ChatMessage {
     let sticker,
       image,
@@ -117,7 +118,7 @@ export class ChatMessage {
       timestamp, //ms?
       text,
       /** Id of the message that we are replying to */
-      responseTo: "",
+      responseTo: responseTo ?? "",
       /** Ens name of the sender */
       ensName: "",
       /** Public Key of the community (TBC) **/

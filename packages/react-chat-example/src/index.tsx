@@ -76,7 +76,7 @@ function DragDiv() {
           <ReactChat
             theme={theme ? lightTheme : darkTheme}
             communityKey={
-              "0x02516353a03fc3892d268a72f4c4b2b0fad179702a996a87346407139949767ba7"
+              "0x022213984be07b1fa120ccd4dcbad161036d651e69dbaf04e45e5c5009e815d86b"
             }
             fetchMetadata={fetchMetadata}
           />
