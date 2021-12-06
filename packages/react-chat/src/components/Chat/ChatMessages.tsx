@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
+import { useActivities } from "../../contexts/activityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
 import { Reply } from "../../hooks/useReply";
+import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
@@ -28,6 +30,7 @@ const today = new Date();
 type ChatUiMessageProps = {
   idx: number;
   message: ChatMessage;
+  channel: ChannelData;
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
@@ -37,6 +40,7 @@ type ChatUiMessageProps = {
 
 function ChatUiMessage({
   message,
+  channel,
   idx,
   prevMessage,
   setImage,
@@ -45,12 +49,29 @@ function ChatUiMessage({
   quote,
 }: ChatUiMessageProps) {
   const { contacts } = useMessengerContext();
+  const { setActivities } = useActivities();
+
   const contact = useMemo(
     () => contacts[message.sender],
     [message.sender, contacts]
   );
   const [showMenu, setShowMenu] = useState(false);
   const [mentioned, setMentioned] = useState(false);
+
+  useEffect(() => {
+    if (mentioned)
+      setActivities((prev) => [
+        ...prev,
+        {
+          id: message.date.getTime().toString() + message.content,
+          type: "mention",
+          date: message.date,
+          user: message.sender,
+          message: message,
+          channel: channel,
+        },
+      ]);
+  }, [mentioned, message]);
 
   return (
     <MessageOuterWrapper>
@@ -191,6 +212,7 @@ export function ChatMessages({ setReply }: ChatMessagesProps) {
         <ChatUiMessage
           key={message.id}
           message={message}
+          channel={activeChannel}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
