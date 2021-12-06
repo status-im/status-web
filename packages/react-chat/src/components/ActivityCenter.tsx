@@ -43,9 +43,6 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
   const { contacts } = useMessengerContext();
 
   const [showMenu, setShowMenu] = useState(false);
-  // const [read, setRead] = useState(false);
-  // const [accepted, setAccepted] = useState(false);
-  // const [declined, setDeclined] = useState(false);
 
   const type = activity.type;
 
@@ -193,7 +190,7 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
         <Btns>
           <ActivityBtn
             onClick={() => {
-              shownActivities.map((activity) => activity.isRead === true);
+              shownActivities.map((activity) => (activity.isRead = true));
             }}
           >
             <ReadIcon />
@@ -326,7 +323,6 @@ const MessageWrapper = styled.div`
 
 const Tag = styled.div`
   width: fit-content;
-  max-width: 70%;
   display: flex;
   align-items: center;
   text-overflow: ellipsis;
