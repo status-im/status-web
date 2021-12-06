@@ -25,7 +25,7 @@ import { GroupIcon } from "./Icons/GroupIcon";
 import { HideIcon } from "./Icons/HideIcon";
 import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
-import { ReplyIcon } from "./Icons/ReplyIcon";
+import { ReplyIcon } from "./Icons/ReplyActivityIcon";
 import { ShowIcon } from "./Icons/ShowIcon";
 // import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
