@@ -9,6 +9,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
+import { Icon } from "../Icons/Icon";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { QuoteSvg } from "../Icons/QuoteIcon";
 import { ReactionSvg } from "../Icons/ReactionIcon";
@@ -281,21 +282,6 @@ export const ContentWrapper = styled.div`
 export const MessageHeaderWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
-
-export const Icon = styled.div`
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  border-radius: 50%;
-  background-color: #bcbdff;
-  background-size: contain;
-  background-position: center;
-  flex-shrink: 0;
-  position: relative;
-  cursor: pointer;
 `;
 
 export const UserNameWrapper = styled.div`

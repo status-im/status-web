@@ -9,7 +9,6 @@ import { buttonStyles } from "./Buttons/buttonStyle";
 import {
   ContentWrapper,
   DateSeparator,
-  Icon,
   MessageHeaderWrapper,
   MessageOuterWrapper,
   MessageText,
@@ -23,6 +22,7 @@ import { CheckSvg } from "./Icons/CheckIcon";
 import { ClearSvg } from "./Icons/ClearIcon";
 import { GroupIcon } from "./Icons/GroupIcon";
 import { HideIcon } from "./Icons/HideIcon";
+import { Icon } from "./Icons/Icon";
 import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
 import { ReplyIcon } from "./Icons/ReplyActivityIcon";
