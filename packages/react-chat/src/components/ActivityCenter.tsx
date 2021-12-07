@@ -88,12 +88,12 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
               </TimeWrapper>
             </MessageHeaderWrapper>
             {type === "request" && (
-              <RequestHeading>
+              <ContextHeading>
                 Contact request
                 {activity.requestType === "outcome"
                   ? ` to ${activity.user.slice(0, 10)}`
                   : ": "}
-              </RequestHeading>
+              </ContextHeading>
             )}
             <ActivityText>
               {activity.message?.content ||
@@ -104,13 +104,18 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
               activity.channel.type !== "dm" && (
                 <Tag>
                   {activity.channel.type === "group" ? <GroupIcon /> : "#"}{" "}
-                  {` ${activity.channel.name.slice(0, 10)}`}
+                  <span>{` ${activity.channel.name.slice(0, 10)}`}</span>
                 </Tag>
               )}
-            {type === "reply" && activity.message && (
-              <Tag>
-                <ReplyIcon /> {activity.message.content}
-              </Tag>
+            {type === "reply" && activity.quote && (
+              <ReplyWrapper>
+                {activity.quote.image && (
+                  <ContextHeading>Posted an image in</ContextHeading>
+                )}
+                <Tag>
+                  <ReplyIcon /> <span>{activity.quote.content}</span>
+                </Tag>
+              </ReplyWrapper>
             )}
           </ActivityContent>
         </>
@@ -306,6 +311,7 @@ const Activities = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow: auto;
 `;
 
 const EmptyActivities = styled.div`
@@ -336,30 +342,35 @@ const MessageWrapper = styled.div`
 
 const ActivityText = styled(MessageText)`
   white-space: unset;
+  margin-bottom: 8px;
 `;
 
 const Tag = styled.div`
   width: fit-content;
-  max-width: 100%;
+  max-width: 200px;
   display: flex;
   align-items: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+
   border: 1px solid ${({ theme }) => theme.secondary};
   border-radius: 11px;
   padding: 0 6px;
-  margin-top: 8px;
   cursor: pointer;
 
   font-weight: 500;
   color: ${({ theme }) => theme.secondary};
   ${textSmallStyles}
+
+  & > span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 `;
 
-const RequestHeading = styled.p`
+const ContextHeading = styled.p`
   font-style: italic;
   color: ${({ theme }) => theme.secondary};
+  flex-shrink: 0;
   ${textMediumStyles}
 `;
 
@@ -387,4 +398,14 @@ const ActivityContent = styled(ContentWrapper)`
 const Btns = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const ReplyWrapper = styled.div`
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+
+  & > p {
+    margin-right: 4px;
+  }
 `;

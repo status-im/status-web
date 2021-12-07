@@ -12,6 +12,7 @@ export type Activity = {
   request?: string;
   requestType?: "outcome" | "income";
   status?: "sent" | "accepted" | "declined" | "blocked";
+  quote?: ChatMessage;
 };
 
 export type Activities = {

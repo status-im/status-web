@@ -15,4 +15,5 @@ export const ReplyIcon = () => (
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.secondary};
+  flex-shrink: 0;
 `;

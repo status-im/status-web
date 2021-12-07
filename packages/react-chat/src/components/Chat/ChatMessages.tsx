@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useActivities } from "../../contexts/activityProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
@@ -50,6 +52,7 @@ function ChatUiMessage({
 }: ChatUiMessageProps) {
   const { contacts } = useMessengerContext();
   const { setActivities } = useActivities();
+  const identity = useIdentity();
 
   const contact = useMemo(
     () => contacts[message.sender],
@@ -71,7 +74,20 @@ function ChatUiMessage({
           channel: channel,
         },
       ]);
-  }, [mentioned, message]);
+    if (quote && quote.sender === utils.bufToHex(identity.publicKey))
+      setActivities((prev) => [
+        ...prev,
+        {
+          id: message.date.getTime().toString() + message.content,
+          type: "reply",
+          date: message.date,
+          user: message.sender,
+          message: message,
+          channel: channel,
+          quote: quote,
+        },
+      ]);
+  }, [mentioned, message, quote]);
 
   return (
     <MessageOuterWrapper>
