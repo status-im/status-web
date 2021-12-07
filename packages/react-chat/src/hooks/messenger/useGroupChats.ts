@@ -65,7 +65,8 @@ export function useGroupChats(
             msg.text ?? "",
             new Date(msg.clock ?? 0),
             sender,
-            image
+            image,
+            msg.responseTo
           ),
           msg.chatId
         );

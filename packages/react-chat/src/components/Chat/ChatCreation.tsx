@@ -79,7 +79,7 @@ export function ChatCreation({
                 {query && (
                   <SearchBlock
                     query={query}
-                    dsicludeList={styledGroup}
+                    discludeList={styledGroup}
                     onClick={addMember}
                   />
                 )}
