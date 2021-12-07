@@ -183,6 +183,11 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
   const { activities } = useActivities();
   const { contacts } = useMessengerContext();
 
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowActivityCenter(false));
+
+  const [hideRead, setHideRead] = useState(false);
+
   const shownActivities = useMemo(
     () =>
       activities.filter(
@@ -191,19 +196,21 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
     [contacts, activities, activities.length]
   );
 
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowActivityCenter(false));
-
-  const [hideRead, setHideRead] = useState(false);
+  const [filter, setFilter] = useState("");
+  const filteredActivities = shownActivities.filter((activity) =>
+    filter ? activity.type === filter : activity
+  );
 
   return (
     <ActivityBlock ref={ref}>
       <ActivityFilter>
         <Filters>
-          <Filter>All</Filter>
-          <Filter>Mentions</Filter>
-          <Filter>Replies</Filter>
-          <Filter>Contact requests</Filter>
+          <FilterBtn onClick={() => setFilter("")}>All</FilterBtn>
+          <FilterBtn onClick={() => setFilter("mention")}>Mentions</FilterBtn>
+          <FilterBtn onClick={() => setFilter("reply")}>Replies</FilterBtn>
+          <FilterBtn onClick={() => setFilter("request")}>
+            Contact requests
+          </FilterBtn>
         </Filters>
         <Btns>
           <ActivityBtn
@@ -218,9 +225,9 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
           </ActivityBtn>
         </Btns>
       </ActivityFilter>
-      {shownActivities.length > 0 ? (
+      {filteredActivities.length > 0 ? (
         <Activities>
-          {shownActivities.map((activity) => (
+          {filteredActivities.map((activity) => (
             <ActivityMessage key={activity.id} activity={activity} />
           ))}
         </Activities>
@@ -255,7 +262,7 @@ const Filters = styled.div`
   display: flex;
 `;
 
-const Filter = styled.button`
+const FilterBtn = styled.button`
   ${buttonStyles}
   ${textSmallStyles}
 
@@ -267,6 +274,10 @@ const Filter = styled.button`
   }
 
   &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
+  }
+
+  &:focus {
     background: ${({ theme }) => theme.buttonBg};
   }
 `;
