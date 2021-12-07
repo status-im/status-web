@@ -257,6 +257,7 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
               {reply.sender}
             </ReplyTo>
             <ReplyOn>{reply.content}</ReplyOn>
+            {reply.image && <ImagePreview src={reply.image} />}
             <CloseButton onClick={() => setReply(undefined)}>
               {" "}
               <ClearSvg width={20} height={20} className="input" />
@@ -442,20 +443,18 @@ const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-height: 96px;
   padding: 6px 12px;
   background: rgba(0, 0, 0, 0.1);
   color: ${({ theme }) => theme.primary};
   border-radius: 14px 14px 4px 14px;
   position: relative;
-
-  ${textSmallStyles};
 `;
 
 export const ReplyTo = styled.div`
   display: flex;
   align-items: center;
   font-weight: 500;
+  ${textSmallStyles};
 `;
 
 export const ReplyOn = styled.div`
@@ -463,4 +462,5 @@ export const ReplyOn = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  ${textSmallStyles};
 `;
