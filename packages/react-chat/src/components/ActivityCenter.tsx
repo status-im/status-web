@@ -88,15 +88,23 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
               </TimeWrapper>
             </MessageHeaderWrapper>
             {type === "request" && (
-              <RequestHeading>Contact request:</RequestHeading>
+              <RequestHeading>
+                Contact request
+                {activity.requestType === "outcome"
+                  ? ` to ${activity.user.slice(0, 10)}`
+                  : ": "}
+              </RequestHeading>
             )}
-            <ActivityText>{activity.message?.content}</ActivityText>
+            <ActivityText>
+              {activity.message?.content ||
+                (activity.requestType === "income" && activity.request)}
+            </ActivityText>
             {type === "mention" &&
               activity.channel &&
               activity.channel.type !== "dm" && (
                 <Tag>
                   {activity.channel.type === "group" ? <GroupIcon /> : "#"}{" "}
-                  {` ${activity.channel.name}`}
+                  {` ${activity.channel.name.slice(0, 10)}`}
                 </Tag>
               )}
             {type === "reply" && activity.message && (
@@ -106,41 +114,46 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
             )}
           </ActivityContent>
         </>
-        {type === "request" && !activity.status && (
-          <>
-            <ActivityBtn
-              onClick={() => {
-                activity.isRead = true;
-                activity.status = "accepted";
-              }}
-              className="accept"
-            >
-              <CheckSvg width={20} height={20} className="accept" />
-            </ActivityBtn>
-            <ActivityBtn
-              onClick={() => {
-                activity.isRead = true;
-                activity.status = "declined";
-              }}
-              className="decline"
-            >
-              <ClearSvg width={20} height={20} className="decline" />
-            </ActivityBtn>
-            <ActivityBtn
-              onClick={() => {
-                setShowMenu((e) => !e);
-              }}
-            >
-              {showMenu && <ContactMenu id="1" setShowMenu={setShowMenu} />}
-              <MoreIcon />
-            </ActivityBtn>
-          </>
-        )}
+        {type === "request" &&
+          !activity.status &&
+          activity.requestType === "income" && (
+            <>
+              <ActivityBtn
+                onClick={() => {
+                  activity.isRead = true;
+                  activity.status = "accepted";
+                }}
+                className="accept"
+              >
+                <CheckSvg width={20} height={20} className="accept" />
+              </ActivityBtn>
+              <ActivityBtn
+                onClick={() => {
+                  activity.isRead = true;
+                  activity.status = "declined";
+                }}
+                className="decline"
+              >
+                <ClearSvg width={20} height={20} className="decline" />
+              </ActivityBtn>
+              <ActivityBtn
+                onClick={() => {
+                  setShowMenu((e) => !e);
+                }}
+              >
+                {showMenu && <ContactMenu id="1" setShowMenu={setShowMenu} />}
+                <MoreIcon />
+              </ActivityBtn>
+            </>
+          )}
         {type === "request" && activity.status === "accepted" && (
           <RequestStatus className="accepted">Accepted</RequestStatus>
         )}
         {type === "request" && activity.status === "declined" && (
           <RequestStatus className="declined">Declined</RequestStatus>
+        )}
+        {type === "request" && activity.status === "sent" && (
+          <RequestStatus>Sent</RequestStatus>
         )}
         {type !== "request" && (
           <ActivityBtn
@@ -327,6 +340,7 @@ const ActivityText = styled(MessageText)`
 
 const Tag = styled.div`
   width: fit-content;
+  max-width: 100%;
   display: flex;
   align-items: center;
   text-overflow: ellipsis;
@@ -348,10 +362,13 @@ const RequestHeading = styled.p`
   color: ${({ theme }) => theme.secondary};
   ${textMediumStyles}
 `;
+
 const RequestStatus = styled.p`
   font-weight: 500;
   align-self: center;
-  ${textMediumStyles}
+  text-align: end;
+  color: ${({ theme }) => theme.secondary};
+  ${textSmallStyles}
 
   &.accepted {
     color: ${({ theme }) => theme.greenColor};
@@ -364,6 +381,7 @@ const RequestStatus = styled.p`
 
 const ActivityContent = styled(ContentWrapper)`
   max-width: calc(100% - 80px);
+  flex: 1;
 `;
 
 const Btns = styled.div`

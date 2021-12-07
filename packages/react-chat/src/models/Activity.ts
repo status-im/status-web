@@ -10,6 +10,7 @@ export type Activity = {
   message?: ChatMessage;
   channel?: ChannelData;
   request?: string;
+  requestType?: "outcome" | "income";
   status?: "sent" | "accepted" | "declined" | "blocked";
 };
 
