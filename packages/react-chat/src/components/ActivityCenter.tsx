@@ -186,8 +186,6 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
   const ref = useRef(null);
   useClickOutside(ref, () => setShowActivityCenter(false));
 
-  const [hideRead, setHideRead] = useState(false);
-
   const shownActivities = useMemo(
     () =>
       activities.filter(
@@ -196,9 +194,16 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
     [contacts, activities, activities.length]
   );
 
+  const [hideRead, setHideRead] = useState(false);
+
   const [filter, setFilter] = useState("");
+
   const filteredActivities = shownActivities.filter((activity) =>
-    filter ? activity.type === filter : activity
+    filter
+      ? activity.type === filter
+      : hideRead
+      ? activity.isRead !== true
+      : activity
   );
 
   return (
@@ -220,7 +225,7 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
           >
             <ReadIcon />
           </ActivityBtn>
-          <ActivityBtn onClick={() => setHideRead(true)}>
+          <ActivityBtn onClick={() => setHideRead(!hideRead)}>
             {hideRead ? <ShowIcon /> : <HideIcon />}
           </ActivityBtn>
         </Btns>
