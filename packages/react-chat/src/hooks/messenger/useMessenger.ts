@@ -217,7 +217,7 @@ export function useMessenger(
       }
       if (content) {
         if (activeChannel.type === "group") {
-          await groupChat?.sendMessage(activeChannel.id, content);
+          await groupChat?.sendMessage(activeChannel.id, content, responseTo);
         } else {
           await messenger?.sendMessage(activeChannel.id, content, responseTo);
         }

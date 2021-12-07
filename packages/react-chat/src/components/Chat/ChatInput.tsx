@@ -284,7 +284,7 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
             {query && (
               <SearchBlock
                 query={query}
-                dsicludeList={[]}
+                discludeList={[]}
                 onClick={addMention}
                 onBotttom
               />

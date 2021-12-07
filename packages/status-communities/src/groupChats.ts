@@ -68,7 +68,11 @@ export class GroupChats {
    *
    * @param text text message to send
    */
-  public async sendMessage(chatId: string, content: Content): Promise<void> {
+  public async sendMessage(
+    chatId: string,
+    content: Content,
+    responseTo?: string
+  ): Promise<void> {
     const now = Date.now();
     const chat = this.chats[chatId];
     if (chat) {
@@ -78,7 +82,8 @@ export class GroupChats {
             now,
             now,
             chatId,
-            content
+            content,
+            responseTo
           );
           const wakuMessage = await WakuMessage.fromBytes(
             chatMessage.encode(),

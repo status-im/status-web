@@ -8,14 +8,14 @@ import { Member } from "./Members/Member";
 
 interface SearchBlockProps {
   query: string;
-  dsicludeList: string[];
+  discludeList: string[];
   onClick: (member: string) => void;
   onBotttom?: boolean;
 }
 
 export const SearchBlock = ({
   query,
-  dsicludeList,
+  discludeList,
   onClick,
   onBotttom,
 }: SearchBlockProps) => {
@@ -24,8 +24,8 @@ export const SearchBlock = ({
   const searchList = useMemo(() => {
     return Object.values(contacts)
       .filter((member) => member.id.includes(query))
-      .filter((member) => !dsicludeList.includes(member.id));
-  }, [query, dsicludeList, contacts]);
+      .filter((member) => !discludeList.includes(member.id));
+  }, [query, discludeList, contacts]);
 
   if (searchList.length === 0) {
     return null;
@@ -37,7 +37,7 @@ export const SearchBlock = ({
       <ContactsList>
         {Object.values(contacts)
           .filter((member) => member.id.includes(query))
-          .filter((member) => !dsicludeList.includes(member.id))
+          .filter((member) => !discludeList.includes(member.id))
           .map((member) => (
             <Member
               key={member.id}
