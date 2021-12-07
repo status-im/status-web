@@ -64,12 +64,22 @@ function ChatUiMessage({
       <MessageWrapper className={`${mentioned && "mention"}`}>
         {quote && (
           <QuoteWrapper>
-            <QuoteSvg width={22} height={25} />
-            <QuoteAuthor>
+            <QuoteSvg
+              width={22}
+              height={
+                quote.image && quote.content
+                  ? 88
+                  : quote.image && !quote.content
+                  ? 68
+                  : 25
+              }
+            />
+            <QuoteSender>
               {" "}
               <UserIcon memberView={true} /> {quote.sender}
-            </QuoteAuthor>
-            <Quote>{quote.content} </Quote>
+            </QuoteSender>
+            <Quote>{quote.content}</Quote>
+            {quote.image && <QuoteImage src={quote.image} />}
           </QuoteWrapper>
         )}
         <UserMessageWrapper>
@@ -119,6 +129,7 @@ function ChatUiMessage({
               setReply({
                 sender: message.sender,
                 content: message.content,
+                image: message.image,
                 id: message.id,
               })
             }
@@ -381,10 +392,17 @@ const QuoteWrapper = styled.div`
   position: relative;
 `;
 
-const QuoteAuthor = styled(ReplyTo)`
+const QuoteSender = styled(ReplyTo)`
   color: ${({ theme }) => theme.secondary};
 `;
 
 const Quote = styled(ReplyOn)`
   color: ${({ theme }) => theme.secondary};
+`;
+
+const QuoteImage = styled.img`
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  margin-top: 4px;
 `;
