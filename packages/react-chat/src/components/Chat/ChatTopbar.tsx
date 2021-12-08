@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useActivities } from "../../contexts/activityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
+import { ActivityCenter } from "../ActivityCenter";
 import { Channel } from "../Channels/Channel";
 import { Community } from "../Community";
 import { ChannelMenu } from "../Form/ChannelMenu";
+import { ActivityIcon } from "../Icons/ActivityIcon";
 import { MembersIcon } from "../Icons/MembersIcon";
 import { MoreIcon } from "../Icons/MoreIcon";
 import { CommunitySkeleton } from "../Skeleton/CommunitySkeleton";
@@ -31,8 +34,10 @@ export function ChatTopbar({
   setEditGroup,
 }: ChatTopbarProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
+  const { activities } = useActivities();
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
+  const [showActivityCenter, setShowActivityCenter] = useState(false);
 
   return (
     <Topbar
@@ -63,13 +68,24 @@ export function ChatTopbar({
 
       <MenuWrapper>
         {!narrow && (
-          <MemberBtn onClick={onClick} className={showMembers ? "active" : ""}>
+          <TopBtn onClick={onClick} className={showMembers ? "active" : ""}>
             <MembersIcon />
-          </MemberBtn>
+          </TopBtn>
         )}
-        <MoreBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
+        <TopBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
           <MoreIcon />
-        </MoreBtn>
+        </TopBtn>
+        <ActivityWrapper>
+          <TopBtn
+            onClick={() => setShowActivityCenter(!showActivityCenter)}
+            className="activity"
+          >
+            <ActivityIcon />
+            {activities.length > 0 && (
+              <NotificationBagde>{activities.length}</NotificationBagde>
+            )}
+          </TopBtn>
+        </ActivityWrapper>
       </MenuWrapper>
       {!messenger && !communityData && <Loading />}
       {showChannelMenu && (
@@ -80,9 +96,25 @@ export function ChatTopbar({
           setEditGroup={setEditGroup}
         />
       )}
+      {showActivityCenter && (
+        <ActivityCenter setShowActivityCenter={setShowActivityCenter} />
+      )}
     </Topbar>
   );
 }
+
+const Topbar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 8px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
+
+  &.narrow {
+    width: 100%;
+  }
+`;
 
 const ChannelWrapper = styled.div`
   display: flex;
@@ -96,19 +128,6 @@ const ChannelWrapper = styled.div`
 
 const SkeletonWrapper = styled.div`
   padding: 8px;
-`;
-
-const Topbar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 5px 8px;
-  background: ${({ theme }) => theme.bodyBackgroundColor};
-  position: relative;
-
-  &.narrow {
-    width: 100%;
-  }
 `;
 
 const CommunityWrap = styled.div`
@@ -139,35 +158,61 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const MemberBtn = styled.button`
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  padding: 0;
+const ActivityWrapper = styled.div`
+  padding-left: 10px;
+  margin-left: 10px;
+  position: relative;
 
-  &:hover {
-    background: ${({ theme }) => theme.border};
-  }
-
-  &:active,
-  &.active {
-    background: ${({ theme }) => theme.inputColor};
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2px;
+    height: 24px;
+    transform: translateY(-50%);
+    border-radius: 1px;
+    background: ${({ theme }) => theme.primary};
+    opacity: 0.1;
   }
 `;
 
-const MoreBtn = styled.button`
+const TopBtn = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 8px;
   padding: 0;
-  margin: 0 8px;
 
   &:hover {
-    background: ${({ theme }) => theme.border};
+    background: ${({ theme }) => theme.sectionBackgroundColor};
   }
 
   &:active,
   &.active {
     background: ${({ theme }) => theme.inputColor};
   }
+
+  &.activity {
+    &:hover {
+      background: ${({ theme }) => theme.bodyBackgroundColor};
+    }
+  }
+`;
+
+const NotificationBagde = styled.div`
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  background-color: ${({ theme }) => theme.notificationColor};
+  color: ${({ theme }) => theme.bodyBackgroundColor};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 `;

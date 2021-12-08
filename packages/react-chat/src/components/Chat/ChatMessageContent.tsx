@@ -24,7 +24,10 @@ function Mention({ id, setMentioned }: MentionProps) {
   const identity = useIdentity();
 
   if (!contact) return <>{id}</>;
-  if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
+
+  useEffect(() => {
+    if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
+  }, [contact.id]);
 
   return (
     <MentionBLock onClick={() => setShowMenu(!showMenu)}>

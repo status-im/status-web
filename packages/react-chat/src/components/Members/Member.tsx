@@ -3,8 +3,8 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Contact } from "../../models/Contact";
-import { Icon } from "../Chat/ChatMessages";
 import { ContactMenu } from "../Form/ContactMenu";
+import { Icon } from "../Icons/Icon";
 import { UserIcon } from "../Icons/UserIcon";
 
 interface MemberProps {

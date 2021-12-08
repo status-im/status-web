@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { ThemeProvider } from "styled-components";
 import styled from "styled-components";
 
+import { ActivityProvider } from "../contexts/activityProvider";
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
 import { ModalProvider } from "../contexts/modalProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
@@ -28,11 +29,13 @@ export function ReactChat({
       <NarrowProvider myRef={ref}>
         <FetchMetadataProvider fetchMetadata={fetchMetadata}>
           <ModalProvider>
-            <Wrapper ref={ref}>
-              <GlobalStyle />
-              <ChatLoader communityKey={communityKey} />
-              <div id="modal-root" />
-            </Wrapper>
+            <ActivityProvider>
+              <Wrapper ref={ref}>
+                <GlobalStyle />
+                <ChatLoader communityKey={communityKey} />
+                <div id="modal-root" />
+              </Wrapper>
+            </ActivityProvider>
           </ModalProvider>
         </FetchMetadataProvider>
       </NarrowProvider>

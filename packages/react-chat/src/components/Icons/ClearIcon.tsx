@@ -9,7 +9,7 @@ type ClearSvgProps = {
 
 export function ClearSvg({ height, width, className }: ClearSvgProps) {
   return (
-    <svg
+    <Icon
       width={width}
       height={height}
       viewBox="0 0 16 16"
@@ -22,7 +22,7 @@ export function ClearSvg({ height, width, className }: ClearSvgProps) {
         clipRule="evenodd"
         d="M7.99992 14.6668C11.6818 14.6668 14.6666 11.6821 14.6666 8.00016C14.6666 4.31826 11.6818 1.3335 7.99992 1.3335C4.31802 1.3335 1.33325 4.31826 1.33325 8.00016C1.33325 11.6821 4.31802 14.6668 7.99992 14.6668ZM7.99992 13.6668C11.1295 13.6668 13.6666 11.1298 13.6666 8.00016C13.6666 4.87055 11.1295 2.3335 7.99992 2.3335C4.87031 2.3335 2.33325 4.87055 2.33325 8.00016C2.33325 11.1298 4.87031 13.6668 7.99992 13.6668Z"
       />
-    </svg>
+    </Icon>
   );
 }
 
@@ -30,10 +30,8 @@ export const ClearIcon = () => {
   return <Icon width={16} height={16} />;
 };
 
-const Icon = styled(ClearSvg)`
-  & > path {
-    fill: ${({ theme }) => theme.tertiary};
-  }
+const Icon = styled.svg`
+  fill: ${({ theme }) => theme.tertiary};
 
   &.profile {
     fill: ${({ theme }) => theme.secondary};
@@ -47,7 +45,7 @@ const Icon = styled(ClearSvg)`
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 
-  &:hover > path {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
+  &.decline {
+    fill: ${({ theme }) => theme.redColor};
   }
 `;

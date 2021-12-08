@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
+import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useManageContact } from "../../hooks/useManageContact";
@@ -40,6 +41,8 @@ export const ProfileModal = () => {
     [props]
   );
 
+  const { setActivities } = useActivities();
+
   const identity = useIdentity();
   const isUser = useMemo(
     () => id === bufToHex(identity.publicKey),
@@ -47,12 +50,14 @@ export const ProfileModal = () => {
   );
 
   const [renaming, setRenaming] = useState(renamingState ?? false);
+
   useEffect(() => {
     setRenaming(renamingState ?? false);
   }, [renamingState]);
 
   const [request, setRequest] = useState("");
   const [requestCreation, setRequestCreation] = useState(requestState ?? false);
+
   useEffect(() => {
     setRequestCreation(requestState ?? false);
   }, [requestState]);
@@ -183,7 +188,19 @@ export const ProfileModal = () => {
             <Btn
               disabled={!request}
               onClick={() => {
-                setIsUserFriend(true),
+                setActivities((prev) => [
+                  ...prev,
+                  {
+                    id: id + request,
+                    type: "request",
+                    isRead: true,
+                    date: new Date(),
+                    user: id,
+                    request: request,
+                    requestType: "outcome",
+                    status: "sent",
+                  },
+                ]),
                   setRequestCreation(false),
                   setRequest("");
               }}

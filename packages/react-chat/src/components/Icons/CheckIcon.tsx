@@ -9,11 +9,10 @@ type CheckSvgProps = {
 
 export function CheckSvg({ width, height, className }: CheckSvgProps) {
   return (
-    <svg
+    <Icon
       width={width}
       height={height}
       viewBox="0 0 16 16"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
@@ -23,7 +22,7 @@ export function CheckSvg({ width, height, className }: CheckSvgProps) {
         clipRule="evenodd"
         d="M7.99992 14.6668C4.31802 14.6668 1.33325 11.6821 1.33325 8.00016C1.33325 4.31826 4.31802 1.3335 7.99992 1.3335C11.6818 1.3335 14.6666 4.31826 14.6666 8.00016C14.6666 11.6821 11.6818 14.6668 7.99992 14.6668ZM7.99992 13.6668C4.8703 13.6668 2.33325 11.1298 2.33325 8.00016C2.33325 4.87055 4.8703 2.3335 7.99992 2.3335C11.1295 2.3335 13.6666 4.87055 13.6666 8.00016C13.6666 11.1298 11.1295 13.6668 7.99992 13.6668Z"
       />
-    </svg>
+    </Icon>
   );
 }
 
@@ -31,12 +30,14 @@ export const CheckIcon = () => {
   return <Icon width={16} height={16} />;
 };
 
-const Icon = styled(CheckSvg)`
-  & > path {
-    fill: ${({ theme }) => theme.tertiary};
+const Icon = styled.svg`
+  fill: ${({ theme }) => theme.tertiary};
+
+  &:hover {
+    fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 
-  &:hover > path {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
+  &.accept {
+    fill: ${({ theme }) => theme.greenColor};
   }
 `;

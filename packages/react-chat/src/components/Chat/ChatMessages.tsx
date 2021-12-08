@@ -1,14 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
+import { useActivities } from "../../contexts/activityProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
 import { Reply } from "../../hooks/useReply";
+import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { ContactMenu } from "../Form/ContactMenu";
+import { Icon } from "../Icons/Icon";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { QuoteSvg } from "../Icons/QuoteIcon";
 import { ReactionSvg } from "../Icons/ReactionIcon";
@@ -27,6 +32,7 @@ const today = new Date();
 type ChatUiMessageProps = {
   idx: number;
   message: ChatMessage;
+  channel: ChannelData;
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
@@ -36,6 +42,7 @@ type ChatUiMessageProps = {
 
 function ChatUiMessage({
   message,
+  channel,
   idx,
   prevMessage,
   setImage,
@@ -44,12 +51,43 @@ function ChatUiMessage({
   quote,
 }: ChatUiMessageProps) {
   const { contacts } = useMessengerContext();
+  const { setActivities } = useActivities();
+  const identity = useIdentity();
+
   const contact = useMemo(
     () => contacts[message.sender],
     [message.sender, contacts]
   );
   const [showMenu, setShowMenu] = useState(false);
   const [mentioned, setMentioned] = useState(false);
+
+  useEffect(() => {
+    if (mentioned)
+      setActivities((prev) => [
+        ...prev,
+        {
+          id: message.date.getTime().toString() + message.content,
+          type: "mention",
+          date: message.date,
+          user: message.sender,
+          message: message,
+          channel: channel,
+        },
+      ]);
+    if (quote && quote.sender === utils.bufToHex(identity.publicKey))
+      setActivities((prev) => [
+        ...prev,
+        {
+          id: message.date.getTime().toString() + message.content,
+          type: "reply",
+          date: message.date,
+          user: message.sender,
+          message: message,
+          channel: channel,
+          quote: quote,
+        },
+      ]);
+  }, [mentioned, message, quote]);
 
   return (
     <MessageOuterWrapper>
@@ -190,6 +228,7 @@ export function ChatMessages({ setReply }: ChatMessagesProps) {
         <ChatUiMessage
           key={message.id}
           message={message}
+          channel={activeChannel}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
@@ -214,7 +253,7 @@ const MessagesWrapper = styled.div`
   }
 `;
 
-const MessageWrapper = styled.div`
+export const MessageWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -242,7 +281,7 @@ const MessageWrapper = styled.div`
   }
 `;
 
-const MessageOuterWrapper = styled.div`
+export const MessageOuterWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -254,7 +293,7 @@ const UserMessageWrapper = styled.div`
   display: flex;
 `;
 
-const DateSeparator = styled.div`
+export const DateSeparator = styled.div`
   width: 100%;
   display: flex;
   flex: 1;
@@ -272,38 +311,24 @@ const DateSeparator = styled.div`
   ${textSmallStyles}
 `;
 
-const ContentWrapper = styled.div`
+export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 8px;
 `;
 
-const MessageHeaderWrapper = styled.div`
+export const MessageHeaderWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
 
-export const Icon = styled.div`
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: end;
-  border-radius: 50%;
-  background-color: #bcbdff;
-  background-size: contain;
-  background-position: center;
-  flex-shrink: 0;
-  position: relative;
-  cursor: pointer;
-`;
-
-const UserNameWrapper = styled.div`
+export const UserNameWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const UserName = styled.p`
+export const UserName = styled.p`
+  font-weight: 500;
   color: ${({ theme }) => theme.tertiary};
   margin-right: 4px;
 
@@ -331,7 +356,7 @@ export const UserAddress = styled.p`
   }
 `;
 
-const TimeWrapper = styled.div`
+export const TimeWrapper = styled.div`
   font-size: 10px;
   line-height: 14px;
   letter-spacing: 0.2px;
@@ -340,7 +365,7 @@ const TimeWrapper = styled.div`
   margin-left: 4px;
 `;
 
-const MessageText = styled.div`
+export const MessageText = styled.div`
   overflow-wrap: anywhere;
   width: 100%;
   white-space: pre-wrap;
