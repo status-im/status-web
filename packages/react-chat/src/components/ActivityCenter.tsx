@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useActivities } from "../contexts/activityProvider";
 import { useMessengerContext } from "../contexts/messengerProvider";
+import { useModal } from "../contexts/modalProvider";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { Activity } from "../models/Activity";
 import { equalDate } from "../utils/equalDate";
@@ -31,6 +32,7 @@ import { ReplyIcon } from "./Icons/ReplyActivityIcon";
 import { ShowIcon } from "./Icons/ShowIcon";
 import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
+import { ProfileModalName } from "./Modals/ProfileModal";
 import { textMediumStyles, textSmallStyles } from "./Text";
 
 const today = new Date();
@@ -41,6 +43,7 @@ type ActivityMessageProps = {
 
 function ActivityMessage({ activity }: ActivityMessageProps) {
   const { contacts } = useMessengerContext();
+  const { setModal } = useModal(ProfileModalName);
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -68,10 +71,18 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
           <ActivityContent>
             <MessageHeaderWrapper>
               <UserNameWrapper>
-                <UserName>
+                <ActivityUserName
+                  onClick={() => {
+                    setModal({
+                      id: activity.user,
+                      renamingState: false,
+                      requestState: false,
+                    });
+                  }}
+                >
                   {" "}
                   {contact.customName ?? activity.user.slice(0, 10)}
-                </UserName>
+                </ActivityUserName>
                 {contact.customName && (
                   <UserAddress>
                     {activity.user.slice(0, 5)}...{activity.user.slice(-3)}
@@ -146,7 +157,9 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
                   setShowMenu((e) => !e);
                 }}
               >
-                {showMenu && <ContactMenu id="1" setShowMenu={setShowMenu} />}
+                {showMenu && (
+                  <ContactMenu id={activity.user} setShowMenu={setShowMenu} />
+                )}
                 <MoreIcon />
               </ActivityBtn>
             </>
@@ -411,6 +424,13 @@ const ActivityContent = styled(ContentWrapper)`
   flex: 1;
 `;
 
+const ActivityUserName = styled(UserName)`
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 const Btns = styled.div`
   display: flex;
   align-items: center;
