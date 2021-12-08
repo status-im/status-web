@@ -39,11 +39,19 @@ const today = new Date();
 
 type ActivityMessageProps = {
   activity: Activity;
+  setShowActivityCenter: (val: boolean) => void;
 };
 
-function ActivityMessage({ activity }: ActivityMessageProps) {
-  const { contacts } = useMessengerContext();
+function ActivityMessage({
+  activity,
+  setShowActivityCenter,
+}: ActivityMessageProps) {
+  const { contacts, setActiveChannel } = useMessengerContext();
   const { setModal } = useModal(ProfileModalName);
+  const showChannel = () => {
+    activity.channel && setActiveChannel(activity.channel),
+      setShowActivityCenter(false);
+  };
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -113,7 +121,7 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
             {type === "mention" &&
               activity.channel &&
               activity.channel.type !== "dm" && (
-                <Tag>
+                <Tag onClick={showChannel}>
                   {activity.channel.type === "group" ? <GroupIcon /> : "#"}{" "}
                   <span>{` ${activity.channel.name.slice(0, 10)}`}</span>
                 </Tag>
@@ -123,7 +131,7 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
                 {activity.quote.image && (
                   <ContextHeading>Posted an image in</ContextHeading>
                 )}
-                <Tag>
+                <Tag onClick={showChannel}>
                   <ReplyIcon /> <span>{activity.quote.content}</span>
                 </Tag>
               </ReplyWrapper>
@@ -246,7 +254,11 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
       {filteredActivities.length > 0 ? (
         <Activities>
           {filteredActivities.map((activity) => (
-            <ActivityMessage key={activity.id} activity={activity} />
+            <ActivityMessage
+              key={activity.id}
+              activity={activity}
+              setShowActivityCenter={setShowActivityCenter}
+            />
           ))}
         </Activities>
       ) : (
