@@ -29,6 +29,37 @@ import { ChatMessageContent } from "./ChatMessageContent";
 
 const today = new Date();
 
+function calcHeight(quote: ChatMessage) {
+  if (quote.image && quote.content) {
+    return 88;
+  } else if (quote.image && !quote.content) {
+    return 68;
+  } else {
+    return 25;
+  }
+}
+
+type MessageQuoteProps = {
+  quote: ChatMessage | undefined;
+};
+
+function MessageQuote({ quote }: MessageQuoteProps) {
+  if (quote) {
+    return (
+      <QuoteWrapper>
+        <QuoteSvg width={22} height={calcHeight(quote)} />
+        <QuoteSender>
+          {" "}
+          <UserIcon memberView={true} /> {quote.sender}
+        </QuoteSender>
+        <Quote>{quote.content}</Quote>
+        {quote.image && <QuoteImage src={quote.image} />}
+      </QuoteWrapper>
+    );
+  }
+  return null;
+}
+
 type ChatUiMessageProps = {
   idx: number;
   message: ChatMessage;
@@ -98,28 +129,8 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-
       <MessageWrapper className={`${mentioned && "mention"}`}>
-        {quote && (
-          <QuoteWrapper>
-            <QuoteSvg
-              width={22}
-              height={
-                quote.image && quote.content
-                  ? 88
-                  : quote.image && !quote.content
-                  ? 68
-                  : 25
-              }
-            />
-            <QuoteSender>
-              {" "}
-              <UserIcon memberView={true} /> {quote.sender}
-            </QuoteSender>
-            <Quote>{quote.content}</Quote>
-            {quote.image && <QuoteImage src={quote.image} />}
-          </QuoteWrapper>
-        )}
+        <MessageQuote quote={quote} />
         <UserMessageWrapper>
           <Icon
             onClick={() => {
