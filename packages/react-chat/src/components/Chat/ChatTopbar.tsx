@@ -76,10 +76,7 @@ export function ChatTopbar({
           <MoreIcon />
         </TopBtn>
         <ActivityWrapper>
-          <TopBtn
-            onClick={() => setShowActivityCenter(!showActivityCenter)}
-            className="activity"
-          >
+          <TopBtn onClick={() => setShowActivityCenter(!showActivityCenter)}>
             <ActivityIcon />
             {activities.length > 0 && (
               <NotificationBagde
@@ -194,18 +191,11 @@ const TopBtn = styled.button`
   padding: 0;
 
   &:hover {
-    background: ${({ theme }) => theme.sectionBackgroundColor};
-  }
-
-  &:active,
-  &.active {
     background: ${({ theme }) => theme.inputColor};
   }
 
-  &.activity {
-    &:hover {
-      background: ${({ theme }) => theme.bodyBackgroundColor};
-    }
+  &:active {
+    background: ${({ theme }) => theme.sectionBackgroundColor};
   }
 `;
 
