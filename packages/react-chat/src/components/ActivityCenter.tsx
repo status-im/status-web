@@ -21,6 +21,7 @@ import {
   UserNameWrapper,
 } from "./Chat/ChatMessages";
 import { ContactMenu } from "./Form/ContactMenu";
+import { Tooltip } from "./Form/Tooltip";
 import { CheckSvg } from "./Icons/CheckIcon";
 import { ClearSvg } from "./Icons/ClearIcon";
 import { GroupIcon } from "./Icons/GroupIcon";
@@ -182,14 +183,17 @@ function ActivityMessage({
           <RequestStatus>Sent</RequestStatus>
         )}
         {type !== "request" && (
-          <ActivityBtn
-            onClick={() => {
-              activity.isRead = true;
-            }}
-            className={`${activity.isRead && "read"}`}
-          >
-            <ReadIcon isRead={activity.isRead} />
-          </ActivityBtn>
+          <BtnWrapper>
+            <ActivityBtn
+              onClick={() => {
+                activity.isRead = true;
+              }}
+              className={`${activity.isRead && "read"}`}
+            >
+              <ReadIcon isRead={activity.isRead} />
+            </ActivityBtn>
+            <Tooltip tip="Mark Read" className="read" />
+          </BtnWrapper>
         )}
       </MessageWrapper>
     </MessageOuterWrapper>
@@ -239,16 +243,22 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
           </FilterBtn>
         </Filters>
         <Btns>
-          <ActivityBtn
-            onClick={() => {
-              shownActivities.map((activity) => (activity.isRead = true));
-            }}
-          >
-            <ReadIcon />
-          </ActivityBtn>
-          <ActivityBtn onClick={() => setHideRead(!hideRead)}>
-            {hideRead ? <ShowIcon /> : <HideIcon />}
-          </ActivityBtn>
+          <BtnWrapper>
+            <ActivityBtn
+              onClick={() => {
+                shownActivities.map((activity) => (activity.isRead = true));
+              }}
+            >
+              <ReadIcon />
+            </ActivityBtn>
+            <Tooltip tip="Mark all as Read" />
+          </BtnWrapper>
+          <BtnWrapper>
+            <ActivityBtn onClick={() => setHideRead(!hideRead)}>
+              {hideRead ? <ShowIcon /> : <HideIcon />}
+            </ActivityBtn>
+            <Tooltip tip={hideRead ? "Show read" : "Hide read"} />
+          </BtnWrapper>
         </Btns>
       </ActivityFilter>
       {filteredActivities.length > 0 ? (
@@ -309,6 +319,14 @@ const FilterBtn = styled.button`
 
   &:focus {
     background: ${({ theme }) => theme.buttonBg};
+  }
+`;
+
+const BtnWrapper = styled.div`
+  position: relative;
+
+  &:hover > div {
+    visibility: visible;
   }
 `;
 
