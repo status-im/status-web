@@ -35,8 +35,7 @@ export const MenuItem = styled.li`
 
   &:hover,
   &:hover > span {
-    background: ${({ theme }) => theme.tertiary};
-    color: ${({ theme }) => theme.bodyBackgroundColor};
+    background: ${({ theme }) => theme.border};
   }
 
   & > svg {
@@ -46,15 +45,11 @@ export const MenuItem = styled.li`
   & > svg.red {
     fill: ${({ theme }) => theme.redColor};
   }
-
-  &:hover > svg {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
-  }
 `;
 
 export const MenuText = styled.span`
   margin-left: 6px;
-  color: ${({ theme }) => theme.tertiary};
+  color: ${({ theme }) => theme.primary};
 
   &.red {
     color: ${({ theme }) => theme.redColor};

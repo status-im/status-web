@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useActivities } from "../contexts/activityProvider";
 import { useMessengerContext } from "../contexts/messengerProvider";
+import { useModal } from "../contexts/modalProvider";
 import { useClickOutside } from "../hooks/useClickOutside";
 import { Activity } from "../models/Activity";
 import { equalDate } from "../utils/equalDate";
@@ -20,6 +21,7 @@ import {
   UserNameWrapper,
 } from "./Chat/ChatMessages";
 import { ContactMenu } from "./Form/ContactMenu";
+import { Tooltip } from "./Form/Tooltip";
 import { CheckSvg } from "./Icons/CheckIcon";
 import { ClearSvg } from "./Icons/ClearIcon";
 import { GroupIcon } from "./Icons/GroupIcon";
@@ -31,16 +33,26 @@ import { ReplyIcon } from "./Icons/ReplyActivityIcon";
 import { ShowIcon } from "./Icons/ShowIcon";
 import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
+import { ProfileModalName } from "./Modals/ProfileModal";
 import { textMediumStyles, textSmallStyles } from "./Text";
 
 const today = new Date();
 
 type ActivityMessageProps = {
   activity: Activity;
+  setShowActivityCenter: (val: boolean) => void;
 };
 
-function ActivityMessage({ activity }: ActivityMessageProps) {
-  const { contacts } = useMessengerContext();
+function ActivityMessage({
+  activity,
+  setShowActivityCenter,
+}: ActivityMessageProps) {
+  const { contacts, setActiveChannel } = useMessengerContext();
+  const { setModal } = useModal(ProfileModalName);
+  const showChannel = () => {
+    activity.channel && setActiveChannel(activity.channel),
+      setShowActivityCenter(false);
+  };
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -68,10 +80,18 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
           <ActivityContent>
             <MessageHeaderWrapper>
               <UserNameWrapper>
-                <UserName>
+                <ActivityUserName
+                  onClick={() => {
+                    setModal({
+                      id: activity.user,
+                      renamingState: false,
+                      requestState: false,
+                    });
+                  }}
+                >
                   {" "}
                   {contact.customName ?? activity.user.slice(0, 10)}
-                </UserName>
+                </ActivityUserName>
                 {contact.customName && (
                   <UserAddress>
                     {activity.user.slice(0, 5)}...{activity.user.slice(-3)}
@@ -102,7 +122,7 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
             {type === "mention" &&
               activity.channel &&
               activity.channel.type !== "dm" && (
-                <Tag>
+                <Tag onClick={showChannel}>
                   {activity.channel.type === "group" ? <GroupIcon /> : "#"}{" "}
                   <span>{` ${activity.channel.name.slice(0, 10)}`}</span>
                 </Tag>
@@ -112,7 +132,7 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
                 {activity.quote.image && (
                   <ContextHeading>Posted an image in</ContextHeading>
                 )}
-                <Tag>
+                <Tag onClick={showChannel}>
                   <ReplyIcon /> <span>{activity.quote.content}</span>
                 </Tag>
               </ReplyWrapper>
@@ -146,7 +166,9 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
                   setShowMenu((e) => !e);
                 }}
               >
-                {showMenu && <ContactMenu id="1" setShowMenu={setShowMenu} />}
+                {showMenu && (
+                  <ContactMenu id={activity.user} setShowMenu={setShowMenu} />
+                )}
                 <MoreIcon />
               </ActivityBtn>
             </>
@@ -161,14 +183,17 @@ function ActivityMessage({ activity }: ActivityMessageProps) {
           <RequestStatus>Sent</RequestStatus>
         )}
         {type !== "request" && (
-          <ActivityBtn
-            onClick={() => {
-              activity.isRead = true;
-            }}
-            className={`${activity.isRead && "read"}`}
-          >
-            <ReadIcon isRead={activity.isRead} />
-          </ActivityBtn>
+          <BtnWrapper>
+            <ActivityBtn
+              onClick={() => {
+                activity.isRead = true;
+              }}
+              className={`${activity.isRead && "read"}`}
+            >
+              <ReadIcon isRead={activity.isRead} />
+            </ActivityBtn>
+            <Tooltip tip="Mark Read" className="read" />
+          </BtnWrapper>
         )}
       </MessageWrapper>
     </MessageOuterWrapper>
@@ -218,22 +243,32 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
           </FilterBtn>
         </Filters>
         <Btns>
-          <ActivityBtn
-            onClick={() => {
-              shownActivities.map((activity) => (activity.isRead = true));
-            }}
-          >
-            <ReadIcon />
-          </ActivityBtn>
-          <ActivityBtn onClick={() => setHideRead(!hideRead)}>
-            {hideRead ? <ShowIcon /> : <HideIcon />}
-          </ActivityBtn>
+          <BtnWrapper>
+            <ActivityBtn
+              onClick={() => {
+                shownActivities.map((activity) => (activity.isRead = true));
+              }}
+            >
+              <ReadIcon />
+            </ActivityBtn>
+            <Tooltip tip="Mark all as Read" />
+          </BtnWrapper>
+          <BtnWrapper>
+            <ActivityBtn onClick={() => setHideRead(!hideRead)}>
+              {hideRead ? <ShowIcon /> : <HideIcon />}
+            </ActivityBtn>
+            <Tooltip tip={hideRead ? "Show read" : "Hide read"} />
+          </BtnWrapper>
         </Btns>
       </ActivityFilter>
       {filteredActivities.length > 0 ? (
         <Activities>
           {filteredActivities.map((activity) => (
-            <ActivityMessage key={activity.id} activity={activity} />
+            <ActivityMessage
+              key={activity.id}
+              activity={activity}
+              setShowActivityCenter={setShowActivityCenter}
+            />
           ))}
         </Activities>
       ) : (
@@ -284,6 +319,14 @@ const FilterBtn = styled.button`
 
   &:focus {
     background: ${({ theme }) => theme.buttonBg};
+  }
+`;
+
+const BtnWrapper = styled.div`
+  position: relative;
+
+  &:hover > div {
+    visibility: visible;
   }
 `;
 
@@ -411,6 +454,13 @@ const ActivityContent = styled(ContentWrapper)`
   flex: 1;
 `;
 
+const ActivityUserName = styled(UserName)`
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 const Btns = styled.div`
   display: flex;
   align-items: center;

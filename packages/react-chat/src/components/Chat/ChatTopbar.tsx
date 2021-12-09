@@ -76,13 +76,20 @@ export function ChatTopbar({
           <MoreIcon />
         </TopBtn>
         <ActivityWrapper>
-          <TopBtn
-            onClick={() => setShowActivityCenter(!showActivityCenter)}
-            className="activity"
-          >
+          <TopBtn onClick={() => setShowActivityCenter(!showActivityCenter)}>
             <ActivityIcon />
             {activities.length > 0 && (
-              <NotificationBagde>{activities.length}</NotificationBagde>
+              <NotificationBagde
+                className={
+                  activities.length > 99
+                    ? "countless"
+                    : activities.length > 9
+                    ? "wide"
+                    : undefined
+                }
+              >
+                {activities.length < 100 ? activities.length : "∞"}
+              </NotificationBagde>
             )}
           </TopBtn>
         </ActivityWrapper>
@@ -184,18 +191,11 @@ const TopBtn = styled.button`
   padding: 0;
 
   &:hover {
-    background: ${({ theme }) => theme.sectionBackgroundColor};
-  }
-
-  &:active,
-  &.active {
     background: ${({ theme }) => theme.inputColor};
   }
 
-  &.activity {
-    &:hover {
-      background: ${({ theme }) => theme.bodyBackgroundColor};
-    }
+  &:active {
+    background: ${({ theme }) => theme.sectionBackgroundColor};
   }
 `;
 
@@ -205,14 +205,24 @@ const NotificationBagde = styled.div`
   position: absolute;
   top: -2px;
   right: -2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
   border-radius: 50%;
   font-size: 12px;
   line-height: 16px;
   font-weight: 500;
   background-color: ${({ theme }) => theme.notificationColor};
   color: ${({ theme }) => theme.bodyBackgroundColor};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  border-radius: 9px;
+
+  &.wide {
+    width: 26px;
+    right: -7px;
+  }
+
+  &.countless {
+    width: 22px;
+  }
 `;

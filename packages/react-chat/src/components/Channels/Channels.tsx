@@ -135,11 +135,10 @@ const EditBtn = styled.button`
   padding: 0;
 
   &:hover {
-    background: ${({ theme }) => theme.border};
+    background: ${({ theme }) => theme.inputColor};
   }
 
-  &:active,
-  &.active {
-    background: ${({ theme }) => theme.inputColor};
+  &:active {
+    background: ${({ theme }) => theme.sectionBackgroundColor};
   }
 `;
