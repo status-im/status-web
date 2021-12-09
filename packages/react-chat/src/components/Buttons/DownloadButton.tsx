@@ -53,7 +53,9 @@ export const DownloadButton = ({ className }: DownloadButtonProps) => {
       target="_blank"
       rel="noopener noreferrer"
     >
-      {os ? `Download Status for ${os}` : "Download Status"}
+      {os
+        ? `${className === "activity" ? "d" : "D"}ownload Status for ${os}`
+        : `${className === "activity" ? "d" : "D"}ownload Status`}
     </Link>
   );
 };
@@ -66,5 +68,21 @@ const Link = styled.a`
 
   &:hover {
     background: ${({ theme }) => theme.buttonBgHover};
+  }
+
+  &.activity {
+    margin: 0;
+    padding: 0;
+    color: ${({ theme }) => theme.secondary};
+    font-style: italic;
+    border-radius: 0;
+    font-weight: 400;
+    text-decoration: underline;
+    background: inherit;
+
+    &:hover {
+      background: inherit;
+      color: ${({ theme }) => theme.tertiary};
+    }
   }
 `;

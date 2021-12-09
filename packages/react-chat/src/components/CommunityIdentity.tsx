@@ -47,7 +47,7 @@ export const Column = styled.div`
   align-items: flex-start;
 `;
 
-const Logo = styled.div`
+export const Logo = styled.div`
   width: 36px;
   height: 36px;
   display: flex;
