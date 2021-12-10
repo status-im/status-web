@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useToasts } from "../../contexts/toastProvider";
 import { useManageContact } from "../../hooks/useManageContact";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
@@ -42,6 +43,8 @@ export const ProfileModal = () => {
   );
 
   const { setActivities } = useActivities();
+  const { setToasts } = useToasts();
+  const { setModal } = useModal(ProfileModalName);
 
   const identity = useIdentity();
   const isUser = useMemo(
@@ -160,6 +163,7 @@ export const ProfileModal = () => {
               maxLength={280}
               onInput={(e) => setRequest(e.currentTarget.value)}
               required
+              autoFocus
             />
           </RequestSection>
         )}
@@ -201,7 +205,15 @@ export const ProfileModal = () => {
                     status: "sent",
                   },
                 ]),
+                  setToasts((prev) => [
+                    ...prev,
+                    {
+                      id: id + request,
+                      type: "request",
+                    },
+                  ]),
                   setRequestCreation(false),
+                  setModal(false),
                   setRequest("");
               }}
             >
