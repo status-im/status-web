@@ -6,6 +6,7 @@ import { ActivityProvider } from "../contexts/activityProvider";
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
 import { ModalProvider } from "../contexts/modalProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
+import { ToastProvider } from "../contexts/toastProvider";
 import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
@@ -30,11 +31,13 @@ export function ReactChat({
         <FetchMetadataProvider fetchMetadata={fetchMetadata}>
           <ModalProvider>
             <ActivityProvider>
-              <Wrapper ref={ref}>
-                <GlobalStyle />
-                <ChatLoader communityKey={communityKey} />
-                <div id="modal-root" />
-              </Wrapper>
+              <ToastProvider>
+                <Wrapper ref={ref}>
+                  <GlobalStyle />
+                  <ChatLoader communityKey={communityKey} />
+                  <div id="modal-root" />
+                </Wrapper>
+              </ToastProvider>
             </ActivityProvider>
           </ModalProvider>
         </FetchMetadataProvider>

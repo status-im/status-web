@@ -12,6 +12,7 @@ import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
 import { ProfileModal } from "./Modals/ProfileModal";
+import { ToastMessageList } from "./ToastMessages/ToastMessageList";
 
 function Modals() {
   return (
@@ -45,6 +46,7 @@ export function Chat() {
       {showMembers && !narrow && state === ChatState.ChatBody && <Members />}
       {state === ChatState.ChatCreation && <ChatCreation />}
       <Modals />
+      <ToastMessageList />
     </ChatWrapper>
   );
 }
@@ -53,6 +55,7 @@ const ChatWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  position: relative;
 `;
 
 const ChannelsWrapper = styled.div`
