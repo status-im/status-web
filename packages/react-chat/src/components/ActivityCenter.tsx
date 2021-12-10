@@ -8,6 +8,7 @@ import { useClickOutside } from "../hooks/useClickOutside";
 import { Activity } from "../models/Activity";
 import { equalDate } from "../utils/equalDate";
 
+import { DownloadButton } from "./Buttons/DownloadButton";
 import { buttonStyles } from "./Buttons/buttonStyle";
 import { Mention } from "./Chat/ChatMessageContent";
 import {
@@ -21,10 +22,12 @@ import {
   UserName,
   UserNameWrapper,
 } from "./Chat/ChatMessages";
+import { Logo } from "./CommunityIdentity";
 import { ContactMenu } from "./Form/ContactMenu";
 import { Tooltip } from "./Form/Tooltip";
 import { CheckSvg } from "./Icons/CheckIcon";
 import { ClearSvg } from "./Icons/ClearIcon";
+import { CommunityIcon } from "./Icons/CommunityIcon";
 import { GroupIcon } from "./Icons/GroupIcon";
 import { HideIcon } from "./Icons/HideIcon";
 import { Icon } from "./Icons/Icon";
@@ -142,6 +145,25 @@ function ActivityMessage({
                   : ": "}
               </ContextHeading>
             )}
+            {type === "invitation" && (
+              <FlexDiv>
+                <ContextHeading>{`Invited you to join a community `}</ContextHeading>
+                <Tag>
+                  <CommunityIcon />
+                  <CommunityLogo
+                    style={{
+                      backgroundImage: activity.invitation?.icon
+                        ? `url(${activity.invitation?.icon}`
+                        : "",
+                    }}
+                  >
+                    {activity.invitation?.icon === undefined &&
+                      activity.invitation?.name.slice(0, 1).toUpperCase()}
+                  </CommunityLogo>
+                  <span>{activity.invitation?.name}</span>
+                </Tag>
+              </FlexDiv>
+            )}
             <ActivityText>
               {activity.message?.content && (
                 <div>{elements.map((el) => el)}</div>
@@ -165,6 +187,12 @@ function ActivityMessage({
                   <ReplyIcon /> <span>{activity.quote.content}</span>
                 </Tag>
               </ReplyWrapper>
+            )}
+            {type === "invitation" && (
+              <InviteDiv>
+                <ContextHeading>{`To access other communities, `}</ContextHeading>
+                <DownloadButton className="activity" />
+              </InviteDiv>
             )}
           </ActivityContent>
         </>
@@ -211,7 +239,7 @@ function ActivityMessage({
         {type === "request" && activity.status === "sent" && (
           <RequestStatus>Sent</RequestStatus>
         )}
-        {type !== "request" && (
+        {(type === "mention" || type === "reply") && (
           <BtnWrapper>
             <ActivityBtn
               onClick={() => {
@@ -263,14 +291,14 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
   return (
     <ActivityBlock ref={ref}>
       <ActivityFilter>
-        <Filters>
+        <FlexDiv>
           <FilterBtn onClick={() => setFilter("")}>All</FilterBtn>
           <FilterBtn onClick={() => setFilter("mention")}>Mentions</FilterBtn>
           <FilterBtn onClick={() => setFilter("reply")}>Replies</FilterBtn>
           <FilterBtn onClick={() => setFilter("request")}>
             Contact requests
           </FilterBtn>
-        </Filters>
+        </FlexDiv>
         <Btns>
           <BtnWrapper>
             <ActivityBtn
@@ -327,8 +355,13 @@ const ActivityFilter = styled.div`
   padding: 13px 16px;
 `;
 
-const Filters = styled.div`
+const FlexDiv = styled.div`
   display: flex;
+`;
+
+const InviteDiv = styled.div`
+  display: flex;
+  margin-top: -4px;
 `;
 
 const FilterBtn = styled.button`
@@ -459,6 +492,7 @@ const ContextHeading = styled.p`
   font-style: italic;
   color: ${({ theme }) => theme.secondary};
   flex-shrink: 0;
+  white-space: pre-wrap;
   ${textMediumStyles}
 `;
 
@@ -503,4 +537,12 @@ const ReplyWrapper = styled.div`
   & > p {
     margin-right: 4px;
   }
+`;
+
+const CommunityLogo = styled(Logo)`
+  width: 16px;
+  height: 16px;
+  margin: 0 2px 0 4px;
+
+  ${textSmallStyles}
 `;
