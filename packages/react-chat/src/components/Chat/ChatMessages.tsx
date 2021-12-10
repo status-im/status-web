@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
@@ -44,9 +50,30 @@ type MessageQuoteProps = {
 };
 
 function MessageQuote({ quote }: MessageQuoteProps) {
+  const quoteClick = useCallback(() => {
+    if (quote) {
+      const quoteDiv = document.getElementById(quote.id);
+      if (quoteDiv) {
+        quoteDiv.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+          inline: "center",
+        });
+        quoteDiv.style.background = "lightblue";
+        quoteDiv.style.transition = "background-color 1000ms linear";
+        window.setTimeout(() => {
+          quoteDiv.style.background = "";
+          window.setTimeout(() => {
+            quoteDiv.style.transition = "";
+          }, 1000);
+        }, 1000);
+      }
+    }
+  }, [quote]);
+
   if (quote) {
     return (
-      <QuoteWrapper>
+      <QuoteWrapper onClick={quoteClick}>
         <QuoteSvg width={22} height={calcHeight(quote)} />
         <QuoteSender>
           {" "}
@@ -129,7 +156,7 @@ function ChatUiMessage({
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-      <MessageWrapper className={`${mentioned && "mention"}`}>
+      <MessageWrapper className={`${mentioned && "mention"}`} id={message.id}>
         <MessageQuote quote={quote} />
         <UserMessageWrapper>
           <Icon
@@ -142,7 +169,6 @@ function ChatUiMessage({
             )}
             <UserIcon />
           </Icon>
-
           <ContentWrapper>
             <MessageHeaderWrapper>
               <UserNameWrapper>
