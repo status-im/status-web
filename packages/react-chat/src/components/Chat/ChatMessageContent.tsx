@@ -15,9 +15,10 @@ import { textMediumStyles, textSmallStyles } from "../Text";
 interface MentionProps {
   id: string;
   setMentioned: (val: boolean) => void;
+  className?: string;
 }
 
-function Mention({ id, setMentioned }: MentionProps) {
+export function Mention({ id, setMentioned, className }: MentionProps) {
   const { contacts } = useMessengerContext();
   const contact = useMemo(() => contacts[id.slice(1)], [id, contacts]);
   const [showMenu, setShowMenu] = useState(false);
@@ -30,7 +31,7 @@ function Mention({ id, setMentioned }: MentionProps) {
   }, [contact.id]);
 
   return (
-    <MentionBLock onClick={() => setShowMenu(!showMenu)}>
+    <MentionBLock onClick={() => setShowMenu(!showMenu)} className={className}>
       {`@${contact.customName ?? contact.id}`}
       {showMenu && <ContactMenu id={id.slice(1)} setShowMenu={setShowMenu} />}
     </MentionBLock>
@@ -205,6 +206,13 @@ const MentionBLock = styled.div`
 
   &:hover {
     background: ${({ theme }) => theme.mentionHover};
+  }
+
+  &.activity {
+    max-width: 488px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   ${textMediumStyles}

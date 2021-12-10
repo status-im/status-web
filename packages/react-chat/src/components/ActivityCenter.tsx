@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useActivities } from "../contexts/activityProvider";
@@ -9,6 +9,7 @@ import { Activity } from "../models/Activity";
 import { equalDate } from "../utils/equalDate";
 
 import { buttonStyles } from "./Buttons/buttonStyle";
+import { Mention } from "./Chat/ChatMessageContent";
 import {
   ContentWrapper,
   DateSeparator,
@@ -63,6 +64,32 @@ function ActivityMessage({
     [activity.user, contacts]
   );
 
+  const [elements, setElements] = useState<
+    (string | React.ReactElement | undefined)[]
+  >([activity.message?.content]);
+
+  useEffect(() => {
+    if (activity.message) {
+      const split = activity.message?.content.split(" ");
+      const newSplit = split.flatMap((element, idx) => {
+        if (element.startsWith("@")) {
+          return [
+            <Mention
+              key={idx}
+              id={element}
+              setMentioned={() => true}
+              className="activity"
+            />,
+            " ",
+          ];
+        }
+        return [element, " "];
+      });
+      newSplit.pop();
+      setElements(newSplit);
+    }
+  }, [activity.message?.content]);
+
   return (
     <MessageOuterWrapper>
       <ActivityDate>
@@ -116,8 +143,10 @@ function ActivityMessage({
               </ContextHeading>
             )}
             <ActivityText>
-              {activity.message?.content ||
-                (activity.requestType === "income" && activity.request)}
+              {activity.message?.content && (
+                <div>{elements.map((el) => el)}</div>
+              )}
+              {activity.requestType === "income" && activity.request}
             </ActivityText>
             {type === "mention" &&
               activity.channel &&
