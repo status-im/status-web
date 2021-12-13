@@ -24,6 +24,7 @@ export type Theme = {
   mentionHover: string;
   mentionBg: string;
   mentionBgHover: string;
+  shadow: string;
 };
 
 export const lightTheme: Theme = {
@@ -52,6 +53,8 @@ export const lightTheme: Theme = {
   mentionHover: "#BDE7F2",
   mentionBg: "#E5F8FD",
   mentionBgHover: "#D4F3FA",
+  shadow:
+    "0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)",
 };
 
 export const darkTheme: Theme = {
@@ -80,6 +83,8 @@ export const darkTheme: Theme = {
   mentionHover: "#004E60",
   mentionBg: "#004050",
   mentionBgHover: "#002D39",
+  shadow:
+    "0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)",
 };
 
 export default { lightTheme, darkTheme };
