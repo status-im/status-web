@@ -4,13 +4,13 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { Reply } from "../../hooks/useReply";
+import { MessagesList } from "../Messages/MessagesList";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
 import { NarrowMembers } from "../NarrowMode/NarrowMembers";
 import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
 
 import { ChatCreation } from "./ChatCreation";
 import { ChatInput } from "./ChatInput";
-import { ChatMessages } from "./ChatMessages";
 import { ChatTopbar } from "./ChatTopbar";
 
 export enum ChatBodyState {
@@ -71,7 +71,7 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
           {showState === ChatBodyState.Chat && (
             <>
               {messenger && communityData ? (
-                <ChatMessages setReply={setReply} />
+                <MessagesList setReply={setReply} />
               ) : (
                 <LoadingSkeleton />
               )}

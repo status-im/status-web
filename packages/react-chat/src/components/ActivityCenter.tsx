@@ -11,17 +11,6 @@ import { equalDate } from "../utils/equalDate";
 import { DownloadButton } from "./Buttons/DownloadButton";
 import { buttonStyles } from "./Buttons/buttonStyle";
 import { Mention } from "./Chat/ChatMessageContent";
-import {
-  ContentWrapper,
-  DateSeparator,
-  MessageHeaderWrapper,
-  MessageOuterWrapper,
-  MessageText,
-  TimeWrapper,
-  UserAddress,
-  UserName,
-  UserNameWrapper,
-} from "./Chat/ChatMessages";
 import { Logo } from "./CommunityIdentity";
 import { ContactMenu } from "./Form/ContactMenu";
 import { Tooltip } from "./Form/Tooltip";
@@ -37,6 +26,17 @@ import { ReplyIcon } from "./Icons/ReplyActivityIcon";
 import { ShowIcon } from "./Icons/ShowIcon";
 import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
 import { UserIcon } from "./Icons/UserIcon";
+import {
+  ContentWrapper,
+  DateSeparator,
+  MessageHeaderWrapper,
+  MessageOuterWrapper,
+  MessageText,
+  TimeWrapper,
+  UserAddress,
+  UserName,
+  UserNameWrapper,
+} from "./Messages/Styles";
 import { ProfileModalName } from "./Modals/ProfileModal";
 import { textMediumStyles, textSmallStyles } from "./Text";
 
