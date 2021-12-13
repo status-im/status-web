@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useManageContact } from "../../hooks/useManageContact";
-import { UserAddress } from "../Chat/ChatMessages";
 import { AddContactSvg } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
 import { ChatSvg } from "../Icons/ChatIcon";
@@ -14,6 +13,7 @@ import { ProfileSvg } from "../Icons/ProfileIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { WarningSvg } from "../Icons/WarningIcon";
+import { UserAddress } from "../Messages/Styles";
 import { ProfileModalName } from "../Modals/ProfileModal";
 import { textMediumStyles } from "../Text";
 
