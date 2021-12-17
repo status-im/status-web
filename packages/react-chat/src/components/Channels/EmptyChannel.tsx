@@ -34,7 +34,8 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         </EmptyText>
       ) : channel.type === "group" ? (
         <EmptyTextGroup>
-          <span>{utils.bufToHex(identity.publicKey)}</span> created a group with{" "}
+          {identity && <span>{utils.bufToHex(identity.publicKey)}</span>}{" "}
+          created a group with{" "}
           <span>{groupName.slice(groupName.length - 1)}</span> and{" "}
           <span>{groupName.at(-1)}</span>
         </EmptyTextGroup>

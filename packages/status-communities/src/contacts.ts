@@ -10,7 +10,7 @@ const STATUS_BROADCAST_INTERVAL = 30000;
 
 export class Contacts {
   waku: Waku;
-  identity: Identity;
+  identity: Identity | undefined;
   private callback: (publicKey: string, clock: number) => void;
   private contacts: string[] = [];
 
@@ -28,7 +28,7 @@ export class Contacts {
    * @param callback callback function called when user status broadcast is received
    */
   public constructor(
-    identity: Identity,
+    identity: Identity | undefined,
     waku: Waku,
     callback: (publicKey: string, clock: number) => void
   ) {
@@ -36,7 +36,9 @@ export class Contacts {
     this.identity = identity;
     this.callback = callback;
     this.startBroadcast();
-    this.addContact(bufToHex(identity.publicKey));
+    if (identity) {
+      this.addContact(bufToHex(identity.publicKey));
+    }
   }
 
   /**
@@ -70,15 +72,17 @@ export class Contacts {
 
   private startBroadcast(): void {
     const send = async (): Promise<void> => {
-      const statusUpdate = StatusUpdate.create(
-        StatusUpdate_StatusType.AUTOMATIC,
-        ""
-      );
-      const msg = await WakuMessage.fromBytes(
-        statusUpdate.encode(),
-        idToContactCodeTopic(bufToHex(this.identity.publicKey))
-      );
-      this.waku.relay.send(msg);
+      if (this.identity) {
+        const statusUpdate = StatusUpdate.create(
+          StatusUpdate_StatusType.AUTOMATIC,
+          ""
+        );
+        const msg = await WakuMessage.fromBytes(
+          statusUpdate.encode(),
+          idToContactCodeTopic(bufToHex(this.identity.publicKey))
+        );
+        this.waku.relay.send(msg);
+      }
     };
     send();
     setInterval(send, STATUS_BROADCAST_INTERVAL);

@@ -12,6 +12,16 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
 import { uintToImgUrl } from "../../utils";
 
+const contactFromId = (member: string): Contact => {
+  return {
+    blocked: false,
+    id: member,
+    isUntrustworthy: false,
+    online: false,
+    trueName: member,
+  };
+};
+
 export function useGroupChats(
   messenger: Messenger | undefined,
   identity: Identity | undefined,
@@ -23,15 +33,6 @@ export function useGroupChats(
   const groupChat = useMemo(() => {
     if (messenger && identity) {
       const addChat = (chat: GroupChat) => {
-        const contactFromId = (member: string): Contact => {
-          return {
-            blocked: false,
-            id: member,
-            isUntrustworthy: false,
-            online: false,
-            trueName: member,
-          };
-        };
         const members = chat.members.map(contactFromId);
         const channel: ChannelData = {
           id: chat.chatId,

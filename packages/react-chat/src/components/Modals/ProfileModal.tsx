@@ -47,10 +47,13 @@ export const ProfileModal = () => {
   const { setModal } = useModal(ProfileModalName);
 
   const identity = useIdentity();
-  const isUser = useMemo(
-    () => id === bufToHex(identity.publicKey),
-    [id, identity]
-  );
+  const isUser = useMemo(() => {
+    if (identity) {
+      return id === bufToHex(identity.publicKey);
+    } else {
+      return false;
+    }
+  }, [id, identity]);
 
   const [renaming, setRenaming] = useState(renamingState ?? false);
 
@@ -98,7 +101,7 @@ export const ProfileModal = () => {
           )}
           <UserNameWrapper>
             <UserName className={`${requestCreation && "small"}`}>
-              {contact.customName ?? id.slice(0, 10)}
+              {contact?.customName ?? id.slice(0, 10)}
             </UserName>
             {contact.isUntrustworthy && <UntrustworthIcon />}
             {!renaming && (
@@ -108,7 +111,7 @@ export const ProfileModal = () => {
               </button>
             )}
           </UserNameWrapper>
-          {contact.customName && (
+          {contact?.customName && (
             <UserTrueName>{contact.trueName}</UserTrueName>
           )}
         </NameSection>

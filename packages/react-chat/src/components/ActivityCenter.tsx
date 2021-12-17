@@ -120,9 +120,9 @@ function ActivityMessage({
                   }}
                 >
                   {" "}
-                  {contact.customName ?? activity.user.slice(0, 10)}
+                  {contact?.customName ?? activity.user.slice(0, 10)}
                 </ActivityUserName>
-                {contact.customName && (
+                {contact?.customName && (
                   <UserAddress>
                     {activity.user.slice(0, 5)}...{activity.user.slice(-3)}
                   </UserAddress>

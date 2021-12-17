@@ -12,7 +12,7 @@ const WAKU_OPTIONS = {
   },
 };
 
-export async function createMessenger(identity: Identity) {
+export async function createMessenger(identity: Identity | undefined) {
   const messenger = await Messenger.create(identity, WAKU_OPTIONS);
   await new Promise((resolve) => {
     messenger.waku.libp2p.peerStore.on("change:protocols", ({ protocols }) => {

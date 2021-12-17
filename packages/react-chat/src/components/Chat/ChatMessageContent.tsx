@@ -27,12 +27,14 @@ export function Mention({ id, setMentioned, className }: MentionProps) {
   if (!contact) return <>{id}</>;
 
   useEffect(() => {
-    if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
-  }, [contact.id]);
+    if (identity) {
+      if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
+    }
+  }, [contact.id, identity]);
 
   return (
     <MentionBLock onClick={() => setShowMenu(!showMenu)} className={className}>
-      {`@${contact.customName ?? contact.id}`}
+      {`@${contact?.customName ?? contact.id}`}
       {showMenu && <ContactMenu id={id.slice(1)} setShowMenu={setShowMenu} />}
     </MentionBLock>
   );

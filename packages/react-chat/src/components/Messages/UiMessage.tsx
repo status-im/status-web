@@ -77,7 +77,11 @@ export function UiMessage({
           channel: channel,
         },
       ]);
-    if (quote && quote.sender === utils.bufToHex(identity.publicKey))
+    if (
+      quote &&
+      identity &&
+      quote.sender === utils.bufToHex(identity.publicKey)
+    )
       setActivities((prev) => [
         ...prev,
         {
@@ -119,9 +123,9 @@ export function UiMessage({
               <UserNameWrapper>
                 <UserName>
                   {" "}
-                  {contact.customName ?? message.sender.slice(0, 10)}
+                  {contact?.customName ?? message.sender.slice(0, 10)}
                 </UserName>
-                {contact.customName && (
+                {contact?.customName && (
                   <UserAddress>
                     {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
                   </UserAddress>

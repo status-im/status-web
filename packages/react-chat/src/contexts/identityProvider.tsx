@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { Identity } from "status-communities/dist/cjs";
 
-const IdentityContext = createContext(new Identity(new Uint8Array()));
+const IdentityContext = createContext<Identity | undefined>(undefined);
 
 export function useIdentity() {
   return useContext(IdentityContext);
@@ -9,7 +9,7 @@ export function useIdentity() {
 
 interface IdentityProviderProps {
   children: React.ReactNode;
-  identity: Identity;
+  identity: Identity | undefined;
 }
 
 export function IdentityProvider({

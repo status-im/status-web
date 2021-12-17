@@ -3,6 +3,10 @@ import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import {
+  UserCreationState,
+  useUserCreationState,
+} from "../../contexts/userCreationStateProvider";
+import {
   decryptIdentity,
   loadEncryptedIdentity,
   saveIdentity,
@@ -14,8 +18,8 @@ interface IdentityLoaderProps {
 
 export function IdentityLoader({ setIdentity }: IdentityLoaderProps) {
   const [password, setPassword] = useState("");
-  // Test password for now
-  // Need design for password input
+  const state = useUserCreationState();
+
   const [encryptedIdentity, setEncryptedIdentity] = useState(
     loadEncryptedIdentity() ?? ""
   );
@@ -35,6 +39,7 @@ export function IdentityLoader({ setIdentity }: IdentityLoaderProps) {
       setWrongPassword(true);
     } else {
       setIdentity(identity);
+      state[1](UserCreationState.NotCreating);
     }
   }, [encryptedIdentity, password]);
 
@@ -42,6 +47,7 @@ export function IdentityLoader({ setIdentity }: IdentityLoaderProps) {
     const identity = Identity.generate();
     await saveIdentity(identity, password);
     setIdentity(identity);
+    state[1](UserCreationState.NotCreating);
   }, [encryptedIdentity, password]);
 
   return (

@@ -22,9 +22,9 @@ export class Messenger {
       ) => void
     >;
   };
-  identity: Identity;
+  identity: Identity | undefined;
 
-  private constructor(identity: Identity, waku: Waku) {
+  private constructor(identity: Identity | undefined, waku: Waku) {
     this.identity = identity;
     this.waku = waku;
     this.chatsById = new Map();
@@ -32,7 +32,7 @@ export class Messenger {
   }
 
   public static async create(
-    identity: Identity,
+    identity: Identity | undefined,
     wakuOptions?: WakuCreateOptions
   ): Promise<Messenger> {
     const _wakuOptions = Object.assign({ bootstrap: true }, wakuOptions);
@@ -105,24 +105,26 @@ export class Messenger {
     content: Content,
     responseTo?: string
   ): Promise<void> {
-    const chat = this.chatsById.get(chatId);
-    if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
+    if (this.identity) {
+      const chat = this.chatsById.get(chatId);
+      if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
 
-    const chatMessage = chat.createMessage(content, responseTo);
+      const chatMessage = chat.createMessage(content, responseTo);
 
-    const appMetadataMessage = ApplicationMetadataMessage.create(
-      chatMessage.encode(),
-      ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE,
-      this.identity
-    );
+      const appMetadataMessage = ApplicationMetadataMessage.create(
+        chatMessage.encode(),
+        ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE,
+        this.identity
+      );
 
-    const wakuMessage = await WakuMessage.fromBytes(
-      appMetadataMessage.encode(),
-      chat.contentTopic,
-      { symKey: chat.symKey, sigPrivKey: this.identity.privateKey }
-    );
+      const wakuMessage = await WakuMessage.fromBytes(
+        appMetadataMessage.encode(),
+        chat.contentTopic,
+        { symKey: chat.symKey, sigPrivKey: this.identity.privateKey }
+      );
 
-    await this.waku.relay.send(wakuMessage);
+      await this.waku.relay.send(wakuMessage);
+    }
   }
 
   /**
