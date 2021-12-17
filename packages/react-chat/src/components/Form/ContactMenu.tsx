@@ -26,10 +26,13 @@ type ContactMenuProps = {
 
 export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
   const identity = useIdentity();
-  const isUser = useMemo(
-    () => id === bufToHex(identity.publicKey),
-    [id, identity]
-  );
+  const isUser = useMemo(() => {
+    if (identity) {
+      return id === bufToHex(identity.publicKey);
+    } else {
+      return false;
+    }
+  }, [id, identity]);
 
   const { setModal } = useModal(ProfileModalName);
   const { contact, setBlocked, setIsUntrustworthy } = useManageContact(id);
@@ -40,10 +43,10 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
       <ContactInfo>
         <UserIcon />
         <UserNameWrapper>
-          <UserName>{contact.customName ?? id.slice(0, 10)}</UserName>
+          <UserName>{contact?.customName ?? id.slice(0, 10)}</UserName>
           {contact.isUntrustworthy && <UntrustworthIcon />}
         </UserNameWrapper>
-        {contact.customName && (
+        {contact?.customName && (
           <UserTrueName>({contact.trueName})</UserTrueName>
         )}
         <UserAddress>

@@ -16,7 +16,7 @@ export function useContacts(
   }>({});
 
   const contactsClass = useMemo(() => {
-    if (messenger && identity) {
+    if (messenger) {
       const newContacts = new ContactsClass(
         identity,
         messenger.waku,

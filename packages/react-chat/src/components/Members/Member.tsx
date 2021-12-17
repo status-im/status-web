@@ -28,7 +28,7 @@ export function Member({
     switchShowMembers?.();
     setChannel({
       id: contact.id,
-      name: contact.customName ?? contact.trueName,
+      name: contact?.customName ?? contact.trueName,
       type: "dm",
       description: "Contact",
       members: [contact],
@@ -47,7 +47,7 @@ export function Member({
         {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
         <UserIcon memberView={true} />
       </MemberIcon>
-      <MemberName>{contact.customName ?? contact.id}</MemberName>
+      <MemberName>{contact?.customName ?? contact.id}</MemberName>
     </MemberData>
   );
 }

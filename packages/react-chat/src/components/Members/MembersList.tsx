@@ -16,13 +16,15 @@ interface MembersListProps {
 export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
-  const userContacts = useMemo(
-    () =>
-      Object.values(contacts).filter(
+  const userContacts = useMemo(() => {
+    if (identity) {
+      return Object.values(contacts).filter(
         (e) => e.id != bufToHex(identity.publicKey)
-      ),
-    [contacts, identity]
-  );
+      );
+    } else {
+      return Object.values(contacts);
+    }
+  }, [contacts, identity]);
   const onlineContacts = useMemo(
     () => userContacts.filter((e) => e.online),
     [userContacts]
@@ -40,7 +42,9 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
           <MemberIcon>
             <UserIcon memberView={true} />
           </MemberIcon>
-          <MemberName>{utils.bufToHex(identity.publicKey)}</MemberName>
+          {identity && (
+            <MemberName>{utils.bufToHex(identity.publicKey)}</MemberName>
+          )}
         </MemberData>
       </MemberCategory>
       {onlineContacts.length > 0 && (

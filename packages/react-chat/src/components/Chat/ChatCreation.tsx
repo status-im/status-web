@@ -46,10 +46,12 @@ export function ChatCreation({
   };
 
   const createChat = (group: string[]) => {
-    const newGroup = group.slice();
-    newGroup.push(bufToHex(identity.publicKey));
-    group.length > 1 ? createGroupChat(newGroup) : createGroupChat(newGroup);
-    setChatState(ChatState.ChatBody);
+    if (identity) {
+      const newGroup = group.slice();
+      newGroup.push(bufToHex(identity.publicKey));
+      group.length > 1 ? createGroupChat(newGroup) : createGroupChat(newGroup);
+      setChatState(ChatState.ChatBody);
+    }
   };
 
   return (
@@ -108,20 +110,21 @@ export function ChatCreation({
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
-            {Object.values(contacts)
-              .filter(
-                (e) =>
-                  e.id != bufToHex(identity.publicKey) &&
-                  !styledGroup.includes(e.id)
-              )
-              .map((contact) => (
-                <Member
-                  key={contact.id}
-                  contact={contact}
-                  isOnline={contact.online}
-                  onClick={() => addMember(contact.id)}
-                />
-              ))}
+            {identity &&
+              Object.values(contacts)
+                .filter(
+                  (e) =>
+                    e.id != bufToHex(identity.publicKey) &&
+                    !styledGroup.includes(e.id)
+                )
+                .map((contact) => (
+                  <Member
+                    key={contact.id}
+                    contact={contact}
+                    isOnline={contact.online}
+                    onClick={() => addMember(contact.id)}
+                  />
+                ))}
           </ContactsList>
         </Contacts>
       )}

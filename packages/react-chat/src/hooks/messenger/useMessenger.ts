@@ -51,11 +51,9 @@ export type MessengerType = {
 function useCreateMessenger(identity: Identity | undefined) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
   useEffect(() => {
-    if (identity) {
-      createMessenger(identity).then((e) => {
-        setMessenger(e);
-      });
-    }
+    createMessenger(identity).then((e) => {
+      setMessenger(e);
+    });
   }, [identity]);
   return messenger;
 }
