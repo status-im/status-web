@@ -8,6 +8,7 @@ export type Theme = {
   iconColor: string;
   iconUserColor: string;
   iconTextColor: string;
+  logoColor: string;
   activeChannelBackground: string;
   notificationColor: string;
   inputColor: string;
@@ -37,6 +38,7 @@ export const lightTheme: Theme = {
   iconColor: "#D37EF4",
   iconUserColor: "#717199",
   iconTextColor: "rgba(255, 255, 255, 0.7)",
+  logoColor: "#51D0F0",
   activeChannelBackground: "#E9EDF1",
   notificationColor: "#4360DF",
   inputColor: "#EEF2F5",
@@ -66,6 +68,7 @@ export const darkTheme: Theme = {
   guestNameColor: "#887AF9",
   iconColor: "#D37EF4",
   iconUserColor: "#717199",
+  logoColor: "#51D0F0",
   iconTextColor: "rgba(0, 0, 0, 0.7)",
   activeChannelBackground: "#2C2C2C",
   notificationColor: "#887AF9",

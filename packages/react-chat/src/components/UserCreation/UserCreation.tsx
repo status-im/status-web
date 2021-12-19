@@ -1,14 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import { useModal } from "../../contexts/modalProvider";
 
-import {
-  UserCreationState,
-  useUserCreationState,
-} from "../../contexts/userCreationStateProvider";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
+import { UserCreationModalName } from "../Modals/UserCreationModal";
 
 export function UserCreation() {
-  const state = useUserCreationState();
+  const {setModal}= useModal(UserCreationModalName)
   return (
     <Background>
       <Wrapper>
@@ -16,7 +14,7 @@ export function UserCreation() {
           <ColorChatIcon />
         </IconWrapper>
         <TitleWrapper>Want in on the discussion ?</TitleWrapper>
-        <ThrowAwayButton onClick={() => state[1](UserCreationState.Creating)}>
+        <ThrowAwayButton onClick={() => setModal(true)}>
           Use a throwaway account
         </ThrowAwayButton>
       </Wrapper>

@@ -13,6 +13,7 @@ import { Members } from "./Members/Members";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
 import { ProfileModal } from "./Modals/ProfileModal";
+import { UserCreationModal } from "./Modals/UserCreationModal";
 import { ToastMessageList } from "./ToastMessages/ToastMessageList";
 import { UserCreation } from "./UserCreation/UserCreation";
 
@@ -20,6 +21,7 @@ function Modals() {
   return (
     <>
       <CommunityModal subtitle="Public Community" />
+      <UserCreationModal />
       <EditModal />
       <ProfileModal />
     </>
