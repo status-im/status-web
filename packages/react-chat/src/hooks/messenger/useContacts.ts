@@ -9,7 +9,8 @@ import { Contacts } from "../../models/Contact";
 
 export function useContacts(
   messenger: Messenger | undefined,
-  identity: Identity | undefined
+  identity: Identity | undefined,
+  nickname: string | undefined,
 ) {
   const [internalContacts, setInternalContacts] = useState<{
     [id: string]: number;
@@ -24,7 +25,8 @@ export function useContacts(
           setInternalContacts((prev) => {
             return { ...prev, [id]: clock };
           });
-        }
+        },
+        nickname
       );
       return newContacts;
     }

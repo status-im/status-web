@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
+import { useSetIdentity } from "../../contexts/identityProvider";
 
 import {
   UserCreationState,
@@ -12,11 +13,8 @@ import {
   saveIdentity,
 } from "../../utils";
 
-interface IdentityLoaderProps {
-  setIdentity: (e: Identity) => void;
-}
-
-export function IdentityLoader({ setIdentity }: IdentityLoaderProps) {
+export function IdentityLoader() {
+  const setIdentity = useSetIdentity();
   const [password, setPassword] = useState("");
   const state = useUserCreationState();
 

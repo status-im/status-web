@@ -1,15 +1,20 @@
 import React, { useState } from "react";
+import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
+import { useSetIdentity, useSetNikcname } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { NameInput } from "../../styles/Inputs";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
 import { Modal } from "./Modal";
-import { Heading, Section, Text, Hint, ButtonSection, BackBtn } from "./ModalStyle";
+import { Heading, Section, Text, Hint, ButtonSection, BackBtn, Btn } from "./ModalStyle";
 
 export const UserCreationModalName = "UserCreationModal";
 
 export function UserCreationModal() {
+    const setIdentity = useSetIdentity();
+    const setNickname = useSetNikcname();
+
     const [customNameInput, setCustomNameInput] = useState('')
     const { setModal } = useModal(UserCreationModalName)
     return (
@@ -35,6 +40,13 @@ export function UserCreationModal() {
                 <BackBtn onClick={() => setModal(false)}>
                     <LeftIconSvg width={28} height={28} />
                 </BackBtn>
+                <Btn onClick={() => {
+                    setIdentity(Identity.generate());
+                    setNickname(customNameInput);
+                    setModal(false);
+                }}>
+                    Next
+                </Btn>
             </ButtonSection>
         </Modal>
     )
