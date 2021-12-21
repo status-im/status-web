@@ -1,9 +1,8 @@
 import React, { useMemo } from "react";
-import { utils } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useIdentity, useNickname } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { UserIcon } from "../Icons/UserIcon";
 
@@ -16,6 +15,7 @@ interface MembersListProps {
 export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
+  const nickname = useNickname();
   const userContacts = useMemo(() => {
     if (identity) {
       return Object.values(contacts).filter(
@@ -42,9 +42,7 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
           <MemberIcon>
             <UserIcon memberView={true} />
           </MemberIcon>
-          {identity && (
-            <MemberName>{utils.bufToHex(identity.publicKey)}</MemberName>
-          )}
+          {identity && <MemberName>{nickname}</MemberName>}
         </MemberData>
       </MemberCategory>
       {onlineContacts.length > 0 && (

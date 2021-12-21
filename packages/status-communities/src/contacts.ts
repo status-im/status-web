@@ -1,9 +1,10 @@
-import { Waku, WakuMessage } from "js-waku";
+import { PageDirection, Waku, WakuMessage } from "js-waku";
 
 import { idToContactCodeTopic } from "./contentTopic";
 import { Identity } from "./identity";
 import { StatusUpdate_StatusType } from "./proto/communities/v1/status_update";
 import { bufToHex } from "./utils";
+import { ChatIdentity } from "./wire/chat_identity";
 import { StatusUpdate } from "./wire/status_update";
 
 const STATUS_BROADCAST_INTERVAL = 30000;
@@ -11,7 +12,9 @@ const STATUS_BROADCAST_INTERVAL = 30000;
 export class Contacts {
   waku: Waku;
   identity: Identity | undefined;
+  nickname?: string;
   private callback: (publicKey: string, clock: number) => void;
+  private callbackNickname: (publicKey: string, nickname: string) => void;
   private contacts: string[] = [];
 
   /**
@@ -30,11 +33,15 @@ export class Contacts {
   public constructor(
     identity: Identity | undefined,
     waku: Waku,
-    callback: (publicKey: string, clock: number) => void
+    callback: (publicKey: string, clock: number) => void,
+    callbackNickname: (publicKey: string, nickname: string) => void,
+    nickname?: string
   ) {
     this.waku = waku;
     this.identity = identity;
+    this.nickname = nickname;
     this.callback = callback;
+    this.callbackNickname = callbackNickname;
     this.startBroadcast();
     if (identity) {
       this.addContact(bufToHex(identity.publicKey));
@@ -66,6 +73,26 @@ export class Contacts {
           endTime: now,
         },
       });
+      this.waku.store.queryHistory([idToContactCodeTopic(publicKey)], {
+        callback: (msgs) =>
+          msgs.some((e) => {
+            try {
+              if (e.payload) {
+                const chatIdentity = ChatIdentity.decode(e?.payload);
+                if (chatIdentity) {
+                  this.callbackNickname(
+                    publicKey,
+                    chatIdentity?.displayName ?? ""
+                  );
+                }
+                return true;
+              }
+            } catch {
+              return false;
+            }
+          }),
+        pageDirection: PageDirection.BACKWARD,
+      });
       this.waku.relay.addObserver(callback, [idToContactCodeTopic(publicKey)]);
     }
   }
@@ -84,6 +111,27 @@ export class Contacts {
         this.waku.relay.send(msg);
       }
     };
+
+    const sendNickname = async (): Promise<void> => {
+      if (this.identity && this.nickname) {
+        const chatIdentity = new ChatIdentity({
+          clock: new Date().getTime(),
+          color: "",
+          description: "",
+          emoji: "",
+          images: {},
+          ensName: "",
+          displayName: this?.nickname ?? "",
+        });
+        const msg = await WakuMessage.fromBytes(
+          chatIdentity.encode(),
+          idToContactCodeTopic(bufToHex(this.identity.publicKey)),
+          { sigPrivKey: this.identity.privateKey }
+        );
+        await this.waku.relay.send(msg);
+      }
+    };
+    sendNickname();
     send();
     setInterval(send, STATUS_BROADCAST_INTERVAL);
   }

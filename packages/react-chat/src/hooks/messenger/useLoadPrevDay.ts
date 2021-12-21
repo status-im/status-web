@@ -24,7 +24,7 @@ export function useLoadPrevDay(
     async (id: string, groupChat?: boolean) => {
       if (messenger) {
         const endTime = lastLoadTime.current[id] ?? new Date();
-        const startTime = new Date(endTime.getTime() - _MS_PER_DAY);
+        const startTime = new Date(endTime.getTime() - _MS_PER_DAY * 5);
         const timeDiff = Math.floor(
           (new Date().getTime() - endTime.getTime()) / _MS_PER_DAY
         );

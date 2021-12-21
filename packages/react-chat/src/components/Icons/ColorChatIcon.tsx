@@ -15,7 +15,7 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <g clip-path="url(#clip0_1307_429352)">
+      <g clipPath="url(#clip0_1307_429352)">
         <path
           d="M43.0453 20.5165C54.7313 20.338 64.2693 29.5356 64.4955 41.2207C64.5288 42.9363 64.3573 44.6062 64.004 46.2079C63.4058 48.92 63.0501 51.6799 63.0501 54.4573V59.8258C63.0501 60.6483 62.3834 61.315 61.5609 61.315H56.1924C53.415 61.315 50.6552 61.6707 47.943 62.2689C46.3414 62.6222 44.6715 62.7936 42.9559 62.7604C31.2709 62.5343 22.0733 52.9965 22.2516 41.3108C22.4254 29.9046 31.6392 20.6907 43.0453 20.5165Z"
           fill="url(#paint0_linear_1307_429352)"
@@ -62,8 +62,8 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
           y2="68.3915"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#A7F3CE" />
-          <stop offset="1" stop-color="#61DB99" />
+          <stop stopColor="#A7F3CE" />
+          <stop offset="1" stopColor="#61DB99" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_1307_429352"
@@ -73,8 +73,8 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
           y2="34.356"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#61DB99" stop-opacity="0" />
-          <stop offset="1" stop-color="#009E74" />
+          <stop stopColor="#61DB99" stopOpacity="0" />
+          <stop offset="1" stopColor="#009E74" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_1307_429352"
@@ -84,8 +84,8 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
           y2="55.5561"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#62E1FB" />
-          <stop offset="1" stop-color="#00A2F3" />
+          <stop stopColor="#62E1FB" />
+          <stop offset="1" stopColor="#00A2F3" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_1307_429352"
@@ -95,8 +95,8 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
           y2="19.9482"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#00A2F3" stop-opacity="0" />
-          <stop offset="1" stop-color="#0075CD" />
+          <stop stopColor="#00A2F3" stopOpacity="0" />
+          <stop offset="1" stopColor="#0075CD" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_1307_429352"
@@ -106,8 +106,8 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
           y2="19.9478"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#00A2F3" stop-opacity="0" />
-          <stop offset="1" stop-color="#2A353D" />
+          <stop stopColor="#00A2F3" stopOpacity="0" />
+          <stop offset="1" stopColor="#2A353D" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_1307_429352"
@@ -117,8 +117,8 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
           y2="19.9479"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#00A2F3" stop-opacity="0" />
-          <stop offset="1" stop-color="#0075CD" />
+          <stop stopColor="#00A2F3" stopOpacity="0" />
+          <stop offset="1" stopColor="#0075CD" />
         </linearGradient>
         <clipPath id="clip0_1307_429352">
           <rect

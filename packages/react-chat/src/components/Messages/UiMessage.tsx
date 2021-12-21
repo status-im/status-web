@@ -121,15 +121,10 @@ export function UiMessage({
           <ContentWrapper>
             <MessageHeaderWrapper>
               <UserNameWrapper>
-                <UserName>
-                  {" "}
-                  {contact?.customName ?? message.sender.slice(0, 10)}
-                </UserName>
-                {contact?.customName && (
-                  <UserAddress>
-                    {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
-                  </UserAddress>
-                )}
+                <UserName> {contact?.customName ?? contact.trueName}</UserName>
+                <UserAddress>
+                  {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
+                </UserAddress>
                 {contact.isUntrustworthy && <UntrustworthIcon />}
               </UserNameWrapper>
               <TimeWrapper>{message.date.toLocaleString()}</TimeWrapper>

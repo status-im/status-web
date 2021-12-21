@@ -9,10 +9,11 @@ import { Contacts } from "../../models/Contact";
 
 export function useContacts(
   messenger: Messenger | undefined,
-  identity: Identity | undefined
+  identity: Identity | undefined,
+  nickname: string | undefined
 ) {
   const [internalContacts, setInternalContacts] = useState<{
-    [id: string]: number;
+    [id: string]: { clock: number; nickname?: string };
   }>({});
 
   const contactsClass = useMemo(() => {
@@ -22,9 +23,15 @@ export function useContacts(
         messenger.waku,
         (id, clock) => {
           setInternalContacts((prev) => {
-            return { ...prev, [id]: clock };
+            return { ...prev, [id]: { ...prev[id], clock } };
           });
-        }
+        },
+        (id, nickname) => {
+          setInternalContacts((prev) => {
+            return { ...prev, [id]: { ...prev[id], nickname } };
+          });
+        },
+        nickname
       );
       return newContacts;
     }
@@ -36,11 +43,11 @@ export function useContacts(
     const now = Date.now();
     setContacts((prev) => {
       const newContacts: Contacts = {};
-      Object.entries(internalContacts).forEach(([id, clock]) => {
+      Object.entries(internalContacts).forEach(([id, { clock, nickname }]) => {
         newContacts[id] = {
           id,
           online: clock > now - 301000,
-          trueName: id.slice(0, 10),
+          trueName: nickname ?? id.slice(0, 10),
           isUntrustworthy: false,
           blocked: false,
         };

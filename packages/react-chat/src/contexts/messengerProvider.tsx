@@ -1,7 +1,8 @@
 import React, { createContext, useContext } from "react";
-import { Identity } from "status-communities/dist/cjs";
 
 import { MessengerType, useMessenger } from "../hooks/messenger/useMessenger";
+
+import { useIdentity, useNickname } from "./identityProvider";
 
 const MessengerContext = createContext<MessengerType>({
   messenger: undefined,
@@ -37,14 +38,14 @@ export function useMessengerContext() {
 interface MessengerProviderProps {
   children: React.ReactNode;
   communityKey?: string;
-  identity?: Identity;
 }
 
 export function MessengerProvider({
   children,
   communityKey,
-  identity,
 }: MessengerProviderProps) {
-  const messenger = useMessenger(communityKey, identity);
+  const identity = useIdentity();
+  const nickname = useNickname();
+  const messenger = useMessenger(communityKey, identity, nickname);
   return <MessengerContext.Provider value={messenger} children={children} />;
 }

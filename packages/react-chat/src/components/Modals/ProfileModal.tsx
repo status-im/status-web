@@ -7,6 +7,7 @@ import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useToasts } from "../../contexts/toastProvider";
 import { useManageContact } from "../../hooks/useManageContact";
+import { NameInput } from "../../styles/Inputs";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ClearSvg } from "../Icons/ClearIcon";
@@ -19,6 +20,8 @@ import { textMediumStyles, textSmallStyles } from "../Text";
 
 import { Modal } from "./Modal";
 import {
+  BackBtn,
+  Btn,
   ButtonSection,
   Heading,
   Hint,
@@ -84,7 +87,7 @@ export const ProfileModal = () => {
       className={`${!requestCreation && "profile"}`}
     >
       <Section>
-        <Heading>{id.slice(0, 10)}’s Profile</Heading>
+        <Heading>{contact.trueName}’s Profile</Heading>
       </Section>
 
       <ProfileSection>
@@ -101,7 +104,7 @@ export const ProfileModal = () => {
           )}
           <UserNameWrapper>
             <UserName className={`${requestCreation && "small"}`}>
-              {contact?.customName ?? id.slice(0, 10)}
+              {contact?.customName ?? contact.trueName}
             </UserName>
             {contact.isUntrustworthy && <UntrustworthIcon />}
             {!renaming && (
@@ -402,36 +405,6 @@ const CopyButton = styled.button`
   }
 `;
 
-const Btn = styled.button`
-  padding: 11px 24px;
-  margin-left: 8px;
-  ${buttonStyles}
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
-
-  &:disabled {
-    background: ${({ theme }) => theme.border};
-    color: ${({ theme }) => theme.secondary};
-  }
-`;
-
-const BackBtn = styled(Btn)`
-  position: absolute;
-  left: 16px;
-  top: 16px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  padding: 8px;
-  margin-left: 0;
-
-  & > svg {
-    fill: ${({ theme }) => theme.tertiary};
-  }
-`;
-
 const ClearBtn = styled.button`
   position: absolute;
   right: 16px;
@@ -446,13 +419,6 @@ const ClearBtn = styled.button`
 
 const NameInputWrapper = styled.div`
   position: relative;
-`;
-
-const NameInput = styled.input`
-  width: 328px;
-  padding: 11px 16px;
-
-  ${inputStyles}
 `;
 
 const RequestSection = styled.div`

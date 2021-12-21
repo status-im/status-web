@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Identity } from "status-communities/dist/cjs";
+import React from "react";
 
 import { ChatStateProvider } from "../contexts/chatStateProvider";
 import { IdentityProvider } from "../contexts/identityProvider";
@@ -17,13 +16,12 @@ interface ChatLoaderProps {
 }
 
 export function ChatLoader({ communityKey }: ChatLoaderProps) {
-  const [identity, setIdentity] = useState<Identity | undefined>(undefined);
   const [userCreationState] = useUserCreationState();
 
   if (userCreationState === UserCreationState.NotCreating)
     return (
-      <IdentityProvider identity={identity}>
-        <MessengerProvider identity={identity} communityKey={communityKey}>
+      <IdentityProvider>
+        <MessengerProvider communityKey={communityKey}>
           <ChatStateProvider>
             <Chat />
           </ChatStateProvider>
@@ -31,7 +29,7 @@ export function ChatLoader({ communityKey }: ChatLoaderProps) {
       </IdentityProvider>
     );
   if (userCreationState === UserCreationState.Creating) {
-    return <IdentityLoader setIdentity={setIdentity} />;
+    return <IdentityLoader />;
   }
 
   return null;

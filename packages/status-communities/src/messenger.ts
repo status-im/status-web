@@ -223,7 +223,7 @@ export class Messenger {
         callback(messages.filter(isDefined));
       }
     };
-
+    console.log(`querying ${chat.contentTopic} for ${startTime} to ${endTime}`);
     const allMessages = await this.waku.store.queryHistory(
       [chat.contentTopic],
       {
@@ -231,6 +231,10 @@ export class Messenger {
         callback: _callback,
       }
     );
+    console.log(
+      `ended querying ${chat.contentTopic} for ${startTime} to ${endTime}`
+    );
+
     return allMessages.length;
   }
 
