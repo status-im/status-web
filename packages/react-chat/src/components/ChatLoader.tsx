@@ -29,7 +29,7 @@ export function ChatLoader({ communityKey }: ChatLoaderProps) {
       </IdentityProvider>
     );
   if (userCreationState === UserCreationState.Creating) {
-    return <IdentityLoader/>;
+    return <IdentityLoader />;
   }
 
   return null;

@@ -100,7 +100,7 @@ function useCreateCommunity(
 export function useMessenger(
   communityKey: string | undefined,
   identity: Identity | undefined,
-  nickname: string | undefined,
+  nickname: string | undefined
 ) {
   const [activeChannel, setActiveChannel] = useState<ChannelData>({
     id: "",

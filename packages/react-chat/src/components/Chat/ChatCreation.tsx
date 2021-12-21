@@ -23,8 +23,9 @@ export function ChatCreation({
   const identity = useIdentity();
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>(
-    activeChannel?.members?.map((member) => member?.customName ?? member.id) ??
-      []
+    activeChannel?.members?.map(
+      (member) => member?.customName ?? member.trueName
+    ) ?? []
   );
   const { contacts, createGroupChat, addMembers } = useMessengerContext();
   const setChatState = useChatState()[1];

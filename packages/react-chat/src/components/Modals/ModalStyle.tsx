@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
-import { buttonStyles } from "../Buttons/buttonStyle";
 
+import { buttonStyles } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
 
 export const Section = styled.div`

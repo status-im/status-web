@@ -34,7 +34,7 @@ export function Mention({ id, setMentioned, className }: MentionProps) {
 
   return (
     <MentionBLock onClick={() => setShowMenu(!showMenu)} className={className}>
-      {`@${contact?.customName ?? contact.id}`}
+      {`@${contact?.customName ?? contact.trueName}`}
       {showMenu && <ContactMenu id={id.slice(1)} setShowMenu={setShowMenu} />}
     </MentionBLock>
   );

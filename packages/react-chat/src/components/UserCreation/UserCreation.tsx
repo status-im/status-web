@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { useModal } from "../../contexts/modalProvider";
 
+import { useModal } from "../../contexts/modalProvider";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
 
 export function UserCreation() {
-  const {setModal}= useModal(UserCreationModalName)
+  const { setModal } = useModal(UserCreationModalName);
   return (
     <Background>
       <Wrapper>

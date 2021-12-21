@@ -43,7 +43,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
       <ContactInfo>
         <UserIcon />
         <UserNameWrapper>
-          <UserName>{contact?.customName ?? id.slice(0, 10)}</UserName>
+          <UserName>{contact?.customName ?? contact.trueName}</UserName>
           {contact.isUntrustworthy && <UntrustworthIcon />}
         </UserNameWrapper>
         {contact?.customName && (

@@ -1,6 +1,7 @@
 import React, { createContext, useContext } from "react";
 
 import { MessengerType, useMessenger } from "../hooks/messenger/useMessenger";
+
 import { useIdentity, useNickname } from "./identityProvider";
 
 const MessengerContext = createContext<MessengerType>({

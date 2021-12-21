@@ -87,7 +87,7 @@ export const ProfileModal = () => {
       className={`${!requestCreation && "profile"}`}
     >
       <Section>
-        <Heading>{id.slice(0, 10)}’s Profile</Heading>
+        <Heading>{contact.trueName}’s Profile</Heading>
       </Section>
 
       <ProfileSection>
@@ -104,7 +104,7 @@ export const ProfileModal = () => {
           )}
           <UserNameWrapper>
             <UserName className={`${requestCreation && "small"}`}>
-              {contact?.customName ?? id.slice(0, 10)}
+              {contact?.customName ?? contact.trueName}
             </UserName>
             {contact.isUntrustworthy && <UntrustworthIcon />}
             {!renaming && (

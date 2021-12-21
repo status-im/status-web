@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
-import { useSetIdentity } from "../../contexts/identityProvider";
 
+import { useSetIdentity } from "../../contexts/identityProvider";
 import {
   UserCreationState,
   useUserCreationState,
