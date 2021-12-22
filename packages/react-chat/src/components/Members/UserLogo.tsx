@@ -1,14 +1,23 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
+import { Contact } from "../../models/Contact";
+
 type UserLogoProps = {
   radius: number;
   colorWheel: [string, number][];
+  contact: Contact;
+  showOnlineStatus?: boolean;
   icon?: string;
-  text?: string;
 };
 
-export function UserLogo({ icon, text, radius, colorWheel }: UserLogoProps) {
+export function UserLogo({
+  icon,
+  contact,
+  radius,
+  colorWheel,
+  showOnlineStatus,
+}: UserLogoProps) {
   const conicGradient = useMemo(() => {
     const colors = colorWheel
       .map((color, idx) => {
@@ -18,21 +27,41 @@ export function UserLogo({ icon, text, radius, colorWheel }: UserLogoProps) {
       .join(",");
     return `conic-gradient(${colors})`;
   }, [colorWheel]);
+
+  const letters = useMemo(() => {
+    if (contact?.customName) {
+      return contact.customName.slice(0, 2);
+    }
+    if (contact.trueName) {
+      return contact.trueName.slice(0, 2);
+    }
+  }, [contact]);
+
+  const logoClassnName = useMemo(() => {
+    if (showOnlineStatus) {
+      if (contact.online) {
+        return "online";
+      }
+      return "offline";
+    }
+    return "";
+  }, [contact]);
+
   return (
     <Wrapper radius={radius} conicGradient={conicGradient}>
-      <Logo icon={icon} radius={radius}>
-        {!icon && text && <TextWrapper>{text}</TextWrapper>}
+      <Logo icon={icon} radius={radius} className={logoClassnName}>
+        {!icon && <TextWrapper radius={radius}>{letters}</TextWrapper>}
       </Logo>
     </Wrapper>
   );
 }
 
-const TextWrapper = styled.div`
+const TextWrapper = styled.div<{ radius: number }>`
   font-family: Inter;
   font-style: normal;
   font-weight: bold;
-  font-size: 32px;
-  line-height: 38px;
+  font-size: calc(${({ radius }) => radius}px / 2.5);
+  line-height: calc(${({ radius }) => radius}px / 2.1);
   display: flex;
   align-items: center;
   text-align: center;
@@ -57,6 +86,34 @@ const Logo = styled.div<{ radius: number; icon?: string }>`
   color: ${({ theme }) => theme.iconTextColor};
   margin: auto;
   display: flex;
+
+  &.offline {
+    &::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      bottom: -2px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: ${({ theme }) => theme.secondary};
+      border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
+    }
+  }
+
+  &.online {
+    &::after {
+      content: "";
+      position: absolute;
+      right: -1px;
+      bottom: -2px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: #4ebc60;
+      border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
+    }
+  }
 `;
 
 const Wrapper = styled.div<{ radius: number; conicGradient: string }>`

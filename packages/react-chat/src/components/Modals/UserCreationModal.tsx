@@ -7,6 +7,7 @@ import {
   useSetNikcname,
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { Contact } from "../../models/Contact";
 import { NameInput } from "../../styles/Inputs";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
@@ -44,7 +45,7 @@ export function UserCreationModal() {
           </StyledHint>
           <LogoWrapper>
             <UserLogo
-              text={customNameInput.slice(0, 2)}
+              contact={{ trueName: customNameInput } as Contact}
               radius={80}
               colorWheel={[
                 ["red", 150],
@@ -60,7 +61,7 @@ export function UserCreationModal() {
           />
         </Content>
       </MiddleSection>
-      <ButtonSection style={{ marginBottom: "40px" }}>
+      <ButtonSection>
         <BackBtn onClick={() => setModal(false)}>
           <LeftIconSvg width={28} height={28} />
         </BackBtn>
