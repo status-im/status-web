@@ -10,6 +10,7 @@ import { textMediumStyles } from "../Text";
 
 import { Modal } from "./Modal";
 import {
+  AddWrapper,
   ButtonSection,
   Heading,
   Hint,
@@ -125,17 +126,9 @@ const GroupLogo = styled(ChannelLogo)`
   margin-right: 0;
 `;
 
-const AddPictureInputWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
+const AddPictureInputWrapper = styled(AddWrapper)`
   top: 0;
   right: 8px;
-  width: 40px;
-  height: 40px;
-  background: ${({ theme }) => theme.tertiary};
-  border-radius: 50%;
 `;
 
 const AddPictureInput = styled.input`

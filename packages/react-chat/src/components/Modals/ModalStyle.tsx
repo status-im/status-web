@@ -77,3 +77,14 @@ export const inputStyles = css`
     caret-color: ${({ theme }) => theme.notificationColor};
   }
 `;
+
+export const AddWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: ${({ theme }) => theme.tertiary};
+  border-radius: 50%;
+`;
