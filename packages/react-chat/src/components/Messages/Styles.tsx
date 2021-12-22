@@ -87,7 +87,7 @@ export const UserAddress = styled.p`
   position: relative;
   padding-right: 8px;
 
-  &:after {
+  &.chat:after {
     content: "";
     position: absolute;
     right: 0;

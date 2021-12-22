@@ -46,7 +46,7 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
       {identity && (
         <MemberCategory>
           <MemberCategoryName>You</MemberCategoryName>
-          <MemberData>
+          <MemberData className="you">
             <Row>
               <MemberIcon>
                 <UserIcon memberView={true} />

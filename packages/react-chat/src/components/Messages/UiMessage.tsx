@@ -130,7 +130,7 @@ export function UiMessage({
             <MessageHeaderWrapper>
               <UserNameWrapper>
                 <UserName> {contact?.customName ?? contact.trueName}</UserName>
-                <UserAddress>
+                <UserAddress className="chat">
                   {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
                 </UserAddress>
                 {contact.isUntrustworthy && <UntrustworthIcon />}
