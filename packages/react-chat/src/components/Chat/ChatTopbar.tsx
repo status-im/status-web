@@ -184,7 +184,7 @@ const ActivityWrapper = styled.div`
   }
 `;
 
-const TopBtn = styled.button`
+export const TopBtn = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 8px;

@@ -4,6 +4,8 @@ import styled from "styled-components";
 
 import { useIdentity, useNickname } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { TopBtn } from "../Chat/ChatTopbar";
+import { LogoutIcon } from "../Icons/LogoutIcon";
 import { UserIcon } from "../Icons/UserIcon";
 
 import { Member, MemberData, MemberIcon } from "./Member";
@@ -39,10 +41,15 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
       <MemberCategory>
         <MemberCategoryName>You</MemberCategoryName>
         <MemberData>
-          <MemberIcon>
-            <UserIcon memberView={true} />
-          </MemberIcon>
-          {identity && <MemberName>{nickname}</MemberName>}
+          <Row>
+            <MemberIcon>
+              <UserIcon memberView={true} />
+            </MemberIcon>
+            {identity && <MemberName>{nickname}</MemberName>}
+          </Row>
+          <TopBtn>
+            <LogoutIcon />
+          </TopBtn>
         </MemberData>
       </MemberCategory>
       {onlineContacts.length > 0 && (
@@ -106,6 +113,13 @@ const MemberName = styled.p`
   color: ${({ theme }) => theme.primary};
   opacity: 0.7;
   margin-left: 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const Row = styled.div`
+  display: flex;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

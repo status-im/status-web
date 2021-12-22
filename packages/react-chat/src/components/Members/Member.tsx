@@ -68,6 +68,7 @@ export function Member({
 export const MemberData = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 16px;
   cursor: pointer;
 `;
