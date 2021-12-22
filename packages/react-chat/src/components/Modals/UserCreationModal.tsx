@@ -9,11 +9,13 @@ import {
 import { useModal } from "../../contexts/modalProvider";
 import { Contact } from "../../models/Contact";
 import { NameInput } from "../../styles/Inputs";
+import { AddIcon } from "../Icons/AddIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
 
 import { Modal } from "./Modal";
 import {
+  AddWrapper,
   BackBtn,
   Btn,
   ButtonSection,
@@ -37,29 +39,30 @@ export function UserCreationModal() {
         <Heading>Create a Status Profile</Heading>
       </Section>
       <MiddleSection>
-        <Content>
-          <Title>Your profile</Title>
-          <StyledHint>
-            Longer and unusual names are better as they are less likely to be
-            used by someone else.
-          </StyledHint>
-          <LogoWrapper>
-            <UserLogo
-              contact={{ trueName: customNameInput } as Contact}
-              radius={80}
-              colorWheel={[
-                ["red", 150],
-                ["blue", 250],
-                ["green", 360],
-              ]}
-            />
-          </LogoWrapper>
-          <NameInput
-            placeholder="Display name"
-            value={customNameInput}
-            onChange={(e) => setCustomNameInput(e.currentTarget.value)}
+        <Title>Your profile</Title>
+        <StyledHint>
+          Longer and unusual names are better as they are <br /> less likely to
+          be used by someone else.
+        </StyledHint>
+        <LogoWrapper>
+          <UserLogo
+            contact={{ trueName: customNameInput } as Contact}
+            radius={80}
+            colorWheel={[
+              ["red", 150],
+              ["blue", 250],
+              ["green", 360],
+            ]}
           />
-        </Content>
+          <AddIconWrapper>
+            <AddIcon />
+          </AddIconWrapper>
+        </LogoWrapper>
+        <NameInput
+          placeholder="Display name"
+          value={customNameInput}
+          onChange={(e) => setCustomNameInput(e.currentTarget.value)}
+        />
       </MiddleSection>
       <ButtonSection>
         <BackBtn onClick={() => setModal(false)}>
@@ -71,6 +74,7 @@ export function UserCreationModal() {
             setNickname(customNameInput);
             setModal(false);
           }}
+          disabled={!customNameInput}
         >
           Next
         </Btn>
@@ -80,39 +84,36 @@ export function UserCreationModal() {
 }
 
 const MiddleSection = styled(Section)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px;
   margin-bottom: 102px;
+`;
+
+const Title = styled(Text)`
+  font-weight: bold;
+  font-size: 22px;
+  line-height: 30px;
+  letter-spacing: -0.2px;
+  margin-bottom: 16px;
+`;
+
+const StyledHint = styled(Hint)`
+  font-size: 15px;
+  line-height: 22px;
+  margin-bottom: 32px;
+  text-align: center;
 `;
 
 const LogoWrapper = styled.div`
   position: relative;
   display: flex;
-  margin-top: 32px;
-  margin-bottom: 38px;
+  margin-bottom: 32px;
 `;
 
-const StyledHint = styled(Hint)`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 22px;
-  text-align: center;
-`;
-
-const Title = styled(Text)`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 22px;
-  line-height: 30px;
-
-  text-align: center;
-  letter-spacing: -0.2px;
-  margin-bottom: 16px;
-`;
-
-const Content = styled.div`
-  margin-top: 16px;
-  margin-left: 65px;
-  margin-right: 65px;
+const AddIconWrapper = styled(AddWrapper)`
+  top: 0;
+  right: -50%;
+  transform: translateX(-50%);
 `;
