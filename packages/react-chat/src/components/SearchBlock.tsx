@@ -23,7 +23,12 @@ export const SearchBlock = ({
 
   const searchList = useMemo(() => {
     return Object.values(contacts)
-      .filter((member) => member.id.includes(query))
+      .filter(
+        (member) =>
+          member.id.includes(query) ||
+          member?.customName?.includes(query) ||
+          member.trueName.includes(query)
+      )
       .filter((member) => !discludeList.includes(member.id));
   }, [query, discludeList, contacts]);
 
@@ -35,16 +40,13 @@ export const SearchBlock = ({
       style={{ [onBotttom ? "bottom" : "top"]: "calc(100% + 24px)" }}
     >
       <ContactsList>
-        {Object.values(contacts)
-          .filter((member) => member.id.includes(query))
-          .filter((member) => !discludeList.includes(member.id))
-          .map((member) => (
-            <Member
-              key={member.id}
-              contact={member}
-              onClick={() => onClick(member.id)}
-            />
-          ))}
+        {searchList.map((member) => (
+          <Member
+            key={member.id}
+            contact={member}
+            onClick={() => onClick(member.id)}
+          />
+        ))}
       </ContactsList>
     </SearchContacts>
   );
