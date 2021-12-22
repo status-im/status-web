@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
 
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { ReplyOn, ReplyTo } from "../Chat/ChatInput";
 import { QuoteSvg } from "../Icons/QuoteIcon";
@@ -21,6 +22,7 @@ type MessageQuoteProps = {
 };
 
 export function MessageQuote({ quote }: MessageQuoteProps) {
+  const { contacts } = useMessengerContext();
   const quoteClick = useCallback(() => {
     if (quote) {
       const quoteDiv = document.getElementById(quote.id);
@@ -42,13 +44,15 @@ export function MessageQuote({ quote }: MessageQuoteProps) {
     }
   }, [quote]);
 
-  if (quote) {
+  if (quote && quote.sender) {
     return (
       <QuoteWrapper onClick={quoteClick}>
         <QuoteSvg width={22} height={calcHeight(quote)} />
         <QuoteSender>
           {" "}
-          <UserIcon memberView={true} /> {quote.sender}
+          <UserIcon memberView={true} />{" "}
+          {contacts[quote.sender]?.customName ??
+            contacts[quote.sender].trueName}
         </QuoteSender>
         <Quote>{quote.content}</Quote>
         {quote.image && <QuoteImage src={quote.image} />}

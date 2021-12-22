@@ -31,7 +31,7 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ reply, setReply }: ChatInputProps) {
-  const { sendMessage } = useMessengerContext();
+  const { sendMessage, contacts } = useMessengerContext();
   const theme = useTheme() as Theme;
   const [content, setContent] = useState("");
   const [clearComponent, setClearComponent] = useState("");
@@ -254,7 +254,8 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
             <ReplyTo>
               {" "}
               <ReplySvg width={18} height={18} className="input" />{" "}
-              {reply.sender}
+              {contacts[reply.sender]?.customName ??
+                contacts[reply.sender].trueName}
             </ReplyTo>
             <ReplyOn>{reply.content}</ReplyOn>
             {reply.image && <ImagePreview src={reply.image} />}

@@ -6,6 +6,7 @@ import { Contact } from "../../models/Contact";
 import { ContactMenu } from "../Form/ContactMenu";
 import { Icon } from "../Icons/Icon";
 import { UserIcon } from "../Icons/UserIcon";
+import { UserAddress } from "../Messages/Styles";
 
 interface MemberProps {
   contact: Contact;
@@ -47,7 +48,10 @@ export function Member({
         {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
         <UserIcon memberView={true} />
       </MemberIcon>
-      <MemberName>{contact?.customName ?? contact.id}</MemberName>
+      <MemberName>{contact?.customName ?? contact.trueName}</MemberName>
+      <UserAddress>
+        {contact.id.slice(0, 5)}...{contact.id.slice(-3)}
+      </UserAddress>
     </MemberData>
   );
 }
@@ -69,6 +73,7 @@ export const MemberName = styled.p`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  margin-right: 4px;
 `;
 
 export const MemberIcon = styled(Icon)`
