@@ -3,6 +3,7 @@ import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import {
+  useIdentity,
   useSetIdentity,
   useSetNikcname,
 } from "../../contexts/identityProvider";
@@ -10,6 +11,7 @@ import { useModal } from "../../contexts/modalProvider";
 import { Contact } from "../../models/Contact";
 import { NameInput } from "../../styles/Inputs";
 import { AddIcon } from "../Icons/AddIcon";
+import { ChainIcon } from "../Icons/ChainIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
 
@@ -24,26 +26,43 @@ import {
   Section,
   Text,
 } from "./ModalStyle";
+import { EmojiKey, UserAddress } from "./ProfileModal";
 
 export const UserCreationModalName = "UserCreationModal";
 
 export function UserCreationModal() {
+  const identity = useIdentity();
   const setIdentity = useSetIdentity();
   const setNickname = useSetNikcname();
 
   const [customNameInput, setCustomNameInput] = useState("");
+  const [nextStep, setNextStep] = useState(false);
   const { setModal } = useModal(UserCreationModalName);
   return (
     <Modal name={UserCreationModalName}>
       <Section>
         <Heading>Create a Status Profile</Heading>
       </Section>
-      <MiddleSection>
-        <Title>Your profile</Title>
-        <StyledHint>
-          Longer and unusual names are better as they are <br /> less likely to
-          be used by someone else.
-        </StyledHint>
+      <MiddleSection className={`${!nextStep && "initial"}`}>
+        {nextStep ? (
+          <Title>Your emojihash and identicon ring</Title>
+        ) : (
+          <Title>Your profile</Title>
+        )}
+        {nextStep ? (
+          <StyledHint>
+            {" "}
+            This set of emojis and coloured ring around your avatar are unique
+            and represent your chat key, so your friends can easily distinguish
+            you from potential impersonators.
+          </StyledHint>
+        ) : (
+          <StyledHint>
+            Longer and unusual names are better as they are <br /> less likely
+            to be used by someone else.
+          </StyledHint>
+        )}
+
         <LogoWrapper>
           <UserLogo
             contact={{ trueName: customNameInput } as Contact}
@@ -54,15 +73,44 @@ export function UserCreationModal() {
               ["green", 360],
             ]}
           />
-          <AddIconWrapper>
-            <AddIcon />
-          </AddIconWrapper>
+          {!nextStep && (
+            <AddIconWrapper>
+              <AddIcon />
+            </AddIconWrapper>
+          )}
         </LogoWrapper>
-        <NameInput
-          placeholder="Display name"
-          value={customNameInput}
-          onChange={(e) => setCustomNameInput(e.currentTarget.value)}
-        />
+        {!nextStep && (
+          <NameInput
+            placeholder="Display name"
+            value={customNameInput}
+            onChange={(e) => setCustomNameInput(e.currentTarget.value)}
+          />
+        )}
+        {nextStep && identity && (
+          <>
+            <UserAddress>
+              {" "}
+              Chatkey: {identity.privateKey.slice(0, 10)}...
+              {identity.privateKey.slice(-3)}{" "}
+            </UserAddress>
+            <ChainIcons>
+              <ChainIcon className="transformed" />
+              <ChainIcon />
+            </ChainIcons>
+            <UserAttributes>
+              <EmojiKey>🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱</EmojiKey>
+              <UserLogo
+                contact={{ trueName: customNameInput } as Contact}
+                radius={40}
+                colorWheel={[
+                  ["red", 150],
+                  ["blue", 250],
+                  ["green", 360],
+                ]}
+              />
+            </UserAttributes>
+          </>
+        )}
       </MiddleSection>
       <ButtonSection>
         <BackBtn onClick={() => setModal(false)}>
@@ -70,9 +118,11 @@ export function UserCreationModal() {
         </BackBtn>
         <Btn
           onClick={() => {
-            setIdentity(Identity.generate());
-            setNickname(customNameInput);
-            setModal(false);
+            nextStep
+              ? setModal(false)
+              : (setIdentity(Identity.generate()),
+                setNickname(customNameInput),
+                setNextStep(true));
           }}
           disabled={!customNameInput}
         >
@@ -84,11 +134,13 @@ export function UserCreationModal() {
 }
 
 const MiddleSection = styled(Section)`
+  height: 420px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px;
-  margin-bottom: 102px;
+  &.initial {
+    padding: 32px;
+  }
 `;
 
 const Title = styled(Text)`
@@ -116,4 +168,20 @@ const AddIconWrapper = styled(AddWrapper)`
   top: 0;
   right: -50%;
   transform: translateX(-50%);
+`;
+
+const ChainIcons = styled.div`
+  width: 104px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 16px 0;
+`;
+
+const UserAttributes = styled.div`
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
 `;

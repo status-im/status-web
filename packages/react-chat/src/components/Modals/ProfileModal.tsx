@@ -349,7 +349,7 @@ const UserAddressWrapper = styled.div`
   }
 `;
 
-const UserAddress = styled.p`
+export const UserAddress = styled.p`
   display: flex;
   letter-spacing: 1px;
   margin-right: 8px;
@@ -363,11 +363,8 @@ const UserAddress = styled.p`
     ${textSmallStyles}
   }
 `;
-const EmojiKey = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+export const EmojiKey = styled.div`
+  width: 116px;
   gap: 8px;
   font-size: 15px;
   line-height: 14px;
