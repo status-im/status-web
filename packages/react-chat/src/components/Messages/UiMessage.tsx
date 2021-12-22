@@ -15,7 +15,7 @@ import { Icon } from "../Icons/Icon";
 import { ReactionSvg } from "../Icons/ReactionIcon";
 import { ReplySvg } from "../Icons/ReplyIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
-import { UserIcon } from "../Icons/UserIcon";
+import { UserLogo } from "../Members/UserLogo";
 
 import { MessageQuote } from "./MessageQuote";
 import {
@@ -116,7 +116,15 @@ export function UiMessage({
             {showMenu && (
               <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
             )}
-            <UserIcon />
+            <UserLogo
+              contact={contact}
+              radius={40}
+              colorWheel={[
+                ["red", 150],
+                ["blue", 250],
+                ["green", 360],
+              ]}
+            />
           </Icon>
           <ContentWrapper>
             <MessageHeaderWrapper>

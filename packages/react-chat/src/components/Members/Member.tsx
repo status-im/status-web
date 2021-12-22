@@ -5,8 +5,9 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Contact } from "../../models/Contact";
 import { ContactMenu } from "../Form/ContactMenu";
 import { Icon } from "../Icons/Icon";
-import { UserIcon } from "../Icons/UserIcon";
 import { UserAddress } from "../Messages/Styles";
+
+import { UserLogo } from "./UserLogo";
 
 interface MemberProps {
   contact: Contact;
@@ -46,7 +47,15 @@ export function Member({
         onClick={() => setShowMenu((e) => !e)}
       >
         {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
-        <UserIcon memberView={true} />
+        <UserLogo
+          contact={contact}
+          radius={30}
+          colorWheel={[
+            ["red", 150],
+            ["blue", 250],
+            ["green", 360],
+          ]}
+        />
       </MemberIcon>
       <MemberName>{contact?.customName ?? contact.trueName}</MemberName>
       <UserAddress>
@@ -77,8 +86,8 @@ export const MemberName = styled.p`
 `;
 
 export const MemberIcon = styled(Icon)`
-  width: 24px;
-  height: 24px;
+  width: 29px;
+  height: 29px;
   position: relative;
   background-size: contain;
   background-position: center;
