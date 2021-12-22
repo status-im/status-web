@@ -2,7 +2,11 @@ import React, { useMemo } from "react";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useIdentity, useNickname } from "../../contexts/identityProvider";
+import {
+  useIdentity,
+  useNickname,
+  useSetIdentity,
+} from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { TopBtn } from "../Chat/ChatTopbar";
 import { LogoutIcon } from "../Icons/LogoutIcon";
@@ -18,6 +22,7 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
   const nickname = useNickname();
+  const logout = useSetIdentity();
   const userContacts = useMemo(() => {
     if (identity) {
       return Object.values(contacts).filter(
@@ -38,20 +43,22 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
 
   return (
     <MembersListWrap>
-      <MemberCategory>
-        <MemberCategoryName>You</MemberCategoryName>
-        <MemberData>
-          <Row>
-            <MemberIcon>
-              <UserIcon memberView={true} />
-            </MemberIcon>
-            {identity && <MemberName>{nickname}</MemberName>}
-          </Row>
-          <TopBtn>
-            <LogoutIcon />
-          </TopBtn>
-        </MemberData>
-      </MemberCategory>
+      {identity && (
+        <MemberCategory>
+          <MemberCategoryName>You</MemberCategoryName>
+          <MemberData>
+            <Row>
+              <MemberIcon>
+                <UserIcon memberView={true} />
+              </MemberIcon>
+              <MemberName>{nickname}</MemberName>
+            </Row>
+            <TopBtn onClick={() => logout(undefined)}>
+              <LogoutIcon />
+            </TopBtn>
+          </MemberData>
+        </MemberCategory>
+      )}
       {onlineContacts.length > 0 && (
         <MemberCategory>
           <MemberCategoryName>Online</MemberCategoryName>
