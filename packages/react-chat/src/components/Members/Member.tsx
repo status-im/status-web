@@ -57,10 +57,12 @@ export function Member({
           ]}
         />
       </MemberIcon>
-      <MemberName>{contact?.customName ?? contact.trueName}</MemberName>
-      <UserAddress>
-        {contact.id.slice(0, 5)}...{contact.id.slice(-3)}
-      </UserAddress>
+      <Column>
+        <MemberName>{contact?.customName ?? contact.trueName}</MemberName>
+        <UserAddress>
+          {contact.id.slice(0, 5)}...{contact.id.slice(-3)}
+        </UserAddress>
+      </Column>
     </MemberData>
   );
 }
@@ -70,6 +72,10 @@ export const MemberData = styled.div`
   align-items: center;
   margin-bottom: 16px;
   cursor: pointer;
+
+  &.you {
+    justify-content: space-between;
+  }
 `;
 
 export const MemberName = styled.p`
@@ -78,11 +84,9 @@ export const MemberName = styled.p`
   line-height: 22px;
   color: ${({ theme }) => theme.primary};
   opacity: 0.7;
-  margin-left: 8px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  margin-right: 4px;
 `;
 
 export const MemberIcon = styled(Icon)`
@@ -120,4 +124,10 @@ export const MemberIcon = styled(Icon)`
       border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
     }
   }
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
 `;
