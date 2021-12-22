@@ -383,7 +383,6 @@ const ProfileBtn = styled.button`
   ${buttonStyles}
   background: ${({ theme }) => theme.bodyBackgroundColor};
   border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 8px;
   margin-left: 8px;
 
   &.red {
@@ -392,10 +391,6 @@ const ProfileBtn = styled.button`
 
   &.red:hover {
     background: ${({ theme }) => theme.buttonNoBgHover};
-  }
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
   }
 `;
 

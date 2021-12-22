@@ -66,10 +66,6 @@ const Link = styled.a`
 
   ${buttonStyles}
 
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
-
   &.activity {
     margin: 0;
     padding: 0;

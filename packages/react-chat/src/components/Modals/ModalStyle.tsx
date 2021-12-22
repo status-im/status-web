@@ -29,10 +29,6 @@ export const Btn = styled.button`
   margin-left: 8px;
   ${buttonStyles}
 
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
-
   &:disabled {
     background: ${({ theme }) => theme.border};
     color: ${({ theme }) => theme.secondary};

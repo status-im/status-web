@@ -153,8 +153,4 @@ const SaveBtn = styled.button`
   padding: 11px 24px;
 
   ${buttonStyles}
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
 `;
