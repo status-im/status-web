@@ -6,7 +6,7 @@ import { Contact } from "../../models/Contact";
 type UserLogoProps = {
   radius: number;
   colorWheel: [string, number][];
-  contact: Contact;
+  contact?: Contact;
   showOnlineStatus?: boolean;
   icon?: string;
 };
@@ -29,17 +29,17 @@ export function UserLogo({
   }, [colorWheel]);
 
   const letters = useMemo(() => {
-    if (contact?.customName) {
+    if (contact && contact?.customName) {
       return contact.customName.slice(0, 2);
     }
-    if (contact.trueName) {
+    if (contact && contact.trueName) {
       return contact.trueName.slice(0, 2);
     }
   }, [contact]);
 
   const logoClassnName = useMemo(() => {
     if (showOnlineStatus) {
-      if (contact.online) {
+      if (contact && contact.online) {
         return "online";
       }
       return "offline";
@@ -49,7 +49,11 @@ export function UserLogo({
 
   return (
     <Wrapper radius={radius} conicGradient={conicGradient}>
-      <Logo icon={icon} radius={radius} className={logoClassnName}>
+      <Logo
+        icon={icon}
+        radius={radius}
+        className={contact ? logoClassnName : "empty"}
+      >
         {!icon && <TextWrapper radius={radius}>{letters}</TextWrapper>}
       </Logo>
     </Wrapper>
@@ -57,8 +61,6 @@ export function UserLogo({
 }
 
 const TextWrapper = styled.div<{ radius: number }>`
-  font-family: Inter;
-  font-style: normal;
   font-weight: bold;
   font-size: calc(${({ radius }) => radius}px / 2.5);
   line-height: calc(${({ radius }) => radius}px / 2.1);
@@ -66,12 +68,13 @@ const TextWrapper = styled.div<{ radius: number }>`
   align-items: center;
   text-align: center;
   letter-spacing: -0.4px;
-  color: rgba(255, 255, 255, 0.7);
+  color: ${({ theme }) => theme.iconTextColor};
 `;
 
 const Logo = styled.div<{ radius: number; icon?: string }>`
   width: calc(${({ radius }) => radius}px - 6px);
   height: calc(${({ radius }) => radius}px - 6px);
+  display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
@@ -83,9 +86,6 @@ const Logo = styled.div<{ radius: number; icon?: string }>`
   background-size: cover;
   background-repeat: no-repeat;
   background-image: ${({ icon }) => icon && `url(${icon}`};
-  color: ${({ theme }) => theme.iconTextColor};
-  margin: auto;
-  display: flex;
 
   &.offline {
     &::after {
@@ -110,18 +110,23 @@ const Logo = styled.div<{ radius: number; icon?: string }>`
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background-color: #4ebc60;
+      background-color: ${({ theme }) => theme.greenColor};
       border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
     }
   }
+
+  &.empty {
+    background-color: ${({ theme }) => theme.bodyBackgroundColor};
+    background-image: none;
+  }
 `;
 
-const Wrapper = styled.div<{ radius: number; conicGradient: string }>`
+export const Wrapper = styled.div<{ radius: number; conicGradient: string }>`
   width: ${({ radius }) => radius}px;
   height: ${({ radius }) => radius}px;
   display: flex;
-  margin-left: auto;
-  margin-right: auto;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
   background: ${({ conicGradient }) => conicGradient};
 `;

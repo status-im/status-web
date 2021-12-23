@@ -100,7 +100,6 @@ export function UserCreationModal() {
             <UserAttributes>
               <EmojiKey>🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱</EmojiKey>
               <UserLogo
-                contact={{ trueName: customNameInput } as Contact}
                 radius={40}
                 colorWheel={[
                   ["red", 150],
@@ -138,6 +137,7 @@ const MiddleSection = styled(Section)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   &.initial {
     padding: 32px;
   }
