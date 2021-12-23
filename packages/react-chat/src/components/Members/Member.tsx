@@ -12,6 +12,7 @@ import { UserLogo } from "./UserLogo";
 interface MemberProps {
   contact: Contact;
   isOnline?: boolean;
+  isYou?: boolean;
   switchShowMembers?: () => void;
   onClick?: () => void;
 }
@@ -19,6 +20,7 @@ interface MemberProps {
 export function Member({
   contact,
   isOnline,
+  isYou,
   switchShowMembers,
   onClick,
 }: MemberProps) {
@@ -38,12 +40,17 @@ export function Member({
   };
 
   return (
-    <MemberData onClick={onClick ? onClick : onMemberClick}>
+    <MemberData
+      onClick={onClick ? onClick : onMemberClick}
+      className={`${isYou && "you"}`}
+    >
       <MemberIcon
         style={{
           backgroundImage: "unset",
         }}
-        className={isOnline ? "online" : "offline"}
+        className={
+          !isYou && isOnline ? "online" : !isYou && !isOnline ? "offline" : ""
+        }
         onClick={() => setShowMenu((e) => !e)}
       >
         {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
@@ -74,7 +81,7 @@ export const MemberData = styled.div`
   cursor: pointer;
 
   &.you {
-    justify-content: space-between;
+    margin-bottom: 0;
   }
 `;
 
