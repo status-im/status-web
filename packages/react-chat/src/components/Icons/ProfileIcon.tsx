@@ -9,7 +9,7 @@ type ProfileSvgProps = {
 
 export function ProfileSvg({ width, height, className }: ProfileSvgProps) {
   return (
-    <svg
+    <Icon
       width={width}
       height={height}
       viewBox="0 0 16 16"
@@ -28,7 +28,7 @@ export function ProfileSvg({ width, height, className }: ProfileSvgProps) {
         clipRule="evenodd"
         d="M8.00065 14.6673C11.6825 14.6673 14.6673 11.6825 14.6673 8.00065C14.6673 4.31875 11.6825 1.33398 8.00065 1.33398C4.31875 1.33398 1.33398 4.31875 1.33398 8.00065C1.33398 11.6825 4.31875 14.6673 8.00065 14.6673ZM8.00065 13.6673C11.1303 13.6673 13.6673 11.1303 13.6673 8.00065C13.6673 4.87104 11.1303 2.33398 8.00065 2.33398C4.87104 2.33398 2.33398 4.87104 2.33398 8.00065C2.33398 11.1303 4.87104 13.6673 8.00065 13.6673Z"
       />
-    </svg>
+    </Icon>
   );
 }
 
@@ -36,12 +36,10 @@ export const ProfileIcon = () => {
   return <Icon width={16} height={16} />;
 };
 
-const Icon = styled(ProfileSvg)`
-  & > path {
-    fill: ${({ theme }) => theme.tertiary};
-  }
+const Icon = styled.svg`
+  fill: ${({ theme }) => theme.tertiary};
 
-  &:hover > path {
+  &:hover {
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 `;
