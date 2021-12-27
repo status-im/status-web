@@ -5,6 +5,7 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ChannelLogo } from "../Channels/Channel";
+import { inputStyles } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { textMediumStyles } from "../Text";
 
@@ -14,7 +15,6 @@ import {
   ButtonSection,
   Heading,
   Hint,
-  inputStyles,
   Section,
 } from "./ModalStyle";
 

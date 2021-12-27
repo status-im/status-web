@@ -7,9 +7,9 @@ import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useToasts } from "../../contexts/toastProvider";
 import { useManageContact } from "../../hooks/useManageContact";
-import { NameInput } from "../../styles/Inputs";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
+import { inputStyles, NameInput } from "../Form/inputStyles";
 import { ClearSvg } from "../Icons/ClearIcon";
 import { CopySvg } from "../Icons/CopyIcon";
 import { EditSvg } from "../Icons/EditIcon";
@@ -25,7 +25,6 @@ import {
   ButtonSection,
   Heading,
   Hint,
-  inputStyles,
   Section,
 } from "./ModalStyle";
 

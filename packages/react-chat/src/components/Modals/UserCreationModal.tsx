@@ -9,7 +9,7 @@ import {
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { Contact } from "../../models/Contact";
-import { NameInput } from "../../styles/Inputs";
+import { NameInput } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { ChainIcon } from "../Icons/ChainIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
