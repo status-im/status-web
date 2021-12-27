@@ -15,8 +15,8 @@ interface PasteInputProps {
   label: string;
 }
 
-export const pasteInput = ({ label }: PasteInputProps) => (
-  <div>
+export const PasteInput = ({ label }: PasteInputProps) => (
+  <PasteWrapper>
     <Label>{label}</Label>
     <Wrapper>
       <Input id="pasteInput" type="text" placeholder="eg. 0x2Ef19" />
@@ -24,11 +24,20 @@ export const pasteInput = ({ label }: PasteInputProps) => (
         <InputBtn onClick={() => paste()}>Paste</InputBtn>
       </ButtonWrapper>
     </Wrapper>
-  </div>
+  </PasteWrapper>
 );
+
+const PasteWrapper = styled.div`
+  width: 100%;
+`;
 
 const Input = styled.input`
   ${inputStyles}
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
 
   border: none;
 `;

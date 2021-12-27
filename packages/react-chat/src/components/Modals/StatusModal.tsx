@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { buttonStyles } from "../Buttons/buttonStyle";
+import { PasteInput } from "../Form/PasteInput";
 import { MobileIcon } from "../Icons/MobileIcon";
 import { ProfileSvg } from "../Icons/ProfileIcon";
 import { ScanIcon } from "../Icons/ScanIcon";
@@ -22,6 +23,9 @@ export function StatusModal() {
   const [modalState, setModalState] = useState<StatusModalState>(
     StatusModalState.Mobile
   );
+
+  const mobileFlow = modalState === StatusModalState.Mobile;
+  const desktopFlow = modalState === StatusModalState.Desktop;
 
   const switchModalState = (state: StatusModalState) => {
     setModalState((prev) => (prev === state ? StatusModalState.Mobile : state));
@@ -47,40 +51,44 @@ export function StatusModal() {
           </SwitchBtnMobile>
         </Switch>
 
-        {modalState === StatusModalState.Mobile && (
-          <>
-            <QRCode value="https://status.im/get/" size={158} />
-            <Instructions>
-              <InstructionStep>Open Status App on your mobile</InstructionStep>
-              <InstructionStep>
-                Navigate yourself to{" "}
-                <InstructionIcon>
-                  {" "}
-                  <ProfileSvg width={13} height={13} /> <span>Profile</span>
-                </InstructionIcon>{" "}
-                tab
-              </InstructionStep>
-              <InstructionStep>
-                Select{" "}
-                <InstructionIcon>
-                  <MobileIcon />
-                </InstructionIcon>{" "}
-                <span>Sync Settings</span>
-              </InstructionStep>
-              <InstructionStep>
-                Tap{" "}
-                <InstructionIcon>
-                  {" "}
-                  <ScanIcon />{" "}
-                </InstructionIcon>{" "}
-                <span>Scan sync code</span>
-              </InstructionStep>
-              <InstructionStep>
-                Scan the sync code from this screen ↑
-              </InstructionStep>
-            </Instructions>
-          </>
-        )}
+        {mobileFlow && <QRCode value="https://status.im/get/" size={158} />}
+
+        {desktopFlow && <PasteInput label="Paste sync code" />}
+
+        <Instructions>
+          <InstructionStep>
+            Open Status App on your {mobileFlow ? "mobile" : "desktop"}
+          </InstructionStep>
+          <InstructionStep>
+            Navigate yourself to{" "}
+            <InstructionIcon>
+              {" "}
+              <ProfileSvg width={13} height={13} /> <span>Profile</span>
+            </InstructionIcon>{" "}
+            tab
+          </InstructionStep>
+          <InstructionStep>
+            Select{" "}
+            <InstructionIcon>
+              <MobileIcon />
+            </InstructionIcon>{" "}
+            <span>Sync Settings</span>
+          </InstructionStep>
+          <InstructionStep>
+            Tap{" "}
+            <InstructionIcon>
+              {" "}
+              <ScanIcon />{" "}
+            </InstructionIcon>{" "}
+            <span>{mobileFlow ? "Scan" : "Display"} sync code</span>
+          </InstructionStep>
+          <InstructionStep>
+            {mobileFlow
+              ? "Scan the sync code from this screen"
+              : "Paste the sync code above"}{" "}
+            ↑
+          </InstructionStep>
+        </Instructions>
       </MiddleSection>
     </Modal>
   );
@@ -90,7 +98,7 @@ const MiddleSection = styled(Section)`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 24px;
+  height: 514px;
 `;
 
 const Switch = styled.div`
@@ -121,7 +129,7 @@ const SwitchBtnMobile = styled(SwitchBtn)`
 
 const Instructions = styled.ol`
   color: ${({ theme }) => theme.secondary};
-  margin-top: 32px;
+  margin: auto 0;
   list-style-type: decimal;
   counter-reset: ollist;
 
