@@ -4,16 +4,21 @@ import styled from "styled-components";
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
+import { StatusModalName } from "../Modals/StatusModal";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
 import { textSmallStyles } from "../Text";
 
 export function UserCreation() {
   const { setModal } = useModal(UserCreationModalName);
+  const { setModal: setStatusModal } = useModal(StatusModalName);
+
   return (
     <Wrapper>
       <ColorChatIcon />
       <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
-      <LoginBtn>Sync with Status profile</LoginBtn>
+      <LoginBtn onClick={() => setStatusModal(true)}>
+        Sync with Status profile
+      </LoginBtn>
       <LoginBtn>Connect Ethereum Wallet</LoginBtn>
       <ThrowAwayButton onClick={() => setModal(true)}>
         Use a throwaway account
