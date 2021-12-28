@@ -1,9 +1,9 @@
-export const paste = () => {
+export const paste = (elementId: string) => {
   navigator.clipboard
     .readText()
     .then(
       (clipText) =>
-        ((<HTMLInputElement>document.getElementById("pasteInput")).value =
+        ((<HTMLInputElement>document.getElementById(elementId)).value =
           clipText)
     );
 };

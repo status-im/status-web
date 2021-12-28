@@ -21,7 +21,7 @@ export const PasteInput = ({ label }: PasteInputProps) => (
     <Wrapper>
       <Input id="pasteInput" type="text" placeholder="eg. 0x2Ef19" />
       <ButtonWrapper>
-        <InputBtn onClick={() => paste()}>Paste</InputBtn>
+        <InputBtn onClick={() => paste("pasteInput")}>Paste</InputBtn>
       </ButtonWrapper>
     </Wrapper>
   </PasteWrapper>
