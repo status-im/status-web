@@ -7,9 +7,9 @@ import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useToasts } from "../../contexts/toastProvider";
 import { useManageContact } from "../../hooks/useManageContact";
-import { NameInput } from "../../styles/Inputs";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
+import { inputStyles, NameInput } from "../Form/inputStyles";
 import { ClearSvg } from "../Icons/ClearIcon";
 import { CopySvg } from "../Icons/CopyIcon";
 import { EditSvg } from "../Icons/EditIcon";
@@ -25,7 +25,6 @@ import {
   ButtonSection,
   Heading,
   Hint,
-  inputStyles,
   Section,
 } from "./ModalStyle";
 
@@ -349,7 +348,7 @@ const UserAddressWrapper = styled.div`
   }
 `;
 
-const UserAddress = styled.p`
+export const UserAddress = styled.p`
   display: flex;
   letter-spacing: 1px;
   margin-right: 8px;
@@ -363,11 +362,8 @@ const UserAddress = styled.p`
     ${textSmallStyles}
   }
 `;
-const EmojiKey = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
+export const EmojiKey = styled.div`
+  width: 116px;
   gap: 8px;
   font-size: 15px;
   line-height: 14px;
@@ -383,7 +379,6 @@ const ProfileBtn = styled.button`
   ${buttonStyles}
   background: ${({ theme }) => theme.bodyBackgroundColor};
   border: 1px solid ${({ theme }) => theme.border};
-  border-radius: 8px;
   margin-left: 8px;
 
   &.red {
@@ -392,10 +387,6 @@ const ProfileBtn = styled.button`
 
   &.red:hover {
     background: ${({ theme }) => theme.buttonNoBgHover};
-  }
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
   }
 `;
 

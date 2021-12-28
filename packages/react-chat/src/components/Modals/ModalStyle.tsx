@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
@@ -28,10 +28,6 @@ export const Btn = styled.button`
   padding: 11px 24px;
   margin-left: 8px;
   ${buttonStyles}
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
 
   &:disabled {
     background: ${({ theme }) => theme.border};
@@ -67,17 +63,13 @@ export const Hint = styled.p`
   line-height: 16px;
 `;
 
-export const inputStyles = css`
-  background: ${({ theme }) => theme.inputColor};
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.inputColor};
-  color: ${({ theme }) => theme.primary};
-  outline: none;
-
-  ${textMediumStyles}
-
-  &:focus {
-    outline: 1px solid ${({ theme }) => theme.tertiary};
-    caret-color: ${({ theme }) => theme.notificationColor};
-  }
+export const AddWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: ${({ theme }) => theme.tertiary};
+  border-radius: 50%;
 `;

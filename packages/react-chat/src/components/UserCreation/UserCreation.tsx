@@ -2,65 +2,56 @@ import React from "react";
 import styled from "styled-components";
 
 import { useModal } from "../../contexts/modalProvider";
+import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
+import { StatusModalName } from "../Modals/StatusModal";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
+import { textSmallStyles } from "../Text";
 
 export function UserCreation() {
   const { setModal } = useModal(UserCreationModalName);
+  const { setModal: setStatusModal } = useModal(StatusModalName);
+
   return (
-    <Background>
-      <Wrapper>
-        <IconWrapper>
-          <ColorChatIcon />
-        </IconWrapper>
-        <TitleWrapper>Want in on the discussion ?</TitleWrapper>
-        <ThrowAwayButton onClick={() => setModal(true)}>
-          Use a throwaway account
-        </ThrowAwayButton>
-      </Wrapper>
-    </Background>
+    <Wrapper>
+      <ColorChatIcon />
+      <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
+      <LoginBtn onClick={() => setStatusModal(true)}>
+        Sync with Status profile
+      </LoginBtn>
+      <LoginBtn>Connect Ethereum Wallet</LoginBtn>
+      <ThrowAwayButton onClick={() => setModal(true)}>
+        Use a throwaway account
+      </ThrowAwayButton>
+    </Wrapper>
   );
 }
 
-const ThrowAwayButton = styled.button`
-  font-family: Inter;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 13px;
-  line-height: 18px;
+const Wrapper = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  text-align: center;
-  color: #4360df;
-`;
-
-const IconWrapper = styled.div`
-  margin-left: auto;
-  margin-right: auto;
+  justify-content: center;
+  flex: 1;
+  background-color: ${({ theme }) => theme.sectionBackgroundColor};
 `;
 
 const TitleWrapper = styled.div`
-  font-family: Inter;
-  font-style: normal;
   font-weight: bold;
   font-size: 17px;
   line-height: 24px;
   text-align: center;
-  margin-top: 25px;
-  margin-bottom: 24px;
+  margin: 24px 0;
+  color: ${({ theme }) => theme.primary};
 `;
 
-const Wrapper = styled.div`
-  margin: auto;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+const LoginBtn = styled.button`
+  ${buttonStyles}
+  ${textSmallStyles}
+  padding: 10px 12px;
+  margin-bottom: 16px;
 `;
 
-const Background = styled.div`
-  background: #f6f8fa;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100%;
+const ThrowAwayButton = styled.button`
+  ${buttonTransparentStyles}
 `;

@@ -9,7 +9,7 @@ import { Activity } from "../models/Activity";
 import { equalDate } from "../utils/equalDate";
 
 import { DownloadButton } from "./Buttons/DownloadButton";
-import { buttonStyles } from "./Buttons/buttonStyle";
+import { buttonTransparentStyles } from "./Buttons/buttonStyle";
 import { Mention } from "./Chat/ChatMessageContent";
 import { Logo } from "./CommunityIdentity";
 import { ContactMenu } from "./Form/ContactMenu";
@@ -365,22 +365,10 @@ const InviteDiv = styled.div`
 `;
 
 const FilterBtn = styled.button`
-  ${buttonStyles}
-  ${textSmallStyles}
-
-  padding: 10px 12px;
-  background: ${({ theme }) => theme.bodyBackgroundColor};
+  ${buttonTransparentStyles}
 
   & + & {
     margin-left: 8px;
-  }
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
-
-  &:focus {
-    background: ${({ theme }) => theme.buttonBg};
   }
 `;
 

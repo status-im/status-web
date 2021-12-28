@@ -1,9 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 
 import { copy } from "../../utils/copy";
 import { reduceString } from "../../utils/reduceString";
-import { textMediumStyles, textSmallStyles } from "../Text";
+
+import { ButtonWrapper, InputBtn, Label, Text, Wrapper } from "./inputStyles";
 
 interface CopyInputProps {
   label: string;
@@ -15,57 +15,9 @@ export const CopyInput = ({ label, value }: CopyInputProps) => (
     <Label>{label}</Label>
     <Wrapper>
       <Text>{reduceString(value, 15, 15)}</Text>
-      <CopyButtonWrapper>
-        <CopyButton onClick={() => copy(value)}>Copy</CopyButton>
-      </CopyButtonWrapper>
+      <ButtonWrapper>
+        <InputBtn onClick={() => copy(value)}>Copy</InputBtn>
+      </ButtonWrapper>
     </Wrapper>
   </div>
 );
-
-const Label = styled.p`
-  margin-bottom: 7px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  color: ${({ theme }) => theme.primary};
-
-  ${textSmallStyles}
-`;
-
-const Wrapper = styled.div`
-  position: relative;
-  padding: 14px 70px 14px 8px;
-  background: ${({ theme }) => theme.inputColor};
-  border-radius: 8px;
-`;
-
-const Text = styled.p`
-  color: ${({ theme }) => theme.primary};
-
-  ${textMediumStyles}
-`;
-
-const CopyButtonWrapper = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 70px;
-  transform: translateY(-50%);
-  background: ${({ theme }) => theme.inputColor};
-  border-radius: 8px;
-`;
-
-const CopyButton = styled.button`
-  padding: 6px 12px;
-  font-size: 12px;
-  line-height: 16px;
-  letter-spacing: 0.1px;
-  color: ${({ theme }) => theme.tertiary};
-  background: ${({ theme }) => theme.buttonBg};
-  border: 1px solid ${({ theme }) => theme.tertiary};
-  border-radius: 6px;
-`;

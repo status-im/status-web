@@ -1,10 +1,10 @@
 export type Contact = {
   id: string;
-  online: boolean;
+  online?: boolean;
   trueName: string;
   customName?: string;
-  isUntrustworthy: boolean;
-  blocked: boolean;
+  isUntrustworthy?: boolean;
+  blocked?: boolean;
   isFriend?: boolean;
 };
 

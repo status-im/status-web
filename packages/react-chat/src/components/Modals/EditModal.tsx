@@ -5,15 +5,16 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { ChannelLogo } from "../Channels/Channel";
+import { inputStyles } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { textMediumStyles } from "../Text";
 
 import { Modal } from "./Modal";
 import {
+  AddWrapper,
   ButtonSection,
   Heading,
   Hint,
-  inputStyles,
   Section,
 } from "./ModalStyle";
 
@@ -125,17 +126,9 @@ const GroupLogo = styled(ChannelLogo)`
   margin-right: 0;
 `;
 
-const AddPictureInputWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
+const AddPictureInputWrapper = styled(AddWrapper)`
   top: 0;
   right: 8px;
-  width: 40px;
-  height: 40px;
-  background: ${({ theme }) => theme.tertiary};
-  border-radius: 50%;
 `;
 
 const AddPictureInput = styled.input`
@@ -153,8 +146,4 @@ const SaveBtn = styled.button`
   padding: 11px 24px;
 
   ${buttonStyles}
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
 `;
