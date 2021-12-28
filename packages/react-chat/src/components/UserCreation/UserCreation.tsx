@@ -6,11 +6,13 @@ import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
 import { StatusModalName } from "../Modals/StatusModal";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
+import { WalletModalName } from "../Modals/WalletModal";
 import { textSmallStyles } from "../Text";
 
 export function UserCreation() {
   const { setModal } = useModal(UserCreationModalName);
   const { setModal: setStatusModal } = useModal(StatusModalName);
+  const { setModal: setWalletModal } = useModal(WalletModalName);
 
   return (
     <Wrapper>
@@ -19,7 +21,7 @@ export function UserCreation() {
       <LoginBtn onClick={() => setStatusModal(true)}>
         Sync with Status profile
       </LoginBtn>
-      <LoginBtn>Connect Ethereum Wallet</LoginBtn>
+      <LoginBtn onClick={() => setWalletModal(true)}>Connect Ethereum Wallet</LoginBtn>
       <ThrowAwayButton onClick={() => setModal(true)}>
         Use a throwaway account
       </ThrowAwayButton>
