@@ -21,7 +21,9 @@ export function UserCreation() {
       <LoginBtn onClick={() => setStatusModal(true)}>
         Sync with Status profile
       </LoginBtn>
-      <LoginBtn onClick={() => setWalletModal(true)}>Connect Ethereum Wallet</LoginBtn>
+      <LoginBtn onClick={() => setWalletModal(true)}>
+        Connect Ethereum Wallet
+      </LoginBtn>
       <ThrowAwayButton onClick={() => setModal(true)}>
         Use a throwaway account
       </ThrowAwayButton>
