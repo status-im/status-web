@@ -3,13 +3,18 @@ import styled from "styled-components";
 
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
+import { TokenRequirement } from "../Form/TokenRequirement";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
 import { StatusModalName } from "../Modals/StatusModal";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
 import { WalletModalName } from "../Modals/WalletModal";
 import { textSmallStyles } from "../Text";
 
-export function UserCreation() {
+interface UserCreationProps {
+  permission: boolean;
+}
+
+export function UserCreation({ permission }: UserCreationProps) {
   const { setModal } = useModal(UserCreationModalName);
   const { setModal: setStatusModal } = useModal(StatusModalName);
   const { setModal: setWalletModal } = useModal(WalletModalName);
@@ -17,16 +22,22 @@ export function UserCreation() {
   return (
     <Wrapper>
       <ColorChatIcon />
-      <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
+      {permission ? (
+        <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
+      ) : (
+        <TokenRequirement />
+      )}
       <LoginBtn onClick={() => setStatusModal(true)}>
         Sync with Status profile
       </LoginBtn>
       <LoginBtn onClick={() => setWalletModal(true)}>
         Connect Ethereum Wallet
       </LoginBtn>
+      {permission && (
       <ThrowAwayButton onClick={() => setModal(true)}>
         Use a throwaway account
       </ThrowAwayButton>
+       )}
     </Wrapper>
   );
 }

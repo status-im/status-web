@@ -46,7 +46,7 @@ export function Chat() {
       {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity />
-          {identity ? <Channels /> : <UserCreation />}
+          {identity ? <Channels /> : <UserCreation permission={true} />}
         </ChannelsWrapper>
       )}
       {state === ChatState.ChatBody && (
