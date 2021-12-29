@@ -81,12 +81,5 @@ export const AddWrapper = styled.div`
 `;
 
 export const QRWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid ${({ theme }) => theme.border};
-  box-sizing: border-box;
-  border-radius: 8px;
-  margin: 16px 0;
-  padding: 14px;
+  margin: 30px 0;
 `;
