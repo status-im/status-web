@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 import { useModal } from "../../contexts/modalProvider";
-import { WalletConnectIcon } from "../Icons/WalletConnectIcon";
+import { CoinbaseLogo } from "../Icons/CoinbaseLogo";
+import { MetamaskLogo } from "../Icons/MetamaskLogo";
+import { WalletConnectLogo } from "../Icons/WalletConnectLogo";
 
 import { CoinbaseModalName } from "./CoinbaseModal";
 import { Modal } from "./Modal";
 import { Heading, MiddleSection, Section, Text } from "./ModalStyle";
 import { WalleConnectModalName } from "./WalletConnectModal";
-// import walletConnect from '../../assets/coinbasewallet.png';
-// import walletConnect from '../../assets/metamask.png';
 
 export const WalletModalName = "WalletModal";
 
@@ -28,18 +28,15 @@ export function WalletModal() {
         <Wallets>
           <Wallet onClick={() => (setModal(false), setWalleConnectModal(true))}>
             <Heading>WalletConnect</Heading>
-            <WalletConnectIcon />
+            <WalletConnectLogo />
           </Wallet>
           <Wallet onClick={() => (setModal(false), setCoinbaseModal(true))}>
             <Heading>Coinbase Wallet</Heading>
-            <WalletLogo
-              src="../../assets/coinbasewallet.png"
-              alt="coinbase wallet logo"
-            />
+            <CoinbaseLogo />
           </Wallet>
           <Wallet>
             <Heading>MetaMask</Heading>
-            <WalletLogo src="../../assets/metamask.png" alt="metamask logo" />
+            <MetamaskLogo />
           </Wallet>
         </Wallets>
       </MiddleSectionWallet>
@@ -72,9 +69,4 @@ const Wallet = styled.div`
   &:hover {
     background: ${({ theme }) => theme.buttonBgHover};
   }
-`;
-
-const WalletLogo = styled.img`
-  width: 40px;
-  height: 40px;
 `;

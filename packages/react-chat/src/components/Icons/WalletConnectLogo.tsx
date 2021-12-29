@@ -1,6 +1,6 @@
 import React from "react";
 
-export const WalletConnectIcon = () => {
+export const WalletConnectLogo = () => {
   return (
     <svg
       width="40"
