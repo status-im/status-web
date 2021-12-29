@@ -4,8 +4,9 @@ import styled from "styled-components";
 import { useModal } from "../../contexts/modalProvider";
 import { WalletConnectIcon } from "../Icons/WalletConnectIcon";
 
+import { CoinbaseModalName } from "./CoinbaseModal";
 import { Modal } from "./Modal";
-import { Heading, Section, Text } from "./ModalStyle";
+import { Heading, MiddleSection, Section, Text } from "./ModalStyle";
 import { WalleConnectModalName } from "./WalletConnectModal";
 // import walletConnect from '../../assets/coinbasewallet.png';
 // import walletConnect from '../../assets/metamask.png';
@@ -15,20 +16,21 @@ export const WalletModalName = "WalletModal";
 export function WalletModal() {
   const { setModal } = useModal(WalletModalName);
   const { setModal: setWalleConnectModal } = useModal(WalleConnectModalName);
+  const { setModal: setCoinbaseModal } = useModal(CoinbaseModalName);
 
   return (
     <Modal name={WalletModalName}>
       <Section>
         <Heading>Connect an Ethereum Wallet</Heading>
       </Section>
-      <MiddleSection>
+      <MiddleSectionWallet>
         <Text>Choose a way to chat using your Ethereum address.</Text>
         <Wallets>
           <Wallet onClick={() => (setModal(false), setWalleConnectModal(true))}>
             <Heading>WalletConnect</Heading>
             <WalletConnectIcon />
           </Wallet>
-          <Wallet>
+          <Wallet onClick={() => (setModal(false), setCoinbaseModal(true))}>
             <Heading>Coinbase Wallet</Heading>
             <WalletLogo
               src="../../assets/coinbasewallet.png"
@@ -40,14 +42,13 @@ export function WalletModal() {
             <WalletLogo src="../../assets/metamask.png" alt="metamask logo" />
           </Wallet>
         </Wallets>
-      </MiddleSection>
+      </MiddleSectionWallet>
     </Modal>
   );
 }
 
-const MiddleSection = styled(Section)`
-  display: flex;
-  flex-direction: column;
+const MiddleSectionWallet = styled(MiddleSection)`
+  align-items: stretch;
 `;
 
 const Wallets = styled.div`

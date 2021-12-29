@@ -10,6 +10,7 @@ import { ChatBody } from "./Chat/ChatBody";
 import { ChatCreation } from "./Chat/ChatCreation";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
+import { CoinbaseModal } from "./Modals/CoinbaseModal";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
 import { ProfileModal } from "./Modals/ProfileModal";
@@ -30,6 +31,7 @@ function Modals() {
       <StatusModal />
       <WalletModal />
       <WalleConnectModal />
+      <CoinbaseModal />
     </>
   );
 }
