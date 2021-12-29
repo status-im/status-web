@@ -11,6 +11,12 @@ export const Section = styled.div`
   }
 `;
 
+export const MiddleSection = styled(Section)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Heading = styled.p`
   color: ${({ theme }) => theme.primary};
   font-weight: bold;
@@ -72,4 +78,15 @@ export const AddWrapper = styled.div`
   height: 40px;
   background: ${({ theme }) => theme.tertiary};
   border-radius: 50%;
+`;
+
+export const QRWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid ${({ theme }) => theme.border};
+  box-sizing: border-box;
+  border-radius: 8px;
+  margin: 16px 0;
+  padding: 14px;
 `;

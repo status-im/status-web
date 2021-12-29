@@ -1,11 +1,10 @@
 import QRCode from "qrcode.react";
 import React from "react";
-import styled from "styled-components";
 
 import { CopyInput } from "../Form/CopyInput";
 
 import { Modal } from "./Modal";
-import { Heading, Section, Text } from "./ModalStyle";
+import { Heading, MiddleSection, QRWrapper, Section, Text } from "./ModalStyle";
 
 export const WalleConnectModalName = "WalleConnectModal";
 
@@ -29,20 +28,3 @@ export function WalleConnectModal() {
     </Modal>
   );
 }
-
-const MiddleSection = styled(Section)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const QRWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid ${({ theme }) => theme.border};
-  box-sizing: border-box;
-  border-radius: 8px;
-  margin: 16px 0;
-  padding: 14px;
-`;
