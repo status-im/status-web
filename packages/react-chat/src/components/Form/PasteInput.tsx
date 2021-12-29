@@ -7,6 +7,7 @@ import {
   ButtonWrapper,
   InputBtn,
   inputStyles,
+  InputWrapper,
   Label,
   Wrapper,
 } from "./inputStyles";
@@ -16,7 +17,7 @@ interface PasteInputProps {
 }
 
 export const PasteInput = ({ label }: PasteInputProps) => (
-  <PasteWrapper>
+  <InputWrapper>
     <Label>{label}</Label>
     <Wrapper>
       <Input id="pasteInput" type="text" placeholder="eg. 0x2Ef19" />
@@ -24,12 +25,8 @@ export const PasteInput = ({ label }: PasteInputProps) => (
         <InputBtn onClick={() => paste("pasteInput")}>Paste</InputBtn>
       </ButtonWrapper>
     </Wrapper>
-  </PasteWrapper>
+  </InputWrapper>
 );
-
-const PasteWrapper = styled.div`
-  width: 100%;
-`;
 
 const Input = styled.input`
   ${inputStyles}
