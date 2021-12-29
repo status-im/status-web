@@ -1,16 +1,21 @@
 import React from "react";
 import styled from "styled-components";
 
+import { useModal } from "../../contexts/modalProvider";
 import { WalletConnectIcon } from "../Icons/WalletConnectIcon";
 
 import { Modal } from "./Modal";
 import { Heading, Section, Text } from "./ModalStyle";
+import { WalleConnectModalName } from "./WalletConnectModal";
 // import walletConnect from '../../assets/coinbasewallet.png';
 // import walletConnect from '../../assets/metamask.png';
 
 export const WalletModalName = "WalletModal";
 
 export function WalletModal() {
+  const { setModal } = useModal(WalletModalName);
+  const { setModal: setWalleConnectModal } = useModal(WalleConnectModalName);
+
   return (
     <Modal name={WalletModalName}>
       <Section>
@@ -19,7 +24,7 @@ export function WalletModal() {
       <MiddleSection>
         <Text>Choose a way to chat using your Ethereum address.</Text>
         <Wallets>
-          <Wallet>
+          <Wallet onClick={() => (setModal(false), setWalleConnectModal(true))}>
             <Heading>WalletConnect</Heading>
             <WalletConnectIcon />
           </Wallet>

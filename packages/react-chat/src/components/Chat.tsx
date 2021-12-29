@@ -15,6 +15,7 @@ import { EditModal } from "./Modals/EditModal";
 import { ProfileModal } from "./Modals/ProfileModal";
 import { StatusModal } from "./Modals/StatusModal";
 import { UserCreationModal } from "./Modals/UserCreationModal";
+import { WalleConnectModal } from "./Modals/WalletConnectModal";
 import { WalletModal } from "./Modals/WalletModal";
 import { ToastMessageList } from "./ToastMessages/ToastMessageList";
 import { UserCreation } from "./UserCreation/UserCreation";
@@ -28,6 +29,7 @@ function Modals() {
       <ProfileModal />
       <StatusModal />
       <WalletModal />
+      <WalleConnectModal />
     </>
   );
 }
