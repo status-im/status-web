@@ -3,11 +3,11 @@ import React from "react";
 import { ConnectModal } from "./ConnectModal";
 import { Modal } from "./Modal";
 
-export const WalleConnectModalName = "WalleConnectModal";
+export const WalletConnectModalName = "WalletConnectModal";
 
-export function WalleConnectModal() {
+export function WalletConnectModal() {
   return (
-    <Modal name={WalleConnectModalName}>
+    <Modal name={WalletConnectModalName}>
       <ConnectModal
         name="WalletConnect"
         text="Scan QR code with a WallectConnect-compatible wallet or copy code and

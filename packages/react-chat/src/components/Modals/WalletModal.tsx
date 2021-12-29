@@ -9,13 +9,13 @@ import { WalletConnectLogo } from "../Icons/WalletConnectLogo";
 import { CoinbaseModalName } from "./CoinbaseModal";
 import { Modal } from "./Modal";
 import { Heading, MiddleSection, Section, Text } from "./ModalStyle";
-import { WalleConnectModalName } from "./WalletConnectModal";
+import { WalletConnectModalName } from "./WalletConnectModal";
 
 export const WalletModalName = "WalletModal";
 
 export function WalletModal() {
   const { setModal } = useModal(WalletModalName);
-  const { setModal: setWalleConnectModal } = useModal(WalleConnectModalName);
+  const { setModal: setWalleConnectModal } = useModal(WalletConnectModalName);
   const { setModal: setCoinbaseModal } = useModal(CoinbaseModalName);
 
   return (
