@@ -22,14 +22,19 @@ export enum ChatBodyState {
 interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
+  permission: boolean;
 }
 
-export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
+export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
   const narrow = useNarrow();
 
   const [editGroup, setEditGroup] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
+  const bluredStyle = useMemo(
+    () => (permission ? {} : { filter: "blur(6px)" }),
+    [permission]
+  );
 
   const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat);
   const switchShowState = useCallback(
@@ -50,7 +55,7 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
   const [reply, setReply] = useState<Reply | undefined>(undefined);
 
   return (
-    <ChatBodyWrapper className={className}>
+    <ChatBodyWrapper className={className} style={bluredStyle}>
       {editGroup && communityData ? (
         <ChatCreation
           setEditGroup={setEditGroup}
@@ -98,6 +103,7 @@ export function ChatBody({ onClick, showMembers }: ChatBodyProps) {
           <ChatInput reply={reply} setReply={setReply} />
         </>
       )}
+      {!permission && <BluredWrapper />}
     </ChatBodyWrapper>
   );
 }
@@ -109,8 +115,18 @@ const ChatBodyWrapper = styled.div`
   flex: 1;
   height: 100%;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 
   &.narrow {
     width: 100%;
   }
+`;
+
+const BluredWrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
 `;

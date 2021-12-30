@@ -46,13 +46,14 @@ export function Chat() {
       {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity />
-          {identity ? <Channels /> : <UserCreation permission={true} />}
+          {identity ? <Channels /> : <UserCreation permission={false} />}
         </ChannelsWrapper>
       )}
       {state === ChatState.ChatBody && (
         <ChatBody
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
+          permission={false}
         />
       )}
       {showMembers && !narrow && state === ChatState.ChatBody && <Members />}
