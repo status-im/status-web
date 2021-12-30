@@ -29,14 +29,16 @@ export function Member({
   const [showMenu, setShowMenu] = useState(false);
 
   const onMemberClick = () => {
-    switchShowMembers?.();
-    setChannel({
-      id: contact.id,
-      name: contact?.customName ?? contact.trueName,
-      type: "dm",
-      description: "Contact",
-      members: [contact],
-    });
+    if (!isYou) {
+      switchShowMembers?.();
+      setChannel({
+        id: contact.id,
+        name: contact?.customName ?? contact.trueName,
+        type: "dm",
+        description: "Contact",
+        members: [contact],
+      });
+    }
   };
 
   return (
@@ -82,6 +84,7 @@ export const MemberData = styled.div`
 
   &.you {
     margin-bottom: 0;
+    cursor: default;
   }
 `;
 
