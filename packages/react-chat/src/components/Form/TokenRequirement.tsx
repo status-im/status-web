@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { EthereumLogo } from "../Icons/EthereumLogo";
+import { MarkerdaoLogo } from "../Icons/MarkerdaoLogo";
 import { StatusIcon } from "../Icons/StatusIcon";
 import { textMediumStyles } from "../Text";
 
@@ -20,12 +22,12 @@ export function TokenRequirement() {
       <Text>or</Text>
       <Row>
         <Requirement>
-          <StatusIcon />
+          <EthereumLogo />
           <Amount>1 ETH</Amount>
         </Requirement>
         <TextMiddle>and</TextMiddle>
         <Requirement>
-          <StatusIcon />
+          <MarkerdaoLogo />
           <Amount>10 MKR</Amount>
         </Requirement>
       </Row>
@@ -63,13 +65,18 @@ const Requirement = styled.div`
   padding: 2px 12px 2px 2px;
   margin-bottom: 16px;
   background: ${({ theme }) => theme.buttonBg};
+  color: ${({ theme }) => theme.tertiary};
+
+  &.denial {
+    background: ${({ theme }) => theme.buttonNoBgHover};
+    color: ${({ theme }) => theme.redColor};
+  }
 `;
 
 const Amount = styled.p`
   font-weight: 500;
   text-transform: uppercase;
   margin-left: 6px;
-  color: ${({ theme }) => theme.tertiary};
 
   ${textMediumStyles}
 `;
