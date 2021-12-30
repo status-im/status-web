@@ -35,7 +35,7 @@ export function Member({
         id: contact.id,
         name: contact?.customName ?? contact.trueName,
         type: "dm",
-        description: "Contact",
+        description: `Chatkey: ${contact.id} `,
         members: [contact],
       });
     }
