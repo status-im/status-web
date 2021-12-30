@@ -27,7 +27,8 @@ export function ChatCreation({
       (member) => member?.customName ?? member.trueName
     ) ?? []
   );
-  const { contacts, createGroupChat, addMembers } = useMessengerContext();
+  const { contacts, createGroupChat, addMembers, setChannel } =
+    useMessengerContext();
   const setChatState = useChatState()[1];
 
   const addMember = useCallback(
@@ -50,7 +51,14 @@ export function ChatCreation({
     if (identity) {
       const newGroup = group.slice();
       newGroup.push(bufToHex(identity.publicKey));
-      group.length > 1 ? createGroupChat(newGroup) : createGroupChat(newGroup);
+      group.length > 1
+        ? createGroupChat(newGroup)
+        : setChannel({
+            id: newGroup[0],
+            name: newGroup[0],
+            type: "dm",
+            description: `Chatkey: ${newGroup[0]} `,
+          });
       setChatState(ChatState.ChatBody);
     }
   };
