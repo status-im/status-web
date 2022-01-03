@@ -182,6 +182,7 @@ const Reactions = styled.div`
   box-shadow: 0px 4px 12px rgba(0, 34, 51, 0.08);
   border-radius: 8px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+  padding: 2px;
   visibility: hidden;
 `;
 
