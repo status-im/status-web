@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
@@ -9,6 +9,11 @@ import {
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { Contact } from "../../models/Contact";
+import {
+  decryptIdentity,
+  loadEncryptedIdentity,
+  saveIdentity,
+} from "../../utils";
 import { NameInput } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { ChainIcon } from "../Icons/ChainIcon";
@@ -34,6 +39,8 @@ export function UserCreationModal() {
   const identity = useIdentity();
   const setIdentity = useSetIdentity();
   const setNickname = useSetNikcname();
+
+  const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   const [customNameInput, setCustomNameInput] = useState("");
   const [nextStep, setNextStep] = useState(false);
@@ -86,6 +93,20 @@ export function UserCreationModal() {
             onChange={(e) => setCustomNameInput(e.currentTarget.value)}
           />
         )}
+        {!nextStep && encryptedIdentity && (
+          <button
+            onClick={async () => {
+              const identity = await decryptIdentity(
+                encryptedIdentity,
+                "noPassword"
+              );
+              setIdentity(identity);
+              setModal(false);
+            }}
+          >
+            Saved identity found, click here to load
+          </button>
+        )}
         {nextStep && identity && (
           <>
             <UserAddress>
@@ -117,11 +138,15 @@ export function UserCreationModal() {
         </BackBtn>
         <Btn
           onClick={() => {
-            nextStep
-              ? setModal(false)
-              : (setIdentity(Identity.generate()),
-                setNickname(customNameInput),
-                setNextStep(true));
+            if (nextStep) {
+              setModal(false);
+            } else {
+              const identity = Identity.generate();
+              setIdentity(identity);
+              saveIdentity(identity, "noPassword");
+              setNickname(customNameInput);
+              setNextStep(true);
+            }
           }}
           disabled={!customNameInput}
         >

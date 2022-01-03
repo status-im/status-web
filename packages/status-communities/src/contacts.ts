@@ -113,22 +113,52 @@ export class Contacts {
     };
 
     const sendNickname = async (): Promise<void> => {
-      if (this.identity && this.nickname) {
-        const chatIdentity = new ChatIdentity({
-          clock: new Date().getTime(),
-          color: "",
-          description: "",
-          emoji: "",
-          images: {},
-          ensName: "",
-          displayName: this?.nickname ?? "",
-        });
-        const msg = await WakuMessage.fromBytes(
-          chatIdentity.encode(),
-          idToContactCodeTopic(bufToHex(this.identity.publicKey)),
-          { sigPrivKey: this.identity.privateKey }
-        );
-        await this.waku.relay.send(msg);
+      if (this.identity) {
+        const publicKey = bufToHex(this.identity.publicKey);
+        if (this.nickname) {
+          const chatIdentity = new ChatIdentity({
+            clock: new Date().getTime(),
+            color: "",
+            description: "",
+            emoji: "",
+            images: {},
+            ensName: "",
+            displayName: this?.nickname ?? "",
+          });
+          const msg = await WakuMessage.fromBytes(
+            chatIdentity.encode(),
+            idToContactCodeTopic(publicKey),
+            { sigPrivKey: this.identity.privateKey }
+          );
+          await this.waku.relay.send(msg);
+        } else {
+          await this.waku.store.queryHistory(
+            [idToContactCodeTopic(publicKey)],
+            {
+              callback: (msgs) =>
+                msgs.some((e) => {
+                  try {
+                    if (e.payload) {
+                      const chatIdentity = ChatIdentity.decode(e?.payload);
+                      if (chatIdentity) {
+                        if (chatIdentity?.displayName) {
+                          this.nickname = chatIdentity.displayName;
+                          this.callbackNickname(
+                            publicKey,
+                            chatIdentity.displayName
+                          );
+                        }
+                      }
+                      return true;
+                    }
+                  } catch {
+                    return false;
+                  }
+                }),
+              pageDirection: PageDirection.BACKWARD,
+            }
+          );
+        }
       }
     };
     sendNickname();
