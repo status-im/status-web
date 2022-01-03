@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 type ReactionProps = {
+  width: number;
+  height: number;
   className?: string;
 };
 
-export function ReactionSvg({ className }: ReactionProps) {
+export function ReactionSvg({ width, height, className }: ReactionProps) {
   return (
     <Icon
-      width="22"
-      height="22"
+      width={width}
+      height={height}
       viewBox="0 0 22 22"
       xmlns="http://www.w3.org/2000/svg"
       className={className}

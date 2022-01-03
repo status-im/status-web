@@ -153,7 +153,7 @@ export function UiMessage({
         {showReactions && <ReactionPicker />}
         <Reactions>
           <ReactionBtn onClick={() => setShowReactions(!showReactions)}>
-            <ReactionSvg />
+            <ReactionSvg width={22} height={22} />
             <Tooltip tip="Add reaction" />
           </ReactionBtn>
           <ReactionBtn
