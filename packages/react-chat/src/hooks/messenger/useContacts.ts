@@ -4,7 +4,9 @@ import {
   Identity,
   Messenger,
 } from "status-communities/dist/cjs";
+import { bufToHex } from "status-communities/dist/cjs/utils";
 
+import { useSetNikcname } from "../../contexts/identityProvider";
 import { Contacts } from "../../models/Contact";
 
 export function useContacts(
@@ -12,6 +14,7 @@ export function useContacts(
   identity: Identity | undefined,
   nickname: string | undefined
 ) {
+  const setNickname = useSetNikcname();
   const [internalContacts, setInternalContacts] = useState<{
     [id: string]: { clock: number; nickname?: string };
   }>({});
@@ -28,6 +31,9 @@ export function useContacts(
         },
         (id, nickname) => {
           setInternalContacts((prev) => {
+            if (identity?.publicKey && id === bufToHex(identity.publicKey)) {
+              setNickname(nickname);
+            }
             return { ...prev, [id]: { ...prev[id], nickname } };
           });
         },
