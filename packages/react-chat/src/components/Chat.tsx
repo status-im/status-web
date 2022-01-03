@@ -10,11 +10,14 @@ import { ChatBody } from "./Chat/ChatBody";
 import { ChatCreation } from "./Chat/ChatCreation";
 import { Community } from "./Community";
 import { Members } from "./Members/Members";
+import { CoinbaseModal } from "./Modals/CoinbaseModal";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
 import { ProfileModal } from "./Modals/ProfileModal";
 import { StatusModal } from "./Modals/StatusModal";
 import { UserCreationModal } from "./Modals/UserCreationModal";
+import { WalletConnectModal } from "./Modals/WalletConnectModal";
+import { WalletModal } from "./Modals/WalletModal";
 import { ToastMessageList } from "./ToastMessages/ToastMessageList";
 import { UserCreation } from "./UserCreation/UserCreation";
 
@@ -26,6 +29,9 @@ function Modals() {
       <EditModal />
       <ProfileModal />
       <StatusModal />
+      <WalletModal />
+      <WalletConnectModal />
+      <CoinbaseModal />
     </>
   );
 }

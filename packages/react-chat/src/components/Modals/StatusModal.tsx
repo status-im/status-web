@@ -7,7 +7,7 @@ import { LoginInstructions } from "../Form/LoginInstructions";
 import { PasteInput } from "../Form/PasteInput";
 
 import { Modal } from "./Modal";
-import { Heading, Section } from "./ModalStyle";
+import { Heading, MiddleSection, Section } from "./ModalStyle";
 
 export const StatusModalName = "StatusModal";
 
@@ -32,7 +32,7 @@ export function StatusModal() {
       <Section>
         <Heading>Sync with Status profile</Heading>
       </Section>
-      <MiddleSection>
+      <MiddleSectionStatus>
         <Switch>
           <SwitchBtn
             className={`${modalState === StatusModalState.Mobile && "active"}`}
@@ -53,15 +53,12 @@ export function StatusModal() {
         {desktopFlow && <PasteInput label="Paste sync code" />}
 
         <LoginInstructions mobileFlow={mobileFlow} />
-      </MiddleSection>
+      </MiddleSectionStatus>
     </Modal>
   );
 }
 
-const MiddleSection = styled(Section)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const MiddleSectionStatus = styled(MiddleSection)`
   height: 514px;
 `;
 

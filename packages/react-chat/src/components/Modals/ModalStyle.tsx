@@ -11,6 +11,12 @@ export const Section = styled.div`
   }
 `;
 
+export const MiddleSection = styled(Section)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 export const Heading = styled.p`
   color: ${({ theme }) => theme.primary};
   font-weight: bold;
@@ -72,4 +78,8 @@ export const AddWrapper = styled.div`
   height: 40px;
   background: ${({ theme }) => theme.tertiary};
   border-radius: 50%;
+`;
+
+export const QRWrapper = styled.div`
+  margin: 30px 0;
 `;

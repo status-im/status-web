@@ -27,6 +27,10 @@ export const Label = styled.p`
   ${textSmallStyles}
 `;
 
+export const InputWrapper = styled.div`
+  width: 100%;
+`;
+
 export const Wrapper = styled.div`
   position: relative;
   padding: 14px 70px 14px 8px;
