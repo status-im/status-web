@@ -34,10 +34,10 @@ export function UserCreation({ permission }: UserCreationProps) {
         Connect Ethereum Wallet
       </LoginBtn>
       {permission && (
-      <ThrowAwayButton onClick={() => setModal(true)}>
-        Use a throwaway account
-      </ThrowAwayButton>
-       )}
+        <ThrowAwayButton onClick={() => setModal(true)}>
+          Use a throwaway account
+        </ThrowAwayButton>
+      )}
     </Wrapper>
   );
 }
