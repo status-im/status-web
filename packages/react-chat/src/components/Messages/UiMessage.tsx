@@ -11,6 +11,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
 import { ContactMenu } from "../Form/ContactMenu";
+import { ReactionPicker } from "../Form/ReactionPicker";
 import { Tooltip } from "../Form/Tooltip";
 import { Icon } from "../Icons/Icon";
 import { ReactionSvg } from "../Icons/ReactionIcon";
@@ -63,6 +64,7 @@ export function UiMessage({
     [message.sender, contacts]
   );
   const [showMenu, setShowMenu] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
   const [mentioned, setMentioned] = useState(false);
 
   useEffect(() => {
@@ -148,8 +150,9 @@ export function UiMessage({
             </MessageText>
           </ContentWrapper>
         </UserMessageWrapper>
+        {showReactions && <ReactionPicker />}
         <Reactions>
-          <ReactionBtn>
+          <ReactionBtn onClick={() => setShowReactions(!showReactions)}>
             <ReactionSvg />
             <Tooltip tip="Add reaction" />
           </ReactionBtn>
