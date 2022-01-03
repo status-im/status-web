@@ -2,9 +2,6 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-// import { EthereumLogo } from "../Icons/EthereumLogo";
-// import { MarkerdaoLogo } from "../Icons/MarkerdaoLogo";
-import { StatusIcon } from "../Icons/StatusIcon";
 import { textMediumStyles } from "../Text";
 
 const communityRequirements = {
@@ -12,16 +9,19 @@ const communityRequirements = {
     {
       name: "STN",
       amount: 10,
+      logo: "https://status.im/img/logo.svg",
     },
   ],
   alternativeRequirements: [
     {
       name: "ETH",
       amount: 1,
+      logo: "https://ethereum.org/static/a110735dade3f354a46fc2446cd52476/db4de/eth-home-icon.webp",
     },
     {
       name: "MKR",
       amount: 10,
+      logo: "https://cryptologos.cc/logos/maker-mkr-logo.svg?v=017",
     },
   ],
 };
@@ -36,8 +36,12 @@ export function TokenRequirement() {
       </Text>
       <Row>
         {communityRequirements.requirements.map((req) => (
-          <Requirement>
-            <StatusIcon />
+          <Requirement key={req.name + req.amount}>
+            <Logo
+              style={{
+                backgroundImage: `url(${req.logo}`,
+              }}
+            />
             <Amount>
               {req.amount} {req.name}{" "}
             </Amount>
@@ -47,8 +51,12 @@ export function TokenRequirement() {
       {communityRequirements.alternativeRequirements && <Text>or</Text>}
       <Row>
         {communityRequirements.alternativeRequirements.map((req) => (
-          <Requirement>
-            <StatusIcon />
+          <Requirement key={req.name + req.amount}>
+            <Logo
+              style={{
+                backgroundImage: `url(${req.logo}`,
+              }}
+            />
             <Amount>
               {req.amount} {req.name}{" "}
             </Amount>
@@ -108,4 +116,16 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
+`;
+
+const Logo = styled.div`
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
