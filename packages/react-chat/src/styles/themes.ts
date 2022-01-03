@@ -4,6 +4,7 @@ export type Theme = {
   tertiary: string;
   bodyBackgroundColor: string;
   sectionBackgroundColor: string;
+  bodyBackgroundGradient: string;
   guestNameColor: string;
   iconColor: string;
   iconUserColor: string;
@@ -34,6 +35,8 @@ export const lightTheme: Theme = {
   tertiary: "#4360DF",
   bodyBackgroundColor: "#fff",
   sectionBackgroundColor: "#F6F8FA",
+  bodyBackgroundGradient:
+    "linear-gradient(0deg, #FFFFFF 50%, rgba(255, 255, 255, 0) 102.57%)",
   guestNameColor: "#887AF9",
   iconColor: "#D37EF4",
   iconUserColor: "#717199",
@@ -65,6 +68,8 @@ export const darkTheme: Theme = {
   tertiary: "#88B0FF",
   bodyBackgroundColor: "#000",
   sectionBackgroundColor: "#252525",
+  bodyBackgroundGradient:
+    "linear-gradient(0deg, #000 50%, rgba(255, 255, 255, 0) 102.57%)",
   guestNameColor: "#887AF9",
   iconColor: "#D37EF4",
   iconUserColor: "#717199",

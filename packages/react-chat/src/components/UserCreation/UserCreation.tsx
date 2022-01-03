@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
-import { TokenRequirement } from "../Form/TokenRequirement";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
 import { StatusModalName } from "../Modals/StatusModal";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
@@ -22,11 +21,7 @@ export function UserCreation({ permission }: UserCreationProps) {
   return (
     <Wrapper>
       <ColorChatIcon />
-      {permission ? (
-        <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
-      ) : (
-        <TokenRequirement />
-      )}
+      <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
       <LoginBtn onClick={() => setStatusModal(true)}>
         Sync with Status profile
       </LoginBtn>

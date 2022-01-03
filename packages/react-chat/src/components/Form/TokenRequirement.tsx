@@ -2,10 +2,29 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { EthereumLogo } from "../Icons/EthereumLogo";
-import { MarkerdaoLogo } from "../Icons/MarkerdaoLogo";
+// import { EthereumLogo } from "../Icons/EthereumLogo";
+// import { MarkerdaoLogo } from "../Icons/MarkerdaoLogo";
 import { StatusIcon } from "../Icons/StatusIcon";
 import { textMediumStyles } from "../Text";
+
+const communityRequirements = {
+  requirements: [
+    {
+      name: "STN",
+      amount: 10,
+    },
+  ],
+  alternativeRequirements: [
+    {
+      name: "ETH",
+      amount: 1,
+    },
+    {
+      name: "MKR",
+      amount: 10,
+    },
+  ],
+};
 
 export function TokenRequirement() {
   const { communityData } = useMessengerContext();
@@ -15,21 +34,26 @@ export function TokenRequirement() {
         To join <span>{communityData?.name}</span> community chat you need to
         hold:
       </Text>
-      <Requirement>
-        <StatusIcon />
-        <Amount>10 SNT</Amount>
-      </Requirement>
-      <Text>or</Text>
       <Row>
-        <Requirement>
-          <EthereumLogo />
-          <Amount>1 ETH</Amount>
-        </Requirement>
-        <TextMiddle>and</TextMiddle>
-        <Requirement>
-          <MarkerdaoLogo />
-          <Amount>10 MKR</Amount>
-        </Requirement>
+        {communityRequirements.requirements.map((req) => (
+          <Requirement>
+            <StatusIcon />
+            <Amount>
+              {req.amount} {req.name}{" "}
+            </Amount>
+          </Requirement>
+        ))}
+      </Row>
+      {communityRequirements.alternativeRequirements && <Text>or</Text>}
+      <Row>
+        {communityRequirements.alternativeRequirements.map((req) => (
+          <Requirement>
+            <StatusIcon />
+            <Amount>
+              {req.amount} {req.name}{" "}
+            </Amount>
+          </Requirement>
+        ))}
       </Row>
     </Wrapper>
   );
@@ -39,7 +63,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 24px 0 8px;
+  height: 50%;
 `;
 
 const Text = styled.p`
@@ -54,22 +78,21 @@ const Text = styled.p`
   ${textMediumStyles}
 `;
 
-const TextMiddle = styled(Text)`
-  margin: 0 6px 16px;
-`;
-
 const Requirement = styled.div`
   display: flex;
   align-items: center;
   border-radius: 16px;
   padding: 2px 12px 2px 2px;
-  margin-bottom: 16px;
   background: ${({ theme }) => theme.buttonBg};
   color: ${({ theme }) => theme.tertiary};
 
   &.denial {
     background: ${({ theme }) => theme.buttonNoBgHover};
     color: ${({ theme }) => theme.redColor};
+  }
+
+  & + & {
+    margin-left: 18px;
   }
 `;
 
@@ -84,4 +107,5 @@ const Amount = styled.p`
 const Row = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 16px;
 `;
