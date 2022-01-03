@@ -9,7 +9,11 @@ import { UserCreationModalName } from "../Modals/UserCreationModal";
 import { WalletModalName } from "../Modals/WalletModal";
 import { textSmallStyles } from "../Text";
 
-export function UserCreation() {
+interface UserCreationProps {
+  permission: boolean;
+}
+
+export function UserCreation({ permission }: UserCreationProps) {
   const { setModal } = useModal(UserCreationModalName);
   const { setModal: setStatusModal } = useModal(StatusModalName);
   const { setModal: setWalletModal } = useModal(WalletModalName);
@@ -24,9 +28,11 @@ export function UserCreation() {
       <LoginBtn onClick={() => setWalletModal(true)}>
         Connect Ethereum Wallet
       </LoginBtn>
-      <ThrowAwayButton onClick={() => setModal(true)}>
-        Use a throwaway account
-      </ThrowAwayButton>
+      {permission && (
+        <ThrowAwayButton onClick={() => setModal(true)}>
+          Use a throwaway account
+        </ThrowAwayButton>
+      )}
     </Wrapper>
   );
 }
