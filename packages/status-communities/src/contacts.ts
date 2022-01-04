@@ -8,6 +8,7 @@ import { ChatIdentity } from "./wire/chat_identity";
 import { StatusUpdate } from "./wire/status_update";
 
 const STATUS_BROADCAST_INTERVAL = 30000;
+const NICKNAME_BROADCAST_INTERVAL = 300000;
 
 export class Contacts {
   waku: Waku;
@@ -112,6 +113,52 @@ export class Contacts {
       }
     };
 
+    const handleNickname = async (): Promise<void> => {
+      if (this.identity) {
+        const publicKey = bufToHex(this.identity.publicKey);
+        const now = new Date().getTime();
+        let newNickname = "";
+        let clock = 0;
+        await this.waku.store.queryHistory([idToContactCodeTopic(publicKey)], {
+          callback: (msgs) =>
+            msgs.some((e) => {
+              try {
+                if (e.payload) {
+                  const chatIdentity = ChatIdentity.decode(e?.payload);
+                  if (chatIdentity) {
+                    if (chatIdentity?.displayName) {
+                      clock = chatIdentity?.clock ?? 0;
+                      newNickname = chatIdentity?.displayName;
+                    }
+                  }
+                  return true;
+                }
+              } catch {
+                return false;
+              }
+            }),
+          pageDirection: PageDirection.BACKWARD,
+        });
+
+        if (this.nickname) {
+          if (this.nickname !== newNickname) {
+            await sendNickname();
+          } else {
+            if (clock < now - NICKNAME_BROADCAST_INTERVAL) {
+              await sendNickname();
+            }
+          }
+        } else {
+          this.nickname = newNickname;
+          this.callbackNickname(publicKey, newNickname);
+          if (clock < now - NICKNAME_BROADCAST_INTERVAL) {
+            await sendNickname();
+          }
+        }
+      }
+      setInterval(send, NICKNAME_BROADCAST_INTERVAL);
+    };
+
     const sendNickname = async (): Promise<void> => {
       if (this.identity) {
         const publicKey = bufToHex(this.identity.publicKey);
@@ -131,37 +178,10 @@ export class Contacts {
             { sigPrivKey: this.identity.privateKey }
           );
           await this.waku.relay.send(msg);
-        } else {
-          await this.waku.store.queryHistory(
-            [idToContactCodeTopic(publicKey)],
-            {
-              callback: (msgs) =>
-                msgs.some((e) => {
-                  try {
-                    if (e.payload) {
-                      const chatIdentity = ChatIdentity.decode(e?.payload);
-                      if (chatIdentity) {
-                        if (chatIdentity?.displayName) {
-                          this.nickname = chatIdentity.displayName;
-                          this.callbackNickname(
-                            publicKey,
-                            chatIdentity.displayName
-                          );
-                        }
-                      }
-                      return true;
-                    }
-                  } catch {
-                    return false;
-                  }
-                }),
-              pageDirection: PageDirection.BACKWARD,
-            }
-          );
         }
       }
     };
-    sendNickname();
+    handleNickname();
     send();
     setInterval(send, STATUS_BROADCAST_INTERVAL);
   }
