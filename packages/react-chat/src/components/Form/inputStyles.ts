@@ -69,9 +69,25 @@ export const InputBtn = styled.button`
   border-radius: 6px;
 `;
 
+export const NameInputWrapper = styled.div`
+  position: relative;
+`;
+
 export const NameInput = styled.input`
   width: 328px;
   padding: 11px 16px;
 
   ${inputStyles}
+`;
+
+export const ClearBtn = styled.button`
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 50%;
+
+  & > svg {
+    fill: ${({ theme }) => theme.secondary};
+  }
 `;
