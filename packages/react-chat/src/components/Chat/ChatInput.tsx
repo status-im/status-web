@@ -1,4 +1,3 @@
-import { Picker } from "emoji-mart";
 import React, {
   useCallback,
   useEffect,
@@ -6,13 +5,11 @@ import React, {
   useRef,
   useState,
 } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
-import { useLow } from "../../contexts/narrowProvider";
 import { Reply } from "../../hooks/useReply";
-import { lightTheme, Theme } from "../../styles/themes";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 import { ClearSvg } from "../Icons/ClearIcon";
 import { EmojiIcon } from "../Icons/EmojiIcon";
@@ -25,6 +22,8 @@ import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles, textSmallStyles } from "../Text";
 
+import { EmojiPicker } from "./EmojiPicker";
+
 interface ChatInputProps {
   reply: Reply | undefined;
   setReply: (val: Reply | undefined) => void;
@@ -33,14 +32,11 @@ interface ChatInputProps {
 
 export function ChatInput({ reply, setReply, disabled }: ChatInputProps) {
   const { sendMessage, contacts } = useMessengerContext();
-  const theme = useTheme() as Theme;
   const [content, setContent] = useState("");
   const [clearComponent, setClearComponent] = useState("");
   const [showEmoji, setShowEmoji] = useState(false);
   const [inputHeight, setInputHeight] = useState(40);
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
-
-  const low = useLow();
 
   const { setModal } = useModal(SizeLimitModalName);
 
@@ -203,29 +199,7 @@ export function ChatInput({ reply, setReply, disabled }: ChatInputProps) {
   return (
     <View>
       <SizeLimitModal />
-      {showEmoji && (
-        <div>
-          <Picker
-            onSelect={addEmoji}
-            theme={theme === lightTheme ? "light" : "dark"}
-            set="twitter"
-            color={theme.tertiary}
-            emojiSize={26}
-            style={{
-              position: "absolute",
-              bottom: "100%",
-              right: "0",
-              color: theme.secondary,
-              height: low ? "200px" : "355px",
-              overflow: "auto",
-            }}
-            showPreview={false}
-            showSkinTones={false}
-            title={""}
-          />
-        </div>
-      )}
-
+      <EmojiPicker addEmoji={addEmoji} showEmoji={showEmoji} />
       <AddPictureInputWrapper>
         <PictureIcon />
         <AddPictureInput
