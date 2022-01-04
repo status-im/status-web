@@ -1,4 +1,4 @@
-import { css } from "styled-components";
+import styled, { css } from "styled-components";
 
 export const buttonStyles = css`
   font-family: "Inter";
@@ -37,4 +37,23 @@ export const buttonTransparentStyles = css`
   &:focus {
     background: ${({ theme }) => theme.buttonBg};
   }
+`;
+
+export const ButtonNo = styled.button`
+  padding: 11px 24px;
+  margin-right: 16px;
+
+  ${buttonStyles}
+  background: ${({ theme }) => theme.buttonNoBg};
+  color: ${({ theme }) => theme.redColor};
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonNoBgHover};
+  }
+`;
+
+export const ButtonYes = styled.button`
+  padding: 11px 24px;
+
+  ${buttonStyles}
 `;
