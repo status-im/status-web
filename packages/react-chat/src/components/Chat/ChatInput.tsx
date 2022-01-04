@@ -375,7 +375,7 @@ const Input = styled.div`
   }
 
   & > span {
-    display: inline-block;
+    display: inline;
     color: ${({ theme }) => theme.mentionColor};
     background: ${({ theme }) => theme.mentionBg};
     border-radius: 4px;

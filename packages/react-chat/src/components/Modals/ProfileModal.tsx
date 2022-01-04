@@ -303,7 +303,7 @@ const ProfileIcon = styled.div`
   }
 `;
 
-const UserNameWrapper = styled.div`
+export const UserNameWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -312,9 +312,13 @@ const UserNameWrapper = styled.div`
   & > svg {
     fill: ${({ theme }) => theme.tertiary};
   }
+
+  &.logout {
+    margin: 8px 0;
+  }
 `;
 
-const UserName = styled.p`
+export const UserName = styled.p`
   color: ${({ theme }) => theme.primary};
   font-weight: bold;
   font-size: 22px;
@@ -337,7 +341,7 @@ const UserTrueName = styled.p`
   margin-top: 8px;
 `;
 
-const UserAddressWrapper = styled.div`
+export const UserAddressWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -370,6 +374,7 @@ export const EmojiKey = styled.div`
   letter-spacing: 0.2px;
 
   &.small {
+    width: 83px;
     ${textSmallStyles}
   }
 `;

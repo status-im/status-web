@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useModal } from "../../contexts/modalProvider";
-import { buttonStyles } from "../Buttons/buttonStyle";
+import { ButtonNo, ButtonYes } from "../Buttons/buttonStyle";
 import { textMediumStyles } from "../Text";
 
 import { Modal } from "./Modal";
@@ -45,23 +45,4 @@ const Link = styled.a`
   color: ${({ theme }) => theme.primary};
 
   ${textMediumStyles}
-`;
-
-const ButtonNo = styled.button`
-  padding: 11px 24px;
-  margin-right: 16px;
-
-  ${buttonStyles}
-  background: ${({ theme }) => theme.buttonNoBg};
-  color: ${({ theme }) => theme.redColor};
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonNoBgHover};
-  }
-`;
-
-const ButtonYes = styled.button`
-  padding: 11px 24px;
-
-  ${buttonStyles}
 `;
