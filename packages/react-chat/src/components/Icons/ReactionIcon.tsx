@@ -2,14 +2,16 @@ import React from "react";
 import styled from "styled-components";
 
 type ReactionProps = {
+  width: number;
+  height: number;
   className?: string;
 };
 
-export function ReactionSvg({ className }: ReactionProps) {
+export function ReactionSvg({ width, height, className }: ReactionProps) {
   return (
     <Icon
-      width="22"
-      height="22"
+      width={width}
+      height={height}
       viewBox="0 0 22 22"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -33,11 +35,6 @@ export function ReactionSvg({ className }: ReactionProps) {
           d="M15.4971 6.45233C15.2392 6.14281 14.7792 6.101 14.4696 6.35892L11.9685 8.44324C11.7325 8.63987 11.645 8.96322 11.7496 9.25201C11.8541 9.5408 12.1284 9.73318 12.4355 9.73318C13.5921 9.73318 15.2769 10.1077 16.2174 10.6957C16.559 10.9093 17.0091 10.8055 17.2227 10.4639C17.4363 10.1223 17.3325 9.67217 16.9909 9.45857C16.3482 9.05678 15.5056 8.75255 14.6556 8.55308C14.4845 8.51292 14.4285 8.29242 14.5635 8.1799L15.4037 7.47977C15.7132 7.22185 15.755 6.76184 15.4971 6.45233Z"
         />
       </g>
-      <defs>
-        <clipPath id="clip0_1136_291537">
-          <rect width="22" height="22" />
-        </clipPath>
-      </defs>
     </Icon>
   );
 }

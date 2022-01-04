@@ -9,7 +9,7 @@ import {
   useSetIdentity,
 } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { TopBtn } from "../Chat/ChatTopbar";
+import { buttonStyles } from "../Buttons/buttonStyle";
 import { LogoutIcon } from "../Icons/LogoutIcon";
 
 import { Member } from "./Member";
@@ -56,12 +56,11 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
                 customName: nickname,
                 trueName: utils.bufToHex(identity.publicKey),
               }}
-              switchShowMembers={switchShowMembers}
               isYou={true}
             />
-            <TopBtn onClick={() => logout(undefined)}>
+            <LogoutBtn onClick={() => logout(undefined)}>
               <LogoutIcon />
-            </TopBtn>
+            </LogoutBtn>
           </Row>
         </MemberCategory>
       )}
@@ -123,4 +122,12 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const LogoutBtn = styled.button`
+  ${buttonStyles}
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 0;
 `;

@@ -22,6 +22,7 @@ import { HideIcon } from "./Icons/HideIcon";
 import { Icon } from "./Icons/Icon";
 import { MoreIcon } from "./Icons/MoreIcon";
 import { ReadIcon } from "./Icons/ReadIcon";
+import { ReadMessageIcon } from "./Icons/ReadMessageIcon";
 import { ReplyIcon } from "./Icons/ReplyActivityIcon";
 import { ShowIcon } from "./Icons/ShowIcon";
 import { UntrustworthIcon } from "./Icons/UntrustworthIcon";
@@ -247,7 +248,7 @@ function ActivityMessage({
               }}
               className={`${activity.isRead && "read"}`}
             >
-              <ReadIcon isRead={activity.isRead} />
+              <ReadMessageIcon isRead={activity.isRead} />
             </ActivityBtn>
             <Tooltip tip="Mark Read" className="read" />
           </BtnWrapper>

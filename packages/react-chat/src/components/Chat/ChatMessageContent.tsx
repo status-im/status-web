@@ -197,7 +197,7 @@ const ContentWrapper = styled.div`
 `;
 
 const MentionBLock = styled.div`
-  display: inline-block;
+  display: inline-flex;
   color: ${({ theme }) => theme.mentionColor};
   background: ${({ theme }) => theme.mentionBgHover};
   border-radius: 4px;
