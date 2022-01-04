@@ -13,6 +13,7 @@ import { Members } from "./Members/Members";
 import { CoinbaseModal } from "./Modals/CoinbaseModal";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
+import { LogoutModal } from "./Modals/LogoutModal";
 import { ProfileModal } from "./Modals/ProfileModal";
 import { StatusModal } from "./Modals/StatusModal";
 import { UserCreationModal } from "./Modals/UserCreationModal";
@@ -32,6 +33,7 @@ function Modals() {
       <WalletModal />
       <WalletConnectModal />
       <CoinbaseModal />
+      <LogoutModal />
     </>
   );
 }

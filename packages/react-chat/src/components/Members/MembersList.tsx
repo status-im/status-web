@@ -3,14 +3,12 @@ import { utils } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import {
-  useIdentity,
-  useNickname,
-  useSetIdentity,
-} from "../../contexts/identityProvider";
+import { useIdentity, useNickname } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { LogoutIcon } from "../Icons/LogoutIcon";
+import { LogoutModalName } from "../Modals/LogoutModal";
 
 import { Member } from "./Member";
 
@@ -21,8 +19,8 @@ interface MembersListProps {
 export function MembersList({ switchShowMembers }: MembersListProps) {
   const { contacts } = useMessengerContext();
   const identity = useIdentity();
+  const { setModal } = useModal(LogoutModalName);
 
-  const logout = useSetIdentity();
   const nickname = useNickname();
 
   const userContacts = useMemo(() => {
@@ -58,7 +56,7 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
               }}
               isYou={true}
             />
-            <LogoutBtn onClick={() => logout(undefined)}>
+            <LogoutBtn onClick={() => setModal(true)}>
               <LogoutIcon />
             </LogoutBtn>
           </Row>
