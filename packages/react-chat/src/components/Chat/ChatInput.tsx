@@ -28,9 +28,10 @@ import { textMediumStyles, textSmallStyles } from "../Text";
 interface ChatInputProps {
   reply: Reply | undefined;
   setReply: (val: Reply | undefined) => void;
+  disabled: boolean;
 }
 
-export function ChatInput({ reply, setReply }: ChatInputProps) {
+export function ChatInput({ reply, setReply, disabled }: ChatInputProps) {
   const { sendMessage, contacts } = useMessengerContext();
   const theme = useTheme() as Theme;
   const [content, setContent] = useState("");
@@ -228,6 +229,7 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
       <AddPictureInputWrapper>
         <PictureIcon />
         <AddPictureInput
+          disabled={disabled}
           type="file"
           multiple={true}
           accept="image/png, image/jpeg"
@@ -274,7 +276,8 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
               />
             )}
             <Input
-              contentEditable
+              aria-disabled={disabled}
+              contentEditable={!disabled}
               onInput={onInputChange}
               onKeyDown={onInputKeyPress}
               onKeyUp={handleCursorChange}
@@ -295,7 +298,9 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
             <ChatButton
               onClick={(e) => {
                 e.stopPropagation();
-                setShowEmoji(!showEmoji);
+                if (!disabled) {
+                  setShowEmoji(!showEmoji);
+                }
               }}
             >
               <EmojiIcon isActive={showEmoji} />

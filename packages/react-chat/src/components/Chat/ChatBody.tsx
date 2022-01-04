@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { Reply } from "../../hooks/useReply";
@@ -29,7 +30,7 @@ interface ChatBodyProps {
 export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
   const narrow = useNarrow();
-
+  const identity = useIdentity();
   const [editGroup, setEditGroup] = useState(false);
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
@@ -78,7 +79,11 @@ export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
                 ) : (
                   <LoadingSkeleton />
                 )}
-                <ChatInput reply={reply} setReply={setReply} />
+                <ChatInput
+                  reply={reply}
+                  setReply={setReply}
+                  disabled={!identity}
+                />
               </>
             )}
 
@@ -98,7 +103,7 @@ export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
         ) : (
           <>
             <LoadingSkeleton />
-            <ChatInput reply={reply} setReply={setReply} />
+            <ChatInput reply={reply} setReply={setReply} disabled={!identity} />
           </>
         )}
       </ChatBodyWrapper>
