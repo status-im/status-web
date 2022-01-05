@@ -47,7 +47,7 @@ export function UserCreationModal() {
   const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   const [customNameInput, setCustomNameInput] = useState("");
-
+  const [errorName, setErrorName] = useState(false);
   const [nextStep, setNextStep] = useState(false);
   const { setModal } = useModal(UserCreationModalName);
 
@@ -107,11 +107,11 @@ export function UserCreationModal() {
             )}
           </NameInputWrapper>
         )}
+
         {customNameInput && (
-          <ErrorWrapper>
-            <NameError nameInput={customNameInput} />
-          </ErrorWrapper>
+          <NameError nameInput={customNameInput} setErrorName={setErrorName} />
         )}
+
         {!nextStep && encryptedIdentity && !walletIdentity && (
           <button
             onClick={async () => {
@@ -167,7 +167,7 @@ export function UserCreationModal() {
               setNextStep(true);
             }
           }}
-          disabled={!customNameInput}
+          disabled={!customNameInput || errorName}
         >
           Next
         </Btn>
@@ -228,9 +228,4 @@ const UserAttributes = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
-`;
-
-const ErrorWrapper = styled.div`
-  width: 328px;
-  margin-top: 8px;
 `;

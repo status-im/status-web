@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -6,13 +6,27 @@ import { Hint } from "../Modals/ModalStyle";
 
 interface NameErrorProps {
   nameInput: string;
+  setErrorName: (val: boolean) => void;
 }
-export function NameError({ nameInput }: NameErrorProps) {
+
+export function NameError({ nameInput, setErrorName }: NameErrorProps) {
   const { contacts } = useMessengerContext();
   const nameExists = Object.values(contacts).find(
     (contact) => contact.trueName === nameInput
   );
   const RegName = new RegExp("^[a-z0-9_-]+$");
+
+  useEffect(() => {
+    if (
+      nameExists ||
+      !nameInput.match(RegName) ||
+      nameInput.slice(-4) === "_eth" ||
+      nameInput.slice(-4) === "-eth" ||
+      nameInput.length === 24
+    ) {
+      setErrorName(true);
+    }
+  }, [nameInput]);
 
   return (
     <ErrorText>
@@ -32,4 +46,6 @@ export function NameError({ nameInput }: NameErrorProps) {
 const ErrorText = styled(Hint)`
   color: ${({ theme }) => theme.redColor};
   text-align: center;
+  width: 328px;
+  margin: 8px 0;
 `;
