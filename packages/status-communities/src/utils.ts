@@ -1,4 +1,7 @@
+import { ec } from "elliptic";
 import { utils } from "js-waku";
+
+const EC = new ec("secp256k1");
 
 const hexToBuf = utils.hexToBuf;
 export { hexToBuf };
@@ -8,4 +11,9 @@ export { hexToBuf };
  */
 export function bufToHex(buf: Uint8Array): string {
   return "0x" + utils.bufToHex(buf);
+}
+
+export function compressPublicKey(key: Uint8Array): string {
+  const PubKey = EC.keyFromPublic(key);
+  return "0x" + PubKey.getPublic(true, "hex");
 }

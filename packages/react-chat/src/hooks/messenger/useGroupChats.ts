@@ -33,7 +33,9 @@ export function useGroupChats(
   const groupChat = useMemo(() => {
     if (messenger && identity) {
       const addChat = (chat: GroupChat) => {
-        const members = chat.members.map(contactFromId);
+        const members = chat.members
+          .map((member) => member.id)
+          .map(contactFromId);
         const channel: ChannelData = {
           id: chat.chatId,
           name: chat.name ?? chat.chatId,

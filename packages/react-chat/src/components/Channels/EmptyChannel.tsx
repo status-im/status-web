@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { textMediumStyles } from "../Text";
 
@@ -13,9 +14,17 @@ type EmptyChannelProps = {
 };
 
 export function EmptyChannel({ channel }: EmptyChannelProps) {
-  const groupName = channel.name.split(", ");
   const identity = useIdentity();
-
+  const { contacts } = useMessengerContext();
+  const members = useMemo(() => {
+    if (channel?.members && identity) {
+      const publicKey = utils.bufToHex(identity.publicKey);
+      return channel.members
+        .filter((contact) => contact.id !== publicKey)
+        .map((member) => contacts?.[member.id] ?? member);
+    }
+    return [];
+  }, [channel, contacts]);
   return (
     <Wrapper>
       <ChannelInfoEmpty>
@@ -36,8 +45,12 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
         <EmptyTextGroup>
           {identity && <span>{utils.bufToHex(identity.publicKey)}</span>}{" "}
           created a group with{" "}
-          <span>{groupName.slice(groupName.length - 1)}</span> and{" "}
-          <span>{groupName.at(-1)}</span>
+          {members.map((contact, idx) => (
+            <span key={contact.id}>
+              {contact?.customName ?? contact.trueName.slice(0, 10)}
+              {idx < members.length - 1 && <> and </>}
+            </span>
+          ))}
         </EmptyTextGroup>
       ) : (
         <EmptyText>
