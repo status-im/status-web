@@ -9,7 +9,7 @@
     "clean:all": "yarn clean && rimraf node_modules/",
     "clean": "rimraf dist/",
     "build": "rm -rf dist && webpack --mode=production --env ENV=production",
-    "start": "webpack serve --mode=development --env ENV=development --https",
+    "start": "webpack serve --mode=development --env ENV=$ENV COMMUNITY_KEY=$COMMUNITY_KEY --https",
     "fix": "run-s 'fix:*'",
     "fix:prettier": "prettier './{src,test}/**/*.{ts,tsx}' \"./*.json\" --write",
     "fix:lint": "eslint './{src,test}/**/*.{ts,tsx}' --fix",

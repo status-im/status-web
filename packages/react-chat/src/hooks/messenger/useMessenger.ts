@@ -8,6 +8,7 @@ import {
   Messenger,
 } from "status-communities/dist/cjs";
 
+import { useConfig } from "../../contexts/configProvider";
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { CommunityData } from "../../models/CommunityData";
@@ -49,9 +50,10 @@ export type MessengerType = {
 };
 
 function useCreateMessenger(identity: Identity | undefined) {
+  const { environment } = useConfig();
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
   useEffect(() => {
-    createMessenger(identity).then((e) => {
+    createMessenger(identity, environment).then((e) => {
       setMessenger(e);
     });
   }, [identity]);
@@ -98,10 +100,10 @@ function useCreateCommunity(
 }
 
 export function useMessenger(
-  communityKey: string | undefined,
   identity: Identity | undefined,
   nickname: string | undefined
 ) {
+  const { communityKey } = useConfig();
   const [activeChannel, setActiveChannel] = useState<ChannelData>({
     id: "",
     name: "",

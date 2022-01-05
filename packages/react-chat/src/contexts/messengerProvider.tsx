@@ -37,15 +37,11 @@ export function useMessengerContext() {
 
 interface MessengerProviderProps {
   children: React.ReactNode;
-  communityKey?: string;
 }
 
-export function MessengerProvider({
-  children,
-  communityKey,
-}: MessengerProviderProps) {
+export function MessengerProvider({ children }: MessengerProviderProps) {
   const identity = useIdentity();
   const nickname = useNickname();
-  const messenger = useMessenger(communityKey, identity, nickname);
+  const messenger = useMessenger(identity, nickname);
   return <MessengerContext.Provider value={messenger} children={children} />;
 }
