@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
 import { ReactionSvg } from "../Icons/ReactionIcon";
@@ -21,9 +22,12 @@ export function Reactions({
   setShowReactions,
   setReply,
 }: ReactionsProps) {
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowReactions(false));
+
   return (
     <Wrapper>
-      <ReactionBtn onClick={() => setShowReactions(!showReactions)}>
+      <ReactionBtn onClick={() => setShowReactions(!showReactions)} ref={ref}>
         <ReactionSvg width={22} height={22} />
         <Tooltip tip="Add reaction" />
       </ReactionBtn>
