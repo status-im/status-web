@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { ChatState, useChatState } from "../../contexts/chatStateProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { CreateIcon } from "../Icons/CreateIcon";
+import { UserCreation } from "../UserCreation/UserCreation";
 
 import { Channel } from "./Channel";
 
@@ -55,24 +57,34 @@ export function Channels({ onCommunityClick }: ChannelsProps) {
     }
   }, [notifications, activeChannel]);
   const setChatState = useChatState()[1];
+  const identity = useIdentity();
+
   return (
     <ChannelList>
       <GenerateChannels type={"channel"} onCommunityClick={onCommunityClick} />
-
       <Chats>
-        <ChatsBar>
-          <Heading>Chat</Heading>
-          <EditBtn onClick={() => setChatState(ChatState.ChatCreation)}>
-            <CreateIcon />
-          </EditBtn>
-        </ChatsBar>
-        <ChatsList>
-          <GenerateChannels
-            type={"group"}
-            onCommunityClick={onCommunityClick}
-          />
-          <GenerateChannels type={"dm"} onCommunityClick={onCommunityClick} />
-        </ChatsList>
+        {identity ? (
+          <>
+            <ChatsBar>
+              <Heading>Chat</Heading>
+              <EditBtn onClick={() => setChatState(ChatState.ChatCreation)}>
+                <CreateIcon />
+              </EditBtn>
+            </ChatsBar>
+            <ChatsList>
+              <GenerateChannels
+                type={"group"}
+                onCommunityClick={onCommunityClick}
+              />
+              <GenerateChannels
+                type={"dm"}
+                onCommunityClick={onCommunityClick}
+              />
+            </ChatsList>
+          </>
+        ) : (
+          <UserCreation permission={true} />
+        )}
       </Chats>
     </ChannelList>
   );

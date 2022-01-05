@@ -5,6 +5,7 @@ import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku"
 import { Chat } from "./chat";
 import { Identity } from "./identity";
 import { ApplicationMetadataMessage_Type } from "./proto/status/v1/application_metadata_message";
+import { getLatestUserNickname } from "./utils";
 import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
 import { ChatMessage, Content } from "./wire/chat_message";
 
@@ -248,5 +249,13 @@ export class Messenger {
         observer(message, timestamp, chat.id);
       });
     }
+  }
+
+  async checkIfUserInWakuNetwork(publicKey: Uint8Array): Promise<boolean> {
+    const { clock, nickname } = await getLatestUserNickname(
+      publicKey,
+      this.waku
+    );
+    return clock > 0 && nickname !== "";
   }
 }

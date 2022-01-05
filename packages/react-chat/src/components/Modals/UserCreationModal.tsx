@@ -6,6 +6,7 @@ import {
   useIdentity,
   useSetIdentity,
   useSetNikcname,
+  useWalletIdentity,
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { Contact } from "../../models/Contact";
@@ -36,6 +37,7 @@ import { EmojiKey, UserAddress } from "./ProfileModal";
 export const UserCreationModalName = "UserCreationModal";
 
 export function UserCreationModal() {
+  const walletIdentity = useWalletIdentity();
   const identity = useIdentity();
   const setIdentity = useSetIdentity();
   const setNickname = useSetNikcname();
@@ -93,7 +95,7 @@ export function UserCreationModal() {
             onChange={(e) => setCustomNameInput(e.currentTarget.value)}
           />
         )}
-        {!nextStep && encryptedIdentity && (
+        {!nextStep && encryptedIdentity && !walletIdentity && (
           <button
             onClick={async () => {
               const identity = await decryptIdentity(
@@ -141,10 +143,10 @@ export function UserCreationModal() {
             if (nextStep) {
               setModal(false);
             } else {
-              const identity = Identity.generate();
-              setIdentity(identity);
-              saveIdentity(identity, "noPassword");
+              const identity = walletIdentity || Identity.generate();
               setNickname(customNameInput);
+              setIdentity(identity);
+              !walletIdentity && saveIdentity(identity, "noPassword");
               setNextStep(true);
             }
           }}

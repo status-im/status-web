@@ -7,7 +7,10 @@ import * as secp256k1 from "secp256k1";
 import { hexToBuf } from "./utils";
 
 export class Identity {
-  public constructor(public privateKey: Uint8Array) {}
+  private pubKey: Uint8Array;
+  public constructor(public privateKey: Uint8Array) {
+    this.pubKey = secp256k1.publicKeyCreate(this.privateKey, true);
+  }
 
   public static generate(): Identity {
     const privateKey = generatePrivateKey();
@@ -31,6 +34,6 @@ export class Identity {
    * Returns the compressed public key.
    */
   public get publicKey(): Uint8Array {
-    return secp256k1.publicKeyCreate(this.privateKey, true);
+    return this.pubKey;
   }
 }
