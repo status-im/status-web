@@ -75,9 +75,10 @@ function DragDiv() {
         <FloatingDiv className={showChat ? "" : "hide"}>
           <ReactChat
             theme={theme ? lightTheme : darkTheme}
-            communityKey={
-              "0x03c07c5a31d5a662b670a9caaccd131bb2cfad0659bcc031205f22d5788b97e3d2"
-            }
+            config={{
+              communityKey: process.env.COMMUNITY_KEY ?? "",
+              environment: process.env.ENV ?? "",
+            }}
             fetchMetadata={fetchMetadata}
           />
         </FloatingDiv>

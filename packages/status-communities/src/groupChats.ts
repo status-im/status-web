@@ -436,6 +436,7 @@ export class GroupChats {
           await this.waku.store.queryHistory([member.topic], {
             timeFilter: { startTime, endTime },
             callback: (msg) => _callback(msg, member.id),
+            decryptionKeys: [member.symKey],
           })
         ).length;
         amountOfMessages.push(msgLength);

@@ -5,10 +5,8 @@ const webpack = require('webpack');
 const { ESBuildMinifyPlugin } = require('esbuild-loader');
 
 module.exports = env => {
-  let environment = 'development';
-  if (env.ENV) {
-    environment = env.ENV;
-  }
+  const environment = env.ENV || 'development';
+  const communityKey = env.COMMUNITY_KEY || '';
 
   return {
     entry: './src/index.tsx',
@@ -71,6 +69,7 @@ module.exports = env => {
       }),
       new webpack.DefinePlugin({
         'process.env.ENV': JSON.stringify(environment),
+        'process.env.COMMUNITY_KEY': JSON.stringify(communityKey),
       }),
       new webpack.ProvidePlugin({
         process: 'process/browser.js',
