@@ -9,6 +9,7 @@ import {
   useWalletIdentity,
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useNameError } from "../../hooks/useNameError";
 import { Contact } from "../../models/Contact";
 import {
   decryptIdentity,
@@ -47,7 +48,7 @@ export function UserCreationModal() {
   const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   const [customNameInput, setCustomNameInput] = useState("");
-  const [errorName, setErrorName] = useState(false);
+  const error = useNameError(customNameInput);
   const [nextStep, setNextStep] = useState(false);
   const { setModal } = useModal(UserCreationModalName);
 
@@ -108,9 +109,7 @@ export function UserCreationModal() {
           </NameInputWrapper>
         )}
 
-        {customNameInput && (
-          <NameError nameInput={customNameInput} setErrorName={setErrorName} />
-        )}
+        <NameError error={error} />
 
         {!nextStep && encryptedIdentity && !walletIdentity && (
           <button
@@ -167,7 +166,7 @@ export function UserCreationModal() {
               setNextStep(true);
             }
           }}
-          disabled={!customNameInput || errorName}
+          disabled={!customNameInput || error !== 0}
         >
           Next
         </Btn>
