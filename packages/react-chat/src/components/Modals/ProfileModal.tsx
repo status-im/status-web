@@ -9,8 +9,13 @@ import { useToasts } from "../../contexts/toastProvider";
 import { useManageContact } from "../../hooks/useManageContact";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
-import { inputStyles, NameInput } from "../Form/inputStyles";
-import { ClearSvg } from "../Icons/ClearIcon";
+import {
+  ClearBtn,
+  inputStyles,
+  NameInput,
+  NameInputWrapper,
+} from "../Form/inputStyles";
+import { ClearSvgFull } from "../Icons/ClearIconFull";
 import { CopySvg } from "../Icons/CopyIcon";
 import { EditSvg } from "../Icons/EditIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
@@ -124,14 +129,14 @@ export const ProfileModal = () => {
               value={customNameInput}
               onChange={(e) => setCustomNameInput(e.currentTarget.value)}
             />
-            {contact.customName && (
+            {customNameInput && (
               <ClearBtn
                 onClick={() => {
                   setCustomName(undefined);
                   setCustomNameInput("");
                 }}
               >
-                <ClearSvg width={16} height={16} className="profile" />
+                <ClearSvgFull width={16} height={16} />
               </ClearBtn>
             )}
           </NameInputWrapper>
@@ -399,22 +404,6 @@ const CopyButton = styled.button`
   & > svg {
     fill: ${({ theme }) => theme.tertiary};
   }
-`;
-
-const ClearBtn = styled.button`
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-radius: 50%;
-
-  & > svg {
-    fill: ${({ theme }) => theme.secondary};
-  }
-`;
-
-const NameInputWrapper = styled.div`
-  position: relative;
 `;
 
 const RequestSection = styled.div`

@@ -9,15 +9,18 @@ import {
   useWalletIdentity,
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useNameError } from "../../hooks/useNameError";
 import { Contact } from "../../models/Contact";
 import {
   decryptIdentity,
   loadEncryptedIdentity,
   saveIdentity,
 } from "../../utils";
-import { NameInput } from "../Form/inputStyles";
+import { NameError } from "../Form/NameError";
+import { ClearBtn, NameInput, NameInputWrapper } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { ChainIcon } from "../Icons/ChainIcon";
+import { ClearSvgFull } from "../Icons/ClearIconFull";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
 
@@ -45,8 +48,10 @@ export function UserCreationModal() {
   const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   const [customNameInput, setCustomNameInput] = useState("");
+  const error = useNameError(customNameInput);
   const [nextStep, setNextStep] = useState(false);
   const { setModal } = useModal(UserCreationModalName);
+
   return (
     <Modal name={UserCreationModalName}>
       <Section>
@@ -89,12 +94,23 @@ export function UserCreationModal() {
           )}
         </LogoWrapper>
         {!nextStep && (
-          <NameInput
-            placeholder="Display name"
-            value={customNameInput}
-            onChange={(e) => setCustomNameInput(e.currentTarget.value)}
-          />
+          <NameInputWrapper>
+            <NameInput
+              placeholder="Display name"
+              value={customNameInput}
+              onChange={(e) => setCustomNameInput(e.currentTarget.value)}
+              maxLength={24}
+            />
+            {customNameInput && (
+              <ClearBtn onClick={() => setCustomNameInput("")}>
+                <ClearSvgFull width={16} height={16} />
+              </ClearBtn>
+            )}
+          </NameInputWrapper>
         )}
+
+        <NameError error={error} />
+
         {!nextStep && encryptedIdentity && !walletIdentity && (
           <button
             onClick={async () => {
@@ -150,7 +166,7 @@ export function UserCreationModal() {
               setNextStep(true);
             }
           }}
-          disabled={!customNameInput}
+          disabled={!customNameInput || error !== 0}
         >
           Next
         </Btn>
