@@ -1,9 +1,10 @@
 import { Waku, WakuMessage } from "js-waku";
 
+import { createSymKeyFromPassword } from "./encryption";
 import { Identity } from "./identity";
 import { MembershipUpdateEvent_EventType } from "./proto/communities/v1/membership_update_message";
 import { getNegotiatedTopic, getPartitionedTopic } from "./topics";
-import { bufToHex } from "./utils";
+import { bufToHex, compressPublicKey } from "./utils";
 import {
   MembershipSignedEvent,
   MembershipUpdateMessage,
@@ -11,9 +12,16 @@ import {
 
 import { ChatMessage, Content } from ".";
 
+type GroupMember = {
+  id: string;
+  topic: string;
+  symKey: Uint8Array;
+  partitionedTopic: string;
+};
+
 export type GroupChat = {
   chatId: string;
-  members: string[];
+  members: GroupMember[];
   admins?: string[];
   name?: string;
   removed: boolean;
@@ -32,7 +40,6 @@ export class GroupChats {
   private addMessage: (message: ChatMessage, sender: string) => void;
 
   public chats: GroupChatsType = {};
-
   /**
    * GroupChats holds a list of private chats and listens to their status broadcast
    *
@@ -87,7 +94,8 @@ export class GroupChats {
           );
           const wakuMessage = await WakuMessage.fromBytes(
             chatMessage.encode(),
-            await getNegotiatedTopic(this.identity, member)
+            member.topic,
+            { sigPrivKey: this.identity.privateKey, symKey: member.symKey }
           );
           this.waku.relay.send(wakuMessage);
         })
@@ -106,10 +114,19 @@ export class GroupChats {
     if (signer) {
       switch (event.event.type) {
         case MembershipUpdateEvent_EventType.CHAT_CREATED: {
+          const members: GroupMember[] = [];
+          await Promise.all(
+            event.event.members.map(async (member) => {
+              const topic = await getNegotiatedTopic(this.identity, member);
+              const symKey = await createSymKeyFromPassword(topic);
+              const partitionedTopic = getPartitionedTopic(member);
+              members.push({ topic, symKey, id: member, partitionedTopic });
+            })
+          );
           await this.addChat(
             {
               chatId: chatId,
-              members: event.event.members,
+              members,
               admins: [signer],
               removed: false,
             },
@@ -120,7 +137,7 @@ export class GroupChats {
         case MembershipUpdateEvent_EventType.MEMBER_REMOVED: {
           if (chat) {
             chat.members = chat.members.filter(
-              (member) => !event.event.members.includes(member)
+              (member) => !event.event.members.includes(member.id)
             );
             if (event.event.members.includes(thisUser)) {
               await this.removeChat(
@@ -140,8 +157,19 @@ export class GroupChats {
         }
         case MembershipUpdateEvent_EventType.MEMBERS_ADDED: {
           if (chat && chat.admins?.includes(signer)) {
-            chat.members.push(...event.event.members);
-            if (chat.members.includes(thisUser)) {
+            const members: GroupMember[] = [];
+            await Promise.all(
+              event.event.members.map(async (member) => {
+                const topic = await getNegotiatedTopic(this.identity, member);
+                const symKey = await createSymKeyFromPassword(topic);
+                const partitionedTopic = getPartitionedTopic(member);
+                members.push({ topic, symKey, id: member, partitionedTopic });
+              })
+            );
+            chat.members.push(...members);
+            if (
+              chat.members.findIndex((member) => member.id === thisUser) > -1
+            ) {
               chat.removed = false;
               await this.addChat(chat, useCallback);
             }
@@ -196,7 +224,11 @@ export class GroupChats {
         const chatMessage = ChatMessage.decode(message.payload);
         if (chatMessage) {
           if (chatMessage.chatId === chat.chatId) {
-            this.addMessage(chatMessage, member);
+            let sender = member;
+            if (message.signaturePublicKey) {
+              sender = compressPublicKey(message.signaturePublicKey);
+            }
+            this.addMessage(chatMessage, sender);
           }
         }
       }
@@ -212,10 +244,12 @@ export class GroupChats {
     const observerFunction = removeObserver ? "deleteObserver" : "addObserver";
     await Promise.all(
       chat.members.map(async (member) => {
-        const topic = await getNegotiatedTopic(this.identity, member);
+        if (!removeObserver) {
+          this.waku.relay.addDecryptionKey(member.symKey);
+        }
         this.waku.relay[observerFunction](
-          (message) => this.handleWakuChatMessage(message, chat, member),
-          [topic]
+          (message) => this.handleWakuChatMessage(message, chat, member.id),
+          [member.topic]
         );
       })
     );
@@ -248,9 +282,8 @@ export class GroupChats {
   }
 
   private async listen(): Promise<void> {
-    const messages = await this.waku.store.queryHistory([
-      getPartitionedTopic(bufToHex(this.identity.publicKey)),
-    ]);
+    const topic = getPartitionedTopic(bufToHex(this.identity.publicKey));
+    const messages = await this.waku.store.queryHistory([topic]);
     messages.sort((a, b) =>
       (a?.timestamp?.getTime() ?? 0) < (b?.timestamp?.getTime() ?? 0) ? -1 : 1
     );
@@ -270,18 +303,18 @@ export class GroupChats {
     );
     this.waku.relay.addObserver(
       (message) => this.decodeUpdateMessage(message, true),
-      [getPartitionedTopic(bufToHex(this.identity.publicKey))]
+      [topic]
     );
   }
 
   private async sendUpdateMessage(
     payload: Uint8Array,
-    members: string[]
+    members: GroupMember[]
   ): Promise<void> {
     const wakuMessages = await Promise.all(
       members.map(
         async (member) =>
-          await WakuMessage.fromBytes(payload, getPartitionedTopic(member))
+          await WakuMessage.fromBytes(payload, member.partitionedTopic)
       )
     );
     wakuMessages.forEach((msg) => this.waku.relay.send(msg));
@@ -314,10 +347,23 @@ export class GroupChats {
     const payload = MembershipUpdateMessage.create(chatId, this.identity);
     const chat = this.chats[chatId];
     if (chat && payload) {
-      const newMembers = members.filter(
-        (member) => !chat.members.includes(member)
+      const newMembers: GroupMember[] = [];
+
+      await Promise.all(
+        members
+          .filter(
+            (member) =>
+              !chat.members.map((chatMember) => chatMember.id).includes(member)
+          )
+          .map(async (member) => {
+            const topic = await getNegotiatedTopic(this.identity, member);
+            const symKey = await createSymKeyFromPassword(topic);
+            const partitionedTopic = getPartitionedTopic(member);
+            newMembers.push({ topic, symKey, id: member, partitionedTopic });
+          })
       );
-      payload.addMembersAddedEvent(newMembers);
+
+      payload.addMembersAddedEvent(newMembers.map((member) => member.id));
       await this.sendUpdateMessage(payload.encode(), [
         ...chat.members,
         ...newMembers,
@@ -335,7 +381,19 @@ export class GroupChats {
       this.identity,
       members
     ).encode();
-    await this.sendUpdateMessage(payload, members);
+
+    const newMembers: GroupMember[] = [];
+
+    await Promise.all(
+      members.map(async (member) => {
+        const topic = await getNegotiatedTopic(this.identity, member);
+        const symKey = await createSymKeyFromPassword(topic);
+        const partitionedTopic = getPartitionedTopic(member);
+        newMembers.push({ topic, symKey, id: member, partitionedTopic });
+      })
+    );
+
+    await this.sendUpdateMessage(payload, newMembers);
   }
 
   /**
@@ -374,11 +432,10 @@ export class GroupChats {
 
     await Promise.all(
       chat.members.map(async (member) => {
-        const topic = await getNegotiatedTopic(this.identity, member);
         const msgLength = (
-          await this.waku.store.queryHistory([topic], {
+          await this.waku.store.queryHistory([member.topic], {
             timeFilter: { startTime, endTime },
-            callback: (msg) => _callback(msg, member),
+            callback: (msg) => _callback(msg, member.id),
           })
         ).length;
         amountOfMessages.push(msgLength);
