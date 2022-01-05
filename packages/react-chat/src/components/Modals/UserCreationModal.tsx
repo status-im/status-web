@@ -15,6 +15,7 @@ import {
   loadEncryptedIdentity,
   saveIdentity,
 } from "../../utils";
+import { NameError } from "../Form/NameError";
 import { ClearBtn, NameInput, NameInputWrapper } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { ChainIcon } from "../Icons/ChainIcon";
@@ -46,8 +47,10 @@ export function UserCreationModal() {
   const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   const [customNameInput, setCustomNameInput] = useState("");
+
   const [nextStep, setNextStep] = useState(false);
   const { setModal } = useModal(UserCreationModalName);
+
   return (
     <Modal name={UserCreationModalName}>
       <Section>
@@ -95,6 +98,7 @@ export function UserCreationModal() {
               placeholder="Display name"
               value={customNameInput}
               onChange={(e) => setCustomNameInput(e.currentTarget.value)}
+              maxLength={24}
             />
             {customNameInput && (
               <ClearBtn onClick={() => setCustomNameInput("")}>
@@ -102,6 +106,11 @@ export function UserCreationModal() {
               </ClearBtn>
             )}
           </NameInputWrapper>
+        )}
+        {customNameInput && (
+          <ErrorWrapper>
+            <NameError nameInput={customNameInput} />
+          </ErrorWrapper>
         )}
         {!nextStep && encryptedIdentity && !walletIdentity && (
           <button
@@ -219,4 +228,9 @@ const UserAttributes = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
+`;
+
+const ErrorWrapper = styled.div`
+  width: 328px;
+  margin-top: 8px;
 `;
