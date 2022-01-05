@@ -6,6 +6,7 @@ import {
   useIdentity,
   useNickname,
   useSetIdentity,
+  useSetNikcname,
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { ButtonNo, ButtonYes } from "../Buttons/buttonStyle";
@@ -26,6 +27,7 @@ export const LogoutModalName = "LogoutModal";
 export const LogoutModal = () => {
   const { setModal } = useModal(LogoutModalName);
   const logout = useSetIdentity();
+  const setNickname = useSetNikcname();
   const identity = useIdentity();
   const nickname = useNickname();
 
@@ -71,6 +73,7 @@ export const LogoutModal = () => {
             onClick={() => {
               setModal(false);
               logout(undefined);
+              setNickname(undefined);
             }}
           >
             Disconnect

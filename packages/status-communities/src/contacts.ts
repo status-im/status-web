@@ -3,7 +3,7 @@ import { PageDirection, Waku, WakuMessage } from "js-waku";
 import { idToContactCodeTopic } from "./contentTopic";
 import { Identity } from "./identity";
 import { StatusUpdate_StatusType } from "./proto/communities/v1/status_update";
-import { bufToHex } from "./utils";
+import { bufToHex, getLatestUserNickname } from "./utils";
 import { ChatIdentity } from "./wire/chat_identity";
 import { StatusUpdate } from "./wire/status_update";
 
@@ -115,30 +115,11 @@ export class Contacts {
 
     const handleNickname = async (): Promise<void> => {
       if (this.identity) {
-        const publicKey = bufToHex(this.identity.publicKey);
         const now = new Date().getTime();
-        let newNickname = "";
-        let clock = 0;
-        await this.waku.store.queryHistory([idToContactCodeTopic(publicKey)], {
-          callback: (msgs) =>
-            msgs.some((e) => {
-              try {
-                if (e.payload) {
-                  const chatIdentity = ChatIdentity.decode(e?.payload);
-                  if (chatIdentity) {
-                    if (chatIdentity?.displayName) {
-                      clock = chatIdentity?.clock ?? 0;
-                      newNickname = chatIdentity?.displayName;
-                    }
-                  }
-                  return true;
-                }
-              } catch {
-                return false;
-              }
-            }),
-          pageDirection: PageDirection.BACKWARD,
-        });
+        const { clock, nickname: newNickname } = await getLatestUserNickname(
+          this.identity.publicKey,
+          this.waku
+        );
 
         if (this.nickname) {
           if (this.nickname !== newNickname) {
@@ -150,7 +131,7 @@ export class Contacts {
           }
         } else {
           this.nickname = newNickname;
-          this.callbackNickname(publicKey, newNickname);
+          this.callbackNickname(bufToHex(this.identity.publicKey), newNickname);
           if (clock < now - NICKNAME_BROADCAST_INTERVAL) {
             await sendNickname();
           }

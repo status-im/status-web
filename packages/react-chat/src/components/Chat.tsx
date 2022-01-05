@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { ChatState, useChatState } from "../contexts/chatStateProvider";
-import { useIdentity } from "../contexts/identityProvider";
 import { useNarrow } from "../contexts/narrowProvider";
 
 import { Channels } from "./Channels/Channels";
@@ -20,7 +19,6 @@ import { UserCreationModal } from "./Modals/UserCreationModal";
 import { WalletConnectModal } from "./Modals/WalletConnectModal";
 import { WalletModal } from "./Modals/WalletModal";
 import { ToastMessageList } from "./ToastMessages/ToastMessageList";
-import { UserCreation } from "./UserCreation/UserCreation";
 
 function Modals() {
   return (
@@ -42,13 +40,12 @@ export function Chat() {
   const [state] = useChatState();
   const [showMembers, setShowMembers] = useState(false);
   const narrow = useNarrow();
-  const identity = useIdentity();
   return (
     <ChatWrapper>
       {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity />
-          {identity ? <Channels /> : <UserCreation permission={true} />}
+          <Channels />
         </ChannelsWrapper>
       )}
       {state === ChatState.ChatBody && (
