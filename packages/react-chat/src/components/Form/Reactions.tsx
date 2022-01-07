@@ -1,36 +1,33 @@
-import React, { useRef } from "react";
+import { BaseEmoji } from "emoji-mart";
+import React from "react";
 import styled from "styled-components";
 
-import { useClickOutside } from "../../hooks/useClickOutside";
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
-import { ReactionSvg } from "../Icons/ReactionIcon";
 import { ReplySvg } from "../Icons/ReplyIcon";
 
+import { ReactionBtn, ReactionButton } from "./ReactionButton";
 import { Tooltip } from "./Tooltip";
 
 interface ReactionsProps {
   message: ChatMessage;
-  showReactions: boolean;
-  setShowReactions: (val: boolean) => void;
   setReply: (val: Reply | undefined) => void;
+  messageReactions: BaseEmoji[];
+  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>;
 }
 
 export function Reactions({
   message,
-  showReactions,
-  setShowReactions,
   setReply,
+  messageReactions,
+  setMessageReactions,
 }: ReactionsProps) {
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowReactions(false));
-
   return (
     <Wrapper>
-      <ReactionBtn onClick={() => setShowReactions(!showReactions)} ref={ref}>
-        <ReactionSvg width={22} height={22} />
-        <Tooltip tip="Add reaction" />
-      </ReactionBtn>
+      <ReactionButton
+        messageReactions={messageReactions}
+        setMessageReactions={setMessageReactions}
+      />
       <ReactionBtn
         onClick={() =>
           setReply({
@@ -58,27 +55,4 @@ const Wrapper = styled.div`
   background: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 2px;
   visibility: hidden;
-`;
-
-const ReactionBtn = styled.button`
-  width: 32px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  align-self: center;
-  position: relative;
-
-  &:hover {
-    background: ${({ theme }) => theme.buttonBgHover};
-  }
-
-  &:hover > svg {
-    fill: ${({ theme }) => theme.tertiary};
-  }
-
-  &:hover > div {
-    visibility: visible;
-  }
 `;
