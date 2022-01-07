@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { ChatState, useChatState } from "../../contexts/chatStateProvider";
@@ -45,43 +45,36 @@ function GenerateChannels({ type, onCommunityClick }: GenerateChannelsProps) {
   );
 }
 
-export function Channels({ onCommunityClick }: ChannelsProps) {
-  const { clearNotifications, clearMentions, notifications, activeChannel } =
-    useMessengerContext();
-  useEffect(() => {
-    if (activeChannel) {
-      if (notifications[activeChannel.id] > 0) {
-        clearNotifications(activeChannel.id);
-        clearMentions(activeChannel.id);
-      }
-    }
-  }, [notifications, activeChannel]);
-  const setChatState = useChatState()[1];
-  const identity = useIdentity();
+type ChatsListProps = {
+  onCommunityClick?: () => void;
+};
 
+function ChatsSideBar({ onCommunityClick }: ChatsListProps) {
+  const setChatState = useChatState()[1];
+  return (
+    <>
+      <ChatsBar>
+        <Heading>Chat</Heading>
+        <EditBtn onClick={() => setChatState(ChatState.ChatCreation)}>
+          <CreateIcon />
+        </EditBtn>
+      </ChatsBar>
+      <ChatsList>
+        <GenerateChannels type={"group"} onCommunityClick={onCommunityClick} />
+        <GenerateChannels type={"dm"} onCommunityClick={onCommunityClick} />
+      </ChatsList>
+    </>
+  );
+}
+
+export function Channels({ onCommunityClick }: ChannelsProps) {
+  const identity = useIdentity();
   return (
     <ChannelList>
       <GenerateChannels type={"channel"} onCommunityClick={onCommunityClick} />
       <Chats>
         {identity ? (
-          <>
-            <ChatsBar>
-              <Heading>Chat</Heading>
-              <EditBtn onClick={() => setChatState(ChatState.ChatCreation)}>
-                <CreateIcon />
-              </EditBtn>
-            </ChatsBar>
-            <ChatsList>
-              <GenerateChannels
-                type={"group"}
-                onCommunityClick={onCommunityClick}
-              />
-              <GenerateChannels
-                type={"dm"}
-                onCommunityClick={onCommunityClick}
-              />
-            </ChatsList>
-          </>
+          <ChatsSideBar onCommunityClick={onCommunityClick} />
         ) : (
           <UserCreation permission={true} />
         )}

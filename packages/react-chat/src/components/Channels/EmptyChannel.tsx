@@ -9,11 +9,11 @@ import { textMediumStyles } from "../Text";
 
 import { ChannelInfo, ChannelLogo, ChannelName } from "./Channel";
 
-type EmptyChannelProps = {
+type ChannelBeggingTextProps = {
   channel: ChannelData;
 };
 
-export function EmptyChannel({ channel }: EmptyChannelProps) {
+function ChannelBeggingText({ channel }: ChannelBeggingTextProps) {
   const identity = useIdentity();
   const { contacts } = useMessengerContext();
   const members = useMemo(() => {
@@ -25,23 +25,18 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
     }
     return [];
   }, [channel, contacts]);
-  return (
-    <Wrapper>
-      <ChannelInfoEmpty>
-        <ChannelLogoEmpty icon={channel.icon}>
-          {" "}
-          {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
-        </ChannelLogoEmpty>
-        <ChannelNameEmpty active={true} channel={channel} />
-      </ChannelInfoEmpty>
 
-      {channel.type === "dm" ? (
+  switch (channel.type) {
+    case "dm":
+      return (
         <EmptyText>
           Any messages you send here are encrypted and can only be read by you
           and <br />
           <span>{channel.name.slice(0, 10)}</span>.
         </EmptyText>
-      ) : channel.type === "group" ? (
+      );
+    case "group":
+      return (
         <EmptyTextGroup>
           {identity && <span>{utils.bufToHex(identity.publicKey)}</span>}{" "}
           created a group with{" "}
@@ -52,11 +47,32 @@ export function EmptyChannel({ channel }: EmptyChannelProps) {
             </span>
           ))}
         </EmptyTextGroup>
-      ) : (
+      );
+    case "channel":
+      return (
         <EmptyText>
           Welcome to the beginning of the <span>#{channel.name}</span> channel!
         </EmptyText>
-      )}
+      );
+  }
+  return null;
+}
+
+type EmptyChannelProps = {
+  channel: ChannelData;
+};
+
+export function EmptyChannel({ channel }: EmptyChannelProps) {
+  return (
+    <Wrapper>
+      <ChannelInfoEmpty>
+        <ChannelLogoEmpty icon={channel.icon}>
+          {" "}
+          {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
+        </ChannelLogoEmpty>
+        <ChannelNameEmpty active={true} channel={channel} />
+      </ChannelInfoEmpty>
+      <ChannelBeggingText channel={channel} />
     </Wrapper>
   );
 }
