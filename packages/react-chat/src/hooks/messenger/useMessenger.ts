@@ -228,6 +228,15 @@ export function useMessenger(
     [messenger, groupChat, activeChannel]
   );
 
+  useEffect(() => {
+    if (activeChannel) {
+      if (notifications[activeChannel.id] > 0) {
+        clearNotifications(activeChannel.id);
+        clearMentions(activeChannel.id);
+      }
+    }
+  }, [notifications, activeChannel]);
+
   return {
     messenger,
     messages,
