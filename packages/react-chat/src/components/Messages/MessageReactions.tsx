@@ -13,11 +13,14 @@ export function MessageReactions({
   messageReactions,
   setMessageReactions,
 }: MessageReactionsProps) {
+  const isMyReactionIncluded = (emoji: BaseEmoji) =>
+    messageReactions.includes(emoji); // temporary function while message reactions are not added to waku
+
   return (
     <Reactions>
       {messageReactions.map((reaction) => (
         <EmojiReaction
-          className={`${messageReactions.includes(reaction) && "chosen"}`}
+          className={`${isMyReactionIncluded(reaction) && "chosen"}`}
         >
           <Emoji emoji={reaction} set={"twitter"} size={16} />
           <p>1</p>

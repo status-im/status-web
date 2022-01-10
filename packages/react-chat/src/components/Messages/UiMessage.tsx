@@ -66,7 +66,6 @@ export function UiMessage({
 
   const [mentioned, setMentioned] = useState(false);
   const [messageReactions, setMessageReactions] = useState<BaseEmoji[]>([]);
-  console.log(messageReactions);
 
   useEffect(() => {
     if (mentioned)
