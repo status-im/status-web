@@ -293,6 +293,10 @@ export class GroupChats {
         async (message) => await this.decodeUpdateMessage(message, false)
       )
     );
+    this.waku.relay.addObserver(
+      (message) => this.decodeUpdateMessage(message, true),
+      [topic]
+    );
     await Promise.all(
       Object.values(this.chats).map(async (chat) => {
         if (!chat?.removed) {
@@ -300,10 +304,6 @@ export class GroupChats {
           this.callback(chat);
         }
       })
-    );
-    this.waku.relay.addObserver(
-      (message) => this.decodeUpdateMessage(message, true),
-      [topic]
     );
   }
 

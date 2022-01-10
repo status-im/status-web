@@ -33,23 +33,29 @@ export function useLoadPrevDay(
             loadingPreviousMessages.current[id] = true;
             setLoadingMessages(true);
             let amountOfMessages = 0;
-            if (groupChat && groupChats) {
-              amountOfMessages = await groupChats.retrievePreviousMessages(
-                id,
-                startTime,
-                endTime
-              );
-            } else {
-              amountOfMessages = await messenger.retrievePreviousMessages(
-                id,
-                startTime,
-                endTime
-              );
+            let failed = true;
+            try {
+              if (groupChat && groupChats) {
+                amountOfMessages = await groupChats.retrievePreviousMessages(
+                  id,
+                  startTime,
+                  endTime
+                );
+              } else {
+                amountOfMessages = await messenger.retrievePreviousMessages(
+                  id,
+                  startTime,
+                  endTime
+                );
+              }
+              lastLoadTime.current[id] = startTime;
+              failed = false;
+            } catch {
+              failed = true;
             }
-            lastLoadTime.current[id] = startTime;
             loadingPreviousMessages.current[id] = false;
             setLoadingMessages(false);
-            if (amountOfMessages === 0) {
+            if (amountOfMessages === 0 && !failed) {
               loadPrevDay(id, groupChat);
             }
           }

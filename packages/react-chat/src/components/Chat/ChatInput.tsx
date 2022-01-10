@@ -47,11 +47,13 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
   const inputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.addEventListener("click", () => setShowEmoji(false));
+    if (showEmoji) {
+      window.addEventListener("click", () => setShowEmoji(false));
+    }
     return () => {
       window.removeEventListener("click", () => setShowEmoji(false));
     };
-  }, []);
+  }, [showEmoji]);
 
   const image = useMemo(
     () => (imageUint ? uintToImgUrl(imageUint) : ""),

@@ -32,7 +32,7 @@ export const SearchBlock = ({
       .filter((member) => !discludeList.includes(member.id));
   }, [query, discludeList, contacts]);
 
-  if (searchList.length === 0) {
+  if (searchList.length === 0 || !query) {
     return null;
   }
   return (

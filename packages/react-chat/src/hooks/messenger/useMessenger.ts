@@ -47,6 +47,7 @@ export type MessengerType = {
   createGroupChat: (members: string[]) => void;
   changeGroupChatName: (name: string, chatId: string) => void;
   addMembers: (members: string[], chatId: string) => void;
+  nickname: string | undefined;
 };
 
 function useCreateMessenger(identity: Identity | undefined) {
@@ -101,7 +102,7 @@ function useCreateCommunity(
 
 export function useMessenger(
   identity: Identity | undefined,
-  nickname: string | undefined
+  newNickname: string | undefined
 ) {
   const { communityKey } = useConfig();
   const [activeChannel, setActiveChannel] = useState<ChannelData>({
@@ -113,10 +114,10 @@ export function useMessenger(
 
   const messenger = useCreateMessenger(identity);
 
-  const { contacts, setContacts, contactsClass } = useContacts(
+  const { contacts, setContacts, contactsClass, nickname } = useContacts(
     messenger,
     identity,
-    nickname
+    newNickname
   );
 
   const {
@@ -258,5 +259,6 @@ export function useMessenger(
     createGroupChat,
     changeGroupChatName,
     addMembers,
+    nickname,
   };
 }

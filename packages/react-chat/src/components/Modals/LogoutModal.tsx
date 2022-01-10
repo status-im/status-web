@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 import {
   useIdentity,
-  useNickname,
   useSetIdentity,
   useSetNikcname,
 } from "../../contexts/identityProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { ButtonNo, ButtonYes } from "../Buttons/buttonStyle";
 import { UserLogo } from "../Members/UserLogo";
@@ -29,7 +29,7 @@ export const LogoutModal = () => {
   const logout = useSetIdentity();
   const setNickname = useSetNikcname();
   const identity = useIdentity();
-  const nickname = useNickname();
+  const { nickname } = useMessengerContext();
 
   if (identity) {
     return (

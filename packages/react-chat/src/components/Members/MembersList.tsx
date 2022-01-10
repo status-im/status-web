@@ -3,7 +3,7 @@ import { utils } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
-import { useIdentity, useNickname } from "../../contexts/identityProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
@@ -17,11 +17,9 @@ interface MembersListProps {
 }
 
 export function MembersList({ switchShowMembers }: MembersListProps) {
-  const { contacts } = useMessengerContext();
+  const { contacts, nickname } = useMessengerContext();
   const identity = useIdentity();
   const { setModal } = useModal(LogoutModalName);
-
-  const nickname = useNickname();
 
   const userContacts = useMemo(() => {
     if (identity) {
