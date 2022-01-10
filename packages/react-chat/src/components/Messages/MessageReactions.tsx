@@ -16,7 +16,9 @@ export function MessageReactions({
   return (
     <Reactions>
       {messageReactions.map((reaction) => (
-        <EmojiReaction>
+        <EmojiReaction
+          className={`${messageReactions.includes(reaction) && "chosen"}`}
+        >
           <Emoji emoji={reaction} set={"twitter"} size={16} />
           <p>1</p>
         </EmojiReaction>
@@ -57,5 +59,10 @@ const EmojiReaction = styled.button`
 
   & > span {
     height: 16px;
+  }
+
+  &.chosen {
+    background: ${({ theme }) => theme.reactionChosen};
+    border: 1px solid ${({ theme }) => theme.tertiary};
   }
 `;

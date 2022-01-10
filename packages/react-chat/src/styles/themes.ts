@@ -27,6 +27,8 @@ export type Theme = {
   mentionBg: string;
   mentionBgHover: string;
   shadow: string;
+  reactionBg: string;
+  reactionChosen: string;
 };
 
 export const lightTheme: Theme = {
@@ -60,6 +62,8 @@ export const lightTheme: Theme = {
   mentionBgHover: "#D4F3FA",
   shadow:
     "0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)",
+  reactionBg: "#eceffc",
+  reactionChosen: "rgba(67, 96, 223, 0.1)",
 };
 
 export const darkTheme: Theme = {
@@ -93,6 +97,8 @@ export const darkTheme: Theme = {
   mentionBgHover: "#002D39",
   shadow:
     "0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)",
+  reactionBg: "#373737",
+  reactionChosen: "rgba(134, 158, 255, 0.3)",
 };
 
 export default { lightTheme, darkTheme };

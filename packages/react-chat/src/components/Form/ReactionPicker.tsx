@@ -30,17 +30,11 @@ export function ReactionPicker({
   messageReactions,
   setMessageReactions,
 }: ReactionPickerProps) {
-  const addReaction = (emoji: BaseEmoji) =>
-    setMessageReactions((prev) => [...prev, emoji]);
-
-  const removeReaction = (emoji: BaseEmoji) =>
-    setMessageReactions((prev) => prev.filter((e) => e != emoji));
-
   const handleReaction = useCallback(
     (emoji: BaseEmoji) => {
       messageReactions.find((e) => e === emoji)
-        ? removeReaction(emoji)
-        : addReaction(emoji);
+        ? setMessageReactions((prev) => prev.filter((e) => e != emoji))
+        : setMessageReactions((prev) => [...prev, emoji]);
     },
     [messageReactions]
   );
@@ -48,7 +42,11 @@ export function ReactionPicker({
   return (
     <Wrapper className={className}>
       {emojiArr.map((emoji) => (
-        <EmojiBtn key={emoji.id} onClick={() => handleReaction(emoji)}>
+        <EmojiBtn
+          key={emoji.id}
+          onClick={() => handleReaction(emoji)}
+          className={`${messageReactions.includes(emoji) && "chosen"}`}
+        >
           {" "}
           <Emoji
             emoji={emoji}
@@ -72,12 +70,13 @@ const Wrapper = styled.div`
   background: ${({ theme }) => theme.bodyBackgroundColor};
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.08);
   border-radius: 16px 16px 4px 16px;
-  padding: 8px 12px;
+  padding: 8px;
 
   &.small {
     right: unset;
-    left: 50%;
-    transform: translateX(-50%);
+    left: -100px;
+    transform: none;
+    border-radius: 16px 16px 16px 4px;
   }
 `;
 
@@ -91,5 +90,10 @@ const EmojiBtn = styled.button`
 
   &:hover {
     background: ${({ theme }) => theme.inputColor};
+  }
+
+  &.chosen {
+    background: ${({ theme }) => theme.reactionBg};
+    border: 1px solid ${({ theme }) => theme.tertiary};
   }
 `;
