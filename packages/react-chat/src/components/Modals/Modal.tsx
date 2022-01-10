@@ -86,6 +86,10 @@ const ModalBody = styled.div`
   &.profile {
     max-width: 640px;
   }
+
+  &.agreement {
+    max-width: 525px;
+  }
 `;
 
 const ModalOverlay = styled.div`
