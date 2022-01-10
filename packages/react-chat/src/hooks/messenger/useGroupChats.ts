@@ -45,7 +45,6 @@ export function useGroupChats(
         setChannels((prev) => {
           return { ...prev, [channel.id]: channel };
         });
-        setActiveChannel(channel);
       };
       const removeChat = (chat: GroupChat) => {
         setChannels((prev) => {

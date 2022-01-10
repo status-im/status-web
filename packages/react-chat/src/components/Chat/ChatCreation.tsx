@@ -34,69 +34,73 @@ export function ChatCreation({
   const addMember = useCallback(
     (member: string) => {
       setStyledGroup((prevMembers: string[]) => {
-        if (prevMembers.find((mem) => mem === member)) {
+        if (
+          prevMembers.find((mem) => mem === member) ||
+          prevMembers.length >= 5
+        ) {
           return prevMembers;
         } else {
           return [...prevMembers, member];
         }
       });
+      setQuery("");
     },
     [setStyledGroup, styledGroup]
   );
-  const removeMember = (member: string) => {
-    setStyledGroup((prev) => prev.filter((e) => e != member));
-  };
+  const removeMember = useCallback(
+    (member: string) => {
+      setStyledGroup((prev) => prev.filter((e) => e != member));
+    },
+    [setStyledGroup]
+  );
 
-  const createChat = (group: string[]) => {
-    if (identity) {
-      const newGroup = group.slice();
-      newGroup.push(bufToHex(identity.publicKey));
-      group.length > 1
-        ? createGroupChat(newGroup)
-        : setChannel({
-            id: newGroup[0],
-            name: newGroup[0],
-            type: "dm",
-            description: `Chatkey: ${newGroup[0]} `,
-          });
-      setChatState(ChatState.ChatBody);
-    }
-  };
+  const createChat = useCallback(
+    (group: string[]) => {
+      if (identity) {
+        const newGroup = group.slice();
+        newGroup.push(bufToHex(identity.publicKey));
+        group.length > 1
+          ? createGroupChat(newGroup)
+          : setChannel({
+              id: newGroup[0],
+              name: newGroup[0],
+              type: "dm",
+              description: `Chatkey: ${newGroup[0]} `,
+            });
+        setChatState(ChatState.ChatBody);
+      }
+    },
+    [identity, createGroupChat, setChannel]
+  );
 
   return (
     <CreationWrapper>
       <CreationBar>
         <InputBar>
           <InputText>To:</InputText>
-          {styledGroup.length > 0 && (
-            <StyledList>
-              {styledGroup.map((member) => (
-                <StyledMember key={member}>
-                  <StyledName>{member.slice(0, 10)}</StyledName>
-                  <CloseButton onClick={() => removeMember(member)}>
-                    <CrossIcon memberView={true} />
-                  </CloseButton>
-                </StyledMember>
-              ))}
-            </StyledList>
+          <StyledList>
+            {styledGroup.map((member) => (
+              <StyledMember key={member}>
+                <StyledName>{member.slice(0, 10)}</StyledName>
+                <CloseButton onClick={() => removeMember(member)}>
+                  <CrossIcon memberView={true} />
+                </CloseButton>
+              </StyledMember>
+            ))}
+          </StyledList>
+          {styledGroup.length < 5 && (
+            <SearchMembers>
+              <Input
+                value={query}
+                onInput={(e) => setQuery(e.currentTarget.value)}
+              />
+              <SearchBlock
+                query={query}
+                discludeList={styledGroup}
+                onClick={addMember}
+              />
+            </SearchMembers>
           )}
-          <SearchMembers>
-            {styledGroup.length < 5 && (
-              <>
-                <Input
-                  value={query}
-                  onInput={(e) => setQuery(e.currentTarget.value)}
-                />
-                {query && (
-                  <SearchBlock
-                    query={query}
-                    discludeList={styledGroup}
-                    onClick={addMember}
-                  />
-                )}
-              </>
-            )}
-          </SearchMembers>
           {styledGroup.length === 5 && (
             <LimitAlert>5 user Limit reached</LimitAlert>
           )}

@@ -25,6 +25,7 @@ const MessengerContext = createContext<MessengerType>({
   createGroupChat: () => undefined,
   changeGroupChatName: () => undefined,
   addMembers: () => undefined,
+  nickname: undefined,
 });
 
 export function useMessengerContext() {

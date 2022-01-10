@@ -6,15 +6,14 @@ import {
 } from "status-communities/dist/cjs";
 import { bufToHex } from "status-communities/dist/cjs/utils";
 
-import { useSetNikcname } from "../../contexts/identityProvider";
 import { Contacts } from "../../models/Contact";
 
 export function useContacts(
   messenger: Messenger | undefined,
   identity: Identity | undefined,
-  nickname: string | undefined
+  newNickname: string | undefined
 ) {
-  const setNickname = useSetNikcname();
+  const [nickname, setNickname] = useState<string | undefined>(undefined);
   const [internalContacts, setInternalContacts] = useState<{
     [id: string]: { clock: number; nickname?: string };
   }>({});
@@ -37,7 +36,7 @@ export function useContacts(
             return { ...prev, [id]: { ...prev[id], nickname } };
           });
         },
-        nickname
+        newNickname
       );
       return newContacts;
     }
@@ -65,5 +64,5 @@ export function useContacts(
     });
   }, [internalContacts]);
 
-  return { contacts, setContacts, contactsClass };
+  return { contacts, setContacts, contactsClass, nickname };
 }
