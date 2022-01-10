@@ -20,7 +20,7 @@ function RenderChannelName({
     case "group":
       return (
         <div className={className}>
-          <GroupIcon activeView={channel.id === activeChannel.id} />
+          <GroupIcon activeView={channel.id === activeChannel?.id} />
           {` ${channel.name}`}
         </div>
       );
