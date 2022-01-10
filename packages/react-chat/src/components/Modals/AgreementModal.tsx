@@ -22,7 +22,7 @@ export function AgreementModal() {
   const [token, setToken] = useState("");
 
   return (
-    <Modal name={AgreementModalName} className="agreement">
+    <Modal name={AgreementModalName} className="wide">
       <Section>
         <Heading>Welcome to {communityData?.name}</Heading>
       </Section>
@@ -96,7 +96,7 @@ const AgreementSection = styled.div`
 
 const Agreements = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -106,6 +106,7 @@ const Agreement = styled.label`
   position: relative;
   color: ${({ theme }) => theme.primary};
   padding-left: 26px;
+  margin-right: 48px;
 
   ${textMediumStyles}
 
