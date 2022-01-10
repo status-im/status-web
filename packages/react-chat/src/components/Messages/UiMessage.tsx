@@ -12,10 +12,10 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
 import { ContactMenu } from "../Form/ContactMenu";
-import { Reactions } from "../Form/Reactions";
 import { Icon } from "../Icons/Icon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserLogo } from "../Members/UserLogo";
+import { Reactions } from "../Reactions/Reactions";
 
 import { MessageQuote } from "./MessageQuote";
 import { MessageReactions } from "./MessageReactions";

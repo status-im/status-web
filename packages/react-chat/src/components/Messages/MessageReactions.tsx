@@ -2,7 +2,7 @@ import { BaseEmoji, Emoji } from "emoji-mart";
 import React from "react";
 import styled from "styled-components";
 
-import { ReactionButton } from "../Form/ReactionButton";
+import { ReactionButton } from "../Reactions/ReactionButton";
 
 interface MessageReactionsProps {
   messageReactions: BaseEmoji[];

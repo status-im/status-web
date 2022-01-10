@@ -4,10 +4,10 @@ import styled from "styled-components";
 
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
+import { Tooltip } from "../Form/Tooltip";
 import { ReplySvg } from "../Icons/ReplyIcon";
 
 import { ReactionBtn, ReactionButton } from "./ReactionButton";
-import { Tooltip } from "./Tooltip";
 
 interface ReactionsProps {
   message: ChatMessage;

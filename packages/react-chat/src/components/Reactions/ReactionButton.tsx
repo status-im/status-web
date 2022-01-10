@@ -3,10 +3,10 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { Tooltip } from "../Form/Tooltip";
 import { ReactionSvg } from "../Icons/ReactionIcon";
 
 import { ReactionPicker } from "./ReactionPicker";
-import { Tooltip } from "./Tooltip";
 
 interface ReactionButtonProps {
   className?: string;
