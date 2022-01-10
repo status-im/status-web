@@ -2,16 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 type ReactionProps = {
-  width: number;
-  height: number;
   className?: string;
 };
 
-export function ReactionSvg({ width, height, className }: ReactionProps) {
+export function ReactionSvg({ className }: ReactionProps) {
   return (
     <Icon
-      width={width}
-      height={height}
       viewBox="0 0 22 22"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
@@ -40,9 +36,16 @@ export function ReactionSvg({ width, height, className }: ReactionProps) {
 }
 
 const Icon = styled.svg`
+  width: 22px;
+  height: 22px;
   fill: ${({ theme }) => theme.secondary};
 
   &:hover {
     fill: ${({ theme }) => theme.tertiary};
+  }
+
+  &.small {
+    width: 18px;
+    height: 18px;
   }
 `;

@@ -1,3 +1,4 @@
+import { BaseEmoji } from "emoji-mart";
 import React, { useEffect, useMemo, useState } from "react";
 import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
@@ -11,13 +12,13 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
 import { ContactMenu } from "../Form/ContactMenu";
-import { ReactionPicker } from "../Form/ReactionPicker";
-import { Reactions } from "../Form/Reactions";
 import { Icon } from "../Icons/Icon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserLogo } from "../Members/UserLogo";
+import { Reactions } from "../Reactions/Reactions";
 
 import { MessageQuote } from "./MessageQuote";
+import { MessageReactions } from "./MessageReactions";
 import {
   ContentWrapper,
   DateSeparator,
@@ -62,8 +63,9 @@ export function UiMessage({
     [message.sender, contacts]
   );
   const [showMenu, setShowMenu] = useState(false);
-  const [showReactions, setShowReactions] = useState(false);
+
   const [mentioned, setMentioned] = useState(false);
+  const [messageReactions, setMessageReactions] = useState<BaseEmoji[]>([]);
 
   useEffect(() => {
     if (mentioned)
@@ -146,14 +148,19 @@ export function UiMessage({
                 setMentioned={setMentioned}
               />
             </MessageText>
+            {messageReactions.length > 0 && (
+              <MessageReactions
+                messageReactions={messageReactions}
+                setMessageReactions={setMessageReactions}
+              />
+            )}
           </ContentWrapper>
         </UserMessageWrapper>
-        {showReactions && <ReactionPicker />}
         <Reactions
           message={message}
           setReply={setReply}
-          showReactions={showReactions}
-          setShowReactions={setShowReactions}
+          messageReactions={messageReactions}
+          setMessageReactions={setMessageReactions}
         />
       </MessageWrapper>
     </MessageOuterWrapper>
