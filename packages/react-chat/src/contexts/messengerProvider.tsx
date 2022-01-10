@@ -17,11 +17,7 @@ const MessengerContext = createContext<MessengerType>({
   communityData: undefined,
   contacts: {},
   setContacts: () => undefined,
-  activeChannel: {
-    id: "",
-    name: "",
-    type: "channel",
-  },
+  activeChannel: undefined,
   channels: {},
   setChannel: () => undefined,
   removeChannel: () => undefined,

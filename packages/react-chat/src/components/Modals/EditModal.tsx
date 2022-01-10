@@ -34,9 +34,11 @@ export const EditModal = () => {
   const { setModal } = useModal(EditModalName);
 
   const handleUpload = () => {
-    activeChannel.icon = image;
-    changeGroupChatName(groupName, activeChannel.id);
-    setModal(false);
+    if (activeChannel) {
+      activeChannel.icon = image;
+      changeGroupChatName(groupName, activeChannel.id);
+      setModal(false);
+    }
   };
 
   return (
@@ -62,10 +64,10 @@ export const EditModal = () => {
         </NameSection>
         <LogoSection>
           <Label>Group image</Label>
-          <GroupLogo icon={image || activeChannel.icon}>
-            {!activeChannel.icon &&
+          <GroupLogo icon={image || activeChannel?.icon}>
+            {!activeChannel?.icon &&
               !image &&
-              activeChannel.name.slice(0, 1).toUpperCase()}
+              activeChannel?.name?.slice(0, 1)?.toUpperCase()}
             <AddPictureInputWrapper>
               <AddIcon />
               <AddPictureInput

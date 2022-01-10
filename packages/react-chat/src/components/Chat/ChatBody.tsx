@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { Reply } from "../../hooks/useReply";
+import { ChannelData } from "../../models/ChannelData";
 import { TokenRequirement } from "../Form/TokenRequirement";
 import { MessagesList } from "../Messages/MessagesList";
 import { NarrowChannels } from "../NarrowMode/NarrowChannels";
@@ -13,12 +13,61 @@ import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
 
 import { ChatCreation } from "./ChatCreation";
 import { ChatInput } from "./ChatInput";
-import { ChatTopbar } from "./ChatTopbar";
+import { ChatTopbar, ChatTopbarLoading } from "./ChatTopbar";
 
 export enum ChatBodyState {
   Chat,
   Channels,
   Members,
+}
+
+function ChatBodyLoading() {
+  const narrow = useNarrow();
+  return (
+    <Wrapper>
+      <ChatBodyWrapper className={narrow ? "narrow" : ""}>
+        <ChatTopbarLoading />
+        <LoadingSkeleton />
+        <ChatInput reply={undefined} setReply={() => undefined} />
+      </ChatBodyWrapper>
+    </Wrapper>
+  );
+}
+
+type ChatBodyContentProps = {
+  showState: ChatBodyState;
+  switchShowState: (state: ChatBodyState) => void;
+  channel: ChannelData;
+};
+
+function ChatBodyContent({
+  showState,
+  switchShowState,
+  channel,
+}: ChatBodyContentProps) {
+  const [reply, setReply] = useState<Reply | undefined>(undefined);
+
+  switch (showState) {
+    case ChatBodyState.Chat:
+      return (
+        <>
+          <MessagesList setReply={setReply} channel={channel} />
+          <ChatInput reply={reply} setReply={setReply} />
+        </>
+      );
+    case ChatBodyState.Channels:
+      return (
+        <NarrowChannels
+          setShowChannels={() => switchShowState(ChatBodyState.Channels)}
+        />
+      );
+    case ChatBodyState.Members:
+      return (
+        <NarrowMembers
+          switchShowMembersList={() => switchShowState(ChatBodyState.Members)}
+        />
+      );
+  }
 }
 
 interface ChatBodyProps {
@@ -29,9 +78,8 @@ interface ChatBodyProps {
 
 export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
-  const narrow = useNarrow();
-  const identity = useIdentity();
   const [editGroup, setEditGroup] = useState(false);
+  const narrow = useNarrow();
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 
   const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat);
@@ -50,70 +98,40 @@ export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
     }
   }, [narrow]);
 
-  const [reply, setReply] = useState<Reply | undefined>(undefined);
-
-  return (
-    <Wrapper>
-      <ChatBodyWrapper className={className}>
-        {editGroup && communityData ? (
-          <ChatCreation
-            setEditGroup={setEditGroup}
-            activeChannel={activeChannel}
-          />
-        ) : (
-          <ChatTopbar
-            className={className}
-            onClick={onClick}
-            setEditGroup={setEditGroup}
-            showMembers={showMembers}
+  if (messenger && communityData && activeChannel) {
+    return (
+      <Wrapper>
+        <ChatBodyWrapper className={className}>
+          {editGroup && communityData ? (
+            <ChatCreation
+              setEditGroup={setEditGroup}
+              activeChannel={activeChannel}
+            />
+          ) : (
+            <ChatTopbar
+              onClick={onClick}
+              setEditGroup={setEditGroup}
+              showMembers={showMembers}
+              showState={showState}
+              switchShowState={switchShowState}
+            />
+          )}
+          <ChatBodyContent
             showState={showState}
             switchShowState={switchShowState}
+            channel={activeChannel}
           />
+        </ChatBodyWrapper>
+        {!permission && (
+          <BluredWrapper>
+            <TokenRequirement />
+          </BluredWrapper>
         )}
-        {messenger ? (
-          <>
-            {showState === ChatBodyState.Chat && (
-              <>
-                {messenger && communityData ? (
-                  <MessagesList setReply={setReply} />
-                ) : (
-                  <LoadingSkeleton />
-                )}
-                <ChatInput
-                  reply={reply}
-                  setReply={setReply}
-                  disabled={!identity}
-                />
-              </>
-            )}
+      </Wrapper>
+    );
+  }
 
-            {showState === ChatBodyState.Channels && (
-              <NarrowChannels
-                setShowChannels={() => switchShowState(ChatBodyState.Channels)}
-              />
-            )}
-            {showState === ChatBodyState.Members && (
-              <NarrowMembers
-                switchShowMembersList={() =>
-                  switchShowState(ChatBodyState.Members)
-                }
-              />
-            )}
-          </>
-        ) : (
-          <>
-            <LoadingSkeleton />
-            <ChatInput reply={reply} setReply={setReply} disabled={!identity} />
-          </>
-        )}
-      </ChatBodyWrapper>
-      {!permission && (
-        <BluredWrapper>
-          <TokenRequirement />
-        </BluredWrapper>
-      )}
-    </Wrapper>
-  );
+  return <ChatBodyLoading />;
 }
 
 const Wrapper = styled.div`

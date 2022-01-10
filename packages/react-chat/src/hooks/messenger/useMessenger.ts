@@ -42,7 +42,7 @@ export type MessengerType = {
   channels: ChannelsData;
   setChannel: (channel: ChannelData) => void;
   removeChannel: (channelId: string) => void;
-  activeChannel: ChannelData;
+  activeChannel: ChannelData | undefined;
   setActiveChannel: (channel: ChannelData) => void;
   createGroupChat: (members: string[]) => void;
   changeGroupChatName: (name: string, chatId: string) => void;

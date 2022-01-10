@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { Reply } from "../../hooks/useReply";
@@ -27,10 +28,11 @@ import { EmojiPicker } from "./EmojiPicker";
 interface ChatInputProps {
   reply: Reply | undefined;
   setReply: (val: Reply | undefined) => void;
-  disabled: boolean;
 }
 
-export function ChatInput({ reply, setReply, disabled }: ChatInputProps) {
+export function ChatInput({ reply, setReply }: ChatInputProps) {
+  const identity = useIdentity();
+  const disabled = useMemo(() => !identity, [identity]);
   const { sendMessage, contacts } = useMessengerContext();
   const [content, setContent] = useState("");
   const [clearComponent, setClearComponent] = useState("");

@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 
 import { useMessengerContext } from "../contexts/messengerProvider";
-import { ChannelData } from "../models/ChannelData";
 import { ChatMessage } from "../models/ChatMessage";
 
 export function useChatScrollHandle(
   messages: ChatMessage[],
-  ref: React.RefObject<HTMLHeadingElement>,
-  activeChannel: ChannelData
+  ref: React.RefObject<HTMLHeadingElement>
 ) {
-  const { loadPrevDay, loadingMessages } = useMessengerContext();
+  const { loadPrevDay, loadingMessages, activeChannel } = useMessengerContext();
   const [scrollOnBot, setScrollOnBot] = useState(true);
 
   useEffect(() => {
@@ -19,7 +17,7 @@ export function useChatScrollHandle(
   }, [messages.length, scrollOnBot]);
 
   useEffect(() => {
-    if (!loadingMessages) {
+    if (!loadingMessages && activeChannel) {
       if (
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
@@ -27,11 +25,11 @@ export function useChatScrollHandle(
         loadPrevDay(activeChannel.id, activeChannel.type === "group");
       }
     }
-  }, [messages.length, loadingMessages]);
+  }, [messages.length, loadingMessages, activeChannel]);
 
   useEffect(() => {
     const setScroll = () => {
-      if (ref?.current) {
+      if (ref?.current && activeChannel) {
         if (ref.current.scrollTop <= 0) {
           loadPrevDay(activeChannel.id, activeChannel.type === "group");
         }
@@ -51,6 +49,6 @@ export function useChatScrollHandle(
     };
     ref.current?.addEventListener("scroll", setScroll);
     return () => ref.current?.removeEventListener("scroll", setScroll);
-  }, [ref, scrollOnBot]);
+  }, [ref, scrollOnBot, activeChannel]);
   return loadingMessages;
 }

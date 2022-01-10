@@ -5,6 +5,7 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
 import { Reply } from "../../hooks/useReply";
+import { ChannelData } from "../../models/ChannelData";
 import { EmptyChannel } from "../Channels/EmptyChannel";
 import { LoadingIcon } from "../Icons/LoadingIcon";
 import { LinkModal, LinkModalName } from "../Modals/LinkModal";
@@ -14,12 +15,13 @@ import { UiMessage } from "./UiMessage";
 
 interface MessagesListProps {
   setReply: (val: Reply | undefined) => void;
+  channel: ChannelData;
 }
 
-export function MessagesList({ setReply }: MessagesListProps) {
-  const { messages, activeChannel, contacts } = useMessengerContext();
+export function MessagesList({ setReply, channel }: MessagesListProps) {
+  const { messages, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
-  const loadingMessages = useChatScrollHandle(messages, ref, activeChannel);
+  const loadingMessages = useChatScrollHandle(messages, ref);
 
   const shownMessages = useMemo(
     () =>
@@ -50,7 +52,7 @@ export function MessagesList({ setReply }: MessagesListProps) {
     <MessagesWrapper ref={ref}>
       <PictureModal image={image} />
       <LinkModal link={link} />
-      <EmptyChannel channel={activeChannel} />
+      <EmptyChannel channel={channel} />
       {loadingMessages && (
         <LoadingWrapper>
           <LoadingIcon className="message" />
@@ -60,7 +62,7 @@ export function MessagesList({ setReply }: MessagesListProps) {
         <UiMessage
           key={message.id}
           message={message}
-          channel={activeChannel}
+          channel={channel}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}

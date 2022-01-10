@@ -16,9 +16,38 @@ import { Loading } from "../Skeleton/Loading";
 
 import { ChatBodyState } from "./ChatBody";
 
+export function ChatTopbarLoading() {
+  const narrow = useNarrow();
+
+  return (
+    <Topbar className={narrow ? "narrow" : ""}>
+      <ChannelWrapper className={narrow ? "narrow" : ""}>
+        <SkeletonWrapper>
+          <CommunitySkeleton />
+        </SkeletonWrapper>
+      </ChannelWrapper>
+      <MenuWrapper>
+        {!narrow && (
+          <TopBtn>
+            <MembersIcon />
+          </TopBtn>
+        )}
+        <TopBtn>
+          <MoreIcon />
+        </TopBtn>
+        <ActivityWrapper>
+          <TopBtn>
+            <ActivityIcon />
+          </TopBtn>
+        </ActivityWrapper>
+      </MenuWrapper>
+      <Loading />
+    </Topbar>
+  );
+}
+
 type ChatTopbarProps = {
   showState: ChatBodyState;
-  className: string;
   onClick: () => void;
   switchShowState: (state: ChatBodyState) => void;
   showMembers: boolean;
@@ -27,7 +56,6 @@ type ChatTopbarProps = {
 
 export function ChatTopbar({
   showState,
-  className,
   onClick,
   switchShowState,
   showMembers,
@@ -39,15 +67,19 @@ export function ChatTopbar({
   const [showChannelMenu, setShowChannelMenu] = useState(false);
   const [showActivityCenter, setShowActivityCenter] = useState(false);
 
+  if (!activeChannel) {
+    return <ChatTopbarLoading />;
+  }
+
   return (
     <Topbar
       className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
     >
-      <ChannelWrapper className={className}>
+      <ChannelWrapper className={narrow ? "narrow" : ""}>
         {messenger && communityData ? (
           <>
             {narrow && (
-              <CommunityWrap className={className}>
+              <CommunityWrap className={narrow ? "narrow" : ""}>
                 <Community />
               </CommunityWrap>
             )}

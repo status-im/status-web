@@ -29,7 +29,7 @@ function GenerateChannels({ type, onCommunityClick }: GenerateChannelsProps) {
           <Channel
             key={channel.id}
             channel={channel}
-            isActive={channel.id === activeChannel.id}
+            isActive={channel.id === activeChannel?.id}
             notified={notifications?.[channel.id] > 0}
             mention={mentions?.[channel.id]}
             onClick={() => {
