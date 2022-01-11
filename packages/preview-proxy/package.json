@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "node-fetch": "^3.0.0"
+    "node-fetch": "^2.6.0"
   },
   "scripts": {
     "start": "yarn node src/index.js",
