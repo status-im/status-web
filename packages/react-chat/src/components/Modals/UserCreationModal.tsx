@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
@@ -11,11 +11,7 @@ import {
 import { useModal } from "../../contexts/modalProvider";
 import { useNameError } from "../../hooks/useNameError";
 import { Contact } from "../../models/Contact";
-import {
-  decryptIdentity,
-  loadEncryptedIdentity,
-  saveIdentity,
-} from "../../utils";
+import { saveIdentity } from "../../utils";
 import { NameError } from "../Form/NameError";
 import { ClearBtn, NameInput, NameInputWrapper } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
@@ -45,8 +41,6 @@ export function UserCreationModal() {
   const identity = useIdentity();
   const setIdentity = useSetIdentity();
   const setNickname = useSetNikcname();
-
-  const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   const [customNameInput, setCustomNameInput] = useState("");
   const error = useNameError(customNameInput);
@@ -113,20 +107,6 @@ export function UserCreationModal() {
 
         <NameError error={error} />
 
-        {!nextStep && encryptedIdentity && !walletIdentity && (
-          <button
-            onClick={async () => {
-              const identity = await decryptIdentity(
-                encryptedIdentity,
-                "noPassword"
-              );
-              setIdentity(identity);
-              setModal(false);
-            }}
-          >
-            Saved identity found, click here to load
-          </button>
-        )}
         {nextStep && identity && (
           <>
             <UserAddress>
