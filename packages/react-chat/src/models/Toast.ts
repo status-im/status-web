@@ -1,4 +1,6 @@
 export type Toast = {
   id: string;
-  type: "request" | "incomeRequest" | "verification";
+  type: "confirmation" | "incoming" | "approvement" | "rejection";
+  text: string;
+  request?: string;
 };

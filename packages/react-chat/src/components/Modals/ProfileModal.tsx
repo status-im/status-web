@@ -216,7 +216,8 @@ export const ProfileModal = () => {
                     ...prev,
                     {
                       id: id + request,
-                      type: "request",
+                      type: "confirmation",
+                      text: "Contact Request Sent",
                     },
                   ]),
                   setRequestCreation(false),

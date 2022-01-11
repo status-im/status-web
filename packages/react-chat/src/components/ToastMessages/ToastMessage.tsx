@@ -3,8 +3,11 @@ import styled, { keyframes } from "styled-components";
 
 import { useToasts } from "../../contexts/toastProvider";
 import { Toast } from "../../models/Toast";
+import { Column } from "../CommunityIdentity";
 import { CheckSvg } from "../Icons/CheckIcon";
+import { CommunityIcon } from "../Icons/CommunityIcon";
 import { CrossIcon } from "../Icons/CrossIcon";
+import { ProfileSvg } from "../Icons/ProfileIcon";
 import { textSmallStyles } from "../Text";
 
 export function AnimationToastMessage() {
@@ -32,16 +35,31 @@ export function ToastMessage({ toast }: ToastMessageProps) {
   return (
     <ToastWrapper>
       <ToastBlock>
-        {toast.type !== "verification" && (
-          <CheckWrapper>
-            <CheckSvg width={20} height={20} className="accept" />
-          </CheckWrapper>
+        {toast.type === "confirmation" && (
+          <IconWrapper className="green">
+            <CheckSvg width={20} height={20} className="green" />
+          </IconWrapper>
         )}
-        <ToastText>
-          {toast.type === "request"
-            ? "Contact Request Sent"
-            : "Verification Request Sent"}
-        </ToastText>
+        {toast.type === "incoming" && (
+          <IconWrapper className="blue">
+            <ProfileSvg width={20} height={20} />
+          </IconWrapper>
+        )}
+        {(toast.type === "approvement" || toast.type === "rejection") && (
+          <IconWrapper
+            className={toast.type === "approvement" ? "green" : "red"}
+          >
+            <CommunityIcon
+              width={20}
+              height={19}
+              className={toast.type === "approvement" ? "green" : "red"}
+            />
+          </IconWrapper>
+        )}
+        <Column>
+          <ToastText>{toast.text}</ToastText>
+          {toast.request && <ToastRequest>{toast.request}</ToastRequest>}
+        </Column>
       </ToastBlock>
       <CloseButton onClick={closeToast}>
         <CrossIcon />
@@ -74,7 +92,15 @@ const ToastText = styled.p`
   ${textSmallStyles};
 `;
 
-const CheckWrapper = styled.div`
+const ToastRequest = styled(ToastText)`
+  width: 243px;
+  color: ${({ theme }) => theme.secondary};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
+const IconWrapper = styled.div`
   width: 32px;
   height: 32px;
   display: flex;
@@ -82,7 +108,18 @@ const CheckWrapper = styled.div`
   align-items: center;
   border-radius: 50%;
   margin-right: 12px;
-  background: rgba(78, 188, 96, 0.1);
+
+  &.green {
+    background: ${({ theme }) => theme.greenBg};
+  }
+
+  &.blue {
+    background: ${({ theme }) => theme.blueBg};
+  }
+
+  &.red {
+    background: ${({ theme }) => theme.buttonNoBg};
+  }
 `;
 
 const CloseButton = styled.button`
