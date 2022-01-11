@@ -86,10 +86,7 @@ export const ProfileModal = () => {
 
   if (!contact) return null;
   return (
-    <Modal
-      name={ProfileModalName}
-      className={`${!requestCreation && "profile"}`}
-    >
+    <Modal name={ProfileModalName} className={`${!requestCreation && "wide"}`}>
       <Section>
         <Heading>{contact.trueName}’s Profile</Heading>
       </Section>

@@ -24,6 +24,7 @@ import { ClearSvgFull } from "../Icons/ClearIconFull";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
 
+import { AgreementModalName } from "./AgreementModal";
 import { Modal } from "./Modal";
 import {
   AddWrapper,
@@ -51,6 +52,7 @@ export function UserCreationModal() {
   const error = useNameError(customNameInput);
   const [nextStep, setNextStep] = useState(false);
   const { setModal } = useModal(UserCreationModalName);
+  const { setModal: setAgreementModal } = useModal(AgreementModalName);
 
   return (
     <Modal name={UserCreationModalName}>
@@ -158,6 +160,7 @@ export function UserCreationModal() {
           onClick={() => {
             if (nextStep) {
               setModal(false);
+              setAgreementModal(true);
             } else {
               const identity = walletIdentity || Identity.generate();
               setNickname(customNameInput);

@@ -83,7 +83,7 @@ const ModalBody = styled.div`
     border-radius: 0;
   }
 
-  &.profile {
+  &.wide {
     max-width: 640px;
   }
 `;

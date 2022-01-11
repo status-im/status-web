@@ -275,8 +275,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@dappconnect/react-chat@workspace:packages/react-chat"
   dependencies:
+    "@hcaptcha/react-hcaptcha": ^1.0.0
     "@types/chai": ^4.2.21
     "@types/emoji-mart": ^3.0.6
+    "@types/hcaptcha__react-hcaptcha": ^0.1.5
     "@types/mocha": ^9.0.0
     "@types/node": ^16.9.6
     "@types/qrcode.react": ^1.0.2
@@ -366,6 +368,16 @@ __metadata:
   version: 1.1.2
   resolution: "@gar/promisify@npm:1.1.2"
   checksum: d05081e0887a49c178b75ee3067bd6ee086f73c154d121b854fb2e044e8a89cb1cbb6de3a0dd93a519b80f0531fda68b099dd7256205f7fbb3490324342f2217
+  languageName: node
+  linkType: hard
+
+"@hcaptcha/react-hcaptcha@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@hcaptcha/react-hcaptcha@npm:1.0.0"
+  peerDependencies:
+    react: ">= 16.3.0"
+    react-dom: ">= 16.3.0"
+  checksum: 7c7c9062a5aa43f83b46d5d6028215830fe496b032652004d006460f579cf728f711d782fccede99751e0c2579d50cf0637d1908334b9f4ffcf9c92de55f7666
   languageName: node
   linkType: hard
 
@@ -830,6 +842,15 @@ __metadata:
     "@types/minimatch": "*"
     "@types/node": "*"
   checksum: 6911a956448f5eddea1e4371f814bf92072e8ceedba83de6ce2a6745938a6f0327376e1c0072fa0d7b3b73d84e255aafda53c1dff148225cfe542a8cc5d54b02
+  languageName: node
+  linkType: hard
+
+"@types/hcaptcha__react-hcaptcha@npm:^0.1.5":
+  version: 0.1.5
+  resolution: "@types/hcaptcha__react-hcaptcha@npm:0.1.5"
+  dependencies:
+    "@types/react": "*"
+  checksum: d36e546bdad097a1e9ae209e22d7ddef2fceb2e9c41ee93d10aa7f0ee03c5cf512b56581518517c20e231333cdc63374e6a8cde7da5398f0e5e747fd34e9157a
   languageName: node
   linkType: hard
 

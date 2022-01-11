@@ -22,8 +22,10 @@
     "proto:build": "buf generate"
   },
   "devDependencies": {
+    "@hcaptcha/react-hcaptcha": "^1.0.0",
     "@types/chai": "^4.2.21",
     "@types/emoji-mart": "^3.0.6",
+    "@types/hcaptcha__react-hcaptcha": "^0.1.5",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.9.6",
     "@types/qrcode.react": "^1.0.2",
