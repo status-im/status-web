@@ -285,13 +285,14 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
                   setShowEmoji(!showEmoji);
                 }
               }}
+              disabled={disabled}
             >
               <EmojiIcon isActive={showEmoji} />
             </ChatButton>
-            <ChatButton>
+            <ChatButton disabled={disabled}>
               <StickerIcon />
             </ChatButton>
-            <ChatButton>
+            <ChatButton disabled={disabled}>
               <GifIcon />
             </ChatButton>
           </InputButtons>
@@ -373,6 +374,7 @@ const Input = styled.div`
 
   &.disabled {
     color: ${({ theme }) => theme.secondary};
+    cursor: default;
   }
 
   &:focus {
@@ -396,6 +398,7 @@ const Input = styled.div`
 
     &:hover {
       background: ${({ theme }) => theme.mentionBgHover};
+      cursor: default;
     }
   }
 `;
@@ -422,6 +425,10 @@ const AddPictureInput = styled.input`
 const ChatButton = styled.button`
   width: 32px;
   height: 32px;
+
+  &:disabled {
+    cursor: default;
+  }
 `;
 
 const CloseButton = styled(ChatButton)`
