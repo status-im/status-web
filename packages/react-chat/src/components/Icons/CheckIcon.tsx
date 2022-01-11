@@ -37,7 +37,7 @@ const Icon = styled.svg`
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
 
-  &.accept {
+  &.green {
     fill: ${({ theme }) => theme.greenColor};
   }
 `;

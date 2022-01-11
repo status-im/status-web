@@ -38,8 +38,4 @@ export const ProfileIcon = () => {
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};
-
-  &:hover {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
-  }
 `;

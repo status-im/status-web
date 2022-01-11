@@ -1,14 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 
-export const CommunityIcon = () => {
+type CommunityIconProps = {
+  width: number;
+  height: number;
+  className?: string;
+};
+
+export const CommunityIcon = ({
+  width,
+  height,
+  className,
+}: CommunityIconProps) => {
   return (
     <Icon
-      width="17"
-      height="16"
+      width={width}
+      height={height}
       viewBox="0 0 17 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
         fillRule="evenodd"
@@ -21,4 +32,12 @@ export const CommunityIcon = () => {
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.secondary};
+
+  &.green {
+    fill: ${({ theme }) => theme.greenColor};
+  }
+
+  &.red {
+    fill: ${({ theme }) => theme.redColor};
+  }
 `;
