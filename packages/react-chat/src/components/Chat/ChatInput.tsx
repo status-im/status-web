@@ -261,7 +261,12 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
               onKeyUp={handleCursorChange}
               ref={inputRef}
               onClick={handleCursorChange}
-              dangerouslySetInnerHTML={{ __html: clearComponent }}
+              dangerouslySetInnerHTML={{
+                __html: disabled
+                  ? "You need to join this community to send messages"
+                  : clearComponent,
+              }}
+              className={`${disabled && "disabled"} `}
             />
             {query && (
               <SearchBlock
@@ -363,11 +368,12 @@ const Input = styled.div`
   color: ${({ theme }) => theme.primary};
   border-radius: 16px 16px 4px 16px;
   outline: none;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: normal;
 
   ${textMediumStyles};
+
+  &.disabled {
+    color: ${({ theme }) => theme.secondary};
+  }
 
   &:focus {
     outline: none;
@@ -423,6 +429,7 @@ const CloseButton = styled(ChatButton)`
   top: 0;
   right: 0;
 `;
+
 const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
