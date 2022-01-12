@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useActivities } from "../../contexts/activityProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ActivityCenter } from "../ActivityCenter";
@@ -36,7 +37,7 @@ export function ChatTopbarLoading() {
           <MoreIcon />
         </TopBtn>
         <ActivityWrapper>
-          <TopBtn>
+          <TopBtn disabled>
             <ActivityIcon />
           </TopBtn>
         </ActivityWrapper>
@@ -66,6 +67,8 @@ export function ChatTopbar({
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
   const [showActivityCenter, setShowActivityCenter] = useState(false);
+  const identity = useIdentity();
+  const disabled = useMemo(() => !identity, [identity]);
 
   if (!activeChannel) {
     return <ChatTopbarLoading />;
@@ -108,7 +111,10 @@ export function ChatTopbar({
           <MoreIcon />
         </TopBtn>
         <ActivityWrapper>
-          <TopBtn onClick={() => setShowActivityCenter(!showActivityCenter)}>
+          <TopBtn
+            onClick={() => setShowActivityCenter(!showActivityCenter)}
+            disabled={disabled}
+          >
             <ActivityIcon />
             {activities.length > 0 && (
               <NotificationBagde
@@ -228,6 +234,10 @@ export const TopBtn = styled.button`
 
   &:active {
     background: ${({ theme }) => theme.sectionBackgroundColor};
+  }
+
+  &:disabled {
+    cursor: default;
   }
 `;
 

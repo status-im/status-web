@@ -261,7 +261,12 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
               onKeyUp={handleCursorChange}
               ref={inputRef}
               onClick={handleCursorChange}
-              dangerouslySetInnerHTML={{ __html: clearComponent }}
+              dangerouslySetInnerHTML={{
+                __html: disabled
+                  ? "You need to join this community to send messages"
+                  : clearComponent,
+              }}
+              className={`${disabled && "disabled"} `}
             />
             {query && (
               <SearchBlock
@@ -280,13 +285,14 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
                   setShowEmoji(!showEmoji);
                 }
               }}
+              disabled={disabled}
             >
               <EmojiIcon isActive={showEmoji} />
             </ChatButton>
-            <ChatButton>
+            <ChatButton disabled={disabled}>
               <StickerIcon />
             </ChatButton>
-            <ChatButton>
+            <ChatButton disabled={disabled}>
               <GifIcon />
             </ChatButton>
           </InputButtons>
@@ -363,11 +369,13 @@ const Input = styled.div`
   color: ${({ theme }) => theme.primary};
   border-radius: 16px 16px 4px 16px;
   outline: none;
-  font-family: "Inter";
-  font-style: normal;
-  font-weight: normal;
 
   ${textMediumStyles};
+
+  &.disabled {
+    color: ${({ theme }) => theme.secondary};
+    cursor: default;
+  }
 
   &:focus {
     outline: none;
@@ -390,6 +398,7 @@ const Input = styled.div`
 
     &:hover {
       background: ${({ theme }) => theme.mentionBgHover};
+      cursor: default;
     }
   }
 `;
@@ -416,6 +425,10 @@ const AddPictureInput = styled.input`
 const ChatButton = styled.button`
   width: 32px;
   height: 32px;
+
+  &:disabled {
+    cursor: default;
+  }
 `;
 
 const CloseButton = styled(ChatButton)`
@@ -423,6 +436,7 @@ const CloseButton = styled(ChatButton)`
   top: 0;
   right: 0;
 `;
+
 const ReplyWrapper = styled.div`
   display: flex;
   flex-direction: column;
