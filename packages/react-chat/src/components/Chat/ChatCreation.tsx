@@ -7,6 +7,7 @@ import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
+import { ActivityButton } from "../ActivityCenter/ActivityButton";
 import { BackButton } from "../Buttons/BackButton";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { CrossIcon } from "../Icons/CrossIcon";
@@ -127,6 +128,7 @@ export function ChatCreation({
         >
           Confirm
         </CreationBtn>
+        <ActivityButton />
       </CreationBar>
       {!setEditGroup && !query && (
         <Contacts>
@@ -177,6 +179,7 @@ const InputBar = styled.div`
   border: 1px solid ${({ theme }) => theme.inputColor};
   border-radius: 8px;
   padding: 8px 16px;
+  margin-right: 16px;
 
   ${textMediumStyles}
 `;
@@ -203,7 +206,7 @@ const InputText = styled.div`
 
 const CreationBtn = styled.button`
   padding: 11px 24px;
-  margin-left: 16px;
+  margin-right: 16px;
   ${buttonStyles}
 
   &:disabled {
