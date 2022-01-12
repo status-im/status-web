@@ -9,7 +9,11 @@ import { ActivityIcon } from "../Icons/ActivityIcon";
 
 import { ActivityCenter } from "./ActivityCenter";
 
-export function ActivityButton() {
+interface ActivityButtonProps {
+  className?: string;
+}
+
+export function ActivityButton({ className }: ActivityButtonProps) {
   const { activities } = useActivities();
   const identity = useIdentity();
   const disabled = useMemo(() => !identity, [identity]);
@@ -19,7 +23,7 @@ export function ActivityButton() {
   const [showActivityCenter, setShowActivityCenter] = useState(false);
 
   return (
-    <ActivityWrapper ref={ref}>
+    <ActivityWrapper ref={ref} className={className}>
       <TopBtn
         onClick={() => setShowActivityCenter(!showActivityCenter)}
         disabled={disabled}
@@ -62,6 +66,16 @@ export const ActivityWrapper = styled.div`
     border-radius: 1px;
     background: ${({ theme }) => theme.primary};
     opacity: 0.1;
+  }
+
+  &.creation {
+    padding-left: 0px;
+    margin-left: 16px;
+
+    &:before {
+      width: 0px;
+      height: 0px;
+    }
   }
 `;
 

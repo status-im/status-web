@@ -128,7 +128,7 @@ export function ChatCreation({
         >
           Confirm
         </CreationBtn>
-        <ActivityButton />
+        {!narrow && <ActivityButton className="creation" />}
       </CreationBar>
       {!setEditGroup && !query && (
         <Contacts>
@@ -206,7 +206,6 @@ const InputText = styled.div`
 
 const CreationBtn = styled.button`
   padding: 11px 24px;
-  margin-right: 16px;
   ${buttonStyles}
 
   &:disabled {
