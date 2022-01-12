@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useModal } from "../../contexts/modalProvider";
+import { loadEncryptedIdentity } from "../../utils";
 import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
+import { ProfileFoundModalName } from "../Modals/ProfileFoundModal";
 import { StatusModalName } from "../Modals/StatusModal";
 import { UserCreationModalName } from "../Modals/UserCreationModal";
 import { WalletModalName } from "../Modals/WalletModal";
@@ -17,6 +19,9 @@ export function UserCreation({ permission }: UserCreationProps) {
   const { setModal } = useModal(UserCreationModalName);
   const { setModal: setStatusModal } = useModal(StatusModalName);
   const { setModal: setWalletModal } = useModal(WalletModalName);
+  const { setModal: setProfileFoundModal } = useModal(ProfileFoundModalName);
+
+  const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
 
   return (
     <Wrapper>
@@ -29,7 +34,11 @@ export function UserCreation({ permission }: UserCreationProps) {
         Connect Ethereum Wallet
       </LoginBtn>
       {permission && (
-        <ThrowAwayButton onClick={() => setModal(true)}>
+        <ThrowAwayButton
+          onClick={() =>
+            encryptedIdentity ? setProfileFoundModal(true) : setModal(true)
+          }
+        >
           Use a throwaway account
         </ThrowAwayButton>
       )}
