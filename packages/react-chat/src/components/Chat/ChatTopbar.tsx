@@ -110,27 +110,29 @@ export function ChatTopbar({
         <TopBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
           <MoreIcon />
         </TopBtn>
-        <ActivityWrapper>
-          <TopBtn
-            onClick={() => setShowActivityCenter(!showActivityCenter)}
-            disabled={disabled}
-          >
-            <ActivityIcon />
-            {activities.length > 0 && (
-              <NotificationBagde
-                className={
-                  activities.length > 99
-                    ? "countless"
-                    : activities.length > 9
-                    ? "wide"
-                    : undefined
-                }
-              >
-                {activities.length < 100 ? activities.length : "∞"}
-              </NotificationBagde>
-            )}
-          </TopBtn>
-        </ActivityWrapper>
+        {!narrow && (
+          <ActivityWrapper>
+            <TopBtn
+              onClick={() => setShowActivityCenter(!showActivityCenter)}
+              disabled={disabled}
+            >
+              <ActivityIcon />
+              {activities.length > 0 && (
+                <NotificationBagde
+                  className={
+                    activities.length > 99
+                      ? "countless"
+                      : activities.length > 9
+                      ? "wide"
+                      : undefined
+                  }
+                >
+                  {activities.length < 100 ? activities.length : "∞"}
+                </NotificationBagde>
+              )}
+            </TopBtn>
+          </ActivityWrapper>
+        )}
       </MenuWrapper>
       {!messenger && !communityData && <Loading />}
       {showChannelMenu && (
@@ -227,6 +229,7 @@ export const TopBtn = styled.button`
   height: 32px;
   border-radius: 8px;
   padding: 0;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
 
   &:hover {
     background: ${({ theme }) => theme.inputColor};
