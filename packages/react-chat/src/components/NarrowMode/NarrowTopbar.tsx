@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { LeftIconSvg } from "../Icons/LeftIcon";
+import { BackButton } from "../Buttons/BackButton";
 
 interface NarrowTopbarProps {
   list: string;
@@ -13,9 +13,8 @@ export function NarrowTopbar({ list, onBtnClick }: NarrowTopbarProps) {
   const { communityData } = useMessengerContext();
   return (
     <TopbarWrapper>
-      <BackBtn onClick={onBtnClick}>
-        <LeftIconSvg width={24} height={24} className="black" />
-      </BackBtn>
+      <BackButton onBtnClick={onBtnClick} />
+
       <HeadingWrapper>
         <Heading>{list}</Heading>
         <SubHeading>{communityData?.name}</SubHeading>
@@ -30,15 +29,6 @@ const TopbarWrapper = styled.div`
   background-color: ${({ theme }) => theme.bodyBackgroundColor};
   margin-bottom: 16px;
   position: relative;
-`;
-
-const BackBtn = styled.button`
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
 `;
 
 const HeadingWrapper = styled.div`
