@@ -5,11 +5,12 @@ import { LeftIconSvg } from "../Icons/LeftIcon";
 
 interface BackButtonProps {
   onBtnClick: () => void;
+  className?: string;
 }
 
-export function BackButton({ onBtnClick }: BackButtonProps) {
+export function BackButton({ onBtnClick, className }: BackButtonProps) {
   return (
-    <BackBtn onClick={onBtnClick}>
+    <BackBtn onClick={onBtnClick} className={className}>
       <LeftIconSvg width={24} height={24} className="black" />
     </BackBtn>
   );
@@ -22,4 +23,9 @@ const BackBtn = styled.button`
   width: 32px;
   height: 32px;
   padding: 0;
+
+  &.narrow {
+    position: static;
+    margin-right: 13px;
+  }
 `;

@@ -14,7 +14,6 @@ export function NarrowTopbar({ list, onBtnClick }: NarrowTopbarProps) {
   return (
     <TopbarWrapper>
       <BackButton onBtnClick={onBtnClick} />
-
       <HeadingWrapper>
         <Heading>{list}</Heading>
         <SubHeading>{communityData?.name}</SubHeading>
