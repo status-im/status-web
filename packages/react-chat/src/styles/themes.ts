@@ -22,13 +22,14 @@ export type Theme = {
   skeletonDark: string;
   redColor: string;
   greenColor: string;
+  greenBg: string;
   mentionColor: string;
   mentionHover: string;
   mentionBg: string;
   mentionBgHover: string;
   shadow: string;
   reactionBg: string;
-  reactionChosen: string;
+  blueBg: string;
 };
 
 export const lightTheme: Theme = {
@@ -56,6 +57,7 @@ export const lightTheme: Theme = {
   skeletonDark: "#E9EDF1",
   redColor: "#FF2D55",
   greenColor: "#4EBC60",
+  greenBg: "rgba(78, 188, 96, 0.1)",
   mentionColor: "#0DA4C9",
   mentionHover: "#BDE7F2",
   mentionBg: "#E5F8FD",
@@ -63,7 +65,7 @@ export const lightTheme: Theme = {
   shadow:
     "0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)",
   reactionBg: "#eceffc",
-  reactionChosen: "rgba(67, 96, 223, 0.1)",
+  blueBg: "rgba(67, 96, 223, 0.1)",
 };
 
 export const darkTheme: Theme = {
@@ -91,6 +93,7 @@ export const darkTheme: Theme = {
   skeletonDark: "#141414",
   redColor: "#FF5C7B",
   greenColor: "#60C370",
+  greenBg: "rgba(96, 195, 112, 0.2)",
   mentionColor: "#51D0F0",
   mentionHover: "#004E60",
   mentionBg: "#004050",
@@ -98,7 +101,7 @@ export const darkTheme: Theme = {
   shadow:
     "0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)",
   reactionBg: "#373737",
-  reactionChosen: "rgba(134, 158, 255, 0.3)",
+  blueBg: "rgba(134, 158, 255, 0.3)",
 };
 
 export default { lightTheme, darkTheme };

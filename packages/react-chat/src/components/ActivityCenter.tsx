@@ -150,7 +150,7 @@ function ActivityMessage({
               <FlexDiv>
                 <ContextHeading>{`Invited you to join a community `}</ContextHeading>
                 <Tag>
-                  <CommunityIcon />
+                  <CommunityIcon width={17} height={16} />
                   <CommunityLogo
                     style={{
                       backgroundImage: activity.invitation?.icon

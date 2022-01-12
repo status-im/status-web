@@ -65,7 +65,7 @@ const EmojiReaction = styled.button`
   }
 
   &.chosen {
-    background: ${({ theme }) => theme.reactionChosen};
+    background: ${({ theme }) => theme.blueBg};
     border: 1px solid ${({ theme }) => theme.tertiary};
     color: ${({ theme }) => theme.tertiary};
   }
