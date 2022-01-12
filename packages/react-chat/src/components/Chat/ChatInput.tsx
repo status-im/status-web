@@ -411,6 +411,14 @@ const AddPictureInputWrapper = styled.div`
   width: 32px;
   height: 32px;
   margin-right: 4px;
+
+  & > input[type="file"]::-webkit-file-upload-button {
+    cursor: pointer;
+  }
+
+  & > input:disabled::-webkit-file-upload-button {
+    cursor: default;
+  }
 `;
 
 const AddPictureInput = styled.input`
