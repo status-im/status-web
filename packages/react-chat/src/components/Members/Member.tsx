@@ -137,7 +137,11 @@ export const MemberIcon = styled(Icon)`
 `;
 
 const Column = styled.div`
+  width: calc(100% - 69px);
   display: flex;
   flex-direction: column;
   margin-left: 8px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 `;

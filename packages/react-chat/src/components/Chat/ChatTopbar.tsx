@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { useActivities } from "../../contexts/activityProvider";
-import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
-import { ActivityCenter } from "../ActivityCenter";
+import {
+  ActivityButton,
+  ActivityWrapper,
+} from "../ActivityCenter/ActivityButton";
 import { Channel } from "../Channels/Channel";
 import { Community } from "../Community";
 import { ChannelMenu } from "../Form/ChannelMenu";
@@ -63,12 +64,9 @@ export function ChatTopbar({
   setEditGroup,
 }: ChatTopbarProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
-  const { activities } = useActivities();
+
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
-  const [showActivityCenter, setShowActivityCenter] = useState(false);
-  const identity = useIdentity();
-  const disabled = useMemo(() => !identity, [identity]);
 
   if (!activeChannel) {
     return <ChatTopbarLoading />;
@@ -110,27 +108,7 @@ export function ChatTopbar({
         <TopBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
           <MoreIcon />
         </TopBtn>
-        <ActivityWrapper>
-          <TopBtn
-            onClick={() => setShowActivityCenter(!showActivityCenter)}
-            disabled={disabled}
-          >
-            <ActivityIcon />
-            {activities.length > 0 && (
-              <NotificationBagde
-                className={
-                  activities.length > 99
-                    ? "countless"
-                    : activities.length > 9
-                    ? "wide"
-                    : undefined
-                }
-              >
-                {activities.length < 100 ? activities.length : "∞"}
-              </NotificationBagde>
-            )}
-          </TopBtn>
-        </ActivityWrapper>
+        {!narrow && <ActivityButton />}
       </MenuWrapper>
       {!messenger && !communityData && <Loading />}
       {showChannelMenu && (
@@ -140,9 +118,6 @@ export function ChatTopbar({
           setShowChannelMenu={setShowChannelMenu}
           setEditGroup={setEditGroup}
         />
-      )}
-      {showActivityCenter && (
-        <ActivityCenter setShowActivityCenter={setShowActivityCenter} />
       )}
     </Topbar>
   );
@@ -203,30 +178,12 @@ const MenuWrapper = styled.div`
   align-items: center;
 `;
 
-const ActivityWrapper = styled.div`
-  padding-left: 10px;
-  margin-left: 10px;
-  position: relative;
-
-  &:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 2px;
-    height: 24px;
-    transform: translateY(-50%);
-    border-radius: 1px;
-    background: ${({ theme }) => theme.primary};
-    opacity: 0.1;
-  }
-`;
-
 export const TopBtn = styled.button`
   width: 32px;
   height: 32px;
   border-radius: 8px;
   padding: 0;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
 
   &:hover {
     background: ${({ theme }) => theme.inputColor};
@@ -238,33 +195,5 @@ export const TopBtn = styled.button`
 
   &:disabled {
     cursor: default;
-  }
-`;
-
-const NotificationBagde = styled.div`
-  width: 18px;
-  height: 18px;
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border-radius: 50%;
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  background-color: ${({ theme }) => theme.notificationColor};
-  color: ${({ theme }) => theme.bodyBackgroundColor};
-  border-radius: 9px;
-
-  &.wide {
-    width: 26px;
-    right: -7px;
-  }
-
-  &.countless {
-    width: 22px;
   }
 `;

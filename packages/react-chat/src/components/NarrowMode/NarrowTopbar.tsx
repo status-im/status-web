@@ -2,17 +2,22 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { BackButton } from "../Buttons/BackButton";
 
 interface NarrowTopbarProps {
   list: string;
+  onBtnClick: () => void;
 }
 
-export function NarrowTopbar({ list }: NarrowTopbarProps) {
+export function NarrowTopbar({ list, onBtnClick }: NarrowTopbarProps) {
   const { communityData } = useMessengerContext();
   return (
     <TopbarWrapper>
-      <Heading>{list}</Heading>
-      <SubHeading>{communityData?.name}</SubHeading>
+      <BackButton onBtnClick={onBtnClick} />
+      <HeadingWrapper>
+        <Heading>{list}</Heading>
+        <SubHeading>{communityData?.name}</SubHeading>
+      </HeadingWrapper>
     </TopbarWrapper>
   );
 }
@@ -20,10 +25,16 @@ export function NarrowTopbar({ list }: NarrowTopbarProps) {
 const TopbarWrapper = styled.div`
   display: flex;
   justify-content: center;
+  background-color: ${({ theme }) => theme.bodyBackgroundColor};
+  margin-bottom: 16px;
+  position: relative;
+`;
+
+const HeadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   flex-direction: column;
   text-align: center;
-  background-color: ${({ theme }) => theme.bodyBackgroundColor};
-  padding: 14px 0;
 `;
 
 const Heading = styled.p`
@@ -34,4 +45,10 @@ const Heading = styled.p`
 const SubHeading = styled.p`
   font-weight: 500;
   color: ${({ theme }) => theme.secondary};
+`;
+
+export const ListWrapper = styled.div`
+  padding: 16px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  overflow: auto;
 `;

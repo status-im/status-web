@@ -5,7 +5,10 @@ import styled from "styled-components";
 import { ChatState, useChatState } from "../../contexts/chatStateProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
+import { ActivityButton } from "../ActivityCenter/ActivityButton";
+import { BackButton } from "../Buttons/BackButton";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { CrossIcon } from "../Icons/CrossIcon";
 import { Member } from "../Members/Member";
@@ -20,6 +23,7 @@ export function ChatCreation({
   setEditGroup,
   activeChannel,
 }: ChatCreationProps) {
+  const narrow = useNarrow();
   const identity = useIdentity();
   const [query, setQuery] = useState("");
   const [styledGroup, setStyledGroup] = useState<string[]>(
@@ -76,6 +80,12 @@ export function ChatCreation({
   return (
     <CreationWrapper>
       <CreationBar>
+        {narrow && (
+          <BackButton
+            onBtnClick={() => setChatState(ChatState.ChatBody)}
+            className="narrow"
+          />
+        )}
         <InputBar>
           <InputText>To:</InputText>
           <StyledList>
@@ -118,6 +128,7 @@ export function ChatCreation({
         >
           Confirm
         </CreationBtn>
+        {!narrow && <ActivityButton className="creation" />}
       </CreationBar>
       {!setEditGroup && !query && (
         <Contacts>
@@ -155,6 +166,7 @@ const CreationWrapper = styled.div`
 
 const CreationBar = styled.div`
   display: flex;
+  align-items: center;
   margin-bottom: 32px;
 `;
 
@@ -167,6 +179,7 @@ const InputBar = styled.div`
   border: 1px solid ${({ theme }) => theme.inputColor};
   border-radius: 8px;
   padding: 8px 16px;
+  margin-right: 16px;
 
   ${textMediumStyles}
 `;
@@ -193,7 +206,6 @@ const InputText = styled.div`
 
 const CreationBtn = styled.button`
   padding: 11px 24px;
-  margin-left: 16px;
   ${buttonStyles}
 
   &:disabled {
