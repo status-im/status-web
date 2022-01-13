@@ -48,6 +48,7 @@ export function ChatCreation({
         }
       });
       setQuery("");
+      if (activeChannel) addMembers(styledGroup, activeChannel.id);
     },
     [setStyledGroup, styledGroup]
   );
