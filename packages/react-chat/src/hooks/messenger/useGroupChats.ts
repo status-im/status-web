@@ -40,6 +40,7 @@ export function useGroupChats(
           id: chat.chatId,
           name: chat.name ?? chat.chatId,
           type: "group",
+          description: `${chat.members.length} members`,
           members: members,
         };
         setChannels((prev) => {

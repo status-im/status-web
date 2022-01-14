@@ -48,6 +48,7 @@ export function ChatCreation({
         }
       });
       setQuery("");
+      if (activeChannel) addMembers(styledGroup, activeChannel.id);
     },
     [setStyledGroup, styledGroup]
   );
@@ -86,9 +87,9 @@ export function ChatCreation({
             className="narrow"
           />
         )}
-        <InputBar>
+        <InputBar className={`${narrow && "narrow"}`}>
           <InputText>To:</InputText>
-          <StyledList>
+          <StyledList className={`${narrow && "narrow"}`}>
             {styledGroup.map((member) => (
               <StyledMember key={member}>
                 <StyledName>{member.slice(0, 10)}</StyledName>
@@ -182,6 +183,10 @@ const InputBar = styled.div`
   margin-right: 16px;
 
   ${textMediumStyles}
+
+  &.narrow {
+    overflow-x: hidden;
+  }
 `;
 
 const Input = styled.input`
@@ -216,6 +221,14 @@ const CreationBtn = styled.button`
 
 const StyledList = styled.div`
   display: flex;
+
+  &.narrow {
+    overflow-x: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 
 const StyledMember = styled.div`
