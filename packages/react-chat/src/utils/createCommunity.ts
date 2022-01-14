@@ -1,5 +1,5 @@
-import { Community, Messenger } from "status-communities/dist/cjs";
-import { ApplicationMetadataMessage } from "status-communities/dist/cjs";
+import { Community, Messenger } from "@waku/status-communities/dist/cjs";
+import { ApplicationMetadataMessage } from "@waku/status-communities/dist/cjs";
 
 export async function createCommunity(
   communityKey: string,

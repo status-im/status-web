@@ -1,6 +1,6 @@
+import { utils } from "@waku/status-communities/dist/cjs";
 import { decode } from "html-entities";
 import React, { useEffect, useMemo, useState } from "react";
-import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";

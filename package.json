@@ -7,7 +7,7 @@
     "fix:prettier": "prettier \"./*.json\" --write",
     "build": "wsrun -e -c -s build",
     "test": "wsrun -e -c -s test",
-    "sc": "yarn workspace status-communities"
+    "sc": "yarn workspace @waku/status-communities"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",

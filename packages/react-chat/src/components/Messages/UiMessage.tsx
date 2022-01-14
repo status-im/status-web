@@ -1,6 +1,6 @@
+import { utils } from "@waku/status-communities/dist/cjs";
 import { BaseEmoji } from "emoji-mart";
 import React, { useEffect, useMemo, useState } from "react";
-import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useActivities } from "../../contexts/activityProvider";

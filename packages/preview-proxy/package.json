@@ -1,5 +1,5 @@
 {
-  "name": "@dappconnect/preview-proxy",
+  "name": "@waku/preview-proxy",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",

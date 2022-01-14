@@ -1,12 +1,12 @@
 // import { StoreCodec } from "js-waku";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ApplicationMetadataMessage,
   Community,
   Contacts as ContactsClass,
   Identity,
   Messenger,
-} from "status-communities/dist/cjs";
+} from "@waku/status-communities/dist/cjs";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useConfig } from "../../contexts/configProvider";
 import { ChannelData, ChannelsData } from "../../models/ChannelData";

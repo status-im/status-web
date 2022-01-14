@@ -1,4 +1,4 @@
-import { darkTheme, lightTheme, ReactChat } from "@dappconnect/react-chat";
+import { darkTheme, lightTheme, ReactChat } from "@waku/react-chat-sdk";
 import React, { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";

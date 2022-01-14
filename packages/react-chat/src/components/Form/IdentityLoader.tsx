@@ -1,5 +1,5 @@
+import { Identity } from "@waku/status-communities/dist/cjs";
 import React, { useCallback, useEffect, useState } from "react";
-import { Identity } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import { useSetIdentity } from "../../contexts/identityProvider";

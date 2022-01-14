@@ -1,6 +1,6 @@
+import { utils } from "@waku/status-communities/dist/cjs";
+import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useMemo } from "react";
-import { utils } from "status-communities/dist/cjs";
-import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
