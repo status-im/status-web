@@ -1,5 +1,5 @@
 {
-  "name": "status-communities",
+  "name": "@waku/status-communities",
   "main": "dist/cjs/src/index.js",
   "module": "dist/esm/src/index.js",
   "types": "dist/esm/src/index.d.ts",

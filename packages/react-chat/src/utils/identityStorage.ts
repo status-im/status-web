@@ -1,5 +1,5 @@
+import { Identity } from "@waku/status-communities/dist/cjs";
 import { bufToHex, hexToBuf } from "js-waku/build/main/lib/utils";
-import { Identity } from "status-communities/dist/cjs";
 
 export async function saveIdentity(identity: Identity, password: string) {
   const salt = window.crypto.getRandomValues(new Uint8Array(16));

@@ -1,5 +1,5 @@
+import { Identity } from "@waku/status-communities/dist/cjs";
 import React, { createContext, useContext, useState } from "react";
-import { Identity } from "status-communities/dist/cjs";
 
 const IdentityContext = createContext<{
   identity: Identity | undefined;

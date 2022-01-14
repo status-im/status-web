@@ -1,11 +1,11 @@
-import { useCallback, useMemo } from "react";
 import {
   GroupChat,
   GroupChats,
   Identity,
   Messenger,
   ChatMessage as StatusChatMessage,
-} from "status-communities/dist/cjs";
+} from "@waku/status-communities/dist/cjs";
+import { useCallback, useMemo } from "react";
 
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";

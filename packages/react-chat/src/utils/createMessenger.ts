@@ -1,5 +1,5 @@
+import { Identity, Messenger } from "@waku/status-communities/dist/cjs";
 import { getBootstrapNodes, StoreCodec } from "js-waku";
-import { Identity, Messenger } from "status-communities/dist/cjs";
 
 function createWakuOptions(env: string) {
   let bootstrap: any = true;

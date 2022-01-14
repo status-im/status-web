@@ -1,5 +1,8 @@
+import {
+  ApplicationMetadataMessage,
+  utils,
+} from "@waku/status-communities/dist/cjs";
 import { keccak256 } from "js-sha3";
-import { ApplicationMetadataMessage, utils } from "status-communities/dist/cjs";
 
 import { uintToImgUrl } from "../utils";
 

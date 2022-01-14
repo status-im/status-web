@@ -1,5 +1,5 @@
 {
-  "name": "@dappconnect/react-chat-example",
+  "name": "@waku/react-chat-sdk-example",
   "main": "index.js",
   "version": "0.1.0",
   "repository": "https://github.com/status-im/dappconnect-chat-sdk/",
@@ -18,7 +18,7 @@
     "test:prettier": "prettier './{src,test}/**/*.{ts,tsx}' \"./*.json\" --list-different"
   },
   "dependencies": {
-    "@dappconnect/react-chat": "^0.1.0",
+    "@waku/react-chat-sdk": "^0.1.0",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",

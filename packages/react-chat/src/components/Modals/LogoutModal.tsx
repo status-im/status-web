@@ -1,5 +1,5 @@
+import { utils } from "@waku/status-communities/dist/cjs";
 import React from "react";
-import { utils } from "status-communities/dist/cjs";
 import styled from "styled-components";
 
 import {

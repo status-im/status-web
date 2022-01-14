@@ -1,5 +1,5 @@
+import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useEffect, useMemo, useState } from "react";
-import { bufToHex } from "status-communities/dist/cjs/utils";
 import styled from "styled-components";
 
 import { useActivities } from "../../contexts/activityProvider";

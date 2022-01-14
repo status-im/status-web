@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
 import {
   Contacts as ContactsClass,
   Identity,
   Messenger,
-} from "status-communities/dist/cjs";
-import { bufToHex } from "status-communities/dist/cjs/utils";
+} from "@waku/status-communities/dist/cjs";
+import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
+import { useEffect, useMemo, useState } from "react";
 
 import { Contacts } from "../../models/Contact";
 

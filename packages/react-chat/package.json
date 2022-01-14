@@ -1,5 +1,5 @@
 {
-  "name": "@dappconnect/react-chat",
+  "name": "@waku/react-chat-sdk",
   "main": "dist/cjs/src/index.js",
   "module": "dist/esm/src/index.js",
   "types": "dist/esm/src/index.d.ts",
@@ -48,13 +48,13 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
+    "@waku/status-communities": "^0.1.0",
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
     "js-sha3": "^0.8.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
-    "status-communities": "^0.1.0",
     "styled-components": "^5.3.1"
   }
 }

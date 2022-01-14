@@ -1,10 +1,10 @@
-import { useCallback, useMemo, useState } from "react";
 import {
   ApplicationMetadataMessage,
   Contacts,
   Identity,
-} from "status-communities/dist/cjs";
-import { bufToHex } from "status-communities/dist/cjs/utils";
+} from "@waku/status-communities/dist/cjs";
+import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
+import { useCallback, useMemo, useState } from "react";
 
 import { ChatMessage } from "../../models/ChatMessage";
 import { binarySetInsert } from "../../utils";
