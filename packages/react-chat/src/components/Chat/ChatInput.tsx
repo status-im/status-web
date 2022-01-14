@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useNarrow } from "../../contexts/narrowProvider";
 import { Reply } from "../../hooks/useReply";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 import { ClearBtn } from "../Form/inputStyles";
@@ -22,6 +23,7 @@ import { ReplySvg } from "../Icons/ReplyIcon";
 import { StickerIcon } from "../Icons/StickerIcon";
 import "emoji-mart/css/emoji-mart.css";
 import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
+import { UserCreationStartModalName } from "../Modals/UserCreationStartModal";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles, textSmallStyles } from "../Text";
 
@@ -33,6 +35,7 @@ interface ChatInputProps {
 }
 
 export function ChatInput({ reply, setReply }: ChatInputProps) {
+  const narrow = useNarrow();
   const identity = useIdentity();
   const disabled = useMemo(() => !identity, [identity]);
   const { sendMessage, contacts } = useMessengerContext();
@@ -43,6 +46,9 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
   const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
 
   const { setModal } = useModal(SizeLimitModalName);
+  const { setModal: setCreationStartModal } = useModal(
+    UserCreationStartModalName
+  );
 
   const [query, setQuery] = useState("");
 
@@ -257,21 +263,27 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
                 </ClearImgBtn>
               </ImageWrapper>
             )}
-            <Input
-              aria-disabled={disabled}
-              contentEditable={!disabled}
-              onInput={onInputChange}
-              onKeyDown={onInputKeyPress}
-              onKeyUp={handleCursorChange}
-              ref={inputRef}
-              onClick={handleCursorChange}
-              dangerouslySetInnerHTML={{
-                __html: disabled
-                  ? "You need to join this community to send messages"
-                  : clearComponent,
-              }}
-              className={`${disabled && "disabled"} `}
-            />
+            {narrow && !identity ? (
+              <JoinBtn onClick={() => setCreationStartModal(true)}>
+                Click here to join discussion
+              </JoinBtn>
+            ) : (
+              <Input
+                aria-disabled={disabled}
+                contentEditable={!disabled}
+                onInput={onInputChange}
+                onKeyDown={onInputKeyPress}
+                onKeyUp={handleCursorChange}
+                ref={inputRef}
+                onClick={handleCursorChange}
+                dangerouslySetInnerHTML={{
+                  __html: disabled
+                    ? "You need to join this community to send messages"
+                    : clearComponent,
+                }}
+                className={`${disabled && "disabled"} `}
+              />
+            )}
             {query && (
               <SearchBlock
                 query={query}
@@ -488,4 +500,15 @@ export const ReplyOn = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   ${textSmallStyles};
+`;
+
+const JoinBtn = styled.button`
+  color: ${({ theme }) => theme.secondary};
+  background: ${({ theme }) => theme.inputColor};
+  border: none;
+  outline: none;
+  padding: 0 10px;
+  text-align: start;
+
+  ${textMediumStyles};
 `;
