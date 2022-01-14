@@ -28,4 +28,8 @@ export function ClearSvgFull({ height, width, className }: ClearSvgFullProps) {
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.secondary};
+
+  &:hover {
+    fill: ${({ theme }) => theme.primary};
+  }
 `;

@@ -13,7 +13,9 @@ import { useModal } from "../../contexts/modalProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { Reply } from "../../hooks/useReply";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
+import { ClearBtn } from "../Form/inputStyles";
 import { ClearSvg } from "../Icons/ClearIcon";
+import { ClearSvgFull } from "../Icons/ClearIconFull";
 import { EmojiIcon } from "../Icons/EmojiIcon";
 import { GifIcon } from "../Icons/GifIcon";
 import { PictureIcon } from "../Icons/PictureIcon";
@@ -254,10 +256,12 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
         <Row style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}>
           <InputWrapper>
             {image && (
-              <ImagePreview
-                src={image}
-                onClick={() => setImageUint(undefined)}
-              />
+              <ImageWrapper>
+                <ImagePreview src={image} />
+                <ClearImgBtn onClick={() => setImageUint(undefined)}>
+                  <ClearSvgFull width={20} height={20} />
+                </ClearImgBtn>
+              </ImageWrapper>
             )}
             {narrow && !identity ? (
               <JoinBtn onClick={() => setCreationStartModal(true)}>
@@ -359,12 +363,27 @@ const InputButtons = styled.div`
   }
 `;
 
+const ImageWrapper = styled.div`
+  width: 64px;
+  position: relative;
+`;
 const ImagePreview = styled.img`
   width: 64px;
   height: 64px;
   border-radius: 16px 16px 4px 16px;
   margin-left: 8px;
   margin-top: 9px;
+`;
+
+const ClearImgBtn = styled(ClearBtn)`
+  width: 24px;
+  height: 24px;
+  top: 4px;
+  right: -20px;
+  transform: none;
+  padding: 0;
+  border: 2px solid ${({ theme }) => theme.inputColor};
+  background-color: ${({ theme }) => theme.inputColor};
 `;
 
 const Input = styled.div`
