@@ -18,6 +18,7 @@ import { ProfileFoundModal } from "./Modals/ProfileFoundModal";
 import { ProfileModal } from "./Modals/ProfileModal";
 import { StatusModal } from "./Modals/StatusModal";
 import { UserCreationModal } from "./Modals/UserCreationModal";
+import { UserCreationStartModal } from "./Modals/UserCreationStartModal";
 import { WalletConnectModal } from "./Modals/WalletConnectModal";
 import { WalletModal } from "./Modals/WalletModal";
 import { ToastMessageList } from "./ToastMessages/ToastMessageList";
@@ -36,6 +37,7 @@ function Modals() {
       <LogoutModal />
       <AgreementModal />
       <ProfileFoundModal />
+      <UserCreationStartModal />
     </>
   );
 }

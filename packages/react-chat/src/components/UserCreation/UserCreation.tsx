@@ -1,49 +1,29 @@
-import React, { useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
 
-import { useModal } from "../../contexts/modalProvider";
-import { loadEncryptedIdentity } from "../../utils";
-import { buttonStyles, buttonTransparentStyles } from "../Buttons/buttonStyle";
+import { useNarrow } from "../../contexts/narrowProvider";
 import { ColorChatIcon } from "../Icons/ColorChatIcon";
-import { ProfileFoundModalName } from "../Modals/ProfileFoundModal";
-import { StatusModalName } from "../Modals/StatusModal";
-import { UserCreationModalName } from "../Modals/UserCreationModal";
-import { WalletModalName } from "../Modals/WalletModal";
-import { textSmallStyles } from "../Text";
+
+import { UserCreationButtons } from "./UserCreationButtons";
 
 interface UserCreationProps {
   permission: boolean;
 }
 
 export function UserCreation({ permission }: UserCreationProps) {
-  const { setModal } = useModal(UserCreationModalName);
-  const { setModal: setStatusModal } = useModal(StatusModalName);
-  const { setModal: setWalletModal } = useModal(WalletModalName);
-  const { setModal: setProfileFoundModal } = useModal(ProfileFoundModalName);
+  const narrow = useNarrow();
 
-  const encryptedIdentity = useMemo(() => loadEncryptedIdentity(), []);
-
-  return (
-    <Wrapper>
-      <ColorChatIcon />
-      <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
-      <LoginBtn onClick={() => setStatusModal(true)}>
-        Sync with Status profile
-      </LoginBtn>
-      <LoginBtn onClick={() => setWalletModal(true)}>
-        Connect Ethereum Wallet
-      </LoginBtn>
-      {permission && (
-        <ThrowAwayButton
-          onClick={() =>
-            encryptedIdentity ? setProfileFoundModal(true) : setModal(true)
-          }
-        >
-          Use a throwaway account
-        </ThrowAwayButton>
-      )}
-    </Wrapper>
-  );
+  if (!narrow) {
+    return (
+      <Wrapper>
+        <ColorChatIcon />
+        <TitleWrapper>Want to jump into the discussion?</TitleWrapper>
+        <UserCreationButtons permission={permission} />
+      </Wrapper>
+    );
+  } else {
+    return null;
+  }
 }
 
 const Wrapper = styled.div`
@@ -62,15 +42,4 @@ const TitleWrapper = styled.div`
   text-align: center;
   margin: 24px 0;
   color: ${({ theme }) => theme.primary};
-`;
-
-const LoginBtn = styled.button`
-  ${buttonStyles}
-  ${textSmallStyles}
-  padding: 10px 12px;
-  margin-bottom: 16px;
-`;
-
-const ThrowAwayButton = styled.button`
-  ${buttonTransparentStyles}
 `;
