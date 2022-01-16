@@ -78,6 +78,7 @@ function DragDiv() {
             config={{
               communityKey: process.env.COMMUNITY_KEY ?? "",
               environment: process.env.ENV ?? "",
+              dappUrl: "https://0.0.0.0:8080",
             }}
             fetchMetadata={fetchMetadata}
           />

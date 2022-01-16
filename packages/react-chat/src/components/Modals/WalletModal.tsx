@@ -3,6 +3,7 @@ import { genPrivateKeyWithEntropy } from "@waku/status-communities/dist/cjs/util
 import React, { useCallback } from "react";
 import styled from "styled-components";
 
+import { useConfig } from "../../contexts/configProvider";
 import {
   useSetIdentity,
   useSetWalletIdentity,
@@ -29,9 +30,14 @@ export function WalletModal() {
   const { setModal: setWalleConnectModal } = useModal(WalletConnectModalName);
   const { setModal: setCoinbaseModal } = useModal(CoinbaseModalName);
   const { messenger } = useMessengerContext();
+  const { dappUrl } = useConfig();
 
   const handleMetamaskClick = useCallback(async () => {
     const ethereum = (window as any)?.ethereum as any | undefined;
+    if (document.location.origin !== dappUrl) {
+      alert("You are not signing in from correct url!");
+      return;
+    }
     if (ethereum && messenger) {
       try {
         if (ethereum?.isMetaMask) {
@@ -47,7 +53,7 @@ export function WalletModal() {
             },
             message: {
               action: "Status Chat Key",
-              onlySignOn: "https://auth.status.im/",
+              onlySignOn: dappUrl,
               message:
                 "I'm aware that i am signing message that creates a private chat key for status communicator. And I have double checked everything is fine.",
             },
