@@ -21,6 +21,7 @@ export function MessageReactions({
       {messageReactions.map((reaction) => (
         <EmojiReaction
           className={`${isMyReactionIncluded(reaction) && "chosen"}`}
+          key={reaction.id}
         >
           <Emoji emoji={reaction} set={"twitter"} size={16} />
           <p>1</p>
