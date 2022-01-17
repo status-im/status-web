@@ -55,7 +55,7 @@ export function WalletModal() {
               action: "Status Chat Key",
               onlySignOn: dappUrl,
               message:
-                "I'm aware that i am signing message that creates a private chat key for status communicator. And I have double checked everything is fine.",
+                "This signature will be used to decrypt chat communications; check that the 'onlySignOn' property of this message matches the current website address.",
             },
             primaryType: "Mail",
             types: {
