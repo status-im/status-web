@@ -327,7 +327,7 @@ const InputWrapper = styled.div`
 
 const View = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   padding: 6px 8px 6px 10px;
   position: relative;
 `;
@@ -356,7 +356,7 @@ const Row = styled.div`
 
 const InputButtons = styled.div`
   display: flex;
-  align-items: center;
+  align-self: flex-end;
 
   button + button {
     margin-left: 4px;
