@@ -23,9 +23,6 @@ export function EmojiPicker({ showEmoji, addEmoji }: EmojiPickerProps) {
         color={theme.tertiary}
         emojiSize={26}
         style={{
-          position: "absolute",
-          bottom: "100%",
-          right: "0",
           color: theme.secondary,
           height: low ? "200px" : "355px",
           overflow: "auto",

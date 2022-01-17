@@ -11,6 +11,7 @@ import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { Reply } from "../../hooks/useReply";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 import { ClearBtn } from "../Form/inputStyles";
@@ -54,14 +55,8 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
 
   const inputRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (showEmoji) {
-      window.addEventListener("click", () => setShowEmoji(false));
-    }
-    return () => {
-      window.removeEventListener("click", () => setShowEmoji(false));
-    };
-  }, [showEmoji]);
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowEmoji(false));
 
   const image = useMemo(
     () => (imageUint ? uintToImgUrl(imageUint) : ""),
@@ -211,7 +206,10 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
   return (
     <View>
       <SizeLimitModal />
-      <EmojiPicker addEmoji={addEmoji} showEmoji={showEmoji} />
+      <EmojiWrapper ref={ref}>
+        <EmojiPicker addEmoji={addEmoji} showEmoji={showEmoji} />
+      </EmojiWrapper>
+
       <AddPictureInputWrapper>
         <PictureIcon />
         <AddPictureInput
@@ -295,11 +293,8 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
           </InputWrapper>
           <InputButtons>
             <ChatButton
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!disabled) {
-                  setShowEmoji(!showEmoji);
-                }
+              onClick={() => {
+                if (!disabled) setShowEmoji(!showEmoji);
               }}
               disabled={disabled}
             >
@@ -323,6 +318,12 @@ const InputWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   position: relative;
+`;
+
+const EmojiWrapper = styled.div`
+  position: absolute;
+  bottom: calc(100% - 6px);
+  right: 8px;
 `;
 
 const View = styled.div`
