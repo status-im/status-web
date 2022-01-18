@@ -139,7 +139,7 @@ const Topbar = styled.div`
 const ChannelWrapper = styled.div`
   display: flex;
   align-items: center;
-  max-width: 85%;
+  max-width: 80%;
 
   &.narrow {
     width: calc(100% - 46px);

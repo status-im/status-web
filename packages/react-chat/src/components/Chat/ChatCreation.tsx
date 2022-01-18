@@ -14,6 +14,9 @@ import { CrossIcon } from "../Icons/CrossIcon";
 import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
+
+import { ChatInput } from "./ChatInput";
+
 interface ChatCreationProps {
   setEditGroup?: (val: boolean) => void;
   activeChannel?: ChannelData;
@@ -153,6 +156,9 @@ export function ChatCreation({
           </ContactsList>
         </Contacts>
       )}
+      {!activeChannel && (
+        <ChatInput createChat={createChat} group={styledGroup} />
+      )}
     </CreationWrapper>
   );
 }
@@ -255,6 +261,8 @@ const CloseButton = styled.button`
 const Contacts = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
+  overflow: auto;
 `;
 
 const ContactsHeading = styled.p`

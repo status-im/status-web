@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import styled from "styled-components";
 
+import { ChatState, useChatState } from "../../contexts/chatStateProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
@@ -31,13 +32,21 @@ import { textMediumStyles, textSmallStyles } from "../Text";
 import { EmojiPicker } from "./EmojiPicker";
 
 interface ChatInputProps {
-  reply: Reply | undefined;
-  setReply: (val: Reply | undefined) => void;
+  reply?: Reply | undefined;
+  setReply?: (val: Reply | undefined) => void;
+  createChat?: (group: string[]) => void;
+  group?: string[];
 }
 
-export function ChatInput({ reply, setReply }: ChatInputProps) {
+export function ChatInput({
+  reply,
+  setReply,
+  createChat,
+  group,
+}: ChatInputProps) {
   const narrow = useNarrow();
   const identity = useIdentity();
+  const setChatState = useChatState()[1];
   const disabled = useMemo(() => !identity, [identity]);
   const { sendMessage, contacts } = useMessengerContext();
   const [content, setContent] = useState("");
@@ -119,7 +128,11 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
           inputRef.current.innerHTML = "";
         }
         setContent("");
-        setReply(undefined);
+        if (setReply) setReply(undefined);
+        if (createChat && group) {
+          createChat(group);
+          setChatState(ChatState.ChatBody);
+        }
       }
     },
     [content, imageUint]
@@ -245,7 +258,11 @@ export function ChatInput({ reply, setReply }: ChatInputProps) {
             </ReplyTo>
             <ReplyOn>{reply.content}</ReplyOn>
             {reply.image && <ImagePreview src={reply.image} />}
-            <CloseButton onClick={() => setReply(undefined)}>
+            <CloseButton
+              onClick={() => {
+                if (setReply) setReply(undefined);
+              }}
+            >
               {" "}
               <ClearSvg width={20} height={20} className="input" />
             </CloseButton>

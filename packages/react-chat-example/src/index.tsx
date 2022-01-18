@@ -125,6 +125,7 @@ const Bubble = styled.div`
 
 const Drag = styled.div`
   position: absolute;
+  min-width: 375px;
 `;
 
 ReactDOM.render(
