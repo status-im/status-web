@@ -21,7 +21,7 @@ const BackBtn = styled.button`
   left: 0;
   top: 8px;
   width: 32px;
-  height: 32px;
+  height: 44px;
   padding: 0;
 
   &.narrow {

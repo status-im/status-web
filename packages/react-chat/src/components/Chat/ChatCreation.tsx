@@ -15,6 +15,7 @@ import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 
+import { Wrapper } from "./ChatBody";
 import { ChatInput } from "./ChatInput";
 
 interface ChatCreationProps {
@@ -82,84 +83,91 @@ export function ChatCreation({
   );
 
   return (
-    <CreationWrapper>
-      <CreationBar>
-        {narrow && (
-          <BackButton
-            onBtnClick={() => setChatState(ChatState.ChatBody)}
-            className="narrow"
-          />
-        )}
-        <InputBar className={`${narrow && "narrow"}`}>
-          <InputText>To:</InputText>
-          <StyledList className={`${narrow && "narrow"}`}>
-            {styledGroup.map((member) => (
-              <StyledMember key={member}>
-                <StyledName>{member.slice(0, 10)}</StyledName>
-                <CloseButton onClick={() => removeMember(member)}>
-                  <CrossIcon memberView={true} />
-                </CloseButton>
-              </StyledMember>
-            ))}
-          </StyledList>
-          {styledGroup.length < 5 && (
-            <SearchMembers>
-              <Input
-                value={query}
-                onInput={(e) => setQuery(e.currentTarget.value)}
-              />
-              <SearchBlock
-                query={query}
-                discludeList={styledGroup}
-                onClick={addMember}
-              />
-            </SearchMembers>
+    <Wrapper>
+      <CreationWrapper>
+        <CreationBar className={`${styledGroup.length === 5 && "limit"}`}>
+          {narrow && (
+            <BackButton
+              onBtnClick={() => setChatState(ChatState.ChatBody)}
+              className="narrow"
+            />
           )}
-          {styledGroup.length === 5 && (
-            <LimitAlert>5 user Limit reached</LimitAlert>
-          )}
-        </InputBar>
-        <CreationBtn
-          disabled={styledGroup.length === 0}
-          onClick={() => {
-            if (!activeChannel) {
-              createChat(styledGroup);
-            } else {
-              addMembers(styledGroup, activeChannel.id);
-            }
-            setEditGroup?.(false);
-          }}
-        >
-          Confirm
-        </CreationBtn>
-        {!narrow && <ActivityButton className="creation" />}
-      </CreationBar>
-      {!setEditGroup && !query && (
-        <Contacts>
-          <ContactsHeading>Contacts</ContactsHeading>
-          <ContactsList>
-            {identity &&
-              Object.values(contacts)
-                .filter(
-                  (e) =>
-                    e.id != bufToHex(identity.publicKey) &&
-                    !styledGroup.includes(e.id)
-                )
-                .map((contact) => (
-                  <Member
-                    key={contact.id}
-                    contact={contact}
-                    isOnline={contact.online}
-                    onClick={() => addMember(contact.id)}
-                  />
+          <Column className={`${narrow && "narrow"}`}>
+            <InputBar>
+              <InputText>To:</InputText>
+              <StyledList>
+                {styledGroup.map((member) => (
+                  <StyledMember key={member}>
+                    <StyledName>{member.slice(0, 10)}</StyledName>
+                    <CloseButton onClick={() => removeMember(member)}>
+                      <CrossIcon memberView={true} />
+                    </CloseButton>
+                  </StyledMember>
                 ))}
-          </ContactsList>
-        </Contacts>
-      )}
-      {!activeChannel && (
-        <ChatInput createChat={createChat} group={styledGroup} />
-      )}
-    </CreationWrapper>
+              </StyledList>
+              {styledGroup.length < 5 && (
+                <SearchMembers>
+                  <Input
+                    value={query}
+                    onInput={(e) => setQuery(e.currentTarget.value)}
+                  />
+                  <SearchBlock
+                    query={query}
+                    discludeList={styledGroup}
+                    onClick={addMember}
+                  />
+                </SearchMembers>
+              )}
+              {!narrow && styledGroup.length === 5 && (
+                <LimitAlert>5 user Limit reached</LimitAlert>
+              )}
+            </InputBar>
+            {narrow && styledGroup.length === 5 && (
+              <LimitAlert className="narrow">5 user Limit reached</LimitAlert>
+            )}
+          </Column>
+          <CreationBtn
+            disabled={styledGroup.length === 0}
+            onClick={() => {
+              if (!activeChannel) {
+                createChat(styledGroup);
+              } else {
+                addMembers(styledGroup, activeChannel.id);
+              }
+              setEditGroup?.(false);
+            }}
+          >
+            Confirm
+          </CreationBtn>
+          {!narrow && <ActivityButton className="creation" />}
+        </CreationBar>
+        {!setEditGroup && !query && (
+          <Contacts>
+            <ContactsHeading>Contacts</ContactsHeading>
+            <ContactsList>
+              {identity &&
+                Object.values(contacts)
+                  .filter(
+                    (e) =>
+                      e.id != bufToHex(identity.publicKey) &&
+                      !styledGroup.includes(e.id)
+                  )
+                  .map((contact) => (
+                    <Member
+                      key={contact.id}
+                      contact={contact}
+                      isOnline={contact.online}
+                      onClick={() => addMember(contact.id)}
+                    />
+                  ))}
+            </ContactsList>
+          </Contacts>
+        )}
+        {!activeChannel && (
+          <ChatInput createChat={createChat} group={styledGroup} />
+        )}
+      </CreationWrapper>
+    </Wrapper>
   );
 }
 
@@ -167,6 +175,7 @@ const CreationWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   background-color: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 8px 16px;
 `;
@@ -175,24 +184,35 @@ const CreationBar = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
+
+  &.limit {
+    align-items: flex-start;
+  }
+`;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  margin-right: 16px;
+  overflow-x: hidden;
+
+  &.narrow {
+  }
 `;
 
 const InputBar = styled.div`
   display: flex;
   align-items: center;
-  flex: 1;
   width: 100%;
+  height: 44px;
   background-color: ${({ theme }) => theme.inputColor};
   border: 1px solid ${({ theme }) => theme.inputColor};
   border-radius: 8px;
-  padding: 8px 16px;
-  margin-right: 16px;
+  padding: 6px 16px;
 
   ${textMediumStyles}
-
-  &.narrow {
-    overflow-x: hidden;
-  }
 `;
 
 const Input = styled.input`
@@ -227,13 +247,11 @@ const CreationBtn = styled.button`
 
 const StyledList = styled.div`
   display: flex;
+  overflow-x: scroll;
+  margin-right: 8px;
 
-  &.narrow {
-    overflow-x: scroll;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
+  &::-webkit-scrollbar {
+    display: none;
   }
 `;
 
@@ -244,7 +262,10 @@ const StyledMember = styled.div`
   background: ${({ theme }) => theme.tertiary};
   color: ${({ theme }) => theme.bodyBackgroundColor};
   border-radius: 8px;
-  margin-right: 8px;
+
+  & + & {
+    margin-left: 8px;
+  }
 `;
 
 const StyledName = styled.p`
@@ -259,6 +280,7 @@ const CloseButton = styled.button`
 `;
 
 const Contacts = styled.div`
+  height: calc(100% - 44px);
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -285,4 +307,9 @@ const LimitAlert = styled.p`
   text-transform: uppercase;
   margin-left: auto;
   color: ${({ theme }) => theme.redColor};
+  white-space: nowrap;
+
+  &.narrow {
+    margin: 8px 0 0;
+  }
 `;
