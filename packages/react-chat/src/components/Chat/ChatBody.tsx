@@ -134,7 +134,7 @@ export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
   return <ChatBodyLoading />;
 }
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   width: 61%;
   display: flex;
   flex-direction: column;

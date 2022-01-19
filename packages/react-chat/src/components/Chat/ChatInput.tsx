@@ -217,7 +217,7 @@ export function ChatInput({
   );
 
   return (
-    <View>
+    <View className={`${createChat && "creation"}`}>
       <SizeLimitModal />
       <EmojiWrapper ref={ref}>
         <EmojiPicker addEmoji={addEmoji} showEmoji={showEmoji} />
@@ -348,6 +348,10 @@ const View = styled.div`
   align-items: flex-end;
   padding: 6px 8px 6px 10px;
   position: relative;
+
+  &.creation {
+    padding: 0;
+  }
 `;
 
 const InputArea = styled.div`
