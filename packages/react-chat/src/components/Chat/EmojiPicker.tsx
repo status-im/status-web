@@ -8,9 +8,10 @@ import { lightTheme, Theme } from "../../styles/themes";
 type EmojiPickerProps = {
   showEmoji: boolean;
   addEmoji: (e: any) => void;
+  bottom: number;
 };
 
-export function EmojiPicker({ showEmoji, addEmoji }: EmojiPickerProps) {
+export function EmojiPicker({ showEmoji, addEmoji, bottom }: EmojiPickerProps) {
   const theme = useTheme() as Theme;
   const low = useLow();
 
@@ -23,6 +24,9 @@ export function EmojiPicker({ showEmoji, addEmoji }: EmojiPickerProps) {
         color={theme.tertiary}
         emojiSize={26}
         style={{
+          position: "absolute",
+          bottom: `calc(100% + ${bottom}px)`,
+          right: "-76px",
           color: theme.secondary,
           height: low ? "200px" : "355px",
           overflow: "auto",
