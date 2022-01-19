@@ -15,7 +15,7 @@ export function NarrowMembers({ switchShowMembersList }: NarrowMembersProps) {
         list="Community members"
         onBtnClick={switchShowMembersList}
       />
-      <MembersList switchShowMembers={switchShowMembersList} />
+      <MembersList />
     </ListWrapper>
   );
 }
