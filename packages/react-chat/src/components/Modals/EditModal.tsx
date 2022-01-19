@@ -35,10 +35,14 @@ export const EditModal = () => {
 
   const handleUpload = () => {
     if (activeChannel) {
-      activeChannel.icon = image; // Need function to send image to waku
-      changeGroupChatName(groupName, activeChannel.id);
-      setImage("");
-      setGroupName("");
+      if (image) {
+        activeChannel.icon = image; // Need function to send image to waku
+        setImage("");
+      }
+      if (groupName) {
+        changeGroupChatName(groupName, activeChannel.id);
+        setGroupName("");
+      }
       setModal(false);
     }
   };
