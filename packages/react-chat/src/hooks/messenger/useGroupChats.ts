@@ -38,7 +38,7 @@ export function useGroupChats(
           .map(contactFromId);
         const channel: ChannelData = {
           id: chat.chatId,
-          name: chat.name ?? chat.chatId,
+          name: chat.name ?? chat.chatId.slice(0, 10),
           type: "group",
           description: `${chat.members.length} members`,
           members: members,
