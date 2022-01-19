@@ -22,6 +22,8 @@ export const EditModalName = "editModal";
 
 export const EditModal = () => {
   const { activeChannel, changeGroupChatName } = useMessengerContext();
+  const { setModal } = useModal(EditModalName);
+
   const [groupName, setGroupName] = useState("");
   const [image, setImage] = useState("");
 
@@ -31,12 +33,12 @@ export const EditModal = () => {
     }
   };
 
-  const { setModal } = useModal(EditModalName);
-
   const handleUpload = () => {
     if (activeChannel) {
-      activeChannel.icon = image;
+      activeChannel.icon = image; // Need function to send image to waku
       changeGroupChatName(groupName, activeChannel.id);
+      setImage("");
+      setGroupName("");
       setModal(false);
     }
   };
@@ -64,10 +66,11 @@ export const EditModal = () => {
         </NameSection>
         <LogoSection>
           <Label>Group image</Label>
-          <GroupLogo icon={image || activeChannel?.icon}>
+          <GroupLogo icon={activeChannel?.icon}>
             {!activeChannel?.icon &&
               !image &&
               activeChannel?.name?.slice(0, 1)?.toUpperCase()}
+            {image && <LogoPreview src={image} />}
             <AddPictureInputWrapper>
               <AddIcon />
               <AddPictureInput
@@ -126,6 +129,12 @@ const GroupLogo = styled(ChannelLogo)`
   position: relative;
   align-self: center;
   margin-right: 0;
+`;
+
+const LogoPreview = styled.img`
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
 `;
 
 const AddPictureInputWrapper = styled(AddWrapper)`
