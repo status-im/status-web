@@ -33,10 +33,6 @@ export const CheckIcon = () => {
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};
 
-  &:hover {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
-  }
-
   &.green {
     fill: ${({ theme }) => theme.greenColor};
   }

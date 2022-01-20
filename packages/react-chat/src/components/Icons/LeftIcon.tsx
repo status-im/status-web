@@ -27,4 +27,8 @@ const Icon = styled.svg`
   &.black {
     fill: ${({ theme }) => theme.primary};
   }
+
+  &.red {
+    fill: ${({ theme }) => theme.redColor};
+  }
 `;

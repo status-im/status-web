@@ -7,6 +7,7 @@ import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { AddMemberIconSvg } from "../Icons/AddMemberIcon";
 import { CheckSvg } from "../Icons/CheckIcon";
+import { DeleteIcon } from "../Icons/DeleteIcon";
 import { EditSvg } from "../Icons/EditIcon";
 import { LeftIconSvg } from "../Icons/LeftIcon";
 import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
@@ -87,8 +88,15 @@ export const ChannelMenu = ({
               setShowChannelMenu(false);
             }}
           >
-            <LeftIconSvg width={16} height={16} />
-            <MenuText>Leave Group</MenuText>
+            {channel.type === "group" && (
+              <LeftIconSvg width={16} height={16} className="red" />
+            )}
+            {channel.type === "dm" && (
+              <DeleteIcon width={16} height={16} className="red" />
+            )}
+            <MenuText className="red">
+              {channel.type === "group" ? "Leave Group" : "Delete Chat"}
+            </MenuText>
           </MenuItem>
         </MenuSection>
       )}
