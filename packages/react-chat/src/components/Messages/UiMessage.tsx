@@ -113,7 +113,7 @@ export function UiMessage({
         <UserMessageWrapper>
           <Icon
             onClick={() => {
-              setShowMenu((e) => !e);
+              if (identity) setShowMenu((e) => !e);
             }}
           >
             {showMenu && (

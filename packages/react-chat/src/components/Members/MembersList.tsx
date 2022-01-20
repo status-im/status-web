@@ -12,11 +12,7 @@ import { LogoutModalName } from "../Modals/LogoutModal";
 
 import { Member } from "./Member";
 
-interface MembersListProps {
-  switchShowMembers?: () => void;
-}
-
-export function MembersList({ switchShowMembers }: MembersListProps) {
+export function MembersList() {
   const { contacts, nickname } = useMessengerContext();
   const identity = useIdentity();
   const { setModal } = useModal(LogoutModalName);
@@ -68,7 +64,6 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
               key={contact.id}
               contact={contact}
               isOnline={contact.online}
-              switchShowMembers={switchShowMembers}
             />
           ))}
         </MemberCategory>
@@ -81,7 +76,6 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
               key={contact.id}
               contact={contact}
               isOnline={contact.online}
-              switchShowMembers={switchShowMembers}
             />
           ))}
         </MemberCategory>
@@ -93,7 +87,6 @@ export function MembersList({ switchShowMembers }: MembersListProps) {
 const MembersListWrap = styled.div`
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
 
   &::-webkit-scrollbar {
     width: 0;

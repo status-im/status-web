@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useIdentity } from "../../contexts/identityProvider";
 import { Contact } from "../../models/Contact";
 import { ContactMenu } from "../Form/ContactMenu";
 import { Icon } from "../Icons/Icon";
@@ -13,39 +13,16 @@ interface MemberProps {
   contact: Contact;
   isOnline?: boolean;
   isYou?: boolean;
-  switchShowMembers?: () => void;
   onClick?: () => void;
 }
 
-export function Member({
-  contact,
-  isOnline,
-  isYou,
-  switchShowMembers,
-  onClick,
-}: MemberProps) {
-  const { setChannel } = useMessengerContext();
+export function Member({ contact, isOnline, isYou, onClick }: MemberProps) {
+  const identity = useIdentity();
 
   const [showMenu, setShowMenu] = useState(false);
 
-  const onMemberClick = () => {
-    if (!isYou) {
-      switchShowMembers?.();
-      setChannel({
-        id: contact.id,
-        name: contact?.customName ?? contact.trueName,
-        type: "dm",
-        description: `Chatkey: ${contact.id} `,
-        members: [contact],
-      });
-    }
-  };
-
   return (
-    <MemberData
-      onClick={onClick ? onClick : onMemberClick}
-      className={`${isYou && "you"}`}
-    >
+    <MemberData onClick={onClick} className={`${isYou && "you"}`}>
       <MemberIcon
         style={{
           backgroundImage: "unset",
@@ -53,7 +30,9 @@ export function Member({
         className={
           !isYou && isOnline ? "online" : !isYou && !isOnline ? "offline" : ""
         }
-        onClick={() => setShowMenu((e) => !e)}
+        onClick={() => {
+          if (identity) setShowMenu((e) => !e);
+        }}
       >
         {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
         <UserLogo

@@ -89,6 +89,8 @@ export function ChatInput({
     setInputHeight(target.scrollHeight);
   }, []);
 
+  const rowHeight = inputHeight + (image ? 73 : 0);
+
   const onInputChange = useCallback((e: React.ChangeEvent<HTMLDivElement>) => {
     const element = document.getSelection();
     const inputElement = inputRef.current;
@@ -219,10 +221,6 @@ export function ChatInput({
   return (
     <View className={`${createChat && "creation"}`}>
       <SizeLimitModal />
-      <EmojiWrapper ref={ref}>
-        <EmojiPicker addEmoji={addEmoji} showEmoji={showEmoji} />
-      </EmojiWrapper>
-
       <AddPictureInputWrapper>
         <PictureIcon />
         <AddPictureInput
@@ -268,7 +266,7 @@ export function ChatInput({
             </CloseButton>
           </ReplyWrapper>
         )}
-        <Row style={{ height: `${inputHeight + (image ? 73 : 0)}px` }}>
+        <Row style={{ height: `${rowHeight}px` }}>
           <InputWrapper>
             {image && (
               <ImageWrapper>
@@ -309,14 +307,21 @@ export function ChatInput({
             )}
           </InputWrapper>
           <InputButtons>
-            <ChatButton
-              onClick={() => {
-                if (!disabled) setShowEmoji(!showEmoji);
-              }}
-              disabled={disabled}
-            >
-              <EmojiIcon isActive={showEmoji} />
-            </ChatButton>
+            <EmojiWrapper ref={ref}>
+              <ChatButton
+                onClick={() => {
+                  if (!disabled) setShowEmoji(!showEmoji);
+                }}
+                disabled={disabled}
+              >
+                <EmojiIcon isActive={showEmoji} />
+              </ChatButton>
+              <EmojiPicker
+                addEmoji={addEmoji}
+                showEmoji={showEmoji}
+                bottom={rowHeight - 24}
+              />
+            </EmojiWrapper>
             <ChatButton disabled={disabled}>
               <StickerIcon />
             </ChatButton>
@@ -338,9 +343,7 @@ const InputWrapper = styled.div`
 `;
 
 const EmojiWrapper = styled.div`
-  position: absolute;
-  bottom: calc(100% - 6px);
-  right: 8px;
+  position: relative;
 `;
 
 const View = styled.div`

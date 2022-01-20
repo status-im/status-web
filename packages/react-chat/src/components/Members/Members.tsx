@@ -20,6 +20,7 @@ const MembersWrapper = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
   padding: 16px;
+  overflow-y: scroll;
 `;
 
 const MemberHeading = styled.h2`
