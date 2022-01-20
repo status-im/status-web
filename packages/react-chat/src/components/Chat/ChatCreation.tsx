@@ -68,14 +68,7 @@ export function ChatCreation({
       if (identity) {
         const newGroup = group.slice();
         newGroup.push(bufToHex(identity.publicKey));
-        group.length > 1
-          ? createGroupChat(newGroup)
-          : setChannel({
-              id: newGroup[0],
-              name: newGroup[0],
-              type: "dm",
-              description: `Chatkey: ${newGroup[0]} `,
-            });
+        createGroupChat(newGroup);
         setChatState(ChatState.ChatBody);
       }
     },

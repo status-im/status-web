@@ -13,6 +13,7 @@ import { AgreementModal } from "./Modals/AgreementModal";
 import { CoinbaseModal } from "./Modals/CoinbaseModal";
 import { CommunityModal } from "./Modals/CommunityModal";
 import { EditModal } from "./Modals/EditModal";
+import { LeavingModal } from "./Modals/LeavingModal";
 import { LogoutModal } from "./Modals/LogoutModal";
 import { ProfileFoundModal } from "./Modals/ProfileFoundModal";
 import { ProfileModal } from "./Modals/ProfileModal";
@@ -38,6 +39,7 @@ function Modals() {
       <AgreementModal />
       <ProfileFoundModal />
       <UserCreationStartModal />
+      <LeavingModal />
     </>
   );
 }

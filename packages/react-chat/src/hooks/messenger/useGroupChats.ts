@@ -36,13 +36,21 @@ export function useGroupChats(
         const members = chat.members
           .map((member) => member.id)
           .map(contactFromId);
-        const channel: ChannelData = {
-          id: chat.chatId,
-          name: chat.name ?? chat.chatId.slice(0, 10),
-          type: "group",
-          description: `${chat.members.length} members`,
-          members: members,
-        };
+        const channel: ChannelData =
+          chat.members.length > 2
+            ? {
+                id: chat.chatId,
+                name: chat.name ?? chat.chatId.slice(0, 10),
+                type: "group",
+                description: `${chat.members.length} members`,
+                members: members,
+              }
+            : {
+                id: chat.chatId,
+                name: chat.members[0].id,
+                type: "dm",
+                description: `Chatkey: ${chat.members[0].id}`,
+              };
         setChannels((prev) => {
           return { ...prev, [channel.id]: channel };
         });
