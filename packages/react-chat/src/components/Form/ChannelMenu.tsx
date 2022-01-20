@@ -13,6 +13,7 @@ import { LeftIconSvg } from "../Icons/LeftIcon";
 import { MembersSmallSvg } from "../Icons/MembersSmallIcon";
 import { MuteSvg } from "../Icons/MuteIcon";
 import { EditModalName } from "../Modals/EditModal";
+import { LeavingModalName } from "../Modals/LeavingModal";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
@@ -30,8 +31,9 @@ export const ChannelMenu = ({
   setEditGroup,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
-  const { clearNotifications, removeChannel } = useMessengerContext();
+  const { clearNotifications } = useMessengerContext();
   const { setModal } = useModal(EditModalName);
+  const { setModal: setLeavingModal } = useModal(LeavingModalName);
 
   return (
     <DropdownMenu closeMenu={setShowChannelMenu}>
@@ -84,7 +86,7 @@ export const ChannelMenu = ({
           {" "}
           <MenuItem
             onClick={() => {
-              removeChannel(channel.id);
+              setLeavingModal(true);
               setShowChannelMenu(false);
             }}
           >
