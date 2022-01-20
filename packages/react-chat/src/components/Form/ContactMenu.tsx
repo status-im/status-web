@@ -8,8 +8,8 @@ import { useManageContact } from "../../hooks/useManageContact";
 import { AddContactSvg } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
 import { ChatSvg } from "../Icons/ChatIcon";
-import { EditSvg } from "../Icons/EditIcon";
-import { ProfileSvg } from "../Icons/ProfileIcon";
+import { EditIcon } from "../Icons/EditIcon";
+import { ProfileIcon } from "../Icons/ProfileIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { WarningSvg } from "../Icons/WarningIcon";
@@ -59,7 +59,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
             setModal({ id, renamingState: false, requestState: false });
           }}
         >
-          <ProfileSvg width={16} height={16} />
+          <ProfileIcon width={16} height={16} />
           <MenuText>View Profile</MenuText>
         </MenuItem>
         {!contact.isFriend && (
@@ -83,7 +83,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
             setModal({ id, renamingState: true });
           }}
         >
-          <EditSvg width={16} height={16} />
+          <EditIcon width={16} height={16} />
           <MenuText>Rename</MenuText>
         </MenuItem>
       </MenuSection>

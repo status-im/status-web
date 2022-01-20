@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { LeftIconSvg } from "../Icons/LeftIcon";
+import { LeftIcon } from "../Icons/LeftIcon";
 
 interface BackButtonProps {
   onBtnClick: () => void;
@@ -11,7 +11,7 @@ interface BackButtonProps {
 export function BackButton({ onBtnClick, className }: BackButtonProps) {
   return (
     <BackBtn onClick={onBtnClick} className={className}>
-      <LeftIconSvg width={24} height={24} className="black" />
+      <LeftIcon width={24} height={24} className="black" />
     </BackBtn>
   );
 }

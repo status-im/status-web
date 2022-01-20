@@ -10,7 +10,7 @@ import { Mention } from "../Chat/ChatMessageContent";
 import { Logo } from "../CommunityIdentity";
 import { ContactMenu } from "../Form/ContactMenu";
 import { Tooltip } from "../Form/Tooltip";
-import { CheckSvg } from "../Icons/CheckIcon";
+import { CheckIcon } from "../Icons/CheckIcon";
 import { ClearSvg } from "../Icons/ClearIcon";
 import { CommunityIcon } from "../Icons/CommunityIcon";
 import { GroupIcon } from "../Icons/GroupIcon";
@@ -203,7 +203,7 @@ export function ActivityMessage({
                 }}
                 className="accept"
               >
-                <CheckSvg width={20} height={20} className="accept" />
+                <CheckIcon width={20} height={20} className="accept" />
               </ActivityBtn>
               <ActivityBtn
                 onClick={() => {

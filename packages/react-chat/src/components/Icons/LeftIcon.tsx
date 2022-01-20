@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-type LeftIconSvgProps = {
+type LeftIconProps = {
   width: number;
   height: number;
   className?: string;
 };
 
-export function LeftIconSvg({ width, height, className }: LeftIconSvgProps) {
+export function LeftIcon({ width, height, className }: LeftIconProps) {
   return (
     <Icon
       width={width}
