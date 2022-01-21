@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -42,9 +42,14 @@ export const ChannelMenu = ({
   const { setModal: setLeavingModal } = useModal(LeavingModalName);
   const { setModal: setProfileModal } = useModal(ProfileModalName);
 
-  const { showMenu, setShowMenu: setShowSideMenu } = useContextMenu(channel.id);
+  const { showMenu, setShowMenu: setShowSideMenu } = useContextMenu(
+    channel.id + "contextMenu"
+  );
 
-  const setShowMenu = setShowChannelMenu ? setShowChannelMenu : setShowSideMenu;
+  const setShowMenu = useMemo(
+    () => (setShowChannelMenu ? setShowChannelMenu : setShowSideMenu),
+    [setShowChannelMenu, setShowSideMenu]
+  );
 
   if (showMenu || setShowChannelMenu) {
     return (

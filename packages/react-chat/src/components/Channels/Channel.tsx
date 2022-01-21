@@ -60,7 +60,7 @@ export function Channel({
       className={`${isActive && "active"}`}
       isNarrow={narrow && activeView}
       onClick={onClick}
-      id={`${!activeView && channel.id}`}
+      id={!activeView ? `${channel.id + "contextMenu"}` : ""}
     >
       <ChannelInfo>
         <ChannelIcon channel={channel} activeView={activeView} />
