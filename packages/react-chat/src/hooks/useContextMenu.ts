@@ -12,17 +12,10 @@ export const useContextMenu = (elementId: string) => {
     [setShowMenu]
   );
 
-  const handleClick = useCallback(
-    () => (showMenu ? setShowMenu(false) : null),
-    [showMenu]
-  );
-
   useEffect(() => {
-    element.addEventListener("click", handleClick);
     element.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("click", () => setShowMenu(false));
     return () => {
-      element.removeEventListener("click", handleClick);
       element.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("click", () => setShowMenu(false));
     };

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
+import { useContextMenu } from "../../hooks/useContextMenu";
 import { ChannelData } from "../../models/ChannelData";
 import { AddMemberIcon } from "../Icons/AddMemberIcon";
 import { CheckIcon } from "../Icons/CheckIcon";
@@ -22,16 +23,18 @@ import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
 interface ChannelMenuProps {
   channel: ChannelData;
-  switchMemberList: () => void;
-  setShowChannelMenu: (val: boolean) => void;
-  setEditGroup: (val: boolean) => void;
+  setShowChannelMenu?: (val: boolean) => void;
+  switchMemberList?: () => void;
+  setEditGroup?: (val: boolean) => void;
+  className?: string;
 }
 
 export const ChannelMenu = ({
   channel,
-  switchMemberList,
   setShowChannelMenu,
+  switchMemberList,
   setEditGroup,
+  className,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
   const { clearNotifications } = useMessengerContext();
@@ -39,93 +42,101 @@ export const ChannelMenu = ({
   const { setModal: setLeavingModal } = useModal(LeavingModalName);
   const { setModal: setProfileModal } = useModal(ProfileModalName);
 
-  return (
-    <DropdownMenu closeMenu={setShowChannelMenu}>
-      {narrow && (
-        <MenuItem
-          onClick={() => {
-            switchMemberList();
-            setShowChannelMenu(false);
-          }}
-        >
-          <MembersSmallIcon width={16} height={16} />
-          <MenuText>View Members</MenuText>
-        </MenuItem>
-      )}
-      {channel.type === "group" && (
-        <>
+  const { showMenu, setShowMenu: setShowSideMenu } = useContextMenu(channel.id);
+
+  const setShowMenu = setShowChannelMenu ? setShowChannelMenu : setShowSideMenu;
+
+  if (showMenu || setShowChannelMenu) {
+    return (
+      <DropdownMenu closeMenu={setShowMenu} className={className}>
+        {narrow && !className && (
           <MenuItem
             onClick={() => {
-              setEditGroup(true);
-              setShowChannelMenu(false);
+              if (switchMemberList) switchMemberList();
+              setShowMenu(false);
             }}
           >
-            <AddMemberIcon width={16} height={16} />
-            <MenuText>Add / remove from group</MenuText>
+            <MembersSmallIcon width={16} height={16} />
+            <MenuText>View Members</MenuText>
           </MenuItem>
-          <MenuItem onClick={() => setModal(true)}>
-            <EditIcon width={16} height={16} />
-            <MenuText>Edit name and image</MenuText>
+        )}
+        {channel.type === "group" && (
+          <>
+            <MenuItem
+              onClick={() => {
+                if (setEditGroup) setEditGroup(true);
+                setShowMenu(false);
+              }}
+            >
+              <AddMemberIcon width={16} height={16} />
+              <MenuText>Add / remove from group</MenuText>
+            </MenuItem>
+            <MenuItem onClick={() => setModal(true)}>
+              <EditIcon width={16} height={16} />
+              <MenuText>Edit name and image</MenuText>
+            </MenuItem>
+          </>
+        )}
+        {channel.type === "dm" && (
+          <MenuItem
+            onClick={() => {
+              setProfileModal({
+                id: channel.name,
+                renamingState: false,
+                requestState: false,
+              });
+              setShowMenu(false);
+            }}
+          >
+            <ProfileIcon width={16} height={16} />
+            <MenuText>View Profile</MenuText>
           </MenuItem>
-        </>
-      )}
-      {channel.type === "dm" && (
-        <MenuItem
-          onClick={() => {
-            setProfileModal({
-              id: channel.name,
-              renamingState: false,
-              requestState: false,
-            });
-            setShowChannelMenu(false);
-          }}
-        >
-          <ProfileIcon width={16} height={16} />
-          <MenuText>View Profile</MenuText>
-        </MenuItem>
-      )}
-      <MenuSection className={`${channel.type === "channel" && "channel"}`}>
-        <MenuItem
-          onClick={() => {
-            channel.isMuted = !channel.isMuted;
-            setShowChannelMenu(false);
-          }}
-        >
-          <MuteIcon width={16} height={16} />
-          <MenuText>
-            {(channel.isMuted ? "Unmute" : "Mute") +
-              (channel.type === "group" ? " Group" : " Chat")}
-          </MenuText>
-        </MenuItem>
-        <MenuItem onClick={() => clearNotifications(channel.id)}>
-          <CheckIcon width={16} height={16} />
-          <MenuText>Mark as Read</MenuText>
-        </MenuItem>
-        <MenuItem>
-          <DownloadIcon width={16} height={16} />
-          <MenuText>Fetch Messages</MenuText>
-        </MenuItem>
-      </MenuSection>
-      {(channel.type === "group" || channel.type === "dm") && (
-        <MenuItem
-          onClick={() => {
-            setLeavingModal(true);
-            setShowChannelMenu(false);
-          }}
-        >
-          {channel.type === "group" && (
-            <LeftIcon width={16} height={16} className="red" />
-          )}
-          {channel.type === "dm" && (
-            <DeleteIcon width={16} height={16} className="red" />
-          )}
-          <MenuText className="red">
-            {channel.type === "group" ? "Leave Group" : "Delete Chat"}
-          </MenuText>
-        </MenuItem>
-      )}
-    </DropdownMenu>
-  );
+        )}
+        <MenuSection className={`${channel.type === "channel" && "channel"}`}>
+          <MenuItem
+            onClick={() => {
+              channel.isMuted = !channel.isMuted;
+              setShowMenu(false);
+            }}
+          >
+            <MuteIcon width={16} height={16} />
+            <MenuText>
+              {(channel.isMuted ? "Unmute" : "Mute") +
+                (channel.type === "group" ? " Group" : " Chat")}
+            </MenuText>
+          </MenuItem>
+          <MenuItem onClick={() => clearNotifications(channel.id)}>
+            <CheckIcon width={16} height={16} />
+            <MenuText>Mark as Read</MenuText>
+          </MenuItem>
+          <MenuItem>
+            <DownloadIcon width={16} height={16} />
+            <MenuText>Fetch Messages</MenuText>
+          </MenuItem>
+        </MenuSection>
+        {(channel.type === "group" || channel.type === "dm") && (
+          <MenuItem
+            onClick={() => {
+              setLeavingModal(true);
+              setShowMenu(false);
+            }}
+          >
+            {channel.type === "group" && (
+              <LeftIcon width={16} height={16} className="red" />
+            )}
+            {channel.type === "dm" && (
+              <DeleteIcon width={16} height={16} className="red" />
+            )}
+            <MenuText className="red">
+              {channel.type === "group" ? "Leave Group" : "Delete Chat"}
+            </MenuText>
+          </MenuItem>
+        )}
+      </DropdownMenu>
+    );
+  } else {
+    return null;
+  }
 };
 
 const MenuSection = styled.div`

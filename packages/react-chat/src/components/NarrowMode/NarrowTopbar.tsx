@@ -51,4 +51,5 @@ export const ListWrapper = styled.div`
   padding: 16px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   overflow: auto;
+  flex: 1;
 `;
