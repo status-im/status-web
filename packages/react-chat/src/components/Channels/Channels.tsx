@@ -11,13 +11,18 @@ import { Channel } from "./Channel";
 
 interface ChannelsProps {
   onCommunityClick?: () => void;
+  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 type GenerateChannelsProps = ChannelsProps & {
   type: string;
 };
 
-function GenerateChannels({ type, onCommunityClick }: GenerateChannelsProps) {
+function GenerateChannels({
+  type,
+  onCommunityClick,
+  setEditGroup,
+}: GenerateChannelsProps) {
   const { mentions, notifications, activeChannel, setActiveChannel, channels } =
     useMessengerContext();
   const setChatState = useChatState()[1];
@@ -39,6 +44,7 @@ function GenerateChannels({ type, onCommunityClick }: GenerateChannelsProps) {
               }
               setChatState(ChatState.ChatBody);
             }}
+            setEditGroup={setEditGroup}
           />
         ))}
     </>
@@ -47,9 +53,10 @@ function GenerateChannels({ type, onCommunityClick }: GenerateChannelsProps) {
 
 type ChatsListProps = {
   onCommunityClick?: () => void;
+  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function ChatsSideBar({ onCommunityClick }: ChatsListProps) {
+function ChatsSideBar({ onCommunityClick, setEditGroup }: ChatsListProps) {
   const setChatState = useChatState()[1];
   return (
     <>
@@ -60,21 +67,28 @@ function ChatsSideBar({ onCommunityClick }: ChatsListProps) {
         </EditBtn>
       </ChatsBar>
       <ChatsList>
-        <GenerateChannels type={"group"} onCommunityClick={onCommunityClick} />
+        <GenerateChannels
+          type={"group"}
+          onCommunityClick={onCommunityClick}
+          setEditGroup={setEditGroup}
+        />
         <GenerateChannels type={"dm"} onCommunityClick={onCommunityClick} />
       </ChatsList>
     </>
   );
 }
 
-export function Channels({ onCommunityClick }: ChannelsProps) {
+export function Channels({ onCommunityClick, setEditGroup }: ChannelsProps) {
   const identity = useIdentity();
   return (
     <ChannelList>
       <GenerateChannels type={"channel"} onCommunityClick={onCommunityClick} />
       <Chats>
         {identity ? (
-          <ChatsSideBar onCommunityClick={onCommunityClick} />
+          <ChatsSideBar
+            onCommunityClick={onCommunityClick}
+            setEditGroup={setEditGroup}
+          />
         ) : (
           <UserCreation permission={true} />
         )}
@@ -86,7 +100,6 @@ export function Channels({ onCommunityClick }: ChannelsProps) {
 export const ChannelList = styled.div`
   display: flex;
   flex-direction: column;
-  overflow-y: scroll;
 
   &::-webkit-scrollbar {
     width: 0;
@@ -123,7 +136,6 @@ const ChatsBar = styled.div`
 const ChatsList = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: auto;
 `;
 
 const Heading = styled.p`

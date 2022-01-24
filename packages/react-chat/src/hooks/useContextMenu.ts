@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 
 export const useContextMenu = (elementId: string) => {
   const [showMenu, setShowMenu] = useState(false);
-  const element = document.getElementById(elementId) || document;
 
   const handleContextMenu = useCallback(
     (event) => {
@@ -12,21 +11,17 @@ export const useContextMenu = (elementId: string) => {
     [setShowMenu]
   );
 
-  const handleClick = useCallback(
-    () => (showMenu ? setShowMenu(false) : null),
-    [showMenu]
-  );
-
   useEffect(() => {
-    element.addEventListener("click", handleClick);
+    const element = document.getElementById(elementId) || document;
+
     element.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("click", () => setShowMenu(false));
     return () => {
-      element.removeEventListener("click", handleClick);
       element.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("click", () => setShowMenu(false));
+      setShowMenu(false);
     };
-  });
+  }, [elementId]);
 
   return { showMenu, setShowMenu };
 };

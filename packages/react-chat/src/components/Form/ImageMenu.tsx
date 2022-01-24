@@ -5,7 +5,7 @@ import { useContextMenu } from "../../hooks/useContextMenu";
 import { copyImg } from "../../utils/copyImg";
 import { downloadImg } from "../../utils/downloadImg";
 import { CopySvg } from "../Icons/CopyIcon";
-import { DownloadSvg } from "../Icons/DownloadIcon";
+import { DownloadIcon } from "../Icons/DownloadIcon";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
@@ -22,7 +22,7 @@ export const ImageMenu = ({ imageId }: ImageMenuProps) => {
         <CopySvg height={16} width={16} /> <MenuText>Copy image</MenuText>
       </MenuItem>
       <MenuItem onClick={() => downloadImg(imageId)}>
-        <DownloadSvg height={16} width={16} />
+        <DownloadIcon height={16} width={16} />
         <MenuText> Download image</MenuText>
       </MenuItem>
     </ImageDropdown>

@@ -69,6 +69,16 @@ const MenuBlock = styled.div`
   right: 8px;
   top: calc(100% - 8px);
   z-index: 2;
+
+  &.side {
+    top: 20px;
+    right: -90px;
+  }
+
+  &.narrow {
+    top: 20px;
+    right: 0;
+  }
 `;
 
 const MenuList = styled.ul`

@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-type CheckSvgProps = {
+type CheckIconProps = {
   width: number;
   height: number;
   className?: string;
 };
 
-export function CheckSvg({ width, height, className }: CheckSvgProps) {
+export function CheckIcon({ width, height, className }: CheckIconProps) {
   return (
     <Icon
       width={width}
@@ -25,10 +25,6 @@ export function CheckSvg({ width, height, className }: CheckSvgProps) {
     </Icon>
   );
 }
-
-export const CheckIcon = () => {
-  return <Icon width={16} height={16} />;
-};
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};

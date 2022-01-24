@@ -17,8 +17,8 @@ import {
 } from "../Form/inputStyles";
 import { ClearSvgFull } from "../Icons/ClearIconFull";
 import { CopySvg } from "../Icons/CopyIcon";
-import { EditSvg } from "../Icons/EditIcon";
-import { LeftIconSvg } from "../Icons/LeftIcon";
+import { EditIcon } from "../Icons/EditIcon";
+import { LeftIcon } from "../Icons/LeftIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserIcon } from "../Icons/UserIcon";
 import { textMediumStyles, textSmallStyles } from "../Text";
@@ -111,7 +111,7 @@ export const ProfileModal = () => {
             {!renaming && (
               <button onClick={() => setRenaming(true)}>
                 {" "}
-                {!requestCreation && <EditSvg width={24} height={24} />}
+                {!requestCreation && <EditIcon width={24} height={24} />}
               </button>
             )}
           </UserNameWrapper>
@@ -179,7 +179,7 @@ export const ProfileModal = () => {
         {renaming ? (
           <>
             <BackBtn onClick={() => setRenaming(false)}>
-              <LeftIconSvg width={28} height={28} />
+              <LeftIcon width={28} height={28} />
             </BackBtn>
             <Btn
               disabled={!customNameInput}
@@ -194,7 +194,7 @@ export const ProfileModal = () => {
         ) : requestCreation ? (
           <>
             <BackBtn onClick={() => setRequestCreation(false)}>
-              <LeftIconSvg width={28} height={28} />
+              <LeftIcon width={28} height={28} />
             </BackBtn>
             <Btn
               disabled={!request}

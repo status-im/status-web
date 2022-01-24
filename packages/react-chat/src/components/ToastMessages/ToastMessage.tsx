@@ -4,10 +4,10 @@ import styled, { keyframes } from "styled-components";
 import { useToasts } from "../../contexts/toastProvider";
 import { Toast } from "../../models/Toast";
 import { Column } from "../CommunityIdentity";
-import { CheckSvg } from "../Icons/CheckIcon";
+import { CheckIcon } from "../Icons/CheckIcon";
 import { CommunityIcon } from "../Icons/CommunityIcon";
 import { CrossIcon } from "../Icons/CrossIcon";
-import { ProfileSvg } from "../Icons/ProfileIcon";
+import { ProfileIcon } from "../Icons/ProfileIcon";
 import { textSmallStyles } from "../Text";
 
 export function AnimationToastMessage() {
@@ -37,12 +37,12 @@ export function ToastMessage({ toast }: ToastMessageProps) {
       <ToastBlock>
         {toast.type === "confirmation" && (
           <IconWrapper className="green">
-            <CheckSvg width={20} height={20} className="green" />
+            <CheckIcon width={20} height={20} className="green" />
           </IconWrapper>
         )}
         {toast.type === "incoming" && (
           <IconWrapper className="blue">
-            <ProfileSvg width={20} height={20} />
+            <ProfileIcon width={20} height={20} />
           </IconWrapper>
         )}
         {(toast.type === "approvement" || toast.type === "rejection") && (

@@ -4,9 +4,12 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
+import { ChannelMenu } from "../Form/ChannelMenu";
 import { GroupIcon } from "../Icons/GroupIcon";
 import { MutedIcon } from "../Icons/MutedIcon";
 import { textMediumStyles } from "../Text";
+
+import { ChannelIcon } from "./ChannelIcon";
 
 function RenderChannelName({
   channel,
@@ -31,24 +34,6 @@ function RenderChannelName({
   }
 }
 
-function ChannelIcon({
-  channel,
-  activeView,
-}: {
-  channel: ChannelData;
-  activeView?: boolean;
-}) {
-  const narrow = useNarrow();
-  return (
-    <ChannelLogo
-      icon={channel.icon}
-      className={activeView ? "active" : narrow ? "narrow" : ""}
-    >
-      {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
-    </ChannelLogo>
-  );
-}
-
 interface ChannelProps {
   channel: ChannelData;
   notified?: boolean;
@@ -56,6 +41,7 @@ interface ChannelProps {
   isActive: boolean;
   activeView?: boolean;
   onClick?: () => void;
+  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function Channel({
@@ -65,6 +51,7 @@ export function Channel({
   onClick,
   notified,
   mention,
+  setEditGroup,
 }: ChannelProps) {
   const narrow = useNarrow();
 
@@ -73,6 +60,7 @@ export function Channel({
       className={`${isActive && "active"}`}
       isNarrow={narrow && activeView}
       onClick={onClick}
+      id={!activeView ? `${channel.id + "contextMenu"}` : ""}
     >
       <ChannelInfo>
         <ChannelIcon channel={channel} activeView={activeView} />
@@ -92,21 +80,34 @@ export function Channel({
         <NotificationBagde>{mention}</NotificationBagde>
       )}
       {channel?.isMuted && !activeView && <MutedIcon />}
+      {!activeView && (
+        <ChannelMenu
+          channel={channel}
+          setEditGroup={setEditGroup}
+          className={narrow ? "narrow" : "side"}
+        />
+      )}
     </ChannelWrapper>
   );
 }
 
 const ChannelWrapper = styled.div<{ isNarrow?: boolean }>`
+  width: ${({ isNarrow }) => (isNarrow ? "calc(100% - 162px)" : "100%")};
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px;
+  border-radius: 8px;
+  position: relative;
   cursor: pointer;
-  width: ${({ isNarrow }) => (isNarrow ? "calc(100% - 162px)" : "100%")};
 
-  &.active {
+  &.active,
+  &:active {
     background-color: ${({ theme }) => theme.activeChannelBackground};
-    border-radius: 8px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.border};
   }
 `;
 
@@ -122,37 +123,6 @@ const ChannelTextInfo = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-`;
-
-export const ChannelLogo = styled.div<{ icon?: string }>`
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-right: 10px;
-  border-radius: 50%;
-  font-weight: bold;
-  font-size: 15px;
-  line-height: 20px;
-  background-color: ${({ theme }) => theme.iconColor};
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-image: ${({ icon }) => icon && `url(${icon}`};
-  color: ${({ theme }) => theme.iconTextColor};
-
-  &.active {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-  }
-
-  &.narrow {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-  }
 `;
 
 export const ChannelName = styled(RenderChannelName)<{

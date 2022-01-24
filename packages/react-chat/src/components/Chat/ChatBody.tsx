@@ -74,11 +74,19 @@ interface ChatBodyProps {
   onClick: () => void;
   showMembers: boolean;
   permission: boolean;
+  editGroup: boolean;
+  setEditGroup: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function ChatBody({ onClick, showMembers, permission }: ChatBodyProps) {
+export function ChatBody({
+  onClick,
+  showMembers,
+  permission,
+  editGroup,
+  setEditGroup,
+}: ChatBodyProps) {
   const { messenger, activeChannel, communityData } = useMessengerContext();
-  const [editGroup, setEditGroup] = useState(false);
+
   const narrow = useNarrow();
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
 

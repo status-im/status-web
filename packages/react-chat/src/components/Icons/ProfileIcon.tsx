@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-type ProfileSvgProps = {
+type ProfileIconProps = {
   width: number;
   height: number;
   className?: string;
 };
 
-export function ProfileSvg({ width, height, className }: ProfileSvgProps) {
+export function ProfileIcon({ width, height, className }: ProfileIconProps) {
   return (
     <Icon
       width={width}
@@ -31,10 +31,6 @@ export function ProfileSvg({ width, height, className }: ProfileSvgProps) {
     </Icon>
   );
 }
-
-export const ProfileIcon = () => {
-  return <Icon width={16} height={16} />;
-};
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};

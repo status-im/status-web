@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { buttonStyles } from "../Buttons/buttonStyle";
-import { ChannelLogo } from "../Channels/Channel";
+import { ChannelLogo } from "../Channels/ChannelIcon";
 import { inputStyles } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { textMediumStyles } from "../Text";

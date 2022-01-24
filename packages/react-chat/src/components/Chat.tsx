@@ -47,13 +47,14 @@ function Modals() {
 export function Chat() {
   const [state] = useChatState();
   const [showMembers, setShowMembers] = useState(false);
+  const [editGroup, setEditGroup] = useState(false);
   const narrow = useNarrow();
   return (
     <ChatWrapper>
       {!narrow && (
         <ChannelsWrapper>
           <StyledCommunity />
-          <Channels />
+          <Channels setEditGroup={setEditGroup} />
         </ChannelsWrapper>
       )}
       {state === ChatState.ChatBody && (
@@ -61,6 +62,8 @@ export function Chat() {
           onClick={() => setShowMembers(!showMembers)}
           showMembers={showMembers}
           permission={true}
+          editGroup={editGroup}
+          setEditGroup={setEditGroup}
         />
       )}
       {showMembers && !narrow && state === ChatState.ChatBody && <Members />}

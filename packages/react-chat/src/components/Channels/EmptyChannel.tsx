@@ -7,7 +7,8 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { textMediumStyles } from "../Text";
 
-import { ChannelInfo, ChannelLogo, ChannelName } from "./Channel";
+import { ChannelInfo, ChannelName } from "./Channel";
+import { ChannelLogo } from "./ChannelIcon";
 
 type ChannelBeggingTextProps = {
   channel: ChannelData;

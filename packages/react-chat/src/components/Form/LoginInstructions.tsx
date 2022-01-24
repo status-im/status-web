@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { MobileIcon } from "../Icons/MobileIcon";
-import { ProfileSvg } from "../Icons/ProfileIcon";
+import { ProfileIcon } from "../Icons/ProfileIcon";
 import { ScanIcon } from "../Icons/ScanIcon";
 import { textMediumStyles } from "../Text";
 
@@ -20,7 +20,7 @@ export function LoginInstructions({ mobileFlow }: LoginInstructionsProps) {
         Navigate yourself to{" "}
         <InstructionIcon>
           {" "}
-          <ProfileSvg width={13} height={13} /> <span>Profile</span>
+          <ProfileIcon width={13} height={13} /> <span>Profile</span>
         </InstructionIcon>{" "}
         tab
       </InstructionStep>

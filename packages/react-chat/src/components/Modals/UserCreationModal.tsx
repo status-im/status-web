@@ -17,7 +17,7 @@ import { ClearBtn, NameInput, NameInputWrapper } from "../Form/inputStyles";
 import { AddIcon } from "../Icons/AddIcon";
 import { ChainIcon } from "../Icons/ChainIcon";
 import { ClearSvgFull } from "../Icons/ClearIconFull";
-import { LeftIconSvg } from "../Icons/LeftIcon";
+import { LeftIcon } from "../Icons/LeftIcon";
 import { UserLogo } from "../Members/UserLogo";
 
 import { AgreementModalName } from "./AgreementModal";
@@ -134,7 +134,7 @@ export function UserCreationModal() {
       </MiddleSection>
       <ButtonSection>
         <BackBtn onClick={() => setModal(false)}>
-          <LeftIconSvg width={28} height={28} />
+          <LeftIcon width={28} height={28} />
         </BackBtn>
         <Btn
           onClick={() => {
