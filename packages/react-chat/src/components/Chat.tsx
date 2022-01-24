@@ -84,7 +84,7 @@ const ChatWrapper = styled.div`
 const ChannelsWrapper = styled.div`
   width: 21%;
   height: 100%;
-  min-width: 196px;
+  min-width: 250px;
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
   padding: 10px 16px;
   display: flex;

@@ -79,6 +79,23 @@ export const UserName = styled.p`
   ${textMediumStyles}
 `;
 
+export const UserNameBtn = styled.button`
+  padding: 0;
+  border: none;
+  outline: none;
+  position: relative;
+  color: ${({ theme }) => theme.tertiary};
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: default;
+    text-decoration: none;
+  }
+`;
+
 export const UserAddress = styled.p`
   font-size: 10px;
   line-height: 14px;
@@ -114,4 +131,26 @@ export const MessageText = styled.div`
   width: 100%;
   white-space: pre-wrap;
   color: ${({ theme }) => theme.primary};
+`;
+
+export const IconBtn = styled.button`
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: #bcbdff;
+  background-size: contain;
+  background-position: center;
+  padding: 0;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
 `;

@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { useIdentity } from "../../contexts/identityProvider";
 import { Contact } from "../../models/Contact";
 import { ContactMenu } from "../Form/ContactMenu";
-import { Icon } from "../Icons/Icon";
-import { UserAddress } from "../Messages/Styles";
+import { IconBtn, UserAddress } from "../Messages/Styles";
 
 import { UserLogo } from "./UserLogo";
 
@@ -78,13 +77,9 @@ export const MemberName = styled.p`
   white-space: nowrap;
 `;
 
-export const MemberIcon = styled(Icon)`
+export const MemberIcon = styled(IconBtn)`
   width: 29px;
   height: 29px;
-  position: relative;
-  background-size: contain;
-  background-position: center;
-  flex-shrink: 0;
 
   &.offline {
     &::after {

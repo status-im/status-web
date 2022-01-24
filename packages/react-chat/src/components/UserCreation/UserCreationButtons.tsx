@@ -55,7 +55,7 @@ export function UserCreationButtons({ permission }: UserCreationProps) {
             setCreationStartModal(false);
           }}
         >
-          Use a throwaway account
+          Use a throwaway profile
         </ThrowAwayButton>
       )}
     </Wrapper>

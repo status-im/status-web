@@ -14,7 +14,6 @@ import { CheckIcon } from "../Icons/CheckIcon";
 import { ClearSvg } from "../Icons/ClearIcon";
 import { CommunityIcon } from "../Icons/CommunityIcon";
 import { GroupIcon } from "../Icons/GroupIcon";
-import { Icon } from "../Icons/Icon";
 import { MoreIcon } from "../Icons/MoreIcon";
 import { ReadMessageIcon } from "../Icons/ReadMessageIcon";
 import { ReplyIcon } from "../Icons/ReplyActivityIcon";
@@ -99,10 +98,7 @@ export function ActivityMessage({
 
       <MessageWrapper className={`${!activity.isRead && "unread"}`}>
         <>
-          <Icon>
-            <UserIcon />
-          </Icon>
-
+          <UserIcon />
           <ActivityContent>
             <MessageHeaderWrapper>
               <UserNameWrapper>

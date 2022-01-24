@@ -12,7 +12,6 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
 import { ContactMenu } from "../Form/ContactMenu";
-import { Icon } from "../Icons/Icon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserLogo } from "../Members/UserLogo";
 import { Reactions } from "../Reactions/Reactions";
@@ -22,6 +21,7 @@ import { MessageReactions } from "./MessageReactions";
 import {
   ContentWrapper,
   DateSeparator,
+  IconBtn,
   MessageHeaderWrapper,
   MessageOuterWrapper,
   MessageText,
@@ -29,6 +29,7 @@ import {
   TimeWrapper,
   UserAddress,
   UserName,
+  UserNameBtn,
   UserNameWrapper,
 } from "./Styles";
 
@@ -111,10 +112,11 @@ export function UiMessage({
       <MessageWrapper className={`${mentioned && "mention"}`} id={message.id}>
         <MessageQuote quote={quote} />
         <UserMessageWrapper>
-          <Icon
+          <IconBtn
             onClick={() => {
               if (identity) setShowMenu((e) => !e);
             }}
+            disabled={!identity}
           >
             {showMenu && (
               <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
@@ -128,11 +130,21 @@ export function UiMessage({
                 ["green", 360],
               ]}
             />
-          </Icon>
+          </IconBtn>
           <ContentWrapper>
             <MessageHeaderWrapper>
               <UserNameWrapper>
-                <UserName> {contact?.customName ?? contact.trueName}</UserName>
+                <UserNameBtn
+                  onClick={() => {
+                    if (identity) setShowMenu((e) => !e);
+                  }}
+                  disabled={!identity}
+                >
+                  <UserName>
+                    {" "}
+                    {contact?.customName ?? contact.trueName}
+                  </UserName>
+                </UserNameBtn>
                 <UserAddress className="chat">
                   {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
                 </UserAddress>
@@ -156,12 +168,14 @@ export function UiMessage({
             )}
           </ContentWrapper>
         </UserMessageWrapper>
-        <Reactions
-          message={message}
-          setReply={setReply}
-          messageReactions={messageReactions}
-          setMessageReactions={setMessageReactions}
-        />
+        {identity && (
+          <Reactions
+            message={message}
+            setReply={setReply}
+            messageReactions={messageReactions}
+            setMessageReactions={setMessageReactions}
+          />
+        )}
       </MessageWrapper>
     </MessageOuterWrapper>
   );

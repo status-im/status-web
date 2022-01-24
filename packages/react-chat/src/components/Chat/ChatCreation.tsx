@@ -15,7 +15,6 @@ import { Member } from "../Members/Member";
 import { SearchBlock } from "../SearchBlock";
 import { textMediumStyles } from "../Text";
 
-import { Wrapper } from "./ChatBody";
 import { ChatInput } from "./ChatInput";
 
 interface ChatCreationProps {
@@ -76,101 +75,107 @@ export function ChatCreation({
   );
 
   return (
-    <Wrapper>
-      <CreationWrapper>
-        <CreationBar className={`${styledGroup.length === 5 && "limit"}`}>
-          {narrow && (
-            <BackButton
-              onBtnClick={() => setChatState(ChatState.ChatBody)}
-              className="narrow"
-            />
-          )}
-          <Column className={`${narrow && "narrow"}`}>
-            <InputBar>
-              <InputText>To:</InputText>
-              <StyledList>
-                {styledGroup.map((member) => (
-                  <StyledMember key={member}>
-                    <StyledName>{member.slice(0, 10)}</StyledName>
-                    <CloseButton onClick={() => removeMember(member)}>
-                      <CrossIcon memberView={true} />
-                    </CloseButton>
-                  </StyledMember>
-                ))}
-              </StyledList>
-              {styledGroup.length < 5 && (
-                <SearchMembers>
-                  <Input
-                    value={query}
-                    onInput={(e) => setQuery(e.currentTarget.value)}
-                  />
-                  <SearchBlock
-                    query={query}
-                    discludeList={styledGroup}
-                    onClick={addMember}
-                  />
-                </SearchMembers>
-              )}
-              {!narrow && styledGroup.length === 5 && (
-                <LimitAlert>5 user Limit reached</LimitAlert>
-              )}
-            </InputBar>
-            {narrow && styledGroup.length === 5 && (
-              <LimitAlert className="narrow">5 user Limit reached</LimitAlert>
+    <CreationWrapper className={`${narrow && "narrow"}`}>
+      <CreationBar
+        className={`${styledGroup.length === 5 && narrow && "limit"}`}
+      >
+        {narrow && (
+          <BackButton
+            onBtnClick={() => setChatState(ChatState.ChatBody)}
+            className="narrow"
+          />
+        )}
+        <Column>
+          <InputBar>
+            <InputText>To:</InputText>
+            <StyledList>
+              {styledGroup.map((member) => (
+                <StyledMember key={member}>
+                  <StyledName>{member.slice(0, 10)}</StyledName>
+                  <CloseButton onClick={() => removeMember(member)}>
+                    <CrossIcon memberView={true} />
+                  </CloseButton>
+                </StyledMember>
+              ))}
+            </StyledList>
+            {styledGroup.length < 5 && (
+              <SearchMembers>
+                <Input
+                  value={query}
+                  onInput={(e) => setQuery(e.currentTarget.value)}
+                />
+                <SearchBlock
+                  query={query}
+                  discludeList={styledGroup}
+                  onClick={addMember}
+                />
+              </SearchMembers>
             )}
-          </Column>
-          <CreationBtn
-            disabled={styledGroup.length === 0}
-            onClick={() => {
-              if (!activeChannel) {
-                createChat(styledGroup);
-              } else {
-                addMembers(styledGroup, activeChannel.id);
-              }
-              setEditGroup?.(false);
-            }}
-          >
-            Confirm
-          </CreationBtn>
-          {!narrow && <ActivityButton className="creation" />}
-        </CreationBar>
-        {!setEditGroup && !query && (
-          <Contacts>
-            <ContactsHeading>Contacts</ContactsHeading>
-            <ContactsList>
-              {identity &&
-                Object.values(contacts)
-                  .filter(
-                    (e) =>
-                      e.id != bufToHex(identity.publicKey) &&
-                      !styledGroup.includes(e.id)
-                  )
-                  .map((contact) => (
-                    <Member
-                      key={contact.id}
-                      contact={contact}
-                      isOnline={contact.online}
-                      onClick={() => addMember(contact.id)}
-                    />
-                  ))}
-            </ContactsList>
-          </Contacts>
-        )}
-        {!activeChannel && (
-          <ChatInput createChat={createChat} group={styledGroup} />
-        )}
-      </CreationWrapper>
-    </Wrapper>
+            {!narrow && styledGroup.length === 5 && (
+              <LimitAlert>5 user Limit reached</LimitAlert>
+            )}
+          </InputBar>
+          {narrow && styledGroup.length === 5 && (
+            <LimitAlert className="narrow">5 user Limit reached</LimitAlert>
+          )}
+        </Column>
+        <CreationBtn
+          disabled={styledGroup.length === 0}
+          onClick={() => {
+            if (!activeChannel) {
+              createChat(styledGroup);
+            } else {
+              addMembers(styledGroup, activeChannel.id);
+            }
+            setEditGroup?.(false);
+          }}
+        >
+          Confirm
+        </CreationBtn>
+        {!narrow && <ActivityButton className="creation" />}
+      </CreationBar>
+      {!setEditGroup && !query && (
+        <Contacts>
+          <ContactsHeading>Contacts</ContactsHeading>
+          <ContactsList>
+            {identity &&
+              Object.values(contacts)
+                .filter(
+                  (e) =>
+                    e.id != bufToHex(identity.publicKey) &&
+                    !styledGroup.includes(e.id)
+                )
+                .map((contact) => (
+                  <Member
+                    key={contact.id}
+                    contact={contact}
+                    isOnline={contact.online}
+                    onClick={() => addMember(contact.id)}
+                  />
+                ))}
+          </ContactsList>
+        </Contacts>
+      )}
+      {!activeChannel && (
+        <ChatInput createChat={createChat} group={styledGroup} />
+      )}
+    </CreationWrapper>
   );
 }
 
 const CreationWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 79%;
   height: 100%;
+  max-width: calc(100% - 250px);
   background-color: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 8px 16px;
+
+  &.narrow {
+    width: 100%;
+    max-width: 100%;
+  }
 `;
 
 const CreationBar = styled.div`
@@ -190,9 +195,6 @@ const Column = styled.div`
   flex: 1;
   margin-right: 16px;
   overflow-x: hidden;
-
-  &.narrow {
-  }
 `;
 
 const InputBar = styled.div`
