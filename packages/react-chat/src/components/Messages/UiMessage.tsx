@@ -168,12 +168,14 @@ export function UiMessage({
             )}
           </ContentWrapper>
         </UserMessageWrapper>
-        <Reactions
-          message={message}
-          setReply={setReply}
-          messageReactions={messageReactions}
-          setMessageReactions={setMessageReactions}
-        />
+        {identity && (
+          <Reactions
+            message={message}
+            setReply={setReply}
+            messageReactions={messageReactions}
+            setMessageReactions={setMessageReactions}
+          />
+        )}
       </MessageWrapper>
     </MessageOuterWrapper>
   );
