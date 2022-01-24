@@ -12,7 +12,6 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
 import { ContactMenu } from "../Form/ContactMenu";
-import { Icon } from "../Icons/Icon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserLogo } from "../Members/UserLogo";
 import { Reactions } from "../Reactions/Reactions";
@@ -22,6 +21,7 @@ import { MessageReactions } from "./MessageReactions";
 import {
   ContentWrapper,
   DateSeparator,
+  IconBtn,
   MessageHeaderWrapper,
   MessageOuterWrapper,
   MessageText,
@@ -112,10 +112,11 @@ export function UiMessage({
       <MessageWrapper className={`${mentioned && "mention"}`} id={message.id}>
         <MessageQuote quote={quote} />
         <UserMessageWrapper>
-          <Icon
+          <IconBtn
             onClick={() => {
               if (identity) setShowMenu((e) => !e);
             }}
+            disabled={!identity}
           >
             {showMenu && (
               <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
@@ -129,7 +130,7 @@ export function UiMessage({
                 ["green", 360],
               ]}
             />
-          </Icon>
+          </IconBtn>
           <ContentWrapper>
             <MessageHeaderWrapper>
               <UserNameWrapper>
@@ -137,6 +138,7 @@ export function UiMessage({
                   onClick={() => {
                     if (identity) setShowMenu((e) => !e);
                   }}
+                  disabled={!identity}
                 >
                   <UserName>
                     {" "}
