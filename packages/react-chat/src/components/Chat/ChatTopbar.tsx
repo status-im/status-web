@@ -114,6 +114,7 @@ export function ChatTopbar({
       {showChannelMenu && (
         <ChannelMenu
           channel={activeChannel}
+          showNarrowMembers={showState === ChatBodyState.Members}
           switchMemberList={() => switchShowState(ChatBodyState.Members)}
           setShowChannelMenu={setShowChannelMenu}
           setEditGroup={setEditGroup}

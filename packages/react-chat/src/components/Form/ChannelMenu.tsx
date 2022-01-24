@@ -24,6 +24,7 @@ import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 interface ChannelMenuProps {
   channel: ChannelData;
   setShowChannelMenu?: (val: boolean) => void;
+  showNarrowMembers?: boolean;
   switchMemberList?: () => void;
   setEditGroup?: (val: boolean) => void;
   className?: string;
@@ -32,6 +33,7 @@ interface ChannelMenuProps {
 export const ChannelMenu = ({
   channel,
   setShowChannelMenu,
+  showNarrowMembers,
   switchMemberList,
   setEditGroup,
   className,
@@ -62,7 +64,7 @@ export const ChannelMenu = ({
             }}
           >
             <MembersSmallIcon width={16} height={16} />
-            <MenuText>View Members</MenuText>
+            <MenuText>{showNarrowMembers ? "Hide" : "View"} Members</MenuText>
           </MenuItem>
         )}
         {channel.type === "group" && (
