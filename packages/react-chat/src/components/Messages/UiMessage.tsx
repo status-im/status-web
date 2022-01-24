@@ -29,6 +29,7 @@ import {
   TimeWrapper,
   UserAddress,
   UserName,
+  UserNameBtn,
   UserNameWrapper,
 } from "./Styles";
 
@@ -132,7 +133,16 @@ export function UiMessage({
           <ContentWrapper>
             <MessageHeaderWrapper>
               <UserNameWrapper>
-                <UserName> {contact?.customName ?? contact.trueName}</UserName>
+                <UserNameBtn
+                  onClick={() => {
+                    if (identity) setShowMenu((e) => !e);
+                  }}
+                >
+                  <UserName>
+                    {" "}
+                    {contact?.customName ?? contact.trueName}
+                  </UserName>
+                </UserNameBtn>
                 <UserAddress className="chat">
                   {message.sender.slice(0, 5)}...{message.sender.slice(-3)}
                 </UserAddress>

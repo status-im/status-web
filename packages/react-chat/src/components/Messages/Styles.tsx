@@ -79,6 +79,13 @@ export const UserName = styled.p`
   ${textMediumStyles}
 `;
 
+export const UserNameBtn = styled.button`
+  padding: 0;
+  border: none;
+  outline: none;
+  position: relative;
+`;
+
 export const UserAddress = styled.p`
   font-size: 10px;
   line-height: 14px;
