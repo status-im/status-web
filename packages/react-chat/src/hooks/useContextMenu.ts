@@ -12,22 +12,14 @@ export const useContextMenu = (elementId: string) => {
     [setShowMenu]
   );
 
-  const hideMenu = useCallback(() => setShowMenu(false), []);
-
   useEffect(() => {
-    if (showMenu === true) {
-      element.addEventListener("contextmenu", handleContextMenu);
-    } else {
-      document.addEventListener("click", hideMenu);
-    }
+    element.addEventListener("contextmenu", handleContextMenu);
+    document.addEventListener("click", () => setShowMenu(false));
     return () => {
-      if (showMenu === true) {
-        element.removeEventListener("contextmenu", handleContextMenu);
-      } else {
-        document.removeEventListener("click", hideMenu);
-      }
+      element.removeEventListener("contextmenu", handleContextMenu);
+      document.removeEventListener("click", () => setShowMenu(false));
     };
-  }, [showMenu]);
+  });
 
   return { showMenu, setShowMenu };
 };
