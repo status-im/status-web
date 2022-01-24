@@ -19,6 +19,7 @@ export const useContextMenu = (elementId: string) => {
     return () => {
       element.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("click", () => setShowMenu(false));
+      setShowMenu(false);
     };
   }, [elementId]);
 
