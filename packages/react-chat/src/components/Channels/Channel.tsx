@@ -35,7 +35,7 @@ function RenderChannelName({
     case "channel":
       return <div className={className}>{`# ${channel.name}`}</div>;
     case "dm":
-      return <div className={className}>{channel.name}</div>;
+      return <div className={className}>{channel.name.slice(0, 20)}</div>;
   }
 }
 

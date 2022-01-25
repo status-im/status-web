@@ -110,9 +110,6 @@ const ChannelNameEmpty = styled(ChannelName)`
   font-size: 22px;
   line-height: 30px;
   margin-bottom: 16px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 const EmptyText = styled.p`
