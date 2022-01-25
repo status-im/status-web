@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
+
+import { useMessengerContext } from "../../contexts/messengerProvider";
 
 import { MembersList } from "./MembersList";
 
 export function Members() {
+  const { activeChannel } = useMessengerContext();
+  const heading = useMemo(
+    () =>
+      activeChannel && activeChannel?.type === "group"
+        ? "Group members"
+        : "Members",
+    [activeChannel]
+  );
+
   return (
     <MembersWrapper>
-      <MemberHeading>Members</MemberHeading>
+      <MemberHeading>{heading}</MemberHeading>
       <MembersList />
     </MembersWrapper>
   );
