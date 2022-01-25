@@ -67,9 +67,9 @@ export function Channel({
       onClick={onClick}
       id={!activeView ? `${channel.id + "contextMenu"}` : ""}
     >
-      <ChannelInfo className={`${narrow && "narrow"}`}>
+      <ChannelInfo activeView={activeView}>
         <ChannelIcon channel={channel} activeView={activeView} />
-        <ChannelTextInfo className={`${narrow && "narrow"}`}>
+        <ChannelTextInfo activeView={activeView && !narrow}>
           <ChannelNameWrapper>
             <ChannelName
               channel={channel}
@@ -121,28 +121,23 @@ const ChannelWrapper = styled.div<{ isNarrow?: boolean }>`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.border};
+    background-color: ${({ theme, isNarrow }) => isNarrow && theme.border};
   }
 `;
 
-export const ChannelInfo = styled.div`
+export const ChannelInfo = styled.div<{ activeView?: boolean }>`
   display: flex;
-  align-items: center;
-
-  &.narrow {
-    overflow: hidden;
-  }
+  align-items: ${({ activeView }) => (activeView ? "flex-start" : "center")};
+  overflow-x: hidden;
 `;
 
-const ChannelTextInfo = styled.div`
+const ChannelTextInfo = styled.div<{ activeView?: boolean }>`
   display: flex;
   flex-direction: column;
-
-  &.narrow {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  white-space: nowrap;
+  padding: ${({ activeView }) => activeView && "0 24px 24px 0"};
 `;
 
 const ChannelNameWrapper = styled.div`
@@ -154,13 +149,15 @@ export const ChannelName = styled(RenderChannelName)<{
   muted?: boolean;
   notified?: boolean;
   active?: boolean;
+  activeView?: boolean;
 }>`
   font-weight: ${({ notified, muted, active }) =>
     notified && !muted && !active ? "600" : "500"};
   opacity: ${({ notified, muted, active }) =>
     muted ? "0.4" : notified || active ? "1.0" : "0.7"};
   color: ${({ theme }) => theme.primary};
-  margin-right: ${({ muted }) => (muted ? "8px" : "")};
+  margin-right: ${({ muted, activeView }) =>
+    muted && activeView ? "8px" : ""};
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

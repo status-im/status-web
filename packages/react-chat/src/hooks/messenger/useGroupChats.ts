@@ -47,7 +47,7 @@ export function useGroupChats(
               }
             : {
                 id: chat.chatId,
-                name: chat.members[0].id,
+                name: chat.members[0].id.slice(0, 10),
                 type: "dm",
                 description: `Chatkey: ${chat.members[0].id}`,
               };

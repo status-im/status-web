@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useNarrow } from "../../contexts/narrowProvider";
 import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
 import { Reply } from "../../hooks/useReply";
 import { ChannelData } from "../../models/ChannelData";
@@ -19,6 +20,7 @@ interface MessagesListProps {
 }
 
 export function MessagesList({ setReply, channel }: MessagesListProps) {
+  const narrow = useNarrow();
   const { messages, contacts } = useMessengerContext();
   const ref = useRef<HTMLHeadingElement>(null);
   const loadingMessages = useChatScrollHandle(messages, ref);
@@ -49,7 +51,7 @@ export function MessagesList({ setReply, channel }: MessagesListProps) {
   useEffect(() => (!showLinkModal ? setLink("") : undefined), [showLinkModal]);
 
   return (
-    <MessagesWrapper ref={ref}>
+    <MessagesWrapper ref={ref} className={`${!narrow && "wide"}`}>
       <PictureModal image={image} />
       <LinkModal link={link} />
       <EmptyChannel channel={channel} />
@@ -90,6 +92,10 @@ const MessagesWrapper = styled.div`
   height: calc(100% - 44px);
   overflow: auto;
   padding: 8px 0;
+
+  &.wide {
+    margin-top: -24px;
+  }
 
   &::-webkit-scrollbar {
     width: 0;
