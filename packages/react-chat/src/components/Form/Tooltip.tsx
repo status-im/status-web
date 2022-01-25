@@ -31,6 +31,11 @@ const TooltipWrapper = styled.div`
   &.read {
     left: 18%;
   }
+
+  &.muted {
+    top: calc(100% + 8px);
+    z-index: 10;
+  }
 `;
 const TooltipBlock = styled.div`
   background: ${({ theme }) => theme.primary};

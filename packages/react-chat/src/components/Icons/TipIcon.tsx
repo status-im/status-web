@@ -30,4 +30,9 @@ const Icon = styled.svg`
   &.read {
     left: 62%;
   }
+
+  &.muted {
+    top: -8px;
+    transform: rotate(180deg) translateX(50%);
+  }
 `;
