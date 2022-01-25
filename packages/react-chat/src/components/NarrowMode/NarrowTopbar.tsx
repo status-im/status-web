@@ -10,13 +10,17 @@ interface NarrowTopbarProps {
 }
 
 export function NarrowTopbar({ list, onBtnClick }: NarrowTopbarProps) {
-  const { communityData } = useMessengerContext();
+  const { communityData, activeChannel } = useMessengerContext();
   return (
     <TopbarWrapper>
       <BackButton onBtnClick={onBtnClick} />
       <HeadingWrapper>
         <Heading>{list}</Heading>
-        <SubHeading>{communityData?.name}</SubHeading>
+        <SubHeading>
+          {activeChannel?.type === "group"
+            ? activeChannel.name
+            : communityData?.name}
+        </SubHeading>
       </HeadingWrapper>
     </TopbarWrapper>
   );

@@ -13,7 +13,7 @@ import { LogoutModalName } from "../Modals/LogoutModal";
 import { Member } from "./Member";
 
 export function MembersList() {
-  const { contacts, nickname } = useMessengerContext();
+  const { contacts, nickname, activeChannel } = useMessengerContext();
   const identity = useIdentity();
   const { setModal } = useModal(LogoutModalName);
 
@@ -27,13 +27,26 @@ export function MembersList() {
     }
   }, [contacts, identity]);
 
+  const members = useMemo(
+    () =>
+      activeChannel &&
+      activeChannel?.type === "group" &&
+      activeChannel.members &&
+      identity
+        ? activeChannel.members.filter(
+            (e) => e.id !== utils.bufToHex(identity.publicKey)
+          )
+        : userContacts,
+    [activeChannel]
+  );
+
   const onlineContacts = useMemo(
-    () => userContacts.filter((e) => e.online),
-    [userContacts]
+    () => members.filter((e) => e.online),
+    [members]
   );
   const offlineContacts = useMemo(
-    () => userContacts.filter((e) => !e.online),
-    [userContacts]
+    () => members.filter((e) => !e.online),
+    [members]
   );
 
   return (
