@@ -127,7 +127,7 @@ export function ChatTopbar({
 const Topbar = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 5px 8px;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   position: relative;
@@ -177,6 +177,7 @@ const CommunityWrap = styled.div`
 const MenuWrapper = styled.div`
   display: flex;
   align-items: center;
+  padding: 8px 0;
 `;
 
 export const TopBtn = styled.button`

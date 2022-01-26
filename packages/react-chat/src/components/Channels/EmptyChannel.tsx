@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { textMediumStyles } from "../Text";
 
@@ -64,8 +65,10 @@ type EmptyChannelProps = {
 };
 
 export function EmptyChannel({ channel }: EmptyChannelProps) {
+  const narrow = useNarrow();
+
   return (
-    <Wrapper>
+    <Wrapper className={`${!narrow && "wide"}`}>
       <ChannelInfoEmpty>
         <ChannelLogoEmpty icon={channel.icon}>
           {" "}
@@ -83,6 +86,10 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 32px;
+
+  &.wide {
+    margin-top: 24px;
+  }
 `;
 
 const ChannelInfoEmpty = styled(ChannelInfo)`
@@ -103,9 +110,6 @@ const ChannelNameEmpty = styled(ChannelName)`
   font-size: 22px;
   line-height: 30px;
   margin-bottom: 16px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 `;
 
 const EmptyText = styled.p`

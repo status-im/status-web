@@ -5,6 +5,7 @@ import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
 import { ChannelMenu } from "../Form/ChannelMenu";
+import { Tooltip } from "../Form/Tooltip";
 import { GroupIcon } from "../Icons/GroupIcon";
 import { MutedIcon } from "../Icons/MutedIcon";
 import { textMediumStyles } from "../Text";
@@ -13,9 +14,11 @@ import { ChannelIcon } from "./ChannelIcon";
 
 function RenderChannelName({
   channel,
+  activeView,
   className,
 }: {
   channel: ChannelData;
+  activeView?: boolean;
   className?: string;
 }) {
   const { activeChannel } = useMessengerContext();
@@ -23,14 +26,16 @@ function RenderChannelName({
     case "group":
       return (
         <div className={className}>
-          <GroupIcon activeView={channel.id === activeChannel?.id} />
+          {!activeView && (
+            <GroupIcon active={channel.id === activeChannel?.id} />
+          )}
           {` ${channel.name}`}
         </div>
       );
     case "channel":
       return <div className={className}>{`# ${channel.name}`}</div>;
     case "dm":
-      return <div className={className}>{channel.name}</div>;
+      return <div className={className}>{channel.name.slice(0, 20)}</div>;
   }
 }
 
@@ -62,15 +67,24 @@ export function Channel({
       onClick={onClick}
       id={!activeView ? `${channel.id + "contextMenu"}` : ""}
     >
-      <ChannelInfo>
+      <ChannelInfo activeView={activeView}>
         <ChannelIcon channel={channel} activeView={activeView} />
-        <ChannelTextInfo>
-          <ChannelName
-            channel={channel}
-            active={isActive || activeView || narrow}
-            muted={channel?.isMuted}
-            notified={notified}
-          />
+        <ChannelTextInfo activeView={activeView && !narrow}>
+          <ChannelNameWrapper>
+            <ChannelName
+              channel={channel}
+              active={isActive || activeView || narrow}
+              activeView={activeView}
+              muted={channel?.isMuted}
+              notified={notified}
+            />
+            {channel?.isMuted && activeView && !narrow && (
+              <MutedBtn onClick={() => (channel.isMuted = !channel.isMuted)}>
+                <MutedIcon />
+                <Tooltip tip="Unmute" className="muted" />
+              </MutedBtn>
+            )}
+          </ChannelNameWrapper>
           {activeView && (
             <ChannelDescription>{channel.description}</ChannelDescription>
           )}
@@ -107,34 +121,43 @@ const ChannelWrapper = styled.div<{ isNarrow?: boolean }>`
   }
 
   &:hover {
-    background-color: ${({ theme }) => theme.border};
+    background-color: ${({ theme, isNarrow }) => isNarrow && theme.border};
   }
 `;
 
-export const ChannelInfo = styled.div`
+export const ChannelInfo = styled.div<{ activeView?: boolean }>`
   display: flex;
-  align-items: center;
-  overflow: hidden;
+  align-items: ${({ activeView }) => (activeView ? "flex-start" : "center")};
+  overflow-x: hidden;
 `;
 
-const ChannelTextInfo = styled.div`
+const ChannelTextInfo = styled.div<{ activeView?: boolean }>`
   display: flex;
   flex-direction: column;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow-x: hidden;
   white-space: nowrap;
+  padding: ${({ activeView }) => activeView && "0 24px 24px 0"};
+`;
+
+const ChannelNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const ChannelName = styled(RenderChannelName)<{
   muted?: boolean;
   notified?: boolean;
   active?: boolean;
+  activeView?: boolean;
 }>`
   font-weight: ${({ notified, muted, active }) =>
     notified && !muted && !active ? "600" : "500"};
   opacity: ${({ notified, muted, active }) =>
     muted ? "0.4" : notified || active ? "1.0" : "0.7"};
   color: ${({ theme }) => theme.primary};
+  margin-right: ${({ muted, activeView }) =>
+    muted && activeView ? "8px" : ""};
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -165,4 +188,19 @@ const NotificationBagde = styled.div`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+`;
+
+const MutedBtn = styled.button`
+  padding: 0;
+  border: none;
+  outline: none;
+  position: relative;
+
+  &:hover > svg {
+    fill-opacity: 1;
+  }
+
+  &:hover > div {
+    visibility: visible;
+  }
 `;
