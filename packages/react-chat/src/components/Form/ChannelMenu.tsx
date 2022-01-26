@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
@@ -14,12 +14,14 @@ import { EditIcon } from "../Icons/EditIcon";
 import { LeftIcon } from "../Icons/LeftIcon";
 import { MembersSmallIcon } from "../Icons/MembersSmallIcon";
 import { MuteIcon } from "../Icons/MuteIcon";
+import { NextIcon } from "../Icons/NextIcon";
 import { ProfileIcon } from "../Icons/ProfileIcon";
 import { EditModalName } from "../Modals/EditModal";
 import { LeavingModalName } from "../Modals/LeavingModal";
 import { ProfileModalName } from "../Modals/ProfileModal";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
+import { MuteMenu } from "./MuteMenu";
 
 interface ChannelMenuProps {
   channel: ChannelData;
@@ -43,6 +45,15 @@ export const ChannelMenu = ({
   const { setModal } = useModal(EditModalName);
   const { setModal: setLeavingModal } = useModal(LeavingModalName);
   const { setModal: setProfileModal } = useModal(ProfileModalName);
+  const [showSubmenu, setShowSubmenu] = useState(false);
+
+  const muting = channel.isMuted;
+  const [isMuted, setIsMuted] = useState(muting);
+
+  useEffect(() => {
+    if (isMuted) channel.isMuted = true;
+    if (!isMuted) channel.isMuted = false;
+  }, [isMuted]);
 
   const { showMenu, setShowMenu: setShowSideMenu } = useContextMenu(
     channel.id + "contextMenu"
@@ -55,7 +66,10 @@ export const ChannelMenu = ({
 
   if (showMenu || setShowChannelMenu) {
     return (
-      <DropdownMenu closeMenu={setShowMenu} className={className}>
+      <DropdownMenu
+        closeMenu={setShowMenu}
+        className={className ? className : "channel"}
+      >
         {narrow && !className && (
           <MenuItem
             onClick={() => {
@@ -102,15 +116,31 @@ export const ChannelMenu = ({
         <MenuSection className={`${channel.type === "channel" && "channel"}`}>
           <MenuItem
             onClick={() => {
-              channel.isMuted = !channel.isMuted;
-              setShowMenu(false);
+              if (isMuted) {
+                setIsMuted(false);
+                setShowMenu(false);
+              }
+            }}
+            onMouseEnter={() => {
+              if (!isMuted) setShowSubmenu(true);
+            }}
+            onMouseLeave={() => {
+              if (!isMuted) setShowSubmenu(false);
             }}
           >
             <MuteIcon width={16} height={16} />
+            {!isMuted && <NextIcon />}
             <MenuText>
-              {(channel.isMuted ? "Unmute" : "Mute") +
+              {(isMuted ? "Unmute" : "Mute") +
                 (channel.type === "group" ? " Group" : " Chat")}
             </MenuText>
+            {!isMuted && showSubmenu && (
+              <MuteMenu
+                setIsMuted={setIsMuted}
+                setShowSubmenu={setShowSubmenu}
+                className="submenu"
+              />
+            )}
           </MenuItem>
           <MenuItem onClick={() => clearNotifications(channel.id)}>
             <CheckIcon width={16} height={16} />

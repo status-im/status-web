@@ -32,14 +32,11 @@ export const MenuItem = styled.li`
   padding: 8px 8px 8px 14px;
   cursor: pointer;
   color: ${({ theme }) => theme.primary};
+  position: relative;
 
   &:hover,
   &:hover > span {
     background: ${({ theme }) => theme.border};
-  }
-
-  & > svg {
-    fill: ${({ theme }) => theme.tertiary};
   }
 
   & > svg.red {
@@ -70,14 +67,25 @@ const MenuBlock = styled.div`
   top: calc(100% - 8px);
   z-index: 2;
 
+  &.channel {
+    top: calc(100% - 32px);
+  }
+
   &.side {
     top: 20px;
-    right: -90px;
+    left: calc(100% - 35px);
+    right: unset;
   }
 
   &.narrow {
     top: 20px;
     right: 0;
+  }
+
+  &.submenu {
+    top: -8px;
+    left: 100%;
+    right: unset;
   }
 `;
 
