@@ -1,29 +1,37 @@
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-import { useClickOutside } from "../../hooks/useClickOutside";
 import { textSmallStyles } from "../Text";
 
 type DropdownMenuProps = {
   children: ReactNode;
   className?: string;
-  closeMenu: (val: boolean) => void;
 };
 
-export function DropdownMenu({
-  children,
-  className,
-  closeMenu,
-}: DropdownMenuProps) {
-  const ref = useRef(null);
-  useClickOutside(ref, () => closeMenu(false));
-
+export function DropdownMenu({ children, className }: DropdownMenuProps) {
   return (
-    <MenuBlock className={className} ref={ref}>
+    <MenuBlock className={className}>
       <MenuList>{children}</MenuList>
     </MenuBlock>
   );
 }
+
+const MenuBlock = styled.div`
+  width: 207px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
+    0px 4px 12px rgba(0, 34, 51, 0.08);
+  border-radius: 8px;
+  padding: 8px 0;
+  position: absolute;
+  top: calc(100% - 8px);
+  right: 8px;
+  z-index: 2;
+`;
+
+const MenuList = styled.ul`
+  list-style: none;
+`;
 
 export const MenuItem = styled.li`
   width: 100%;
@@ -32,14 +40,11 @@ export const MenuItem = styled.li`
   padding: 8px 8px 8px 14px;
   cursor: pointer;
   color: ${({ theme }) => theme.primary};
+  position: relative;
 
   &:hover,
   &:hover > span {
     background: ${({ theme }) => theme.border};
-  }
-
-  & > svg {
-    fill: ${({ theme }) => theme.tertiary};
   }
 
   & > svg.red {
@@ -58,29 +63,15 @@ export const MenuText = styled.span`
   ${textSmallStyles}
 `;
 
-const MenuBlock = styled.div`
-  width: 207px;
-  background: ${({ theme }) => theme.bodyBackgroundColor};
-  box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
-    0px 4px 12px rgba(0, 34, 51, 0.08);
-  border-radius: 8px;
-  padding: 8px 0;
-  position: absolute;
-  right: 8px;
-  top: calc(100% - 8px);
-  z-index: 2;
+export const MenuSection = styled.div`
+  padding: 4px 0;
+  margin: 4px 0;
+  border-top: 1px solid ${({ theme }) => theme.inputColor};
+  border-bottom: 1px solid ${({ theme }) => theme.inputColor};
 
-  &.side {
-    top: 20px;
-    right: -90px;
+  &.channel {
+    padding: 0;
+    margin: 0;
+    border: none;
   }
-
-  &.narrow {
-    top: 20px;
-    right: 0;
-  }
-`;
-
-const MenuList = styled.ul`
-  list-style: none;
 `;

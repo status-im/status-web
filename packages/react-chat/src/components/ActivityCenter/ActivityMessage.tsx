@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { Activity } from "../../models/Activity";
 import { equalDate } from "../../utils/equalDate";
 import { DownloadButton } from "../Buttons/DownloadButton";
@@ -87,6 +88,9 @@ export function ActivityMessage({
       setElements(newSplit);
     }
   }, [activity.message?.content]);
+
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowMenu(false));
 
   return (
     <MessageOuterWrapper>
@@ -214,6 +218,7 @@ export function ActivityMessage({
                 onClick={() => {
                   setShowMenu((e) => !e);
                 }}
+                ref={ref}
               >
                 {showMenu && (
                   <ContactMenu id={activity.user} setShowMenu={setShowMenu} />

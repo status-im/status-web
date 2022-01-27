@@ -16,7 +16,7 @@ import {
   NameInputWrapper,
 } from "../Form/inputStyles";
 import { ClearSvgFull } from "../Icons/ClearIconFull";
-import { CopySvg } from "../Icons/CopyIcon";
+import { CopyIcon } from "../Icons/CopyIcon";
 import { EditIcon } from "../Icons/EditIcon";
 import { LeftIcon } from "../Icons/LeftIcon";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
@@ -151,7 +151,7 @@ export const ProfileModal = () => {
                   </UserAddress>
 
                   <CopyButton onClick={() => copy(id)}>
-                    <CopySvg width={24} height={24} />
+                    <CopyIcon width={24} height={24} />
                   </CopyButton>
                 </>
               )}

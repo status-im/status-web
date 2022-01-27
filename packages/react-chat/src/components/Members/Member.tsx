@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { Contact } from "../../models/Contact";
 import { ContactMenu } from "../Form/ContactMenu";
 import { IconBtn, UserAddress } from "../Messages/Styles";
@@ -20,6 +21,9 @@ export function Member({ contact, isOnline, isYou, onClick }: MemberProps) {
 
   const [showMenu, setShowMenu] = useState(false);
 
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowMenu(false));
+
   return (
     <MemberData onClick={onClick} className={`${isYou && "you"}`}>
       <MemberIcon
@@ -32,6 +36,7 @@ export function Member({ contact, isOnline, isYou, onClick }: MemberProps) {
         onClick={() => {
           if (identity) setShowMenu((e) => !e);
         }}
+        ref={ref}
       >
         {showMenu && <ContactMenu id={contact.id} setShowMenu={setShowMenu} />}
         <UserLogo

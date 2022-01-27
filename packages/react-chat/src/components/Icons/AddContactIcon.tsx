@@ -1,19 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-type AddContactSvgProps = {
+type AddContactIconProps = {
   width: number;
   height: number;
   className?: string;
 };
 
-export function AddContactSvg({
+export function AddContactIcon({
   width,
   height,
   className,
-}: AddContactSvgProps) {
+}: AddContactIconProps) {
   return (
-    <svg
+    <Icon
       width={width}
       height={height}
       viewBox="0 0 16 16"
@@ -28,20 +28,10 @@ export function AddContactSvg({
       />
       <path d="M8.07357 11.6671C8.35289 11.6707 8.60016 11.4677 8.62336 11.1893C8.64601 10.9175 8.44624 10.6758 8.17357 10.6689C8.11597 10.6674 8.05818 10.6667 8.00022 10.6667C5.97321 10.6667 4.15749 11.5713 2.93477 12.9989C2.77487 13.1856 2.79579 13.4622 2.96961 13.636C3.18548 13.8519 3.54282 13.8208 3.74449 13.5916C4.78296 12.4114 6.30462 11.6667 8.00022 11.6667C8.02471 11.6667 8.04916 11.6668 8.07357 11.6671Z" />
       <path d="M10.167 11.1667C10.167 10.8905 10.3908 10.6667 10.667 10.6667H11.5003C11.6844 10.6667 11.8337 10.5174 11.8337 10.3333V9.5C11.8337 9.22386 12.0575 9 12.3337 9C12.6098 9 12.8337 9.22386 12.8337 9.5V10.3333C12.8337 10.5174 12.9829 10.6667 13.167 10.6667H14.0003C14.2765 10.6667 14.5003 10.8905 14.5003 11.1667C14.5003 11.4428 14.2765 11.6667 14.0003 11.6667H13.167C12.9829 11.6667 12.8337 11.8159 12.8337 12V12.8333C12.8337 13.1095 12.6098 13.3333 12.3337 13.3333C12.0575 13.3333 11.8337 13.1095 11.8337 12.8333V12C11.8337 11.8159 11.6844 11.6667 11.5003 11.6667H10.667C10.3908 11.6667 10.167 11.4428 10.167 11.1667Z" />
-    </svg>
+    </Icon>
   );
 }
 
-export const AddContactIcon = () => {
-  return <Icon width={16} height={16} />;
-};
-
-const Icon = styled(AddContactSvg)`
-  & > path {
-    fill: ${({ theme }) => theme.tertiary};
-  }
-
-  &:hover > path {
-    fill: ${({ theme }) => theme.bodyBackgroundColor};
-  }
+const Icon = styled.svg`
+  fill: ${({ theme }) => theme.tertiary};
 `;

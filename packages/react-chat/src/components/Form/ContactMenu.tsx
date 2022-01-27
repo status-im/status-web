@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useManageContact } from "../../hooks/useManageContact";
-import { AddContactSvg } from "../Icons/AddContactIcon";
+import { AddContactIcon } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
 import { ChatSvg } from "../Icons/ChatIcon";
 import { EditIcon } from "../Icons/EditIcon";
@@ -39,7 +39,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
 
   if (!contact) return null;
   return (
-    <ContactDropdown closeMenu={setShowMenu}>
+    <ContactDropdown>
       <ContactInfo>
         <UserIcon />
         <UserNameWrapper>
@@ -68,7 +68,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
               setModal({ id, requestState: true });
             }}
           >
-            <AddContactSvg width={16} height={16} />
+            <AddContactIcon width={16} height={16} />
             <MenuText>Send Contact Request</MenuText>
           </MenuItem>
         )}
