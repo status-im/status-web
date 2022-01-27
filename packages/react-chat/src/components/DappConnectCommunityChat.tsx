@@ -16,13 +16,19 @@ import { Theme } from "../styles/themes";
 
 import { ChatLoader } from "./ChatLoader";
 
-interface ReactChatProps {
+interface DappConnectCommunityChatProps {
   theme: Theme;
+  communityKey: string;
   config: ConfigType;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function ReactChat({ theme, config, fetchMetadata }: ReactChatProps) {
+export function DappConnectCommunityChat({
+  theme,
+  config,
+  fetchMetadata,
+  communityKey,
+}: DappConnectCommunityChatProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   return (
     <ConfigProvider config={config}>
@@ -35,7 +41,7 @@ export function ReactChat({ theme, config, fetchMetadata }: ReactChatProps) {
                   <ToastProvider>
                     <Wrapper ref={ref}>
                       <GlobalStyle />
-                      <ChatLoader />
+                      <ChatLoader communityKey={communityKey} />
                       <div id="modal-root" />
                     </Wrapper>
                   </ToastProvider>

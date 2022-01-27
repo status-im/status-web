@@ -11,13 +11,17 @@ import {
 import { Chat } from "./Chat";
 import { IdentityLoader } from "./Form/IdentityLoader";
 
-export function ChatLoader() {
+type ChatLoaderProps = {
+  communityKey: string;
+};
+
+export function ChatLoader({ communityKey }: ChatLoaderProps) {
   const [userCreationState] = useUserCreationState();
 
   if (userCreationState === UserCreationState.NotCreating)
     return (
       <IdentityProvider>
-        <MessengerProvider>
+        <MessengerProvider communityKey={communityKey}>
           <ChatStateProvider>
             <Chat />
           </ChatStateProvider>
