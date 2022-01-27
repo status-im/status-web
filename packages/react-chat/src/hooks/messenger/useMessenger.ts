@@ -6,7 +6,7 @@ import {
   Identity,
   Messenger,
 } from "@waku/status-communities/dist/cjs";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { ReducerAction, useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { useConfig } from "../../contexts/configProvider";
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
@@ -87,7 +87,7 @@ function useCreateCommunity(
         name: community.description.identity?.displayName ?? "",
         icon: uintToImgUrl(
           community.description?.identity?.images?.thumbnail?.payload ??
-            new Uint8Array()
+          new Uint8Array()
         ),
         members: 0,
         membersList: Object.keys(community.description.proto.members),
@@ -101,17 +101,59 @@ function useCreateCommunity(
   return { community, communityData };
 }
 
+export type ChannelsState = {
+  channels: ChannelsData,
+  activeChannel: ChannelData,
+}
+
+export type ChannelAction = { type: "AddChannel", payload: ChannelData } | { type: "UpdateActive", payload: ChannelData } | { type: 'ChangeActive', payload: string } | { type: 'ToggleActiveMuted' } | {type:'RemoveChannel', payload:string};
+
+function channelReducer(state: ChannelsState, action: ChannelAction): ChannelsState {
+  switch (action.type) {
+    case 'AddChannel': {
+      const channels = { ...state.channels, [action.payload.id]: action.payload };
+      return { channels, activeChannel: action.payload };
+    }
+    case 'UpdateActive': {
+      const activeChannel = state.activeChannel
+      if (activeChannel) {
+        return { channels: { ...state.channels, [activeChannel.id]: action.payload }, activeChannel: action.payload }
+      }
+      return state
+    }
+    case 'ChangeActive': {
+      const newActive = state.channels[action.payload]
+      if (newActive) {
+        return { ...state, activeChannel: newActive }
+      }
+      return state
+    }
+    case 'ToggleActiveMuted': {
+      const activeChannel = state.activeChannel
+      if (activeChannel) {
+        const updatedChannel: ChannelData = { ...activeChannel, isMuted: !activeChannel.isMuted }
+        return { channels: { ...state.channels, [activeChannel.id]: updatedChannel }, activeChannel: updatedChannel }
+      }
+      return state
+    }
+    case 'RemoveChannel': {
+      delete state.channels[action.payload]
+      return {...state, channels: state.channels}
+    }
+    default:
+
+      throw new Error();
+  }
+  return state;
+}
+
 export function useMessenger(
   communityKey: string,
   identity: Identity | undefined,
   newNickname: string | undefined
 ) {
-  const [activeChannel, setActiveChannel] = useState<ChannelData>({
-    id: "",
-    name: "",
-    description: "",
-    type: "channel",
-  });
+
+  const [channelsState, channelsDispatch] = useReducer(channelReducer, { channels: {}, activeChannel: {id:'',name:'',type:'channel'} } as ChannelsState)
 
   const messenger = useCreateMessenger(identity);
 
@@ -129,7 +171,7 @@ export function useMessenger(
     messages,
     mentions,
     clearMentions,
-  } = useMessages(activeChannel.id, identity, contactsClass);
+  } = useMessages(channelsState?.activeChannel?.id, identity, contactsClass);
 
   const { community, communityData } = useCreateCommunity(
     messenger,
@@ -138,38 +180,34 @@ export function useMessenger(
     contactsClass
   );
 
-  const [channels, setChannels] = useState<ChannelsData>({});
-
-  const setChannel = useCallback((channel: ChannelData) => {
-    setChannels((prev) => {
-      return { ...prev, [channel.id]: channel };
-    });
-    setActiveChannel(channel);
-  }, []);
-
   useEffect(() => {
     if (community?.chats) {
       for (const chat of community.chats.values()) {
-        setChannel({
-          id: chat.id,
-          name: chat.communityChat?.identity?.displayName ?? "",
-          description: chat.communityChat?.identity?.description ?? "",
-          type: "channel",
-        });
+        channelsDispatch({
+          type: 'AddChannel', payload: {
+            id: chat.id,
+            name: chat.communityChat?.identity?.displayName ?? "",
+            description: chat.communityChat?.identity?.description ?? "",
+            type: "channel",
+          }
+        })
       }
     }
   }, [community]);
 
   useEffect(() => {
-    Object.values(channels)
+    Object.values(channelsState.channels)
       .filter((channel) => channel.type === "dm")
       .forEach((channel) => {
         const contact = contacts?.[channel?.members?.[0]?.id ?? ""];
         if (contact && channel.name !== (contact?.customName ?? channel.name)) {
-          setChannel({
-            ...channel,
-            name: contact?.customName ?? channel.name,
-          });
+          channelsDispatch({
+            type: 'AddChannel', payload:
+            {
+              ...channel,
+              name: contact?.customName ?? channel.name,
+            }
+          })
         }
       });
   }, [contacts]);
@@ -190,7 +228,7 @@ export function useMessenger(
   );
 
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(
-    activeChannel.id,
+    channelsState.activeChannel.id,
     messenger,
     groupChat
   );
@@ -220,28 +258,28 @@ export function useMessenger(
         };
       }
       if (content) {
-        if (activeChannel.type === "group") {
-          await groupChat?.sendMessage(activeChannel.id, content, responseTo);
+        if (channelsState.activeChannel.type === "group") {
+          await groupChat?.sendMessage(channelsState.activeChannel.id, content, responseTo);
         } else {
-          await messenger?.sendMessage(activeChannel.id, content, responseTo);
+          await messenger?.sendMessage(channelsState.activeChannel.id, content, responseTo);
         }
       }
     },
-    [messenger, groupChat, activeChannel]
+    [messenger, groupChat, channelsState.activeChannel]
   );
 
   useEffect(() => {
-    if (activeChannel) {
-      if (notifications[activeChannel.id] > 0) {
-        clearNotifications(activeChannel.id);
-        clearMentions(activeChannel.id);
+    if (channelsState.activeChannel) {
+      if (notifications[channelsState.activeChannel.id] > 0) {
+        clearNotifications(channelsState.activeChannel.id);
+        clearMentions(channelsState.activeChannel.id);
       }
     }
-  }, [notifications, activeChannel]);
+  }, [notifications, channelsState]);
 
   const loadingMessenger = useMemo(() => {
-    return !communityData || !messenger || !activeChannel;
-  }, [communityData, messenger, activeChannel]);
+    return !communityData || !messenger || !channelsState.activeChannel.id;
+  }, [communityData, messenger, channelsState]);
 
   return {
     messenger,
@@ -255,10 +293,10 @@ export function useMessenger(
     communityData,
     contacts,
     setContacts,
-    channels,
+    channels:channelsState.channels,
     setChannel,
     removeChannel,
-    activeChannel,
+    activeChannel:channelsState.activeChannel,
     setActiveChannel,
     mentions,
     clearMentions,

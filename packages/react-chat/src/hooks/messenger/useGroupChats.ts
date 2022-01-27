@@ -11,6 +11,7 @@ import { ChannelData, ChannelsData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
 import { uintToImgUrl } from "../../utils";
+import { ChannelAction, ChannelsState } from "./useMessenger";
 
 const contactFromId = (member: string): Contact => {
   return {
@@ -25,10 +26,9 @@ const contactFromId = (member: string): Contact => {
 export function useGroupChats(
   messenger: Messenger | undefined,
   identity: Identity | undefined,
-  setChannels: React.Dispatch<React.SetStateAction<ChannelsData>>,
-  setActiveChannel: (channel: ChannelData) => void,
+  dispatch: (action: ChannelAction) => void,
   addChatMessage: (newMessage: ChatMessage | undefined, id: string) => void,
-  channels: ChannelsData
+  channelsState: ChannelsState
 ) {
   const groupChat = useMemo(() => {
     if (messenger && identity) {
@@ -51,9 +51,7 @@ export function useGroupChats(
                 type: "dm",
                 description: `Chatkey: ${chat.members[0].id}`,
               };
-        setChannels((prev) => {
-          return { ...prev, [channel.id]: channel };
-        });
+        dispatch({type:'AddChannel',payload:channel})
       };
       const removeChat = (chat: GroupChat) => {
         setChannels((prev) => {
@@ -116,7 +114,7 @@ export function useGroupChats(
         groupChat.quitChat(channelId);
       }
     },
-    [channels, groupChat]
+    [groupChat]
   );
 
   const addMembers = useCallback(

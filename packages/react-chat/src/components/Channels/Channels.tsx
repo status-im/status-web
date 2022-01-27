@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { ChatState, useChatState } from "../../contexts/chatStateProvider";
@@ -25,10 +25,13 @@ function GenerateChannels({
 }: GenerateChannelsProps) {
   const { mentions, notifications, activeChannel, setActiveChannel, channels } =
     useMessengerContext();
+
+  const channelList = useMemo(() => Object.values(channels),[channels])
+
   const setChatState = useChatState()[1];
   return (
     <>
-      {Object.values(channels)
+      {channelList
         .filter((channel) => channel.type === type)
         .map((channel) => (
           <Channel

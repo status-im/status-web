@@ -41,7 +41,7 @@ export const ChannelMenu = ({
   className,
 }: ChannelMenuProps) => {
   const narrow = useNarrow();
-  const { clearNotifications } = useMessengerContext();
+  const { clearNotifications, setChannel } = useMessengerContext();
   const { setModal } = useModal(EditModalName);
   const { setModal: setLeavingModal } = useModal(LeavingModalName);
   const { setModal: setProfileModal } = useModal(ProfileModalName);
@@ -113,6 +113,7 @@ export const ChannelMenu = ({
         <MenuSection className={`${channel.type === "channel" && "channel"}`}>
           <MenuItem
             onClick={() => {
+<<<<<<< HEAD
               if (isMuted) {
                 setIsMuted(false);
                 setShowMenu(false);
@@ -123,6 +124,10 @@ export const ChannelMenu = ({
             }}
             onMouseLeave={() => {
               if (!isMuted) setShowSubmenu(false);
+=======
+              setChannel({...channel,isMuted:!channel.isMuted});
+              setShowMenu(false);
+>>>>>>> 65bbe2b (efactor channels to use reducer)
             }}
           >
             <MuteIcon width={16} height={16} />
