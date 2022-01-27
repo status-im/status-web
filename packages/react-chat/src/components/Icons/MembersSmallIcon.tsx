@@ -32,5 +32,5 @@ export function MembersSmallIcon({
 }
 
 const Icon = styled.svg`
-  fill: ${({ theme }) => theme.primary};
+  fill: ${({ theme }) => theme.tertiary};
 `;
