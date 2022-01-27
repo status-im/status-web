@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-type CopySvgProps = {
+type CopyIconProps = {
   width: number;
   height: number;
   className?: string;
 };
 
-export function CopySvg({ width, height, className }: CopySvgProps) {
+export function CopyIcon({ width, height, className }: CopyIconProps) {
   return (
-    <svg
+    <Icon
       width={width}
       height={height}
       viewBox="0 0 16 16"
@@ -22,16 +22,10 @@ export function CopySvg({ width, height, className }: CopySvgProps) {
         clipRule="evenodd"
         d="M6.00016 4.00065C6.00016 2.52789 7.19407 1.33398 8.66683 1.33398H12.0002C13.4729 1.33398 14.6668 2.52789 14.6668 4.00065V7.33398C14.6668 8.80674 13.4729 10.0007 12.0002 10.0007H8.66683C7.19407 10.0007 6.00016 8.80674 6.00016 7.33398V4.00065ZM8.66683 2.33398H12.0002C12.9206 2.33398 13.6668 3.08018 13.6668 4.00065V7.33398C13.6668 8.25446 12.9206 9.00065 12.0002 9.00065H8.66683C7.74636 9.00065 7.00016 8.25446 7.00016 7.33398V4.00065C7.00016 3.08018 7.74636 2.33398 8.66683 2.33398Z"
       />
-    </svg>
+    </Icon>
   );
 }
 
-export const CopyIcon = () => {
-  return <Icon width={16} height={16} />;
-};
-
-const Icon = styled(CopySvg)`
-  & > path {
-    fill: ${({ theme }) => theme.tertiary};
-  }
+const Icon = styled.svg`
+  fill: ${({ theme }) => theme.tertiary};
 `;

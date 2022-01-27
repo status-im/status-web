@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import { copyImg } from "../../utils/copyImg";
 import { downloadImg } from "../../utils/downloadImg";
-import { CopySvg } from "../Icons/CopyIcon";
+import { CopyIcon } from "../Icons/CopyIcon";
 import { DownloadIcon } from "../Icons/DownloadIcon";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
@@ -19,7 +19,7 @@ export const ImageMenu = ({ imageId }: ImageMenuProps) => {
   return showMenu ? (
     <ImageDropdown closeMenu={setShowMenu}>
       <MenuItem onClick={() => copyImg(imageId)}>
-        <CopySvg height={16} width={16} /> <MenuText>Copy image</MenuText>
+        <CopyIcon height={16} width={16} /> <MenuText>Copy image</MenuText>
       </MenuItem>
       <MenuItem onClick={() => downloadImg(imageId)}>
         <DownloadIcon height={16} width={16} />
