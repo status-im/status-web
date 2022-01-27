@@ -98,7 +98,7 @@ export function Channel({
         <ChannelMenu
           channel={channel}
           setEditGroup={setEditGroup}
-          className={narrow ? "narrow" : "side"}
+          className={narrow ? "sideNarrow" : "side"}
         />
       )}
     </ChannelWrapper>

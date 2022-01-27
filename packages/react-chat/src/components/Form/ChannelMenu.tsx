@@ -20,7 +20,7 @@ import { EditModalName } from "../Modals/EditModal";
 import { LeavingModalName } from "../Modals/LeavingModal";
 import { ProfileModalName } from "../Modals/ProfileModal";
 
-import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
+import { DropdownMenu, MenuItem, MenuSection, MenuText } from "./DropdownMenu";
 import { MuteMenu } from "./MuteMenu";
 
 interface ChannelMenuProps {
@@ -66,10 +66,7 @@ export const ChannelMenu = ({
 
   if (showMenu || setShowChannelMenu) {
     return (
-      <DropdownMenu
-        closeMenu={setShowMenu}
-        className={className ? className : "channel"}
-      >
+      <ChannelDropdown closeMenu={setShowMenu} className={className}>
         {narrow && !className && (
           <MenuItem
             onClick={() => {
@@ -138,7 +135,7 @@ export const ChannelMenu = ({
               <MuteMenu
                 setIsMuted={setIsMuted}
                 setShowSubmenu={setShowSubmenu}
-                className="submenu"
+                className={className}
               />
             )}
           </MenuItem>
@@ -169,22 +166,25 @@ export const ChannelMenu = ({
             </MenuText>
           </MenuItem>
         )}
-      </DropdownMenu>
+      </ChannelDropdown>
     );
   } else {
     return null;
   }
 };
 
-const MenuSection = styled.div`
-  padding: 4px 0;
-  margin: 4px 0;
-  border-top: 1px solid ${({ theme }) => theme.inputColor};
-  border-bottom: 1px solid ${({ theme }) => theme.inputColor};
+const ChannelDropdown = styled(DropdownMenu)`
+  top: calc(100% + 4px);
+  right: 0px;
 
-  &.channel {
-    padding: 0;
-    margin: 0;
-    border: none;
+  &.side {
+    top: 20px;
+    left: calc(100% - 35px);
+    right: unset;
+  }
+
+  &.sideNarrow {
+    top: 20px;
+    right: 8px;
   }
 `;

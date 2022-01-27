@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import styled from "styled-components";
 
 import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
@@ -25,7 +26,7 @@ export const MuteMenu = ({
   );
 
   return (
-    <DropdownMenu closeMenu={setShowSubmenu} className={className}>
+    <MuteDropdown closeMenu={setShowSubmenu} className={className}>
       <MenuItem onClick={() => muteChannel(0.25)}>
         <MenuText>For 15 min</MenuText>
       </MenuItem>
@@ -41,6 +42,28 @@ export const MuteMenu = ({
       <MenuItem onClick={() => setIsMuted(true)}>
         <MenuText>Until I turn it back on</MenuText>
       </MenuItem>
-    </DropdownMenu>
+    </MuteDropdown>
   );
 };
+
+const MuteDropdown = styled(DropdownMenu)`
+  width: 176px;
+  top: 100%;
+  right: -60px;
+  z-index: 3;
+
+  &.side {
+    width: 176px;
+    top: -8px;
+    left: 100%;
+    right: unset;
+  }
+
+  &.narrow,
+  &.sideNarrow {
+    width: 176px;
+    top: 100%;
+    right: -16px;
+    z-index: 3;
+  }
+`;

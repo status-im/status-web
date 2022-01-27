@@ -25,6 +25,23 @@ export function DropdownMenu({
   );
 }
 
+const MenuBlock = styled.div`
+  width: 207px;
+  background: ${({ theme }) => theme.bodyBackgroundColor};
+  box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
+    0px 4px 12px rgba(0, 34, 51, 0.08);
+  border-radius: 8px;
+  padding: 8px 0;
+  position: absolute;
+  top: calc(100% - 8px);
+  right: 8px;
+  z-index: 2;
+`;
+
+const MenuList = styled.ul`
+  list-style: none;
+`;
+
 export const MenuItem = styled.li`
   width: 100%;
   display: flex;
@@ -55,40 +72,15 @@ export const MenuText = styled.span`
   ${textSmallStyles}
 `;
 
-const MenuBlock = styled.div`
-  width: 207px;
-  background: ${({ theme }) => theme.bodyBackgroundColor};
-  box-shadow: 0px 2px 4px rgba(0, 34, 51, 0.16),
-    0px 4px 12px rgba(0, 34, 51, 0.08);
-  border-radius: 8px;
-  padding: 8px 0;
-  position: absolute;
-  right: 8px;
-  top: calc(100% - 8px);
-  z-index: 2;
+export const MenuSection = styled.div`
+  padding: 4px 0;
+  margin: 4px 0;
+  border-top: 1px solid ${({ theme }) => theme.inputColor};
+  border-bottom: 1px solid ${({ theme }) => theme.inputColor};
 
   &.channel {
-    top: calc(100% - 32px);
+    padding: 0;
+    margin: 0;
+    border: none;
   }
-
-  &.side {
-    top: 20px;
-    left: calc(100% - 35px);
-    right: unset;
-  }
-
-  &.narrow {
-    top: 20px;
-    right: 0;
-  }
-
-  &.submenu {
-    top: -8px;
-    left: 100%;
-    right: unset;
-  }
-`;
-
-const MenuList = styled.ul`
-  list-style: none;
 `;

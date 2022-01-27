@@ -107,19 +107,21 @@ export function ChatTopbar({
         )}
         <TopBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
           <MoreIcon />
+
+          {showChannelMenu && (
+            <ChannelMenu
+              channel={activeChannel}
+              showNarrowMembers={showState === ChatBodyState.Members}
+              switchMemberList={() => switchShowState(ChatBodyState.Members)}
+              setShowChannelMenu={setShowChannelMenu}
+              setEditGroup={setEditGroup}
+              className={`${narrow && "narrow"}`}
+            />
+          )}
         </TopBtn>
         {!narrow && <ActivityButton />}
       </MenuWrapper>
       {loadingMessenger && <Loading />}
-      {showChannelMenu && (
-        <ChannelMenu
-          channel={activeChannel}
-          showNarrowMembers={showState === ChatBodyState.Members}
-          switchMemberList={() => switchShowState(ChatBodyState.Members)}
-          setShowChannelMenu={setShowChannelMenu}
-          setEditGroup={setEditGroup}
-        />
-      )}
     </Topbar>
   );
 }
@@ -186,6 +188,7 @@ export const TopBtn = styled.button`
   border-radius: 8px;
   padding: 0;
   background: ${({ theme }) => theme.bodyBackgroundColor};
+  position: relative;
 
   &:hover {
     background: ${({ theme }) => theme.inputColor};
