@@ -4,6 +4,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Tooltip } from "../Form/Tooltip";
@@ -28,6 +29,7 @@ export function Reactions({
   setMessageReactions,
 }: ReactionsProps) {
   const identity = useIdentity();
+  const { activeChannel } = useMessengerContext();
 
   const userMessage =
     identity && message.sender === utils.bufToHex(identity.publicKey);
@@ -57,10 +59,12 @@ export function Reactions({
           <Tooltip tip="Edit" />
         </ReactionBtn>
       )}
-      <ReactionBtn>
-        <PinIcon width={22} height={22} />
-        <Tooltip tip="Pin" />
-      </ReactionBtn>
+      {activeChannel?.type !== "channel" && (
+        <ReactionBtn>
+          <PinIcon width={22} height={22} />
+          <Tooltip tip="Pin" />
+        </ReactionBtn>
+      )}
       {userMessage && (
         <ReactionBtn className="red">
           <DeleteIcon width={22} height={22} className="grey" />
