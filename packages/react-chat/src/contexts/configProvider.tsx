@@ -1,13 +1,11 @@
 import React, { createContext, useContext } from "react";
 
 export type ConfigType = {
-  communityKey: string;
   environment: string;
   dappUrl: string;
 };
 
 const ConfigContext = createContext<ConfigType>({
-  communityKey: "",
   environment: "production",
   dappUrl: "",
 });

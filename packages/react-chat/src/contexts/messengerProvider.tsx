@@ -14,6 +14,7 @@ const MessengerContext = createContext<MessengerType>({
   clearMentions: () => undefined,
   loadPrevDay: async () => undefined,
   loadingMessages: false,
+  loadingMessenger: true,
   communityData: undefined,
   contacts: {},
   setContacts: () => undefined,
@@ -33,12 +34,16 @@ export function useMessengerContext() {
 }
 
 interface MessengerProviderProps {
+  communityKey: string;
   children: React.ReactNode;
 }
 
-export function MessengerProvider({ children }: MessengerProviderProps) {
+export function MessengerProvider({
+  communityKey,
+  children,
+}: MessengerProviderProps) {
   const identity = useIdentity();
   const nickname = useNickname();
-  const messenger = useMessenger(identity, nickname);
+  const messenger = useMessenger(communityKey, identity, nickname);
   return <MessengerContext.Provider value={messenger} children={children} />;
 }

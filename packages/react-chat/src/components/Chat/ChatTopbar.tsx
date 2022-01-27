@@ -63,7 +63,7 @@ export function ChatTopbar({
   showMembers,
   setEditGroup,
 }: ChatTopbarProps) {
-  const { messenger, activeChannel, communityData } = useMessengerContext();
+  const { activeChannel, loadingMessenger } = useMessengerContext();
 
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
@@ -77,7 +77,7 @@ export function ChatTopbar({
       className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
     >
       <ChannelWrapper className={narrow ? "narrow" : ""}>
-        {messenger && communityData ? (
+        {!loadingMessenger ? (
           <>
             {narrow && (
               <CommunityWrap className={narrow ? "narrow" : ""}>
@@ -110,7 +110,7 @@ export function ChatTopbar({
         </TopBtn>
         {!narrow && <ActivityButton />}
       </MenuWrapper>
-      {!messenger && !communityData && <Loading />}
+      {loadingMessenger && <Loading />}
       {showChannelMenu && (
         <ChannelMenu
           channel={activeChannel}

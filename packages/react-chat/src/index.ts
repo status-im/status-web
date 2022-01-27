@@ -1,4 +1,4 @@
-import { ReactChat } from "./components/ReactChat";
+import { DappConnectCommunityChat } from "./components/DappConnectCommunityChat";
 import { ConfigType } from "./contexts/configProvider";
 import { darkTheme, lightTheme } from "./styles/themes";
-export { ReactChat, lightTheme, darkTheme, ConfigType };
+export { DappConnectCommunityChat, lightTheme, darkTheme, ConfigType };

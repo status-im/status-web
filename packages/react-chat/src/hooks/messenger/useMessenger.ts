@@ -36,6 +36,7 @@ export type MessengerType = {
   clearMentions: (id: string) => void;
   loadPrevDay: (id: string, groupChat?: boolean) => Promise<void>;
   loadingMessages: boolean;
+  loadingMessenger: boolean;
   communityData: CommunityData | undefined;
   contacts: Contacts;
   setContacts: React.Dispatch<React.SetStateAction<Contacts>>;
@@ -101,10 +102,10 @@ function useCreateCommunity(
 }
 
 export function useMessenger(
+  communityKey: string,
   identity: Identity | undefined,
   newNickname: string | undefined
 ) {
-  const { communityKey } = useConfig();
   const [activeChannel, setActiveChannel] = useState<ChannelData>({
     id: "",
     name: "",
@@ -238,6 +239,10 @@ export function useMessenger(
     }
   }, [notifications, activeChannel]);
 
+  const loadingMessenger = useMemo(() => {
+    return !communityData || !messenger || !activeChannel;
+  }, [communityData, messenger, activeChannel]);
+
   return {
     messenger,
     messages,
@@ -246,6 +251,7 @@ export function useMessenger(
     clearNotifications,
     loadPrevDay,
     loadingMessages,
+    loadingMessenger,
     communityData,
     contacts,
     setContacts,

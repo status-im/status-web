@@ -85,7 +85,7 @@ export function ChatBody({
   editGroup,
   setEditGroup,
 }: ChatBodyProps) {
-  const { messenger, activeChannel, communityData } = useMessengerContext();
+  const { activeChannel, loadingMessenger } = useMessengerContext();
 
   const narrow = useNarrow();
   const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
@@ -106,11 +106,11 @@ export function ChatBody({
     }
   }, [narrow]);
 
-  if (messenger && communityData && activeChannel) {
+  if (!loadingMessenger && activeChannel) {
     return (
       <Wrapper>
         <ChatBodyWrapper className={className}>
-          {editGroup && communityData ? (
+          {editGroup ? (
             <ChatCreation
               setEditGroup={setEditGroup}
               activeChannel={activeChannel}
