@@ -66,7 +66,7 @@ export const ChannelMenu = ({
 
   if (showMenu || setShowChannelMenu) {
     return (
-      <ChannelDropdown closeMenu={setShowMenu} className={className}>
+      <ChannelDropdown className={className}>
         {narrow && !className && (
           <MenuItem
             onClick={() => {
@@ -132,11 +132,7 @@ export const ChannelMenu = ({
                 (channel.type === "group" ? " Group" : " Chat")}
             </MenuText>
             {!isMuted && showSubmenu && (
-              <MuteMenu
-                setIsMuted={setIsMuted}
-                setShowSubmenu={setShowSubmenu}
-                className={className}
-              />
+              <MuteMenu setIsMuted={setIsMuted} className={className} />
             )}
           </MenuItem>
           <MenuItem onClick={() => clearNotifications(channel.id)}>

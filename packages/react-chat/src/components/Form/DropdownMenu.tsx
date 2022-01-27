@@ -1,25 +1,16 @@
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-import { useClickOutside } from "../../hooks/useClickOutside";
 import { textSmallStyles } from "../Text";
 
 type DropdownMenuProps = {
   children: ReactNode;
   className?: string;
-  closeMenu: (val: boolean) => void;
 };
 
-export function DropdownMenu({
-  children,
-  className,
-  closeMenu,
-}: DropdownMenuProps) {
-  const ref = useRef(null);
-  useClickOutside(ref, () => closeMenu(false));
-
+export function DropdownMenu({ children, className }: DropdownMenuProps) {
   return (
-    <MenuBlock className={className} ref={ref}>
+    <MenuBlock className={className}>
       <MenuList>{children}</MenuList>
     </MenuBlock>
   );

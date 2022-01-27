@@ -5,15 +5,10 @@ import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
 
 interface SubMenuProps {
   setIsMuted: (val: boolean) => void;
-  setShowSubmenu: (val: boolean) => void;
   className?: string;
 }
 
-export const MuteMenu = ({
-  setIsMuted,
-  setShowSubmenu,
-  className,
-}: SubMenuProps) => {
+export const MuteMenu = ({ setIsMuted, className }: SubMenuProps) => {
   const muteChannel = useCallback(
     (timeout: number) => {
       setIsMuted(true);
@@ -26,7 +21,7 @@ export const MuteMenu = ({
   );
 
   return (
-    <MuteDropdown closeMenu={setShowSubmenu} className={className}>
+    <MuteDropdown className={className}>
       <MenuItem onClick={() => muteChannel(0.25)}>
         <MenuText>For 15 min</MenuText>
       </MenuItem>

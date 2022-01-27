@@ -1,11 +1,12 @@
 import { utils } from "@waku/status-communities/dist/cjs";
 import { decode } from "html-entities";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Metadata } from "../../models/Metadata";
 import { ContactMenu } from "../Form/ContactMenu";
@@ -32,8 +33,15 @@ export function Mention({ id, setMentioned, className }: MentionProps) {
     }
   }, [contact.id, identity]);
 
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowMenu(false));
+
   return (
-    <MentionBLock onClick={() => setShowMenu(!showMenu)} className={className}>
+    <MentionBLock
+      onClick={() => setShowMenu(!showMenu)}
+      className={className}
+      ref={ref}
+    >
       {`@${contact?.customName ?? contact.trueName}`}
       {showMenu && <ContactMenu id={id.slice(1)} setShowMenu={setShowMenu} />}
     </MentionBLock>

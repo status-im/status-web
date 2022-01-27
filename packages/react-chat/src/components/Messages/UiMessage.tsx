@@ -1,11 +1,12 @@
 import { utils } from "@waku/status-communities/dist/cjs";
 import { BaseEmoji } from "emoji-mart";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { Reply } from "../../hooks/useReply";
 import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
@@ -100,6 +101,9 @@ export function UiMessage({
       ]);
   }, [mentioned, message, quote]);
 
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowMenu(false));
+
   return (
     <MessageOuterWrapper>
       {(idx === 0 || !equalDate(prevMessage.date, message.date)) && (
@@ -117,6 +121,7 @@ export function UiMessage({
               if (identity) setShowMenu((e) => !e);
             }}
             disabled={!identity}
+            ref={ref}
           >
             {showMenu && (
               <ContactMenu id={message.sender} setShowMenu={setShowMenu} />
@@ -139,6 +144,7 @@ export function UiMessage({
                     if (identity) setShowMenu((e) => !e);
                   }}
                   disabled={!identity}
+                  ref={ref}
                 >
                   <UserName>
                     {" "}

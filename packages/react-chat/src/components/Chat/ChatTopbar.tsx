@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import {
   ActivityButton,
   ActivityWrapper,
@@ -68,6 +69,9 @@ export function ChatTopbar({
   const narrow = useNarrow();
   const [showChannelMenu, setShowChannelMenu] = useState(false);
 
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowChannelMenu(false));
+
   if (!activeChannel) {
     return <ChatTopbarLoading />;
   }
@@ -105,20 +109,21 @@ export function ChatTopbar({
             <MembersIcon />
           </TopBtn>
         )}
-        <TopBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
-          <MoreIcon />
-
-          {showChannelMenu && (
-            <ChannelMenu
-              channel={activeChannel}
-              showNarrowMembers={showState === ChatBodyState.Members}
-              switchMemberList={() => switchShowState(ChatBodyState.Members)}
-              setShowChannelMenu={setShowChannelMenu}
-              setEditGroup={setEditGroup}
-              className={`${narrow && "narrow"}`}
-            />
-          )}
-        </TopBtn>
+        <div ref={ref}>
+          <TopBtn onClick={() => setShowChannelMenu(!showChannelMenu)}>
+            <MoreIcon />
+            {showChannelMenu && (
+              <ChannelMenu
+                channel={activeChannel}
+                showNarrowMembers={showState === ChatBodyState.Members}
+                switchMemberList={() => switchShowState(ChatBodyState.Members)}
+                setShowChannelMenu={setShowChannelMenu}
+                setEditGroup={setEditGroup}
+                className={`${narrow && "narrow"}`}
+              />
+            )}
+          </TopBtn>
+        </div>
         {!narrow && <ActivityButton />}
       </MenuWrapper>
       {loadingMessenger && <Loading />}
