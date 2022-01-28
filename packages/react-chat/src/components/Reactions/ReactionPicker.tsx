@@ -10,7 +10,7 @@ const emojiLaughing = getEmojiDataFromNative("😆", "twitter", data);
 const emojiDisappointed = getEmojiDataFromNative("😥", "twitter", data);
 const emojiRage = getEmojiDataFromNative("😡", "twitter", data);
 
-const emojiArr = [
+export const emojiArr = [
   emojiHeart,
   emojiLike,
   emojiDislike,
@@ -46,13 +46,14 @@ export function ReactionPicker({
           key={emoji.id}
           onClick={() => handleReaction(emoji)}
           className={`${messageReactions.includes(emoji) && "chosen"}`}
+          menuMode={className === "menu"}
         >
           {" "}
           <Emoji
             emoji={emoji}
             set={"twitter"}
             skin={emoji.skin || 1}
-            size={32}
+            size={className === "menu" ? 20 : 32}
           />
         </EmojiBtn>
       ))}
@@ -78,11 +79,19 @@ const Wrapper = styled.div`
     transform: none;
     border-radius: 16px 16px 16px 4px;
   }
+
+  &.menu {
+    width: 100%;
+    position: static;
+    box-shadow: unset;
+    border: none;
+    padding: 0;
+  }
 `;
 
-const EmojiBtn = styled.button`
-  width: 40px;
-  height: 40px;
+export const EmojiBtn = styled.button<{ menuMode: boolean }>`
+  width: ${({ menuMode }) => (menuMode ? "24px" : "40px")};
+  height: ${({ menuMode }) => (menuMode ? "24px" : "40px")};
   display: flex;
   justify-content: center;
   align-items: center;

@@ -30,7 +30,7 @@ export function PinIcon({ width, height, className }: PinIconProps) {
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.secondary};
 
-  &:hover {
+  &.menu {
     fill: ${({ theme }) => theme.tertiary};
   }
 

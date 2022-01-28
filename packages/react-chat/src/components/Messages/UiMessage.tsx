@@ -13,6 +13,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
 import { ContactMenu } from "../Form/ContactMenu";
+import { MessageMenu } from "../Form/MessageMenu";
 import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
 import { UserLogo } from "../Members/UserLogo";
 import { Reactions } from "../Reactions/Reactions";
@@ -104,6 +105,8 @@ export function UiMessage({
   const ref = useRef(null);
   useClickOutside(ref, () => setShowMenu(false));
 
+  const messageRef = useRef(null);
+
   return (
     <MessageOuterWrapper>
       {(idx === 0 || !equalDate(prevMessage.date, message.date)) && (
@@ -115,7 +118,7 @@ export function UiMessage({
       )}
       <MessageWrapper className={`${mentioned && "mention"}`} id={message.id}>
         <MessageQuote quote={quote} />
-        <UserMessageWrapper>
+        <UserMessageWrapper ref={messageRef}>
           <IconBtn
             onClick={() => {
               if (identity) setShowMenu((e) => !e);
@@ -173,6 +176,13 @@ export function UiMessage({
               />
             )}
           </ContentWrapper>
+          <MessageMenu
+            message={message}
+            setReply={setReply}
+            messageReactions={messageReactions}
+            setMessageReactions={setMessageReactions}
+            messageRef={messageRef}
+          />
         </UserMessageWrapper>
         {identity && (
           <Reactions
@@ -190,4 +200,5 @@ export function UiMessage({
 const UserMessageWrapper = styled.div`
   width: 100%;
   display: flex;
+  position: relative;
 `;
