@@ -34,8 +34,7 @@ export function ChatCreation({
       (member) => member?.customName ?? member.trueName
     ) ?? []
   );
-  const { contacts, createGroupChat, addMembers, setChannel } =
-    useMessengerContext();
+  const { contacts, createGroupChat, addMembers } = useMessengerContext();
   const setChatState = useChatState()[1];
 
   const addMember = useCallback(
@@ -71,7 +70,7 @@ export function ChatCreation({
         setChatState(ChatState.ChatBody);
       }
     },
-    [identity, createGroupChat, setChannel]
+    [identity, createGroupChat]
   );
 
   return (

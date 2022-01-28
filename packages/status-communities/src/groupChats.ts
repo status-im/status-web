@@ -287,12 +287,9 @@ export class GroupChats {
     messages.sort((a, b) =>
       (a?.timestamp?.getTime() ?? 0) < (b?.timestamp?.getTime() ?? 0) ? -1 : 1
     );
-
-    await Promise.all(
-      messages.map(
-        async (message) => await this.decodeUpdateMessage(message, false)
-      )
-    );
+    for (let i = 0; i < messages.length; i++) {
+      await this.decodeUpdateMessage(messages[i], false);
+    }
     this.waku.relay.addObserver(
       (message) => this.decodeUpdateMessage(message, true),
       [topic]
