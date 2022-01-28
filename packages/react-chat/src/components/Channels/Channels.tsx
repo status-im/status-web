@@ -23,10 +23,10 @@ function GenerateChannels({
   onCommunityClick,
   setEditGroup,
 }: GenerateChannelsProps) {
-  const { mentions, notifications, activeChannel, setActiveChannel, channels } =
+  const { mentions, notifications, activeChannel, channelsDispatch, channels } =
     useMessengerContext();
 
-  const channelList = useMemo(() => Object.values(channels),[channels])
+  const channelList = useMemo(() => Object.values(channels), [channels]);
 
   const setChatState = useChatState()[1];
   return (
@@ -41,7 +41,7 @@ function GenerateChannels({
             notified={notifications?.[channel.id] > 0}
             mention={mentions?.[channel.id]}
             onClick={() => {
-              setActiveChannel(channel);
+              channelsDispatch({ type: "ChangeActive", payload: channel.id });
               if (onCommunityClick) {
                 onCommunityClick();
               }

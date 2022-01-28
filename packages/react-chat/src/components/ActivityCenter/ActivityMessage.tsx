@@ -47,10 +47,11 @@ export function ActivityMessage({
   activity,
   setShowActivityCenter,
 }: ActivityMessageProps) {
-  const { contacts, setActiveChannel } = useMessengerContext();
+  const { contacts, channelsDispatch } = useMessengerContext();
   const { setModal } = useModal(ProfileModalName);
   const showChannel = () => {
-    activity.channel && setActiveChannel(activity.channel),
+    activity.channel &&
+      channelsDispatch({ type: "ChangeActive", payload: activity.channel.id }),
       setShowActivityCenter(false);
   };
 

@@ -7,11 +7,12 @@ import {
 } from "@waku/status-communities/dist/cjs";
 import { useCallback, useMemo } from "react";
 
-import { ChannelData, ChannelsData } from "../../models/ChannelData";
+import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
 import { uintToImgUrl } from "../../utils";
-import { ChannelAction, ChannelsState } from "./useMessenger";
+
+import { ChannelAction } from "./useMessenger";
 
 const contactFromId = (member: string): Contact => {
   return {
@@ -27,8 +28,7 @@ export function useGroupChats(
   messenger: Messenger | undefined,
   identity: Identity | undefined,
   dispatch: (action: ChannelAction) => void,
-  addChatMessage: (newMessage: ChatMessage | undefined, id: string) => void,
-  channelsState: ChannelsState
+  addChatMessage: (newMessage: ChatMessage | undefined, id: string) => void
 ) {
   const groupChat = useMemo(() => {
     if (messenger && identity) {
@@ -51,18 +51,10 @@ export function useGroupChats(
                 type: "dm",
                 description: `Chatkey: ${chat.members[0].id}`,
               };
-        dispatch({type:'AddChannel',payload:channel})
+        dispatch({ type: "AddChannel", payload: channel });
       };
       const removeChat = (chat: GroupChat) => {
-        setChannels((prev) => {
-          delete prev[chat.chatId];
-          return prev;
-        });
-        setActiveChannel({
-          id: "",
-          name: "",
-          type: "channel",
-        } as ChannelData);
+        dispatch({ type: "RemoveChannel", payload: chat.chatId });
       };
       const handleMessage = (msg: StatusChatMessage, sender: string) => {
         let image: string | undefined = undefined;
