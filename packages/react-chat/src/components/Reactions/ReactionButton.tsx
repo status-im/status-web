@@ -56,13 +56,22 @@ export const ReactionBtn = styled.button`
   align-items: center;
   border-radius: 8px;
   align-self: center;
+  position: relative;
 
   &:hover {
     background: ${({ theme }) => theme.buttonBgHover};
   }
 
+  &.red:hover {
+    background: ${({ theme }) => theme.buttonNoBgHover};
+  }
+
   &:hover > svg {
     fill: ${({ theme }) => theme.tertiary};
+  }
+
+  &.red:hover > svg {
+    fill: ${({ theme }) => theme.redColor};
   }
 
   &:hover > div {

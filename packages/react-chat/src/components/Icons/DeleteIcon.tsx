@@ -31,4 +31,8 @@ const Icon = styled.svg`
   &.red {
     fill: ${({ theme }) => theme.redColor};
   }
+
+  &.grey {
+    fill: ${({ theme }) => theme.secondary};
+  }
 `;

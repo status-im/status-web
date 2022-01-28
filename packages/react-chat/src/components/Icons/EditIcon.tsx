@@ -27,4 +27,8 @@ export function EditIcon({ width, height, className }: EditIconProps) {
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};
+
+  &.grey {
+    fill: ${({ theme }) => theme.secondary};
+  }
 `;

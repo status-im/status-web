@@ -1,10 +1,16 @@
+import { utils } from "@waku/status-communities/dist/cjs";
 import { BaseEmoji } from "emoji-mart";
 import React from "react";
 import styled from "styled-components";
 
+import { useIdentity } from "../../contexts/identityProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
 import { Tooltip } from "../Form/Tooltip";
+import { DeleteIcon } from "../Icons/DeleteIcon";
+import { EditIcon } from "../Icons/EditIcon";
+import { PinIcon } from "../Icons/PinIcon";
 import { ReplySvg } from "../Icons/ReplyIcon";
 
 import { ReactionBtn, ReactionButton } from "./ReactionButton";
@@ -22,6 +28,12 @@ export function Reactions({
   messageReactions,
   setMessageReactions,
 }: ReactionsProps) {
+  const identity = useIdentity();
+  const { activeChannel } = useMessengerContext();
+
+  const userMessage =
+    identity && message.sender === utils.bufToHex(identity.publicKey);
+
   return (
     <Wrapper>
       <ReactionButton
@@ -41,6 +53,24 @@ export function Reactions({
         <ReplySvg width={22} height={22} />
         <Tooltip tip="Reply" />
       </ReactionBtn>
+      {userMessage && (
+        <ReactionBtn>
+          <EditIcon width={22} height={22} className="grey" />
+          <Tooltip tip="Edit" />
+        </ReactionBtn>
+      )}
+      {activeChannel?.type !== "channel" && (
+        <ReactionBtn>
+          <PinIcon width={22} height={22} />
+          <Tooltip tip="Pin" />
+        </ReactionBtn>
+      )}
+      {userMessage && (
+        <ReactionBtn className="red">
+          <DeleteIcon width={22} height={22} className="grey" />
+          <Tooltip tip="Delete" />
+        </ReactionBtn>
+      )}
     </Wrapper>
   );
 }

@@ -6,11 +6,16 @@ import { textSmallStyles } from "../Text";
 type DropdownMenuProps = {
   children: ReactNode;
   className?: string;
+  style?: { top: number; left: number };
 };
 
-export function DropdownMenu({ children, className }: DropdownMenuProps) {
+export function DropdownMenu({
+  children,
+  className,
+  style,
+}: DropdownMenuProps) {
   return (
-    <MenuBlock className={className}>
+    <MenuBlock className={className} style={style}>
       <MenuList>{children}</MenuList>
     </MenuBlock>
   );
@@ -24,8 +29,6 @@ const MenuBlock = styled.div`
   border-radius: 8px;
   padding: 8px 0;
   position: absolute;
-  top: calc(100% - 8px);
-  right: 8px;
   z-index: 2;
 `;
 
@@ -45,6 +48,10 @@ export const MenuItem = styled.li`
   &:hover,
   &:hover > span {
     background: ${({ theme }) => theme.border};
+  }
+
+  &.picker:hover {
+    background: ${({ theme }) => theme.bodyBackgroundColor};
   }
 
   & > svg.red {
@@ -73,5 +80,11 @@ export const MenuSection = styled.div`
     padding: 0;
     margin: 0;
     border: none;
+  }
+
+  &.message {
+    padding: 4px 0 0;
+    margin: 4px 0 0;
+    border-bottom: none;
   }
 `;

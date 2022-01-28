@@ -27,4 +27,8 @@ const Icon = styled.svg`
   &.input {
     fill: ${({ theme }) => theme.primary};
   }
+
+  &.menu {
+    fill: ${({ theme }) => theme.tertiary};
+  }
 `;
