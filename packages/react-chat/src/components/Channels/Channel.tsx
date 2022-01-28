@@ -59,6 +59,7 @@ export function Channel({
   setEditGroup,
 }: ChannelProps) {
   const narrow = useNarrow();
+  const { channelsDispatch } = useMessengerContext();
 
   return (
     <ChannelWrapper
@@ -79,7 +80,11 @@ export function Channel({
               notified={notified}
             />
             {channel?.isMuted && activeView && !narrow && (
-              <MutedBtn onClick={() => (channel.isMuted = !channel.isMuted)}>
+              <MutedBtn
+                onClick={() =>
+                  channelsDispatch({ type: "ToggleMuted", payload: channel.id })
+                }
+              >
                 <MutedIcon />
                 <Tooltip tip="Unmute" className="muted" />
               </MutedBtn>
@@ -90,7 +95,7 @@ export function Channel({
           )}
         </ChannelTextInfo>
       </ChannelInfo>
-      {!activeView && !!mention && mention > 0 && !channel?.isMuted && (
+      {!activeView && !!mention && !channel?.isMuted && (
         <NotificationBagde>{mention}</NotificationBagde>
       )}
       {channel?.isMuted && !activeView && <MutedIcon />}
