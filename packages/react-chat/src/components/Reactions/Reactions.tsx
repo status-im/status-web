@@ -7,13 +7,14 @@ import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
+import { MenuBtn } from "../Buttons/buttonStyle";
 import { Tooltip } from "../Form/Tooltip";
 import { DeleteIcon } from "../Icons/DeleteIcon";
 import { EditIcon } from "../Icons/EditIcon";
 import { PinIcon } from "../Icons/PinIcon";
 import { ReplySvg } from "../Icons/ReplyIcon";
 
-import { ReactionBtn, ReactionButton } from "./ReactionButton";
+import { ReactionButton } from "./ReactionButton";
 
 interface ReactionsProps {
   message: ChatMessage;
@@ -40,7 +41,7 @@ export function Reactions({
         messageReactions={messageReactions}
         setMessageReactions={setMessageReactions}
       />
-      <ReactionBtn
+      <MenuBtn
         onClick={() =>
           setReply({
             sender: message.sender,
@@ -52,24 +53,24 @@ export function Reactions({
       >
         <ReplySvg width={22} height={22} />
         <Tooltip tip="Reply" />
-      </ReactionBtn>
+      </MenuBtn>
       {userMessage && (
-        <ReactionBtn>
+        <MenuBtn>
           <EditIcon width={22} height={22} className="grey" />
           <Tooltip tip="Edit" />
-        </ReactionBtn>
+        </MenuBtn>
       )}
       {activeChannel?.type !== "channel" && (
-        <ReactionBtn>
+        <MenuBtn>
           <PinIcon width={22} height={22} />
           <Tooltip tip="Pin" />
-        </ReactionBtn>
+        </MenuBtn>
       )}
       {userMessage && (
-        <ReactionBtn className="red">
+        <MenuBtn className="red">
           <DeleteIcon width={22} height={22} className="grey" />
           <Tooltip tip="Delete" />
-        </ReactionBtn>
+        </MenuBtn>
       )}
     </Wrapper>
   );

@@ -57,3 +57,44 @@ export const ButtonYes = styled.button`
 
   ${buttonStyles}
 `;
+
+export const MenuBtn = styled.button`
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  align-self: center;
+  position: relative;
+
+  &:hover {
+    background: ${({ theme }) => theme.buttonBgHover};
+  }
+
+  &.red:hover {
+    background: ${({ theme }) => theme.buttonNoBgHover};
+  }
+
+  &:hover > svg {
+    fill: ${({ theme }) => theme.tertiary};
+  }
+
+  &.red:hover > svg {
+    fill: ${({ theme }) => theme.redColor};
+  }
+
+  &:hover > div {
+    visibility: visible;
+  }
+
+  &.small {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+
+    &:hover {
+      background: inherit;
+    }
+  }
+`;
