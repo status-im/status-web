@@ -16,21 +16,19 @@ import { Theme } from "../styles/themes";
 import { IdentityProvider } from "../contexts/identityProvider";
 import { MessengerProvider } from "../contexts/messengerProvider";
 import { ChatStateProvider } from "../contexts/chatStateProvider";
-import { Chat } from "./Chat";
+import { GroupChat } from "./GroupChat";
 
-interface DappConnectCommunityChatProps {
+interface DappConnectGroupChatProps {
   theme: Theme;
-  communityKey: string;
   config: ConfigType;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function DappConnectCommunityChat({
+export function DappConnectGroupChat({
   theme,
   config,
   fetchMetadata,
-  communityKey,
-}: DappConnectCommunityChatProps) {
+}: DappConnectGroupChatProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   return (
     <ConfigProvider config={config}>
@@ -43,9 +41,9 @@ export function DappConnectCommunityChat({
                   <Wrapper ref={ref}>
                     <GlobalStyle />
                     <IdentityProvider>
-                      <MessengerProvider communityKey={communityKey}>
+                      <MessengerProvider communityKey={undefined}>
                         <ChatStateProvider>
-                          <Chat />
+                          <GroupChat />
                           <div id="modal-root" />
                         </ChatStateProvider>
                       </MessengerProvider>

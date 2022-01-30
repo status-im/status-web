@@ -18,6 +18,7 @@ const MessengerContext = createContext<MessengerType>({
   communityData: undefined,
   contacts: {},
   contactsDispatch: () => undefined,
+  addContact: () => undefined,
   activeChannel: undefined,
   channels: {},
   channelsDispatch: () => undefined,
@@ -33,7 +34,7 @@ export function useMessengerContext() {
 }
 
 interface MessengerProviderProps {
-  communityKey: string;
+  communityKey: string | undefined;
   children: React.ReactNode;
 }
 
