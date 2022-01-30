@@ -4,9 +4,9 @@ import styled from "styled-components";
 
 import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useToasts } from "../../contexts/toastProvider";
-import { useManageContact } from "../../hooks/useManageContact";
 import { copy } from "../../utils";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import {
@@ -75,13 +75,8 @@ export const ProfileModal = () => {
     setRequestCreation(requestState ?? false);
   }, [requestState]);
 
-  const {
-    contact,
-    setBlocked,
-    setCustomName,
-    setIsUntrustworthy,
-    setIsUserFriend,
-  } = useManageContact(id);
+  const { contacts, contactsDispatch } = useMessengerContext();
+  const contact = useMemo(() => contacts[id], [id, contacts]);
   const [customNameInput, setCustomNameInput] = useState("");
 
   if (!contact) return null;
@@ -129,7 +124,10 @@ export const ProfileModal = () => {
             {customNameInput && (
               <ClearBtn
                 onClick={() => {
-                  setCustomName(undefined);
+                  contactsDispatch({
+                    type: "setCustomName",
+                    payload: { id, customName: undefined },
+                  });
                   setCustomNameInput("");
                 }}
               >
@@ -184,7 +182,10 @@ export const ProfileModal = () => {
             <Btn
               disabled={!customNameInput}
               onClick={() => {
-                setCustomName(customNameInput);
+                contactsDispatch({
+                  type: "setCustomName",
+                  payload: { id, customName: customNameInput },
+                });
                 setRenaming(false);
               }}
             >
@@ -234,7 +235,7 @@ export const ProfileModal = () => {
               <ProfileBtn
                 className={contact.blocked ? "" : "red"}
                 onClick={() => {
-                  setBlocked(!contact.blocked);
+                  contactsDispatch({ type: "toggleBlocked", payload: { id } });
                 }}
               >
                 {contact.blocked ? "Unblock" : "Block"}
@@ -243,14 +244,21 @@ export const ProfileModal = () => {
             {contact.isFriend && (
               <ProfileBtn
                 className="red"
-                onClick={() => setIsUserFriend(false)}
+                onClick={() =>
+                  contactsDispatch({
+                    type: "setIsFriend",
+                    payload: { id, isFriend: false },
+                  })
+                }
               >
                 Remove Contact
               </ProfileBtn>
             )}
             <ProfileBtn
               className={contact.isUntrustworthy ? "" : "red"}
-              onClick={() => setIsUntrustworthy(!contact.isUntrustworthy)}
+              onClick={() =>
+                contactsDispatch({ type: "toggleTrustworthy", payload: { id } })
+              }
             >
               {contact.isUntrustworthy
                 ? "Remove Untrustworthy Mark"

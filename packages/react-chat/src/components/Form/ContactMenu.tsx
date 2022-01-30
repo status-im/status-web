@@ -3,8 +3,8 @@ import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useIdentity } from "../../contexts/identityProvider";
+import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
-import { useManageContact } from "../../hooks/useManageContact";
 import { AddContactIcon } from "../Icons/AddContactIcon";
 import { BlockSvg } from "../Icons/BlockIcon";
 import { ChatSvg } from "../Icons/ChatIcon";
@@ -26,6 +26,8 @@ type ContactMenuProps = {
 
 export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
   const identity = useIdentity();
+  const { contacts, contactsDispatch } = useMessengerContext();
+  const contact = useMemo(() => contacts[id], [id, contacts]);
   const isUser = useMemo(() => {
     if (identity) {
       return id === bufToHex(identity.publicKey);
@@ -35,7 +37,6 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
   }, [id, identity]);
 
   const { setModal } = useModal(ProfileModalName);
-  const { contact, setBlocked, setIsUntrustworthy } = useManageContact(id);
 
   if (!contact) return null;
   return (
@@ -88,7 +89,11 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
         </MenuItem>
       </MenuSection>
       <MenuSection>
-        <MenuItem onClick={() => setIsUntrustworthy(!contact.isUntrustworthy)}>
+        <MenuItem
+          onClick={() =>
+            contactsDispatch({ type: "toggleTrustworthy", payload: { id } })
+          }
+        >
           <WarningSvg
             width={16}
             height={16}
@@ -104,7 +109,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
         {!contact.isFriend && !isUser && (
           <MenuItem
             onClick={() => {
-              setBlocked(!contact.blocked);
+              contactsDispatch({ type: "toggleBlocked", payload: { id } });
               setShowMenu(false);
             }}
           >
