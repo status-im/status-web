@@ -12,7 +12,7 @@ import { ChatMessage } from "../../models/ChatMessage";
 import { Contact } from "../../models/Contact";
 import { uintToImgUrl } from "../../utils";
 
-import { ChannelAction } from "./useMessenger";
+import { ChannelAction } from "./useChannelsReducer";
 
 const contactFromId = (member: string): Contact => {
   return {
@@ -43,13 +43,14 @@ export function useGroupChats(
                 name: chat.name ?? chat.chatId.slice(0, 10),
                 type: "group",
                 description: `${chat.members.length} members`,
-                members: members,
+                members,
               }
             : {
                 id: chat.chatId,
                 name: chat.members[0].id,
                 type: "dm",
                 description: `Chatkey: ${chat.members[0].id}`,
+                members,
               };
         dispatch({ type: "AddChannel", payload: channel });
       };

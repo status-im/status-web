@@ -6,7 +6,7 @@ import {
   Identity,
   Messenger,
 } from "@waku/status-communities/dist/cjs";
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useConfig } from "../../contexts/configProvider";
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
@@ -17,7 +17,8 @@ import { createCommunity } from "../../utils/createCommunity";
 import { createMessenger } from "../../utils/createMessenger";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
 
-import { useContacts } from "./useContacts";
+import { ChannelAction, useChannelsReducer } from "./useChannelsReducer";
+import { ContactsAction, useContacts } from "./useContacts";
 import { useGroupChats } from "./useGroupChats";
 import { useLoadPrevDay } from "./useLoadPrevDay";
 import { useMessages } from "./useMessages";
@@ -39,7 +40,7 @@ export type MessengerType = {
   loadingMessenger: boolean;
   communityData: CommunityData | undefined;
   contacts: Contacts;
-  setContacts: React.Dispatch<React.SetStateAction<Contacts>>;
+  contactsDispatch: (action: ContactsAction) => void;
   channels: ChannelsData;
   channelsDispatch: (action: ChannelAction) => void;
   removeChannel: (channelId: string) => void;
@@ -78,9 +79,12 @@ function useCreateCommunity(
 
   const communityData = useMemo(() => {
     if (community?.description) {
-      Object.keys(community.description.proto.members).forEach((contact) =>
-        contactsClass?.addContact(contact)
-      );
+      const membersList = Object.keys(community.description.proto.members);
+
+      if (contactsClass) {
+        membersList.forEach(contactsClass.addContact, contactsClass);
+      }
+
       return {
         id: community.publicKeyStr,
         name: community.description.identity?.displayName ?? "",
@@ -88,8 +92,8 @@ function useCreateCommunity(
           community.description?.identity?.images?.thumbnail?.payload ??
             new Uint8Array()
         ),
-        members: 0,
-        membersList: Object.keys(community.description.proto.members),
+        members: membersList.length,
+        membersList,
         description: community.description.identity?.description ?? "",
       };
     } else {
@@ -100,88 +104,14 @@ function useCreateCommunity(
   return { community, communityData };
 }
 
-export type ChannelsState = {
-  channels: ChannelsData;
-  activeChannel: ChannelData;
-};
-
-export type ChannelAction =
-  | { type: "AddChannel"; payload: ChannelData }
-  | { type: "UpdateActive"; payload: ChannelData }
-  | { type: "ChangeActive"; payload: string }
-  | { type: "ToggleMuted"; payload: string }
-  | { type: "RemoveChannel"; payload: string };
-
-function channelReducer(
-  state: ChannelsState,
-  action: ChannelAction
-): ChannelsState {
-  switch (action.type) {
-    case "AddChannel": {
-      const channels = {
-        ...state.channels,
-        [action.payload.id]: action.payload,
-      };
-      return { channels, activeChannel: action.payload };
-    }
-    case "UpdateActive": {
-      const activeChannel = state.activeChannel;
-      if (activeChannel) {
-        return {
-          channels: { ...state.channels, [activeChannel.id]: action.payload },
-          activeChannel: action.payload,
-        };
-      }
-      return state;
-    }
-    case "ChangeActive": {
-      const newActive = state.channels[action.payload];
-      if (newActive) {
-        return { ...state, activeChannel: newActive };
-      }
-      return state;
-    }
-    case "ToggleMuted": {
-      const channel = state.channels[action.payload];
-      if (channel) {
-        const updatedChannel: ChannelData = {
-          ...channel,
-          isMuted: !channel.isMuted,
-        };
-        return {
-          channels: { ...state.channels, [channel.id]: updatedChannel },
-          activeChannel: updatedChannel,
-        };
-      }
-      return state;
-    }
-    case "RemoveChannel": {
-      const channelsCopy = { ...state.channels };
-      delete channelsCopy[action.payload];
-      let newActive = { id: "", name: "", type: "channel" } as ChannelData;
-      if (Object.values(channelsCopy).length > 0) {
-        newActive = Object.values(channelsCopy)[0];
-      }
-      return { channels: channelsCopy, activeChannel: newActive };
-    }
-    default:
-      throw new Error();
-  }
-}
-
 export function useMessenger(
   communityKey: string,
   identity: Identity | undefined,
   newNickname: string | undefined
 ) {
-  const [channelsState, channelsDispatch] = useReducer(channelReducer, {
-    channels: {},
-    activeChannel: { id: "", name: "", type: "channel" },
-  } as ChannelsState);
-
+  const [channelsState, channelsDispatch] = useChannelsReducer();
   const messenger = useCreateMessenger(identity);
-
-  const { contacts, setContacts, contactsClass, nickname } = useContacts(
+  const { contacts, contactsDispatch, contactsClass, nickname } = useContacts(
     messenger,
     identity,
     newNickname
@@ -224,18 +154,21 @@ export function useMessenger(
     Object.values(channelsState.channels)
       .filter((channel) => channel.type === "dm")
       .forEach((channel) => {
-        const contact = contacts?.[channel?.members?.[0]?.id ?? ""];
-        if (contact && channel.name !== (contact?.customName ?? channel.name)) {
+        const contact = contacts?.[channel?.members?.[1]?.id ?? ""];
+        if (
+          contact &&
+          channel.name !== (contact?.customName ?? contact.trueName)
+        ) {
           channelsDispatch({
             type: "AddChannel",
             payload: {
               ...channel,
-              name: contact?.customName ?? channel.name,
+              name: contact?.customName ?? contact.trueName,
             },
           });
         }
       });
-  }, [contacts]);
+  }, [contacts, channelsState.channels]);
 
   const {
     groupChat,
@@ -276,7 +209,7 @@ export function useMessenger(
         };
       }
       if (content) {
-        if (channelsState.activeChannel.type === "group") {
+        if (channelsState.activeChannel.type !== "channel") {
           await groupChat?.sendMessage(
             channelsState.activeChannel.id,
             content,
@@ -318,7 +251,7 @@ export function useMessenger(
     loadingMessenger,
     communityData,
     contacts,
-    setContacts,
+    contactsDispatch,
     channels: channelsState.channels,
     channelsDispatch,
     removeChannel,

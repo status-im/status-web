@@ -17,7 +17,7 @@ const MessengerContext = createContext<MessengerType>({
   loadingMessenger: true,
   communityData: undefined,
   contacts: {},
-  setContacts: () => undefined,
+  contactsDispatch: () => undefined,
   activeChannel: undefined,
   channels: {},
   channelsDispatch: () => undefined,

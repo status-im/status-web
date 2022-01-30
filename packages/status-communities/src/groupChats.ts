@@ -32,12 +32,34 @@ export type GroupChatsType = {
 };
 /* TODO: add chat messages encryption */
 
+class GroupChatUsers {
+  private users: { [id: string]: GroupMember } = {};
+  private identity: Identity;
+
+  public constructor(_identity: Identity) {
+    this.identity = _identity;
+  }
+
+  public async getUser(id: string): Promise<GroupMember> {
+    if (this.users[id]) {
+      return this.users[id];
+    }
+    const topic = await getNegotiatedTopic(this.identity, id);
+    const symKey = await createSymKeyFromPassword(topic);
+    const partitionedTopic = getPartitionedTopic(id);
+    const groupUser: GroupMember = { topic, symKey, id, partitionedTopic };
+    this.users[id] = groupUser;
+    return groupUser;
+  }
+}
+
 export class GroupChats {
   waku: Waku;
   identity: Identity;
   private callback: (chats: GroupChat) => void;
   private removeCallback: (chats: GroupChat) => void;
   private addMessage: (message: ChatMessage, sender: string) => void;
+  private groupChatUsers;
 
   public chats: GroupChatsType = {};
   /**
@@ -62,6 +84,7 @@ export class GroupChats {
   ) {
     this.waku = waku;
     this.identity = identity;
+    this.groupChatUsers = new GroupChatUsers(identity);
     this.callback = callback;
     this.removeCallback = removeCallback;
     this.addMessage = addMessage;
@@ -117,10 +140,7 @@ export class GroupChats {
           const members: GroupMember[] = [];
           await Promise.all(
             event.event.members.map(async (member) => {
-              const topic = await getNegotiatedTopic(this.identity, member);
-              const symKey = await createSymKeyFromPassword(topic);
-              const partitionedTopic = getPartitionedTopic(member);
-              members.push({ topic, symKey, id: member, partitionedTopic });
+              members.push(await this.groupChatUsers.getUser(member));
             })
           );
           await this.addChat(
@@ -160,10 +180,7 @@ export class GroupChats {
             const members: GroupMember[] = [];
             await Promise.all(
               event.event.members.map(async (member) => {
-                const topic = await getNegotiatedTopic(this.identity, member);
-                const symKey = await createSymKeyFromPassword(topic);
-                const partitionedTopic = getPartitionedTopic(member);
-                members.push({ topic, symKey, id: member, partitionedTopic });
+                members.push(await this.groupChatUsers.getUser(member));
               })
             );
             chat.members.push(...members);
@@ -353,10 +370,7 @@ export class GroupChats {
               !chat.members.map((chatMember) => chatMember.id).includes(member)
           )
           .map(async (member) => {
-            const topic = await getNegotiatedTopic(this.identity, member);
-            const symKey = await createSymKeyFromPassword(topic);
-            const partitionedTopic = getPartitionedTopic(member);
-            newMembers.push({ topic, symKey, id: member, partitionedTopic });
+            newMembers.push(await this.groupChatUsers.getUser(member));
           })
       );
 
@@ -383,10 +397,7 @@ export class GroupChats {
 
     await Promise.all(
       members.map(async (member) => {
-        const topic = await getNegotiatedTopic(this.identity, member);
-        const symKey = await createSymKeyFromPassword(topic);
-        const partitionedTopic = getPartitionedTopic(member);
-        newMembers.push({ topic, symKey, id: member, partitionedTopic });
+        newMembers.push(await this.groupChatUsers.getUser(member));
       })
     );
 
