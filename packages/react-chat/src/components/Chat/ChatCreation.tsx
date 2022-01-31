@@ -103,11 +103,6 @@ export function ChatCreation({
                   value={query}
                   onInput={(e) => setQuery(e.currentTarget.value)}
                 />
-                <SearchBlock
-                  query={query}
-                  discludeList={styledGroup}
-                  onClick={addMember}
-                />
               </SearchMembers>
             )}
             {!narrow && styledGroup.length === 5 && (
@@ -132,12 +127,18 @@ export function ChatCreation({
           Confirm
         </CreationBtn>
         {!narrow && <ActivityButton className="creation" />}
+        <SearchBlock
+          query={query}
+          discludeList={styledGroup}
+          onClick={addMember}
+        />
       </CreationBar>
-      {!setEditGroup && !query && (
+      {!setEditGroup && (
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
             {identity &&
+              !query &&
               Object.values(contacts)
                 .filter(
                   (e) =>
@@ -181,7 +182,7 @@ const CreationBar = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
-
+  position: relative;
   &.limit {
     align-items: flex-start;
   }

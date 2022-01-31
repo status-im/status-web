@@ -1343,6 +1343,60 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@waku/react-group-chat-sdk-example@workspace:packages/react-group-chat-example":
+  version: 0.0.0-use.local
+  resolution: "@waku/react-group-chat-sdk-example@workspace:packages/react-group-chat-example"
+  dependencies:
+    "@testing-library/react-hooks": ^7.0.1
+    "@types/chai": ^4.2.21
+    "@types/mocha": ^9.0.0
+    "@types/node": ^16.4.12
+    "@types/react": ^17.0.15
+    "@types/react-dom": ^17.0.9
+    "@types/react-router": ^5.1.16
+    "@types/react-router-dom": ^5.1.8
+    "@types/styled-components": ^5.1.12
+    "@typescript-eslint/eslint-plugin": ^4.29.0
+    "@typescript-eslint/parser": ^4.29.0
+    "@waku/react-chat-sdk": ^0.1.0
+    assert: ^2.0.0
+    browserify-zlib: ^0.2.0
+    buffer: ^6.0.3
+    chai: ^4.3.4
+    crypto-browserify: ^3.12.0
+    css-loader: ^6.3.0
+    esbuild-loader: ^2.15.1
+    eslint: ^7.32.0
+    eslint-plugin-hooks: ^0.2.0
+    eslint-plugin-react: ^7.24.0
+    file-loader: ^6.2.0
+    fork-ts-checker-webpack-plugin: ^6.3.1
+    html-webpack-plugin: ^5.3.2
+    https-browserify: ^1.0.0
+    jsdom: ^16.7.0
+    jsdom-global: ^3.0.2
+    mocha: ^9.0.3
+    npm-run-all: ^4.1.5
+    prettier: ^2.3.2
+    process: ^0.11.10
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-router-dom: ^5.2.0
+    rimraf: ^3.0.2
+    source-map-loader: ^3.0.0
+    stream-browserify: ^3.0.0
+    stream-http: ^3.2.0
+    style-loader: ^3.3.0
+    styled-components: ^5.3.1
+    ts-loader: ^9.2.5
+    ts-node: ^10.1.0
+    typescript: ^4.3.5
+    webpack: ^5.48.0
+    webpack-cli: ^4.7.2
+    webpack-dev-server: ^3.11.2
+  languageName: unknown
+  linkType: soft
+
 "@waku/status-communities@^0.1.0, @waku/status-communities@workspace:packages/status-communities":
   version: 0.0.0-use.local
   resolution: "@waku/status-communities@workspace:packages/status-communities"

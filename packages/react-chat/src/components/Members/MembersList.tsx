@@ -1,4 +1,3 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useMemo } from "react";
 import styled from "styled-components";
@@ -6,6 +5,7 @@ import styled from "styled-components";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { Contact } from "../../models/Contact";
 import { buttonStyles } from "../Buttons/buttonStyle";
 import { LogoutIcon } from "../Icons/LogoutIcon";
 import { LogoutModalName } from "../Modals/LogoutModal";
@@ -15,30 +15,32 @@ import { Member } from "./Member";
 export function MembersList() {
   const { contacts, nickname, activeChannel } = useMessengerContext();
   const identity = useIdentity();
+  const userPK = useMemo(
+    () => (identity ? bufToHex(identity?.publicKey) : undefined),
+    [identity]
+  );
   const { setModal } = useModal(LogoutModalName);
 
-  const userContacts = useMemo(() => {
+  const members = useMemo(() => {
+    const contactsArray = Object.values(contacts);
     if (identity) {
-      return Object.values(contacts).filter(
-        (e) => e.id != bufToHex(identity.publicKey)
-      );
-    } else {
-      return Object.values(contacts);
+      if (
+        activeChannel &&
+        activeChannel.type === "group" &&
+        activeChannel.members
+      ) {
+        const returnContacts: Contact[] = [];
+        activeChannel.members.forEach((member) => {
+          if (contacts[member.id] && member.id != userPK) {
+            returnContacts.push(contacts[member.id]);
+          }
+        });
+        return returnContacts;
+      }
+      return contactsArray.filter((e) => e.id !== userPK);
     }
-  }, [contacts, identity]);
-
-  const members = useMemo(
-    () =>
-      activeChannel &&
-      activeChannel?.type === "group" &&
-      activeChannel.members &&
-      identity
-        ? activeChannel.members.filter(
-            (e) => e.id !== utils.bufToHex(identity.publicKey)
-          )
-        : userContacts,
-    [activeChannel]
-  );
+    return contactsArray;
+  }, [activeChannel, contacts, identity, userPK]);
 
   const onlineContacts = useMemo(
     () => members.filter((e) => e.online),
@@ -57,9 +59,9 @@ export function MembersList() {
           <Row>
             <Member
               contact={{
-                id: utils.bufToHex(identity.publicKey),
+                id: userPK ?? "",
                 customName: nickname,
-                trueName: utils.bufToHex(identity.publicKey),
+                trueName: userPK ?? "",
               }}
               isYou={true}
             />

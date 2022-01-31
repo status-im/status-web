@@ -1,4 +1,5 @@
 import {
+  Contacts as ContactsClass,
   GroupChat,
   GroupChats,
   Identity,
@@ -28,10 +29,11 @@ export function useGroupChats(
   messenger: Messenger | undefined,
   identity: Identity | undefined,
   dispatch: (action: ChannelAction) => void,
-  addChatMessage: (newMessage: ChatMessage | undefined, id: string) => void
+  addChatMessage: (newMessage: ChatMessage | undefined, id: string) => void,
+  contactsClass: ContactsClass | undefined
 ) {
   const groupChat = useMemo(() => {
-    if (messenger && identity) {
+    if (messenger && identity && contactsClass) {
       const addChat = (chat: GroupChat) => {
         const members = chat.members
           .map((member) => member.id)
@@ -52,6 +54,7 @@ export function useGroupChats(
                 description: `Chatkey: ${chat.members[0].id}`,
                 members,
               };
+        chat.members.forEach((member) => contactsClass.addContact(member.id));
         dispatch({ type: "AddChannel", payload: channel });
       };
       const removeChat = (chat: GroupChat) => {
@@ -81,7 +84,7 @@ export function useGroupChats(
         handleMessage
       );
     }
-  }, [messenger, identity]);
+  }, [messenger, identity, contactsClass]);
 
   const createGroupChat = useCallback(
     (members: string[]) => {

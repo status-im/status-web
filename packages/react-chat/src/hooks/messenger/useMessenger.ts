@@ -41,6 +41,7 @@ export type MessengerType = {
   communityData: CommunityData | undefined;
   contacts: Contacts;
   contactsDispatch: (action: ContactsAction) => void;
+  addContact: (publicKey: string) => void;
   channels: ChannelsData;
   channelsDispatch: (action: ChannelAction) => void;
   removeChannel: (channelId: string) => void;
@@ -105,7 +106,7 @@ function useCreateCommunity(
 }
 
 export function useMessenger(
-  communityKey: string,
+  communityKey: string | undefined,
   identity: Identity | undefined,
   newNickname: string | undefined
 ) {
@@ -115,6 +116,15 @@ export function useMessenger(
     messenger,
     identity,
     newNickname
+  );
+
+  const addContact = useCallback(
+    (publicKey: string) => {
+      if (contactsClass) {
+        contactsClass.addContact(publicKey);
+      }
+    },
+    [contactsClass]
   );
 
   const {
@@ -176,7 +186,13 @@ export function useMessenger(
     createGroupChat,
     changeGroupChatName,
     addMembers,
-  } = useGroupChats(messenger, identity, channelsDispatch, addChatMessage);
+  } = useGroupChats(
+    messenger,
+    identity,
+    channelsDispatch,
+    addChatMessage,
+    contactsClass
+  );
 
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(
     channelsState.activeChannel.id,
@@ -237,9 +253,12 @@ export function useMessenger(
   }, [notifications, channelsState]);
 
   const loadingMessenger = useMemo(() => {
-    return !communityData || !messenger || !channelsState.activeChannel.id;
+    return Boolean(
+      (communityKey && !communityData) ||
+        !messenger ||
+        (communityKey && !channelsState.activeChannel.id)
+    );
   }, [communityData, messenger, channelsState]);
-
   return {
     messenger,
     messages,
@@ -252,6 +271,7 @@ export function useMessenger(
     communityData,
     contacts,
     contactsDispatch,
+    addContact,
     channels: channelsState.channels,
     channelsDispatch,
     removeChannel,
