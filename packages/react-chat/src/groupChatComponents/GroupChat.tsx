@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { ChatState, useChatState } from "../contexts/chatStateProvider";
-import { useNarrow } from "../contexts/narrowProvider";
-
 import { Channels } from "../components/Channels/Channels";
 import { ChatCreation } from "../components/Chat/ChatCreation";
 import { AgreementModal } from "../components/Modals/AgreementModal";
@@ -19,6 +16,9 @@ import { UserCreationStartModal } from "../components/Modals/UserCreationStartMo
 import { WalletConnectModal } from "../components/Modals/WalletConnectModal";
 import { WalletModal } from "../components/Modals/WalletModal";
 import { ToastMessageList } from "../components/ToastMessages/ToastMessageList";
+import { ChatState, useChatState } from "../contexts/chatStateProvider";
+import { useNarrow } from "../contexts/narrowProvider";
+
 import { GroupChatBody } from "./GroupChat/GroupChatBody";
 import { GroupMembers } from "./GroupMembers/GroupMembers";
 
@@ -62,7 +62,9 @@ export function GroupChat() {
           setEditGroup={setEditGroup}
         />
       )}
-      {showMembers && !narrow && state === ChatState.ChatBody && <GroupMembers />}
+      {showMembers && !narrow && state === ChatState.ChatBody && (
+        <GroupMembers />
+      )}
       {state === ChatState.ChatCreation && <ChatCreation />}
       <Modals />
       <ToastMessageList />

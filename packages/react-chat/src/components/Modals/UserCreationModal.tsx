@@ -94,7 +94,6 @@ export function UserCreationModal() {
             <NameInput
               placeholder="Display name"
               value={customNameInput}
-              onKeyPress={(e) => console.log(e)}
               onChange={(e) => setCustomNameInput(e.currentTarget.value)}
               maxLength={24}
             />

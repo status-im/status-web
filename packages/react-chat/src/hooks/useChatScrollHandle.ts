@@ -22,16 +22,16 @@ export function useChatScrollHandle(
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
         setScrollOnBot(true);
-        loadPrevDay(activeChannel.id, activeChannel.type === "group");
+        loadPrevDay(activeChannel.id, activeChannel.type !== "channel");
       }
     }
-  }, [messages.length, loadingMessages, activeChannel]);
+  }, [messages.length, activeChannel]);
 
   useEffect(() => {
     const setScroll = () => {
       if (ref?.current && activeChannel) {
         if (ref.current.scrollTop <= 0) {
-          loadPrevDay(activeChannel.id, activeChannel.type === "group");
+          loadPrevDay(activeChannel.id, activeChannel.type !== "channel");
         }
         if (
           ref.current.scrollTop + ref.current.clientHeight ==

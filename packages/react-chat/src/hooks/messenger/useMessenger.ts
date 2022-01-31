@@ -117,12 +117,15 @@ export function useMessenger(
     identity,
     newNickname
   );
- 
-  const addContact = useCallback((publicKey:string) => {
-    if(contactsClass){
-      contactsClass.addContact(publicKey)
-    }
-  },[contactsClass])
+
+  const addContact = useCallback(
+    (publicKey: string) => {
+      if (contactsClass) {
+        contactsClass.addContact(publicKey);
+      }
+    },
+    [contactsClass]
+  );
 
   const {
     addChatMessage,
@@ -183,7 +186,13 @@ export function useMessenger(
     createGroupChat,
     changeGroupChatName,
     addMembers,
-  } = useGroupChats(messenger, identity, channelsDispatch, addChatMessage);
+  } = useGroupChats(
+    messenger,
+    identity,
+    channelsDispatch,
+    addChatMessage,
+    contactsClass
+  );
 
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(
     channelsState.activeChannel.id,
@@ -244,7 +253,11 @@ export function useMessenger(
   }, [notifications, channelsState]);
 
   const loadingMessenger = useMemo(() => {
-    return Boolean((communityKey && !communityData) || !messenger || (communityKey && !channelsState.activeChannel.id));
+    return Boolean(
+      (communityKey && !communityData) ||
+        !messenger ||
+        (communityKey && !channelsState.activeChannel.id)
+    );
   }, [communityData, messenger, channelsState]);
   return {
     messenger,

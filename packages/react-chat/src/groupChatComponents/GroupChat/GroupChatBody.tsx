@@ -1,19 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { Reply } from "../../hooks/useReply";
-import { ChannelData } from "../../models/ChannelData";
+import { ChatCreation } from "../../components/Chat/ChatCreation";
+import { ChatInput } from "../../components/Chat/ChatInput";
+import {
+  ChatTopbar,
+  ChatTopbarLoading,
+} from "../../components/Chat/ChatTopbar";
 import { TokenRequirement } from "../../components/Form/TokenRequirement";
 import { MessagesList } from "../../components/Messages/MessagesList";
 import { NarrowChannels } from "../../components/NarrowMode/NarrowChannels";
 import { NarrowMembers } from "../../components/NarrowMode/NarrowMembers";
 import { LoadingSkeleton } from "../../components/Skeleton/LoadingSkeleton";
-
-import { ChatCreation } from "../../components/Chat/ChatCreation";
-import { ChatInput } from "../../components/Chat/ChatInput";
-import { ChatTopbar, ChatTopbarLoading } from "../../components/Chat/ChatTopbar";
+import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useNarrow } from "../../contexts/narrowProvider";
+import { Reply } from "../../hooks/useReply";
+import { ChannelData } from "../../models/ChannelData";
 
 export enum ChatBodyState {
   Chat,

@@ -4,8 +4,11 @@ import styled from "styled-components";
 
 import { ConfigType } from "..";
 import { ActivityProvider } from "../contexts/activityProvider";
+import { ChatStateProvider } from "../contexts/chatStateProvider";
 import { ConfigProvider } from "../contexts/configProvider";
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
+import { IdentityProvider } from "../contexts/identityProvider";
+import { MessengerProvider } from "../contexts/messengerProvider";
 import { ModalProvider } from "../contexts/modalProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
 import { ToastProvider } from "../contexts/toastProvider";
@@ -13,9 +16,6 @@ import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
 
-import { IdentityProvider } from "../contexts/identityProvider";
-import { MessengerProvider } from "../contexts/messengerProvider";
-import { ChatStateProvider } from "../contexts/chatStateProvider";
 import { Chat } from "./Chat";
 
 interface DappConnectCommunityChatProps {

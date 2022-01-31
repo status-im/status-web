@@ -1,12 +1,11 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
+import { MembersList } from "../../components/Members/MembersList";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 
-import { MembersList } from "../../components/Members/MembersList";
-
 export function GroupMembers() {
-  const { activeChannel, addContact } = useMessengerContext();
+  const { addContact, activeChannel } = useMessengerContext();
   const heading = useMemo(
     () =>
       activeChannel && activeChannel?.type === "group"
@@ -14,16 +13,19 @@ export function GroupMembers() {
         : "Members",
     [activeChannel]
   );
-
-  const [newUserInput, setNewUserInput] = useState('')
-
+  const [newUserInput, setNewUserInput] = useState("");
   return (
-    <MembersWrapper>
-      <MemberHeading>{heading}</MemberHeading>
-      <MembersList />
-      <input value={newUserInput} onChange={(e) => setNewUserInput(e.target.value)} />
-      <button onClick={() => addContact(newUserInput)}>Add Contact</button>
-    </MembersWrapper>
+    <>
+      <MembersWrapper>
+        <MemberHeading>{heading}</MemberHeading>
+        <MembersList />
+        <input
+          value={newUserInput}
+          onChange={(e) => setNewUserInput(e.target.value)}
+        />
+        <button onClick={() => addContact(newUserInput)}>Add Contact</button>
+      </MembersWrapper>
+    </>
   );
 }
 

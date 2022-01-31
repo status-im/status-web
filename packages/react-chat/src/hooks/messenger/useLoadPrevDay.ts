@@ -17,12 +17,14 @@ export function useLoadPrevDay(
   const [loadingMessages, setLoadingMessages] = useState(false);
 
   useEffect(() => {
-    setLoadingMessages(loadingPreviousMessages.current[chatId]);
+    if (chatId) {
+      setLoadingMessages(loadingPreviousMessages.current[chatId]);
+    }
   }, [chatId]);
 
   const loadPrevDay = useCallback(
     async (id: string, groupChat?: boolean) => {
-      if (messenger) {
+      if (messenger && id) {
         const endTime = lastLoadTime.current[id] ?? new Date();
         const startTime = new Date(endTime.getTime() - _MS_PER_DAY * 5);
         const timeDiff = Math.floor(
