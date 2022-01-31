@@ -15,6 +15,7 @@ import { useNarrow } from "../../contexts/narrowProvider";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { Reply } from "../../hooks/useReply";
 import { uintToImgUrl } from "../../utils/uintToImgUrl";
+import { TextFormatMenu } from "../Form/TextFormatMenu";
 import { ClearBtn } from "../Form/inputStyles";
 import { ClearSvg } from "../Icons/ClearIcon";
 import { ClearSvgFull } from "../Icons/ClearIconFull";
@@ -65,6 +66,7 @@ export function ChatInput({
   const inputRef = useRef<HTMLDivElement>(null);
 
   const ref = useRef(null);
+  const textRef = useRef(null);
   useClickOutside(ref, () => setShowEmoji(false));
 
   const image = useMemo(
@@ -267,7 +269,7 @@ export function ChatInput({
           </ReplyWrapper>
         )}
         <Row style={{ height: `${rowHeight}px` }}>
-          <InputWrapper>
+          <InputWrapper ref={textRef}>
             {image && (
               <ImageWrapper>
                 <ImagePreview src={image} />
@@ -305,6 +307,7 @@ export function ChatInput({
                 onBotttom
               />
             )}
+            <TextFormatMenu textRef={textRef} />
           </InputWrapper>
           <InputButtons>
             <EmojiWrapper ref={ref}>
