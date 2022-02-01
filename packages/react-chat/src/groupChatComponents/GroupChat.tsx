@@ -17,17 +17,13 @@ import { Theme } from "../styles/themes";
 
 import { GroupChatRoom } from "./GroupChatRoom";
 
-interface DappConnectGroupChatProps {
+interface GroupChatProps {
   theme: Theme;
   config: ConfigType;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function GroupChat({
-  theme,
-  config,
-  fetchMetadata,
-}: DappConnectGroupChatProps) {
+export function GroupChat({ theme, config, fetchMetadata }: GroupChatProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   return (
     <ConfigProvider config={config}>
