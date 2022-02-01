@@ -19,5 +19,8 @@
     "packages": [
       "packages/*"
     ]
+  },
+  "dependencies": {
+    "remark-gfm": "^3.0.1"
   }
 }
