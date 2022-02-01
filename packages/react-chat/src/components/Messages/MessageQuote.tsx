@@ -1,7 +1,8 @@
-import React, { useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useScrollToMessage } from "../../hooks/useScrollToMessage";
 import { ChatMessage } from "../../models/ChatMessage";
 import { ReplyOn, ReplyTo } from "../Chat/ChatInput";
 import { QuoteSvg } from "../Icons/QuoteIcon";
@@ -23,30 +24,11 @@ type MessageQuoteProps = {
 
 export function MessageQuote({ quote }: MessageQuoteProps) {
   const { contacts } = useMessengerContext();
-  const quoteClick = useCallback(() => {
-    if (quote) {
-      const quoteDiv = document.getElementById(quote.id);
-      if (quoteDiv) {
-        quoteDiv.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-          inline: "center",
-        });
-        quoteDiv.style.background = "lightblue";
-        quoteDiv.style.transition = "background-color 1000ms linear";
-        window.setTimeout(() => {
-          quoteDiv.style.background = "";
-          window.setTimeout(() => {
-            quoteDiv.style.transition = "";
-          }, 1000);
-        }, 1000);
-      }
-    }
-  }, [quote]);
+  const scroll = useScrollToMessage();
 
   if (quote && quote.sender) {
     return (
-      <QuoteWrapper onClick={quoteClick}>
+      <QuoteWrapper onClick={() => scroll(quote)}>
         <QuoteSvg width={22} height={calcHeight(quote)} />
         <QuoteSender>
           {" "}

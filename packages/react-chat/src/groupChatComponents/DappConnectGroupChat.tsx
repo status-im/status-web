@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import styled from "styled-components";
 
 import { ConfigType } from "..";
-import { ActivityProvider } from "../contexts/activityProvider";
 import { ChatStateProvider } from "../contexts/chatStateProvider";
 import { ConfigProvider } from "../contexts/configProvider";
 import { FetchMetadataProvider } from "../contexts/fetchMetadataProvider";
@@ -36,21 +35,19 @@ export function DappConnectGroupChat({
         <NarrowProvider myRef={ref}>
           <FetchMetadataProvider fetchMetadata={fetchMetadata}>
             <ModalProvider>
-              <ActivityProvider>
-                <ToastProvider>
-                  <Wrapper ref={ref}>
-                    <GlobalStyle />
-                    <IdentityProvider>
-                      <MessengerProvider communityKey={undefined}>
-                        <ChatStateProvider>
-                          <GroupChat />
-                          <div id="modal-root" />
-                        </ChatStateProvider>
-                      </MessengerProvider>
-                    </IdentityProvider>
-                  </Wrapper>
-                </ToastProvider>
-              </ActivityProvider>
+              <ToastProvider>
+                <Wrapper ref={ref}>
+                  <GlobalStyle />
+                  <IdentityProvider>
+                    <MessengerProvider communityKey={undefined}>
+                      <ChatStateProvider>
+                        <GroupChat />
+                        <div id="modal-root" />
+                      </ChatStateProvider>
+                    </MessengerProvider>
+                  </IdentityProvider>
+                </Wrapper>
+              </ToastProvider>
             </ModalProvider>
           </FetchMetadataProvider>
         </NarrowProvider>

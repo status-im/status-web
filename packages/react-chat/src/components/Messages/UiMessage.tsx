@@ -1,14 +1,11 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import { BaseEmoji } from "emoji-mart";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { Reply } from "../../hooks/useReply";
-import { ChannelData } from "../../models/ChannelData";
 import { ChatMessage } from "../../models/ChatMessage";
 import { equalDate } from "../../utils";
 import { ChatMessageContent } from "../Chat/ChatMessageContent";
@@ -38,27 +35,22 @@ import {
 type UiMessageProps = {
   idx: number;
   message: ChatMessage;
-  channel: ChannelData;
   prevMessage: ChatMessage;
   setImage: (img: string) => void;
   setLink: (link: string) => void;
   setReply: (val: Reply | undefined) => void;
-  quote?: ChatMessage;
 };
 
 export function UiMessage({
   message,
-  channel,
   idx,
   prevMessage,
   setImage,
   setLink,
   setReply,
-  quote,
 }: UiMessageProps) {
   const today = new Date();
   const { contacts } = useMessengerContext();
-  const { setActivities } = useActivities();
   const identity = useIdentity();
 
   const contact = useMemo(
@@ -69,38 +61,6 @@ export function UiMessage({
 
   const [mentioned, setMentioned] = useState(false);
   const [messageReactions, setMessageReactions] = useState<BaseEmoji[]>([]);
-
-  useEffect(() => {
-    if (mentioned)
-      setActivities((prev) => [
-        ...prev,
-        {
-          id: message.date.getTime().toString() + message.content,
-          type: "mention",
-          date: message.date,
-          user: message.sender,
-          message: message,
-          channel: channel,
-        },
-      ]);
-    if (
-      quote &&
-      identity &&
-      quote.sender === utils.bufToHex(identity.publicKey)
-    )
-      setActivities((prev) => [
-        ...prev,
-        {
-          id: message.date.getTime().toString() + message.content,
-          type: "reply",
-          date: message.date,
-          user: message.sender,
-          message: message,
-          channel: channel,
-          quote: quote,
-        },
-      ]);
-  }, [mentioned, message, quote]);
 
   const ref = useRef(null);
   useClickOutside(ref, () => setShowMenu(false));
@@ -117,7 +77,7 @@ export function UiMessage({
         </DateSeparator>
       )}
       <MessageWrapper className={`${mentioned && "mention"}`} id={message.id}>
-        <MessageQuote quote={quote} />
+        <MessageQuote quote={message.quote} />
         <UserMessageWrapper ref={messageRef}>
           <IconBtn
             onClick={() => {

@@ -12,6 +12,7 @@ export class ChatMessage {
   sender: string;
   image?: string;
   responseTo?: string;
+  quote?: ChatMessage;
   id: string;
 
   constructor(

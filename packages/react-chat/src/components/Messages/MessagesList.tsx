@@ -64,13 +64,11 @@ export function MessagesList({ setReply, channel }: MessagesListProps) {
         <UiMessage
           key={message.id}
           message={message}
-          channel={channel}
           idx={idx}
           prevMessage={shownMessages[idx - 1]}
           setLink={setLink}
           setImage={setImage}
           setReply={setReply}
-          quote={shownMessages.find((msg) => msg.id == message?.responseTo)}
         />
       ))}
     </MessagesWrapper>

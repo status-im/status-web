@@ -1,8 +1,9 @@
 import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useActivities } from "../../contexts/activityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
+import { ActivityAction } from "../../hooks/useActivities";
+import { Activity } from "../../models/Activity";
 import { buttonTransparentStyles } from "../Buttons/buttonStyle";
 import { Tooltip } from "../Form/Tooltip";
 import { HideIcon } from "../Icons/HideIcon";
@@ -12,11 +13,16 @@ import { ShowIcon } from "../Icons/ShowIcon";
 import { ActivityMessage } from "./ActivityMessage";
 
 interface ActivityCenterProps {
+  activities: Activity[];
   setShowActivityCenter: (val: boolean) => void;
+  activityDispatch: React.Dispatch<ActivityAction>;
 }
 
-export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
-  const { activities } = useActivities();
+export function ActivityCenter({
+  activities,
+  setShowActivityCenter,
+  activityDispatch,
+}: ActivityCenterProps) {
   const { contacts } = useMessengerContext();
 
   const shownActivities = useMemo(
@@ -53,9 +59,7 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
         <Btns>
           <BtnWrapper>
             <ActivityBtn
-              onClick={() => {
-                shownActivities.map((activity) => (activity.isRead = true));
-              }}
+              onClick={() => activityDispatch({ type: "setAllAsRead" })}
             >
               <ReadIcon />
             </ActivityBtn>
@@ -76,6 +80,7 @@ export function ActivityCenter({ setShowActivityCenter }: ActivityCenterProps) {
               key={activity.id}
               activity={activity}
               setShowActivityCenter={setShowActivityCenter}
+              activityDispatch={activityDispatch}
             />
           ))}
         </Activities>

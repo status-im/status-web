@@ -6,7 +6,7 @@ import {
   Identity,
   Messenger,
 } from "@waku/status-communities/dist/cjs";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
 
 import { useConfig } from "../../contexts/configProvider";
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
@@ -50,6 +50,7 @@ export type MessengerType = {
   changeGroupChatName: (name: string, chatId: string) => void;
   addMembers: (members: string[], chatId: string) => void;
   nickname: string | undefined;
+  subscriptionsDispatch: (action: SubscriptionAction) => void;
 };
 
 function useCreateMessenger(identity: Identity | undefined) {
@@ -105,11 +106,54 @@ function useCreateCommunity(
   return { community, communityData };
 }
 
+type Subscriptions = {
+  [id: string]: (msg: ChatMessage, id: string) => void;
+};
+
+type SubscriptionAction =
+  | {
+      type: "addSubscription";
+      payload: {
+        name: string;
+        subFunction: (msg: ChatMessage, id: string) => void;
+      };
+    }
+  | { type: "removeSubscription"; payload: { name: string } };
+
+function subscriptionReducer(
+  state: Subscriptions,
+  action: SubscriptionAction
+): Subscriptions {
+  switch (action.type) {
+    case "addSubscription": {
+      if (state[action.payload.name]) {
+        throw new Error("Subscription already exists");
+      }
+      return { ...state, [action.payload.name]: action.payload.subFunction };
+    }
+    case "removeSubscription": {
+      if (state[action.payload.name]) {
+        const newState = { ...state };
+        delete newState[action.payload.name];
+        return newState;
+      }
+      return state;
+    }
+    default:
+      throw new Error("Wrong subscription action type");
+  }
+}
+
 export function useMessenger(
   communityKey: string | undefined,
   identity: Identity | undefined,
   newNickname: string | undefined
 ) {
+  const [subscriptions, subscriptionsDispatch] = useReducer(
+    subscriptionReducer,
+    {}
+  );
+  const subList = useMemo(() => Object.values(subscriptions), [subscriptions]);
   const [channelsState, channelsDispatch] = useChannelsReducer();
   const messenger = useCreateMessenger(identity);
   const { contacts, contactsDispatch, contactsClass, nickname } = useContacts(
@@ -135,7 +179,12 @@ export function useMessenger(
     messages,
     mentions,
     clearMentions,
-  } = useMessages(channelsState?.activeChannel?.id, identity, contactsClass);
+  } = useMessages(
+    channelsState?.activeChannel?.id,
+    identity,
+    subList,
+    contactsClass
+  );
 
   const { community, communityData } = useCreateCommunity(
     messenger,
@@ -259,6 +308,7 @@ export function useMessenger(
         (communityKey && !channelsState.activeChannel.id)
     );
   }, [communityData, messenger, channelsState]);
+
   return {
     messenger,
     messages,
@@ -282,5 +332,6 @@ export function useMessenger(
     changeGroupChatName,
     addMembers,
     nickname,
+    subscriptionsDispatch,
   };
 }
