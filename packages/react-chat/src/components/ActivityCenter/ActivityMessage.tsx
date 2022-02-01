@@ -3,7 +3,9 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { ActivityAction } from "../../hooks/useActivities";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { useScrollToMessage } from "../../hooks/useScrollToMessage";
 import { Activity } from "../../models/Activity";
 import { equalDate } from "../../utils/equalDate";
 import { DownloadButton } from "../Buttons/DownloadButton";
@@ -41,16 +43,19 @@ const today = new Date();
 type ActivityMessageProps = {
   activity: Activity;
   setShowActivityCenter: (val: boolean) => void;
+  activityDispatch: React.Dispatch<ActivityAction>;
 };
 
 export function ActivityMessage({
   activity,
   setShowActivityCenter,
+  activityDispatch,
 }: ActivityMessageProps) {
   const { contacts, channelsDispatch } = useMessengerContext();
+  const scroll = useScrollToMessage();
   const { setModal } = useModal(ProfileModalName);
   const showChannel = () => {
-    activity.channel &&
+    "channel" in activity &&
       channelsDispatch({ type: "ChangeActive", payload: activity.channel.id }),
       setShowActivityCenter(false);
   };
@@ -66,10 +71,10 @@ export function ActivityMessage({
 
   const [elements, setElements] = useState<
     (string | React.ReactElement | undefined)[]
-  >([activity.message?.content]);
+  >(["message" in activity ? activity.message?.content : undefined]);
 
   useEffect(() => {
-    if (activity.message) {
+    if ("message" in activity) {
       const split = activity.message?.content.split(" ");
       const newSplit = split.flatMap((element, idx) => {
         if (element.startsWith("@")) {
@@ -88,7 +93,7 @@ export function ActivityMessage({
       newSplit.pop();
       setElements(newSplit);
     }
-  }, [activity.message?.content]);
+  }, [activity]);
 
   const ref = useRef(null);
   useClickOutside(ref, () => setShowMenu(false));
@@ -162,10 +167,16 @@ export function ActivityMessage({
               </FlexDiv>
             )}
             <ActivityText>
-              {activity.message?.content && (
-                <div>{elements.map((el) => el)}</div>
+              {"message" in activity && activity.message?.content && (
+                <div
+                  onClick={() => scroll(activity.message, activity.channel.id)}
+                >
+                  {elements.map((el) => el)}
+                </div>
               )}
-              {activity.requestType === "income" && activity.request}
+              {activity.type === "request" &&
+                activity.requestType === "income" &&
+                activity.request}
             </ActivityText>
             {type === "mention" &&
               activity.channel &&
@@ -199,8 +210,10 @@ export function ActivityMessage({
             <>
               <ActivityBtn
                 onClick={() => {
-                  activity.isRead = true;
-                  activity.status = "accepted";
+                  activityDispatch({
+                    type: "setStatus",
+                    payload: { id: activity.id, status: "accepted" },
+                  });
                 }}
                 className="accept"
               >
@@ -208,8 +221,10 @@ export function ActivityMessage({
               </ActivityBtn>
               <ActivityBtn
                 onClick={() => {
-                  activity.isRead = true;
-                  activity.status = "declined";
+                  activityDispatch({
+                    type: "setStatus",
+                    payload: { id: activity.id, status: "declined" },
+                  });
                 }}
                 className="decline"
               >
@@ -240,9 +255,9 @@ export function ActivityMessage({
         {(type === "mention" || type === "reply") && (
           <BtnWrapper>
             <ActivityBtn
-              onClick={() => {
-                activity.isRead = true;
-              }}
+              onClick={() =>
+                activityDispatch({ type: "setAsRead", payload: activity.id })
+              }
               className={`${activity.isRead && "read"}`}
             >
               <ReadMessageIcon isRead={activity.isRead} />

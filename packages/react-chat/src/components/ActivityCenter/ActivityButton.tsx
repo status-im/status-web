@@ -1,8 +1,8 @@
 import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
+import { useActivities } from "../../hooks/useActivities";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { TopBtn } from "../Chat/ChatTopbar";
 import { ActivityIcon } from "../Icons/ActivityIcon";
@@ -14,13 +14,17 @@ interface ActivityButtonProps {
 }
 
 export function ActivityButton({ className }: ActivityButtonProps) {
-  const { activities } = useActivities();
+  const { activities, activityDispatch } = useActivities();
   const identity = useIdentity();
   const disabled = useMemo(() => !identity, [identity]);
   const ref = useRef(null);
   useClickOutside(ref, () => setShowActivityCenter(false));
 
   const [showActivityCenter, setShowActivityCenter] = useState(false);
+  const badgeAmount = useMemo(
+    () => activities.filter((activity) => !activity.isRead).length,
+    [activities]
+  );
 
   return (
     <ActivityWrapper ref={ref} className={className}>
@@ -29,22 +33,26 @@ export function ActivityButton({ className }: ActivityButtonProps) {
         disabled={disabled}
       >
         <ActivityIcon />
-        {activities.length > 0 && (
+        {badgeAmount > 0 && (
           <NotificationBagde
             className={
-              activities.length > 99
+              badgeAmount > 99
                 ? "countless"
-                : activities.length > 9
+                : badgeAmount > 9
                 ? "wide"
                 : undefined
             }
           >
-            {activities.length < 100 ? activities.length : "∞"}
+            {badgeAmount < 100 ? badgeAmount : "∞"}
           </NotificationBagde>
         )}
       </TopBtn>
       {showActivityCenter && (
-        <ActivityCenter setShowActivityCenter={setShowActivityCenter} />
+        <ActivityCenter
+          activities={activities}
+          setShowActivityCenter={setShowActivityCenter}
+          activityDispatch={activityDispatch}
+        />
       )}
     </ActivityWrapper>
   );

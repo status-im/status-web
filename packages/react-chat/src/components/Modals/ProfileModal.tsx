@@ -2,7 +2,6 @@ import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useActivities } from "../../contexts/activityProvider";
 import { useIdentity } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
@@ -49,7 +48,6 @@ export const ProfileModal = () => {
     [props]
   );
 
-  const { setActivities } = useActivities();
   const { setToasts } = useToasts();
   const { setModal } = useModal(ProfileModalName);
 
@@ -200,27 +198,14 @@ export const ProfileModal = () => {
             <Btn
               disabled={!request}
               onClick={() => {
-                setActivities((prev) => [
+                setToasts((prev) => [
                   ...prev,
                   {
                     id: id + request,
-                    type: "request",
-                    isRead: true,
-                    date: new Date(),
-                    user: id,
-                    request: request,
-                    requestType: "outcome",
-                    status: "sent",
+                    type: "confirmation",
+                    text: "Contact Request Sent",
                   },
                 ]),
-                  setToasts((prev) => [
-                    ...prev,
-                    {
-                      id: id + request,
-                      type: "confirmation",
-                      text: "Contact Request Sent",
-                    },
-                  ]),
                   setRequestCreation(false),
                   setModal(false),
                   setRequest("");

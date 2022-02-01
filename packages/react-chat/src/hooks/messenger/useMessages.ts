@@ -14,6 +14,7 @@ import { useNotifications } from "./useNotifications";
 export function useMessages(
   chatId: string,
   identity: Identity | undefined,
+  subscriptions: ((msg: ChatMessage, id: string) => void)[],
   contacts?: Contacts
 ) {
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
@@ -28,6 +29,11 @@ export function useMessages(
     (newMessage: ChatMessage | undefined, id: string) => {
       if (newMessage) {
         contacts?.addContact(newMessage.sender);
+        if (newMessage.responseTo) {
+          newMessage.quote = messages[id].find(
+            (msg) => msg.id === newMessage.responseTo
+          );
+        }
         setMessages((prev) => {
           return {
             ...prev,
@@ -39,6 +45,7 @@ export function useMessages(
             ),
           };
         });
+        subscriptions.forEach((subscription) => subscription(newMessage, id));
         incNotification(id);
         if (
           identity &&
@@ -48,7 +55,7 @@ export function useMessages(
         }
       }
     },
-    [contacts, identity]
+    [contacts, identity, subscriptions]
   );
 
   const addMessage = useCallback(
