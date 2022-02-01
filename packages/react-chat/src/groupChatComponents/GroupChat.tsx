@@ -23,7 +23,7 @@ interface DappConnectGroupChatProps {
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function DappConnectGroupChat({
+export function GroupChat({
   theme,
   config,
   fetchMetadata,
