@@ -1242,6 +1242,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@waku/chat-sdk-root@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@waku/chat-sdk-root@workspace:."
+  dependencies:
+    npm-run-all: ^4.1.5
+    prettier: ^2.3.2
+    wsrun: ^5.2.4
+  languageName: unknown
+  linkType: soft
+
 "@waku/preview-proxy@workspace:packages/preview-proxy":
   version: 0.0.0-use.local
   resolution: "@waku/preview-proxy@workspace:packages/preview-proxy"
@@ -3340,16 +3350,6 @@ __metadata:
   checksum: 199f9af7e673f9f188525c3102a329d637ff46c52f6385a4427ff5cb17adcb736189150170a7af7c5701d18d7704bdad130273f4aa7e44c6c4f9967e6115dc93
   languageName: node
   linkType: hard
-
-"dappconnect-sdks@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "dappconnect-sdks@workspace:."
-  dependencies:
-    npm-run-all: ^4.1.5
-    prettier: ^2.3.2
-    wsrun: ^5.2.4
-  languageName: unknown
-  linkType: soft
 
 "dashdash@npm:^1.12.0":
   version: 1.14.1

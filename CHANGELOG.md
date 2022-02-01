@@ -10,4 +10,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Project initialization.
 
-[Unreleased]: https://github.com/status-im/dappconnect-sdks/compare/x...HEAD
+[Unreleased]: https://github.com/status-im/wakuconnect-chat-sdk/compare/x...HEAD
