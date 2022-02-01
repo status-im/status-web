@@ -17,19 +17,19 @@ import { Theme } from "../styles/themes";
 
 import { Chat } from "./Chat";
 
-interface DappConnectCommunityChatProps {
+interface CommunityChatProps {
   theme: Theme;
   communityKey: string;
   config: ConfigType;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function DappConnectCommunityChat({
+export function CommunityChat({
   theme,
   config,
   fetchMetadata,
   communityKey,
-}: DappConnectCommunityChatProps) {
+}: CommunityChatProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   return (
     <ConfigProvider config={config}>
