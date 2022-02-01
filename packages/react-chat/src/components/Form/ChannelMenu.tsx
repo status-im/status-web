@@ -121,7 +121,7 @@ export const ChannelMenu = ({
             {!channel.isMuted && <NextIcon />}
             <MenuText>
               {(channel.isMuted ? "Unmute" : "Mute") +
-                (channel.type === "group" ? " Group" : " Chat")}
+                (channel.type === "group" ? " Group" : " CommunityChatRoom")}
             </MenuText>
             {!channel.isMuted && showSubmenu && (
               <MuteMenu
@@ -155,7 +155,9 @@ export const ChannelMenu = ({
               <DeleteIcon width={16} height={16} className="red" />
             )}
             <MenuText className="red">
-              {channel.type === "group" ? "Leave Group" : "Delete Chat"}
+              {channel.type === "group"
+                ? "Leave Group"
+                : "Delete CommunityChatRoom"}
             </MenuText>
           </MenuItem>
         )}

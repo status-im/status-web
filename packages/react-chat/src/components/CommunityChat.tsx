@@ -15,7 +15,7 @@ import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
 
-import { Chat } from "./Chat";
+import { CommunityChatRoom } from "./CommunityChatRoom";
 
 interface CommunityChatProps {
   theme: Theme;
@@ -43,7 +43,7 @@ export function CommunityChat({
                   <IdentityProvider>
                     <MessengerProvider communityKey={communityKey}>
                       <ChatStateProvider>
-                        <Chat />
+                        <CommunityChatRoom />
                         <div id="modal-root" />
                       </ChatStateProvider>
                     </MessengerProvider>

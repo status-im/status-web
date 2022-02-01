@@ -52,7 +52,7 @@ export function WalletModal() {
               version: "1",
             },
             message: {
-              action: "Status Chat Key",
+              action: "Status CommunityChatRoom Key",
               onlySignOn: dappUrl,
               message:
                 "This signature will be used to decrypt chat communications; check that the 'onlySignOn' property of this message matches the current website address.",
