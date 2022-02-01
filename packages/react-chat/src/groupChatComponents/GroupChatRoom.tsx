@@ -41,7 +41,7 @@ function Modals() {
   );
 }
 
-export function GroupChat() {
+export function GroupChatRoom() {
   const [state] = useChatState();
   const [showMembers, setShowMembers] = useState(false);
   const [editGroup, setEditGroup] = useState(false);

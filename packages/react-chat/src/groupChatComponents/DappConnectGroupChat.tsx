@@ -15,7 +15,7 @@ import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
 
-import { GroupChat } from "./GroupChat";
+import { GroupChatRoom } from "./GroupChatRoom";
 
 interface DappConnectGroupChatProps {
   theme: Theme;
@@ -41,7 +41,7 @@ export function DappConnectGroupChat({
                   <IdentityProvider>
                     <MessengerProvider communityKey={undefined}>
                       <ChatStateProvider>
-                        <GroupChat />
+                        <GroupChatRoom />
                         <div id="modal-root" />
                       </ChatStateProvider>
                     </MessengerProvider>
