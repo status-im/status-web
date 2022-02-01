@@ -14,9 +14,19 @@ import { Tooltip } from "./Tooltip";
 
 type TextFormatMenuProps = {
   textRef: React.MutableRefObject<null>;
+  selectedElement: {
+    element: Selection | null;
+    start: number;
+    end: number;
+    text: string;
+    node: Node | null;
+  };
 };
 
-export function TextFormatMenu({ textRef }: TextFormatMenuProps) {
+export function TextFormatMenu({
+  textRef,
+  selectedElement,
+}: TextFormatMenuProps) {
   const identity = useIdentity();
   const { topPosition, leftPosition, selectedText, setSelectedText } =
     useTextSelection(textRef);
@@ -29,22 +39,38 @@ export function TextFormatMenu({ textRef }: TextFormatMenuProps) {
   const ref = useRef(null);
   useClickOutside(ref, () => setSelectedText(""));
 
+  const addStyle = (tag: string) => {
+    const { element, text, node } = selectedElement;
+    const styledElement = document.createElement(tag);
+    if (tag === "span") styledElement.style.textDecoration = "line-through";
+    if (tag === "pre")
+      styledElement.style.fontFamily = "Roboto Mono, monospace";
+    styledElement.innerText = selectedText;
+
+    if (element && text && node && styledElement && element.rangeCount > 0) {
+      const range = element.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(styledElement);
+      range.collapse();
+    }
+  };
+
   if (identity && selectedText) {
     return (
       <Wrapper style={menuStyle} ref={ref}>
-        <MenuBtn>
+        <MenuBtn onClick={() => addStyle("b")}>
           <TextBoldIcon />
           <Tooltip tip="Bold" />
         </MenuBtn>
-        <MenuBtn>
+        <MenuBtn onClick={() => addStyle("i")}>
           <TextItalicIcon />
           <Tooltip tip="Italic" />
         </MenuBtn>
-        <MenuBtn>
+        <MenuBtn onClick={() => addStyle("span")}>
           <TextStrikethroughIcon />
           <Tooltip tip="Strikethrough" />
         </MenuBtn>
-        <MenuBtn>
+        <MenuBtn onClick={() => addStyle("pre")}>
           <TextCodeIcon />
           <Tooltip tip="Code" />
         </MenuBtn>

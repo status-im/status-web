@@ -307,7 +307,10 @@ export function ChatInput({
                 onBotttom
               />
             )}
-            <TextFormatMenu textRef={textRef} />
+            <TextFormatMenu
+              textRef={textRef}
+              selectedElement={selectedElement}
+            />
           </InputWrapper>
           <InputButtons>
             <EmojiWrapper ref={ref}>
