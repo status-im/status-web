@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { ChatState, useChatState } from "../contexts/chatStateProvider";
+import { useMessengerContext } from "../contexts/messengerProvider";
 import { useNarrow } from "../contexts/narrowProvider";
 
 import { Channels } from "./Channels/Channels";
@@ -49,6 +50,8 @@ export function CommunityChatRoom() {
   const [showMembers, setShowMembers] = useState(false);
   const [editGroup, setEditGroup] = useState(false);
   const narrow = useNarrow();
+  const { activeChannel } = useMessengerContext();
+
   return (
     <ChatWrapper>
       {!narrow && (
@@ -66,7 +69,11 @@ export function CommunityChatRoom() {
           setEditGroup={setEditGroup}
         />
       )}
-      {showMembers && !narrow && state === ChatState.ChatBody && <Members />}
+      {showMembers &&
+        !narrow &&
+        state === ChatState.ChatBody &&
+        activeChannel &&
+        activeChannel.type !== "dm" && <Members />}
       {state === ChatState.ChatCreation && <ChatCreation />}
       <Modals />
       <ToastMessageList />

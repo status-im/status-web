@@ -59,7 +59,7 @@ export const ChannelMenu = ({
   if (showMenu || setShowChannelMenu) {
     return (
       <ChannelDropdown className={className}>
-        {narrow && !className && (
+        {narrow && !className && channel.type !== "dm" && (
           <MenuItem
             onClick={() => {
               if (switchMemberList) switchMemberList();

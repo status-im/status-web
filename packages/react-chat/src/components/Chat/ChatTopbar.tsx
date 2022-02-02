@@ -104,7 +104,7 @@ export function ChatTopbar({
       </ChannelWrapper>
 
       <MenuWrapper>
-        {!narrow && (
+        {!narrow && activeChannel.type !== "dm" && (
           <TopBtn onClick={onClick} className={showMembers ? "active" : ""}>
             <MembersIcon />
           </TopBtn>
