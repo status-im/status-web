@@ -10,6 +10,7 @@
     "plugin:eslint-comments/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/typescript",
+    "plugin:react-hooks/recommended",
     "prettier"
   ],
   "globals": { "BigInt": true, "console": true, "WebAssembly": true },
