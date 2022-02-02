@@ -7,7 +7,7 @@ build
 cache
 
 # Yarn 2 (zero-installs)
-.yarn/*
+.yarn/
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins
