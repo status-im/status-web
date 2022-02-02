@@ -25,17 +25,16 @@ export function Mention({ id, setMentioned, className }: MentionProps) {
   const [showMenu, setShowMenu] = useState(false);
   const identity = useIdentity();
 
-  if (!contact) return <>{id}</>;
-
   useEffect(() => {
-    if (identity) {
+    if (identity && contact) {
       if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
     }
-  }, [contact.id, identity]);
+  }, [contact, identity]);
 
   const ref = useRef(null);
   useClickOutside(ref, () => setShowMenu(false));
 
+  if (!contact) return <>{id}</>;
   return (
     <MentionBLock
       onClick={() => setShowMenu(!showMenu)}
