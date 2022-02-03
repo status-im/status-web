@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
+import { useScrollToMessage } from "../../contexts/scrollProvider";
 import { ActivityAction } from "../../hooks/useActivities";
 import { useClickOutside } from "../../hooks/useClickOutside";
-import { useScrollToMessage } from "../../hooks/useScrollToMessage";
 import { Activity } from "../../models/Activity";
 import { equalDate } from "../../utils/equalDate";
 import { DownloadButton } from "../Buttons/DownloadButton";
@@ -169,7 +169,10 @@ export function ActivityMessage({
             <ActivityText>
               {"message" in activity && activity.message?.content && (
                 <div
-                  onClick={() => scroll(activity.message, activity.channel.id)}
+                  onClick={() => {
+                    scroll(activity.message, activity.channel.id);
+                    setShowActivityCenter(false);
+                  }}
                 >
                   {elements.map((el) => el)}
                 </div>

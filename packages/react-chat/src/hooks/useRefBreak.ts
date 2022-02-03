@@ -20,7 +20,7 @@ export function useRefBreak(dimension: number, sizeThreshold: number) {
     return () => {
       window.removeEventListener("resize", checkDimensions);
     };
-  }, [dimension, widthBreak]);
+  }, [dimension, widthBreak, sizeThreshold]);
 
   return widthBreak;
 }

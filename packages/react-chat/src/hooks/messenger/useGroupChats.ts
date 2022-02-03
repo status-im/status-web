@@ -84,7 +84,7 @@ export function useGroupChats(
         handleMessage
       );
     }
-  }, [messenger, identity, contactsClass]);
+  }, [messenger, identity, contactsClass, addChatMessage, dispatch]);
 
   const createGroupChat = useCallback(
     (members: string[]) => {

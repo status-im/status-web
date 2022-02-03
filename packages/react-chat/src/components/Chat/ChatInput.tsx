@@ -1,3 +1,4 @@
+import { EmojiData } from "emoji-mart";
 import React, {
   useCallback,
   useEffect,
@@ -72,16 +73,23 @@ export function ChatInput({
     [imageUint]
   );
 
-  const addEmoji = useCallback((e: any) => {
-    const sym = e.unified.split("-");
-    const codesArray: any[] = [];
-    sym.forEach((el: string) => codesArray.push("0x" + el));
-    const emoji = String.fromCodePoint(...codesArray);
-    if (inputRef.current) {
-      inputRef.current.appendChild(document.createTextNode(emoji));
-    }
-    setContent((p) => p + emoji);
-  }, []);
+  const addEmoji = useCallback(
+    (e: EmojiData) => {
+      if ("unified" in e) {
+        const sym = e.unified.split("-");
+        const codesArray: string[] = [];
+        sym.forEach((el: string) => codesArray.push("0x" + el));
+        const emoji = String.fromCodePoint(
+          ...(codesArray as unknown as number[])
+        );
+        if (inputRef.current) {
+          inputRef.current.appendChild(document.createTextNode(emoji));
+        }
+        setContent((p) => p + emoji);
+      }
+    },
+    [setContent]
+  );
 
   const resizeTextArea = useCallback((target: HTMLDivElement) => {
     target.style.height = "40px";
@@ -91,31 +99,37 @@ export function ChatInput({
 
   const rowHeight = inputHeight + (image ? 73 : 0);
 
-  const onInputChange = useCallback((e: React.ChangeEvent<HTMLDivElement>) => {
-    const element = document.getSelection();
-    const inputElement = inputRef.current;
-    if (inputElement && element && element.rangeCount > 0) {
-      const selection = element?.getRangeAt(0)?.startOffset;
-      const parentElement = element.anchorNode?.parentElement;
-      if (parentElement && parentElement.tagName === "B") {
-        parentElement.outerHTML = parentElement.innerText;
-        const range = document.createRange();
-        const sel = window.getSelection();
-        if (element.anchorNode.firstChild) {
-          const childNumber =
-            element.focusOffset === 0 ? 0 : element.focusOffset - 1;
-          range.setStart(element.anchorNode.childNodes[childNumber], selection);
-        }
-        range.collapse(true);
+  const onInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLDivElement>) => {
+      const element = document.getSelection();
+      const inputElement = inputRef.current;
+      if (inputElement && element && element.rangeCount > 0) {
+        const selection = element?.getRangeAt(0)?.startOffset;
+        const parentElement = element.anchorNode?.parentElement;
+        if (parentElement && parentElement.tagName === "B") {
+          parentElement.outerHTML = parentElement.innerText;
+          const range = document.createRange();
+          const sel = window.getSelection();
+          if (element.anchorNode.firstChild) {
+            const childNumber =
+              element.focusOffset === 0 ? 0 : element.focusOffset - 1;
+            range.setStart(
+              element.anchorNode.childNodes[childNumber],
+              selection
+            );
+          }
+          range.collapse(true);
 
-        sel?.removeAllRanges();
-        sel?.addRange(range);
+          sel?.removeAllRanges();
+          sel?.addRange(range);
+        }
       }
-    }
-    const target = e.target;
-    resizeTextArea(target);
-    setContent(target.textContent ?? "");
-  }, []);
+      const target = e.target;
+      resizeTextArea(target);
+      setContent(target.textContent ?? "");
+    },
+    [resizeTextArea]
+  );
 
   const onInputKeyPress = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -137,7 +151,16 @@ export function ChatInput({
         }
       }
     },
-    [content, imageUint]
+    [
+      content,
+      imageUint,
+      createChat,
+      group,
+      sendMessage,
+      reply?.id,
+      setChatState,
+      setReply,
+    ]
   );
 
   const [selectedElement, setSelectedElement] = useState<{
@@ -176,7 +199,7 @@ export function ChatInput({
     }
   }, []);
 
-  useEffect(handleCursorChange, [content]);
+  useEffect(handleCursorChange, [content, handleCursorChange]);
 
   const addMention = useCallback(
     (contact: string) => {
@@ -215,7 +238,7 @@ export function ChatInput({
         }
       }
     },
-    [inputRef, inputRef?.current, content, selectedElement]
+    [inputRef, content, selectedElement, resizeTextArea]
   );
 
   return (

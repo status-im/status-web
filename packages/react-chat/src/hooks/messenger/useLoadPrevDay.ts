@@ -64,7 +64,7 @@ export function useLoadPrevDay(
         }
       }
     },
-    [messenger]
+    [messenger, groupChats]
   );
   return { loadingMessages, loadPrevDay };
 }

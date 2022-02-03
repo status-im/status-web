@@ -1,9 +1,11 @@
 import { Identity } from "@waku/status-communities/dist/cjs";
-import React, { createContext, useContext, useState } from "react";
+import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
+import React, { createContext, useContext, useMemo, useState } from "react";
 
 const IdentityContext = createContext<{
   identity: Identity | undefined;
   setIdentity: React.Dispatch<React.SetStateAction<Identity | undefined>>;
+  publicKey: string | undefined;
   walletIdentity: Identity | undefined;
   setWalletIdentity: React.Dispatch<React.SetStateAction<Identity | undefined>>;
   nickname: string | undefined;
@@ -11,6 +13,7 @@ const IdentityContext = createContext<{
 }>({
   identity: undefined,
   setIdentity: () => undefined,
+  publicKey: undefined,
   walletIdentity: undefined,
   setWalletIdentity: () => undefined,
   nickname: undefined,
@@ -19,6 +22,10 @@ const IdentityContext = createContext<{
 
 export function useIdentity() {
   return useContext(IdentityContext).identity;
+}
+
+export function useUserPublicKey() {
+  return useContext(IdentityContext).publicKey;
 }
 
 export function useSetIdentity() {
@@ -47,6 +54,10 @@ interface IdentityProviderProps {
 
 export function IdentityProvider({ children }: IdentityProviderProps) {
   const [identity, setIdentity] = useState<Identity | undefined>(undefined);
+  const publicKey = useMemo(
+    () => (identity ? bufToHex(identity.publicKey) : undefined),
+    [identity]
+  );
   const [walletIdentity, setWalletIdentity] = useState<Identity | undefined>(
     undefined
   );
@@ -57,6 +68,7 @@ export function IdentityProvider({ children }: IdentityProviderProps) {
       value={{
         identity,
         setIdentity,
+        publicKey,
         nickname,
         setNickname,
         walletIdentity,

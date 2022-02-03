@@ -1,9 +1,8 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import { BaseEmoji } from "emoji-mart";
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { useClickPosition } from "../../hooks/useClickPosition";
@@ -33,23 +32,27 @@ export const MessageMenu = ({
   setReply,
   messageRef,
 }: MessageMenuProps) => {
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const { activeChannel } = useMessengerContext();
   const { showMenu, setShowMenu } = useContextMenu(message.id);
   const { topPosition, leftPosition } = useClickPosition(messageRef);
 
-  const menuStyle = {
-    top: topPosition,
-    left: leftPosition,
-  };
+  const menuStyle = useMemo(() => {
+    return {
+      top: topPosition,
+      left: leftPosition,
+    };
+  }, [topPosition, leftPosition]);
 
   const ref = useRef(null);
   useClickOutside(ref, () => setShowMenu(false));
 
-  const userMessage =
-    identity && message.sender === utils.bufToHex(identity.publicKey);
+  const userMessage = useMemo(
+    () => !!userPK && message.sender === userPK,
+    [userPK, message]
+  );
 
-  return identity && showMenu ? (
+  return userPK && showMenu ? (
     <div ref={ref} id={"messageDropdown"}>
       <MessageDropdown style={menuStyle}>
         <MenuItem className="picker">

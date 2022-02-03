@@ -1,9 +1,8 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import { BaseEmoji } from "emoji-mart";
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { Reply } from "../../hooks/useReply";
 import { ChatMessage } from "../../models/ChatMessage";
@@ -28,11 +27,13 @@ export function Reactions({
   messageReactions,
   setMessageReactions,
 }: ReactionsProps) {
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const { activeChannel } = useMessengerContext();
 
-  const userMessage =
-    identity && message.sender === utils.bufToHex(identity.publicKey);
+  const userMessage = useMemo(
+    () => !!userPK && message.sender === userPK,
+    [userPK, message]
+  );
 
   return (
     <Wrapper>

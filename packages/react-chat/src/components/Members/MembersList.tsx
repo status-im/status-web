@@ -1,8 +1,7 @@
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { Contact } from "../../models/Contact";
@@ -14,16 +13,12 @@ import { Member } from "./Member";
 
 export function MembersList() {
   const { contacts, nickname, activeChannel } = useMessengerContext();
-  const identity = useIdentity();
-  const userPK = useMemo(
-    () => (identity ? bufToHex(identity?.publicKey) : undefined),
-    [identity]
-  );
+  const userPK = useUserPublicKey();
   const { setModal } = useModal(LogoutModalName);
 
   const members = useMemo(() => {
     const contactsArray = Object.values(contacts);
-    if (identity) {
+    if (userPK) {
       if (
         activeChannel &&
         activeChannel.type === "group" &&
@@ -40,7 +35,7 @@ export function MembersList() {
       return contactsArray.filter((e) => e.id !== userPK);
     }
     return contactsArray;
-  }, [activeChannel, contacts, identity, userPK]);
+  }, [activeChannel, contacts, userPK]);
 
   const onlineContacts = useMemo(
     () => members.filter((e) => e.online),
@@ -53,15 +48,15 @@ export function MembersList() {
 
   return (
     <MembersListWrap>
-      {identity && (
+      {userPK && (
         <MemberCategory>
           <MemberCategoryName>You</MemberCategoryName>
           <Row>
             <Member
               contact={{
-                id: userPK ?? "",
+                id: userPK,
                 customName: nickname,
-                trueName: userPK ?? "",
+                trueName: userPK,
               }}
               isYou={true}
             />

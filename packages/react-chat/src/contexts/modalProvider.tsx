@@ -44,7 +44,7 @@ export function useModal<T extends string>(name: T) {
         };
       });
     },
-    [name, modals]
+    [name, setModals]
   );
   const isVisible = useMemo(() => !!modals?.[name], [modals, name]);
 

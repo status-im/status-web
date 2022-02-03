@@ -14,10 +14,10 @@ export function useChatScrollHandle(
     if (ref && ref.current && scrollOnBot) {
       ref.current.scrollTop = ref.current.scrollHeight;
     }
-  }, [messages.length, scrollOnBot]);
+  }, [messages.length, scrollOnBot, ref]);
 
   useEffect(() => {
-    if (!loadingMessages && activeChannel) {
+    if (activeChannel) {
       if (
         (ref?.current?.clientHeight ?? 0) >= (ref?.current?.scrollHeight ?? 0)
       ) {
@@ -25,9 +25,10 @@ export function useChatScrollHandle(
         loadPrevDay(activeChannel.id, activeChannel.type !== "channel");
       }
     }
-  }, [messages.length, activeChannel]);
+  }, [messages.length, activeChannel, loadPrevDay, setScrollOnBot, ref]);
 
   useEffect(() => {
+    const currentRef = ref.current;
     const setScroll = () => {
       if (ref?.current && activeChannel) {
         if (ref.current.scrollTop <= 0) {
@@ -47,8 +48,8 @@ export function useChatScrollHandle(
         }
       }
     };
-    ref.current?.addEventListener("scroll", setScroll);
-    return () => ref.current?.removeEventListener("scroll", setScroll);
-  }, [ref, scrollOnBot, activeChannel]);
+    currentRef?.addEventListener("scroll", setScroll);
+    return () => currentRef?.removeEventListener("scroll", setScroll);
+  }, [ref, scrollOnBot, activeChannel, loadPrevDay]);
   return loadingMessages;
 }

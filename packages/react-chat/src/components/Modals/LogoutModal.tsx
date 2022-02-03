@@ -1,11 +1,10 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import React from "react";
 import styled from "styled-components";
 
 import {
-  useIdentity,
   useSetIdentity,
   useSetNikcname,
+  useUserPublicKey,
 } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
@@ -28,10 +27,10 @@ export const LogoutModal = () => {
   const { setModal } = useModal(LogoutModalName);
   const logout = useSetIdentity();
   const setNickname = useSetNikcname();
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const { nickname } = useMessengerContext();
 
-  if (identity) {
+  if (userPK) {
     return (
       <Modal name={LogoutModalName}>
         <Section>
@@ -42,9 +41,9 @@ export const LogoutModal = () => {
           <UserSection>
             <UserLogo
               contact={{
-                id: utils.bufToHex(identity.publicKey),
+                id: userPK,
                 customName: nickname,
-                trueName: utils.bufToHex(identity.publicKey),
+                trueName: userPK,
               }}
               radius={80}
               colorWheel={[
@@ -61,8 +60,8 @@ export const LogoutModal = () => {
             <UserAddressWrapper className="small">
               <UserAddress className="small">
                 {" "}
-                Chatkey: {identity.privateKey.slice(0, 10)}...
-                {identity.privateKey.slice(-3)}{" "}
+                Chatkey: {userPK.slice(0, 10)}...
+                {userPK.slice(-3)}{" "}
               </UserAddress>
             </UserAddressWrapper>
             <EmojiKey className="small">🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱</EmojiKey>

@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useScrollToMessage } from "../../hooks/useScrollToMessage";
+import { useScrollToMessage } from "../../contexts/scrollProvider";
 import { ChatMessage } from "../../models/ChatMessage";
 import { ReplyOn, ReplyTo } from "../Chat/ChatInput";
 import { QuoteSvg } from "../Icons/QuoteIcon";

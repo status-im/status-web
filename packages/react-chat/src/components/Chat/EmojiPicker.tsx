@@ -1,4 +1,4 @@
-import { Picker } from "emoji-mart";
+import { EmojiData, Picker } from "emoji-mart";
 import React from "react";
 import { useTheme } from "styled-components";
 
@@ -7,7 +7,7 @@ import { lightTheme, Theme } from "../../styles/themes";
 
 type EmojiPickerProps = {
   showEmoji: boolean;
-  addEmoji: (e: any) => void;
+  addEmoji: (e: EmojiData) => void;
   bottom: number;
 };
 

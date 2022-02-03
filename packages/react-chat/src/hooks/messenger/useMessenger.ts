@@ -6,7 +6,14 @@ import {
   Identity,
   Messenger,
 } from "@waku/status-communities/dist/cjs";
-import { useCallback, useEffect, useMemo, useReducer, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 
 import { useConfig } from "../../contexts/configProvider";
 import { ChannelData, ChannelsData } from "../../models/ChannelData";
@@ -60,24 +67,33 @@ function useCreateMessenger(identity: Identity | undefined) {
     createMessenger(identity, environment).then((e) => {
       setMessenger(e);
     });
-  }, [identity]);
+  }, [identity, environment]);
+
   return messenger;
 }
 
 function useCreateCommunity(
   messenger: Messenger | undefined,
+  identity: Identity | undefined,
   communityKey: string | undefined,
   addMessage: (msg: ApplicationMetadataMessage, id: string, date: Date) => void,
   contactsClass: ContactsClass | undefined
 ) {
   const [community, setCommunity] = useState<Community | undefined>(undefined);
+
   useEffect(() => {
-    if (messenger && communityKey && contactsClass) {
+    if (
+      messenger &&
+      communityKey &&
+      contactsClass &&
+      addMessage &&
+      messenger.identity === identity
+    ) {
       createCommunity(communityKey, addMessage, messenger).then((comm) => {
         setCommunity(comm);
       });
     }
-  }, [messenger, communityKey, addMessage, contactsClass]);
+  }, [messenger, communityKey, addMessage, contactsClass, identity]);
 
   const communityData = useMemo(() => {
     if (community?.description) {
@@ -101,7 +117,7 @@ function useCreateCommunity(
     } else {
       return undefined;
     }
-  }, [community]);
+  }, [community, contactsClass]);
 
   return { community, communityData };
 }
@@ -153,7 +169,11 @@ export function useMessenger(
     subscriptionReducer,
     {}
   );
-  const subList = useMemo(() => Object.values(subscriptions), [subscriptions]);
+  const subList = useRef<((msg: ChatMessage, id: string) => void)[]>([]);
+  useEffect(() => {
+    subList.current = Object.values(subscriptions);
+  }, [subscriptions]);
+
   const [channelsState, channelsDispatch] = useChannelsReducer();
   const messenger = useCreateMessenger(identity);
   const { contacts, contactsDispatch, contactsClass, nickname } = useContacts(
@@ -188,6 +208,7 @@ export function useMessenger(
 
   const { community, communityData } = useCreateCommunity(
     messenger,
+    identity,
     communityKey,
     addMessage,
     contactsClass
@@ -207,7 +228,7 @@ export function useMessenger(
         });
       }
     }
-  }, [community]);
+  }, [community, channelsDispatch]);
 
   useEffect(() => {
     Object.values(channelsState.channels)
@@ -227,7 +248,7 @@ export function useMessenger(
           });
         }
       });
-  }, [contacts, channelsState.channels]);
+  }, [contacts, channelsState.channels, channelsDispatch]);
 
   const {
     groupChat,
@@ -255,7 +276,7 @@ export function useMessenger(
         loadPrevDay(id)
       );
     }
-  }, [messenger, community]);
+  }, [messenger, community, loadPrevDay]);
 
   const sendMessage = useCallback(
     async (messageText?: string, image?: Uint8Array, responseTo?: string) => {
@@ -299,7 +320,7 @@ export function useMessenger(
         clearMentions(channelsState.activeChannel.id);
       }
     }
-  }, [notifications, channelsState]);
+  }, [notifications, channelsState, clearNotifications, clearMentions]);
 
   const loadingMessenger = useMemo(() => {
     return Boolean(
@@ -307,7 +328,7 @@ export function useMessenger(
         !messenger ||
         (communityKey && !channelsState.activeChannel.id)
     );
-  }, [communityData, messenger, channelsState]);
+  }, [communityData, messenger, channelsState, communityKey]);
 
   return {
     messenger,
