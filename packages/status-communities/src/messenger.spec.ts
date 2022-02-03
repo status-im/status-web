@@ -34,20 +34,6 @@ describe("Messenger", () => {
       }),
     ]);
 
-    const pubsubPromises = [
-      new Promise((resolve) =>
-        messengerAlice.waku.libp2p.pubsub.once(
-          "pubsub:subscription-change",
-          () => resolve(null)
-        )
-      ),
-      new Promise((resolve) =>
-        messengerBob.waku.libp2p.pubsub.once("pubsub:subscription-change", () =>
-          resolve(null)
-        )
-      ),
-    ];
-
     dbg("Connect messengers");
     // Connect both messengers together for test purposes
     messengerAlice.waku.addPeerToAddressBook(
@@ -56,7 +42,10 @@ describe("Messenger", () => {
     );
 
     dbg("Wait for pubsub connection");
-    await Promise.all(pubsubPromises);
+    await Promise.all([
+      messengerAlice.waku.waitForRemotePeer(),
+      messengerBob.waku.waitForRemotePeer(),
+    ]);
     dbg("Messengers ready");
   });
 
