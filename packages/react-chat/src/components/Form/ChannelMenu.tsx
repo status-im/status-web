@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
+import { useClickOutside } from "../../hooks/useClickOutside";
 import { useContextMenu } from "../../hooks/useContextMenu";
 import { ChannelData } from "../../models/ChannelData";
 import { AddMemberIcon } from "../Icons/AddMemberIcon";
@@ -56,10 +57,13 @@ export const ChannelMenu = ({
     [setShowChannelMenu, setShowSideMenu]
   );
 
+  const ref = useRef(null);
+  useClickOutside(ref, () => setShowMenu(false));
+
   if (showMenu || setShowChannelMenu) {
     return (
-      <ChannelDropdown className={className}>
-        {narrow && !className && (
+      <ChannelDropdown className={className} menuRef={ref}>
+        {narrow && channel.type !== "dm" && (
           <MenuItem
             onClick={() => {
               if (switchMemberList) switchMemberList();
@@ -106,7 +110,10 @@ export const ChannelMenu = ({
           <MenuItem
             onClick={() => {
               if (channel.isMuted) {
-                channelsDispatch({ type: "ToggleMuted", payload: channel.id });
+                channelsDispatch({
+                  type: "ToggleMuted",
+                  payload: channel.id,
+                });
                 setShowMenu(false);
               }
             }}
@@ -121,12 +128,15 @@ export const ChannelMenu = ({
             {!channel.isMuted && <NextIcon />}
             <MenuText>
               {(channel.isMuted ? "Unmute" : "Mute") +
-                (channel.type === "group" ? " Group" : " CommunityChatRoom")}
+                (channel.type === "group" ? " Group" : "Chat")}
             </MenuText>
             {!channel.isMuted && showSubmenu && (
               <MuteMenu
                 setIsMuted={() =>
-                  channelsDispatch({ type: "ToggleMuted", payload: channel.id })
+                  channelsDispatch({
+                    type: "ToggleMuted",
+                    payload: channel.id,
+                  })
                 }
                 className={className}
               />
@@ -155,9 +165,7 @@ export const ChannelMenu = ({
               <DeleteIcon width={16} height={16} className="red" />
             )}
             <MenuText className="red">
-              {channel.type === "group"
-                ? "Leave Group"
-                : "Delete CommunityChatRoom"}
+              {channel.type === "group" ? "Leave Group" : "Delete Chat"}
             </MenuText>
           </MenuItem>
         )}

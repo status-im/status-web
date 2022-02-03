@@ -7,15 +7,19 @@ type DropdownMenuProps = {
   children: ReactNode;
   className?: string;
   style?: { top: number; left: number };
+  menuRef?: React.MutableRefObject<null>;
+  id?: string;
 };
 
 export function DropdownMenu({
   children,
   className,
   style,
+  menuRef,
+  id,
 }: DropdownMenuProps) {
   return (
-    <MenuBlock className={className} style={style}>
+    <MenuBlock className={className} style={style} ref={menuRef} id={id}>
       <MenuList>{children}</MenuList>
     </MenuBlock>
   );

@@ -53,64 +53,62 @@ export const MessageMenu = ({
   );
 
   return userPK && showMenu ? (
-    <div ref={ref} id={"messageDropdown"}>
-      <MessageDropdown style={menuStyle}>
-        <MenuItem className="picker">
-          <ReactionPicker
-            messageReactions={messageReactions}
-            setMessageReactions={setMessageReactions}
-            className="menu"
-          />
+    <MessageDropdown style={menuStyle} menuRef={ref} id="messageDropdown">
+      <MenuItem className="picker">
+        <ReactionPicker
+          messageReactions={messageReactions}
+          setMessageReactions={setMessageReactions}
+          className="menu"
+        />
+      </MenuItem>
+      <MenuSection className={`${!userMessage && "message"}`}>
+        <MenuItem
+          onClick={() => {
+            setReply({
+              sender: message.sender,
+              content: message.content,
+              image: message.image,
+              id: message.id,
+            });
+            setShowMenu(false);
+          }}
+        >
+          <ReplySvg width={16} height={16} className="menu" />
+          <MenuText>Reply</MenuText>
         </MenuItem>
-        <MenuSection className={`${!userMessage && "message"}`}>
-          <MenuItem
-            onClick={() => {
-              setReply({
-                sender: message.sender,
-                content: message.content,
-                image: message.image,
-                id: message.id,
-              });
-              setShowMenu(false);
-            }}
-          >
-            <ReplySvg width={16} height={16} className="menu" />
-            <MenuText>Reply</MenuText>
-          </MenuItem>
 
-          {userMessage && (
-            <MenuItem
-              onClick={() => {
-                setShowMenu(false);
-              }}
-            >
-              <EditIcon width={16} height={16} />
-              <MenuText>Edit</MenuText>
-            </MenuItem>
-          )}
-          {activeChannel?.type !== "channel" && (
-            <MenuItem
-              onClick={() => {
-                setShowMenu(false);
-              }}
-            >
-              <PinIcon width={16} height={16} className="menu" />
-              <MenuText>Pin</MenuText>
-            </MenuItem>
-          )}
-        </MenuSection>
         {userMessage && (
           <MenuItem
             onClick={() => {
               setShowMenu(false);
             }}
           >
-            <DeleteIcon width={16} height={16} className="red" />
-            <MenuText className="red">Delete message</MenuText>
+            <EditIcon width={16} height={16} />
+            <MenuText>Edit</MenuText>
           </MenuItem>
         )}
-      </MessageDropdown>
-    </div>
+        {activeChannel?.type !== "channel" && (
+          <MenuItem
+            onClick={() => {
+              setShowMenu(false);
+            }}
+          >
+            <PinIcon width={16} height={16} className="menu" />
+            <MenuText>Pin</MenuText>
+          </MenuItem>
+        )}
+      </MenuSection>
+      {userMessage && (
+        <MenuItem
+          onClick={() => {
+            setShowMenu(false);
+          }}
+        >
+          <DeleteIcon width={16} height={16} className="red" />
+          <MenuText className="red">Delete message</MenuText>
+        </MenuItem>
+      )}
+    </MessageDropdown>
   ) : (
     <></>
   );

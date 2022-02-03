@@ -107,7 +107,6 @@ export function UiMessage({
                     if (identity) setShowMenu((e) => !e);
                   }}
                   disabled={!identity}
-                  ref={ref}
                 >
                   <UserName>
                     {" "}

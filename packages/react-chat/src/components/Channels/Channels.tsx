@@ -64,7 +64,7 @@ function ChatsSideBar({ onCommunityClick, setEditGroup }: ChatsListProps) {
   return (
     <>
       <ChatsBar>
-        <Heading>Chat</Heading>
+        <Heading>Messages</Heading>
         <EditBtn onClick={() => setChatState(ChatState.ChatCreation)}>
           <CreateIcon />
         </EditBtn>

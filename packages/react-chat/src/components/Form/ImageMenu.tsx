@@ -21,17 +21,15 @@ export const ImageMenu = ({ imageId }: ImageMenuProps) => {
   useClickOutside(ref, () => setShowMenu(false));
 
   return showMenu ? (
-    <div ref={ref}>
-      <ImageDropdown>
-        <MenuItem onClick={() => copyImg(imageId)}>
-          <CopyIcon height={16} width={16} /> <MenuText>Copy image</MenuText>
-        </MenuItem>
-        <MenuItem onClick={() => downloadImg(imageId)}>
-          <DownloadIcon height={16} width={16} />
-          <MenuText> Download image</MenuText>
-        </MenuItem>
-      </ImageDropdown>
-    </div>
+    <ImageDropdown menuRef={ref}>
+      <MenuItem onClick={() => copyImg(imageId)}>
+        <CopyIcon height={16} width={16} /> <MenuText>Copy image</MenuText>
+      </MenuItem>
+      <MenuItem onClick={() => downloadImg(imageId)}>
+        <DownloadIcon height={16} width={16} />
+        <MenuText> Download image</MenuText>
+      </MenuItem>
+    </ImageDropdown>
   ) : (
     <></>
   );
