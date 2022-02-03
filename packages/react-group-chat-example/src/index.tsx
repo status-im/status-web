@@ -1,8 +1,4 @@
-import {
-  DappConnectGroupChat,
-  darkTheme,
-  lightTheme,
-} from "@waku/react-chat-sdk";
+import { darkTheme, GroupChat, lightTheme } from "@waku/react-chat-sdk";
 import React, { useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
@@ -77,7 +73,7 @@ function DragDiv() {
           }}
         />
         <FloatingDiv className={showChat ? "" : "hide"}>
-          <DappConnectGroupChat
+          <GroupChat
             theme={theme ? lightTheme : darkTheme}
             config={{
               environment: process.env.ENV ?? "",

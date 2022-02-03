@@ -1,12 +1,6 @@
-import { DappConnectCommunityChat } from "./components/DappConnectCommunityChat";
+import { CommunityChat } from "./components/CommunityChat";
 import { ConfigType } from "./contexts/configProvider";
-import { DappConnectGroupChat } from "./groupChatComponents/DappConnectGroupChat";
+import { GroupChat } from "./groupChatComponents/GroupChat";
 import { darkTheme, lightTheme } from "./styles/themes";
 
-export {
-  DappConnectCommunityChat,
-  DappConnectGroupChat,
-  lightTheme,
-  darkTheme,
-  ConfigType,
-};
+export { CommunityChat, GroupChat, lightTheme, darkTheme, ConfigType };

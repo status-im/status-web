@@ -2,7 +2,7 @@
   "name": "@waku/react-chat-sdk-example",
   "main": "index.js",
   "version": "0.1.0",
-  "repository": "https://github.com/status-im/dappconnect-chat-sdk/",
+  "repository": "https://github.com/status-im/wakuconnect-chat-sdk/",
   "license": "MIT OR Apache-2.0",
   "packageManager": "yarn@3.0.1",
   "scripts": {

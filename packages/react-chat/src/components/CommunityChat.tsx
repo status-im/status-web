@@ -15,21 +15,21 @@ import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
 import { Theme } from "../styles/themes";
 
-import { Chat } from "./Chat";
+import { CommunityChatRoom } from "./CommunityChatRoom";
 
-interface DappConnectCommunityChatProps {
+interface CommunityChatProps {
   theme: Theme;
   communityKey: string;
   config: ConfigType;
   fetchMetadata?: (url: string) => Promise<Metadata | undefined>;
 }
 
-export function DappConnectCommunityChat({
+export function CommunityChat({
   theme,
   config,
   fetchMetadata,
   communityKey,
-}: DappConnectCommunityChatProps) {
+}: CommunityChatProps) {
   const ref = useRef<HTMLHeadingElement>(null);
   return (
     <ConfigProvider config={config}>
@@ -43,7 +43,7 @@ export function DappConnectCommunityChat({
                   <IdentityProvider>
                     <MessengerProvider communityKey={communityKey}>
                       <ChatStateProvider>
-                        <Chat />
+                        <CommunityChatRoom />
                         <div id="modal-root" />
                       </ChatStateProvider>
                     </MessengerProvider>
