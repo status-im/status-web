@@ -45,7 +45,7 @@ export function UserLogo({
       return "offline";
     }
     return "";
-  }, [contact]);
+  }, [contact, showOnlineStatus]);
 
   return (
     <Wrapper radius={radius} conicGradient={conicGradient}>

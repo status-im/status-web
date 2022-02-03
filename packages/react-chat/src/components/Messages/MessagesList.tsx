@@ -30,7 +30,7 @@ export function MessagesList({ setReply, channel }: MessagesListProps) {
       messages.filter(
         (message) => !contacts?.[message.sender]?.blocked ?? true
       ),
-    [contacts, messages, messages.length]
+    [contacts, messages]
   );
 
   const [image, setImage] = useState("");
@@ -41,8 +41,14 @@ export function MessagesList({ setReply, channel }: MessagesListProps) {
   const { setModal: setLinkModal, isVisible: showLinkModal } =
     useModal(LinkModalName);
 
-  useEffect(() => (!image ? undefined : setPictureModal(true)), [image]);
-  useEffect(() => (!link ? undefined : setLinkModal(true)), [link]);
+  useEffect(
+    () => (!image ? undefined : setPictureModal(true)),
+    [image, setPictureModal]
+  );
+  useEffect(
+    () => (!link ? undefined : setLinkModal(true)),
+    [link, setLinkModal]
+  );
 
   useEffect(
     () => (!showPictureModal ? setImage("") : undefined),

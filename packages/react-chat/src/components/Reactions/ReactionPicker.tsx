@@ -36,7 +36,7 @@ export function ReactionPicker({
         ? setMessageReactions((prev) => prev.filter((e) => e != emoji))
         : setMessageReactions((prev) => [...prev, emoji]);
     },
-    [messageReactions]
+    [messageReactions, setMessageReactions]
   );
 
   return (

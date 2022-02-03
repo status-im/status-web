@@ -15,7 +15,7 @@ export const useClickPosition = (ref: RefObject<HTMLDivElement>) => {
         setTopPosition(imgTarget ? 0 : e.clientY - rect.top);
       }
     },
-    [setTopPosition, setLeftPosition]
+    [setTopPosition, setLeftPosition, ref]
   );
 
   useEffect(() => {

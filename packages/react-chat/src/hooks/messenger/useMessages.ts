@@ -14,7 +14,9 @@ import { useNotifications } from "./useNotifications";
 export function useMessages(
   chatId: string,
   identity: Identity | undefined,
-  subscriptions: ((msg: ChatMessage, id: string) => void)[],
+  subscriptions: React.MutableRefObject<
+    ((msg: ChatMessage, id: string) => void)[]
+  >,
   contacts?: Contacts
 ) {
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
@@ -23,18 +25,22 @@ export function useMessages(
   const { notifications, incNotification, clearNotifications } =
     useNotifications();
 
-  const mentions = useNotifications();
+  const {
+    notifications: mentions,
+    incNotification: incMentions,
+    clearNotifications: clearMentions,
+  } = useNotifications();
 
   const addChatMessage = useCallback(
     (newMessage: ChatMessage | undefined, id: string) => {
       if (newMessage) {
         contacts?.addContact(newMessage.sender);
-        if (newMessage.responseTo) {
-          newMessage.quote = messages[id].find(
-            (msg) => msg.id === newMessage.responseTo
-          );
-        }
         setMessages((prev) => {
+          if (newMessage.responseTo && prev[id]) {
+            newMessage.quote = prev[id].find(
+              (msg) => msg.id === newMessage.responseTo
+            );
+          }
           return {
             ...prev,
             [id]: binarySetInsert(
@@ -45,17 +51,19 @@ export function useMessages(
             ),
           };
         });
-        subscriptions.forEach((subscription) => subscription(newMessage, id));
+        subscriptions.current.forEach((subscription) =>
+          subscription(newMessage, id)
+        );
         incNotification(id);
         if (
           identity &&
           newMessage.content.includes(`@${bufToHex(identity.publicKey)}`)
         ) {
-          mentions.incNotification(id);
+          incMentions(id);
         }
       }
     },
-    [contacts, identity, subscriptions]
+    [contacts, identity, subscriptions, incMentions, incNotification]
   );
 
   const addMessage = useCallback(
@@ -63,21 +71,23 @@ export function useMessages(
       const newMessage = ChatMessage.fromMetadataMessage(msg, date);
       addChatMessage(newMessage, id);
     },
-    [contacts, identity]
+    [addChatMessage]
   );
 
-  const activeMessages = useMemo(
-    () => messages?.[chatId] ?? [],
-    [messages, chatId]
-  );
+  const activeMessages = useMemo(() => {
+    if (messages?.[chatId]) {
+      return [...messages[chatId]];
+    }
+    return [];
+  }, [messages, chatId]);
 
   return {
     messages: activeMessages,
     addMessage,
     notifications,
     clearNotifications,
-    mentions: mentions.notifications,
-    clearMentions: mentions.clearNotifications,
+    mentions,
+    clearMentions,
     addChatMessage,
   };
 }

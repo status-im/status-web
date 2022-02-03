@@ -1,10 +1,9 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import { decode } from "html-entities";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useFetchMetadata } from "../../contexts/fetchMetadataProvider";
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { ChatMessage } from "../../models/ChatMessage";
@@ -23,13 +22,13 @@ export function Mention({ id, setMentioned, className }: MentionProps) {
   const { contacts } = useMessengerContext();
   const contact = useMemo(() => contacts[id.slice(1)], [id, contacts]);
   const [showMenu, setShowMenu] = useState(false);
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
 
   useEffect(() => {
-    if (identity && contact) {
-      if (contact.id === utils.bufToHex(identity.publicKey)) setMentioned(true);
+    if (userPK && contact) {
+      if (contact.id === userPK) setMentioned(true);
     }
-  }, [contact, identity]);
+  }, [contact, userPK, setMentioned]);
 
   const ref = useRef(null);
   useClickOutside(ref, () => setShowMenu(false));
@@ -92,7 +91,7 @@ export function ChatMessageContent({
     newSplit.pop();
     setLink(link);
     setElements(newSplit);
-  }, [content]);
+  }, [content, setLink, setMentioned, setElements, setLinkOpen]);
 
   useEffect(() => {
     const updatePreview = async () => {
@@ -108,7 +107,7 @@ export function ChatMessageContent({
       }
     };
     updatePreview();
-  }, [link]);
+  }, [link, fetchMetadata]);
 
   return (
     <ContentWrapper>

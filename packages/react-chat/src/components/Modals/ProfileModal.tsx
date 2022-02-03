@@ -1,8 +1,7 @@
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { useToasts } from "../../contexts/toastProvider";
@@ -51,14 +50,14 @@ export const ProfileModal = () => {
   const { setToasts } = useToasts();
   const { setModal } = useModal(ProfileModalName);
 
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const isUser = useMemo(() => {
-    if (identity) {
-      return id === bufToHex(identity.publicKey);
+    if (userPK) {
+      return id === userPK;
     } else {
       return false;
     }
-  }, [id, identity]);
+  }, [id, userPK]);
 
   const [renaming, setRenaming] = useState(renamingState ?? false);
 

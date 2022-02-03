@@ -116,19 +116,21 @@ export function ChatBody({
               activeChannel={activeChannel}
             />
           ) : (
-            <ChatTopbar
-              onClick={onClick}
-              setEditGroup={setEditGroup}
-              showMembers={showMembers}
-              showState={showState}
-              switchShowState={switchShowState}
-            />
+            <>
+              <ChatTopbar
+                onClick={onClick}
+                setEditGroup={setEditGroup}
+                showMembers={showMembers}
+                showState={showState}
+                switchShowState={switchShowState}
+              />
+              <ChatBodyContent
+                showState={showState}
+                switchShowState={switchShowState}
+                channel={activeChannel}
+              />
+            </>
           )}
-          <ChatBodyContent
-            showState={showState}
-            switchShowState={switchShowState}
-            channel={activeChannel}
-          />
         </ChatBodyWrapper>
         {!permission && (
           <BluredWrapper>

@@ -101,7 +101,7 @@ export function useContacts(
   const [contacts, contactsDispatch] = useReducer(contactsReducer, {});
 
   const contactsClass = useMemo(() => {
-    if (messenger) {
+    if (messenger && messenger.identity === identity) {
       const newContacts = new ContactsClass(
         identity,
         messenger.waku,
@@ -120,7 +120,7 @@ export function useContacts(
       );
       return newContacts;
     }
-  }, [messenger, identity]);
+  }, [messenger, identity, newNickname]);
 
   return { contacts, contactsDispatch, contactsClass, nickname };
 }

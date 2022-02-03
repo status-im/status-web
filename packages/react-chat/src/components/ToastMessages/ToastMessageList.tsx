@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import styled from "styled-components";
 
 import { useToasts } from "../../contexts/toastProvider";
@@ -8,11 +8,9 @@ import { ToastMessage } from "./ToastMessage";
 export function ToastMessageList() {
   const { toasts } = useToasts();
 
-  const shownToasts = useMemo(() => toasts, [toasts, toasts.length]);
-
   return (
     <ToastsWrapper>
-      {shownToasts.map((toast) => (
+      {toasts.map((toast) => (
         <ToastMessage key={toast.id} toast={toast} />
       ))}
     </ToastsWrapper>

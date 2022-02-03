@@ -26,7 +26,7 @@ export function WalletModal() {
   const { setModal } = useModal(WalletModalName);
   const setIdentity = useSetIdentity();
   const setWalletIdentity = useSetWalletIdentity();
-  const userCreationModal = useModal(UserCreationModalName);
+  const { setModal: setUserCreationModal } = useModal(UserCreationModalName);
   const { setModal: setWalleConnectModal } = useModal(WalletConnectModalName);
   const { setModal: setCoinbaseModal } = useModal(CoinbaseModalName);
   const { messenger } = useMessengerContext();
@@ -92,7 +92,7 @@ export function WalletModal() {
             setIdentity(loadedIdentity);
           } else {
             setWalletIdentity(loadedIdentity);
-            userCreationModal.setModal(true);
+            setUserCreationModal(true);
           }
           setModal(false);
           return;
@@ -102,7 +102,14 @@ export function WalletModal() {
       }
     }
     alert("Metamask not found");
-  }, [messenger]);
+  }, [
+    messenger,
+    dappUrl,
+    setIdentity,
+    setModal,
+    setWalletIdentity,
+    setUserCreationModal,
+  ]);
 
   return (
     <Modal name={WalletModalName}>

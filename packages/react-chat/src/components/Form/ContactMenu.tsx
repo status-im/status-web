@@ -1,8 +1,7 @@
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useModal } from "../../contexts/modalProvider";
 import { AddContactIcon } from "../Icons/AddContactIcon";
@@ -25,16 +24,16 @@ type ContactMenuProps = {
 };
 
 export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const { contacts, contactsDispatch } = useMessengerContext();
   const contact = useMemo(() => contacts[id], [id, contacts]);
   const isUser = useMemo(() => {
-    if (identity) {
-      return id === bufToHex(identity.publicKey);
+    if (userPK) {
+      return id === userPK;
     } else {
       return false;
     }
-  }, [id, identity]);
+  }, [id, userPK]);
 
   const { setModal } = useModal(ProfileModalName);
 

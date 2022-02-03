@@ -10,6 +10,7 @@ import { IdentityProvider } from "../contexts/identityProvider";
 import { MessengerProvider } from "../contexts/messengerProvider";
 import { ModalProvider } from "../contexts/modalProvider";
 import { NarrowProvider } from "../contexts/narrowProvider";
+import { ScrollProvider } from "../contexts/scrollProvider";
 import { ToastProvider } from "../contexts/toastProvider";
 import { Metadata } from "../models/Metadata";
 import { GlobalStyle } from "../styles/GlobalStyle";
@@ -43,8 +44,10 @@ export function CommunityChat({
                   <IdentityProvider>
                     <MessengerProvider communityKey={communityKey}>
                       <ChatStateProvider>
-                        <CommunityChatRoom />
-                        <div id="modal-root" />
+                        <ScrollProvider>
+                          <CommunityChatRoom />
+                          <div id="modal-root" />
+                        </ScrollProvider>
                       </ChatStateProvider>
                     </MessengerProvider>
                   </IdentityProvider>

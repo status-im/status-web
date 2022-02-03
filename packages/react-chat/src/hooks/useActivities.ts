@@ -1,7 +1,6 @@
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
 import { useEffect, useMemo, useReducer } from "react";
 
-import { useIdentity } from "../contexts/identityProvider";
+import { useUserPublicKey } from "../contexts/identityProvider";
 import { useMessengerContext } from "../contexts/messengerProvider";
 import { Activities, Activity, ActivityStatus } from "../models/Activity";
 import { ChatMessage } from "../models/ChatMessage";
@@ -65,17 +64,13 @@ export function useActivities() {
     () => Object.values(activitiesObj),
     [activitiesObj]
   );
-  const identity = useIdentity();
-  const userPK = useMemo(
-    () => (identity ? bufToHex(identity.publicKey) : undefined),
-    [identity]
-  );
+  const userPK = useUserPublicKey();
   const { subscriptionsDispatch, channels } = useMessengerContext();
 
   useEffect(() => {
-    if (identity) {
+    if (userPK) {
       const subscribeFunction = (message: ChatMessage, id: string) => {
-        if (message.quote && identity && message.quote.sender === userPK) {
+        if (message.quote && message.quote.sender === userPK) {
           const newActivity: Activity = {
             id: message.date.getTime().toString() + message.content,
             type: "reply",
@@ -114,7 +109,7 @@ export function useActivities() {
         type: "removeSubscription",
         payload: { name: "activityCenter" },
       });
-  }, [subscriptionsDispatch, identity]);
+  }, [subscriptionsDispatch, userPK, channels]);
 
   return { activities, activityDispatch: dispatch };
 }

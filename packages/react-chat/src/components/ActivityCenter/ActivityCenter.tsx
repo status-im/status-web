@@ -30,7 +30,7 @@ export function ActivityCenter({
       activities.filter(
         (activity) => !contacts?.[activity.user]?.blocked ?? true
       ),
-    [contacts, activities, activities.length]
+    [contacts, activities]
   );
 
   const [hideRead, setHideRead] = useState(false);

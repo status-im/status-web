@@ -1,9 +1,8 @@
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import styled from "styled-components";
 
 import { ChatState, useChatState } from "../../contexts/chatStateProvider";
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
@@ -27,19 +26,23 @@ export function ChatCreation({
   activeChannel,
 }: ChatCreationProps) {
   const narrow = useNarrow();
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const [query, setQuery] = useState("");
-  const [styledGroup, setStyledGroup] = useState<string[]>(
-    activeChannel?.members?.map(
-      (member) => member?.customName ?? member.trueName
-    ) ?? []
+  const [groupChatMembersIds, setGroupChatMembersIds] = useState<string[]>(
+    activeChannel?.members?.map((member) => member.id) ?? []
   );
   const { contacts, createGroupChat, addMembers } = useMessengerContext();
+
+  const groupChatMembers = useMemo(
+    () => groupChatMembersIds.map((id) => contacts[id]).filter((e) => !!e),
+    [groupChatMembersIds, contacts]
+  );
+
   const setChatState = useChatState()[1];
 
   const addMember = useCallback(
     (member: string) => {
-      setStyledGroup((prevMembers: string[]) => {
+      setGroupChatMembersIds((prevMembers: string[]) => {
         if (
           prevMembers.find((mem) => mem === member) ||
           prevMembers.length >= 5
@@ -50,33 +53,44 @@ export function ChatCreation({
         }
       });
       setQuery("");
-      if (activeChannel) addMembers(styledGroup, activeChannel.id);
     },
-    [setStyledGroup, styledGroup]
+    [setGroupChatMembersIds]
   );
   const removeMember = useCallback(
     (member: string) => {
-      setStyledGroup((prev) => prev.filter((e) => e != member));
+      setGroupChatMembersIds((prev) => prev.filter((e) => e != member));
     },
-    [setStyledGroup]
+    [setGroupChatMembersIds]
   );
 
   const createChat = useCallback(
     (group: string[]) => {
-      if (identity) {
+      if (userPK) {
         const newGroup = group.slice();
-        newGroup.push(bufToHex(identity.publicKey));
+        newGroup.push(userPK);
         createGroupChat(newGroup);
         setChatState(ChatState.ChatBody);
       }
     },
-    [identity, createGroupChat]
+    [userPK, createGroupChat, setChatState]
   );
+
+  const handleCreationClick = useCallback(() => {
+    if (!activeChannel) {
+      createChat(groupChatMembers.map((member) => member.id));
+    } else {
+      addMembers(
+        groupChatMembers.map((member) => member.id),
+        activeChannel.id
+      );
+    }
+    setEditGroup?.(false);
+  }, [activeChannel, groupChatMembers, createChat, addMembers, setEditGroup]);
 
   return (
     <CreationWrapper className={`${narrow && "narrow"}`}>
       <CreationBar
-        className={`${styledGroup.length === 5 && narrow && "limit"}`}
+        className={`${groupChatMembers.length === 5 && narrow && "limit"}`}
       >
         {narrow && (
           <BackButton
@@ -88,16 +102,19 @@ export function ChatCreation({
           <InputBar>
             <InputText>To:</InputText>
             <StyledList>
-              {styledGroup.map((member) => (
-                <StyledMember key={member}>
-                  <StyledName>{member.slice(0, 10)}</StyledName>
-                  <CloseButton onClick={() => removeMember(member)}>
+              {groupChatMembers.map((member) => (
+                <StyledMember key={member.id}>
+                  <StyledName>
+                    {member?.customName?.slice(0, 10) ??
+                      member.trueName.slice(0, 10)}
+                  </StyledName>
+                  <CloseButton onClick={() => removeMember(member.id)}>
                     <CrossIcon memberView={true} />
                   </CloseButton>
                 </StyledMember>
               ))}
             </StyledList>
-            {styledGroup.length < 5 && (
+            {groupChatMembers.length < 5 && (
               <SearchMembers>
                 <Input
                   value={query}
@@ -105,31 +122,24 @@ export function ChatCreation({
                 />
               </SearchMembers>
             )}
-            {!narrow && styledGroup.length === 5 && (
+            {!narrow && groupChatMembers.length === 5 && (
               <LimitAlert>5 user Limit reached</LimitAlert>
             )}
           </InputBar>
-          {narrow && styledGroup.length === 5 && (
+          {narrow && groupChatMembers.length === 5 && (
             <LimitAlert className="narrow">5 user Limit reached</LimitAlert>
           )}
         </Column>
         <CreationBtn
-          disabled={styledGroup.length === 0}
-          onClick={() => {
-            if (!activeChannel) {
-              createChat(styledGroup);
-            } else {
-              addMembers(styledGroup, activeChannel.id);
-            }
-            setEditGroup?.(false);
-          }}
+          disabled={groupChatMembers.length === 0}
+          onClick={handleCreationClick}
         >
           Confirm
         </CreationBtn>
         {!narrow && <ActivityButton className="creation" />}
         <SearchBlock
           query={query}
-          discludeList={styledGroup}
+          discludeList={groupChatMembersIds}
           onClick={addMember}
         />
       </CreationBar>
@@ -137,13 +147,11 @@ export function ChatCreation({
         <Contacts>
           <ContactsHeading>Contacts</ContactsHeading>
           <ContactsList>
-            {identity &&
+            {userPK &&
               !query &&
               Object.values(contacts)
                 .filter(
-                  (e) =>
-                    e.id != bufToHex(identity.publicKey) &&
-                    !styledGroup.includes(e.id)
+                  (e) => e.id != userPK && !groupChatMembersIds.includes(e.id)
                 )
                 .map((contact) => (
                   <Member
@@ -157,7 +165,10 @@ export function ChatCreation({
         </Contacts>
       )}
       {!activeChannel && (
-        <ChatInput createChat={createChat} group={styledGroup} />
+        <ChatInput
+          createChat={createChat}
+          group={groupChatMembers.map((member) => member.id)}
+        />
       )}
     </CreationWrapper>
   );

@@ -12,9 +12,9 @@ export enum NameErrors {
 
 export function useNameError(name: string) {
   const { contacts } = useMessengerContext();
-  const RegName = new RegExp("^[a-z0-9_-]+$");
 
   const error = useMemo(() => {
+    const RegName = new RegExp("^[a-z0-9_-]+$");
     if (name === "") {
       return NameErrors.NoError;
     }

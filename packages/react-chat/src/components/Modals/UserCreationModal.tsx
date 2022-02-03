@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import {
-  useIdentity,
   useSetIdentity,
   useSetNikcname,
+  useUserPublicKey,
   useWalletIdentity,
 } from "../../contexts/identityProvider";
 import { useModal } from "../../contexts/modalProvider";
@@ -38,7 +38,7 @@ export const UserCreationModalName = "UserCreationModal";
 
 export function UserCreationModal() {
   const walletIdentity = useWalletIdentity();
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const setIdentity = useSetIdentity();
   const setNickname = useSetNikcname();
 
@@ -107,12 +107,12 @@ export function UserCreationModal() {
 
         <NameError error={error} />
 
-        {nextStep && identity && (
+        {nextStep && userPK && (
           <>
             <UserAddress>
               {" "}
-              Chatkey: {identity.privateKey.slice(0, 10)}...
-              {identity.privateKey.slice(-3)}{" "}
+              Chatkey: {userPK.slice(0, 10)}...
+              {userPK.slice(-3)}{" "}
             </UserAddress>
             <ChainIcons>
               <ChainIcon className="transformed" />

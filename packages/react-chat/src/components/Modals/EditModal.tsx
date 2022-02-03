@@ -27,9 +27,9 @@ export const EditModal = () => {
   const [groupName, setGroupName] = useState("");
   const [image, setImage] = useState("");
 
-  const handleChange = (e: any) => {
-    if (e.target.files.length) {
-      setImage(URL.createObjectURL(e.target.files[0]));
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+    if (e.currentTarget?.files?.length) {
+      setImage(URL.createObjectURL(e.currentTarget.files[0]));
     }
   };
 

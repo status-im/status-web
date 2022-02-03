@@ -1,8 +1,7 @@
-import { utils } from "@waku/status-communities/dist/cjs";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { useIdentity } from "../../contexts/identityProvider";
+import { useUserPublicKey } from "../../contexts/identityProvider";
 import { useMessengerContext } from "../../contexts/messengerProvider";
 import { useNarrow } from "../../contexts/narrowProvider";
 import { ChannelData } from "../../models/ChannelData";
@@ -16,17 +15,16 @@ type ChannelBeggingTextProps = {
 };
 
 function ChannelBeggingText({ channel }: ChannelBeggingTextProps) {
-  const identity = useIdentity();
+  const userPK = useUserPublicKey();
   const { contacts } = useMessengerContext();
   const members = useMemo(() => {
-    if (channel?.members && identity) {
-      const publicKey = utils.bufToHex(identity.publicKey);
+    if (channel?.members && userPK) {
       return channel.members
-        .filter((contact) => contact.id !== publicKey)
+        .filter((contact) => contact.id !== userPK)
         .map((member) => contacts?.[member.id] ?? member);
     }
     return [];
-  }, [channel, contacts]);
+  }, [channel, contacts, userPK]);
 
   switch (channel.type) {
     case "dm":
@@ -40,8 +38,7 @@ function ChannelBeggingText({ channel }: ChannelBeggingTextProps) {
     case "group":
       return (
         <EmptyTextGroup>
-          {identity && <span>{utils.bufToHex(identity.publicKey)}</span>}{" "}
-          created a group with{" "}
+          {userPK && <span>{userPK}</span>} created a group with{" "}
           {members.map((contact, idx) => (
             <span key={contact.id}>
               {contact?.customName ?? contact.trueName.slice(0, 10)}
