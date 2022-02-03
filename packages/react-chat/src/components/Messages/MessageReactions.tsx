@@ -1,5 +1,5 @@
 import { BaseEmoji, Emoji } from "emoji-mart";
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 
 import { ReactionButton } from "../Reactions/ReactionButton";
@@ -16,12 +16,22 @@ export function MessageReactions({
   const isMyReactionIncluded = (emoji: BaseEmoji) =>
     messageReactions.includes(emoji); // temporary function while message reactions are not added to waku
 
+  const handleReaction = useCallback(
+    (emoji: BaseEmoji) => {
+      messageReactions.find((e) => e === emoji)
+        ? setMessageReactions((prev) => prev.filter((e) => e != emoji))
+        : setMessageReactions((prev) => [...prev, emoji]);
+    },
+    [messageReactions, setMessageReactions]
+  );
+
   return (
     <Reactions>
       {messageReactions.map((reaction) => (
         <EmojiReaction
           className={`${isMyReactionIncluded(reaction) && "chosen"}`}
           key={reaction.id}
+          onClick={() => handleReaction(reaction)}
         >
           <Emoji emoji={reaction} set={"twitter"} size={16} />
           <p>1</p>
