@@ -28,9 +28,8 @@ describe("Messenger", () => {
     dbg("Create messengers");
 
     [messengerAlice, messengerBob] = await Promise.all([
-      Messenger.create(identityAlice, { bootstrap: undefined }),
+      Messenger.create(identityAlice),
       Messenger.create(identityBob, {
-        bootstrap: undefined,
         libp2p: { addresses: { listen: ["/ip4/0.0.0.0/tcp/0/ws"] } },
       }),
     ]);
@@ -152,7 +151,7 @@ describe("Messenger [live data]", () => {
     this.timeout(20_000);
 
     const community = await Community.instantiateCommunity(
-      "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd",
+      "0x02cf13719c8b836bebd4e430c497ee38e798a43e4d8c4760c34bbd9bf4f2434d26",
       messenger.waku
     );
 
@@ -162,7 +161,7 @@ describe("Messenger [live data]", () => {
     const endTime = new Date();
 
     const chat = Array.from(community.chats.values()).find(
-      (chat) => chat.communityChat?.identity?.displayName === "foobar"
+      (chat) => chat.communityChat?.identity?.displayName === "Test Chat"
     );
 
     if (!chat) throw "Could not find foobar chat";
