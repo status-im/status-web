@@ -36,7 +36,7 @@ module.exports = env => {
           exclude: /node_modules/,
           options: {
             loader: 'tsx',
-            target: 'es2018',
+            target: 'es2020',
           },
         },
         {
@@ -58,7 +58,7 @@ module.exports = env => {
     optimization: {
       minimizer: [
         new ESBuildMinifyPlugin({
-          target: 'es2018',
+          target: 'es2020',
         }),
       ],
     },

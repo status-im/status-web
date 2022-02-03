@@ -1,6 +1,7 @@
 import debug from "debug";
 import { Waku, WakuMessage } from "js-waku";
 import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku";
+import { DecryptionMethod } from "js-waku/build/main/lib/waku_message";
 
 import { Chat } from "./chat";
 import { Identity } from "./identity";
@@ -36,7 +37,10 @@ export class Messenger {
     identity: Identity | undefined,
     wakuOptions?: WakuCreateOptions
   ): Promise<Messenger> {
-    const _wakuOptions = Object.assign({ bootstrap: true }, wakuOptions);
+    const _wakuOptions = Object.assign(
+      { bootstrap: { default: true } },
+      wakuOptions
+    );
     const waku = await Waku.create(_wakuOptions);
     return new Messenger(identity, waku);
   }
@@ -76,7 +80,10 @@ export class Messenger {
     if (this.chatsById.has(chat.id))
       throw `Failed to join chat, it is already joined: ${chat.id}`;
 
-    this.waku.addDecryptionKey(chat.symKey);
+    this.waku.addDecryptionKey(chat.symKey, {
+      method: DecryptionMethod.Symmetric,
+      contentTopics: [chat.contentTopic],
+    });
 
     this.waku.relay.addObserver(
       (wakuMessage: WakuMessage) => {

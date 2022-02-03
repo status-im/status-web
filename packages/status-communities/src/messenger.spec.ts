@@ -28,9 +28,9 @@ describe("Messenger", () => {
     dbg("Create messengers");
 
     [messengerAlice, messengerBob] = await Promise.all([
-      Messenger.create(identityAlice, { bootstrap: false }),
+      Messenger.create(identityAlice, { bootstrap: undefined }),
       Messenger.create(identityBob, {
-        bootstrap: false,
+        bootstrap: undefined,
         libp2p: { addresses: { listen: ["/ip4/0.0.0.0/tcp/0/ws"] } },
       }),
     ]);
@@ -139,10 +139,12 @@ describe("Messenger [live data]", () => {
 
     dbg("Create messengers");
 
-    messenger = await Messenger.create(identity, { bootstrap: true });
+    messenger = await Messenger.create(identity, {
+      bootstrap: { default: true },
+    });
 
     dbg("Wait to be connected to a peer");
-    await messenger.waku.waitForConnectedPeer();
+    await messenger.waku.waitForRemotePeer();
     dbg("Messengers ready");
   });
 

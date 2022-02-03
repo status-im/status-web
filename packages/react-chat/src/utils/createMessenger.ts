@@ -1,14 +1,16 @@
 import { Identity, Messenger } from "@waku/status-communities/dist/cjs";
-import { getBootstrapNodes, StoreCodec } from "js-waku";
+import { getNodesFromHostedJson, StoreCodec } from "js-waku";
 
 function createWakuOptions(env: string) {
-  let bootstrap: any = true;
+  let bootstrap: any = { default: true };
   if (env === "test") {
-    bootstrap = getBootstrapNodes.bind({}, [
-      "fleets",
-      "wakuv2.test",
-      "waku-websocket",
-    ]);
+    bootstrap = {
+      getPeers: getNodesFromHostedJson.bind({}, [
+        "fleets",
+        "wakuv2.test",
+        "waku-websocket",
+      ]),
+    };
   }
   return {
     bootstrap,

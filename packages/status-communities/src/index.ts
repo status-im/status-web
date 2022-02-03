@@ -15,3 +15,4 @@ export {
   AudioContent,
   TextContent,
 } from "./wire/chat_message";
+export { getNodesFromHostedJson } from "js-waku";

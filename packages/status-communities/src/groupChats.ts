@@ -1,4 +1,5 @@
 import { Waku, WakuMessage } from "js-waku";
+import { DecryptionMethod } from "js-waku/build/main/lib/waku_message";
 
 import { createSymKeyFromPassword } from "./encryption";
 import { Identity } from "./identity";
@@ -262,7 +263,10 @@ export class GroupChats {
     await Promise.all(
       chat.members.map(async (member) => {
         if (!removeObserver) {
-          this.waku.relay.addDecryptionKey(member.symKey);
+          this.waku.relay.addDecryptionKey(member.symKey, {
+            method: DecryptionMethod.Symmetric,
+            contentTopics: [member.topic],
+          });
         }
         this.waku.relay[observerFunction](
           (message) => this.handleWakuChatMessage(message, chat, member.id),
