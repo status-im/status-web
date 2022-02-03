@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import debug from "debug";
+import { Protocols } from "js-waku/build/main/lib/waku";
 
 import { Community } from "./community";
 import { Identity } from "./identity";
@@ -41,10 +42,10 @@ describe("Messenger", () => {
       messengerBob.waku.libp2p.multiaddrs
     );
 
-    dbg("Wait for pubsub connection");
+    dbg("Wait for remote peer");
     await Promise.all([
-      messengerAlice.waku.waitForRemotePeer(),
-      messengerBob.waku.waitForRemotePeer(),
+      messengerAlice.waku.waitForRemotePeer([Protocols.Relay]),
+      messengerBob.waku.waitForRemotePeer([Protocols.Relay]),
     ]);
     dbg("Messengers ready");
   });
