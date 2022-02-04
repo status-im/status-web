@@ -170,6 +170,20 @@ export function ChatCreation({
             </ContactsList>
           </Contacts>
         )}
+      {!setEditGroup && Object.keys(contacts).length === 0 && (
+        <EmptyContacts>
+          <EmptyContactsHeading>
+            You only can send direct messages to your Contacts.{" "}
+          </EmptyContactsHeading>
+          <EmptyContactsHeading>
+            {" "}
+            Send a contact request to the person you would like to chat with,
+            you will be able to chat with them once they have accepted your
+            contact request.
+          </EmptyContactsHeading>
+        </EmptyContacts>
+      )}
+
       {!activeChannel && (
         <ChatInput
           createChat={createChat}
@@ -309,6 +323,17 @@ const ContactsHeading = styled.p`
 export const ContactsList = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const EmptyContacts = styled(Contacts)`
+  justify-content: center;
+  align-items: center;
+`;
+
+const EmptyContactsHeading = styled(ContactsHeading)`
+  max-width: 550px;
+  margin-bottom: 24px;
+  text-align: center;
 `;
 
 const SearchMembers = styled.div`
