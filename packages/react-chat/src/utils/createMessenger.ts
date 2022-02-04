@@ -1,14 +1,17 @@
 import { Identity, Messenger } from "@waku/status-communities/dist/cjs";
-import { getBootstrapNodes, StoreCodec } from "js-waku";
+import { getNodesFromHostedJson } from "js-waku";
+import { Protocols } from "js-waku/build/main/lib/waku";
 
 function createWakuOptions(env: string) {
-  let bootstrap: any = true;
+  let bootstrap: any = { default: true };
   if (env === "test") {
-    bootstrap = getBootstrapNodes.bind({}, [
-      "fleets",
-      "wakuv2.test",
-      "waku-websocket",
-    ]);
+    bootstrap = {
+      getPeers: getNodesFromHostedJson.bind({}, [
+        "fleets",
+        "wakuv2.test",
+        "waku-websocket",
+      ]),
+    };
   }
   return {
     bootstrap,
@@ -29,13 +32,7 @@ export async function createMessenger(
 ) {
   const WAKU_OPTIONS = createWakuOptions(env);
   const messenger = await Messenger.create(identity, WAKU_OPTIONS);
-  await new Promise((resolve) => {
-    messenger.waku.libp2p.peerStore.on("change:protocols", ({ protocols }) => {
-      if (protocols.includes(StoreCodec)) {
-        resolve("");
-      }
-    });
-  });
+  await messenger.waku.waitForRemotePeer([Protocols.Store]);
 
   return messenger;
 }

@@ -53,6 +53,7 @@
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
     "js-sha3": "^0.8.0",
+    "js-waku": "^0.16.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",

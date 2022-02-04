@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import debug from "debug";
+import { Protocols } from "js-waku/build/main/lib/waku";
 
 import { Community } from "./community";
 import { Identity } from "./identity";
@@ -28,26 +29,12 @@ describe("Messenger", () => {
     dbg("Create messengers");
 
     [messengerAlice, messengerBob] = await Promise.all([
-      Messenger.create(identityAlice, { bootstrap: false }),
+      Messenger.create(identityAlice, { bootstrap: {} }),
       Messenger.create(identityBob, {
-        bootstrap: false,
+        bootstrap: {},
         libp2p: { addresses: { listen: ["/ip4/0.0.0.0/tcp/0/ws"] } },
       }),
     ]);
-
-    const pubsubPromises = [
-      new Promise((resolve) =>
-        messengerAlice.waku.libp2p.pubsub.once(
-          "pubsub:subscription-change",
-          () => resolve(null)
-        )
-      ),
-      new Promise((resolve) =>
-        messengerBob.waku.libp2p.pubsub.once("pubsub:subscription-change", () =>
-          resolve(null)
-        )
-      ),
-    ];
 
     dbg("Connect messengers");
     // Connect both messengers together for test purposes
@@ -56,8 +43,11 @@ describe("Messenger", () => {
       messengerBob.waku.libp2p.multiaddrs
     );
 
-    dbg("Wait for pubsub connection");
-    await Promise.all(pubsubPromises);
+    dbg("Wait for remote peer");
+    await Promise.all([
+      messengerAlice.waku.waitForRemotePeer([Protocols.Relay]),
+      messengerBob.waku.waitForRemotePeer([Protocols.Relay]),
+    ]);
     dbg("Messengers ready");
   });
 
@@ -139,10 +129,12 @@ describe("Messenger [live data]", () => {
 
     dbg("Create messengers");
 
-    messenger = await Messenger.create(identity, { bootstrap: true });
+    messenger = await Messenger.create(identity, {
+      bootstrap: { default: true },
+    });
 
     dbg("Wait to be connected to a peer");
-    await messenger.waku.waitForConnectedPeer();
+    await messenger.waku.waitForRemotePeer();
     dbg("Messengers ready");
   });
 
@@ -150,7 +142,7 @@ describe("Messenger [live data]", () => {
     this.timeout(20_000);
 
     const community = await Community.instantiateCommunity(
-      "0x0262c65c881f5a9f79343a26faaa02aad3af7c533d9445fb1939ed11b8bf4d2abd",
+      "0x02cf13719c8b836bebd4e430c497ee38e798a43e4d8c4760c34bbd9bf4f2434d26",
       messenger.waku
     );
 
@@ -160,7 +152,7 @@ describe("Messenger [live data]", () => {
     const endTime = new Date();
 
     const chat = Array.from(community.chats.values()).find(
-      (chat) => chat.communityChat?.identity?.displayName === "foobar"
+      (chat) => chat.communityChat?.identity?.displayName === "Test Chat"
     );
 
     if (!chat) throw "Could not find foobar chat";
