@@ -94,7 +94,11 @@ export function ChatCreation({
       >
         {narrow && (
           <BackButton
-            onBtnClick={() => setEditGroup?.(false)}
+            onBtnClick={() =>
+              setEditGroup
+                ? setEditGroup?.(false)
+                : setChatState(ChatState.ChatBody)
+            }
             className="narrow"
           />
         )}
@@ -143,27 +147,29 @@ export function ChatCreation({
           onClick={addMember}
         />
       </CreationBar>
-      {!setEditGroup && (
-        <Contacts>
-          <ContactsHeading>Contacts</ContactsHeading>
-          <ContactsList>
-            {userPK &&
-              !query &&
-              Object.values(contacts)
-                .filter(
-                  (e) => e.id != userPK && !groupChatMembersIds.includes(e.id)
-                )
-                .map((contact) => (
-                  <Member
-                    key={contact.id}
-                    contact={contact}
-                    isOnline={contact.online}
-                    onClick={() => addMember(contact.id)}
-                  />
-                ))}
-          </ContactsList>
-        </Contacts>
-      )}
+      {!setEditGroup &&
+        groupChatMembers.length === 0 &&
+        Object.keys(contacts).length > 0 && (
+          <Contacts>
+            <ContactsHeading>Contacts</ContactsHeading>
+            <ContactsList>
+              {userPK &&
+                !query &&
+                Object.values(contacts)
+                  .filter(
+                    (e) => e.id != userPK && !groupChatMembersIds.includes(e.id)
+                  )
+                  .map((contact) => (
+                    <Member
+                      key={contact.id}
+                      contact={contact}
+                      isOnline={contact.online}
+                      onClick={() => addMember(contact.id)}
+                    />
+                  ))}
+            </ContactsList>
+          </Contacts>
+        )}
       {!activeChannel && (
         <ChatInput
           createChat={createChat}
@@ -178,6 +184,7 @@ const CreationWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   flex: 1;
   background-color: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 8px 16px;
