@@ -94,7 +94,7 @@ export function ChatCreation({
       >
         {narrow && (
           <BackButton
-            onBtnClick={() => setChatState(ChatState.ChatBody)}
+            onBtnClick={() => setEditGroup?.(false)}
             className="narrow"
           />
         )}
