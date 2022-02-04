@@ -175,11 +175,10 @@ export function ChatCreation({
 }
 
 const CreationWrapper = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
-  width: 79%;
-  height: 100%;
-  max-width: calc(100% - 250px);
+  flex: 1;
   background-color: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 8px 16px;
 
@@ -223,6 +222,7 @@ const InputBar = styled.div`
 
 const Input = styled.input`
   width: 100%;
+  min-width: 20px;
   background-color: ${({ theme }) => theme.inputColor};
   border: 1px solid ${({ theme }) => theme.inputColor};
   outline: none;
