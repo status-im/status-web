@@ -116,7 +116,6 @@ export const MemberIcon = styled(IconBtn)`
 `;
 
 const Column = styled.div`
-  width: calc(100% - 69px);
   display: flex;
   flex-direction: column;
   margin-left: 8px;

@@ -41,11 +41,13 @@ export const SearchBlock = ({
     >
       <ContactsList>
         {searchList.map((member) => (
-          <Member
-            key={member.id}
-            contact={member}
-            onClick={() => onClick(member.id)}
-          />
+          <SearchContact>
+            <Member
+              key={member.id}
+              contact={member}
+              onClick={() => onClick(member.id)}
+            />
+          </SearchContact>
         ))}
       </ContactsList>
     </SearchContacts>
@@ -65,4 +67,16 @@ const SearchContacts = styled.div`
   left: 0;
   max-height: 200px;
   overflow: auto;
+`;
+
+const SearchContact = styled.div`
+  width: 340px;
+  display: flex;
+  align-items: center;
+  padding: 12px 12px 0 16px;
+  border-radius: 8px;
+
+  &:hover {
+    background: ${({ theme }) => theme.inputColor};
+  }
 `;
