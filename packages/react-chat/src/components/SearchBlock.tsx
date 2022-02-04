@@ -41,12 +41,8 @@ export const SearchBlock = ({
     >
       <ContactsList>
         {searchList.map((member) => (
-          <SearchContact>
-            <Member
-              key={member.id}
-              contact={member}
-              onClick={() => onClick(member.id)}
-            />
+          <SearchContact key={member.id}>
+            <Member contact={member} onClick={() => onClick(member.id)} />
           </SearchContact>
         ))}
       </ContactsList>

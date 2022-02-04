@@ -38,6 +38,17 @@ export function ChatCreation({
     [groupChatMembersIds, contacts]
   );
 
+  const contactsList = useMemo(() => {
+    return Object.values(contacts)
+      .filter(
+        (member) =>
+          member.id.includes(query) ||
+          member?.customName?.includes(query) ||
+          member.trueName.includes(query)
+      )
+      .filter((member) => !groupChatMembersIds.includes(member.id));
+  }, [query, groupChatMembersIds, contacts]);
+
   const setChatState = useChatState()[1];
 
   const addMember = useCallback(
@@ -141,32 +152,43 @@ export function ChatCreation({
           Confirm
         </CreationBtn>
         {!narrow && <ActivityButton className="creation" />}
-        <SearchBlock
-          query={query}
-          discludeList={groupChatMembersIds}
-          onClick={addMember}
-        />
+        {!narrow && (
+          <SearchBlock
+            query={query}
+            discludeList={groupChatMembersIds}
+            onClick={addMember}
+          />
+        )}
       </CreationBar>
-      {!setEditGroup &&
-        groupChatMembers.length === 0 &&
+      {((!setEditGroup && groupChatMembers.length === 0) || narrow) &&
         Object.keys(contacts).length > 0 && (
           <Contacts>
             <ContactsHeading>Contacts</ContactsHeading>
             <ContactsList>
-              {userPK &&
-                !query &&
-                Object.values(contacts)
-                  .filter(
-                    (e) => e.id != userPK && !groupChatMembersIds.includes(e.id)
-                  )
-                  .map((contact) => (
-                    <Member
-                      key={contact.id}
-                      contact={contact}
-                      isOnline={contact.online}
-                      onClick={() => addMember(contact.id)}
-                    />
-                  ))}
+              {userPK && narrow
+                ? contactsList.map((contact) => (
+                    <Contact key={contact.id}>
+                      <Member
+                        contact={contact}
+                        isOnline={contact.online}
+                        onClick={() => addMember(contact.id)}
+                      />
+                    </Contact>
+                  ))
+                : Object.values(contacts)
+                    .filter(
+                      (e) =>
+                        e.id != userPK && !groupChatMembersIds.includes(e.id)
+                    )
+                    .map((contact) => (
+                      <Contact key={contact.id}>
+                        <Member
+                          contact={contact}
+                          isOnline={contact.online}
+                          onClick={() => addMember(contact.id)}
+                        />
+                      </Contact>
+                    ))}
             </ContactsList>
           </Contacts>
         )}
@@ -212,8 +234,9 @@ const CreationWrapper = styled.div`
 const CreationBar = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   position: relative;
+
   &.limit {
     align-items: flex-start;
   }
@@ -312,6 +335,17 @@ const Contacts = styled.div`
   flex-direction: column;
   flex: 1;
   overflow: auto;
+`;
+
+const Contact = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 12px 12px 0 16px;
+  border-radius: 8px;
+
+  &:hover {
+    background: ${({ theme }) => theme.inputColor};
+  }
 `;
 
 const ContactsHeading = styled.p`
