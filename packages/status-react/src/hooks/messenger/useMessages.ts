@@ -2,8 +2,8 @@ import {
   ApplicationMetadataMessage,
   Contacts,
   Identity,
-} from "@waku/status-communities/dist/cjs";
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
+  bufToHex
+} from "@status-im/core";
 import { useCallback, useMemo, useState } from "react";
 
 import { ChatMessage } from "../../models/ChatMessage";
@@ -35,10 +35,10 @@ export function useMessages(
     (newMessage: ChatMessage | undefined, id: string) => {
       if (newMessage) {
         contacts?.addContact(newMessage.sender);
-        setMessages((prev) => {
+        setMessages(prev => {
           if (newMessage.responseTo && prev[id]) {
             newMessage.quote = prev[id].find(
-              (msg) => msg.id === newMessage.responseTo
+              msg => msg.id === newMessage.responseTo
             );
           }
           return {
@@ -51,7 +51,7 @@ export function useMessages(
             ),
           };
         });
-        subscriptions.current.forEach((subscription) =>
+        subscriptions.current.forEach(subscription =>
           subscription(newMessage, id)
         );
         incNotification(id);

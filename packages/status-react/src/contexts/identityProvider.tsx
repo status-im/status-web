@@ -1,5 +1,4 @@
-import { Identity } from "@waku/status-communities/dist/cjs";
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
+import { Identity, bufToHex } from "@status-im/core";
 import React, { createContext, useContext, useMemo, useState } from "react";
 
 const IdentityContext = createContext<{

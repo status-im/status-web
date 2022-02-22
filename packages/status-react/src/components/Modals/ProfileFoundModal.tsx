@@ -1,4 +1,4 @@
-import { Identity, utils } from "@waku/status-communities/dist/cjs";
+import { Identity, utils } from "@status-im/core";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 

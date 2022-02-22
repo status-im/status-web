@@ -5,7 +5,7 @@ import {
   Contacts as ContactsClass,
   Identity,
   Messenger,
-} from "@waku/status-communities/dist/cjs";
+} from "@status-im/core";
 import {
   useCallback,
   useEffect,
@@ -64,7 +64,7 @@ function useCreateMessenger(identity: Identity | undefined) {
   const { environment } = useConfig();
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
   useEffect(() => {
-    createMessenger(identity, environment).then((e) => {
+    createMessenger(identity, environment).then(e => {
       setMessenger(e);
     });
   }, [identity, environment]);
@@ -89,7 +89,7 @@ function useCreateCommunity(
       addMessage &&
       messenger.identity === identity
     ) {
-      createCommunity(communityKey, addMessage, messenger).then((comm) => {
+      createCommunity(communityKey, addMessage, messenger).then(comm => {
         setCommunity(comm);
       });
     }
@@ -232,8 +232,8 @@ export function useMessenger(
 
   useEffect(() => {
     Object.values(channelsState.channels)
-      .filter((channel) => channel.type === "dm")
-      .forEach((channel) => {
+      .filter(channel => channel.type === "dm")
+      .forEach(channel => {
         const contact = contacts?.[channel?.members?.[1]?.id ?? ""];
         if (
           contact &&

@@ -1,4 +1,4 @@
-import { Identity, Messenger } from "@waku/status-communities/dist/cjs";
+import { Identity, Messenger } from "@status-im/core";
 import { getNodesFromHostedJson } from "js-waku";
 import { Protocols } from "js-waku/build/main/lib/waku";
 

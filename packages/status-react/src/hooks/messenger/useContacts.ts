@@ -2,8 +2,8 @@ import {
   Contacts as ContactsClass,
   Identity,
   Messenger,
-} from "@waku/status-communities/dist/cjs";
-import { bufToHex } from "@waku/status-communities/dist/cjs/utils";
+  bufToHex
+} from "@status-im/core";
 import { useMemo, useReducer, useState } from "react";
 
 import { Contacts } from "../../models/Contact";

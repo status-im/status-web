@@ -1,7 +1,4 @@
-import {
-  ApplicationMetadataMessage,
-  utils,
-} from "@waku/status-communities/dist/cjs";
+import { ApplicationMetadataMessage, bufToHex } from "@status-im/core";
 import { keccak256 } from "js-sha3";
 
 import { uintToImgUrl } from "../utils";
@@ -44,7 +41,7 @@ export class ChatMessage {
       if (msg.chatMessage?.image) {
         image = uintToImgUrl(msg.chatMessage?.image.payload);
       }
-      const sender = utils.bufToHex(msg.signer);
+      const sender = bufToHex(msg.signer);
       return new ChatMessage(
         content,
         date,

@@ -5,7 +5,7 @@ import {
   Identity,
   Messenger,
   ChatMessage as StatusChatMessage,
-} from "@waku/status-communities/dist/cjs";
+} from "@status-im/core";
 import { useCallback, useMemo } from "react";
 
 import { ChannelData } from "../../models/ChannelData";
@@ -36,7 +36,7 @@ export function useGroupChats(
     if (messenger && identity && contactsClass) {
       const addChat = (chat: GroupChat) => {
         const members = chat.members
-          .map((member) => member.id)
+          .map(member => member.id)
           .map(contactFromId);
         const channel: ChannelData =
           chat.members.length > 2
@@ -54,7 +54,7 @@ export function useGroupChats(
                 description: `Chatkey: ${chat.members[0].id}`,
                 members,
               };
-        chat.members.forEach((member) => contactsClass.addContact(member.id));
+        chat.members.forEach(member => contactsClass.addContact(member.id));
         dispatch({ type: "AddChannel", payload: channel });
       };
       const removeChat = (chat: GroupChat) => {

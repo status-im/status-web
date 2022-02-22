@@ -1,5 +1,4 @@
-import { Community, Messenger } from "@waku/status-communities/dist/cjs";
-import { ApplicationMetadataMessage } from "@waku/status-communities/dist/cjs";
+import { Community, Messenger, ApplicationMetadataMessage } from "@status-im/core";
 
 export async function createCommunity(
   communityKey: string,
@@ -11,7 +10,7 @@ export async function createCommunity(
     messenger.waku
   );
   await Promise.all(
-    Array.from(community.chats.values()).map(async (chat) => {
+    Array.from(community.chats.values()).map(async chat => {
       await messenger.joinChat(chat);
       messenger.addObserver(
         (msg, date) => addMessage(msg, chat.id, date),

@@ -1,5 +1,4 @@
-import { Identity } from "@waku/status-communities/dist/cjs";
-import { genPrivateKeyWithEntropy } from "@waku/status-communities/dist/cjs/utils";
+import { Identity, genPrivateKeyWithEntropy } from "@status-im/core";
 import React, { useCallback } from "react";
 import styled from "styled-components";
 

@@ -1,4 +1,4 @@
-import { Identity } from "@waku/status-communities/dist/cjs";
+import { Identity } from "@status-im/core";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -94,7 +94,7 @@ export function UserCreationModal() {
             <NameInput
               placeholder="Display name"
               value={customNameInput}
-              onChange={(e) => setCustomNameInput(e.currentTarget.value)}
+              onChange={e => setCustomNameInput(e.currentTarget.value)}
               maxLength={24}
             />
             {customNameInput && (
