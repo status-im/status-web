@@ -1,12 +1,19 @@
 {
-  "name": "@waku/react-chat-sdk",
+  "name": "@status-im/react",
+  "version": "0.0.0",
+  "license": "MIT OR Apache-2.0",
+  "homepage": "https://github.com/status-im/status-web",
+  "repository": {
+    "url": "https://github.com/status-im/status-web.git",
+    "directory": "packages/status-react",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/status-im/status-web/issues"
+  },
   "main": "dist/cjs/src/index.js",
   "module": "dist/esm/src/index.js",
   "types": "dist/esm/src/index.d.ts",
-  "version": "0.1.0",
-  "repository": "https://github.com/status-im/wakuconnect-chat-sdk/",
-  "license": "MIT OR Apache-2.0",
-  "packageManager": "yarn@3.0.1",
   "scripts": {
     "build": "run-s 'build:*'",
     "build:esm": "tsc --module es2020 --target es2017 --outDir dist/esm",
@@ -49,7 +56,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "@waku/status-communities": "^0.1.0",
+    "@status-im/core": "^0.0.0",
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
     "js-sha3": "^0.8.0",
