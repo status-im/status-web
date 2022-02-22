@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const CoinbaseLogo = () => {
   return (
@@ -46,5 +46,5 @@ export const CoinbaseLogo = () => {
         </linearGradient>
       </defs>
     </svg>
-  );
-};
+  )
+}

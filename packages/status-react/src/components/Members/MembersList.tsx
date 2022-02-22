@@ -1,50 +1,47 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { useUserPublicKey } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { Contact } from "../../models/Contact";
-import { buttonStyles } from "../Buttons/buttonStyle";
-import { LogoutIcon } from "../Icons/LogoutIcon";
-import { LogoutModalName } from "../Modals/LogoutModal";
+import { useUserPublicKey } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { Contact } from '../../models/Contact'
+import { buttonStyles } from '../Buttons/buttonStyle'
+import { LogoutIcon } from '../Icons/LogoutIcon'
+import { LogoutModalName } from '../Modals/LogoutModal'
 
-import { Member } from "./Member";
+import { Member } from './Member'
 
 export function MembersList() {
-  const { contacts, nickname, activeChannel } = useMessengerContext();
-  const userPK = useUserPublicKey();
-  const { setModal } = useModal(LogoutModalName);
+  const { contacts, nickname, activeChannel } = useMessengerContext()
+  const userPK = useUserPublicKey()
+  const { setModal } = useModal(LogoutModalName)
 
   const members = useMemo(() => {
-    const contactsArray = Object.values(contacts);
+    const contactsArray = Object.values(contacts)
     if (userPK) {
       if (
         activeChannel &&
-        activeChannel.type === "group" &&
+        activeChannel.type === 'group' &&
         activeChannel.members
       ) {
-        const returnContacts: Contact[] = [];
-        activeChannel.members.forEach((member) => {
+        const returnContacts: Contact[] = []
+        activeChannel.members.forEach(member => {
           if (contacts[member.id] && member.id != userPK) {
-            returnContacts.push(contacts[member.id]);
+            returnContacts.push(contacts[member.id])
           }
-        });
-        return returnContacts;
+        })
+        return returnContacts
       }
-      return contactsArray.filter((e) => e.id !== userPK);
+      return contactsArray.filter(e => e.id !== userPK)
     }
-    return contactsArray;
-  }, [activeChannel, contacts, userPK]);
+    return contactsArray
+  }, [activeChannel, contacts, userPK])
 
-  const onlineContacts = useMemo(
-    () => members.filter((e) => e.online),
-    [members]
-  );
+  const onlineContacts = useMemo(() => members.filter(e => e.online), [members])
   const offlineContacts = useMemo(
-    () => members.filter((e) => !e.online),
+    () => members.filter(e => !e.online),
     [members]
-  );
+  )
 
   return (
     <MembersListWrap>
@@ -69,7 +66,7 @@ export function MembersList() {
       {onlineContacts.length > 0 && (
         <MemberCategory>
           <MemberCategoryName>Online</MemberCategoryName>
-          {onlineContacts.map((contact) => (
+          {onlineContacts.map(contact => (
             <Member
               key={contact.id}
               contact={contact}
@@ -81,7 +78,7 @@ export function MembersList() {
       {offlineContacts.length > 0 && (
         <MemberCategory>
           <MemberCategoryName>Offline</MemberCategoryName>
-          {offlineContacts.map((contact) => (
+          {offlineContacts.map(contact => (
             <Member
               key={contact.id}
               contact={contact}
@@ -91,7 +88,7 @@ export function MembersList() {
         </MemberCategory>
       )}
     </MembersListWrap>
-  );
+  )
 }
 
 const MembersListWrap = styled.div`
@@ -101,13 +98,13 @@ const MembersListWrap = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
-`;
+`
 
 const MemberCategory = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
-`;
+`
 
 const MemberCategoryName = styled.h3`
   font-weight: normal;
@@ -115,13 +112,13 @@ const MemberCategoryName = styled.h3`
   line-height: 18px;
   color: ${({ theme }) => theme.secondary};
   margin-bottom: 8px;
-`;
+`
 
 const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
+`
 
 const LogoutBtn = styled.button`
   ${buttonStyles}
@@ -129,4 +126,4 @@ const LogoutBtn = styled.button`
   height: 32px;
   border-radius: 50%;
   padding: 0;
-`;
+`

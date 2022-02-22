@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { LoadingIcon } from "../Icons/LoadingIcon";
-import { textSmallStyles } from "../Text";
+import { LoadingIcon } from '../Icons/LoadingIcon'
+import { textSmallStyles } from '../Text'
 
 export const Loading = () => {
   return (
@@ -10,8 +10,8 @@ export const Loading = () => {
       <LoadingIcon />
       <LoadingText>Loading messages...</LoadingText>
     </LoadingBlock>
-  );
-};
+  )
+}
 
 const LoadingBlock = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const LoadingBlock = styled.div`
   box-shadow: ${({ theme }) => theme.shadow};
   border-radius: 8px;
   z-index: 2;
-`;
+`
 
 const LoadingText = styled.p`
   color: ${({ theme }) => theme.primary};
@@ -34,4 +34,4 @@ const LoadingText = styled.p`
   font-weight: 500;
 
   ${textSmallStyles}
-`;
+`

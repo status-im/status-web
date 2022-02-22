@@ -1,12 +1,12 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { Modal } from "./Modal";
+import { Modal } from './Modal'
 
-export const PictureModalName = "PictureModal" as const;
+export const PictureModalName = 'PictureModal' as const
 
 export interface PictureModalProps {
-  image: string;
+  image: string
 }
 
 export const PictureModal = ({ image }: PictureModalProps) => {
@@ -16,16 +16,16 @@ export const PictureModal = ({ image }: PictureModalProps) => {
         <ModalImage src={image}></ModalImage>
       </ModalImageWrapper>
     </Modal>
-  );
-};
+  )
+}
 
 const ModalImageWrapper = styled.div`
   display: flex;
   max-width: 820px;
   max-height: 820px;
-`;
+`
 
 const ModalImage = styled.img`
   width: 100%;
   height: 100%;
-`;
+`

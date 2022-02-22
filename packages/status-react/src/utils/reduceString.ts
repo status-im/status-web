@@ -5,5 +5,5 @@ export const reduceString = (
 ) => {
   return `${string.substring(0, limitBefore)}...${string.substring(
     string.length - limitAfter
-  )}`;
-};
+  )}`
+}

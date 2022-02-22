@@ -1,16 +1,16 @@
-import QRCode from "qrcode.react";
-import React from "react";
+import QRCode from 'qrcode.react'
+import React from 'react'
 
-import { CopyInput } from "../Form/CopyInput";
+import { CopyInput } from '../Form/CopyInput'
 
-import { Heading, MiddleSection, QRWrapper, Section, Text } from "./ModalStyle";
+import { Heading, MiddleSection, QRWrapper, Section, Text } from './ModalStyle'
 
-export const ConnectModalName = "ConnectModal";
+export const ConnectModalName = 'ConnectModal'
 
 interface ConnectModalProps {
-  name: string;
-  address: string;
-  text: string;
+  name: string
+  address: string
+  text: string
 }
 
 export function ConnectModal({ name, address, text }: ConnectModalProps) {
@@ -22,11 +22,11 @@ export function ConnectModal({ name, address, text }: ConnectModalProps) {
       <MiddleSection>
         <Text>{text}</Text>
         <QRWrapper>
-          {" "}
+          {' '}
           <QRCode value={address} size={224} />
         </QRWrapper>
         <CopyInput value="2Ef1907d50926...6dt4cEbd975aC5E0Ba" />
       </MiddleSection>
     </>
-  );
+  )
 }

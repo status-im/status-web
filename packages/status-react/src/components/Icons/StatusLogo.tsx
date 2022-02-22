@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 export const StatusLogo = () => (
   <Icon
@@ -24,7 +24,7 @@ export const StatusLogo = () => (
       fill="black"
     />
   </Icon>
-);
+)
 
 const Icon = styled.svg`
   & > path:first-child {
@@ -38,4 +38,4 @@ const Icon = styled.svg`
   & > path:last-child {
     fill: ${({ theme }) => theme.primary};
   }
-`;
+`

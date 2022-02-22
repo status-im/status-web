@@ -1,52 +1,52 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { MobileIcon } from "../Icons/MobileIcon";
-import { ProfileIcon } from "../Icons/ProfileIcon";
-import { ScanIcon } from "../Icons/ScanIcon";
-import { textMediumStyles } from "../Text";
+import { MobileIcon } from '../Icons/MobileIcon'
+import { ProfileIcon } from '../Icons/ProfileIcon'
+import { ScanIcon } from '../Icons/ScanIcon'
+import { textMediumStyles } from '../Text'
 
 interface LoginInstructionsProps {
-  mobileFlow: boolean;
+  mobileFlow: boolean
 }
 
 export function LoginInstructions({ mobileFlow }: LoginInstructionsProps) {
   return (
     <Instructions>
       <InstructionStep>
-        Open Status App on your {mobileFlow ? "mobile" : "desktop"}
+        Open Status App on your {mobileFlow ? 'mobile' : 'desktop'}
       </InstructionStep>
       <InstructionStep>
-        Navigate yourself to{" "}
+        Navigate yourself to{' '}
         <InstructionIcon>
-          {" "}
+          {' '}
           <ProfileIcon width={13} height={13} /> <span>Profile</span>
-        </InstructionIcon>{" "}
+        </InstructionIcon>{' '}
         tab
       </InstructionStep>
       <InstructionStep>
-        Select{" "}
+        Select{' '}
         <InstructionIcon>
           <MobileIcon />
-        </InstructionIcon>{" "}
+        </InstructionIcon>{' '}
         <span>Sync Settings</span>
       </InstructionStep>
       <InstructionStep>
-        Tap{" "}
+        Tap{' '}
         <InstructionIcon>
-          {" "}
-          <ScanIcon />{" "}
-        </InstructionIcon>{" "}
-        <span>{mobileFlow ? "Scan" : "Display"} sync code</span>
+          {' '}
+          <ScanIcon />{' '}
+        </InstructionIcon>{' '}
+        <span>{mobileFlow ? 'Scan' : 'Display'} sync code</span>
       </InstructionStep>
       <InstructionStep>
         {mobileFlow
-          ? "Scan the sync code from this screen"
-          : "Paste the sync code above"}{" "}
+          ? 'Scan the sync code from this screen'
+          : 'Paste the sync code above'}{' '}
         ↑
       </InstructionStep>
     </Instructions>
-  );
+  )
 }
 
 const Instructions = styled.ol`
@@ -56,7 +56,7 @@ const Instructions = styled.ol`
   counter-reset: ollist;
 
   ${textMediumStyles}
-`;
+`
 
 const InstructionStep = styled.li`
   display: flex;
@@ -72,10 +72,10 @@ const InstructionStep = styled.li`
 
   &::before {
     counter-increment: ollist;
-    content: counter(ollist) ".";
+    content: counter(ollist) '.';
     margin-right: 4px;
   }
-`;
+`
 
 const InstructionIcon = styled.div`
   width: 40px;
@@ -90,4 +90,4 @@ const InstructionIcon = styled.div`
   font-size: 8px;
   line-height: 10px;
   margin: 0 6px;
-`;
+`

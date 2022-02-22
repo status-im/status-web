@@ -5,7 +5,7 @@ import {
   Contacts as ContactsClass,
   Identity,
   Messenger,
-} from "@status-im/core";
+} from '@status-im/core'
 import {
   useCallback,
   useEffect,
@@ -13,63 +13,63 @@ import {
   useReducer,
   useRef,
   useState,
-} from "react";
+} from 'react'
 
-import { useConfig } from "../../contexts/configProvider";
-import { ChannelData, ChannelsData } from "../../models/ChannelData";
-import { ChatMessage } from "../../models/ChatMessage";
-import { CommunityData } from "../../models/CommunityData";
-import { Contacts } from "../../models/Contact";
-import { createCommunity } from "../../utils/createCommunity";
-import { createMessenger } from "../../utils/createMessenger";
-import { uintToImgUrl } from "../../utils/uintToImgUrl";
+import { useConfig } from '../../contexts/configProvider'
+import { ChannelData, ChannelsData } from '../../models/ChannelData'
+import { ChatMessage } from '../../models/ChatMessage'
+import { CommunityData } from '../../models/CommunityData'
+import { Contacts } from '../../models/Contact'
+import { createCommunity } from '../../utils/createCommunity'
+import { createMessenger } from '../../utils/createMessenger'
+import { uintToImgUrl } from '../../utils/uintToImgUrl'
 
-import { ChannelAction, useChannelsReducer } from "./useChannelsReducer";
-import { ContactsAction, useContacts } from "./useContacts";
-import { useGroupChats } from "./useGroupChats";
-import { useLoadPrevDay } from "./useLoadPrevDay";
-import { useMessages } from "./useMessages";
+import { ChannelAction, useChannelsReducer } from './useChannelsReducer'
+import { ContactsAction, useContacts } from './useContacts'
+import { useGroupChats } from './useGroupChats'
+import { useLoadPrevDay } from './useLoadPrevDay'
+import { useMessages } from './useMessages'
 
 export type MessengerType = {
-  messenger: Messenger | undefined;
-  messages: ChatMessage[];
+  messenger: Messenger | undefined
+  messages: ChatMessage[]
   sendMessage: (
     messageText?: string | undefined,
     image?: Uint8Array | undefined,
     responseTo?: string
-  ) => Promise<void>;
-  notifications: { [chatId: string]: number };
-  clearNotifications: (id: string) => void;
-  mentions: { [chatId: string]: number };
-  clearMentions: (id: string) => void;
-  loadPrevDay: (id: string, groupChat?: boolean) => Promise<void>;
-  loadingMessages: boolean;
-  loadingMessenger: boolean;
-  communityData: CommunityData | undefined;
-  contacts: Contacts;
-  contactsDispatch: (action: ContactsAction) => void;
-  addContact: (publicKey: string) => void;
-  channels: ChannelsData;
-  channelsDispatch: (action: ChannelAction) => void;
-  removeChannel: (channelId: string) => void;
-  activeChannel: ChannelData | undefined;
-  createGroupChat: (members: string[]) => void;
-  changeGroupChatName: (name: string, chatId: string) => void;
-  addMembers: (members: string[], chatId: string) => void;
-  nickname: string | undefined;
-  subscriptionsDispatch: (action: SubscriptionAction) => void;
-};
+  ) => Promise<void>
+  notifications: { [chatId: string]: number }
+  clearNotifications: (id: string) => void
+  mentions: { [chatId: string]: number }
+  clearMentions: (id: string) => void
+  loadPrevDay: (id: string, groupChat?: boolean) => Promise<void>
+  loadingMessages: boolean
+  loadingMessenger: boolean
+  communityData: CommunityData | undefined
+  contacts: Contacts
+  contactsDispatch: (action: ContactsAction) => void
+  addContact: (publicKey: string) => void
+  channels: ChannelsData
+  channelsDispatch: (action: ChannelAction) => void
+  removeChannel: (channelId: string) => void
+  activeChannel: ChannelData | undefined
+  createGroupChat: (members: string[]) => void
+  changeGroupChatName: (name: string, chatId: string) => void
+  addMembers: (members: string[], chatId: string) => void
+  nickname: string | undefined
+  subscriptionsDispatch: (action: SubscriptionAction) => void
+}
 
 function useCreateMessenger(identity: Identity | undefined) {
-  const { environment } = useConfig();
-  const [messenger, setMessenger] = useState<Messenger | undefined>(undefined);
+  const { environment } = useConfig()
+  const [messenger, setMessenger] = useState<Messenger | undefined>(undefined)
   useEffect(() => {
     createMessenger(identity, environment).then(e => {
-      setMessenger(e);
-    });
-  }, [identity, environment]);
+      setMessenger(e)
+    })
+  }, [identity, environment])
 
-  return messenger;
+  return messenger
 }
 
 function useCreateCommunity(
@@ -79,7 +79,7 @@ function useCreateCommunity(
   addMessage: (msg: ApplicationMetadataMessage, id: string, date: Date) => void,
   contactsClass: ContactsClass | undefined
 ) {
-  const [community, setCommunity] = useState<Community | undefined>(undefined);
+  const [community, setCommunity] = useState<Community | undefined>(undefined)
 
   useEffect(() => {
     if (
@@ -90,73 +90,73 @@ function useCreateCommunity(
       messenger.identity === identity
     ) {
       createCommunity(communityKey, addMessage, messenger).then(comm => {
-        setCommunity(comm);
-      });
+        setCommunity(comm)
+      })
     }
-  }, [messenger, communityKey, addMessage, contactsClass, identity]);
+  }, [messenger, communityKey, addMessage, contactsClass, identity])
 
   const communityData = useMemo(() => {
     if (community?.description) {
-      const membersList = Object.keys(community.description.proto.members);
+      const membersList = Object.keys(community.description.proto.members)
 
       if (contactsClass) {
-        membersList.forEach(contactsClass.addContact, contactsClass);
+        membersList.forEach(contactsClass.addContact, contactsClass)
       }
 
       return {
         id: community.publicKeyStr,
-        name: community.description.identity?.displayName ?? "",
+        name: community.description.identity?.displayName ?? '',
         icon: uintToImgUrl(
           community.description?.identity?.images?.thumbnail?.payload ??
             new Uint8Array()
         ),
         members: membersList.length,
         membersList,
-        description: community.description.identity?.description ?? "",
-      };
+        description: community.description.identity?.description ?? '',
+      }
     } else {
-      return undefined;
+      return undefined
     }
-  }, [community, contactsClass]);
+  }, [community, contactsClass])
 
-  return { community, communityData };
+  return { community, communityData }
 }
 
 type Subscriptions = {
-  [id: string]: (msg: ChatMessage, id: string) => void;
-};
+  [id: string]: (msg: ChatMessage, id: string) => void
+}
 
 type SubscriptionAction =
   | {
-      type: "addSubscription";
+      type: 'addSubscription'
       payload: {
-        name: string;
-        subFunction: (msg: ChatMessage, id: string) => void;
-      };
+        name: string
+        subFunction: (msg: ChatMessage, id: string) => void
+      }
     }
-  | { type: "removeSubscription"; payload: { name: string } };
+  | { type: 'removeSubscription'; payload: { name: string } }
 
 function subscriptionReducer(
   state: Subscriptions,
   action: SubscriptionAction
 ): Subscriptions {
   switch (action.type) {
-    case "addSubscription": {
+    case 'addSubscription': {
       if (state[action.payload.name]) {
-        throw new Error("Subscription already exists");
+        throw new Error('Subscription already exists')
       }
-      return { ...state, [action.payload.name]: action.payload.subFunction };
+      return { ...state, [action.payload.name]: action.payload.subFunction }
     }
-    case "removeSubscription": {
+    case 'removeSubscription': {
       if (state[action.payload.name]) {
-        const newState = { ...state };
-        delete newState[action.payload.name];
-        return newState;
+        const newState = { ...state }
+        delete newState[action.payload.name]
+        return newState
       }
-      return state;
+      return state
     }
     default:
-      throw new Error("Wrong subscription action type");
+      throw new Error('Wrong subscription action type')
   }
 }
 
@@ -168,28 +168,28 @@ export function useMessenger(
   const [subscriptions, subscriptionsDispatch] = useReducer(
     subscriptionReducer,
     {}
-  );
-  const subList = useRef<((msg: ChatMessage, id: string) => void)[]>([]);
+  )
+  const subList = useRef<((msg: ChatMessage, id: string) => void)[]>([])
   useEffect(() => {
-    subList.current = Object.values(subscriptions);
-  }, [subscriptions]);
+    subList.current = Object.values(subscriptions)
+  }, [subscriptions])
 
-  const [channelsState, channelsDispatch] = useChannelsReducer();
-  const messenger = useCreateMessenger(identity);
+  const [channelsState, channelsDispatch] = useChannelsReducer()
+  const messenger = useCreateMessenger(identity)
   const { contacts, contactsDispatch, contactsClass, nickname } = useContacts(
     messenger,
     identity,
     newNickname
-  );
+  )
 
   const addContact = useCallback(
     (publicKey: string) => {
       if (contactsClass) {
-        contactsClass.addContact(publicKey);
+        contactsClass.addContact(publicKey)
       }
     },
     [contactsClass]
-  );
+  )
 
   const {
     addChatMessage,
@@ -204,7 +204,7 @@ export function useMessenger(
     identity,
     subList,
     contactsClass
-  );
+  )
 
   const { community, communityData } = useCreateCommunity(
     messenger,
@@ -212,43 +212,43 @@ export function useMessenger(
     communityKey,
     addMessage,
     contactsClass
-  );
+  )
 
   useEffect(() => {
     if (community?.chats) {
       for (const chat of community.chats.values()) {
         channelsDispatch({
-          type: "AddChannel",
+          type: 'AddChannel',
           payload: {
             id: chat.id,
-            name: chat.communityChat?.identity?.displayName ?? "",
-            description: chat.communityChat?.identity?.description ?? "",
-            type: "channel",
+            name: chat.communityChat?.identity?.displayName ?? '',
+            description: chat.communityChat?.identity?.description ?? '',
+            type: 'channel',
           },
-        });
+        })
       }
     }
-  }, [community, channelsDispatch]);
+  }, [community, channelsDispatch])
 
   useEffect(() => {
     Object.values(channelsState.channels)
-      .filter(channel => channel.type === "dm")
+      .filter(channel => channel.type === 'dm')
       .forEach(channel => {
-        const contact = contacts?.[channel?.members?.[1]?.id ?? ""];
+        const contact = contacts?.[channel?.members?.[1]?.id ?? '']
         if (
           contact &&
           channel.name !== (contact?.customName ?? contact.trueName)
         ) {
           channelsDispatch({
-            type: "AddChannel",
+            type: 'AddChannel',
             payload: {
               ...channel,
               name: contact?.customName ?? contact.trueName,
             },
-          });
+          })
         }
-      });
-  }, [contacts, channelsState.channels, channelsDispatch]);
+      })
+  }, [contacts, channelsState.channels, channelsDispatch])
 
   const {
     groupChat,
@@ -262,73 +262,71 @@ export function useMessenger(
     channelsDispatch,
     addChatMessage,
     contactsClass
-  );
+  )
 
   const { loadPrevDay, loadingMessages } = useLoadPrevDay(
     channelsState.activeChannel.id,
     messenger,
     groupChat
-  );
+  )
 
   useEffect(() => {
     if (messenger && community?.chats) {
-      Array.from(community?.chats.values()).forEach(({ id }) =>
-        loadPrevDay(id)
-      );
+      Array.from(community?.chats.values()).forEach(({ id }) => loadPrevDay(id))
     }
-  }, [messenger, community, loadPrevDay]);
+  }, [messenger, community, loadPrevDay])
 
   const sendMessage = useCallback(
     async (messageText?: string, image?: Uint8Array, responseTo?: string) => {
-      let content;
+      let content
       if (messageText) {
         content = {
           text: messageText,
           contentType: 0,
-        };
+        }
       }
       if (image) {
         content = {
           image,
           imageType: 1,
           contentType: 2,
-        };
+        }
       }
       if (content) {
-        if (channelsState.activeChannel.type !== "channel") {
+        if (channelsState.activeChannel.type !== 'channel') {
           await groupChat?.sendMessage(
             channelsState.activeChannel.id,
             content,
             responseTo
-          );
+          )
         } else {
           await messenger?.sendMessage(
             channelsState.activeChannel.id,
             content,
             responseTo
-          );
+          )
         }
       }
     },
     [messenger, groupChat, channelsState.activeChannel]
-  );
+  )
 
   useEffect(() => {
     if (channelsState.activeChannel) {
       if (notifications[channelsState.activeChannel.id] > 0) {
-        clearNotifications(channelsState.activeChannel.id);
-        clearMentions(channelsState.activeChannel.id);
+        clearNotifications(channelsState.activeChannel.id)
+        clearMentions(channelsState.activeChannel.id)
       }
     }
-  }, [notifications, channelsState, clearNotifications, clearMentions]);
+  }, [notifications, channelsState, clearNotifications, clearMentions])
 
   const loadingMessenger = useMemo(() => {
     return Boolean(
       (communityKey && !communityData) ||
         !messenger ||
         (communityKey && !channelsState.activeChannel.id)
-    );
-  }, [communityData, messenger, channelsState, communityKey]);
+    )
+  }, [communityData, messenger, channelsState, communityKey])
 
   return {
     messenger,
@@ -354,5 +352,5 @@ export function useMessenger(
     addMembers,
     nickname,
     subscriptionsDispatch,
-  };
+  }
 }

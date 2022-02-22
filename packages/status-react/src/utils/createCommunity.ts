@@ -1,4 +1,8 @@
-import { Community, Messenger, ApplicationMetadataMessage } from "@status-im/core";
+import {
+  Community,
+  Messenger,
+  ApplicationMetadataMessage,
+} from '@status-im/core'
 
 export async function createCommunity(
   communityKey: string,
@@ -8,15 +12,15 @@ export async function createCommunity(
   const community = await Community.instantiateCommunity(
     communityKey,
     messenger.waku
-  );
+  )
   await Promise.all(
     Array.from(community.chats.values()).map(async chat => {
-      await messenger.joinChat(chat);
+      await messenger.joinChat(chat)
       messenger.addObserver(
         (msg, date) => addMessage(msg, chat.id, date),
         chat.id
-      );
+      )
     })
-  );
-  return community;
+  )
+  return community
 }

@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-import { copy } from "../../utils/copy";
-import { reduceString } from "../../utils/reduceString";
+import { copy } from '../../utils/copy'
+import { reduceString } from '../../utils/reduceString'
 
 import {
   ButtonWrapper,
@@ -10,11 +10,11 @@ import {
   Label,
   Text,
   Wrapper,
-} from "./inputStyles";
+} from './inputStyles'
 
 interface CopyInputProps {
-  label?: string;
-  value: string;
+  label?: string
+  value: string
 }
 
 export const CopyInput = ({ label, value }: CopyInputProps) => (
@@ -27,4 +27,4 @@ export const CopyInput = ({ label, value }: CopyInputProps) => (
       </ButtonWrapper>
     </Wrapper>
   </InputWrapper>
-);
+)

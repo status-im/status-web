@@ -1,15 +1,15 @@
-import React, { ReactNode } from "react";
-import styled from "styled-components";
+import React, { ReactNode } from 'react'
+import styled from 'styled-components'
 
-import { textSmallStyles } from "../Text";
+import { textSmallStyles } from '../Text'
 
 type DropdownMenuProps = {
-  children: ReactNode;
-  className?: string;
-  style?: { top: number; left: number };
-  menuRef?: React.MutableRefObject<null>;
-  id?: string;
-};
+  children: ReactNode
+  className?: string
+  style?: { top: number; left: number }
+  menuRef?: React.MutableRefObject<null>
+  id?: string
+}
 
 export function DropdownMenu({
   children,
@@ -22,7 +22,7 @@ export function DropdownMenu({
     <MenuBlock className={className} style={style} ref={menuRef} id={id}>
       <MenuList>{children}</MenuList>
     </MenuBlock>
-  );
+  )
 }
 
 const MenuBlock = styled.div`
@@ -34,11 +34,11 @@ const MenuBlock = styled.div`
   padding: 8px 0;
   position: absolute;
   z-index: 2;
-`;
+`
 
 const MenuList = styled.ul`
   list-style: none;
-`;
+`
 
 export const MenuItem = styled.li`
   width: 100%;
@@ -61,7 +61,7 @@ export const MenuItem = styled.li`
   & > svg.red {
     fill: ${({ theme }) => theme.redColor};
   }
-`;
+`
 
 export const MenuText = styled.span`
   margin-left: 6px;
@@ -72,7 +72,7 @@ export const MenuText = styled.span`
   }
 
   ${textSmallStyles}
-`;
+`
 
 export const MenuSection = styled.div`
   padding: 4px 0;
@@ -91,4 +91,4 @@ export const MenuSection = styled.div`
     margin: 4px 0 0;
     border-bottom: none;
   }
-`;
+`

@@ -1,43 +1,43 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { useUserPublicKey } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { AddContactIcon } from "../Icons/AddContactIcon";
-import { BlockSvg } from "../Icons/BlockIcon";
-import { ChatSvg } from "../Icons/ChatIcon";
-import { EditIcon } from "../Icons/EditIcon";
-import { ProfileIcon } from "../Icons/ProfileIcon";
-import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
-import { UserIcon } from "../Icons/UserIcon";
-import { WarningSvg } from "../Icons/WarningIcon";
-import { UserAddress } from "../Messages/Styles";
-import { ProfileModalName } from "../Modals/ProfileModal";
-import { textMediumStyles } from "../Text";
+import { useUserPublicKey } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { AddContactIcon } from '../Icons/AddContactIcon'
+import { BlockSvg } from '../Icons/BlockIcon'
+import { ChatSvg } from '../Icons/ChatIcon'
+import { EditIcon } from '../Icons/EditIcon'
+import { ProfileIcon } from '../Icons/ProfileIcon'
+import { UntrustworthIcon } from '../Icons/UntrustworthIcon'
+import { UserIcon } from '../Icons/UserIcon'
+import { WarningSvg } from '../Icons/WarningIcon'
+import { UserAddress } from '../Messages/Styles'
+import { ProfileModalName } from '../Modals/ProfileModal'
+import { textMediumStyles } from '../Text'
 
-import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
+import { DropdownMenu, MenuItem, MenuText } from './DropdownMenu'
 
 type ContactMenuProps = {
-  id: string;
-  setShowMenu: (val: boolean) => void;
-};
+  id: string
+  setShowMenu: (val: boolean) => void
+}
 
 export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
-  const userPK = useUserPublicKey();
-  const { contacts, contactsDispatch } = useMessengerContext();
-  const contact = useMemo(() => contacts[id], [id, contacts]);
+  const userPK = useUserPublicKey()
+  const { contacts, contactsDispatch } = useMessengerContext()
+  const contact = useMemo(() => contacts[id], [id, contacts])
   const isUser = useMemo(() => {
     if (userPK) {
-      return id === userPK;
+      return id === userPK
     } else {
-      return false;
+      return false
     }
-  }, [id, userPK]);
+  }, [id, userPK])
 
-  const { setModal } = useModal(ProfileModalName);
+  const { setModal } = useModal(ProfileModalName)
 
-  if (!contact) return null;
+  if (!contact) return null
   return (
     <ContactDropdown>
       <ContactInfo>
@@ -56,7 +56,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
       <MenuSection>
         <MenuItem
           onClick={() => {
-            setModal({ id, renamingState: false, requestState: false });
+            setModal({ id, renamingState: false, requestState: false })
           }}
         >
           <ProfileIcon width={16} height={16} />
@@ -65,7 +65,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
         {!contact.isFriend && (
           <MenuItem
             onClick={() => {
-              setModal({ id, requestState: true });
+              setModal({ id, requestState: true })
             }}
           >
             <AddContactIcon width={16} height={16} />
@@ -80,7 +80,7 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
         )}
         <MenuItem
           onClick={() => {
-            setModal({ id, renamingState: true });
+            setModal({ id, renamingState: true })
           }}
         >
           <EditIcon width={16} height={16} />
@@ -90,69 +90,69 @@ export function ContactMenu({ id, setShowMenu }: ContactMenuProps) {
       <MenuSection>
         <MenuItem
           onClick={() =>
-            contactsDispatch({ type: "toggleTrustworthy", payload: { id } })
+            contactsDispatch({ type: 'toggleTrustworthy', payload: { id } })
           }
         >
           <WarningSvg
             width={16}
             height={16}
-            className={contact.isUntrustworthy ? "" : "red"}
+            className={contact.isUntrustworthy ? '' : 'red'}
           />
-          <MenuText className={contact.isUntrustworthy ? "" : "red"}>
+          <MenuText className={contact.isUntrustworthy ? '' : 'red'}>
             {contact.isUntrustworthy
-              ? "Remove Untrustworthy Mark"
-              : "Mark as Untrustworthy"}
+              ? 'Remove Untrustworthy Mark'
+              : 'Mark as Untrustworthy'}
           </MenuText>
         </MenuItem>
 
         {!contact.isFriend && !isUser && (
           <MenuItem
             onClick={() => {
-              contactsDispatch({ type: "toggleBlocked", payload: { id } });
-              setShowMenu(false);
+              contactsDispatch({ type: 'toggleBlocked', payload: { id } })
+              setShowMenu(false)
             }}
           >
             <BlockSvg width={16} height={16} className="red" />
             <MenuText className="red">
-              {contact.blocked ? "Unblock User" : "Block User"}
+              {contact.blocked ? 'Unblock User' : 'Block User'}
             </MenuText>
           </MenuItem>
         )}
       </MenuSection>
     </ContactDropdown>
-  );
+  )
 }
 
 const ContactDropdown = styled(DropdownMenu)`
   top: 20px;
   left: 0px;
   width: 222px;
-`;
+`
 
 const ContactInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
+`
 
 const MenuSection = styled.div`
   margin-top: 5px;
   padding-top: 5px;
   border-top: 1px solid ${({ theme }) => theme.inputColor};
-`;
+`
 
 const UserNameWrapper = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 4px;
-`;
+`
 
 const UserName = styled.p`
   color: ${({ theme }) => theme.primary};
   margin-right: 4px;
 
   ${textMediumStyles}
-`;
+`
 
 const UserTrueName = styled.p`
   color: ${({ theme }) => theme.primary};
@@ -160,4 +160,4 @@ const UserTrueName = styled.p`
   line-height: 16px;
   letter-spacing: 0.1px;
   margin-top: 4px;
-`;
+`

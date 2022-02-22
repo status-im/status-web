@@ -1,6 +1,6 @@
-import { Reader } from "protobufjs";
+import { Reader } from 'protobufjs'
 
-import * as proto from "../proto/communities/v1/status_update";
+import * as proto from '../proto/communities/v1/status_update'
 
 export class StatusUpdate {
   public constructor(public proto: proto.StatusUpdate) {}
@@ -9,15 +9,15 @@ export class StatusUpdate {
     statusType: proto.StatusUpdate_StatusType,
     customText: string
   ): StatusUpdate {
-    const clock = Date.now();
+    const clock = Date.now()
 
     const proto = {
       clock,
       statusType,
       customText,
-    };
+    }
 
-    return new StatusUpdate(proto);
+    return new StatusUpdate(proto)
   }
 
   /**
@@ -26,24 +26,24 @@ export class StatusUpdate {
    * @throws
    */
   static decode(bytes: Uint8Array): StatusUpdate {
-    const protoBuf = proto.StatusUpdate.decode(Reader.create(bytes));
+    const protoBuf = proto.StatusUpdate.decode(Reader.create(bytes))
 
-    return new StatusUpdate(protoBuf);
+    return new StatusUpdate(protoBuf)
   }
 
   encode(): Uint8Array {
-    return proto.StatusUpdate.encode(this.proto).finish();
+    return proto.StatusUpdate.encode(this.proto).finish()
   }
 
   public get clock(): number | undefined {
-    return this.proto.clock;
+    return this.proto.clock
   }
 
   public get statusType(): proto.StatusUpdate_StatusType | undefined {
-    return this.proto.statusType;
+    return this.proto.statusType
   }
 
   public get customText(): string | undefined {
-    return this.proto.customText;
+    return this.proto.customText
   }
 }

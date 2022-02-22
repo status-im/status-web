@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { MessageSkeleton } from "./MessageSkeleton";
-import { Skeleton } from "./Skeleton";
+import { MessageSkeleton } from './MessageSkeleton'
+import { Skeleton } from './Skeleton'
 
 export const LoadingSkeleton = () => {
   return (
@@ -42,8 +42,8 @@ export const LoadingSkeleton = () => {
         <Skeleton width="70%" />
       </MessageSkeleton>
     </Loading>
-  );
-};
+  )
+}
 
 const Loading = styled.div`
   display: flex;
@@ -52,4 +52,4 @@ const Loading = styled.div`
   height: calc(100% - 44px);
   padding: 8px 16px 0;
   overflow: auto;
-`;
+`

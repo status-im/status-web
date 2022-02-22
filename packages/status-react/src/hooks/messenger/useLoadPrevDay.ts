@@ -1,7 +1,7 @@
-import { GroupChats, Messenger } from "@status-im/core";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { GroupChats, Messenger } from '@status-im/core'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+const _MS_PER_DAY = 1000 * 60 * 60 * 24
 
 export function useLoadPrevDay(
   chatId: string,
@@ -9,62 +9,62 @@ export function useLoadPrevDay(
   groupChats?: GroupChats
 ) {
   const loadingPreviousMessages = useRef<{
-    [chatId: string]: boolean;
-  }>({});
+    [chatId: string]: boolean
+  }>({})
   const lastLoadTime = useRef<{
-    [chatId: string]: Date;
-  }>({});
-  const [loadingMessages, setLoadingMessages] = useState(false);
+    [chatId: string]: Date
+  }>({})
+  const [loadingMessages, setLoadingMessages] = useState(false)
 
   useEffect(() => {
     if (chatId) {
-      setLoadingMessages(loadingPreviousMessages.current[chatId]);
+      setLoadingMessages(loadingPreviousMessages.current[chatId])
     }
-  }, [chatId]);
+  }, [chatId])
 
   const loadPrevDay = useCallback(
     async (id: string, groupChat?: boolean) => {
       if (messenger && id) {
-        const endTime = lastLoadTime.current[id] ?? new Date();
-        const startTime = new Date(endTime.getTime() - _MS_PER_DAY * 5);
+        const endTime = lastLoadTime.current[id] ?? new Date()
+        const startTime = new Date(endTime.getTime() - _MS_PER_DAY * 5)
         const timeDiff = Math.floor(
           (new Date().getTime() - endTime.getTime()) / _MS_PER_DAY
-        );
+        )
         if (timeDiff < 28) {
           if (!loadingPreviousMessages.current[id]) {
-            loadingPreviousMessages.current[id] = true;
-            setLoadingMessages(true);
-            let amountOfMessages = 0;
-            let failed = true;
+            loadingPreviousMessages.current[id] = true
+            setLoadingMessages(true)
+            let amountOfMessages = 0
+            let failed = true
             try {
               if (groupChat && groupChats) {
                 amountOfMessages = await groupChats.retrievePreviousMessages(
                   id,
                   startTime,
                   endTime
-                );
+                )
               } else {
                 amountOfMessages = await messenger.retrievePreviousMessages(
                   id,
                   startTime,
                   endTime
-                );
+                )
               }
-              lastLoadTime.current[id] = startTime;
-              failed = false;
+              lastLoadTime.current[id] = startTime
+              failed = false
             } catch {
-              failed = true;
+              failed = true
             }
-            loadingPreviousMessages.current[id] = false;
-            setLoadingMessages(false);
+            loadingPreviousMessages.current[id] = false
+            setLoadingMessages(false)
             if (amountOfMessages === 0 && !failed) {
-              loadPrevDay(id, groupChat);
+              loadPrevDay(id, groupChat)
             }
           }
         }
       }
     },
     [messenger, groupChats]
-  );
-  return { loadingMessages, loadPrevDay };
+  )
+  return { loadingMessages, loadPrevDay }
 }

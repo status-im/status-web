@@ -1,26 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 export function useRefBreak(dimension: number, sizeThreshold: number) {
-  const [widthBreak, setWidthBreak] = useState(dimension < sizeThreshold);
+  const [widthBreak, setWidthBreak] = useState(dimension < sizeThreshold)
 
   useEffect(() => {
     const checkDimensions = () => {
       if (dimension && dimension < sizeThreshold && dimension > 0) {
         if (widthBreak === false) {
-          setWidthBreak(true);
+          setWidthBreak(true)
         }
       } else {
         if (widthBreak === true) {
-          setWidthBreak(false);
+          setWidthBreak(false)
         }
       }
-    };
-    checkDimensions();
-    window.addEventListener("resize", checkDimensions);
+    }
+    checkDimensions()
+    window.addEventListener('resize', checkDimensions)
     return () => {
-      window.removeEventListener("resize", checkDimensions);
-    };
-  }, [dimension, widthBreak, sizeThreshold]);
+      window.removeEventListener('resize', checkDimensions)
+    }
+  }, [dimension, widthBreak, sizeThreshold])
 
-  return widthBreak;
+  return widthBreak
 }

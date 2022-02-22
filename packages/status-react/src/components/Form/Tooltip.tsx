@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { TipIcon } from "../Icons/TipIcon";
-import { textSmallStyles } from "../Text";
+import { TipIcon } from '../Icons/TipIcon'
+import { textSmallStyles } from '../Text'
 
 type TooltipProps = {
-  tip: string;
-  className?: string;
-};
+  tip: string
+  className?: string
+}
 
 export function Tooltip({ tip, className }: TooltipProps) {
   return (
@@ -17,7 +17,7 @@ export function Tooltip({ tip, className }: TooltipProps) {
         <TipIcon className={className} />
       </TooltipBlock>
     </TooltipWrapper>
-  );
+  )
 }
 
 const TooltipWrapper = styled.div`
@@ -36,16 +36,16 @@ const TooltipWrapper = styled.div`
     top: calc(100% + 8px);
     z-index: 10;
   }
-`;
+`
 const TooltipBlock = styled.div`
   background: ${({ theme }) => theme.primary};
   border-radius: 8px;
   position: relative;
   padding: 8px;
-`;
+`
 
 const TooltipText = styled.p`
   font-weight: 500;
   color: ${({ theme }) => theme.bodyBackgroundColor};
   ${textSmallStyles};
-`;
+`

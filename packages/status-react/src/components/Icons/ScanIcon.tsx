@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 export const ScanIcon = () => {
   return (
@@ -32,9 +32,9 @@ export const ScanIcon = () => {
         d="M21.9998 17.2498C21.9998 19.8731 19.8732 21.9998 17.2498 21.9998H15.2498C14.8356 21.9998 14.4998 21.664 14.4998 21.2498C14.4998 20.8355 14.8356 20.4998 15.2498 20.4998H17.2498C19.0448 20.4998 20.4998 19.0447 20.4998 17.2498V15.4626C20.4998 15.0483 20.8356 14.7126 21.2498 14.7126C21.6641 14.7126 21.9998 15.0483 21.9998 15.4626V17.2498Z"
       />
     </Icon>
-  );
-};
+  )
+}
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};
-`;
+`

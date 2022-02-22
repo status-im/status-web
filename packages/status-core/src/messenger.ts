@@ -1,20 +1,20 @@
-import debug from "debug";
-import { Waku, WakuMessage } from "js-waku";
-import { CreateOptions as WakuCreateOptions } from "js-waku/build/main/lib/waku";
-import { DecryptionMethod } from "js-waku/build/main/lib/waku_message";
+import debug from 'debug'
+import { Waku, WakuMessage } from 'js-waku'
+import { CreateOptions as WakuCreateOptions } from 'js-waku/build/main/lib/waku'
+import { DecryptionMethod } from 'js-waku/build/main/lib/waku_message'
 
-import { Chat } from "./chat";
-import { Identity } from "./identity";
-import { ApplicationMetadataMessage_Type } from "./proto/status/v1/application_metadata_message";
-import { getLatestUserNickname } from "./utils";
-import { ApplicationMetadataMessage } from "./wire/application_metadata_message";
-import { ChatMessage, Content } from "./wire/chat_message";
+import { Chat } from './chat'
+import { Identity } from './identity'
+import { ApplicationMetadataMessage_Type } from './proto/status/v1/application_metadata_message'
+import { getLatestUserNickname } from './utils'
+import { ApplicationMetadataMessage } from './wire/application_metadata_message'
+import { ChatMessage, Content } from './wire/chat_message'
 
-const dbg = debug("communities:messenger");
+const dbg = debug('communities:messenger')
 
 export class Messenger {
-  waku: Waku;
-  chatsById: Map<string, Chat>;
+  waku: Waku
+  chatsById: Map<string, Chat>
   observers: {
     [chatId: string]: Set<
       (
@@ -22,15 +22,15 @@ export class Messenger {
         timestamp: Date,
         chatId: string
       ) => void
-    >;
-  };
-  identity: Identity | undefined;
+    >
+  }
+  identity: Identity | undefined
 
   private constructor(identity: Identity | undefined, waku: Waku) {
-    this.identity = identity;
-    this.waku = waku;
-    this.chatsById = new Map();
-    this.observers = {};
+    this.identity = identity
+    this.waku = waku
+    this.chatsById = new Map()
+    this.observers = {}
   }
 
   public static async create(
@@ -40,9 +40,9 @@ export class Messenger {
     const _wakuOptions = Object.assign(
       { bootstrap: { default: true } },
       wakuOptions
-    );
-    const waku = await Waku.create(_wakuOptions);
-    return new Messenger(identity, waku);
+    )
+    const waku = await Waku.create(_wakuOptions)
+    return new Messenger(identity, waku)
   }
 
   /**
@@ -53,9 +53,9 @@ export class Messenger {
    * Use `addListener` to get messages received on this chat.
    */
   public async joinChatById(chatId: string): Promise<void> {
-    const chat = await Chat.create(chatId);
+    const chat = await Chat.create(chatId)
 
-    await this.joinChat(chat);
+    await this.joinChat(chat)
   }
 
   /**
@@ -65,10 +65,10 @@ export class Messenger {
    */
   public async joinChats(chats: Iterable<Chat>): Promise<void> {
     await Promise.all(
-      Array.from(chats).map((chat) => {
-        return this.joinChat(chat);
+      Array.from(chats).map(chat => {
+        return this.joinChat(chat)
       })
-    );
+    )
   }
 
   /**
@@ -78,31 +78,31 @@ export class Messenger {
    */
   public async joinChat(chat: Chat): Promise<void> {
     if (this.chatsById.has(chat.id))
-      throw `Failed to join chat, it is already joined: ${chat.id}`;
+      throw `Failed to join chat, it is already joined: ${chat.id}`
 
     this.waku.addDecryptionKey(chat.symKey, {
       method: DecryptionMethod.Symmetric,
       contentTopics: [chat.contentTopic],
-    });
+    })
 
     this.waku.relay.addObserver(
       (wakuMessage: WakuMessage) => {
-        if (!wakuMessage.payload || !wakuMessage.timestamp) return;
+        if (!wakuMessage.payload || !wakuMessage.timestamp) return
 
-        const message = ApplicationMetadataMessage.decode(wakuMessage.payload);
+        const message = ApplicationMetadataMessage.decode(wakuMessage.payload)
 
         switch (message.type) {
           case ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE:
-            this._handleNewChatMessage(chat, message, wakuMessage.timestamp);
-            break;
+            this._handleNewChatMessage(chat, message, wakuMessage.timestamp)
+            break
           default:
-            dbg("Received unsupported message type", message.type);
+            dbg('Received unsupported message type', message.type)
         }
       },
       [chat.contentTopic]
-    );
+    )
 
-    this.chatsById.set(chat.id, chat);
+    this.chatsById.set(chat.id, chat)
   }
 
   /**
@@ -114,24 +114,24 @@ export class Messenger {
     responseTo?: string
   ): Promise<void> {
     if (this.identity) {
-      const chat = this.chatsById.get(chatId);
-      if (!chat) throw `Failed to send message, chat not joined: ${chatId}`;
+      const chat = this.chatsById.get(chatId)
+      if (!chat) throw `Failed to send message, chat not joined: ${chatId}`
 
-      const chatMessage = chat.createMessage(content, responseTo);
+      const chatMessage = chat.createMessage(content, responseTo)
 
       const appMetadataMessage = ApplicationMetadataMessage.create(
         chatMessage.encode(),
         ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE,
         this.identity
-      );
+      )
 
       const wakuMessage = await WakuMessage.fromBytes(
         appMetadataMessage.encode(),
         chat.contentTopic,
         { symKey: chat.symKey, sigPrivKey: this.identity.privateKey }
-      );
+      )
 
-      await this.waku.relay.send(wakuMessage);
+      await this.waku.relay.send(wakuMessage)
     }
   }
 
@@ -148,23 +148,23 @@ export class Messenger {
     ) => void,
     chatId: string | string[]
   ): void {
-    let chats = [];
+    let chats = []
 
-    if (typeof chatId === "string") {
-      chats.push(chatId);
+    if (typeof chatId === 'string') {
+      chats.push(chatId)
     } else {
-      chats = [...chatId];
+      chats = [...chatId]
     }
 
-    chats.forEach((id) => {
+    chats.forEach(id => {
       if (!this.chatsById.has(id))
-        throw "Cannot add observer on a chat that is not joined.";
+        throw 'Cannot add observer on a chat that is not joined.'
       if (!this.observers[id]) {
-        this.observers[id] = new Set();
+        this.observers[id] = new Set()
       }
 
-      this.observers[id].add(observer);
-    });
+      this.observers[id].add(observer)
+    })
   }
 
   /**
@@ -178,7 +178,7 @@ export class Messenger {
     chatId: string
   ): void {
     if (this.observers[chatId]) {
-      this.observers[chatId].delete(observer);
+      this.observers[chatId].delete(observer)
     }
   }
 
@@ -186,7 +186,7 @@ export class Messenger {
    * Stops the messenger.
    */
   public async stop(): Promise<void> {
-    await this.waku.stop();
+    await this.waku.stop()
   }
 
   /**
@@ -202,43 +202,43 @@ export class Messenger {
     endTime: Date,
     callback?: (messages: ApplicationMetadataMessage[]) => void
   ): Promise<number> {
-    const chat = this.chatsById.get(chatId);
+    const chat = this.chatsById.get(chatId)
     if (!chat)
-      throw `Failed to retrieve messages, chat is not joined: ${chatId}`;
+      throw `Failed to retrieve messages, chat is not joined: ${chatId}`
 
     const _callback = (wakuMessages: WakuMessage[]): void => {
       const isDefined = (
         msg: ApplicationMetadataMessage | undefined
       ): msg is ApplicationMetadataMessage => {
-        return !!msg;
-      };
+        return !!msg
+      }
 
       const messages = wakuMessages.map((wakuMessage: WakuMessage) => {
-        if (!wakuMessage.payload || !wakuMessage.timestamp) return;
+        if (!wakuMessage.payload || !wakuMessage.timestamp) return
 
-        const message = ApplicationMetadataMessage.decode(wakuMessage.payload);
+        const message = ApplicationMetadataMessage.decode(wakuMessage.payload)
 
         switch (message.type) {
           case ApplicationMetadataMessage_Type.TYPE_CHAT_MESSAGE:
-            this._handleNewChatMessage(chat, message, wakuMessage.timestamp);
-            return message;
+            this._handleNewChatMessage(chat, message, wakuMessage.timestamp)
+            return message
           default:
-            dbg("Retrieved unsupported message type", message.type);
-            return;
+            dbg('Retrieved unsupported message type', message.type)
+            return
         }
-      });
+      })
       if (callback) {
-        callback(messages.filter(isDefined));
+        callback(messages.filter(isDefined))
       }
-    };
+    }
     const allMessages = await this.waku.store.queryHistory(
       [chat.contentTopic],
       {
         timeFilter: { startTime, endTime },
         callback: _callback,
       }
-    );
-    return allMessages.length;
+    )
+    return allMessages.length
   }
 
   private _handleNewChatMessage(
@@ -246,15 +246,15 @@ export class Messenger {
     message: ApplicationMetadataMessage,
     timestamp: Date
   ): void {
-    if (!message.payload || !message.type || !message.signature) return;
+    if (!message.payload || !message.type || !message.signature) return
 
-    const chatMessage = ChatMessage.decode(message.payload);
-    chat.handleNewMessage(chatMessage);
+    const chatMessage = ChatMessage.decode(message.payload)
+    chat.handleNewMessage(chatMessage)
 
     if (this.observers[chat.id]) {
-      this.observers[chat.id].forEach((observer) => {
-        observer(message, timestamp, chat.id);
-      });
+      this.observers[chat.id].forEach(observer => {
+        observer(message, timestamp, chat.id)
+      })
     }
   }
 
@@ -262,7 +262,7 @@ export class Messenger {
     const { clock, nickname } = await getLatestUserNickname(
       publicKey,
       this.waku
-    );
-    return clock > 0 && nickname !== "";
+    )
+    return clock > 0 && nickname !== ''
   }
 }

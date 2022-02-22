@@ -1,20 +1,20 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { useToasts } from "../../contexts/toastProvider";
+import { useToasts } from '../../contexts/toastProvider'
 
-import { ToastMessage } from "./ToastMessage";
+import { ToastMessage } from './ToastMessage'
 
 export function ToastMessageList() {
-  const { toasts } = useToasts();
+  const { toasts } = useToasts()
 
   return (
     <ToastsWrapper>
-      {toasts.map((toast) => (
+      {toasts.map(toast => (
         <ToastMessage key={toast.id} toast={toast} />
       ))}
     </ToastsWrapper>
-  );
+  )
 }
 
 const ToastsWrapper = styled.div`
@@ -26,4 +26,4 @@ const ToastsWrapper = styled.div`
   flex-direction: column-reverse;
   align-items: center;
   z-index: 999;
-`;
+`

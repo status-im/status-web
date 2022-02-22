@@ -1,16 +1,16 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext } from 'react'
 
 const FetchMetadataContext = createContext<
   ((link: string) => Promise<any>) | undefined
->(undefined);
+>(undefined)
 
 export function useFetchMetadata() {
-  return useContext(FetchMetadataContext);
+  return useContext(FetchMetadataContext)
 }
 
 interface FetchMetadataProviderProps {
-  children: React.ReactNode;
-  fetchMetadata?: (link: string) => Promise<any>;
+  children: React.ReactNode
+  fetchMetadata?: (link: string) => Promise<any>
 }
 
 export function FetchMetadataProvider({
@@ -19,5 +19,5 @@ export function FetchMetadataProvider({
 }: FetchMetadataProviderProps) {
   return (
     <FetchMetadataContext.Provider value={fetchMetadata} children={children} />
-  );
+  )
 }

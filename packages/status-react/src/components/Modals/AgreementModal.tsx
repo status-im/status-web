@@ -1,25 +1,25 @@
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import React, { useState } from "react";
-import styled, { useTheme } from "styled-components";
+import HCaptcha from '@hcaptcha/react-hcaptcha'
+import React, { useState } from 'react'
+import styled, { useTheme } from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { lightTheme, Theme } from "../../styles/themes";
-import { Logo } from "../CommunityIdentity";
-import { textMediumStyles } from "../Text";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { lightTheme, Theme } from '../../styles/themes'
+import { Logo } from '../CommunityIdentity'
+import { textMediumStyles } from '../Text'
 
-import { Modal } from "./Modal";
-import { Btn, ButtonSection, Heading, Section, Text } from "./ModalStyle";
+import { Modal } from './Modal'
+import { Btn, ButtonSection, Heading, Section, Text } from './ModalStyle'
 
-export const AgreementModalName = "AgreementModal";
+export const AgreementModalName = 'AgreementModal'
 
 export function AgreementModal() {
-  const theme = useTheme() as Theme;
-  const { communityData } = useMessengerContext();
-  const { setModal } = useModal(AgreementModalName);
+  const theme = useTheme() as Theme
+  const { communityData } = useMessengerContext()
+  const { setModal } = useModal(AgreementModalName)
 
-  const [checked, setChecked] = useState(false);
-  const [token, setToken] = useState("");
+  const [checked, setChecked] = useState(false)
+  const [token, setToken] = useState('')
 
   return (
     <Modal name={AgreementModalName} className="wide">
@@ -32,10 +32,10 @@ export function AgreementModal() {
             style={{
               backgroundImage: communityData?.icon
                 ? `url(${communityData?.icon}`
-                : "",
+                : '',
             }}
           >
-            {" "}
+            {' '}
             {communityData?.icon === undefined &&
               communityData?.name.slice(0, 1).toUpperCase()}
           </CommunityLogo>
@@ -50,7 +50,7 @@ export function AgreementModal() {
               name="agreement"
               value="user agreement"
               checked={checked}
-              onChange={(e) => setChecked(e.target.checked)}
+              onChange={e => setChecked(e.target.checked)}
               required
             />
             <Checkmark />I agree with the above
@@ -59,7 +59,7 @@ export function AgreementModal() {
           <form>
             <HCaptcha
               sitekey="64702fa3-7f57-41bb-bd43-7afeae54227e"
-              theme={theme === lightTheme ? "light" : "dark"}
+              theme={theme === lightTheme ? 'light' : 'dark'}
               onVerify={setToken}
             />
           </form>
@@ -68,7 +68,7 @@ export function AgreementModal() {
       <ButtonSection>
         <Btn
           onClick={() => {
-            setModal(false);
+            setModal(false)
           }}
           disabled={!token || !checked}
         >
@@ -76,29 +76,29 @@ export function AgreementModal() {
         </Btn>
       </ButtonSection>
     </Modal>
-  );
+  )
 }
 
 const LogoWrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 24px;
-`;
+`
 
 const CommunityLogo = styled(Logo)`
   width: 64px;
   height: 64px;
-`;
+`
 
 const AgreementSection = styled.div`
   margin-bottom: 24px;
-`;
+`
 
 const Agreements = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
+`
 
 const Agreement = styled.label`
   display: flex;
@@ -119,14 +119,14 @@ const Agreement = styled.label`
   & input:checked ~ span:after {
     display: block;
   }
-`;
+`
 
 const AgreementInput = styled.input`
   position: absolute;
   opacity: 0;
   height: 0;
   width: 0;
-`;
+`
 
 const Checkmark = styled.span`
   position: absolute;
@@ -141,7 +141,7 @@ const Checkmark = styled.span`
   margin: 0 8px 0 0;
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     display: none;
 
@@ -153,4 +153,4 @@ const Checkmark = styled.span`
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
-`;
+`

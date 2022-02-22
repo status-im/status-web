@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react'
 
-import { Channels } from "../Channels/Channels";
+import { Channels } from '../Channels/Channels'
 
-import { ListWrapper, NarrowTopbar } from "./NarrowTopbar";
+import { ListWrapper, NarrowTopbar } from './NarrowTopbar'
 
 interface NarrowChannelsProps {
-  setShowChannels: (val: boolean) => void;
+  setShowChannels: (val: boolean) => void
 }
 
 export function NarrowChannels({ setShowChannels }: NarrowChannelsProps) {
@@ -14,5 +14,5 @@ export function NarrowChannels({ setShowChannels }: NarrowChannelsProps) {
       <NarrowTopbar list="Channels" onBtnClick={() => setShowChannels(false)} />
       <Channels onCommunityClick={() => setShowChannels(false)} />
     </ListWrapper>
-  );
+  )
 }

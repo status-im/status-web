@@ -1,27 +1,27 @@
-import { Identity } from "@status-im/core";
-import React, { useState } from "react";
-import styled from "styled-components";
+import { Identity } from '@status-im/core'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
 import {
   useSetIdentity,
   useSetNikcname,
   useUserPublicKey,
   useWalletIdentity,
-} from "../../contexts/identityProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { useNameError } from "../../hooks/useNameError";
-import { Contact } from "../../models/Contact";
-import { saveIdentity } from "../../utils";
-import { NameError } from "../Form/NameError";
-import { ClearBtn, NameInput, NameInputWrapper } from "../Form/inputStyles";
-import { AddIcon } from "../Icons/AddIcon";
-import { ChainIcon } from "../Icons/ChainIcon";
-import { ClearSvgFull } from "../Icons/ClearIconFull";
-import { LeftIcon } from "../Icons/LeftIcon";
-import { UserLogo } from "../Members/UserLogo";
+} from '../../contexts/identityProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { useNameError } from '../../hooks/useNameError'
+import { Contact } from '../../models/Contact'
+import { saveIdentity } from '../../utils'
+import { NameError } from '../Form/NameError'
+import { ClearBtn, NameInput, NameInputWrapper } from '../Form/inputStyles'
+import { AddIcon } from '../Icons/AddIcon'
+import { ChainIcon } from '../Icons/ChainIcon'
+import { ClearSvgFull } from '../Icons/ClearIconFull'
+import { LeftIcon } from '../Icons/LeftIcon'
+import { UserLogo } from '../Members/UserLogo'
 
-import { AgreementModalName } from "./AgreementModal";
-import { Modal } from "./Modal";
+import { AgreementModalName } from './AgreementModal'
+import { Modal } from './Modal'
 import {
   AddWrapper,
   BackBtn,
@@ -31,29 +31,29 @@ import {
   Hint,
   Section,
   Text,
-} from "./ModalStyle";
-import { EmojiKey, UserAddress } from "./ProfileModal";
+} from './ModalStyle'
+import { EmojiKey, UserAddress } from './ProfileModal'
 
-export const UserCreationModalName = "UserCreationModal";
+export const UserCreationModalName = 'UserCreationModal'
 
 export function UserCreationModal() {
-  const walletIdentity = useWalletIdentity();
-  const userPK = useUserPublicKey();
-  const setIdentity = useSetIdentity();
-  const setNickname = useSetNikcname();
+  const walletIdentity = useWalletIdentity()
+  const userPK = useUserPublicKey()
+  const setIdentity = useSetIdentity()
+  const setNickname = useSetNikcname()
 
-  const [customNameInput, setCustomNameInput] = useState("");
-  const error = useNameError(customNameInput);
-  const [nextStep, setNextStep] = useState(false);
-  const { setModal } = useModal(UserCreationModalName);
-  const { setModal: setAgreementModal } = useModal(AgreementModalName);
+  const [customNameInput, setCustomNameInput] = useState('')
+  const error = useNameError(customNameInput)
+  const [nextStep, setNextStep] = useState(false)
+  const { setModal } = useModal(UserCreationModalName)
+  const { setModal: setAgreementModal } = useModal(AgreementModalName)
 
   return (
     <Modal name={UserCreationModalName}>
       <Section>
         <Heading>Create a Status Profile</Heading>
       </Section>
-      <MiddleSection className={`${!nextStep && "initial"}`}>
+      <MiddleSection className={`${!nextStep && 'initial'}`}>
         {nextStep ? (
           <Title>Your emojihash and identicon ring</Title>
         ) : (
@@ -61,7 +61,7 @@ export function UserCreationModal() {
         )}
         {nextStep ? (
           <StyledHint>
-            {" "}
+            {' '}
             This set of emojis and coloured ring around your avatar are unique
             and represent your chat key, so your friends can easily distinguish
             you from potential impersonators.
@@ -78,9 +78,9 @@ export function UserCreationModal() {
             contact={{ trueName: customNameInput } as Contact}
             radius={80}
             colorWheel={[
-              ["red", 150],
-              ["blue", 250],
-              ["green", 360],
+              ['red', 150],
+              ['blue', 250],
+              ['green', 360],
             ]}
           />
           {!nextStep && (
@@ -98,7 +98,7 @@ export function UserCreationModal() {
               maxLength={24}
             />
             {customNameInput && (
-              <ClearBtn onClick={() => setCustomNameInput("")}>
+              <ClearBtn onClick={() => setCustomNameInput('')}>
                 <ClearSvgFull width={16} height={16} />
               </ClearBtn>
             )}
@@ -110,9 +110,9 @@ export function UserCreationModal() {
         {nextStep && userPK && (
           <>
             <UserAddress>
-              {" "}
+              {' '}
               Chatkey: {userPK.slice(0, 10)}...
-              {userPK.slice(-3)}{" "}
+              {userPK.slice(-3)}{' '}
             </UserAddress>
             <ChainIcons>
               <ChainIcon className="transformed" />
@@ -123,9 +123,9 @@ export function UserCreationModal() {
               <UserLogo
                 radius={40}
                 colorWheel={[
-                  ["red", 150],
-                  ["blue", 250],
-                  ["green", 360],
+                  ['red', 150],
+                  ['blue', 250],
+                  ['green', 360],
                 ]}
               />
             </UserAttributes>
@@ -139,14 +139,14 @@ export function UserCreationModal() {
         <Btn
           onClick={() => {
             if (nextStep) {
-              setModal(false);
-              setAgreementModal(true);
+              setModal(false)
+              setAgreementModal(true)
             } else {
-              const identity = walletIdentity || Identity.generate();
-              setNickname(customNameInput);
-              setIdentity(identity);
-              !walletIdentity && saveIdentity(identity, "noPassword");
-              setNextStep(true);
+              const identity = walletIdentity || Identity.generate()
+              setNickname(customNameInput)
+              setIdentity(identity)
+              !walletIdentity && saveIdentity(identity, 'noPassword')
+              setNextStep(true)
             }
           }}
           disabled={!customNameInput || error !== 0}
@@ -155,7 +155,7 @@ export function UserCreationModal() {
         </Btn>
       </ButtonSection>
     </Modal>
-  );
+  )
 }
 
 const MiddleSection = styled(Section)`
@@ -167,7 +167,7 @@ const MiddleSection = styled(Section)`
   &.initial {
     padding: 32px;
   }
-`;
+`
 
 const Title = styled(Text)`
   font-weight: bold;
@@ -175,26 +175,26 @@ const Title = styled(Text)`
   line-height: 30px;
   letter-spacing: -0.2px;
   margin-bottom: 16px;
-`;
+`
 
 const StyledHint = styled(Hint)`
   font-size: 15px;
   line-height: 22px;
   margin-bottom: 32px;
   text-align: center;
-`;
+`
 
 const LogoWrapper = styled.div`
   position: relative;
   display: flex;
   margin-bottom: 32px;
-`;
+`
 
 const AddIconWrapper = styled(AddWrapper)`
   top: 0;
   right: -50%;
   transform: translateX(-50%);
-`;
+`
 
 const ChainIcons = styled.div`
   width: 104px;
@@ -202,7 +202,7 @@ const ChainIcons = styled.div`
   justify-content: space-between;
   align-items: center;
   margin: 16px 0;
-`;
+`
 
 const UserAttributes = styled.div`
   width: 200px;
@@ -210,4 +210,4 @@ const UserAttributes = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 32px;
-`;
+`

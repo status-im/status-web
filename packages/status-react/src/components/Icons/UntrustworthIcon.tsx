@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 export const UntrustworthIcon = () => {
   return (
@@ -18,11 +18,11 @@ export const UntrustworthIcon = () => {
         fill="white"
       />
     </Icon>
-  );
-};
+  )
+}
 
 const Icon = styled.svg`
   & > circle {
     fill: ${({ theme }) => theme.redColor};
   }
-`;
+`

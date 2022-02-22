@@ -1,7 +1,7 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { paste } from "../../utils/paste";
+import { paste } from '../../utils/paste'
 
 import {
   ButtonWrapper,
@@ -10,10 +10,10 @@ import {
   InputWrapper,
   Label,
   Wrapper,
-} from "./inputStyles";
+} from './inputStyles'
 
 interface PasteInputProps {
-  label: string;
+  label: string
 }
 
 export const PasteInput = ({ label }: PasteInputProps) => (
@@ -22,11 +22,11 @@ export const PasteInput = ({ label }: PasteInputProps) => (
     <Wrapper>
       <Input id="pasteInput" type="text" placeholder="eg. 0x2Ef19" />
       <ButtonWrapper>
-        <InputBtn onClick={() => paste("pasteInput")}>Paste</InputBtn>
+        <InputBtn onClick={() => paste('pasteInput')}>Paste</InputBtn>
       </ButtonWrapper>
     </Wrapper>
   </InputWrapper>
-);
+)
 
 const Input = styled.input`
   ${inputStyles}
@@ -37,4 +37,4 @@ const Input = styled.input`
   }
 
   border: none;
-`;
+`
