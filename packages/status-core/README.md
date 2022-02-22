@@ -1,1 +1,1 @@
-# status-communities
+# `status-core`
