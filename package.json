@@ -8,6 +8,7 @@
   "scripts": {
     "fix": "run-s 'fix:*' && wsrun -e -c -s fix",
     "build": "wsrun -e -c -s build",
+    "lint": "eslint 'packages/**/*.{ts,tsx}'",
     "format": "prettier --write .",
     "typecheck": "wsrun -e -c -s typecheck",
     "test": "wsrun -e -c -s test"
@@ -15,6 +16,17 @@
   "devDependencies": {
     "@parcel/packager-ts": "2.3.2",
     "@parcel/transformer-typescript-types": "2.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.27.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.3.2",
     "prettier": "^2.5.1",
