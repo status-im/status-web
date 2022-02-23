@@ -11,9 +11,9 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
-  "main": "dist/cjs/src/index.js",
-  "module": "dist/esm/src/index.js",
-  "types": "dist/esm/src/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "run-s 'build:*'",
     "build:esm": "tsc --module es2020 --target es2017 --outDir dist/esm",
@@ -26,7 +26,7 @@
     "proto": "run-s 'proto:*'",
     "proto:lint": "buf lint",
     "proto:build": "buf generate",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@hcaptcha/react-hcaptcha": "^1.0.0",
