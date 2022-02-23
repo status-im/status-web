@@ -1,43 +1,43 @@
-import React, { ReactNode, useCallback, useEffect } from "react";
-import { createPortal } from "react-dom";
-import styled from "styled-components";
+import React, { ReactNode, useCallback, useEffect } from 'react'
+import { createPortal } from 'react-dom'
+import styled from 'styled-components'
 
-import { useModal } from "../../contexts/modalProvider";
-import { CrossIcon } from "../Icons/CrossIcon";
+import { useModal } from '../../contexts/modalProvider'
+import { CrossIcon } from '../Icons/CrossIcon'
 
 export interface BasicModalProps {
-  name: string;
-  className?: string;
+  name: string
+  className?: string
 }
 
 export interface ModalProps extends BasicModalProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 export const Modal = ({ name, children, className }: ModalProps) => {
-  const { isVisible, setModal } = useModal(name);
+  const { isVisible, setModal } = useModal(name)
 
   const listenKeyboard = useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === "Escape" || event.keyCode === 27) {
-        setModal(false);
+      if (event.key === 'Escape' || event.keyCode === 27) {
+        setModal(false)
       }
     },
     [setModal]
-  );
+  )
 
   useEffect(() => {
     if (isVisible) {
-      window.addEventListener("keydown", listenKeyboard, true);
+      window.addEventListener('keydown', listenKeyboard, true)
       return () => {
-        window.removeEventListener("keydown", listenKeyboard, true);
-      };
+        window.removeEventListener('keydown', listenKeyboard, true)
+      }
     }
-  }, [isVisible, listenKeyboard]);
+  }, [isVisible, listenKeyboard])
 
-  if (!isVisible) return null;
+  if (!isVisible) return null
 
-  const element = document.getElementById("modal-root");
+  const element = document.getElementById('modal-root')
 
   if (element) {
     return createPortal(
@@ -51,10 +51,10 @@ export const Modal = ({ name, children, className }: ModalProps) => {
         </ModalBody>
       </ModalView>,
       element
-    );
+    )
   }
-  return null;
-};
+  return null
+}
 
 const ModalView = styled.div`
   position: fixed;
@@ -65,7 +65,7 @@ const ModalView = styled.div`
   width: 100%;
   height: 100%;
   z-index: 9999;
-`;
+`
 
 const ModalBody = styled.div`
   position: absolute;
@@ -86,7 +86,7 @@ const ModalBody = styled.div`
   &.wide {
     max-width: 640px;
   }
-`;
+`
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -98,7 +98,7 @@ const ModalOverlay = styled.div`
   height: 100%;
   background: ${({ theme }) => theme.primary};
   opacity: 0.4;
-`;
+`
 
 const CloseButton = styled.button`
   position: absolute;
@@ -109,4 +109,4 @@ const CloseButton = styled.button`
   &.picture {
     display: none;
   }
-`;
+`

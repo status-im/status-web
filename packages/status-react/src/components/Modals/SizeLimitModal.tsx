@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react'
 
-import { useModal } from "../../contexts/modalProvider";
+import { useModal } from '../../contexts/modalProvider'
 
-import { Modal } from "./Modal";
+import { Modal } from './Modal'
 
-export const SizeLimitModalName = "SizeLimitModal";
+export const SizeLimitModalName = 'SizeLimitModal'
 
 export function SizeLimitModal() {
-  const { setModal } = useModal(SizeLimitModalName);
+  const { setModal } = useModal(SizeLimitModalName)
 
   return (
     <Modal name={SizeLimitModalName}>
-      <div onClick={() => setModal(false)} style={{ padding: "20px" }}>
+      <div onClick={() => setModal(false)} style={{ padding: '20px' }}>
         File size must be less than 1MB
       </div>
     </Modal>
-  );
+  )
 }

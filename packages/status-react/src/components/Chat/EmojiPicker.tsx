@@ -1,41 +1,41 @@
-import { EmojiData, Picker } from "emoji-mart";
-import React from "react";
-import { useTheme } from "styled-components";
+import { EmojiData, Picker } from 'emoji-mart'
+import React from 'react'
+import { useTheme } from 'styled-components'
 
-import { useLow } from "../../contexts/narrowProvider";
-import { lightTheme, Theme } from "../../styles/themes";
+import { useLow } from '../../contexts/narrowProvider'
+import { lightTheme, Theme } from '../../styles/themes'
 
 type EmojiPickerProps = {
-  showEmoji: boolean;
-  addEmoji: (e: EmojiData) => void;
-  bottom: number;
-};
+  showEmoji: boolean
+  addEmoji: (e: EmojiData) => void
+  bottom: number
+}
 
 export function EmojiPicker({ showEmoji, addEmoji, bottom }: EmojiPickerProps) {
-  const theme = useTheme() as Theme;
-  const low = useLow();
+  const theme = useTheme() as Theme
+  const low = useLow()
 
   if (showEmoji) {
     return (
       <Picker
         onSelect={addEmoji}
-        theme={theme === lightTheme ? "light" : "dark"}
+        theme={theme === lightTheme ? 'light' : 'dark'}
         set="twitter"
         color={theme.tertiary}
         emojiSize={26}
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: `calc(100% + ${bottom}px)`,
-          right: "-76px",
+          right: '-76px',
           color: theme.secondary,
-          height: low ? "200px" : "355px",
-          overflow: "auto",
+          height: low ? '200px' : '355px',
+          overflow: 'auto',
         }}
         showPreview={false}
         showSkinTones={false}
-        title={""}
+        title={''}
       />
-    );
+    )
   }
-  return null;
+  return null
 }

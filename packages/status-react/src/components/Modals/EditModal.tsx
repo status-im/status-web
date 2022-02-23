@@ -1,51 +1,45 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { buttonStyles } from "../Buttons/buttonStyle";
-import { ChannelLogo } from "../Channels/ChannelIcon";
-import { inputStyles } from "../Form/inputStyles";
-import { AddIcon } from "../Icons/AddIcon";
-import { textMediumStyles } from "../Text";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { buttonStyles } from '../Buttons/buttonStyle'
+import { ChannelLogo } from '../Channels/ChannelIcon'
+import { inputStyles } from '../Form/inputStyles'
+import { AddIcon } from '../Icons/AddIcon'
+import { textMediumStyles } from '../Text'
 
-import { Modal } from "./Modal";
-import {
-  AddWrapper,
-  ButtonSection,
-  Heading,
-  Hint,
-  Section,
-} from "./ModalStyle";
+import { Modal } from './Modal'
+import { AddWrapper, ButtonSection, Heading, Hint, Section } from './ModalStyle'
 
-export const EditModalName = "editModal";
+export const EditModalName = 'editModal'
 
 export const EditModal = () => {
-  const { activeChannel, changeGroupChatName } = useMessengerContext();
-  const { setModal } = useModal(EditModalName);
+  const { activeChannel, changeGroupChatName } = useMessengerContext()
+  const { setModal } = useModal(EditModalName)
 
-  const [groupName, setGroupName] = useState("");
-  const [image, setImage] = useState("");
+  const [groupName, setGroupName] = useState('')
+  const [image, setImage] = useState('')
 
   const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget?.files?.length) {
-      setImage(URL.createObjectURL(e.currentTarget.files[0]));
+      setImage(URL.createObjectURL(e.currentTarget.files[0]))
     }
-  };
+  }
 
   const handleUpload = () => {
     if (activeChannel) {
       if (image) {
-        activeChannel.icon = image; // Need function to send image to waku
-        setImage("");
+        activeChannel.icon = image // Need function to send image to waku
+        setImage('')
       }
       if (groupName) {
-        changeGroupChatName(groupName, activeChannel.id);
-        setGroupName("");
+        changeGroupChatName(groupName, activeChannel.id)
+        setGroupName('')
       }
-      setModal(false);
+      setModal(false)
     }
-  };
+  }
 
   return (
     <Modal name={EditModalName}>
@@ -65,7 +59,7 @@ export const EditModal = () => {
             type="text"
             placeholder="A catchy name"
             maxLength={30}
-            onInput={(e) => setGroupName(e.currentTarget.value)}
+            onInput={e => setGroupName(e.currentTarget.value)}
           />
         </NameSection>
         <LogoSection>
@@ -90,40 +84,40 @@ export const EditModal = () => {
         <SaveBtn onClick={handleUpload}>Save changes</SaveBtn>
       </ButtonSection>
     </Modal>
-  );
-};
+  )
+}
 
 const NameSection = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 16px;
-`;
+`
 
 const LabelGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`;
+`
 
 const Label = styled.p`
   color: ${({ theme }) => theme.primary};
   padding: 10px 0;
 
   ${textMediumStyles}
-`;
+`
 
 const NameInput = styled.input`
   padding: 14px 70px 14px 8px;
 
   ${inputStyles}
-`;
+`
 
 const LogoSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin-bottom: 8px;
-`;
+`
 
 const GroupLogo = styled(ChannelLogo)`
   width: 128px;
@@ -133,18 +127,18 @@ const GroupLogo = styled(ChannelLogo)`
   position: relative;
   align-self: center;
   margin-right: 0;
-`;
+`
 
 const LogoPreview = styled.img`
   width: 128px;
   height: 128px;
   border-radius: 50%;
-`;
+`
 
 const AddPictureInputWrapper = styled(AddWrapper)`
   top: 0;
   right: 8px;
-`;
+`
 
 const AddPictureInput = styled.input`
   position: absolute;
@@ -155,10 +149,10 @@ const AddPictureInput = styled.input`
   opacity: 0;
   z-index: 2;
   cursor: pointer;
-`;
+`
 
 const SaveBtn = styled.button`
   padding: 11px 24px;
 
   ${buttonStyles}
-`;
+`

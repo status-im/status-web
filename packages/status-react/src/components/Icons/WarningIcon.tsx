@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 type WarningSvgProps = {
-  width: number;
-  height: number;
-  className?: string;
-};
+  width: number
+  height: number
+  className?: string
+}
 
 export function WarningSvg({ width, height, className }: WarningSvgProps) {
   return (
@@ -25,12 +25,12 @@ export function WarningSvg({ width, height, className }: WarningSvgProps) {
         d="M1.33398 8.00065C1.33398 11.6825 4.31875 14.6673 8.00065 14.6673C11.6825 14.6673 14.6673 11.6825 14.6673 8.00065C14.6673 4.31875 11.6826 1.33398 8.00065 1.33398C4.31875 1.33398 1.33398 4.31875 1.33398 8.00065ZM2.33398 8.00065C2.33398 11.1303 4.87104 13.6673 8.00065 13.6673C11.1303 13.6673 13.6673 11.1303 13.6673 8.00065C13.6673 4.87104 11.1303 2.33398 8.00065 2.33398C4.87104 2.33398 2.33398 4.87104 2.33398 8.00065Z"
       />
     </svg>
-  );
+  )
 }
 
 export const WarningIcon = () => {
-  return <Icon width={16} height={16} />;
-};
+  return <Icon width={16} height={16} />
+}
 
 const Icon = styled(WarningSvg)`
   & > path {
@@ -44,4 +44,4 @@ const Icon = styled(WarningSvg)`
   &:hover > path {
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
-`;
+`

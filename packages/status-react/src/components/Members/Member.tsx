@@ -1,40 +1,40 @@
-import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { useIdentity } from "../../contexts/identityProvider";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { Contact } from "../../models/Contact";
-import { ContactMenu } from "../Form/ContactMenu";
-import { IconBtn, UserAddress } from "../Messages/Styles";
+import { useIdentity } from '../../contexts/identityProvider'
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { Contact } from '../../models/Contact'
+import { ContactMenu } from '../Form/ContactMenu'
+import { IconBtn, UserAddress } from '../Messages/Styles'
 
-import { UserLogo } from "./UserLogo";
+import { UserLogo } from './UserLogo'
 
 interface MemberProps {
-  contact: Contact;
-  isOnline?: boolean;
-  isYou?: boolean;
-  onClick?: () => void;
+  contact: Contact
+  isOnline?: boolean
+  isYou?: boolean
+  onClick?: () => void
 }
 
 export function Member({ contact, isOnline, isYou, onClick }: MemberProps) {
-  const identity = useIdentity();
+  const identity = useIdentity()
 
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(false)
 
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowMenu(false));
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowMenu(false))
 
   return (
-    <MemberData onClick={onClick} className={`${isYou && "you"}`}>
+    <MemberData onClick={onClick} className={`${isYou && 'you'}`}>
       <MemberIcon
         style={{
-          backgroundImage: "unset",
+          backgroundImage: 'unset',
         }}
         className={
-          !isYou && isOnline ? "online" : !isYou && !isOnline ? "offline" : ""
+          !isYou && isOnline ? 'online' : !isYou && !isOnline ? 'offline' : ''
         }
         onClick={() => {
-          if (identity) setShowMenu((e) => !e);
+          if (identity) setShowMenu(e => !e)
         }}
         ref={ref}
       >
@@ -43,9 +43,9 @@ export function Member({ contact, isOnline, isYou, onClick }: MemberProps) {
           contact={contact}
           radius={30}
           colorWheel={[
-            ["red", 150],
-            ["blue", 250],
-            ["green", 360],
+            ['red', 150],
+            ['blue', 250],
+            ['green', 360],
           ]}
         />
       </MemberIcon>
@@ -56,7 +56,7 @@ export function Member({ contact, isOnline, isYou, onClick }: MemberProps) {
         </UserAddress>
       </Column>
     </MemberData>
-  );
+  )
 }
 
 export const MemberData = styled.div`
@@ -69,7 +69,7 @@ export const MemberData = styled.div`
     margin-bottom: 0;
     cursor: default;
   }
-`;
+`
 
 export const MemberName = styled.p`
   font-weight: 500;
@@ -80,7 +80,7 @@ export const MemberName = styled.p`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-`;
+`
 
 export const MemberIcon = styled(IconBtn)`
   width: 29px;
@@ -88,7 +88,7 @@ export const MemberIcon = styled(IconBtn)`
 
   &.offline {
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       right: -1px;
       bottom: -2px;
@@ -102,7 +102,7 @@ export const MemberIcon = styled(IconBtn)`
 
   &.online {
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       right: -1px;
       bottom: -2px;
@@ -113,7 +113,7 @@ export const MemberIcon = styled(IconBtn)`
       border: 2px solid ${({ theme }) => theme.bodyBackgroundColor};
     }
   }
-`;
+`
 
 const Column = styled.div`
   display: flex;
@@ -122,4 +122,4 @@ const Column = styled.div`
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-`;
+`

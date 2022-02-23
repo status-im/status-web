@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const EthereumLogo = () => (
   <svg
@@ -35,4 +35,4 @@ export const EthereumLogo = () => (
       fillOpacity="0.602"
     />
   </svg>
-);
+)

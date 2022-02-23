@@ -1,50 +1,50 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react'
+import styled from 'styled-components'
 
-import { buttonStyles } from "./buttonStyle";
+import { buttonStyles } from './buttonStyle'
 
-const userAgent = window.navigator.userAgent;
-const platform = window.navigator.platform;
-const macosPlatforms = ["Macintosh", "MacIntel", "MacPPC", "Mac68K"];
-const windowsPlatforms = ["Win32", "Win64", "Windows", "WinCE"];
-const iosPlatforms = ["iPhone", "iPad", "iPod"];
+const userAgent = window.navigator.userAgent
+const platform = window.navigator.platform
+const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K']
+const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE']
+const iosPlatforms = ['iPhone', 'iPad', 'iPod']
 
 interface DownloadButtonProps {
-  className?: string;
+  className?: string
 }
 
 export const DownloadButton = ({ className }: DownloadButtonProps) => {
-  const [link, setlink] = useState("https://status.im/get/");
-  const [os, setOs] = useState<string | null>(null);
+  const [link, setlink] = useState('https://status.im/get/')
+  const [os, setOs] = useState<string | null>(null)
 
   useEffect(() => {
     if (macosPlatforms.includes(platform)) {
       setlink(
-        "https://status-im-files.ams3.cdn.digitaloceanspaces.com/StatusIm-Desktop-v0.3.0-beta-a8c37d.dmg"
-      );
-      setOs("Mac");
+        'https://status-im-files.ams3.cdn.digitaloceanspaces.com/StatusIm-Desktop-v0.3.0-beta-a8c37d.dmg'
+      )
+      setOs('Mac')
     } else if (iosPlatforms.includes(platform)) {
       setlink(
-        "https://apps.apple.com/us/app/status-private-communication/id1178893006"
-      );
-      setOs("iOS");
+        'https://apps.apple.com/us/app/status-private-communication/id1178893006'
+      )
+      setOs('iOS')
     } else if (windowsPlatforms.includes(platform)) {
       setlink(
-        "https://status-im-files.ams3.cdn.digitaloceanspaces.com/StatusIm-Desktop-v0.3.0-beta-a8c37d.exe"
-      );
-      setOs("Windows");
+        'https://status-im-files.ams3.cdn.digitaloceanspaces.com/StatusIm-Desktop-v0.3.0-beta-a8c37d.exe'
+      )
+      setOs('Windows')
     } else if (/Android/.test(userAgent)) {
       setlink(
-        "https://play.google.com/store/apps/details?id=im.status.ethereum"
-      );
-      setOs("Android");
+        'https://play.google.com/store/apps/details?id=im.status.ethereum'
+      )
+      setOs('Android')
     } else if (/Linux/.test(platform)) {
       setlink(
-        "https://status-im-files.ams3.cdn.digitaloceanspaces.com/StatusIm-Desktop-v0.3.0-beta-a8c37d.tar.gz"
-      );
-      setOs("Linux");
+        'https://status-im-files.ams3.cdn.digitaloceanspaces.com/StatusIm-Desktop-v0.3.0-beta-a8c37d.tar.gz'
+      )
+      setOs('Linux')
     }
-  }, []);
+  }, [])
 
   return (
     <Link
@@ -54,11 +54,11 @@ export const DownloadButton = ({ className }: DownloadButtonProps) => {
       rel="noopener noreferrer"
     >
       {os
-        ? `${className === "activity" ? "d" : "D"}ownload Status for ${os}`
-        : `${className === "activity" ? "d" : "D"}ownload Status`}
+        ? `${className === 'activity' ? 'd' : 'D'}ownload Status for ${os}`
+        : `${className === 'activity' ? 'd' : 'D'}ownload Status`}
     </Link>
-  );
-};
+  )
+}
 
 const Link = styled.a`
   margin-top: 24px;
@@ -81,4 +81,4 @@ const Link = styled.a`
       color: ${({ theme }) => theme.tertiary};
     }
   }
-`;
+`

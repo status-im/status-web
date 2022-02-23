@@ -1,20 +1,20 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../contexts/messengerProvider";
+import { useMessengerContext } from '../contexts/messengerProvider'
 
-import { textMediumStyles } from "./Text";
+import { textMediumStyles } from './Text'
 
 export interface CommunityIdentityProps {
-  subtitle: string;
-  className?: string;
+  subtitle: string
+  className?: string
 }
 
 export const CommunityIdentity = ({
   subtitle,
   className,
 }: CommunityIdentityProps) => {
-  const { communityData } = useMessengerContext();
+  const { communityData } = useMessengerContext()
 
   return (
     <Row className={className}>
@@ -22,10 +22,10 @@ export const CommunityIdentity = ({
         style={{
           backgroundImage: communityData?.icon
             ? `url(${communityData?.icon}`
-            : "",
+            : '',
         }}
       >
-        {" "}
+        {' '}
         {communityData?.icon === undefined &&
           communityData?.name.slice(0, 1).toUpperCase()}
       </Logo>
@@ -34,18 +34,18 @@ export const CommunityIdentity = ({
         <Subtitle>{subtitle}</Subtitle>
       </Column>
     </Row>
-  );
-};
+  )
+}
 
 const Row = styled.div`
   display: flex;
-`;
+`
 
 export const Column = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-`;
+`
 
 export const Logo = styled.div`
   width: 36px;
@@ -63,22 +63,22 @@ export const Logo = styled.div`
   font-weight: bold;
   font-size: 15px;
   line-height: 20px;
-`;
+`
 
 const Name = styled.p`
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 500;
   text-align: left;
   color: ${({ theme }) => theme.primary};
   white-space: nowrap;
 
   ${textMediumStyles}
-`;
+`
 
 const Subtitle = styled.p`
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.1px;
   color: ${({ theme }) => theme.secondary};
-`;
+`

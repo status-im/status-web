@@ -1,25 +1,25 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { useNarrow } from "../../contexts/narrowProvider";
-import { ChannelData } from "../../models/ChannelData";
+import { useNarrow } from '../../contexts/narrowProvider'
+import { ChannelData } from '../../models/ChannelData'
 
 interface ChannelIconProps {
-  channel: ChannelData;
-  activeView?: boolean;
+  channel: ChannelData
+  activeView?: boolean
 }
 
 export function ChannelIcon({ channel, activeView }: ChannelIconProps) {
-  const narrow = useNarrow();
+  const narrow = useNarrow()
 
   return (
     <ChannelLogo
       icon={channel.icon}
-      className={activeView ? "active" : narrow ? "narrow" : ""}
+      className={activeView ? 'active' : narrow ? 'narrow' : ''}
     >
       {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
     </ChannelLogo>
-  );
+  )
 }
 
 export const ChannelLogo = styled.div<{ icon?: string }>`
@@ -51,4 +51,4 @@ export const ChannelLogo = styled.div<{ icon?: string }>`
     height: 40px;
     font-size: 20px;
   }
-`;
+`

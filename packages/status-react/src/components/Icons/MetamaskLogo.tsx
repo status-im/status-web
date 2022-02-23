@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const MetamaskLogo = () => {
   return (
@@ -213,5 +213,5 @@ export const MetamaskLogo = () => {
         strokeLinejoin="round"
       />
     </svg>
-  );
-};
+  )
+}

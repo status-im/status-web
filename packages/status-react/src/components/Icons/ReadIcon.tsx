@@ -1,8 +1,8 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 interface ReadIconProps {
-  isRead?: boolean;
+  isRead?: boolean
 }
 
 export const ReadIcon = ({ isRead }: ReadIconProps) => {
@@ -13,7 +13,7 @@ export const ReadIcon = ({ isRead }: ReadIconProps) => {
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`${isRead && "read"}`}
+      className={`${isRead && 'read'}`}
     >
       <path
         fillRule="evenodd"
@@ -31,8 +31,8 @@ export const ReadIcon = ({ isRead }: ReadIconProps) => {
         d="M1.0183 12.48C1.31 12.1859 1.78487 12.184 2.07895 12.4757L8.09656 18.4446C8.39064 18.7363 8.39257 19.2112 8.10087 19.5053C7.80917 19.7994 7.3343 19.8013 7.04022 19.5096L1.02261 13.5407C0.728529 13.249 0.7266 12.7741 1.0183 12.48Z"
       />
     </Icon>
-  );
-};
+  )
+}
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};
@@ -40,4 +40,4 @@ const Icon = styled.svg`
   &.read {
     fill: ${({ theme }) => theme.secondary};
   }
-`;
+`

@@ -1,34 +1,34 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 import {
   useSetIdentity,
   useSetNikcname,
   useUserPublicKey,
-} from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { ButtonNo, ButtonYes } from "../Buttons/buttonStyle";
-import { UserLogo } from "../Members/UserLogo";
+} from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { ButtonNo, ButtonYes } from '../Buttons/buttonStyle'
+import { UserLogo } from '../Members/UserLogo'
 
-import { Modal } from "./Modal";
-import { ButtonSection, Heading, Section, Text } from "./ModalStyle";
+import { Modal } from './Modal'
+import { ButtonSection, Heading, Section, Text } from './ModalStyle'
 import {
   EmojiKey,
   UserAddress,
   UserAddressWrapper,
   UserName,
   UserNameWrapper,
-} from "./ProfileModal";
+} from './ProfileModal'
 
-export const LogoutModalName = "LogoutModal";
+export const LogoutModalName = 'LogoutModal'
 
 export const LogoutModal = () => {
-  const { setModal } = useModal(LogoutModalName);
-  const logout = useSetIdentity();
-  const setNickname = useSetNikcname();
-  const userPK = useUserPublicKey();
-  const { nickname } = useMessengerContext();
+  const { setModal } = useModal(LogoutModalName)
+  const logout = useSetIdentity()
+  const setNickname = useSetNikcname()
+  const userPK = useUserPublicKey()
+  const { nickname } = useMessengerContext()
 
   if (userPK) {
     return (
@@ -47,21 +47,21 @@ export const LogoutModal = () => {
               }}
               radius={80}
               colorWheel={[
-                ["red", 150],
-                ["blue", 250],
-                ["green", 360],
+                ['red', 150],
+                ['blue', 250],
+                ['green', 360],
               ]}
             />
             <UserNameWrapper className="logout">
-              {" "}
+              {' '}
               <UserName className="small">{nickname}</UserName>
             </UserNameWrapper>
 
             <UserAddressWrapper className="small">
               <UserAddress className="small">
-                {" "}
+                {' '}
                 Chatkey: {userPK.slice(0, 10)}...
-                {userPK.slice(-3)}{" "}
+                {userPK.slice(-3)}{' '}
               </UserAddress>
             </UserAddressWrapper>
             <EmojiKey className="small">🎩🍞🥑🦍🌈📡💅🏻♣️🔔⛸👵🅱</EmojiKey>
@@ -70,31 +70,31 @@ export const LogoutModal = () => {
         <ButtonSection>
           <ButtonNo
             onClick={() => {
-              setModal(false);
-              logout(undefined);
-              setNickname(undefined);
+              setModal(false)
+              logout(undefined)
+              setNickname(undefined)
             }}
           >
             Disconnect
           </ButtonNo>
           <ButtonYes
             onClick={() => {
-              setModal(false);
+              setModal(false)
             }}
           >
             Stay Connected
           </ButtonYes>
         </ButtonSection>
       </Modal>
-    );
+    )
   }
 
-  return null;
-};
+  return null
+}
 
 const UserSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 8px 0;
-`;
+`

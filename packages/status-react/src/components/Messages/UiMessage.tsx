@@ -1,22 +1,22 @@
-import { BaseEmoji } from "emoji-mart";
-import React, { useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import { BaseEmoji } from 'emoji-mart'
+import React, { useMemo, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { useIdentity } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { Reply } from "../../hooks/useReply";
-import { ChatMessage } from "../../models/ChatMessage";
-import { equalDate } from "../../utils";
-import { ChatMessageContent } from "../Chat/ChatMessageContent";
-import { ContactMenu } from "../Form/ContactMenu";
-import { MessageMenu } from "../Form/MessageMenu";
-import { UntrustworthIcon } from "../Icons/UntrustworthIcon";
-import { UserLogo } from "../Members/UserLogo";
-import { Reactions } from "../Reactions/Reactions";
+import { useIdentity } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { Reply } from '../../hooks/useReply'
+import { ChatMessage } from '../../models/ChatMessage'
+import { equalDate } from '../../utils'
+import { ChatMessageContent } from '../Chat/ChatMessageContent'
+import { ContactMenu } from '../Form/ContactMenu'
+import { MessageMenu } from '../Form/MessageMenu'
+import { UntrustworthIcon } from '../Icons/UntrustworthIcon'
+import { UserLogo } from '../Members/UserLogo'
+import { Reactions } from '../Reactions/Reactions'
 
-import { MessageQuote } from "./MessageQuote";
-import { MessageReactions } from "./MessageReactions";
+import { MessageQuote } from './MessageQuote'
+import { MessageReactions } from './MessageReactions'
 import {
   ContentWrapper,
   DateSeparator,
@@ -30,16 +30,16 @@ import {
   UserName,
   UserNameBtn,
   UserNameWrapper,
-} from "./Styles";
+} from './Styles'
 
 type UiMessageProps = {
-  idx: number;
-  message: ChatMessage;
-  prevMessage: ChatMessage;
-  setImage: (img: string) => void;
-  setLink: (link: string) => void;
-  setReply: (val: Reply | undefined) => void;
-};
+  idx: number
+  message: ChatMessage
+  prevMessage: ChatMessage
+  setImage: (img: string) => void
+  setLink: (link: string) => void
+  setReply: (val: Reply | undefined) => void
+}
 
 export function UiMessage({
   message,
@@ -49,39 +49,39 @@ export function UiMessage({
   setLink,
   setReply,
 }: UiMessageProps) {
-  const today = new Date();
-  const { contacts } = useMessengerContext();
-  const identity = useIdentity();
+  const today = new Date()
+  const { contacts } = useMessengerContext()
+  const identity = useIdentity()
 
   const contact = useMemo(
     () => contacts[message.sender],
     [message.sender, contacts]
-  );
-  const [showMenu, setShowMenu] = useState(false);
+  )
+  const [showMenu, setShowMenu] = useState(false)
 
-  const [mentioned, setMentioned] = useState(false);
-  const [messageReactions, setMessageReactions] = useState<BaseEmoji[]>([]);
+  const [mentioned, setMentioned] = useState(false)
+  const [messageReactions, setMessageReactions] = useState<BaseEmoji[]>([])
 
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowMenu(false));
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowMenu(false))
 
-  const messageRef = useRef(null);
+  const messageRef = useRef(null)
 
   return (
     <MessageOuterWrapper>
       {(idx === 0 || !equalDate(prevMessage.date, message.date)) && (
         <DateSeparator>
           {equalDate(message.date, today)
-            ? "Today"
+            ? 'Today'
             : message.date.toLocaleDateString()}
         </DateSeparator>
       )}
-      <MessageWrapper className={`${mentioned && "mention"}`} id={message.id}>
+      <MessageWrapper className={`${mentioned && 'mention'}`} id={message.id}>
         <MessageQuote quote={message.quote} />
         <UserMessageWrapper ref={messageRef}>
           <IconBtn
             onClick={() => {
-              if (identity) setShowMenu((e) => !e);
+              if (identity) setShowMenu(e => !e)
             }}
             disabled={!identity}
             ref={ref}
@@ -93,9 +93,9 @@ export function UiMessage({
               contact={contact}
               radius={40}
               colorWheel={[
-                ["red", 150],
-                ["blue", 250],
-                ["green", 360],
+                ['red', 150],
+                ['blue', 250],
+                ['green', 360],
               ]}
             />
           </IconBtn>
@@ -104,12 +104,12 @@ export function UiMessage({
               <UserNameWrapper>
                 <UserNameBtn
                   onClick={() => {
-                    if (identity) setShowMenu((e) => !e);
+                    if (identity) setShowMenu(e => !e)
                   }}
                   disabled={!identity}
                 >
                   <UserName>
-                    {" "}
+                    {' '}
                     {contact?.customName ?? contact.trueName}
                   </UserName>
                 </UserNameBtn>
@@ -153,11 +153,11 @@ export function UiMessage({
         )}
       </MessageWrapper>
     </MessageOuterWrapper>
-  );
+  )
 }
 
 const UserMessageWrapper = styled.div`
   width: 100%;
   display: flex;
   position: relative;
-`;
+`

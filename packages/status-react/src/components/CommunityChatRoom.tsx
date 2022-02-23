@@ -1,29 +1,29 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import { ChatState, useChatState } from "../contexts/chatStateProvider";
-import { useMessengerContext } from "../contexts/messengerProvider";
-import { useNarrow } from "../contexts/narrowProvider";
+import { ChatState, useChatState } from '../contexts/chatStateProvider'
+import { useMessengerContext } from '../contexts/messengerProvider'
+import { useNarrow } from '../contexts/narrowProvider'
 
-import { Channels } from "./Channels/Channels";
-import { ChatBody } from "./Chat/ChatBody";
-import { ChatCreation } from "./Chat/ChatCreation";
-import { Community } from "./Community";
-import { Members } from "./Members/Members";
-import { AgreementModal } from "./Modals/AgreementModal";
-import { CoinbaseModal } from "./Modals/CoinbaseModal";
-import { CommunityModal } from "./Modals/CommunityModal";
-import { EditModal } from "./Modals/EditModal";
-import { LeavingModal } from "./Modals/LeavingModal";
-import { LogoutModal } from "./Modals/LogoutModal";
-import { ProfileFoundModal } from "./Modals/ProfileFoundModal";
-import { ProfileModal } from "./Modals/ProfileModal";
-import { StatusModal } from "./Modals/StatusModal";
-import { UserCreationModal } from "./Modals/UserCreationModal";
-import { UserCreationStartModal } from "./Modals/UserCreationStartModal";
-import { WalletConnectModal } from "./Modals/WalletConnectModal";
-import { WalletModal } from "./Modals/WalletModal";
-import { ToastMessageList } from "./ToastMessages/ToastMessageList";
+import { Channels } from './Channels/Channels'
+import { ChatBody } from './Chat/ChatBody'
+import { ChatCreation } from './Chat/ChatCreation'
+import { Community } from './Community'
+import { Members } from './Members/Members'
+import { AgreementModal } from './Modals/AgreementModal'
+import { CoinbaseModal } from './Modals/CoinbaseModal'
+import { CommunityModal } from './Modals/CommunityModal'
+import { EditModal } from './Modals/EditModal'
+import { LeavingModal } from './Modals/LeavingModal'
+import { LogoutModal } from './Modals/LogoutModal'
+import { ProfileFoundModal } from './Modals/ProfileFoundModal'
+import { ProfileModal } from './Modals/ProfileModal'
+import { StatusModal } from './Modals/StatusModal'
+import { UserCreationModal } from './Modals/UserCreationModal'
+import { UserCreationStartModal } from './Modals/UserCreationStartModal'
+import { WalletConnectModal } from './Modals/WalletConnectModal'
+import { WalletModal } from './Modals/WalletModal'
+import { ToastMessageList } from './ToastMessages/ToastMessageList'
 
 function Modals() {
   return (
@@ -42,15 +42,15 @@ function Modals() {
       <UserCreationStartModal />
       <LeavingModal />
     </>
-  );
+  )
 }
 
 export function CommunityChatRoom() {
-  const [state] = useChatState();
-  const [showMembers, setShowMembers] = useState(false);
-  const [editGroup, setEditGroup] = useState(false);
-  const narrow = useNarrow();
-  const { activeChannel } = useMessengerContext();
+  const [state] = useChatState()
+  const [showMembers, setShowMembers] = useState(false)
+  const [editGroup, setEditGroup] = useState(false)
+  const narrow = useNarrow()
+  const { activeChannel } = useMessengerContext()
 
   return (
     <ChatWrapper>
@@ -73,12 +73,12 @@ export function CommunityChatRoom() {
         !narrow &&
         state === ChatState.ChatBody &&
         activeChannel &&
-        activeChannel.type !== "dm" && <Members />}
+        activeChannel.type !== 'dm' && <Members />}
       {state === ChatState.ChatCreation && <ChatCreation />}
       <Modals />
       <ToastMessageList />
     </ChatWrapper>
-  );
+  )
 }
 
 const ChatWrapper = styled.div`
@@ -86,7 +86,7 @@ const ChatWrapper = styled.div`
   height: 100%;
   display: flex;
   position: relative;
-`;
+`
 
 const ChannelsWrapper = styled.div`
   width: 21%;
@@ -96,9 +96,9 @@ const ChannelsWrapper = styled.div`
   padding: 10px 16px;
   display: flex;
   flex-direction: column;
-`;
+`
 
 const StyledCommunity = styled(Community)`
   padding: 0 0 0 8px;
   margin: 0 0 16px;
-`;
+`

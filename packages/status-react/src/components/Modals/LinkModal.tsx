@@ -1,21 +1,21 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { useModal } from "../../contexts/modalProvider";
-import { ButtonNo, ButtonYes } from "../Buttons/buttonStyle";
-import { textMediumStyles } from "../Text";
+import { useModal } from '../../contexts/modalProvider'
+import { ButtonNo, ButtonYes } from '../Buttons/buttonStyle'
+import { textMediumStyles } from '../Text'
 
-import { Modal } from "./Modal";
-import { ButtonSection, Heading, Section } from "./ModalStyle";
+import { Modal } from './Modal'
+import { ButtonSection, Heading, Section } from './ModalStyle'
 
-export const LinkModalName = "LinkModal";
+export const LinkModalName = 'LinkModal'
 
 interface LinkModalProps {
-  link: string;
+  link: string
 }
 
 export const LinkModal = ({ link }: LinkModalProps) => {
-  const { setModal } = useModal(LinkModalName);
+  const { setModal } = useModal(LinkModalName)
   return (
     <Modal name={LinkModalName}>
       <Section>
@@ -28,16 +28,16 @@ export const LinkModal = ({ link }: LinkModalProps) => {
         <ButtonNo onClick={() => setModal(false)}>No</ButtonNo>
         <ButtonYes
           onClick={() => {
-            window?.open(link, "_blank", "noopener")?.focus();
-            setModal(false);
+            window?.open(link, '_blank', 'noopener')?.focus()
+            setModal(false)
           }}
         >
           Yes, take me there
         </ButtonYes>
       </ButtonSection>
     </Modal>
-  );
-};
+  )
+}
 
 const Link = styled.a`
   text-decoration: none;
@@ -45,4 +45,4 @@ const Link = styled.a`
   color: ${({ theme }) => theme.primary};
 
   ${textMediumStyles}
-`;
+`

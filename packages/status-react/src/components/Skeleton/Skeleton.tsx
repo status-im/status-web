@@ -1,9 +1,9 @@
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes } from 'styled-components'
 
 interface SkeletonProps {
-  width?: string;
-  height?: string;
-  borderRadius?: string;
+  width?: string
+  height?: string
+  borderRadius?: string
 }
 
 const waveKeyframe = keyframes`
@@ -16,15 +16,15 @@ const waveKeyframe = keyframes`
   100% {
     transform: translateX(100%);
   }
-`;
+`
 
 export const Skeleton = styled.div<SkeletonProps>`
   position: relative;
   display: inline-block;
-  width: ${({ width }) => width || "100%"};
-  height: ${({ height }) => height || "22px"};
+  width: ${({ width }) => width || '100%'};
+  height: ${({ height }) => height || '22px'};
   background: ${({ theme }) => theme.skeletonDark};
-  border-radius: ${({ borderRadius }) => borderRadius || "8px"};
+  border-radius: ${({ borderRadius }) => borderRadius || '8px'};
   margin-bottom: 5px;
   overflow: hidden;
 
@@ -35,7 +35,7 @@ export const Skeleton = styled.div<SkeletonProps>`
       ${({ theme }) => theme.skeletonLight} 0%,
       ${({ theme }) => theme.skeletonDark} 100%
     );
-    content: "";
+    content: '';
     position: absolute;
     transform: translateX(-100%);
     bottom: 0;
@@ -43,4 +43,4 @@ export const Skeleton = styled.div<SkeletonProps>`
     right: 0;
     top: 0;
   }
-`;
+`

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const MarkerdaoLogo = () => (
   <svg
@@ -30,4 +30,4 @@ export const MarkerdaoLogo = () => (
       </linearGradient>
     </defs>
   </svg>
-);
+)

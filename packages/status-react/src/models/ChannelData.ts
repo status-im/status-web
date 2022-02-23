@@ -1,15 +1,15 @@
-import { Contact } from "./Contact";
+import { Contact } from './Contact'
 
 export type ChannelData = {
-  id: string;
-  name: string;
-  type: "channel" | "dm" | "group";
-  description?: string;
-  icon?: string;
-  isMuted?: boolean;
-  members?: Contact[];
-};
+  id: string
+  name: string
+  type: 'channel' | 'dm' | 'group'
+  description?: string
+  icon?: string
+  isMuted?: boolean
+  members?: Contact[]
+}
 
 export type ChannelsData = {
-  [id: string]: ChannelData;
-};
+  [id: string]: ChannelData
+}

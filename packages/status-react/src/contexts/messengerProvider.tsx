@@ -1,8 +1,8 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext } from 'react'
 
-import { MessengerType, useMessenger } from "../hooks/messenger/useMessenger";
+import { MessengerType, useMessenger } from '../hooks/messenger/useMessenger'
 
-import { useIdentity, useNickname } from "./identityProvider";
+import { useIdentity, useNickname } from './identityProvider'
 
 const MessengerContext = createContext<MessengerType>({
   messenger: undefined,
@@ -28,23 +28,23 @@ const MessengerContext = createContext<MessengerType>({
   addMembers: () => undefined,
   nickname: undefined,
   subscriptionsDispatch: () => undefined,
-});
+})
 
 export function useMessengerContext() {
-  return useContext(MessengerContext);
+  return useContext(MessengerContext)
 }
 
 interface MessengerProviderProps {
-  communityKey: string | undefined;
-  children: React.ReactNode;
+  communityKey: string | undefined
+  children: React.ReactNode
 }
 
 export function MessengerProvider({
   communityKey,
   children,
 }: MessengerProviderProps) {
-  const identity = useIdentity();
-  const nickname = useNickname();
-  const messenger = useMessenger(communityKey, identity, nickname);
-  return <MessengerContext.Provider value={messenger} children={children} />;
+  const identity = useIdentity()
+  const nickname = useNickname()
+  const messenger = useMessenger(communityKey, identity, nickname)
+  return <MessengerContext.Provider value={messenger} children={children} />
 }

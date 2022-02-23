@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 export const MembersIcon = () => {
   return (
@@ -16,11 +16,11 @@ export const MembersIcon = () => {
       />
       <path d="M9.14735 25.0368C9.53098 25.1327 9.91944 24.9141 10.0836 24.5543C11.1079 22.3099 13.3718 20.75 16 20.75C18.6684 20.75 20.9613 22.3579 21.9625 24.6577C22.1289 25.0398 22.5478 25.2663 22.9456 25.142C23.3386 25.0192 23.5622 24.6006 23.4061 24.2196C22.2119 21.3039 19.3458 19.25 16 19.25C12.704 19.25 9.8736 21.2432 8.64834 24.0901C8.47629 24.4898 8.72515 24.9313 9.14735 25.0368Z" />
     </Icon>
-  );
-};
+  )
+}
 
 const Icon = styled.svg`
   & > path {
     fill: ${({ theme }) => theme.primary};
   }
-`;
+`

@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 type ColorChatSvgProps = {
-  width: number;
-  height: number;
-};
+  width: number
+  height: number
+}
 
 export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
   return (
@@ -130,12 +130,12 @@ export function ColorChatSvg({ width, height }: ColorChatSvgProps) {
         </clipPath>
       </defs>
     </svg>
-  );
+  )
 }
 
 export const ColorChatIcon = () => {
-  return <Icon width={64} height={64} />;
-};
+  return <Icon width={64} height={64} />
+}
 
 const Icon = styled(ColorChatSvg)`
   & > path {
@@ -145,4 +145,4 @@ const Icon = styled(ColorChatSvg)`
   &:hover > path {
     fill: ${({ theme }) => theme.bodyBackgroundColor};
   }
-`;
+`

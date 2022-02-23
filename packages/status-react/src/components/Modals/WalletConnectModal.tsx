@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-import { ConnectModal } from "./ConnectModal";
-import { Modal } from "./Modal";
+import { ConnectModal } from './ConnectModal'
+import { Modal } from './Modal'
 
-export const WalletConnectModalName = "WalletConnectModal";
+export const WalletConnectModalName = 'WalletConnectModal'
 
 export function WalletConnectModal() {
   return (
@@ -15,5 +15,5 @@ export function WalletConnectModal() {
         address="https://walletconnect.com/"
       />
     </Modal>
-  );
+  )
 }

@@ -1,30 +1,30 @@
-import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useNarrow } from '../../contexts/narrowProvider'
+import { useClickOutside } from '../../hooks/useClickOutside'
 import {
   ActivityButton,
   ActivityWrapper,
-} from "../ActivityCenter/ActivityButton";
-import { Channel } from "../Channels/Channel";
-import { Community } from "../Community";
-import { ChannelMenu } from "../Form/ChannelMenu";
-import { ActivityIcon } from "../Icons/ActivityIcon";
-import { MembersIcon } from "../Icons/MembersIcon";
-import { MoreIcon } from "../Icons/MoreIcon";
-import { CommunitySkeleton } from "../Skeleton/CommunitySkeleton";
-import { Loading } from "../Skeleton/Loading";
+} from '../ActivityCenter/ActivityButton'
+import { Channel } from '../Channels/Channel'
+import { Community } from '../Community'
+import { ChannelMenu } from '../Form/ChannelMenu'
+import { ActivityIcon } from '../Icons/ActivityIcon'
+import { MembersIcon } from '../Icons/MembersIcon'
+import { MoreIcon } from '../Icons/MoreIcon'
+import { CommunitySkeleton } from '../Skeleton/CommunitySkeleton'
+import { Loading } from '../Skeleton/Loading'
 
-import { ChatBodyState } from "./ChatBody";
+import { ChatBodyState } from './ChatBody'
 
 export function ChatTopbarLoading() {
-  const narrow = useNarrow();
+  const narrow = useNarrow()
 
   return (
-    <Topbar className={narrow ? "narrow" : ""}>
-      <ChannelWrapper className={narrow ? "narrow" : ""}>
+    <Topbar className={narrow ? 'narrow' : ''}>
+      <ChannelWrapper className={narrow ? 'narrow' : ''}>
         <SkeletonWrapper>
           <CommunitySkeleton />
         </SkeletonWrapper>
@@ -46,16 +46,16 @@ export function ChatTopbarLoading() {
       </MenuWrapper>
       <Loading />
     </Topbar>
-  );
+  )
 }
 
 type ChatTopbarProps = {
-  showState: ChatBodyState;
-  onClick: () => void;
-  switchShowState: (state: ChatBodyState) => void;
-  showMembers: boolean;
-  setEditGroup: React.Dispatch<React.SetStateAction<boolean>>;
-};
+  showState: ChatBodyState
+  onClick: () => void
+  switchShowState: (state: ChatBodyState) => void
+  showMembers: boolean
+  setEditGroup: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 export function ChatTopbar({
   showState,
@@ -64,27 +64,27 @@ export function ChatTopbar({
   showMembers,
   setEditGroup,
 }: ChatTopbarProps) {
-  const { activeChannel, loadingMessenger } = useMessengerContext();
+  const { activeChannel, loadingMessenger } = useMessengerContext()
 
-  const narrow = useNarrow();
-  const [showChannelMenu, setShowChannelMenu] = useState(false);
+  const narrow = useNarrow()
+  const [showChannelMenu, setShowChannelMenu] = useState(false)
 
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowChannelMenu(false));
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowChannelMenu(false))
 
   if (!activeChannel) {
-    return <ChatTopbarLoading />;
+    return <ChatTopbarLoading />
   }
 
   return (
     <Topbar
-      className={narrow && showState !== ChatBodyState.Chat ? "narrow" : ""}
+      className={narrow && showState !== ChatBodyState.Chat ? 'narrow' : ''}
     >
-      <ChannelWrapper className={narrow ? "narrow" : ""}>
+      <ChannelWrapper className={narrow ? 'narrow' : ''}>
         {!loadingMessenger ? (
           <>
             {narrow && (
-              <CommunityWrap className={narrow ? "narrow" : ""}>
+              <CommunityWrap className={narrow ? 'narrow' : ''}>
                 <Community />
               </CommunityWrap>
             )}
@@ -104,8 +104,8 @@ export function ChatTopbar({
       </ChannelWrapper>
 
       <MenuWrapper>
-        {!narrow && activeChannel.type !== "dm" && (
-          <TopBtn onClick={onClick} className={showMembers ? "active" : ""}>
+        {!narrow && activeChannel.type !== 'dm' && (
+          <TopBtn onClick={onClick} className={showMembers ? 'active' : ''}>
             <MembersIcon />
           </TopBtn>
         )}
@@ -119,7 +119,7 @@ export function ChatTopbar({
                 switchMemberList={() => switchShowState(ChatBodyState.Members)}
                 setShowChannelMenu={setShowChannelMenu}
                 setEditGroup={setEditGroup}
-                className={`${narrow && "narrow"}`}
+                className={`${narrow && 'narrow'}`}
               />
             )}
           </TopBtn>
@@ -128,7 +128,7 @@ export function ChatTopbar({
       </MenuWrapper>
       {loadingMessenger && <Loading />}
     </Topbar>
-  );
+  )
 }
 
 const Topbar = styled.div`
@@ -142,7 +142,7 @@ const Topbar = styled.div`
   &.narrow {
     width: 100%;
   }
-`;
+`
 
 const ChannelWrapper = styled.div`
   display: flex;
@@ -152,11 +152,11 @@ const ChannelWrapper = styled.div`
   &.narrow {
     width: calc(100% - 46px);
   }
-`;
+`
 
 const SkeletonWrapper = styled.div`
   padding: 8px;
-`;
+`
 
 const CommunityWrap = styled.div`
   padding-right: 10px;
@@ -168,7 +168,7 @@ const CommunityWrap = styled.div`
   }
 
   &:after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0;
     top: 50%;
@@ -179,13 +179,13 @@ const CommunityWrap = styled.div`
     background: ${({ theme }) => theme.primary};
     opacity: 0.1;
   }
-`;
+`
 
 const MenuWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 8px 0;
-`;
+`
 
 export const TopBtn = styled.button`
   width: 32px;
@@ -206,4 +206,4 @@ export const TopBtn = styled.button`
   &:disabled {
     cursor: default;
   }
-`;
+`

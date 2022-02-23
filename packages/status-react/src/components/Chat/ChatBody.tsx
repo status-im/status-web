@@ -1,19 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { Reply } from "../../hooks/useReply";
-import { ChannelData } from "../../models/ChannelData";
-import { TokenRequirement } from "../Form/TokenRequirement";
-import { MessagesList } from "../Messages/MessagesList";
-import { NarrowChannels } from "../NarrowMode/NarrowChannels";
-import { NarrowMembers } from "../NarrowMode/NarrowMembers";
-import { LoadingSkeleton } from "../Skeleton/LoadingSkeleton";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useNarrow } from '../../contexts/narrowProvider'
+import { Reply } from '../../hooks/useReply'
+import { ChannelData } from '../../models/ChannelData'
+import { TokenRequirement } from '../Form/TokenRequirement'
+import { MessagesList } from '../Messages/MessagesList'
+import { NarrowChannels } from '../NarrowMode/NarrowChannels'
+import { NarrowMembers } from '../NarrowMode/NarrowMembers'
+import { LoadingSkeleton } from '../Skeleton/LoadingSkeleton'
 
-import { ChatCreation } from "./ChatCreation";
-import { ChatInput } from "./ChatInput";
-import { ChatTopbar, ChatTopbarLoading } from "./ChatTopbar";
+import { ChatCreation } from './ChatCreation'
+import { ChatInput } from './ChatInput'
+import { ChatTopbar, ChatTopbarLoading } from './ChatTopbar'
 
 export enum ChatBodyState {
   Chat,
@@ -22,30 +22,30 @@ export enum ChatBodyState {
 }
 
 function ChatBodyLoading() {
-  const narrow = useNarrow();
+  const narrow = useNarrow()
   return (
     <Wrapper>
-      <ChatBodyWrapper className={narrow ? "narrow" : ""}>
+      <ChatBodyWrapper className={narrow ? 'narrow' : ''}>
         <ChatTopbarLoading />
         <LoadingSkeleton />
         <ChatInput reply={undefined} setReply={() => undefined} />
       </ChatBodyWrapper>
     </Wrapper>
-  );
+  )
 }
 
 type ChatBodyContentProps = {
-  showState: ChatBodyState;
-  switchShowState: (state: ChatBodyState) => void;
-  channel: ChannelData;
-};
+  showState: ChatBodyState
+  switchShowState: (state: ChatBodyState) => void
+  channel: ChannelData
+}
 
 function ChatBodyContent({
   showState,
   switchShowState,
   channel,
 }: ChatBodyContentProps) {
-  const [reply, setReply] = useState<Reply | undefined>(undefined);
+  const [reply, setReply] = useState<Reply | undefined>(undefined)
 
   switch (showState) {
     case ChatBodyState.Chat:
@@ -54,28 +54,28 @@ function ChatBodyContent({
           <MessagesList setReply={setReply} channel={channel} />
           <ChatInput reply={reply} setReply={setReply} />
         </>
-      );
+      )
     case ChatBodyState.Channels:
       return (
         <NarrowChannels
           setShowChannels={() => switchShowState(ChatBodyState.Channels)}
         />
-      );
+      )
     case ChatBodyState.Members:
       return (
         <NarrowMembers
           switchShowMembersList={() => switchShowState(ChatBodyState.Members)}
         />
-      );
+      )
   }
 }
 
 interface ChatBodyProps {
-  onClick: () => void;
-  showMembers: boolean;
-  permission: boolean;
-  editGroup: boolean;
-  setEditGroup: React.Dispatch<React.SetStateAction<boolean>>;
+  onClick: () => void
+  showMembers: boolean
+  permission: boolean
+  editGroup: boolean
+  setEditGroup: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function ChatBody({
@@ -85,26 +85,26 @@ export function ChatBody({
   editGroup,
   setEditGroup,
 }: ChatBodyProps) {
-  const { activeChannel, loadingMessenger } = useMessengerContext();
+  const { activeChannel, loadingMessenger } = useMessengerContext()
 
-  const narrow = useNarrow();
-  const className = useMemo(() => (narrow ? "narrow" : ""), [narrow]);
+  const narrow = useNarrow()
+  const className = useMemo(() => (narrow ? 'narrow' : ''), [narrow])
 
-  const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat);
+  const [showState, setShowState] = useState<ChatBodyState>(ChatBodyState.Chat)
   const switchShowState = useCallback(
     (state: ChatBodyState) => {
       if (narrow) {
-        setShowState((prev) => (prev === state ? ChatBodyState.Chat : state));
+        setShowState(prev => (prev === state ? ChatBodyState.Chat : state))
       }
     },
     [narrow]
-  );
+  )
 
   useEffect(() => {
     if (!narrow) {
-      setShowState(ChatBodyState.Chat);
+      setShowState(ChatBodyState.Chat)
     }
-  }, [narrow]);
+  }, [narrow])
 
   if (!loadingMessenger && activeChannel) {
     return (
@@ -138,10 +138,10 @@ export function ChatBody({
           </BluredWrapper>
         )}
       </Wrapper>
-    );
+    )
   }
 
-  return <ChatBodyLoading />;
+  return <ChatBodyLoading />
 }
 
 export const Wrapper = styled.div`
@@ -156,7 +156,7 @@ export const Wrapper = styled.div`
   &.narrow {
     width: 100%;
   }
-`;
+`
 
 const ChatBodyWrapper = styled.div`
   width: 100%;
@@ -165,7 +165,7 @@ const ChatBodyWrapper = styled.div`
   flex-direction: column;
   flex: 1;
   background: ${({ theme }) => theme.bodyBackgroundColor};
-`;
+`
 
 const BluredWrapper = styled.div`
   width: 100%;
@@ -179,4 +179,4 @@ const BluredWrapper = styled.div`
   background: ${({ theme }) => theme.bodyBackgroundGradient};
   backdrop-filter: blur(4px);
   z-index: 2;
-`;
+`

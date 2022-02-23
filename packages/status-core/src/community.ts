@@ -1,23 +1,23 @@
-import debug from "debug";
-import { Waku } from "js-waku";
+import debug from 'debug'
+import { Waku } from 'js-waku'
 
-import { Chat } from "./chat";
-import { bufToHex, hexToBuf } from "./utils";
-import { CommunityChat } from "./wire/community_chat";
-import { CommunityDescription } from "./wire/community_description";
+import { Chat } from './chat'
+import { bufToHex, hexToBuf } from './utils'
+import { CommunityChat } from './wire/community_chat'
+import { CommunityDescription } from './wire/community_description'
 
-const dbg = debug("communities:community");
+const dbg = debug('communities:community')
 
 export class Community {
-  public publicKey: Uint8Array;
-  private waku: Waku;
-  public chats: Map<string, Chat>; // Chat id, Chat
-  public description?: CommunityDescription;
+  public publicKey: Uint8Array
+  private waku: Waku
+  public chats: Map<string, Chat> // Chat id, Chat
+  public description?: CommunityDescription
 
   constructor(publicKey: Uint8Array, waku: Waku) {
-    this.publicKey = publicKey;
-    this.waku = waku;
-    this.chats = new Map();
+    this.publicKey = publicKey
+    this.waku = waku
+    this.chats = new Map()
   }
 
   /**
@@ -34,15 +34,15 @@ export class Community {
     publicKey: string,
     waku: Waku
   ): Promise<Community> {
-    const community = new Community(hexToBuf(publicKey), waku);
+    const community = new Community(hexToBuf(publicKey), waku)
 
-    await community.refreshCommunityDescription();
+    await community.refreshCommunityDescription()
 
-    return community;
+    return community
   }
 
   public get publicKeyStr(): string {
-    return bufToHex(this.publicKey);
+    return bufToHex(this.publicKey)
   }
 
   /**
@@ -53,20 +53,20 @@ export class Community {
     const desc = await CommunityDescription.retrieve(
       this.publicKey,
       this.waku.store
-    );
+    )
 
     if (!desc) {
-      dbg(`Failed to retrieve Community Description for ${this.publicKeyStr}`);
-      return;
+      dbg(`Failed to retrieve Community Description for ${this.publicKeyStr}`)
+      return
     }
 
-    this.description = desc;
+    this.description = desc
 
     await Promise.all(
       Array.from(this.description.chats).map(([chatUuid, communityChat]) => {
-        return this.instantiateChat(chatUuid, communityChat);
+        return this.instantiateChat(chatUuid, communityChat)
       })
-    );
+    )
   }
 
   /**
@@ -80,13 +80,13 @@ export class Community {
     communityChat: CommunityChat
   ): Promise<void> {
     if (!this.description)
-      throw "Failed to retrieve community description, cannot instantiate chat";
+      throw 'Failed to retrieve community description, cannot instantiate chat'
 
-    const chatId = this.publicKeyStr + chatUuid;
-    if (this.chats.get(chatId)) return;
+    const chatId = this.publicKeyStr + chatUuid
+    if (this.chats.get(chatId)) return
 
-    const chat = await Chat.create(chatId, communityChat);
+    const chat = await Chat.create(chatId, communityChat)
 
-    this.chats.set(chatId, chat);
+    this.chats.set(chatId, chat)
   }
 }
