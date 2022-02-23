@@ -1,51 +1,8 @@
 {
-  "compilerOptions": {
-    "incremental": true,
-    "target": "es6",
-    "outDir": "dist",
-    "rootDir": "src",
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "declaration": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "composite": true,
-    "strict": true /* Enable all strict type-checking options. */,
-
-    /* Strict Type-Checking Options */
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true,
-    "alwaysStrict": true,
-
-    /* Additional Checks */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": false /* to set at a later stage */,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-
-    /* Debugging Options */
-    "traceResolution": false,
-    "listEmittedFiles": false,
-    "listFiles": false,
-    "pretty": true,
-
-    // Due to broken types in indirect dependencies
-    "skipLibCheck": true,
-
-    "lib": ["es6", "dom"],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types",
-      "../../node_modules/@types"
-    ]
-  },
+  "extends": "../../tsconfig.base.json",
   "include": ["src"],
-  "exclude": ["node_modules/**"],
-  "types": ["mocha"],
-  "compileOnSave": false
+  "compilerOptions": {
+    "outDir": "dist",
+    "declarationDir": "dist/types"
+  }
 }
