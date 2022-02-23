@@ -1,33 +1,33 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { textMediumStyles } from "../Text";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { textMediumStyles } from '../Text'
 
 const communityRequirements = {
   requirements: [
     {
-      name: "STN",
+      name: 'STN',
       amount: 10,
-      logo: "https://status.im/img/logo.svg",
+      logo: 'https://status.im/img/logo.svg',
     },
   ],
   alternativeRequirements: [
     {
-      name: "ETH",
+      name: 'ETH',
       amount: 1,
-      logo: "https://ethereum.org/static/a110735dade3f354a46fc2446cd52476/db4de/eth-home-icon.webp",
+      logo: 'https://ethereum.org/static/a110735dade3f354a46fc2446cd52476/db4de/eth-home-icon.webp',
     },
     {
-      name: "MKR",
+      name: 'MKR',
       amount: 10,
-      logo: "https://cryptologos.cc/logos/maker-mkr-logo.svg?v=017",
+      logo: 'https://cryptologos.cc/logos/maker-mkr-logo.svg?v=017',
     },
   ],
-};
+}
 
 export function TokenRequirement() {
-  const { communityData } = useMessengerContext();
+  const { communityData } = useMessengerContext()
   return (
     <Wrapper>
       <Text>
@@ -35,7 +35,7 @@ export function TokenRequirement() {
         hold:
       </Text>
       <Row>
-        {communityRequirements.requirements.map((req) => (
+        {communityRequirements.requirements.map(req => (
           <Requirement key={req.name + req.amount}>
             <Logo
               style={{
@@ -43,14 +43,14 @@ export function TokenRequirement() {
               }}
             />
             <Amount>
-              {req.amount} {req.name}{" "}
+              {req.amount} {req.name}{' '}
             </Amount>
           </Requirement>
         ))}
       </Row>
       {communityRequirements.alternativeRequirements && <Text>or</Text>}
       <Row>
-        {communityRequirements.alternativeRequirements.map((req) => (
+        {communityRequirements.alternativeRequirements.map(req => (
           <Requirement key={req.name + req.amount}>
             <Logo
               style={{
@@ -58,13 +58,13 @@ export function TokenRequirement() {
               }}
             />
             <Amount>
-              {req.amount} {req.name}{" "}
+              {req.amount} {req.name}{' '}
             </Amount>
           </Requirement>
         ))}
       </Row>
     </Wrapper>
-  );
+  )
 }
 
 const Wrapper = styled.div`
@@ -72,7 +72,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   height: 50%;
-`;
+`
 
 const Text = styled.p`
   color: ${({ theme }) => theme.primary};
@@ -84,7 +84,7 @@ const Text = styled.p`
   }
 
   ${textMediumStyles}
-`;
+`
 
 const Requirement = styled.div`
   display: flex;
@@ -102,7 +102,7 @@ const Requirement = styled.div`
   & + & {
     margin-left: 18px;
   }
-`;
+`
 
 const Amount = styled.p`
   font-weight: 500;
@@ -110,13 +110,13 @@ const Amount = styled.p`
   margin-left: 6px;
 
   ${textMediumStyles}
-`;
+`
 
 const Row = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 16px;
-`;
+`
 
 const Logo = styled.div`
   width: 28px;
@@ -128,4 +128,4 @@ const Logo = styled.div`
   border-radius: 50%;
   background-size: cover;
   background-repeat: no-repeat;
-`;
+`

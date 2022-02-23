@@ -1,63 +1,61 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { useChatScrollHandle } from "../../hooks/useChatScrollHandle";
-import { Reply } from "../../hooks/useReply";
-import { ChannelData } from "../../models/ChannelData";
-import { EmptyChannel } from "../Channels/EmptyChannel";
-import { LoadingIcon } from "../Icons/LoadingIcon";
-import { LinkModal, LinkModalName } from "../Modals/LinkModal";
-import { PictureModal, PictureModalName } from "../Modals/PictureModal";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { useNarrow } from '../../contexts/narrowProvider'
+import { useChatScrollHandle } from '../../hooks/useChatScrollHandle'
+import { Reply } from '../../hooks/useReply'
+import { ChannelData } from '../../models/ChannelData'
+import { EmptyChannel } from '../Channels/EmptyChannel'
+import { LoadingIcon } from '../Icons/LoadingIcon'
+import { LinkModal, LinkModalName } from '../Modals/LinkModal'
+import { PictureModal, PictureModalName } from '../Modals/PictureModal'
 
-import { UiMessage } from "./UiMessage";
+import { UiMessage } from './UiMessage'
 
 interface MessagesListProps {
-  setReply: (val: Reply | undefined) => void;
-  channel: ChannelData;
+  setReply: (val: Reply | undefined) => void
+  channel: ChannelData
 }
 
 export function MessagesList({ setReply, channel }: MessagesListProps) {
-  const narrow = useNarrow();
-  const { messages, contacts } = useMessengerContext();
-  const ref = useRef<HTMLHeadingElement>(null);
-  const loadingMessages = useChatScrollHandle(messages, ref);
+  const narrow = useNarrow()
+  const { messages, contacts } = useMessengerContext()
+  const ref = useRef<HTMLHeadingElement>(null)
+  const loadingMessages = useChatScrollHandle(messages, ref)
 
   const shownMessages = useMemo(
     () =>
-      messages.filter(
-        (message) => !contacts?.[message.sender]?.blocked ?? true
-      ),
+      messages.filter(message => !contacts?.[message.sender]?.blocked ?? true),
     [contacts, messages]
-  );
+  )
 
-  const [image, setImage] = useState("");
-  const [link, setLink] = useState("");
+  const [image, setImage] = useState('')
+  const [link, setLink] = useState('')
 
   const { setModal: setPictureModal, isVisible: showPictureModal } =
-    useModal(PictureModalName);
+    useModal(PictureModalName)
   const { setModal: setLinkModal, isVisible: showLinkModal } =
-    useModal(LinkModalName);
+    useModal(LinkModalName)
 
   useEffect(
     () => (!image ? undefined : setPictureModal(true)),
     [image, setPictureModal]
-  );
+  )
   useEffect(
     () => (!link ? undefined : setLinkModal(true)),
     [link, setLinkModal]
-  );
+  )
 
   useEffect(
-    () => (!showPictureModal ? setImage("") : undefined),
+    () => (!showPictureModal ? setImage('') : undefined),
     [showPictureModal]
-  );
-  useEffect(() => (!showLinkModal ? setLink("") : undefined), [showLinkModal]);
+  )
+  useEffect(() => (!showLinkModal ? setLink('') : undefined), [showLinkModal])
 
   return (
-    <MessagesWrapper ref={ref} className={`${!narrow && "wide"}`}>
+    <MessagesWrapper ref={ref} className={`${!narrow && 'wide'}`}>
       <PictureModal image={image} />
       <LinkModal link={link} />
       <EmptyChannel channel={channel} />
@@ -78,7 +76,7 @@ export function MessagesList({ setReply, channel }: MessagesListProps) {
         />
       ))}
     </MessagesWrapper>
-  );
+  )
 }
 
 const LoadingWrapper = styled.div`
@@ -88,7 +86,7 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   background: ${({ theme }) => theme.bodyBackgroundColor};
   position: relative;
-`;
+`
 
 const MessagesWrapper = styled.div`
   display: flex;
@@ -104,4 +102,4 @@ const MessagesWrapper = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
-`;
+`

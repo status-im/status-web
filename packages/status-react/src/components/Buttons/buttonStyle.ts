@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components'
 
 export const buttonStyles = css`
-  font-family: "Inter";
+  font-family: 'Inter';
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
@@ -17,10 +17,10 @@ export const buttonStyles = css`
   &:focus {
     background: ${({ theme }) => theme.buttonBg};
   }
-`;
+`
 
 export const buttonTransparentStyles = css`
-  font-family: "Inter";
+  font-family: 'Inter';
   font-weight: 500;
   font-size: 13px;
   line-height: 18px;
@@ -37,7 +37,7 @@ export const buttonTransparentStyles = css`
   &:focus {
     background: ${({ theme }) => theme.buttonBg};
   }
-`;
+`
 
 export const ButtonNo = styled.button`
   padding: 11px 24px;
@@ -50,10 +50,10 @@ export const ButtonNo = styled.button`
   &:hover {
     background: ${({ theme }) => theme.buttonNoBgHover};
   }
-`;
+`
 
 export const ButtonYes = styled.button`
   padding: 11px 24px;
 
   ${buttonStyles}
-`;
+`

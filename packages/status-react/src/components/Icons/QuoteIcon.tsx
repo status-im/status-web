@@ -1,10 +1,10 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 type QuoteProps = {
-  width: number;
-  height: number;
-};
+  width: number
+  height: number
+}
 
 export function QuoteSvg({ width, height }: QuoteProps) {
   return (
@@ -23,7 +23,7 @@ export function QuoteSvg({ width, height }: QuoteProps) {
         strokeLinejoin="round"
       />
     </Icon>
-  );
+  )
 }
 
 const Icon = styled.svg`
@@ -34,4 +34,4 @@ const Icon = styled.svg`
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-`;
+`

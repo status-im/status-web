@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 
-import { textMediumStyles, textSmallStyles } from "../Text";
+import { textMediumStyles, textSmallStyles } from '../Text'
 
 export const MessageWrapper = styled.div`
   width: 100%;
@@ -28,14 +28,14 @@ export const MessageWrapper = styled.div`
     background: ${({ theme }) => theme.mentionBgHover};
     border-color: ${({ theme }) => theme.mentionColor};
   }
-`;
+`
 
 export const MessageOuterWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-`;
+`
 
 export const DateSeparator = styled.div`
   width: 100%;
@@ -45,7 +45,7 @@ export const DateSeparator = styled.div`
   text-align: center;
   justify-content: center;
   align-items: center;
-  font-family: "Inter";
+  font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
   color: #939ba1;
@@ -53,23 +53,23 @@ export const DateSeparator = styled.div`
   margin-bottom: 16px;
 
   ${textSmallStyles}
-`;
+`
 
 export const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 8px;
-`;
+`
 
 export const MessageHeaderWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
+`
 
 export const UserNameWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
+`
 
 export const UserName = styled.p`
   font-weight: 500;
@@ -77,7 +77,7 @@ export const UserName = styled.p`
   margin-right: 4px;
 
   ${textMediumStyles}
-`;
+`
 
 export const UserNameBtn = styled.button`
   padding: 0;
@@ -94,7 +94,7 @@ export const UserNameBtn = styled.button`
     cursor: default;
     text-decoration: none;
   }
-`;
+`
 
 export const UserAddress = styled.p`
   font-size: 10px;
@@ -105,7 +105,7 @@ export const UserAddress = styled.p`
   padding-right: 8px;
 
   &.chat:after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0;
     top: 50%;
@@ -115,7 +115,7 @@ export const UserAddress = styled.p`
     border-radius: 50%;
     background: ${({ theme }) => theme.secondary};
   }
-`;
+`
 
 export const TimeWrapper = styled.div`
   font-size: 10px;
@@ -124,14 +124,14 @@ export const TimeWrapper = styled.div`
   text-transform: uppercase;
   color: ${({ theme }) => theme.secondary};
   margin-left: 4px;
-`;
+`
 
 export const MessageText = styled.div`
   overflow-wrap: anywhere;
   width: 100%;
   white-space: pre-wrap;
   color: ${({ theme }) => theme.primary};
-`;
+`
 
 export const IconBtn = styled.button`
   width: 40px;
@@ -153,4 +153,4 @@ export const IconBtn = styled.button`
   &:disabled {
     cursor: default;
   }
-`;
+`

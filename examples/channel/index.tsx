@@ -1,6 +1,6 @@
-import React, { render } from 'react-dom';
-import { GroupChat, lightTheme } from '@status-im/react';
-import { StrictMode } from 'react';
+import React, { render } from 'react-dom'
+import { GroupChat, lightTheme } from '@status-im/react'
+import { StrictMode } from 'react'
 
 const App = () => {
   return (
@@ -14,12 +14,12 @@ const App = () => {
         }}
       />
     </div>
-  );
-};
+  )
+}
 
 render(
   <StrictMode>
     <App />
   </StrictMode>,
   document.getElementById('root')
-);
+)

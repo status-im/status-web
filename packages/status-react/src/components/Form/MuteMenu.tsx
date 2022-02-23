@@ -1,24 +1,24 @@
-import React, { useCallback } from "react";
-import styled from "styled-components";
+import React, { useCallback } from 'react'
+import styled from 'styled-components'
 
-import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
+import { DropdownMenu, MenuItem, MenuText } from './DropdownMenu'
 
 interface SubMenuProps {
-  setIsMuted: (val: boolean) => void;
-  className?: string;
+  setIsMuted: (val: boolean) => void
+  className?: string
 }
 
 export const MuteMenu = ({ setIsMuted, className }: SubMenuProps) => {
   const muteChannel = useCallback(
     (timeout: number) => {
-      setIsMuted(true);
-      const timer = setTimeout(() => setIsMuted(false), timeout * 6000000);
+      setIsMuted(true)
+      const timer = setTimeout(() => setIsMuted(false), timeout * 6000000)
       return () => {
-        clearTimeout(timer);
-      };
+        clearTimeout(timer)
+      }
     },
     [setIsMuted]
-  );
+  )
 
   return (
     <MuteDropdown className={className}>
@@ -38,8 +38,8 @@ export const MuteMenu = ({ setIsMuted, className }: SubMenuProps) => {
         <MenuText>Until I turn it back on</MenuText>
       </MenuItem>
     </MuteDropdown>
-  );
-};
+  )
+}
 
 const MuteDropdown = styled(DropdownMenu)`
   width: 176px;
@@ -61,4 +61,4 @@ const MuteDropdown = styled(DropdownMenu)`
     right: -16px;
     z-index: 3;
   }
-`;
+`

@@ -1,30 +1,30 @@
-import React, { useMemo, useRef, useState } from "react";
-import styled from "styled-components";
+import React, { useMemo, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { useIdentity } from "../../contexts/identityProvider";
-import { useActivities } from "../../hooks/useActivities";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { TopBtn } from "../Chat/ChatTopbar";
-import { ActivityIcon } from "../Icons/ActivityIcon";
+import { useIdentity } from '../../contexts/identityProvider'
+import { useActivities } from '../../hooks/useActivities'
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { TopBtn } from '../Chat/ChatTopbar'
+import { ActivityIcon } from '../Icons/ActivityIcon'
 
-import { ActivityCenter } from "./ActivityCenter";
+import { ActivityCenter } from './ActivityCenter'
 
 interface ActivityButtonProps {
-  className?: string;
+  className?: string
 }
 
 export function ActivityButton({ className }: ActivityButtonProps) {
-  const { activities, activityDispatch } = useActivities();
-  const identity = useIdentity();
-  const disabled = useMemo(() => !identity, [identity]);
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowActivityCenter(false));
+  const { activities, activityDispatch } = useActivities()
+  const identity = useIdentity()
+  const disabled = useMemo(() => !identity, [identity])
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowActivityCenter(false))
 
-  const [showActivityCenter, setShowActivityCenter] = useState(false);
+  const [showActivityCenter, setShowActivityCenter] = useState(false)
   const badgeAmount = useMemo(
-    () => activities.filter((activity) => !activity.isRead).length,
+    () => activities.filter(activity => !activity.isRead).length,
     [activities]
-  );
+  )
 
   return (
     <ActivityWrapper ref={ref} className={className}>
@@ -37,13 +37,13 @@ export function ActivityButton({ className }: ActivityButtonProps) {
           <NotificationBagde
             className={
               badgeAmount > 99
-                ? "countless"
+                ? 'countless'
                 : badgeAmount > 9
-                ? "wide"
+                ? 'wide'
                 : undefined
             }
           >
-            {badgeAmount < 100 ? badgeAmount : "∞"}
+            {badgeAmount < 100 ? badgeAmount : '∞'}
           </NotificationBagde>
         )}
       </TopBtn>
@@ -55,7 +55,7 @@ export function ActivityButton({ className }: ActivityButtonProps) {
         />
       )}
     </ActivityWrapper>
-  );
+  )
 }
 
 export const ActivityWrapper = styled.div`
@@ -64,7 +64,7 @@ export const ActivityWrapper = styled.div`
   position: relative;
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     top: 50%;
@@ -85,7 +85,7 @@ export const ActivityWrapper = styled.div`
       height: 0px;
     }
   }
-`;
+`
 
 const NotificationBagde = styled.div`
   width: 18px;
@@ -113,4 +113,4 @@ const NotificationBagde = styled.div`
   &.countless {
     width: 22px;
   }
-`;
+`

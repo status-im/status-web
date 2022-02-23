@@ -1,15 +1,15 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { Contact } from "../../models/Contact";
+import { Contact } from '../../models/Contact'
 
 type UserLogoProps = {
-  radius: number;
-  colorWheel: [string, number][];
-  contact?: Contact;
-  showOnlineStatus?: boolean;
-  icon?: string;
-};
+  radius: number
+  colorWheel: [string, number][]
+  contact?: Contact
+  showOnlineStatus?: boolean
+  icon?: string
+}
 
 export function UserLogo({
   icon,
@@ -21,43 +21,43 @@ export function UserLogo({
   const conicGradient = useMemo(() => {
     const colors = colorWheel
       .map((color, idx) => {
-        const prevDeg = idx === 0 ? "0deg" : `${colorWheel[idx - 1][1]}deg`;
-        return `${color[0]} ${prevDeg} ${color[1]}deg`;
+        const prevDeg = idx === 0 ? '0deg' : `${colorWheel[idx - 1][1]}deg`
+        return `${color[0]} ${prevDeg} ${color[1]}deg`
       })
-      .join(",");
-    return `conic-gradient(${colors})`;
-  }, [colorWheel]);
+      .join(',')
+    return `conic-gradient(${colors})`
+  }, [colorWheel])
 
   const letters = useMemo(() => {
     if (contact && contact?.customName) {
-      return contact.customName.slice(0, 2);
+      return contact.customName.slice(0, 2)
     }
     if (contact && contact.trueName) {
-      return contact.trueName.slice(0, 2);
+      return contact.trueName.slice(0, 2)
     }
-  }, [contact]);
+  }, [contact])
 
   const logoClassnName = useMemo(() => {
     if (showOnlineStatus) {
       if (contact && contact.online) {
-        return "online";
+        return 'online'
       }
-      return "offline";
+      return 'offline'
     }
-    return "";
-  }, [contact, showOnlineStatus]);
+    return ''
+  }, [contact, showOnlineStatus])
 
   return (
     <Wrapper radius={radius} conicGradient={conicGradient}>
       <Logo
         icon={icon}
         radius={radius}
-        className={contact ? logoClassnName : "empty"}
+        className={contact ? logoClassnName : 'empty'}
       >
         {!icon && <TextWrapper radius={radius}>{letters}</TextWrapper>}
       </Logo>
     </Wrapper>
-  );
+  )
 }
 
 const TextWrapper = styled.div<{ radius: number }>`
@@ -69,7 +69,7 @@ const TextWrapper = styled.div<{ radius: number }>`
   text-align: center;
   letter-spacing: -0.4px;
   color: ${({ theme }) => theme.iconTextColor};
-`;
+`
 
 const Logo = styled.div<{ radius: number; icon?: string }>`
   width: calc(${({ radius }) => radius}px - 6px);
@@ -89,7 +89,7 @@ const Logo = styled.div<{ radius: number; icon?: string }>`
 
   &.offline {
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       right: -1px;
       bottom: -2px;
@@ -103,7 +103,7 @@ const Logo = styled.div<{ radius: number; icon?: string }>`
 
   &.online {
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       right: -1px;
       bottom: -2px;
@@ -119,7 +119,7 @@ const Logo = styled.div<{ radius: number; icon?: string }>`
     background-color: ${({ theme }) => theme.bodyBackgroundColor};
     background-image: none;
   }
-`;
+`
 
 export const Wrapper = styled.div<{ radius: number; conicGradient: string }>`
   width: ${({ radius }) => radius}px;
@@ -129,4 +129,4 @@ export const Wrapper = styled.div<{ radius: number; conicGradient: string }>`
   justify-content: center;
   border-radius: 50%;
   background: ${({ conicGradient }) => conicGradient};
-`;
+`

@@ -1,6 +1,6 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components'
 
-import { textMediumStyles, textSmallStyles } from "../Text";
+import { textMediumStyles, textSmallStyles } from '../Text'
 
 export const inputStyles = css`
   background: ${({ theme }) => theme.inputColor};
@@ -15,7 +15,7 @@ export const inputStyles = css`
     outline: 1px solid ${({ theme }) => theme.tertiary};
     caret-color: ${({ theme }) => theme.notificationColor};
   }
-`;
+`
 
 export const Label = styled.p`
   margin-bottom: 7px;
@@ -25,24 +25,24 @@ export const Label = styled.p`
   color: ${({ theme }) => theme.primary};
 
   ${textSmallStyles}
-`;
+`
 
 export const InputWrapper = styled.div`
   width: 100%;
-`;
+`
 
 export const Wrapper = styled.div`
   position: relative;
   padding: 14px 70px 14px 8px;
   background: ${({ theme }) => theme.inputColor};
   border-radius: 8px;
-`;
+`
 
 export const Text = styled.p`
   color: ${({ theme }) => theme.primary};
 
   ${textMediumStyles}
-`;
+`
 
 export const ButtonWrapper = styled.div`
   position: absolute;
@@ -56,7 +56,7 @@ export const ButtonWrapper = styled.div`
   transform: translateY(-50%);
   background: ${({ theme }) => theme.inputColor};
   border-radius: 8px;
-`;
+`
 
 export const InputBtn = styled.button`
   padding: 6px 12px;
@@ -67,18 +67,18 @@ export const InputBtn = styled.button`
   background: ${({ theme }) => theme.buttonBg};
   border: 1px solid ${({ theme }) => theme.tertiary};
   border-radius: 6px;
-`;
+`
 
 export const NameInputWrapper = styled.div`
   position: relative;
-`;
+`
 
 export const NameInput = styled.input`
   width: 328px;
   padding: 11px 16px;
 
   ${inputStyles}
-`;
+`
 
 export const ClearBtn = styled.button`
   position: absolute;
@@ -90,4 +90,4 @@ export const ClearBtn = styled.button`
   & > svg {
     fill: ${({ theme }) => theme.secondary};
   }
-`;
+`

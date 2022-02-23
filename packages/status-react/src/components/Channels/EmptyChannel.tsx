@@ -1,44 +1,44 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { useUserPublicKey } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { ChannelData } from "../../models/ChannelData";
-import { textMediumStyles } from "../Text";
+import { useUserPublicKey } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useNarrow } from '../../contexts/narrowProvider'
+import { ChannelData } from '../../models/ChannelData'
+import { textMediumStyles } from '../Text'
 
-import { ChannelInfo, ChannelName } from "./Channel";
-import { ChannelLogo } from "./ChannelIcon";
+import { ChannelInfo, ChannelName } from './Channel'
+import { ChannelLogo } from './ChannelIcon'
 
 type ChannelBeggingTextProps = {
-  channel: ChannelData;
-};
+  channel: ChannelData
+}
 
 function ChannelBeggingText({ channel }: ChannelBeggingTextProps) {
-  const userPK = useUserPublicKey();
-  const { contacts } = useMessengerContext();
+  const userPK = useUserPublicKey()
+  const { contacts } = useMessengerContext()
   const members = useMemo(() => {
     if (channel?.members && userPK) {
       return channel.members
-        .filter((contact) => contact.id !== userPK)
-        .map((member) => contacts?.[member.id] ?? member);
+        .filter(contact => contact.id !== userPK)
+        .map(member => contacts?.[member.id] ?? member)
     }
-    return [];
-  }, [channel, contacts, userPK]);
+    return []
+  }, [channel, contacts, userPK])
 
   switch (channel.type) {
-    case "dm":
+    case 'dm':
       return (
         <EmptyText>
           Any messages you send here are encrypted and can only be read by you
           and <br />
           <span>{channel.name.slice(0, 10)}</span>.
         </EmptyText>
-      );
-    case "group":
+      )
+    case 'group':
       return (
         <EmptyTextGroup>
-          {userPK && <span>{userPK}</span>} created a group with{" "}
+          {userPK && <span>{userPK}</span>} created a group with{' '}
           {members.map((contact, idx) => (
             <span key={contact.id}>
               {contact?.customName ?? contact.trueName.slice(0, 10)}
@@ -46,36 +46,36 @@ function ChannelBeggingText({ channel }: ChannelBeggingTextProps) {
             </span>
           ))}
         </EmptyTextGroup>
-      );
-    case "channel":
+      )
+    case 'channel':
       return (
         <EmptyText>
           Welcome to the beginning of the <span>#{channel.name}</span> channel!
         </EmptyText>
-      );
+      )
   }
-  return null;
+  return null
 }
 
 type EmptyChannelProps = {
-  channel: ChannelData;
-};
+  channel: ChannelData
+}
 
 export function EmptyChannel({ channel }: EmptyChannelProps) {
-  const narrow = useNarrow();
+  const narrow = useNarrow()
 
   return (
-    <Wrapper className={`${!narrow && "wide"}`}>
+    <Wrapper className={`${!narrow && 'wide'}`}>
       <ChannelInfoEmpty>
         <ChannelLogoEmpty icon={channel.icon}>
-          {" "}
+          {' '}
           {!channel.icon && channel.name.slice(0, 1).toUpperCase()}
         </ChannelLogoEmpty>
         <ChannelNameEmpty active={true} channel={channel} />
       </ChannelInfoEmpty>
       <ChannelBeggingText channel={channel} />
     </Wrapper>
-  );
+  )
 }
 
 const Wrapper = styled.div`
@@ -87,11 +87,11 @@ const Wrapper = styled.div`
   &.wide {
     margin-top: 24px;
   }
-`;
+`
 
 const ChannelInfoEmpty = styled(ChannelInfo)`
   flex-direction: column;
-`;
+`
 
 const ChannelLogoEmpty = styled(ChannelLogo)`
   width: 120px;
@@ -100,14 +100,14 @@ const ChannelLogoEmpty = styled(ChannelLogo)`
   font-size: 51px;
   line-height: 62px;
   margin-bottom: 16px;
-`;
+`
 
 const ChannelNameEmpty = styled(ChannelName)`
   font-weight: bold;
   font-size: 22px;
   line-height: 30px;
   margin-bottom: 16px;
-`;
+`
 
 const EmptyText = styled.p`
   display: inline-block;
@@ -120,10 +120,10 @@ const EmptyText = styled.p`
   }
 
   ${textMediumStyles}
-`;
+`
 
 const EmptyTextGroup = styled(EmptyText)`
   & > span {
     word-break: break-all;
   }
-`;
+`

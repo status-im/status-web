@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { LeftIcon } from "../Icons/LeftIcon";
+import { LeftIcon } from '../Icons/LeftIcon'
 
 interface BackButtonProps {
-  onBtnClick: () => void;
-  className?: string;
+  onBtnClick: () => void
+  className?: string
 }
 
 export function BackButton({ onBtnClick, className }: BackButtonProps) {
@@ -13,7 +13,7 @@ export function BackButton({ onBtnClick, className }: BackButtonProps) {
     <BackBtn onClick={onBtnClick} className={className}>
       <LeftIcon width={24} height={24} className="black" />
     </BackBtn>
-  );
+  )
 }
 
 const BackBtn = styled.button`
@@ -28,4 +28,4 @@ const BackBtn = styled.button`
     position: static;
     margin-right: 13px;
   }
-`;
+`

@@ -1,22 +1,22 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { ChatState, useChatState } from "../../contexts/chatStateProvider";
-import { useIdentity } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { CreateIcon } from "../Icons/CreateIcon";
-import { UserCreation } from "../UserCreation/UserCreation";
+import { ChatState, useChatState } from '../../contexts/chatStateProvider'
+import { useIdentity } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { CreateIcon } from '../Icons/CreateIcon'
+import { UserCreation } from '../UserCreation/UserCreation'
 
-import { Channel } from "./Channel";
+import { Channel } from './Channel'
 
 interface ChannelsProps {
-  onCommunityClick?: () => void;
-  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>;
+  onCommunityClick?: () => void
+  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type GenerateChannelsProps = ChannelsProps & {
-  type: string;
-};
+  type: string
+}
 
 function GenerateChannels({
   type,
@@ -24,16 +24,16 @@ function GenerateChannels({
   setEditGroup,
 }: GenerateChannelsProps) {
   const { mentions, notifications, activeChannel, channelsDispatch, channels } =
-    useMessengerContext();
+    useMessengerContext()
 
-  const channelList = useMemo(() => Object.values(channels), [channels]);
+  const channelList = useMemo(() => Object.values(channels), [channels])
 
-  const setChatState = useChatState()[1];
+  const setChatState = useChatState()[1]
   return (
     <>
       {channelList
-        .filter((channel) => channel.type === type)
-        .map((channel) => (
+        .filter(channel => channel.type === type)
+        .map(channel => (
           <Channel
             key={channel.id}
             channel={channel}
@@ -41,26 +41,26 @@ function GenerateChannels({
             notified={notifications?.[channel.id] > 0}
             mention={mentions?.[channel.id]}
             onClick={() => {
-              channelsDispatch({ type: "ChangeActive", payload: channel.id });
+              channelsDispatch({ type: 'ChangeActive', payload: channel.id })
               if (onCommunityClick) {
-                onCommunityClick();
+                onCommunityClick()
               }
-              setChatState(ChatState.ChatBody);
+              setChatState(ChatState.ChatBody)
             }}
             setEditGroup={setEditGroup}
           />
         ))}
     </>
-  );
+  )
 }
 
 type ChatsListProps = {
-  onCommunityClick?: () => void;
-  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>;
-};
+  onCommunityClick?: () => void
+  setEditGroup?: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 function ChatsSideBar({ onCommunityClick, setEditGroup }: ChatsListProps) {
-  const setChatState = useChatState()[1];
+  const setChatState = useChatState()[1]
   return (
     <>
       <ChatsBar>
@@ -71,21 +71,21 @@ function ChatsSideBar({ onCommunityClick, setEditGroup }: ChatsListProps) {
       </ChatsBar>
       <ChatsList>
         <GenerateChannels
-          type={"group"}
+          type={'group'}
           onCommunityClick={onCommunityClick}
           setEditGroup={setEditGroup}
         />
-        <GenerateChannels type={"dm"} onCommunityClick={onCommunityClick} />
+        <GenerateChannels type={'dm'} onCommunityClick={onCommunityClick} />
       </ChatsList>
     </>
-  );
+  )
 }
 
 export function Channels({ onCommunityClick, setEditGroup }: ChannelsProps) {
-  const identity = useIdentity();
+  const identity = useIdentity()
   return (
     <ChannelList>
-      <GenerateChannels type={"channel"} onCommunityClick={onCommunityClick} />
+      <GenerateChannels type={'channel'} onCommunityClick={onCommunityClick} />
       <Chats>
         {identity ? (
           <ChatsSideBar
@@ -97,7 +97,7 @@ export function Channels({ onCommunityClick, setEditGroup }: ChannelsProps) {
         )}
       </Chats>
     </ChannelList>
-  );
+  )
 }
 
 export const ChannelList = styled.div`
@@ -107,7 +107,7 @@ export const ChannelList = styled.div`
   &::-webkit-scrollbar {
     width: 0;
   }
-`;
+`
 
 const Chats = styled.div`
   display: flex;
@@ -117,7 +117,7 @@ const Chats = styled.div`
   position: relative;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 50%;
@@ -127,26 +127,26 @@ const Chats = styled.div`
     background-color: ${({ theme }) => theme.primary};
     opacity: 0.1;
   }
-`;
+`
 
 const ChatsBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-`;
+`
 
 const ChatsList = styled.div`
   display: flex;
   flex-direction: column;
-`;
+`
 
 const Heading = styled.p`
   font-weight: bold;
   font-size: 17px;
   line-height: 24px;
   color: ${({ theme }) => theme.primary};
-`;
+`
 
 const EditBtn = styled.button`
   width: 32px;
@@ -161,4 +161,4 @@ const EditBtn = styled.button`
   &:active {
     background: ${({ theme }) => theme.sectionBackgroundColor};
   }
-`;
+`

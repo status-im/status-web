@@ -1,26 +1,26 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
+import { useMessengerContext } from '../../contexts/messengerProvider'
 
-import { MembersList } from "./MembersList";
+import { MembersList } from './MembersList'
 
 export function Members() {
-  const { activeChannel } = useMessengerContext();
+  const { activeChannel } = useMessengerContext()
   const heading = useMemo(
     () =>
-      activeChannel && activeChannel?.type === "group"
-        ? "Group members"
-        : "Members",
+      activeChannel && activeChannel?.type === 'group'
+        ? 'Group members'
+        : 'Members',
     [activeChannel]
-  );
+  )
 
   return (
     <MembersWrapper>
       <MemberHeading>{heading}</MemberHeading>
       <MembersList />
     </MembersWrapper>
-  );
+  )
 }
 
 const MembersWrapper = styled.div`
@@ -32,7 +32,7 @@ const MembersWrapper = styled.div`
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
   padding: 16px;
   overflow-y: scroll;
-`;
+`
 
 const MemberHeading = styled.h2`
   font-weight: 500;
@@ -40,4 +40,4 @@ const MemberHeading = styled.h2`
   line-height: 22px;
   color: ${({ theme }) => theme.primary};
   margin-bottom: 16px;
-`;
+`

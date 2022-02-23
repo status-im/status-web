@@ -1,27 +1,24 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { DownloadButton } from "../Buttons/DownloadButton";
-import {
-  CommunityIdentity,
-  CommunityIdentityProps,
-} from "../CommunityIdentity";
-import { CopyInput } from "../Form/CopyInput";
-import { StatusLogo } from "../Icons/StatusLogo";
-import { textSmallStyles } from "../Text";
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useNarrow } from '../../contexts/narrowProvider'
+import { DownloadButton } from '../Buttons/DownloadButton'
+import { CommunityIdentity, CommunityIdentityProps } from '../CommunityIdentity'
+import { CopyInput } from '../Form/CopyInput'
+import { StatusLogo } from '../Icons/StatusLogo'
+import { textSmallStyles } from '../Text'
 
-import { Modal } from "./Modal";
-import { Section, Text } from "./ModalStyle";
+import { Modal } from './Modal'
+import { Section, Text } from './ModalStyle'
 
-export const CommunityModalName = "CommunityModal";
+export const CommunityModalName = 'CommunityModal'
 
-type CommunityModalProps = CommunityIdentityProps;
+type CommunityModalProps = CommunityIdentityProps
 
 export const CommunityModal = ({ subtitle }: CommunityModalProps) => {
-  const narrow = useNarrow();
-  const { communityData } = useMessengerContext();
+  const narrow = useNarrow()
+  const { communityData } = useMessengerContext()
   return (
     <Modal name={CommunityModalName}>
       <Section>
@@ -32,7 +29,7 @@ export const CommunityModal = ({ subtitle }: CommunityModalProps) => {
       </Section>
       <Section>
         <CopyInput
-          value={communityData?.id ?? ""}
+          value={communityData?.id ?? ''}
           label="Community public key"
         />
         <Hint>
@@ -48,14 +45,14 @@ export const CommunityModal = ({ subtitle }: CommunityModalProps) => {
         </BottomSection>
       )}
     </Modal>
-  );
-};
+  )
+}
 
 const BottomSection = styled(Section)`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
+`
 
 const StyledDownloadButton = styled(DownloadButton)`
   display: inline;
@@ -66,11 +63,11 @@ const StyledDownloadButton = styled(DownloadButton)`
   line-height: 18px;
   text-decoration: underline;
   color: ${({ theme }) => theme.secondary};
-`;
+`
 
 const Hint = styled.p`
   margin-top: 16px;
   color: ${({ theme }) => theme.secondary};
 
   ${textSmallStyles}
-`;
+`

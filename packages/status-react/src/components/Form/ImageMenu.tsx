@@ -1,24 +1,24 @@
-import React, { useRef } from "react";
-import styled from "styled-components";
+import React, { useRef } from 'react'
+import styled from 'styled-components'
 
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { useContextMenu } from "../../hooks/useContextMenu";
-import { copyImg } from "../../utils/copyImg";
-import { downloadImg } from "../../utils/downloadImg";
-import { CopyIcon } from "../Icons/CopyIcon";
-import { DownloadIcon } from "../Icons/DownloadIcon";
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { useContextMenu } from '../../hooks/useContextMenu'
+import { copyImg } from '../../utils/copyImg'
+import { downloadImg } from '../../utils/downloadImg'
+import { CopyIcon } from '../Icons/CopyIcon'
+import { DownloadIcon } from '../Icons/DownloadIcon'
 
-import { DropdownMenu, MenuItem, MenuText } from "./DropdownMenu";
+import { DropdownMenu, MenuItem, MenuText } from './DropdownMenu'
 
 interface ImageMenuProps {
-  imageId: string;
+  imageId: string
 }
 
 export const ImageMenu = ({ imageId }: ImageMenuProps) => {
-  const { showMenu, setShowMenu } = useContextMenu(imageId);
+  const { showMenu, setShowMenu } = useContextMenu(imageId)
 
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowMenu(false));
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowMenu(false))
 
   return showMenu ? (
     <ImageDropdown menuRef={ref}>
@@ -32,11 +32,11 @@ export const ImageMenu = ({ imageId }: ImageMenuProps) => {
     </ImageDropdown>
   ) : (
     <></>
-  );
-};
+  )
+}
 
 const ImageDropdown = styled(DropdownMenu)`
   width: 176px;
   left: 120px;
   top: 46px;
-`;
+`

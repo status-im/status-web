@@ -1,15 +1,15 @@
-import QRCode from "qrcode.react";
-import React, { useState } from "react";
-import styled from "styled-components";
+import QRCode from 'qrcode.react'
+import React, { useState } from 'react'
+import styled from 'styled-components'
 
-import { buttonStyles } from "../Buttons/buttonStyle";
-import { LoginInstructions } from "../Form/LoginInstructions";
-import { PasteInput } from "../Form/PasteInput";
+import { buttonStyles } from '../Buttons/buttonStyle'
+import { LoginInstructions } from '../Form/LoginInstructions'
+import { PasteInput } from '../Form/PasteInput'
 
-import { Modal } from "./Modal";
-import { Heading, MiddleSection, Section } from "./ModalStyle";
+import { Modal } from './Modal'
+import { Heading, MiddleSection, Section } from './ModalStyle'
 
-export const StatusModalName = "StatusModal";
+export const StatusModalName = 'StatusModal'
 
 export enum StatusModalState {
   Mobile,
@@ -19,14 +19,14 @@ export enum StatusModalState {
 export function StatusModal() {
   const [modalState, setModalState] = useState<StatusModalState>(
     StatusModalState.Mobile
-  );
+  )
 
-  const mobileFlow = modalState === StatusModalState.Mobile;
-  const desktopFlow = modalState === StatusModalState.Desktop;
+  const mobileFlow = modalState === StatusModalState.Mobile
+  const desktopFlow = modalState === StatusModalState.Desktop
 
   const switchModalState = (state: StatusModalState) => {
-    setModalState((prev) => (prev === state ? StatusModalState.Mobile : state));
-  };
+    setModalState(prev => (prev === state ? StatusModalState.Mobile : state))
+  }
   return (
     <Modal name={StatusModalName}>
       <Section>
@@ -35,13 +35,13 @@ export function StatusModal() {
       <MiddleSectionStatus>
         <Switch>
           <SwitchBtn
-            className={`${modalState === StatusModalState.Mobile && "active"}`}
+            className={`${modalState === StatusModalState.Mobile && 'active'}`}
             onClick={() => switchModalState(StatusModalState.Mobile)}
           >
             From mobile
           </SwitchBtn>
           <SwitchBtnMobile
-            className={`${modalState === StatusModalState.Desktop && "active"}`}
+            className={`${modalState === StatusModalState.Desktop && 'active'}`}
             onClick={() => switchModalState(StatusModalState.Desktop)}
           >
             From desktop
@@ -55,18 +55,18 @@ export function StatusModal() {
         <LoginInstructions mobileFlow={mobileFlow} />
       </MiddleSectionStatus>
     </Modal>
-  );
+  )
 }
 
 const MiddleSectionStatus = styled(MiddleSection)`
   height: 514px;
-`;
+`
 
 const Switch = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 32px;
-`;
+`
 
 const SwitchBtn = styled.button`
   ${buttonStyles}
@@ -82,8 +82,8 @@ const SwitchBtn = styled.button`
     color: ${({ theme }) => theme.bodyBackgroundColor};
     z-index: 10000;
   }
-`;
+`
 
 const SwitchBtnMobile = styled(SwitchBtn)`
   margin-left: -8px;
-`;
+`

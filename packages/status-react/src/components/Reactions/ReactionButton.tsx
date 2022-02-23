@@ -1,17 +1,17 @@
-import { BaseEmoji } from "emoji-mart";
-import React, { useRef, useState } from "react";
-import styled from "styled-components";
+import { BaseEmoji } from 'emoji-mart'
+import React, { useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { Tooltip } from "../Form/Tooltip";
-import { ReactionSvg } from "../Icons/ReactionIcon";
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { Tooltip } from '../Form/Tooltip'
+import { ReactionSvg } from '../Icons/ReactionIcon'
 
-import { ReactionPicker } from "./ReactionPicker";
+import { ReactionPicker } from './ReactionPicker'
 
 interface ReactionButtonProps {
-  className?: string;
-  messageReactions: BaseEmoji[];
-  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>;
+  className?: string
+  messageReactions: BaseEmoji[]
+  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>
 }
 
 export function ReactionButton({
@@ -19,10 +19,10 @@ export function ReactionButton({
   messageReactions,
   setMessageReactions,
 }: ReactionButtonProps) {
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowReactions(false));
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowReactions(false))
 
-  const [showReactions, setShowReactions] = useState(false);
+  const [showReactions, setShowReactions] = useState(false)
 
   return (
     <Wrapper ref={ref}>
@@ -41,12 +41,12 @@ export function ReactionButton({
         {!className && !showReactions && <Tooltip tip="Add reaction" />}
       </ReactionBtn>
     </Wrapper>
-  );
+  )
 }
 
 const Wrapper = styled.div`
   position: relative;
-`;
+`
 
 export const ReactionBtn = styled.button`
   width: 32px;
@@ -87,4 +87,4 @@ export const ReactionBtn = styled.button`
       background: inherit;
     }
   }
-`;
+`

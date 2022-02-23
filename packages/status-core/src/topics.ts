@@ -1,15 +1,15 @@
-import { BN } from "bn.js";
-import { derive } from "ecies-geth";
-import { ec } from "elliptic";
-import { bufToHex } from "js-waku/build/main/lib/utils";
+import { BN } from 'bn.js'
+import { derive } from 'ecies-geth'
+import { ec } from 'elliptic'
+import { bufToHex } from 'js-waku/build/main/lib/utils'
 
-import { idToContentTopic } from "./contentTopic";
-import { hexToBuf } from "./utils";
+import { idToContentTopic } from './contentTopic'
+import { hexToBuf } from './utils'
 
-import { Identity } from ".";
+import { Identity } from '.'
 
-const EC = new ec("secp256k1");
-const partitionsNum = new BN(5000);
+const EC = new ec('secp256k1')
+const partitionsNum = new BN(5000)
 
 /**
  * Get the partitioned topic https://specs.status.im/spec/3#partitioned-topic
@@ -17,14 +17,14 @@ const partitionsNum = new BN(5000);
  * @returns string The Waku v2 Content Topic.
  */
 export function getPartitionedTopic(publicKey: string): string {
-  const key = EC.keyFromPublic(publicKey.slice(2), "hex");
-  const X = key.getPublic().getX();
+  const key = EC.keyFromPublic(publicKey.slice(2), 'hex')
+  const X = key.getPublic().getX()
 
-  const partition = X.mod(partitionsNum);
+  const partition = X.mod(partitionsNum)
 
-  const partitionTopic = `contact-discovery-${partition.toString()}`;
+  const partitionTopic = `contact-discovery-${partition.toString()}`
 
-  return idToContentTopic(partitionTopic);
+  return idToContentTopic(partitionTopic)
 }
 
 /**
@@ -37,10 +37,10 @@ export async function getNegotiatedTopic(
   identity: Identity,
   publicKey: string
 ): Promise<string> {
-  const key = EC.keyFromPublic(publicKey.slice(2), "hex");
+  const key = EC.keyFromPublic(publicKey.slice(2), 'hex')
   const sharedSecret = await derive(
     Buffer.from(identity.privateKey),
-    hexToBuf(key.getPublic("hex"))
-  );
-  return idToContentTopic(bufToHex(sharedSecret));
+    hexToBuf(key.getPublic('hex'))
+  )
+  return idToContentTopic(bufToHex(sharedSecret))
 }

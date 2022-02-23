@@ -1,19 +1,19 @@
-import React, { useMemo, useState } from "react";
-import styled from "styled-components";
+import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
 
-import { MembersList } from "../../components/Members/MembersList";
-import { useMessengerContext } from "../../contexts/messengerProvider";
+import { MembersList } from '../../components/Members/MembersList'
+import { useMessengerContext } from '../../contexts/messengerProvider'
 
 export function GroupMembers() {
-  const { addContact, activeChannel } = useMessengerContext();
+  const { addContact, activeChannel } = useMessengerContext()
   const heading = useMemo(
     () =>
-      activeChannel && activeChannel?.type === "group"
-        ? "Group members"
-        : "Members",
+      activeChannel && activeChannel?.type === 'group'
+        ? 'Group members'
+        : 'Members',
     [activeChannel]
-  );
-  const [newUserInput, setNewUserInput] = useState("");
+  )
+  const [newUserInput, setNewUserInput] = useState('')
   return (
     <>
       <MembersWrapper>
@@ -21,12 +21,12 @@ export function GroupMembers() {
         <MembersList />
         <input
           value={newUserInput}
-          onChange={(e) => setNewUserInput(e.target.value)}
+          onChange={e => setNewUserInput(e.target.value)}
         />
         <button onClick={() => addContact(newUserInput)}>Add Contact</button>
       </MembersWrapper>
     </>
-  );
+  )
 }
 
 const MembersWrapper = styled.div`
@@ -38,7 +38,7 @@ const MembersWrapper = styled.div`
   background-color: ${({ theme }) => theme.sectionBackgroundColor};
   padding: 16px;
   overflow-y: scroll;
-`;
+`
 
 const MemberHeading = styled.h2`
   font-weight: 500;
@@ -46,4 +46,4 @@ const MemberHeading = styled.h2`
   line-height: 22px;
   color: ${({ theme }) => theme.primary};
   margin-bottom: 16px;
-`;
+`

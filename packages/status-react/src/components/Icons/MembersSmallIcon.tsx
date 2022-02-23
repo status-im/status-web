@@ -1,11 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 type MembersSmallIconProps = {
-  width: number;
-  height: number;
-  className?: string;
-};
+  width: number
+  height: number
+  className?: string
+}
 
 export function MembersSmallIcon({
   height,
@@ -28,9 +28,9 @@ export function MembersSmallIcon({
       />
       <path d="M3.43173 14.5246C3.68748 14.5885 3.94646 14.4427 4.05591 14.2029C4.73877 12.7066 6.24803 11.6667 8.00019 11.6667C9.77912 11.6667 11.3077 12.7386 11.9752 14.2718C12.0861 14.5265 12.3654 14.6775 12.6306 14.5947C12.8925 14.5128 13.0416 14.2337 12.9376 13.9797C12.1414 12.0359 10.2307 10.6667 8.00019 10.6667C5.80286 10.6667 3.9159 11.9955 3.09905 13.8934C2.98436 14.1599 3.15026 14.4542 3.43173 14.5246Z" />
     </Icon>
-  );
+  )
 }
 
 const Icon = styled.svg`
   fill: ${({ theme }) => theme.tertiary};
-`;
+`

@@ -1,24 +1,24 @@
-import { BaseEmoji } from "emoji-mart";
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import { BaseEmoji } from 'emoji-mart'
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { useUserPublicKey } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { Reply } from "../../hooks/useReply";
-import { ChatMessage } from "../../models/ChatMessage";
-import { Tooltip } from "../Form/Tooltip";
-import { DeleteIcon } from "../Icons/DeleteIcon";
-import { EditIcon } from "../Icons/EditIcon";
-import { PinIcon } from "../Icons/PinIcon";
-import { ReplySvg } from "../Icons/ReplyIcon";
+import { useUserPublicKey } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { Reply } from '../../hooks/useReply'
+import { ChatMessage } from '../../models/ChatMessage'
+import { Tooltip } from '../Form/Tooltip'
+import { DeleteIcon } from '../Icons/DeleteIcon'
+import { EditIcon } from '../Icons/EditIcon'
+import { PinIcon } from '../Icons/PinIcon'
+import { ReplySvg } from '../Icons/ReplyIcon'
 
-import { ReactionBtn, ReactionButton } from "./ReactionButton";
+import { ReactionBtn, ReactionButton } from './ReactionButton'
 
 interface ReactionsProps {
-  message: ChatMessage;
-  setReply: (val: Reply | undefined) => void;
-  messageReactions: BaseEmoji[];
-  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>;
+  message: ChatMessage
+  setReply: (val: Reply | undefined) => void
+  messageReactions: BaseEmoji[]
+  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>
 }
 
 export function Reactions({
@@ -27,13 +27,13 @@ export function Reactions({
   messageReactions,
   setMessageReactions,
 }: ReactionsProps) {
-  const userPK = useUserPublicKey();
-  const { activeChannel } = useMessengerContext();
+  const userPK = useUserPublicKey()
+  const { activeChannel } = useMessengerContext()
 
   const userMessage = useMemo(
     () => !!userPK && message.sender === userPK,
     [userPK, message]
-  );
+  )
 
   return (
     <Wrapper>
@@ -60,7 +60,7 @@ export function Reactions({
           <Tooltip tip="Edit" />
         </ReactionBtn>
       )}
-      {activeChannel?.type !== "channel" && (
+      {activeChannel?.type !== 'channel' && (
         <ReactionBtn>
           <PinIcon width={22} height={22} />
           <Tooltip tip="Pin" />
@@ -73,7 +73,7 @@ export function Reactions({
         </ReactionBtn>
       )}
     </Wrapper>
-  );
+  )
 }
 
 const Wrapper = styled.div`
@@ -86,4 +86,4 @@ const Wrapper = styled.div`
   background: ${({ theme }) => theme.bodyBackgroundColor};
   padding: 2px;
   visibility: hidden;
-`;
+`

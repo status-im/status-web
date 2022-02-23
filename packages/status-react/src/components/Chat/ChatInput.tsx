@@ -1,42 +1,36 @@
-import { EmojiData } from "emoji-mart";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import styled from "styled-components";
+import { EmojiData } from 'emoji-mart'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import styled from 'styled-components'
 
-import { ChatState, useChatState } from "../../contexts/chatStateProvider";
-import { useIdentity } from "../../contexts/identityProvider";
-import { useMessengerContext } from "../../contexts/messengerProvider";
-import { useModal } from "../../contexts/modalProvider";
-import { useNarrow } from "../../contexts/narrowProvider";
-import { useClickOutside } from "../../hooks/useClickOutside";
-import { Reply } from "../../hooks/useReply";
-import { uintToImgUrl } from "../../utils/uintToImgUrl";
-import { ClearBtn } from "../Form/inputStyles";
-import { ClearSvg } from "../Icons/ClearIcon";
-import { ClearSvgFull } from "../Icons/ClearIconFull";
-import { EmojiIcon } from "../Icons/EmojiIcon";
-import { GifIcon } from "../Icons/GifIcon";
-import { PictureIcon } from "../Icons/PictureIcon";
-import { ReplySvg } from "../Icons/ReplyIcon";
-import { StickerIcon } from "../Icons/StickerIcon";
-import "emoji-mart/css/emoji-mart.css";
-import { SizeLimitModal, SizeLimitModalName } from "../Modals/SizeLimitModal";
-import { UserCreationStartModalName } from "../Modals/UserCreationStartModal";
-import { SearchBlock } from "../SearchBlock";
-import { textMediumStyles, textSmallStyles } from "../Text";
+import { ChatState, useChatState } from '../../contexts/chatStateProvider'
+import { useIdentity } from '../../contexts/identityProvider'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
+import { useNarrow } from '../../contexts/narrowProvider'
+import { useClickOutside } from '../../hooks/useClickOutside'
+import { Reply } from '../../hooks/useReply'
+import { uintToImgUrl } from '../../utils/uintToImgUrl'
+import { ClearBtn } from '../Form/inputStyles'
+import { ClearSvg } from '../Icons/ClearIcon'
+import { ClearSvgFull } from '../Icons/ClearIconFull'
+import { EmojiIcon } from '../Icons/EmojiIcon'
+import { GifIcon } from '../Icons/GifIcon'
+import { PictureIcon } from '../Icons/PictureIcon'
+import { ReplySvg } from '../Icons/ReplyIcon'
+import { StickerIcon } from '../Icons/StickerIcon'
+import 'emoji-mart/css/emoji-mart.css'
+import { SizeLimitModal, SizeLimitModalName } from '../Modals/SizeLimitModal'
+import { UserCreationStartModalName } from '../Modals/UserCreationStartModal'
+import { SearchBlock } from '../SearchBlock'
+import { textMediumStyles, textSmallStyles } from '../Text'
 
-import { EmojiPicker } from "./EmojiPicker";
+import { EmojiPicker } from './EmojiPicker'
 
 interface ChatInputProps {
-  reply?: Reply | undefined;
-  setReply?: (val: Reply | undefined) => void;
-  createChat?: (group: string[]) => void;
-  group?: string[];
+  reply?: Reply | undefined
+  setReply?: (val: Reply | undefined) => void
+  createChat?: (group: string[]) => void
+  group?: string[]
 }
 
 export function ChatInput({
@@ -45,109 +39,109 @@ export function ChatInput({
   createChat,
   group,
 }: ChatInputProps) {
-  const narrow = useNarrow();
-  const identity = useIdentity();
-  const setChatState = useChatState()[1];
-  const disabled = useMemo(() => !identity, [identity]);
-  const { sendMessage, contacts } = useMessengerContext();
-  const [content, setContent] = useState("");
-  const [clearComponent, setClearComponent] = useState("");
-  const [showEmoji, setShowEmoji] = useState(false);
-  const [inputHeight, setInputHeight] = useState(40);
-  const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined);
+  const narrow = useNarrow()
+  const identity = useIdentity()
+  const setChatState = useChatState()[1]
+  const disabled = useMemo(() => !identity, [identity])
+  const { sendMessage, contacts } = useMessengerContext()
+  const [content, setContent] = useState('')
+  const [clearComponent, setClearComponent] = useState('')
+  const [showEmoji, setShowEmoji] = useState(false)
+  const [inputHeight, setInputHeight] = useState(40)
+  const [imageUint, setImageUint] = useState<undefined | Uint8Array>(undefined)
 
-  const { setModal } = useModal(SizeLimitModalName);
+  const { setModal } = useModal(SizeLimitModalName)
   const { setModal: setCreationStartModal } = useModal(
     UserCreationStartModalName
-  );
+  )
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('')
 
-  const inputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLDivElement>(null)
 
-  const ref = useRef(null);
-  useClickOutside(ref, () => setShowEmoji(false));
+  const ref = useRef(null)
+  useClickOutside(ref, () => setShowEmoji(false))
 
   const image = useMemo(
-    () => (imageUint ? uintToImgUrl(imageUint) : ""),
+    () => (imageUint ? uintToImgUrl(imageUint) : ''),
     [imageUint]
-  );
+  )
 
   const addEmoji = useCallback(
     (e: EmojiData) => {
-      if ("unified" in e) {
-        const sym = e.unified.split("-");
-        const codesArray: string[] = [];
-        sym.forEach((el: string) => codesArray.push("0x" + el));
+      if ('unified' in e) {
+        const sym = e.unified.split('-')
+        const codesArray: string[] = []
+        sym.forEach((el: string) => codesArray.push('0x' + el))
         const emoji = String.fromCodePoint(
           ...(codesArray as unknown as number[])
-        );
+        )
         if (inputRef.current) {
-          inputRef.current.appendChild(document.createTextNode(emoji));
+          inputRef.current.appendChild(document.createTextNode(emoji))
         }
-        setContent((p) => p + emoji);
+        setContent(p => p + emoji)
       }
     },
     [setContent]
-  );
+  )
 
   const resizeTextArea = useCallback((target: HTMLDivElement) => {
-    target.style.height = "40px";
-    target.style.height = `${Math.min(target.scrollHeight, 438)}px`;
-    setInputHeight(target.scrollHeight);
-  }, []);
+    target.style.height = '40px'
+    target.style.height = `${Math.min(target.scrollHeight, 438)}px`
+    setInputHeight(target.scrollHeight)
+  }, [])
 
-  const rowHeight = inputHeight + (image ? 73 : 0);
+  const rowHeight = inputHeight + (image ? 73 : 0)
 
   const onInputChange = useCallback(
     (e: React.ChangeEvent<HTMLDivElement>) => {
-      const element = document.getSelection();
-      const inputElement = inputRef.current;
+      const element = document.getSelection()
+      const inputElement = inputRef.current
       if (inputElement && element && element.rangeCount > 0) {
-        const selection = element?.getRangeAt(0)?.startOffset;
-        const parentElement = element.anchorNode?.parentElement;
-        if (parentElement && parentElement.tagName === "B") {
-          parentElement.outerHTML = parentElement.innerText;
-          const range = document.createRange();
-          const sel = window.getSelection();
+        const selection = element?.getRangeAt(0)?.startOffset
+        const parentElement = element.anchorNode?.parentElement
+        if (parentElement && parentElement.tagName === 'B') {
+          parentElement.outerHTML = parentElement.innerText
+          const range = document.createRange()
+          const sel = window.getSelection()
           if (element.anchorNode.firstChild) {
             const childNumber =
-              element.focusOffset === 0 ? 0 : element.focusOffset - 1;
+              element.focusOffset === 0 ? 0 : element.focusOffset - 1
             range.setStart(
               element.anchorNode.childNodes[childNumber],
               selection
-            );
+            )
           }
-          range.collapse(true);
+          range.collapse(true)
 
-          sel?.removeAllRanges();
-          sel?.addRange(range);
+          sel?.removeAllRanges()
+          sel?.addRange(range)
         }
       }
-      const target = e.target;
-      resizeTextArea(target);
-      setContent(target.textContent ?? "");
+      const target = e.target
+      resizeTextArea(target)
+      setContent(target.textContent ?? '')
     },
     [resizeTextArea]
-  );
+  )
 
   const onInputKeyPress = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key == "Enter" && !e.getModifierState("Shift")) {
-        e.preventDefault();
-        (e.target as HTMLDivElement).style.height = "40px";
-        setInputHeight(40);
-        sendMessage(content, imageUint, reply?.id);
-        setImageUint(undefined);
-        setClearComponent("");
+      if (e.key == 'Enter' && !e.getModifierState('Shift')) {
+        e.preventDefault()
+        ;(e.target as HTMLDivElement).style.height = '40px'
+        setInputHeight(40)
+        sendMessage(content, imageUint, reply?.id)
+        setImageUint(undefined)
+        setClearComponent('')
         if (inputRef.current) {
-          inputRef.current.innerHTML = "";
+          inputRef.current.innerHTML = ''
         }
-        setContent("");
-        if (setReply) setReply(undefined);
+        setContent('')
+        if (setReply) setReply(undefined)
         if (createChat && group) {
-          createChat(group);
-          setChatState(ChatState.ChatBody);
+          createChat(group)
+          setChatState(ChatState.ChatBody)
         }
       }
     },
@@ -161,88 +155,88 @@ export function ChatInput({
       setChatState,
       setReply,
     ]
-  );
+  )
 
   const [selectedElement, setSelectedElement] = useState<{
-    element: Selection | null;
-    start: number;
-    end: number;
-    text: string;
-    node: Node | null;
-  }>({ element: null, start: 0, end: 0, text: "", node: null });
+    element: Selection | null
+    start: number
+    end: number
+    text: string
+    node: Node | null
+  }>({ element: null, start: 0, end: 0, text: '', node: null })
 
   const handleCursorChange = useCallback(() => {
-    const element = document.getSelection();
+    const element = document.getSelection()
     if (element && element.rangeCount > 0) {
-      const selection = element?.getRangeAt(0)?.startOffset;
-      const text = element?.anchorNode?.textContent;
+      const selection = element?.getRangeAt(0)?.startOffset
+      const text = element?.anchorNode?.textContent
       if (selection && text) {
-        const end = text.indexOf(" ", selection);
-        const start = text.lastIndexOf(" ", selection - 1);
+        const end = text.indexOf(' ', selection)
+        const start = text.lastIndexOf(' ', selection - 1)
         setSelectedElement({
           element,
           start,
           end,
           text,
           node: element.anchorNode,
-        });
+        })
         const substring = text.substring(
           start > -1 ? start + 1 : 0,
           end > -1 ? end : undefined
-        );
-        if (substring.startsWith("@")) {
-          setQuery(substring.slice(1));
+        )
+        if (substring.startsWith('@')) {
+          setQuery(substring.slice(1))
         } else {
-          setQuery("");
+          setQuery('')
         }
       }
     }
-  }, []);
+  }, [])
 
-  useEffect(handleCursorChange, [content, handleCursorChange]);
+  useEffect(handleCursorChange, [content, handleCursorChange])
 
   const addMention = useCallback(
     (contact: string) => {
       if (inputRef?.current) {
-        const { element, start, end, text, node } = selectedElement;
+        const { element, start, end, text, node } = selectedElement
         if (element && text && node) {
-          const firstSlice = text.slice(0, start > -1 ? start : 0);
-          const secondSlice = text.slice(end > -1 ? end : content.length);
-          const replaceContent = `${firstSlice} @${contact}${secondSlice}`;
-          const spaceElement = document.createTextNode(" ");
-          const contactElement = document.createElement("span");
-          contactElement.innerText = `@${contact}`;
+          const firstSlice = text.slice(0, start > -1 ? start : 0)
+          const secondSlice = text.slice(end > -1 ? end : content.length)
+          const replaceContent = `${firstSlice} @${contact}${secondSlice}`
+          const spaceElement = document.createTextNode(' ')
+          const contactElement = document.createElement('span')
+          contactElement.innerText = `@${contact}`
 
           if (contactElement && element.rangeCount > 0) {
-            const range = element.getRangeAt(0);
-            range.setStart(node, start > -1 ? start : 0);
+            const range = element.getRangeAt(0)
+            range.setStart(node, start > -1 ? start : 0)
             if (end === -1 || end > text.length) {
-              range.setEnd(node, text.length);
+              range.setEnd(node, text.length)
             } else {
-              range.setEnd(node, end);
+              range.setEnd(node, end)
             }
-            range.deleteContents();
+            range.deleteContents()
             if (end === -1) {
-              range.insertNode(spaceElement.cloneNode());
+              range.insertNode(spaceElement.cloneNode())
             }
-            range.insertNode(contactElement);
+            range.insertNode(contactElement)
             if (start > -1) {
-              range.insertNode(spaceElement.cloneNode());
+              range.insertNode(spaceElement.cloneNode())
             }
-            range.collapse();
+            range.collapse()
           }
-          inputRef.current.focus();
-          setQuery("");
-          setContent(replaceContent);
-          resizeTextArea(inputRef.current);
+          inputRef.current.focus()
+          setQuery('')
+          setContent(replaceContent)
+          resizeTextArea(inputRef.current)
         }
       }
     },
     [inputRef, content, selectedElement, resizeTextArea]
-  );
+  )
 
   return (
-    <View className={`${createChat && "creation"}`}>
+    <View className={`${createChat && 'creation'}`}>
       <SizeLimitModal />
       <AddPictureInputWrapper>
         <PictureIcon />
@@ -251,18 +245,18 @@ export function ChatInput({
           type="file"
           multiple={true}
           accept="image/png, image/jpeg"
-          onChange={(e) => {
-            const fileReader = new FileReader();
-            fileReader.onloadend = (s) => {
-              const arr = new Uint8Array(s.target?.result as ArrayBuffer);
-              setImageUint(arr);
-            };
+          onChange={e => {
+            const fileReader = new FileReader()
+            fileReader.onloadend = s => {
+              const arr = new Uint8Array(s.target?.result as ArrayBuffer)
+              setImageUint(arr)
+            }
 
             if (e?.target?.files?.[0]) {
               if (e.target.files[0].size < 1024 * 1024) {
-                fileReader.readAsArrayBuffer(e.target.files[0]);
+                fileReader.readAsArrayBuffer(e.target.files[0])
               } else {
-                setModal(true);
+                setModal(true)
               }
             }
           }}
@@ -272,8 +266,8 @@ export function ChatInput({
         {reply && (
           <ReplyWrapper>
             <ReplyTo>
-              {" "}
-              <ReplySvg width={18} height={18} className="input" />{" "}
+              {' '}
+              <ReplySvg width={18} height={18} className="input" />{' '}
               {contacts[reply.sender]?.customName ??
                 contacts[reply.sender].trueName}
             </ReplyTo>
@@ -281,10 +275,10 @@ export function ChatInput({
             {reply.image && <ImagePreview src={reply.image} />}
             <CloseButton
               onClick={() => {
-                if (setReply) setReply(undefined);
+                if (setReply) setReply(undefined)
               }}
             >
-              {" "}
+              {' '}
               <ClearSvg width={20} height={20} className="input" />
             </CloseButton>
           </ReplyWrapper>
@@ -314,10 +308,10 @@ export function ChatInput({
                 onClick={handleCursorChange}
                 dangerouslySetInnerHTML={{
                   __html: disabled
-                    ? "You need to join this community to send messages"
+                    ? 'You need to join this community to send messages'
                     : clearComponent,
                 }}
-                className={`${disabled && "disabled"} `}
+                className={`${disabled && 'disabled'} `}
               />
             )}
             {query && (
@@ -333,7 +327,7 @@ export function ChatInput({
             <EmojiWrapper ref={ref}>
               <ChatButton
                 onClick={() => {
-                  if (!disabled) setShowEmoji(!showEmoji);
+                  if (!disabled) setShowEmoji(!showEmoji)
                 }}
                 disabled={disabled}
               >
@@ -355,7 +349,7 @@ export function ChatInput({
         </Row>
       </InputArea>
     </View>
-  );
+  )
 }
 
 const InputWrapper = styled.div`
@@ -363,11 +357,11 @@ const InputWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   position: relative;
-`;
+`
 
 const EmojiWrapper = styled.div`
   position: relative;
-`;
+`
 
 const View = styled.div`
   display: flex;
@@ -378,7 +372,7 @@ const View = styled.div`
   &.creation {
     padding: 0;
   }
-`;
+`
 
 const InputArea = styled.div`
   position: relative;
@@ -389,7 +383,7 @@ const InputArea = styled.div`
   padding: 2px;
   background: ${({ theme }) => theme.inputColor};
   border-radius: 16px 16px 4px 16px;
-`;
+`
 
 const Row = styled.div`
   position: relative;
@@ -400,7 +394,7 @@ const Row = styled.div`
   padding-right: 6px;
   background: ${({ theme }) => theme.inputColor};
   border-radius: 16px 16px 4px 16px;
-`;
+`
 
 const InputButtons = styled.div`
   display: flex;
@@ -409,19 +403,19 @@ const InputButtons = styled.div`
   button + button {
     margin-left: 4px;
   }
-`;
+`
 
 const ImageWrapper = styled.div`
   width: 64px;
   position: relative;
-`;
+`
 const ImagePreview = styled.img`
   width: 64px;
   height: 64px;
   border-radius: 16px 16px 4px 16px;
   margin-left: 8px;
   margin-top: 9px;
-`;
+`
 
 const ClearImgBtn = styled(ClearBtn)`
   width: 24px;
@@ -432,7 +426,7 @@ const ClearImgBtn = styled(ClearBtn)`
   padding: 0;
   border: 2px solid ${({ theme }) => theme.inputColor};
   background-color: ${({ theme }) => theme.inputColor};
-`;
+`
 
 const Input = styled.div`
   display: block;
@@ -480,7 +474,7 @@ const Input = styled.div`
       cursor: default;
     }
   }
-`;
+`
 
 const AddPictureInputWrapper = styled.div`
   position: relative;
@@ -491,14 +485,14 @@ const AddPictureInputWrapper = styled.div`
   height: 32px;
   margin-right: 4px;
 
-  & > input[type="file"]::-webkit-file-upload-button {
+  & > input[type='file']::-webkit-file-upload-button {
     cursor: pointer;
   }
 
   & > input:disabled::-webkit-file-upload-button {
     cursor: default;
   }
-`;
+`
 
 const AddPictureInput = styled.input`
   position: absolute;
@@ -507,7 +501,7 @@ const AddPictureInput = styled.input`
   width: 100%;
   height: 100%;
   opacity: 0;
-`;
+`
 
 const ChatButton = styled.button`
   width: 32px;
@@ -516,13 +510,13 @@ const ChatButton = styled.button`
   &:disabled {
     cursor: default;
   }
-`;
+`
 
 const CloseButton = styled(ChatButton)`
   position: absolute;
   top: 0;
   right: 0;
-`;
+`
 
 const ReplyWrapper = styled.div`
   display: flex;
@@ -533,14 +527,14 @@ const ReplyWrapper = styled.div`
   color: ${({ theme }) => theme.primary};
   border-radius: 14px 14px 4px 14px;
   position: relative;
-`;
+`
 
 export const ReplyTo = styled.div`
   display: flex;
   align-items: center;
   font-weight: 500;
   ${textSmallStyles};
-`;
+`
 
 export const ReplyOn = styled.div`
   width: 100%;
@@ -548,7 +542,7 @@ export const ReplyOn = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   ${textSmallStyles};
-`;
+`
 
 const JoinBtn = styled.button`
   color: ${({ theme }) => theme.secondary};
@@ -559,4 +553,4 @@ const JoinBtn = styled.button`
   text-align: start;
 
   ${textMediumStyles};
-`;
+`

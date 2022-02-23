@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const StatusIcon = () => (
   <svg
@@ -21,4 +21,4 @@ export const StatusIcon = () => (
       fill="#4360DF"
     />
   </svg>
-);
+)

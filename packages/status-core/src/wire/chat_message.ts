@@ -1,20 +1,16 @@
-import { Reader } from "protobufjs";
+import { Reader } from 'protobufjs'
 
-import * as proto from "../proto/communities/v1/chat_message";
+import * as proto from '../proto/communities/v1/chat_message'
 import {
   AudioMessage,
   AudioMessage_AudioType,
   ChatMessage_ContentType,
   ImageMessage,
   StickerMessage,
-} from "../proto/communities/v1/chat_message";
-import { ImageType, MessageType } from "../proto/communities/v1/enums";
+} from '../proto/communities/v1/chat_message'
+import { ImageType, MessageType } from '../proto/communities/v1/enums'
 
-export type Content =
-  | TextContent
-  | StickerContent
-  | ImageContent
-  | AudioContent;
+export type Content = TextContent | StickerContent | ImageContent | AudioContent
 
 export enum ContentType {
   Text,
@@ -24,43 +20,43 @@ export enum ContentType {
 }
 
 export interface TextContent {
-  text: string;
-  contentType: ContentType.Text;
+  text: string
+  contentType: ContentType.Text
 }
 
 export interface StickerContent {
-  hash: string;
-  pack: number;
-  contentType: ContentType.Sticker;
+  hash: string
+  pack: number
+  contentType: ContentType.Sticker
 }
 
 export interface ImageContent {
-  image: Uint8Array;
-  imageType: ImageType;
-  contentType: ContentType.Image;
+  image: Uint8Array
+  imageType: ImageType
+  contentType: ContentType.Image
 }
 
 export interface AudioContent {
-  audio: Uint8Array;
-  audioType: AudioMessage_AudioType;
-  durationMs: number;
-  contentType: ContentType.Audio;
+  audio: Uint8Array
+  audioType: AudioMessage_AudioType
+  durationMs: number
+  contentType: ContentType.Audio
 }
 
 function isText(content: Content): content is TextContent {
-  return content.contentType === ContentType.Text;
+  return content.contentType === ContentType.Text
 }
 
 function isSticker(content: Content): content is StickerContent {
-  return content.contentType === ContentType.Sticker;
+  return content.contentType === ContentType.Sticker
 }
 
 function isImage(content: Content): content is ImageContent {
-  return content.contentType === ContentType.Image;
+  return content.contentType === ContentType.Image
 }
 
 function isAudio(content: Content): content is AudioContent {
-  return content.contentType === ContentType.Audio;
+  return content.contentType === ContentType.Audio
 }
 
 export class ChatMessage {
@@ -81,36 +77,36 @@ export class ChatMessage {
     let sticker,
       image,
       audio,
-      text = "Upgrade to the latest version to see this media content.";
-    let contentType = ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN;
+      text = 'Upgrade to the latest version to see this media content.'
+    let contentType = ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN
 
     if (isText(content)) {
-      if (!content.text) throw "Malformed Text Content";
-      text = content.text;
-      contentType = ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN;
+      if (!content.text) throw 'Malformed Text Content'
+      text = content.text
+      contentType = ChatMessage_ContentType.CONTENT_TYPE_TEXT_PLAIN
     } else if (isSticker(content)) {
-      if (!content.hash || !content.pack) throw "Malformed Sticker Content";
+      if (!content.hash || !content.pack) throw 'Malformed Sticker Content'
       sticker = {
         hash: content.hash,
         pack: content.pack,
-      };
-      contentType = ChatMessage_ContentType.CONTENT_TYPE_STICKER;
+      }
+      contentType = ChatMessage_ContentType.CONTENT_TYPE_STICKER
     } else if (isImage(content)) {
-      if (!content.image || !content.imageType) throw "Malformed Image Content";
+      if (!content.image || !content.imageType) throw 'Malformed Image Content'
       image = {
         payload: content.image,
         type: content.imageType,
-      };
-      contentType = ChatMessage_ContentType.CONTENT_TYPE_IMAGE;
+      }
+      contentType = ChatMessage_ContentType.CONTENT_TYPE_IMAGE
     } else if (isAudio(content)) {
       if (!content.audio || !content.audioType || !content.durationMs)
-        throw "Malformed Audio Content";
+        throw 'Malformed Audio Content'
       audio = {
         payload: content.audio,
         type: content.audioType,
         durationMs: content.durationMs,
-      };
-      contentType = ChatMessage_ContentType.CONTENT_TYPE_AUDIO;
+      }
+      contentType = ChatMessage_ContentType.CONTENT_TYPE_AUDIO
     }
 
     const proto = {
@@ -118,9 +114,9 @@ export class ChatMessage {
       timestamp, //ms?
       text,
       /** Id of the message that we are replying to */
-      responseTo: responseTo ?? "",
+      responseTo: responseTo ?? '',
       /** Ens name of the sender */
-      ensName: "",
+      ensName: '',
       /** Public Key of the community (TBC) **/
       chatId,
       /** The type of message (public/one-to-one/private-group-chat) */
@@ -132,24 +128,24 @@ export class ChatMessage {
       audio,
       community: undefined, // Used to share a community
       grant: undefined,
-    };
+    }
 
-    return new ChatMessage(proto);
+    return new ChatMessage(proto)
   }
 
   static decode(bytes: Uint8Array): ChatMessage {
-    const protoBuf = proto.ChatMessage.decode(Reader.create(bytes));
+    const protoBuf = proto.ChatMessage.decode(Reader.create(bytes))
 
-    return new ChatMessage(protoBuf);
+    return new ChatMessage(protoBuf)
   }
 
   encode(): Uint8Array {
-    return proto.ChatMessage.encode(this.proto).finish();
+    return proto.ChatMessage.encode(this.proto).finish()
   }
 
   /** Lamport timestamp of the chat message */
   public get clock(): number | undefined {
-    return this.proto.clock;
+    return this.proto.clock
   }
 
   /**
@@ -157,28 +153,28 @@ export class ChatMessage {
    * so that we don't rely on it
    */
   public get timestamp(): number | undefined {
-    return this.proto.timestamp;
+    return this.proto.timestamp
   }
 
   /**
    * Text of the message
    */
   public get text(): string | undefined {
-    return this.proto.text;
+    return this.proto.text
   }
 
   /**
    * Id of the message that we are replying to
    */
   public get responseTo(): string | undefined {
-    return this.proto.responseTo;
+    return this.proto.responseTo
   }
 
   /**
    * Ens name of the sender
    */
   public get ensName(): string | undefined {
-    return this.proto.ensName;
+    return this.proto.ensName
   }
 
   /**
@@ -188,39 +184,39 @@ export class ChatMessage {
    * Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
    */
   public get chatId(): string {
-    return this.proto.chatId;
+    return this.proto.chatId
   }
 
   /**
    * The type of message (public/one-to-one/private-group-chat)
    */
   public get messageType(): MessageType | undefined {
-    return this.proto.messageType;
+    return this.proto.messageType
   }
 
   /**
    * The type of the content of the message
    */
   public get contentType(): ChatMessage_ContentType | undefined {
-    return this.proto.contentType;
+    return this.proto.contentType
   }
 
   public get sticker(): StickerMessage | undefined {
-    return this.proto.sticker;
+    return this.proto.sticker
   }
 
   public get image(): ImageMessage | undefined {
-    return this.proto.image;
+    return this.proto.image
   }
 
   public get audio(): AudioMessage | undefined {
-    return this.proto.audio;
+    return this.proto.audio
   }
 
   /**
    * Used when sharing a community via a chat message.
    */
   public get community(): Uint8Array | undefined {
-    return this.proto.community;
+    return this.proto.community
   }
 }

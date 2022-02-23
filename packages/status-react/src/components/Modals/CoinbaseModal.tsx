@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react'
 
-import { ConnectModal } from "./ConnectModal";
-import { Modal } from "./Modal";
+import { ConnectModal } from './ConnectModal'
+import { Modal } from './Modal'
 
-export const CoinbaseModalName = "CoinbaseModal";
+export const CoinbaseModalName = 'CoinbaseModal'
 
 export function CoinbaseModal() {
   return (
@@ -14,5 +14,5 @@ export function CoinbaseModal() {
         address="https://www.coinbase.com/wallet"
       />
     </Modal>
-  );
+  )
 }

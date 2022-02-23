@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 export const WalletConnectLogo = () => {
   return (
@@ -31,5 +31,5 @@ export const WalletConnectLogo = () => {
         </radialGradient>
       </defs>
     </svg>
-  );
-};
+  )
+}

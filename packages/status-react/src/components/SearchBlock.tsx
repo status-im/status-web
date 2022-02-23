@@ -1,16 +1,16 @@
-import React, { useMemo } from "react";
-import styled from "styled-components";
+import React, { useMemo } from 'react'
+import styled from 'styled-components'
 
-import { useMessengerContext } from "../contexts/messengerProvider";
+import { useMessengerContext } from '../contexts/messengerProvider'
 
-import { ContactsList } from "./Chat/ChatCreation";
-import { Member } from "./Members/Member";
+import { ContactsList } from './Chat/ChatCreation'
+import { Member } from './Members/Member'
 
 interface SearchBlockProps {
-  query: string;
-  discludeList: string[];
-  onClick: (member: string) => void;
-  onBotttom?: boolean;
+  query: string
+  discludeList: string[]
+  onClick: (member: string) => void
+  onBotttom?: boolean
 }
 
 export const SearchBlock = ({
@@ -19,36 +19,36 @@ export const SearchBlock = ({
   onClick,
   onBotttom,
 }: SearchBlockProps) => {
-  const { contacts } = useMessengerContext();
+  const { contacts } = useMessengerContext()
 
   const searchList = useMemo(() => {
     return Object.values(contacts)
       .filter(
-        (member) =>
+        member =>
           member.id.includes(query) ||
           member?.customName?.includes(query) ||
           member.trueName.includes(query)
       )
-      .filter((member) => !discludeList.includes(member.id));
-  }, [query, discludeList, contacts]);
+      .filter(member => !discludeList.includes(member.id))
+  }, [query, discludeList, contacts])
 
   if (searchList.length === 0 || !query) {
-    return null;
+    return null
   }
   return (
     <SearchContacts
-      style={{ [onBotttom ? "bottom" : "top"]: "calc(100% + 24px)" }}
+      style={{ [onBotttom ? 'bottom' : 'top']: 'calc(100% + 24px)' }}
     >
       <ContactsList>
-        {searchList.map((member) => (
+        {searchList.map(member => (
           <SearchContact key={member.id}>
             <Member contact={member} onClick={() => onClick(member.id)} />
           </SearchContact>
         ))}
       </ContactsList>
     </SearchContacts>
-  );
-};
+  )
+}
 
 const SearchContacts = styled.div`
   display: flex;
@@ -63,7 +63,7 @@ const SearchContacts = styled.div`
   left: 0;
   max-height: 200px;
   overflow: auto;
-`;
+`
 
 const SearchContact = styled.div`
   width: 340px;
@@ -75,4 +75,4 @@ const SearchContact = styled.div`
   &:hover {
     background: ${({ theme }) => theme.inputColor};
   }
-`;
+`

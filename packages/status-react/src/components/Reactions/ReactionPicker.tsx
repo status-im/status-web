@@ -1,14 +1,14 @@
-import { BaseEmoji, Emoji, getEmojiDataFromNative } from "emoji-mart";
-import data from "emoji-mart/data/all.json";
-import React, { useCallback } from "react";
-import styled from "styled-components";
+import { BaseEmoji, Emoji, getEmojiDataFromNative } from 'emoji-mart'
+import data from 'emoji-mart/data/all.json'
+import React, { useCallback } from 'react'
+import styled from 'styled-components'
 
-const emojiHeart = getEmojiDataFromNative("❤️", "twitter", data);
-const emojiLike = getEmojiDataFromNative("👍", "twitter", data);
-const emojiDislike = getEmojiDataFromNative("👎", "twitter", data);
-const emojiLaughing = getEmojiDataFromNative("😆", "twitter", data);
-const emojiDisappointed = getEmojiDataFromNative("😥", "twitter", data);
-const emojiRage = getEmojiDataFromNative("😡", "twitter", data);
+const emojiHeart = getEmojiDataFromNative('❤️', 'twitter', data)
+const emojiLike = getEmojiDataFromNative('👍', 'twitter', data)
+const emojiDislike = getEmojiDataFromNative('👎', 'twitter', data)
+const emojiLaughing = getEmojiDataFromNative('😆', 'twitter', data)
+const emojiDisappointed = getEmojiDataFromNative('😥', 'twitter', data)
+const emojiRage = getEmojiDataFromNative('😡', 'twitter', data)
 
 export const emojiArr = [
   emojiHeart,
@@ -17,12 +17,12 @@ export const emojiArr = [
   emojiLaughing,
   emojiDisappointed,
   emojiRage,
-];
+]
 
 interface ReactionPickerProps {
-  className?: string;
-  messageReactions: BaseEmoji[];
-  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>;
+  className?: string
+  messageReactions: BaseEmoji[]
+  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>
 }
 
 export function ReactionPicker({
@@ -32,33 +32,33 @@ export function ReactionPicker({
 }: ReactionPickerProps) {
   const handleReaction = useCallback(
     (emoji: BaseEmoji) => {
-      messageReactions.find((e) => e === emoji)
-        ? setMessageReactions((prev) => prev.filter((e) => e != emoji))
-        : setMessageReactions((prev) => [...prev, emoji]);
+      messageReactions.find(e => e === emoji)
+        ? setMessageReactions(prev => prev.filter(e => e != emoji))
+        : setMessageReactions(prev => [...prev, emoji])
     },
     [messageReactions, setMessageReactions]
-  );
+  )
 
   return (
     <Wrapper className={className}>
-      {emojiArr.map((emoji) => (
+      {emojiArr.map(emoji => (
         <EmojiBtn
           key={emoji.id}
           onClick={() => handleReaction(emoji)}
-          className={`${messageReactions.includes(emoji) && "chosen"}`}
-          menuMode={className === "menu"}
+          className={`${messageReactions.includes(emoji) && 'chosen'}`}
+          menuMode={className === 'menu'}
         >
-          {" "}
+          {' '}
           <Emoji
             emoji={emoji}
-            set={"twitter"}
+            set={'twitter'}
             skin={emoji.skin || 1}
-            size={className === "menu" ? 20 : 32}
+            size={className === 'menu' ? 20 : 32}
           />
         </EmojiBtn>
       ))}
     </Wrapper>
-  );
+  )
 }
 
 const Wrapper = styled.div`
@@ -87,11 +87,11 @@ const Wrapper = styled.div`
     border: none;
     padding: 0;
   }
-`;
+`
 
 export const EmojiBtn = styled.button<{ menuMode: boolean }>`
-  width: ${({ menuMode }) => (menuMode ? "24px" : "40px")};
-  height: ${({ menuMode }) => (menuMode ? "24px" : "40px")};
+  width: ${({ menuMode }) => (menuMode ? '24px' : '40px')};
+  height: ${({ menuMode }) => (menuMode ? '24px' : '40px')};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,4 +105,4 @@ export const EmojiBtn = styled.button<{ menuMode: boolean }>`
     background: ${({ theme }) => theme.reactionBg};
     border: 1px solid ${({ theme }) => theme.tertiary};
   }
-`;
+`

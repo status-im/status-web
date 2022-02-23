@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 type ReactionProps = {
-  className?: string;
-};
+  className?: string
+}
 
 export function ReactionSvg({ className }: ReactionProps) {
   return (
@@ -32,7 +32,7 @@ export function ReactionSvg({ className }: ReactionProps) {
         />
       </g>
     </Icon>
-  );
+  )
 }
 
 const Icon = styled.svg`
@@ -48,4 +48,4 @@ const Icon = styled.svg`
     width: 18px;
     height: 18px;
   }
-`;
+`

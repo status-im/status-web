@@ -1,12 +1,12 @@
-import { BaseEmoji, Emoji } from "emoji-mart";
-import React, { useCallback } from "react";
-import styled from "styled-components";
+import { BaseEmoji, Emoji } from 'emoji-mart'
+import React, { useCallback } from 'react'
+import styled from 'styled-components'
 
-import { ReactionButton } from "../Reactions/ReactionButton";
+import { ReactionButton } from '../Reactions/ReactionButton'
 
 interface MessageReactionsProps {
-  messageReactions: BaseEmoji[];
-  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>;
+  messageReactions: BaseEmoji[]
+  setMessageReactions: React.Dispatch<React.SetStateAction<BaseEmoji[]>>
 }
 
 export function MessageReactions({
@@ -14,26 +14,26 @@ export function MessageReactions({
   setMessageReactions,
 }: MessageReactionsProps) {
   const isMyReactionIncluded = (emoji: BaseEmoji) =>
-    messageReactions.includes(emoji); // temporary function while message reactions are not added to waku
+    messageReactions.includes(emoji) // temporary function while message reactions are not added to waku
 
   const handleReaction = useCallback(
     (emoji: BaseEmoji) => {
-      messageReactions.find((e) => e === emoji)
-        ? setMessageReactions((prev) => prev.filter((e) => e != emoji))
-        : setMessageReactions((prev) => [...prev, emoji]);
+      messageReactions.find(e => e === emoji)
+        ? setMessageReactions(prev => prev.filter(e => e != emoji))
+        : setMessageReactions(prev => [...prev, emoji])
     },
     [messageReactions, setMessageReactions]
-  );
+  )
 
   return (
     <Reactions>
-      {messageReactions.map((reaction) => (
+      {messageReactions.map(reaction => (
         <EmojiReaction
-          className={`${isMyReactionIncluded(reaction) && "chosen"}`}
+          className={`${isMyReactionIncluded(reaction) && 'chosen'}`}
           key={reaction.id}
           onClick={() => handleReaction(reaction)}
         >
-          <Emoji emoji={reaction} set={"twitter"} size={16} />
+          <Emoji emoji={reaction} set={'twitter'} size={16} />
           <p>1</p>
         </EmojiReaction>
       ))}
@@ -43,14 +43,14 @@ export function MessageReactions({
         className="small"
       />
     </Reactions>
-  );
+  )
 }
 
 export const Reactions = styled.div`
   display: flex;
   align-items: center;
   margin-top: 6px;
-`;
+`
 
 const EmojiReaction = styled.button`
   display: flex;
@@ -80,4 +80,4 @@ const EmojiReaction = styled.button`
     border: 1px solid ${({ theme }) => theme.tertiary};
     color: ${({ theme }) => theme.tertiary};
   }
-`;
+`

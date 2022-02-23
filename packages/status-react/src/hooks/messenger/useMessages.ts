@@ -2,14 +2,14 @@ import {
   ApplicationMetadataMessage,
   Contacts,
   Identity,
-  bufToHex
-} from "@status-im/core";
-import { useCallback, useMemo, useState } from "react";
+  bufToHex,
+} from '@status-im/core'
+import { useCallback, useMemo, useState } from 'react'
 
-import { ChatMessage } from "../../models/ChatMessage";
-import { binarySetInsert } from "../../utils";
+import { ChatMessage } from '../../models/ChatMessage'
+import { binarySetInsert } from '../../utils'
 
-import { useNotifications } from "./useNotifications";
+import { useNotifications } from './useNotifications'
 
 export function useMessages(
   chatId: string,
@@ -21,25 +21,25 @@ export function useMessages(
 ) {
   const [messages, setMessages] = useState<{ [chatId: string]: ChatMessage[] }>(
     {}
-  );
+  )
   const { notifications, incNotification, clearNotifications } =
-    useNotifications();
+    useNotifications()
 
   const {
     notifications: mentions,
     incNotification: incMentions,
     clearNotifications: clearMentions,
-  } = useNotifications();
+  } = useNotifications()
 
   const addChatMessage = useCallback(
     (newMessage: ChatMessage | undefined, id: string) => {
       if (newMessage) {
-        contacts?.addContact(newMessage.sender);
+        contacts?.addContact(newMessage.sender)
         setMessages(prev => {
           if (newMessage.responseTo && prev[id]) {
             newMessage.quote = prev[id].find(
               msg => msg.id === newMessage.responseTo
-            );
+            )
           }
           return {
             ...prev,
@@ -49,37 +49,37 @@ export function useMessages(
               (a, b) => a.date < b.date,
               (a, b) => a.date.getTime() === b.date.getTime()
             ),
-          };
-        });
+          }
+        })
         subscriptions.current.forEach(subscription =>
           subscription(newMessage, id)
-        );
-        incNotification(id);
+        )
+        incNotification(id)
         if (
           identity &&
           newMessage.content.includes(`@${bufToHex(identity.publicKey)}`)
         ) {
-          incMentions(id);
+          incMentions(id)
         }
       }
     },
     [contacts, identity, subscriptions, incMentions, incNotification]
-  );
+  )
 
   const addMessage = useCallback(
     (msg: ApplicationMetadataMessage, id: string, date: Date) => {
-      const newMessage = ChatMessage.fromMetadataMessage(msg, date);
-      addChatMessage(newMessage, id);
+      const newMessage = ChatMessage.fromMetadataMessage(msg, date)
+      addChatMessage(newMessage, id)
     },
     [addChatMessage]
-  );
+  )
 
   const activeMessages = useMemo(() => {
     if (messages?.[chatId]) {
-      return [...messages[chatId]];
+      return [...messages[chatId]]
     }
-    return [];
-  }, [messages, chatId]);
+    return []
+  }, [messages, chatId])
 
   return {
     messages: activeMessages,
@@ -89,5 +89,5 @@ export function useMessages(
     mentions,
     clearMentions,
     addChatMessage,
-  };
+  }
 }
