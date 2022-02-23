@@ -1,23 +1,19 @@
 {
-  "name": "@waku/chat-sdk-root",
-  "packageManager": "yarn@3.1.0",
-  "license": "MIT OR Apache-2.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "keywords": [],
   "scripts": {
     "fix": "run-s 'fix:*' && wsrun -e -c -s fix",
     "fix:prettier": "prettier \"./*.json\" --write",
     "build": "wsrun -e -c -s build",
-    "test": "wsrun -e -c -s test",
-    "sc": "yarn workspace @waku/status-communities"
+    "test": "wsrun -e -c -s test"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.2",
     "wsrun": "^5.2.4"
   },
-  "private": true,
-  "workspaces": {
-    "packages": [
-      "packages/*"
-    ]
-  }
+  "packageManager": "yarn@1.22.17"
 }
