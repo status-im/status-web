@@ -10,13 +10,14 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
-  "main": "dist/cjs/src/index.js",
-  "module": "dist/esm/src/index.js",
-  "types": "dist/esm/src/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "run-s 'build:*'",
     "build:esm": "tsc --module es2020 --target es2017 --outDir dist/esm",
     "build:cjs": "tsc --outDir dist/cjs",
+    "build:types": "tsc --emitDeclarationOnly",
     "fix": "run-s 'fix:*'",
     "fix:lint": "eslint src --ext .ts --fix",
     "test": "run-s 'test:*'",
@@ -24,7 +25,8 @@
     "test:unit": "mocha",
     "proto": "run-s 'proto:*'",
     "proto:lint": "buf lint",
-    "proto:build": "buf generate"
+    "proto:build": "buf generate",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
@@ -46,8 +48,7 @@
     "mocha": "^9.1.1",
     "npm-run-all": "^4.1.5",
     "ts-node": "^10.2.1",
-    "ts-proto": "^1.83.0",
-    "typescript": "^4.4.3"
+    "ts-proto": "^1.83.0"
   },
   "dependencies": {
     "bn.js": "^5.2.0",
