@@ -1,5 +1,6 @@
-import { Identity } from '@status-im/core'
 import React, { useState } from 'react'
+
+import { Identity } from '@status-im/core'
 import styled from 'styled-components'
 
 import {
@@ -10,16 +11,14 @@ import {
 } from '../../contexts/identityProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { useNameError } from '../../hooks/useNameError'
-import { Contact } from '../../models/Contact'
 import { saveIdentity } from '../../utils'
-import { NameError } from '../Form/NameError'
 import { ClearBtn, NameInput, NameInputWrapper } from '../Form/inputStyles'
+import { NameError } from '../Form/NameError'
 import { AddIcon } from '../Icons/AddIcon'
 import { ChainIcon } from '../Icons/ChainIcon'
 import { ClearSvgFull } from '../Icons/ClearIconFull'
 import { LeftIcon } from '../Icons/LeftIcon'
 import { UserLogo } from '../Members/UserLogo'
-
 import { AgreementModalName } from './AgreementModal'
 import { Modal } from './Modal'
 import {
@@ -33,6 +32,8 @@ import {
   Text,
 } from './ModalStyle'
 import { EmojiKey, UserAddress } from './ProfileModal'
+
+import type { Contact } from '../../models/Contact'
 
 export const UserCreationModalName = 'UserCreationModal'
 

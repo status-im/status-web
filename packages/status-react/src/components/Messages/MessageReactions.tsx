@@ -1,8 +1,11 @@
-import { BaseEmoji, Emoji } from 'emoji-mart'
 import React, { useCallback } from 'react'
+
+import { Emoji } from 'emoji-mart'
 import styled from 'styled-components'
 
 import { ReactionButton } from '../Reactions/ReactionButton'
+
+import type { BaseEmoji } from 'emoji-mart'
 
 interface MessageReactionsProps {
   messageReactions: BaseEmoji[]

@@ -1,8 +1,10 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useNarrow } from '../../contexts/narrowProvider'
-import { ChannelData } from '../../models/ChannelData'
+
+import type { ChannelData } from '../../models/ChannelData'
 
 interface ChannelIconProps {
   channel: ChannelData

@@ -2,7 +2,8 @@ import { expect } from 'chai'
 import { Waku } from 'js-waku'
 
 import { Community } from './community'
-import { CommunityDescription } from './wire/community_description'
+
+import type { CommunityDescription } from './wire/community_description'
 
 describe('Community [live data]', () => {
   before(function () {

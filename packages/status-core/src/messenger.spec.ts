@@ -6,8 +6,9 @@ import { Community } from './community'
 import { Identity } from './identity'
 import { Messenger } from './messenger'
 import { bufToHex } from './utils'
-import { ApplicationMetadataMessage } from './wire/application_metadata_message'
 import { ContentType } from './wire/chat_message'
+
+import type { ApplicationMetadataMessage } from './wire/application_metadata_message'
 
 const testChatId = 'test-chat-id'
 
@@ -97,6 +98,7 @@ describe('Messenger', () => {
 
     const receivedMessage = await receivedMessagePromise
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     expect(bufToHex(receivedMessage.signer!)).to.eq(
       bufToHex(identityAlice.publicKey)
     )

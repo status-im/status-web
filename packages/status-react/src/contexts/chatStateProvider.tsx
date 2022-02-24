@@ -21,5 +21,9 @@ export function useChatState() {
 
 export function ChatStateProvider({ children }: { children: React.ReactNode }) {
   const state = useState(ChatState.ChatBody)
-  return <ChatStateContext.Provider value={state} children={children} />
+  return (
+    <ChatStateContext.Provider value={state}>
+      {children}
+    </ChatStateContext.Provider>
+  )
 }

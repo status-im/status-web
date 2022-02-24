@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import styled from 'styled-components'
 
 import { Channels } from '../components/Channels/Channels'
@@ -18,7 +19,6 @@ import { WalletModal } from '../components/Modals/WalletModal'
 import { ToastMessageList } from '../components/ToastMessages/ToastMessageList'
 import { ChatState, useChatState } from '../contexts/chatStateProvider'
 import { useNarrow } from '../contexts/narrowProvider'
-
 import { GroupChatBody } from './GroupChat/GroupChatBody'
 import { GroupMembers } from './GroupMembers/GroupMembers'
 

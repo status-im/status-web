@@ -1,9 +1,9 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useNarrow } from '../../contexts/narrowProvider'
 import { ColorChatIcon } from '../Icons/ColorChatIcon'
-
 import { UserCreationButtons } from './UserCreationButtons'
 
 interface UserCreationProps {

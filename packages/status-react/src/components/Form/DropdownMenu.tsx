@@ -1,7 +1,10 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+
 import styled from 'styled-components'
 
 import { textSmallStyles } from '../Text'
+
+import type { ReactNode } from 'react'
 
 type DropdownMenuProps = {
   children: ReactNode

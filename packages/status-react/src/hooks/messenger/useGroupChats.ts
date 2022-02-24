@@ -1,19 +1,20 @@
-import {
-  Contacts as ContactsClass,
-  GroupChat,
-  GroupChats,
-  Identity,
-  Messenger,
-  ChatMessage as StatusChatMessage,
-} from '@status-im/core'
 import { useCallback, useMemo } from 'react'
 
-import { ChannelData } from '../../models/ChannelData'
+import { GroupChats } from '@status-im/core'
+
 import { ChatMessage } from '../../models/ChatMessage'
-import { Contact } from '../../models/Contact'
 import { uintToImgUrl } from '../../utils'
 
-import { ChannelAction } from './useChannelsReducer'
+import type { ChannelData } from '../../models/ChannelData'
+import type { Contact } from '../../models/Contact'
+import type { ChannelAction } from './useChannelsReducer'
+import type {
+  ChatMessage as StatusChatMessage,
+  Contacts as ContactsClass,
+  GroupChat,
+  Identity,
+  Messenger,
+} from '@status-im/core'
 
 const contactFromId = (member: string): Contact => {
   return {

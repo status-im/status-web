@@ -1,5 +1,4 @@
 import { Buffer } from 'buffer'
-
 import { keccak256 } from 'js-sha3'
 
 const TopicLength = 4

@@ -1,10 +1,11 @@
 import debug from 'debug'
-import { Waku } from 'js-waku'
 
 import { Chat } from './chat'
 import { bufToHex, hexToBuf } from './utils'
-import { CommunityChat } from './wire/community_chat'
 import { CommunityDescription } from './wire/community_description'
+
+import type { CommunityChat } from './wire/community_chat'
+import type { Waku } from 'js-waku'
 
 const dbg = debug('communities:community')
 

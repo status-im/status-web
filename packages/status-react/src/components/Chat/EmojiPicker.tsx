@@ -1,9 +1,13 @@
-import { EmojiData, Picker } from 'emoji-mart'
 import React from 'react'
+
+import { Picker } from 'emoji-mart'
 import { useTheme } from 'styled-components'
 
 import { useLow } from '../../contexts/narrowProvider'
-import { lightTheme, Theme } from '../../styles/themes'
+import { lightTheme } from '../../styles/themes'
+
+import type { Theme } from '../../styles/themes'
+import type { EmojiData } from 'emoji-mart'
 
 type EmojiPickerProps = {
   showEmoji: boolean

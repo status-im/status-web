@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useIdentity } from '../../contexts/identityProvider'
@@ -6,7 +7,6 @@ import { useActivities } from '../../hooks/useActivities'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { TopBtn } from '../Chat/ChatTopbar'
 import { ActivityIcon } from '../Icons/ActivityIcon'
-
 import { ActivityCenter } from './ActivityCenter'
 
 interface ActivityButtonProps {

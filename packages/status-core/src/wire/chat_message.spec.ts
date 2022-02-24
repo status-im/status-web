@@ -5,14 +5,9 @@ import {
   ChatMessage_ContentType,
 } from '../proto/communities/v1/chat_message'
 import { ImageType } from '../proto/communities/v1/enums'
+import { ChatMessage, ContentType } from './chat_message'
 
-import {
-  AudioContent,
-  ChatMessage,
-  ContentType,
-  ImageContent,
-  StickerContent,
-} from './chat_message'
+import type { AudioContent, ImageContent, StickerContent } from './chat_message'
 
 describe('Chat Message', () => {
   it('Encode & decode Image message', () => {

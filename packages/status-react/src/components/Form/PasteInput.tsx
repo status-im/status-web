@@ -1,8 +1,8 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { paste } from '../../utils/paste'
-
 import {
   ButtonWrapper,
   InputBtn,

@@ -1,7 +1,9 @@
 import { idToContentTopic } from './contentTopic'
 import { createSymKeyFromPassword } from './encryption'
-import { ChatMessage, Content } from './wire/chat_message'
-import { CommunityChat } from './wire/community_chat'
+import { ChatMessage } from './wire/chat_message'
+
+import type { Content } from './wire/chat_message'
+import type { CommunityChat } from './wire/community_chat'
 
 /**
  * Represent a chat room. Only public chats are currently supported.

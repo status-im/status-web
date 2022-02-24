@@ -1,4 +1,4 @@
-import { Contact } from './Contact'
+import type { Contact } from './Contact'
 
 export type ChannelData = {
   id: string

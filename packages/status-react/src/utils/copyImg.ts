@@ -1,4 +1,4 @@
-const copyToClipboard = async (pngBlob: any) => {
+const copyToClipboard = async (pngBlob: Blob) => {
   try {
     await navigator.clipboard.write([
       new ClipboardItem({

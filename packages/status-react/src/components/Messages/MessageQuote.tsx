@@ -1,12 +1,14 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useScrollToMessage } from '../../contexts/scrollProvider'
-import { ChatMessage } from '../../models/ChatMessage'
 import { ReplyOn, ReplyTo } from '../Chat/ChatInput'
 import { QuoteSvg } from '../Icons/QuoteIcon'
 import { UserIcon } from '../Icons/UserIcon'
+
+import type { ChatMessage } from '../../models/ChatMessage'
 
 function calcHeight(quote: ChatMessage) {
   if (quote.image && quote.content) {

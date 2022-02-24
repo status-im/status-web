@@ -1,6 +1,6 @@
 import { useReducer } from 'react'
 
-import { ChannelData, ChannelsData } from '../../models/ChannelData'
+import type { ChannelData, ChannelsData } from '../../models/ChannelData'
 
 export type ChannelsState = {
   channels: ChannelsData

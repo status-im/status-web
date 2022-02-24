@@ -1,8 +1,9 @@
 import React, { createContext, useContext } from 'react'
 
-import { MessengerType, useMessenger } from '../hooks/messenger/useMessenger'
-
+import { useMessenger } from '../hooks/messenger/useMessenger'
 import { useIdentity, useNickname } from './identityProvider'
+
+import type { MessengerType } from '../hooks/messenger/useMessenger'
 
 const MessengerContext = createContext<MessengerType>({
   messenger: undefined,
@@ -46,5 +47,9 @@ export function MessengerProvider({
   const identity = useIdentity()
   const nickname = useNickname()
   const messenger = useMessenger(communityKey, identity, nickname)
-  return <MessengerContext.Provider value={messenger} children={children} />
+  return (
+    <MessengerContext.Provider value={messenger}>
+      {children}
+    </MessengerContext.Provider>
+  )
 }

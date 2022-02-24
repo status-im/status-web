@@ -1,16 +1,17 @@
 import React, { useMemo, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
-import { ActivityAction } from '../../hooks/useActivities'
-import { Activity } from '../../models/Activity'
 import { buttonTransparentStyles } from '../Buttons/buttonStyle'
 import { Tooltip } from '../Form/Tooltip'
 import { HideIcon } from '../Icons/HideIcon'
 import { ReadIcon } from '../Icons/ReadIcon'
 import { ShowIcon } from '../Icons/ShowIcon'
-
 import { ActivityMessage } from './ActivityMessage'
+
+import type { ActivityAction } from '../../hooks/useActivities'
+import type { Activity } from '../../models/Activity'
 
 interface ActivityCenterProps {
   activities: Activity[]

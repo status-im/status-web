@@ -1,5 +1,7 @@
-import { EmojiData } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'
+
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { ChatState, useChatState } from '../../contexts/chatStateProvider'
@@ -8,7 +10,6 @@ import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { Reply } from '../../hooks/useReply'
 import { uintToImgUrl } from '../../utils/uintToImgUrl'
 import { ClearBtn } from '../Form/inputStyles'
 import { ClearSvg } from '../Icons/ClearIcon'
@@ -18,13 +19,14 @@ import { GifIcon } from '../Icons/GifIcon'
 import { PictureIcon } from '../Icons/PictureIcon'
 import { ReplySvg } from '../Icons/ReplyIcon'
 import { StickerIcon } from '../Icons/StickerIcon'
-import 'emoji-mart/css/emoji-mart.css'
 import { SizeLimitModal, SizeLimitModalName } from '../Modals/SizeLimitModal'
 import { UserCreationStartModalName } from '../Modals/UserCreationStartModal'
 import { SearchBlock } from '../SearchBlock'
 import { textMediumStyles, textSmallStyles } from '../Text'
-
 import { EmojiPicker } from './EmojiPicker'
+
+import type { Reply } from '../../hooks/useReply'
+import type { EmojiData } from 'emoji-mart'
 
 interface ChatInputProps {
   reply?: Reply | undefined

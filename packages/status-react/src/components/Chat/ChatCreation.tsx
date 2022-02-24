@@ -1,11 +1,11 @@
 import React, { useCallback, useMemo, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { ChatState, useChatState } from '../../contexts/chatStateProvider'
 import { useUserPublicKey } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
-import { ChannelData } from '../../models/ChannelData'
 import { ActivityButton } from '../ActivityCenter/ActivityButton'
 import { BackButton } from '../Buttons/BackButton'
 import { buttonStyles } from '../Buttons/buttonStyle'
@@ -13,8 +13,9 @@ import { CrossIcon } from '../Icons/CrossIcon'
 import { Member } from '../Members/Member'
 import { SearchBlock } from '../SearchBlock'
 import { textMediumStyles } from '../Text'
-
 import { ChatInput } from './ChatInput'
+
+import type { ChannelData } from '../../models/ChannelData'
 
 interface ChatCreationProps {
   setEditGroup?: (val: boolean) => void

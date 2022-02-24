@@ -1,14 +1,16 @@
 import debug from 'debug'
 import { Waku, WakuMessage } from 'js-waku'
-import { CreateOptions as WakuCreateOptions } from 'js-waku/build/main/lib/waku'
 import { DecryptionMethod } from 'js-waku/build/main/lib/waku_message'
 
 import { Chat } from './chat'
-import { Identity } from './identity'
 import { ApplicationMetadataMessage_Type } from './proto/status/v1/application_metadata_message'
 import { getLatestUserNickname } from './utils'
 import { ApplicationMetadataMessage } from './wire/application_metadata_message'
-import { ChatMessage, Content } from './wire/chat_message'
+import { ChatMessage } from './wire/chat_message'
+
+import type { Identity } from './identity'
+import type { Content } from './wire/chat_message'
+import type { CreateOptions as WakuCreateOptions } from 'js-waku/build/main/lib/waku'
 
 const dbg = debug('communities:messenger')
 

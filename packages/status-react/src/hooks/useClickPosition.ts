@@ -1,4 +1,6 @@
-import { RefObject, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+import type { RefObject } from 'react'
 
 export const useClickPosition = (ref: RefObject<HTMLDivElement>) => {
   const [topPosition, setTopPosition] = useState(0)

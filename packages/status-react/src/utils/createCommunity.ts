@@ -1,8 +1,6 @@
-import {
-  Community,
-  Messenger,
-  ApplicationMetadataMessage,
-} from '@status-im/core'
+import { Community } from '@status-im/core'
+
+import type { ApplicationMetadataMessage, Messenger } from '@status-im/core'
 
 export async function createCommunity(
   communityKey: string,

@@ -1,16 +1,18 @@
-import { decode } from 'html-entities'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+
+import { decode } from 'html-entities'
 import styled from 'styled-components'
 
 import { useFetchMetadata } from '../../contexts/fetchMetadataProvider'
 import { useUserPublicKey } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { ChatMessage } from '../../models/ChatMessage'
-import { Metadata } from '../../models/Metadata'
 import { ContactMenu } from '../Form/ContactMenu'
 import { ImageMenu } from '../Form/ImageMenu'
 import { textMediumStyles, textSmallStyles } from '../Text'
+
+import type { ChatMessage } from '../../models/ChatMessage'
+import type { Metadata } from '../../models/Metadata'
 
 interface MentionProps {
   id: string

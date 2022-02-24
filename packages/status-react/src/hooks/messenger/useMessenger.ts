@@ -1,12 +1,5 @@
 // import { StoreCodec } from "js-waku";
 import {
-  ApplicationMetadataMessage,
-  Community,
-  Contacts as ContactsClass,
-  Identity,
-  Messenger,
-} from '@status-im/core'
-import {
   useCallback,
   useEffect,
   useMemo,
@@ -16,19 +9,28 @@ import {
 } from 'react'
 
 import { useConfig } from '../../contexts/configProvider'
-import { ChannelData, ChannelsData } from '../../models/ChannelData'
-import { ChatMessage } from '../../models/ChatMessage'
-import { CommunityData } from '../../models/CommunityData'
-import { Contacts } from '../../models/Contact'
 import { createCommunity } from '../../utils/createCommunity'
 import { createMessenger } from '../../utils/createMessenger'
 import { uintToImgUrl } from '../../utils/uintToImgUrl'
-
-import { ChannelAction, useChannelsReducer } from './useChannelsReducer'
-import { ContactsAction, useContacts } from './useContacts'
+import { useChannelsReducer } from './useChannelsReducer'
+import { useContacts } from './useContacts'
 import { useGroupChats } from './useGroupChats'
 import { useLoadPrevDay } from './useLoadPrevDay'
 import { useMessages } from './useMessages'
+
+import type { ChannelData, ChannelsData } from '../../models/ChannelData'
+import type { ChatMessage } from '../../models/ChatMessage'
+import type { CommunityData } from '../../models/CommunityData'
+import type { Contacts } from '../../models/Contact'
+import type { ChannelAction } from './useChannelsReducer'
+import type { ContactsAction } from './useContacts'
+import type {
+  ApplicationMetadataMessage,
+  Community,
+  Contacts as ContactsClass,
+  Identity,
+  Messenger,
+} from '@status-im/core'
 
 export type MessengerType = {
   messenger: Messenger | undefined
