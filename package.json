@@ -6,6 +6,7 @@
   ],
   "keywords": [],
   "scripts": {
+    "prepare": "husky install",
     "fix": "run-s 'fix:*' && wsrun -e -c -s fix",
     "build": "wsrun -e -c -s build",
     "lint": "eslint 'packages/**/*.{ts,tsx}'",
@@ -31,11 +32,22 @@
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
     "npm-run-all": "^4.1.5",
     "parcel": "^2.3.2",
     "prettier": "^2.5.1",
     "typescript": "^4.5.5",
     "wsrun": "^5.2.4"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint",
+      "prettier --write"
+    ],
+    "*.{md,mdx,yml,yaml,json}": [
+      "prettier --write"
+    ]
   },
   "packageManager": "yarn@1.22.17"
 }
