@@ -1,5 +1,6 @@
-import QRCode from 'qrcode.react'
 import React from 'react'
+
+import QRCode from 'qrcode.react'
 
 import { CopyInput } from '../Form/CopyInput'
 import { Heading, MiddleSection, QRWrapper, Section, Text } from './ModalStyle'
