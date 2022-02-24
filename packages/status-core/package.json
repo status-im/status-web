@@ -18,15 +18,13 @@
     "prebuild": "rm -rf dist",
     "build": "parcel build",
     "build:types": "tsc --emitDeclarationOnly",
-    "fix": "run-s 'fix:*'",
-    "fix:lint": "eslint src --ext .ts --fix",
-    "test": "run-s 'test:*'",
-    "test:lint": "eslint src --ext .ts",
-    "test:unit": "mocha",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src",
+    "format": "prettier --write src",
+    "test": "mocha",
     "proto": "run-s 'proto:*'",
     "proto:lint": "buf lint",
-    "proto:build": "buf generate",
-    "typecheck": "tsc --noEmit"
+    "proto:build": "buf generate"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
