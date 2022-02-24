@@ -1,6 +1,6 @@
-import HCaptcha from '@hcaptcha/react-hcaptcha'
 import React, { useState } from 'react'
 
+import HCaptcha from '@hcaptcha/react-hcaptcha'
 import styled, { useTheme } from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'

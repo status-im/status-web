@@ -1,6 +1,6 @@
-import QRCode from 'qrcode.react'
 import React, { useState } from 'react'
 
+import QRCode from 'qrcode.react'
 import styled from 'styled-components'
 
 import { buttonStyles } from '../Buttons/buttonStyle'
