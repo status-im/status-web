@@ -1,5 +1,4 @@
 import { Buffer } from 'buffer'
-
 import { keccak256 } from 'js-sha3'
 import { generatePrivateKey } from 'js-waku'
 import * as secp256k1 from 'secp256k1'

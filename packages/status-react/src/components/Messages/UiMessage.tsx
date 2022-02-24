@@ -1,12 +1,10 @@
-import { BaseEmoji } from 'emoji-mart'
 import React, { useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useIdentity } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { Reply } from '../../hooks/useReply'
-import { ChatMessage } from '../../models/ChatMessage'
 import { equalDate } from '../../utils'
 import { ChatMessageContent } from '../Chat/ChatMessageContent'
 import { ContactMenu } from '../Form/ContactMenu'
@@ -14,7 +12,6 @@ import { MessageMenu } from '../Form/MessageMenu'
 import { UntrustworthIcon } from '../Icons/UntrustworthIcon'
 import { UserLogo } from '../Members/UserLogo'
 import { Reactions } from '../Reactions/Reactions'
-
 import { MessageQuote } from './MessageQuote'
 import { MessageReactions } from './MessageReactions'
 import {
@@ -31,6 +28,10 @@ import {
   UserNameBtn,
   UserNameWrapper,
 } from './Styles'
+
+import type { Reply } from '../../hooks/useReply'
+import type { ChatMessage } from '../../models/ChatMessage'
+import type { BaseEmoji } from 'emoji-mart'
 
 type UiMessageProps = {
   idx: number

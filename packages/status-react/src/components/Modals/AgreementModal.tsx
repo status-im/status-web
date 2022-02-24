@@ -1,15 +1,17 @@
 import HCaptcha from '@hcaptcha/react-hcaptcha'
 import React, { useState } from 'react'
+
 import styled, { useTheme } from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
-import { lightTheme, Theme } from '../../styles/themes'
+import { lightTheme } from '../../styles/themes'
 import { Logo } from '../CommunityIdentity'
 import { textMediumStyles } from '../Text'
-
 import { Modal } from './Modal'
 import { Btn, ButtonSection, Heading, Section, Text } from './ModalStyle'
+
+import type { Theme } from '../../styles/themes'
 
 export const AgreementModalName = 'AgreementModal'
 

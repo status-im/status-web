@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 
-import { Toast } from '../models/Toast'
+import type { Toast } from '../models/Toast'
 
 const ToastContext = createContext<{
   toasts: Toast[]

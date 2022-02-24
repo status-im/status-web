@@ -1,7 +1,8 @@
 import { Reader } from 'protobufjs'
 
 import * as proto from '../proto/communities/v1/chat_identity'
-import { IdentityImage } from '../proto/communities/v1/chat_identity'
+
+import type { IdentityImage } from '../proto/communities/v1/chat_identity'
 
 export class ChatIdentity {
   public constructor(public proto: proto.ChatIdentity) {}

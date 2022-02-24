@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useUserPublicKey } from '../../contexts/identityProvider'
@@ -20,7 +21,6 @@ import { LeftIcon } from '../Icons/LeftIcon'
 import { UntrustworthIcon } from '../Icons/UntrustworthIcon'
 import { UserIcon } from '../Icons/UserIcon'
 import { textMediumStyles, textSmallStyles } from '../Text'
-
 import { Modal } from './Modal'
 import {
   BackBtn,

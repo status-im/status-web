@@ -1,20 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { useScrollToMessage } from '../../contexts/scrollProvider'
-import { ActivityAction } from '../../hooks/useActivities'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { Activity } from '../../models/Activity'
 import { equalDate } from '../../utils/equalDate'
-
 import { DownloadButton } from '../Buttons/DownloadButton'
 import { Mention } from '../Chat/ChatMessageContent'
 import { Logo } from '../CommunityIdentity'
 import { ContactMenu } from '../Form/ContactMenu'
 import { Tooltip } from '../Form/Tooltip'
-
 import { CheckIcon } from '../Icons/CheckIcon'
 import { ClearSvg } from '../Icons/ClearIcon'
 import { CommunityIcon } from '../Icons/CommunityIcon'
@@ -37,8 +34,10 @@ import {
 } from '../Messages/Styles'
 import { ProfileModalName } from '../Modals/ProfileModal'
 import { textMediumStyles, textSmallStyles } from '../Text'
-
 import { ActivityBtn, FlexDiv } from './ActivityCenter'
+
+import type { ActivityAction } from '../../hooks/useActivities'
+import type { Activity } from '../../models/Activity'
 
 const today = new Date()
 

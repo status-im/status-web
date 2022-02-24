@@ -1,18 +1,19 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
 import { useChatScrollHandle } from '../../hooks/useChatScrollHandle'
-import { Reply } from '../../hooks/useReply'
-import { ChannelData } from '../../models/ChannelData'
 import { EmptyChannel } from '../Channels/EmptyChannel'
 import { LoadingIcon } from '../Icons/LoadingIcon'
 import { LinkModal, LinkModalName } from '../Modals/LinkModal'
 import { PictureModal, PictureModalName } from '../Modals/PictureModal'
-
 import { UiMessage } from './UiMessage'
+
+import type { Reply } from '../../hooks/useReply'
+import type { ChannelData } from '../../models/ChannelData'
 
 interface MessagesListProps {
   setReply: (val: Reply | undefined) => void

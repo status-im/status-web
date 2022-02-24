@@ -1,19 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
-import { Reply } from '../../hooks/useReply'
-import { ChannelData } from '../../models/ChannelData'
 import { TokenRequirement } from '../Form/TokenRequirement'
 import { MessagesList } from '../Messages/MessagesList'
 import { NarrowChannels } from '../NarrowMode/NarrowChannels'
 import { NarrowMembers } from '../NarrowMode/NarrowMembers'
 import { LoadingSkeleton } from '../Skeleton/LoadingSkeleton'
-
 import { ChatCreation } from './ChatCreation'
 import { ChatInput } from './ChatInput'
 import { ChatTopbar, ChatTopbarLoading } from './ChatTopbar'
+
+import type { Reply } from '../../hooks/useReply'
+import type { ChannelData } from '../../models/ChannelData'
 
 export enum ChatBodyState {
   Chat,

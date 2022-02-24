@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
@@ -16,7 +17,6 @@ import { MembersIcon } from '../Icons/MembersIcon'
 import { MoreIcon } from '../Icons/MoreIcon'
 import { CommunitySkeleton } from '../Skeleton/CommunitySkeleton'
 import { Loading } from '../Skeleton/Loading'
-
 import { ChatBodyState } from './ChatBody'
 
 export function ChatTopbarLoading() {

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Channels } from '../Channels/Channels'
-
 import { ListWrapper, NarrowTopbar } from './NarrowTopbar'
 
 interface NarrowChannelsProps {

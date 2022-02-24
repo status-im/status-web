@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
+
 import styled, { ThemeProvider } from 'styled-components'
 
-import { ConfigType } from '..'
 import { ChatStateProvider } from '../contexts/chatStateProvider'
 import { ConfigProvider } from '../contexts/configProvider'
 import { FetchMetadataProvider } from '../contexts/fetchMetadataProvider'
@@ -11,11 +11,12 @@ import { ModalProvider } from '../contexts/modalProvider'
 import { NarrowProvider } from '../contexts/narrowProvider'
 import { ScrollProvider } from '../contexts/scrollProvider'
 import { ToastProvider } from '../contexts/toastProvider'
-import { Metadata } from '../models/Metadata'
 import { GlobalStyle } from '../styles/GlobalStyle'
-import { Theme } from '../styles/themes'
-
 import { CommunityChatRoom } from './CommunityChatRoom'
+
+import type { ConfigType } from '..'
+import type { Metadata } from '../models/Metadata'
+import type { Theme } from '../styles/themes'
 
 interface CommunityChatProps {
   theme: Theme

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
 import { ChatState, useChatState } from '../../contexts/chatStateProvider'
@@ -6,7 +7,6 @@ import { useIdentity } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { CreateIcon } from '../Icons/CreateIcon'
 import { UserCreation } from '../UserCreation/UserCreation'
-
 import { Channel } from './Channel'
 
 interface ChannelsProps {

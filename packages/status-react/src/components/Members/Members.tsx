@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
-
 import { MembersList } from './MembersList'
 
 export function Members() {

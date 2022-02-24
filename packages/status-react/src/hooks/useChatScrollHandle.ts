@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
 import { useMessengerContext } from '../contexts/messengerProvider'
-import { ChatMessage } from '../models/ChatMessage'
+
+import type { ChatMessage } from '../models/ChatMessage'
 
 export function useChatScrollHandle(
   messages: ChatMessage[],

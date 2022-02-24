@@ -3,7 +3,6 @@ import React from 'react'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { ButtonNo } from '../Buttons/buttonStyle'
-
 import { Modal } from './Modal'
 import { ButtonSection, Heading, Section, Text } from './ModalStyle'
 

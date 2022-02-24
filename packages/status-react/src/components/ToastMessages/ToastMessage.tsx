@@ -1,14 +1,16 @@
 import React from 'react'
+
 import styled, { keyframes } from 'styled-components'
 
 import { useToasts } from '../../contexts/toastProvider'
-import { Toast } from '../../models/Toast'
 import { Column } from '../CommunityIdentity'
 import { CheckIcon } from '../Icons/CheckIcon'
 import { CommunityIcon } from '../Icons/CommunityIcon'
 import { CrossIcon } from '../Icons/CrossIcon'
 import { ProfileIcon } from '../Icons/ProfileIcon'
 import { textSmallStyles } from '../Text'
+
+import type { Toast } from '../../models/Toast'
 
 export function AnimationToastMessage() {
   return keyframes`

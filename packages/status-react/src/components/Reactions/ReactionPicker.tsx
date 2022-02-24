@@ -1,7 +1,10 @@
-import { BaseEmoji, Emoji, getEmojiDataFromNative } from 'emoji-mart'
-import data from 'emoji-mart/data/all.json'
 import React, { useCallback } from 'react'
+
+import { Emoji, getEmojiDataFromNative } from 'emoji-mart'
+import data from 'emoji-mart/data/all.json'
 import styled from 'styled-components'
+
+import type { BaseEmoji } from 'emoji-mart'
 
 const emojiHeart = getEmojiDataFromNative('❤️', 'twitter', data)
 const emojiLike = getEmojiDataFromNative('👍', 'twitter', data)

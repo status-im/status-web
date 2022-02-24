@@ -1,9 +1,12 @@
-import React, { ReactNode, useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
+
 import styled from 'styled-components'
 
 import { useModal } from '../../contexts/modalProvider'
 import { CrossIcon } from '../Icons/CrossIcon'
+
+import type { ReactNode } from 'react'
 
 export interface BasicModalProps {
   name: string

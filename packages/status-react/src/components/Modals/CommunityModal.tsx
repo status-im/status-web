@@ -1,16 +1,18 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
 import { DownloadButton } from '../Buttons/DownloadButton'
-import { CommunityIdentity, CommunityIdentityProps } from '../CommunityIdentity'
+import { CommunityIdentity } from '../CommunityIdentity'
 import { CopyInput } from '../Form/CopyInput'
 import { StatusLogo } from '../Icons/StatusLogo'
 import { textSmallStyles } from '../Text'
-
 import { Modal } from './Modal'
 import { Section, Text } from './ModalStyle'
+
+import type { CommunityIdentityProps } from '../CommunityIdentity'
 
 export const CommunityModalName = 'CommunityModal'
 

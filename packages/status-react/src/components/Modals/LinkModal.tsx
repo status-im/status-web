@@ -1,10 +1,10 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useModal } from '../../contexts/modalProvider'
 import { ButtonNo, ButtonYes } from '../Buttons/buttonStyle'
 import { textMediumStyles } from '../Text'
-
 import { Modal } from './Modal'
 import { ButtonSection, Heading, Section } from './ModalStyle'
 

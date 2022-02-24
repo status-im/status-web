@@ -13,7 +13,13 @@
     "browser": true,
     "node": true
   },
-  "plugins": ["@typescript-eslint", "import", "react", "jsx-a11y"],
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "simple-import-sort",
+    "react",
+    "jsx-a11y"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -28,6 +34,36 @@
     // "plugin:jest/recommended",
     "prettier"
   ],
+  "rules": {
+    // "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/consistent-type-imports": "error",
+    // "@typescript-eslint/consistent-type-exports": "error",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          // Side effect imports.
+          ["^\\u0000"],
+          // `react` related packages come first.
+          ["react"],
+          // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
+          ["^@?\\w"],
+          // Absolute imports and other imports such as Vue-style `@/foo`.
+          // Anything not matched in another group.
+          ["^"],
+          // Relative imports.
+          // Anything that starts with a dot.
+          ["^\\."],
+          // type imports last as a separate group
+          ["^.+\\u0000$"]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "error",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-duplicates": "error"
+  },
   "settings": {
     "react": {
       "version": "detect"

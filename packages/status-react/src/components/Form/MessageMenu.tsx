@@ -1,5 +1,5 @@
-import { BaseEmoji } from 'emoji-mart'
 import React, { useMemo, useRef } from 'react'
+
 import styled from 'styled-components'
 
 import { useUserPublicKey } from '../../contexts/identityProvider'
@@ -7,15 +7,16 @@ import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { useClickPosition } from '../../hooks/useClickPosition'
 import { useContextMenu } from '../../hooks/useContextMenu'
-import { Reply } from '../../hooks/useReply'
-import { ChatMessage } from '../../models/ChatMessage'
 import { DeleteIcon } from '../Icons/DeleteIcon'
 import { EditIcon } from '../Icons/EditIcon'
 import { PinIcon } from '../Icons/PinIcon'
 import { ReplySvg } from '../Icons/ReplyIcon'
 import { ReactionPicker } from '../Reactions/ReactionPicker'
-
 import { DropdownMenu, MenuItem, MenuSection, MenuText } from './DropdownMenu'
+
+import type { Reply } from '../../hooks/useReply'
+import type { ChatMessage } from '../../models/ChatMessage'
+import type { BaseEmoji } from 'emoji-mart'
 
 interface MessageMenuProps {
   message: ChatMessage

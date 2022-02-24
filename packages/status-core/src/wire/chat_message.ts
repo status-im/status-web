@@ -1,14 +1,16 @@
 import { Reader } from 'protobufjs'
 
 import * as proto from '../proto/communities/v1/chat_message'
-import {
+import { ChatMessage_ContentType } from '../proto/communities/v1/chat_message'
+import { MessageType } from '../proto/communities/v1/enums'
+
+import type {
   AudioMessage,
   AudioMessage_AudioType,
-  ChatMessage_ContentType,
   ImageMessage,
   StickerMessage,
 } from '../proto/communities/v1/chat_message'
-import { ImageType, MessageType } from '../proto/communities/v1/enums'
+import type { ImageType } from '../proto/communities/v1/enums'
 
 export type Content = TextContent | StickerContent | ImageContent | AudioContent
 

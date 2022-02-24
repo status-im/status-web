@@ -1,6 +1,8 @@
-import { Identity, Messenger } from '@status-im/core'
+import { Messenger } from '@status-im/core'
 import { getNodesFromHostedJson } from 'js-waku'
 import { Protocols } from 'js-waku/build/main/lib/waku'
+
+import type { Identity } from '@status-im/core'
 
 function createWakuOptions(env: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

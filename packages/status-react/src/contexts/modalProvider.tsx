@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react'
 
-import {
+import type {
   ProfileModalName,
   ProfileModalProps,
 } from '../components/Modals/ProfileModal'

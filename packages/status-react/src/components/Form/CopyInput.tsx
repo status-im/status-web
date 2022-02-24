@@ -2,7 +2,6 @@ import React from 'react'
 
 import { copy } from '../../utils/copy'
 import { reduceString } from '../../utils/reduceString'
-
 import {
   ButtonWrapper,
   InputBtn,

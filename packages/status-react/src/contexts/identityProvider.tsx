@@ -1,5 +1,8 @@
-import { Identity, bufToHex } from '@status-im/core'
 import React, { createContext, useContext, useMemo, useState } from 'react'
+
+import { bufToHex } from '@status-im/core'
+
+import type { Identity } from '@status-im/core'
 
 const IdentityContext = createContext<{
   identity: Identity | undefined

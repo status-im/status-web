@@ -1,5 +1,6 @@
-import { GroupChats, Messenger } from '@status-im/core'
 import { useCallback, useEffect, useRef, useState } from 'react'
+
+import type { GroupChats, Messenger } from '@status-im/core'
 
 const _MS_PER_DAY = 1000 * 60 * 60 * 24
 

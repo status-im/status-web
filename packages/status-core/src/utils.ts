@@ -1,8 +1,10 @@
 import { ec } from 'elliptic'
-import { PageDirection, utils, Waku } from 'js-waku'
+import { PageDirection, utils } from 'js-waku'
 
 import { idToContactCodeTopic } from './contentTopic'
 import { ChatIdentity } from './proto/communities/v1/chat_identity'
+
+import type { Waku } from 'js-waku'
 
 const EC = new ec('secp256k1')
 

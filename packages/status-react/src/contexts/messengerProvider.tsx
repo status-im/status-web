@@ -1,8 +1,9 @@
 import React, { createContext, useContext } from 'react'
 
-import { MessengerType, useMessenger } from '../hooks/messenger/useMessenger'
-
+import { useMessenger } from '../hooks/messenger/useMessenger'
 import { useIdentity, useNickname } from './identityProvider'
+
+import type { MessengerType } from '../hooks/messenger/useMessenger'
 
 const MessengerContext = createContext<MessengerType>({
   messenger: undefined,

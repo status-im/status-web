@@ -1,5 +1,6 @@
-import { Identity, bufToHex } from '@status-im/core'
 import React, { useEffect, useMemo, useState } from 'react'
+
+import { bufToHex } from '@status-im/core'
 import styled from 'styled-components'
 
 import { useNickname, useSetIdentity } from '../../contexts/identityProvider'
@@ -8,7 +9,6 @@ import { decryptIdentity, loadEncryptedIdentity } from '../../utils'
 import { buttonTransparentStyles } from '../Buttons/buttonStyle'
 import { UserLogo } from '../Members/UserLogo'
 import { textMediumStyles } from '../Text'
-
 import { Modal } from './Modal'
 import {
   Btn,
@@ -25,6 +25,8 @@ import {
   UserName,
 } from './ProfileModal'
 import { UserCreationModalName } from './UserCreationModal'
+
+import type { Identity } from '@status-im/core'
 
 export const ProfileFoundModalName = 'ProfileFoundModal'
 

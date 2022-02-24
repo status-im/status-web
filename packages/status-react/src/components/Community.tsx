@@ -1,9 +1,9 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../contexts/messengerProvider'
 import { useModal } from '../contexts/modalProvider'
-
 import { CommunityIdentity } from './CommunityIdentity'
 import { CommunityModalName } from './Modals/CommunityModal'
 import { CommunitySkeleton } from './Skeleton/CommunitySkeleton'

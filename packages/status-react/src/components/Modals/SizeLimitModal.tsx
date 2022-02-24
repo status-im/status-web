@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { useModal } from '../../contexts/modalProvider'
-
 import { Modal } from './Modal'
 
 export const SizeLimitModalName = 'SizeLimitModal'

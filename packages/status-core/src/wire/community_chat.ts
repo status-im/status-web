@@ -1,12 +1,12 @@
 import { Reader } from 'protobufjs'
 
 import * as proto from '../proto/communities/v1/communities'
-import {
+import { ChatIdentity } from './chat_identity'
+
+import type {
   CommunityMember,
   CommunityPermissions,
 } from '../proto/communities/v1/communities'
-
-import { ChatIdentity } from './chat_identity'
 
 export class CommunityChat {
   public constructor(public proto: proto.CommunityChat) {}

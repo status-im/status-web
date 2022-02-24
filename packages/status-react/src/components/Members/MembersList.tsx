@@ -1,15 +1,16 @@
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
 import { useUserPublicKey } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
-import { Contact } from '../../models/Contact'
 import { buttonStyles } from '../Buttons/buttonStyle'
 import { LogoutIcon } from '../Icons/LogoutIcon'
 import { LogoutModalName } from '../Modals/LogoutModal'
-
 import { Member } from './Member'
+
+import type { Contact } from '../../models/Contact'
 
 export function MembersList() {
   const { contacts, nickname, activeChannel } = useMessengerContext()

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
@@ -8,7 +9,6 @@ import { ChannelLogo } from '../Channels/ChannelIcon'
 import { inputStyles } from '../Form/inputStyles'
 import { AddIcon } from '../Icons/AddIcon'
 import { textMediumStyles } from '../Text'
-
 import { Modal } from './Modal'
 import { AddWrapper, ButtonSection, Heading, Hint, Section } from './ModalStyle'
 

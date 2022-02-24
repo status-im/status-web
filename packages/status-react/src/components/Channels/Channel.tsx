@@ -1,16 +1,17 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
-import { ChannelData } from '../../models/ChannelData'
 import { ChannelMenu } from '../Form/ChannelMenu'
 import { Tooltip } from '../Form/Tooltip'
 import { GroupIcon } from '../Icons/GroupIcon'
 import { MutedIcon } from '../Icons/MutedIcon'
 import { textMediumStyles } from '../Text'
-
 import { ChannelIcon } from './ChannelIcon'
+
+import type { ChannelData } from '../../models/ChannelData'
 
 function RenderChannelName({
   channel,
