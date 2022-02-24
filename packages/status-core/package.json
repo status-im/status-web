@@ -10,13 +10,13 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.ts",
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "run-s 'build:*'",
-    "build:esm": "tsc --module es2020 --target es2017 --outDir dist/esm",
-    "build:cjs": "tsc --outDir dist/cjs",
+    "prebuild": "rm -rf dist",
+    "build": "parcel build",
     "build:types": "tsc --emitDeclarationOnly",
     "fix": "run-s 'fix:*'",
     "fix:lint": "eslint src --ext .ts --fix",
@@ -53,10 +53,12 @@
   "dependencies": {
     "bn.js": "^5.2.0",
     "buffer": "^6.0.3",
+    "debug": "^4.3.3",
     "ecies-geth": "^1.5.3",
     "elliptic": "^6.5.4",
     "js-sha3": "^0.8.0",
     "js-waku": "^0.16.0",
+    "long": "^5.2.0",
     "pbkdf2": "^3.1.2",
     "protobufjs": "^6.11.2",
     "secp256k1": "^4.0.2",

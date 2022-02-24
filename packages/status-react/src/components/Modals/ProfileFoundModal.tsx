@@ -1,4 +1,4 @@
-import { Identity, utils } from '@status-im/core'
+import { Identity, bufToHex } from '@status-im/core'
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
@@ -58,9 +58,9 @@ export function ProfileFoundModal() {
         <MiddleSection>
           <Logo
             contact={{
-              id: utils.bufToHex(decryptedIdentity.publicKey),
+              id: bufToHex(decryptedIdentity.publicKey),
               customName: nickname,
-              trueName: utils.bufToHex(decryptedIdentity.publicKey),
+              trueName: bufToHex(decryptedIdentity.publicKey),
             }}
             radius={80}
             colorWheel={[
