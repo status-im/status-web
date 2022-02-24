@@ -73,7 +73,8 @@ export function IdentityProvider({ children }: IdentityProviderProps) {
         walletIdentity,
         setWalletIdentity,
       }}
-      children={children}
-    />
+    >
+      {children}
+    </IdentityContext.Provider>
   )
 }

@@ -11,9 +11,12 @@ export function SizeLimitModal() {
 
   return (
     <Modal name={SizeLimitModalName}>
-      <div onClick={() => setModal(false)} style={{ padding: '20px' }}>
+      <button
+        onClick={() => setModal(false)}
+        style={{ padding: '20px', display: 'block' }}
+      >
         File size must be less than 1MB
-      </div>
+      </button>
     </Modal>
   )
 }

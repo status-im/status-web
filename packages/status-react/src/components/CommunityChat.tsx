@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
-import { ThemeProvider } from 'styled-components'
-import styled from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 
 import { ConfigType } from '..'
 import { ChatStateProvider } from '../contexts/chatStateProvider'

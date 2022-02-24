@@ -25,5 +25,9 @@ interface NarrowProviderProps {
 export function NarrowProvider({ children, myRef }: NarrowProviderProps) {
   const narrow = useRefBreak(myRef?.current?.offsetWidth ?? 0, 736)
   const low = useRefBreak(myRef?.current?.offsetHeight ?? 0, 465)
-  return <NarrowContext.Provider value={{ narrow, low }} children={children} />
+  return (
+    <NarrowContext.Provider value={{ narrow, low }}>
+      {children}
+    </NarrowContext.Provider>
+  )
 }

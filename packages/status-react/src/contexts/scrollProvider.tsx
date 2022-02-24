@@ -66,5 +66,7 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
     },
     [scrollToDivId, channelsDispatch, activeChannel]
   )
-  return <ScrollContext.Provider value={scroll} children={children} />
+  return (
+    <ScrollContext.Provider value={scroll}>{children}</ScrollContext.Provider>
+  )
 }

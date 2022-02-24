@@ -46,5 +46,9 @@ export function MessengerProvider({
   const identity = useIdentity()
   const nickname = useNickname()
   const messenger = useMessenger(communityKey, identity, nickname)
-  return <MessengerContext.Provider value={messenger} children={children} />
+  return (
+    <MessengerContext.Provider value={messenger}>
+      {children}
+    </MessengerContext.Provider>
+  )
 }

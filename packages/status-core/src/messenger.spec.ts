@@ -97,6 +97,7 @@ describe('Messenger', () => {
 
     const receivedMessage = await receivedMessagePromise
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     expect(bufToHex(receivedMessage.signer!)).to.eq(
       bufToHex(identityAlice.publicKey)
     )

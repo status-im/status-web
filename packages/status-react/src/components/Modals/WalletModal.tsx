@@ -32,6 +32,8 @@ export function WalletModal() {
   const { dappUrl } = useConfig()
 
   const handleMetamaskClick = useCallback(async () => {
+    // TODO: Add types for global Ethereum object
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ethereum = (window as any)?.ethereum as any | undefined
     if (document.location.origin !== dappUrl) {
       alert('You are not signing in from correct url!')

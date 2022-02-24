@@ -165,7 +165,6 @@ export const ProfileModal = () => {
               maxLength={280}
               onInput={e => setRequest(e.currentTarget.value)}
               required
-              autoFocus
             />
           </RequestSection>
         )}

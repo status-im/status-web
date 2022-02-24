@@ -3,7 +3,9 @@ import { getNodesFromHostedJson } from 'js-waku'
 import { Protocols } from 'js-waku/build/main/lib/waku'
 
 function createWakuOptions(env: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let bootstrap: any = { default: true }
+
   if (env === 'test') {
     bootstrap = {
       getPeers: getNodesFromHostedJson.bind({}, [

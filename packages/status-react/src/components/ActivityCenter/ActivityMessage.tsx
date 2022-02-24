@@ -8,11 +8,13 @@ import { ActivityAction } from '../../hooks/useActivities'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { Activity } from '../../models/Activity'
 import { equalDate } from '../../utils/equalDate'
+
 import { DownloadButton } from '../Buttons/DownloadButton'
 import { Mention } from '../Chat/ChatMessageContent'
 import { Logo } from '../CommunityIdentity'
 import { ContactMenu } from '../Form/ContactMenu'
 import { Tooltip } from '../Form/Tooltip'
+
 import { CheckIcon } from '../Icons/CheckIcon'
 import { ClearSvg } from '../Icons/ClearIcon'
 import { CommunityIcon } from '../Icons/CommunityIcon'
@@ -168,14 +170,15 @@ export function ActivityMessage({
             )}
             <ActivityText>
               {'message' in activity && activity.message?.content && (
-                <div
+                // TODO: Check if broken (was a div)
+                <button
                   onClick={() => {
                     scroll(activity.message, activity.channel.id)
                     setShowActivityCenter(false)
                   }}
                 >
                   {elements.map(el => el)}
-                </div>
+                </button>
               )}
               {activity.type === 'request' &&
                 activity.requestType === 'income' &&
