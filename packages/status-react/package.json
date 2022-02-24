@@ -43,5 +43,9 @@
     "@types/qrcode.react": "^1.0.2",
     "@types/react": "^17.0.16",
     "@types/styled-components": "^5.1.12"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
   }
 }
