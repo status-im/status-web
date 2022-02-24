@@ -1,8 +1,8 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { UserCreationButtons } from '../UserCreation/UserCreationButtons'
-
 import { Modal } from './Modal'
 import { Heading, Section } from './ModalStyle'
 

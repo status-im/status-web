@@ -1,8 +1,8 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../contexts/messengerProvider'
-
 import { textMediumStyles } from './Text'
 
 export interface CommunityIdentityProps {

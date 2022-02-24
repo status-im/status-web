@@ -20,5 +20,7 @@ type ConfigProviderProps = {
 }
 
 export function ConfigProvider({ children, config }: ConfigProviderProps) {
-  return <ConfigContext.Provider value={config} children={children} />
+  return (
+    <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
+  )
 }

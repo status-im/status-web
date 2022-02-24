@@ -1,17 +1,17 @@
-import { Waku, WakuMessage } from 'js-waku'
+import { WakuMessage } from 'js-waku'
 import { DecryptionMethod } from 'js-waku/build/main/lib/waku_message'
 
+import { ChatMessage } from '.'
 import { createSymKeyFromPassword } from './encryption'
-import { Identity } from './identity'
 import { MembershipUpdateEvent_EventType } from './proto/communities/v1/membership_update_message'
 import { getNegotiatedTopic, getPartitionedTopic } from './topics'
 import { bufToHex, compressPublicKey } from './utils'
-import {
-  MembershipSignedEvent,
-  MembershipUpdateMessage,
-} from './wire/membership_update_message'
+import { MembershipUpdateMessage } from './wire/membership_update_message'
 
-import { ChatMessage, Content } from '.'
+import type { Content } from '.'
+import type { Identity } from './identity'
+import type { MembershipSignedEvent } from './wire/membership_update_message'
+import type { Waku } from 'js-waku'
 
 type GroupMember = {
   id: string

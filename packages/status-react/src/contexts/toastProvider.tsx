@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 
-import { Toast } from '../models/Toast'
+import type { Toast } from '../models/Toast'
 
 const ToastContext = createContext<{
   toasts: Toast[]
@@ -21,6 +21,8 @@ interface ToastProviderProps {
 export function ToastProvider({ children }: ToastProviderProps) {
   const [toasts, setToasts] = useState<Toast[]>([])
   return (
-    <ToastContext.Provider value={{ toasts, setToasts }} children={children} />
+    <ToastContext.Provider value={{ toasts, setToasts }}>
+      {children}
+    </ToastContext.Provider>
   )
 }

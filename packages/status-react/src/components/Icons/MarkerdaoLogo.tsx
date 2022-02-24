@@ -25,8 +25,8 @@ export const MarkerdaoLogo = () => (
         y2="128"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#4FA89B" />
-        <stop offset="1" stop-color="#6ACEBB" />
+        <stop stopColor="#4FA89B" />
+        <stop offset="1" stopColor="#6ACEBB" />
       </linearGradient>
     </defs>
   </svg>

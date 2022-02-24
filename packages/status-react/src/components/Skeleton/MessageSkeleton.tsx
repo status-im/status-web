@@ -1,7 +1,10 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
+
 import styled from 'styled-components'
 
 import { Skeleton } from './Skeleton'
+
+import type { ReactNode } from 'react'
 
 interface MessageSkeletonProps {
   children: ReactNode

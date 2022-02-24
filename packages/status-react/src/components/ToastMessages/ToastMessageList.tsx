@@ -1,8 +1,8 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { useToasts } from '../../contexts/toastProvider'
-
 import { ToastMessage } from './ToastMessage'
 
 export function ToastMessageList() {

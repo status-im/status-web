@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
-import { Contact } from '../../models/Contact'
+import type { Contact } from '../../models/Contact'
 
 type UserLogoProps = {
   radius: number

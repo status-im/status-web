@@ -2,8 +2,9 @@ import { useEffect, useMemo, useReducer } from 'react'
 
 import { useUserPublicKey } from '../contexts/identityProvider'
 import { useMessengerContext } from '../contexts/messengerProvider'
-import { Activities, Activity, ActivityStatus } from '../models/Activity'
-import { ChatMessage } from '../models/ChatMessage'
+
+import type { Activities, Activity, ActivityStatus } from '../models/Activity'
+import type { ChatMessage } from '../models/ChatMessage'
 
 export type ActivityAction =
   | { type: 'addActivity'; payload: Activity }

@@ -1,14 +1,15 @@
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
 import { useUserPublicKey } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
-import { ChannelData } from '../../models/ChannelData'
 import { textMediumStyles } from '../Text'
-
 import { ChannelInfo, ChannelName } from './Channel'
 import { ChannelLogo } from './ChannelIcon'
+
+import type { ChannelData } from '../../models/ChannelData'
 
 type ChannelBeggingTextProps = {
   channel: ChannelData

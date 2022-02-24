@@ -1,15 +1,16 @@
-import {
-  ApplicationMetadataMessage,
-  Contacts,
-  Identity,
-  bufToHex,
-} from '@status-im/core'
 import { useCallback, useMemo, useState } from 'react'
+
+import { bufToHex } from '@status-im/core'
 
 import { ChatMessage } from '../../models/ChatMessage'
 import { binarySetInsert } from '../../utils'
-
 import { useNotifications } from './useNotifications'
+
+import type {
+  ApplicationMetadataMessage,
+  Contacts,
+  Identity,
+} from '@status-im/core'
 
 export function useMessages(
   chatId: string,

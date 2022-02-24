@@ -1,11 +1,13 @@
-import { PageDirection, Waku, WakuMessage } from 'js-waku'
+import { PageDirection, WakuMessage } from 'js-waku'
 
 import { idToContactCodeTopic } from './contentTopic'
-import { Identity } from './identity'
 import { StatusUpdate_StatusType } from './proto/communities/v1/status_update'
 import { bufToHex, getLatestUserNickname } from './utils'
 import { ChatIdentity } from './wire/chat_identity'
 import { StatusUpdate } from './wire/status_update'
+
+import type { Identity } from './identity'
+import type { Waku } from 'js-waku'
 
 const STATUS_BROADCAST_INTERVAL = 30000
 const NICKNAME_BROADCAST_INTERVAL = 300000

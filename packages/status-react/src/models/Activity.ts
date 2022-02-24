@@ -1,6 +1,6 @@
-import { ChannelData } from './ChannelData'
-import { ChatMessage } from './ChatMessage'
-import { CommunityData } from './CommunityData'
+import type { ChannelData } from './ChannelData'
+import type { ChatMessage } from './ChatMessage'
+import type { CommunityData } from './CommunityData'
 
 export type ActivityStatus = 'sent' | 'accepted' | 'declined' | 'blocked'
 

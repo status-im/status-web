@@ -1,4 +1,5 @@
 import React, { useRef } from 'react'
+
 import styled from 'styled-components'
 
 import { useClickOutside } from '../../hooks/useClickOutside'
@@ -7,7 +8,6 @@ import { copyImg } from '../../utils/copyImg'
 import { downloadImg } from '../../utils/downloadImg'
 import { CopyIcon } from '../Icons/CopyIcon'
 import { DownloadIcon } from '../Icons/DownloadIcon'
-
 import { DropdownMenu, MenuItem, MenuText } from './DropdownMenu'
 
 interface ImageMenuProps {

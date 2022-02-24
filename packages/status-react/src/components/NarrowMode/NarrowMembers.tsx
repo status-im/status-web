@@ -2,7 +2,6 @@ import React, { useMemo } from 'react'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { MembersList } from '../Members/MembersList'
-
 import { ListWrapper, NarrowTopbar } from './NarrowTopbar'
 
 interface NarrowMembersProps {

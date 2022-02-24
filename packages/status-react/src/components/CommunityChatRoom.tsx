@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
+
 import styled from 'styled-components'
 
 import { ChatState, useChatState } from '../contexts/chatStateProvider'
 import { useMessengerContext } from '../contexts/messengerProvider'
 import { useNarrow } from '../contexts/narrowProvider'
-
 import { Channels } from './Channels/Channels'
 import { ChatBody } from './Chat/ChatBody'
 import { ChatCreation } from './Chat/ChatCreation'

@@ -1,5 +1,6 @@
-import { Identity, genPrivateKeyWithEntropy } from '@status-im/core'
 import React, { useCallback } from 'react'
+
+import { genPrivateKeyWithEntropy, Identity } from '@status-im/core'
 import styled from 'styled-components'
 
 import { useConfig } from '../../contexts/configProvider'
@@ -12,7 +13,6 @@ import { useModal } from '../../contexts/modalProvider'
 import { CoinbaseLogo } from '../Icons/CoinbaseLogo'
 import { MetamaskLogo } from '../Icons/MetamaskLogo'
 import { WalletConnectLogo } from '../Icons/WalletConnectLogo'
-
 import { CoinbaseModalName } from './CoinbaseModal'
 import { Modal } from './Modal'
 import { Heading, MiddleSection, Section, Text } from './ModalStyle'
@@ -32,6 +32,8 @@ export function WalletModal() {
   const { dappUrl } = useConfig()
 
   const handleMetamaskClick = useCallback(async () => {
+    // TODO: Add types for global Ethereum object
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ethereum = (window as any)?.ethereum as any | undefined
     if (document.location.origin !== dappUrl) {
       alert('You are not signing in from correct url!')

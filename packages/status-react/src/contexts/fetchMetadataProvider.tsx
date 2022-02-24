@@ -1,7 +1,9 @@
 import React, { createContext, useContext } from 'react'
 
+type Metadata = Record<string, string>
+
 const FetchMetadataContext = createContext<
-  ((link: string) => Promise<any>) | undefined
+  ((link: string) => Promise<Metadata>) | undefined
 >(undefined)
 
 export function useFetchMetadata() {
@@ -10,7 +12,7 @@ export function useFetchMetadata() {
 
 interface FetchMetadataProviderProps {
   children: React.ReactNode
-  fetchMetadata?: (link: string) => Promise<any>
+  fetchMetadata?: (link: string) => Promise<Metadata>
 }
 
 export function FetchMetadataProvider({
@@ -18,6 +20,8 @@ export function FetchMetadataProvider({
   fetchMetadata,
 }: FetchMetadataProviderProps) {
   return (
-    <FetchMetadataContext.Provider value={fetchMetadata} children={children} />
+    <FetchMetadataContext.Provider value={fetchMetadata}>
+      {children}
+    </FetchMetadataContext.Provider>
   )
 }

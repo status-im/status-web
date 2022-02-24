@@ -1,12 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { useScrollToMessage } from '../../contexts/scrollProvider'
-import { ActivityAction } from '../../hooks/useActivities'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { Activity } from '../../models/Activity'
 import { equalDate } from '../../utils/equalDate'
 import { DownloadButton } from '../Buttons/DownloadButton'
 import { Mention } from '../Chat/ChatMessageContent'
@@ -35,8 +34,10 @@ import {
 } from '../Messages/Styles'
 import { ProfileModalName } from '../Modals/ProfileModal'
 import { textMediumStyles, textSmallStyles } from '../Text'
-
 import { ActivityBtn, FlexDiv } from './ActivityCenter'
+
+import type { ActivityAction } from '../../hooks/useActivities'
+import type { Activity } from '../../models/Activity'
 
 const today = new Date()
 
@@ -168,14 +169,15 @@ export function ActivityMessage({
             )}
             <ActivityText>
               {'message' in activity && activity.message?.content && (
-                <div
+                // TODO: Check if broken (was a div)
+                <button
                   onClick={() => {
                     scroll(activity.message, activity.channel.id)
                     setShowActivityCenter(false)
                   }}
                 >
                   {elements.map(el => el)}
-                </div>
+                </button>
               )}
               {activity.type === 'request' &&
                 activity.requestType === 'income' &&

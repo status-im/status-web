@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
@@ -6,7 +7,6 @@ import { useModal } from '../../contexts/modalProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
 import { useContextMenu } from '../../hooks/useContextMenu'
-import { ChannelData } from '../../models/ChannelData'
 import { AddMemberIcon } from '../Icons/AddMemberIcon'
 import { CheckIcon } from '../Icons/CheckIcon'
 import { DeleteIcon } from '../Icons/DeleteIcon'
@@ -20,9 +20,10 @@ import { ProfileIcon } from '../Icons/ProfileIcon'
 import { EditModalName } from '../Modals/EditModal'
 import { LeavingModalName } from '../Modals/LeavingModal'
 import { ProfileModalName } from '../Modals/ProfileModal'
-
 import { DropdownMenu, MenuItem, MenuSection, MenuText } from './DropdownMenu'
 import { MuteMenu } from './MuteMenu'
+
+import type { ChannelData } from '../../models/ChannelData'
 
 interface ChannelMenuProps {
   channel: ChannelData

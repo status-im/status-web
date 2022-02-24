@@ -1,13 +1,14 @@
 import React, { useRef, useState } from 'react'
+
 import styled from 'styled-components'
 
 import { useIdentity } from '../../contexts/identityProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { Contact } from '../../models/Contact'
 import { ContactMenu } from '../Form/ContactMenu'
 import { IconBtn, UserAddress } from '../Messages/Styles'
-
 import { UserLogo } from './UserLogo'
+
+import type { Contact } from '../../models/Contact'
 
 interface MemberProps {
   contact: Contact

@@ -1,7 +1,9 @@
-import { ApplicationMetadataMessage, bufToHex } from '@status-im/core'
+import { bufToHex } from '@status-im/core'
 import { keccak256 } from 'js-sha3'
 
 import { uintToImgUrl } from '../utils'
+
+import type { ApplicationMetadataMessage } from '@status-im/core'
 
 export class ChatMessage {
   content: string

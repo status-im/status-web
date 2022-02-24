@@ -1,4 +1,5 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import {
@@ -10,7 +11,6 @@ import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useModal } from '../../contexts/modalProvider'
 import { ButtonNo, ButtonYes } from '../Buttons/buttonStyle'
 import { UserLogo } from '../Members/UserLogo'
-
 import { Modal } from './Modal'
 import { ButtonSection, Heading, Section, Text } from './ModalStyle'
 import {

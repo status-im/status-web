@@ -1,11 +1,11 @@
 import QRCode from 'qrcode.react'
 import React, { useState } from 'react'
+
 import styled from 'styled-components'
 
 import { buttonStyles } from '../Buttons/buttonStyle'
 import { LoginInstructions } from '../Form/LoginInstructions'
 import { PasteInput } from '../Form/PasteInput'
-
 import { Modal } from './Modal'
 import { Heading, MiddleSection, Section } from './ModalStyle'
 

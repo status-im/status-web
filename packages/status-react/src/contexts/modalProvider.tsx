@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react'
 
-import {
+import type {
   ProfileModalName,
   ProfileModalProps,
 } from '../components/Modals/ProfileModal'
@@ -59,5 +59,7 @@ interface IdentityProviderProps {
 
 export function ModalProvider({ children }: IdentityProviderProps) {
   const modalState = useState<ModalsState>({})
-  return <ModalContext.Provider value={modalState} children={children} />
+  return (
+    <ModalContext.Provider value={modalState}>{children}</ModalContext.Provider>
+  )
 }

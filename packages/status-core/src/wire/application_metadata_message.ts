@@ -2,12 +2,12 @@ import { keccak256 } from 'js-sha3'
 import { Reader } from 'protobufjs'
 import secp256k1 from 'secp256k1'
 
-import { Identity } from '../identity'
 import * as proto from '../proto/status/v1/application_metadata_message'
-import { ApplicationMetadataMessage_Type } from '../proto/status/v1/application_metadata_message'
 import { hexToBuf } from '../utils'
-
 import { ChatMessage } from './chat_message'
+
+import type { Identity } from '../identity'
+import type { ApplicationMetadataMessage_Type } from '../proto/status/v1/application_metadata_message'
 
 export class ApplicationMetadataMessage {
   private constructor(public proto: proto.ApplicationMetadataMessage) {}

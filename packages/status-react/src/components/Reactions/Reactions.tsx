@@ -1,18 +1,19 @@
-import { BaseEmoji } from 'emoji-mart'
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
 import { useUserPublicKey } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
-import { Reply } from '../../hooks/useReply'
-import { ChatMessage } from '../../models/ChatMessage'
 import { Tooltip } from '../Form/Tooltip'
 import { DeleteIcon } from '../Icons/DeleteIcon'
 import { EditIcon } from '../Icons/EditIcon'
 import { PinIcon } from '../Icons/PinIcon'
 import { ReplySvg } from '../Icons/ReplyIcon'
-
 import { ReactionBtn, ReactionButton } from './ReactionButton'
+
+import type { Reply } from '../../hooks/useReply'
+import type { ChatMessage } from '../../models/ChatMessage'
+import type { BaseEmoji } from 'emoji-mart'
 
 interface ReactionsProps {
   message: ChatMessage

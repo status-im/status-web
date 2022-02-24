@@ -7,7 +7,8 @@ import React, {
 } from 'react'
 
 import { useMessengerContext } from '../contexts/messengerProvider'
-import { ChatMessage } from '../models/ChatMessage'
+
+import type { ChatMessage } from '../models/ChatMessage'
 
 const ScrollContext = createContext<
   (msg: ChatMessage, channelId?: string) => void
@@ -66,5 +67,7 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
     },
     [scrollToDivId, channelsDispatch, activeChannel]
   )
-  return <ScrollContext.Provider value={scroll} children={children} />
+  return (
+    <ScrollContext.Provider value={scroll}>{children}</ScrollContext.Provider>
+  )
 }

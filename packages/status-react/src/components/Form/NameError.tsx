@@ -1,4 +1,5 @@
 import React from 'react'
+
 import styled from 'styled-components'
 
 import { NameErrors } from '../../hooks/useNameError'
@@ -28,7 +29,7 @@ export function NameError({ error }: NameErrorProps) {
     case NameErrors.EndingWithEth:
       return (
         <ErrorText>
-          Usernames ending with “_eth” or "-eth" are not allowed
+          Usernames ending with {'"_eth"'} or {'"-eth"'} are not allowed
         </ErrorText>
       )
     case NameErrors.TooLong:

@@ -6,7 +6,7 @@ import { bufToHex } from 'js-waku/build/main/lib/utils'
 import { idToContentTopic } from './contentTopic'
 import { hexToBuf } from './utils'
 
-import { Identity } from '.'
+import type { Identity } from '.'
 
 const EC = new ec('secp256k1')
 const partitionsNum = new BN(5000)

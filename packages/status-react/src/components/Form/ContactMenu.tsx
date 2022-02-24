@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+
 import styled from 'styled-components'
 
 import { useUserPublicKey } from '../../contexts/identityProvider'
@@ -15,7 +16,6 @@ import { WarningSvg } from '../Icons/WarningIcon'
 import { UserAddress } from '../Messages/Styles'
 import { ProfileModalName } from '../Modals/ProfileModal'
 import { textMediumStyles } from '../Text'
-
 import { DropdownMenu, MenuItem, MenuText } from './DropdownMenu'
 
 type ContactMenuProps = {

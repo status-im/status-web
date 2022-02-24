@@ -2,7 +2,6 @@ import QRCode from 'qrcode.react'
 import React from 'react'
 
 import { CopyInput } from '../Form/CopyInput'
-
 import { Heading, MiddleSection, QRWrapper, Section, Text } from './ModalStyle'
 
 export const ConnectModalName = 'ConnectModal'

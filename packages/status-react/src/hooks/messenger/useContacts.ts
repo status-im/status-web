@@ -1,12 +1,9 @@
-import {
-  Contacts as ContactsClass,
-  Identity,
-  Messenger,
-  bufToHex,
-} from '@status-im/core'
 import { useMemo, useReducer, useState } from 'react'
 
-import { Contacts } from '../../models/Contact'
+import { bufToHex, Contacts as ContactsClass } from '@status-im/core'
+
+import type { Contacts } from '../../models/Contact'
+import type { Identity, Messenger } from '@status-im/core'
 
 export type ContactsAction =
   | { type: 'updateOnline'; payload: { id: string; clock: number } }

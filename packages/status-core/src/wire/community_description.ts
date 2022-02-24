@@ -1,15 +1,15 @@
 import debug from 'debug'
-import { WakuMessage, WakuStore } from 'js-waku'
 import { Reader } from 'protobufjs'
 
 import { idToContentTopic } from '../contentTopic'
 import { createSymKeyFromPassword } from '../encryption'
 import * as proto from '../proto/communities/v1/communities'
 import { bufToHex } from '../utils'
-
 import { ApplicationMetadataMessage } from './application_metadata_message'
 import { ChatIdentity } from './chat_identity'
-import { CommunityChat } from './community_chat'
+
+import type { CommunityChat } from './community_chat'
+import type { WakuMessage, WakuStore } from 'js-waku'
 
 const dbg = debug('communities:wire:community_description')
 
