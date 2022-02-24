@@ -1,7 +1,14 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {},
+  "parserOptions": {
+    // TODO: Enable type-aware linting (https://typescript-eslint.io/docs/linting/type-linting)
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "warnOnUnsupportedTypeScriptVersion": true
+  },
   "env": {
     "browser": true,
     "node": true
@@ -10,12 +17,15 @@
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    // "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:eslint-comments/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
     "plugin:jsx-a11y/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
+    // "plugin:node/recommended",
+    // "plugin:jest/recommended",
     "prettier"
   ],
   "settings": {

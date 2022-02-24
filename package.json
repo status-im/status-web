@@ -9,6 +9,7 @@
     "fix": "run-s 'fix:*' && wsrun -e -c -s fix",
     "build": "wsrun -e -c -s build",
     "lint": "eslint 'packages/**/*.{ts,tsx}'",
+    "lint:fix": "eslint 'packages/**/*.{ts,tsx}' --fix",
     "format": "prettier --write .",
     "typecheck": "wsrun -e -c -s typecheck",
     "test": "wsrun -e -c -s test"
@@ -24,7 +25,9 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^26.1.1",
     "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-react": "^7.27.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "npm-run-all": "^4.1.5",
