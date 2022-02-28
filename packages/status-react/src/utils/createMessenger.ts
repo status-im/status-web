@@ -1,22 +1,22 @@
 import { Messenger } from '@status-im/core'
-import { getNodesFromHostedJson } from 'js-waku'
+import { getPredefinedBootstrapNodes } from 'js-waku'
+import { Fleet } from 'js-waku/build/main/lib/discovery/predefined'
 import { Protocols } from 'js-waku/build/main/lib/waku'
 
 import type { Identity } from '@status-im/core'
+import type { CreateOptions } from 'js-waku/build/main/lib/waku'
 
-function createWakuOptions(env: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let bootstrap: any = { default: true }
+function createWakuOptions(env: string): CreateOptions {
+  let bootstrap: CreateOptions['bootstrap'] = {
+    default: true,
+  }
 
   if (env === 'test') {
     bootstrap = {
-      getPeers: getNodesFromHostedJson.bind({}, [
-        'fleets',
-        'wakuv2.test',
-        'waku-websocket',
-      ]),
+      peers: getPredefinedBootstrapNodes(Fleet.Test).map(a => a.toString()),
     }
   }
+
   return {
     bootstrap,
     libp2p: {
@@ -34,8 +34,8 @@ export async function createMessenger(
   identity: Identity | undefined,
   env: string
 ) {
-  const WAKU_OPTIONS = createWakuOptions(env)
-  const messenger = await Messenger.create(identity, WAKU_OPTIONS)
+  const wakuOptions = createWakuOptions(env)
+  const messenger = await Messenger.create(identity, wakuOptions)
   await messenger.waku.waitForRemotePeer([Protocols.Store])
 
   return messenger
