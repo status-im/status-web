@@ -24,13 +24,13 @@
     "format": "prettier --write src"
   },
   "dependencies": {
-    "@status-im/core": "^0.0.0",
     "@hcaptcha/react-hcaptcha": "^1.0.0",
-    "qrcode.react": "^1.0.1",
+    "@status-im/core": "^0.0.0",
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
     "js-sha3": "^0.8.0",
-    "js-waku": "^0.16.0",
+    "js-waku": "^0.18.0",
+    "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",

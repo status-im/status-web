@@ -22,4 +22,4 @@ export type {
   TextContent,
 } from './wire/chat_message'
 export { ChatMessage } from './wire/chat_message'
-export { getNodesFromHostedJson } from 'js-waku'
+export { getPredefinedBootstrapNodes } from 'js-waku'
