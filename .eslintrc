@@ -3,6 +3,8 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     // TODO: Enable type-aware linting (https://typescript-eslint.io/docs/linting/type-linting)
+    // "tsconfigRootDir": ".",
+    // "project": ["./packages/*/tsconfig.json"],
     "sourceType": "module",
     "ecmaFeatures": {
       "jsx": true
@@ -70,10 +72,12 @@
     },
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "project": ["tsconfig.base.json", "packages/*/tsconfig.json"]
       },
       "typescript": {
-        "alwaysTryTypes": true
+        "alwaysTryTypes": true,
+        "project": ["tsconfig.base.json", "packages/*/tsconfig.json"]
       }
     }
   }
