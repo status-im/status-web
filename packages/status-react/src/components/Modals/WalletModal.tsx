@@ -3,7 +3,6 @@ import React, { useCallback } from 'react'
 import { genPrivateKeyWithEntropy, Identity } from '@status-im/core'
 import styled from 'styled-components'
 
-import { useConfig } from '../../contexts/configProvider'
 import {
   useSetIdentity,
   useSetWalletIdentity,
@@ -29,11 +28,12 @@ export function WalletModal() {
   const { setModal: setWalleConnectModal } = useModal(WalletConnectModalName)
   const { setModal: setCoinbaseModal } = useModal(CoinbaseModalName)
   const { messenger } = useMessengerContext()
-  const { dappUrl } = useConfig()
 
   const handleMetamaskClick = useCallback(async () => {
     // TODO: Add types for global Ethereum object
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dappUrl = window.location.hostname
+
     const ethereum = (window as any)?.ethereum as any | undefined
     if (document.location.origin !== dappUrl) {
       alert('You are not signing in from correct url!')
@@ -105,7 +105,6 @@ export function WalletModal() {
     alert('Metamask not found')
   }, [
     messenger,
-    dappUrl,
     setIdentity,
     setModal,
     setWalletIdentity,

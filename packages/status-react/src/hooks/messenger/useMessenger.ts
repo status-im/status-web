@@ -8,7 +8,6 @@ import {
   useState,
 } from 'react'
 
-import { useConfig } from '../../contexts/configProvider'
 import { createCommunity } from '../../utils/createCommunity'
 import { createMessenger } from '../../utils/createMessenger'
 import { uintToImgUrl } from '../../utils/uintToImgUrl'
@@ -31,6 +30,7 @@ import type {
   Identity,
   Messenger,
 } from '@status-im/core'
+import type { Environment } from '~/src/types/config'
 
 export type MessengerType = {
   messenger: Messenger | undefined
@@ -62,8 +62,10 @@ export type MessengerType = {
   subscriptionsDispatch: (action: SubscriptionAction) => void
 }
 
-function useCreateMessenger(identity: Identity | undefined) {
-  const { environment } = useConfig()
+function useCreateMessenger(
+  environment: Environment,
+  identity: Identity | undefined
+) {
   const [messenger, setMessenger] = useState<Messenger | undefined>(undefined)
   useEffect(() => {
     createMessenger(identity, environment).then(e => {
@@ -163,7 +165,8 @@ function subscriptionReducer(
 }
 
 export function useMessenger(
-  communityKey: string | undefined,
+  communityKey: string,
+  environment: Environment | undefined = 'production',
   identity: Identity | undefined,
   newNickname: string | undefined
 ) {
@@ -177,7 +180,7 @@ export function useMessenger(
   }, [subscriptions])
 
   const [channelsState, channelsDispatch] = useChannelsReducer()
-  const messenger = useCreateMessenger(identity)
+  const messenger = useCreateMessenger(environment, identity)
   const { contacts, contactsDispatch, contactsClass, nickname } = useContacts(
     messenger,
     identity,
