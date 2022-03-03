@@ -6,7 +6,7 @@ import { useTheme } from 'styled-components'
 import { useLow } from '../../contexts/narrowProvider'
 import { lightTheme } from '../../styles/themes'
 
-import type { Theme } from '../../styles/themes'
+import type { Theme } from '~/src/types/theme'
 import type { EmojiData } from 'emoji-mart'
 
 type EmojiPickerProps = {
