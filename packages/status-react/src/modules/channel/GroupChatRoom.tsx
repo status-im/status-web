@@ -23,6 +23,8 @@ import { useNarrow } from '~/src/contexts/narrowProvider'
 import { GroupChatBody } from './GroupChat/GroupChatBody'
 import { GroupMembers } from './GroupMembers/GroupMembers'
 
+// import type { ChannelProps } from '.'
+
 function Modals() {
   return (
     <>
@@ -42,11 +44,16 @@ function Modals() {
   )
 }
 
-export function GroupChatRoom() {
+// interface Props {
+//   options: ChannelProps['options']
+// }
+
+export const GroupChatRoom = () => {
   const [state] = useChatState()
   const [showMembers, setShowMembers] = useState(false)
   const [editGroup, setEditGroup] = useState(false)
   const narrow = useNarrow()
+
   return (
     <ChatWrapper>
       {!narrow && (

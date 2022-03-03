@@ -6,14 +6,7 @@ import { Community, lightTheme } from '@status-im/react'
 const App = () => {
   return (
     <div>
-      <Community
-        theme={lightTheme}
-        communityKey="<YOUR_COMMUNITY_KEY>"
-        config={{
-          environment: '<ENVIRONMENT>',
-          dappUrl: '<URL>',
-        }}
-      />
+      <Community publicKey="<YOUR_COMMUNITY_KEY>" theme={lightTheme} />
     </div>
   )
 }

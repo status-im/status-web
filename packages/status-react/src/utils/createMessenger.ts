@@ -3,10 +3,11 @@ import { getPredefinedBootstrapNodes } from 'js-waku'
 import { Fleet } from 'js-waku/build/main/lib/discovery/predefined'
 import { Protocols } from 'js-waku/build/main/lib/waku'
 
+import type { Environment } from '../types/config'
 import type { Identity } from '@status-im/core'
 import type { CreateOptions } from 'js-waku/build/main/lib/waku'
 
-function createWakuOptions(env: string): CreateOptions {
+function createWakuOptions(env: Environment): CreateOptions {
   let bootstrap: CreateOptions['bootstrap'] = {
     default: true,
   }
@@ -32,7 +33,7 @@ function createWakuOptions(env: string): CreateOptions {
 
 export async function createMessenger(
   identity: Identity | undefined,
-  env: string
+  env: Environment
 ) {
   const wakuOptions = createWakuOptions(env)
   const messenger = await Messenger.create(identity, wakuOptions)

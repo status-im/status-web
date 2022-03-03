@@ -1,0 +1,33 @@
+export interface Theme {
+  primary: string
+  secondary: string
+  tertiary: string
+  bodyBackgroundColor: string
+  sectionBackgroundColor: string
+  bodyBackgroundGradient: string
+  guestNameColor: string
+  iconColor: string
+  iconUserColor: string
+  iconTextColor: string
+  logoColor: string
+  activeChannelBackground: string
+  notificationColor: string
+  inputColor: string
+  border: string
+  buttonBg: string
+  buttonBgHover: string
+  buttonNoBg: string
+  buttonNoBgHover: string
+  skeletonLight: string
+  skeletonDark: string
+  redColor: string
+  greenColor: string
+  greenBg: string
+  mentionColor: string
+  mentionHover: string
+  mentionBg: string
+  mentionBgHover: string
+  shadow: string
+  reactionBg: string
+  blueBg: string
+}
