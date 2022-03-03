@@ -5,12 +5,12 @@ import styled from 'styled-components'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
+import { CommunitySidebar } from '../../modules/community/CommunitySidebar'
 import {
   ActivityButton,
   ActivityWrapper,
 } from '../ActivityCenter/ActivityButton'
 import { Channel } from '../Channels/Channel'
-import { Community } from '../Community'
 import { ChannelMenu } from '../Form/ChannelMenu'
 import { ActivityIcon } from '../Icons/ActivityIcon'
 import { MembersIcon } from '../Icons/MembersIcon'
@@ -85,7 +85,7 @@ export function ChatTopbar({
           <>
             {narrow && (
               <CommunityWrap className={narrow ? 'narrow' : ''}>
-                <Community />
+                <CommunitySidebar />
               </CommunityWrap>
             )}
 

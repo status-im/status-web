@@ -2,19 +2,19 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import styled from 'styled-components'
 
-import { ChatCreation } from '../../components/Chat/ChatCreation'
-import { ChatInput } from '../../components/Chat/ChatInput'
-import { ChatTopbar, ChatTopbarLoading } from '../../components/Chat/ChatTopbar'
-import { TokenRequirement } from '../../components/Form/TokenRequirement'
-import { MessagesList } from '../../components/Messages/MessagesList'
-import { NarrowChannels } from '../../components/NarrowMode/NarrowChannels'
-import { NarrowMembers } from '../../components/NarrowMode/NarrowMembers'
-import { LoadingSkeleton } from '../../components/Skeleton/LoadingSkeleton'
-import { useMessengerContext } from '../../contexts/messengerProvider'
-import { useNarrow } from '../../contexts/narrowProvider'
+import { ChatCreation } from '~/src/components/Chat/ChatCreation'
+import { ChatInput } from '~/src/components/Chat/ChatInput'
+import { ChatTopbar, ChatTopbarLoading } from '~/src/components/Chat/ChatTopbar'
+import { TokenRequirement } from '~/src/components/Form/TokenRequirement'
+import { MessagesList } from '~/src/components/Messages/MessagesList'
+import { NarrowChannels } from '~/src/components/NarrowMode/NarrowChannels'
+import { NarrowMembers } from '~/src/components/NarrowMode/NarrowMembers'
+import { LoadingSkeleton } from '~/src/components/Skeleton/LoadingSkeleton'
+import { useMessengerContext } from '~/src/contexts/messengerProvider'
+import { useNarrow } from '~/src/contexts/narrowProvider'
 
-import type { Reply } from '../../hooks/useReply'
-import type { ChannelData } from '../../models/ChannelData'
+import type { Reply } from '~/src/hooks/useReply'
+import type { ChannelData } from '~/src/models/ChannelData'
 
 export enum ChatBodyState {
   Chat,
