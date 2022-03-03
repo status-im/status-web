@@ -4,6 +4,7 @@ import { useMessenger } from '../hooks/messenger/useMessenger'
 import { useIdentity, useNickname } from './identityProvider'
 
 import type { MessengerType } from '../hooks/messenger/useMessenger'
+import type { Environment } from '~/src/types/config'
 
 const MessengerContext = createContext<MessengerType>({
   messenger: undefined,
@@ -35,18 +36,19 @@ export function useMessengerContext() {
   return useContext(MessengerContext)
 }
 
-interface MessengerProviderProps {
-  communityKey: string | undefined
+interface Props {
+  publicKey: string
+  environment?: Environment
   children: React.ReactNode
 }
 
-export function MessengerProvider({
-  communityKey,
-  children,
-}: MessengerProviderProps) {
+export function MessengerProvider(props: Props) {
+  const { publicKey, environment, children } = props
+
   const identity = useIdentity()
   const nickname = useNickname()
-  const messenger = useMessenger(communityKey, identity, nickname)
+  const messenger = useMessenger(publicKey, environment, identity, nickname)
+
   return (
     <MessengerContext.Provider value={messenger}>
       {children}

@@ -7,11 +7,10 @@ const App = () => {
   return (
     <div>
       <Channel
+        publicKey="<YOUR_COMMUNITY_KEY>"
         theme={lightTheme}
-        communityKey="<YOUR_COMMUNITY_KEY>"
-        config={{
-          environment: '<ENVIRONMENT>',
-          dappUrl: '<URL>',
+        options={{
+          showMembers: false,
         }}
       />
     </div>
