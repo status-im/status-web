@@ -2,8 +2,8 @@ import React, { useMemo, useState } from 'react'
 
 import styled from 'styled-components'
 
-import { MembersList } from '../../components/Members/MembersList'
-import { useMessengerContext } from '../../contexts/messengerProvider'
+import { MembersList } from '~/src/components/Members/MembersList'
+import { useMessengerContext } from '~/src/contexts/messengerProvider'
 
 export function GroupMembers() {
   const { addContact, activeChannel } = useMessengerContext()
