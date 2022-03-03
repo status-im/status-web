@@ -3,7 +3,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { decode } from 'html-entities'
 import styled from 'styled-components'
 
-import { useFetchMetadata } from '../../contexts/fetchMetadataProvider'
 import { useUserPublicKey } from '../../contexts/identityProvider'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
@@ -61,13 +60,12 @@ export function ChatMessageContent({
   setLinkOpen,
   setMentioned,
 }: ChatMessageContentProps) {
-  const fetchMetadata = useFetchMetadata()
   const { content, image } = useMemo(() => message, [message])
   const [elements, setElements] = useState<(string | React.ReactElement)[]>([
     content,
   ])
   const [link, setLink] = useState<string | undefined>(undefined)
-  const [openGraph, setOpenGraph] = useState<Metadata | undefined>(undefined)
+  const [openGraph] = useState<Metadata | undefined>(undefined)
 
   useEffect(() => {
     let link
@@ -95,21 +93,21 @@ export function ChatMessageContent({
     setElements(newSplit)
   }, [content, setLink, setMentioned, setElements, setLinkOpen])
 
-  useEffect(() => {
-    const updatePreview = async () => {
-      if (link && fetchMetadata) {
-        try {
-          const metadata = await fetchMetadata(link)
-          if (metadata) {
-            setOpenGraph(metadata)
-          }
-        } catch {
-          return
-        }
-      }
-    }
-    updatePreview()
-  }, [link, fetchMetadata])
+  // useEffect(() => {
+  //   const updatePreview = async () => {
+  //     if (link && fetchMetadata) {
+  //       try {
+  //         const metadata = await fetchMetadata(link)
+  //         if (metadata) {
+  //           setOpenGraph(metadata)
+  //         }
+  //       } catch {
+  //         return
+  //       }
+  //     }
+  //   }
+  //   updatePreview()
+  // }, [link, fetchMetadata])
 
   return (
     <ContentWrapper>

@@ -2,28 +2,29 @@ import React, { useState } from 'react'
 
 import styled from 'styled-components'
 
-import { ChatState, useChatState } from '../contexts/chatStateProvider'
-import { useMessengerContext } from '../contexts/messengerProvider'
-import { useNarrow } from '../contexts/narrowProvider'
-import { Channels } from './Channels/Channels'
-import { ChatBody } from './Chat/ChatBody'
-import { ChatCreation } from './Chat/ChatCreation'
-import { Community } from './Community'
-import { Members } from './Members/Members'
-import { AgreementModal } from './Modals/AgreementModal'
-import { CoinbaseModal } from './Modals/CoinbaseModal'
-import { CommunityModal } from './Modals/CommunityModal'
-import { EditModal } from './Modals/EditModal'
-import { LeavingModal } from './Modals/LeavingModal'
-import { LogoutModal } from './Modals/LogoutModal'
-import { ProfileFoundModal } from './Modals/ProfileFoundModal'
-import { ProfileModal } from './Modals/ProfileModal'
-import { StatusModal } from './Modals/StatusModal'
-import { UserCreationModal } from './Modals/UserCreationModal'
-import { UserCreationStartModal } from './Modals/UserCreationStartModal'
-import { WalletConnectModal } from './Modals/WalletConnectModal'
-import { WalletModal } from './Modals/WalletModal'
-import { ToastMessageList } from './ToastMessages/ToastMessageList'
+import { Channels } from '~/src/components/Channels/Channels'
+import { ChatBody } from '~/src/components/Chat/ChatBody'
+import { ChatCreation } from '~/src/components/Chat/ChatCreation'
+import { Members } from '~/src/components/Members/Members'
+import { AgreementModal } from '~/src/components/Modals/AgreementModal'
+import { CoinbaseModal } from '~/src/components/Modals/CoinbaseModal'
+import { CommunityModal } from '~/src/components/Modals/CommunityModal'
+import { EditModal } from '~/src/components/Modals/EditModal'
+import { LeavingModal } from '~/src/components/Modals/LeavingModal'
+import { LogoutModal } from '~/src/components/Modals/LogoutModal'
+import { ProfileFoundModal } from '~/src/components/Modals/ProfileFoundModal'
+import { ProfileModal } from '~/src/components/Modals/ProfileModal'
+import { StatusModal } from '~/src/components/Modals/StatusModal'
+import { UserCreationModal } from '~/src/components/Modals/UserCreationModal'
+import { UserCreationStartModal } from '~/src/components/Modals/UserCreationStartModal'
+import { WalletConnectModal } from '~/src/components/Modals/WalletConnectModal'
+import { WalletModal } from '~/src/components/Modals/WalletModal'
+import { ToastMessageList } from '~/src/components/ToastMessages/ToastMessageList'
+import { ChatState, useChatState } from '~/src/contexts/chatStateProvider'
+import { useMessengerContext } from '~/src/contexts/messengerProvider'
+import { useNarrow } from '~/src/contexts/narrowProvider'
+
+import { CommunitySidebar } from './CommunitySidebar'
 
 function Modals() {
   return (
@@ -98,7 +99,7 @@ const ChannelsWrapper = styled.div`
   flex-direction: column;
 `
 
-const StyledCommunity = styled(Community)`
+const StyledCommunity = styled(CommunitySidebar)`
   padding: 0 0 0 8px;
   margin: 0 0 16px;
 `

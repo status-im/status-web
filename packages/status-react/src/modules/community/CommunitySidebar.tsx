@@ -2,17 +2,17 @@ import React from 'react'
 
 import styled from 'styled-components'
 
-import { useMessengerContext } from '../contexts/messengerProvider'
-import { useModal } from '../contexts/modalProvider'
-import { CommunityIdentity } from './CommunityIdentity'
-import { CommunityModalName } from './Modals/CommunityModal'
-import { CommunitySkeleton } from './Skeleton/CommunitySkeleton'
+import { CommunityIdentity } from '../../components/CommunityIdentity'
+import { CommunityModalName } from '../../components/Modals/CommunityModal'
+import { CommunitySkeleton } from '../../components/Skeleton/CommunitySkeleton'
+import { useMessengerContext } from '../../contexts/messengerProvider'
+import { useModal } from '../../contexts/modalProvider'
 
 interface CommunityProps {
   className?: string
 }
 
-export function Community({ className }: CommunityProps) {
+export function CommunitySidebar({ className }: CommunityProps) {
   const { communityData } = useMessengerContext()
   const { setModal } = useModal(CommunityModalName)
 

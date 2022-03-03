@@ -1,12 +1,12 @@
 import React, { StrictMode } from 'react'
 import { render } from 'react-dom'
 
-import { GroupChat, lightTheme } from '@status-im/react'
+import { Channel, lightTheme } from '@status-im/react'
 
 const App = () => {
   return (
     <div>
-      <GroupChat
+      <Channel
         theme={lightTheme}
         communityKey="<YOUR_COMMUNITY_KEY>"
         config={{
