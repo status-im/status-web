@@ -4,11 +4,7 @@ import { render } from 'react-dom'
 import { Community, lightTheme } from '@status-im/react'
 
 const App = () => {
-  return (
-    <div>
-      <Community publicKey="<YOUR_COMMUNITY_KEY>" theme={lightTheme} />
-    </div>
-  )
+  return <Community publicKey="<YOUR_COMMUNITY_KEY>" theme={lightTheme} />
 }
 
 render(
