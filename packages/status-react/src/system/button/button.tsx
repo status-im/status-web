@@ -24,10 +24,12 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     loading,
     onClick,
     variant = 'default',
+    ...buttonProps
   } = props
 
   return (
     <Base
+      {...buttonProps}
       type={type}
       ref={ref}
       disabled={disabled}

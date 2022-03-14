@@ -28,10 +28,12 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
     intent,
     color,
     active,
+    ...buttonProps
   } = props
 
   return (
     <Base
+      {...buttonProps}
       type={type}
       ref={ref}
       aria-label={label}
