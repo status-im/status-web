@@ -1,2 +1,2 @@
-export type { DialogProps, DialogTriggerProps } from './dialog'
+export { AlertDialog, AlertDialogTrigger } from './alert-dialog'
 export { Dialog, DialogTrigger } from './dialog'

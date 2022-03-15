@@ -1,41 +1,41 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import * as Primitive from '@radix-ui/react-dialog'
+import * as Primitive from '@radix-ui/react-alert-dialog'
 
 import { CrossIcon } from '~/src/icons/cross-icon'
 
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
+import { Text } from '../text'
 import { Actions, Body, Content, Header, Overlay, Title } from './styles'
 
-interface DialogTriggerProps {
+interface TriggerProps {
   children: [React.ReactElement, React.ReactElement]
 }
 
-const DialogTrigger = (props: DialogTriggerProps) => {
+const AlertDialogTrigger = (props: TriggerProps) => {
   const { children } = props
-
-  const [open, setOpen] = useState(false)
 
   const [trigger, content] = children
 
   return (
-    <Primitive.Root open={open} onOpenChange={setOpen}>
+    <Primitive.Root>
       <Primitive.Trigger asChild>{trigger}</Primitive.Trigger>
+
       {content}
     </Primitive.Root>
   )
 }
 
 interface DialogProps {
-  title: React.ReactNode
-  children: React.ReactNode
-  actionLabel: string
-  cancelLabel?: string
+  title: string
+  description: string
+  // actionLabel: string
+  // cancelLabel?: string
 }
 
-const Dialog = (props: DialogProps) => {
-  const { title, children, actionLabel, cancelLabel } = props
+const AlertDialog = (props: DialogProps) => {
+  const { title, description } = props
 
   return (
     <Primitive.Portal>
@@ -43,24 +43,26 @@ const Dialog = (props: DialogProps) => {
       <Content as={Primitive.Content}>
         <Header>
           <Title as={Primitive.Title}>{title}</Title>
-          <Primitive.Close asChild>
+          <Primitive.Cancel asChild>
             <IconButton label="Close">
               <CrossIcon />
             </IconButton>
-          </Primitive.Close>
+          </Primitive.Cancel>
         </Header>
-        <Body>{children}</Body>
+        <Body>
+          <Text as={Primitive.Description}>{description}</Text>
+        </Body>
         <Actions>
-          {cancelLabel && (
-            <Primitive.Close asChild>
-              <Button>{cancelLabel}</Button>
-            </Primitive.Close>
-          )}
-          <Button>{actionLabel}</Button>
+          <Primitive.Cancel asChild>
+            <Button>Cancel</Button>
+          </Primitive.Cancel>
+          <Primitive.Action asChild>
+            <Button>Action</Button>
+          </Primitive.Action>
         </Actions>
       </Content>
     </Primitive.Portal>
   )
 }
 
-export { Dialog, DialogTrigger }
+export { AlertDialog, AlertDialogTrigger }

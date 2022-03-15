@@ -1,5 +1,3 @@
-import * as Primitive from '@radix-ui/react-dialog'
-
 import { keyframes, styled } from '~/src/styles/config'
 
 const overlayAnimation = keyframes({
@@ -11,7 +9,7 @@ const overlayAnimation = keyframes({
   },
 })
 
-export const Overlay = styled(Primitive.Overlay, {
+export const Overlay = styled('div', {
   inset: 0,
   position: 'fixed',
   backgroundColor: 'rgba(0,0,0,0.4)',
@@ -32,7 +30,7 @@ const contentAnimation = keyframes({
   },
 })
 
-export const Content = styled(Primitive.Content, {
+export const Content = styled('div', {
   backgroundColor: 'white',
   borderRadius: 8,
   boxShadow:
@@ -71,7 +69,7 @@ export const Actions = styled('div', {
   borderTop: '1px solid #eee',
 })
 
-export const Title = styled(Primitive.Title, {
+export const Title = styled('div', {
   margin: 0,
   fontWeight: 500,
   fontSize: 17,
