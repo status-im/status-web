@@ -6,7 +6,7 @@ export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('div', {
   position: 'relative',
-  background: '#fff',
+  background: '#F6F8FA',
   borderRadius: '100%',
   flexShrink: 0,
 
