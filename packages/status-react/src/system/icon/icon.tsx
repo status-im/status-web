@@ -1,22 +1,22 @@
 import React, { cloneElement } from 'react'
 
-import { AccessibleIcon } from '@radix-ui/react-accessible-icon'
+import { Root } from '@radix-ui/react-accessible-icon'
 
-type Props = ({ label: string; hide?: false } | { hide: true }) & {
+type Props = ({ label: string; hidden?: false } | { hidden: true }) & {
   children: React.ReactElement
 }
 
 const Icon = (props: Props) => {
-  const { children, hide } = props
+  const { children, hidden } = props
 
-  if (hide) {
+  if (hidden) {
     return cloneElement(children, {
       'aria-hidden': 'true',
       focusable: 'false',
     })
   }
 
-  return <AccessibleIcon label={props.label}>{children}</AccessibleIcon>
+  return <Root label={props.label}>{children}</Root>
 }
 
 export { Icon }
