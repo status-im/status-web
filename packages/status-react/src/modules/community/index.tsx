@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 
 import styled, { ThemeProvider } from 'styled-components'
 
+import { AppProvider } from '~/src/contexts/app-context'
 import { ChatStateProvider } from '~/src/contexts/chatStateProvider'
 import { IdentityProvider } from '~/src/contexts/identityProvider'
 import { MessengerProvider } from '~/src/contexts/messengerProvider'
@@ -11,7 +12,7 @@ import { ScrollProvider } from '~/src/contexts/scrollProvider'
 import { ToastProvider } from '~/src/contexts/toastProvider'
 import { GlobalStyle } from '~/src/styles/GlobalStyle'
 
-import { CommunityChatRoom } from './CommunityChatRoom'
+import { Messenger } from './messenger'
 
 import type { Config } from '~/src/types/config'
 
@@ -23,30 +24,32 @@ export const Community = (props: Props) => {
   const ref = useRef<HTMLHeadingElement>(null)
 
   return (
-    <ThemeProvider theme={theme}>
-      <NarrowProvider myRef={ref}>
-        <ModalProvider>
-          <ToastProvider>
-            <Wrapper ref={ref}>
-              <GlobalStyle />
-              <IdentityProvider>
-                <MessengerProvider
-                  publicKey={publicKey}
-                  environment={environment}
-                >
-                  <ChatStateProvider>
-                    <ScrollProvider>
-                      <CommunityChatRoom />
-                      <div id="modal-root" />
-                    </ScrollProvider>
-                  </ChatStateProvider>
-                </MessengerProvider>
-              </IdentityProvider>
-            </Wrapper>
-          </ToastProvider>
-        </ModalProvider>
-      </NarrowProvider>
-    </ThemeProvider>
+    <AppProvider>
+      <ThemeProvider theme={theme}>
+        <NarrowProvider myRef={ref}>
+          <ModalProvider>
+            <ToastProvider>
+              <Wrapper ref={ref}>
+                <GlobalStyle />
+                <IdentityProvider>
+                  <MessengerProvider
+                    publicKey={publicKey}
+                    environment={environment}
+                  >
+                    <ChatStateProvider>
+                      <ScrollProvider>
+                        <Messenger />
+                        <div id="modal-root" />
+                      </ScrollProvider>
+                    </ChatStateProvider>
+                  </MessengerProvider>
+                </IdentityProvider>
+              </Wrapper>
+            </ToastProvider>
+          </ModalProvider>
+        </NarrowProvider>
+      </ThemeProvider>
+    </AppProvider>
   )
 }
 
