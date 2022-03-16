@@ -34,6 +34,7 @@ export const { styled, css, keyframes, theme, createTheme, config } =
       },
       radii: {
         8: '8px',
+        full: '100%',
       },
     },
 
