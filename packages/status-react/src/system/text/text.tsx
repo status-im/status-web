@@ -13,13 +13,25 @@ const Text = styled('div', {
       '12': {
         fontSize: '12px',
       },
+      '13': {
+        fontSize: '13px',
+      },
       '14': {
         fontSize: '14px',
       },
+      '15': {
+        fontSize: '15px',
+      },
     },
     color: {
+      accent: {
+        color: '$accent-1',
+      },
+      primary: {
+        color: '$primary-1',
+      },
       gray: {
-        color: '#939BA1',
+        color: '$gray-1',
       },
     },
     weight: {
@@ -70,6 +82,7 @@ const Text = styled('div', {
   defaultVariants: {
     align: 'left',
     weight: '400',
+    color: 'accent',
   },
 
   // compoundVariants: {},

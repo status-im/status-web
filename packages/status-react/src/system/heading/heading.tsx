@@ -4,11 +4,21 @@ import type React from 'react'
 
 const Heading = styled('div', {
   fontFamily: theme.fonts.sans,
-  fontSize: '17px',
 
   variants: {
-    size: {},
-    color: {},
+    size: {
+      15: {
+        fontSize: '15px',
+      },
+      17: {
+        fontSize: '17px',
+      },
+    },
+    color: {
+      accent: {
+        color: '$accent-1',
+      },
+    },
     weight: {
       '400': {
         fontWeight: theme.fontWeights[400],
@@ -55,6 +65,9 @@ const Heading = styled('div', {
 
   defaultVariants: {
     align: 'left',
+    color: 'accent',
+    weight: '500',
+    size: '17',
   },
 
   // compoundVariants: {},
