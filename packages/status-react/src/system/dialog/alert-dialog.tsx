@@ -5,9 +5,10 @@ import * as Primitive from '@radix-ui/react-alert-dialog'
 import { CrossIcon } from '~/src/icons/cross-icon'
 
 import { Button } from '../button'
+import { Heading } from '../heading'
 import { IconButton } from '../icon-button'
 import { Text } from '../text'
-import { Actions, Body, Content, Header, Overlay, Title } from './styles'
+import { Actions, Body, Content, Header, Overlay } from './styles'
 
 interface TriggerProps {
   children: [React.ReactElement, React.ReactElement]
@@ -42,7 +43,9 @@ const AlertDialog = (props: DialogProps) => {
       <Overlay as={Primitive.Overlay} />
       <Content as={Primitive.Content}>
         <Header>
-          <Title as={Primitive.Title}>{title}</Title>
+          <Heading as={Primitive.Title} weight="600" size="17">
+            {title}
+          </Heading>
           <Primitive.Cancel asChild>
             <IconButton label="Close">
               <CrossIcon />
