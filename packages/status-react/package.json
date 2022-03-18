@@ -31,6 +31,7 @@
     "@radix-ui/react-context-menu": "^0.1.6",
     "@radix-ui/react-dialog": "^0.1.7",
     "@radix-ui/react-dropdown-menu": "^0.1.6",
+    "@radix-ui/react-separator": "^0.1.4",
     "@radix-ui/react-tooltip": "^0.1.7",
     "@radix-ui/react-visually-hidden": "^0.1.4",
     "@status-im/core": "^0.0.0",
