@@ -5,8 +5,12 @@ import * as Primitive from '@radix-ui/react-dialog'
 import { CrossIcon } from '~/src/icons/cross-icon'
 
 import { Button } from '../button'
+import { Heading } from '../heading'
 import { IconButton } from '../icon-button'
-import { Actions, Body, Content, Header, Overlay, Title } from './styles'
+import { Separator } from '../separator'
+import { Actions, Body, Content, Header, Overlay } from './styles'
+
+import type { ButtonProps } from '../button'
 
 interface DialogTriggerProps {
   children: [React.ReactElement, React.ReactElement]
@@ -30,37 +34,47 @@ const DialogTrigger = (props: DialogTriggerProps) => {
 interface DialogProps {
   title: React.ReactNode
   children: React.ReactNode
-  actionLabel: string
-  cancelLabel?: string
 }
 
 const Dialog = (props: DialogProps) => {
-  const { title, children, actionLabel, cancelLabel } = props
+  const { title, children } = props
 
   return (
     <Primitive.Portal>
       <Overlay as={Primitive.Overlay} />
       <Content as={Primitive.Content}>
         <Header>
-          <Title as={Primitive.Title}>{title}</Title>
+          <Heading as={Primitive.Title} weight="600" size="17">
+            {title}
+          </Heading>
           <Primitive.Close asChild>
             <IconButton label="Close">
               <CrossIcon />
             </IconButton>
           </Primitive.Close>
         </Header>
-        <Body>{children}</Body>
-        <Actions>
-          {cancelLabel && (
-            <Primitive.Close asChild>
-              <Button>{cancelLabel}</Button>
-            </Primitive.Close>
-          )}
-          <Button>{actionLabel}</Button>
-        </Actions>
+        {children}
       </Content>
     </Primitive.Portal>
   )
 }
+
+const Cancel = (props: ButtonProps) => {
+  return (
+    <Primitive.Close asChild>
+      <Button {...props} />
+    </Primitive.Close>
+  )
+}
+
+const Action = (props: ButtonProps) => {
+  return <Button {...props} />
+}
+
+Dialog.Body = Body
+Dialog.Actions = Actions
+Dialog.Cancel = Cancel
+Dialog.Action = Action
+Dialog.Separator = Separator
 
 export { Dialog, DialogTrigger }

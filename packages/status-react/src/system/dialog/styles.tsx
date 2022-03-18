@@ -49,7 +49,7 @@ export const Content = styled('div', {
 })
 
 export const Header = styled('div', {
-  padding: '16px',
+  padding: '12px 12px 12px 16px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -65,12 +65,6 @@ export const Actions = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
+  borderTop: '1px solid #EEF2F5',
   gap: 16,
-  borderTop: '1px solid #eee',
-})
-
-export const Title = styled('div', {
-  margin: 0,
-  fontWeight: 500,
-  fontSize: 17,
 })
