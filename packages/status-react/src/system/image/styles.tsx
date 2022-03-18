@@ -12,8 +12,17 @@ export const Base = styled('img', {
 
   variants: {
     radius: {
+      1: {
+        borderRadius: '$1',
+      },
+      2: {
+        borderRadius: '$2',
+      },
       full: {
-        borderRadius: '100%',
+        borderRadius: '$full',
+      },
+      bubble: {
+        borderRadius: '16px 16px 4px 16px',
       },
     },
     fit: {
