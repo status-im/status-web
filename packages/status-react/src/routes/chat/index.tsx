@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { MemberSidebar } from '~/src/components/member-sidebar'
 import { useAppState } from '~/src/contexts/app-context'
 import { ChatProvider } from '~/src/contexts/chat-context'
 import { styled } from '~/src/styles/config'
@@ -8,7 +9,6 @@ import { Flex } from '~/src/system/flex'
 import { Heading } from '~/src/system/heading'
 import { Text } from '~/src/system/text'
 
-import { MemberSidebar } from '../member-sidebar'
 import { ChatInput } from './chat-input'
 import { ChatMessage } from './chat-message'
 import { Navbar } from './navbar'
