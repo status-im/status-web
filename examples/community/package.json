@@ -4,7 +4,7 @@
   "source": "./index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead, not ios_saf < 13",
   "scripts": {
-    "dev": "parcel",
+    "dev": "parcel --https",
     "prebuild": "rm -rf dist",
     "build": "parcel build"
   },
