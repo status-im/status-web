@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { cloneElement, useState } from 'react'
 
 import * as Primitive from '@radix-ui/react-context-menu'
 
@@ -18,12 +18,14 @@ interface TriggerProps extends ContextMenuTriggerProps {
 const ContextMenuTrigger = (props: TriggerProps) => {
   const { children, ...triggerProps } = props
 
+  const [open, setOpen] = useState(false)
+
   const [trigger, menu] = children
 
   return (
-    <Primitive.Root>
+    <Primitive.Root onOpenChange={setOpen}>
       <Primitive.Trigger {...triggerProps} asChild>
-        {trigger}
+        {cloneElement(trigger, { 'data-open': open })}
       </Primitive.Trigger>
       {menu}
     </Primitive.Root>
