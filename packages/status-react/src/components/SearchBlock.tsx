@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useMessengerContext } from '../contexts/messengerProvider'
-import { ContactsList } from './Chat/ChatCreation'
+import { ContactsList } from './Chat-legacy/ChatCreation'
 import { Member } from './Members/Member'
 
 interface SearchBlockProps {
