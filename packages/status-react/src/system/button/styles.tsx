@@ -14,31 +14,35 @@ export const Base = styled('button', {
   justifyContent: 'center',
   alignItems: 'center',
   padding: '11px 24px',
-  borderRadius: 8,
+  borderRadius: '$8',
   transitionProperty: 'background-color, border-color, color, fill, stroke',
   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
   transitionDuration: '150ms',
 
   '&:disabled': {
-    background: '#EEF2F5',
-    color: '#939BA1',
+    color: '$gray-1',
+    background: '$gray-2',
     cursor: 'not-allowed',
+    '&:hover': {
+      background: '$gray-2',
+    },
   },
 
   variants: {
     variant: {
       default: {
-        background: 'rgba(67, 96, 223, 0.1)',
-        color: '#4360DF',
-        '&:hover': {},
-      },
-      minimal: {
-        '&:hover': {},
+        background: '$primary-3',
+        color: '$primary-1',
+        '&:hover': {
+          background: '$primary-2',
+        },
       },
       danger: {
-        background: 'rgba(255, 45, 85, 0.1)',
-        color: '#FF2D55',
-        '&:hover': {},
+        background: '$danger-3',
+        color: '$danger-1',
+        '&:hover': {
+          background: '$danger-2',
+        },
       },
     },
     loading: {
