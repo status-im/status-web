@@ -8,4 +8,8 @@ export interface Config {
   environment?: Environment
   theme?: Theme
   router?: typeof BrowserRouter | typeof MemoryRouter | typeof HashRouter
+  options?: {
+    enableSidebar: boolean
+    enableMembers: boolean
+  }
 }

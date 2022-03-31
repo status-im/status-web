@@ -44,10 +44,10 @@ const Content = () => {
 }
 
 export const Chat = () => {
-  const { state } = useAppState()
+  const { state, options } = useAppState()
 
   // TODO: Update condition based on a chat type
-  const enableMembers = true
+  const enableMembers = options.enableMembers // && (chat.type === 'group' || chat.type === 'channel')
   const showMembers = enableMembers && state.showMembers
 
   return (

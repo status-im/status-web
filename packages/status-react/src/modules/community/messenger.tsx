@@ -3,6 +3,7 @@ import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { MainSidebar } from '~/src/components/main-sidebar'
+import { useAppState } from '~/src/contexts/app-context'
 import { Chat } from '~/src/routes/chat'
 import { NewChat } from '~/src/routes/new-chat'
 import { styled } from '~/src/styles/config'
@@ -42,9 +43,11 @@ import { styled } from '~/src/styles/config'
 // }
 
 export function Messenger() {
+  const { options } = useAppState()
+
   return (
     <Wrapper>
-      <MainSidebar />
+      {options.enableMembers && <MainSidebar />}
       <Routes>
         <Route path="/:id" element={<Chat />} />
         <Route path="/new" element={<NewChat />} />

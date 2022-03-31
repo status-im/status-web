@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useMemo, useReducer } from 'react'
 
+import type { Config } from '../types/config'
 import type { Dispatch, Reducer } from 'react'
 
 type Context = {
   state: State
   dispatch: Dispatch<Action>
+  options: NonNullable<Config['options']>
 }
 
 const AppContext = createContext<Context | undefined>(undefined)
@@ -31,13 +33,27 @@ const initialState: State = {
 
 interface Props {
   children: React.ReactNode
+  config: Config
 }
 
 export const AppProvider = (props: Props) => {
-  const { children } = props
+  const { children, config } = props
 
   const [state, dispatch] = useReducer(reducer, initialState)
-  const value = useMemo(() => ({ state, dispatch }), [state])
+
+  const value = useMemo(
+    () => ({
+      state,
+      dispatch,
+      options: {
+        enableSidebar: true,
+        enableMembers: true,
+        ...config.options,
+      },
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state]
+  )
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
 }
