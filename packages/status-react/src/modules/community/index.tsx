@@ -31,7 +31,7 @@ export const Community = (props: Props) => {
 
   return (
     <Router>
-      <AppProvider>
+      <AppProvider config={props}>
         <ThemeProvider theme={theme}>
           <NarrowProvider myRef={ref}>
             <ModalProvider>
