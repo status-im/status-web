@@ -31,7 +31,7 @@ const DropdownMenuTrigger = (props: TriggerProps) => {
 }
 
 interface MenuProps extends DropdownMenuContentProps {
-  children: React.ReactElement[] | React.ReactElement
+  children: React.ReactNode
 }
 
 const DropdownMenu = (props: MenuProps) => {
