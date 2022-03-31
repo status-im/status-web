@@ -1,3 +1,5 @@
-export { type CommunityProps, Community } from './modules/community'
+export type { CommunityProps } from './modules/community'
+export { Community } from './modules/community'
 export { darkTheme, lightTheme } from './styles/themes'
 export type { Config } from './types/config'
+export { HashRouter, MemoryRouter } from 'react-router-dom'

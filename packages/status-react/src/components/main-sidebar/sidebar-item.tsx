@@ -1,30 +1,31 @@
 import React, { forwardRef } from 'react'
 
+import { NavLink } from 'react-router-dom'
+
 import { styled } from '~/src/styles/config'
 import { Avatar } from '~/src/system'
 
 import type { Ref } from 'react'
 
 interface Props {
+  to: string
   muted: boolean
   unread: boolean
-  active: boolean
   children: React.ReactNode
 }
 
-const SidebarItem = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { muted, unread, active, children, ...buttonProps } = props
+const SidebarItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
+  const { muted, unread, children, ...buttonProps } = props
 
   return (
-    <Button
+    <Link
       ref={ref}
       state={muted ? 'muted' : unread ? 'unread' : undefined}
-      active={active}
       {...buttonProps}
     >
       <Avatar size={24} />
       {children}
-    </Button>
+    </Link>
   )
 }
 
@@ -33,7 +34,7 @@ const _SidebarItem = forwardRef(SidebarItem)
 export { _SidebarItem as SidebarItem }
 export type SidebarItemProps = Omit<Props, 'children'>
 
-const Button = styled('button', {
+const Link = styled(NavLink, {
   position: 'relative',
   fontFamily: '$sans',
   fontWeight: '$500',
@@ -50,12 +51,11 @@ const Button = styled('button', {
     background: '#E9EDF1',
   },
 
+  '&.active': {
+    background: 'rgba(233, 237, 241, 1)',
+  },
+
   variants: {
-    active: {
-      true: {
-        background: 'rgba(233, 237, 241, 1)',
-      },
-    },
     state: {
       muted: {
         color: 'rgba(0, 0, 0, 0.4)',
@@ -64,6 +64,7 @@ const Button = styled('button', {
         fontWeight: '$600',
         '&::after': {
           content: '"1"',
+          textAlign: 'center',
           position: 'absolute',
           right: 8,
           width: 22,
