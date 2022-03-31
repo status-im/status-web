@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useIdentity } from '../../contexts/identityProvider'
 import { useActivities } from '../../hooks/useActivities'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { TopBtn } from '../Chat/ChatTopbar'
+import { TopBtn } from '../Chat-legacy/ChatTopbar'
 import { ActivityIcon } from '../Icons/ActivityIcon'
 import { ActivityCenter } from './ActivityCenter'
 

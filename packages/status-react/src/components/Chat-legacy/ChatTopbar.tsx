@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useNarrow } from '../../contexts/narrowProvider'
 import { useClickOutside } from '../../hooks/useClickOutside'
-import { CommunitySidebar } from '../../modules/community/CommunitySidebar'
 import {
   ActivityButton,
   ActivityWrapper,
@@ -18,6 +17,7 @@ import { MoreIcon } from '../Icons/MoreIcon'
 import { CommunitySkeleton } from '../Skeleton/CommunitySkeleton'
 import { Loading } from '../Skeleton/Loading'
 import { ChatBodyState } from './ChatBody'
+import { CommunitySidebar } from './CommunitySidebar'
 
 export function ChatTopbarLoading() {
   const narrow = useNarrow()

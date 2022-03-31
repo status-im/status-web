@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { useMessengerContext } from '../../contexts/messengerProvider'
 import { useScrollToMessage } from '../../contexts/scrollProvider'
-import { ReplyOn, ReplyTo } from '../Chat/ChatInput'
+import { ReplyOn, ReplyTo } from '../Chat-legacy/ChatInput'
 import { QuoteSvg } from '../Icons/QuoteIcon'
 import { UserIcon } from '../Icons/UserIcon'
 
