@@ -20,7 +20,7 @@ export const ChannelGroup = (props: Props) => {
     <ContextMenuTrigger>
       <Collapsible.Root defaultOpen>
         <CollapsibleTrigger>
-          <Text size="15" weight="500" color="black-70">
+          <Text size="15" weight="500" color="accent">
             {name}
           </Text>
           <ChevronDownIcon />
@@ -28,7 +28,7 @@ export const ChannelGroup = (props: Props) => {
         <CollapsibleContent>{children}</CollapsibleContent>
       </Collapsible.Root>
       <ContextMenu>
-        <ContextMenu.TriggerItem label="Mute Chat" icon={<BellIcon />}>
+        <ContextMenu.TriggerItem label="Mute Category" icon={<BellIcon />}>
           <ContextMenu.Item>For 15 min</ContextMenu.Item>
           <ContextMenu.Item>For 1 hour</ContextMenu.Item>
           <ContextMenu.Item>For 8 hours</ContextMenu.Item>

@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Chat } from '~/src/components/chat'
+import { Route, Routes } from 'react-router-dom'
+
 import { MainSidebar } from '~/src/components/main-sidebar'
-import { NewChat } from '~/src/components/new-chat'
-import { useAppState } from '~/src/contexts/app-context'
+import { Chat } from '~/src/routes/chat'
+import { NewChat } from '~/src/routes/new-chat'
 import { styled } from '~/src/styles/config'
 
 // import { AgreementModal } from '~/src/components/Modals/AgreementModal'
@@ -41,13 +42,13 @@ import { styled } from '~/src/styles/config'
 // }
 
 export function Messenger() {
-  const { state } = useAppState()
-
   return (
     <Wrapper>
       <MainSidebar />
-      {state.view === 'new-chat' && <NewChat />}
-      {(state.view === 'channel' || state.view === 'chat') && <Chat />}
+      <Routes>
+        <Route path="/:id" element={<Chat />} />
+        <Route path="/new" element={<NewChat />} />
+      </Routes>
     </Wrapper>
   )
 }

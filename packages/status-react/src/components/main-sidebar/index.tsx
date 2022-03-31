@@ -1,20 +1,19 @@
 import React from 'react'
 
-import { useAppState } from '~/src/contexts/app-context'
 import { EditIcon } from '~/src/icons/edit-icon'
 import { styled } from '~/src/styles/config'
-import { Box, Button } from '~/src/system'
+import { Box } from '~/src/system'
 import { Avatar } from '~/src/system/avatar'
-import { Dialog, DialogTrigger } from '~/src/system/dialog'
+import { DialogTrigger } from '~/src/system/dialog'
 import { Grid } from '~/src/system/grid'
 import { Heading } from '~/src/system/heading'
 import { IconButton } from '~/src/system/icon-button'
 import { Text } from '~/src/system/text'
-import { TextInput } from '~/src/system/text-input'
 
 import { ChannelGroup } from './channel-group'
 import { ChannelItem } from './channel-item'
 import { ChatItem } from './chat-item'
+import { CommunityDialog } from './community-dialog'
 
 const CHANNELS = {
   Public: ['welcome', 'general', 'random'],
@@ -24,8 +23,6 @@ const CHANNELS = {
 const CHATS = ['vitalik.eth', 'pvl.eth', 'Climate Change']
 
 export const MainSidebar = () => {
-  const { dispatch } = useAppState()
-
   return (
     <Wrapper>
       <DialogTrigger>
@@ -38,15 +35,10 @@ export const MainSidebar = () => {
             </Text>
           </div>
         </IdentityWrapper>
-        <Dialog title="Crypto Kitties" actionLabel="Save">
-          <Text>A community of cat lovers, meow!</Text>
-          <TextInput placeholder="meow" />
-          <Text>
-            To access this community, paste community public key in Status
-            desktop or mobile app
-          </Text>
-          <Button>Download Status for Mac</Button>
-        </Dialog>
+        <CommunityDialog
+          title="Crypto Kitties"
+          description="A community of cat lovers, meow!"
+        />
       </DialogTrigger>
 
       {Object.entries(CHANNELS).map(([group, channels]) => (
@@ -54,9 +46,9 @@ export const MainSidebar = () => {
           {channels.map(channel => (
             <ChannelItem
               key={group + channel}
+              to={`/${channel}`}
               unread={channel === 'general'}
               muted={channel === 'random'}
-              active={false}
             >
               {channel}
             </ChannelItem>
@@ -73,16 +65,13 @@ export const MainSidebar = () => {
           justify="between"
           css={{ marginBottom: 16 }}
         >
-          <Heading>Messages</Heading>
-          <IconButton
-            label="New Chat"
-            onClick={() => dispatch({ type: 'NEW_CHAT' })}
-          >
+          <Heading weight="600">Messages</Heading>
+          <IconButton label="New Chat" to="/new">
             <EditIcon />
           </IconButton>
         </Grid>
         {CHATS.map(chat => (
-          <ChatItem key={chat} unread={false} muted={false} active={false}>
+          <ChatItem key={chat} to={`/${chat}`} unread={false} muted={false}>
             {chat}
           </ChatItem>
         ))}
