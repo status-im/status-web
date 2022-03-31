@@ -31,12 +31,12 @@ const AlertDialogTrigger = (props: TriggerProps) => {
 interface DialogProps {
   title: string
   description: string
-  // actionLabel: string
-  // cancelLabel?: string
+  actionLabel: string
+  cancelLabel?: string
 }
 
 const AlertDialog = (props: DialogProps) => {
-  const { title, description } = props
+  const { title, description, cancelLabel = 'Cancel', actionLabel } = props
 
   return (
     <Primitive.Portal>
@@ -57,10 +57,10 @@ const AlertDialog = (props: DialogProps) => {
         </Body>
         <Actions>
           <Primitive.Cancel asChild>
-            <Button>Cancel</Button>
+            <Button>{cancelLabel}</Button>
           </Primitive.Cancel>
           <Primitive.Action asChild>
-            <Button>Action</Button>
+            <Button>{actionLabel}</Button>
           </Primitive.Action>
         </Actions>
       </Content>
