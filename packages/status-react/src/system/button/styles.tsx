@@ -44,6 +44,13 @@ export const Base = styled('button', {
           background: '$danger-2',
         },
       },
+      outline: {
+        background: '$transparent',
+        color: '$primary-1',
+        '&:hover': {
+          background: '$primary-3',
+        },
+      },
     },
     loading: {
       true: {},
