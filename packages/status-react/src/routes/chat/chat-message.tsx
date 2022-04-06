@@ -22,6 +22,7 @@ interface Props {
   reply?: 'text' | 'image' | 'image-text'
   image?: boolean
   mention?: boolean
+  pinned?: boolean
 }
 
 const MessageLink = (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
@@ -42,7 +43,7 @@ const MessageLink = (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
 }
 
 export const ChatMessage = (props: Props) => {
-  const { reply, image, mention } = props
+  const { reply, image, mention, pinned } = props
 
   const { dispatch } = useChatState()
 
@@ -50,7 +51,7 @@ export const ChatMessage = (props: Props) => {
     <>
       {reply && <MessageReply reply={reply} />}
       <ContextMenuTrigger>
-        <Wrapper mention={mention}>
+        <Wrapper mention={mention} pinned={pinned}>
           <div>
             <DropdownMenuTrigger>
               <button type="button">
@@ -150,11 +151,19 @@ export const ChatMessage = (props: Props) => {
                 <PencilIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip label="Pin">
-              <IconButton label="Pin message" intent="info" color="gray">
-                <PinIcon />
-              </IconButton>
-            </Tooltip>
+            {pinned ? (
+              <Tooltip label="Unpin">
+                <IconButton label="Unpin message" intent="info" color="gray">
+                  <UnpinIcon />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip label="Pin">
+                <IconButton label="Pin message" intent="info" color="gray">
+                  <PinIcon />
+                </IconButton>
+              </Tooltip>
+            )}
             <Tooltip label="Delete">
               <IconButton label="Delete message" intent="danger" color="gray">
                 <TrashIcon />
@@ -265,6 +274,25 @@ const Wrapper = styled('div', {
           bottom: 0,
           width: 3,
           background: '$mention-1',
+        },
+      },
+    },
+    pinned: {
+      true: {
+        background: '$pin-3',
+
+        '&:hover, &[data-open="true"]': {
+          background: '$pin-2',
+        },
+
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          bottom: 0,
+          width: 3,
+          background: '$pin-1',
         },
       },
     },
