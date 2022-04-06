@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { useChatState } from '~/src/contexts/chat-context'
 import { CrossIcon } from '~/src/icons/cross-icon'
@@ -15,8 +15,21 @@ import { Text } from '~/src/system/text'
 
 import type { Message } from '~/src/contexts/chat-context'
 
-export const ChatInput = () => {
+interface Props {
+  value?: string
+}
+
+export const ChatInput = (props: Props) => {
+  const { value } = props
   const { state } = useChatState()
+
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (state.message) {
+      inputRef.current?.focus()
+    }
+  }, [state.message])
 
   return (
     <Wrapper>
@@ -27,7 +40,7 @@ export const ChatInput = () => {
         {state.message && <InputReply reply={state.message} />}
 
         <InputWrapper>
-          <Input placeholder="Message" />
+          <Input ref={inputRef} placeholder="Message" defaultValue={value} />
           <Flex>
             <IconButton label="Pick emoji">
               <EmojiIcon />
