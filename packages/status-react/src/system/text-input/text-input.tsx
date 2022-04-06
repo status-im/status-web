@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react'
 
 import { Box } from '../box'
+import { Text } from '../text'
 import { Base } from './styles'
 
 import type { Ref } from 'react'
@@ -10,11 +11,13 @@ type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 interface Props {
   id?: string
   name?: string
+  label?: string
   type?: InputProps['type']
   value?: string
   defaultValue?: string
   onChange?: InputProps['onChange']
   onBlur?: InputProps['onBlur']
+  onClick?: InputProps['onClick']
   disabled?: boolean
   readOnly?: boolean
   required?: boolean
@@ -28,9 +31,16 @@ interface Props {
 }
 
 const TextInput = (props: Props, ref: Ref<HTMLInputElement>) => {
+  const { label, ...inputProps } = props
+
   return (
     <Box>
-      <Base ref={ref} {...props} />
+      {label && (
+        <Text size={13} weight={500} css={{ marginBottom: 6 }}>
+          {label}
+        </Text>
+      )}
+      <Base ref={ref} {...inputProps} />
     </Box>
   )
 }
