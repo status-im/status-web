@@ -14,6 +14,7 @@ interface Props {
   type?: ButtonProps['type']
   onClick?: ButtonProps['onClick']
   variant?: Variants['variant']
+  size?: Variants['size']
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
