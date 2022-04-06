@@ -11,6 +11,7 @@ import { Separator } from '../separator'
 import { Actions, Body, Content, Header, Overlay } from './styles'
 
 import type { ButtonProps } from '../button'
+import type { Variants } from './styles'
 
 interface DialogTriggerProps {
   children: [React.ReactElement, React.ReactElement]
@@ -34,15 +35,16 @@ const DialogTrigger = (props: DialogTriggerProps) => {
 interface DialogProps {
   title: React.ReactNode
   children: React.ReactNode
+  size?: Variants['size']
 }
 
 const Dialog = (props: DialogProps) => {
-  const { title, children } = props
+  const { title, children, size, ...contentProps } = props
 
   return (
     <Primitive.Portal>
       <Overlay as={Primitive.Overlay} />
-      <Content as={Primitive.Content}>
+      <Content as={Primitive.Content} size={size} {...contentProps}>
         <Header>
           <Heading as={Primitive.Title} weight="600" size="17">
             {title}

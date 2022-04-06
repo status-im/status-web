@@ -1,5 +1,9 @@
 import { keyframes, styled } from '~/src/styles/config'
 
+import type { VariantProps } from '~/src/styles/config'
+
+export type Variants = VariantProps<typeof Content>
+
 const overlayAnimation = keyframes({
   '0%': {
     opacity: 0,
@@ -40,11 +44,27 @@ export const Content = styled('div', {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '90vw',
-  maxWidth: '638px',
   maxHeight: '85vh',
 
   '@motion': {
     animation: `${contentAnimation} 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+  },
+
+  variants: {
+    size: {
+      480: {
+        maxWidth: '480px',
+      },
+      640: {
+        maxWidth: '640px',
+      },
+      1060: {
+        maxWidth: '1060px',
+      },
+    },
+  },
+  defaultVariants: {
+    size: '480',
   },
 })
 
