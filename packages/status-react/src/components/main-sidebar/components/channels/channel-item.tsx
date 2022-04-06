@@ -3,9 +3,9 @@ import React from 'react'
 import { BellIcon } from '~/src/icons/bell-icon'
 import { ContextMenu, ContextMenuTrigger } from '~/src/system/context-menu'
 
-import { SidebarItem } from './sidebar-item'
+import { SidebarItem } from '../sidebar-item'
 
-import type { SidebarItemProps } from './sidebar-item'
+import type { SidebarItemProps } from '../sidebar-item'
 
 interface Props extends SidebarItemProps {
   children: string
