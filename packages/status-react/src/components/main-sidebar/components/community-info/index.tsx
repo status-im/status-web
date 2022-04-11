@@ -2,9 +2,7 @@ import React from 'react'
 
 import { useCommunity } from '~/src/protocol/use-community'
 import { styled } from '~/src/styles/config'
-import { Avatar } from '~/src/system/avatar'
-import { DialogTrigger } from '~/src/system/dialog'
-import { Text } from '~/src/system/text'
+import { Avatar, DialogTrigger, Text } from '~/src/system'
 
 import { CommunityDialog } from './community-dialog'
 

@@ -1,8 +1,7 @@
 import React from 'react'
 
 import { styled } from '~/src/styles/config'
-import { Grid } from '~/src/system'
-import { Heading } from '~/src/system/heading'
+import { Grid, Heading } from '~/src/system'
 
 import { MemberGroup } from './member-group'
 import { MemberItem } from './member-item'

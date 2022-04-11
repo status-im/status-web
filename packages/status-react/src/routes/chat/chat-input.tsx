@@ -8,10 +8,7 @@ import { ImageIcon } from '~/src/icons/image-icon'
 import { ReplyIcon } from '~/src/icons/reply-icon'
 import { StickerIcon } from '~/src/icons/sticker-icon'
 import { styled } from '~/src/styles/config'
-import { Icon, Image } from '~/src/system'
-import { Flex } from '~/src/system/flex'
-import { IconButton } from '~/src/system/icon-button'
-import { Text } from '~/src/system/text'
+import { Flex, Icon, IconButton, Image, Text } from '~/src/system'
 
 import type { Message } from '~/src/contexts/chat-context'
 

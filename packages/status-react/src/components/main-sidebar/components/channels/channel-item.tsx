@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ChatMenu } from '~/src/components/chat-menu'
-import { ContextMenuTrigger } from '~/src/system/context-menu'
+import { ContextMenuTrigger } from '~/src/system'
 
 import { SidebarItem } from '../sidebar-item'
 
