@@ -9,15 +9,17 @@ import type { Ref } from 'react'
 
 interface TriggerProps {
   children: [React.ReactElement, React.ReactElement]
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 const PopoverTrigger = (props: TriggerProps, ref: Ref<HTMLButtonElement>) => {
-  const { children, ...triggerProps } = props
+  const { children, open, onOpenChange, ...triggerProps } = props
 
   const [trigger, content] = children
 
   return (
-    <Primitive.Root>
+    <Primitive.Root open={open} onOpenChange={onOpenChange}>
       <Primitive.Trigger asChild>
         {cloneElement(trigger, { ref, ...triggerProps })}
       </Primitive.Trigger>
