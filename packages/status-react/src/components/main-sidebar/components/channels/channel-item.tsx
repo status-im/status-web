@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { BellIcon } from '~/src/icons/bell-icon'
-import { ContextMenu, ContextMenuTrigger } from '~/src/system/context-menu'
+import { ChatMenu } from '~/src/components/chat-menu'
+import { ContextMenuTrigger } from '~/src/system/context-menu'
 
 import { SidebarItem } from '../sidebar-item'
 
@@ -17,21 +17,7 @@ export const ChannelItem = (props: Props) => {
   return (
     <ContextMenuTrigger>
       <SidebarItem {...sidebarItemProps}>#{children}</SidebarItem>
-      <ContextMenu>
-        <ContextMenu.Item icon={<BellIcon />}>View Profile</ContextMenu.Item>
-        <ContextMenu.Separator />
-        <ContextMenu.TriggerItem label="Mute Chat">
-          <ContextMenu.Item>For 15 min</ContextMenu.Item>
-          <ContextMenu.Item>For 1 hour</ContextMenu.Item>
-          <ContextMenu.Item>For 8 hours</ContextMenu.Item>
-          <ContextMenu.Item>For 24 hours</ContextMenu.Item>
-          <ContextMenu.Item>Until I turn it back on</ContextMenu.Item>
-        </ContextMenu.TriggerItem>
-        <ContextMenu.Separator />
-        <ContextMenu.Item icon={<BellIcon />} danger>
-          Delete
-        </ContextMenu.Item>
-      </ContextMenu>
+      <ChatMenu type="context" chatType="channel" />
     </ContextMenuTrigger>
   )
 }
