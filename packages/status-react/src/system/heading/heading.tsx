@@ -13,6 +13,9 @@ const Heading = styled('div', {
       17: {
         fontSize: '17px',
       },
+      22: {
+        fontSize: '22px',
+      },
     },
     color: {
       accent: {

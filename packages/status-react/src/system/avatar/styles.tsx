@@ -32,6 +32,14 @@ export const Base = styled('div', {
         width: 44,
         height: 44,
       },
+      64: {
+        width: 64,
+        height: 64,
+      },
+      80: {
+        width: 80,
+        height: 80,
+      },
       120: {
         width: 120,
         height: 120,
@@ -57,6 +65,8 @@ export const Indicator = styled('span', {
       },
       36: {},
       44: {},
+      64: {},
+      80: {},
       120: {},
     },
     state: {
