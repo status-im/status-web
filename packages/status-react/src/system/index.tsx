@@ -11,6 +11,7 @@ export {
   DialogTrigger,
 } from './dialog'
 export { DropdownMenu, DropdownMenuTrigger } from './dropdown-menu'
+export { EmojiHash } from './emoji-hash'
 export { EthAddress } from './eth-address'
 export { Flex } from './flex'
 export { Grid } from './grid'
