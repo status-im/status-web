@@ -33,7 +33,7 @@ const ContextMenuTrigger = (props: TriggerProps) => {
 }
 
 interface MenuProps extends ContextMenuContentProps {
-  children: React.ReactElement[] | React.ReactElement
+  children: React.ReactNode
 }
 
 const ContextMenu = (props: MenuProps) => {

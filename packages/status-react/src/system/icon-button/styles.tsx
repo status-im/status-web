@@ -5,7 +5,6 @@ import type { VariantProps } from '~/src/styles/config'
 export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('button', {
-  all: 'unset',
   width: 32,
   height: 32,
   flexShrink: 0,
