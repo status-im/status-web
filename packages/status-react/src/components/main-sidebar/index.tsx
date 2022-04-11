@@ -38,4 +38,5 @@ const Separator = styled('div', {
   margin: '16px 0',
   height: 1,
   background: 'rgba(0, 0, 0, 0.1)',
+  flexShrink: 0,
 })
