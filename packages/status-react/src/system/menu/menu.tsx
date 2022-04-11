@@ -50,7 +50,7 @@ const ItemBase = styled('div', {
   userSelect: 'none',
   whiteSpace: 'nowrap',
 
-  '&:focus, &[aria-expanded="true"]': {
+  '&:focus, &[aria-selected="true"], &[aria-expanded="true"]': {
     backgroundColor: '#EEF2F5',
   },
 
