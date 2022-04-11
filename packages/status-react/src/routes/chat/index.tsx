@@ -11,7 +11,7 @@ import { Text } from '~/src/system/text'
 
 import { ChatInput } from './chat-input'
 import { ChatMessage } from './chat-message'
-import { Navbar } from './navbar'
+import { Navbar } from './components/navbar'
 
 const EmptyChat = () => {
   return (
