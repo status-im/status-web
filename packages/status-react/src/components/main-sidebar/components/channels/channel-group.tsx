@@ -5,8 +5,7 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 import { BellIcon } from '~/src/icons/bell-icon'
 import { ChevronDownIcon } from '~/src/icons/chevron-down-icon'
 import { styled } from '~/src/styles/config'
-import { ContextMenu, ContextMenuTrigger } from '~/src/system/context-menu'
-import { Text } from '~/src/system/text'
+import { ContextMenu, ContextMenuTrigger, Text } from '~/src/system'
 
 interface Props {
   name: string

@@ -8,15 +8,23 @@ import { ReactionIcon } from '~/src/icons/reaction-icon'
 import { ReplyIcon } from '~/src/icons/reply-icon'
 import { TrashIcon } from '~/src/icons/trash-icon'
 import { styled } from '~/src/styles/config'
-import { AlertDialog, AlertDialogTrigger, Box } from '~/src/system'
-import { Avatar } from '~/src/system/avatar'
-import { ContextMenu, ContextMenuTrigger } from '~/src/system/context-menu'
-import { DropdownMenu, DropdownMenuTrigger } from '~/src/system/dropdown-menu'
-import { Flex } from '~/src/system/flex'
-import { IconButton } from '~/src/system/icon-button'
-import { Image } from '~/src/system/image'
-import { Text } from '~/src/system/text'
-import { Tooltip } from '~/src/system/tooltip'
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  Avatar,
+  Box,
+  Button,
+  ContextMenu,
+  ContextMenuTrigger,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  EmojiHash,
+  Flex,
+  IconButton,
+  Image,
+  Text,
+  Tooltip,
+} from '~/src/system'
 
 interface Props {
   reply?: 'text' | 'image' | 'image-text'

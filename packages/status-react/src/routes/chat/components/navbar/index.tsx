@@ -9,10 +9,7 @@ import { DotsIcon } from '~/src/icons/dots-icon'
 import { GroupIcon } from '~/src/icons/group-icon'
 import { useChat } from '~/src/protocol/use-chat'
 import { styled } from '~/src/styles/config'
-import { Separator } from '~/src/system'
-import { DropdownMenuTrigger } from '~/src/system/dropdown-menu'
-import { Flex } from '~/src/system/flex'
-import { IconButton } from '~/src/system/icon-button'
+import { DropdownMenuTrigger, Flex, IconButton, Separator } from '~/src/system'
 
 import { ChatInfo } from '../chat-info'
 

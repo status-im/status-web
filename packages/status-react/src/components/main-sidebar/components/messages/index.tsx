@@ -1,10 +1,7 @@
 import React from 'react'
 
 import { EditIcon } from '~/src/icons/edit-icon'
-import { Box } from '~/src/system'
-import { Grid } from '~/src/system/grid'
-import { Heading } from '~/src/system/heading'
-import { IconButton } from '~/src/system/icon-button'
+import { Box, Grid, Heading, IconButton } from '~/src/system'
 
 import { ChatItem } from './chat-item'
 
