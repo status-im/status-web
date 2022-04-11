@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 
 import { useCommunity } from '~/src/protocol/use-community'
-import { Avatar, Dialog, Flex, Text } from '~/src/system'
-import { Checkbox } from '~/src/system/checkbox'
+import { Avatar, Checkbox, Dialog, Flex, Text } from '~/src/system'
 
 export const WelcomeDialog = () => {
-  const { name } = useCommunity()
+  const { name, imageUrl, requestNeeded } = useCommunity()
 
   const [agreed, setAgreed] = useState(false)
 
   return (
     <Dialog title={`Welcome to ${name}`} size={640}>
-      <Dialog.Body>
-        <Flex justify="center" css={{ marginBottom: 24 }}>
-          <Avatar size="64" />
+      <Dialog.Body gap="4">
+        <Flex justify="center">
+          <Avatar size="64" src={imageUrl} />
         </Flex>
         <Text>
           CryptoKitties sed ut perspiciatis unde omnis iste natus error sit
@@ -31,14 +30,15 @@ export const WelcomeDialog = () => {
           aut fugit, sed quia consequuntur magni dolores eos qui ratione
           voluptatem sequi nesciunt.
         </Text>
-
-        <Checkbox checked={agreed} onChange={setAgreed}>
-          I agree with the above
-        </Checkbox>
+        <Flex>
+          <Checkbox checked={agreed} onChange={setAgreed}>
+            I agree with the above
+          </Checkbox>
+        </Flex>
       </Dialog.Body>
       <Dialog.Actions>
         <Dialog.Action disabled={agreed === false}>
-          Request to Join
+          {requestNeeded ? 'Request to Join' : `Join ${name}`}
         </Dialog.Action>
       </Dialog.Actions>
     </Dialog>
