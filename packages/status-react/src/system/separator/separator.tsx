@@ -14,12 +14,12 @@ export const Separator = styled(Root, {
       '1': {
         '&[data-orientation="horizontal"]': {
           height: '1px',
-          width: '100%',
+          minWidth: '100%',
         },
 
         '&[data-orientation="vertical"]': {
           width: '1px',
-          height: '100%',
+          minHeight: '100%',
         },
       },
     },
