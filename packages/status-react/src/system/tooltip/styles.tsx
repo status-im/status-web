@@ -24,6 +24,7 @@ export const slideLeftAndFade = keyframes({
 
 export const Content = styled(Primitive.Content, {
   fontFamily: theme.fonts.sans,
+  fontWeight: '$500',
   fontSize: 13,
   padding: 8,
   lineHeight: 1,
