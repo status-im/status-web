@@ -8,7 +8,7 @@ export const DisconnectDialog = () => {
 
   return (
     <Dialog title="Disconnect">
-      <Dialog.Body gap="4">
+      <Dialog.Body gap="5">
         <Text>Do you want to disconnect your profile from this browser?</Text>
         <Flex direction="column" align="center" gap="2">
           <Avatar size={64} src={profile.imageUrl} />
