@@ -1,37 +1,32 @@
 import React from 'react'
 
+import { useProfile } from '~/src/protocol/use-profile'
 import { styled } from '~/src/styles/config'
-import {
-  Avatar,
-  Dialog,
-  DialogTrigger,
-  EthAddress,
-  Flex,
-  Text,
-} from '~/src/system'
+import { Avatar, DialogTrigger, EthAddress, Flex, Text } from '~/src/system'
+
+import { DisconnectDialog } from './disconnect-dialog'
 
 export const UserItem = () => {
+  const profile = useProfile()
+
   return (
     <Flex align="center" justify="between">
       <Flex gap="2" align="center" css={{ height: 56 }}>
-        <Avatar
-          size={32}
-          src="https://images.unsplash.com/photo-1546776310-eef45dd6d63c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1620&q=80"
-        />
+        <Avatar size={32} src={profile.imageUrl} />
         <div>
           <Flex align="center" gap={1}>
-            <Text size="15" color="black-70">
-              Pavel
+            <Text size="15" color="accent">
+              {profile.name}
             </Text>
           </Flex>
           <EthAddress size={10} color="gray">
-            71C7656EC7ab88b098defB751B7401B5f6d8976F
+            {profile.publicKey}
           </EthAddress>
         </div>
       </Flex>
 
       <DialogTrigger>
-        <LogoutButton>
+        <DisconnectButton>
           <svg
             width="20"
             height="18"
@@ -48,21 +43,14 @@ export const UserItem = () => {
               fill="#4360DF"
             />
           </svg>
-        </LogoutButton>
-        <Dialog
-          title="Disconnect"
-          cancelLabel="Disconnect"
-          actionLabel="Stay Connected"
-        >
-          <Text>Do you want to disconnect your profile from this browser?</Text>
-          <Avatar size="120" />
-        </Dialog>
+        </DisconnectButton>
+        <DisconnectDialog />
       </DialogTrigger>
     </Flex>
   )
 }
 
-const LogoutButton = styled('button', {
+const DisconnectButton = styled('button', {
   background: 'rgba(67, 96, 223, 0.1)',
   borderRadius: '50%',
   height: 32,
