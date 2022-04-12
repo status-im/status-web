@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 
 import * as Primitive from '@radix-ui/react-dialog'
 
+import { useDialogContext } from '~/src/contexts/dialog-context'
 import { CrossIcon } from '~/src/icons/cross-icon'
 
 import { Button } from '../button'
@@ -12,6 +13,7 @@ import { Actions, Body, Content, Header, Overlay } from './styles'
 
 import type { ButtonProps } from '../button'
 import type { Variants } from './styles'
+import type { DialogContentProps } from '@radix-ui/react-dialog'
 
 interface DialogTriggerProps {
   children: [React.ReactElement, React.ReactElement]
@@ -36,6 +38,8 @@ interface DialogProps {
   title: React.ReactNode
   children: React.ReactNode
   size?: Variants['size']
+  onOpenAutoFocus?: DialogContentProps['onOpenAutoFocus']
+  onCloseAutoFocus?: DialogContentProps['onCloseAutoFocus']
 }
 
 const Dialog = (props: DialogProps) => {
@@ -79,4 +83,26 @@ Dialog.Cancel = Cancel
 Dialog.Action = Action
 Dialog.Separator = Separator
 
-export { Dialog, DialogTrigger }
+const useDialog = <Props,>(Component: React.ComponentType<Props>) => {
+  const render = useDialogContext()
+  const triggerRef = useRef<HTMLButtonElement>(null)
+
+  const handleCloseAutoFocus = () => {
+    triggerRef.current?.focus()
+  }
+
+  const open = useCallback(
+    (props: Props) => {
+      render(
+        <Primitive.Root>
+          <Component {...props} onCloseAutoFocus={handleCloseAutoFocus} />
+        </Primitive.Root>
+      )
+    },
+    [render, Component]
+  )
+
+  return { open, triggerRef }
+}
+
+export { Dialog, DialogTrigger, useDialog }

@@ -8,40 +8,6 @@ import { Chat } from '~/src/routes/chat'
 import { NewChat } from '~/src/routes/new-chat'
 import { styled } from '~/src/styles/config'
 
-// import { AgreementModal } from '~/src/components/Modals/AgreementModal'
-// import { CoinbaseModal } from '~/src/components/Modals/CoinbaseModal'
-// import { CommunityModal } from '~/src/components/Modals/CommunityModal'
-// import { EditModal } from '~/src/components/Modals/EditModal'
-// import { LeavingModal } from '~/src/components/Modals/LeavingModal'
-// import { LogoutModal } from '~/src/components/Modals/LogoutModal'
-// import { ProfileFoundModal } from '~/src/components/Modals/ProfileFoundModal'
-// import { ProfileModal } from '~/src/components/Modals/ProfileModal'
-// import { StatusModal } from '~/src/components/Modals/StatusModal'
-// import { UserCreationModal } from '~/src/components/Modals/UserCreationModal'
-// import { UserCreationStartModal } from '~/src/components/Modals/UserCreationStartModal'
-// import { WalletConnectModal } from '~/src/components/Modals/WalletConnectModal'
-// import { WalletModal } from '~/src/components/Modals/WalletModal'
-
-// function Modals() {
-//   return (
-//     <>
-//       <CommunityModal subtitle="Public Community" />
-//       <UserCreationModal />
-//       <EditModal />
-//       <ProfileModal />
-//       <StatusModal />
-//       <WalletModal />
-//       <WalletConnectModal />
-//       <CoinbaseModal />
-//       <LogoutModal />
-//       <AgreementModal />
-//       <ProfileFoundModal />
-//       <UserCreationStartModal />
-//       <LeavingModal />
-//     </>
-//   )
-// }
-
 export function Messenger() {
   const { options } = useAppState()
 
