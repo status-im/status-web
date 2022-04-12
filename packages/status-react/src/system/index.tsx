@@ -10,6 +10,8 @@ export {
   AlertDialogTrigger,
   Dialog,
   DialogTrigger,
+  useAlertDialog,
+  useDialog,
 } from './dialog'
 export { DropdownMenu, DropdownMenuTrigger } from './dropdown-menu'
 export { EmojiHash } from './emoji-hash'

@@ -1,5 +1,7 @@
 import { keyframes, styled } from '~/src/styles/config'
 
+import { Flex } from '../flex'
+
 import type { VariantProps } from '~/src/styles/config'
 
 export type Variants = VariantProps<typeof Content>
@@ -76,8 +78,12 @@ export const Header = styled('div', {
   borderBottom: '1px solid #eee',
 })
 
-export const Body = styled('div', {
+export const Body = styled(Flex, {
   padding: '16px',
+
+  defaultVariants: {
+    direction: 'column',
+  },
 })
 
 export const Actions = styled('div', {

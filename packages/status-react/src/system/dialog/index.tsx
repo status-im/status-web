@@ -1,2 +1,2 @@
-export { AlertDialog, AlertDialogTrigger } from './alert-dialog'
-export { Dialog, DialogTrigger } from './dialog'
+export { AlertDialog, AlertDialogTrigger, useAlertDialog } from './alert-dialog'
+export { Dialog, DialogTrigger, useDialog } from './dialog'
