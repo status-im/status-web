@@ -3,11 +3,13 @@ import React, { useState } from 'react'
 import { styled } from '~/src/styles/config'
 import { Dialog, Grid, Text } from '~/src/system'
 
+// TODO: Add wallet integration
 export const ConnectWalletDialog = () => {
   const [wallet, setWallet] = useState<'coinbase' | undefined>()
 
   console.log(wallet)
 
+  // TODO: Add wallet logos
   return (
     <Dialog title="Connect Ethereum Wallet">
       <Dialog.Body>

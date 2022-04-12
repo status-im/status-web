@@ -8,10 +8,10 @@ interface Props {
 
 // TODO: Add all states of contact, wait for desktop release
 export const UserProfileDialog = (props: Props) => {
-  const { contact } = props
+  const { contact, ...dialogProps } = props
 
   return (
-    <Dialog title={`${contact}'s Profile`} size="640">
+    <Dialog title={`${contact}'s Profile`} size="640" {...dialogProps}>
       <Dialog.Body align="center">
         <Avatar size="80" />
         <Heading size="22">{contact}</Heading>
