@@ -5,6 +5,7 @@ import styled, { ThemeProvider } from 'styled-components'
 
 import { AppProvider } from '~/src/contexts/app-context'
 import { ChatStateProvider } from '~/src/contexts/chatStateProvider'
+import { DialogProvider } from '~/src/contexts/dialog-context'
 import { IdentityProvider } from '~/src/contexts/identityProvider'
 import { MessengerProvider } from '~/src/contexts/messengerProvider'
 import { ModalProvider } from '~/src/contexts/modalProvider'
@@ -32,30 +33,32 @@ export const Community = (props: Props) => {
   return (
     <Router>
       <AppProvider config={props}>
-        <ThemeProvider theme={theme}>
-          <NarrowProvider myRef={ref}>
-            <ModalProvider>
-              <ToastProvider>
-                <Wrapper ref={ref}>
-                  <GlobalStyle />
-                  <IdentityProvider>
-                    <MessengerProvider
-                      publicKey={publicKey}
-                      environment={environment}
-                    >
-                      <ChatStateProvider>
-                        <ScrollProvider>
-                          <Messenger />
-                          <div id="modal-root" />
-                        </ScrollProvider>
-                      </ChatStateProvider>
-                    </MessengerProvider>
-                  </IdentityProvider>
-                </Wrapper>
-              </ToastProvider>
-            </ModalProvider>
-          </NarrowProvider>
-        </ThemeProvider>
+        <DialogProvider>
+          <ThemeProvider theme={theme}>
+            <NarrowProvider myRef={ref}>
+              <ModalProvider>
+                <ToastProvider>
+                  <Wrapper ref={ref}>
+                    <GlobalStyle />
+                    <IdentityProvider>
+                      <MessengerProvider
+                        publicKey={publicKey}
+                        environment={environment}
+                      >
+                        <ChatStateProvider>
+                          <ScrollProvider>
+                            <Messenger />
+                            <div id="modal-root" />
+                          </ScrollProvider>
+                        </ChatStateProvider>
+                      </MessengerProvider>
+                    </IdentityProvider>
+                  </Wrapper>
+                </ToastProvider>
+              </ModalProvider>
+            </NarrowProvider>
+          </ThemeProvider>
+        </DialogProvider>
       </AppProvider>
     </Router>
   )
