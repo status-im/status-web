@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useMemo, useReducer } from 'react'
 
+import type { Message } from '../protocol/use-messages'
 import type { Dispatch, Reducer } from 'react'
 
 type Context = {
@@ -8,12 +9,6 @@ type Context = {
 }
 
 const ChatContext = createContext<Context | undefined>(undefined)
-
-// TODO: Take from generated protobuf
-export interface Message {
-  type: 'text' | 'image' | 'image-text'
-  text?: string
-}
 
 interface State {
   message?: Message
@@ -51,7 +46,7 @@ export const ChatProvider = (props: Props) => {
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
 }
 
-export const useChatState = () => {
+export const useChatContext = () => {
   const context = useContext(ChatContext)
 
   if (!context) {
