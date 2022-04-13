@@ -1,19 +1,28 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+
+import { useMatch } from 'react-router-dom'
 
 import { MemberSidebar } from '~/src/components/member-sidebar'
 import { useAppState } from '~/src/contexts/app-context'
 import { ChatProvider } from '~/src/contexts/chat-context'
+import { useChat } from '~/src/protocol/use-chat'
+import { useMessages } from '~/src/protocol/use-messages'
 import { styled } from '~/src/styles/config'
 import { Avatar, Flex, Heading, Text } from '~/src/system'
 
-import { ChatInput } from './chat-input'
-import { ChatMessage } from './chat-message'
+import { ChatInput } from './components/chat-input'
+import { ChatMessage } from './components/chat-message'
 import { Navbar } from './components/navbar'
 
-const EmptyChat = () => {
+const ChatStart = () => {
+  // TODO: unify this with the useChat hook
+  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+
+  const chat = useChat(params.id!)
+
   return (
     <Flex direction="column" gap="3" align="center" css={{ marginBottom: 50 }}>
-      <Avatar size={120} />
+      <Avatar size={120} src={chat.imageUrl} />
       <Heading>general</Heading>
       <Text>Welcome to the beginning of the #general channel!</Text>
     </Flex>
@@ -21,22 +30,22 @@ const EmptyChat = () => {
 }
 
 const Content = () => {
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    contentRef.current!.scrollTop = contentRef.current!.scrollHeight ?? 0
+  }, [])
+
+  const messages = useMessages()
+
   return (
-    <div style={{ flex: 1, overflowY: 'auto' }}>
-      <EmptyChat />
-      <ChatMessage reply="text" />
-      <ChatMessage />
-      <ChatMessage reply="image" />
-      <ChatMessage image />
-      <ChatMessage reply="image-text" />
-      <ChatMessage />
-      <ChatMessage />
-      <ChatMessage mention />
-      <ChatMessage />
-      <ChatMessage />
-      <ChatMessage />
-      <ChatMessage />
-    </div>
+    <ContentWrapper ref={contentRef}>
+      <ChatStart />
+      {messages.map(message => (
+        <ChatMessage key={message.id} message={message} />
+      ))}
+    </ContentWrapper>
   )
 }
 
@@ -69,6 +78,20 @@ const Wrapper = styled('div', {
   display: 'flex',
   alignItems: 'stretch',
   background: '#fff',
+})
+
+const ContentWrapper = styled('div', {
+  flex: 1,
+  overflowY: 'auto',
+  overflowX: 'hidden',
+  WebkitOverflowScrolling: 'touch',
+  overscrollBehavior: 'contain',
+  // scrollSnapType: 'y proximity',
+
+  // '& > div:last-child': {
+  // scrollSnapAlign: 'end',
+  // scrollMarginBlockEnd: '1px',
+  // },
 })
 
 const Main = styled('div', {
