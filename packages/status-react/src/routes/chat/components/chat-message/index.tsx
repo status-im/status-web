@@ -65,7 +65,7 @@ export const ChatMessage = (props: Props) => {
       <Wrapper>
         <Avatar size={44} />
         <Box>
-          <ChatInput value={text} />
+          <ChatInput value={message?.text} />
           <Flex gap={2}>
             <Button
               variant="outline"
@@ -153,11 +153,11 @@ export const ChatMessage = (props: Props) => {
                   <Avatar size={44} src={contact.imageUrl} />
                 </button>
                 <DropdownMenu>
-                  <div>
+                  <Flex direction="column" align="center" gap="1">
                     <Avatar size="36" src={contact.imageUrl} />
                     <Text>{contact.name}</Text>
                     <EmojiHash />
-                  </div>
+                  </Flex>
                   <DropdownMenu.Separator />
                   <DropdownMenu.Item icon={<BellIcon />}>
                     View Profile

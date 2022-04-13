@@ -6,7 +6,7 @@ import { GifIcon } from '~/src/icons/gif-icon'
 import { ImageIcon } from '~/src/icons/image-icon'
 import { StickerIcon } from '~/src/icons/sticker-icon'
 import { styled } from '~/src/styles/config'
-import { Flex, IconButton } from '~/src/system'
+import { Box, Flex, IconButton } from '~/src/system'
 
 import { InputReply } from './input-reply'
 
@@ -34,9 +34,11 @@ export const ChatInput = (props: Props) => {
 
   return (
     <Wrapper>
-      <IconButton label="Add file">
-        <ImageIcon />
-      </IconButton>
+      <Box css={{ paddingBottom: 6 }}>
+        <IconButton label="Add file" color="gray">
+          <ImageIcon />
+        </IconButton>
+      </Box>
       <Bubble>
         {state.message && <InputReply message={state.message} />}
         <InputWrapper>
@@ -67,7 +69,7 @@ const Wrapper = styled('div', {
   display: 'flex',
   overflow: 'hidden',
   alignItems: 'flex-end',
-  padding: '12px 8px 12px 10px',
+  padding: '12px 8px 12px 4px',
   gap: 4,
 })
 

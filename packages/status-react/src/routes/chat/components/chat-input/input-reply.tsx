@@ -38,7 +38,7 @@ export const InputReply = (props: Props) => {
       </Flex>
       {message.type === 'text' && (
         <Flex>
-          <Text size="13" truncate={false}>
+          <Text size="13" truncate>
             {message.text}
           </Text>
         </Flex>
@@ -56,7 +56,7 @@ export const InputReply = (props: Props) => {
       {message.type === 'image-text' && (
         <Box>
           <Flex>
-            <Text size="13" truncate={false}>
+            <Text size="13" truncate>
               {message.text}
             </Text>
           </Flex>
