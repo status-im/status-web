@@ -4,6 +4,8 @@ import type React from 'react'
 
 const Text = styled('div', {
   fontFamily: theme.fonts.sans,
+  overflowWrap: 'break-word',
+  lineHeight: 1.5,
 
   variants: {
     size: {
