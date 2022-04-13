@@ -78,6 +78,8 @@ const Wrapper = styled('div', {
   display: 'flex',
   alignItems: 'stretch',
   background: '#fff',
+  maxWidth: '100%',
+  minWidth: 1,
 })
 
 const ContentWrapper = styled('div', {
@@ -98,4 +100,5 @@ const Main = styled('div', {
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
+  minWidth: 1,
 })

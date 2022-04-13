@@ -24,14 +24,7 @@ export const MessageReply = (props: Props) => {
       </Flex>
       {reply.type === 'text' && (
         <Flex>
-          <Text
-            color="gray"
-            size="13"
-            truncate={false}
-            css={{
-              lineClamp: 1,
-            }}
-          >
+          <Text color="gray" size="13" truncate>
             {reply.text}
           </Text>
         </Flex>
@@ -50,7 +43,7 @@ export const MessageReply = (props: Props) => {
       )}
       {reply.type === 'image-text' && (
         <Flex direction="column" gap={1}>
-          <Text color="gray" size="13" truncate={false}>
+          <Text color="gray" size="13" truncate>
             {reply.text}
           </Text>
           <Image
