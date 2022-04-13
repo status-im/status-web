@@ -4,6 +4,7 @@ import type React from 'react'
 
 const Heading = styled('div', {
   fontFamily: theme.fonts.sans,
+  overflowWrap: 'break-word',
 
   variants: {
     size: {
