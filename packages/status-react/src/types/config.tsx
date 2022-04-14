@@ -1,4 +1,4 @@
-import type { Theme } from './theme'
+import type { Theme } from '../styles/config'
 import type { BrowserRouter, HashRouter, MemoryRouter } from 'react-router-dom'
 
 export type Environment = 'production' | 'test'
