@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { ReactionPopover } from '~/src/components/reaction-popover'
 import { PencilIcon } from '~/src/icons/pencil-icon'
@@ -15,6 +15,8 @@ import {
   Tooltip,
 } from '~/src/system'
 
+import type { Reactions } from '~/src/protocol/use-messages'
+
 interface Props {
   owner: boolean
   pinned: boolean
@@ -22,6 +24,7 @@ interface Props {
   onEditClick: () => void
   reacting: boolean
   onReactingChange: (reacting: boolean) => void
+  reactions: Reactions
 }
 
 export const Actions = (props: Props) => {
@@ -32,11 +35,13 @@ export const Actions = (props: Props) => {
     onEditClick,
     reacting,
     onReactingChange,
+    reactions,
   } = props
 
   return (
     <Wrapper open={reacting}>
       <ReactionPopover
+        reactions={reactions}
         open={reacting}
         onOpenChange={onReactingChange}
         onClick={emoji => {

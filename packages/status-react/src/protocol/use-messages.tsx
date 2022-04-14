@@ -1,3 +1,18 @@
+export type Reaction =
+  | 'heart'
+  | 'thumbs-up'
+  | 'thumbs-down'
+  | 'smile'
+  | 'sad'
+  | 'angry'
+
+export type Reactions = {
+  [key in Reaction]: {
+    count: number
+    me: boolean
+  }
+}
+
 interface BaseMessage {
   id: string
   type: 'text' | 'image' | 'image-text'
@@ -9,6 +24,7 @@ interface BaseMessage {
   pinned: boolean
   mention: boolean
   reply?: TextReply | ImageReply | ImageTextReply
+  reactions: Reactions
 }
 
 interface TextMessage extends BaseMessage {
@@ -68,6 +84,14 @@ export const useMessages = (): Message[] => {
       owner: false,
       pinned: true,
       mention: false,
+      reactions: {
+        heart: { count: 0, me: false },
+        'thumbs-up': { count: 0, me: false },
+        'thumbs-down': { count: 0, me: false },
+        smile: { count: 0, me: false },
+        sad: { count: 0, me: false },
+        angry: { count: 0, me: false },
+      },
       reply: {
         contact: {
           name: 'Leila Joyner',
@@ -90,6 +114,14 @@ export const useMessages = (): Message[] => {
       owner: false,
       pinned: false,
       mention: false,
+      reactions: {
+        heart: { count: 0, me: false },
+        'thumbs-up': { count: 0, me: false },
+        'thumbs-down': { count: 0, me: false },
+        smile: { count: 0, me: false },
+        sad: { count: 0, me: false },
+        angry: { count: 0, me: false },
+      },
       reply: {
         contact: {
           name: 'Leila Joyner',
@@ -113,6 +145,14 @@ export const useMessages = (): Message[] => {
       owner: false,
       pinned: false,
       mention: true,
+      reactions: {
+        heart: { count: 1, me: false },
+        'thumbs-up': { count: 1, me: false },
+        'thumbs-down': { count: 3, me: true },
+        smile: { count: 0, me: false },
+        sad: { count: 0, me: false },
+        angry: { count: 0, me: false },
+      },
       reply: {
         contact: {
           name: 'Leila Joyner',
@@ -137,6 +177,14 @@ export const useMessages = (): Message[] => {
       owner: false,
       pinned: false,
       mention: false,
+      reactions: {
+        heart: { count: 0, me: false },
+        'thumbs-up': { count: 0, me: false },
+        'thumbs-down': { count: 0, me: false },
+        smile: { count: 0, me: false },
+        sad: { count: 0, me: false },
+        angry: { count: 0, me: false },
+      },
     },
     {
       id: '5',
@@ -150,6 +198,14 @@ export const useMessages = (): Message[] => {
       owner: true,
       pinned: false,
       mention: false,
+      reactions: {
+        heart: { count: 0, me: false },
+        'thumbs-up': { count: 0, me: false },
+        'thumbs-down': { count: 0, me: false },
+        smile: { count: 0, me: false },
+        sad: { count: 1, me: false },
+        angry: { count: 1, me: true },
+      },
       reply: {
         contact: {
           name: 'Leila Joyner',
@@ -174,6 +230,14 @@ export const useMessages = (): Message[] => {
       owner: false,
       pinned: false,
       mention: false,
+      reactions: {
+        heart: { count: 0, me: false },
+        'thumbs-up': { count: 10, me: true },
+        'thumbs-down': { count: 3, me: false },
+        smile: { count: 0, me: false },
+        sad: { count: 0, me: false },
+        angry: { count: 0, me: false },
+      },
     },
     {
       id: '5',
@@ -187,6 +251,14 @@ export const useMessages = (): Message[] => {
       owner: true,
       pinned: false,
       mention: false,
+      reactions: {
+        heart: { count: 0, me: false },
+        'thumbs-up': { count: 0, me: false },
+        'thumbs-down': { count: 0, me: false },
+        smile: { count: 0, me: false },
+        sad: { count: 0, me: false },
+        angry: { count: 0, me: false },
+      },
     },
   ]
 }

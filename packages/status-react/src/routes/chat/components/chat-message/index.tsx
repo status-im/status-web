@@ -21,7 +21,7 @@ import {
 import { ChatInput } from '../chat-input'
 import { Actions } from './actions'
 import { MessageReply } from './message-reply'
-import { Reactions } from './reactions'
+import { MessageReactions } from './reactions'
 
 import type { Message } from '~/src/protocol/use-messages'
 
@@ -53,7 +53,7 @@ interface Props {
 export const ChatMessage = (props: Props) => {
   const { message } = props
 
-  const { type, contact, owner, mention, pinned, reply } = message
+  const { type, contact, owner, mention, pinned, reply, reactions } = message
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
@@ -198,7 +198,10 @@ export const ChatMessage = (props: Props) => {
 
               {renderMessage()}
 
-              <Reactions onClick={handleReaction} />
+              <MessageReactions
+                reactions={reactions}
+                onClick={handleReaction}
+              />
             </Box>
           </Flex>
 
@@ -209,6 +212,7 @@ export const ChatMessage = (props: Props) => {
             onReplyClick={handleReplyClick}
             reacting={reacting}
             onReactingChange={setReacting}
+            reactions={reactions}
           />
         </Wrapper>
         <ContextMenu>
