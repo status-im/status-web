@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 
 import { BrowserRouter } from 'react-router-dom'
-import styled, { ThemeProvider } from 'styled-components'
 
 import { AppProvider } from '~/src/contexts/app-context'
 import { ChatStateProvider } from '~/src/contexts/chatStateProvider'
@@ -12,6 +11,7 @@ import { ModalProvider } from '~/src/contexts/modalProvider'
 import { NarrowProvider } from '~/src/contexts/narrowProvider'
 import { ScrollProvider } from '~/src/contexts/scrollProvider'
 import { ToastProvider } from '~/src/contexts/toastProvider'
+import { styled } from '~/src/styles/config'
 import { GlobalStyle } from '~/src/styles/GlobalStyle'
 
 import { Messenger } from './messenger'
@@ -34,30 +34,28 @@ export const Community = (props: Props) => {
     <Router>
       <AppProvider config={props}>
         <DialogProvider>
-          <ThemeProvider theme={theme}>
-            <NarrowProvider myRef={ref}>
-              <ModalProvider>
-                <ToastProvider>
-                  <Wrapper ref={ref}>
-                    <GlobalStyle />
-                    <IdentityProvider>
-                      <MessengerProvider
-                        publicKey={publicKey}
-                        environment={environment}
-                      >
-                        <ChatStateProvider>
-                          <ScrollProvider>
-                            <Messenger />
-                            <div id="modal-root" />
-                          </ScrollProvider>
-                        </ChatStateProvider>
-                      </MessengerProvider>
-                    </IdentityProvider>
-                  </Wrapper>
-                </ToastProvider>
-              </ModalProvider>
-            </NarrowProvider>
-          </ThemeProvider>
+          <NarrowProvider myRef={ref}>
+            <ModalProvider>
+              <ToastProvider>
+                <Wrapper ref={ref} className={theme}>
+                  <GlobalStyle />
+                  <IdentityProvider>
+                    <MessengerProvider
+                      publicKey={publicKey}
+                      environment={environment}
+                    >
+                      <ChatStateProvider>
+                        <ScrollProvider>
+                          <Messenger />
+                          <div id="portal" data-radix-portal />
+                        </ScrollProvider>
+                      </ChatStateProvider>
+                    </MessengerProvider>
+                  </IdentityProvider>
+                </Wrapper>
+              </ToastProvider>
+            </ModalProvider>
+          </NarrowProvider>
         </DialogProvider>
       </AppProvider>
     </Router>
@@ -66,7 +64,7 @@ export const Community = (props: Props) => {
 
 export type { Props as CommunityProps }
 
-const Wrapper = styled.div`
-  height: 100%;
-  overflow: hidden;
-`
+const Wrapper = styled('div', {
+  height: '100%',
+  overflow: 'hidden',
+})

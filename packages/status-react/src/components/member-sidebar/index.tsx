@@ -50,7 +50,7 @@ const Wrapper = styled('div', {
   flexShrink: 0,
   padding: '18px 16px',
   display: 'none',
-  backgroundColor: '#F6F8FA',
+  backgroundColor: '$gray-4',
   overflowY: 'scroll',
 
   '@medium': {

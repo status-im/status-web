@@ -23,7 +23,7 @@ export const MemberItem = (props: Props) => {
       />
       <div>
         <Flex align="center" gap={1}>
-          <Text size="15" color="black-70">
+          <Text size="15" color="accent">
             {children}
           </Text>
           {verified && (

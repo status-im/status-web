@@ -250,7 +250,6 @@ const Wrapper = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
-  background: '#fff',
 })
 
 const NavbarWrapper = styled('div', {

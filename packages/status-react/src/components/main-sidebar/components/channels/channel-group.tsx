@@ -48,9 +48,10 @@ const CollapsibleTrigger = styled(Collapsible.Trigger, {
   padding: 8,
   borderRadius: 8,
   height: 34,
+  color: '$accent-1',
 
   '&:hover': {
-    background: '#E9EDF1',
+    background: '$gray-3',
   },
 
   '&[aria-expanded="true"] svg': {

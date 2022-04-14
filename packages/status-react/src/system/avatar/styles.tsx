@@ -6,7 +6,7 @@ export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('div', {
   position: 'relative',
-  background: '#F6F8FA',
+  background: '$accent-6',
   borderRadius: '100%',
   flexShrink: 0,
 
@@ -53,7 +53,7 @@ export const Indicator = styled('span', {
   right: -2,
   bottom: -2,
   borderRadius: '100%',
-  border: '2px solid #fff',
+  border: '2px solid $gray-4',
 
   variants: {
     size: {
@@ -71,10 +71,10 @@ export const Indicator = styled('span', {
     },
     state: {
       online: {
-        backgroundColor: '#4EBC60',
+        backgroundColor: '$success-1',
       },
       offline: {
-        backgroundColor: '#939BA1',
+        backgroundColor: '$gray-1',
       },
     },
   },
