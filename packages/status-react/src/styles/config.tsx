@@ -4,6 +4,7 @@ import type { CSS as StitchesCSS } from '@stitches/react'
 
 export type { VariantProps } from '@stitches/react'
 export type CSS = StitchesCSS<typeof config>
+export type Theme = typeof theme
 
 export const {
   styled,
@@ -30,6 +31,9 @@ export const {
       black: 'rgb(0, 0, 0)',
       current: 'currentColor',
       transparent: 'transparent',
+
+      background: 'rgb(255, 255, 255)',
+      overlay: 'rgba(0, 0, 0, 0.4)',
 
       'primary-1': 'rgba(67, 96, 223, 1)',
       'primary-2': 'rgba(67, 96, 223, 0.2)',
@@ -107,6 +111,9 @@ export const {
 
 export const darkTheme = createTheme({
   colors: {
+    background: 'rgb(0, 0, 0)',
+    overlay: 'rgba(255, 255, 255, 0.4)',
+
     'primary-1': 'rgba(136, 176, 255, 1)',
     'primary-2': 'rgba(134, 158, 255, 0.3)',
     'primary-3': 'rgba(134, 158, 255, 0.2)',

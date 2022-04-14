@@ -235,7 +235,7 @@ const Wrapper = styled('div', {
   transitionDuration: '100ms',
 
   '&:hover, &[data-open="true"], &[data-active="true"]': {
-    background: '#EEF2F5',
+    background: '$gray-4',
   },
 
   a: {

@@ -18,7 +18,7 @@ const overlayAnimation = keyframes({
 export const Overlay = styled('div', {
   inset: 0,
   position: 'fixed',
-  backgroundColor: 'rgba(0,0,0,0.4)',
+  backgroundColor: '$overlay',
 
   '@motion': {
     animation: `${overlayAnimation} 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
@@ -37,7 +37,7 @@ const contentAnimation = keyframes({
 })
 
 export const Content = styled('div', {
-  backgroundColor: 'white',
+  backgroundColor: '$background',
   borderRadius: 8,
   boxShadow:
     'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
@@ -75,7 +75,7 @@ export const Header = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  borderBottom: '1px solid #eee',
+  borderBottom: '1px solid $gray-2',
 })
 
 export const Body = styled(Flex, {
@@ -91,6 +91,6 @@ export const Actions = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
-  borderTop: '1px solid #EEF2F5',
+  borderTop: '1px solid $gray-2',
   gap: 16,
 })

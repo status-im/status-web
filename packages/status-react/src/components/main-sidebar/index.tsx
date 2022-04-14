@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { styled } from '~/src/styles/config'
+import { Separator } from '~/src/system'
 
 import { Channels } from './components/channels'
 import { CommunityInfo } from './components/community-info'
@@ -12,9 +13,9 @@ export const MainSidebar = () => {
     <Wrapper>
       <CommunityInfo />
       <Channels />
-      <Separator />
+      <Separator css={{ margin: '16px 0' }} />
       <Messages />
-      <Separator />
+      <Separator css={{ margin: '16px 0' }} />
       <GetStarted />
     </Wrapper>
   )
@@ -26,17 +27,10 @@ const Wrapper = styled('div', {
   flexDirection: 'column',
   padding: '10px 16px',
   display: 'none',
-  backgroundColor: '#F6F8FA',
+  backgroundColor: '$gray-4',
   overflowY: 'scroll',
 
   '@medium': {
     display: 'flex',
   },
-})
-
-const Separator = styled('div', {
-  margin: '16px 0',
-  height: 1,
-  background: 'rgba(0, 0, 0, 0.1)',
-  flexShrink: 0,
 })

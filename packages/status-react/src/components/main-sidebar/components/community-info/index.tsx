@@ -34,6 +34,6 @@ const Button = styled('button', {
   alignItems: 'center',
 
   '&:hover': {
-    background: '#E9EDF1',
+    background: '$gray-3',
   },
 })

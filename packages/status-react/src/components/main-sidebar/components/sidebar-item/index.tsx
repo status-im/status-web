@@ -40,7 +40,7 @@ const Link = styled(NavLink, {
   fontWeight: '$500',
   fontSize: 15,
   display: 'inline-flex',
-  color: 'rgba(0, 0, 0, 0.7)',
+  color: '$accent-4',
   alignItems: 'center',
   width: '100%',
   gap: '$2',
@@ -48,19 +48,21 @@ const Link = styled(NavLink, {
   padding: 8,
 
   '&:hover': {
-    background: '#E9EDF1',
+    background: '$gray-3',
   },
 
   '&.active': {
-    background: 'rgba(233, 237, 241, 1)',
+    color: '$accent-1',
+    background: '$gray-3',
   },
 
   variants: {
     state: {
       muted: {
-        color: 'rgba(0, 0, 0, 0.4)',
+        color: '$accent-5',
       },
       unread: {
+        color: '$accent-1',
         fontWeight: '$600',
         '&::after': {
           content: '"1"',

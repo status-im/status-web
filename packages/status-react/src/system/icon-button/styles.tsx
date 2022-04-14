@@ -14,39 +14,39 @@ export const Base = styled('button', {
   borderRadius: 8,
 
   '&:hover': {
-    background: '#EEF2F5',
+    background: '$gray-3',
   },
 
   '&[aria-expanded="true"]': {
-    background: '#F6F8FA',
+    background: '$gray-4',
   },
 
   variants: {
     color: {
       default: {
-        color: '#000',
+        color: '$accent-1',
       },
       gray: {
-        color: '#939BA1',
+        color: '$gray-1',
       },
     },
     intent: {
       info: {
         '&:hover': {
-          background: 'rgba(67, 96, 223, 0.1)',
-          color: '#4360DF',
+          background: '$primary-3',
+          color: '$primary-1',
         },
       },
       danger: {
         '&:hover': {
-          background: 'rgba(255, 45, 85, 0.2)',
-          color: '#FF2D55',
+          background: '$danger-2',
+          color: '$danger-1',
         },
       },
     },
     active: {
       true: {
-        background: '#F6F8FA',
+        background: '$gray-4',
       },
     },
   },
