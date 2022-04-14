@@ -22,15 +22,15 @@ export const MainSidebar = () => {
 }
 
 const Wrapper = styled('div', {
+  display: 'none',
   width: 304,
   flexShrink: 0,
   flexDirection: 'column',
   padding: '10px 16px',
-  display: 'none',
   backgroundColor: '$gray-4',
   overflowY: 'scroll',
 
-  '@medium': {
+  '@large': {
     display: 'flex',
   },
 })
