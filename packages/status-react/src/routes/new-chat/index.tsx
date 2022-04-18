@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useCallback, useMemo, useState } from 'react'
 
 import { BellIcon } from '~/src/icons/bell-icon'
