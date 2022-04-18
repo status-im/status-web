@@ -88,6 +88,8 @@ const ContentWrapper = styled('div', {
   overflowX: 'hidden',
   WebkitOverflowScrolling: 'touch',
   overscrollBehavior: 'contain',
+  minWidth: 1,
+
   // scrollSnapType: 'y proximity',
 
   // '& > div:last-child': {
