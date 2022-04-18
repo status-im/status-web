@@ -1,7 +1,5 @@
 export { binarySetInsert } from './binarySetInsert'
-export { copy } from './copy'
 export { copyImg } from './copyImg'
-export { downloadImg } from './downloadImg'
 export { equalDate } from './equalDate'
 export {
   decryptIdentity,
