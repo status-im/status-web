@@ -10,6 +10,7 @@ import { MessengerProvider } from '~/src/contexts/messengerProvider'
 import { ModalProvider } from '~/src/contexts/modalProvider'
 import { NarrowProvider } from '~/src/contexts/narrowProvider'
 import { ScrollProvider } from '~/src/contexts/scrollProvider'
+import { ThemeProvider } from '~/src/contexts/theme-context'
 import { ToastProvider } from '~/src/contexts/toastProvider'
 import { styled } from '~/src/styles/config'
 import { GlobalStyle } from '~/src/styles/GlobalStyle'
@@ -33,30 +34,32 @@ export const Community = (props: Props) => {
   return (
     <Router>
       <AppProvider config={props}>
-        <DialogProvider>
-          <NarrowProvider myRef={ref}>
-            <ModalProvider>
-              <ToastProvider>
-                <Wrapper ref={ref} className={theme}>
-                  <GlobalStyle />
-                  <IdentityProvider>
-                    <MessengerProvider
-                      publicKey={publicKey}
-                      environment={environment}
-                    >
-                      <ChatStateProvider>
-                        <ScrollProvider>
-                          <Messenger />
-                          <div id="portal" data-radix-portal />
-                        </ScrollProvider>
-                      </ChatStateProvider>
-                    </MessengerProvider>
-                  </IdentityProvider>
-                </Wrapper>
-              </ToastProvider>
-            </ModalProvider>
-          </NarrowProvider>
-        </DialogProvider>
+        <ThemeProvider theme={theme}>
+          <DialogProvider>
+            <NarrowProvider myRef={ref}>
+              <ModalProvider>
+                <ToastProvider>
+                  <Wrapper ref={ref}>
+                    <GlobalStyle />
+                    <IdentityProvider>
+                      <MessengerProvider
+                        publicKey={publicKey}
+                        environment={environment}
+                      >
+                        <ChatStateProvider>
+                          <ScrollProvider>
+                            <Messenger />
+                            <div id="portal" data-radix-portal />
+                          </ScrollProvider>
+                        </ChatStateProvider>
+                      </MessengerProvider>
+                    </IdentityProvider>
+                  </Wrapper>
+                </ToastProvider>
+              </ModalProvider>
+            </NarrowProvider>
+          </DialogProvider>
+        </ThemeProvider>
       </AppProvider>
     </Router>
   )
