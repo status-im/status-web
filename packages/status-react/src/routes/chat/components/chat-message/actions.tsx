@@ -116,7 +116,7 @@ const Wrapper = styled('div', {
   right: 16,
   padding: 2,
   boxShadow: '0px 4px 12px rgba(0, 34, 51, 0.08)',
-  background: '#fff',
+  background: '$background',
   borderRadius: 8,
   display: 'none',
 

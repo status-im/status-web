@@ -75,7 +75,7 @@ const Wrapper = styled('div', {
 
 const Bubble = styled('div', {
   width: '100%',
-  background: '#EEF2F5',
+  background: '$gray-2',
   borderRadius: '16px 16px 4px 16px;',
   padding: 2,
   overflow: 'hidden',
@@ -86,7 +86,7 @@ const InputWrapper = styled('div', {
   height: 40,
   width: '100%',
   alignItems: 'center',
-  background: '#EEF2F5',
+  background: '$gray-2',
   padding: '0 0 0 12px',
 })
 

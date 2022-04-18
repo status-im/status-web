@@ -28,8 +28,8 @@ export const Content = styled(Primitive.Content, {
   fontSize: 13,
   padding: 8,
   lineHeight: 1,
-  backgroundColor: '#000',
-  color: '#fff',
+  backgroundColor: '$accent-1',
+  color: '$accent-11',
   borderRadius: 8,
 
   '@media (prefers-reduced-motion: no-preference)': {
@@ -59,5 +59,5 @@ export const Content = styled(Primitive.Content, {
 })
 
 export const Arrow = styled(Primitive.Arrow, {
-  fill: '#000',
+  fill: '$accent-1',
 })
