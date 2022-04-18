@@ -9,7 +9,7 @@ import { Icon } from '../icon'
 const Content = styled('div', {
   minWidth: 176,
   padding: '8px 0',
-  background: theme.colors.white,
+  background: '$background',
   borderRadius: theme.radii[8],
   boxShadow:
     '0px 2px 4px rgba(0, 34, 51, 0.16), 0px 4px 12px rgba(0, 34, 51, 0.08)',
@@ -41,7 +41,7 @@ const ItemBase = styled('div', {
   height: 34,
   fontSize: 13,
   lineHeight: 1,
-  color: '#000',
+  color: '$accent-1',
   display: 'flex',
   alignItems: 'center',
   gap: 6,
@@ -51,7 +51,7 @@ const ItemBase = styled('div', {
   whiteSpace: 'nowrap',
 
   '&:focus, &[aria-selected="true"], &[aria-expanded="true"]': {
-    backgroundColor: '#EEF2F5',
+    backgroundColor: '$gray-2',
   },
 
   '&[data-disabled]': {
@@ -59,15 +59,15 @@ const ItemBase = styled('div', {
   },
 
   svg: {
-    color: '#4360DF',
+    color: '$primary-1',
   },
 
   variants: {
     danger: {
       true: {
-        color: '#FF2D55',
+        color: '$danger-1',
         svg: {
-          color: '#FF2D55',
+          color: '$danger-1',
         },
       },
     },
@@ -98,7 +98,7 @@ const TriggerItemIcon = styled('div', {
 
 const Separator = styled('div', {
   height: 1,
-  background: '#F0F2F5',
+  background: '$gray-5',
   margin: '5px 0',
 })
 

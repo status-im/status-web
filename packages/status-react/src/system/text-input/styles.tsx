@@ -5,7 +5,7 @@ export const Base = styled('input', {
   lineHeight: 1.2,
   fontSize: '15px',
   padding: '10px 16px',
-  background: '#EEF2F5',
+  background: '$gray-2',
   borderRadius: 8,
   height: 44,
   width: '100%',
@@ -14,7 +14,7 @@ export const Base = styled('input', {
   justifyContent: 'center',
 
   '&::placeholder': {
-    color: '#939BA1',
+    color: '$gray-1',
   },
 
   '&:focus': {

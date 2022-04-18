@@ -9,8 +9,6 @@ interface Props {
 const EmojiHash = (props: Props) => {
   const { name } = props
 
-  console.log(name)
-
   return (
     <Base>
       🎩🍞🥑🦍🌈📡

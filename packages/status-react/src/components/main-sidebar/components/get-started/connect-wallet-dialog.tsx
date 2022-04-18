@@ -7,8 +7,6 @@ import { Dialog, Grid, Text } from '~/src/system'
 export const ConnectWalletDialog = () => {
   const [wallet, setWallet] = useState<'coinbase' | undefined>()
 
-  console.log(wallet)
-
   // TODO: Add wallet logos
   return (
     <Dialog title="Connect Ethereum Wallet">
