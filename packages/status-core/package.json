@@ -24,7 +24,8 @@
     "test": "mocha",
     "proto": "run-s 'proto:*'",
     "proto:lint": "buf lint",
-    "proto:build": "buf generate"
+    "proto:build": "buf generate",
+    "clean": "rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "bn.js": "^5.2.0",

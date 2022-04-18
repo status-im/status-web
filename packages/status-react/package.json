@@ -21,7 +21,8 @@
     "build:types": "tsc --emitDeclarationOnly",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
-    "format": "prettier --write src"
+    "format": "prettier --write src",
+    "clean": "rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.0.0",
