@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useAppState } from '~/src/contexts/app-context'
 import { styled } from '~/src/styles/config'
 import { Separator } from '~/src/system'
 
@@ -9,6 +10,12 @@ import { GetStarted } from './components/get-started'
 import { Messages } from './components/messages'
 
 export const MainSidebar = () => {
+  const { options } = useAppState()
+
+  if (options.enableSidebar === false) {
+    return null
+  }
+
   return (
     <Wrapper>
       <CommunityInfo />
