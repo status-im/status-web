@@ -60,12 +60,26 @@ export const ChatMessage = (props: Props) => {
 
   const { dispatch } = useChatContext()
 
-  if (editing) {
-    return (
-      <Wrapper>
-        <Avatar size={44} />
+  const handleReplyClick = () => {
+    dispatch({
+      type: 'SET_REPLY',
+      message,
+    })
+  }
+
+  const handlePinClick = () => {
+    console.log(pinned)
+  }
+
+  const handleReaction = (reaction: string) => {
+    console.log(reaction)
+  }
+
+  const renderMessage = () => {
+    if (editing) {
+      return (
         <Box>
-          <ChatInput value={message?.text} />
+          <ChatInput value={message?.text ?? ''} />
           <Flex gap={2}>
             <Button
               variant="outline"
@@ -77,22 +91,9 @@ export const ChatMessage = (props: Props) => {
             <Button size="small">Save</Button>
           </Flex>
         </Box>
-      </Wrapper>
-    )
-  }
+      )
+    }
 
-  const handleReplyClick = () => {
-    dispatch({
-      type: 'SET_REPLY',
-      message,
-    })
-  }
-
-  const handleReaction = (reaction: string) => {
-    console.log(reaction)
-  }
-
-  const renderMessage = () => {
     switch (type) {
       case 'text': {
         //   <AlertDialogTrigger>
@@ -210,14 +211,15 @@ export const ChatMessage = (props: Props) => {
             pinned={pinned}
             onEditClick={() => setEditing(true)}
             onReplyClick={handleReplyClick}
+            onPinClick={handlePinClick}
             reacting={reacting}
             onReactingChange={setReacting}
             reactions={reactions}
           />
         </Wrapper>
         <ContextMenu>
-          <ContextMenu.Item>Reply</ContextMenu.Item>
-          <ContextMenu.Item>Pin</ContextMenu.Item>
+          <ContextMenu.Item onSelect={handleReplyClick}>Reply</ContextMenu.Item>
+          <ContextMenu.Item onSelect={handlePinClick}>Pin</ContextMenu.Item>
         </ContextMenu>
       </ContextMenuTrigger>
     </>
@@ -280,4 +282,6 @@ const Wrapper = styled('div', {
       },
     },
   },
+
+  compoundVariants: [],
 })
