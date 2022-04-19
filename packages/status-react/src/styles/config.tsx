@@ -1,10 +1,6 @@
 import { createStitches } from '@stitches/react'
 
-import type { CSS as StitchesCSS } from '@stitches/react'
-
-export type { VariantProps } from '@stitches/react'
-export type CSS = StitchesCSS<typeof config>
-export type Theme = typeof theme
+import type { CSS as StitchesCSS, VariantProps } from '@stitches/react'
 
 export const {
   styled,
@@ -164,3 +160,7 @@ export const darkTheme = createTheme({
     kaki: 'rgba(234, 210, 123, 1)',
   },
 })
+
+export type { VariantProps }
+export type CSS = StitchesCSS<typeof config>
+export type Theme = typeof theme
