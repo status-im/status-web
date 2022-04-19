@@ -22,6 +22,7 @@ interface Props {
   pinned: boolean
   onReplyClick: () => void
   onEditClick: () => void
+  onPinClick: () => void
   reacting: boolean
   onReactingChange: (reacting: boolean) => void
   reactions: Reactions
@@ -33,6 +34,7 @@ export const Actions = (props: Props) => {
     pinned,
     onReplyClick,
     onEditClick,
+    onPinClick,
     reacting,
     onReactingChange,
     reactions,
@@ -77,19 +79,16 @@ export const Actions = (props: Props) => {
           </IconButton>
         </Tooltip>
       )}
-      {pinned ? (
-        <Tooltip label="Unpin">
-          <IconButton label="Unpin message" intent="info" color="gray">
-            <UnpinIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip label="Pin">
-          <IconButton label="Pin message" intent="info" color="gray">
-            <PinIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      <Tooltip label={pinned ? 'Unpin' : 'Pin'}>
+        <IconButton
+          label={pinned ? 'Unpin message' : 'Pin message'}
+          intent="info"
+          color="gray"
+          onClick={onPinClick}
+        >
+          {pinned ? <UnpinIcon /> : <PinIcon />}
+        </IconButton>
+      </Tooltip>
       {owner && (
         <AlertDialogTrigger>
           <Tooltip label="Delete">
