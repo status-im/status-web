@@ -18,7 +18,7 @@ export interface Config {
   theme?: 'light' | 'dark' | CustomTheme
   router?: typeof BrowserRouter | typeof MemoryRouter | typeof HashRouter
   options?: {
-    enableSidebar: boolean
-    enableMembers: boolean
+    enableSidebar?: boolean
+    enableMembers?: boolean
   }
 }
