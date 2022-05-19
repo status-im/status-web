@@ -34,7 +34,7 @@
     "ecies-geth": "^1.5.3",
     "elliptic": "^6.5.4",
     "js-sha3": "^0.8.0",
-    "js-waku": "^0.18.0",
+    "js-waku": "^0.23.0",
     "long": "^5.2.0",
     "pbkdf2": "^3.1.2",
     "protobufjs": "^6.11.2",
