@@ -1,10 +1,10 @@
 import React, { StrictMode } from 'react'
 import { render } from 'react-dom'
 
-import { Community, lightTheme } from '@status-im/react'
+import { Community } from '@status-im/react'
 
 const App = () => {
-  return <Community publicKey="<YOUR_COMMUNITY_KEY>" theme={lightTheme} />
+  return <Community publicKey="<YOUR_COMMUNITY_KEY>" theme="light" />
 }
 
 render(
