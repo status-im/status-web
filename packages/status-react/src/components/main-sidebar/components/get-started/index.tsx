@@ -142,10 +142,10 @@ export const GetStarted = () => {
         Want to jump into the discussion?
       </Heading>
       <Grid gap={3} align="center" justify="center">
-        <DialogTrigger>
+        {/* <DialogTrigger>
           <Button>Sync with Status profile</Button>
           <SyncStatusProfileDialog />
-        </DialogTrigger>
+        </DialogTrigger> */}
 
         <DialogTrigger>
           <Button>Connect Wallet</Button>
