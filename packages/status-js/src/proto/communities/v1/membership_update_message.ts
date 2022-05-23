@@ -1,8 +1,8 @@
 /* eslint-disable */
 import Long from 'long'
 import _m0 from 'protobufjs/minimal'
-import { ChatMessage } from '../../communities/v1/chat_message'
-import { EmojiReaction } from '../../communities/v1/emoji_reaction'
+import { ChatMessage } from './chat_message'
+import { EmojiReaction } from './emoji_reaction'
 
 export const protobufPackage = 'communities.v1'
 

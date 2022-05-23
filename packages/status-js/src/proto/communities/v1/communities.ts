@@ -1,7 +1,7 @@
 /* eslint-disable */
 import Long from 'long'
 import _m0 from 'protobufjs/minimal'
-import { ChatIdentity } from '../../communities/v1/chat_identity'
+import { ChatIdentity } from './chat_identity'
 
 export const protobufPackage = 'communities.v1'
 

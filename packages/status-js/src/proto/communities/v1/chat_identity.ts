@@ -5,7 +5,7 @@ import {
   ImageType,
   imageTypeFromJSON,
   imageTypeToJSON,
-} from '../../communities/v1/enums'
+} from './enums'
 
 export const protobufPackage = 'communities.v1'
 
