@@ -7,7 +7,7 @@ import { ChannelItem } from './channel-item'
 
 const CHANNELS = {
   Public: ['welcome', 'general', 'random'],
-  Other: ['random', 'general', 'welcome'],
+  Internal: ['watercooler', 'pm'],
 }
 
 export const Channels = () => {
