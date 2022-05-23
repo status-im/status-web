@@ -4,7 +4,7 @@
   "license": "MIT OR Apache-2.0",
   "repository": {
     "url": "https://github.com/status-im/status-web.git",
-    "directory": "packages/status-core",
+    "directory": "packages/status-js",
     "type": "git"
   },
   "bugs": {
