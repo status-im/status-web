@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { UserProfileDialog } from '~/src/components/user-profile-dialog'
 import { useChatContext } from '~/src/contexts/chat-context'
 import { BellIcon } from '~/src/icons/bell-icon'
 import { PinIcon } from '~/src/icons/pin-icon'
@@ -16,6 +17,7 @@ import {
   Flex,
   Image,
   Text,
+  useDialog,
 } from '~/src/system'
 
 import { ChatInput } from '../chat-input'
@@ -59,6 +61,8 @@ export const ChatMessage = (props: Props) => {
   const [reacting, setReacting] = useState(false)
 
   const { dispatch } = useChatContext()
+
+  const userProfileDialog = useDialog(UserProfileDialog)
 
   const handleReplyClick = () => {
     dispatch({
@@ -160,7 +164,12 @@ export const ChatMessage = (props: Props) => {
                     <EmojiHash />
                   </Flex>
                   <DropdownMenu.Separator />
-                  <DropdownMenu.Item icon={<BellIcon />}>
+                  <DropdownMenu.Item
+                    icon={<BellIcon />}
+                    onSelect={() =>
+                      userProfileDialog.open({ name: contact.name })
+                    }
+                  >
                     View Profile
                   </DropdownMenu.Item>
                   <DropdownMenu.Item icon={<BellIcon />}>

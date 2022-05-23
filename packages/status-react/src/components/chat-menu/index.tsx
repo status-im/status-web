@@ -87,7 +87,7 @@ export const ChatMenu = (props: Props) => {
     <Menu>
       <Menu.Item
         icon={<BellIcon />}
-        onSelect={() => userProfileDialog.open({ contact: 'Satoshi' })}
+        onSelect={() => userProfileDialog.open({ name: 'Satoshi' })}
       >
         View Profile
       </Menu.Item>
