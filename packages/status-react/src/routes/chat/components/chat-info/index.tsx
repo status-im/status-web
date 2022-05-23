@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { useMatch } from 'react-router-dom'
+
 import { PinIcon } from '~/src/icons/pin-icon'
 import { Avatar, DialogTrigger, Flex, Text } from '~/src/system'
 
@@ -13,13 +15,14 @@ interface Props {
 
 export const ChatInfo = (props: Props) => {
   const { chat } = props
+  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
   if (chat.type == 'channel') {
     return (
       <Flex align="center" gap="2">
         <Avatar size={36} src={chat.imageUrl} />
         <div>
-          <Text>#general</Text>
+          <Text>#{params.id}</Text>
           <Flex align="center">
             <Text size={12} color="gray">
               <DialogTrigger>
