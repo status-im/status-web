@@ -52,7 +52,7 @@ export const AppProvider = (props: Props) => {
       },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state]
+    [state, config.options]
   )
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
