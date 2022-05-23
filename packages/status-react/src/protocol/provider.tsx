@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useMemo } from 'react'
 
 import type { Config } from '~/src/types/config'
-// import { createClient } from '@status-im/core'
-// import type { Client } from '@status-im/core'
+// import { createClient } from '@status-im/js'
+// import type { Client } from '@status-im/js'
 
 interface ClientContext {
   client: Config
