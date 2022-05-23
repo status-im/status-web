@@ -250,7 +250,7 @@ export const useMessages = (): Message[] => {
       text: 'tincidunt tempus risus. Donec egestas. Duis ac arcu. Nunc mauris. Morbi non sapien molestie orci tincidunt adipiscing. Mauris molestie pharetra nibh. Aliquam ornare, libero at auctor ullamcorper, nisl arcu iaculis enim, sit amet ornare lectus justo eu arcu. Morbi sit amet massa. Quisque porttitor eros nec tellus. Nunc lectus pede, ultrices a, auctor non, feugiat nec, diam. Duis mi',
       owner: true,
       pinned: false,
-      mention: false,
+      mention: true,
       reactions: {
         heart: { count: 0, me: false },
         'thumbs-up': { count: 0, me: false },
