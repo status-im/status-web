@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package communities.v1;
-
 /* Specs:
 :AUTOMATIC
 	To Send - "AUTOMATIC" status ping every 5 minutes
@@ -14,19 +12,19 @@ package communities.v1;
 	Display - Offline forever
 Note: Only send pings if the user interacted with the app in the last x minutes. */
 message StatusUpdate {
-  
-    uint64 clock = 1;
-    
-    StatusType status_type = 2;
-      
-    string custom_text = 3;
-    
-    enum StatusType {
-      UNKNOWN_STATUS_TYPE = 0;
-      AUTOMATIC = 1;
-      DO_NOT_DISTURB = 2;
-      ALWAYS_ONLINE = 3;
-      INACTIVE = 4;
-    };
-  
-  }
+
+  uint64 clock = 1;
+
+  StatusType status_type = 2;
+
+  string custom_text = 3;
+
+  enum StatusType {
+    UNKNOWN_STATUS_TYPE = 0;
+    AUTOMATIC = 1;
+    DO_NOT_DISTURB = 2;
+    ALWAYS_ONLINE = 3;
+    INACTIVE = 4;
+  };
+
+}

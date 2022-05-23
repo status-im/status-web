@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-package communities.v1;
-
-import "communities/v1/enums.proto";
+import "enums.proto";
 
 message StickerMessage {
   string hash = 1;
@@ -19,9 +17,9 @@ message AudioMessage {
   AudioType type = 2;
   uint64 duration_ms = 3;
   enum AudioType {
-    AUDIO_TYPE_UNKNOWN_UNSPECIFIED = 0;
-    AUDIO_TYPE_AAC = 1;
-    AUDIO_TYPE_AMR = 2;
+    UNKNOWN_AUDIO_TYPE = 0;
+    AAC = 1;
+    AMR = 2;
   }
 }
 
@@ -85,21 +83,24 @@ message ChatMessage {
   }
 
   // Grant for community chat messages
-  optional bytes grant = 13;
+  bytes grant = 13;
+
+  // Message author's display name, introduced in version 1
+  string display_name = 14;
 
   enum ContentType {
-    CONTENT_TYPE_UNKNOWN_UNSPECIFIED = 0;
-    CONTENT_TYPE_TEXT_PLAIN = 1;
-    CONTENT_TYPE_STICKER = 2;
-    CONTENT_TYPE_STATUS = 3;
-    CONTENT_TYPE_EMOJI = 4;
-    CONTENT_TYPE_TRANSACTION_COMMAND = 5;
+    UNKNOWN_CONTENT_TYPE = 0;
+    TEXT_PLAIN = 1;
+    STICKER = 2;
+    STATUS = 3;
+    EMOJI = 4;
+    TRANSACTION_COMMAND = 5;
     // Only local
-    CONTENT_TYPE_SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
-    CONTENT_TYPE_IMAGE = 7;
-    CONTENT_TYPE_AUDIO = 8;
-    CONTENT_TYPE_COMMUNITY = 9;
+    SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
+    IMAGE = 7;
+    AUDIO = 8;
+    COMMUNITY = 9;
     // Only local
-    CONTENT_TYPE_SYSTEM_MESSAGE_GAP = 10;
+    SYSTEM_MESSAGE_GAP = 10;
   }
 }
