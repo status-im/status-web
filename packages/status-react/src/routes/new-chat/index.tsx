@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useCallback, useMemo, useState } from 'react'
 
 import { BellIcon } from '~/src/icons/bell-icon'
@@ -14,12 +13,12 @@ import { CrossIcon } from '../../components/Icons/CrossIcon'
 import { Member } from '../../components/Members/Member'
 import { SearchBlock } from '../../components/SearchBlock'
 import { textMediumStyles } from '../../components/Text'
-import { ChatState, useChatState } from '../../contexts/chatStateProvider'
-import { useUserPublicKey } from '../../contexts/identityProvider'
-import { useMessengerContext } from '../../contexts/messengerProvider'
-import { useNarrow } from '../../contexts/narrowProvider'
+// import { ChatState, useChatState } from '../../contexts/chatStateProvider'
+// import { useUserPublicKey } from '../../contexts/identityProvider'
+// import { useMessengerContext } from '../../contexts/messengerProvider'
+// import { useNarrow } from '../../contexts/narrowProvider'
 
-import type { ChannelData } from '../../models/ChannelData'
+// import type { ChannelData } from '../../models/ChannelData'
 
 interface Props {
   setEditGroup?: (val: boolean) => void

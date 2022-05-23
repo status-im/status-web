@@ -7,13 +7,15 @@ import { AppProvider } from '~/src/contexts/app-context'
 import { DialogProvider } from '~/src/contexts/dialog-context'
 import { ThemeProvider } from '~/src/contexts/theme-context'
 import { Chat } from '~/src/routes/chat'
-import { NewChat } from '~/src/routes/new-chat'
+// import { NewChat } from '~/src/routes/new-chat'
 import { styled } from '~/src/styles/config'
 import { GlobalStyle } from '~/src/styles/GlobalStyle'
 
 import type { Config } from '~/src/types/config'
 
-type Props = Config
+interface Props extends Config {
+  meta?: string
+}
 
 export const Community = (props: Props) => {
   const { theme, router: Router = BrowserRouter } = props
@@ -28,7 +30,7 @@ export const Community = (props: Props) => {
               <MainSidebar />
               <Routes>
                 <Route path="/:id" element={<Chat />} />
-                <Route path="/new" element={<NewChat />} />
+                {/* <Route path="/new" element={<NewChat />} /> */}
               </Routes>
             </Wrapper>
           </DialogProvider>
