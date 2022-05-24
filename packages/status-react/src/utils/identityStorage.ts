@@ -1,4 +1,4 @@
-import { bufToHex, hexToBuf, Identity } from '@status-im/core'
+import { bufToHex, hexToBuf, Identity } from '@status-im/js'
 
 export async function saveIdentity(identity: Identity, password: string) {
   const salt = window.crypto.getRandomValues(new Uint8Array(16))
