@@ -1,14 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import {
-  enumeration,
-  encodeMessage,
-  decodeMessage,
-  message,
-  uint64,
-  string,
-} from 'protons-runtime'
+import { enumeration, encodeMessage, decodeMessage, message, uint64, string } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface StatusUpdate {
@@ -23,7 +16,7 @@ export namespace StatusUpdate {
     AUTOMATIC = 'AUTOMATIC',
     DO_NOT_DISTURB = 'DO_NOT_DISTURB',
     ALWAYS_ONLINE = 'ALWAYS_ONLINE',
-    INACTIVE = 'INACTIVE',
+    INACTIVE = 'INACTIVE'
   }
 
   enum __StatusTypeValues {
@@ -31,7 +24,7 @@ export namespace StatusUpdate {
     AUTOMATIC = 1,
     DO_NOT_DISTURB = 2,
     ALWAYS_ONLINE = 3,
-    INACTIVE = 4,
+    INACTIVE = 4
   }
 
   export namespace StatusType {
@@ -44,7 +37,7 @@ export namespace StatusUpdate {
     return message<StatusUpdate>({
       1: { name: 'clock', codec: uint64 },
       2: { name: 'statusType', codec: StatusUpdate.StatusType.codec() },
-      3: { name: 'customText', codec: string },
+      3: { name: 'customText', codec: string }
     })
   }
 

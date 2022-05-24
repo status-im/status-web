@@ -1,16 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import {
-  encodeMessage,
-  decodeMessage,
-  message,
-  string,
-  int32,
-  bytes,
-  enumeration,
-  uint64,
-} from 'protons-runtime'
+import { encodeMessage, decodeMessage, message, string, int32, bytes, enumeration, uint64 } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface StickerMessage {
@@ -22,7 +13,7 @@ export namespace StickerMessage {
   export const codec = (): Codec<StickerMessage> => {
     return message<StickerMessage>({
       1: { name: 'hash', codec: string },
-      2: { name: 'pack', codec: int32 },
+      2: { name: 'pack', codec: int32 }
     })
   }
 
@@ -44,7 +35,7 @@ export namespace ImageMessage {
   export const codec = (): Codec<ImageMessage> => {
     return message<ImageMessage>({
       1: { name: 'payload', codec: bytes },
-      2: { name: 'type', codec: ImageType.codec() },
+      2: { name: 'type', codec: ImageType.codec() }
     })
   }
 
@@ -67,13 +58,13 @@ export namespace AudioMessage {
   export enum AudioType {
     UNKNOWN_AUDIO_TYPE = 'UNKNOWN_AUDIO_TYPE',
     AAC = 'AAC',
-    AMR = 'AMR',
+    AMR = 'AMR'
   }
 
   enum __AudioTypeValues {
     UNKNOWN_AUDIO_TYPE = 0,
     AAC = 1,
-    AMR = 2,
+    AMR = 2
   }
 
   export namespace AudioType {
@@ -86,7 +77,7 @@ export namespace AudioMessage {
     return message<AudioMessage>({
       1: { name: 'payload', codec: bytes },
       2: { name: 'type', codec: AudioMessage.AudioType.codec() },
-      3: { name: 'durationMs', codec: uint64 },
+      3: { name: 'durationMs', codec: uint64 }
     })
   }
 
@@ -116,7 +107,7 @@ export namespace EditMessage {
       3: { name: 'chatId', codec: string },
       4: { name: 'messageId', codec: string },
       5: { name: 'grant', codec: bytes },
-      6: { name: 'messageType', codec: MessageType.codec() },
+      6: { name: 'messageType', codec: MessageType.codec() }
     })
   }
 
@@ -144,7 +135,7 @@ export namespace DeleteMessage {
       2: { name: 'chatId', codec: string },
       3: { name: 'messageId', codec: string },
       4: { name: 'grant', codec: bytes },
-      5: { name: 'messageType', codec: MessageType.codec() },
+      5: { name: 'messageType', codec: MessageType.codec() }
     })
   }
 
@@ -186,7 +177,7 @@ export namespace ChatMessage {
     IMAGE = 'IMAGE',
     AUDIO = 'AUDIO',
     COMMUNITY = 'COMMUNITY',
-    SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
+    SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
   }
 
   enum __ContentTypeValues {
@@ -200,7 +191,7 @@ export namespace ChatMessage {
     IMAGE = 7,
     AUDIO = 8,
     COMMUNITY = 9,
-    SYSTEM_MESSAGE_GAP = 10,
+    SYSTEM_MESSAGE_GAP = 10
   }
 
   export namespace ContentType {
@@ -224,7 +215,7 @@ export namespace ChatMessage {
       11: { name: 'audio', codec: AudioMessage.codec() },
       12: { name: 'community', codec: bytes },
       13: { name: 'grant', codec: bytes },
-      14: { name: 'displayName', codec: string },
+      14: { name: 'displayName', codec: string }
     })
   }
 
@@ -244,7 +235,7 @@ export enum MessageType {
   PRIVATE_GROUP = 'PRIVATE_GROUP',
   SYSTEM_MESSAGE_PRIVATE_GROUP = 'SYSTEM_MESSAGE_PRIVATE_GROUP',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
-  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
+  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
 }
 
 enum __MessageTypeValues {
@@ -254,7 +245,7 @@ enum __MessageTypeValues {
   PRIVATE_GROUP = 3,
   SYSTEM_MESSAGE_PRIVATE_GROUP = 4,
   COMMUNITY_CHAT = 5,
-  SYSTEM_MESSAGE_GAP = 6,
+  SYSTEM_MESSAGE_GAP = 6
 }
 
 export namespace MessageType {
@@ -267,7 +258,7 @@ export enum ImageType {
   PNG = 'PNG',
   JPEG = 'JPEG',
   WEBP = 'WEBP',
-  GIF = 'GIF',
+  GIF = 'GIF'
 }
 
 enum __ImageTypeValues {
@@ -275,7 +266,7 @@ enum __ImageTypeValues {
   PNG = 1,
   JPEG = 2,
   WEBP = 3,
-  GIF = 4,
+  GIF = 4
 }
 
 export namespace ImageType {

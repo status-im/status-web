@@ -1,16 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import {
-  enumeration,
-  encodeMessage,
-  decodeMessage,
-  message,
-  uint64,
-  string,
-  bool,
-  bytes,
-} from 'protons-runtime'
+import { enumeration, encodeMessage, decodeMessage, message, uint64, string, bool, bytes } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface EmojiReaction {
@@ -31,7 +22,7 @@ export namespace EmojiReaction {
     THUMBS_DOWN = 'THUMBS_DOWN',
     LAUGH = 'LAUGH',
     SAD = 'SAD',
-    ANGRY = 'ANGRY',
+    ANGRY = 'ANGRY'
   }
 
   enum __TypeValues {
@@ -41,7 +32,7 @@ export namespace EmojiReaction {
     THUMBS_DOWN = 3,
     LAUGH = 4,
     SAD = 5,
-    ANGRY = 6,
+    ANGRY = 6
   }
 
   export namespace Type {
@@ -58,7 +49,7 @@ export namespace EmojiReaction {
       4: { name: 'messageType', codec: MessageType.codec() },
       5: { name: 'type', codec: EmojiReaction.Type.codec() },
       6: { name: 'retracted', codec: bool },
-      7: { name: 'grant', codec: bytes },
+      7: { name: 'grant', codec: bytes }
     })
   }
 
@@ -78,7 +69,7 @@ export enum MessageType {
   PRIVATE_GROUP = 'PRIVATE_GROUP',
   SYSTEM_MESSAGE_PRIVATE_GROUP = 'SYSTEM_MESSAGE_PRIVATE_GROUP',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
-  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
+  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
 }
 
 enum __MessageTypeValues {
@@ -88,7 +79,7 @@ enum __MessageTypeValues {
   PRIVATE_GROUP = 3,
   SYSTEM_MESSAGE_PRIVATE_GROUP = 4,
   COMMUNITY_CHAT = 5,
-  SYSTEM_MESSAGE_GAP = 6,
+  SYSTEM_MESSAGE_GAP = 6
 }
 
 export namespace MessageType {
@@ -101,7 +92,7 @@ export enum ImageType {
   PNG = 'PNG',
   JPEG = 'JPEG',
   WEBP = 'WEBP',
-  GIF = 'GIF',
+  GIF = 'GIF'
 }
 
 enum __ImageTypeValues {
@@ -109,7 +100,7 @@ enum __ImageTypeValues {
   PNG = 1,
   JPEG = 2,
   WEBP = 3,
-  GIF = 4,
+  GIF = 4
 }
 
 export namespace ImageType {
