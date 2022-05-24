@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-package communities.v1;
-
-import "communities/v1/enums.proto";
+import "enums.proto";
 
 message EmojiReaction {
   // clock Lamport timestamp of the chat message

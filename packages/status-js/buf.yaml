@@ -1,9 +1,0 @@
-version: v1beta1
-
-build:
-  roots:
-    - ./proto
-lint:
-  except:
-    - ENUM_ZERO_VALUE_SUFFIX
-    - ENUM_VALUE_PREFIX

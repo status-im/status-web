@@ -1,7 +1,5 @@
 syntax = "proto3";
 
-package status.v1;
-
 message ApplicationMetadataMessage {
   // Signature of the payload field
   bytes signature = 1;
