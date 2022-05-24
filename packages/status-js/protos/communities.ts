@@ -1,18 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import {
-  encodeMessage,
-  decodeMessage,
-  message,
-  bytes,
-  string,
-  uint64,
-  enumeration,
-  bool,
-  int32,
-  uint32,
-} from 'protons-runtime'
+import { encodeMessage, decodeMessage, message, bytes, string, uint64, enumeration, bool, int32, uint32 } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface Grant {
@@ -28,7 +17,7 @@ export namespace Grant {
       1: { name: 'communityId', codec: bytes },
       2: { name: 'memberId', codec: bytes },
       3: { name: 'chatId', codec: string },
-      4: { name: 'clock', codec: uint64 },
+      4: { name: 'clock', codec: uint64 }
     })
   }
 
@@ -49,13 +38,13 @@ export namespace CommunityMember {
   export enum Roles {
     UNKNOWN_ROLE = 'UNKNOWN_ROLE',
     ROLE_ALL = 'ROLE_ALL',
-    ROLE_MANAGE_USERS = 'ROLE_MANAGE_USERS',
+    ROLE_MANAGE_USERS = 'ROLE_MANAGE_USERS'
   }
 
   enum __RolesValues {
     UNKNOWN_ROLE = 0,
     ROLE_ALL = 1,
-    ROLE_MANAGE_USERS = 2,
+    ROLE_MANAGE_USERS = 2
   }
 
   export namespace Roles {
@@ -66,7 +55,7 @@ export namespace CommunityMember {
 
   export const codec = (): Codec<CommunityMember> => {
     return message<CommunityMember>({
-      1: { name: 'roles', codec: CommunityMember.Roles.codec(), repeats: true },
+      1: { name: 'roles', codec: CommunityMember.Roles.codec(), repeats: true }
     })
   }
 
@@ -90,14 +79,14 @@ export namespace CommunityPermissions {
     UNKNOWN_ACCESS = 'UNKNOWN_ACCESS',
     NO_MEMBERSHIP = 'NO_MEMBERSHIP',
     INVITATION_ONLY = 'INVITATION_ONLY',
-    ON_REQUEST = 'ON_REQUEST',
+    ON_REQUEST = 'ON_REQUEST'
   }
 
   enum __AccessValues {
     UNKNOWN_ACCESS = 0,
     NO_MEMBERSHIP = 1,
     INVITATION_ONLY = 2,
-    ON_REQUEST = 3,
+    ON_REQUEST = 3
   }
 
   export namespace Access {
@@ -110,7 +99,7 @@ export namespace CommunityPermissions {
     return message<CommunityPermissions>({
       1: { name: 'ensOnly', codec: bool },
       2: { name: 'private', codec: bool },
-      3: { name: 'access', codec: CommunityPermissions.Access.codec() },
+      3: { name: 'access', codec: CommunityPermissions.Access.codec() }
     })
   }
 
@@ -146,7 +135,7 @@ export namespace CommunityDescription {
       7: { name: 'banList', codec: string, repeats: true },
       8: { name: 'categories', codec: CommunityCategory.codec() },
       9: { name: 'archiveMagnetlinkClock', codec: uint64 },
-      10: { name: 'adminSettings', codec: CommunityAdminSettings.codec() },
+      10: { name: 'adminSettings', codec: CommunityAdminSettings.codec() }
     })
   }
 
@@ -166,7 +155,7 @@ export interface CommunityAdminSettings {
 export namespace CommunityAdminSettings {
   export const codec = (): Codec<CommunityAdminSettings> => {
     return message<CommunityAdminSettings>({
-      1: { name: 'pinMessageAllMembersEnabled', codec: bool },
+      1: { name: 'pinMessageAllMembersEnabled', codec: bool }
     })
   }
 
@@ -194,7 +183,7 @@ export namespace CommunityChat {
       2: { name: 'permissions', codec: CommunityPermissions.codec() },
       3: { name: 'identity', codec: ChatIdentity.codec() },
       4: { name: 'categoryId', codec: string },
-      5: { name: 'position', codec: int32 },
+      5: { name: 'position', codec: int32 }
     })
   }
 
@@ -218,7 +207,7 @@ export namespace CommunityCategory {
     return message<CommunityCategory>({
       1: { name: 'categoryId', codec: string },
       2: { name: 'name', codec: string },
-      3: { name: 'position', codec: int32 },
+      3: { name: 'position', codec: int32 }
     })
   }
 
@@ -244,7 +233,7 @@ export namespace CommunityInvitation {
       1: { name: 'communityDescription', codec: bytes },
       2: { name: 'grant', codec: bytes },
       3: { name: 'chatId', codec: string },
-      4: { name: 'publicKey', codec: bytes },
+      4: { name: 'publicKey', codec: bytes }
     })
   }
 
@@ -270,7 +259,7 @@ export namespace CommunityRequestToJoin {
       1: { name: 'clock', codec: uint64 },
       2: { name: 'ensName', codec: string },
       3: { name: 'chatId', codec: string },
-      4: { name: 'communityId', codec: bytes },
+      4: { name: 'communityId', codec: bytes }
     })
   }
 
@@ -296,7 +285,7 @@ export namespace CommunityRequestToJoinResponse {
       1: { name: 'clock', codec: uint64 },
       2: { name: 'community', codec: CommunityDescription.codec() },
       3: { name: 'accepted', codec: bool },
-      4: { name: 'grant', codec: bytes },
+      4: { name: 'grant', codec: bytes }
     })
   }
 
@@ -318,19 +307,15 @@ export namespace CommunityMessageArchiveMagnetlink {
   export const codec = (): Codec<CommunityMessageArchiveMagnetlink> => {
     return message<CommunityMessageArchiveMagnetlink>({
       1: { name: 'clock', codec: uint64 },
-      2: { name: 'magnetUri', codec: string },
+      2: { name: 'magnetUri', codec: string }
     })
   }
 
-  export const encode = (
-    obj: CommunityMessageArchiveMagnetlink
-  ): Uint8Array => {
+  export const encode = (obj: CommunityMessageArchiveMagnetlink): Uint8Array => {
     return encodeMessage(obj, CommunityMessageArchiveMagnetlink.codec())
   }
 
-  export const decode = (
-    buf: Uint8Array
-  ): CommunityMessageArchiveMagnetlink => {
+  export const decode = (buf: Uint8Array): CommunityMessageArchiveMagnetlink => {
     return decodeMessage(buf, CommunityMessageArchiveMagnetlink.codec())
   }
 }
@@ -352,7 +337,7 @@ export namespace WakuMessage {
       3: { name: 'topic', codec: bytes },
       4: { name: 'payload', codec: bytes },
       5: { name: 'padding', codec: bytes },
-      6: { name: 'hash', codec: bytes },
+      6: { name: 'hash', codec: bytes }
     })
   }
 
@@ -378,7 +363,7 @@ export namespace WakuMessageArchiveMetadata {
       1: { name: 'version', codec: uint32 },
       2: { name: 'from', codec: uint64 },
       3: { name: 'to', codec: uint64 },
-      4: { name: 'contentTopic', codec: bytes, repeats: true },
+      4: { name: 'contentTopic', codec: bytes, repeats: true }
     })
   }
 
@@ -402,7 +387,7 @@ export namespace WakuMessageArchive {
     return message<WakuMessageArchive>({
       1: { name: 'version', codec: uint32 },
       2: { name: 'metadata', codec: WakuMessageArchiveMetadata.codec() },
-      3: { name: 'messages', codec: WakuMessage.codec(), repeats: true },
+      3: { name: 'messages', codec: WakuMessage.codec(), repeats: true }
     })
   }
 
@@ -430,7 +415,7 @@ export namespace WakuMessageArchiveIndexMetadata {
       2: { name: 'metadata', codec: WakuMessageArchiveMetadata.codec() },
       3: { name: 'offset', codec: uint64 },
       4: { name: 'size', codec: uint64 },
-      5: { name: 'padding', codec: uint64 },
+      5: { name: 'padding', codec: uint64 }
     })
   }
 
@@ -450,7 +435,7 @@ export interface WakuMessageArchiveIndex {
 export namespace WakuMessageArchiveIndex {
   export const codec = (): Codec<WakuMessageArchiveIndex> => {
     return message<WakuMessageArchiveIndex>({
-      1: { name: 'archives', codec: WakuMessageArchiveIndexMetadata.codec() },
+      1: { name: 'archives', codec: WakuMessageArchiveIndexMetadata.codec() }
     })
   }
 
@@ -482,7 +467,7 @@ export namespace ChatIdentity {
       4: { name: 'displayName', codec: string },
       5: { name: 'description', codec: string },
       6: { name: 'color', codec: string },
-      7: { name: 'emoji', codec: string },
+      7: { name: 'emoji', codec: string }
     })
   }
 
@@ -507,13 +492,13 @@ export namespace IdentityImage {
   export enum SourceType {
     UNKNOWN_SOURCE_TYPE = 'UNKNOWN_SOURCE_TYPE',
     RAW_PAYLOAD = 'RAW_PAYLOAD',
-    ENS_AVATAR = 'ENS_AVATAR',
+    ENS_AVATAR = 'ENS_AVATAR'
   }
 
   enum __SourceTypeValues {
     UNKNOWN_SOURCE_TYPE = 0,
     RAW_PAYLOAD = 1,
-    ENS_AVATAR = 2,
+    ENS_AVATAR = 2
   }
 
   export namespace SourceType {
@@ -528,7 +513,7 @@ export namespace IdentityImage {
       2: { name: 'sourceType', codec: IdentityImage.SourceType.codec() },
       3: { name: 'imageType', codec: ImageType.codec() },
       4: { name: 'encryptionKeys', codec: bytes, repeats: true },
-      5: { name: 'encrypted', codec: bool },
+      5: { name: 'encrypted', codec: bool }
     })
   }
 
@@ -548,7 +533,7 @@ export enum MessageType {
   PRIVATE_GROUP = 'PRIVATE_GROUP',
   SYSTEM_MESSAGE_PRIVATE_GROUP = 'SYSTEM_MESSAGE_PRIVATE_GROUP',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
-  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
+  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
 }
 
 enum __MessageTypeValues {
@@ -558,7 +543,7 @@ enum __MessageTypeValues {
   PRIVATE_GROUP = 3,
   SYSTEM_MESSAGE_PRIVATE_GROUP = 4,
   COMMUNITY_CHAT = 5,
-  SYSTEM_MESSAGE_GAP = 6,
+  SYSTEM_MESSAGE_GAP = 6
 }
 
 export namespace MessageType {
@@ -571,7 +556,7 @@ export enum ImageType {
   PNG = 'PNG',
   JPEG = 'JPEG',
   WEBP = 'WEBP',
-  GIF = 'GIF',
+  GIF = 'GIF'
 }
 
 enum __ImageTypeValues {
@@ -579,7 +564,7 @@ enum __ImageTypeValues {
   PNG = 1,
   JPEG = 2,
   WEBP = 3,
-  GIF = 4,
+  GIF = 4
 }
 
 export namespace ImageType {

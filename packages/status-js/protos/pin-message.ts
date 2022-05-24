@@ -1,15 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import {
-  encodeMessage,
-  decodeMessage,
-  message,
-  uint64,
-  string,
-  bool,
-  enumeration,
-} from 'protons-runtime'
+import { encodeMessage, decodeMessage, message, uint64, string, bool, enumeration } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface PinMessage {
@@ -27,7 +19,7 @@ export namespace PinMessage {
       2: { name: 'messageId', codec: string },
       3: { name: 'chatId', codec: string },
       4: { name: 'pinned', codec: bool },
-      5: { name: 'messageType', codec: MessageType.codec() },
+      5: { name: 'messageType', codec: MessageType.codec() }
     })
   }
 
@@ -47,7 +39,7 @@ export enum MessageType {
   PRIVATE_GROUP = 'PRIVATE_GROUP',
   SYSTEM_MESSAGE_PRIVATE_GROUP = 'SYSTEM_MESSAGE_PRIVATE_GROUP',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
-  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
+  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
 }
 
 enum __MessageTypeValues {
@@ -57,7 +49,7 @@ enum __MessageTypeValues {
   PRIVATE_GROUP = 3,
   SYSTEM_MESSAGE_PRIVATE_GROUP = 4,
   COMMUNITY_CHAT = 5,
-  SYSTEM_MESSAGE_GAP = 6,
+  SYSTEM_MESSAGE_GAP = 6
 }
 
 export namespace MessageType {
@@ -70,7 +62,7 @@ export enum ImageType {
   PNG = 'PNG',
   JPEG = 'JPEG',
   WEBP = 'WEBP',
-  GIF = 'GIF',
+  GIF = 'GIF'
 }
 
 enum __ImageTypeValues {
@@ -78,7 +70,7 @@ enum __ImageTypeValues {
   PNG = 1,
   JPEG = 2,
   WEBP = 3,
-  GIF = 4,
+  GIF = 4
 }
 
 export namespace ImageType {

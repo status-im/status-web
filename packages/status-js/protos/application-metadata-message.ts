@@ -1,13 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import {
-  enumeration,
-  encodeMessage,
-  decodeMessage,
-  message,
-  bytes,
-} from 'protons-runtime'
+import { enumeration, encodeMessage, decodeMessage, message, bytes } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface ApplicationMetadataMessage {
@@ -51,7 +45,7 @@ export namespace ApplicationMetadataMessage {
     TYPE_STATUS_UPDATE = 'TYPE_STATUS_UPDATE',
     TYPE_DELETE_MESSAGE = 'TYPE_DELETE_MESSAGE',
     TYPE_SYNC_INSTALLATION_COMMUNITY = 'TYPE_SYNC_INSTALLATION_COMMUNITY',
-    TYPE_ANONYMOUS_METRIC_BATCH = 'TYPE_ANONYMOUS_METRIC_BATCH',
+    TYPE_ANONYMOUS_METRIC_BATCH = 'TYPE_ANONYMOUS_METRIC_BATCH'
   }
 
   enum __TypeValues {
@@ -88,7 +82,7 @@ export namespace ApplicationMetadataMessage {
     TYPE_STATUS_UPDATE = 30,
     TYPE_DELETE_MESSAGE = 31,
     TYPE_SYNC_INSTALLATION_COMMUNITY = 32,
-    TYPE_ANONYMOUS_METRIC_BATCH = 33,
+    TYPE_ANONYMOUS_METRIC_BATCH = 33
   }
 
   export namespace Type {
@@ -101,7 +95,7 @@ export namespace ApplicationMetadataMessage {
     return message<ApplicationMetadataMessage>({
       1: { name: 'signature', codec: bytes },
       2: { name: 'payload', codec: bytes },
-      3: { name: 'type', codec: ApplicationMetadataMessage.Type.codec() },
+      3: { name: 'type', codec: ApplicationMetadataMessage.Type.codec() }
     })
   }
 
