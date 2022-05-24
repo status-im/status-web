@@ -40,7 +40,7 @@
     "@radix-ui/react-toggle-group": "^0.1.5",
     "@radix-ui/react-tooltip": "^0.1.7",
     "@radix-ui/react-visually-hidden": "^0.1.4",
-    "@status-im/core": "^0.0.0",
+    "@status-im/js": "^0.0.0",
     "@stitches/react": "^1.2.7",
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
