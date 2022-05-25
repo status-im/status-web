@@ -8,14 +8,16 @@ import type { Waku } from 'js-waku'
 
 const EC = new ec('secp256k1')
 
-const hexToBuf = utils.hexToBuf
+// TODO: rename
+const hexToBuf = utils.hexToBytes
 export { hexToBuf }
 
+// TODO: rename
 /**
  * Return hex string with 0x prefix (commonly used for string format of a community id/public key.
  */
 export function bufToHex(buf: Uint8Array): string {
-  return '0x' + utils.bufToHex(buf)
+  return '0x' + utils.bytesToHex(buf)
 }
 
 export function compressPublicKey(key: Uint8Array): string {
