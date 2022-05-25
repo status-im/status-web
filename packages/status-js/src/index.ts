@@ -1,4 +1,5 @@
 export { Chat } from './chat'
+export { createClient } from './client'
 export { Community } from './community'
 export { Contacts } from './contacts'
 export type { GroupChat, GroupChatsType } from './groupChats'

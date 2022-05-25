@@ -1,5 +1,6 @@
 import { waku_message, WakuMessage } from 'js-waku'
 
+// FIXME?: import from 'js-waku' not /build
 import { ChatMessage } from '.'
 import { createSymKeyFromPassword } from './encryption'
 import { MembershipUpdateEvent_EventType } from './proto/communities/v1/membership_update_message'
