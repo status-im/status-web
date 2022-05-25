@@ -15,6 +15,7 @@ describe('Community [live data]', () => {
 
   it('Retrieves community description For DappConnect Test from Waku prod fleet', async function () {
     this.timeout(20000)
+    // FIXME?: mock
     const waku = await Waku.create({ bootstrap: { default: true } })
 
     await waku.waitForRemotePeer()

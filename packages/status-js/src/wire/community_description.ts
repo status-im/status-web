@@ -3,6 +3,7 @@ import { Reader } from 'protobufjs'
 
 import { idToContentTopic } from '../contentTopic'
 import { createSymKeyFromPassword } from '../encryption'
+// TODO: replace for 'packages/status-js/protos/communities.ts'
 import * as proto from '../proto/communities/v1/communities'
 import { bufToHex } from '../utils'
 import { ApplicationMetadataMessage } from './application_metadata_message'
@@ -34,12 +35,14 @@ export class CommunityDescription {
     wakuStore: WakuStore
   ): Promise<CommunityDescription | undefined> {
     const hexCommunityPublicKey = bufToHex(communityPublicKey)
+    // TEST: diff topic
     const contentTopic = idToContentTopic(hexCommunityPublicKey)
 
     let communityDescription: CommunityDescription | undefined
 
     const callback = (messages: WakuMessage[]): void => {
       // Value found, stop processing
+      // FIXME?: return true/false
       if (communityDescription) return
 
       // Process most recent message first
@@ -64,6 +67,8 @@ export class CommunityDescription {
           )
         }
       })
+
+      // FIXME?: return true/false
     }
 
     const symKey = await createSymKeyFromPassword(hexCommunityPublicKey)

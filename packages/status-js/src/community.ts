@@ -12,6 +12,7 @@ const dbg = debug('communities:community')
 export class Community {
   public publicKey: Uint8Array
   private waku: Waku
+  // TODO?: rename to channels
   public chats: Map<string, Chat> // Chat id, Chat
   public description?: CommunityDescription
 
@@ -21,6 +22,7 @@ export class Community {
     this.chats = new Map()
   }
 
+  // TODO: explain why init func instead of constructor
   /**
    * Instantiate a Community by retrieving its details from the Waku network.
    *
