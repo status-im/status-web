@@ -1,10 +1,9 @@
 import { BN } from 'bn.js'
 import { derive } from 'ecies-geth'
 import { ec } from 'elliptic'
-import { bufToHex } from 'js-waku/build/main/lib/utils'
 
 import { idToContentTopic } from './contentTopic'
-import { hexToBuf } from './utils'
+import { bufToHex, hexToBuf } from './utils'
 
 import type { Identity } from '.'
 
@@ -40,7 +39,7 @@ export async function getNegotiatedTopic(
   const key = EC.keyFromPublic(publicKey.slice(2), 'hex')
   const sharedSecret = await derive(
     Buffer.from(identity.privateKey),
-    hexToBuf(key.getPublic('hex'))
+    Buffer.concat([hexToBuf(key.getPublic('hex'))])
   )
   return idToContentTopic(bufToHex(sharedSecret))
 }
