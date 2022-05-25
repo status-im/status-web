@@ -10,7 +10,7 @@ const COMMUNITY_PUBLIC_KEY = '0x029dd5fecbd689dc11e2a5b399afed92cf1fab65d315b883
   const client = await createClient()
 
   // Retrieve Community's metadata (e.g. description)
-  const community = await Community.instantiateCommunity(COMMUNITY_PUBLIC_KEY, client) // decoded protobuf
+  const community = await Community.instantiateCommunity(COMMUNITY_PUBLIC_KEY, client)
 
   // // Retrieve and subscribe to messages
   // const messenger = await Messenger.create(, client)
