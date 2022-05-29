@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import debug from 'debug'
-import { Protocols } from 'js-waku/build/main/lib/waku'
+import { Protocols } from 'js-waku'
 
 import { Community } from './community'
 import { Identity } from './identity'
