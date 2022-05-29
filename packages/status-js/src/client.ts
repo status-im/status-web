@@ -6,6 +6,7 @@ import { Waku } from 'js-waku'
 // TODO?: error handling
 // TOOD?: teardown
 export async function createClient(): Promise<Waku> {
+  // TODO?: set tiemout
   const waku = await Waku.create({
     bootstrap: {
       default: false,
