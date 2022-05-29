@@ -13,7 +13,7 @@ import type { Waku } from 'js-waku'
 
 const dbg = debug('communities:messenger')
 
-// tood: pass waku client
+// TODO: pass waku client
 export class Messenger {
   waku: Waku
   chatsById: Map<string, Chat>
