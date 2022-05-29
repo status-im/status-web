@@ -9,6 +9,8 @@
     "prepare": "husky install",
     "fix": "run-s 'fix:*' && wsrun -e -c -s fix",
     "build": "wsrun -e -c -s build",
+    "build:status-js": "yarn workspace @status-im/js build",
+    "build:status-react": "yarn workspace @status-im/react build",
     "lint": "eslint 'packages/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'packages/**/*.{ts,tsx}' --fix",
     "lint:examples": "eslint 'examples/**/*.{ts,tsx}'",
