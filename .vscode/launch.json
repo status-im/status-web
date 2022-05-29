@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch status-js",
+      "program": "${workspaceFolder}/packages/status-js/src/index.ts",
+      "preLaunchTask": "npm: build:status-js",
+      "outFiles": ["${workspaceFolder}/packages/status-js/dist/index.js"],
+      "sourceMaps": true,
+      "smartStep": true,
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*",
+        "<node_internals>/**/*.js"
+      ],
+      "sourceMapPathOverrides": {
+        "packages/status-js/*": "${workspaceFolder}/packages/status-js/*"
+      }
+    }
+  ]
+}
