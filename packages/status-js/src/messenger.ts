@@ -1,6 +1,5 @@
 import debug from 'debug'
-import { Waku, WakuMessage } from 'js-waku'
-import { DecryptionMethod } from 'js-waku/build/main/lib/waku_message'
+import { Waku, waku_message, WakuMessage } from 'js-waku'
 
 import { Chat } from './chat'
 import { ApplicationMetadataMessage_Type } from './proto/status/v1/application_metadata_message'
@@ -10,7 +9,7 @@ import { ChatMessage } from './wire/chat_message'
 
 import type { Identity } from './identity'
 import type { Content } from './wire/chat_message'
-import type { CreateOptions as WakuCreateOptions } from 'js-waku/build/main/lib/waku'
+import type { waku } from 'js-waku'
 
 const dbg = debug('communities:messenger')
 
@@ -37,7 +36,7 @@ export class Messenger {
 
   public static async create(
     identity: Identity | undefined,
-    wakuOptions?: WakuCreateOptions
+    wakuOptions?: waku.CreateOptions
   ): Promise<Messenger> {
     const _wakuOptions = Object.assign(
       { bootstrap: { default: true } },
@@ -83,7 +82,7 @@ export class Messenger {
       throw `Failed to join chat, it is already joined: ${chat.id}`
 
     this.waku.addDecryptionKey(chat.symKey, {
-      method: DecryptionMethod.Symmetric,
+      method: waku_message.DecryptionMethod.Symmetric,
       contentTopics: [chat.contentTopic],
     })
 

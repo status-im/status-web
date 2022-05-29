@@ -1,5 +1,4 @@
-import { WakuMessage } from 'js-waku'
-import { DecryptionMethod } from 'js-waku/build/main/lib/waku_message'
+import { waku_message, WakuMessage } from 'js-waku'
 
 import { ChatMessage } from '.'
 import { createSymKeyFromPassword } from './encryption'
@@ -260,7 +259,7 @@ export class GroupChats {
       chat.members.map(async member => {
         if (!removeObserver) {
           this.waku.relay.addDecryptionKey(member.symKey, {
-            method: DecryptionMethod.Symmetric,
+            method: waku_message.DecryptionMethod.Symmetric,
             contentTopics: [member.topic],
           })
         }
