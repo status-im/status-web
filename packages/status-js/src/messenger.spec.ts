@@ -1,4 +1,3 @@
-import { expect } from 'chai'
 import debug from 'debug'
 import { Protocols } from 'js-waku'
 
@@ -20,9 +19,7 @@ describe('Messenger', () => {
   let identityAlice: Identity
   let identityBob: Identity
 
-  beforeEach(async function () {
-    this.timeout(20_000)
-
+  beforeEach(async () => {
     dbg('Generate keys')
     identityAlice = Identity.generate()
     identityBob = Identity.generate()
@@ -51,9 +48,7 @@ describe('Messenger', () => {
     dbg('Messengers ready')
   })
 
-  it('Sends & Receive public chat messages', async function () {
-    this.timeout(10_000)
-
+  test('Sends & Receive public chat messages', async () => {
     await messengerAlice.joinChatById(testChatId)
     await messengerBob.joinChatById(testChatId)
 
@@ -73,12 +68,10 @@ describe('Messenger', () => {
 
     const receivedMessage = await receivedMessagePromise
 
-    expect(receivedMessage.chatMessage?.text).to.eq(text)
+    expect(receivedMessage.chatMessage?.text).toEqual(text)
   })
 
-  it('public chat messages have signers', async function () {
-    this.timeout(10_000)
-
+  test('public chat messages have signers', async () => {
     await messengerAlice.joinChatById(testChatId)
     await messengerBob.joinChatById(testChatId)
 
@@ -99,32 +92,22 @@ describe('Messenger', () => {
     const receivedMessage = await receivedMessagePromise
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    expect(bufToHex(receivedMessage.signer!)).to.eq(
+    expect(bufToHex(receivedMessage.signer!)).toEqual(
       bufToHex(identityAlice.publicKey)
     )
   })
 
-  afterEach(async function () {
-    this.timeout(5000)
+  afterEach(async () => {
     await messengerAlice.stop()
     await messengerBob.stop()
   })
 })
 
 describe('Messenger [live data]', () => {
-  before(function () {
-    if (process.env.CI) {
-      // Skip live data test in CI
-      this.skip()
-    }
-  })
-
   let messenger: Messenger
   let identity: Identity
 
-  beforeEach(async function () {
-    this.timeout(20_000)
-
+  beforeEach(async () => {
     dbg('Generate keys')
     identity = Identity.generate()
 
@@ -139,9 +122,7 @@ describe('Messenger [live data]', () => {
     dbg('Messengers ready')
   })
 
-  it('Receive public chat messages', async function () {
-    this.timeout(20_000)
-
+  test('Receive public chat messages', async () => {
     const community = await Community.instantiateCommunity(
       '0x02cf13719c8b836bebd4e430c497ee38e798a43e4d8c4760c34bbd9bf4f2434d26',
       messenger.waku
@@ -172,8 +153,7 @@ describe('Messenger [live data]', () => {
     )
   })
 
-  afterEach(async function () {
-    this.timeout(5000)
+  afterEach(async () => {
     await messenger.stop()
   })
 })

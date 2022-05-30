@@ -1,5 +1,3 @@
-import { expect } from 'chai'
-
 import {
   AudioMessage_AudioType,
   ChatMessage_ContentType,
@@ -10,7 +8,7 @@ import { ChatMessage, ContentType } from './chat_message'
 import type { AudioContent, ImageContent, StickerContent } from './chat_message'
 
 describe('Chat Message', () => {
-  it('Encode & decode Image message', () => {
+  test('Encode & decode Image message', () => {
     const payload = Buffer.from([1, 1])
 
     const imageContent: ImageContent = {
@@ -24,12 +22,12 @@ describe('Chat Message', () => {
     const buf = message.encode()
     const dec = ChatMessage.decode(buf)
 
-    expect(dec.contentType).eq(ChatMessage_ContentType.CONTENT_TYPE_IMAGE)
-    expect(dec.image?.payload?.toString()).eq(payload.toString())
-    expect(dec.image?.type).eq(ImageType.IMAGE_TYPE_PNG)
+    expect(dec.contentType).toEqual(ChatMessage_ContentType.CONTENT_TYPE_IMAGE)
+    expect(dec.image?.payload?.toString()).toEqual(payload.toString())
+    expect(dec.image?.type).toEqual(ImageType.IMAGE_TYPE_PNG)
   })
 
-  it('Encode & decode Audio message', () => {
+  test('Encode & decode Audio message', () => {
     const payload = Buffer.from([1, 1])
     const durationMs = 12345
 
@@ -45,13 +43,13 @@ describe('Chat Message', () => {
     const buf = message.encode()
     const dec = ChatMessage.decode(buf)
 
-    expect(dec.contentType).eq(ChatMessage_ContentType.CONTENT_TYPE_AUDIO)
-    expect(dec.audio?.payload?.toString()).eq(payload.toString())
-    expect(dec.audio?.type).eq(ImageType.IMAGE_TYPE_PNG)
-    expect(dec.audio?.durationMs).eq(durationMs)
+    expect(dec.contentType).toEqual(ChatMessage_ContentType.CONTENT_TYPE_AUDIO)
+    expect(dec.audio?.payload?.toString()).toEqual(payload.toString())
+    expect(dec.audio?.type).toEqual(ImageType.IMAGE_TYPE_PNG)
+    expect(dec.audio?.durationMs).toEqual(durationMs)
   })
 
-  it('Encode & decode Sticker message', () => {
+  test('Encode & decode Sticker message', () => {
     const hash = 'deadbeef'
     const pack = 12345
 
@@ -66,8 +64,10 @@ describe('Chat Message', () => {
     const buf = message.encode()
     const dec = ChatMessage.decode(buf)
 
-    expect(dec.contentType).eq(ChatMessage_ContentType.CONTENT_TYPE_STICKER)
-    expect(dec.sticker?.hash).eq(hash)
-    expect(dec.sticker?.pack).eq(pack)
+    expect(dec.contentType).toEqual(
+      ChatMessage_ContentType.CONTENT_TYPE_STICKER
+    )
+    expect(dec.sticker?.hash).toEqual(hash)
+    expect(dec.sticker?.pack).toEqual(pack)
   })
 })
