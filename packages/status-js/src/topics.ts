@@ -5,7 +5,7 @@ import { ec } from 'elliptic'
 import { idToContentTopic } from './contentTopic'
 import { bufToHex, hexToBuf } from './utils'
 
-import type { Identity } from '.'
+import type { Identity } from './identity'
 
 const EC = new ec('secp256k1')
 const partitionsNum = new BN(5000)
