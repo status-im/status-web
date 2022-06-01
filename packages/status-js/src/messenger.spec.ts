@@ -1,7 +1,6 @@
 import debug from 'debug'
 import { Protocols } from 'js-waku'
 
-import { Community } from './community'
 import { Identity } from './identity'
 import { Messenger } from './messenger'
 import { bufToHex } from './utils'
@@ -24,6 +23,7 @@ describe('Messenger', () => {
     identityAlice = Identity.generate()
     identityBob = Identity.generate()
 
+    // todo: mock/provide WakuMock
     dbg('Create messengers')
     ;[messengerAlice, messengerBob] = await Promise.all([
       Messenger.create(identityAlice, { bootstrap: {} }),
@@ -100,60 +100,5 @@ describe('Messenger', () => {
   afterEach(async () => {
     await messengerAlice.stop()
     await messengerBob.stop()
-  })
-})
-
-describe('Messenger [live data]', () => {
-  let messenger: Messenger
-  let identity: Identity
-
-  beforeEach(async () => {
-    dbg('Generate keys')
-    identity = Identity.generate()
-
-    dbg('Create messengers')
-
-    messenger = await Messenger.create(identity, {
-      bootstrap: { default: true },
-    })
-
-    dbg('Wait to be connected to a peer')
-    await messenger.waku.waitForRemotePeer()
-    dbg('Messengers ready')
-  })
-
-  test('Receive public chat messages', async () => {
-    const community = await Community.instantiateCommunity(
-      '0x02cf13719c8b836bebd4e430c497ee38e798a43e4d8c4760c34bbd9bf4f2434d26',
-      messenger.waku
-    )
-
-    await messenger.joinChats(community.chats.values())
-
-    const startTime = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-    const endTime = new Date()
-
-    const chat = Array.from(community.chats.values()).find(
-      chat => chat.communityChat?.identity?.displayName === 'Test Chat'
-    )
-
-    if (!chat) throw 'Could not find foobar chat'
-
-    console.log(chat)
-
-    await messenger.retrievePreviousMessages(
-      chat.id,
-      startTime,
-      endTime,
-      metadata => {
-        metadata.forEach(m => {
-          console.log('Message', m.chatMessage?.text)
-        })
-      }
-    )
-  })
-
-  afterEach(async () => {
-    await messenger.stop()
   })
 })
