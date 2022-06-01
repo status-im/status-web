@@ -39,14 +39,13 @@ export class Messenger {
     identity: Identity | undefined,
     // wakuOptions?: waku.CreateOptions
     // TODO: pass waku as client
-    // wakuOptions?: WakuCreateOptions
-    waku: Waku
+    wakuOptions?: waku.CreateOptions
   ): Promise<Messenger> {
-    // const _wakuOptions = Object.assign(
-    //   { bootstrap: { default: true } },
-    //   wakuOptions
-    // )
-    // const waku = await Waku.create(_wakuOptions)
+    const _wakuOptions = Object.assign(
+      { bootstrap: { default: true } },
+      wakuOptions
+    )
+    const waku = await Waku.create(_wakuOptions)
     return new Messenger(identity, waku)
   }
 

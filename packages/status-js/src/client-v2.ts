@@ -1,17 +1,17 @@
 import { getPredefinedBootstrapNodes, Waku } from 'js-waku'
 
-import { ApplicationMetadataMessage } from '~/protos/application-metadata-message'
-import { ChatMessage } from '~/protos/chat-message'
-import { CommunityChat, CommunityDescription } from '~/protos/communities'
-
+import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
+import { ChatMessage } from '../protos/chat-message'
+import { CommunityChat, CommunityDescription } from '../protos/communities'
 import { idToContentTopic } from './contentTopic'
 import { createSymKeyFromPassword } from './encryption'
+import { hexToBuf } from './utils'
 
 import type { WakuMessage } from 'js-waku'
 
 export interface ClientOptions {
   publicKey: string
-  environement?: 'production' | 'test'
+  env?: 'production' | 'test'
   callback: (message: ChatMessage) => void
 }
 
@@ -31,15 +31,21 @@ export class Client {
   }
 
   public async start() {
+    console.log(getPredefinedBootstrapNodes('test'))
     this.waku = await Waku.create(
-      this.options.environement === 'test'
+      this.options.env === 'test'
         ? {
             bootstrap: {
-              getPeers: getPredefinedBootstrapNodes('test'),
+              peers: [
+                '/dns4/node-01.gc-us-central1-a.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS',
+              ],
             },
           }
         : { bootstrap: { default: true } }
     )
+
+    console.log('here')
+
     await this.waku.waitForRemotePeer()
   }
 
@@ -100,7 +106,7 @@ export class Client {
     this.waku!.relay.addObserver(this.handleMessage, contentTopics)
   }
 
-  private handleMessage = (message: WakuMessage) => {
+  private async handleMessage(message: WakuMessage) {
     if (!message.payload || !message.timestamp) {
       return
     }
@@ -128,6 +134,8 @@ export class Client {
       }
     }
   }
+
+  async sendMessage(message: any) {}
 }
 
 export const createClient = async (options: ClientOptions) => {

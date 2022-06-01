@@ -1,6 +1,6 @@
-import { Waku } from 'js-waku'
-// import { Fleet } from 'js-waku/build/main/lib/discovery/predefined'
+import { getPredefinedBootstrapNodes, Waku } from 'js-waku'
 
+// import { Fleet } from 'js-waku/build/main/lib/discovery/predefined'
 // TOOD: params
 // TODO?: reconnect/keep alive
 // TODO?: error handling
@@ -19,6 +19,5 @@ export async function createClient(): Promise<Waku> {
     libp2p: { config: { pubsub: { enabled: true, emitSelf: true } } },
   })
   await waku.waitForRemotePeer()
-
   return waku
 }
