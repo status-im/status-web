@@ -3,11 +3,9 @@ import { getPredefinedBootstrapNodes, Waku } from 'js-waku'
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 import { ChatMessage } from '../protos/chat-message'
 import { CommunityChat, CommunityDescription } from '../protos/communities'
+import { Account } from './account'
 import { idToContentTopic } from './contentTopic'
 import { createSymKeyFromPassword } from './encryption'
-import { hexToBuf } from './utils'
-
-import type { WakuMessage } from 'js-waku'
 
 export interface ClientOptions {
   publicKey: string
@@ -20,6 +18,7 @@ export class Client {
   publicKey: string
   callback: (message: ChatMessage) => void
   waku?: Waku
+  account?: Account
   communityDescription?: CommunityDescription
   clocks: Record<string, Date>
 
@@ -135,7 +134,10 @@ export class Client {
     }
   }
 
-  async sendMessage(message: any) {}
+  createAccount = async (): Promise<Account> => {
+    this.account = new Account()
+    return this.account
+  }
 }
 
 export const createClient = async (options: ClientOptions) => {
