@@ -40,14 +40,15 @@
     "debug": "^4.3.3",
     "ecies-geth": "^1.5.3",
     "elliptic": "^6.5.4",
+    "ethereum-cryptography": "^1.0.3",
     "js-sha3": "^0.8.0",
     "js-waku": "^0.23.0",
     "long": "^5.2.0",
     "pbkdf2": "^3.1.2",
+    "protobufjs": "^6.11.3",
     "protons-runtime": "^1.0.4",
     "secp256k1": "^4.0.2",
-    "uuid": "^8.3.2",
-    "protobufjs": "^6.11.3"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
