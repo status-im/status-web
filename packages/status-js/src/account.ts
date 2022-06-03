@@ -1,25 +1,24 @@
 import { keccak256 } from 'ethereum-cryptography/keccak'
 import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
-import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
-
-import { privateKeyToAddress } from './utils/private-key-to-address'
+import { bytesToHex } from 'ethereum-cryptography/utils'
 
 export class Account {
   public privateKey: string
   public publicKey: string
-  public address: string
+  public chatKey: string
 
   constructor() {
     const privateKey = utils.randomPrivateKey()
     const publicKey = getPublicKey(privateKey)
+    const chatKey = getPublicKey(privateKey, true)
 
     this.privateKey = bytesToHex(privateKey)
     this.publicKey = bytesToHex(publicKey)
-    this.address = privateKeyToAddress(this.privateKey)
+    this.chatKey = bytesToHex(chatKey)
   }
 
-  sign = (payload: string) => {
-    const hash = keccak256(utf8ToBytes(payload))
+  signMessage = (payload: Uint8Array) => {
+    const hash = keccak256(payload)
     return sign(hash, this.privateKey)
   }
 }
