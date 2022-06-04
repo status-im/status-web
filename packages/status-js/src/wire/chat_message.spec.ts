@@ -8,6 +8,26 @@ import { ChatMessage, ContentType } from './chat_message'
 import type { AudioContent, ImageContent, StickerContent } from './chat_message'
 
 describe('Chat Message', () => {
+  // todo:
+  // test('Encode & decode Text message', () => {
+  //   const payload = Buffer.from([1, 1])
+
+  //   const imageContent: ImageContent = {
+  //     image: payload,
+  //     imageType: ImageType.IMAGE_TYPE_PNG,
+  //     contentType: ContentType.Image,
+  //   }
+
+  //   const message = ChatMessage.createMessage(1, 1, 'chat-id', imageContent)
+
+  //   const buf = message.encode()
+  //   const dec = ChatMessage.decode(buf)
+
+  //   expect(dec.contentType).toEqual(ChatMessage_ContentType.CONTENT_TYPE_IMAGE)
+  //   expect(dec.image?.payload?.toString()).toEqual(payload.toString())
+  //   expect(dec.image?.type).toEqual(ImageType.IMAGE_TYPE_PNG)
+  // })
+
   test('Encode & decode Image message', () => {
     const payload = Buffer.from([1, 1])
 

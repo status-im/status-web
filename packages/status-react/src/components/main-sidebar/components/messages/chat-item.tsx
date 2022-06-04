@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { ChatMenu } from '~/src/components/chat-menu'
-import { useChat } from '~/src/protocol/use-chat'
+import { useChannel } from '~/src/protocol'
 import { ContextMenuTrigger } from '~/src/system'
 
 import { SidebarItem } from '../sidebar-item'
@@ -15,7 +15,7 @@ interface Props extends SidebarItemProps {
 export const ChatItem = (props: Props) => {
   const { children, ...sidebarItemProps } = props
 
-  const chat = useChat(children)
+  const chat = useChannel(children)
 
   return (
     <ContextMenuTrigger>

@@ -1,27 +1,23 @@
 import { createClient } from '../src/client'
 
-import { Community } from '../src/community'
-// import { Messenger } from '../src/messenger'
-
 const COMMUNITY_PUBLIC_KEY =
-  '0x029dd5fecbd689dc11e2a5b399afed92cf1fab65d315b883efca753e8f3882f3bd' // compressed; A catchy name
-// '0x02c788e419b56c714460220bedadc9c5d401ea10eee48d25ac81fc9a06fb75162e' // compressed; A boring name
-// const COMMUNITY_CHANNEL_KEY = '0x029dd5fecbd689dc11e2a5b399afed92cf1fab65d315b883efca753e8f3882f3bd06935bce-a863-4827-9990-1652ae375c89' // 06935bce-a863-4827-9990-1652ae375c89; #channel
-const COMMUNITY_CHANNEL_KEY = '6102c603-3246-4b90-986d-43c1b87b165f' // #random; UUID
+  '0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133' // Boring community
+// '0x0243611cc13cc4e4390180fe8fd35234ab0fe2a7ba8d32e8ae5dd23b60ac7ec177'
+// '0x02e7102c85ed78e5be30124f8f52014b1135f972c383f55f83ec8ff50436cd1260'
+const CHANNEL_ID = '00d3f525-a0cf-4c40-832d-543ec9f8188b' // messages
 
 ;(async () => {
-  const client = await createClient()
+  const client = await createClient(COMMUNITY_PUBLIC_KEY)
 
-  // Community (e.g. name, description, permissions, members, channels, channel messages)
-  const community = await Community.instantiateCommunity(
-    COMMUNITY_PUBLIC_KEY,
-    client
+  await client.start()
+
+  // const community = await client.community.fetchCommunity()
+
+  // client.community.onCommunityUpdate(() => console.log("community:update"))
+  // client.community.onChannelUpdate(() => console.log("channel:update"))
+  client.community.onChannelMessages(CHANNEL_ID, () =>
+    console.log('channel:message')
   )
 
-  // // Messenger/Messages (e.g. direct messages)
-  // const messenger = await Messenger.create(, client)
-
-  // history
-
-  await client.stop()
+  // await client.stop()
 })()

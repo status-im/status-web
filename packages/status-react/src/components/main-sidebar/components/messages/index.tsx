@@ -5,9 +5,9 @@ import { Box, Grid, Heading, IconButton } from '~/src/system'
 
 import { ChatItem } from './chat-item'
 
-const CHATS = ['vitalik.eth', 'pvl.eth', 'Climate Change']
-
 export const Messages = () => {
+  const chats = []
+
   return (
     <Box>
       <Grid
@@ -21,7 +21,7 @@ export const Messages = () => {
           <EditIcon />
         </IconButton>
       </Grid>
-      {CHATS.map(chat => (
+      {chats.map(chat => (
         <ChatItem key={chat} to={`/${chat}`} unread={false} muted={false}>
           {chat}
         </ChatItem>

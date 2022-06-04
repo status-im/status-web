@@ -6,8 +6,11 @@ import { Grid, Heading } from '~/src/system'
 import { MemberGroup } from './member-group'
 import { MemberItem } from './member-item'
 import { UserItem } from './user-item'
+import { useMembers } from '~/src/protocol'
 
 export function MemberSidebar() {
+  const members = useMembers()
+
   return (
     <Wrapper>
       <Heading size="15" css={{ marginBottom: '$3' }}>
@@ -18,28 +21,19 @@ export function MemberSidebar() {
           <UserItem />
         </MemberGroup>
         <MemberGroup label="Online">
-          <MemberItem verified={true} untrustworthy={false} indicator="online">
-            pvl.eth
-          </MemberItem>
-          <MemberItem verified={false} untrustworthy={false} indicator="online">
-            carmen
-          </MemberItem>
-          <MemberItem verified={false} untrustworthy={false} indicator="online">
-            carmen
-          </MemberItem>
+          {members.map(member => (
+            <MemberItem
+              key={member}
+              verified={false}
+              untrustworthy={false}
+              indicator="online"
+              chatKey={member}
+            >
+              {member}
+            </MemberItem>
+          ))}
         </MemberGroup>
-        <MemberGroup label="Offline">
-          <MemberItem verified={false} untrustworthy indicator="offline">
-            mark
-          </MemberItem>
-          <MemberItem
-            verified={false}
-            untrustworthy={false}
-            indicator="offline"
-          >
-            mark
-          </MemberItem>
-        </MemberGroup>
+        {/* <MemberGroup label="Offline"></MemberGroup> */}
       </Grid>
     </Wrapper>
   )

@@ -1,31 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
 
-import { useClient } from './provider'
+import { useCommunity } from '~/src/protocol/use-community'
+import { Community } from '@status-im/js'
 
-interface State {
-  fetching: boolean
-  stale: boolean
-  data?: any
-  error?: Error
-}
+export type Member = Community['communityMetadata']['members'][0]
 
-export const useMembers = (): State => {
-  const isMounted = useRef(true)
-  const client = useClient()
+export const useMembers = (): string[] => {
 
-  const [state, setState] = useState<State>({
-    fetching: false,
-    stale: false,
-    data: undefined,
-    error: undefined,
-  })
+  const community = useCommunity()
 
-  useEffect(() => {
-    isMounted.current = true
-    return () => {
-      isMounted.current = false
-    }
-  }, [])
+return Object.keys(community.members)
 
-  return state
 }

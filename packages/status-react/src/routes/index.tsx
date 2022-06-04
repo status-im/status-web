@@ -2,6 +2,7 @@ import React from 'react'
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { ClientProvider } from '~/src/protocol'
 import { MainSidebar } from '~/src/components/main-sidebar'
 import { AppProvider } from '~/src/contexts/app-context'
 import { DialogProvider } from '~/src/contexts/dialog-context'
@@ -23,18 +24,20 @@ export const Community = (props: Props) => {
   return (
     <Router>
       <AppProvider config={props}>
-        <ThemeProvider theme={theme}>
-          <DialogProvider>
-            <GlobalStyle />
-            <Wrapper>
-              <MainSidebar />
-              <Routes>
-                <Route path="/:id" element={<Chat />} />
-                {/* <Route path="/new" element={<NewChat />} /> */}
-              </Routes>
-            </Wrapper>
-          </DialogProvider>
-        </ThemeProvider>
+        <ClientProvider options={{ publicKey: props.publicKey }}>
+          <ThemeProvider theme={theme}>
+            <DialogProvider>
+              <GlobalStyle />
+              <Wrapper>
+                <MainSidebar />
+                <Routes>
+                  <Route path="/:id" element={<Chat />} />
+                  {/* <Route path="/new" element={<NewChat />} /> */}
+                </Routes>
+              </Wrapper>
+            </DialogProvider>
+          </ThemeProvider>
+        </ClientProvider>
       </AppProvider>
     </Router>
   )

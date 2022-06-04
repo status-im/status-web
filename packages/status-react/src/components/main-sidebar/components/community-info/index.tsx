@@ -1,22 +1,24 @@
 import React from 'react'
 
-import { useCommunity } from '~/src/protocol/use-community'
+import { useCommunity, useMembers } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Avatar, DialogTrigger, Text } from '~/src/system'
 
 import { CommunityDialog } from './community-dialog'
 
 export const CommunityInfo = () => {
-  const { name, imageUrl, membersCount } = useCommunity()
+  const community = useCommunity()
+  const members = useMembers()
+  console.log("file: index.tsx > line 11 > CommunityInfo > community", community)
 
   return (
     <DialogTrigger>
       <Button>
-        <Avatar size={36} src={imageUrl} />
+        <Avatar size={36}  />
         <div>
-          <Text>{name}</Text>
+          <Text>{community.identity?.displayName}</Text>
           <Text color="gray" size={12}>
-            {membersCount} members
+            {members.length} members
           </Text>
         </div>
       </Button>

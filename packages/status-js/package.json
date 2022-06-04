@@ -24,15 +24,19 @@
   },
   "scripts": {
     "prebuild": "rm -rf dist",
-    "dev": "parcel",
+    "dev": "parcel --host 192.168.86.38 --port 8080",
     "build": "parcel build",
+    "debug": "parcel build src/debug.ts --dist-dir output",
     "build:vite": "vite build",
     "build:types": "tsc --emitDeclarationOnly",
     "build:protos": "protons protos/*.proto",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "format": "prettier --write src",
-    "clean": "rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf node_modules && rm -rf dist",
+    "proto": "run-s 'proto:*'",
+    "proto:lint": "buf lint",
+    "proto:build": "buf generate"
   },
   "dependencies": {
     "bn.js": "^5.2.0",
@@ -43,6 +47,7 @@
     "ethereum-cryptography": "^1.0.3",
     "js-sha3": "^0.8.0",
     "js-waku": "^0.23.0",
+    "lodash": "^4.17.21",
     "long": "^5.2.0",
     "pbkdf2": "^3.1.2",
     "protobufjs": "^6.11.3",
@@ -53,11 +58,13 @@
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
     "@types/elliptic": "^6.4.14",
+    "@types/lodash": "^4.14.182",
     "@types/pbkdf2": "^3.1.0",
     "@types/secp256k1": "^4.0.3",
     "@types/uuid": "^8.3.3",
     "npm-run-all": "^4.1.5",
     "protons": "^3.0.4",
-    "ts-node": "^10.2.1"
+    "ts-node": "^10.2.1",
+    "ts-proto": "^1.115.1"
   }
 }

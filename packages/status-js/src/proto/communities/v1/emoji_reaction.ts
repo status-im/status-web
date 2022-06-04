@@ -1,11 +1,7 @@
 /* eslint-disable */
 import Long from 'long'
 import _m0 from 'protobufjs/minimal'
-import {
-  MessageType,
-  messageTypeFromJSON,
-  messageTypeToJSON,
-} from './enums'
+import { MessageType, messageTypeFromJSON, messageTypeToJSON } from './enums'
 
 export const protobufPackage = 'communities.v1'
 

@@ -1,29 +1,35 @@
 import React from 'react'
 
-import { useProfile } from '~/src/protocol/use-profile'
+import { useAccount } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Avatar, DialogTrigger, EthAddress, Flex, Text } from '~/src/system'
 
 import { DisconnectDialog } from './disconnect-dialog'
 
 export const UserItem = () => {
-  const profile = useProfile()
+  const [account] = useAccount()
+  console.log("file: user-item.tsx > line 11 > UserItem > account", account)
+
+  if (!account) {
+    return null
+  }
 
   return (
     <Flex align="center" justify="between">
       <Flex gap="2" align="center" css={{ height: 56 }}>
-        <Avatar size={32} src={profile.imageUrl} />
+        <Avatar size={32} src={account.imageUrl} />
         <div>
           <Flex align="center" gap={1}>
             <Text size="15" color="accent">
-              {profile.name}
+              {account.name}
             </Text>
           </Flex>
           <EthAddress size={10} color="gray">
-            {profile.publicKey}
+            {account.publicKey}
           </EthAddress>
         </div>
       </Flex>
+
 
       <DialogTrigger>
         <DisconnectButton>
@@ -44,7 +50,10 @@ export const UserItem = () => {
             />
           </svg>
         </DisconnectButton>
-        <DisconnectDialog />
+        {account && (
+
+          <DisconnectDialog />
+        )}
       </DialogTrigger>
     </Flex>
   )

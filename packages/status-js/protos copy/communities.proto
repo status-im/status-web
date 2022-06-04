@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+import "chat-identity.proto";
+
+message Grant {
+  bytes community_id = 1;
+  bytes member_id = 2;
+  string chat_id = 3;
+  uint64 clock = 4;
+}
+
+message CommunityMember {
+  enum Roles {
+    UNKNOWN_ROLE = 0;
+    ROLE_ALL = 1;
+    ROLE_MANAGE_USERS = 2;
+  }
+  repeated Roles roles = 1;
+}
+
+message CommunityPermissions {
+  enum Access {
+    UNKNOWN_ACCESS = 0;
+    NO_MEMBERSHIP = 1;
+    INVITATION_ONLY = 2;
+    ON_REQUEST = 3;
+  }
+
+  bool ens_only = 1;
+  // https://gitlab.matrix.org/matrix-org/olm/blob/master/docs/megolm.md is a candidate for the algorithm to be used in case we want to have private communityal chats, lighter than pairwise encryption using the DR, less secure, but more efficient for large number of participants
+  bool private = 2;
+  Access access = 3;
+}
+
+message CommunityDescription {
+  uint64 clock = 1;
+  map<string,CommunityMember> members = 2;
+  CommunityPermissions permissions = 3;
+  ChatIdentity identity = 5;
+  map<string,CommunityChat> chats = 6;
+  repeated string ban_list = 7;
+  map<string,CommunityCategory> categories = 8;
+  uint64 archive_magnetlink_clock = 9;
+  CommunityAdminSettings admin_settings = 10;
+}
+
+message CommunityAdminSettings {
+  bool pin_message_all_members_enabled = 1;
+}
+
+message CommunityChat {
+  map<string,CommunityMember> members = 1;
+  CommunityPermissions permissions = 2;
+  ChatIdentity identity = 3;
+  string category_id = 4;
+  int32 position = 5;
+}
+
+message CommunityCategory {
+  string category_id = 1;
+  string name = 2;
+  int32 position = 3;
+}
+
+message CommunityInvitation {
+  bytes community_description = 1;
+  bytes grant = 2;
+  string chat_id = 3;
+  bytes public_key = 4;
+}
+
+message CommunityRequestToJoin {
+  uint64 clock = 1;
+  string ens_name = 2;
+  string chat_id = 3;
+  bytes community_id = 4;
+}
+
+message CommunityRequestToJoinResponse {
+  uint64 clock = 1;
+  CommunityDescription community = 2;
+  bool accepted = 3;
+  bytes grant = 4;
+}
+
+message CommunityMessageArchiveMagnetlink {
+  uint64 clock = 1;
+  string magnet_uri = 2;
+}
+
+message WakuMessage {
+  bytes sig = 1;
+  uint64 timestamp = 2;
+  bytes topic = 3;
+  bytes payload = 4;
+  bytes padding = 5;
+  bytes hash = 6;
+}
+
+message WakuMessageArchiveMetadata {
+  uint32 version = 1;
+  uint64 from = 2;
+  uint64 to = 3;
+  repeated bytes contentTopic = 4;
+}
+
+message WakuMessageArchive {
+  uint32 version = 1;
+  WakuMessageArchiveMetadata metadata = 2;
+  repeated WakuMessage messages = 3;
+}
+
+message WakuMessageArchiveIndexMetadata {
+  uint32 version = 1;
+  WakuMessageArchiveMetadata metadata = 2;
+  uint64 offset = 3;
+  uint64 size = 4;
+  uint64 padding = 5;
+}
+
+message WakuMessageArchiveIndex {
+  map<string, WakuMessageArchiveIndexMetadata> archives = 1;
+}
