@@ -117,7 +117,7 @@ export interface CommunityDescription {
   members: CommunityMember
   permissions: CommunityPermissions
   identity: ChatIdentity
-  chats: Record<string,CommunityChat>
+  chats: CommunityChat
   banList: string[]
   categories: CommunityCategory
   archiveMagnetlinkClock: bigint

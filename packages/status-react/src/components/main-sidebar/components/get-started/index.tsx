@@ -2,13 +2,14 @@ import React from 'react'
 
 import { CreateProfileDialog } from '~/src/components/create-profile-dialog'
 import { useLocalStorage } from '~/src/hooks/use-local-storage'
+import { useAccount } from '~/src/protocol'
 import { Button, Flex } from '~/src/system'
 import { DialogTrigger } from '~/src/system/dialog'
 import { Grid } from '~/src/system/grid'
 import { Heading } from '~/src/system/heading'
 
-import { ConnectWalletDialog } from './connect-wallet-dialog'
-import { SyncStatusProfileDialog } from './sync-status-profile-dialog'
+// import { ConnectWalletDialog } from './connect-wallet-dialog'
+// import { SyncStatusProfileDialog } from './sync-status-profile-dialog'
 import { ThrowawayProfileFoundDialog } from './throwaway-profile-found-dialog'
 
 export const GetStarted = () => {
@@ -17,6 +18,8 @@ export const GetStarted = () => {
   const handleSkip = () => {
     // TODO: Add skip logic
   }
+
+  const [account, { createAccount }] = useAccount()
 
   return (
     <Flex direction="column" align="center" gap={5}>
@@ -138,29 +141,30 @@ export const GetStarted = () => {
         </defs>
       </svg>
 
-      <Heading align="center" size="17" weight="600">
-        Want to jump into the discussion?
-      </Heading>
-      <Grid gap={3} align="center" justify="center">
-        {/* <DialogTrigger>
+          <Heading align="center" size="17" weight="600">
+            Want to jump into the discussion?
+          </Heading>
+          <Grid gap={3} align="center" justify="center">
+            {/* <DialogTrigger>
           <Button>Sync with Status profile</Button>
           <SyncStatusProfileDialog />
         </DialogTrigger> */}
 
-        <DialogTrigger>
+            {/* <DialogTrigger>
           <Button>Connect Wallet</Button>
           <ConnectWalletDialog />
-        </DialogTrigger>
+        </DialogTrigger> */}
 
-        <DialogTrigger>
-          <Button variant="outline">Use Throwaway Profile</Button>
-          {throwawayProfile ? (
+            <Button onClick={createAccount}>Use Throwaway Profile</Button>
+            {/* <DialogTrigger>
+          <Button>Use Throwaway Profile</Button>
+          {account ? (
             <ThrowawayProfileFoundDialog onSkip={handleSkip} />
           ) : (
             <CreateProfileDialog />
           )}
-        </DialogTrigger>
-      </Grid>
+        </DialogTrigger> */}
+          </Grid>
     </Flex>
   )
 }

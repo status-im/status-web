@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+import "enums.proto";
+
+message StickerMessage {
+  string hash = 1;
+  int32 pack = 2;
+}
+
+message ImageMessage {
+  bytes payload = 1;
+  ImageType type = 2;
+}
+
+message AudioMessage {
+  bytes payload = 1;
+  AudioType type = 2;
+  uint64 duration_ms = 3;
+  enum AudioType {
+    UNKNOWN_AUDIO_TYPE = 0;
+    AAC = 1;
+    AMR = 2;
+  }
+}
+
+message EditMessage {
+  uint64 clock = 1;
+  // Text of the message
+  string text = 2;
+
+  string chat_id = 3;
+  string message_id = 4;
+
+  // Grant for community edit messages
+  bytes grant = 5;
+
+  // The type of message (public/one-to-one/private-group-chat)
+  MessageType message_type = 6;
+}
+
+message DeleteMessage {
+  uint64 clock = 1;
+
+  string chat_id = 2;
+  string message_id = 3;
+
+  // Grant for community delete messages
+  bytes grant = 4;
+
+  // The type of message (public/one-to-one/private-group-chat)
+  MessageType message_type = 5;
+}
+
+
+message ChatMessage {
+  // Lamport timestamp of the chat message
+  uint64 clock = 1;
+  // Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
+  // so that we don't rely on it
+  uint64 timestamp = 2;
+  // Text of the message
+  string text = 3;
+  // Id of the message that we are replying to
+  string response_to = 4;
+  // Ens name of the sender
+  string ens_name = 5;
+  // Chat id, this field is symmetric for public-chats and private group chats,
+  // but asymmetric in case of one-to-ones, as the sender will use the chat-id
+  // of the received, while the receiver will use the chat-id of the sender.
+  // Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
+  string chat_id = 6;
+
+  // The type of message (public/one-to-one/private-group-chat)
+  MessageType message_type = 7;
+  // The type of the content of the message
+  ContentType content_type = 8;
+
+  oneof payload {
+    StickerMessage sticker = 9;
+    ImageMessage image = 10;
+    AudioMessage audio = 11;
+    bytes community = 12;
+  }
+
+  // Grant for community chat messages
+  bytes grant = 13;
+
+  // Message author's display name, introduced in version 1
+  string display_name = 14;
+
+  enum ContentType {
+    UNKNOWN_CONTENT_TYPE = 0;
+    TEXT_PLAIN = 1;
+    STICKER = 2;
+    STATUS = 3;
+    EMOJI = 4;
+    TRANSACTION_COMMAND = 5;
+    // Only local
+    SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP = 6;
+    IMAGE = 7;
+    AUDIO = 8;
+    COMMUNITY = 9;
+    // Only local
+    SYSTEM_MESSAGE_GAP = 10;
+  }
+}

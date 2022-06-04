@@ -7,7 +7,9 @@ import { Separator } from '~/src/system'
 import { Channels } from './components/channels'
 import { CommunityInfo } from './components/community-info'
 import { GetStarted } from './components/get-started'
+import { useAccount } from '~/src/protocol'
 // import { Messages } from './components/messages'
+
 
 export const MainSidebar = () => {
   const { options } = useAppState()
@@ -16,14 +18,20 @@ export const MainSidebar = () => {
     return null
   }
 
+  const [account] = useAccount()
+
   return (
     <Wrapper>
       <CommunityInfo />
       <Channels />
       {/* <Separator css={{ margin: '16px 0' }} />
       <Messages /> */}
+      { !account && (
+        <>
       <Separator css={{ margin: '16px 0' }} />
       <GetStarted />
+        </>
+      )}
     </Wrapper>
   )
 }

@@ -4,10 +4,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch status-js",
-      "program": "${workspaceFolder}/packages/status-js/src/index.ts",
+      "name": "Launch Client",
+      "program": "${workspaceFolder}/packages/status-js/src/debug.ts",
       "preLaunchTask": "npm: build:status-js",
-      "outFiles": ["${workspaceFolder}/packages/status-js/dist/index.js"],
+      "outFiles": [
+        "${workspaceFolder}/packages/status-js/dist/index.js"
+      ],
       "sourceMaps": true,
       "smartStep": true,
       "internalConsoleOptions": "openOnSessionStart",

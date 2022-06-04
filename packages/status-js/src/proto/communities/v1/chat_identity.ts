@@ -1,11 +1,7 @@
 /* eslint-disable */
 import Long from 'long'
 import _m0 from 'protobufjs/minimal'
-import {
-  ImageType,
-  imageTypeFromJSON,
-  imageTypeToJSON,
-} from './enums'
+import { ImageType, imageTypeFromJSON, imageTypeToJSON } from './enums'
 
 export const protobufPackage = 'communities.v1'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useProfile } from '~/src/protocol/use-profile'
+import { useAccount } from '~/src/protocol'
 import { Avatar, Dialog, EmojiHash, Flex, Heading, Text } from '~/src/system'
 
 interface Props {
@@ -10,18 +10,22 @@ interface Props {
 export const ThrowawayProfileFoundDialog = (props: Props) => {
   const { onSkip } = props
 
-  const profile = useProfile()
+  const [account] = useAccount()
 
   const handleLoadThrowawayProfile = () => {
     // TODO: load throwaway profile
   }
 
+if (!account) {
+  return null
+}
+
   return (
     <Dialog title="Throwaway Profile Found">
       <Dialog.Body gap="5">
         <Flex direction="column" align="center" gap="2">
-          <Avatar size={64} src={profile.imageUrl} />
-          <Heading weight="600">{profile.name}</Heading>
+          <Avatar size={64} src={account.imageUrl} />
+          <Heading weight="600">{account.name}</Heading>
           <Text color="gray">
             Chatkey: 0x63FaC9201494f0bd17B9892B9fae4d52fe3BD377
           </Text>

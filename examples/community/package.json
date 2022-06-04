@@ -4,7 +4,7 @@
   "source": "./index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead, not ios_saf < 13",
   "scripts": {
-    "dev": "parcel --https",
+    "dev": "parcel --https --host 192.168.86.38 --port 8080",
     "prebuild": "rm -rf dist",
     "build": "parcel build"
   },

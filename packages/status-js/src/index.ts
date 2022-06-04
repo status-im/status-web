@@ -1,61 +1,44 @@
-// export { Chat } from './chat'
-// // export type { Client, ClientOptions } from './client'
-// export { createClient } from './client'
-// export { Community } from './community'
-// export { Contacts } from './contacts'
-// export type { GroupChat, GroupChatsType } from './groupChats'
-// export { GroupChats } from './groupChats'
-// export { Identity } from './identity'
-// export { Messenger } from './messenger'
-// export {
-//   bufToHex,
-//   compressPublicKey,
-//   genPrivateKeyWithEntropy,
-//   getLatestUserNickname,
-//   hexToBuf,
-// } from './utils'
-// export { ApplicationMetadataMessage } from './wire/application_metadata_message'
-// export type {
-//   AudioContent,
-//   Content,
-//   ContentType,
-//   ImageContent,
-//   StickerContent,
-//   TextContent,
-// } from './wire/chat_message'
-// export { ChatMessage } from './wire/chat_message'
-// export { getPredefinedBootstrapNodes } from 'js-waku'
+// import { createClient } from '../src/client'
 
-import { createClient } from './client-v2'
-
-const COMMUNITY_PUBLIC_KEY =
-  '0x029dd5fecbd689dc11e2a5b399afed92cf1fab65d315b883efca753e8f3882f3bd' // compressed
 // const COMMUNITY_PUBLIC_KEY =
-//   '0x0403aeff2fdd0044b136e06afa6d69bb563bb7b3fd518bb30c0d5115a2e020840a2247966c2cc9953ed02cc391e8883b3319f63a31e5f5369d0fb72b62b23dfcbd' // compressed
+//   '0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133' // Boring community
+// // '0x0243611cc13cc4e4390180fe8fd35234ab0fe2a7ba8d32e8ae5dd23b60ac7ec177'
+// // '0x02e7102c85ed78e5be30124f8f52014b1135f972c383f55f83ec8ff50436cd1260'
+// const CHANNEL_ID =
+//   // '00d3f525-a0cf-4c40-832d-543ec9f8188b' // #messages
+//   '30804ea7-bd66-4d5d-91eb-b2dcfe2515b3' // #test-messages
 
-// import { Community } from '../src/community'
-// import { Messenger } from '../src/messenger'
+// ;(async () => {
+//   const client = await createClient({ publicKey: COMMUNITY_PUBLIC_KEY })
 
-console.log('🚀 > COMMUNITY_PUBLIC_KEY', COMMUNITY_PUBLIC_KEY)
-;(async () => {
-  const client = await createClient({
-    env: 'test',
-    publicKey: COMMUNITY_PUBLIC_KEY,
-    callback: msgs => {},
-  })
+//   await client.start()
+//   await client.createAccount()
 
-  const communityDescription = await client.getCommunityDescription()
+//   const community = client.community.communityMetadata
 
-  console.log('meow', communityDescription)
+//   client.community.fetchChannelMessages(
+//     CHANNEL_ID,
+//     (messages, isDone) => {
+//       console.log(messages)
 
-  // console.log(communityDescription)
-  // Retrieve Community's metadata (e.g. description)
-  // const community = await Community.instantiateCommunity(COMMUNITY_PUBLIC_KEY, client)
-  // // Retrieve and subscribe to messages
-  // const messenger = await Messenger.create(, client)
-  // // TODO: Register observers/callbacks
-  // messenger.addObserver(() => {})
-  // await client.stop()
-})()
+//       return false
+//     },
+//     { start: new Date('2022-01-01'), end: new Date(), chunk: 3 }
+//   )
+//   // client.community.onCommunityUpdate(community => console.log(community))
+//   // client.community.onChannelUpdate(CHANNEL_ID, channel => console.log(channel))
+//   // client.community.onChannelMessageUpdate(CHANNEL_ID, messages =>
+//   //   console.log(messages)
+//   // )
 
-// export {}
+//   // await client.stop()
+// })()
+
+// export type {} from './'
+export type { Client, ClientOptions, Community, MessageType } from './client'
+export type { Account } from './account'
+export { createClient } from './client'
+
+// import { Community } from './client'
+
+// type h = Community['communityMetadata']['members'][0]

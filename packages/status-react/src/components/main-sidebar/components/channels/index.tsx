@@ -1,19 +1,30 @@
 import React from 'react'
 
 import { Box } from '~/src/system'
+import { useChats } from '~/src/protocol'
 
 import { ChannelGroup } from './channel-group'
 import { ChannelItem } from './channel-item'
 
-const CHANNELS = {
-  Public: ['welcome', 'general', 'random'],
-  Internal: ['watercooler', 'pm'],
-}
 
 export const Channels = () => {
+
+  const chats = useChats()
+
   return (
-    <Box>
-      {Object.entries(CHANNELS).map(([group, channels]) => (
+    <Box css={{padding:'8px 0'}}>
+      {chats.map((chat) => (
+        <ChannelItem
+          key={chat.id}
+          to={`/${chat.id}`}
+          unread={false}
+          muted={false}
+        >
+          {chat.identity!.displayName}
+        </ChannelItem>
+      ))}
+
+      {/* {Object.entries(community.chats).map(([group, channels]) => (
         <ChannelGroup key={group} name={group}>
           {channels.map(channel => (
             <ChannelItem
@@ -26,7 +37,7 @@ export const Channels = () => {
             </ChannelItem>
           ))}
         </ChannelGroup>
-      ))}
+      ))} */}
     </Box>
   )
 }

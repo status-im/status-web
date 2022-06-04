@@ -6,24 +6,24 @@ import type { AvatarProps } from '~/src/system/avatar'
 
 interface Props {
   children: string
+  chatKey: string
   verified: boolean
   untrustworthy: boolean
   indicator?: AvatarProps['indicator']
 }
 
 export const MemberItem = (props: Props) => {
-  const { children, indicator, verified, untrustworthy } = props
+  const { children, chatKey, indicator, verified, untrustworthy } = props
 
   return (
     <Flex gap="2" align="center" css={{ height: 56 }}>
       <Avatar
         size={32}
         indicator={indicator}
-        src="https://images.unsplash.com/photo-1499155286265-79a9dc9c6380?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1284&q=80"
       />
       <div>
         <Flex align="center" gap={1}>
-          <Text size="15" color="accent">
+          <Text size="15" color="accent" truncate>
             {children}
           </Text>
           {verified && (
@@ -62,7 +62,7 @@ export const MemberItem = (props: Props) => {
           )}
         </Flex>
         <EthAddress size={10} color="gray">
-          71C7656EC7ab88b098defB751B7401B5f6d8976F
+          {chatKey}
         </EthAddress>
       </div>
     </Flex>

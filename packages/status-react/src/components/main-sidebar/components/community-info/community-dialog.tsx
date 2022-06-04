@@ -1,13 +1,15 @@
 import React from 'react'
 
-import { useCommunity } from '~/src/protocol/use-community'
+import { useCommunity } from '~/src/protocol'
 import { Button, CopyInput, Dialog, Flex, Grid, Text } from '~/src/system'
 
 export const CommunityDialog = () => {
-  const { name, description, publicKey } = useCommunity()
+  const {  identity, publicKey='0xTODO' } = useCommunity()
+  const { displayName, description} = identity
+
 
   return (
-    <Dialog title={name}>
+    <Dialog title={displayName}>
       <Dialog.Body>
         <Text>{description}</Text>
       </Dialog.Body>
@@ -17,7 +19,7 @@ export const CommunityDialog = () => {
           <CopyInput label="Community Public Key" value={publicKey} />
           <Text size="13" color="gray">
             To access this community, paste community public key in Status
-            desktop or mobile app
+            desktop or mobile app.
           </Text>
         </Grid>
       </Dialog.Body>

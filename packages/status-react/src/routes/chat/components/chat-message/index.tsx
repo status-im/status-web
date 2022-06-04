@@ -25,10 +25,10 @@ import { Actions } from './actions'
 import { MessageReply } from './message-reply'
 import { MessageReactions } from './reactions'
 
-import type { Message } from '~/src/protocol/use-messages'
+import type { MessageType } from '~/src/protocol/use-messages'
 
 interface Props {
-  message: Message
+  message: MessageType
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -54,8 +54,14 @@ interface Props {
 
 export const ChatMessage = (props: Props) => {
   const { message } = props
+  console.log("🚀 > message", message)
 
-  const { type, contact, owner, mention, pinned, reply, reactions } = message
+  // const { type, contact, owner, mention, pinned, reply, reactions } = message
+  const owner=false
+  const mention=false
+  const pinned = false
+  const reply = false
+  const { contentType, text, displayName, reactions } = message
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
@@ -72,7 +78,7 @@ export const ChatMessage = (props: Props) => {
   }
 
   const handlePinClick = () => {
-    console.log(pinned)
+    // console.log(pinned)
   }
 
   const handleReaction = (reaction: string) => {
@@ -98,8 +104,8 @@ export const ChatMessage = (props: Props) => {
       )
     }
 
-    switch (type) {
-      case 'text': {
+    switch (contentType) {
+      case 'TEXT_PLAIN': {
         //   <AlertDialogTrigger>
         //   <MessageLink href="https://specs.status.im/spec">
         //     https://specs.status.im/spec
@@ -155,19 +161,20 @@ export const ChatMessage = (props: Props) => {
             <Box>
               <DropdownMenuTrigger>
                 <button type="button">
-                  <Avatar size={44} src={contact.imageUrl} />
+                  {/* <Avatar size={44} src={contact.imageUrl} /> */}
                 </button>
                 <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
-                    <Avatar size="36" src={contact.imageUrl} />
-                    <Text>{contact.name}</Text>
+                    {/* <Avatar size="36" src={contact.imageUrl} /> */}
+                    {/* <Text>{contact.name}</Text> */}
+                    <Text>{displayName}</Text>
                     <EmojiHash />
                   </Flex>
                   <DropdownMenu.Separator />
                   <DropdownMenu.Item
                     icon={<BellIcon />}
                     onSelect={() =>
-                      userProfileDialog.open({ name: contact.name })
+                      userProfileDialog.open({ name: displayName })
                     }
                   >
                     View Profile
@@ -199,7 +206,8 @@ export const ChatMessage = (props: Props) => {
 
               <Flex gap="1" align="center">
                 <Text color="primary" weight="500" size="15">
-                  {contact.name}
+                  {displayName}
+                  {/* {contact.name} */}
                 </Text>
                 <Text size="10" color="gray">
                   10:00 AM

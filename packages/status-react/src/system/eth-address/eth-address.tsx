@@ -13,7 +13,7 @@ const EthAddress = (props: Props) => {
 
   return (
     <Text {...textProps}>
-      0x{children.substring(0, 3)}...{children.substring(children.length - 3)}
+      {children.substring(0, 5)}...{children.substring(children.length - 3)}
     </Text>
   )
 }

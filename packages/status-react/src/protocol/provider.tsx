@@ -1,14 +1,20 @@
-import React, { createContext, useContext, useMemo } from 'react'
+import React, {
+  useEffect,
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+} from 'react'
 
 import type { Config } from '~/src/types/config'
-// import { createClient } from '@status-im/js'
-// import type { Client } from '@status-im/js'
+import {Loading} from '~/src/components/loading'
+import { createClient } from '@status-im/js'
+import type { Client, ClientOptions, Community , Account} from '@status-im/js'
 
-interface ClientContext {
-  client: Config
-}
-
-const Context = createContext<ClientContext | undefined>(undefined)
+const Context = createContext<Client | undefined>(undefined)
+const CommunityContext = createContext<
+  Community['communityMetadata'] | undefined
+>(undefined)
 
 export function useClient() {
   const context = useContext(Context)
@@ -20,18 +26,74 @@ export function useClient() {
   return context
 }
 
+export function useCommunity() {
+  const context = useContext(CommunityContext)
+
+  if (!context) {
+    // return {}
+    throw new Error(`useCommunity must be used within a ClientProvider`)
+  }
+
+  return context
+}
+
 interface ClientProviderProps {
-  config: Config
+  options: ClientOptions
   children: React.ReactNode
 }
 
 export const ClientProvider = (props: ClientProviderProps) => {
-  const { config, children } = props
+  const [client, setClient] = useState<Client>()
+  const [community, setCommunity] = useState<Community['communityMetadata']>()
+  const [account, setAccount] = useState<Account>()
+  const [loading, setLoading] = useState(true)
 
-  const client = useMemo(() => {
-    // return createClient({ ...config })
-    return { client: config }
-  }, [config])
+  const { options, children } = props
 
-  return <Context.Provider value={client}>{children}</Context.Provider>
+  // const client = useMemo(() => {
+  //   return createClient(options)
+  // }, [options])
+
+  useEffect(() => {
+    const loadClient = async () => {
+      // setLoading(true)
+      const client = await createClient({ publicKey: props.options.publicKey })
+console.log('starting')
+      await client.start()
+      console.log('init', client)
+      setCommunity(client.community.communityMetadata)
+      console.log("file: provider.tsx > line 64 > loadClient > client.community.communityMetadata", client.community.communityMetadata)
+
+      setClient(client)
+      setLoading(false)
+    }
+
+    loadClient()
+  }, [])
+
+  useEffect(() => {
+    if (client) {
+      console.log('useEffect subscribe')
+      return client.community.onCommunityUpdate(community => {
+        setCommunity(community)
+        console.log("file: provider.tsx > line 75 > useEffect > community", community)
+      })
+    }
+  }, [client])
+
+  // if (!client) {
+  //   return
+  // }
+
+  return (
+    <Context.Provider value={client}>
+      <CommunityContext.Provider value={community}>
+        {loading ? (
+          <Loading />
+        ) : (
+          children
+        )}
+      </CommunityContext.Provider>
+    </Context.Provider>
+  )
 }
