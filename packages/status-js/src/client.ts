@@ -9,7 +9,6 @@
 // proactively change
 import { bytesToHex } from 'ethereum-cryptography/utils'
 import { Waku, waku_message } from 'js-waku'
-import chunk from 'lodash/chunk'
 import difference from 'lodash/difference'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
@@ -21,6 +20,7 @@ import { EmojiReaction } from '../protos/emoji-reaction'
 import { PinMessage } from '../protos/pin-message'
 import { ProtocolMessage } from '../protos/protocol-message'
 import { Account } from './account'
+import { fetchChannelMessages } from './client/community/fetch-channel-messages'
 // import { ChatIdentity } from './wire/chat_identity'
 import { idToContentTopic } from './contentTopic'
 import { createSymKeyFromPassword } from './encryption'
@@ -76,11 +76,12 @@ class Client {
       bootstrap: {
         default: false,
         peers: [
-          // '/dns4/node-01.gc-us-central1-a.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS',
-          '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/8000/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
+          '/dns4/node-01.gc-us-central1-a.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS',
+          // '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/8000/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
           // '/dns4/node-01.do-ams3.status.test.statusim.net/tcp/30303/p2p/16Uiu2HAkukebeXjTQ9QDBeNDWuGfbaSg79wkkhK4vPocLgR6QFDf'
         ],
       },
+      libp2p: { config: { pubsub: { enabled: true, emitSelf: true } } },
     })
     await waku.waitForRemotePeer()
     this.waku = waku
@@ -108,23 +109,29 @@ class Client {
 class Community {
   private client: Client
   private waku: Waku
-  private communityPublicKey: string
+  public communityPublicKey: string
   private communityContentTopic!: string
   private communityDecryptionKey!: Uint8Array
   public communityMetadata!: CommunityType
-  private communityCallback: ((community: CommunityType) => void) | undefined
-  private channelMessages: Partial<{ [key: string]: MessageType[] }> = {}
+  public channelMessages: Partial<{ [key: string]: MessageType[] }> = {}
   private channelCallbacks: {
     [key: string]: (channel: ChannelType) => void
   } = {}
   private channelMessagesCallbacks: {
     [key: string]: (messages: MessageType[]) => void
   } = {}
+  private communityCallback: ((community: CommunityType) => void) | undefined
+  public fetchChannelMessages
 
   constructor(client: Client, waku: Waku, publicKey: string) {
     this.client = client
     this.waku = waku
     this.communityPublicKey = publicKey
+
+    this.fetchChannelMessages = fetchChannelMessages(
+      this,
+      this.waku.store.queryHistory.bind(this.waku.store)
+    )
   }
 
   public async start() {
@@ -525,130 +532,6 @@ class Community {
 
   public getMessages(channelId: string): MessageType[] {
     return this.channelMessages[channelId] ?? []
-  }
-
-  public async fetchChannelMessages(
-    channelId: string,
-    callback: (messages: MessageType[], isDone: boolean) => boolean,
-    options: { start: Date; end: Date; chunk: number /*total: number*/ }
-  ) {
-    const id = `${this.communityPublicKey}${channelId}`
-    const channelContentTopic = await idToContentTopic(id)
-    const symKey = await createSymKeyFromPassword(id)
-
-    const messages: MessageType[] = []
-    let shouldStop = false
-
-    await this.waku.store.queryHistory([channelContentTopic], {
-      // timeFilter: {
-      //   startTime: options.start,
-      //   endTime: options.end,
-      // },
-      // todo!: increase after testing
-      pageSize: 100,
-      decryptionKeys: [symKey],
-      callback: wakuMessages => {
-        for (const wakuMessage of wakuMessages.reverse()) {
-          if (!wakuMessage.payload) {
-            continue
-          }
-
-          if (!wakuMessage.signaturePublicKey) {
-            continue
-          }
-
-          const decodedProtocol = ProtocolMessage.decode(wakuMessage.payload)
-          if (!decodedProtocol) {
-            continue
-          }
-
-          const decodedMetadata = ApplicationMetadataMessage.decode(
-            decodedProtocol.publicMessage
-          )
-          if (!decodedMetadata.payload) {
-            continue
-          }
-
-          const messageId = payloadToId(
-            decodedProtocol.publicMessage,
-            wakuMessage.signaturePublicKey
-          )
-
-          const decodedPayload = ChatMessage.decode(decodedMetadata.payload)
-
-          messages.push({
-            ...decodedPayload,
-            messageId: messageId,
-            pinned: false,
-            reactions: {
-              'thumbs-up': {
-                count: 0,
-                me: false,
-              },
-              'thumbs-down': {
-                count: 0,
-                me: false,
-              },
-              heart: {
-                count: 0,
-                me: false,
-              },
-              smile: {
-                count: 0,
-                me: false,
-              },
-              sad: {
-                count: 0,
-                me: false,
-              },
-              angry: {
-                count: 0,
-                me: false,
-              },
-            },
-          })
-        }
-
-        for (const _chunk of chunk(messages, options.chunk)) {
-          if (_chunk.length === options.chunk) {
-            const sortedMessages = sortBy(messages.splice(0, options.chunk), [
-              'timestamp',
-            ])
-            const _messages = [
-              ...sortedMessages,
-              ...(this.channelMessages[channelId] ?? []),
-            ]
-
-            this.channelMessages[channelId] = _messages
-
-            shouldStop = callback(_messages, false)
-
-            if (shouldStop) {
-              return true
-            }
-          }
-        }
-      },
-    })
-
-    if (messages.length && !shouldStop) {
-      const _messages = [
-        ...messages.splice(0),
-        ...(this.channelMessages[channelId] ?? []),
-      ]
-      const sortedMessages = sortBy(_messages, ['timestamp'])
-
-      this.channelMessages[channelId] = sortedMessages
-
-      callback(sortedMessages, true)
-
-      return
-    }
-
-    // do?: always return at least last state
-    // callback(this.channelMessages[channelId] ?? [], true)
-
-    return
   }
 
   public onCommunityUpdate(callback: (community: CommunityType) => void) {
