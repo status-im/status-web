@@ -149,13 +149,9 @@ class Community {
 
     // Channel messages
     await this.observeChannelMessages(Object.keys(this.communityMetadata.chats))
-
-    console.log('CLINET: STARTED')
-    console.log('COMMUNITY:', this)
   }
 
   private async observeCommunity() {
-    // console.log('here')
     this.waku.relay.addDecryptionKey(this.communityDecryptionKey)
     this.waku.relay.addObserver(
       message => {
@@ -223,7 +219,6 @@ class Community {
     // todo?: check if waku propagates errors
     // todo!: request Waku feature to accept decryption keys as a param
     this.waku.relay.addObserver(this.handleMessage, contentTopics)
-    console.log('Added observer', contentTopics)
   }
 
   private unobserveChannelMessages(chatIds: string[]) {
@@ -238,7 +233,6 @@ class Community {
   }
 
   private handleMessage = (wakuMessage: WakuMessage) => {
-    console.log('MESSAGE: HANDLE')
     if (!wakuMessage.payload) {
       return
     }
@@ -263,8 +257,6 @@ class Community {
       console.error(err)
     }
 
-    console.log('MESSAGE: DECODED METADATA')
-
     let shouldUpdate = false
     let _decodedPayload:
       | ChatMessage
@@ -275,8 +267,6 @@ class Community {
       | undefined
     switch (decodedMetadata.type) {
       case ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE: {
-        console.log('MESSAGE:')
-
         if (!wakuMessage.signaturePublicKey) {
           break
         }
@@ -286,8 +276,6 @@ class Community {
           wakuMessage.signaturePublicKey
         )
         const decodedPayload = ChatMessage.decode(decodedMetadata.payload)
-
-        console.log('MESSAGE: DECODED')
 
         // todo: explain
         // if (!decodedMetadata.identity) {
@@ -301,15 +289,9 @@ class Community {
 
         const channelId = decodedPayload.chatId.slice(68)
 
-        console.log('THIS:', this)
-
         if (!this.channelMessages[channelId]) {
           this.channelMessages[channelId] = []
         }
-
-        console.log('THIS:', this)
-        console.log('CHANNEL:', channelId)
-        console.log('MESSAGES:', this.channelMessages)
 
         const channelMessage: MessageType = {
           ...decodedPayload,
@@ -343,14 +325,11 @@ class Community {
             },
           },
         }
-        console.log('MESSAGE: PREMAPPED')
 
         this.channelMessages[channelId].push(channelMessage)
 
         shouldUpdate = true
         _decodedPayload = decodedPayload
-
-        console.log('MESSAGE: MAPPED')
 
         break
       }
@@ -488,8 +467,6 @@ class Community {
       this.channelMessagesCallbacks[channelId]?.(
         this.channelMessages[channelId]
       )
-
-      console.log('MESSAGE: NEW', messages, channelId)
     }
   }
 
