@@ -191,13 +191,13 @@ class Community {
     )
   }
 
-  private observeChannelMessages(chats: string[]) {
+  private async observeChannelMessages(chats: string[]) {
     const contentTopics: string[] = []
 
     for (const chatId of chats) {
       const id = `${this.communityPublicKey}${chatId}`
       const channelContentTopic = idToContentTopic(id)
-      const symKey = createSymKeyFromPassword(id)
+      const symKey = await createSymKeyFromPassword(id)
 
       contentTopics.push(channelContentTopic)
 
