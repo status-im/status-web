@@ -22,6 +22,7 @@ import { Account } from './account'
 import { idToContentTopic } from './contentTopic'
 import { createSymKeyFromPassword } from './encryption'
 import { payloadToId } from './utils/payload-to-id'
+import { recoverPublicKeyFromMetadata } from './utils/recover-public-key-from-metadata'
 import { CommunityDescription } from './wire/community_description'
 
 import type { WakuMessage } from 'js-waku'
@@ -244,6 +245,13 @@ class Community {
     )
     if (!decodedMetadata.payload) {
       return
+    }
+
+    try {
+      const pk = recoverPublicKeyFromMetadata(decodedMetadata)
+      console.log('pk', pk)
+    } catch (err) {
+      console.error(err)
     }
 
     console.log('MESSAGE: DECODED METADATA')
