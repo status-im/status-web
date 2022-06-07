@@ -1,15 +1,18 @@
+// todo: replies
+// todo: identities/members?
 // todo: validate sig
 // todo: observer contact updates
-// todo: replies
-// todo: subsribe to newly added channel
-// todo: identities/members?
-// todo: getmesages
+// todo: observer channels
+
+// denormalized
+// before calling callback; response to message id
+// proactively change
 import { bytesToHex } from 'ethereum-cryptography/utils'
 import { Waku, waku_message } from 'js-waku'
+import chunk from 'lodash/chunk'
 import difference from 'lodash/difference'
 import sortBy from 'lodash/sortBy'
 import uniqBy from 'lodash/uniqBy'
-import chunk from 'lodash/chunk'
 
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 // import { ChatIdentity } from '../protos/chat-identity'
@@ -144,7 +147,6 @@ class Community {
     console.log('COMMUNITY:', this)
   }
 
-  // todo? and channels
   private async observeCommunity() {
     // console.log('here')
     this.waku.relay.addDecryptionKey(this.communityDecryptionKey)
@@ -530,27 +532,11 @@ class Community {
     callback: (messages: MessageType[], isDone: boolean) => boolean,
     options: { start: Date; end: Date; chunk: number /*total: number*/ }
   ) {
-    // const id = `${this.communityPublicKey}${channelId}`
-    // const channelContentTopic = await idToContentTopic(channelId)
-    // const symKey = await createSymKeyFromPassword(id)
-
-    // this.waku.store.addDecryptionKey(symKey, {
-    //   method: waku_message.DecryptionMethod.Symmetric,
-    //   contentTopics: [channelContentTopic],
-    // })
-
     const id = `${this.communityPublicKey}${channelId}`
     const channelContentTopic = await idToContentTopic(id)
     const symKey = await createSymKeyFromPassword(id)
 
-    // todo: request waku feature to be passed as param
-    // this.waku.store.addDecryptionKey(symKey, {
-    //   method: waku_message.DecryptionMethod.Symmetric,
-    //   contentTopics: [channelContentTopic],
-    // })
-
     const messages: MessageType[] = []
-    let count = 0
     let shouldStop = false
 
     await this.waku.store.queryHistory([channelContentTopic], {
@@ -559,7 +545,7 @@ class Community {
       //   endTime: options.end,
       // },
       // todo!: increase after testing
-      // pageSize: 5,
+      pageSize: 100,
       decryptionKeys: [symKey],
       callback: wakuMessages => {
         for (const wakuMessage of wakuMessages.reverse()) {
@@ -621,8 +607,6 @@ class Community {
               },
             },
           })
-
-          count++
         }
 
         for (const _chunk of chunk(messages, options.chunk)) {

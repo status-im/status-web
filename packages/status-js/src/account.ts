@@ -1,6 +1,10 @@
 import { keccak256 } from 'ethereum-cryptography/keccak'
-import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
-import { bytesToHex } from 'ethereum-cryptography/utils'
+import { getPublicKey, sign } from 'ethereum-cryptography/secp256k1'
+import {
+  bytesToHex,
+  concatBytes,
+  hexToBytes,
+} from 'ethereum-cryptography/utils'
 
 export class Account {
   public privateKey: string
@@ -21,8 +25,15 @@ export class Account {
     this.chatKey = bytesToHex(chatKey)
   }
 
-  signMessage = (payload: Uint8Array) => {
+  // sig must be a 65-byte compact ECDSA signature containing the recovery id as the last element.
+  sign = async (payload: Uint8Array) => {
     const hash = keccak256(payload)
-    return sign(hash, this.privateKey)
+    const [signature, recoverId] = await sign(hash, this.privateKey, {
+      recovered: true,
+      der: false,
+    })
+
+    return concatBytes(signature, new Uint8Array([recoverId]))
+  }
   }
 }
