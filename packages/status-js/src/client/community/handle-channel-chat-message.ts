@@ -2,6 +2,8 @@
 // todo?: rename to handle-message
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
+import { recoverPublicKeyFromMetadata } from '~/src/utils/recover-public-key-from-metadata'
+
 import { ApplicationMetadataMessage } from '../../../protos/application-metadata-message'
 import {
   ChatMessage,
@@ -61,17 +63,16 @@ export function handleChannelChatMessage(
   //   break
   // }
 
+  const publicKey = recoverPublicKeyFromMetadata(decodedMetadata)
+
   // todo: merge and process other types of messages
   // TODO?: ignore messages which are messageType !== COMMUNITY_CHAT
   switch (decodedMetadata.type) {
     case ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE: {
       const decodedPayload = ChatMessage.decode(messageToDecode)
 
-      const messageId = payloadToId(
-        decodedProtocol.publicMessage,
-        // fixme!: replace for recoverPublicKeyFromMetadata
-        wakuMessage.signaturePublicKey
-      )
+      // fixme?: handle decodedProtocol.encryptedMessage
+      const messageId = payloadToId(decodedProtocol.publicMessage, publicKey)
       const channelId = getChannelId(decodedPayload.chatId)
 
       const _messages = messages[channelId] || []

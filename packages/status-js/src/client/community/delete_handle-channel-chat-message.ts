@@ -1,3 +1,5 @@
+import { recoverPublicKeyFromMetadata } from '~/src/utils/recover-public-key-from-metadata'
+
 import { ApplicationMetadataMessage } from '../../../protos/application-metadata-message'
 import { ChatMessage } from '../../../protos/chat-message'
 import { ProtocolMessage } from '../../../protos/protocol-message'
@@ -46,12 +48,13 @@ export function handleChannelChatMessage(
     return
   }
 
+  const publicKey = recoverPublicKeyFromMetadata(decodedMetadata)
+
   const decodedPayload = ChatMessage.decode(messageToDecode)
 
-  const messageId = payloadToId(
-    decodedProtocol.publicMessage,
-    wakuMessage.signaturePublicKey
-  )
+  // fixme?: handle decodedProtocol.encryptedMessage
+  const messageId = payloadToId(decodedProtocol.publicMessage, publicKey)
+
   const channelId = getChannelId(decodedPayload.chatId)
 
   const message = mapChatMessage(decodedPayload, { messageId, channelId })
