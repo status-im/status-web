@@ -102,7 +102,7 @@ export class Community {
   ) => {
     const id = `${this.communityPublicKey}${channelId}`
     const channelContentTopic = idToContentTopic(id)
-    // todo: keep in state instead and replace the factory
+    // todo?: keep in state instead and replace the factory
     const symKey = await createSymKeyFromPassword(id)
 
     return async (options: { start: Date; end?: Date }) => {
@@ -134,21 +134,19 @@ export class Community {
   }
 
   private observeChannelMessages = async (chatsIds: string[]) => {
-    const symKeyPromises = chatsIds.map((chatId: string) => {
-      return new Promise<string>(resolve => {
-        const id = `${this.communityPublicKey}${chatId}`
-        const channelContentTopic = idToContentTopic(id)
+    const symKeyPromises = chatsIds.map(async (chatId: string) => {
+      const id = `${this.communityPublicKey}${chatId}`
+      const channelContentTopic = idToContentTopic(id)
 
-        createSymKeyFromPassword(id).then(symKey => {
-          // todo: request waku feature to be passed as param
-          this.waku.relay.addDecryptionKey(symKey, {
-            method: waku_message.DecryptionMethod.Symmetric,
-            contentTopics: [channelContentTopic],
-          })
+      const symKey = await createSymKeyFromPassword(id)
 
-          resolve(channelContentTopic)
-        })
+      // todo?: request waku feature to be passed as param
+      this.waku.relay.addDecryptionKey(symKey, {
+        method: waku_message.DecryptionMethod.Symmetric,
+        contentTopics: [channelContentTopic],
       })
+
+      return channelContentTopic
     })
     const contentTopics = await Promise.all(symKeyPromises)
 
@@ -207,11 +205,6 @@ export class Community {
     // state
     const channelId = messages[0].channelId
 
-    // todo: don't use; insert in-place
-    // const sortedMessages = sortBy(messages, ['timestamp'])
-    // todo: don't use; check prior insert
-    // const uniqueChannelMessages = uniqBy(sortedMessages, 'messageId')
-    // todo?: remove undefined left after deletion
     this.channelMessages[channelId] = messages
 
     // callback
