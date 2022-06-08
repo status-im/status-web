@@ -21,6 +21,7 @@ export type MessageType = ChatMessage & {
   pinned: boolean
   reactions: Reactions
   channelId: string
+  responseToMessage?: Omit<MessageType, 'responseToMessage'>
 }
 
 export class Community {
