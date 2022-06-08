@@ -35,28 +35,37 @@ export function handleChannelChatMessage(
     return result
   }
 
-  const decodedProtocol = ProtocolMessage.decode(wakuMessage.payload)
+  let messageToDecode = wakuMessage.payload
+  let decodedProtocol
+
+  try {
+    decodedProtocol = ProtocolMessage.decode(wakuMessage.payload)
+    if (decodedProtocol) {
+      messageToDecode = decodedProtocol.publicMessage
+    }
+  } catch {}
+
+  // fixme!: remove after replacing payloadToId
   if (!decodedProtocol) {
     return result
   }
 
-  const decodedMetadata = ApplicationMetadataMessage.decode(
-    decodedProtocol.publicMessage
-  )
-
+  const decodedMetadata = ApplicationMetadataMessage.decode(messageToDecode)
   if (!decodedMetadata.payload) {
     return result
   }
+  messageToDecode = decodedMetadata.payload
 
   // todo?:
   // if (!decodedMetadata.identity) {
   //   break
   // }
 
+  // todo: merge and process other types of messages
   // TODO?: ignore messages which are messageType !== COMMUNITY_CHAT
   switch (decodedMetadata.type) {
     case ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE: {
-      const decodedPayload = ChatMessage.decode(decodedMetadata.payload)
+      const decodedPayload = ChatMessage.decode(messageToDecode)
 
       const messageId = payloadToId(
         decodedProtocol.publicMessage,
@@ -99,7 +108,7 @@ export function handleChannelChatMessage(
       break
     }
     case ApplicationMetadataMessage.Type.TYPE_EDIT_MESSAGE: {
-      const decodedPayload = EditMessage.decode(decodedMetadata.payload)
+      const decodedPayload = EditMessage.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
       const channelId = getChannelId(decodedPayload.chatId)
@@ -139,7 +148,7 @@ export function handleChannelChatMessage(
       break
     }
     case ApplicationMetadataMessage.Type.TYPE_DELETE_MESSAGE: {
-      const decodedPayload = DeleteMessage.decode(decodedMetadata.payload)
+      const decodedPayload = DeleteMessage.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
       const channelId = getChannelId(decodedPayload.chatId)
@@ -168,7 +177,7 @@ export function handleChannelChatMessage(
       break
     }
     case ApplicationMetadataMessage.Type.TYPE_PIN_MESSAGE: {
-      const decodedPayload = PinMessage.decode(decodedMetadata.payload)
+      const decodedPayload = PinMessage.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
       const channelId = getChannelId(decodedPayload.chatId)
@@ -196,7 +205,7 @@ export function handleChannelChatMessage(
       break
     }
     case ApplicationMetadataMessage.Type.TYPE_EMOJI_REACTION: {
-      const decodedPayload = EmojiReaction.decode(decodedMetadata.payload)
+      const decodedPayload = EmojiReaction.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
       const channelId = getChannelId(decodedPayload.chatId)
