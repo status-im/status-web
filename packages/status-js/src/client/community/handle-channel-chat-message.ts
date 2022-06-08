@@ -69,16 +69,12 @@ export function handleChannelChatMessage(
 
       const messageId = payloadToId(
         decodedProtocol.publicMessage,
+        // fixme!: replace for recoverPublicKeyFromMetadata
         wakuMessage.signaturePublicKey
       )
       const channelId = getChannelId(decodedPayload.chatId)
 
       const _messages = messages[channelId] || []
-
-      // already received
-      if (_messages.find(message => message.messageId === messageId)) {
-        break
-      }
 
       const message = mapChatMessage(decodedPayload, { messageId, channelId })
 
@@ -87,9 +83,16 @@ export function handleChannelChatMessage(
       //   new Date(Number(timestamp)) > new Date(Number(message.timestamp))
       // })
       // findIndexRight
-      let index = _messages.length
-      while (index >= 0) {
-        const _message = _messages[index - 1]
+      let messageIndex = _messages.length
+      while (messageIndex > 0) {
+        const _message = _messages[messageIndex - 1]
+
+        // // already received
+        // if (_message.messageId === messageId) {
+        //   messageIndex = -1
+
+        //   break
+        // }
 
         if (
           new Date(Number(_message.timestamp)) <=
@@ -98,10 +101,29 @@ export function handleChannelChatMessage(
           break
         }
 
-        index--
+        messageIndex--
       }
 
-      _messages.splice(index, 0, message)
+      // // already received
+      // if (messageIndex < 0) {
+      //   break
+      // }
+
+      // replied
+      let responsedToMessageIndex = _messages.length
+      while (--responsedToMessageIndex >= 0) {
+        const _message = _messages[responsedToMessageIndex]
+
+        if (_message.messageId === message.responseTo) {
+          break
+        }
+      }
+
+      if (responsedToMessageIndex >= 0) {
+        message.responseToMessage = _messages[responsedToMessageIndex]
+      }
+
+      _messages.splice(messageIndex, 0, message)
 
       result = _messages
 

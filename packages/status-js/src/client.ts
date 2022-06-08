@@ -1,19 +1,19 @@
-// todo: replies; normalize messages (e.g. replies) prior returning
+// todo?: already received (by messageId or event)
+// todo: ignore not found
+// todo: handle updates together with fetching history (chat messages)
+// todo: handle diff waku messages on diff topics
 // todo: tests
 
 // todo?: use clock for sorting
 
-// todo: handle diff waku messages on diff topics
-
 // todo: handle disconnections; no messages after sleep; libp2p;
 // todo: identities/members?
-// todo: validate sig
-// todo: observer contact updates
-// todo: observer channels
+// todo?: observe channels
 // todo?: rename channels to chats
-// todo: change relative import paths
 // todo?: multiple communityCallback
 // todo?: call onChannel* separately
+// todo?: ignore messages of not yet approved users
+// todo?: ignore messages with invalid signature
 
 import { Waku } from 'js-waku'
 
@@ -45,6 +45,7 @@ class Client {
         default: false,
         peers: [
           '/dns4/node-01.gc-us-central1-a.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS',
+          // '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/8000/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
         ],
       },
     })
