@@ -2,11 +2,13 @@ import { ApplicationMetadataMessage } from '../../../protos/application-metadata
 import { ChatMessage } from '../../../protos/chat-message'
 import { ProtocolMessage } from '../../../protos/protocol-message'
 import { payloadToId } from '../../utils/payload-to-id'
+import { getChannelId } from './get-channel-id'
+import { mapChatMessage } from './map-chat-message'
 
-import type { MessageType } from '../../client'
+import type { MessageType } from './community'
 import type { WakuMessage } from 'js-waku'
 
-export function handleMessage(
+export function handleChannelChatMessage(
   wakuMessage: WakuMessage
 ): MessageType | undefined {
   if (!wakuMessage.payload) {
@@ -29,44 +31,22 @@ export function handleMessage(
     return
   }
 
+  // todo?: process other types of messages
+  if (
+    decodedMetadata.type !== ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE
+  ) {
+    return
+  }
+
   const decodedPayload = ChatMessage.decode(decodedMetadata.payload)
 
   const messageId = payloadToId(
     decodedProtocol.publicMessage,
     wakuMessage.signaturePublicKey
   )
+  const channelId = getChannelId(decodedPayload.chatId)
 
-  const message = {
-    ...decodedPayload,
-    messageId: messageId,
-    pinned: false,
-    reactions: {
-      'thumbs-up': {
-        count: 0,
-        me: false,
-      },
-      'thumbs-down': {
-        count: 0,
-        me: false,
-      },
-      heart: {
-        count: 0,
-        me: false,
-      },
-      smile: {
-        count: 0,
-        me: false,
-      },
-      sad: {
-        count: 0,
-        me: false,
-      },
-      angry: {
-        count: 0,
-        me: false,
-      },
-    },
-  }
+  const message = mapChatMessage(decodedPayload, { messageId, channelId })
 
   return message
 }

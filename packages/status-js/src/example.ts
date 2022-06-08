@@ -1,3 +1,4 @@
+// todo: delete
 import { createClient } from '../src/client'
 
 const COMMUNITY_PUBLIC_KEY =
@@ -8,8 +9,6 @@ const CHANNEL_ID = '00d3f525-a0cf-4c40-832d-543ec9f8188b' // messages
 
 ;(async () => {
   const client = await createClient({ publicKey: COMMUNITY_PUBLIC_KEY })
-
-  await client.start()
 
   // client.community.onCommunityUpdate(() => console.log("community:update"))
   // client.community.onChannelUpdate(() => console.log("channel:update"))
