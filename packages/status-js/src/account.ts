@@ -35,5 +35,4 @@ export class Account {
 
     return concatBytes(signature, new Uint8Array([recoverId]))
   }
-  }
 }
