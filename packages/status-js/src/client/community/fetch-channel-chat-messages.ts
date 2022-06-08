@@ -5,8 +5,8 @@ import { handleChannelChatMessage } from './delete_handle-channel-chat-message'
 import type { MessageType } from './community'
 import type { Waku } from 'js-waku'
 
-const CHUNK_SIZE = 2
-const PAGE_SIZE = 2
+const CHUNK_SIZE = 50
+const PAGE_SIZE = CHUNK_SIZE
 
 export const fetchChannelChatMessages = async (
   waku: Waku,
@@ -86,6 +86,7 @@ export async function fetchMessages(
         }
       }
 
+      // todo?: remove chunking until PAGE_SIZE !== CHUNK_SIZE
       while (remainingFetchedMessages.length >= CHUNK_SIZE) {
         // reverse
         const _chunk = remainingFetchedMessages.splice(0, CHUNK_SIZE).reverse()
