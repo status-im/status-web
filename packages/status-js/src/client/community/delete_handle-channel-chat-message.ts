@@ -19,26 +19,34 @@ export function handleChannelChatMessage(
     return
   }
 
-  const decodedProtocol = ProtocolMessage.decode(wakuMessage.payload)
+  let messageToDecode = wakuMessage.payload
+  let decodedProtocol
+  try {
+    decodedProtocol = ProtocolMessage.decode(messageToDecode)
+    if (decodedProtocol) {
+      messageToDecode = decodedProtocol.publicMessage
+    }
+  } catch {}
+
+  // fixme!: remove after replacing payloadToId
   if (!decodedProtocol) {
     return
   }
 
-  const decodedMetadata = ApplicationMetadataMessage.decode(
-    decodedProtocol.publicMessage
-  )
+  const decodedMetadata = ApplicationMetadataMessage.decode(messageToDecode)
   if (!decodedMetadata.payload) {
     return
   }
+  messageToDecode = decodedMetadata.payload
 
-  // todo?: process other types of messages
+  // todo: merge and process other types of messages
   if (
     decodedMetadata.type !== ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE
   ) {
     return
   }
 
-  const decodedPayload = ChatMessage.decode(decodedMetadata.payload)
+  const decodedPayload = ChatMessage.decode(messageToDecode)
 
   const messageId = payloadToId(
     decodedProtocol.publicMessage,

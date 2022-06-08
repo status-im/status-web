@@ -1,4 +1,3 @@
-// todo: try protocol layer; then application data layer
 // todo: replies; normalize messages (e.g. replies) prior returning
 // todo: tests
 

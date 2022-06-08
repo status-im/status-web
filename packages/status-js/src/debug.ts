@@ -13,7 +13,7 @@ const CHANNEL_ID =
 
   await client.createAccount()
 
-  const communityMetadata = client.community.fetchCommunity()
+  const communityMetadata = await client.community.fetchCommunity()
 
   const fetchChannelMessages =
     await client.community.createFetchChannelMessages(CHANNEL_ID, messages =>
