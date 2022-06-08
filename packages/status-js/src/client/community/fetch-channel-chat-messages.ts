@@ -100,7 +100,7 @@ export async function fetchMessages(
   })
 
   if (remainingFetchedMessages.length) {
-    const _chunk = remainingFetchedMessages.splice(0)
+    const _chunk = remainingFetchedMessages.splice(0).reverse()
     const _messages = [..._chunk, ...fetchedMessages, ...storedMessages]
 
     callback(_messages)
