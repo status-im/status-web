@@ -1,6 +1,5 @@
 import { keccak256 } from 'ethereum-cryptography/keccak'
 import { recoverPublicKey } from 'ethereum-cryptography/secp256k1'
-import { bytesToHex } from 'ethereum-cryptography/utils'
 
 import type { ApplicationMetadataMessage } from '../../protos/application-metadata-message'
 
@@ -11,7 +10,7 @@ import type { ApplicationMetadataMessage } from '../../protos/application-metada
  */
 export function recoverPublicKeyFromMetadata(
   metadata: ApplicationMetadataMessage
-): string {
+): Uint8Array {
   const signature = metadata.signature.slice(0, 64)
   const recoveryId = metadata.signature.slice(-1)
 
@@ -21,5 +20,5 @@ export function recoverPublicKeyFromMetadata(
     Number(recoveryId)
   )
 
-  return bytesToHex(pk)
+  return pk
 }
