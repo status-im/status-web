@@ -1,5 +1,5 @@
 import { keccak256 } from 'ethereum-cryptography/keccak'
-import { getPublicKey, sign } from 'ethereum-cryptography/secp256k1'
+import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
 import {
   bytesToHex,
   concatBytes,
