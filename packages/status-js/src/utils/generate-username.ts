@@ -1,21 +1,17 @@
 const poly = BigInt(0xb8)
 
 function lfsr(seed: bigint) {
-  console.log({ seed })
   let bit = 0n
 
   for (let index = 0; index < 64; index++) {
-    const cond = poly & (1n << BigInt(index))
-    if (cond !== 0n) {
+    if ((poly & (1n << BigInt(index))) !== 0n) {
       bit ^= seed >> BigInt(index)
     }
   }
 
-  console.log({ bit })
-
   bit &= 1n
-  const result = BigInt.asUintN(64, seed << 1n) | bit
-  return result
+
+  return BigInt.asUintN(64, seed << 1n) | bit
 }
 
 export function generateUsername(publicKey: string): string {
