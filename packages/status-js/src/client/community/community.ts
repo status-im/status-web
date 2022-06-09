@@ -1,4 +1,4 @@
-import { waku_message } from 'js-waku'
+import { PageDirection, waku_message } from 'js-waku'
 import { hexToBytes } from 'js-waku/build/main/lib/utils'
 import difference from 'lodash/difference'
 
@@ -9,18 +9,16 @@ import { EmojiReaction } from '~/protos/emoji-reaction'
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
 import { createChannelContentTopics } from './create-channel-content-topics'
-import { fetchChannelChatMessages } from './fetch-channel-chat-messages'
-import { handleChannelChatMessage } from './handle-channel-chat-message'
-import { handleCommunity } from './handle-community'
 
 import type { Client } from '../../client'
 import type { CommunityDescription } from '../../wire/community_description'
 import type { Reactions } from './get-reactions'
 import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
-import type { Waku, WakuMessage } from 'js-waku'
+import type { Waku } from 'js-waku'
 
 export type CommunityMetadataType = CommunityDescription['proto']
 
+// todo?: rename to ChatMessageType
 export type MessageType = ChatMessage & {
   messageId: string
   pinned: boolean
@@ -36,13 +34,12 @@ export class Community {
   // fixme!
   private communityContentTopic!: string
   private communityDecryptionKey!: Uint8Array
-  public communityMetadata!: CommunityMetadataType
-  public channelMessages: Partial<{ [key: string]: MessageType[] }> = {}
-  private channelMessagesCallbacks: {
+  public communityMetadata!: CommunityMetadataType // state
+  public channelMessages: Partial<{ [key: string]: MessageType[] }> = {} // state
+  public channelMessagesCallbacks: {
     [key: string]: (messages: MessageType[]) => void
   } = {}
-
-  private communityCallback:
+  public communityCallback:
     | ((community: CommunityMetadataType) => void)
     | undefined
 
@@ -83,14 +80,15 @@ export class Community {
     await this.waku.store.queryHistory([this.communityContentTopic], {
       decryptionKeys: [this.communityDecryptionKey],
       callback: wakuMessages => {
+        // todo: iterate from right
         for (const wakuMessage of wakuMessages.reverse()) {
-          const message = handleCommunity(wakuMessage)
+          this.client.handleWakuMessage(wakuMessage)
 
-          if (!message) {
+          if (!this.communityMetadata) {
             return shouldStop
           }
 
-          communityMetadata = message
+          communityMetadata = this.communityMetadata
           shouldStop = true
 
           return shouldStop
@@ -111,30 +109,46 @@ export class Community {
     // todo?: keep in state instead and replace the factory
     const symKey = await createSymKeyFromPassword(id)
 
-    return async (options: { start: Date; end?: Date }) => {
-      const messages = await fetchChannelChatMessages(
-        this.waku,
-        symKey,
-        channelContentTopic,
-        this.channelMessages[channelId] ?? [],
-        options,
-        callback
-      )
+    return async (options: { start: Date }) => {
+      const startTime = options.start
+      const endTime = new Date()
 
-      if (!messages.length) {
-        return
+      const _messages = this.channelMessages[channelId] || []
+
+      if (_messages.length) {
+        const oldestMessageTime = new Date(Number(_messages[0].timestamp))
+
+        if (oldestMessageTime <= options.start) {
+          callback(_messages)
+        }
       }
 
-      // state
-      this.channelMessages[channelId] = messages
+      await this.waku.store.queryHistory([channelContentTopic], {
+        timeFilter: {
+          startTime: startTime,
+          endTime: endTime,
+        },
+        pageSize: 50,
+        // most recent page first
+        pageDirection: PageDirection.BACKWARD,
+        decryptionKeys: [symKey],
+        callback: wakuMessages => {
+          // oldest message first
+          for (const wakuMessage of wakuMessages) {
+            this.client.handleWakuMessage(wakuMessage)
+          }
+        },
+      })
 
-      return
+      // todo: call abck only if oldestMessageTime has changed
+      // callback
+      callback(this.channelMessages[channelId] ?? [])
     }
   }
 
   private observeCommunity = () => {
     this.waku.relay.addDecryptionKey(this.communityDecryptionKey)
-    this.waku.relay.addObserver(this.handleCommunity, [
+    this.waku.relay.addObserver(this.client.handleWakuMessage, [
       this.communityContentTopic,
     ])
   }
@@ -156,7 +170,7 @@ export class Community {
     })
     const contentTopics = await Promise.all(symKeyPromises)
 
-    this.waku.relay.addObserver(this.handleMessage, contentTopics)
+    this.waku.relay.addObserver(this.client.handleWakuMessage, contentTopics)
   }
 
   private unobserveChannelMessages = (chatIds: string[]) => {
@@ -165,53 +179,91 @@ export class Community {
       this.communityPublicKey
     )
 
-    this.waku.relay.deleteObserver(this.handleMessage, contentTopics)
+    this.waku.relay.deleteObserver(this.client.handleWakuMessage, contentTopics)
   }
 
-  private handleCommunity = (wakuMessage: WakuMessage) => {
-    const communityMetadata = handleCommunity(wakuMessage)
+  public handleCommunityMetadataEvent = (
+    communityMetadata: CommunityMetadataType
+  ) => {
+    if (this.communityMetadata) {
+      // Channels
+      const removedChats = difference(
+        Object.keys(this.communityMetadata.chats),
+        Object.keys(communityMetadata.chats)
+      )
+      const addedChats = difference(
+        Object.keys(communityMetadata.chats),
+        Object.keys(communityMetadata.chats)
+      )
 
-    if (!communityMetadata) {
-      return
-    }
+      if (removedChats.length) {
+        this.unobserveChannelMessages(removedChats)
+      }
 
-    // Channels
-    const removedChats = difference(
-      Object.keys(this.communityMetadata.chats),
-      Object.keys(communityMetadata.chats)
-    )
-    const addedChats = difference(
-      Object.keys(communityMetadata.chats),
-      Object.keys(communityMetadata.chats)
-    )
-
-    if (removedChats.length) {
-      this.unobserveChannelMessages(removedChats)
-    }
-
-    if (addedChats.length) {
-      this.observeChannelMessages(addedChats)
+      if (addedChats.length) {
+        this.observeChannelMessages(addedChats)
+      }
     }
 
     // Community
+    // fixme!: set only if updated
+    this.communityMetadata = communityMetadata
     this.communityCallback?.(communityMetadata)
   }
 
-  private handleMessage = (wakuMessage: WakuMessage) => {
-    const messages = handleChannelChatMessage(
-      wakuMessage,
-      this.channelMessages,
-      this.client.account?.publicKey
-    )
+  public handleChannelChatMessageNewEvent = (chatMessage: MessageType) => {
+    const _messages = this.channelMessages[chatMessage.channelId] || []
 
-    if (!messages.length) {
-      return
+    // findIndexLeft
+    // const index = _messages.findIndex(({ timestamp }) => {
+    //   new Date(Number(timestamp)) > new Date(Number(message.timestamp))
+    // })
+    // findIndexRight
+    let messageIndex = _messages.length
+    while (messageIndex > 0) {
+      const _message = _messages[messageIndex - 1]
+
+      // if (_message.messageId === chatMessage.messageId) {
+      //   messageIndex = -1
+
+      //   break
+      // }
+
+      if (
+        new Date(Number(_message.timestamp)) <=
+        new Date(Number(chatMessage.timestamp))
+      ) {
+        break
+      }
+
+      messageIndex--
     }
 
-    // state
-    const channelId = messages[0].channelId
+    // // already received
+    // if (messageIndex < 0) {
+    //   return
+    // }
 
-    this.channelMessages[channelId] = messages
+    // replied
+    let responsedToMessageIndex = _messages.length
+    while (--responsedToMessageIndex >= 0) {
+      const _message = _messages[responsedToMessageIndex]
+
+      if (_message.messageId === chatMessage.responseTo) {
+        break
+      }
+    }
+
+    if (responsedToMessageIndex >= 0) {
+      chatMessage.responseToMessage = _messages[responsedToMessageIndex]
+    }
+
+    _messages.splice(messageIndex, 0, chatMessage)
+
+    // state
+    const channelId = _messages[0].channelId
+
+    this.channelMessages[channelId] = _messages
 
     // callback
     // todo!: review use of ! why not just use messages defined above?
