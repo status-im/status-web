@@ -114,12 +114,15 @@ export class Community {
       const endTime = new Date()
 
       const _messages = this.channelMessages[channelId] || []
+      let _oldestMessageTime: Date | undefined = undefined
 
       if (_messages.length) {
-        const oldestMessageTime = new Date(Number(_messages[0].timestamp))
+        _oldestMessageTime = new Date(Number(_messages[0].timestamp))
 
-        if (oldestMessageTime <= options.start) {
+        if (_oldestMessageTime <= options.start) {
           callback(_messages)
+
+          return
         }
       }
 
@@ -140,8 +143,18 @@ export class Community {
         },
       })
 
-      // todo: call abck only if oldestMessageTime has changed
       // callback
+      if (
+        _oldestMessageTime &&
+        this.channelMessages[channelId]?.length &&
+        _oldestMessageTime >=
+          new Date(Number(this.channelMessages[channelId]![0].timestamp))
+      ) {
+        callback([])
+
+        return
+      }
+
       callback(this.channelMessages[channelId] ?? [])
     }
   }
