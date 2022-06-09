@@ -1,4 +1,4 @@
-// todo?: already received (by messageId or event)
+// todo!: handle already received (emoji) events (by messageId or event)
 // todo: use Map
 // todo: write class for channels
 
