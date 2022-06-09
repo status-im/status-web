@@ -15,10 +15,12 @@
 // todo?: ignore messages of not yet approved users
 // todo?: ignore messages with invalid signature
 
-import { Waku } from 'js-waku'
+import { hexToBytes } from 'ethereum-cryptography/utils'
+import { Waku, WakuMessage } from 'js-waku'
 
 import { Account } from './account'
 import { Community } from './client/community/community'
+import * as ams from './proto/status/v1/application_metadata_message'
 
 export interface ClientOptions {
   publicKey: string
@@ -67,6 +69,9 @@ class Client {
   public createAccount = (): Account => {
     this.account = new Account()
 
+    // TODO: joining part of creation of an account
+    // await this.community.requestToJoin()
+
     return this.account
   }
 
@@ -74,6 +79,36 @@ class Client {
   // public deleteAccount = () => {
   //   this.account = undefined
   // }
+
+  public sendMessage = async (
+    type: keyof typeof ams.ApplicationMetadataMessage_Type,
+    payload: Uint8Array,
+    contentTopic: string,
+    symKey: Uint8Array
+  ) => {
+    if (!this.waku) {
+      throw new Error('Waku not started')
+    }
+
+    if (!this.account) {
+      throw new Error('Account not created')
+    }
+
+    const signature = await this.account.sign(payload)
+
+    const message = ams.ApplicationMetadataMessage.encode({
+      type: ams.ApplicationMetadataMessage_Type[type],
+      signature,
+      payload,
+    }).finish()
+
+    const wakuMesage = await WakuMessage.fromBytes(message, contentTopic, {
+      sigPrivKey: hexToBytes(this.account.privateKey),
+      symKey,
+    })
+
+    await this.waku.relay.send(wakuMesage)
+  }
 }
 
 export async function createClient(options: ClientOptions): Promise<Client> {
