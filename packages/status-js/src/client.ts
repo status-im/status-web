@@ -1,10 +1,13 @@
-// todo?: already received (by messageId or event)
-// todo: ignore not found
 // todo: handle updates together with fetching history (chat messages)
 // todo: handle diff waku messages on diff topics
-// todo: tests
+// todo?: already received (by messageId or event)
+// todo: use clock for sorting
+// todo: use Map
+// todo: write class for channels
+// todo: fetch all history until Map; remove end param
+// todo: handle
 
-// todo?: use clock for sorting
+// todo: tests
 
 // todo: handle disconnections; no messages after sleep; libp2p;
 // todo: identities/members?
@@ -14,6 +17,8 @@
 // todo?: call onChannel* separately
 // todo?: ignore messages of not yet approved users
 // todo?: ignore messages with invalid signature
+// todo?: handle encrypted waku messages
+// todo?: handle waku messages/events without identity
 
 import { hexToBytes } from 'ethereum-cryptography/utils'
 import { Waku, WakuMessage } from 'js-waku'
@@ -22,6 +27,7 @@ import { ApplicationMetadataMessage } from '~/protos/application-metadata-messag
 
 import { Account } from './account'
 import { Community } from './client/community/community'
+import { handleWakuMessage } from './client/community/handle-waku-message'
 
 export interface ClientOptions {
   publicKey: string
@@ -109,6 +115,10 @@ class Client {
     })
 
     await this.waku.relay.send(wakuMesage)
+  }
+
+  public handleWakuMessage = (wakuMessage: WakuMessage): void => {
+    handleWakuMessage(wakuMessage, this.community, this.account)
   }
 }
 
