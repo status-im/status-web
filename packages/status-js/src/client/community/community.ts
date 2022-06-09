@@ -223,11 +223,11 @@ export class Community {
     while (messageIndex > 0) {
       const _message = _messages[messageIndex - 1]
 
-      // if (_message.messageId === chatMessage.messageId) {
-      //   messageIndex = -1
+      if (_message.messageId === chatMessage.messageId) {
+        messageIndex = -1
 
-      //   break
-      // }
+        break
+      }
 
       if (
         new Date(Number(_message.timestamp)) <=
@@ -239,10 +239,10 @@ export class Community {
       messageIndex--
     }
 
-    // // already received
-    // if (messageIndex < 0) {
-    //   return
-    // }
+    // already received
+    if (messageIndex < 0) {
+      return
+    }
 
     // replied
     let responsedToMessageIndex = _messages.length
