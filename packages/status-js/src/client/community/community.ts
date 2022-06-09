@@ -1,6 +1,11 @@
 import { waku_message } from 'js-waku'
+import { hexToBytes } from 'js-waku/build/main/lib/utils'
 import difference from 'lodash/difference'
 
+import { CommunityRequestToJoin, MessageType } from '~/protos/communities'
+import { EmojiReaction } from '~/protos/emoji-reaction'
+
+import { ChatMessage } from '../../../protos/chat-message'
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
 import { createChannelContentTopics } from './create-channel-content-topics'
@@ -8,10 +13,10 @@ import { fetchChannelChatMessages } from './fetch-channel-chat-messages'
 import { handleChannelChatMessage } from './handle-channel-chat-message'
 import { handleCommunity } from './handle-community'
 
-import type { ChatMessage } from '../../../protos/chat-message'
 import type { Client } from '../../client'
 import type { CommunityDescription } from '../../wire/community_description'
 import type { Reactions } from './get-reactions'
+import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
 import type { Waku, WakuMessage } from 'js-waku'
 
 export type CommunityMetadataType = CommunityDescription['proto']
@@ -236,5 +241,147 @@ export class Community {
     return () => {
       delete this.channelMessagesCallbacks[channelId]
     }
+  }
+
+  public sendTextMessage = async (chatUuid: string, message: string) => {
+    const chat = this.communityMetadata.chats[chatUuid]
+
+    if (!chat) {
+      throw new Error('Chat not found')
+    }
+
+    const chatId = `${this.communityPublicKey}${chatUuid}`
+    const channelContentTopic = idToContentTopic(chatId)
+    const symKey = await createSymKeyFromPassword(chatId)
+
+    // TODO: protos does not support optional fields
+    // @ts-ignore
+    const payload = ChatMessage.encode({
+      clock: BigInt(Date.now()),
+      timestamp: BigInt(Date.now()),
+      text: message, // string
+      responseTo: '', // string
+      ensName: '', // string
+      chatId: chatId, // string
+      messageType: MessageType.COMMUNITY_CHAT,
+      contentType: ChatMessage.ContentType.TEXT_PLAIN,
+      // sticker: '', // StickerMessage
+      // image: '', // ImageMessage
+      // audio: '', // AudioMessage
+      // community: '', // Uint8Array
+      // grant: '', // Uint8Array
+      // displayName: '', // string
+    })
+
+    await this.client.sendMessage(
+      'TYPE_CHAT_MESSAGE',
+      payload,
+      channelContentTopic,
+      symKey
+    )
+  }
+
+  public sendImageMessage = async (chatUuid: string, image: ImageMessage) => {
+    const chat = this.communityMetadata.chats[chatUuid]
+
+    if (!chat) {
+      throw new Error('Chat not found')
+    }
+
+    // TODO: move to chat instance
+    const chatId = `${this.communityPublicKey}${chatUuid}`
+    const channelContentTopic = idToContentTopic(chatId)
+    const symKey = await createSymKeyFromPassword(chatId)
+
+    const payload = ChatMessage.encode({
+      clock: BigInt(Date.now()),
+      timestamp: BigInt(Date.now()),
+      responseTo: '', // string
+      ensName: '', // string
+      chatId: chatId, // string
+      messageType: MessageType.COMMUNITY_CHAT,
+      contentType: ChatMessage.ContentType.IMAGE,
+      image: {
+        type: image.type,
+        payload: image.payload,
+      },
+      // sticker: '', // StickerMessage
+      // image: '', // ImageMessage
+      // audio: '', // AudioMessage
+      // community: '', // Uint8Array
+      // grant: '', // Uint8Array
+      // displayName: '', // string
+    })
+
+    await this.client.sendMessage(
+      'TYPE_CHAT_MESSAGE',
+      payload,
+      channelContentTopic,
+      symKey
+    )
+  }
+
+  public sendReaction = async (
+    chatUuid: string,
+    messageId: string,
+    reaction: EmojiReaction.Type
+  ) => {
+    const chat = this.communityMetadata.chats[chatUuid]
+
+    if (!chat) {
+      throw new Error('Chat not found')
+    }
+
+    // TODO: move to chat instance
+    const chatId = `${this.communityPublicKey}${chatUuid}`
+    const channelContentTopic = idToContentTopic(chatId)
+    const symKey = await createSymKeyFromPassword(chatId)
+
+    const payload = EmojiReaction.encode({
+      clock: BigInt(Date.now()),
+      chatId,
+      messageType: MessageType.COMMUNITY_CHAT,
+      messageId,
+      type: reaction,
+      // TODO: get message by id and derive state
+      retracted: false,
+      grant: new Uint8Array([]),
+    })
+
+    await this.client.sendMessage(
+      'TYPE_EMOJI_REACTION',
+      payload,
+      channelContentTopic,
+      symKey
+    )
+  }
+
+  public requestToJoin = async (chatUuid: string) => {
+    if (!this.client.account) {
+      throw new Error('Account not found')
+    }
+
+    const chat = this.communityMetadata.chats[chatUuid]
+
+    if (!chat) {
+      throw new Error('Chat not found')
+    }
+
+    // TODO: move to chat instance
+    const chatId = `${this.communityPublicKey}${chatUuid}`
+
+    const payload = CommunityRequestToJoin.encode({
+      chatId,
+      clock: BigInt(Date.now()),
+      communityId: hexToBytes(this.communityPublicKey),
+      ensName: '',
+    })
+
+    await this.client.sendMessage(
+      'TYPE_COMMUNITY_REQUEST_TO_JOIN',
+      payload,
+      this.communityContentTopic,
+      this.communityDecryptionKey
+    )
   }
 }
