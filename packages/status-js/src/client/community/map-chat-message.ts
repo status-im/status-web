@@ -19,27 +19,27 @@ export function mapChatMessage(
     channelId,
     pinned: false,
     reactions: {
-      'thumbs-up': {
+      THUMBS_UP: {
         count: 0,
         me: false,
       },
-      'thumbs-down': {
+      THUMBS_DOWN: {
         count: 0,
         me: false,
       },
-      heart: {
+      LOVE: {
         count: 0,
         me: false,
       },
-      smile: {
+      LAUGH: {
         count: 0,
         me: false,
       },
-      sad: {
+      SAD: {
         count: 0,
         me: false,
       },
-      angry: {
+      ANGRY: {
         count: 0,
         me: false,
       },
