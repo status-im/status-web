@@ -202,6 +202,10 @@ export class Community {
     communityMetadata: CommunityMetadataType
   ) => {
     if (this.communityMetadata) {
+      if (this.communityMetadata.clock > communityMetadata.clock) {
+        return
+      }
+
       // Channels
       const removedChats = difference(
         Object.keys(this.communityMetadata.chats),
@@ -245,10 +249,7 @@ export class Community {
         break
       }
 
-      if (
-        new Date(Number(_message.timestamp)) <=
-        new Date(Number(chatMessage.timestamp))
-      ) {
+      if (_message.clock <= chatMessage.clock) {
         break
       }
 
