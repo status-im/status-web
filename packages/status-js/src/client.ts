@@ -1,11 +1,6 @@
-// todo: handle updates together with fetching history (chat messages)
-// todo: handle diff waku messages on diff topics
 // todo?: already received (by messageId or event)
-// todo: use clock for sorting
 // todo: use Map
 // todo: write class for channels
-// todo: fetch all history until Map; remove end param
-// todo: handle
 
 // todo: tests
 
