@@ -79,10 +79,13 @@ export class Community {
 
     await this.waku.store.queryHistory([this.communityContentTopic], {
       decryptionKeys: [this.communityDecryptionKey],
+      // oldest message first
       callback: wakuMessages => {
-        // todo: iterate from right
-        for (const wakuMessage of wakuMessages.reverse()) {
-          this.client.handleWakuMessage(wakuMessage)
+        let index = wakuMessages.length
+
+        // most recent page first
+        while (--index >= 0) {
+          this.client.handleWakuMessage(wakuMessages[index])
 
           if (!this.communityMetadata) {
             return shouldStop
