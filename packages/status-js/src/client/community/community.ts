@@ -2,10 +2,10 @@ import { waku_message } from 'js-waku'
 import { hexToBytes } from 'js-waku/build/main/lib/utils'
 import difference from 'lodash/difference'
 
-import { CommunityRequestToJoin, MessageType } from '~/protos/communities'
+import { ChatMessage } from '~/protos/chat-message'
+import { CommunityRequestToJoin } from '~/protos/communities'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
-import { ChatMessage } from '../../../protos/chat-message'
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
 import { createChannelContentTopics } from './create-channel-content-topics'
@@ -214,7 +214,7 @@ export class Community {
     this.channelMessages[channelId] = messages
 
     // callback
-    // todo!: review use of !
+    // todo!: review use of ! why not just use messages defined above?
     this.channelMessagesCallbacks[channelId]?.(this.channelMessages[channelId]!)
   }
 
@@ -243,34 +243,45 @@ export class Community {
     }
   }
 
-  public sendTextMessage = async (chatUuid: string, message: string) => {
+  public sendTextMessage = async (
+    chatUuid: string,
+    text: string,
+    responseTo?: string
+  ) => {
     const chat = this.communityMetadata.chats[chatUuid]
 
     if (!chat) {
       throw new Error('Chat not found')
     }
 
+    // TODO: move to chat instance
     const chatId = `${this.communityPublicKey}${chatUuid}`
     const channelContentTopic = idToContentTopic(chatId)
     const symKey = await createSymKeyFromPassword(chatId)
 
-    // TODO: protos does not support optional fields
-    // @ts-ignore
+    // TODO: protos does not support optional fields :-(
     const payload = ChatMessage.encode({
       clock: BigInt(Date.now()),
       timestamp: BigInt(Date.now()),
-      text: message, // string
-      responseTo: '', // string
-      ensName: '', // string
-      chatId: chatId, // string
-      messageType: MessageType.COMMUNITY_CHAT,
+      text,
+      responseTo: responseTo ?? '',
+      ensName: '',
+      chatId,
+      messageType: 'COMMUNITY_CHAT',
       contentType: ChatMessage.ContentType.TEXT_PLAIN,
-      // sticker: '', // StickerMessage
-      // image: '', // ImageMessage
-      // audio: '', // AudioMessage
-      // community: '', // Uint8Array
-      // grant: '', // Uint8Array
-      // displayName: '', // string
+      sticker: { hash: '', pack: 0 },
+      image: {
+        type: 'JPEG',
+        payload: new Uint8Array([]),
+      },
+      audio: {
+        type: 'AAC',
+        payload: new Uint8Array([]),
+        durationMs: BigInt(0),
+      },
+      community: new Uint8Array([]),
+      grant: new Uint8Array([]),
+      displayName: '',
     })
 
     await this.client.sendMessage(
@@ -296,21 +307,25 @@ export class Community {
     const payload = ChatMessage.encode({
       clock: BigInt(Date.now()),
       timestamp: BigInt(Date.now()),
-      responseTo: '', // string
-      ensName: '', // string
-      chatId: chatId, // string
-      messageType: MessageType.COMMUNITY_CHAT,
-      contentType: ChatMessage.ContentType.IMAGE,
+      text: '',
+      responseTo: responseTo ?? '',
+      ensName: '',
+      chatId,
+      messageType: 'COMMUNITY_CHAT',
+      contentType: ChatMessage.ContentType.TEXT_PLAIN,
+      sticker: { hash: '', pack: 0 },
       image: {
         type: image.type,
         payload: image.payload,
       },
-      // sticker: '', // StickerMessage
-      // image: '', // ImageMessage
-      // audio: '', // AudioMessage
-      // community: '', // Uint8Array
-      // grant: '', // Uint8Array
-      // displayName: '', // string
+      audio: {
+        type: 'AAC',
+        payload: new Uint8Array([]),
+        durationMs: BigInt(0),
+      },
+      community: new Uint8Array([]),
+      grant: new Uint8Array([]),
+      displayName: '',
     })
 
     await this.client.sendMessage(
@@ -322,30 +337,30 @@ export class Community {
   }
 
   public sendReaction = async (
-    chatUuid: string,
+    chatId: string,
     messageId: string,
     reaction: EmojiReaction.Type
   ) => {
-    const chat = this.communityMetadata.chats[chatUuid]
+    // const chat = this.communityMetadata.chats[chatId]
 
-    if (!chat) {
-      throw new Error('Chat not found')
-    }
+    // if (!chat) {
+    //   throw new Error('Chat not found')
+    // }
 
     // TODO: move to chat instance
-    const chatId = `${this.communityPublicKey}${chatUuid}`
+    // const chatId = `${this.communityPublicKey}${chatUuid}`
     const channelContentTopic = idToContentTopic(chatId)
     const symKey = await createSymKeyFromPassword(chatId)
 
+    // TODO: protos does not support optional fields :-(
     const payload = EmojiReaction.encode({
       clock: BigInt(Date.now()),
-      chatId,
-      messageType: MessageType.COMMUNITY_CHAT,
-      messageId,
-      type: reaction,
-      // TODO: get message by id and derive state
-      retracted: false,
+      chatId: chatId,
+      messageType: 'COMMUNITY_CHAT',
       grant: new Uint8Array([]),
+      messageId,
+      retracted: false,
+      type: reaction,
     })
 
     await this.client.sendMessage(
@@ -371,8 +386,8 @@ export class Community {
     const chatId = `${this.communityPublicKey}${chatUuid}`
 
     const payload = CommunityRequestToJoin.encode({
-      chatId,
       clock: BigInt(Date.now()),
+      chatId,
       communityId: hexToBytes(this.communityPublicKey),
       ensName: '',
     })
