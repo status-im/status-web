@@ -11,9 +11,12 @@ describe('Account', () => {
     const message = utf8ToBytes('123')
     const messageHash = keccak256(message)
 
-    const signature = await account.signMessage(message)
+    const signature = await account.sign(message)
+    const signatureWithoutRecoveryId = signature.slice(0, -1)
 
-    expect(secp.verify(signature, messageHash, account.publicKey)).toBeTruthy()
+    expect(
+      secp.verify(signatureWithoutRecoveryId, messageHash, account.publicKey)
+    ).toBeTruthy()
   })
 
   it('should not verify signature with different message', async () => {
@@ -22,7 +25,7 @@ describe('Account', () => {
     const message = utf8ToBytes('123')
     const messageHash = keccak256(message)
 
-    const signature = await account.signMessage(utf8ToBytes('abc'))
+    const signature = await account.sign(utf8ToBytes('abc'))
 
     expect(secp.verify(signature, messageHash, account.publicKey)).toBeFalsy()
   })
