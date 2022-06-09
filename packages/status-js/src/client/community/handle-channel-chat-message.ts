@@ -2,7 +2,7 @@
 // todo?: rename to handle-message
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
-import { recoverPublicKeyFromMetadata } from '~/src/utils/recover-public-key-from-metadata'
+import { recoverPublicKey } from '~/src/utils/recover-public-key'
 
 import { ApplicationMetadataMessage } from '../../../protos/application-metadata-message'
 import {
@@ -63,7 +63,10 @@ export function handleChannelChatMessage(
   //   break
   // }
 
-  const publicKey = recoverPublicKeyFromMetadata(decodedMetadata)
+  const publicKey = recoverPublicKey(
+    decodedMetadata.signature,
+    decodedMetadata.payload
+  )
 
   // todo: merge and process other types of messages
   // TODO?: ignore messages which are messageType !== COMMUNITY_CHAT

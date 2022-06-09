@@ -1,4 +1,4 @@
-import { recoverPublicKeyFromMetadata } from '~/src/utils/recover-public-key-from-metadata'
+import { recoverPublicKey } from '~/src/utils/recover-public-key'
 
 import { ApplicationMetadataMessage } from '../../../protos/application-metadata-message'
 import { ChatMessage } from '../../../protos/chat-message'
@@ -48,7 +48,10 @@ export function handleChannelChatMessage(
     return
   }
 
-  const publicKey = recoverPublicKeyFromMetadata(decodedMetadata)
+  const publicKey = recoverPublicKey(
+    decodedMetadata.signature,
+    decodedMetadata.payload
+  )
 
   const decodedPayload = ChatMessage.decode(messageToDecode)
 
