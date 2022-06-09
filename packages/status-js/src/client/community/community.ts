@@ -193,7 +193,7 @@ export class Community {
       )
       const addedChats = difference(
         Object.keys(communityMetadata.chats),
-        Object.keys(communityMetadata.chats)
+        Object.keys(this.communityMetadata.chats)
       )
 
       if (removedChats.length) {
