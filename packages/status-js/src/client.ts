@@ -18,9 +18,10 @@
 import { hexToBytes } from 'ethereum-cryptography/utils'
 import { Waku, WakuMessage } from 'js-waku'
 
+import { ApplicationMetadataMessage } from '~/protos/application-metadata-message'
+
 import { Account } from './account'
 import { Community } from './client/community/community'
-import * as ams from './proto/status/v1/application_metadata_message'
 
 export interface ClientOptions {
   publicKey: string
@@ -81,7 +82,7 @@ class Client {
   // }
 
   public sendMessage = async (
-    type: keyof typeof ams.ApplicationMetadataMessage_Type,
+    type: keyof typeof ApplicationMetadataMessage.Type,
     payload: Uint8Array,
     contentTopic: string,
     symKey: Uint8Array
@@ -96,11 +97,11 @@ class Client {
 
     const signature = await this.account.sign(payload)
 
-    const message = ams.ApplicationMetadataMessage.encode({
-      type: ams.ApplicationMetadataMessage_Type[type],
+    const message = ApplicationMetadataMessage.encode({
+      type: type as ApplicationMetadataMessage.Type,
       signature,
       payload,
-    }).finish()
+    })
 
     const wakuMesage = await WakuMessage.fromBytes(message, contentTopic, {
       sigPrivKey: hexToBytes(this.account.privateKey),
