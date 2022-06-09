@@ -1,10 +1,25 @@
-import { recoverPublicKeyFromMetadata } from './recover-public-key-from-metadata'
+import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 
-import type { ApplicationMetadataMessage } from '../../protos/application-metadata-message'
+import { Account } from '../account'
+import { recoverPublicKey } from './recover-public-key'
 
-describe('TODO: recoverPublicKeyFromMetadata', () => {
+import type { ApplicationMetadataMessage } from '~/protos/application-metadata-message'
+
+describe('recoverPublicKey', () => {
   it('should recover public key', async () => {
-    const metadataFixture = {
+    const payload = utf8ToBytes('hello')
+
+    const account = new Account()
+    const signature = await account.sign(payload)
+
+    expect(bytesToHex(recoverPublicKey(signature, payload))).toEqual(
+      account.publicKey
+    )
+  })
+
+  it('should recover public key from fixture', async () => {
+    const metadataFixture: ApplicationMetadataMessage = {
+      type: 'TYPE_EMOJI_REACTION' as ApplicationMetadataMessage.Type,
       signature: new Uint8Array([
         250, 132, 234, 119, 159, 124, 98, 93, 197, 108, 99, 52, 186, 234, 142,
         101, 147, 180, 50, 190, 102, 61, 219, 189, 95, 124, 29, 74, 43, 46, 106,
@@ -25,8 +40,7 @@ describe('TODO: recoverPublicKeyFromMetadata', () => {
         102, 55, 99, 48, 98, 55, 55, 97, 55, 99, 48, 97, 53, 101, 98, 97, 53,
         102, 97, 57, 100, 52, 100, 57, 49, 98, 97, 56, 32, 5, 40, 2,
       ]),
-      type: 'TYPE_EMOJI_REACTION',
-    } as unknown as ApplicationMetadataMessage
+    }
 
     const publicKeySnapshot = new Uint8Array([
       4, 172, 65, 157, 172, 154, 139, 187, 88, 130, 90, 60, 222, 96, 238, 240,
@@ -36,8 +50,33 @@ describe('TODO: recoverPublicKeyFromMetadata', () => {
       99, 24, 17,
     ])
 
-    const result = recoverPublicKeyFromMetadata(metadataFixture)
+    const result = recoverPublicKey(
+      metadataFixture.signature,
+      metadataFixture.payload
+    )
 
     expect(result).toEqual(publicKeySnapshot)
+  })
+
+  it('should not recover public key with different payload', async () => {
+    const payload = utf8ToBytes('1')
+
+    const account = new Account()
+    const signature = await account.sign(payload)
+
+    const payload2 = utf8ToBytes('2')
+    expect(recoverPublicKey(signature, payload2)).not.toEqual(account.publicKey)
+  })
+
+  it('should throw error when signature length is not 65 bytes', async () => {
+    const payload = utf8ToBytes('hello')
+    const signature = new Uint8Array([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+    ])
+
+    // TODO: use toThrowErrorMatchingInlineSnapshot
+    expect(recoverPublicKey(signature, payload)).toThrow(
+      'Signature must be 65 bytes long'
+    )
   })
 })
