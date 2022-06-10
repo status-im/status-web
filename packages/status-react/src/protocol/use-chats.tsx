@@ -1,12 +1,15 @@
 import { useMemo } from 'react'
-import { useClient } from './provider'
-import { useCommunity } from '~/src/protocol/use-community'
-import { Community } from '@status-im/js'
 
-export type Channel = Community['communityMetadata']['chats'][0]
+import { useProtocol } from './provider'
 
-export const useChats = (): Channel => {
-  const community = useCommunity()
+import type { Community } from '@status-im/js'
+
+export type Chat = Community['communityMetadata']['chats'][0] & {
+  id: string
+}
+
+export const useChats = (): Chat[] => {
+  const { community } = useProtocol()
 
   return useMemo(() => {
     return Object.entries(community.chats)
