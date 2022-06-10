@@ -1,7 +1,8 @@
 import React from 'react'
-import { styled } from '~/src/styles/config'
 
 import ContentLoader from 'react-content-loader'
+
+import { styled } from '~/src/styles/config'
 import { Box } from '~/src/system'
 
 const CommunityInfoLoader = () => (
@@ -10,8 +11,8 @@ const CommunityInfoLoader = () => (
     width={185}
     height={50}
     viewBox="0 0 185 50"
-    backgroundColor="rgba(233, 237, 241, 1)"
-    foregroundColor="rgba(246, 248, 250, 1)"
+    backgroundColor="var(--colors-accent-8)"
+    foregroundColor="var(--colors-accent-5)"
   >
     <rect x="50" y="10" rx="3" ry="3" width="120" height="12" />
     <rect x="50" y="30" rx="3" ry="3" width="120" height="8" />
@@ -19,15 +20,15 @@ const CommunityInfoLoader = () => (
   </ContentLoader>
 )
 
-const ChannelLoader = () => {
+const ChatItemLoader = () => {
   return (
     <ContentLoader
       speed={2}
       width={272}
       height={40}
       viewBox="0 0 272 40"
-      backgroundColor="rgba(233, 237, 241, 1)"
-      foregroundColor="rgba(246, 248, 250, 1)"
+      backgroundColor="var(--colors-accent-8)"
+      foregroundColor="var(--colors-accent-5)"
     >
       <rect x="41" y="13" rx="3" ry="3" width="140" height="14" />
       <circle cx="20" cy="20" r="12" />
@@ -41,17 +42,16 @@ export const Loading = () => {
       <Sidebar>
         <CommunityInfoLoader />
         <Box css={{ padding: '8px 0' }}>
-          <ChannelLoader />
-          <ChannelLoader />
-          <ChannelLoader />
-          <ChannelLoader />
-          <ChannelLoader />
+          <ChatItemLoader />
+          <ChatItemLoader />
+          <ChatItemLoader />
+          <ChatItemLoader />
+          <ChatItemLoader />
         </Box>
       </Sidebar>
       <Box css={{ padding: '6px 10px' }}>
-      <CommunityInfoLoader />
-
-        </Box>
+        <CommunityInfoLoader />
+      </Box>
     </Wrapper>
   )
 }
