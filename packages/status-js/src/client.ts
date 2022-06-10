@@ -2,9 +2,9 @@
  * @see https://specs.status.im/spec/1
  */
 
-// todo!: handle already received (emoji) events (by messageId or event)
+// todo: write class for channels/chat
 // todo: use Map
-// todo: write class for channels
+
 // todo: use single proto runtime
 
 // todo: tests
