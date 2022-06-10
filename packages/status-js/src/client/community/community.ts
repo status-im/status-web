@@ -1,5 +1,5 @@
+import { hexToBytes } from 'ethereum-cryptography/utils'
 import { PageDirection, waku_message } from 'js-waku'
-import { hexToBytes } from 'js-waku/build/main/lib/utils'
 import difference from 'lodash/difference'
 
 import { ChatMessage } from '~/protos/chat-message'
@@ -457,7 +457,7 @@ export class Community {
     const payload = CommunityRequestToJoin.encode({
       clock: BigInt(Date.now()),
       chatId,
-      communityId: hexToBytes(this.communityPublicKey),
+      communityId: hexToBytes(this.communityPublicKey.replace(/^0[xX]/, '')),
       ensName: '',
     })
 
