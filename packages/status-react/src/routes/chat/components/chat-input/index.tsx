@@ -14,10 +14,11 @@ interface Props {
   mode?: 'normal' | 'editing'
   value?: string
   editing?: boolean
+  onSubmit: (value: string) => void
 }
 
 export const ChatInput = (props: Props) => {
-  const { value, editing } = props
+  const { value, editing, onSubmit } = props
 
   const [inputValue, setInputValue] = useState(value ?? '')
   const { state } = useChatContext()
@@ -30,6 +31,13 @@ export const ChatInput = (props: Props) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && event.shiftKey === false) {
+      onSubmit(inputValue)
+      setInputValue('')
+    }
   }
 
   return (
@@ -47,6 +55,7 @@ export const ChatInput = (props: Props) => {
             placeholder="Message"
             value={inputValue}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
           />
           <Flex>
             <IconButton label="Pick emoji">

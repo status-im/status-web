@@ -10,22 +10,22 @@ interface Props {
 export const ThrowawayProfileFoundDialog = (props: Props) => {
   const { onSkip } = props
 
-  const [account] = useAccount()
+  const { account } = useAccount()
 
   const handleLoadThrowawayProfile = () => {
     // TODO: load throwaway profile
   }
 
-if (!account) {
-  return null
-}
+  if (!account) {
+    return null
+  }
 
   return (
     <Dialog title="Throwaway Profile Found">
       <Dialog.Body gap="5">
         <Flex direction="column" align="center" gap="2">
-          <Avatar size={64} src={account.imageUrl} />
-          <Heading weight="600">{account.name}</Heading>
+          <Avatar size={64} />
+          <Heading weight="600">{account.username}</Heading>
           <Text color="gray">
             Chatkey: 0x63FaC9201494f0bd17B9892B9fae4d52fe3BD377
           </Text>

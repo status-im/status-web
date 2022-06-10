@@ -1,27 +1,26 @@
 import React from 'react'
 
-import { useMatch } from 'react-router-dom'
+// import { PinIcon } from '~/src/icons/pin-icon'
+import { Avatar, Flex, Text } from '~/src/system'
 
-import { PinIcon } from '~/src/icons/pin-icon'
-import { Avatar, DialogTrigger, Flex, Text } from '~/src/system'
-
-import { PinnedMessagesDialog } from './pinned-messages-dialog'
-
-import type { Channel } from '~/src/protocol'
+// import { PinnedMessagesDialog } from './pinned-messages-dialog'
+import type { Chat } from '~/src/protocol'
 
 interface Props {
-  chat: Channel
+  chat: Chat
 }
 
 export const ChatInfo = (props: Props) => {
   const { chat } = props
-  console.log("file: index.tsx > line 18 > ChatInfo > chat", chat)
-
 
   // if (chat.type == 'channel') {
   return (
     <Flex align="center" gap="2">
-      <Avatar size={36} />
+      <Avatar
+        size={36}
+        name={chat.identity?.displayName}
+        color={chat.identity?.color}
+      />
       <div>
         <Text>#{chat.identity?.displayName}</Text>
         <Flex align="center">

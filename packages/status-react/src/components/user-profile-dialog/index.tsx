@@ -15,7 +15,7 @@ export const UserProfileDialog = (props: Props) => {
       <Dialog.Body align="center">
         <Avatar size="80" />
         <Heading size="22">{name}</Heading>
-        <Text>Chatkey:0x63FaC9201494f0bd17B9892B9fae4d52fe3BD377</Text>
+        <Text>Chatkey: 0x63FaC9201494f0bd17B9892B9fae4d52fe3BD377</Text>
         <EmojiHash />
       </Dialog.Body>
       <Dialog.Actions>

@@ -1,24 +1,22 @@
 import React from 'react'
 
 import { useAppState } from '~/src/contexts/app-context'
+import { useAccount } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Separator } from '~/src/system'
 
 import { Channels } from './components/channels'
 import { CommunityInfo } from './components/community-info'
 import { GetStarted } from './components/get-started'
-import { useAccount } from '~/src/protocol'
 // import { Messages } from './components/messages'
-
 
 export const MainSidebar = () => {
   const { options } = useAppState()
+  const { account } = useAccount()
 
   if (options.enableSidebar === false) {
     return null
   }
-
-  const [account] = useAccount()
 
   return (
     <Wrapper>
@@ -26,10 +24,10 @@ export const MainSidebar = () => {
       <Channels />
       {/* <Separator css={{ margin: '16px 0' }} />
       <Messages /> */}
-      { !account && (
+      {!account && (
         <>
-      <Separator css={{ margin: '16px 0' }} />
-      <GetStarted />
+          <Separator />
+          <GetStarted />
         </>
       )}
     </Wrapper>

@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
 
+import snarkdown from 'snarkdown'
+
 import { UserProfileDialog } from '~/src/components/user-profile-dialog'
 import { useChatContext } from '~/src/contexts/chat-context'
 import { BellIcon } from '~/src/icons/bell-icon'
 import { PinIcon } from '~/src/icons/pin-icon'
+import { useProtocol } from '~/src/protocol/provider'
 import { styled } from '~/src/styles/config'
 import {
   Avatar,
@@ -25,10 +28,11 @@ import { Actions } from './actions'
 import { MessageReply } from './message-reply'
 import { MessageReactions } from './reactions'
 
-import type { MessageType } from '~/src/protocol/use-messages'
+import type { Message, Reaction } from '~/src/protocol/use-messages'
 
 interface Props {
-  message: MessageType
+  message: Message
+  previousMessage?: Message
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -53,15 +57,17 @@ interface Props {
 // })
 
 export const ChatMessage = (props: Props) => {
-  const { message } = props
-  console.log("🚀 > message", message)
+  const { client } = useProtocol()
 
-  // const { type, contact, owner, mention, pinned, reply, reactions } = message
-  const owner=false
-  const mention=false
+  const { message } = props
+
+  const owner = false
+  const mention = false
   const pinned = false
   const reply = false
-  const { contentType, text, displayName, reactions } = message
+
+  const { messageId, chatId, contentType, clock, displayName, reactions } =
+    message
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
@@ -70,26 +76,34 @@ export const ChatMessage = (props: Props) => {
 
   const userProfileDialog = useDialog(UserProfileDialog)
 
-  const handleReplyClick = () => {
-    dispatch({
-      type: 'SET_REPLY',
+  const handleMessageSubmit = (message: string) => {
+    client.community.sendTextMessage(
+      chatId,
       message,
-    })
+      '0x0fa999097568d1fdcc39108a08d75340bd2cee5ec59c36799007150d0a9fc896'
+    )
+  }
+
+  const handleReaction = (reaction: Reaction) => {
+    client.community.sendReaction(chatId, messageId, reaction)
+  }
+
+  const handleReplyClick = () => {
+    dispatch({ type: 'SET_REPLY', message })
   }
 
   const handlePinClick = () => {
-    // console.log(pinned)
-  }
-
-  const handleReaction = (reaction: string) => {
-    console.log(reaction)
+    // TODO: pin message
   }
 
   const renderMessage = () => {
     if (editing) {
       return (
         <Box>
-          <ChatInput value={message?.text ?? ''} />
+          <ChatInput
+            value={message?.text ?? ''}
+            onSubmit={handleMessageSubmit}
+          />
           <Flex gap={2}>
             <Button
               variant="outline"
@@ -98,7 +112,9 @@ export const ChatMessage = (props: Props) => {
             >
               Cancel
             </Button>
-            <Button size="small">Save</Button>
+            <Button size="small" onClick={handleMessageSubmit}>
+              Save
+            </Button>
           </Flex>
         </Box>
       )
@@ -118,35 +134,28 @@ export const ChatMessage = (props: Props) => {
         // </AlertDialogTrigger>{' '}
         return <Text>{message.text}</Text>
       }
-      case 'image': {
+      case 'EMOJI': {
+        return (
+          <Text css={{ fontSize: '3rem', lineHeight: 1.1, letterSpacing: -2 }}>
+            {message.text}
+          </Text>
+        )
+      }
+      case 'IMAGE': {
+        const blob = new Blob([message.image.payload], { type: 'image/jpeg' })
+
+        // TODO?: call URL.revokeObjectURL()
         return (
           <Flex gap={1} css={{ paddingTop: '$2' }}>
             <Image
-              width={147}
+              width={150}
               alt="message"
-              height={196}
-              src={message.imageUrl}
+              height={150}
+              src={URL.createObjectURL(blob)}
               radius="bubble"
+              fit="cover"
             />
           </Flex>
-        )
-      }
-      case 'image-text': {
-        const { text, imageUrl } = message
-
-        return (
-          <>
-            <Text>{text}</Text>
-            <Flex gap={1} css={{ paddingTop: '$1' }}>
-              <Image
-                width={147}
-                alt="message"
-                height={196}
-                src={imageUrl}
-                radius="bubble"
-              />
-            </Flex>
-          </>
         )
       }
     }
@@ -161,12 +170,11 @@ export const ChatMessage = (props: Props) => {
             <Box>
               <DropdownMenuTrigger>
                 <button type="button">
-                  {/* <Avatar size={44} src={contact.imageUrl} /> */}
+                  <Avatar size={44} />
                 </button>
                 <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
-                    {/* <Avatar size="36" src={contact.imageUrl} /> */}
-                    {/* <Text>{contact.name}</Text> */}
+                    <Avatar size="36" />
                     <Text>{displayName}</Text>
                     <EmojiHash />
                   </Flex>
@@ -197,20 +205,22 @@ export const ChatMessage = (props: Props) => {
             </Box>
 
             <Box css={{ flex: 1 }}>
-              {pinned && (
+              {/* {pinned && (
                 <Flex gap={1}>
                   <PinIcon width={8} />
-                  <Text size="13">Pinned by carmen.eth</Text>
+                  <Text size="13">Pinned by {contact.name}</Text>
                 </Flex>
-              )}
+              )} */}
 
               <Flex gap="1" align="center">
                 <Text color="primary" weight="500" size="15">
                   {displayName}
-                  {/* {contact.name} */}
                 </Text>
                 <Text size="10" color="gray">
-                  10:00 AM
+                  {new Date(Number(clock)).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </Text>
               </Flex>
 
@@ -229,6 +239,7 @@ export const ChatMessage = (props: Props) => {
             onEditClick={() => setEditing(true)}
             onReplyClick={handleReplyClick}
             onPinClick={handlePinClick}
+            onReactionClick={handleReaction}
             reacting={reacting}
             onReactingChange={setReacting}
             reactions={reactions}
@@ -236,7 +247,7 @@ export const ChatMessage = (props: Props) => {
         </Wrapper>
         <ContextMenu>
           <ContextMenu.Item onSelect={handleReplyClick}>Reply</ContextMenu.Item>
-          <ContextMenu.Item onSelect={handlePinClick}>Pin</ContextMenu.Item>
+          {/* <ContextMenu.Item onSelect={handlePinClick}>Pin</ContextMenu.Item> */}
         </ContextMenu>
       </ContextMenuTrigger>
     </>

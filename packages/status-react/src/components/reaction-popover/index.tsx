@@ -14,27 +14,27 @@ interface Props {
 }
 
 export const emojis: Record<Reaction, { url: string; symbol: string }> = {
-  heart: {
+  LOVE: {
     symbol: '❤️',
     url: 'https://twemoji.maxcdn.com/v/latest/svg/2764.svg',
   },
-  'thumbs-up': {
+  THUMBS_UP: {
     symbol: '👍️',
     url: 'https://twemoji.maxcdn.com/v/latest/svg/1f44d.svg',
   },
-  'thumbs-down': {
+  THUMBS_DOWN: {
     symbol: '👎️',
     url: 'https://twemoji.maxcdn.com/v/latest/svg/1f44e.svg',
   },
-  smile: {
+  LAUGH: {
     symbol: '😆',
     url: 'https://twemoji.maxcdn.com/v/latest/svg/1f606.svg',
   },
-  sad: {
+  SAD: {
     symbol: '😭',
     url: 'https://twemoji.maxcdn.com/v/latest/svg/1f62d.svg',
   },
-  angry: {
+  ANGRY: {
     symbol: '😡',
     url: 'https://twemoji.maxcdn.com/v/latest/svg/1f621.svg',
   },

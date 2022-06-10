@@ -2,11 +2,11 @@ import React from 'react'
 
 import { ReactionPopover } from '~/src/components/reaction-popover'
 import { PencilIcon } from '~/src/icons/pencil-icon'
-import { PinIcon } from '~/src/icons/pin-icon'
+// import { PinIcon } from '~/src/icons/pin-icon'
 import { ReactionIcon } from '~/src/icons/reaction-icon'
 import { ReplyIcon } from '~/src/icons/reply-icon'
 import { TrashIcon } from '~/src/icons/trash-icon'
-import { UnpinIcon } from '~/src/icons/unpin-icon'
+// import { UnpinIcon } from '~/src/icons/unpin-icon'
 import { styled } from '~/src/styles/config'
 import {
   AlertDialog,
@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from '~/src/system'
 
-import type { Reactions } from '~/src/protocol/use-messages'
+import type { Reaction, Reactions } from '~/src/protocol/use-messages'
 
 interface Props {
   owner: boolean
@@ -23,6 +23,7 @@ interface Props {
   onReplyClick: () => void
   onEditClick: () => void
   onPinClick: () => void
+  onReactionClick: (reaction: Reaction) => void
   reacting: boolean
   onReactingChange: (reacting: boolean) => void
   reactions: Reactions
@@ -31,10 +32,11 @@ interface Props {
 export const Actions = (props: Props) => {
   const {
     owner,
-    pinned,
+    // pinned,
     onReplyClick,
     onEditClick,
-    onPinClick,
+    // onPinClick,
+    onReactionClick,
     reacting,
     onReactingChange,
     reactions,
@@ -47,7 +49,7 @@ export const Actions = (props: Props) => {
         open={reacting}
         onOpenChange={onReactingChange}
         onClick={emoji => {
-          console.log(emoji)
+          onReactionClick(emoji)
           onReactingChange(false)
         }}
       >
@@ -79,7 +81,7 @@ export const Actions = (props: Props) => {
           </IconButton>
         </Tooltip>
       )}
-      <Tooltip label={pinned ? 'Unpin' : 'Pin'}>
+      {/* <Tooltip label={pinned ? 'Unpin' : 'Pin'}>
         <IconButton
           label={pinned ? 'Unpin message' : 'Pin message'}
           intent="info"
@@ -88,7 +90,7 @@ export const Actions = (props: Props) => {
         >
           {pinned ? <UnpinIcon /> : <PinIcon />}
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
       {owner && (
         <AlertDialogTrigger>
           <Tooltip label="Delete">

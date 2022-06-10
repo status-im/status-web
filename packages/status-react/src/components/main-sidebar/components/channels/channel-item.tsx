@@ -17,7 +17,7 @@ export const ChannelItem = (props: Props) => {
   return (
     <ContextMenuTrigger>
       <SidebarItem {...sidebarItemProps}>#{children}</SidebarItem>
-      <ChatMenu type="context" chatType="channel" />
+      <ChatMenu type="context" />
     </ContextMenuTrigger>
   )
 }

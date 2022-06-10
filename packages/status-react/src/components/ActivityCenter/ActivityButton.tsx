@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useMemo, useRef, useState } from 'react'
 
 import styled from 'styled-components'
