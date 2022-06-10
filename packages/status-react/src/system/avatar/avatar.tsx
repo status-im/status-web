@@ -1,18 +1,20 @@
 import React from 'react'
 
 import { Image } from '../image'
-import { Base, Indicator } from './styles'
+import { Base, Indicator, Initials } from './styles'
 
 import type { Variants } from './styles'
 
 interface Props {
   size: Variants['size']
+  name?: string
   indicator?: 'online' | 'offline'
   src?: string
+  color?: string
 }
 
 const Avatar = (props: Props) => {
-  const { size, src, indicator } = props
+  const { size, name, src, color, indicator } = props
 
   // const identicon = useMemo(() => {
   //   const colors = colorWheel
@@ -33,8 +35,11 @@ const Avatar = (props: Props) => {
   //   }
   // }, [contact])
 
+  const initials = name ? name.slice(0, 1) : ''
+
   return (
-    <Base size={size}>
+    <Base size={size} style={{ backgroundColor: color }}>
+      {initials && <Initials size={size}>{initials}</Initials>}
       {src && (
         <Image
           src={src}

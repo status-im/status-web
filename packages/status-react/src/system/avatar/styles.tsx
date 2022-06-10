@@ -6,7 +6,7 @@ export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('div', {
   position: 'relative',
-  background: '$accent-6',
+  background: '$primary-1',
   borderRadius: '100%',
   flexShrink: 0,
 
@@ -76,6 +76,29 @@ export const Indicator = styled('span', {
       offline: {
         backgroundColor: '$gray-1',
       },
+    },
+  },
+})
+
+export const Initials = styled('div', {
+  width: '100%',
+  height: '100%',
+  color: '$accent-11',
+  textAlign: 'center',
+  fontWeight: '$600',
+  fontSize: 15,
+  textTransform: 'uppercase',
+  verticalAlign: 'baseline',
+  variants: {
+    size: {
+      20: { fontSize: 'calc(20 * 0.5px)', lineHeight: '20px' },
+      24: { fontSize: 'calc(24 * 0.5px)', lineHeight: '24px' },
+      32: { fontSize: 'calc(32 * 0.5px)', lineHeight: '32px' },
+      36: { fontSize: 'calc(36 * 0.5px)', lineHeight: '36px' },
+      44: { fontSize: 'calc(44 * 0.5px)', lineHeight: '44px' },
+      64: { fontSize: 'calc(64 * 0.5px)', lineHeight: '64px' },
+      80: { fontSize: 'calc(80 * 0.5px)', lineHeight: '80px' },
+      120: { fontSize: 'calc(120 * 0.5px)', lineHeight: '120px' },
     },
   },
 })
