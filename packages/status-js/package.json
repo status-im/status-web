@@ -24,7 +24,7 @@
   },
   "scripts": {
     "prebuild": "rm -rf dist",
-    "dev": "parcel --host 192.168.86.38 --port 8080",
+    "dev": "parcel",
     "build": "parcel build",
     "debug": "parcel build src/debug.ts --dist-dir output",
     "build:vite": "vite build",
