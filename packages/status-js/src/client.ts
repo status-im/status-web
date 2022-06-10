@@ -1,6 +1,11 @@
+/**
+ * @see https://specs.status.im/spec/1
+ */
+
 // todo!: handle already received (emoji) events (by messageId or event)
 // todo: use Map
 // todo: write class for channels
+// todo: use single proto runtime
 
 // todo: tests
 
@@ -31,6 +36,7 @@ export interface ClientOptions {
 
 class Client {
   private waku: Waku
+  public readonly wakuMessages: Set<string>
 
   public account?: Account
   public community: Community
@@ -38,6 +44,8 @@ class Client {
   constructor(waku: Waku, options: ClientOptions) {
     // Waku
     this.waku = waku
+    this.wakuMessages = new Set()
+
     // Community
     this.community = new Community(this, waku, options.publicKey)
   }
@@ -113,7 +121,7 @@ class Client {
   }
 
   public handleWakuMessage = (wakuMessage: WakuMessage): void => {
-    handleWakuMessage(wakuMessage, this.community, this.account)
+    handleWakuMessage(wakuMessage, this, this.community, this.account)
   }
 }
 

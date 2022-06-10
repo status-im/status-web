@@ -20,6 +20,7 @@ import { getReactions } from './get-reactions'
 import { mapChatMessage } from './map-chat-message'
 
 import type { Account } from '../../account'
+import type { Client } from '../../client'
 import type { Community /*, MessageType*/ } from './community'
 import type { WakuMessage } from 'js-waku'
 
@@ -37,6 +38,7 @@ import type { WakuMessage } from 'js-waku'
 export function handleWakuMessage(
   wakuMessage: WakuMessage,
   // state
+  client: Client,
   community: Community,
   account?: Account
 ): void {
@@ -65,11 +67,25 @@ export function handleWakuMessage(
   }
   messageToDecode = decodedMetadata.payload
 
-  // recover public key
   const publicKey = recoverPublicKey(
     decodedMetadata.signature,
     decodedMetadata.payload
   )
+
+  // fixme?: handle decodedProtocol.encryptedMessage
+  const wakuMessageId = payloadToId(
+    decodedProtocol?.publicMessage || decodedMetadata.payload,
+    publicKey
+  )
+
+  // already handled
+  if (client.wakuMessages.has(wakuMessageId)) {
+    console.log('already received')
+
+    return
+  }
+
+  let success = false
 
   // decode, map and handle (events)
   switch (decodedMetadata.type) {
@@ -81,6 +97,8 @@ export function handleWakuMessage(
       // handle (state and callback)
       community.handleCommunityMetadataEvent(decodedPayload)
 
+      success = true
+
       break
     }
 
@@ -88,25 +106,21 @@ export function handleWakuMessage(
       // decode
       const decodedPayload = ChatMessage.decode(messageToDecode)
 
-      if (!decodedProtocol) {
-        break
-      }
-
       // TODO?: ignore community.channelMessages which are messageType !== COMMUNITY_CHAT
 
       // map
-      // fixme?: handle decodedProtocol.encryptedMessage
-      const messageId = payloadToId(decodedProtocol.publicMessage, publicKey)
       // todo?: use full chatId (incl. pub key) instead
       const channelId = getChannelId(decodedPayload.chatId)
 
       const chatMessage = mapChatMessage(decodedPayload, {
-        messageId,
+        messageId: wakuMessageId,
         channelId,
       })
 
       // handle
       community.handleChannelChatMessageNewEvent(chatMessage)
+
+      success = true
 
       break
     }
@@ -153,6 +167,8 @@ export function handleWakuMessage(
         community.channelMessages[channelId]!
       )
 
+      success = true
+
       break
     }
 
@@ -189,6 +205,8 @@ export function handleWakuMessage(
         community.channelMessages[channelId]!
       )
 
+      success = true
+
       break
     }
 
@@ -224,6 +242,8 @@ export function handleWakuMessage(
       community.channelMessagesCallbacks[channelId]?.(
         community.channelMessages[channelId]!
       )
+
+      success = true
 
       break
     }
@@ -269,11 +289,17 @@ export function handleWakuMessage(
         community.channelMessages[channelId]!
       )
 
+      success = true
+
       break
     }
 
     default:
       break
+  }
+
+  if (success) {
+    client.wakuMessages.add(wakuMessageId)
   }
 
   return
