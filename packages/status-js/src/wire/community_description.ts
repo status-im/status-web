@@ -42,7 +42,6 @@ export class CommunityDescription {
 
     const callback = (messages: WakuMessage[]): void => {
       // Value found, stop processing
-      // FIXME?: return true/false
       if (communityDescription) return
 
       // Process most recent message first
@@ -67,8 +66,6 @@ export class CommunityDescription {
           )
         }
       })
-
-      // FIXME?: return true/false
     }
 
     const symKey = await createSymKeyFromPassword(hexCommunityPublicKey)

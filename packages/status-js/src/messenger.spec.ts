@@ -23,7 +23,6 @@ describe('Messenger', () => {
     identityAlice = Identity.generate()
     identityBob = Identity.generate()
 
-    // todo: mock/provide WakuMock
     dbg('Create messengers')
     ;[messengerAlice, messengerBob] = await Promise.all([
       Messenger.create(identityAlice, { bootstrap: {} }),

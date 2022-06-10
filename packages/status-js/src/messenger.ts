@@ -1,5 +1,5 @@
 import debug from 'debug'
-import { waku_message, WakuMessage } from 'js-waku'
+import { Waku, waku_message, WakuMessage } from 'js-waku'
 
 import { Chat } from './chat'
 import { ApplicationMetadataMessage_Type } from './proto/status/v1/application_metadata_message'
@@ -9,11 +9,10 @@ import { ChatMessage } from './wire/chat_message'
 
 import type { Identity } from './identity'
 import type { Content } from './wire/chat_message'
-import type { Waku } from 'js-waku'
+import type { waku } from 'js-waku'
 
 const dbg = debug('communities:messenger')
 
-// TODO: pass waku client
 export class Messenger {
   waku: Waku
   chatsById: Map<string, Chat>
@@ -37,8 +36,6 @@ export class Messenger {
 
   public static async create(
     identity: Identity | undefined,
-    // wakuOptions?: waku.CreateOptions
-    // TODO: pass waku as client
     wakuOptions?: waku.CreateOptions
   ): Promise<Messenger> {
     const _wakuOptions = Object.assign(

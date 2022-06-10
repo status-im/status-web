@@ -18,7 +18,6 @@ import type { Waku } from 'js-waku'
 
 export type CommunityMetadataType = CommunityDescription['proto']
 
-// todo?: rename to ChatMessageType
 export type MessageType = ChatMessage & {
   messageId: string
   pinned: boolean
@@ -31,7 +30,6 @@ export class Community {
   private client: Client
   private waku: Waku
   public communityPublicKey: string
-  // fixme!
   private communityContentTopic!: string
   private communityDecryptionKey!: Uint8Array
   public communityMetadata!: CommunityMetadataType // state
@@ -102,14 +100,12 @@ export class Community {
     return communityMetadata
   }
 
-  // todo?: rename and implement as "fetch history" (e.g. emojis, however, would arrive first and not match)
   public createFetchChannelMessages = async (
     channelId: string,
     callback: (messages: MessageType[]) => void
   ) => {
     const id = `${this.communityPublicKey}${channelId}`
     const channelContentTopic = idToContentTopic(id)
-    // todo?: keep in state instead and replace the factory
     const symKey = await createSymKeyFromPassword(id)
 
     return async (options: { start: Date }) => {
@@ -176,7 +172,6 @@ export class Community {
 
       const symKey = await createSymKeyFromPassword(id)
 
-      // todo?: request waku feature to be passed as param
       this.waku.relay.addDecryptionKey(symKey, {
         method: waku_message.DecryptionMethod.Symmetric,
         contentTopics: [channelContentTopic],
@@ -226,7 +221,6 @@ export class Community {
     }
 
     // Community
-    // fixme!: set only if updated
     this.communityMetadata = communityMetadata
     this.communityCallback?.(communityMetadata)
   }
@@ -283,7 +277,6 @@ export class Community {
     this.channelMessages[channelId] = _messages
 
     // callback
-    // todo!: review use of ! why not just use messages defined above?
     this.channelMessagesCallbacks[channelId]?.(this.channelMessages[channelId]!)
   }
 
