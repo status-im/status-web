@@ -1,6 +1,3 @@
-// todo: move file
-// fixme: relative paths
-
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
 import { ApplicationMetadataMessage } from '../../../protos/application-metadata-message'
@@ -24,17 +21,6 @@ import type { Client } from '../../client'
 import type { Community /*, MessageType*/ } from './community'
 import type { WakuMessage } from 'js-waku'
 
-// todo?: return decoded, possibly mapped, event but do not update state and call callback
-// todo?: return void
-// todo?: return success (e.g. if this handler should be used in Community's init)
-// fixme:
-/**
- * Argument of type '(wakuMessage: WakuMessage, community: Community) => boolean'
- * is not assignable to parameter of type '(message: WakuMessage) => void'.ts(2345)
- */
-// type HandlerResult = boolean
-// type HandlerResult = CommunityDescription | MessageType | undefined
-
 export function handleWakuMessage(
   wakuMessage: WakuMessage,
   // state
@@ -47,7 +33,6 @@ export function handleWakuMessage(
     return
   }
 
-  // todo: explain
   if (!wakuMessage.signaturePublicKey) {
     return
   }
@@ -72,7 +57,6 @@ export function handleWakuMessage(
     decodedMetadata.payload
   )
 
-  // fixme?: handle decodedProtocol.encryptedMessage
   const wakuMessageId = payloadToId(
     decodedProtocol?.publicMessage || decodedMetadata.payload,
     publicKey
@@ -91,7 +75,6 @@ export function handleWakuMessage(
       // decode
       const decodedPayload = CommunityDescription.decode(messageToDecode)
 
-      // todo?: don't use class method
       // handle (state and callback)
       community.handleCommunityMetadataEvent(decodedPayload)
 
@@ -107,7 +90,6 @@ export function handleWakuMessage(
       // TODO?: ignore community.channelMessages which are messageType !== COMMUNITY_CHAT
 
       // map
-      // todo?: use full chatId (incl. pub key) instead
       const channelId = getChannelId(decodedPayload.chatId)
 
       const chatMessage = mapChatMessage(decodedPayload, {
@@ -129,7 +111,6 @@ export function handleWakuMessage(
       const messageId = decodedPayload.messageId
       const channelId = getChannelId(decodedPayload.chatId)
 
-      // todo?: move to class method (e.g. handleChannelChatMessageEditEvent)
       const _messages = community.channelMessages[channelId] || []
 
       let index = _messages.length
@@ -148,10 +129,8 @@ export function handleWakuMessage(
 
       const _message = _messages[index]
 
-      // todo?: use mapChatMessage
       const message = {
         ..._message,
-        // fixme?: other fields that user can edit
         text: decodedPayload.text,
       }
 
@@ -192,7 +171,6 @@ export function handleWakuMessage(
         break
       }
 
-      // todo?: use delete; set to null
       _messages.splice(index, 1)
 
       // state
@@ -236,7 +214,6 @@ export function handleWakuMessage(
       community.channelMessages[channelId] = _messages
 
       // callback
-      // todo!: review use of !
       community.channelMessagesCallbacks[channelId]?.(
         community.channelMessages[channelId]!
       )
@@ -272,7 +249,6 @@ export function handleWakuMessage(
       const isMe =
         account?.publicKey === `0x${bytesToHex(wakuMessage.signaturePublicKey)}`
 
-      // fixme!
       _messages[index].reactions = getReactions(
         decodedPayload,
         _message.reactions,

@@ -2,24 +2,6 @@
  * @see https://specs.status.im/spec/1
  */
 
-// todo: write class for channels/chat
-// todo: use Map
-
-// todo: use single proto runtime
-
-// todo: tests
-
-// todo: handle disconnections; no messages after sleep; libp2p;
-// todo: identities/members?
-// todo?: observe channels
-// todo?: rename channels to chats
-// todo?: multiple communityCallback
-// todo?: call onChannel* separately
-// todo?: ignore messages of not yet approved users
-// todo?: ignore messages with invalid signature
-// todo?: handle encrypted waku messages
-// todo?: handle waku messages/events without identity
-
 import { hexToBytes } from 'ethereum-cryptography/utils'
 import { Waku, WakuMessage } from 'js-waku'
 
