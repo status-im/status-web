@@ -1,15 +1,17 @@
 import React, {
-  useEffect,
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react'
 
-import type { Config } from '~/src/types/config'
-import {Loading} from '~/src/components/loading'
 import { createClient } from '@status-im/js'
-import type { Client, ClientOptions, Community , Account} from '@status-im/js'
+
+import { Loading } from '~/src/components/loading'
+
+import type { Account, Client, ClientOptions, Community } from '@status-im/js'
+import type { Config } from '~/src/types/config'
 
 const Context = createContext<Client | undefined>(undefined)
 const CommunityContext = createContext<
@@ -58,11 +60,12 @@ export const ClientProvider = (props: ClientProviderProps) => {
     const loadClient = async () => {
       // setLoading(true)
       const client = await createClient({ publicKey: props.options.publicKey })
-console.log('starting')
-      await client.start()
       console.log('init', client)
       setCommunity(client.community.communityMetadata)
-      console.log("file: provider.tsx > line 64 > loadClient > client.community.communityMetadata", client.community.communityMetadata)
+      console.log(
+        'file: provider.tsx > line 64 > loadClient > client.community.communityMetadata',
+        client.community.communityMetadata
+      )
 
       setClient(client)
       setLoading(false)
@@ -76,7 +79,10 @@ console.log('starting')
       console.log('useEffect subscribe')
       return client.community.onCommunityUpdate(community => {
         setCommunity(community)
-        console.log("file: provider.tsx > line 75 > useEffect > community", community)
+        console.log(
+          'file: provider.tsx > line 75 > useEffect > community',
+          community
+        )
       })
     }
   }, [client])
@@ -88,11 +94,7 @@ console.log('starting')
   return (
     <Context.Provider value={client}>
       <CommunityContext.Provider value={community}>
-        {loading ? (
-          <Loading />
-        ) : (
-          children
-        )}
+        {loading ? <Loading /> : children}
       </CommunityContext.Provider>
     </Context.Provider>
   )
