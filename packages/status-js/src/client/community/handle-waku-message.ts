@@ -80,8 +80,6 @@ export function handleWakuMessage(
 
   // already handled
   if (client.wakuMessages.has(wakuMessageId)) {
-    console.log('already received')
-
     return
   }
 
