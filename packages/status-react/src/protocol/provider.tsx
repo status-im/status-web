@@ -1,101 +1,109 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
+import React, { createContext, useContext, useEffect, useReducer } from 'react'
 
 import { createClient } from '@status-im/js'
 
 import { Loading } from '~/src/components/loading'
 
 import type { Account, Client, ClientOptions, Community } from '@status-im/js'
-import type { Config } from '~/src/types/config'
 
-const Context = createContext<Client | undefined>(undefined)
-const CommunityContext = createContext<
-  Community['communityMetadata'] | undefined
->(undefined)
+const Context = createContext<State | undefined>(undefined)
 
-export function useClient() {
-  const context = useContext(Context)
-
-  if (!context) {
-    throw new Error(`useClient must be used within a ClientProvider`)
-  }
-
-  return context
+type State = {
+  loading: boolean
+  client: Client | undefined
+  community: Community['communityMetadata'] | undefined
+  account: Account | undefined
+  dispatch?: React.Dispatch<Action>
 }
 
-export function useCommunity() {
-  const context = useContext(CommunityContext)
+type Action =
+  | { type: 'INIT'; client: Client }
+  | { type: 'UPDATE_COMMUNITY'; community: Community['communityMetadata'] }
+  | { type: 'SET_ACCOUNT'; account: Account }
+  | { type: 'REMOVE_ACCOUNT' }
 
-  if (!context) {
-    // return {}
-    throw new Error(`useCommunity must be used within a ClientProvider`)
-  }
-
-  return context
-}
-
-interface ClientProviderProps {
+interface Props {
   options: ClientOptions
   children: React.ReactNode
 }
 
-export const ClientProvider = (props: ClientProviderProps) => {
-  const [client, setClient] = useState<Client>()
-  const [community, setCommunity] = useState<Community['communityMetadata']>()
-  const [account, setAccount] = useState<Account>()
-  const [loading, setLoading] = useState(true)
+const reducer = (state: State, action: Action): State => {
+  switch (action.type) {
+    case 'INIT': {
+      const { client } = action
+      return {
+        ...state,
+        loading: false,
+        client,
+        community: client.community.communityMetadata,
+      }
+    }
+    case 'UPDATE_COMMUNITY': {
+      return { ...state, community: action.community }
+    }
+    case 'SET_ACCOUNT': {
+      return { ...state, account: action.account }
+    }
+    case 'REMOVE_ACCOUNT': {
+      return { ...state, account: undefined }
+    }
+  }
+}
 
+export const ProtocolProvider = (props: Props) => {
   const { options, children } = props
 
-  // const client = useMemo(() => {
-  //   return createClient(options)
-  // }, [options])
+  const [state, dispatch] = useReducer(reducer, {
+    loading: true,
+    client: undefined,
+    community: undefined,
+    account: undefined,
+    dispatch: undefined,
+  })
+
+  const { client, loading } = state
 
   useEffect(() => {
     const loadClient = async () => {
-      // setLoading(true)
-      const client = await createClient({ publicKey: props.options.publicKey })
-      console.log('init', client)
-      setCommunity(client.community.communityMetadata)
-      console.log(
-        'file: provider.tsx > line 64 > loadClient > client.community.communityMetadata',
-        client.community.communityMetadata
-      )
-
-      setClient(client)
-      setLoading(false)
+      const client = await createClient({ publicKey: options.publicKey })
+      dispatch({ type: 'INIT', client })
     }
 
     loadClient()
-  }, [])
+
+    // Community public key should not change during the lifetime
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (client) {
-      console.log('useEffect subscribe')
       return client.community.onCommunityUpdate(community => {
-        setCommunity(community)
-        console.log(
-          'file: provider.tsx > line 75 > useEffect > community',
-          community
-        )
+        dispatch({ type: 'UPDATE_COMMUNITY', community })
       })
     }
   }, [client])
 
-  // if (!client) {
-  //   return
-  // }
+  if (loading) {
+    return <Loading />
+  }
 
   return (
-    <Context.Provider value={client}>
-      <CommunityContext.Provider value={community}>
-        {loading ? <Loading /> : children}
-      </CommunityContext.Provider>
+    <Context.Provider value={{ ...state, dispatch }}>
+      {children}
     </Context.Provider>
   )
+}
+
+export function useProtocol() {
+  const context = useContext(Context)
+
+  if (!context) {
+    throw new Error(`useProtocol must be used within a ProtocolProvider`)
+  }
+
+  // we enforce initialization of client before rendering children
+  return context as State & {
+    client: Client
+    community: Community['communityMetadata']
+    dispatch: React.Dispatch<Action>
+  }
 }
