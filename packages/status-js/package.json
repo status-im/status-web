@@ -26,7 +26,6 @@
     "prebuild": "rm -rf dist",
     "dev": "parcel",
     "build": "parcel build",
-    "debug": "parcel build src/debug.ts --dist-dir output",
     "build:vite": "vite build",
     "build:types": "tsc --emitDeclarationOnly",
     "build:protos": "protons protos/*.proto",
