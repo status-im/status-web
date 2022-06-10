@@ -12,10 +12,12 @@ interface Props {
   muted: boolean
   unread: boolean
   children: React.ReactNode
+  name?: string
+  color?: string
 }
 
 const SidebarItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
-  const { muted, unread, children, ...buttonProps } = props
+  const { muted, unread, children, name, color, ...buttonProps } = props
 
   return (
     <Link
@@ -23,7 +25,7 @@ const SidebarItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
       state={muted ? 'muted' : unread ? 'unread' : undefined}
       {...buttonProps}
     >
-      <Avatar size={24} />
+      <Avatar size={24} name={name} color={color} />
       {children}
     </Link>
   )

@@ -1,43 +1,28 @@
 import React from 'react'
 
-import { Box } from '~/src/system'
 import { useChats } from '~/src/protocol'
+import { Box } from '~/src/system'
 
-import { ChannelGroup } from './channel-group'
+// import { ChannelGroup } from './channel-group'
 import { ChannelItem } from './channel-item'
 
-
 export const Channels = () => {
-
   const chats = useChats()
 
   return (
-    <Box css={{padding:'8px 0'}}>
-      {chats.map((chat) => (
+    <Box css={{ padding: '24px 0', overflow: 'auto' }}>
+      {chats.map(chat => (
         <ChannelItem
           key={chat.id}
           to={`/${chat.id}`}
           unread={false}
           muted={false}
+          name={chat.identity?.displayName}
+          color={chat.identity?.color}
         >
           {chat.identity!.displayName}
         </ChannelItem>
       ))}
-
-      {/* {Object.entries(community.chats).map(([group, channels]) => (
-        <ChannelGroup key={group} name={group}>
-          {channels.map(channel => (
-            <ChannelItem
-              key={group + channel}
-              to={`/${channel}`}
-              unread={channel === 'general'}
-              muted={channel === 'random'}
-            >
-              {channel}
-            </ChannelItem>
-          ))}
-        </ChannelGroup>
-      ))} */}
     </Box>
   )
 }

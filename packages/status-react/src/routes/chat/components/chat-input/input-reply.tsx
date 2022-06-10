@@ -25,7 +25,7 @@ export const InputReply = (props: Props) => {
             <ReplyIcon />
           </Icon>
           <Text size="13" weight="500" truncate={false}>
-            {message.contact.name}
+            TODO: Add name
           </Text>
         </Flex>
 
@@ -36,14 +36,14 @@ export const InputReply = (props: Props) => {
           <CrossIcon />
         </IconButton>
       </Flex>
-      {message.type === 'text' && (
+      {message.contentType === 'TEXT_PLAIN' && (
         <Flex>
           <Text size="13" truncate>
             {message.text}
           </Text>
         </Flex>
       )}
-      {message.type === 'image' && (
+      {message.contentType === 'IMAGE' && (
         <Image
           src={message.imageUrl}
           width={56}
@@ -52,23 +52,6 @@ export const InputReply = (props: Props) => {
           radius="bubble"
           alt="message"
         />
-      )}
-      {message.type === 'image-text' && (
-        <Box>
-          <Flex>
-            <Text size="13" truncate>
-              {message.text}
-            </Text>
-          </Flex>
-          <Image
-            src={message.imageUrl}
-            width={56}
-            height={56}
-            fit="cover"
-            radius="bubble"
-            alt="message"
-          />
-        </Box>
       )}
     </Wrapper>
   )

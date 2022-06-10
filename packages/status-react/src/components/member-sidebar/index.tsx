@@ -1,15 +1,16 @@
 import React from 'react'
 
+import { useAccount, useMembers } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Grid, Heading } from '~/src/system'
 
 import { MemberGroup } from './member-group'
 import { MemberItem } from './member-item'
 import { UserItem } from './user-item'
-import { useMembers } from '~/src/protocol'
 
 export function MemberSidebar() {
   const members = useMembers()
+  const { account } = useAccount()
 
   return (
     <Wrapper>
@@ -17,9 +18,11 @@ export function MemberSidebar() {
         Members
       </Heading>
       <Grid gap="2">
-        <MemberGroup label="You">
-          <UserItem />
-        </MemberGroup>
+        {account && (
+          <MemberGroup label="You">
+            <UserItem account={account} />
+          </MemberGroup>
+        )}
         <MemberGroup label="Online">
           {members.map(member => (
             <MemberItem

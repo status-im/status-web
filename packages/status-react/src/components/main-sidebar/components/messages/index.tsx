@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from 'react'
 
 import { EditIcon } from '~/src/icons/edit-icon'

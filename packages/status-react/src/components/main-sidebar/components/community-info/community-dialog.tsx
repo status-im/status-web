@@ -1,12 +1,11 @@
 import React from 'react'
 
-import { useCommunity } from '~/src/protocol'
+import { useProtocol } from '~/src/protocol'
 import { Button, CopyInput, Dialog, Flex, Grid, Text } from '~/src/system'
 
 export const CommunityDialog = () => {
-  const {  identity, publicKey='0xTODO' } = useCommunity()
-  const { displayName, description} = identity
-
+  const { community } = useProtocol()
+  const { displayName, description } = community.identity!
 
   return (
     <Dialog title={displayName}>
@@ -16,7 +15,7 @@ export const CommunityDialog = () => {
       <Dialog.Separator />
       <Dialog.Body>
         <Grid gap={3}>
-          <CopyInput label="Community Public Key" value={publicKey} />
+          <CopyInput label="Community Public Key" value="0xTODO" />
           <Text size="13" color="gray">
             To access this community, paste community public key in Status
             desktop or mobile app.
@@ -54,7 +53,7 @@ export const CommunityDialog = () => {
               fill="currentColor"
             />
           </svg>
-          <Button href="https://status.im/get">Download Status for Mac</Button>
+          <Button href="https://status.im/get">Download Status</Button>
         </Flex>
       </Dialog.Body>
     </Dialog>

@@ -1,3 +1,5 @@
+// TODO: handle non-existing chat ID
+
 import React, { useEffect, useRef } from 'react'
 
 import { useMatch } from 'react-router-dom'
@@ -5,7 +7,8 @@ import { useMatch } from 'react-router-dom'
 import { MemberSidebar } from '~/src/components/member-sidebar'
 import { useAppState } from '~/src/contexts/app-context'
 import { ChatProvider } from '~/src/contexts/chat-context'
-import { useChannel } from '~/src/protocol'
+import { useChat } from '~/src/protocol'
+import { useProtocol } from '~/src/protocol/provider'
 import { useMessages } from '~/src/protocol/use-messages'
 import { styled } from '~/src/styles/config'
 import { Avatar, Flex, Heading, Text } from '~/src/system'
@@ -14,59 +17,85 @@ import { ChatInput } from './components/chat-input'
 import { ChatMessage } from './components/chat-message'
 import { Navbar } from './components/navbar'
 
-const ChatStart = () => {
-  // TODO: unify this with the useChat hook
-  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+interface ChatStartProps {
+  chatId: string
+}
 
-  const chat = useChannel(params.id!)
+const ChatStart = (props: ChatStartProps) => {
+  const { chatId } = props
+
+  const { identity } = useChat(chatId)
 
   return (
     <Flex direction="column" gap="3" align="center" css={{ marginBottom: 50 }}>
-      {/* <Avatar size={120} src={chat.imageUrl} /> */}
-      <Heading>{chat.identity?.displayName}</Heading>
+      <Avatar size={120} name={identity?.displayName} color={identity?.color} />
+      <Heading>{identity?.displayName}</Heading>
       <Text>
-        Welcome to the beginning of the #{chat.identity?.displayName} channel!
+        Welcome to the beginning of the #{identity?.displayName} channel!
       </Text>
     </Flex>
   )
 }
 
-const Content = () => {
-  const contentRef = useRef<HTMLDivElement>(null)
+interface ContentProps {
+  chatId: string
+}
 
-  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+const Content = (props: ContentProps) => {
+  const { chatId } = props
+
+  const contentRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     contentRef.current!.scrollTop = contentRef.current!.scrollHeight ?? 0
-  }, [])
+  }, [chatId])
 
-  const messages = useMessages(params.id!)
+  const messages = useMessages(chatId)
 
   return (
     <ContentWrapper ref={contentRef}>
-      <ChatStart />
-      {messages.data.map(message => (
-        <ChatMessage key={message.messageId} message={message} />
+      {/* <Button onClick={messages.fetchMore}>Fetch more</Button> */}
+      <ChatStart chatId={chatId} />
+      {messages.data.map((message, index) => (
+        <ChatMessage
+          key={message.messageId}
+          message={message}
+          previousMessage={messages.data[index - 1]}
+        />
       ))}
     </ContentWrapper>
   )
 }
 
 export const Chat = () => {
+  const { client } = useProtocol()
   const { state, options } = useAppState()
 
+  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  const chatId = params.id!
+
+  const chat = useChat(chatId)
+
   // TODO: Update condition based on a chat type
-  const enableMembers = options.enableMembers // && (chat.type === 'group' || chat.type === 'channel')
+  const enableMembers = options.enableMembers ?? false // && (chat.type === 'group' || chat.type === 'channel')
   const showMembers = enableMembers && state.showMembers
+
+  const handleMessageSubmit = (message: string) => {
+    client.community.sendTextMessage(
+      chatId,
+      message
+      // '0x0fa999097568d1fdcc39108a08d75340bd2cee5ec59c36799007150d0a9fc896'
+    )
+  }
 
   return (
     <ChatProvider>
       <Wrapper>
         <Main>
           <Navbar enableMembers={enableMembers} />
-          <Content />
-          <ChatInput />
+          <Content chatId={chatId} />
+          <ChatInput onSubmit={handleMessageSubmit} />
         </Main>
         {showMembers && <MemberSidebar />}
       </Wrapper>

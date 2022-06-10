@@ -7,7 +7,7 @@ import { useAppState } from '~/src/contexts/app-context'
 import { BellIcon } from '~/src/icons/bell-icon'
 import { DotsIcon } from '~/src/icons/dots-icon'
 import { GroupIcon } from '~/src/icons/group-icon'
-import { useChannel } from '~/src/protocol'
+import { useChat } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { DropdownMenuTrigger, Flex, IconButton, Separator } from '~/src/system'
 
@@ -23,7 +23,7 @@ export const Navbar = (props: Props) => {
   const { state, dispatch } = useAppState()
   const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
 
-  const chat = useChannel(params.id!)
+  const chat = useChat(params.id!)
 
   return (
     <NavbarWrapper>
@@ -44,7 +44,7 @@ export const Navbar = (props: Props) => {
           <IconButton label="Options">
             <DotsIcon />
           </IconButton>
-          <ChatMenu type="dropdown" chatType="channel" />
+          <ChatMenu type="dropdown" />
         </DropdownMenuTrigger>
 
         <Separator orientation="vertical" css={{ height: 24 }} />
