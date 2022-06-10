@@ -6,7 +6,7 @@ import { Community } from '@status-im/react'
 const App = () => {
   return (
     <Community
-      publicKey="0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133"
+      publicKey="<YOUR_COMMUNITY_KEY>"
       theme="light"
     />
   )
