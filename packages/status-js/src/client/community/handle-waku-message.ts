@@ -17,7 +17,7 @@ import { mapChatMessage } from './map-chat-message'
 
 import type { Account } from '../../account'
 import type { Client } from '../../client'
-import type { Community /*, MessageType*/ } from './community'
+import type { Community } from './community'
 import type { WakuMessage } from 'js-waku'
 
 export function handleWakuMessage(
@@ -75,7 +75,7 @@ export function handleWakuMessage(
       const decodedPayload = CommunityDescription.decode(messageToDecode)
 
       // handle (state and callback)
-      community.handleCommunityMetadataEvent(decodedPayload)
+      community.handleCommunityDescription(decodedPayload)
 
       success = true
 

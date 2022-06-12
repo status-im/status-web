@@ -1,13 +1,13 @@
-import type { ChatMessage } from '../../../protos/chat-message'
-import type { Message } from '../chat'
+import type { ChatMessage } from '../chat'
+import type { ChatMessage as ChatMessageProto } from '~/protos/chat-message'
 
 export function mapChatMessage(
-  decodedMessage: ChatMessage,
+  decodedMessage: ChatMessageProto,
   props: {
     messageId: string
     chatUuid: string
   }
-): Message {
+): ChatMessage {
   const { messageId, chatUuid } = props
 
   const message = {

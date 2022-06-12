@@ -1,17 +1,21 @@
 import { waku_message } from 'js-waku'
-import difference from 'lodash/difference'
 
 import { MessageType } from '~/protos/enums'
+import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
 import { Chat } from '../chat'
 
 import type { Client } from '../../client'
-import type { CommunityDescription } from '../../wire/community_description'
+import type {
+  CommunityChat,
+  CommunityDescription,
+} from '~/src/proto/communities/v1/communities'
 import type { Waku } from 'js-waku'
 
-export type CommunityMetadataType = CommunityDescription['proto']
+// todo: rename
+export type CommunityMetadataType = CommunityDescription
 
 export class Community {
   private client: Client
@@ -22,6 +26,7 @@ export class Community {
   public communityPublicKey: string
   private communityContentTopic!: string
   private communityDecryptionKey!: Uint8Array
+  // todo: rename to description
   public communityMetadata!: CommunityMetadataType
   public chats: Map<string, Chat>
   public communityCallback:
@@ -59,7 +64,7 @@ export class Community {
 
     // Chats
     // fixme?: don't await
-    await this.observeChatMessages(Object.keys(this.communityMetadata.chats))
+    await this.observeChatMessages(this.communityMetadata.chats)
   }
 
   public fetchCommunity = async () => {
@@ -98,33 +103,42 @@ export class Community {
     ])
   }
 
-  private observeChatMessages = async (chatUuids: string[]) => {
-    const chatPromises = chatUuids.map(async (chatUuid: string) => {
-      const chat = await Chat.create(this.client, {
-        uuid: chatUuid,
-        communityPublicKey: this.communityPublicKey,
-        type: MessageType.COMMUNITY_CHAT,
-      })
+  private observeChatMessages = async (
+    chatProtos: CommunityDescription['chats']
+  ) => {
+    const chatPromises = Object.entries(chatProtos).map(
+      async ([chatUuid, chatProto]: [string, CommunityChat]) => {
+        const chat = await Chat.create(this, this.client, {
+          type: MessageType.COMMUNITY_CHAT,
+          uuid: chatUuid,
+          ...chatProto,
+        })
+        const contentTopic = chat.contentTopic
 
-      this.chats.set(chatUuid, chat)
+        this.chats.set(chatUuid, chat)
 
-      this.waku.relay.addDecryptionKey(chat.symetricKey, {
-        method: waku_message.DecryptionMethod.Symmetric,
-        contentTopics: [chat.contentTopic],
-      })
+        this.waku.relay.addDecryptionKey(chat.symetricKey, {
+          method: waku_message.DecryptionMethod.Symmetric,
+          contentTopics: [contentTopic],
+        })
 
-      return chat.contentTopic
-    })
+        return contentTopic
+      }
+    )
 
     const contentTopics = await Promise.all(chatPromises)
 
     this.waku.relay.addObserver(this.client.handleWakuMessage, contentTopics)
   }
 
-  private unobserveChatMessages = (chatUuids: string[]) => {
-    const contentTopics = chatUuids.map(chatUuid => {
-      const id = `${this.communityPublicKey}${chatUuid}`
-      const contentTopic = idToContentTopic(id)
+  private unobserveChatMessages = (
+    chatProtos: CommunityDescription['chats']
+  ) => {
+    const contentTopics = Object.keys(chatProtos).map(chatUuid => {
+      const chat = this.chats.get(chatUuid)
+      const contentTopic = chat!.contentTopic
+
+      this.chats.delete(chatUuid)
 
       return contentTopic
     })
@@ -132,7 +146,7 @@ export class Community {
     this.waku.relay.deleteObserver(this.client.handleWakuMessage, contentTopics)
   }
 
-  public handleCommunityMetadataEvent = (
+  public handleCommunityDescription = (
     communityMetadata: CommunityMetadataType
   ) => {
     if (this.communityMetadata) {
@@ -140,20 +154,21 @@ export class Community {
         return
       }
 
+      // todo: update chats props
       // Chats
-      const removedChats = difference(
-        Object.keys(this.communityMetadata.chats),
-        Object.keys(communityMetadata.chats)
+      // observe
+      const removedChats = getDifferenceByKeys(
+        this.communityMetadata.chats,
+        communityMetadata.chats
       )
-      const addedChats = difference(
-        Object.keys(communityMetadata.chats),
-        Object.keys(this.communityMetadata.chats)
-      )
-
       if (removedChats.length) {
         this.unobserveChatMessages(removedChats)
       }
 
+      const addedChats = getDifferenceByKeys(
+        communityMetadata.chats,
+        this.communityMetadata.chats
+      )
       if (addedChats.length) {
         // fixme?: await
         this.observeChatMessages(addedChats)
@@ -161,8 +176,15 @@ export class Community {
     }
 
     // Community
+    // state
     this.communityMetadata = communityMetadata
-    this.communityCallback?.(communityMetadata)
+
+    // callback
+    this.communityCallback?.(this.communityMetadata)
+
+    // Chats
+    // handle
+    // this.chats.forEach()
   }
 
   public onCommunityUpdate = (

@@ -1,7 +1,7 @@
 import { hexToBytes } from 'ethereum-cryptography/utils'
 import { PageDirection } from 'js-waku'
 
-import { ChatMessage } from '~/protos/chat-message'
+import { ChatMessage as ChatMessageProto } from '~/protos/chat-message'
 import { CommunityRequestToJoin } from '~/protos/communities'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
@@ -11,74 +11,108 @@ import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
 import type { Client } from '../client'
+import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
+import type { CommunityChat } from '~/src/proto/communities/v1/communities'
 import type { WakuMessage } from 'js-waku'
 
-type Options = {
+type ChatProps = {
+  // options?
   uuid: string
   type: MessageType.COMMUNITY_CHAT
-  communityPublicKey: string
+  // proto
+  members: CommunityChat['members']
+  permissions: CommunityChat['permissions']
+  identity: CommunityChat['identity']
+  categoryId: CommunityChat['categoryId']
+  position: CommunityChat['position']
 }
 
-export type Message = ChatMessage & {
+export type ChatMessage = ChatMessageProto & {
   messageId: string
   pinned: boolean
   reactions: Reactions
   chatUuid: string
-  responseToMessage?: Omit<Message, 'responseToMessage'>
+  responseToMessage?: Omit<ChatMessage, 'responseToMessage'>
 }
 
+// todo: add metadata; CommunityChat
 export class Chat {
+  // todo?: add whole community reference
+  private readonly community: Community
   // todo?: add waku too
   private readonly client: Client
-  // todo?: add whole community reference
-  private readonly communityPublicKey: string
 
   public readonly uuid: string
   public readonly id: string
   public readonly contentTopic: string
   public readonly type: MessageType.COMMUNITY_CHAT
   public readonly symetricKey: Uint8Array
+  // todo?: class implements
+  public readonly members: CommunityChat['members']
+  public readonly permissions: CommunityChat['permissions']
+  public readonly identity: CommunityChat['identity']
+  public readonly categoryId: CommunityChat['categoryId']
+  public readonly position: CommunityChat['position']
   // todo!: use Map
-  public readonly messages: Message[]
-  public readonly callbacks: Set<(messages: Message[]) => void>
+  public readonly messages: ChatMessage[]
+  public readonly callbacks: Set<(messages: ChatMessage[]) => void>
 
   constructor(
+    community: Community,
     client: Client,
-    communityPublicKey: string,
     uuid: string,
     id: string,
     contentTopic: string,
     type: MessageType.COMMUNITY_CHAT,
-    symetricKey: Uint8Array
+    symetricKey: Uint8Array,
+    members: CommunityChat['members'],
+    permissions: CommunityChat['permissions'],
+    identity: CommunityChat['identity'],
+    categoryId: CommunityChat['categoryId'],
+    position: CommunityChat['position']
   ) {
     this.client = client
-    this.communityPublicKey = communityPublicKey
+    this.community = community
 
     this.uuid = uuid
     this.id = id
     this.contentTopic = contentTopic
     this.type = type
     this.symetricKey = symetricKey
+    this.members = members
+    this.permissions = permissions
+    this.identity = identity
+    this.categoryId = categoryId
+    this.position = position
 
     this.messages = []
     this.callbacks = new Set()
   }
 
-  public static create = async (client: Client, options: Options) => {
-    const id = `${options.communityPublicKey}${options.uuid}`
+  public static create = async (
+    community: Community,
+    client: Client,
+    props: ChatProps
+  ) => {
+    const id = `${community.communityPublicKey}${props.uuid}`
     const contentTopic = idToContentTopic(id)
     const symetricKey = await createSymKeyFromPassword(id)
 
     return new Chat(
+      community,
       client,
-      options.communityPublicKey,
-      options.uuid,
+      props.uuid,
       id,
       contentTopic,
-      options.type,
-      symetricKey
+      props.type,
+      symetricKey,
+      props.members,
+      props.permissions,
+      props.identity,
+      props.categoryId,
+      props.position
     )
   }
 
@@ -86,8 +120,11 @@ export class Chat {
     return this.messages
   }
 
+  // todo?: rename to onMetadata/Info/Params/Description/Context/Props/Detail/Proto
+  // public onDescription = () => {}
+
   public onMessage = (
-    callback: (messages: Message[]) => void
+    callback: (messages: ChatMessage[]) => void
   ): (() => void) => {
     this.callbacks.add(callback)
 
@@ -98,7 +135,7 @@ export class Chat {
 
   public fetchMessages = async (
     options: { start: Date },
-    callback: (messages: Message[]) => void
+    callback: (messages: ChatMessage[]) => void
   ) => {
     const startTime = options.start
     const endTime = new Date()
@@ -147,12 +184,14 @@ export class Chat {
     this.emitMessages(this.messages)
   }
 
-  public emitMessages = (messages: Message[]) => {
+  public emitMessages = (messages: ChatMessage[]) => {
     // fixme!: don't emit on backfill
     this.callbacks.forEach(callback => callback(messages))
   }
 
-  public handleNewMessage = (message: Message) => {
+  // public handleDescription = () => {}
+
+  public handleNewMessage = (message: ChatMessage) => {
     // todo: move to func
     let messageIndex = this.messages.length
     while (messageIndex > 0) {
@@ -279,7 +318,7 @@ export class Chat {
 
   public sendTextMessage = async (text: string, responseTo?: string) => {
     // TODO: protos does not support optional fields :-(
-    const payload = ChatMessage.encode({
+    const payload = ChatMessageProto.encode({
       clock: BigInt(Date.now()),
       timestamp: BigInt(Date.now()),
       text,
@@ -287,7 +326,7 @@ export class Chat {
       ensName: '',
       chatId: this.id,
       messageType: 'COMMUNITY_CHAT',
-      contentType: ChatMessage.ContentType.TEXT_PLAIN,
+      contentType: ChatMessageProto.ContentType.TEXT_PLAIN,
       sticker: { hash: '', pack: 0 },
       image: {
         type: 'JPEG',
@@ -312,7 +351,7 @@ export class Chat {
   }
 
   public sendImageMessage = async (image: ImageMessage) => {
-    const payload = ChatMessage.encode({
+    const payload = ChatMessageProto.encode({
       clock: BigInt(Date.now()),
       timestamp: BigInt(Date.now()),
       text: '',
@@ -320,7 +359,7 @@ export class Chat {
       ensName: '',
       chatId: this.id,
       messageType: 'COMMUNITY_CHAT',
-      contentType: ChatMessage.ContentType.TEXT_PLAIN,
+      contentType: ChatMessageProto.ContentType.TEXT_PLAIN,
       sticker: { hash: '', pack: 0 },
       image: {
         type: image.type,
@@ -372,7 +411,9 @@ export class Chat {
     const payload = CommunityRequestToJoin.encode({
       clock: BigInt(Date.now()),
       chatId: this.id,
-      communityId: hexToBytes(this.communityPublicKey.replace(/^0[xX]/, '')),
+      communityId: hexToBytes(
+        this.community.communityPublicKey.replace(/^0[xX]/, '')
+      ),
       ensName: '',
     })
 
