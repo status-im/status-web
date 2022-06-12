@@ -29,7 +29,7 @@ class Client {
     this.wakuMessages = new Set()
 
     // Community
-    this.community = new Community(this, waku, options.publicKey)
+    this.community = new Community(this, options.publicKey)
   }
 
   static async start(options: ClientOptions) {
