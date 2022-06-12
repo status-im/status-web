@@ -46,7 +46,6 @@
     "ethereum-cryptography": "^1.0.3",
     "js-sha3": "^0.8.0",
     "js-waku": "^0.23.0",
-    "lodash": "^4.17.21",
     "long": "^5.2.0",
     "pbkdf2": "^3.1.2",
     "protobufjs": "^6.11.3",
@@ -57,7 +56,6 @@
   "devDependencies": {
     "@types/bn.js": "^5.1.0",
     "@types/elliptic": "^6.4.14",
-    "@types/lodash": "^4.14.182",
     "@types/pbkdf2": "^3.1.0",
     "@types/secp256k1": "^4.0.3",
     "@types/uuid": "^8.3.3",
