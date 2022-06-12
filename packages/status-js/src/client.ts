@@ -17,7 +17,7 @@ export interface ClientOptions {
 }
 
 class Client {
-  private waku: Waku
+  public waku: Waku
   public readonly wakuMessages: Set<string>
 
   public account?: Account
@@ -72,7 +72,7 @@ class Client {
   //   this.account = undefined
   // }
 
-  public sendMessage = async (
+  public sendWakuMessage = async (
     type: keyof typeof ApplicationMetadataMessage.Type,
     payload: Uint8Array,
     contentTopic: string,

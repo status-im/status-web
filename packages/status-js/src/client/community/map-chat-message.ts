@@ -1,22 +1,19 @@
 import type { ChatMessage } from '../../../protos/chat-message'
-import type { MessageType } from './community'
-// import type { Reactions } from './set-reactions'
+import type { Message } from '../chat'
 
 export function mapChatMessage(
   decodedMessage: ChatMessage,
   props: {
     messageId: string
-    channelId: string
-    // pinned: boolean
-    // reactions: Reactions
+    chatUuid: string
   }
-): MessageType {
-  const { messageId, channelId } = props
+): Message {
+  const { messageId, chatUuid } = props
 
   const message = {
     ...decodedMessage,
     messageId,
-    channelId,
+    chatUuid,
     pinned: false,
     reactions: {
       THUMBS_UP: {
