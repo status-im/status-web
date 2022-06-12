@@ -163,6 +163,8 @@ export function handleWakuMessage(
     }
 
     default:
+      success = true
+
       break
   }
 
