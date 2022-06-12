@@ -166,7 +166,7 @@ export class Chat {
       return
     }
 
-    this.emitMessages(this.messages)
+    callback(this.messages)
   }
 
   public emitMessages = (messages: ChatMessage[]) => {
