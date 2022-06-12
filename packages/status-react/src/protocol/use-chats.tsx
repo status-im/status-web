@@ -4,7 +4,7 @@ import { useProtocol } from './provider'
 
 import type { Community } from '@status-im/js'
 
-export type Chat = Community['communityMetadata']['chats'][0] & {
+export type Chat = Community['description']['chats'][0] & {
   id: string
 }
 
