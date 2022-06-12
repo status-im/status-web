@@ -13,62 +13,54 @@ import type {
   CommunityDescription,
 } from '~/src/proto/communities/v1/communities'
 
-// todo: rename
-export type CommunityMetadataType = CommunityDescription
-
 export class Community {
   private client: Client
 
-  // todo: remove community prefix
-  public communityPublicKey: string
-  private communityContentTopic!: string
-  private communityDecryptionKey!: Uint8Array
-  // todo: rename to description
-  public communityMetadata!: CommunityMetadataType
+  public publicKey: string
+  private contentTopic!: string
+  private symetricKey!: Uint8Array
+  // todo?: rename to community (and access via commuity.community)
+  public description!: CommunityDescription
   public chats: Map<string, Chat>
-  public communityCallback:
-    | ((community: CommunityMetadataType) => void)
-    | undefined
+  // todo: use Set
+  public callback: ((description: CommunityDescription) => void) | undefined
 
   constructor(client: Client, publicKey: string) {
     this.client = client
-    this.communityPublicKey = publicKey
+    this.publicKey = publicKey
 
     this.chats = new Map()
   }
 
   public async start() {
-    this.communityContentTopic = idToContentTopic(this.communityPublicKey)
-    // todo: rename
-    this.communityDecryptionKey = await createSymKeyFromPassword(
-      this.communityPublicKey
-    )
+    this.contentTopic = idToContentTopic(this.publicKey)
+    this.symetricKey = await createSymKeyFromPassword(this.publicKey)
 
     // Waku
-    this.client.waku.store.addDecryptionKey(this.communityDecryptionKey)
+    this.client.waku.store.addDecryptionKey(this.symetricKey)
 
     // Community
-    const communityMetadata = await this.fetchCommunity()
+    const description = await this.fetch()
 
-    if (!communityMetadata) {
+    if (!description) {
       throw new Error('Failed to intiliaze Community')
     }
 
-    this.communityMetadata = communityMetadata
+    this.description = description
 
-    await this.observeCommunity()
+    await this.observe()
 
     // Chats
     // fixme?: don't await
-    await this.observeChatMessages(this.communityMetadata.chats)
+    await this.observeChatMessages(this.description.chats)
   }
 
-  public fetchCommunity = async () => {
-    let communityMetadata: CommunityMetadataType | undefined
+  public fetch = async () => {
+    let description: CommunityDescription | undefined
     let shouldStop = false
 
-    await this.client.waku.store.queryHistory([this.communityContentTopic], {
-      decryptionKeys: [this.communityDecryptionKey],
+    await this.client.waku.store.queryHistory([this.contentTopic], {
+      decryptionKeys: [this.symetricKey],
       // oldest message first
       callback: wakuMessages => {
         let index = wakuMessages.length
@@ -77,11 +69,11 @@ export class Community {
         while (--index >= 0) {
           this.client.handleWakuMessage(wakuMessages[index])
 
-          if (!this.communityMetadata) {
+          if (!this.description) {
             return shouldStop
           }
 
-          communityMetadata = this.communityMetadata
+          description = this.description
           shouldStop = true
 
           return shouldStop
@@ -89,17 +81,18 @@ export class Community {
       },
     })
 
-    return communityMetadata
+    return description
   }
 
-  private observeCommunity = () => {
-    this.client.waku.relay.addDecryptionKey(this.communityDecryptionKey)
+  private observe = () => {
+    this.client.waku.relay.addDecryptionKey(this.symetricKey)
     this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
-      this.communityContentTopic,
+      this.contentTopic,
     ])
   }
 
   private observeChatMessages = async (
+    // todo: rename
     chatProtos: CommunityDescription['chats']
   ) => {
     const chatPromises = Object.entries(chatProtos).map(
@@ -148,11 +141,9 @@ export class Community {
     )
   }
 
-  public handleCommunityDescription = (
-    communityMetadata: CommunityMetadataType
-  ) => {
-    if (this.communityMetadata) {
-      if (this.communityMetadata.clock > communityMetadata.clock) {
+  public handleChange = (description: CommunityDescription) => {
+    if (this.description) {
+      if (this.description.clock > description.clock) {
         return
       }
 
@@ -160,16 +151,16 @@ export class Community {
       // Chats
       // observe
       const removedChats = getDifferenceByKeys(
-        this.communityMetadata.chats,
-        communityMetadata.chats
+        this.description.chats,
+        description.chats
       )
       if (removedChats.length) {
         this.unobserveChatMessages(removedChats)
       }
 
       const addedChats = getDifferenceByKeys(
-        communityMetadata.chats,
-        this.communityMetadata.chats
+        description.chats,
+        this.description.chats
       )
       if (addedChats.length) {
         // fixme?: await
@@ -179,23 +170,21 @@ export class Community {
 
     // Community
     // state
-    this.communityMetadata = communityMetadata
+    this.description = description
 
     // callback
-    this.communityCallback?.(this.communityMetadata)
+    this.callback?.(this.description)
 
     // Chats
     // handle
     // this.chats.forEach()
   }
 
-  public onCommunityUpdate = (
-    callback: (community: CommunityMetadataType) => void
-  ) => {
-    this.communityCallback = callback
+  public onChange = (callback: (description: CommunityDescription) => void) => {
+    this.callback = callback
 
     return () => {
-      this.communityCallback = undefined
+      this.callback = undefined
     }
   }
 }

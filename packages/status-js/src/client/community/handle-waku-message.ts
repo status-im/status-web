@@ -75,7 +75,7 @@ export function handleWakuMessage(
       const decodedPayload = CommunityDescription.decode(messageToDecode)
 
       // handle (state and callback)
-      community.handleCommunityDescription(decodedPayload)
+      community.handleChange(decodedPayload)
 
       success = true
 
