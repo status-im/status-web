@@ -92,16 +92,17 @@ export class Community {
   }
 
   private observeChatMessages = async (
-    // todo: rename
-    chatProtos: CommunityDescription['chats']
+    chatDescriptions: CommunityDescription['chats']
   ) => {
-    const chatPromises = Object.entries(chatProtos).map(
-      async ([chatUuid, chatProto]: [string, CommunityChat]) => {
-        const chat = await Chat.create(this, this.client, {
-          type: MessageType.COMMUNITY_CHAT,
-          uuid: chatUuid,
-          ...chatProto,
-        })
+    const chatPromises = Object.entries(chatDescriptions).map(
+      async ([chatUuid, chatDescription]: [string, CommunityChat]) => {
+        const chat = await Chat.create(
+          this,
+          this.client,
+          chatUuid,
+          MessageType.COMMUNITY_CHAT,
+          chatDescription
+        )
         const contentTopic = chat.contentTopic
 
         this.chats.set(chatUuid, chat)
@@ -124,9 +125,9 @@ export class Community {
   }
 
   private unobserveChatMessages = (
-    chatProtos: CommunityDescription['chats']
+    chatDescription: CommunityDescription['chats']
   ) => {
-    const contentTopics = Object.keys(chatProtos).map(chatUuid => {
+    const contentTopics = Object.keys(chatDescription).map(chatUuid => {
       const chat = this.chats.get(chatUuid)
       const contentTopic = chat!.contentTopic
 
@@ -147,7 +148,6 @@ export class Community {
         return
       }
 
-      // todo: update chats props
       // Chats
       // observe
       const removedChats = getDifferenceByKeys(
@@ -177,7 +177,10 @@ export class Community {
 
     // Chats
     // handle
-    // this.chats.forEach()
+    Object.entries(this.description.chats).forEach(
+      ([chatUuid, chatDescription]) =>
+        this.chats.get(chatUuid)?.handleChange(chatDescription)
+    )
   }
 
   public onChange = (callback: (description: CommunityDescription) => void) => {

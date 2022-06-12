@@ -17,18 +17,6 @@ import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
 import type { CommunityChat } from '~/src/proto/communities/v1/communities'
 import type { WakuMessage } from 'js-waku'
 
-type ChatProps = {
-  // options?
-  uuid: string
-  type: MessageType.COMMUNITY_CHAT
-  // proto
-  members: CommunityChat['members']
-  permissions: CommunityChat['permissions']
-  identity: CommunityChat['identity']
-  categoryId: CommunityChat['categoryId']
-  position: CommunityChat['position']
-}
-
 export type ChatMessage = ChatMessageProto & {
   messageId: string
   pinned: boolean
@@ -38,7 +26,6 @@ export type ChatMessage = ChatMessageProto & {
 }
 
 // todo?: add clock
-// todo: add metadata; CommunityChat
 export class Chat {
   // todo?: add whole community reference
   private readonly community: Community
@@ -49,15 +36,11 @@ export class Chat {
   public readonly contentTopic: string
   public readonly type: MessageType.COMMUNITY_CHAT
   public readonly symetricKey: Uint8Array
-  // todo?: class implements
-  public readonly members: CommunityChat['members']
-  public readonly permissions: CommunityChat['permissions']
-  public readonly identity: CommunityChat['identity']
-  public readonly categoryId: CommunityChat['categoryId']
-  public readonly position: CommunityChat['position']
+  public description: CommunityChat
+  public readonly chatCallbacks: Set<(description: CommunityChat) => void>
   // todo!: use Map
-  public readonly messages: ChatMessage[]
-  public readonly callbacks: Set<(messages: ChatMessage[]) => void>
+  public messages: ChatMessage[]
+  public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
 
   constructor(
     community: Community,
@@ -67,11 +50,8 @@ export class Chat {
     contentTopic: string,
     type: MessageType.COMMUNITY_CHAT,
     symetricKey: Uint8Array,
-    members: CommunityChat['members'],
-    permissions: CommunityChat['permissions'],
-    identity: CommunityChat['identity'],
-    categoryId: CommunityChat['categoryId'],
-    position: CommunityChat['position']
+    // todo?: rename to chat (and access via chat.chat)
+    description: CommunityChat
   ) {
     this.client = client
     this.community = community
@@ -81,38 +61,33 @@ export class Chat {
     this.contentTopic = contentTopic
     this.type = type
     this.symetricKey = symetricKey
-    this.members = members
-    this.permissions = permissions
-    this.identity = identity
-    this.categoryId = categoryId
-    this.position = position
+    this.description = description
 
+    this.chatCallbacks = new Set()
     this.messages = []
-    this.callbacks = new Set()
+    this.messageCallbacks = new Set()
   }
 
   public static create = async (
     community: Community,
     client: Client,
-    props: ChatProps
+    uuid: string,
+    type: MessageType.COMMUNITY_CHAT,
+    description: CommunityChat
   ) => {
-    const id = `${community.publicKey}${props.uuid}`
+    const id = `${community.publicKey}${uuid}`
     const contentTopic = idToContentTopic(id)
     const symetricKey = await createSymKeyFromPassword(id)
 
     return new Chat(
       community,
       client,
-      props.uuid,
+      uuid,
       id,
       contentTopic,
-      props.type,
+      type,
       symetricKey,
-      props.members,
-      props.permissions,
-      props.identity,
-      props.categoryId,
-      props.position
+      description
     )
   }
 
@@ -121,15 +96,25 @@ export class Chat {
   }
 
   // todo?: rename to onMetadata/Info/Params/Description/Context/Props/Detail/Proto/Change/Update
-  // public onChange = () => {}
+  public onChange = (callback: (description: CommunityChat) => void) => {
+    this.chatCallbacks.add(callback)
+
+    return () => {
+      this.chatCallbacks.delete(callback)
+    }
+  }
+
+  public emitChange = (description: CommunityChat) => {
+    this.chatCallbacks.forEach(callback => callback(description))
+  }
 
   public onMessage = (
     callback: (messages: ChatMessage[]) => void
   ): (() => void) => {
-    this.callbacks.add(callback)
+    this.messageCallbacks.add(callback)
 
     return () => {
-      this.callbacks.delete(callback)
+      this.messageCallbacks.delete(callback)
     }
   }
 
@@ -186,10 +171,16 @@ export class Chat {
 
   public emitMessages = (messages: ChatMessage[]) => {
     // fixme!: don't emit on backfill
-    this.callbacks.forEach(callback => callback(messages))
+    this.messageCallbacks.forEach(callback => callback(messages))
   }
 
-  // public handleChange = () => {}
+  public handleChange = (description: CommunityChat) => {
+    // state
+    this.description = description
+
+    // callback
+    this.emitChange(description)
+  }
 
   public handleNewMessage = (message: ChatMessage) => {
     // todo: move to func
@@ -406,7 +397,6 @@ export class Chat {
     )
   }
 
-  // todo?: on CommunityChat subclass
   public requestToJoin = async () => {
     const payload = CommunityRequestToJoin.encode({
       clock: BigInt(Date.now()),
