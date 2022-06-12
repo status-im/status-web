@@ -125,11 +125,14 @@ export class Chat {
     const startTime = options.start
     const endTime = new Date()
 
-    let _oldestMessageTime: Date | undefined = undefined
+    let _oldestClock: BigInt | undefined
+    let _oldestMessageTime: Date | undefined
 
     if (this.messages.length) {
+      _oldestClock = this.messages[0].clock
       _oldestMessageTime = new Date(Number(this.messages[0].timestamp))
 
+      // already handled
       if (_oldestMessageTime <= options.start) {
         callback(this.messages)
 
@@ -155,11 +158,11 @@ export class Chat {
     })
 
     // callback
-    // todo: use clock
+    // more not found
     if (
-      _oldestMessageTime &&
+      _oldestClock &&
       this.messages.length &&
-      _oldestMessageTime >= new Date(Number(this.messages[0].timestamp))
+      _oldestClock >= this.messages[0].clock
     ) {
       callback([])
 
