@@ -41,7 +41,6 @@ export type ChatMessage = ChatMessageProto & {
 export class Chat {
   // todo?: add whole community reference
   private readonly community: Community
-  // todo?: add waku too
   private readonly client: Client
 
   public readonly uuid: string

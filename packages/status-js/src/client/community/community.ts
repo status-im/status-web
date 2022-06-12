@@ -12,15 +12,12 @@ import type {
   CommunityChat,
   CommunityDescription,
 } from '~/src/proto/communities/v1/communities'
-import type { Waku } from 'js-waku'
 
 // todo: rename
 export type CommunityMetadataType = CommunityDescription
 
 export class Community {
   private client: Client
-  // todo?: use client.waku instead
-  private waku: Waku
 
   // todo: remove community prefix
   public communityPublicKey: string
@@ -33,9 +30,8 @@ export class Community {
     | ((community: CommunityMetadataType) => void)
     | undefined
 
-  constructor(client: Client, waku: Waku, publicKey: string) {
+  constructor(client: Client, publicKey: string) {
     this.client = client
-    this.waku = waku
     this.communityPublicKey = publicKey
 
     this.chats = new Map()
@@ -49,7 +45,7 @@ export class Community {
     )
 
     // Waku
-    this.waku.store.addDecryptionKey(this.communityDecryptionKey)
+    this.client.waku.store.addDecryptionKey(this.communityDecryptionKey)
 
     // Community
     const communityMetadata = await this.fetchCommunity()
@@ -71,7 +67,7 @@ export class Community {
     let communityMetadata: CommunityMetadataType | undefined
     let shouldStop = false
 
-    await this.waku.store.queryHistory([this.communityContentTopic], {
+    await this.client.waku.store.queryHistory([this.communityContentTopic], {
       decryptionKeys: [this.communityDecryptionKey],
       // oldest message first
       callback: wakuMessages => {
@@ -97,8 +93,8 @@ export class Community {
   }
 
   private observeCommunity = () => {
-    this.waku.relay.addDecryptionKey(this.communityDecryptionKey)
-    this.waku.relay.addObserver(this.client.handleWakuMessage, [
+    this.client.waku.relay.addDecryptionKey(this.communityDecryptionKey)
+    this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
       this.communityContentTopic,
     ])
   }
@@ -117,7 +113,7 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        this.waku.relay.addDecryptionKey(chat.symetricKey, {
+        this.client.waku.relay.addDecryptionKey(chat.symetricKey, {
           method: waku_message.DecryptionMethod.Symmetric,
           contentTopics: [contentTopic],
         })
@@ -128,7 +124,10 @@ export class Community {
 
     const contentTopics = await Promise.all(chatPromises)
 
-    this.waku.relay.addObserver(this.client.handleWakuMessage, contentTopics)
+    this.client.waku.relay.addObserver(
+      this.client.handleWakuMessage,
+      contentTopics
+    )
   }
 
   private unobserveChatMessages = (
@@ -143,7 +142,10 @@ export class Community {
       return contentTopic
     })
 
-    this.waku.relay.deleteObserver(this.client.handleWakuMessage, contentTopics)
+    this.client.waku.relay.deleteObserver(
+      this.client.handleWakuMessage,
+      contentTopics
+    )
   }
 
   public handleCommunityDescription = (
