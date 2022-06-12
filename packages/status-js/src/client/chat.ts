@@ -5,8 +5,8 @@ import { ChatMessage as ChatMessageProto } from '~/protos/chat-message'
 import { CommunityRequestToJoin } from '~/protos/communities'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
+import { idToContentTopic } from '../contentTopic'
 import { createSymKeyFromPassword } from '../encryption'
-import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
