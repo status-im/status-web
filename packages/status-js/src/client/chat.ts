@@ -37,6 +37,7 @@ export type ChatMessage = ChatMessageProto & {
   responseToMessage?: Omit<ChatMessage, 'responseToMessage'>
 }
 
+// todo?: add clock
 // todo: add metadata; CommunityChat
 export class Chat {
   // todo?: add whole community reference
@@ -95,7 +96,7 @@ export class Chat {
     client: Client,
     props: ChatProps
   ) => {
-    const id = `${community.communityPublicKey}${props.uuid}`
+    const id = `${community.publicKey}${props.uuid}`
     const contentTopic = idToContentTopic(id)
     const symetricKey = await createSymKeyFromPassword(id)
 
@@ -119,8 +120,8 @@ export class Chat {
     return this.messages
   }
 
-  // todo?: rename to onMetadata/Info/Params/Description/Context/Props/Detail/Proto
-  // public onDescription = () => {}
+  // todo?: rename to onMetadata/Info/Params/Description/Context/Props/Detail/Proto/Change/Update
+  // public onChange = () => {}
 
   public onMessage = (
     callback: (messages: ChatMessage[]) => void
@@ -188,7 +189,7 @@ export class Chat {
     this.callbacks.forEach(callback => callback(messages))
   }
 
-  // public handleDescription = () => {}
+  // public handleChange = () => {}
 
   public handleNewMessage = (message: ChatMessage) => {
     // todo: move to func
@@ -410,9 +411,7 @@ export class Chat {
     const payload = CommunityRequestToJoin.encode({
       clock: BigInt(Date.now()),
       chatId: this.id,
-      communityId: hexToBytes(
-        this.community.communityPublicKey.replace(/^0[xX]/, '')
-      ),
+      communityId: hexToBytes(this.community.publicKey.replace(/^0[xX]/, '')),
       ensName: '',
     })
 
