@@ -39,25 +39,25 @@ export class Chat {
   public messages: ChatMessage[]
   public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
 
-  constructor(
-    community: Community,
-    client: Client,
-    uuid: string,
-    id: string,
-    contentTopic: string,
-    type: MessageType.COMMUNITY_CHAT,
-    symmetricKey: Uint8Array,
+  constructor(options: {
+    community: Community
+    client: Client
+    uuid: string
+    id: string
+    contentTopic: string
+    type: MessageType.COMMUNITY_CHAT
+    symmetricKey: Uint8Array
     description: CommunityChat
-  ) {
-    this.client = client
-    this.community = community
+  }) {
+    this.client = options.client
+    this.community = options.community
 
-    this.uuid = uuid
-    this.id = id
-    this.contentTopic = contentTopic
-    this.type = type
-    this.symmetricKey = symmetricKey
-    this.description = description
+    this.uuid = options.uuid
+    this.id = options.id
+    this.contentTopic = options.contentTopic
+    this.type = options.type
+    this.symmetricKey = options.symmetricKey
+    this.description = options.description
 
     this.chatCallbacks = new Set()
     this.messages = []
@@ -75,7 +75,7 @@ export class Chat {
     const contentTopic = idToContentTopic(id)
     const symmetricKey = await createSymKeyFromPassword(id)
 
-    return new Chat(
+    return new Chat({
       community,
       client,
       uuid,
@@ -83,8 +83,8 @@ export class Chat {
       contentTopic,
       type,
       symmetricKey,
-      description
-    )
+      description,
+    })
   }
 
   public getMessages = () => {
