@@ -120,7 +120,7 @@ export class Chat {
     const startTime = options.start
     const endTime = new Date()
 
-    let _oldestClock: BigInt | undefined
+    let _oldestClock: bigint | undefined
     let _oldestMessageTime: Date | undefined
 
     if (this.messages.length) {
@@ -169,7 +169,7 @@ export class Chat {
 
   public emitMessages = (messages: ChatMessage[]) => {
     // fixme!: don't emit on backfill
-    this.messageCallbacks.forEach(callback => callback(messages))
+    this.messageCallbacks.forEach(callback => callback([...messages]))
   }
 
   public handleChange = (description: CommunityChat) => {
