@@ -169,7 +169,7 @@ export class Chat {
 
   public emitMessages = (messages: ChatMessage[]) => {
     // fixme!: don't emit on backfill
-    this.messageCallbacks.forEach(callback => callback(messages))
+    this.messageCallbacks.forEach(callback => callback([...messages]))
   }
 
   public handleChange = (description: CommunityChat) => {
