@@ -152,7 +152,7 @@ export class Community {
         this.description.chats,
         description.chats
       )
-      if (removedChats.length) {
+      if (Object.keys(removedChats).length) {
         this.unobserveChatMessages(removedChats)
       }
 
@@ -160,7 +160,7 @@ export class Community {
         description.chats,
         this.description.chats
       )
-      if (addedChats.length) {
+      if (Object.keys(addedChats).length) {
         this.observeChatMessages(addedChats)
       }
     }
