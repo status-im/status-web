@@ -46,7 +46,7 @@ export class Community {
 
     this.description = description
 
-    await this.observe()
+    this.observe()
 
     // Chats
     await this.observeChatMessages(this.description.chats)
