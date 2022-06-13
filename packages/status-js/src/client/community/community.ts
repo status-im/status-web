@@ -57,6 +57,11 @@ export class Community {
     await this.observeChatMessages(this.description.chats)
   }
 
+  // todo: rename this to chats when changing references in ui
+  public get _chats() {
+    return [...this.chats.values()]
+  }
+
   public fetch = async () => {
     let description: CommunityDescription | undefined
     let shouldStop = false
