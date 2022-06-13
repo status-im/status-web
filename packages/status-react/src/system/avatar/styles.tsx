@@ -6,7 +6,6 @@ export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('div', {
   position: 'relative',
-  background: '$primary-1',
   borderRadius: '100%',
   flexShrink: 0,
 
@@ -15,37 +14,52 @@ export const Base = styled('div', {
       20: {
         width: 20,
         height: 20,
+        padding: 1,
       },
       24: {
         width: 24,
         height: 24,
+        padding: 1,
       },
       32: {
         width: 32,
         height: 32,
+        padding: 2,
       },
       36: {
         width: 36,
         height: 36,
+        padding: 2,
       },
       44: {
         width: 44,
         height: 44,
+        padding: 2,
       },
       64: {
         width: 64,
         height: 64,
+        padding: 3,
       },
       80: {
         width: 80,
         height: 80,
+        padding: 4,
       },
       120: {
         width: 120,
         height: 120,
+        padding: 5,
       },
     },
   },
+})
+
+export const Content = styled('div', {
+  background: '$primary-1',
+  borderRadius: '100%',
+  width: '100%',
+  height: '100%',
 })
 
 export const Indicator = styled('span', {
