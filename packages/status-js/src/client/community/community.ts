@@ -63,9 +63,6 @@ export class Community {
   }
 
   public fetch = async () => {
-    let description: CommunityDescription | undefined
-    let shouldStop = false
-
     await this.client.waku.store.queryHistory([this.contentTopic], {
       // oldest message first
       callback: wakuMessages => {
@@ -75,19 +72,12 @@ export class Community {
         while (--index >= 0) {
           this.client.handleWakuMessage(wakuMessages[index])
 
-          if (!this.description) {
-            return shouldStop
-          }
-
-          description = this.description
-          shouldStop = true
-
-          return shouldStop
+          return this.description !== undefined
         }
       },
     })
 
-    return description
+    return this.description
   }
 
   private observe = () => {
