@@ -35,8 +35,12 @@ export class Community {
     this.symmetricKey = await createSymKeyFromPassword(this.publicKey)
 
     // Waku
-    this.client.waku.store.addDecryptionKey(this.symmetricKey)
-    this.client.waku.relay.addDecryptionKey(this.symmetricKey)
+    this.client.waku.store.addDecryptionKey(this.symmetricKey, {
+      contentTopics: [this.contentTopic],
+    })
+    this.client.waku.relay.addDecryptionKey(this.symmetricKey, {
+      contentTopics: [this.contentTopic],
+    })
 
     // Community
     const description = await this.fetch()
@@ -58,7 +62,6 @@ export class Community {
     let shouldStop = false
 
     await this.client.waku.store.queryHistory([this.contentTopic], {
-      decryptionKeys: [this.symmetricKey],
       // oldest message first
       callback: wakuMessages => {
         let index = wakuMessages.length
