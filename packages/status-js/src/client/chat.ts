@@ -33,7 +33,7 @@ export class Chat {
   public readonly id: string
   public readonly contentTopic: string
   public readonly type: MessageType.COMMUNITY_CHAT
-  public readonly symetricKey: Uint8Array
+  public readonly symmetricKey: Uint8Array
   public description: CommunityChat
   public readonly chatCallbacks: Set<(description: CommunityChat) => void>
   public messages: ChatMessage[]
@@ -46,7 +46,7 @@ export class Chat {
     id: string,
     contentTopic: string,
     type: MessageType.COMMUNITY_CHAT,
-    symetricKey: Uint8Array,
+    symmetricKey: Uint8Array,
     description: CommunityChat
   ) {
     this.client = client
@@ -56,7 +56,7 @@ export class Chat {
     this.id = id
     this.contentTopic = contentTopic
     this.type = type
-    this.symetricKey = symetricKey
+    this.symmetricKey = symmetricKey
     this.description = description
 
     this.chatCallbacks = new Set()
@@ -73,7 +73,7 @@ export class Chat {
   ) => {
     const id = `${community.publicKey}${uuid}`
     const contentTopic = idToContentTopic(id)
-    const symetricKey = await createSymKeyFromPassword(id)
+    const symmetricKey = await createSymKeyFromPassword(id)
 
     return new Chat(
       community,
@@ -82,7 +82,7 @@ export class Chat {
       id,
       contentTopic,
       type,
-      symetricKey,
+      symmetricKey,
       description
     )
   }
@@ -143,7 +143,7 @@ export class Chat {
       pageSize: 50,
       // most recent page first
       pageDirection: PageDirection.BACKWARD,
-      decryptionKeys: [this.symetricKey],
+      decryptionKeys: [this.symmetricKey],
       callback: (wakuMessages: WakuMessage[]) => {
         // oldest message first
         for (const wakuMessage of wakuMessages) {
@@ -331,7 +331,7 @@ export class Chat {
       'TYPE_CHAT_MESSAGE',
       payload,
       this.contentTopic,
-      this.symetricKey
+      this.symmetricKey
     )
   }
 
@@ -364,7 +364,7 @@ export class Chat {
       'TYPE_CHAT_MESSAGE',
       payload,
       this.contentTopic,
-      this.symetricKey
+      this.symmetricKey
     )
   }
 
@@ -387,7 +387,7 @@ export class Chat {
       'TYPE_EMOJI_REACTION',
       payload,
       this.contentTopic,
-      this.symetricKey
+      this.symmetricKey
     )
   }
 
@@ -403,7 +403,7 @@ export class Chat {
       'TYPE_COMMUNITY_REQUEST_TO_JOIN',
       payload,
       this.contentTopic,
-      this.symetricKey
+      this.symmetricKey
     )
   }
 }

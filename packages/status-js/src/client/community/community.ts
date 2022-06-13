@@ -18,7 +18,7 @@ export class Community {
 
   public publicKey: string
   private contentTopic!: string
-  private symetricKey!: Uint8Array
+  private symmetricKey!: Uint8Array
   public description!: CommunityDescription
   public chats: Map<string, Chat>
   public callback: ((description: CommunityDescription) => void) | undefined
@@ -32,10 +32,10 @@ export class Community {
 
   public async start() {
     this.contentTopic = idToContentTopic(this.publicKey)
-    this.symetricKey = await createSymKeyFromPassword(this.publicKey)
+    this.symmetricKey = await createSymKeyFromPassword(this.publicKey)
 
     // Waku
-    this.client.waku.store.addDecryptionKey(this.symetricKey)
+    this.client.waku.store.addDecryptionKey(this.symmetricKey)
 
     // Community
     const description = await this.fetch()
@@ -57,7 +57,7 @@ export class Community {
     let shouldStop = false
 
     await this.client.waku.store.queryHistory([this.contentTopic], {
-      decryptionKeys: [this.symetricKey],
+      decryptionKeys: [this.symmetricKey],
       // oldest message first
       callback: wakuMessages => {
         let index = wakuMessages.length
@@ -82,7 +82,7 @@ export class Community {
   }
 
   private observe = () => {
-    this.client.waku.relay.addDecryptionKey(this.symetricKey)
+    this.client.waku.relay.addDecryptionKey(this.symmetricKey)
     this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
       this.contentTopic,
     ])
@@ -104,7 +104,7 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        this.client.waku.relay.addDecryptionKey(chat.symetricKey, {
+        this.client.waku.relay.addDecryptionKey(chat.symmetricKey, {
           method: waku_message.DecryptionMethod.Symmetric,
           contentTopics: [contentTopic],
         })
