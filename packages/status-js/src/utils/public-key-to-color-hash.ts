@@ -1,6 +1,6 @@
 import * as secp256k1 from 'ethereum-cryptography/secp256k1'
 
-type ColorHash = number[][]
+export type ColorHash = number[][]
 
 const COLOR_HASH_COLORS_COUNT = 32
 const COLOR_HASH_SEGMENT_MAX_LENGTH = 5

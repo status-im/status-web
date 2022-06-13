@@ -9,8 +9,8 @@ import { MemberItem } from './member-item'
 import { UserItem } from './user-item'
 
 export function MemberSidebar() {
-  const members = useMembers()
   const { account } = useAccount()
+  const members = useMembers()
 
   return (
     <Wrapper>
@@ -26,14 +26,12 @@ export function MemberSidebar() {
         <MemberGroup label="Online">
           {members.map(member => (
             <MemberItem
-              key={member}
+              key={member.publicKey}
               verified={false}
               untrustworthy={false}
-              indicator="online"
-              chatKey={member}
-            >
-              {member}
-            </MemberItem>
+              // indicator=""
+              member={member}
+            />
           ))}
         </MemberGroup>
         {/* <MemberGroup label="Offline"></MemberGroup> */}
