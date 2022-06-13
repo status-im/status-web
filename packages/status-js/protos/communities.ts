@@ -114,13 +114,12 @@ export namespace CommunityPermissions {
 
 export interface CommunityDescription {
   clock: bigint
-  members: CommunityMember
+  members: Record<string, CommunityMember>
   permissions: CommunityPermissions
   identity: ChatIdentity
-  // fixme!: Map
-  chats: CommunityChat
+  chats: Record<string, CommunityChat>
   banList: string[]
-  categories: CommunityCategory
+  categories: Record<string, CommunityCategory>
   archiveMagnetlinkClock: bigint
   adminSettings: CommunityAdminSettings
 }
