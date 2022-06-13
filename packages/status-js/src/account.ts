@@ -2,10 +2,13 @@ import { keccak256 } from 'ethereum-cryptography/keccak'
 import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
 import { bytesToHex, concatBytes } from 'ethereum-cryptography/utils'
 
+import { generateUsername } from './utils/generate-username'
+
 export class Account {
   public privateKey: string
   public publicKey: string
   public chatKey: string
+  public username: string
 
   constructor() {
     const privateKey = utils.randomPrivateKey()
@@ -14,9 +17,9 @@ export class Account {
 
     this.privateKey = bytesToHex(privateKey)
     this.publicKey = bytesToHex(publicKey)
-
     // TODO?: add 0x prefix to public key
     this.chatKey = bytesToHex(chatKey)
+    this.username = generateUsername('0x' + this.publicKey)
   }
 
   // sig must be a 65-byte compact ECDSA signature containing the recovery id as the last element.
