@@ -120,7 +120,7 @@ export class Chat {
     const startTime = options.start
     const endTime = new Date()
 
-    let _oldestClock: BigInt | undefined
+    let _oldestClock: bigint | undefined
     let _oldestMessageTime: Date | undefined
 
     if (this.messages.length) {
