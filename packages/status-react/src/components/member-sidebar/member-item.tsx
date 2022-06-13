@@ -2,26 +2,27 @@ import React from 'react'
 
 import { Avatar, EthAddress, Flex, Text } from '~/src/system'
 
+import type { Member } from '~/src/protocol'
 import type { AvatarProps } from '~/src/system/avatar'
 
 interface Props {
-  children: string
-  chatKey: string
   verified: boolean
   untrustworthy: boolean
   indicator?: AvatarProps['indicator']
+  member: Member
 }
 
 export const MemberItem = (props: Props) => {
-  const { children, chatKey, indicator, verified, untrustworthy } = props
+  const { member, indicator, verified, untrustworthy } = props
+  const { publicKey, username, colorHash } = member
 
   return (
     <Flex gap="2" align="center" css={{ height: 56 }}>
-      <Avatar size={32} indicator={indicator} />
+      <Avatar size={32} indicator={indicator} colorHash={colorHash} />
       <div>
         <Flex align="center" gap={1}>
           <Text size="15" color="accent" truncate>
-            {children}
+            {username}
           </Text>
           {verified && (
             <svg
@@ -59,7 +60,7 @@ export const MemberItem = (props: Props) => {
           )}
         </Flex>
         <EthAddress size={10} color="gray">
-          {chatKey}
+          {publicKey}
         </EthAddress>
       </div>
     </Flex>

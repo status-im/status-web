@@ -1,11 +1,12 @@
 import { useProtocol } from '~/src/protocol'
 
-import type { Community } from '@status-im/js'
+import type { Member } from '@status-im/js'
 
-export type Member = Community['description']['members'][0]
+// todo: remove in favor of useCommunity
+export const useMembers = (): Member[] => {
+  const { client } = useProtocol()
 
-export const useMembers = (): string[] => {
-  const { community } = useProtocol()
-
-  return Object.keys(community.members)
+  return client.community.members
 }
+
+export type { Member }
