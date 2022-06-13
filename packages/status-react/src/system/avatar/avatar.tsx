@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { Image } from '../image'
-import { Base, Indicator, Initials } from './styles'
+import { Base, Content, Indicator, Initials } from './styles'
+import { generateIdenticonRing } from './utils'
 
 import type { Variants } from './styles'
 
@@ -11,46 +12,43 @@ interface Props {
   indicator?: 'online' | 'offline'
   src?: string
   color?: string
+  colorHash?: number[][]
 }
 
 const Avatar = (props: Props) => {
-  const { size, name, src, color, indicator } = props
+  const { size, name, src, color, indicator, colorHash } = props
 
-  // const identicon = useMemo(() => {
-  //   const colors = colorWheel
-  //     .map((color, idx) => {
-  //       const prevDeg = idx === 0 ? '0deg' : `${colorWheel[idx - 1][1]}deg`
-  //       return `${color[0]} ${prevDeg} ${color[1]}deg`
-  //     })
-  //     .join(',')
-  //   return `conic-gradient(${colors})`
-  // }, [colorWheel])
-
-  // const intials = useMemo(() => {
-  //   if (contact && contact?.customName) {
-  //     return contact.customName.slice(0, 2)
-  //   }
-  //   if (contact && contact.trueName) {
-  //     return contact.trueName.slice(0, 2)
-  //   }
-  // }, [contact])
+  const identiconRing = useMemo(() => {
+    if (colorHash) {
+      const gradient = generateIdenticonRing(colorHash)
+      return `conic-gradient(${gradient})`
+    }
+  }, [colorHash])
 
   const initials = name ? name.slice(0, 1) : ''
 
   return (
-    <Base size={size} style={{ backgroundColor: color }}>
-      {initials && <Initials size={size}>{initials}</Initials>}
-      {src && (
-        <Image
-          src={src}
-          alt="avatar"
-          width="100%"
-          height="100%"
-          fit="cover"
-          radius="full"
-        />
-      )}
-      {indicator && <Indicator size={size} state={indicator} />}
+    <Base
+      size={size}
+      style={{
+        background: identiconRing,
+        padding: !identiconRing ? 0 : undefined,
+      }}
+    >
+      <Content style={{ background: color }}>
+        {initials && <Initials size={size}>{initials}</Initials>}
+        {src && (
+          <Image
+            src={src}
+            alt="avatar"
+            width="100%"
+            height="100%"
+            fit="cover"
+            radius="full"
+          />
+        )}
+        {indicator && <Indicator size={size} state={indicator} />}
+      </Content>
     </Base>
   )
 }
