@@ -25,9 +25,7 @@ export type ChatMessage = ChatMessageProto & {
   responseToMessage?: Omit<ChatMessage, 'responseToMessage'>
 }
 
-// todo?: add clock
 export class Chat {
-  // todo?: add whole community reference
   private readonly community: Community
   private readonly client: Client
 
@@ -38,7 +36,6 @@ export class Chat {
   public readonly symetricKey: Uint8Array
   public description: CommunityChat
   public readonly chatCallbacks: Set<(description: CommunityChat) => void>
-  // todo!: use Map
   public messages: ChatMessage[]
   public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
 
@@ -50,7 +47,6 @@ export class Chat {
     contentTopic: string,
     type: MessageType.COMMUNITY_CHAT,
     symetricKey: Uint8Array,
-    // todo?: rename to chat (and access via chat.chat)
     description: CommunityChat
   ) {
     this.client = client
@@ -95,7 +91,6 @@ export class Chat {
     return this.messages
   }
 
-  // todo?: rename to onMetadata/Info/Params/Description/Context/Props/Detail/Proto/Change/Update
   public onChange = (callback: (description: CommunityChat) => void) => {
     this.chatCallbacks.add(callback)
 
@@ -186,7 +181,6 @@ export class Chat {
   }
 
   public handleNewMessage = (message: ChatMessage) => {
-    // todo: move to func
     let messageIndex = this.messages.length
     while (messageIndex > 0) {
       const _message = this.messages[messageIndex - 1]
@@ -198,7 +192,6 @@ export class Chat {
       messageIndex--
     }
 
-    // todo: move to func
     let responseToMessageIndex = this.messages.length
     while (--responseToMessageIndex >= 0) {
       const _message = this.messages[responseToMessageIndex]
@@ -243,8 +236,6 @@ export class Chat {
     this.emitMessages(this.messages)
   }
 
-  // fixme!: delete all references (e.g. in replies)
-  // todo?: replace deleted message with partial object
   public handleDeletedMessage = (messageId: string) => {
     let messageIndex = this.messages.length
     while (--messageIndex >= 0) {

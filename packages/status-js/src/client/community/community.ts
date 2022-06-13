@@ -19,10 +19,8 @@ export class Community {
   public publicKey: string
   private contentTopic!: string
   private symetricKey!: Uint8Array
-  // todo?: rename to community (and access via commuity.community)
   public description!: CommunityDescription
   public chats: Map<string, Chat>
-  // todo: use Set
   public callback: ((description: CommunityDescription) => void) | undefined
 
   constructor(client: Client, publicKey: string) {
@@ -51,7 +49,6 @@ export class Community {
     await this.observe()
 
     // Chats
-    // fixme?: don't await
     await this.observeChatMessages(this.description.chats)
   }
 
@@ -164,7 +161,6 @@ export class Community {
         this.description.chats
       )
       if (addedChats.length) {
-        // fixme?: await
         this.observeChatMessages(addedChats)
       }
     }

@@ -1,4 +1,3 @@
-// fixme: types
 export function getDifferenceByKeys<T extends Record<string, unknown>>(
   a: T,
   b: T
