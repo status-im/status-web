@@ -1,82 +1,69 @@
-import { hexToBytes } from 'ethereum-cryptography/utils'
-import { PageDirection, waku_message } from 'js-waku'
-import difference from 'lodash/difference'
+import { waku_message } from 'js-waku'
 
-import { ChatMessage } from '~/protos/chat-message'
-import { CommunityRequestToJoin } from '~/protos/communities'
-import { EmojiReaction } from '~/protos/emoji-reaction'
+import { MessageType } from '~/protos/enums'
+import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
-import { createChannelContentTopics } from './create-channel-content-topics'
+import { Chat } from '../chat'
 
 import type { Client } from '../../client'
-import type { CommunityDescription } from '../../wire/community_description'
-import type { Reactions } from './get-reactions'
-import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
-import type { Waku } from 'js-waku'
-
-export type CommunityMetadataType = CommunityDescription['proto']
-
-export type MessageType = ChatMessage & {
-  messageId: string
-  pinned: boolean
-  reactions: Reactions
-  channelId: string
-  responseToMessage?: Omit<MessageType, 'responseToMessage'>
-}
+import type {
+  CommunityChat,
+  CommunityDescription,
+} from '~/src/proto/communities/v1/communities'
 
 export class Community {
   private client: Client
-  private waku: Waku
-  public communityPublicKey: string
-  private communityContentTopic!: string
-  private communityDecryptionKey!: Uint8Array
-  public communityMetadata!: CommunityMetadataType // state
-  public channelMessages: Partial<{ [key: string]: MessageType[] }> = {} // state
-  public channelMessagesCallbacks: {
-    [key: string]: (messages: MessageType[]) => void
-  } = {}
-  public communityCallback:
-    | ((community: CommunityMetadataType) => void)
-    | undefined
 
-  constructor(client: Client, waku: Waku, publicKey: string) {
+  public publicKey: string
+  private contentTopic!: string
+  private symmetricKey!: Uint8Array
+  public description!: CommunityDescription
+  public chats: Map<string, Chat>
+  public callback: ((description: CommunityDescription) => void) | undefined
+
+  constructor(client: Client, publicKey: string) {
     this.client = client
-    this.waku = waku
-    this.communityPublicKey = publicKey
+    this.publicKey = publicKey
+
+    this.chats = new Map()
   }
 
   public async start() {
-    this.communityContentTopic = idToContentTopic(this.communityPublicKey)
-    this.communityDecryptionKey = await createSymKeyFromPassword(
-      this.communityPublicKey
-    )
+    this.contentTopic = idToContentTopic(this.publicKey)
+    this.symmetricKey = await createSymKeyFromPassword(this.publicKey)
 
     // Waku
-    this.waku.store.addDecryptionKey(this.communityDecryptionKey)
+    this.client.waku.store.addDecryptionKey(this.symmetricKey, {
+      contentTopics: [this.contentTopic],
+    })
+    this.client.waku.relay.addDecryptionKey(this.symmetricKey, {
+      contentTopics: [this.contentTopic],
+    })
 
     // Community
-    const communityMetadata = await this.fetchCommunity()
+    const description = await this.fetch()
 
-    if (!communityMetadata) {
+    if (!description) {
       throw new Error('Failed to intiliaze Community')
     }
 
-    this.communityMetadata = communityMetadata
+    this.description = description
 
-    await this.observeCommunity()
+    this.observe()
 
-    // Channels
-    await this.observeChannelMessages(Object.keys(this.communityMetadata.chats))
+    // Chats
+    await this.observeChatMessages(this.description.chats)
   }
 
-  public fetchCommunity = async () => {
-    let communityMetadata: CommunityMetadataType | undefined
-    let shouldStop = false
+  // todo: rename this to chats when changing references in ui
+  public get _chats() {
+    return [...this.chats.values()]
+  }
 
-    await this.waku.store.queryHistory([this.communityContentTopic], {
-      decryptionKeys: [this.communityDecryptionKey],
+  public fetch = async () => {
+    await this.client.waku.store.queryHistory([this.contentTopic], {
       // oldest message first
       callback: wakuMessages => {
         let index = wakuMessages.length
@@ -85,380 +72,117 @@ export class Community {
         while (--index >= 0) {
           this.client.handleWakuMessage(wakuMessages[index])
 
-          if (!this.communityMetadata) {
-            return shouldStop
-          }
-
-          communityMetadata = this.communityMetadata
-          shouldStop = true
-
-          return shouldStop
+          return this.description !== undefined
         }
       },
     })
 
-    return communityMetadata
+    return this.description
   }
 
-  public createFetchChannelMessages = async (
-    channelId: string,
-    callback: (messages: MessageType[]) => void
-  ) => {
-    const id = `${this.communityPublicKey}${channelId}`
-    const channelContentTopic = idToContentTopic(id)
-    const symKey = await createSymKeyFromPassword(id)
-
-    return async (options: { start: Date }) => {
-      const startTime = options.start
-      const endTime = new Date()
-
-      const _messages = this.channelMessages[channelId] || []
-      let _oldestMessageTime: Date | undefined = undefined
-
-      if (_messages.length) {
-        _oldestMessageTime = new Date(Number(_messages[0].timestamp))
-
-        if (_oldestMessageTime <= options.start) {
-          callback(_messages)
-
-          return
-        }
-      }
-
-      await this.waku.store.queryHistory([channelContentTopic], {
-        timeFilter: {
-          startTime: startTime,
-          endTime: endTime,
-        },
-        pageSize: 50,
-        // most recent page first
-        pageDirection: PageDirection.BACKWARD,
-        decryptionKeys: [symKey],
-        callback: wakuMessages => {
-          // oldest message first
-          for (const wakuMessage of wakuMessages) {
-            this.client.handleWakuMessage(wakuMessage)
-          }
-        },
-      })
-
-      // callback
-      if (
-        _oldestMessageTime &&
-        this.channelMessages[channelId]?.length &&
-        _oldestMessageTime >=
-          new Date(Number(this.channelMessages[channelId]![0].timestamp))
-      ) {
-        callback([])
-
-        return
-      }
-
-      callback(this.channelMessages[channelId] ?? [])
-    }
-  }
-
-  private observeCommunity = () => {
-    this.waku.relay.addDecryptionKey(this.communityDecryptionKey)
-    this.waku.relay.addObserver(this.client.handleWakuMessage, [
-      this.communityContentTopic,
+  private observe = () => {
+    this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
+      this.contentTopic,
     ])
   }
 
-  private observeChannelMessages = async (chatsIds: string[]) => {
-    const symKeyPromises = chatsIds.map(async (chatId: string) => {
-      const id = `${this.communityPublicKey}${chatId}`
-      const channelContentTopic = idToContentTopic(id)
+  private observeChatMessages = async (
+    chatDescriptions: CommunityDescription['chats']
+  ) => {
+    const chatPromises = Object.entries(chatDescriptions).map(
+      async ([chatUuid, chatDescription]: [string, CommunityChat]) => {
+        const chat = await Chat.create(
+          this,
+          this.client,
+          chatUuid,
+          MessageType.COMMUNITY_CHAT,
+          chatDescription
+        )
+        const contentTopic = chat.contentTopic
 
-      const symKey = await createSymKeyFromPassword(id)
+        this.chats.set(chatUuid, chat)
 
-      this.waku.relay.addDecryptionKey(symKey, {
-        method: waku_message.DecryptionMethod.Symmetric,
-        contentTopics: [channelContentTopic],
-      })
+        this.client.waku.relay.addDecryptionKey(chat.symmetricKey, {
+          method: waku_message.DecryptionMethod.Symmetric,
+          contentTopics: [contentTopic],
+        })
 
-      return channelContentTopic
-    })
-    const contentTopics = await Promise.all(symKeyPromises)
-
-    this.waku.relay.addObserver(this.client.handleWakuMessage, contentTopics)
-  }
-
-  private unobserveChannelMessages = (chatIds: string[]) => {
-    const contentTopics = createChannelContentTopics(
-      chatIds,
-      this.communityPublicKey
+        return contentTopic
+      }
     )
 
-    this.waku.relay.deleteObserver(this.client.handleWakuMessage, contentTopics)
+    const contentTopics = await Promise.all(chatPromises)
+
+    this.client.waku.relay.addObserver(
+      this.client.handleWakuMessage,
+      contentTopics
+    )
   }
 
-  public handleCommunityMetadataEvent = (
-    communityMetadata: CommunityMetadataType
+  private unobserveChatMessages = (
+    chatDescription: CommunityDescription['chats']
   ) => {
-    if (this.communityMetadata) {
-      if (this.communityMetadata.clock > communityMetadata.clock) {
+    const contentTopics = Object.keys(chatDescription).map(chatUuid => {
+      const chat = this.chats.get(chatUuid)
+      const contentTopic = chat!.contentTopic
+
+      this.chats.delete(chatUuid)
+
+      return contentTopic
+    })
+
+    this.client.waku.relay.deleteObserver(
+      this.client.handleWakuMessage,
+      contentTopics
+    )
+  }
+
+  public handleDescription = (description: CommunityDescription) => {
+    if (this.description) {
+      // already handled
+      if (this.description.clock >= description.clock) {
         return
       }
 
-      // Channels
-      const removedChats = difference(
-        Object.keys(this.communityMetadata.chats),
-        Object.keys(communityMetadata.chats)
+      // Chats
+      // observe
+      const removedChats = getDifferenceByKeys(
+        this.description.chats,
+        description.chats
       )
-      const addedChats = difference(
-        Object.keys(communityMetadata.chats),
-        Object.keys(this.communityMetadata.chats)
-      )
-
-      if (removedChats.length) {
-        this.unobserveChannelMessages(removedChats)
+      if (Object.keys(removedChats).length) {
+        this.unobserveChatMessages(removedChats)
       }
 
-      if (addedChats.length) {
-        this.observeChannelMessages(addedChats)
+      const addedChats = getDifferenceByKeys(
+        description.chats,
+        this.description.chats
+      )
+      if (Object.keys(addedChats).length) {
+        this.observeChatMessages(addedChats)
       }
     }
 
     // Community
-    this.communityMetadata = communityMetadata
-    this.communityCallback?.(communityMetadata)
-  }
-
-  public handleChannelChatMessageNewEvent = (chatMessage: MessageType) => {
-    const _messages = this.channelMessages[chatMessage.channelId] || []
-
-    // findIndexLeft
-    // const index = _messages.findIndex(({ timestamp }) => {
-    //   new Date(Number(timestamp)) > new Date(Number(message.timestamp))
-    // })
-    // findIndexRight
-    let messageIndex = _messages.length
-    while (messageIndex > 0) {
-      const _message = _messages[messageIndex - 1]
-
-      // if (_message.messageId === chatMessage.messageId) {
-      //   messageIndex = -1
-
-      //   break
-      // }
-
-      if (_message.clock <= chatMessage.clock) {
-        break
-      }
-
-      messageIndex--
-    }
-
-    // // already received
-    // if (messageIndex < 0) {
-    //   return
-    // }
-
-    // replied
-    let responsedToMessageIndex = _messages.length
-    while (--responsedToMessageIndex >= 0) {
-      const _message = _messages[responsedToMessageIndex]
-
-      if (_message.messageId === chatMessage.responseTo) {
-        break
-      }
-    }
-
-    if (responsedToMessageIndex >= 0) {
-      chatMessage.responseToMessage = _messages[responsedToMessageIndex]
-    }
-
-    _messages.splice(messageIndex, 0, chatMessage)
-
     // state
-    const channelId = _messages[0].channelId
-
-    this.channelMessages[channelId] = _messages
+    this.description = description
 
     // callback
-    this.channelMessagesCallbacks[channelId]?.(this.channelMessages[channelId]!)
+    this.callback?.(this.description)
+
+    // Chats
+    // handle
+    Object.entries(this.description.chats).forEach(
+      ([chatUuid, chatDescription]) =>
+        this.chats.get(chatUuid)?.handleChange(chatDescription)
+    )
   }
 
-  public getMessages(channelId: string): MessageType[] {
-    return this.channelMessages[channelId] ?? []
-  }
-
-  public onCommunityUpdate = (
-    callback: (community: CommunityMetadataType) => void
-  ) => {
-    this.communityCallback = callback
+  public onChange = (callback: (description: CommunityDescription) => void) => {
+    this.callback = callback
 
     return () => {
-      this.communityCallback = undefined
+      this.callback = undefined
     }
-  }
-
-  public onChannelMessageUpdate = (
-    channelId: string,
-    callback: (messages: MessageType[]) => void
-  ) => {
-    this.channelMessagesCallbacks[channelId] = callback
-
-    return () => {
-      delete this.channelMessagesCallbacks[channelId]
-    }
-  }
-
-  public sendTextMessage = async (
-    chatUuid: string,
-    text: string,
-    responseTo?: string
-  ) => {
-    const chat = this.communityMetadata.chats[chatUuid]
-
-    if (!chat) {
-      throw new Error('Chat not found')
-    }
-
-    // TODO: move to chat instance
-    const chatId = `${this.communityPublicKey}${chatUuid}`
-    const channelContentTopic = idToContentTopic(chatId)
-    const symKey = await createSymKeyFromPassword(chatId)
-
-    // TODO: protos does not support optional fields :-(
-    const payload = ChatMessage.encode({
-      clock: BigInt(Date.now()),
-      timestamp: BigInt(Date.now()),
-      text,
-      responseTo: responseTo ?? '',
-      ensName: '',
-      chatId,
-      messageType: 'COMMUNITY_CHAT',
-      contentType: ChatMessage.ContentType.TEXT_PLAIN,
-      sticker: { hash: '', pack: 0 },
-      image: {
-        type: 'JPEG',
-        payload: new Uint8Array([]),
-      },
-      audio: {
-        type: 'AAC',
-        payload: new Uint8Array([]),
-        durationMs: BigInt(0),
-      },
-      community: new Uint8Array([]),
-      grant: new Uint8Array([]),
-      displayName: '',
-    })
-
-    await this.client.sendMessage(
-      'TYPE_CHAT_MESSAGE',
-      payload,
-      channelContentTopic,
-      symKey
-    )
-  }
-
-  public sendImageMessage = async (chatUuid: string, image: ImageMessage) => {
-    const chat = this.communityMetadata.chats[chatUuid]
-
-    if (!chat) {
-      throw new Error('Chat not found')
-    }
-
-    // TODO: move to chat instance
-    const chatId = `${this.communityPublicKey}${chatUuid}`
-    const channelContentTopic = idToContentTopic(chatId)
-    const symKey = await createSymKeyFromPassword(chatId)
-
-    const payload = ChatMessage.encode({
-      clock: BigInt(Date.now()),
-      timestamp: BigInt(Date.now()),
-      text: '',
-      responseTo: responseTo ?? '',
-      ensName: '',
-      chatId,
-      messageType: 'COMMUNITY_CHAT',
-      contentType: ChatMessage.ContentType.TEXT_PLAIN,
-      sticker: { hash: '', pack: 0 },
-      image: {
-        type: image.type,
-        payload: image.payload,
-      },
-      audio: {
-        type: 'AAC',
-        payload: new Uint8Array([]),
-        durationMs: BigInt(0),
-      },
-      community: new Uint8Array([]),
-      grant: new Uint8Array([]),
-      displayName: '',
-    })
-
-    await this.client.sendMessage(
-      'TYPE_CHAT_MESSAGE',
-      payload,
-      channelContentTopic,
-      symKey
-    )
-  }
-
-  public sendReaction = async (
-    chatId: string,
-    messageId: string,
-    reaction: EmojiReaction.Type
-  ) => {
-    // const chat = this.communityMetadata.chats[chatId]
-
-    // if (!chat) {
-    //   throw new Error('Chat not found')
-    // }
-
-    // TODO: move to chat instance
-    // const chatId = `${this.communityPublicKey}${chatUuid}`
-    const channelContentTopic = idToContentTopic(chatId)
-    const symKey = await createSymKeyFromPassword(chatId)
-
-    // TODO: protos does not support optional fields :-(
-    const payload = EmojiReaction.encode({
-      clock: BigInt(Date.now()),
-      chatId: chatId,
-      messageType: 'COMMUNITY_CHAT',
-      grant: new Uint8Array([]),
-      messageId,
-      retracted: false,
-      type: reaction,
-    })
-
-    await this.client.sendMessage(
-      'TYPE_EMOJI_REACTION',
-      payload,
-      channelContentTopic,
-      symKey
-    )
-  }
-
-  public requestToJoin = async (chatUuid: string) => {
-    if (!this.client.account) {
-      throw new Error('Account not found')
-    }
-
-    const chat = this.communityMetadata.chats[chatUuid]
-
-    if (!chat) {
-      throw new Error('Chat not found')
-    }
-
-    // TODO: move to chat instance
-    const chatId = `${this.communityPublicKey}${chatUuid}`
-
-    const payload = CommunityRequestToJoin.encode({
-      clock: BigInt(Date.now()),
-      chatId,
-      communityId: hexToBytes(this.communityPublicKey.replace(/^0[xX]/, '')),
-      ensName: '',
-    })
-
-    await this.client.sendMessage(
-      'TYPE_COMMUNITY_REQUEST_TO_JOIN',
-      payload,
-      this.communityContentTopic,
-      this.communityDecryptionKey
-    )
   }
 }

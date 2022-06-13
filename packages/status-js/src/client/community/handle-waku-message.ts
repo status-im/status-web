@@ -12,13 +12,12 @@ import { ProtocolMessage } from '../../../protos/protocol-message'
 import { CommunityDescription } from '../../proto/communities/v1/communities'
 import { payloadToId } from '../../utils/payload-to-id'
 import { recoverPublicKey } from '../../utils/recover-public-key'
-import { getChannelId } from './get-channel-id'
-import { getReactions } from './get-reactions'
+import { getChatUuid } from './get-chat-uuid'
 import { mapChatMessage } from './map-chat-message'
 
 import type { Account } from '../../account'
 import type { Client } from '../../client'
-import type { Community /*, MessageType*/ } from './community'
+import type { Community } from './community'
 import type { WakuMessage } from 'js-waku'
 
 export function handleWakuMessage(
@@ -57,13 +56,13 @@ export function handleWakuMessage(
     decodedMetadata.payload
   )
 
-  const wakuMessageId = payloadToId(
+  const messageId = payloadToId(
     decodedProtocol?.publicMessage || decodedMetadata.payload,
     publicKey
   )
 
   // already handled
-  if (client.wakuMessages.has(wakuMessageId)) {
+  if (client.wakuMessages.has(messageId)) {
     return
   }
 
@@ -76,7 +75,7 @@ export function handleWakuMessage(
       const decodedPayload = CommunityDescription.decode(messageToDecode)
 
       // handle (state and callback)
-      community.handleCommunityMetadataEvent(decodedPayload)
+      community.handleDescription(decodedPayload)
 
       success = true
 
@@ -88,17 +87,16 @@ export function handleWakuMessage(
       const decodedPayload = ChatMessage.decode(messageToDecode)
 
       // TODO?: ignore community.channelMessages which are messageType !== COMMUNITY_CHAT
+      const chatUuid = getChatUuid(decodedPayload.chatId)
 
       // map
-      const channelId = getChannelId(decodedPayload.chatId)
-
       const chatMessage = mapChatMessage(decodedPayload, {
-        messageId: wakuMessageId,
-        channelId,
+        messageId,
+        chatUuid,
       })
 
       // handle
-      community.handleChannelChatMessageNewEvent(chatMessage)
+      community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
 
       success = true
 
@@ -109,40 +107,11 @@ export function handleWakuMessage(
       const decodedPayload = EditMessage.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
-      const channelId = getChannelId(decodedPayload.chatId)
+      const chatUuid = getChatUuid(decodedPayload.chatId)
 
-      const _messages = community.channelMessages[channelId] || []
-
-      let index = _messages.length
-      while (--index >= 0) {
-        const _message = _messages[index]
-
-        if (_message.messageId === messageId) {
-          break
-        }
-      }
-
-      // original not found
-      if (index < 0) {
-        break
-      }
-
-      const _message = _messages[index]
-
-      const message = {
-        ..._message,
-        text: decodedPayload.text,
-      }
-
-      _messages[index] = message
-
-      // state
-      community.channelMessages[channelId] = _messages
-
-      // callback
-      community.channelMessagesCallbacks[channelId]?.(
-        community.channelMessages[channelId]!
-      )
+      community.chats
+        .get(chatUuid)
+        ?.handleEditedMessage(messageId, decodedPayload.text)
 
       success = true
 
@@ -153,33 +122,9 @@ export function handleWakuMessage(
       const decodedPayload = DeleteMessage.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
-      const channelId = getChannelId(decodedPayload.chatId)
+      const chatUuid = getChatUuid(decodedPayload.chatId)
 
-      const _messages = community.channelMessages[channelId] || []
-
-      let index = _messages.length
-      while (--index >= 0) {
-        const _message = _messages[index]
-
-        if (_message.messageId === messageId) {
-          break
-        }
-      }
-
-      // original not found
-      if (index < 0) {
-        break
-      }
-
-      _messages.splice(index, 1)
-
-      // state
-      community.channelMessages[channelId] = _messages
-
-      // callback
-      community.channelMessagesCallbacks[channelId]?.(
-        community.channelMessages[channelId]!
-      )
+      community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
 
       success = true
 
@@ -190,33 +135,11 @@ export function handleWakuMessage(
       const decodedPayload = PinMessage.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
-      const channelId = getChannelId(decodedPayload.chatId)
+      const chatUuid = getChatUuid(decodedPayload.chatId)
 
-      const _messages = community.channelMessages[channelId] || []
-
-      let index = _messages.length
-      while (--index >= 0) {
-        const _message = _messages[index]
-
-        if (_message.messageId === messageId) {
-          break
-        }
-      }
-
-      // original not found
-      if (index < 0) {
-        break
-      }
-
-      _messages[index].pinned = Boolean(decodedPayload.pinned)
-
-      // state
-      community.channelMessages[channelId] = _messages
-
-      // callback
-      community.channelMessagesCallbacks[channelId]?.(
-        community.channelMessages[channelId]!
-      )
+      community.chats
+        .get(chatUuid)
+        ?.handlePinnedMessage(messageId, decodedPayload.pinned)
 
       success = true
 
@@ -227,41 +150,12 @@ export function handleWakuMessage(
       const decodedPayload = EmojiReaction.decode(messageToDecode)
 
       const messageId = decodedPayload.messageId
-      const channelId = getChannelId(decodedPayload.chatId)
+      const chatUuid = getChatUuid(decodedPayload.chatId)
+      const isMe = account?.publicKey === `0x${bytesToHex(publicKey)}`
 
-      const _messages = community.channelMessages[channelId] || []
-
-      let index = _messages.length
-      while (--index >= 0) {
-        const _message = _messages[index]
-
-        if (_message.messageId === messageId) {
-          break
-        }
-      }
-
-      // original not found
-      if (index < 0) {
-        break
-      }
-
-      const _message = _messages[index]
-      const isMe =
-        account?.publicKey === `0x${bytesToHex(wakuMessage.signaturePublicKey)}`
-
-      _messages[index].reactions = getReactions(
-        decodedPayload,
-        _message.reactions,
-        isMe
-      )
-
-      // state
-      community.channelMessages[channelId] = _messages
-
-      // callback
-      community.channelMessagesCallbacks[channelId]?.(
-        community.channelMessages[channelId]!
-      )
+      community.chats
+        .get(chatUuid)
+        ?.handleEmojiReaction(messageId, decodedPayload, isMe)
 
       success = true
 
@@ -269,11 +163,13 @@ export function handleWakuMessage(
     }
 
     default:
+      success = true
+
       break
   }
 
   if (success) {
-    client.wakuMessages.add(wakuMessageId)
+    client.wakuMessages.add(messageId)
   }
 
   return

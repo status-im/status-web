@@ -91,20 +91,20 @@ export const useMessages = (channelId: string): Result => {
   // const [state, dispatch] = useReducer<Result>((state,action) => {}, {})
 
   const [data, setData] = useState<any[]>(() =>
-    client.community.getMessages(channelId)
+    client.community.chats.get(channelId).getMessages()
   )
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error>()
 
   useEffect(() => {
-    setData(client.community.getMessages(channelId))
+    setData(client.community.chats.get(channelId).getMessages())
 
     const handleUpdate = (messages: Message[]) => {
       setLoading(false)
       setData(messages)
     }
 
-    return client.community.onChannelMessageUpdate(channelId, handleUpdate)
+    return client.community.chats.get(channelId).onMessage(handleUpdate)
   }, [channelId])
 
   return {
