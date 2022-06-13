@@ -1,4 +1,5 @@
 export type { Account } from './account'
 export type { Client, ClientOptions } from './client'
 export { createClient } from './client'
-export type { Community, MessageType } from './client/community/community'
+export type { ChatMessage as Message } from './client/chat'
+export type { Community } from './client/community/community'

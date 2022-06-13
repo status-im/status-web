@@ -11,14 +11,14 @@ const Context = createContext<State | undefined>(undefined)
 type State = {
   loading: boolean
   client: Client | undefined
-  community: Community['communityMetadata'] | undefined
+  community: Community['description'] | undefined
   account: Account | undefined
   dispatch?: React.Dispatch<Action>
 }
 
 type Action =
   | { type: 'INIT'; client: Client }
-  | { type: 'UPDATE_COMMUNITY'; community: Community['communityMetadata'] }
+  | { type: 'UPDATE_COMMUNITY'; community: Community['description'] }
   | { type: 'SET_ACCOUNT'; account: Account }
   | { type: 'REMOVE_ACCOUNT' }
 
@@ -35,7 +35,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         loading: false,
         client,
-        community: client.community.communityMetadata,
+        community: client.community.description,
       }
     }
     case 'UPDATE_COMMUNITY': {
@@ -76,7 +76,7 @@ export const ProtocolProvider = (props: Props) => {
 
   useEffect(() => {
     if (client) {
-      return client.community.onCommunityUpdate(community => {
+      return client.community.onChange(community => {
         dispatch({ type: 'UPDATE_COMMUNITY', community })
       })
     }
@@ -103,7 +103,7 @@ export function useProtocol() {
   // we enforce initialization of client before rendering children
   return context as State & {
     client: Client
-    community: Community['communityMetadata']
+    community: Community['description']
     dispatch: React.Dispatch<Action>
   }
 }

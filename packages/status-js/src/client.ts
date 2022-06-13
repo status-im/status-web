@@ -17,7 +17,7 @@ export interface ClientOptions {
 }
 
 class Client {
-  private waku: Waku
+  public waku: Waku
   public readonly wakuMessages: Set<string>
 
   public account?: Account
@@ -29,7 +29,7 @@ class Client {
     this.wakuMessages = new Set()
 
     // Community
-    this.community = new Community(this, waku, options.publicKey)
+    this.community = new Community(this, options.publicKey)
   }
 
   static async start(options: ClientOptions) {
@@ -72,7 +72,7 @@ class Client {
   //   this.account = undefined
   // }
 
-  public sendMessage = async (
+  public sendWakuMessage = async (
     type: keyof typeof ApplicationMetadataMessage.Type,
     payload: Uint8Array,
     contentTopic: string,

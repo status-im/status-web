@@ -117,6 +117,7 @@ export interface CommunityDescription {
   members: CommunityMember
   permissions: CommunityPermissions
   identity: ChatIdentity
+  // fixme!: Map
   chats: CommunityChat
   banList: string[]
   categories: CommunityCategory
