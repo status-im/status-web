@@ -2,10 +2,12 @@ import { waku_message } from 'js-waku'
 
 import { MessageType } from '~/protos/enums'
 import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
+import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
 
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
 import { Chat } from '../chat'
+import { Member } from '../member'
 
 import type { Client } from '../../client'
 import type {
@@ -21,6 +23,7 @@ export class Community {
   private symmetricKey!: Uint8Array
   public description!: CommunityDescription
   public chats: Map<string, Chat>
+  #members: Map<string, Member>
   public callback: ((description: CommunityDescription) => void) | undefined
 
   constructor(client: Client, publicKey: string) {
@@ -28,6 +31,7 @@ export class Community {
     this.publicKey = publicKey
 
     this.chats = new Map()
+    this.#members = new Map()
   }
 
   public async start() {
@@ -52,6 +56,7 @@ export class Community {
     this.description = description
 
     this.observe()
+    this.addMembers(this.description.members)
 
     // Chats
     await this.observeChatMessages(this.description.chats)
@@ -60,6 +65,18 @@ export class Community {
   // todo: rename this to chats when changing references in ui
   public get _chats() {
     return [...this.chats.values()]
+  }
+
+  public getChat(uuid: string) {
+    return this.chats.get(uuid)
+  }
+
+  public get members() {
+    return [...this.#members.values()]
+  }
+
+  public getMember(publicKey: string) {
+    return this.#members.get(publicKey)
   }
 
   public fetch = async () => {
@@ -137,6 +154,19 @@ export class Community {
     )
   }
 
+  private addMembers = (members: CommunityDescription['members']) => {
+    for (const publicKey of Object.keys(members)) {
+      const member = new Member(publicKey)
+      this.#members.set(publicKey, member)
+    }
+  }
+
+  private removeMembers = (ids: string[]) => {
+    for (const id of ids) {
+      this.#members.delete(id)
+    }
+  }
+
   public handleDescription = (description: CommunityDescription) => {
     if (this.description) {
       // already handled
@@ -161,6 +191,23 @@ export class Community {
       if (Object.keys(addedChats).length) {
         this.observeChatMessages(addedChats)
       }
+
+      // TODO: migrate chats to new format
+      // const chats = getObjectsDifference(
+      //   this.description.chats,
+      //   description.chats
+      // )
+
+      // this.observeChatMessages(chats.added)
+      // this.unobserveChatMessages(chats.removed)
+
+      const members = getObjectsDifference(
+        this.description.members,
+        description.members
+      )
+
+      this.addMembers(members.added)
+      this.removeMembers(members.removed)
     }
 
     // Community
