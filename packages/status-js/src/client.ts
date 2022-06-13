@@ -42,6 +42,7 @@ class Client {
           // '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/8000/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
         ],
       },
+      libp2p: { config: { pubsub: { enabled: true, emitSelf: true } } },
     })
     await waku.waitForRemotePeer()
 
