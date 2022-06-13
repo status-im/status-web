@@ -144,7 +144,8 @@ export class Community {
 
   public handleChange = (description: CommunityDescription) => {
     if (this.description) {
-      if (this.description.clock > description.clock) {
+      // already handled
+      if (this.description.clock >= description.clock) {
         return
       }
 
