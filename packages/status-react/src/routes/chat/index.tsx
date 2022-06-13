@@ -82,7 +82,7 @@ export const Chat = () => {
   const showMembers = enableMembers && state.showMembers
 
   const handleMessageSubmit = (message: string) => {
-    client.community.get(chatId).sendTextMessage(
+    client.community.chats.get(chatId).sendTextMessage(
       message
       // '0x0fa999097568d1fdcc39108a08d75340bd2cee5ec59c36799007150d0a9fc896'
     )
