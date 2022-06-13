@@ -36,6 +36,7 @@ export class Community {
 
     // Waku
     this.client.waku.store.addDecryptionKey(this.symmetricKey)
+    this.client.waku.relay.addDecryptionKey(this.symmetricKey)
 
     // Community
     const description = await this.fetch()
@@ -82,7 +83,6 @@ export class Community {
   }
 
   private observe = () => {
-    this.client.waku.relay.addDecryptionKey(this.symmetricKey)
     this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
       this.contentTopic,
     ])
