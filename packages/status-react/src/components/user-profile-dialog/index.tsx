@@ -2,20 +2,24 @@ import React from 'react'
 
 import { Avatar, Dialog, EmojiHash, Heading, Text } from '~/src/system'
 
+import type { Member } from '~/src/protocol'
+
 interface Props {
-  name: string
+  member: Member
 }
 
 // TODO: Add all states of contact, wait for desktop release
 export const UserProfileDialog = (props: Props) => {
-  const { name, ...dialogProps } = props
+  const { member, ...dialogProps } = props
+
+  const { username, colorHash, chatKey } = member
 
   return (
-    <Dialog title={`${name}'s Profile`} size="640" {...dialogProps}>
+    <Dialog title={`${username}'s Profile`} size="640" {...dialogProps}>
       <Dialog.Body align="center">
-        <Avatar size="80" />
-        <Heading size="22">{name}</Heading>
-        <Text>Chatkey: 0x63FaC9201494f0bd17B9892B9fae4d52fe3BD377</Text>
+        <Avatar size="80" name={username} colorHash={colorHash} />
+        <Heading size="22">{username}</Heading>
+        <Text>Chatkey: {chatKey}</Text>
         <EmojiHash />
       </Dialog.Body>
       <Dialog.Actions>
