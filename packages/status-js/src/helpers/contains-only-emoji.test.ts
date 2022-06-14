@@ -1,6 +1,6 @@
 import { containsOnlyEmoji } from './contains-only-emoji'
 
-describe('hasOnlyEmoji', () => {
+describe('containsOnlyEmoji', () => {
   it('should be truthy', () => {
     expect(containsOnlyEmoji('💩')).toBeTruthy()
     expect(containsOnlyEmoji('💩💩💩💩💩💩')).toBeTruthy()
