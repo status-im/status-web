@@ -18,7 +18,12 @@ export const MemberItem = (props: Props) => {
 
   return (
     <Flex gap="2" align="center" css={{ height: 56 }}>
-      <Avatar size={32} indicator={indicator} colorHash={colorHash} />
+      <Avatar
+        size={32}
+        indicator={indicator}
+        name={username}
+        colorHash={colorHash}
+      />
       <div>
         <Flex align="center" gap={1}>
           <Text size="15" color="accent" truncate>
