@@ -1,22 +1,16 @@
 import * as secp256k1 from 'ethereum-cryptography/secp256k1'
 
+import { compressPublicKey } from './compress-public-key'
+
 export type ColorHash = number[][]
 
 const COLOR_HASH_COLORS_COUNT = 32
 const COLOR_HASH_SEGMENT_MAX_LENGTH = 5
 
-export function publicKeyToColorHash(publicKey: string): ColorHash | undefined {
-  const publicKeyHex = publicKey.replace(/^0[xX]/, '') // ensures hexadecimal digits without "base prefix"
+export function publicKeyToColorHash(publicKey: string): ColorHash {
+  const compressedPublicKey = compressPublicKey(publicKey)
 
-  let compressedPublicKeyDigits: string
-  try {
-    compressedPublicKeyDigits =
-      secp256k1.Point.fromHex(publicKeyHex).toHex(true) // validates and adds "sign prefix" too
-  } catch (error) {
-    return undefined
-  }
-
-  const colorHashHex = compressedPublicKeyDigits.slice(43, 63)
+  const colorHashHex = compressedPublicKey.slice(43, 63)
   const colorHash = hexToColorHash(
     colorHashHex,
     COLOR_HASH_COLORS_COUNT,
