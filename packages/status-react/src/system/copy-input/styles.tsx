@@ -2,6 +2,11 @@ import { styled } from '~/src/styles/config'
 
 export const Wrapper = styled('div', {
   position: 'relative',
+
+  input: {
+    paddingRight: 82,
+    textOverflow: 'ellipsis',
+  },
 })
 
 export const CopyButton = styled('button', {
