@@ -17,7 +17,7 @@ export const UserItem = (props: Props) => {
   return (
     <Flex align="center" justify="between">
       <Flex gap="2" align="center" css={{ height: 56 }}>
-        <Avatar size={32} />
+        <Avatar size={32} name={account.username} />
         <div>
           <Flex align="center" gap={1}>
             <Text size="15" color="accent">

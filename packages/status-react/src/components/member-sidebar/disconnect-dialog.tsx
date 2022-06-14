@@ -20,7 +20,7 @@ export const DisconnectDialog = (props: Props) => {
         <Flex direction="column" align="center" gap="2">
           <Avatar size={64} />
           <Heading weight="600">{account.username}</Heading>
-          <Text color="gray">Chatkey: {account.chatKey}</Text>
+          <Text color="gray">Chatkey: {account.publicKey}</Text>
           <EmojiHash />
         </Flex>
       </Dialog.Body>
