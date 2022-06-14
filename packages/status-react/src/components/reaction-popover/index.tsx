@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useAccount } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Flex, Image, Popover, PopoverTrigger } from '~/src/system'
 
@@ -43,18 +44,22 @@ export const emojis: Record<Reaction, { url: string; symbol: string }> = {
 export const ReactionPopover = (props: Props) => {
   const { reactions, children, onClick, ...popoverProps } = props
 
+  const { account } = useAccount()
+
   return (
     <PopoverTrigger {...popoverProps}>
       {children}
       <Popover side="top" align="center" sideOffset={6}>
         <Flex gap={1} css={{ padding: 8 }}>
           {Object.entries(emojis).map(([type, emoji]) => {
-            const reaction = reactions[type]
+            const value = reactions[type]
+            const me = account ? value.has('0x' + account.publicKey) : false
+
             return (
               <Button
                 key={type}
                 onClick={() => onClick(type)}
-                active={reaction.me}
+                active={me}
                 aria-label={`React with ${emoji.symbol}`}
               >
                 <Image width={30} src={emoji.url} alt={emoji.symbol} />
