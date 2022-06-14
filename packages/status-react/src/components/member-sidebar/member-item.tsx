@@ -14,7 +14,7 @@ interface Props {
 
 export const MemberItem = (props: Props) => {
   const { member, indicator, verified, untrustworthy } = props
-  const { publicKey, username, colorHash } = member
+  const { chatKey, username, colorHash } = member
 
   return (
     <Flex gap="2" align="center" css={{ height: 56 }}>
@@ -65,7 +65,7 @@ export const MemberItem = (props: Props) => {
           )}
         </Flex>
         <EthAddress size={10} color="gray">
-          {publicKey}
+          {chatKey}
         </EthAddress>
       </div>
     </Flex>

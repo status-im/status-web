@@ -25,7 +25,7 @@ export const UserItem = (props: Props) => {
             </Text>
           </Flex>
           <EthAddress size={10} color="gray">
-            {account.publicKey}
+            {account.chatKey}
           </EthAddress>
         </div>
       </Flex>

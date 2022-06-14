@@ -2,6 +2,7 @@ import { keccak256 } from 'ethereum-cryptography/keccak'
 import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
 import { bytesToHex, concatBytes } from 'ethereum-cryptography/utils'
 
+import { compressPublicKey } from './utils/compress-public-key'
 import { generateUsername } from './utils/generate-username'
 
 export class Account {
@@ -13,12 +14,10 @@ export class Account {
   constructor() {
     const privateKey = utils.randomPrivateKey()
     const publicKey = getPublicKey(privateKey)
-    const chatKey = getPublicKey(privateKey, true)
 
     this.privateKey = bytesToHex(privateKey)
     this.publicKey = bytesToHex(publicKey)
-    // TODO?: add 0x prefix to public key
-    this.chatKey = bytesToHex(chatKey)
+    this.chatKey = '0x' + compressPublicKey(this.publicKey)
     this.username = generateUsername('0x' + this.publicKey)
   }
 
