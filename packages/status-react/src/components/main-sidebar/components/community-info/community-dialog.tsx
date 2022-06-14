@@ -4,7 +4,7 @@ import { useProtocol } from '~/src/protocol'
 import { Button, CopyInput, Dialog, Flex, Grid, Text } from '~/src/system'
 
 export const CommunityDialog = () => {
-  const { community } = useProtocol()
+  const { client, community } = useProtocol()
   const { displayName, description } = community.identity!
 
   return (
@@ -15,7 +15,10 @@ export const CommunityDialog = () => {
       <Dialog.Separator />
       <Dialog.Body>
         <Grid gap={3}>
-          <CopyInput label="Community Public Key" value="0xTODO" />
+          <CopyInput
+            label="Community Public Key"
+            value={client.community.publicKey}
+          />
           <Text size="13" color="gray">
             To access this community, paste community public key in Status
             desktop or mobile app.
