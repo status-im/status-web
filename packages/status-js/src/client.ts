@@ -104,7 +104,7 @@ class Client {
   }
 
   public handleWakuMessage = (wakuMessage: WakuMessage): void => {
-    handleWakuMessage(wakuMessage, this, this.community, this.account)
+    handleWakuMessage(wakuMessage, this, this.community)
   }
 }
 
