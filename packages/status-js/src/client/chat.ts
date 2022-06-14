@@ -2,6 +2,7 @@ import { PageDirection } from 'js-waku'
 
 import {
   ChatMessage as ChatMessageProto,
+  DeleteMessage,
   EditMessage,
 } from '~/protos/chat-message'
 import { EmojiReaction } from '~/protos/emoji-reaction'
@@ -396,6 +397,26 @@ export class Chat {
       this.symmetricKey
     )
   }
+
+  public deleteMessage = async (messageId: string) => {
+    // todo: check if message exists
+
+    const payload = DeleteMessage.encode({
+      clock: BigInt(Date.now()),
+      messageId,
+      chatId: this.id,
+      grant: new Uint8Array([]),
+      messageType: 'COMMUNITY_CHAT' as MessageType,
+    })
+
+    await this.client.sendWakuMessage(
+      'TYPE_DELETE_MESSAGE',
+      payload,
+      this.contentTopic,
+      this.symmetricKey
+    )
+  }
+
   public sendReaction = async (
     chatId: string,
     messageId: string,
