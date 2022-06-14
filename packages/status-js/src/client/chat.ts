@@ -9,6 +9,7 @@ import { EmojiReaction } from '~/protos/emoji-reaction'
 
 import { idToContentTopic } from '../contentTopic'
 import { createSymKeyFromPassword } from '../encryption'
+import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
@@ -349,7 +350,7 @@ export class Chat {
       responseTo: '',
       ensName: '',
       chatId: this.id,
-      messageType: 'COMMUNITY_CHAT',
+      messageType: 'COMMUNITY_CHAT' as MessageType,
       contentType: ChatMessageProto.ContentType.TEXT_PLAIN,
       sticker: { hash: '', pack: 0 },
       image: {
