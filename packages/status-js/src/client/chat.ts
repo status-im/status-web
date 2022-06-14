@@ -1,8 +1,9 @@
-import { hexToBytes } from 'ethereum-cryptography/utils'
 import { PageDirection } from 'js-waku'
 
-import { ChatMessage as ChatMessageProto } from '~/protos/chat-message'
-import { CommunityRequestToJoin } from '~/protos/communities'
+import {
+  ChatMessage as ChatMessageProto,
+  EditMessage,
+} from '~/protos/chat-message'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
 import { idToContentTopic } from '../contentTopic'
@@ -372,6 +373,29 @@ export class Chat {
     )
   }
 
+  public editMessage = async (messageId: string, text: string) => {
+    // todo?: check if message exists
+
+    if (text === '') {
+      throw new Error('Text message cannot be empty')
+    }
+
+    const payload = EditMessage.encode({
+      clock: BigInt(Date.now()),
+      text,
+      messageId,
+      chatId: this.id,
+      grant: new Uint8Array([]),
+      messageType: 'COMMUNITY_CHAT' as MessageType,
+    })
+
+    await this.client.sendWakuMessage(
+      'TYPE_EDIT_MESSAGE',
+      payload,
+      this.contentTopic,
+      this.symmetricKey
+    )
+  }
   public sendReaction = async (
     chatId: string,
     messageId: string,
