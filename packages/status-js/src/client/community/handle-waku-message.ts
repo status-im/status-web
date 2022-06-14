@@ -57,7 +57,7 @@ export function handleWakuMessage(
   )
 
   const messageId = payloadToId(
-    decodedProtocol?.publicMessage || decodedMetadata.payload,
+    decodedProtocol?.publicMessage ?? wakuMessage.payload,
     publicKey
   )
 
