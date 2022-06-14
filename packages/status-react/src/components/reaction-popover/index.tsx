@@ -48,13 +48,13 @@ export const ReactionPopover = (props: Props) => {
       {children}
       <Popover side="top" align="center" sideOffset={6}>
         <Flex gap={1} css={{ padding: 8 }}>
-          {Object.entries(reactions).map(([reaction, value]) => {
-            const emoji = emojis[reaction as Reaction]
+          {Object.entries(emojis).map(([type, emoji]) => {
+            const reaction = reactions[type]
             return (
               <Button
-                key={reaction}
+                key={type}
                 onClick={() => onClick(reaction as Reaction)}
-                active={value.me}
+                active={reaction.me}
                 aria-label={`React with ${emoji.symbol}`}
               >
                 <Image width={30} src={emoji.url} alt={emoji.symbol} />
