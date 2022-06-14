@@ -2,9 +2,14 @@ import { useProtocol } from '~/src/protocol'
 
 import type { Member } from '@status-im/js'
 
-// todo: remove in favor of useCommunity
 export const useMembers = (): Member[] => {
-  const { client } = useProtocol()
+  const { client, account } = useProtocol()
+
+  if (account) {
+    return client.community.members.filter(
+      member => member.publicKey !== '0x' + account.publicKey
+    )
+  }
 
   return client.community.members
 }
