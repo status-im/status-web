@@ -26,7 +26,6 @@ export type ChatMessage = ChatMessageProto & {
 }
 
 export class Chat {
-  private readonly community: Community
   private readonly client: Client
 
   public readonly uuid: string
@@ -40,7 +39,6 @@ export class Chat {
   public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
 
   constructor(options: {
-    community: Community
     client: Client
     uuid: string
     id: string
@@ -50,7 +48,6 @@ export class Chat {
     description: CommunityChat
   }) {
     this.client = options.client
-    this.community = options.community
 
     this.uuid = options.uuid
     this.id = options.id
@@ -76,7 +73,6 @@ export class Chat {
     const symmetricKey = await createSymKeyFromPassword(id)
 
     return new Chat({
-      community,
       client,
       uuid,
       id,
@@ -407,22 +403,6 @@ export class Chat {
 
     await this.client.sendWakuMessage(
       'TYPE_EMOJI_REACTION',
-      payload,
-      this.contentTopic,
-      this.symmetricKey
-    )
-  }
-
-  public requestToJoin = async () => {
-    const payload = CommunityRequestToJoin.encode({
-      clock: BigInt(Date.now()),
-      chatId: this.id,
-      communityId: hexToBytes(this.community.publicKey.replace(/^0[xX]/, '')),
-      ensName: '',
-    })
-
-    await this.client.sendWakuMessage(
-      'TYPE_COMMUNITY_REQUEST_TO_JOIN',
       payload,
       this.contentTopic,
       this.symmetricKey

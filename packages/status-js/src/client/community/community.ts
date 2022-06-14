@@ -1,5 +1,7 @@
+import { hexToBytes } from 'ethereum-cryptography/utils'
 import { waku_message } from 'js-waku'
 
+import { CommunityRequestToJoin } from '~/protos/communities'
 import { MessageType } from '~/protos/enums'
 import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
@@ -231,5 +233,22 @@ export class Community {
     return () => {
       this.callback = undefined
     }
+  }
+
+  public requestToJoin = async (chatId = '') => {
+    const payload = CommunityRequestToJoin.encode({
+      clock: BigInt(Date.now()),
+      chatId,
+      // TODO: handle this better
+      communityId: hexToBytes(this.publicKey.replace(/^0[xX]/, '')),
+      ensName: '',
+    })
+
+    await this.client.sendWakuMessage(
+      'TYPE_COMMUNITY_REQUEST_TO_JOIN',
+      payload,
+      this.contentTopic,
+      this.symmetricKey
+    )
   }
 }
