@@ -53,7 +53,7 @@ export const ReactionPopover = (props: Props) => {
             return (
               <Button
                 key={type}
-                onClick={() => onClick(reaction as Reaction)}
+                onClick={() => onClick(type)}
                 active={reaction.me}
                 aria-label={`React with ${emoji.symbol}`}
               >
