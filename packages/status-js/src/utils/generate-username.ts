@@ -1,3 +1,7 @@
+/**
+ * https://github.com/status-im/status-go/blob/develop/protocol/identity/alias/generate.go
+ */
+
 const poly = BigInt(0xb8)
 
 function lfsr(seed: bigint) {
