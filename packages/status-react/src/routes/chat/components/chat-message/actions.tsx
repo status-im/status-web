@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from '~/src/system'
 
-import type { Reaction, Reactions } from '~/src/protocol/use-messages'
+import type { Reaction, Reactions } from '~/src/protocol'
 
 interface Props {
   owner: boolean
