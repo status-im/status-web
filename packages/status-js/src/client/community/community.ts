@@ -21,6 +21,7 @@ export class Community {
   private client: Client
 
   public publicKey: string
+  public id: string
   private contentTopic!: string
   private symmetricKey!: Uint8Array
   public description!: CommunityDescription
@@ -30,7 +31,9 @@ export class Community {
 
   constructor(client: Client, publicKey: string) {
     this.client = client
+
     this.publicKey = publicKey
+    this.id = publicKey.replace(/^0[xX]/, '')
 
     this.chats = new Map()
     this.#members = new Map()
@@ -239,8 +242,7 @@ export class Community {
     const payload = CommunityRequestToJoin.encode({
       clock: BigInt(Date.now()),
       chatId,
-      // TODO: handle this better
-      communityId: hexToBytes(this.publicKey.replace(/^0[xX]/, '')),
+      communityId: hexToBytes(this.id),
       ensName: '',
     })
 
