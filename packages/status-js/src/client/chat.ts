@@ -277,7 +277,7 @@ export class Chat {
   public handleEmojiReaction = (
     messageId: string,
     reaction: EmojiReaction,
-    isMe: boolean
+    publicKey: string
   ) => {
     let messageIndex = this.messages.length
     while (--messageIndex >= 0) {
@@ -295,7 +295,7 @@ export class Chat {
     this.messages[messageIndex].reactions = getReactions(
       reaction,
       this.messages[messageIndex].reactions,
-      isMe
+      publicKey
     )
 
     this.emitMessages(this.messages)
@@ -379,16 +379,30 @@ export class Chat {
   public sendReaction = async (
     chatId: string,
     messageId: string,
-    reaction: EmojiReaction.Type
+    reaction: keyof ChatMessage['reactions']
   ) => {
+    if (!this.client.account) {
+      throw new Error('Account not initialized')
+    }
+
+    const message = this.getMessage(messageId)
+
+    if (!message) {
+      throw new Error('Message not found')
+    }
+
+    const retracted = message.reactions[reaction].has(
+      this.client.account.publicKey
+    )
+
     const payload = EmojiReaction.encode({
       clock: BigInt(Date.now()),
       chatId: chatId,
-      messageType: 'COMMUNITY_CHAT',
-      grant: new Uint8Array([]),
+      messageType: 'COMMUNITY_CHAT' as MessageType,
       messageId,
-      retracted: false,
       type: reaction,
+      retracted,
+      grant: new Uint8Array([]),
     })
 
     await this.client.sendWakuMessage(

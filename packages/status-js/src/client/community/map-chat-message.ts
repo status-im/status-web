@@ -6,40 +6,24 @@ export function mapChatMessage(
   props: {
     messageId: string
     chatUuid: string
+    publicKey: string
   }
 ): ChatMessage {
-  const { messageId, chatUuid } = props
+  const { messageId, chatUuid, publicKey } = props
 
   const message = {
     ...decodedMessage,
     messageId,
     chatUuid,
     pinned: false,
+    signer: publicKey,
     reactions: {
-      THUMBS_UP: {
-        count: 0,
-        me: false,
-      },
-      THUMBS_DOWN: {
-        count: 0,
-        me: false,
-      },
-      LOVE: {
-        count: 0,
-        me: false,
-      },
-      LAUGH: {
-        count: 0,
-        me: false,
-      },
-      SAD: {
-        count: 0,
-        me: false,
-      },
-      ANGRY: {
-        count: 0,
-        me: false,
-      },
+      THUMBS_UP: new Set<string>(),
+      THUMBS_DOWN: new Set<string>(),
+      LOVE: new Set<string>(),
+      LAUGH: new Set<string>(),
+      SAD: new Set<string>(),
+      ANGRY: new Set<string>(),
     },
   }
 
