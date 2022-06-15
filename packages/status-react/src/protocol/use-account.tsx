@@ -1,5 +1,7 @@
 import { useProtocol } from './provider'
 
+import type { Account } from '@status-im/js'
+
 export const useAccount = () => {
   const { client, account, dispatch } = useProtocol()
 
@@ -18,3 +20,5 @@ export const useAccount = () => {
 
   return { account, createAccount, deleteAccount } as const
 }
+
+export type { Account }
