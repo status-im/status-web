@@ -15,7 +15,6 @@ import { recoverPublicKey } from '../../utils/recover-public-key'
 import { getChatUuid } from './get-chat-uuid'
 import { mapChatMessage } from './map-chat-message'
 
-import type { Account } from '../../account'
 import type { Client } from '../../client'
 import type { Community } from './community'
 import type { WakuMessage } from 'js-waku'
@@ -24,8 +23,7 @@ export function handleWakuMessage(
   wakuMessage: WakuMessage,
   // state
   client: Client,
-  community: Community,
-  account?: Account
+  community: Community
 ): void {
   // decode (layers)
   if (!wakuMessage.payload) {
@@ -151,11 +149,14 @@ export function handleWakuMessage(
 
       const messageId = decodedPayload.messageId
       const chatUuid = getChatUuid(decodedPayload.chatId)
-      const isMe = account?.publicKey === `0x${bytesToHex(publicKey)}`
 
-      community.chats
-        .get(chatUuid)
-        ?.handleEmojiReaction(messageId, decodedPayload, isMe)
+      const chat = community.chats.get(chatUuid)
+
+      chat?.handleEmojiReaction(
+        messageId,
+        decodedPayload,
+        `0x${bytesToHex(publicKey)}`
+      )
 
       success = true
 

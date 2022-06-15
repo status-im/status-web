@@ -2,7 +2,7 @@ import React from 'react'
 
 import { emojis, ReactionPopover } from '~/src/components/reaction-popover'
 import { ReactionIcon } from '~/src/icons/reaction-icon'
-import { Reaction } from '~/src/protocol/use-messages'
+import { useAccount } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Flex, Image, Text } from '~/src/system'
 
@@ -16,9 +16,7 @@ interface Props {
 export const MessageReactions = (props: Props) => {
   const { reactions, onClick } = props
 
-  const hasReaction = Object.values(reactions).some(
-    reaction => reaction.count !== 0
-  )
+  const hasReaction = Object.values(reactions).some(value => value.size > 0)
 
   if (hasReaction === false) {
     return null
@@ -26,12 +24,12 @@ export const MessageReactions = (props: Props) => {
 
   return (
     <Flex align="center" css={{ paddingTop: 6 }} gap={1}>
-      {Object.entries(reactions).map(([reaction, value]) => (
+      {Object.entries(emojis).map(([type, emoji]) => (
         <Reaction
-          key={reaction}
-          emoji={emojis[reaction as Reaction]}
-          reaction={value}
-          onClick={() => onClick(reaction as Reaction)}
+          key={type}
+          emoji={emoji}
+          value={reactions[type]}
+          onClick={() => onClick(type)}
         />
       ))}
 
@@ -59,25 +57,30 @@ interface ReactionProps {
     url: string
     symbol: string
   }
-  reaction: Props['reactions']['smile']
+  value: Props['reactions']['HEART']
   onClick: VoidFunction
 }
 
 const Reaction = (props: ReactionProps) => {
-  const { emoji, reaction, onClick } = props
+  const { emoji, value, onClick } = props
 
-  if (reaction.count === 0) {
+  const { account } = useAccount()
+
+  const count = value.size
+  const me = account ? value.has('0x' + account.publicKey) : false
+
+  if (value.size === 0) {
     return null
   }
 
   return (
     <Button
       onClick={onClick}
-      active={reaction.me}
-      aria-label={`${emoji.symbol}, ${reaction.count} reaction, press to react`}
+      active={me}
+      aria-label={`${emoji.symbol}, ${count} reaction, press to react`}
     >
       <Image width={14} src={emoji.url} alt={emoji.symbol} />
-      <Text size="12">{reaction.count}</Text>
+      <Text size="12">{count}</Text>
     </Button>
   )
 }

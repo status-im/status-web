@@ -84,7 +84,9 @@ export const ChatMessage = (props: Props) => {
   }
 
   const handleReaction = (reaction: Reaction) => {
-    client.community.chats.get(chatId).sendReaction(chatId, messageId, reaction)
+    client.community
+      .getChatById(chatId)
+      .sendReaction(chatId, messageId, reaction)
   }
 
   const handleReplyClick = () => {
