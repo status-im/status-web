@@ -10,7 +10,7 @@ export const Channels = () => {
   const chats = useChats()
 
   return (
-    <Box css={{ padding: '24px 0', overflow: 'auto' }}>
+    <Box css={{ padding: '18px 0', overflow: 'auto' }}>
       {chats.map(chat => (
         <ChannelItem
           key={chat.id}
