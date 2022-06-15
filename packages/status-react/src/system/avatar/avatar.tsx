@@ -21,7 +21,7 @@ const Avatar = (props: Props) => {
   const identiconRing = useMemo(() => {
     if (colorHash) {
       const gradient = generateIdenticonRing(colorHash)
-      return `conic-gradient(${gradient})`
+      return `conic-gradient(from 90deg, ${gradient})`
     }
   }, [colorHash])
 
