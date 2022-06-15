@@ -85,7 +85,7 @@ export const ChatMessage = (props: Props) => {
   }
 
   const handleReplyClick = () => {
-    dispatch({ type: 'SET_REPLY', message })
+    dispatch({ type: 'SET_REPLY', message, member })
   }
 
   const handlePinClick = () => {
