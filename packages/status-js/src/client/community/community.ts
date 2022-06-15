@@ -88,12 +88,12 @@ export class Community {
   }
 
   public fetch = async () => {
+    // most recent page first
     await this.client.waku.store.queryHistory([this.contentTopic], {
-      // oldest message first
       callback: wakuMessages => {
         let index = wakuMessages.length
 
-        // most recent page first
+        // most recent message first
         while (--index >= 0) {
           this.client.handleWakuMessage(wakuMessages[index])
 

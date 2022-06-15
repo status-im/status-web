@@ -20,14 +20,20 @@ import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
 import type { CommunityChat } from '~/src/proto/communities/v1/communities'
 import type { WakuMessage } from 'js-waku'
 
+type DeletedChatMessage = { deletedClock: bigint }
+
 export type ChatMessage = ChatMessageProto & {
   messageId: string
   pinned: boolean
   reactions: Reactions
   chatUuid: string
   signer: string
-  responseToMessage?: Omit<ChatMessage, 'responseToMessage'>
+  responseToMessage?: ChatMessage | DeletedChatMessage
+  edittedClock?: bigint
+  pinnedClock?: bigint
 }
+
+type FetchedMessage = { messageId: string; timestamp?: Date }
 
 export class Chat {
   private readonly client: Client
@@ -39,7 +45,18 @@ export class Chat {
   public readonly symmetricKey: Uint8Array
   public description: CommunityChat
   public readonly chatCallbacks: Set<(description: CommunityChat) => void>
-  public messages: ChatMessage[]
+  #messages: Map<string, ChatMessage>
+  #editTextEvents: Map<string, Pick<ChatMessage, 'clock' | 'text'>>
+  #pinEvents: Map<string, Pick<ChatMessage, 'clock' | 'pinned'>>
+  #reactEvents: Map<string, Pick<ChatMessage, 'clock' | 'reactions'>>
+  /**
+   * Elements should not be removed to ensure new and possibly delayed messages
+   * have referenses correctly resolved.
+   */
+  #deleteEvents: Map<string, Pick<ChatMessage, 'clock'>>
+  #fetchingMessages?: boolean
+  #previousFetchedStartTime?: Date
+  #oldestFetchedMessage?: FetchedMessage
   public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
 
   constructor(options: {
@@ -61,7 +78,11 @@ export class Chat {
     this.description = options.description
 
     this.chatCallbacks = new Set()
-    this.messages = []
+    this.#messages = new Map()
+    this.#editTextEvents = new Map()
+    this.#pinEvents = new Map()
+    this.#reactEvents = new Map()
+    this.#deleteEvents = new Map()
     this.messageCallbacks = new Set()
   }
 
@@ -87,12 +108,45 @@ export class Chat {
     })
   }
 
+  /**
+   * Returns chat messages soreted in ascending order and reply references resolved.
+   */
   public getMessages = () => {
-    return this.messages
+    const messages: ChatMessage[] = []
+
+    for (const message of this.#messages.values()) {
+      // resolve references
+      const referencedMessage = this.#messages.get(message.responseTo)
+      if (referencedMessage) {
+        message.responseToMessage = referencedMessage
+      }
+
+      const deleteEvent = this.#deleteEvents.get(message.responseTo)
+      if (deleteEvent) {
+        message.responseToMessage = { deletedClock: deleteEvent.clock }
+      }
+
+      messages.push(message)
+    }
+
+    // sort
+    messages.sort((a, b) => {
+      if (a.clock < b.clock) {
+        return -1
+      }
+
+      if (a.clock > b.clock) {
+        return 1
+      }
+
+      return 0
+    })
+
+    return messages
   }
 
   public getMessage = (id: string) => {
-    return this.messages.find(message => message.messageId === id)
+    return this.#messages.get(id)
   }
 
   public onChange = (callback: (description: CommunityChat) => void) => {
@@ -117,26 +171,24 @@ export class Chat {
     }
   }
 
-  public fetchMessages = async (
-    options: { start: Date },
-    callback: (messages: ChatMessage[]) => void
-  ) => {
+  public fetchMessages = async (options: { start: Date }) => {
+    const previousOldestMessage = this.#oldestFetchedMessage
+
     const startTime = options.start
-    const endTime = new Date()
+    // nothing to fetch
+    if (
+      previousOldestMessage &&
+      previousOldestMessage.timestamp &&
+      previousOldestMessage.timestamp < options.start
+    ) {
+      return
+    }
 
-    let _oldestClock: bigint | undefined
-    let _oldestMessageTime: Date | undefined
-
-    if (this.messages.length) {
-      _oldestClock = this.messages[0].clock
-      _oldestMessageTime = new Date(Number(this.messages[0].timestamp))
-
-      // already handled
-      if (_oldestMessageTime <= options.start) {
-        callback(this.messages)
-
-        return
-      }
+    let endTime: Date
+    if (this.#previousFetchedStartTime) {
+      endTime = this.#previousFetchedStartTime
+    } else {
+      endTime = new Date()
     }
 
     await this.client.waku.store.queryHistory([this.contentTopic], {
@@ -149,31 +201,48 @@ export class Chat {
       pageDirection: PageDirection.BACKWARD,
       decryptionKeys: [this.symmetricKey],
       callback: (wakuMessages: WakuMessage[]) => {
-        // oldest message first
-        for (const wakuMessage of wakuMessages) {
-          this.client.handleWakuMessage(wakuMessage)
+        let index = wakuMessages.length
+
+        this.#fetchingMessages = true
+        // most recent message first
+        while (--index >= 0) {
+          this.client.handleWakuMessage(wakuMessages[index])
         }
+        this.#fetchingMessages = false
       },
     })
 
-    // callback
-    // more not found
-    if (
-      _oldestClock &&
-      this.messages.length &&
-      _oldestClock >= this.messages[0].clock
-    ) {
-      callback([])
+    this.#previousFetchedStartTime = startTime
 
+    // more chat messages not found
+    if (
+      previousOldestMessage &&
+      this.#oldestFetchedMessage &&
+      // same message
+      previousOldestMessage.messageId === this.#oldestFetchedMessage.messageId
+    ) {
       return
     }
 
-    callback(this.messages)
+    const messages = this.emitMessages()
+
+    return messages
   }
 
-  public emitMessages = (messages: ChatMessage[]) => {
-    // fixme!: don't emit on backfill
-    this.messageCallbacks.forEach(callback => callback([...messages]))
+  public emitMessages = () => {
+    if (this.#fetchingMessages) {
+      return
+    }
+
+    if (!this.#messages.size) {
+      return
+    }
+
+    const messages = this.getMessages()
+
+    this.messageCallbacks.forEach(callback => callback(messages))
+
+    return messages
   }
 
   public handleChange = (description: CommunityChat) => {
@@ -184,140 +253,171 @@ export class Chat {
     this.emitChange(description)
   }
 
-  public handleNewMessage = (message: ChatMessage) => {
-    let messageIndex = this.messages.length
-    while (messageIndex > 0) {
-      const _message = this.messages[messageIndex - 1]
-
-      if (_message.clock <= message.clock) {
-        break
-      }
-
-      messageIndex--
+  public handleNewMessage = (
+    newMessage: ChatMessage,
+    signerPublicKey: string,
+    timestamp?: Date
+  ) => {
+    // fetching in progress
+    if (this.#fetchingMessages) {
+      this.#oldestFetchedMessage = this.getOldestFetchedMessage(
+        this.#oldestFetchedMessage,
+        newMessage.messageId,
+        timestamp
+      )
     }
 
-    let responseToMessageIndex = this.messages.length
-    while (--responseToMessageIndex >= 0) {
-      const _message = this.messages[responseToMessageIndex]
-
-      if (_message.messageId === message.responseTo) {
-        break
-      }
+    // delete event received first
+    const deletedEvent = this.#deleteEvents.has(newMessage.messageId)
+    if (deletedEvent && this.isAuthor(newMessage, signerPublicKey)) {
+      return
     }
 
-    if (responseToMessageIndex >= 0) {
-      message.responseToMessage = this.messages[responseToMessageIndex]
+    // message already received
+    const message = this.#messages.get(newMessage.messageId)
+    if (message) {
+      return
+    }
+
+    // action events received prior
+    const editTextEvent = this.#editTextEvents.get(newMessage.messageId)
+    if (editTextEvent && this.isAuthor(newMessage, signerPublicKey)) {
+      newMessage.text = editTextEvent.text
+      newMessage.edittedClock = editTextEvent.clock
+
+      this.#editTextEvents.delete(newMessage.messageId) // pop
+    }
+
+    const pinEvent = this.#pinEvents.get(newMessage.messageId)
+    if (pinEvent) {
+      newMessage.pinned = pinEvent.pinned
+      newMessage.pinnedClock = pinEvent.clock
+
+      this.#pinEvents.delete(newMessage.messageId)
+    }
+
+    const reactEvent = this.#reactEvents.get(newMessage.messageId)
+    if (reactEvent) {
+      newMessage.reactions = reactEvent.reactions
+
+      this.#reactEvents.delete(newMessage.messageId)
     }
 
     // state
-    this.messages.splice(messageIndex, 0, message)
+    this.#messages.set(newMessage.messageId, newMessage)
 
     // callback
-    this.emitMessages(this.messages)
+    this.emitMessages()
   }
 
   public handleEditedMessage = (
     messageId: string,
     text: string,
+    clock: bigint,
     signerPublicKey: string
   ) => {
-    let messageIndex = this.messages.length
-    while (--messageIndex >= 0) {
-      const _message = this.messages[messageIndex]
+    const message = this.#messages.get(messageId)
 
-      if (_message.messageId === messageId) {
-        break
-      }
-    }
+    if (message && this.isAuthor(message, signerPublicKey)) {
+      message.text = text
 
-    // original not found
-    if (messageIndex < 0) {
+      this.emitMessages()
+
       return
     }
 
-    if (!this.isAuthor(this.messages[messageIndex], signerPublicKey)) {
-      return
+    const editTextEvent = this.#editTextEvents.get(messageId)
+    if (!editTextEvent || editTextEvent.clock < clock) {
+      this.#editTextEvents.set(messageId, { clock, text })
     }
-
-    this.messages[messageIndex] = {
-      ...this.messages[messageIndex],
-      text,
-    }
-
-    // callback
-    this.emitMessages(this.messages)
   }
 
   public handleDeletedMessage = (
     messageId: string,
+    clock: bigint,
     signerPublicKey: string
   ) => {
-    let messageIndex = this.messages.length
-    while (--messageIndex >= 0) {
-      const _message = this.messages[messageIndex]
+    const message = this.#messages.get(messageId)
+    if (message && this.isAuthor(message, signerPublicKey)) {
+      this.#messages.delete(messageId)
+      this.#deleteEvents.set(messageId, { clock })
+      this.emitMessages()
 
-      if (_message.messageId === messageId) {
-        break
-      }
-    }
-
-    if (messageIndex < 0) {
       return
     }
 
-    if (!this.isAuthor(this.messages[messageIndex], signerPublicKey)) {
-      return
+    const deleteEvent = this.#deleteEvents.get(messageId)
+    if (!deleteEvent || deleteEvent.clock > clock) {
+      this.#deleteEvents.set(messageId, { clock })
     }
-
-    this.messages.splice(messageIndex, 1)
-
-    this.emitMessages(this.messages)
   }
 
-  public handlePinnedMessage = (messageId: string, pinned?: boolean) => {
-    let messageIndex = this.messages.length
-    while (--messageIndex >= 0) {
-      const _message = this.messages[messageIndex]
+  public handlePinnedMessage = (
+    messageId: string,
+    clock: bigint,
+    pinned?: boolean
+  ) => {
+    const message = this.#messages.get(messageId)
+    if (message) {
+      message.pinned = Boolean(pinned)
+      message.pinnedClock = clock
 
-      if (_message.messageId === messageId) {
-        break
-      }
-    }
+      this.emitMessages()
 
-    if (messageIndex < 0) {
       return
     }
 
-    this.messages[messageIndex].pinned = Boolean(pinned)
-
-    this.emitMessages(this.messages)
+    const pinEvent = this.#pinEvents.get(messageId)
+    if (!pinEvent || pinEvent.clock < clock) {
+      this.#pinEvents.set(messageId, { clock, pinned: Boolean(pinned) })
+    }
   }
 
   public handleEmojiReaction = (
     messageId: string,
     reaction: EmojiReaction,
-    publicKey: string
+    clock: bigint,
+    signerPublicKey: string
   ) => {
-    let messageIndex = this.messages.length
-    while (--messageIndex >= 0) {
-      const _message = this.messages[messageIndex]
+    const message = this.#messages.get(messageId)
+    if (message) {
+      const reactions = getReactions(
+        reaction,
+        message.reactions,
+        signerPublicKey
+      )
+      message.reactions = reactions
 
-      if (_message.messageId === messageId) {
-        break
-      }
-    }
+      this.emitMessages()
 
-    if (messageIndex < 0) {
       return
     }
 
-    this.messages[messageIndex].reactions = getReactions(
-      reaction,
-      this.messages[messageIndex].reactions,
-      publicKey
-    )
+    const reactEvent = this.#reactEvents.get(messageId)
+    if (!reactEvent) {
+      const reactions = getReactions(
+        reaction,
+        {
+          THUMBS_UP: new Set<string>(),
+          THUMBS_DOWN: new Set<string>(),
+          LOVE: new Set<string>(),
+          LAUGH: new Set<string>(),
+          SAD: new Set<string>(),
+          ANGRY: new Set<string>(),
+        },
+        signerPublicKey
+      )
 
-    this.emitMessages(this.messages)
+      this.#reactEvents.set(messageId, { clock, reactions })
+    } else {
+      const reactions = getReactions(
+        reaction,
+        reactEvent.reactions,
+        signerPublicKey
+      )
+
+      this.#reactEvents.set(messageId, { clock, reactions })
+    }
   }
 
   public sendTextMessage = async (text: string, responseTo?: string) => {
@@ -400,25 +500,13 @@ export class Chat {
       throw new Error('Text message cannot be edited without a created account')
     }
 
-    let messageIndex = this.messages.length
-    while (--messageIndex >= 0) {
-      const _message = this.messages[messageIndex]
+    const message = this.#messages.get(messageId)
 
-      if (_message.messageId === messageId) {
-        break
-      }
+    if (!message) {
+      throw new Error('Message not found')
     }
 
-    if (messageIndex < 0) {
-      throw new Error('Text message was not found')
-    }
-
-    if (
-      !this.isAuthor(
-        this.messages[messageIndex],
-        `0x${this.client.account.publicKey}`
-      )
-    ) {
+    if (!this.isAuthor(message, `0x${this.client.account.publicKey}`)) {
       throw new Error('Text message can only be edited by its author')
     }
 
@@ -450,25 +538,13 @@ export class Chat {
       )
     }
 
-    let messageIndex = this.messages.length
-    while (--messageIndex >= 0) {
-      const _message = this.messages[messageIndex]
+    const message = this.#messages.get(messageId)
 
-      if (_message.messageId === messageId) {
-        break
-      }
+    if (!message) {
+      throw new Error('Message not found')
     }
 
-    if (messageIndex < 0) {
-      throw new Error('Text message was not found')
-    }
-
-    if (
-      !this.isAuthor(
-        this.messages[messageIndex],
-        `0x${this.client.account.publicKey}`
-      )
-    ) {
+    if (!this.isAuthor(message, `0x${this.client.account.publicKey}`)) {
       throw new Error('Text message can only be deleted by its author')
     }
 
@@ -496,7 +572,7 @@ export class Chat {
       throw new Error('Account not initialized')
     }
 
-    const message = this.getMessage(messageId)
+    const message = this.#messages.get(messageId)
 
     if (!message) {
       throw new Error('Message not found')
@@ -529,5 +605,34 @@ export class Chat {
     signerPublicKey: string
   ): boolean => {
     return message.signer === signerPublicKey
+  }
+
+  private getOldestFetchedMessage(
+    oldestMessage: FetchedMessage | undefined,
+    messageId: string,
+    messageTimestamp?: Date
+  ): FetchedMessage {
+    let message: FetchedMessage
+
+    if (!oldestMessage) {
+      message = {
+        messageId: messageId,
+        timestamp: messageTimestamp,
+      }
+    } else if (
+      messageTimestamp &&
+      oldestMessage.timestamp &&
+      // is older
+      messageTimestamp < oldestMessage.timestamp
+    ) {
+      message = {
+        messageId: messageId,
+        timestamp: messageTimestamp,
+      }
+    } else {
+      message = oldestMessage
+    }
+
+    return message
   }
 }
