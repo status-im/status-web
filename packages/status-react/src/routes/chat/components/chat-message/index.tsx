@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 
-import snarkdown from 'snarkdown'
-
 import { UserProfileDialog } from '~/src/components/user-profile-dialog'
 import { useChatContext } from '~/src/contexts/chat-context'
 import { BellIcon } from '~/src/icons/bell-icon'
-import { PinIcon } from '~/src/icons/pin-icon'
-import { useProtocol } from '~/src/protocol/provider'
+// import { PinIcon } from '~/src/icons/pin-icon'
+import { useProtocol } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import {
   Avatar,
@@ -28,11 +26,11 @@ import { Actions } from './actions'
 import { MessageReply } from './message-reply'
 import { MessageReactions } from './reactions'
 
-import type { Message, Reaction } from '~/src/protocol/use-messages'
+import type { Message, Reaction } from '~/src/protocol'
 
 interface Props {
   message: Message
-  previousMessage?: Message
+  prevMessage?: Message
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -57,17 +55,28 @@ interface Props {
 // })
 
 export const ChatMessage = (props: Props) => {
-  const { client } = useProtocol()
+  const { client, account } = useProtocol()
 
   const { message } = props
 
-  const owner = false
   const mention = false
   const pinned = false
-  const reply = false
 
-  const { messageId, chatId, contentType, clock, displayName, reactions } =
-    message
+  const {
+    messageId,
+    chatId,
+    contentType,
+    clock,
+    reactions,
+    sender,
+    responseTo,
+  } = message
+
+  // TODO: remove usage of 0x prefix
+  const owner = '0x' + account?.publicKey === sender
+  const chat = client.community.getChatById(chatId)
+
+  const member = client.community.getMember(sender) ?? {}
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
@@ -77,11 +86,20 @@ export const ChatMessage = (props: Props) => {
   const userProfileDialog = useDialog(UserProfileDialog)
 
   const handleMessageSubmit = (message: string) => {
-    client.community.chats.get(chatId).sendTextMessage(message)
+    chat.sendTextMessage(message)
+  }
+
+  const handleMessageEdit = (message: string) => {
+    chat.editMessage(messageId, message)
+    setEditing(false)
+  }
+
+  const handleMessageDelete = () => {
+    chat.deleteMessage(messageId)
   }
 
   const handleReaction = (reaction: Reaction) => {
-    client.community.getChatById(chatId).sendReaction(messageId, reaction)
+    chat.sendReaction(messageId, reaction)
   }
 
   const handleReplyClick = () => {
@@ -96,10 +114,7 @@ export const ChatMessage = (props: Props) => {
     if (editing) {
       return (
         <Box>
-          <ChatInput
-            value={message?.text ?? ''}
-            onSubmit={handleMessageSubmit}
-          />
+          <ChatInput value={message?.text ?? ''} onSubmit={handleMessageEdit} />
           <Flex gap={2}>
             <Button
               variant="outline"
@@ -161,25 +176,27 @@ export const ChatMessage = (props: Props) => {
     <>
       <ContextMenuTrigger>
         <Wrapper mention={mention} pinned={pinned} data-active={reacting}>
-          {reply && <MessageReply reply={reply} />}
+          {responseTo && <MessageReply messageId={responseTo} />}
           <Flex gap={2}>
             <Box>
               <DropdownMenuTrigger>
                 <button type="button">
-                  <Avatar size={44} />
+                  <Avatar
+                    size={44}
+                    name={member.username}
+                    colorHash={member.colorHash}
+                  />
                 </button>
                 <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
                     <Avatar size="36" />
-                    <Text>{displayName}</Text>
+                    <Text>{member.username}</Text>
                     <EmojiHash />
                   </Flex>
                   <DropdownMenu.Separator />
                   <DropdownMenu.Item
                     icon={<BellIcon />}
-                    onSelect={() =>
-                      userProfileDialog.open({ name: displayName })
-                    }
+                    onSelect={() => userProfileDialog.open({ member })}
                   >
                     View Profile
                   </DropdownMenu.Item>
@@ -210,7 +227,7 @@ export const ChatMessage = (props: Props) => {
 
               <Flex gap="1" align="center">
                 <Text color="primary" weight="500" size="15">
-                  {displayName}
+                  {member.username}
                 </Text>
                 <Text size="10" color="gray">
                   {new Date(Number(clock)).toLocaleTimeString([], {
@@ -235,6 +252,7 @@ export const ChatMessage = (props: Props) => {
             onEditClick={() => setEditing(true)}
             onReplyClick={handleReplyClick}
             onPinClick={handlePinClick}
+            onDeleteClick={handleMessageDelete}
             onReactionClick={handleReaction}
             reacting={reacting}
             onReactingChange={setReacting}
