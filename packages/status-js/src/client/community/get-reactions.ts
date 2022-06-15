@@ -20,6 +20,7 @@ export function getReactions(
   if (retracted) {
     reactions[type].delete(publicKey)
   } else {
+    // Set handles that potentially multiple same reactions count as one
     reactions[type].add(publicKey)
   }
 
