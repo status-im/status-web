@@ -23,6 +23,7 @@ interface Props {
   onReplyClick: () => void
   onEditClick: () => void
   onPinClick: () => void
+  onDeleteClick: () => void
   onReactionClick: (reaction: Reaction) => void
   reacting: boolean
   onReactingChange: (reacting: boolean) => void
@@ -32,12 +33,13 @@ interface Props {
 export const Actions = (props: Props) => {
   const {
     owner,
-    // pinned,
     onReplyClick,
     onEditClick,
+    onDeleteClick,
+    // pinned,
     // onPinClick,
-    onReactionClick,
     reacting,
+    onReactionClick,
     onReactingChange,
     reactions,
   } = props
@@ -103,6 +105,7 @@ export const Actions = (props: Props) => {
             description="Are you sure you want to delete this message?"
             actionLabel="Delete"
             actionVariant="danger"
+            onAction={onDeleteClick}
             cancelLabel="Cancel"
           />
         </AlertDialogTrigger>
