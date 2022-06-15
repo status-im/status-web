@@ -302,6 +302,14 @@ export class Chat {
   }
 
   public sendTextMessage = async (text: string, responseTo?: string) => {
+    if (text === '') {
+      throw new Error('Text message cannot be empty')
+    }
+
+    const type = containsOnlyEmoji(text)
+      ? ChatMessageProto.ContentType.EMOJI
+      : ChatMessageProto.ContentType.TEXT_PLAIN
+
     // TODO: protos does not support optional fields :-(
     const payload = ChatMessageProto.encode({
       clock: BigInt(Date.now()),
@@ -310,8 +318,8 @@ export class Chat {
       responseTo: responseTo ?? '',
       ensName: '',
       chatId: this.id,
-      messageType: 'COMMUNITY_CHAT',
-      contentType: ChatMessageProto.ContentType.TEXT_PLAIN,
+      contentType: type,
+      messageType: 'COMMUNITY_CHAT' as MessageType,
       sticker: { hash: '', pack: 0 },
       image: {
         type: 'JPEG',
