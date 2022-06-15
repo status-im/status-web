@@ -21,7 +21,7 @@ export const ChatInput = (props: Props) => {
   const { value, editing, onSubmit } = props
 
   const [inputValue, setInputValue] = useState(value ?? '')
-  const { state } = useChatContext()
+  const { state, dispatch } = useChatContext()
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -37,6 +37,7 @@ export const ChatInput = (props: Props) => {
     if (event.key === 'Enter' && event.shiftKey === false) {
       onSubmit(inputValue)
       setInputValue('')
+      dispatch({ type: 'DELETE_REPLY' })
     }
   }
 
@@ -48,7 +49,9 @@ export const ChatInput = (props: Props) => {
         </IconButton>
       </Box>
       <Bubble>
-        {state.message && <InputReply message={state.message} />}
+        {state.message && (
+          <InputReply message={state.message} member={state.member} />
+        )}
         <InputWrapper>
           <Input
             ref={inputRef}

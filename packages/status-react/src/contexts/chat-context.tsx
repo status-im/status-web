@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useMemo, useReducer } from 'react'
 
-import type { Message } from '../protocol/use-messages'
+import type { Member, Message } from '../protocol'
 import type { Dispatch, Reducer } from 'react'
 
 type Context = {
@@ -12,25 +12,27 @@ const ChatContext = createContext<Context | undefined>(undefined)
 
 interface State {
   message?: Message
+  member?: Member
 }
 
 type Action =
-  | { type: 'SET_REPLY'; message?: Message }
-  | { type: 'CANCEL_REPLY' }
+  | { type: 'SET_REPLY'; message?: Message; member?: Member }
+  | { type: 'DELETE_REPLY' }
 
 const reducer: Reducer<State, Action> = (state, action) => {
   switch (action.type) {
     case 'SET_REPLY': {
-      return { ...state, message: action.message }
+      return { ...state, message: action.message, member: action.member }
     }
-    case 'CANCEL_REPLY': {
-      return { ...state, message: undefined }
+    case 'DELETE_REPLY': {
+      return { ...initialState }
     }
   }
 }
 
 const initialState: State = {
   message: undefined,
+  member: undefined,
 }
 
 interface Props {
@@ -41,6 +43,7 @@ export const ChatProvider = (props: Props) => {
   const { children } = props
 
   const [state, dispatch] = useReducer(reducer, initialState)
+
   const value = useMemo(() => ({ state, dispatch }), [state])
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>

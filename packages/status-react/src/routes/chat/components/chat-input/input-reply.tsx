@@ -4,34 +4,30 @@ import { useChatContext } from '~/src/contexts/chat-context'
 import { CrossIcon } from '~/src/icons/cross-icon'
 import { ReplyIcon } from '~/src/icons/reply-icon'
 import { styled } from '~/src/styles/config'
-import { Box, Flex, Icon, IconButton, Image, Text } from '~/src/system'
+import { Flex, Icon, IconButton, Image, Text } from '~/src/system'
 
-import type { Message } from '~/src/protocol/use-messages'
+import type { Member, Message } from '~/src/protocol'
 
 interface Props {
   message: Message
+  member: Member
 }
 
 export const InputReply = (props: Props) => {
   const { dispatch } = useChatContext()
 
-  const { message } = props
+  const { message, member } = props
 
   return (
     <Wrapper>
       <Flex align="center" justify="between">
-        <Flex gap={1}>
-          <Icon hidden>
-            <ReplyIcon />
-          </Icon>
-          <Text size="13" weight="500" truncate={false}>
-            TODO: Add name
-          </Text>
-        </Flex>
+        <Text size="13" weight="500" truncate={false}>
+          {member.username}
+        </Text>
 
         <IconButton
           label="Cancel reply"
-          onClick={() => dispatch({ type: 'CANCEL_REPLY' })}
+          onClick={() => dispatch({ type: 'DELETE_REPLY' })}
         >
           <CrossIcon />
         </IconButton>
