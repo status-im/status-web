@@ -6,10 +6,8 @@ import { useMatch } from 'react-router-dom'
 
 import { MemberSidebar } from '~/src/components/member-sidebar'
 import { useAppState } from '~/src/contexts/app-context'
-import { ChatProvider } from '~/src/contexts/chat-context'
-import { useChat } from '~/src/protocol'
-import { useProtocol } from '~/src/protocol/provider'
-import { useMessages } from '~/src/protocol/use-messages'
+import { ChatProvider, useChatContext } from '~/src/contexts/chat-context'
+import { useChat, useMessages, useProtocol } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Avatar, Flex, Heading, Text } from '~/src/system'
 
@@ -37,64 +35,52 @@ const ChatStart = (props: ChatStartProps) => {
   )
 }
 
-interface ContentProps {
-  chatId: string
-}
+const Body = () => {
+  const { client } = useProtocol()
+  const { state } = useChatContext()
 
-const Content = (props: ContentProps) => {
-  const { chatId } = props
+  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  const chatId = params.id!
+
+  const chat = client.community.getChat(chatId)
+  const messages = useMessages(chatId)
 
   const contentRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     contentRef.current!.scrollTop = contentRef.current!.scrollHeight ?? 0
-  }, [chatId])
+  }, [chatId, messages.data.length])
 
-  const messages = useMessages(chatId)
+  const handleMessageSubmit = (message: string) => {
+    chat.sendTextMessage(message, state.message?.messageId)
+  }
 
   return (
-    <ContentWrapper ref={contentRef}>
-      {/* <Button onClick={messages.fetchMore}>Fetch more</Button> */}
-      <ChatStart chatId={chatId} />
+    <>
+      <ContentWrapper ref={contentRef}>
+        <ChatStart chatId={chatId} />
       {messages.data.map((message, index) => (
         <ChatMessage
           key={message.messageId}
           message={message}
           previousMessage={messages.data[index - 1]}
         />
-      ))}
-    </ContentWrapper>
+      </ContentWrapper>
   )
 }
 
 export const Chat = () => {
-  const { client } = useProtocol()
   const { state, options } = useAppState()
 
-  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const chatId = params.id!
-
-  const chat = useChat(chatId)
-
-  // TODO: Update condition based on a chat type
   const enableMembers = options.enableMembers ?? false // && (chat.type === 'group' || chat.type === 'channel')
   const showMembers = enableMembers && state.showMembers
-
-  const handleMessageSubmit = (message: string) => {
-    client.community.chats.get(chatId).sendTextMessage(
-      message
-      // '0x0fa999097568d1fdcc39108a08d75340bd2cee5ec59c36799007150d0a9fc896'
-    )
-  }
 
   return (
     <ChatProvider>
       <Wrapper>
         <Main>
           <Navbar enableMembers={enableMembers} />
-          <Content chatId={chatId} />
-          <ChatInput onSubmit={handleMessageSubmit} />
+          <Body />
         </Main>
         {showMembers && <MemberSidebar />}
       </Wrapper>
