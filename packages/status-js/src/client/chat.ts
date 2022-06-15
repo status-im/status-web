@@ -90,6 +90,10 @@ export class Chat {
     return this.messages
   }
 
+  public getMessage = (id: string) => {
+    return this.messages.find(message => message.messageId === id)
+  }
+
   public onChange = (callback: (description: CommunityChat) => void) => {
     this.chatCallbacks.add(callback)
 
@@ -441,7 +445,7 @@ export class Chat {
       chatId: this.id,
       messageType: 'COMMUNITY_CHAT' as MessageType,
       messageId,
-      type: reaction,
+      type: reaction as EmojiReaction.Type,
       retracted,
       grant: new Uint8Array([]),
     })
