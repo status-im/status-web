@@ -1,12 +1,15 @@
-import { hexToBytes } from 'ethereum-cryptography/utils'
 import { PageDirection } from 'js-waku'
 
-import { ChatMessage as ChatMessageProto } from '~/protos/chat-message'
-import { CommunityRequestToJoin } from '~/protos/communities'
+import {
+  ChatMessage as ChatMessageProto,
+  DeleteMessage,
+  EditMessage,
+} from '~/protos/chat-message'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
 import { idToContentTopic } from '../contentTopic'
 import { createSymKeyFromPassword } from '../encryption'
+import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
@@ -26,7 +29,6 @@ export type ChatMessage = ChatMessageProto & {
 }
 
 export class Chat {
-  private readonly community: Community
   private readonly client: Client
 
   public readonly uuid: string
@@ -40,7 +42,6 @@ export class Chat {
   public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
 
   constructor(options: {
-    community: Community
     client: Client
     uuid: string
     id: string
@@ -50,7 +51,6 @@ export class Chat {
     description: CommunityChat
   }) {
     this.client = options.client
-    this.community = options.community
 
     this.uuid = options.uuid
     this.id = options.id
@@ -76,7 +76,6 @@ export class Chat {
     const symmetricKey = await createSymKeyFromPassword(id)
 
     return new Chat({
-      community,
       client,
       uuid,
       id,
@@ -89,6 +88,10 @@ export class Chat {
 
   public getMessages = () => {
     return this.messages
+  }
+
+  public getMessage = (id: string) => {
+    return this.messages.find(message => message.messageId === id)
   }
 
   public onChange = (callback: (description: CommunityChat) => void) => {
@@ -351,7 +354,7 @@ export class Chat {
       responseTo: '',
       ensName: '',
       chatId: this.id,
-      messageType: 'COMMUNITY_CHAT',
+      messageType: 'COMMUNITY_CHAT' as MessageType,
       contentType: ChatMessageProto.ContentType.TEXT_PLAIN,
       sticker: { hash: '', pack: 0 },
       image: {
@@ -376,8 +379,50 @@ export class Chat {
     )
   }
 
+  public editMessage = async (messageId: string, text: string) => {
+    // todo?: check if message exists
+
+    if (text === '') {
+      throw new Error('Text message cannot be empty')
+    }
+
+    const payload = EditMessage.encode({
+      clock: BigInt(Date.now()),
+      text,
+      messageId,
+      chatId: this.id,
+      grant: new Uint8Array([]),
+      messageType: 'COMMUNITY_CHAT' as MessageType,
+    })
+
+    await this.client.sendWakuMessage(
+      'TYPE_EDIT_MESSAGE',
+      payload,
+      this.contentTopic,
+      this.symmetricKey
+    )
+  }
+
+  public deleteMessage = async (messageId: string) => {
+    // todo: check if message exists
+
+    const payload = DeleteMessage.encode({
+      clock: BigInt(Date.now()),
+      messageId,
+      chatId: this.id,
+      grant: new Uint8Array([]),
+      messageType: 'COMMUNITY_CHAT' as MessageType,
+    })
+
+    await this.client.sendWakuMessage(
+      'TYPE_DELETE_MESSAGE',
+      payload,
+      this.contentTopic,
+      this.symmetricKey
+    )
+  }
+
   public sendReaction = async (
-    chatId: string,
     messageId: string,
     reaction: keyof ChatMessage['reactions']
   ) => {
@@ -397,32 +442,16 @@ export class Chat {
 
     const payload = EmojiReaction.encode({
       clock: BigInt(Date.now()),
-      chatId: chatId,
+      chatId: this.id,
       messageType: 'COMMUNITY_CHAT' as MessageType,
       messageId,
-      type: reaction,
+      type: reaction as EmojiReaction.Type,
       retracted,
       grant: new Uint8Array([]),
     })
 
     await this.client.sendWakuMessage(
       'TYPE_EMOJI_REACTION',
-      payload,
-      this.contentTopic,
-      this.symmetricKey
-    )
-  }
-
-  public requestToJoin = async () => {
-    const payload = CommunityRequestToJoin.encode({
-      clock: BigInt(Date.now()),
-      chatId: this.id,
-      communityId: hexToBytes(this.community.publicKey.replace(/^0[xX]/, '')),
-      ensName: '',
-    })
-
-    await this.client.sendWakuMessage(
-      'TYPE_COMMUNITY_REQUEST_TO_JOIN',
       payload,
       this.contentTopic,
       this.symmetricKey
