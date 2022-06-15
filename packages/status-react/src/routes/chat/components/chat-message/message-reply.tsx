@@ -1,38 +1,63 @@
 import React from 'react'
 
+import { useMatch } from 'react-router-dom'
+
+import { useProtocol } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Avatar, Box, Flex, Image, Text } from '~/src/system'
 
-import type { Reply } from '~/src/protocol/use-messages'
-
 interface Props {
-  reply: Reply
+  messageId: string
 }
 
 export const MessageReply = (props: Props) => {
-  const { reply } = props
+  const { messageId } = props
 
-  const { contact } = reply
+  const { client } = useProtocol()
+
+  // TODO: use protocol hook
+  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
+  const message = client.community.getChat(params.id).getMessage(messageId)
+
+  if (!message) {
+    return (
+      <Wrapper>
+        <Text color="gray" size="13" truncate>
+          Message not available.
+        </Text>
+      </Wrapper>
+    )
+  }
+
+  const { contentType, text, sender } = message
+  const { username } = client.community.getMember(sender)
 
   return (
     <Wrapper>
       <Flex gap="1" align="center">
-        <Avatar size={20} src={contact.imageUrl} />
+        <Avatar size={20} name={username} />
         <Text color="gray" size="13" weight="500">
-          {contact.name}
+          {username}
         </Text>
       </Flex>
-      {reply.type === 'text' && (
+      {contentType === 'TEXT_PLAIN' && (
         <Flex>
           <Text color="gray" size="13" truncate>
-            {reply.text}
+            {text}
           </Text>
         </Flex>
       )}
-      {reply.type === 'image' && (
+      {contentType === 'EMOJI' && (
+        <Flex>
+          <Text color="gray" size="13" truncate>
+            {text}
+          </Text>
+        </Flex>
+      )}
+      {contentType === 'IMAGE' && (
         <Box css={{ paddingTop: '$1' }}>
           <Image
-            src={reply.imageUrl}
+            src="TODO"
             width={56}
             height={56}
             fit="cover"
@@ -40,21 +65,6 @@ export const MessageReply = (props: Props) => {
             alt="message"
           />
         </Box>
-      )}
-      {reply.type === 'image-text' && (
-        <Flex direction="column" gap={1}>
-          <Text color="gray" size="13" truncate>
-            {reply.text}
-          </Text>
-          <Image
-            src={reply.imageUrl}
-            width={56}
-            height={56}
-            fit="cover"
-            radius="1"
-            alt="message"
-          />
-        </Flex>
       )}
     </Wrapper>
   )
