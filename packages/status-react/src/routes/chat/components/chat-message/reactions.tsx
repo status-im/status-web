@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { emojis, ReactionPopover } from '~/src/components/reaction-popover'
 import { ReactionIcon } from '~/src/icons/reaction-icon'
@@ -6,7 +6,7 @@ import { useAccount } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Flex, Image, Text } from '~/src/system'
 
-import type { Reactions } from '~/src/protocol/use-messages'
+import type { Reaction, Reactions } from '~/src/protocol'
 
 interface Props {
   reactions: Reactions
@@ -16,24 +16,36 @@ interface Props {
 export const MessageReactions = (props: Props) => {
   const { reactions, onClick } = props
 
+  const [open, setOpen] = useState(false)
+
   const hasReaction = Object.values(reactions).some(value => value.size > 0)
 
   if (hasReaction === false) {
     return null
   }
 
+  const handlePopoverClick = (reaction: Reaction) => {
+    onClick(reaction)
+    setOpen(false)
+  }
+
   return (
     <Flex align="center" css={{ paddingTop: 6 }} gap={1}>
       {Object.entries(emojis).map(([type, emoji]) => (
-        <Reaction
+        <ReactionButton
           key={type}
           emoji={emoji}
-          value={reactions[type]}
-          onClick={() => onClick(type)}
+          value={reactions[type as Reaction]}
+          onClick={() => onClick(type as Reaction)}
         />
       ))}
 
-      <ReactionPopover reactions={reactions} onClick={onClick}>
+      <ReactionPopover
+        open={open}
+        onOpenChange={setOpen}
+        reactions={reactions}
+        onClick={handlePopoverClick}
+      >
         <AddReactionButton aria-label="Add Reaction">
           <ReactionIcon width={16} height={16} />
         </AddReactionButton>
@@ -57,11 +69,11 @@ interface ReactionProps {
     url: string
     symbol: string
   }
-  value: Props['reactions']['HEART']
+  value: Reactions['LOVE']
   onClick: VoidFunction
 }
 
-const Reaction = (props: ReactionProps) => {
+const ReactionButton = (props: ReactionProps) => {
   const { emoji, value, onClick } = props
 
   const { account } = useAccount()

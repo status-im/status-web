@@ -4,7 +4,7 @@ import { useAccount } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Flex, Image, Popover, PopoverTrigger } from '~/src/system'
 
-import type { Reaction, Reactions } from '~/src/protocol/use-messages'
+import type { Reaction, Reactions } from '~/src/protocol'
 
 interface Props {
   children: React.ReactElement
@@ -52,13 +52,13 @@ export const ReactionPopover = (props: Props) => {
       <Popover side="top" align="center" sideOffset={6}>
         <Flex gap={1} css={{ padding: 8 }}>
           {Object.entries(emojis).map(([type, emoji]) => {
-            const value = reactions[type]
+            const value = reactions[type as Reaction]
             const me = account ? value.has('0x' + account.publicKey) : false
 
             return (
               <Button
                 key={type}
-                onClick={() => onClick(type)}
+                onClick={() => onClick(type as Reaction)}
                 active={me}
                 aria-label={`React with ${emoji.symbol}`}
               >
