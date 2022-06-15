@@ -77,16 +77,11 @@ export const ChatMessage = (props: Props) => {
   const userProfileDialog = useDialog(UserProfileDialog)
 
   const handleMessageSubmit = (message: string) => {
-    client.community.chats.get(chatId).sendTextMessage(
-      message,
-      '0x0fa999097568d1fdcc39108a08d75340bd2cee5ec59c36799007150d0a9fc896'
-    )
+    client.community.chats.get(chatId).sendTextMessage(message)
   }
 
   const handleReaction = (reaction: Reaction) => {
-    client.community
-      .getChatById(chatId)
-      .sendReaction(chatId, messageId, reaction)
+    client.community.getChatById(chatId).sendReaction(messageId, reaction)
   }
 
   const handleReplyClick = () => {

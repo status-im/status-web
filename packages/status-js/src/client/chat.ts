@@ -419,7 +419,6 @@ export class Chat {
   }
 
   public sendReaction = async (
-    chatId: string,
     messageId: string,
     reaction: keyof ChatMessage['reactions']
   ) => {
@@ -439,7 +438,7 @@ export class Chat {
 
     const payload = EmojiReaction.encode({
       clock: BigInt(Date.now()),
-      chatId: chatId,
+      chatId: this.id,
       messageType: 'COMMUNITY_CHAT' as MessageType,
       messageId,
       type: reaction,
