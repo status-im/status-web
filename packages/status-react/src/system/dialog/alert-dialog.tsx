@@ -40,6 +40,7 @@ interface DialogProps {
   description: string
   actionLabel: string
   actionVariant?: ButtonProps['variant']
+  onAction: VoidFunction
   cancelLabel?: string
   onOpenAutoFocus?: DialogContentProps['onOpenAutoFocus']
   onCloseAutoFocus?: DialogContentProps['onCloseAutoFocus']
@@ -51,6 +52,7 @@ const AlertDialog = (props: DialogProps) => {
     description,
     actionLabel,
     actionVariant,
+    onAction,
     cancelLabel = 'Cancel',
     ...contentProps
   } = props
@@ -77,7 +79,9 @@ const AlertDialog = (props: DialogProps) => {
             <Button>{cancelLabel}</Button>
           </Primitive.Cancel>
           <Primitive.Action asChild>
-            <Button variant={actionVariant}>{actionLabel}</Button>
+            <Button variant={actionVariant} onClick={onAction}>
+              {actionLabel}
+            </Button>
           </Primitive.Action>
         </Actions>
       </Content>
