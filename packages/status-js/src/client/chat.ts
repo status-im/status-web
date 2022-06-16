@@ -397,7 +397,30 @@ export class Chat {
   }
 
   public editMessage = async (messageId: string, text: string) => {
-    // todo?: check if message exists
+    if (!this.client.account) {
+      throw new Error('Text message cannot be edited without a created account')
+    }
+
+    let messageIndex = this.messages.length
+    while (--messageIndex >= 0) {
+      const _message = this.messages[messageIndex]
+
+      if (_message.messageId === messageId) {
+        break
+      }
+    }
+
+    if (messageIndex < 0) {
+      throw new Error('Text message was not found')
+    }
+
+    // not original author
+    if (
+      this.messages[messageIndex].signer !==
+      `0x${this.client.account.publicKey}`
+    ) {
+      throw new Error('Text message can only be edited by its author')
+    }
 
     if (text === '') {
       throw new Error('Text message cannot be empty')
@@ -421,7 +444,31 @@ export class Chat {
   }
 
   public deleteMessage = async (messageId: string) => {
-    // todo: check if message exists
+    if (!this.client.account) {
+      throw new Error(
+        'Text message cannot be deleted without a created account'
+      )
+    }
+
+    let messageIndex = this.messages.length
+    while (--messageIndex >= 0) {
+      const _message = this.messages[messageIndex]
+
+      if (_message.messageId === messageId) {
+        break
+      }
+    }
+
+    if (messageIndex < 0) {
+      throw new Error('Text message was not found')
+    }
+
+    if (
+      this.messages[messageIndex].signer !==
+      `0x${this.client.account.publicKey}`
+    ) {
+      throw new Error('Text message can only be deleted by its author')
+    }
 
     const payload = DeleteMessage.encode({
       clock: BigInt(Date.now()),
