@@ -41,7 +41,9 @@ export function handleWakuMessage(
     if (decodedProtocol) {
       messageToDecode = decodedProtocol.publicMessage
     }
-  } catch {}
+  } catch {
+    // eslint-disable-next-line no-empty
+  }
 
   const decodedMetadata = ApplicationMetadataMessage.decode(messageToDecode)
   if (!decodedMetadata.payload) {
@@ -67,106 +69,111 @@ export function handleWakuMessage(
   let success = false
 
   // decode, map and handle (events)
-  switch (decodedMetadata.type) {
-    case ApplicationMetadataMessage.Type.TYPE_COMMUNITY_DESCRIPTION: {
-      // decode
-      const decodedPayload = CommunityDescription.decode(messageToDecode)
+  try {
+    switch (decodedMetadata.type) {
+      case ApplicationMetadataMessage.Type.TYPE_COMMUNITY_DESCRIPTION: {
+        // decode
+        const decodedPayload = CommunityDescription.decode(messageToDecode)
 
-      // handle (state and callback)
-      community.handleDescription(decodedPayload)
+        // handle (state and callback)
+        community.handleDescription(decodedPayload)
 
-      success = true
+        success = true
 
-      break
+        break
+      }
+
+      case ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE: {
+        // decode
+        const decodedPayload = ChatMessage.decode(messageToDecode)
+
+        // TODO?: ignore community.channelMessages which are messageType !== COMMUNITY_CHAT
+        const chatUuid = getChatUuid(decodedPayload.chatId)
+
+        // map
+        const chatMessage = mapChatMessage(decodedPayload, {
+          messageId,
+          chatUuid,
+        })
+
+        // handle
+        community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
+
+        success = true
+
+        break
+      }
+
+      case ApplicationMetadataMessage.Type.TYPE_EDIT_MESSAGE: {
+        const decodedPayload = EditMessage.decode(messageToDecode)
+
+        const messageId = decodedPayload.messageId
+        const chatUuid = getChatUuid(decodedPayload.chatId)
+
+        community.chats
+          .get(chatUuid)
+          ?.handleEditedMessage(messageId, decodedPayload.text)
+
+        success = true
+
+        break
+      }
+
+      case ApplicationMetadataMessage.Type.TYPE_DELETE_MESSAGE: {
+        const decodedPayload = DeleteMessage.decode(messageToDecode)
+
+        const messageId = decodedPayload.messageId
+        const chatUuid = getChatUuid(decodedPayload.chatId)
+
+        community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
+
+        success = true
+
+        break
+      }
+
+      case ApplicationMetadataMessage.Type.TYPE_PIN_MESSAGE: {
+        const decodedPayload = PinMessage.decode(messageToDecode)
+
+        const messageId = decodedPayload.messageId
+        const chatUuid = getChatUuid(decodedPayload.chatId)
+
+        community.chats
+          .get(chatUuid)
+          ?.handlePinnedMessage(messageId, decodedPayload.pinned)
+
+        success = true
+
+        break
+      }
+
+      case ApplicationMetadataMessage.Type.TYPE_EMOJI_REACTION: {
+        const decodedPayload = EmojiReaction.decode(messageToDecode)
+
+        const messageId = decodedPayload.messageId
+        const chatUuid = getChatUuid(decodedPayload.chatId)
+
+        const chat = community.chats.get(chatUuid)
+
+        chat?.handleEmojiReaction(
+          messageId,
+          decodedPayload,
+          `0x${bytesToHex(publicKey)}`
+        )
+
+        success = true
+
+        break
+      }
+
+      default:
+        success = true
+
+        break
     }
-
-    case ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE: {
-      // decode
-      const decodedPayload = ChatMessage.decode(messageToDecode)
-
-      // TODO?: ignore community.channelMessages which are messageType !== COMMUNITY_CHAT
-      const chatUuid = getChatUuid(decodedPayload.chatId)
-
-      // map
-      const chatMessage = mapChatMessage(decodedPayload, {
-        messageId,
-        chatUuid,
-      })
-
-      // handle
-      community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
-
-      success = true
-
-      break
-    }
-
-    case ApplicationMetadataMessage.Type.TYPE_EDIT_MESSAGE: {
-      const decodedPayload = EditMessage.decode(messageToDecode)
-
-      const messageId = decodedPayload.messageId
-      const chatUuid = getChatUuid(decodedPayload.chatId)
-
-      community.chats
-        .get(chatUuid)
-        ?.handleEditedMessage(messageId, decodedPayload.text)
-
-      success = true
-
-      break
-    }
-
-    case ApplicationMetadataMessage.Type.TYPE_DELETE_MESSAGE: {
-      const decodedPayload = DeleteMessage.decode(messageToDecode)
-
-      const messageId = decodedPayload.messageId
-      const chatUuid = getChatUuid(decodedPayload.chatId)
-
-      community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
-
-      success = true
-
-      break
-    }
-
-    case ApplicationMetadataMessage.Type.TYPE_PIN_MESSAGE: {
-      const decodedPayload = PinMessage.decode(messageToDecode)
-
-      const messageId = decodedPayload.messageId
-      const chatUuid = getChatUuid(decodedPayload.chatId)
-
-      community.chats
-        .get(chatUuid)
-        ?.handlePinnedMessage(messageId, decodedPayload.pinned)
-
-      success = true
-
-      break
-    }
-
-    case ApplicationMetadataMessage.Type.TYPE_EMOJI_REACTION: {
-      const decodedPayload = EmojiReaction.decode(messageToDecode)
-
-      const messageId = decodedPayload.messageId
-      const chatUuid = getChatUuid(decodedPayload.chatId)
-
-      const chat = community.chats.get(chatUuid)
-
-      chat?.handleEmojiReaction(
-        messageId,
-        decodedPayload,
-        `0x${bytesToHex(publicKey)}`
-      )
-
-      success = true
-
-      break
-    }
-
-    default:
-      success = true
-
-      break
+  } catch {
+    // protons-runtime throws when trying to decode invalid protocol buffers
+    success = true
   }
 
   if (success) {
