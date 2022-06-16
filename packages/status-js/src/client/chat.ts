@@ -25,6 +25,7 @@ export type ChatMessage = ChatMessageProto & {
   pinned: boolean
   reactions: Reactions
   chatUuid: string
+  signer: string
   responseToMessage?: Omit<ChatMessage, 'responseToMessage'>
 }
 
