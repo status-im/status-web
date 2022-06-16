@@ -49,14 +49,14 @@ export function handleWakuMessage(
   }
   messageToDecode = decodedMetadata.payload
 
-  const publicKey = recoverPublicKey(
+  const signerPublicKey = recoverPublicKey(
     decodedMetadata.signature,
     decodedMetadata.payload
   )
 
   const messageId = payloadToId(
     decodedProtocol?.publicMessage ?? wakuMessage.payload,
-    publicKey
+    signerPublicKey
   )
 
   // already handled
@@ -91,6 +91,7 @@ export function handleWakuMessage(
       const chatMessage = mapChatMessage(decodedPayload, {
         messageId,
         chatUuid,
+        publicKey: `0x${bytesToHex(signerPublicKey)}`,
       })
 
       // handle
@@ -109,7 +110,11 @@ export function handleWakuMessage(
 
       community.chats
         .get(chatUuid)
-        ?.handleEditedMessage(messageId, decodedPayload.text)
+        ?.handleEditedMessage(
+          messageId,
+          decodedPayload.text,
+          `0x${bytesToHex(signerPublicKey)}`
+        )
 
       success = true
 
@@ -122,7 +127,9 @@ export function handleWakuMessage(
       const messageId = decodedPayload.messageId
       const chatUuid = getChatUuid(decodedPayload.chatId)
 
-      community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
+      community.chats
+        .get(chatUuid)
+        ?.handleDeletedMessage(messageId, `0x${bytesToHex(signerPublicKey)}`)
 
       success = true
 
@@ -155,7 +162,7 @@ export function handleWakuMessage(
       chat?.handleEmojiReaction(
         messageId,
         decodedPayload,
-        `0x${bytesToHex(publicKey)}`
+        `0x${bytesToHex(signerPublicKey)}`
       )
 
       success = true

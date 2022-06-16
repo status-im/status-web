@@ -215,7 +215,11 @@ export class Chat {
     this.emitMessages(this.messages)
   }
 
-  public handleEditedMessage = (messageId: string, text: string) => {
+  public handleEditedMessage = (
+    messageId: string,
+    text: string,
+    signerPublicKey: string
+  ) => {
     let messageIndex = this.messages.length
     while (--messageIndex >= 0) {
       const _message = this.messages[messageIndex]
@@ -230,6 +234,11 @@ export class Chat {
       return
     }
 
+    // not original author
+    if (this.messages[messageIndex].signer !== signerPublicKey) {
+      return
+    }
+
     this.messages[messageIndex] = {
       ...this.messages[messageIndex],
       text,
@@ -239,7 +248,10 @@ export class Chat {
     this.emitMessages(this.messages)
   }
 
-  public handleDeletedMessage = (messageId: string) => {
+  public handleDeletedMessage = (
+    messageId: string,
+    signerPublicKey: string
+  ) => {
     let messageIndex = this.messages.length
     while (--messageIndex >= 0) {
       const _message = this.messages[messageIndex]
@@ -250,6 +262,10 @@ export class Chat {
     }
 
     if (messageIndex < 0) {
+      return
+    }
+
+    if (this.messages[messageIndex].signer !== signerPublicKey) {
       return
     }
 

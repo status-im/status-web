@@ -11,7 +11,7 @@ export function mapChatMessage(
 ): ChatMessage {
   const { messageId, chatUuid, publicKey } = props
 
-  const message = {
+  const message: ChatMessage = {
     ...decodedMessage,
     messageId,
     chatUuid,
