@@ -27,7 +27,7 @@ export class Community {
   public description!: CommunityDescription
   public chats: Map<string, Chat>
   #members: Map<string, Member>
-  public callback: ((description: CommunityDescription) => void) | undefined
+  #descriptionCallbacks: Set<(description: CommunityDescription) => void>
 
   constructor(client: Client, publicKey: string) {
     this.client = client
@@ -37,6 +37,7 @@ export class Community {
 
     this.chats = new Map()
     this.#members = new Map()
+    this.#descriptionCallbacks = new Set()
   }
 
   public async start() {
@@ -220,7 +221,9 @@ export class Community {
     this.description = description
 
     // callback
-    this.callback?.(this.description)
+    this.#descriptionCallbacks.forEach(callback =>
+      callback({ ...this.description })
+    )
 
     // Chats
     // handle
@@ -231,10 +234,10 @@ export class Community {
   }
 
   public onChange = (callback: (description: CommunityDescription) => void) => {
-    this.callback = callback
+    this.#descriptionCallbacks.add(callback)
 
     return () => {
-      this.callback = undefined
+      this.#descriptionCallbacks.delete(callback)
     }
   }
 
