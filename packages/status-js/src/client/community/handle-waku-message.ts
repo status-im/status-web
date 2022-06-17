@@ -66,7 +66,7 @@ export function handleWakuMessage(
     return
   }
 
-  let success = false
+  client.wakuMessages.add(messageId)
 
   // decode, map and handle (events)
   try {
@@ -77,8 +77,6 @@ export function handleWakuMessage(
 
         // handle (state and callback)
         community.handleDescription(decodedPayload)
-
-        success = true
 
         break
       }
@@ -99,8 +97,6 @@ export function handleWakuMessage(
         // handle
         community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
 
-        success = true
-
         break
       }
 
@@ -114,8 +110,6 @@ export function handleWakuMessage(
           .get(chatUuid)
           ?.handleEditedMessage(messageId, decodedPayload.text)
 
-        success = true
-
         break
       }
 
@@ -126,8 +120,6 @@ export function handleWakuMessage(
         const chatUuid = getChatUuid(decodedPayload.chatId)
 
         community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
-
-        success = true
 
         break
       }
@@ -141,8 +133,6 @@ export function handleWakuMessage(
         community.chats
           .get(chatUuid)
           ?.handlePinnedMessage(messageId, decodedPayload.pinned)
-
-        success = true
 
         break
       }
@@ -161,23 +151,15 @@ export function handleWakuMessage(
           `0x${bytesToHex(publicKey)}`
         )
 
-        success = true
-
         break
       }
 
       default:
-        success = true
-
         break
     }
   } catch {
     // protons-runtime throws when trying to decode invalid protocol buffers
-    success = true
-  }
-
-  if (success) {
-    client.wakuMessages.add(messageId)
+    // eslint-disable-next-line no-empty
   }
 
   return
