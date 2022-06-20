@@ -34,6 +34,10 @@ export const ChatInput = (props: Props) => {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (inputValue === '') {
+      return
+    }
+
     if (event.key === 'Enter' && event.shiftKey === false) {
       onSubmit(inputValue)
       setInputValue('')
