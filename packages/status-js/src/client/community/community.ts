@@ -261,7 +261,7 @@ export class Community {
     /** Uncompressed. */
     signerPublicKey: string
   ): boolean => {
-    return this.publicKey === compressPublicKey(signerPublicKey)
+    return this.publicKey === `0x${compressPublicKey(signerPublicKey)}`
   }
 
   public isMember = (signerPublicKey: string): boolean => {
