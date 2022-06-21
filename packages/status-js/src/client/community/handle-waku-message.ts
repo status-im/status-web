@@ -5,6 +5,7 @@ import {
   ChatMessage,
   DeleteMessage,
   EditMessage,
+  MessageType,
 } from '../../../protos/chat-message'
 import { EmojiReaction } from '../../../protos/emoji-reaction'
 import { PinMessage } from '../../../protos/pin-message'
@@ -68,8 +69,8 @@ export function handleWakuMessage(
 
   client.wakuMessages.add(messageId)
 
-  // decode, map and handle (events)
   try {
+    // decode, map and handle (events)
     switch (decodedMetadata.type) {
       case ApplicationMetadataMessage.Type.TYPE_COMMUNITY_DESCRIPTION: {
         // decode
@@ -85,17 +86,26 @@ export function handleWakuMessage(
         // decode
         const decodedPayload = ChatMessage.decode(messageToDecode)
 
-        // TODO?: ignore community.channelMessages which are messageType !== COMMUNITY_CHAT
-        const chatUuid = getChatUuid(decodedPayload.chatId)
+        switch (decodedPayload.messageType) {
+          case MessageType.COMMUNITY_CHAT: {
+            const chatUuid = getChatUuid(decodedPayload.chatId)
 
-        // map
-        const chatMessage = mapChatMessage(decodedPayload, {
-          messageId,
-          chatUuid,
-        })
+            // map
+            const chatMessage = mapChatMessage(decodedPayload, {
+              messageId,
+              chatUuid,
+            })
 
-        // handle
-        community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
+            // handle
+            community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
+
+            break
+          }
+
+          default: {
+            break
+          }
+        }
 
         break
       }
@@ -103,12 +113,22 @@ export function handleWakuMessage(
       case ApplicationMetadataMessage.Type.TYPE_EDIT_MESSAGE: {
         const decodedPayload = EditMessage.decode(messageToDecode)
 
-        const messageId = decodedPayload.messageId
-        const chatUuid = getChatUuid(decodedPayload.chatId)
+        switch (decodedPayload.messageType) {
+          case MessageType.COMMUNITY_CHAT: {
+            const messageId = decodedPayload.messageId
+            const chatUuid = getChatUuid(decodedPayload.chatId)
 
-        community.chats
-          .get(chatUuid)
-          ?.handleEditedMessage(messageId, decodedPayload.text)
+            community.chats
+              .get(chatUuid)
+              ?.handleEditedMessage(messageId, decodedPayload.text)
+
+            break
+          }
+
+          default: {
+            break
+          }
+        }
 
         break
       }
@@ -116,10 +136,20 @@ export function handleWakuMessage(
       case ApplicationMetadataMessage.Type.TYPE_DELETE_MESSAGE: {
         const decodedPayload = DeleteMessage.decode(messageToDecode)
 
-        const messageId = decodedPayload.messageId
-        const chatUuid = getChatUuid(decodedPayload.chatId)
+        switch (decodedPayload.messageType) {
+          case MessageType.COMMUNITY_CHAT: {
+            const messageId = decodedPayload.messageId
+            const chatUuid = getChatUuid(decodedPayload.chatId)
 
-        community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
+            community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
+
+            break
+          }
+
+          default: {
+            break
+          }
+        }
 
         break
       }
@@ -127,12 +157,22 @@ export function handleWakuMessage(
       case ApplicationMetadataMessage.Type.TYPE_PIN_MESSAGE: {
         const decodedPayload = PinMessage.decode(messageToDecode)
 
-        const messageId = decodedPayload.messageId
-        const chatUuid = getChatUuid(decodedPayload.chatId)
+        switch (decodedPayload.messageType) {
+          case MessageType.COMMUNITY_CHAT: {
+            const messageId = decodedPayload.messageId
+            const chatUuid = getChatUuid(decodedPayload.chatId)
 
-        community.chats
-          .get(chatUuid)
-          ?.handlePinnedMessage(messageId, decodedPayload.pinned)
+            community.chats
+              .get(chatUuid)
+              ?.handlePinnedMessage(messageId, decodedPayload.pinned)
+
+            break
+          }
+
+          default: {
+            break
+          }
+        }
 
         break
       }
@@ -140,22 +180,33 @@ export function handleWakuMessage(
       case ApplicationMetadataMessage.Type.TYPE_EMOJI_REACTION: {
         const decodedPayload = EmojiReaction.decode(messageToDecode)
 
-        const messageId = decodedPayload.messageId
-        const chatUuid = getChatUuid(decodedPayload.chatId)
+        switch (decodedPayload.messageType) {
+          case MessageType.COMMUNITY_CHAT: {
+            const messageId = decodedPayload.messageId
+            const chatUuid = getChatUuid(decodedPayload.chatId)
 
-        const chat = community.chats.get(chatUuid)
+            const chat = community.chats.get(chatUuid)
 
-        chat?.handleEmojiReaction(
-          messageId,
-          decodedPayload,
-          `0x${bytesToHex(publicKey)}`
-        )
+            chat?.handleEmojiReaction(
+              messageId,
+              decodedPayload,
+              `0x${bytesToHex(publicKey)}`
+            )
+
+            break
+          }
+
+          default: {
+            break
+          }
+        }
 
         break
       }
 
-      default:
+      default: {
         break
+      }
     }
   } catch {
     // protons-runtime throws when trying to decode invalid protocol buffers
