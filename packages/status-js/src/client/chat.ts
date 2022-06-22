@@ -20,15 +20,13 @@ import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
 import type { CommunityChat } from '~/src/proto/communities/v1/communities'
 import type { WakuMessage } from 'js-waku'
 
-type DeletedChatMessage = { deletedClock: bigint }
-
 export type ChatMessage = ChatMessageProto & {
   messageId: string
   pinned: boolean
   reactions: Reactions
   chatUuid: string
   signer: string
-  responseToMessage?: ChatMessage | DeletedChatMessage
+  responseToMessage?: ChatMessage
   edittedClock?: bigint
   pinnedClock?: bigint
 }
@@ -119,11 +117,6 @@ export class Chat {
       const referencedMessage = this.#messages.get(message.responseTo)
       if (referencedMessage) {
         message.responseToMessage = referencedMessage
-      }
-
-      const deleteEvent = this.#deleteEvents.get(message.responseTo)
-      if (deleteEvent) {
-        message.responseToMessage = { deletedClock: deleteEvent.clock }
       }
 
       messages.push(message)
