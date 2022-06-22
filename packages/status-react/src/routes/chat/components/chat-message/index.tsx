@@ -68,15 +68,15 @@ export const ChatMessage = (props: Props) => {
     contentType,
     clock,
     reactions,
-    sender,
+    signer,
     responseTo,
   } = message
 
   // TODO: remove usage of 0x prefix
-  const owner = '0x' + account?.publicKey === sender
-  const chat = client.community.getChatById(chatId)
+  const owner = '0x' + account?.publicKey === signer
+  const chat = client.community.getChat(chatId)
 
-  const member = client.community.getMember(sender) ?? {}
+  const member = client.community.getMember(signer) ?? {}
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)

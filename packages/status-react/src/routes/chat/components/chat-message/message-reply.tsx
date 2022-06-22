@@ -29,8 +29,9 @@ export const MessageReply = (props: Props) => {
     )
   }
 
-  const { contentType, text, sender } = message
-  const { username } = client.community.getMember(sender)
+  const { contentType, text, signer } = message
+
+  const { username } = client.community.getMember(signer)
 
   return (
     <Wrapper>
