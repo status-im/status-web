@@ -257,10 +257,10 @@ export class Chat {
     if (deletedEvent) {
       if (this.isAuthor(newMessage, deletedEvent.signer)) {
         return
-      } else {
-        // delete unathorized event from stash
-        this.#deleteEvents.delete(newMessage.messageId)
       }
+
+      // delete unathorized event from stash
+      this.#deleteEvents.delete(newMessage.messageId)
     }
 
     // message already received
