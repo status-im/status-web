@@ -262,8 +262,13 @@ export class Chat {
 
     // delete event received first
     const deletedEvent = this.#deleteEvents.has(newMessage.messageId)
-    if (deletedEvent && this.isAuthor(newMessage, signerPublicKey)) {
-      return
+    if (deletedEvent) {
+      if (this.isAuthor(newMessage, signerPublicKey)) {
+        return
+      } else {
+        // delete unathorized event from stash
+        this.#deleteEvents.delete(newMessage.messageId)
+      }
     }
 
     // message already received
@@ -274,11 +279,14 @@ export class Chat {
 
     // action events received prior
     const editTextEvent = this.#editTextEvents.get(newMessage.messageId)
-    if (editTextEvent && this.isAuthor(newMessage, signerPublicKey)) {
-      newMessage.text = editTextEvent.text
-      newMessage.edittedClock = editTextEvent.clock
+    if (editTextEvent) {
+      if (this.isAuthor(newMessage, signerPublicKey)) {
+        newMessage.text = editTextEvent.text
+        newMessage.edittedClock = editTextEvent.clock
+      }
 
-      this.#editTextEvents.delete(newMessage.messageId) // pop
+      // finally, delete event from stash whether it was authorized or not
+      this.#editTextEvents.delete(newMessage.messageId)
     }
 
     const pinEvent = this.#pinEvents.get(newMessage.messageId)
