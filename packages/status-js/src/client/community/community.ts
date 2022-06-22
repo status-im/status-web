@@ -5,6 +5,7 @@ import { CommunityRequestToJoin } from '~/protos/communities'
 import { MessageType } from '~/protos/enums'
 import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
+import { compressPublicKey } from '~/src/utils/compress-public-key'
 
 import { idToContentTopic } from '../../contentTopic'
 import { createSymKeyFromPassword } from '../../encryption'
@@ -20,6 +21,7 @@ import type {
 export class Community {
   private client: Client
 
+  /** Compressed. */
   public publicKey: string
   public id: string
   private contentTopic!: string
@@ -253,5 +255,16 @@ export class Community {
       this.contentTopic,
       this.symmetricKey
     )
+  }
+
+  public isOwner = (
+    /** Uncompressed. */
+    signerPublicKey: string
+  ): boolean => {
+    return this.publicKey === `0x${compressPublicKey(signerPublicKey)}`
+  }
+
+  public isMember = (signerPublicKey: string): boolean => {
+    return this.getMember(signerPublicKey) !== undefined
   }
 }

@@ -6,17 +6,17 @@ export function mapChatMessage(
   props: {
     messageId: string
     chatUuid: string
-    publicKey: string
+    signerPublicKey: string
   }
 ): ChatMessage {
-  const { messageId, chatUuid, publicKey } = props
+  const { messageId, chatUuid, signerPublicKey } = props
 
-  const message = {
+  const message: ChatMessage = {
     ...decodedMessage,
     messageId,
     chatUuid,
     pinned: false,
-    signer: publicKey,
+    signer: signerPublicKey,
     reactions: {
       THUMBS_UP: new Set<string>(),
       THUMBS_DOWN: new Set<string>(),

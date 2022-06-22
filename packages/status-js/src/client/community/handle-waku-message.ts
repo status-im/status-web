@@ -52,15 +52,16 @@ export function handleWakuMessage(
   }
   messageToDecode = decodedMetadata.payload
 
-  const publicKey = recoverPublicKey(
+  const signerPublicKeyBytes = recoverPublicKey(
     decodedMetadata.signature,
     decodedMetadata.payload
   )
 
   const messageId = payloadToId(
     decodedProtocol?.publicMessage ?? wakuMessage.payload,
-    publicKey
+    signerPublicKeyBytes
   )
+  const signerPublicKey = `0x${bytesToHex(signerPublicKeyBytes)}`
 
   // already handled
   if (client.wakuMessages.has(messageId)) {
@@ -76,6 +77,10 @@ export function handleWakuMessage(
         // decode
         const decodedPayload = CommunityDescription.decode(messageToDecode)
 
+        if (!community.isOwner(signerPublicKey)) {
+          return
+        }
+
         // handle (state and callback)
         community.handleDescription(decodedPayload)
 
@@ -88,16 +93,26 @@ export function handleWakuMessage(
 
         switch (decodedPayload.messageType) {
           case MessageType.COMMUNITY_CHAT: {
+            if (!community.isMember(signerPublicKey)) {
+              return
+            }
+
             const chatUuid = getChatUuid(decodedPayload.chatId)
+            const chat = community.chats.get(chatUuid)
+
+            if (!chat) {
+              return
+            }
 
             // map
             const chatMessage = mapChatMessage(decodedPayload, {
               messageId,
               chatUuid,
+              signerPublicKey,
             })
 
             // handle
-            community.chats.get(chatUuid)?.handleNewMessage(chatMessage)
+            chat.handleNewMessage(chatMessage)
 
             break
           }
@@ -115,12 +130,23 @@ export function handleWakuMessage(
 
         switch (decodedPayload.messageType) {
           case MessageType.COMMUNITY_CHAT: {
+            if (!community.isMember(signerPublicKey)) {
+              return
+            }
+
             const messageId = decodedPayload.messageId
             const chatUuid = getChatUuid(decodedPayload.chatId)
+            const chat = community.chats.get(chatUuid)
 
-            community.chats
-              .get(chatUuid)
-              ?.handleEditedMessage(messageId, decodedPayload.text)
+            if (!chat) {
+              return
+            }
+
+            chat.handleEditedMessage(
+              messageId,
+              decodedPayload.text,
+              signerPublicKey
+            )
 
             break
           }
@@ -138,10 +164,19 @@ export function handleWakuMessage(
 
         switch (decodedPayload.messageType) {
           case MessageType.COMMUNITY_CHAT: {
+            if (!community.isMember(signerPublicKey)) {
+              return
+            }
+
             const messageId = decodedPayload.messageId
             const chatUuid = getChatUuid(decodedPayload.chatId)
+            const chat = community.chats.get(chatUuid)
 
-            community.chats.get(chatUuid)?.handleDeletedMessage(messageId)
+            if (!chat) {
+              return
+            }
+
+            chat.handleDeletedMessage(messageId, signerPublicKey)
 
             break
           }
@@ -159,12 +194,19 @@ export function handleWakuMessage(
 
         switch (decodedPayload.messageType) {
           case MessageType.COMMUNITY_CHAT: {
+            if (!community.isMember(signerPublicKey)) {
+              return
+            }
+
             const messageId = decodedPayload.messageId
             const chatUuid = getChatUuid(decodedPayload.chatId)
+            const chat = community.chats.get(chatUuid)
 
-            community.chats
-              .get(chatUuid)
-              ?.handlePinnedMessage(messageId, decodedPayload.pinned)
+            if (!chat) {
+              return
+            }
+
+            chat.handlePinnedMessage(messageId, decodedPayload.pinned)
 
             break
           }
@@ -182,16 +224,19 @@ export function handleWakuMessage(
 
         switch (decodedPayload.messageType) {
           case MessageType.COMMUNITY_CHAT: {
+            if (!community.isMember(signerPublicKey)) {
+              return
+            }
+
             const messageId = decodedPayload.messageId
             const chatUuid = getChatUuid(decodedPayload.chatId)
-
             const chat = community.chats.get(chatUuid)
 
-            chat?.handleEmojiReaction(
-              messageId,
-              decodedPayload,
-              `0x${bytesToHex(publicKey)}`
-            )
+            if (!chat) {
+              return
+            }
+
+            chat.handleEmojiReaction(messageId, decodedPayload, signerPublicKey)
 
             break
           }
