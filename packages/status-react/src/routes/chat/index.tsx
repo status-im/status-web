@@ -59,13 +59,12 @@ const Body = () => {
     <>
       <ContentWrapper ref={contentRef}>
         <ChatStart chatId={chatId} />
-      {messages.data.map((message, index) => (
-        <ChatMessage
-          key={message.messageId}
-          message={message}
-          previousMessage={messages.data[index - 1]}
-        />
+        {messages.data.map(message => (
+          <ChatMessage key={message.messageId} message={message} />
+        ))}
       </ContentWrapper>
+      <ChatInput onSubmit={handleMessageSubmit} />
+    </>
   )
 }
 
