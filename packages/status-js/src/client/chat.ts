@@ -44,14 +44,14 @@ export class Chat {
   public description: CommunityChat
   public readonly chatCallbacks: Set<(description: CommunityChat) => void>
   #messages: Map<string, ChatMessage>
-  #editTextEvents: Map<string, Pick<ChatMessage, 'clock' | 'text'>>
+  #editTextEvents: Map<string, Pick<ChatMessage, 'clock' | 'signer' | 'text'>>
   #pinEvents: Map<string, Pick<ChatMessage, 'clock' | 'pinned'>>
   #reactEvents: Map<string, Pick<ChatMessage, 'clock' | 'reactions'>>
   /**
    * Elements should not be removed to ensure new and possibly delayed messages
    * have referenses correctly resolved.
    */
-  #deleteEvents: Map<string, Pick<ChatMessage, 'clock'>>
+  #deleteEvents: Map<string, Pick<ChatMessage, 'clock' | 'signer'>>
   #fetchingMessages?: boolean
   #previousFetchedStartTime?: Date
   #oldestFetchedMessage?: FetchedMessage
@@ -246,11 +246,7 @@ export class Chat {
     this.emitChange(description)
   }
 
-  public handleNewMessage = (
-    newMessage: ChatMessage,
-    signerPublicKey: string,
-    timestamp?: Date
-  ) => {
+  public handleNewMessage = (newMessage: ChatMessage, timestamp?: Date) => {
     // fetching in progress
     if (this.#fetchingMessages) {
       this.#oldestFetchedMessage = this.getOldestFetchedMessage(
@@ -261,9 +257,9 @@ export class Chat {
     }
 
     // delete event received first
-    const deletedEvent = this.#deleteEvents.has(newMessage.messageId)
+    const deletedEvent = this.#deleteEvents.get(newMessage.messageId)
     if (deletedEvent) {
-      if (this.isAuthor(newMessage, signerPublicKey)) {
+      if (this.isAuthor(newMessage, deletedEvent.signer)) {
         return
       } else {
         // delete unathorized event from stash
@@ -280,7 +276,7 @@ export class Chat {
     // action events received prior
     const editTextEvent = this.#editTextEvents.get(newMessage.messageId)
     if (editTextEvent) {
-      if (this.isAuthor(newMessage, signerPublicKey)) {
+      if (this.isAuthor(newMessage, editTextEvent.signer)) {
         newMessage.text = editTextEvent.text
         newMessage.edittedClock = editTextEvent.clock
       }
@@ -329,7 +325,11 @@ export class Chat {
 
     const editTextEvent = this.#editTextEvents.get(messageId)
     if (!editTextEvent || editTextEvent.clock < clock) {
-      this.#editTextEvents.set(messageId, { clock, text })
+      this.#editTextEvents.set(messageId, {
+        clock,
+        signer: signerPublicKey,
+        text,
+      })
     }
   }
 
@@ -341,7 +341,7 @@ export class Chat {
     const message = this.#messages.get(messageId)
     if (message && this.isAuthor(message, signerPublicKey)) {
       this.#messages.delete(messageId)
-      this.#deleteEvents.set(messageId, { clock })
+      this.#deleteEvents.set(messageId, { clock, signer: signerPublicKey })
       this.emitMessages()
 
       return
@@ -349,7 +349,7 @@ export class Chat {
 
     const deleteEvent = this.#deleteEvents.get(messageId)
     if (!deleteEvent || deleteEvent.clock > clock) {
-      this.#deleteEvents.set(messageId, { clock })
+      this.#deleteEvents.set(messageId, { clock, signer: signerPublicKey })
     }
   }
 
@@ -370,7 +370,10 @@ export class Chat {
 
     const pinEvent = this.#pinEvents.get(messageId)
     if (!pinEvent || pinEvent.clock < clock) {
-      this.#pinEvents.set(messageId, { clock, pinned: Boolean(pinned) })
+      this.#pinEvents.set(messageId, {
+        clock,
+        pinned: Boolean(pinned),
+      })
     }
   }
 

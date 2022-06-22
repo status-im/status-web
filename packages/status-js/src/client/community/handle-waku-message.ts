@@ -113,11 +113,7 @@ export function handleWakuMessage(
             })
 
             // handle
-            chat.handleNewMessage(
-              chatMessage,
-              signerPublicKey,
-              messageTimestamp
-            )
+            chat.handleNewMessage(chatMessage, messageTimestamp)
 
             break
           }
