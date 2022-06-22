@@ -579,7 +579,7 @@ export class Chat {
     }
 
     const retracted = message.reactions[reaction].has(
-      this.client.account.publicKey
+      `0x${this.client.account.publicKey}`
     )
 
     const payload = EmojiReaction.encode({
