@@ -25,6 +25,7 @@ export type ChatMessage = ChatMessageProto & {
   pinned: boolean
   reactions: Reactions
   chatUuid: string
+  signer: string
   responseToMessage?: Omit<ChatMessage, 'responseToMessage'>
 }
 
@@ -215,7 +216,11 @@ export class Chat {
     this.emitMessages(this.messages)
   }
 
-  public handleEditedMessage = (messageId: string, text: string) => {
+  public handleEditedMessage = (
+    messageId: string,
+    text: string,
+    signerPublicKey: string
+  ) => {
     let messageIndex = this.messages.length
     while (--messageIndex >= 0) {
       const _message = this.messages[messageIndex]
@@ -230,6 +235,10 @@ export class Chat {
       return
     }
 
+    if (!this.isAuthor(this.messages[messageIndex], signerPublicKey)) {
+      return
+    }
+
     this.messages[messageIndex] = {
       ...this.messages[messageIndex],
       text,
@@ -239,7 +248,10 @@ export class Chat {
     this.emitMessages(this.messages)
   }
 
-  public handleDeletedMessage = (messageId: string) => {
+  public handleDeletedMessage = (
+    messageId: string,
+    signerPublicKey: string
+  ) => {
     let messageIndex = this.messages.length
     while (--messageIndex >= 0) {
       const _message = this.messages[messageIndex]
@@ -250,6 +262,10 @@ export class Chat {
     }
 
     if (messageIndex < 0) {
+      return
+    }
+
+    if (!this.isAuthor(this.messages[messageIndex], signerPublicKey)) {
       return
     }
 
@@ -380,7 +396,31 @@ export class Chat {
   }
 
   public editMessage = async (messageId: string, text: string) => {
-    // todo?: check if message exists
+    if (!this.client.account) {
+      throw new Error('Text message cannot be edited without a created account')
+    }
+
+    let messageIndex = this.messages.length
+    while (--messageIndex >= 0) {
+      const _message = this.messages[messageIndex]
+
+      if (_message.messageId === messageId) {
+        break
+      }
+    }
+
+    if (messageIndex < 0) {
+      throw new Error('Text message was not found')
+    }
+
+    if (
+      !this.isAuthor(
+        this.messages[messageIndex],
+        `0x${this.client.account.publicKey}`
+      )
+    ) {
+      throw new Error('Text message can only be edited by its author')
+    }
 
     if (text === '') {
       throw new Error('Text message cannot be empty')
@@ -404,7 +444,33 @@ export class Chat {
   }
 
   public deleteMessage = async (messageId: string) => {
-    // todo: check if message exists
+    if (!this.client.account) {
+      throw new Error(
+        'Text message cannot be deleted without a created account'
+      )
+    }
+
+    let messageIndex = this.messages.length
+    while (--messageIndex >= 0) {
+      const _message = this.messages[messageIndex]
+
+      if (_message.messageId === messageId) {
+        break
+      }
+    }
+
+    if (messageIndex < 0) {
+      throw new Error('Text message was not found')
+    }
+
+    if (
+      !this.isAuthor(
+        this.messages[messageIndex],
+        `0x${this.client.account.publicKey}`
+      )
+    ) {
+      throw new Error('Text message can only be deleted by its author')
+    }
 
     const payload = DeleteMessage.encode({
       clock: BigInt(Date.now()),
@@ -456,5 +522,12 @@ export class Chat {
       this.contentTopic,
       this.symmetricKey
     )
+  }
+
+  public isAuthor = (
+    message: ChatMessage,
+    signerPublicKey: string
+  ): boolean => {
+    return message.signer === signerPublicKey
   }
 }
