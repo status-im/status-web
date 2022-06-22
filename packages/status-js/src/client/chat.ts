@@ -47,10 +47,6 @@ export class Chat {
   #editTextEvents: Map<string, Pick<ChatMessage, 'clock' | 'signer' | 'text'>>
   #pinEvents: Map<string, Pick<ChatMessage, 'clock' | 'pinned'>>
   #reactEvents: Map<string, Pick<ChatMessage, 'clock' | 'reactions'>>
-  /**
-   * Elements should not be removed to ensure new and possibly delayed messages
-   * have referenses correctly resolved.
-   */
   #deleteEvents: Map<string, Pick<ChatMessage, 'clock' | 'signer'>>
   #fetchingMessages?: boolean
   #previousFetchedStartTime?: Date
