@@ -7,9 +7,9 @@ import { Waku, WakuMessage } from 'js-waku'
 
 import { ApplicationMetadataMessage } from '~/protos/application-metadata-message'
 
-import { Account } from './account'
-import { Community } from './client/community/community'
-import { handleWakuMessage } from './client/community/handle-waku-message'
+import { Account } from '../account'
+import { Community } from './community/community'
+import { handleWakuMessage } from './community/handle-waku-message'
 
 export interface ClientOptions {
   publicKey: string

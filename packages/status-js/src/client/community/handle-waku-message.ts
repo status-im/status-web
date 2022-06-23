@@ -16,7 +16,7 @@ import { recoverPublicKey } from '../../utils/recover-public-key'
 import { getChatUuid } from './get-chat-uuid'
 import { mapChatMessage } from './map-chat-message'
 
-import type { Client } from '../../client'
+import type { Client } from '../client'
 import type { Community } from './community'
 import type { WakuMessage } from 'js-waku'
 

@@ -13,7 +13,7 @@ import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
-import type { Client } from '../client'
+import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'

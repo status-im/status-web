@@ -12,7 +12,7 @@ import { createSymKeyFromPassword } from '../../encryption'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
-import type { Client } from '../../client'
+import type { Client } from '../client'
 import type {
   CommunityChat,
   CommunityDescription,
