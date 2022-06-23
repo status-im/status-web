@@ -7,8 +7,8 @@ import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
 import { compressPublicKey } from '~/src/utils/compress-public-key'
 import { generateKeyFromPassword } from '~/src/utils/generate-key-from-password'
+import { idToContentTopic } from '~/src/utils/id-to-content-topic'
 
-import { idToContentTopic } from '../../contentTopic'
 import { Chat } from '../chat'
 import { Member } from '../member'
 

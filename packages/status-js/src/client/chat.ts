@@ -7,9 +7,9 @@ import {
 } from '~/protos/chat-message'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
-import { idToContentTopic } from '../contentTopic'
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
+import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
