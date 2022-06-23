@@ -147,14 +147,24 @@ export class Community {
   private unobserveChatMessages = (
     chatDescription: CommunityDescription['chats']
   ) => {
-    const contentTopics = Object.keys(chatDescription).map(chatUuid => {
+    const contentTopics: string[] = []
+
+    for (const chatUuid of Object.keys(chatDescription)) {
       const chat = this.chats.get(chatUuid)
-      const contentTopic = chat!.contentTopic
+
+      if (!chat) {
+        continue
+      }
+
+      const contentTopic = chat.contentTopic
 
       this.chats.delete(chatUuid)
+      contentTopics.push(contentTopic)
+    }
 
-      return contentTopic
-    })
+    if (!contentTopics.length) {
+      return
+    }
 
     this.client.waku.relay.deleteObserver(
       this.client.handleWakuMessage,
