@@ -1,6 +1,6 @@
 import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 
-import { Account } from '../account'
+import { Account } from '../client/account'
 import { recoverPublicKey } from './recover-public-key'
 
 import type { ApplicationMetadataMessage } from '~/protos/application-metadata-message'

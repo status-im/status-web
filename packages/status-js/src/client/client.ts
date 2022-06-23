@@ -7,7 +7,7 @@ import { Waku, WakuMessage } from 'js-waku'
 
 import { ApplicationMetadataMessage } from '~/protos/application-metadata-message'
 
-import { Account } from '../account'
+import { Account } from './account'
 import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
 
