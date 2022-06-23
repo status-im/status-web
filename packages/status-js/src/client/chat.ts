@@ -8,8 +8,8 @@ import {
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
 import { idToContentTopic } from '../contentTopic'
-import { createSymKeyFromPassword } from '../encryption'
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
+import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { getReactions } from './community/get-reactions'
 
 import type { MessageType } from '../../protos/enums'
@@ -89,7 +89,7 @@ export class Chat {
   ) => {
     const id = `${community.publicKey}${uuid}`
     const contentTopic = idToContentTopic(id)
-    const symmetricKey = await createSymKeyFromPassword(id)
+    const symmetricKey = await generateKeyFromPassword(id)
 
     return new Chat({
       client,

@@ -1,5 +1,5 @@
 import { pbkdf2 } from 'ethereum-cryptography/pbkdf2'
-import { hexToBytes, utf8ToBytes } from 'ethereum-cryptography/utils'
+import { utf8ToBytes } from 'ethereum-cryptography/utils'
 
 const AES_KEY_LENGTH = 32 // bytes
 
@@ -10,7 +10,7 @@ export async function generateKeyFromPassword(
   password: string
 ): Promise<Uint8Array> {
   return await pbkdf2(
-    hexToBytes(password),
+    utf8ToBytes(password),
     utf8ToBytes(''),
     65356,
     AES_KEY_LENGTH,

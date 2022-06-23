@@ -6,9 +6,9 @@ import { MessageType } from '~/protos/enums'
 import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
 import { compressPublicKey } from '~/src/utils/compress-public-key'
+import { generateKeyFromPassword } from '~/src/utils/generate-key-from-password'
 
 import { idToContentTopic } from '../../contentTopic'
-import { createSymKeyFromPassword } from '../../encryption'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
@@ -44,7 +44,7 @@ export class Community {
 
   public async start() {
     this.contentTopic = idToContentTopic(this.publicKey)
-    this.symmetricKey = await createSymKeyFromPassword(this.publicKey)
+    this.symmetricKey = await generateKeyFromPassword(this.publicKey)
 
     // Waku
     this.client.waku.store.addDecryptionKey(this.symmetricKey, {

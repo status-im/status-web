@@ -3,7 +3,7 @@ import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 import { Account } from '../client/account'
 import { recoverPublicKey } from './recover-public-key'
 
-import type { ApplicationMetadataMessage } from '~/protos/application-metadata-message'
+import type { ApplicationMetadataMessage } from '../../protos/application-metadata-message'
 
 describe('recoverPublicKey', () => {
   it('should recover public key', async () => {

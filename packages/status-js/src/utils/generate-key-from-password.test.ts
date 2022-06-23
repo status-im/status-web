@@ -4,7 +4,7 @@ import { generateKeyFromPassword } from './generate-key-from-password'
 
 describe('createSymKeyFromPassword', () => {
   it('should create symmetric key from password', async () => {
-    const password = 'password'
+    const password = 'arbitrary data here'
     const symKey = await generateKeyFromPassword(password)
 
     expect(bytesToHex(symKey)).toEqual(
