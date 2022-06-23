@@ -1,9 +1,11 @@
 import { PageDirection } from 'js-waku'
 
 import {
+  AudioMessage,
   ChatMessage as ChatMessageProto,
   DeleteMessage,
   EditMessage,
+  ImageType,
 } from '~/protos/chat-message'
 import { EmojiReaction } from '~/protos/emoji-reaction'
 
@@ -16,7 +18,7 @@ import type { MessageType } from '../../protos/enums'
 import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
-import type { ImageMessage } from '~/src/proto/communities/v1/chat_message'
+import type { ImageMessage } from '~/protos/chat-message'
 import type { CommunityChat } from '~/src/proto/communities/v1/communities'
 import type { WakuMessage } from 'js-waku'
 
@@ -441,11 +443,11 @@ export class Chat {
       messageType: 'COMMUNITY_CHAT' as MessageType,
       sticker: { hash: '', pack: 0 },
       image: {
-        type: 'JPEG',
+        type: ImageType.JPEG,
         payload: new Uint8Array([]),
       },
       audio: {
-        type: 'AAC',
+        type: AudioMessage.AudioType.AAC,
         payload: new Uint8Array([]),
         durationMs: BigInt(0),
       },
@@ -478,7 +480,7 @@ export class Chat {
         payload: image.payload,
       },
       audio: {
-        type: 'AAC',
+        type: AudioMessage.AudioType.AAC,
         payload: new Uint8Array([]),
         durationMs: BigInt(0),
       },
