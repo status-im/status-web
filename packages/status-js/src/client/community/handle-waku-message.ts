@@ -61,6 +61,7 @@ export function handleWakuMessage(
     decodedProtocol?.publicMessage ?? wakuMessage.payload,
     signerPublicKeyBytes
   )
+  const messageTimestamp = wakuMessage.timestamp
   const signerPublicKey = `0x${bytesToHex(signerPublicKeyBytes)}`
 
   // already handled
@@ -112,7 +113,7 @@ export function handleWakuMessage(
             })
 
             // handle
-            chat.handleNewMessage(chatMessage)
+            chat.handleNewMessage(chatMessage, messageTimestamp)
 
             break
           }
@@ -145,6 +146,7 @@ export function handleWakuMessage(
             chat.handleEditedMessage(
               messageId,
               decodedPayload.text,
+              decodedPayload.clock,
               signerPublicKey
             )
 
@@ -176,7 +178,11 @@ export function handleWakuMessage(
               return
             }
 
-            chat.handleDeletedMessage(messageId, signerPublicKey)
+            chat.handleDeletedMessage(
+              messageId,
+              decodedPayload.clock,
+              signerPublicKey
+            )
 
             break
           }
@@ -206,7 +212,11 @@ export function handleWakuMessage(
               return
             }
 
-            chat.handlePinnedMessage(messageId, decodedPayload.pinned)
+            chat.handlePinnedMessage(
+              messageId,
+              decodedPayload.clock,
+              decodedPayload.pinned
+            )
 
             break
           }
@@ -236,7 +246,12 @@ export function handleWakuMessage(
               return
             }
 
-            chat.handleEmojiReaction(messageId, decodedPayload, signerPublicKey)
+            chat.handleEmojiReaction(
+              messageId,
+              decodedPayload,
+              decodedPayload.clock,
+              signerPublicKey
+            )
 
             break
           }

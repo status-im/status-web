@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import { useMatch } from 'react-router-dom'
+
 import { UserProfileDialog } from '~/src/components/user-profile-dialog'
 import { useChatContext } from '~/src/contexts/chat-context'
 import { BellIcon } from '~/src/icons/bell-icon'
@@ -56,27 +58,22 @@ interface Props {
 
 export const ChatMessage = (props: Props) => {
   const { client, account } = useProtocol()
+  const { params } = useMatch(':id')!
 
+  const chatId = params.id!
   const { message } = props
 
   const mention = false
   const pinned = false
 
-  const {
-    messageId,
-    chatId,
-    contentType,
-    clock,
-    reactions,
-    sender,
-    responseTo,
-  } = message
+  const { messageId, contentType, clock, reactions, signer, responseTo } =
+    message
 
   // TODO: remove usage of 0x prefix
-  const owner = '0x' + account?.publicKey === sender
-  const chat = client.community.getChatById(chatId)
+  const owner = '0x' + account?.publicKey === signer
+  const chat = client.community.getChat(chatId)
 
-  const member = client.community.getMember(sender) ?? {}
+  const member = client.community.getMember(signer) ?? {}
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
