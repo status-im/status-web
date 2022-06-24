@@ -1,5 +1,5 @@
 import { keccak256 } from 'ethereum-cryptography/keccak'
-import { bytesToHex, hexToBytes } from 'ethereum-cryptography/utils'
+import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 
 /**
  * waku spec: https://rfc.vac.dev/spec/23/#bridging-waku-v1-and-waku-v2
@@ -9,8 +9,8 @@ import { bytesToHex, hexToBytes } from 'ethereum-cryptography/utils'
 const TOPIC_LENGTH = 4
 
 export function idToContentTopic(id: string): string {
-  const hash = keccak256(hexToBytes(id))
+  const hash = keccak256(utf8ToBytes(id))
   const topic = hash.slice(0, TOPIC_LENGTH)
 
-  return `/waku/1/${bytesToHex(topic)}/rfc26`
+  return `/waku/1/0x${bytesToHex(topic)}/rfc26`
 }
