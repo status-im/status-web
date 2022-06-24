@@ -2,8 +2,8 @@ import { keccak256 } from 'ethereum-cryptography/keccak'
 import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
 import { bytesToHex, concatBytes } from 'ethereum-cryptography/utils'
 
-import { compressPublicKey } from './utils/compress-public-key'
-import { generateUsername } from './utils/generate-username'
+import { compressPublicKey } from '../utils/compress-public-key'
+import { generateUsername } from '../utils/generate-username'
 
 export class Account {
   public privateKey: string

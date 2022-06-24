@@ -6,13 +6,13 @@ import { MessageType } from '~/protos/enums'
 import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
 import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
 import { compressPublicKey } from '~/src/utils/compress-public-key'
+import { generateKeyFromPassword } from '~/src/utils/generate-key-from-password'
+import { idToContentTopic } from '~/src/utils/id-to-content-topic'
 
-import { idToContentTopic } from '../../contentTopic'
-import { createSymKeyFromPassword } from '../../encryption'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
-import type { Client } from '../../client'
+import type { Client } from '../client'
 import type {
   CommunityChat,
   CommunityDescription,
@@ -44,7 +44,7 @@ export class Community {
 
   public async start() {
     this.contentTopic = idToContentTopic(this.publicKey)
-    this.symmetricKey = await createSymKeyFromPassword(this.publicKey)
+    this.symmetricKey = await generateKeyFromPassword(this.publicKey)
 
     // Waku
     this.client.waku.store.addDecryptionKey(this.symmetricKey, {
@@ -147,14 +147,24 @@ export class Community {
   private unobserveChatMessages = (
     chatDescription: CommunityDescription['chats']
   ) => {
-    const contentTopics = Object.keys(chatDescription).map(chatUuid => {
+    const contentTopics: string[] = []
+
+    for (const chatUuid of Object.keys(chatDescription)) {
       const chat = this.chats.get(chatUuid)
-      const contentTopic = chat!.contentTopic
+
+      if (!chat) {
+        continue
+      }
+
+      const contentTopic = chat.contentTopic
 
       this.chats.delete(chatUuid)
+      contentTopics.push(contentTopic)
+    }
 
-      return contentTopic
-    })
+    if (!contentTopics.length) {
+      return
+    }
 
     this.client.waku.relay.deleteObserver(
       this.client.handleWakuMessage,
