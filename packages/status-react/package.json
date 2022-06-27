@@ -2,7 +2,14 @@
   "name": "@status-im/react",
   "version": "0.0.0",
   "license": "MIT OR Apache-2.0",
-  "homepage": "https://github.com/status-im/status-web",
+  "type": "module",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.es.js",
+    "default": "./dist/index.es.js"
+  },
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "url": "https://github.com/status-im/status-web.git",
     "directory": "packages/status-react",
@@ -11,18 +18,14 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
-  "source": "src/index.tsx",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/types.d.ts",
   "scripts": {
-    "prebuild": "rm -rf dist",
-    "build": "parcel build",
-    "build:types": "tsc --emitDeclarationOnly",
-    "typecheck": "tsc --noEmit",
+    "dev": "vite build --watch",
+    "build": "vite build && yarn typegen",
+    "typecheck": "tsc",
+    "typegen": "tsc --noEmit false --emitDeclarationOnly --paths null || true",
     "lint": "eslint src",
     "format": "prettier --write src",
-    "clean": "rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.0.0",
@@ -45,9 +48,7 @@
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
     "qrcode.react": "^3.0.1",
-    "react": "^17.0.2",
     "react-content-loader": "^6.2.0",
-    "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
     "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.1",
@@ -58,7 +59,9 @@
     "@types/hcaptcha__react-hcaptcha": "^0.1.5",
     "@types/node": "^16.9.6",
     "@types/react": "^17.0.16",
-    "@types/styled-components": "^5.1.12"
+    "@types/styled-components": "^5.1.12",
+    "@vitejs/plugin-react": "^1.3.2",
+    "happy-dom": "^5.3.1"
   },
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0",
