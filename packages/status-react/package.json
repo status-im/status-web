@@ -4,12 +4,12 @@
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "exports": {
-    "types": "./dist/index.d.ts",
+    "types": "./dist/types/index.d.ts",
     "import": "./dist/index.es.js",
     "default": "./dist/index.es.js"
   },
   "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "repository": {
     "url": "https://github.com/status-im/status-web.git",
     "directory": "packages/status-react",
