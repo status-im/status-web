@@ -1,4 +1,6 @@
-import { generateUsername } from './generate-username'
+import { describe, expect, it } from 'vitest'
+
+import { generateUsername } from '~/src/utils/generate-username'
 
 describe('generateUsername', () => {
   it('should generate the username', async () => {

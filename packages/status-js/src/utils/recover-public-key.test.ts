@@ -1,4 +1,5 @@
 import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
+import { describe, expect, it } from 'vitest'
 
 import { Account } from '../client/account'
 import { recoverPublicKey } from './recover-public-key'

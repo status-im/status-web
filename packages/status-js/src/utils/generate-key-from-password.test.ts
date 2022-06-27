@@ -1,4 +1,5 @@
 import { bytesToHex } from 'ethereum-cryptography/utils'
+import { describe, expect, it } from 'vitest'
 
 import { generateKeyFromPassword } from './generate-key-from-password'
 

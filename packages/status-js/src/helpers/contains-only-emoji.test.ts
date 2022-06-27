@@ -1,3 +1,5 @@
+import { describe, expect, it } from 'vitest'
+
 import { containsOnlyEmoji } from './contains-only-emoji'
 
 describe('containsOnlyEmoji', () => {

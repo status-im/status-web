@@ -21,6 +21,7 @@
   "scripts": {
     "dev": "vite build --watch",
     "build": "vite build && yarn typegen",
+    "#test": "vitest",
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly --paths null || true",
     "lint": "eslint src",

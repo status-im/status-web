@@ -1,6 +1,7 @@
 import { keccak256 } from 'ethereum-cryptography/keccak'
 import * as secp from 'ethereum-cryptography/secp256k1'
 import { utf8ToBytes } from 'ethereum-cryptography/utils'
+import { describe, expect, it } from 'vitest'
 
 import { Account } from './account'
 
