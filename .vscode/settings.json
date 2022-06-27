@@ -1,5 +1,5 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "jestRunIt.debugTestLabel": "Debug",
-  "jestRunIt.runTestLabel": "Run"
+  "eslint.packageManager": "yarn",
+  "npm.packageManager": "yarn"
 }
