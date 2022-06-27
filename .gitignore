@@ -72,3 +72,6 @@ node_modules/
 
 # Serverless directories
 .serverless/
+
+# Turborepo
+.turbo
