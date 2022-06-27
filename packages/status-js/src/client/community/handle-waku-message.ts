@@ -1,16 +1,16 @@
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
-import { ApplicationMetadataMessage } from '../../../protos/application-metadata-message'
+import { CommunityDescription } from '../../proto/communities/v1/communities'
+import { ApplicationMetadataMessage } from '../../protos/application-metadata-message'
 import {
   ChatMessage,
   DeleteMessage,
   EditMessage,
   MessageType,
-} from '../../../protos/chat-message'
-import { EmojiReaction } from '../../../protos/emoji-reaction'
-import { PinMessage } from '../../../protos/pin-message'
-import { ProtocolMessage } from '../../../protos/protocol-message'
-import { CommunityDescription } from '../../proto/communities/v1/communities'
+} from '../../protos/chat-message'
+import { EmojiReaction } from '../../protos/emoji-reaction'
+import { PinMessage } from '../../protos/pin-message'
+import { ProtocolMessage } from '../../protos/protocol-message'
 import { payloadToId } from '../../utils/payload-to-id'
 import { recoverPublicKey } from '../../utils/recover-public-key'
 import { getChatUuid } from './get-chat-uuid'

@@ -1,5 +1,5 @@
+import type { ChatMessage as ChatMessageProto } from '../../protos/chat-message'
 import type { ChatMessage } from '../chat'
-import type { ChatMessage as ChatMessageProto } from '~/protos/chat-message'
 
 export function mapChatMessage(
   decodedMessage: ChatMessageProto,

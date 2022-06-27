@@ -3,10 +3,6 @@
   "include": ["src"],
   "compilerOptions": {
     "outDir": "dist",
-    "declarationDir": "dist/types",
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"]
-    }
+    "declarationDir": "dist/types"
   }
 }
