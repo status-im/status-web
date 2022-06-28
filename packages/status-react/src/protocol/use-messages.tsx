@@ -19,63 +19,6 @@ export type Reactions = {
   }
 }
 
-interface BaseMessage {
-  id: string
-  type: 'text' | 'image' | 'image-text'
-  contact: {
-    name: string
-    imageUrl?: string
-  }
-  owner: boolean
-  pinned: boolean
-  mention: boolean
-  reply?: TextReply | ImageReply | ImageTextReply
-  reactions: Reactions
-}
-
-interface TextMessage extends BaseMessage {
-  type: 'text'
-  text: string
-}
-
-interface ImageMessage extends BaseMessage {
-  type: 'image'
-  imageUrl: string
-}
-interface ImageTextMessage extends BaseMessage {
-  type: 'image-text'
-  text: string
-  imageUrl: string
-}
-
-// export type Message = TextMessage | ImageMessage | ImageTextMessage
-
-interface BaseReply {
-  type: Message['type']
-  contact: {
-    name: string
-    imageUrl?: string
-  }
-}
-
-interface TextReply extends BaseReply {
-  type: 'text'
-  text: string
-}
-
-interface ImageReply extends BaseReply {
-  type: 'image'
-  imageUrl: string
-}
-
-interface ImageTextReply extends BaseReply {
-  type: 'image-text'
-  text: string
-  imageUrl: string
-}
-
-export type Reply = TextReply | ImageReply | ImageTextReply
-
 export type { Message }
 
 interface Result {

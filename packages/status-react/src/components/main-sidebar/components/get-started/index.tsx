@@ -1,25 +1,25 @@
 import React from 'react'
 
-import { CreateProfileDialog } from '~/src/components/create-profile-dialog'
-import { useLocalStorage } from '~/src/hooks/use-local-storage'
+// import { CreateProfileDialog } from '~/src/components/create-profile-dialog'
+// import { useLocalStorage } from '~/src/hooks/use-local-storage'
 import { useAccount } from '~/src/protocol'
 import { Button, Flex } from '~/src/system'
-import { DialogTrigger } from '~/src/system/dialog'
+// import { DialogTrigger } from '~/src/system/dialog'
 import { Grid } from '~/src/system/grid'
 import { Heading } from '~/src/system/heading'
 
 // import { ConnectWalletDialog } from './connect-wallet-dialog'
 // import { SyncStatusProfileDialog } from './sync-status-profile-dialog'
-import { ThrowawayProfileFoundDialog } from './throwaway-profile-found-dialog'
+// import { ThrowawayProfileFoundDialog } from './throwaway-profile-found-dialog'
 
 export const GetStarted = () => {
-  const [throwawayProfile] = useLocalStorage('cipherIdentityt', null)
+  // const [throwawayProfile] = useLocalStorage('cipherIdentityt', null)
 
-  const handleSkip = () => {
-    // TODO: Add skip logic
-  }
+  // const handleSkip = () => {
+  //   // TODO: Add skip logic
+  // }
 
-  const { account, createAccount } = useAccount()
+  const { createAccount } = useAccount()
 
   return (
     <Flex direction="column" align="center" gap={5} css={{ padding: '30px 0' }}>

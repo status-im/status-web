@@ -5,7 +5,7 @@ import { Dialog, Grid, Text } from '~/src/system'
 
 // TODO: Add wallet integration
 export const ConnectWalletDialog = () => {
-  const [wallet, setWallet] = useState<'coinbase' | undefined>()
+  const [, setWallet] = useState<'coinbase' | undefined>()
 
   // TODO: Add wallet logos
   return (
