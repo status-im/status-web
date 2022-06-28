@@ -1,25 +1,24 @@
 import { PageDirection } from 'js-waku'
 
+import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import {
   AudioMessage,
   ChatMessage as ChatMessageProto,
   DeleteMessage,
   EditMessage,
   ImageType,
-} from '~/protos/chat-message'
-import { EmojiReaction } from '~/protos/emoji-reaction'
-
-import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
+} from '../protos/chat-message'
+import { EmojiReaction } from '../protos/emoji-reaction'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
-import type { MessageType } from '../../protos/enums'
+import type { CommunityChat } from '../proto/communities/v1/communities'
+import type { ImageMessage } from '../protos/chat-message'
+import type { MessageType } from '../protos/enums'
 import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
-import type { ImageMessage } from '~/protos/chat-message'
-import type { CommunityChat } from '~/src/proto/communities/v1/communities'
 import type { WakuMessage } from 'js-waku'
 
 export type ChatMessage = ChatMessageProto & {

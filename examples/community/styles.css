@@ -2,4 +2,5 @@ body,
 html,
 #root {
   height: 100%;
+  overscroll-behavior-y: none;
 }

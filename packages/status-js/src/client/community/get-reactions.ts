@@ -1,4 +1,4 @@
-import type { EmojiReaction } from '../../../protos/emoji-reaction'
+import type { EmojiReaction } from '../../protos/emoji-reaction'
 
 type Reaction = Exclude<`${EmojiReaction.Type}`, 'UNKNOWN_EMOJI_REACTION_TYPE'>
 

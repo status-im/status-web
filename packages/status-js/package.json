@@ -2,6 +2,14 @@
   "name": "@status-im/js",
   "version": "0.0.0",
   "license": "MIT OR Apache-2.0",
+  "type": "module",
+  "exports": {
+    "types": "./dist/types/index.d.ts",
+    "import": "./dist/index.es.js",
+    "default": "./dist/index.es.js"
+  },
+  "module": "dist/index.es.js",
+  "types": "dist/types/index.d.ts",
   "repository": {
     "url": "https://github.com/status-im/status-web.git",
     "directory": "packages/status-js",
@@ -10,32 +18,16 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
-  "source": "src/index.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
-  "targets": {
-    "main": {
-      "includeNodeModules": [
-        "protons-runtime",
-        "uint8arraylist"
-      ]
-    }
-  },
   "scripts": {
-    "prebuild": "rm -rf dist",
-    "dev": "parcel",
-    "build": "parcel build",
-    "build:vite": "vite build",
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:protos": "protons protos/*.proto",
-    "typecheck": "tsc --noEmit",
+    "dev": "vite build --watch",
+    "build": "vite build && yarn typegen",
+    "test": "vitest",
     "lint": "eslint src",
+    "typecheck": "tsc",
+    "typegen": "tsc --noEmit false --emitDeclarationOnly --paths null || true",
     "format": "prettier --write src",
-    "clean": "rm -rf node_modules && rm -rf dist",
-    "proto": "run-s 'proto:*'",
-    "proto:lint": "buf lint",
-    "proto:build": "buf generate"
+    "protos": "protons protos/*.proto",
+    "clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
     "ethereum-cryptography": "^1.0.3",
@@ -45,7 +37,6 @@
     "protons-runtime": "^1.0.4"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5",
     "protons": "^3.0.4"
   }
 }
