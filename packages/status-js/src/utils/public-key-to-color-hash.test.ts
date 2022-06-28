@@ -25,19 +25,19 @@ test('returns color hash from public key', () => {
   ])
 })
 
-test('returns undefined for invalid public keys', () => {
-  expect(publicKeyToColorHash('abc')).toBeUndefined()
-  expect(publicKeyToColorHash('0x01')).toBeUndefined()
-  expect(
+test('throws for invalid public keys', () => {
+  expect(() => publicKeyToColorHash('abc')).toThrow()
+  expect(() => publicKeyToColorHash('0x01')).toThrow()
+  expect(() =>
     publicKeyToColorHash(
       '0x01e25da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8'
     )
-  ).toBeUndefined()
-  expect(
+  ).toThrow()
+  expect(() =>
     publicKeyToColorHash(
       '0x04425da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8'
     )
-  ).toBeUndefined()
+  ).toThrow()
 })
 
 test('returns color hash from hex', () => {
