@@ -22,7 +22,7 @@ jobs:
           with:
             fetch-depth: 2
 
-        - name: Setup Node.js environment
+        - name: Setup Node.js ${{ matrix.node-version }}
           uses: actions/setup-node@v3
           with:
             node-version: 16
@@ -33,6 +33,12 @@ jobs:
 
         - name: Build
           run: yarn build
+
+        - name: Typecheck
+          run: yarn typecheck
+
+        - name: Lint
+          run: yarn lint && yarn format:check
 
         - name: Test
           run: yarn test

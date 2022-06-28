@@ -11,7 +11,7 @@
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --parallel --filter=@status-im/*",
     "build": "turbo run build  --filter=@status-im/*",
-    "lint": "turbo run lint --filter=@status-im/*",
+    "typecheck": "turbo run typecheck --filter=@status-im/*",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint/.eslint-cache .",
     "format": "prettier --cache --write .",
     "format:check": "prettier --check .",
