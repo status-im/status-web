@@ -5,7 +5,7 @@ import {
   publicKeyToColorHash,
 } from './public-key-to-color-hash'
 
-test('returns color hash from public key', () => {
+test('should return color hash from public key', () => {
   expect(
     publicKeyToColorHash(
       '0x04e25da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8'
@@ -25,7 +25,7 @@ test('returns color hash from public key', () => {
   ])
 })
 
-test('throws for invalid public keys', () => {
+test('should throw for invalid public keys', () => {
   expect(() => publicKeyToColorHash('abc')).toThrow()
   expect(() => publicKeyToColorHash('0x01')).toThrow()
   expect(() =>
@@ -40,14 +40,14 @@ test('throws for invalid public keys', () => {
   ).toThrow()
 })
 
-test('returns color hash from hex', () => {
+test('should return color hash from hex', () => {
   expect(hexToColorHash('0', 4, 4)).toEqual([[1, 0]])
   expect(hexToColorHash('1', 4, 4)).toEqual([[1, 1]])
   expect(hexToColorHash('4', 4, 4)).toEqual([[2, 0]])
   expect(hexToColorHash('F', 4, 4)).toEqual([[4, 3]])
 })
 
-test('returns color hash from hex with redecued collision resistance', () => {
+test('should return color hash from hex with redecued collision resistance', () => {
   expect(hexToColorHash('FF', 4, 4)).toEqual([
     [4, 3],
     [4, 0],
