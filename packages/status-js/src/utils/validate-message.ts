@@ -1,4 +1,4 @@
-import type { ChatMessage } from '~/protos/chat-message'
+import type { ChatMessage } from '../protos/chat-message'
 
 // TODO?: maybe this should normalize the message?
 export function validateMessage(message: ChatMessage): boolean {

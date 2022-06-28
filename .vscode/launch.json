@@ -4,20 +4,27 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Client",
-      "program": "${workspaceFolder}/packages/status-js/src/index.ts",
-      "preLaunchTask": "npm: build:status-js",
-      "outFiles": ["${workspaceFolder}/packages/status-js/dist/index.js"],
-      "sourceMaps": true,
+      "name": "Debug Client",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**"],
+      "cwd": "${workspaceFolder}/packages/status-js",
+      "program": "${workspaceRoot}/node_modules/vite-node/dist/cli.mjs",
+      "args": ["src/index.ts"],
       "smartStep": true,
-      "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": [
-        "${workspaceFolder}/node_modules/**/*",
-        "<node_internals>/**/*.js"
-      ],
-      "sourceMapPathOverrides": {
-        "packages/status-js/*": "${workspaceFolder}/packages/status-js/*"
-      }
+      "console": "integratedTerminal",
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Test File",
+      "autoAttachChildProcesses": true,
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
+      "args": ["run", "${relativeFile}"],
+      "smartStep": true,
+      "console": "integratedTerminal",
+      "sourceMaps": true
     }
   ]
 }

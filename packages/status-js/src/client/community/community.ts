@@ -1,22 +1,21 @@
 import { hexToBytes } from 'ethereum-cryptography/utils'
 import { waku_message } from 'js-waku'
 
-import { CommunityRequestToJoin } from '~/protos/communities'
-import { MessageType } from '~/protos/enums'
-import { getDifferenceByKeys } from '~/src/helpers/get-difference-by-keys'
-import { getObjectsDifference } from '~/src/helpers/get-objects-difference'
-import { compressPublicKey } from '~/src/utils/compress-public-key'
-import { generateKeyFromPassword } from '~/src/utils/generate-key-from-password'
-import { idToContentTopic } from '~/src/utils/id-to-content-topic'
-
+import { getDifferenceByKeys } from '../../helpers/get-difference-by-keys'
+import { getObjectsDifference } from '../../helpers/get-objects-difference'
+import { CommunityRequestToJoin } from '../../protos/communities'
+import { MessageType } from '../../protos/enums'
+import { compressPublicKey } from '../../utils/compress-public-key'
+import { generateKeyFromPassword } from '../../utils/generate-key-from-password'
+import { idToContentTopic } from '../../utils/id-to-content-topic'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
-import type { Client } from '../client'
 import type {
   CommunityChat,
   CommunityDescription,
-} from '~/src/proto/communities/v1/communities'
+} from '../../proto/communities/v1/communities'
+import type { Client } from '../client'
 
 export class Community {
   private client: Client
