@@ -46,9 +46,9 @@ export const Community = (props: Props) => {
 
   return (
     <Router>
-      <AppProvider config={props}>
-        <ThemeProvider theme={theme}>
-          <ProtocolProvider options={{ publicKey: props.publicKey }}>
+      <ProtocolProvider options={{ publicKey: props.publicKey }}>
+        <AppProvider config={props}>
+          <ThemeProvider theme={theme}>
             <DialogProvider>
               <GlobalStyle />
               <Wrapper>
@@ -65,9 +65,9 @@ export const Community = (props: Props) => {
                 </Routes>
               </Wrapper>
             </DialogProvider>
-          </ProtocolProvider>
-        </ThemeProvider>
-      </AppProvider>
+          </ThemeProvider>
+        </AppProvider>
+      </ProtocolProvider>
     </Router>
   )
 }

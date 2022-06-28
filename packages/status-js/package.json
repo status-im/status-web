@@ -19,7 +19,7 @@
     "url": "https://github.com/status-im/status-web/issues"
   },
   "scripts": {
-    "dev": "vite build --watch",
+    "dev": "vite build --watch --mode development",
     "build": "vite build && yarn typegen",
     "test": "vitest",
     "lint": "eslint src",
