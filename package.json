@@ -12,8 +12,8 @@
     "dev": "turbo run dev --parallel --filter=@status-im/*",
     "build": "turbo run build  --filter=@status-im/*",
     "lint": "turbo run lint --filter=@status-im/*",
-    "check": "turbo run check --filter=@status-im/*",
-    "format": "prettier --write .",
+    "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint/.eslint-cache .",
+    "format": "prettier --cache --write .",
     "format:check": "prettier --check .",
     "clean": "turbo run clean && rm -rf node_modules .parcel-cache"
   },
