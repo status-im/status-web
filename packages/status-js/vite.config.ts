@@ -1,6 +1,5 @@
 /// <reference types="vitest" />
 
-import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 import { dependencies } from './package.json'
@@ -10,21 +9,17 @@ const external = [
   // ...Object.keys(peerDependencies || {}),
 ].map(name => new RegExp(`^${name}(/.*)?`))
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ mode }) => {
   return {
-    resolve: {
-      alias: {
-        '~': resolve('.'),
-      },
-    },
     build: {
+      target: 'es2020',
       lib: {
         entry: './src/index.ts',
         fileName: 'index',
         formats: ['es'],
       },
-      target: 'es2020',
-      emptyOutDir: command === 'build',
+      sourcemap: true,
+      emptyOutDir: mode === 'production',
       rollupOptions: {
         external,
       },

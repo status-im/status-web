@@ -11,7 +11,7 @@ const external = [
   ...Object.keys(peerDependencies || {}),
 ].map(name => new RegExp(`^${name}(/.*)?`))
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
@@ -19,15 +19,14 @@ export default defineConfig(({ command }) => {
       },
     },
     build: {
+      target: 'es2020',
       lib: {
         entry: './src/index.tsx',
         fileName: 'index',
         formats: ['es'],
       },
-      emptyOutDir: command === 'build',
-      // sourcemap: true,
-      target: 'es2020',
-
+      sourcemap: true,
+      emptyOutDir: mode === 'production',
       rollupOptions: {
         external,
       },
