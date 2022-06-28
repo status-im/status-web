@@ -32,14 +32,14 @@
     "plugin:jsx-a11y/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    // "plugin:node/recommended",
-    // "plugin:jest/recommended",
     "prettier"
   ],
   "rules": {
     "react/prop-types": 0,
     // "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/consistent-type-imports": "error",
+    // TODO: turn on this rul
+    "@typescript-eslint/no-non-null-assertion": "off",
     // "@typescript-eslint/consistent-type-exports": "error",
     "simple-import-sort/imports": [
       "error",
