@@ -17,7 +17,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Current Test",
+      "name": "Debug Test File",
       "autoAttachChildProcesses": true,
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",

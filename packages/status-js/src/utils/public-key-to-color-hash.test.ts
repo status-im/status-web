@@ -47,7 +47,7 @@ test('should return color hash from hex', () => {
   expect(hexToColorHash('F', 4, 4)).toEqual([[4, 3]])
 })
 
-test('should return color hash from hex with redecued collision resistance', () => {
+test('should return color hash from hex with reduced collision resistance', () => {
   expect(hexToColorHash('FF', 4, 4)).toEqual([
     [4, 3],
     [4, 0],
