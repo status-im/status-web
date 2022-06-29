@@ -7,7 +7,7 @@ import { useMatch } from 'react-router-dom'
 import { MemberSidebar } from '~/src/components/member-sidebar'
 import { useAppState } from '~/src/contexts/app-context'
 import { ChatProvider, useChatContext } from '~/src/contexts/chat-context'
-import { useChat, useMessages, useProtocol } from '~/src/protocol'
+import { useAccount, useChat, useMessages, useProtocol } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
 import { Avatar, Flex, Heading, Text } from '~/src/system'
 
@@ -38,6 +38,7 @@ const ChatStart = (props: ChatStartProps) => {
 const Body = () => {
   const { client } = useProtocol()
   const { state } = useChatContext()
+  const { account } = useAccount()
 
   const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
   const chatId = params.id!
@@ -63,7 +64,7 @@ const Body = () => {
           <ChatMessage key={message.messageId} message={message} />
         ))}
       </ContentWrapper>
-      <ChatInput onSubmit={handleMessageSubmit} />
+      {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>
   )
 }
