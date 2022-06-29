@@ -6,9 +6,7 @@ interface Props {
   name?: string
 }
 
-const EmojiHash = (props: Props) => {
-  const { name } = props
-
+const EmojiHash = () => {
   return (
     <Base>
       🎩🍞🥑🦍🌈📡

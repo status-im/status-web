@@ -20,7 +20,8 @@
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "build": "vite build && yarn typegen",
+    "build": "vite build",
+    "postbuild": "yarn typegen",
     "#test": "vitest",
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly --paths null || true",
