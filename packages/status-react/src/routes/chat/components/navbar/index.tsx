@@ -2,14 +2,17 @@ import React from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-import { ChatMenu } from '~/src/components/chat-menu'
+// import { ChatMenu } from '~/src/components/chat-menu'
 import { useAppState } from '~/src/contexts/app-context'
-import { BellIcon } from '~/src/icons/bell-icon'
-import { DotsIcon } from '~/src/icons/dots-icon'
+// import { BellIcon } from '~/src/icons/bell-icon'
+// import { DotsIcon } from '~/src/icons/dots-icon'
 import { GroupIcon } from '~/src/icons/group-icon'
 import { useChat } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
-import { DropdownMenuTrigger, Flex, IconButton, Separator } from '~/src/system'
+import {
+  /*DropdownMenuTrigger,*/ Flex,
+  IconButton /*,Separator*/,
+} from '~/src/system'
 
 import { ChatInfo } from '../chat-info'
 
@@ -40,18 +43,18 @@ export const Navbar = (props: Props) => {
           </IconButton>
         )}
 
-        <DropdownMenuTrigger>
+        {/* <DropdownMenuTrigger>
           <IconButton label="Options">
             <DotsIcon />
           </IconButton>
           <ChatMenu type="dropdown" />
-        </DropdownMenuTrigger>
+        </DropdownMenuTrigger> */}
 
-        <Separator orientation="vertical" css={{ height: 24 }} />
+        {/* <Separator orientation="vertical" css={{ height: 24 }} /> */}
 
-        <IconButton label="Show Activity Center">
+        {/* <IconButton label="Show Activity Center">
           <BellIcon />
-        </IconButton>
+        </IconButton> */}
       </Flex>
     </NavbarWrapper>
   )
