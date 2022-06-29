@@ -1,20 +1,44 @@
 name: CI
 
 on:
-  pull_request:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  pull_request:
+    types: [opened, synchronize]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup node 16
-        uses: actions/setup-node@v1
-        with:
-          node-version: 16.x
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
-      - run: DEBUG=communities:test* yarn test
+  build:
+      name: Build and Test
+      timeout-minutes: 15
+      runs-on: ${{ matrix.os }}
+
+      strategy:
+        matrix:
+          os: [ubuntu-latest, macos-latest]
+
+      steps:
+        - name: Check out code
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 2
+
+        - name: Setup Node.js ${{ matrix.node-version }}
+          uses: actions/setup-node@v3
+          with:
+            node-version: 16
+            cache: 'yarn'
+
+        - name: Install dependencies
+          run: yarn --frozen-lockfile
+
+        - name: Build
+          run: yarn build
+
+        - name: Typecheck
+          run: yarn typecheck
+
+        - name: Lint
+          run: yarn lint && yarn format:check
+
+        - name: Test
+          run: yarn test

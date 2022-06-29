@@ -20,11 +20,12 @@
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "build": "vite build && yarn typegen",
+    "build": "vite build",
+    "postbuild": "yarn typegen",
     "test": "vitest",
-    "lint": "eslint src",
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly --paths null || true",
+    "lint": "eslint src",
     "format": "prettier --write src",
     "protos": "protons protos/*.proto",
     "clean": "rm -rf dist node_modules .turbo"
