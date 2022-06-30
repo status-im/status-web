@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { useChatContext } from '~/src/contexts/chat-context'
-import { EmojiIcon } from '~/src/icons/emoji-icon'
-import { GifIcon } from '~/src/icons/gif-icon'
-import { ImageIcon } from '~/src/icons/image-icon'
-import { StickerIcon } from '~/src/icons/sticker-icon'
+// import { EmojiIcon } from '~/src/icons/emoji-icon'
+// import { GifIcon } from '~/src/icons/gif-icon'
+// import { ImageIcon } from '~/src/icons/image-icon'
+// import { StickerIcon } from '~/src/icons/sticker-icon'
 import { styled } from '~/src/styles/config'
-import { Box, Flex, IconButton } from '~/src/system'
 
+// import { Box, Flex, IconButton } from '~/src/system'
 import { InputReply } from './input-reply'
 
 interface Props {
@@ -47,11 +47,11 @@ export const ChatInput = (props: Props) => {
 
   return (
     <Wrapper>
-      <Box css={{ paddingBottom: 6 }}>
+      {/* <Box css={{ paddingBottom: 6 }}>
         <IconButton label="Add file" color="gray">
           <ImageIcon />
         </IconButton>
-      </Box>
+      </Box> */}
       <Bubble>
         {state.message && (
           <InputReply message={state.message} member={state.member} />
@@ -64,7 +64,7 @@ export const ChatInput = (props: Props) => {
             onChange={handleChange}
             onKeyDown={handleKeyDown}
           />
-          <Flex>
+          {/* <Flex>
             <IconButton label="Pick emoji">
               <EmojiIcon />
             </IconButton>
@@ -74,7 +74,7 @@ export const ChatInput = (props: Props) => {
             <IconButton label="Pick gif">
               <GifIcon />
             </IconButton>
-          </Flex>
+          </Flex> */}
         </InputWrapper>
       </Bubble>
     </Wrapper>

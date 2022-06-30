@@ -56,7 +56,17 @@ export const CommunityDialog = () => {
               fill="currentColor"
             />
           </svg>
-          <Button href="https://status.im/get">Download Status</Button>
+          <Button
+            onClick={() =>
+              window.open(
+                'https://status.im/get',
+                '_blank',
+                'noopener,noreferrer'
+              )
+            }
+          >
+            Download Status
+          </Button>
         </Flex>
       </Dialog.Body>
     </Dialog>

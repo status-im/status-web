@@ -4,7 +4,7 @@ import { useMatch } from 'react-router-dom'
 
 import { UserProfileDialog } from '~/src/components/user-profile-dialog'
 import { useChatContext } from '~/src/contexts/chat-context'
-import { BellIcon } from '~/src/icons/bell-icon'
+// import { BellIcon } from '~/src/icons/bell-icon'
 // import { PinIcon } from '~/src/icons/pin-icon'
 import { useProtocol } from '~/src/protocol'
 import { styled } from '~/src/styles/config'
@@ -14,9 +14,9 @@ import {
   Button,
   ContextMenu,
   ContextMenuTrigger,
-  DropdownMenu,
-  DropdownMenuTrigger,
-  EmojiHash,
+  // DropdownMenu,
+  // DropdownMenuTrigger,
+  // EmojiHash,
   Flex,
   Image,
   Text,
@@ -176,15 +176,15 @@ export const ChatMessage = (props: Props) => {
           {responseTo && <MessageReply messageId={responseTo} />}
           <Flex gap={2}>
             <Box>
-              <DropdownMenuTrigger>
-                <button type="button">
-                  <Avatar
-                    size={44}
-                    name={member.username}
-                    colorHash={member.colorHash}
-                  />
-                </button>
-                <DropdownMenu>
+              {/* <DropdownMenuTrigger>
+                <button type="button"> */}
+              <Avatar
+                size={44}
+                name={member.username}
+                colorHash={member.colorHash}
+              />
+              {/* </button> */}
+              {/* <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
                     <Avatar size="36" />
                     <Text>{member.username}</Text>
@@ -211,7 +211,7 @@ export const ChatMessage = (props: Props) => {
                     Mark as Untrustworthy
                   </DropdownMenu.Item>
                 </DropdownMenu>
-              </DropdownMenuTrigger>
+              </DropdownMenuTrigger> */}
             </Box>
 
             <Box css={{ flex: 1 }}>
