@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { MemoryRouter } from '@status-im/react'
 import dynamic from 'next/dynamic'
 

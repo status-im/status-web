@@ -1,8 +1,8 @@
 {
+  "name": "with-parcel",
   "private": true,
-  "name": "community",
-  "type": "module",
   "version": "0.0.0",
+  "type": "module",
   "browserslist": "> 0.5%, last 2 versions, not dead, not ios_saf < 13",
   "scripts": {
     "dev": "vite",
