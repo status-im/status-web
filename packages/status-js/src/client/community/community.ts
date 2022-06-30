@@ -7,6 +7,7 @@ import { CommunityRequestToJoin } from '../../protos/communities'
 import { MessageType } from '../../protos/enums'
 import { compressPublicKey } from '../../utils/compress-public-key'
 import { generateKeyFromPassword } from '../../utils/generate-key-from-password'
+import { getNextClock } from '../../utils/get-next-clock'
 import { idToContentTopic } from '../../utils/id-to-content-topic'
 import { Chat } from '../chat'
 import { Member } from '../member'
@@ -19,6 +20,7 @@ import type { Client } from '../client'
 
 export class Community {
   private client: Client
+  #clock: bigint
 
   /** Compressed. */
   public publicKey: string
@@ -36,6 +38,7 @@ export class Community {
     this.publicKey = publicKey
     this.id = publicKey.replace(/^0[xX]/, '')
 
+    this.#clock = BigInt(Date.now())
     this.chats = new Map()
     this.#members = new Map()
     this.#callbacks = new Set()
@@ -252,7 +255,7 @@ export class Community {
 
   public requestToJoin = async (chatId = '') => {
     const payload = CommunityRequestToJoin.encode({
-      clock: BigInt(Date.now()),
+      clock: this.setClock(this.#clock),
       chatId,
       communityId: hexToBytes(this.id),
       ensName: '',
@@ -275,5 +278,11 @@ export class Community {
 
   public isMember = (signerPublicKey: string): boolean => {
     return this.getMember(signerPublicKey) !== undefined
+  }
+
+  public setClock = (currentClock?: bigint): bigint => {
+    this.#clock = getNextClock(currentClock)
+
+    return this.#clock
   }
 }

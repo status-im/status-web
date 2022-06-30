@@ -10,6 +10,7 @@ import {
 } from '../protos/chat-message'
 import { EmojiReaction } from '../protos/emoji-reaction'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
+import { getNextClock } from '../utils/get-next-clock'
 import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
@@ -36,6 +37,7 @@ type FetchedMessage = { messageId: string; timestamp?: Date }
 
 export class Chat {
   private readonly client: Client
+  #clock: bigint
 
   public readonly uuid: string
   public readonly id: string
@@ -72,6 +74,7 @@ export class Chat {
     this.symmetricKey = options.symmetricKey
     this.description = options.description
 
+    this.#clock = BigInt(Date.now())
     this.chatCallbacks = new Set()
     this.#messages = new Map()
     this.#editTextEvents = new Map()
@@ -243,7 +246,7 @@ export class Chat {
     this.emitChange(description)
   }
 
-  public handleNewMessage = (newMessage: ChatMessage, timestamp?: Date) => {
+  public handleNewMessage = (newMessage: ChatMessage, timestamp: Date) => {
     // fetching in progress
     if (this.#fetchingMessages) {
       this.#oldestFetchedMessage = this.getOldestFetchedMessage(
@@ -432,7 +435,7 @@ export class Chat {
 
     // TODO: protos does not support optional fields :-(
     const payload = ChatMessageProto.encode({
-      clock: BigInt(Date.now()),
+      clock: this.setClock(this.#clock),
       timestamp: BigInt(Date.now()),
       text,
       responseTo: responseTo ?? '',
@@ -465,7 +468,7 @@ export class Chat {
 
   public sendImageMessage = async (image: ImageMessage) => {
     const payload = ChatMessageProto.encode({
-      clock: BigInt(Date.now()),
+      clock: this.setClock(this.#clock),
       timestamp: BigInt(Date.now()),
       text: '',
       responseTo: '',
@@ -516,7 +519,7 @@ export class Chat {
     }
 
     const payload = EditMessage.encode({
-      clock: BigInt(Date.now()),
+      clock: this.setClock(this.#clock),
       text,
       messageId,
       chatId: this.id,
@@ -550,7 +553,7 @@ export class Chat {
     }
 
     const payload = DeleteMessage.encode({
-      clock: BigInt(Date.now()),
+      clock: this.setClock(this.#clock),
       messageId,
       chatId: this.id,
       grant: new Uint8Array([]),
@@ -584,7 +587,7 @@ export class Chat {
     )
 
     const payload = EmojiReaction.encode({
-      clock: BigInt(Date.now()),
+      clock: this.setClock(this.#clock),
       chatId: this.id,
       messageType: 'COMMUNITY_CHAT' as MessageType,
       messageId,
@@ -635,5 +638,11 @@ export class Chat {
     }
 
     return message
+  }
+
+  public setClock = (currentClock?: bigint): bigint => {
+    this.#clock = getNextClock(currentClock)
+
+    return this.#clock
   }
 }
