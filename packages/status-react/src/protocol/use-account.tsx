@@ -5,8 +5,8 @@ import type { Account } from '@status-im/js'
 export const useAccount = () => {
   const { client, account, dispatch } = useProtocol()
 
-  const createAccount = () => {
-    const account = client.createAccount()
+  const createAccount = async () => {
+    const account = await client.createAccount()
     dispatch({ type: 'SET_ACCOUNT', account })
     // TODO: save account
 

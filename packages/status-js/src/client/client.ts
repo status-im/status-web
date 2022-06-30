@@ -91,11 +91,10 @@ class Client {
     await this.waku.stop()
   }
 
-  public createAccount = (): Account => {
+  public createAccount = async (): Promise<Account> => {
     this.account = new Account()
 
-    // TODO: joining part of creation of an account
-    // await this.community.requestToJoin()
+    await this.community.requestToJoin()
 
     return this.account
   }
