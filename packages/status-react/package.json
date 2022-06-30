@@ -1,6 +1,6 @@
 {
   "name": "@status-im/react",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.1",
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "exports": {
@@ -45,7 +45,7 @@
     "@radix-ui/react-toggle-group": "^0.1.5",
     "@radix-ui/react-tooltip": "^0.1.7",
     "@radix-ui/react-visually-hidden": "^0.1.4",
-    "@status-im/js": "^0.0.0",
+    "@status-im/js": "0.1.0-alpha.1",
     "@stitches/react": "^1.2.8",
     "emoji-mart": "^3.0.1",
     "html-entities": "^2.3.2",
@@ -68,5 +68,13 @@
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0",
     "react-dom": "^16.8.0 || ^17.0.0"
-  }
+  },
+  "files": [
+    "dist/",
+    "!dist/**/*.map",
+    "!dist/tsconfig.tsbuildinfo",
+    "LICENSE-MIT",
+    "LICENSE-APACHE-v2",
+    "package.json"
+  ]
 }
