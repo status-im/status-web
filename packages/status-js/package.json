@@ -1,6 +1,6 @@
 {
   "name": "@status-im/js",
-  "version": "0.0.0",
+  "version": "0.1.0-alpha.1",
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "exports": {
@@ -39,5 +39,13 @@
   },
   "devDependencies": {
     "protons": "^3.0.4"
-  }
+  },
+  "files": [
+    "dist/",
+    "!dist/**/*.map",
+    "!dist/tsconfig.tsbuildinfo",
+    "LICENSE-MIT",
+    "LICENSE-APACHE-v2",
+    "package.json"
+  ]
 }
