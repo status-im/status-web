@@ -114,6 +114,7 @@ export function communityPermissions_AccessToJSON(
 }
 
 export interface CommunityDescription {
+  // fixme?: bigint
   clock: number
   members: { [key: string]: CommunityMember }
   permissions: CommunityPermissions | undefined
