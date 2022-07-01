@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 
 import react from '@vitejs/plugin-react'
-import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 
 import { dependencies, peerDependencies } from './package.json'
@@ -13,11 +12,6 @@ const external = [
 
 export default defineConfig(({ mode }) => {
   return {
-    resolve: {
-      alias: {
-        '~': resolve('.'),
-      },
-    },
     build: {
       target: 'es2020',
       lib: {
