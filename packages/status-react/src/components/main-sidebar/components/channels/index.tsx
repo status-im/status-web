@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { useChats } from '~/src/protocol'
-import { Box } from '~/src/system'
-
+import { useChats } from '../../../../protocol'
+import { Box } from '../../../../system'
 // import { ChannelGroup } from './channel-group'
 import { ChannelItem } from './channel-item'
 

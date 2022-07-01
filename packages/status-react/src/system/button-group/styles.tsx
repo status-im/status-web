@@ -1,6 +1,6 @@
 import { Item, Root } from '@radix-ui/react-toggle-group'
 
-import { styled } from '~/src/styles/config'
+import { styled } from '../../styles/config'
 
 export const Group = styled(Root, {
   backgroundColor: '$primary-3',

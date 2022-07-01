@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Avatar, EthAddress, Flex, Text } from '~/src/system'
+import { Avatar, EthAddress, Flex, Text } from '../../system'
 
-import type { Member } from '~/src/protocol'
-import type { AvatarProps } from '~/src/system/avatar'
+import type { Member } from '../../protocol'
+import type { AvatarProps } from '../../system/avatar'
 
 interface Props {
   verified: boolean

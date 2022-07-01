@@ -1,21 +1,21 @@
 import React from 'react'
 
-import { ReactionPopover } from '~/src/components/reaction-popover'
-import { PencilIcon } from '~/src/icons/pencil-icon'
-// import { PinIcon } from '~/src/icons/pin-icon'
-import { ReactionIcon } from '~/src/icons/reaction-icon'
-import { ReplyIcon } from '~/src/icons/reply-icon'
-import { TrashIcon } from '~/src/icons/trash-icon'
-// import { UnpinIcon } from '~/src/icons/unpin-icon'
-import { styled } from '~/src/styles/config'
+import { ReactionPopover } from '../../../../components/reaction-popover'
+import { PencilIcon } from '../../../../icons/pencil-icon'
+// import { PinIcon } from '../../../../icons/pin-icon'
+import { ReactionIcon } from '../../../../icons/reaction-icon'
+import { ReplyIcon } from '../../../../icons/reply-icon'
+import { TrashIcon } from '../../../../icons/trash-icon'
+// import { UnpinIcon } from '../../../../icons/unpin-icon'
+import { styled } from '../../../../styles/config'
 import {
   AlertDialog,
   AlertDialogTrigger,
   IconButton,
   Tooltip,
-} from '~/src/system'
+} from '../../../../system'
 
-import type { Reaction, Reactions } from '~/src/protocol'
+import type { Reaction, Reactions } from '../../../../protocol'
 
 interface Props {
   owner: boolean

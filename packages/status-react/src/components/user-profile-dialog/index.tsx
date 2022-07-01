@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Avatar, Dialog, EmojiHash, Heading, Text } from '~/src/system'
+import { Avatar, Dialog, EmojiHash, Heading, Text } from '../../system'
 
-import type { Member } from '~/src/protocol'
+import type { Member } from '../../protocol'
 
 interface Props {
   member: Member

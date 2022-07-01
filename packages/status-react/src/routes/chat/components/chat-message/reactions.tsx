@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 
-import { emojis, ReactionPopover } from '~/src/components/reaction-popover'
-import { ReactionIcon } from '~/src/icons/reaction-icon'
-import { useAccount } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Flex, Image, Text } from '~/src/system'
+import {
+  emojis,
+  ReactionPopover,
+} from '../../../../components/reaction-popover'
+import { ReactionIcon } from '../../../../icons/reaction-icon'
+import { useAccount } from '../../../../protocol'
+import { styled } from '../../../../styles/config'
+import { Flex, Image, Text } from '../../../../system'
 
-import type { Reaction, Reactions } from '~/src/protocol'
+import type { Reaction, Reactions } from '../../../../protocol'
 
 interface Props {
   reactions: Reactions

@@ -1,4 +1,4 @@
-import { useProtocol } from '~/src/protocol'
+import { useProtocol } from './provider'
 
 import type { Member } from '@status-im/js'
 

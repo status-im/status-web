@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { styled } from '~/src/styles/config'
-import { Dialog, Grid, Text } from '~/src/system'
+import { styled } from '../../../../styles/config'
+import { Dialog, Grid, Text } from '../../../../system'
 
 // TODO: Add wallet integration
 export const ConnectWalletDialog = () => {

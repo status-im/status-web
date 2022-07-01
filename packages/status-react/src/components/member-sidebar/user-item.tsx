@@ -1,11 +1,10 @@
 import React from 'react'
 
-import { styled } from '~/src/styles/config'
-import { Avatar, DialogTrigger, EthAddress, Flex, Text } from '~/src/system'
-
+import { styled } from '../../styles/config'
+import { Avatar, DialogTrigger, EthAddress, Flex, Text } from '../../system'
 import { DisconnectDialog } from './disconnect-dialog'
 
-import type { Account } from '~/src/protocol'
+import type { Account } from '../../protocol'
 
 interface Props {
   account: Account

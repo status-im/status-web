@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import { QRCodeSVG } from 'qrcode.react'
 
-import { styled } from '~/src/styles/config'
-import { Box, ButtonGroup, Dialog, Text, TextInput } from '~/src/system'
+import { styled } from '../../../../styles/config'
+import { Box, ButtonGroup, Dialog, Text, TextInput } from '../../../../system'
 
 export const SyncStatusProfileDialog = () => {
   const [platform, setPlatform] = useState<'mobile' | 'desktop'>('mobile')

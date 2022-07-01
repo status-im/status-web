@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { useProtocol } from '~/src/protocol'
-import { Button, CopyInput, Dialog, Flex, Grid, Text } from '~/src/system'
+import { useProtocol } from '../../../../protocol'
+import { Button, CopyInput, Dialog, Flex, Grid, Text } from '../../../../system'
 
 export const CommunityDialog = () => {
   const { client, community } = useProtocol()

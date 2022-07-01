@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { useAccount, useMembers } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Grid, Heading } from '~/src/system'
-
+import { useAccount, useMembers } from '../../protocol'
+import { styled } from '../../styles/config'
+import { Grid, Heading } from '../../system'
 import { MemberGroup } from './member-group'
 import { MemberItem } from './member-item'
 import { UserItem } from './user-item'

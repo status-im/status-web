@@ -2,9 +2,8 @@ import React, { useCallback, useRef, useState } from 'react'
 
 import * as Primitive from '@radix-ui/react-dialog'
 
-import { useDialogContext } from '~/src/contexts/dialog-context'
-import { CrossIcon } from '~/src/icons/cross-icon'
-
+import { useDialogContext } from '../../contexts/dialog-context'
+import { CrossIcon } from '../../icons/cross-icon'
 import { Button } from '../button'
 import { Heading } from '../heading'
 import { IconButton } from '../icon-button'

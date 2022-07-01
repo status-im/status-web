@@ -1,9 +1,8 @@
 import React from 'react'
 
-import { useMembers, useProtocol } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Avatar, DialogTrigger, Text } from '~/src/system'
-
+import { useMembers, useProtocol } from '../../../../protocol'
+import { styled } from '../../../../styles/config'
+import { Avatar, DialogTrigger, Text } from '../../../../system'
 import { CommunityDialog } from './community-dialog'
 
 export const CommunityInfo = () => {

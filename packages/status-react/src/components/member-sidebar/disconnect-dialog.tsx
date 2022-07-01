@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { useAccount } from '~/src/protocol'
-import { Avatar, Dialog, EmojiHash, Flex, Heading, Text } from '~/src/system'
+import { useAccount } from '../../protocol'
+import { Avatar, Dialog, EmojiHash, Flex, Heading, Text } from '../../system'
 
-import type { Account } from '~/src/protocol'
+import type { Account } from '../../protocol'
 
 interface Props {
   account: Account

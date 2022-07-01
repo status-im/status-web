@@ -2,8 +2,8 @@ import React, { forwardRef } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
-import { styled } from '~/src/styles/config'
-import { Avatar } from '~/src/system'
+import { styled } from '../../../../styles/config'
+import { Avatar } from '../../../../system'
 
 import type { Ref } from 'react'
 

@@ -1,6 +1,6 @@
 import { Root } from '@radix-ui/react-separator'
 
-import { styled } from '~/src/styles/config'
+import { styled } from '../../styles/config'
 
 export const Separator = styled(Root, {
   border: 'none',

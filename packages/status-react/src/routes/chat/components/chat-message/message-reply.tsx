@@ -2,9 +2,9 @@ import React from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-import { useProtocol } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Avatar, Box, Flex, Image, Text } from '~/src/system'
+import { useProtocol } from '../../../../protocol'
+import { styled } from '../../../../styles/config'
+import { Avatar, Box, Flex, Image, Text } from '../../../../system'
 
 interface Props {
   messageId: string

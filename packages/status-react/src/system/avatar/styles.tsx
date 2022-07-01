@@ -1,6 +1,6 @@
-import { styled } from '~/src/styles/config'
+import { styled } from '../../styles/config'
 
-import type { VariantProps } from '~/src/styles/config'
+import type { VariantProps } from '../../styles/config'
 
 export type Variants = VariantProps<typeof Base>
 

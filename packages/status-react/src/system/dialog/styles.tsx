@@ -1,8 +1,7 @@
-import { keyframes, styled } from '~/src/styles/config'
-
+import { keyframes, styled } from '../../styles/config'
 import { Flex } from '../flex'
 
-import type { VariantProps } from '~/src/styles/config'
+import type { VariantProps } from '../../styles/config'
 
 export type Variants = VariantProps<typeof Content>
 

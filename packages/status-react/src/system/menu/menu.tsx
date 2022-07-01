@@ -1,8 +1,7 @@
 import React, { cloneElement } from 'react'
 
-import { ChevronRightIcon } from '~/src/icons/chevron-right-icon'
-import { styled, theme } from '~/src/styles/config'
-
+import { ChevronRightIcon } from '../../icons/chevron-right-icon'
+import { styled, theme } from '../../styles/config'
 import { Box } from '../box'
 import { Icon } from '../icon'
 

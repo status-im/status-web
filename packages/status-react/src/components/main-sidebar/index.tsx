@@ -1,14 +1,12 @@
 import React from 'react'
 
-import { useAppState } from '~/src/contexts/app-context'
-import { useAccount } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Separator } from '~/src/system'
-
+import { useAppState } from '../../contexts/app-context'
+import { useAccount } from '../../protocol'
+import { styled } from '../../styles/config'
+import { Separator } from '../../system'
 import { Channels } from './components/channels'
 import { CommunityInfo } from './components/community-info'
 import { GetStarted } from './components/get-started'
-// import { Messages } from './components/messages'
 
 export const MainSidebar = () => {
   const { options } = useAppState()
@@ -22,8 +20,7 @@ export const MainSidebar = () => {
     <Wrapper>
       <CommunityInfo />
       <Channels />
-      {/* <Separator css={{ margin: '16px 0' }} />
-      <Messages /> */}
+
       {!account && (
         <>
           <Separator />

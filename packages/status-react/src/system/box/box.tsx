@@ -1,4 +1,4 @@
-import { styled } from '~/src/styles/config'
+import { styled } from '../../styles/config'
 
 const Box = styled('div', {
   boxSizing: 'border-box',

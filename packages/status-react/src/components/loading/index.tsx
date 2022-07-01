@@ -2,8 +2,8 @@ import React from 'react'
 
 import ContentLoader from 'react-content-loader'
 
-import { styled } from '~/src/styles/config'
-import { Box } from '~/src/system'
+import { styled } from '../../styles/config'
+import { Box } from '../../system'
 
 const CommunityInfoLoader = () => (
   <ContentLoader

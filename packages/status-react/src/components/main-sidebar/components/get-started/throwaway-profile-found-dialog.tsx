@@ -1,7 +1,14 @@
 import React from 'react'
 
-import { useAccount } from '~/src/protocol'
-import { Avatar, Dialog, EmojiHash, Flex, Heading, Text } from '~/src/system'
+import { useAccount } from '../../../../protocol'
+import {
+  Avatar,
+  Dialog,
+  EmojiHash,
+  Flex,
+  Heading,
+  Text,
+} from '../../../../system'
 
 interface Props {
   onSkip: () => void
