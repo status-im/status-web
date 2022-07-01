@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { useChatContext } from '~/src/contexts/chat-context'
-import { CrossIcon } from '~/src/icons/cross-icon'
-import { styled } from '~/src/styles/config'
-import { Flex, IconButton, Text } from '~/src/system'
+import { useChatContext } from '../../../../contexts/chat-context'
+import { CrossIcon } from '../../../../icons/cross-icon'
+import { styled } from '../../../../styles/config'
+import { Flex, IconButton, Text } from '../../../../system'
 
-import type { Member, Message } from '~/src/protocol'
+import type { Member, Message } from '../../../../protocol'
 
 interface Props {
   reply: {

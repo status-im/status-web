@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import { useProtocol } from '~/src/protocol'
-import { Avatar, Checkbox, Dialog, Flex, Text } from '~/src/system'
+import { useProtocol } from '../../protocol'
+import { Avatar, Checkbox, Dialog, Flex, Text } from '../../system'
 
 export const WelcomeDialog = () => {
   const { community } = useProtocol()

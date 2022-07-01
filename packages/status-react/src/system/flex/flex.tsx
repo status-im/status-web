@@ -1,5 +1,4 @@
-import { styled } from '~/src/styles/config'
-
+import { styled } from '../../styles/config'
 import { Box } from '../box'
 
 const Flex = styled(Box, {

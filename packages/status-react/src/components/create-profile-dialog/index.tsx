@@ -8,7 +8,7 @@ import {
   Heading,
   Text,
   TextInput,
-} from '~/src/system'
+} from '../../system'
 
 export const CreateProfileDialog = () => {
   return (

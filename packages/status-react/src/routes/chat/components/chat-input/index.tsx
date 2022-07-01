@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { useChatContext } from '~/src/contexts/chat-context'
-// import { EmojiIcon } from '~/src/icons/emoji-icon'
-// import { GifIcon } from '~/src/icons/gif-icon'
-// import { ImageIcon } from '~/src/icons/image-icon'
-// import { StickerIcon } from '~/src/icons/sticker-icon'
-import { styled } from '~/src/styles/config'
-
-// import { Box, Flex, IconButton } from '~/src/system'
+import { useChatContext } from '../../../../contexts/chat-context'
+// import { EmojiIcon } from '../../../../icons/emoji-icon'
+// import { GifIcon } from '../../../../icons/gif-icon'
+// import { ImageIcon } from '../../../../icons/image-icon'
+// import { StickerIcon } from '../../../../icons/sticker-icon'
+import { styled } from '../../../../styles/config'
+// import { Box, Flex, IconButton } from '../../../../system'
 import { InputReply } from './input-reply'
 
 interface Props {

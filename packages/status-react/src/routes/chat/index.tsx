@@ -1,16 +1,13 @@
-// TODO: handle non-existing chat ID
-
 import React, { useEffect, useRef } from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-import { MemberSidebar } from '~/src/components/member-sidebar'
-import { useAppState } from '~/src/contexts/app-context'
-import { ChatProvider, useChatContext } from '~/src/contexts/chat-context'
-import { useAccount, useChat, useMessages, useProtocol } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Avatar, Flex, Heading, Text } from '~/src/system'
-
+import { MemberSidebar } from '../../components/member-sidebar'
+import { useAppState } from '../../contexts/app-context'
+import { ChatProvider, useChatContext } from '../../contexts/chat-context'
+import { useAccount, useChat, useMessages, useProtocol } from '../../protocol'
+import { styled } from '../../styles/config'
+import { Avatar, Flex, Heading, Text } from '../../system'
 import { ChatInput } from './components/chat-input'
 import { ChatMessage } from './components/chat-message'
 import { Navbar } from './components/navbar'

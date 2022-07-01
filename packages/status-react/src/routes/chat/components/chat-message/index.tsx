@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-// import { UserProfileDialog } from '~/src/components/user-profile-dialog'
-import { useChatContext } from '~/src/contexts/chat-context'
-// import { BellIcon } from '~/src/icons/bell-icon'
-// import { PinIcon } from '~/src/icons/pin-icon'
-import { useProtocol } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
+// import { UserProfileDialog } from '../../../../components/user-profile-dialog'
+import { useChatContext } from '../../../../contexts/chat-context'
+// import { BellIcon } from '../../../../icons/bell-icon'
+// import { PinIcon } from '../../../../icons/pin-icon'
+import { useProtocol } from '../../../../protocol'
+import { styled } from '../../../../styles/config'
 import {
   Avatar,
   Box,
@@ -21,14 +21,13 @@ import {
   Image,
   Text,
   // useDialog,
-} from '~/src/system'
-
+} from '../../../../system'
 import { ChatInput } from '../chat-input'
 import { Actions } from './actions'
 import { MessageReply } from './message-reply'
 import { MessageReactions } from './reactions'
 
-import type { Message, Reaction } from '~/src/protocol'
+import type { Message, Reaction } from '../../../../protocol'
 
 interface Props {
   message: Message

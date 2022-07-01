@@ -2,18 +2,14 @@ import React from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-// import { ChatMenu } from '~/src/components/chat-menu'
-import { useAppState } from '~/src/contexts/app-context'
-// import { BellIcon } from '~/src/icons/bell-icon'
-// import { DotsIcon } from '~/src/icons/dots-icon'
-import { GroupIcon } from '~/src/icons/group-icon'
-import { useChat } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import {
-  /*DropdownMenuTrigger,*/ Flex,
-  IconButton /*,Separator*/,
-} from '~/src/system'
-
+// import { ChatMenu } from '../../../../components/chat-menu'
+import { useAppState } from '../../../../contexts/app-context'
+// import { BellIcon } from '../../../../icons/bell-icon'
+// import { DotsIcon } from '../../../../icons/dots-icon'
+import { GroupIcon } from '../../../../icons/group-icon'
+import { useChat } from '../../../../protocol'
+import { styled } from '../../../../styles/config'
+import { Flex, IconButton } from '../../../../system'
 import { ChatInfo } from '../chat-info'
 
 interface Props {

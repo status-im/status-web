@@ -1,10 +1,10 @@
 import React from 'react'
 
-// import { PinIcon } from '~/src/icons/pin-icon'
-import { Avatar, Flex, Text } from '~/src/system'
+// import { PinIcon } from '../../../../icons/pin-icon'
+import { Avatar, Flex, Text } from '../../../../system'
 
 // import { PinnedMessagesDialog } from './pinned-messages-dialog'
-import type { Chat } from '~/src/protocol'
+import type { Chat } from '../../../../protocol'
 
 interface Props {
   chat: Chat

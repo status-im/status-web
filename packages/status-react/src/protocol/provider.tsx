@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useReducer } from 'react'
 
 import { createClient } from '@status-im/js'
 
-import { Loading } from '~/src/components/loading'
+import { Loading } from '../components/loading'
 
 import type { Account, Client, ClientOptions, Community } from '@status-im/js'
 

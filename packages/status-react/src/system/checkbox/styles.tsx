@@ -1,7 +1,7 @@
 import * as Checkbox from '@radix-ui/react-checkbox'
 import { Label } from '@radix-ui/react-label'
 
-import { styled, theme } from '~/src/styles/config'
+import { styled, theme } from '../../styles/config'
 
 export const Wrapper = styled(Label, {
   cursor: 'pointer',

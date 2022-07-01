@@ -1,4 +1,4 @@
-import { styled } from '~/src/styles/config'
+import { styled } from '../../styles/config'
 
 export const Wrapper = styled('div', {
   position: 'relative',

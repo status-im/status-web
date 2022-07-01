@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { useAccount } from '~/src/protocol'
-import { styled } from '~/src/styles/config'
-import { Flex, Image, Popover, PopoverTrigger } from '~/src/system'
+import { useAccount } from '../../protocol'
+import { styled } from '../../styles/config'
+import { Flex, Image, Popover, PopoverTrigger } from '../../system'
 
-import type { Reaction, Reactions } from '~/src/protocol'
+import type { Reaction, Reactions } from '../../protocol'
 
 interface Props {
   children: React.ReactElement

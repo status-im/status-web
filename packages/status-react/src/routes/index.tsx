@@ -8,17 +8,16 @@ import {
   useMatch,
 } from 'react-router-dom'
 
-import { MainSidebar } from '~/src/components/main-sidebar'
-import { AppProvider } from '~/src/contexts/app-context'
-import { DialogProvider } from '~/src/contexts/dialog-context'
-import { ProtocolProvider, useProtocol } from '~/src/protocol'
-import { Chat } from '~/src/routes/chat'
-import { styled } from '~/src/styles/config'
-import { GlobalStyle } from '~/src/styles/GlobalStyle'
-
+import { MainSidebar } from '../components/main-sidebar'
+import { AppProvider } from '../contexts/app-context'
+import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
+import { ProtocolProvider, useProtocol } from '../protocol'
+import { Chat } from '../routes/chat'
+import { styled } from '../styles/config'
+import { GlobalStyle } from '../styles/GlobalStyle'
 
-import type { Config } from '~/src/types/config'
+import type { Config } from '../types/config'
 
 interface Props extends Config {
   meta?: string

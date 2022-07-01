@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { BellIcon } from '~/src/icons/bell-icon'
-import { ContextMenu, DropdownMenu } from '~/src/system'
-// import { useAlertDialog } from '~/src/system/dialog/alert-dialog'
-// import { useDialog } from '~/src/system/dialog/dialog'
+import { BellIcon } from '../../icons/bell-icon'
+import { ContextMenu, DropdownMenu } from '../../system'
+// import { useAlertDialog } from '../../system/dialog/alert-dialog'
+// import { useDialog } from '../../system/dialog/dialog'
 
 // import { UserProfileDialog } from '../user-profile-dialog'
 // import { EditGroupChatDialog } from './edit-group-chat-dialog'

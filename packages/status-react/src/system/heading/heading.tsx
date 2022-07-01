@@ -1,4 +1,4 @@
-import { styled, theme } from '~/src/styles/config'
+import { styled, theme } from '../../styles/config'
 
 import type React from 'react'
 
