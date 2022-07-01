@@ -11,11 +11,12 @@ import {
 import { MainSidebar } from '~/src/components/main-sidebar'
 import { AppProvider } from '~/src/contexts/app-context'
 import { DialogProvider } from '~/src/contexts/dialog-context'
-import { ThemeProvider } from '~/src/contexts/theme-context'
 import { ProtocolProvider, useProtocol } from '~/src/protocol'
 import { Chat } from '~/src/routes/chat'
 import { styled } from '~/src/styles/config'
 import { GlobalStyle } from '~/src/styles/GlobalStyle'
+
+import { useTheme } from '../hooks/use-theme'
 
 import type { Config } from '~/src/types/config'
 
@@ -44,28 +45,28 @@ const Gate = (props: { children: JSX.Element }) => {
 export const Community = (props: Props) => {
   const { theme, router: Router = BrowserRouter } = props
 
+  useTheme(theme)
+
   return (
     <Router>
       <ProtocolProvider options={{ publicKey: props.publicKey }}>
         <AppProvider config={props}>
-          <ThemeProvider theme={theme}>
-            <DialogProvider>
-              <GlobalStyle />
-              <Wrapper>
-                <MainSidebar />
-                <Routes>
-                  <Route
-                    path="/:id"
-                    element={
-                      <Gate>
-                        <Chat />
-                      </Gate>
-                    }
-                  />
-                </Routes>
-              </Wrapper>
-            </DialogProvider>
-          </ThemeProvider>
+          <DialogProvider>
+            <GlobalStyle />
+            <Wrapper>
+              <MainSidebar />
+              <Routes>
+                <Route
+                  path="/:id"
+                  element={
+                    <Gate>
+                      <Chat />
+                    </Gate>
+                  }
+                />
+              </Routes>
+            </Wrapper>
+          </DialogProvider>
         </AppProvider>
       </ProtocolProvider>
     </Router>
