@@ -34,6 +34,15 @@
     "plugin:react-hooks/recommended",
     "prettier"
   ],
+  "overrides": [
+    {
+      "files": ["examples/**/*.tsx"],
+      "rules": {
+        "react/jsx-uses-react": "off",
+        "react/react-in-jsx-scope": "off"
+      }
+    }
+  ],
   "rules": {
     "react/prop-types": 0,
     // "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
