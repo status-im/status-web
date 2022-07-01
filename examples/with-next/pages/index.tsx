@@ -12,7 +12,7 @@ const Community = dynamic(
   { ssr: false }
 )
 
-export default function Root() {
+export default function Index() {
   return (
     <Community
       publicKey="<YOUR_COMMUNITY_KEY>"
