@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Community } from '@status-im/react'
 
 export const App = () => {
