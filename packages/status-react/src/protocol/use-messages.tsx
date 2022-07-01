@@ -2,60 +2,46 @@ import { useEffect, useState } from 'react'
 
 import { useProtocol } from './provider'
 
-import type { Message } from '@status-im/js'
+import type { Message, Reactions } from '@status-im/js'
 
-export type Reaction =
-  | 'LOVE'
-  | 'THUMBS_UP'
-  | 'THUMBS_DOWN'
-  | 'LAUGH'
-  | 'SAD'
-  | 'ANGRY'
-
-export type Reactions = {
-  [key in Reaction]: {
-    count: number
-    me: boolean
-  }
-}
-
-export type { Message }
+type Reaction = keyof Reactions
 
 interface Result {
   data: Message[]
   loading: boolean
-  error?: Error
+  // error?: Error
   // fetchMore: () => void
 }
 
 export const useMessages = (channelId: string): Result => {
   const { client } = useProtocol()
 
+  const chat = client.community.chats.get(channelId)!
   // const [state, dispatch] = useReducer<Result>((state,action) => {}, {})
 
-  const [data, setData] = useState<any[]>(() =>
-    client.community.chats.get(channelId).getMessages()
-  )
+  const [data, setData] = useState<Message[]>(() => chat.getMessages())
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error>()
+  // const [error, setError] = useState<Error>()
 
   useEffect(() => {
-    setData(client.community.chats.get(channelId).getMessages())
+    setData(chat.getMessages())
 
     const handleUpdate = (messages: Message[]) => {
       setLoading(false)
       setData(messages)
     }
 
-    return client.community.chats.get(channelId).onMessage(handleUpdate)
-  }, [channelId])
+    return chat.onMessage(handleUpdate)
+  }, [chat])
 
   return {
     data,
     loading,
-    error,
+    // error,
     // hasMore
     // fetchMore,
     // refetch
   }
 }
+
+export type { Message, Reaction, Reactions }

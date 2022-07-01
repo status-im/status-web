@@ -26,8 +26,8 @@ export const ChatInput = (props: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    state.message && !editing && inputRef.current?.focus()
-  }, [state.message, editing])
+    state.reply && !editing && inputRef.current?.focus()
+  }, [state.reply, editing])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value)
@@ -53,9 +53,7 @@ export const ChatInput = (props: Props) => {
         </IconButton>
       </Box> */}
       <Bubble>
-        {state.message && (
-          <InputReply message={state.message} member={state.member} />
-        )}
+        {state.reply && <InputReply reply={state.reply} />}
         <InputWrapper>
           <Input
             ref={inputRef}

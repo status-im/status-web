@@ -17,7 +17,7 @@ export const MessageReply = (props: Props) => {
 
   // TODO: use protocol hook
   const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const message = client.community.getChat(params.id).getMessage(messageId)
+  const message = client.community.getChat(params.id!)!.getMessage(messageId)
 
   if (!message) {
     return (
@@ -31,14 +31,19 @@ export const MessageReply = (props: Props) => {
 
   const { contentType, text, signer } = message
 
-  const { username } = client.community.getMember(signer)
+  // TODO: can this happen?
+  const member = client.community.getMember(signer)
+
+  if (!member) {
+    return null
+  }
 
   return (
     <Wrapper>
       <Flex gap="1" align="center">
-        <Avatar size={20} name={username} />
+        <Avatar size={20} name={member.username} />
         <Text color="gray" size="13" weight="500">
-          {username}
+          {member.username}
         </Text>
       </Flex>
       {contentType === 'TEXT_PLAIN' && (

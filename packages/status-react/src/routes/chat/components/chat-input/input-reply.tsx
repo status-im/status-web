@@ -3,19 +3,22 @@ import React from 'react'
 import { useChatContext } from '~/src/contexts/chat-context'
 import { CrossIcon } from '~/src/icons/cross-icon'
 import { styled } from '~/src/styles/config'
-import { Flex, IconButton, Image, Text } from '~/src/system'
+import { Flex, IconButton, Text } from '~/src/system'
 
 import type { Member, Message } from '~/src/protocol'
 
 interface Props {
-  message: Message
-  member: Member
+  reply: {
+    message: Message
+    member: Member
+  }
 }
 
 export const InputReply = (props: Props) => {
   const { dispatch } = useChatContext()
 
-  const { message, member } = props
+  const { reply } = props
+  const { message, member } = reply
 
   return (
     <Wrapper>
@@ -38,7 +41,7 @@ export const InputReply = (props: Props) => {
           </Text>
         </Flex>
       )}
-      {message.contentType === 'IMAGE' && (
+      {/* {message.contentType === 'IMAGE' && (
         <Image
           src={message.imageUrl}
           width={56}
@@ -47,7 +50,7 @@ export const InputReply = (props: Props) => {
           radius="bubble"
           alt="message"
         />
-      )}
+      )} */}
     </Wrapper>
   )
 }
