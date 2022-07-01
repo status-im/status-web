@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useMatch } from 'react-router-dom'
 
-import { UserProfileDialog } from '~/src/components/user-profile-dialog'
+// import { UserProfileDialog } from '~/src/components/user-profile-dialog'
 import { useChatContext } from '~/src/contexts/chat-context'
 // import { BellIcon } from '~/src/icons/bell-icon'
 // import { PinIcon } from '~/src/icons/pin-icon'
@@ -20,7 +20,7 @@ import {
   Flex,
   Image,
   Text,
-  useDialog,
+  // useDialog,
 } from '~/src/system'
 
 import { ChatInput } from '../chat-input'
@@ -71,16 +71,16 @@ export const ChatMessage = (props: Props) => {
 
   // TODO: remove usage of 0x prefix
   const owner = '0x' + account?.publicKey === signer
-  const chat = client.community.getChat(chatId)
+  const chat = client.community.getChat(chatId)!
 
-  const member = client.community.getMember(signer) ?? {}
+  const member = client.community.getMember(signer)!
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
 
   const { dispatch } = useChatContext()
 
-  const userProfileDialog = useDialog(UserProfileDialog)
+  // const userProfileDialog = useDialog(UserProfileDialog)
 
   const handleMessageSubmit = (message: string) => {
     chat.sendTextMessage(message)
@@ -120,7 +120,8 @@ export const ChatMessage = (props: Props) => {
             >
               Cancel
             </Button>
-            <Button size="small" onClick={handleMessageSubmit}>
+            {/* TODO: fix message submit */}
+            <Button size="small" onClick={() => handleMessageSubmit('')}>
               Save
             </Button>
           </Flex>
@@ -180,14 +181,14 @@ export const ChatMessage = (props: Props) => {
                 <button type="button"> */}
               <Avatar
                 size={44}
-                name={member.username}
-                colorHash={member.colorHash}
+                name={member!.username}
+                colorHash={member!.colorHash}
               />
               {/* </button> */}
               {/* <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
                     <Avatar size="36" />
-                    <Text>{member.username}</Text>
+                    <Text>{member!.username}</Text>
                     <EmojiHash />
                   </Flex>
                   <DropdownMenu.Separator />
@@ -224,7 +225,7 @@ export const ChatMessage = (props: Props) => {
 
               <Flex gap="1" align="center">
                 <Text color="primary" weight="500" size="15">
-                  {member.username}
+                  {member!.username}
                 </Text>
                 <Text size="10" color="gray">
                   {new Date(Number(clock)).toLocaleTimeString([], {

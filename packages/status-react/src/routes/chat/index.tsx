@@ -43,7 +43,7 @@ const Body = () => {
   const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
   const chatId = params.id!
 
-  const chat = client.community.getChat(chatId)
+  const chat = client.community.getChat(chatId)!
   const messages = useMessages(chatId)
 
   const contentRef = useRef<HTMLDivElement>(null)
@@ -53,7 +53,7 @@ const Body = () => {
   }, [chatId, messages.data.length])
 
   const handleMessageSubmit = (message: string) => {
-    chat.sendTextMessage(message, state.message?.messageId)
+    chat.sendTextMessage(message, state.reply?.message.messageId)
   }
 
   return (

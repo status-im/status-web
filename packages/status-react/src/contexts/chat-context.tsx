@@ -11,18 +11,26 @@ type Context = {
 const ChatContext = createContext<Context | undefined>(undefined)
 
 interface State {
-  message?: Message
-  member?: Member
+  reply?: {
+    message: Message
+    member: Member
+  }
 }
 
 type Action =
-  | { type: 'SET_REPLY'; message?: Message; member?: Member }
+  | { type: 'SET_REPLY'; message: Message; member: Member }
   | { type: 'DELETE_REPLY' }
 
-const reducer: Reducer<State, Action> = (state, action) => {
+const reducer: Reducer<State, Action> = (state, action): State => {
   switch (action.type) {
     case 'SET_REPLY': {
-      return { ...state, message: action.message, member: action.member }
+      return {
+        ...state,
+        reply: {
+          message: action.message,
+          member: action.member,
+        },
+      }
     }
     case 'DELETE_REPLY': {
       return { ...initialState }
@@ -31,8 +39,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
 }
 
 const initialState: State = {
-  message: undefined,
-  member: undefined,
+  reply: undefined,
 }
 
 interface Props {
