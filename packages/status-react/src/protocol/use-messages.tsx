@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { useProtocol } from './provider'
+import { useProtocol } from './use-protocol'
 
 import type { Message, Reactions } from '@status-im/js'
 
