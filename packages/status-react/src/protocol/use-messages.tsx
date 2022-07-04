@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 
-import { useProtocol } from './provider'
+import sub from 'date-fns/sub'
+
+import { useProtocol } from './use-protocol'
 
 import type { Message, Reactions } from '@status-im/js'
 
@@ -9,26 +11,30 @@ type Reaction = keyof Reactions
 interface Result {
   data: Message[]
   loading: boolean
-  // error?: Error
-  // fetchMore: () => void
 }
 
-export const useMessages = (channelId: string): Result => {
+export const useMessages = (chatId: string): Result => {
   const { client } = useProtocol()
 
-  const chat = client.community.chats.get(channelId)!
-  // const [state, dispatch] = useReducer<Result>((state,action) => {}, {})
+  const chat = client.community.chats.get(chatId)!
 
   const [data, setData] = useState<Message[]>(() => chat.getMessages())
   const [loading, setLoading] = useState(true)
   // const [error, setError] = useState<Error>()
 
   useEffect(() => {
+    const messages = chat.getMessages()
+
     setData(chat.getMessages())
 
     const handleUpdate = (messages: Message[]) => {
       setLoading(false)
       setData(messages)
+    }
+
+    if (messages.length === 0) {
+      setLoading(true)
+      chat.fetchMessages({ start: sub(new Date(), { days: 30 }) })
     }
 
     return chat.onMessage(handleUpdate)
@@ -37,9 +43,10 @@ export const useMessages = (channelId: string): Result => {
   return {
     data,
     loading,
+    // fetchMore,
+    // fetching,
     // error,
     // hasMore
-    // fetchMore,
     // refetch
   }
 }

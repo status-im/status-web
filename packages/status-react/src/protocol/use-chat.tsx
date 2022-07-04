@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { useProtocol } from './provider'
+import { useProtocol } from './use-protocol'
 
 import type { Community } from '@status-im/js'
 

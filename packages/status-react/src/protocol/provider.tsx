@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useReducer } from 'react'
+import React, { createContext, useEffect, useReducer } from 'react'
 
 import { createClient } from '@status-im/js'
 
@@ -6,9 +6,9 @@ import { Loading } from '../components/loading'
 
 import type { Account, Client, ClientOptions, Community } from '@status-im/js'
 
-const Context = createContext<State | undefined>(undefined)
+export const Context = createContext<State | undefined>(undefined)
 
-type State = {
+export type State = {
   loading: boolean
   client: Client | undefined
   community: Community['description'] | undefined
@@ -16,7 +16,7 @@ type State = {
   dispatch?: React.Dispatch<Action>
 }
 
-type Action =
+export type Action =
   | { type: 'INIT'; client: Client }
   | { type: 'UPDATE_COMMUNITY'; community: Community['description'] }
   | { type: 'SET_ACCOUNT'; account: Account | undefined }
@@ -98,19 +98,4 @@ export const ProtocolProvider = (props: Props) => {
       {children}
     </Context.Provider>
   )
-}
-
-export function useProtocol() {
-  const context = useContext(Context)
-
-  if (!context) {
-    throw new Error(`useProtocol must be used within a ProtocolProvider`)
-  }
-
-  // we enforce initialization of client before rendering children
-  return context as State & {
-    client: Client
-    community: Community['description']
-    dispatch: React.Dispatch<Action>
-  }
 }

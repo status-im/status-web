@@ -31,7 +31,7 @@ import type { Message, Reaction } from '../../../../protocol'
 
 interface Props {
   message: Message
-  prevMessage?: Message
+  collapse: boolean
   highlight?: boolean
 }
 
@@ -57,16 +57,17 @@ interface Props {
 // })
 
 export const ChatMessage = (props: Props) => {
+  const { message, collapse, highlight } = props
+
   const { client, account } = useProtocol()
   const { params } = useMatch(':id')!
 
   const chatId = params.id!
-  const { message, highlight } = props
 
   const mention = false
   const pinned = false
 
-  const { messageId, contentType, clock, reactions, signer, responseTo } =
+  const { messageId, contentType, timestamp, reactions, signer, responseTo } =
     message
 
   // TODO: remove usage of 0x prefix
@@ -74,6 +75,7 @@ export const ChatMessage = (props: Props) => {
   const chat = client.community.getChat(chatId)!
 
   const member = client.community.getMember(signer)!
+  const response = client.community.getChat(params.id!)!.getMessage(responseTo)
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
@@ -82,6 +84,7 @@ export const ChatMessage = (props: Props) => {
 
   // const userProfileDialog = useDialog(UserProfileDialog)
 
+  // TODO: fix saving of edited message
   const handleMessageSubmit = (message: string) => {
     chat.sendTextMessage(message)
   }
@@ -107,7 +110,7 @@ export const ChatMessage = (props: Props) => {
     // TODO: pin message
   }
 
-  const renderMessage = () => {
+  const renderContent = () => {
     if (editing) {
       return (
         <Box>
@@ -170,100 +173,85 @@ export const ChatMessage = (props: Props) => {
     }
   }
 
-  return (
-    <>
-      {/* <ContextMenuTrigger> */}
-      <Wrapper
-        mention={mention}
-        pinned={pinned}
-        data-active={reacting}
-        highlight={highlight}
-      >
-        {responseTo && <MessageReply messageId={responseTo} />}
-        <Flex gap={2}>
-          <Box>
-            {/* <DropdownMenuTrigger>
-                <button type="button"> */}
-            <Avatar
-              size={44}
-              name={member!.username}
-              colorHash={member!.colorHash}
-            />
-            {/* </button> */}
-            {/* <DropdownMenu>
-                  <Flex direction="column" align="center" gap="1">
-                    <Avatar size="36" />
-                    <Text>{member!.username}</Text>
-                    <EmojiHash />
-                  </Flex>
-                  <DropdownMenu.Separator />
-                  <DropdownMenu.Item
-                    icon={<BellIcon />}
-                    onSelect={() => userProfileDialog.open({ member })}
-                  >
-                    View Profile
-                  </DropdownMenu.Item>
-                  <DropdownMenu.Item icon={<BellIcon />}>
-                    Send Message
-                  </DropdownMenu.Item>
-                  <DropdownMenu.Item icon={<BellIcon />}>
-                    Verify Identity
-                  </DropdownMenu.Item>
-                  <DropdownMenu.Item icon={<BellIcon />}>
-                    Send Contact Request
-                  </DropdownMenu.Item>
-                  <DropdownMenu.Separator />
-                  <DropdownMenu.Item icon={<BellIcon />} danger>
-                    Mark as Untrustworthy
-                  </DropdownMenu.Item>
-                </DropdownMenu>
-              </DropdownMenuTrigger> */}
-          </Box>
+  const renderMessage = () => {
+    if (collapse) {
+      return (
+        <Box css={{ flex: 1, paddingLeft: 52 }}>
+          {renderContent()}
+          <MessageReactions reactions={reactions} onClick={handleReaction} />
+        </Box>
+      )
+    }
 
-          <Box css={{ flex: 1 }}>
-            {/* {pinned && (
+    return (
+      <Flex gap={2}>
+        <Box>
+          <Avatar
+            size={44}
+            name={member!.username}
+            colorHash={member!.colorHash}
+          />
+        </Box>
+
+        <Box css={{ flex: 1 }}>
+          {/* {pinned && (
+        </Box>
+
+        <Box css={{ flex: 1 }}>
+          {/* {pinned && (
                 <Flex gap={1}>
                   <PinIcon width={8} />
                   <Text size="13">Pinned by {contact.name}</Text>
                 </Flex>
               )} */}
 
-            <Flex gap="1" align="center">
-              <Text color="primary" weight="500" size="15">
-                {member!.username}
-              </Text>
-              <Text size="10" color="gray">
-                {new Date(Number(clock)).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </Text>
-            </Flex>
+          <Flex gap="1" align="center">
+            <Text color="primary" weight="500" size="15">
+              {member!.username}
+            </Text>
+            <Text size="10" color="gray">
+              {new Date(Number(timestamp)).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </Text>
+          </Flex>
 
-            {renderMessage()}
+          {renderContent()}
 
-            <MessageReactions reactions={reactions} onClick={handleReaction} />
-          </Box>
-        </Flex>
+          <MessageReactions reactions={reactions} onClick={handleReaction} />
+        </Box>
+      </Flex>
+    )
+  }
 
-        <Actions
-          owner={owner}
-          pinned={pinned}
-          onEditClick={() => setEditing(true)}
-          onReplyClick={handleReplyClick}
-          onPinClick={handlePinClick}
-          onDeleteClick={handleMessageDelete}
-          onReactionClick={handleReaction}
-          reacting={reacting}
-          onReactingChange={setReacting}
-          reactions={reactions}
-        />
+  return (
+    <>
+      {/* <ContextMenuTrigger> */}
+      <Wrapper
+        mention={mention}
+        pinned={pinned}
+        highlight={highlight}
+        data-active={reacting}
+      >
+        {response && <MessageReply message={response} />}
+        {renderMessage()}
+
+        {account && (
+          <Actions
+            owner={owner}
+            pinned={pinned}
+            onEditClick={() => setEditing(true)}
+            onReplyClick={handleReplyClick}
+            onPinClick={handlePinClick}
+            onDeleteClick={handleMessageDelete}
+            onReactionClick={handleReaction}
+            reacting={reacting}
+            onReactingChange={setReacting}
+            reactions={reactions}
+          />
+        )}
       </Wrapper>
-      {/* <ContextMenu>
-          <ContextMenu.Item onSelect={handleReplyClick}>Reply</ContextMenu.Item>
-          <ContextMenu.Item onSelect={handlePinClick}>Pin</ContextMenu.Item>
-        </ContextMenu> */}
-      {/* </ContextMenuTrigger> */}
     </>
   )
 }
@@ -280,7 +268,8 @@ const backgroundAnimation = keyframes({
 // TODO: Use compound variants https://stitches.dev/docs/variants#compound-variants
 const Wrapper = styled('div', {
   position: 'relative',
-  padding: '10px 16px',
+  padding: '2px 16px',
+  marginTop: 14,
   gap: '$2',
 
   transitionProperty: 'background-color, border-color, color, fill, stroke',

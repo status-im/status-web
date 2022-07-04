@@ -1,6 +1,6 @@
 import { useMatch } from 'react-router-dom'
 
-import { useProtocol } from './provider'
+import { useProtocol } from './use-protocol'
 
 export const useActiveChat = () => {
   const { client } = useProtocol()
