@@ -20,7 +20,7 @@ type Props = (AnchorProps | ButtonProps) & {
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { children, variant = 'default' } = props
+  const { children } = props
 
   if ('href' in props) {
     const { href, ...linkProps } = props
@@ -44,13 +44,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const { type = 'button', loading, ...buttonProps } = props
 
   return (
-    <Base
-      {...buttonProps}
-      type={type}
-      ref={ref}
-      loading={loading}
-      variant={variant}
-    >
+    <Base {...buttonProps} type={type} ref={ref} loading={loading}>
       {children}
     </Base>
   )

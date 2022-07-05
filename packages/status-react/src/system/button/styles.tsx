@@ -67,4 +67,7 @@ export const Base = styled('button', {
       },
     },
   },
+  defaultVariants: {
+    variant: 'default',
+  },
 })
