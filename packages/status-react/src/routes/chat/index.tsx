@@ -92,13 +92,13 @@ const Body = () => {
           </button>
         </div>
         {messages.data.map((message, index) => {
-          const sentDate = new Date(Number(message.clock))
+          const sentDate = new Date(Number(message.timestamp))
           const prevMessage = messages.data[index - 1]
 
           let showDate = index === 0 // always show date for the first message
 
           if (prevMessage) {
-            const prevSentDate = new Date(Number(prevMessage.clock))
+            const prevSentDate = new Date(Number(prevMessage.timestamp))
             showDate = !isSameDay(prevSentDate, sentDate) // show date if it's not the same day
           }
 

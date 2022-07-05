@@ -65,7 +65,7 @@ export const ChatMessage = (props: Props) => {
   const mention = false
   const pinned = false
 
-  const { messageId, contentType, clock, reactions, signer, responseTo } =
+  const { messageId, contentType, timestamp, reactions, signer, responseTo } =
     message
 
   // TODO: remove usage of 0x prefix
@@ -232,7 +232,7 @@ export const ChatMessage = (props: Props) => {
               {member!.username}
             </Text>
             <Text size="10" color="gray">
-              {new Date(Number(clock)).toLocaleTimeString([], {
+              {new Date(Number(timestamp)).toLocaleTimeString([], {
                 hour: '2-digit',
                 minute: '2-digit',
               })}
