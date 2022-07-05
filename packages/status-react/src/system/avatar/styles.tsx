@@ -109,7 +109,7 @@ export const Initials = styled('div', {
       24: { fontSize: 'calc(24 * 0.5px)', lineHeight: '24px' },
       32: { fontSize: 'calc(32 * 0.5px)', lineHeight: '32px' },
       36: { fontSize: 'calc(36 * 0.5px)', lineHeight: '36px' },
-      44: { fontSize: 'calc(44 * 0.5px)', lineHeight: '44px' },
+      44: { fontSize: 'calc(44 * 0.5px)', lineHeight: '40px' },
       64: { fontSize: 'calc(64 * 0.5px)', lineHeight: '64px' },
       80: { fontSize: 'calc(80 * 0.5px)', lineHeight: '80px' },
       120: { fontSize: 'calc(120 * 0.5px)', lineHeight: '120px' },
