@@ -57,9 +57,16 @@ const Body = () => {
     <>
       <ContentWrapper ref={contentRef}>
         <ChatStart chatId={chatId} />
-        {messages.data.map(message => (
-          <ChatMessage key={message.messageId} message={message} />
-        ))}
+        {/* temporary */}
+        <div style={{ textAlign: 'center' }}>
+          <button
+            type="button"
+            onClick={messages.fetchMore}
+            disabled={messages.loading}
+          >
+            {messages.loading ? 'Loading...' : 'Load more'}
+          </button>
+        </div>
       </ContentWrapper>
       {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>
