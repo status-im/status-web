@@ -5,6 +5,8 @@ import { containsOnlyEmoji } from './contains-only-emoji'
 test('should be truthy', () => {
   expect(containsOnlyEmoji('💩')).toBeTruthy()
   expect(containsOnlyEmoji('💩💩💩💩💩💩')).toBeTruthy()
+  // expect(containsOnlyEmoji('1️⃣')).toBeTruthy()
+  // expect(containsOnlyEmoji('👨‍👩‍👧')).toBeTruthy()
 })
 
 test('should be falsy', () => {
