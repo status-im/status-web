@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 
+import isSameDay from 'date-fns/isSameDay'
 import { useMatch } from 'react-router-dom'
 
 import { MemberSidebar } from '../../components/member-sidebar'
@@ -27,6 +28,29 @@ const ChatStart = (props: ChatStartProps) => {
       <Heading>{identity?.displayName}</Heading>
       <Text>
         Welcome to the beginning of the #{identity?.displayName} channel!
+      </Text>
+    </Flex>
+  )
+}
+
+const DateDivider = (props: { date: Date }) => {
+  const { date } = props
+
+  let label = date.toLocaleDateString([], { weekday: 'long' })
+
+  const today = new Date()
+  const yesterday = new Date().setDate(today.getDate() - 1)
+
+  if (isSameDay(date, today)) {
+    label = 'Today'
+  } else if (isSameDay(date, yesterday)) {
+    label = 'Yesterday'
+  }
+
+  return (
+    <Flex justify="center" css={{ padding: '18px 0 8px' }}>
+      <Text size="13" color="gray">
+        {label}
       </Text>
     </Flex>
   )
@@ -68,6 +92,27 @@ const Body = () => {
           </button>
         </div>
       </ContentWrapper>
+      {messages.data.map((message, index) => {
+        const sentDate = new Date(Number(message.clock))
+        const prevMessage = messages.data[index - 1]
+
+        let showDate = index === 0 // always show date for the first message
+
+        if (prevMessage) {
+          const prevSentDate = new Date(Number(prevMessage.clock))
+          showDate = !isSameDay(prevSentDate, sentDate) // show date if it's not the same day
+        }
+
+        return (
+          <Fragment key={message.messageId}>
+            {showDate && <DateDivider date={sentDate} />}
+            <ChatMessage
+              message={message}
+              prevSigner={showDate ? undefined : prevMessage?.signer}
+            />
+          </Fragment>
+        )
+      })}
       {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>
   )
@@ -113,7 +158,7 @@ const ContentWrapper = styled('div', {
   minWidth: 1,
 
   // scrollSnapType: 'y proximity',
-
+  paddingBottom: 16,
   // '& > div:last-child': {
   // scrollSnapAlign: 'end',
   // scrollMarginBlockEnd: '1px',
