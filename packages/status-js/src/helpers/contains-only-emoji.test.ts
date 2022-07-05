@@ -14,4 +14,7 @@ test('should be falsy', () => {
   expect(containsOnlyEmoji('💩 ')).toBeFalsy()
   expect(containsOnlyEmoji('text 💩')).toBeFalsy()
   expect(containsOnlyEmoji('💩 text')).toBeFalsy()
+  expect(containsOnlyEmoji('123')).toBeFalsy()
+  expect(containsOnlyEmoji('💩 123')).toBeFalsy()
+  expect(containsOnlyEmoji('123 💩💩💩 ')).toBeFalsy()
 })
