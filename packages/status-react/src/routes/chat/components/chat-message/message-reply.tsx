@@ -1,47 +1,37 @@
 import React from 'react'
 
-import { useMatch } from 'react-router-dom'
-
 import { useProtocol } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Avatar, Box, Flex, Image, Text } from '../../../../system'
 
+import type { Message } from '../../../../protocol'
+
 interface Props {
-  messageId: string
+  message: Message
 }
 
 export const MessageReply = (props: Props) => {
-  const { messageId } = props
+  const { message } = props
 
   const { client } = useProtocol()
 
-  // TODO: use protocol hook
-  const { params } = useMatch(':id')! // eslint-disable-line @typescript-eslint/no-non-null-assertion
-  const message = client.community.getChat(params.id!)!.getMessage(messageId)
-
-  if (!message) {
-    return (
-      <Wrapper>
-        <Text color="gray" size="13" truncate>
-          Message not available.
-        </Text>
-      </Wrapper>
-    )
-  }
+  // if (!message) {
+  //   return (
+  //     <Wrapper>
+  //       <Text color="gray" size="13" truncate>
+  //         Message not available.
+  //       </Text>
+  //     </Wrapper>
+  //   )
+  // }
 
   const { contentType, text, signer } = message
-
-  // TODO: can this happen?
-  const member = client.community.getMember(signer)
-
-  if (!member) {
-    return null
-  }
+  const member = client.community.getMember(signer)!
 
   return (
     <Wrapper>
       <Flex gap="1" align="center">
-        <Avatar size={20} name={member.username} />
+        <Avatar size={20} name={member.username} colorHash={member.colorHash} />
         <Text color="gray" size="13" weight="500">
           {member.username}
         </Text>
