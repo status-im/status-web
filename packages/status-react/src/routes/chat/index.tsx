@@ -91,28 +91,29 @@ const Body = () => {
             {messages.loading ? 'Loading...' : 'Load more'}
           </button>
         </div>
+        {messages.data.map((message, index) => {
+          const sentDate = new Date(Number(message.clock))
+          const prevMessage = messages.data[index - 1]
+
+          let showDate = index === 0 // always show date for the first message
+
+          if (prevMessage) {
+            const prevSentDate = new Date(Number(prevMessage.clock))
+            showDate = !isSameDay(prevSentDate, sentDate) // show date if it's not the same day
+          }
+
+          return (
+            <Fragment key={message.messageId}>
+              {showDate && <DateDivider date={sentDate} />}
+              <ChatMessage
+                message={message}
+                prevSigner={showDate ? undefined : prevMessage?.signer}
+              />
+            </Fragment>
+          )
+        })}
       </ContentWrapper>
-      {messages.data.map((message, index) => {
-        const sentDate = new Date(Number(message.clock))
-        const prevMessage = messages.data[index - 1]
 
-        let showDate = index === 0 // always show date for the first message
-
-        if (prevMessage) {
-          const prevSentDate = new Date(Number(prevMessage.clock))
-          showDate = !isSameDay(prevSentDate, sentDate) // show date if it's not the same day
-        }
-
-        return (
-          <Fragment key={message.messageId}>
-            {showDate && <DateDivider date={sentDate} />}
-            <ChatMessage
-              message={message}
-              prevSigner={showDate ? undefined : prevMessage?.signer}
-            />
-          </Fragment>
-        )
-      })}
       {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>
   )
