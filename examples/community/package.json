@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "community",
   "type": "module",
   "version": "0.0.0",
