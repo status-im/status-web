@@ -3,7 +3,12 @@
  */
 
 import { hexToBytes } from 'ethereum-cryptography/utils'
-import { Waku, WakuMessage } from 'js-waku'
+import {
+  discovery,
+  getPredefinedBootstrapNodes,
+  Waku,
+  WakuMessage,
+} from 'js-waku'
 
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 import { Account } from './account'
@@ -12,7 +17,7 @@ import { handleWakuMessage } from './community/handle-waku-message'
 
 export interface ClientOptions {
   publicKey: string
-  env?: 'production' | 'test'
+  environment?: 'production' | 'test'
 }
 
 class Client {
@@ -51,13 +56,21 @@ class Client {
 
   static async start(options: ClientOptions) {
     // Waku
+    const fleet =
+      options.environment === 'production'
+        ? discovery.predefined.Fleet.Prod
+        : discovery.predefined.Fleet.Test
+    /**
+     * >only connects to 1 remote node because of the limited number of nodes
+     * >run by Status and the limited number of connections provided by these nodes
+     * >
+     * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
+     */
+    const peers = getPredefinedBootstrapNodes(fleet)
     const waku = await Waku.create({
       bootstrap: {
         default: false,
-        peers: [
-          '/dns4/node-01.gc-us-central1-a.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS',
-          // '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/8000/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
-        ],
+        peers,
       },
       relayKeepAlive: 15,
       libp2p: { config: { pubsub: { enabled: true, emitSelf: true } } },
