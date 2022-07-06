@@ -175,7 +175,12 @@ export const ChatMessage = (props: Props) => {
 
   const renderMessage = () => {
     if (collapse) {
-      return <Box css={{ flex: 1, paddingLeft: 52 }}>{renderContent()}</Box>
+      return (
+        <Box css={{ flex: 1, paddingLeft: 52 }}>
+          {renderContent()}
+          <MessageReactions reactions={reactions} onClick={handleReaction} />
+        </Box>
+      )
     }
 
     return (
@@ -286,8 +291,8 @@ export const ChatMessage = (props: Props) => {
 // TODO: Use compound variants https://stitches.dev/docs/variants#compound-variants
 const Wrapper = styled('div', {
   position: 'relative',
-  padding: '0 16px',
-  marginTop: 18,
+  padding: '2px 16px',
+  marginTop: 14,
   gap: '$2',
 
   transitionProperty: 'background-color, border-color, color, fill, stroke',
