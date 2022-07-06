@@ -1,0 +1,27 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn install --frozen-lockfile
+      - uses: changesets/action@v1
+        id: changesets
+        with:
+          title: Release
+          commit: Release
+          version: yarn changeset version
+          publish: yarn changeset publish
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
