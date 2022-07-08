@@ -23,6 +23,7 @@
     "build": "vite build",
     "postbuild": "yarn typegen",
     "test": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
