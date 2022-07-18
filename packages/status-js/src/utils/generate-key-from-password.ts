@@ -1,6 +1,6 @@
 import { utf8ToBytes } from 'ethereum-cryptography/utils'
 
-import { pbkdf2 } from '../crypto/pbkdf2'
+import { pbkdf2 } from '../crypto/pbkdf2.browser'
 
 const AES_KEY_LENGTH = 32 // bytes
 
