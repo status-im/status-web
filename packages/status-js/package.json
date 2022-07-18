@@ -50,8 +50,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "browser": {
-    "crypto": false
   }
 }
