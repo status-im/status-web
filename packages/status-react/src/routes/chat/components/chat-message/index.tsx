@@ -12,8 +12,8 @@ import {
   Avatar,
   Box,
   Button,
-  ContextMenu,
-  ContextMenuTrigger,
+  // ContextMenu,
+  // ContextMenuTrigger,
   // DropdownMenu,
   // DropdownMenuTrigger,
   // EmojiHash,
@@ -171,20 +171,20 @@ export const ChatMessage = (props: Props) => {
 
   return (
     <>
-      <ContextMenuTrigger>
-        <Wrapper mention={mention} pinned={pinned} data-active={reacting}>
-          {responseTo && <MessageReply messageId={responseTo} />}
-          <Flex gap={2}>
-            <Box>
-              {/* <DropdownMenuTrigger>
+      {/* <ContextMenuTrigger> */}
+      <Wrapper mention={mention} pinned={pinned} data-active={reacting}>
+        {responseTo && <MessageReply messageId={responseTo} />}
+        <Flex gap={2}>
+          <Box>
+            {/* <DropdownMenuTrigger>
                 <button type="button"> */}
-              <Avatar
-                size={44}
-                name={member!.username}
-                colorHash={member!.colorHash}
-              />
-              {/* </button> */}
-              {/* <DropdownMenu>
+            <Avatar
+              size={44}
+              name={member!.username}
+              colorHash={member!.colorHash}
+            />
+            {/* </button> */}
+            {/* <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
                     <Avatar size="36" />
                     <Text>{member!.username}</Text>
@@ -212,55 +212,52 @@ export const ChatMessage = (props: Props) => {
                   </DropdownMenu.Item>
                 </DropdownMenu>
               </DropdownMenuTrigger> */}
-            </Box>
+          </Box>
 
-            <Box css={{ flex: 1 }}>
-              {/* {pinned && (
+          <Box css={{ flex: 1 }}>
+            {/* {pinned && (
                 <Flex gap={1}>
                   <PinIcon width={8} />
                   <Text size="13">Pinned by {contact.name}</Text>
                 </Flex>
               )} */}
 
-              <Flex gap="1" align="center">
-                <Text color="primary" weight="500" size="15">
-                  {member!.username}
-                </Text>
-                <Text size="10" color="gray">
-                  {new Date(Number(clock)).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </Text>
-              </Flex>
+            <Flex gap="1" align="center">
+              <Text color="primary" weight="500" size="15">
+                {member!.username}
+              </Text>
+              <Text size="10" color="gray">
+                {new Date(Number(clock)).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            </Flex>
 
-              {renderMessage()}
+            {renderMessage()}
 
-              <MessageReactions
-                reactions={reactions}
-                onClick={handleReaction}
-              />
-            </Box>
-          </Flex>
+            <MessageReactions reactions={reactions} onClick={handleReaction} />
+          </Box>
+        </Flex>
 
-          <Actions
-            owner={owner}
-            pinned={pinned}
-            onEditClick={() => setEditing(true)}
-            onReplyClick={handleReplyClick}
-            onPinClick={handlePinClick}
-            onDeleteClick={handleMessageDelete}
-            onReactionClick={handleReaction}
-            reacting={reacting}
-            onReactingChange={setReacting}
-            reactions={reactions}
-          />
-        </Wrapper>
-        <ContextMenu>
+        <Actions
+          owner={owner}
+          pinned={pinned}
+          onEditClick={() => setEditing(true)}
+          onReplyClick={handleReplyClick}
+          onPinClick={handlePinClick}
+          onDeleteClick={handleMessageDelete}
+          onReactionClick={handleReaction}
+          reacting={reacting}
+          onReactingChange={setReacting}
+          reactions={reactions}
+        />
+      </Wrapper>
+      {/* <ContextMenu>
           <ContextMenu.Item onSelect={handleReplyClick}>Reply</ContextMenu.Item>
-          {/* <ContextMenu.Item onSelect={handlePinClick}>Pin</ContextMenu.Item> */}
-        </ContextMenu>
-      </ContextMenuTrigger>
+          <ContextMenu.Item onSelect={handlePinClick}>Pin</ContextMenu.Item>
+        </ContextMenu> */}
+      {/* </ContextMenuTrigger> */}
     </>
   )
 }
