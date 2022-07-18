@@ -57,9 +57,9 @@ class Client {
   static async start(options: ClientOptions) {
     // Waku
     const fleet =
-      options.environment === 'production'
-        ? discovery.predefined.Fleet.Prod
-        : discovery.predefined.Fleet.Test
+      options.environment === 'test'
+        ? discovery.predefined.Fleet.Test
+        : discovery.predefined.Fleet.Prod
     /**
      * >only connects to 1 remote node because of the limited number of nodes
      * >run by Status and the limited number of connections provided by these nodes

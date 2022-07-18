@@ -10,7 +10,7 @@ if (!publicKey) {
   )
 }
 
-const environment = process.env.NODE_ENV
+const environment = process.env.ENVIRONMENT
 
 export const App = () => {
   return (
