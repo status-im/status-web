@@ -606,7 +606,7 @@ afterEach(async () => {
 // TODO!: fixture chat(s)
 // TODO!: fixture message(s)
 // TODO!: expect .close(s) to be called
-test.only(
+test(
   'receiving message',
   async () => {
     await page.goto('http://localhost:3001')
@@ -694,7 +694,7 @@ test.only(
 )
 
 // TODO!: mock community.requestToJoin()
-test('sending message', async () => {
+test.skip('sending message', async () => {
   await page.goto('http://localhost:3001')
 
   // Click text=Use Throwaway Profile
@@ -720,7 +720,7 @@ test('sending message', async () => {
   // TODO!: expect "help" message
 })
 
-test('replying to message', async () => {
+test.skip('replying to message', async () => {
   await page.goto('http://localhost:3001')
 
   // Click text=t#test-messages
@@ -743,7 +743,7 @@ test('replying to message', async () => {
   // TODO!: expect reply with reference to original message
 })
 
-test('reacting to message', async () => {
+test.skip('reacting to message', async () => {
   await page.goto('http://localhost:3001')
 
   // Click text=t#test-messages
