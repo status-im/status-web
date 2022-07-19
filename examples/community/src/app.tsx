@@ -10,6 +10,10 @@ if (!publicKey) {
   )
 }
 
+const environment = process.env.ENVIRONMENT
+
 export const App = () => {
-  return <Community publicKey={publicKey} theme="light" />
+  return (
+    <Community publicKey={publicKey} environment={environment} theme="light" />
+  )
 }
