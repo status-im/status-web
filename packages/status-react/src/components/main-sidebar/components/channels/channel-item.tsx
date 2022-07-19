@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { ChatMenu } from '../../../../components/chat-menu'
-import { ContextMenuTrigger } from '../../../../system'
+// import { ChatMenu } from '../../../../components/chat-menu'
+// import { ContextMenuTrigger } from '../../../../system'
 import { SidebarItem } from '../sidebar-item'
 
 import type { SidebarItemProps } from '../sidebar-item'
@@ -14,9 +14,9 @@ export const ChannelItem = (props: Props) => {
   const { children, ...sidebarItemProps } = props
 
   return (
-    <ContextMenuTrigger>
-      <SidebarItem {...sidebarItemProps}>#{children}</SidebarItem>
-      <ChatMenu type="context" />
-    </ContextMenuTrigger>
+    // <ContextMenuTrigger>
+    <SidebarItem {...sidebarItemProps}>#{children}</SidebarItem>
+    // <ChatMenu type="context" />
+    // </ContextMenuTrigger>
   )
 }
