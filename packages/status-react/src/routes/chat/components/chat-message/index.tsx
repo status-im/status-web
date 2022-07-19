@@ -31,7 +31,7 @@ import type { Message, Reaction } from '../../../../protocol'
 
 interface Props {
   message: Message
-  prevMessage?: Message
+  prevSigner?: Message['signer']
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -60,12 +60,12 @@ export const ChatMessage = (props: Props) => {
   const { params } = useMatch(':id')!
 
   const chatId = params.id!
-  const { message } = props
+  const { message, prevSigner } = props
 
   const mention = false
   const pinned = false
 
-  const { messageId, contentType, clock, reactions, signer, responseTo } =
+  const { messageId, contentType, timestamp, reactions, signer, responseTo } =
     message
 
   // TODO: remove usage of 0x prefix
@@ -73,6 +73,9 @@ export const ChatMessage = (props: Props) => {
   const chat = client.community.getChat(chatId)!
 
   const member = client.community.getMember(signer)!
+  const response = client.community.getChat(params.id!)!.getMessage(responseTo)
+
+  const collapse = !response && signer === prevSigner
 
   const [editing, setEditing] = useState(false)
   const [reacting, setReacting] = useState(false)
@@ -81,6 +84,7 @@ export const ChatMessage = (props: Props) => {
 
   // const userProfileDialog = useDialog(UserProfileDialog)
 
+  // TODO: fix saving of edited message
   const handleMessageSubmit = (message: string) => {
     chat.sendTextMessage(message)
   }
@@ -106,7 +110,7 @@ export const ChatMessage = (props: Props) => {
     // TODO: pin message
   }
 
-  const renderMessage = () => {
+  const renderContent = () => {
     if (editing) {
       return (
         <Box>
@@ -169,22 +173,28 @@ export const ChatMessage = (props: Props) => {
     }
   }
 
-  return (
-    <>
-      <ContextMenuTrigger>
-        <Wrapper mention={mention} pinned={pinned} data-active={reacting}>
-          {responseTo && <MessageReply messageId={responseTo} />}
-          <Flex gap={2}>
-            <Box>
-              {/* <DropdownMenuTrigger>
+  const renderMessage = () => {
+    if (collapse) {
+      return (
+        <Box css={{ flex: 1, paddingLeft: 52 }}>
+          {renderContent()}
+          <MessageReactions reactions={reactions} onClick={handleReaction} />
+        </Box>
+      )
+    }
+
+    return (
+      <Flex gap={2}>
+        <Box>
+          {/* <DropdownMenuTrigger>
                 <button type="button"> */}
-              <Avatar
-                size={44}
-                name={member!.username}
-                colorHash={member!.colorHash}
-              />
-              {/* </button> */}
-              {/* <DropdownMenu>
+          <Avatar
+            size={44}
+            name={member!.username}
+            colorHash={member!.colorHash}
+          />
+          {/* </button> */}
+          {/* <DropdownMenu>
                   <Flex direction="column" align="center" gap="1">
                     <Avatar size="36" />
                     <Text>{member!.username}</Text>
@@ -212,49 +222,62 @@ export const ChatMessage = (props: Props) => {
                   </DropdownMenu.Item>
                 </DropdownMenu>
               </DropdownMenuTrigger> */}
-            </Box>
+        </Box>
 
-            <Box css={{ flex: 1 }}>
-              {/* {pinned && (
+        <Box css={{ flex: 1 }}>
+          {/* {pinned && (
                 <Flex gap={1}>
                   <PinIcon width={8} />
                   <Text size="13">Pinned by {contact.name}</Text>
                 </Flex>
               )} */}
 
-              <Flex gap="1" align="center">
-                <Text color="primary" weight="500" size="15">
-                  {member!.username}
-                </Text>
-                <Text size="10" color="gray">
-                  {new Date(Number(clock)).toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </Text>
-              </Flex>
-
-              {renderMessage()}
-
-              <MessageReactions
-                reactions={reactions}
-                onClick={handleReaction}
-              />
-            </Box>
+          <Flex gap="1" align="center">
+            <Text color="primary" weight="500" size="15">
+              {member!.username}
+            </Text>
+            <Text size="10" color="gray">
+              {new Date(Number(timestamp)).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </Text>
           </Flex>
 
-          <Actions
-            owner={owner}
-            pinned={pinned}
-            onEditClick={() => setEditing(true)}
-            onReplyClick={handleReplyClick}
-            onPinClick={handlePinClick}
-            onDeleteClick={handleMessageDelete}
-            onReactionClick={handleReaction}
-            reacting={reacting}
-            onReactingChange={setReacting}
-            reactions={reactions}
-          />
+          {renderContent()}
+
+          <MessageReactions reactions={reactions} onClick={handleReaction} />
+        </Box>
+      </Flex>
+    )
+  }
+
+  return (
+    <>
+      <ContextMenuTrigger>
+        <Wrapper
+          mention={mention}
+          pinned={pinned}
+          collapse={collapse}
+          data-active={reacting}
+        >
+          {response && <MessageReply message={response} />}
+          {renderMessage()}
+
+          {account && (
+            <Actions
+              owner={owner}
+              pinned={pinned}
+              onEditClick={() => setEditing(true)}
+              onReplyClick={handleReplyClick}
+              onPinClick={handlePinClick}
+              onDeleteClick={handleMessageDelete}
+              onReactionClick={handleReaction}
+              reacting={reacting}
+              onReactingChange={setReacting}
+              reactions={reactions}
+            />
+          )}
         </Wrapper>
         <ContextMenu>
           <ContextMenu.Item onSelect={handleReplyClick}>Reply</ContextMenu.Item>
@@ -268,7 +291,8 @@ export const ChatMessage = (props: Props) => {
 // TODO: Use compound variants https://stitches.dev/docs/variants#compound-variants
 const Wrapper = styled('div', {
   position: 'relative',
-  padding: '10px 16px',
+  padding: '2px 16px',
+  marginTop: 14,
   gap: '$2',
 
   transitionProperty: 'background-color, border-color, color, fill, stroke',
@@ -318,6 +342,12 @@ const Wrapper = styled('div', {
           width: 3,
           background: '$pin-1',
         },
+      },
+    },
+    collapse: {
+      true: {
+        // paddingTop: '$1',
+        // paddingBottom: '$1',
       },
     },
   },
