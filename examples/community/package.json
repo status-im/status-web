@@ -2,7 +2,7 @@
   "private": true,
   "name": "community",
   "type": "module",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "browserslist": "> 0.5%, last 2 versions, not dead, not ios_saf < 13",
   "scripts": {
     "dev": "parcel index.html --https --no-cache --open",
@@ -10,7 +10,7 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "@status-im/react": "0.1.0-alpha.2",
+    "@status-im/react": "0.1.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },

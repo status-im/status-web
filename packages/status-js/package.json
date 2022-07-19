@@ -1,6 +1,6 @@
 {
   "name": "@status-im/js",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0",
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "exports": {
