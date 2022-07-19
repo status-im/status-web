@@ -1,3 +1,7 @@
+/**
+ * Integration test suite
+ */
+
 // todo?: move to __tests__/, tests/
 
 import { beforeEach, describe, expect, test, vi } from 'vitest'
