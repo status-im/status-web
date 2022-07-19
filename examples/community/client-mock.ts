@@ -1,4 +1,5 @@
-import { spy, stub } from 'sinon'
+// TODO?: remove
+import { spy /*, stub*/ } from 'sinon'
 
 import { createClient as _createClient } from '../../packages/status-js/src/client/client'
 
@@ -7,24 +8,19 @@ import type {
   ClientOptions,
 } from '../../packages/status-js/src/client/client'
 
-// todo?: no need
-// todo?: create prior load
+// TODO?: remove
+// TODO?: create prior load like js-waku-mock
 let client: Client
 
 async function createClient(options: ClientOptions): Promise<Client> {
   if (!client) {
     client = await _createClient(options)
 
-    // todo: sinon sandbox
+    // TODO: sinon sandbox
     spy(client)
     spy(client.community)
 
     globalThis.client = client
-    // try {
-    //   globalThis.obj = await globalThis.getObj()
-    // } catch (error) {
-    //   console.error(error)
-    // }
   }
 
   return client

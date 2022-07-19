@@ -28,6 +28,11 @@
 // TODO?: nest in describe
 // TODO?!: test unmount (to gracefully disconnect from waku)
 // TODO?: mount match snapshot
+// TODO: remove network recording
+// TODO!: fixture chat(s) with "smaller" payload
+// TODO!: fixture message(s)
+// TODO!: expect .close(s) to be called
+// TODO!: block/abort HTTP requests too if "mock mode"
 
 import { chromium /*, firefox, webkit */ } from 'playwright'
 import { build, preview } from 'vite'
@@ -36,33 +41,12 @@ import {
   afterEach,
   beforeAll,
   beforeEach,
-  expect,
+  // expect,
   test,
-  // vi,
 } from 'vitest'
 
-// import { App } from './src/app'
 import type { Browser, BrowserContext, Page } from 'playwright'
 import type { PreviewServer } from 'vite'
-
-const date = new Date()
-
-const obj = {
-  foo: () => console.log(date.getTime(), date),
-}
-
-// vi.mock('@status-im/react', () => {
-//   return {}
-// })
-
-// vi.mock('js-waku', () => {
-//   // const Waku = () => console.log('mock')
-//   const Waku = vi.fn()
-
-//   // Client.prototype.connect = vi.fn()
-
-//   return { Waku }
-// })
 
 let server: PreviewServer
 let browser: Browser
@@ -76,14 +60,7 @@ beforeAll(async () => {
   })
   server = await preview({
     preview: { port: 3001 },
-    // test: {
-    //   deps: {
-    //     inline: ['js-waku'],
-    //   },
-    // },
   })
-  // execa("npm run build")
-  // browser = await chromium.launch()
   browser = await chromium.launch({ headless: false, devtools: true })
 })
 
@@ -93,65 +70,14 @@ afterAll(async () => {
   await server.httpServer.close()
 })
 
-// todo?: create a new context
-// https://playwright.dev/docs/browser-contexts
 beforeEach(async () => {
-  // const contextA = await browser.newContext()
-
-  // contextA.addInitScript(
-  //   //   {
-  //   //   path: './waku-mock.ts',
-  //   // }
-  //   obj => {
-  //     console.log('HERE')
-  //     console.log(obj)
-  //     window.waku = obj
-  //   },
-  //   { create: () => console.log(date.getTime(), date) }
-  // )
-
-  // pageA = await contextA.newPage()
-
-  // const contextB = await browser.newContext()
-
-  // contextB.addInitScript({
-  //   path: './waku-mock.ts',
-  // })
-
-  // pageB = await contextA.newPage()
-
-  // pageB = await contextA.newPage()
-
-  // const mock = {
-  //   // todo: returns .waitForRemotePeer
-  //   create: vi.fn(),
-  //   libp2p: {
-  //     connectionManager: {
-  //       // empty so wakuDisconnectionTimer runs without effect
-  //       connections: new Map(),
-  //     },
-  //   },
-  //   stop: undefined,
-  //   store: {
-  //     queryHistory: undefined,
-  //     addDecryptionKey: undefined,
-  //   },
-  //   relay: {
-  //     addObserver: undefined,
-  //     addDecryptionKey: undefined,
-  //     deleteObserver: undefined,
-  //     send: undefined,
-  //   },
-  // }
-
   context = await browser.newContext({
     recordHar: { path: 'example.har' },
   })
-  // await context.exposeFunction('getObj', () => obj)
   await context.addInitScript({ path: './js-waku-mock-script.js' })
   page = await context.newPage()
   await page.addInitScript(() => {
-    globalThis.waku.foo()
+    // globalThis.waku.foo()
     globalThis.waku.historyMessages.set('/waku/1/0x35cd47c5/rfc26', [
       {
         payload: new Uint8Array([
@@ -496,116 +422,12 @@ beforeEach(async () => {
       },
     ])
   })
-
-  // page.on('websocket', ws => {
-  //   console.log(`WebSocket opened: ${ws.url()}>`)
-  //   ws.on('framesent', event => console.log(event.payload))
-  //   ws.on('framereceived', event => console.log(event.payload))
-  //   ws.on('close', () => console.log('WebSocket closed'))
-  // })
-
-  // const text = 'huh'
-
-  // await page.addInitScript(() => {
-  //   window.waku = {
-  //     create: () => {
-  //       // console.log('WHAT?!')
-  //       console.log(text)
-  //     },
-  //   }
-  // })
-
-  // const window = await page.evaluate(() => {
-  //   return window
-  // })
-
-  // window.waku = 'bruh'
-  // waku = await page.evaluate(() => {
-  //   // window.waku
-  //   // return globalThis.window.waku
-  //   // window.waku = {
-  //   //   create: () => {
-  //   //     // console.log('WHAT?!')
-  //   //     console.log(text)
-  //   //   },
-  //   // }
-  //   // return window.waku
-  // })
-
-  // console.log('HERE')
-  // console.log(window)
-  // // console.log(waku)
-  // console.log(window.waku)
-
-  // globalThis.window.foo = null
-
-  // console.log(globalThis.window)
-
-  // await page.pause()
-
-  // Object.assign(globalThis.window.waku, mock)
-
-  // await page.addInitScript(() => {
-  //   Object.assign(window.waku, mock)
-  // })
-
-  // await page.addInitScript(() => {
-  //   Object.assign(window.waku, {
-  //     // todo: returns .waitForRemotePeer
-  //     create: vi.fn(),
-  //     libp2p: {
-  //       connectionManager: {
-  //         // empty so wakuDisconnectionTimer runs without effect
-  //         connections: new Map(),
-  //       },
-  //     },
-  //     stop: undefined,
-  //     store: {
-  //       queryHistory: undefined,
-  //       addDecryptionKey: undefined,
-  //     },
-  //     relay: {
-  //       addObserver: undefined,
-  //       addDecryptionKey: undefined,
-  //       deleteObserver: undefined,
-  //       send: undefined,
-  //     },
-  //   })
-  // })
-
-  // Object.assign(window.waku, {
-  //   // todo: returns .waitForRemotePeer
-  //   create: vi.fn(),
-  //   libp2p: {
-  //     connectionManager: {
-  //       // empty so wakuDisconnectionTimer runs without effect
-  //       connections: new Map(),
-  //     },
-  //   },
-  //   stop: undefined,
-  //   store: {
-  //     queryHistory: undefined,
-  //     addDecryptionKey: undefined,
-  //   },
-  //   relay: {
-  //     addObserver: undefined,
-  //     addDecryptionKey: undefined,
-  //     deleteObserver: undefined,
-  //     send: undefined,
-  //   },
-  // })
 }, 10 * 60 * 1000)
 
 afterEach(async () => {
   await page.close()
-
-  // todo?: use
-  // vi.clearAllMocks()
 })
 
-// TODO!: fixture chat(s)
-// TODO!: fixture message(s)
-// TODO!: expect .close(s) to be called
 test(
   'receiving message',
   async () => {
@@ -619,20 +441,9 @@ test(
       'http://localhost:3001/30804ea7-bd66-4d5d-91eb-b2dcfe2515b3'
     )
 
-    // const foo = waku.foo
-    // console.log(waku)
-
-    await page.pause()
-
-    // TODO!: expect a message
-    // addObserver(callback: (message: WakuMessage)
     await page.evaluate(() => {
-      // window.waku.foo()
-      // globalThis.client.waku.foo()
-      const observer = window.waku.observers
+      globalThis.waku.observers
         .get('/waku/1/0x0fd9cba5/rfc26')
-        // console.log('observer:', observer)
-        // console.log(globalThis.client.waku.observers)
         .forEach(observer =>
           observer({
             payload: new Uint8Array([
@@ -679,6 +490,7 @@ test(
         )
     })
 
+    // TODO!: expect located message
     // // Click text=IIdeal Aromatic Imperatorangel12:10HelpPick reactionReply to message
     // await page
     //   .locator(
@@ -700,7 +512,7 @@ test.skip('sending message', async () => {
   // Click text=Use Throwaway Profile
   await page.locator('text=Use Throwaway Profile').click()
 
-  // TODO: Return message with the profile in members
+  // TODO?!: Return message with the profile in members
 
   // Click text=t#test-messages
   await page.locator('text=t#test-messages').click()
