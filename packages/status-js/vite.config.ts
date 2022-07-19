@@ -6,8 +6,6 @@ import { dependencies } from './package.json'
 
 import type { Alias } from 'vite'
 
-const isTest = process.env.NODE_ENV === 'test'
-
 const external = [
   ...Object.keys(dependencies || {}),
   // ...Object.keys(peerDependencies || {}),
@@ -16,7 +14,7 @@ const external = [
 export default defineConfig(({ mode }) => {
   const alias: Alias[] = []
 
-  if (isTest) {
+  if (mode === 'test') {
     alias.push({
       /**
        * Note: `happy-dom` nor `jsdom` have Crypto implemented (@see https://github.com/jsdom/jsdom/issues/1612)
