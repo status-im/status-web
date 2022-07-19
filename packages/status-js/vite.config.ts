@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 
 import { defineConfig } from 'vite'
+import { configDefaults } from 'vitest/config'
 
 import { dependencies } from './package.json'
 
@@ -27,6 +28,18 @@ export default defineConfig(({ mode }) => {
 
     test: {
       // environment: 'happy-dom',
+      coverage: {
+        all: true,
+        include: ['src/**'],
+        exclude: [
+          ...configDefaults.coverage.exclude!,
+          '.scripts/*',
+          'src/proto/**',
+          'src/protos/**',
+          'src/index.ts',
+        ],
+        reporter: ['text', 'html'],
+      },
     },
   }
 })
