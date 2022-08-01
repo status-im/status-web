@@ -5,35 +5,35 @@ import { NavLink } from 'react-router-dom'
 import { styled } from '../../../../styles/config'
 import { Avatar } from '../../../../system'
 
+import type { Chat } from '../../../../protocol/use-sorted-chats'
 import type { Ref } from 'react'
 
 interface Props {
-  to: string
-  muted: boolean
-  unread: boolean
-  children: React.ReactNode
-  name?: string
-  color?: string
+  chat: Chat
 }
 
-const SidebarItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
-  const { muted, unread, children, name, color, ...buttonProps } = props
+const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
+  const { chat } = props
+
+  const muted = false
+  const unread = false
+
+  const { color, displayName } = chat.identity!
 
   return (
     <Link
       ref={ref}
+      to={`/${chat.id}`}
       state={muted ? 'muted' : unread ? 'unread' : undefined}
-      {...buttonProps}
     >
-      <Avatar size={24} name={name} color={color} />
-      {children}
+      <Avatar size={24} name={displayName} color={color} />#{displayName}
     </Link>
   )
 }
 
-const _SidebarItem = forwardRef(SidebarItem)
+const _ChatItem = forwardRef(ChatItem)
 
-export { _SidebarItem as SidebarItem }
+export { _ChatItem as ChatItem }
 export type SidebarItemProps = Omit<Props, 'children'>
 
 const Link = styled(NavLink, {
