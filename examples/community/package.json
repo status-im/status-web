@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "parcel index.html --https --no-cache --open",
     "prebuild": "rm -rf dist",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --no-cache"
   },
   "dependencies": {
     "@status-im/react": "0.1.0-alpha.2",

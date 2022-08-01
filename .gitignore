@@ -76,3 +76,6 @@ node_modules/
 
 # Turborepo
 .turbo
+
+# Vercel
+.vercel

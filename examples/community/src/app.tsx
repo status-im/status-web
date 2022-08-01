@@ -10,7 +10,7 @@ if (!publicKey) {
   )
 }
 
-const environment = process.env.ENVIRONMENT
+const environment = process.env.ENVIRONMENT as 'production' | 'test'
 
 export const App = () => {
   return (
