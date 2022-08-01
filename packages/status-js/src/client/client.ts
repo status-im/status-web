@@ -70,12 +70,26 @@ class Client {
     const waku = await Waku.create({
       bootstrap: {
         default: false,
-        peers,
+        // peers,
+        peers: [
+          // prod
+          // '/dns4/node-01.gc-us-central1-a.wakuv2.prod.statusim.net/tcp/443/wss/p2p/16Uiu2HAmVkKntsECaYfefR1V2yCR79CegLATuTPE6B9TxgxBiiiA',
+          // test
+          // '/dns4/node-01.gc-us-central1-a.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS',
+          // '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/8000/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
+          // '/dns4/node-01.do-ams3.wakuv2.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ',
+          // test:go
+          // '/dns4/node-01.gc-us-central1-a.go-waku.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmPz63Xc6AuVkDeujz7YeZta18rcdau3Y1BzaxKAfDrBqz',
+          '/dns4/node-01.do-ams3.go-waku.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAm9vnvCQgCDrynDK1h7GJoEZVGvnuzq84RyDQ3DEdXmcX7',
+          // '/dns4/node-01.ac-cn-hongkong-c.go-waku.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAmBDbMWFiG9ki8sDw6fYtraSxo4oHU9HbuN43S2HVyq1FD',
+        ],
       },
+      // todo: don't relay
       relayKeepAlive: 15,
       libp2p: { config: { pubsub: { enabled: true, emitSelf: true } } },
     })
     await waku.waitForRemotePeer()
+    console.log('waku:ready', new Date().toISOString())
     const wakuDisconnectionTimer = setInterval(async () => {
       const connectionsToClose: Promise<void>[] = []
 
@@ -144,6 +158,7 @@ class Client {
       symKey,
     })
 
+    // todo: use light push
     await this.waku.relay.send(wakuMesage)
   }
 

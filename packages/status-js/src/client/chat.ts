@@ -184,6 +184,7 @@ export class Chat {
       endTime = new Date()
     }
 
+    console.log('chat:fetch:start', new Date().toISOString())
     await this.client.waku.store.queryHistory([this.contentTopic], {
       timeFilter: {
         startTime: startTime,
@@ -204,6 +205,7 @@ export class Chat {
         this.#fetchingMessages = false
       },
     })
+    console.log('chat:fetch:end', new Date().toISOString())
 
     this.#previousFetchedStartTime = startTime
 

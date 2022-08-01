@@ -31,6 +31,7 @@ export class Community {
   public chats: Map<string, Chat>
   #members: Map<string, Member>
   #callbacks: Set<(description: CommunityDescription) => void>
+  #subscriptions: Map<string, () => Promise<void>>
 
   constructor(client: Client, publicKey: string) {
     this.client = client
@@ -42,6 +43,7 @@ export class Community {
     this.chats = new Map()
     this.#members = new Map()
     this.#callbacks = new Set()
+    this.#subscriptions = new Map()
   }
 
   public async start() {
@@ -52,7 +54,8 @@ export class Community {
     this.client.waku.store.addDecryptionKey(this.symmetricKey, {
       contentTopics: [this.contentTopic],
     })
-    this.client.waku.relay.addDecryptionKey(this.symmetricKey, {
+    // this.client.waku.relay.addDecryptionKey(this.symmetricKey, {
+    this.client.waku.filter.addDecryptionKey(this.symmetricKey, {
       contentTopics: [this.contentTopic],
     })
 
@@ -64,12 +67,14 @@ export class Community {
     }
 
     this.description = description
+    console.log('community:ready', new Date().toISOString())
 
     this.observe()
     this.addMembers(this.description.members)
 
     // Chats
     await this.observeChatMessages(this.description.chats)
+    console.log('community:chats:ready', new Date().toISOString())
   }
 
   // todo: rename this to chats when changing references in ui
@@ -108,7 +113,8 @@ export class Community {
   }
 
   private observe = () => {
-    this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
+    // this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
+    this.client.waku.filter.subscribe(this.client.handleWakuMessage, [
       this.contentTopic,
     ])
   }
@@ -129,24 +135,34 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        this.client.waku.relay.addDecryptionKey(chat.symmetricKey, {
+        // this.client.waku.relay.addDecryptionKey(chat.symmetricKey, {
+        this.client.waku.filter.addDecryptionKey(chat.symmetricKey, {
           method: waku_message.DecryptionMethod.Symmetric,
           contentTopics: [contentTopic],
         })
+
+        const unsubscribe = await this.client.waku.filter.subscribe(
+          this.client.handleWakuMessage,
+          [contentTopic]
+        )
+
+        this.#subscriptions.set(contentTopic, unsubscribe)
 
         return contentTopic
       }
     )
 
     const contentTopics = await Promise.all(chatPromises)
+    // await Promise.all(chatPromises)
 
-    this.client.waku.relay.addObserver(
-      this.client.handleWakuMessage,
-      contentTopics
-    )
+    // this.client.waku.relay.addObserver(
+    // this.client.waku.filter.subscribe(
+    //   this.client.handleWakuMessage,
+    //   contentTopics
+    // )
   }
 
-  private unobserveChatMessages = (
+  private unobserveChatMessages = async (
     chatDescription: CommunityDescription['chats']
   ) => {
     const contentTopics: string[] = []
@@ -161,6 +177,7 @@ export class Community {
       const contentTopic = chat.contentTopic
 
       this.chats.delete(chatUuid)
+      await this.#subscriptions.get(contentTopic)?.() // unsubscribe
       contentTopics.push(contentTopic)
     }
 
@@ -168,10 +185,12 @@ export class Community {
       return
     }
 
-    this.client.waku.relay.deleteObserver(
-      this.client.handleWakuMessage,
-      contentTopics
-    )
+    // fixme: unsubscribe
+    // this.client.waku.relay.deleteObserver(
+    //   this.client.handleWakuMessage,
+    //   contentTopics
+    // )
+    // this.client.waku.filter.unsubscribe()
   }
 
   private addMembers = (members: CommunityDescription['members']) => {
