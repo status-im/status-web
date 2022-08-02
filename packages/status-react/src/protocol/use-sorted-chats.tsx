@@ -59,11 +59,15 @@ export const useSortedChats = (): Result => {
       []
     )
 
-    const categories = Object.entries(categoryChats).map(([id, chats]) => ({
-      ...community.categories[id],
-      id,
-      chats: sortByPosition(chats),
-    }))
+    const categories = Object.entries(categoryChats).map(([id, chats]) => {
+      const { name, position } = community.categories[id]
+      return {
+        id,
+        name,
+        position,
+        chats: sortByPosition(chats),
+      }
+    })
 
     return {
       categories: sortByPosition(categories),
