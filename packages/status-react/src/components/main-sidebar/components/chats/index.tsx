@@ -10,16 +10,16 @@ export const Chats = () => {
 
   return (
     <Box css={{ padding: '18px 0', overflow: 'auto' }}>
+      {chats.map(chat => (
+        <ChatItem key={chat.id} chat={chat} />
+      ))}
+
       {categories.map(category => (
         <ChatGroup key={category.id} name={category.name}>
           {category.chats.map(chat => (
             <ChatItem key={chat.id} chat={chat} />
           ))}
         </ChatGroup>
-      ))}
-
-      {chats.map(chat => (
-        <ChatItem key={chat.id} chat={chat} />
       ))}
     </Box>
   )
