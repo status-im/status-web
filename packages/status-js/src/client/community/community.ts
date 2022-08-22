@@ -269,6 +269,9 @@ export class Community {
       this.contentTopic,
       this.symmetricKey
     )
+
+    // todo?:
+    // this.client.activityCenter.addJoiningRequestNotification(...)
   }
 
   public isOwner = (
