@@ -12,6 +12,7 @@ import {
 
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 import { Account } from './account'
+import { ActivityCenter } from './activityCenter'
 import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
 
@@ -37,6 +38,7 @@ class Client {
    */
   #wakuDisconnectionTimer: ReturnType<typeof setInterval>
 
+  public activityCenter: ActivityCenter
   public account?: Account
   public community: Community
 
@@ -49,6 +51,9 @@ class Client {
     this.waku = waku
     this.wakuMessages = new Set()
     this.#wakuDisconnectionTimer = wakuDisconnectionTimer
+
+    // Activity Center
+    this.activityCenter = new ActivityCenter(/* this */)
 
     // Community
     this.community = new Community(this, options.publicKey)

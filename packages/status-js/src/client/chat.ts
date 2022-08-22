@@ -35,7 +35,9 @@ export type ChatMessage = ChatMessageProto & {
 
 type FetchedMessage = { messageId: string; timestamp?: Date }
 
+// todo?: add isMuted prop, use as condition to add a message/notification to activity center or not
 export class Chat {
+  // todo: use #
   private readonly client: Client
   #clock: bigint
 
@@ -51,6 +53,7 @@ export class Chat {
   #pinEvents: Map<string, Pick<ChatMessage, 'clock' | 'pinned'>>
   #reactEvents: Map<string, Pick<ChatMessage, 'clock' | 'reactions'>>
   #deleteEvents: Map<string, Pick<ChatMessage, 'clock' | 'signer'>>
+  #isActive: boolean
   #fetchingMessages?: boolean
   #previousFetchedStartTime?: Date
   #oldestFetchedMessage?: FetchedMessage
@@ -81,6 +84,7 @@ export class Chat {
     this.#pinEvents = new Map()
     this.#reactEvents = new Map()
     this.#deleteEvents = new Map()
+    this.#isActive = false
     this.messageCallbacks = new Set()
   }
 
@@ -142,6 +146,7 @@ export class Chat {
     return this.#messages.get(id)
   }
 
+  // todo?: delete
   public onChange = (callback: (description: CommunityChat) => void) => {
     this.chatCallbacks.add(callback)
 
@@ -158,9 +163,16 @@ export class Chat {
     callback: (messages: ChatMessage[]) => void
   ): (() => void) => {
     this.messageCallbacks.add(callback)
+    // todo?: set from ui, think use case without an ui
+    this.#isActive = true
+    // todo?!: only if in `unreadChats`, keep "unreads" separate from `notifications`
+    // todo?: only if at the bottom and all unread messages are in view
+    // todo?: call from ui
+    this.client.activityCenter.removeChatNotifications(this.uuid)
 
     return () => {
       this.messageCallbacks.delete(callback)
+      this.#isActive = false
     }
   }
 
@@ -305,6 +317,11 @@ export class Chat {
 
     // callback
     this.emitMessages()
+
+    // todo?: if not muted
+    if (!this.#isActive) {
+      this.client.activityCenter.addMessageNotifications(newMessage)
+    }
   }
 
   public handleEditedMessage = (
