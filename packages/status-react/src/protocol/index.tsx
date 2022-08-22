@@ -1,6 +1,7 @@
 export { ProtocolProvider, useProtocol } from './provider'
 export type { Account } from './use-account'
 export { useAccount } from './use-account'
+export { useActivityCenter } from './use-activity-center'
 export type { Chat } from './use-chat'
 export { useChat } from './use-chat'
 export { useChats } from './use-chats'

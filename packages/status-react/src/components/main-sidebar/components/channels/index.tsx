@@ -1,12 +1,13 @@
 import React from 'react'
 
-import { useChats } from '../../../../protocol'
+import { useActivityCenter, useChats } from '../../../../protocol'
 import { Box } from '../../../../system'
 // import { ChannelGroup } from './channel-group'
 import { ChannelItem } from './channel-item'
 
 export const Channels = () => {
   const chats = useChats()
+  const { unreadChats } = useActivityCenter().data
 
   return (
     <Box css={{ padding: '18px 0', overflow: 'auto' }}>
@@ -14,7 +15,7 @@ export const Channels = () => {
         <ChannelItem
           key={chat.id}
           to={`/${chat.id}`}
-          unread={false}
+          unread={unreadChats.has(chat.id)}
           muted={false}
           name={chat.identity?.displayName}
           color={chat.identity?.color}
