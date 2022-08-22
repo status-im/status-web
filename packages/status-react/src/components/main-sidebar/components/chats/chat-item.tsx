@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
+import { useActivityCenter } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Avatar } from '../../../../system'
 
@@ -15,8 +16,10 @@ interface Props {
 const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
   const { chat } = props
 
+  const { unreadChats } = useActivityCenter().data
+
   const muted = false
-  const unread = false
+  const unread = unreadChats.has(chat.id)
 
   const { color, displayName } = chat.identity!
 
@@ -66,18 +69,18 @@ const Link = styled(NavLink, {
       unread: {
         color: '$accent-1',
         fontWeight: '$600',
-        '&::after': {
-          content: '"1"',
-          textAlign: 'center',
-          position: 'absolute',
-          right: 8,
-          width: 22,
-          height: 22,
-          background: '$primary-1',
-          borderRadius: '$full',
-          fontSize: 12,
-          color: '$accent-11',
-        },
+        // '&::after': {
+        //   content: '"1"',
+        //   textAlign: 'center',
+        //   position: 'absolute',
+        //   right: 8,
+        //   width: 22,
+        //   height: 22,
+        //   background: '$primary-1',
+        //   borderRadius: '$full',
+        //   fontSize: 12,
+        //   color: '$accent-11',
+        // },
       },
     },
   },

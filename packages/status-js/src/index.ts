@@ -1,4 +1,5 @@
 export type { Account } from './client/account'
+export type { ActivityCenter } from './client/activityCenter'
 export type { ChatMessage as Message } from './client/chat'
 export type { Client, ClientOptions } from './client/client'
 export { createClient } from './client/client'
