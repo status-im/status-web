@@ -33,11 +33,11 @@ const initialState: State = {
 
 interface Props {
   children: React.ReactNode
-  config: Config
+  options: Config['options']
 }
 
 export const AppProvider = (props: Props) => {
-  const { children, config } = props
+  const { children, options } = props
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -46,13 +46,12 @@ export const AppProvider = (props: Props) => {
       state,
       dispatch,
       options: {
-        enableSidebar: true,
-        enableMembers: true,
-        ...config.options,
+        enableSidebar: options?.enableSidebar ?? true,
+        enableMembers: options?.enableMembers ?? true,
       },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state, config.options]
+    [state, options]
   )
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>
