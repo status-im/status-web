@@ -5,7 +5,6 @@ import * as Collapsible from '@radix-ui/react-collapsible'
 // import { BellIcon } from '../../../../icons/bell-icon'
 import { ChevronDownIcon } from '../../../../icons/chevron-down-icon'
 import { styled } from '../../../../styles/config'
-import { Text } from '../../../../system'
 
 interface Props {
   name: string
@@ -18,9 +17,7 @@ export const ChatCategory = (props: Props) => {
   return (
     <Collapsible.Root defaultOpen>
       <CollapsibleTrigger>
-        <Text size="15" weight="500" color="gray">
-          {name}
-        </Text>
+        {name}
         <ChevronDownIcon />
       </CollapsibleTrigger>
       <CollapsibleContent>{children}</CollapsibleContent>
@@ -52,7 +49,8 @@ const CollapsibleTrigger = styled(Collapsible.Trigger, {
   padding: 8,
   borderRadius: 8,
   height: 34,
-  color: '$accent-1',
+  fontWeight: '$500',
+  color: '$accent-4',
 
   '&:hover': {
     background: '$gray-3',
