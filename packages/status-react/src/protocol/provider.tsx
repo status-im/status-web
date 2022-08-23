@@ -65,7 +65,7 @@ export const ProtocolProvider = (props: Props) => {
 
   useEffect(() => {
     const loadClient = async () => {
-      const client = await createClient({ publicKey: options.publicKey })
+      const client = await createClient(options)
       dispatch({ type: 'INIT', client })
     }
 

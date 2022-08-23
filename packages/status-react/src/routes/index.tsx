@@ -42,14 +42,20 @@ const Gate = (props: { children: JSX.Element }) => {
 }
 
 export const Community = (props: Props) => {
-  const { theme, router: Router = BrowserRouter } = props
+  const {
+    theme,
+    router: Router = BrowserRouter,
+    publicKey,
+    environment,
+    options,
+  } = props
 
   useTheme(theme)
 
   return (
     <Router>
-      <ProtocolProvider options={{ publicKey: props.publicKey }}>
-        <AppProvider config={props}>
+      <ProtocolProvider options={{ publicKey, environment }}>
+        <AppProvider options={options}>
           <DialogProvider>
             <GlobalStyle />
             <Wrapper>
