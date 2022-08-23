@@ -5,8 +5,11 @@ import { useProtocol } from './provider'
 export const useActiveChat = () => {
   const { client } = useProtocol()
 
-  const { params } = useMatch(':id')!
-  const chatId = params.id!
+  const path = useMatch(':id')
 
-  return client.community.getChat(chatId)
+  if (!path?.params.id) {
+    return
+  }
+
+  return client.community.getChat(path.params.id)
 }
