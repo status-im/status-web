@@ -4,7 +4,7 @@ import { useAppState } from '../../contexts/app-context'
 import { useAccount } from '../../protocol'
 import { styled } from '../../styles/config'
 import { Separator } from '../../system'
-import { Channels } from './components/channels'
+import { Chats } from './components/chats'
 import { CommunityInfo } from './components/community-info'
 import { GetStarted } from './components/get-started'
 
@@ -19,7 +19,7 @@ export const MainSidebar = () => {
   return (
     <Wrapper>
       <CommunityInfo />
-      <Channels />
+      <Chats />
 
       {!account && (
         <>
