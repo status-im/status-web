@@ -320,7 +320,10 @@ export class Chat {
 
     // todo?: if not muted
     if (!this.#isActive) {
-      this.client.activityCenter.addMessageNotifications(newMessage)
+      this.client.activityCenter.addMessageNotification(
+        newMessage,
+        this.#messages.get(newMessage.responseTo)
+      )
     }
   }
 

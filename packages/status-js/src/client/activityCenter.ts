@@ -1,6 +1,6 @@
 // todo: rename to notifications (center?), inbox, or keep same as other platforms
 import type { ChatMessage } from './chat'
-// import type { Client } from './client'
+import type { Client } from './client'
 
 // todo?: union
 // todo?: rename to Activity
@@ -8,6 +8,8 @@ type Notification = {
   // fixme?: specify message type (message_reply)
   type: 'message'
   value: ChatMessage
+  isMention?: boolean
+  isReply?: boolean
 }
 
 type ActivityCenterLatest = {
@@ -19,13 +21,13 @@ type ActivityCenterLatest = {
 // todo?: rename to NotificationCenter
 export class ActivityCenter {
   // todo?: use client.account for mentions and replies, or in chat.ts
-  // #client: Client
+  #client: Client
 
   #notifications: Set<Notification>
   #callbacks: Set<(latest: ActivityCenterLatest) => void>
 
-  constructor(/* client: Client */) {
-    // this.#client = client
+  constructor(client: Client) {
+    this.#client = client
 
     this.#notifications = new Set()
     this.#callbacks = new Set()
@@ -43,8 +45,7 @@ export class ActivityCenter {
 
         const chat = unreadChats.get(chatUuid)
         if (chat) {
-          // fixme!: isReply || isMention
-          const shouldIncrement = false
+          const shouldIncrement = notification.isMention || notification.isReply
           if (shouldIncrement) {
             chat.count++
           }
@@ -74,8 +75,28 @@ export class ActivityCenter {
     return { notifications, unreadChats }
   }
 
-  public addMessageNotification = (value: ChatMessage) => {
-    this.#notifications.add({ type: 'message', value })
+  // todo: pass ids instead of values and resolve within
+  public addMessageNotification = (
+    newMessage: ChatMessage,
+    referencedMessage?: ChatMessage
+  ) => {
+    let isMention: boolean | undefined
+    let isReply: boolean | undefined
+
+    if (this.#client.account) {
+      const publicKey = `0x${this.#client.account.publicKey}`
+
+      isMention = newMessage.text.includes(publicKey)
+      isReply = referencedMessage?.signer === publicKey
+    }
+
+    // todo?: getLatest on login
+    this.#notifications.add({
+      type: 'message',
+      value: newMessage,
+      isMention,
+      isReply,
+    })
 
     this.emitLatest()
   }

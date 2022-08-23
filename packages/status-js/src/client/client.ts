@@ -53,7 +53,7 @@ class Client {
     this.#wakuDisconnectionTimer = wakuDisconnectionTimer
 
     // Activity Center
-    this.activityCenter = new ActivityCenter(/* this */)
+    this.activityCenter = new ActivityCenter(this)
 
     // Community
     this.community = new Community(this, options.publicKey)
