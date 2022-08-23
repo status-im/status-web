@@ -12,7 +12,7 @@ interface Props {
   children: React.ReactNode
 }
 
-export const ChatGroup = (props: Props) => {
+export const ChatCategory = (props: Props) => {
   const { name, children } = props
 
   return (

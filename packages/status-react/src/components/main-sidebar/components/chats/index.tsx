@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useSortedChats } from '../../../../protocol'
 import { Box } from '../../../../system'
-import { ChatGroup } from './chat-group'
+import { ChatCategory } from './chat-category'
 import { ChatItem } from './chat-item'
 
 export const Chats = () => {
@@ -15,11 +15,11 @@ export const Chats = () => {
       ))}
 
       {categories.map(category => (
-        <ChatGroup key={category.id} name={category.name}>
+        <ChatCategory key={category.id} name={category.name}>
           {category.chats.map(chat => (
             <ChatItem key={chat.id} chat={chat} />
           ))}
-        </ChatGroup>
+        </ChatCategory>
       ))}
     </Box>
   )
