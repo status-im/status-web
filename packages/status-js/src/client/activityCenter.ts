@@ -1,16 +1,12 @@
 // todo?: rename to notifications (center?), inbox, or keep same as other platforms
 
-// import type { ChatMessage } from './chat'
+import type { ChatMessage } from './chat'
 import type { Client } from './client'
 
 // todo?: rename to Activity
 type Notification = {
   type: 'message'
-  // value: ChatMessage
-  id: string
-  // todo?: resolve in ui too
-  chatUuid: string
-  referencedMessageId?: string
+  value: ChatMessage
   isMention?: boolean
   isReply?: boolean
 }
@@ -40,7 +36,7 @@ export class ActivityCenter {
 
     for (const notification of this.#notifications.values()) {
       if (notification.type === 'message') {
-        const chatUuid = notification.chatUuid
+        const chatUuid = notification.value.chatUuid
 
         const chat = unreadChats.get(chatUuid)
         let count = chat?.count ?? 0
@@ -54,24 +50,17 @@ export class ActivityCenter {
         } else {
           unreadChats.set(chatUuid, { count })
         }
-
-        notifications.push(notification)
       }
+
+      notifications.push(notification)
     }
 
     notifications.sort((a, b) => {
-      const ma = this.#client.community.getChat(a.chatUuid)?.getMessage(a.id)
-      const mb = this.#client.community.getChat(b.chatUuid)?.getMessage(b.id)
-
-      if (!ma || !mb) {
-        return 0
-      }
-
-      if (ma.clock > mb.clock) {
+      if (a.value.clock > b.value.clock) {
         return -1
       }
 
-      if (ma.clock < mb.clock) {
+      if (a.value.clock < b.value.clock) {
         return 1
       }
 
@@ -84,37 +73,24 @@ export class ActivityCenter {
   }
 
   // todo: pass ids instead of values and resolve within
-  public addMessageNotification = (chatUuid: string, id: string) => {
-    const chat = this.#client.community.getChat(chatUuid)
-
-    if (!chat) {
-      return
-    }
-
-    const message = chat.getMessage(id)
-
-    if (!message) {
-      return
-    }
-
-    const referencedMessage = chat.getMessage(message.responseTo)
-
+  public addMessageNotification = (
+    newMessage: ChatMessage,
+    referencedMessage?: ChatMessage
+  ) => {
     let isMention: boolean | undefined
     let isReply: boolean | undefined
 
     if (this.#client.account) {
       const publicKey = `0x${this.#client.account.publicKey}`
 
-      isMention = message.text.includes(publicKey)
+      isMention = newMessage.text.includes(publicKey)
       isReply = referencedMessage?.signer === publicKey
     }
 
     // todo?: getLatest on login
     this.#notifications.add({
       type: 'message',
-      id,
-      chatUuid,
-      referencedMessageId: referencedMessage?.messageId,
+      value: newMessage,
       isMention,
       isReply,
     })
@@ -143,7 +119,7 @@ export class ActivityCenter {
         continue
       }
 
-      if (notification.chatUuid === chatUuid) {
+      if (notification.value.chatUuid === chatUuid) {
         this.#notifications.delete(notification)
       }
     }
