@@ -16,7 +16,7 @@ interface Props {
 const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
   const { chat } = props
 
-  const { unreadChats } = useActivityCenter().data
+  const { unreadChats } = useActivityCenter()
 
   const muted = false
   const unread = unreadChats.has(chat.id)

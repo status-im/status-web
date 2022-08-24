@@ -11,7 +11,7 @@ type Notification = {
   isReply?: boolean
 }
 
-type ActivityCenterLatest = {
+export type ActivityCenterLatest = {
   notifications: Notification[]
   // todo?: rename count to mentionsAndRepliesCount
   unreadChats: Map<string, { count: number }>

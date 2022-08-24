@@ -2,28 +2,28 @@ import { useEffect, useState } from 'react'
 
 import { useProtocol } from './provider'
 
-interface Result {
-  data: any
-}
+import type { ActivityCenterLatest } from '@status-im/js'
 
-export const useActivityCenter = (): Result => {
-  const { client } = useProtocol()
+export const useActivityCenter = () => {
+  const { activityCenter } = useProtocol()
 
-  const activityCenter = client.activityCenter
-
-  const [data, setData] = useState<any>(() => activityCenter.getLatest())
+  const [latest, setData] = useState<ActivityCenterLatest>(() =>
+    activityCenter.getLatest()
+  )
 
   useEffect(() => {
     setData(activityCenter.getLatest())
 
-    const handleUpdate = (latest: any) => {
+    const handleUpdate = (latest: ActivityCenterLatest) => {
       setData(latest)
     }
 
     return activityCenter.onChange(handleUpdate)
+    // todo?: add latest.unreadChats and latest.notifications, will it render unnecessarily
   }, [activityCenter])
 
   return {
-    data,
+    activityCenter,
+    unreadChats: latest.unreadChats,
   }
 }
