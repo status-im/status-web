@@ -6,11 +6,15 @@
       "request": "launch",
       "name": "Launch via Vite Node",
       "runtimeExecutable": "node",
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       // todo?: make relative to ${file}
       "cwd": "${workspaceFolder}/packages/status-js",
       "program": "${workspaceRoot}/node_modules/vite-node/dist/cli.mjs",
-      "args": ["${file}"],
+      "args": [
+        "${file}"
+      ],
       "smartStep": true,
       "sourceMaps": true,
       "env": {
@@ -23,10 +27,14 @@
       "request": "launch",
       "name": "Debug Client",
       "autoAttachChildProcesses": true,
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "cwd": "${workspaceFolder}/packages/status-js",
       "program": "${workspaceRoot}/node_modules/vite-node/dist/cli.mjs",
-      "args": ["src/index.ts"],
+      "args": [
+        "src/index.ts"
+      ],
       "smartStep": true,
       "console": "integratedTerminal",
       "sourceMaps": true
@@ -36,9 +44,14 @@
       "request": "launch",
       "name": "Debug Test File",
       "autoAttachChildProcesses": true,
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "program": "${workspaceRoot}/node_modules/vitest/vitest.mjs",
-      "args": ["run", "${relativeFile}"],
+      "args": [
+        "run",
+        "${relativeFile}"
+      ],
       "smartStep": true,
       "console": "integratedTerminal",
       "sourceMaps": true
