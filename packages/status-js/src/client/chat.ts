@@ -322,8 +322,8 @@ export class Chat {
 
     if (!this.#isActive && !isAuthor) {
       this.client.activityCenter.addMessageNotification(
-        newMessage,
-        this.#messages.get(newMessage.responseTo)
+        newMessage.chatUuid,
+        newMessage.chatId
       )
     }
   }
