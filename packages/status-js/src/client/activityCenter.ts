@@ -1,11 +1,9 @@
 // todo: rename to notifications (center?), inbox, or keep same as other platforms
+
 import type { ChatMessage } from './chat'
 import type { Client } from './client'
 
-// todo?: union
-// todo?: rename to Activity
 type Notification = {
-  // fixme?: specify message type (message_reply)
   type: 'message'
   value: ChatMessage
   isMention?: boolean
@@ -15,12 +13,10 @@ type Notification = {
 type ActivityCenterLatest = {
   notifications: Notification[]
   // todo?: rename count to mentionsAndRepliesCount
-  unreadChats: Map<string, { count: number }> // id, count (mentions, replies)
+  unreadChats: Map<string, { count: number }>
 }
 
-// todo?: rename to NotificationCenter
 export class ActivityCenter {
-  // todo?: use client.account for mentions and replies, or in chat.ts
   #client: Client
 
   #notifications: Set<Notification>
@@ -33,7 +29,6 @@ export class ActivityCenter {
     this.#callbacks = new Set()
   }
 
-  // todo?: rename to latest, change
   public getLatest = (): ActivityCenterLatest => {
     const notifications: Notification[] = []
     const unreadChats: Map<string, { count: number }> = new Map()

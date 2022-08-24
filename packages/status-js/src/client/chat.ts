@@ -35,9 +35,7 @@ export type ChatMessage = ChatMessageProto & {
 
 type FetchedMessage = { messageId: string; timestamp?: Date }
 
-// todo?: add isMuted prop, use as condition to add a message/notification to activity center or not
 export class Chat {
-  // todo: use #
   private readonly client: Client
   #clock: bigint
 
@@ -146,7 +144,6 @@ export class Chat {
     return this.#messages.get(id)
   }
 
-  // todo?: delete
   public onChange = (callback: (description: CommunityChat) => void) => {
     this.chatCallbacks.add(callback)
 
@@ -318,7 +315,6 @@ export class Chat {
     // callback
     this.emitMessages()
 
-    // todo?: if not muted
     if (!this.#isActive) {
       this.client.activityCenter.addMessageNotification(
         newMessage,
