@@ -317,8 +317,8 @@ export class Chat {
 
     if (!this.#isActive) {
       this.client.activityCenter.addMessageNotification(
-        newMessage.chatUuid,
-        newMessage.chatId
+        newMessage,
+        this.#messages.get(newMessage.responseTo)
       )
     }
   }
