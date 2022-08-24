@@ -35,7 +35,6 @@ export class ActivityCenter {
     const unreadChats: Map<string, { count: number }> = new Map()
 
     for (const notification of this.#notifications.values()) {
-      // todo?: switch
       if (notification.type === 'message') {
         const chatUuid = notification.value.chatUuid
 
@@ -56,13 +55,12 @@ export class ActivityCenter {
       notifications.push(notification)
     }
 
-    // todo?: reverse order
     notifications.sort((a, b) => {
-      if (a.value.clock < b.value.clock) {
+      if (a.value.clock > b.value.clock) {
         return -1
       }
 
-      if (a.value.clock > b.value.clock) {
+      if (a.value.clock < b.value.clock) {
         return 1
       }
 
