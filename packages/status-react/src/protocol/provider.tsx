@@ -17,7 +17,6 @@ const Context = createContext<State | undefined>(undefined)
 type State = {
   loading: boolean
   client: Client | undefined
-  // todo?: remove, use via client
   activityCenter: ActivityCenter | undefined
   community: Community['description'] | undefined
   account: Account | undefined
@@ -113,6 +112,7 @@ export function useProtocol() {
   // we enforce initialization of client before rendering children
   return context as State & {
     client: Client
+    activityCenter: ActivityCenter
     community: Community['description']
     dispatch: React.Dispatch<Action>
   }
