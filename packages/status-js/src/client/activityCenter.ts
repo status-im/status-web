@@ -1,8 +1,9 @@
-// todo: rename to notifications (center?), inbox, or keep same as other platforms
+// todo?: rename to notifications (center?), inbox, or keep same as other platforms
 
 import type { ChatMessage } from './chat'
 import type { Client } from './client'
 
+// todo?: rename to Activity
 type Notification = {
   type: 'message'
   value: ChatMessage
