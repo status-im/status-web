@@ -20,7 +20,7 @@ const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
 
   const muted = false
   const unread = unreadChats.has(chat.id)
-  const count = unreadChats.get(chat.id)?.count
+  const count = unreadChats.get(chat.id)?.count ?? 0
 
   const { color, displayName } = chat.identity!
 
