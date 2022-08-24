@@ -4,20 +4,13 @@ import { createClient } from '@status-im/js'
 
 import { Loading } from '../components/loading'
 
-import type {
-  Account,
-  ActivityCenter,
-  Client,
-  ClientOptions,
-  Community,
-} from '@status-im/js'
+import type { Account, Client, ClientOptions, Community } from '@status-im/js'
 
 const Context = createContext<State | undefined>(undefined)
 
 type State = {
   loading: boolean
   client: Client | undefined
-  activityCenter: ActivityCenter | undefined
   community: Community['description'] | undefined
   account: Account | undefined
   dispatch?: React.Dispatch<Action>
@@ -42,7 +35,6 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         loading: false,
         client,
-        activityCenter: client.activityCenter,
         community: client.community.description,
       }
     }
@@ -64,7 +56,6 @@ export const ProtocolProvider = (props: Props) => {
   const [state, dispatch] = useReducer(reducer, {
     loading: true,
     client: undefined,
-    activityCenter: undefined,
     community: undefined,
     account: undefined,
     dispatch: undefined,
@@ -112,7 +103,6 @@ export function useProtocol() {
   // we enforce initialization of client before rendering children
   return context as State & {
     client: Client
-    activityCenter: ActivityCenter
     community: Community['description']
     dispatch: React.Dispatch<Action>
   }
