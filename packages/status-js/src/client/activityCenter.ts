@@ -45,8 +45,6 @@ export class ActivityCenter {
           count++
         }
 
-        console.log('be:count', count)
-
         if (chat) {
           chat.count = count
         } else {
