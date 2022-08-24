@@ -44,13 +44,18 @@ export class ActivityCenter {
         const chatUuid = notification.value.chatUuid
 
         const chat = unreadChats.get(chatUuid)
+        let count = chat?.count ?? 0
+
+        if (notification.isMention || notification.isReply) {
+          count++
+        }
+
+        console.log('be:count', count)
+
         if (chat) {
-          const shouldIncrement = notification.isMention || notification.isReply
-          if (shouldIncrement) {
-            chat.count++
-          }
+          chat.count = count
         } else {
-          unreadChats.set(chatUuid, { count: 0 })
+          unreadChats.set(chatUuid, { count })
         }
       }
 
