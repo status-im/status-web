@@ -23,5 +23,6 @@ export const useActivityCenter = () => {
 
   return {
     unreadChats: latest.unreadChats,
+    totalCount: latest.totalCount,
   }
 }
