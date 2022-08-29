@@ -13,7 +13,7 @@ type Notification = {
 
 export type ActivityCenterLatest = {
   notifications: Notification[]
-  // todo?: rename count to mentionsAndRepliesCount
+  // todo?: rename count to mentionsAndRepliesCount, mentionsCount
   unreadChats: Map<string, { count: number }>
   totalCount: number
 }
@@ -75,16 +75,23 @@ export class ActivityCenter {
       return 0
     })
 
-    // fixme!?: do not display regular messages, only mentions and replies
-    // todo?: group notifications (all, unreads, mentions, replies, _chats.{id,count})
-    return { notifications, unreadChats, totalCount }
+    return {
+      // todo?: group notifications (all, mentions, replies)
+      notifications,
+      unreadChats,
+      totalCount,
+    }
   }
 
-  // todo: pass ids instead of values and resolve within
   public addMessageNotification = (
     newMessage: ChatMessage,
     referencedMessage?: ChatMessage
   ) => {
+    /* todo?: set unread chats here
+    if not client emit and return
+    if not mention or reply emit and return
+    else add notification emit and return */
+
     let isMention: boolean | undefined
     let isReply: boolean | undefined
 
