@@ -43,7 +43,8 @@ export class ActivityCenter {
         const chat = unreadChats.get(chatUuid)
         let count = chat?.count ?? 0
 
-        if (notification.isMention || notification.isReply) {
+        const isMention = notification.isMention || notification.isReply
+        if (isMention) {
           count++
           totalCount++
         }
@@ -52,6 +53,10 @@ export class ActivityCenter {
           chat.count = count
         } else {
           unreadChats.set(chatUuid, { count })
+        }
+
+        if (!isMention) {
+          continue
         }
       }
 
