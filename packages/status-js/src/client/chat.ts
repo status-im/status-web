@@ -315,7 +315,12 @@ export class Chat {
     // callback
     this.emitMessages()
 
-    if (!this.#isActive) {
+    // notifications
+    const isAuthor =
+      this.client.account !== undefined &&
+      this.isAuthor(newMessage, `0x${this.client.account.publicKey}`)
+
+    if (!this.#isActive && !isAuthor) {
       this.client.activityCenter.addMessageNotification(
         newMessage,
         this.#messages.get(newMessage.responseTo)
