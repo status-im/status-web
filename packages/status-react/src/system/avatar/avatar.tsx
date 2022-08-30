@@ -13,10 +13,19 @@ interface Props {
   src?: string
   color?: string
   colorHash?: number[][]
+  initialsCount?: number
 }
 
 const Avatar = (props: Props) => {
-  const { size, name, src, color, indicator, colorHash } = props
+  const {
+    size,
+    name,
+    src,
+    color,
+    indicator,
+    colorHash,
+    initialsCount = 2,
+  } = props
 
   const identiconRing = useMemo(() => {
     if (colorHash) {
@@ -25,7 +34,7 @@ const Avatar = (props: Props) => {
     }
   }, [colorHash])
 
-  const initials = name ? name.slice(0, 1) : ''
+  const initials = name ? name.slice(0, initialsCount) : ''
 
   return (
     <Base

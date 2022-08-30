@@ -23,7 +23,12 @@ const ChatStart = (props: ChatStartProps) => {
 
   return (
     <Flex direction="column" gap="3" align="center" css={{ marginBottom: 50 }}>
-      <Avatar size={120} name={identity?.displayName} color={identity?.color} />
+      <Avatar
+        size={120}
+        name={identity?.displayName}
+        color={identity?.color}
+        initialsCount={1}
+      />
       <Heading>{identity?.displayName}</Heading>
       <Text>
         Welcome to the beginning of the #{identity?.displayName} channel!

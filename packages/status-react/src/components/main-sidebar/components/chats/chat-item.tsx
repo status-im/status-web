@@ -30,7 +30,8 @@ const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
       to={`/${chat.id}`}
       state={muted ? 'muted' : unread ? 'unread' : undefined}
     >
-      <Avatar size={24} name={displayName} color={color} />#{displayName}
+      <Avatar size={24} name={displayName} color={color} initialsCount={1} />#
+      {displayName}
       {count > 0 && <Badge>{count}</Badge>}
     </Link>
   )
