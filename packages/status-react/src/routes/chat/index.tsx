@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-import { useMatch } from 'react-router-dom'
+import { useLocation, useMatch } from 'react-router-dom'
 
 import { MemberSidebar } from '../../components/member-sidebar'
 import { useAppState } from '../../contexts/app-context'
@@ -48,6 +48,10 @@ const Body = () => {
   const chat = client.community.getChat(chatId)!
   const messages = useMessages(chatId)
 
+  const location = useLocation()
+  const selectedMesssageId = location.state?.selectedMesssageId
+  // delete location.state?.selectedMesssageId
+
   const contentRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -62,9 +66,25 @@ const Body = () => {
     <>
       <ContentWrapper ref={contentRef}>
         <ChatStart chatId={chatId} />
-        {messages.data.map(message => (
-          <ChatMessage key={message.messageId} message={message} />
-        ))}
+        {messages.data.map(message => {
+          const selected = message.messageId === selectedMesssageId
+          // delete location.state?.selectedMesssageId
+          // if (location.state?.selectedMesssageId) {
+          //   location.state.selectedMesssageId = undefined
+          // }
+          // if (window.history?.state?.usr?.selectedMesssageId) {
+          //   delete window.history?.state?.usr?.selectedMesssageId
+          // }
+          window.history.replaceState({}, document.title)
+
+          return (
+            <ChatMessage
+              key={message.messageId}
+              message={message}
+              selected={selected}
+            />
+          )
+        })}
       </ContentWrapper>
       {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>

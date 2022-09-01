@@ -17,6 +17,8 @@ import { Chat } from '../routes/chat'
 import { styled } from '../styles/config'
 import { GlobalStyle } from '../styles/GlobalStyle'
 
+// import { Flex } from '../system'
+// import { Navbar } from './chat/components/navbar'
 import type { Config } from '../types/config'
 
 interface Props extends Config {
@@ -60,6 +62,9 @@ export const Community = (props: Props) => {
             <GlobalStyle />
             <Wrapper>
               <MainSidebar />
+              {/* <Flex direction="column" style={{ flexGrow: 1 }}>
+                // todo?: move navbar here, think community w/o chats yet, but already has members to inspect
+                <Navbar /> */}
               <Routes>
                 <Route
                   path="/:id"
@@ -70,6 +75,7 @@ export const Community = (props: Props) => {
                   }
                 />
               </Routes>
+              {/* </Flex> */}
             </Wrapper>
           </DialogProvider>
         </AppProvider>

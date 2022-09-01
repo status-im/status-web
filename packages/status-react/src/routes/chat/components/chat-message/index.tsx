@@ -7,7 +7,7 @@ import { useChatContext } from '../../../../contexts/chat-context'
 // import { BellIcon } from '../../../../icons/bell-icon'
 // import { PinIcon } from '../../../../icons/pin-icon'
 import { useProtocol } from '../../../../protocol'
-import { styled } from '../../../../styles/config'
+import { keyframes, styled } from '../../../../styles/config'
 import {
   Avatar,
   Box,
@@ -32,6 +32,7 @@ import type { Message, Reaction } from '../../../../protocol'
 interface Props {
   message: Message
   prevMessage?: Message
+  selected?: boolean
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -60,7 +61,7 @@ export const ChatMessage = (props: Props) => {
   const { params } = useMatch(':id')!
 
   const chatId = params.id!
-  const { message } = props
+  const { message, selected } = props
 
   const mention = false
   const pinned = false
@@ -172,7 +173,12 @@ export const ChatMessage = (props: Props) => {
   return (
     <>
       {/* <ContextMenuTrigger> */}
-      <Wrapper mention={mention} pinned={pinned} data-active={reacting}>
+      <Wrapper
+        mention={mention}
+        pinned={pinned}
+        data-active={reacting}
+        selected={selected}
+      >
         {responseTo && <MessageReply messageId={responseTo} />}
         <Flex gap={2}>
           <Box>
@@ -262,6 +268,15 @@ export const ChatMessage = (props: Props) => {
   )
 }
 
+const backgroundAnimation = keyframes({
+  from: {
+    backgroundColor: 'red',
+  },
+  to: {
+    backgroundColor: 'white',
+  },
+})
+
 // TODO: Use compound variants https://stitches.dev/docs/variants#compound-variants
 const Wrapper = styled('div', {
   position: 'relative',
@@ -315,6 +330,27 @@ const Wrapper = styled('div', {
           width: 3,
           background: '$pin-1',
         },
+      },
+    },
+    selected: {
+      true: {
+        // backgroundColor: 'red',
+        // animation: `${contentAnimation} 3s cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+        // animation: {highlighted-post-fade 3s;
+        // animation-duration: 3s;
+        // animation-timing-function: ease-out;
+        // animation-delay: 0s;
+        // animation-iteration-count: 1;
+        // animation-direction: normal;
+        // animation-fill-mode: none;
+        // animation-play-state: running;
+        // animation-name: highlighted-post-fade;}
+        // animation-timing-function: ease-out;
+        '@motion': {
+          // animation: `${backgroundAnimation} 10s ease-in 0s 1 normal none running higlight`,
+          animation: `${backgroundAnimation} 3s ease-out 0s`,
+        },
+        // animationTimingFunction: 'ease-out',
       },
     },
   },

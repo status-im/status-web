@@ -13,6 +13,8 @@ interface TriggerProps {
   onOpenChange?: (open: boolean) => void
 }
 
+// adds functionality to its childs (opens, accessiblity labels)
+// like context menu, dropdown menu
 const PopoverTrigger = (props: TriggerProps, ref: Ref<HTMLButtonElement>) => {
   const { children, open, onOpenChange, ...triggerProps } = props
 
@@ -34,6 +36,7 @@ interface PopoverProps extends PopoverContentProps {
   children: React.ReactNode
 }
 
+// expects styled content; handles sizing/where to open
 const Popover = (props: PopoverProps) => {
   const { children, ...contentProps } = props
 
