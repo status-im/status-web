@@ -41,9 +41,90 @@ export const ActivityCenter = () => {
 
   const navigate = useNavigate()
 
+  const renderNotifications = (notifications: Notification[]) => {
+    return notifications.map(notification => {
+      const value = notification.value
+      const isReply = notification.isReply
+
+      // todo: un/read
+      // todo: date separator
+      return (
+        <NotificationLink
+          to={`/${value.chatUuid}`}
+          key={value.messageId}
+          // todo?: rename to jumpedTo, navigateTo, goTo
+          state={{ selectedMesssageId: value.messageId }}
+          // style={{ background: 'red' }}
+          onClick={() => setOpen(false)}
+        >
+          <Flex gap={2}>
+            <Box>
+              <Avatar
+                size={40}
+                name={value.member.username}
+                colorHash={value.member.colorHash}
+              ></Avatar>
+            </Box>
+            <Box>
+              <Flex gap="1" align="center">
+                <Text color="primary" weight="500" size="15">
+                  {value.member.username}
+                </Text>
+                <Text size="10" color="gray">
+                  0x045…d71
+                </Text>
+                <Text size="10" color="gray">
+                  •
+                </Text>
+                <Text size="10" color="gray">
+                  9:41 AM
+                </Text>
+              </Flex>
+              <Text style={{ wordBreak: 'break-word' }}>{value.text}</Text>
+              {/* Community tag */}
+              <div
+                style={{
+                  padding: '0px 6px',
+                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  borderRadius: '11px',
+                  height: '22px',
+                }}
+              >
+                {'icon, avatar, '}
+                {'Community'}
+                {' icon '}
+                <PathLink
+                  onClick={e => {
+                    // e.stopPropagation()
+                    e.preventDefault()
+                    navigate(`/${value.chatUuid}`)
+                  }}
+                >
+                  #chat
+                </PathLink>
+              </div>
+              {/* Reply tag */}
+              {isReply && (
+                <div
+                  style={{
+                    padding: '0px 6px',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    borderRadius: '11px',
+                    height: '22px',
+                  }}
+                >
+                  {/* <TinyReplyIcon /> */}
+                  {value.responseToMessage?.text}
+                </div>
+              )}
+            </Box>
+          </Flex>
+        </NotificationLink>
+      )
+    })
+  }
+
   return (
-    //  {/* todo: move to ActivityCenter component, then moved to reusable NavBar redering children */}
-    //   {/* todo: tabs (switching), see radix */}
     //   {/* todo: mention component; add to design system */}
     <PopoverTrigger open={open} onOpenChange={setOpen}>
       <IconButton label="Show Activity Center" onClick={() => setOpen(!open)}>
@@ -101,7 +182,6 @@ export const ActivityCenter = () => {
           </Flex>
           {/* todo: if reply, show message being responded to as mention tag */}
           {/* todo: chat mention tag */}
-          {/* todo: add message date separators */}
           <div
             style={{
               maxHeight: '700px',
@@ -112,191 +192,12 @@ export const ActivityCenter = () => {
               overscrollBehavior: 'contain',
             }}
           >
-            <Tabs.Content
-              value="tab1"
-              // style={{
-              //   overflowY: 'auto',
-              //   overflowX: 'hidden',
-              //   WebkitOverflowScrolling: 'touch',
-              //   overscrollBehavior: 'contain',
-              // }}
-            >
-              {/* <Text size="15" color="gray">
-                  Today
-                </Text> */}
-              {/* Notifications */}
-              {/* todo: jump to mesage in chat and flash it */}
-              {all.map(notification => {
-                const value = notification.value
-                const isReply = notification.isReply
-
-                return (
-                  // Chat messages
-                  <NotificationLink
-                    to={`/${value.chatUuid}`}
-                    key={value.messageId}
-                    // todo?: rename to jumpedTo, navigateTo, goTo
-                    state={{ selectedMesssageId: value.messageId }}
-                    // style={{ background: 'red' }}
-                    onClick={() => setOpen(false)}
-                  >
-                    <Flex gap={2}>
-                      <Box>
-                        <Avatar
-                          size={40}
-                          name={value.member.username}
-                          colorHash={value.member.colorHash}
-                        ></Avatar>
-                      </Box>
-                      <Box>
-                        <Flex gap="1" align="center">
-                          <Text color="primary" weight="500" size="15">
-                            {value.member.username}
-                          </Text>
-                          <Text size="10" color="gray">
-                            0x045…d71
-                          </Text>
-                          <Text size="10" color="gray">
-                            •
-                          </Text>
-                          <Text size="10" color="gray">
-                            9:41 AM
-                          </Text>
-                        </Flex>
-                        <Text style={{ wordBreak: 'break-word' }}>
-                          {value.text}
-                        </Text>
-                        {/* Community tag */}
-                        <div
-                          style={{
-                            padding: '0px 6px',
-                            border: '1px solid rgba(0, 0, 0, 0.1)',
-                            borderRadius: '11px',
-                            height: '22px',
-                          }}
-                        >
-                          {'icon, avatar, '}
-                          {'Community'}
-                          {' icon '}
-                          <PathLink
-                            onClick={e => {
-                              // e.stopPropagation()
-                              e.preventDefault()
-                              navigate(`/${value.chatUuid}`)
-                            }}
-                          >
-                            #chat
-                          </PathLink>
-                        </div>
-                        {/* Reply tag */}
-                        {isReply && (
-                          <div
-                            style={{
-                              padding: '0px 6px',
-                              border: '1px solid rgba(0, 0, 0, 0.1)',
-                              borderRadius: '11px',
-                              height: '22px',
-                            }}
-                          >
-                            {/* <TinyReplyIcon /> */}
-                            {value.responseToMessage?.text}
-                          </div>
-                        )}
-                      </Box>
-                    </Flex>
-                  </NotificationLink>
-                )
-              })}
+            <Tabs.Content value="tab1">{renderNotifications(all)}</Tabs.Content>
+            <Tabs.Content value="tab2">
+              {renderNotifications(mentions)}
             </Tabs.Content>
-            <Tabs.Content
-              value="tab2"
-              // style={{
-              //   overflowY: 'auto',
-              //   overflowX: 'hidden',
-              //   WebkitOverflowScrolling: 'touch',
-              //   overscrollBehavior: 'contain',
-              // }}
-            >
-              {mentions.map(notification => {
-                const value = notification.value
-
-                return (
-                  // Chat messages
-                  <Flex key={value.messageId} gap={2}>
-                    <Box>
-                      <Avatar
-                        size={40}
-                        // name={value.member.username}
-                        // colorHash={value.member.colorHash}
-                      ></Avatar>
-                    </Box>
-                    <Box>
-                      <Flex gap="1" align="center">
-                        <Text color="primary" weight="500" size="15">
-                          {value.displayName}
-                        </Text>
-                        <Text size="10" color="gray">
-                          0x045…d71
-                        </Text>
-                        <Text size="10" color="gray">
-                          •
-                        </Text>
-                        <Text size="10" color="gray">
-                          9:41 AM
-                        </Text>
-                      </Flex>
-                      <Text style={{ wordBreak: 'break-word' }}>
-                        {value.text}
-                      </Text>
-                    </Box>
-                  </Flex>
-                )
-              })}
-            </Tabs.Content>
-            <Tabs.Content
-              value="tab3"
-              // style={{
-              //   overflowY: 'auto',
-              //   overflowX: 'hidden',
-              //   WebkitOverflowScrolling: 'touch',
-              //   overscrollBehavior: 'contain',
-              // }}
-            >
-              {replies.map(notification => {
-                const value = notification.value
-
-                return (
-                  // Chat messages
-                  <Flex key={value.messageId} gap={2}>
-                    <Box>
-                      <Avatar
-                        size={40}
-                        // name={value.member.username}
-                        // colorHash={value.member.colorHash}
-                      ></Avatar>
-                    </Box>
-                    <Box>
-                      <Flex gap="1" align="center">
-                        <Text color="primary" weight="500" size="15">
-                          {value.displayName}
-                        </Text>
-                        <Text size="10" color="gray">
-                          0x045…d71
-                        </Text>
-                        <Text size="10" color="gray">
-                          •
-                        </Text>
-                        <Text size="10" color="gray">
-                          9:41 AM
-                        </Text>
-                      </Flex>
-                      <Text style={{ wordBreak: 'break-word' }}>
-                        {value.text}
-                      </Text>
-                    </Box>
-                  </Flex>
-                )
-              })}
+            <Tabs.Content value="tab3">
+              {renderNotifications(replies)}
             </Tabs.Content>
           </div>
         </Tabs.Root>
