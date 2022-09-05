@@ -77,7 +77,7 @@ class Client {
       },
     })
     await waku.start()
-    await waitForRemotePeer(waku, [Protocols.Relay])
+    await waitForRemotePeer(waku, [Protocols.Relay], 5 * 1000)
     const wakuDisconnectionTimer = setInterval(async () => {
       const connectionsToClose: Promise<void>[] = []
 
