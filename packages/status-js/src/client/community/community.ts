@@ -99,7 +99,9 @@ export class Community {
         while (--index >= 0) {
           this.client.handleWakuMessage(wakuMessages[index])
 
-          return this.description !== undefined
+          if (this.description) {
+            return true
+          }
         }
       },
     })
