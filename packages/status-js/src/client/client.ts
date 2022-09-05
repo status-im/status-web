@@ -3,17 +3,21 @@
  */
 
 import { hexToBytes } from 'ethereum-cryptography/utils'
+import { Protocols, WakuMessage } from 'js-waku'
+import { createWaku } from 'js-waku/lib/create_waku'
+import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list'
 import {
-  discovery,
+  Fleet,
   getPredefinedBootstrapNodes,
-  Waku,
-  WakuMessage,
-} from 'js-waku'
+} from 'js-waku/lib/predefined_bootstrap_nodes'
+import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
 
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 import { Account } from './account'
 import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
+
+import type { Waku } from 'js-waku'
 
 export interface ClientOptions {
   publicKey: string
@@ -56,10 +60,7 @@ class Client {
 
   static async start(options: ClientOptions) {
     // Waku
-    const fleet =
-      options.environment === 'test'
-        ? discovery.predefined.Fleet.Test
-        : discovery.predefined.Fleet.Prod
+    const fleet = options.environment === 'test' ? Fleet.Test : Fleet.Prod
     /**
      * >only connects to 1 remote node because of the limited number of nodes
      * >run by Status and the limited number of connections provided by these nodes
@@ -67,23 +68,22 @@ class Client {
      * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
      */
     const peers = getPredefinedBootstrapNodes(fleet)
-    const waku = await Waku.create({
-      bootstrap: {
-        default: false,
-        peers,
-      },
+    const waku = await createWaku({
+      defaultBootstrap: false,
+      emitSelf: true,
       relayKeepAlive: 15,
-      libp2p: { config: { pubsub: { enabled: true, emitSelf: true } } },
+      libp2p: {
+        peerDiscovery: [new PeerDiscoveryStaticPeers(peers)],
+      },
     })
-    await waku.waitForRemotePeer()
+    await waku.start()
+    await waitForRemotePeer(waku, [Protocols.Relay])
     const wakuDisconnectionTimer = setInterval(async () => {
       const connectionsToClose: Promise<void>[] = []
 
-      for (const connections of waku.libp2p.connectionManager.connections.values()) {
-        for (const connection of connections) {
-          if (!connection.streams.length) {
-            connectionsToClose.push(connection.close())
-          }
+      for (const connection of waku.libp2p.connectionManager.getConnections()) {
+        if (!connection.streams.length) {
+          connectionsToClose.push(connection.close())
         }
       }
 
