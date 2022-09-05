@@ -4927,10 +4927,10 @@ js-sha3@^0.8.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-waku@^0.23.0:
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/js-waku/-/js-waku-0.23.0.tgz#9f0d37b0ce6741fc39f5ff1be66eeff2b4ada1f7"
-  integrity sha512-M09UhXC7916Jo7isZbXij42CUbDYvcBIbFM7fkePC2cQV1rXNbD+989BATlfUtiNqjaLIZStoR8fwIfFeCY0kg==
+js-waku@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/js-waku/-/js-waku-0.24.0.tgz#509dc5e2fa30a4b1476b79665594d7b149717d4c"
+  integrity sha512-8l7/WuadaaGy6XmVKutZpJ61JohbBe8WamJUtNiTd8WdxhBuz/rXh5RUiD8mjiiG8kEzQ+3+E68rvIpb/+BbXw==
   dependencies:
     "@chainsafe/libp2p-noise" "^5.0.0"
     "@ethersproject/rlp" "^5.5.0"

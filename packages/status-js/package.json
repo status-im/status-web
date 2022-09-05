@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "ethereum-cryptography": "^1.0.3",
-    "js-waku": "^0.23.0",
+    "js-waku": "^0.24.0",
     "long": "^5.2.0",
     "protobufjs": "^6.11.3",
     "protons-runtime": "^1.0.4"
