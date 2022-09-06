@@ -78,6 +78,8 @@ class Client {
     })
     await waku.start()
     await waitForRemotePeer(waku, [Protocols.Relay, Protocols.Store], 10 * 1000)
+    const wakuDisconnectionTimer = setInterval(async () => {
+      const connectionsToClose: Promise<void>[] = []
 
       for (const connection of waku.libp2p.connectionManager.getConnections()) {
         if (!connection.streams.length) {
