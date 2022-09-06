@@ -77,7 +77,7 @@ class Client {
       },
     })
     await waku.start()
-    await waitForRemotePeer(waku, [Protocols.Relay, Protocols.Store], 5 * 1000)
+    await waitForRemotePeer(waku, [Protocols.Relay, Protocols.Store], 10 * 1000)
 
       for (const connection of waku.libp2p.connectionManager.getConnections()) {
         if (!connection.streams.length) {
