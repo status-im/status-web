@@ -70,6 +70,8 @@ class Client {
     const peers = getPredefinedBootstrapNodes(fleet)
     const waku = await createWaku({
       defaultBootstrap: false,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       emitSelf: true,
       relayKeepAlive: 15,
       libp2p: {
