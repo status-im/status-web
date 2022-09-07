@@ -5,10 +5,9 @@
   "version": "0.0.0",
   "browserslist": "> 0.5%, last 2 versions, not dead, not ios_saf < 13",
   "scripts": {
-    "dev": "vite build --watch --mode development",
+    "dev": "vite",
     "prebuild": "rm -rf dist",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "vite build"
   },
   "dependencies": {
     "@status-im/react": "0.1.0-alpha.2",
