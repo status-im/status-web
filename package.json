@@ -15,7 +15,7 @@
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint/.eslint-cache .",
     "format": "prettier --cache --write .",
     "format:check": "prettier --check .",
-    "clean": "turbo run clean && rm -rf node_modules .parcel-cache"
+    "clean": "turbo run clean && rm -rf node_modules"
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
