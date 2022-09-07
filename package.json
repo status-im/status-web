@@ -50,9 +50,5 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@1.22.17",
-  "alias": {
-    "protons-runtime": "./node_modules/protons-runtime/dist/src/index.js",
-    "uint8arraylist": "./node_modules/uint8arraylist/dist/src/index.js"
-  }
+  "packageManager": "yarn@1.22.17"
 }
