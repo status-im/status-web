@@ -10,7 +10,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
-      // target: ['ES2020'],
       target: 'es2020',
     },
     plugins: [react()],
