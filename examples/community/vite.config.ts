@@ -4,8 +4,14 @@ import { defineConfig, loadEnv } from 'vite'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2020',
+      },
+    },
     build: {
-      target: 'esnext',
+      // target: ['ES2020'],
+      target: 'es2020',
     },
     plugins: [react()],
     define: {
