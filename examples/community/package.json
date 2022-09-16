@@ -8,7 +8,7 @@
     "dev": "vite",
     "prebuild": "rm -rf dist",
     "build": "vite build",
-    "preview": "vite preview"
+    "start": "vite preview"
   },
   "dependencies": {
     "@status-im/react": "0.1.0-alpha.2",
