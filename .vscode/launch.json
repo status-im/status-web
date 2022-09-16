@@ -4,6 +4,24 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Launch via Vite Node",
+      "runtimeExecutable": "node",
+      "skipFiles": ["<node_internals>/**"],
+      // todo?: make relative to ${file}
+      "cwd": "${workspaceFolder}/packages/status-js",
+      "program": "${workspaceRoot}/node_modules/vite-node/dist/cli.mjs",
+      "args": ["${file}"],
+      "smartStep": true,
+      "sourceMaps": true,
+      "env": {
+        "DEBUG": "*",
+        "NODE_ENV": "test",
+        "VITEST": "true"
+      }
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Debug Client",
       "autoAttachChildProcesses": true,
       "skipFiles": ["<node_internals>/**"],
