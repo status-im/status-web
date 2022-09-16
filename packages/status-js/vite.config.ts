@@ -14,7 +14,7 @@ const external = [
 export default defineConfig(({ mode }) => {
   const alias: Alias[] = []
 
-  if (process.env.VITEST === 'true' || mode === 'test') {
+  if (process.env.VITE_NODE === 'true' || mode === 'test') {
     alias.push({
       /**
        * Note: `happy-dom` nor `jsdom` have Crypto implemented (@see https://github.com/jsdom/jsdom/issues/1612)
