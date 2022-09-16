@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react'
 
 import { NavLink } from 'react-router-dom'
 
+import { useActivityCenter } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Avatar } from '../../../../system'
 
@@ -15,8 +16,11 @@ interface Props {
 const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
   const { chat } = props
 
+  const { unreadChats } = useActivityCenter()
+
   const muted = false
-  const unread = false
+  const unread = unreadChats.has(chat.id)
+  const count = unreadChats.get(chat.id)?.count ?? 0
 
   const { color, displayName } = chat.identity!
 
@@ -27,6 +31,7 @@ const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
       state={muted ? 'muted' : unread ? 'unread' : undefined}
     >
       <Avatar size={24} name={displayName} color={color} />#{displayName}
+      {count > 0 && <Badge>{count}</Badge>}
     </Link>
   )
 }
@@ -66,19 +71,19 @@ const Link = styled(NavLink, {
       unread: {
         color: '$accent-1',
         fontWeight: '$600',
-        '&::after': {
-          content: '"1"',
-          textAlign: 'center',
-          position: 'absolute',
-          right: 8,
-          width: 22,
-          height: 22,
-          background: '$primary-1',
-          borderRadius: '$full',
-          fontSize: 12,
-          color: '$accent-11',
-        },
       },
     },
   },
+})
+
+const Badge = styled('div', {
+  textAlign: 'center',
+  position: 'absolute',
+  right: 8,
+  width: 22,
+  height: 22,
+  background: '$primary-1',
+  borderRadius: '$full',
+  fontSize: 12,
+  color: '$accent-11',
 })
