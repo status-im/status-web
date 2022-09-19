@@ -15,8 +15,7 @@
       "sourceMaps": true,
       "env": {
         "DEBUG": "*",
-        "NODE_ENV": "test",
-        "VITEST": "true"
+        "VITE_NODE": "true"
       }
     },
     {
