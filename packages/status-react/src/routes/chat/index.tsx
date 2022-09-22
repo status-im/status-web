@@ -111,24 +111,28 @@ export const Chat = () => {
 }
 
 const Wrapper = styled('div', {
+  // https://medium.com/the-crazy-coder/the-mystery-of-css-flex-layout-items-shrinking-8748145e96d9
+  overflow: 'hidden',
   flex: 1,
-  position: 'relative',
-  width: '100%',
-  height: '100%',
+  // position: 'relative',
+  // width: '100%',
+  // height: '100%',
   display: 'flex',
   alignItems: 'stretch',
   background: '$background',
-  maxWidth: '100%',
-  minWidth: 1,
+  // maxWidth: '100%',
+  // minWidth: 1,
+  // minWidth: 0,
 })
 
 const ContentWrapper = styled('div', {
+  overflow: 'hidden',
   flex: 1,
   overflowY: 'auto',
-  overflowX: 'hidden',
+  // overflowX: 'hidden',
   WebkitOverflowScrolling: 'touch',
   overscrollBehavior: 'contain',
-  minWidth: 1,
+  // minWidth: 1,
 
   // scrollSnapType: 'y proximity',
 
@@ -139,8 +143,9 @@ const ContentWrapper = styled('div', {
 })
 
 const Main = styled('div', {
+  overflow: 'hidden',
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  minWidth: 1,
+  // minWidth: 1,
 })

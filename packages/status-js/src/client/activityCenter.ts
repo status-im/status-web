@@ -113,10 +113,17 @@ export class ActivityCenter {
     this.emitLatest()
   }
 
+  // todo?: mark as read
+  // markAllAsRead = () => {}
+
+  // markAsRead = (category, ids) => {}
+
+  // fixme: add category/group param (i.e. all, mentions, etc.)
   /**
    * Removes all notifications.
    */
   removeNotifications = () => {
+    // fixme!: do not clear non-metntions
     this.#notifications.clear()
 
     this.emitLatest()

@@ -1,6 +1,7 @@
 body,
 html,
 #root {
+  /* xxx?: add to GlobalStyle */
   height: 100%;
   overscroll-behavior-y: none;
 }

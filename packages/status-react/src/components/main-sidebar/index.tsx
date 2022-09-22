@@ -38,7 +38,7 @@ const Wrapper = styled('div', {
   flexDirection: 'column',
   padding: '10px 16px',
   backgroundColor: '$gray-4',
-  overflowY: 'scroll',
+  // overflowY: 'scroll',
 
   '@large': {
     display: 'flex',

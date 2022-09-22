@@ -5,12 +5,16 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { BellIcon } from '../../../../../../icons/bell-icon'
 import { MarkAllAsReadIcon } from '../../../../../../icons/mark-all-as-read-icon'
+import { TinyChevronRightIcon } from '../../../../../../icons/tiny-chevron-right-icon'
+import { TinyCommunityIcon } from '../../../../../../icons/tiny-community-icon'
 import { TinyReplyIcon } from '../../../../../../icons/tiny-reply-icon'
 import { useActivityCenter } from '../../../../../../protocol'
 import { styled } from '../../../../../../styles/config'
 import {
   Avatar,
   Box,
+  Button,
+  EthAddress,
   Flex,
   IconButton,
   Popover,
@@ -42,7 +46,7 @@ export const ActivityCenter = () => {
   const navigate = useNavigate()
 
   const renderNotifications = (notifications: Notification[]) => {
-    return notifications.map(notification => {
+    const _notifications = notifications.map(notification => {
       const value = notification.value
       const isReply = notification.isReply
 
@@ -54,10 +58,16 @@ export const ActivityCenter = () => {
           key={value.messageId}
           // todo?: rename to jumpedTo, navigateTo, goTo
           state={{ selectedMesssageId: value.messageId }}
-          // style={{ background: 'red' }}
           onClick={() => setOpen(false)}
         >
-          <Flex gap={2}>
+          <Flex
+            gap={2}
+            style={{
+              width: '100%',
+              // no, cuase fluid; maxheight
+              //height: '100%'
+            }}
+          >
             <Box>
               <Avatar
                 size={40}
@@ -65,63 +75,140 @@ export const ActivityCenter = () => {
                 colorHash={value.member.colorHash}
               ></Avatar>
             </Box>
-            <Box>
-              <Flex gap="1" align="center">
-                <Text color="primary" weight="500" size="15">
-                  {value.member.username}
-                </Text>
-                <Text size="10" color="gray">
-                  0x045…d71
-                </Text>
-                <Text size="10" color="gray">
-                  •
-                </Text>
-                <Text size="10" color="gray">
-                  9:41 AM
-                </Text>
-              </Flex>
-              <Text style={{ wordBreak: 'break-word' }}>{value.text}</Text>
-              {/* Community tag */}
-              <div
+            <Flex
+              direction="column"
+              style={{
+                width: '100%',
+                overflow: 'hidden',
+              }}
+            >
+              <div>
+                <Flex gap="1" align="center">
+                  <Text color="primary" weight="500" size="15">
+                    {/* todo?: ens name */}
+                    {/* todo?: nickname */}
+                    {value.member.username}
+                  </Text>
+                  <EthAddress size={10} color="gray">
+                    {value.member.chatKey}
+                  </EthAddress>
+                  <Text size="10" color="gray">
+                    •
+                  </Text>
+                  <Text size="10" color="gray">
+                    {new Date(Number(value.timestamp)).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </Text>
+                </Flex>
+              </div>
+              {/* todo?: same comoponnent as for chat messages; think mention resolution */}
+              <Text
                 style={{
-                  padding: '0px 6px',
-                  border: '1px solid rgba(0, 0, 0, 0.1)',
-                  borderRadius: '11px',
-                  height: '22px',
+                  wordBreak: 'break-word',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  // '-webkit-line-clamp': 3,
+                  // lineClamp: 3,
+                  display: '-webkit-box',
+                  boxOrient: 'vertical',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical',
                 }}
               >
-                {'icon, avatar, '}
-                {'Community'}
-                {' icon '}
-                <PathLink
+                {value.text}
+              </Text>
+              {/* Community tag */}
+              <Flex
+                gap={1}
+                style={{
+                  padding: '6px 0px 0px',
+                }}
+              >
+                <Tag
                   onClick={e => {
-                    // e.stopPropagation()
                     e.preventDefault()
-                    navigate(`/${value.chatUuid}`)
                   }}
                 >
-                  #chat
-                </PathLink>
-              </div>
-              {/* Reply tag */}
-              {isReply && (
-                <div
-                  style={{
-                    padding: '0px 6px',
-                    border: '1px solid rgba(0, 0, 0, 0.1)',
-                    borderRadius: '11px',
-                    height: '22px',
-                  }}
-                >
-                  {/* <TinyReplyIcon /> */}
-                  {value.responseToMessage?.text}
-                </div>
-              )}
-            </Box>
+                  <div
+                    style={{
+                      display: 'flex',
+                      gap: '2px',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <TinyCommunityIcon />
+                    <Avatar
+                      size={16}
+                      name={value.communityDisplayName}
+                      initialsCount={1}
+                    />
+                    <Text color="current" weight="500">
+                      {value.communityDisplayName}
+                    </Text>
+                  </div>
+                  <TinyChevronRightIcon />
+                  <PathLink
+                    onClick={e => {
+                      // e.stopPropagation()
+                      e.preventDefault()
+                      navigate(`/${value.chatUuid}`)
+                    }}
+                  >
+                    <Text color="current" weight="500">
+                      #chat
+                    </Text>
+                  </PathLink>
+                </Tag>
+                {/* Reply tag */}
+                {isReply && (
+                  <Tag>
+                    <TinyReplyIcon />
+                    <Text color="current" weight="500">
+                      {value.responseToMessage?.text}
+                    </Text>
+                  </Tag>
+                )}
+              </Flex>
+            </Flex>
           </Flex>
         </NotificationLink>
       )
     })
+
+    if (!_notifications.length) {
+      return (
+        <Text
+          size="15"
+          color="gray"
+          weight="400"
+          align="center"
+          style={{
+            margin: 'auto',
+            position: 'relative',
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        >
+          Notifications will appear here
+        </Text>
+      )
+    }
+
+    return (
+      <div>
+        {/* todo: */}
+        <Text
+          color="gray"
+          weight={400}
+          style={{ height: '34px', padding: '8px 16px 4px 16px' }}
+        >
+          Today
+        </Text>
+        {_notifications}
+      </div>
+    )
   }
 
   return (
@@ -139,68 +226,119 @@ export const ActivityCenter = () => {
         </>
       </IconButton>
 
-      <Popover
-        side="bottom"
-        style={{
-          maxWidth: '600px',
-          minWidth: '600px',
-          maxHeight: '770px',
-          minHeight: '770px',
-        }}
-      >
-        <Tabs.Root
-          defaultValue="tab1"
-          orientation="vertical"
-          style={{ display: 'flex', flexDirection: 'column' }}
+      <Popover side="bottom">
+        <div
+          style={{
+            width: '600px',
+            height: '770px',
+            // overflow: 'scroll',
+            // maxHeight: 'max-content',
+            // xxx?: why
+            // display: 'flex',
+          }}
         >
-          <Flex style={{ padding: '16px' }}>
-            {/* todo: default tab */}
-            {/* todo?: if all empty, disable other tabs */}
-            <Tabs.List aria-label="tabs example">
-              <Tabs.Trigger
+          <Tabs.Root
+            defaultValue="tab1"
+            orientation="vertical"
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+          >
+            <Flex
+              style={{
+                height: '64px',
+                padding: '13px 16px',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+              // gap={2}
+            >
+              {/* todo: default tab */}
+              {/* todo?: if all empty, disable other tabs */}
+              <Tabs.List
+                aria-label="tabs example"
+                style={{ display: 'flex', gap: '8px' }}
+              >
+                {/* todo: map */}
+                <Tabs.Trigger value="tab1">
+                  <Button size="small">All</Button>
+                </Tabs.Trigger>
+                <Tabs.Trigger value="tab2">
+                  <Button size="small" variant="secondary">
+                    Mentions
+                  </Button>
+                </Tabs.Trigger>
+                <Tabs.Trigger value="tab3">
+                  <Button size="small" variant="secondary">
+                    Replies
+                  </Button>
+                </Tabs.Trigger>
+              </Tabs.List>
+              <div>
+                {/* todo?: relative to currently selected tab */}
+                <IconButton
+                  label="Mark All As Read"
+                  onClick={() => activityCenter.removeNotifications()}
+                >
+                  <MarkAllAsReadIcon />
+                </IconButton>
+              </div>
+            </Flex>
+            {/* todo: if reply, show message being responded to as mention tag */}
+            {/* todo: chat mention tag */}
+            <div
+              style={{
+                flex: 1,
+
+                overflow: 'hidden',
+                overflowY: 'scroll',
+                // overflow: 'hidden',
+                // maxHeight: '700px',
+                // minHeight: '700px',
+                // overflowY: 'scroll',
+                // overflowX: 'hidden',
+                // WebkitOverflowScrolling: 'touch',
+                // overscrollBehavior: 'contain',
+              }}
+            >
+              <Tabs.Content
+                className="content"
                 value="tab1"
                 style={{
-                  padding: '0px 12px',
+                  width: '100%',
+                  height: '100%',
+                  // display: 'flex',
+                  // flexDirection: 'column',
+                  // justifyContent: 'center',
                 }}
               >
-                All
-              </Tabs.Trigger>
-              <Tabs.Trigger value="tab2" style={{ padding: '0px 12px' }}>
-                Mentions
-              </Tabs.Trigger>
-              <Tabs.Trigger value="tab3" style={{ padding: '0px 12px' }}>
-                Replies
-              </Tabs.Trigger>
-            </Tabs.List>
-            {/* todo?: relative to currently selected tab */}
-            <IconButton
-              label="Mark All As Read"
-              onClick={() => activityCenter.removeNotifications()}
-            >
-              <MarkAllAsReadIcon />
-            </IconButton>
-          </Flex>
-          {/* todo: if reply, show message being responded to as mention tag */}
-          {/* todo: chat mention tag */}
-          <div
-            style={{
-              maxHeight: '700px',
-              minHeight: '700px',
-              overflowY: 'auto',
-              overflowX: 'hidden',
-              WebkitOverflowScrolling: 'touch',
-              overscrollBehavior: 'contain',
-            }}
-          >
-            <Tabs.Content value="tab1">{renderNotifications(all)}</Tabs.Content>
-            <Tabs.Content value="tab2">
-              {renderNotifications(mentions)}
-            </Tabs.Content>
-            <Tabs.Content value="tab3">
-              {renderNotifications(replies)}
-            </Tabs.Content>
-          </div>
-        </Tabs.Root>
+                {renderNotifications(all)}
+              </Tabs.Content>
+              <Tabs.Content
+                value="tab2"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  // display: 'flex',
+                  // flexDirection: 'column',
+                  // justifyContent: 'center',
+                }}
+              >
+                {renderNotifications(mentions)}
+              </Tabs.Content>
+              <Tabs.Content
+                value="tab3"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  // display: 'flex',
+                  // flexDirection: 'column',
+                  // justifyContent: 'center',
+                }}
+              >
+                {renderNotifications(replies)}
+              </Tabs.Content>
+            </div>
+          </Tabs.Root>
+        </div>
       </Popover>
     </PopoverTrigger>
   )
@@ -236,8 +374,16 @@ const NotificationLink = styled(Link, {
   // width: '100%',
   // boxSizing: 'border-box',
   // display: 'inherit',
-  display: 'inline-flex',
-  // border: '1px solid black',
+  // display: 'inline-flex',
+  // width: '100%',
+  // display: 'flex',
+  // gap: '$2',
+  display: 'flex',
+  flexShrink: 0,
+  // height: '100%',
+  minHeight: '60px',
+  maxHeight: '126px',
+  padding: '8px 16px',
   '&:hover': {
     background: '$gray-3',
   },
@@ -246,5 +392,20 @@ const NotificationLink = styled(Link, {
 const PathLink = styled('a', {
   '&:hover': {
     textDecoration: 'underline',
+  },
+})
+
+const Tag = styled('div', {
+  padding: '0px 6px',
+  border: '1px solid rgba(0, 0, 0, 0.1)',
+  borderRadius: '11px',
+  height: '22px',
+  display: 'flex',
+  alignItems: 'center',
+  width: 'max-content',
+  color: '$gray-1',
+  gap: 'unset',
+  '&:hover': {
+    cursor: 'default',
   },
 })

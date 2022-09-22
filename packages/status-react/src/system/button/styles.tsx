@@ -5,6 +5,7 @@ import type { VariantProps } from '../../styles/config'
 export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('button', {
+  // height: '44px',
   fontFamily: '$sans',
   fontWeight: '$500',
   fontSize: '15px',
@@ -37,6 +38,13 @@ export const Base = styled('button', {
           background: '$primary-2',
         },
       },
+      secondary: {
+        background: '$transparent', // default vs. active
+        color: '$primary-1',
+        '&:hover': {
+          background: '$primary-3',
+        },
+      },
       danger: {
         background: '$danger-3',
         color: '$danger-1',
@@ -54,8 +62,9 @@ export const Base = styled('button', {
     },
     size: {
       small: {
+        height: '38px',
         fontSize: '13px',
-        padding: '10px 12px',
+        padding: '0px 12px',
       },
     },
     loading: {

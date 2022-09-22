@@ -30,6 +30,7 @@ export type ChatMessage = ChatMessageProto & {
   chatUuid: string
   signer: string
   member: Member
+  communityDisplayName: string
   responseToMessage?: ChatMessage
   edittedClock?: bigint
   pinnedClock?: bigint
@@ -312,6 +313,8 @@ export class Chat {
     }
 
     newMessage.member = this.client.community.getMember(newMessage.signer)!
+    newMessage.communityDisplayName =
+      this.client.community.description.identity?.displayName
 
     // state
     this.#messages.set(newMessage.messageId, newMessage)

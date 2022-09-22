@@ -6,6 +6,7 @@ const Text = styled('div', {
   fontFamily: theme.fonts.sans,
   overflowWrap: 'break-word',
   lineHeight: 1.5,
+  // color: '$current',
 
   variants: {
     size: {
@@ -34,6 +35,9 @@ const Text = styled('div', {
       },
       gray: {
         color: '$gray-1',
+      },
+      current: {
+        color: '$current',
       },
     },
     weight: {

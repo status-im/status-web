@@ -11,6 +11,11 @@ export const Base = styled('div', {
 
   variants: {
     size: {
+      16: {
+        width: 16,
+        height: 16,
+        padding: 1,
+      },
       20: {
         width: 20,
         height: 20,
@@ -111,6 +116,7 @@ export const Initials = styled('div', {
   verticalAlign: 'baseline',
   variants: {
     size: {
+      16: { fontSize: 'calc(16 * 0.5px)', lineHeight: '16px' },
       20: { fontSize: 'calc(20 * 0.5px)', lineHeight: '20px' },
       24: { fontSize: 'calc(24 * 0.5px)', lineHeight: '24px' },
       32: { fontSize: 'calc(32 * 0.5px)', lineHeight: '32px' },
