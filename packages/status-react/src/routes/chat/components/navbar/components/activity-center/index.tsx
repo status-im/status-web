@@ -126,12 +126,8 @@ export const ActivityCenter = () => {
                   padding: '6px 0px 0px',
                 }}
               >
-                <Tag
-                  onClick={e => {
-                    e.preventDefault()
-                    // e.stopPropagation()
-                  }}
-                >
+                {/* fixme: clicking on flex gab/space between components captures and handles click events */}
+                <Tag>
                   <div
                     role="none"
                     onClick={e => {
@@ -141,29 +137,36 @@ export const ActivityCenter = () => {
                     style={{
                       display: 'flex',
                       alignItems: 'center',
+                      gap: '4px',
                     }}
                   >
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: '2px',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <TinyCommunityIcon />
-                      <Avatar
-                        size={16}
-                        name={value.communityDisplayName}
-                        initialsCount={1}
-                      />
-                      <Text color="current" weight="500">
-                        {value.communityDisplayName}
-                      </Text>
-                    </div>
+                    <TinyCommunityIcon />
+                    <Avatar
+                      size={16}
+                      name={value.communityDisplayName}
+                      initialsCount={1}
+                    />
+                    <Text color="current" weight="500">
+                      {value.communityDisplayName}
+                    </Text>
+                  </div>
+                  <div
+                    role="none"
+                    onClick={e => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                    }}
+                  >
                     <TinyChevronRightIcon />
                   </div>
                   <PathLink
                     onClick={e => {
+                      // would not close the popover
                       // e.stopPropagation()
                       e.preventDefault()
                       navigate(`/${value.chatUuid}`)
@@ -176,16 +179,24 @@ export const ActivityCenter = () => {
                 </Tag>
                 {/* Reply tag */}
                 {isReply && (
-                  <Tag
-                    onClick={e => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                  >
-                    <TinyReplyIcon />
-                    <Text color="current" weight="500">
-                      {value.responseToMessage?.text}
-                    </Text>
+                  <Tag>
+                    <div
+                      role="none"
+                      onClick={e => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                      }}
+                    >
+                      <TinyReplyIcon />
+                      <Text color="current" weight="500">
+                        {value.responseToMessage?.text}
+                      </Text>
+                    </div>
                   </Tag>
                 )}
               </Flex>
@@ -422,7 +433,7 @@ const Tag = styled('div', {
   alignItems: 'center',
   width: 'max-content',
   color: '$gray-1',
-  gap: 'unset',
+  gap: '6px',
   '&:hover': {
     cursor: 'default',
   },
