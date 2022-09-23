@@ -129,26 +129,39 @@ export const ActivityCenter = () => {
                 <Tag
                   onClick={e => {
                     e.preventDefault()
+                    // e.stopPropagation()
                   }}
                 >
                   <div
+                    role="none"
+                    onClick={e => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
                     style={{
                       display: 'flex',
-                      gap: '2px',
                       alignItems: 'center',
                     }}
                   >
-                    <TinyCommunityIcon />
-                    <Avatar
-                      size={16}
-                      name={value.communityDisplayName}
-                      initialsCount={1}
-                    />
-                    <Text color="current" weight="500">
-                      {value.communityDisplayName}
-                    </Text>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: '2px',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <TinyCommunityIcon />
+                      <Avatar
+                        size={16}
+                        name={value.communityDisplayName}
+                        initialsCount={1}
+                      />
+                      <Text color="current" weight="500">
+                        {value.communityDisplayName}
+                      </Text>
+                    </div>
+                    <TinyChevronRightIcon />
                   </div>
-                  <TinyChevronRightIcon />
                   <PathLink
                     onClick={e => {
                       // e.stopPropagation()
@@ -163,7 +176,12 @@ export const ActivityCenter = () => {
                 </Tag>
                 {/* Reply tag */}
                 {isReply && (
-                  <Tag>
+                  <Tag
+                    onClick={e => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                  >
                     <TinyReplyIcon />
                     <Text color="current" weight="500">
                       {value.responseToMessage?.text}
