@@ -254,7 +254,6 @@ export const ActivityCenter = () => {
           )}
         </>
       </IconButton>
-
       <Popover side="bottom">
         <div
           style={{
@@ -287,15 +286,15 @@ export const ActivityCenter = () => {
                 style={{ display: 'flex', gap: '8px' }}
               >
                 {/* todo: map */}
-                <Tabs.Trigger value="tab1">
+                <Tabs.Trigger value="tab1" asChild>
                   <Button size="small">All</Button>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="tab2">
+                <Tabs.Trigger value="tab2" asChild>
                   <Button size="small" variant="secondary">
                     Mentions
                   </Button>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="tab3">
+                <Tabs.Trigger value="tab3" asChild>
                   <Button size="small" variant="secondary">
                     Replies
                   </Button>
