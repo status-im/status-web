@@ -267,7 +267,7 @@ export const ActivityCenter = () => {
         >
           <Tabs.Root
             defaultValue="tab1"
-            orientation="vertical"
+            // orientation="vertical"
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
             <Flex
