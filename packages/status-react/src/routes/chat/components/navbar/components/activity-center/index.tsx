@@ -24,6 +24,7 @@ import {
 
 export const ActivityCenter = () => {
   const [open, setOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState('all')
 
   const { activityCenter, notifications, totalCount } = useActivityCenter()
   const { all, mentions, replies } = notifications.reduce(
@@ -266,8 +267,10 @@ export const ActivityCenter = () => {
           }}
         >
           <Tabs.Root
-            defaultValue="tab1"
+            // defaultValue="tab1"
             // orientation="vertical"
+            value={activeTab}
+            onValueChange={setActiveTab}
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
             <Flex
@@ -286,15 +289,15 @@ export const ActivityCenter = () => {
                 style={{ display: 'flex', gap: '8px' }}
               >
                 {/* todo: map */}
-                <Tabs.Trigger value="tab1" asChild>
+                <Tabs.Trigger value="all" asChild>
                   <Button size="small">All</Button>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="tab2" asChild>
+                <Tabs.Trigger value="mentions" asChild>
                   <Button size="small" variant="secondary">
                     Mentions
                   </Button>
                 </Tabs.Trigger>
-                <Tabs.Trigger value="tab3" asChild>
+                <Tabs.Trigger value="replies" asChild>
                   <Button size="small" variant="secondary">
                     Replies
                   </Button>
@@ -329,7 +332,7 @@ export const ActivityCenter = () => {
             >
               <Tabs.Content
                 className="content"
-                value="tab1"
+                value="all"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -341,7 +344,7 @@ export const ActivityCenter = () => {
                 {renderNotifications(all)}
               </Tabs.Content>
               <Tabs.Content
-                value="tab2"
+                value="mentions"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -353,7 +356,7 @@ export const ActivityCenter = () => {
                 {renderNotifications(mentions)}
               </Tabs.Content>
               <Tabs.Content
-                value="tab3"
+                value="replies"
                 style={{
                   width: '100%',
                   height: '100%',
