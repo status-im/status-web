@@ -170,7 +170,7 @@ export const ActivityCenter = () => {
                     }}
                   >
                     <Text color="current" weight="500">
-                      #chat
+                      #{value.chatDisplayName}
                     </Text>
                   </PathLink>
                 </Tag>

@@ -31,6 +31,7 @@ export type ChatMessage = ChatMessageProto & {
   signer: string
   member: Member
   communityDisplayName: string
+  chatDisplayName: string
   responseToMessage?: ChatMessage
   edittedClock?: bigint
   pinnedClock?: bigint
