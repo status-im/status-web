@@ -26,6 +26,20 @@ interface Props extends Config {
 }
 
 // TODO: use a better way to handle this
+const RootGate = (props: { children: JSX.Element }) => {
+  const { client } = useProtocol()
+
+  // fixme!: use sorted chats
+  const chat = client.community._chats[0]
+
+  if (!chat) {
+    return props.children
+  }
+
+  return <Navigate to={`/${chat.uuid}`} replace />
+}
+
+// TODO: use a better way to handle this
 const Gate = (props: { children: JSX.Element }) => {
   const { client } = useProtocol()
 
@@ -67,13 +81,24 @@ export const Community = (props: Props) => {
                 <Navbar /> */}
               <Routes>
                 <Route
-                  path="/:id"
+                  path="/"
+                  element={
+                    <RootGate>
+                      {/* todo?: empty state/page */}
+                      {/* todo?: navbar at least */}
+                      <></>
+                    </RootGate>
+                  }
+                />
+                <Route
+                  path=":id"
                   element={
                     <Gate>
                       <Chat />
                     </Gate>
                   }
                 />
+                {/* </Route> */}
               </Routes>
               {/* </Flex> */}
             </Wrapper>
