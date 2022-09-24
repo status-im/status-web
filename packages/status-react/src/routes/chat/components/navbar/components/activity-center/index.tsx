@@ -290,29 +290,17 @@ export const ActivityCenter = () => {
               >
                 {/* todo: map */}
                 <Tabs.Trigger value="all" asChild>
-                  <Button
-                    size="small"
-                    variant="secondary"
-                    active={activeTab === 'all'}
-                  >
+                  <Button size="small" variant="secondary">
                     All
                   </Button>
                 </Tabs.Trigger>
                 <Tabs.Trigger value="mentions" asChild>
-                  <Button
-                    size="small"
-                    variant="secondary"
-                    active={activeTab === 'mentions'}
-                  >
+                  <Button size="small" variant="secondary">
                     Mentions
                   </Button>
                 </Tabs.Trigger>
                 <Tabs.Trigger value="replies" asChild>
-                  <Button
-                    size="small"
-                    variant="secondary"
-                    active={activeTab === 'replies'}
-                  >
+                  <Button size="small" variant="secondary">
                     Replies
                   </Button>
                 </Tabs.Trigger>

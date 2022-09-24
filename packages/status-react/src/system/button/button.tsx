@@ -24,7 +24,6 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     children,
     disabled,
     loading,
-    active,
     onClick,
     variant = 'default',
     ...buttonProps
@@ -37,7 +36,6 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       ref={ref}
       disabled={disabled}
       loading={loading}
-      active={active}
       onClick={onClick}
       variant={variant}
     >
