@@ -33,7 +33,6 @@ export const {
 
       'primary-1': 'rgba(67, 96, 223, 1)',
       'primary-2': 'rgba(67, 96, 223, 0.2)',
-      // todo?: rename to secondary
       'primary-3': 'rgba(67, 96, 223, 0.1)',
 
       'gray-1': 'rgba(147, 155, 161, 1)',

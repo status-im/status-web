@@ -39,7 +39,7 @@ export const Base = styled('button', {
         },
       },
       secondary: {
-        background: '$transparent', // default vs. active
+        background: '$transparent',
         color: '$primary-1',
         '&:hover': {
           background: '$primary-3',
@@ -70,10 +70,26 @@ export const Base = styled('button', {
     loading: {
       true: {},
     },
+    active: {
+      true: {},
+    },
     width: {
       full: {
         width: '100%',
       },
     },
   },
+
+  compoundVariants: [
+    {
+      variant: 'secondary',
+      active: true,
+      css: {
+        background: '$primary-2',
+        '&:hover': {
+          backgroundColor: '$primary-2', // override default hover behavior
+        },
+      },
+    },
+  ],
 })

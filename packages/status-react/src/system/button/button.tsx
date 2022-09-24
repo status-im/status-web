@@ -11,6 +11,7 @@ interface Props {
   children: string
   disabled?: boolean
   loading?: boolean
+  active?: boolean
   type?: ButtonProps['type']
   onClick?: ButtonProps['onClick']
   variant?: Variants['variant']
@@ -23,6 +24,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     children,
     disabled,
     loading,
+    active,
     onClick,
     variant = 'default',
     ...buttonProps
@@ -35,6 +37,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       ref={ref}
       disabled={disabled}
       loading={loading}
+      active={active}
       onClick={onClick}
       variant={variant}
     >
