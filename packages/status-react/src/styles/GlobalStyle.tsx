@@ -162,4 +162,8 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     cursor: pointer;
   }
+
+  body {
+    overflow: hidden; // prevent dragging of the whole page in either direction
+  }
 `
