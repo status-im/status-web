@@ -433,7 +433,7 @@ const NotificationLink = styled(Link, {
   maxHeight: '126px',
   padding: '8px 16px',
   '&:hover': {
-    background: '$gray-3',
+    background: '$primary-3',
   },
 })
 

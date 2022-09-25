@@ -270,10 +270,10 @@ export const ChatMessage = (props: Props) => {
 
 const backgroundAnimation = keyframes({
   from: {
-    backgroundColor: 'red',
+    backgroundColor: '$navigate-2',
   },
   to: {
-    backgroundColor: 'white',
+    backgroundColor: 'revert',
   },
 })
 

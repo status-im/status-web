@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components'
 
 // xxx?: how was this generated
+// xxx?: how does this work in embedded context
 export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
