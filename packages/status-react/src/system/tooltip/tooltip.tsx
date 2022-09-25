@@ -4,7 +4,10 @@ import * as Primitive from '@radix-ui/react-tooltip'
 
 import { Arrow, Content } from './styles'
 
-import type { TooltipContentProps } from '@radix-ui/react-tooltip'
+import type {
+  TooltipArrowProps,
+  TooltipContentProps,
+} from '@radix-ui/react-tooltip'
 import type { Ref } from 'react'
 
 interface Props {
@@ -12,6 +15,8 @@ interface Props {
   children: React.ReactElement
   side?: TooltipContentProps['side']
   sideOffset?: TooltipContentProps['sideOffset']
+  align?: TooltipContentProps['align']
+  arrowOffset?: TooltipArrowProps['offset']
 }
 
 const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -20,6 +25,8 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
     label,
     side = 'top',
     sideOffset = 5,
+    align = 'center',
+    arrowOffset = 0,
     ...triggerProps
   } = props
 
@@ -28,9 +35,9 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
       <Primitive.Trigger asChild>
         {cloneElement(children, { ref, ...triggerProps })}
       </Primitive.Trigger>
-      <Content side={side} sideOffset={sideOffset}>
+      <Content side={side} sideOffset={sideOffset} align={align}>
         {label}
-        <Arrow />
+        <Arrow offset={arrowOffset} />
       </Content>
     </Primitive.Root>
   )

@@ -20,6 +20,7 @@ import {
   Popover,
   PopoverTrigger,
   Text,
+  Tooltip,
 } from '../../../../../../system'
 
 export const ActivityCenter = () => {
@@ -244,27 +245,29 @@ export const ActivityCenter = () => {
   return (
     //   {/* todo: mention component; add to design system */}
     <PopoverTrigger open={open} onOpenChange={setOpen}>
-      <IconButton label="Show Activity Center" onClick={() => setOpen(!open)}>
-        {/* todo?: use <div> */}
-        <div style={{ position: 'relative' }}>
-          <BellIcon />
-          {totalCount > 0 && (
-            <Badge
-              style={{
-                position: 'absolute',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Text size="12" color="current" weight="500">
-                {totalCount < 100 ? totalCount : '∞'}
-              </Text>
-            </Badge>
-          )}
-        </div>
-      </IconButton>
+      <Tooltip label="Activity">
+        <IconButton label="Show Activity Center" onClick={() => setOpen(!open)}>
+          {/* todo?: use <div> */}
+          <div style={{ position: 'relative' }}>
+            <BellIcon />
+            {totalCount > 0 && (
+              <Badge
+                style={{
+                  position: 'absolute',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text size="12" color="current" weight="500">
+                  {totalCount < 100 ? totalCount : '∞'}
+                </Text>
+              </Badge>
+            )}
+          </div>
+        </IconButton>
+      </Tooltip>
       <Popover side="bottom">
         <div
           style={{
@@ -317,12 +320,14 @@ export const ActivityCenter = () => {
               </Tabs.List>
               <div>
                 {/* todo?: relative to currently selected tab */}
-                <IconButton
-                  label="Mark All As Read"
-                  onClick={() => activityCenter.removeNotifications()}
-                >
-                  <MarkAllAsReadIcon />
-                </IconButton>
+                <Tooltip label="Mark all as Read" arrowOffset={7}>
+                  <IconButton
+                    label="Mark All As Read"
+                    onClick={() => activityCenter.removeNotifications()}
+                  >
+                    <MarkAllAsReadIcon />
+                  </IconButton>
+                </Tooltip>
               </div>
             </Flex>
             {/* todo: if reply, show message being responded to as mention tag */}

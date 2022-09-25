@@ -27,7 +27,7 @@ export const Content = styled(Primitive.Content, {
   fontWeight: '$500',
   fontSize: 13,
   padding: 8,
-  lineHeight: 1,
+  lineHeight: '18px',
   backgroundColor: '$accent-1',
   color: '$accent-11',
   borderRadius: 8,
