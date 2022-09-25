@@ -288,7 +288,7 @@ const Wrapper = styled('div', {
   transitionDuration: '100ms',
 
   '&:hover, &[data-open="true"], &[data-active="true"]': {
-    background: '$gray-4',
+    background: '$gray-2',
   },
 
   a: {
