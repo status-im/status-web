@@ -246,14 +246,24 @@ export const ActivityCenter = () => {
     <PopoverTrigger open={open} onOpenChange={setOpen}>
       <IconButton label="Show Activity Center" onClick={() => setOpen(!open)}>
         {/* todo?: use <div> */}
-        <>
+        <div style={{ position: 'relative' }}>
           <BellIcon />
           {totalCount > 0 && (
-            <Badge style={{ position: 'relative' }}>
-              {totalCount < 99 ? totalCount : '∞'}
+            <Badge
+              style={{
+                position: 'absolute',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Text size="12" color="current" weight="500">
+                {totalCount < 100 ? totalCount : '∞'}
+              </Text>
             </Badge>
           )}
-        </>
+        </div>
       </IconButton>
       <Popover side="bottom">
         <div
@@ -382,22 +392,22 @@ export const ActivityCenter = () => {
 const Badge = styled('div', {
   textAlign: 'center',
   position: 'absolute',
-  right: 8,
-  width: 22,
-  height: 22,
+  left: '8px',
+  top: '-8px',
+  minWidth: '18px',
+  height: '18px',
   background: '$primary-1',
-  borderRadius: '$full',
-  fontSize: 12,
+  borderRadius: '9px',
+  // fontSize: 12,
   color: '$accent-11',
-
-  border: '2px solid $accent-11',
-
+  // todo?: use border
+  outline: '2px solid $accent-11',
   // 'line-height': '16px',
   // align: 'center',
   // display: 'flex',
   // 'flex-direction': 'column',
   // 'align-items': 'center',
-  // padding: '1px 5px',
+  padding: '1px 5px',
   // // position: 'absolute',
   // // left: '16px',
   // // top: '-2px',
