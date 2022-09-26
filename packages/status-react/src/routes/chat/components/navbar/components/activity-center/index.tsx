@@ -1,6 +1,9 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 
 import * as Tabs from '@radix-ui/react-tabs'
+import format from 'date-fns/format'
+import isSameDay from 'date-fns/isSameDay'
+import isSameYear from 'date-fns/isSameYear'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { BellIcon } from '../../../../../../icons/bell-icon'
@@ -20,7 +23,7 @@ import {
   Popover,
   PopoverTrigger,
   Text,
-  Tooltip,
+  Tooltip
 } from '../../../../../../system'
 
 export const ActivityCenter = () => {
@@ -48,167 +51,215 @@ export const ActivityCenter = () => {
   const navigate = useNavigate()
 
   const renderNotifications = (notifications: Notification[]) => {
-    const _notifications = notifications.map(notification => {
-      const value = notification.value
-      const isReply = notification.isReply
+    const mappedNotifications = notifications.map(
+      (currentNotification, notificationIndex, iteratedNotifications) => {
+        const value = currentNotification.value
+        const isReply = currentNotification.isReply
 
-      // todo: un/read
-      // todo: date separator
-      return (
-        <NotificationLink
-          to={`/${value.chatUuid}`}
-          key={value.messageId}
-          // todo?: rename to jumpedTo, navigateTo, goTo
-          state={{ selectedMesssageId: value.messageId }}
-          onClick={() => setOpen(false)}
-        >
-          <Flex
-            gap={2}
-            style={{
-              width: '100%',
-              // no, cuase fluid; maxheight
-              //height: '100%'
-            }}
-          >
-            <Box>
-              <Avatar
-                size={40}
-                name={value.member.username}
-                colorHash={value.member.colorHash}
-              ></Avatar>
-            </Box>
-            <Flex
-              direction="column"
-              style={{
-                width: '100%',
-                overflow: 'hidden',
-              }}
-            >
-              <div>
-                <Flex gap="1" align="center">
-                  <Text color="primary" weight="500" size="15">
-                    {/* todo?: ens name */}
-                    {/* todo?: nickname */}
-                    {value.member.username}
-                  </Text>
-                  <EthAddress size={10} color="gray">
-                    {value.member.chatKey}
-                  </EthAddress>
-                  <Text size="10" color="gray">
-                    •
-                  </Text>
-                  <Text size="10" color="gray">
-                    {new Date(Number(value.timestamp)).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Text>
-                </Flex>
-              </div>
-              {/* todo?: same comoponnent as for chat messages; think mention resolution */}
+        const previousNotification =
+          iteratedNotifications[notificationIndex - 1]
+
+        let showNewDateSeparator: boolean
+        if (!previousNotification) {
+          showNewDateSeparator = true
+        } else {
+          showNewDateSeparator = !isSameDay(
+            new Date(Number(currentNotification.value.timestamp)),
+            new Date(Number(previousNotification.value.timestamp))
+          )
+        }
+
+        let date: string | undefined
+        if (showNewDateSeparator) {
+          const _date = new Date(Number(currentNotification.value.timestamp))
+
+          const today = new Date()
+          const yesterday = new Date().setDate(today.getDate() - 1)
+
+          if (isSameDay(_date, today)) {
+            date = 'Today'
+          } else if (isSameDay(_date, yesterday)) {
+            date = 'Yesterday'
+          } else if (isSameYear(_date, today)) {
+            // let label = date.toLocaleDateString([], { weekday: 'long' })
+            date = format(_date, 'iii, d MMMM')
+          } else {
+            date = format(_date, 'iii, d MMMM yyyy')
+          }
+        }
+
+        // todo: un/read
+        // todo: date separator
+        return (
+          <Fragment key={value.messageId}>
+            {showNewDateSeparator && (
               <Text
-                style={{
-                  wordBreak: 'break-word',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  // '-webkit-line-clamp': 3,
-                  // lineClamp: 3,
-                  display: '-webkit-box',
-                  boxOrient: 'vertical',
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: 'vertical',
-                }}
+                color="gray"
+                weight={400}
+                style={{ height: '34px', padding: '8px 16px 4px 16px' }}
               >
-                {value.text}
+                {date}
               </Text>
-              {/* Community tag */}
+            )}
+            <NotificationLink
+              to={`/${value.chatUuid}`}
+              // key={value.messageId}
+              // todo?: rename to jumpedTo, navigateTo, goTo
+              state={{ selectedMesssageId: value.messageId }}
+              onClick={() => setOpen(false)}
+            >
               <Flex
-                gap={1}
+                gap={2}
                 style={{
-                  padding: '6px 0px 0px',
+                  width: '100%'
+                  // no, cuase fluid; maxheight
+                  //height: '100%'
                 }}
               >
-                {/* fixme: clicking on flex gab/space between components captures and handles click events */}
-                <Tag>
-                  <div
-                    role="none"
-                    onClick={e => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    <TinyCommunityIcon />
-                    <Avatar
-                      size={16}
-                      name={value.communityDisplayName}
-                      initialsCount={1}
-                    />
-                    <Text color="current" weight="500">
-                      {value.communityDisplayName}
-                    </Text>
-                  </div>
-                  <div
-                    role="none"
-                    onClick={e => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                    }}
-                  >
-                    <TinyChevronRightIcon />
-                  </div>
-                  <PathLink
-                    onClick={e => {
-                      // would not close the popover
-                      // e.stopPropagation()
-                      e.preventDefault()
-                      navigate(`/${value.chatUuid}`)
-                    }}
-                  >
-                    <Text color="current" weight="500">
-                      #{value.chatDisplayName}
-                    </Text>
-                  </PathLink>
-                </Tag>
-                {/* Reply tag */}
-                {isReply && (
-                  <Tag>
-                    <div
-                      role="none"
-                      onClick={e => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                      }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                      }}
-                    >
-                      <TinyReplyIcon />
-                      <Text color="current" weight="500">
-                        {value.responseToMessage?.text}
+                <Box>
+                  <Avatar
+                    size={40}
+                    name={value.member.username}
+                    colorHash={value.member.colorHash}
+                  ></Avatar>
+                </Box>
+                <Flex
+                  direction="column"
+                  style={{
+                    width: '100%',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <div>
+                    <Flex gap="1" align="center">
+                      <Text color="primary" weight="500" size="15">
+                        {/* todo?: ens name */}
+                        {/* todo?: nickname */}
+                        {value.member.username}
                       </Text>
-                    </div>
-                  </Tag>
-                )}
+                      <EthAddress size={10} color="gray">
+                        {value.member.chatKey}
+                      </EthAddress>
+                      <Text size="10" color="gray">
+                        •
+                      </Text>
+                      <Text size="10" color="gray">
+                        {new Date(Number(value.timestamp)).toLocaleTimeString(
+                          [],
+                          {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }
+                        )}
+                      </Text>
+                    </Flex>
+                  </div>
+                  {/* todo?: same comoponnent as for chat messages; think mention resolution */}
+                  <Text
+                    style={{
+                      wordBreak: 'break-word',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      // '-webkit-line-clamp': 3,
+                      // lineClamp: 3,
+                      display: '-webkit-box',
+                      boxOrient: 'vertical',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical'
+                    }}
+                  >
+                    {value.text}
+                  </Text>
+                  {/* Community tag */}
+                  <Flex
+                    gap={1}
+                    style={{
+                      padding: '6px 0px 0px'
+                    }}
+                  >
+                    {/* fixme: clicking on flex gab/space between components captures and handles click events */}
+                    <Tag>
+                      <div
+                        role="none"
+                        onClick={e => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <TinyCommunityIcon />
+                        <Avatar
+                          size={16}
+                          name={value.communityDisplayName}
+                          initialsCount={1}
+                        />
+                        <Text color="current" weight="500">
+                          {value.communityDisplayName}
+                        </Text>
+                      </div>
+                      <div
+                        role="none"
+                        onClick={e => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                        }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                      >
+                        <TinyChevronRightIcon />
+                      </div>
+                      <PathLink
+                        onClick={e => {
+                          // would not close the popover
+                          // e.stopPropagation()
+                          e.preventDefault()
+                          navigate(`/${value.chatUuid}`)
+                        }}
+                      >
+                        <Text color="current" weight="500">
+                          #{value.chatDisplayName}
+                        </Text>
+                      </PathLink>
+                    </Tag>
+                    {/* Reply tag */}
+                    {isReply && (
+                      <Tag>
+                        <div
+                          role="none"
+                          onClick={e => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                          }}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px'
+                          }}
+                        >
+                          <TinyReplyIcon />
+                          <Text color="current" weight="500">
+                            {value.responseToMessage?.text}
+                          </Text>
+                        </div>
+                      </Tag>
+                    )}
+                  </Flex>
+                </Flex>
               </Flex>
-            </Flex>
-          </Flex>
-        </NotificationLink>
-      )
-    })
+            </NotificationLink>
+          </Fragment>
+        )
+      }
+    )
 
-    if (!_notifications.length) {
+    if (!mappedNotifications.length) {
       return (
         <Text
           size="15"
@@ -219,7 +270,7 @@ export const ActivityCenter = () => {
             margin: 'auto',
             position: 'relative',
             top: '50%',
-            transform: 'translateY(-50%)',
+            transform: 'translateY(-50%)'
           }}
         >
           Notifications will appear here
@@ -227,19 +278,7 @@ export const ActivityCenter = () => {
       )
     }
 
-    return (
-      <div>
-        {/* todo: */}
-        <Text
-          color="gray"
-          weight={400}
-          style={{ height: '34px', padding: '8px 16px 4px 16px' }}
-        >
-          Today
-        </Text>
-        {_notifications}
-      </div>
-    )
+    return mappedNotifications
   }
 
   return (
@@ -257,7 +296,7 @@ export const ActivityCenter = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 <Text size="12" color="current" weight="500">
@@ -272,7 +311,7 @@ export const ActivityCenter = () => {
         <div
           style={{
             width: '600px',
-            height: '770px',
+            height: '770px'
             // overflow: 'scroll',
             // maxHeight: 'max-content',
             // xxx?: why
@@ -291,7 +330,7 @@ export const ActivityCenter = () => {
                 height: '64px',
                 padding: '13px 16px',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'space-between'
               }}
               // gap={2}
             >
@@ -339,7 +378,7 @@ export const ActivityCenter = () => {
                 flex: 1,
 
                 overflow: 'hidden',
-                overflowY: 'scroll',
+                overflowY: 'scroll'
                 // overflow: 'hidden',
                 // maxHeight: '700px',
                 // minHeight: '700px',
@@ -354,7 +393,7 @@ export const ActivityCenter = () => {
                 value="all"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100%'
                   // display: 'flex',
                   // flexDirection: 'column',
                   // justifyContent: 'center',
@@ -366,7 +405,7 @@ export const ActivityCenter = () => {
                 value="mentions"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100%'
                   // display: 'flex',
                   // flexDirection: 'column',
                   // justifyContent: 'center',
@@ -378,7 +417,7 @@ export const ActivityCenter = () => {
                 value="replies"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100%'
                   // display: 'flex',
                   // flexDirection: 'column',
                   // justifyContent: 'center',
@@ -414,7 +453,7 @@ const Badge = styled('div', {
   // display: 'flex',
   // 'flex-direction': 'column',
   // 'align-items': 'center',
-  padding: '1px 5px',
+  padding: '1px 5px'
   // // position: 'absolute',
   // // left: '16px',
   // // top: '-2px',
@@ -435,14 +474,14 @@ const NotificationLink = styled(Link, {
   maxHeight: '126px',
   padding: '8px 16px',
   '&:hover': {
-    background: '$primary-3',
-  },
+    background: '$primary-3'
+  }
 })
 
 const PathLink = styled('a', {
   '&:hover': {
-    textDecoration: 'underline',
-  },
+    textDecoration: 'underline'
+  }
 })
 
 const Tag = styled('div', {
@@ -456,6 +495,6 @@ const Tag = styled('div', {
   color: '$gray-1',
   gap: '6px',
   '&:hover': {
-    cursor: 'default',
-  },
+    cursor: 'default'
+  }
 })
