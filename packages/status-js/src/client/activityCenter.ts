@@ -1360,9 +1360,16 @@ export class ActivityCenter {
    * Removes all notifications.
    */
   removeNotifications = (category: 'all' | 'mentions' | 'replies') => {
-    // fixme!: do not clear non-metntions (i.e. Unreads)
     if (category === 'all') {
-      this.#notifications.clear()
+      for (const notification of this.#notifications) {
+        const { isMention, isReply } = notification
+
+        if (!(isMention || isReply)) {
+          continue
+        }
+
+        this.#notifications.delete(notification)
+      }
     } else if (category === 'mentions') {
       this.#notifications.forEach(notification => {
         if (notification.isMention) {
