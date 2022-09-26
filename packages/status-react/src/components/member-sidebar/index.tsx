@@ -16,22 +16,26 @@ export function MemberSidebar() {
       <Heading size="15" css={{ marginBottom: '$3' }}>
         Members
       </Heading>
-      <Grid gap="2">
+      <Grid gap="2" style={{ height: '100%' }}>
         {account && (
           <MemberGroup label="You">
             <UserItem account={account} />
           </MemberGroup>
         )}
-        <MemberGroup label="Online">
-          {members.map(member => (
-            <MemberItem
-              key={member.publicKey}
-              verified={false}
-              untrustworthy={false}
-              // indicator=""
-              member={member}
-            />
-          ))}
+        <MemberGroup label="All">
+          <div
+            style={{ overflow: 'hidden', overflowY: 'scroll', height: '100%' }}
+          >
+            {members.map(member => (
+              <MemberItem
+                key={member.publicKey}
+                verified={false}
+                untrustworthy={false}
+                // indicator=""
+                member={member}
+              />
+            ))}
+          </div>
         </MemberGroup>
         {/* <MemberGroup label="Offline"></MemberGroup> */}
       </Grid>
@@ -45,7 +49,7 @@ const Wrapper = styled('div', {
   padding: '18px 16px',
   display: 'none',
   backgroundColor: '$gray-4',
-  overflowY: 'scroll',
+  // overflowY: 'scroll',
 
   '@large': {
     display: 'block',
