@@ -314,6 +314,7 @@ export class Chat {
     }
 
     newMessage.member = this.client.community.getMember(newMessage.signer)!
+    // todo?: asign as .community, .community.description, .communityDescription, or .community.displayName
     newMessage.communityDisplayName =
       this.client.community.description.identity?.displayName
     newMessage.chatDisplayName = this.description.identity?.displayName
