@@ -323,7 +323,9 @@ export const ActivityCenter = () => {
                 <Tooltip label="Mark all as Read" arrowOffset={7}>
                   <IconButton
                     label="Mark All As Read"
-                    onClick={() => activityCenter.removeNotifications()}
+                    onClick={() =>
+                      activityCenter.removeNotifications(activeTab)
+                    }
                   >
                     <MarkAllAsReadIcon />
                   </IconButton>
