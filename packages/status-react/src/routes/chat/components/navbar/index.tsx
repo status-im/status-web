@@ -62,5 +62,5 @@ const NavbarWrapper = styled('div', {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  padding: '10px 16px',
+  padding: '10px 20px',
 })

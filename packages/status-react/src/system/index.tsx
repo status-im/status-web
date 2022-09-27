@@ -1,4 +1,5 @@
 export { Avatar } from './avatar'
+export { Badge } from './badge'
 export { Box } from './box'
 export { Button } from './button'
 export { ButtonGroup } from './button-group'

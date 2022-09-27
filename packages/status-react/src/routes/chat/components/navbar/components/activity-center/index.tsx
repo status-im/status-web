@@ -15,6 +15,7 @@ import { useActivityCenter } from '../../../../../../protocol'
 import { styled } from '../../../../../../styles/config'
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   EthAddress,
@@ -280,17 +281,14 @@ export const ActivityCenter = () => {
             <BellIcon />
             {totalCount > 0 && (
               <Badge
-                style={{
+                variant="border"
+                css={{
                   position: 'absolute',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  left: 8,
+                  top: -8,
                 }}
               >
-                <Text size="12" color="current" weight="500">
-                  {totalCount < 100 ? totalCount : '∞'}
-                </Text>
+                {totalCount}
               </Badge>
             )}
           </div>
@@ -396,21 +394,6 @@ export const ActivityCenter = () => {
     </PopoverTrigger>
   )
 }
-
-const Badge = styled('div', {
-  textAlign: 'center',
-  position: 'absolute',
-  left: '8px',
-  top: '-8px',
-  minWidth: '18px',
-  height: '18px',
-  background: '$primary-1',
-  borderRadius: '9px',
-  color: '$accent-11',
-  // todo?: use border
-  outline: '2px solid $accent-11',
-  padding: '1px 5px',
-})
 
 const NotificationLink = styled(Link, {
   display: 'flex',
