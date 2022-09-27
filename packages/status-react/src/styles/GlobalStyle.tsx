@@ -165,6 +165,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    // fixme: don't use overflow; use overscroll-behavior instead?
     overflow: hidden; // prevent dragging of the whole page in either direction
   }
 `

@@ -1,5 +1,3 @@
-// todo: display navbar even with no chats available
-
 import React from 'react'
 
 import { useMatch } from 'react-router-dom'

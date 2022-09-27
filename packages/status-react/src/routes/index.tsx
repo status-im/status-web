@@ -17,19 +17,17 @@ import { Chat } from '../routes/chat'
 import { styled } from '../styles/config'
 import { GlobalStyle } from '../styles/GlobalStyle'
 
-// import { Flex } from '../system'
-// import { Navbar } from './chat/components/navbar'
 import type { Config } from '../types/config'
 
 interface Props extends Config {
   meta?: string
 }
 
-// TODO: use a better way to handle this
+// todo: use a better way to handle this
 const RootGate = (props: { children: JSX.Element }) => {
   const { client } = useProtocol()
 
-  // fixme!: use sorted chats
+  // todo!: use sorted chats
   const chat = client.community._chats[0]
 
   if (!chat) {
@@ -76,31 +74,28 @@ export const Community = (props: Props) => {
             <GlobalStyle />
             <Wrapper>
               <MainSidebar />
-              {/* <Flex direction="column" style={{ flexGrow: 1 }}>
-                // todo?: move navbar here, think community w/o chats yet, but already has members to inspect
-                <Navbar /> */}
               <Routes>
                 <Route
                   path="/"
                   element={
                     <RootGate>
                       {/* todo?: empty state/page */}
-                      {/* todo?: navbar at least */}
+                      {/* todo?: navbar at least; think community w/o chats yet, but already has members to inspect */}
                       <></>
                     </RootGate>
                   }
                 />
+                {/* todo?: nest under `/` route */}
                 <Route
                   path=":id"
                   element={
+                    // todo?: merge with `RootGate`
                     <Gate>
                       <Chat />
                     </Gate>
                   }
                 />
-                {/* </Route> */}
               </Routes>
-              {/* </Flex> */}
             </Wrapper>
           </DialogProvider>
         </AppProvider>

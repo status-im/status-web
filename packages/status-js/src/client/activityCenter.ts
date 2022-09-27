@@ -1,4 +1,6 @@
 // todo?: rename to notifications (center?), inbox, or keep same as other platforms
+// todo: use kebab case for the file name
+// todo?: think "read" as "cleared" too
 
 import type { ChatMessage } from './chat'
 import type { Client } from './client'
@@ -1351,15 +1353,19 @@ export class ActivityCenter {
     this.emitLatest()
   }
 
-  // todo?: mark as read
+  // todo?: also calls `clearChatNotifications` (on non-action items/notifications)?
   // markAllAsRead = () => {}
 
-  // markAsRead = (category, ids) => {}
+  // todo?: for example from chat with red bar in UI indicating start
+  // markChatNotificationsAsUnreadSince = (category, id) => {}
 
+  // todo?: rename to `clearChatNotifications`; separate (button) from `markAllAsRead`?
+  // todo?: merge with `removeChatNotifications`; together with `notification.type` condition
   /**
    * Removes all notifications.
    */
   removeNotifications = (category: 'all' | 'mentions' | 'replies') => {
+    // todo?: clear all non-actionable notification too
     if (category === 'all') {
       for (const notification of this.#notifications) {
         const { isMention, isReply } = notification
@@ -1371,6 +1377,7 @@ export class ActivityCenter {
         this.#notifications.delete(notification)
       }
     } else if (category === 'mentions') {
+      // todo: extract to a func
       this.#notifications.forEach(notification => {
         if (notification.isMention) {
           this.#notifications.delete(notification)
@@ -1387,6 +1394,8 @@ export class ActivityCenter {
     this.emitLatest()
   }
 
+  // todo?: call from UI on ESC
+  // todo?: call from UI if scrolled all the way to the end
   /**
    * Removes chat message notifications from the Activity Center. For example,
    * on only opening or after scrolling to the end.

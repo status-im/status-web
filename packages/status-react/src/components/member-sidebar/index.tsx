@@ -49,7 +49,6 @@ const Wrapper = styled('div', {
   padding: '18px 16px',
   display: 'none',
   backgroundColor: '$gray-4',
-  // overflowY: 'scroll',
 
   '@large': {
     display: 'block',

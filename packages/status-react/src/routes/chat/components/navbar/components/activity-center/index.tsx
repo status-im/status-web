@@ -23,7 +23,7 @@ import {
   Popover,
   PopoverTrigger,
   Text,
-  Tooltip
+  Tooltip,
 } from '../../../../../../system'
 
 export const ActivityCenter = () => {
@@ -81,15 +81,12 @@ export const ActivityCenter = () => {
           } else if (isSameDay(_date, yesterday)) {
             date = 'Yesterday'
           } else if (isSameYear(_date, today)) {
-            // let label = date.toLocaleDateString([], { weekday: 'long' })
             date = format(_date, 'iii, d MMMM')
           } else {
             date = format(_date, 'iii, d MMMM yyyy')
           }
         }
 
-        // todo: un/read
-        // todo: date separator
         return (
           <Fragment key={value.messageId}>
             {showNewDateSeparator && (
@@ -103,17 +100,14 @@ export const ActivityCenter = () => {
             )}
             <NotificationLink
               to={`/${value.chatUuid}`}
-              // key={value.messageId}
-              // todo?: rename to jumpedTo, navigateTo, goTo
+              // todo?: rename to `jumpedTo` or `navigateTo`
               state={{ selectedMesssageId: value.messageId }}
               onClick={() => setOpen(false)}
             >
               <Flex
                 gap={2}
                 style={{
-                  width: '100%'
-                  // no, cuase fluid; maxheight
-                  //height: '100%'
+                  width: '100%',
                 }}
               >
                 <Box>
@@ -127,7 +121,7 @@ export const ActivityCenter = () => {
                   direction="column"
                   style={{
                     width: '100%',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
                   }}
                 >
                   <div>
@@ -148,7 +142,7 @@ export const ActivityCenter = () => {
                           [],
                           {
                             hour: '2-digit',
-                            minute: '2-digit'
+                            minute: '2-digit',
                           }
                         )}
                       </Text>
@@ -160,23 +154,22 @@ export const ActivityCenter = () => {
                       wordBreak: 'break-word',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
-                      // '-webkit-line-clamp': 3,
-                      // lineClamp: 3,
                       display: '-webkit-box',
                       boxOrient: 'vertical',
+                      // todo: check if these field names are recommended
                       WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical'
+                      WebkitBoxOrient: 'vertical',
                     }}
                   >
                     {value.text}
                   </Text>
-                  {/* Community tag */}
                   <Flex
                     gap={1}
                     style={{
-                      padding: '6px 0px 0px'
+                      padding: '6px 0px 0px',
                     }}
                   >
+                    {/* Community tag */}
                     {/* fixme: clicking on flex gab/space between components captures and handles click events */}
                     <Tag>
                       <div
@@ -188,7 +181,7 @@ export const ActivityCenter = () => {
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '4px'
+                          gap: '4px',
                         }}
                       >
                         <TinyCommunityIcon />
@@ -210,15 +203,13 @@ export const ActivityCenter = () => {
                         style={{
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '4px'
+                          gap: '4px',
                         }}
                       >
                         <TinyChevronRightIcon />
                       </div>
                       <PathLink
                         onClick={e => {
-                          // would not close the popover
-                          // e.stopPropagation()
                           e.preventDefault()
                           navigate(`/${value.chatUuid}`)
                         }}
@@ -240,7 +231,7 @@ export const ActivityCenter = () => {
                           style={{
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '4px'
+                            gap: '4px',
                           }}
                         >
                           <TinyReplyIcon />
@@ -270,7 +261,7 @@ export const ActivityCenter = () => {
             margin: 'auto',
             position: 'relative',
             top: '50%',
-            transform: 'translateY(-50%)'
+            transform: 'translateY(-50%)',
           }}
         >
           Notifications will appear here
@@ -282,11 +273,9 @@ export const ActivityCenter = () => {
   }
 
   return (
-    //   {/* todo: mention component; add to design system */}
     <PopoverTrigger open={open} onOpenChange={setOpen}>
       <Tooltip label="Activity">
         <IconButton label="Show Activity Center" onClick={() => setOpen(!open)}>
-          {/* todo?: use <div> */}
           <div style={{ position: 'relative' }}>
             <BellIcon />
             {totalCount > 0 && (
@@ -296,7 +285,7 @@ export const ActivityCenter = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
                 }}
               >
                 <Text size="12" color="current" weight="500">
@@ -311,16 +300,10 @@ export const ActivityCenter = () => {
         <div
           style={{
             width: '600px',
-            height: '770px'
-            // overflow: 'scroll',
-            // maxHeight: 'max-content',
-            // xxx?: why
-            // display: 'flex',
+            height: '770px',
           }}
         >
           <Tabs.Root
-            // defaultValue="tab1"
-            // orientation="vertical"
             value={activeTab}
             onValueChange={setActiveTab}
             style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
@@ -330,12 +313,12 @@ export const ActivityCenter = () => {
                 height: '64px',
                 padding: '13px 16px',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
-              // gap={2}
             >
               {/* todo: default tab */}
               {/* todo?: if all empty, disable other tabs */}
+              {/* todo?: if active, disable hover and clicks */}
               <Tabs.List
                 aria-label="tabs example"
                 style={{ display: 'flex', gap: '8px' }}
@@ -358,7 +341,7 @@ export const ActivityCenter = () => {
                 </Tabs.Trigger>
               </Tabs.List>
               <div>
-                {/* todo?: relative to currently selected tab */}
+                {/* todo: call it "Mark as Read" since the action is relative to active tab */}
                 <Tooltip label="Mark all as Read" arrowOffset={7}>
                   <IconButton
                     label="Mark All As Read"
@@ -371,21 +354,11 @@ export const ActivityCenter = () => {
                 </Tooltip>
               </div>
             </Flex>
-            {/* todo: if reply, show message being responded to as mention tag */}
-            {/* todo: chat mention tag */}
             <div
               style={{
                 flex: 1,
-
                 overflow: 'hidden',
-                overflowY: 'scroll'
-                // overflow: 'hidden',
-                // maxHeight: '700px',
-                // minHeight: '700px',
-                // overflowY: 'scroll',
-                // overflowX: 'hidden',
-                // WebkitOverflowScrolling: 'touch',
-                // overscrollBehavior: 'contain',
+                overflowY: 'scroll',
               }}
             >
               <Tabs.Content
@@ -393,10 +366,7 @@ export const ActivityCenter = () => {
                 value="all"
                 style={{
                   width: '100%',
-                  height: '100%'
-                  // display: 'flex',
-                  // flexDirection: 'column',
-                  // justifyContent: 'center',
+                  height: '100%',
                 }}
               >
                 {renderNotifications(all)}
@@ -405,10 +375,7 @@ export const ActivityCenter = () => {
                 value="mentions"
                 style={{
                   width: '100%',
-                  height: '100%'
-                  // display: 'flex',
-                  // flexDirection: 'column',
-                  // justifyContent: 'center',
+                  height: '100%',
                 }}
               >
                 {renderNotifications(mentions)}
@@ -417,10 +384,7 @@ export const ActivityCenter = () => {
                 value="replies"
                 style={{
                   width: '100%',
-                  height: '100%'
-                  // display: 'flex',
-                  // flexDirection: 'column',
-                  // justifyContent: 'center',
+                  height: '100%',
                 }}
               >
                 {renderNotifications(replies)}
@@ -433,8 +397,6 @@ export const ActivityCenter = () => {
   )
 }
 
-// todo: dedupe
-// fixme: position, white border, stretch up to 2 digits
 const Badge = styled('div', {
   textAlign: 'center',
   position: 'absolute',
@@ -444,44 +406,27 @@ const Badge = styled('div', {
   height: '18px',
   background: '$primary-1',
   borderRadius: '9px',
-  // fontSize: 12,
   color: '$accent-11',
   // todo?: use border
   outline: '2px solid $accent-11',
-  // 'line-height': '16px',
-  // align: 'center',
-  // display: 'flex',
-  // 'flex-direction': 'column',
-  // 'align-items': 'center',
-  padding: '1px 5px'
-  // // position: 'absolute',
-  // // left: '16px',
-  // // top: '-2px',
+  padding: '1px 5px',
 })
 
 const NotificationLink = styled(Link, {
-  // width: '100%',
-  // boxSizing: 'border-box',
-  // display: 'inherit',
-  // display: 'inline-flex',
-  // width: '100%',
-  // display: 'flex',
-  // gap: '$2',
   display: 'flex',
   flexShrink: 0,
-  // height: '100%',
   minHeight: '60px',
   maxHeight: '126px',
   padding: '8px 16px',
   '&:hover': {
-    background: '$primary-3'
-  }
+    background: '$primary-3',
+  },
 })
 
 const PathLink = styled('a', {
   '&:hover': {
-    textDecoration: 'underline'
-  }
+    textDecoration: 'underline',
+  },
 })
 
 const Tag = styled('div', {
@@ -495,6 +440,6 @@ const Tag = styled('div', {
   color: '$gray-1',
   gap: '6px',
   '&:hover': {
-    cursor: 'default'
-  }
+    cursor: 'default',
+  },
 })

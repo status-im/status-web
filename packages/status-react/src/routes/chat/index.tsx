@@ -50,7 +50,6 @@ const Body = () => {
 
   const location = useLocation()
   const selectedMesssageId = location.state?.selectedMesssageId
-  // delete location.state?.selectedMesssageId
 
   const contentRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
@@ -68,13 +67,7 @@ const Body = () => {
         <ChatStart chatId={chatId} />
         {messages.data.map(message => {
           const selected = message.messageId === selectedMesssageId
-          // delete location.state?.selectedMesssageId
-          // if (location.state?.selectedMesssageId) {
-          //   location.state.selectedMesssageId = undefined
-          // }
-          // if (window.history?.state?.usr?.selectedMesssageId) {
-          //   delete window.history?.state?.usr?.selectedMesssageId
-          // }
+
           window.history.replaceState({}, document.title)
 
           return (
@@ -114,25 +107,17 @@ const Wrapper = styled('div', {
   // https://medium.com/the-crazy-coder/the-mystery-of-css-flex-layout-items-shrinking-8748145e96d9
   overflow: 'hidden',
   flex: 1,
-  // position: 'relative',
-  // width: '100%',
-  // height: '100%',
   display: 'flex',
   alignItems: 'stretch',
   background: '$background',
-  // maxWidth: '100%',
-  // minWidth: 1,
-  // minWidth: 0,
 })
 
 const ContentWrapper = styled('div', {
   overflow: 'hidden',
   flex: 1,
   overflowY: 'auto',
-  // overflowX: 'hidden',
   WebkitOverflowScrolling: 'touch',
   overscrollBehavior: 'contain',
-  // minWidth: 1,
 
   // scrollSnapType: 'y proximity',
 
@@ -147,5 +132,4 @@ const Main = styled('div', {
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  // minWidth: 1,
 })
