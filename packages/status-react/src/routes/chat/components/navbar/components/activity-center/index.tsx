@@ -4,26 +4,23 @@ import * as Tabs from '@radix-ui/react-tabs'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
 import isSameYear from 'date-fns/isSameYear'
-import { useNavigate } from 'react-router-dom'
 
 import { BellIcon } from '../../../../../../icons/bell-icon'
 import { MarkAllAsReadIcon } from '../../../../../../icons/mark-all-as-read-icon'
 import { useActivityCenter } from '../../../../../../protocol'
-import { styled } from '../../../../../../styles/config'
 import {
-  Avatar,
+  Activity,
   Badge,
-  Box,
   Button,
-  EthAddress,
   Flex,
   IconButton,
   Popover,
   PopoverTrigger,
-  Tag,
   Text,
-  Tooltip
+  Tooltip,
 } from '../../../../../../system'
+
+import type { Notification } from '@status-im/js'
 
 export const ActivityCenter = () => {
   const [open, setOpen] = useState(false)
@@ -47,14 +44,9 @@ export const ActivityCenter = () => {
     { all: notifications, mentions: [], replies: [] }
   )
 
-  const navigate = useNavigate()
-
   const renderNotifications = (notifications: Notification[]) => {
     const mappedNotifications = notifications.map(
       (currentNotification, notificationIndex, iteratedNotifications) => {
-        const value = currentNotification.value
-        const isReply = currentNotification.isReply
-
         const previousNotification =
           iteratedNotifications[notificationIndex - 1]
 
@@ -87,7 +79,8 @@ export const ActivityCenter = () => {
         }
 
         return (
-          <Fragment key={value.messageId}>
+          <Fragment key={currentNotification.value.messageId}>
+            {/* todo: seperate separator component */}
             {showNewDateSeparator && (
               <Text
                 color="gray"
@@ -97,93 +90,8 @@ export const ActivityCenter = () => {
                 {date}
               </Text>
             )}
-            <Activity
-              onClick={() => {
-                setOpen(false)
-                navigate(`/${value.chatUuid}`, {
-                  // todo?: rename to `jumpedTo` or `navigateTo`
-                  state: { selectedMesssageId: value.messageId }
-                })
-              }}
-            >
-              <Flex
-                gap={2}
-                style={{
-                  width: '100%'
-                }}
-              >
-                <Box>
-                  <Avatar
-                    size={40}
-                    name={value.member.username}
-                    colorHash={value.member.colorHash}
-                  ></Avatar>
-                </Box>
-                <Flex
-                  direction="column"
-                  style={{
-                    width: '100%',
-                    overflow: 'hidden'
-                  }}
-                >
-                  <div>
-                    <Flex gap="1" align="center">
-                      <Text color="primary" weight="500" size="15">
-                        {/* todo?: ens name */}
-                        {/* todo?: nickname */}
-                        {value.member.username}
-                      </Text>
-                      <EthAddress size={10} color="gray">
-                        {value.member.chatKey}
-                      </EthAddress>
-                      <Text size="10" color="gray">
-                        •
-                      </Text>
-                      <Text size="10" color="gray">
-                        {new Date(Number(value.timestamp)).toLocaleTimeString(
-                          [],
-                          {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          }
-                        )}
-                      </Text>
-                    </Flex>
-                  </div>
-                  {/* todo?: same comoponnent as for chat messages; think mention resolution */}
-                  <Text
-                    style={{
-                      wordBreak: 'break-word',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: '-webkit-box',
-                      boxOrient: 'vertical',
-                      // todo: check if these field names are recommended
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical'
-                    }}
-                  >
-                    {value.text}
-                  </Text>
-                  <Flex
-                    gap={1}
-                    style={{
-                      padding: '6px 0px 0px'
-                    }}
-                  >
-                    <Tag
-                      type="community"
-                      communityDisplayName={value.communityDisplayName}
-                      chatDisplayName={value.chatDisplayName}
-                      chatUuid={value.chatUuid}
-                      setOpen={setOpen}
-                    />
-                    {isReply && (
-                      <Tag type="reply" text={value.responseToMessage?.text} />
-                    )}
-                  </Flex>
-                </Flex>
-              </Flex>
+            <Activity close={() => setOpen(false)}>
+              {currentNotification}
             </Activity>
           </Fragment>
         )
@@ -201,7 +109,7 @@ export const ActivityCenter = () => {
             margin: 'auto',
             position: 'relative',
             top: '50%',
-            transform: 'translateY(-50%)'
+            transform: 'translateY(-50%)',
           }}
         >
           Notifications will appear here
@@ -224,7 +132,7 @@ export const ActivityCenter = () => {
                 css={{
                   position: 'absolute',
                   left: 8,
-                  top: -8
+                  top: -8,
                 }}
               >
                 {totalCount}
@@ -237,7 +145,7 @@ export const ActivityCenter = () => {
         <div
           style={{
             width: '600px',
-            height: '770px'
+            height: '770px',
           }}
         >
           <Tabs.Root
@@ -250,7 +158,7 @@ export const ActivityCenter = () => {
                 height: '64px',
                 padding: '13px 16px',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
               }}
             >
               {/* todo: default tab */}
@@ -295,7 +203,7 @@ export const ActivityCenter = () => {
               style={{
                 flex: 1,
                 overflow: 'hidden',
-                overflowY: 'scroll'
+                overflowY: 'scroll',
               }}
             >
               <Tabs.Content
@@ -303,7 +211,7 @@ export const ActivityCenter = () => {
                 value="all"
                 style={{
                   width: '100%',
-                  height: '100%'
+                  height: '100%',
                 }}
               >
                 {renderNotifications(all)}
@@ -312,7 +220,7 @@ export const ActivityCenter = () => {
                 value="mentions"
                 style={{
                   width: '100%',
-                  height: '100%'
+                  height: '100%',
                 }}
               >
                 {renderNotifications(mentions)}
@@ -321,7 +229,7 @@ export const ActivityCenter = () => {
                 value="replies"
                 style={{
                   width: '100%',
-                  height: '100%'
+                  height: '100%',
                 }}
               >
                 {renderNotifications(replies)}
@@ -333,14 +241,3 @@ export const ActivityCenter = () => {
     </PopoverTrigger>
   )
 }
-
-const Activity = styled('div', {
-  display: 'flex',
-  flexShrink: 0,
-  minHeight: '60px',
-  maxHeight: '126px',
-  padding: '8px 16px',
-  '&:hover': {
-    background: '$primary-3'
-  }
-})

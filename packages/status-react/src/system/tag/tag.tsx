@@ -20,20 +20,20 @@ const Base = styled('div', {
   color: '$gray-1',
   gap: '6px',
   '&:hover': {
-    cursor: 'default'
-  }
+    cursor: 'default',
+  },
 })
 
 const Segment = styled('div', {
   display: 'flex',
   alignItems: 'center',
-  gap: '4px'
+  gap: '4px',
 })
 
 const PathLink = styled('a', {
   '&:hover': {
-    textDecoration: 'underline'
-  }
+    textDecoration: 'underline',
+  },
 })
 
 // fixme: clicking on flex gab/space between components captures and handles click events
@@ -44,7 +44,7 @@ const Tag = (
         communityDisplayName: string
         chatDisplayName: string
         chatUuid: string
-        setOpen: (value: boolean) => void
+        close: () => void
       }
     | { type: 'reply'; text: string }
 ) => {
@@ -88,7 +88,7 @@ const Tag = (
               onClick={e => {
                 e.preventDefault()
                 e.stopPropagation()
-                props.setOpen(false)
+                props.close()
                 navigate(`/${props.chatUuid}`)
               }}
             >

@@ -1,3 +1,4 @@
+export { Activity } from './activity'
 export { Avatar } from './avatar'
 export { Badge } from './badge'
 export { Box } from './box'
@@ -12,7 +13,7 @@ export {
   Dialog,
   DialogTrigger,
   useAlertDialog,
-  useDialog
+  useDialog,
 } from './dialog'
 export { DropdownMenu, DropdownMenuTrigger } from './dropdown-menu'
 export { EmojiHash } from './emoji-hash'
