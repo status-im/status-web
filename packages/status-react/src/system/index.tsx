@@ -12,7 +12,7 @@ export {
   Dialog,
   DialogTrigger,
   useAlertDialog,
-  useDialog,
+  useDialog
 } from './dialog'
 export { DropdownMenu, DropdownMenuTrigger } from './dropdown-menu'
 export { EmojiHash } from './emoji-hash'
@@ -25,6 +25,7 @@ export { IconButton } from './icon-button'
 export { Image } from './image'
 export { Popover, PopoverTrigger } from './popover'
 export { Separator } from './separator'
+export { Tag } from './tag'
 export { Text } from './text'
 export { TextInput } from './text-input'
 export { Tooltip } from './tooltip'

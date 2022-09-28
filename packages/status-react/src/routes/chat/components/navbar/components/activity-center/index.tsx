@@ -4,13 +4,10 @@ import * as Tabs from '@radix-ui/react-tabs'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
 import isSameYear from 'date-fns/isSameYear'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { BellIcon } from '../../../../../../icons/bell-icon'
 import { MarkAllAsReadIcon } from '../../../../../../icons/mark-all-as-read-icon'
-import { TinyChevronRightIcon } from '../../../../../../icons/tiny-chevron-right-icon'
-import { TinyCommunityIcon } from '../../../../../../icons/tiny-community-icon'
-import { TinyReplyIcon } from '../../../../../../icons/tiny-reply-icon'
 import { useActivityCenter } from '../../../../../../protocol'
 import { styled } from '../../../../../../styles/config'
 import {
@@ -23,8 +20,9 @@ import {
   IconButton,
   Popover,
   PopoverTrigger,
+  Tag,
   Text,
-  Tooltip,
+  Tooltip
 } from '../../../../../../system'
 
 export const ActivityCenter = () => {
@@ -48,8 +46,6 @@ export const ActivityCenter = () => {
     },
     { all: notifications, mentions: [], replies: [] }
   )
-
-  const navigate = useNavigate()
 
   const renderNotifications = (notifications: Notification[]) => {
     const mappedNotifications = notifications.map(
@@ -108,7 +104,7 @@ export const ActivityCenter = () => {
               <Flex
                 gap={2}
                 style={{
-                  width: '100%',
+                  width: '100%'
                 }}
               >
                 <Box>
@@ -122,7 +118,7 @@ export const ActivityCenter = () => {
                   direction="column"
                   style={{
                     width: '100%',
-                    overflow: 'hidden',
+                    overflow: 'hidden'
                   }}
                 >
                   <div>
@@ -143,7 +139,7 @@ export const ActivityCenter = () => {
                           [],
                           {
                             hour: '2-digit',
-                            minute: '2-digit',
+                            minute: '2-digit'
                           }
                         )}
                       </Text>
@@ -159,7 +155,7 @@ export const ActivityCenter = () => {
                       boxOrient: 'vertical',
                       // todo: check if these field names are recommended
                       WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
+                      WebkitBoxOrient: 'vertical'
                     }}
                   >
                     {value.text}
@@ -167,80 +163,17 @@ export const ActivityCenter = () => {
                   <Flex
                     gap={1}
                     style={{
-                      padding: '6px 0px 0px',
+                      padding: '6px 0px 0px'
                     }}
                   >
-                    {/* Community tag */}
-                    {/* fixme: clicking on flex gab/space between components captures and handles click events */}
-                    <Tag>
-                      <div
-                        role="none"
-                        onClick={e => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                        }}
-                      >
-                        <TinyCommunityIcon />
-                        <Avatar
-                          size={16}
-                          name={value.communityDisplayName}
-                          initialsCount={1}
-                        />
-                        <Text color="current" weight="500">
-                          {value.communityDisplayName}
-                        </Text>
-                      </div>
-                      <div
-                        role="none"
-                        onClick={e => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                        }}
-                      >
-                        <TinyChevronRightIcon />
-                      </div>
-                      <PathLink
-                        onClick={e => {
-                          e.preventDefault()
-                          navigate(`/${value.chatUuid}`)
-                        }}
-                      >
-                        <Text color="current" weight="500">
-                          #{value.chatDisplayName}
-                        </Text>
-                      </PathLink>
-                    </Tag>
-                    {/* Reply tag */}
+                    <Tag
+                      type="community"
+                      communityDisplayName={value.communityDisplayName}
+                      chatDisplayName={value.chatDisplayName}
+                      chatUuid={value.chatUuid}
+                    />
                     {isReply && (
-                      <Tag>
-                        <div
-                          role="none"
-                          onClick={e => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                          }}
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                          }}
-                        >
-                          <TinyReplyIcon />
-                          <Text color="current" weight="500">
-                            {value.responseToMessage?.text}
-                          </Text>
-                        </div>
-                      </Tag>
+                      <Tag type="reply" text={value.responseToMessage?.text} />
                     )}
                   </Flex>
                 </Flex>
@@ -262,7 +195,7 @@ export const ActivityCenter = () => {
             margin: 'auto',
             position: 'relative',
             top: '50%',
-            transform: 'translateY(-50%)',
+            transform: 'translateY(-50%)'
           }}
         >
           Notifications will appear here
@@ -285,7 +218,7 @@ export const ActivityCenter = () => {
                 css={{
                   position: 'absolute',
                   left: 8,
-                  top: -8,
+                  top: -8
                 }}
               >
                 {totalCount}
@@ -298,7 +231,7 @@ export const ActivityCenter = () => {
         <div
           style={{
             width: '600px',
-            height: '770px',
+            height: '770px'
           }}
         >
           <Tabs.Root
@@ -311,7 +244,7 @@ export const ActivityCenter = () => {
                 height: '64px',
                 padding: '13px 16px',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'space-between'
               }}
             >
               {/* todo: default tab */}
@@ -356,7 +289,7 @@ export const ActivityCenter = () => {
               style={{
                 flex: 1,
                 overflow: 'hidden',
-                overflowY: 'scroll',
+                overflowY: 'scroll'
               }}
             >
               <Tabs.Content
@@ -364,7 +297,7 @@ export const ActivityCenter = () => {
                 value="all"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100%'
                 }}
               >
                 {renderNotifications(all)}
@@ -373,7 +306,7 @@ export const ActivityCenter = () => {
                 value="mentions"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100%'
                 }}
               >
                 {renderNotifications(mentions)}
@@ -382,7 +315,7 @@ export const ActivityCenter = () => {
                 value="replies"
                 style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100%'
                 }}
               >
                 {renderNotifications(replies)}
@@ -402,27 +335,6 @@ const NotificationLink = styled(Link, {
   maxHeight: '126px',
   padding: '8px 16px',
   '&:hover': {
-    background: '$primary-3',
-  },
-})
-
-const PathLink = styled('a', {
-  '&:hover': {
-    textDecoration: 'underline',
-  },
-})
-
-const Tag = styled('div', {
-  padding: '0px 6px',
-  border: '1px solid rgba(0, 0, 0, 0.1)',
-  borderRadius: '11px',
-  height: '22px',
-  display: 'flex',
-  alignItems: 'center',
-  width: 'max-content',
-  color: '$gray-1',
-  gap: '6px',
-  '&:hover': {
-    cursor: 'default',
-  },
+    background: '$primary-3'
+  }
 })
