@@ -6,7 +6,7 @@ import type { ChatMessage } from './chat'
 import type { Client } from './client'
 
 // todo?: rename to Activity
-type Notification = {
+export type Notification = {
   type: 'message'
   value: ChatMessage
   isMention?: boolean

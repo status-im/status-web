@@ -2,6 +2,7 @@ export type { Account } from './client/account'
 export type {
   ActivityCenter,
   ActivityCenterLatest,
+  Notification,
 } from './client/activityCenter'
 export type { ChatMessage as Message } from './client/chat'
 export type { Client, ClientOptions } from './client/client'
