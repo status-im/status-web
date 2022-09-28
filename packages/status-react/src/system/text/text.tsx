@@ -2,6 +2,7 @@ import { styled, theme } from '../../styles/config'
 
 import type React from 'react'
 
+// todo?: rich variant here (e.g. mentions, format, code)
 const Text = styled('div', {
   fontFamily: theme.fonts.sans,
   overflowWrap: 'break-word',
