@@ -33,8 +33,8 @@ export class ActivityCenter {
       {
         type: 'message',
         value: {
-          clock: 1661450563108n,
-          timestamp: 1661450563108n,
+          clock: BigInt(new Date().getTime()), // today
+          timestamp: BigInt(new Date().getTime()), // diff but still today
           text: 'mention @0x0450536264938f1a030e3df57dbbb1c3b5be2b48c6089f4eeb5ffeac89456c78a3ff3eff2633b7fd4bc409ec6e803e0e7eb25e33fa76965fa75a11f0266640a735 ',
           chatId:
             '0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133202e25f2-48ac-4e2d-8fd0-aa5971383134',
@@ -83,8 +83,8 @@ export class ActivityCenter {
       {
         type: 'message',
         value: {
-          clock: 1661450601974n,
-          timestamp: 1661450601974n,
+          clock: BigInt(new Date().setDate(new Date().getDate() - 1)), // yesterday
+          timestamp: BigInt(new Date().setDate(new Date().getDate() - 1)),
           text: 'reply and mention @0x0450536264938f1a030e3df57dbbb1c3b5be2b48c6089f4eeb5ffeac89456c78a3ff3eff2633b7fd4bc409ec6e803e0e7eb25e33fa76965fa75a11f0266640a735 ',
           responseTo:
             '0xae46bc16ffc0d9ffe350f0d4f1027a581fecc7f3b43d8957e8ea24c6d8114e59',
@@ -473,6 +473,56 @@ export class ActivityCenter {
           chatDisplayName: 'test-messages',
         },
         isMention: false,
+        isReply: false,
+      },
+      {
+        type: 'message',
+        value: {
+          clock: BigInt(new Date('2020-08-25T18:02:36.669Z').getTime()), // 2 years ago,
+          timestamp: BigInt(new Date('2020-08-25T18:02:36.669Z').getTime()),
+          text: 'mention @0x0450536264938f1a030e3df57dbbb1c3b5be2b48c6089f4eeb5ffeac89456c78a3ff3eff2633b7fd4bc409ec6e803e0e7eb25e33fa76965fa75a11f0266640a735 ',
+          chatId:
+            '0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb454295513330804ea7-bd66-4d5d-91eb-b2dcfe2515b3',
+          messageType: 'COMMUNITY_CHAT',
+          contentType: 'TEXT_PLAIN',
+          messageId:
+            '0x5878fa9b0b6710387090099ae2134fe4a24746d14f5ddcd2cd41a78ffaf5b7e9a',
+          chatUuid: '30804ea7-bd66-4d5d-91eb-b2dcfe2515b3',
+          pinned: false,
+          signer:
+            '0x04ac419dac9a8bbb58825a3cde60eef0ee71b8cf6c63df611eeefc8e7aac7c79b55954b679d24cf5ec82da7ed921caf240628a9bfb3450c5111a9cffe54e631811',
+          reactions: {
+            THUMBS_UP: {},
+            THUMBS_DOWN: {},
+            LOVE: {},
+            LAUGH: {},
+            SAD: {},
+            ANGRY: {},
+          },
+          member: {
+            publicKey:
+              '0x04ac419dac9a8bbb58825a3cde60eef0ee71b8cf6c63df611eeefc8e7aac7c79b55954b679d24cf5ec82da7ed921caf240628a9bfb3450c5111a9cffe54e631811',
+            chatKey:
+              '0x03ac419dac9a8bbb58825a3cde60eef0ee71b8cf6c63df611eeefc8e7aac7c79b5',
+            username: 'Bumpy Absolute Crustacean',
+            colorHash: [
+              [1, 26],
+              [4, 1],
+              [5, 22],
+              [4, 19],
+              [2, 30],
+              [5, 19],
+              [1, 3],
+              [3, 19],
+              [5, 13],
+              [3, 18],
+              [5, 7],
+            ],
+          },
+          communityDisplayName: 'Boring community',
+          chatDisplayName: 'test-messages',
+        },
+        isMention: true,
         isReply: false,
       },
       // dupes
@@ -1157,8 +1207,8 @@ export class ActivityCenter {
       {
         type: 'message',
         value: {
-          clock: 1661450556669n,
-          timestamp: 1661450556669n,
+          clock: BigInt(new Date('2021-08-25T18:02:36.669Z').getTime()), // last year
+          timestamp: BigInt(new Date('2021-08-25T18:02:36.669Z').getTime()),
           text: 'reply',
           responseTo:
             '0xae46bc16ffc0d9ffe350f0d4f1027a581fecc7f3b43d8957e8ea24c6d8114e59',
