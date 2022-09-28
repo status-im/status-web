@@ -4,7 +4,7 @@ import * as Tabs from '@radix-ui/react-tabs'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
 import isSameYear from 'date-fns/isSameYear'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { BellIcon } from '../../../../../../icons/bell-icon'
 import { MarkAllAsReadIcon } from '../../../../../../icons/mark-all-as-read-icon'
@@ -46,6 +46,8 @@ export const ActivityCenter = () => {
     },
     { all: notifications, mentions: [], replies: [] }
   )
+
+  const navigate = useNavigate()
 
   const renderNotifications = (notifications: Notification[]) => {
     const mappedNotifications = notifications.map(
@@ -95,11 +97,14 @@ export const ActivityCenter = () => {
                 {date}
               </Text>
             )}
-            <NotificationLink
-              to={`/${value.chatUuid}`}
-              // todo?: rename to `jumpedTo` or `navigateTo`
-              state={{ selectedMesssageId: value.messageId }}
-              onClick={() => setOpen(false)}
+            <Activity
+              onClick={() => {
+                setOpen(false)
+                navigate(`/${value.chatUuid}`, {
+                  // todo?: rename to `jumpedTo` or `navigateTo`
+                  state: { selectedMesssageId: value.messageId }
+                })
+              }}
             >
               <Flex
                 gap={2}
@@ -171,6 +176,7 @@ export const ActivityCenter = () => {
                       communityDisplayName={value.communityDisplayName}
                       chatDisplayName={value.chatDisplayName}
                       chatUuid={value.chatUuid}
+                      setOpen={setOpen}
                     />
                     {isReply && (
                       <Tag type="reply" text={value.responseToMessage?.text} />
@@ -178,7 +184,7 @@ export const ActivityCenter = () => {
                   </Flex>
                 </Flex>
               </Flex>
-            </NotificationLink>
+            </Activity>
           </Fragment>
         )
       }
@@ -328,7 +334,7 @@ export const ActivityCenter = () => {
   )
 }
 
-const NotificationLink = styled(Link, {
+const Activity = styled('div', {
   display: 'flex',
   flexShrink: 0,
   minHeight: '60px',

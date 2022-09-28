@@ -44,11 +44,13 @@ const Tag = (
         communityDisplayName: string
         chatDisplayName: string
         chatUuid: string
+        setOpen: (value: boolean) => void
       }
     | { type: 'reply'; text: string }
 ) => {
   const { type } = props
 
+  // todo?: extract together with `PathLink`
   const navigate = useNavigate()
 
   switch (type) {
@@ -85,6 +87,8 @@ const Tag = (
             <PathLink
               onClick={e => {
                 e.preventDefault()
+                e.stopPropagation()
+                props.setOpen(false)
                 navigate(`/${props.chatUuid}`)
               }}
             >
