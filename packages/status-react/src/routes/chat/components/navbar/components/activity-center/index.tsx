@@ -148,6 +148,7 @@ export const ActivityCenter = () => {
             height: '770px',
           }}
         >
+          {/* todo: move to `/system` */}
           <Tabs.Root
             value={activeTab}
             onValueChange={setActiveTab}
@@ -161,14 +162,10 @@ export const ActivityCenter = () => {
                 justifyContent: 'space-between',
               }}
             >
-              {/* todo: default tab */}
               {/* todo?: if all empty, disable other tabs */}
               {/* todo?: if active, disable hover and clicks */}
-              <Tabs.List
-                aria-label="tabs example"
-                style={{ display: 'flex', gap: '8px' }}
-              >
-                {/* todo: map */}
+              <Tabs.List style={{ display: 'flex', gap: '8px' }}>
+                {/* todo?: map */}
                 <Tabs.Trigger value="all" asChild>
                   <Button size="small" variant="secondary">
                     All
@@ -206,8 +203,8 @@ export const ActivityCenter = () => {
                 overflowY: 'scroll',
               }}
             >
+              {/* todo?: map */}
               <Tabs.Content
-                className="content"
                 value="all"
                 style={{
                   width: '100%',
