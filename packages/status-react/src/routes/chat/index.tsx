@@ -49,7 +49,9 @@ const Body = () => {
   const messages = useMessages(chatId)
 
   const location = useLocation()
-  const selectedMesssageId = location.state?.selectedMesssageId
+  const selectedMesssageId = (
+    location.state as { selectedMesssageId: string } | undefined
+  )?.selectedMesssageId
 
   const contentRef = useRef<HTMLDivElement>(null)
   useEffect(() => {

@@ -81,6 +81,7 @@ export const Indicator = styled('span', {
 
   variants: {
     size: {
+      16: {},
       20: {},
       24: {},
       32: {
