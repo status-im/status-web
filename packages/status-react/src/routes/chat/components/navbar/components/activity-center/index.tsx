@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 
-import * as Tabs from '@radix-ui/react-tabs'
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'
 import isSameYear from 'date-fns/isSameYear'
@@ -11,11 +10,10 @@ import { useActivityCenter } from '../../../../../../protocol'
 import {
   Activity,
   Badge,
-  Button,
-  Flex,
   IconButton,
   Popover,
   PopoverTrigger,
+  Tabs,
   Text,
   Tooltip,
 } from '../../../../../../system'
@@ -24,25 +22,31 @@ import type { Notification } from '@status-im/js'
 
 export const ActivityCenter = () => {
   const [open, setOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('all')
 
   const { activityCenter, notifications, totalCount } = useActivityCenter()
-  const { all, mentions, replies } = notifications.reduce(
-    (acc, obj) => {
-      if (obj.type === 'message') {
-        if (obj.isMention) {
-          acc.mentions.push(obj)
-        }
 
-        if (obj.isReply) {
-          acc.replies.push(obj)
-        }
+  const initialValue: {
+    all: Notification[]
+    mentions: Notification[]
+    replies: Notification[]
+  } = {
+    all: notifications,
+    mentions: [],
+    replies: [],
+  }
+  const { all, mentions, replies } = notifications.reduce((acc, obj) => {
+    if (obj.type === 'message') {
+      if (obj.isMention) {
+        acc.mentions.push(obj)
       }
 
-      return acc
-    },
-    { all: notifications, mentions: [], replies: [] }
-  )
+      if (obj.isReply) {
+        acc.replies.push(obj)
+      }
+    }
+
+    return acc
+  }, initialValue)
 
   const renderNotifications = (notifications: Notification[]) => {
     const mappedNotifications = notifications.map(
@@ -148,91 +152,32 @@ export const ActivityCenter = () => {
             height: '770px',
           }}
         >
-          {/* todo: move to `/system` */}
-          <Tabs.Root
-            value={activeTab}
-            onValueChange={setActiveTab}
-            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
-            <Flex
-              style={{
-                height: '64px',
-                padding: '13px 16px',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
-              {/* todo?: if all empty, disable other tabs */}
-              {/* todo?: if active, disable hover and clicks */}
-              <Tabs.List style={{ display: 'flex', gap: '8px' }}>
-                {/* todo?: map */}
-                <Tabs.Trigger value="all" asChild>
-                  <Button size="small" variant="secondary">
-                    All
-                  </Button>
-                </Tabs.Trigger>
-                <Tabs.Trigger value="mentions" asChild>
-                  <Button size="small" variant="secondary">
-                    Mentions
-                  </Button>
-                </Tabs.Trigger>
-                <Tabs.Trigger value="replies" asChild>
-                  <Button size="small" variant="secondary">
-                    Replies
-                  </Button>
-                </Tabs.Trigger>
-              </Tabs.List>
-              <div>
-                {/* todo: call it "Mark as Read" since the action is relative to active tab */}
-                <Tooltip label="Mark all as Read" arrowOffset={7}>
-                  <IconButton
-                    label="Mark All As Read"
-                    onClick={() =>
-                      activityCenter.removeNotifications(activeTab)
-                    }
-                  >
-                    <MarkAllAsReadIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            </Flex>
-            <div
-              style={{
-                flex: 1,
-                overflow: 'hidden',
-                overflowY: 'scroll',
-              }}
-            >
-              {/* todo?: map */}
-              <Tabs.Content
-                value="all"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                {renderNotifications(all)}
-              </Tabs.Content>
-              <Tabs.Content
-                value="mentions"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                {renderNotifications(mentions)}
-              </Tabs.Content>
-              <Tabs.Content
-                value="replies"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                {renderNotifications(replies)}
-              </Tabs.Content>
-            </div>
-          </Tabs.Root>
+          <Tabs
+            tabs={[
+              { title: 'All', value: 'all', content: renderNotifications(all) },
+              {
+                title: 'Mentions',
+                value: 'mentions',
+                content: renderNotifications(mentions),
+              },
+              {
+                title: 'Replies',
+                value: 'replies',
+                content: renderNotifications(replies),
+              },
+            ]}
+            actions={[
+              {
+                icon: <MarkAllAsReadIcon />,
+                // todo: call it "Mark as Read" since the action is relative to active tab
+                label: 'Mark All As Read',
+                method: (activeTab: string) =>
+                  activityCenter.removeNotifications(
+                    activeTab as 'all' | 'mentions' | 'replies'
+                  ),
+              },
+            ]}
+          />
         </div>
       </Popover>
     </PopoverTrigger>
