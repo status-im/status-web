@@ -73,7 +73,6 @@ class Client {
      * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
      */
     const peers = getPredefinedBootstrapNodes(fleet)
-    console.log(peers)
     const waku = await createWaku({
       defaultBootstrap: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
