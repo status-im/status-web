@@ -53,11 +53,23 @@ const Body = () => {
     location.state as { selectedMesssageId: string } | undefined
   )?.selectedMesssageId
 
-  const contentRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement | null>(null)
+  // todo: more scrolling conditions
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (selectedMesssageId) {
+      document.getElementById(selectedMesssageId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      })
+      // todo?: history.state clean-up
+
+      return
+    }
+
     contentRef.current!.scrollTop = contentRef.current!.scrollHeight ?? 0
-  }, [chatId, messages.data.length])
+  }, [chatId, messages.data.length, selectedMesssageId])
 
   const handleMessageSubmit = (message: string) => {
     chat.sendTextMessage(message, state.reply?.message.messageId)
@@ -69,8 +81,6 @@ const Body = () => {
         <ChatStart chatId={chatId} />
         {messages.data.map(message => {
           const selected = message.messageId === selectedMesssageId
-
-          window.history.replaceState({}, document.title)
 
           return (
             <ChatMessage

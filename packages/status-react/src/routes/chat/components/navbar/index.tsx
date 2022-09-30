@@ -35,7 +35,6 @@ export const Navbar = (props: Props) => {
             label="Toggle Members"
             active={state.showMembers}
             onClick={() => {
-              console.log(state.showMembers)
               dispatch({ type: 'TOGGLE_MEMBERS' })
             }}
           >

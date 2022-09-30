@@ -48,7 +48,9 @@ export const ActivityCenter = () => {
     return acc
   }, initialValue)
 
-  const renderNotifications = (notifications: Notification[]) => {
+  const createContent = (
+    notifications: Notification[]
+  ): JSX.Element | JSX.Element[] => {
     const mappedNotifications = notifications.map(
       (currentNotification, notificationIndex, iteratedNotifications) => {
         const previousNotification =
@@ -154,16 +156,16 @@ export const ActivityCenter = () => {
         >
           <Tabs
             tabs={[
-              { title: 'All', value: 'all', content: renderNotifications(all) },
+              { title: 'All', value: 'all', content: createContent(all) },
               {
                 title: 'Mentions',
                 value: 'mentions',
-                content: renderNotifications(mentions),
+                content: createContent(mentions),
               },
               {
                 title: 'Replies',
                 value: 'replies',
-                content: renderNotifications(replies),
+                content: createContent(replies),
               },
             ]}
             actions={[
