@@ -96,7 +96,7 @@ export const ActivityCenter = () => {
                 {date}
               </Text>
             )}
-            <Activity close={() => setOpen(false)}>
+            <Activity onNavigateChange={() => setOpen(false)}>
               {currentNotification}
             </Activity>
           </Fragment>

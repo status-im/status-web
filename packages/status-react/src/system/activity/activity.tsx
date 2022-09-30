@@ -23,7 +23,10 @@ const Base = styled('div', {
   },
 })
 
-const Activity = (props: { children: Notification; close: () => void }) => {
+const Activity = (props: {
+  children: Notification
+  onNavigateChange: () => void
+}) => {
   const value = props.children.value
   const isReply = props.children.isReply
 
@@ -32,7 +35,7 @@ const Activity = (props: { children: Notification; close: () => void }) => {
   return (
     <Base
       onClick={() => {
-        props.close()
+        props.onNavigateChange()
         navigate(`/${value.chatUuid}`, {
           // todo?: rename to `jumpedTo` or `navigateTo`
           state: { selectedMesssageId: value.messageId },
@@ -105,7 +108,7 @@ const Activity = (props: { children: Notification; close: () => void }) => {
               communityDisplayName={value.communityDisplayName}
               chatDisplayName={value.chatDisplayName}
               chatUuid={value.chatUuid}
-              close={props.close}
+              onNavigateChange={props.onNavigateChange}
             />
             {isReply && (
               <Tag

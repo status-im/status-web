@@ -44,7 +44,7 @@ const Tag = (
         communityDisplayName: string
         chatDisplayName: string
         chatUuid: string
-        close: () => void
+        onNavigateChange: () => void
       }
     | { type: 'reply'; text: string }
 ) => {
@@ -88,7 +88,7 @@ const Tag = (
               onClick={e => {
                 e.preventDefault()
                 e.stopPropagation()
-                props.close()
+                props.onNavigateChange()
                 navigate(`/${props.chatUuid}`)
               }}
             >
