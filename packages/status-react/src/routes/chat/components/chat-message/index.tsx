@@ -334,23 +334,9 @@ const Wrapper = styled('div', {
     },
     selected: {
       true: {
-        // backgroundColor: 'red',
-        // animation: `${contentAnimation} 3s cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-        // animation: {highlighted-post-fade 3s;
-        // animation-duration: 3s;
-        // animation-timing-function: ease-out;
-        // animation-delay: 0s;
-        // animation-iteration-count: 1;
-        // animation-direction: normal;
-        // animation-fill-mode: none;
-        // animation-play-state: running;
-        // animation-name: highlighted-post-fade;}
-        // animation-timing-function: ease-out;
         '@motion': {
-          // animation: `${backgroundAnimation} 10s ease-in 0s 1 normal none running higlight`,
           animation: `${backgroundAnimation} 3s ease-out 0s`,
         },
-        // animationTimingFunction: 'ease-out',
       },
     },
   },

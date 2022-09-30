@@ -5,7 +5,6 @@ import type { VariantProps } from '../../styles/config'
 export type Variants = VariantProps<typeof Base>
 
 export const Base = styled('button', {
-  // height: '44px',
   fontFamily: '$sans',
   fontWeight: '$500',
   fontSize: '15px',

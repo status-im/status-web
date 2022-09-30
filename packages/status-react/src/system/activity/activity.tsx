@@ -23,7 +23,6 @@ const Base = styled('div', {
   },
 })
 
-// fixme!: scroll to element
 const Activity = (props: { children: Notification; close: () => void }) => {
   const value = props.children.value
   const isReply = props.children.isReply
@@ -89,7 +88,6 @@ const Activity = (props: { children: Notification; close: () => void }) => {
               textOverflow: 'ellipsis',
               display: '-webkit-box',
               boxOrient: 'vertical',
-              // todo: check if these field names are recommended
               WebkitLineClamp: 2,
               WebkitBoxOrient: 'vertical',
             }}

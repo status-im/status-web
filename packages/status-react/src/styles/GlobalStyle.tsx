@@ -1,7 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
 
-// xxx?: how was this generated
-// xxx?: how does this work in embedded context
 export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
@@ -108,8 +106,6 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     border: 0;
     vertical-align: baseline;
-    // xxx?: why not; hides popover, reply bar, emoji reaction, create profile
-    // overflow: hidden;
   }
 
   article,
@@ -162,10 +158,5 @@ export const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
     cursor: pointer;
-  }
-
-  body {
-    // fixme: don't use overflow; use overscroll-behavior instead?
-    overflow: hidden; // prevent dragging of the whole page in either direction
   }
 `

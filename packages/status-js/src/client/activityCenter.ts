@@ -1,6 +1,5 @@
 // todo?: rename to notifications (center?), inbox, or keep same as other platforms
 // todo: use kebab case for the file name
-// todo?: think "read" as "cleared" too
 
 import type { ChatMessage } from './chat'
 import type { Client } from './client'
@@ -89,11 +88,6 @@ export class ActivityCenter {
     newMessage: ChatMessage,
     referencedMessage?: ChatMessage
   ) => {
-    /* todo?: set unread chats here
-    if not client emit and return
-    if not mention or reply emit and return
-    else add notification emit and return */
-
     let isMention: boolean | undefined
     let isReply: boolean | undefined
 

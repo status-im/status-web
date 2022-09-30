@@ -22,9 +22,7 @@ export const useActivityCenter = () => {
   }, [client.activityCenter])
 
   return {
-    // todo?: activityCenter or some of its methods
     activityCenter: client.activityCenter,
-    // todo?: spread latest
     notifications: latest.notifications,
     unreadChats: latest.unreadChats,
     totalCount: latest.totalCount,

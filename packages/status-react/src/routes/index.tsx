@@ -107,7 +107,7 @@ export const Community = (props: Props) => {
 export type { Props as CommunityProps }
 
 const Wrapper = styled('div', {
-  overflow: 'clip',
+  overflow: 'hidden',
   position: 'relative',
   width: '100%',
   height: '100%',
