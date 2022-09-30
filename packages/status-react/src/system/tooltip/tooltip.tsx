@@ -31,15 +31,17 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
   } = props
 
   return (
-    <Primitive.Root delayDuration={500}>
-      <Primitive.Trigger asChild>
-        {cloneElement(children, { ref, ...triggerProps })}
-      </Primitive.Trigger>
-      <Content side={side} sideOffset={sideOffset} align={align}>
-        {label}
-        <Arrow offset={arrowOffset} />
-      </Content>
-    </Primitive.Root>
+    <Primitive.Provider>
+      <Primitive.Root delayDuration={500}>
+        <Primitive.Trigger asChild>
+          {cloneElement(children, { ref, ...triggerProps })}
+        </Primitive.Trigger>
+        <Content side={side} sideOffset={sideOffset} align={align}>
+          {label}
+          <Arrow offset={arrowOffset} />
+        </Content>
+      </Primitive.Root>
+    </Primitive.Provider>
   )
 }
 
