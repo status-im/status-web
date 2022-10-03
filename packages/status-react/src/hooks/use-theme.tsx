@@ -14,6 +14,7 @@ export const useTheme = (theme?: Config['theme']) => {
       return darkTheme
     }
 
+    // note: custom theme
     return createTheme({
       colors: theme.colors,
       fonts: theme.fonts,

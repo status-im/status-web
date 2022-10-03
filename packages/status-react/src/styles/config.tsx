@@ -1,3 +1,4 @@
+// note: has better api, theming, 1st class?, 5x smaller, for embedding
 import { createStitches } from '@stitches/react'
 
 import type { CSS as StitchesCSS, VariantProps } from '@stitches/react'
@@ -10,6 +11,7 @@ export const {
   createTheme,
   config,
   getCssText,
+  // globalCss,
 } = createStitches({
   // prefix: 'status',
   theme: {

@@ -41,40 +41,46 @@ const _ChatItem = forwardRef(ChatItem)
 export { _ChatItem as ChatItem }
 export type SidebarItemProps = Omit<Props, 'children'>
 
-const Link = styled(NavLink, {
-  position: 'relative',
-  fontFamily: '$sans',
-  fontWeight: '$500',
-  fontSize: 15,
-  display: 'inline-flex',
-  color: '$accent-4',
-  alignItems: 'center',
-  width: '100%',
-  gap: '$2',
-  borderRadius: 8,
-  padding: 8,
+const Link = styled(
+  NavLink,
+  // 'a',
+  // // { ':where(#foo) a': { padding: 20 } },
+  // { '.foo a': { padding: 20 } },
+  {
+    position: 'relative',
+    fontFamily: '$sans',
+    fontWeight: '$500',
+    fontSize: 15,
+    display: 'inline-flex',
+    color: '$accent-4',
+    alignItems: 'center',
+    width: '100%',
+    gap: '$2',
+    borderRadius: 8,
+    padding: 8,
 
-  '&:hover': {
-    background: '$gray-3',
-  },
+    '&:hover': {
+      background: '$gray-3',
+    },
 
-  '&.active': {
-    color: '$accent-1',
-    background: '$gray-3',
-  },
+    '&.active': {
+      color: '$accent-1',
+      background: '$gray-3',
+    },
 
-  variants: {
-    state: {
-      muted: {
-        color: '$accent-5',
-      },
-      unread: {
-        color: '$accent-1',
-        fontWeight: '$600',
+    variants: {
+      state: {
+        muted: {
+          color: '$accent-5',
+        },
+        unread: {
+          color: '$accent-1',
+          fontWeight: '$600',
+        },
       },
     },
-  },
-})
+  }
+)
 
 const Badge = styled('div', {
   textAlign: 'center',
