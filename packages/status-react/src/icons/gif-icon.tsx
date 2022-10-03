@@ -1,5 +1,6 @@
 import React from 'react'
 
+// note: dupe icon
 export const GifIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
