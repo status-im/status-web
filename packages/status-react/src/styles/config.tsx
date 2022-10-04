@@ -196,18 +196,58 @@ export const globalStyles = globalCss({
 })
 
 export const base = css({
-  // note: works as expected; applies & automatically, but not :where(&) though; locally scoped
-  // ':where(div, a, table)': {
-  //   padding: 21,
-  // },
-  // // note: works as expected
-  ':where(&) :where(div, a, table)': {
-    padding: 22,
+  // todo?: caniuse where()
+  // todo?: nest
+  ':where(&)': {
+    margin: 0,
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 15,
+    // lineHeight: 22,
+    lineHeight: '147%',
   },
-  // // note: does not work as expected
-  // ':where(&) div, a, table': {
-  //   padding: 22,
-  // },
+  ':where(&) :where(*)': {
+    boxSizing: 'border-box',
+    '-webkit-font-smoothing': 'antialiased',
+    // fixme?:
+    '&::-webkit-scrollbar': {
+      width: 0,
+    },
+  },
+  ':where(&) :where(div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video)':
+    {
+      margin: 0,
+      padding: 0,
+      border: 0,
+      verticalAlign: 'baseline',
+    },
+  ':where(&) :where(article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section)':
+    {
+      display: 'block',
+    },
+  ':where(&) :where(ol, ul)': {
+    listStyle: 'none',
+  },
+  ':where(&) :where(blockquote, q)': {
+    quotes: 'none',
+  },
+  // fixme?:
+  ':where(&) :where(blockquote:before, blockquote:after, q:before, q:after)': {
+    // content: '',
+    content: 'none',
+  },
+  ':where(&) :where(table)': {
+    borderCollapse: 'collapse',
+    borderSpacing: 0,
+  },
+  ':where(&) :where(button)': {
+    border: 'none',
+    background: 'none',
+    cursor: 'pointer',
+  },
+  ':where(&) :where(a)': {
+    textDecoration: 'none',
+    cursor: 'pointer',
+  },
 })
 
 export type { VariantProps }
