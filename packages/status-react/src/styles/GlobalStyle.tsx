@@ -9,7 +9,7 @@ import styled from 'styled-components'
 // note: iframe; e.g. Intercom; separate context in browser; not accesible from "parent" page; not applies style
 // note: iframe; difficult; not responsive; check height and width of iframe; pitfalls; not allows consumers to update styles; theme props
 // export const GlobalStyle = createGlobalStyle`
-export const Wrapper = styled.div`
+export const GlobalWrapper = styled.div`
   overflow: hidden;
   position: relative;
   width: 100%;
