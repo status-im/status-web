@@ -8,16 +8,19 @@ import {
   useMatch,
 } from 'react-router-dom'
 
-// import { createGlobalStyle } from 'styled-components'
+// import {
+//   // createGlobalStyle,
+//   default as styled2,
+// } from 'styled-components'
 import { MainSidebar } from '../components/main-sidebar'
 import { AppProvider } from '../contexts/app-context'
 import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
-import { /* globalCss, */ globalStyles, styled } from '../styles/config'
+import { /* globalCss, */ /* globalStyles, */ styled } from '../styles/config'
 
-// import { GlobalWrapper } from '../styles/GlobalStyle'
+// import { Wrapper2 } from '../styles/GlobalStyle'
 // import { GlobalStyle } from '../styles/GlobalStyle'
 import type { Config } from '../types/config'
 
@@ -52,7 +55,8 @@ export const Community = (props: Props) => {
     options,
   } = props
 
-  globalStyles() // base styles
+  // todo?: use globalCss(), css(), styled() body or styled(..., {}, ...) wrapper
+  // globalStyles() // base styles
   useTheme(theme)
 
   return (
@@ -61,20 +65,23 @@ export const Community = (props: Props) => {
         <AppProvider options={options}>
           <DialogProvider>
             {/* todo?: wrap inside another element to simulate `body` */}
+            {/* <Body> */}
             {/* <GlobalStyle /> */}
-            {/* <GlobalWrapper
-              id="foo"
-            > */}
+            {/* <Wrapper2 id="foo"> */}
             <Wrapper
               // todo?: use class name
+              className="foo"
               id="foo"
-              // css={{
-              //   // note: works correctly
-              //   ':where(&) a': {
-              //     padding: 30,
-              //   },
-              // }}
+              css={{
+                // note!: works as expected
+                ':where(&) :where(div, a, table)': {
+                  // note: does not work as expected; overrides; first in order
+                  // ':where(&) div, a, table': {
+                  padding: 20,
+                },
+              }}
             >
+              <a>foo</a>
               <MainSidebar />
               <Routes>
                 <Route
@@ -87,7 +94,8 @@ export const Community = (props: Props) => {
                 />
               </Routes>
             </Wrapper>
-            {/* </GlobalWrapper> */}
+            {/* </Wrapper2> */}
+            {/* </Body> */}
           </DialogProvider>
         </AppProvider>
       </ProtocolProvider>
@@ -114,83 +122,115 @@ export type { Props as CommunityProps }
 //   }
 // `
 
-const Wrapper = styled('div', {
-  // base styles
-  overflow: 'hidden',
-  position: 'relative',
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'stretch',
-  background: '$background',
+// const Body = styled2.div`
+//   // // note: does not work as expected
+//   //:where(&) a {
+//   // note: does not work
+//   :where(#foo) a {
+//     padding: 20px;
+//   }
+// `
 
-  // margin: 0,
-  // // xxx!?: bare minimu for a "global" style
-  // fontFamily: 'Inter, sans-serif',
-  // // fontSize: 15,
-  // // lineHeight: 22,
+// const Body = styled('div', {
+//   // note: does not work as ecpected; cannot overridden
+//   // ':where(&) div, a, table':
+//   // note: does not work at all
+//   // ':where(&) div a table':
+//   // note!: works as expected
+//   ':where(&) :where(div, a, table)': {
+//     padding: 20,
+//   },
+// })
 
-  // // lineHeight: '147%',
+const Wrapper = styled(
+  'div',
+  // // note: works correctly
+  // { ':where(&) a': { padding: 20 } },
+  {
+    // base styles
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'stretch',
+    background: '$background',
 
-  // // margin: 0,
-  // padding: 0,
-  // border: 0,
-  // verticalAlign: 'baseline',
+    // margin: 0,
+    // // xxx!?: bare minimu for a "global" style
+    // fontFamily: 'Inter, sans-serif',
+    // // fontSize: 15,
+    // // lineHeight: 22,
 
-  // // todo?: move to global styles; using `globalCss`; call like `useTheme`
-  // // todo?: use "'> *': {" isntead
-  // // global styles relative to this element
-  // '& *': {
-  //   boxSizing: 'border-box',
-  //   WebkitFontSmoothing: 'antialiased',
-  //   // '& div': { border: '3px solid black' },
-  //   // todo: test
-  //   '&::-webkit-scrollbar': {
-  //     width: 0,
-  //   },
-  // },
+    // // lineHeight: '147%',
 
-  // '& div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
-  //   // note: does not work correctly
-  //   // ':where(&) div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
-  //   {
-  //     margin: 0,
-  //     // fixme!: other styled components do not override this
-  //     padding: 0,
-  //     border: 0,
-  //     verticalAlign: 'baseline',
-  //   },
+    // // margin: 0,
+    // padding: 0,
+    // border: 0,
+    // verticalAlign: 'baseline',
 
-  // '& article,  aside,  details,  figcaption,  figure,  footer,  header,  hgroup,  menu,  nav,  section':
-  //   {
-  //     display: 'block',
-  //   },
+    // // todo?: move to global styles; using `globalCss`; call like `useTheme`
+    // // todo?: use "'> *': {" isntead
+    // // global styles relative to this element
+    // '& *': {
+    //   boxSizing: 'border-box',
+    //   WebkitFontSmoothing: 'antialiased',
+    //   // '& div': { border: '3px solid black' },
+    //   // todo: test
+    //   '&::-webkit-scrollbar': {
+    //     width: 0,
+    //   },
+    // },
 
-  // '& ol, ul': {
-  //   listStyle: 'none',
-  // },
+    // '& div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
+    // note: does not work as expected
+    // ':where(&) div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video':
+    // note?: works as expected
+    // ':where(&) :where(div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video)':
+    //   // note: does not work as expected
+    //   // ':where(& div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video)':
+    //   // note: works as ecpected
+    //   // ':where(&) a':
+    //   // ':where(& a, div)':
+    //   {
+    //     margin: 0,
+    //     // fixme!: other styled components do not override this
+    //     padding: 20,
+    //     border: 0,
+    //     verticalAlign: 'baseline',
+    //   },
 
-  // '& blockquote, q': {
-  //   quotes: 'none',
-  // },
+    // '& article,  aside,  details,  figcaption,  figure,  footer,  header,  hgroup,  menu,  nav,  section':
+    //   {
+    //     display: 'block',
+    //   },
 
-  // '& blockquote::before, blockquote::after, q::before, q::after': {
-  //   content: 'none',
-  // },
+    // '& ol, ul': {
+    //   listStyle: 'none',
+    // },
 
-  // '& table': {
-  //   borderCollapse: 'collapse',
-  //   borderSpacing: 0,
-  // },
+    // '& blockquote, q': {
+    //   quotes: 'none',
+    // },
 
-  // '& button': {
-  //   border: 'none',
-  //   background: 'none',
-  //   cursor: 'pointer',
-  // },
+    // '& blockquote::before, blockquote::after, q::before, q::after': {
+    //   content: 'none',
+    // },
 
-  // '& a': {
-  //   textDecoration: 'none',
-  //   cursor: 'pointer',
-  // },
-})
+    // '& table': {
+    //   borderCollapse: 'collapse',
+    //   borderSpacing: 0,
+    // },
+
+    // '& button': {
+    //   border: 'none',
+    //   background: 'none',
+    //   cursor: 'pointer',
+    // },
+
+    // '& a': {
+    //   textDecoration: 'none',
+    //   cursor: 'pointer',
+    // },
+  }
+)

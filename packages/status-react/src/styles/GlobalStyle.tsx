@@ -9,7 +9,7 @@ import styled from 'styled-components'
 // note: iframe; e.g. Intercom; separate context in browser; not accesible from "parent" page; not applies style
 // note: iframe; difficult; not responsive; check height and width of iframe; pitfalls; not allows consumers to update styles; theme props
 // export const GlobalStyle = createGlobalStyle`
-export const GlobalWrapper = styled.div`
+export const Wrapper2 = styled.div`
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -32,7 +32,9 @@ export const GlobalWrapper = styled.div`
   // font-size: 15px;
   // // line-height: 22px;
 
+  // // // note: does not work as expected
   // // :where(#foo) div,
+  // // :where(&) div,
   // & div,
   // span,
   // applet,
@@ -113,7 +115,7 @@ export const GlobalWrapper = styled.div`
   // audio,
   // video {
   //   margin: 0;
-  //   // padding: 0;
+  //   padding: 0;
   //   border: 0;
   //   vertical-align: baseline;
   // }
