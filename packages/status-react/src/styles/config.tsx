@@ -163,19 +163,17 @@ export const darkTheme = createTheme({
 
 export const base = css({
   // todo?: caniuse where()
-  // todo?: nest
   ':where(&)': {
     margin: 0,
     fontFamily: 'Inter, sans-serif',
     fontSize: 15,
-    // lineHeight: 22,
     lineHeight: '147%',
   },
   ':where(&) :where(*)': {
     boxSizing: 'border-box',
     '-webkit-font-smoothing': 'antialiased',
-    // fixme?:
     '&::-webkit-scrollbar': {
+      // todo?: report unsupported typing in these blocks
       width: 0,
     },
   },
@@ -195,11 +193,12 @@ export const base = css({
   },
   ':where(&) :where(blockquote, q)': {
     quotes: 'none',
-  },
-  // fixme?:
-  ':where(&) :where(blockquote:before, blockquote:after, q:before, q:after)': {
-    // content: '',
-    content: 'none',
+    '&::before': {
+      content: 'none',
+    },
+    '&::after': {
+      content: 'none',
+    },
   },
   ':where(&) :where(table)': {
     borderCollapse: 'collapse',
