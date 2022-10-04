@@ -11,7 +11,7 @@ export const {
   createTheme,
   config,
   getCssText,
-  // globalCss,
+  globalCss,
 } = createStitches({
   // prefix: 'status',
   theme: {

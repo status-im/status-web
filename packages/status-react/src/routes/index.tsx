@@ -8,13 +8,14 @@ import {
   useMatch,
 } from 'react-router-dom'
 
+// import { createGlobalStyle } from 'styled-components'
 import { MainSidebar } from '../components/main-sidebar'
 import { AppProvider } from '../contexts/app-context'
 import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
-import { /* globalCss, */ styled } from '../styles/config'
+import { globalCss, styled } from '../styles/config'
 import { Wrapper } from '../styles/GlobalStyle'
 
 // import { GlobalStyle } from '../styles/GlobalStyle'
@@ -51,7 +52,7 @@ export const Community = (props: Props) => {
     options,
   } = props
 
-  // globalStyles()
+  globalStyles() // base styles
   useTheme(theme)
 
   return (
@@ -90,14 +91,22 @@ export const Community = (props: Props) => {
 
 export type { Props as CommunityProps }
 
-// const globalStyles = globalCss({
-//   // '*': { margin: 0, padding: 0 },
-//   // '.foo div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
-//   ':where(#foo) div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
-//     {
-//       padding: 20,
-//     },
-// })
+const globalStyles = globalCss({
+  // '*': { margin: 0, padding: 0 },
+  ':where(#foo) a': {
+    padding: 20,
+  },
+  // ':where(#foo)': {
+  //   fontFamily: 'Inter, sans-serif',
+  // },
+})
+
+// const GlobalStyle = createGlobalStyle`
+//   :where(#foo) a {
+//   // #foo a {
+//     padding: 20px;
+//   }
+// `
 
 const _Wrapper = styled('div', {
   // base styles
