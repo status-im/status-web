@@ -83,7 +83,6 @@ export const Community = (props: Props) => {
               //   },
               // }}
             >
-              <a>foo</a>
               <MainSidebar />
               <Routes>
                 <Route
