@@ -11,7 +11,6 @@ export const {
   createTheme,
   config,
   getCssText,
-  globalCss,
 } = createStitches({
   // prefix: 'status',
   theme: {
@@ -161,38 +160,6 @@ export const darkTheme = createTheme({
     vintage: 'rgba(173, 67, 67, 1)',
     kaki: 'rgba(234, 210, 123, 1)',
   },
-})
-
-// todo?: rename to baseStyles
-/**
- * Base styles
- */
-export const globalStyles = globalCss({
-  // our `body`
-  ':where(#foo)': {
-    fontFamily: 'Inter, sans-serif',
-  },
-  // all `body` descendents (recursive)
-  // ':where(#foo *)': {},
-  // selected `body` descendents (recursive)
-  // ':where(#foo) a':
-  // note: does not work as expected; does not respec id selector
-  // ':where(#foo) div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video':
-  // note: works as expected
-  ':where(#foo) :where(div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video)':
-    // note: seems to work the same as if the elements were in :where()
-    // note: does not work as expected; does not respec id selector
-    // ':where(#foo div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video)':
-    {
-      // ':where(.foo a, h1, h2)': {
-      // ':where(.foo) a, h1, h2': {
-      // ':where(#foo a, h1, h2)': {
-      // ':where(#foo) a, h1, h2': {
-      margin: 0,
-      padding: 20,
-      border: 0,
-      verticalAlign: 'baseline',
-    },
 })
 
 export const base = css({

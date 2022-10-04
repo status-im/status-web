@@ -18,10 +18,7 @@ import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
-import {
-  /* globalCss, */ /* globalStyles, */ base,
-  styled,
-} from '../styles/config'
+import { base, styled } from '../styles/config'
 
 import type { Config } from '../types/config'
 
@@ -56,8 +53,6 @@ export const Community = (props: Props) => {
     options,
   } = props
 
-  // todo?: use globalCss(), css(), styled() body or styled(..., {}, ...) wrapper
-  // globalStyles() // base styles
   useTheme(theme)
 
   return (
@@ -67,7 +62,6 @@ export const Community = (props: Props) => {
           <DialogProvider>
             {/* todo?: wrap inside another element to simulate `body` */}
             {/* <Body> */}
-            {/* <GlobalStyle /> */}
             {/* <Wrapper2 id="foo"> */}
             <Wrapper
               // todo?: use class name
@@ -105,23 +99,6 @@ export const Community = (props: Props) => {
 }
 
 export type { Props as CommunityProps }
-
-// const globalStyles = globalCss({
-//   // '*': { margin: 0, padding: 0 },
-//   ':where(#foo) a': {
-//     padding: 20,
-//   },
-//   // ':where(#foo)': {
-//   //   fontFamily: 'Inter, sans-serif',
-//   // },
-// })
-
-// const GlobalStyle = createGlobalStyle`
-//   :where(#foo) a {
-//   // #foo a {
-//     padding: 20px;
-//   }
-// `
 
 // const Body = styled2.div`
 //   // // note: does not work as expected
