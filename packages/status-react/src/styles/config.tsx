@@ -195,6 +195,21 @@ export const globalStyles = globalCss({
     },
 })
 
+export const base = css({
+  // note: works as expected; applies & automatically, but not :where(&) though; locally scoped
+  // ':where(div, a, table)': {
+  //   padding: 21,
+  // },
+  // // note: works as expected
+  ':where(&) :where(div, a, table)': {
+    padding: 22,
+  },
+  // // note: does not work as expected
+  // ':where(&) div, a, table': {
+  //   padding: 22,
+  // },
+})
+
 export type { VariantProps }
 export type CSS = StitchesCSS<typeof config>
 export type Theme = typeof theme

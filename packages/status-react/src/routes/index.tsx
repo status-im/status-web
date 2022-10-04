@@ -18,7 +18,10 @@ import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
-import { /* globalCss, */ /* globalStyles, */ styled } from '../styles/config'
+import {
+  /* globalCss, */ /* globalStyles, */ base,
+  styled,
+} from '../styles/config'
 
 // import { Wrapper2 } from '../styles/GlobalStyle'
 // import { GlobalStyle } from '../styles/GlobalStyle'
@@ -70,16 +73,17 @@ export const Community = (props: Props) => {
             {/* <Wrapper2 id="foo"> */}
             <Wrapper
               // todo?: use class name
-              className="foo"
+              // className="foo"
+              className={base()}
               id="foo"
-              css={{
-                // note!: works as expected
-                ':where(&) :where(div, a, table)': {
-                  // note: does not work as expected; overrides; first in order
-                  // ':where(&) div, a, table': {
-                  padding: 20,
-                },
-              }}
+              // css={{
+              //   // note!: works as expected
+              //   ':where(&) :where(div, a, table)': {
+              //     // note: does not work as expected; overrides; first in order
+              //     // ':where(&) div, a, table': {
+              //     padding: 0,
+              //   },
+              // }}
             >
               <a>foo</a>
               <MainSidebar />
