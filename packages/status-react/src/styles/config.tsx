@@ -163,6 +163,23 @@ export const darkTheme = createTheme({
   },
 })
 
+// todo?: rename to baseStyles
+/**
+ * Base styles
+ */
+export const globalStyles = globalCss({
+  // our `body`
+  ':where(#foo)': {
+    fontFamily: 'Inter, sans-serif',
+  },
+  // all `body` descendents (recursive)
+  // ':where(#foo) *': {},
+  // selected `body` descendents (recursive)
+  ':where(#foo) a': {
+    padding: 0,
+  },
+})
+
 export type { VariantProps }
 export type CSS = StitchesCSS<typeof config>
 export type Theme = typeof theme

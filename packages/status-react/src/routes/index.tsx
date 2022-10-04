@@ -15,7 +15,7 @@ import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
-import { globalCss, styled } from '../styles/config'
+import { /* globalCss, */ globalStyles, styled } from '../styles/config'
 import { Wrapper } from '../styles/GlobalStyle'
 
 // import { GlobalStyle } from '../styles/GlobalStyle'
@@ -62,7 +62,6 @@ export const Community = (props: Props) => {
           <DialogProvider>
             {/* <GlobalStyle /> */}
             <Wrapper
-              className="foo"
               id="foo"
               // css={{
               //   '& a': {
@@ -91,15 +90,15 @@ export const Community = (props: Props) => {
 
 export type { Props as CommunityProps }
 
-const globalStyles = globalCss({
-  // '*': { margin: 0, padding: 0 },
-  ':where(#foo) a': {
-    padding: 20,
-  },
-  // ':where(#foo)': {
-  //   fontFamily: 'Inter, sans-serif',
-  // },
-})
+// const globalStyles = globalCss({
+//   // '*': { margin: 0, padding: 0 },
+//   ':where(#foo) a': {
+//     padding: 20,
+//   },
+//   // ':where(#foo)': {
+//   //   fontFamily: 'Inter, sans-serif',
+//   // },
+// })
 
 // const GlobalStyle = createGlobalStyle`
 //   :where(#foo) a {
