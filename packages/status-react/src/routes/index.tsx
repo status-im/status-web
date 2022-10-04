@@ -23,8 +23,6 @@ import {
   styled,
 } from '../styles/config'
 
-// import { Wrapper2 } from '../styles/GlobalStyle'
-// import { GlobalStyle } from '../styles/GlobalStyle'
 import type { Config } from '../types/config'
 
 interface Props extends Config {
