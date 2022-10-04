@@ -16,8 +16,8 @@ import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
 import { /* globalCss, */ globalStyles, styled } from '../styles/config'
-import { GlobalWrapper } from '../styles/GlobalStyle'
 
+// import { GlobalWrapper } from '../styles/GlobalStyle'
 // import { GlobalStyle } from '../styles/GlobalStyle'
 import type { Config } from '../types/config'
 
@@ -60,19 +60,17 @@ export const Community = (props: Props) => {
       <ProtocolProvider options={{ publicKey, environment }}>
         <AppProvider options={options}>
           <DialogProvider>
+            {/* todo?: wrap inside another element to simulate `body` */}
             {/* <GlobalStyle /> */}
             {/* <GlobalWrapper
               id="foo"
-              // css={{
-              //   '& a': {
-              //     padding: 30,
-              //   },
-              // }}
             > */}
             <Wrapper
+              // todo?: use class name
               id="foo"
               // css={{
-              //   '& a': {
+              //   // note: works correctly
+              //   ':where(&) a': {
               //     padding: 30,
               //   },
               // }}
@@ -153,6 +151,8 @@ const Wrapper = styled('div', {
   // },
 
   // '& div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
+  //   // note: does not work correctly
+  //   // ':where(&) div,  span,  applet,  object,  iframe,  h1,  h2,  h3,  h4, h5,  h6,  p,  blockquote,  pre,  a,  abbr,  acronym,  address,  big,  cite,  code,  del,  dfn,  em,  img,  ins,  kbd,  q,  s,  samp,  small,  strike,  strong,  sub,  sup,  tt,  var,  b,  u,  i,  center,  dl,  dt,  dd,  ol,  ul,  li,  fieldset,  form,  label,  legend,  table,  caption,  tbody,  tfoot,  thead,  tr,  th,  td,  article,  aside,  canvas,  details,  embed,  figure,  figcaption,  footer,  header,  hgroup,  menu,  nav,  output,  ruby,  section,  summary,  time,  mark,  audio,  video':
   //   {
   //     margin: 0,
   //     // fixme!: other styled components do not override this
