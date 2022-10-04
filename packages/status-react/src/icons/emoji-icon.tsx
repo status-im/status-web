@@ -1,6 +1,5 @@
 import React from 'react'
 
-// note: dupe icon
 export const EmojiIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
