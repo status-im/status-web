@@ -14,12 +14,6 @@ const environment = process.env.ENVIRONMENT as 'production' | 'test'
 
 export const App = () => {
   return (
-    <div>
-      <Community
-        publicKey={publicKey}
-        environment={environment}
-        theme="light"
-      />
-    </div>
+    <Community publicKey={publicKey} environment={environment} theme="light" />
   )
 }
