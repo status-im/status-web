@@ -63,10 +63,8 @@ export class Community {
       throw new Error('Failed to intiliaze Community')
     }
 
-    this.description = description
-
+    // Observe community description
     this.observe()
-    this.addMembers(this.description.members)
 
     // Chats
     await this.observeChatMessages(this.description.chats)
@@ -235,6 +233,7 @@ export class Community {
     // Community
     // state
     this.description = description
+    this.addMembers(this.description.members)
 
     // callback
     this.#callbacks.forEach(callback => callback({ ...this.description }))

@@ -17,6 +17,7 @@ import { recoverPublicKey } from '../../utils/recover-public-key'
 import { getChatUuid } from './get-chat-uuid'
 import { mapChatMessage } from './map-chat-message'
 
+import type { Account } from '../account'
 import type { Client } from '../client'
 import type { Community } from './community'
 import type { WakuMessage } from 'js-waku'
@@ -25,7 +26,8 @@ export function handleWakuMessage(
   wakuMessage: WakuMessage,
   // state
   client: Client,
-  community: Community
+  community: Community,
+  account?: Account
 ): void {
   // decode (layers)
   // validate
@@ -96,6 +98,8 @@ export function handleWakuMessage(
         // handle (state and callback)
         community.handleDescription(decodedPayload)
         community.setClock(BigInt(decodedPayload.clock))
+
+        account?.updateMembership(community)
 
         break
       }
