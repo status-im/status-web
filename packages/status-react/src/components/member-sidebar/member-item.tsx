@@ -24,7 +24,7 @@ export const MemberItem = (props: Props) => {
         name={username}
         colorHash={colorHash}
       />
-      <div style={{ overflow: 'hidden' }}>
+      <div>
         <Flex align="center" gap={1}>
           <Text size="15" color="accent" truncate>
             {username}

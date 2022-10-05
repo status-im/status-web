@@ -11,7 +11,7 @@ export const MemberGroup = (props: Props) => {
   const { label, children } = props
 
   return (
-    <div style={{ overflow: 'hidden' }}>
+    <div>
       <Text size={12} color="gray">
         {label}
       </Text>
