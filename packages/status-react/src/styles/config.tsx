@@ -161,57 +161,176 @@ export const darkTheme = createTheme({
   },
 })
 
+// todo: check license
+// fixme?: special selectors
+/**
+ * Base styles.
+ *
+ * @see https://tailwindcss.com/docs/preflight
+ * @see https://unpkg.com/tailwindcss@3.1.8/src/css/preflight.css
+ * @see https://github.com/codesandbox/sandpack/blob/main/sandpack-react/src/contexts/themeContext.tsx
+ *
+ * Note: Check regurarly for changes in the upstreams.
+ */
 export const base = css({
   // todo?: caniuse where()
   ':where(&)': {
-    margin: 0,
+    all: 'initial',
+    '&::before, &::after': {
+      boxSizing: 'border-box',
+      borderWidth: 0,
+      borderStyle: 'solid',
+    },
+    lineHeight: 1.5,
+    '-webkit-text-size-adjust': '100%',
+    '-moz-tab-size': 4,
+    tabSize: 4,
     fontFamily: 'Inter, sans-serif',
-    fontSize: 15,
-    lineHeight: '147%',
+    margin: 0,
+    '&:-moz-focusring': {
+      outline: 'auto',
+    },
+    '&:-moz-ui-invalid': {
+      boxShadow: 'none',
+    },
+    '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': {
+      height: 'auto',
+    },
+    '&::-webkit-search-decoration': {
+      '-webkit-appearance': 'none',
+    },
+    '&::-webkit-file-upload-button': {
+      '-webkit-appearance': 'button',
+      font: 'inherit',
+    },
+    '&:disabled': {
+      cursor: 'default',
+    },
   },
   ':where(&) :where(*)': {
-    boxSizing: 'border-box',
     '-webkit-font-smoothing': 'antialiased',
     '&::-webkit-scrollbar': {
       // todo?: report unsupported typing in these blocks
       width: 0,
     },
+    boxSizing: 'border-box',
+    borderWidth: 0,
+    borderStyle: 'solid',
   },
-  ':where(&) :where(div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video)':
-    {
-      margin: 0,
-      padding: 0,
-      border: 0,
-      verticalAlign: 'baseline',
-    },
-  ':where(&) :where(article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section)':
-    {
-      display: 'block',
-    },
-  ':where(&) :where(ol, ul)': {
-    listStyle: 'none',
+  ':where(&) :where(hr)': {
+    height: 0,
+    color: 'inherit',
+    borderTopWidth: 1,
   },
-  ':where(&) :where(blockquote, q)': {
-    quotes: 'none',
-    '&::before': {
-      content: 'none',
-    },
-    '&::after': {
-      content: 'none',
+  ':where(&) :where(abbr)': {
+    '&:where([title])': {
+      textDecoration: 'underline dotted',
     },
   },
-  ':where(&) :where(table)': {
-    borderCollapse: 'collapse',
-    borderSpacing: 0,
-  },
-  ':where(&) :where(button)': {
-    border: 'none',
-    background: 'none',
-    cursor: 'pointer',
+  ':where(&) :where(h1, h2, h3, h4, h5, h6)': {
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
   },
   ':where(&) :where(a)': {
-    textDecoration: 'none',
-    cursor: 'pointer',
+    color: 'inherit',
+    textDecoration: 'inherit',
+  },
+  ':where(&) :where(b, strong)': {
+    fontWeight: 'bolder',
+  },
+  ':where(&) :where(code, kbd, samp, pre)': {
+    // todo?: check license
+    // todo?: use default user font
+    fontFamily:
+      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    fontSize: '1em',
+  },
+  ':where(&) :where(small)': {
+    fontSize: '80%',
+  },
+  ':where(&) :where(sub, sup)': {
+    fontSize: '75%',
+    lineHeight: 0,
+    position: 'relative',
+    verticalAlign: 'baseline',
+  },
+  ':where(&) :where(sub)': {
+    bottom: '-0.25em',
+  },
+  ':where(&) :where(sup)': {
+    top: '-0.5em',
+  },
+  ':where(&) :where(table)': {
+    textIndent: 0,
+    borderColor: 'inherit',
+    borderCollapse: 'collapse',
+  },
+  ':where(&) :where(button, input, optgroup, select, textarea)': {
+    fontFamily: 'inherit',
+    fontSize: '100%',
+    fontWeight: 'inherit',
+    lineHeight: 'inherit',
+    color: 'inherit',
+    margin: 0,
+    padding: 0,
+  },
+  ':where(&) :where(button, select)': {
+    textTransform: 'none',
+  },
+  ':where(&) :where(button, [type="button"], [type="reset"], [type="submit"])':
+    {
+      '-webkit-appearance': 'button',
+      backgroundColor: 'transparent',
+      backgroundImage: 'none',
+    },
+  ':where(&) :where(progress)': {
+    verticalAlign: 'baseline',
+  },
+  ':where(&) :where([type="search"])': {
+    '-webkit-appearance': 'textfield',
+    outlineOffset: -2,
+  },
+  ':where(&) :where(summary)': {
+    display: 'list-item',
+  },
+  ':where(&) :where(blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre)':
+    {
+      margin: 0,
+    },
+  ':where(&) :where(fieldset)': {
+    margin: 0,
+    padding: 0,
+  },
+  ':where(&) :where(legend)': {
+    margin: 0,
+    padding: 0,
+  },
+  ':where(&) :where(ol, ul, menu)': {
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
+  ':where(&) :where(textarea)': {
+    resize: 'vertical',
+  },
+  ':where(&) :where(input, textarea)': {
+    '&::placeholder': {
+      opacity: 1,
+      // todo?: color
+    },
+  },
+  ':where(&) :where(button, [role="button"])': {
+    // fixme?; don't use where() for the &
+    // '& :where(button, [role="button"])': {
+    cursor: 'default',
+  },
+  ':where(&) :where(img, svg, video, canvas, audio, iframe, embed, object)': {
+    display: 'block',
+    verticalAlign: 'middle',
+  },
+  ':where(&) :where(img, video)': {
+    maxWidth: '100%',
+    height: 'auto',
   },
 })
 
