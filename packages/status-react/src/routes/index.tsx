@@ -14,8 +14,7 @@ import { DialogProvider } from '../contexts/dialog-context'
 import { useTheme } from '../hooks/use-theme'
 import { ProtocolProvider, useProtocol } from '../protocol'
 import { Chat } from '../routes/chat'
-import { styled } from '../styles/config'
-import { GlobalStyle } from '../styles/GlobalStyle'
+import { base, styled } from '../styles/config'
 
 import type { Config } from '../types/config'
 
@@ -57,8 +56,7 @@ export const Community = (props: Props) => {
       <ProtocolProvider options={{ publicKey, environment }}>
         <AppProvider options={options}>
           <DialogProvider>
-            <GlobalStyle />
-            <Wrapper>
+            <Wrapper className={base()}>
               <MainSidebar />
               <Routes>
                 <Route

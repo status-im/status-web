@@ -161,6 +161,181 @@ export const darkTheme = createTheme({
   },
 })
 
+/**
+ * Base styles.
+ *
+ * @see https://tailwindcss.com/docs/preflight for styles source
+ * @see https://unpkg.com/tailwindcss@3.1.8/src/css/preflight.css for styles source
+ * @see https://github.com/codesandbox/sandpack/blob/1778f245d0dff04dc2776b7420db5561874c7730/sandpack-react/src/styles/themeContext.tsx for styles source
+ * @see https://caniuse.com/?search=%3Awhere() for browser support
+ *
+ * note: Check regurarly for changes in the upstreams.
+ */
+export const base = css({
+  // note: following block is nested under `&` only for clarity, technically, properties could be spread
+  '&': {
+    // note: without this our main component overflows
+    all: 'initial',
+    '&::before, &::after': {
+      boxSizing: 'border-box',
+      borderWidth: 0,
+      borderStyle: 'solid',
+    },
+    lineHeight: 1.5,
+    '-webkit-text-size-adjust': '100%',
+    '-moz-tab-size': 4,
+    tabSize: 4,
+    fontFamily: 'Inter, sans-serif',
+    margin: 0,
+    '&:-moz-focusring': {
+      outline: 'auto',
+    },
+    '&:-moz-ui-invalid': {
+      boxShadow: 'none',
+    },
+    '&::-webkit-inner-spin-button, &::-webkit-outer-spin-button': {
+      height: 'auto',
+    },
+    '&::-webkit-search-decoration': {
+      '-webkit-appearance': 'none',
+    },
+    '&::-webkit-file-upload-button': {
+      '-webkit-appearance': 'button',
+      font: 'inherit',
+    },
+    '&:disabled': {
+      cursor: 'default',
+    },
+  },
+  // todo?: move to the top
+  '& :where(*)': {
+    // todo?: add
+    // all: 'initial',
+    '-webkit-font-smoothing': 'antialiased',
+    '&::-webkit-scrollbar': {
+      // todo?: report unsupported typing in these blocks
+      width: 0,
+    },
+    boxSizing: 'border-box',
+    borderWidth: 0,
+    borderStyle: 'solid',
+  },
+  /**
+   * note: for specificity, `& :where(...)` leaves the class selector's (i.e. &) weight,
+   * but nullifies it for the listed elements (i.e. :where()). Overriding by later set
+   * properties thus still works (e.g. stiches component) as well as overriding of global
+   * styles (e.g. tailwindcss) set by the context where would our main component be embedded.
+   */
+  '& :where(hr)': {
+    height: 0,
+    color: 'inherit',
+    borderTopWidth: 1,
+  },
+  '& :where(abbr)': {
+    '&:where([title])': {
+      textDecoration: 'underline dotted',
+    },
+  },
+  '& :where(h1, h2, h3, h4, h5, h6)': {
+    fontSize: 'inherit',
+    fontWeight: 'inherit',
+  },
+  '& :where(a)': {
+    color: 'inherit',
+    textDecoration: 'inherit',
+  },
+  '& :where(b, strong)': {
+    fontWeight: 'bolder',
+  },
+  '& :where(code, kbd, samp, pre)': {
+    fontFamily:
+      'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+    fontSize: '1em',
+  },
+  '& :where(small)': {
+    fontSize: '80%',
+  },
+  '& :where(sub, sup)': {
+    fontSize: '75%',
+    lineHeight: 0,
+    position: 'relative',
+    verticalAlign: 'baseline',
+  },
+  '& :where(sub)': {
+    bottom: '-0.25em',
+  },
+  '& :where(sup)': {
+    top: '-0.5em',
+  },
+  '& :where(table)': {
+    textIndent: 0,
+    borderColor: 'inherit',
+    borderCollapse: 'collapse',
+  },
+  '& :where(button, input, optgroup, select, textarea)': {
+    fontFamily: 'inherit',
+    fontSize: '100%',
+    fontWeight: 'inherit',
+    lineHeight: 'inherit',
+    color: 'inherit',
+    margin: 0,
+    padding: 0,
+  },
+  '& :where(button, select)': {
+    textTransform: 'none',
+  },
+  '& :where(button, [type="button"], [type="reset"], [type="submit"])': {
+    '-webkit-appearance': 'button',
+    backgroundColor: 'transparent',
+    backgroundImage: 'none',
+  },
+  '& :where(progress)': {
+    verticalAlign: 'baseline',
+  },
+  '& :where([type="search"])': {
+    '-webkit-appearance': 'textfield',
+    outlineOffset: -2,
+  },
+  '& :where(summary)': {
+    display: 'list-item',
+  },
+  '& :where(blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre)': {
+    margin: 0,
+  },
+  '& :where(fieldset)': {
+    margin: 0,
+    padding: 0,
+  },
+  '& :where(legend)': {
+    margin: 0,
+    padding: 0,
+  },
+  '& :where(ol, ul, menu)': {
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
+  '& :where(textarea)': {
+    resize: 'vertical',
+  },
+  '& :where(input, textarea)': {
+    '&::placeholder': {
+      opacity: 1,
+    },
+  },
+  '& :where(button, [role="button"])': {
+    cursor: 'default',
+  },
+  '& :where(img, svg, video, canvas, audio, iframe, embed, object)': {
+    display: 'block',
+    verticalAlign: 'middle',
+  },
+  '& :where(img, video)': {
+    maxWidth: '100%',
+    height: 'auto',
+  },
+})
+
 export type { VariantProps }
 export type CSS = StitchesCSS<typeof config>
 export type Theme = typeof theme
