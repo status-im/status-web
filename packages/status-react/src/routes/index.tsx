@@ -56,22 +56,19 @@ export const Community = (props: Props) => {
       <ProtocolProvider options={{ publicKey, environment }}>
         <AppProvider options={options}>
           <DialogProvider>
-            {/* todo?: wrap inside another element to simulate `html` > `body` structure */}
-            <div className={base()}>
-              <Wrapper>
-                <MainSidebar />
-                <Routes>
-                  <Route
-                    path="/:id"
-                    element={
-                      <Gate>
-                        <Chat />
-                      </Gate>
-                    }
-                  />
-                </Routes>
-              </Wrapper>
-            </div>
+            <Wrapper className={base()}>
+              <MainSidebar />
+              <Routes>
+                <Route
+                  path="/:id"
+                  element={
+                    <Gate>
+                      <Chat />
+                    </Gate>
+                  }
+                />
+              </Routes>
+            </Wrapper>
           </DialogProvider>
         </AppProvider>
       </ProtocolProvider>

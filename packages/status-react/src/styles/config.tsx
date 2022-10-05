@@ -161,13 +161,12 @@ export const darkTheme = createTheme({
   },
 })
 
-// todo: check source licenses
 /**
  * Base styles.
  *
  * @see https://tailwindcss.com/docs/preflight for styles source
  * @see https://unpkg.com/tailwindcss@3.1.8/src/css/preflight.css for styles source
- * @see https://github.com/codesandbox/sandpack/blob/main/sandpack-react/src/contexts/themeContext.tsx for styles source
+ * @see https://github.com/codesandbox/sandpack/blob/1778f245d0dff04dc2776b7420db5561874c7730/sandpack-react/src/styles/themeContext.tsx for styles source
  * @see https://caniuse.com/?search=%3Awhere() for browser support
  *
  * note: Check regurarly for changes in the upstreams.
@@ -249,8 +248,6 @@ export const base = css({
     fontWeight: 'bolder',
   },
   '& :where(code, kbd, samp, pre)': {
-    // todo?: check license
-    // todo?: use default user font
     fontFamily:
       'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
     fontSize: '1em',
@@ -324,7 +321,6 @@ export const base = css({
   '& :where(input, textarea)': {
     '&::placeholder': {
       opacity: 1,
-      // todo?: color
     },
   },
   '& :where(button, [role="button"])': {
