@@ -1,25 +1,15 @@
 import React from 'react'
 
-// import { CreateProfileDialog } from '../../../../components/create-profile-dialog'
-// import { useLocalStorage } from '../../../../hooks/use-local-storage'
 import { useAccount } from '../../../../protocol'
 import { Button, Flex } from '../../../../system'
-// import { DialogTrigger } from '../../../../system/dialog'
 import { Grid } from '../../../../system/grid'
 import { Heading } from '../../../../system/heading'
 
-// import { ConnectWalletDialog } from './connect-wallet-dialog'
-// import { SyncStatusProfileDialog } from './sync-status-profile-dialog'
-// import { ThrowawayProfileFoundDialog } from './throwaway-profile-found-dialog'
-
 export const GetStarted = () => {
-  // const [throwawayProfile] = useLocalStorage('cipherIdentityt', null)
+  const { account, createAccount } = useAccount()
+  console.log('GetStarted > account', account)
 
-  // const handleSkip = () => {
-  //   // TODO: Add skip logic
-  // }
-
-  const { createAccount } = useAccount()
+  const membershipRequested = account?.membership === 'requested'
 
   return (
     <Flex direction="column" align="center" gap={5} css={{ padding: '30px 0' }}>
@@ -145,25 +135,11 @@ export const GetStarted = () => {
         Want to jump into the discussion?
       </Heading>
       <Grid gap={3} align="center" justify="center">
-        {/* <DialogTrigger>
-          <Button>Sync with Status profile</Button>
-          <SyncStatusProfileDialog />
-        </DialogTrigger> */}
-
-        {/* <DialogTrigger>
-          <Button>Connect Wallet</Button>
-          <ConnectWalletDialog />
-        </DialogTrigger> */}
-
-        <Button onClick={createAccount}>Use Throwaway Profile</Button>
-        {/* <DialogTrigger>
-          <Button>Use Throwaway Profile</Button>
-          {account ? (
-            <ThrowawayProfileFoundDialog onSkip={handleSkip} />
-          ) : (
-            <CreateProfileDialog />
-          )}
-        </DialogTrigger> */}
+        <Button onClick={createAccount} disabled={membershipRequested}>
+          {membershipRequested
+            ? 'Membership Requested'
+            : 'Use Throwaway Profile'}
+        </Button>
       </Grid>
     </Flex>
   )

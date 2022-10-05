@@ -19,8 +19,7 @@ type State = {
 type Action =
   | { type: 'INIT'; client: Client }
   | { type: 'UPDATE_COMMUNITY'; community: Community['description'] }
-  | { type: 'SET_ACCOUNT'; account: Account }
-  | { type: 'REMOVE_ACCOUNT' }
+  | { type: 'SET_ACCOUNT'; account: Account | undefined }
 
 interface Props {
   options: ClientOptions
@@ -35,6 +34,7 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         loading: false,
         client,
+        account: client.account,
         community: client.community.description,
       }
     }
@@ -43,9 +43,6 @@ const reducer = (state: State, action: Action): State => {
     }
     case 'SET_ACCOUNT': {
       return { ...state, account: action.account }
-    }
-    case 'REMOVE_ACCOUNT': {
-      return { ...state, account: undefined }
     }
   }
 }
@@ -66,6 +63,7 @@ export const ProtocolProvider = (props: Props) => {
   useEffect(() => {
     const loadClient = async () => {
       const client = await createClient(options)
+
       dispatch({ type: 'INIT', client })
     }
 
@@ -76,9 +74,18 @@ export const ProtocolProvider = (props: Props) => {
 
   useEffect(() => {
     if (client) {
-      return client.community.onChange(community => {
-        dispatch({ type: 'UPDATE_COMMUNITY', community })
-      })
+      const unsubscribe = [
+        client.onAccountChange(account => {
+          dispatch({ type: 'SET_ACCOUNT', account })
+        }),
+        client.community.onChange(community => {
+          dispatch({ type: 'UPDATE_COMMUNITY', community })
+        }),
+      ]
+
+      return () => {
+        unsubscribe.forEach(listener => listener())
+      }
     }
   }, [client])
 

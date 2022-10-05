@@ -3,22 +3,14 @@ import { useProtocol } from './provider'
 import type { Account } from '@status-im/js'
 
 export const useAccount = () => {
-  const { client, account, dispatch } = useProtocol()
+  const { client, account } = useProtocol()
 
-  const createAccount = async () => {
-    const account = await client.createAccount()
-    dispatch({ type: 'SET_ACCOUNT', account })
-    // TODO: save account
-
-    return account
-  }
-
-  const deleteAccount = () => {
-    dispatch({ type: 'REMOVE_ACCOUNT' })
-    // TODO: remove from storage
-  }
-
-  return { account, createAccount, deleteAccount } as const
+  return {
+    account,
+    createAccount: () => client.createAccount(),
+    deleteAccount: () => client.deleteAccount(),
+    isMember: account ? client.community.isMember(account.chatKey) : undefined,
+  } as const
 }
 
 export type { Account }
