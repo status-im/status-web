@@ -208,7 +208,10 @@ export const base = css({
       cursor: 'default',
     },
   },
+  // todo?: move to the top
   '& :where(*)': {
+    // todo?: add
+    // all: 'initial',
     '-webkit-font-smoothing': 'antialiased',
     '&::-webkit-scrollbar': {
       // todo?: report unsupported typing in these blocks
