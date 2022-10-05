@@ -6,12 +6,9 @@ import { hexToBytes } from 'ethereum-cryptography/utils'
 import { Protocols, WakuMessage } from 'js-waku'
 import { createWaku } from 'js-waku/lib/create_waku'
 import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list'
-import {
-  Fleet,
-  getPredefinedBootstrapNodes,
-} from 'js-waku/lib/predefined_bootstrap_nodes'
 import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
 
+import { peers } from '../consts/peers'
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
@@ -65,14 +62,8 @@ class Client {
 
   static async start(options: ClientOptions) {
     // Waku
-    const fleet = options.environment === 'test' ? Fleet.Test : Fleet.Prod
-    /**
-     * >only connects to 1 remote node because of the limited number of nodes
-     * >run by Status and the limited number of connections provided by these nodes
-     * >
-     * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
-     */
-    const peers = getPredefinedBootstrapNodes(fleet)
+    const { environment = 'production' } = options
+
     const waku = await createWaku({
       defaultBootstrap: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -80,7 +71,15 @@ class Client {
       emitSelf: true,
       relayKeepAlive: 15,
       libp2p: {
-        peerDiscovery: [new PeerDiscoveryStaticPeers(peers)],
+        peerDiscovery: [
+          /**
+           * >only connects to 1 remote node because of the limited number of nodes
+           * >run by Status and the limited number of connections provided by these nodes
+           * >
+           * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
+           */
+          new PeerDiscoveryStaticPeers(peers[environment], { maxPeers: 1 }),
+        ],
       },
     })
     await waku.start()
