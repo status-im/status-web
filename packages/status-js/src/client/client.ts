@@ -9,15 +9,13 @@ import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list
 import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
 
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
-import {
-  Fleet,
-  getPredefinedBootstrapNodes,
-} from '../utils/predefined-bootstrap-nodes'
+import { getPredefinedBootstrapNodes } from '../utils/predefined-bootstrap-nodes'
 import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
 import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
 
+import type { Fleet } from '../utils/predefined-bootstrap-nodes'
 import type { Waku } from 'js-waku'
 
 export interface ClientOptions {
@@ -65,7 +63,7 @@ class Client {
 
   static async start(options: ClientOptions) {
     // Waku
-    const fleet = options.environment === 'test' ? Fleet.Test : Fleet.Prod
+    const fleet: Fleet = options.environment === 'test' ? 'test' : 'prod'
     /**
      * >only connects to 1 remote node because of the limited number of nodes
      * >run by Status and the limited number of connections provided by these nodes

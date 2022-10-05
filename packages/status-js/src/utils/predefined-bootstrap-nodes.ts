@@ -7,13 +7,10 @@ import { fleets } from '../consts/fleets'
 
 export const DefaultWantedNumber = 1
 
-export enum Fleet {
-  Prod = 'prod',
-  Test = 'test',
-}
+export type Fleet = 'prod' | 'test'
 
 export function getPredefinedBootstrapNodes(
-  fleet: Fleet = Fleet.Prod,
+  fleet: Fleet = 'prod',
   wantedNumber: number = DefaultWantedNumber
 ): string[] {
   if (wantedNumber <= 0) {
@@ -22,10 +19,10 @@ export function getPredefinedBootstrapNodes(
 
   let nodes
   switch (fleet) {
-    case Fleet.Prod:
+    case 'prod':
       nodes = fleets.fleets['status.prod']['wss/p2p/waku']
       break
-    case Fleet.Test:
+    case 'test':
       nodes = fleets.fleets['status.test']['wss/p2p/waku']
       break
     default:
