@@ -22,7 +22,7 @@ export function MemberSidebar() {
             <UserItem account={account} />
           </MemberGroup>
         )}
-        <MemberGroup label="Online">
+        <MemberGroup label="All">
           {members.map(member => (
             <MemberItem
               key={member.publicKey}
