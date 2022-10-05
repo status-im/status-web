@@ -6,7 +6,7 @@ import { expect, test } from 'vitest'
 import { Account } from './account'
 
 test('should verify the signature', async () => {
-  const account = new Account()
+  const account = new Account({} as any)
 
   const message = utf8ToBytes('123')
   const messageHash = keccak256(message)
@@ -20,7 +20,7 @@ test('should verify the signature', async () => {
 })
 
 test('should not verify signature with different message', async () => {
-  const account = new Account()
+  const account = new Account({} as any)
 
   const message = utf8ToBytes('123')
   const messageHash = keccak256(message)

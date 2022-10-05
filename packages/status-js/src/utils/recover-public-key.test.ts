@@ -9,7 +9,7 @@ import type { ApplicationMetadataMessage } from '../protos/application-metadata-
 test('should recover public key', async () => {
   const payload = utf8ToBytes('hello')
 
-  const account = new Account()
+  const account = new Account({} as any)
   const signature = await account.sign(payload)
 
   expect(bytesToHex(recoverPublicKey(signature, payload))).toEqual(
@@ -60,7 +60,7 @@ test('should recover public key from fixture', async () => {
 test('should not recover public key with different payload', async () => {
   const payload = utf8ToBytes('1')
 
-  const account = new Account()
+  const account = new Account({} as any)
   const signature = await account.sign(payload)
 
   const payload2 = utf8ToBytes('2')
