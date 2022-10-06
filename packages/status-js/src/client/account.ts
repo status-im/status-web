@@ -8,8 +8,7 @@ import { generateUsername } from '../utils/generate-username'
 import type { Client } from './client'
 import type { Community } from './community/community'
 
-// todo: rejected -> kicked
-type MembershipStatus = 'none' | 'requested' | 'approved' | 'rejected' // TODO: add 'banned'
+type MembershipStatus = 'none' | 'requested' | 'approved' | 'kicked' // TODO: add 'banned'
 
 export class Account {
   #client: Client
@@ -61,7 +60,7 @@ export class Account {
 
       case 'approved': {
         if (isMember === false) {
-          this.membership = 'rejected'
+          this.membership = 'kicked'
           this.#client.account = this // fixme
         }
         return
