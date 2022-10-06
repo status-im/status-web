@@ -84,7 +84,7 @@ export const ProtocolProvider = (props: Props) => {
       ]
 
       return () => {
-        unsubscribe.forEach(listener => listener())
+        unsubscribe.forEach(fn => fn())
       }
     }
   }, [client])
