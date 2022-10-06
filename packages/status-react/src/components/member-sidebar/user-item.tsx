@@ -19,13 +19,7 @@ export const UserItem = (props: Props) => {
         <Avatar size={32} name={account.username} />
         <div>
           <Flex align="center" gap={1}>
-            <Text
-              size="15"
-              color="accent"
-              truncate
-              css={{ width: 144 }}
-              aria-label="fklasdjflk asdjfklasdfj aksdlfjasdlkfj sdlkfj dsf"
-            >
+            <Text size="15" color="accent" truncate css={{ width: 144 }}>
               {account.username}
             </Text>
           </Flex>

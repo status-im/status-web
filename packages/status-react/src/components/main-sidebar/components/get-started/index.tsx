@@ -7,7 +7,6 @@ import { Heading } from '../../../../system/heading'
 
 export const GetStarted = () => {
   const { account, createAccount } = useAccount()
-  console.log('GetStarted > account', account)
 
   const membershipRequested = account?.membership === 'requested'
 

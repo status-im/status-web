@@ -144,7 +144,7 @@ class Client {
     this.storage.setItem(THROWAWAY_ACCOUNT_STORAGE_KEY, this.#account)
 
     for (const listener of this.#accountListeners) {
-      listener(this.#account ?? undefined)
+      callback(this.#account)
     }
   }
 
