@@ -98,8 +98,8 @@ const Tabs = (props: Props) => {
       <div
         style={{
           flex: 1,
-          overflow: 'hidden',
           overflowY: 'scroll',
+          overflowX: 'hidden',
         }}
       >
         {contents}

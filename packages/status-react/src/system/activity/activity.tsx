@@ -61,7 +61,6 @@ const Activity = (props: Props) => {
           direction="column"
           css={{
             width: '100%',
-            overflow: 'hidden',
           }}
         >
           <div>
