@@ -31,8 +31,8 @@ const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
       state={muted ? 'muted' : unread ? 'unread' : undefined}
     >
       <Flex gap={2} align="center">
-        <Avatar size={24} name={displayName} color={color} initialsCount={1} />#
-        {displayName}
+        <Avatar size={24} name={displayName} color={color} initialsLength={1} />
+        #{displayName}
       </Flex>
       {count > 0 && <Badge>{count}</Badge>}
     </Link>

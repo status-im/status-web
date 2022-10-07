@@ -27,7 +27,7 @@ const ChatStart = (props: ChatStartProps) => {
         size={120}
         name={identity?.displayName}
         color={identity?.color}
-        initialsCount={1}
+        initialsLength={1}
       />
       <Heading>{identity?.displayName}</Heading>
       <Text>

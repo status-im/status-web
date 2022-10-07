@@ -68,7 +68,7 @@ const Tag = (
             <Avatar
               size={16}
               name={props.communityDisplayName}
-              initialsCount={1}
+              initialsLength={1}
             />
             <Text color="current" weight="500">
               {props.communityDisplayName}

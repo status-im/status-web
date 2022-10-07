@@ -20,7 +20,7 @@ export const ChatInfo = (props: Props) => {
         size={36}
         name={chat.identity?.displayName}
         color={chat.identity?.color}
-        initialsCount={1}
+        initialsLength={1}
       />
       <div>
         <Text>#{chat.identity?.displayName}</Text>
