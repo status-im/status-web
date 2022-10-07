@@ -20,6 +20,7 @@ import type { MessageType } from '../protos/enums'
 import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
+import type { Member } from './member'
 import type { WakuMessage } from 'js-waku'
 
 export type ChatMessage = ChatMessageProto & {
@@ -28,6 +29,9 @@ export type ChatMessage = ChatMessageProto & {
   reactions: Reactions
   chatUuid: string
   signer: string
+  member: Member
+  communityDisplayName: string
+  chatDisplayName: string
   responseToMessage?: ChatMessage
   edittedClock?: bigint
   pinnedClock?: bigint

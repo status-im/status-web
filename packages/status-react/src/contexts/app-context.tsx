@@ -28,7 +28,7 @@ const reducer: Reducer<State, Action> = (state, action) => {
 
 const initialState: State = {
   state: 'loading',
-  showMembers: false,
+  showMembers: true,
 }
 
 interface Props {

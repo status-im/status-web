@@ -5,6 +5,7 @@ import * as Primitive from '@radix-ui/react-popover'
 import { Content } from './styles'
 
 import type { PopoverContentProps } from '@radix-ui/react-popover'
+import type Stitches from '@stitches/react'
 import type { Ref } from 'react'
 
 interface TriggerProps {
@@ -32,13 +33,14 @@ const _PopoverTrigger = forwardRef(PopoverTrigger)
 
 interface PopoverProps extends PopoverContentProps {
   children: React.ReactNode
+  css?: Stitches.CSS
 }
 
 const Popover = (props: PopoverProps) => {
-  const { children, ...contentProps } = props
+  const { children, css, ...contentProps } = props
 
   return (
-    <Content as={Primitive.Content} {...contentProps}>
+    <Content as={Primitive.Content} css={css} {...contentProps}>
       {children}
     </Content>
   )

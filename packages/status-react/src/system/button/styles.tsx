@@ -37,6 +37,19 @@ export const Base = styled('button', {
           background: '$primary-2',
         },
       },
+      secondary: {
+        background: '$transparent',
+        color: '$primary-1',
+        '&:hover': {
+          background: '$primary-3',
+        },
+        '&[data-state="active"]': {
+          background: '$primary-2',
+          '&:hover': {
+            backgroundColor: '$primary-2', // override default hover behavior
+          },
+        },
+      },
       danger: {
         background: '$danger-3',
         color: '$danger-1',
@@ -54,8 +67,9 @@ export const Base = styled('button', {
     },
     size: {
       small: {
+        height: '38px',
         fontSize: '13px',
-        padding: '10px 12px',
+        padding: '0px 12px',
       },
     },
     loading: {

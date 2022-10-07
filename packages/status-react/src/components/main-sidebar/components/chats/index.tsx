@@ -9,7 +9,7 @@ export const Chats = () => {
   const { categories, chats } = useSortedChats()
 
   return (
-    <Box css={{ padding: '18px 0', overflow: 'auto' }}>
+    <Box css={{ padding: '18px 0', overflowY: 'scroll' }}>
       {chats.map(chat => (
         <ChatItem key={chat.id} chat={chat} />
       ))}

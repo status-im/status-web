@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
-import { useMatch } from 'react-router-dom'
+import { useLocation, useMatch } from 'react-router-dom'
 
 import { MemberSidebar } from '../../components/member-sidebar'
 import { useAppState } from '../../contexts/app-context'
@@ -23,7 +23,12 @@ const ChatStart = (props: ChatStartProps) => {
 
   return (
     <Flex direction="column" gap="3" align="center" css={{ marginBottom: 50 }}>
-      <Avatar size={120} name={identity?.displayName} color={identity?.color} />
+      <Avatar
+        size={120}
+        name={identity?.displayName}
+        color={identity?.color}
+        initialsLength={1}
+      />
       <Heading>{identity?.displayName}</Heading>
       <Text>
         Welcome to the beginning of the #{identity?.displayName} channel!
@@ -43,11 +48,28 @@ const Body = () => {
   const chat = client.community.getChat(chatId)!
   const messages = useMessages(chatId)
 
-  const contentRef = useRef<HTMLDivElement>(null)
+  const location = useLocation()
+  const selectedMessageId = (
+    location.state as { selectedMessageId: string } | undefined
+  )?.selectedMessageId
+
+  const contentRef = useRef<HTMLDivElement | null>(null)
+  // todo: more scrolling conditions
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (selectedMessageId) {
+      document.getElementById(selectedMessageId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'start',
+      })
+      // todo?: history.state clean-up
+
+      return
+    }
+
     contentRef.current!.scrollTop = contentRef.current!.scrollHeight ?? 0
-  }, [chatId, messages.data.length])
+  }, [chatId, messages.data.length, selectedMessageId])
 
   const handleMessageSubmit = (message: string) => {
     chat.sendTextMessage(message, state.reply?.message.messageId)
@@ -57,9 +79,15 @@ const Body = () => {
     <>
       <ContentWrapper ref={contentRef}>
         <ChatStart chatId={chatId} />
-        {messages.data.map(message => (
-          <ChatMessage key={message.messageId} message={message} />
-        ))}
+        {messages.data.map(message => {
+          return (
+            <ChatMessage
+              key={message.messageId}
+              message={message}
+              highlight={message.messageId === selectedMessageId}
+            />
+          )
+        })}
       </ContentWrapper>
       {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>
@@ -87,14 +115,11 @@ export const Chat = () => {
 
 const Wrapper = styled('div', {
   flex: 1,
-  position: 'relative',
-  width: '100%',
-  height: '100%',
   display: 'flex',
   alignItems: 'stretch',
+  // https://medium.com/the-crazy-coder/the-mystery-of-css-flex-layout-items-shrinking-8748145e96d9
+  minWidth: 0,
   background: '$background',
-  maxWidth: '100%',
-  minWidth: 1,
 })
 
 const ContentWrapper = styled('div', {
@@ -103,7 +128,6 @@ const ContentWrapper = styled('div', {
   overflowX: 'hidden',
   WebkitOverflowScrolling: 'touch',
   overscrollBehavior: 'contain',
-  minWidth: 1,
 
   // scrollSnapType: 'y proximity',
 
@@ -117,5 +141,5 @@ const Main = styled('div', {
   flex: 1,
   display: 'flex',
   flexDirection: 'column',
-  minWidth: 1,
+  minWidth: 0,
 })

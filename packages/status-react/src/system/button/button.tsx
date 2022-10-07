@@ -11,6 +11,7 @@ interface Props {
   children: string
   disabled?: boolean
   loading?: boolean
+  active?: boolean
   type?: ButtonProps['type']
   onClick?: ButtonProps['onClick']
   variant?: Variants['variant']

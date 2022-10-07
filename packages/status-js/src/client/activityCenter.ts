@@ -1,10 +1,11 @@
 // todo?: rename to notifications (center?), inbox, or keep same as other platforms
+// todo: use kebab case for the file name
 
 import type { ChatMessage } from './chat'
 import type { Client } from './client'
 
 // todo?: rename to Activity
-type Notification = {
+export type Notification = {
   type: 'message'
   value: ChatMessage
   isMention?: boolean
@@ -13,8 +14,9 @@ type Notification = {
 
 export type ActivityCenterLatest = {
   notifications: Notification[]
-  // todo?: rename count to mentionsAndRepliesCount
+  // todo?: rename count to mentionsAndRepliesCount, mentionsCount
   unreadChats: Map<string, { count: number }>
+  totalCount: number
 }
 
 export class ActivityCenter {
@@ -33,6 +35,7 @@ export class ActivityCenter {
   public getLatest = (): ActivityCenterLatest => {
     const notifications: Notification[] = []
     const unreadChats: Map<string, { count: number }> = new Map()
+    let totalCount = 0
 
     for (const notification of this.#notifications.values()) {
       if (notification.type === 'message') {
@@ -41,14 +44,20 @@ export class ActivityCenter {
         const chat = unreadChats.get(chatUuid)
         let count = chat?.count ?? 0
 
-        if (notification.isMention || notification.isReply) {
+        const isMention = notification.isMention || notification.isReply
+        if (isMention) {
           count++
+          totalCount++
         }
 
         if (chat) {
           chat.count = count
         } else {
           unreadChats.set(chatUuid, { count })
+        }
+
+        if (!isMention) {
+          continue
         }
       }
 
@@ -67,12 +76,14 @@ export class ActivityCenter {
       return 0
     })
 
-    // fixme!?: do not display regular messages, only mentions and replies
-    // todo?: group notifications (all, unreads, mentions, replies, _chats.{id,count})
-    return { notifications, unreadChats }
+    return {
+      // todo?: group notifications (all, mentions, replies)
+      notifications,
+      unreadChats,
+      totalCount,
+    }
   }
 
-  // todo: pass ids instead of values and resolve within
   public addMessageNotification = (
     newMessage: ChatMessage,
     referencedMessage?: ChatMessage
@@ -98,15 +109,49 @@ export class ActivityCenter {
     this.emitLatest()
   }
 
+  // todo?: also calls `clearChatNotifications` (on non-action items/notifications)?
+  // markAllAsRead = () => {}
+
+  // todo?: for example from chat with red bar in UI indicating start
+  // markChatNotificationsAsUnreadSince = (category, id) => {}
+
+  // todo?: rename to `clearChatNotifications`; separate (button) from `markAllAsRead`?
+  // todo?: merge with `removeChatNotifications`; together with `notification.type` condition
   /**
    * Removes all notifications.
    */
-  removeNotifications = () => {
-    this.#notifications.clear()
+  removeNotifications = (category: 'all' | 'mentions' | 'replies') => {
+    // todo?: clear all non-actionable notification too
+    if (category === 'all') {
+      for (const notification of this.#notifications) {
+        const { isMention, isReply } = notification
+
+        if (!(isMention || isReply)) {
+          continue
+        }
+
+        this.#notifications.delete(notification)
+      }
+    } else if (category === 'mentions') {
+      // todo: extract to a func
+      this.#notifications.forEach(notification => {
+        if (notification.isMention) {
+          this.#notifications.delete(notification)
+        }
+      })
+    } else if (category === 'replies') {
+      this.#notifications.forEach(notification => {
+        if (notification.isReply) {
+          this.#notifications.delete(notification)
+        }
+      })
+    }
 
     this.emitLatest()
   }
 
+  // todo?: call from UI on ESC
+  // todo?: call from UI if scrolled all the way to the end
   /**
    * Removes chat message notifications from the Activity Center. For example,
    * on only opening or after scrolling to the end.
