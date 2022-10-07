@@ -126,6 +126,8 @@ export function handleWakuMessage(
               messageId,
               chatUuid,
               signerPublicKey,
+              community,
+              chat,
             })
 
             // handle

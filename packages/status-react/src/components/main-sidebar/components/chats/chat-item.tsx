@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 import { useActivityCenter } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
-import { Avatar } from '../../../../system'
+import { Avatar, Badge, Flex } from '../../../../system'
 
 import type { Chat } from '../../../../protocol/use-sorted-chats'
 import type { Ref } from 'react'
@@ -30,7 +30,10 @@ const ChatItem = (props: Props, ref: Ref<HTMLAnchorElement>) => {
       to={`/${chat.id}`}
       state={muted ? 'muted' : unread ? 'unread' : undefined}
     >
-      <Avatar size={24} name={displayName} color={color} />#{displayName}
+      <Flex gap={2} align="center">
+        <Avatar size={24} name={displayName} color={color} initialsLength={1} />
+        #{displayName}
+      </Flex>
       {count > 0 && <Badge>{count}</Badge>}
     </Link>
   )
@@ -46,11 +49,11 @@ const Link = styled(NavLink, {
   fontFamily: '$sans',
   fontWeight: '$500',
   fontSize: 15,
-  display: 'inline-flex',
+  display: 'flex',
+  justifyContent: 'space-between',
   color: '$accent-4',
   alignItems: 'center',
   width: '100%',
-  gap: '$2',
   borderRadius: 8,
   padding: 8,
 
@@ -74,16 +77,4 @@ const Link = styled(NavLink, {
       },
     },
   },
-})
-
-const Badge = styled('div', {
-  textAlign: 'center',
-  position: 'absolute',
-  right: 8,
-  width: 22,
-  height: 22,
-  background: '$primary-1',
-  borderRadius: '$full',
-  fontSize: 12,
-  color: '$accent-11',
 })

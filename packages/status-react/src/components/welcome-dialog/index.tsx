@@ -17,6 +17,7 @@ export const WelcomeDialog = () => {
             size="64"
             src={identity?.displayName}
             color={identity?.color}
+            initialsLength={1}
           />
         </Flex>
         <Text>{identity?.description}</Text>

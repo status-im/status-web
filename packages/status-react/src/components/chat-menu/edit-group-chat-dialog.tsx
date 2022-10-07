@@ -11,7 +11,7 @@ export const EditGroupChatDialog = () => {
           placeholder="A catchy name"
           maxLength={30}
         />
-        <Avatar size="120" />
+        <Avatar size="120" initialsLength={1} />
       </Dialog.Body>
       <Dialog.Actions>
         <Dialog.Action>Save changes</Dialog.Action>

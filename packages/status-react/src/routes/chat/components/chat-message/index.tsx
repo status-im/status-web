@@ -7,7 +7,7 @@ import { useChatContext } from '../../../../contexts/chat-context'
 // import { BellIcon } from '../../../../icons/bell-icon'
 // import { PinIcon } from '../../../../icons/pin-icon'
 import { useProtocol } from '../../../../protocol'
-import { styled } from '../../../../styles/config'
+import { keyframes, styled } from '../../../../styles/config'
 import {
   Avatar,
   Box,
@@ -32,6 +32,7 @@ import type { Message, Reaction } from '../../../../protocol'
 interface Props {
   message: Message
   prevMessage?: Message
+  highlight?: boolean
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -60,7 +61,7 @@ export const ChatMessage = (props: Props) => {
   const { params } = useMatch(':id')!
 
   const chatId = params.id!
-  const { message } = props
+  const { message, highlight } = props
 
   const mention = false
   const pinned = false
@@ -172,7 +173,12 @@ export const ChatMessage = (props: Props) => {
   return (
     <>
       {/* <ContextMenuTrigger> */}
-      <Wrapper mention={mention} pinned={pinned} data-active={reacting}>
+      <Wrapper
+        mention={mention}
+        pinned={pinned}
+        data-active={reacting}
+        highlight={highlight}
+      >
         {responseTo && <MessageReply messageId={responseTo} />}
         <Flex gap={2}>
           <Box>
@@ -262,6 +268,15 @@ export const ChatMessage = (props: Props) => {
   )
 }
 
+const backgroundAnimation = keyframes({
+  from: {
+    backgroundColor: '$navigate-2',
+  },
+  to: {
+    backgroundColor: 'revert',
+  },
+})
+
 // TODO: Use compound variants https://stitches.dev/docs/variants#compound-variants
 const Wrapper = styled('div', {
   position: 'relative',
@@ -273,7 +288,7 @@ const Wrapper = styled('div', {
   transitionDuration: '100ms',
 
   '&:hover, &[data-open="true"], &[data-active="true"]': {
-    background: '$gray-4',
+    background: '$gray-2',
   },
 
   a: {
@@ -314,6 +329,13 @@ const Wrapper = styled('div', {
           bottom: 0,
           width: 3,
           background: '$pin-1',
+        },
+      },
+    },
+    highlight: {
+      true: {
+        '@motion': {
+          animation: `${backgroundAnimation} 3s ease-out 0s`,
         },
       },
     },

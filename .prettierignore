@@ -3,3 +3,4 @@
 .parcel-cache
 .github
 **/protos
+**/coverage

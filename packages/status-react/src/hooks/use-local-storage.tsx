@@ -90,7 +90,6 @@ function parseJSON<T>(value: string | null): T | undefined {
   try {
     return value === 'undefined' ? undefined : JSON.parse(value ?? '')
   } catch {
-    console.log('Parse error', { value })
     return undefined
   }
 }

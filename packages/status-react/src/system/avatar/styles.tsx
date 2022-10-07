@@ -11,6 +11,11 @@ export const Base = styled('div', {
 
   variants: {
     size: {
+      16: {
+        width: 16,
+        height: 16,
+        padding: 1,
+      },
       20: {
         width: 20,
         height: 20,
@@ -29,6 +34,11 @@ export const Base = styled('div', {
       36: {
         width: 36,
         height: 36,
+        padding: 2,
+      },
+      40: {
+        width: 40,
+        height: 40,
         padding: 2,
       },
       44: {
@@ -71,6 +81,7 @@ export const Indicator = styled('span', {
 
   variants: {
     size: {
+      16: {},
       20: {},
       24: {},
       32: {
@@ -78,6 +89,7 @@ export const Indicator = styled('span', {
         height: 12,
       },
       36: {},
+      40: {},
       44: {},
       64: {},
       80: {},
@@ -105,10 +117,12 @@ export const Initials = styled('div', {
   verticalAlign: 'baseline',
   variants: {
     size: {
+      16: { fontSize: 'calc(16 * 0.5px)', lineHeight: '16px' },
       20: { fontSize: 'calc(20 * 0.5px)', lineHeight: '20px' },
       24: { fontSize: 'calc(24 * 0.5px)', lineHeight: '24px' },
       32: { fontSize: 'calc(32 * 0.5px)', lineHeight: '32px' },
       36: { fontSize: 'calc(36 * 0.5px)', lineHeight: '36px' },
+      40: { fontSize: 'calc(40 * 0.5px)', lineHeight: '40px' },
       44: { fontSize: 'calc(44 * 0.5px)', lineHeight: '44px' },
       64: { fontSize: 'calc(64 * 0.5px)', lineHeight: '64px' },
       80: { fontSize: 'calc(80 * 0.5px)', lineHeight: '80px' },

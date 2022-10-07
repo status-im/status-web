@@ -22,6 +22,9 @@ export const useActivityCenter = () => {
   }, [client.activityCenter])
 
   return {
+    activityCenter: client.activityCenter,
+    notifications: latest.notifications,
     unreadChats: latest.unreadChats,
+    totalCount: latest.totalCount,
   }
 }

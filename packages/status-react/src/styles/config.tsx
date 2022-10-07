@@ -57,6 +57,8 @@ export const {
       'pin-2': 'rgba(255, 159, 15, 0.2)',
       'pin-3': 'rgba(255, 159, 15, 0.1)',
 
+      'navigate-2': 'rgba(255, 159, 15, 0.2)',
+
       'accent-1': 'rgba(0, 0, 0, 1)',
       'accent-2': 'rgba(0, 0, 0, 0.9)',
       'accent-3': 'rgba(0, 0, 0, 0.8)',

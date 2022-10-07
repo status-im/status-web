@@ -14,7 +14,7 @@ export const CommunityInfo = () => {
   return (
     <DialogTrigger>
       <Button>
-        <Avatar size={36} name={displayName} color={color} />
+        <Avatar size={36} name={displayName} color={color} initialsLength={1} />
         <div>
           <Text>{displayName}</Text>
           <Text color="gray" size={12}>
