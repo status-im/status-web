@@ -41,7 +41,7 @@ const Avatar = (props: Props) => {
       size={size}
       style={{
         background: identiconRing,
-        padding: !identiconRing ? 0 : undefined,
+        padding: identiconRing ? undefined : 0,
       }}
     >
       <Content style={{ background: color }}>

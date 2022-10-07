@@ -1,15 +1,14 @@
 import React from 'react'
 
-import { useMembers, useProtocol } from '../../../../protocol'
+import { useProtocol } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Avatar, DialogTrigger, Text } from '../../../../system'
 import { CommunityDialog } from './community-dialog'
 
 export const CommunityInfo = () => {
-  const { community } = useProtocol()
-  const members = useMembers()
+  const { client } = useProtocol()
 
-  const { displayName, color } = community.identity!
+  const { displayName, color } = client.community.description.identity!
 
   return (
     <DialogTrigger>
@@ -18,7 +17,7 @@ export const CommunityInfo = () => {
         <div>
           <Text>{displayName}</Text>
           <Text color="gray" size={12}>
-            {members.length} members
+            {client.community.members.length} members
           </Text>
         </div>
       </Button>

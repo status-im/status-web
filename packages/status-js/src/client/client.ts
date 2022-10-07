@@ -14,12 +14,24 @@ import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
 import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
+import { LocalStorage } from './storage'
 
+import type { Storage } from './storage'
 import type { Waku } from 'js-waku'
 
+const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
+
 export interface ClientOptions {
+  /**
+   * Public key of a community to join.
+   */
   publicKey: string
   environment?: 'production' | 'test'
+  /**
+   * Custom storage for data persistance
+   * @default window.localStorage
+   */
+  storage?: Storage
 }
 
 class Client {
@@ -40,8 +52,12 @@ class Client {
   #wakuDisconnectionTimer: ReturnType<typeof setInterval>
 
   public activityCenter: ActivityCenter
-  public account?: Account
   public community: Community
+
+  #account?: Account
+  #accountCallbacks = new Set<(account?: Account) => void>()
+
+  storage: Storage
 
   constructor(
     waku: Waku,
@@ -53,11 +69,22 @@ class Client {
     this.wakuMessages = new Set()
     this.#wakuDisconnectionTimer = wakuDisconnectionTimer
 
+    // Storage
+    this.storage = options.storage ?? new LocalStorage()
+
     // Activity Center
     this.activityCenter = new ActivityCenter(this)
 
     // Community
     this.community = new Community(this, options.publicKey)
+
+    // Restore account if exists
+    const privateKey = this.storage.getItem<string>(
+      THROWAWAY_ACCOUNT_STORAGE_KEY
+    )
+    if (privateKey) {
+      this.#account = new Account(this, privateKey)
+    }
   }
 
   static async start(options: ClientOptions) {
@@ -110,18 +137,39 @@ class Client {
     await this.waku.stop()
   }
 
-  public createAccount = async (): Promise<Account> => {
-    this.account = new Account()
+  get account() {
+    return this.#account
+  }
 
-    await this.community.requestToJoin()
+  set account(account: Account | undefined) {
+    this.#account = account
+    this.storage.setItem(
+      THROWAWAY_ACCOUNT_STORAGE_KEY,
+      this.#account?.privateKey
+    )
+
+    for (const callback of this.#accountCallbacks) {
+      callback(this.#account)
+    }
+  }
+
+  public createAccount(): Account {
+    this.account = new Account(this)
+    this.account.updateMembership(this.community)
 
     return this.account
   }
 
-  // TODO?: should this exist
-  // public deleteAccount = () => {
-  //   this.account = undefined
-  // }
+  public deleteAccount() {
+    this.account = undefined
+  }
+
+  public onAccountChange(listener: (account?: Account) => void) {
+    this.#accountCallbacks.add(listener)
+    return () => {
+      this.#accountCallbacks.delete(listener)
+    }
+  }
 
   public sendWakuMessage = async (
     type: keyof typeof ApplicationMetadataMessage.Type,
@@ -133,11 +181,11 @@ class Client {
       throw new Error('Waku not started')
     }
 
-    if (!this.account) {
+    if (!this.#account) {
       throw new Error('Account not created')
     }
 
-    const signature = await this.account.sign(payload)
+    const signature = await this.#account.sign(payload)
 
     const message = ApplicationMetadataMessage.encode({
       type: type as ApplicationMetadataMessage.Type,
@@ -146,7 +194,7 @@ class Client {
     })
 
     const wakuMesage = await WakuMessage.fromBytes(message, contentTopic, {
-      sigPrivKey: hexToBytes(this.account.privateKey),
+      sigPrivKey: hexToBytes(this.#account.privateKey),
       symKey,
     })
 
@@ -154,7 +202,7 @@ class Client {
   }
 
   public handleWakuMessage = (wakuMessage: WakuMessage): void => {
-    handleWakuMessage(wakuMessage, this, this.community)
+    handleWakuMessage(wakuMessage, this, this.community, this.#account)
   }
 }
 

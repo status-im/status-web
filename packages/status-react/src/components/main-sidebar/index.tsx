@@ -21,7 +21,7 @@ export const MainSidebar = () => {
       <CommunityInfo />
       <Chats />
 
-      {!account && (
+      {account?.membership !== 'approved' && (
         <>
           <Separator />
           <GetStarted />
