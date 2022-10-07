@@ -53,7 +53,7 @@ const Activity = (props: {
             size={40}
             name={value.member.username}
             colorHash={value.member.colorHash}
-          ></Avatar>
+          />
         </Box>
         <Flex
           direction="column"
