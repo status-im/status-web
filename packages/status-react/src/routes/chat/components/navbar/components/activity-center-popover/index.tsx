@@ -129,58 +129,55 @@ export const ActivityCenterPopover = () => {
   return (
     <PopoverTrigger open={open} onOpenChange={setOpen}>
       <Tooltip label="Activity">
-        <IconButton label="Show Activity Center" onClick={() => setOpen(!open)}>
-          <div style={{ position: 'relative' }}>
+        <IconButton
+          label="Show Activity Center"
+          onClick={() => setOpen(!open)}
+          css={{ position: 'relative' }}
+        >
+          <>
             <BellIcon />
             {totalCount > 0 && (
               <Badge
                 variant="border"
                 css={{
                   position: 'absolute',
-                  left: 8,
-                  top: -8,
+                  left: 16,
+                  top: -2,
                 }}
               >
                 {totalCount}
               </Badge>
             )}
-          </div>
+          </>
         </IconButton>
       </Tooltip>
-      <Popover side="bottom">
-        <div
-          style={{
-            width: '600px',
-            height: '770px',
-          }}
-        >
-          <Tabs
-            tabs={[
-              { title: 'All', value: 'all', content: createContent(all) },
-              {
-                title: 'Mentions',
-                value: 'mentions',
-                content: createContent(mentions),
-              },
-              {
-                title: 'Replies',
-                value: 'replies',
-                content: createContent(replies),
-              },
-            ]}
-            actions={[
-              {
-                icon: <DoubleTickIcon />,
-                // todo: call it "Mark as Read" since the action is relative to active tab
-                label: 'Mark All As Read',
-                method: (activeTab: string) =>
-                  activityCenter.removeNotifications(
-                    activeTab as 'all' | 'mentions' | 'replies'
-                  ),
-              },
-            ]}
-          />
-        </div>
+      <Popover side="bottom" css={{ width: 600, height: 770 }}>
+        <Tabs
+          tabs={[
+            { title: 'All', value: 'all', content: createContent(all) },
+            {
+              title: 'Mentions',
+              value: 'mentions',
+              content: createContent(mentions),
+            },
+            {
+              title: 'Replies',
+              value: 'replies',
+              content: createContent(replies),
+            },
+          ]}
+          actions={[
+            {
+              icon: <DoubleTickIcon />,
+              // todo: call it "Mark as Read" since the action is relative to active tab
+              label: 'Mark All As Read',
+              method: (activeTab: string) =>
+                activityCenter.removeNotifications(
+                  activeTab as 'all' | 'mentions' | 'replies'
+                ),
+            },
+          ]}
+        />
       </Popover>
     </PopoverTrigger>
   )

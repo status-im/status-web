@@ -3,10 +3,30 @@ import React, { useState } from 'react'
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 
 import { DoubleTickIcon } from '../../icons/double-tick-icon'
+import { styled } from '../../styles/config'
 import { Button } from '../button'
 import { Flex } from '../flex'
 import { IconButton } from '../icon-button'
 import { Tooltip } from '../tooltip'
+
+const TabsRoot = styled(TabsPrimitive.Root, {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+})
+
+const TabsList = styled(TabsPrimitive.List, { display: 'flex', gap: '8px' })
+
+const TabsContent = styled(TabsPrimitive.Content, {
+  width: '100%',
+  height: '100%',
+})
+
+const ContentWrapper = styled('div', {
+  flex: 1,
+  overflowY: 'scroll',
+  overflowX: 'hidden',
+})
 
 interface Props {
   tabs: Array<{
@@ -44,16 +64,9 @@ const Tabs = (props: Props) => {
       </TabsPrimitive.Trigger>
     )
     results.contents.push(
-      <TabsPrimitive.Content
-        key={currentTab.value}
-        value={currentTab.value}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
+      <TabsContent key={currentTab.value} value={currentTab.value}>
         {currentTab.content}
-      </TabsPrimitive.Content>
+      </TabsContent>
     )
 
     return results
@@ -75,11 +88,7 @@ const Tabs = (props: Props) => {
   })
 
   return (
-    <TabsPrimitive.Root
-      value={activeTab}
-      onValueChange={setActiveTab}
-      style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-    >
+    <TabsRoot value={activeTab} onValueChange={setActiveTab}>
       <Flex
         css={{
           height: '64px',
@@ -90,21 +99,11 @@ const Tabs = (props: Props) => {
       >
         {/* todo?: if all empty, disable other tabs */}
         {/* todo?: if active, disable hover and clicks */}
-        <TabsPrimitive.List style={{ display: 'flex', gap: '8px' }}>
-          {triggers}
-        </TabsPrimitive.List>
+        <TabsList>{triggers}</TabsList>
         <div>{actions}</div>
       </Flex>
-      <div
-        style={{
-          flex: 1,
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-        }}
-      >
-        {contents}
-      </div>
-    </TabsPrimitive.Root>
+      <ContentWrapper>{contents}</ContentWrapper>
+    </TabsRoot>
   )
 }
 

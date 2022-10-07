@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import { Base } from './styles'
 
 import type { Variants } from './styles'
+import type Stitches from '@stitches/react'
 import type { Ref } from 'react'
 import type { LinkProps } from 'react-router-dom'
 
@@ -20,6 +21,7 @@ interface Props {
   color?: Variants['color']
   active?: boolean
   to?: LinkProps['to']
+  css?: Stitches.CSS
 }
 
 const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -32,6 +34,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
     color,
     active,
     to,
+    css,
     ...buttonProps
   } = props
 
@@ -44,6 +47,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
         intent={intent}
         color={color}
         active={active}
+        css={css}
       >
         {children}
       </Base>
@@ -60,6 +64,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
       intent={intent}
       color={color}
       active={active}
+      css={css}
     >
       <AccessibleIcon label={label}>{children}</AccessibleIcon>
     </Base>
