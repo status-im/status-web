@@ -55,7 +55,7 @@ class Client {
   public community: Community
 
   #account?: Account
-  #accountListeners = new Set<(account?: Account) => void>()
+  #accountCallbacks = new Set<(account?: Account) => void>()
 
   storage: Storage
 
@@ -143,7 +143,7 @@ class Client {
     this.#account = account
     this.storage.setItem(THROWAWAY_ACCOUNT_STORAGE_KEY, this.#account)
 
-    for (const listener of this.#accountListeners) {
+    for (const callback of this.#accountCallbacks) {
       callback(this.#account)
     }
   }
@@ -160,9 +160,9 @@ class Client {
   }
 
   public onAccountChange(listener: (account?: Account) => void) {
-    this.#accountListeners.add(listener)
+    this.#accountCallbacks.add(listener)
     return () => {
-      this.#accountListeners.delete(listener)
+      this.#accountCallbacks.delete(listener)
     }
   }
 
