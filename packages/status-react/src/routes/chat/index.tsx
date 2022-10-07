@@ -80,13 +80,11 @@ const Body = () => {
       <ContentWrapper ref={contentRef}>
         <ChatStart chatId={chatId} />
         {messages.data.map(message => {
-          const selected = message.messageId === selectedMesssageId
-
           return (
             <ChatMessage
               key={message.messageId}
               message={message}
-              selected={selected}
+              highlight={message.messageId === selectedMesssageId}
             />
           )
         })}

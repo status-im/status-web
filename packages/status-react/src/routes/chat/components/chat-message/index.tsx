@@ -32,7 +32,7 @@ import type { Message, Reaction } from '../../../../protocol'
 interface Props {
   message: Message
   prevMessage?: Message
-  selected?: boolean
+  highlight?: boolean
 }
 
 // const MessageLink = forwardRef(function MessageLink(
@@ -61,7 +61,7 @@ export const ChatMessage = (props: Props) => {
   const { params } = useMatch(':id')!
 
   const chatId = params.id!
-  const { message, selected } = props
+  const { message, highlight } = props
 
   const mention = false
   const pinned = false
@@ -177,7 +177,7 @@ export const ChatMessage = (props: Props) => {
         mention={mention}
         pinned={pinned}
         data-active={reacting}
-        selected={selected}
+        highlight={highlight}
       >
         {responseTo && <MessageReply messageId={responseTo} />}
         <Flex gap={2}>
@@ -332,7 +332,7 @@ const Wrapper = styled('div', {
         },
       },
     },
-    selected: {
+    highlight: {
       true: {
         '@motion': {
           animation: `${backgroundAnimation} 3s ease-out 0s`,
