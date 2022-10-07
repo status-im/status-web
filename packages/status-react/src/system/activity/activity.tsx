@@ -38,7 +38,7 @@ const Activity = (props: {
         props.onNavigateChange()
         navigate(`/${value.chatUuid}`, {
           // todo?: rename to `jumpedTo` or `navigateTo`
-          state: { selectedMesssageId: value.messageId },
+          state: { selectedMessageId: value.messageId },
         })
       }}
     >

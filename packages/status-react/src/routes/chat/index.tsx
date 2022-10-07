@@ -49,16 +49,16 @@ const Body = () => {
   const messages = useMessages(chatId)
 
   const location = useLocation()
-  const selectedMesssageId = (
-    location.state as { selectedMesssageId: string } | undefined
-  )?.selectedMesssageId
+  const selectedMessageId = (
+    location.state as { selectedMessageId: string } | undefined
+  )?.selectedMessageId
 
   const contentRef = useRef<HTMLDivElement | null>(null)
   // todo: more scrolling conditions
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (selectedMesssageId) {
-      document.getElementById(selectedMesssageId)?.scrollIntoView({
+    if (selectedMessageId) {
+      document.getElementById(selectedMessageId)?.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
         inline: 'start',
@@ -69,7 +69,7 @@ const Body = () => {
     }
 
     contentRef.current!.scrollTop = contentRef.current!.scrollHeight ?? 0
-  }, [chatId, messages.data.length, selectedMesssageId])
+  }, [chatId, messages.data.length, selectedMessageId])
 
   const handleMessageSubmit = (message: string) => {
     chat.sendTextMessage(message, state.reply?.message.messageId)
@@ -84,7 +84,7 @@ const Body = () => {
             <ChatMessage
               key={message.messageId}
               message={message}
-              highlight={message.messageId === selectedMesssageId}
+              highlight={message.messageId === selectedMessageId}
             />
           )
         })}
