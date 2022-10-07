@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import * as TabsPrimitive from '@radix-ui/react-tabs'
 
-import { MarkAllAsReadIcon } from '../../icons/mark-all-as-read-icon'
+import { DoubleTickIcon } from '../../icons/double-tick-icon'
 import { Button } from '../button'
 import { Flex } from '../flex'
 import { IconButton } from '../icon-button'
@@ -66,7 +66,7 @@ const Tabs = (props: {
             action.method(activeTab)
           }}
         >
-          <MarkAllAsReadIcon />
+          <DoubleTickIcon />
         </IconButton>
       </Tooltip>
     )

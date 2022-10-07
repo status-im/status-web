@@ -5,7 +5,7 @@ import isSameDay from 'date-fns/isSameDay'
 import isSameYear from 'date-fns/isSameYear'
 
 import { BellIcon } from '../../../../../../icons/bell-icon'
-import { MarkAllAsReadIcon } from '../../../../../../icons/mark-all-as-read-icon'
+import { DoubleTickIcon } from '../../../../../../icons/double-tick-icon'
 import { useActivityCenter } from '../../../../../../protocol'
 import {
   Activity,
@@ -170,7 +170,7 @@ export const ActivityCenter = () => {
             ]}
             actions={[
               {
-                icon: <MarkAllAsReadIcon />,
+                icon: <DoubleTickIcon />,
                 // todo: call it "Mark as Read" since the action is relative to active tab
                 label: 'Mark All As Read',
                 method: (activeTab: string) =>

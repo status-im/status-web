@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MarkAllAsReadIcon = (props: React.SVGProps<SVGSVGElement>) => {
+export const DoubleTickIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg
       width="24"
