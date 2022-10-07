@@ -20,7 +20,7 @@ import {
 
 import type { Notification } from '@status-im/js'
 
-export const ActivityCenter = () => {
+export const ActivityCenterPopover = () => {
   const [open, setOpen] = useState(false)
 
   const { activityCenter, notifications, totalCount } = useActivityCenter()

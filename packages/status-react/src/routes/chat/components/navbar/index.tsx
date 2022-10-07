@@ -10,7 +10,7 @@ import { useChat } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Flex, IconButton, Separator } from '../../../../system'
 import { ChatInfo } from '../chat-info'
-import { ActivityCenter } from './components/activity-center'
+import { ActivityCenterPopover } from './components/activity-center-popover'
 
 interface Props {
   enableMembers: boolean
@@ -49,7 +49,7 @@ export const Navbar = (props: Props) => {
 
         <Separator orientation="vertical" css={{ height: 24 }} />
 
-        <ActivityCenter />
+        <ActivityCenterPopover />
       </Flex>
     </NavbarWrapper>
   )
