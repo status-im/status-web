@@ -1,3 +1,141 @@
-# Status Communities for the Web
+# Status Web
 
 [![CI](https://github.com/status-im/status-web/actions/workflows/ci.yml/badge.svg)](https://github.com/status-im/status-web/actions/workflows/ci.yml)
+
+## Features
+
+- [ ] Communities
+  - [ ] ~~Administration~~
+  - [ ] Channels/chats
+    - [ ] Private/locked/token-gated/restricted
+      - [ ] view
+      - [ ] post
+  - [ ] Text formatting
+    - [ ] bold, italic, strikethrough, code
+  - [ ] Messages
+    - [ ] right-click; context menu; react, reply, pin
+    - [ ] deleted
+    - [ ] Pins
+      - [ ] in chat info, three dots, in main body, context menu, popover, unpin previous message selected message
+    - [ ] Type
+      - [ ] Text
+        - [ ] Link
+          - [ ] dialog
+          - [ ] in chat, panel/dialog
+          - [ ] states
+        - [ ] Mention
+      - [ ] Images
+        - [ ] copy and download
+        - [ ] overlay preview
+        - [ ] carousels
+        - [ ] max size for uploading
+      - [ ] Stickers
+      - [ ] GIFs
+      - [ ] Audio
+      - [ ] Emojis
+  - [ ] Encryption
+  - [ ] Account
+    - [x] Throwaway
+    - [ ] Wallet
+  - [ ] Protocol
+  - [ ] Avatar
+  - [ ] Chats
+    - [ ] Categories
+      - [ ] mute
+      - [ ] mark as read
+      - [ ] context menu
+      - [ ] Fetch messages
+    - [ ] Mute
+    - [ ] Three dots?
+      - [ ] Pinned messages
+      - [ ] Mute
+      - [ ] Token permissions
+      - [ ] Marks as read
+  - [ ] Activity Center
+    - [ ] Toast messages (verifications, requests, membership approved/rejected)
+    - [ ] Read, unread, hiding, mark
+    - [ ] Type
+      - [ ] CTA
+        - [ ] Contact requests
+        - [ ] Identity checks
+    - [ ] identity verification
+    - [ ] token purchase?
+    - [ ] collectible listed
+  - [ ] Members/Profiles
+    - [ ] List
+    - [ ] Online, Offline status
+    - [ ] Contact, Verified, Untrustworthy, friend, not friend
+    - [ ] Emoji hash
+    - [ ] ENS names
+    - [ ] Display name
+    - [ ] Modals
+    - [ ] context menus
+    - [ ] Change display name
+    - [ ] Collectibles, Tokens, Accounts (under wallet?)
+    - [ ] multiple accounts?
+    - [ ] Network preference?
+    - [ ] Link
+      - [ ] sync with/disconnect from mobile/desktop profile
+      - [ ] throwaway
+      - [ ] wallet
+  - [ ] Token permissions
+  - [ ] History
+  - [ ] Context menu
+    - [ ] Mark as read
+    - [ ] Mute
+  - [ ] Search
+- [ ] Messages/Direct messages
+  - [ ] Group chats
+  - [ ] 1:1
+- protocol
+  - edit pending, failed
+  - sent, failed
+  - read
+  - delivered
+- [ ] Theming
+  - [x] Light
+  - [ ] Dark
+  - [ ] Custom
+- [ ] ~~Wallet (in-app)~~
+- [ ] ~~Browser~~
+
+## Known Issues
+
+- Protocol
+  - clock?
+  - description history fetch?
+- UI
+  - Center avatar content
+  - Land on first chat in order
+  - Avatar images
+  - Breakpoints
+    - 736 fits everything
+    - 735; community info missing; only in one screen though; on hover?
+      - mid
+    - activity center shrinking to 450px in height
+    - 453px
+      - narrow
+      - community info
+      - channels and messages (three dots)
+      - "full screen" activity center
+      - "full screen" members
+      - "full screen" pinned messages
+      - "full screen" token permissions
+      - change to another channel by clicking on the current one
+  - pins
+  - community dialog missing avatar and subtitle
+  - replying
+    - missing icon next to nae
+    - wrong icon for close
+    - multiline works?
+  - **chat body overflows on a message with long text**
+  - activity center
+    - Visit site; don't login; receive mention; login; see it in activity center
+  - cancel input edit on ESC
+  - save input edit on ENTER
+  - "Posted an image in" AC
+  - input prio joining
+    - "You need to join this community to send messages"
+  - community demanding request to join?
+  - missing captcha?/welcome dialog
+  - missing create throwaway profile dialog
