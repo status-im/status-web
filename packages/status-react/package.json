@@ -1,6 +1,6 @@
 {
   "name": "@status-im/react",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0",
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "exports": {
@@ -47,7 +47,7 @@
     "@radix-ui/react-toggle-group": "^0.1.5",
     "@radix-ui/react-tooltip": "^1.0.0",
     "@radix-ui/react-visually-hidden": "^0.1.4",
-    "@status-im/js": "0.1.0-alpha.2",
+    "@status-im/js": "0.1.0",
     "@stitches/react": "^1.2.8",
     "date-fns": "^2.29.3",
     "emoji-mart": "^3.0.1",
