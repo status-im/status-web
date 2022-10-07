@@ -79,9 +79,11 @@ class Client {
     this.community = new Community(this, options.publicKey)
 
     // Restore account if exists
-    const account = this.storage.getItem<Account>(THROWAWAY_ACCOUNT_STORAGE_KEY)
-    if (account) {
-      this.#account = Account.fromJSON(this, account)
+    const privateKey = this.storage.getItem<string>(
+      THROWAWAY_ACCOUNT_STORAGE_KEY
+    )
+    if (privateKey) {
+      this.#account = new Account(this, privateKey)
     }
   }
 
@@ -141,7 +143,10 @@ class Client {
 
   set account(account: Account | undefined) {
     this.#account = account
-    this.storage.setItem(THROWAWAY_ACCOUNT_STORAGE_KEY, this.#account)
+    this.storage.setItem(
+      THROWAWAY_ACCOUNT_STORAGE_KEY,
+      this.#account?.privateKey
+    )
 
     for (const callback of this.#accountCallbacks) {
       callback(this.#account)
