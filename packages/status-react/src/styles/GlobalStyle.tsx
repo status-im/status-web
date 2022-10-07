@@ -5,11 +5,8 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
 
-    // @see https://stackoverflow.com/questions/16670931/hide-scroll-bar-but-while-still-being-able-to-scroll
     &::-webkit-scrollbar {
       width: 0;
-      height: 0;
-      // display: none;
     }
   }
 
