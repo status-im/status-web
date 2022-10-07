@@ -44,7 +44,7 @@ const Activity = (props: {
     >
       <Flex
         gap={2}
-        style={{
+        css={{
           width: '100%',
         }}
       >
@@ -57,7 +57,7 @@ const Activity = (props: {
         </Box>
         <Flex
           direction="column"
-          style={{
+          css={{
             width: '100%',
             overflow: 'hidden',
           }}
@@ -85,7 +85,7 @@ const Activity = (props: {
           </div>
           {/* todo?: same comoponnent as for chat messages; think mention resolution */}
           <Text
-            style={{
+            css={{
               wordBreak: 'break-word',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -99,7 +99,7 @@ const Activity = (props: {
           </Text>
           <Flex
             gap={1}
-            style={{
+            css={{
               padding: '6px 0px 0px',
             }}
           >

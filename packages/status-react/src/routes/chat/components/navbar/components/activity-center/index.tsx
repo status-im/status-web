@@ -91,7 +91,7 @@ export const ActivityCenter = () => {
               <Text
                 color="gray"
                 weight={400}
-                style={{ height: '34px', padding: '8px 16px 4px 16px' }}
+                css={{ height: '34px', padding: '8px 16px 4px 16px' }}
               >
                 {date}
               </Text>
@@ -111,7 +111,7 @@ export const ActivityCenter = () => {
           color="gray"
           weight="400"
           align="center"
-          style={{
+          css={{
             margin: 'auto',
             position: 'relative',
             top: '50%',

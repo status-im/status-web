@@ -79,7 +79,7 @@ const Tabs = (props: {
       style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
     >
       <Flex
-        style={{
+        css={{
           height: '64px',
           padding: '13px 16px',
           alignItems: 'center',
