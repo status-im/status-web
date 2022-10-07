@@ -26,7 +26,7 @@ export const MemberItem = (props: Props) => {
       />
       <div>
         <Flex align="center" gap={1}>
-          <Text size="15" color="accent" truncate>
+          <Text size="15" color="accent" truncate css={{ width: 184 }}>
             {username}
           </Text>
           {verified && (
