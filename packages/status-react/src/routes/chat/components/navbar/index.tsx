@@ -34,9 +34,7 @@ export const Navbar = (props: Props) => {
           <IconButton
             label="Toggle Members"
             active={state.showMembers}
-            onClick={() => {
-              dispatch({ type: 'TOGGLE_MEMBERS' })
-            }}
+            onClick={() => dispatch({ type: 'TOGGLE_MEMBERS' })}
           >
             <GroupIcon />
           </IconButton>
