@@ -4,12 +4,14 @@ import { expect, test } from 'vitest'
 import { Account } from '../client/account'
 import { recoverPublicKey } from './recover-public-key'
 
+import type { Client } from '../client/client'
 import type { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 
 test('should recover public key', async () => {
   const payload = utf8ToBytes('hello')
 
-  const account = new Account({} as any)
+  // @fixme
+  const account = new Account({} as unknown as Client)
   const signature = await account.sign(payload)
 
   expect(bytesToHex(recoverPublicKey(signature, payload))).toEqual(
@@ -60,7 +62,8 @@ test('should recover public key from fixture', async () => {
 test('should not recover public key with different payload', async () => {
   const payload = utf8ToBytes('1')
 
-  const account = new Account({} as any)
+  // @fixme
+  const account = new Account({} as unknown as Client)
   const signature = await account.sign(payload)
 
   const payload2 = utf8ToBytes('2')
