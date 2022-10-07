@@ -82,7 +82,8 @@ const Wrapper = styled('div', {
   display: 'flex',
   overflow: 'hidden',
   alignItems: 'flex-end',
-  padding: '12px 8px 12px 4px',
+  // padding: '12px 8px 12px 4px',
+  padding: '12px 8px 12px 8px',
   gap: 4,
 })
 
