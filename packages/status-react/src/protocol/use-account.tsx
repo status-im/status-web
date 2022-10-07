@@ -1,4 +1,4 @@
-import { useProtocol } from './provider'
+import { useProtocol } from './use-protocol'
 
 import type { Account } from '@status-im/js'
 

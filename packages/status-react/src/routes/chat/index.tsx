@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import React, { Fragment, useEffect, useRef } from 'react'
 
+import isSameDay from 'date-fns/isSameDay'
 import { useLocation, useMatch } from 'react-router-dom'
 
 import { MemberSidebar } from '../../components/member-sidebar'
@@ -10,6 +11,9 @@ import { styled } from '../../styles/config'
 import { Avatar, Flex, Heading, Text } from '../../system'
 import { ChatInput } from './components/chat-input'
 import { ChatMessage } from './components/chat-message'
+import { DateDivider } from './components/date-divider'
+import { LoadingToast } from './components/loading-toast'
+import { MessageLoader } from './components/message-loader'
 import { Navbar } from './components/navbar'
 
 interface ChatStartProps {
@@ -75,20 +79,52 @@ const Body = () => {
     chat.sendTextMessage(message, state.reply?.message.messageId)
   }
 
+  const renderContent = () => {
+    if (messages.loading) {
+      return (
+        <>
+          <LoadingToast label="last 30 days" />
+
+          <MessageLoader />
+          <MessageLoader />
+          <MessageLoader />
+        </>
+      )
+    }
+
+    if (messages.data.length === 0) {
+      return <ChatStart chatId={chatId} />
+    }
+
+    return messages.data.map((message, index) => {
+      const sentDate = new Date(Number(message.timestamp))
+      const previousMessage = messages.data[index - 1]
+
+      let hasDateSeparator = true
+
+      if (previousMessage) {
+        const prevSentDate = new Date(Number(previousMessage.timestamp))
+
+        if (isSameDay(prevSentDate, sentDate)) {
+          hasDateSeparator = false
+        }
+      }
+
+      const shouldCollapse =
+        !message.responseTo && message.signer === previousMessage?.signer
+
+      return (
+        <Fragment key={message.messageId}>
+          {hasDateSeparator && <DateDivider date={sentDate} />}
+          <ChatMessage message={message} collapse={shouldCollapse} />
+        </Fragment>
+      )
+    })
+  }
+
   return (
     <>
-      <ContentWrapper ref={contentRef}>
-        <ChatStart chatId={chatId} />
-        {messages.data.map(message => {
-          return (
-            <ChatMessage
-              key={message.messageId}
-              message={message}
-              highlight={message.messageId === selectedMessageId}
-            />
-          )
-        })}
-      </ContentWrapper>
+      <ContentWrapper ref={contentRef}>{renderContent()}</ContentWrapper>
       {account && <ChatInput onSubmit={handleMessageSubmit} />}
     </>
   )
@@ -130,7 +166,7 @@ const ContentWrapper = styled('div', {
   overscrollBehavior: 'contain',
 
   // scrollSnapType: 'y proximity',
-
+  paddingBottom: 16,
   // '& > div:last-child': {
   // scrollSnapAlign: 'end',
   // scrollMarginBlockEnd: '1px',
