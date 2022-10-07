@@ -4,14 +4,18 @@ export interface Storage {
   getItem: <T = string>(key: string) => T | null
   setItem: (key: string, newValue: unknown) => void
   removeItem: (key: string) => void
-  subscribe?: (key: string, callback: (value: string) => void) => Unsubscribe
+  subscribe?: (key: string, callback: (value: unknown) => void) => Unsubscribe
 }
 
 export class LocalStorage implements Storage {
-  #prefix = 'status'
+  #prefix = 'status-im:'
+
+  #getStorageKey(key: string) {
+    return `${this.#prefix}${key}`
+  }
 
   getItem<T>(key: string): T | null {
-    const value = window.localStorage.getItem(`${this.#prefix}_${key}`)
+    const value = window.localStorage.getItem(this.#getStorageKey(key))
 
     if (!value) {
       return null
@@ -25,19 +29,23 @@ export class LocalStorage implements Storage {
     }
   }
 
-  setItem(key: string, value: unknown) {
-    return window.localStorage.setItem(
-      `${this.#prefix}_${key}`,
-      JSON.stringify(value)
-    )
+  setItem(key: string, value: unknown): boolean {
+    try {
+      window.localStorage.setItem(
+        this.#getStorageKey(key),
+        JSON.stringify(value)
+      )
+      return true
+    } catch {
+      return false
+    }
   }
 
   removeItem(key: string) {
-    return window.localStorage.removeItem(`${this.#prefix}_${key}`)
+    return window.localStorage.removeItem(this.#getStorageKey(key))
   }
 
-  // todo?: test in Node.js and maybe subscribe conditionally
-  subscribe(key: string, callback: (value: any) => void) {
+  subscribe(key: string, callback: (value: unknown) => void) {
     const handler = (event: StorageEvent) => {
       if (event.key === key && event.newValue) {
         callback(JSON.parse(event.newValue))
