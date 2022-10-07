@@ -8,7 +8,7 @@ import { Flex } from '../flex'
 import { IconButton } from '../icon-button'
 import { Tooltip } from '../tooltip'
 
-const Tabs = (props: {
+interface Props {
   tabs: Array<{
     title: string
     value: string
@@ -19,7 +19,9 @@ const Tabs = (props: {
     label: string
     method: (activeTab: string) => void
   }>
-}) => {
+}
+
+const Tabs = (props: Props) => {
   const [activeTab, setActiveTab] = useState('all')
 
   const initialValue: {

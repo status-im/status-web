@@ -36,18 +36,20 @@ const PathLink = styled('a', {
   },
 })
 
+interface CommunityProps {
+  type: 'community'
+  communityDisplayName: string
+  chatDisplayName: string
+  chatUuid: string
+  onNavigateChange: () => void
+}
+interface ReplyProps {
+  type: 'reply'
+  text: string
+}
+
 // fixme: clicking on flex gab/space between components captures and handles click events
-const Tag = (
-  props:
-    | {
-        type: 'community'
-        communityDisplayName: string
-        chatDisplayName: string
-        chatUuid: string
-        onNavigateChange: () => void
-      }
-    | { type: 'reply'; text: string }
-) => {
+const Tag = (props: CommunityProps | ReplyProps) => {
   const { type } = props
 
   // todo?: extract together with `PathLink`

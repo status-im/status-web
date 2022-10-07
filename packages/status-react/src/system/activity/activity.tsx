@@ -23,10 +23,12 @@ const Base = styled('div', {
   },
 })
 
-const Activity = (props: {
+interface Props {
   children: Notification
   onNavigateChange: () => void
-}) => {
+}
+
+const Activity = (props: Props) => {
   const value = props.children.value
   const isReply = props.children.isReply
 
