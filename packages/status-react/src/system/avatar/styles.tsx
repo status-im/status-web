@@ -80,6 +80,9 @@ export const Content = styled('div', {
   borderRadius: '100%',
   width: '100%',
   height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 })
 
 export const Indicator = styled('span', {
@@ -117,56 +120,46 @@ export const Indicator = styled('span', {
 })
 
 export const Initials = styled('div', {
-  width: '100%',
-  height: '100%',
   color: '$accent-11',
   opacity: 0.7,
   textAlign: 'center',
   fontWeight: '$600',
   fontSize: 15,
   textTransform: 'uppercase',
-  verticalAlign: 'baseline',
+  verticalAlign: 'middle',
+  display: 'inline-block',
+
   variants: {
     size: {
       16: {
-        fontSize: 'calc(16 * 0.4px)',
-        lineHeight: 'calc(16px - var(--identicon-size))',
+        fontSize: 'calc(16 * 0.5px)',
       },
       20: {
-        fontSize: 'calc(20 * 0.4px)',
-        lineHeight: 'calc(20px - var(--identicon-size))',
+        fontSize: 'calc(20 * 0.5px)',
       },
       24: {
-        fontSize: 'calc(24 * 0.4px)',
-        lineHeight: 'calc(24px - var(--identicon-size))',
+        fontSize: 'calc(24 * 0.5px)',
       },
       32: {
         fontSize: 'calc(32 * 0.4px)',
-        lineHeight: 'calc(32px - var(--identicon-size))',
       },
       36: {
         fontSize: 'calc(36 * 0.4px)',
-        lineHeight: 'calc(36px - var(--identicon-size))',
       },
       40: {
         fontSize: 'calc(40 * 0.4px)',
-        lineHeight: 'calc(40px - var(--identicon-size))',
       },
       44: {
         fontSize: 'calc(44 * 0.4px)',
-        lineHeight: 'calc(44px - var(--identicon-size))',
       },
       64: {
         fontSize: 'calc(64 * 0.4px)',
-        lineHeight: 'calc(64px - var(--identicon-size))',
       },
       80: {
         fontSize: 'calc(80 * 0.4px)',
-        lineHeight: 'calc(80px - var(--identicon-size))',
       },
       120: {
         fontSize: 'calc(120 * 0.4px)',
-        lineHeight: 'calc(120px - var(--identicon-size))',
       },
     },
   },
