@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { useChatContext } from '../../../../contexts/chat-context'
+import { useAccount } from '../../../../protocol'
 // import { EmojiIcon } from '../../../../icons/emoji-icon'
 // import { GifIcon } from '../../../../icons/gif-icon'
 // import { ImageIcon } from '../../../../icons/image-icon'
@@ -18,6 +19,8 @@ interface Props {
 
 export const ChatInput = (props: Props) => {
   const { value, editing, onSubmit } = props
+
+  const { isMember } = useAccount()
 
   const [inputValue, setInputValue] = useState(value ?? '')
   const { state, dispatch } = useChatContext()
@@ -56,10 +59,15 @@ export const ChatInput = (props: Props) => {
         <InputWrapper>
           <Input
             ref={inputRef}
-            placeholder="Message"
+            placeholder={
+              isMember
+                ? 'Message'
+                : 'You need to join this community to send messages'
+            }
             value={inputValue}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            disabled={!isMember}
           />
           {/* <Flex>
             <IconButton label="Pick emoji">
@@ -109,4 +117,13 @@ const Input = styled('input', {
   background: 'none',
   alignItems: 'center',
   width: '100%',
+  fontSize: '15px',
+
+  '&:disabled': {
+    cursor: 'not-allowed',
+  },
+
+  '&::placeholder': {
+    color: '$accent-5',
+  },
 })

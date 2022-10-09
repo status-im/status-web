@@ -6,7 +6,7 @@ import { useMatch } from 'react-router-dom'
 import { useChatContext } from '../../../../contexts/chat-context'
 // import { BellIcon } from '../../../../icons/bell-icon'
 // import { PinIcon } from '../../../../icons/pin-icon'
-import { useProtocol } from '../../../../protocol'
+import { useAccount, useProtocol } from '../../../../protocol'
 import { keyframes, styled } from '../../../../styles/config'
 import {
   Avatar,
@@ -60,6 +60,7 @@ export const ChatMessage = (props: Props) => {
   const { message, collapse, highlight } = props
 
   const { client, account } = useProtocol()
+  const { isMember } = useAccount()
   const { params } = useMatch(':id')!
 
   const chatId = params.id!
@@ -237,7 +238,7 @@ export const ChatMessage = (props: Props) => {
         {response && <MessageReply message={response} />}
         {renderMessage()}
 
-        {account && (
+        {isMember && (
           <Actions
             owner={owner}
             pinned={pinned}
@@ -268,8 +269,8 @@ const backgroundAnimation = keyframes({
 // TODO: Use compound variants https://stitches.dev/docs/variants#compound-variants
 const Wrapper = styled('div', {
   position: 'relative',
-  padding: '2px 16px',
-  marginTop: 14,
+  padding: '8px 16px',
+  marginTop: 2,
   gap: '$2',
 
   transitionProperty: 'background-color, border-color, color, fill, stroke',

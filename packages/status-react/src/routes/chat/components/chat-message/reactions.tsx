@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import {
   emojis,
@@ -19,9 +19,13 @@ interface Props {
 export const MessageReactions = (props: Props) => {
   const { reactions, onClick } = props
 
+  const { isMember } = useAccount()
+
   const [open, setOpen] = useState(false)
 
-  const hasReaction = Object.values(reactions).some(value => value.size > 0)
+  const hasReaction = useMemo(() => {
+    return Object.values(reactions).some(value => value.size > 0)
+  }, [reactions])
 
   if (hasReaction === false) {
     return null
@@ -43,16 +47,18 @@ export const MessageReactions = (props: Props) => {
         />
       ))}
 
-      <ReactionPopover
-        open={open}
-        onOpenChange={setOpen}
-        reactions={reactions}
-        onClick={handlePopoverClick}
-      >
-        <AddReactionButton aria-label="Add Reaction">
-          <ReactionIcon width={16} height={16} />
-        </AddReactionButton>
-      </ReactionPopover>
+      {isMember && (
+        <ReactionPopover
+          open={open}
+          onOpenChange={setOpen}
+          reactions={reactions}
+          onClick={handlePopoverClick}
+        >
+          <AddReactionButton aria-label="Add Reaction">
+            <ReactionIcon width={16} height={16} />
+          </AddReactionButton>
+        </ReactionPopover>
+      )}
     </Flex>
   )
 }
