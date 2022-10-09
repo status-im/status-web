@@ -9,7 +9,7 @@ export const useAccount = () => {
     account,
     createAccount: () => client.createAccount(),
     deleteAccount: () => client.deleteAccount(),
-    isMember: account ? client.community.isMember(account.chatKey) : false,
+    isMember: account?.membership === 'approved',
   } as const
 }
 
