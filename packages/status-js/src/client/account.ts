@@ -21,13 +21,13 @@ export class Account {
   publicKey: string
   chatKey: string
   username: string
-  membership: MembershipStatus = 'none'
+  membership: MembershipStatus
 
-  constructor(client: Client, initialPrivateKey?: string) {
+  constructor(client: Client, initialAccount?: Account) {
     this.#client = client
 
-    const privateKey = initialPrivateKey
-      ? hexToBytes(initialPrivateKey)
+    const privateKey = initialAccount
+      ? hexToBytes(initialAccount.privateKey)
       : utils.randomPrivateKey()
     const publicKey = getPublicKey(privateKey)
 
@@ -35,6 +35,8 @@ export class Account {
     this.publicKey = bytesToHex(publicKey)
     this.chatKey = '0x' + compressPublicKey(this.publicKey)
     this.username = generateUsername('0x' + this.publicKey)
+
+    this.membership = initialAccount ? initialAccount.membership : 'none'
   }
 
   // sig must be a 65-byte compact ECDSA signature containing the recovery id as the last element.
