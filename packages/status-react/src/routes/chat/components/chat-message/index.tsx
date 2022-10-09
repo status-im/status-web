@@ -188,9 +188,9 @@ export const ChatMessage = (props: Props) => {
       <Flex gap={2}>
         <Box>
           <Avatar
-            size={44}
+            size={40}
             name={member!.username}
-            colorHash={member!.colorHash}
+            colorHash={owner ? undefined : member!.colorHash}
           />
         </Box>
 
