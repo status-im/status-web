@@ -74,7 +74,7 @@ Add your Community's public key to your environment:
 echo 'PUBLIC_KEY="0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801"' >> examples/with-vite/.env
 ```
 
-And run it in the background:
+And run it in:
 
 ```sh
 npm run test --workspace=examples/with-vite
