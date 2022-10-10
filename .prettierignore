@@ -4,3 +4,4 @@
 .github
 **/protos
 **/coverage
+.next
