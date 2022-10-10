@@ -2,7 +2,11 @@
 
 [![CI](https://github.com/status-im/status-web/actions/workflows/ci.yml/badge.svg)](https://github.com/status-im/status-web/actions/workflows/ci.yml)
 
-## Run
+## About
+
+Embeddable, customizible and themable component for your Community.
+
+## Usage
 
 ### For Community owners 👥
 
@@ -10,15 +14,11 @@
 
 Status Desktop > select Community > click on its overview in upper left corner > Invite new people > Share community > copy link > get only the public key (e.g. `0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801`)
 
-[insert screenshot]
-
 **Or create new one first:**
 
-Get Status Desktop at <https://status.im/get/> > Communities Portal > Create New Community
+Get Status Desktop at <https://status.im/get> > Chat > click on plus icon > Communities
 
-[insert screenshot]
-
-**Embed the Community to pre-existing page:**
+**Use the Community component:**
 
 In your project,
 
@@ -39,30 +39,17 @@ Set component props:
 ```js
 <Community
   publicKey="0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801"
-  environment="production"
   theme="light"
 />
 ```
 
-For an example, see ``.
-
-**Or have it as stand-alone site:**
-
-For an example, see ``.
-
-**To deploy it for free, you could use Vercel:**
-
-Create account > ...
-
-Other examples with different bundling and deployment flows could be found under `` as well.
+For an example, see [examples/with-vite/src/app.tsx](./examples/with-vite/src/app.tsx).
 
 ### For User 👤
 
-**Simply visit your Community's url from the browser:**
+**Simply visit your Community's URL from the browser:**
 
 For example, <https://status-devcon.vercel.app/>.
-
-[insert screenshots]
 
 If the Community doesn't require a joining request, that would be it. So look around and get the feel for the space.
 
@@ -75,13 +62,20 @@ Use Throwaway Profile > wait for your request to be approved and the chat input 
 Get the source ready:
 
 ```sh
-git clone
-cd
+git clone https://github.com/status-im/status-web.git
+cd ./status-web
+npm install
 npm build
+```
+
+Add your Community's public key to your environment:
+
+```sh
+echo 'PUBLIC_KEY="0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801"' >> examples/with-vite/.env
 ```
 
 And run it in the background:
 
 ```sh
-npm workspaces start &
+npm run test --workspace=examples/with-vite
 ```
