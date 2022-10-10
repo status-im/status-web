@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'es2020',
     },
-    plugins: [react()],
+    plugins: [react({})],
     define: {
       /**
        * Loads `.env` files and sets `process.env` varibales.
