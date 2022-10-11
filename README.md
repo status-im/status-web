@@ -21,7 +21,7 @@ Embeddable, customizable and themable component for your Status Community.
 
 **Or create new one first:**
 
-1. Get Status Desktop at <https://status.im/get> 
+1. Get Status Desktop at <https://status.im/get>
 2. Go to Chat
 3. Click on plus icon
 4. Click on Communities
