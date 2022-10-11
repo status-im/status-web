@@ -12,7 +12,7 @@ Embeddable, customizable and themable component for your Status Community.
 - online content creators
 - and their followers
 
- ### What
+### What
 
 - It is 100% open source
 - 100% decentralized
@@ -29,21 +29,21 @@ Embeddable, customizable and themable component for your Status Community.
 ### Why
 
 - To communicate and collaborate freely without worrying about
-    - Censorship
-    - Persecution
-    - Chilling effects
-    - Interference
-    - Oppression
-    - Being deplatformed, or shut down
+  - Censorship
+  - Persecution
+  - Chilling effects
+  - Interference
+  - Oppression
+  - Being deplatformed, or shut down
 - Support
-    - Autonomy
-    - Free speech 
-    - Freedom of association
-    - Freedom to transact
-    - Right to privacy
-    - Crypto native and frictionless integration
-    - Monetization
-    - Facilitation of sharing of common interests, needs, desires and values
+  - Autonomy
+  - Free speech
+  - Freedom of association
+  - Freedom to transact
+  - Right to privacy
+  - Crypto native and frictionless integration
+  - Monetization
+  - Facilitation of sharing of common interests, needs, desires and values
 - Be trusted alternative to centralized group chat application
 
 ## Usage
