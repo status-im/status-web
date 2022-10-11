@@ -4,7 +4,7 @@
 
 ## About
 
-Embeddable, customizible and themable component for your Community.
+Embeddable, customizable and themable component for your Status Community.
 
 ## Usage
 
@@ -12,11 +12,19 @@ Embeddable, customizible and themable component for your Community.
 
 **Get public key to your pre-existing Community:**
 
-Status Desktop > select Community > click on its overview in upper left corner > Invite new people > Share community > copy link > get only the public key (e.g. `0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801`)
+1. Open Status Desktop
+2. Select Community
+3. Click on its overview in upper left corner
+4. Invite new people
+5. Share community
+6. Get only the public key from the URL (e.g. `0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801`)
 
 **Or create new one first:**
 
-Get Status Desktop at <https://status.im/get> > Chat > click on plus icon > Communities
+1. Get Status Desktop at <https://status.im/get> 
+2. Go to Chat
+3. Click on plus icon
+4. Click on Communities
 
 **Use the Community component:**
 
