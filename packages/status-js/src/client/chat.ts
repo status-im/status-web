@@ -1,4 +1,5 @@
 import { PageDirection } from 'js-waku'
+import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
 
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import {
@@ -21,7 +22,6 @@ import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { Member } from './member'
-import type { WakuMessage } from 'js-waku'
 
 export type ChatMessage = ChatMessageProto & {
   messageId: string
@@ -197,26 +197,23 @@ export class Chat {
       endTime = new Date()
     }
 
-    await this.client.waku.store.queryHistory([this.contentTopic], {
-      timeFilter: {
-        startTime: startTime,
-        endTime: endTime,
-      },
-      pageSize: 50,
-      // most recent page first
-      pageDirection: PageDirection.BACKWARD,
-      decryptionKeys: [this.symmetricKey],
-      callback: (wakuMessages: WakuMessage[]) => {
-        let index = wakuMessages.length
-
+    await this.client.waku.store.queryOrderedCallback(
+      [new SymDecoder(this.contentTopic, this.symmetricKey)],
+      wakuMessage => {
         this.#fetchingMessages = true
-        // most recent message first
-        while (--index >= 0) {
-          this.client.handleWakuMessage(wakuMessages[index])
-        }
+        this.client.handleWakuMessage(wakuMessage)
         this.#fetchingMessages = false
       },
-    })
+      {
+        timeFilter: {
+          startTime: startTime,
+          endTime: endTime,
+        },
+        pageSize: 50,
+        // most recent page first
+        pageDirection: PageDirection.BACKWARD,
+      }
+    )
 
     this.#previousFetchedStartTime = startTime
 
