@@ -3,10 +3,11 @@
  */
 
 import { hexToBytes } from 'ethereum-cryptography/utils'
-import { Protocols, WakuMessage } from 'js-waku'
-import { createWaku } from 'js-waku/lib/create_waku'
+import { Protocols } from 'js-waku'
+import { createFullNode } from 'js-waku/lib/create_waku'
 import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list'
 import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
+import { SymEncoder } from 'js-waku/lib/waku_message/version_1'
 
 import { peers } from '../consts/peers'
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
@@ -17,7 +18,7 @@ import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
 import type { Storage } from './storage'
-import type { Waku } from 'js-waku'
+import type { Message as WakuMessage, WakuFull } from 'js-waku/lib/interfaces'
 
 const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
 
@@ -35,7 +36,7 @@ export interface ClientOptions {
 }
 
 class Client {
-  public waku: Waku
+  public waku: WakuFull
   public readonly wakuMessages: Set<string>
   /**
    * Tracks open connections which had their streams silently destroyed
@@ -60,7 +61,7 @@ class Client {
   storage: Storage
 
   constructor(
-    waku: Waku,
+    waku: WakuFull,
     wakuDisconnectionTimer: ReturnType<typeof setInterval>,
     options: ClientOptions
   ) {
@@ -89,7 +90,7 @@ class Client {
     // Waku
     const { environment = 'production' } = options
 
-    const waku = await createWaku({
+    const waku = await createFullNode({
       defaultBootstrap: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -188,12 +189,14 @@ class Client {
       payload,
     })
 
-    const wakuMesage = await WakuMessage.fromBytes(message, contentTopic, {
-      sigPrivKey: hexToBytes(this.#account.privateKey),
-      symKey,
-    })
-
-    await this.waku.relay.send(wakuMesage)
+    await this.waku.relay.send(
+      new SymEncoder(
+        contentTopic,
+        symKey,
+        hexToBytes(this.#account.privateKey)
+      ),
+      { payload: message }
+    )
   }
 
   public handleWakuMessage = (wakuMessage: WakuMessage): void => {

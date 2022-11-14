@@ -1,5 +1,5 @@
 import { hexToBytes } from 'ethereum-cryptography/utils'
-import { waku_message } from 'js-waku'
+import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
 
 import { getDifferenceByKeys } from '../../helpers/get-difference-by-keys'
 import { getObjectsDifference } from '../../helpers/get-objects-difference'
@@ -31,6 +31,7 @@ export class Community {
   public chats: Map<string, Chat>
   #members: Map<string, Member>
   #callbacks: Set<(description: CommunityDescription) => void>
+  #chatUnobserveFns: Map<string, () => void>
 
   constructor(client: Client, publicKey: string) {
     this.client = client
@@ -42,19 +43,12 @@ export class Community {
     this.chats = new Map()
     this.#members = new Map()
     this.#callbacks = new Set()
+    this.#chatUnobserveFns = new Map()
   }
 
   public async start() {
     this.contentTopic = idToContentTopic(this.publicKey)
     this.symmetricKey = await generateKeyFromPassword(this.publicKey)
-
-    // Waku
-    this.client.waku.store.addDecryptionKey(this.symmetricKey, {
-      contentTopics: [this.contentTopic],
-    })
-    this.client.waku.relay.addDecryptionKey(this.symmetricKey, {
-      contentTopics: [this.contentTopic],
-    })
 
     // Community
     const description = await this.fetch()
@@ -89,28 +83,25 @@ export class Community {
 
   public fetch = async () => {
     // most recent page first
-    await this.client.waku.store.queryHistory([this.contentTopic], {
-      callback: wakuMessages => {
-        let index = wakuMessages.length
+    await this.client.waku.store.queryOrderedCallback(
+      [new SymDecoder(this.contentTopic, this.symmetricKey)],
+      wakuMessage => {
+        this.client.handleWakuMessage(wakuMessage)
 
-        // most recent message first
-        while (--index >= 0) {
-          this.client.handleWakuMessage(wakuMessages[index])
-
-          if (this.description) {
-            return true
-          }
+        if (this.description) {
+          return true
         }
-      },
-    })
+      }
+    )
 
     return this.description
   }
 
   private observe = () => {
-    this.client.waku.relay.addObserver(this.client.handleWakuMessage, [
-      this.contentTopic,
-    ])
+    this.client.waku.relay.addObserver(
+      new SymDecoder(this.contentTopic, this.symmetricKey),
+      this.client.handleWakuMessage
+    )
   }
 
   private observeChatMessages = async (
@@ -125,25 +116,19 @@ export class Community {
           MessageType.COMMUNITY_CHAT,
           chatDescription
         )
-        const contentTopic = chat.contentTopic
 
         this.chats.set(chatUuid, chat)
 
-        this.client.waku.relay.addDecryptionKey(chat.symmetricKey, {
-          method: waku_message.DecryptionMethod.Symmetric,
-          contentTopics: [contentTopic],
-        })
+        const unobserveFn = this.client.waku.relay.addObserver(
+          new SymDecoder(chat.contentTopic, chat.symmetricKey),
+          this.client.handleWakuMessage
+        )
 
-        return contentTopic
+        this.#chatUnobserveFns.set(chat.contentTopic, unobserveFn)
       }
     )
 
-    const contentTopics = await Promise.all(chatPromises)
-
-    this.client.waku.relay.addObserver(
-      this.client.handleWakuMessage,
-      contentTopics
-    )
+    await Promise.all(chatPromises)
   }
 
   private unobserveChatMessages = (
@@ -168,9 +153,8 @@ export class Community {
       return
     }
 
-    this.client.waku.relay.deleteObserver(
-      this.client.handleWakuMessage,
-      contentTopics
+    contentTopics.forEach(contentTopic =>
+      this.#chatUnobserveFns.get(contentTopic)?.()
     )
   }
 

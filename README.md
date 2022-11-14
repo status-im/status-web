@@ -97,8 +97,6 @@ For an example, see [examples/with-vite/src/app.tsx](./examples/with-vite/src/ap
 
 **Simply visit your Community's URL from the browser:**
 
-For example, <https://status-devcon.vercel.app/>.
-
 If the Community doesn't require a joining request, that would be it. So look around and get the feel for the space.
 
 **Once ready to chat, create a throwaway profile:**
