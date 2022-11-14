@@ -20,7 +20,7 @@ import { mapChatMessage } from './map-chat-message'
 import type { Account } from '../account'
 import type { Client } from '../client'
 import type { Community } from './community'
-import type { WakuMessage } from 'js-waku'
+import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
 
 export function handleWakuMessage(
   wakuMessage: WakuMessage,

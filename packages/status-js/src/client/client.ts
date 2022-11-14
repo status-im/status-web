@@ -18,7 +18,8 @@ import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
 import type { Storage } from './storage'
-import type { Message as WakuMessage, WakuFull } from 'js-waku/lib/interfaces'
+import type { WakuFull } from 'js-waku/lib/interfaces'
+import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
 
 const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
 
