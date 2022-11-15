@@ -58,7 +58,7 @@ export class Community {
     }
 
     // Observe community description
-    this.observe()
+    await this.observe()
 
     // Chats
     await this.observeChatMessages(this.description.chats)
@@ -97,9 +97,9 @@ export class Community {
     return this.description
   }
 
-  private observe = () => {
-    this.client.waku.relay.addObserver(
-      new SymDecoder(this.contentTopic, this.symmetricKey),
+  private observe = async () => {
+    await this.client.waku.filter.subscribe(
+      [new SymDecoder(this.contentTopic, this.symmetricKey)],
       this.client.handleWakuMessage
     )
   }
@@ -119,8 +119,8 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        const unobserveFn = this.client.waku.relay.addObserver(
-          new SymDecoder(chat.contentTopic, chat.symmetricKey),
+        const unobserveFn = await this.client.waku.filter.subscribe(
+          [new SymDecoder(chat.contentTopic, chat.symmetricKey)],
           this.client.handleWakuMessage
         )
 

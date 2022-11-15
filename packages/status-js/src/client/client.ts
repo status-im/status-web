@@ -4,7 +4,7 @@
 
 import { hexToBytes } from 'ethereum-cryptography/utils'
 import { Protocols } from 'js-waku'
-import { createFullNode } from 'js-waku/lib/create_waku'
+import { createLightNode } from 'js-waku/lib/create_waku'
 import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list'
 import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
 import { SymEncoder } from 'js-waku/lib/waku_message/version_1'
@@ -18,7 +18,7 @@ import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
 import type { Storage } from './storage'
-import type { WakuFull } from 'js-waku/lib/interfaces'
+import type { WakuLight } from 'js-waku/lib/interfaces'
 import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
 
 const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
@@ -37,7 +37,7 @@ export interface ClientOptions {
 }
 
 class Client {
-  public waku: WakuFull
+  public waku: WakuLight
   public readonly wakuMessages: Set<string>
   /**
    * Tracks open connections which had their streams silently destroyed
@@ -62,7 +62,7 @@ class Client {
   storage: Storage
 
   constructor(
-    waku: WakuFull,
+    waku: WakuLight,
     wakuDisconnectionTimer: ReturnType<typeof setInterval>,
     options: ClientOptions
   ) {
@@ -91,7 +91,7 @@ class Client {
     // Waku
     const { environment = 'production' } = options
 
-    const waku = await createFullNode({
+    const waku = await createLightNode({
       defaultBootstrap: false,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
@@ -110,7 +110,7 @@ class Client {
       },
     })
     await waku.start()
-    await waitForRemotePeer(waku, [Protocols.Relay, Protocols.Store], 10 * 1000)
+    await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
     const wakuDisconnectionTimer = setInterval(async () => {
       const connectionsToClose: Promise<void>[] = []
 
@@ -190,7 +190,7 @@ class Client {
       payload,
     })
 
-    await this.waku.relay.send(
+    await this.waku.lightPush.push(
       new SymEncoder(
         contentTopic,
         symKey,
