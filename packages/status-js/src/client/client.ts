@@ -96,7 +96,8 @@ class Client {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       emitSelf: true,
-      relayKeepAlive: 15,
+      pingKeepAlive: 15,
+      relayKeepAlive: 0,
       libp2p: {
         peerDiscovery: [
           /**
