@@ -110,8 +110,8 @@ Get the source ready:
 ```sh
 git clone https://github.com/status-im/status-web.git
 cd ./status-web
-npm install
-npm run build
+yarn install
+yarn run build
 ```
 
 Add your Community's public key to your environment:
@@ -123,5 +123,5 @@ echo 'PUBLIC_KEY="0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6
 And run it:
 
 ```sh
-npm run dev --workspace=examples/with-vite
+yarn workspace with-vite run dev
 ```
