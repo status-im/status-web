@@ -111,7 +111,7 @@ Get the source ready:
 git clone https://github.com/status-im/status-web.git
 cd ./status-web
 npm install
-npm build
+npm run build
 ```
 
 Add your Community's public key to your environment:
