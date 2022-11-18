@@ -10,13 +10,18 @@
       // todo?: make relative to ${file}
       "cwd": "${workspaceFolder}/packages/status-js",
       "program": "${workspaceRoot}/node_modules/vite-node/dist/cli.mjs",
-      "args": ["${file}"],
+      "args": ["--options.sourcemap=inline", "${file}"],
       "smartStep": true,
       "sourceMaps": true,
       "env": {
         "DEBUG": "*",
+        "DEBUG_HIDE_DATE": "0",
+        "DEBUG_COLORS": "1",
         "VITE_NODE": "true"
-      }
+      },
+      "runtimeArgs": ["--preserve-symlinks"],
+      "outFiles": ["${workspaceFolder}/**/*.js"],
+      "resolveSourceMapLocations": ["**/*"]
     },
     {
       "type": "node",
