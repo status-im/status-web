@@ -1,6 +1,17 @@
 {
   "version": "0.2.0",
+  // https://code.visualstudio.com/docs/nodejs/browser-debugging for browser debugging docs
+  // https://github.com/microsoft/vscode-js-debug/blob/d77a474700e16d647e8fe68c205ef867094fa092/OPTIONS.md for browser debugging options
+  // https://github.com/vitejs/vite/issues/10372#issuecomment-1321219125 for debugging deeply nested `node_modules` dependencies in Chrome DevTools
   "configurations": [
+    {
+      "name": "Attach to Vite via Chrome",
+      "url": "http://localhost:5173",
+      "request": "launch",
+      "type": "chrome",
+      "smartStep": false,
+      "sourceMaps": true
+    },
     {
       "type": "node",
       "request": "launch",
