@@ -100,7 +100,13 @@ class Client {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         emitSelf: true,
-        pingKeepAlive: 15,
+        /**
+         * Note: Delegated to `wakuDisconnectionTimer`.
+         */
+        pingKeepAlive: 0,
+        /**
+         * Note: Not supported in light mode.
+         */
         relayKeepAlive: 0,
         libp2p: {
           peerDiscovery: [
@@ -124,7 +130,9 @@ class Client {
         const connectionsToClose: Promise<void>[] = []
 
         for (const connection of waku!.libp2p.connectionManager.getConnections()) {
-          if (!connection.streams.length) {
+          try {
+            await waku!.libp2p.ping(connection.remoteAddr)
+          } catch {
             connectionsToClose.push(connection.close())
           }
         }
