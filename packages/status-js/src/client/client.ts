@@ -61,15 +61,23 @@ class Client {
 
   storage: Storage
 
-  constructor(
-    waku: WakuLight,
-    wakuDisconnectionTimer: ReturnType<typeof setInterval>,
-    options: ClientOptions
-  ) {
+  constructor(waku: WakuLight, options: ClientOptions) {
     // Waku
     this.waku = waku
     this.wakuMessages = new Set()
-    this.#wakuDisconnectionTimer = wakuDisconnectionTimer
+    this.#wakuDisconnectionTimer = setInterval(async () => {
+      const connectionsToClose: Promise<void>[] = []
+
+      for (const connection of this.waku.libp2p.connectionManager.getConnections()) {
+        try {
+          await this.waku.libp2p.ping(connection.remoteAddr)
+        } catch {
+          connectionsToClose.push(connection.close())
+        }
+      }
+
+      await Promise.allSettled(connectionsToClose)
+    }, 10 * 1000)
 
     // Storage
     this.storage = options.storage ?? new LocalStorage()
@@ -126,22 +134,9 @@ class Client {
         [Protocols.Store, Protocols.Filter, Protocols.LightPush],
         10 * 1000
       )
-      const wakuDisconnectionTimer = setInterval(async () => {
-        const connectionsToClose: Promise<void>[] = []
-
-        for (const connection of waku!.libp2p.connectionManager.getConnections()) {
-          try {
-            await waku!.libp2p.ping(connection.remoteAddr)
-          } catch {
-            connectionsToClose.push(connection.close())
-          }
-        }
-
-        await Promise.allSettled(connectionsToClose)
-      }, 10 * 1000)
 
       // Client
-      client = new Client(waku, wakuDisconnectionTimer, options)
+      client = new Client(waku, options)
 
       // Community
       await client.community.start()
