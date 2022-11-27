@@ -87,52 +87,65 @@ class Client {
     }
   }
 
-  static async start(options: ClientOptions) {
-    // Waku
+  static async start(options: ClientOptions): Promise<Client> {
     const { environment = 'production' } = options
 
-    const waku = await createLightNode({
-      defaultBootstrap: false,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      emitSelf: true,
-      pingKeepAlive: 15,
-      relayKeepAlive: 0,
-      libp2p: {
-        peerDiscovery: [
-          /**
-           * >only connects to 1 remote node because of the limited number of nodes
-           * >run by Status and the limited number of connections provided by these nodes
-           * >
-           * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
-           */
-          new PeerDiscoveryStaticPeers(peers[environment], { maxPeers: 1 }),
-        ],
-      },
-    })
-    await waku.start()
-    await waitForRemotePeer(
-      waku,
-      [Protocols.Store, Protocols.Filter, Protocols.LightPush],
-      10 * 1000
-    )
-    const wakuDisconnectionTimer = setInterval(async () => {
-      const connectionsToClose: Promise<void>[] = []
+    let waku: WakuLight | undefined
+    let client: Client | undefined
 
-      for (const connection of waku.libp2p.connectionManager.getConnections()) {
-        if (!connection.streams.length) {
-          connectionsToClose.push(connection.close())
+    try {
+      // Waku
+      waku = await createLightNode({
+        defaultBootstrap: false,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        emitSelf: true,
+        pingKeepAlive: 15,
+        relayKeepAlive: 0,
+        libp2p: {
+          peerDiscovery: [
+            /**
+             * >only connects to 1 remote node because of the limited number of nodes
+             * >run by Status and the limited number of connections provided by these nodes
+             * >
+             * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
+             */
+            new PeerDiscoveryStaticPeers(peers[environment], { maxPeers: 1 }),
+          ],
+        },
+      })
+      await waku.start()
+      await waitForRemotePeer(
+        waku,
+        [Protocols.Store, Protocols.Filter, Protocols.LightPush],
+        10 * 1000
+      )
+      const wakuDisconnectionTimer = setInterval(async () => {
+        const connectionsToClose: Promise<void>[] = []
+
+        for (const connection of waku!.libp2p.connectionManager.getConnections()) {
+          if (!connection.streams.length) {
+            connectionsToClose.push(connection.close())
+          }
         }
+
+        await Promise.allSettled(connectionsToClose)
+      }, 10 * 1000)
+
+      // Client
+      client = new Client(waku, wakuDisconnectionTimer, options)
+
+      // Community
+      await client.community.start()
+    } catch (error) {
+      if (client) {
+        await client.stop()
+      } else if (waku) {
+        await waku.stop()
       }
 
-      await Promise.allSettled(connectionsToClose)
-    }, 10 * 1000)
-
-    // Client
-    const client = new Client(waku, wakuDisconnectionTimer, options)
-
-    // Community
-    await client.community.start()
+      throw error
+    }
 
     return client
   }
