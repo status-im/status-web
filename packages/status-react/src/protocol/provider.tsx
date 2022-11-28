@@ -23,6 +23,7 @@ export type Action =
   | { type: 'UPDATE_COMMUNITY'; community: Community['description'] }
   | { type: 'SET_ACCOUNT'; account: Account | undefined }
   | { type: 'FAIL' }
+  | { type: 'CONNECT'; connected: boolean }
 
 interface Props {
   options: ClientOptions
@@ -49,6 +50,9 @@ const reducer = (state: State, action: Action): State => {
     }
     case 'FAIL': {
       return { ...state, failed: true, loading: false }
+    }
+    case 'CONNECT': {
+      return { ...state, loading: !action.connected }
     }
   }
 }
@@ -88,6 +92,9 @@ export const ProtocolProvider = (props: Props) => {
   useEffect(() => {
     if (client) {
       const unsubscribe = [
+        client.onConnection(connected => {
+          dispatch({ type: 'CONNECT', connected })
+        }),
         client.onAccountChange(account => {
           dispatch({ type: 'SET_ACCOUNT', account })
         }),
