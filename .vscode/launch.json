@@ -9,8 +9,9 @@
       "url": "http://localhost:5173",
       "request": "launch",
       "type": "chrome",
-      "smartStep": false,
-      "sourceMaps": true
+      "smartStep": true,
+      "sourceMaps": true,
+      "runtimeArgs": ["--auto-open-devtools-for-tabs"]
     },
     {
       "type": "node",
