@@ -53,6 +53,7 @@ class Client {
    */
   #wakuDisconnectionTimer: ReturnType<typeof setInterval>
   connected: boolean
+  #connectionCallbacks: Set<(connected: boolean) => void>
 
   public activityCenter: ActivityCenter
   public community: Community
@@ -68,6 +69,7 @@ class Client {
      * Waku should be connected and protocols awaited at this point, thus connected.
      */
     this.connected = true
+    this.#connectionCallbacks = new Set()
     this.waku = waku
     this.wakuMessages = new Set()
     this.#wakuDisconnectionTimer = setInterval(async () => {
@@ -76,6 +78,12 @@ class Client {
       for (const connection of this.waku.libp2p.connectionManager.getConnections()) {
         try {
           await this.waku.libp2p.ping(connection.remoteAddr)
+
+          if (!this.connected) {
+            this.connected = true
+
+            this.emitConnection(this.connected)
+          }
         } catch {
           connectionsToClose.push(connection.close())
         }
@@ -89,6 +97,8 @@ class Client {
      */
     this.waku.libp2p.connectionManager.addEventListener('peer:connect', () => {
       this.connected = true // reconnect
+
+      this.emitConnection(this.connected)
     })
     /**
      * >This event will **only** be triggered when the last connection is closed.
@@ -96,6 +106,13 @@ class Client {
      */
     waku.libp2p.connectionManager.addEventListener('peer:disconnect', () => {
       this.connected = false
+
+      this.emitConnection(this.connected)
+    })
+    window.addEventListener('offline', () => {
+      this.connected = false
+
+      this.emitConnection(this.connected)
     })
 
     // Storage
@@ -177,6 +194,18 @@ class Client {
     await this.waku.stop()
   }
 
+  public onConnection = (callback: (connected: boolean) => void) => {
+    this.#connectionCallbacks.add(callback)
+
+    return () => {
+      this.#connectionCallbacks.delete(callback)
+    }
+  }
+
+  private emitConnection = (connected: boolean) => {
+    this.#connectionCallbacks.forEach(callback => callback(connected))
+  }
+
   get account() {
     return this.#account
   }
@@ -201,10 +230,10 @@ class Client {
     this.account = undefined
   }
 
-  public onAccountChange(listener: (account?: Account) => void) {
-    this.#accountCallbacks.add(listener)
+  public onAccountChange(callback: (account?: Account) => void) {
+    this.#accountCallbacks.add(callback)
     return () => {
-      this.#accountCallbacks.delete(listener)
+      this.#accountCallbacks.delete(callback)
     }
   }
 
