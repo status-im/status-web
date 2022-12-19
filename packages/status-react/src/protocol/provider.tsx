@@ -95,6 +95,9 @@ export const ProtocolProvider = (props: Props) => {
         client.onConnection(connected => {
           dispatch({ type: 'CONNECT', connected })
         }),
+        client.onFailure(() => {
+          dispatch({ type: 'FAIL' })
+        }),
         client.onAccountChange(account => {
           dispatch({ type: 'SET_ACCOUNT', account })
         }),

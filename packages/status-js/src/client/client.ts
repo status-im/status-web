@@ -39,21 +39,30 @@ export interface ClientOptions {
 class Client {
   public waku: WakuLight
   public readonly wakuMessages: Set<string>
+  // todo!: add `debug` logs
   /**
-   * Tracks open connections which had their streams silently destroyed
-   * and closes them so new connections can be automatically created
-   * by libp2p's dial mechanism.
+   * Pings peers to aid with libp2p's reconnecting attempts and its eventual
+   * emitting of disconnection event.
+   *
+   * For example, in case of a user going offline.
+   *
+   * Also attempting to detect open connections, which had their streams silently destroyed
+   * (for Relay) or can no longer create new ones (for Filter, Light Push). And closes them
+   * so new connections can be automatically recreated by libp2p's dial mechanism.
    *
    * For example, in case of a websocket in browser which did not
    * have its close event emitted.
    *
-   * Note: Detection of the stream removal depends pinging the peer.
+   * Note: This is only a workaround.
    *
-   * Note: This is only a workaround (@see https://github.com/libp2p/js-libp2p/issues/939).
+   * @see https://github.com/waku-org/js-waku/issues/751 for js-waku bug
+   * @see https://github.com/libp2p/js-libp2p/issues/939 for libp2p bug
+   * @see https://github.com/libp2p/js-libp2p/issues/744 for libp2p plan
    */
   #wakuDisconnectionTimer: ReturnType<typeof setInterval>
   connected: boolean
   #connectionCallbacks: Set<(connected: boolean) => void>
+  #failureCallbacks: Set<() => void>
 
   public activityCenter: ActivityCenter
   public community: Community
@@ -70,12 +79,24 @@ class Client {
      */
     this.connected = true
     this.#connectionCallbacks = new Set()
+    this.#failureCallbacks = new Set()
     this.waku = waku
     this.wakuMessages = new Set()
     this.#wakuDisconnectionTimer = setInterval(async () => {
-      const connectionsToClose: Promise<void>[] = []
+      const connections = this.waku.libp2p.connectionManager.getConnections()
 
-      for (const connection of this.waku.libp2p.connectionManager.getConnections()) {
+      // todo?: move to `'peer:disconnect'` event listener
+      if (!connections.length) {
+        this.connected = false
+
+        this.#failureCallbacks.forEach(callback => callback())
+        await this.stop()
+
+        return
+      }
+
+      const connectionsToClose: Promise<void>[] = []
+      for (const connection of connections) {
         try {
           await this.waku.libp2p.ping(connection.remoteAddr)
 
@@ -204,6 +225,14 @@ class Client {
 
   private emitConnection = (connected: boolean) => {
     this.#connectionCallbacks.forEach(callback => callback(connected))
+  }
+
+  public onFailure = (callback: () => void) => {
+    this.#failureCallbacks.add(callback)
+
+    return () => {
+      this.#failureCallbacks.delete(callback)
+    }
   }
 
   get account() {

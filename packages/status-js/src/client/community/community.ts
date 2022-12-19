@@ -119,6 +119,7 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
+        // todo?: ping Filter protocol subscriptions with a Waku message and re-subscribe if not delivered
         const unobserveFn = await this.client.waku.filter.subscribe(
           [new SymDecoder(chat.contentTopic, chat.symmetricKey)],
           this.client.handleWakuMessage
