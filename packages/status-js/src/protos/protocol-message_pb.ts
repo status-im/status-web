@@ -339,9 +339,9 @@ export class HRHeader extends Message<HRHeader> {
   /**
    * Community ID
    *
-   * @generated from field: string group_id = 3;
+   * @generated from field: bytes group_id = 3;
    */
-  groupId = "";
+  groupId = new Uint8Array(0);
 
   constructor(data?: PartialMessage<HRHeader>) {
     super();
@@ -353,7 +353,7 @@ export class HRHeader extends Message<HRHeader> {
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "key_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 2, name: "seq_no", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 3, name: "group_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "group_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HRHeader {
@@ -370,6 +370,86 @@ export class HRHeader extends Message<HRHeader> {
 
   static equals(a: HRHeader | PlainMessage<HRHeader> | undefined, b: HRHeader | PlainMessage<HRHeader> | undefined): boolean {
     return proto3.util.equals(HRHeader, a, b);
+  }
+}
+
+/**
+ * @generated from message HRKeys
+ */
+export class HRKeys extends Message<HRKeys> {
+  /**
+   * @generated from field: repeated HRKey keys = 1;
+   */
+  keys: HRKey[] = [];
+
+  constructor(data?: PartialMessage<HRKeys>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "HRKeys";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "keys", kind: "message", T: HRKey, repeated: true },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HRKeys {
+    return new HRKeys().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HRKeys {
+    return new HRKeys().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HRKeys {
+    return new HRKeys().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: HRKeys | PlainMessage<HRKeys> | undefined, b: HRKeys | PlainMessage<HRKeys> | undefined): boolean {
+    return proto3.util.equals(HRKeys, a, b);
+  }
+}
+
+/**
+ * @generated from message HRKey
+ */
+export class HRKey extends Message<HRKey> {
+  /**
+   * @generated from field: uint32 key_id = 1;
+   */
+  keyId = 0;
+
+  /**
+   * @generated from field: bytes key = 2;
+   */
+  key = new Uint8Array(0);
+
+  constructor(data?: PartialMessage<HRKey>) {
+    super();
+    proto3.util.initPartial(data, this);
+  }
+
+  static readonly runtime = proto3;
+  static readonly typeName = "HRKey";
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: "key_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 2, name: "key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+  ]);
+
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HRKey {
+    return new HRKey().fromBinary(bytes, options);
+  }
+
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HRKey {
+    return new HRKey().fromJson(jsonValue, options);
+  }
+
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HRKey {
+    return new HRKey().fromJsonString(jsonString, options);
+  }
+
+  static equals(a: HRKey | PlainMessage<HRKey> | undefined, b: HRKey | PlainMessage<HRKey> | undefined): boolean {
+    return proto3.util.equals(HRKey, a, b);
   }
 }
 
