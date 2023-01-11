@@ -9,7 +9,7 @@ process.env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD = '1'
 
 const boolVals = {
   true: true,
-  false: false
+  false: false,
 }
 
 const disableExtraction =
@@ -24,6 +24,7 @@ const plugins = [
     importsWhitelist: ['constants.js', 'colors.js'],
     logTimings: true,
     disableExtraction,
+
     // experiment - reduced bundle size react-native-web
     useReactNativeWebLite: false,
     shouldExtract: path => {
@@ -36,19 +37,19 @@ const plugins = [
       'ProgressBar',
       'Picker',
       'CheckBox',
-      'Touchable'
-    ]
-  })
+      'Touchable',
+    ],
+  }),
 ]
 
-module.exports = function() {
+module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
     typescript: {
-      ignoreBuildErrors: true
+      ignoreBuildErrors: true,
     },
     images: {
-      disableStaticImages: true
+      disableStaticImages: true,
     },
     transpilePackages: [
       //   'solito',
@@ -56,19 +57,20 @@ module.exports = function() {
       //   'expo-linking',
       //   'expo-constants',
       //   'expo-modules-core'
-      '@status-im/components'
+      '@status-im/components',
     ],
+
     experimental: {
       // optimizeCss: true,
       // scrollRestoration: true,
-      legacyBrowsers: false
-    }
+      legacyBrowsers: false,
+    },
   }
 
   for (const plugin of plugins) {
     config = {
       ...config,
-      ...plugin(config)
+      ...plugin(config),
     }
   }
 
