@@ -36,7 +36,9 @@ const interFont = createInterFont({
     15: -6,
   },
   face: {
-    700: { normal: 'InterBold' },
+    400: { normal: 'Inter' },
+    500: { normal: 'Inter' },
+    600: { normal: 'InterBold' },
   },
 })
 

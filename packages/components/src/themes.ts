@@ -3,6 +3,8 @@ import { createTheme } from '@tamagui/core'
 import { tokens } from './tokens'
 
 const light = createTheme({
+  background: tokens.color['white-100'],
+  textPrimary: tokens.color['neutral-100'],
   primary: tokens.color['primary-50'],
   primaryHover: tokens.color['primary-60'],
   success: tokens.color['success-50'],
@@ -34,6 +36,8 @@ const light = createTheme({
 })
 
 const dark = createTheme({
+  background: tokens.color['neutral-95'],
+  textPrimary: tokens.color['white-100'],
   primary: tokens.color['primary-60'],
   primaryHover: tokens.color['primary-50'],
   success: tokens.color['success-60'],
