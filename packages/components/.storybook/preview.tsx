@@ -1,18 +1,19 @@
 import React from 'react'
 import { TamaguiProvider } from '@tamagui/core'
 import { config } from '../src'
+import { Parameters, Decorator } from '@storybook/react'
 
-export const parameters = {
+export const parameters: Parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       color: /(background|color)$/i,
-      date: /Date$/
-    }
-  }
+      date: /Date$/,
+    },
+  },
 }
 
-const withThemeProvider = (Story, context) => {
+const withThemeProvider: Decorator = (Story, _context) => {
   return (
     <TamaguiProvider config={config}>
       <Story />
