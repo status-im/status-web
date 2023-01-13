@@ -1,11 +1,8 @@
-// eslint-disable-next-line import/default
-import tamagui from '@tamagui/vite-plugin'
+import { tamaguiPlugin } from '@tamagui/vite-plugin'
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig } from 'vite'
 
 import type { PluginOption } from 'vite'
-
-const { tamaguiPlugin } = tamagui
 
 process.env.TAMAGUI_TARGET = 'web'
 process.env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD = '1'
