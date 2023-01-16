@@ -22,13 +22,14 @@
     "react-native-web": "^0.18.0"
   },
   "dependencies": {
-    "@tamagui/animations-react-native": "^1.0.8",
-    "@tamagui/core": "^1.0.8",
-    "@tamagui/font-inter": "^1.0.8",
-    "@tamagui/react-native-media-driver": "^1.0.8",
-    "@tamagui/shorthands": "^1.0.8",
-    "@tamagui/theme-base": "^1.0.8",
-    "tamagui": "^1.0.8"
+    "@tamagui/animations-css": "1.0.15",
+    "@tamagui/animations-react-native": "1.0.15",
+    "@tamagui/core": "1.0.15",
+    "@tamagui/font-inter": "1.0.15",
+    "@tamagui/react-native-media-driver": "1.0.15",
+    "@tamagui/shorthands": "1.0.15",
+    "@tamagui/theme-base": "1.0.15",
+    "tamagui": "1.0.15"
   },
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.0-beta.21",
@@ -38,8 +39,8 @@
     "@storybook/react": "^7.0.0-beta.21",
     "@storybook/react-vite": "^7.0.0-beta.21",
     "@storybook/testing-library": "^0.0.13",
-    "@tamagui/build": "^1.0.8",
-    "@tamagui/vite-plugin": "^1.0.8",
+    "@tamagui/build": "1.0.15",
+    "@tamagui/vite-plugin": "1.0.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.18.0",
