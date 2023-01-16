@@ -1,15 +1,9 @@
-import { Stack, styled, Text } from '@tamagui/core'
+import { styled, Text } from '@tamagui/core'
+import { ButtonFrame } from 'tamagui'
 
 import type { GetProps } from '@tamagui/core'
-// import { Button} from 'react-native'
 
-// import { Button as RNButton } from 'react-native'
-
-// setupReactNative({ Button: RNButton })
-
-// import type { GetProps} from '@tamagui/core';
-
-const Base = styled(Stack, {
+const Base = styled(ButtonFrame, {
   // tag: 'button',
 
   cursor: 'pointer',
@@ -17,26 +11,27 @@ const Base = styled(Stack, {
   display: 'inline-flex',
   paddingHorizontal: 16,
   paddingVertical: 10,
-
+  animation: 'fast',
   variants: {
     type: {
       primary: {
-        backgroundColor: 'hsla(229, 71%, 57%, 1)',
-        hoverStyle: { backgroundColor: 'hsla(229, 54%, 45%, 1)' },
-        pressStyle: { backgroundColor: 'hsla(229, 54%, 45%, 1)' },
+        backgroundColor: '$primary',
+        hoverStyle: { backgroundColor: '$primaryHover' },
+        pressStyle: { backgroundColor: '$primaryHover' },
       },
       positive: {
-        backgroundColor: 'hsla(174, 63%, 40%, 1)',
-        hoverStyle: { backgroundColor: 'hsla(174, 63%, 34%, 1)' },
-        pressStyle: { backgroundColor: 'hsla(174, 63%, 34%, 1)' },
+        backgroundColor: '$success',
+        hoverStyle: { backgroundColor: '$successHover' },
+        pressStyle: { backgroundColor: '$successHover' },
       },
     },
   } as const,
 })
 
 const ButtonText = styled(Text, {
-  color: 'rgb(255, 255, 255)',
+  fontFamily: '$inter',
   textAlign: 'center',
+  color: '$white',
 })
 
 type BaseProps = GetProps<typeof Base>
@@ -49,7 +44,9 @@ interface Props {
 
 const Button = (props: Props) => {
   const { type = 'primary', children, onPress } = props
+  console.log(onPress)
 
+  console.log('Button', type)
   return (
     <Base type={type} onPress={onPress}>
       <ButtonText>{children}</ButtonText>
@@ -58,4 +55,3 @@ const Button = (props: Props) => {
 }
 
 export { Button }
-// const Button =
