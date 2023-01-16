@@ -2,26 +2,30 @@ import '@tamagui/core/reset.css'
 import '@tamagui/font-inter/css/400.css'
 import '@tamagui/font-inter/css/700.css'
 
-import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
-// import { Provider } from 'app/provider'
+import '../styles/reset.css'
+import '../styles/app.css'
+
 import Head from 'next/head'
-import React, { useMemo } from 'react'
-// import type { SolitoAppProps } from 'solito'
+import React from 'react'
 
 import tamaguiConfig from '../tamagui.config'
 
-import 'raf/polyfill'
 import { AppProps } from 'next/app'
 import { TamaguiProvider } from '@tamagui/core'
 
-function MyApp({ Component, pageProps }: AppProps) {
+// import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
+// import { Provider } from 'app/provider'
+// import type { SolitoAppProps } from 'solito'
+
+function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Tamagui Example App</title>
+        <title>Status</title>
         <meta name="description" content="Tamagui, Solito, Expo & Next.js" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <TamaguiProvider config={tamaguiConfig}>
         <Component {...pageProps} />
       </TamaguiProvider>
@@ -41,4 +45,4 @@ function MyApp({ Component, pageProps }: AppProps) {
 //   )
 // }
 
-export default MyApp
+export default App
