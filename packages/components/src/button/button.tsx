@@ -44,13 +44,14 @@ type BaseProps = GetProps<typeof Base>
 interface Props {
   type?: BaseProps['type']
   children: string
+  onPress?: () => void
 }
 
 const Button = (props: Props) => {
-  const { type = 'primary', children } = props
+  const { type = 'primary', children, onPress } = props
 
   return (
-    <Base type={type}>
+    <Base type={type} onPress={onPress}>
       <ButtonText>{children}</ButtonText>
     </Base>
   )

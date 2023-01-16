@@ -19,7 +19,7 @@ function App() {
   const [theme, setTheme] = useState<ThemeVars>('light')
 
   return (
-    <TamaguiProvider config={tamaguiConfig}>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
       <div id="app">
         <div id="sidebar">
           <Sidebar
@@ -53,11 +53,11 @@ function App() {
                 <Paragraph marginVertical={20}>
                   Theme selected - {theme}{' '}
                 </Paragraph>
-                <button
-                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                <Button
+                  onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 >
                   Toogle theme
-                </button>
+                </Button>
                 <Shape marginTop={20} />
               </Stack>
             </Stack>
