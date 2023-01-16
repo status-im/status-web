@@ -1,6 +1,5 @@
 import { styled } from '@tamagui/core'
-
-import { SizableText } from './sizableText'
+import { SizableText } from 'tamagui'
 
 export const Heading = styled(SizableText, {
   name: 'Heading',
@@ -24,7 +23,7 @@ export const Heading = styled(SizableText, {
       true: {
         textTransform: 'uppercase',
       },
-    } as const,
+    },
     weight: {
       regular: {
         fontWeight: '400',
@@ -37,13 +36,12 @@ export const Heading = styled(SizableText, {
       },
     },
   },
-
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     heading: 'h1',
   },
-})
+} as const)
 
 export const Paragraph = styled(SizableText, {
   name: 'Paragraph',
@@ -67,7 +65,7 @@ export const Paragraph = styled(SizableText, {
       true: {
         textTransform: 'uppercase',
       },
-    } as const,
+    },
     weight: {
       regular: {
         fontWeight: '400',
@@ -87,7 +85,7 @@ export const Paragraph = styled(SizableText, {
     variant: 'normal',
     weight: 'regular',
   },
-})
+} as const)
 
 export const Label = styled(SizableText, {
   name: 'Label',
@@ -103,7 +101,7 @@ export const Label = styled(SizableText, {
       true: {
         textTransform: 'uppercase',
       },
-    } as const,
+    },
     weight: {
       regular: {
         fontWeight: '400',
@@ -116,13 +114,12 @@ export const Label = styled(SizableText, {
       },
     },
   },
-
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     weight: 'regular',
   },
-})
+} as const)
 
 export const Code = styled(SizableText, {
   name: 'Code',
@@ -148,7 +145,7 @@ export const Code = styled(SizableText, {
       true: {
         textTransform: 'uppercase',
       },
-    } as const,
+    },
     weight: {
       regular: {
         fontWeight: '400',
@@ -161,11 +158,10 @@ export const Code = styled(SizableText, {
       },
     },
   },
-
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     variant: 'normal',
     weight: 'regular',
   },
-})
+} as const)
