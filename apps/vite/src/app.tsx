@@ -30,7 +30,13 @@ function App() {
         </div>
 
         <main id="main">
-          <div>topbar</div>
+          <Stack
+            backgroundColor="$background"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Paragraph weight="semibold">Topbar</Paragraph>
+          </Stack>
           <div>
             <Stack width="100%" height="100%" backgroundColor="$background">
               <Stack
@@ -54,6 +60,7 @@ function App() {
                   Theme selected - {theme}{' '}
                 </Paragraph>
                 <Button
+                  type="positive"
                   onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 >
                   Toogle theme
@@ -62,7 +69,13 @@ function App() {
               </Stack>
             </Stack>
           </div>
-          <div>composer</div>
+          <Stack
+            backgroundColor="$background"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Paragraph weight="semibold">Composer</Paragraph>
+          </Stack>
         </main>
       </div>
     </TamaguiProvider>
