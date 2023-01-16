@@ -1,3 +1,4 @@
+import { createAnimations as createAnimationsCSS } from '@tamagui/animations-css'
 import { createAnimations } from '@tamagui/animations-react-native'
 
 export const animations = createAnimations({
@@ -18,4 +19,10 @@ export const animations = createAnimations({
     mass: 1.2,
     stiffness: 250,
   },
+})
+
+export const animationsCSS = createAnimationsCSS({
+  fast: 'ease-in 150ms',
+  medium: 'ease-in 300ms',
+  slow: 'ease-in 450ms',
 })
