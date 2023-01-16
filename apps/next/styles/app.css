@@ -1,0 +1,20 @@
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+div {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#app {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 352px 1fr;
+}
+
+#main {
+  display: grid;
+  grid-template-rows: 56px 1fr 100px;
+}

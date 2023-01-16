@@ -4,17 +4,13 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "expo start -c",
-    "android": "TAMAGUI_TARGET=native yarn expo run:android",
+    "dev": "expo start -c",
     "ios": "TAMAGUI_TARGET=native yarn expo run:ios",
-    "web": "TAMAGUI_TARGET=web yarn expo start --web",
-    "eject": "expo eject"
+    "android": "TAMAGUI_TARGET=native yarn expo run:android"
   },
   "dependencies": {
     "@babel/runtime": "^7.18.9",
     "@status-im/components": "*",
-    "@types/react-native": "~0.70.6",
-    "babel-plugin-module-resolver": "^4.1.0",
     "expo": "^47.0.12",
     "expo-constants": "^14.0.2",
     "expo-dev-client": "^2.0.1",
@@ -28,9 +24,11 @@
     "react-native-web": "~0.18.7"
   },
   "devDependencies": {
+    "@types/react-native": "~0.70.6",
     "@babel/core": "^7.17.9",
     "@expo/metro-config": "^0.3.21",
-    "@tamagui/babel-plugin": "1.0.4",
+    "@tamagui/babel-plugin": "1.0.8",
+    "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "typescript": "^4.7.4"
   }

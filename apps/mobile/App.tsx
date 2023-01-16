@@ -2,9 +2,17 @@
 /* eslint-disable import/namespace */
 import 'expo-dev-client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-import { Code, Heading, Label, Paragraph, Shape } from '@status-im/components'
+import {
+  Code,
+  Heading,
+  Image,
+  Label,
+  Paragraph,
+  Shape,
+  Sidebar,
+} from '@status-im/components'
 import { Stack, TamaguiProvider } from '@tamagui/core'
 import { useFonts } from 'expo-font'
 import { SafeAreaView, TouchableOpacity } from 'react-native'
@@ -29,6 +37,18 @@ export default function App() {
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
       <SafeAreaView>
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1673537074513-e66435b69012?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+            height: 200,
+            width: '100%',
+          }}
+        />
+        <Sidebar
+          name="Rarible"
+          description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
+          membersCount={123}
+        />
         <Stack
           flexDirection="column"
           justifyContent="center"

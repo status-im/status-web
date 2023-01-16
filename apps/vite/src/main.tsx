@@ -1,12 +1,15 @@
-import './index.css'
+import '../styles/reset.css'
+import '../styles/app.css'
 
 import React from 'react'
 
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 
 import App from './app'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+const root = document.getElementById('root') as HTMLElement
+
+createRoot(root).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
