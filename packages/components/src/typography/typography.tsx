@@ -35,13 +35,13 @@ export const Heading = styled(SizableText, {
         fontWeight: '600',
       },
     },
-  },
+  } as const,
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     heading: 'h1',
   },
-} as const)
+})
 
 export const Paragraph = styled(SizableText, {
   name: 'Paragraph',
@@ -77,15 +77,14 @@ export const Paragraph = styled(SizableText, {
         fontWeight: '600',
       },
     },
-  },
-
+  } as const,
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     variant: 'normal',
     weight: 'regular',
   },
-} as const)
+})
 
 export const Label = styled(SizableText, {
   name: 'Label',
@@ -113,13 +112,13 @@ export const Label = styled(SizableText, {
         fontWeight: '600',
       },
     },
-  },
+  } as const,
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     weight: 'regular',
   },
-} as const)
+})
 
 export const Code = styled(SizableText, {
   name: 'Code',
@@ -157,11 +156,11 @@ export const Code = styled(SizableText, {
         fontWeight: '600',
       },
     },
-  },
+  } as const,
   defaultVariants: {
     // note tamagui uses a generic "true" token that your sizes should set to be the same as the default on your scale
     size: '$true',
     variant: 'normal',
     weight: 'regular',
   },
-} as const)
+})
