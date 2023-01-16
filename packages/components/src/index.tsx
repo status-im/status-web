@@ -1,3 +1,7 @@
+export * from './button'
+export * from './image'
+export * from './input'
 export * from './shape'
+export * from './sidebar'
 export { config } from './tamagui.config'
 export * from './typography'
