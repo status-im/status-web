@@ -2,9 +2,8 @@
   "name": "vite-app",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "TAMAGUI_TARGET='web' vite",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },

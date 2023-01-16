@@ -20,10 +20,10 @@ const plugins = [
   // withImages,
   withTamagui({
     config: './tamagui.config.ts',
-    components: [],
+    components: ['@status-im/components'],
     importsWhitelist: ['constants.js', 'colors.js'],
     logTimings: true,
-    disableExtraction,
+    disableExtraction: true,
 
     // experiment - reduced bundle size react-native-web
     useReactNativeWebLite: false,
@@ -33,11 +33,11 @@ const plugins = [
       }
     },
     excludeReactNativeWebExports: [
-      'Switch',
-      'ProgressBar',
-      'Picker',
-      'CheckBox',
-      'Touchable',
+      // 'Switch',
+      // 'ProgressBar',
+      // 'Picker',
+      // 'CheckBox',
+      // 'Touchable'
     ],
   }),
 ]
@@ -53,7 +53,7 @@ module.exports = function () {
     },
     transpilePackages: [
       //   'solito',
-      //   'react-native-web',
+      'react-native-web',
       //   'expo-linking',
       //   'expo-constants',
       //   'expo-modules-core'
