@@ -35,7 +35,10 @@ const light = createTheme({
   beigeHover: tokens.color['beige-60'],
 })
 
-const dark = createTheme({
+// note: we set up a single consistent base type to validate the rest:
+type BaseTheme = typeof light
+
+const dark: BaseTheme = createTheme({
   background: tokens.color['neutral-95'],
   textPrimary: tokens.color['white-100'],
   primary: tokens.color['primary-60'],
@@ -68,7 +71,15 @@ const dark = createTheme({
   beigeHover: tokens.color['beige-50'],
 })
 
-export const themes = {
+const allThemes = {
   light,
   dark,
 }
+
+type ThemeName = keyof typeof allThemes
+
+type Themes = {
+  [key in ThemeName]: BaseTheme
+}
+
+export const themes: Themes = allThemes
