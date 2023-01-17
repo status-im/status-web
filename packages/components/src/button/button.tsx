@@ -35,17 +35,17 @@ const ButtonText = styled(Text, {
 
 type BaseProps = GetProps<typeof Base>
 
-interface Props {
+type Props = {
   type?: BaseProps['type']
   children: string
   onPress?: () => void
-}
+} & Omit<BaseProps, 'type'>
 
 const Button = (props: Props) => {
-  const { type = 'primary', children, onPress } = props
+  const { type = 'primary', children, onPress, ...rest } = props
 
   return (
-    <Base type={type} onPress={onPress}>
+    <Base {...rest} type={type} onPress={onPress}>
       <ButtonText>{children}</ButtonText>
     </Base>
   )

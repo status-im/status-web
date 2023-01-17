@@ -74,7 +74,6 @@ export default function App() {
           <Code marginBottom={12}>This is a code line</Code>
           <Paragraph fontWeight="400">0x213abc190 ... 121ah4a9e</Paragraph>
           <Shape marginVertical={20} />
-
           <Paragraph>Theme selected - {theme}</Paragraph>
           <TouchableOpacity
             onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

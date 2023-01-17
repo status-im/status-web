@@ -34,6 +34,6 @@ const Icon = (props: IconProps) => {
   )
 }
 
-Icon.displayName = 'Union'
+Icon.displayName = 'Group'
 
-export const Union = memo<IconProps>(themed(Icon))
+export const Group = memo<IconProps>(themed(Icon))
