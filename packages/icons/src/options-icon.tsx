@@ -1,12 +1,12 @@
 import type { IconProps } from './types'
 
 export function OptionsIcon(props: IconProps) {
-  const { color = 'currentColor', ...rest } = props
+  const { color = 'currentColor', size = 20, ...rest } = props
 
   return (
     <svg
-      width={20}
-      height={20}
+      width={size}
+      height={size}
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
