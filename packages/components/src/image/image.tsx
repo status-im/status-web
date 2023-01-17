@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 
 import { isWeb, setupReactNative, styled } from '@tamagui/core'
 import { Image as RNImage } from 'react-native'
@@ -16,32 +16,48 @@ setupReactNative({
 const Base = styled(RNImage, {
   name: 'Image',
   position: 'relative',
-  source: { uri: '' },
   zIndex: 1,
+  source: {
+    uri: '',
+  },
 })
 
 type InputProps = GetProps<typeof Image>
 
+// type W = InputProps['width']
+
 interface Props {
   src: string
-  width: number
-  height: number
+  width: number | 'full'
+  height?: number
+  aspectRatio?: number
   // onLoad?: InputProps['onLoad']
   // onError?: InputProps['onError']
 }
 
 const Image = (props: Props, ref: Ref<HTMLImageElement>) => {
-  const { src } = props
+  const { src, aspectRatio, ...rest } = props
 
-  const source =
-    typeof src === 'string'
-      ? {
-          uri: src,
-          ...(isWeb && { width: props.width, height: props.height }),
-        }
-      : src
+  const width = props.width === 'full' ? '100%' : props.width
+  const height = aspectRatio ? undefined : props.height
 
-  return <Base source={source} ref={ref} />
+  const source = {
+    uri: src,
+    ...(isWeb && { width, height }),
+  }
+
+  return (
+    <Base
+      {...rest}
+      ref={ref}
+      source={source}
+      width={width}
+      height={height}
+      style={{
+        aspectRatio,
+      }}
+    />
+  )
 }
 
 // focusableInputHOC(Image)
