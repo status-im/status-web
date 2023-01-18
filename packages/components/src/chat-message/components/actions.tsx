@@ -3,7 +3,7 @@ import { Stack } from 'tamagui'
 import { Paragraph } from '../../typography'
 
 interface Props {
-  onClick: VoidFunction
+  onClick?: VoidFunction
 }
 
 export const Actions = (_props: Props) => {

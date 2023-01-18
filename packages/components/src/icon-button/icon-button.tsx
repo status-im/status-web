@@ -13,6 +13,7 @@ const Base = styled(Stack, {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
+  animation: 'fast',
 
   width: 31,
   height: 31,
@@ -25,6 +26,17 @@ const Base = styled(Stack, {
   },
 
   variants: {
+    noBackground: {
+      true: {
+        backgroundColor: 'transparent',
+        borderColor: '$neutral-20',
+
+        hoverStyle: {
+          backgroundColor: 'transparent',
+          borderColor: '$neutral-30',
+        },
+      },
+    },
     selected: {
       true: {
         backgroundColor: '$neutral-30',
@@ -56,13 +68,14 @@ interface Props {
   icon: React.ReactElement
   onPress?: () => void
   selected?: boolean
+  noBackground?: boolean
 }
 
 const IconButton = (props: Props) => {
-  const { icon, selected, onPress } = props
+  const { icon, noBackground, selected, onPress } = props
 
   return (
-    <Base selected={selected} onPress={onPress}>
+    <Base selected={selected} onPress={onPress} noBackground={noBackground}>
       <Icon selected={selected}>{icon}</Icon>
     </Base>
   )

@@ -1,4 +1,8 @@
+export { AudioIcon } from './audio-icon'
+export { FormatIcon } from './format-icon'
+export { ImageIcon } from './image-icon'
 export { LockedIcon } from './lock-icon'
 export { MembersIcon } from './members-icon'
 export { OptionsIcon } from './options-icon'
+export { ReactionIcon } from './reaction-icon'
 export type { IconProps } from './types'
