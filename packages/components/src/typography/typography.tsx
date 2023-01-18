@@ -60,6 +60,11 @@ export const Paragraph = styled(SizableText, {
         lineHeight: 18,
         letterSpacing: '-0.003em',
       },
+      11: {
+        fontSize: 11,
+        lineHeight: 18,
+        letterSpacing: '-0.003em',
+      },
     },
     uppercase: {
       true: {
