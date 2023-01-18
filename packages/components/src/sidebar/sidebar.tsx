@@ -6,7 +6,7 @@ import { Accordion } from '../accordion/accordion'
 import { AccordionItem } from '../accordion/accordionItem'
 import { Avatar } from '../avatar'
 // import { Button } from '../button'
-import { Collaboration, Fire, Peach, Play, Unicorn } from '../emoji'
+import { Basketball, Collaboration, Fire, Peach, Play, Unicorn } from '../emoji'
 import { Group } from '../icon'
 import { Image } from '../image'
 import { Heading, Paragraph } from '../typography'
@@ -17,8 +17,22 @@ interface Props {
   membersCount: number
 }
 
+interface Channels {
+  id: string
+  title: string
+  icon?: React.ReactNode
+  channelStatus?: 'muted' | 'normal' | 'withMessages' | 'withMentions'
+  numberOfMessages?: number
+}
+interface CommunitiesProps {
+  id: string
+  title: string
+  numberOfNewMessages?: number
+  channels: Channels[]
+}
+
 // MOCK DATA
-const COMMUNITIES = [
+const COMMUNITIES: CommunitiesProps[] = [
   {
     id: 'welcome',
     title: 'Welcome',
@@ -80,6 +94,48 @@ const COMMUNITIES = [
     ],
   },
   {
+    id: 'Design',
+    title: 'Design',
+    channels: [
+      {
+        id: 'design',
+        title: '# design',
+        icon: <Collaboration hasBackground />,
+      },
+      {
+        id: 'ux',
+        title: '# ux',
+        icon: <Play hasBackground />,
+      },
+      {
+        id: 'ui',
+        title: '# ui',
+        icon: <Fire hasBackground />,
+      },
+      {
+        id: 'figma',
+        title: '# figma',
+        icon: <Unicorn hasBackground />,
+      },
+    ],
+  },
+  {
+    id: 'General',
+    title: 'General',
+    channels: [
+      {
+        id: 'general',
+        title: '# general',
+        icon: <Collaboration hasBackground />,
+      },
+      {
+        id: 'people-ops',
+        title: '# people-ops',
+        icon: <Basketball hasBackground />,
+      },
+    ],
+  },
+  {
     id: 'Frontend',
     title: 'Frontend',
     channels: [
@@ -87,6 +143,7 @@ const COMMUNITIES = [
         id: 'react',
         title: '# react',
         icon: <Collaboration hasBackground />,
+        channelStatus: 'withMessages',
       },
       {
         id: 'vue',
@@ -136,18 +193,25 @@ const COMMUNITIES = [
 ]
 
 const COMMUNITIES_EXPAND_CONTROL = COMMUNITIES.reduce(
-  (o, key) => ({ ...o, [key.title]: false }),
-  {}
+  (o, key) => ({ ...o, [key.id]: false }),
+
+  {} as Record<string, boolean>[]
 )
 
 const _Sidebar = (props: Props) => {
   const { name, description, membersCount } = props
-  const [isExpanded, setIsExpanded] = useState(COMMUNITIES_EXPAND_CONTROL)
+  const [isExpanded, setIsExpanded] = useState({
+    ...COMMUNITIES_EXPAND_CONTROL,
+    welcome: true,
+  })
 
   const [selectedChannel, setSelectedChannel] = useState('welcome')
 
   const handleToggle = (id: string) => {
-    setIsExpanded(prev => ({ ...prev, [id]: !prev[id] }))
+    setIsExpanded(prev => ({
+      ...prev,
+      [id]: !prev[id as keyof typeof isExpanded],
+    }))
   }
 
   return (
@@ -183,18 +247,20 @@ const _Sidebar = (props: Props) => {
         {COMMUNITIES.map(community => (
           <Accordion
             key={community.id}
-            isExpanded={isExpanded[community.id]}
+            isExpanded={!!isExpanded[community.id as keyof typeof isExpanded]}
             onToggle={() => handleToggle(community.id)}
             title={community.title}
             numberOfNewMessages={community.numberOfNewMessages}
-            showNotifications={!isExpanded[community.id]}
+            showNotifications={
+              !isExpanded[community.id as keyof typeof isExpanded]
+            }
           >
             {community.channels.map(channel => (
               <AccordionItem
                 key={channel.id}
                 icon={channel.icon}
                 title={channel.title}
-                channelStatus={channel.channelStatus as any}
+                channelStatus={channel.channelStatus}
                 numberOfMessages={channel.numberOfMessages}
                 isSelected={selectedChannel === channel.id}
                 onPress={() => setSelectedChannel(channel.id)}
@@ -203,98 +269,6 @@ const _Sidebar = (props: Props) => {
           </Accordion>
         ))}
         <Stack borderBottomColor="$neutral-10" borderBottomWidth={1} />
-
-        {/* <Accordion
-          isExpanded={isExpanded}
-          onToggle={() => setIsExpanded(!isExpanded)}
-          title="Welcome"
-          numberOfNewMessages={3}
-          showNotifications={!isExpanded}
-        >
-          <AccordionItem
-            icon={<Collaboration hasBackground />}
-            title="# welcome"
-            channelStatus="normal"
-            isSelected={selectedChannel === 0}
-            onPress={() => setSelectedChannel(0)}
-          />
-          <AccordionItem
-            icon={<Play hasBackground />}
-            title="# random"
-            channelStatus="muted"
-            isSelected={selectedChannel === 1}
-            onPress={() => setSelectedChannel(1)}
-          />
-          <AccordionItem
-            icon={<Fire hasBackground />}
-            title="# onboarding"
-            channelStatus="withMessages"
-            isSelected={selectedChannel === 2}
-            onPress={() => setSelectedChannel(2)}
-          />
-          <AccordionItem
-            icon={<Unicorn hasBackground />}
-            title="# intro"
-            channelStatus="withMentions"
-            numberOfMessages={3}
-            isSelected={selectedChannel === 3}
-            onPress={() => setSelectedChannel(3)}
-          />
-        </Accordion>
-        <Accordion
-          isExpanded={isExpandedSecondGroup}
-          onToggle={() => setIsExpandedSecondGroup(!isExpandedSecondGroup)}
-          title="Design"
-        >
-          <AccordionItem
-            icon={<Collaboration hasBackground />}
-            title="# general"
-            channelStatus="normal"
-            isSelected={selectedChannel === 4}
-            onPress={() => setSelectedChannel(4)}
-          />
-          <AccordionItem
-            icon={<Play hasBackground />}
-            title="# help"
-            channelStatus="muted"
-            isSelected={selectedChannel === 5}
-            onPress={() => setSelectedChannel(5)}
-          />
-          <AccordionItem
-            icon={<Collaboration hasBackground />}
-            title="# research"
-            isSelected={selectedChannel === 6}
-            onPress={() => setSelectedChannel(6)}
-          />
-        </Accordion>
-        <Accordion
-          isExpanded={isExpandedSecondGroup}
-          onToggle={() => setIsExpandedSecondGroup(!isExpandedSecondGroup)}
-          title="General"
-        >
-          <AccordionItem
-            icon={<Peach hasBackground />}
-            title="# general"
-            channelStatus="withMentions"
-            numberOfMessages={5}
-            isSelected={selectedChannel === 7}
-            onPress={() => setSelectedChannel(7)}
-          />
-          <AccordionItem
-            icon={<Play hasBackground />}
-            title="# help"
-            channelStatus="muted"
-            isSelected={selectedChannel === 8}
-            onPress={() => setSelectedChannel(8)}
-          />
-          <AccordionItem
-            icon={<Collaboration hasBackground />}
-            title="# research"
-            isSelected={selectedChannel === 8}
-            onPress={() => setSelectedChannel(8)}
-          />
-        </Accordion> */}
-
         {/* <Button mt={20}>Request to join community</Button> */}
       </Stack>
     </Stack>

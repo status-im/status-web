@@ -34,7 +34,6 @@ const AccordionItem = ({
   return (
     <Stack
       {...rest}
-      key={title}
       animation={[
         'fast',
         {

@@ -1,3 +1,4 @@
+export { Basketball } from './emojis/basketball'
 export { Collaboration } from './emojis/collaboration'
 export { Fire } from './emojis/fire'
 export { Peach } from './emojis/peach'
