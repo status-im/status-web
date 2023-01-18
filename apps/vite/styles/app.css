@@ -16,8 +16,7 @@ body,
   grid-template-rows: 56px 1fr 100px;
 }
 
-#main,
-#main > div {
+#main {
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
 

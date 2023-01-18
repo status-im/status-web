@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {
   Button,
   Code,
+  Composer,
   Heading,
   Label,
   Paragraph,
@@ -28,7 +29,6 @@ function App() {
             membersCount={123}
           />
         </div>
-
         <main id="main">
           <Stack
             backgroundColor="$background"
@@ -69,13 +69,7 @@ function App() {
               </Stack>
             </Stack>
           </div>
-          <Stack
-            backgroundColor="$background"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Paragraph weight="semibold">Composer</Paragraph>
-          </Stack>
+          <Composer />
         </main>
       </div>
     </TamaguiProvider>

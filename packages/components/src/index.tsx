@@ -1,4 +1,5 @@
 export * from './button'
+export * from './composer'
 export * from './image'
 export * from './input'
 export * from './shape'
