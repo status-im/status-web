@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@status-im/components": "*",
+    "@status-im/icons": "*",
     "@tamagui/core": "1.0.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
