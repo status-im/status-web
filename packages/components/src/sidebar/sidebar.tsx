@@ -5,6 +5,7 @@ import { Stack } from '@tamagui/core'
 import { Accordion } from '../accordion/accordion'
 import { AccordionItem } from '../accordion/accordionItem'
 import { Avatar } from '../avatar'
+import { Button } from '../button'
 // import { Button } from '../button'
 import { Basketball, Collaboration, Fire, Peach, Play, Unicorn } from '../emoji'
 import { Group } from '../icon'
@@ -229,7 +230,7 @@ const Sidebar = (props: Props) => {
         borderTopRightRadius={20}
         zIndex={10}
       >
-        <Stack paddingHorizontal={16}>
+        <Stack paddingHorizontal={16} paddingBottom={16}>
           <Stack marginTop={-32} marginBottom={12}>
             <Avatar
               withOutline
@@ -243,6 +244,8 @@ const Sidebar = (props: Props) => {
             <Group color="$neutral-100" size={16} />
             <Paragraph ml={8}>{membersCount}</Paragraph>
           </Stack>
+
+          <Button>Join community</Button>
         </Stack>
         {COMMUNITIES.map(community => (
           <Accordion
