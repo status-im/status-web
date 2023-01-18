@@ -7,6 +7,13 @@ import { animations } from './animations'
 import { themes } from './themes'
 import { tokens } from './tokens'
 
+export type Conf = typeof config
+
+declare module '@tamagui/core' {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface TamaguiCustomConfig extends Conf {}
+}
+
 const interFont = createInterFont({
   size: {
     6: 11,
