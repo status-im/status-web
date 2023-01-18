@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Stack, styled, Text } from '@tamagui/core'
+import { Stack, styled, Text, Unspaced } from '@tamagui/core'
 
 import { Image } from '../image'
 
@@ -66,6 +66,66 @@ const Base = styled(Stack, {
   } as const,
 })
 
+const Indicator = styled(Stack, {
+  name: 'Indicator',
+
+  position: 'absolute',
+  width: 8,
+  height: 8,
+  bottom: 0,
+  right: 0,
+  zIndex: 2,
+  // borderWidth: 2,
+  // borderColor: 'rgba(255,255,0,1.0)',
+
+  variants: {
+    size: {
+      56: {
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+      },
+      // FIXME: use catch all variant
+      52: {
+        width: 8,
+        height: 8,
+        borderRadius: 8 / 2,
+      },
+      48: {
+        width: 8,
+        height: 8,
+        borderRadius: 8 / 2,
+      },
+      32: {
+        width: 8,
+        height: 8,
+        borderRadius: 8 / 2,
+      },
+      20: {
+        width: 8,
+        height: 8,
+        borderRadius: 8 / 2,
+      },
+    },
+
+    state: {
+      online: {
+        backgroundColor: '$success-50',
+      },
+      offline: {
+        backgroundColor: '$neutral-40',
+      },
+    },
+
+    shape: {
+      circle: {},
+      rounded: {
+        borderRadius: 16,
+      },
+    },
+  } as const,
+})
+
 const Fallback = styled(Text, {
   name: 'AvatarFallback',
 })
@@ -83,7 +143,7 @@ interface Props {
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 const Avatar = (props: Props) => {
-  const { src, size, shape = 'circle', withOutline } = props
+  const { src, size, shape = 'circle', withOutline, indicator } = props
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
@@ -93,13 +153,21 @@ const Avatar = (props: Props) => {
 
   return (
     <Base size={size} shape={shape} withOutline={withOutline}>
-      <Image
-        src={src}
-        width={size}
-        height={size}
-        onLoad={() => setStatus('loaded')}
-        onError={() => setStatus('error')}
-      />
+      {indicator && (
+        <Unspaced>
+          <Indicator size={size} state={indicator} />
+        </Unspaced>
+      )}
+      <Stack borderRadius={28} overflow="hidden">
+        <Image
+          src={src}
+          width={size}
+          height={size}
+          onLoad={() => setStatus('loaded')}
+          onError={() => setStatus('error')}
+        />
+      </Stack>
+
       {status === 'error' && (
         <Fallback
           width={size}
