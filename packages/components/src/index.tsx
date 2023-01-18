@@ -1,4 +1,7 @@
 export * from './button'
+export * from './chat-message'
+export * from './divider'
+export * from './icon-button'
 export * from './image'
 export * from './input'
 export * from './shape'
