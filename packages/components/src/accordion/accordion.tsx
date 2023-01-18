@@ -1,53 +1,101 @@
 import React from 'react'
 
 import { Stack } from '@tamagui/core'
-import { AnimatePresence, ListItem, YGroup } from 'tamagui'
+import { AnimatePresence } from 'tamagui'
 
 import { Chevron } from '../icon'
-import { Paragraph } from '../typography'
+import { Label, Paragraph } from '../typography'
 
 import type { GetProps } from '@tamagui/core'
 
-type BaseProps = GetProps<typeof YGroup>
+type BaseProps = GetProps<typeof Stack>
 
 type Props = {
   children: React.ReactElement[] | React.ReactElement
   isExpanded: boolean
   onToggle?: () => void
   title: string
+  numberOfNewMessages?: number
+  showNotifications?: boolean
 } & BaseProps
 
-const Accordion = ({ children, isExpanded, onToggle, title }: Props) => {
+const Accordion = ({
+  children,
+  isExpanded,
+  onToggle,
+  title,
+  numberOfNewMessages,
+  showNotifications,
+}: Props) => {
   return (
-    <YGroup
-      w="100%"
+    <Stack
+      width="100%"
       borderRadius="$0"
       borderTopWidth={1}
       borderTopColor="$neutral-10"
+      paddingHorizontal={8}
     >
-      <ListItem size={20} justifyContent="flex-start">
+      <Stack justifyContent="flex-start">
         <Stack width="100%">
           <Stack
+            width="100%"
             flexDirection="row"
-            alignItems="center"
+            justifyContent={'space-between'}
+            onPress={onToggle}
             cursor="pointer"
             py={8}
-            onPress={onToggle}
           >
-            <Stack
-              animation="fast"
-              transform={[{ rotateZ: isExpanded ? '90deg' : '0deg' }]}
-            >
-              <Chevron color="$neutral-50" size={20} />
+            <Stack flexDirection="row" alignItems="center">
+              <Stack
+                animation="fast"
+                transform={[{ rotateZ: isExpanded ? '90deg' : '0deg' }]}
+              >
+                <Chevron color="$neutral-50" size={16} />
+              </Stack>
+              <Paragraph
+                marginLeft={4}
+                color="$neutral-50"
+                weight="medium"
+                variant="smaller"
+              >
+                {title}
+              </Paragraph>
             </Stack>
-            <Paragraph
-              marginLeft={8}
-              color="$neutral-50"
-              weight="medium"
-              variant="smaller"
-            >
-              {title}
-            </Paragraph>
+            <AnimatePresence>
+              {showNotifications && numberOfNewMessages && (
+                <Stack
+                  key={`notifications-${title}}`}
+                  width={20}
+                  justifyContent="center"
+                  alignItems="center"
+                  mr={8}
+                  animation={[
+                    'fast',
+                    {
+                      opacity: {
+                        overshootClamping: true,
+                      },
+                    },
+                  ]}
+                  enterStyle={{ opacity: 0 }}
+                  exitStyle={{ opacity: 0 }}
+                  opacity={1}
+                >
+                  <Stack
+                    backgroundColor="$turquoise-50"
+                    borderRadius="$4"
+                    width={16}
+                    height={16}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Label color="$white-100" weight="medium">
+                      {numberOfNewMessages}
+                    </Label>
+                  </Stack>
+                </Stack>
+              )}
+            </AnimatePresence>
           </Stack>
           <AnimatePresence>
             {isExpanded && (
@@ -55,8 +103,8 @@ const Accordion = ({ children, isExpanded, onToggle, title }: Props) => {
             )}
           </AnimatePresence>
         </Stack>
-      </ListItem>
-    </YGroup>
+      </Stack>
+    </Stack>
   )
 }
 

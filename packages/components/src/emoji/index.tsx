@@ -1,3 +1,5 @@
 export { Collaboration } from './emojis/collaboration'
 export { Fire } from './emojis/fire'
+export { Peach } from './emojis/peach'
 export { Play } from './emojis/play'
+export { Unicorn } from './emojis/unicorn'

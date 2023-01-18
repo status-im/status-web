@@ -1,4 +1,4 @@
-import { isWeb, Stack } from '@tamagui/core'
+import { Stack } from '@tamagui/core'
 
 import { Muted } from '../icon'
 import { Label, Paragraph } from '../typography'
@@ -35,14 +35,21 @@ const AccordionItem = ({
     <Stack
       {...rest}
       key={title}
-      // TODO fix this when having animations for react native
-      {...(isWeb && { animation: 'fast' })}
+      animation={[
+        'fast',
+        {
+          opacity: {
+            overshootClamping: true,
+          },
+        },
+      ]}
       backgroundColor={isSelected ? '$turquoise-50-opa-10' : 'transparent'}
       borderRadius="$4"
       padding={8}
       width="100%"
       enterStyle={{ opacity: 0 }}
       exitStyle={{ opacity: 0 }}
+      opacity={1}
       justifyContent={
         channelStatus === 'normal' ? 'flex-start' : 'space-between'
       }
