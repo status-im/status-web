@@ -3,7 +3,7 @@ import { createInterFont } from '@tamagui/font-inter'
 import { createMedia } from '@tamagui/react-native-media-driver'
 import { shorthands } from '@tamagui/shorthands'
 
-import { animations, animationsCSS } from './animations'
+import { animations } from './animations'
 import { themes } from './themes'
 import { tokens } from './tokens'
 
@@ -106,8 +106,5 @@ export const config = createTamagui({
     pointerCoarse: { pointer: 'coarse' },
   }),
   shorthands,
-  animations: {
-    ...animations,
-    ...animationsCSS,
-  },
+  animations,
 })

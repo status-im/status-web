@@ -1,4 +1,6 @@
-import { setupReactNative, Stack, styled } from '@tamagui/core'
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable import/namespace */
+import { setupReactNative, styled } from '@tamagui/core'
 // import { focusableInputHOC } from '@tamagui/focusable'
 import { TextInput } from 'react-native'
 
@@ -43,7 +45,7 @@ export const InputFrame = styled(
     // },/
 
     // focusStyle: {
-    //   // borderColor: '$borderColorFocus',
+
     //   borderWidth: 2,
     //   marginHorizontal: -1,
     // },
