@@ -43,6 +43,7 @@
     "@tamagui/vite-plugin": "1.0.15",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-native-svg": "^13.7.0",
     "react-native-web": "^0.18.0",
     "storybook": "^7.0.0-beta.21",
     "storybook-addon-designs": "^7.0.0-beta.2",

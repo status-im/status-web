@@ -18,7 +18,9 @@ const Base = styled(Stack, {
   display: 'inline-flex',
   position: 'relative',
   overflow: 'hidden',
-  backgroundColor: 'rgb(255,255,255)',
+  backgroundColor: '$white-100',
+  justifyContent: 'center',
+  alignItems: 'center',
 
   variants: {
     size: {
@@ -55,6 +57,12 @@ const Base = styled(Stack, {
         borderRadius: 16,
       },
     },
+    withOutline: {
+      true: {
+        borderWidth: 2,
+        borderColor: '$white-100',
+      },
+    },
   } as const,
 })
 
@@ -69,12 +77,13 @@ interface Props {
   size: NonNullable<BaseProps['size']>
   indicator?: 'online' | 'offline'
   shape?: 'circle' | 'rounded'
+  withOutline?: boolean
 }
 
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 const Avatar = (props: Props) => {
-  const { src, size, shape = 'circle' } = props
+  const { src, size, shape = 'circle', withOutline } = props
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
@@ -83,7 +92,7 @@ const Avatar = (props: Props) => {
   }, [JSON.stringify(src)])
 
   return (
-    <Base size={size} shape={shape}>
+    <Base size={size} shape={shape} withOutline={withOutline}>
       <Image
         src={src}
         width={size}
@@ -91,15 +100,17 @@ const Avatar = (props: Props) => {
         onLoad={() => setStatus('loaded')}
         onError={() => setStatus('error')}
       />
-      <Fallback
-        width={size}
-        height={size}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        PP
-      </Fallback>
+      {status === 'error' && (
+        <Fallback
+          width={size}
+          height={size}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          PP
+        </Fallback>
+      )}
     </Base>
   )
 }

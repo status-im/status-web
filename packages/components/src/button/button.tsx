@@ -1,9 +1,8 @@
-import { styled, Text } from '@tamagui/core'
-import { ButtonFrame } from 'tamagui'
+import { Stack, styled, Text } from '@tamagui/core'
 
 import type { GetProps } from '@tamagui/core'
 
-const Base = styled(ButtonFrame, {
+const Base = styled(Stack, {
   // tag: 'button',
 
   cursor: 'pointer',
@@ -31,24 +30,22 @@ const Base = styled(ButtonFrame, {
 const ButtonText = styled(Text, {
   fontFamily: '$inter',
   textAlign: 'center',
-  color: '$white',
+  color: '$white-100',
 })
 
 type BaseProps = GetProps<typeof Base>
 
-interface Props {
+type Props = {
   type?: BaseProps['type']
   children: string
   onPress?: () => void
-}
+} & Omit<BaseProps, 'type'>
 
 const Button = (props: Props) => {
-  const { type = 'primary', children, onPress } = props
-  console.log(onPress)
+  const { type = 'primary', children, onPress, ...rest } = props
 
-  console.log('Button', type)
   return (
-    <Base type={type} onPress={onPress}>
+    <Base {...rest} type={type} onPress={onPress}>
       <ButtonText>{children}</ButtonText>
     </Base>
   )
