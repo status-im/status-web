@@ -1,16 +1,23 @@
-import { Stack, styled, Text } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
+
+import { Paragraph } from '../typography'
 
 import type { GetProps } from '@tamagui/core'
+// import { Pressable } from 'react-native'
 
 const Base = styled(Stack, {
-  // tag: 'button',
+  name: 'Button',
+  accessibilityRole: 'button',
 
   cursor: 'pointer',
   borderRadius: 12,
   display: 'inline-flex',
   paddingHorizontal: 16,
-  paddingVertical: 10,
+  paddingTop: 7,
+  paddingBottom: 9,
   animation: 'fast',
+  userSelect: 'none',
+
   variants: {
     type: {
       primary: {
@@ -27,12 +34,6 @@ const Base = styled(Stack, {
   } as const,
 })
 
-const ButtonText = styled(Text, {
-  fontFamily: '$inter',
-  textAlign: 'center',
-  color: '$white-100',
-})
-
 type BaseProps = GetProps<typeof Base>
 
 type Props = {
@@ -46,9 +47,12 @@ const Button = (props: Props) => {
 
   return (
     <Base {...rest} type={type} onPress={onPress}>
-      <ButtonText>{children}</ButtonText>
+      <Paragraph color="$white-100" textAlign="center" weight="medium">
+        {children}
+      </Paragraph>
     </Base>
   )
 }
 
 export { Button }
+export type { Props as ButtonProps }
