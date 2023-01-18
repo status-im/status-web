@@ -6,6 +6,7 @@ import {
   Composer,
   Heading,
   Label,
+  Messages,
   Paragraph,
   Shape,
   Sidebar,
@@ -13,11 +14,13 @@ import {
 import { Stack, TamaguiProvider } from '@tamagui/core'
 
 import tamaguiConfig from '../tamagui.config'
+import { Topbar } from './components/topbar'
 
 type ThemeVars = 'light' | 'dark'
 
 function App() {
   const [theme, setTheme] = useState<ThemeVars>('light')
+  const [showMembers, setShowMembers] = useState(false)
 
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
@@ -30,14 +33,13 @@ function App() {
           />
         </div>
         <main id="main">
-          <Stack
-            backgroundColor="$background"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Paragraph weight="semibold">Topbar</Paragraph>
-          </Stack>
-          <div>
+          <Topbar
+            membersVisisble={showMembers}
+            onMembersPress={() => setShowMembers(show => !show)}
+          />
+          <div id="content">
+            <Messages />
+
             <Stack width="100%" height="100%" backgroundColor="$background">
               <Stack
                 flexDirection="column"
@@ -71,6 +73,8 @@ function App() {
           </div>
           <Composer />
         </main>
+
+        {showMembers && <div id="members">members</div>}
       </div>
     </TamaguiProvider>
   )

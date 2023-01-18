@@ -8,12 +8,13 @@ body,
 #app {
   height: 100%;
   display: grid;
-  grid-template-columns: 352px 1fr;
+  grid-template-columns: 352px 1fr auto;
 }
 
 #main {
   display: grid;
   grid-template-rows: 56px 1fr 100px;
+  height: 100vh;
 }
 
 #main {
@@ -23,4 +24,14 @@ body,
 #sidebar {
   overflow: auto;
   height: 100vh;
+}
+
+#content {
+  overflow: auto;
+  padding: 8px;
+}
+
+#members {
+  width: 352px;
+  color: #000;
 }

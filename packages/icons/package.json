@@ -1,0 +1,28 @@
+{
+  "name": "@status-im/icons",
+  "version": "0.0.1",
+  "types": "src/index.tsx",
+  "main": "src/index.tsx",
+  "private": true,
+  "files": [
+    "types",
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
+    "postbuild": "yarn typegen",
+    "#test": "vitest",
+    "typecheck": "tsc",
+    "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
+    "lint": "eslint src",
+    "format": "prettier --write src",
+    "clean": "rm -rf dist node_modules .turbo"
+  },
+  "peerDependencies": {
+    "react": "^16.x || ^17.x || ^18.x"
+  },
+  "devDependencies": {
+    "vite": "^4.0.4"
+  }
+}

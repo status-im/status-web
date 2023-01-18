@@ -5,6 +5,7 @@ import { Stack } from '@tamagui/core'
 import { Accordion } from '../accordion/accordion'
 import { AccordionItem } from '../accordion/accordionItem'
 import { Avatar } from '../avatar'
+import { Button } from '../button'
 // import { Button } from '../button'
 import { Basketball, Collaboration, Fire, Peach, Play, Unicorn } from '../emoji'
 import { Group } from '../icon'
@@ -198,7 +199,7 @@ const COMMUNITIES_EXPAND_CONTROL = COMMUNITIES.reduce(
   {} as Record<string, boolean>[]
 )
 
-const _Sidebar = (props: Props) => {
+const Sidebar = (props: Props) => {
   const { name, description, membersCount } = props
   const [isExpanded, setIsExpanded] = useState({
     ...COMMUNITIES_EXPAND_CONTROL,
@@ -218,8 +219,8 @@ const _Sidebar = (props: Props) => {
     <Stack backgroundColor="$background">
       <Image
         src="https://images.unsplash.com/photo-1584475784921-d9dbfd9d17ca?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
-        width={352}
-        height={136}
+        width="full"
+        aspectRatio={2.6}
       />
       <Stack
         paddingBottom={16}
@@ -229,7 +230,7 @@ const _Sidebar = (props: Props) => {
         borderTopRightRadius={20}
         zIndex={10}
       >
-        <Stack paddingHorizontal={16}>
+        <Stack paddingHorizontal={16} paddingBottom={16}>
           <Stack marginTop={-32} marginBottom={12}>
             <Avatar
               withOutline
@@ -243,6 +244,8 @@ const _Sidebar = (props: Props) => {
             <Group color="$neutral-100" size={16} />
             <Paragraph ml={8}>{membersCount}</Paragraph>
           </Stack>
+
+          <Button>Join community</Button>
         </Stack>
         {COMMUNITIES.map(community => (
           <Accordion
@@ -275,4 +278,4 @@ const _Sidebar = (props: Props) => {
   )
 }
 
-export const Sidebar = _Sidebar
+export { Sidebar }
