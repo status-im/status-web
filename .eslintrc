@@ -90,6 +90,7 @@
         "alwaysTryTypes": true,
         "project": ["tsconfig.base.json", "packages/*/tsconfig.json"]
       }
-    }
+    },
+    "import/ignore": ["react-native"]
   }
 }
