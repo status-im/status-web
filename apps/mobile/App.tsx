@@ -7,8 +7,8 @@ import { useState } from 'react'
 import {
   Code,
   Heading,
-  Image,
   Label,
+  Messages,
   Paragraph,
   Shape,
   Sidebar,
@@ -38,13 +38,6 @@ export default function App() {
     <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
       <SafeAreaView>
         <ScrollView>
-          <Image
-            source={{
-              uri: 'https://images.unsplash.com/photo-1673537074513-e66435b69012?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
-              height: 200,
-              width: '100%',
-            }}
-          />
           <Sidebar
             name="Rarible"
             description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
@@ -55,6 +48,7 @@ export default function App() {
             justifyContent="center"
             alignItems="center"
             paddingTop={20}
+            paddingHorizontal={12}
             width="100%"
             backgroundColor="$background"
           >
@@ -74,12 +68,15 @@ export default function App() {
             <Code marginBottom={12}>This is a code line</Code>
             <Paragraph fontWeight="400">0x213abc190 ... 121ah4a9e</Paragraph>
             <Shape marginVertical={20} />
+
             <Paragraph>Theme selected - {theme}</Paragraph>
             <TouchableOpacity
               onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
               <Paragraph>Toogle theme</Paragraph>
             </TouchableOpacity>
+
+            <Messages />
           </Stack>
         </ScrollView>
       </SafeAreaView>
