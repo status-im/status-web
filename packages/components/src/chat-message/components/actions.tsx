@@ -1,15 +1,15 @@
 import { Stack } from 'tamagui'
 
-import { Text } from '../../typography'
+import { Paragraph } from '../../typography'
 
-interface Props {}
+interface Props {
+  onClick: VoidFunction
+}
 
-export const Actions = (props: Props) => {
-  const {} = props
-
+export const Actions = (_props: Props) => {
   return (
     <Stack position="absolute" top={0} right={0}>
-      <Text>actions</Text>
+      <Paragraph>actions</Paragraph>
     </Stack>
   )
 }

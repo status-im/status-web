@@ -29,6 +29,7 @@
     "@tamagui/react-native-media-driver": "1.0.15",
     "@tamagui/shorthands": "1.0.15",
     "@tamagui/theme-base": "1.0.15",
+    "@status-im/icons": "*",
     "tamagui": "1.0.15"
   },
   "devDependencies": {
