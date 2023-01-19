@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import {
   AudioIcon,
   FormatIcon,
@@ -16,7 +14,6 @@ import type { GetProps } from '@tamagui/core'
 type BaseProps = GetProps<typeof YStack>
 
 const Composer = (props: BaseProps) => {
-  const [showMembers, setShowMembers] = useState(false)
   return (
     <YStack
       backgroundColor="$background"
@@ -42,15 +39,11 @@ const Composer = (props: BaseProps) => {
       </YStack>
       <XStack alignItems="center" justifyContent="space-between" pt={8}>
         <Stack space={12} flexDirection="row">
-          <IconButton
-            icon={<ImageIcon />}
-            selected={showMembers}
-            onPress={() => setShowMembers(!showMembers)}
-          />
-          <IconButton icon={<ReactionIcon />} />
-          <IconButton icon={<FormatIcon />} />
+          <IconButton noBackground icon={<ImageIcon />} />
+          <IconButton noBackground icon={<ReactionIcon />} />
+          <IconButton noBackground icon={<FormatIcon />} />
         </Stack>
-        <IconButton icon={<AudioIcon />} />
+        <IconButton noBackground icon={<AudioIcon />} />
       </XStack>
     </YStack>
   )
