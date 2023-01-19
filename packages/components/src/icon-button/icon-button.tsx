@@ -15,13 +15,17 @@ const Base = styled(Stack, {
   justifyContent: 'center',
   animation: 'fast',
 
-  width: 31,
-  height: 31,
+  width: 30,
+  height: 30,
   borderWidth: 1,
   backgroundColor: '$neutral-10',
   borderColor: '$neutral-10',
 
   hoverStyle: {
+    backgroundColor: '$neutral-20',
+  },
+
+  pressStyle: {
     backgroundColor: '$neutral-20',
   },
 
@@ -32,6 +36,11 @@ const Base = styled(Stack, {
         borderColor: '$neutral-20',
 
         hoverStyle: {
+          backgroundColor: 'transparent',
+          borderColor: '$neutral-30',
+        },
+
+        pressStyle: {
           backgroundColor: 'transparent',
           borderColor: '$neutral-30',
         },
@@ -76,7 +85,9 @@ const IconButton = (props: Props) => {
 
   return (
     <Base selected={selected} onPress={onPress} noBackground={noBackground}>
-      <Icon selected={selected}>{icon}</Icon>
+      <Icon selected={selected} pointerEvents="none">
+        {icon}
+      </Icon>
     </Base>
   )
 }

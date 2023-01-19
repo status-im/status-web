@@ -37,7 +37,7 @@ export const All: Story = {
               key={name}
               style={{ display: 'flex', flexDirection: 'column' }}
             >
-              <Icon color="black" />
+              <Icon color="$background" />
               <Paragraph>{unpascal(name)}</Paragraph>
             </div>
           )

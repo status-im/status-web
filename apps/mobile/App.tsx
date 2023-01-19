@@ -2,27 +2,26 @@
 /* eslint-disable import/namespace */
 import 'expo-dev-client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import {
-  Code,
-  Heading,
-  Label,
-  Messages,
-  Paragraph,
-  Shape,
-  Sidebar,
-} from '@status-im/components'
-import { Stack, TamaguiProvider } from '@tamagui/core'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { Heading } from '@status-im/components'
+import { Avatar } from '@status-im/components/src/avatar'
+import { Stack as View, TamaguiProvider } from '@tamagui/core'
 import { useFonts } from 'expo-font'
-import { SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { AnimatePresence } from 'tamagui'
 
+import { NavigationProvider } from './navigation/provider'
+import { ChannelScreen } from './screens/channel'
+import { HomeScreen } from './screens/home'
 import tamaguiConfig from './tamagui.config'
 
-type ThemeVars = 'light' | 'dark'
+const Stack = createNativeStackNavigator()
 
 export default function App() {
-  const [theme, setTheme] = useState<ThemeVars>('light')
+  const [position, setPosition] = useState(0)
+
   const [loaded] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
@@ -30,56 +29,95 @@ export default function App() {
     UbuntuMono: require('./assets/fonts/UbuntuMono.ttf'),
   })
 
+  const onScroll = event => {
+    if (event.nativeEvent.contentOffset.y > 90) {
+      setPosition(event.nativeEvent.contentOffset.y)
+    } else {
+      setPosition(0)
+    }
+  }
+
+  const showMinimizedHeader = useMemo(() => {
+    return position > 90
+  }, [position])
+
   if (!loaded) {
     return null
   }
 
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
-      <SafeAreaView>
-        <ScrollView>
-          <Sidebar
-            name="Rarible"
-            description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
-            membersCount={123}
-          />
-          <Stack
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            paddingTop={20}
-            paddingHorizontal={12}
-            width="100%"
-            backgroundColor="$background"
-          >
-            <Heading weight="semibold" marginBottom={12}>
-              Communities
-            </Heading>
-            <Heading heading="h2" marginBottom={12}>
-              This is an Heading 2
-            </Heading>
-            <Paragraph weight="semibold" marginBottom={12} uppercase>
-              Paragraph uppercased and bolded
-            </Paragraph>
-            <Paragraph marginBottom={12} uppercase>
-              This is a paragraph
-            </Paragraph>
-            <Label marginBottom={12}>This is a label</Label>
-            <Code marginBottom={12}>This is a code line</Code>
-            <Paragraph fontWeight="400">0x213abc190 ... 121ah4a9e</Paragraph>
-            <Shape marginVertical={20} />
-
-            <Paragraph>Theme selected - {theme}</Paragraph>
-            <TouchableOpacity
-              onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
+      <NavigationProvider>
+        <SafeAreaProvider>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              options={{
+                headerBlurEffect: 'systemUltraThinMaterialLight',
+                headerTransparent: true,
+                headerShadowVisible: true,
+                header: () => (
+                  <View
+                    height={100}
+                    animation="fast"
+                    backgroundColor={
+                      showMinimizedHeader ? '$background' : 'transparent'
+                    }
+                    padding={16}
+                    paddingTop={48}
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <AnimatePresence>
+                      {showMinimizedHeader && (
+                        <View
+                          key="header"
+                          animation={[
+                            'fast',
+                            {
+                              opacity: {
+                                overshootClamping: true,
+                              },
+                            },
+                          ]}
+                          enterStyle={{ opacity: 0 }}
+                          exitStyle={{ opacity: 0 }}
+                          opacity={1}
+                          flexDirection="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          width="100%"
+                        >
+                          <Heading color="$textPrimary">Rarible</Heading>
+                          <Avatar
+                            withOutline
+                            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images"
+                            size={48}
+                          />
+                        </View>
+                      )}
+                    </AnimatePresence>
+                  </View>
+                ),
+              }}
             >
-              <Paragraph>Toogle theme</Paragraph>
-            </TouchableOpacity>
-
-            <Messages />
-          </Stack>
-        </ScrollView>
-      </SafeAreaView>
+              {props => (
+                <HomeScreen
+                  {...props}
+                  onScroll={onScroll}
+                  isMinimized={showMinimizedHeader}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen
+              name="Channel"
+              component={ChannelScreen}
+              options={{ title: 'Messages' }}
+            />
+          </Stack.Navigator>
+        </SafeAreaProvider>
+      </NavigationProvider>
     </TamaguiProvider>
   )
 }

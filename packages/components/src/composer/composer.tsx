@@ -11,7 +11,11 @@ import { Stack, XStack, YStack } from 'tamagui'
 import { IconButton } from '../icon-button'
 import { Input } from '../input'
 
-const Composer = () => {
+import type { GetProps } from '@tamagui/core'
+
+type BaseProps = GetProps<typeof YStack>
+
+const Composer = (props: BaseProps) => {
   const [showMembers, setShowMembers] = useState(false)
   return (
     <YStack
@@ -25,6 +29,8 @@ const Composer = () => {
       px={16}
       pt={8}
       pb={12}
+      width="100%"
+      {...props}
     >
       <YStack>
         <Input
@@ -37,15 +43,14 @@ const Composer = () => {
       <XStack alignItems="center" justifyContent="space-between" pt={8}>
         <Stack space={12} flexDirection="row">
           <IconButton
-            noBackground
             icon={<ImageIcon />}
             selected={showMembers}
             onPress={() => setShowMembers(!showMembers)}
           />
-          <IconButton noBackground icon={<ReactionIcon />} />
-          <IconButton noBackground icon={<FormatIcon />} />
+          <IconButton icon={<ReactionIcon />} />
+          <IconButton icon={<FormatIcon />} />
         </Stack>
-        <IconButton noBackground icon={<AudioIcon />} />
+        <IconButton icon={<AudioIcon />} />
       </XStack>
     </YStack>
   )

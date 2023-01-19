@@ -24,6 +24,11 @@ const Base = styled(Stack, {
 
   variants: {
     size: {
+      80: {
+        width: 80,
+        height: 80,
+        borderRadius: 80 / 2,
+      },
       56: {
         width: 56,
         height: 56,
@@ -80,10 +85,15 @@ const Indicator = styled(Stack, {
 
   variants: {
     size: {
+      80: {
+        width: 10,
+        height: 10,
+        borderRadius: '50%',
+      },
       56: {
         width: 10,
         height: 10,
-        borderRadius: 10 / 2,
+        borderRadius: '50%',
       },
       // FIXME: use catch all variant
       52: {

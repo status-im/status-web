@@ -40,6 +40,12 @@ function App() {
   const [theme, setTheme] = useState<ThemeVars>('light')
   const [showMembers, setShowMembers] = useState(false)
 
+  const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
+
+  const onChannelPress = (id: string) => {
+    setSelectedChannel(id)
+  }
+
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
       <div id="app">
@@ -48,6 +54,8 @@ function App() {
             name="Rarible"
             description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
             membersCount={123}
+            onChannelPress={onChannelPress}
+            selectedChannel={selectedChannel}
           />
         </div>
         <main id="main">
@@ -105,8 +113,8 @@ function App() {
                   },
                 },
               ]}
-              enterStyle={{ opacity: 0, width: 200 }}
-              exitStyle={{ opacity: 0, width: 0 }}
+              enterStyle={{ opacity: 0 }}
+              exitStyle={{ opacity: 0 }}
               opacity={1}
             >
               members
