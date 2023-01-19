@@ -1,1 +1,1 @@
-export { Avatar } from './avatar'
+export * from './avatar'
