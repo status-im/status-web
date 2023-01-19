@@ -9,6 +9,8 @@ export * from './messages'
 export * from './shape'
 export * from './sidebar'
 export * from './sidebar-members'
-export { config } from './tamagui.config'
 export * from './typography'
 export * from './user-list'
+
+// eslint-disable-next-line simple-import-sort/exports
+export { config } from './tamagui.config'
