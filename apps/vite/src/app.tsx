@@ -10,31 +10,32 @@ import {
   Paragraph,
   Shape,
   Sidebar,
+  SidebarMembers,
 } from '@status-im/components'
 import { Stack, styled, TamaguiProvider } from '@tamagui/core'
-import { AnimatePresence } from 'tamagui'
 
+// import { AnimatePresence } from 'tamagui'
 import tamaguiConfig from '../tamagui.config'
 import { Topbar } from './components/topbar'
 
 type ThemeVars = 'light' | 'dark'
 
-const AnimatableDrawer = styled(Stack, {
-  variants: {
-    fromRight: {
-      true: {
-        x: 500,
-        width: 0,
-      },
-    },
-    fromLeft: {
-      true: {
-        x: 500,
-        width: 250,
-      },
-    },
-  },
-})
+// const AnimatableDrawer = styled(Stack, {
+//   variants: {
+//     fromRight: {
+//       true: {
+//         x: 500,
+//         width: 0,
+//       },
+//     },
+//     fromLeft: {
+//       true: {
+//         x: 500,
+//         width: 250,
+//       },
+//     },
+//   },
+// })
 
 function App() {
   const [theme, setTheme] = useState<ThemeVars>('light')
@@ -47,7 +48,7 @@ function App() {
   }
 
   return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
+    <TamaguiProvider config={tamaguiConfig} defaultTheme={'light'}>
       <div id="app">
         <div id="sidebar">
           <Sidebar
@@ -65,62 +66,15 @@ function App() {
           />
           <div id="content">
             <Messages />
-
-            <Stack width="100%" height="100%" backgroundColor="$background">
-              <Stack
-                flexDirection="column"
-                justifyContent="center"
-                alignItems="center"
-                height="100%"
-                width="100%"
-              >
-                <Heading marginBottom={12}>This is an Heading 1</Heading>
-                <Heading marginBottom={12} heading="h2">
-                  This is an Heading 2
-                </Heading>
-                <Paragraph weight="semibold" uppercase marginBottom={12}>
-                  This is a paragraph
-                </Paragraph>
-                <Label marginBottom={12}>This is a label</Label>
-                <Code marginBottom={12}>This is a code</Code>
-                <Paragraph>0x213abc190 ... 121ah4a9e</Paragraph>
-                <Paragraph marginVertical={20}>
-                  Theme selected - {theme}{' '}
-                </Paragraph>
-                <Button
-                  type="positive"
-                  onPress={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                >
-                  Toogle theme
-                </Button>
-                <Shape marginTop={20} />
-              </Stack>
-            </Stack>
           </div>
           <Composer />
         </main>
 
-        <AnimatePresence>
-          {showMembers && (
-            <AnimatableDrawer
-              id="members"
-              key="members"
-              animation={[
-                'fast',
-                {
-                  opacity: {
-                    overshootClamping: true,
-                  },
-                },
-              ]}
-              enterStyle={{ opacity: 0 }}
-              exitStyle={{ opacity: 0 }}
-              opacity={1}
-            >
-              members
-            </AnimatableDrawer>
-          )}
-        </AnimatePresence>
+        {showMembers && (
+          <div id="members">
+            <SidebarMembers />
+          </div>
+        )}
       </div>
     </TamaguiProvider>
   )

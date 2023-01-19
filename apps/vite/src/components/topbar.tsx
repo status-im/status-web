@@ -17,6 +17,8 @@ export const Topbar = (props: Props) => {
       alignItems="center"
       justifyContent="space-between"
       padding={16}
+      borderBottomWidth={1}
+      borderColor="$neutral-10"
     >
       <Stack flexDirection="row" alignItems="center">
         <Paragraph weight="semibold" marginRight={4}>

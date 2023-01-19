@@ -5,6 +5,11 @@ body,
   overscroll-behavior: none;
 }
 
+*::selection {
+  color: #fff;
+  background: hsla(229, 71%, 57%, 1);
+}
+
 #app {
   height: 100%;
   display: grid;
@@ -15,10 +20,14 @@ body,
   display: grid;
   grid-template-rows: 56px 1fr 100px;
   height: 100vh;
-  overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-width: 0 1px;
 }
+
+/* #main,
+#sidebar,
+#members,
+#main > div {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+} */
 
 #sidebar {
   overflow: auto;
@@ -32,5 +41,5 @@ body,
 
 #members {
   width: 352px;
-  color: #000;
+  overflow: auto;
 }
