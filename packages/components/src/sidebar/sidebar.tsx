@@ -56,9 +56,15 @@ const Sidebar = (props: Props) => {
   }
 
   return (
-    <Stack backgroundColor="$background">
+    <Stack
+      backgroundColor="$background"
+      borderRightWidth={1}
+      borderColor="$neutral-10"
+      height="100%"
+      overflow="scroll"
+    >
       <Image
-        src="https://images.unsplash.com/photo-1584475784921-d9dbfd9d17ca?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
+        src="https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80"
         width="full"
         aspectRatio={2.6}
       />
