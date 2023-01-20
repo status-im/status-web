@@ -27,21 +27,18 @@
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "format": "prettier --write src",
-    "protos:list": "buf ls-files src/protos",
-    "protos:lint": "buf lint src/protos",
-    "protos": "buf generate src/protos",
-    "clean": "rm -rf dist node_modules .turbo"
+    "protos": "protons protos/*.proto",
+    "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^1.0.0",
-    "@scure/base": "^1.1.1",
     "ethereum-cryptography": "^1.0.3",
-    "ethers": "^6.2.1",
     "js-waku": "^0.30.0",
-    "multiformats": "^11.0.1"
+    "long": "^5.2.0",
+    "protobufjs": "^6.11.3",
+    "protons-runtime": "^1.0.4"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^1.0.0"
+    "protons": "^3.0.4"
   },
   "files": [
     "dist/",
