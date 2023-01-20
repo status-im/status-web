@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src"],
+  "include": ["12", "16", "20", "reactions"],
   "compilerOptions": {
     "outDir": "./dist",
     "declarationDir": "dist/types",
