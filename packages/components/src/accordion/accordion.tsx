@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { ChevronIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 import { AnimatePresence } from 'tamagui'
 
-import { Chevron } from '../icon'
 import { Label, Paragraph } from '../typography'
 
 import type { GetProps } from '@tamagui/core'
@@ -48,9 +48,17 @@ const Accordion = ({
             <Stack flexDirection="row" alignItems="center">
               <Stack
                 animation="fast"
-                transform={[{ rotateZ: isExpanded ? '90deg' : '0deg' }]}
+                justifyContent="center"
+                transform={[
+                  {
+                    rotateZ: isExpanded ? '90deg' : '0deg',
+                  },
+                  {
+                    translateY: isExpanded ? -4 : 0,
+                  },
+                ]}
               >
-                <Chevron color="$neutral-50" size={16} />
+                <ChevronIcon color="$neutral-50" size={16} />
               </Stack>
               <Paragraph
                 marginLeft={4}

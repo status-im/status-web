@@ -1,5 +1,6 @@
 export * from './button'
 export * from './chat-message'
+export * from './composer'
 export * from './divider'
 export * from './icon-button'
 export * from './image'

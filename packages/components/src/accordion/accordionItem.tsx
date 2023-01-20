@@ -1,6 +1,6 @@
+import { MutedIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
-import { Muted } from '../icon'
 import { Label, Paragraph } from '../typography'
 
 import type { GetProps } from '@tamagui/core'
@@ -42,7 +42,10 @@ const AccordionItem = ({
           },
         },
       ]}
-      backgroundColor={isSelected ? '$turquoise-50-opa-10' : 'transparent'}
+      backgroundColor={isSelected ? '$primary-50-opa-10' : 'transparent'}
+      hoverStyle={{
+        backgroundColor: '$primary-50-opa-5',
+      }}
       borderRadius="$4"
       padding={8}
       width="100%"
@@ -105,7 +108,9 @@ const AccordionItem = ({
               />
             </Stack>
           )}
-          {channelStatus === 'muted' && <Muted size={20} color="$neutral-40" />}
+          {channelStatus === 'muted' && (
+            <MutedIcon size={20} color="$neutral-40" />
+          )}
         </Stack>
       )}
     </Stack>
