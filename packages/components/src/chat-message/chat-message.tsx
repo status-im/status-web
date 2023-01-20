@@ -24,6 +24,7 @@ const ChatMessage = (props: Props) => {
       space={10}
       position="relative"
       alignItems="flex-start"
+      justifyContent="center"
       paddingHorizontal={8}
       paddingVertical={12}
       borderRadius={16}
@@ -50,7 +51,7 @@ const ChatMessage = (props: Props) => {
           <Paragraph weight="semibold" color="$neutral-100">
             Alisher Yakupov
           </Paragraph>
-          <Paragraph fontFamily="$mono" color="$neutral-50" fontSize={11}>
+          <Paragraph color="$neutral-50" fontSize={11}>
             zQ3...9d4Gs0
           </Paragraph>
           <Paragraph color="$neutral-50" variant={11}>

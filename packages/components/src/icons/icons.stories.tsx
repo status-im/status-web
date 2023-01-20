@@ -1,6 +1,8 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import * as icons from '@status-im/icons'
 
-import { Text } from '../typography'
+import { Paragraph } from '../typography'
 
 import type { IconProps } from '@status-im/icons'
 import type { Meta, StoryObj } from '@storybook/react'
@@ -35,8 +37,8 @@ export const All: Story = {
               key={name}
               style={{ display: 'flex', flexDirection: 'column' }}
             >
-              <Icon color="black" />
-              <Text>{unpascal(name)}</Text>
+              <Icon color="$background" />
+              <Paragraph>{unpascal(name)}</Paragraph>
             </div>
           )
         })}

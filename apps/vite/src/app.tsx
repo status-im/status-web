@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {
   Button,
   Code,
+  Composer,
   Heading,
   Label,
   Messages,
@@ -10,16 +11,40 @@ import {
   Shape,
   Sidebar,
 } from '@status-im/components'
-import { Stack, TamaguiProvider } from '@tamagui/core'
+import { Stack, styled, TamaguiProvider } from '@tamagui/core'
+import { AnimatePresence } from 'tamagui'
 
 import tamaguiConfig from '../tamagui.config'
 import { Topbar } from './components/topbar'
 
 type ThemeVars = 'light' | 'dark'
 
+const AnimatableDrawer = styled(Stack, {
+  variants: {
+    fromRight: {
+      true: {
+        x: 500,
+        width: 0,
+      },
+    },
+    fromLeft: {
+      true: {
+        x: 500,
+        width: 250,
+      },
+    },
+  },
+})
+
 function App() {
   const [theme, setTheme] = useState<ThemeVars>('light')
   const [showMembers, setShowMembers] = useState(false)
+
+  const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
+
+  const onChannelPress = (id: string) => {
+    setSelectedChannel(id)
+  }
 
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={theme}>
@@ -29,9 +54,10 @@ function App() {
             name="Rarible"
             description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
             membersCount={123}
+            onChannelPress={onChannelPress}
+            selectedChannel={selectedChannel}
           />
         </div>
-
         <main id="main">
           <Topbar
             membersVisisble={showMembers}
@@ -71,16 +97,30 @@ function App() {
               </Stack>
             </Stack>
           </div>
-          <Stack
-            backgroundColor="$background"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Paragraph weight="semibold">Composer</Paragraph>
-          </Stack>
+          <Composer />
         </main>
 
-        {showMembers && <div id="members">members</div>}
+        <AnimatePresence>
+          {showMembers && (
+            <AnimatableDrawer
+              id="members"
+              key="members"
+              animation={[
+                'fast',
+                {
+                  opacity: {
+                    overshootClamping: true,
+                  },
+                },
+              ]}
+              enterStyle={{ opacity: 0 }}
+              exitStyle={{ opacity: 0 }}
+              opacity={1}
+            >
+              members
+            </AnimatableDrawer>
+          )}
+        </AnimatePresence>
       </div>
     </TamaguiProvider>
   )

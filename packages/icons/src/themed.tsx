@@ -1,6 +1,6 @@
 import { useCurrentColor } from 'tamagui'
 
-import type { IconProps } from './IconProps'
+import type { IconProps } from './types'
 import type React from 'react'
 
 export function themed(Component: React.ElementType) {

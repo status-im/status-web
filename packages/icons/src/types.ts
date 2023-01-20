@@ -1,9 +1,18 @@
-import type { SVGAttributes } from 'react'
+import type {
+  SizeTokens,
+  StyleObject,
+  ThemeParsed,
+  Tokens,
+} from '@tamagui/core'
+import type { SvgProps } from 'react-native-svg'
 
-export interface IconProps extends SVGAttributes<SVGElement> {
-  children?: never
-  width?: never
-  height?: never
-  color?: string
-  size?: number
+type GetTokenString<A> = A extends string ? `$${A}` : `$${string}`
+export type ColorTokens =
+  | GetTokenString<keyof Tokens['color']>
+  | GetTokenString<keyof ThemeParsed>
+
+export type IconProps = SvgProps & {
+  size?: number | SizeTokens
+  color?: ColorTokens
+  style?: StyleObject
 }

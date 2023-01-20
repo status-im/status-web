@@ -1,12 +1,11 @@
 import { memo } from 'react'
 
+import { themed } from '@status-im/icons/src/themed'
 import { Path, Svg } from 'react-native-svg'
 
-import { themed } from '../themed'
+import type { IconProps } from './types'
 
-import type { IconProps } from '../IconProps'
-
-const Icon = (props: IconProps) => {
+function Icon(props: IconProps) {
   const { color, size = 16, ...otherProps } = props
 
   return (
@@ -27,6 +26,4 @@ const Icon = (props: IconProps) => {
   )
 }
 
-Icon.displayName = 'Muted'
-
-export const Muted = memo<IconProps>(themed(Icon))
+export const MutedIcon = memo<IconProps>(themed(Icon))
