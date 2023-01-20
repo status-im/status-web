@@ -1,16 +1,10 @@
-import { Stack } from '@tamagui/core'
-
 import { ChatMessage } from './chat-message'
-
-import type { GetProps } from '@tamagui/core'
 
 export * from './chat-message'
 
-type BaseProps = GetProps<typeof Stack>
-
-export const Messages = (props: BaseProps) => {
+export const Messages = () => {
   return (
-    <Stack {...props}>
+    <>
       <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
       <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
       <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
@@ -21,12 +15,21 @@ export const Messages = (props: BaseProps) => {
           },
         ]}
       />
+      <ChatMessage
+        text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf"
+        reactions={['123']}
+      />
       <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
       <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
       <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
-      <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
-      <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
-      <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
-    </Stack>
+      <ChatMessage
+        text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf"
+        reactions={['123']}
+      />
+      <ChatMessage
+        text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf"
+        reactions={['123']}
+      />
+    </>
   )
 }
