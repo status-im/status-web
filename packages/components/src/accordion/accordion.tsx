@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ChevronDown } from '@status-im/icons/20'
+import { ChevronRight } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 import { AnimatePresence } from 'tamagui'
 
@@ -58,7 +58,7 @@ const Accordion = ({
                   },
                 ]}
               >
-                <ChevronDown color="$neutral-50" />
+                <ChevronRight color="$neutral-50" />
               </Stack>
               <Paragraph
                 marginLeft={4}
