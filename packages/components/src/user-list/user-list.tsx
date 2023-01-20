@@ -16,10 +16,10 @@ const UserList = (props: Props) => {
 
   return (
     <YStack>
-      {users.map(user => {
+      {users.map((user, index) => {
         return (
           <XStack
-            key={user.address}
+            key={user.address! + index}
             padding={8}
             space={8}
             borderRadius={12}
