@@ -1,9 +1,4 @@
-import {
-  AudioIcon,
-  FormatIcon,
-  ImageIcon,
-  ReactionIcon,
-} from '@status-im/icons'
+import { Audio, Format, Image, Reaction } from '@status-im/icons/20'
 import { Stack, XStack, YStack } from 'tamagui'
 
 import { IconButton } from '../icon-button'
@@ -39,11 +34,11 @@ const Composer = (props: BaseProps) => {
       </YStack>
       <XStack alignItems="center" justifyContent="space-between" pt={8}>
         <Stack space={12} flexDirection="row">
-          <IconButton noBackground icon={<ImageIcon />} />
-          <IconButton noBackground icon={<ReactionIcon />} />
-          <IconButton noBackground icon={<FormatIcon />} />
+          <IconButton noBackground icon={<Image />} />
+          <IconButton noBackground icon={<Reaction />} />
+          <IconButton noBackground icon={<Format />} />
         </Stack>
-        <IconButton noBackground icon={<AudioIcon />} />
+        <IconButton noBackground icon={<Audio />} />
       </XStack>
     </YStack>
   )
