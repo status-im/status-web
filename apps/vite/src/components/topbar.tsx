@@ -1,5 +1,5 @@
 import { Divider, IconButton, Paragraph } from '@status-im/components'
-import { LockedIcon, MembersIcon, OptionsIcon } from '@status-im/icons'
+import { Locked, Members, Options } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
 type Props = {
@@ -24,7 +24,7 @@ export const Topbar = (props: Props) => {
         <Paragraph weight="semibold" marginRight={4}>
           # random
         </Paragraph>
-        <LockedIcon color="rgba(27, 39, 61, 0.4)" size={16} />
+        <Locked color="rgba(27, 39, 61, 0.4)" size={16} />
         <Divider height={16} />
         <Paragraph weight="medium" color="$neutral-80-opa-50" variant="smaller">
           Share random funny stuff with the community. Play nice.
@@ -33,11 +33,11 @@ export const Topbar = (props: Props) => {
 
       <Stack space={12} flexDirection="row">
         <IconButton
-          icon={<MembersIcon />}
+          icon={<Members />}
           selected={membersVisisble}
           onPress={onMembersPress}
         />
-        <IconButton icon={<OptionsIcon />} />
+        <IconButton icon={<Options />} />
       </Stack>
     </Stack>
   )
