@@ -1,3 +1,5 @@
+import { cloneElement } from 'react'
+
 import { Stack, styled, Text } from '@tamagui/core'
 
 // import { Pressable } from 'react-native'
@@ -86,7 +88,7 @@ const IconButton = (props: Props) => {
   return (
     <Base selected={selected} onPress={onPress} noBackground={noBackground}>
       <Icon selected={selected} pointerEvents="none">
-        {icon}
+        {cloneElement(icon, { color: '$neutral-50' })}
       </Icon>
     </Base>
   )
