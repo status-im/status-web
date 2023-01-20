@@ -1,0 +1,21 @@
+<svg
+  width="16"
+  height="16"
+  viewBox="0 0 16 16"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <circle
+    cx="8"
+    cy="8"
+    r="6"
+    transform="rotate(-180 8 8)"
+    stroke="#F0F2F5"
+    stroke-width="1.2"
+  />
+  <path
+    d="M8 2C9.26708 2 10.5016 2.40113 11.5267 3.1459C12.5518 3.89067 13.3148 4.94084 13.7063 6.1459"
+    stroke="#09101C"
+    stroke-width="1.2"
+  />
+</svg>
