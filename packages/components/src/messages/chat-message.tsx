@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Stack, Unspaced, XStack, YStack } from 'tamagui'
 
+import { Author } from '../author/author'
 import { Avatar } from '../avatar'
 import { Image } from '../image'
 import { Paragraph } from '../typography'
@@ -24,7 +25,6 @@ const ChatMessage = (props: Props) => {
       space={10}
       position="relative"
       alignItems="flex-start"
-      justifyContent="center"
       paddingHorizontal={8}
       paddingVertical={12}
       borderRadius={16}
@@ -36,7 +36,7 @@ const ChatMessage = (props: Props) => {
     >
       {hovered && (
         <Unspaced>
-          <Actions />
+          <Actions onClick={() => {}} />
         </Unspaced>
       )}
 
@@ -47,17 +47,12 @@ const ChatMessage = (props: Props) => {
       />
 
       <YStack flex={1}>
-        <XStack space={8} alignItems="center">
-          <Paragraph weight="semibold" color="$neutral-100">
-            Alisher Yakupov
-          </Paragraph>
-          <Paragraph color="$neutral-50" fontSize={11}>
-            zQ3...9d4Gs0
-          </Paragraph>
-          <Paragraph color="$neutral-50" variant={11}>
-            09:30
-          </Paragraph>
-        </XStack>
+        <Author
+          name="Alisher Yakupov"
+          address="zQ3...9d4Gs0"
+          status="verified"
+          time="09:30"
+        />
 
         {text && (
           <Paragraph flexGrow={0} weight="regular" color="$neutral-100">
@@ -70,7 +65,7 @@ const ChatMessage = (props: Props) => {
             key={image.url}
             borderRadius={12}
             overflow="hidden"
-            marginTop={6}
+            marginTop={8}
             $gtMd={{
               maxWidth: 320,
             }}
@@ -79,7 +74,11 @@ const ChatMessage = (props: Props) => {
           </Stack>
         ))}
 
-        {reactions && <Reactions />}
+        {reactions && (
+          <Stack marginTop={8}>
+            <Reactions />
+          </Stack>
+        )}
       </YStack>
     </XStack>
   )
