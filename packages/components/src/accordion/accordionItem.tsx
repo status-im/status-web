@@ -1,4 +1,4 @@
-import { MutedIcon } from '@status-im/icons'
+import { Muted } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
 import { Label, Paragraph } from '../typography'
@@ -108,9 +108,7 @@ const AccordionItem = ({
               />
             </Stack>
           )}
-          {channelStatus === 'muted' && (
-            <MutedIcon size={20} color="$neutral-40" />
-          )}
+          {channelStatus === 'muted' && <Muted color="$neutral-40" />}
         </Stack>
       )}
     </Stack>
