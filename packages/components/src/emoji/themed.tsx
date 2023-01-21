@@ -12,7 +12,7 @@ export function themed(Component: React.ElementType) {
         <Stack
           width={sizeBackground}
           height={sizeBackground}
-          borderRadius="50%"
+          borderRadius={sizeBackground / 2}
           backgroundColor="$turquoise-50-opa-10"
           justifyContent="center"
           alignItems="center"

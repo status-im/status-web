@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "mobile",
-    "slug": "mobile",
-    "version": "1.0.0",
+    "slug": "status-poc",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,16 +16,24 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.marcelines.statuspoc"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.marcelines.statuspoc"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e214cc8a-4e7e-4850-8a41-e280ca3a4469"
+      }
+    },
+    "owner": "marcelines"
   }
 }

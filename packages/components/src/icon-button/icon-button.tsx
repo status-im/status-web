@@ -10,7 +10,7 @@ const Base = styled(Stack, {
   cursor: 'pointer',
   userSelect: 'none',
   borderRadius: 10,
-  display: 'inline-flex',
+  display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   animation: 'fast',

@@ -11,7 +11,7 @@ const Base = styled(Stack, {
 
   cursor: 'pointer',
   borderRadius: 12,
-  display: 'inline-flex',
+  display: 'flex',
   paddingHorizontal: 16,
   paddingTop: 7,
   paddingBottom: 9,
