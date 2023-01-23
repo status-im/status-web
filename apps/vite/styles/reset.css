@@ -30,13 +30,16 @@
 * {
   margin: 0;
 }
+
 /*
   3. Allow percentage-based heights in the application
 */
 html,
 body {
-  height: 100%;
-  overscroll-behavior: none;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior-y: none; /* not working on Safari */
 }
 /*
   Typographic tweaks!
@@ -46,6 +49,8 @@ body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  padding: 0;
+  -webkit-overflow-scrolling: touch;
 }
 /*
   6. Improve media defaults
