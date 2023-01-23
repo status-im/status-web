@@ -179,6 +179,7 @@ const Avatar = (props: Props) => {
           height={size}
           onLoad={() => setStatus('loaded')}
           onError={() => setStatus('error')}
+          radius="full"
         />
       </Stack>
 

@@ -27,6 +27,9 @@ const Base = styled(RNImage, {
       12: {
         borderRadius: 12,
       },
+      full: {
+        borderRadius: 9999,
+      },
     },
   },
 })
