@@ -1,7 +1,11 @@
 import { Divider, IconButton, Paragraph } from '@status-im/components'
+import {
+  ArrowLeftIcon,
+  LockedIcon,
+  MembersIcon,
+  OptionsIcon,
+} from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
-
-import { ArrowIcon, LockedIcon, MembersIcon, OptionsIcon } from '../../../icons'
 
 type Props = {
   membersVisisble: boolean
@@ -27,7 +31,7 @@ const Topbar = (props: Props) => {
     >
       <Stack flexDirection="row" alignItems="center" flexWrap="wrap">
         <Stack mr={12} $gtSm={{ display: 'none' }}>
-          <IconButton icon={<ArrowIcon />} onPress={() => goBack?.()} />
+          <IconButton icon={<ArrowLeftIcon />} onPress={() => goBack?.()} />
         </Stack>
 
         {title && (
@@ -36,7 +40,7 @@ const Topbar = (props: Props) => {
           </Paragraph>
         )}
 
-        <LockedIcon color="$neutral-80-opa-40" size={16} />
+        <LockedIcon color="$neutral-80-opa-40" />
         <Divider height={16} $sm={{ display: 'none' }} />
         {description && (
           <Paragraph

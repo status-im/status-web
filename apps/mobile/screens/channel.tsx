@@ -40,8 +40,11 @@ export const ChannelScreen = ({ route }: ChannelScreenProps) => {
         width="100%"
         onContentSizeChange={() => scrollRef.current?.scrollToEnd()}
       >
-        <Messages pt={insets.top + 60} pb={insets.bottom} />
+        <Stack pt={insets.top + 60} pb={insets.bottom}>
+          <Messages />
+        </Stack>
       </ScrollView>
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Stack>
           <Composer

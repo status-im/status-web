@@ -1,3 +1,5 @@
+import { cloneElement } from 'react'
+
 import { Stack, styled, Text } from '@tamagui/core'
 
 import type React from 'react'
@@ -17,6 +19,7 @@ const Base = styled(Stack, {
   width: 30,
   height: 30,
   borderWidth: 1,
+  padding: 4,
   backgroundColor: '$neutral-10',
   borderColor: '$neutral-10',
 
@@ -29,7 +32,14 @@ const Base = styled(Stack, {
   },
 
   variants: {
-    noBackground: {
+    selected: {
+      true: {
+        backgroundColor: '$neutral-30',
+        borderColor: '$neutral-30',
+      },
+    },
+
+    transparent: {
       true: {
         backgroundColor: 'transparent',
         borderColor: '$neutral-20',
@@ -45,36 +55,6 @@ const Base = styled(Stack, {
         },
       },
     },
-    selected: {
-      true: {
-        backgroundColor: '$neutral-30',
-        borderColor: '$neutral-30',
-      },
-    },
-  } as const,
-})
-
-const Icon = styled(Text, {
-  // color: '$neutral-50',
-  width: 'auto',
-  height: 'auto',
-
-  justifyContent: 'center',
-  lineHeight: 0,
-
-  alignSelf: 'center',
-  color: 'white',
-
-  hoverStyle: {
-    color: '$neutral-100',
-  },
-
-  variants: {
-    selected: {
-      true: {
-        color: '$neutral-100',
-      },
-    },
   } as const,
 })
 
@@ -82,15 +62,21 @@ interface Props {
   icon: React.ReactElement
   onPress?: () => void
   selected?: boolean
-  noBackground?: boolean
+  transparent?: boolean
+  // FIXME: enforce aria-label for accessibility
+  // 'aria-label'?: string
 }
 
 const IconButton = (props: Props) => {
-  const { icon, noBackground, selected, onPress } = props
+  const { icon, transparent, selected, onPress } = props
 
   return (
-    <Base selected={selected} onPress={onPress} noBackground={noBackground}>
-      {icon}
+    <Base selected={selected} onPress={onPress} transparent={transparent}>
+      {cloneElement(icon, {
+        color: selected ? '$neutral-100' : '$neutral-50',
+        size: 20,
+        pressEvents: 'none',
+      })}
     </Base>
   )
 }

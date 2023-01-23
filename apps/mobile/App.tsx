@@ -8,7 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Heading, IconButton, Paragraph } from '@status-im/components'
 import { Avatar } from '@status-im/components/src/avatar'
-import { ArrowIcon, MembersIcon } from '@status-im/icons'
+import { ArrowLeftIcon, MembersIcon } from '@status-im/icons/20'
 import { Stack as View, TamaguiProvider } from '@tamagui/core'
 import { useFonts } from 'expo-font'
 import { Platform } from 'react-native'
@@ -37,7 +37,7 @@ const CustomHeaderLeft = (props: HeaderBackButtonProps) => {
   return (
     <>
       <IconButton
-        icon={<ArrowIcon />}
+        icon={<ArrowLeftIcon />}
         onPress={() => {
           props.canGoBack && navigation.goBack()
         }}

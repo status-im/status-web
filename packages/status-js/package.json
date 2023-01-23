@@ -28,7 +28,7 @@
     "lint": "eslint src",
     "format": "prettier --write src",
     "protos": "protons protos/*.proto",
-    "clean": "rm -rf dist node_modules .turbo"
+    "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
     "ethereum-cryptography": "^1.0.3",

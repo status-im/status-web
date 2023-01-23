@@ -3,7 +3,7 @@ import {
   FormatIcon,
   ImageIcon,
   ReactionIcon,
-} from '@status-im/icons'
+} from '@status-im/icons/20'
 import { Stack, XStack, YStack } from 'tamagui'
 
 import { IconButton } from '../icon-button'
@@ -33,11 +33,11 @@ const Composer = (props: BaseProps) => {
       <Input placeholder="Type something..." borderWidth={0} px={0} />
       <XStack alignItems="center" justifyContent="space-between" pt={8}>
         <Stack space={12} flexDirection="row">
-          <IconButton noBackground icon={<ImageIcon />} />
-          <IconButton noBackground icon={<ReactionIcon />} />
-          <IconButton noBackground icon={<FormatIcon />} />
+          <IconButton icon={<ImageIcon />} transparent />
+          <IconButton icon={<ReactionIcon />} transparent />
+          <IconButton icon={<FormatIcon />} transparent />
         </Stack>
-        <IconButton noBackground icon={<AudioIcon />} />
+        <IconButton icon={<AudioIcon />} transparent />
       </XStack>
     </YStack>
   )

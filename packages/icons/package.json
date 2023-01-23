@@ -6,23 +6,46 @@
   "private": true,
   "files": [
     "types",
-    "dist"
+    "dist",
+    "src"
   ],
+  "#browser": {
+    "react-native-svg": "@tamagui/react-native-svg"
+  },
+  "#exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.umd.js"
+    },
+    "./src/12/*.svg": "./src/12/*.svg",
+    "./src/16/*.svg": "./src/16/*.svg",
+    "./src/20/*.svg": "./src/20/*.svg",
+    "./src/reactions/*.svg": "./src/reactions/*.svg"
+  },
   "scripts": {
     "dev": "vite build --watch --mode development",
+    "generate": "rimraf 12 16 20 reactions && svgr src && yarn fix",
     "build": "vite build",
-    "postbuild": "yarn typegen",
+    "#postbuild": "yarn typegen",
     "#test": "vitest",
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
-    "lint": "eslint src",
-    "format": "prettier --write src",
-    "clean": "rm -rf dist node_modules .turbo"
+    "lint": "eslint '{12,16,20,reactions}/**/*.{ts,tsx}'",
+    "lint:fix": "eslint '{12,16,20,reactions}/**/*.{ts,tsx}' --fix",
+    "format": "prettier --write '{12,16,20,reactions}/**/*.{ts,tsx}'",
+    "fix": "yarn lint:fix && yarn format",
+    "clean": "rimraf dist node_modules .turbo"
   },
   "peerDependencies": {
-    "react": "^16.x || ^17.x || ^18.x"
+    "react": "^16.x || ^17.x || ^18.x",
+    "react-dom": "*",
+    "react-native-svg": ">=12"
   },
   "devDependencies": {
+    "@svgr/cli": "^6.5.1",
+    "@svgr/core": "^6.5.1",
     "vite": "^4.0.4"
   }
 }

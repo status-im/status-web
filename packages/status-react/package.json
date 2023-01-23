@@ -27,7 +27,7 @@
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "format": "prettier --write src",
-    "clean": "rm -rf dist node_modules .turbo"
+    "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.0.0",
