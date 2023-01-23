@@ -17,7 +17,6 @@ const Base = styled(Stack, {
 
   display: 'inline-flex',
   position: 'relative',
-  overflow: 'hidden',
   backgroundColor: '$white-100',
   justifyContent: 'center',
   alignItems: 'center',
@@ -75,46 +74,51 @@ const Indicator = styled(Stack, {
   name: 'Indicator',
 
   position: 'absolute',
-  width: 8,
-  height: 8,
-  bottom: 0,
-  right: 0,
+  bottom: 2,
+  right: 2,
   zIndex: 2,
-  // borderWidth: 2,
-  // borderColor: 'rgba(255,255,0,1.0)',
+
+  borderWidth: '2px',
+  borderColor: '$white-100',
 
   variants: {
     size: {
       80: {
-        width: 10,
-        height: 10,
+        width: 12,
+        height: 12,
         borderRadius: '50%',
       },
       56: {
-        width: 10,
-        height: 10,
-        borderRadius: '50%',
+        width: 12,
+        height: 12,
+        borderRadius: 12 / 2,
       },
       // FIXME: use catch all variant
       52: {
-        width: 8,
-        height: 8,
-        borderRadius: 8 / 2,
+        width: 12,
+        height: 12,
+        borderRadius: 12 / 2,
       },
       48: {
-        width: 8,
-        height: 8,
-        borderRadius: 8 / 2,
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+        right: 0,
+        bottom: 0,
       },
       32: {
-        width: 8,
-        height: 8,
-        borderRadius: 8 / 2,
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+        right: 0,
+        bottom: 0,
       },
       20: {
-        width: 8,
-        height: 8,
-        borderRadius: 8 / 2,
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+        right: 0,
+        bottom: 0,
       },
     },
 
