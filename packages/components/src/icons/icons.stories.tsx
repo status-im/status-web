@@ -34,7 +34,7 @@ export const All: Story = {
           {Object.keys(icons12).map(name => {
             // @ts-ignore
             // eslint-disable-next-line import/namespace
-            const Icon = icons[name] as React.FunctionComponent<IconProps>
+            const Icon = icons12[name] as React.FunctionComponent<IconProps>
 
             return (
               <div
@@ -51,7 +51,7 @@ export const All: Story = {
           {Object.keys(icons16).map(name => {
             // @ts-ignore
             // eslint-disable-next-line import/namespace
-            const Icon = icons[name] as React.FunctionComponent<IconProps>
+            const Icon = icons16[name] as React.FunctionComponent<IconProps>
 
             return (
               <div
@@ -68,7 +68,7 @@ export const All: Story = {
           {Object.keys(icons20).map(name => {
             // @ts-ignore
             // eslint-disable-next-line import/namespace
-            const Icon = icons[name] as React.FunctionComponent<IconProps>
+            const Icon = icons20[name] as React.FunctionComponent<IconProps>
 
             return (
               <div
@@ -85,7 +85,7 @@ export const All: Story = {
           {Object.keys(reactions).map(name => {
             // @ts-ignore
             // eslint-disable-next-line import/namespace
-            const Icon = icons[name] as React.FunctionComponent<IconProps>
+            const Icon = reactions[name] as React.FunctionComponent<IconProps>
 
             return (
               <div

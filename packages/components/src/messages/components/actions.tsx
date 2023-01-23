@@ -1,4 +1,4 @@
-import { AddReaction, Options, Reply } from '@status-im/icons/20'
+import { AddReactionIcon, OptionsIcon, ReplyIcon } from '@status-im/icons/20'
 import { Stack } from 'tamagui'
 
 import { Button } from '../../button'
@@ -23,9 +23,9 @@ export const Actions = (_props: Props) => {
       shadowColor="rgba(9, 16, 28, 0.08)"
       zIndex={10}
     >
-      <Button type="ghost" icon={<AddReaction />} borderRadius={0} />
-      <Button type="ghost" icon={<Reply />} borderRadius={0} />
-      <Button type="ghost" icon={<Options />} borderRadius={0} />
+      <Button type="ghost" icon={<AddReactionIcon />} borderRadius={0} />
+      <Button type="ghost" icon={<ReplyIcon />} borderRadius={0} />
+      <Button type="ghost" icon={<OptionsIcon />} borderRadius={0} />
     </Stack>
   )
 }

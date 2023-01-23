@@ -1,4 +1,4 @@
-import { Options } from '@status-im/icons/20'
+import { OptionsIcon } from '@status-im/icons/20'
 
 import { IconButton } from './icon-button'
 
@@ -15,7 +15,7 @@ type Story = StoryObj<typeof IconButton>
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Default: Story = {
   args: {
-    icon: <Options />,
+    icon: <OptionsIcon />,
   },
 }
 

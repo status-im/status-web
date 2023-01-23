@@ -26,7 +26,7 @@
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "generate": "svgr src && yarn fix",
+    "generate": "rimraf 12 16 20 reactions && svgr src && yarn fix",
     "build": "vite build",
     "#postbuild": "yarn typegen",
     "#test": "vitest",

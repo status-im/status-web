@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { Group } from '@status-im/icons/16'
+import { GroupIcon } from '@status-im/icons/16'
 import { Stack } from '@tamagui/core'
 
 import { Accordion } from '../accordion/accordion'
@@ -87,7 +87,7 @@ const Sidebar = (props: Props) => {
           <Heading marginBottom={16}>{name}</Heading>
           <Paragraph marginBottom={12}>{description}</Paragraph>
           <Stack flexDirection="row" alignItems="center" mb={12}>
-            <Group color="$neutral-100" />
+            <GroupIcon color="$neutral-100" />
             <Paragraph ml={8}>{membersCount}</Paragraph>
           </Stack>
 
