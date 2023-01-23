@@ -1,4 +1,8 @@
-import { Contact, Untrustworthy, Verified } from '@status-im/icons/12'
+import {
+  ContactIcon,
+  UntrustworthyIcon,
+  VerifiedIcon,
+} from '@status-im/icons/12'
 import { XStack } from 'tamagui'
 
 import { Paragraph } from '../typography'
@@ -21,9 +25,9 @@ const Author = (props: Props) => {
         <Paragraph weight="semibold" variant="smaller" color="$neutral-100">
           {name}
         </Paragraph>
-        {status === 'contact' && <Contact />}
-        {status === 'verified' && <Verified />}
-        {status === 'untrustworthy' && <Untrustworthy />}
+        {status === 'contact' && <ContactIcon />}
+        {status === 'verified' && <VerifiedIcon />}
+        {status === 'untrustworthy' && <UntrustworthyIcon />}
       </XStack>
 
       {address && (

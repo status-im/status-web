@@ -1,13 +1,13 @@
 import { cloneElement } from 'react'
 
-import { AddReaction } from '@status-im/icons/20'
+import { AddReactionIcon } from '@status-im/icons/20'
 import {
-  Angry,
-  Laugh,
-  Love,
-  Sad,
-  ThumbsDown,
-  ThumbsUp,
+  AngryIcon,
+  LaughIcon,
+  LoveIcon,
+  SadIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
 } from '@status-im/icons/reactions'
 import { Stack, styled } from '@tamagui/core'
 import { XStack } from 'tamagui'
@@ -75,14 +75,13 @@ export const Reactions = (props: Props) => {
 
   return (
     <XStack space={8}>
-      <ReactionButton count={1} icon={<Love />} selected />
-      <ReactionButton count={10} icon={<ThumbsUp />} />
-      <ReactionButton count={99} icon={<ThumbsDown />} />
-      <ReactionButton count={100} icon={<Laugh />} />
-      <ReactionButton count={100} icon={<Sad />} />
-      {/* <ReactionButton count={100} icon={ang} /> */}
-      <ReactionButton count={100} icon={<Angry />} />
-      <ReactionButton icon={<AddReaction />} />
+      <ReactionButton count={1} icon={<LoveIcon />} selected />
+      <ReactionButton count={10} icon={<ThumbsUpIcon />} />
+      <ReactionButton count={99} icon={<ThumbsDownIcon />} />
+      <ReactionButton count={100} icon={<LaughIcon />} />
+      <ReactionButton count={100} icon={<SadIcon />} />
+      <ReactionButton count={100} icon={<AngryIcon />} />
+      <ReactionButton icon={<AddReactionIcon />} />
     </XStack>
   )
 }
