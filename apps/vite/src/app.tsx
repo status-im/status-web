@@ -10,12 +10,12 @@ import {
   Paragraph,
   Shape,
   Sidebar,
+  Topbar,
 } from '@status-im/components'
 import { Stack, styled, TamaguiProvider } from '@tamagui/core'
 import { AnimatePresence } from 'tamagui'
 
 import tamaguiConfig from '../tamagui.config'
-import { Topbar } from './components/topbar'
 
 type ThemeVars = 'light' | 'dark'
 
@@ -60,6 +60,8 @@ function App() {
         </div>
         <main id="main">
           <Topbar
+            title={`#${selectedChannel}`}
+            description="Share random funny stuff with the community. Play nice."
             membersVisisble={showMembers}
             onMembersPress={() => setShowMembers(show => !show)}
           />

@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { GroupIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
@@ -34,26 +32,6 @@ const Sidebar = (props: Props) => {
     selectedChannel,
     onChannelPress,
   } = props
-
-  const communitiesExpandControl = communities.reduce(
-    (o, key) => ({ ...o, [key.id]: false }),
-
-    {} as Record<string, boolean>[]
-  )
-
-  const [isExpanded, setIsExpanded] = useState({
-    ...communitiesExpandControl,
-    welcome: true,
-    community: true,
-    design: true,
-  })
-
-  const handleToggle = (id: string) => {
-    setIsExpanded(prev => ({
-      ...prev,
-      [id]: !prev[id as keyof typeof isExpanded],
-    }))
-  }
 
   return (
     <Stack backgroundColor="$background">
@@ -90,13 +68,10 @@ const Sidebar = (props: Props) => {
         {communities.map(community => (
           <Accordion
             key={community.id}
-            isExpanded={!!isExpanded[community.id as keyof typeof isExpanded]}
-            onToggle={() => handleToggle(community.id)}
+            // This is just for the demo
+            initialExpanded={community.id === 'welcome'}
             title={community.title}
             numberOfNewMessages={community.numberOfNewMessages}
-            showNotifications={
-              !isExpanded[community.id as keyof typeof isExpanded]
-            }
           >
             {community.channels.map((channel, index) => {
               const isLastChannelOfTheList =
@@ -117,7 +92,6 @@ const Sidebar = (props: Props) => {
           </Accordion>
         ))}
         <Stack borderBottomColor="$neutral-10" borderBottomWidth={1} />
-        {/* <Button mt={20}>Request to join community</Button> */}
       </Stack>
     </Stack>
   )

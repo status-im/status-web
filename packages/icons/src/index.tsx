@@ -1,3 +1,4 @@
+export { ArrowIcon } from './arrow-icon'
 export { AudioIcon } from './audio-icon'
 export { ChevronIcon } from './chevron-icon'
 export { FormatIcon } from './format-icon'

@@ -22,21 +22,15 @@ const Composer = (props: BaseProps) => {
       shadowRadius={20}
       borderTopLeftRadius={20}
       borderTopRightRadius={20}
-      elevation={0}
       px={16}
       pt={8}
-      pb={12}
       width="100%"
+      style={{
+        elevation: 10,
+      }}
       {...props}
     >
-      <YStack>
-        <Input
-          elevation={10}
-          placeholder="Type something..."
-          borderWidth={0}
-          px={0}
-        />
-      </YStack>
+      <Input placeholder="Type something..." borderWidth={0} px={0} />
       <XStack alignItems="center" justifyContent="space-between" pt={8}>
         <Stack space={12} flexDirection="row">
           <IconButton noBackground icon={<ImageIcon />} />

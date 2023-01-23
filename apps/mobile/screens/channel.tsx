@@ -1,7 +1,11 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable import/namespace */
+
+import { useRef } from 'react'
+
 import { Composer, Messages } from '@status-im/components'
 import { Stack, useTheme } from '@tamagui/core'
+import { StatusBar } from 'expo-status-bar'
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -11,22 +15,38 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ScrollView } from 'tamagui'
 
-export const ChannelScreen = () => {
+import type { RootStackParamList } from '../App'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
+
+type ChannelScreenProps = NativeStackScreenProps<RootStackParamList, 'Channel'>
+
+export const ChannelScreen = ({ route }: ChannelScreenProps) => {
   const insets = useSafeAreaInsets()
   const theme = useTheme()
+
+  // We need to get the channel name from the route params
+  const channelName = route.params.channelId
+  const scrollRef = useRef(null)
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={Platform.select({ ios: 60 })}
       style={{ height: '100%', flex: 1, backgroundColor: theme.background.val }}
     >
-      <ScrollView paddingHorizontal={12} width="100%">
-        <Messages py={20} />
+      <StatusBar style={'dark'} animated />
+      <ScrollView
+        ref={scrollRef}
+        paddingHorizontal={12}
+        width="100%"
+        onContentSizeChange={() => scrollRef.current?.scrollToEnd()}
+      >
+        <Messages pt={insets.top + 60} pb={insets.bottom} />
       </ScrollView>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <Stack pb={insets.bottom}>
-          <Composer />
+        <Stack>
+          <Composer
+            pb={insets.bottom + Platform.select({ android: 12, ios: 0 })}
+          />
         </Stack>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

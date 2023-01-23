@@ -1,18 +1,27 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable import/namespace */
-import { useState } from 'react'
 
 import { Sidebar } from '@status-im/components'
 import { Stack } from '@tamagui/core'
 import { StatusBar } from 'expo-status-bar'
 import { ScrollView } from 'tamagui'
 
-export const HomeScreen = ({ navigation, onScroll, isMinimized }) => {
-  const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
+import type { RootStackParamList } from '../App'
+import type { NativeStackScreenProps } from '@react-navigation/native-stack'
+import type { NativeScrollEvent, NativeSyntheticEvent } from 'react-native'
 
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'> & {
+  onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void
+  isMinimized?: boolean
+}
+
+export const HomeScreen = ({
+  navigation,
+  onScroll,
+  isMinimized,
+}: HomeScreenProps) => {
   const onChannelPress = (id: string) => {
-    setSelectedChannel(id)
-    navigation.navigate('Channel')
+    navigation.navigate('Channel', { channelId: id })
   }
 
   return (
@@ -25,7 +34,6 @@ export const HomeScreen = ({ navigation, onScroll, isMinimized }) => {
             description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
             membersCount={123}
             onChannelPress={onChannelPress}
-            selectedChannel={selectedChannel}
           />
         </Stack>
       </ScrollView>

@@ -1,6 +1,5 @@
 import { Stack, styled, Text } from '@tamagui/core'
 
-// import { Pressable } from 'react-native'
 import type React from 'react'
 
 const Base = styled(Stack, {
@@ -56,9 +55,15 @@ const Base = styled(Stack, {
 })
 
 const Icon = styled(Text, {
-  color: '$neutral-50',
-  width: 20,
-  height: 20,
+  // color: '$neutral-50',
+  width: 'auto',
+  height: 'auto',
+
+  justifyContent: 'center',
+  lineHeight: 0,
+
+  alignSelf: 'center',
+  color: 'white',
 
   hoverStyle: {
     color: '$neutral-100',
@@ -85,9 +90,7 @@ const IconButton = (props: Props) => {
 
   return (
     <Base selected={selected} onPress={onPress} noBackground={noBackground}>
-      <Icon selected={selected} pointerEvents="none">
-        {icon}
-      </Icon>
+      {icon}
     </Base>
   )
 }
