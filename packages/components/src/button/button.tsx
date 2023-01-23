@@ -90,7 +90,7 @@ const ButtonText = styled(Paragraph, {
 type BaseProps = GetProps<typeof Base>
 
 type Props = BaseProps & {
-  children: string
+  children?: string
   icon?: React.ReactNode
   type?: BaseProps['type']
   size?: BaseProps['size']

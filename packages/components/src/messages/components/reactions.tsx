@@ -2,7 +2,7 @@ import { cloneElement } from 'react'
 
 import { AddReactionIcon } from '@status-im/icons/20'
 import {
-  AngryIcon,
+  // AngryIcon,
   LaughIcon,
   LoveIcon,
   SadIcon,
@@ -51,27 +51,35 @@ const ReactButton = styled(Stack, {
   } as const,
 })
 
-interface Props {
+type ReactionButtonProps = {
   icon: React.ReactElement
-  count: number
+  count?: number
   selected?: boolean
 }
 
-const ReactionButton = (props: Props) => {
+const ReactionButton = (props: ReactionButtonProps) => {
   const { count, selected, icon } = props
 
   return (
     <ReactButton selected={selected}>
       {cloneElement(icon, { color: '$neutral-100' })}
-      <Paragraph weight="medium" variant="smaller" whiteSpace="nowrap">
-        {count}
-      </Paragraph>
+      {count && (
+        <Paragraph weight="medium" variant="smaller" whiteSpace="nowrap">
+          {count}
+        </Paragraph>
+      )}
     </ReactButton>
   )
 }
 
+type Props = {
+  reactions?: any[]
+}
+
 export const Reactions = (props: Props) => {
-  const {} = props
+  const { reactions } = props
+
+  console.log(reactions)
 
   return (
     <XStack space={8}>
@@ -80,7 +88,8 @@ export const Reactions = (props: Props) => {
       <ReactionButton count={99} icon={<ThumbsDownIcon />} />
       <ReactionButton count={100} icon={<LaughIcon />} />
       <ReactionButton count={100} icon={<SadIcon />} />
-      <ReactionButton count={100} icon={<AngryIcon />} />
+      {/* FIX TAMAGUI BUG */}
+      {/* <ReactionButton count={100} icon={<AngryIcon />} /> */}
       <ReactionButton icon={<AddReactionIcon />} />
     </XStack>
   )
