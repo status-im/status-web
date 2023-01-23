@@ -172,16 +172,15 @@ const Avatar = (props: Props) => {
           <Indicator size={size} state={indicator} />
         </Unspaced>
       )}
-      <Stack borderRadius={28} overflow="hidden">
-        <Image
-          src={src}
-          width={size}
-          height={size}
-          onLoad={() => setStatus('loaded')}
-          onError={() => setStatus('error')}
-          radius="full"
-        />
-      </Stack>
+
+      <Image
+        src={src}
+        width="full"
+        radius="full"
+        aspectRatio={1}
+        onLoad={() => setStatus('loaded')}
+        onError={() => setStatus('error')}
+      />
 
       {status === 'error' && (
         <Fallback
