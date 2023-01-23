@@ -5,6 +5,7 @@ import { Image as RNImage } from 'react-native'
 
 import type { GetProps } from '@tamagui/core'
 import type { Ref } from 'react'
+import type { ImagePropsBase as RNImageProps } from 'react-native'
 
 // TODO: this was used in @tamagui/image package. Why?
 // import { focusableInputHOC } from '@tamagui/focusable'
@@ -20,23 +21,30 @@ const Base = styled(RNImage, {
   source: {
     uri: '',
   },
+
+  variants: {
+    radius: {
+      12: {
+        borderRadius: 12,
+      },
+    },
+  },
 })
 
-type InputProps = GetProps<typeof Image>
-
-// type W = InputProps['width']
+type ImageProps = GetProps<typeof Base>
 
 interface Props {
   src: string
   width: number | 'full'
   height?: number
-  aspectRatio?: number
-  // onLoad?: InputProps['onLoad']
-  // onError?: InputProps['onError']
+  aspectRatio?: ImageProps['aspectRatio']
+  radius?: ImageProps['radius']
+  onLoad?: RNImageProps['onLoad']
+  onError?: RNImageProps['onError']
 }
 
 const Image = (props: Props, ref: Ref<HTMLImageElement>) => {
-  const { src, aspectRatio, ...rest } = props
+  const { src, aspectRatio, radius, ...rest } = props
 
   const width = props.width === 'full' ? '100%' : props.width
   const height = aspectRatio ? undefined : props.height
@@ -53,9 +61,8 @@ const Image = (props: Props, ref: Ref<HTMLImageElement>) => {
       source={source}
       width={width}
       height={height}
-      style={{
-        aspectRatio,
-      }}
+      radius={radius}
+      aspectRatio={aspectRatio}
     />
   )
 }

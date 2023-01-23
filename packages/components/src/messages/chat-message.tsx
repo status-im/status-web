@@ -36,7 +36,11 @@ const ChatMessage = (props: Props) => {
     >
       {hovered && (
         <Unspaced>
-          <Actions onClick={() => {}} />
+          <Actions
+            onClick={() => {
+              console.log('clicked')
+            }}
+          />
         </Unspaced>
       )}
 
@@ -63,14 +67,12 @@ const ChatMessage = (props: Props) => {
         {images?.map(image => (
           <Stack
             key={image.url}
-            borderRadius={12}
-            overflow="hidden"
             marginTop={8}
             $gtMd={{
               maxWidth: 320,
             }}
           >
-            <Image src={image.url} width="full" height={320} />
+            <Image src={image.url} width="full" height={320} radius={12} />
           </Stack>
         ))}
 
