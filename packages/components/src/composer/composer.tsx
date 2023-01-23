@@ -39,11 +39,11 @@ const Composer = (props: BaseProps) => {
       </YStack>
       <XStack alignItems="center" justifyContent="space-between" pt={8}>
         <Stack space={12} flexDirection="row">
-          <IconButton noBackground icon={<ImageIcon />} />
-          <IconButton noBackground icon={<ReactionIcon />} />
-          <IconButton noBackground icon={<FormatIcon />} />
+          <IconButton icon={<ImageIcon />} transparent />
+          <IconButton icon={<ReactionIcon />} transparent />
+          <IconButton icon={<FormatIcon />} transparent />
         </Stack>
-        <IconButton noBackground icon={<AudioIcon />} />
+        <IconButton icon={<AudioIcon />} transparent />
       </XStack>
     </YStack>
   )
