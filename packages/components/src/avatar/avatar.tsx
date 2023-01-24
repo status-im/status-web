@@ -15,7 +15,7 @@ import type { GetProps } from '@tamagui/core'
 const Base = styled(Stack, {
   name: 'Avatar',
 
-  display: 'inline-flex',
+  display: 'flex',
   position: 'relative',
   backgroundColor: '$white-100',
   justifyContent: 'center',
@@ -78,20 +78,20 @@ const Indicator = styled(Stack, {
   right: 2,
   zIndex: 2,
 
-  borderWidth: '2px',
+  borderWidth: 2,
   borderColor: '$white-100',
 
   variants: {
     size: {
       80: {
-        width: 12,
-        height: 12,
-        borderRadius: '50%',
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
       },
       56: {
-        width: 12,
-        height: 12,
-        borderRadius: 12 / 2,
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
       },
       // FIXME: use catch all variant
       52: {

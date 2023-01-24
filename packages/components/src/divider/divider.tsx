@@ -8,6 +8,7 @@ export const Divider = styled(Stack, {
   flex: 1,
   height: '100%',
   // maxHeight: 0,
+  maxWidth: 1,
   width: 1,
   marginHorizontal: 12,
   // y: -0.5,

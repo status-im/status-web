@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { ChevronRightIcon } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
@@ -12,21 +12,18 @@ type BaseProps = GetProps<typeof Stack>
 
 type Props = {
   children: React.ReactElement[] | React.ReactElement
-  isExpanded: boolean
-  onToggle?: () => void
+  initialExpanded: boolean
   title: string
   numberOfNewMessages?: number
-  showNotifications?: boolean
 } & BaseProps
 
 const Accordion = ({
   children,
-  isExpanded,
-  onToggle,
+  initialExpanded,
   title,
   numberOfNewMessages,
-  showNotifications,
 }: Props) => {
+  const [isExpanded, setIsExpanded] = useState(initialExpanded)
   return (
     <Stack
       width="100%"
@@ -41,7 +38,7 @@ const Accordion = ({
             width="100%"
             flexDirection="row"
             justifyContent={'space-between'}
-            onPress={onToggle}
+            onPress={() => setIsExpanded(prev => !prev)}
             cursor="pointer"
             py={8}
           >
@@ -70,7 +67,7 @@ const Accordion = ({
               </Paragraph>
             </Stack>
             <AnimatePresence>
-              {showNotifications && numberOfNewMessages && (
+              {!isExpanded && numberOfNewMessages && (
                 <Stack
                   key={`notifications-${title}}`}
                   width={20}

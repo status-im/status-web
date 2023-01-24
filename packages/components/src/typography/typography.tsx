@@ -11,12 +11,12 @@ export const Heading = styled(SizableText, {
       h1: {
         fontSize: 27,
         lineHeight: 32,
-        letterSpacing: '-0.021em',
+        letterSpacing: -0.021,
       },
       h2: {
         fontSize: 19,
         lineHeight: 26,
-        letterSpacing: '-0.016em',
+        letterSpacing: -0.016,
       },
     },
     uppercase: {
@@ -53,17 +53,17 @@ export const Paragraph = styled(SizableText, {
       normal: {
         fontSize: 15,
         lineHeight: 22,
-        letterSpacing: '-0.009em',
+        letterSpacing: -0.009,
       },
       smaller: {
         fontSize: 13,
         lineHeight: 18,
-        letterSpacing: '-0.003em',
+        letterSpacing: -0.003,
       },
       11: {
         fontSize: 11,
         lineHeight: 18,
-        letterSpacing: '-0.003em',
+        letterSpacing: -0.003,
       },
     },
     uppercase: {
@@ -98,7 +98,7 @@ export const Label = styled(SizableText, {
 
   fontSize: 11,
   lineHeight: 16,
-  letterSpacing: '-0.005em',
+  letterSpacing: -0.005,
 
   variants: {
     uppercase: {
@@ -132,18 +132,18 @@ export const Code = styled(SizableText, {
 
   fontSize: 11,
   lineHeight: 16,
-  letterSpacing: '-0.005em',
+  letterSpacing: -0.005,
 
   variants: {
     normal: {
       fontSize: 15,
       lineHeight: 22,
-      letterSpacing: '-0.009em',
+      letterSpacing: -0.009,
     },
     smaller: {
       fontSize: 13,
       lineHeight: 18,
-      letterSpacing: '-0.003em',
+      letterSpacing: -0.003,
     },
     uppercase: {
       true: {

@@ -8,6 +8,7 @@ export * from './input'
 export * from './messages'
 export * from './sidebar'
 export * from './sidebar-members'
+export * from './topbar'
 export * from './typography'
 export * from './user-list'
 
