@@ -10,8 +10,12 @@ const Base = styled(Stack, {
   accessibilityRole: 'button',
 
   borderRadius: 12,
+  display: 'flex',
+  paddingHorizontal: 16,
+  paddingTop: 7,
+  paddingBottom: 9,
   cursor: 'pointer',
-  display: 'inline-flex',
+
   alignItems: 'center',
   animation: 'fast',
   userSelect: 'none',
@@ -65,7 +69,7 @@ const Base = styled(Stack, {
 const ButtonText = styled(Paragraph, {
   textAlign: 'center',
   weight: 'medium',
-  display: 'inline-flex',
+  display: 'flex',
   alignItems: 'center',
   space: 4,
 

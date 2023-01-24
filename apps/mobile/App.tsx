@@ -4,11 +4,14 @@ import 'expo-dev-client'
 
 import { useMemo, useState } from 'react'
 
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Heading } from '@status-im/components'
+import { Heading, IconButton, Paragraph } from '@status-im/components'
 import { Avatar } from '@status-im/components/src/avatar'
+import { ArrowLeftIcon, MembersIcon } from '@status-im/icons/20'
 import { Stack as View, TamaguiProvider } from '@tamagui/core'
 import { useFonts } from 'expo-font'
+import { Platform } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { AnimatePresence } from 'tamagui'
 
@@ -17,7 +20,34 @@ import { ChannelScreen } from './screens/channel'
 import { HomeScreen } from './screens/home'
 import tamaguiConfig from './tamagui.config'
 
-const Stack = createNativeStackNavigator()
+import type { RouteProp } from '@react-navigation/native'
+import type { HeaderBackButtonProps } from '@react-navigation/native-stack/lib/typescript/src/types'
+
+export type RootStackParamList = {
+  Home: undefined
+  Channel: { channelId: string }
+}
+
+const Stack = createNativeStackNavigator<RootStackParamList>()
+
+const CustomHeaderLeft = (props: HeaderBackButtonProps) => {
+  const navigation = useNavigation()
+  const route = useRoute<RouteProp<RootStackParamList, 'Channel'>>()
+
+  return (
+    <>
+      <IconButton
+        icon={<ArrowLeftIcon />}
+        onPress={() => {
+          props.canGoBack && navigation.goBack()
+        }}
+      />
+      <Paragraph weight="semibold" marginLeft={12}>
+        # {route.params.channelId || 'channel'}
+      </Paragraph>
+    </>
+  )
+}
 
 export default function App() {
   const [position, setPosition] = useState(0)
@@ -49,13 +79,16 @@ export default function App() {
     <TamaguiProvider config={tamaguiConfig} defaultTheme="light">
       <NavigationProvider>
         <SafeAreaProvider>
-          <Stack.Navigator>
+          <Stack.Navigator
+            screenOptions={{
+              animation: 'slide_from_right',
+            }}
+          >
             <Stack.Screen
               name="Home"
               options={{
-                headerBlurEffect: 'systemUltraThinMaterialLight',
                 headerTransparent: true,
-                headerShadowVisible: true,
+                headerShadowVisible: false,
                 header: () => (
                   <View
                     height={100}
@@ -113,7 +146,31 @@ export default function App() {
             <Stack.Screen
               name="Channel"
               component={ChannelScreen}
-              options={{ title: 'Messages' }}
+              options={{
+                headerBlurEffect: 'systemUltraThinMaterialLight',
+                headerStyle: {
+                  backgroundColor: Platform.select({
+                    ios: 'transparent',
+                    default: 'white',
+                  }),
+                },
+                headerTransparent: true,
+                headerShadowVisible: false,
+                headerTitle: '',
+                headerLeft(props) {
+                  return <CustomHeaderLeft {...props} />
+                },
+                headerRight() {
+                  return (
+                    <IconButton
+                      icon={<MembersIcon />}
+                      onPress={() => {
+                        // noop
+                      }}
+                    />
+                  )
+                },
+              }}
             />
           </Stack.Navigator>
         </SafeAreaProvider>

@@ -25,7 +25,7 @@ const ReactButton = styled(Stack, {
   cursor: 'pointer',
   userSelect: 'none',
   borderRadius: 8,
-  display: 'inline-flex',
+  display: 'flex',
   flexDirection: 'row',
   space: 4,
   alignItems: 'center',
@@ -82,7 +82,7 @@ export const Reactions = (props: Props) => {
   console.log(reactions)
 
   return (
-    <XStack space={8}>
+    <XStack space={8} flexWrap="wrap">
       <ReactionButton count={1} icon={<LoveIcon />} selected />
       <ReactionButton count={10} icon={<ThumbsUpIcon />} />
       <ReactionButton count={99} icon={<ThumbsDownIcon />} />

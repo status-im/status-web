@@ -2,7 +2,6 @@ import { cloneElement } from 'react'
 
 import { Stack, styled, Text } from '@tamagui/core'
 
-// import { Pressable } from 'react-native'
 import type React from 'react'
 
 const Base = styled(Stack, {
@@ -12,6 +11,9 @@ const Base = styled(Stack, {
   cursor: 'pointer',
   userSelect: 'none',
   borderRadius: 10,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   animation: 'fast',
 
   width: 30,
