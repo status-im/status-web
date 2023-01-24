@@ -7,29 +7,29 @@ import {
   SidebarMembers,
   Topbar,
 } from '@status-im/components'
-import { TamaguiProvider } from '@tamagui/core'
+import { Stack, styled, TamaguiProvider } from '@tamagui/core'
+import { AnimatePresence } from 'tamagui'
 
-// import { AnimatePresence } from 'tamagui'
 import tamaguiConfig from '../tamagui.config'
 
 type ThemeVars = 'light' | 'dark'
 
-// const AnimatableDrawer = styled(Stack, {
-//   variants: {
-//     fromRight: {
-//       true: {
-//         x: 500,
-//         width: 0,
-//       },
-//     },
-//     fromLeft: {
-//       true: {
-//         x: 500,
-//         width: 250,
-//       },
-//     },
-//   },
-// })
+const AnimatableDrawer = styled(Stack, {
+  variants: {
+    fromRight: {
+      true: {
+        x: 500,
+        width: 0,
+      },
+    },
+    fromLeft: {
+      true: {
+        x: 500,
+        width: 250,
+      },
+    },
+  },
+})
 
 function App() {
   const [theme, setTheme] = useState<ThemeVars>('light')
@@ -65,12 +65,27 @@ function App() {
           </div>
           <Composer />
         </main>
-
-        {showMembers && (
-          <div id="members">
-            <SidebarMembers />
-          </div>
-        )}
+        <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
+          {showMembers && (
+            <AnimatableDrawer
+              id="members"
+              key="members"
+              animation={[
+                'fast',
+                {
+                  opacity: {
+                    overshootClamping: true,
+                  },
+                },
+              ]}
+              enterStyle={{ opacity: 0 }}
+              exitStyle={{ opacity: 0 }}
+              opacity={1}
+            >
+              <SidebarMembers />
+            </AnimatableDrawer>
+          )}
+        </AnimatePresence>
       </div>
     </TamaguiProvider>
   )
