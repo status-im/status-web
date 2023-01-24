@@ -4,8 +4,6 @@ import { Topbar } from './topbar'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-console.log(MINIMAL_VIEWPORTS)
-
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta<typeof Topbar> = {
   title: 'Navigation/Topbar',
@@ -14,6 +12,10 @@ const meta: Meta<typeof Topbar> = {
   parameters: {
     viewport: {
       viewports: MINIMAL_VIEWPORTS,
+    },
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/qSIh8wh9EVdY8S2sZce15n/Composer-for-Web?node-id=7213%3A553827&t=11hKj5jyWVroXgdu-4',
     },
   },
 }
