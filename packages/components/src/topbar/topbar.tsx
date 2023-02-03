@@ -1,3 +1,5 @@
+// import { useCallback, useEffect, useState } from 'react'
+
 import { Divider, IconButton, Paragraph } from '@status-im/components'
 import {
   ArrowLeftIcon,
@@ -7,16 +9,32 @@ import {
 } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
+import type { GetProps, StackProps } from '@tamagui/core'
+
+type BaseProps = GetProps<typeof Stack>
+
 type Props = {
   membersVisisble: boolean
   onMembersPress: () => void
   goBack?: () => void
   title?: string
   description?: string
-}
+  icon?: React.ReactNode
+  refForScroll?: React.RefObject<HTMLDivElement>
+  backgroundColor?: StackProps['backgroundColor']
+} & BaseProps
 
 const Topbar = (props: Props) => {
-  const { membersVisisble, onMembersPress, goBack, title, description } = props
+  const {
+    membersVisisble,
+    onMembersPress,
+    goBack,
+    title,
+    description,
+    icon,
+    backgroundColor,
+    ...rest
+  } = props
 
   return (
     <Stack
@@ -25,14 +43,18 @@ const Topbar = (props: Props) => {
       alignItems="center"
       justifyContent="space-between"
       padding={16}
+      backgroundColor={backgroundColor || '$background'}
       borderBottomWidth={1}
       borderColor="$neutral-10"
       width="100%"
+      {...rest}
     >
       <Stack flexDirection="row" alignItems="center" flexWrap="wrap">
         <Stack mr={12} $gtSm={{ display: 'none' }}>
           <IconButton icon={<ArrowLeftIcon />} onPress={() => goBack?.()} />
         </Stack>
+
+        {icon && <Stack marginRight={12}>{icon}</Stack>}
 
         {title && (
           <Paragraph weight="semibold" marginRight={4}>

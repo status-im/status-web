@@ -95,7 +95,13 @@ export const config = createTamagui({
     mono: monoFont,
   },
   themes,
-  tokens,
+  tokens: {
+    colors: {
+      ...tokens.color,
+    },
+    ...tokens,
+  },
+  shouldAddPrefersColorThemes: true,
   media: createMedia({
     xs: { maxWidth: 660 },
     sm: { maxWidth: 800 },

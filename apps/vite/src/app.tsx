@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { cloneElement, useState } from 'react'
 
 import {
   Composer,
@@ -7,10 +7,15 @@ import {
   SidebarMembers,
   Topbar,
 } from '@status-im/components'
+import { useScrollPosition } from '@status-im/components/hooks'
+import { COMMUNITIES } from '@status-im/components/src/sidebar/mock-data'
 import { Stack, styled, TamaguiProvider } from '@tamagui/core'
+import { BlurView } from 'expo-blur'
 import { AnimatePresence } from 'tamagui'
 
 import tamaguiConfig from '../tamagui.config'
+
+import type { ReactElement, ReactNode } from 'react'
 
 type ThemeVars = 'light' | 'dark'
 
@@ -36,10 +41,23 @@ function App() {
   const [showMembers, setShowMembers] = useState(false)
 
   const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
+  // TODO - this is a hack to get the icon to show up in the topbar when a channel is selected on mount
 
-  const onChannelPress = (id: string) => {
+  const [icon, setIcon] = useState<ReactNode>(
+    cloneElement(COMMUNITIES[0].channels[0].icon as ReactElement, {
+      hasBackground: false,
+    })
+  )
+
+  const onChannelPress = (id: string, icon?: ReactNode) => {
     setSelectedChannel(id)
+    setIcon(icon)
   }
+
+  const { ref, scrollPos } = useScrollPosition()
+
+  const shouldBlurBackground =
+    scrollPos <= ref.current?.scrollHeight - (ref.current?.clientHeight + 32)
 
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={'light'}>
@@ -54,16 +72,30 @@ function App() {
           />
         </div>
         <main id="main">
-          <Topbar
-            title={`#${selectedChannel}`}
-            description="Share random funny stuff with the community. Play nice."
-            membersVisisble={showMembers}
-            onMembersPress={() => setShowMembers(show => !show)}
-          />
-          <div id="content">
+          <BlurView intensity={40} style={{ zIndex: 100 }}>
+            <Topbar
+              // TODO we need to handle this correctly when having dark mode
+              backgroundColor="$white-70"
+              icon={
+                icon &&
+                cloneElement(icon as ReactElement, { hasBackground: false })
+              }
+              title={`#${selectedChannel}`}
+              description="Share random funny stuff with the community. Play nice."
+              membersVisisble={showMembers}
+              onMembersPress={() => setShowMembers(show => !show)}
+            />
+          </BlurView>
+          <div id="content" ref={ref}>
             <Messages />
           </div>
-          <Composer />
+          <BlurView intensity={40} style={{ zIndex: 100, marginTop: -112 }}>
+            <Composer
+              backgroundColor="$white-70"
+              paddingBottom={56}
+              isBlurred={shouldBlurBackground}
+            />
+          </BlurView>
         </main>
         <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
           {showMembers && (

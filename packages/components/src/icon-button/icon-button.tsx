@@ -1,6 +1,6 @@
 import { cloneElement } from 'react'
 
-import { Stack, styled, Text } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 
 import type React from 'react'
 
@@ -55,6 +55,22 @@ const Base = styled(Stack, {
         },
       },
     },
+    blurred: {
+      true: {
+        backgroundColor: 'transparent',
+        borderColor: '$neutral-80-opa-10',
+
+        hoverStyle: {
+          backgroundColor: 'transparent',
+          borderColor: '$neutral-80-opa-20',
+        },
+
+        pressStyle: {
+          backgroundColor: 'transparent',
+          borderColor: '$neutral-80-opa-20',
+        },
+      },
+    },
   } as const,
 })
 
@@ -63,19 +79,24 @@ interface Props {
   onPress?: () => void
   selected?: boolean
   transparent?: boolean
+  blurred?: boolean
   // FIXME: enforce aria-label for accessibility
   // 'aria-label'?: string
 }
 
 const IconButton = (props: Props) => {
-  const { icon, transparent, selected, onPress } = props
+  const { icon, transparent, selected, blurred, onPress } = props
 
   return (
-    <Base selected={selected} onPress={onPress} transparent={transparent}>
+    <Base
+      selected={selected}
+      onPress={onPress}
+      transparent={transparent}
+      blurred={blurred}
+    >
       {cloneElement(icon, {
         color: selected ? '$neutral-100' : '$neutral-50',
         size: 20,
-        pressEvents: 'none',
       })}
     </Base>
   )

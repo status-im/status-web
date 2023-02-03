@@ -13,10 +13,27 @@ import type { GetProps } from '@tamagui/core'
 
 type BaseProps = GetProps<typeof YStack>
 
-const Composer = (props: BaseProps) => {
+const Composer = (
+  props: BaseProps & {
+    placeholderTextColor?: BaseProps['backgroundColor']
+    iconOptionsColor?: BaseProps['backgroundColor']
+    isBlurred?: boolean
+  }
+) => {
+  const {
+    backgroundColor,
+
+    isBlurred,
+    ...rest
+  } = props
+
+  const applyVariantStyles = isBlurred
+    ? { blurred: true }
+    : { transparent: true }
+
   return (
     <YStack
-      backgroundColor="$background"
+      backgroundColor={backgroundColor || '$background'}
       shadowColor="rgba(9, 16, 28, 0.08)"
       shadowOffset={{ width: 0, height: -4 }}
       shadowRadius={20}
@@ -28,16 +45,26 @@ const Composer = (props: BaseProps) => {
       style={{
         elevation: 10,
       }}
-      {...props}
+      {...rest}
     >
-      <Input placeholder="Type something..." borderWidth={0} px={0} />
-      <XStack alignItems="center" justifyContent="space-between" pt={8}>
-        <Stack space={12} flexDirection="row">
-          <IconButton icon={<ImageIcon />} transparent />
-          <IconButton icon={<ReactionIcon />} transparent />
-          <IconButton icon={<FormatIcon />} transparent />
+      <Input
+        className="composer-input"
+        placeholder="Type something..."
+        px={0}
+        blurred={isBlurred}
+      />
+      <XStack
+        alignItems="center"
+        justifyContent="space-between"
+        pt={8}
+        backgroundColor="transparent"
+      >
+        <Stack space={12} flexDirection="row" backgroundColor="transparent">
+          <IconButton icon={<ImageIcon />} {...applyVariantStyles} />
+          <IconButton icon={<ReactionIcon />} {...applyVariantStyles} />
+          <IconButton icon={<FormatIcon />} {...applyVariantStyles} />
         </Stack>
-        <IconButton icon={<AudioIcon />} transparent />
+        <IconButton icon={<AudioIcon />} {...applyVariantStyles} />
       </XStack>
     </YStack>
   )
