@@ -35,10 +35,10 @@
     "js-waku": "^0.30.0",
     "long": "^5.2.0",
     "protobufjs": "^6.11.3",
-    "protons-runtime": "^1.0.4"
+    "protons-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "protons": "^3.0.4"
+    "protons": "^7.0.0"
   },
   "files": [
     "dist/",
