@@ -38,13 +38,15 @@ export namespace CommunityMember {
   export enum Roles {
     UNKNOWN_ROLE = 'UNKNOWN_ROLE',
     ROLE_ALL = 'ROLE_ALL',
-    ROLE_MANAGE_USERS = 'ROLE_MANAGE_USERS'
+    ROLE_MANAGE_USERS = 'ROLE_MANAGE_USERS',
+    ROLE_MODERATE_CONTENT = 'ROLE_MODERATE_CONTENT'
   }
 
   enum __RolesValues {
     UNKNOWN_ROLE = 0,
     ROLE_ALL = 1,
-    ROLE_MANAGE_USERS = 2
+    ROLE_MANAGE_USERS = 2,
+    ROLE_MODERATE_CONTENT = 3
   }
 
   export namespace Roles {
@@ -122,6 +124,10 @@ export interface CommunityDescription {
   categories: CommunityCategory
   archiveMagnetlinkClock: bigint
   adminSettings: CommunityAdminSettings
+  introMessage: string
+  outroMessage: string
+  encrypted: boolean
+  tags: string[]
 }
 
 export namespace CommunityDescription {
@@ -135,7 +141,11 @@ export namespace CommunityDescription {
       7: { name: 'banList', codec: string, repeats: true },
       8: { name: 'categories', codec: CommunityCategory.codec() },
       9: { name: 'archiveMagnetlinkClock', codec: uint64 },
-      10: { name: 'adminSettings', codec: CommunityAdminSettings.codec() }
+      10: { name: 'adminSettings', codec: CommunityAdminSettings.codec() },
+      11: { name: 'introMessage', codec: string },
+      12: { name: 'outroMessage', codec: string },
+      13: { name: 'encrypted', codec: bool },
+      14: { name: 'tags', codec: string, repeats: true }
     })
   }
 
@@ -251,6 +261,7 @@ export interface CommunityRequestToJoin {
   ensName: string
   chatId: string
   communityId: Uint8Array
+  displayName: string
 }
 
 export namespace CommunityRequestToJoin {
@@ -259,7 +270,8 @@ export namespace CommunityRequestToJoin {
       1: { name: 'clock', codec: uint64 },
       2: { name: 'ensName', codec: string },
       3: { name: 'chatId', codec: string },
-      4: { name: 'communityId', codec: bytes }
+      4: { name: 'communityId', codec: bytes },
+      5: { name: 'displayName', codec: string }
     })
   }
 
@@ -272,11 +284,41 @@ export namespace CommunityRequestToJoin {
   }
 }
 
+export interface CommunityCancelRequestToJoin {
+  clock: bigint
+  ensName: string
+  chatId: string
+  communityId: Uint8Array
+  displayName: string
+}
+
+export namespace CommunityCancelRequestToJoin {
+  export const codec = (): Codec<CommunityCancelRequestToJoin> => {
+    return message<CommunityCancelRequestToJoin>({
+      1: { name: 'clock', codec: uint64 },
+      2: { name: 'ensName', codec: string },
+      3: { name: 'chatId', codec: string },
+      4: { name: 'communityId', codec: bytes },
+      5: { name: 'displayName', codec: string }
+    })
+  }
+
+  export const encode = (obj: CommunityCancelRequestToJoin): Uint8Array => {
+    return encodeMessage(obj, CommunityCancelRequestToJoin.codec())
+  }
+
+  export const decode = (buf: Uint8Array): CommunityCancelRequestToJoin => {
+    return decodeMessage(buf, CommunityCancelRequestToJoin.codec())
+  }
+}
+
 export interface CommunityRequestToJoinResponse {
   clock: bigint
   community: CommunityDescription
   accepted: boolean
   grant: Uint8Array
+  communityId: Uint8Array
+  magnetUri: string
 }
 
 export namespace CommunityRequestToJoinResponse {
@@ -285,7 +327,9 @@ export namespace CommunityRequestToJoinResponse {
       1: { name: 'clock', codec: uint64 },
       2: { name: 'community', codec: CommunityDescription.codec() },
       3: { name: 'accepted', codec: bool },
-      4: { name: 'grant', codec: bytes }
+      4: { name: 'grant', codec: bytes },
+      5: { name: 'communityId', codec: bytes },
+      6: { name: 'magnetUri', codec: string }
     })
   }
 
@@ -295,6 +339,28 @@ export namespace CommunityRequestToJoinResponse {
 
   export const decode = (buf: Uint8Array): CommunityRequestToJoinResponse => {
     return decodeMessage(buf, CommunityRequestToJoinResponse.codec())
+  }
+}
+
+export interface CommunityRequestToLeave {
+  clock: bigint
+  communityId: Uint8Array
+}
+
+export namespace CommunityRequestToLeave {
+  export const codec = (): Codec<CommunityRequestToLeave> => {
+    return message<CommunityRequestToLeave>({
+      1: { name: 'clock', codec: uint64 },
+      2: { name: 'communityId', codec: bytes }
+    })
+  }
+
+  export const encode = (obj: CommunityRequestToLeave): Uint8Array => {
+    return encodeMessage(obj, CommunityRequestToLeave.codec())
+  }
+
+  export const decode = (buf: Uint8Array): CommunityRequestToLeave => {
+    return decodeMessage(buf, CommunityRequestToLeave.codec())
   }
 }
 
@@ -327,6 +393,7 @@ export interface WakuMessage {
   payload: Uint8Array
   padding: Uint8Array
   hash: Uint8Array
+  thirdPartyId: string
 }
 
 export namespace WakuMessage {
@@ -337,7 +404,8 @@ export namespace WakuMessage {
       3: { name: 'topic', codec: bytes },
       4: { name: 'payload', codec: bytes },
       5: { name: 'padding', codec: bytes },
-      6: { name: 'hash', codec: bytes }
+      6: { name: 'hash', codec: bytes },
+      7: { name: 'thirdPartyId', codec: string }
     })
   }
 
@@ -456,6 +524,8 @@ export interface ChatIdentity {
   description: string
   color: string
   emoji: string
+  socialLinks: SocialLink[]
+  firstMessageTimestamp: number
 }
 
 export namespace ChatIdentity {
@@ -467,7 +537,9 @@ export namespace ChatIdentity {
       4: { name: 'displayName', codec: string },
       5: { name: 'description', codec: string },
       6: { name: 'color', codec: string },
-      7: { name: 'emoji', codec: string }
+      7: { name: 'emoji', codec: string },
+      8: { name: 'socialLinks', codec: SocialLink.codec(), repeats: true },
+      9: { name: 'firstMessageTimestamp', codec: uint32 }
     })
   }
 
@@ -523,6 +595,28 @@ export namespace IdentityImage {
 
   export const decode = (buf: Uint8Array): IdentityImage => {
     return decodeMessage(buf, IdentityImage.codec())
+  }
+}
+
+export interface SocialLink {
+  text: string
+  url: string
+}
+
+export namespace SocialLink {
+  export const codec = (): Codec<SocialLink> => {
+    return message<SocialLink>({
+      1: { name: 'text', codec: string },
+      2: { name: 'url', codec: string }
+    })
+  }
+
+  export const encode = (obj: SocialLink): Uint8Array => {
+    return encodeMessage(obj, SocialLink.codec())
+  }
+
+  export const decode = (buf: Uint8Array): SocialLink => {
+    return decodeMessage(buf, SocialLink.codec())
   }
 }
 

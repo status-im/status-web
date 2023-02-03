@@ -1,7 +1,7 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import { encodeMessage, decodeMessage, message, uint64, string, enumeration, bytes, bool } from 'protons-runtime'
+import { encodeMessage, decodeMessage, message, uint64, string, uint32, enumeration, bytes, bool } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface ChatIdentity {
@@ -12,6 +12,8 @@ export interface ChatIdentity {
   description: string
   color: string
   emoji: string
+  socialLinks: SocialLink[]
+  firstMessageTimestamp: number
 }
 
 export namespace ChatIdentity {
@@ -23,7 +25,9 @@ export namespace ChatIdentity {
       4: { name: 'displayName', codec: string },
       5: { name: 'description', codec: string },
       6: { name: 'color', codec: string },
-      7: { name: 'emoji', codec: string }
+      7: { name: 'emoji', codec: string },
+      8: { name: 'socialLinks', codec: SocialLink.codec(), repeats: true },
+      9: { name: 'firstMessageTimestamp', codec: uint32 }
     })
   }
 
@@ -79,6 +83,28 @@ export namespace IdentityImage {
 
   export const decode = (buf: Uint8Array): IdentityImage => {
     return decodeMessage(buf, IdentityImage.codec())
+  }
+}
+
+export interface SocialLink {
+  text: string
+  url: string
+}
+
+export namespace SocialLink {
+  export const codec = (): Codec<SocialLink> => {
+    return message<SocialLink>({
+      1: { name: 'text', codec: string },
+      2: { name: 'url', codec: string }
+    })
+  }
+
+  export const encode = (obj: SocialLink): Uint8Array => {
+    return encodeMessage(obj, SocialLink.codec())
+  }
+
+  export const decode = (buf: Uint8Array): SocialLink => {
+    return decodeMessage(buf, SocialLink.codec())
   }
 }
 
