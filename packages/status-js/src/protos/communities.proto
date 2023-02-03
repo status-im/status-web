@@ -14,6 +14,7 @@ message CommunityMember {
     UNKNOWN_ROLE = 0;
     ROLE_ALL = 1;
     ROLE_MANAGE_USERS = 2;
+    ROLE_MODERATE_CONTENT = 3;
   }
   repeated Roles roles = 1;
 }
@@ -42,6 +43,10 @@ message CommunityDescription {
   map<string,CommunityCategory> categories = 8;
   uint64 archive_magnetlink_clock = 9;
   CommunityAdminSettings admin_settings = 10;
+  string intro_message = 11;
+  string outro_message = 12;
+  bool encrypted = 13;
+  repeated string tags = 14;
 }
 
 message CommunityAdminSettings {
@@ -74,6 +79,15 @@ message CommunityRequestToJoin {
   string ens_name = 2;
   string chat_id = 3;
   bytes community_id = 4;
+  string display_name = 5;
+}
+
+message CommunityCancelRequestToJoin {
+  uint64 clock = 1;
+  string ens_name = 2;
+  string chat_id = 3;
+  bytes community_id = 4;
+  string display_name = 5;
 }
 
 message CommunityRequestToJoinResponse {
@@ -81,6 +95,13 @@ message CommunityRequestToJoinResponse {
   CommunityDescription community = 2;
   bool accepted = 3;
   bytes grant = 4;
+  bytes community_id = 5;
+  string magnet_uri = 6;
+}
+
+message CommunityRequestToLeave {
+  uint64 clock = 1;
+  bytes community_id = 2;
 }
 
 message CommunityMessageArchiveMagnetlink {
@@ -95,6 +116,7 @@ message WakuMessage {
   bytes payload = 4;
   bytes padding = 5;
   bytes hash = 6;
+  string thirdPartyId = 7;
 }
 
 message WakuMessageArchiveMetadata {
