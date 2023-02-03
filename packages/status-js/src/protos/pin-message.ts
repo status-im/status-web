@@ -1,8 +1,12 @@
 /* eslint-disable import/export */
+/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-unnecessary-boolean-literal-compare */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 
-import { encodeMessage, decodeMessage, message, uint64, string, bool, enumeration } from 'protons-runtime'
+import { encodeMessage, decodeMessage, message, enumeration } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
+import type { Uint8ArrayList } from 'uint8arraylist'
 
 export interface PinMessage {
   clock: bigint
@@ -13,21 +17,91 @@ export interface PinMessage {
 }
 
 export namespace PinMessage {
+  let _codec: Codec<PinMessage>
+
   export const codec = (): Codec<PinMessage> => {
-    return message<PinMessage>({
-      1: { name: 'clock', codec: uint64 },
-      2: { name: 'messageId', codec: string },
-      3: { name: 'chatId', codec: string },
-      4: { name: 'pinned', codec: bool },
-      5: { name: 'messageType', codec: MessageType.codec() }
-    })
+    if (_codec == null) {
+      _codec = message<PinMessage>((obj, w, opts = {}) => {
+        if (opts.lengthDelimited !== false) {
+          w.fork()
+        }
+
+        if (opts.writeDefaults === true || (obj.clock != null && obj.clock !== 0n)) {
+          w.uint32(8)
+          w.uint64(obj.clock ?? 0n)
+        }
+
+        if (opts.writeDefaults === true || (obj.messageId != null && obj.messageId !== '')) {
+          w.uint32(18)
+          w.string(obj.messageId ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.chatId != null && obj.chatId !== '')) {
+          w.uint32(26)
+          w.string(obj.chatId ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.pinned != null && obj.pinned !== false)) {
+          w.uint32(32)
+          w.bool(obj.pinned ?? false)
+        }
+
+        if (opts.writeDefaults === true || (obj.messageType != null && __MessageTypeValues[obj.messageType] !== 0)) {
+          w.uint32(40)
+          MessageType.codec().encode(obj.messageType ?? MessageType.UNKNOWN_MESSAGE_TYPE, w)
+        }
+
+        if (opts.lengthDelimited !== false) {
+          w.ldelim()
+        }
+      }, (reader, length) => {
+        const obj: any = {
+          clock: 0n,
+          messageId: '',
+          chatId: '',
+          pinned: false,
+          messageType: MessageType.UNKNOWN_MESSAGE_TYPE
+        }
+
+        const end = length == null ? reader.len : reader.pos + length
+
+        while (reader.pos < end) {
+          const tag = reader.uint32()
+
+          switch (tag >>> 3) {
+            case 1:
+              obj.clock = reader.uint64()
+              break
+            case 2:
+              obj.messageId = reader.string()
+              break
+            case 3:
+              obj.chatId = reader.string()
+              break
+            case 4:
+              obj.pinned = reader.bool()
+              break
+            case 5:
+              obj.messageType = MessageType.codec().decode(reader)
+              break
+            default:
+              reader.skipType(tag & 7)
+              break
+          }
+        }
+
+        return obj
+      })
+    }
+
+    return _codec
   }
 
-  export const encode = (obj: PinMessage): Uint8Array => {
+  export const encode = (obj: Partial<PinMessage>): Uint8Array => {
     return encodeMessage(obj, PinMessage.codec())
   }
 
-  export const decode = (buf: Uint8Array): PinMessage => {
+  export const decode = (buf: Uint8Array | Uint8ArrayList): PinMessage => {
     return decodeMessage(buf, PinMessage.codec())
   }
 }
@@ -53,8 +127,8 @@ enum __MessageTypeValues {
 }
 
 export namespace MessageType {
-  export const codec = () => {
-    return enumeration<typeof MessageType>(__MessageTypeValues)
+  export const codec = (): Codec<MessageType> => {
+    return enumeration<MessageType>(__MessageTypeValues)
   }
 }
 export enum ImageType {
@@ -74,7 +148,7 @@ enum __ImageTypeValues {
 }
 
 export namespace ImageType {
-  export const codec = () => {
-    return enumeration<typeof ImageType>(__ImageTypeValues)
+  export const codec = (): Codec<ImageType> => {
+    return enumeration<ImageType>(__ImageTypeValues)
   }
 }

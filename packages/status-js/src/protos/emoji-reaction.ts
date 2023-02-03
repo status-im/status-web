@@ -1,8 +1,12 @@
 /* eslint-disable import/export */
+/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-unnecessary-boolean-literal-compare */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 
-import { enumeration, encodeMessage, decodeMessage, message, uint64, string, bool, bytes } from 'protons-runtime'
+import { enumeration, encodeMessage, decodeMessage, message } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
+import type { Uint8ArrayList } from 'uint8arraylist'
 
 export interface EmojiReaction {
   clock: bigint
@@ -36,28 +40,114 @@ export namespace EmojiReaction {
   }
 
   export namespace Type {
-    export const codec = () => {
-      return enumeration<typeof Type>(__TypeValues)
+    export const codec = (): Codec<Type> => {
+      return enumeration<Type>(__TypeValues)
     }
   }
 
+  let _codec: Codec<EmojiReaction>
+
   export const codec = (): Codec<EmojiReaction> => {
-    return message<EmojiReaction>({
-      1: { name: 'clock', codec: uint64 },
-      2: { name: 'chatId', codec: string },
-      3: { name: 'messageId', codec: string },
-      4: { name: 'messageType', codec: MessageType.codec() },
-      5: { name: 'type', codec: EmojiReaction.Type.codec() },
-      6: { name: 'retracted', codec: bool },
-      7: { name: 'grant', codec: bytes }
-    })
+    if (_codec == null) {
+      _codec = message<EmojiReaction>((obj, w, opts = {}) => {
+        if (opts.lengthDelimited !== false) {
+          w.fork()
+        }
+
+        if (opts.writeDefaults === true || (obj.clock != null && obj.clock !== 0n)) {
+          w.uint32(8)
+          w.uint64(obj.clock ?? 0n)
+        }
+
+        if (opts.writeDefaults === true || (obj.chatId != null && obj.chatId !== '')) {
+          w.uint32(18)
+          w.string(obj.chatId ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.messageId != null && obj.messageId !== '')) {
+          w.uint32(26)
+          w.string(obj.messageId ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.messageType != null && __MessageTypeValues[obj.messageType] !== 0)) {
+          w.uint32(32)
+          MessageType.codec().encode(obj.messageType ?? MessageType.UNKNOWN_MESSAGE_TYPE, w)
+        }
+
+        if (opts.writeDefaults === true || (obj.type != null && __TypeValues[obj.type] !== 0)) {
+          w.uint32(40)
+          EmojiReaction.Type.codec().encode(obj.type ?? EmojiReaction.Type.UNKNOWN_EMOJI_REACTION_TYPE, w)
+        }
+
+        if (opts.writeDefaults === true || (obj.retracted != null && obj.retracted !== false)) {
+          w.uint32(48)
+          w.bool(obj.retracted ?? false)
+        }
+
+        if (opts.writeDefaults === true || (obj.grant != null && obj.grant.byteLength > 0)) {
+          w.uint32(58)
+          w.bytes(obj.grant ?? new Uint8Array(0))
+        }
+
+        if (opts.lengthDelimited !== false) {
+          w.ldelim()
+        }
+      }, (reader, length) => {
+        const obj: any = {
+          clock: 0n,
+          chatId: '',
+          messageId: '',
+          messageType: MessageType.UNKNOWN_MESSAGE_TYPE,
+          type: Type.UNKNOWN_EMOJI_REACTION_TYPE,
+          retracted: false,
+          grant: new Uint8Array(0)
+        }
+
+        const end = length == null ? reader.len : reader.pos + length
+
+        while (reader.pos < end) {
+          const tag = reader.uint32()
+
+          switch (tag >>> 3) {
+            case 1:
+              obj.clock = reader.uint64()
+              break
+            case 2:
+              obj.chatId = reader.string()
+              break
+            case 3:
+              obj.messageId = reader.string()
+              break
+            case 4:
+              obj.messageType = MessageType.codec().decode(reader)
+              break
+            case 5:
+              obj.type = EmojiReaction.Type.codec().decode(reader)
+              break
+            case 6:
+              obj.retracted = reader.bool()
+              break
+            case 7:
+              obj.grant = reader.bytes()
+              break
+            default:
+              reader.skipType(tag & 7)
+              break
+          }
+        }
+
+        return obj
+      })
+    }
+
+    return _codec
   }
 
-  export const encode = (obj: EmojiReaction): Uint8Array => {
+  export const encode = (obj: Partial<EmojiReaction>): Uint8Array => {
     return encodeMessage(obj, EmojiReaction.codec())
   }
 
-  export const decode = (buf: Uint8Array): EmojiReaction => {
+  export const decode = (buf: Uint8Array | Uint8ArrayList): EmojiReaction => {
     return decodeMessage(buf, EmojiReaction.codec())
   }
 }
@@ -83,8 +173,8 @@ enum __MessageTypeValues {
 }
 
 export namespace MessageType {
-  export const codec = () => {
-    return enumeration<typeof MessageType>(__MessageTypeValues)
+  export const codec = (): Codec<MessageType> => {
+    return enumeration<MessageType>(__MessageTypeValues)
   }
 }
 export enum ImageType {
@@ -104,7 +194,7 @@ enum __ImageTypeValues {
 }
 
 export namespace ImageType {
-  export const codec = () => {
-    return enumeration<typeof ImageType>(__ImageTypeValues)
+  export const codec = (): Codec<ImageType> => {
+    return enumeration<ImageType>(__ImageTypeValues)
   }
 }

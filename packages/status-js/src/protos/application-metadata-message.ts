@@ -1,8 +1,12 @@
 /* eslint-disable import/export */
+/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-unnecessary-boolean-literal-compare */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 
-import { enumeration, encodeMessage, decodeMessage, message, bytes } from 'protons-runtime'
+import { enumeration, encodeMessage, decodeMessage, message } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
+import type { Uint8ArrayList } from 'uint8arraylist'
 
 export interface ApplicationMetadataMessage {
   signature: Uint8Array
@@ -86,24 +90,78 @@ export namespace ApplicationMetadataMessage {
   }
 
   export namespace Type {
-    export const codec = () => {
-      return enumeration<typeof Type>(__TypeValues)
+    export const codec = (): Codec<Type> => {
+      return enumeration<Type>(__TypeValues)
     }
   }
 
+  let _codec: Codec<ApplicationMetadataMessage>
+
   export const codec = (): Codec<ApplicationMetadataMessage> => {
-    return message<ApplicationMetadataMessage>({
-      1: { name: 'signature', codec: bytes },
-      2: { name: 'payload', codec: bytes },
-      3: { name: 'type', codec: ApplicationMetadataMessage.Type.codec() }
-    })
+    if (_codec == null) {
+      _codec = message<ApplicationMetadataMessage>((obj, w, opts = {}) => {
+        if (opts.lengthDelimited !== false) {
+          w.fork()
+        }
+
+        if (opts.writeDefaults === true || (obj.signature != null && obj.signature.byteLength > 0)) {
+          w.uint32(10)
+          w.bytes(obj.signature ?? new Uint8Array(0))
+        }
+
+        if (opts.writeDefaults === true || (obj.payload != null && obj.payload.byteLength > 0)) {
+          w.uint32(18)
+          w.bytes(obj.payload ?? new Uint8Array(0))
+        }
+
+        if (opts.writeDefaults === true || (obj.type != null && __TypeValues[obj.type] !== 0)) {
+          w.uint32(24)
+          ApplicationMetadataMessage.Type.codec().encode(obj.type ?? ApplicationMetadataMessage.Type.TYPE_UNKNOWN_UNSPECIFIED, w)
+        }
+
+        if (opts.lengthDelimited !== false) {
+          w.ldelim()
+        }
+      }, (reader, length) => {
+        const obj: any = {
+          signature: new Uint8Array(0),
+          payload: new Uint8Array(0),
+          type: Type.TYPE_UNKNOWN_UNSPECIFIED
+        }
+
+        const end = length == null ? reader.len : reader.pos + length
+
+        while (reader.pos < end) {
+          const tag = reader.uint32()
+
+          switch (tag >>> 3) {
+            case 1:
+              obj.signature = reader.bytes()
+              break
+            case 2:
+              obj.payload = reader.bytes()
+              break
+            case 3:
+              obj.type = ApplicationMetadataMessage.Type.codec().decode(reader)
+              break
+            default:
+              reader.skipType(tag & 7)
+              break
+          }
+        }
+
+        return obj
+      })
+    }
+
+    return _codec
   }
 
-  export const encode = (obj: ApplicationMetadataMessage): Uint8Array => {
+  export const encode = (obj: Partial<ApplicationMetadataMessage>): Uint8Array => {
     return encodeMessage(obj, ApplicationMetadataMessage.codec())
   }
 
-  export const decode = (buf: Uint8Array): ApplicationMetadataMessage => {
+  export const decode = (buf: Uint8Array | Uint8ArrayList): ApplicationMetadataMessage => {
     return decodeMessage(buf, ApplicationMetadataMessage.codec())
   }
 }

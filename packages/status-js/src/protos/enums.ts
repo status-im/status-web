@@ -1,5 +1,8 @@
 /* eslint-disable import/export */
+/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-unnecessary-boolean-literal-compare */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 
 import { enumeration } from 'protons-runtime'
 
@@ -24,8 +27,8 @@ enum __MessageTypeValues {
 }
 
 export namespace MessageType {
-  export const codec = () => {
-    return enumeration<typeof MessageType>(__MessageTypeValues)
+  export const codec = (): Codec<MessageType> => {
+    return enumeration<MessageType>(__MessageTypeValues)
   }
 }
 export enum ImageType {
@@ -45,7 +48,7 @@ enum __ImageTypeValues {
 }
 
 export namespace ImageType {
-  export const codec = () => {
-    return enumeration<typeof ImageType>(__ImageTypeValues)
+  export const codec = (): Codec<ImageType> => {
+    return enumeration<ImageType>(__ImageTypeValues)
   }
 }

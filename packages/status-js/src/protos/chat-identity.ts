@@ -1,13 +1,17 @@
 /* eslint-disable import/export */
+/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable @typescript-eslint/no-unnecessary-boolean-literal-compare */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 
-import { encodeMessage, decodeMessage, message, uint64, string, uint32, enumeration, bytes, bool } from 'protons-runtime'
+import { encodeMessage, decodeMessage, message, enumeration } from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
+import type { Uint8ArrayList } from 'uint8arraylist'
 
 export interface ChatIdentity {
   clock: bigint
   ensName: string
-  images: IdentityImage
+  images: Map<string, IdentityImage>
   displayName: string
   description: string
   color: string
@@ -17,25 +21,207 @@ export interface ChatIdentity {
 }
 
 export namespace ChatIdentity {
-  export const codec = (): Codec<ChatIdentity> => {
-    return message<ChatIdentity>({
-      1: { name: 'clock', codec: uint64 },
-      2: { name: 'ensName', codec: string },
-      3: { name: 'images', codec: IdentityImage.codec() },
-      4: { name: 'displayName', codec: string },
-      5: { name: 'description', codec: string },
-      6: { name: 'color', codec: string },
-      7: { name: 'emoji', codec: string },
-      8: { name: 'socialLinks', codec: SocialLink.codec(), repeats: true },
-      9: { name: 'firstMessageTimestamp', codec: uint32 }
-    })
+  export interface ChatIdentity$imagesEntry {
+    key: string
+    value: IdentityImage
   }
 
-  export const encode = (obj: ChatIdentity): Uint8Array => {
+  export namespace ChatIdentity$imagesEntry {
+    let _codec: Codec<ChatIdentity$imagesEntry>
+
+    export const codec = (): Codec<ChatIdentity$imagesEntry> => {
+      if (_codec == null) {
+        _codec = message<ChatIdentity$imagesEntry>((obj, w, opts = {}) => {
+          if (opts.lengthDelimited !== false) {
+            w.fork()
+          }
+
+          if (opts.writeDefaults === true || (obj.key != null && obj.key !== '')) {
+            w.uint32(10)
+            w.string(obj.key ?? '')
+          }
+
+          if (obj.value != null) {
+            w.uint32(18)
+            IdentityImage.codec().encode(obj.value, w, {
+              writeDefaults: false
+            })
+          }
+
+          if (opts.lengthDelimited !== false) {
+            w.ldelim()
+          }
+        }, (reader, length) => {
+          const obj: any = {
+            key: '',
+            value: undefined
+          }
+
+          const end = length == null ? reader.len : reader.pos + length
+
+          while (reader.pos < end) {
+            const tag = reader.uint32()
+
+            switch (tag >>> 3) {
+              case 1:
+                obj.key = reader.string()
+                break
+              case 2:
+                obj.value = IdentityImage.codec().decode(reader, reader.uint32())
+                break
+              default:
+                reader.skipType(tag & 7)
+                break
+            }
+          }
+
+          return obj
+        })
+      }
+
+      return _codec
+    }
+
+    export const encode = (obj: Partial<ChatIdentity$imagesEntry>): Uint8Array => {
+      return encodeMessage(obj, ChatIdentity$imagesEntry.codec())
+    }
+
+    export const decode = (buf: Uint8Array | Uint8ArrayList): ChatIdentity$imagesEntry => {
+      return decodeMessage(buf, ChatIdentity$imagesEntry.codec())
+    }
+  }
+
+  let _codec: Codec<ChatIdentity>
+
+  export const codec = (): Codec<ChatIdentity> => {
+    if (_codec == null) {
+      _codec = message<ChatIdentity>((obj, w, opts = {}) => {
+        if (opts.lengthDelimited !== false) {
+          w.fork()
+        }
+
+        if (opts.writeDefaults === true || (obj.clock != null && obj.clock !== 0n)) {
+          w.uint32(8)
+          w.uint64(obj.clock ?? 0n)
+        }
+
+        if (opts.writeDefaults === true || (obj.ensName != null && obj.ensName !== '')) {
+          w.uint32(18)
+          w.string(obj.ensName ?? '')
+        }
+
+        if (obj.images != null && obj.images.size !== 0) {
+          for (const [key, value] of obj.images.entries()) {
+            w.uint32(26)
+            ChatIdentity.ChatIdentity$imagesEntry.codec().encode({ key, value }, w, {
+              writeDefaults: true
+            })
+          }
+        }
+
+        if (opts.writeDefaults === true || (obj.displayName != null && obj.displayName !== '')) {
+          w.uint32(34)
+          w.string(obj.displayName ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.description != null && obj.description !== '')) {
+          w.uint32(42)
+          w.string(obj.description ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.color != null && obj.color !== '')) {
+          w.uint32(50)
+          w.string(obj.color ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.emoji != null && obj.emoji !== '')) {
+          w.uint32(58)
+          w.string(obj.emoji ?? '')
+        }
+
+        if (obj.socialLinks != null) {
+          for (const value of obj.socialLinks) {
+            w.uint32(66)
+            SocialLink.codec().encode(value, w, {
+              writeDefaults: true
+            })
+          }
+        }
+
+        if (opts.writeDefaults === true || (obj.firstMessageTimestamp != null && obj.firstMessageTimestamp !== 0)) {
+          w.uint32(72)
+          w.uint32(obj.firstMessageTimestamp ?? 0)
+        }
+
+        if (opts.lengthDelimited !== false) {
+          w.ldelim()
+        }
+      }, (reader, length) => {
+        const obj: any = {
+          clock: 0n,
+          ensName: '',
+          images: new Map<string, undefined>(),
+          displayName: '',
+          description: '',
+          color: '',
+          emoji: '',
+          socialLinks: [],
+          firstMessageTimestamp: 0
+        }
+
+        const end = length == null ? reader.len : reader.pos + length
+
+        while (reader.pos < end) {
+          const tag = reader.uint32()
+
+          switch (tag >>> 3) {
+            case 1:
+              obj.clock = reader.uint64()
+              break
+            case 2:
+              obj.ensName = reader.string()
+              break
+            case 3: {
+              const entry = ChatIdentity.ChatIdentity$imagesEntry.codec().decode(reader, reader.uint32())
+              obj.images.set(entry.key, entry.value)
+              break
+            }
+            case 4:
+              obj.displayName = reader.string()
+              break
+            case 5:
+              obj.description = reader.string()
+              break
+            case 6:
+              obj.color = reader.string()
+              break
+            case 7:
+              obj.emoji = reader.string()
+              break
+            case 8:
+              obj.socialLinks.push(SocialLink.codec().decode(reader, reader.uint32()))
+              break
+            case 9:
+              obj.firstMessageTimestamp = reader.uint32()
+              break
+            default:
+              reader.skipType(tag & 7)
+              break
+          }
+        }
+
+        return obj
+      })
+    }
+
+    return _codec
+  }
+
+  export const encode = (obj: Partial<ChatIdentity>): Uint8Array => {
     return encodeMessage(obj, ChatIdentity.codec())
   }
 
-  export const decode = (buf: Uint8Array): ChatIdentity => {
+  export const decode = (buf: Uint8Array | Uint8ArrayList): ChatIdentity => {
     return decodeMessage(buf, ChatIdentity.codec())
   }
 }
@@ -62,26 +248,98 @@ export namespace IdentityImage {
   }
 
   export namespace SourceType {
-    export const codec = () => {
-      return enumeration<typeof SourceType>(__SourceTypeValues)
+    export const codec = (): Codec<SourceType> => {
+      return enumeration<SourceType>(__SourceTypeValues)
     }
   }
 
+  let _codec: Codec<IdentityImage>
+
   export const codec = (): Codec<IdentityImage> => {
-    return message<IdentityImage>({
-      1: { name: 'payload', codec: bytes },
-      2: { name: 'sourceType', codec: IdentityImage.SourceType.codec() },
-      3: { name: 'imageType', codec: ImageType.codec() },
-      4: { name: 'encryptionKeys', codec: bytes, repeats: true },
-      5: { name: 'encrypted', codec: bool }
-    })
+    if (_codec == null) {
+      _codec = message<IdentityImage>((obj, w, opts = {}) => {
+        if (opts.lengthDelimited !== false) {
+          w.fork()
+        }
+
+        if (opts.writeDefaults === true || (obj.payload != null && obj.payload.byteLength > 0)) {
+          w.uint32(10)
+          w.bytes(obj.payload ?? new Uint8Array(0))
+        }
+
+        if (opts.writeDefaults === true || (obj.sourceType != null && __SourceTypeValues[obj.sourceType] !== 0)) {
+          w.uint32(16)
+          IdentityImage.SourceType.codec().encode(obj.sourceType ?? IdentityImage.SourceType.UNKNOWN_SOURCE_TYPE, w)
+        }
+
+        if (opts.writeDefaults === true || (obj.imageType != null && __ImageTypeValues[obj.imageType] !== 0)) {
+          w.uint32(24)
+          ImageType.codec().encode(obj.imageType ?? ImageType.UNKNOWN_IMAGE_TYPE, w)
+        }
+
+        if (obj.encryptionKeys != null) {
+          for (const value of obj.encryptionKeys) {
+            w.uint32(34)
+            w.bytes(value)
+          }
+        }
+
+        if (opts.writeDefaults === true || (obj.encrypted != null && obj.encrypted !== false)) {
+          w.uint32(40)
+          w.bool(obj.encrypted ?? false)
+        }
+
+        if (opts.lengthDelimited !== false) {
+          w.ldelim()
+        }
+      }, (reader, length) => {
+        const obj: any = {
+          payload: new Uint8Array(0),
+          sourceType: SourceType.UNKNOWN_SOURCE_TYPE,
+          imageType: ImageType.UNKNOWN_IMAGE_TYPE,
+          encryptionKeys: [],
+          encrypted: false
+        }
+
+        const end = length == null ? reader.len : reader.pos + length
+
+        while (reader.pos < end) {
+          const tag = reader.uint32()
+
+          switch (tag >>> 3) {
+            case 1:
+              obj.payload = reader.bytes()
+              break
+            case 2:
+              obj.sourceType = IdentityImage.SourceType.codec().decode(reader)
+              break
+            case 3:
+              obj.imageType = ImageType.codec().decode(reader)
+              break
+            case 4:
+              obj.encryptionKeys.push(reader.bytes())
+              break
+            case 5:
+              obj.encrypted = reader.bool()
+              break
+            default:
+              reader.skipType(tag & 7)
+              break
+          }
+        }
+
+        return obj
+      })
+    }
+
+    return _codec
   }
 
-  export const encode = (obj: IdentityImage): Uint8Array => {
+  export const encode = (obj: Partial<IdentityImage>): Uint8Array => {
     return encodeMessage(obj, IdentityImage.codec())
   }
 
-  export const decode = (buf: Uint8Array): IdentityImage => {
+  export const decode = (buf: Uint8Array | Uint8ArrayList): IdentityImage => {
     return decodeMessage(buf, IdentityImage.codec())
   }
 }
@@ -92,18 +350,64 @@ export interface SocialLink {
 }
 
 export namespace SocialLink {
+  let _codec: Codec<SocialLink>
+
   export const codec = (): Codec<SocialLink> => {
-    return message<SocialLink>({
-      1: { name: 'text', codec: string },
-      2: { name: 'url', codec: string }
-    })
+    if (_codec == null) {
+      _codec = message<SocialLink>((obj, w, opts = {}) => {
+        if (opts.lengthDelimited !== false) {
+          w.fork()
+        }
+
+        if (opts.writeDefaults === true || (obj.text != null && obj.text !== '')) {
+          w.uint32(10)
+          w.string(obj.text ?? '')
+        }
+
+        if (opts.writeDefaults === true || (obj.url != null && obj.url !== '')) {
+          w.uint32(18)
+          w.string(obj.url ?? '')
+        }
+
+        if (opts.lengthDelimited !== false) {
+          w.ldelim()
+        }
+      }, (reader, length) => {
+        const obj: any = {
+          text: '',
+          url: ''
+        }
+
+        const end = length == null ? reader.len : reader.pos + length
+
+        while (reader.pos < end) {
+          const tag = reader.uint32()
+
+          switch (tag >>> 3) {
+            case 1:
+              obj.text = reader.string()
+              break
+            case 2:
+              obj.url = reader.string()
+              break
+            default:
+              reader.skipType(tag & 7)
+              break
+          }
+        }
+
+        return obj
+      })
+    }
+
+    return _codec
   }
 
-  export const encode = (obj: SocialLink): Uint8Array => {
+  export const encode = (obj: Partial<SocialLink>): Uint8Array => {
     return encodeMessage(obj, SocialLink.codec())
   }
 
-  export const decode = (buf: Uint8Array): SocialLink => {
+  export const decode = (buf: Uint8Array | Uint8ArrayList): SocialLink => {
     return decodeMessage(buf, SocialLink.codec())
   }
 }
@@ -129,8 +433,8 @@ enum __MessageTypeValues {
 }
 
 export namespace MessageType {
-  export const codec = () => {
-    return enumeration<typeof MessageType>(__MessageTypeValues)
+  export const codec = (): Codec<MessageType> => {
+    return enumeration<MessageType>(__MessageTypeValues)
   }
 }
 export enum ImageType {
@@ -150,7 +454,7 @@ enum __ImageTypeValues {
 }
 
 export namespace ImageType {
-  export const codec = () => {
-    return enumeration<typeof ImageType>(__ImageTypeValues)
+  export const codec = (): Codec<ImageType> => {
+    return enumeration<ImageType>(__ImageTypeValues)
   }
 }
