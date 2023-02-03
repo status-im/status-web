@@ -1,6 +1,9 @@
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
-import { ApplicationMetadataMessage, ApplicationMetadataMessage_Type } from '../../protos/application-metadata-message_pb'
+import {
+  ApplicationMetadataMessage,
+  ApplicationMetadataMessage_Type,
+} from '../../protos/application-metadata-message_pb'
 import {
   ChatMessage,
   DeleteMessage,
@@ -15,12 +18,12 @@ import { isClockValid } from '../../utils/is-clock-valid'
 import { payloadToId } from '../../utils/payload-to-id'
 import { recoverPublicKey } from '../../utils/recover-public-key'
 import { getChatUuid } from './get-chat-uuid'
-import { mapChatMessage} from './map-chat-message'
+import { mapChatMessage } from './map-chat-message'
 
 import type { Account } from '../account'
 import type { Client } from '../client'
 import type { Community } from './community'
-import type { MessageV1 as WakuMessage} from 'js-waku/lib/waku_message/version_1'
+import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
 
 export function handleWakuMessage(
   wakuMessage: WakuMessage,

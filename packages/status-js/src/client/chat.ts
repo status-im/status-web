@@ -10,7 +10,7 @@ import {
   EditMessage,
 } from '../protos/chat-message_pb'
 import { EmojiReaction, EmojiReaction_Type } from '../protos/emoji-reaction_pb'
-import {MessageType} from '../protos/enums_pb';
+import { MessageType } from '../protos/enums_pb'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { getNextClock } from '../utils/get-next-clock'
 import { idToContentTopic } from '../utils/id-to-content-topic'
@@ -22,8 +22,7 @@ import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { Member } from './member'
-import type {PlainMessage} from '@bufbuild/protobuf'
-
+import type { PlainMessage } from '@bufbuild/protobuf'
 
 export type ChatMessage = PlainMessage<ChatMessageProto> & {
   messageId: string
@@ -455,7 +454,8 @@ export class Chat {
     }
 
     const type = containsOnlyEmoji(text)
-    ? ChatMessage_ContentType.EMOJI: ChatMessage_ContentType.TEXT_PLAIN
+      ? ChatMessage_ContentType.EMOJI
+      : ChatMessage_ContentType.TEXT_PLAIN
 
     // TODO: protos does not support optional fields :-(
     const payload = new ChatMessageProto({
@@ -495,7 +495,7 @@ export class Chat {
         value: {
           type: image.type,
           payload: image.payload,
-        }
+        },
       },
       grant: new Uint8Array([]),
       displayName: '',

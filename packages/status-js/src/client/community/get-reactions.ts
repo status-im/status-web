@@ -1,8 +1,11 @@
-import { EmojiReaction_Type } from '../../protos/emoji-reaction_pb';
+import { EmojiReaction_Type } from '../../protos/emoji-reaction_pb'
 
 import type { EmojiReaction } from '../../protos/emoji-reaction_pb'
 
-type Reaction = Exclude<EmojiReaction_Type, EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE>
+type Reaction = Exclude<
+  EmojiReaction_Type,
+  EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE
+>
 
 export type Reactions = {
   [key in Reaction]: Set<string>

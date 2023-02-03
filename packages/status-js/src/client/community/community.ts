@@ -18,7 +18,7 @@ import type {
   CommunityDescription,
 } from '../../protos/communities_pb'
 import type { Client } from '../client'
-import type {PlainMessage} from '@bufbuild/protobuf'
+import type { PlainMessage } from '@bufbuild/protobuf'
 
 export class Community {
   private client: Client
@@ -232,7 +232,9 @@ export class Community {
     )
   }
 
-  public onChange = (callback: (description: PlainMessage<CommunityDescription>) => void) => {
+  public onChange = (
+    callback: (description: PlainMessage<CommunityDescription>) => void
+  ) => {
     this.#callbacks.add(callback)
 
     return () => {

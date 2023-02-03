@@ -2,7 +2,10 @@ import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 import { expect, test } from 'vitest'
 
 import { Account } from '../client/account'
-import { ApplicationMetadataMessage,ApplicationMetadataMessage_Type  } from '../protos/application-metadata-message_pb'
+import {
+  ApplicationMetadataMessage,
+  ApplicationMetadataMessage_Type,
+} from '../protos/application-metadata-message_pb'
 import { recoverPublicKey } from './recover-public-key'
 
 import type { Client } from '../client/client'

@@ -17,7 +17,7 @@ import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
-import type { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb';
+import type { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
 import type { Storage } from './storage'
 import type { WakuLight } from 'js-waku/lib/interfaces'
 import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'

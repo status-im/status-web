@@ -1,7 +1,14 @@
-import { AudioMessage_AudioType, ChatMessage_ContentType } from '../protos/chat-message_pb';
-import {ImageType, MessageType} from '../protos/enums_pb'
+import {
+  AudioMessage_AudioType,
+  ChatMessage_ContentType,
+} from '../protos/chat-message_pb'
+import { ImageType, MessageType } from '../protos/enums_pb'
 
-import type { AudioMessage,ChatMessage , ImageMessage } from '../protos/chat-message_pb'
+import type {
+  AudioMessage,
+  ChatMessage,
+  ImageMessage,
+} from '../protos/chat-message_pb'
 
 // TODO?: maybe this should normalize the message?
 export function validateMessage(message: ChatMessage): boolean {
