@@ -27,7 +27,7 @@
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "format": "prettier --write src",
-    "protos": "protons protos/*.proto",
+    "protos": "protons src/protos/*.proto",
     "clean": "rm -rf dist node_modules .turbo"
   },
   "dependencies": {
