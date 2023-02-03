@@ -2,28 +2,30 @@ import { PageDirection } from 'js-waku'
 import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
 
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
+import { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
 import {
-  AudioMessage,
   ChatMessage as ChatMessageProto,
+  ChatMessage_ContentType,
   DeleteMessage,
   EditMessage,
-  ImageType,
-} from '../protos/chat-message'
-import { EmojiReaction } from '../protos/emoji-reaction'
+} from '../protos/chat-message_pb'
+import { EmojiReaction, EmojiReaction_Type } from '../protos/emoji-reaction_pb'
+import {MessageType} from '../protos/enums_pb';
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { getNextClock } from '../utils/get-next-clock'
 import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
-import type { ImageMessage } from '../protos/chat-message'
-import type { CommunityChat } from '../protos/communities'
-import type { MessageType } from '../protos/enums'
+import type { ImageMessage } from '../protos/chat-message_pb'
+import type { CommunityChat } from '../protos/communities_pb'
 import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { Member } from './member'
+import type {PlainMessage} from '@bufbuild/protobuf'
 
-export type ChatMessage = ChatMessageProto & {
+
+export type ChatMessage = PlainMessage<ChatMessageProto> & {
   messageId: string
   pinned: boolean
   reactions: Reactions
@@ -425,12 +427,12 @@ export class Chat {
       const reactions = getReactions(
         reaction,
         {
-          THUMBS_UP: new Set<string>(),
-          THUMBS_DOWN: new Set<string>(),
-          LOVE: new Set<string>(),
-          LAUGH: new Set<string>(),
-          SAD: new Set<string>(),
-          ANGRY: new Set<string>(),
+          [EmojiReaction_Type.THUMBS_UP]: new Set<string>(),
+          [EmojiReaction_Type.THUMBS_DOWN]: new Set<string>(),
+          [EmojiReaction_Type.LOVE]: new Set<string>(),
+          [EmojiReaction_Type.LAUGH]: new Set<string>(),
+          [EmojiReaction_Type.SAD]: new Set<string>(),
+          [EmojiReaction_Type.ANGRY]: new Set<string>(),
         },
         signerPublicKey
       )
@@ -453,11 +455,10 @@ export class Chat {
     }
 
     const type = containsOnlyEmoji(text)
-      ? ChatMessageProto.ContentType.EMOJI
-      : ChatMessageProto.ContentType.TEXT_PLAIN
+    ? ChatMessage_ContentType.EMOJI: ChatMessage_ContentType.TEXT_PLAIN
 
     // TODO: protos does not support optional fields :-(
-    const payload = ChatMessageProto.encode({
+    const payload = new ChatMessageProto({
       clock: this.setClock(this.#clock),
       timestamp: BigInt(Date.now()),
       text,
@@ -465,24 +466,13 @@ export class Chat {
       ensName: '',
       chatId: this.id,
       contentType: type,
-      messageType: 'COMMUNITY_CHAT' as MessageType,
-      sticker: { hash: '', pack: 0 },
-      image: {
-        type: ImageType.JPEG,
-        payload: new Uint8Array([]),
-      },
-      audio: {
-        type: AudioMessage.AudioType.AAC,
-        payload: new Uint8Array([]),
-        durationMs: BigInt(0),
-      },
-      community: new Uint8Array([]),
+      messageType: MessageType.COMMUNITY_CHAT,
       grant: new Uint8Array([]),
       displayName: '',
-    })
+    }).toBinary()
 
     await this.client.sendWakuMessage(
-      'TYPE_CHAT_MESSAGE',
+      ApplicationMetadataMessage_Type.CHAT_MESSAGE,
       payload,
       this.contentTopic,
       this.symmetricKey
@@ -490,32 +480,29 @@ export class Chat {
   }
 
   public sendImageMessage = async (image: ImageMessage) => {
-    const payload = ChatMessageProto.encode({
+    const payload = new ChatMessageProto({
       clock: this.setClock(this.#clock),
       timestamp: BigInt(Date.now()),
       text: '',
       responseTo: '',
       ensName: '',
       chatId: this.id,
-      messageType: 'COMMUNITY_CHAT' as MessageType,
-      contentType: ChatMessageProto.ContentType.TEXT_PLAIN,
-      sticker: { hash: '', pack: 0 },
-      image: {
-        type: image.type,
-        payload: image.payload,
+      messageType: MessageType.COMMUNITY_CHAT,
+      // fixme?
+      contentType: ChatMessage_ContentType.TEXT_PLAIN,
+      payload: {
+        case: 'image',
+        value: {
+          type: image.type,
+          payload: image.payload,
+        }
       },
-      audio: {
-        type: AudioMessage.AudioType.AAC,
-        payload: new Uint8Array([]),
-        durationMs: BigInt(0),
-      },
-      community: new Uint8Array([]),
       grant: new Uint8Array([]),
       displayName: '',
-    })
+    }).toBinary()
 
     await this.client.sendWakuMessage(
-      'TYPE_CHAT_MESSAGE',
+      ApplicationMetadataMessage_Type.CHAT_MESSAGE,
       payload,
       this.contentTopic,
       this.symmetricKey
@@ -541,17 +528,17 @@ export class Chat {
       throw new Error('Text message cannot be empty')
     }
 
-    const payload = EditMessage.encode({
+    const payload = new EditMessage({
       clock: this.setClock(this.#clock),
       text,
       messageId,
       chatId: this.id,
       grant: new Uint8Array([]),
-      messageType: 'COMMUNITY_CHAT' as MessageType,
-    })
+      messageType: MessageType.COMMUNITY_CHAT,
+    }).toBinary()
 
     await this.client.sendWakuMessage(
-      'TYPE_EDIT_MESSAGE',
+      ApplicationMetadataMessage_Type.EDIT_MESSAGE,
       payload,
       this.contentTopic,
       this.symmetricKey
@@ -575,16 +562,16 @@ export class Chat {
       throw new Error('Text message can only be deleted by its author')
     }
 
-    const payload = DeleteMessage.encode({
+    const payload = new DeleteMessage({
       clock: this.setClock(this.#clock),
       messageId,
       chatId: this.id,
       grant: new Uint8Array([]),
-      messageType: 'COMMUNITY_CHAT' as MessageType,
-    })
+      messageType: MessageType.COMMUNITY_CHAT,
+    }).toBinary()
 
     await this.client.sendWakuMessage(
-      'TYPE_DELETE_MESSAGE',
+      ApplicationMetadataMessage_Type.DELETE_MESSAGE,
       payload,
       this.contentTopic,
       this.symmetricKey
@@ -609,18 +596,18 @@ export class Chat {
       `0x${this.client.account.publicKey}`
     )
 
-    const payload = EmojiReaction.encode({
+    const payload = new EmojiReaction({
       clock: this.setClock(this.#clock),
       chatId: this.id,
-      messageType: 'COMMUNITY_CHAT' as MessageType,
+      messageType: MessageType.COMMUNITY_CHAT,
       messageId,
-      type: reaction as EmojiReaction.Type,
+      type: reaction,
       retracted,
       grant: new Uint8Array([]),
-    })
+    }).toBinary()
 
     await this.client.sendWakuMessage(
-      'TYPE_EMOJI_REACTION',
+      ApplicationMetadataMessage_Type.EMOJI_REACTION,
       payload,
       this.contentTopic,
       this.symmetricKey

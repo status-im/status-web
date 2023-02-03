@@ -10,13 +10,14 @@ import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
 import { SymEncoder } from 'js-waku/lib/waku_message/version_1'
 
 import { peers } from '../consts/peers'
-import { ApplicationMetadataMessage } from '../protos/application-metadata-message'
+import { ApplicationMetadataMessage } from '../protos/application-metadata-message_pb'
 import { Account } from './account'
 import { ActivityCenter } from './activityCenter'
 import { Community } from './community/community'
 import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
+import type { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb';
 import type { Storage } from './storage'
 import type { WakuLight } from 'js-waku/lib/interfaces'
 import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
@@ -238,7 +239,7 @@ class Client {
   }
 
   public sendWakuMessage = async (
-    type: keyof typeof ApplicationMetadataMessage.Type,
+    type: ApplicationMetadataMessage_Type,
     payload: Uint8Array,
     contentTopic: string,
     symKey: Uint8Array
@@ -253,11 +254,11 @@ class Client {
 
     const signature = await this.#account.sign(payload)
 
-    const message = ApplicationMetadataMessage.encode({
-      type: type as ApplicationMetadataMessage.Type,
+    const message = new ApplicationMetadataMessage({
+      type: type,
       signature,
       payload,
-    })
+    }).toBinary()
 
     await this.waku.lightPush.push(
       new SymEncoder(

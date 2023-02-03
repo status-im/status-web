@@ -1,6 +1,8 @@
-import type { EmojiReaction } from '../../protos/emoji-reaction'
+import { EmojiReaction_Type } from '../../protos/emoji-reaction_pb';
 
-type Reaction = Exclude<`${EmojiReaction.Type}`, 'UNKNOWN_EMOJI_REACTION_TYPE'>
+import type { EmojiReaction } from '../../protos/emoji-reaction_pb'
+
+type Reaction = Exclude<EmojiReaction_Type, EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE>
 
 export type Reactions = {
   [key in Reaction]: Set<string>
@@ -13,7 +15,7 @@ export function getReactions(
 ): Reactions {
   const { type, retracted } = reaction
 
-  if (type === 'UNKNOWN_EMOJI_REACTION_TYPE') {
+  if (type === EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE) {
     return reactions
   }
 

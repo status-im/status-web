@@ -2,10 +2,10 @@ import { bytesToHex, utf8ToBytes } from 'ethereum-cryptography/utils'
 import { expect, test } from 'vitest'
 
 import { Account } from '../client/account'
+import { ApplicationMetadataMessage,ApplicationMetadataMessage_Type  } from '../protos/application-metadata-message_pb'
 import { recoverPublicKey } from './recover-public-key'
 
 import type { Client } from '../client/client'
-import type { ApplicationMetadataMessage } from '../protos/application-metadata-message'
 
 test('should recover public key', async () => {
   const payload = utf8ToBytes('hello')
@@ -20,8 +20,8 @@ test('should recover public key', async () => {
 })
 
 test('should recover public key from fixture', async () => {
-  const metadataFixture: ApplicationMetadataMessage = {
-    type: 'TYPE_EMOJI_REACTION' as ApplicationMetadataMessage.Type,
+  const metadataFixture = new ApplicationMetadataMessage({
+    type: ApplicationMetadataMessage_Type.EMOJI_REACTION,
     signature: new Uint8Array([
       250, 132, 234, 119, 159, 124, 98, 93, 197, 108, 99, 52, 186, 234, 142,
       101, 147, 180, 50, 190, 102, 61, 219, 189, 95, 124, 29, 74, 43, 46, 106,
@@ -42,7 +42,7 @@ test('should recover public key from fixture', async () => {
       55, 97, 55, 99, 48, 97, 53, 101, 98, 97, 53, 102, 97, 57, 100, 52, 100,
       57, 49, 98, 97, 56, 32, 5, 40, 2,
     ]),
-  }
+  })
 
   const publicKeySnapshot = new Uint8Array([
     4, 172, 65, 157, 172, 154, 139, 187, 88, 130, 90, 60, 222, 96, 238, 240,

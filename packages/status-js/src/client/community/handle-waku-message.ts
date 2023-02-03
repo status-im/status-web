@@ -1,26 +1,26 @@
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
-import { ApplicationMetadataMessage } from '../../protos/application-metadata-message'
+import { ApplicationMetadataMessage, ApplicationMetadataMessage_Type } from '../../protos/application-metadata-message_pb'
 import {
   ChatMessage,
   DeleteMessage,
   EditMessage,
-  MessageType,
-} from '../../protos/chat-message'
-import { CommunityDescription } from '../../protos/communities'
-import { EmojiReaction } from '../../protos/emoji-reaction'
-import { PinMessage } from '../../protos/pin-message'
-import { ProtocolMessage } from '../../protos/protocol-message'
+} from '../../protos/chat-message_pb'
+import { CommunityDescription } from '../../protos/communities_pb'
+import { EmojiReaction } from '../../protos/emoji-reaction_pb'
+import { MessageType } from '../../protos/enums_pb'
+import { PinMessage } from '../../protos/pin-message_pb'
+import { ProtocolMessage } from '../../protos/protocol-message_pb'
 import { isClockValid } from '../../utils/is-clock-valid'
 import { payloadToId } from '../../utils/payload-to-id'
 import { recoverPublicKey } from '../../utils/recover-public-key'
 import { getChatUuid } from './get-chat-uuid'
-import { mapChatMessage } from './map-chat-message'
+import { mapChatMessage} from './map-chat-message'
 
 import type { Account } from '../account'
 import type { Client } from '../client'
 import type { Community } from './community'
-import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
+import type { MessageV1 as WakuMessage} from 'js-waku/lib/waku_message/version_1'
 
 export function handleWakuMessage(
   wakuMessage: WakuMessage,
@@ -46,7 +46,7 @@ export function handleWakuMessage(
   let messageToDecode = wakuMessage.payload
   let decodedProtocol
   try {
-    decodedProtocol = ProtocolMessage.decode(messageToDecode)
+    decodedProtocol = ProtocolMessage.fromBinary(messageToDecode)
     if (decodedProtocol) {
       messageToDecode = decodedProtocol.publicMessage
     }
@@ -54,7 +54,7 @@ export function handleWakuMessage(
     // eslint-disable-next-line no-empty
   }
 
-  const decodedMetadata = ApplicationMetadataMessage.decode(messageToDecode)
+  const decodedMetadata = ApplicationMetadataMessage.fromBinary(messageToDecode)
   if (!decodedMetadata.payload) {
     return
   }
@@ -82,9 +82,9 @@ export function handleWakuMessage(
   try {
     // decode, map and handle (events)
     switch (decodedMetadata.type) {
-      case ApplicationMetadataMessage.Type.TYPE_COMMUNITY_DESCRIPTION: {
+      case ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION: {
         // decode
-        const decodedPayload = CommunityDescription.decode(messageToDecode)
+        const decodedPayload = CommunityDescription.fromBinary(messageToDecode)
 
         // validate
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
@@ -104,9 +104,9 @@ export function handleWakuMessage(
         break
       }
 
-      case ApplicationMetadataMessage.Type.TYPE_CHAT_MESSAGE: {
+      case ApplicationMetadataMessage_Type.CHAT_MESSAGE: {
         // decode
-        const decodedPayload = ChatMessage.decode(messageToDecode)
+        const decodedPayload = ChatMessage.fromBinary(messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -149,8 +149,8 @@ export function handleWakuMessage(
         break
       }
 
-      case ApplicationMetadataMessage.Type.TYPE_EDIT_MESSAGE: {
-        const decodedPayload = EditMessage.decode(messageToDecode)
+      case ApplicationMetadataMessage_Type.EDIT_MESSAGE: {
+        const decodedPayload = EditMessage.fromBinary(messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -189,8 +189,8 @@ export function handleWakuMessage(
         break
       }
 
-      case ApplicationMetadataMessage.Type.TYPE_DELETE_MESSAGE: {
-        const decodedPayload = DeleteMessage.decode(messageToDecode)
+      case ApplicationMetadataMessage_Type.DELETE_MESSAGE: {
+        const decodedPayload = DeleteMessage.fromBinary(messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -228,8 +228,8 @@ export function handleWakuMessage(
         break
       }
 
-      case ApplicationMetadataMessage.Type.TYPE_PIN_MESSAGE: {
-        const decodedPayload = PinMessage.decode(messageToDecode)
+      case ApplicationMetadataMessage_Type.PIN_MESSAGE: {
+        const decodedPayload = PinMessage.fromBinary(messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return
@@ -267,8 +267,8 @@ export function handleWakuMessage(
         break
       }
 
-      case ApplicationMetadataMessage.Type.TYPE_EMOJI_REACTION: {
-        const decodedPayload = EmojiReaction.decode(messageToDecode)
+      case ApplicationMetadataMessage_Type.EMOJI_REACTION: {
+        const decodedPayload = EmojiReaction.fromBinary(messageToDecode)
 
         if (!isClockValid(BigInt(decodedPayload.clock), messageTimestamp)) {
           return

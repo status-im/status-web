@@ -3,8 +3,9 @@ import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
 
 import { getDifferenceByKeys } from '../../helpers/get-difference-by-keys'
 import { getObjectsDifference } from '../../helpers/get-objects-difference'
-import { CommunityRequestToJoin } from '../../protos/communities'
-import { MessageType } from '../../protos/enums'
+import { ApplicationMetadataMessage_Type } from '../../protos/application-metadata-message_pb'
+import { CommunityRequestToJoin } from '../../protos/communities_pb'
+import { MessageType } from '../../protos/enums_pb'
 import { compressPublicKey } from '../../utils/compress-public-key'
 import { generateKeyFromPassword } from '../../utils/generate-key-from-password'
 import { getNextClock } from '../../utils/get-next-clock'
@@ -15,8 +16,9 @@ import { Member } from '../member'
 import type {
   CommunityChat,
   CommunityDescription,
-} from '../../protos/communities'
+} from '../../protos/communities_pb'
 import type { Client } from '../client'
+import type {PlainMessage} from '@bufbuild/protobuf'
 
 export class Community {
   private client: Client
@@ -30,7 +32,7 @@ export class Community {
   public description!: CommunityDescription
   public chats: Map<string, Chat>
   #members: Map<string, Member>
-  #callbacks: Set<(description: CommunityDescription) => void>
+  #callbacks: Set<(description: PlainMessage<CommunityDescription>) => void>
   #chatUnobserveFns: Map<string, () => void>
 
   constructor(client: Client, publicKey: string) {
@@ -230,7 +232,7 @@ export class Community {
     )
   }
 
-  public onChange = (callback: (description: CommunityDescription) => void) => {
+  public onChange = (callback: (description: PlainMessage<CommunityDescription>) => void) => {
     this.#callbacks.add(callback)
 
     return () => {
@@ -239,15 +241,15 @@ export class Community {
   }
 
   public requestToJoin = async (chatId = '') => {
-    const payload = CommunityRequestToJoin.encode({
+    const payload = new CommunityRequestToJoin({
       clock: this.setClock(this.#clock),
       chatId,
       communityId: hexToBytes(this.id),
       ensName: '',
-    })
+    }).toBinary()
 
     await this.client.sendWakuMessage(
-      'TYPE_COMMUNITY_REQUEST_TO_JOIN',
+      ApplicationMetadataMessage_Type.COMMUNITY_REQUEST_TO_JOIN,
       payload,
       this.contentTopic,
       this.symmetricKey
