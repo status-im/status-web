@@ -15,7 +15,7 @@ import { Member } from '../member'
 import type {
   CommunityChat,
   CommunityDescription,
-} from '../../proto/communities/v1/communities'
+} from '../../protos/communities'
 import type { Client } from '../client'
 
 export class Community {

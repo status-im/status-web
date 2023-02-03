@@ -1,6 +1,5 @@
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
-import { CommunityDescription } from '../../proto/communities/v1/communities'
 import { ApplicationMetadataMessage } from '../../protos/application-metadata-message'
 import {
   ChatMessage,
@@ -8,6 +7,7 @@ import {
   EditMessage,
   MessageType,
 } from '../../protos/chat-message'
+import { CommunityDescription } from '../../protos/communities'
 import { EmojiReaction } from '../../protos/emoji-reaction'
 import { PinMessage } from '../../protos/pin-message'
 import { ProtocolMessage } from '../../protos/protocol-message'
@@ -311,9 +311,10 @@ export function handleWakuMessage(
         break
       }
     }
-  } catch {
+  } catch (error) {
     // protons-runtime throws when trying to decode invalid protocol buffers
     // eslint-disable-next-line no-empty
+    console.error(error)
   }
 
   return
