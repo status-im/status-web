@@ -21,6 +21,7 @@ export function validateMessage(message: ChatMessage): boolean {
       return message.text !== ''
     }
     case ChatMessage_ContentType.IMAGE: {
+      // fixme?
       const payload = message.payload.value as ImageMessage
 
       if (payload.type === ImageType.UNKNOWN_IMAGE_TYPE) {

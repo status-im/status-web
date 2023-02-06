@@ -17,12 +17,16 @@ import { idToContentTopic } from '../utils/id-to-content-topic'
 import { getReactions } from './community/get-reactions'
 
 import type { ImageMessage } from '../protos/chat-message_pb'
-import type { CommunityChat } from '../protos/communities_pb'
+import type { CommunityChat as CommunityChatProto } from '../protos/communities_pb'
 import type { Client } from './client'
 import type { Community } from './community/community'
 import type { Reactions } from './community/get-reactions'
 import type { Member } from './member'
 import type { PlainMessage } from '@bufbuild/protobuf'
+
+export { ChatMessage_ContentType as ChatMessageContentType } from '../protos/chat-message_pb'
+
+export type CommunityChat = PlainMessage<CommunityChatProto>
 
 export type ChatMessage = PlainMessage<ChatMessageProto> & {
   messageId: string
@@ -426,12 +430,12 @@ export class Chat {
       const reactions = getReactions(
         reaction,
         {
-          [EmojiReaction_Type.THUMBS_UP]: new Set<string>(),
-          [EmojiReaction_Type.THUMBS_DOWN]: new Set<string>(),
-          [EmojiReaction_Type.LOVE]: new Set<string>(),
-          [EmojiReaction_Type.LAUGH]: new Set<string>(),
-          [EmojiReaction_Type.SAD]: new Set<string>(),
-          [EmojiReaction_Type.ANGRY]: new Set<string>(),
+          THUMBS_UP: new Set<string>(),
+          THUMBS_DOWN: new Set<string>(),
+          LOVE: new Set<string>(),
+          LAUGH: new Set<string>(),
+          SAD: new Set<string>(),
+          ANGRY: new Set<string>(),
         },
         signerPublicKey
       )
@@ -601,7 +605,7 @@ export class Chat {
       chatId: this.id,
       messageType: MessageType.COMMUNITY_CHAT,
       messageId,
-      type: reaction,
+      type: EmojiReaction_Type[reaction],
       retracted,
       grant: new Uint8Array([]),
     }).toBinary()

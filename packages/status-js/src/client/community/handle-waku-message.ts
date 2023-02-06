@@ -314,10 +314,9 @@ export function handleWakuMessage(
         break
       }
     }
-  } catch (error) {
+  } catch {
     // protons-runtime throws when trying to decode invalid protocol buffers
     // eslint-disable-next-line no-empty
-    console.error(error)
   }
 
   return

@@ -5,8 +5,9 @@ export type {
   Notification,
 } from './client/activityCenter'
 export type { ChatMessage as Message } from './client/chat'
+export { ChatMessageContentType as MessageContentType } from './client/chat'
 export type { Client, ClientOptions } from './client/client'
 export { createClient } from './client/client'
 export type { Community } from './client/community/community'
-export type { Reactions } from './client/community/get-reactions'
+export type { Reaction, Reactions } from './client/community/get-reactions'
 export type { Member } from './client/member'

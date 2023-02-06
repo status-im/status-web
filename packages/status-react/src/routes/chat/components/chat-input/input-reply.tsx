@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useChatContext } from '../../../../contexts/chat-context'
 import { CrossIcon } from '../../../../icons/cross-icon'
+import { MessageContentType } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Flex, IconButton, Text } from '../../../../system'
 
@@ -34,7 +35,7 @@ export const InputReply = (props: Props) => {
           <CrossIcon />
         </IconButton>
       </Flex>
-      {message.contentType === 'TEXT_PLAIN' && (
+      {message.contentType === MessageContentType.TEXT_PLAIN && (
         <Flex>
           <Text size="13" truncate>
             {message.text}

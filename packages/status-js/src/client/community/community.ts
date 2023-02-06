@@ -13,12 +13,12 @@ import { idToContentTopic } from '../../utils/id-to-content-topic'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
-import type {
-  CommunityChat,
-  CommunityDescription,
-} from '../../protos/communities_pb'
+import type { CommunityDescription as CommunityDescriptionProto } from '../../protos/communities_pb'
+import type { CommunityChat } from '../chat'
 import type { Client } from '../client'
 import type { PlainMessage } from '@bufbuild/protobuf'
+
+type CommunityDescription = PlainMessage<CommunityDescriptionProto>
 
 export class Community {
   private client: Client
@@ -32,7 +32,7 @@ export class Community {
   public description!: CommunityDescription
   public chats: Map<string, Chat>
   #members: Map<string, Member>
-  #callbacks: Set<(description: PlainMessage<CommunityDescription>) => void>
+  #callbacks: Set<(description: CommunityDescription) => void>
   #chatUnobserveFns: Map<string, () => void>
 
   constructor(client: Client, publicKey: string) {
@@ -232,9 +232,7 @@ export class Community {
     )
   }
 
-  public onChange = (
-    callback: (description: PlainMessage<CommunityDescription>) => void
-  ) => {
+  public onChange = (callback: (description: CommunityDescription) => void) => {
     this.#callbacks.add(callback)
 
     return () => {

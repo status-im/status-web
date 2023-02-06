@@ -2,9 +2,9 @@ import { EmojiReaction_Type } from '../../protos/emoji-reaction_pb'
 
 import type { EmojiReaction } from '../../protos/emoji-reaction_pb'
 
-type Reaction = Exclude<
-  EmojiReaction_Type,
-  EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE
+export type Reaction = Exclude<
+  keyof typeof EmojiReaction_Type,
+  'UNKNOWN_EMOJI_REACTION_TYPE'
 >
 
 export type Reactions = {
@@ -22,11 +22,13 @@ export function getReactions(
     return reactions
   }
 
+  const reactionName = EmojiReaction_Type[type] as Reaction
+
   if (retracted) {
-    reactions[type].delete(publicKey)
+    reactions[reactionName].delete(publicKey)
   } else {
     // Set handles that potentially multiple same reactions count as one
-    reactions[type].add(publicKey)
+    reactions[reactionName].add(publicKey)
   }
 
   return reactions

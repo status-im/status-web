@@ -1,5 +1,3 @@
-import { EmojiReaction_Type } from '../../protos/emoji-reaction_pb'
-
 import type { ChatMessage as ChatMessageProto } from '../../protos/chat-message_pb'
 import type { Chat, ChatMessage } from '../chat'
 import type { Community } from './community'
@@ -23,12 +21,12 @@ export function mapChatMessage(
     pinned: false,
     signer: signerPublicKey,
     reactions: {
-      [EmojiReaction_Type.THUMBS_UP]: new Set<string>(),
-      [EmojiReaction_Type.THUMBS_DOWN]: new Set<string>(),
-      [EmojiReaction_Type.LOVE]: new Set<string>(),
-      [EmojiReaction_Type.LAUGH]: new Set<string>(),
-      [EmojiReaction_Type.SAD]: new Set<string>(),
-      [EmojiReaction_Type.ANGRY]: new Set<string>(),
+      THUMBS_UP: new Set<string>(),
+      THUMBS_DOWN: new Set<string>(),
+      LOVE: new Set<string>(),
+      LAUGH: new Set<string>(),
+      SAD: new Set<string>(),
+      ANGRY: new Set<string>(),
     },
     member: community.getMember(signerPublicKey)!,
     // todo?: asign as .community, .community.description, .communityDescription, or .community.displayName
