@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 
 import {
   emojis,
@@ -23,9 +23,9 @@ export const MessageReactions = (props: Props) => {
 
   const [open, setOpen] = useState(false)
 
-  const hasReaction = useMemo(() => {
-    return Object.values(reactions).some(value => value.size > 0)
-  }, [reactions])
+  const hasReaction = Object.values<Set<string>>(reactions).some(
+    value => value.size > 0
+  )
 
   if (hasReaction === false) {
     return null
