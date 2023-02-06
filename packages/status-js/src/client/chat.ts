@@ -492,8 +492,7 @@ export class Chat {
       ensName: '',
       chatId: this.id,
       messageType: MessageType.COMMUNITY_CHAT,
-      // fixme?
-      contentType: ChatMessage_ContentType.TEXT_PLAIN,
+      contentType: ChatMessage_ContentType.IMAGE,
       payload: {
         case: 'image',
         value: {
