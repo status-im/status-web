@@ -49,3 +49,13 @@ body,
   width: 352px;
   overflow: auto;
 }
+
+@media screen and (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+
+  #sidebar {
+    display: none;
+  }
+}
