@@ -2,7 +2,7 @@ import { cloneElement } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 
-import type React from 'react'
+import type { Ref } from 'react'
 
 const Base = styled(Stack, {
   name: 'IconButton',
@@ -165,26 +165,29 @@ const getSelectedVariant = ({
   return variant
 }
 
-const IconButton = (props: Props) => {
+const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const {
     icon,
-    selected,
+
     blurred,
-    onPress,
+
     variant = 'default',
     disabled,
   } = props
+
+  const selected =
+    props.selected || props['aria-expanded'] || props['aria-selected']
 
   const state = getStateForIconColor({ blurred, selected })
   const selectedVariant = getSelectedVariant({ selected, variant, blurred })
 
   return (
     <Base
+      {...rest}
+      ref={ref}
       variant={variant}
       selected={selectedVariant}
-      onPress={onPress}
       blurred={blurred ? variant : undefined}
-      disabled={disabled}
     >
       {cloneElement(icon, {
         color: iconColor[variant][state],
@@ -194,5 +197,7 @@ const IconButton = (props: Props) => {
   )
 }
 
-export { IconButton }
+const _IconButton = forwardRef(IconButton)
+
+export { _IconButton as IconButton }
 export type { Props as IconButtonProps }
