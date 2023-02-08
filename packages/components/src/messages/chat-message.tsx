@@ -5,84 +5,103 @@ import { Stack, Unspaced, XStack, YStack } from 'tamagui'
 import { Author } from '../author/author'
 import { Avatar } from '../avatar'
 import { Image } from '../image'
+import { Reply } from '../reply'
 import { Paragraph } from '../typography'
 import { Actions } from './components/actions'
 import { Reactions } from './components/reactions'
 
+import type { ReactionsType } from './types'
+
 interface Props {
   text?: React.ReactNode
   images?: Array<{ url: string }>
-  reactions?: []
+  reactions: ReactionsType
+  reply?: boolean
 }
 
 const ChatMessage = (props: Props) => {
-  const { text, images, reactions } = props
+  const { text, images, reactions, reply } = props
 
   const [hovered, setHovered] = React.useState(false)
+  const [actionsOpen, setActionsOpen] = React.useState(false)
+
+  const active = actionsOpen || hovered
+  // <Sheet press="long">
 
   return (
-    <XStack
-      space={10}
+    <YStack
       position="relative"
       alignItems="flex-start"
       paddingHorizontal={8}
-      paddingVertical={12}
+      paddingVertical={8}
       borderRadius={16}
-      hoverStyle={{
-        backgroundColor: '$neutral-5',
-      }}
-      onHoverIn={() => setHovered(true)}
-      onHoverOut={() => setHovered(false)}
+      backgroundColor={active ? '$neutral-5' : ''}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      {hovered && (
+      {active && (
         <Unspaced>
           <Actions
-            onClick={() => {
-              console.log('clicked')
+            reactions={reactions}
+            onOpenChange={setActionsOpen}
+            onReplyPress={() => {
+              console.log('reply')
             }}
           />
         </Unspaced>
       )}
 
-      <Avatar
-        size={32}
-        src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
-        indicator="online"
-      />
+      {reply && (
+        <Stack paddingLeft={16} paddingBottom={12}>
+          <Reply
+            type="text"
+            name="Alisher"
+            src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
+          />
+        </Stack>
+      )}
 
-      <YStack flex={1}>
-        <Author
-          name="Alisher Yakupov"
-          address="zQ3...9d4Gs0"
-          status="verified"
-          time="09:30"
+      <XStack space={10}>
+        <Avatar
+          size={32}
+          src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
+          indicator="online"
         />
 
-        {text && (
-          <Paragraph flexGrow={0} weight="regular" color="$neutral-100">
-            {text}
-          </Paragraph>
-        )}
+        <YStack flex={1}>
+          <Author
+            name="Alisher Yakupov"
+            address="zQ3...9d4Gs0"
+            status="verified"
+            time="09:30"
+          />
 
-        {images?.map(image => (
-          <Stack
-            key={image.url}
-            marginTop={8}
-            $gtMd={{
-              maxWidth: 320,
-            }}
-          >
-            <Image src={image.url} width="full" height={320} radius={12} />
-          </Stack>
-        ))}
+          {text && (
+            <Paragraph flexGrow={0} weight="regular" color="$neutral-100">
+              {text}
+            </Paragraph>
+          )}
 
-        {reactions && (
-          <Stack marginTop={8}>
-            <Reactions />
-          </Stack>
-        )}
-      </YStack>
-    </XStack>
+          {images?.map(image => (
+            <Stack
+              key={image.url}
+              marginTop={8}
+              $gtMd={{
+                maxWidth: 320,
+              }}
+            >
+              <Image src={image.url} width="full" height={320} radius={12} />
+            </Stack>
+          ))}
+
+          {reactions && (
+            <Stack paddingTop={8}>
+              <Reactions reactions={reactions} />
+            </Stack>
+          )}
+        </YStack>
+      </XStack>
+    </YStack>
   )
 }
 

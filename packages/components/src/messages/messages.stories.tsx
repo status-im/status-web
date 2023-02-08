@@ -1,5 +1,6 @@
 import { ChatMessage } from './chat-message'
 
+import type { ReactionsType } from './types'
 import type { Meta, StoryObj } from '@storybook/react'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
@@ -17,7 +18,11 @@ const meta: Meta<typeof ChatMessage> = {
 
 type Story = StoryObj<typeof ChatMessage>
 
-const reactions = ['123']
+const reactions: ReactionsType = {
+  love: new Set(['me', '1', '2', '3']),
+  'thumbs-up': new Set(['me', '1', '2', '3']),
+  'thumbs-down': new Set(['me', '1', '2', '3']),
+}
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Text: Story = {
@@ -31,6 +36,14 @@ export const TextWithReactions: Story = {
   args: {
     text: 'This is a simple message.',
     reactions,
+  },
+}
+
+export const TextWithReply: Story = {
+  name: 'Text + Reply',
+  args: {
+    text: 'This is a simple message.',
+    reply: true,
   },
 }
 
