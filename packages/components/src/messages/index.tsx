@@ -1,8 +1,8 @@
-import { ChatMessage } from './chat-message'
+import { Message } from './message'
 
 import type { ReactionsType } from './types'
 
-export * from './chat-message'
+export * from './message'
 
 const reactions: ReactionsType = {
   love: new Set(['me', '1']),
@@ -13,19 +13,21 @@ const reactions: ReactionsType = {
 export const Messages = () => {
   return (
     <>
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim. Nunc tincidunt ante vitae massa. Duis ante orci, molestie vitae, vehicula venenatis, tincidunt ac, pede. Nulla accumsan, elit sit"
         reactions={{}}
       />
-      <ChatMessage
+      <Message
+        text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. "
+        reactions={{}}
+        reply
+        pinned
+      />
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. "
         reactions={{}}
       />
-      <ChatMessage
-        text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. "
-        reactions={{}}
-      />
-      <ChatMessage
+      <Message
         images={[
           {
             url: 'https://images.unsplash.com/photo-1673433107234-14d1a4424658?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
@@ -33,42 +35,41 @@ export const Messages = () => {
         ]}
         reactions={{}}
       />
-      <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
-      <ChatMessage text="fsdjkf kasldjf ksdlfjksdlfj asdklfj sdkljf" />
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim. Nunc tincidunt ante vitae massa. Duis ante orci, molestie vitae, vehicula venenatis, tincidunt ac, pede. Nulla accumsan, elit sit"
         reactions={reactions}
       />
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
+        pinned
       />
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
         reply
       />
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
       />
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"
         reactions={reactions}
         reply
       />
-      <ChatMessage
+      <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"
         reactions={reactions}
       />
-      <ChatMessage
+      <Message
         images={[
           {
             url: 'https://images.unsplash.com/photo-1673433107234-14d1a4424658?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
           },
         ]}
       />
-      <ChatMessage
+      <Message
         images={[
           {
             url: 'https://images.unsplash.com/photo-1673433107234-14d1a4424658?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
