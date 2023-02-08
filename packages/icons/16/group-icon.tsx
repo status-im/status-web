@@ -7,13 +7,7 @@ const SvgGroupIcon = (props: SvgProps) => {
   const { color: colorToken = 'currentColor', ...rest } = props
   const color = useCurrentColor(colorToken)
   return (
-    <Svg
-      width={16}
-      height={16}
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
+    <Svg width={16} height={16} fill="none" {...rest}>
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

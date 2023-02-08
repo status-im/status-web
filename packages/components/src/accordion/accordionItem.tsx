@@ -34,6 +34,7 @@ const AccordionItem = ({
   return (
     <Stack
       {...rest}
+      accessibilityRole="button"
       animation={[
         'fast',
         {

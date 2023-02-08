@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
   AudioIcon,
   FormatIcon,
@@ -20,22 +22,22 @@ const Composer = (
     isBlurred?: boolean
   }
 ) => {
-  const {
-    backgroundColor,
+  const { backgroundColor, isBlurred, ...rest } = props
 
-    isBlurred,
-    ...rest
-  } = props
+  const [isFocused, setIsFocused] = useState(false)
 
-  const applyVariantStyles = isBlurred
-    ? { blurred: true }
-    : { transparent: true }
+  const applyVariantStyles:
+    | {
+        blurred: boolean
+      }
+    | undefined = isBlurred && !isFocused ? { blurred: true } : undefined
 
   return (
     <YStack
-      backgroundColor={backgroundColor || '$background'}
-      shadowColor="rgba(9, 16, 28, 0.08)"
-      shadowOffset={{ width: 0, height: -4 }}
+      animation="fast"
+      backgroundColor={isFocused ? '$background' : backgroundColor}
+      shadowColor={!isBlurred || isFocused ? 'rgba(9, 16, 28, 0.08)' : 'none'}
+      shadowOffset={{ width: 4, height: !isBlurred || isFocused ? 4 : 0 }}
       shadowRadius={20}
       borderTopLeftRadius={20}
       borderTopRightRadius={20}
@@ -51,7 +53,10 @@ const Composer = (
         className="composer-input"
         placeholder="Type something..."
         px={0}
+        borderWidth={0}
         blurred={isBlurred}
+        onBlur={() => setIsFocused(false)}
+        onFocus={() => setIsFocused(true)}
       />
       <XStack
         alignItems="center"
@@ -60,11 +65,29 @@ const Composer = (
         backgroundColor="transparent"
       >
         <Stack space={12} flexDirection="row" backgroundColor="transparent">
-          <IconButton icon={<ImageIcon />} {...applyVariantStyles} />
-          <IconButton icon={<ReactionIcon />} {...applyVariantStyles} />
-          <IconButton icon={<FormatIcon />} {...applyVariantStyles} />
+          <IconButton
+            variant="outline"
+            icon={<ImageIcon />}
+            {...applyVariantStyles}
+            selected
+          />
+          <IconButton
+            variant="outline"
+            icon={<ReactionIcon />}
+            {...applyVariantStyles}
+          />
+          <IconButton
+            variant="outline"
+            icon={<FormatIcon />}
+            disabled
+            {...applyVariantStyles}
+          />
         </Stack>
-        <IconButton icon={<AudioIcon />} {...applyVariantStyles} />
+        <IconButton
+          variant="outline"
+          icon={<AudioIcon />}
+          {...applyVariantStyles}
+        />
       </XStack>
     </YStack>
   )

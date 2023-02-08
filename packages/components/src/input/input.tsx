@@ -11,15 +11,23 @@ setupReactNative({
 export const InputFrame = styled(
   TextInput,
   {
+    tag: 'input',
     name: 'Input',
-    fontFamily: '$body',
+
     borderWidth: 1,
     outlineWidth: 0,
-    color: '$textPrimary',
-    focusable: true,
-    borderColor: '$turquoiseHover',
+    borderColor: 'rgba(0, 200, 0, 1)',
+
+    paddingHorizontal: 30,
+    color: 'hsla(218, 51%, 7%, 1)',
+    placeholderTextColor: '$placeHolderColor',
+
     backgroundColor: 'transparent',
-    placeholderTextColor: 'red',
+
+    height: 40,
+    borderRadius: 12,
+
+    animation: 'fast',
 
     // this fixes a flex bug where it overflows container
     minWidth: 0,
@@ -30,16 +38,12 @@ export const InputFrame = styled(
 
     focusStyle: {
       borderColor: '$blueHover',
-
-      marginHorizontal: -1,
     },
 
     variants: {
       blurred: {
         true: {
-          backgroundColor: '$neutral-80-opa-10',
-          borderColor: 'transparent',
-          placeholderTextColor: '$turquoiseHover',
+          placeholderTextColor: '$placeHolderColorBlurred',
         },
       },
     },

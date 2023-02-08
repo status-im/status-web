@@ -1,5 +1,3 @@
-// import { useCallback, useEffect, useState } from 'react'
-
 import { Divider, IconButton, Paragraph } from '@status-im/components'
 import {
   ArrowLeftIcon,
@@ -22,6 +20,7 @@ type Props = {
   icon?: React.ReactNode
   refForScroll?: React.RefObject<HTMLDivElement>
   backgroundColor?: StackProps['backgroundColor']
+  isBlurred?: boolean
 } & BaseProps
 
 const Topbar = (props: Props) => {
@@ -33,6 +32,7 @@ const Topbar = (props: Props) => {
     description,
     icon,
     backgroundColor,
+    isBlurred,
     ...rest
   } = props
 
@@ -45,13 +45,17 @@ const Topbar = (props: Props) => {
       padding={16}
       backgroundColor={backgroundColor || '$background'}
       borderBottomWidth={1}
-      borderColor="$neutral-10"
+      borderColor="$neutral-80-opa-10"
       width="100%"
       {...rest}
     >
       <Stack flexDirection="row" alignItems="center" flexWrap="wrap">
         <Stack mr={12} $gtSm={{ display: 'none' }}>
-          <IconButton icon={<ArrowLeftIcon />} onPress={() => goBack?.()} />
+          <IconButton
+            icon={<ArrowLeftIcon />}
+            onPress={() => goBack?.()}
+            blurred={isBlurred}
+          />
         </Stack>
 
         {icon && <Stack marginRight={12}>{icon}</Stack>}
@@ -64,27 +68,41 @@ const Topbar = (props: Props) => {
 
         <LockedIcon color="$neutral-80-opa-40" />
         <Divider height={16} $sm={{ display: 'none' }} />
+      </Stack>
+
+      <Stack
+        space={12}
+        flexDirection="row"
+        alignItems="center"
+        justifyContent={description ? 'space-between' : 'flex-end'}
+        flexGrow={1}
+        flexShrink={1}
+        $sm={{ justifyContent: 'flex-end' }}
+      >
         {description && (
           <Paragraph
             weight="medium"
             color="$neutral-80-opa-50"
             variant="smaller"
             $sm={{ display: 'none' }}
+            flexShrink={1}
+            flexGrow={1}
+            whiteSpace="nowrap"
+            overflow="hidden"
+            textOverflow="ellipsis"
           >
             {description}
           </Paragraph>
         )}
-      </Stack>
-
-      <Stack space={12} flexDirection="row">
         <Stack $sm={{ display: 'none' }}>
           <IconButton
             icon={<MembersIcon />}
             selected={membersVisisble}
             onPress={onMembersPress}
+            blurred={isBlurred}
           />
         </Stack>
-        <IconButton icon={<OptionsIcon />} />
+        <IconButton icon={<OptionsIcon />} blurred={isBlurred} />
       </Stack>
     </Stack>
   )

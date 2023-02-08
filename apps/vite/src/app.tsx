@@ -59,10 +59,12 @@ function App() {
   const shouldBlurBackground =
     scrollPos <= ref.current?.scrollHeight - (ref.current?.clientHeight + 32)
 
+  const shouldBlurTopbar = scrollPos >= 56
+
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={'light'}>
       <div id="app">
-        <div id="sidebar">
+        <div id="sidebar" style={{ zIndex: 200 }}>
           <Sidebar
             name="Rarible"
             description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
@@ -74,8 +76,8 @@ function App() {
         <main id="main">
           <BlurView intensity={40} style={{ zIndex: 100 }}>
             <Topbar
-              // TODO we need to handle this correctly when having dark mode
-              backgroundColor="$white-70"
+              isBlurred={shouldBlurTopbar}
+              backgroundColor="$blurBackground"
               icon={
                 icon &&
                 cloneElement(icon as ReactElement, { hasBackground: false })
@@ -89,9 +91,16 @@ function App() {
           <div id="content" ref={ref}>
             <Messages />
           </div>
-          <BlurView intensity={40} style={{ zIndex: 100, marginTop: -112 }}>
+          <BlurView
+            intensity={40}
+            style={{
+              zIndex: 100,
+              marginTop: -112,
+              borderRadius: 20,
+            }}
+          >
             <Composer
-              backgroundColor="$white-70"
+              backgroundColor="$blurBackground"
               paddingBottom={56}
               isBlurred={shouldBlurBackground}
             />
