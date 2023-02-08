@@ -1,9 +1,11 @@
+import { forwardRef } from 'react'
+
 import { Stack, styled } from '@tamagui/core'
 
 import { Paragraph } from '../typography'
 
 import type { GetProps } from '@tamagui/core'
-// import { Pressable } from 'react-native'
+import type { Ref } from 'react'
 
 const Base = styled(Stack, {
   name: 'Button',
@@ -102,12 +104,11 @@ type Props = BaseProps & {
   onPress?: () => void
 }
 
-const Button = (props: Props) => {
+const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const {
     type = 'primary',
     size = 40,
     children,
-    onPress,
     icon,
     iconAfter,
     ...rest
@@ -116,13 +117,7 @@ const Button = (props: Props) => {
   const iconOnly = !children && Boolean(icon)
 
   return (
-    <Base
-      {...rest}
-      type={type}
-      size={size}
-      iconOnly={iconOnly}
-      onPress={onPress}
-    >
+    <Base {...rest} ref={ref} type={type} size={size} iconOnly={iconOnly}>
       <ButtonText type={type}>
         {icon}
         {children}
@@ -132,5 +127,7 @@ const Button = (props: Props) => {
   )
 }
 
-export { Button }
+const _Button = forwardRef(Button)
+
+export { _Button as Button }
 export type { Props as ButtonProps }
