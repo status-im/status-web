@@ -15,7 +15,6 @@ const Base = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  space: 4,
   paddingHorizontal: 16,
   paddingTop: 7,
   paddingBottom: 9,
@@ -106,6 +105,7 @@ const Base = styled(Stack, {
 const ButtonText = styled(Paragraph, {
   display: 'flex',
   alignItems: 'center',
+  space: 4,
   weight: 'medium',
 
   variants: {
@@ -172,11 +172,11 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base {...rest} ref={ref} type={type} size={size} iconOnly={iconOnly}>
-      {icon}
       <ButtonText type={type} size={size}>
+        {icon}
         {children}
+        {iconAfter}
       </ButtonText>
-      {iconAfter}
     </Base>
   )
 }
