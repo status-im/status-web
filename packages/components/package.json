@@ -22,6 +22,9 @@
     "react-native-web": "^0.18.0"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.0.2",
+    "@radix-ui/react-popover": "^1.0.3",
+    "@radix-ui/react-tooltip": "^1.0.3",
     "@status-im/icons": "*",
     "@tamagui/animations-css": "1.0.15",
     "@tamagui/animations-react-native": "1.0.15",
