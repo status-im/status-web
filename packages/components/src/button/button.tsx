@@ -11,16 +11,20 @@ const Base = styled(Stack, {
   name: 'Button',
   accessibilityRole: 'button',
 
-  borderRadius: 12,
   display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  space: 4,
   paddingHorizontal: 16,
   paddingTop: 7,
   paddingBottom: 9,
-  cursor: 'pointer',
 
-  alignItems: 'center',
-  animation: 'fast',
+  cursor: 'pointer',
   userSelect: 'none',
+  animation: 'fast',
+  borderWidth: 1,
+  borderColor: 'transparent',
 
   variants: {
     type: {
@@ -30,9 +34,19 @@ const Base = styled(Stack, {
         pressStyle: { backgroundColor: '$primaryHover' },
       },
       positive: {
-        backgroundColor: '$success',
-        hoverStyle: { backgroundColor: '$successHover' },
-        pressStyle: { backgroundColor: '$successHover' },
+        backgroundColor: '$success-50',
+        hoverStyle: { backgroundColor: '$success-60' },
+        pressStyle: { backgroundColor: '$success-50' },
+      },
+      grey: {
+        backgroundColor: '$neutral-10',
+        hoverStyle: { backgroundColor: '$neutral-20' },
+        pressStyle: { backgroundColor: '$neutral-30' },
+      },
+      darkGrey: {
+        backgroundColor: '$neutral-20',
+        hoverStyle: { backgroundColor: '$neutral-30' },
+        pressStyle: { backgroundColor: '$neutral-40' },
       },
       outline: {
         borderWidth: 1,
@@ -45,23 +59,44 @@ const Base = styled(Stack, {
         hoverStyle: { backgroundColor: '$neutral-10' },
         pressStyle: { backgroundColor: '$neutral-20' },
       },
+      danger: {
+        backgroundColor: '$danger',
+        hoverStyle: { backgroundColor: '$danger-60' },
+        pressStyle: { backgroundColor: '$danger' },
+      },
+    },
+
+    disabled: {
+      true: {
+        opacity: 0.3,
+        cursor: 'default',
+      },
     },
 
     size: {
       40: {
+        borderRadius: 12,
         paddingHorizontal: 16,
         paddingTop: 7,
         paddingBottom: 9,
       },
       32: {
+        borderRadius: 10,
         paddingHorizontal: 16,
         paddingTop: 4,
         paddingBottom: 6,
+      },
+      24: {
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        paddingTop: 2,
+        paddingBottom: 4,
       },
     },
 
     iconOnly: {
       true: {
+        space: 0,
         paddingHorizontal: 8,
       },
     },
@@ -69,11 +104,9 @@ const Base = styled(Stack, {
 })
 
 const ButtonText = styled(Paragraph, {
-  textAlign: 'center',
-  weight: 'medium',
   display: 'flex',
   alignItems: 'center',
-  space: 4,
+  weight: 'medium',
 
   variants: {
     type: {
@@ -83,11 +116,32 @@ const ButtonText = styled(Paragraph, {
       positive: {
         color: '$white-100',
       },
+      grey: {
+        color: '$neutral-100',
+      },
+      darkGrey: {
+        color: '$neutral-100',
+      },
       outline: {
         color: '$neutral-100',
       },
       ghost: {
         color: '$neutral-100',
+      },
+      danger: {
+        color: '$white-100',
+      },
+    },
+
+    size: {
+      40: {
+        variant: 'normal',
+      },
+      32: {
+        variant: 'normal',
+      },
+      24: {
+        variant: 'smaller',
       },
     },
   } as const,
@@ -97,11 +151,11 @@ type BaseProps = GetProps<typeof Base>
 
 type Props = BaseProps & {
   children?: string
-  icon?: React.ReactNode
   type?: BaseProps['type']
   size?: BaseProps['size']
+  disabled?: boolean
+  icon?: React.ReactNode
   iconAfter?: React.ReactNode
-  onPress?: () => void
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -118,11 +172,11 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base {...rest} ref={ref} type={type} size={size} iconOnly={iconOnly}>
-      <ButtonText type={type}>
-        {icon}
+      {icon}
+      <ButtonText type={type} size={size}>
         {children}
-        {iconAfter}
       </ButtonText>
+      {iconAfter}
     </Base>
   )
 }
