@@ -1,4 +1,4 @@
-import { Close, Content, Portal, Root, Trigger } from '@radix-ui/react-popover'
+import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover'
 import { Stack } from 'tamagui'
 
 import type { PopoverContentProps } from '@radix-ui/react-popover'
@@ -41,7 +41,6 @@ const PopoverContent: FunctionComponent = props => {
       shadowColor="rgba(9, 16, 28, 0.12)"
     >
       {children}
-      <Close />
     </Stack>
   )
 }
