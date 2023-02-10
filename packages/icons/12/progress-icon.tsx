@@ -12,7 +12,7 @@ const SvgProgressIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <G clipPath="url(#progress-icon_svg__a)" strokeWidth={1.1}>
         <Path d="M6 1a5 5 0 1 1 0 10A5 5 0 0 1 6 1Z" stroke="#E7EAEE" />

@@ -12,7 +12,7 @@ const SvgPullupIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle
         cx={10}

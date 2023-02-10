@@ -12,7 +12,7 @@ const SvgLoadingIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M10 2.25a.75.75 0 0 1 0 1.5v-1.5ZM3.75 10A6.25 6.25 0 0 0 10 16.25v1.5A7.75 7.75 0 0 1 2.25 10h1.5ZM10 3.75A6.25 6.25 0 0 0 3.75 10h-1.5A7.75 7.75 0 0 1 10 2.25v1.5Z"

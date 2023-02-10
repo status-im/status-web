@@ -12,7 +12,7 @@ const SvgStopIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Rect x={3.5} y={3.5} width={13} height={13} rx={4} fill={color} />
     </Svg>

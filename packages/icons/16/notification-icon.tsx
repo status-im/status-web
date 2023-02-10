@@ -12,9 +12,9 @@ const SvgNotificationIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
-      <Circle cx={8} cy={8} r={4} fill="#4360DF" />
+      <Circle cx={8} cy={8} r={4} fill={color} />
     </Svg>
   )
 }

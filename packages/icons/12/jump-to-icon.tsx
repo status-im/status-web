@@ -12,7 +12,7 @@ const SvgJumpToIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path d="M4.575 2.525h4.95v4.95" stroke={color} strokeWidth={1.1} />
       <Path

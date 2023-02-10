@@ -12,10 +12,10 @@ const SvgMutualContactIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
-      <Circle cx={15} cy={10} r={7} fill="#4360DF" />
-      <Circle cx={9} cy={10} r={7} fill="#4360DF" fillOpacity={0.3} />
+      <Circle cx={15} cy={10} r={7} fill={color} />
+      <Circle cx={9} cy={10} r={7} fill={color} fillOpacity={0.3} />
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

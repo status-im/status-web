@@ -12,11 +12,11 @@ const SvgHoldIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <G clipPath="url(#hold-icon_svg__a)">
         <Circle cx={6} cy={6} r={6} fill="#647084" />
-        <Path d="M3.333 6.4 5.111 8l3.556-4" stroke="#fff" strokeWidth={1.1} />
+        <Path d="M3.333 6.4 5.111 8l3.556-4" stroke={color} strokeWidth={1.1} />
       </G>
       <Defs>
         <ClipPath id="hold-icon_svg__a">

@@ -12,14 +12,14 @@ const SvgVerifiedIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle
         cx={10.25}
         cy={10.25}
         r={6.75}
-        fill="#26A69A"
-        stroke="#26A69A"
+        fill={color}
+        stroke={color}
         strokeWidth={1.3}
       />
       <Path d="M6.833 10.5 9 12.5l4.333-5" stroke="#fff" strokeWidth={1.3} />

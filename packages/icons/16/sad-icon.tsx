@@ -12,7 +12,7 @@ const SvgSadIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle cx={8} cy={8} r={6} stroke={color} strokeWidth={1.2} />
       <Path

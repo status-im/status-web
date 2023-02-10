@@ -12,7 +12,7 @@ const SvgMoreIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle cx={3.25} cy={8} r={1.25} fill={color} />
       <Circle cx={8} cy={8} r={1.25} fill={color} />

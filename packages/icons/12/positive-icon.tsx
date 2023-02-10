@@ -12,9 +12,9 @@ const SvgPositiveIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
-      <G clipPath="url(#positive-icon_svg__a)" stroke="#26A69A">
+      <G clipPath="url(#positive-icon_svg__a)" stroke={color}>
         <Circle cx={6} cy={6} r={5.5} strokeOpacity={0.4} />
         <Path d="M6 3.5V9M9 6.5l-3-3-3 3" strokeWidth={1.2} />
       </G>

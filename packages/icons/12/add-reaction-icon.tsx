@@ -12,7 +12,7 @@ const SvgAddReactionIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <G clipPath="url(#add-reaction-icon_svg__a)">
         <Path d="M7.294 1.17A5 5 0 1 0 11 6" stroke={color} strokeWidth={1.1} />

@@ -12,7 +12,7 @@ const SvgChevronBottomIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path d="m3 4.5 3 3 3-3" stroke={color} strokeWidth={1.1} />
     </Svg>

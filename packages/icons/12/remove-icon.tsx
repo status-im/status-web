@@ -12,10 +12,10 @@ const SvgRemoveIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <G clipPath="url(#remove-icon_svg__a)">
-        <Circle cx={6} cy={6} r={6} fill="#647084" />
+        <Circle cx={6} cy={6} r={6} fill={color} />
         <Path
           d="M3.879 3.879 8.12 8.12M8.121 3.879 3.88 8.12"
           stroke="#fff"

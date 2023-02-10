@@ -12,7 +12,7 @@ const SvgAddReactionIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M7.525 12a3.5 3.5 0 0 0 4.95 0"

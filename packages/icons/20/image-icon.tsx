@@ -8,7 +8,13 @@ const SvgImageIcon = (props: SvgProps) => {
   const color = useCurrentColor(colorToken)
 
   return (
-    <Svg width={20} height={20} fill="none" {...rest}>
+    <Svg
+      width={20}
+      height={20}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...rest}
+    >
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

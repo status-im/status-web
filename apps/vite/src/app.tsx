@@ -1,4 +1,4 @@
-import { cloneElement, useState } from 'react'
+import { cloneElement, useRef, useState } from 'react'
 
 import {
   Composer,
@@ -7,10 +7,9 @@ import {
   SidebarMembers,
   Topbar,
 } from '@status-im/components'
-import { useScrollPosition } from '@status-im/components/hooks'
+import { useBlur } from '@status-im/components/hooks'
 import { COMMUNITIES } from '@status-im/components/src/sidebar/mock-data'
 import { Stack, styled, TamaguiProvider } from '@tamagui/core'
-import { BlurView } from 'expo-blur'
 import { AnimatePresence } from 'tamagui'
 
 import tamaguiConfig from '../tamagui.config'
@@ -41,8 +40,9 @@ function App() {
   const [showMembers, setShowMembers] = useState(false)
 
   const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
-  // TODO - this is a hack to get the icon to show up in the topbar when a channel is selected on mount
+  const refMessagesContainer = useRef<HTMLDivElement>(null)
 
+  // TODO - this is a hack to get the icon to show up in the topbar when a channel is selected on mount
   const [icon, setIcon] = useState<ReactNode>(
     cloneElement(COMMUNITIES[0].channels[0].icon as ReactElement, {
       hasBackground: false,
@@ -54,12 +54,9 @@ function App() {
     setIcon(icon)
   }
 
-  const { ref, scrollPos } = useScrollPosition()
-
-  const shouldBlurBackground =
-    scrollPos <= ref.current?.scrollHeight - (ref.current?.clientHeight + 32)
-
-  const shouldBlurTopbar = scrollPos >= 56
+  const { shouldBlurTop, shouldBlurBottom } = useBlur({
+    ref: refMessagesContainer,
+  })
 
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={'light'}>
@@ -74,37 +71,29 @@ function App() {
           />
         </div>
         <main id="main">
-          <BlurView intensity={40} style={{ zIndex: 100 }}>
-            <Topbar
-              isBlurred={shouldBlurTopbar}
-              backgroundColor="$blurBackground"
-              icon={
-                icon &&
-                cloneElement(icon as ReactElement, { hasBackground: false })
-              }
-              title={`#${selectedChannel}`}
-              description="Share random funny stuff with the community. Play nice."
-              membersVisisble={showMembers}
-              onMembersPress={() => setShowMembers(show => !show)}
-            />
-          </BlurView>
-          <div id="content" ref={ref}>
+          <Topbar
+            isBlurred={shouldBlurTop}
+            backgroundColor="$blurBackground"
+            icon={
+              icon &&
+              cloneElement(icon as ReactElement, { hasBackground: false })
+            }
+            title={`#${selectedChannel}`}
+            description="Share random funny stuff with the community. Play nice."
+            membersVisisble={showMembers}
+            onMembersPress={() => setShowMembers(show => !show)}
+          />
+
+          <div id="content" ref={refMessagesContainer}>
             <Messages />
           </div>
-          <BlurView
-            intensity={40}
-            style={{
-              zIndex: 100,
-              marginTop: -112,
-              borderRadius: 20,
-            }}
-          >
-            <Composer
-              backgroundColor="$blurBackground"
-              paddingBottom={56}
-              isBlurred={shouldBlurBackground}
-            />
-          </BlurView>
+
+          <Composer
+            backgroundColor="$blurBackground"
+            paddingBottom={56}
+            isBlurred={shouldBlurBottom}
+            style={{ marginTop: -112 }}
+          />
         </main>
         <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
           {showMembers && (

@@ -1,1 +1,2 @@
-export { useScrollPosition } from './use-scroll-position'
+export { useBlur } from './use-blur'
+export { useThrottle } from './use-throttle'

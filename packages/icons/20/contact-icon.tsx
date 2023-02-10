@@ -12,14 +12,14 @@ const SvgContactIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle
         cx={10}
         cy={10}
         r={6.75}
-        fill="#4360DF"
-        stroke="#4360DF"
+        fill={color}
+        stroke={color}
         strokeWidth={1.5}
       />
       <Path
@@ -36,8 +36,8 @@ const SvgContactIcon = (props: SvgProps) => {
         strokeWidth={1.3}
         strokeLinejoin="round"
       />
-      <Circle cx={10} cy={10} r={6.75} stroke="#4360DF" strokeWidth={1.5} />
-      <Circle cx={10} cy={10} r={6.25} stroke="#4360DF" />
+      <Circle cx={10} cy={10} r={6.75} stroke={color} strokeWidth={1.5} />
+      <Circle cx={10} cy={10} r={6.25} stroke={color} />
     </Svg>
   )
 }
