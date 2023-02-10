@@ -63,7 +63,7 @@ export function deserializePublicKey(
     }
 
     default: {
-      throw new Error('Unsopported public key multicodec code')
+      throw new Error('Unsupported public key multicodec code')
     }
   }
 
