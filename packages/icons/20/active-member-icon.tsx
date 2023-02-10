@@ -12,7 +12,7 @@ const SvgActiveMemberIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M11.25 2.5v6.25h3.25L8.75 17.5v-6.25H5.5l5.75-8.75Z"

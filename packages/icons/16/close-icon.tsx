@@ -12,7 +12,7 @@ const SvgCloseIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="m4.464 11.536 7.072-7.072M4.464 4.464l7.072 7.072"

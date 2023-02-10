@@ -12,7 +12,7 @@ const SvgRevealIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M10 4c4.5 0 7 5 7 6s-2.5 6-7 6-7-5-7-6 2.5-6 7-6Z"

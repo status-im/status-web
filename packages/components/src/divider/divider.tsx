@@ -2,7 +2,7 @@ import { Stack, styled } from '@tamagui/core'
 
 export const Divider = styled(Stack, {
   name: 'Divider',
-  backgroundColor: '$neutral-10',
+  backgroundColor: '$neutral-80-opa-10',
   flexShrink: 0,
   // borderWidth: 0,
   flex: 1,

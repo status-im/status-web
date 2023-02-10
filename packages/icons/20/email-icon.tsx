@@ -12,7 +12,7 @@ const SvgEmailIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path d="m6 7 4 3 4-3" stroke={color} strokeWidth={1.3} />
       <Path

@@ -12,7 +12,7 @@ const SvgUnderlineIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M13.5 4.5V9a3.5 3.5 0 0 1-3.5 3.5v0A3.5 3.5 0 0 1 6.5 9V4.5"

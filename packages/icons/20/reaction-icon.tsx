@@ -6,13 +6,14 @@ import type { SvgProps } from 'react-native-svg'
 const SvgReactionIcon = (props: SvgProps) => {
   const { color: colorToken = 'currentColor', ...rest } = props
   const color = useCurrentColor(colorToken)
+
   return (
     <Svg
       width={20}
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle cx={10} cy={10} r={6.75} stroke={color} strokeWidth={1.3} />
       <Path

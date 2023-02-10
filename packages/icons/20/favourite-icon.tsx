@@ -12,7 +12,7 @@ const SvgFavouriteIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="m10 3 2.057 4.168 4.6.669-3.328 3.245.785 4.581L10 13.5l-4.114 2.163.785-4.581-3.328-3.245 4.6-.669L10 3Z"

@@ -12,7 +12,7 @@ const SvgDropdownIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <G clipPath="url(#dropdown-icon_svg__a)">
         <Circle cx={6} cy={6} r={6} fill="#E7EAEE" />

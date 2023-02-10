@@ -12,10 +12,10 @@ const SvgNegativeIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
-      <Circle cx={8} cy={8} r={6} stroke="#E65F5C" strokeOpacity={0.4} />
-      <Path d="M8 10.5V5M5 7.5l3 3 3-3" stroke="#E65F5C" strokeWidth={1.2} />
+      <Circle cx={8} cy={8} r={6} stroke={color} strokeOpacity={0.4} />
+      <Path d="M8 10.5V5M5 7.5l3 3 3-3" stroke={color} strokeWidth={1.2} />
     </Svg>
   )
 }

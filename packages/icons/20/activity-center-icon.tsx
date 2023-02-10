@@ -12,7 +12,7 @@ const SvgActivityCenterIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M5.5 7.5a4.5 4.5 0 1 1 9 0v.75c0 .811.263 1.6.75 2.25l.45.6a1.5 1.5 0 0 1-1.2 2.4h-9a1.5 1.5 0 0 1-1.2-2.4l.45-.6a3.75 3.75 0 0 0 .75-2.25V7.5ZM7.878 16.121a2.999 2.999 0 0 0 4.243 0"

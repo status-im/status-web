@@ -12,7 +12,7 @@ const SvgLightningIcon = (props: SvgProps) => {
       height={14}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M7 1.5V6h2.5L5 12.5v-5H2.5l4.5-6Z"

@@ -12,7 +12,7 @@ const SvgAlphabeticallyIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M8.412 13H7l2.152-6h1.699l1.074 3L13 13h-1.412l-1.562-4.629h-.049L8.412 13Zm-.088-2.358h3.337v.99H8.324v-.99Z"

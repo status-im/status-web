@@ -12,7 +12,7 @@ const SvgUnreadIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M12 15H8M14 10H6M16 5H4"

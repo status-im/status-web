@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { cloneElement, useRef, useState } from 'react'
 
 import {
   Composer,
@@ -7,10 +7,14 @@ import {
   SidebarMembers,
   Topbar,
 } from '@status-im/components'
+import { useBlur } from '@status-im/components/hooks'
+import { COMMUNITIES } from '@status-im/components/src/sidebar/mock-data'
 import { Stack, styled, TamaguiProvider } from '@tamagui/core'
 import { AnimatePresence } from 'tamagui'
 
 import tamaguiConfig from '../tamagui.config'
+
+import type { ReactElement, ReactNode } from 'react'
 
 type ThemeVars = 'light' | 'dark'
 
@@ -36,15 +40,28 @@ function App() {
   const [showMembers, setShowMembers] = useState(false)
 
   const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
+  const refMessagesContainer = useRef<HTMLDivElement>(null)
 
-  const onChannelPress = (id: string) => {
+  // TODO - this is a hack to get the icon to show up in the topbar when a channel is selected on mount
+  const [icon, setIcon] = useState<ReactNode>(
+    cloneElement(COMMUNITIES[0].channels[0].icon as ReactElement, {
+      hasBackground: false,
+    })
+  )
+
+  const onChannelPress = (id: string, icon?: ReactNode) => {
     setSelectedChannel(id)
+    setIcon(icon)
   }
+
+  const { shouldBlurTop, shouldBlurBottom } = useBlur({
+    ref: refMessagesContainer,
+  })
 
   return (
     <TamaguiProvider config={tamaguiConfig} defaultTheme={'light'}>
       <div id="app">
-        <div id="sidebar">
+        <div id="sidebar" style={{ zIndex: 200 }}>
           <Sidebar
             name="Rarible"
             description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
@@ -55,15 +72,28 @@ function App() {
         </div>
         <main id="main">
           <Topbar
+            isBlurred={shouldBlurTop}
+            backgroundColor="$blurBackground"
+            icon={
+              icon &&
+              cloneElement(icon as ReactElement, { hasBackground: false })
+            }
             title={`#${selectedChannel}`}
             description="Share random funny stuff with the community. Play nice."
             membersVisisble={showMembers}
             onMembersPress={() => setShowMembers(show => !show)}
           />
-          <div id="content">
+
+          <div id="content" ref={refMessagesContainer}>
             <Messages />
           </div>
-          <Composer />
+
+          <Composer
+            backgroundColor="$blurBackground"
+            paddingBottom={56}
+            isBlurred={shouldBlurBottom}
+            style={{ marginTop: -112 }}
+          />
         </main>
         <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
           {showMembers && (

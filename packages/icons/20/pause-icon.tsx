@@ -12,7 +12,7 @@ const SvgPauseIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Rect x={4} y={4} width={4} height={12} rx={1.5} fill={color} />
       <Rect x={12} y={4} width={4} height={12} rx={1.5} fill={color} />

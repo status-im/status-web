@@ -12,7 +12,7 @@ const SvgAddUserIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M8.5 10H6a3 3 0 0 0-3 3 1 1 0 0 0 1 1h4.5"

@@ -12,7 +12,7 @@ const SvgBridgeIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M4 15.5v-11M7 12.5v-5M13 12.5v-5M10 12.5v-4M16 15.5v-11M17 12.5H3"

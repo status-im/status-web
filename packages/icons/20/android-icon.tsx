@@ -12,7 +12,7 @@ const SvgAndroidIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M4 9a6 6 0 0 1 12 0v5.667A2.333 2.333 0 0 1 13.667 17H6.333A2.333 2.333 0 0 1 4 14.667V9Z"

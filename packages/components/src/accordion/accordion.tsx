@@ -26,6 +26,7 @@ const Accordion = ({
   const [isExpanded, setIsExpanded] = useState(initialExpanded)
   return (
     <Stack
+      accessibilityRole="button"
       width="100%"
       borderRadius="$0"
       borderTopWidth={1}
