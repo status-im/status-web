@@ -79,8 +79,6 @@ type Props = {
 export const Reactions = (props: Props) => {
   const { reactions } = props
 
-  console.log(reactions)
-
   return (
     <XStack space={8} flexWrap="wrap">
       <ReactionButton count={1} icon={<LoveIcon />} selected />

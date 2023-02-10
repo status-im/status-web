@@ -1,6 +1,6 @@
 import { cloneElement } from 'react'
 
-import { Stack, styled, Text } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 
 import type React from 'react'
 
@@ -20,39 +20,80 @@ const Base = styled(Stack, {
   height: 30,
   borderWidth: 1,
   padding: 4,
-  backgroundColor: '$neutral-10',
-  borderColor: '$neutral-10',
-
-  hoverStyle: {
-    backgroundColor: '$neutral-20',
-  },
-
-  pressStyle: {
-    backgroundColor: '$neutral-20',
-  },
 
   variants: {
-    selected: {
-      true: {
-        backgroundColor: '$neutral-30',
-        borderColor: '$neutral-30',
-      },
-    },
-
-    transparent: {
-      true: {
-        backgroundColor: 'transparent',
-        borderColor: '$neutral-20',
+    variant: {
+      default: {
+        backgroundColor: '$iconButtonBackground',
+        borderColor: 'transparent',
 
         hoverStyle: {
-          backgroundColor: 'transparent',
-          borderColor: '$neutral-30',
+          backgroundColor: '$iconButtonBackgroundHover',
         },
 
         pressStyle: {
-          backgroundColor: 'transparent',
-          borderColor: '$neutral-30',
+          backgroundColor: '$iconButtonBackgroundHover',
         },
+      },
+      outline: {
+        backgroundColor: 'transparent',
+        borderColor: '$iconButtonOutlineBorder',
+
+        hoverStyle: {
+          borderColor: '$iconButtonOutlineBorderHover',
+        },
+
+        pressStyle: {
+          borderColor: '$iconButtonOutlineBorderHover',
+        },
+      },
+    },
+    blurred: {
+      default: {
+        backgroundColor: '$iconButtonBackgroundBlurred',
+
+        hoverStyle: {
+          backgroundColor: '$iconButtonBackgroundBlurredHover',
+        },
+
+        pressStyle: {
+          backgroundColor: 'iconButtonBackgroundBlurredHover',
+        },
+      },
+      outline: {
+        borderColor: '$iconButtonOutlineBorderBlurred',
+
+        hoverStyle: {
+          borderColor: '$iconButtonOutlineBorderBlurredHover',
+        },
+
+        pressStyle: {
+          borderColor: '$iconButtonOutlineBorderBlurredHover',
+        },
+      },
+    },
+    selected: {
+      default: {
+        backgroundColor: '$iconButtonBackgroundSelected',
+        borderColor: '$iconButtonBorderSelected',
+      },
+      defaultWithBlur: {
+        backgroundColor: '$iconButtonBackgroundBlurredSelected',
+        borderColor: '$iconButtonBorderBlurredSelected',
+      },
+      outline: {
+        backgroundColor: '$iconButtonOutlineBackgroundSelected',
+        borderColor: '$iconButtonOutlineBorderSelected',
+      },
+      outlineWithBlur: {
+        backgroundColor: '$iconButtonOutBackgroundBlurredSelected',
+        borderColor: '$iconButtonOutlineBorderBlurredSelected',
+      },
+    },
+    disabled: {
+      true: {
+        opacity: 0.3,
+        cursor: 'default',
       },
     },
   } as const,
@@ -62,20 +103,92 @@ interface Props {
   icon: React.ReactElement
   onPress?: () => void
   selected?: boolean
-  transparent?: boolean
+  blurred?: boolean
+  variant?: 'default' | 'outline'
+  disabled?: boolean
   // FIXME: enforce aria-label for accessibility
   // 'aria-label'?: string
 }
 
+const iconColor = {
+  default: {
+    default: '$iconButtonColor',
+    defaultBlurred: '$iconButtonColorBlurred',
+    selected: '$iconButtonColorSelected',
+    selectedBlurred: '$iconButtonColorBlurred',
+  },
+  outline: {
+    default: '$iconButtonColorOutline',
+    defaultBlurred: '$iconButtonColorOutlineBlurred',
+    selected: '$iconButtonColorOutlineSelected',
+    selectedBlurred: '$iconButtonColorOutlineBlurred',
+  },
+}
+
+const getStateForIconColor = ({
+  blurred,
+  selected,
+}: {
+  blurred?: boolean
+  selected?: boolean
+}) => {
+  if (!selected && blurred) {
+    return 'defaultBlurred'
+  }
+  if (selected && blurred) {
+    return 'selectedBlurred'
+  }
+  if (selected && !blurred) {
+    return 'selected'
+  }
+  return 'default'
+}
+
+const getSelectedVariant = ({
+  selected,
+  blurred,
+  variant,
+}: {
+  selected?: boolean
+  blurred?: boolean
+  variant?: 'default' | 'outline'
+}) => {
+  if (!selected) {
+    return undefined
+  }
+  if (blurred && variant === 'default') {
+    return 'defaultWithBlur'
+  }
+  if (blurred && variant === 'outline') {
+    return 'outlineWithBlur'
+  }
+  return variant
+}
+
 const IconButton = (props: Props) => {
-  const { icon, transparent, selected, onPress } = props
+  const {
+    icon,
+    selected,
+    blurred,
+    onPress,
+    variant = 'default',
+    disabled,
+  } = props
+
+  const state = getStateForIconColor({ blurred, selected })
+  const selectedVariant = getSelectedVariant({ selected, variant, blurred })
 
   return (
-    <Base selected={selected} onPress={onPress} transparent={transparent}>
+    <Base
+      variant={variant}
+      selected={selectedVariant}
+      onPress={onPress}
+      blurred={blurred ? variant : undefined}
+      disabled={disabled}
+    >
       {cloneElement(icon, {
-        color: selected ? '$neutral-100' : '$neutral-50',
+        color: iconColor[variant][state],
         size: 20,
-        pressEvents: 'none',
       })}
     </Base>
   )

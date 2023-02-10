@@ -12,9 +12,9 @@ const SvgOnlineLeftIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
-      <Circle cx={4} cy={10} r={4} fill="#26A69A" />
+      <Circle cx={4} cy={10} r={4} fill={color} />
     </Svg>
   )
 }

@@ -12,7 +12,7 @@ const SvgAccountNumberIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Rect x={2.5} y={2.5} width={15} height={15} rx={3.5} stroke={color} />
       <Path

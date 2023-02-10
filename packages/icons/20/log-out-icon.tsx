@@ -12,7 +12,7 @@ const SvgLogOutIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M9.5 4H8.3c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C3.5 6.28 3.5 7.12 3.5 8.8v2.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C5.78 16 6.62 16 8.3 16h1.2"

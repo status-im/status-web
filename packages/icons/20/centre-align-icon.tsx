@@ -12,7 +12,7 @@ const SvgCentreAlignIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M15 11.75H5M15 5H5M13 15H7M13 8.25H7"

@@ -12,7 +12,7 @@ const SvgSpeedIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="m6.5 13.5-1.45 1.45a7 7 0 1 1 9.9 0L13.5 13.5"

@@ -12,7 +12,7 @@ const SvgAddTokenIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle cx={10} cy={10} r={6.75} fill={color} />
       <Path

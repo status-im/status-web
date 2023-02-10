@@ -11,6 +11,7 @@ import { COMMUNITIES } from './mock-data'
 
 import type { CommunityProps } from './mock-data'
 import type { GetProps } from '@tamagui/core'
+import type { ReactNode } from 'react'
 
 type BaseProps = GetProps<typeof Stack>
 
@@ -20,7 +21,7 @@ type Props = {
   membersCount: number
   selectedChannel?: string
   communities?: CommunityProps[]
-  onChannelPress: (channelId: string) => void
+  onChannelPress: (channelId: string, channelIcon?: ReactNode) => void
 } & BaseProps
 
 const Sidebar = (props: Props) => {
@@ -90,7 +91,7 @@ const Sidebar = (props: Props) => {
                   channelStatus={channel.channelStatus}
                   numberOfMessages={channel.numberOfMessages}
                   isSelected={selectedChannel === channel.id}
-                  onPress={() => onChannelPress(channel.id)}
+                  onPress={() => onChannelPress(channel.id, channel.icon)}
                   mb={isLastChannelOfTheList ? 8 : 0}
                 />
               )

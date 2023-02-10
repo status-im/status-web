@@ -12,11 +12,11 @@ const SvgInfoBadgeIcon = (props: SvgProps) => {
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Circle cx={10} cy={10} r={6.75} fill={color} />
-      <Path d="M10 9.5V14" stroke="#fff" strokeWidth={1.3} />
-      <Circle cx={10} cy={7} r={1} transform="rotate(-180 10 7)" fill="#fff" />
+      <Path d="M10 9.5V14" stroke={color} strokeWidth={1.3} />
+      <Circle cx={10} cy={7} r={1} transform="rotate(-180 10 7)" fill={color} />
     </Svg>
   )
 }

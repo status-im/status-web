@@ -12,7 +12,7 @@ const SvgContactBookIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path
         d="M6 10.625c0-1.036.84-1.875 1.875-1.875h1.25c1.036 0 1.875.84 1.875 1.875 0 .345-.28.625-.625.625h-3.75A.625.625 0 0 1 6 10.625Z"

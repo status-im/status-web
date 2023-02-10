@@ -12,7 +12,7 @@ const SvgTimeoutIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <G clipPath="url(#timeout-icon_svg__a)">
         <Path

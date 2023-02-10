@@ -12,7 +12,7 @@ const SvgSentIcon = (props: SvgProps) => {
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path d="M2.5 6.25 5 8.75l4.5-5.5" stroke={color} strokeWidth={1.3} />
     </Svg>

@@ -12,7 +12,7 @@ const SvgArrowRightIcon = (props: SvgProps) => {
       height={16}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...props}
+      {...rest}
     >
       <Path d="m9 12 4-4-4-4M3 8h10" stroke={color} strokeWidth={1.2} />
     </Svg>
