@@ -30,7 +30,7 @@ type MulticodecCode = typeof VALID_MULTICODEC_CODES[number]
  */
 export function deserializePublicKey(
   publicKey: string, // uncompressed, compressed, or compressed & encoded
-  options: { compress: boolean }
+  options = { compress: true }
 ): string {
   const cpk = publicKey.replace(/^0[xX]/, 'f') // ensure multibase code for hexadecimal encoding
   const c = cpk[0] as MultibaseCode
