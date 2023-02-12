@@ -34,7 +34,7 @@ export function hexToColorHash(
   return colorHash
 }
 
-function numberToIndices(number: bigint, base: bigint): bigint[] {
+export function numberToIndices(number: bigint, base: bigint): bigint[] {
   const indices: bigint[] = []
   let nextNumber = number
 
