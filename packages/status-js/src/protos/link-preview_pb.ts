@@ -34,15 +34,19 @@ export class CommunityPreview extends Message<CommunityPreview> {
    * string app_url = 6;
    * repeated Tag tags = 7;
    *
+   * @generated from field: string color = 8;
+   */
+  color = "";
+
+  /**
    * todo?!: try it here instead of url
    * bytes public_key = 9;
    * bytes description = 10;
    * bytes signature = 11;
-   * string public_key = 12;
    *
-   * @generated from field: string color = 8;
+   * @generated from field: string public_key = 12;
    */
-  color = "";
+  publicKey = "";
 
   constructor(data?: PartialMessage<CommunityPreview>) {
     super();
@@ -56,6 +60,7 @@ export class CommunityPreview extends Message<CommunityPreview> {
     { no: 4, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "members_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 8, name: "color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 12, name: "public_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CommunityPreview {
