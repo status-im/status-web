@@ -13,8 +13,8 @@ import {
 } from '@status-im/icons/20'
 import { Stack } from 'tamagui'
 
-import { Button } from '../../button'
 import { DropdownMenu } from '../../dropdown-menu'
+import { IconButton } from '../../icon-button'
 import { ReactionPopover } from './reaction-popover'
 
 import type { ReactionsType } from '../types'
@@ -23,6 +23,8 @@ interface Props {
   reactions: ReactionsType
   onOpenChange: (open: boolean) => void
   onReplyPress: VoidFunction
+  // onEditPress: VoidFunction
+  // onDeletePress: VoidFunction
 }
 
 export const Actions = (props: Props) => {
@@ -38,6 +40,8 @@ export const Actions = (props: Props) => {
       borderWidth={1}
       borderColor="$neutral-10"
       borderRadius={12}
+      padding={2}
+      space={2}
       overflow="hidden"
       position="absolute"
       top={-16}
@@ -55,15 +59,33 @@ export const Actions = (props: Props) => {
         sideOffset={6}
         onOpenChange={onOpenChange}
       >
-        <Button type="ghost" icon={<AddReactionIcon />} />
+        <IconButton variant="outline" icon={<AddReactionIcon />} />
       </ReactionPopover>
 
       {/* REPLY */}
-      <Button type="ghost" icon={<ReplyIcon />} onPress={onReplyPress} />
+      <IconButton
+        variant="outline"
+        icon={<ReplyIcon />}
+        onPress={onReplyPress}
+      />
+
+      {/* EDIT */}
+      {/* <IconButton
+        variant="outline"
+        icon={<EditIcon />}
+        onPress={onEditPress}
+      /> */}
+
+      {/* DELETE */}
+      {/* <IconButton
+        variant="outline"
+        icon={<DeleteIcon />}
+        onPress={onDeletePress}
+      /> */}
 
       {/* OPTIONS MENU */}
       <DropdownMenu modal={false} onOpenChange={onOpenChange}>
-        <Button type="ghost" icon={<OptionsIcon />} />
+        <IconButton variant="outline" icon={<OptionsIcon />} />
         <DropdownMenu.Content align="end" sideOffset={10}>
           <DropdownMenu.Item
             icon={<EditIcon />}

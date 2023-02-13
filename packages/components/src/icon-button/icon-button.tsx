@@ -1,4 +1,4 @@
-import { cloneElement } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 
@@ -166,14 +166,7 @@ const getSelectedVariant = ({
 }
 
 const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const {
-    icon,
-
-    blurred,
-
-    variant = 'default',
-    disabled,
-  } = props
+  const { icon, blurred, variant = 'default', ...rest } = props
 
   const selected =
     props.selected || props['aria-expanded'] || props['aria-selected']
