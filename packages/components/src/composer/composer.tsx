@@ -28,23 +28,31 @@ const Composer = (
     style?: ViewProps['style']
   }
 ) => {
-  const { backgroundColor, isBlurred, style: styleFromProps, ...rest } = props
+  const {
+    backgroundColor,
+    isBlurred: isBlurredFromProps,
+    style: styleFromProps,
+    ...rest
+  } = props
   const style = styleFromProps ? Object.assign(styleFromProps) : {}
 
   const [isFocused, setIsFocused] = useState(false)
-
-  const applyVariantStyles:
-    | {
-        blurred: boolean
-      }
-    | undefined = isBlurred && !isFocused ? { blurred: true } : undefined
 
   const {
     imagesData,
     handleImageUpload,
     handleImageRemove,
     imageUploaderInputRef,
+    isDisabled: isImageUploadDisabled,
   } = useImageUpload()
+
+  const isBlurred = isBlurredFromProps && imagesData.length === 0 && !isFocused
+
+  const applyVariantStyles:
+    | {
+        blurred: boolean
+      }
+    | undefined = isBlurred ? { blurred: true } : undefined
 
   return (
     <BlurView
@@ -57,9 +65,9 @@ const Composer = (
     >
       <YStack
         animation="fast"
-        backgroundColor={isFocused ? '$background' : backgroundColor}
-        shadowColor={!isBlurred || isFocused ? 'rgba(9, 16, 28, 0.08)' : 'none'}
-        shadowOffset={{ width: 4, height: !isBlurred || isFocused ? 4 : 0 }}
+        backgroundColor={isBlurred ? backgroundColor : '$background'}
+        shadowColor={!isBlurred ? 'rgba(9, 16, 28, 0.08)' : 'none'}
+        shadowOffset={{ width: 4, height: isBlurred ? 0 : 4 }}
         shadowRadius={20}
         borderTopLeftRadius={20}
         borderTopRightRadius={20}
@@ -161,6 +169,7 @@ const Composer = (
               <IconButton
                 variant="outline"
                 icon={<ImageIcon />}
+                disabled={isImageUploadDisabled}
                 {...applyVariantStyles}
               />
             </label>

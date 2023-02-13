@@ -5,8 +5,10 @@ interface UseImageUploadReturn {
   handleImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
   handleImageRemove: (index: number) => void
   imageUploaderInputRef: React.RefObject<HTMLInputElement>
+  isDisabled: boolean
 }
 const ALLOWED_EXTENSIONS = /(\.jpg|\.jpeg|\.png)$/i
+const IMAGES_LIMIT = 6
 
 const useImageUpload = (): UseImageUploadReturn => {
   const [imagesData, setImagesData] = useState<string[]>([])
@@ -26,8 +28,14 @@ const useImageUpload = (): UseImageUploadReturn => {
 
       // Show alert if some files have unsupported formats
       if (files.length > filteredFiles.length) {
-        alert(
+        return alert(
           `Some files have unsupported formats. Only .jpg, .jpeg and .png formats are supported.`
+        )
+      }
+
+      if (files.length > IMAGES_LIMIT || imagesData.length > IMAGES_LIMIT) {
+        return alert(
+          `You can upload only ${IMAGES_LIMIT} images. Please remove some files and try again.`
         )
       }
 
@@ -59,6 +67,7 @@ const useImageUpload = (): UseImageUploadReturn => {
     handleImageUpload,
     handleImageRemove,
     imageUploaderInputRef,
+    isDisabled: imagesData.length >= IMAGES_LIMIT,
   }
 }
 
