@@ -40,9 +40,13 @@ body,
 
 #content {
   overflow: auto;
-  padding: 72px 8px 132px 8px;
+  padding: 40px 0px 0px 0px;
   height: 100vh;
   margin-top: -56px;
+}
+
+#messages {
+  padding: 32px 8px;
 }
 
 #members {

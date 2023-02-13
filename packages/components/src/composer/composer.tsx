@@ -1,15 +1,18 @@
 import { useState } from 'react'
 
+import { useImageUpload } from '@status-im/components/hooks'
 import {
   AudioIcon,
+  ClearIcon,
   FormatIcon,
   ImageIcon,
   ReactionIcon,
 } from '@status-im/icons/20'
 import { BlurView } from 'expo-blur'
-import { Stack, XStack, YStack } from 'tamagui'
+import { AnimatePresence, Stack, XStack, YStack } from 'tamagui'
 
 import { IconButton } from '../icon-button'
+import { Image } from '../image'
 import { Input } from '../input'
 
 import type { GetProps } from '@tamagui/core'
@@ -36,12 +39,19 @@ const Composer = (
       }
     | undefined = isBlurred && !isFocused ? { blurred: true } : undefined
 
+  const {
+    imagesData,
+    handleImageUpload,
+    handleImageRemove,
+    imageUploaderInputRef,
+  } = useImageUpload()
+
   return (
     <BlurView
       intensity={40}
       style={{
-        zIndex: 100,
         borderRadius: 20,
+        width: '100%',
         ...style,
       }}
     >
@@ -70,6 +80,76 @@ const Composer = (
           onBlur={() => setIsFocused(false)}
           onFocus={() => setIsFocused(true)}
         />
+        <input
+          ref={imageUploaderInputRef}
+          type="file"
+          multiple
+          onChange={handleImageUpload}
+          hidden
+          id="image-uploader-input"
+          style={{
+            display: 'none',
+          }}
+        />
+        <AnimatePresence>
+          {imagesData.length > 0 && (
+            <XStack
+              key="images-thumbnails"
+              paddingTop={12}
+              paddingBottom={8}
+              overflow="scroll"
+            >
+              {imagesData.map((imageData, index) => (
+                <Stack
+                  key={index + imageData}
+                  mr={12}
+                  position="relative"
+                  justifyContent="flex-end"
+                  flexDirection="row"
+                  alignItems="flex-start"
+                  animation={[
+                    'fast',
+                    {
+                      opacity: {
+                        overshootClamping: true,
+                      },
+                    },
+                  ]}
+                  enterStyle={{ opacity: 0 }}
+                  exitStyle={{ opacity: 0 }}
+                  opacity={1}
+                >
+                  <Image
+                    src={imageData}
+                    width={56}
+                    height={56}
+                    radius={12}
+                    aspectRatio={1}
+                  />
+                  <Stack
+                    zIndex={8}
+                    onPress={() => handleImageRemove(index)}
+                    cursor="pointer"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Stack
+                      backgroundColor="$background"
+                      width={15}
+                      height={15}
+                      borderRadius={7}
+                      position="absolute"
+                      zIndex={1}
+                    />
+                    <Stack position="absolute" zIndex={2} width={20}>
+                      <ClearIcon color="$neutral-50" />
+                    </Stack>
+                  </Stack>
+                </Stack>
+              ))}
+            </XStack>
+          )}
+        </AnimatePresence>
         <XStack
           alignItems="center"
           justifyContent="space-between"
@@ -77,12 +157,13 @@ const Composer = (
           backgroundColor="transparent"
         >
           <Stack space={12} flexDirection="row" backgroundColor="transparent">
-            <IconButton
-              variant="outline"
-              icon={<ImageIcon />}
-              {...applyVariantStyles}
-              selected
-            />
+            <label htmlFor="image-uploader-input">
+              <IconButton
+                variant="outline"
+                icon={<ImageIcon />}
+                {...applyVariantStyles}
+              />
+            </label>
             <IconButton
               variant="outline"
               icon={<ReactionIcon />}
