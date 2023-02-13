@@ -151,7 +151,7 @@ const Topbar = (props: Props) => {
                 danger
               />
             </DropdownMenu.Content>
-          </DropdownMenu>{' '}
+          </DropdownMenu>
         </Stack>
       </Stack>
     </BlurView>
