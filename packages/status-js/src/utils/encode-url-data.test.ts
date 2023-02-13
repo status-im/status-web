@@ -1,25 +1,25 @@
+import { utf8 } from '@scure/base'
 import { describe, expect, test } from 'vitest'
 
 import { encodeUrlData } from './encode-url-data'
 
 describe('community', () => {
   test('A', () => {
-    const encodedData = encodeUrlData(
-      'community',
-      {
-        displayName: 'Lorem ipsum dolor sit egestas.',
-        description:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
-        membersCount: 1_000_000,
-        color: '#4360DF',
-      },
-      {
-        serialization: 'csv',
-        compression: 'noop',
-        encoding: 'encodeURIComponent',
-      }
-    )
+    const data = {
+      displayName: 'Lorem ipsum dolor sit egestas.',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      membersCount: 1_000_000,
+      color: '#4360DF',
+    }
+    const encodedData = encodeUrlData('community', data, {
+      serialization: 'csv',
+      compression: 'noop',
+      encoding: 'encodeURIComponent',
+    })
+    const characterLength = countCharacters(data)
 
+    expect(characterLength).toBe(184)
     expect(encodedData).toBe(
       'Lorem%20ipsum%20dolor%20sit%20egestas.%2CLorem%20ipsum%20dolor%20sit%20amet%2C%20consectetur%20adipiscing%20elit.%20Phasellus%20non%20dui%20vitae%20augue%20elementum%20laoreet%20ac%20pharetra%20odio.%20Morbi%20vestibulum.%2C1000000%2C%234360DF'
     )
@@ -94,4 +94,134 @@ describe('community', () => {
     )
     expect(encodedData).toHaveLength(192)
   })
+
+  test('E', () => {
+    const encodedData = encodeUrlData(
+      'community',
+      {
+        displayName: 'Lorem ipsum dolor sit egestas.',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+        membersCount: 1_000_000,
+        color: '#4360DF',
+      },
+      {
+        serialization: 'protobuf',
+        compression: 'brotli',
+        encoding: 'base64url',
+      }
+    )
+
+    expect(encodedData).toBe(
+      'G7sAgK0OzJOmo4yssBOBo6ekybWGRw-TDqBpImRzStN66S8_fBx3Wi8-CYpBaDEC98GMkJGEsSFyjBOFTRcZeFtvHzxkKV8QJcbjHpzQfWpGfDia4OjNJC4AIZP5w7_FMpkVkK5bz6NrgKbZ9pt3szpYvtBL8WoKITWKsP-sCRMPMiEP9l-CGQLv6g153IqXJ_Uuk4T2ffHRPA=='
+    )
+    expect(encodedData).toHaveLength(208)
+  })
+
+  test('F', () => {
+    const encodedData = encodeUrlData(
+      'community',
+      {
+        displayName: 'Lorem ipsum dolor sit egestas.',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+        membersCount: 1_000_000,
+        color: '#4360DF',
+        publicKey: 'zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU',
+      },
+      {
+        serialization: 'protobuf',
+        compression: 'brotli',
+        encoding: 'base64url',
+      }
+    )
+
+    expect(encodedData).toBe(
+      'G-4A4J0H2WnpjJPkb2iwqTU8ephUAOGSXVVtTnqhBFgOcrv5AXOPPGAEdowT8kE3XWTgAW_ywUOWnpIkSkzGQ0YHFAu7fE-FKmBTmil0oxrhsM7h3GJZsXIGoSlSUeQbQEt1bbx5t5YL-OBBM8GKqkAQ3DCC9xt2YEXIiBWEgtiKjDULCJrCGtyFLAlWWCpJtuzWxu9Yb2d7b-P0XG7-P22X9ms_76gj3ezg2_muXio-SSfn_x9Of19-7Lx87rYl3h0yEHn5Bg=='
+    )
+    expect(encodedData).toHaveLength(268)
+  })
 })
+
+describe('chat', () => {
+  test('A', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      community: {
+        displayName: 'Lorem ipsum dolor sit egestas.',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+        membersCount: 1_000_000,
+        color: '#4360DF',
+      },
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'protobuf',
+      compression: 'brotli',
+      encoding: 'base64url',
+    })
+    const characterLength = countCharacters(data)
+
+    expect(characterLength).toBe(383)
+    expect(encodedData).toBe(
+      'G_8AYKwKeDJ8lNFUDUMv91LnB3zVmJqbOncP-lRBw2oL2sim1DYaJmLlSOBnEj6C2pzStPxw8-d13Gm9-CQoDUIriLEOhKAmx78H5owyTSTBTlue5zD9csuh3xpC1HlwNX1OrTZcY9tlJt_Pc9t_C9RripV4uVRGtp3ugIgmxDAyjiY4RzgLJnA0spg_PMu4TGYFZOij59Y9QdPsx6DvZnWwfWOU4tUUQmoW0cVnLZh4kAm58fwlmCHwod5V63EpXp7Uq8wL3boV8b3QLms='
+    )
+    expect(encodedData).toHaveLength(276)
+  })
+})
+
+describe('user', () => {
+  test('A', () => {
+    const data = {
+      displayName: 'Lorem ipsum dolore nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce finibus eleifend urna. Sed euismod tellus vel tellus interdum molestie. Maecenas ut fringilla dui. Duis auctor quis magna at congue. Duis euismod tempor pharetra. Morbi blandit.',
+      color: '#EAB700',
+    }
+    const encodedData = encodeUrlData('user', data, {
+      serialization: 'protobuf',
+      compression: 'brotli',
+      encoding: 'base64url',
+    })
+    const characterLength = countCharacters(data)
+
+    expect(characterLength).toBe(271)
+    expect(encodedData).toBe(
+      'GxUBoJwHdsOHgITK206z2oTI6cn2pEtSkxmSJyFKmBF4myq27J1Oe-VxJ_YlRcI4D_AFouMYJ6wzv66LnJ8PjkNGz1Pk70qr7Qlu6Ju9l74z4W0mn-EsI7Ugm_X1x5OzWB2Qpa_mVH9A0xqmcxK3ul6doFFv-kKHy3BcYGvus1A068Q_jaZ6MVZv7GPMUg4UTrokunCH-qNmgtU6VGtCetYJ_MlteVwghXn8aQawLdzvCbw_CVbIwBOX4nqHxmqUOtIB'
+    )
+    expect(encodedData).toHaveLength(260)
+  })
+
+  test('B', () => {
+    const data = {
+      displayName: 'John',
+      description: 'I am John',
+      color: '#EAB700',
+    }
+    const encodedData = encodeUrlData('user', data, {
+      serialization: 'protobuf',
+      compression: 'brotli',
+      encoding: 'base64url',
+    })
+    const characterLength = countCharacters(data)
+
+    expect(characterLength).toBe(20)
+    expect(encodedData).toBe('iwyAEgRKb2huGglJIGFtIEpvaG46ByNFQUI3MDAD')
+    expect(encodedData).toHaveLength(40)
+  })
+})
+
+// function countCharacters(data: Record<string, string | number>): number {
+function countCharacters(data: object): number {
+  return Object.values(data).reduce((a, v) => {
+    if (typeof v === 'object') {
+      return a + countCharacters(v)
+    }
+
+    return a + utf8.decode(v.toString()).length
+  }, 0)
+}

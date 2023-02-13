@@ -31,6 +31,7 @@ export function encodeUrlData(
   let serialized: Uint8Array
   switch (options.serialization) {
     case 'csv':
+      // note!: does not handle nested data
       serialized = utf8.decode(Object.values(data).join(','))
 
       break
