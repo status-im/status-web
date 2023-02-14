@@ -101,11 +101,7 @@ function App() {
                 zIndex: 100,
               }}
             >
-              <Composer
-                backgroundColor="$blurBackground"
-                paddingBottom={12}
-                isBlurred={shouldBlurBottom}
-              />
+              <Composer isBlurred={shouldBlurBottom} />
             </div>
           </div>
         </main>

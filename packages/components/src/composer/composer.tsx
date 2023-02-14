@@ -17,7 +17,6 @@ import { Image } from '../image'
 import { Input } from '../input'
 
 import type { GetProps } from '@tamagui/core'
-import type { ViewProps } from 'react-native'
 
 type BaseProps = GetProps<typeof YStack>
 
@@ -26,16 +25,9 @@ const Composer = (
     placeholderTextColor?: BaseProps['backgroundColor']
     iconOptionsColor?: BaseProps['backgroundColor']
     isBlurred?: boolean
-    style?: ViewProps['style']
   }
 ) => {
-  const {
-    backgroundColor,
-    isBlurred: isBlurredFromProps,
-    style: styleFromProps,
-    ...rest
-  } = props
-  const style = styleFromProps ? Object.assign(styleFromProps) : {}
+  const { isBlurred: isBlurredFromProps, ...rest } = props
 
   const [isFocused, setIsFocused] = useState(false)
   const [text, setText] = useState('')
@@ -62,12 +54,11 @@ const Composer = (
       style={{
         borderRadius: 20,
         width: '100%',
-        ...style,
       }}
     >
       <YStack
         animation="fast"
-        backgroundColor={isBlurred ? backgroundColor : '$background'}
+        backgroundColor={isBlurred ? '$blurBackground' : '$background'}
         shadowColor={!isBlurred ? 'rgba(9, 16, 28, 0.08)' : 'none'}
         shadowOffset={{ width: 4, height: isBlurred ? 0 : 4 }}
         shadowRadius={20}
@@ -75,6 +66,7 @@ const Composer = (
         borderTopRightRadius={20}
         px={16}
         pt={8}
+        pb={12}
         width="100%"
         style={{
           elevation: 10,
