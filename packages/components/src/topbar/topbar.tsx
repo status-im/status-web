@@ -1,12 +1,20 @@
 import { Divider, IconButton, Paragraph } from '@status-im/components'
 import {
   ArrowLeftIcon,
+  CommunitiesIcon,
+  DeleteIcon,
+  DownloadIcon,
   LockedIcon,
   MembersIcon,
+  MutedIcon,
   OptionsIcon,
+  ShareIcon,
+  UpToDateIcon,
 } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
+
+import { DropdownMenu } from '../dropdown-menu'
 
 import type { GetProps, StackProps } from '@tamagui/core'
 
@@ -104,7 +112,46 @@ const Topbar = (props: Props) => {
               blurred={isBlurred}
             />
           </Stack>
-          <IconButton icon={<OptionsIcon />} blurred={isBlurred} />
+          <DropdownMenu>
+            <IconButton icon={<OptionsIcon />} />
+
+            <DropdownMenu.Content align="end" sideOffset={4}>
+              <DropdownMenu.Item
+                icon={<CommunitiesIcon />}
+                label="View channel members and details"
+                onSelect={() => console.log('click')}
+              />
+              <DropdownMenu.Item
+                icon={<MutedIcon />}
+                label="Mute channel"
+                onSelect={() => console.log('click')}
+              />
+              <DropdownMenu.Item
+                icon={<UpToDateIcon />}
+                label="Mark as read"
+                onSelect={() => console.log('click')}
+              />
+              <DropdownMenu.Item
+                icon={<DownloadIcon />}
+                label="Fetch messages"
+                onSelect={() => console.log('click')}
+              />
+              <DropdownMenu.Item
+                icon={<ShareIcon />}
+                label="Share link to the channel"
+                onSelect={() => console.log('click')}
+              />
+
+              <DropdownMenu.Separator />
+
+              <DropdownMenu.Item
+                icon={<DeleteIcon />}
+                label="Clear history"
+                onSelect={() => console.log('click')}
+                danger
+              />
+            </DropdownMenu.Content>
+          </DropdownMenu>
         </Stack>
       </Stack>
     </BlurView>

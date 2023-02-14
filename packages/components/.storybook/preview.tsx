@@ -3,6 +3,8 @@ import { TamaguiProvider } from '@tamagui/core'
 import { config } from '../src'
 import { Parameters, Decorator } from '@storybook/react'
 
+import './reset.css'
+
 export const parameters: Parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {

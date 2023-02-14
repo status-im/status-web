@@ -88,12 +88,9 @@ function App() {
             <Messages />
           </div>
 
-          <Composer
-            backgroundColor="$blurBackground"
-            paddingBottom={56}
-            isBlurred={shouldBlurBottom}
-            style={{ marginTop: -112 }}
-          />
+          <div id="composer">
+            <Composer isBlurred={shouldBlurBottom} reply={false} />
+          </div>
         </main>
         <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
           {showMembers && (
