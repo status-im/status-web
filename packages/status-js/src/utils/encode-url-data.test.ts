@@ -251,6 +251,81 @@ describe('chat', () => {
     expect(encodedData).toHaveLength(284)
   })
 
+  test('B', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      communityDisplayName: 'Lorem ipsum dolor sit egestas.',
+      communityDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      communityMembersCount: 1_000_000,
+      communityColor: '#4360DF',
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'csv',
+      compression: 'noop',
+      encoding: 'encodeURIComponent',
+    })
+
+    expect(encodedData).toBe(
+      '%F0%9F%8F%B4%F3%A0%81%A7%F3%A0%81%A2%F3%A0%81%A5%F3%A0%81%AE%F3%A0%81%A7%F3%A0%81%BF%2Clorem-ipsum-dolore-nulla%2CLorem%20ipsum%20dolor%20sit%20amet%2C%20consectetur%20adipiscing%20elit.%20Phasellus%20non%20dui%20vitae%20augue%20elementum%20laoreet%20ac%20pharetra%20odio.%20Morbi%20vestibulum.%2C%23EAB700%2CLorem%20ipsum%20dolor%20sit%20egestas.%2CLorem%20ipsum%20dolor%20sit%20amet%2C%20consectetur%20adipiscing%20elit.%20Phasellus%20non%20dui%20vitae%20augue%20elementum%20laoreet%20ac%20pharetra%20odio.%20Morbi%20vestibulum.%2C1000000%2C%234360DF'
+    )
+    expect(encodedData).toHaveLength(552)
+  })
+
+  test('C', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      communityDisplayName: 'Lorem ipsum dolor sit egestas.',
+      communityDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      communityMembersCount: 1_000_000,
+      communityColor: '#4360DF',
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'csv',
+      compression: 'brotli',
+      encoding: 'base64url',
+    })
+
+    expect(encodedData).toBe(
+      'G4UB4B2HKdyc5OYnb5yWKdkV_LzlLdVf_3Db_15mSNQgJCEym2mSzrbZtB60VuPuf9ILlmH6Ojn-Qso1bIuyBAPBtIWQeUK5jQ3BNXwK0ixiRn9nO1jYdlF-VnNeTc7N1YZRWyOCalEEwgZXArQ4Kv272AyOdNCQI_eVPcEq0e85z1XzYtvGSMEvQQzKmYw4R8kFJXPmAL04HzmHE2yIdVTzR_DzDXlSc_Vakg8OcOI8t38-YlTGG5CLiiFm'
+    )
+    expect(encodedData).toHaveLength(252)
+  })
+
+  test('D', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      communityDisplayName: 'Lorem ipsum dolor sit egestas.',
+      communityDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      communityMembersCount: 1_000_000,
+      communityColor: '#4360DF',
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'csv',
+      compression: 'noop',
+      encoding: 'base64url',
+    })
+
+    expect(encodedData).toBe(
+      '8J-PtPOggafzoIGi86CBpfOgga7zoIGn86CBvyxsb3JlbS1pcHN1bS1kb2xvcmUtbnVsbGEsTG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gUGhhc2VsbHVzIG5vbiBkdWkgdml0YWUgYXVndWUgZWxlbWVudHVtIGxhb3JlZXQgYWMgcGhhcmV0cmEgb2Rpby4gTW9yYmkgdmVzdGlidWx1bS4sI0VBQjcwMCxMb3JlbSBpcHN1bSBkb2xvciBzaXQgZWdlc3Rhcy4sTG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4gUGhhc2VsbHVzIG5vbiBkdWkgdml0YWUgYXVndWUgZWxlbWVudHVtIGxhb3JlZXQgYWMgcGhhcmV0cmEgb2Rpby4gTW9yYmkgdmVzdGlidWx1bS4sMTAwMDAwMCwjNDM2MERG'
+    )
+    expect(encodedData).toHaveLength(520)
+  })
+
   describe('max', () => {
     test('A', () => {
       const data = {

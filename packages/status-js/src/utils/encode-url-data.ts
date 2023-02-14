@@ -82,7 +82,7 @@ export function encodeUrlData(
   let encoded: string
   switch (options.encoding) {
     case 'encodeURIComponent':
-      if (options.serialization !== 'csv') {
+      if (options.serialization !== 'csv' || options.compression !== 'noop') {
         throw 'Invalid options'
       }
 
