@@ -15,19 +15,15 @@ import { AnimatePresence, Stack, XStack, YStack } from 'tamagui'
 import { IconButton } from '../icon-button'
 import { Image } from '../image'
 import { Input } from '../input'
+import { Reply } from '../reply'
 
-import type { GetProps } from '@tamagui/core'
+interface Props {
+  isBlurred: boolean
+  reply: boolean
+}
 
-type BaseProps = GetProps<typeof YStack>
-
-const Composer = (
-  props: Omit<BaseProps, 'style'> & {
-    placeholderTextColor?: BaseProps['backgroundColor']
-    iconOptionsColor?: BaseProps['backgroundColor']
-    isBlurred?: boolean
-  }
-) => {
-  const { isBlurred: isBlurredFromProps, ...rest } = props
+const Composer = (props: Props) => {
+  const { isBlurred, reply } = props
 
   const [isFocused, setIsFocused] = useState(false)
   const [text, setText] = useState('')
@@ -40,13 +36,7 @@ const Composer = (
     isDisabled: isImageUploadDisabled,
   } = useImageUpload()
 
-  const isBlurred = isBlurredFromProps && imagesData.length === 0 && !isFocused
-
-  const applyVariantStyles:
-    | {
-        blurred: boolean
-      }
-    | undefined = isBlurred ? { blurred: true } : undefined
+  const iconButtonBlurred = isBlurred && !isFocused && imagesData.length === 0
 
   return (
     <BlurView
@@ -65,14 +55,25 @@ const Composer = (
         borderTopLeftRadius={20}
         borderTopRightRadius={20}
         px={16}
-        pt={8}
-        pb={12}
         width="100%"
+        py={12}
         style={{
           elevation: 10,
         }}
-        {...rest}
       >
+        {reply && (
+          <Stack paddingLeft={4} paddingBottom={4}>
+            <Reply
+              type="text"
+              name="Alisher"
+              src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
+              onClose={() => {
+                console.log('close')
+              }}
+            />
+          </Stack>
+        )}
+
         <Input
           className="composer-input"
           placeholder="Type something..."
@@ -156,7 +157,7 @@ const Composer = (
         <XStack
           alignItems="center"
           justifyContent="space-between"
-          pt={8}
+          paddingTop={12}
           backgroundColor="transparent"
         >
           <Stack space={12} flexDirection="row" backgroundColor="transparent">
@@ -165,29 +166,29 @@ const Composer = (
                 variant="outline"
                 icon={<ImageIcon />}
                 disabled={isImageUploadDisabled}
-                {...applyVariantStyles}
+                blurred={iconButtonBlurred}
               />
             </label>
             <IconButton
               variant="outline"
               icon={<ReactionIcon />}
-              {...applyVariantStyles}
+              blurred={iconButtonBlurred}
             />
             <IconButton
               variant="outline"
               icon={<FormatIcon />}
               disabled
-              {...applyVariantStyles}
+              blurred={iconButtonBlurred}
             />
           </Stack>
           {text || imagesData.length > 0 ? (
             // TODO change this to be the button icon only variant when available
-            <IconButton icon={<ArrowUpIcon />} {...applyVariantStyles} />
+            <IconButton icon={<ArrowUpIcon />} blurred={iconButtonBlurred} />
           ) : (
             <IconButton
               variant="outline"
               icon={<AudioIcon />}
-              {...applyVariantStyles}
+              blurred={iconButtonBlurred}
             />
           )}
         </XStack>

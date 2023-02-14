@@ -92,16 +92,8 @@ function App() {
             <div id="messages">
               <Messages />
             </div>
-            <div
-              id="composer"
-              style={{
-                position: 'sticky',
-                bottom: 0,
-                left: 0,
-                zIndex: 100,
-              }}
-            >
-              <Composer isBlurred={shouldBlurBottom} />
+            <div id="composer">
+              <Composer isBlurred={shouldBlurBottom} reply={false} />
             </div>
           </div>
         </main>

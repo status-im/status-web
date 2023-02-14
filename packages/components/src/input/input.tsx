@@ -24,7 +24,7 @@ export const InputFrame = styled(
 
     backgroundColor: 'transparent',
 
-    height: 40,
+    height: 32,
     borderRadius: 12,
 
     animation: 'fast',

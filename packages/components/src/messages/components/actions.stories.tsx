@@ -1,11 +1,21 @@
 import { Actions } from './actions'
 
+import type { ReactionsType } from '../types'
 import type { Meta, StoryObj } from '@storybook/react'
+
+const reactions: ReactionsType = {
+  love: new Set(['me', '1', '2', '3']),
+  'thumbs-up': new Set(['me', '1', '2', '3']),
+  'thumbs-down': new Set(['me', '1', '2', '3']),
+}
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta<typeof Actions> = {
   title: 'Messages/actions',
   component: Actions,
+  args: {
+    reactions,
+  },
   argTypes: {},
   parameters: {
     layout: 'centered',

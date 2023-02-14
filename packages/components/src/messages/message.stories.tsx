@@ -1,12 +1,25 @@
-import { ChatMessage } from './chat-message'
+import { Message } from './message'
 
+import type { ReactionsType } from './types'
 import type { Meta, StoryObj } from '@storybook/react'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
-const meta: Meta<typeof ChatMessage> = {
-  // title: 'Messages',
-  component: ChatMessage,
-  argTypes: {},
+const meta: Meta<typeof Message> = {
+  title: 'messages',
+  component: Message,
+  args: {
+    reactions: {},
+  },
+  argTypes: {
+    pinned: {
+      type: 'boolean',
+      defaultValue: false,
+    },
+    reply: {
+      type: 'boolean',
+      defaultValue: false,
+    },
+  },
   parameters: {
     design: {
       type: 'figma',
@@ -15,9 +28,13 @@ const meta: Meta<typeof ChatMessage> = {
   },
 }
 
-type Story = StoryObj<typeof ChatMessage>
+type Story = StoryObj<typeof Message>
 
-const reactions = ['123']
+const reactions: ReactionsType = {
+  love: new Set(['me', '1', '2', '3']),
+  'thumbs-up': new Set(['me', '1', '2', '3']),
+  'thumbs-down': new Set(['me', '1', '2', '3']),
+}
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Text: Story = {
@@ -31,6 +48,22 @@ export const TextWithReactions: Story = {
   args: {
     text: 'This is a simple message.',
     reactions,
+  },
+}
+
+export const TextWithReply: Story = {
+  name: 'Text + Reply',
+  args: {
+    text: 'This is a simple message.',
+    reply: true,
+  },
+}
+
+export const TextPinned: Story = {
+  name: 'Text + Pinned',
+  args: {
+    text: 'This is a simple message.',
+    pinned: true,
   },
 }
 
