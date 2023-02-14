@@ -74,6 +74,11 @@ export function encodeUrlData(
       break
   }
 
+  // note: would require ifCompressed header (e.g. br)
+  // if (compressed.length > serialized.length) {
+  //   compressed = serialized
+  // }
+
   let encoded: string
   switch (options.encoding) {
     case 'encodeURIComponent':

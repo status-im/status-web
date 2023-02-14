@@ -213,6 +213,42 @@ describe('user', () => {
     expect(encodedData).toBe('iwyAEgRKb2huGglJIGFtIEpvaG46ByNFQUI3MDAD')
     expect(encodedData).toHaveLength(40)
   })
+
+  test('C', () => {
+    const data = {
+      displayName: 'John',
+      description: 'I am John',
+      color: '#EAB700',
+    }
+    const encodedData = encodeUrlData('user', data, {
+      serialization: 'csv',
+      compression: 'brotli',
+      encoding: 'base64url',
+    })
+    const characterLength = countCharacters(data)
+
+    expect(characterLength).toBe(20)
+    expect(encodedData).toBe('iwqASm9obixJIGFtIEpvaG4sI0VBQjcwMAM=')
+    expect(encodedData).toHaveLength(36)
+  })
+
+  test('D', () => {
+    const data = {
+      displayName: 'John',
+      description: 'I am John',
+      color: '#EAB700',
+    }
+    const encodedData = encodeUrlData('user', data, {
+      serialization: 'csv',
+      compression: 'noop',
+      encoding: 'encodeURIComponent',
+    })
+    const characterLength = countCharacters(data)
+
+    expect(characterLength).toBe(20)
+    expect(encodedData).toBe('John%2CI%20am%20John%2C%23EAB700')
+    expect(encodedData).toHaveLength(32)
+  })
 })
 
 // function countCharacters(data: Record<string, string | number>): number {
