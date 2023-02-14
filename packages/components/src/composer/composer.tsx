@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { useImageUpload } from '@status-im/components/hooks'
 import {
+  ArrowUpIcon,
   AudioIcon,
   ClearIcon,
   FormatIcon,
@@ -37,6 +38,7 @@ const Composer = (
   const style = styleFromProps ? Object.assign(styleFromProps) : {}
 
   const [isFocused, setIsFocused] = useState(false)
+  const [text, setText] = useState('')
 
   const {
     imagesData,
@@ -87,6 +89,7 @@ const Composer = (
           blurred={isBlurred}
           onBlur={() => setIsFocused(false)}
           onFocus={() => setIsFocused(true)}
+          onChangeText={setText}
         />
         <input
           ref={imageUploaderInputRef}
@@ -185,11 +188,16 @@ const Composer = (
               {...applyVariantStyles}
             />
           </Stack>
-          <IconButton
-            variant="outline"
-            icon={<AudioIcon />}
-            {...applyVariantStyles}
-          />
+          {text || imagesData.length > 0 ? (
+            // TODO change this to be the button icon only variant when available
+            <IconButton icon={<ArrowUpIcon />} {...applyVariantStyles} />
+          ) : (
+            <IconButton
+              variant="outline"
+              icon={<AudioIcon />}
+              {...applyVariantStyles}
+            />
+          )}
         </XStack>
       </YStack>
     </BlurView>
