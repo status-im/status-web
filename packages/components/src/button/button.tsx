@@ -74,18 +74,21 @@ const Base = styled(Stack, {
 
     size: {
       40: {
+        minHeight: 40,
         borderRadius: 12,
         paddingHorizontal: 16,
         paddingTop: 7,
         paddingBottom: 9,
       },
       32: {
+        minHeight: 32,
         borderRadius: 10,
         paddingHorizontal: 16,
         paddingTop: 4,
         paddingBottom: 6,
       },
       24: {
+        minHeight: 24,
         borderRadius: 8,
         paddingHorizontal: 8,
         paddingTop: 2,

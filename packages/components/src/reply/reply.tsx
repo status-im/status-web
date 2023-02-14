@@ -4,7 +4,7 @@ import { Path, Svg } from 'react-native-svg'
 import { Stack, Unspaced, XStack } from 'tamagui'
 
 import { Avatar } from '../avatar'
-import { IconButton } from '../icon-button'
+import { Button } from '../button'
 import { Paragraph } from '../typography'
 
 interface Props {
@@ -66,7 +66,12 @@ const Reply = (props: Props) => {
 
       {/* FIXME: This should be regular button with size 24 */}
       {onClose && (
-        <IconButton icon={<CloseIcon />} onPress={onClose} transparent />
+        <Button
+          type="outline"
+          size={24}
+          icon={<CloseIcon />}
+          onPress={onClose}
+        />
       )}
     </XStack>
   )

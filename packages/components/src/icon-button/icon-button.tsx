@@ -108,6 +108,9 @@ interface Props {
   disabled?: boolean
   // FIXME: enforce aria-label for accessibility
   // 'aria-label'?: string
+  // FIXME: update to latest RN
+  'aria-expanded'?: boolean
+  'aria-selected'?: boolean
 }
 
 const iconColor = {
