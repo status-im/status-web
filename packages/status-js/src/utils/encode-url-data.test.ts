@@ -3,6 +3,13 @@ import { describe, expect, test } from 'vitest'
 
 import { encodeUrlData } from './encode-url-data'
 
+import type {
+  CommunityChatPreview,
+  CommunityPreview,
+  UserPreview,
+} from '../protos/link-preview_pb'
+import type { PlainMessage } from '@bufbuild/protobuf'
+
 describe('community', () => {
   test('A', () => {
     const data = {
@@ -141,6 +148,77 @@ describe('community', () => {
     )
     expect(encodedData).toHaveLength(268)
   })
+
+  describe('max', () => {
+    test('A', () => {
+      const encodedData = encodeUrlData(
+        'community',
+        {
+          displayName: 'Lorem ipsum dolor sit egestas.',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+          membersCount: 1_000_000,
+          color: '#4360DF',
+        },
+        {
+          serialization: 'protobuf',
+          compression: 'brotli',
+          encoding: 'base64url',
+        }
+      )
+
+      expect(encodedData).toBe(
+        'G7sAgK0OzJOmo4yssBOBo6ekybWGRw-TDqBpImRzStN66S8_fBx3Wi8-CYpBaDEC98GMkJGEsSFyjBOFTRcZeFtvHzxkKV8QJcbjHpzQfWpGfDia4OjNJC4AIZP5w7_FMpkVkK5bz6NrgKbZ9pt3szpYvtBL8WoKITWKsP-sCRMPMiEP9l-CGQLv6g153IqXJ_Uuk4T2ffHRPA=='
+      )
+      expect(encodedData).toHaveLength(208)
+    })
+  })
+
+  describe('mid', () => {
+    test('A', () => {
+      const encodedData = encodeUrlData(
+        'community',
+        {
+          displayName: 'Lorem ipsum eu.',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ex eu.',
+          membersCount: 500_000,
+          color: '#4360DF',
+        },
+        {
+          serialization: 'protobuf',
+          compression: 'brotli',
+          encoding: 'base64url',
+        }
+      )
+
+      expect(encodedData).toBe(
+        'G2UA-J0Htk1qG1d7YfVJhrl-0BBikkagwtbcoqXJocUgXzQ1QxrbIQ9uG_t_MGFsiHoQhUCCShIAwjqn3CcrdFhUMGQT03NTR6r0E7k3Y3Z6TKSiQy1re8FPXfCwgA7-LOTotWW_rww='
+      )
+      expect(encodedData).toHaveLength(140)
+    })
+  })
+
+  describe('min', () => {
+    test('A', () => {
+      const encodedData = encodeUrlData(
+        'community',
+        {
+          displayName: 'L',
+          membersCount: 0,
+          color: '#4360DF',
+        } as unknown as PlainMessage<CommunityPreview>,
+        {
+          serialization: 'protobuf',
+          compression: 'brotli',
+          encoding: 'base64url',
+        }
+      )
+
+      expect(encodedData).toBe('iwWAGgFMQgcjNDM2MERGAw==')
+      expect(encodedData).toHaveLength(24)
+    })
+  })
 })
 
 describe('chat', () => {
@@ -171,6 +249,93 @@ describe('chat', () => {
       'G_8AYKwKeDJ8lNFUDUMv91LnB3zVmJqbOncP-lRBw2oL2sim1DYaJmLlSOBnEj6C2pzStPxw8-d13Gm9-CQoDUIriLEOhKAmx78H5owyTSTBTlue5zD9csuh3xpC1HlwNX1OrTZcY9tlJt_Pc9t_C9RripV4uVRGtp3ugIgmxDAyjiY4RzgLJnA0spg_PMu4TGYFZOij59Y9QdPsx6DvZnWwfWOU4tUUQmoW0cVnLZh4kAm58fwlmCHwod5V63EpXp7Uq8wL3boV8b3QLms='
     )
     expect(encodedData).toHaveLength(276)
+  })
+
+  describe('max', () => {
+    test('A', () => {
+      const data = {
+        emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+        displayName: 'lorem-ipsum-dolore-nulla',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+        color: '#EAB700',
+        community: {
+          displayName: 'Lorem ipsum dolor sit egestas.',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+          membersCount: 1_000_000,
+          color: '#4360DF',
+        },
+      }
+      const encodedData = encodeUrlData('chat', data, {
+        serialization: 'protobuf',
+        compression: 'brotli',
+        encoding: 'base64url',
+      })
+
+      expect(encodedData).toBe(
+        'G_8AYKwKeDJ8lNFUDUMv91LnB3zVmJqbOncP-lRBw2oL2sim1DYaJmLlSOBnEj6C2pzStPxw8-d13Gm9-CQoDUIriLEOhKAmx78H5owyTSTBTlue5zD9csuh3xpC1HlwNX1OrTZcY9tlJt_Pc9t_C9RripV4uVRGtp3ugIgmxDAyjiY4RzgLJnA0spg_PMu4TGYFZOij59Y9QdPsx6DvZnWwfWOU4tUUQmoW0cVnLZh4kAm58fwlmCHwod5V63EpXp7Uq8wL3boV8b3QLms='
+      )
+      expect(encodedData).toHaveLength(276)
+    })
+  })
+
+  describe('mid', () => {
+    test('A', () => {
+      const data = {
+        emoji: '💂‍♀️',
+        displayName: 'lorem-ipsuma',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ex eu.',
+        color: '#EAB700',
+        community: {
+          displayName: 'Lorem ipsum eu.',
+          description:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et ex eu.',
+          membersCount: 500_000,
+          color: '#4360DF',
+        },
+      }
+      const encodedData = encodeUrlData('chat', data, {
+        serialization: 'protobuf',
+        compression: 'brotli',
+        encoding: 'base64url',
+      })
+
+      expect(encodedData).toBe(
+        'i0aAEgxsb3JlbS1pcHN1bWEqDfCfkoLigI3imYDvuI8yByNFQUI3MDA6ZhoPTG9yZW0gaXBzdW0gZXUuIkZMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBTZWQgZXQgZXggZXUuKKDCHkIHIzQzNjBERgM='
+      )
+      expect(encodedData).toHaveLength(196)
+    })
+  })
+
+  describe('min', () => {
+    test('A', () => {
+      const data = {
+        emoji: '🫅',
+        displayName: 'l',
+        color: '#EAB700',
+        community: {
+          displayName: 'L',
+          membersCount: 0,
+          color: '#4360DF',
+        },
+      }
+      const encodedData = encodeUrlData(
+        'chat',
+        data as unknown as PlainMessage<CommunityChatPreview>,
+        {
+          serialization: 'protobuf',
+          compression: 'brotli',
+          encoding: 'base64url',
+        }
+      )
+
+      expect(encodedData).toBe(
+        'iw-AEgFsKgTwn6uFMgcjRUFCNzAwOgwaAUxCByM0MzYwREYD'
+      )
+      expect(encodedData).toHaveLength(48)
+    })
   })
 })
 
@@ -248,6 +413,69 @@ describe('user', () => {
     expect(characterLength).toBe(20)
     expect(encodedData).toBe('John%2CI%20am%20John%2C%23EAB700')
     expect(encodedData).toHaveLength(32)
+  })
+
+  describe('max', () => {
+    test('A', () => {
+      const data = {
+        displayName: 'Lorem ipsum dolore nulla',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce finibus eleifend urna. Sed euismod tellus vel tellus interdum molestie. Maecenas ut fringilla dui. Duis auctor quis magna at congue. Duis euismod tempor pharetra. Morbi blandit.',
+        color: '#EAB700',
+      }
+      const encodedData = encodeUrlData('user', data, {
+        serialization: 'protobuf',
+        compression: 'brotli',
+        encoding: 'base64url',
+      })
+
+      expect(encodedData).toBe(
+        'GxUBoJwHdsOHgITK206z2oTI6cn2pEtSkxmSJyFKmBF4myq27J1Oe-VxJ_YlRcI4D_AFouMYJ6wzv66LnJ8PjkNGz1Pk70qr7Qlu6Ju9l74z4W0mn-EsI7Ugm_X1x5OzWB2Qpa_mVH9A0xqmcxK3ul6doFFv-kKHy3BcYGvus1A068Q_jaZ6MVZv7GPMUg4UTrokunCH-qNmgtU6VGtCetYJ_MlteVwghXn8aQawLdzvCbw_CVbIwBOX4nqHxmqUOtIB'
+      )
+      expect(encodedData).toHaveLength(260)
+    })
+  })
+
+  describe('mid', () => {
+    test('A', () => {
+      const data = {
+        displayName: 'Lorem ipsuma',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae urna sagittis, maximus metus in, finibus lacus sed.',
+        color: '#EAB700',
+      }
+      const encodedData = encodeUrlData('user', data, {
+        serialization: 'protobuf',
+        compression: 'brotli',
+        encoding: 'base64url',
+      })
+
+      expect(encodedData).toBe(
+        'G5AAYBwJdmzJcOxhPUKlJ4MEk6lL4QNedFJp9LSDbcKdfT-WnaoBAxtw4JBRIDpttPDVyOSjpLrzeqQZ3LTNcvqj_PdKg8zJHMK6aAqWrB2QyI0auBSkidbj2zQk_GiS0I5FoFJoRnVbh4o5mc7FIXOhb4pJQtMaU-zv3fnzeF4A'
+      )
+      expect(encodedData).toHaveLength(172)
+    })
+  })
+
+  describe('min', () => {
+    test('A', () => {
+      const data = {
+        displayName: 'Lorem',
+        color: '#EAB700',
+      }
+      const encodedData = encodeUrlData(
+        'user',
+        data as unknown as PlainMessage<UserPreview>,
+        {
+          serialization: 'protobuf',
+          compression: 'brotli',
+          encoding: 'base64url',
+        }
+      )
+
+      expect(encodedData).toBe('iweAEgVMb3JlbToHI0VBQjcwMAM=')
+      expect(encodedData).toHaveLength(28)
+    })
   })
 })
 
