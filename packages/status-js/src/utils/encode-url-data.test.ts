@@ -326,6 +326,31 @@ describe('chat', () => {
     expect(encodedData).toHaveLength(520)
   })
 
+  test('E', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      communityDisplayName: 'Lorem ipsum dolor sit egestas.',
+      communityDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      communityMembersCount: 1_000_000,
+      communityColor: '#4360DF',
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'protobuf',
+      compression: 'brotli',
+      encoding: 'base64url',
+    })
+
+    expect(encodedData).toBe(
+      'G4sBYCwOzNM_RWBzjmD5rRAWh6Zu3oM-_QbeRXOSpbQtygtx9Ugg4aceYXwEZepMwosOV0sYGBp1mlNmKZ8cu3XwppPj78DWFiUWCIZpSyDBtpxyGwPHcepRaBelEI3LOJLuEyPVlDQCLpeg9whig6MOGfQPXlwsOj0MUnXreXQ2sKvnE8793uNgrokailddCIkWRIOxGOiyjHTIg_0Xo5tgVV0ZQyuKl8e1RI-Rb_bc-e8OTFj1EE5cGkWS-lK2IrWxLQR95Fsr_t0FBdZ4Mi8B'
+    )
+    expect(encodedData).toHaveLength(280)
+  })
+
   describe('max', () => {
     test('A', () => {
       const data = {

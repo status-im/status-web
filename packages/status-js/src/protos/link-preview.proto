@@ -34,6 +34,12 @@ message CommunityChatPreview {
 	// todo?!: try spreading instead to reduce size
 	CommunityPreview community = 7;
 	// bytes public_key = 8;
+	// note: only testing
+	string community_display_name = 9;
+	string community_description = 10;
+	uint32 community_members_count = 11;
+	string community_color = 12;
+	string community_public_key = 13;
 }
 
 // message Url {

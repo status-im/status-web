@@ -112,11 +112,36 @@ export class CommunityChatPreview extends Message<CommunityChatPreview> {
   /**
    * todo?!: try spreading instead to reduce size
    *
-   * bytes public_key = 8;
-   *
    * @generated from field: CommunityPreview community = 7;
    */
   community?: CommunityPreview;
+
+  /**
+   * bytes public_key = 8;
+   *
+   * @generated from field: string community_display_name = 9;
+   */
+  communityDisplayName = "";
+
+  /**
+   * @generated from field: string community_description = 10;
+   */
+  communityDescription = "";
+
+  /**
+   * @generated from field: uint32 community_members_count = 11;
+   */
+  communityMembersCount = 0;
+
+  /**
+   * @generated from field: string community_color = 12;
+   */
+  communityColor = "";
+
+  /**
+   * @generated from field: string community_public_key = 13;
+   */
+  communityPublicKey = "";
 
   constructor(data?: PartialMessage<CommunityChatPreview>) {
     super();
@@ -131,6 +156,11 @@ export class CommunityChatPreview extends Message<CommunityChatPreview> {
     { no: 5, name: "emoji", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 6, name: "color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 7, name: "community", kind: "message", T: CommunityPreview },
+    { no: 9, name: "community_display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 10, name: "community_description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 11, name: "community_members_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
+    { no: 12, name: "community_color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 13, name: "community_public_key", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CommunityChatPreview {
