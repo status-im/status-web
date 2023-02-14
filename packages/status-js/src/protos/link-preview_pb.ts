@@ -93,7 +93,11 @@ export class CommunityChatPreview extends Message<CommunityChatPreview> {
   displayName = "";
 
   /**
-   * string description = 3;
+   * @generated from field: string description = 3;
+   */
+  description = "";
+
+  /**
    * uint32 members_count = 4;
    *
    * @generated from field: string emoji = 5;
@@ -123,6 +127,7 @@ export class CommunityChatPreview extends Message<CommunityChatPreview> {
   static readonly typeName = "CommunityChatPreview";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 2, name: "display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "emoji", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 6, name: "color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 7, name: "community", kind: "message", T: CommunityPreview },

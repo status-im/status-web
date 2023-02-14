@@ -246,9 +246,9 @@ describe('chat', () => {
 
     expect(characterLength).toBe(383)
     expect(encodedData).toBe(
-      'G_8AYKwKeDJ8lNFUDUMv91LnB3zVmJqbOncP-lRBw2oL2sim1DYaJmLlSOBnEj6C2pzStPxw8-d13Gm9-CQoDUIriLEOhKAmx78H5owyTSTBTlue5zD9csuh3xpC1HlwNX1OrTZcY9tlJt_Pc9t_C9RripV4uVRGtp3ugIgmxDAyjiY4RzgLJnA0spg_PMu4TGYFZOij59Y9QdPsx6DvZnWwfWOU4tUUQmoW0cVnLZh4kAm58fwlmCHwod5V63EpXp7Uq8wL3boV8b3QLms='
+      'G44BYCwKbLcVA5s5Bhs2lC8WIsbe1Ll70Kdv4FgHbWRTahsNE7FyJPCzCRkfQZmb4bJ3OjqVUh33_HvYgBqJydeBkE6OvwNbW5RYIBimLYEE85hyGwPHcepRaBelEHXmnEX3yVmaUcoIuLwEjUcQGxwNyGT88OJiMRjpkKZbz62rg0OjnnDuj5EHyxZaKh4NISR7Eg3GcmKIORmQG_svznCBNbWK1vxSPDyhV46c9cue2_5bgB6TrsKFS1NlHSn9HRAR3Nh3gj7ybhZ_bqKYhi3LGg=='
     )
-    expect(encodedData).toHaveLength(276)
+    expect(encodedData).toHaveLength(284)
   })
 
   describe('max', () => {
@@ -274,9 +274,9 @@ describe('chat', () => {
       })
 
       expect(encodedData).toBe(
-        'G_8AYKwKeDJ8lNFUDUMv91LnB3zVmJqbOncP-lRBw2oL2sim1DYaJmLlSOBnEj6C2pzStPxw8-d13Gm9-CQoDUIriLEOhKAmx78H5owyTSTBTlue5zD9csuh3xpC1HlwNX1OrTZcY9tlJt_Pc9t_C9RripV4uVRGtp3ugIgmxDAyjiY4RzgLJnA0spg_PMu4TGYFZOij59Y9QdPsx6DvZnWwfWOU4tUUQmoW0cVnLZh4kAm58fwlmCHwod5V63EpXp7Uq8wL3boV8b3QLms='
+        'G44BYCwKbLcVA5s5Bhs2lC8WIsbe1Ll70Kdv4FgHbWRTahsNE7FyJPCzCRkfQZmb4bJ3OjqVUh33_HvYgBqJydeBkE6OvwNbW5RYIBimLYEE85hyGwPHcepRaBelEHXmnEX3yVmaUcoIuLwEjUcQGxwNyGT88OJiMRjpkKZbz62rg0OjnnDuj5EHyxZaKh4NISR7Eg3GcmKIORmQG_svznCBNbWK1vxSPDyhV46c9cue2_5bgB6TrsKFS1NlHSn9HRAR3Nh3gj7ybhZ_bqKYhi3LGg=='
       )
-      expect(encodedData).toHaveLength(276)
+      expect(encodedData).toHaveLength(284)
     })
   })
 
@@ -303,9 +303,9 @@ describe('chat', () => {
       })
 
       expect(encodedData).toBe(
-        'i0aAEgxsb3JlbS1pcHN1bWEqDfCfkoLigI3imYDvuI8yByNFQUI3MDA6ZhoPTG9yZW0gaXBzdW0gZXUuIkZMb3JlbSBpcHN1bSBkb2xvciBzaXQgYW1ldCwgY29uc2VjdGV0dXIgYWRpcGlzY2luZyBlbGl0LiBTZWQgZXQgZXggZXUuKKDCHkIHIzQzNjBERgM='
+        'G9UAoBwFbutBXB2JQFKvc_1N3QT5fb5B_hvLtlECf_m2qATjCB-k-oBpqoxtuWX_6WiKKMdd-iuErOdVCBxy84NiwBamlmFq9cNzgskMjN-kHzaiXNsgQN1fhCXUmTueFueSWRPabVic9t7gYynoDib4gyUb_K9jCn4Op_-eNcL0dZNbW10NCx5Yshj9er-8wSRxZrsB'
       )
-      expect(encodedData).toHaveLength(196)
+      expect(encodedData).toHaveLength(200)
     })
   })
 
