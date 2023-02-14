@@ -32,32 +32,34 @@ export function deserializePublicKey(
   publicKey: string, // uncompressed, compressed, or compressed & encoded
   options = { compress: true }
 ): string {
-  const cpk = publicKey.replace(/^0[xX]/, 'f') // ensure multibase code for hexadecimal encoding
-  const c = cpk[0] as MultibaseCode
+  const multibasePublicKey = publicKey.replace(/^0[xX]/, 'f') // ensure multibase code for hexadecimal encoding
+  const multibaseCode = multibasePublicKey[0] as MultibaseCode
 
-  if (!VALID_MULTIBASE_CODES.includes(c)) {
+  if (!VALID_MULTIBASE_CODES.includes(multibaseCode)) {
     throw new Error('Invalid public key multibase code')
   }
 
-  let pk: string
-  switch (c) {
+  let hexadecimalPublicKey: string
+  switch (multibaseCode) {
     case 'z': {
-      const zpk = base58btc.decode(cpk)
-      const v = varint.decode(zpk)
-      const c = v[0] as MulticodecCode
-      const b = v[1]
+      const base58btcPublicKey = base58btc.decode(multibasePublicKey)
+      const multicodec = varint.decode(base58btcPublicKey)
+      const multicodecCode = multicodec[0] as MulticodecCode
+      const multicodecCodeByteLength = multicodec[1]
 
-      if (!VALID_MULTICODEC_CODES.includes(c)) {
+      if (!VALID_MULTICODEC_CODES.includes(multicodecCode)) {
         throw new Error('Invalid public key multicodec code')
       }
 
-      pk = toHex(zpk.slice(b))
+      hexadecimalPublicKey = toHex(
+        base58btcPublicKey.slice(multicodecCodeByteLength)
+      )
 
       break
     }
 
     case 'f': {
-      pk = cpk.slice(1)
+      hexadecimalPublicKey = multibasePublicKey.slice(1)
 
       break
     }
@@ -67,7 +69,5 @@ export function deserializePublicKey(
     }
   }
 
-  const p = Point.fromHex(pk).toHex(options.compress) // validates and sets compression
-
-  return `0x${p}`
+  return `0x${Point.fromHex(hexadecimalPublicKey).toHex(options.compress)}` // validates and sets compression
 }
