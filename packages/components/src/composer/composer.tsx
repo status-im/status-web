@@ -12,6 +12,7 @@ import {
 import { BlurView } from 'expo-blur'
 import { AnimatePresence, Stack, XStack, YStack } from 'tamagui'
 
+import { Button } from '../button'
 import { IconButton } from '../icon-button'
 import { Image } from '../image'
 import { Input } from '../input'
@@ -48,9 +49,9 @@ const Composer = (props: Props) => {
     >
       <YStack
         animation="fast"
-        backgroundColor={isBlurred ? '$blurBackground' : '$background'}
-        shadowColor={!isBlurred ? 'rgba(9, 16, 28, 0.08)' : 'none'}
-        shadowOffset={{ width: 4, height: isBlurred ? 0 : 4 }}
+        backgroundColor={iconButtonBlurred ? '$blurBackground' : '$background'}
+        shadowColor={iconButtonBlurred ? 'none' : 'rgba(9, 16, 28, 0.08)'}
+        shadowOffset={{ width: 4, height: iconButtonBlurred ? 0 : 4 }}
         shadowRadius={20}
         borderTopLeftRadius={20}
         borderTopRightRadius={20}
@@ -182,8 +183,17 @@ const Composer = (props: Props) => {
             />
           </Stack>
           {text || imagesData.length > 0 ? (
-            // TODO change this to be the button icon only variant when available
-            <IconButton icon={<ArrowUpIcon />} blurred={iconButtonBlurred} />
+            // TODO fix styles for circular button. Also the color is different from the design and we have layout shift because of the size.
+            <Button
+              icon={<ArrowUpIcon />}
+              height={32}
+              size={32}
+              width={32}
+              borderRadius={32}
+              justifyContent="center"
+              alignItems="center"
+              type="positive"
+            />
           ) : (
             <IconButton
               variant="outline"

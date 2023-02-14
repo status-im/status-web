@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface UseImageUploadReturn {
   imagesData: string[]
@@ -14,53 +14,52 @@ const useImageUpload = (): UseImageUploadReturn => {
   const [imagesData, setImagesData] = useState<string[]>([])
   const imageUploaderInputRef = useRef<HTMLInputElement>(null)
 
-  const handleImageUpload = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files
 
-      if (!files) {
-        return
-      }
+    if (!files) {
+      return
+    }
 
-      const filteredFiles = [...files].filter(file =>
-        ALLOWED_EXTENSIONS.test(file.name)
+    const filteredFiles = [...files].filter(file =>
+      ALLOWED_EXTENSIONS.test(file.name)
+    )
+
+    // Show alert if some files have unsupported formats
+    if (files.length > filteredFiles.length) {
+      return alert(
+        `Some files have unsupported formats. Only .jpg, .jpeg and .png formats are supported.`
       )
+    }
 
-      // Show alert if some files have unsupported formats
-      if (files.length > filteredFiles.length) {
-        return alert(
-          `Some files have unsupported formats. Only .jpg, .jpeg and .png formats are supported.`
-        )
-      }
+    if (files.length > IMAGES_LIMIT || imagesData.length > IMAGES_LIMIT) {
+      return alert(
+        `You can upload only ${IMAGES_LIMIT} images. Please remove some files and try again.`
+      )
+    }
 
-      if (files.length > IMAGES_LIMIT || imagesData.length > IMAGES_LIMIT) {
-        return alert(
-          `You can upload only ${IMAGES_LIMIT} images. Please remove some files and try again.`
-        )
-      }
-
-      const newImagesData: string[] = await Promise.all(
-        filteredFiles.map(async file => {
-          const reader = new FileReader()
-          reader.readAsDataURL(file)
-          return new Promise(resolve => {
-            reader.onloadend = () => {
-              resolve(reader.result as string)
-            }
-          })
+    const newImagesData: string[] = await Promise.all(
+      filteredFiles.map(async file => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        return new Promise(resolve => {
+          reader.onloadend = () => {
+            resolve(reader.result as string)
+          }
         })
-      )
+      })
+    )
 
-      setImagesData(prevState => [...prevState, ...newImagesData])
-    },
-    []
-  )
+    setImagesData(prevState => [...prevState, ...newImagesData])
+  }
 
-  const handleImageRemove = useCallback((index: number) => {
+  const handleImageRemove = (index: number) => {
     // Reset input value to trigger onChange event
     imageUploaderInputRef.current!.value = ''
     setImagesData(prevState => prevState.filter((_, i) => i !== index))
-  }, [])
+  }
 
   return {
     imagesData,
