@@ -17,6 +17,7 @@ body,
 }
 
 #main {
+  position: relative;
   display: grid;
   grid-template-rows: 56px 1fr 100px;
   height: 100vh;
@@ -45,7 +46,24 @@ body,
   margin-top: -56px;
 }
 
+#composer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 #members {
   width: 352px;
   overflow: auto;
+}
+
+@media screen and (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+
+  #sidebar {
+    display: none;
+  }
 }

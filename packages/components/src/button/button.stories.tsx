@@ -1,3 +1,6 @@
+import { action } from '@storybook/addon-actions'
+import { Stack } from 'tamagui'
+
 import { Button } from './button'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -5,17 +8,24 @@ import type { Meta, StoryObj } from '@storybook/react'
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta<typeof Button> = {
   component: Button,
-  argTypes: {},
+  args: {
+    onPress: action('press'),
+  },
+  argTypes: {
+    disabled: {
+      defaultValue: false,
+    },
+  },
+  decorators: [
+    Story => (
+      <Stack alignItems="flex-start">
+        <Story />
+      </Stack>
+    ),
+  ],
 }
 
 type Story = StoryObj<typeof Button>
-
-// More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
-export const Primary: Story = {
-  args: {
-    children: 'Click me',
-  },
-}
 
 const icon = (
   <svg
@@ -34,10 +44,39 @@ const icon = (
   </svg>
 )
 
+// More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
+export const Primary: Story = {
+  args: {
+    children: 'Click me',
+  },
+}
+
+export const PrimaryDisabled: Story = {
+  args: {
+    children: 'Click me',
+    disabled: true,
+  },
+}
+
+export const PrimaryFullWidth: Story = {
+  args: {
+    children: 'Click me',
+    width: 'full',
+  },
+}
+
 export const Primary32: Story = {
-  name: 'Primary/32px',
+  name: 'Primary / 32',
   args: {
     size: 32,
+    children: 'Click me',
+  },
+}
+
+export const Primary24: Story = {
+  name: 'Primary / 24',
+  args: {
+    size: 24,
     children: 'Click me',
   },
 }
@@ -81,6 +120,13 @@ export const Outline: Story = {
 export const Ghost: Story = {
   args: {
     type: 'ghost',
+    children: 'Click me',
+  },
+}
+
+export const Danger: Story = {
+  args: {
+    type: 'danger',
     children: 'Click me',
   },
 }

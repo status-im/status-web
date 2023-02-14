@@ -23,7 +23,6 @@ export default defineConfig(({ mode }) => {
           './src/reactions/index.ts',
         ],
         fileName(format, entryName) {
-          console.log('fileName > format, entryName', format, entryName)
           // const [name] = entryName.split('/')
           return `icons-${entryName}.${format}.js`
         },
