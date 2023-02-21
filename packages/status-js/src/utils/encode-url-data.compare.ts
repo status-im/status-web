@@ -5,6 +5,7 @@
 // todo?: use .fromBinary(bytes, { readUnknownFields: false })
 
 import { base58, base64, base64url, utf8 } from '@scure/base'
+// note: ensure next.js reads package.json#browser too
 import brotli from 'brotli'
 // import { utf8ToBytes as toBytes } from 'ethereum-cryptography/utils'
 import lz from 'lz-string'
@@ -73,6 +74,7 @@ export function encodeUrlData(
       break
 
     case 'browser:brotli':
+      // note: outdated types
       compressed = brotli.compress(serialized)
 
       break
