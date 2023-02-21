@@ -6,7 +6,11 @@ import { useMatch } from 'react-router-dom'
 import { useChatContext } from '../../../../contexts/chat-context'
 // import { BellIcon } from '../../../../icons/bell-icon'
 // import { PinIcon } from '../../../../icons/pin-icon'
-import { useAccount, useProtocol } from '../../../../protocol'
+import {
+  MessageContentType,
+  useAccount,
+  useProtocol,
+} from '../../../../protocol'
 import { keyframes, styled } from '../../../../styles/config'
 import {
   Avatar,
@@ -134,7 +138,7 @@ export const ChatMessage = (props: Props) => {
     }
 
     switch (contentType) {
-      case 'TEXT_PLAIN': {
+      case MessageContentType.TEXT_PLAIN: {
         //   <AlertDialogTrigger>
         //   <MessageLink href="https://specs.status.im/spec">
         //     https://specs.status.im/spec
@@ -147,15 +151,22 @@ export const ChatMessage = (props: Props) => {
         // </AlertDialogTrigger>{' '}
         return <Text>{message.text}</Text>
       }
-      case 'EMOJI': {
+      case MessageContentType.EMOJI: {
         return (
           <Text css={{ fontSize: '3rem', lineHeight: 1.1, letterSpacing: -2 }}>
             {message.text}
           </Text>
         )
       }
-      case 'IMAGE': {
-        const blob = new Blob([message.image.payload], { type: 'image/jpeg' })
+      case MessageContentType.IMAGE: {
+        // fixme?
+        const image = message.payload.value as {
+          payload: Uint8Array
+          type: number
+        }
+        const blob = new Blob([image.payload], {
+          type: 'image/jpeg',
+        })
 
         // TODO?: call URL.revokeObjectURL()
         return (

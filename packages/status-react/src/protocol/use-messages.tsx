@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
 
+import { MessageContentType } from '@status-im/js'
 import sub from 'date-fns/sub'
 
 import { useProtocol } from './use-protocol'
 
-import type { Message, Reactions } from '@status-im/js'
-
-type Reaction = keyof Reactions
+import type { Message, Reaction, Reactions } from '@status-im/js'
 
 interface Result {
   data: Message[]
@@ -52,3 +51,4 @@ export const useMessages = (chatId: string): Result => {
 }
 
 export type { Message, Reaction, Reactions }
+export { MessageContentType }

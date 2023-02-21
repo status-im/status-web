@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useProtocol } from '../../../../protocol'
+import { MessageContentType, useProtocol } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Avatar, Box, Flex, Image, Text } from '../../../../system'
 
@@ -36,21 +36,21 @@ export const MessageReply = (props: Props) => {
           {member.username}
         </Text>
       </Flex>
-      {contentType === 'TEXT_PLAIN' && (
+      {contentType === MessageContentType.TEXT_PLAIN && (
         <Flex>
           <Text color="gray" size="13" truncate>
             {text}
           </Text>
         </Flex>
       )}
-      {contentType === 'EMOJI' && (
+      {contentType === MessageContentType.EMOJI && (
         <Flex>
           <Text color="gray" size="13" truncate>
             {text}
           </Text>
         </Flex>
       )}
-      {contentType === 'IMAGE' && (
+      {contentType === MessageContentType.IMAGE && (
         <Box css={{ paddingTop: '$1' }}>
           <Image
             src="TODO"

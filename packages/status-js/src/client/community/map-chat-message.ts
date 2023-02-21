@@ -1,4 +1,4 @@
-import type { ChatMessage as ChatMessageProto } from '../../protos/chat-message'
+import type { ChatMessage as ChatMessageProto } from '../../protos/chat-message_pb'
 import type { Chat, ChatMessage } from '../chat'
 import type { Community } from './community'
 
