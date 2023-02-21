@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useMemo, useReducer } from 'react'
+import { createContext, useContext, useMemo, useReducer } from 'react'
 
 import type { Config } from '../types/config'
+import type React from 'react'
 import type { Dispatch, Reducer } from 'react'
 
 type Context = {

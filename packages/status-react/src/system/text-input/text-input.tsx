@@ -1,9 +1,10 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 
 import { Box } from '../box'
 import { Text } from '../text'
 import { Base } from './styles'
 
+import type React from 'react'
 import type { Ref } from 'react'
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement>

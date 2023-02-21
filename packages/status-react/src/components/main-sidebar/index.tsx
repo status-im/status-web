@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useAppState } from '../../contexts/app-context'
 import { useAccount } from '../../protocol'
 import { styled } from '../../styles/config'

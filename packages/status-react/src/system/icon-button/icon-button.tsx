@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 
 import { AccessibleIcon } from '@radix-ui/react-accessible-icon'
 import { Link } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { Base } from './styles'
 
 import type { Variants } from './styles'
 import type Stitches from '@stitches/react'
+import type React from 'react'
 import type { Ref } from 'react'
 import type { LinkProps } from 'react-router-dom'
 

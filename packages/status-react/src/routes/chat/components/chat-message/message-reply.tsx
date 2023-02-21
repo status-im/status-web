@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useProtocol } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 import { Avatar, Box, Flex, Image, Text } from '../../../../system'

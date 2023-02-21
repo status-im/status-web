@@ -1,4 +1,6 @@
-import React, { cloneElement, createContext, useContext, useState } from 'react'
+import { cloneElement, createContext, useContext, useState } from 'react'
+
+import type React from 'react'
 
 const DialogContext = createContext<
   ((dialog: React.ReactElement) => void) | null

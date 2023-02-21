@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 
 export const UnpinIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (

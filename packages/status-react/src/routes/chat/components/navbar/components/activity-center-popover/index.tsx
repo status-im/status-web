@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import format from 'date-fns/format'
 import isSameDay from 'date-fns/isSameDay'

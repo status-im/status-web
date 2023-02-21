@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Avatar, EthAddress, Flex, Text } from '../../system'
 
 import type { Member } from '../../protocol'

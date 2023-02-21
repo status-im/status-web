@@ -1,8 +1,9 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 
 import { Base } from './styles'
 
 import type { Variants } from './styles'
+import type React from 'react'
 import type { Ref } from 'react'
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {

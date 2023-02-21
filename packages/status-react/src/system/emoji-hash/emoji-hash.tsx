@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Base } from './styles'
 
 interface Props {

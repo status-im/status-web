@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 
 export const PencilIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (

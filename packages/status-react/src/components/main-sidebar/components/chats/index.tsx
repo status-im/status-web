@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useSortedChats } from '../../../../protocol'
 import { Box } from '../../../../system'
 import { ChatCategory } from './chat-category'

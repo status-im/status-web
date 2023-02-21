@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useAccount } from '../../protocol'
 import {
   Avatar,
