@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "start": "vite preview"
+    "start": "vite preview",
+    "clean": "rimraf dist node_modules"
   },
   "dependencies": {
     "@status-im/react": "^0.1.1",

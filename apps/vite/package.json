@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "TAMAGUI_TARGET='web' vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "rimraf dist node_modules"
   },
   "dependencies": {
     "@status-im/components": "*",

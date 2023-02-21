@@ -16,7 +16,8 @@
     "build": "tamagui-build",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "storybook": "TAMAGUI_TARGET='web' storybook dev -p 3001",
-    "storybook:build": "TAMAGUI_TARGET='web' storybook build"
+    "storybook:build": "TAMAGUI_TARGET='web' storybook build",
+    "clean": "rimraf dist node_modules .turbo"
   },
   "peerDependencies": {
     "react-native-web": "^0.18.0"
