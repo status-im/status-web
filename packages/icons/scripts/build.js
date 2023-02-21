@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const fs = require('fs').promises
 const camelcase = require('camelcase')
 const { promisify } = require('util')
@@ -133,3 +135,5 @@ if (!package) {
 }
 
 main(package)
+
+/* eslint-enable @typescript-eslint/no-var-requires */
