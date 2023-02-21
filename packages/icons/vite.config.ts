@@ -17,10 +17,10 @@ export default defineConfig(({ mode }) => {
       target: 'es2020',
       lib: {
         entry: [
-          './src/12/index.ts',
-          './src/16/index.ts',
-          './src/20/index.ts',
-          './src/reactions/index.ts',
+          './12/index.ts',
+          './16/index.ts',
+          './20/index.ts',
+          './reactions/index.ts',
         ],
         fileName(format, entryName) {
           // const [name] = entryName.split('/')
