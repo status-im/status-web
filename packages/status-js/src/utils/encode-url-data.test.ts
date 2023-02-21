@@ -1,14 +1,17 @@
 import { describe, expect, test } from 'vitest'
 
-import { encodeUrlData } from './encode-url-data'
+import {
+  encodeChannelUrlData,
+  encodeCommunityUrlData,
+  encodeUserUrlData,
+} from './encode-url-data'
 
 // import type { Channel, Community, URLData, User } from '../protos/url-data_pb'
 // import type { PlainMessage } from '@bufbuild/protobuf'
 
 describe('encode-url-data', () => {
   test('community', () => {
-    const encodedData = encodeUrlData(
-      'community',
+    const encodedData = encodeCommunityUrlData(
       {
         displayName: 'Lorem ipsum dolor sit egestas.',
         description:
@@ -25,8 +28,7 @@ describe('encode-url-data', () => {
   })
 
   test('channel', () => {
-    const encodedData = encodeUrlData(
-      'channel',
+    const encodedData = encodeChannelUrlData(
       {
         emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
         displayName: 'lorem-ipsum-dolore-nulla',
@@ -50,8 +52,7 @@ describe('encode-url-data', () => {
   })
 
   test('user', () => {
-    const encodedData = encodeUrlData(
-      'user',
+    const encodedData = encodeUserUrlData(
       {
         displayName: 'Lorem ipsum dolore nulla',
         description:

@@ -10,58 +10,37 @@ import { Channel, Community, URLData, User } from '../protos/url-data_pb'
 
 import type { PlainMessage } from '@bufbuild/protobuf'
 
-export function encodeUrlData(
-  type: 'community' | 'channel' | 'user',
-  data: PlainMessage<Community | Channel | User>,
+export function encodeCommunityUrlData(
+  data: PlainMessage<Community>,
   publicKey: string
 ): string {
-  let serialized: Uint8Array
-  switch (type) {
-    case 'community': {
-      const community = new Community(data).toBinary()
-      const checksum = sha256(
-        sha256(concatBytes(community, toBytes(publicKey)))
-      ).slice(0, 4)
+  return encodeUrlData(new Community(data).toBinary(), publicKey)
+}
 
-      serialized = new URLData({
-        checksum,
-        content: community,
-      }).toBinary()
+export function encodeChannelUrlData(
+  data: PlainMessage<Channel>,
+  publicKey: string
+): string {
+  return encodeUrlData(new Channel(data).toBinary(), publicKey)
+}
 
-      break
-    }
+export function encodeUserUrlData(data: PlainMessage<User>, publicKey: string) {
+  return encodeUrlData(new User(data).toBinary(), publicKey)
+}
 
-    case 'channel': {
-      const channel = new Channel(data).toBinary()
-      const checksum = sha256(
-        sha256(concatBytes(channel, toBytes(publicKey)))
-      ).slice(0, 4)
+function encodeUrlData(data: Uint8Array, publicKey: string): string {
+  const checksum = sha256(sha256(concatBytes(data, toBytes(publicKey)))).slice(
+    0,
+    4
+  )
 
-      serialized = new URLData({
-        checksum,
-        content: channel,
-      }).toBinary()
-
-      break
-    }
-
-    case 'user': {
-      const user = new User(data).toBinary()
-      const checksum = sha256(
-        sha256(concatBytes(user, toBytes(publicKey)))
-      ).slice(0, 4)
-
-      serialized = new URLData({
-        checksum,
-        content: user,
-      }).toBinary()
-
-      break
-    }
-  }
-
+  const serialized = new URLData({
+    content: data,
+    checksum,
+  }).toBinary()
   const compressed = brotliCompressSync(serialized)
-  // todo: remove padding
+  // todo?!: remove padding
+  // todo?!: split into 301 chars chunks with a semicolon separator
   const encoded = base64url.encode(compressed)
 
   return encoded
