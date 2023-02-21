@@ -1,7 +1,6 @@
 /// <reference types="vitest" />
 
 import { defineConfig } from 'vite'
-import { configDefaults } from 'vitest/config'
 
 import { dependencies } from './package.json'
 
@@ -44,7 +43,6 @@ export default defineConfig(({ mode }) => {
     },
     test: {
       environment: 'happy-dom',
-      exclude: [...configDefaults.exclude, '**/encode-url-data.compare.*'],
     },
   }
 })

@@ -4,6 +4,5 @@
   "compilerOptions": {
     "outDir": "./dist",
     "declarationDir": "./dist/types"
-  },
-  "exclude": ["src/utils/encode-url-data.compare.*"]
+  }
 }
