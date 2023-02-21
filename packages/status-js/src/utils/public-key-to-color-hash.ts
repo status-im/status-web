@@ -7,6 +7,9 @@ export type ColorHash = number[][]
 const COLOR_HASH_COLORS_COUNT = 32
 const COLOR_HASH_SEGMENT_MAX_LENGTH = 5
 
+/**
+ * @see https://github.com/status-im/specs/pull/166 for specs
+ */
 export function publicKeyToColorHash(publicKey: string): ColorHash {
   const compressedPublicKey = compressPublicKey(publicKey)
 
@@ -34,7 +37,7 @@ export function hexToColorHash(
   return colorHash
 }
 
-function numberToIndices(number: bigint, base: bigint): bigint[] {
+export function numberToIndices(number: bigint, base: bigint): bigint[] {
   const indices: bigint[] = []
   let nextNumber = number
 
