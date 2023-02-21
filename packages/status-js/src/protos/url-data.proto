@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+message Community {
+ string display_name = 1;
+ string description = 2;
+ uint32 members_count = 3;
+ string color = 4;
+}
+
+message Channel {
+ string display_name = 1;
+ string description = 2;
+ string emoji = 3;
+ string color = 4;
+ Community community = 5;
+}
+
+message User {
+ string display_name = 1;
+ string description = 2;
+ string color = 3;
+}
+
+message URLData {
+ // Community, Channel, or User
+ bytes content = 1;
+ // content and public key concatanated and sha256 hashed twice, returning first 4 bytes
+ bytes checksum = 2;
+}
