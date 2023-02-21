@@ -298,7 +298,7 @@ describe('chat', () => {
     expect(encodedData).toBe(
       'G4UB4B2HKdyc5OYnb5yWKdkV_LzlLdVf_3Db_15mSNQgJCEym2mSzrbZtB60VuPuf9ILlmH6Ojn-Qso1bIuyBAPBtIWQeUK5jQ3BNXwK0ixiRn9nO1jYdlF-VnNeTc7N1YZRWyOCalEEwgZXArQ4Kv272AyOdNCQI_eVPcEq0e85z1XzYtvGSMEvQQzKmYw4R8kFJXPmAL04HzmHE2yIdVTzR_DzDXlSc_Vakg8OcOI8t38-YlTGG5CLiiFm'
     )
-    expect(encodedData).toHaveLength(252)
+    expect(encodedData).toHaveLength(252) // shorter than A
   })
 
   test('D', () => {
@@ -349,6 +349,58 @@ describe('chat', () => {
       'G4sBYCwOzNM_RWBzjmD5rRAWh6Zu3oM-_QbeRXOSpbQtygtx9Ugg4aceYXwEZepMwosOV0sYGBp1mlNmKZ8cu3XwppPj78DWFiUWCIZpSyDBtpxyGwPHcepRaBelEI3LOJLuEyPVlDQCLpeg9whig6MOGfQPXlwsOj0MUnXreXQ2sKvnE8793uNgrokailddCIkWRIOxGOiyjHTIg_0Xo5tgVV0ZQyuKl8e1RI-Rb_bc-e8OTFj1EE5cGkWS-lK2IrWxLQR95Fsr_t0FBdZ4Mi8B'
     )
     expect(encodedData).toHaveLength(280)
+  })
+
+  test('F', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      communityDisplayName: 'Lorem ipsum dolor sit egestas.',
+      communityDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      communityMembersCount: 1_000_000,
+      communityColor: '#4360DF',
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'csv',
+      compression: 'lz',
+      encoding: 'base64url',
+    })
+
+    expect(encodedData).toBe(
+      'jwbhf9wC245jtoRjtopjtkHY7kyH8dgNAGwPYCcCmAtgLQCWADgM4CuJAJtjgcQHbWaYCG6AMnkQAIKNQgIZMBlUgBcBnQvmnoBAY2wtK-FdMXVccuhVKUVpFgHMB-TDIB0AgAoALTpo7VKAlurHVSAgDcZTnw5anNqUOsifBZpWgEufkU5FQFyFwJpXE4BbENsewBZPAAjfwD8SmlSUvZaW3QAYgBRAEEAIQB2AAYe3n5RYQTxPEkZK3Mq6VdGvgIhqhHGMalZeUVlNQ0tHXj9TkNyY1MLKxtpe2dXa0wPLx86P0Dg0M5wyPOYuISkghTOGkMpwsjk8gVimUKtNavVCI0AIx9ZH9JoAFgAzAA2HoAEQAYkAAA=='
+    )
+    expect(encodedData).toHaveLength(376)
+  })
+
+  test('G', () => {
+    const data = {
+      emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+      displayName: 'lorem-ipsum-dolore-nulla',
+      description:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+      color: '#EAB700',
+      community: {
+        displayName: 'Lorem ipsum dolor sit egestas.',
+        description:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
+        membersCount: 1_000_000,
+        color: '#4360DF',
+      },
+    }
+    const encodedData = encodeUrlData('chat', data, {
+      serialization: 'protobuf',
+      compression: 'browser:brotli',
+      encoding: 'base64url',
+    })
+
+    expect(encodedData).toBe(
+      'G44BACwKbLcVA5s5Bhs2lC8WIsbe1Ll70Kdv4FgHbWRTahsNE7FyJPCzCRkfQZmb4bJ3OjqVUh33_HvYgBqJydeBkE6OvwNbW5RYIBimLYEE85hyGwPH8ehRaBelEHXmnEX3yVmaUcoUuLwEjU0QGxwNyGT88OViMRjpkKZbz62rg0OjXnHuj5EHyxZaKh4NISR7EiXGcmKIORmQG_svznCBNbWK1vxSPDyhV46c9cue2_5bgB6TrtqFS1NlHSn9HRCR3djXgj7yLhd_bqKYhi3LGg=='
+    ) // has slightly different output then node:brotli
+    expect(encodedData).toHaveLength(284) // but has same length
   })
 
   describe('max', () => {

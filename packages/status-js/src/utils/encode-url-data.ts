@@ -5,6 +5,9 @@
 // todo?: use .fromBinary(bytes, { readUnknownFields: false })
 
 import { base58, base64, base64url, utf8 } from '@scure/base'
+import brotli from 'brotli'
+// import { utf8ToBytes as toBytes } from 'ethereum-cryptography/utils'
+import lz from 'lz-string'
 import { brotliCompressSync, gzipSync } from 'node:zlib'
 
 import {
@@ -20,7 +23,7 @@ export function encodeUrlData(
   data: PlainMessage<CommunityPreview | CommunityChatPreview | UserPreview>,
   options: {
     serialization: 'csv' | 'protobuf'
-    compression: 'gzip' | 'brotli' | 'noop'
+    compression: 'gzip' | 'brotli' | 'browser:brotli' | 'lz' | 'noop'
     encoding: 'encodeURIComponent' | 'base58' | 'base64' | 'base64url'
   } = {
     serialization: 'protobuf',
@@ -33,6 +36,7 @@ export function encodeUrlData(
     case 'csv':
       // note!: does not handle nested data
       serialized = utf8.decode(Object.values(data).join(','))
+      // serialized = Object.values(data).join(',')
 
       break
 
@@ -68,6 +72,21 @@ export function encodeUrlData(
 
       break
 
+    case 'browser:brotli':
+      compressed = brotli.compress(serialized)
+
+      break
+
+    case 'lz': {
+      compressed = lz.compressToUint8Array(utf8.encode(serialized))
+      // const ce = base64url.encode(compressed)
+      // const c2 = Buffer.from(lz.compressToUTF16(utf8.encode(serialized))) // more bytes than utf8
+      // const c2e = base64url.encode(c2) // more chars than ce
+      // const c3 = lz.compressToEncodedURIComponent(utf8.encode(serialized)) // less chars than ce, but only by a few
+
+      break
+    }
+
     case 'noop':
       compressed = serialized
 
@@ -101,6 +120,7 @@ export function encodeUrlData(
       break
 
     case 'base64url':
+      // todo?: use base64url.encode(compressed, { padding: false }); slice/remove traling padding
       encoded = base64url.encode(compressed)
 
       break

@@ -118,6 +118,7 @@ export class CommunityChatPreview extends Message<CommunityChatPreview> {
 
   /**
    * bytes public_key = 8;
+   * note: only testing
    *
    * @generated from field: string community_display_name = 9;
    */
