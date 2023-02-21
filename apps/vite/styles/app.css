@@ -41,16 +41,20 @@ body,
 
 #content {
   overflow: auto;
-  padding: 72px 8px 132px 8px;
+  padding: 40px 0px 0px 0px;
   height: 100vh;
   margin-top: -56px;
 }
 
+#messages {
+  padding: 32px 8px;
+}
+
 #composer {
-  position: absolute;
+  position: sticky;
   bottom: 0;
   left: 0;
-  right: 0;
+  z-index: 100;
 }
 
 #members {
