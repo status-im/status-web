@@ -84,12 +84,17 @@ function App() {
             onMembersPress={() => setShowMembers(show => !show)}
           />
 
-          <div id="content" ref={refMessagesContainer}>
-            <Messages />
-          </div>
-
-          <div id="composer">
-            <Composer isBlurred={shouldBlurBottom} reply={false} />
+          <div
+            id="content"
+            ref={refMessagesContainer}
+            style={{ position: 'relative' }}
+          >
+            <div id="messages">
+              <Messages />
+            </div>
+            <div id="composer">
+              <Composer isBlurred={shouldBlurBottom} reply={false} />
+            </div>
           </div>
         </main>
         <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
