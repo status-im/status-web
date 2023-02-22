@@ -20,7 +20,8 @@
     "clean": "rimraf dist node_modules .turbo"
   },
   "peerDependencies": {
-    "react-native-web": "^0.18.0"
+    "react-native-web": "^0.18.0",
+    "@tamagui/next-plugin": "1.0.15"
   },
   "dependencies": {
     "@radix-ui/react-dropdown-menu": "^2.0.2",
