@@ -46,7 +46,7 @@ describe('URL data', () => {
     }).toThrowErrorMatchingInlineSnapshot(`"Invalid checksum"`)
   })
 
-  test('should encode and decode  channel', () => {
+  test('should encode and decode channel', () => {
     const data = {
       emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
       displayName: 'lorem-ipsum-dolore-nulla',
