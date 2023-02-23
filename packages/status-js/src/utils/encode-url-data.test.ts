@@ -72,7 +72,7 @@ describe('URL data', () => {
     expect(decodedData).toEqual(data)
   })
 
-  test('should encode and decode  user', () => {
+  test('should encode and decode user', () => {
     const data = {
       displayName: 'Lorem ipsum dolore nulla',
       description:
