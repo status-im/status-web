@@ -7,6 +7,8 @@ import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialM
 import { Message, proto3 } from "@bufbuild/protobuf";
 
 /**
+ * todo?: define/specify/lock as subset of CommunityDescription and ContactCodeAdvertisement protobufs
+ *
  * @generated from message Community
  */
 export class Community extends Message<Community> {
@@ -172,6 +174,10 @@ export class User extends Message<User> {
 }
 
 /**
+ * todo?: remove since checksum was dropped; use CommunityURLData instead
+ * todo?: add timestamp
+ * todo?: ensure deterministic signing with (json) serialization; https://github.com/bufbuild/protobuf-es/issues/251
+ *
  * @generated from message URLData
  */
 export class URLData extends Message<URLData> {
@@ -182,13 +188,6 @@ export class URLData extends Message<URLData> {
    */
   content = new Uint8Array(0);
 
-  /**
-   * content and public key concatanated and sha256 hashed twice, returning first 4 bytes
-   *
-   * @generated from field: bytes checksum = 2;
-   */
-  checksum = new Uint8Array(0);
-
   constructor(data?: PartialMessage<URLData>) {
     super();
     proto3.util.initPartial(data, this);
@@ -198,7 +197,6 @@ export class URLData extends Message<URLData> {
   static readonly typeName = "URLData";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "content", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "checksum", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): URLData {
