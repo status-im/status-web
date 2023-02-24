@@ -24,8 +24,12 @@ export function encodeChannelUrlData(data: PlainMessage<Channel>): string {
 export function decodeChannelUrlData(data: string): PlainMessage<Channel> {
   const deserialized = decodeUrlData(data)
   const channel = Channel.fromBinary(deserialized.content)
+  const community = channel.community
 
-  return { ...channel }
+  return {
+    ...channel,
+    ...(community && { community: { ...community } }),
+  }
 }
 
 export function encodeUserUrlData(data: PlainMessage<User>) {
