@@ -6,6 +6,7 @@ import '@tamagui/font-inter/css/700.css'
 
 import React from 'react'
 
+import { Provider } from '@status-im/components'
 import { createRoot } from 'react-dom/client'
 
 import App from './app'
@@ -14,6 +15,8 @@ const root = document.getElementById('root') as HTMLElement
 
 createRoot(root).render(
   <React.StrictMode>
-    <App />
+    <Provider>
+      <App />
+    </Provider>
   </React.StrictMode>
 )
