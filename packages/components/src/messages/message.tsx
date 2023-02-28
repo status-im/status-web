@@ -6,6 +6,7 @@ import { Stack, Unspaced, XStack, YStack } from 'tamagui'
 import { Author } from '../author/author'
 import { Avatar } from '../avatar'
 import { Image } from '../image'
+import { useChatDispatch } from '../provider'
 import { Reply } from '../reply'
 import { Paragraph } from '../typography'
 import { Actions } from './components/actions'
@@ -30,6 +31,8 @@ const Message = (props: Props) => {
   const active = actionsOpen || hovered
   // <Sheet press="long">
 
+  const dispatch = useChatDispatch()
+
   return (
     <YStack
       position="relative"
@@ -48,9 +51,8 @@ const Message = (props: Props) => {
           <Actions
             reactions={reactions}
             onOpenChange={setActionsOpen}
-            onReplyPress={() => {
-              console.log('reply')
-            }}
+            onReplyPress={() => dispatch({ type: 'reply', messageId: '1' })}
+            onEditPress={() => dispatch({ type: 'edit', messageId: '1' })}
           />
         </Unspaced>
       )}
