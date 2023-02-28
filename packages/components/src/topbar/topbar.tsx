@@ -16,34 +16,20 @@ import { BlurView } from 'expo-blur'
 
 import { DropdownMenu } from '../dropdown-menu'
 
-import type { GetProps, StackProps } from '@tamagui/core'
-
-type BaseProps = GetProps<typeof Stack>
+import type { Channel } from '../sidebar/mock-data'
 
 type Props = {
   membersVisisble: boolean
   onMembersPress: () => void
   goBack?: () => void
-  title?: string
-  description?: string
-  icon?: React.ReactNode
-  refForScroll?: React.RefObject<HTMLDivElement>
-  backgroundColor?: StackProps['backgroundColor']
-  isBlurred?: boolean
-} & BaseProps
+  channel: Channel
+  blur?: boolean
+}
 
 const Topbar = (props: Props) => {
-  const {
-    membersVisisble,
-    onMembersPress,
-    goBack,
-    title,
-    description,
-    icon,
-    backgroundColor,
-    isBlurred,
-    ...rest
-  } = props
+  const { membersVisisble, onMembersPress, goBack, blur, channel } = props
+
+  const { title, description, icon } = channel
 
   return (
     <BlurView intensity={40} style={{ zIndex: 100 }}>
@@ -53,18 +39,17 @@ const Topbar = (props: Props) => {
         alignItems="center"
         justifyContent="space-between"
         padding={16}
-        backgroundColor={backgroundColor || '$background'}
+        backgroundColor={'$blurBackground'}
         borderBottomWidth={1}
-        borderColor={isBlurred ? 'transparent' : '$neutral-80-opa-10'}
+        borderColor={blur ? 'transparent' : '$neutral-80-opa-10'}
         width="100%"
-        {...rest}
       >
         <Stack flexDirection="row" alignItems="center" flexWrap="wrap">
           <Stack mr={12} $gtSm={{ display: 'none' }}>
             <IconButton
               icon={<ArrowLeftIcon />}
               onPress={() => goBack?.()}
-              blurred={isBlurred}
+              blurred={blur}
             />
           </Stack>
 
@@ -109,9 +94,10 @@ const Topbar = (props: Props) => {
               icon={<MembersIcon />}
               selected={membersVisisble}
               onPress={onMembersPress}
-              blurred={isBlurred}
+              blurred={blur}
             />
           </Stack>
+
           <DropdownMenu>
             <IconButton icon={<OptionsIcon />} />
 
