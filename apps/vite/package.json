@@ -11,7 +11,6 @@
     "@status-im/components": "*",
     "@status-im/icons": "*",
     "@tamagui/core": "1.0.15",
-    "expo-blur": "~12.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.18.6"

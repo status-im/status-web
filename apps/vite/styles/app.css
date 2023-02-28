@@ -40,6 +40,7 @@ body,
 }
 
 #content {
+  position: relative;
   overflow: auto;
   padding: 40px 0px 0px 0px;
   height: 100vh;

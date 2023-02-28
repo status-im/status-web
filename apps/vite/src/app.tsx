@@ -1,4 +1,4 @@
-import { cloneElement, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 import {
   Composer,
@@ -6,120 +6,80 @@ import {
   Sidebar,
   SidebarMembers,
   Topbar,
+  useAppDispatch,
+  useAppState,
 } from '@status-im/components'
 import { useBlur } from '@status-im/components/hooks'
-import { COMMUNITIES } from '@status-im/components/src/sidebar/mock-data'
-import { Stack, styled, TamaguiProvider } from '@tamagui/core'
-import { AnimatePresence } from 'tamagui'
+import { CHANNEL_GROUPS } from '@status-im/components/src/sidebar/mock-data'
 
-import tamaguiConfig from '../tamagui.config'
-
-import type { ReactElement, ReactNode } from 'react'
-
-type ThemeVars = 'light' | 'dark'
-
-const AnimatableDrawer = styled(Stack, {
-  variants: {
-    fromRight: {
-      true: {
-        x: 500,
-        width: 0,
-      },
-    },
-    fromLeft: {
-      true: {
-        x: 500,
-        width: 250,
-      },
-    },
-  },
-})
+const COMMUNITY = {
+  name: 'Rarible',
+  description:
+    'Multichain community-centric NFT marketplace. Create, buy and sell your NFTs.',
+  membersCount: 123,
+  imageUrl:
+    'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
+}
 
 function App() {
-  const [theme, setTheme] = useState<ThemeVars>('light')
   const [showMembers, setShowMembers] = useState(false)
 
-  const [selectedChannel, setSelectedChannel] = useState<string>('welcome')
-  const refMessagesContainer = useRef<HTMLDivElement>(null)
-
-  // TODO - this is a hack to get the icon to show up in the topbar when a channel is selected on mount
-  const [icon, setIcon] = useState<ReactNode>(
-    cloneElement(COMMUNITIES[0].channels[0].icon as ReactElement, {
-      hasBackground: false,
-    })
-  )
-
-  const onChannelPress = (id: string, icon?: ReactNode) => {
-    setSelectedChannel(id)
-    setIcon(icon)
-  }
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const { shouldBlurTop, shouldBlurBottom } = useBlur({
-    ref: refMessagesContainer,
+    ref: containerRef,
   })
 
-  return (
-    <TamaguiProvider config={tamaguiConfig} defaultTheme={'light'}>
-      <div id="app">
-        <div id="sidebar" style={{ zIndex: 200 }}>
-          <Sidebar
-            name="Rarible"
-            description="Multichain community-centric NFT marketplace. Create, buy and sell your NFTs."
-            membersCount={123}
-            onChannelPress={onChannelPress}
-            selectedChannel={selectedChannel}
-          />
-        </div>
-        <main id="main">
-          <Topbar
-            isBlurred={shouldBlurTop}
-            backgroundColor="$blurBackground"
-            icon={
-              icon &&
-              cloneElement(icon as ReactElement, { hasBackground: false })
-            }
-            title={`#${selectedChannel}`}
-            description="Share random funny stuff with the community. Play nice."
-            membersVisisble={showMembers}
-            onMembersPress={() => setShowMembers(show => !show)}
-          />
+  const appState = useAppState()
+  const appDispatch = useAppDispatch()
 
-          <div
-            id="content"
-            ref={refMessagesContainer}
-            style={{ position: 'relative' }}
-          >
-            <div id="messages">
-              <Messages />
-            </div>
-            <div id="composer">
-              <Composer isBlurred={shouldBlurBottom} reply={false} />
-            </div>
-          </div>
-        </main>
-        <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
-          {showMembers && (
-            <AnimatableDrawer
-              id="members"
-              key="members"
-              animation={[
-                'fast',
-                {
-                  opacity: {
-                    overshootClamping: true,
-                  },
-                },
-              ]}
-              enterStyle={{ opacity: 0 }}
-              exitStyle={{ opacity: 0 }}
-              opacity={1}
-            >
-              <SidebarMembers />
-            </AnimatableDrawer>
-          )}
-        </AnimatePresence>
+  // TODO: This should change based on the URL
+  const selectedChannel = useMemo(() => {
+    for (const { channels } of CHANNEL_GROUPS) {
+      for (const channel of channels) {
+        if (channel.id === appState.channelId) {
+          return channel
+        }
+      }
+    }
+  }, [appState.channelId])
+
+  return (
+    <div id="app">
+      <div id="sidebar" style={{ zIndex: 200 }}>
+        <Sidebar
+          community={COMMUNITY}
+          selectedChannelId={appState.channelId}
+          onChannelPress={channelId =>
+            appDispatch({ type: 'set-channel', channelId })
+          }
+        />
       </div>
-    </TamaguiProvider>
+
+      <main id="main">
+        <Topbar
+          blur={shouldBlurTop}
+          channel={selectedChannel}
+          membersVisisble={showMembers}
+          onMembersPress={() => setShowMembers(show => !show)}
+        />
+
+        <div id="content" ref={containerRef}>
+          <div id="messages">
+            <Messages />
+          </div>
+          <div id="composer">
+            <Composer blur={shouldBlurBottom} />
+          </div>
+        </div>
+      </main>
+
+      {showMembers && (
+        <div id="members">
+          <SidebarMembers />
+        </div>
+      )}
+    </div>
   )
 }
 
