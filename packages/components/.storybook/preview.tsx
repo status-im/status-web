@@ -1,6 +1,5 @@
 import React from 'react'
-import { TamaguiProvider } from '@tamagui/core'
-import { config } from '../src'
+import { Provider } from '../src'
 import { Parameters, Decorator } from '@storybook/react'
 
 import './reset.css'
@@ -17,9 +16,9 @@ export const parameters: Parameters = {
 
 const withThemeProvider: Decorator = (Story, _context) => {
   return (
-    <TamaguiProvider config={config}>
+    <Provider>
       <Story />
-    </TamaguiProvider>
+    </Provider>
   )
 }
 export const decorators = [withThemeProvider]
