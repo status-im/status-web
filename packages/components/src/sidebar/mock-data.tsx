@@ -1,46 +1,51 @@
 import { Basketball, Collaboration, Fire, Peach, Play, Unicorn } from '../emoji'
 
-interface Channels {
+export interface Channel {
   id: string
   title: string
+  description: string
   icon?: React.ReactNode
   channelStatus?: 'muted' | 'normal' | 'withMessages' | 'withMentions'
   numberOfMessages?: number
 }
 
-export interface CommunityProps {
+export interface ChannelGroup {
   id: string
   title: string
-  numberOfNewMessages?: number
-  channels: Channels[]
+  unreadCount?: number
+  channels: Channel[]
 }
 
 // MOCK DATA
-export const COMMUNITIES: CommunityProps[] = [
+export const CHANNEL_GROUPS: ChannelGroup[] = [
   {
     id: 'welcome',
     title: 'Welcome',
-    numberOfNewMessages: 3,
+    unreadCount: 3,
     channels: [
       {
         id: 'welcome',
         title: '# welcome',
         icon: <Collaboration hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'general-welcome',
         title: '# general',
         icon: <Play hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'random',
         title: '# random',
         icon: <Fire hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'onboarding',
         title: '# onboarding',
         icon: <Unicorn hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
         channelStatus: 'withMentions',
         numberOfMessages: 3,
       },
@@ -49,12 +54,13 @@ export const COMMUNITIES: CommunityProps[] = [
   {
     id: 'community',
     title: 'Community',
-    numberOfNewMessages: 5,
+    unreadCount: 5,
     channels: [
       {
         id: 'announcements',
         title: '# announcements',
         icon: <Peach hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'jobs',
@@ -62,6 +68,7 @@ export const COMMUNITIES: CommunityProps[] = [
         channelStatus: 'withMentions',
         numberOfMessages: 3,
         icon: <Play hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'events',
@@ -69,11 +76,13 @@ export const COMMUNITIES: CommunityProps[] = [
         channelStatus: 'withMentions',
         numberOfMessages: 2,
         icon: <Fire hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'meetups',
         title: '# meetups',
         icon: <Unicorn hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
     ],
   },
@@ -85,21 +94,25 @@ export const COMMUNITIES: CommunityProps[] = [
         id: 'design',
         title: '# design',
         icon: <Collaboration hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'ux',
         title: '# ux',
         icon: <Play hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'ui',
         title: '# ui',
         icon: <Fire hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'figma',
         title: '# figma',
         icon: <Unicorn hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
     ],
   },
@@ -111,11 +124,13 @@ export const COMMUNITIES: CommunityProps[] = [
         id: 'general',
         title: '# general',
         icon: <Collaboration hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'people-ops',
         title: '# people-ops',
         icon: <Basketball hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
     ],
   },
@@ -127,23 +142,27 @@ export const COMMUNITIES: CommunityProps[] = [
         id: 'react',
         title: '# react',
         icon: <Collaboration hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
         channelStatus: 'withMessages',
       },
       {
         id: 'vue',
         title: '# vue',
         icon: <Play hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'angular',
         title: '# angular',
         channelStatus: 'muted',
         icon: <Fire hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'svelte',
         title: '# svelte',
         icon: <Unicorn hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
     ],
   },
@@ -155,22 +174,26 @@ export const COMMUNITIES: CommunityProps[] = [
         id: 'node',
         title: '# node',
         icon: <Collaboration hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'python',
         title: '# python',
         icon: <Play hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'ruby',
         title: '# ruby',
         icon: <Fire hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'php',
         title: '# php',
         channelStatus: 'muted',
         icon: <Unicorn hasBackground />,
+        description: 'Share random funny stuff with the community. Play nice.',
       },
     ],
   },
