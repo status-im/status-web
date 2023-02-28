@@ -7,32 +7,31 @@ import { Avatar } from '../avatar'
 import { Button } from '../button'
 import { Image } from '../image'
 import { Heading, Paragraph } from '../typography'
-import { COMMUNITIES } from './mock-data'
+import { CHANNEL_GROUPS } from './mock-data'
 
-import type { CommunityProps } from './mock-data'
-import type { GetProps } from '@tamagui/core'
-import type { ReactNode } from 'react'
-
-type BaseProps = GetProps<typeof Stack>
+import type { ChannelGroup } from './mock-data'
 
 type Props = {
-  name: string
-  description: string
-  membersCount: number
-  selectedChannel?: string
-  communities?: CommunityProps[]
-  onChannelPress: (channelId: string, channelIcon?: ReactNode) => void
-} & BaseProps
+  community: {
+    name: string
+    description: string
+    membersCount: number
+    imageUrl: string
+  }
+  channels?: ChannelGroup[]
+  selectedChannelId?: string
+  onChannelPress: (channelId: string) => void
+}
 
 const Sidebar = (props: Props) => {
   const {
-    name,
-    description,
-    membersCount,
-    communities = COMMUNITIES,
-    selectedChannel,
+    community,
+    channels = CHANNEL_GROUPS,
+    selectedChannelId,
     onChannelPress,
   } = props
+
+  const { name, description, membersCount, imageUrl } = community
 
   return (
     <Stack
@@ -42,11 +41,7 @@ const Sidebar = (props: Props) => {
       height="100%"
       overflow="scroll"
     >
-      <Image
-        src="https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80"
-        width="full"
-        aspectRatio={2.6}
-      />
+      <Image src={imageUrl} width="full" aspectRatio={2.6} />
       <Stack
         paddingBottom={16}
         marginTop={-16}
@@ -72,17 +67,16 @@ const Sidebar = (props: Props) => {
 
           <Button>Join community</Button>
         </Stack>
-        {communities.map(community => (
+        {channels.map(group => (
           <Accordion
-            key={community.id}
-            // This is just for the demo
-            initialExpanded={community.id === 'welcome'}
-            title={community.title}
-            numberOfNewMessages={community.numberOfNewMessages}
+            key={group.id}
+            initialExpanded={group.id === 'welcome'}
+            title={group.title}
+            numberOfNewMessages={group.unreadCount}
           >
-            {community.channels.map((channel, index) => {
-              const isLastChannelOfTheList =
-                index === community.channels.length - 1
+            {group.channels.map((channel, index) => {
+              const isLastChannelOfTheList = index === group.channels.length - 1
+
               return (
                 <AccordionItem
                   key={channel.id}
@@ -90,8 +84,8 @@ const Sidebar = (props: Props) => {
                   title={channel.title}
                   channelStatus={channel.channelStatus}
                   numberOfMessages={channel.numberOfMessages}
-                  isSelected={selectedChannel === channel.id}
-                  onPress={() => onChannelPress(channel.id, channel.icon)}
+                  isSelected={selectedChannelId === channel.id}
+                  onPress={() => onChannelPress(channel.id)}
                   mb={isLastChannelOfTheList ? 8 : 0}
                 />
               )

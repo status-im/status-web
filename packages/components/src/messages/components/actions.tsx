@@ -23,12 +23,12 @@ interface Props {
   reactions: ReactionsType
   onOpenChange: (open: boolean) => void
   onReplyPress: VoidFunction
-  // onEditPress: VoidFunction
+  onEditPress: VoidFunction
   // onDeletePress: VoidFunction
 }
 
 export const Actions = (props: Props) => {
-  const { reactions, onOpenChange, onReplyPress } = props
+  const { reactions, onOpenChange, onReplyPress, onEditPress } = props
 
   useEffect(() => {
     return () => onOpenChange(false)
@@ -70,11 +70,7 @@ export const Actions = (props: Props) => {
       />
 
       {/* EDIT */}
-      {/* <IconButton
-        variant="outline"
-        icon={<EditIcon />}
-        onPress={onEditPress}
-      /> */}
+      <IconButton variant="outline" icon={<EditIcon />} onPress={onEditPress} />
 
       {/* DELETE */}
       {/* <IconButton
@@ -90,12 +86,12 @@ export const Actions = (props: Props) => {
           <DropdownMenu.Item
             icon={<EditIcon />}
             label="Edit message"
-            onSelect={() => console.log('edit')}
+            onSelect={onEditPress}
           />
           <DropdownMenu.Item
             icon={<ReplyIcon />}
             label="Reply"
-            onSelect={() => console.log('reply')}
+            onSelect={onReplyPress}
           />
           <DropdownMenu.Item
             icon={<CopyIcon />}

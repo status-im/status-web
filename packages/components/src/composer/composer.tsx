@@ -16,15 +16,15 @@ import { Button } from '../button'
 import { IconButton } from '../icon-button'
 import { Image } from '../image'
 import { Input } from '../input'
+import { useChatDispatch, useChatState } from '../provider'
 import { Reply } from '../reply'
 
 interface Props {
-  isBlurred: boolean
-  reply: boolean
+  blur: boolean
 }
 
 const Composer = (props: Props) => {
-  const { isBlurred, reply } = props
+  const { blur } = props
 
   const [isFocused, setIsFocused] = useState(false)
   const [text, setText] = useState('')
@@ -37,7 +37,10 @@ const Composer = (props: Props) => {
     isDisabled: isImageUploadDisabled,
   } = useImageUpload()
 
-  const iconButtonBlurred = isBlurred && !isFocused && imagesData.length === 0
+  const iconButtonBlurred = blur && !isFocused && imagesData.length === 0
+
+  const chatState = useChatState()
+  const chatDispatch = useChatDispatch()
 
   return (
     <BlurView
@@ -62,15 +65,13 @@ const Composer = (props: Props) => {
           elevation: 10,
         }}
       >
-        {reply && (
+        {chatState?.type === 'reply' && (
           <Stack paddingLeft={4} paddingBottom={4}>
             <Reply
               type="text"
               name="Alisher"
               src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
-              onClose={() => {
-                console.log('close')
-              }}
+              onClose={() => chatDispatch({ type: 'cancel' })}
             />
           </Stack>
         )}
@@ -80,7 +81,7 @@ const Composer = (props: Props) => {
           placeholder="Type something..."
           px={0}
           borderWidth={0}
-          blurred={isBlurred}
+          blurred={blur}
           onBlur={() => setIsFocused(false)}
           onFocus={() => setIsFocused(true)}
           onChangeText={setText}
