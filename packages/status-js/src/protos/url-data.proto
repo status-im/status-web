@@ -1,6 +1,9 @@
+// todo?: rename to url.proto
 syntax = "proto3";
 
 // todo?: define/specify/lock as subset of CommunityDescription and ContactCodeAdvertisement protobufs
+// todo?: add timestamp
+// todo?: add permission
 message Community {
  string display_name = 1;
  string description = 2;
@@ -25,7 +28,14 @@ message User {
 // todo?: remove since checksum was dropped; use CommunityURLData instead
 // todo?: add timestamp
 // todo?: ensure deterministic signing with (json) serialization; https://github.com/bufbuild/protobuf-es/issues/251
+// todo?: use link keyword
 message URLData {
  // Community, Channel, or User
  bytes content = 1;
+}
+
+message URLProps {
+	string encoded_url_data = 1;
+	// Signature of compressed and encoded URL data
+	bytes signature = 2;
 }

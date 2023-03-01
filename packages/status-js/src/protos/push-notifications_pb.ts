@@ -6,6 +6,7 @@
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
 import { ChatIdentity } from "./chat-identity_pb.js";
+import { URLProps } from "./url-data_pb.js";
 
 /**
  * @generated from message PushNotificationRegistration
@@ -249,6 +250,11 @@ export class ContactCodeAdvertisement extends Message<ContactCodeAdvertisement> 
    */
   chatIdentity?: ChatIdentity;
 
+  /**
+   * @generated from field: URLProps url_props = 3;
+   */
+  urlProps?: URLProps;
+
   constructor(data?: PartialMessage<ContactCodeAdvertisement>) {
     super();
     proto3.util.initPartial(data, this);
@@ -259,6 +265,7 @@ export class ContactCodeAdvertisement extends Message<ContactCodeAdvertisement> 
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "push_notification_info", kind: "message", T: PushNotificationQueryInfo, repeated: true },
     { no: 2, name: "chat_identity", kind: "message", T: ChatIdentity },
+    { no: 3, name: "url_props", kind: "message", T: URLProps },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ContactCodeAdvertisement {

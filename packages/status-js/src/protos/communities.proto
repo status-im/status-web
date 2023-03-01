@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "chat-identity.proto";
+import "url-data.proto";
 
 message Grant {
   bytes community_id = 1;
@@ -47,6 +48,8 @@ message CommunityDescription {
   string outro_message = 12;
   bool encrypted = 13;
   repeated string tags = 14;
+  // todo?: store whole url instead
+  URLProps url_props = 15;
 }
 
 message CommunityAdminSettings {
@@ -59,6 +62,7 @@ message CommunityChat {
   ChatIdentity identity = 3;
   string category_id = 4;
   int32 position = 5;
+  URLProps url_props = 6;
 }
 
 message CommunityCategory {
