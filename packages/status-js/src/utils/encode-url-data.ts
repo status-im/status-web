@@ -5,6 +5,7 @@ import { Channel, Community, URLData, User } from '../protos/url-data_pb'
 
 import type { PlainMessage } from '@bufbuild/protobuf'
 
+// todo?: uppercase URL
 export function encodeCommunityUrlData(data: PlainMessage<Community>): string {
   return encodeUrlData(new Community(data).toBinary())
 }
