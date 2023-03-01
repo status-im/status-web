@@ -36,6 +36,6 @@ message URLData {
 
 message URLProps {
 	string encoded_url_data = 1;
-	// Signature of compressed and encoded URL data
-	bytes signature = 2;
+	// Signature of encoded URL data
+	string encoded_signature = 2;
 }

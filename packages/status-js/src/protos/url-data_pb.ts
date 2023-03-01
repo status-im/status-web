@@ -231,11 +231,11 @@ export class URLProps extends Message<URLProps> {
   encodedUrlData = "";
 
   /**
-   * Signature of compressed and encoded URL data
+   * Signature of encoded URL data
    *
-   * @generated from field: bytes signature = 2;
+   * @generated from field: string encoded_signature = 2;
    */
-  signature = new Uint8Array(0);
+  encodedSignature = "";
 
   constructor(data?: PartialMessage<URLProps>) {
     super();
@@ -246,7 +246,7 @@ export class URLProps extends Message<URLProps> {
   static readonly typeName = "URLProps";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "encoded_url_data", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "signature", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
+    { no: 2, name: "encoded_signature", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): URLProps {
