@@ -7,6 +7,7 @@ import {
 } from 'ethereum-cryptography/utils'
 
 import { compressPublicKey } from '../utils/compress-public-key'
+import { createUserUrl } from '../utils/create-url'
 import { generateUsername } from '../utils/generate-username'
 
 import type { Client } from './client'
@@ -22,6 +23,7 @@ export class Account {
   chatKey: string
   username: string
   membership: MembershipStatus
+  link: URL
 
   constructor(client: Client, initialAccount?: Account) {
     this.#client = client
@@ -35,8 +37,8 @@ export class Account {
     this.publicKey = bytesToHex(publicKey)
     this.chatKey = '0x' + compressPublicKey(this.publicKey)
     this.username = generateUsername('0x' + this.publicKey)
-
     this.membership = initialAccount ? initialAccount.membership : 'none'
+    this.link = createUserUrl(this.chatKey)
   }
 
   // sig must be a 65-byte compact ECDSA signature containing the recovery id as the last element.
