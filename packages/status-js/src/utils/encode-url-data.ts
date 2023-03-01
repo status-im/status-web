@@ -5,9 +5,13 @@ import { Channel, Community, URLData, User } from '../protos/url-data_pb'
 
 import type { PlainMessage } from '@bufbuild/protobuf'
 
+export type EncodedUrlData = string & { _: never }
+
 // todo?: uppercase URL
-export function encodeCommunityUrlData(data: PlainMessage<Community>): string {
-  return encodeUrlData(new Community(data).toBinary())
+export function encodeCommunityUrlData(
+  data: PlainMessage<Community>
+): EncodedUrlData {
+  return encodeUrlData(new Community(data).toBinary()) as EncodedUrlData
 }
 
 export function decodeCommunityUrlData(data: string): PlainMessage<Community> {
@@ -18,8 +22,10 @@ export function decodeCommunityUrlData(data: string): PlainMessage<Community> {
   return { ...community }
 }
 
-export function encodeChannelUrlData(data: PlainMessage<Channel>): string {
-  return encodeUrlData(new Channel(data).toBinary())
+export function encodeChannelUrlData(
+  data: PlainMessage<Channel>
+): EncodedUrlData {
+  return encodeUrlData(new Channel(data).toBinary()) as EncodedUrlData
 }
 
 export function decodeChannelUrlData(data: string): PlainMessage<Channel> {
@@ -33,8 +39,8 @@ export function decodeChannelUrlData(data: string): PlainMessage<Channel> {
   }
 }
 
-export function encodeUserUrlData(data: PlainMessage<User>) {
-  return encodeUrlData(new User(data).toBinary())
+export function encodeUserUrlData(data: PlainMessage<User>): EncodedUrlData {
+  return encodeUrlData(new User(data).toBinary()) as EncodedUrlData
 }
 
 export function decodeUserUrlData(data: string) {

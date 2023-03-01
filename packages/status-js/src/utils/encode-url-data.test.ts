@@ -9,7 +9,7 @@ import {
   encodeUserUrlData,
 } from './encode-url-data'
 
-describe('URL data', () => {
+describe('Encode URL data', () => {
   test('should encode and decode community', () => {
     const data = {
       displayName: 'Lorem ipsum dolor sit egestas.',
