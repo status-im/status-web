@@ -241,8 +241,7 @@ class PreviewClient {
         if (
           !isClockValid(
             BigInt(decodedContactCode.chatIdentity.clock),
-            // todo: check
-            wakuMessage.timestamp!
+            message.timestamp
           )
         ) {
           return
