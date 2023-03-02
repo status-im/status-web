@@ -1,4 +1,4 @@
-import type { ContactCodeAdvertisement } from '../proto/communities/v1/push_notifications'
+import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
 
 export type UserPreview = {
   photo?: Uint8Array

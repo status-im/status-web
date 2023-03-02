@@ -1,7 +1,7 @@
 // todo?: rename to map-commuinty-details and use in client.ts too
 import { tags as tagsMap } from './tags'
 
-import type { CommunityDescription } from '../proto/communities/v1/communities'
+import type { CommunityDescription } from '../protos/communities_pb'
 
 export type CommunityPreview = {
   banner?: Uint8Array

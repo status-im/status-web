@@ -3,7 +3,7 @@ import { mapCommunityPreview } from './map-community-preview'
 import type {
   CommunityChat,
   CommunityDescription,
-} from '../proto/communities/v1/communities'
+} from '../protos/communities_pb'
 import type { CommunityPreview } from './map-community-preview'
 
 export type CommunityChatPreview = {
