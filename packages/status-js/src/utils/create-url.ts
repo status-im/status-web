@@ -25,25 +25,19 @@ export function createCommunityUrl(
 export function createChannelUrl(
   ...args:
     | [channelUuid: string, communityPublicKey: string]
-    | [
-        channelUuid: string,
-        encodedChannelUrlData: string,
-        signature: Uint8Array
-      ]
+    | [encodedChannelUrlData: string, signature: Uint8Array]
 ): URL {
-  const channelUuid = args[0]
-  const signature = args[2]
+  const signature = args[1]
 
-  if (signature) {
-    const encodedChannelUrlData = args[1]
+  if (signature instanceof Uint8Array) {
+    const encodedChannelUrlData = args[0]
 
     return new URL(
-      `${BASE_URL}/cc/${channelUuid}/${encodedChannelUrlData}#${base64url.encode(
-        signature
-      )}`
+      `${BASE_URL}/cc/${encodedChannelUrlData}#${base64url.encode(signature)}`
     )
   }
 
+  const channelUuid = args[0]
   const communityPublicKey = args[1]
 
   return new URL(`${BASE_URL}/cc/${channelUuid}#${communityPublicKey}`)

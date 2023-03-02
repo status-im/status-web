@@ -102,6 +102,11 @@ export class Channel extends Message<Channel> {
    */
   community?: Community;
 
+  /**
+   * @generated from field: string uuid = 6;
+   */
+  uuid = "";
+
   constructor(data?: PartialMessage<Channel>) {
     super();
     proto3.util.initPartial(data, this);
@@ -115,6 +120,7 @@ export class Channel extends Message<Channel> {
     { no: 3, name: "emoji", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 4, name: "color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "community", kind: "message", T: Community },
+    { no: 6, name: "uuid", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Channel {

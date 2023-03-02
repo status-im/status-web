@@ -36,6 +36,7 @@ describe('Encode URL data', () => {
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
       color: '#EAB700',
+      uuid: '30804ea7-bd66-4d5d-91eb-b2dcfe2515b3',
       community: {
         displayName: 'Lorem ipsum dolor sit egestas.',
         description:
@@ -50,7 +51,7 @@ describe('Encode URL data', () => {
     const decodedData = decodeChannelUrlData(encodedData)
 
     expect(encodedData).toBe(
-      'G5cBYKwObLc59IJgR2IwXKGsXvEdnfuiA_pFCzdvZBMpLBpH2mheSGW6ScJPfV5d_IP03bjwTYCS0q5oiupgpmFUbIimyo2RTo6_A1tblFhg-JZAgnlKuY2B4zj1KLSLFGgo8Nics-g-OUszWpmClKvAoUcQGxwNyGT88OViMRjpkKZbz6Org0OjXnHuj5EHyxZaKl4NISR7EiXGcmKIORmQB_svznCBNbWKyPxWvDyhd46c9Ss_bb3_XbICA2bfhAuHyeoH0Y1BDR7sa0E_aaZ8ztw2Wc7HMKEM'
+      'G70BYJwHdqxloHnQV-SSlY7OfdEB_f8igUIHtomMR1igUTaaRSFVBhJ-mjSn8BPqdBHk0PiHrEsBk8WBTo6_gK0tSiwQDLCWpwnmKeU2Bo7j005CuygCCwWebictMe-XLrHfyPEUmLllOKoRCBtcLDALSYQvF5NCoieM550vx-sAmlmSK871edYL67bCK-PPYghGByWEGNMFs9lOIoFx2H_mJDkNNs9bYsbbaRl_uoStzrokUn0u578yAg16mYwLh-287482y4Ibg9640rAW9JNkrfwstJ2qbLLXJ2CYUOa5ftZlFZk2TnzTxIGvfdznZLVXePelos5rWwI='
     )
     expect(decodedData).toEqual(data)
   })
