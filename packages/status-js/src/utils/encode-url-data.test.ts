@@ -17,13 +17,14 @@ describe('Encode URL data', () => {
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
       membersCount: 1_000_000,
       color: '#4360DF',
+      tagIndices: [1, 2, 3, 4],
     }
 
     const encodedData = encodeCommunityUrlData(data)
     const decodedData = decodeCommunityUrlData(encodedData)
 
     expect(encodedData).toBe(
-      'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA='
+      'G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi'
     )
     expect(decodedData).toEqual(data)
   })
@@ -41,6 +42,7 @@ describe('Encode URL data', () => {
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non dui vitae augue elementum laoreet ac pharetra odio. Morbi vestibulum.',
         membersCount: 1_000_000,
         color: '#4360DF',
+        tagIndices: [1, 2, 3, 4],
       },
     }
 
@@ -48,7 +50,7 @@ describe('Encode URL data', () => {
     const decodedData = decodeChannelUrlData(encodedData)
 
     expect(encodedData).toBe(
-      'G5EBYCwOMrkec8PbsvkGVxRnInqDN3deAUebRefR-VRkKX2Lwov4MpDwMxkfQRPD49F0k4Sf-ry6-Afpu3HhmwAlpZ1Ojr8DW1uUWCAYYC2BBPOUchsDx3HqUWgXZfSxrjPnLLpPztKMUqbA5QIbjyA2OBqQyfjhy8ViMNIhTbeeR1cHh0a94twfIw-WLbRUvBpCSPYkSozlxBBzMiAP9l-c4QJrahWt-a14eULvHDnr13hu-7cAPSZdhQuX5KrK8tCyzB3qBTf2taCfNIs_d5HkynMDq6wB'
+      'G5cBYKwObLc59IJgR2IwXKGsXvEdnfuiA_pFCzdvZBMpLBpH2mheSGW6ScJPfV5d_IP03bjwTYCS0q5oiupgpmFUbIimyo2RTo6_A1tblFhg-JZAgnlKuY2B4zj1KLSLFGgo8Nics-g-OUszWpmClKvAoUcQGxwNyGT88OViMRjpkKZbz6Org0OjXnHuj5EHyxZaKl4NISR7EiXGcmKIORmQB_svznCBNbWKyPxWvDyhd46c9Ss_bb3_XbICA2bfhAuHyeoH0Y1BDR7sa0E_aaZ8ztw2Wc7HMKEM'
     )
     expect(decodedData).toEqual(data)
   })

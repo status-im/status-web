@@ -36,6 +36,11 @@ export class Community extends Message<Community> {
    */
   color = "";
 
+  /**
+   * @generated from field: repeated uint32 tag_indices = 5;
+   */
+  tagIndices: number[] = [];
+
   constructor(data?: PartialMessage<Community>) {
     super();
     proto3.util.initPartial(data, this);
@@ -48,6 +53,7 @@ export class Community extends Message<Community> {
     { no: 2, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 3, name: "members_count", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
     { no: 4, name: "color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: "tag_indices", kind: "scalar", T: 13 /* ScalarType.UINT32 */, repeated: true },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Community {

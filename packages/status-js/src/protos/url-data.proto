@@ -9,6 +9,7 @@ message Community {
  string description = 2;
  uint32 members_count = 3;
  string color = 4;
+ repeated uint32 tag_indices = 5;
 }
 
 message Channel {
