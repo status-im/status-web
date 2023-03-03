@@ -5,8 +5,18 @@
     "*.css"
   ],
   "private": true,
-  "types": "src/index.tsx",
-  "main": "src/index.tsx",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "types",
     "dist"
