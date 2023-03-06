@@ -41,11 +41,13 @@
   "peerDependencies": {
     "react": "^16.x || ^17.x || ^18.x",
     "react-dom": "*",
-    "react-native-svg": ">=12"
+    "react-native-svg": ">=12",
+    "tamagui": "1.0.15"
   },
   "devDependencies": {
     "@svgr/cli": "^6.5.1",
     "@svgr/core": "^6.5.1",
+    "tamagui": "1.0.15",
     "vite": "^4.0.4"
   }
 }
