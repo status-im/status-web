@@ -44,6 +44,7 @@
     "@tamagui/animations-css": "1.0.15",
     "@tamagui/animations-react-native": "1.0.15",
     "@tamagui/core": "1.0.15",
+    "@tamagui/focusable": "^1.6.3",
     "@tamagui/font-inter": "1.0.15",
     "@tamagui/react-native-media-driver": "1.0.15",
     "@tamagui/shorthands": "1.0.15",
