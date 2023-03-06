@@ -31,6 +31,7 @@
     "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^1.1.0",
     "ethereum-cryptography": "^1.0.3",
     "js-waku": "^0.30.0",
     "long": "^5.2.0",
