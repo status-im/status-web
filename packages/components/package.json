@@ -50,6 +50,7 @@
     "@tamagui/shorthands": "1.0.15",
     "@tamagui/theme-base": "1.0.15",
     "expo-blur": "~12.0.1",
+    "expo-linear-gradient": "^12.1.1",
     "tamagui": "1.0.15"
   },
   "devDependencies": {
