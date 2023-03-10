@@ -14,12 +14,13 @@ export function encodeCommunityUrlData(
   return encodeUrlData(new Community(data).toBinary()) as EncodedUrlData
 }
 
+// note: PlainMessage<T> type does not ensure returning of only own properties
 export function decodeCommunityUrlData(data: string): PlainMessage<Community> {
   const deserialized = decodeUrlData(data)
-  const community = Community.fromBinary(deserialized.content)
 
-  // note: PlainMessage<T> type does not ensure returning of only own properties
-  return { ...community }
+  return Community.fromBinary(
+    deserialized.content
+  ).toJson() as PlainMessage<Community>
 }
 
 export function encodeChannelUrlData(
@@ -30,24 +31,20 @@ export function encodeChannelUrlData(
 
 export function decodeChannelUrlData(data: string): PlainMessage<Channel> {
   const deserialized = decodeUrlData(data)
-  const channel = Channel.fromBinary(deserialized.content)
-  const community = channel.community
 
-  return {
-    ...channel,
-    ...(community && { community: { ...community } }),
-  }
+  return Channel.fromBinary(
+    deserialized.content
+  ).toJson() as PlainMessage<Channel>
 }
 
 export function encodeUserUrlData(data: PlainMessage<User>): EncodedUrlData {
   return encodeUrlData(new User(data).toBinary()) as EncodedUrlData
 }
 
-export function decodeUserUrlData(data: string) {
+export function decodeUserUrlData(data: string): PlainMessage<User> {
   const deserialized = decodeUrlData(data)
-  const user = User.fromBinary(deserialized.content)
 
-  return { ...user }
+  return User.fromBinary(deserialized.content).toJson() as PlainMessage<User>
 }
 
 function encodeUrlData(data: Uint8Array): string {
