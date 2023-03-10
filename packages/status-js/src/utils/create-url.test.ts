@@ -9,7 +9,7 @@ import {
   createUserURLWithSignature,
 } from './create-url'
 
-describe('URL', () => {
+describe('Create URLs', () => {
   test('should create community URL', () => {
     expect(
       createCommunityURLWithPublicKey(
