@@ -66,7 +66,6 @@ export class Chat {
   #previousFetchedStartTime?: Date
   #oldestFetchedMessage?: FetchedMessage
   public readonly messageCallbacks: Set<(messages: ChatMessage[]) => void>
-  public link: URL
 
   constructor(options: {
     client: Client
@@ -95,10 +94,6 @@ export class Chat {
     this.#deleteEvents = new Map()
     this.#isActive = false
     this.messageCallbacks = new Set()
-    this.link = createChannelURLWithPublicKey(
-      this.uuid,
-      this.client.community.publicKey
-    )
   }
 
   public static create = async (
@@ -157,6 +152,13 @@ export class Chat {
 
   public getMessage = (id: string) => {
     return this.#messages.get(id)
+  }
+
+  public get link(): URL {
+    return createChannelURLWithPublicKey(
+      this.uuid,
+      this.client.community.publicKey
+    )
   }
 
   public onChange = (callback: (description: CommunityChat) => void) => {

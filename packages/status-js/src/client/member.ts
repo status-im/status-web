@@ -10,14 +10,15 @@ export class Member {
   chatKey: string
   username: string
   colorHash: ColorHash
-  link: URL
 
   constructor(publicKey: string) {
     this.publicKey = publicKey
     this.chatKey = '0x' + compressPublicKey(publicKey)
     this.username = generateUsername(publicKey)
     this.colorHash = publicKeyToColorHash(publicKey)
-    // todo?: use getter
-    this.link = createUserURLWithPublicKey(this.chatKey)
+  }
+
+  public get link(): URL {
+    return createUserURLWithPublicKey(this.chatKey)
   }
 }
