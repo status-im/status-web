@@ -30,11 +30,11 @@ import type { UserPreview } from './map-user-preview'
 import type { WakuLight } from 'js-waku/lib/interfaces'
 import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
 
-export interface PreviewClientOptions {
+export interface RequestClientOptions {
   environment?: 'production' | 'test'
 }
 
-class PreviewClient {
+class RequestClient {
   public waku: WakuLight
   /** Cache. */
   public readonly wakuMessages: Set<string>
@@ -44,11 +44,11 @@ class PreviewClient {
     this.wakuMessages = new Set()
   }
 
-  static async start(options: PreviewClientOptions): Promise<PreviewClient> {
+  static async start(options: RequestClientOptions): Promise<RequestClient> {
     const { environment = 'production' } = options
 
     let waku: WakuLight | undefined
-    let previewClient: PreviewClient | undefined
+    let client: RequestClient | undefined
 
     try {
       // Waku
@@ -68,11 +68,10 @@ class PreviewClient {
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
 
-      // Preview Client
-      previewClient = new PreviewClient(waku)
+      client = new RequestClient(waku)
     } catch (error) {
-      if (previewClient) {
-        await previewClient.stop()
+      if (client) {
+        await client.stop()
       } else if (waku) {
         await waku.stop()
       }
@@ -80,7 +79,7 @@ class PreviewClient {
       throw error
     }
 
-    return previewClient
+    return client
   }
 
   public async stop() {
@@ -331,12 +330,10 @@ class PreviewClient {
   }
 }
 
-export async function createPreviewClient(
-  options: PreviewClientOptions
-): Promise<PreviewClient> {
-  const previewClient = await PreviewClient.start(options)
-
-  return previewClient
+export async function createRequestClient(
+  options: RequestClientOptions
+): Promise<RequestClient> {
+  return await RequestClient.start(options)
 }
 
-export type { PreviewClient }
+export type { RequestClient }
