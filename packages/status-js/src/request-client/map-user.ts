@@ -9,7 +9,6 @@ export type UserInfo = {
   emojiHash: string
   socialUrls: Array<{
     url: string
-    // todo?: map fixed (e.g. telegram) and custom
     text: string
   }>
   // todo: currently not in protobuf nor in product

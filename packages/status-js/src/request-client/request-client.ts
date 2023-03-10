@@ -129,7 +129,6 @@ class RequestClient {
     return mapUser(contactCodeAdvertisement, publicKey)
   }
 
-  // todo?: rename to fetchCommunityDetails/Info/Meta/Props
   private fetchCommunityDescription = async (
     /** Uncompressed */
     publicKey: string
@@ -235,7 +234,6 @@ class RequestClient {
           return
         }
 
-        // todo!: report js-waku abort logic
         if (!contactCodeAdvertisement) {
           contactCodeAdvertisement = decodedContactCode
         }
