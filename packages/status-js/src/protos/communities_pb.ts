@@ -285,8 +285,6 @@ export class CommunityDescription extends Message<CommunityDescription> {
   tags: string[] = [];
 
   /**
-   * todo?: store whole url instead
-   *
    * @generated from field: URLProps url_props = 15;
    */
   urlProps?: URLProps;

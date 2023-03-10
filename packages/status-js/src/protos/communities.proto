@@ -48,7 +48,6 @@ message CommunityDescription {
   string outro_message = 12;
   bool encrypted = 13;
   repeated string tags = 14;
-  // todo?: store whole url instead
   URLProps url_props = 15;
 }
 

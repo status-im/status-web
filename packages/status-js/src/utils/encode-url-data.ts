@@ -7,7 +7,6 @@ import type { PlainMessage } from '@bufbuild/protobuf'
 
 export type EncodedURLData = string & { _: 'EncodedURLData' }
 
-// todo?: uppercase URL
 export function encodeCommunityURLData(
   data: PlainMessage<Community>
 ): EncodedURLData {
@@ -52,8 +51,6 @@ function encodeURLData(data: Uint8Array): string {
     content: data,
   }).toBinary()
   const compressed = brotliCompressSync(serialized)
-  // todo?!: remove padding
-  // todo?!: split into 301 chars chunks with a semicolon separator
   const encoded = base64url.encode(compressed)
 
   return encoded
