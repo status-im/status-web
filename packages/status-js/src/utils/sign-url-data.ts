@@ -8,9 +8,9 @@ export async function signEncodedURLData(
   encodedURLData: EncodedURLData,
   privateKey: Uint8Array | string
 ): Promise<string> {
-  const signatrue = await signData(encodedURLData, privateKey)
+  const signature = await signData(encodedURLData, privateKey)
 
-  return base64url.encode(signatrue)
+  return base64url.encode(signature)
 }
 
 export function verifyEncodedURLData(
