@@ -1,18 +1,18 @@
 import { describe, expect, test } from 'vitest'
 
-import { createChannelUrl, createCommunityUrl } from './create-url'
+import { createChannelURL, createCommunityURL } from './create-url'
 
 describe('URL', () => {
   test('should create community URL', () => {
     expect(
-      createCommunityUrl(
+      createCommunityURL(
         'zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
       ).toString()
     ).toBe(
       'https://status.app/c#zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
     )
     expect(
-      createCommunityUrl(
+      createCommunityURL(
         'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=',
         new Uint8Array([
           94, 52, 162, 140, 177, 216, 189, 16, 47, 100, 230, 195, 33, 131, 3,
@@ -29,7 +29,7 @@ describe('URL', () => {
 
   test('should create channel URL', () => {
     expect(
-      createChannelUrl(
+      createChannelURL(
         '30804ea7-bd66-4d5d-91eb-b2dcfe2515b3',
         'zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
       ).toString()
@@ -37,7 +37,7 @@ describe('URL', () => {
       'https://status.app/cc/30804ea7-bd66-4d5d-91eb-b2dcfe2515b3#zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
     )
     expect(
-      createChannelUrl(
+      createChannelURL(
         'G70BYJwHdqxloHnQV-SSlY7OfdEB_f8igUIHtomMR1igUTaaRSFVBhJ-mjSn8BPqdBHk0PiHrEsBk8WBTo6_gK0tSiwQDLCWpwnmKeU2Bo7j005CuygCCwWebictMe-XLrHfyPEUmLllOKoRCBtcLDALSYQvF5NCoieM550vx-sAmlmSK871edYL67bCK-PPYghGByWEGNMFs9lOIoFx2H_mJDkNNs9bYsbbaRl_uoStzrokUn0u578yAg16mYwLh-287482y4Ibg9640rAW9JNkrfwstJ2qbLLXJ2CYUOa5ftZlFZk2TnzTxIGvfdznZLVXePelos5rWwI=',
         new Uint8Array([
           94, 52, 162, 140, 177, 216, 189, 16, 47, 100, 230, 195, 33, 131, 3,

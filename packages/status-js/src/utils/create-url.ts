@@ -2,18 +2,18 @@ import { base64url } from '@scure/base'
 
 const BASE_URL = 'https://status.app'
 
-export function createCommunityUrl(
+export function createCommunityURL(
   ...args:
     | [publicKey: string]
-    | [encodedCommunityUrlData: string, signature: Uint8Array]
+    | [encodedCommunityURLData: string, signature: Uint8Array]
 ): URL {
   const signature = args[1]
 
   if (signature) {
-    const encodedCommunityUrlData = args[0]
+    const encodedCommunityURLData = args[0]
 
     return new URL(
-      `${BASE_URL}/c/${encodedCommunityUrlData}#${base64url.encode(signature)}`
+      `${BASE_URL}/c/${encodedCommunityURLData}#${base64url.encode(signature)}`
     )
   }
 
@@ -22,18 +22,18 @@ export function createCommunityUrl(
   return new URL(`${BASE_URL}/c#${publicKey}`)
 }
 
-export function createChannelUrl(
+export function createChannelURL(
   ...args:
     | [channelUuid: string, communityPublicKey: string]
-    | [encodedChannelUrlData: string, signature: Uint8Array]
+    | [encodedChannelURLData: string, signature: Uint8Array]
 ): URL {
   const signature = args[1]
 
   if (signature instanceof Uint8Array) {
-    const encodedChannelUrlData = args[0]
+    const encodedChannelURLData = args[0]
 
     return new URL(
-      `${BASE_URL}/cc/${encodedChannelUrlData}#${base64url.encode(signature)}`
+      `${BASE_URL}/cc/${encodedChannelURLData}#${base64url.encode(signature)}`
     )
   }
 
@@ -43,16 +43,16 @@ export function createChannelUrl(
   return new URL(`${BASE_URL}/cc/${channelUuid}#${communityPublicKey}`)
 }
 
-export function createUserUrl(
-  ...args: [publicKey: string] | [encodedUrlData: string, signature: Uint8Array]
+export function createUserURL(
+  ...args: [publicKey: string] | [encodedURLData: string, signature: Uint8Array]
 ): URL {
   const signature = args[1]
 
   if (signature) {
-    const encodedUrlData = args[0]
+    const encodedURLData = args[0]
 
     return new URL(
-      `${BASE_URL}/u/${encodedUrlData}#${base64url.encode(signature)}`
+      `${BASE_URL}/u/${encodedURLData}#${base64url.encode(signature)}`
     )
   }
 

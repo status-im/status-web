@@ -5,49 +5,49 @@ import { Channel, Community, URLData, User } from '../protos/url-data_pb'
 
 import type { PlainMessage } from '@bufbuild/protobuf'
 
-export type EncodedUrlData = string & { _: never }
+export type EncodedURLData = string & { _: never }
 
 // todo?: uppercase URL
-export function encodeCommunityUrlData(
+export function encodeCommunityURLData(
   data: PlainMessage<Community>
-): EncodedUrlData {
-  return encodeUrlData(new Community(data).toBinary()) as EncodedUrlData
+): EncodedURLData {
+  return encodeURLData(new Community(data).toBinary()) as EncodedURLData
 }
 
 // note: PlainMessage<T> type does not ensure returning of only own properties
-export function decodeCommunityUrlData(data: string): PlainMessage<Community> {
-  const deserialized = decodeUrlData(data)
+export function decodeCommunityURLData(data: string): PlainMessage<Community> {
+  const deserialized = decodeURLData(data)
 
   return Community.fromBinary(
     deserialized.content
   ).toJson() as PlainMessage<Community>
 }
 
-export function encodeChannelUrlData(
+export function encodeChannelURLData(
   data: PlainMessage<Channel>
-): EncodedUrlData {
-  return encodeUrlData(new Channel(data).toBinary()) as EncodedUrlData
+): EncodedURLData {
+  return encodeURLData(new Channel(data).toBinary()) as EncodedURLData
 }
 
-export function decodeChannelUrlData(data: string): PlainMessage<Channel> {
-  const deserialized = decodeUrlData(data)
+export function decodeChannelURLData(data: string): PlainMessage<Channel> {
+  const deserialized = decodeURLData(data)
 
   return Channel.fromBinary(
     deserialized.content
   ).toJson() as PlainMessage<Channel>
 }
 
-export function encodeUserUrlData(data: PlainMessage<User>): EncodedUrlData {
-  return encodeUrlData(new User(data).toBinary()) as EncodedUrlData
+export function encodeUserURLData(data: PlainMessage<User>): EncodedURLData {
+  return encodeURLData(new User(data).toBinary()) as EncodedURLData
 }
 
-export function decodeUserUrlData(data: string): PlainMessage<User> {
-  const deserialized = decodeUrlData(data)
+export function decodeUserURLData(data: string): PlainMessage<User> {
+  const deserialized = decodeURLData(data)
 
   return User.fromBinary(deserialized.content).toJson() as PlainMessage<User>
 }
 
-function encodeUrlData(data: Uint8Array): string {
+function encodeURLData(data: Uint8Array): string {
   const serialized = new URLData({
     content: data,
   }).toBinary()
@@ -59,7 +59,7 @@ function encodeUrlData(data: Uint8Array): string {
   return encoded
 }
 
-function decodeUrlData(data: string): URLData {
+function decodeURLData(data: string): URLData {
   const decoded = base64url.decode(data)
   const decompressed = brotliDecompressSync(decoded)
   const deserialized = URLData.fromBinary(decompressed)

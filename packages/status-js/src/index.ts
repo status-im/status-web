@@ -18,9 +18,9 @@ export type { RequestClient } from './request-client/request-client'
 export { createRequestClient } from './request-client/request-client'
 export { deserializePublicKey } from './utils/deserialize-public-key'
 export {
-  decodeChannelUrlData,
-  decodeCommunityUrlData,
-  decodeUserUrlData,
+  decodeChannelURLData,
+  decodeCommunityURLData,
+  decodeUserURLData,
 } from './utils/encode-url-data'
 export { publicKeyToEmojiHash } from './utils/public-key-to-emoji-hash'
-export { verifyEncodedUrlData } from './utils/sign-url-data'
+export { verifyEncodedURLData } from './utils/sign-url-data'

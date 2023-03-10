@@ -1,8 +1,8 @@
 import { describe, expect, test } from 'vitest'
 
-import { signEncodedUrlData, verifyEncodedUrlData } from './sign-url-data'
+import { signEncodedURLData, verifyEncodedURLData } from './sign-url-data'
 
-import type { EncodedUrlData } from './encode-url-data'
+import type { EncodedURLData } from './encode-url-data'
 
 describe('Sign URL data', () => {
   const privateKey = new Uint8Array([
@@ -11,14 +11,14 @@ describe('Sign URL data', () => {
   ])
 
   test('should sign and verify URL data', async () => {
-    const encodedUrlData =
-      'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=' as EncodedUrlData
+    const encodedURLData =
+      'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=' as EncodedURLData
 
-    const signature = await signEncodedUrlData(encodedUrlData, privateKey)
+    const signature = await signEncodedURLData(encodedURLData, privateKey)
 
     expect(signature).toBe(
       'k-n7d-9Pcx6ht87F4riP5xAw1v7S-e1HGMRaeaO068Q3IF1Jo8xOyeMT9Yr3Wv349Z2CdBzylw8M83CgQhcMogA='
     )
-    expect(verifyEncodedUrlData(signature, encodedUrlData)).toBe(true)
+    expect(verifyEncodedURLData(signature, encodedURLData)).toBe(true)
   })
 })

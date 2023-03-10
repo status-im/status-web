@@ -1,12 +1,12 @@
 import { describe, expect, test } from 'vitest'
 
 import {
-  decodeChannelUrlData,
-  decodeCommunityUrlData,
-  decodeUserUrlData,
-  encodeChannelUrlData,
-  encodeCommunityUrlData,
-  encodeUserUrlData,
+  decodeChannelURLData,
+  decodeCommunityURLData,
+  decodeUserURLData,
+  encodeChannelURLData,
+  encodeCommunityURLData,
+  encodeUserURLData,
 } from './encode-url-data'
 
 describe('Encode URL data', () => {
@@ -20,8 +20,8 @@ describe('Encode URL data', () => {
       tagIndices: [1, 2, 3, 4],
     }
 
-    const encodedData = encodeCommunityUrlData(data)
-    const decodedData = decodeCommunityUrlData(encodedData)
+    const encodedData = encodeCommunityURLData(data)
+    const decodedData = decodeCommunityURLData(encodedData)
 
     expect(encodedData).toBe(
       'G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi'
@@ -47,8 +47,8 @@ describe('Encode URL data', () => {
       },
     }
 
-    const encodedData = encodeChannelUrlData(data)
-    const decodedData = decodeChannelUrlData(encodedData)
+    const encodedData = encodeChannelURLData(data)
+    const decodedData = decodeChannelURLData(encodedData)
 
     expect(encodedData).toBe(
       'G70BYJwHdqxloHnQV-SSlY7OfdEB_f8igUIHtomMR1igUTaaRSFVBhJ-mjSn8BPqdBHk0PiHrEsBk8WBTo6_gK0tSiwQDLCWpwnmKeU2Bo7j005CuygCCwWebictMe-XLrHfyPEUmLllOKoRCBtcLDALSYQvF5NCoieM550vx-sAmlmSK871edYL67bCK-PPYghGByWEGNMFs9lOIoFx2H_mJDkNNs9bYsbbaRl_uoStzrokUn0u578yAg16mYwLh-287482y4Ibg9640rAW9JNkrfwstJ2qbLLXJ2CYUOa5ftZlFZk2TnzTxIGvfdznZLVXePelos5rWwI='
@@ -64,8 +64,8 @@ describe('Encode URL data', () => {
       color: '#EAB700',
     }
 
-    const encodedData = encodeUserUrlData(data)
-    const decodedData = decodeUserUrlData(encodedData)
+    const encodedData = encodeUserURLData(data)
+    const decodedData = decodeUserURLData(encodedData)
 
     expect(encodedData).toBe(
       'GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg=='
