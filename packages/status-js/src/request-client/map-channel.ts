@@ -1,30 +1,27 @@
-import { mapCommunityPreview } from './map-community-preview'
+import { mapCommunity } from './map-community'
 
 import type {
   CommunityChat,
   CommunityDescription,
 } from '../protos/communities_pb'
-import type { CommunityPreview } from './map-community-preview'
+import type { CommunityInfo } from './map-community'
 
-export type CommunityChatPreview = {
+export type ChannelInfo = {
   emoji?: string
   displayName: string
   description: string
   appUrl: string
   color: string
-  community: CommunityPreview
+  community: CommunityInfo
 }
 
-export function mapCommunityChatPreview(
+export function mapChannel(
   communityChat: CommunityChat,
   communityDescription: CommunityDescription,
   communityPublicKey: string,
   communityChatUuid: string
-): CommunityChatPreview | undefined {
-  const community = mapCommunityPreview(
-    communityDescription,
-    communityPublicKey
-  )
+): ChannelInfo | undefined {
+  const community = mapCommunity(communityDescription, communityPublicKey)
 
   if (!community) {
     return
@@ -36,7 +33,7 @@ export function mapCommunityChatPreview(
     return
   }
 
-  const communityChatPreview: CommunityChatPreview = {
+  const channelInfo: ChannelInfo = {
     emoji: identity.emoji,
     displayName: identity.displayName,
     description: identity.description,
@@ -45,5 +42,5 @@ export function mapCommunityChatPreview(
     community,
   }
 
-  return communityChatPreview
+  return channelInfo
 }

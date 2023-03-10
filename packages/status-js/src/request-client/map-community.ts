@@ -1,9 +1,8 @@
-// todo?: rename to map-commuinty-details and use in client.ts too
 import { tags as tagsMap } from './tags'
 
 import type { CommunityDescription } from '../protos/communities_pb'
 
-export type CommunityPreview = {
+export type CommunityInfo = {
   banner?: Uint8Array
   photo?: Uint8Array
   displayName: string
@@ -17,24 +16,24 @@ export type CommunityPreview = {
   color: string
 }
 
-export function mapCommunityPreview(
+export function mapCommunity(
   communityDescription: CommunityDescription,
   communityPublicKey: string
-): CommunityPreview | undefined {
+): CommunityInfo | undefined {
   const { identity, tags, members } = communityDescription
 
   if (!identity) {
     return
   }
 
-  const communityPreview: CommunityPreview = {
+  const communityInfo: CommunityInfo = {
     banner: identity.images.banner?.payload,
     photo: identity.images.thumbnail?.payload,
     displayName: identity.displayName,
     description: identity.description,
     membersCount: Object.keys(members).length,
     appUrl: `status-im://c/${communityPublicKey}`,
-    tags: tags.reduce<CommunityPreview['tags']>((tags, nextTag) => {
+    tags: tags.reduce<CommunityInfo['tags']>((tags, nextTag) => {
       const emoji = tagsMap[nextTag as keyof typeof tagsMap]
 
       if (!emoji) {
@@ -51,5 +50,5 @@ export function mapCommunityPreview(
     color: identity.color,
   }
 
-  return communityPreview
+  return communityInfo
 }

@@ -1,4 +1,3 @@
-// todo?: rename to link-preview-client.ts
 import { bytesToHex } from 'ethereum-cryptography/utils'
 import { Protocols } from 'js-waku'
 import { createLightNode } from 'js-waku/lib/create_waku'
@@ -20,13 +19,13 @@ import { idToContentTopic } from '../utils/id-to-content-topic'
 import { isClockValid } from '../utils/is-clock-valid'
 import { payloadToId } from '../utils/payload-to-id'
 import { recoverPublicKey } from '../utils/recover-public-key'
-import { mapCommunityChatPreview } from './map-community-chat-preview'
-import { mapCommunityPreview } from './map-community-preview'
-import { mapUserPreview } from './map-user-preview'
+import { mapChannel } from './map-channel'
+import { mapCommunity } from './map-community'
+import { mapUser } from './map-user'
 
-import type { CommunityChatPreview } from './map-community-chat-preview'
-import type { CommunityPreview } from './map-community-preview'
-import type { UserPreview } from './map-user-preview'
+import type { ChannelInfo } from './map-channel'
+import type { CommunityInfo } from './map-community'
+import type { UserInfo } from './map-user'
 import type { WakuLight } from 'js-waku/lib/interfaces'
 import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
 
@@ -86,29 +85,24 @@ class RequestClient {
     await this.waku.stop()
   }
 
-  public fetchCommunityPreview = async (
+  public fetchCommunity = async (
     /** Uncompressed */
     publicKey: string
-  ): Promise<CommunityPreview | undefined> => {
+  ): Promise<CommunityInfo | undefined> => {
     const communityDescription = await this.fetchCommunityDescription(publicKey)
 
     if (!communityDescription) {
       return
     }
 
-    const communityPreview = mapCommunityPreview(
-      communityDescription,
-      publicKey
-    )
-
-    return communityPreview
+    return mapCommunity(communityDescription, publicKey)
   }
 
-  public fetchCommunityChatPreview = async (
+  public fetchChannel = async (
     /** Compressed */
     publicKey: string,
     uuid: string
-  ): Promise<CommunityChatPreview | undefined> => {
+  ): Promise<ChannelInfo | undefined> => {
     const communityDescription = await this.fetchCommunityDescription(publicKey)
 
     if (!communityDescription) {
@@ -117,20 +111,13 @@ class RequestClient {
 
     const communityChat = communityDescription.chats[uuid]
 
-    const communityChatPreview = mapCommunityChatPreview(
-      communityChat,
-      communityDescription,
-      publicKey,
-      uuid
-    )
-
-    return communityChatPreview
+    return mapChannel(communityChat, communityDescription, publicKey, uuid)
   }
 
-  public fetchUserPreview = async (
+  public fetchUser = async (
     /** Uncompressed */
     publicKey: string
-  ): Promise<UserPreview | undefined> => {
+  ): Promise<UserInfo | undefined> => {
     const contactCodeAdvertisement = await this.fetchContactCodeAdvertisement(
       publicKey
     )
@@ -139,9 +126,7 @@ class RequestClient {
       return
     }
 
-    const userPreview = mapUserPreview(contactCodeAdvertisement, publicKey)
-
-    return userPreview
+    return mapUser(contactCodeAdvertisement, publicKey)
   }
 
   // todo?: rename to fetchCommunityDetails/Info/Meta/Props

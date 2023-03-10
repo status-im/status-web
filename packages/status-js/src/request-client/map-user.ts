@@ -2,7 +2,7 @@ import { publicKeyToEmojiHash } from '../utils/public-key-to-emoji-hash'
 
 import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
 
-export type UserPreview = {
+export type UserInfo = {
   photo?: Uint8Array
   displayName: string
   description?: string
@@ -17,17 +17,17 @@ export type UserPreview = {
   // color: string
 }
 
-export function mapUserPreview(
+export function mapUser(
   contactCodeAdvertisement: ContactCodeAdvertisement,
   userPublicKey: string
-): UserPreview | undefined {
+): UserInfo | undefined {
   const { chatIdentity: identity } = contactCodeAdvertisement
 
   if (!identity) {
     return
   }
 
-  const userPreview: UserPreview = {
+  const userInfo: UserInfo = {
     photo: identity.images.thumbnail?.payload,
     displayName: identity.displayName,
     description: identity.description,
@@ -36,5 +36,5 @@ export function mapUserPreview(
     appUrl: `status-im://u/${userPublicKey}`,
   }
 
-  return userPreview
+  return userInfo
 }
