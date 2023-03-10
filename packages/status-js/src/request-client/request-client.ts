@@ -95,7 +95,7 @@ class RequestClient {
       return
     }
 
-    return mapCommunity(communityDescription, publicKey)
+    return mapCommunity(communityDescription)
   }
 
   public fetchChannel = async (
@@ -111,7 +111,7 @@ class RequestClient {
 
     const communityChat = communityDescription.chats[uuid]
 
-    return mapChannel(communityChat, communityDescription, publicKey, uuid)
+    return mapChannel(communityChat, communityDescription)
   }
 
   public fetchUser = async (

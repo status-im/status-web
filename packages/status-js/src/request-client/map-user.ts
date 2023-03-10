@@ -12,7 +12,6 @@ export type UserInfo = {
     // todo?: map fixed (e.g. telegram) and custom
     text: string
   }>
-  appUrl: string
   // todo: currently not in protobuf nor in product
   // color: string
 }
@@ -33,7 +32,6 @@ export function mapUser(
     description: identity.description,
     emojiHash: publicKeyToEmojiHash(userPublicKey),
     socialUrls: identity.socialLinks,
-    appUrl: `status-im://u/${userPublicKey}`,
   }
 
   return userInfo

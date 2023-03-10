@@ -10,18 +10,15 @@ export type ChannelInfo = {
   emoji?: string
   displayName: string
   description: string
-  appUrl: string
   color: string
   community: CommunityInfo
 }
 
 export function mapChannel(
   communityChat: CommunityChat,
-  communityDescription: CommunityDescription,
-  communityPublicKey: string,
-  communityChatUuid: string
+  communityDescription: CommunityDescription
 ): ChannelInfo | undefined {
-  const community = mapCommunity(communityDescription, communityPublicKey)
+  const community = mapCommunity(communityDescription)
 
   if (!community) {
     return
@@ -38,7 +35,6 @@ export function mapChannel(
     displayName: identity.displayName,
     description: identity.description,
     color: identity.color,
-    appUrl: `status-im://cc/${communityPublicKey}/${communityChatUuid}`,
     community,
   }
 

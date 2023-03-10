@@ -8,7 +8,6 @@ export type CommunityInfo = {
   displayName: string
   description: string
   membersCount: number
-  appUrl: string
   tags: Array<{
     emoji: string
     text: string
@@ -17,8 +16,7 @@ export type CommunityInfo = {
 }
 
 export function mapCommunity(
-  communityDescription: CommunityDescription,
-  communityPublicKey: string
+  communityDescription: CommunityDescription
 ): CommunityInfo | undefined {
   const { identity, tags, members } = communityDescription
 
@@ -32,7 +30,6 @@ export function mapCommunity(
     displayName: identity.displayName,
     description: identity.description,
     membersCount: Object.keys(members).length,
-    appUrl: `status-im://c/${communityPublicKey}`,
     tags: tags.reduce<CommunityInfo['tags']>((tags, nextTag) => {
       const emoji = tagsMap[nextTag as keyof typeof tagsMap]
 
