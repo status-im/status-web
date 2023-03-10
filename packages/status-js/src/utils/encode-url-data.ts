@@ -1,5 +1,5 @@
 import { base64url } from '@scure/base'
-import { brotliCompressSync, brotliDecompressSync } from 'node:zlib'
+import { brotliCompressSync, brotliDecompressSync } from 'zlib'
 
 import { Channel, Community, URLData, User } from '../protos/url-data_pb'
 

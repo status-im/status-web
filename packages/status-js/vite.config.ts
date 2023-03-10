@@ -35,7 +35,7 @@ export default defineConfig(({ mode }) => {
       sourcemap: true,
       emptyOutDir: mode === 'production',
       rollupOptions: {
-        external: [...external, 'node:zlib'],
+        external: [...external, 'zlib'],
       },
     },
     resolve: {
