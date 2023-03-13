@@ -8,7 +8,7 @@
     "build": "vite build",
     "typecheck": "tsc",
     "preview": "vite preview",
-    "clean": "rimraf node_modules"
+    "clean": "rimraf node_modules .turbo"
   },
   "dependencies": {
     "@tauri-apps/api": "^1.2.0",

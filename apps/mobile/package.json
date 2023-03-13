@@ -10,7 +10,7 @@
     "start": "expo start --dev-client",
     "lint": "eslint screens",
     "#typecheck": "tsc",
-    "clean": "rimraf node_modules"
+    "clean": "rimraf node_modules .turbo"
   },
   "dependencies": {
     "@babel/runtime": "^7.18.9",

@@ -37,7 +37,7 @@
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
-    "generate": "rimraf 12 16 20 reactions && svgr src && yarn fix",
+    "generate": "rimraf 12 16 20 reactions && svgr src --silent && yarn fix",
     "prebuild": "yarn generate",
     "build": "vite build",
     "postbuild": "yarn typegen",
@@ -45,10 +45,10 @@
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint '{12,16,20,reactions}/**/*.{ts,tsx}'",
-    "lint:fix": "eslint '{12,16,20,reactions}/**/*.{ts,tsx}' --fix",
+    "lint:fix": "yarn lint --fix",
     "format": "prettier --write '{12,16,20,reactions}/**/*.{ts,tsx}'",
-    "fix": "yarn lint:fix && yarn format",
-    "clean": "rimraf dist node_modules .turbo"
+    "fix": "yarn lint:fix && yarn format --loglevel=silent",
+    "clean": "rimraf 12 16 20 dist node_modules .turbo"
   },
   "peerDependencies": {
     "react": "^16.x || ^17.x || ^18.x",
