@@ -14,9 +14,13 @@
   "scripts": {
     "dev": "tamagui-build --watch",
     "build": "tamagui-build",
+    "postbuild": "yarn typegen",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
+    "lint": "eslint src",
+    "typecheck": "tsc",
     "storybook": "TAMAGUI_TARGET='web' storybook dev -p 3001",
-    "storybook:build": "TAMAGUI_TARGET='web' storybook build"
+    "storybook:build": "TAMAGUI_TARGET='web' storybook build",
+    "clean": "rimraf node_modules dist .turbo storybook-static"
   },
   "peerDependencies": {
     "react-native-web": "^0.18.0"
