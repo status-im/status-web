@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Dialog } from '../../../../system'
 
 export const PinnedMessagesDialog = () => {

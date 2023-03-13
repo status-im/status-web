@@ -1,7 +1,17 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import { enumeration, encodeMessage, decodeMessage, message, uint64, string, bytes, int32, bool } from 'protons-runtime'
+import {
+  enumeration,
+  encodeMessage,
+  decodeMessage,
+  message,
+  uint64,
+  string,
+  bytes,
+  int32,
+  bool,
+} from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface MembershipUpdateEvent {
@@ -20,7 +30,7 @@ export namespace MembershipUpdateEvent {
     MEMBER_JOINED = 'MEMBER_JOINED',
     MEMBER_REMOVED = 'MEMBER_REMOVED',
     ADMINS_ADDED = 'ADMINS_ADDED',
-    ADMIN_REMOVED = 'ADMIN_REMOVED'
+    ADMIN_REMOVED = 'ADMIN_REMOVED',
   }
 
   enum __EventTypeValues {
@@ -31,7 +41,7 @@ export namespace MembershipUpdateEvent {
     MEMBER_JOINED = 4,
     MEMBER_REMOVED = 5,
     ADMINS_ADDED = 6,
-    ADMIN_REMOVED = 7
+    ADMIN_REMOVED = 7,
   }
 
   export namespace EventType {
@@ -45,7 +55,7 @@ export namespace MembershipUpdateEvent {
       1: { name: 'clock', codec: uint64 },
       2: { name: 'members', codec: string, repeats: true },
       3: { name: 'name', codec: string },
-      4: { name: 'type', codec: MembershipUpdateEvent.EventType.codec() }
+      4: { name: 'type', codec: MembershipUpdateEvent.EventType.codec() },
     })
   }
 
@@ -71,7 +81,7 @@ export namespace MembershipUpdateMessage {
       1: { name: 'chatId', codec: string },
       2: { name: 'events', codec: bytes, repeats: true },
       3: { name: 'message', codec: ChatMessage.codec() },
-      4: { name: 'emojiReaction', codec: EmojiReaction.codec() }
+      4: { name: 'emojiReaction', codec: EmojiReaction.codec() },
     })
   }
 
@@ -93,7 +103,7 @@ export namespace StickerMessage {
   export const codec = (): Codec<StickerMessage> => {
     return message<StickerMessage>({
       1: { name: 'hash', codec: string },
-      2: { name: 'pack', codec: int32 }
+      2: { name: 'pack', codec: int32 },
     })
   }
 
@@ -115,7 +125,7 @@ export namespace ImageMessage {
   export const codec = (): Codec<ImageMessage> => {
     return message<ImageMessage>({
       1: { name: 'payload', codec: bytes },
-      2: { name: 'type', codec: ImageType.codec() }
+      2: { name: 'type', codec: ImageType.codec() },
     })
   }
 
@@ -138,13 +148,13 @@ export namespace AudioMessage {
   export enum AudioType {
     UNKNOWN_AUDIO_TYPE = 'UNKNOWN_AUDIO_TYPE',
     AAC = 'AAC',
-    AMR = 'AMR'
+    AMR = 'AMR',
   }
 
   enum __AudioTypeValues {
     UNKNOWN_AUDIO_TYPE = 0,
     AAC = 1,
-    AMR = 2
+    AMR = 2,
   }
 
   export namespace AudioType {
@@ -157,7 +167,7 @@ export namespace AudioMessage {
     return message<AudioMessage>({
       1: { name: 'payload', codec: bytes },
       2: { name: 'type', codec: AudioMessage.AudioType.codec() },
-      3: { name: 'durationMs', codec: uint64 }
+      3: { name: 'durationMs', codec: uint64 },
     })
   }
 
@@ -187,7 +197,7 @@ export namespace EditMessage {
       3: { name: 'chatId', codec: string },
       4: { name: 'messageId', codec: string },
       5: { name: 'grant', codec: bytes },
-      6: { name: 'messageType', codec: MessageType.codec() }
+      6: { name: 'messageType', codec: MessageType.codec() },
     })
   }
 
@@ -215,7 +225,7 @@ export namespace DeleteMessage {
       2: { name: 'chatId', codec: string },
       3: { name: 'messageId', codec: string },
       4: { name: 'grant', codec: bytes },
-      5: { name: 'messageType', codec: MessageType.codec() }
+      5: { name: 'messageType', codec: MessageType.codec() },
     })
   }
 
@@ -257,7 +267,7 @@ export namespace ChatMessage {
     IMAGE = 'IMAGE',
     AUDIO = 'AUDIO',
     COMMUNITY = 'COMMUNITY',
-    SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
+    SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
   }
 
   enum __ContentTypeValues {
@@ -271,7 +281,7 @@ export namespace ChatMessage {
     IMAGE = 7,
     AUDIO = 8,
     COMMUNITY = 9,
-    SYSTEM_MESSAGE_GAP = 10
+    SYSTEM_MESSAGE_GAP = 10,
   }
 
   export namespace ContentType {
@@ -295,7 +305,7 @@ export namespace ChatMessage {
       11: { name: 'audio', codec: AudioMessage.codec() },
       12: { name: 'community', codec: bytes },
       13: { name: 'grant', codec: bytes },
-      14: { name: 'displayName', codec: string }
+      14: { name: 'displayName', codec: string },
     })
   }
 
@@ -315,7 +325,7 @@ export enum MessageType {
   PRIVATE_GROUP = 'PRIVATE_GROUP',
   SYSTEM_MESSAGE_PRIVATE_GROUP = 'SYSTEM_MESSAGE_PRIVATE_GROUP',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
-  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
+  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
 }
 
 enum __MessageTypeValues {
@@ -325,7 +335,7 @@ enum __MessageTypeValues {
   PRIVATE_GROUP = 3,
   SYSTEM_MESSAGE_PRIVATE_GROUP = 4,
   COMMUNITY_CHAT = 5,
-  SYSTEM_MESSAGE_GAP = 6
+  SYSTEM_MESSAGE_GAP = 6,
 }
 
 export namespace MessageType {
@@ -338,7 +348,7 @@ export enum ImageType {
   PNG = 'PNG',
   JPEG = 'JPEG',
   WEBP = 'WEBP',
-  GIF = 'GIF'
+  GIF = 'GIF',
 }
 
 enum __ImageTypeValues {
@@ -346,7 +356,7 @@ enum __ImageTypeValues {
   PNG = 1,
   JPEG = 2,
   WEBP = 3,
-  GIF = 4
+  GIF = 4,
 }
 
 export namespace ImageType {
@@ -372,7 +382,7 @@ export namespace EmojiReaction {
     THUMBS_DOWN = 'THUMBS_DOWN',
     LAUGH = 'LAUGH',
     SAD = 'SAD',
-    ANGRY = 'ANGRY'
+    ANGRY = 'ANGRY',
   }
 
   enum __TypeValues {
@@ -382,7 +392,7 @@ export namespace EmojiReaction {
     THUMBS_DOWN = 3,
     LAUGH = 4,
     SAD = 5,
-    ANGRY = 6
+    ANGRY = 6,
   }
 
   export namespace Type {
@@ -399,7 +409,7 @@ export namespace EmojiReaction {
       4: { name: 'messageType', codec: MessageType.codec() },
       5: { name: 'type', codec: EmojiReaction.Type.codec() },
       6: { name: 'retracted', codec: bool },
-      7: { name: 'grant', codec: bytes }
+      7: { name: 'grant', codec: bytes },
     })
   }
 

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useAccount, useMembers } from '../../protocol'
 import { styled } from '../../styles/config'
 import { Grid, Heading } from '../../system'

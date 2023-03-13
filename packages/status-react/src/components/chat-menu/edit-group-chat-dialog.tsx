@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Avatar, Dialog, TextInput } from '../../system'
 
 export const EditGroupChatDialog = () => {

@@ -1,7 +1,6 @@
-import React from 'react'
-
 import { PinIcon } from '@status-im/icons/16'
-import { Stack, Unspaced, XStack, YStack } from 'tamagui'
+import { View } from 'react-native'
+import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
 
 import { Author } from '../author/author'
 import { Avatar } from '../avatar'
@@ -22,6 +21,27 @@ interface Props {
   pinned?: boolean
 }
 
+const Wrapper = styled(View, {
+  position: 'relative',
+  paddingHorizontal: 8,
+  paddingVertical: 8,
+  borderRadius: 16,
+  alignItems: 'flex-start',
+
+  variants: {
+    active: {
+      true: {
+        backgroundColor: '$neutral-5',
+      },
+    },
+    pinned: {
+      true: {
+        backgroundColor: '$blue-50-opa-5',
+      },
+    },
+  } as const,
+})
+
 const Message = (props: Props) => {
   const { text, images, reactions, reply, pinned } = props
 
@@ -34,17 +54,10 @@ const Message = (props: Props) => {
   const dispatch = useChatDispatch()
 
   return (
-    <YStack
-      position="relative"
-      alignItems="flex-start"
-      paddingHorizontal={8}
-      paddingVertical={8}
-      borderRadius={16}
-      backgroundColor={
-        active ? '$neutral-5' : pinned ? '$blue-50-opa-5' : undefined
-      }
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+    <Wrapper
+      active={active}
+      onHoverIn={() => setHovered(true)}
+      onHoverOut={() => setHovered(false)}
     >
       {active && (
         <Unspaced>
@@ -122,7 +135,7 @@ const Message = (props: Props) => {
           )}
         </YStack>
       </XStack>
-    </YStack>
+    </Wrapper>
   )
 }
 

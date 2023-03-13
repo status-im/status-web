@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import { ChevronRightIcon } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
@@ -104,9 +104,7 @@ const Accordion = ({
             </AnimatePresence>
           </Stack>
           <AnimatePresence>
-            {isExpanded && (
-              <React.Fragment key={title}>{children}</React.Fragment>
-            )}
+            {isExpanded && <Fragment key={title}>{children}</Fragment>}
           </AnimatePresence>
         </Stack>
       </Stack>

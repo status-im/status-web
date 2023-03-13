@@ -1,7 +1,15 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import { encodeMessage, decodeMessage, message, bytes, uint32, int64, string } from 'protons-runtime'
+import {
+  encodeMessage,
+  decodeMessage,
+  message,
+  bytes,
+  uint32,
+  int64,
+  string,
+} from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface SignedPreKey {
@@ -15,7 +23,7 @@ export namespace SignedPreKey {
     return message<SignedPreKey>({
       1: { name: 'signedPreKey', codec: bytes },
       2: { name: 'version', codec: uint32 },
-      3: { name: 'protocolVersion', codec: uint32 }
+      3: { name: 'protocolVersion', codec: uint32 },
     })
   }
 
@@ -41,7 +49,7 @@ export namespace Bundle {
       1: { name: 'identity', codec: bytes },
       2: { name: 'signedPreKeys', codec: SignedPreKey.codec() },
       4: { name: 'signature', codec: bytes },
-      5: { name: 'timestamp', codec: int64 }
+      5: { name: 'timestamp', codec: int64 },
     })
   }
 
@@ -63,7 +71,7 @@ export namespace BundleContainer {
   export const codec = (): Codec<BundleContainer> => {
     return message<BundleContainer>({
       1: { name: 'bundle', codec: Bundle.codec() },
-      2: { name: 'privateSignedPreKey', codec: bytes }
+      2: { name: 'privateSignedPreKey', codec: bytes },
     })
   }
 
@@ -89,7 +97,7 @@ export namespace DRHeader {
       1: { name: 'key', codec: bytes },
       2: { name: 'n', codec: uint32 },
       3: { name: 'pn', codec: uint32 },
-      4: { name: 'id', codec: bytes }
+      4: { name: 'id', codec: bytes },
     })
   }
 
@@ -109,7 +117,7 @@ export interface DHHeader {
 export namespace DHHeader {
   export const codec = (): Codec<DHHeader> => {
     return message<DHHeader>({
-      1: { name: 'key', codec: bytes }
+      1: { name: 'key', codec: bytes },
     })
   }
 
@@ -131,7 +139,7 @@ export namespace X3DHHeader {
   export const codec = (): Codec<X3DHHeader> => {
     return message<X3DHHeader>({
       1: { name: 'key', codec: bytes },
-      4: { name: 'id', codec: bytes }
+      4: { name: 'id', codec: bytes },
     })
   }
 
@@ -155,7 +163,7 @@ export namespace HRHeader {
     return message<HRHeader>({
       1: { name: 'keyId', codec: uint32 },
       2: { name: 'seqNo', codec: uint32 },
-      3: { name: 'groupId', codec: string }
+      3: { name: 'groupId', codec: string },
     })
   }
 
@@ -183,7 +191,7 @@ export namespace EncryptedMessageProtocol {
       2: { name: 'DRHeader', codec: DRHeader.codec() },
       101: { name: 'DHHeader', codec: DHHeader.codec() },
       102: { name: 'HRHeader', codec: HRHeader.codec() },
-      3: { name: 'payload', codec: bytes }
+      3: { name: 'payload', codec: bytes },
     })
   }
 
@@ -208,8 +216,11 @@ export namespace ProtocolMessage {
     return message<ProtocolMessage>({
       2: { name: 'installationId', codec: string },
       3: { name: 'bundles', codec: Bundle.codec(), repeats: true },
-      101: { name: 'encryptedMessage', codec: EncryptedMessageProtocol.codec() },
-      102: { name: 'publicMessage', codec: bytes }
+      101: {
+        name: 'encryptedMessage',
+        codec: EncryptedMessageProtocol.codec(),
+      },
+      102: { name: 'publicMessage', codec: bytes },
     })
   }
 

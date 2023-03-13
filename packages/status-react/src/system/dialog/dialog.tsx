@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import * as Primitive from '@radix-ui/react-dialog'
 
@@ -13,6 +13,7 @@ import { Actions, Body, Content, Header, Overlay } from './styles'
 import type { ButtonProps } from '../button'
 import type { Variants } from './styles'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
+import type React from 'react'
 
 interface DialogTriggerProps {
   children: [React.ReactElement, React.ReactElement]

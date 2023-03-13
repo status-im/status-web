@@ -163,7 +163,7 @@ const Avatar = (props: Props) => {
 
   useEffect(() => {
     setStatus('idle')
-  }, [JSON.stringify(src)])
+  }, [src])
 
   return (
     <Base size={size} shape={shape} withOutline={withOutline}>

@@ -20,12 +20,12 @@ const interFont = createInterFont({
     7: 13,
     8: 15,
     9: 19,
-    10: 27
+    10: 27,
   },
   weight: {
     6: '400',
     7: '500',
-    8: '600'
+    8: '600',
   },
   letterSpacing: {
     5: 2,
@@ -36,19 +36,19 @@ const interFont = createInterFont({
     10: -3,
     12: -4,
     14: -5,
-    15: -6
+    15: -6,
   },
   face: {
     400: { normal: 'Inter' },
     500: { normal: 'Inter' },
-    600: { normal: 'InterBold' }
-  }
+    600: { normal: 'InterBold' },
+  },
 })
 
 const monoFont = createFont({
   family: 'UbuntuMono',
   weight: {
-    1: '500'
+    1: '500',
   },
   letterSpacing: {
     5: 2,
@@ -59,7 +59,7 @@ const monoFont = createFont({
     10: -3,
     12: -4,
     14: -5,
-    15: -6
+    15: -6,
   },
   size: {
     1: 11,
@@ -77,25 +77,25 @@ const monoFont = createFont({
     13: 72,
     14: 92,
     15: 114,
-    16: 124
+    16: 124,
   },
   lineHeight: {
     1: 14,
-    2: 15
-  }
+    2: 15,
+  },
 })
 
 export const config = createTamagui({
   fonts: {
     inter: interFont,
-    mono: monoFont
+    mono: monoFont,
   },
   themes,
   tokens: {
     colors: {
-      ...tokens.color
+      ...tokens.color,
     },
-    ...tokens
+    ...tokens,
   },
   shouldAddPrefersColorThemes: true,
   media: createMedia({
@@ -112,8 +112,8 @@ export const config = createTamagui({
     short: { maxHeight: 820 },
     tall: { minHeight: 820 },
     hoverNone: { hover: 'none' },
-    pointerCoarse: { pointer: 'coarse' }
+    pointerCoarse: { pointer: 'coarse' },
   }),
   shorthands,
-  animations
+  animations,
 })

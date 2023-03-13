@@ -20,9 +20,10 @@ import { useChatDispatch, useChatState } from '../provider'
 import { Reply } from '../reply'
 
 interface Props {
-  blur: boolean
+  blur?: boolean
 }
 
+// pb={insets.bottom + Platform.select({ android: 12, ios: 0 })}
 const Composer = (props: Props) => {
   const { blur } = props
 

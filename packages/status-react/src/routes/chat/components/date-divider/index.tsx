@@ -1,5 +1,3 @@
-import React from 'react'
-
 import isSameDay from 'date-fns/isSameDay'
 
 import { Flex, Text } from '../../../../system'

@@ -1,6 +1,3 @@
-// eslint-disable-next-line eslint-comments/disable-enable-pair
-/* eslint-disable import/namespace */
-
 import { useRef } from 'react'
 
 import { Composer, Messages } from '@status-im/components'
@@ -25,7 +22,8 @@ export const ChannelScreen = ({ route }: ChannelScreenProps) => {
   const theme = useTheme()
 
   // We need to get the channel name from the route params
-  const channelName = route.params.channelId
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _channelName = route.params.channelId
   const scrollRef = useRef(null)
 
   return (
@@ -47,9 +45,7 @@ export const ChannelScreen = ({ route }: ChannelScreenProps) => {
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <Stack>
-          <Composer
-            pb={insets.bottom + Platform.select({ android: 12, ios: 0 })}
-          />
+          <Composer />
         </Stack>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

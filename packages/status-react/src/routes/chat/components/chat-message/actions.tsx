@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { ReactionPopover } from '../../../../components/reaction-popover'
 import { PencilIcon } from '../../../../icons/pencil-icon'
 // import { PinIcon } from '../../../../icons/pin-icon'

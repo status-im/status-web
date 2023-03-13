@@ -1,7 +1,16 @@
 /* eslint-disable import/export */
 /* eslint-disable @typescript-eslint/no-namespace */
 
-import { encodeMessage, decodeMessage, message, uint64, string, enumeration, bytes, bool } from 'protons-runtime'
+import {
+  encodeMessage,
+  decodeMessage,
+  message,
+  uint64,
+  string,
+  enumeration,
+  bytes,
+  bool,
+} from 'protons-runtime'
 import type { Codec } from 'protons-runtime'
 
 export interface ChatIdentity {
@@ -23,7 +32,7 @@ export namespace ChatIdentity {
       4: { name: 'displayName', codec: string },
       5: { name: 'description', codec: string },
       6: { name: 'color', codec: string },
-      7: { name: 'emoji', codec: string }
+      7: { name: 'emoji', codec: string },
     })
   }
 
@@ -48,13 +57,13 @@ export namespace IdentityImage {
   export enum SourceType {
     UNKNOWN_SOURCE_TYPE = 'UNKNOWN_SOURCE_TYPE',
     RAW_PAYLOAD = 'RAW_PAYLOAD',
-    ENS_AVATAR = 'ENS_AVATAR'
+    ENS_AVATAR = 'ENS_AVATAR',
   }
 
   enum __SourceTypeValues {
     UNKNOWN_SOURCE_TYPE = 0,
     RAW_PAYLOAD = 1,
-    ENS_AVATAR = 2
+    ENS_AVATAR = 2,
   }
 
   export namespace SourceType {
@@ -69,7 +78,7 @@ export namespace IdentityImage {
       2: { name: 'sourceType', codec: IdentityImage.SourceType.codec() },
       3: { name: 'imageType', codec: ImageType.codec() },
       4: { name: 'encryptionKeys', codec: bytes, repeats: true },
-      5: { name: 'encrypted', codec: bool }
+      5: { name: 'encrypted', codec: bool },
     })
   }
 
@@ -89,7 +98,7 @@ export enum MessageType {
   PRIVATE_GROUP = 'PRIVATE_GROUP',
   SYSTEM_MESSAGE_PRIVATE_GROUP = 'SYSTEM_MESSAGE_PRIVATE_GROUP',
   COMMUNITY_CHAT = 'COMMUNITY_CHAT',
-  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP'
+  SYSTEM_MESSAGE_GAP = 'SYSTEM_MESSAGE_GAP',
 }
 
 enum __MessageTypeValues {
@@ -99,7 +108,7 @@ enum __MessageTypeValues {
   PRIVATE_GROUP = 3,
   SYSTEM_MESSAGE_PRIVATE_GROUP = 4,
   COMMUNITY_CHAT = 5,
-  SYSTEM_MESSAGE_GAP = 6
+  SYSTEM_MESSAGE_GAP = 6,
 }
 
 export namespace MessageType {
@@ -112,7 +121,7 @@ export enum ImageType {
   PNG = 'PNG',
   JPEG = 'JPEG',
   WEBP = 'WEBP',
-  GIF = 'GIF'
+  GIF = 'GIF',
 }
 
 enum __ImageTypeValues {
@@ -120,7 +129,7 @@ enum __ImageTypeValues {
   PNG = 1,
   JPEG = 2,
   WEBP = 3,
-  GIF = 4
+  GIF = 4,
 }
 
 export namespace ImageType {

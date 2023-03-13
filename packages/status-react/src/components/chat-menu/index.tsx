@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { BellIcon } from '../../icons/bell-icon'
 import { ContextMenu, DropdownMenu } from '../../system'
 // import { useAlertDialog } from '../../system/dialog/alert-dialog'

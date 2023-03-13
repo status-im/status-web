@@ -8,6 +8,7 @@ import type { GetProps } from '@tamagui/core'
 import type { Ref } from 'react'
 
 const Base = styled(Stack, {
+  tag: 'button',
   name: 'Button',
   accessibilityRole: 'button',
 
