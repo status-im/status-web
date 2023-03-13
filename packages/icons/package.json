@@ -58,6 +58,6 @@
   "devDependencies": {
     "@svgr/cli": "^6.5.1",
     "@svgr/core": "^6.5.1",
-    "vite": "^4.0.4"
+    "vite": "^4.1.4"
   }
 }
