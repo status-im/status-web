@@ -16,7 +16,7 @@
     "build": "turbo run build  --filter=@status-im/*",
     "typecheck": "turbo run typecheck --filter=@status-im/*",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint/.eslint-cache .",
-    "format": "prettier --cache --write .",
+    "format": "prettier --ignore-path .gitignore --cache --write .",
     "format:check": "prettier --check .",
     "clean": "turbo run clean && rimraf node_modules",
     "web": "yarn workspace web dev",
