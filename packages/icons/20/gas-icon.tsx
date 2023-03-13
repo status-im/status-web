@@ -1,18 +1,22 @@
+import { useTheme } from '@tamagui/core'
 import { Path, Svg } from 'react-native-svg'
-import { useCurrentColor } from 'tamagui'
 
-import type { SvgProps } from 'react-native-svg'
+import type { IconProps } from '../types'
 
-const SvgGasIcon = (props: SvgProps) => {
-  const { color: colorToken = 'currentColor', ...rest } = props
-  const color = useCurrentColor(colorToken)
+const SvgGasIcon = (props: IconProps) => {
+  const { color: token = '$neutral-100' } = props
+  const theme = useTheme()
+  /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const color = theme[token]?.val ?? token
   return (
     <Svg
       width={20}
       height={20}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...rest}
+      {...props}
     >
       <Path
         d="M4 7.5c0-1.398 0-2.097.228-2.648a3 3 0 0 1 1.624-1.624C6.403 3 7.102 3 8.5 3c1.398 0 2.097 0 2.648.228a3 3 0 0 1 1.624 1.624C13 5.403 13 6.102 13 7.5V17H4V7.5ZM4 9h9"

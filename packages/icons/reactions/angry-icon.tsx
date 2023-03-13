@@ -1,3 +1,4 @@
+import { useTheme } from '@tamagui/core'
 import {
   Circle,
   Defs,
@@ -7,13 +8,16 @@ import {
   Stop,
   Svg,
 } from 'react-native-svg'
-import { useCurrentColor } from 'tamagui'
 
-import type { SvgProps } from 'react-native-svg'
+import type { IconProps } from '../types'
 
-const SvgAngryIcon = (props: SvgProps) => {
-  const { color: colorToken = 'currentColor', ...rest } = props
-  const color = useCurrentColor(colorToken)
+const SvgAngryIcon = (props: IconProps) => {
+  const { color: token = '$neutral-100' } = props
+  const theme = useTheme()
+  /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const color = theme[token]?.val ?? token
   return (
     <Svg
       width={16}

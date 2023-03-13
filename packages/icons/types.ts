@@ -1,18 +1,23 @@
-import type {
-  SizeTokens,
-  StyleObject,
-  ThemeParsed,
-  Tokens,
-} from '@tamagui/core'
+// import 'react-native-svg'
+
+import type { ColorTokens } from '@tamagui/core'
 import type { SvgProps } from 'react-native-svg'
 
-type GetTokenString<A> = A extends string ? `$${A}` : `$${string}`
-export type ColorTokens =
-  | GetTokenString<keyof Tokens['color']>
-  | GetTokenString<keyof ThemeParsed>
+declare module 'react-native-svg' {
+  export interface SvgProps {
+    xmlns?: string
+    xmlnsXlink?: string
+    xlinkHref?: string
+  }
+}
+
+// type GetTokenString<A> = A extends string ? `$${A}` : `$${string}`
+// export type ColorTokens =
+//   | GetTokenString<keyof Tokens['color']>
+//   | GetTokenString<keyof ThemeParsed>
 
 export type IconProps = SvgProps & {
-  size?: number | SizeTokens
+  // size?: number | SizeTokens
   color?: ColorTokens
-  style?: StyleObject
+  // style?: StyleObject
 }

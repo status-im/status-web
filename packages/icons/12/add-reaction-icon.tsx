@@ -1,18 +1,22 @@
+import { useTheme } from '@tamagui/core'
 import { Circle, ClipPath, Defs, G, Path, Svg } from 'react-native-svg'
-import { useCurrentColor } from 'tamagui'
 
-import type { SvgProps } from 'react-native-svg'
+import type { IconProps } from '../types'
 
-const SvgAddReactionIcon = (props: SvgProps) => {
-  const { color: colorToken = 'currentColor', ...rest } = props
-  const color = useCurrentColor(colorToken)
+const SvgAddReactionIcon = (props: IconProps) => {
+  const { color: token = '$neutral-100' } = props
+  const theme = useTheme()
+  /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const color = theme[token]?.val ?? token
   return (
     <Svg
       width={12}
       height={12}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      {...rest}
+      {...props}
     >
       <G clipPath="url(#add-reaction-icon_svg__a)">
         <Path d="M7.294 1.17A5 5 0 1 0 11 6" stroke={color} strokeWidth={1.1} />

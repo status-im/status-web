@@ -6,25 +6,24 @@ import { defineConfig } from 'vite'
 import { peerDependencies } from './package.json'
 
 const external = [
+  '@tamagui/core',
   'tamagui',
   // ...Object.keys(dependencies || {}),
   ...Object.keys(peerDependencies || {}),
 ].map(name => new RegExp(`^${name}(/.*)?`))
+
+let index = 0
+const TYPES = ['12', '16', '20', 'reactions'] as const
 
 export default defineConfig(({ mode }) => {
   return {
     build: {
       target: 'es2020',
       lib: {
-        entry: [
-          './src/12/index.ts',
-          './src/16/index.ts',
-          './src/20/index.ts',
-          './src/reactions/index.ts',
-        ],
-        fileName(format, entryName) {
-          // const [name] = entryName.split('/')
-          return `icons-${entryName}.${format}.js`
+        entry: TYPES.map(type => `./${type}/index.ts`),
+        fileName() {
+          // return `${TYPES[index++]}.${format}.js`
+          return `${TYPES[index++]}.js`
         },
         formats: ['es'],
       },

@@ -9,26 +9,38 @@
     "dist",
     "src"
   ],
-  "#browser": {
+  "browser": {
     "react-native-svg": "@tamagui/react-native-svg"
   },
-  "#exports": {
+  "exports": {
     "./package.json": "./package.json",
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.umd.js"
+    "./12": {
+      "types": "./dist/types/12/index.d.ts",
+      "import": "./dist/12.js"
     },
-    "./src/12/*.svg": "./src/12/*.svg",
-    "./src/16/*.svg": "./src/16/*.svg",
-    "./src/20/*.svg": "./src/20/*.svg",
-    "./src/reactions/*.svg": "./src/reactions/*.svg"
+    "./16": {
+      "types": "./dist/types/16/index.d.ts",
+      "import": "./dist/16.js"
+    },
+    "./20": {
+      "types": "./dist/types/20/index.d.ts",
+      "import": "./dist/20.js"
+    },
+    "./reactions": {
+      "types": "./dist/types/reactions/index.d.ts",
+      "import": "./dist/reactions.js"
+    },
+    "./12/*.svg": "./src/12/*.svg",
+    "./16/*.svg": "./src/16/*.svg",
+    "./20/*.svg": "./src/20/*.svg",
+    "./reactions/*.svg": "./src/reactions/*.svg"
   },
   "scripts": {
     "dev": "vite build --watch --mode development",
     "generate": "rimraf 12 16 20 reactions && svgr src && yarn fix",
+    "prebuild": "yarn generate",
     "build": "vite build",
-    "#postbuild": "yarn typegen",
+    "postbuild": "yarn typegen",
     "#test": "vitest",
     "typecheck": "tsc",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
