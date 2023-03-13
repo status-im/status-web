@@ -1,4 +1,3 @@
-import { Divider, IconButton, Paragraph } from '@status-im/components'
 import {
   ArrowLeftIcon,
   CommunitiesIcon,
@@ -14,7 +13,10 @@ import {
 import { Stack, Text } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
 
+import { Divider } from '../divider'
 import { DropdownMenu } from '../dropdown-menu'
+import { IconButton } from '../icon-button'
+import { Paragraph } from '../typography'
 
 import type { Channel } from '../sidebar/mock-data'
 
