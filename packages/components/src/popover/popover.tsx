@@ -2,7 +2,6 @@ import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover'
 import { Stack } from 'tamagui'
 
 import type { PopoverContentProps } from '@radix-ui/react-popover'
-import type { FunctionComponent } from 'react'
 
 interface Props {
   children: [React.ReactElement, React.ReactElement]
@@ -29,7 +28,11 @@ const Popover = (props: Props) => {
   )
 }
 
-const PopoverContent: FunctionComponent = props => {
+type ContentProps = {
+  children: React.ReactNode
+}
+
+const PopoverContent = (props: ContentProps) => {
   const { children } = props
 
   return (

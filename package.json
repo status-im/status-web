@@ -23,11 +23,7 @@
     "desktop": "yarn workspace desktop dev",
     "storybook": "yarn workspace @status-im/components storybook"
   },
-  "resolutions": {
-    "react": "18.1.0",
-    "react-dom": "18.1.0",
-    "react-native-svg": "13.4.0"
-  },
+  "resolutions": {},
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
     "@tsconfig/strictest": "^1.0.1",
