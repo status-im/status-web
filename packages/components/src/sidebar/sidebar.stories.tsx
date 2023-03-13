@@ -1,3 +1,4 @@
+import { CHANNEL_GROUPS } from './mock-data'
 import { Sidebar } from './sidebar'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -6,6 +7,9 @@ import type { Meta, StoryObj } from '@storybook/react'
 const meta: Meta<typeof Sidebar> = {
   title: 'Sidebar/Community',
   component: Sidebar,
+  args: {
+    channels: CHANNEL_GROUPS,
+  },
   argTypes: {},
   parameters: {
     design: {
@@ -19,12 +23,7 @@ type Story = StoryObj<typeof Sidebar>
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Default: Story = {
-  args: {
-    name: 'Rarible',
-    description:
-      'Multichain community-centric NFT marketplace. Create, buy and sell your NFTs.',
-    membersCount: 476,
-  },
+  args: {},
 }
 
 export default meta

@@ -8,6 +8,14 @@ import type { Meta, StoryObj } from '@storybook/react'
 const meta: Meta<typeof Topbar> = {
   title: 'Navigation/Topbar',
   component: Topbar,
+  args: {
+    channel: {
+      id: '1',
+      emoji: '👋',
+      title: '# channel',
+      description: 'This is a channel description',
+    },
+  },
   argTypes: {},
   parameters: {
     viewport: {
@@ -24,10 +32,7 @@ type Story = StoryObj<typeof Topbar>
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Default: Story = {
-  args: {
-    title: '# channel',
-    description: 'This is a channel description',
-  },
+  args: {},
 }
 
 export const WithMembersSelected: Story = {

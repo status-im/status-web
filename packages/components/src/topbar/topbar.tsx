@@ -11,7 +11,7 @@ import {
   ShareIcon,
   UpToDateIcon,
 } from '@status-im/icons/20'
-import { Stack } from '@tamagui/core'
+import { Stack, Text } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
 
 import { DropdownMenu } from '../dropdown-menu'
@@ -29,7 +29,7 @@ type Props = {
 const Topbar = (props: Props) => {
   const { membersVisisble, onMembersPress, goBack, blur, channel } = props
 
-  const { title, description, icon } = channel
+  const { title, description, emoji } = channel
 
   return (
     <BlurView intensity={40} style={{ zIndex: 100 }}>
@@ -53,7 +53,11 @@ const Topbar = (props: Props) => {
             />
           </Stack>
 
-          {icon && <Stack marginRight={12}>{icon}</Stack>}
+          {emoji && (
+            <Stack marginRight={12}>
+              <Text>{emoji}</Text>
+            </Stack>
+          )}
 
           {title && (
             <Paragraph weight="semibold" marginRight={4}>

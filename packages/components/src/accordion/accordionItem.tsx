@@ -3,18 +3,14 @@ import { Stack } from '@tamagui/core'
 
 import { Label, Paragraph } from '../typography'
 
-import type { GetProps } from '@tamagui/core'
-
-type BaseProps = GetProps<typeof Stack>
+import type { Channel } from '../sidebar/mock-data'
 
 type Props = {
   isSelected?: boolean
-  onToggle?: () => void
-  title: string
-  channelStatus?: 'muted' | 'normal' | 'withMessages' | 'withMentions'
-  icon?: React.ReactNode
-  numberOfMessages?: number
-} & BaseProps
+  onPress?: () => void
+  channel: Channel
+  mb?: number
+}
 
 const textColor = {
   muted: '$neutral-40',
@@ -23,17 +19,12 @@ const textColor = {
   withMentions: '$neutral-100',
 }
 
-const AccordionItem = ({
-  icon,
-  isSelected,
-  title,
-  channelStatus = 'normal',
-  numberOfMessages,
-  ...rest
-}: Props) => {
+const AccordionItem = (props: Props) => {
+  const { channel, isSelected, onPress, mb } = props
+  const { emoji, title, channelStatus = 'normal', numberOfMessages } = channel
+
   return (
     <Stack
-      {...rest}
       accessibilityRole="button"
       animation={[
         'fast',
@@ -59,17 +50,30 @@ const AccordionItem = ({
       alignItems="center"
       flexDirection="row"
       cursor="pointer"
+      onPress={onPress}
+      mb={mb}
     >
       <Stack
         justifyContent="flex-start"
         alignItems="center"
         flexDirection="row"
       >
-        {icon && <>{icon}</>}
+        {emoji && (
+          <Stack
+            width={24}
+            height={24}
+            borderRadius={24 / 2}
+            backgroundColor="$turquoise-50-opa-10"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {emoji}
+          </Stack>
+        )}
         <Paragraph
           color={textColor[channelStatus]}
           weight="medium"
-          marginLeft={icon ? 8 : 0}
+          marginLeft={emoji ? 8 : 0}
         >
           {title}
         </Paragraph>
