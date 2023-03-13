@@ -80,10 +80,7 @@ const Sidebar = (props: Props) => {
               return (
                 <AccordionItem
                   key={channel.id}
-                  icon={channel.icon}
-                  title={channel.title}
-                  channelStatus={channel.channelStatus}
-                  numberOfMessages={channel.numberOfMessages}
+                  channel={channel}
                   isSelected={selectedChannelId === channel.id}
                   onPress={() => onChannelPress(channel.id)}
                   mb={isLastChannelOfTheList ? 8 : 0}

@@ -1,4 +1,4 @@
-import { Basketball, Collaboration, Play, Unicorn } from '../emoji'
+import { CHANNEL_GROUPS } from '../sidebar/mock-data'
 import { Accordion } from './accordion'
 import { AccordionItem } from './accordionItem'
 
@@ -27,47 +27,12 @@ export const Default: Story = {
       <>
         <AccordionItem
           key="welcome"
-          icon={<Unicorn hasBackground />}
-          title={'# welcome'}
-          channelStatus="withMessages"
-          numberOfMessages={1}
           isSelected
-          onPress={() => {
-            // do nothing
-          }}
+          channel={CHANNEL_GROUPS[0].channels[0]}
         />
-        <AccordionItem
-          key="general"
-          icon={<Basketball hasBackground />}
-          title={'# general'}
-          channelStatus="withMentions"
-          numberOfMessages={2}
-          onPress={() => {
-            // do nothing
-          }}
-          mb={8}
-        />
-        <AccordionItem
-          key="lounge"
-          icon={<Collaboration hasBackground />}
-          title={'# lounge'}
-          numberOfMessages={0}
-          onPress={() => {
-            // do nothing
-          }}
-          mb={8}
-        />
-        <AccordionItem
-          key="random"
-          icon={<Play hasBackground />}
-          title={'# random'}
-          channelStatus="muted"
-          numberOfMessages={0}
-          onPress={() => {
-            // do nothing
-          }}
-          mb={8}
-        />
+        <AccordionItem key="general" channel={CHANNEL_GROUPS[0].channels[0]} />
+        <AccordionItem key="lounge" channel={CHANNEL_GROUPS[0].channels[0]} />
+        <AccordionItem key="random" channel={CHANNEL_GROUPS[0].channels[0]} />
       </>
     ),
   },
