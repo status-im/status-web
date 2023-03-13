@@ -5,15 +5,16 @@
     "*.css"
   ],
   "private": true,
-  "types": "src/index.tsx",
-  "main": "src/index.tsx",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/types/index.d.ts",
   "files": [
     "types",
     "dist"
   ],
   "scripts": {
-    "dev": "tamagui-build --watch",
-    "build": "tamagui-build",
+    "dev": "TAMAGUI_TARGET='web' vite build --watch --mode development",
+    "build": "TAMAGUI_TARGET='web' vite build",
     "postbuild": "yarn typegen",
     "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
@@ -50,8 +51,8 @@
     "@storybook/react": "7.0.0-beta.21",
     "@storybook/react-vite": "7.0.0-beta.21",
     "@storybook/testing-library": "^0.0.13",
-    "@tamagui/build": "1.7.7",
     "@tamagui/vite-plugin": "1.7.7",
+    "@vitejs/plugin-react-swc": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-svg": "^13.8.0",
