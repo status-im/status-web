@@ -1,6 +1,8 @@
-import React, { cloneElement } from 'react'
+import { cloneElement } from 'react'
 
 import { Root } from '@radix-ui/react-accessible-icon'
+
+import type React from 'react'
 
 type Props = ({ label: string; hidden?: false } | { hidden: true }) & {
   children: React.ReactElement

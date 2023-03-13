@@ -1,4 +1,4 @@
-import React, { cloneElement, useCallback, useRef } from 'react'
+import { cloneElement, useCallback, useRef } from 'react'
 
 import * as Primitive from '@radix-ui/react-alert-dialog'
 
@@ -12,6 +12,7 @@ import { Actions, Body, Content, Header, Overlay } from './styles'
 
 import type { ButtonProps } from '../button'
 import type { DialogContentProps } from '@radix-ui/react-dialog'
+import type React from 'react'
 
 interface TriggerProps {
   open?: boolean

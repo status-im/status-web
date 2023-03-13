@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Stack } from '@tamagui/core'
 
 import { Image } from './image'

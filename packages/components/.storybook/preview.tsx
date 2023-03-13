@@ -1,4 +1,3 @@
-import React from 'react'
 import { Provider } from '../src'
 import { Parameters, Decorator } from '@storybook/react'
 

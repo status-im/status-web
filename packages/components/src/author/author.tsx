@@ -17,7 +17,7 @@ interface Props {
 }
 
 const Author = (props: Props) => {
-  const { name, status, nickname, address, time } = props
+  const { name, status, address, time } = props
 
   return (
     <XStack space={8} alignItems="center">

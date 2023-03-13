@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { styled } from '../../../../styles/config'
 import { Dialog, Grid, Text } from '../../../../system'

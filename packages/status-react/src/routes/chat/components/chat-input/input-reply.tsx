@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useChatContext } from '../../../../contexts/chat-context'
 import { CrossIcon } from '../../../../icons/cross-icon'
 import { MessageContentType } from '../../../../protocol'

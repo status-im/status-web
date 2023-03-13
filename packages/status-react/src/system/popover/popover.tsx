@@ -1,4 +1,4 @@
-import React, { cloneElement, forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import * as Primitive from '@radix-ui/react-popover'
 
@@ -6,6 +6,7 @@ import { Content } from './styles'
 
 import type { PopoverContentProps } from '@radix-ui/react-popover'
 import type Stitches from '@stitches/react'
+import type React from 'react'
 import type { Ref } from 'react'
 
 interface TriggerProps {

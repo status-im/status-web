@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { keyframes } from '../../../../styles/config'
 import { Box, Text } from '../../../../system'
 

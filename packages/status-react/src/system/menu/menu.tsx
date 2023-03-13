@@ -1,9 +1,11 @@
-import React, { cloneElement } from 'react'
+import { cloneElement } from 'react'
 
 import { ChevronRightIcon } from '../../icons/chevron-right-icon'
 import { styled, theme } from '../../styles/config'
 import { Box } from '../box'
 import { Icon } from '../icon'
+
+import type React from 'react'
 
 const Content = styled('div', {
   minWidth: 176,

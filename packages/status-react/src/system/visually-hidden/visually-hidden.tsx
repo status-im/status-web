@@ -1,6 +1,6 @@
-import React from 'react'
-
 import { Root } from '@radix-ui/react-visually-hidden'
+
+import type React from 'react'
 
 type Props = {
   children: React.ReactNode

@@ -1,6 +1,6 @@
-import React from 'react'
-
 import { Button, Group } from './styles'
+
+import type React from 'react'
 
 interface Props<V> {
   value: V

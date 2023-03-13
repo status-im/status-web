@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Text } from '../text'
 import { Base } from './styles'
 

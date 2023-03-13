@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useNavigate } from 'react-router-dom'
 
 import { TinyChevronRightIcon } from '../../icons/tiny-chevron-right-icon'

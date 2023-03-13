@@ -1,5 +1,3 @@
-import React from 'react'
-
 // import { PinIcon } from '../../../../icons/pin-icon'
 import { Avatar, Flex, Text } from '../../../../system'
 
