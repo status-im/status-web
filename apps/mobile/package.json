@@ -7,7 +7,10 @@
     "dev": "expo start -c",
     "ios": "TAMAGUI_TARGET=native yarn expo run:ios",
     "android": "TAMAGUI_TARGET=native yarn expo run:android",
-    "start": "expo start --dev-client"
+    "start": "expo start --dev-client",
+    "lint": "eslint screens",
+    "#typecheck": "tsc",
+    "clean": "rimraf node_modules"
   },
   "dependencies": {
     "@babel/runtime": "^7.18.9",
@@ -26,8 +29,7 @@
     "react-native": "0.70.5",
     "react-native-safe-area-context": "4.4.1",
     "react-native-screens": "~3.18.0",
-    "react-native-svg": "^13.8.0",
-    "react-native-web": "~0.18.12"
+    "react-native-svg": "^13.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

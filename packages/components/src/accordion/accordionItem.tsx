@@ -1,5 +1,5 @@
 import { MutedIcon } from '@status-im/icons/20'
-import { Stack } from '@tamagui/core'
+import { Stack, Text } from '@tamagui/core'
 
 import { Label, Paragraph } from '../typography'
 
@@ -67,7 +67,7 @@ const AccordionItem = (props: Props) => {
             justifyContent="center"
             alignItems="center"
           >
-            {emoji}
+            <Text>{emoji}</Text>
           </Stack>
         )}
         <Paragraph
