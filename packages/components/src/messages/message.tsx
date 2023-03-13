@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { PinIcon } from '@status-im/icons/16'
 import { View } from 'react-native'
 import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
@@ -45,8 +47,8 @@ const Wrapper = styled(View, {
 const Message = (props: Props) => {
   const { text, images, reactions, reply, pinned } = props
 
-  const [hovered, setHovered] = React.useState(false)
-  const [actionsOpen, setActionsOpen] = React.useState(false)
+  const [hovered, setHovered] = useState(false)
+  const [actionsOpen, setActionsOpen] = useState(false)
 
   const active = actionsOpen || hovered
   // <Sheet press="long">
