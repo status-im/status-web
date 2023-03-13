@@ -1,14 +1,11 @@
 import { forwardRef } from 'react'
 
-import { isWeb, setupReactNative, styled } from '@tamagui/core'
+import { setupReactNative, styled } from '@tamagui/core'
 import { Image as RNImage } from 'react-native'
 
 import type { GetProps } from '@tamagui/core'
 import type { Ref } from 'react'
 import type { ImagePropsBase as RNImageProps } from 'react-native'
-
-// TODO: this was used in @tamagui/image package. Why?
-// import { focusableInputHOC } from '@tamagui/focusable'
 
 setupReactNative({
   Image: RNImage,
@@ -54,7 +51,7 @@ const Image = (props: Props, ref: Ref<HTMLImageElement>) => {
 
   const source = {
     uri: src,
-    ...(isWeb && { width, height }),
+    // ...(isWeb && { width, height }),
   }
 
   return (
@@ -70,6 +67,7 @@ const Image = (props: Props, ref: Ref<HTMLImageElement>) => {
   )
 }
 
+// TODO?: this was used in @tamagui/image package. Why?
 // focusableInputHOC(Image)
 const _Image = Base.extractable(forwardRef(Image))
 
