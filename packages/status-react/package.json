@@ -22,8 +22,8 @@
     "#test": "vitest",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "yarn typegen",
-    "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
+    "postbuild": "yarn build:types",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "typecheck": "tsc",
     "clean": "rimraf dist node_modules .turbo"
