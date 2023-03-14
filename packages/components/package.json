@@ -5,9 +5,11 @@
     "*.css"
   ],
   "private": true,
+  "#module": "./src/index.tsx",
+  "types": "./src/index.tsx",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/types/index.d.ts",
+  "#types": "./dist/types/index.d.ts",
   "files": [
     "types",
     "dist"

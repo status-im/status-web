@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 
 import {
+  CHANNEL_GROUPS,
   Composer,
   Messages,
   Sidebar,
@@ -10,7 +11,6 @@ import {
   useAppState,
 } from '@status-im/components'
 import { useBlur } from '@status-im/components/hooks'
-import { CHANNEL_GROUPS } from '@status-im/components/src/sidebar/mock-data'
 
 const COMMUNITY = {
   name: 'Rarible',

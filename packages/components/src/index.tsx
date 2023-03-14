@@ -13,5 +13,8 @@ export * from './topbar'
 export * from './typography'
 export * from './user-list'
 
+// MOCK DATA
+export { CHANNEL_GROUPS } from './sidebar/mock-data'
+
 // eslint-disable-next-line simple-import-sort/exports
 export { config } from './tamagui.config'
