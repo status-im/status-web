@@ -17,8 +17,8 @@
   "scripts": {
     "dev": "TAMAGUI_TARGET='web' vite build --watch --mode development",
     "build": "TAMAGUI_TARGET='web' vite build",
-    "postbuild": "yarn typegen",
-    "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
+    "postbuild": "yarn build:types",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "typecheck": "tsc",
     "storybook": "TAMAGUI_TARGET='web' storybook dev -p 3001",

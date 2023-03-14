@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src",
-    "#typecheck": "tsc"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@status-im/components": "*",
