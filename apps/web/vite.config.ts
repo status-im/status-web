@@ -1,5 +1,6 @@
 import { tamaguiPlugin } from '@tamagui/vite-plugin'
 import react from '@vitejs/plugin-react-swc'
+import path from 'path'
 import { defineConfig } from 'vite'
 
 import type { PluginOption } from 'vite'
@@ -13,15 +14,23 @@ const tamaguiConfig = {
   // useReactNativeWebLite: true,
 }
 
-// https://vitejs.dev/config
+// @see: https://vitejs.dev/config
 export default defineConfig({
+  resolve: {
+    // mainFields: ['module', 'jsnext:main', 'jsnext'],
+    alias: {
+      '@status-im/components/hooks': path.resolve(
+        '../../packages/components/hooks'
+      ),
+      '@status-im/components': path.resolve('../../packages/components/src'),
+    },
+  },
   define: {
     TAMAGUI_TARGET: JSON.stringify('web'),
   },
   plugins: [
     react(),
     tamaguiPlugin(tamaguiConfig) as PluginOption,
-    // BUG
     // tamaguiExtractPlugin(tamaguiConfig)
   ],
 })

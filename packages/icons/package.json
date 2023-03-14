@@ -1,8 +1,6 @@
 {
   "name": "@status-im/icons",
   "version": "0.0.1",
-  "types": "src/index.tsx",
-  "main": "src/index.tsx",
   "private": true,
   "files": [
     "types",
