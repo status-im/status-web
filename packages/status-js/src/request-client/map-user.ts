@@ -7,10 +7,6 @@ export type UserInfo = {
   displayName: string
   description?: string
   emojiHash: string
-  socialUrls: Array<{
-    url: string
-    text: string
-  }>
   // todo: currently not in protobuf nor in product
   // color: string
 }
@@ -30,7 +26,6 @@ export function mapUser(
     displayName: identity.displayName,
     description: identity.description,
     emojiHash: publicKeyToEmojiHash(userPublicKey),
-    socialUrls: identity.socialLinks,
   }
 
   return userInfo
