@@ -48,7 +48,7 @@ message CommunityDescription {
   string outro_message = 12;
   bool encrypted = 13;
   repeated string tags = 14;
-  URLProps url_props = 15;
+  URLParams url_params = 15;
 }
 
 message CommunityAdminSettings {
@@ -61,7 +61,7 @@ message CommunityChat {
   ChatIdentity identity = 3;
   string category_id = 4;
   int32 position = 5;
-  URLProps url_props = 6;
+  URLParams url_params = 6;
 }
 
 message CommunityCategory {

@@ -223,9 +223,9 @@ export class URLData extends Message<URLData> {
 }
 
 /**
- * @generated from message URLProps
+ * @generated from message URLParams
  */
-export class URLProps extends Message<URLProps> {
+export class URLParams extends Message<URLParams> {
   /**
    * @generated from field: string encoded_url_data = 1;
    */
@@ -238,32 +238,32 @@ export class URLProps extends Message<URLProps> {
    */
   encodedSignature = "";
 
-  constructor(data?: PartialMessage<URLProps>) {
+  constructor(data?: PartialMessage<URLParams>) {
     super();
     proto3.util.initPartial(data, this);
   }
 
   static readonly runtime = proto3;
-  static readonly typeName = "URLProps";
+  static readonly typeName = "URLParams";
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: "encoded_url_data", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 2, name: "encoded_signature", kind: "scalar", T: 9 /* ScalarType.STRING */ },
   ]);
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): URLProps {
-    return new URLProps().fromBinary(bytes, options);
+  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): URLParams {
+    return new URLParams().fromBinary(bytes, options);
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): URLProps {
-    return new URLProps().fromJson(jsonValue, options);
+  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): URLParams {
+    return new URLParams().fromJson(jsonValue, options);
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): URLProps {
-    return new URLProps().fromJsonString(jsonString, options);
+  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): URLParams {
+    return new URLParams().fromJsonString(jsonString, options);
   }
 
-  static equals(a: URLProps | PlainMessage<URLProps> | undefined, b: URLProps | PlainMessage<URLProps> | undefined): boolean {
-    return proto3.util.equals(URLProps, a, b);
+  static equals(a: URLParams | PlainMessage<URLParams> | undefined, b: URLParams | PlainMessage<URLParams> | undefined): boolean {
+    return proto3.util.equals(URLParams, a, b);
   }
 }
 

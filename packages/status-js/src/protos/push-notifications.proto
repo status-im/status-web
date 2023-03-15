@@ -42,7 +42,7 @@ message PushNotificationRegistrationResponse {
 message ContactCodeAdvertisement {
   repeated PushNotificationQueryInfo push_notification_info = 1;
   ChatIdentity chat_identity = 2;
-	URLProps url_props = 3;
+	URLParams url_params = 3;
 }
 
 message PushNotificationQuery {

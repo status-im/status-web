@@ -6,7 +6,7 @@
 import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
 import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
 import { ChatIdentity } from "./chat-identity_pb.js";
-import { URLProps } from "./url-data_pb.js";
+import { URLParams } from "./url-data_pb.js";
 
 /**
  * @generated from message Grant
@@ -285,9 +285,9 @@ export class CommunityDescription extends Message<CommunityDescription> {
   tags: string[] = [];
 
   /**
-   * @generated from field: URLProps url_props = 15;
+   * @generated from field: URLParams url_params = 15;
    */
-  urlProps?: URLProps;
+  urlParams?: URLParams;
 
   constructor(data?: PartialMessage<CommunityDescription>) {
     super();
@@ -310,7 +310,7 @@ export class CommunityDescription extends Message<CommunityDescription> {
     { no: 12, name: "outro_message", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 13, name: "encrypted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
     { no: 14, name: "tags", kind: "scalar", T: 9 /* ScalarType.STRING */, repeated: true },
-    { no: 15, name: "url_props", kind: "message", T: URLProps },
+    { no: 15, name: "url_params", kind: "message", T: URLParams },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CommunityDescription {
@@ -397,9 +397,9 @@ export class CommunityChat extends Message<CommunityChat> {
   position = 0;
 
   /**
-   * @generated from field: URLProps url_props = 6;
+   * @generated from field: URLParams url_params = 6;
    */
-  urlProps?: URLProps;
+  urlParams?: URLParams;
 
   constructor(data?: PartialMessage<CommunityChat>) {
     super();
@@ -414,7 +414,7 @@ export class CommunityChat extends Message<CommunityChat> {
     { no: 3, name: "identity", kind: "message", T: ChatIdentity },
     { no: 4, name: "category_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
     { no: 5, name: "position", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-    { no: 6, name: "url_props", kind: "message", T: URLProps },
+    { no: 6, name: "url_params", kind: "message", T: URLParams },
   ]);
 
   static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): CommunityChat {
