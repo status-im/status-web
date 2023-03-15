@@ -69,9 +69,7 @@ class RequestClient {
 
       client = new RequestClient(waku)
     } catch (error) {
-      if (client) {
-        await client.stop()
-      } else if (waku) {
+      if (waku) {
         await waku.stop()
       }
 
