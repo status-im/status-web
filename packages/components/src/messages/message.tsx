@@ -14,7 +14,7 @@ import { Reactions } from './components/reactions'
 
 import type { ReactionsType } from './types'
 
-interface Props {
+export interface MessageProps {
   text?: React.ReactNode
   images?: Array<{ url: string }>
   reactions: ReactionsType
@@ -44,7 +44,7 @@ const Base = styled(Stack, {
   } as const,
 })
 
-const Message = (props: Props) => {
+const Message = (props: MessageProps) => {
   const { text, images, reactions, reply, pinned } = props
 
   const [hovered, setHovered] = useState(false)
