@@ -56,7 +56,7 @@ const Base = styled(Stack, {
       },
     },
 
-    selected: {
+    active: {
       default: {
         backgroundColor: '$neutral-20',
         borderColor: '$neutral-30',
@@ -104,7 +104,7 @@ const Base = styled(Stack, {
       },
     },
 
-    selectedBlur: {
+    activeBlur: {
       default: {
         backgroundColor: '$neutral-80-opa-10',
         borderColor: '$neutral-80-opa-5',
@@ -166,9 +166,9 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
       {...pressableProps}
       ref={ref}
       variant={blur ? undefined : variant}
-      selected={blur ? undefined : selected ? variant : undefined}
+      active={blur ? undefined : selected ? variant : undefined}
       variantBlur={blur ? variant : undefined}
-      selectedBlur={blur ? (selected ? variant : undefined) : undefined}
+      activeBlur={blur ? (selected ? variant : undefined) : undefined}
     >
       {cloneElement(icon, {
         color,
