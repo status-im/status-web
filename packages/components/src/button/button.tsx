@@ -1,10 +1,10 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 
 import { Paragraph } from '../typography'
 
-import type { GetProps } from '@tamagui/core'
+import type { ColorTokens, GetProps } from '@tamagui/core'
 import type { Ref } from 'react'
 
 const Base = styled(Stack, {
@@ -16,22 +16,18 @@ const Base = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  paddingHorizontal: 16,
-  paddingTop: 7,
-  paddingBottom: 9,
-
   cursor: 'pointer',
   userSelect: 'none',
-  animation: 'fast',
   borderWidth: 1,
   borderColor: 'transparent',
+  animation: 'fast',
 
   variants: {
-    type: {
+    variant: {
       primary: {
         backgroundColor: '$primary',
         hoverStyle: { backgroundColor: '$primaryHover' },
-        pressStyle: { backgroundColor: '$primaryHover' },
+        pressStyle: { backgroundColor: '#2139B6' },
       },
       positive: {
         backgroundColor: '$success-50',
@@ -51,7 +47,7 @@ const Base = styled(Stack, {
       outline: {
         borderWidth: 1,
         borderColor: '$neutral-30',
-        hoverStyle: { borderColor: '$neutral-30' },
+        hoverStyle: { borderColor: '$neutral-40' },
         pressStyle: { borderColor: '$neutral-50' },
       },
       ghost: {
@@ -75,32 +71,41 @@ const Base = styled(Stack, {
 
     size: {
       40: {
-        minHeight: 40,
-        borderRadius: 12,
+        height: 40,
         paddingHorizontal: 16,
-        paddingTop: 7,
-        paddingBottom: 9,
+        gap: 4,
       },
       32: {
-        minHeight: 32,
-        borderRadius: 10,
-        paddingHorizontal: 16,
-        paddingTop: 4,
-        paddingBottom: 6,
+        height: 32,
+        paddingHorizontal: 12,
+        gap: 4,
       },
       24: {
-        minHeight: 24,
-        borderRadius: 8,
+        height: 24,
         paddingHorizontal: 8,
-        paddingTop: 2,
-        paddingBottom: 4,
+      },
+    },
+
+    radius: {
+      full: {
+        borderRadius: 40,
+      },
+      40: {
+        borderRadius: 12,
+      },
+      32: {
+        borderRadius: 10,
+      },
+      24: {
+        borderRadius: 8,
       },
     },
 
     iconOnly: {
       true: {
-        space: 0,
-        paddingHorizontal: 8,
+        gap: 0,
+        padding: 0,
+        aspectRatio: 1,
       },
     },
   } as const,
@@ -113,30 +118,6 @@ const ButtonText = styled(Paragraph, {
   weight: 'medium',
 
   variants: {
-    type: {
-      primary: {
-        color: '$white-100',
-      },
-      positive: {
-        color: '$white-100',
-      },
-      grey: {
-        color: '$neutral-100',
-      },
-      darkGrey: {
-        color: '$neutral-100',
-      },
-      outline: {
-        color: '$neutral-100',
-      },
-      ghost: {
-        color: '$neutral-100',
-      },
-      danger: {
-        color: '$white-100',
-      },
-    },
-
     size: {
       40: {
         variant: 'normal',
@@ -155,16 +136,28 @@ type BaseProps = GetProps<typeof Base>
 
 type Props = BaseProps & {
   children?: string
-  type?: BaseProps['type']
+  variant?: BaseProps['variant']
+  shape?: 'default' | 'circle'
   size?: BaseProps['size']
   disabled?: boolean
-  icon?: React.ReactNode
-  iconAfter?: React.ReactNode
+  icon?: React.ReactElement
+  iconAfter?: React.ReactElement
+}
+
+const textColors: Record<NonNullable<Props['variant']>, ColorTokens> = {
+  primary: '$white-100',
+  positive: '$white-100',
+  grey: '$neutral-100',
+  darkGrey: '$neutral-100',
+  outline: '$neutral-100',
+  ghost: '$neutral-100',
+  danger: '$white-100',
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const {
-    type = 'primary',
+    variant = 'primary',
+    shape = 'default',
     size = 40,
     children,
     icon,
@@ -172,15 +165,24 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     ...rest
   } = props
 
+  // TODO: provider aria-label if button has only icon
   const iconOnly = !children && Boolean(icon)
+  const color = textColors[variant]
 
   return (
-    <Base {...rest} ref={ref} type={type} size={size} iconOnly={iconOnly}>
-      <ButtonText type={type} size={size}>
-        {icon}
+    <Base
+      {...rest}
+      ref={ref}
+      variant={variant}
+      radius={shape === 'circle' ? 'full' : size}
+      size={size}
+      iconOnly={iconOnly}
+    >
+      {icon ? cloneElement(icon, { color }) : null}
+      <ButtonText color={color} size={size}>
         {children}
-        {iconAfter}
       </ButtonText>
+      {iconAfter ? cloneElement(iconAfter, { color }) : null}
     </Base>
   )
 }
