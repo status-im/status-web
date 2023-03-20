@@ -1,10 +1,9 @@
 import { useState } from 'react'
 
 import { PinIcon } from '@status-im/icons/16'
-import { View } from 'react-native'
 import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
 
-import { Author } from '../author/author'
+import { Author } from '../author'
 import { Avatar } from '../avatar'
 import { Image } from '../image'
 import { useChatDispatch } from '../provider'
@@ -23,7 +22,7 @@ interface Props {
   pinned?: boolean
 }
 
-const Wrapper = styled(View, {
+const Base = styled(Stack, {
   position: 'relative',
   paddingHorizontal: 8,
   paddingVertical: 8,
@@ -36,6 +35,7 @@ const Wrapper = styled(View, {
         backgroundColor: '$neutral-5',
       },
     },
+
     pinned: {
       true: {
         backgroundColor: '$blue-50-opa-5',
@@ -48,15 +48,16 @@ const Message = (props: Props) => {
   const { text, images, reactions, reply, pinned } = props
 
   const [hovered, setHovered] = useState(false)
-  const [actionsOpen, setActionsOpen] = useState(false)
+  const [showActions, setShowActions] = useState(false)
 
-  const active = actionsOpen || hovered
+  const active = showActions || hovered
+  const hasReactions = Object.keys(reactions).length > 0
   // <Sheet press="long">
 
   const dispatch = useChatDispatch()
 
   return (
-    <Wrapper
+    <Base
       active={active}
       onHoverIn={() => setHovered(true)}
       onHoverOut={() => setHovered(false)}
@@ -65,7 +66,7 @@ const Message = (props: Props) => {
         <Unspaced>
           <Actions
             reactions={reactions}
-            onOpenChange={setActionsOpen}
+            onOpenChange={setShowActions}
             onReplyPress={() => dispatch({ type: 'reply', messageId: '1' })}
             onEditPress={() => dispatch({ type: 'edit', messageId: '1' })}
           />
@@ -113,7 +114,12 @@ const Message = (props: Props) => {
           />
 
           {text && (
-            <Paragraph flexGrow={0} weight="regular" color="$neutral-100">
+            <Paragraph
+              flexGrow={0}
+              weight="regular"
+              color="$neutral-100"
+              userSelect="text"
+            >
               {text}
             </Paragraph>
           )}
@@ -130,14 +136,14 @@ const Message = (props: Props) => {
             </Stack>
           ))}
 
-          {reactions && (
+          {hasReactions && (
             <Stack paddingTop={8}>
               <Reactions reactions={reactions} />
             </Stack>
           )}
         </YStack>
       </XStack>
-    </Wrapper>
+    </Base>
   )
 }
 
