@@ -41,7 +41,7 @@ const Base = styled(Stack, {
         borderColor: '$neutral-20',
         hoverStyle: { borderColor: '$neutral-30' },
         pressStyle: {
-          borderColor: '$netural-20',
+          borderColor: '$neutral-20',
           backgroundColor: '$neutral-10',
         },
       },
@@ -63,7 +63,7 @@ const Base = styled(Stack, {
       },
 
       outline: {
-        borderColor: '$netural-20',
+        borderColor: '$neutral-20',
         backgroundColor: '$neutral-10',
       },
 
