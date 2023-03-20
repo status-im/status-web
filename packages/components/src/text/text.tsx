@@ -36,7 +36,7 @@ const Base = styled(BaseText, {
   variants: {
     type: {
       default: {
-        fontFamily: '$inter',
+        fontFamily: '$sans',
       },
       monospace: {
         fontFamily: '$mono',
