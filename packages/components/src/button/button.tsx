@@ -178,11 +178,11 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       size={size}
       iconOnly={iconOnly}
     >
-      {icon ? cloneElement(icon, { color }) : null}
-      <ButtonText color={color} size={size}>
+      {icon ? cloneElement(icon, { color: textColor }) : null}
+      <Text color={textColor} size={textSize}>
         {children}
-      </ButtonText>
-      {iconAfter ? cloneElement(iconAfter, { color }) : null}
+      </Text>
+      {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
     </Base>
   )
 }
