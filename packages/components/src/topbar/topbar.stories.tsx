@@ -38,7 +38,7 @@ export const Default: Story = {
 export const WithMembersSelected: Story = {
   args: {
     ...Default.args,
-    membersVisisble: true,
+    showMembers: true,
   },
 }
 

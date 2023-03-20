@@ -11,7 +11,7 @@ import {
 } from '@radix-ui/react-dropdown-menu'
 import { Stack, styled } from 'tamagui'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 const Content = styled(DropdownMenuContent, {
   name: 'DropdownMenuContent',
@@ -93,9 +93,9 @@ const DropdownMenuItem = (props: DropdownMenuItemProps) => {
   return (
     <Item onSelect={onSelect}>
       <Stack marginRight={12}>{cloneElement(icon, { color: iconColor })}</Stack>
-      <Paragraph weight="medium" color={textColor}>
+      <Text size={15} weight="medium" color={textColor}>
         {label}
-      </Paragraph>
+      </Text>
     </Item>
   )
 }

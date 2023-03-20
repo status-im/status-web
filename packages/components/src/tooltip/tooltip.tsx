@@ -10,7 +10,7 @@ import {
 } from '@radix-ui/react-tooltip'
 import { Stack } from 'tamagui'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 import type { TooltipContentProps } from '@radix-ui/react-tooltip'
 import type { Ref } from 'react'
@@ -62,9 +62,9 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
               shadowColor="rgba(9, 16, 28, 0.12)"
             >
               {typeof content === 'string' ? (
-                <Paragraph variant="smaller" weight="medium" color="$white-100">
+                <Text size={13} weight="medium" color="$white-100">
                   {content}
-                </Paragraph>
+                </Text>
               ) : (
                 content
               )}

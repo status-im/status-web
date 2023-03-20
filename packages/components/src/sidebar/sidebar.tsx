@@ -6,7 +6,7 @@ import { AccordionItem } from '../accordion/accordionItem'
 import { Avatar } from '../avatar'
 import { Button } from '../button'
 import { Image } from '../image'
-import { Heading, Paragraph } from '../typography'
+import { Text } from '../text'
 import { CHANNEL_GROUPS } from './mock-data'
 
 import type { ChannelGroup } from './mock-data'
@@ -58,11 +58,15 @@ const Sidebar = (props: Props) => {
               size={80}
             />
           </Stack>
-          <Heading marginBottom={16}>{name}</Heading>
-          <Paragraph marginBottom={12}>{description}</Paragraph>
-          <Stack flexDirection="row" alignItems="center" mb={12}>
+          <Stack gap={8} marginBottom={12}>
+            <Text size={27} weight="semibold">
+              {name}
+            </Text>
+            <Text size={15}>{description}</Text>
+          </Stack>
+          <Stack flexDirection="row" alignItems="center" mb={12} space={8}>
             <GroupIcon color="$neutral-100" />
-            <Paragraph ml={8}>{membersCount}</Paragraph>
+            <Text size={15}>{membersCount}</Text>
           </Stack>
 
           <Button>Join community</Button>
