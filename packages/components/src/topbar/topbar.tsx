@@ -51,7 +51,7 @@ const Topbar = (props: Props) => {
             <IconButton
               icon={<ArrowLeftIcon />}
               onPress={() => goBack?.()}
-              blurred={blur}
+              blur={blur}
             />
           </Stack>
 
@@ -100,7 +100,7 @@ const Topbar = (props: Props) => {
               icon={<MembersIcon />}
               selected={membersVisisble}
               onPress={onMembersPress}
-              blurred={blur}
+              blur={blur}
             />
           </Stack>
 
