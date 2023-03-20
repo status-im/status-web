@@ -1,1 +1,1 @@
-export { Shadow } from './shadow'
+export { Shadow, type ShadowProps } from './shadow'
