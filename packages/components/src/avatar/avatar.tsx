@@ -10,7 +10,6 @@ const Base = styled(Stack, {
   position: 'relative',
   justifyContent: 'center',
   alignItems: 'center',
-  backgroundColor: '$white-100',
 
   variants: {
     // defined in Avatar props
@@ -20,6 +19,15 @@ const Base = styled(Stack, {
           width: size,
           height: size,
         }
+      },
+    },
+
+    shape: {
+      circle: {
+        borderRadius: 80, // big enough to cover all sizes
+      },
+      rounded: {
+        borderRadius: 16,
       },
     },
 
@@ -37,6 +45,7 @@ const Shape = styled(Stack, {
 
   width: '100%',
   height: '100%',
+  backgroundColor: '$white-100',
   overflow: 'hidden',
 
   variants: {
@@ -141,7 +150,7 @@ const Avatar = (props: Props) => {
   }, [src])
 
   return (
-    <Base size={size} outline={outline}>
+    <Base size={size} shape={shape} outline={outline}>
       {indicator && (
         <Unspaced>
           <Indicator size={size} state={indicator} />
