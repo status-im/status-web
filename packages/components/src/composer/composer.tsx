@@ -10,7 +10,7 @@ import {
   ReactionIcon,
 } from '@status-im/icons/20'
 import { BlurView } from 'expo-blur'
-import { AnimatePresence, Stack, XStack, YStack } from 'tamagui'
+import { AnimatePresence, Stack, XStack } from 'tamagui'
 
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
@@ -18,6 +18,7 @@ import { Image } from '../image'
 import { Input } from '../input'
 import { useChatDispatch, useChatState } from '../provider'
 import { Reply } from '../reply'
+import { Shadow } from '../shadow'
 
 interface Props {
   blur?: boolean
@@ -43,6 +44,8 @@ const Composer = (props: Props) => {
   const chatState = useChatState()
   const chatDispatch = useChatDispatch()
 
+  const showSendButton = text !== '' || imagesData.length > 0
+
   return (
     <BlurView
       intensity={40}
@@ -51,20 +54,16 @@ const Composer = (props: Props) => {
         width: '100%',
       }}
     >
-      <YStack
+      <Shadow
+        variant={iconButtonBlurred ? 'none' : '$2'}
+        inverted
         animation="fast"
         backgroundColor={iconButtonBlurred ? '$blurBackground' : '$background'}
-        shadowColor={iconButtonBlurred ? 'none' : 'rgba(9, 16, 28, 0.08)'}
-        shadowOffset={{ width: 4, height: iconButtonBlurred ? 0 : 4 }}
-        shadowRadius={20}
         borderTopLeftRadius={20}
         borderTopRightRadius={20}
         px={16}
         width="100%"
         py={12}
-        style={{
-          elevation: 10,
-        }}
       >
         {chatState?.type === 'reply' && (
           <Stack paddingLeft={4} paddingBottom={4}>
@@ -169,42 +168,38 @@ const Composer = (props: Props) => {
                 variant="outline"
                 icon={<ImageIcon />}
                 disabled={isImageUploadDisabled}
-                blurred={iconButtonBlurred}
+                blur={iconButtonBlurred}
               />
             </label>
             <IconButton
               variant="outline"
               icon={<ReactionIcon />}
-              blurred={iconButtonBlurred}
+              blur={iconButtonBlurred}
             />
             <IconButton
               variant="outline"
               icon={<FormatIcon />}
               disabled
-              blurred={iconButtonBlurred}
+              blur={iconButtonBlurred}
             />
           </Stack>
-          {text || imagesData.length > 0 ? (
-            // TODO fix styles for circular button. Also the color is different from the design and we have layout shift because of the size.
+          {showSendButton ? (
             <Button
+              variant="primary"
+              shape="circle"
               icon={<ArrowUpIcon />}
-              height={32}
               size={32}
-              width={32}
-              borderRadius={32}
-              justifyContent="center"
-              alignItems="center"
-              type="positive"
             />
           ) : (
-            <IconButton
+            <Button
               variant="outline"
               icon={<AudioIcon />}
-              blurred={iconButtonBlurred}
+              size={32}
+              // blurred={iconButtonBlurred}
             />
           )}
         </XStack>
-      </YStack>
+      </Shadow>
     </BlurView>
   )
 }
