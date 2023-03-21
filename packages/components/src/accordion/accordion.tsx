@@ -6,24 +6,18 @@ import { AnimatePresence } from 'tamagui'
 
 import { Label, Paragraph } from '../typography'
 
-import type { GetProps } from '@tamagui/core'
-
-type BaseProps = GetProps<typeof Stack>
-
 type Props = {
   children: React.ReactElement[] | React.ReactElement
   initialExpanded: boolean
   title: string
-  numberOfNewMessages?: number
-} & BaseProps
+  unreadCount?: number
+}
 
-const Accordion = ({
-  children,
-  initialExpanded,
-  title,
-  numberOfNewMessages,
-}: Props) => {
+const Accordion = (props: Props) => {
+  const { children, initialExpanded, title, unreadCount } = props
+
   const [isExpanded, setIsExpanded] = useState(initialExpanded)
+
   return (
     <Stack
       accessibilityRole="button"
@@ -32,6 +26,7 @@ const Accordion = ({
       borderTopWidth={1}
       borderTopColor="$neutral-10"
       paddingHorizontal={8}
+      paddingBottom={8}
     >
       <Stack justifyContent="flex-start">
         <Stack width="100%">
@@ -68,7 +63,7 @@ const Accordion = ({
               </Paragraph>
             </Stack>
             <AnimatePresence>
-              {!isExpanded && numberOfNewMessages && (
+              {!isExpanded && unreadCount !== 0 && (
                 <Stack
                   key={`notifications-${title}}`}
                   width={20}
@@ -96,7 +91,7 @@ const Accordion = ({
                     alignItems="center"
                   >
                     <Label color="$white-100" weight="medium">
-                      {numberOfNewMessages}
+                      {unreadCount}
                     </Label>
                   </Stack>
                 </Stack>

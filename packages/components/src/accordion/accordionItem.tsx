@@ -9,7 +9,6 @@ type Props = {
   selected?: boolean
   onPress?: () => void
   channel: Channel
-  mb?: number
 }
 
 const textColor = {
@@ -20,8 +19,9 @@ const textColor = {
 }
 
 const AccordionItem = (props: Props) => {
-  const { channel, selected, onPress, mb } = props
-  const { emoji, title, channelStatus = 'normal', numberOfMessages } = channel
+  const { channel, selected, onPress } = props
+
+  const { emoji, title, channelStatus = 'normal', unreadCount } = channel
 
   return (
     <Stack
@@ -51,7 +51,6 @@ const AccordionItem = (props: Props) => {
       flexDirection="row"
       cursor="pointer"
       onPress={onPress}
-      mb={mb}
     >
       <Stack
         justifyContent="flex-start"
@@ -91,7 +90,7 @@ const AccordionItem = (props: Props) => {
                 alignItems="center"
               >
                 <Label color="$white-100" weight="medium">
-                  {numberOfMessages}
+                  {unreadCount}
                 </Label>
               </Stack>
             </Stack>

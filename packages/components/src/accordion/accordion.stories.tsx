@@ -8,7 +8,7 @@ const meta: Meta<typeof Accordion> = {
   component: Accordion,
   argTypes: {},
   args: {
-    numberOfNewMessages: 3,
+    unreadCount: 3,
     title: 'Welcome',
   },
   parameters: {

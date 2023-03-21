@@ -72,18 +72,15 @@ const Sidebar = (props: Props) => {
             key={group.id}
             initialExpanded={group.id === 'welcome'}
             title={group.title}
-            numberOfNewMessages={group.unreadCount}
+            unreadCount={group.unreadCount}
           >
-            {group.channels.map((channel, index) => {
-              const isLastChannelOfTheList = index === group.channels.length - 1
-
+            {group.channels.map(channel => {
               return (
                 <AccordionItem
                   key={channel.id}
                   channel={channel}
                   selected={selectedChannelId === channel.id}
                   onPress={() => onChannelPress(channel.id)}
-                  mb={isLastChannelOfTheList ? 8 : 0}
                 />
               )
             })}
