@@ -4,6 +4,8 @@ import { Stack, styled, Text, Unspaced } from '@tamagui/core'
 
 import { Image } from '../image'
 
+import type { GetProps } from '@tamagui/core'
+
 const Base = styled(Stack, {
   name: 'Avatar',
 
@@ -116,6 +118,7 @@ const Indicator = styled(Stack, {
     },
 
     state: {
+      none: {},
       online: {
         backgroundColor: '$success-50',
       },
@@ -133,15 +136,21 @@ const Fallback = styled(Text, {
 interface Props {
   src: string
   size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
-  indicator?: 'online' | 'offline'
-  shape?: 'circle' | 'rounded'
-  outline?: boolean
+  indicator?: GetProps<typeof Indicator>['state']
+  shape?: GetProps<typeof Base>['shape']
+  outline?: GetProps<typeof Base>['outline']
 }
 
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 const Avatar = (props: Props) => {
-  const { src, size, shape = 'circle', outline = false, indicator } = props
+  const {
+    src,
+    size,
+    shape = 'circle',
+    outline = false,
+    indicator = 'none',
+  } = props
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
