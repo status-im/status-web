@@ -37,6 +37,7 @@ const Image = (props: Props, ref: Ref<HTMLImageElement>) => {
       source={source}
       width={width}
       height={height}
+      aspectRatio={aspectRatio}
       radius={radius}
     />
   )
