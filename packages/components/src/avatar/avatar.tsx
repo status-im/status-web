@@ -35,7 +35,7 @@ const Avatar = (props: Props) => {
 
   return (
     <Base size={size} shape={shape} outline={outline}>
-      {indicator && (
+      {indicator !== 'none' && (
         <Unspaced>
           <Indicator size={size} state={indicator} />
         </Unspaced>
