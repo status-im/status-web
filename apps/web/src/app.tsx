@@ -4,6 +4,7 @@ import {
   CHANNEL_GROUPS,
   Composer,
   Messages,
+  PinnedMessage,
   Sidebar,
   SidebarMembers,
   Topbar,
@@ -20,6 +21,19 @@ const COMMUNITY = {
   imageUrl:
     'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
 }
+
+const mockMessages = [
+  {
+    text: 'First message',
+    reactions: {},
+    pinned: true,
+  },
+  {
+    text: 'Second message',
+    reactions: {},
+    pinned: true,
+  },
+]
 
 function App() {
   const [showMembers, setShowMembers] = useState(false)
@@ -63,6 +77,7 @@ function App() {
           showMembers={showMembers}
           onMembersPress={() => setShowMembers(show => !show)}
         />
+        <PinnedMessage messages={mockMessages} />
 
         <div id="content" ref={containerRef}>
           <div id="messages">
