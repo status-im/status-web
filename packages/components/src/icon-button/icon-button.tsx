@@ -24,7 +24,7 @@ type Props = PressableProps & {
 }
 
 const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { icon, blur, variant = 'default' } = props
+  const { icon, blur, variant = 'default', ...buttonProps } = props
 
   const { pressableProps, color } = usePressableColors(
     {
@@ -41,6 +41,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base
+      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
       {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
       ref={ref}
       variant={blur ? undefined : variant}
