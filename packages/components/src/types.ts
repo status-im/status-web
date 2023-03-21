@@ -28,9 +28,8 @@ export type MapVariant<
   [key in V[K] & string]: ColorTokens
 }
 
-export type {
-  GetBaseProps,
-  GetProps,
-  GetStyledVariants as GetVariants,
-  PressableProps,
-}
+export type GetVariants<A extends TamaguiComponent> = Required<
+  GetStyledVariants<A>
+>
+
+export type { GetBaseProps, GetProps, PressableProps }
