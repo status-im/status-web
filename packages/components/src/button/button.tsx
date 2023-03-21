@@ -167,7 +167,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   // TODO: provider aria-label if button has only icon
   const iconOnly = !children && Boolean(icon)
-  const color = textColors[variant]
+  const textColor = textColors[variant]
 
   return (
     <Base
@@ -179,9 +179,9 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       iconOnly={iconOnly}
     >
       {icon ? cloneElement(icon, { color: textColor }) : null}
-      <Text color={textColor} size={textSize}>
+      <ButtonText color={textColor} size={size}>
         {children}
-      </Text>
+      </ButtonText>
       {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
     </Base>
   )
