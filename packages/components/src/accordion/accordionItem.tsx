@@ -6,7 +6,7 @@ import { Label, Paragraph } from '../typography'
 import type { Channel } from '../sidebar/mock-data'
 
 type Props = {
-  isSelected?: boolean
+  selected?: boolean
   onPress?: () => void
   channel: Channel
   mb?: number
@@ -20,7 +20,7 @@ const textColor = {
 }
 
 const AccordionItem = (props: Props) => {
-  const { channel, isSelected, onPress, mb } = props
+  const { channel, selected, onPress, mb } = props
   const { emoji, title, channelStatus = 'normal', numberOfMessages } = channel
 
   return (
@@ -34,7 +34,7 @@ const AccordionItem = (props: Props) => {
           },
         },
       ]}
-      backgroundColor={isSelected ? '$primary-50-opa-10' : 'transparent'}
+      backgroundColor={selected ? '$primary-50-opa-10' : 'transparent'}
       hoverStyle={{
         backgroundColor: '$primary-50-opa-5',
       }}

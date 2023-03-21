@@ -27,7 +27,7 @@ export const Default: Story = {
       <>
         <AccordionItem
           key="welcome"
-          isSelected
+          selected
           channel={CHANNEL_GROUPS[0].channels[0]}
         />
         <AccordionItem key="general" channel={CHANNEL_GROUPS[0].channels[0]} />

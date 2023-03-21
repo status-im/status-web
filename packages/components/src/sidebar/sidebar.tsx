@@ -81,7 +81,7 @@ const Sidebar = (props: Props) => {
                 <AccordionItem
                   key={channel.id}
                   channel={channel}
-                  isSelected={selectedChannelId === channel.id}
+                  selected={selectedChannelId === channel.id}
                   onPress={() => onChannelPress(channel.id)}
                   mb={isLastChannelOfTheList ? 8 : 0}
                 />
