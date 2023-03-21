@@ -1,4 +1,5 @@
 import { compressPublicKey } from '../utils/compress-public-key'
+import { createUserURLWithPublicKey } from '../utils/create-url'
 import { generateUsername } from '../utils/generate-username'
 import { publicKeyToColorHash } from '../utils/public-key-to-color-hash'
 
@@ -15,5 +16,9 @@ export class Member {
     this.chatKey = '0x' + compressPublicKey(publicKey)
     this.username = generateUsername(publicKey)
     this.colorHash = publicKeyToColorHash(publicKey)
+  }
+
+  public get link(): URL {
+    return createUserURLWithPublicKey(this.chatKey)
   }
 }
