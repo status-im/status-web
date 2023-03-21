@@ -17,4 +17,10 @@ export type { UserInfo } from './request-client/map-user'
 export type { RequestClient } from './request-client/request-client'
 export { createRequestClient } from './request-client/request-client'
 export { deserializePublicKey } from './utils/deserialize-public-key'
+export {
+  decodeChannelURLData,
+  decodeCommunityURLData,
+  decodeUserURLData,
+} from './utils/encode-url-data'
 export { publicKeyToEmojiHash } from './utils/public-key-to-emoji-hash'
+export { verifyEncodedURLData } from './utils/sign-url-data'

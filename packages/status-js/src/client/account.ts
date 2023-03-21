@@ -1,13 +1,10 @@
-import { keccak256 } from 'ethereum-cryptography/keccak'
-import { getPublicKey, sign, utils } from 'ethereum-cryptography/secp256k1'
-import {
-  bytesToHex,
-  concatBytes,
-  hexToBytes,
-} from 'ethereum-cryptography/utils'
+import { getPublicKey, utils } from 'ethereum-cryptography/secp256k1'
+import { bytesToHex, hexToBytes } from 'ethereum-cryptography/utils'
 
 import { compressPublicKey } from '../utils/compress-public-key'
+import { createUserURLWithPublicKey } from '../utils/create-url'
 import { generateUsername } from '../utils/generate-username'
+import { signData, verifySignedData } from '../utils/sign-data'
 
 import type { Client } from './client'
 import type { Community } from './community/community'
@@ -35,19 +32,19 @@ export class Account {
     this.publicKey = bytesToHex(publicKey)
     this.chatKey = '0x' + compressPublicKey(this.publicKey)
     this.username = generateUsername('0x' + this.publicKey)
-
     this.membership = initialAccount ? initialAccount.membership : 'none'
   }
 
-  // sig must be a 65-byte compact ECDSA signature containing the recovery id as the last element.
-  async sign(payload: Uint8Array) {
-    const hash = keccak256(payload)
-    const [signature, recoverId] = await sign(hash, this.privateKey, {
-      recovered: true,
-      der: false,
-    })
+  public get link(): URL {
+    return createUserURLWithPublicKey(this.chatKey)
+  }
 
-    return concatBytes(signature, new Uint8Array([recoverId]))
+  async sign(payload: Uint8Array | string) {
+    return await signData(payload, this.privateKey)
+  }
+
+  verify(signature: Uint8Array, payload: Uint8Array | string) {
+    return verifySignedData(signature, payload, this.publicKey)
   }
 
   updateMembership(community: Community): void {
