@@ -2,9 +2,35 @@ import { forwardRef } from 'react'
 
 import { Stack, styled } from 'tamagui'
 
-import type { GetProps, StackProps } from '@tamagui/core'
+import type { GetVariants } from '../types'
+import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
 import type { View } from 'react-native'
+
+type Variants = GetVariants<typeof Base>
+
+type Props = StackProps & {
+  variant?: Variants['variant']
+  inverted?: boolean
+}
+
+const Shadow = (props: Props, ref: Ref<View>) => {
+  const { variant = '$1', inverted = false, ...stackProps } = props
+
+  return (
+    <Base
+      {...stackProps}
+      ref={ref}
+      variant={inverted ? undefined : variant}
+      inverted={inverted ? variant : undefined}
+    />
+  )
+}
+
+const _Shadow = forwardRef(Shadow)
+
+export { _Shadow as Shadow }
+export type { Props as ShadowProps }
 
 const Base = styled(Stack, {
   variants: {
@@ -69,26 +95,3 @@ const Base = styled(Stack, {
     variant: '$1',
   },
 })
-
-type Props = StackProps & {
-  variant?: GetProps<typeof Base>['variant']
-  inverted?: boolean
-}
-
-const Shadow = (props: Props, ref: Ref<View>) => {
-  const { variant = '$1', inverted = false, ...rest } = props
-
-  return (
-    <Base
-      {...rest}
-      ref={ref}
-      variant={inverted ? undefined : variant}
-      inverted={inverted ? variant : undefined}
-    />
-  )
-}
-
-const _Shadow = forwardRef(Shadow)
-
-export { _Shadow as Shadow }
-export type { Props as ShadowProps }

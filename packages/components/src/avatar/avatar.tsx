@@ -4,7 +4,69 @@ import { Stack, styled, Text, Unspaced } from '@tamagui/core'
 
 import { Image } from '../image'
 
-import type { GetProps } from '@tamagui/core'
+import type { GetStyledVariants } from '@tamagui/core'
+
+type Variants = GetStyledVariants<typeof Base>
+
+type Props = {
+  src: string
+  size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
+  shape?: Variants['shape']
+  outline?: Variants['outline']
+  indicator?: GetStyledVariants<typeof Indicator>['state']
+}
+
+type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
+
+const Avatar = (props: Props) => {
+  const {
+    src,
+    size,
+    shape = 'circle',
+    outline = false,
+    indicator = 'none',
+  } = props
+
+  const [status, setStatus] = useState<ImageLoadingStatus>('idle')
+
+  useEffect(() => {
+    setStatus('idle')
+  }, [src])
+
+  return (
+    <Base size={size} shape={shape} outline={outline}>
+      {indicator && (
+        <Unspaced>
+          <Indicator size={size} state={indicator} />
+        </Unspaced>
+      )}
+      <Shape shape={shape}>
+        <Image
+          src={src}
+          width="full"
+          aspectRatio={1}
+          onLoad={() => setStatus('loaded')}
+          onError={() => setStatus('error')}
+        />
+
+        {status === 'error' && (
+          <Fallback
+            width={size}
+            height={size}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            PP
+          </Fallback>
+        )}
+      </Shape>
+    </Base>
+  )
+}
+
+export { Avatar }
+export type { Props as AvatarProps }
 
 const Base = styled(Stack, {
   name: 'Avatar',
@@ -132,63 +194,3 @@ const Indicator = styled(Stack, {
 const Fallback = styled(Text, {
   name: 'AvatarFallback',
 })
-
-interface Props {
-  src: string
-  size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
-  indicator?: GetProps<typeof Indicator>['state']
-  shape?: GetProps<typeof Base>['shape']
-  outline?: GetProps<typeof Base>['outline']
-}
-
-type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
-
-const Avatar = (props: Props) => {
-  const {
-    src,
-    size,
-    shape = 'circle',
-    outline = false,
-    indicator = 'none',
-  } = props
-
-  const [status, setStatus] = useState<ImageLoadingStatus>('idle')
-
-  useEffect(() => {
-    setStatus('idle')
-  }, [src])
-
-  return (
-    <Base size={size} shape={shape} outline={outline}>
-      {indicator && (
-        <Unspaced>
-          <Indicator size={size} state={indicator} />
-        </Unspaced>
-      )}
-      <Shape shape={shape}>
-        <Image
-          src={src}
-          width="full"
-          aspectRatio={1}
-          onLoad={() => setStatus('loaded')}
-          onError={() => setStatus('error')}
-        />
-
-        {status === 'error' && (
-          <Fallback
-            width={size}
-            height={size}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            PP
-          </Fallback>
-        )}
-      </Shape>
-    </Base>
-  )
-}
-
-export { Avatar }
-export type { Props as AvatarProps }
