@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 
 import {
+  AnchorActions,
   CHANNEL_GROUPS,
   Composer,
   Messages,
@@ -69,6 +70,9 @@ function App() {
             <Messages />
           </div>
           <div id="composer">
+            <div id="anchor-actions">
+              <AnchorActions scrolled={shouldBlurBottom} />
+            </div>
             <Composer blur={shouldBlurBottom} />
           </div>
         </div>

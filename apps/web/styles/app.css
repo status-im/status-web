@@ -52,6 +52,12 @@ body,
   padding: 32px 8px;
 }
 
+#anchor-actions {
+  position: absolute;
+  right: 20px;
+  transform: translateY(calc(-100% - 12px));
+}
+
 #composer {
   position: sticky;
   bottom: 0;
