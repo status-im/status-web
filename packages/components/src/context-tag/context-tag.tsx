@@ -4,7 +4,7 @@ import { View } from 'react-native'
 import { Badge } from '../badge'
 import { Paragraph } from '../typography'
 
-type BannerProps = {
+type ContextTagProps = {
   children: React.ReactNode
   icon?: React.ReactNode
   count?: number
@@ -16,7 +16,6 @@ const StyledView = styled(View, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
-  maxHeight: '50px',
 })
 
 const InsideView = styled(View, {
@@ -32,7 +31,7 @@ const Truncate = styled(Paragraph, {
   maxWidth: '200px',
 })
 
-export const Banner = ({ icon, children, count }: BannerProps) => {
+export const ContextTag = ({ icon, children, count }: ContextTagProps) => {
   return (
     <StyledView>
       <InsideView>

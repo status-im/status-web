@@ -5,9 +5,13 @@ import type { Meta, StoryObj } from '@storybook/react'
 const mockMessages = [
   {
     text: 'First message',
+    reactions: {},
+    pinned: true,
   },
   {
     text: 'Second message',
+    reactions: {},
+    pinned: true,
   },
 ]
 
