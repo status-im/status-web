@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import type { PressableProps } from '../types'
 import type { ColorTokens } from 'tamagui'
 
 type Config = {
@@ -9,14 +10,22 @@ type Config = {
   active: ColorTokens
 }
 
+type Return = {
+  color: ColorTokens
+  pressableProps: Pick<
+    PressableProps,
+    'onHoverIn' | 'onHoverOut' | 'onPressIn' | 'onPressOut'
+  >
+}
+
 export const usePressableColors = (
   styles: Config,
-  props: {
+  props: Partial<PressableProps> & {
     'aria-expanded'?: boolean
     'aria-selected'?: boolean
     selected?: boolean
   }
-) => {
+): Return => {
   const [hovered, setHovered] = useState(false)
   const [pressed, setPressed] = useState(false)
 
@@ -39,10 +48,22 @@ export const usePressableColors = (
   return {
     color: styles[key],
     pressableProps: {
-      onHoverIn: () => setHovered(true),
-      onHoverOut: () => setHovered(false),
-      onPressIn: () => setPressed(true),
-      onPressOut: () => setPressed(false),
+      onHoverIn: event => {
+        props.onHoverIn?.(event)
+        setHovered(true)
+      },
+      onHoverOut: event => {
+        props.onHoverOut?.(event)
+        setHovered(false)
+      },
+      onPressIn: event => {
+        props.onPressIn?.(event)
+        setPressed(true)
+      },
+      onPressOut: event => {
+        props.onPressOut?.(event)
+        setPressed(false)
+      },
     } as const,
   }
 }

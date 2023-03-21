@@ -4,7 +4,62 @@ import { Stack, styled } from 'tamagui'
 
 import { usePressableColors } from '../hooks/use-pressable-colors'
 
+import type { GetVariants, PressableProps } from '../types'
+import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
+
+type Variants = GetVariants<typeof Base>
+
+type Props = PressableProps & {
+  icon: React.ReactElement
+  variant?: Variants['variant']
+  selected?: boolean
+  blur?: boolean
+  disabled?: boolean
+  // FIXME: enforce aria-label for accessibility
+  // 'aria-label'?: string
+  // FIXME: update to latest RN
+  'aria-expanded'?: boolean
+  'aria-selected'?: boolean
+}
+
+const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
+  const { icon, blur, variant = 'default' } = props
+
+  const { pressableProps, color } = usePressableColors(
+    {
+      default: blur ? '$neutral-80-opa-70' : '$neutral-50',
+      hover: blur ? '$neutral-80-opa-70' : '$neutral-50',
+      press: '$neutral-100',
+      active: '$neutral-100',
+    },
+    props
+  )
+
+  const selected =
+    props.selected || props['aria-expanded'] || props['aria-selected']
+
+  return (
+    <Base
+      {...(pressableProps as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      ref={ref}
+      variant={blur ? undefined : variant}
+      active={blur ? undefined : selected ? variant : undefined}
+      variantBlur={blur ? variant : undefined}
+      activeBlur={blur ? (selected ? variant : undefined) : undefined}
+    >
+      {cloneElement(icon, {
+        color,
+        size: 20,
+      })}
+    </Base>
+  )
+}
+
+const _IconButton = forwardRef(IconButton)
+
+export { _IconButton as IconButton }
+export type { Props as IconButtonProps }
 
 const Base = styled(Stack, {
   name: 'IconButton',
@@ -129,56 +184,3 @@ const Base = styled(Stack, {
     },
   } as const,
 })
-
-interface Props {
-  icon: React.ReactElement
-  onPress?: () => void
-  variant?: 'default' | 'outline' | 'ghost'
-  selected?: boolean
-  blur?: boolean
-  disabled?: boolean
-  // FIXME: enforce aria-label for accessibility
-  // 'aria-label'?: string
-  // FIXME: update to latest RN
-  'aria-expanded'?: boolean
-  'aria-selected'?: boolean
-}
-
-const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { icon, blur, variant = 'default', ...rest } = props
-
-  const { pressableProps, color } = usePressableColors(
-    {
-      default: blur ? '$neutral-80-opa-70' : '$neutral-50',
-      hover: blur ? '$neutral-80-opa-70' : '$neutral-50',
-      press: '$neutral-100',
-      active: '$neutral-100',
-    },
-    props
-  )
-
-  const selected =
-    props.selected || props['aria-expanded'] || props['aria-selected']
-
-  return (
-    <Base
-      {...rest}
-      {...pressableProps}
-      ref={ref}
-      variant={blur ? undefined : variant}
-      active={blur ? undefined : selected ? variant : undefined}
-      variantBlur={blur ? variant : undefined}
-      activeBlur={blur ? (selected ? variant : undefined) : undefined}
-    >
-      {cloneElement(icon, {
-        color,
-        size: 20,
-      })}
-    </Base>
-  )
-}
-
-const _IconButton = forwardRef(IconButton)
-
-export { _IconButton as IconButton }
-export type { Props as IconButtonProps }

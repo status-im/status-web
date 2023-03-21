@@ -4,8 +4,70 @@ import { Stack, styled } from '@tamagui/core'
 
 import { Paragraph } from '../typography'
 
-import type { ColorTokens, GetProps } from '@tamagui/core'
+import type { GetVariants, MapVariant, PressableProps } from '../types'
+import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
+
+type Variants = GetVariants<typeof Base>
+
+type Props = PressableProps & {
+  variant?: Variants['variant']
+  size?: Variants['size']
+  shape?: 'default' | 'circle'
+  children?: string
+  icon?: React.ReactElement
+  iconAfter?: React.ReactElement
+  disabled?: boolean
+}
+
+const textColors: MapVariant<typeof Base, 'variant'> = {
+  primary: '$white-100',
+  positive: '$white-100',
+  grey: '$neutral-100',
+  darkGrey: '$neutral-100',
+  outline: '$neutral-100',
+  ghost: '$neutral-100',
+  danger: '$white-100',
+}
+
+const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
+  const {
+    variant = 'primary',
+    shape = 'default',
+    size = 40,
+    icon = null,
+    iconAfter = null,
+    children,
+
+    ...buttonProps
+  } = props
+
+  // TODO: provider aria-label if button has only icon
+  const iconOnly = !children && Boolean(icon)
+  const textColor = textColors[variant]
+
+  return (
+    <Base
+      {...(buttonProps as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      ref={ref}
+      variant={variant}
+      radius={shape === 'circle' ? 'full' : size}
+      size={size}
+      iconOnly={iconOnly}
+    >
+      {icon ? cloneElement(icon, { color: textColor }) : null}
+      <ButtonText color={textColor} size={size}>
+        {children}
+      </ButtonText>
+      {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
+    </Base>
+  )
+}
+
+const _Button = forwardRef(Button)
+
+export { _Button as Button }
+export type { Props as ButtonProps }
 
 const Base = styled(Stack, {
   tag: 'button',
@@ -131,63 +193,3 @@ const ButtonText = styled(Paragraph, {
     },
   } as const,
 })
-
-type BaseProps = GetProps<typeof Base>
-
-type Props = BaseProps & {
-  children?: string
-  variant?: BaseProps['variant']
-  shape?: 'default' | 'circle'
-  size?: BaseProps['size']
-  disabled?: boolean
-  icon?: React.ReactElement
-  iconAfter?: React.ReactElement
-}
-
-const textColors: Record<NonNullable<Props['variant']>, ColorTokens> = {
-  primary: '$white-100',
-  positive: '$white-100',
-  grey: '$neutral-100',
-  darkGrey: '$neutral-100',
-  outline: '$neutral-100',
-  ghost: '$neutral-100',
-  danger: '$white-100',
-}
-
-const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const {
-    variant = 'primary',
-    shape = 'default',
-    size = 40,
-    children,
-    icon,
-    iconAfter,
-    ...rest
-  } = props
-
-  // TODO: provider aria-label if button has only icon
-  const iconOnly = !children && Boolean(icon)
-  const textColor = textColors[variant]
-
-  return (
-    <Base
-      {...rest}
-      ref={ref}
-      variant={variant}
-      radius={shape === 'circle' ? 'full' : size}
-      size={size}
-      iconOnly={iconOnly}
-    >
-      {icon ? cloneElement(icon, { color: textColor }) : null}
-      <ButtonText color={textColor} size={size}>
-        {children}
-      </ButtonText>
-      {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
-    </Base>
-  )
-}
-
-const _Button = forwardRef(Button)
-
-export { _Button as Button }
-export type { Props as ButtonProps }
