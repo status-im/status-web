@@ -58,7 +58,7 @@ const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Button
-      {...(pressableProps as StackProps)}
+      {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
       ref={ref}
       variant={variant}
       size={size}

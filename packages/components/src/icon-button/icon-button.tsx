@@ -41,7 +41,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base
-      {...(pressableProps as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
       ref={ref}
       variant={blur ? undefined : variant}
       active={blur ? undefined : selected ? variant : undefined}

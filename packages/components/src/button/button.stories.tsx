@@ -58,13 +58,6 @@ export const PrimaryDisabled: Story = {
   },
 }
 
-export const PrimaryFullWidth: Story = {
-  args: {
-    children: 'Click me',
-    width: 'full',
-  },
-}
-
 export const Primary32: Story = {
   name: 'Primary / 32',
   args: {
