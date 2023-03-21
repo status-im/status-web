@@ -14,7 +14,6 @@ type Props = PressableProps & {
   variant?: Variants['variant']
   size?: Variants['size']
   shape?: 'default' | 'circle'
-
   children?: string
   icon?: React.ReactElement
   iconAfter?: React.ReactElement
@@ -38,7 +37,6 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     size = 40,
     icon = null,
     iconAfter = null,
-
     children,
     ...buttonProps
   } = props
