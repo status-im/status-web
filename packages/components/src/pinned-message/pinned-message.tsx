@@ -8,7 +8,7 @@ import { Pressable, View } from 'react-native'
 import { Banner } from '../banner'
 import { Dialog } from '../dialog'
 import { Message } from '../messages'
-import { Heading } from '../typography'
+import { Text } from '../text'
 
 import type { MessageProps } from '../messages'
 
@@ -51,7 +51,9 @@ export const PinnedMessage = ({ messages }: PinnedMessageProps) => {
         </Pressable>
 
         <Wrapper>
-          <Heading>Pinned Messages</Heading>
+          <Text size={27} weight="semibold">
+            Pinned Messages
+          </Text>
           {messages.map((message, i) => (
             <Message key={i} {...message} />
           ))}

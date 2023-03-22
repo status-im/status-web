@@ -1,7 +1,7 @@
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 type ContextTagProps = {
   children: React.ReactNode
@@ -18,9 +18,9 @@ const StyledView = styled(View, {
 export const ContextTag = ({ children }: ContextTagProps) => {
   return (
     <StyledView>
-      <Paragraph size={12} weight="medium" color="$neutral-100">
+      <Text size={11} weight="medium" color="$neutral-100">
         {children}
-      </Paragraph>
+      </Text>
     </StyledView>
   )
 }

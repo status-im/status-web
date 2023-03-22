@@ -2,7 +2,7 @@ import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
 import { Badge } from '../badge'
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 type BannerProps = {
   children: React.ReactNode
@@ -24,20 +24,14 @@ const InsideView = styled(View, {
   gap: 10,
 })
 
-const Truncate = styled(Paragraph, {
-  display: 'inline-flex',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-  maxWidth: '200px',
-})
-
 export const Banner = ({ icon, children, count }: BannerProps) => {
   return (
     <StyledView>
       <InsideView>
         {icon}
-        <Truncate color="$textPrimary">{children}</Truncate>
+        <Text size={13} color="$textPrimary">
+          {children}
+        </Text>
       </InsideView>
       {count ? <Badge value={count} /> : null}
     </StyledView>

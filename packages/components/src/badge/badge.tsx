@@ -1,7 +1,7 @@
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
-import { Label } from '../typography'
+import { Text } from '../text'
 
 import type { ColorTokens } from '@tamagui/core'
 
@@ -55,7 +55,9 @@ const textColor: Record<NonNullable<BadgeProps['type']>, ColorTokens> = {
 export const Badge = ({ type = 'default', value }: BadgeProps) => {
   return (
     <StyledBadge type={type}>
-      <Label color={textColor[type]}>{value > 99 ? '99+' : value}</Label>
+      <Text size={11} color={textColor[type]}>
+        {value > 99 ? '99+' : value}
+      </Text>
     </StyledBadge>
   )
 }
