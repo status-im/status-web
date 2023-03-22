@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 
 import { Content, Overlay, Portal, Root, Trigger } from '@radix-ui/react-dialog'
-import { useMedia } from 'tamagui'
+import { Stack, styled, useMedia } from 'tamagui'
 
 import { Sheet } from '../sheet'
 
@@ -14,6 +14,15 @@ interface Props {
   onOpenChange?: (open: boolean) => void
   press?: 'normal' | 'long'
 }
+
+const Wrapper = styled(Stack, {
+  position: 'absolute',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100vw',
+  height: '100vh',
+})
 
 // const DialogTrigger = (
 //   props: DialogTriggerProps & {
@@ -52,14 +61,16 @@ const Dialog = (props: Props) => {
 
       {/* CONTENT */}
       <Portal>
-        <Overlay
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}
-        />
-        {content}
+        <Wrapper>
+          <Overlay
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0,0,0,0.5)',
+            }}
+          />
+          {content}
+        </Wrapper>
       </Portal>
     </Root>
   )
