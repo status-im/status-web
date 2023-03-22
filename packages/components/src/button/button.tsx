@@ -86,13 +86,15 @@ const Base = styled(Stack, {
   variants: {
     variant: {
       primary: {
-        backgroundColor: '$primary',
-        hoverStyle: { backgroundColor: '$primaryHover' },
-        pressStyle: { backgroundColor: '#2139B6' },
+        backgroundColor: '$primary-50',
+        hoverStyle: { backgroundColor: '$primary-60' },
+        // TODO: update background color
+        pressStyle: { backgroundColor: '$primary-50' },
       },
       positive: {
         backgroundColor: '$success-50',
         hoverStyle: { backgroundColor: '$success-60' },
+        // TODO: update background color
         pressStyle: { backgroundColor: '$success-50' },
       },
       grey: {
@@ -119,6 +121,7 @@ const Base = styled(Stack, {
       danger: {
         backgroundColor: '$danger',
         hoverStyle: { backgroundColor: '$danger-60' },
+        // TODO: update background color
         pressStyle: { backgroundColor: '$danger' },
       },
     },
