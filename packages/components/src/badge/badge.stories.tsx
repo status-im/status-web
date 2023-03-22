@@ -1,4 +1,5 @@
-import { List, Lists } from '../utils'
+import { Stack } from '@tamagui/core'
+
 import { Badge } from './badge'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -53,26 +54,26 @@ export const Outline: Story = {
 export const AllVariants: Story = {
   args: {},
   render: () => (
-    <Lists>
-      <List>
+    <Stack space flexDirection="row">
+      <Stack space>
         <Badge type="default" value={5} />
         <Badge type="secondary" value={5} />
         <Badge type="grey" value={5} />
         <Badge type="outline" value={5} />
-      </List>
-      <List>
+      </Stack>
+      <Stack space>
         <Badge type="default" value={10} />
         <Badge type="secondary" value={10} />
         <Badge type="grey" value={10} />
         <Badge type="outline" value={10} />
-      </List>
-      <List>
+      </Stack>
+      <Stack space>
         <Badge type="default" value={100} />
         <Badge type="secondary" value={100} />
         <Badge type="grey" value={100} />
         <Badge type="outline" value={100} />
-      </List>
-    </Lists>
+      </Stack>
+    </Stack>
   ),
 }
 

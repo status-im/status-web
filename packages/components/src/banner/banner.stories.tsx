@@ -1,6 +1,6 @@
 import { PinIcon } from '@status-im/icons/20'
+import { Stack } from '@tamagui/core'
 
-import { List } from '../utils'
 import { Banner } from './banner'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -41,13 +41,13 @@ export const NoCount: Story = {
 export const AllVariants: Story = {
   args: {},
   render: () => (
-    <List>
+    <Stack space>
       <Banner icon={<PinIcon />} count={5}>
         Banner message
       </Banner>
       <Banner count={5}>Banner message</Banner>
       <Banner icon={<PinIcon />}>Banner message</Banner>
-    </List>
+    </Stack>
   ),
 }
 
