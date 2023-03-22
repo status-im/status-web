@@ -4,12 +4,12 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 const mockMessages = [
   {
-    text: 'First message',
+    text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
     reactions: {},
     pinned: true,
   },
   {
-    text: 'Second message',
+    text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam. message',
     reactions: {},
     pinned: true,
   },
