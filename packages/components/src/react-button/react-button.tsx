@@ -11,7 +11,7 @@ import {
 } from '@status-im/icons/reactions'
 import { Stack, styled } from '@tamagui/core'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 import type { GetVariants } from '../types'
 import type { StackProps } from '@tamagui/core'
@@ -66,9 +66,9 @@ const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
     >
       <Icon color="$neutral-100" />
       {count && (
-        <Paragraph weight="medium" variant="smaller" whiteSpace="nowrap">
+        <Text size={13} weight="medium" wrap={false}>
           {count}
-        </Paragraph>
+        </Text>
       )}
     </Button>
   )

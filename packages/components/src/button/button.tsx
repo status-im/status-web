@@ -2,8 +2,9 @@ import { cloneElement, forwardRef } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
+import type { TextProps } from '../text'
 import type { GetVariants, MapVariant, PressableProps } from '../types'
 import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
@@ -30,24 +31,32 @@ const textColors: MapVariant<typeof Base, 'variant'> = {
   danger: '$white-100',
 }
 
+const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
+  '40': 15,
+  '32': 15,
+  '24': 13,
+}
+
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const {
     variant = 'primary',
     shape = 'default',
     size = 40,
-    icon = null,
-    iconAfter = null,
     children,
-    ...buttonProps
+    icon,
+    iconAfter,
+    ...rest
   } = props
 
   // TODO: provider aria-label if button has only icon
   const iconOnly = !children && Boolean(icon)
+
   const textColor = textColors[variant]
+  const textSize = textSizes[size]
 
   return (
     <Base
-      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      {...rest}
       ref={ref}
       variant={variant}
       radius={shape === 'circle' ? 'full' : size}
@@ -55,9 +64,9 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       iconOnly={iconOnly}
     >
       {icon ? cloneElement(icon, { color: textColor }) : null}
-      <ButtonText color={textColor} size={size}>
+      <Text color={textColor} size={textSize}>
         {children}
-      </ButtonText>
+      </Text>
       {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
     </Base>
   )
@@ -170,27 +179,6 @@ const Base = styled(Stack, {
         gap: 0,
         padding: 0,
         aspectRatio: 1,
-      },
-    },
-  } as const,
-})
-
-const ButtonText = styled(Paragraph, {
-  display: 'flex',
-  alignItems: 'center',
-  space: 4,
-  weight: 'medium',
-
-  variants: {
-    size: {
-      40: {
-        variant: 'normal',
-      },
-      32: {
-        variant: 'normal',
-      },
-      24: {
-        variant: 'smaller',
       },
     },
   } as const,

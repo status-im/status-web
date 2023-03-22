@@ -5,7 +5,7 @@ import {
 } from '@status-im/icons/12'
 import { XStack } from 'tamagui'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 interface Props {
   name: string
@@ -22,19 +22,19 @@ const Author = (props: Props) => {
   return (
     <XStack space={8} alignItems="center">
       <XStack space={4} alignItems="center">
-        <Paragraph weight="semibold" variant="smaller" color="$neutral-100">
+        <Text size={13} weight="semibold">
           {name}
-        </Paragraph>
+        </Text>
         {status === 'contact' && <ContactIcon />}
         {status === 'verified' && <VerifiedIcon />}
         {status === 'untrustworthy' && <UntrustworthyIcon />}
       </XStack>
 
       {address && (
-        <Paragraph color="$neutral-50" fontSize={11}>
+        <Text size={11} color="$neutral-50">
           {address}
           {time && ` · ${time}`}
-        </Paragraph>
+        </Text>
       )}
     </XStack>
   )

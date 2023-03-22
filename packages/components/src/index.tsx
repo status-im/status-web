@@ -9,8 +9,8 @@ export * from './messages'
 export * from './provider'
 export * from './sidebar'
 export * from './sidebar-members'
+export * from './text'
 export * from './topbar'
-export * from './typography'
 export * from './user-list'
 
 // MOCK DATA

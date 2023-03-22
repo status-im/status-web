@@ -8,7 +8,7 @@ import { Avatar } from '../avatar'
 import { Image } from '../image'
 import { useChatDispatch } from '../provider'
 import { Reply } from '../reply'
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 import { Actions } from './components/actions'
 import { Reactions } from './components/reactions'
 
@@ -92,9 +92,9 @@ const Message = (props: Props) => {
           space={2}
         >
           <PinIcon color="$blue-50" />
-          <Paragraph variant={11} weight="medium" color="$blue-50">
+          <Text size={11} weight="medium" color="$blue-50">
             Steve
-          </Paragraph>
+          </Text>
         </Stack>
       )}
 
@@ -114,14 +114,13 @@ const Message = (props: Props) => {
           />
 
           {text && (
-            <Paragraph
-              flexGrow={0}
-              weight="regular"
-              color="$neutral-100"
-              userSelect="text"
+            <Text
+              size={15}
+              // flexGrow={0}
+              // userSelect="text"
             >
               {text}
-            </Paragraph>
+            </Text>
           )}
 
           {images?.map(image => (

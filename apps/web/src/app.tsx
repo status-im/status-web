@@ -60,7 +60,7 @@ function App() {
         <Topbar
           blur={shouldBlurTop}
           channel={selectedChannel}
-          membersVisisble={showMembers}
+          showMembers={showMembers}
           onMembersPress={() => setShowMembers(show => !show)}
         />
 

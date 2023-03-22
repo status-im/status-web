@@ -5,7 +5,7 @@ import * as icons16 from '@status-im/icons/16'
 import * as icons20 from '@status-im/icons/20'
 import * as reactions from '@status-im/icons/reactions'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 import type { IconProps } from '@status-im/icons/types'
 import type { Meta, StoryObj } from '@storybook/react'
@@ -42,7 +42,7 @@ export const All: Story = {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <Icon color="$background" />
-                <Paragraph>{unpascal(name)}</Paragraph>
+                <Text size={15}>{unpascal(name)}</Text>
               </div>
             )
           })}
@@ -59,7 +59,7 @@ export const All: Story = {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <Icon color="$background" />
-                <Paragraph>{unpascal(name)}</Paragraph>
+                <Text size={15}>{unpascal(name)}</Text>
               </div>
             )
           })}
@@ -76,7 +76,7 @@ export const All: Story = {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <Icon color="$background" />
-                <Paragraph>{unpascal(name)}</Paragraph>
+                <Text size={15}>{unpascal(name)}</Text>
               </div>
             )
           })}
@@ -93,7 +93,7 @@ export const All: Story = {
                 style={{ display: 'flex', flexDirection: 'column' }}
               >
                 <Icon color="$background" />
-                <Paragraph>{unpascal(name)}</Paragraph>
+                <Text size={15}>{unpascal(name)}</Text>
               </div>
             )
           })}
