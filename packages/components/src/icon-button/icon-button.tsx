@@ -1,110 +1,20 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Stack, styled } from '@tamagui/core'
+import { Stack, styled } from 'tamagui'
 
+import { usePressableColors } from '../hooks/use-pressable-colors'
+
+import type { GetVariants, PressableProps } from '../types'
+import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
 
-const Base = styled(Stack, {
-  name: 'IconButton',
-  accessibilityRole: 'button',
+type Variants = GetVariants<typeof Base>
 
-  cursor: 'pointer',
-  userSelect: 'none',
-  borderRadius: 10,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  animation: 'fast',
-
-  width: 30,
-  height: 30,
-  borderWidth: 1,
-  padding: 4,
-
-  variants: {
-    variant: {
-      default: {
-        backgroundColor: '$iconButtonBackground',
-        borderColor: 'transparent',
-
-        hoverStyle: {
-          backgroundColor: '$iconButtonBackgroundHover',
-        },
-
-        pressStyle: {
-          backgroundColor: '$iconButtonBackgroundHover',
-        },
-      },
-      outline: {
-        backgroundColor: 'transparent',
-        borderColor: '$iconButtonOutlineBorder',
-
-        hoverStyle: {
-          borderColor: '$iconButtonOutlineBorderHover',
-        },
-
-        pressStyle: {
-          borderColor: '$iconButtonOutlineBorderHover',
-        },
-      },
-    },
-    blurred: {
-      default: {
-        backgroundColor: '$iconButtonBackgroundBlurred',
-
-        hoverStyle: {
-          backgroundColor: '$iconButtonBackgroundBlurredHover',
-        },
-
-        pressStyle: {
-          backgroundColor: 'iconButtonBackgroundBlurredHover',
-        },
-      },
-      outline: {
-        borderColor: '$iconButtonOutlineBorderBlurred',
-
-        hoverStyle: {
-          borderColor: '$iconButtonOutlineBorderBlurredHover',
-        },
-
-        pressStyle: {
-          borderColor: '$iconButtonOutlineBorderBlurredHover',
-        },
-      },
-    },
-    selected: {
-      default: {
-        backgroundColor: '$iconButtonBackgroundSelected',
-        borderColor: '$iconButtonBorderSelected',
-      },
-      defaultWithBlur: {
-        backgroundColor: '$iconButtonBackgroundBlurredSelected',
-        borderColor: '$iconButtonBorderBlurredSelected',
-      },
-      outline: {
-        backgroundColor: '$iconButtonOutlineBackgroundSelected',
-        borderColor: '$iconButtonOutlineBorderSelected',
-      },
-      outlineWithBlur: {
-        backgroundColor: '$iconButtonOutBackgroundBlurredSelected',
-        borderColor: '$iconButtonOutlineBorderBlurredSelected',
-      },
-    },
-    disabled: {
-      true: {
-        opacity: 0.3,
-        cursor: 'default',
-      },
-    },
-  } as const,
-})
-
-interface Props {
+type Props = PressableProps & {
   icon: React.ReactElement
-  onPress?: () => void
+  variant?: Variants['variant']
   selected?: boolean
-  blurred?: boolean
-  variant?: 'default' | 'outline'
+  blur?: boolean
   disabled?: boolean
   // FIXME: enforce aria-label for accessibility
   // 'aria-label'?: string
@@ -113,80 +23,34 @@ interface Props {
   'aria-selected'?: boolean
 }
 
-const iconColor = {
-  default: {
-    default: '$iconButtonColor',
-    defaultBlurred: '$iconButtonColorBlurred',
-    selected: '$iconButtonColorSelected',
-    selectedBlurred: '$iconButtonColorBlurred',
-  },
-  outline: {
-    default: '$iconButtonColorOutline',
-    defaultBlurred: '$iconButtonColorOutlineBlurred',
-    selected: '$iconButtonColorOutlineSelected',
-    selectedBlurred: '$iconButtonColorOutlineBlurred',
-  },
-}
-
-const getStateForIconColor = ({
-  blurred,
-  selected,
-}: {
-  blurred?: boolean
-  selected?: boolean
-}) => {
-  if (!selected && blurred) {
-    return 'defaultBlurred'
-  }
-  if (selected && blurred) {
-    return 'selectedBlurred'
-  }
-  if (selected && !blurred) {
-    return 'selected'
-  }
-  return 'default'
-}
-
-const getSelectedVariant = ({
-  selected,
-  blurred,
-  variant,
-}: {
-  selected?: boolean
-  blurred?: boolean
-  variant?: 'default' | 'outline'
-}) => {
-  if (!selected) {
-    return undefined
-  }
-  if (blurred && variant === 'default') {
-    return 'defaultWithBlur'
-  }
-  if (blurred && variant === 'outline') {
-    return 'outlineWithBlur'
-  }
-  return variant
-}
-
 const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { icon, blurred, variant = 'default', ...rest } = props
+  const { icon, blur, variant = 'default', ...buttonProps } = props
+
+  const { pressableProps, color } = usePressableColors(
+    {
+      default: blur ? '$neutral-80-opa-70' : '$neutral-50',
+      hover: blur ? '$neutral-80-opa-70' : '$neutral-50',
+      press: '$neutral-100',
+      active: '$neutral-100',
+    },
+    props
+  )
 
   const selected =
     props.selected || props['aria-expanded'] || props['aria-selected']
 
-  const state = getStateForIconColor({ blurred, selected })
-  const selectedVariant = getSelectedVariant({ selected, variant, blurred })
-
   return (
     <Base
-      {...rest}
+      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
       ref={ref}
-      variant={variant}
-      selected={selectedVariant}
-      blurred={blurred ? variant : undefined}
+      variant={blur ? undefined : variant}
+      active={blur ? undefined : selected ? variant : undefined}
+      variantBlur={blur ? variant : undefined}
+      activeBlur={blur ? (selected ? variant : undefined) : undefined}
     >
       {cloneElement(icon, {
-        color: iconColor[variant][state],
+        color,
         size: 20,
       })}
     </Base>
@@ -197,3 +61,127 @@ const _IconButton = forwardRef(IconButton)
 
 export { _IconButton as IconButton }
 export type { Props as IconButtonProps }
+
+const Base = styled(Stack, {
+  name: 'IconButton',
+  tag: 'button',
+  accessibilityRole: 'button',
+
+  cursor: 'pointer',
+  userSelect: 'none',
+  borderRadius: 10,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: 4,
+  width: 32,
+  height: 32,
+  borderWidth: 1,
+  borderColor: 'transparent',
+  animation: 'fast',
+
+  variants: {
+    variant: {
+      default: {
+        backgroundColor: '$neutral-10',
+        borderColor: 'transparent',
+        hoverStyle: { backgroundColor: '$neutral-20' },
+        pressStyle: {
+          backgroundColor: '$neutral-20',
+          borderColor: '$neutral-30',
+        },
+      },
+
+      outline: {
+        backgroundColor: 'transparent',
+        borderColor: '$neutral-20',
+        hoverStyle: { borderColor: '$neutral-30' },
+        pressStyle: {
+          borderColor: '$neutral-20',
+          backgroundColor: '$neutral-10',
+        },
+      },
+
+      ghost: {
+        backgroundColor: 'transparent',
+        hoverStyle: { backgroundColor: '$neutral-10' },
+        pressStyle: {
+          backgroundColor: '$neutral-10',
+          borderColor: '$neutral-20',
+        },
+      },
+    },
+
+    active: {
+      default: {
+        backgroundColor: '$neutral-20',
+        borderColor: '$neutral-30',
+      },
+
+      outline: {
+        borderColor: '$neutral-20',
+        backgroundColor: '$neutral-10',
+      },
+
+      ghost: {
+        backgroundColor: '$neutral-10',
+        borderColor: '$neutral-20',
+      },
+    },
+
+    variantBlur: {
+      default: {
+        backgroundColor: '$neutral-80-opa-5',
+        borderColor: 'transparent',
+        hoverStyle: { backgroundColor: '$neutral-80-opa-10' },
+        pressStyle: {
+          backgroundColor: '$neutral-80-opa-10',
+          borderColor: '$neutral-80-opa-5',
+        },
+      },
+
+      outline: {
+        backgroundColor: 'transparent',
+        borderColor: '$neutral-80-opa-10',
+        hoverStyle: { borderColor: '$neutral-80-opa-20' },
+        pressStyle: {
+          borderColor: '$neutral-80-opa-10',
+          backgroundColor: '$neutral-80-opa-5',
+        },
+      },
+
+      ghost: {
+        backgroundColor: 'transparent',
+        hoverStyle: { backgroundColor: '$neutral-80-opa-5' },
+        pressStyle: {
+          backgroundColor: '$neutral-80-opa-5',
+          borderColor: '$neutral-80-opa-10',
+        },
+      },
+    },
+
+    activeBlur: {
+      default: {
+        backgroundColor: '$neutral-80-opa-10',
+        borderColor: '$neutral-80-opa-5',
+      },
+
+      outline: {
+        borderColor: '$neutral-80-opa-10',
+        backgroundColor: '$neutral-80-opa-5',
+      },
+
+      ghost: {
+        backgroundColor: '$neutral-80-opa-5',
+        borderColor: '$neutral-80-opa-10',
+      },
+    },
+
+    disabled: {
+      true: {
+        opacity: 0.3,
+        cursor: 'default',
+      },
+    },
+  } as const,
+})

@@ -58,13 +58,6 @@ export const PrimaryDisabled: Story = {
   },
 }
 
-export const PrimaryFullWidth: Story = {
-  args: {
-    children: 'Click me',
-    width: 'full',
-  },
-}
-
 export const Primary32: Story = {
   name: 'Primary / 32',
   args: {
@@ -103,30 +96,38 @@ export const PrimaryIconOnly: Story = {
   },
 }
 
+export const PrimaryIconOnlyCirlce: Story = {
+  name: 'Primary/Icon only/Circle',
+  args: {
+    icon,
+    shape: 'circle',
+  },
+}
+
 export const Success: Story = {
   args: {
-    type: 'positive',
+    variant: 'positive',
     children: 'Click me',
   },
 }
 
 export const Outline: Story = {
   args: {
-    type: 'outline',
+    variant: 'outline',
     children: 'Click me',
   },
 }
 
 export const Ghost: Story = {
   args: {
-    type: 'ghost',
+    variant: 'ghost',
     children: 'Click me',
   },
 }
 
 export const Danger: Story = {
   args: {
-    type: 'danger',
+    variant: 'danger',
     children: 'Click me',
   },
 }

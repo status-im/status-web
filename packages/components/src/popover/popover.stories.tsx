@@ -23,7 +23,7 @@ export const Default: Story = {
   args: {},
   render: args => (
     <Popover {...args}>
-      <Button type="primary">Trigger</Button>
+      <Button variant="primary">Trigger</Button>
       <Popover.Content>some content</Popover.Content>
     </Popover>
   ),

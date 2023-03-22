@@ -4,7 +4,7 @@ export interface Channel {
   description: string
   emoji: string
   channelStatus?: 'muted' | 'normal' | 'withMessages' | 'withMentions'
-  numberOfMessages?: number
+  unreadCount?: number
 }
 
 export interface ChannelGroup {
@@ -49,7 +49,7 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
         channelStatus: 'withMentions',
-        numberOfMessages: 3,
+        unreadCount: 3,
       },
     ],
   },
@@ -68,7 +68,7 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
         id: 'jobs',
         title: '# jobs',
         channelStatus: 'withMentions',
-        numberOfMessages: 3,
+        unreadCount: 3,
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
@@ -76,7 +76,7 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
         id: 'events',
         title: '# events',
         channelStatus: 'withMentions',
-        numberOfMessages: 2,
+        unreadCount: 2,
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },

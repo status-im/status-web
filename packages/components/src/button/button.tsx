@@ -1,11 +1,72 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 
 import { Paragraph } from '../typography'
 
-import type { GetProps } from '@tamagui/core'
+import type { GetVariants, MapVariant, PressableProps } from '../types'
+import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
+
+type Variants = GetVariants<typeof Base>
+
+type Props = PressableProps & {
+  variant?: Variants['variant']
+  size?: Variants['size']
+  shape?: 'default' | 'circle'
+  children?: string
+  icon?: React.ReactElement
+  iconAfter?: React.ReactElement
+  disabled?: boolean
+}
+
+const textColors: MapVariant<typeof Base, 'variant'> = {
+  primary: '$white-100',
+  positive: '$white-100',
+  grey: '$neutral-100',
+  darkGrey: '$neutral-100',
+  outline: '$neutral-100',
+  ghost: '$neutral-100',
+  danger: '$white-100',
+}
+
+const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
+  const {
+    variant = 'primary',
+    shape = 'default',
+    size = 40,
+    icon = null,
+    iconAfter = null,
+    children,
+    ...buttonProps
+  } = props
+
+  // TODO: provider aria-label if button has only icon
+  const iconOnly = !children && Boolean(icon)
+  const textColor = textColors[variant]
+
+  return (
+    <Base
+      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      ref={ref}
+      variant={variant}
+      radius={shape === 'circle' ? 'full' : size}
+      size={size}
+      iconOnly={iconOnly}
+    >
+      {icon ? cloneElement(icon, { color: textColor }) : null}
+      <ButtonText color={textColor} size={size}>
+        {children}
+      </ButtonText>
+      {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
+    </Base>
+  )
+}
+
+const _Button = forwardRef(Button)
+
+export { _Button as Button }
+export type { Props as ButtonProps }
 
 const Base = styled(Stack, {
   tag: 'button',
@@ -16,26 +77,24 @@ const Base = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  paddingHorizontal: 16,
-  paddingTop: 7,
-  paddingBottom: 9,
-
   cursor: 'pointer',
   userSelect: 'none',
-  animation: 'fast',
   borderWidth: 1,
   borderColor: 'transparent',
+  animation: 'fast',
 
   variants: {
-    type: {
+    variant: {
       primary: {
-        backgroundColor: '$primary',
-        hoverStyle: { backgroundColor: '$primaryHover' },
-        pressStyle: { backgroundColor: '$primaryHover' },
+        backgroundColor: '$primary-50',
+        hoverStyle: { backgroundColor: '$primary-60' },
+        // TODO: update background color
+        pressStyle: { backgroundColor: '$primary-50' },
       },
       positive: {
         backgroundColor: '$success-50',
         hoverStyle: { backgroundColor: '$success-60' },
+        // TODO: update background color
         pressStyle: { backgroundColor: '$success-50' },
       },
       grey: {
@@ -51,7 +110,7 @@ const Base = styled(Stack, {
       outline: {
         borderWidth: 1,
         borderColor: '$neutral-30',
-        hoverStyle: { borderColor: '$neutral-30' },
+        hoverStyle: { borderColor: '$neutral-40' },
         pressStyle: { borderColor: '$neutral-50' },
       },
       ghost: {
@@ -62,6 +121,7 @@ const Base = styled(Stack, {
       danger: {
         backgroundColor: '$danger',
         hoverStyle: { backgroundColor: '$danger-60' },
+        // TODO: update background color
         pressStyle: { backgroundColor: '$danger' },
       },
     },
@@ -75,32 +135,41 @@ const Base = styled(Stack, {
 
     size: {
       40: {
-        minHeight: 40,
-        borderRadius: 12,
+        height: 40,
         paddingHorizontal: 16,
-        paddingTop: 7,
-        paddingBottom: 9,
+        gap: 4,
       },
       32: {
-        minHeight: 32,
-        borderRadius: 10,
-        paddingHorizontal: 16,
-        paddingTop: 4,
-        paddingBottom: 6,
+        height: 32,
+        paddingHorizontal: 12,
+        gap: 4,
       },
       24: {
-        minHeight: 24,
-        borderRadius: 8,
+        height: 24,
         paddingHorizontal: 8,
-        paddingTop: 2,
-        paddingBottom: 4,
+      },
+    },
+
+    radius: {
+      full: {
+        borderRadius: 40,
+      },
+      40: {
+        borderRadius: 12,
+      },
+      32: {
+        borderRadius: 10,
+      },
+      24: {
+        borderRadius: 8,
       },
     },
 
     iconOnly: {
       true: {
-        space: 0,
-        paddingHorizontal: 8,
+        gap: 0,
+        padding: 0,
+        aspectRatio: 1,
       },
     },
   } as const,
@@ -113,30 +182,6 @@ const ButtonText = styled(Paragraph, {
   weight: 'medium',
 
   variants: {
-    type: {
-      primary: {
-        color: '$white-100',
-      },
-      positive: {
-        color: '$white-100',
-      },
-      grey: {
-        color: '$neutral-100',
-      },
-      darkGrey: {
-        color: '$neutral-100',
-      },
-      outline: {
-        color: '$neutral-100',
-      },
-      ghost: {
-        color: '$neutral-100',
-      },
-      danger: {
-        color: '$white-100',
-      },
-    },
-
     size: {
       40: {
         variant: 'normal',
@@ -150,42 +195,3 @@ const ButtonText = styled(Paragraph, {
     },
   } as const,
 })
-
-type BaseProps = GetProps<typeof Base>
-
-type Props = BaseProps & {
-  children?: string
-  type?: BaseProps['type']
-  size?: BaseProps['size']
-  disabled?: boolean
-  icon?: React.ReactNode
-  iconAfter?: React.ReactNode
-}
-
-const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const {
-    type = 'primary',
-    size = 40,
-    children,
-    icon,
-    iconAfter,
-    ...rest
-  } = props
-
-  const iconOnly = !children && Boolean(icon)
-
-  return (
-    <Base {...rest} ref={ref} type={type} size={size} iconOnly={iconOnly}>
-      <ButtonText type={type} size={size}>
-        {icon}
-        {children}
-        {iconAfter}
-      </ButtonText>
-    </Base>
-  )
-}
-
-const _Button = forwardRef(Button)
-
-export { _Button as Button }
-export type { Props as ButtonProps }
