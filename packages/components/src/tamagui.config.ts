@@ -7,6 +7,12 @@ import { animations } from './animations'
 import { themes } from './themes'
 import { tokens } from './tokens'
 
+import type {
+  ColorTokens,
+  GetStyledVariants,
+  TamaguiComponent,
+} from '@tamagui/core'
+
 export type Conf = typeof config
 
 declare module '@tamagui/core' {
@@ -14,81 +20,25 @@ declare module '@tamagui/core' {
   interface TamaguiCustomConfig extends Conf {}
 }
 
-const interFont = createInterFont({
-  size: {
-    6: 11,
-    7: 13,
-    8: 15,
-    9: 19,
-    10: 27,
-  },
-  weight: {
-    6: '400',
-    7: '500',
-    8: '600',
-  },
-  letterSpacing: {
-    5: 2,
-    6: 1,
-    7: 0,
-    8: -1,
-    9: -2,
-    10: -3,
-    12: -4,
-    14: -5,
-    15: -6,
-  },
-  face: {
-    400: { normal: 'Inter' },
-    500: { normal: 'Inter' },
-    600: { normal: 'InterBold' },
-  },
-})
-
-const monoFont = createFont({
-  family: 'UbuntuMono',
-  weight: {
-    1: '500',
-  },
-  letterSpacing: {
-    5: 2,
-    6: 1,
-    7: 0,
-    8: -1,
-    9: -2,
-    10: -3,
-    12: -4,
-    14: -5,
-    15: -6,
-  },
-  size: {
-    1: 11,
-    2: 12,
-    3: 13,
-    4: 14,
-    5: 16,
-    6: 18,
-    7: 20,
-    8: 22,
-    9: 30,
-    10: 42,
-    11: 52,
-    12: 62,
-    13: 72,
-    14: 92,
-    15: 114,
-    16: 124,
-  },
-  lineHeight: {
-    1: 14,
-    2: 15,
-  },
-})
-
 export const config = createTamagui({
   fonts: {
-    inter: interFont,
-    mono: monoFont,
+    sans: createInterFont({
+      size: {},
+      weight: {},
+      letterSpacing: {},
+      face: {
+        400: { normal: 'Inter' },
+        500: { normal: 'Inter' },
+        600: { normal: 'InterBold' },
+      },
+    }),
+    mono: createFont({
+      family: 'UbuntuMono',
+      weight: {},
+      letterSpacing: {},
+      size: {},
+      lineHeight: {},
+    }),
   },
   themes,
   tokens: {
@@ -117,3 +67,11 @@ export const config = createTamagui({
   shorthands,
   animations,
 })
+
+export type TextColor<
+  C extends TamaguiComponent,
+  K extends keyof V,
+  V extends GetStyledVariants<C> = GetStyledVariants<C>
+> = {
+  [P in V[K] & string]: ColorTokens
+}

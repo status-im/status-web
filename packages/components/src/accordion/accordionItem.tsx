@@ -1,9 +1,10 @@
 import { MutedIcon } from '@status-im/icons/20'
-import { Stack, Text } from '@tamagui/core'
+import { Stack, Text as RNText } from '@tamagui/core'
 
-import { Label, Paragraph } from '../typography'
+import { Text } from '../text'
 
 import type { Channel } from '../sidebar/mock-data'
+import type { ColorTokens } from '@tamagui/core'
 
 type Props = {
   selected?: boolean
@@ -11,7 +12,7 @@ type Props = {
   channel: Channel
 }
 
-const textColor = {
+const textColors: Record<NonNullable<Channel['channelStatus']>, ColorTokens> = {
   muted: '$neutral-40',
   normal: '$neutral-50',
   withMessages: '$neutral-100',
@@ -65,17 +66,14 @@ const AccordionItem = (props: Props) => {
             backgroundColor="$turquoise-50-opa-10"
             justifyContent="center"
             alignItems="center"
+            marginRight={8}
           >
-            <Text>{emoji}</Text>
+            <RNText>{emoji}</RNText>
           </Stack>
         )}
-        <Paragraph
-          color={textColor[channelStatus]}
-          weight="medium"
-          marginLeft={emoji ? 8 : 0}
-        >
+        <Text size={15} color={textColors[channelStatus]} weight="medium">
           {title}
-        </Paragraph>
+        </Text>
       </Stack>
       {channelStatus !== 'normal' && (
         <Stack>
@@ -89,9 +87,9 @@ const AccordionItem = (props: Props) => {
                 justifyContent="center"
                 alignItems="center"
               >
-                <Label color="$white-100" weight="medium">
+                <Text size={11} color="$white-100" weight="medium">
                   {unreadCount}
-                </Label>
+                </Text>
               </Stack>
             </Stack>
           )}

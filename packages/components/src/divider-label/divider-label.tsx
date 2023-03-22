@@ -1,6 +1,6 @@
 import { Stack } from '@tamagui/core'
 
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 type Props = {
   label: string
@@ -18,9 +18,9 @@ const DividerLabel = (props: Props) => {
       borderColor="$neutral-10"
       borderTopWidth={1}
     >
-      <Paragraph color="$neutral-50" weight="medium" variant="smaller">
+      <Text size={13} color="$neutral-50" weight="medium">
         {label}
-      </Paragraph>
+      </Text>
     </Stack>
   )
 }

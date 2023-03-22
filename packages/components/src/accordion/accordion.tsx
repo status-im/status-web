@@ -4,7 +4,7 @@ import { ChevronRightIcon } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 import { AnimatePresence } from 'tamagui'
 
-import { Label, Paragraph } from '../typography'
+import { Text } from '../text'
 
 type Props = {
   children: React.ReactElement[] | React.ReactElement
@@ -38,7 +38,7 @@ const Accordion = (props: Props) => {
             cursor="pointer"
             py={8}
           >
-            <Stack flexDirection="row" alignItems="center">
+            <Stack flexDirection="row" alignItems="center" gap={4}>
               <Stack
                 animation="fast"
                 justifyContent="center"
@@ -53,14 +53,9 @@ const Accordion = (props: Props) => {
               >
                 <ChevronRightIcon color="$neutral-50" />
               </Stack>
-              <Paragraph
-                marginLeft={4}
-                color="$neutral-50"
-                weight="medium"
-                variant="smaller"
-              >
+              <Text size={13} color="$neutral-50" weight="medium">
                 {title}
-              </Paragraph>
+              </Text>
             </Stack>
             <AnimatePresence>
               {!isExpanded && unreadCount !== 0 && (
@@ -90,9 +85,9 @@ const Accordion = (props: Props) => {
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Label color="$white-100" weight="medium">
+                    <Text size={11} color="$white-100" weight="medium">
                       {unreadCount}
-                    </Label>
+                    </Text>
                   </Stack>
                 </Stack>
               )}

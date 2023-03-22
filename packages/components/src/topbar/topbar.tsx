@@ -10,18 +10,18 @@ import {
   ShareIcon,
   UpToDateIcon,
 } from '@status-im/icons/20'
-import { Stack, Text } from '@tamagui/core'
+import { Stack, Text as RNText } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
 
 import { Divider } from '../divider'
 import { DropdownMenu } from '../dropdown-menu'
 import { IconButton } from '../icon-button'
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 import type { Channel } from '../sidebar/mock-data'
 
 type Props = {
-  membersVisisble: boolean
+  showMembers: boolean
   onMembersPress: () => void
   goBack?: () => void
   channel: Channel
@@ -29,7 +29,7 @@ type Props = {
 }
 
 const Topbar = (props: Props) => {
-  const { membersVisisble, onMembersPress, goBack, blur, channel } = props
+  const { showMembers, onMembersPress, goBack, blur, channel } = props
 
   const { title, description, emoji } = channel
 
@@ -57,14 +57,14 @@ const Topbar = (props: Props) => {
 
           {emoji && (
             <Stack marginRight={12}>
-              <Text>{emoji}</Text>
+              <RNText>{emoji}</RNText>
             </Stack>
           )}
 
           {title && (
-            <Paragraph weight="semibold" marginRight={4}>
+            <Text size={15} weight="semibold">
               {title}
-            </Paragraph>
+            </Text>
           )}
 
           <LockedIcon color="$neutral-80-opa-40" />
@@ -81,24 +81,21 @@ const Topbar = (props: Props) => {
           $sm={{ justifyContent: 'flex-end' }}
         >
           {description && (
-            <Paragraph
-              weight="medium"
-              color="$neutral-80-opa-50"
-              variant="smaller"
-              $sm={{ display: 'none' }}
-              flexShrink={1}
-              flexGrow={1}
-              whiteSpace="nowrap"
-              overflow="hidden"
-              textOverflow="ellipsis"
-            >
-              {description}
-            </Paragraph>
+            <Stack flexGrow={1} flexShrink={1} $sm={{ display: 'none' }}>
+              <Text
+                weight="medium"
+                color="$neutral-80-opa-50"
+                size={13}
+                truncate
+              >
+                {description}
+              </Text>
+            </Stack>
           )}
           <Stack $sm={{ display: 'none' }}>
             <IconButton
               icon={<MembersIcon />}
-              selected={membersVisisble}
+              selected={showMembers}
               onPress={onMembersPress}
               blur={blur}
             />

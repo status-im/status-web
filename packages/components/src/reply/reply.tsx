@@ -5,7 +5,7 @@ import { Stack, Unspaced, XStack } from 'tamagui'
 
 import { Avatar } from '../avatar'
 import { Button } from '../button'
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 interface Props {
   type: 'text' | 'gif' | 'image' | 'deleted'
@@ -29,15 +29,15 @@ const Reply = (props: Props) => {
 
         <Avatar size={16} src={src} />
 
-        <Paragraph variant="smaller" weight="semibold" color="$neutral-100">
+        <Text size={13} weight="semibold">
           {name}
-        </Paragraph>
+        </Text>
 
-        <Paragraph variant={11} weight="regular" color="$neutral-50">
+        <Text size={11} color="$neutral-50">
           {type === 'text' && 'What is the meaning of life? '}
           {type === 'gif' && 'GIF'}
           {type === 'image' && '5 photos'}
-        </Paragraph>
+        </Text>
       </XStack>
     ) : (
       <XStack position="relative" space={4} alignItems="center" height={24}>
@@ -49,9 +49,9 @@ const Reply = (props: Props) => {
 
         <SadIcon color="$neutral-50" />
 
-        <Paragraph variant="smaller" weight="medium" color="$neutral-50">
+        <Text size={13} weight="medium" color="$neutral-50">
           Message deleted
-        </Paragraph>
+        </Text>
       </XStack>
     )
 

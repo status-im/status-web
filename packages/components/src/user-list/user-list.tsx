@@ -2,7 +2,7 @@ import { XStack, YStack } from 'tamagui'
 
 import { Author } from '../author/author'
 import { Avatar } from '../avatar'
-import { Paragraph } from '../typography'
+import { Text } from '../text'
 
 import type { AuthorProps } from '../author/author'
 import type { AvatarProps } from '../avatar'
@@ -37,9 +37,9 @@ const UserList = (props: Props) => {
                 status={user.status}
                 orientation="vertical"
               />
-              <Paragraph variant="smaller" color="$neutral-50">
+              <Text size={13} color="$neutral-50">
                 {user.address}
-              </Paragraph>
+              </Text>
             </YStack>
           </XStack>
         )
