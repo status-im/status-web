@@ -45,7 +45,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     children,
     icon,
     iconAfter,
-    ...rest
+    ...buttonProps
   } = props
 
   // TODO: provider aria-label if button has only icon
@@ -56,7 +56,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base
-      {...rest}
+      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
       ref={ref}
       variant={variant}
       radius={shape === 'circle' ? 'full' : size}
