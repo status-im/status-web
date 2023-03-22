@@ -11,10 +11,10 @@ import {
   PinIcon,
   ReplyIcon,
 } from '@status-im/icons/20'
-import { Stack } from 'tamagui'
 
 import { DropdownMenu } from '../../dropdown-menu'
 import { IconButton } from '../../icon-button'
+import { Shadow } from '../../shadow'
 import { ReactionPopover } from './reaction-popover'
 
 import type { ReactionsType } from '../types'
@@ -35,21 +35,19 @@ export const Actions = (props: Props) => {
   }, [onOpenChange])
 
   return (
-    <Stack
-      backgroundColor="$white-100"
-      borderWidth={1}
-      borderColor="$neutral-10"
-      borderRadius={12}
-      padding={2}
-      space={2}
+    <Shadow
+      variant="$1"
       overflow="hidden"
       position="absolute"
-      top={-16}
-      right={0}
+      top={-8}
+      right={8}
+      borderRadius={12}
+      borderWidth={1}
+      borderColor="$neutral-10"
+      backgroundColor="$white-100"
+      padding={2}
+      space={2}
       flexDirection="row"
-      shadowRadius={20}
-      shadowOffset={{ width: 0, height: 4 }}
-      shadowColor="rgba(9, 16, 28, 0.08)"
       zIndex={10}
     >
       {/* REACTION */}
@@ -59,29 +57,25 @@ export const Actions = (props: Props) => {
         sideOffset={6}
         onOpenChange={onOpenChange}
       >
-        <IconButton variant="outline" icon={<AddReactionIcon />} />
+        <IconButton variant="ghost" icon={<AddReactionIcon />} />
       </ReactionPopover>
 
       {/* REPLY */}
-      <IconButton
-        variant="outline"
-        icon={<ReplyIcon />}
-        onPress={onReplyPress}
-      />
+      <IconButton variant="ghost" icon={<ReplyIcon />} onPress={onReplyPress} />
 
       {/* EDIT */}
-      <IconButton variant="outline" icon={<EditIcon />} onPress={onEditPress} />
+      <IconButton variant="ghost" icon={<EditIcon />} onPress={onEditPress} />
 
       {/* DELETE */}
       {/* <IconButton
-        variant="outline"
+        variant="ghost"
         icon={<DeleteIcon />}
         onPress={onDeletePress}
       /> */}
 
       {/* OPTIONS MENU */}
       <DropdownMenu modal={false} onOpenChange={onOpenChange}>
-        <IconButton variant="outline" icon={<OptionsIcon />} />
+        <IconButton variant="ghost" icon={<OptionsIcon />} />
         <DropdownMenu.Content align="end" sideOffset={10}>
           <DropdownMenu.Item
             icon={<EditIcon />}
@@ -124,6 +118,6 @@ export const Actions = (props: Props) => {
           />
         </DropdownMenu.Content>
       </DropdownMenu>
-    </Stack>
+    </Shadow>
   )
 }

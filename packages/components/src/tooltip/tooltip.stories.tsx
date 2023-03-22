@@ -22,7 +22,7 @@ export const Default: Story = {
   },
   render: args => (
     <Tooltip {...args}>
-      <Button type="outline">Trigger</Button>
+      <Button variant="outline">Trigger</Button>
     </Tooltip>
   ),
 }

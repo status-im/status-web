@@ -27,7 +27,7 @@ const Reply = (props: Props) => {
           </Stack>
         </Unspaced>
 
-        <Avatar size={20} src={src} />
+        <Avatar size={16} src={src} />
 
         <Paragraph variant="smaller" weight="semibold" color="$neutral-100">
           {name}
@@ -64,12 +64,11 @@ const Reply = (props: Props) => {
     >
       {content}
 
-      {/* FIXME: This should be regular button with size 24 */}
       {onClose && (
         <Button
-          type="outline"
-          size={24}
           icon={<CloseIcon />}
+          variant="outline"
+          size={24}
           onPress={onClose}
         />
       )}
