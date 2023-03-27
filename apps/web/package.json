@@ -8,7 +8,7 @@
     "preview": "TAMAGUI_TARGET=web vite preview",
     "lint": "eslint src",
     "typecheck": "tsc",
-    "clean": "rimraf node_modules .turbo"
+    "clean": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
     "@status-im/components": "*",
