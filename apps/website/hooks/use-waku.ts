@@ -6,7 +6,7 @@ export type Client = Awaited<ReturnType<typeof createRequestClient>>
 
 export const useWaku = (
   publicKey: string | undefined,
-  onReady: (client: Client) => Promise<void>,
+  onReady: (client: Client) => Promise<void>
 ) => {
   const [client, setClient] = useState<Client>()
 

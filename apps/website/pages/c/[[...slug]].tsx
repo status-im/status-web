@@ -18,11 +18,11 @@ import {
 } from '@status-im/components'
 
 export const getServerSideProps = createGetServerSideProps(
-  decodeCommunityURLData,
+  decodeCommunityURLData
 )
 
 export default function CommunityPreviewPage(
-  props: ServerSideProps<ReturnType<typeof decodeCommunityURLData>>,
+  props: ServerSideProps<ReturnType<typeof decodeCommunityURLData>>
 ) {
   // todo?: merge error, data, and publicKey into single effect
   const [error, setError] = useState<number>()
@@ -73,7 +73,7 @@ export default function CommunityPreviewPage(
 
   // todo?: provider, reducer
   // todo?: return status
-  const client = useWaku(publicKey, async (client) => {
+  const client = useWaku(publicKey, async client => {
     const data = await client.fetchCommunity(publicKey)
 
     if (!data) {

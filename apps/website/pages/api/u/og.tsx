@@ -15,7 +15,8 @@ function UserPreviewImage({ user }) {
         justifyContent: 'center',
         flexDirection: 'column',
         flexWrap: 'nowrap',
-      }}>
+      }}
+    >
       {/* displayName */}
       <div
         style={{
@@ -27,7 +28,8 @@ function UserPreviewImage({ user }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {user.displayName}
       </div>
       {/* description */}
@@ -41,7 +43,8 @@ function UserPreviewImage({ user }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {user.description + ' (description)'}
       </div>
       {/* color */}
@@ -58,7 +61,7 @@ function UserPreviewImage({ user }) {
   )
 }
 
-const handler = createHandler((url) => {
+const handler = createHandler(url => {
   const { searchParams } = url
 
   const user = Object.fromEntries(searchParams.entries())

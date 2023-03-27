@@ -25,9 +25,10 @@ interface Query extends ParsedUrlQuery {
 }
 
 export function createGetServerSideProps(decodeUrlData: DecodeType) {
-  const getServerSideProps: GetServerSideProps<ServerSideProps, Query> = async (
-    context,
-  ) => {
+  const getServerSideProps: GetServerSideProps<
+    ServerSideProps,
+    Query
+  > = async context => {
     try {
       const { params, res } = context
 
@@ -51,7 +52,7 @@ export function createGetServerSideProps(decodeUrlData: DecodeType) {
       // fixme: set Cache-Control
       res.setHeader(
         'Cache-Control',
-        'public, max-age=0, s-maxage=180, stale-while-revalidate=239',
+        'public, max-age=0, s-maxage=180, stale-while-revalidate=239'
         // 'public, max-age=0, s-maxage=1, stale-while-revalidate=900',
         // 'public, max-age=0, s-maxage=600, stale-while-revalidate=900',
         // 'public, s-maxage=10, stale-while-revalidate=59',

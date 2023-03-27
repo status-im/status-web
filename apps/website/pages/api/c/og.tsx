@@ -15,7 +15,8 @@ function CommunityPreviewImage({ community }) {
         justifyContent: 'center',
         flexDirection: 'column',
         flexWrap: 'nowrap',
-      }}>
+      }}
+    >
       {/* displayName */}
       <div
         style={{
@@ -27,7 +28,8 @@ function CommunityPreviewImage({ community }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {community.displayName}
       </div>
       {/* description */}
@@ -41,7 +43,8 @@ function CommunityPreviewImage({ community }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {community.description + ' (description)'}
       </div>
       {/* membersCount */}
@@ -55,7 +58,8 @@ function CommunityPreviewImage({ community }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {community.membersCount + ' (members)'}
       </div>
       {/* color */}
@@ -79,14 +83,15 @@ function CommunityPreviewImage({ community }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {community.tags}
       </div>
     </div>
   )
 }
 
-const handler = createHandler((url) => {
+const handler = createHandler(url => {
   const { searchParams } = url
 
   // todo?: decode and validate data if passed through from server props

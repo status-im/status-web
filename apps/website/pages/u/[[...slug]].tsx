@@ -12,7 +12,7 @@ import { Avatar, Paragraph, Button, Heading } from '@status-im/components'
 export const getServerSideProps = createGetServerSideProps(decodeUserURLData)
 
 export default function UserPreviewPage(
-  props: ServerSideProps<ReturnType<typeof decodeUserURLData>>,
+  props: ServerSideProps<ReturnType<typeof decodeUserURLData>>
 ) {
   const [error, setError] = useState<number>()
   const [data, setData] = useState(props.unverifiedData)
