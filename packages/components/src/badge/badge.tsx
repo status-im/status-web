@@ -7,12 +7,27 @@ import type { ColorTokens } from '@tamagui/core'
 
 export type BadgeVariants = 'default' | 'grey' | 'secondary' | 'outline'
 
-type BadgeProps = {
+type Props = {
   value: number
   type?: BadgeVariants
 }
 
-const StyledBadge = styled(View, {
+const Badge = (props: Props) => {
+  const { value, type = 'default' } = props
+
+  return (
+    <Base type={type}>
+      <Text size={11} color={textColor[type]}>
+        {value > 99 ? '99+' : value}
+      </Text>
+    </Base>
+  )
+}
+
+export { Badge }
+export type { Props as BadgeProps }
+
+const Base = styled(View, {
   backgroundColor: '$primary-50',
   paddingHorizontal: 3,
   paddingVertical: 0,
@@ -45,19 +60,9 @@ const StyledBadge = styled(View, {
   },
 })
 
-const textColor: Record<NonNullable<BadgeProps['type']>, ColorTokens> = {
+const textColor: Record<NonNullable<Props['type']>, ColorTokens> = {
   default: '$white-100',
   secondary: '$neutral-100',
   outline: '$neutral-100',
   grey: '$neutral-100',
-}
-
-export const Badge = ({ type = 'default', value }: BadgeProps) => {
-  return (
-    <StyledBadge type={type}>
-      <Text size={11} color={textColor[type]}>
-        {value > 99 ? '99+' : value}
-      </Text>
-    </StyledBadge>
-  )
 }

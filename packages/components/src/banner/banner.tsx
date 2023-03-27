@@ -4,13 +4,32 @@ import { View } from 'react-native'
 import { Badge } from '../badge'
 import { Text } from '../text'
 
-type BannerProps = {
+type Props = {
   children: React.ReactNode
   icon?: React.ReactNode
   count?: number
 }
 
-const StyledView = styled(View, {
+const Banner = (props: Props) => {
+  const { icon, children, count } = props
+
+  return (
+    <Base>
+      <Content>
+        {icon}
+        <Text size={13} color="$textPrimary">
+          {children}
+        </Text>
+      </Content>
+      {count ? <Badge value={count} /> : null}
+    </Base>
+  )
+}
+
+export { Banner }
+export type { Props as BannerProps }
+
+const Base = styled(View, {
   backgroundColor: '$primary-50-opa-20',
   padding: 12,
   flexDirection: 'row',
@@ -19,21 +38,7 @@ const StyledView = styled(View, {
   maxHeight: '50px',
 })
 
-const InsideView = styled(View, {
+const Content = styled(View, {
   flexDirection: 'row',
   gap: 10,
 })
-
-export const Banner = ({ icon, children, count }: BannerProps) => {
-  return (
-    <StyledView>
-      <InsideView>
-        {icon}
-        <Text size={13} color="$textPrimary">
-          {children}
-        </Text>
-      </InsideView>
-      {count ? <Badge value={count} /> : null}
-    </StyledView>
-  )
-}

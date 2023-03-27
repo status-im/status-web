@@ -1,1 +1,1 @@
-export { ContextTag } from './context-tag'
+export { ContextTag, type ContextTagProps } from './context-tag'
