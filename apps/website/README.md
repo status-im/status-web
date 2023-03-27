@@ -1,0 +1,24 @@
+```shell
+% npm ci
+% npm run build
+% npm run dev
+
+visit: http://localhost:3000/c/G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi#QJdN5DUCTMPsTcLxkUVC4GZSfny_9UVWPpZZ40BlDswhCyaT-bHwLM4X6t4UWHMeMO660WSS2K3Yo0D-E0zRDgA=;0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133
+visit: http://localhost:3000/c/G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi#QJdN5DUCTMPsTcLxkUVC4GZSfny_9UVWPpZZ40BlDswhCyaT-bHwLM4X6t4UWHMeMO660WSS2K3Yo0D-E0zRDgA=;0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955132 (unverified)
+visit: http://localhost:3000/cc/G70BYJwHdqxloHnQV-SSlY7OfdEB_f8igUIHtomMR1igUTaaRSFVBhJ-mjSn8BPqdBHk0PiHrEsBk8WBTo6_gK0tSiwQDLCWpwnmKeU2Bo7j005CuygCCwWebictMe-XLrHfyPEUmLllOKoRCBtcLDALSYQvF5NCoieM550vx-sAmlmSK871edYL67bCK-PPYghGByWEGNMFs9lOIoFx2H_mJDkNNs9bYsbbaRl_uoStzrokUn0u578yAg16mYwLh-287482y4Ibg9640rAW9JNkrfwstJ2qbLLXJ2CYUOa5ftZlFZk2TnzTxIGvfdznZLVXePelos5rWwI=#zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU
+visit: http://localhost:3000/u/GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg==#zQ3shUHp2rAM1yqBYeo6LhFbtrozG5mZeA6cRoGohsudtsieT
+```
+
+```shell
+git clone https://github.com/felicio/status-web
+git checkout integration
+yarn run dev
+```
+
+```shell
+yarn link
+```
+
+```shell
+yarn link '@status-im/js' '@status-im/components' '@status-im/icons'
+```
