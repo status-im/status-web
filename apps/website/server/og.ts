@@ -9,7 +9,7 @@ export const config = {
 
 // todo?: set cache header too
 export function createHandler(
-  createComponent: (url: URL) => React.ReactElement,
+  createComponent: (url: URL) => React.ReactElement
 ) {
   const handler = async (req: NextRequest) => {
     try {

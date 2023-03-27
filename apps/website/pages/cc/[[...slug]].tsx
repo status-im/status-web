@@ -8,11 +8,11 @@ import { Avatar, Paragraph, Button, Heading } from '@status-im/components'
 export const getServerSideProps = createGetServerSideProps(decodeChannelURLData)
 
 export default function ChannelPreviewPage(
-  props: ServerSideProps<ReturnType<typeof decodeChannelURLData>>,
+  props: ServerSideProps<ReturnType<typeof decodeChannelURLData>>
 ) {
   const [error, setError] = useState<number>()
   const [data, setData] = useState<Awaited<ReturnType<Client['fetchChannel']>>>(
-    props.unverifiedData,
+    props.unverifiedData
   )
   const [publicKey, setPublicKey] = useState<string>()
 

@@ -19,7 +19,7 @@ const plugins = [
     disableExtraction: true,
     // experiment - reduced bundle size react-native-web
     useReactNativeWebLite: false,
-    shouldExtract: (path) => {
+    shouldExtract: path => {
       if (path.includes(join('packages', 'app'))) {
         return true
       }

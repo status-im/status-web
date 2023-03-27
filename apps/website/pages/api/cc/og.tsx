@@ -15,7 +15,8 @@ function ChannelPreviewImage({ channel }) {
         justifyContent: 'center',
         flexDirection: 'column',
         flexWrap: 'nowrap',
-      }}>
+      }}
+    >
       {/* displayName */}
       <div
         style={{
@@ -27,7 +28,8 @@ function ChannelPreviewImage({ channel }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {channel.displayName}
       </div>
       {/* description */}
@@ -41,7 +43,8 @@ function ChannelPreviewImage({ channel }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {channel.description + ' (description)'}
       </div>
       {/* emoji */}
@@ -55,7 +58,8 @@ function ChannelPreviewImage({ channel }) {
           padding: '0 120px',
           lineHeight: 1.4,
           whiteSpace: 'pre-wrap',
-        }}>
+        }}
+      >
         {channel.emoji}
       </div>
       {/* color */}
@@ -72,7 +76,7 @@ function ChannelPreviewImage({ channel }) {
   )
 }
 
-const handler = createHandler((url) => {
+const handler = createHandler(url => {
   const { searchParams } = url
 
   const channel = Object.fromEntries(searchParams.entries())

@@ -25,7 +25,7 @@ export function PreviewPage(props: PreviewPageProps) {
   const renderContent = (
     props: ServerSideProps,
     content?: React.ReactElement,
-    image?: React.ReactElement,
+    image?: React.ReactElement
   ) => {
     if (isError(props)) {
       switch (props.errorCode) {

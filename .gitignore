@@ -102,3 +102,4 @@ web-build/
 # Tauri
 **/src-tauri/target/
 
+**/.data
