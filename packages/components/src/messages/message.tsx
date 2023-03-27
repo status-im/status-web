@@ -15,6 +15,7 @@ import { Reactions } from './components/reactions'
 import type { ReactionsType } from './types'
 
 export interface MessageProps {
+  id: string
   text?: React.ReactNode
   images?: Array<{ url: string }>
   reactions: ReactionsType

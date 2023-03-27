@@ -16,16 +16,19 @@ export const Messages = () => {
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim. Nunc tincidunt ante vitae massa. Duis ante orci, molestie vitae, vehicula venenatis, tincidunt ac, pede. Nulla accumsan, elit sit"
         reactions={{}}
+        id="1234-1234"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. "
         reactions={{}}
         reply
         pinned
+        id="1234-1235"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. "
         reactions={{}}
+        id="1234-1236"
       />
       <Message
         images={[
@@ -34,33 +37,40 @@ export const Messages = () => {
           },
         ]}
         reactions={{}}
+        id="1234-1237"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim. Nunc tincidunt ante vitae massa. Duis ante orci, molestie vitae, vehicula venenatis, tincidunt ac, pede. Nulla accumsan, elit sit"
         reactions={reactions}
+        id="1234-1238"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
         pinned
+        id="1234-1239"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
         reply
+        id="1234-1240"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
+        id="1234-1241"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"
         reactions={reactions}
         reply
+        id="1234-1242"
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"
         reactions={reactions}
+        id="1234-1243"
       />
       <Message
         images={[
@@ -69,6 +79,7 @@ export const Messages = () => {
           },
         ]}
         reactions={{}}
+        id="1234-1244"
       />
       <Message
         images={[
@@ -77,6 +88,7 @@ export const Messages = () => {
           },
         ]}
         reactions={{}}
+        id="1234-1245"
       />
     </>
   )

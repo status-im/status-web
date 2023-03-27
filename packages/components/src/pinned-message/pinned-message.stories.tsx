@@ -7,11 +7,13 @@ const mockMessages = [
     text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
     reactions: {},
     pinned: true,
+    id: '1234-1234',
   },
   {
     text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam. message',
     reactions: {},
     pinned: true,
+    id: '4321-4321',
   },
 ]
 

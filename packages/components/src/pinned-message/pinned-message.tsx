@@ -78,8 +78,8 @@ export const PinnedMessage = ({ messages }: PinnedMessageProps) => {
             </ContextTag>
           </DialogHeader>
           <DialogContent>
-            {messages.map((message, i) => (
-              <Message key={i} {...message} />
+            {messages.map(message => (
+              <Message key={message.id} {...message} />
             ))}
           </DialogContent>
         </Wrapper>
