@@ -22,7 +22,7 @@ export const Default: Story = {
   render: () => {
     return (
       <Stack gap={24}>
-        <NewMessages color="$blue-50" />
+        <NewMessages color="$primary-50" />
         <NewMessages color="$yellow-50" />
         <NewMessages color="$turquoise-50" />
         {/* <NewMessages color="$cooper-50" /> */}
