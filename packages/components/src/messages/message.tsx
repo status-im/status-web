@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PinIcon } from '@status-im/icons/16'
+import { DeleteIcon, PinIcon } from '@status-im/icons/16'
 import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
 
 import { Author } from '../author'
@@ -21,6 +21,8 @@ export interface MessageProps {
   reactions: ReactionsType
   reply?: boolean
   pinned?: boolean
+  removedForMe?: boolean
+  removedForAll?: boolean
 }
 
 const Base = styled(Stack, {
@@ -46,12 +48,21 @@ const Base = styled(Stack, {
 })
 
 const Message = (props: MessageProps) => {
-  const { text, images, reactions, reply, pinned } = props
+  const {
+    text,
+    images,
+    reactions,
+    reply,
+    pinned,
+    removedForMe,
+    removedForAll,
+  } = props
 
   const [hovered, setHovered] = useState(false)
   const [showActions, setShowActions] = useState(false)
 
-  const active = showActions || hovered
+  const removed = removedForMe || removedForAll
+  const active = (showActions || hovered) && !removed
   const hasReactions = Object.keys(reactions).length > 0
   // <Sheet press="long">
 
@@ -63,6 +74,7 @@ const Message = (props: MessageProps) => {
       pinned={pinned}
       onHoverIn={() => setHovered(true)}
       onHoverOut={() => setHovered(false)}
+      backgroundColor={removed ? '$danger-50-opa-5' : undefined}
     >
       {active && (
         <Unspaced>
@@ -100,51 +112,63 @@ const Message = (props: MessageProps) => {
           </Text>
         </Stack>
       )}
-
-      <XStack space={10}>
-        <Avatar
-          size={32}
-          src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
-          indicator="online"
-        />
-
-        <YStack flex={1}>
-          <Author
-            name="Alisher Yakupov"
-            address="zQ3...9d4Gs0"
-            status="verified"
-            time="09:30"
+      {removed ? (
+        <XStack space={10} padding={15}>
+          <DeleteIcon color="$neutral-100" />
+          <Text size={13} color="$neutral-100">
+            {removedForAll && 'Messaged deleted for everyone'}
+            {removedForMe && 'Messaged deleted for me'}
+          </Text>
+          <Text size={11} color="$neutral-50">
+            09:30
+          </Text>
+        </XStack>
+      ) : (
+        <XStack space={10}>
+          <Avatar
+            size={32}
+            src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"
+            indicator="online"
           />
 
-          {text && (
-            <Text
-              size={15}
-              // flexGrow={0}
-              // userSelect="text"
-            >
-              {text}
-            </Text>
-          )}
+          <YStack flex={1}>
+            <Author
+              name="Alisher Yakupov"
+              address="zQ3...9d4Gs0"
+              status="verified"
+              time="09:30"
+            />
 
-          {images?.map(image => (
-            <Stack
-              key={image.url}
-              marginTop={8}
-              $gtMd={{
-                maxWidth: 320,
-              }}
-            >
-              <Image src={image.url} width="full" height={320} radius={12} />
-            </Stack>
-          ))}
+            {text && (
+              <Text
+                size={15}
+                // flexGrow={0}
+                // userSelect="text"
+              >
+                {text}
+              </Text>
+            )}
 
-          {hasReactions && (
-            <Stack paddingTop={8}>
-              <Reactions reactions={reactions} />
-            </Stack>
-          )}
-        </YStack>
-      </XStack>
+            {images?.map(image => (
+              <Stack
+                key={image.url}
+                marginTop={8}
+                $gtMd={{
+                  maxWidth: 320,
+                }}
+              >
+                <Image src={image.url} width="full" height={320} radius={12} />
+              </Stack>
+            ))}
+
+            {hasReactions && (
+              <Stack paddingTop={8}>
+                <Reactions reactions={reactions} />
+              </Stack>
+            )}
+          </YStack>
+        </XStack>
+      )}
     </Base>
   )
 }

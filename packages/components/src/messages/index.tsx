@@ -56,6 +56,7 @@ export const Messages = (props: Props) => {
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. "
         reactions={{}}
         id="1234-1236"
+        removedForAll
       />
       <Message
         images={[
@@ -97,6 +98,7 @@ export const Messages = (props: Props) => {
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "
         reactions={{}}
         id="1234-1241"
+        removedForMe
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"

@@ -121,9 +121,16 @@ export const Actions = (props: Props) => {
 
           <DropdownMenu.Item
             icon={<DeleteIcon />}
-            label="Delete message"
+            label="Delete message for me"
             danger
-            onSelect={() => console.log('delete')}
+            onSelect={() => console.log('delete for me')}
+          />
+
+          <DropdownMenu.Item
+            icon={<DeleteIcon />}
+            label="Delete message for everyone"
+            danger
+            onSelect={() => console.log('delete for everyone')}
           />
         </DropdownMenu.Content>
       </DropdownMenu>
