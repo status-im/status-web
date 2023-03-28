@@ -9,7 +9,7 @@ const meta: Meta<typeof DividerLabel> = {
   parameters: {
     design: {
       type: 'figma',
-      url: '',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=5626-159384&t=OkwNsSt1XE3TE2SS-11',
     },
   },
 }

@@ -13,7 +13,6 @@ import {
 import { Stack, Text as RNText } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
 
-import { Divider } from '../divider'
 import { DropdownMenu } from '../dropdown-menu'
 import { IconButton } from '../icon-button'
 import { PinnedMessage } from '../pinned-message'
@@ -85,7 +84,13 @@ const Topbar = (props: Props) => {
             )}
 
             <LockedIcon color="$neutral-80-opa-40" />
-            <Divider height={16} $sm={{ display: 'none' }} />
+            <Stack
+              backgroundColor="$neutral-80-opa-10"
+              marginHorizontal={12}
+              height={16}
+              width={1}
+              $sm={{ display: 'none' }}
+            />
           </Stack>
 
           <Stack
