@@ -70,6 +70,7 @@ const Message = (props: MessageProps) => {
             onOpenChange={setShowActions}
             onReplyPress={() => dispatch({ type: 'reply', messageId: '1' })}
             onEditPress={() => dispatch({ type: 'edit', messageId: '1' })}
+            pinned={pinned}
           />
         </Unspaced>
       )}

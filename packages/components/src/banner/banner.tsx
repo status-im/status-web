@@ -1,7 +1,7 @@
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
-import { Badge } from '../badge'
+import { Counter } from '../counter'
 import { Text } from '../text'
 
 type Props = {
@@ -21,7 +21,7 @@ const Banner = (props: Props) => {
           {children}
         </Text>
       </Content>
-      {count ? <Badge value={count} /> : null}
+      {count ? <Counter value={count} /> : null}
     </Base>
   )
 }
@@ -35,10 +35,11 @@ const Base = styled(View, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'space-between',
-  maxHeight: '50px',
+  maxHeight: '40px',
 })
 
 const Content = styled(View, {
   flexDirection: 'row',
   gap: 10,
+  alignItems: 'center',
 })

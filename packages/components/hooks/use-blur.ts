@@ -17,7 +17,7 @@ type UseBlurProps = {
 const useBlur = (props: UseBlurProps): UseBlurReturn => {
   const {
     marginBlurBottom = 32,
-    heightTop = 56,
+    heightTop = 96,
     throttle = 100,
     ref,
   } = props || {}

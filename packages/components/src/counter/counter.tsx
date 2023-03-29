@@ -5,14 +5,14 @@ import { Text } from '../text'
 
 import type { ColorTokens } from '@tamagui/core'
 
-export type BadgeVariants = 'default' | 'grey' | 'secondary' | 'outline'
+export type CounterVariants = 'default' | 'grey' | 'secondary' | 'outline'
 
 type Props = {
   value: number
-  type?: BadgeVariants
+  type?: CounterVariants
 }
 
-const Badge = (props: Props) => {
+const Counter = (props: Props) => {
   const { value, type = 'default' } = props
 
   return (
@@ -24,14 +24,14 @@ const Badge = (props: Props) => {
   )
 }
 
-export { Badge }
-export type { Props as BadgeProps }
+export { Counter }
+export type { Props as CounterProps }
 
 const Base = styled(View, {
   backgroundColor: '$primary-50',
   paddingHorizontal: 3,
   paddingVertical: 0,
-  borderRadius: '$2',
+  borderRadius: '6px', // TODO: use tokens when fixed its definition
   height: 16,
   minWidth: 16,
   maxWidth: 28,

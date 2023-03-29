@@ -22,21 +22,6 @@ const COMMUNITY = {
     'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
 }
 
-const mockMessages = [
-  {
-    text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
-    reactions: {},
-    pinned: true,
-    id: '1234-1234',
-  },
-  {
-    text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.',
-    reactions: {},
-    pinned: true,
-    id: '4321-4321',
-  },
-]
-
 function App() {
   const [showMembers, setShowMembers] = useState(false)
 
@@ -79,7 +64,6 @@ function App() {
           showMembers={showMembers}
           onMembersPress={() => setShowMembers(show => !show)}
         />
-        <PinnedMessage messages={mockMessages} />
 
         <div id="content" ref={containerRef}>
           <div id="messages">

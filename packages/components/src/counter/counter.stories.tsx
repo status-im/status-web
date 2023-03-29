@@ -1,11 +1,11 @@
 import { Stack } from '@tamagui/core'
 
-import { Badge } from './badge'
+import { Counter } from './counter'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta<typeof Badge> = {
-  component: Badge,
+const meta: Meta<typeof Counter> = {
+  component: Counter,
   argTypes: {
     value: {
       control: {
@@ -21,7 +21,7 @@ const meta: Meta<typeof Badge> = {
   },
 }
 
-type Story = StoryObj<typeof Badge>
+type Story = StoryObj<typeof Counter>
 
 export const Default: Story = {
   args: {
@@ -56,22 +56,22 @@ export const AllVariants: Story = {
   render: () => (
     <Stack space flexDirection="row">
       <Stack space>
-        <Badge type="default" value={5} />
-        <Badge type="secondary" value={5} />
-        <Badge type="grey" value={5} />
-        <Badge type="outline" value={5} />
+        <Counter type="default" value={5} />
+        <Counter type="secondary" value={5} />
+        <Counter type="grey" value={5} />
+        <Counter type="outline" value={5} />
       </Stack>
       <Stack space>
-        <Badge type="default" value={10} />
-        <Badge type="secondary" value={10} />
-        <Badge type="grey" value={10} />
-        <Badge type="outline" value={10} />
+        <Counter type="default" value={10} />
+        <Counter type="secondary" value={10} />
+        <Counter type="grey" value={10} />
+        <Counter type="outline" value={10} />
       </Stack>
       <Stack space>
-        <Badge type="default" value={100} />
-        <Badge type="secondary" value={100} />
-        <Badge type="grey" value={100} />
-        <Badge type="outline" value={100} />
+        <Counter type="default" value={100} />
+        <Counter type="secondary" value={100} />
+        <Counter type="grey" value={100} />
+        <Counter type="outline" value={100} />
       </Stack>
     </Stack>
   ),
