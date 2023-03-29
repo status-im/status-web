@@ -2,17 +2,13 @@ import { Stack } from 'tamagui'
 
 import { DynamicButton } from '../dynamic-button'
 
-type Props = {
-  scrolled: boolean
-}
+// type Props = {}
 
-const AnchorActions = (props: Props) => {
-  const { scrolled } = props
-
+const AnchorActions = () => {
   return (
     <Stack flexDirection="row" space={8}>
-      {scrolled && <DynamicButton type="mention" count={1} />}
-      {scrolled && <DynamicButton type="notification" count={0} />}
+      <DynamicButton type="mention" count={1} />
+      <DynamicButton type="notification" count={0} />
     </Stack>
   )
 }
