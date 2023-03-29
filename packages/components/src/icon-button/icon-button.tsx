@@ -5,7 +5,6 @@ import { Stack, styled } from 'tamagui'
 import { usePressableColors } from '../hooks/use-pressable-colors'
 
 import type { GetVariants, PressableProps } from '../types'
-import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
 
 type Variants = GetVariants<typeof Base>
@@ -41,8 +40,8 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base
-      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
-      {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      {...(buttonProps as unknown as object)} // TODO: Tamagui has incorrect types for PressableProps
+      {...pressableProps}
       ref={ref}
       variant={blur ? undefined : variant}
       active={blur ? undefined : selected ? variant : undefined}

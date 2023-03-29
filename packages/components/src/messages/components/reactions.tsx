@@ -41,7 +41,7 @@ export const Reactions = (props: Props) => {
         align="start"
         sideOffset={8}
       >
-        <ReactButton size="compact" type="add" selected={false} />
+        <ReactButton type="add" />
       </ReactionPopover>
     </XStack>
   )
@@ -96,7 +96,6 @@ const Reaction = (props: ReactionProps) => {
         }
       >
         <ReactButton
-          size="compact"
           type={type as ReactionType}
           count={value.size}
           selected={value.has('me')}
