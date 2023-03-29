@@ -1,12 +1,15 @@
-import { XStack } from 'tamagui'
+import { createElement, useState } from 'react'
+
+import { Stack, XStack } from 'tamagui'
 
 import { Dialog } from '../../dialog'
 import { ReactButton } from '../../react-button'
+import { REACTIONS_ICONS } from '../../react-button/react-button'
+import { Text } from '../../text'
 import { Tooltip } from '../../tooltip/tooltip'
-import { UserList } from '../../user-list'
 import { ReactionPopover } from './reaction-popover'
+import { ReactionsDialog } from './reactions-dialog'
 
-import type { ReactButtonProps } from '../../react-button'
 import type { ReactionsType, ReactionType } from '../types'
 
 type Props = {
@@ -24,13 +27,11 @@ export const Reactions = (props: Props) => {
 
   return (
     <XStack space={6} flexWrap="wrap">
-      {Object.entries(reactions).map(([type, value]) => (
+      {Object.keys(reactions).map(type => (
         <Reaction
           key={type}
-          size="compact"
-          icon={type as ReactionType}
-          count={value.size}
-          selected={value.has('me')}
+          type={type as ReactionType}
+          reactions={reactions}
         />
       ))}
 
@@ -40,70 +41,68 @@ export const Reactions = (props: Props) => {
         align="start"
         sideOffset={8}
       >
-        <ReactButton size="compact" icon="add" selected={false} />
+        <ReactButton size="compact" type="add" selected={false} />
       </ReactionPopover>
     </XStack>
   )
 }
 
-const Reaction = (props: ReactButtonProps) => {
+type ReactionProps = {
+  type: ReactionType
+  reactions: ReactionsType
+}
+
+const Reaction = (props: ReactionProps) => {
+  const { type, reactions } = props
+
+  const value = reactions[type]!
+  const icon = REACTIONS_ICONS[type]
+
+  const [dialogOpen, setDialogOpen] = useState(false)
+
   return (
-    <Dialog press="long">
+    <Dialog press="long" open={dialogOpen} onOpenChange={setDialogOpen}>
       <Tooltip
         side="bottom"
         sideOffset={4}
         content={
-          <>
-            You, Mr Gandalf, Ariana Perlona and
-            <button>3 more</button> reacted with {'[ICON]'}
-          </>
+          <Stack
+            tag="button"
+            cursor="pointer"
+            onPress={() => setDialogOpen(true)}
+          >
+            <Text size={13} weight="medium" color="$neutral-100">
+              You, Mr Gandalf, Ariana Perlona
+            </Text>
+            <Stack flexDirection="row" alignItems="center" gap={4}>
+              <Text size={13} weight="medium" color="$neutral-100">
+                and
+              </Text>
+              <Stack
+                backgroundColor="$turquoise-50-opa-10"
+                borderRadius={6}
+                paddingHorizontal={4}
+              >
+                <Text size={13} weight="medium" color="$turquoise-50">
+                  3 more
+                </Text>
+              </Stack>
+              <Text size={13} weight="medium" color="$neutral-100">
+                reacted with
+              </Text>
+              {createElement(icon)}
+            </Stack>
+          </Stack>
         }
       >
-        <ReactButton {...props} />
-      </Tooltip>
-
-      <Dialog.Content>
-        <UserList
-          users={[
-            {
-              name: 'Pedro',
-              src: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
-              address: 'zQ3...9d4Gs0',
-              indicator: 'online',
-            },
-            {
-              name: 'Pedro',
-              src: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
-              address: 'zQ3...9d4Gs0',
-              indicator: 'online',
-            },
-            {
-              name: 'Pedro',
-              src: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
-              address: 'zQ3...9d4Gs0',
-              indicator: 'online',
-            },
-            {
-              name: 'Pedro',
-              src: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
-              address: 'zQ3...9d4Gs0',
-              indicator: 'online',
-            },
-            {
-              name: 'Pedro',
-              src: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
-              address: 'zQ3...9d4Gs0',
-              indicator: 'online',
-            },
-            {
-              name: 'Pedro',
-              src: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
-              address: 'zQ3...9d4Gs0',
-              indicator: 'online',
-            },
-          ]}
+        <ReactButton
+          size="compact"
+          type={type as ReactionType}
+          count={value.size}
+          selected={value.has('me')}
         />
-      </Dialog.Content>
+      </Tooltip>
+      <ReactionsDialog initialReactionType={type} reactions={reactions} />
     </Dialog>
   )
 }
