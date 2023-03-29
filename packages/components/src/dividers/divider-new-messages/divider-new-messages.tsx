@@ -9,7 +9,7 @@ type Props = {
   color: ColorTokens
 }
 
-const NewMessages = (props: Props) => {
+const DividerNewMessages = (props: Props) => {
   const { color } = props
 
   return (
@@ -25,4 +25,4 @@ const NewMessages = (props: Props) => {
   )
 }
 
-export { NewMessages }
+export { DividerNewMessages }
