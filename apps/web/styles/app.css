@@ -24,7 +24,6 @@ body,
 
 #main {
   position: relative;
-  display: grid;
   height: 100vh;
 }
 
