@@ -12,6 +12,7 @@ import {
   useAppState,
 } from '@status-im/components'
 import { useBlur } from '@status-im/components/hooks'
+import useResizeObserver from 'use-resize-observer'
 
 const COMMUNITY = {
   name: 'Rarible',
@@ -22,14 +23,12 @@ const COMMUNITY = {
     'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
 }
 
+const updateProperty = (property: string, value: number) => {
+  document.documentElement.style.setProperty(property, `${value}px`)
+}
+
 function App() {
   const [showMembers, setShowMembers] = useState(false)
-
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const { shouldBlurTop, shouldBlurBottom } = useBlur({
-    ref: containerRef,
-  })
 
   const appState = useAppState()
   const appDispatch = useAppDispatch()
@@ -45,6 +44,24 @@ function App() {
     }
   }, [appState.channelId])
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  const { shouldBlurTop, shouldBlurBottom } = useBlur({
+    ref: containerRef,
+  })
+
+  const { ref: topbarRef } = useResizeObserver<HTMLDivElement>({
+    onResize({ height }) {
+      updateProperty('--topbar-height', height)
+    },
+  })
+
+  const { ref: composerRef } = useResizeObserver<HTMLDivElement>({
+    onResize({ height }) {
+      updateProperty('--composer-height', height)
+    },
+  })
+
   return (
     <div id="app">
       <div id="sidebar" style={{ zIndex: 200 }}>
@@ -58,12 +75,14 @@ function App() {
       </div>
 
       <main id="main">
-        <Topbar
-          blur={shouldBlurTop}
-          channel={selectedChannel}
-          showMembers={showMembers}
-          onMembersPress={() => setShowMembers(show => !show)}
-        />
+        <div id="topbar" ref={topbarRef}>
+          <Topbar
+            blur={shouldBlurTop}
+            channel={selectedChannel}
+            showMembers={showMembers}
+            onMembersPress={() => setShowMembers(show => !show)}
+          />
+        </div>
 
         <div id="content" ref={containerRef}>
           <div id="messages">
