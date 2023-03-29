@@ -50,6 +50,7 @@ body,
 
 #messages {
   padding: 32px 8px;
+  min-height: calc(100% - 100px);
 }
 
 #anchor-actions {
@@ -77,5 +78,17 @@ body,
 
   #sidebar {
     display: none;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }

@@ -1,7 +1,10 @@
-import { Provider } from '../src'
+import React from 'react'
 import { Parameters, Decorator } from '@storybook/react'
 
+import { Provider } from '../src'
+
 import './reset.css'
+import './components.css'
 
 export const parameters: Parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
