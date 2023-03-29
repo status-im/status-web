@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   AnchorActions,
@@ -66,6 +66,10 @@ function App() {
   const scrollPosition = useScrollPosition({
     ref: contentRef,
   })
+
+  useEffect(() => {
+    contentRef.current.scrollTop = contentRef.current.scrollHeight
+  }, [selectedChannel])
 
   return (
     <div id="app">
