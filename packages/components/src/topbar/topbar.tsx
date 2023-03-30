@@ -50,8 +50,8 @@ const Topbar = (props: Props) => {
   const { title, description, emoji } = channel
 
   return (
-    <Stack flexDirection="column" width="100%" height={96}>
-      <BlurView intensity={40} style={{ zIndex: 100 }}>
+    <BlurView intensity={40} style={{ zIndex: 100 }}>
+      <Stack flexDirection="column" width="100%" height={96}>
         <Stack
           flexDirection="row"
           height={56}
@@ -160,11 +160,9 @@ const Topbar = (props: Props) => {
             </DropdownMenu>
           </Stack>
         </Stack>
-      </BlurView>
-      <BlurView intensity={40} style={{ zIndex: 100 }}>
         <PinnedMessage messages={mockMessages} />
-      </BlurView>
-    </Stack>
+      </Stack>
+    </BlurView>
   )
 }
 
