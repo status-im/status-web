@@ -1,4 +1,4 @@
-import { PinAnnouncement } from '../pinned-message'
+import { PinAnnouncement } from '../system-messages'
 import { Message } from './message'
 
 import type { ReactionsType } from './types'

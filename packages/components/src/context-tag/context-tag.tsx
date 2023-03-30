@@ -44,6 +44,12 @@ const avatarSizes: Record<NonNullable<Props['size']>, AvatarProps['size']> = {
   '24': 20,
 }
 
+const Label = ({ children, size }: { children: string; size: 24 | 32 }) => (
+  <Text size={textSizes[size]} weight="medium" color="$neutral-100">
+    {children}
+  </Text>
+)
+
 const ContextTag = (props: Props) => {
   const {
     src,
@@ -56,11 +62,6 @@ const ContextTag = (props: Props) => {
   } = props
 
   const hasImg = Boolean(src || icon)
-  const Label = ({ children }: { children: string }) => (
-    <Text size={textSizes[size]} weight="medium" color="$neutral-100">
-      {children}
-    </Text>
-  )
 
   return (
     <Base outline={outline} size={size} hasImg={hasImg} blur={blur}>
@@ -73,15 +74,19 @@ const ContextTag = (props: Props) => {
             return (
               <Fragment key={item}>
                 <ChevronRightIcon color="$neutral-50" />
-                <Label>{item}</Label>
+                <Label size={size}>{item}</Label>
               </Fragment>
             )
           } else {
-            return <Label key={item}>{item}</Label>
+            return (
+              <Label size={size} key={item}>
+                {item}
+              </Label>
+            )
           }
         })
       ) : (
-        <Label>{label}</Label>
+        <Label size={size}>{label}</Label>
       )}
     </Base>
   )
