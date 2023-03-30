@@ -1,3 +1,6 @@
+import { Stack } from '@tamagui/core'
+
+import { DividerDate, DividerNewMessages } from '../dividers'
 import { PinAnnouncement } from '../system-messages'
 import { Message } from './message'
 
@@ -78,6 +81,9 @@ export const Messages = () => {
         reply
         id="1234-1242"
       />
+      <Stack marginHorizontal={-8} marginVertical={8}>
+        <DividerNewMessages color="$blue-50" />
+      </Stack>
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"
         reactions={reactions}
@@ -92,6 +98,7 @@ export const Messages = () => {
         reactions={{}}
         id="1234-1244"
       />
+      <DividerDate label="Today" />
       <Message
         images={[
           {

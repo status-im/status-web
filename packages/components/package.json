@@ -42,6 +42,7 @@
     "@tamagui/shorthands": "1.7.7",
     "@tamagui/theme-base": "1.7.7",
     "expo-blur": "~12.0.1",
+    "expo-linear-gradient": "^12.1.2",
     "tamagui": "1.7.7",
     "zustand": "^4.3.6"
   },
