@@ -5,7 +5,8 @@ import { Text } from './text'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta = {
-  title: 'Text',
+  title: 'text',
+
   args: {
     children: 'The quick brown fox jumped over the lazy dog.',
   },
@@ -19,8 +20,7 @@ const meta: Meta = {
   },
 }
 
-export const TextStory: StoryObj<typeof Text> = {
-  name: 'TextNew',
+export const Default: StoryObj<typeof Text> = {
   render: args => (
     <Stack gap={24}>
       <Stack gap={8}>

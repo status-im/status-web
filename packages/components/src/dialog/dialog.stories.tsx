@@ -24,7 +24,10 @@ export const Default: Story = {
   render: () => (
     <Dialog>
       <Button>Trigger</Button>
-      <Dialog.Content>test</Dialog.Content>
+
+      <Dialog.Content borderRadius={16} width={400}>
+        test
+      </Dialog.Content>
     </Dialog>
   ),
 }

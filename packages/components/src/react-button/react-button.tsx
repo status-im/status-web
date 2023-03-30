@@ -9,18 +9,16 @@ import {
   ThumbsDownIcon,
   ThumbsUpIcon,
 } from '@status-im/icons/reactions'
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
+import { Stack } from '@tamagui/web'
 
 import { Text } from '../text'
 
-import type { GetVariants } from '../types'
-import type { StackProps } from '@tamagui/core'
+import type { ReactionType } from '../messages/types'
+import type { PressableProps } from '../types'
 import type { Ref } from 'react'
-import type { PressableProps } from 'react-native'
 
-type Variants = GetVariants<typeof Button>
-
-export const REACTIONS = {
+export const REACTIONS_ICONS = {
   love: LoveIcon,
   laugh: LaughIcon,
   'thumbs-up': ThumbsUpIcon,
@@ -31,10 +29,7 @@ export const REACTIONS = {
 } as const
 
 type Props = PressableProps & {
-  icon: keyof typeof REACTIONS
-  variant?: Variants['variant']
-  size?: Variants['size']
-  // FIXME: use aria-selected
+  type: ReactionType
   selected?: boolean
   count?: number
   // FIXME: update to latest RN
@@ -43,25 +38,17 @@ type Props = PressableProps & {
 }
 
 const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const {
-    icon,
-    variant = 'outline',
-    size = 40,
-    count,
-    ...pressableProps
-  } = props
+  const { type, count, ...pressableProps } = props
 
-  const Icon = REACTIONS[icon]
+  const Icon = REACTIONS_ICONS[type]
 
   const selected =
     props.selected || props['aria-expanded'] || props['aria-selected']
 
   return (
     <Button
-      {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      {...(pressableProps as unknown as object)}
       ref={ref}
-      variant={variant}
-      size={size}
       selected={selected}
     >
       <Icon color="$neutral-100" />
@@ -81,6 +68,7 @@ export type { Props as ReactButtonProps }
 
 const Button = styled(Stack, {
   name: 'ReactButton',
+  tag: 'button',
   accessibilityRole: 'button',
 
   cursor: 'pointer',
@@ -93,49 +81,23 @@ const Button = styled(Stack, {
   animation: 'fast',
   space: 4,
 
+  borderRadius: 8,
+  minWidth: 36,
+  height: 24,
+  paddingHorizontal: 8,
+
+  borderColor: '$neutral-20',
+  hoverStyle: { borderColor: '$neutral-30' },
+  pressStyle: {
+    backgroundColor: '$neutral-10',
+    borderColor: '$neutral-20',
+  },
+
   variants: {
-    variant: {
-      outline: {
-        borderColor: '$neutral-10',
-        hoverStyle: { borderColor: '$neutral-30' },
-        pressStyle: {
-          backgroundColor: '$neutral-10',
-          borderColor: '$neutral-20',
-        },
-      },
-
-      ghost: {
-        borderColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-10' },
-        pressStyle: { backgroundColor: '$neutral-20' },
-      },
-    },
-
     selected: {
       true: {
         backgroundColor: '$neutral-10',
         borderColor: '$neutral-30',
-      },
-    },
-
-    size: {
-      40: {
-        borderRadius: 12,
-        width: 40,
-        height: 40,
-      },
-
-      32: {
-        borderRadius: 10,
-        width: 32,
-        height: 32,
-      },
-
-      compact: {
-        borderRadius: 8,
-        minWidth: 36,
-        height: 24,
-        paddingHorizontal: 8,
       },
     },
   } as const,

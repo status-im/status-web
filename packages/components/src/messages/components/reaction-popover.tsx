@@ -1,7 +1,15 @@
+import {
+  AngryIcon,
+  LaughIcon,
+  LoveIcon,
+  SadIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+} from '@status-im/icons/reactions'
 import { XStack } from 'tamagui'
 
+import { IconButton } from '../../icon-button'
 import { Popover } from '../../popover'
-import { ReactButton } from '../../react-button'
 
 import type { PopoverProps } from '../../popover'
 import type { ReactionsType } from '../types'
@@ -12,6 +20,15 @@ type Props = Omit<PopoverProps, 'children'> & {
   onOpenChange?: PopoverProps['onOpenChange']
 }
 
+export const REACTIONS_ICONS = {
+  love: <LoveIcon />,
+  laugh: <LaughIcon />,
+  'thumbs-up': <ThumbsUpIcon />,
+  'thumbs-down': <ThumbsDownIcon />,
+  sad: <SadIcon />,
+  angry: <AngryIcon />,
+} as const
+
 export const ReactionPopover = (props: Props) => {
   const { children, reactions, onOpenChange, ...popoverProps } = props
 
@@ -21,40 +38,34 @@ export const ReactionPopover = (props: Props) => {
 
       <Popover.Content>
         <XStack space={2} padding={2}>
-          <ReactButton
+          <IconButton
+            icon={REACTIONS_ICONS['love']}
             variant="ghost"
-            size={32}
-            icon="love"
             selected={reactions['love']?.has('me')}
           />
-          <ReactButton
+          <IconButton
+            icon={REACTIONS_ICONS['thumbs-up']}
             variant="ghost"
-            size={32}
-            icon="thumbs-up"
             selected={reactions['thumbs-up']?.has('me')}
           />
-          <ReactButton
+          <IconButton
+            icon={REACTIONS_ICONS['thumbs-down']}
             variant="ghost"
-            size={32}
-            icon="thumbs-down"
             selected={reactions['thumbs-down']?.has('me')}
           />
-          <ReactButton
+          <IconButton
+            icon={REACTIONS_ICONS['laugh']}
             variant="ghost"
-            size={32}
-            icon="laugh"
             selected={reactions.laugh?.has('me')}
           />
-          <ReactButton
+          <IconButton
+            icon={REACTIONS_ICONS['sad']}
             variant="ghost"
-            size={32}
-            icon="sad"
             selected={reactions.sad?.has('me')}
           />
-          <ReactButton
+          <IconButton
+            icon={REACTIONS_ICONS['angry']}
             variant="ghost"
-            size={32}
-            icon="angry"
             selected={reactions.angry?.has('me')}
           />
         </XStack>

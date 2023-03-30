@@ -17,7 +17,7 @@ const Counter = (props: Props) => {
 
   return (
     <Base type={type}>
-      <Text size={11} color={textColor[type]}>
+      <Text size={11} weight="medium" color={textColors[type]}>
         {value > 99 ? '99+' : value}
       </Text>
     </Base>
@@ -31,7 +31,7 @@ const Base = styled(View, {
   backgroundColor: '$primary-50',
   paddingHorizontal: 3,
   paddingVertical: 0,
-  borderRadius: '6px', // TODO: use tokens when fixed its definition
+  borderRadius: 6, // TODO: use tokens when fixed its definition
   height: 16,
   minWidth: 16,
   maxWidth: 28,
@@ -39,6 +39,8 @@ const Base = styled(View, {
   justifyContent: 'center',
   alignItems: 'center',
   flexBasis: 'fit-content',
+  borderWidth: 1,
+  borderColor: 'transparent',
 
   variants: {
     type: {
@@ -54,13 +56,12 @@ const Base = styled(View, {
       outline: {
         backgroundColor: 'transparent',
         borderColor: '$neutral-20',
-        borderWidth: '1px',
       },
     },
   },
 })
 
-const textColor: Record<NonNullable<Props['type']>, ColorTokens> = {
+const textColors: Record<NonNullable<Props['type']>, ColorTokens> = {
   default: '$white-100',
   secondary: '$neutral-100',
   outline: '$neutral-100',

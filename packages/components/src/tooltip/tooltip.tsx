@@ -8,8 +8,9 @@ import {
   TooltipProvider,
   Trigger,
 } from '@radix-ui/react-tooltip'
-import { Stack } from 'tamagui'
+import { useTheme } from 'tamagui'
 
+import { Shadow } from '../shadow'
 import { Text } from '../text'
 
 import type { TooltipContentProps } from '@radix-ui/react-tooltip'
@@ -37,6 +38,8 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
     ...triggerProps
   } = props
 
+  const theme = useTheme() // not ideal
+
   return (
     <TooltipProvider>
       <Root delayDuration={delayDuration}>
@@ -52,24 +55,22 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
             align={align}
             alignOffset={alignOffset}
           >
-            <Stack
-              backgroundColor="$neutral-95"
+            <Shadow
+              variant="$3"
+              backgroundColor="$white-100"
               paddingVertical={6}
               paddingHorizontal={12}
               borderRadius={8}
-              shadowRadius={30}
-              shadowOffset="0px 8px"
-              shadowColor="rgba(9, 16, 28, 0.12)"
             >
               {typeof content === 'string' ? (
-                <Text size={13} weight="medium" color="$white-100">
+                <Text size={13} weight="medium" color="$neutral-100">
                   {content}
                 </Text>
               ) : (
                 content
               )}
-              <Arrow width={11} height={5} />
-            </Stack>
+              <Arrow width={11} height={5} fill={theme.background.val} />
+            </Shadow>
           </Content>
         </Portal>
       </Root>

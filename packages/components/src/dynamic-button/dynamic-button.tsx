@@ -6,10 +6,9 @@ import { Stack, styled } from '@tamagui/core'
 import { Shadow } from '../shadow'
 import { Text } from '../text'
 
-import type { GetVariants } from '../types'
-import type { ColorTokens, StackProps } from '@tamagui/core'
+import type { GetVariants, PressableProps } from '../types'
+import type { ColorTokens } from '@tamagui/core'
 import type { Ref } from 'react'
-import type { PressableProps } from 'react-native'
 
 type Variants = GetVariants<typeof Button>
 
@@ -27,7 +26,7 @@ const DynamicButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
   return (
     <Shadow variant="$2" borderRadius={999}>
       <Button
-        {...(pressableProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+        {...(pressableProps as unknown as object)} // TODO: Tamagui has incorrect types for PressableProps
         ref={ref}
         type={type}
         iconOnly={showCount === false}
@@ -51,8 +50,8 @@ export type { Props as DynamicButtonProps }
 
 const Button = styled(Stack, {
   name: 'DynamicButton',
-  accessibilityRole: 'button',
   tag: 'button',
+  accessibilityRole: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',

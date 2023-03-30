@@ -71,6 +71,7 @@ button,
 textarea,
 select {
   font: inherit;
+  all: unset;
 }
 /*
   8. Avoid text overflows

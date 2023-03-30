@@ -17,7 +17,7 @@ type PressableProps = {
   delayHoverIn?: NativePressableProps['delayHoverIn']
   delayHoverOut?: NativePressableProps['delayHoverOut']
   delayLongPress?: NativePressableProps['delayLongPress']
-  disabled?: NativePressableProps['disabled']
+  disabled?: boolean
 }
 
 export type MapVariant<

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
 import type { PressableProps } from '../types'
-import type { ColorTokens } from 'tamagui'
+import type { MouseEvent } from 'react-native'
+import type { ColorTokens, TamaguiComponentPropsBase } from 'tamagui'
 
 type Config = {
   default: ColorTokens
@@ -12,8 +13,9 @@ type Config = {
 
 type Return = {
   color: ColorTokens
+  // FIXME: use PressableProps instead TamaguiComponentPropsBase, fix necessary in Tamagui
   pressableProps: Pick<
-    PressableProps,
+    TamaguiComponentPropsBase,
     'onHoverIn' | 'onHoverOut' | 'onPressIn' | 'onPressOut'
   >
 }
@@ -49,11 +51,11 @@ export const usePressableColors = (
     color: styles[key],
     pressableProps: {
       onHoverIn: event => {
-        props.onHoverIn?.(event)
+        props.onHoverIn?.(event as unknown as MouseEvent)
         setHovered(true)
       },
       onHoverOut: event => {
-        props.onHoverOut?.(event)
+        props.onHoverOut?.(event as unknown as MouseEvent)
         setHovered(false)
       },
       onPressIn: event => {

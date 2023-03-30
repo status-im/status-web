@@ -49,4 +49,4 @@ const UserList = (props: Props) => {
 }
 
 export { UserList }
-export type { Props as USerListProps }
+export type { Props as UserListProps }

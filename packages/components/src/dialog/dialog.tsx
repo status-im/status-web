@@ -1,10 +1,15 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
-import { Content, Overlay, Portal, Root, Trigger } from '@radix-ui/react-dialog'
-import { Stack, styled, useMedia } from 'tamagui'
+import {
+  Close,
+  Content,
+  Overlay,
+  Portal,
+  Root,
+  Trigger,
+} from '@radix-ui/react-dialog'
 
-import { Sheet } from '../sheet'
-
+import type { DialogTriggerProps } from '@radix-ui/react-dialog'
 import type { Ref } from 'react'
 import type React from 'react'
 
@@ -15,74 +20,61 @@ interface Props {
   press?: 'normal' | 'long'
 }
 
-const Wrapper = styled(Stack, {
-  position: 'absolute',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100vw',
-  height: '100vh',
-})
-
-// const DialogTrigger = (
-//   props: DialogTriggerProps & {
-//     press: Props['press']
-//     children: React.ReactElement
-//   }
-// ) => {
-//   const { children, press, onClick, type, ...triggerProps } = props
-//   const handler = press === 'normal' ? 'onPress' : 'onLongPress'
-
-//   // console.log('dialog', press, onClick, { ...triggerProps, [handler]: onClick })
-//   return cloneElement(children, { ref, ...triggerProps, [handler]: onClick })
-// }
-
-// TODO: allow customization of press duration
 const Dialog = (props: Props) => {
-  const { children, open, onOpenChange /* press = 'normal' */ } = props
+  const { children, open, onOpenChange, press = 'normal' } = props
 
   const [trigger, content] = children
 
-  const media = useMedia()
+  // const media = useMedia()
 
-  if (media.sm) {
-    return (
-      <Sheet>
-        {trigger}
-        {content}
-      </Sheet>
-    )
-  }
+  // if (media.sm) {
+  //   return (
+  //     <Sheet>
+  //       {trigger}
+  //       {content}
+  //     </Sheet>
+  //   )
+  // }
 
   return (
     <Root open={open} onOpenChange={onOpenChange}>
       {/* TRIGGER */}
-      <Trigger asChild>{trigger}</Trigger>
+      <Trigger asChild>
+        <PressableTrigger press={press}>{trigger}</PressableTrigger>
+      </Trigger>
 
       {/* CONTENT */}
       <Portal>
-        <Wrapper>
-          <Overlay
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
-            }}
-          />
-          {content}
-        </Wrapper>
+        <Overlay
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}
+        />
+        {content}
       </Portal>
     </Root>
   )
 }
 
+const PressableTrigger = forwardRef(function _PressableTrigger(
+  props: DialogTriggerProps & {
+    press: Props['press']
+    children: React.ReactElement
+  },
+  ref
+) {
+  const { children, press, onClick, ...triggerProps } = props
+  const handler = press === 'normal' ? 'onPress' : 'onLongPress'
+
+  return cloneElement(children, { ref, ...triggerProps, [handler]: onClick })
+})
+
 interface DialogContentProps {
-  // title: string
-  // description?: string
   children: React.ReactNode
-  // action: string
-  // onAction: (close: VoidFunction) => void
-  // onCancel?: () => void
+  borderRadius: 8 | 12 | 16
+  width: number
   initialFocusRef?: React.RefObject<HTMLElement>
 }
 
@@ -96,25 +88,25 @@ const DialogContent = (props: DialogContentProps, ref: Ref<HTMLDivElement>) => {
     }
   }
 
-  const media = useMedia()
+  // const media = useMedia()
 
-  if (media.sm) {
-    return <Sheet.Content>{children}</Sheet.Content>
-  }
+  // if (media.sm) {
+  //   return <Sheet.Content>{children}</Sheet.Content>
+  // }
 
   return (
     <Content
       ref={ref}
       onOpenAutoFocus={handleOpenAutoFocus}
+      // TODO: use tamagui components
       style={{
-        backgroundColor: 'white',
-        padding: 8,
-        width: 400,
-        borderRadius: 8,
         position: 'fixed',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        backgroundColor: 'white',
+        borderRadius: props.borderRadius,
+        width: props.width,
       }}
     >
       {children}
@@ -124,4 +116,4 @@ const DialogContent = (props: DialogContentProps, ref: Ref<HTMLDivElement>) => {
 
 Dialog.Content = forwardRef(DialogContent)
 
-export { Dialog }
+export { Close, Dialog }
