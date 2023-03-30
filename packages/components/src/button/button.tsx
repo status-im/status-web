@@ -64,7 +64,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       iconOnly={iconOnly}
     >
       {icon ? cloneElement(icon, { color: textColor }) : null}
-      <Text color={textColor} size={textSize}>
+      <Text weight="medium" color={textColor} size={textSize}>
         {children}
       </Text>
       {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
