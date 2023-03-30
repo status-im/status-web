@@ -5746,7 +5746,7 @@
     "@tamagui/use-event" "1.7.7"
     "@tamagui/web" "1.7.7"
 
-"@tamagui/core@1.9.18", "@tamagui/core@^1.6.2":
+"@tamagui/core@1.9.18", "@tamagui/core@^1.7.7":
   version "1.9.18"
   resolved "https://registry.yarnpkg.com/@tamagui/core/-/core-1.9.18.tgz#63279789b88b93c63ec470e605a0eaabc35316c0"
   integrity sha512-CFxF+30UamM/WItMbYZF4SRQ/TzBbT6aUrpomjC8IUZLrAD8Hu5h9uYHgTD4OEoXRgJ0jAvIUIexADZ7V3LOqQ==
@@ -5989,7 +5989,7 @@
     thread-loader "^3.0.4"
     url-loader "^4.1.1"
 
-"@tamagui/next-theme@^1.6.2":
+"@tamagui/next-theme@^1.7.7":
   version "1.9.18"
   resolved "https://registry.yarnpkg.com/@tamagui/next-theme/-/next-theme-1.9.18.tgz#27bb77645f3b83b2645ebdd352cc936a69df679a"
   integrity sha512-itaGWDnoHwKZMEGsi5s1iKQ6eVuib2AC6oq3i3/14jrx5Fjazox7EBLmqA67hBElsqBdUOCGH5XtUCMBllWOFQ==
