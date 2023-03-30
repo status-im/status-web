@@ -3,11 +3,11 @@ import { Stack } from '@tamagui/core'
 import { DividerLabel } from '../dividers'
 import { UserList } from '../user-list'
 
-import type { USerListProps } from '../user-list'
+import type { UserListProps } from '../user-list'
 
 type GroupProps = {
   label: string
-  users: USerListProps['users']
+  users: UserListProps['users']
 }
 
 const Group = (props: GroupProps) => {
