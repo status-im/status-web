@@ -1,7 +1,13 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Content, Overlay, Portal, Root, Trigger } from '@radix-ui/react-dialog'
-import { Stack, styled } from 'tamagui'
+import {
+  Close,
+  Content,
+  Overlay,
+  Portal,
+  Root,
+  Trigger,
+} from '@radix-ui/react-dialog'
 
 import type { DialogTriggerProps } from '@radix-ui/react-dialog'
 import type { Ref } from 'react'
@@ -14,16 +20,6 @@ interface Props {
   press?: 'normal' | 'long'
 }
 
-const Wrapper = styled(Stack, {
-  position: 'absolute',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: '100vw',
-  height: '100vh',
-})
-
-// TODO: allow customization of press duration
 const Dialog = (props: Props) => {
   const { children, open, onOpenChange, press = 'normal' } = props
 
@@ -49,16 +45,14 @@ const Dialog = (props: Props) => {
 
       {/* CONTENT */}
       <Portal>
-        <Wrapper>
-          <Overlay
-            style={{
-              position: 'fixed',
-              inset: 0,
-              backgroundColor: 'rgba(0,0,0,0.5)',
-            }}
-          />
-          {content}
-        </Wrapper>
+        <Overlay
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}
+        />
+        {content}
       </Portal>
     </Root>
   )
@@ -79,6 +73,8 @@ const PressableTrigger = forwardRef(function _PressableTrigger(
 
 interface DialogContentProps {
   children: React.ReactNode
+  borderRadius: 8 | 12 | 16
+  width: number
   initialFocusRef?: React.RefObject<HTMLElement>
 }
 
@@ -102,14 +98,15 @@ const DialogContent = (props: DialogContentProps, ref: Ref<HTMLDivElement>) => {
     <Content
       ref={ref}
       onOpenAutoFocus={handleOpenAutoFocus}
+      // TODO: use tamagui components
       style={{
-        backgroundColor: 'white',
-        width: 400,
-        borderRadius: 8,
         position: 'fixed',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
+        backgroundColor: 'white',
+        borderRadius: props.borderRadius,
+        width: props.width,
       }}
     >
       {children}
@@ -119,4 +116,4 @@ const DialogContent = (props: DialogContentProps, ref: Ref<HTMLDivElement>) => {
 
 Dialog.Content = forwardRef(DialogContent)
 
-export { Dialog }
+export { Close, Dialog }
