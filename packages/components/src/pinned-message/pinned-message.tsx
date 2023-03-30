@@ -44,7 +44,7 @@ const PinnedMessage = (props: Props) => {
         </DialogHeader>
         <DialogContent>
           {messages.map(message => (
-            <Message key={message.id} {...message} />
+            <Message key={message.id} {...message} pinned={false} />
           ))}
         </DialogContent>
       </Base>

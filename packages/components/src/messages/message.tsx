@@ -60,6 +60,7 @@ const Message = (props: MessageProps) => {
   return (
     <Base
       active={active}
+      pinned={pinned}
       onHoverIn={() => setHovered(true)}
       onHoverOut={() => setHovered(false)}
     >
