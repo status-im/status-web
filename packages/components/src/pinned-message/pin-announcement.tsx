@@ -19,7 +19,7 @@ const PinAnnouncement = (props: Props) => {
       <IconAvatar backgroundColor="$turquoise-50-opa-5" color="$neutral-100">
         <PinIcon />
       </IconAvatar>
-      <Stack flexDirection="column">
+      <Stack flexDirection="column" space={2}>
         <Stack flexDirection="row" space={4} alignItems="center">
           <Text size={13} weight="semibold">
             {name}

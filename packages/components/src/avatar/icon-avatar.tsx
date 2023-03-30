@@ -24,7 +24,7 @@ const IconAvatar = (props: Props) => {
 }
 
 const Base = styled(Stack, {
-  borderRadius: 80, // big enough to cover all sizes
+  borderRadius: 80,
   justifyContent: 'center',
   alignItems: 'center',
 
