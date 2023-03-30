@@ -1,11 +1,13 @@
 // todo?: rename to preview/onboarding/sharing/conversion-page/screen/invite.tsx
 
-import { Head } from '@/components/head'
-import styles from '@/styles/Home.module.css'
-import { ERROR_CODES } from '@/consts/error-codes'
-import { ServerSideProps } from '@/server/ssr'
 import { Image } from '@status-im/components'
 import Script from 'next/script'
+
+import { Head } from '@/components/head'
+import { ERROR_CODES } from '@/consts/error-codes'
+import styles from '@/styles/Home.module.css'
+
+import type { ServerSideProps } from '@/server/ssr'
 
 type PreviewPageProps = ServerSideProps & {
   // serverSideProps: ServerSideProps
@@ -47,7 +49,7 @@ export function PreviewPage(props: PreviewPageProps) {
         default:
           return (
             <>
-              <h1>Oh no, something's wrong!</h1>
+              <h1>{"Oh no, something's wrong!"}</h1>
               <p>Try reloading the page or come back later!</p>
             </>
           )

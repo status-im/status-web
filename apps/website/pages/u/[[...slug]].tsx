@@ -1,13 +1,17 @@
+import { useEffect,useState } from 'react'
+
+import { Avatar, Button, Heading,Paragraph } from '@status-im/components'
 import {
   decodeUserURLData,
   deserializePublicKey,
   publicKeyToEmojiHash,
 } from '@status-im/js'
-import { createGetServerSideProps, ServerSideProps } from '@/server/ssr'
-import { useWaku } from '@/hooks/use-waku'
-import { useState, useEffect } from 'react'
+
 import { PreviewPage } from '@/components/page'
-import { Avatar, Paragraph, Button, Heading } from '@status-im/components'
+import { useWaku } from '@/hooks/use-waku'
+import { createGetServerSideProps } from '@/server/ssr'
+
+import type { ServerSideProps } from '@/server/ssr';
 
 export const getServerSideProps = createGetServerSideProps(decodeUserURLData)
 
