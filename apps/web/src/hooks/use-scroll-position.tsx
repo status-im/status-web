@@ -33,7 +33,9 @@ export function useScrollPosition(options: Options) {
         return
       }
 
-      positionRef.current !== 'middle' && setPosition('middle')
+      if (positionRef.current !== 'middle') {
+        setPosition('middle')
+      }
     }
 
     node.addEventListener('scroll', handleScroll, { passive: true })
