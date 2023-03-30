@@ -18,7 +18,7 @@ const meta: Meta<typeof Tabs> = {
   },
 }
 
-type Story = StoryObj<{ size: 24 | 32; icon: boolean }>
+type Story = StoryObj<{ size: 24 | 32; icon: boolean; count: boolean }>
 
 export const Default: Story = {
   name: 'Default',
@@ -34,14 +34,18 @@ export const Default: Story = {
     icon: {
       control: 'boolean',
     },
+    count: {
+      control: 'boolean',
+    },
   },
   render(args) {
     const icon = args.icon ? <PlaceholderIcon /> : undefined
+    const count = args.count ? 8 : undefined
 
     return (
       <Tabs defaultValue="1">
         <Tabs.List size={args.size}>
-          <Tabs.Trigger value="1" icon={icon}>
+          <Tabs.Trigger value="1" icon={icon} count={count}>
             Tab 1
           </Tabs.Trigger>
           <Tabs.Trigger value="2" icon={icon}>

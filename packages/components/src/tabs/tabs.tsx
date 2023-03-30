@@ -4,6 +4,7 @@ import { Content, List, Root, Trigger } from '@radix-ui/react-tabs'
 import { Stack } from '@tamagui/web'
 import { styled } from 'tamagui'
 
+import { Counter } from '../counter'
 import { usePressableColors } from '../hooks/use-pressable-colors'
 import { Text } from '../text'
 
@@ -65,7 +66,7 @@ type TriggerProps = {
 
 // TODO: Add counter
 const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
-  const { icon = null, children, ...triggerProps } = props
+  const { icon = null, children, count, ...triggerProps } = props
 
   // props coming from parent List and Trigger, not passed by the user (line 52)
   const providedProps = props as TriggerProps & {
@@ -99,6 +100,11 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       <Text size={textSize} weight="medium" color={color}>
         {children}
       </Text>
+      {count && (
+        <Stack marginRight={-4}>
+          <Counter type="secondary" value={count} />
+        </Stack>
+      )}
     </TriggerBase>
   )
 }
@@ -116,7 +122,6 @@ const TriggerBase = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: 4,
 
   variants: {
     size: {
@@ -124,11 +129,13 @@ const TriggerBase = styled(Stack, {
         height: 32,
         borderRadius: 10,
         paddingHorizontal: 12,
+        gap: 6,
       },
       24: {
         height: 24,
         borderRadius: 8,
         paddingHorizontal: 8,
+        gap: 4,
       },
     },
     active: {
