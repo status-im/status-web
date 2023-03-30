@@ -24,6 +24,13 @@ const plugins = [
         return true
       }
     },
+    excludeReactNativeWebExports: [
+      // 'Switch',
+      // 'ProgressBar',
+      // 'Picker',
+      // 'CheckBox',
+      // 'Touchable'
+    ],
   }),
 ]
 
@@ -40,7 +47,9 @@ module.exports = function () {
       'react-native',
       'react-native-web',
       'expo-modules-core',
+      'expo-blur',
       '@status-im/components',
+      '@status-im/js',
     ],
     experimental: {
       legacyBrowsers: false,
