@@ -7,7 +7,7 @@ import { REACTIONS_ICONS } from '../../react-button/react-button'
 import { Tabs } from '../../tabs'
 import { UserList } from '../../user-list'
 
-import type { USerListProps } from '../../user-list'
+import type { UserListProps } from '../../user-list'
 import type { ReactionsType, ReactionType } from '../types'
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
 export const ReactionsDialog = (props: Props) => {
   const { initialReactionType, reactions } = props
 
-  const users: USerListProps['users'] = useMemo(() => {
+  const users: UserListProps['users'] = useMemo(() => {
     return [
       {
         name: 'Pedro',
