@@ -20,7 +20,7 @@ body,
 #main {
   position: relative;
   display: grid;
-  grid-template-rows: 56px 1fr 100px;
+  grid-template-rows: 96px 1fr 100px; /* 56px 1fr 100px without pinned messages */
   height: 100vh;
 }
 
@@ -45,7 +45,7 @@ body,
   overflow: auto;
   padding: 40px 0px 0px 0px;
   height: 100vh;
-  margin-top: -56px;
+  margin-top: -96px; /* -56px without pinned messages */
 }
 
 #messages {
