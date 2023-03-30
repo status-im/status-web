@@ -1,3 +1,4 @@
+import { PinAnnouncement } from '../pinned-message'
 import { Message } from './message'
 
 import type { ReactionsType } from './types'
@@ -49,6 +50,16 @@ export const Messages = () => {
         reactions={{}}
         pinned
         id="1234-1239"
+      />
+      <PinAnnouncement
+        name="Steve"
+        message={{
+          text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
+          reactions: {},
+          reply: true,
+          pinned: true,
+          id: '1234-1235',
+        }}
       />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.  "

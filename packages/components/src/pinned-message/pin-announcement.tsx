@@ -17,7 +17,11 @@ const PinAnnouncement = (props: Props) => {
     <Stack flexDirection="row">
       <PinIcon />
       <Stack flexDirection="column">
-        <Text size={13}>{`<strong>{name}</strong> pinned a message`}</Text>
+        <Text size={13}>
+          <>
+            <strong>{name}</strong> pinned a message
+          </>
+        </Text>
         09:30
         <Text size={11}>{message.text}</Text>
       </Stack>
