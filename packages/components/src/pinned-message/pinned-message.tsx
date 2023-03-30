@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PinIcon } from '@status-im/icons/20'
+import { CloseIcon, PinIcon } from '@status-im/icons/20'
 import { styled } from '@tamagui/core'
 import { Pressable, View } from 'react-native'
 
@@ -30,9 +30,12 @@ const PinnedMessage = (props: Props) => {
       </Pressable>
 
       <Base>
-        <Button variant="grey" onPress={() => setIsDetailVisible(false)}>
-          &times;
-        </Button>
+        <Button
+          variant="grey"
+          onPress={() => setIsDetailVisible(false)}
+          size={32}
+          icon={<CloseIcon />}
+        />
         <DialogHeader>
           <Text size={27} weight="semibold">
             Pinned Messages
