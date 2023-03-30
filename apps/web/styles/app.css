@@ -20,7 +20,7 @@ body,
 #main {
   position: relative;
   display: grid;
-  grid-template-rows: 56px 56px 1fr 100px; /* 56px 1fr 100px without pinned messages */
+  grid-template-rows: 96px 1fr 100px; /* 56px 1fr 100px without pinned messages */
   height: 100vh;
 }
 

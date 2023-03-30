@@ -4,7 +4,6 @@ import {
   CHANNEL_GROUPS,
   Composer,
   Messages,
-  PinnedMessage,
   Sidebar,
   SidebarMembers,
   Topbar,
