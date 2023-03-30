@@ -1,9 +1,14 @@
+import { useEffect,useState } from 'react'
+
+import { Avatar, Button, Heading,Paragraph } from '@status-im/components'
 import { decodeChannelURLData, deserializePublicKey } from '@status-im/js'
-import { createGetServerSideProps, ServerSideProps } from '@/server/ssr'
-import { Client, useWaku } from '@/hooks/use-waku'
-import { useState, useEffect } from 'react'
+
 import { PreviewPage } from '@/components/page'
-import { Avatar, Paragraph, Button, Heading } from '@status-im/components'
+import { useWaku } from '@/hooks/use-waku'
+import { createGetServerSideProps } from '@/server/ssr'
+
+import type { Client} from '@/hooks/use-waku';
+import type { ServerSideProps } from '@/server/ssr';
 
 export const getServerSideProps = createGetServerSideProps(decodeChannelURLData)
 

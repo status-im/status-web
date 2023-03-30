@@ -1,6 +1,6 @@
-import NextDocument, { Html, Head, Main, NextScript } from 'next/document'
-
 import { Children } from 'react'
+
+import NextDocument, { Head, Html, Main, NextScript } from 'next/document'
 import { AppRegistry } from 'react-native'
 
 import Tamagui from '../tamagui.config'
@@ -8,6 +8,7 @@ import Tamagui from '../tamagui.config'
 export default class Document extends NextDocument {
   static async getInitialProps({ renderPage }) {
     AppRegistry.registerComponent('app', () => Main)
+    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     // @ts-ignore
     const { getStyleElement } = AppRegistry.getApplication('app')
 
