@@ -50,7 +50,7 @@ const Composer = (props: Props) => {
     <BlurView
       intensity={40}
       style={{
-        borderRadius: 20,
+        borderRadius: '$20',
         width: '100%',
       }}
     >
@@ -143,7 +143,7 @@ const Composer = (props: Props) => {
                       backgroundColor="$background"
                       width={15}
                       height={15}
-                      borderRadius={7}
+                      borderRadius="$10"
                       position="absolute"
                       zIndex={1}
                     />

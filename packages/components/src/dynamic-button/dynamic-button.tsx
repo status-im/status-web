@@ -24,7 +24,7 @@ const DynamicButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const showCount = Boolean(count)
 
   return (
-    <Shadow variant="$2" borderRadius={999}>
+    <Shadow variant="$2" borderRadius="$999">
       <Button
         {...(pressableProps as unknown as object)} // TODO: Tamagui has incorrect types for PressableProps
         ref={ref}
@@ -60,7 +60,7 @@ const Button = styled(Stack, {
   justifyContent: 'center',
   flexShrink: 0,
   height: 24,
-  borderRadius: 999,
+  borderRadius: '$100',
   animation: 'fast',
   space: 3,
 

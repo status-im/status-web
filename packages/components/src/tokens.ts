@@ -1,5 +1,5 @@
 import { createTokens } from '@tamagui/core'
-import { radius, size, space, zIndex } from '@tamagui/theme-base'
+import { size, space, zIndex } from '@tamagui/theme-base'
 
 export const tokens = createTokens({
   color: {
@@ -184,5 +184,15 @@ export const tokens = createTokens({
   size,
   space,
   zIndex,
-  radius,
+  radius: {
+    0: 0,
+    4: 4,
+    6: 6,
+    8: 8,
+    10: 10,
+    12: 12,
+    16: 16,
+    20: 20,
+    100: 100,
+  },
 })

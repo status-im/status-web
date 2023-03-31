@@ -16,10 +16,12 @@ const Counter = (props: Props) => {
   const { value, type = 'default' } = props
 
   return (
-    <Base type={type}>
-      <Text size={11} weight="medium" color={textColors[type]}>
-        {value > 99 ? '99+' : value}
-      </Text>
+    <Base>
+      <Content type={type}>
+        <Text size={11} weight="medium" color={textColors[type]}>
+          {value > 99 ? '99+' : value}
+        </Text>
+      </Content>
     </Base>
   )
 }
@@ -28,17 +30,24 @@ export { Counter }
 export type { Props as CounterProps }
 
 const Base = styled(View, {
-  backgroundColor: '$primary-50',
-  paddingHorizontal: 3,
-  paddingVertical: 0,
-  borderRadius: 6, // TODO: use tokens when fixed its definition
-  height: 16,
-  minWidth: 16,
-  maxWidth: 28,
+  padding: 2,
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexBasis: 'fit-content',
+})
+
+const Content = styled(View, {
+  backgroundColor: '$primary-50',
+  paddingHorizontal: 3,
+  paddingVertical: 0,
+  borderRadius: '$6',
+  minHeight: 16,
+  maxHeight: 16,
+  minWidth: 16,
+  maxWidth: 28,
+  justifyContent: 'center',
+  alignItems: 'center',
   borderWidth: 1,
   borderColor: 'transparent',
 

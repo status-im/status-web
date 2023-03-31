@@ -127,13 +127,13 @@ const TriggerBase = styled(Stack, {
     size: {
       32: {
         height: 32,
-        borderRadius: 10,
+        borderRadius: '$10',
         paddingHorizontal: 12,
         gap: 6,
       },
       24: {
         height: 24,
-        borderRadius: 8,
+        borderRadius: '$8',
         paddingHorizontal: 8,
         gap: 4,
       },

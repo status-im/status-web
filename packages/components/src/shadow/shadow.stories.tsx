@@ -30,7 +30,7 @@ export const Default: Story = {
         height={50}
         borderWidth={1}
         borderColor="$neutral-20"
-        borderRadius={12}
+        borderRadius="$12"
       />
       <Shadow
         variant="$2"
@@ -38,7 +38,7 @@ export const Default: Story = {
         height={50}
         borderWidth={1}
         borderColor="$neutral-20"
-        borderRadius={12}
+        borderRadius="$12"
       />
       <Shadow
         variant="$3"
@@ -46,7 +46,7 @@ export const Default: Story = {
         height={50}
         borderWidth={1}
         borderColor="$neutral-20"
-        borderRadius={12}
+        borderRadius="$12"
       />
       <Shadow
         variant="$4"
@@ -54,7 +54,7 @@ export const Default: Story = {
         height={50}
         borderWidth={1}
         borderColor="$neutral-20"
-        borderRadius={12}
+        borderRadius="$12"
       />
     </Stack>
   ),

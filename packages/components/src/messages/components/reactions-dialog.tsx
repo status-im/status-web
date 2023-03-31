@@ -60,7 +60,7 @@ export const ReactionsDialog = (props: Props) => {
   }, [reactions])
 
   return (
-    <Dialog.Content width={352} borderRadius={12}>
+    <Dialog.Content width={352} borderRadius="$12">
       <Tabs defaultValue={initialReactionType}>
         <Stack padding={16}>
           <Tabs.List size={24}>

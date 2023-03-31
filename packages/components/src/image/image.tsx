@@ -60,10 +60,10 @@ const Base = styled(RNImage, {
     radius: {
       none: {},
       12: {
-        borderRadius: 12,
+        borderRadius: '$12',
       },
       full: {
-        borderRadius: 9999,
+        borderRadius: '$100',
       },
     },
   },
