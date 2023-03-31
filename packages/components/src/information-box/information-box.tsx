@@ -1,5 +1,6 @@
 import { cloneElement } from 'react'
 
+import { CloseIcon } from '@status-im/icons/12'
 import { Stack, styled } from '@tamagui/core'
 
 import { Button } from '../button'
@@ -65,13 +66,14 @@ const InformationBox = ({
         flexDirection="row"
         alignItems="center"
         justifyContent="flex-start"
+        width="100%"
       >
         {icon ? (
           <Stack pr={8} pt={1} alignSelf="flex-start">
             {cloneElement(icon, { color: colorIcon })}
           </Stack>
         ) : null}
-        <Stack flexShrink={1}>
+        <Stack flexShrink={1} width="100%">
           <Text size={13} color={colorText}>
             {message}
           </Text>
@@ -88,10 +90,14 @@ const InformationBox = ({
           ) : null}
         </Stack>
         {onDismiss ? (
-          <Stack pl={8} pt={1} alignSelf="flex-end" onPress={() => onDismiss()}>
-            <Text size={13} color={colorText}>
-              Dismiss
-            </Text>
+          <Stack
+            pl={8}
+            pt={4}
+            onPress={() => onDismiss()}
+            cursor="pointer"
+            alignSelf="flex-start"
+          >
+            <CloseIcon />
           </Stack>
         ) : null}
       </Stack>

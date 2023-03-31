@@ -106,4 +106,66 @@ export const DefaultWithDismiss: Story = {
     onDismiss: () => alert('dismissed'),
   },
 }
+
+export const InformationWithDismiss: Story = {
+  args: {
+    ...DefaultWithDismiss.args,
+    variant: 'information',
+  },
+}
+
+export const ErrorWithDismiss: Story = {
+  args: {
+    ...DefaultWithDismiss.args,
+    variant: 'error',
+  },
+}
+
+export const DefaultWithIconAndDismiss: Story = {
+  args: {
+    message: 'This is a simple message with an info icon.',
+    icon: <InfoIcon />,
+    onDismiss: () => alert('dismissed'),
+  },
+}
+
+export const InformationWithIconAndDismiss: Story = {
+  args: {
+    ...DefaultWithIconAndDismiss.args,
+    variant: 'information',
+  },
+}
+
+export const ErrorWithIconAndDismiss: Story = {
+  args: {
+    ...DefaultWithIconAndDismiss.args,
+    variant: 'error',
+  },
+}
+
+export const WithButtonAndIconAndDismiss: Story = {
+  args: {
+    ...WithButtonAndIconDefault.args,
+    message: 'This is a message with an icon and a button.',
+    buttonText: 'Button',
+    maxWidth: 256,
+    onButtonPress: () => alert('clicked'),
+    onDismiss: () => alert('dismissed'),
+  },
+}
+
+export const WithButtonAndIconAndDismissInformation: Story = {
+  args: {
+    ...WithButtonAndIconAndDismiss.args,
+    variant: 'information',
+  },
+}
+
+export const WithButtonAndIconAndDismissError: Story = {
+  args: {
+    ...WithButtonAndIconAndDismiss.args,
+    variant: 'error',
+  },
+}
+
 export default meta
