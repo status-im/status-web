@@ -8,8 +8,7 @@ import Tamagui from '../tamagui.config'
 export default class Document extends NextDocument {
   static async getInitialProps({ renderPage }) {
     AppRegistry.registerComponent('app', () => Main)
-    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-    // @ts-ignore
+    // @ts-expect-error
     const { getStyleElement } = AppRegistry.getApplication('app')
 
     const page = await renderPage()
@@ -25,7 +24,7 @@ export default class Document extends NextDocument {
         <Head>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <style
-            id="stitches"
+            id="tamagui"
             dangerouslySetInnerHTML={{ __html: Tamagui.getCSS() }}
           />
         </Head>
