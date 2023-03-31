@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import {
   AnchorActions,
@@ -11,7 +11,9 @@ import {
   useAppDispatch,
   useAppState,
 } from '@status-im/components'
-import { useBlur } from '@status-im/components/hooks'
+import useResizeObserver from 'use-resize-observer'
+
+import { useScrollPosition } from './hooks/use-scroll-position'
 
 const COMMUNITY = {
   name: 'Rarible',
@@ -22,14 +24,12 @@ const COMMUNITY = {
     'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
 }
 
+const updateProperty = (property: string, value: number) => {
+  document.documentElement.style.setProperty(property, `${value}px`)
+}
+
 function App() {
   const [showMembers, setShowMembers] = useState(false)
-
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const { shouldBlurTop, shouldBlurBottom } = useBlur({
-    ref: containerRef,
-  })
 
   const appState = useAppState()
   const appDispatch = useAppDispatch()
@@ -45,6 +45,32 @@ function App() {
     }
   }, [appState.channelId])
 
+  const topbarRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const composerRef = useRef<HTMLDivElement>(null)
+
+  useResizeObserver<HTMLDivElement>({
+    ref: topbarRef,
+    onResize({ height }) {
+      updateProperty('--topbar-height', height)
+    },
+  })
+
+  useResizeObserver<HTMLDivElement>({
+    ref: composerRef,
+    onResize({ height }) {
+      updateProperty('--composer-height', height)
+    },
+  })
+
+  const scrollPosition = useScrollPosition({
+    ref: contentRef,
+  })
+
+  useEffect(() => {
+    contentRef.current.scrollTop = contentRef.current.scrollHeight
+  }, [selectedChannel])
+
   return (
     <div id="app">
       <div id="sidebar" style={{ zIndex: 200 }}>
@@ -58,23 +84,28 @@ function App() {
       </div>
 
       <main id="main">
-        <Topbar
-          blur={shouldBlurTop}
-          channel={selectedChannel}
-          showMembers={showMembers}
-          onMembersPress={() => setShowMembers(show => !show)}
-        />
+        <div id="topbar" ref={topbarRef}>
+          <Topbar
+            blur={scrollPosition !== 'top'}
+            channel={selectedChannel}
+            showMembers={showMembers}
+            onMembersPress={() => setShowMembers(show => !show)}
+          />
+        </div>
 
-        <div id="content" ref={containerRef}>
+        <div id="content" ref={contentRef}>
           <div id="messages">
             <Messages />
           </div>
-          <div id="composer">
+        </div>
+
+        <div id="composer" ref={composerRef}>
+          {scrollPosition !== 'bottom' && (
             <div id="anchor-actions">
-              <AnchorActions scrolled={shouldBlurBottom} />
+              <AnchorActions />
             </div>
-            <Composer blur={shouldBlurBottom} />
-          </div>
+          )}
+          <Composer blur={scrollPosition !== 'bottom'} />
         </div>
       </main>
 
