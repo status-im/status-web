@@ -1,14 +1,14 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Avatar, Button, Heading,Paragraph } from '@status-im/components'
+import { Avatar, Button, Text } from '@status-im/components'
 import { decodeChannelURLData, deserializePublicKey } from '@status-im/js'
 
 import { PreviewPage } from '@/components/page'
 import { useWaku } from '@/hooks/use-waku'
 import { createGetServerSideProps } from '@/server/ssr'
 
-import type { Client} from '@/hooks/use-waku';
-import type { ServerSideProps } from '@/server/ssr';
+import type { Client } from '@/hooks/use-waku'
+import type { ServerSideProps } from '@/server/ssr'
 
 export const getServerSideProps = createGetServerSideProps(decodeChannelURLData)
 
@@ -60,40 +60,40 @@ export default function ChannelPreviewPage(
             src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
             size={80}
           />
-          <Heading>#{data.displayName}</Heading>
-          <Paragraph>{data.description}</Paragraph>
+          <Text size={13}>#{data.displayName}</Text>
+          <Text size={13}>{data.description}</Text>
           <div>
-            <Paragraph>Channel in</Paragraph>
+            <Text size={13}>Channel in</Text>
             {/* todo: Status logo */}
             <div>
               <Avatar
                 src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
                 size={80}
               />
-              <Paragraph>{data.community.displayName}</Paragraph>
+              <Text>{data.community.displayName}</Text>
             </div>
           </div>
 
           <div>
-            <Heading heading="h2">How to join this channel:</Heading>
+            <Text size={27}>How to join this channel:</Text>
             <ol>
               <li>
                 <div>
                   <Button size={24}>Download</Button>
-                  <Paragraph>the Status app</Paragraph>
+                  <Text size={13}>the Status app</Text>
                 </div>
               </li>
               <li>
-                <Paragraph>Install Status</Paragraph>
+                <Text size={13}>Install Status</Text>
               </li>
               <li>
-                <Paragraph>Complete the onboarding</Paragraph>
+                <Text size={13}>Complete the onboarding</Text>
               </li>
               <li>
                 <div>
                   <Button size={24}>View channel in Status</Button>
                   <div>
-                    <Paragraph>and voilá</Paragraph>
+                    <Text size={13}>and voilá</Text>
                   </div>
                 </div>
               </li>
