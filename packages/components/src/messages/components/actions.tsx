@@ -25,10 +25,11 @@ interface Props {
   onReplyPress: VoidFunction
   onEditPress: VoidFunction
   // onDeletePress: VoidFunction
+  pinned?: boolean
 }
 
 export const Actions = (props: Props) => {
-  const { reactions, onOpenChange, onReplyPress, onEditPress } = props
+  const { reactions, onOpenChange, onReplyPress, onEditPress, pinned } = props
 
   useEffect(() => {
     return () => onOpenChange(false)
@@ -76,7 +77,7 @@ export const Actions = (props: Props) => {
       {/* OPTIONS MENU */}
       <DropdownMenu modal={false} onOpenChange={onOpenChange}>
         <IconButton variant="ghost" icon={<OptionsIcon />} />
-        <DropdownMenu.Content align="end" sideOffset={10}>
+        <DropdownMenu.Content align="end" sideOffset={10} zIndex={101}>
           <DropdownMenu.Item
             icon={<EditIcon />}
             label="Edit message"
@@ -92,11 +93,19 @@ export const Actions = (props: Props) => {
             label="Copy text"
             onSelect={() => console.log('copy')}
           />
-          <DropdownMenu.Item
-            icon={<PinIcon />}
-            label="Pin to the channel"
-            onSelect={() => console.log('pin')}
-          />
+          {pinned ? (
+            <DropdownMenu.Item
+              icon={<PinIcon />}
+              label="Unpin message"
+              onSelect={() => console.log('unpin')}
+            />
+          ) : (
+            <DropdownMenu.Item
+              icon={<PinIcon />}
+              label="Pin to the channel"
+              onSelect={() => console.log('pin')}
+            />
+          )}
           <DropdownMenu.Item
             icon={<ForwardIcon />}
             label="Forward"

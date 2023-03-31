@@ -14,7 +14,8 @@ import { Reactions } from './components/reactions'
 
 import type { ReactionsType } from './types'
 
-interface Props {
+export interface MessageProps {
+  id: string
   text?: React.ReactNode
   images?: Array<{ url: string }>
   reactions: ReactionsType
@@ -44,7 +45,7 @@ const Base = styled(Stack, {
   } as const,
 })
 
-const Message = (props: Props) => {
+const Message = (props: MessageProps) => {
   const { text, images, reactions, reply, pinned } = props
 
   const [hovered, setHovered] = useState(false)
@@ -59,6 +60,7 @@ const Message = (props: Props) => {
   return (
     <Base
       active={active}
+      pinned={pinned}
       onHoverIn={() => setHovered(true)}
       onHoverOut={() => setHovered(false)}
     >
@@ -69,6 +71,7 @@ const Message = (props: Props) => {
             onOpenChange={setShowActions}
             onReplyPress={() => dispatch({ type: 'reply', messageId: '1' })}
             onEditPress={() => dispatch({ type: 'edit', messageId: '1' })}
+            pinned={pinned}
           />
         </Unspaced>
       )}
