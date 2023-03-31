@@ -32,6 +32,16 @@ export const config = createTamagui({
         600: { normal: 'InterBold' },
       },
     }),
+    body: createInterFont({
+      size: {},
+      weight: {},
+      letterSpacing: {},
+      face: {
+        400: { normal: 'Inter' },
+        500: { normal: 'Inter' },
+        600: { normal: 'InterBold' },
+      },
+    }),
     mono: createFont({
       family:
         'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;',
