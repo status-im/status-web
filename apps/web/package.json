@@ -15,7 +15,8 @@
     "@tamagui/core": "1.7.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-native-web": "^0.18.12"
+    "react-native-web": "^0.18.12",
+    "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
     "@tamagui/vite-plugin": "1.7.7",
