@@ -129,7 +129,7 @@ const Topbar = (props: Props) => {
               <DropdownMenu.Content align="end" sideOffset={4}>
                 <DropdownMenu.Item
                   icon={<CommunitiesIcon />}
-                  label="View channel members and details"
+                  label="View channel details"
                   onSelect={() => console.log('click')}
                 />
                 <DropdownMenu.Item
