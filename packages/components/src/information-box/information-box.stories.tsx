@@ -103,7 +103,7 @@ export const WithButtonAndIconError: Story = {
 export const DefaultWithDismiss: Story = {
   args: {
     message: 'This is a simple message.',
-    onDismiss: () => alert('dismissed'),
+    onClose: () => alert('dismissed'),
   },
 }
 
@@ -125,7 +125,7 @@ export const DefaultWithIconAndDismiss: Story = {
   args: {
     message: 'This is a simple message with an info icon.',
     icon: <InfoIcon />,
-    onDismiss: () => alert('dismissed'),
+    onClose: () => alert('dismissed'),
   },
 }
 
@@ -150,7 +150,7 @@ export const WithButtonAndIconAndDismiss: Story = {
     buttonText: 'Button',
     maxWidth: 256,
     onButtonPress: () => alert('clicked'),
-    onDismiss: () => alert('dismissed'),
+    onClose: () => alert('dismissed'),
   },
 }
 

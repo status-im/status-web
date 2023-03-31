@@ -17,7 +17,7 @@ type InformationBoxProps = {
   icon?: React.ReactElement
   buttonText?: string
   onButtonPress?: () => void
-  onDismiss?: () => void
+  onClose?: () => void
 } & StackProps
 
 const colorTextValue: Record<
@@ -53,7 +53,7 @@ const InformationBox = ({
   icon,
   buttonText,
   onButtonPress,
-  onDismiss,
+  onClose,
   ...props
 }: InformationBoxProps) => {
   const colorText = colorTextValue[variant]
@@ -89,11 +89,11 @@ const InformationBox = ({
             </Stack>
           ) : null}
         </Stack>
-        {onDismiss ? (
+        {onClose ? (
           <Stack
             pl={8}
             pt={4}
-            onPress={() => onDismiss()}
+            onPress={() => onClose()}
             cursor="pointer"
             alignSelf="flex-start"
           >
