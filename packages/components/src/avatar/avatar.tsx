@@ -88,7 +88,7 @@ const Base = styled(Stack, {
 
     shape: {
       circle: {
-        borderRadius: '$100',
+        borderRadius: '$full',
       },
       rounded: {
         borderRadius: '$16',
@@ -115,7 +115,7 @@ const Shape = styled(Stack, {
   variants: {
     shape: {
       circle: {
-        borderRadius: '$100',
+        borderRadius: '$full',
       },
       rounded: {
         borderRadius: '$16',

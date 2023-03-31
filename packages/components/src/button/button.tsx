@@ -162,7 +162,7 @@ const Base = styled(Stack, {
 
     radius: {
       full: {
-        borderRadius: '$100',
+        borderRadius: '$full',
       },
       40: {
         borderRadius: '$12',
