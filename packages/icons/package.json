@@ -14,19 +14,23 @@
     "./package.json": "./package.json",
     "./12": {
       "types": "./dist/types/12/index.d.ts",
-      "import": "./dist/12.js"
+      "import": "./dist/12.js",
+      "require": "./dist/12.js"
     },
     "./16": {
       "types": "./dist/types/16/index.d.ts",
-      "import": "./dist/16.js"
+      "import": "./dist/16.js",
+      "require": "./dist/16.js"
     },
     "./20": {
       "types": "./dist/types/20/index.d.ts",
-      "import": "./dist/20.js"
+      "import": "./dist/20.js",
+      "require": "./dist/20.js"
     },
     "./reactions": {
       "types": "./dist/types/reactions/index.d.ts",
-      "import": "./dist/reactions.js"
+      "import": "./dist/reactions.js",
+      "require": "./dist/reactions.js"
     },
     "./12/*.svg": "./src/12/*.svg",
     "./16/*.svg": "./src/16/*.svg",
