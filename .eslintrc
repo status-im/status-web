@@ -42,6 +42,13 @@
         "react/jsx-uses-react": "off",
         "react/react-in-jsx-scope": "off"
       }
+    },
+    {
+      "files": ["./apps/website/"],
+      "extends": [
+        // "next"
+        "next/core-web-vitals"
+      ]
     }
   ],
   "rules": {
@@ -94,3 +101,5 @@
     "import/ignore": ["react-native"]
   }
 }
+
+// appp/website; extend eslint-config-next
