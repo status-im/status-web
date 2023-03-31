@@ -6,12 +6,13 @@ import { AccordionItem } from '../accordion/accordionItem'
 import { Avatar } from '../avatar'
 import { Button } from '../button'
 import { Image } from '../image'
+import { SidebarSkeleton } from '../skeleton/sidebar-skeleton'
 import { Text } from '../text'
 import { CHANNEL_GROUPS } from './mock-data'
 
 import type { ChannelGroup } from './mock-data'
 
-type Props = {
+export type SidebarProps = {
   community: {
     name: string
     description: string
@@ -21,17 +22,23 @@ type Props = {
   channels?: ChannelGroup[]
   selectedChannelId?: string
   onChannelPress: (channelId: string) => void
+  isLoading?: boolean
 }
 
-const Sidebar = (props: Props) => {
+const Sidebar = (props: SidebarProps) => {
   const {
     community,
     channels = CHANNEL_GROUPS,
     selectedChannelId,
     onChannelPress,
+    isLoading,
   } = props
 
   const { name, description, membersCount, imageUrl } = community
+
+  if (isLoading) {
+    return <SidebarSkeleton />
+  }
 
   return (
     <Stack
