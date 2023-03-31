@@ -143,7 +143,7 @@ const Composer = (props: Props) => {
                       backgroundColor="$background"
                       width={15}
                       height={15}
-                      borderRadius="$10"
+                      borderRadius="$8"
                       position="absolute"
                       zIndex={1}
                     />
