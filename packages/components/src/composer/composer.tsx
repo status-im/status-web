@@ -1,50 +1,69 @@
 import { useState } from 'react'
 
-import { useImageUpload } from '@status-im/components/hooks'
 import {
   ArrowTopIcon,
   AudioIcon,
-  ClearIcon,
   FormatIcon,
   ImageIcon,
   ReactionIcon,
 } from '@status-im/icons'
 import { BlurView } from 'expo-blur'
-import { AnimatePresence, Stack, XStack } from 'tamagui'
+import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker'
+import { Stack, XStack } from 'tamagui'
 
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
-import { Image } from '../image'
 import { Input } from '../input'
 import { useChatDispatch, useChatState } from '../provider'
 import { Reply } from '../reply'
 import { Shadow } from '../shadow'
+import { Images } from './components/images'
+
+import type { ImagePickerAsset } from 'expo-image-picker'
 
 interface Props {
   blur?: boolean
 }
+
+const IMAGES_LIMIT = 6
 
 // pb={insets.bottom + Platform.select({ android: 12, ios: 0 })}
 const Composer = (props: Props) => {
   const { blur } = props
 
   const [isFocused, setIsFocused] = useState(false)
+
   const [text, setText] = useState('')
+  const [images, setImages] = useState<ImagePickerAsset[]>([])
 
-  const {
-    imagesData,
-    handleImageUpload,
-    handleImageRemove,
-    imageUploaderInputRef,
-    isDisabled: isImageUploadDisabled,
-  } = useImageUpload()
+  const handlePickImages = async () => {
+    const result = await launchImageLibraryAsync({
+      mediaTypes: MediaTypeOptions.All,
+      allowsMultipleSelection: true,
+      // aspect: [4, 3],
+      // quality: 1,
+    })
 
-  const iconButtonBlurred = blur && !isFocused && imagesData.length === 0
+    if (result.canceled) {
+      return
+    }
+
+    const assets = result.assets.slice(0, IMAGES_LIMIT - 1) // zero-based index
+    setImages(assets)
+  }
+
+  const handleImageRemove = (uri: string) => {
+    setImages(prevState => prevState.filter(image => image.uri !== uri))
+  }
+
+  const iconButtonBlurred = blur && !isFocused && images.length === 0
 
   const chatState = useChatState()
   const chatDispatch = useChatDispatch()
 
-  const showSendButton = text !== '' || imagesData.length > 0
+  const hasImages = images.length > 0
+  const canSend = text !== '' || hasImages
+  const imagePickerDisabled = images.length === IMAGES_LIMIT
 
   return (
     <BlurView
@@ -86,91 +105,23 @@ const Composer = (props: Props) => {
           onFocus={() => setIsFocused(true)}
           onChangeText={setText}
         />
-        <input
-          ref={imageUploaderInputRef}
-          type="file"
-          multiple
-          onChange={handleImageUpload}
-          hidden
-          id="image-uploader-input"
-          style={{
-            display: 'none',
-          }}
-        />
-        <AnimatePresence>
-          {imagesData.length > 0 && (
-            <XStack
-              key="images-thumbnails"
-              paddingTop={12}
-              paddingBottom={8}
-              overflow="scroll"
-            >
-              {imagesData.map((imageData, index) => (
-                <Stack
-                  key={index + imageData}
-                  mr={12}
-                  position="relative"
-                  justifyContent="flex-end"
-                  flexDirection="row"
-                  alignItems="flex-start"
-                  animation={[
-                    'fast',
-                    {
-                      opacity: {
-                        overshootClamping: true,
-                      },
-                    },
-                  ]}
-                  enterStyle={{ opacity: 0 }}
-                  exitStyle={{ opacity: 0 }}
-                  opacity={1}
-                >
-                  <Image
-                    src={imageData}
-                    width={56}
-                    height={56}
-                    radius={12}
-                    aspectRatio={1}
-                  />
-                  <Stack
-                    zIndex={8}
-                    onPress={() => handleImageRemove(index)}
-                    cursor="pointer"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Stack
-                      backgroundColor="$background"
-                      width={15}
-                      height={15}
-                      borderRadius="$8"
-                      position="absolute"
-                      zIndex={1}
-                    />
-                    <Stack position="absolute" zIndex={2} width={20}>
-                      <ClearIcon size={20} color="$neutral-50" />
-                    </Stack>
-                  </Stack>
-                </Stack>
-              ))}
-            </XStack>
-          )}
-        </AnimatePresence>
+
+        {hasImages && <Images images={images} onRemove={handleImageRemove} />}
+
         <XStack
           alignItems="center"
           justifyContent="space-between"
           paddingTop={12}
           backgroundColor="transparent"
         >
-          <Stack gap={12} flexDirection="row" backgroundColor="transparent">
-            <label htmlFor="image-uploader-input">
-              <IconButton
-                variant="outline"
-                icon={<ImageIcon size={20} />}
-                disabled={isImageUploadDisabled}
-                blur={iconButtonBlurred}
-              />
-            </label>
+          <Stack space={12} flexDirection="row" backgroundColor="transparent">
+            <IconButton
+              variant="outline"
+              icon={<ImageIcon size={20} />}
+              disabled={imagePickerDisabled}
+              blur={iconButtonBlurred}
+              onPress={handlePickImages}
+            />
             <IconButton
               variant="outline"
               icon={<ReactionIcon size={20} />}
@@ -183,7 +134,7 @@ const Composer = (props: Props) => {
               blur={iconButtonBlurred}
             />
           </Stack>
-          {showSendButton ? (
+          {canSend ? (
             <Button
               variant="primary"
               shape="circle"
