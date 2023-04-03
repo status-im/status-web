@@ -49,6 +49,14 @@
         // "next"
         "next/core-web-vitals"
       ]
+      // "settings": {
+      //   "import/resolver": {
+      //     "typescript": {
+      //       "extensions": [".js", ".jsx", ".ts", ".tsx"],
+      //       "project": ["tsconfig.json", "apps/website/tsconfig.json"]
+      //     }
+      //   }
+      // }
     }
   ],
   "rules": {
@@ -91,11 +99,19 @@
     "import/resolver": {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
-        "project": ["tsconfig.base.json", "packages/*/tsconfig.json"]
+        "project": [
+          "tsconfig.base.json",
+          "packages/*/tsconfig.json",
+          "apps/*/tsconfig.json"
+        ]
       },
       "typescript": {
         "alwaysTryTypes": true,
-        "project": ["tsconfig.base.json", "packages/*/tsconfig.json"]
+        "project": [
+          "tsconfig.base.json",
+          "packages/*/tsconfig.json",
+          "apps/*/tsconfig.json"
+        ]
       }
     },
     "import/ignore": ["react-native"]
