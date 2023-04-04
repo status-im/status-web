@@ -19,6 +19,11 @@ type ToastState = {
     message: string,
     actionProps?: Pick<ToastProps, 'action' | 'onAction'>
   ) => void
+  custom: (
+    message: string,
+    icon: React.ReactElement,
+    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
+  ) => void
 }
 
 const useStore = create<ToastState>()(set => ({
@@ -27,6 +32,8 @@ const useStore = create<ToastState>()(set => ({
     set({ toast: { ...actionProps, message, type: 'positive' } }),
   negative: (message, actionProps) =>
     set({ toast: { ...actionProps, message, type: 'negative' } }),
+  custom: (message, icon, actionProps) =>
+    set({ toast: { ...actionProps, message, icon } }),
   dismiss: () => set({ toast: null }),
 }))
 
@@ -64,6 +71,7 @@ const useToast = () => {
     () => ({
       positive: store.positive,
       negative: store.negative,
+      custom: store.custom,
     }),
     [store]
   )
