@@ -8,9 +8,9 @@ import type { Meta, StoryObj } from '@storybook/react'
 const meta: Meta<typeof SystemMessage> = {
   component: SystemMessage,
   argTypes: {
-    type: {
+    state: {
       control: 'select',
-      options: ['deleted', 'pinned', 'added'],
+      options: ['default', 'pressed', 'landed'],
     },
   },
 }
@@ -18,30 +18,34 @@ const meta: Meta<typeof SystemMessage> = {
 type Story = StoryObj<typeof SystemMessage>
 
 export const AllVariants: Story = {
-  args: {},
-  render: () => (
+  args: { state: 'default' },
+  render: ({ state }) => (
     <Stack space flexDirection="row" width={800}>
       <Stack space minWidth={800}>
         <SystemMessage
           type="deleted"
           text="Message deleted for you"
           timestamp="9:45"
+          state={state}
         />
         <SystemMessage
           type="deleted"
           text="Message deleted for everyone"
           timestamp="10:31"
+          state={state}
         />
         <SystemMessage
           timestamp="11:12"
           type="deleted"
           text="Message deleted"
           action={{ label: 'Undo', onClick: action('undo') }}
+          state={state}
         />
         <SystemMessage
           type="pinned"
           actor={{ id: '123', name: 'Steve', src: '' }}
           timestamp="9:45"
+          state={state}
           message={{
             text: 'This is a pinned message',
             author: {
@@ -56,6 +60,7 @@ export const AllVariants: Story = {
           type="added"
           timestamp="9:41"
           actor={{ id: '123', name: 'Steve', src: '' }}
+          state={state}
           users={[
             {
               id: '425',

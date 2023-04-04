@@ -1,13 +1,11 @@
-import { useState } from 'react'
-
-import { TimeoutIcon } from '@status-im/icons/12'
 import { AddUserIcon, DeleteIcon, PinIcon } from '@status-im/icons/20'
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
-import { Avatar, IconAvatar } from '../avatar'
-import { Button } from '../button'
-import { Text } from '../text'
+import { IconAvatar } from '../avatar'
+import { AddedUsersContentMessage } from './components/added-users-message-content'
+import { DeletedMessageContent } from './components/deleted-message-content'
+import { PinnedMessageContent } from './components/pinned-message-content'
 
 type User = {
   id: string
@@ -61,9 +59,36 @@ const getIcon = {
 }
 
 const SystemMessage = (props: Props) => {
-  console.log(props)
-
   const { state = 'default', timestamp, type } = props
+
+  const renderMessage = (type: 'pinned' | 'deleted' | 'added') => {
+    switch (type) {
+      case 'pinned':
+        return (
+          <PinnedMessageContent
+            timestamp={timestamp}
+            actor={props.actor}
+            message={props.message}
+          />
+        )
+      case 'deleted':
+        return (
+          <DeletedMessageContent
+            timestamp={timestamp}
+            text={props.text}
+            action={props.action}
+          />
+        )
+      case 'added':
+        return (
+          <AddedUsersContentMessage
+            timestamp={timestamp}
+            actor={props.actor}
+            users={props.users}
+          />
+        )
+    }
+  }
 
   return (
     <Base
@@ -78,73 +103,13 @@ const SystemMessage = (props: Props) => {
       <IconAvatar backgroundColor="$turquoise-50-opa-5" color="$neutral-100">
         {getIcon[type]}
       </IconAvatar>
-      {type === 'pinned' && (
-        <Stack flexDirection="column" space={2}>
-          <Stack flexDirection="row" space={4} alignItems="center">
-            <Text size={13} weight="semibold">
-              {props.actor?.name}
-            </Text>
-            <Text size={13}>pinned a message</Text>
-            <Text size={11} color="$neutral-50">
-              {timestamp}
-            </Text>
-          </Stack>
-          <Stack flexDirection="row" space={4}>
-            <Avatar size={16} src={props.message?.author.src} />
-            <Text size={11} weight="semibold">
-              {props.message?.author.name}
-            </Text>
-            <Text size={11}>{props.message.text}</Text>
-          </Stack>
-        </Stack>
-      )}
-      {type === 'deleted' && (
-        <Stack flexDirection="row" space={2} justifyContent="space-between">
-          <Stack
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-            minWidth={800}
-          >
-            <>
-              <Text size={13}>{props.text}</Text>
-              <Text size={11} color="$neutral-50">
-                {timestamp}
-              </Text>
-            </>
-            {props.action && (
-              <Button
-                onPress={props?.action?.onClick}
-                variant="darkGrey"
-                size={24}
-                icon={<TimeoutIcon />}
-              >
-                {props.action.label}
-              </Button>
-            )}
-          </Stack>
-        </Stack>
-      )}
-      {type === 'added' && (
-        <Stack flexDirection="row" space={2}>
-          <Stack flexDirection="row" space={4} alignItems="center">
-            <Text size={13} weight="semibold">
-              {props.actor?.name}
-            </Text>
-            <Text size={13}>added</Text>
-            <Text size={13}>{props.users?.map(user => user.name)}</Text>
-            <Text size={11} color="$neutral-50">
-              {timestamp}
-            </Text>
-          </Stack>
-        </Stack>
-      )}
+      {renderMessage(type)}
     </Base>
   )
 }
 
 export { SystemMessage }
-export type { Props as SystemMessageProps }
+export type { Props as SystemMessageProps, User }
 
 const Base = styled(View, {
   backgroundColor: '$white-50',
