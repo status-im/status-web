@@ -7,35 +7,49 @@ import { XStack } from 'tamagui'
 
 import { Text } from '../text'
 
-interface Props {
+import type { TextProps } from '../text'
+
+type Props = {
   name: string
+  size?: Extract<TextProps['size'], 13 | 15>
   nickname?: string
-  address?: string
   status?: 'verified' | 'untrustworthy' | 'contact'
+  address?: string
   time?: string
-  orientation?: 'horizontal' | 'vertical'
 }
 
 const Author = (props: Props) => {
-  const { name, status, address, time } = props
+  const { name, size = 13, nickname, status, address, time } = props
 
   return (
     <XStack space={8} alignItems="center">
-      <XStack space={4} alignItems="center">
-        <Text size={13} weight="semibold">
+      <XStack gap={4} alignItems="center">
+        <Text size={size} weight="semibold">
           {name}
         </Text>
+
+        {nickname && (
+          <Text size={11} color="$neutral-60">
+            · {nickname}
+          </Text>
+        )}
         {status === 'contact' && <ContactIcon />}
         {status === 'verified' && <VerifiedIcon />}
         {status === 'untrustworthy' && <UntrustworthyIcon />}
       </XStack>
 
-      {address && (
-        <Text size={11} color="$neutral-50">
-          {address}
-          {time && ` · ${time}`}
-        </Text>
-      )}
+      <XStack gap={4} alignItems="center">
+        {address && (
+          <Text size={11} color="$neutral-50" type="monospace">
+            {address}
+          </Text>
+        )}
+        {time && (
+          <Text size={11} color="$neutral-50">
+            · {time}
+          </Text>
+        )}
+      </XStack>
     </XStack>
   )
 }
