@@ -23,6 +23,10 @@ type Props = {
       message: {
         author: User
         text: string
+        images?: {
+          type: 'photo' | 'gif'
+          srcs: Array<string>
+        }
       }
     }
   | {
@@ -95,7 +99,7 @@ const SystemMessage = (props: Props) => {
       flexDirection="row"
       space={8}
       padding={8}
-      alignItems="stretch"
+      alignItems="center"
       state={
         type === 'deleted' && state === 'landed' ? 'landed_deleted' : state
       }
@@ -113,6 +117,8 @@ export type { Props as SystemMessageProps, User }
 
 const Base = styled(View, {
   backgroundColor: '$white-50',
+  borderRadius: 16, // switch to borderRadius tokens once merged => '$16'
+  padding: 8,
 
   variants: {
     state: {

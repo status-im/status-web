@@ -11,16 +11,23 @@ type Props = {
   message: {
     author: User
     text: string
+    images?: {
+      type: 'photo' | 'gif'
+      srcs: Array<string>
+    }
   }
 }
 
 const PinnedMessageContent = (props: Props) => {
   const { timestamp, actor, message } = props
+
+  const { author, images, text } = message
+
   return (
     <Stack flexDirection="column" space={2}>
       <Stack flexDirection="row" space={4} alignItems="center">
         <Text size={13} weight="semibold">
-          {actor?.name}
+          {actor.name}
         </Text>
         <Text size={13}>pinned a message</Text>
         <Text size={11} color="$neutral-50">
@@ -28,11 +35,14 @@ const PinnedMessageContent = (props: Props) => {
         </Text>
       </Stack>
       <Stack flexDirection="row" space={4}>
-        <Avatar size={16} src={message?.author.src} />
+        <Avatar size={16} src={author.src} />
         <Text size={11} weight="semibold">
-          {message?.author.name}
+          {author.name}
         </Text>
-        <Text size={11}>{message.text}</Text>
+        <Text size={11}>{images?.type === 'gif' ? 'GIF' : text}</Text>
+        {images?.type === 'photo' && images.srcs.length > 0 && (
+          <Text size={11}>{images.srcs.length} photos</Text>
+        )}
       </Stack>
     </Stack>
   )
