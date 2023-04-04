@@ -56,7 +56,7 @@ const getIcon = {
     </IconAvatar>
   ),
   added: (
-    <IconAvatar backgroundColor="$blue-50-opa-5">
+    <IconAvatar backgroundColor="$blue-50-opa-5" color="$blue-50">
       <AddUserIcon />
     </IconAvatar>
   ),
@@ -104,9 +104,7 @@ const SystemMessage = (props: Props) => {
         type === 'deleted' && state === 'landed' ? 'landed_deleted' : state
       }
     >
-      <IconAvatar backgroundColor="$turquoise-50-opa-5" color="$neutral-100">
-        {getIcon[type]}
-      </IconAvatar>
+      {getIcon[type]}
       {renderMessage(type)}
     </Base>
   )

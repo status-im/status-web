@@ -41,7 +41,9 @@ const PinnedMessageContent = (props: Props) => {
         </Text>
         <Text size={11}>{images?.type === 'gif' ? 'GIF' : text}</Text>
         {images?.type === 'photo' && images.srcs.length > 0 && (
-          <Text size={11}>{images.srcs.length} photos</Text>
+          <Text size={11} color="$neutral-50">
+            {images.srcs.length} photos
+          </Text>
         )}
       </Stack>
     </Stack>
