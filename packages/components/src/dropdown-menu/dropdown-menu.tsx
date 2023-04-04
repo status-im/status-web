@@ -106,4 +106,4 @@ DropdownMenu.Item = MenuItem
 DropdownMenu.Separator = Separator
 
 export { DropdownMenu }
-export type { Props as DropdownMenuProps }
+export type DropdownMenuProps = Omit<Props, 'children'>
