@@ -1,89 +1,11 @@
-import { cloneElement, forwardRef, useMemo } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
-import {
-  Action,
-  Description,
-  Provider,
-  Root,
-  Viewport,
-} from '@radix-ui/react-toast'
+import { Action, Description } from '@radix-ui/react-toast'
 import { CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
 import { Stack, styled } from '@tamagui/core'
-import { create } from 'zustand'
 
 import { Button } from '../button'
 import { Text } from '../text'
-
-type ToastState = {
-  toast: Props | null
-  dismiss: () => void
-  positive: (
-    message: string,
-    actionProps?: Pick<Props, 'action' | 'onAction'>
-  ) => void
-  negative: (
-    message: string,
-    actionProps?: Pick<Props, 'action' | 'onAction'>
-  ) => void
-}
-
-const useStore = create<ToastState>()(set => ({
-  toast: null,
-  positive: (message, actionProps) =>
-    set({ toast: { ...actionProps, message, type: 'positive' } }),
-  negative: (message, actionProps) =>
-    set({ toast: { ...actionProps, message, type: 'negative' } }),
-  dismiss: () => set({ toast: null }),
-}))
-
-export const ToastContainer = () => {
-  const store = useStore()
-
-  if (store.toast === null) {
-    return null
-  }
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      store.dismiss()
-    }
-  }
-
-  return (
-    <Provider>
-      <ToastRoot
-        id="toast-root"
-        defaultOpen
-        onOpenChange={handleOpenChange}
-        style={{ position: 'fixed' }}
-      >
-        <Toast {...store.toast} />
-      </ToastRoot>
-      <Viewport />
-    </Provider>
-  )
-}
-
-const ToastRoot = styled(Root, {
-  name: 'ToastRoot',
-  acceptsClassName: true,
-
-  bottom: 12,
-  right: 12,
-  zIndex: 1000,
-})
-
-export const useToast = () => {
-  const store = useStore()
-
-  return useMemo(
-    () => ({
-      positive: store.positive,
-      negative: store.negative,
-    }),
-    [store]
-  )
-}
 
 type Props = {
   message: string
@@ -140,6 +62,7 @@ const Toast = (props: Props) => {
 const _Toast = forwardRef(Toast)
 
 export { _Toast as Toast }
+export type { Props as ToastProps }
 
 const Base = styled(Stack, {
   name: 'Toast',

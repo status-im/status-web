@@ -2,7 +2,7 @@ import { PlaceholderIcon } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
 import { Button } from '../button'
-import { Toast, useToast } from './toast'
+import { Toast, useToast } from './'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
@@ -55,7 +55,7 @@ export const AllVariants: Story = {
       <Toast
         type="negative"
         action="Retry"
-        message="Couldn’t fetch information"
+        message="Couldn't fetch information"
       />
       <Toast
         type="negative"
