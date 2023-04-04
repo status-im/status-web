@@ -11,7 +11,7 @@ type Props = {
   users: Array<User>
 }
 
-const AddedUsersContentMessage = (props: Props) => {
+const AddedUsersMessageContent = (props: Props) => {
   const { actor, users, timestamp } = props
 
   return (
@@ -53,4 +53,4 @@ const AddedUsersContentMessage = (props: Props) => {
   )
 }
 
-export { AddedUsersContentMessage }
+export { AddedUsersMessageContent }

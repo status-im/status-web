@@ -3,7 +3,7 @@ import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
 import { IconAvatar } from '../avatar'
-import { AddedUsersContentMessage } from './components/added-users-message-content'
+import { AddedUsersMessageContent } from './components/added-users-message-content'
 import { DeletedMessageContent } from './components/deleted-message-content'
 import { PinnedMessageContent } from './components/pinned-message-content'
 
@@ -85,7 +85,7 @@ const SystemMessage = (props: Props) => {
         )
       case 'added':
         return (
-          <AddedUsersContentMessage
+          <AddedUsersMessageContent
             timestamp={timestamp}
             actor={props.actor}
             users={props.users}

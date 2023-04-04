@@ -126,6 +126,7 @@ export const Messages = (props: Props) => {
         id="1234-1243"
       />
       <SystemMessage
+        state="landed"
         type="deleted"
         text="Messaged deleted for you"
         timestamp="10:12"
