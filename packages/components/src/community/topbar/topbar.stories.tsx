@@ -6,13 +6,13 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta<typeof Topbar> = {
-  title: 'Navigation/Topbar',
+  title: 'Community/Topbar',
   component: Topbar,
   args: {
     channel: {
       id: '1',
       emoji: '👋',
-      title: '# channel',
+      title: 'channel',
       description: 'This is a channel description',
     },
   },
@@ -35,16 +35,34 @@ export const Default: Story = {
   args: {},
 }
 
-export const isLoading: Story = {
+export const Loading: Story = {
   args: {
-    ...Default.args,
-    isLoading: true,
+    loading: true,
+  },
+}
+
+export const WithPinnedMessages: Story = {
+  args: {
+    pinnedMessages: [
+      {
+        text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
+        reactions: {},
+        pinned: true,
+        id: '1234-1234',
+      },
+      {
+        text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.',
+        reactions: {},
+        pinned: true,
+        id: '4321-4321',
+      },
+    ],
+    showMembers: true,
   },
 }
 
 export const WithMembersSelected: Story = {
   args: {
-    ...Default.args,
     showMembers: true,
   },
 }

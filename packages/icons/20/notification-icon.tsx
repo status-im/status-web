@@ -18,7 +18,7 @@ const SvgNotificationIcon = (props: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <Circle cx={10} cy={10} r={4} fill="#4360DF" />
+      <Circle cx={10} cy={10} r={4} fill={color} />
     </Svg>
   )
 }
