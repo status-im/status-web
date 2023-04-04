@@ -188,18 +188,6 @@ const Base = styled(Stack, {
       },
     },
   } as const,
-
-  compoundVariants: [
-    {
-      size: 80,
-      outline: true,
-      css: {
-        // '--identicon-size': 4,
-        // padding: 'var(--identicon-size)'
-        padding: 4,
-      },
-    },
-  ],
 })
 
 const Shape = styled(Stack, {
