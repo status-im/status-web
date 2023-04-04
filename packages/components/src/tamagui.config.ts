@@ -33,7 +33,8 @@ export const config = createTamagui({
       },
     }),
     mono: createFont({
-      family: 'UbuntuMono',
+      family:
+        'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;',
       weight: {},
       letterSpacing: {},
       size: {},
