@@ -18,6 +18,7 @@ const external = [
 export default defineConfig(({ mode }) => {
   return {
     define: {
+      __DEV__: process.env.NODE_ENV === 'development',
       TAMAGUI_TARGET: JSON.stringify('web'),
     },
     build: {
