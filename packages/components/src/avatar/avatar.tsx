@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Stack, styled, Text, Unspaced } from '@tamagui/core'
 
 import { Image } from '../image'
+import { generateIdenticonRing } from './utils'
 
 import type { GetStyledVariants } from '@tamagui/core'
 
@@ -12,8 +13,11 @@ type Props = {
   src: string
   size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
   shape?: Variants['shape']
-  outline?: Variants['outline']
+  // outline?: Variants['outline']
   indicator?: GetStyledVariants<typeof Indicator>['state']
+} & {
+  type: 'user'
+  colorHash?: number[][]
 }
 
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
@@ -23,9 +27,17 @@ const Avatar = (props: Props) => {
     src,
     size,
     shape = 'circle',
-    outline = false,
+    // outline = false,
     indicator = 'none',
+    colorHash,
   } = props
+
+  const identiconRing = useMemo(() => {
+    if (colorHash) {
+      const gradient = generateIdenticonRing(colorHash)
+      return `conic-gradient(from 90deg, ${gradient})`
+    }
+  }, [colorHash])
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
@@ -34,7 +46,25 @@ const Avatar = (props: Props) => {
   }, [src])
 
   return (
-    <Base size={size} shape={shape} outline={outline}>
+    <Base
+      size={size}
+      shape={shape}
+      outline={Boolean(colorHash)}
+      style={{
+        background: identiconRing,
+        // 'background': 'red',
+        // padding: 4,
+        ...(!identiconRing
+          ? {
+              '--identicon-size': 0,
+              // padding: 0
+            }
+          : {
+              // padding: 4,
+              // '--identicon-size': 4
+            }),
+      }}
+    >
       {indicator !== 'none' && (
         <Unspaced>
           <Indicator size={size} state={indicator} />
@@ -78,11 +108,66 @@ const Base = styled(Stack, {
   variants: {
     // defined in Avatar props
     size: {
-      '...': (size: number) => {
-        return {
-          width: size,
-          height: size,
-        }
+      // '...': (size: number) => {
+      //   return {
+      //     width: size,
+      //     height: size,
+      //     '--identicon-size': 4,
+      //     padding: 'var(--identicon-size)'
+      //   }
+      // },
+
+      // 80: {
+      //   width: 80,
+      //   height: 80,
+      //   // '--identicon-size': 4,
+      //   // padding: 'var(--identicon-size)',
+      //   // padding: 4,
+      // },
+
+      80: {
+        width: 80,
+        height: 80,
+        // '--identicon-size': 4,
+        // padding: 'var(--identicon-size)',
+        padding: 4,
+      },
+      56: {
+        width: 56,
+        height: 56,
+        // padding: 3,
+        '--identicon-size': 3,
+        padding: 'var(--identicon-size)',
+      },
+      48: {
+        width: 48,
+        height: 48,
+        padding: 2,
+      },
+      32: {
+        width: 32,
+        height: 32,
+        padding: 2,
+      },
+      28: {
+        width: 28,
+        height: 28,
+        padding: 1,
+      },
+      24: {
+        width: 24,
+        height: 24,
+        padding: 1,
+      },
+      20: {
+        width: 20,
+        height: 20,
+        padding: 1,
+      },
+      16: {
+        width: 16,
+        height: 16,
+        padding: 1,
       },
     },
 
@@ -97,11 +182,24 @@ const Base = styled(Stack, {
 
     outline: {
       true: {
-        borderWidth: 2,
-        borderColor: '$white-100',
+        // borderWidth: 2,
+        // borderColor: '$white-100',
+        // borderColor: 'red'
       },
     },
   } as const,
+
+  compoundVariants: [
+    {
+      size: 80,
+      outline: true,
+      css: {
+        // '--identicon-size': 4,
+        // padding: 'var(--identicon-size)'
+        padding: 4,
+      },
+    },
+  ],
 })
 
 const Shape = styled(Stack, {
