@@ -43,17 +43,9 @@ const Avatar = (props: Props) => {
       shape={shape}
       style={{
         background: identiconRing,
-        // 'background': 'red',
-        // padding: 4,
-        ...(!identiconRing
-          ? {
-              '--identicon-size': 0,
-              // padding: 0
-            }
-          : {
-              // padding: 4,
-              // '--identicon-size': 4
-            }),
+        ...(!identiconRing && {
+          padding: 0,
+        }),
       }}
     >
       {indicator !== 'none' && (
@@ -97,38 +89,16 @@ const Base = styled(Stack, {
   alignItems: 'center',
 
   variants: {
-    // defined in Avatar props
     size: {
-      // '...': (size: number) => {
-      //   return {
-      //     width: size,
-      //     height: size,
-      //     '--identicon-size': 4,
-      //     padding: 'var(--identicon-size)'
-      //   }
-      // },
-
-      // 80: {
-      //   width: 80,
-      //   height: 80,
-      //   // '--identicon-size': 4,
-      //   // padding: 'var(--identicon-size)',
-      //   // padding: 4,
-      // },
-
       80: {
         width: 80,
         height: 80,
-        // '--identicon-size': 4,
-        // padding: 'var(--identicon-size)',
         padding: 4,
       },
       56: {
         width: 56,
         height: 56,
-        // padding: 3,
-        '--identicon-size': 3,
-        padding: 'var(--identicon-size)',
+        padding: 2,
       },
       48: {
         width: 48,
@@ -143,22 +113,18 @@ const Base = styled(Stack, {
       28: {
         width: 28,
         height: 28,
-        padding: 1,
       },
       24: {
         width: 24,
         height: 24,
-        padding: 1,
       },
       20: {
         width: 20,
         height: 20,
-        padding: 1,
       },
       16: {
         width: 16,
         height: 16,
-        padding: 1,
       },
     },
 
