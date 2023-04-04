@@ -5,6 +5,7 @@ import { Counter } from './counter'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof Counter> = {
+  title: 'Components/Counter',
   component: Counter,
   argTypes: {
     value: {
