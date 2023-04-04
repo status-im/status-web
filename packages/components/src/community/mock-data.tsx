@@ -1,17 +1,17 @@
-export interface Channel {
+export interface ChannelType {
   id: string
   title: string
   description: string
   emoji: string
-  channelStatus?: 'muted' | 'normal' | 'withMessages' | 'withMentions'
-  unreadCount?: number
+  channelStatus?: 'default' | 'notification' | 'muted'
+  mentionCount?: number
 }
 
-export interface ChannelGroup {
+export interface ChannelGroupType {
   id: string
   title: string
   unreadCount?: number
-  channels: Channel[]
+  channels: ChannelType[]
 }
 
 const emojis = ['👋', '🔥', '🦄', '🍑', '🤫', '🫣', '🏀', '🤝']
@@ -19,7 +19,7 @@ const emojis = ['👋', '🔥', '🦄', '🍑', '🤫', '🫣', '🏀', '🤝']
 const randomEmoji = () => emojis[Math.floor(Math.random() * emojis.length)]
 
 // MOCK DATA
-export const CHANNEL_GROUPS: ChannelGroup[] = [
+export const CHANNEL_GROUPS: ChannelGroupType[] = [
   {
     id: 'welcome',
     title: 'Welcome',
@@ -27,29 +27,29 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
     channels: [
       {
         id: 'welcome',
-        title: '# welcome',
+        title: 'welcome',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'general-welcome',
-        title: '# general',
+        title: 'general',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'random',
-        title: '# random',
+        title: 'random',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'onboarding',
-        title: '# onboarding',
+        title: 'onboarding',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
-        channelStatus: 'withMentions',
-        unreadCount: 3,
+        channelStatus: 'mention',
+        mentionCount: 3,
       },
     ],
   },
@@ -60,29 +60,29 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
     channels: [
       {
         id: 'announcements',
-        title: '# announcements',
+        title: 'announcements',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'jobs',
-        title: '# jobs',
-        channelStatus: 'withMentions',
-        unreadCount: 3,
+        title: 'jobs',
+        channelStatus: 'mention',
+        mentionCount: 3,
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'events',
-        title: '# events',
-        channelStatus: 'withMentions',
-        unreadCount: 2,
+        title: 'events',
+        channelStatus: 'mention',
+        mentionCount: 2,
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'meetups',
-        title: '# meetups',
+        title: 'meetups',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
@@ -94,25 +94,25 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
     channels: [
       {
         id: 'design',
-        title: '# design',
+        title: 'design',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'ux',
-        title: '# ux',
+        title: 'ux',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'ui',
-        title: '# ui',
+        title: 'ui',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'figma',
-        title: '# figma',
+        title: 'figma',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
@@ -124,13 +124,13 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
     channels: [
       {
         id: 'general',
-        title: '# general',
+        title: 'general',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'people-ops',
-        title: '# people-ops',
+        title: 'people-ops',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
@@ -142,27 +142,27 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
     channels: [
       {
         id: 'react',
-        title: '# react',
+        title: 'react',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
-        channelStatus: 'withMessages',
+        channelStatus: 'notification',
       },
       {
         id: 'vue',
-        title: '# vue',
+        title: 'vue',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'angular',
-        title: '# angular',
+        title: 'angular',
         channelStatus: 'muted',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'svelte',
-        title: '# svelte',
+        title: 'svelte',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
@@ -174,25 +174,25 @@ export const CHANNEL_GROUPS: ChannelGroup[] = [
     channels: [
       {
         id: 'node',
-        title: '# node',
+        title: 'node',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'python',
-        title: '# python',
+        title: 'python',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'ruby',
-        title: '# ruby',
+        title: 'ruby',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
       },
       {
         id: 'php',
-        title: '# php',
+        title: 'php',
         channelStatus: 'muted',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
