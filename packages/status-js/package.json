@@ -36,6 +36,7 @@
     "@bufbuild/protobuf": "^1.0.0",
     "@scure/base": "^1.1.1",
     "ethereum-cryptography": "^1.0.3",
+    "ethers": "^6.2.1",
     "js-waku": "^0.30.0",
     "multiformats": "^11.0.1"
   },
