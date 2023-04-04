@@ -5,7 +5,7 @@ import {
   CHANNEL_GROUPS,
   Composer,
   Messages,
-  Sidebar,
+  SidebarCommunity,
   SidebarMembers,
   Topbar,
   useAppDispatch,
@@ -21,7 +21,7 @@ const COMMUNITY = {
     'Multichain community-centric NFT marketplace. Create, buy and sell your NFTs.',
   membersCount: 123,
   imageUrl:
-    'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2264&q=80',
 }
 
 const updateProperty = (property: string, value: number) => {
@@ -73,8 +73,8 @@ function App() {
 
   return (
     <div id="app">
-      <div id="sidebar" style={{ zIndex: 200 }}>
-        <Sidebar
+      <div id="community-sidebar" style={{ zIndex: 200 }}>
+        <SidebarCommunity
           community={COMMUNITY}
           selectedChannelId={appState.channelId}
           onChannelPress={channelId =>
@@ -90,6 +90,20 @@ function App() {
             channel={selectedChannel}
             showMembers={showMembers}
             onMembersPress={() => setShowMembers(show => !show)}
+            pinnedMessages={[
+              {
+                text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
+                reactions: {},
+                pinned: true,
+                id: '1234-1234',
+              },
+              {
+                text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.',
+                reactions: {},
+                pinned: true,
+                id: '4321-4321',
+              },
+            ]}
           />
         </div>
 
@@ -110,7 +124,7 @@ function App() {
       </main>
 
       {showMembers && (
-        <div id="members">
+        <div id="members-sidebar">
           <SidebarMembers />
         </div>
       )}

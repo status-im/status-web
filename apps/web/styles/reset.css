@@ -92,3 +92,9 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+/* Temporary testing purposes of keyboard navigation */
+button:focus-visible {
+  outline: 2px solid crimson;
+  border-radius: 3px;
+}
