@@ -5,7 +5,7 @@ import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
 
 import { Author } from '../author'
 import { Avatar } from '../avatar'
-import { Image } from '../image'
+// import { Image } from '../image'
 import { useChatDispatch } from '../provider'
 import { Reply } from '../reply'
 import { Text } from '../text'
@@ -127,8 +127,23 @@ const Message = (props: MessageProps) => {
               {text}
             </Text>
           )}
+          {images && images.length > 0 && (
+            <div className="container">
+              <div className="thumbnail-grid" data-count={images.length}>
+                {images?.map((image, index) => (
+                  <div
+                    className="thumbnail"
+                    key={`${image.url}-${index}`}
+                    data-count={images?.length}
+                  >
+                    <img alt="thumb-img" src={image.url} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-          {images?.map(image => (
+          {/* {images?.map(image => (
             <Stack
               key={image.url}
               marginTop={8}
@@ -138,7 +153,7 @@ const Message = (props: MessageProps) => {
             >
               <Image src={image.url} width="full" height={320} radius={12} />
             </Stack>
-          ))}
+          ))} */}
 
           {hasReactions && (
             <Stack paddingTop={8}>
