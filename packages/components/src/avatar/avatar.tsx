@@ -13,7 +13,6 @@ type Props = {
   src: string
   size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
   shape?: Variants['shape']
-  // outline?: Variants['outline']
   indicator?: GetStyledVariants<typeof Indicator>['state']
 } & {
   type: 'user'
@@ -23,14 +22,7 @@ type Props = {
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 const Avatar = (props: Props) => {
-  const {
-    src,
-    size,
-    shape = 'circle',
-    // outline = false,
-    indicator = 'none',
-    colorHash,
-  } = props
+  const { src, size, shape = 'circle', indicator = 'none', colorHash } = props
 
   const identiconRing = useMemo(() => {
     if (colorHash) {
@@ -49,7 +41,6 @@ const Avatar = (props: Props) => {
     <Base
       size={size}
       shape={shape}
-      outline={Boolean(colorHash)}
       style={{
         background: identiconRing,
         // 'background': 'red',
@@ -177,14 +168,6 @@ const Base = styled(Stack, {
       },
       rounded: {
         borderRadius: '$16',
-      },
-    },
-
-    outline: {
-      true: {
-        // borderWidth: 2,
-        // borderColor: '$white-100',
-        // borderColor: 'red'
       },
     },
   } as const,
