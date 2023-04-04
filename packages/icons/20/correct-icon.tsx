@@ -18,15 +18,8 @@ const SvgCorrectIcon = (props: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <Circle
-        cx={10}
-        cy={10}
-        r={6.75}
-        stroke="#26A69A"
-        strokeOpacity={0.4}
-        strokeWidth={1.3}
-      />
-      <Path d="M6.833 10.5 9 12.5l4.333-5" stroke="#26A69A" strokeWidth={1.3} />
+      <Circle cx={10} cy={10} r={7.5} stroke="#23ADA0" strokeWidth={1.2} />
+      <Path d="m7.25 10.75 2 1.5 3.5-4.5" stroke="#23ADA0" strokeWidth={1.2} />
     </Svg>
   )
 }
