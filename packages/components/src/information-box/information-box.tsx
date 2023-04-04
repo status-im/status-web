@@ -6,59 +6,52 @@ import { Stack, styled } from '@tamagui/core'
 import { Button } from '../button'
 import { Text } from '../text'
 
-import type { GetVariants } from '../types'
-import type { ColorTokens, StackProps } from '@tamagui/core'
+import type { GetVariants, MapColorToken } from '../types'
 
 type Variants = GetVariants<typeof Base>
 
-type InformationBoxProps = {
+type Props = {
   message: string
   variant?: Variants['variant']
   icon?: React.ReactElement
   buttonText?: string
   onButtonPress?: () => void
   onClose?: () => void
-} & StackProps
+}
 
-const colorTextValue: Record<
-  NonNullable<InformationBoxProps['variant']>,
-  ColorTokens
-> = {
+type Variant = Props['variant']
+
+const textColors: MapColorToken<Variant> = {
   default: '$neutral-100',
   information: '$neutral-100',
   error: '$danger-50',
 }
 
-const colorIconValue: Record<
-  NonNullable<InformationBoxProps['variant']>,
-  ColorTokens
-> = {
+const iconColors: MapColorToken<Variant> = {
   default: '$neutral-50',
   information: '$neutral-50',
   error: '$danger-50',
 }
 
-const buttonVariantValue: Record<
-  NonNullable<InformationBoxProps['variant']>,
-  'primary' | 'danger'
-> = {
+const buttonVariants: Record<NonNullable<Variant>, 'primary' | 'danger'> = {
   default: 'primary',
   information: 'primary',
   error: 'danger',
 }
 
-const InformationBox = ({
-  message,
-  variant = 'default',
-  icon,
-  buttonText,
-  onButtonPress,
-  onClose,
-  ...props
-}: InformationBoxProps) => {
-  const colorText = colorTextValue[variant]
-  const colorIcon = colorIconValue[variant]
-  const buttonVariant = buttonVariantValue[variant]
+const InformationBox = (props: Props) => {
+  const {
+    message,
+    variant = 'default',
+    icon,
+    buttonText,
+    onButtonPress,
+    onClose,
+  } = props
+
+  const textColor = textColors[variant]
+  const iconColor = iconColors[variant]
+  const buttonVariant = buttonVariants[variant]
 
   return (
     <Base variant={variant} {...props}>
@@ -70,11 +63,11 @@ const InformationBox = ({
       >
         {icon ? (
           <Stack pr={8} pt={1} alignSelf="flex-start">
-            {cloneElement(icon, { color: colorIcon })}
+            {cloneElement(icon, { color: iconColor })}
           </Stack>
         ) : null}
         <Stack flexShrink={1} width="100%">
-          <Text size={13} color={colorText}>
+          <Text size={13} color={textColor}>
             {message}
           </Text>
           {buttonText ? (
@@ -104,6 +97,9 @@ const InformationBox = ({
     </Base>
   )
 }
+
+export { InformationBox }
+export type { Props as InformationBoxProps }
 
 const Base = styled(Stack, {
   name: 'InformationBox',
@@ -136,5 +132,3 @@ const Base = styled(Stack, {
     },
   },
 })
-
-export { InformationBox }
