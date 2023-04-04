@@ -5,17 +5,10 @@
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
 >
-  <circle
-    cx="10"
-    cy="10"
-    r="6.75"
-    stroke="#26A69A"
-    stroke-opacity="0.4"
-    stroke-width="1.3"
-  />
+  <circle cx="10" cy="10" r="7.5" stroke="#23ADA0" stroke-width="1.2" />
   <path
-    d="M6.83334 10.5L9 12.5L13.3333 7.5"
-    stroke="#26A69A"
-    stroke-width="1.3"
+    d="M7.25 10.75L9.25 12.25L12.75 7.75"
+    stroke="#23ADA0"
+    stroke-width="1.2"
   />
 </svg>

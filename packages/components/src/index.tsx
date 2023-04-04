@@ -12,6 +12,7 @@ export * from './provider'
 export * from './sidebar'
 export * from './sidebar-members'
 export * from './text'
+export * from './toast'
 export * from './topbar'
 export * from './user-list'
 
