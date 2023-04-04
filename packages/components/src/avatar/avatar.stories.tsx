@@ -66,24 +66,6 @@ export const Default: Story = {
             [4, 15],
           ]}
         />
-        <Avatar
-          {...args}
-          size={56}
-          indicator="online"
-          colorHash={[
-            [3, 30],
-            [2, 10],
-            [5, 5],
-            [3, 14],
-            [5, 4],
-            [4, 19],
-            [3, 16],
-            [4, 0],
-            [5, 28],
-            [4, 13],
-            [4, 15],
-          ]}
-        />
       </Stack>
     </Stack>
   ),
