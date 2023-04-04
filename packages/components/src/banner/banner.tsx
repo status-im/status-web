@@ -1,4 +1,4 @@
-import { styled } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 import { View } from 'react-native'
 
 import { Counter } from '../counter'
@@ -15,7 +15,7 @@ type Props = {
 
 const Banner = (props: Props) => {
   const {
-    icon,
+    icon = null,
     children,
     count,
     backgroundColor = '$primary-50-opa-20',
@@ -25,9 +25,11 @@ const Banner = (props: Props) => {
     <Base backgroundColor={backgroundColor}>
       <Content>
         {icon}
-        <Text size={13} color="$textPrimary">
-          {children}
-        </Text>
+        <Stack flexGrow={1} flexShrink={1}>
+          <Text size={13} color="$textPrimary" truncate>
+            {children}
+          </Text>
+        </Stack>
       </Content>
       {count ? <Counter value={count} /> : null}
     </Base>
@@ -43,10 +45,12 @@ const Base = styled(View, {
   alignItems: 'center',
   justifyContent: 'space-between',
   maxHeight: '40px',
+  gap: 10,
 })
 
 const Content = styled(View, {
   flexDirection: 'row',
   gap: 10,
   alignItems: 'center',
+  width: '90%', // truncate does work without this ¯\_(ツ)_/¯
 })
