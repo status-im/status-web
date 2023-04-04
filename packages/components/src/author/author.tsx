@@ -38,18 +38,20 @@ const Author = (props: Props) => {
         {status === 'untrustworthy' && <UntrustworthyIcon />}
       </XStack>
 
-      <XStack gap={4} alignItems="center">
-        {address && (
-          <Text size={11} color="$neutral-50" type="monospace">
-            {address}
-          </Text>
-        )}
-        {time && (
-          <Text size={11} color="$neutral-50">
-            · {time}
-          </Text>
-        )}
-      </XStack>
+      {(address || time) && (
+        <XStack gap={4} alignItems="center">
+          {address && (
+            <Text size={11} color="$neutral-50" type="monospace">
+              {address}
+            </Text>
+          )}
+          {time && (
+            <Text size={11} color="$neutral-50">
+              · {time}
+            </Text>
+          )}
+        </XStack>
+      )}
     </XStack>
   )
 }
