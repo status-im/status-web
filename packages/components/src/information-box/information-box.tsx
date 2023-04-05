@@ -16,7 +16,7 @@ type Props = {
   icon?: React.ReactElement
   buttonText?: string
   onButtonPress?: () => void
-  onClose?: () => void
+  onClosePress?: () => void
 }
 
 type Variant = Props['variant']
@@ -46,7 +46,7 @@ const InformationBox = (props: Props) => {
     icon,
     buttonText,
     onButtonPress,
-    onClose,
+    onClosePress,
   } = props
 
   const textColor = textColors[variant]
@@ -82,11 +82,11 @@ const InformationBox = (props: Props) => {
             </Stack>
           ) : null}
         </Stack>
-        {onClose ? (
+        {onClosePress ? (
           <Stack
             pl={8}
             pt={4}
-            onPress={() => onClose()}
+            onPress={() => onClosePress()}
             cursor="pointer"
             alignSelf="flex-start"
           >

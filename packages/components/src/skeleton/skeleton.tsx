@@ -2,30 +2,32 @@ import { Stack, useTheme } from '@tamagui/core'
 
 import type { ColorTokens, StackProps } from '@tamagui/core'
 
-type SkeletonProps = StackProps & {
+type Props = StackProps & {
   width?: number | string
   height?: number | string
   borderRadius?: number
   variant?: 'primary' | 'secondary'
 }
 
-const colorValue: Record<NonNullable<SkeletonProps['variant']>, ColorTokens> = {
+const skeletonColor: Record<NonNullable<Props['variant']>, ColorTokens> = {
   primary: '$neutral-10',
   secondary: '$neutral-20',
 }
 
-const Skeleton = ({
-  width = 32,
-  height = 32,
-  borderRadius = 16,
-  variant = 'primary',
-  ...props
-}: SkeletonProps) => {
+const Skeleton = (props: Props) => {
+  const {
+    width = 32,
+    height = 32,
+    borderRadius = 16,
+    variant = 'primary',
+    ...rest
+  } = props
+
   const theme = useTheme()
   /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const color = theme[colorValue[variant]]?.val
+  const color = theme[skeletonColor[variant]]?.val
 
   return (
     <Stack
@@ -34,7 +36,7 @@ const Skeleton = ({
       width="100%"
       borderRadius={borderRadius}
       overflow="hidden"
-      {...props}
+      {...rest}
     >
       <div
         style={{
@@ -52,3 +54,4 @@ const Skeleton = ({
 }
 
 export { Skeleton }
+export type { Props as SkeletonProps }

@@ -6,18 +6,7 @@ import { Tooltip } from '../tooltip'
 
 const NUM_CIRCLES = 200
 
-// TODO try to find a responsive solution if we need to keep the circles in the future
-const Circles = () => {
-  return (
-    <>
-      {[...Array(NUM_CIRCLES)].map((_, i) => (
-        <Circle key={i} />
-      ))}
-    </>
-  )
-}
-
-interface GapMessagesProps {
+type Props = {
   startDate: string
   endDate: string
   message: string
@@ -25,12 +14,9 @@ interface GapMessagesProps {
 }
 
 // TODO try to find a solution for the inset shadow
-const GapMessages = ({
-  startDate,
-  endDate,
-  message,
-  tooltipMessage,
-}: GapMessagesProps) => {
+const GapMessages = (props: Props) => {
+  const { startDate, endDate, message, tooltipMessage } = props
+
   return (
     <Stack backgroundColor="$neutral-5" width="100%">
       <Stack>
@@ -80,6 +66,20 @@ const GapMessages = ({
   )
 }
 
+export { GapMessages }
+export type { Props as GapMessageProps }
+
+// TODO try to find a responsive solution if we need to keep the circles in the future
+const Circles = () => {
+  return (
+    <>
+      {[...Array(NUM_CIRCLES)].map((_, i) => (
+        <Circle key={i} />
+      ))}
+    </>
+  )
+}
+
 const Circle = styled(Stack, {
   name: 'Circle',
   width: 8,
@@ -108,5 +108,3 @@ const Divider = styled(Stack, {
   width: 1,
   height: 'auto',
 })
-
-export { GapMessages }

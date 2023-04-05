@@ -64,7 +64,6 @@ export const ErrorWithIcon: Story = {
 export const WithMaxWidth: Story = {
   args: {
     ...Default.args,
-    maxWidth: 256,
   },
 }
 
@@ -72,7 +71,6 @@ export const WithIconAndTwoLines: Story = {
   args: {
     ...DefaultWithIcon.args,
     message: 'This is a message with an icon and two lines.',
-    maxWidth: 200,
   },
 }
 
@@ -81,7 +79,6 @@ export const WithButtonAndIconDefault: Story = {
     ...DefaultWithIcon.args,
     message: 'This is a message with an icon and a button.',
     buttonText: 'Button',
-    maxWidth: 256,
     onButtonPress: () => alert('clicked'),
   },
 }
@@ -103,7 +100,7 @@ export const WithButtonAndIconError: Story = {
 export const DefaultWithDismiss: Story = {
   args: {
     message: 'This is a simple message.',
-    onClose: () => alert('dismissed'),
+    onClosePress: () => alert('dismissed'),
   },
 }
 
@@ -125,7 +122,7 @@ export const DefaultWithIconAndDismiss: Story = {
   args: {
     message: 'This is a simple message with an info icon.',
     icon: <InfoIcon />,
-    onClose: () => alert('dismissed'),
+    onClosePress: () => alert('dismissed'),
   },
 }
 
@@ -148,9 +145,8 @@ export const WithButtonAndIconAndDismiss: Story = {
     ...WithButtonAndIconDefault.args,
     message: 'This is a message with an icon and a button.',
     buttonText: 'Button',
-    maxWidth: 256,
     onButtonPress: () => alert('clicked'),
-    onClose: () => alert('dismissed'),
+    onClosePress: () => alert('dismissed'),
   },
 }
 
