@@ -52,5 +52,5 @@ const Content = styled(View, {
   flexDirection: 'row',
   gap: 10,
   alignItems: 'center',
-  width: '90%', // truncate does work without this ¯\_(ツ)_/¯
+  width: '90%', // truncate does not work without this ¯\_(ツ)_/¯
 })
