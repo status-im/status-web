@@ -35,6 +35,13 @@ export const Default: Story = {
   args: {},
 }
 
+export const isLoading: Story = {
+  args: {
+    ...Default.args,
+    isLoading: true,
+  },
+}
+
 export const WithMembersSelected: Story = {
   args: {
     ...Default.args,
