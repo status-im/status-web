@@ -156,6 +156,7 @@ const Base = styled(Stack, {
       24: {
         height: 24,
         paddingHorizontal: 8,
+        gap: 4,
       },
     },
 

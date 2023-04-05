@@ -1,7 +1,6 @@
 import React from 'react'
+import { Provider, ToastContainer } from '../src'
 import { Parameters, Decorator } from '@storybook/react'
-
-import { Provider } from '../src'
 
 import './reset.css'
 import './components.css'
@@ -20,6 +19,7 @@ const withThemeProvider: Decorator = (Story, _context) => {
   return (
     <Provider>
       <Story />
+      <ToastContainer />
     </Provider>
   )
 }

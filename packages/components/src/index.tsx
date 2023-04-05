@@ -15,6 +15,7 @@ export * from './sidebar'
 export * from './sidebar-members'
 export * from './skeleton'
 export * from './text'
+export * from './toast'
 export * from './topbar'
 export * from './user-list'
 

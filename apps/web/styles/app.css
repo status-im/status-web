@@ -17,6 +17,7 @@ body,
 }
 
 #app {
+  isolation: isolate;
   height: 100%;
   display: grid;
   grid-template-columns: 352px 1fr auto;
