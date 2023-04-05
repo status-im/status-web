@@ -20,7 +20,7 @@ type Props = {
     name: string
     description: string
     membersCount: number
-    imageUrl: string
+    imageSrc: string
   }
   channels?: ChannelGroupType[]
   selectedChannelId?: string
@@ -37,7 +37,7 @@ const SidebarCommunity = (props: Props) => {
     // onChannelPress,
   } = props
 
-  const { name, description, membersCount, imageUrl } = community
+  const { name, description, membersCount, imageSrc } = community
 
   const [value, setValue] = useState(['Welcome'])
 
@@ -53,7 +53,7 @@ const SidebarCommunity = (props: Props) => {
       height="100%"
       overflow="scroll"
     >
-      <Image src={imageUrl} width="full" aspectRatio={2.6} />
+      <Image src={imageSrc} width="full" aspectRatio={2.6} />
       <Stack
         paddingBottom={16}
         marginTop={-16}

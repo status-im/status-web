@@ -48,7 +48,6 @@ export const CHANNEL_GROUPS: ChannelGroupType[] = [
         title: 'onboarding',
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
-        channelStatus: 'mention',
         mentionCount: 3,
       },
     ],
@@ -67,7 +66,6 @@ export const CHANNEL_GROUPS: ChannelGroupType[] = [
       {
         id: 'jobs',
         title: 'jobs',
-        channelStatus: 'mention',
         mentionCount: 3,
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',
@@ -75,7 +73,6 @@ export const CHANNEL_GROUPS: ChannelGroupType[] = [
       {
         id: 'events',
         title: 'events',
-        channelStatus: 'mention',
         mentionCount: 2,
         emoji: randomEmoji(),
         description: 'Share random funny stuff with the community. Play nice.',

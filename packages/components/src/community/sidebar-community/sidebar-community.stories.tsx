@@ -13,7 +13,7 @@ const meta: Meta<typeof SidebarCommunity> = {
       description:
         'Multichain community-centric NFT marketplace. Create, buy and sell your NFTs.',
       membersCount: 123,
-      imageUrl:
+      imageSrc:
         'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2264&q=80',
     },
     channels: CHANNEL_GROUPS,
