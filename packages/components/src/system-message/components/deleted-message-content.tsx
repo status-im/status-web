@@ -17,12 +17,18 @@ const DeletedMessageContent = (props: Props) => {
   const { timestamp, text, action } = props
 
   return (
-    <Stack flexDirection="row" space={2} justifyContent="space-between">
+    <Stack
+      flexDirection="row"
+      space={2}
+      justifyContent="space-between"
+      flexBasis="max-content"
+      flexGrow={1}
+    >
       <Stack
         flexDirection="row"
         alignItems="center"
         justifyContent="space-between"
-        minWidth={800}
+        flexGrow={1}
       >
         <Stack flexDirection="row" space={8} alignItems="baseline">
           <Text size={13}>{text}</Text>

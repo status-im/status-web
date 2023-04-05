@@ -180,6 +180,7 @@ export const tokens = createTokens({
     xdai: 'hsla(179, 51%, 50%, 1)',
     polygon: 'hsla(268, 84%, 70%, 1)',
     unknown: 'hsla(206, 26%, 95%, 1)',
+    transparent: 'hsla(0, 0%, 0%, 0)',
   },
   size,
   space,

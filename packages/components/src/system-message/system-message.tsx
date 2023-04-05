@@ -13,8 +13,11 @@ type User = {
   src: string
 }
 
+type SystemMessageType = 'pinned' | 'deleted' | 'added'
+type SystemMessageState = 'default' | 'pressed' | 'landed'
+
 type Props = {
-  state?: 'default' | 'pressed' | 'landed'
+  state?: SystemMessageState
   timestamp: string
 } & (
   | {
@@ -44,22 +47,42 @@ type Props = {
     }
 )
 
-const getIcon = {
-  deleted: (
-    <IconAvatar backgroundColor="$red-50-opa-5" color="$neutral-100">
-      <DeleteIcon />
-    </IconAvatar>
-  ),
-  pinned: (
-    <IconAvatar backgroundColor="$blue-50-opa-5" color="$neutral-100">
-      <PinIcon />
-    </IconAvatar>
-  ),
-  added: (
-    <IconAvatar backgroundColor="$blue-50-opa-5" color="$blue-50">
-      <AddUserIcon />
-    </IconAvatar>
-  ),
+const getIcon = (type: SystemMessageType, state: SystemMessageState) => {
+  switch (type) {
+    case 'deleted':
+      return (
+        <IconAvatar
+          backgroundColor={
+            state === 'landed' ? '$transparent' : '$red-50-opa-5'
+          }
+          color="$neutral-100"
+        >
+          <DeleteIcon />
+        </IconAvatar>
+      )
+    case 'pinned':
+      return (
+        <IconAvatar
+          backgroundColor={
+            state === 'landed' ? '$transparent' : '$blue-50-opa-5'
+          }
+          color="$neutral-100"
+        >
+          <PinIcon />
+        </IconAvatar>
+      )
+    case 'added':
+      return (
+        <IconAvatar
+          backgroundColor={
+            state === 'landed' ? '$transparent' : '$blue-50-opa-5'
+          }
+          color="$blue-50"
+        >
+          <AddUserIcon />
+        </IconAvatar>
+      )
+  }
 }
 
 const SystemMessage = (props: Props) => {
@@ -104,7 +127,7 @@ const SystemMessage = (props: Props) => {
         type === 'deleted' && state === 'landed' ? 'landed_deleted' : state
       }
     >
-      {getIcon[type]}
+      {getIcon(type, state)}
       {renderMessage(type)}
     </Base>
   )
