@@ -17,7 +17,7 @@ const skeletonTopSize = {
   large: 124,
 }
 
-const sekeltonBottomSize = {
+const skeletonBottomSizes = {
   smallest: 144,
   small: 156,
   medium: 212,
@@ -39,7 +39,7 @@ const MessageSkeleton = (props: Props) => {
           mb={8}
         />
         <Skeleton
-          width={sekeltonBottomSize[size || 'medium']}
+          width={skeletonBottomSizes[size || 'medium']}
           br={6}
           height={16}
         />
