@@ -41,7 +41,6 @@ const SidebarCommunity = (props: Props) => {
 
   const [value, setValue] = useState(['Welcome'])
 
-
   if (loading) {
     return <SidebarSkeleton />
   }
