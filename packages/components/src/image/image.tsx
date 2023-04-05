@@ -60,10 +60,10 @@ const Base = styled(RNImage, {
     radius: {
       none: {},
       12: {
-        borderRadius: '$12',
+        borderRadius: 12, // fix this once Image is migrated to tamagui image
       },
       full: {
-        borderRadius: '$full',
+        borderRadius: 999, // fix this once Image is migrated to tamagui image
       },
     },
   },
