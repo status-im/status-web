@@ -18,19 +18,25 @@ body,
 
 #app {
   isolation: isolate;
-  height: 100%;
+  height: 100vh;
   display: grid;
   grid-template-columns: 352px 1fr auto;
 }
 
-#main {
-  position: relative;
+#sidebar-community {
+  overflow: auto;
   height: 100vh;
 }
 
-#sidebar {
+#sidebar-members {
+  width: 352px;
   overflow: auto;
-  height: 100vh;
+  background-color: #fff;
+  z-index: 2;
+}
+
+#main {
+  position: relative;
 }
 
 #topbar {
@@ -45,6 +51,7 @@ body,
   padding-top: var(--topbar-height);
   padding-bottom: var(--composer-height);
   height: 100vh;
+  isolation: isolate;
 }
 
 #messages {
@@ -60,12 +67,7 @@ body,
 #composer {
   position: absolute;
   inset: auto 0 0;
-  z-index: 100;
-}
-
-#members {
-  width: 352px;
-  overflow: auto;
+  z-index: 1;
 }
 
 @media screen and (max-width: 768px) {

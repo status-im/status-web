@@ -17,11 +17,13 @@ const UserList = (props: Props) => {
   return (
     <YStack>
       {users.map((user, index) => {
+        const { src, indicator, ...authorProps } = user
+
         return (
           <XStack
             key={user.address! + index}
             padding={8}
-            space={8}
+            gap={8}
             borderRadius={12}
             alignItems="center"
             cursor="pointer"
@@ -29,15 +31,10 @@ const UserList = (props: Props) => {
               backgroundColor: '$primary-50-opa-5',
             }}
           >
-            <Avatar size={32} src={user.src} indicator={user.indicator} />
+            <Avatar size={32} src={src} indicator={indicator} />
             <YStack>
-              <Author
-                name={user.name}
-                nickname={user.nickname}
-                status={user.status}
-                orientation="vertical"
-              />
-              <Text size={13} color="$neutral-50">
+              <Author {...authorProps} />
+              <Text size={13} color="$neutral-50" type="monospace">
                 {user.address}
               </Text>
             </YStack>
