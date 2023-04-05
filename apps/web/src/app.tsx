@@ -5,7 +5,7 @@ import {
   CHANNEL_GROUPS,
   Composer,
   Messages,
-  Sidebar,
+  SidebarCommunity,
   SidebarMembers,
   Topbar,
   useAppDispatch,
@@ -20,8 +20,8 @@ const COMMUNITY = {
   description:
     'Multichain community-centric NFT marketplace. Create, buy and sell your NFTs.',
   membersCount: 123,
-  imageUrl:
-    'https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80',
+  imageSrc:
+    'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2264&q=80',
 }
 
 const updateProperty = (property: string, value: number) => {
@@ -29,7 +29,16 @@ const updateProperty = (property: string, value: number) => {
 }
 
 function App() {
+  const [loading, setLoading] = useState(false)
   const [showMembers, setShowMembers] = useState(false)
+
+  // TODO: Use it to simulate loading
+  // useEffect(() => {
+  //   setLoading(true)
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 2000)
+  // }, [])
 
   const appState = useAppState()
   const appDispatch = useAppDispatch()
@@ -73,13 +82,14 @@ function App() {
 
   return (
     <div id="app">
-      <div id="sidebar" style={{ zIndex: 200 }}>
-        <Sidebar
+      <div id="sidebar-community" style={{ zIndex: 200 }}>
+        <SidebarCommunity
           community={COMMUNITY}
           selectedChannelId={appState.channelId}
           onChannelPress={channelId =>
             appDispatch({ type: 'set-channel', channelId })
           }
+          loading={loading}
         />
       </div>
 
@@ -90,27 +100,44 @@ function App() {
             channel={selectedChannel}
             showMembers={showMembers}
             onMembersPress={() => setShowMembers(show => !show)}
+            pinnedMessages={[
+              {
+                text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
+                reactions: {},
+                pinned: true,
+                id: '1234-1234',
+              },
+              {
+                text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam.',
+                reactions: {},
+                pinned: true,
+                id: '4321-4321',
+              },
+            ]}
+            loading={loading}
           />
         </div>
 
         <div id="content" ref={contentRef}>
           <div id="messages">
-            <Messages />
+            <Messages loading={loading} />
           </div>
         </div>
 
-        <div id="composer" ref={composerRef}>
-          {scrollPosition !== 'bottom' && (
-            <div id="anchor-actions">
-              <AnchorActions />
-            </div>
-          )}
-          <Composer blur={scrollPosition !== 'bottom'} />
-        </div>
+        {loading === false && (
+          <div id="composer" ref={composerRef}>
+            {scrollPosition !== 'bottom' && (
+              <div id="anchor-actions">
+                <AnchorActions />
+              </div>
+            )}
+            <Composer blur={scrollPosition !== 'bottom'} />
+          </div>
+        )}
       </main>
 
       {showMembers && (
-        <div id="members">
+        <div id="sidebar-members">
           <SidebarMembers />
         </div>
       )}

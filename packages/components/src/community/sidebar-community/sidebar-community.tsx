@@ -1,42 +1,47 @@
+import { useState } from 'react'
+
+import * as Accordion from '@radix-ui/react-accordion'
 import { GroupIcon } from '@status-im/icons/16'
+import { CommunitiesIcon } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
-import { Accordion } from '../accordion/accordion'
-import { AccordionItem } from '../accordion/accordionItem'
-import { Avatar } from '../avatar'
-import { Button } from '../button'
-import { Image } from '../image'
-import { SidebarSkeleton } from '../skeleton/sidebar-skeleton'
-import { Text } from '../text'
-import { CHANNEL_GROUPS } from './mock-data'
+import { Avatar } from '../../avatar'
+import { Button } from '../../button'
+import { Image } from '../../image'
+import { SidebarSkeleton } from '../../skeleton/sidebar-skeleton'
+import { Text } from '../../text'
+import { CHANNEL_GROUPS } from '../mock-data'
+import { ChannelGroup } from './components/channel-group'
 
-import type { ChannelGroup } from './mock-data'
+import type { ChannelGroupType } from '../mock-data'
 
-export type SidebarProps = {
+type Props = {
   community: {
     name: string
     description: string
     membersCount: number
-    imageUrl: string
+    imageSrc: string
   }
-  channels?: ChannelGroup[]
+  channels?: ChannelGroupType[]
   selectedChannelId?: string
   onChannelPress: (channelId: string) => void
-  isLoading?: boolean
+  loading?: boolean
 }
 
-const Sidebar = (props: SidebarProps) => {
+const SidebarCommunity = (props: Props) => {
   const {
     community,
     channels = CHANNEL_GROUPS,
     selectedChannelId,
-    onChannelPress,
-    isLoading,
+    loading,
+    // onChannelPress,
   } = props
 
-  const { name, description, membersCount, imageUrl } = community
+  const { name, description, membersCount, imageSrc } = community
 
-  if (isLoading) {
+  const [value, setValue] = useState(['Welcome'])
+
+  if (loading) {
     return <SidebarSkeleton />
   }
 
@@ -48,7 +53,7 @@ const Sidebar = (props: SidebarProps) => {
       height="100%"
       overflow="scroll"
     >
-      <Image src={imageUrl} width="full" aspectRatio={2.6} />
+      <Image src={imageSrc} width="full" aspectRatio={2.6} />
       <Stack
         paddingBottom={16}
         marginTop={-16}
@@ -76,31 +81,26 @@ const Sidebar = (props: SidebarProps) => {
             <Text size={15}>{membersCount}</Text>
           </Stack>
 
-          <Button>Join community</Button>
+          <Button icon={<CommunitiesIcon />}>Request to join community</Button>
         </Stack>
-        {channels.map(group => (
-          <Accordion
-            key={group.id}
-            initialExpanded={group.id === 'welcome'}
-            title={group.title}
-            unreadCount={group.unreadCount}
-          >
-            {group.channels.map(channel => {
-              return (
-                <AccordionItem
-                  key={channel.id}
-                  channel={channel}
-                  selected={selectedChannelId === channel.id}
-                  onPress={() => onChannelPress(channel.id)}
-                />
-              )
-            })}
-          </Accordion>
-        ))}
-        <Stack borderBottomColor="$neutral-10" borderBottomWidth={1} />
+
+        <Accordion.Root type="multiple" value={value} onValueChange={setValue}>
+          {channels.map(group => {
+            return (
+              <ChannelGroup
+                key={group.id}
+                name={group.title}
+                unreadCount={group.unreadCount}
+                channels={group.channels}
+                expanded={value.includes(group.title)}
+                selectedChannelId={selectedChannelId}
+              />
+            )
+          })}
+        </Accordion.Root>
       </Stack>
     </Stack>
   )
 }
 
-export { Sidebar }
+export { SidebarCommunity }
