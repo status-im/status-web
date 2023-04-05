@@ -55,7 +55,7 @@ const ContextTag = (props: Props) => {
     src,
     icon,
     label,
-    type = 'default',
+    // type = 'default', // this is commented because it's not being used
     size = 24,
     blur = false,
     outline,

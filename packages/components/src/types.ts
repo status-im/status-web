@@ -28,6 +28,10 @@ export type MapVariant<
   [key in V[K] & string]: ColorTokens
 }
 
+export type MapColorToken<V> = {
+  [key in V & string]: ColorTokens
+}
+
 export type GetVariants<A extends TamaguiComponent> = Required<
   GetStyledVariants<A>
 >

@@ -4,17 +4,25 @@ import { View } from 'react-native'
 import { Counter } from '../counter'
 import { Text } from '../text'
 
+import type { ColorTokens } from '@tamagui/core'
+
 type Props = {
   children: React.ReactNode
   icon?: React.ReactNode
   count?: number
+  backgroundColor?: ColorTokens
 }
 
 const Banner = (props: Props) => {
-  const { icon, children, count } = props
+  const {
+    icon,
+    children,
+    count,
+    backgroundColor = '$primary-50-opa-20',
+  } = props
 
   return (
-    <Base>
+    <Base backgroundColor={backgroundColor}>
       <Content>
         {icon}
         <Text size={13} color="$textPrimary">
@@ -30,7 +38,6 @@ export { Banner }
 export type { Props as BannerProps }
 
 const Base = styled(View, {
-  backgroundColor: '$primary-50-opa-20',
   padding: 12,
   flexDirection: 'row',
   alignItems: 'center',

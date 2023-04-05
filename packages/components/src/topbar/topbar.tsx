@@ -16,6 +16,7 @@ import { BlurView } from 'expo-blur'
 import { DropdownMenu } from '../dropdown-menu'
 import { IconButton } from '../icon-button'
 import { PinnedMessage } from '../pinned-message'
+import { TopbarSkeleton } from '../skeleton/topbar-skeleton'
 import { Text } from '../text'
 
 import type { Channel } from '../sidebar/mock-data'
@@ -41,12 +42,18 @@ type Props = {
   goBack?: () => void
   channel: Channel
   blur?: boolean
+  isLoading?: boolean
 }
 
 const Topbar = (props: Props) => {
-  const { showMembers, onMembersPress, goBack, blur, channel } = props
+  const { showMembers, onMembersPress, goBack, blur, channel, isLoading } =
+    props
 
   const { title, description, emoji } = channel
+
+  if (isLoading) {
+    return <TopbarSkeleton />
+  }
 
   return (
     <BlurView intensity={40} style={{ zIndex: 100 }}>
