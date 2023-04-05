@@ -1,6 +1,7 @@
 import { Stack } from '@tamagui/core'
 
 import { DividerDate, DividerNewMessages } from '../dividers'
+import { MessageSkeleton } from '../skeleton'
 import { PinAnnouncement } from '../system-messages'
 import { Message } from './message'
 
@@ -14,7 +15,29 @@ const reactions: ReactionsType = {
   'thumbs-down': new Set(['me', '1', '2', '3']),
 }
 
-export const Messages = () => {
+type Props = {
+  loading?: boolean
+}
+
+export const Messages = (props: Props) => {
+  const { loading } = props
+
+  if (loading) {
+    return (
+      <>
+        <MessageSkeleton size="large" />
+        <MessageSkeleton size="small" />
+        <MessageSkeleton size="medium" />
+        <MessageSkeleton size="large" />
+        <MessageSkeleton size="medium" />
+        <MessageSkeleton size="small" />
+        <MessageSkeleton size="large" />
+        <MessageSkeleton size="small" />
+        <MessageSkeleton size="medium" />
+      </>
+    )
+  }
+
   return (
     <>
       <Message

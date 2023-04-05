@@ -29,7 +29,16 @@ const updateProperty = (property: string, value: number) => {
 }
 
 function App() {
+  const [loading, setLoading] = useState(false)
   const [showMembers, setShowMembers] = useState(false)
+
+  // TODO: Use it to simulate loading
+  // useEffect(() => {
+  //   setLoading(true)
+  //   setTimeout(() => {
+  //     setLoading(false)
+  //   }, 2000)
+  // }, [])
 
   const appState = useAppState()
   const appDispatch = useAppDispatch()
@@ -80,6 +89,7 @@ function App() {
           onChannelPress={channelId =>
             appDispatch({ type: 'set-channel', channelId })
           }
+          loading={loading}
         />
       </div>
 
@@ -104,23 +114,26 @@ function App() {
                 id: '4321-4321',
               },
             ]}
+            loading={loading}
           />
         </div>
 
         <div id="content" ref={contentRef}>
           <div id="messages">
-            <Messages />
+            <Messages loading={loading} />
           </div>
         </div>
 
-        <div id="composer" ref={composerRef}>
-          {scrollPosition !== 'bottom' && (
-            <div id="anchor-actions">
-              <AnchorActions />
-            </div>
-          )}
-          <Composer blur={scrollPosition !== 'bottom'} />
-        </div>
+        {loading === false && (
+          <div id="composer" ref={composerRef}>
+            {scrollPosition !== 'bottom' && (
+              <div id="anchor-actions">
+                <AnchorActions />
+              </div>
+            )}
+            <Composer blur={scrollPosition !== 'bottom'} />
+          </div>
+        )}
       </main>
 
       {showMembers && (
