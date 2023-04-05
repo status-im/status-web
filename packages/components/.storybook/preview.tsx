@@ -1,7 +1,9 @@
+import React from 'react'
 import { Provider, ToastContainer } from '../src'
 import { Parameters, Decorator } from '@storybook/react'
 
 import './reset.css'
+import './components.css'
 
 export const parameters: Parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

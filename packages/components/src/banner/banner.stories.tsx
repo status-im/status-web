@@ -1,4 +1,4 @@
-import { PinIcon } from '@status-im/icons/20'
+import { AlertIcon, PinIcon, RecentIcon } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
 import { Banner } from './banner'
@@ -38,6 +38,22 @@ export const NoCount: Story = {
   },
 }
 
+export const NetworkStateConnecting: Story = {
+  args: {
+    backgroundColor: '$neutral-80-opa-5',
+    icon: <RecentIcon />,
+    children: 'Connecting...',
+  },
+}
+
+export const NetworkStateError: Story = {
+  args: {
+    backgroundColor: '$danger-50-opa-20',
+    icon: <AlertIcon />,
+    children: 'Network is down',
+  },
+}
+
 export const AllVariants: Story = {
   args: {},
   render: () => (
@@ -46,6 +62,12 @@ export const AllVariants: Story = {
         Banner message
       </Banner>
       <Banner count={5}>Banner message</Banner>
+      <Banner backgroundColor="$neutral-80-opa-5" icon={<RecentIcon />}>
+        Connecting...
+      </Banner>
+      <Banner backgroundColor="$danger-50-opa-20" icon={<AlertIcon />}>
+        Network is down
+      </Banner>
       <Banner icon={<PinIcon />}>Banner message</Banner>
     </Stack>
   ),
