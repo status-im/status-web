@@ -23,12 +23,12 @@ body,
   grid-template-columns: 352px 1fr auto;
 }
 
-#community-sidebar {
+#sidebar-community {
   overflow: auto;
   height: 100vh;
 }
 
-#members-sidebar {
+#sidebar-members {
   width: 352px;
   overflow: auto;
   background-color: #fff;

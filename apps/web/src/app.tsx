@@ -73,7 +73,7 @@ function App() {
 
   return (
     <div id="app">
-      <div id="community-sidebar" style={{ zIndex: 200 }}>
+      <div id="sidebar-community" style={{ zIndex: 200 }}>
         <SidebarCommunity
           community={COMMUNITY}
           selectedChannelId={appState.channelId}
@@ -124,7 +124,7 @@ function App() {
       </main>
 
       {showMembers && (
-        <div id="members-sidebar">
+        <div id="sidebar-members">
           <SidebarMembers />
         </div>
       )}
