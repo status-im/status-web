@@ -19,13 +19,13 @@
     "url": "https://github.com/status-im/status-web/issues"
   },
   "scripts": {
+    "test": "vitest",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "yarn typegen",
-    "test": "vitest",
-    "typecheck": "tsc",
-    "typegen": "tsc --noEmit false --emitDeclarationOnly || true",
+    "postbuild": "yarn build:types",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
+    "typecheck": "tsc",
     "format": "prettier --write src",
     "protos:list": "buf ls-files src/protos",
     "protos:lint": "buf lint src/protos",

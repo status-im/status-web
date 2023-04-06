@@ -79,3 +79,28 @@ node_modules/
 
 # Vercel
 .vercel
+
+# Tamagui
+.tamagui
+
+# Storybook
+storybook-static
+
+# Expo
+node_modules/
+.expo/
+dist/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# Tauri
+**/src-tauri/target/
+
+# Local
+**/.data

@@ -1,0 +1,29 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "TAMAGUI_TARGET='web' vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint src",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@status-im/components": "*",
+    "@status-im/icons": "*",
+    "@tamagui/core": "1.7.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native-web": "^0.18.12",
+    "use-resize-observer": "^9.1.0"
+  },
+  "devDependencies": {
+    "@tamagui/vite-plugin": "1.7.7",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@vitejs/plugin-react-swc": "^3.2.0",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.4"
+  }
+}

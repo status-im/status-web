@@ -1,0 +1,61 @@
+{
+  "name": "@status-im/icons",
+  "version": "0.0.1",
+  "private": true,
+  "files": [
+    "types",
+    "dist",
+    "src"
+  ],
+  "browser": {
+    "react-native-svg": "@tamagui/react-native-svg"
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    "./12": {
+      "types": "./dist/types/12/index.d.ts",
+      "import": "./dist/12.js"
+    },
+    "./16": {
+      "types": "./dist/types/16/index.d.ts",
+      "import": "./dist/16.js"
+    },
+    "./20": {
+      "types": "./dist/types/20/index.d.ts",
+      "import": "./dist/20.js"
+    },
+    "./reactions": {
+      "types": "./dist/types/reactions/index.d.ts",
+      "import": "./dist/reactions.js"
+    },
+    "./12/*.svg": "./src/12/*.svg",
+    "./16/*.svg": "./src/16/*.svg",
+    "./20/*.svg": "./src/20/*.svg",
+    "./reactions/*.svg": "./src/reactions/*.svg"
+  },
+  "scripts": {
+    "dev": "vite build --watch --mode development",
+    "generate": "rimraf 12 16 20 reactions && svgr src --silent && yarn fix",
+    "prebuild": "yarn generate",
+    "build": "vite build",
+    "postbuild": "yarn build:types",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
+    "#test": "vitest",
+    "typecheck": "tsc",
+    "lint": "eslint '{12,16,20,reactions}/**/*.{ts,tsx}'",
+    "lint:fix": "yarn lint --fix",
+    "format": "prettier --write '{12,16,20,reactions}/**/*.{ts,tsx}'",
+    "fix": "yarn lint:fix && yarn format --loglevel=silent",
+    "clean": "rimraf 12 16 20 dist node_modules .turbo"
+  },
+  "peerDependencies": {
+    "react": "^16.x || ^17.x || ^18.x",
+    "react-dom": "*",
+    "react-native-svg": ">=12"
+  },
+  "devDependencies": {
+    "@svgr/cli": "^6.5.1",
+    "@svgr/core": "^6.5.1",
+    "vite": "^4.1.4"
+  }
+}

@@ -1,5 +1,5 @@
 // todo: add to /tiny folder
-import React from 'react'
+import type React from 'react'
 
 export const TinyCommunityIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (

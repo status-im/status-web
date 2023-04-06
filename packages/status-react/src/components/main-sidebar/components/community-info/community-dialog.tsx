@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useProtocol } from '../../../../protocol'
 import { Button, CopyInput, Dialog, Flex, Grid, Text } from '../../../../system'
 

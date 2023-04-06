@@ -1,0 +1,93 @@
+:root {
+  --topbar-height: 56px;
+  --composer-height: 100px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overscroll-behavior: none;
+  user-select: none;
+}
+
+*::selection {
+  color: #fff;
+  background: hsla(229, 71%, 57%, 1);
+}
+
+#app {
+  isolation: isolate;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 352px 1fr auto;
+}
+
+#sidebar-community {
+  overflow: auto;
+  height: 100vh;
+}
+
+#sidebar-members {
+  width: 352px;
+  overflow: auto;
+  background-color: #fff;
+  z-index: 2;
+}
+
+#main {
+  position: relative;
+}
+
+#topbar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 100;
+}
+
+#content {
+  position: relative;
+  overflow: auto;
+  padding-top: var(--topbar-height);
+  padding-bottom: var(--composer-height);
+  height: 100vh;
+  isolation: isolate;
+}
+
+#messages {
+  padding: 8px;
+}
+
+#anchor-actions {
+  position: absolute;
+  right: 20px;
+  transform: translateY(calc(-100% - 12px));
+}
+
+#composer {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+}
+
+@media screen and (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+
+  #sidebar {
+    display: none;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

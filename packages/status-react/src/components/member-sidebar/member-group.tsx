@@ -1,6 +1,6 @@
-import React from 'react'
-
 import { Text } from '../../system'
+
+import type React from 'react'
 
 interface Props {
   label: string

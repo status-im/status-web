@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { styled } from '../../styles/config'
 import { Avatar, DialogTrigger, EthAddress, Flex, Text } from '../../system'
 import { DisconnectDialog } from './disconnect-dialog'

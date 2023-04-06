@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 
 import isSameDay from 'date-fns/isSameDay'
 import { useLocation, useMatch } from 'react-router-dom'

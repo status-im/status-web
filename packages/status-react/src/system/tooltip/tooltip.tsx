@@ -1,4 +1,4 @@
-import React, { cloneElement, forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import * as Primitive from '@radix-ui/react-tooltip'
 
@@ -8,6 +8,7 @@ import type {
   TooltipArrowProps,
   TooltipContentProps,
 } from '@radix-ui/react-tooltip'
+import type React from 'react'
 import type { Ref } from 'react'
 
 interface Props {

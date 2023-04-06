@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 import { useProtocol } from '../../protocol'
 import { Avatar, Checkbox, Dialog, Flex, Text } from '../../system'

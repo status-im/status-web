@@ -1,4 +1,4 @@
-import React, { cloneElement, useState } from 'react'
+import { cloneElement, useState } from 'react'
 
 import * as Primitive from '@radix-ui/react-context-menu'
 
@@ -10,6 +10,7 @@ import type {
   ContextMenuSeparatorProps,
   ContextMenuTriggerProps,
 } from '@radix-ui/react-context-menu'
+import type React from 'react'
 
 interface TriggerProps extends ContextMenuTriggerProps {
   children: [React.ReactElement, React.ReactElement]

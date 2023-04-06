@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 
 import { Text } from '../text'
 import { Indicator, Root, Wrapper } from './styles'

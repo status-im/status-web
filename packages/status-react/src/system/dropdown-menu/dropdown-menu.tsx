@@ -1,5 +1,3 @@
-import React from 'react'
-
 import * as Primitive from '@radix-ui/react-dropdown-menu'
 
 import * as Menu from '../menu'
@@ -10,6 +8,7 @@ import type {
   DropdownMenuSeparatorProps,
   DropdownMenuTriggerProps,
 } from '@radix-ui/react-dropdown-menu'
+import type React from 'react'
 
 interface TriggerProps extends DropdownMenuTriggerProps {
   children: [React.ReactElement, React.ReactElement]

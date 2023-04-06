@@ -32,6 +32,7 @@
     "plugin:jsx-a11y/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:react/jsx-runtime",
     "prettier"
   ],
   "overrides": [
@@ -89,6 +90,7 @@
         "alwaysTryTypes": true,
         "project": ["tsconfig.base.json", "packages/*/tsconfig.json"]
       }
-    }
+    },
+    "import/ignore": ["react-native"]
   }
 }

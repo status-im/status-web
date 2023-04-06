@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useChatContext } from '../../../../contexts/chat-context'
 import { useAccount } from '../../../../protocol'
@@ -9,6 +9,8 @@ import { useAccount } from '../../../../protocol'
 import { styled } from '../../../../styles/config'
 // import { Box, Flex, IconButton } from '../../../../system'
 import { InputReply } from './input-reply'
+
+import type React from 'react'
 
 interface Props {
   mode?: 'normal' | 'editing'

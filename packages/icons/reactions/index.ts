@@ -1,0 +1,6 @@
+export { default as AngryIcon } from './angry-icon'
+export { default as LaughIcon } from './laugh-icon'
+export { default as LoveIcon } from './love-icon'
+export { default as SadIcon } from './sad-icon'
+export { default as ThumbsDownIcon } from './thumbs-down-icon'
+export { default as ThumbsUpIcon } from './thumbs-up-icon'

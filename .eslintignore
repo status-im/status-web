@@ -3,3 +3,6 @@
 **/protos
 **/proto
 **/coverage
+**/storybook-static
+**/examples
+**/packages/status-react

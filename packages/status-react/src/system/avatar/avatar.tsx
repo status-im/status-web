@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { Image } from '../image'
 import { Base, Content, Indicator, Initials } from './styles'
