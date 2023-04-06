@@ -4,6 +4,7 @@ import { setupReactNative, styled } from '@tamagui/core'
 import { Image as RNImage } from 'react-native'
 
 import type { GetProps, GetVariants } from '../types'
+import type { StackStylePropsBase } from '@tamagui/core'
 import type { Ref } from 'react'
 
 setupReactNative({
@@ -15,7 +16,7 @@ type Variants = GetVariants<typeof Base>
 type Props = GetProps<typeof Base> & {
   src: string
   width: number | 'full'
-  height?: number
+  height?: number | StackStylePropsBase['height']
   radius?: Variants['radius']
 }
 
