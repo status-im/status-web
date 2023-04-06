@@ -41,7 +41,8 @@
     "multiformats": "^11.0.1"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^1.0.0"
+    "@bufbuild/protoc-gen-es": "^1.0.0",
+    "happy-dom": "^9.1.7"
   },
   "files": [
     "dist/",
