@@ -1,179 +1,223 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { Stack } from '@tamagui/core'
-import { Image as RNImage, StyleSheet } from 'react-native'
-import { AnimatePresence, Square } from 'tamagui'
+import { ArrowLeftIcon, ArrowRightIcon } from '@status-im/icons/20'
+import { Stack, styled, Theme } from '@tamagui/core'
+import { Animated, FlatList, Image as RNImage, StyleSheet } from 'react-native'
+import { useWindowDimensions } from 'tamagui'
 
+import { IconButton } from '../../icon-button'
 import { Image } from '../../image'
 
-type Props = {
-  images: string[]
-  isVisible?: boolean
-}
+import type { LayoutChangeEvent } from 'react-native'
 
-const Carousel = (props: Props): JSX.Element => {
-  const { images, isVisible } = props
-  const [activeIndex, setActiveIndex] = useState(0)
+const THUMBNAIL_GAP = 8
+const THUMBNAIL_SIZE = 40
 
-  // const handlePrev = () => {
-  //   setActiveIndex(activeIndex === 0 ? images.length - 1 : activeIndex - 1)
-  // }
+export const Carousel = ({ images }: { images: string[] }) => {
+  const dimensions = useWindowDimensions()
+  // State
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [thumbnailWidth, setThumbnailWidth] = useState(0)
+  const [thumbnailContainerSize, setThumbnailContainerSize] = useState({
+    height: 0,
+    width: 0,
+  })
 
-  // const handleNext = () => {
-  //   setActiveIndex(activeIndex === images.length - 1 ? 0 : activeIndex + 1)
-  // }
+  // Refs
+  const thumbnailRef = useRef<HTMLImageElement>(null)
+  const refThumbnailContainer = useRef(null)
+  const translateX = useRef(new Animated.Value(0)).current
 
+  // Handlers
   const handleThumbnailPress = (index: number) => {
-    setActiveIndex(index)
-    setSelectedImage(images[index])
+    setSelectedImageIndex(index)
   }
 
-  const [selectedImage, setSelectedImage] = useState(images[0])
-  const [imageOrientation, setImageOrientation] = useState('landscape')
+  const handleThumbnailLayout = (event: LayoutChangeEvent) => {
+    setThumbnailWidth(event.nativeEvent.layout.width)
+  }
 
-  const getImageOrientation = useCallback((selectedImage: string) => {
-    RNImage.getSize(
-      selectedImage,
-      (width, height) => {
-        if (width > height) {
-          setImageOrientation('landscape')
-        } else if (width < height) {
-          setImageOrientation('portrait')
-        } else {
-          setImageOrientation('square')
-        }
-      },
-      errorMsg => {
-        throw new Error(errorMsg)
-      }
+  const handleThumbnailContainerLayout = (event: LayoutChangeEvent) => {
+    setThumbnailContainerSize({
+      height: event.nativeEvent.layout.height,
+      width: event.nativeEvent.layout.width,
+    })
+  }
+
+  const handlePrev = () => {
+    setSelectedImageIndex(
+      selectedImageIndex === 0 ? images.length - 1 : selectedImageIndex - 1
     )
-  }, [])
+  }
+
+  const handleNext = () => {
+    setSelectedImageIndex(
+      selectedImageIndex === images.length - 1 ? 0 : selectedImageIndex + 1
+    )
+  }
+
+  const [imageWidth, setImageWidth] = useState(0)
+  const [imageHeight, setImageHeight] = useState(0)
 
   useEffect(() => {
-    getImageOrientation(selectedImage)
-  }, [getImageOrientation, selectedImage])
+    const handleImageSize = () => {
+      RNImage.getSize(images[selectedImageIndex], (width, height) => {
+        setImageWidth(width)
+        setImageHeight(height)
+      })
+    }
+
+    handleImageSize()
+  }, [selectedImageIndex, images])
+
+  const aspectRatio = imageWidth / imageHeight
+  const scaledWidth = dimensions.height * aspectRatio
+  const scaledHeight = dimensions.width / aspectRatio
+
+  // Effects
+  useEffect(() => {
+    if (thumbnailWidth > 0) {
+      // Calculate the offset to center the selected thumbnail
+      const margin = THUMBNAIL_SIZE + THUMBNAIL_GAP
+
+      const halfContainerWidth = thumbnailContainerSize.width / 2
+      const halfSelectedThumbnailWidth = THUMBNAIL_SIZE / 2
+      const selectedThumbnailOffset = selectedImageIndex * margin
+
+      const toValue =
+        halfContainerWidth -
+        halfSelectedThumbnailWidth -
+        selectedThumbnailOffset -
+        THUMBNAIL_GAP
+
+      Animated.spring(translateX, {
+        toValue,
+        useNativeDriver: false,
+      }).start()
+    }
+  }, [
+    thumbnailWidth,
+    selectedImageIndex,
+    translateX,
+    thumbnailContainerSize.width,
+  ])
 
   return (
-    <AnimatePresence>
-      {isVisible && (
+    <Theme name="dark">
+      <Container
+        padding={20}
+        justifyContent="flex-end"
+        position="relative"
+        height={dimensions.height - 32}
+      >
         <Stack
-          key="carousel"
-          padding={20}
-          backgroundColor="$neutral-95"
-          alignItems="center"
-          justifyContent="space-between"
+          width="100%"
           height="100%"
+          justifyContent="space-between"
+          alignItems="center"
+          flexDirection="row"
         >
-          <Stack
-            flexGrow={1}
-            height="100%"
-            width="100%"
-            animation={[
-              'fast',
-              {
-                opacity: {
-                  overshootClamping: true,
-                },
-              },
-            ]}
-            opacity={1}
-            enterStyle={{
-              opacity: 1,
-            }}
-            exitStyle={{
-              opacity: 0,
-            }}
-          >
+          <IconButton
+            variant="default"
+            icon={<ArrowLeftIcon />}
+            onPress={handlePrev}
+          />
+
+          <Stack px={16}>
             <Image
-              width="full"
+              width={Math.min(dimensions.width, scaledWidth)}
+              height={Math.min(dimensions.height, scaledHeight)}
+              src={images[selectedImageIndex]}
+              resizeMode="contain"
               radius={16}
-              key="image"
-              height="100%"
-              src={selectedImage}
-              resizeMode={
-                imageOrientation === 'landscape' ? 'contain' : 'cover'
-              }
-              style={{
-                aspectRatio: imageOrientation === 'square' ? 1 : undefined,
-              }}
             />
           </Stack>
 
-          {/* <TouchableOpacity style={styles.prevButton} onPress={handlePrev}>
-        <Text style={styles.arrow}>{'<'}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-        <Text style={styles.arrow}>{'>'}</Text>
-      </TouchableOpacity> */}
-          <Stack width="100%" justifyContent="center" flexDirection="row">
-            <Stack
-              gap={14}
-              flexDirection="row"
-              mt={10}
-              justifyContent="center"
-              alignItems="center"
-              height={92}
-              width={330}
-            >
-              {images.map((src, index) => {
-                const isSelected = index === activeIndex
+          <IconButton icon={<ArrowRightIcon />} onPress={handleNext} />
+        </Stack>
+        <Stack
+          width="100%"
+          p={20}
+          justifyContent="center"
+          alignItems="center"
+          position="absolute"
+          bottom={0}
+          zIndex={20}
+        >
+          <Animated.View
+            onLayout={handleThumbnailContainerLayout}
+            ref={refThumbnailContainer}
+            style={[
+              styles.thumbnailsWrapper,
+              {
+                transform: [
+                  {
+                    translateX: translateX,
+                  },
+                ],
+              },
+            ]}
+          >
+            <FlatList
+              style={{ overflow: 'visible' }}
+              contentContainerStyle={{ alignItems: 'center' }}
+              data={images}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={item => item}
+              renderItem={({ item, index }) => {
+                const isSelected = index === selectedImageIndex
+                const isLastImage = index === images.length - 1
+
                 return (
                   <Stack
                     key={index}
                     animation="fast"
                     br="$12"
-                    width={40}
-                    height={40}
+                    width={isSelected ? THUMBNAIL_SIZE * 1.4 : THUMBNAIL_SIZE}
+                    height={isSelected ? THUMBNAIL_SIZE * 1.4 : THUMBNAIL_SIZE}
+                    marginRight={!isLastImage ? THUMBNAIL_GAP : 0}
                     cursor="pointer"
                     onPress={() => handleThumbnailPress(index)}
                     hoverStyle={{
-                      scale: isSelected ? 1.4 : 1.1,
+                      scale: 1.1,
                     }}
                     pressStyle={{
-                      scale: isSelected ? 1.4 : 0.8,
+                      scale: 0.95,
                     }}
-                    scale={isSelected ? 1.4 : 1}
                   >
                     <Image
-                      src={src}
+                      ref={thumbnailRef}
+                      src={item}
                       width="full"
                       height="100%"
                       borderRadius={12}
+                      onLayout={handleThumbnailLayout}
                     />
                   </Stack>
                 )
-              })}
-            </Stack>
-          </Stack>
+              }}
+            />
+          </Animated.View>
         </Stack>
-      )}
-    </AnimatePresence>
+      </Container>
+    </Theme>
   )
 }
 
-export { Carousel }
-export type { Props as CarouselProps }
+const Container = styled(Stack, {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '$neutral-100',
+  height: '100%',
+  overflow: 'hidden',
+})
 
 const styles = StyleSheet.create({
-  imageContainer: {
-    position: 'relative',
-    height: 600,
-    width: '100%',
-  },
-  prevButton: {
-    position: 'absolute',
-    top: '50%',
-    left: 0,
-    zIndex: 1,
-  },
-  nextButton: {
-    position: 'absolute',
-    top: '50%',
-    right: 0,
-    zIndex: 1,
-  },
-  arrow: {
-    fontSize: 24,
-    color: '#fff',
+  thumbnailsWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 100,
   },
 })
