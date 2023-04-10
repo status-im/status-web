@@ -22,7 +22,7 @@ type Props = {
 } & (
   | {
       type: 'pinned'
-      actor: User
+      user: User
       message: {
         author: User
         text: string
@@ -42,48 +42,10 @@ type Props = {
     }
   | {
       type: 'added'
-      actor: User
+      user: User
       users: Array<User>
     }
 )
-
-const getIcon = (type: SystemMessageType, state: SystemMessageState) => {
-  switch (type) {
-    case 'deleted':
-      return (
-        <IconAvatar
-          backgroundColor={
-            state === 'landed' ? '$transparent' : '$red-50-opa-5'
-          }
-          color="$neutral-100"
-        >
-          <DeleteIcon />
-        </IconAvatar>
-      )
-    case 'pinned':
-      return (
-        <IconAvatar
-          backgroundColor={
-            state === 'landed' ? '$transparent' : '$blue-50-opa-5'
-          }
-          color="$neutral-100"
-        >
-          <PinIcon />
-        </IconAvatar>
-      )
-    case 'added':
-      return (
-        <IconAvatar
-          backgroundColor={
-            state === 'landed' ? '$transparent' : '$blue-50-opa-5'
-          }
-          color="$blue-50"
-        >
-          <AddUserIcon />
-        </IconAvatar>
-      )
-  }
-}
 
 const SystemMessage = (props: Props) => {
   const { state = 'default', timestamp, type } = props
@@ -94,8 +56,9 @@ const SystemMessage = (props: Props) => {
         return (
           <PinnedMessageContent
             timestamp={timestamp}
-            actor={props.actor}
+            user={props.user}
             message={props.message}
+            state={state}
           />
         )
       case 'deleted':
@@ -104,14 +67,16 @@ const SystemMessage = (props: Props) => {
             timestamp={timestamp}
             text={props.text}
             action={props.action}
+            state={state}
           />
         )
       case 'added':
         return (
           <AddedUsersMessageContent
             timestamp={timestamp}
-            actor={props.actor}
+            user={props.user}
             users={props.users}
+            state={state}
           />
         )
     }
@@ -127,14 +92,13 @@ const SystemMessage = (props: Props) => {
         type === 'deleted' && state === 'landed' ? 'landed_deleted' : state
       }
     >
-      {getIcon(type, state)}
       {renderMessage(type)}
     </Base>
   )
 }
 
 export { SystemMessage }
-export type { Props as SystemMessageProps, User }
+export type { Props as SystemMessageProps, SystemMessageState, User }
 
 const Base = styled(View, {
   backgroundColor: '$white-50',
