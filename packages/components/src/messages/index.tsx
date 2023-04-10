@@ -86,7 +86,7 @@ export const Messages = (props: Props) => {
         type="pinned"
         state="pressed"
         timestamp="9:45"
-        actor={{
+        user={{
           id: '123',
           name: 'Steve',
           src: 'https://images.unsplash.com/photo-1628196482365-8b8b2b2b2b1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',

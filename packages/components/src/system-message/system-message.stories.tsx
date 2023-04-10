@@ -37,7 +37,7 @@ export const AllVariants: Story = {
         />
         <SystemMessage
           type="pinned"
-          actor={{ id: '123', name: 'Steve', src: '' }}
+          user={{ id: '123', name: 'Steve', src: '' }}
           timestamp="9:45"
           state={state}
           message={{
@@ -51,7 +51,7 @@ export const AllVariants: Story = {
         />
         <SystemMessage
           type="pinned"
-          actor={{ id: '123', name: 'Steve', src: '' }}
+          user={{ id: '123', name: 'Steve', src: '' }}
           timestamp="9:45"
           state={state}
           message={{
@@ -69,7 +69,7 @@ export const AllVariants: Story = {
         />
         <SystemMessage
           type="pinned"
-          actor={{ id: '123', name: 'Steve', src: '' }}
+          user={{ id: '123', name: 'Steve', src: '' }}
           timestamp="9:45"
           state={state}
           message={{
@@ -88,7 +88,7 @@ export const AllVariants: Story = {
         <SystemMessage
           type="added"
           timestamp="9:41"
-          actor={{
+          user={{
             id: '123',
             name: 'Steve',
             src: 'https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500',
@@ -105,7 +105,7 @@ export const AllVariants: Story = {
         <SystemMessage
           type="added"
           timestamp="9:41"
-          actor={{
+          user={{
             id: '123',
             name: 'Brian',
             src: 'https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500',
