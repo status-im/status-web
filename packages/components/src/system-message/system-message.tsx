@@ -1,8 +1,6 @@
-import { AddUserIcon, DeleteIcon, PinIcon } from '@status-im/icons/20'
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
-import { IconAvatar } from '../avatar'
 import { AddedUsersMessageContent } from './components/added-users-message-content'
 import { DeletedMessageContent } from './components/deleted-message-content'
 import { PinnedMessageContent } from './components/pinned-message-content'
@@ -13,7 +11,6 @@ type User = {
   src: string
 }
 
-type SystemMessageType = 'pinned' | 'deleted' | 'added'
 type SystemMessageState = 'default' | 'pressed' | 'landed'
 
 type Props = {
