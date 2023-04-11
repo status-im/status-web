@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --topbar-height: 56px;
   --composer-height: 100px;
@@ -9,6 +13,7 @@ body,
   height: 100%;
   overscroll-behavior: none;
   user-select: none;
+  color: #000;
 }
 
 *::selection {
@@ -35,3 +40,4 @@ body,
     grid-template-columns: 1fr;
   }
 }
+

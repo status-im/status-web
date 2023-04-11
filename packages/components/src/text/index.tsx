@@ -1,1 +1,1 @@
-export { Text, type TextProps } from './text'
+export { Text, TEXT_SIZES, type TextProps } from './text'

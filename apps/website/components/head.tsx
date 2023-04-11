@@ -3,9 +3,11 @@ import Head from 'next/head'
 type Props = {
   index?: boolean
   children?: React.ReactElement
+  imageUrl?: string
 }
 
-function _Head({ index = true, children }: Props) {
+function _Head(props: Props) {
+  const { index = true, children, imageUrl } = props
   return (
     <Head>
       <title>Status</title>
@@ -22,6 +24,9 @@ function _Head({ index = true, children }: Props) {
       />
       <meta property="og:title" content="Join [@|#]<name> in Status" />
       <meta property="og:url" content="<url>" />
+
+      {imageUrl && <meta property="og:image" content={imageUrl} />}
+
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:site" content="@ethstatus" />
       {/* <meta property="twitter:image" content="<logo>" /> */}

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Avatar, Button, Text } from '@status-im/components'
 import { decodeChannelURLData, deserializePublicKey } from '@status-im/js'
 
+import { ErrorPage } from '@/components/error-page'
 import { PreviewPage } from '@/components/page'
 import { useWaku } from '@/hooks/use-waku'
 import { createGetServerSideProps } from '@/server/ssr'
@@ -15,7 +16,7 @@ export const getServerSideProps = createGetServerSideProps(decodeChannelURLData)
 export default function ChannelPreviewPage(
   props: ServerSideProps<ReturnType<typeof decodeChannelURLData>>
 ) {
-  const [error, setError] = useState<number>()
+  const [error, setError] = useState<number>(props.errorCode)
   const [data, setData] = useState<Awaited<ReturnType<Client['fetchChannel']>>>(
     props.unverifiedData
   )
@@ -25,10 +26,14 @@ export default function ChannelPreviewPage(
 
   // todo: use client like for community
 
+  if (error) {
+    return <ErrorPage errorCode={error} />
+  }
+
   return (
     <PreviewPage
-      errorCode={error || props.errorCode}
-      unverifiedData={props.unverifiedData}
+      type="channel"
+      verifiedData={data}
       // onRetry={handleRetry}
     >
       <>
@@ -56,24 +61,6 @@ export default function ChannelPreviewPage(
       </>
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Avatar
-            src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-            size={80}
-          />
-          <Text size={13}>#{data.displayName}</Text>
-          <Text size={13}>{data.description}</Text>
-          <div>
-            <Text size={13}>Channel in</Text>
-            {/* todo: Status logo */}
-            <div>
-              <Avatar
-                src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                size={80}
-              />
-              <Text>{data.community.displayName}</Text>
-            </div>
-          </div>
-
           <div>
             <Text size={27}>How to join this channel:</Text>
             <ol>

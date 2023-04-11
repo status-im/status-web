@@ -44,6 +44,7 @@
       }
     },
     {
+      // TODO: add https://github.com/francoismassart/eslint-plugin-tailwindcss
       "files": ["./apps/website/"],
       "extends": [
         // "next"

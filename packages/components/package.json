@@ -7,7 +7,7 @@
   "private": true,
   "main": "./src/index.tsx",
   "types": "./src/index.tsx",
-  "module": "./dist/index.mjs",
+  "#module": "./dist/index.mjs",
   "files": [
     "types",
     "dist"

@@ -14,7 +14,8 @@ const Provider = (props: Props) => {
   return (
     <ThemeProvider defaultTheme={props.defaultTheme}>
       <AppProvider>
-        <ChatProvider>{children}</ChatProvider>
+        {/* <ChatProvider>{children}</ChatProvider> */}
+        {children}
       </AppProvider>
     </ThemeProvider>
   )

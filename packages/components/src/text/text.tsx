@@ -31,6 +31,17 @@ const Text = (props: Props, ref: Ref<RNText>) => {
   return <Base {...rest} ref={ref} color={color} />
 }
 
+export type TextSizeVariant<V extends string | number | undefined> = Record<
+  NonNullable<V>,
+  Props['size']
+>
+
+export const TEXT_SIZES: TextSizeVariant<Props['size']> = {
+  '40': 15,
+  '32': 15,
+  '24': 13,
+}
+
 const Base = styled(BaseText, {
   name: 'Text',
 

@@ -2,10 +2,15 @@ import { cloneElement, forwardRef } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 
-import { Text } from '../text'
+import { Text, TEXT_SIZES } from '../text'
 
-import type { TextProps } from '../text'
-import type { GetVariants, MapVariant, PressableProps } from '../types'
+// import type { TextProps } from '../text'
+import type {
+  GetVariants,
+  MapVariant,
+  PressableProps,
+  TextSizeVariant,
+} from '../types'
 import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
 
@@ -31,7 +36,7 @@ const textColors: MapVariant<typeof Base, 'variant'> = {
   danger: '$white-100',
 }
 
-const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
+const textSizes: TextSizeVariant<Props['size']> = {
   '40': 15,
   '32': 15,
   '24': 13,
