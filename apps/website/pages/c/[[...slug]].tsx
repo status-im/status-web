@@ -72,7 +72,15 @@ export default function CommunityPreviewPage(
         .replace('#', '')
         .split(';')
 
-      if (!verifyEncodedURLData(urlSignature, props.encodedData, publicKey)) {
+      if (!urlSignature || !publicKey) {
+        setError(ERROR_CODES.UNVERIFIED_CONTENT)
+
+        return
+      }
+
+      if (
+        !verifyEncodedURLData(urlSignature, props.encodedData /*, publicKey */)
+      ) {
         setError(ERROR_CODES.UNVERIFIED_CONTENT)
 
         return
@@ -80,7 +88,7 @@ export default function CommunityPreviewPage(
 
       // fixme!: set only verified data
       setData(props.unverifiedData)
-      setPublicKey(publicKey)
+      setPublicKey(deserializePublicKey(publicKey))
     } catch (error) {
       console.error(error)
 
@@ -153,9 +161,6 @@ export default function CommunityPreviewPage(
             )
           })()}
       </> */}
-      {/* {null} */}
-      {/* {data && <>{JSON.stringify(data)}</>} */}
-      {data && <></>}
     </PreviewPage>
   )
 }

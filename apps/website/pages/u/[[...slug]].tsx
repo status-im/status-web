@@ -1,35 +1,46 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Avatar, Button, Heading,Paragraph } from '@status-im/components'
-import {
-  decodeUserURLData,
-  deserializePublicKey,
-  publicKeyToEmojiHash,
-} from '@status-im/js'
+import { decodeUserURLData, deserializePublicKey } from '@status-im/js'
 
+import { ErrorPage } from '@/components/error-page'
 import { PreviewPage } from '@/components/page'
 import { useWaku } from '@/hooks/use-waku'
 import { createGetServerSideProps } from '@/server/ssr'
 
-import type { ServerSideProps } from '@/server/ssr';
+import type { ServerSideProps } from '@/server/ssr'
+import type { UserInfo } from '@status-im/js'
 
 export const getServerSideProps = createGetServerSideProps(decodeUserURLData)
 
 export default function UserPreviewPage(
   props: ServerSideProps<ReturnType<typeof decodeUserURLData>>
 ) {
-  const [error, setError] = useState<number>()
-  const [data, setData] = useState(props.unverifiedData)
+  const [error, setError] = useState<number>(props.errorCode)
+  const [data, setData] = useState<UserInfo>()
   const [publicKey, setPublicKey] = useState<string>()
 
   // todo: use effects like for community but with exception of resooving ENS
+  useEffect(() => {
+    const [urlSignature, publicKey] = window.location.hash
+      .replace('#', '')
+      .split(';')
+
+    // fixme!: set only verified data
+    setData(props.unverifiedData)
+    setPublicKey(deserializePublicKey(publicKey))
+  }, [])
 
   // todo: use client like for community
 
+  if (error) {
+    return <ErrorPage errorCode={error} />
+  }
+
   return (
     <PreviewPage
-      errorCode={error || props.errorCode}
-      unverifiedData={props.unverifiedData}
+      type="profile"
+      verifiedData={data}
+      publicKey={publicKey}
       // onRetry={handleRetry}
     >
       <>
@@ -54,46 +65,6 @@ export default function UserPreviewPage(
             )
           })()}
       </>
-      {data && (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Avatar
-            src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-            size={80}
-          />
-          <Heading>{data.displayName}</Heading>
-          <Paragraph>{data.description}</Paragraph>
-          {/* <Paragraph>{publicKeyToEmojiHash(publicKey)}</Paragraph> */}
-
-          <div>
-            <Heading heading="h2">How to connect with this profile:</Heading>
-            <ol>
-              <li>
-                <div>
-                  <Button size={24}>Download</Button>
-                  <Paragraph>the Status app</Paragraph>
-                </div>
-              </li>
-              <li>
-                <Paragraph>Install Status</Paragraph>
-              </li>
-              <li>
-                <Paragraph>Complete the onboarding</Paragraph>
-              </li>
-              <li>
-                <div>
-                  <Button size={24}>Open profile in Status</Button>
-                  <div>
-                    <Paragraph>and voilá</Paragraph>
-                  </div>
-                </div>
-              </li>
-            </ol>
-          </div>
-
-          {/* todo: reuse "QR" component */}
-          {/* todo: reuse "powered by" component*/}
-        </div>
-      )}
     </PreviewPage>
   )
 }

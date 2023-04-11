@@ -7,6 +7,7 @@ import {
   Counter,
   Text,
 } from '@status-im/components'
+import { publicKeyToEmojiHash } from '@status-im/js'
 
 import { ContextTag } from '@/../../packages/components/src/context-tag'
 // import Script from 'next/script'
@@ -42,6 +43,7 @@ type PreviewPageProps = ServerSideProps & {
       }
     | {
         type: 'profile'
+        publicKey: string
         verifiedData?: UserInfo
       }
   )
@@ -61,42 +63,9 @@ const JOIN_BUTTON_LABEL: Record<Type, string> = {
 export function PreviewPage(props: PreviewPageProps) {
   const { type, ogImageUrl, verifiedData } = props
 
-  const [meta, content] = Array.isArray(props.children)
+  const [meta] = Array.isArray(props.children)
     ? props.children
     : [props.children]
-
-  if (!verifiedData) {
-    return null
-  }
-
-  // return (
-  //   <div>
-  //     {/* <div>{JSON.stringify(verifiedData)}</div> */}
-  //     <div
-  //       style={{
-  //         height: 233,
-  //         background:
-  //           'linear-gradient(179.82deg, rgba(246, 111, 143, 1) 0.16%, rgba(0, 0, 0, 0) 99.84%)',
-  //       }}
-  //     ></div>
-  //     {content}
-  //     <Image
-  //       src="https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80"
-  //       width="full"
-  //       aspectRatio={1}
-  //     />
-  //     {/* todo: retry toast */}
-  //     {/* todo: content-updated toast */}
-  //     {/* fixme?: useEffect https://github.com/vercel/next.js/discussions/29737*/}
-  //     <Script
-  //       src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"
-  //       onLoad={() => {
-  //         globalThis.twemoji.parse(document.body)
-  //       }}
-  //     />
-  //   </div>
-  // )
-  // }
 
   return (
     <>
@@ -104,149 +73,165 @@ export function PreviewPage(props: PreviewPageProps) {
         {meta}
       </Head>
       {/* todo: theme; based on user system settings */}
-      <main id="main">
-        {/* todo: (system or both?) install banner */}
+      {verifiedData && (
+        <main id="main">
+          {/* todo: (system or both?) install banner */}
 
-        <div className="relative h-full bg-gradient-to-b from-indigo-500 to-white to-20% xl:grid xl:grid-cols-[560px,auto]">
-          <div className="absolute left-0 right-0 top-0 xl:hidden">
-            <div className="absolute h-full w-full bg-gradient-to-t from-white" />
-            <img
-              className="aspect-video object-cover"
-              src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
-              alt=""
-            />
-          </div>
+          <div className="relative h-full bg-gradient-to-b from-indigo-500 to-white to-20% xl:grid xl:grid-cols-[560px,auto]">
+            <div className="absolute left-0 right-0 top-0 xl:hidden">
+              <div className="absolute h-full w-full bg-gradient-to-t from-white" />
+              <img
+                className="aspect-video object-cover"
+                src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
+                alt=""
+              />
+            </div>
 
-          <div className="relative z-20">
-            <div className="mx-auto px-5 pt-20 xl:px-20">
-              <div className="mb-10">
-                {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
-                {type === 'community' && (
-                  <Avatar
-                    src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                    size={80}
-                  />
-                )}
-                {type === 'channel' && (
-                  <ChannelAvatar emoji={verifiedData.emoji} size={32} />
-                )}
-                {type === 'profile' && (
-                  <Avatar
-                    src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                    size={80}
-                  />
-                )}
-
-                <h1 className="mb-3 text-[40px] font-bold text-gray-900 xl:text-[64px]">
-                  {(type === 'channel' ? '#' : '') + verifiedData.displayName}
-                </h1>
-                <p className="mb-4 text-[15px] text-gray-900 xl:text-[19px]">
-                  {verifiedData.description}
-                </p>
-
-                {type === 'community' && (
-                  <>
-                    <div className="mb-5 flex items-center gap-1">
-                      <GroupIcon />
-                      <span className="text-[15px]">446.7K</span>
-                    </div>
-
-                    <div className="flex gap-3">
-                      <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
-                        Art
-                      </div>
-                      <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
-                        Crypto
-                      </div>
-                      <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
-                        NFT
-                      </div>
-                    </div>
-                  </>
-                )}
-                {type === 'channel' && (
-                  <div>
-                    <Text size={13}>Channel in</Text>
-                    <ContextTag
+            <div className="relative z-20">
+              <div className="mx-auto px-5 pt-20 xl:px-20">
+                <div className="mb-10">
+                  {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
+                  {type === 'community' && (
+                    <Avatar
                       src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                      label={verifiedData.community.displayName}
-                      outline
+                      size={80}
                     />
-                  </div>
-                )}
-              </div>
+                  )}
+                  {type === 'channel' && (
+                    <ChannelAvatar emoji={verifiedData.emoji} size={32} />
+                  )}
+                  {type === 'profile' && (
+                    <Avatar
+                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                      size={80}
+                    />
+                  )}
 
-              <div className="mb-6 grid gap-3">
-                <div className="rounded-2xl border px-4 py-3">
-                  <h3 className="text-[15px] font-bold xl:text-[19px]">
-                    {INSTRUCTIONS_HEADING[type]}
-                  </h3>
-                  <ul>
-                    <ListItem order={1}>
-                      <Button size={24} icon={<DownloadIcon />}>
-                        Install
-                      </Button>
-                      <Text size={13}>the Status app</Text>
-                    </ListItem>
-                    <ListItem order={2}>
-                      <Text size={13}>Install Status</Text>
-                    </ListItem>
-                    <ListItem order={3}>
-                      <Text size={13}>Complete the onboarding</Text>
-                    </ListItem>
-                    <ListItem order={4}>
-                      <Button size={24} variant="grey">
-                        {JOIN_BUTTON_LABEL[type]}
-                      </Button>
-                      <Text size={13}>and voilá</Text>
-                    </ListItem>
-                  </ul>
+                  <h1 className="mb-3 text-[40px] font-bold text-gray-900 xl:text-[64px]">
+                    {(type === 'channel' ? '#' : '') + verifiedData.displayName}
+                  </h1>
+                  <p className="mb-4 text-[15px] text-gray-900 xl:text-[19px]">
+                    {verifiedData.description}
+                  </p>
+
+                  {type === 'community' && (
+                    <>
+                      <div className="mb-5 flex items-center gap-1">
+                        <GroupIcon />
+                        <span className="text-[15px]">446.7K</span>
+                      </div>
+
+                      <div className="flex gap-3">
+                        <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
+                          Art
+                        </div>
+                        <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
+                          Crypto
+                        </div>
+                        <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
+                          NFT
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {type === 'channel' && (
+                    <div>
+                      <Text size={13}>Channel in</Text>
+                      <ContextTag
+                        src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                        label={verifiedData.community.displayName}
+                        outline
+                      />
+                    </div>
+                  )}
+                  {type === 'profile' && (
+                    <Text>{publicKeyToEmojiHash(props.publicKey)}</Text>
+                  )}
                 </div>
 
-                <div className="flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
-                  <div className="flex flex-col gap-1">
-                    <Text size={15} weight="semibold">
-                      Have Status on your phone?
-                    </Text>
-                    <Text size={13}>Scan the QR code with your device</Text>
+                <div className="mb-6 grid gap-3">
+                  <div className="rounded-2xl border px-4 py-3">
+                    <h3 className="text-[15px] font-bold xl:text-[19px]">
+                      {INSTRUCTIONS_HEADING[type]}
+                    </h3>
+                    <ul>
+                      <ListItem order={1}>
+                        <Button size={24} icon={<DownloadIcon />}>
+                          Install
+                        </Button>
+                        <Text size={13}>the Status app</Text>
+                      </ListItem>
+                      {/* todo?: delete step; merge with download */}
+                      <ListItem order={2}>
+                        <Text size={13}>Install Status</Text>
+                      </ListItem>
+                      <ListItem order={3}>
+                        <Text size={13}>Complete the onboarding</Text>
+                      </ListItem>
+                      <ListItem order={4}>
+                        <Button size={24} variant="grey">
+                          {JOIN_BUTTON_LABEL[type]}
+                        </Button>
+                        <Text size={13}>and voilá</Text>
+                      </ListItem>
+                    </ul>
                   </div>
 
-                  <QrDialog>
-                    <Button variant="grey" size={32} icon={<QrCodeIcon />}>
-                      Show QR code
-                    </Button>
-                  </QrDialog>
-                </div>
-              </div>
+                  <div className="flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
+                    <div className="flex flex-col gap-1">
+                      <Text size={15} weight="semibold">
+                        Have Status on your phone?
+                      </Text>
+                      <Text size={13}>Scan the QR code with your device</Text>
+                    </div>
 
-              <div className="flex items-center gap-1 text-gray-800">
-                <Text size={13} color="$neutral-50">
-                  Powered by
-                </Text>
-                <StatusLogo />
+                    <QrDialog>
+                      <Button variant="grey" size={32} icon={<QrCodeIcon />}>
+                        Show QR code
+                      </Button>
+                    </QrDialog>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1 text-gray-800">
+                  <Text size={13} color="$neutral-50">
+                    Powered by
+                  </Text>
+                  <StatusLogo />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="hidden p-2 xl:block">
-            <div className="h-full rounded-[20px] bg-gray-200">
-              {/* <Image
+            <div className="hidden p-2 xl:block">
+              <div className="h-full rounded-[20px] bg-gray-200">
+                {/* <Image
               src="/banner-waku.png"
               fill
               style={{ objectFit: 'contain' }}
               alt=""
               // className="h-full w-full rounded object-cover"
             /> */}
-              <img
-                className="h-full w-full rounded-[20px] object-cover"
-                src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
-                // src={bannerImage}
-                alt=""
-              />
+                <img
+                  className="h-full w-full rounded-[20px] object-cover"
+                  src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
+                  // src={bannerImage}
+                  alt=""
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+          {/* todo: retry toast */}
+          {/* todo: content-updated toast */}
+
+          {/* fixme?: useEffect https://github.com/vercel/next.js/discussions/29737
+          <Script
+            src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"
+            onLoad={() => {
+              globalThis.twemoji.parse(document.body)
+            }}
+          /> */}
+        </main>
+      )}
     </>
   )
 }
