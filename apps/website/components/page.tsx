@@ -150,7 +150,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 </div>
 
                 <div className="mb-6 grid gap-3">
-                  <div className="rounded-2xl border px-4 py-3">
+                  <div className="rounded-2xl bg-white border px-4 py-3">
                     <h3 className="text-[15px] font-bold xl:text-[19px]">
                       {INSTRUCTIONS_HEADING[type]}
                     </h3>
@@ -177,7 +177,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     </ul>
                   </div>
 
-                  <div className="flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
+                  <div className="flex flex-col items-start gap-4 rounded-2xl bg-white border p-4 pt-3">
                     <div className="flex flex-col gap-1">
                       <Text size={15} weight="semibold">
                         Have Status on your phone?
