@@ -24,9 +24,7 @@ export const QrDialog = (props: Props) => {
         <Dialog.Content className="inset-0 data-[state=open]:animate-contentShow fixed focus:outline-none flex justify-center items-center">
           <div>
             <div className="flex flex-col items-center gap-4">
-              <div className="w-[100px] h-[100px] bg-gray-100 rounded">
-                QR CODE
-              </div>
+              <div className="w-full max-w-[335px] aspect-square bg-gray-100 rounded-xl p-3"></div>
               <Text size={13} color="$neutral-5-opa-70">
                 Scan with Status Desktop or Status Mobile
               </Text>
