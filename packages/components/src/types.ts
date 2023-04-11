@@ -1,3 +1,4 @@
+import type { TextProps } from './text'
 import type {
   ColorTokens,
   GetBaseProps,
@@ -34,6 +35,11 @@ export type MapColorToken<V> = {
 
 export type GetVariants<A extends TamaguiComponent> = Required<
   GetStyledVariants<A>
+>
+
+export type TextSizeVariant<V extends string | number | undefined> = Record<
+  NonNullable<V>,
+  TextProps['size']
 >
 
 export type { GetBaseProps, GetProps, PressableProps }
