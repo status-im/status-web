@@ -35,11 +35,9 @@ export default defineConfig(({ mode }) => {
     },
 
     plugins: [
-      react({
-        // jsxRuntime: 'classic',
-      }),
+      react(),
       tamaguiPlugin(tamaguiConfig),
-      // tamaguiExtractPlugin(tamaguiConfig)
+      // tamaguiExtractPlugin(tamaguiConfig),
     ],
 
     test: {
