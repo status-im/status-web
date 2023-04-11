@@ -26,7 +26,7 @@ const SidebarSkeleton = () => {
             <Skeleton
               height={80}
               width={80}
-              borderRadius={40}
+              borderRadius="$full"
               borderWidth={2}
               borderColor="$white-100"
               variant="secondary"
@@ -35,21 +35,21 @@ const SidebarSkeleton = () => {
           <Skeleton
             height={24}
             width={104}
-            borderRadius={8}
+            borderRadius="$8"
             mb={14}
             variant="secondary"
           />
           <Skeleton
             height={16}
             width={312}
-            borderRadius={8}
+            borderRadius="$8"
             mb={8}
             variant="secondary"
           />
           <Skeleton
             height={16}
             width={272}
-            borderRadius={8}
+            borderRadius="$8"
             mb={12}
             variant="secondary"
           />
@@ -58,30 +58,30 @@ const SidebarSkeleton = () => {
             <Skeleton
               height={12}
               width={50}
-              borderRadius={5}
+              borderRadius="$6"
               variant="secondary"
             />
             <Skeleton height={14} width={14} ml={12} mr={4} />
             <Skeleton
               height={12}
               width={50}
-              borderRadius={5}
+              borderRadius="$6"
               variant="secondary"
             />
           </Stack>
           <Stack flexDirection="row" alignItems="center" mb={27} gap={8}>
-            <Skeleton height={24} width={76} borderRadius={20} />
-            <Skeleton height={24} width={76} borderRadius={20} />
-            <Skeleton height={24} width={76} borderRadius={20} />
+            <Skeleton height={24} width={76} borderRadius="$20" />
+            <Skeleton height={24} width={76} borderRadius="$20" />
+            <Skeleton height={24} width={76} borderRadius="$20" />
           </Stack>
           <Stack mb={27}>
-            <Skeleton height={12} width={50} borderRadius={5} mb={19} />
+            <Skeleton height={12} width={50} borderRadius="$6" mb={19} />
             <Stack flexDirection="row" alignItems="center" mb={16}>
               <Skeleton height={24} width={24} mr={8} />
               <Skeleton
                 height={12}
                 width={80}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>
@@ -90,7 +90,7 @@ const SidebarSkeleton = () => {
               <Skeleton
                 height={12}
                 width={100}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>
@@ -99,7 +99,7 @@ const SidebarSkeleton = () => {
               <Skeleton
                 height={12}
                 width={70}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>
@@ -108,7 +108,7 @@ const SidebarSkeleton = () => {
               <Skeleton
                 height={12}
                 width={90}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>
@@ -120,7 +120,7 @@ const SidebarSkeleton = () => {
               <Skeleton
                 height={12}
                 width={80}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>
@@ -129,7 +129,7 @@ const SidebarSkeleton = () => {
               <Skeleton
                 height={12}
                 width={100}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>
@@ -138,7 +138,7 @@ const SidebarSkeleton = () => {
               <Skeleton
                 height={12}
                 width={70}
-                borderRadius={5}
+                borderRadius="$6"
                 variant="secondary"
               />
             </Stack>

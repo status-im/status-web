@@ -60,7 +60,7 @@ const Tooltip = (props: Props, ref: Ref<HTMLButtonElement>) => {
               backgroundColor="$white-100"
               paddingVertical={6}
               paddingHorizontal={12}
-              borderRadius={8}
+              borderRadius="$8"
             >
               {typeof content === 'string' ? (
                 <Text size={13} weight="medium" color="$neutral-100">

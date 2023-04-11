@@ -73,7 +73,7 @@ const PressableTrigger = forwardRef(function _PressableTrigger(
 
 interface DialogContentProps {
   children: React.ReactNode
-  borderRadius: 8 | 12 | 16
+  borderRadius: '$8' | '$12' | '$16'
   width: number
   initialFocusRef?: React.RefObject<HTMLElement>
 }

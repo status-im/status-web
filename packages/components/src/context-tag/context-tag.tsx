@@ -98,7 +98,7 @@ export type { Props as ContextTagProps }
 const Base = styled(View, {
   backgroundColor: '$neutral-10',
   paddingVertical: 1,
-  borderRadius: 20,
+  borderRadius: '$20',
   display: 'inline-flex',
   flexDirection: 'row',
   alignItems: 'center',

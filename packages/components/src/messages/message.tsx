@@ -27,7 +27,7 @@ const Base = styled(Stack, {
   position: 'relative',
   paddingHorizontal: 8,
   paddingVertical: 8,
-  borderRadius: 16,
+  borderRadius: '$16',
   alignItems: 'flex-start',
 
   variants: {

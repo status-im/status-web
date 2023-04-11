@@ -60,7 +60,7 @@ const Content = styled(DropdownMenuContent, {
 
   width: 256,
   padding: 4,
-  borderRadius: 12,
+  borderRadius: '$12',
   backgroundColor: '$white-100',
 
   shadowRadius: 30,
@@ -76,7 +76,7 @@ const ItemBase = styled(DropdownMenuItem, {
   alignItems: 'center',
   height: 32,
   paddingHorizontal: 8,
-  borderRadius: 10,
+  borderRadius: '$10',
   cursor: 'pointer',
   userSelect: 'none',
   gap: 8,

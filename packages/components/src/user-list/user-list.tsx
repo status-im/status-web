@@ -24,7 +24,7 @@ const UserList = (props: Props) => {
             key={user.address! + index}
             padding={8}
             gap={8}
-            borderRadius={12}
+            borderRadius="$12"
             alignItems="center"
             cursor="pointer"
             hoverStyle={{

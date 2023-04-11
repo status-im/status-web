@@ -84,7 +84,7 @@ const Circle = styled(Stack, {
   name: 'Circle',
   width: 8,
   height: 8,
-  borderRadius: 4,
+  borderRadius: '$4',
   backgroundColor: '$neutral-5',
   marginRight: 7,
 })
@@ -93,7 +93,7 @@ const EmptyCircle = styled(Stack, {
   name: 'EmptyCircle',
   width: 8,
   height: 8,
-  borderRadius: 4,
+  borderRadius: '$4',
   backgroundColor: 'transparent',
   borderWidth: 1,
   borderColor: '$neutral-40',

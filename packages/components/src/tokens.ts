@@ -1,5 +1,5 @@
 import { createTokens } from '@tamagui/core'
-import { radius, size, space, zIndex } from '@tamagui/theme-base'
+import { size, space, zIndex } from '@tamagui/theme-base'
 
 export const tokens = createTokens({
   color: {
@@ -184,5 +184,20 @@ export const tokens = createTokens({
   size,
   space,
   zIndex,
-  radius,
+  radius: {
+    0: 0,
+    4: 4,
+    6: 6,
+    8: 8,
+    10: 10,
+    12: 12,
+    16: 16,
+    20: 20,
+    full: 1000,
+  },
 })
+
+type GetTokenString<A> = A extends string | number ? `$${A}` : `$${string}`
+type RadiusTokens = GetTokenString<keyof typeof tokens.radius> | number
+
+export { type RadiusTokens }

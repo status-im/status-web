@@ -25,7 +25,7 @@ export const Default: Story = {
     <Dialog>
       <Button>Trigger</Button>
 
-      <Dialog.Content borderRadius={16} width={400}>
+      <Dialog.Content borderRadius="$16" width={400}>
         test
       </Dialog.Content>
     </Dialog>
