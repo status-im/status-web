@@ -21,7 +21,8 @@
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "typecheck": "tsc",
-    "storybook": "TAMAGUI_TARGET='web' storybook dev -p 3001",
+    "storybook": "node ./scripts/storybook.js",
+    "storybook:dev": "TAMAGUI_TARGET='web' storybook dev -p 3001",
     "storybook:build": "TAMAGUI_TARGET='web' storybook build",
     "clean": "rimraf node_modules dist .turbo storybook-static"
   },
