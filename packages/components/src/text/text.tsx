@@ -16,6 +16,7 @@ type Props = {
   truncate?: boolean
   wrap?: false
 } & (
+  | { size: 64; weight?: Weight }
   | { size: 27; weight?: Weight }
   | { size: 19; weight?: Weight }
   | { size: 15; weight?: Weight; type?: Type }
@@ -44,6 +45,11 @@ const Base = styled(BaseText, {
     },
 
     size: {
+      64: {
+        fontSize: 64,
+        lineHeight: 68,
+        letterSpacing: -0.02,
+      },
       27: {
         fontSize: 27,
         lineHeight: 32,
