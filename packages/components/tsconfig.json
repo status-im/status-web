@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["src"],
+  "include": ["src", ".storybook"],
   "compilerOptions": {
     "outDir": "./dist",
     "declarationDir": "dist/types"

@@ -40,6 +40,8 @@ export const config = createTamagui({
       size: {},
       lineHeight: {},
     }),
+    // Tamagui requires this... weird
+    body: createInterFont({}),
   },
   themes,
   tokens: {
