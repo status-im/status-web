@@ -113,7 +113,7 @@ const Base = styled(Stack, {
 
   py: 11,
   px: 16,
-  borderRadius: 12,
+  borderRadius: '$12',
 
   variants: {
     variant: {

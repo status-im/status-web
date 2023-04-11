@@ -30,7 +30,7 @@ const TopbarSkeleton = () => {
             <Skeleton
               height={16}
               width={92}
-              borderRadius={5}
+              borderRadius="$6"
               variant="secondary"
             />
           </Stack>
@@ -42,8 +42,8 @@ const TopbarSkeleton = () => {
             flexGrow={1}
             flexShrink={1}
           >
-            <Skeleton height={32} width={32} borderRadius={10} />
-            <Skeleton height={32} width={32} borderRadius={10} />
+            <Skeleton height={32} width={32} borderRadius="$10" />
+            <Skeleton height={32} width={32} borderRadius="$10" />
           </Stack>
         </Stack>
       </Stack>
