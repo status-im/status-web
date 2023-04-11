@@ -4,16 +4,16 @@ import {
   Avatar,
   Button,
   ChannelAvatar,
+  ContextTag,
   Counter,
   Text,
 } from '@status-im/components'
-import { publicKeyToEmojiHash } from '@status-im/js'
-
-import { ContextTag } from '@/../../packages/components/src/context-tag'
 // import Script from 'next/script'
 // import { Image } from 'react-native'
-import { GroupIcon } from '@/../../packages/icons/16'
-import { DownloadIcon, QrCodeIcon } from '@/../../packages/icons/20'
+import { GroupIcon } from '@status-im/icons/16'
+import { DownloadIcon, QrCodeIcon } from '@status-im/icons/20'
+import { publicKeyToEmojiHash } from '@status-im/js'
+
 import { Head } from '@/components/head'
 
 import { QrDialog } from './qr-dialog'
@@ -107,8 +107,8 @@ export function PreviewPage(props: PreviewPageProps) {
                     />
                   )}
 
-                  <h1 className="mb-3 text-[40px] font-bold text-gray-900 xl:text-[64px]">
-                    {(type === 'channel' ? '#' : '') + verifiedData.displayName}
+                  <h1 className="mb-3 text-4xl font-bold text-gray-900 xl:text-6xl">
+                    {type === 'channel' && '#'} {verifiedData.displayName}
                   </h1>
                   <p className="mb-4 text-[15px] text-gray-900 xl:text-[19px]">
                     {verifiedData.description}
@@ -145,7 +145,9 @@ export function PreviewPage(props: PreviewPageProps) {
                     </div>
                   )}
                   {type === 'profile' && (
-                    <Text>{publicKeyToEmojiHash(props.publicKey)}</Text>
+                    <Text size={13}>
+                      {publicKeyToEmojiHash(props.publicKey)}
+                    </Text>
                   )}
                 </div>
 
