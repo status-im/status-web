@@ -74,7 +74,7 @@ export function PreviewPage(props: PreviewPageProps) {
       </Head>
       {/* todo: theme; based on user system settings */}
       {verifiedData && (
-        <main id="main">
+        <>
           {/* todo: (system or both?) install banner */}
 
           <div className="relative h-full bg-gradient-to-b from-indigo-500 to-white to-20% xl:grid xl:grid-cols-[560px,auto]">
@@ -230,7 +230,7 @@ export function PreviewPage(props: PreviewPageProps) {
               globalThis.twemoji.parse(document.body)
             }}
           /> */}
-        </main>
+        </>
       )}
     </>
   )

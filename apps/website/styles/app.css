@@ -2,14 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --topbar-height: 56px;
-  --composer-height: 100px;
-}
-
 html,
 body,
-#root {
+#__next {
   height: 100%;
   overscroll-behavior: none;
   user-select: none;
@@ -22,22 +17,7 @@ body,
 }
 
 #app {
+  position: relative;
   isolation: isolate;
   height: 100%;
-  display: grid;
-  grid-template-columns: 352px 1fr auto;
 }
-
-#main {
-  position: relative;
-  height: 100vh;
-  /* todo?: */
-  width: 100vw;
-}
-
-@media screen and (max-width: 768px) {
-  #app {
-    grid-template-columns: 1fr;
-  }
-}
-
