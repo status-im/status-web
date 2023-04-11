@@ -5,7 +5,6 @@ import Script from 'next/script'
 
 import { Head } from '@/components/head'
 import { ERROR_CODES } from '@/consts/error-codes'
-import styles from '@/styles/Home.module.css'
 
 import type { ServerSideProps } from '@/server/ssr'
 
@@ -13,7 +12,7 @@ type PreviewPageProps = ServerSideProps & {
   // serverSideProps: ServerSideProps
   // verifiedData?: any
   // onContent: (data: any) => boolean
-  onRetry: () => Promise<void>
+  // onRetry: () => Promise<void>
   // component: ({ data }: { data: any }) => React.ReactElement
   index?: boolean
   children: [React.ReactElement, React.ReactElement | undefined]
@@ -61,9 +60,15 @@ export function PreviewPage(props: PreviewPageProps) {
     // }
 
     return (
-      // todo: layout
       <div>
         {/* <div>{JSON.stringify(verifiedData)}</div> */}
+        <div
+          style={{
+            height: 233,
+            background:
+              'linear-gradient(179.82deg, rgba(246, 111, 143, 1) 0.16%, rgba(0, 0, 0, 0) 99.84%)',
+          }}
+        ></div>
         {content}
         <Image
           src="https://images.unsplash.com/photo-1574786527860-f2e274867c91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1764&q=80"

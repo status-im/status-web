@@ -1,12 +1,6 @@
-import { useEffect,useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import {
-  Avatar,
-  Button,
-  Heading,
-  Label,
-  Paragraph,
-} from '@status-im/components'
+import { Avatar, Button, Text } from '@status-im/components'
 import {
   decodeCommunityURLData,
   deserializePublicKey,
@@ -14,13 +8,14 @@ import {
   verifyEncodedURLData,
 } from '@status-im/js'
 
+import { GroupIcon } from '@/../../packages/icons/16'
 import { PreviewPage } from '@/components/page'
 import { ERROR_CODES } from '@/consts/error-codes'
 import { useWaku } from '@/hooks/use-waku'
 import { createGetServerSideProps } from '@/server/ssr'
 
-import type { Client} from '@/hooks/use-waku';
-import type { ServerSideProps } from '@/server/ssr';
+import type { Client } from '@/hooks/use-waku'
+import type { ServerSideProps } from '@/server/ssr'
 
 export const getServerSideProps = createGetServerSideProps(
   decodeCommunityURLData
@@ -78,25 +73,27 @@ export default function CommunityPreviewPage(
 
   // todo?: provider, reducer
   // todo?: return status
-  const client = useWaku(publicKey, async client => {
-    const data = await client.fetchCommunity(publicKey)
+  // const client = useWaku(publicKey, async client => {
+  //   const data = await client.fetchCommunity(publicKey)
 
-    if (!data) {
-      return
-    }
+  //   if (!data) {
+  //     return
+  //   }
 
-    setData(data)
-  })
+  //   setData(data)
+  // })
 
-  const handleRetry = async () => {
-    const data = await client.fetchCommunity(publicKey)
+  // const handleRetry = async () => {
+  //   const data = await client.fetchCommunity(publicKey)
 
-    if (!data) {
-      return
-    }
+  //   if (!data) {
+  //     return
+  //   }
 
-    setData(data)
-  }
+  //   setData(data)
+  // }
+
+  // return
 
   // todo?: pass meta, info as component
   // todo?: pass image, color as props
@@ -104,7 +101,7 @@ export default function CommunityPreviewPage(
     <PreviewPage
       errorCode={error || props.errorCode}
       unverifiedData={props.unverifiedData}
-      onRetry={handleRetry}
+      // onRetry={handleRetry}
       // verifiedData={data}
     >
       <>
@@ -136,55 +133,90 @@ export default function CommunityPreviewPage(
       {/* {data && <>{JSON.stringify(data)}</>} */}
       {data && (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Avatar
-            src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-            size={80}
-          />
-          <Heading>{data.displayName}</Heading>
-          <Paragraph>{data.description}</Paragraph>
-          <div>
-            {/* todo: icons */}
-            <Label>{data.membersCount}</Label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Avatar
+              src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+              size={80}
+              indicator="online"
+            />
+            <Text size={64} weight="semibold">
+              {data.displayName}
+            </Text>
+            <Text size={19} weight="regular">
+              {data.description}
+            </Text>
+            <div style={{ display: 'flex' }}>
+              <GroupIcon color="$neutral-50" />
+              <Text size={15} weight="regular">
+                {data.membersCount}
+              </Text>
+            </div>
+            {/* todo: tags */}
           </div>
-          {/* todo: tags */}
 
-          <div>
-            <Heading heading="h2">How to join this community:</Heading>
+          <div
+            style={{
+              border: '1px solid #F0F2F5',
+              borderRadius: 16,
+              padding: '12px 16px',
+            }}
+          >
+            <Text size={19} weight="semibold">
+              How to join this community:
+            </Text>
             <ol>
               <li>
                 <div>
                   <Button size={24}>Download</Button>
-                  <Paragraph>the Status app</Paragraph>
+                  <Text size={13} weight="regular">
+                    the Status app
+                  </Text>
                 </div>
               </li>
               <li>
-                <Paragraph>Install Status</Paragraph>
+                <Text size={13} weight="regular">
+                  Install Status
+                </Text>
               </li>
               <li>
-                <Paragraph>Complete the onboarding</Paragraph>
+                <Text size={13} weight="regular">
+                  Complete the onboarding
+                </Text>
               </li>
               <li>
                 <div>
                   <Button size={24}>Join community in Status</Button>
                   <div>
-                    <Paragraph>and voilá</Paragraph>
+                    <Text size={13} weight="regular">
+                      and voilá
+                    </Text>
                   </div>
                 </div>
               </li>
             </ol>
           </div>
 
-          <div>
-            <Heading heading="h2">Have Status on your phone?</Heading>
-            <Paragraph>Scan the QR code with your device</Paragraph>
+          <div
+            style={{
+              border: '1px solid #F0F2F5',
+              borderRadius: 16,
+              padding: '12px 16px',
+            }}
+          >
+            <Text size={15} weight="semibold">
+              Have Status on your phone?
+            </Text>
+            <Text size={13} weight="regular">
+              Scan the QR code with your device
+            </Text>
             {/* todo: QR dialog */}
-            <Button type="grey" size={32}>
+            {/* <Button type="grey" size={32}>
               Show QR code
-            </Button>
+            </Button> */}
           </div>
 
           <div>
-            <Paragraph>Powered by</Paragraph>
+            <Text>Powered by</Text>
             {/* todo: Status logo */}
           </div>
         </div>
