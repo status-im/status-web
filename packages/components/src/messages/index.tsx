@@ -2,7 +2,7 @@ import { Stack } from '@tamagui/core'
 
 import { DividerDate, DividerNewMessages } from '../dividers'
 import { MessageSkeleton } from '../skeleton'
-import { PinAnnouncement } from '../system-messages'
+import { SystemMessage } from '../system-message'
 import { Message } from './message'
 
 import type { ReactionsType } from './types'
@@ -66,6 +66,11 @@ export const Messages = (props: Props) => {
         reactions={{}}
         id="1234-1237"
       />
+      <SystemMessage
+        type="deleted"
+        text="Messaged deleted for everyone"
+        timestamp="9:45"
+      />
       <Message
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim. Nunc tincidunt ante vitae massa. Duis ante orci, molestie vitae, vehicula venenatis, tincidunt ac, pede. Nulla accumsan, elit sit"
         reactions={reactions}
@@ -77,14 +82,22 @@ export const Messages = (props: Props) => {
         pinned
         id="1234-1239"
       />
-      <PinAnnouncement
-        name="Steve"
+      <SystemMessage
+        type="pinned"
+        state="pressed"
+        timestamp="9:45"
+        user={{
+          id: '123',
+          name: 'Steve',
+          src: 'https://images.unsplash.com/photo-1628196482365-8b8b2b2b2b1f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
+        }}
         message={{
           text: 'Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit.',
-          reactions: {},
-          reply: true,
-          pinned: true,
-          id: '1234-1235',
+          author: {
+            id: '123',
+            name: 'Alisher',
+            src: 'https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500',
+          },
         }}
       />
       <Message
@@ -111,6 +124,12 @@ export const Messages = (props: Props) => {
         text="Morbi a metus. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Nullam sapien sem, ornare ac, nonummy non, lobortis a, enim.sit"
         reactions={reactions}
         id="1234-1243"
+      />
+      <SystemMessage
+        state="landed"
+        type="deleted"
+        text="Messaged deleted for you"
+        timestamp="10:12"
       />
       <Message
         images={[
