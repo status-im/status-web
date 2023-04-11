@@ -6,7 +6,15 @@ import type { Meta, StoryObj } from '@storybook/react'
 const meta: Meta<typeof Carousel> = {
   title: 'carousel',
   component: Carousel,
-  args: {},
+  args: {
+    messageInfo: {
+      messageId: '1',
+      author: 'Alisher Yakupov',
+      date: 'Today 09:38',
+      message:
+        'Moving to using compressed keys for chat with this will help, because with this the first 3 letter prefix will be different from ethereum keys (yes I know Ethereum keys can also be compressed, but almost nobody does this)  Moving to using compressed keys for chat with this will help, because with this the first 3 letter prefix will be different from ethereum keys almost nobody does this)  Moving to using compressed keys for chat with this will help, because with this the first 3 letter prefix will be different from ethereum keys.',
+    },
+  },
   argTypes: {},
   parameters: {
     design: {
@@ -33,7 +41,7 @@ export const SixImages: Story = {
   name: 'Six Images',
   args: {
     images: [
-      'https://images.unsplash.com/photo-1673831792265-68b44126c999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=60',
+      'https://plus.unsplash.com/premium_photo-1661342431791-32cc2802dfed?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
       'https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
       'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
       'https://images.unsplash.com/photo-1570126688035-1e6adbd61053?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=974&q=80',
