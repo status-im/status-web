@@ -99,7 +99,7 @@ export type { Props as SystemMessageProps, SystemMessageState, User }
 
 const Base = styled(View, {
   backgroundColor: '$white-50',
-  borderRadius: 16, // switch to borderRadius tokens once merged => '$16'
+  borderRadius: '$16',
   padding: 8,
 
   variants: {

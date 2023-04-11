@@ -13,7 +13,7 @@ type Props = {
   text: string
   action?: {
     label: string
-    onClick: () => void
+    onPress: () => void
   }
   state: SystemMessageState
 }
@@ -50,7 +50,7 @@ const DeletedMessageContent = (props: Props) => {
           </Stack>
           {action && (
             <Button
-              onPress={action.onClick}
+              onPress={action.onPress}
               variant="darkGrey"
               size={24}
               icon={<TimeoutIcon />}
