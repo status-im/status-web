@@ -8,6 +8,7 @@ process.env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD = '1'
 
 /** @type {import('next').NextConfig} */
 let config = {
+  reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -26,8 +27,6 @@ let config = {
     legacyBrowsers: false,
     // esmExternals: 'loose',
   },
-
-  reactStrictMode: false,
 }
 
 const plugins = [
@@ -50,11 +49,12 @@ const plugins = [
       }
     },
     excludeReactNativeWebExports: [
-      // 'Switch',
-      // 'ProgressBar',
-      // 'Picker',
-      // 'CheckBox',
-      // 'Touchable'
+      'Switch',
+      'ProgressBar',
+      'Picker',
+      'CheckBox',
+      'Touchable',
+      'Modal'
     ],
   }),
 ]
