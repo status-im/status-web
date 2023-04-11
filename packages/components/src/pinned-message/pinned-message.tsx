@@ -26,7 +26,7 @@ const PinnedMessage = (props: Props) => {
         </Banner>
       </Pressable>
 
-      <Dialog.Content width={480} borderRadius={16}>
+      <Dialog.Content width={480} borderRadius="$16">
         <Stack padding={16} alignItems="flex-start">
           <Close asChild>
             <Button variant="grey" size={32} icon={<CloseIcon />} />

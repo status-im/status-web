@@ -60,7 +60,7 @@ const LockBase = styled(Stack, {
   height: 16,
   backgroundColor: '$white-100',
   position: 'absolute',
-  borderRadius: 16,
+  borderRadius: '$16',
 
   variants: {
     variant: {

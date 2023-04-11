@@ -114,7 +114,7 @@ const Base = styled(Stack, {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: 8,
-  borderRadius: 12,
+  borderRadius: '$12',
   userSelect: 'none',
 
   variants: {

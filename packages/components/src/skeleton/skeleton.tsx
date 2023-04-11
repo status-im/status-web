@@ -1,11 +1,12 @@
 import { Stack, useTheme } from '@tamagui/core'
 
+import type { RadiusTokens } from '../tokens'
 import type { ColorTokens, StackProps } from '@tamagui/core'
 
 type Props = StackProps & {
   width?: number | string
   height?: number | string
-  borderRadius?: number
+  borderRadius?: RadiusTokens
   variant?: 'primary' | 'secondary'
 }
 
@@ -18,7 +19,7 @@ const Skeleton = (props: Props) => {
   const {
     width = 32,
     height = 32,
-    borderRadius = 16,
+    borderRadius = '$16',
     variant = 'primary',
     ...rest
   } = props

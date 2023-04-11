@@ -81,7 +81,7 @@ const Button = styled(Stack, {
   animation: 'fast',
   space: 4,
 
-  borderRadius: 8,
+  borderRadius: '$8',
   minWidth: 36,
   height: 24,
   paddingHorizontal: 8,

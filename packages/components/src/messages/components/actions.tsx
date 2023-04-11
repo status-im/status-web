@@ -42,7 +42,7 @@ export const Actions = (props: Props) => {
       position="absolute"
       top={-8}
       right={8}
-      borderRadius={12}
+      borderRadius="$12"
       borderWidth={1}
       borderColor="$neutral-10"
       backgroundColor="$white-100"
