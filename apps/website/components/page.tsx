@@ -87,7 +87,7 @@ export function PreviewPage(props: PreviewPageProps) {
     <>
       <Head index={props.index}>{meta}</Head>
       {/* todo: theme; based on user system settings */}
-      <main className={styles.main}>
+      <main id="main">
         {/* todo: install banner */}
 
         {/* note: development */}

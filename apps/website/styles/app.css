@@ -1,0 +1,37 @@
+:root {
+  --topbar-height: 56px;
+  --composer-height: 100px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overscroll-behavior: none;
+  user-select: none;
+}
+
+*::selection {
+  color: #fff;
+  background: hsla(229, 71%, 57%, 1);
+}
+
+#app {
+  isolation: isolate;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 352px 1fr auto;
+}
+
+#main {
+  position: relative;
+  height: 100vh;
+  /* todo?: */
+  width: 100vw;
+}
+
+@media screen and (max-width: 768px) {
+  #app {
+    grid-template-columns: 1fr;
+  }
+}

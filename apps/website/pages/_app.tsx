@@ -1,4 +1,5 @@
-import '@/styles/globals.css'
+import '@/styles/app.css'
+import '@/styles/reset.css'
 
 import { Provider } from '@status-im/components'
 import { Inter } from 'next/font/google'
@@ -13,7 +14,7 @@ const inter = Inter({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className={inter.variable}>
+    <div id="app" className={inter.variable}>
       <Provider>
         <Component {...pageProps} />
       </Provider>
