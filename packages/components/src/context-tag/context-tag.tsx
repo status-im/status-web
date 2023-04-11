@@ -1,4 +1,4 @@
-import { cloneElement, Fragment } from 'react'
+import { cloneElement } from 'react'
 
 import { ChevronRightIcon } from '@status-im/icons'
 import { styled } from '@tamagui/core'
@@ -11,13 +11,12 @@ import type { AvatarProps } from '../avatar'
 import type { TextProps } from '../text'
 
 type ContextTagType =
-  | 'default'
+  | 'account'
   | 'group'
-  | 'channel'
   | 'community'
+  | 'channel'
   | 'token'
   | 'network'
-  | 'account'
   | 'collectible'
   | 'address'
   | 'icon'
@@ -25,14 +24,25 @@ type ContextTagType =
 
 type Props = {
   children?: React.ReactNode
-  src?: string
-  icon?: React.ReactElement
-  label: string | [string, string]
-  type?: ContextTagType
   size?: 24 | 32
   blur?: boolean
   outline?: boolean
-}
+} & (
+  | { type: 'account'; user: { name: string; src: string } }
+  | {
+      type: 'group'
+      groupName: 'string'
+      icon: React.ReactElement
+    }
+  | { type: 'community'; communityName: string }
+  | { type: 'channel'; communityName: string; channelName: string }
+  | { type: 'token'; tokenName: string; src: string }
+  | { type: 'network'; networkName: string; src: string }
+  | { type: 'collectible'; collectibleName: string; src: string }
+  | { type: 'address'; label: string }
+  | { type: 'icon'; icon: React.ReactElement; label: string }
+  | { type: 'audio'; audioLength: number }
+)
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '32': 15,
@@ -52,23 +62,79 @@ const Label = ({ children, size }: { children: string; size: 24 | 32 }) => (
 
 const ContextTag = (props: Props) => {
   const {
-    src,
-    icon,
-    label,
     // type = 'default', // this is commented because it's not being used
     size = 24,
     blur = false,
     outline,
+    user,
+    icon,
+    type,
   } = props
 
-  const hasImg = Boolean(src || icon)
+  const renderContent = (type: ContextTagType) => {
+    switch (type) {
+      case 'community': {
+        return <Label size={size}>{props.communityName}</Label>
+      }
+      case 'channel': {
+        return (
+          <>
+            <Label size={size}>{props.communityName}</Label>
+            <ChevronRightIcon color="$neutral-50" />
+            <Label size={size}>{props.channelName}</Label>
+          </>
+        )
+      }
+      case 'token': {
+        return <Label size={size}>{props.tokenName}</Label>
+      }
+      case 'address': {
+        return <Label size={size}>{props.label}</Label>
+      }
+      case 'audio': {
+        return (
+          <>
+            <AudioIcon color="$neutral-50" />
+            <Label size={size}>{props.audioLength}</Label>
+          </>
+        )
+      }
+      case 'account': {
+        return (
+          <>
+            <Avatar size={avatarSizes[size]} src={user.src} />
+            <Label size={size}>{user.name}</Label>
+          </>
+        )
+      }
+      case 'group': {
+        return (
+          <>
+            {icon && cloneElement(icon, { color: '$neutral-50' })}
+            <Label size={size}>{props.groupName}</Label>
+          </>
+        )
+      }
+      case 'network': {
+        return <Label size={size}>{props.networkName}</Label>
+      }
+      case 'collectible': {
+        return <Label size={size}>{props.collectibleName}</Label>
+      }
+      case 'icon': {
+        return <>{icon && cloneElement(icon, { color: '$neutral-50' })}</>
+      }
+    }
+  }
 
   return (
-    <Base outline={outline} size={size} hasImg={hasImg} blur={blur}>
+    <Base outline={outline} size={size} blur={blur}>
       {src && <Avatar type="user" name="" size={avatarSizes[size]} src={src} />}
       {icon && cloneElement(icon, { color: '$neutral-50' })}
 
-      {Array.isArray(label) ? (
+      {renderContent(type)}
+
+      {/* {Array.isArray(label) ? (
         label.map((item, i) => {
           if (i !== 0) {
             return (
@@ -87,7 +153,7 @@ const ContextTag = (props: Props) => {
         })
       ) : (
         <Label size={size}>{label}</Label>
-      )}
+      )} */}
     </Base>
   )
 }
@@ -124,24 +190,14 @@ const Base = styled(View, {
       },
     },
     size: {
-      24: props => {
-        // there is only first param which is "size" and hasImg doesn't exist here
-        return {
-          space: 4,
-          paddingLeft: props.hasImg ? 8 : 2,
-          paddingRight: 8,
-        }
+      24: {
+        space: 4,
+        paddingHorizontal: 8,
       },
-      32: ({ hasImg }) => ({
-        // this therefore doesn't work as well
+      32: {
         space: 8,
-        paddingLeft: hasImg ? 12 : 2,
-        paddingRight: 12,
-      }),
+        paddingHorizontal: 12,
+      },
     },
-    hasImg: {
-      true: {},
-      false: {},
-    }, // to correctly infer the type of the variant
   } as const,
 })
