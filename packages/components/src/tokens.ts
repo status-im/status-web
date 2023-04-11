@@ -1,8 +1,6 @@
 import { createTokens } from '@tamagui/core'
 import { size, space, zIndex } from '@tamagui/theme-base'
 
-import type { Tokens } from '@tamagui/core'
-
 export const tokens = createTokens({
   color: {
     'neutral-5': 'hsla(220, 18%, 97%, 1)',
