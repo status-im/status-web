@@ -4,6 +4,10 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CloseIcon,
+  CopyIcon,
+  DeleteIcon,
+  DownloadIcon,
+  ForwardIcon,
   InfoIcon,
   OptionsIcon,
   ShareIcon,
@@ -12,6 +16,7 @@ import { Stack, styled, Theme } from '@tamagui/core'
 import { Animated, FlatList, Image as RNImage, StyleSheet } from 'react-native'
 import { useWindowDimensions } from 'tamagui'
 
+import { DropdownMenu } from '../../dropdown-menu'
 import { IconButton } from '../../icon-button'
 import { Image } from '../../image'
 import { Text } from '../../text'
@@ -186,7 +191,33 @@ const Carousel = (props: Props) => {
           <Stack flexDirection="row" alignItems="center" gap={12}>
             <IconButton icon={<InfoIcon />} />
             <IconButton icon={<ShareIcon />} />
-            <IconButton icon={<OptionsIcon />} />
+            <DropdownMenu>
+              <IconButton icon={<OptionsIcon />} />
+              <DropdownMenu.Content align="end" width={188}>
+                <DropdownMenu.Item
+                  icon={<CopyIcon />}
+                  label="Copy image"
+                  onSelect={() => console.log('click')}
+                />
+                <DropdownMenu.Item
+                  icon={<DownloadIcon />}
+                  label="Save image"
+                  onSelect={() => console.log('click')}
+                />
+                <DropdownMenu.Item
+                  icon={<ForwardIcon />}
+                  label="Forward"
+                  onSelect={() => console.log('click')}
+                />
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item
+                  icon={<DeleteIcon />}
+                  label="Delete for me"
+                  onSelect={() => console.log('click')}
+                  danger
+                />
+              </DropdownMenu.Content>
+            </DropdownMenu>
           </Stack>
         </Stack>
         <Stack
