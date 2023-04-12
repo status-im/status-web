@@ -46,7 +46,7 @@ const Base = styled(Stack, {
   justifyContent: 'center',
   borderWidth: 1,
   borderColor: '$neutral-20',
-  borderRadius: 9999,
+  borderRadius: '$full',
 
   variants: {
     size: {
