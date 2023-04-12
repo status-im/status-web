@@ -47,7 +47,7 @@ type Props = {
 const SystemMessage = (props: Props) => {
   const { state = 'default', timestamp, type } = props
 
-  const renderMessage = (type: 'pinned' | 'deleted' | 'added') => {
+  const renderMessage = () => {
     switch (type) {
       case 'pinned':
         return (
@@ -63,7 +63,14 @@ const SystemMessage = (props: Props) => {
           <DeletedMessageContent
             timestamp={timestamp}
             text={props.text}
-            action={props.action}
+            action={
+              props.action
+                ? {
+                    label: props.action.label,
+                    onPress: props.action.onClick,
+                  }
+                : undefined
+            }
             state={state}
           />
         )
@@ -89,7 +96,7 @@ const SystemMessage = (props: Props) => {
         type === 'deleted' && state === 'landed' ? 'landed_deleted' : state
       }
     >
-      {renderMessage(type)}
+      {renderMessage()}
     </Base>
   )
 }
