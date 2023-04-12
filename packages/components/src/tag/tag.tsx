@@ -12,7 +12,6 @@ type Props = {
   disabled?: boolean
 }
 
-// todo?: export this map from text
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '32': 15,
   '24': 13,
@@ -28,7 +27,6 @@ const Tag = (props: Props) => {
       disabled={disabled}
       emojiOnly={Boolean(emoji && !label)}
     >
-      {/* todo: twemoji loading and parsing provider/script */}
       {emoji && <Text size={textSizes[size]}>{emoji}</Text>}
       {label && (
         <Text size={textSizes[size]} weight="medium">
