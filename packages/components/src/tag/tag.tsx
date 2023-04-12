@@ -44,7 +44,6 @@ const Base = styled(Stack, {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',
-  gap: 4.5,
   borderWidth: 1,
   borderColor: '$neutral-20',
   borderRadius: 9999,
@@ -55,11 +54,13 @@ const Base = styled(Stack, {
         height: 32,
         minWidth: 32,
         paddingHorizontal: 12,
+        gap: 6,
       },
       24: {
         height: 24,
         minWidth: 24,
         paddingHorizontal: 8,
+        gap: 5,
       },
     },
 
