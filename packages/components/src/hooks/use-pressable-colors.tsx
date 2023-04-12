@@ -5,6 +5,7 @@ import type { MouseEvent } from 'react-native'
 import type { ColorTokens, TamaguiComponentPropsBase } from 'tamagui'
 
 type Config = {
+  dark: ColorTokens
   default: ColorTokens
   hover: ColorTokens
   press: ColorTokens

@@ -27,6 +27,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   const { pressableProps, color } = usePressableColors(
     {
+      dark: blur ? '$neutral-80-opa-10' : '$neutral-100',
       default: blur ? '$neutral-80-opa-70' : '$neutral-50',
       hover: blur ? '$neutral-80-opa-70' : '$neutral-50',
       press: '$neutral-100',
@@ -81,6 +82,15 @@ const Base = styled(Stack, {
 
   variants: {
     variant: {
+      dark: {
+        backgroundColor: '$neutral-80',
+        borderColor: '$neutral-80',
+        hoverStyle: { backgroundColor: '$neutral-70' },
+        pressStyle: {
+          backgroundColor: '$neutral-70',
+          borderColor: '$neutral-70',
+        },
+      },
       default: {
         backgroundColor: '$neutral-10',
         borderColor: 'transparent',
@@ -112,6 +122,10 @@ const Base = styled(Stack, {
     },
 
     active: {
+      dark: {
+        backgroundColor: '$neutral-70',
+        borderColor: '$neutral-70',
+      },
       default: {
         backgroundColor: '$neutral-20',
         borderColor: '$neutral-30',
@@ -129,6 +143,15 @@ const Base = styled(Stack, {
     },
 
     variantBlur: {
+      dark: {
+        backgroundColor: '$neutral-80-opa-5',
+        borderColor: '$neutral-80-opa-5',
+        hoverStyle: { backgroundColor: '$neutral-80-opa-10' },
+        pressStyle: {
+          backgroundColor: '$neutral-80-opa-10',
+          borderColor: '$neutral-80-opa-10',
+        },
+      },
       default: {
         backgroundColor: '$neutral-80-opa-5',
         borderColor: 'transparent',
@@ -160,6 +183,10 @@ const Base = styled(Stack, {
     },
 
     activeBlur: {
+      dark: {
+        backgroundColor: '$neutral-80-opa-10',
+        borderColor: '$neutral-80-opa-10',
+      },
       default: {
         backgroundColor: '$neutral-80-opa-10',
         borderColor: '$neutral-80-opa-5',
