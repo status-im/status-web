@@ -34,7 +34,7 @@ type Props = {
       text: string
       action?: {
         label: string
-        onClick: () => void
+        onPress: () => void
       }
     }
   | {
@@ -47,7 +47,7 @@ type Props = {
 const SystemMessage = (props: Props) => {
   const { state = 'default', timestamp, type } = props
 
-  const renderMessage = (type: 'pinned' | 'deleted' | 'added') => {
+  const renderMessage = () => {
     switch (type) {
       case 'pinned':
         return (
@@ -89,7 +89,7 @@ const SystemMessage = (props: Props) => {
         type === 'deleted' && state === 'landed' ? 'landed_deleted' : state
       }
     >
-      {renderMessage(type)}
+      {renderMessage()}
     </Base>
   )
 }
