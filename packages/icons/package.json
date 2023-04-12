@@ -33,7 +33,6 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
-    "fix": "yarn lint:fix && yarn format --loglevel=silent",
     "clean": "rimraf dist node_modules .turbo"
   },
   "peerDependencies": {
