@@ -18,7 +18,7 @@ function toKebabCase(str: string): string {
 }
 
 const personalAccessToken = await text({
-  message: 'Yourour Figma access token:',
+  message: 'Your personal Figma access token:',
   validate(value) {
     if (value.length === 0) return `required`
   },
