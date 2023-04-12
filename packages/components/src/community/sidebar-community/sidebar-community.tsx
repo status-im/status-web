@@ -1,8 +1,7 @@
 import { useState } from 'react'
 
 import * as Accordion from '@radix-ui/react-accordion'
-import { GroupIcon } from '@status-im/icons/16'
-import { CommunitiesIcon } from '@status-im/icons/20'
+import { CommunitiesIcon, MembersIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Avatar } from '../../avatar'
@@ -76,12 +75,19 @@ const SidebarCommunity = (props: Props) => {
             </Text>
             <Text size={15}>{description}</Text>
           </Stack>
-          <Stack flexDirection="row" alignItems="center" mb={12} space={8}>
-            <GroupIcon color="$neutral-100" />
+          <Stack
+            flexDirection="row"
+            alignItems="center"
+            marginBottom={12}
+            gap={4}
+          >
+            <MembersIcon size={16} color="$neutral-50" />
             <Text size={15}>{membersCount}</Text>
           </Stack>
 
-          <Button icon={<CommunitiesIcon />}>Request to join community</Button>
+          <Button icon={<CommunitiesIcon size={20} />}>
+            Request to join community
+          </Button>
         </Stack>
 
         <Accordion.Root type="multiple" value={value} onValueChange={setValue}>

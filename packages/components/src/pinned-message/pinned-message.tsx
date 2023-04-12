@@ -1,4 +1,4 @@
-import { CloseIcon, PinIcon } from '@status-im/icons/20'
+import { CloseIcon, PinIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 import { Pressable } from 'react-native'
 
@@ -21,7 +21,7 @@ const PinnedMessage = (props: Props) => {
   return (
     <Dialog>
       <Pressable>
-        <Banner count={messages.length} icon={<PinIcon />}>
+        <Banner count={messages.length} icon={<PinIcon size={20} />}>
           {messages[0].text}
         </Banner>
       </Pressable>
@@ -29,7 +29,7 @@ const PinnedMessage = (props: Props) => {
       <Dialog.Content width={480} borderRadius="$16">
         <Stack padding={16} alignItems="flex-start">
           <Close asChild>
-            <Button variant="grey" size={32} icon={<CloseIcon />} />
+            <Button variant="grey" size={32} icon={<CloseIcon size={20} />} />
           </Close>
           <Stack paddingTop={24} gap={8} alignItems="flex-start">
             <Text size={27} weight="semibold">

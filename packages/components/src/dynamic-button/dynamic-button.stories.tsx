@@ -15,7 +15,7 @@ type Story = StoryObj<typeof DynamicButton>
 
 export const Default: Story = {
   render: () => (
-    <XStack space={4}>
+    <XStack gap={4}>
       <DynamicButton type="mention" count={7} />
       <DynamicButton type="notification" count={8} />
       <DynamicButton type="notification" count={0} />

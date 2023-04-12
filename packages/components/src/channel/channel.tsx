@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { MutedIcon, NotificationIcon, OptionsIcon } from '@status-im/icons/20'
+import { MutedIcon, NotificationIcon, OptionsIcon } from '@status-im/icons'
 import { Stack, styled } from 'tamagui'
 
 import { ChannelAvatar } from '../avatar'
@@ -47,20 +47,20 @@ const Channel = (props: Props) => {
       return (
         <DropdownMenu onOpenChange={setMenuOpen}>
           <Stack tag="button" width={20} height={20}>
-            <OptionsIcon color="$neutral-50" />
+            <OptionsIcon size={20} color="$neutral-50" />
           </Stack>
 
           {/* TODO: Find all options */}
           <DropdownMenu.Content align="start">
             <DropdownMenu.Item
-              icon={<MutedIcon />}
+              icon={<MutedIcon size={20} />}
               label="Mute channel"
               onSelect={() => {
                 console.log('Mute channel')
               }}
             />
             <DropdownMenu.Item
-              icon={<MutedIcon />}
+              icon={<MutedIcon size={20} />}
               label="Mark as read"
               onSelect={() => {
                 console.log('Mark as read')
@@ -79,9 +79,9 @@ const Channel = (props: Props) => {
         return <Counter value={mentionCount} />
       }
       case 'notification':
-        return <NotificationIcon color="$neutral-40" />
+        return <NotificationIcon size={20} color="$neutral-40" />
       case 'muted':
-        return <MutedIcon color="$neutral-40" />
+        return <MutedIcon size={20} color="$neutral-40" />
     }
   }
 

@@ -1,5 +1,4 @@
-import { CloseIcon } from '@status-im/icons/12'
-import { SadIcon } from '@status-im/icons/16'
+import { CloseIcon, SadIcon } from '@status-im/icons'
 import { Path, Svg } from 'react-native-svg'
 import { Stack, Unspaced, XStack } from 'tamagui'
 
@@ -20,7 +19,7 @@ const Reply = (props: Props) => {
 
   const content =
     type !== 'deleted' ? (
-      <XStack position="relative" space={4} alignItems="center" height={24}>
+      <XStack position="relative" gap={4} alignItems="center" height={24}>
         <Unspaced>
           <Stack position="absolute" left={-24} top={10}>
             <Connector />
@@ -40,14 +39,14 @@ const Reply = (props: Props) => {
         </Text>
       </XStack>
     ) : (
-      <XStack position="relative" space={4} alignItems="center" height={24}>
+      <XStack position="relative" gap={4} alignItems="center" height={24}>
         <Unspaced>
           <Stack position="absolute" left={-24} top={10}>
             <Connector />
           </Stack>
         </Unspaced>
 
-        <SadIcon color="$neutral-50" />
+        <SadIcon size={16} color="$neutral-50" />
 
         <Text size={13} weight="medium" color="$neutral-50">
           Message deleted
@@ -57,7 +56,7 @@ const Reply = (props: Props) => {
 
   return (
     <XStack
-      space={8}
+      gap={8}
       justifyContent="space-between"
       alignItems="center"
       paddingLeft={24}
@@ -66,7 +65,7 @@ const Reply = (props: Props) => {
 
       {onClose && (
         <Button
-          icon={<CloseIcon />}
+          icon={<CloseIcon size={12} />}
           variant="outline"
           size={24}
           onPress={onClose}

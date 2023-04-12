@@ -26,7 +26,7 @@ export const Reactions = (props: Props) => {
   }
 
   return (
-    <XStack space={6} flexWrap="wrap">
+    <XStack gap={6} flexWrap="wrap">
       {Object.keys(reactions).map(type => (
         <Reaction
           key={type}

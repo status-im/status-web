@@ -1,4 +1,4 @@
-import { PinIcon } from '@status-im/icons/20'
+import { PinIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
 import { Avatar, IconAvatar } from '../../avatar'
@@ -31,15 +31,15 @@ const PinnedMessageContent = (props: Props) => {
         backgroundColor={state === 'landed' ? '$transparent' : '$blue-50-opa-5'}
         color="$neutral-100"
       >
-        <PinIcon />
+        <PinIcon size={20} />
       </IconAvatar>
       <Stack
         flexDirection="column"
-        space={2}
+        gap={2}
         flexBasis="max-content"
         flexGrow={1}
       >
-        <Stack flexDirection="row" space={4} alignItems="baseline">
+        <Stack flexDirection="row" gap={4} alignItems="baseline">
           <Text size={13} weight="semibold">
             {user.name}
           </Text>
@@ -50,12 +50,12 @@ const PinnedMessageContent = (props: Props) => {
         </Stack>
         <Stack
           flexDirection="row"
-          space={4}
+          gap={4}
           justifyContent="space-between"
           flexGrow={1}
           flexBasis="max-content"
         >
-          <Stack flexDirection="row" space={4}>
+          <Stack flexDirection="row" gap={4}>
             <Avatar size={16} src={author.src} />
             <Text size={11} weight="semibold">
               {author.name}

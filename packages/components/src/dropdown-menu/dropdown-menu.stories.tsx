@@ -1,12 +1,12 @@
 import {
   CopyIcon,
-  DeleteIcon,
   EditIcon,
   ForwardIcon,
   LinkIcon,
   PinIcon,
   ReplyIcon,
-} from '@status-im/icons/20'
+  TrashIcon,
+} from '@status-im/icons'
 import { action } from '@storybook/addon-actions'
 
 import { Button } from '../button'
@@ -38,32 +38,32 @@ export const Default: Story = {
 
         <DropdownMenu.Content sideOffset={10}>
           <DropdownMenu.Item
-            icon={<EditIcon />}
+            icon={<EditIcon size={20} />}
             label="Edit message"
             onSelect={action('edit')}
           />
           <DropdownMenu.Item
-            icon={<ReplyIcon />}
+            icon={<ReplyIcon size={20} />}
             label="Reply"
             onSelect={action('reply')}
           />
           <DropdownMenu.Item
-            icon={<CopyIcon />}
+            icon={<CopyIcon size={20} />}
             label="Copy text"
             onSelect={action('copy')}
           />
           <DropdownMenu.Item
-            icon={<PinIcon />}
+            icon={<PinIcon size={20} />}
             label="Pin to the channel"
             onSelect={action('pin')}
           />
           <DropdownMenu.Item
-            icon={<ForwardIcon />}
+            icon={<ForwardIcon size={20} />}
             label="Forward"
             onSelect={action('forward')}
           />
           <DropdownMenu.Item
-            icon={<LinkIcon />}
+            icon={<LinkIcon size={20} />}
             label="Share link to message"
             onSelect={action('share')}
           />
@@ -71,7 +71,7 @@ export const Default: Story = {
           <DropdownMenu.Separator />
 
           <DropdownMenu.Item
-            icon={<DeleteIcon />}
+            icon={<TrashIcon size={20} />}
             label="Delete message"
             danger
             onSelect={action('delete')}

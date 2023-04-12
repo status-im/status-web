@@ -1,4 +1,4 @@
-import { InfoIcon } from '@status-im/icons/16'
+import { InfoIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Text } from '../text'
@@ -54,7 +54,7 @@ const GapMessages = (props: Props) => {
         <Stack position="absolute" right={26} top={20}>
           <Tooltip side="bottom" sideOffset={4} content={<>{tooltipMessage}</>}>
             <Stack width={20}>
-              <InfoIcon color="$neutral-50" />
+              <InfoIcon size={16} color="$neutral-50" />
             </Stack>
           </Tooltip>
         </Stack>

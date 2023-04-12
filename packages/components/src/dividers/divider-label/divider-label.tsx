@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from '@status-im/icons/20'
+import { ChevronRightIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Counter } from '../../counter'
@@ -45,7 +45,7 @@ const DividerLabel = (props: Props) => {
                 },
               ]}
             >
-              <ChevronRightIcon color="$neutral-50" />
+              <ChevronRightIcon size={20} color="$neutral-50" />
             </Stack>
           )}
           <Text size={13} color="$neutral-50" weight="medium">

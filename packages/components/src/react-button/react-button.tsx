@@ -1,14 +1,14 @@
 import { forwardRef } from 'react'
 
-import { AddReactionIcon } from '@status-im/icons/20'
 import {
+  AddReactionIcon,
   AngryIcon,
   LaughIcon,
   LoveIcon,
   SadIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
-} from '@status-im/icons/reactions'
+} from '@status-im/icons'
 import { styled } from '@tamagui/core'
 import { Stack } from '@tamagui/web'
 
@@ -51,7 +51,7 @@ const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
       ref={ref}
       selected={selected}
     >
-      <Icon color="$neutral-100" />
+      <Icon size={20} color="$neutral-100" />
       {count && (
         <Text size={13} weight="medium" wrap={false}>
           {count}

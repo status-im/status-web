@@ -10,7 +10,7 @@ const meta: Meta<typeof ReactButton> = {
   args: {},
   argTypes: {},
   render: args => (
-    <XStack space={4}>
+    <XStack gap={4}>
       <ReactButton {...args} type="laugh" />
       <ReactButton {...args} type="love" />
       <ReactButton {...args} type="sad" />

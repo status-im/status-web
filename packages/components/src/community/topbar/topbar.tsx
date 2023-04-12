@@ -1,15 +1,15 @@
 import {
   ArrowLeftIcon,
   CommunitiesIcon,
-  DeleteIcon,
   DownloadIcon,
   LockedIcon,
   MembersIcon,
   MutedIcon,
   OptionsIcon,
   ShareIcon,
+  TrashIcon,
   UpToDateIcon,
-} from '@status-im/icons/20'
+} from '@status-im/icons'
 import { Stack, Text as RNText } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
 
@@ -64,7 +64,7 @@ const Topbar = (props: Props) => {
         <Stack flexDirection="row" alignItems="center" flexWrap="wrap">
           <Stack marginRight={12} $gtSm={{ display: 'none' }}>
             <IconButton
-              icon={<ArrowLeftIcon />}
+              icon={<ArrowLeftIcon size={20} />}
               onPress={() => goBack?.()}
               blur={blur}
             />
@@ -76,7 +76,7 @@ const Topbar = (props: Props) => {
             {title}
           </Text>
           <Stack marginLeft={4}>
-            <LockedIcon color="$neutral-80-opa-40" />
+            <LockedIcon size={20} color="$neutral-80-opa-40" />
           </Stack>
           <Stack
             backgroundColor="$neutral-80-opa-10"
@@ -101,7 +101,7 @@ const Topbar = (props: Props) => {
         >
           <Stack $sm={{ display: 'none' }}>
             <IconButton
-              icon={<MembersIcon />}
+              icon={<MembersIcon size={20} />}
               selected={showMembers}
               onPress={onMembersPress}
               blur={blur}
@@ -109,31 +109,31 @@ const Topbar = (props: Props) => {
           </Stack>
 
           <DropdownMenu>
-            <IconButton icon={<OptionsIcon />} />
+            <IconButton icon={<OptionsIcon size={20} />} />
 
             <DropdownMenu.Content align="end" sideOffset={4}>
               <DropdownMenu.Item
-                icon={<CommunitiesIcon />}
+                icon={<CommunitiesIcon size={20} />}
                 label="View channel details"
                 onSelect={() => console.log('click')}
               />
               <DropdownMenu.Item
-                icon={<MutedIcon />}
+                icon={<MutedIcon size={20} />}
                 label="Mute channel"
                 onSelect={() => console.log('click')}
               />
               <DropdownMenu.Item
-                icon={<UpToDateIcon />}
+                icon={<UpToDateIcon size={20} />}
                 label="Mark as read"
                 onSelect={() => console.log('click')}
               />
               <DropdownMenu.Item
-                icon={<DownloadIcon />}
+                icon={<DownloadIcon size={20} />}
                 label="Fetch messages"
                 onSelect={() => console.log('click')}
               />
               <DropdownMenu.Item
-                icon={<ShareIcon />}
+                icon={<ShareIcon size={20} />}
                 label="Share link to the channel"
                 onSelect={() => console.log('click')}
               />
@@ -141,7 +141,7 @@ const Topbar = (props: Props) => {
               <DropdownMenu.Separator />
 
               <DropdownMenu.Item
-                icon={<DeleteIcon />}
+                icon={<TrashIcon size={20} />}
                 label="Clear history"
                 onSelect={() => console.log('click')}
                 danger
