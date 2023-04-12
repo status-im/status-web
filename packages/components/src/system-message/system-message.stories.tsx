@@ -32,7 +32,7 @@ export const AllVariants: Story = {
           timestamp="11:12"
           type="deleted"
           text="Message deleted for you"
-          action={{ label: 'Undo', onClick: action('undo') }}
+          action={{ label: 'Undo', onPress: action('undo') }}
           state={state}
         />
         <SystemMessage

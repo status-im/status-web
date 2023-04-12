@@ -34,7 +34,7 @@ type Props = {
       text: string
       action?: {
         label: string
-        onClick: () => void
+        onPress: () => void
       }
     }
   | {
@@ -63,14 +63,7 @@ const SystemMessage = (props: Props) => {
           <DeletedMessageContent
             timestamp={timestamp}
             text={props.text}
-            action={
-              props.action
-                ? {
-                    label: props.action.label,
-                    onPress: props.action.onClick,
-                  }
-                : undefined
-            }
+            action={props.action}
             state={state}
           />
         )
