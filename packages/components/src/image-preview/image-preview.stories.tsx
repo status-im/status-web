@@ -1,11 +1,11 @@
-import { Carousel } from './carousel'
+import { ImagePreview } from './image-preview'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
-const meta: Meta<typeof Carousel> = {
-  title: 'carousel',
-  component: Carousel,
+const meta: Meta<typeof ImagePreview> = {
+  title: 'image-preview',
+  component: ImagePreview,
   args: {
     messageInfo: {
       messageId: '1',
@@ -25,7 +25,7 @@ const meta: Meta<typeof Carousel> = {
   },
 }
 
-type Story = StoryObj<typeof Carousel>
+type Story = StoryObj<typeof ImagePreview>
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 
