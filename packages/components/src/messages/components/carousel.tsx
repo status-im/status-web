@@ -14,7 +14,6 @@ import {
 } from '@status-im/icons/20'
 import { Stack, styled, Theme } from '@tamagui/core'
 import { Animated, FlatList, Image as RNImage, StyleSheet } from 'react-native'
-import { useWindowDimensions } from 'tamagui'
 
 import { DropdownMenu } from '../../dropdown-menu'
 import { IconButton } from '../../icon-button'
@@ -57,9 +56,6 @@ const Carousel = (props: Props) => {
   const refThumbnailContainer = useRef(null)
   const translateX = useRef(new Animated.Value(0)).current
 
-  // Hooks
-  const dimensions = useWindowDimensions()
-
   // Handlers
   const handleThumbnailPress = (index: number) => {
     setSelectedImageIndex(index)
@@ -90,13 +86,6 @@ const Carousel = (props: Props) => {
 
   // Image Dimensions
   const aspectRatio = imageSize.width / imageSize.height
-  const scaledWidth = dimensions.height * aspectRatio
-  const scaledHeight = dimensions.width / aspectRatio
-
-  const finalSelectedImageDimensions = {
-    width: Math.min(dimensions.width - 200, scaledWidth),
-    height: Math.min(dimensions.height - 192, scaledHeight),
-  }
 
   // Effects
   // Center the selected thumbnail
@@ -169,7 +158,7 @@ const Carousel = (props: Props) => {
         padding={20}
         justifyContent="space-between"
         position="relative"
-        height={dimensions.height - 32}
+        height="100vh"
       >
         <Stack
           flexDirection="row"
@@ -225,6 +214,7 @@ const Carousel = (props: Props) => {
           justifyContent="space-between"
           alignItems="center"
           flexDirection="row"
+          flex={1}
         >
           <IconButton
             variant="default"
@@ -232,21 +222,19 @@ const Carousel = (props: Props) => {
             onPress={handlePrev}
             disabled={selectedImageIndex === 0}
           />
-          {/* TODO fix responsive issue with this approach */}
-          <Stack>
-            <RNImage
-              source={{
-                uri: images[selectedImageIndex],
-              }}
-              style={{
-                borderRadius: 16,
-                width: '100%',
-                height: finalSelectedImageDimensions.height,
-                // resizeMode: 'contain',
-                aspectRatio:
-                  finalSelectedImageDimensions.width /
-                  finalSelectedImageDimensions.height,
-              }}
+          {/* TODO Check if this is the best option that we can do */}
+          <Stack
+            aspectRatio={aspectRatio}
+            flex={aspectRatio > 1 ? 1 : aspectRatio / 1.5}
+            padding={8}
+            {...(aspectRatio >= 1 && { maxWidth: '100%', maxHeight: '100%' })}
+            {...(aspectRatio < 1 && { maxHeight: '100%' })}
+          >
+            <Image
+              src={images[selectedImageIndex]}
+              width="full"
+              height="100%"
+              borderRadius={16}
             />
           </Stack>
           <IconButton

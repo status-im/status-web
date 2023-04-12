@@ -17,6 +17,7 @@ const meta: Meta<typeof Carousel> = {
   },
   argTypes: {},
   parameters: {
+    layout: 'fullscreen',
     design: {
       type: 'figma',
       url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Web?node-id=611%3A36006&t=Gyy71OAckl3b2TWj-4',
