@@ -309,6 +309,16 @@ const Base = styled(Stack, {
   } as const,
 })
 
+const Fallback = styled(Stack, {
+  name: 'AvatarFallback',
+
+  justifyContent: 'center',
+  alignItems: 'center',
+
+  width: '100%',
+  height: '100%',
+})
+
 const Indicator = styled(Stack, {
   name: 'AvatarIndicator',
 
@@ -374,16 +384,6 @@ const Indicator = styled(Stack, {
       },
     },
   } as const,
-})
-
-const Fallback = styled(Stack, {
-  name: 'AvatarFallback',
-
-  justifyContent: 'center',
-  alignItems: 'center',
-
-  width: '100%',
-  height: '100%',
 })
 
 const LockBase = styled(Stack, {
