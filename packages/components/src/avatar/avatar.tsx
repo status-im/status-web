@@ -42,20 +42,12 @@ type AvatarProps =
     }
   | {
       type: 'channel'
-      size: 32 | 24 | 20
+      size: 80 | 32 | 24 | 20
       emoji: string
       outline?: Variants['outline']
       backgroundColor?: ColorTokens
       background?: ColorTokens
       lock?: 'locked' | 'unlocked'
-    }
-  | {
-      type: 'channel'
-      size: 80
-      emoji: string
-      outline?: Variants['outline']
-      backgroundColor?: ColorTokens
-      background?: ColorTokens
     }
   | {
       type: 'community'
