@@ -1,5 +1,4 @@
-import { TimeoutIcon } from '@status-im/icons/12'
-import { DeleteIcon } from '@status-im/icons/20'
+import { LoadingIcon, TrashIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
 import { IconAvatar } from '../../avatar'
@@ -27,11 +26,11 @@ const DeletedMessageContent = (props: Props) => {
         backgroundColor={state === 'landed' ? '$transparent' : '$red-50-opa-5'}
         color="$neutral-100"
       >
-        <DeleteIcon />
+        <TrashIcon size={20} />
       </IconAvatar>
       <Stack
         flexDirection="row"
-        space={2}
+        gap={2}
         justifyContent="space-between"
         flexBasis="max-content"
         flexGrow={1}
@@ -42,7 +41,7 @@ const DeletedMessageContent = (props: Props) => {
           justifyContent="space-between"
           flexGrow={1}
         >
-          <Stack flexDirection="row" space={8} alignItems="baseline">
+          <Stack flexDirection="row" gap={8} alignItems="baseline">
             <Text size={13}>{text}</Text>
             <Text size={11} color="$neutral-50">
               {timestamp}
@@ -53,7 +52,7 @@ const DeletedMessageContent = (props: Props) => {
               onPress={action.onPress}
               variant="darkGrey"
               size={24}
-              icon={<TimeoutIcon />}
+              icon={<LoadingIcon size={12} />}
             >
               {action.label}
             </Button>

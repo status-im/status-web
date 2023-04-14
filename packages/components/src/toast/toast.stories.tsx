@@ -1,4 +1,4 @@
-import { PlaceholderIcon } from '@status-im/icons/20'
+import { PlaceholderIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Button } from '../button'
@@ -51,7 +51,10 @@ export const AllVariants: Story = {
         message="You can only add 6 photos to your message"
       />
       <Toast type="positive" message="Great success! This means good stuff!" />
-      <Toast icon={<PlaceholderIcon />} message="Something happened" />
+      <Toast
+        icon={<PlaceholderIcon size={20} />}
+        message="Something happened"
+      />
       <Toast
         type="negative"
         action="Retry"

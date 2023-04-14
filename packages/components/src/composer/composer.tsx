@@ -2,13 +2,13 @@ import { useState } from 'react'
 
 import { useImageUpload } from '@status-im/components/hooks'
 import {
-  ArrowUpIcon,
+  ArrowTopIcon,
   AudioIcon,
   ClearIcon,
   FormatIcon,
   ImageIcon,
   ReactionIcon,
-} from '@status-im/icons/20'
+} from '@status-im/icons'
 import { BlurView } from 'expo-blur'
 import { AnimatePresence, Stack, XStack } from 'tamagui'
 
@@ -148,7 +148,7 @@ const Composer = (props: Props) => {
                       zIndex={1}
                     />
                     <Stack position="absolute" zIndex={2} width={20}>
-                      <ClearIcon color="$neutral-50" />
+                      <ClearIcon size={20} color="$neutral-50" />
                     </Stack>
                   </Stack>
                 </Stack>
@@ -162,23 +162,23 @@ const Composer = (props: Props) => {
           paddingTop={12}
           backgroundColor="transparent"
         >
-          <Stack space={12} flexDirection="row" backgroundColor="transparent">
+          <Stack gap={12} flexDirection="row" backgroundColor="transparent">
             <label htmlFor="image-uploader-input">
               <IconButton
                 variant="outline"
-                icon={<ImageIcon />}
+                icon={<ImageIcon size={20} />}
                 disabled={isImageUploadDisabled}
                 blur={iconButtonBlurred}
               />
             </label>
             <IconButton
               variant="outline"
-              icon={<ReactionIcon />}
+              icon={<ReactionIcon size={20} />}
               blur={iconButtonBlurred}
             />
             <IconButton
               variant="outline"
-              icon={<FormatIcon />}
+              icon={<FormatIcon size={20} />}
               disabled
               blur={iconButtonBlurred}
             />
@@ -187,13 +187,13 @@ const Composer = (props: Props) => {
             <Button
               variant="primary"
               shape="circle"
-              icon={<ArrowUpIcon />}
+              icon={<ArrowTopIcon size={20} />}
               size={32}
             />
           ) : (
             <Button
               variant="outline"
-              icon={<AudioIcon />}
+              icon={<AudioIcon size={20} />}
               size={32}
               // blurred={iconButtonBlurred}
             />

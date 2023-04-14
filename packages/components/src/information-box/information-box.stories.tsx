@@ -1,4 +1,4 @@
-import { InfoIcon } from '@status-im/icons/16'
+import { InfoIcon } from '@status-im/icons'
 
 import { InformationBox } from './information-box'
 
@@ -43,7 +43,7 @@ export const Error: Story = {
 export const DefaultWithIcon: Story = {
   args: {
     message: 'This is a simple message with an info icon.',
-    icon: <InfoIcon />,
+    icon: <InfoIcon size={16} />,
   },
 }
 
@@ -121,7 +121,7 @@ export const ErrorWithDismiss: Story = {
 export const DefaultWithIconAndDismiss: Story = {
   args: {
     message: 'This is a simple message with an info icon.',
-    icon: <InfoIcon />,
+    icon: <InfoIcon size={16} />,
     onClosePress: () => alert('dismissed'),
   },
 }

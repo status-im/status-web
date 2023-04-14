@@ -1,4 +1,4 @@
-import { LockedIcon, UnlockedIcon } from '@status-im/icons/12'
+import { LockedIcon, UnlockedIcon } from '@status-im/icons'
 import { type ColorTokens, Stack, styled, Text } from '@tamagui/core'
 
 type Props = {
@@ -23,7 +23,11 @@ const ChannelAvatar = (props: Props) => {
     <Base size={size} backgroundColor={background}>
       {lock !== 'none' && (
         <LockBase variant={size}>
-          {lock === 'locked' ? <LockedIcon /> : <UnlockedIcon />}
+          {lock === 'locked' ? (
+            <LockedIcon size={12} />
+          ) : (
+            <UnlockedIcon size={12} />
+          )}
         </LockBase>
       )}
 

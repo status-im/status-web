@@ -48,7 +48,7 @@ const SystemMessage = (props: Props) => {
   const { state = 'default', timestamp, type } = props
 
   const renderMessage = () => {
-    switch (type) {
+    switch (props.type) {
       case 'pinned':
         return (
           <PinnedMessageContent
@@ -82,7 +82,7 @@ const SystemMessage = (props: Props) => {
   return (
     <Base
       flexDirection="row"
-      space={8}
+      gap={8}
       padding={8}
       alignItems="center"
       state={

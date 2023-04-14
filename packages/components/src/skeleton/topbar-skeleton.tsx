@@ -35,7 +35,7 @@ const TopbarSkeleton = () => {
             />
           </Stack>
           <Stack
-            space={12}
+            gap={12}
             flexDirection="row"
             alignItems="center"
             justifyContent="flex-end"

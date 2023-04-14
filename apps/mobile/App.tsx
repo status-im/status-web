@@ -8,7 +8,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Heading, IconButton, Paragraph } from '@status-im/components'
 import { Avatar } from '@status-im/components/src/avatar'
-import { ArrowLeftIcon, MembersIcon } from '@status-im/icons/20'
+import { ArrowLeftIcon, MembersIcon } from '@status-im/icons'
 import { Stack as View, TamaguiProvider } from '@tamagui/core'
 import { useFonts } from 'expo-font'
 import { Platform } from 'react-native'
@@ -37,7 +37,7 @@ const CustomHeaderLeft = (props: HeaderBackButtonProps) => {
   return (
     <>
       <IconButton
-        icon={<ArrowLeftIcon />}
+        icon={<ArrowLeftIcon size={20} />}
         onPress={() => {
           props.canGoBack && navigation.goBack()
         }}
@@ -163,7 +163,7 @@ export default function App() {
                 headerRight() {
                   return (
                     <IconButton
-                      icon={<MembersIcon />}
+                      icon={<MembersIcon size={20} />}
                       onPress={() => {
                         // noop
                       }}

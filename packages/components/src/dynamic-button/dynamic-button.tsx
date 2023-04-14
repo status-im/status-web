@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { ArrowDownIcon, MentionIcon } from '@status-im/icons/12'
+import { ArrowDownIcon, MentionIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Shadow } from '../shadow'
@@ -31,13 +31,13 @@ const DynamicButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
         type={type}
         iconOnly={showCount === false}
       >
-        {type === 'mention' && <MentionIcon color={color} />}
+        {type === 'mention' && <MentionIcon size={12} color={color} />}
         {showCount && (
           <Text size={13} weight="medium" color={color} wrap={false}>
             {count}
           </Text>
         )}
-        {type === 'notification' && <ArrowDownIcon color={color} />}
+        {type === 'notification' && <ArrowDownIcon size={12} color={color} />}
       </Button>
     </Shadow>
   )

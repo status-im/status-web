@@ -1,6 +1,6 @@
 import { cloneElement } from 'react'
 
-import { CloseIcon } from '@status-im/icons/12'
+import { CloseIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Button } from '../button'
@@ -90,7 +90,7 @@ const InformationBox = (props: Props) => {
             cursor="pointer"
             alignSelf="flex-start"
           >
-            <CloseIcon />
+            <CloseIcon size={12} />
           </Stack>
         ) : null}
       </Stack>

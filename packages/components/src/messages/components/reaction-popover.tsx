@@ -5,7 +5,7 @@ import {
   SadIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
-} from '@status-im/icons/reactions'
+} from '@status-im/icons'
 import { XStack } from 'tamagui'
 
 import { IconButton } from '../../icon-button'
@@ -21,12 +21,12 @@ type Props = Omit<PopoverProps, 'children'> & {
 }
 
 export const REACTIONS_ICONS = {
-  love: <LoveIcon />,
-  laugh: <LaughIcon />,
-  'thumbs-up': <ThumbsUpIcon />,
-  'thumbs-down': <ThumbsDownIcon />,
-  sad: <SadIcon />,
-  angry: <AngryIcon />,
+  love: <LoveIcon size={20} />,
+  laugh: <LaughIcon size={20} />,
+  'thumbs-up': <ThumbsUpIcon size={20} />,
+  'thumbs-down': <ThumbsDownIcon size={20} />,
+  sad: <SadIcon size={20} />,
+  angry: <AngryIcon size={20} />,
 } as const
 
 export const ReactionPopover = (props: Props) => {
@@ -37,7 +37,7 @@ export const ReactionPopover = (props: Props) => {
       {children}
 
       <Popover.Content>
-        <XStack space={2} padding={2}>
+        <XStack gap={2} padding={2}>
           <IconButton
             icon={REACTIONS_ICONS['love']}
             variant="ghost"

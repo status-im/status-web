@@ -3,14 +3,14 @@ import { useEffect } from 'react'
 import {
   AddReactionIcon,
   CopyIcon,
-  DeleteIcon,
   EditIcon,
   ForwardIcon,
   LinkIcon,
   OptionsIcon,
   PinIcon,
   ReplyIcon,
-} from '@status-im/icons/20'
+  TrashIcon,
+} from '@status-im/icons'
 
 import { DropdownMenu } from '../../dropdown-menu'
 import { IconButton } from '../../icon-button'
@@ -47,7 +47,7 @@ export const Actions = (props: Props) => {
       borderColor="$neutral-10"
       backgroundColor="$white-100"
       padding={2}
-      space={2}
+      gap={2}
       flexDirection="row"
       zIndex={10}
     >
@@ -58,61 +58,69 @@ export const Actions = (props: Props) => {
         sideOffset={6}
         onOpenChange={onOpenChange}
       >
-        <IconButton variant="ghost" icon={<AddReactionIcon />} />
+        <IconButton variant="ghost" icon={<AddReactionIcon size={20} />} />
       </ReactionPopover>
 
       {/* REPLY */}
-      <IconButton variant="ghost" icon={<ReplyIcon />} onPress={onReplyPress} />
+      <IconButton
+        variant="ghost"
+        icon={<ReplyIcon size={20} />}
+        onPress={onReplyPress}
+      />
 
       {/* EDIT */}
-      <IconButton variant="ghost" icon={<EditIcon />} onPress={onEditPress} />
+      <IconButton
+        variant="ghost"
+        icon={<EditIcon size={20} />}
+        onPress={onEditPress}
+      />
 
       {/* DELETE */}
       {/* <IconButton
         variant="ghost"
-        icon={<DeleteIcon />}
+        icon={<TrashIcon size={20} />}
         onPress={onDeletePress}
       /> */}
 
       {/* OPTIONS MENU */}
       <DropdownMenu modal={false} onOpenChange={onOpenChange}>
-        <IconButton variant="ghost" icon={<OptionsIcon />} />
+        <IconButton variant="ghost" icon={<OptionsIcon size={20} />} />
         <DropdownMenu.Content align="end" sideOffset={10} zIndex={101}>
           <DropdownMenu.Item
-            icon={<EditIcon />}
+            icon={<EditIcon size={20} />}
             label="Edit message"
             onSelect={onEditPress}
           />
           <DropdownMenu.Item
-            icon={<ReplyIcon />}
+            icon={<ReplyIcon size={20} />}
             label="Reply"
             onSelect={onReplyPress}
           />
           <DropdownMenu.Item
-            icon={<CopyIcon />}
+            icon={<CopyIcon size={20} />}
             label="Copy text"
             onSelect={() => console.log('copy')}
           />
           {pinned ? (
             <DropdownMenu.Item
-              icon={<PinIcon />}
+              icon={<PinIcon size={20} />}
               label="Unpin message"
               onSelect={() => console.log('unpin')}
             />
           ) : (
             <DropdownMenu.Item
-              icon={<PinIcon />}
+              icon={<PinIcon size={20} />}
               label="Pin to the channel"
               onSelect={() => console.log('pin')}
             />
           )}
           <DropdownMenu.Item
-            icon={<ForwardIcon />}
+            icon={<ForwardIcon size={20} />}
             label="Forward"
             onSelect={() => console.log('forward')}
           />
           <DropdownMenu.Item
-            icon={<LinkIcon />}
+            icon={<LinkIcon size={20} />}
             label="Share link to message"
             onSelect={() => console.log('share')}
           />
@@ -120,14 +128,14 @@ export const Actions = (props: Props) => {
           <DropdownMenu.Separator />
 
           <DropdownMenu.Item
-            icon={<DeleteIcon />}
+            icon={<TrashIcon size={20} />}
             label="Delete for me"
             danger
             onSelect={() => console.log('delete for me')}
           />
 
           <DropdownMenu.Item
-            icon={<DeleteIcon />}
+            icon={<TrashIcon size={20} />}
             label="Delete for everyone"
             danger
             onSelect={() => console.log('delete for everyone')}
