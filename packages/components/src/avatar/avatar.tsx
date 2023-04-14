@@ -1,6 +1,6 @@
 import { cloneElement, useMemo, useState } from 'react'
 
-import { LockedIcon, UnlockedIcon } from '@status-im/icons/12'
+import { LockedIcon, MembersIcon, UnlockedIcon } from '@status-im/icons'
 import { Stack, styled, Unspaced } from '@tamagui/core'
 import { Platform } from 'react-native'
 
@@ -33,6 +33,14 @@ type AvatarProps =
       backgroundColor?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
       colorHash?: number[][]
+    }
+  | {
+      type: 'group'
+      size: 80 | 48 | 32 | 28 | 20
+      name: string
+      src?: string
+      outline?: Variants['outline']
+      backgroundColor?: ColorTokens
     }
   | {
       type: 'channel'
@@ -129,6 +137,20 @@ const textSizes: Record<NonNullable<AvatarProps['size']>, TextProps['size']> = {
   '16': 11,
 }
 
+const iconSizes: Record<
+  NonNullable<AvatarProps['size']>,
+  React.ReactElement
+> = {
+  '80': <MembersIcon size={20} />,
+  '56': <></>,
+  '48': <MembersIcon size={20} />,
+  '32': <MembersIcon size={16} />,
+  '28': <MembersIcon size={16} />,
+  '24': <></>,
+  '20': <MembersIcon size={12} />,
+  '16': <></>,
+}
+
 function hasIdenticon(
   props: AvatarProps
 ): props is Extract<AvatarProps, { colorHash?: number[][] }> {
@@ -194,6 +216,7 @@ const Avatar = (props: AvatarProps) => {
 
         {(props.type === 'user' ||
           props.type === 'account' ||
+          props.type === 'group' ||
           props.type === 'community') && (
           <>
             {src ? (
@@ -218,13 +241,29 @@ const Avatar = (props: AvatarProps) => {
             ) : (
               <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
                 {/* fixme: contrasting color to background */}
-                <Text size={textSizes[size]} weight="medium" color="$white-100">
-                  {props.name.slice(0, 2).toUpperCase()}
-                </Text>
+                {props.type === 'group' ? (
+                  cloneElement(iconSizes[size], { color: '$white-100' })
+                ) : (
+                  <Text
+                    size={textSizes[size]}
+                    weight="medium"
+                    color="$white-100"
+                  >
+                    {props.name.slice(0, 2).toUpperCase()}
+                  </Text>
+                )}
               </Fallback>
             )}
           </>
         )}
+
+        {/* {props.type === 'wallet' && (
+          <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
+            <Text size={textSizes[size]} weight="medium" color="$white-100">
+              {props.name.slice(0, 2).toUpperCase()}
+            </Text>
+          </Fallback>
+        )} */}
 
         {props.type === 'channel' && (
           // fixme: Type 'undefined' is not assignable to type '32 | 11 | 13 | 15 | 19 | 27'
@@ -248,7 +287,11 @@ const Avatar = (props: AvatarProps) => {
 
       {props.type === 'channel' && hasLock(props) && (
         <LockBase variant={props.size}>
-          {props.lock === 'locked' ? <LockedIcon /> : <UnlockedIcon />}
+          {props.lock === 'locked' ? (
+            <LockedIcon size={12} />
+          ) : (
+            <UnlockedIcon size={12} />
+          )}
         </LockBase>
       )}
     </Stack>

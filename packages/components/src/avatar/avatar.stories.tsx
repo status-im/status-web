@@ -219,6 +219,37 @@ export const User: StoryObj<UserArgs> = {
   ),
 }
 
+export const Group: StoryObj<Extract<AvatarProps, { type: 'group' }>> = {
+  args: {
+    type: 'group',
+    src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
+  },
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=483-19401&t=kcsW0DN5ochMPO1u-4',
+    },
+  },
+  render: args => (
+    <Stack space flexDirection="row">
+      <Stack space flexDirection="column">
+        <Avatar {...args} size={80} />
+        <Avatar {...args} size={48} />
+        <Avatar {...args} size={32} />
+        <Avatar {...args} size={28} />
+        <Avatar {...args} size={20} />
+      </Stack>
+      <Stack space flexDirection="column">
+        <Avatar {...args} src={undefined} size={80} />
+        <Avatar {...args} src={undefined} size={48} />
+        <Avatar {...args} src={undefined} size={32} />
+        <Avatar {...args} src={undefined} size={28} />
+        <Avatar {...args} src={undefined} size={20} />
+      </Stack>
+    </Stack>
+  ),
+}
+
 export const Account: StoryObj<Extract<AvatarProps, { type: 'account' }>> = {
   args: {
     type: 'account',
