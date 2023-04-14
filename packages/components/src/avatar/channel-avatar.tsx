@@ -1,29 +1,44 @@
 import { LockedIcon, UnlockedIcon } from '@status-im/icons'
 import { type ColorTokens, Stack, styled, Text } from '@tamagui/core'
 
-type Props = {
-  emoji: string
-  color?: ColorTokens
-  background?: ColorTokens
-  size: 32 | 24 | 20
-  lock?: 'locked' | 'unlocked' | 'none'
-}
+type Props =
+  | {
+      type: 'channel'
+      emoji: string
+      color?: ColorTokens
+      background?: ColorTokens
+      size: 32 | 24 | 20
+      lock?: 'locked' | 'unlocked'
+    }
+  | {
+      type: 'channel'
+      emoji: string
+      color?: ColorTokens
+      background?: ColorTokens
+      size: 80
+    }
 
 const emojiSizes: Record<Props['size'], number> = {
+  80: 32,
   32: 14,
   24: 13,
   20: 11,
 }
 
-// https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=399-20709&t=kX5LC5OYFnSF8BiZ-11
+type AvatarWithIdenticon = Extract<Props, { lock?: 'locked' | 'unlocked' }>
+
+function hasLock(props: Props): props is AvatarWithIdenticon {
+  return (props as AvatarWithIdenticon).lock !== undefined
+}
+
 const ChannelAvatar = (props: Props) => {
-  const { emoji, background = '$blue-50-opa-20', size, lock = 'none' } = props
+  const { emoji, background = '$blue-50-opa-20', size } = props
 
   return (
     <Base size={size} backgroundColor={background}>
-      {lock !== 'none' && (
-        <LockBase variant={size}>
-          {lock === 'locked' ? (
+      {hasLock(props) && (
+        <LockBase variant={props.size}>
+          {props.lock === 'locked' ? (
             <LockedIcon size={12} />
           ) : (
             <UnlockedIcon size={12} />
