@@ -67,4 +67,6 @@ const Base = styled(RNImage, {
       },
     },
   },
+
+  backgroundColor: '$white-100',
 })
