@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { Stack, styled } from '@tamagui/core'
 import { Image as RNImage } from 'react-native'
+import { AnimatePresence } from 'tamagui'
 
 import { Text } from '../text'
 import { ImageSelected } from './components/image-selected'
@@ -89,8 +90,9 @@ const ImagePreview = (props: Props) => {
 
   return (
     <Container>
-      <Stack height="100%" maxWidth="100%" flexGrow={1}>
+      <Stack height="100%" maxWidth="100%" flexGrow={1} animation="fast">
         <TopBar
+          drawerOpen={showMessageInfo}
           onClose={onClose}
           messageInfo={messageInfo}
           onShowInfo={() => setShowMessageInfo(!showMessageInfo)}
@@ -109,21 +111,28 @@ const ImagePreview = (props: Props) => {
           handleThumbnailPress={handleThumbnailPress}
         />
       </Stack>
-      {showMessageInfo && (
-        <Stack
-          width={352}
-          p={16}
-          height="100vh"
-          borderLeftWidth={1}
-          marginLeft={8}
-          borderLeftColor="$neutral-90"
-          backgroundColor="$neutral-100"
-        >
-          <Text size={15} color="$white-70">
-            {messageInfo.message}
-          </Text>
-        </Stack>
-      )}
+      <AnimatePresence enterVariant="fromRight" exitVariant="fromLeft">
+        {showMessageInfo && (
+          <AnimatableDrawer
+            key="message"
+            animation={[
+              'fast',
+              {
+                opacity: {
+                  overshootClamping: true,
+                },
+              },
+            ]}
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+            opacity={1}
+          >
+            <Text size={15} color="$white-100">
+              {messageInfo.message}
+            </Text>
+          </AnimatableDrawer>
+        )}
+      </AnimatePresence>
     </Container>
   )
 }
@@ -140,4 +149,28 @@ const Container = styled(Stack, {
   height: '100vh',
   overflow: 'hidden',
   p: 20,
+})
+
+const AnimatableDrawer = styled(Stack, {
+  width: 352,
+  p: 16,
+  height: '100vh',
+  borderLeftWidth: 1,
+  ml: 8,
+  borderLeftColor: '$neutral-90',
+  backgroundColor: '$neutral-100',
+  variants: {
+    fromRight: {
+      true: {
+        x: 0,
+        width: 352,
+      },
+    },
+    fromLeft: {
+      true: {
+        x: 500,
+        width: 352,
+      },
+    },
+  },
 })
