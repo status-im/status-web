@@ -43,6 +43,13 @@ type AvatarProps =
       backgroundColor?: ColorTokens
     }
   | {
+      type: 'wallet'
+      size: 80 | 48 | 32 | 28 | 20
+      name: string
+      outline?: Variants['outline']
+      backgroundColor?: ColorTokens
+    }
+  | {
       type: 'channel'
       size: 32 | 24 | 20
       emoji: string
@@ -257,13 +264,13 @@ const Avatar = (props: AvatarProps) => {
           </>
         )}
 
-        {/* {props.type === 'wallet' && (
+        {props.type === 'wallet' && (
           <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
             <Text size={textSizes[size]} weight="medium" color="$white-100">
               {props.name.slice(0, 2).toUpperCase()}
             </Text>
           </Fallback>
-        )} */}
+        )}
 
         {props.type === 'channel' && (
           // fixme: Type 'undefined' is not assignable to type '32 | 11 | 13 | 15 | 19 | 27'

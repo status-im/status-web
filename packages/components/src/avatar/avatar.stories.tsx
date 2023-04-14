@@ -227,7 +227,7 @@ export const Group: StoryObj<Extract<AvatarProps, { type: 'group' }>> = {
   parameters: {
     design: {
       type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=483-19401&t=kcsW0DN5ochMPO1u-4',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=14584-169312&t=kcsW0DN5ochMPO1u-4',
     },
   },
   render: args => (
@@ -245,6 +245,30 @@ export const Group: StoryObj<Extract<AvatarProps, { type: 'group' }>> = {
         <Avatar {...args} src={undefined} size={32} />
         <Avatar {...args} src={undefined} size={28} />
         <Avatar {...args} src={undefined} size={20} />
+      </Stack>
+    </Stack>
+  ),
+}
+
+export const Wallet: StoryObj<Extract<AvatarProps, { type: 'wallet' }>> = {
+  args: {
+    type: 'wallet',
+    name: 'Wallet 1',
+  },
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=114-7646&t=kcsW0DN5ochMPO1u-4',
+    },
+  },
+  render: args => (
+    <Stack space flexDirection="row">
+      <Stack space flexDirection="column">
+        <Avatar {...args} size={80} />
+        <Avatar {...args} size={48} />
+        <Avatar {...args} size={32} />
+        <Avatar {...args} size={28} />
+        <Avatar {...args} size={20} />
       </Stack>
     </Stack>
   ),
