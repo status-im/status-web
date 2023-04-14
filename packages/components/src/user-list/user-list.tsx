@@ -8,7 +8,8 @@ import type { AuthorProps } from '../author/author'
 import type { AvatarProps } from '../avatar'
 
 type Props = {
-  users: (Pick<AvatarProps, 'src' | 'indicator'> & AuthorProps)[]
+  users: (Pick<Extract<AvatarProps, { type: 'user' }>, 'src' | 'indicator'> &
+    AuthorProps)[]
 }
 
 const UserList = (props: Props) => {
@@ -31,7 +32,7 @@ const UserList = (props: Props) => {
               backgroundColor: '$primary-50-opa-5',
             }}
           >
-            <Avatar size={32} src={src} indicator={indicator} />
+            <Avatar type="user" size={32} src={src} indicator={indicator} />
             <YStack>
               <Author {...authorProps} />
               <Text size={13} color="$neutral-50" type="monospace">

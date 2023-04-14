@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { LockedIcon, UnlockedIcon } from '@status-im/icons/12'
 import { Stack, styled, Unspaced } from '@tamagui/core'
@@ -113,7 +113,7 @@ function hasLock(props: AvatarProps): props is AvatarWithLock {
 }
 
 const Avatar = (props: AvatarProps) => {
-  const { type, src, size, color = '$blue-50-opa-20', outline = false } = props
+  const { type, size, color = '$blue-50-opa-20', outline = false } = props
 
   // todo?: conditional hook(s)
 
@@ -126,9 +126,6 @@ const Avatar = (props: AvatarProps) => {
   }, [colorHash])
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
-  useEffect(() => {
-    setStatus('idle')
-  }, [src])
 
   const radius = type === 'account' ? radii[size] : tokens.radius['full'].val
   const padding = identiconRing ? paddings[size] : 0
@@ -155,7 +152,7 @@ const Avatar = (props: AvatarProps) => {
         {(props.type === 'user' || props.type === 'account') && (
           <>
             <Image
-              src={src}
+              src={props.src}
               backgroundColor={color}
               borderRadius={radius}
               width="full"

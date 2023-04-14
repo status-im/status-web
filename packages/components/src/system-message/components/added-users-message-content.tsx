@@ -26,14 +26,14 @@ const AddedUsersMessageContent = (props: Props) => {
       </IconAvatar>
       <Stack flexDirection="row" gap={2} flexBasis="max-content" flexGrow={1}>
         <Stack flexDirection="row" gap={4} alignItems="center" flexGrow={1}>
-          <Avatar size={16} src={user.src} />
+          <Avatar type="user" size={16} src={user.src} />
           <Text size={13} weight="semibold">
             {user.name}
           </Text>
           <Text size={13}>added </Text>
           {users.length === 1 && (
             <Stack flexDirection="row" gap={4} alignItems="center">
-              <Avatar size={16} src={users[0].src} />
+              <Avatar type="user" size={16} src={users[0].src} />
               <Text size={13} weight="semibold">
                 {users[0].name}
               </Text>
@@ -56,7 +56,7 @@ const AddedUsersMessageContent = (props: Props) => {
                       <Text size={13}>
                         {users.length === i + 1 ? ' and ' : null}
                       </Text>
-                      <Avatar size={16} src={user.src} />
+                      <Avatar type="user" size={16} src={user.src} />
                       <Text size={13} weight="semibold">
                         {user.name}
                       </Text>

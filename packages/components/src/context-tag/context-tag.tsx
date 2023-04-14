@@ -65,7 +65,7 @@ const ContextTag = (props: Props) => {
 
   return (
     <Base outline={outline} size={size} hasImg={hasImg} blur={blur}>
-      {src && <Avatar size={avatarSizes[size]} src={src} />}
+      {src && <Avatar type="user" size={avatarSizes[size]} src={src} />}
       {icon && cloneElement(icon, { color: '$neutral-50' })}
 
       {Array.isArray(label) ? (

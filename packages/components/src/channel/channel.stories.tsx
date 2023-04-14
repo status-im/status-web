@@ -44,9 +44,7 @@ type Story = StoryObj<typeof Channel>
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const Default: Story = {
-  args: {
-    lock: 'none',
-  },
+  args: {},
 }
 
 export const Locked: Story = {
