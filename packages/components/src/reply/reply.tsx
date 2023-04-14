@@ -81,6 +81,7 @@ const Connector = () => (
     height="16"
     viewBox="0 0 16 16"
     fill="none"
+    // @ts-expect-error update react-native-svg types
     xmlns="http://www.w3.org/2000/svg"
   >
     <Path

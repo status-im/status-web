@@ -20,7 +20,7 @@ const meta: Meta = {
 
 type Story = StoryObj<{
   search: string
-  size: IconProps['si']
+  size: IconProps['size']
   color: ColorTokens
 }>
 

@@ -48,7 +48,7 @@ const SystemMessage = (props: Props) => {
   const { state = 'default', timestamp, type } = props
 
   const renderMessage = () => {
-    switch (type) {
+    switch (props.type) {
       case 'pinned':
         return (
           <PinnedMessageContent
