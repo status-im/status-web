@@ -1,7 +1,6 @@
 import { Stack } from '@tamagui/core'
 
 import { Avatar } from './avatar'
-import { ChannelAvatar } from './channel-avatar'
 
 import type { AvatarProps } from './avatar'
 import type { Meta, StoryObj } from '@storybook/react'
@@ -149,30 +148,35 @@ export const Account: StoryObj<Extract<AvatarProps, { type: 'account' }>> = {
   ),
 }
 
-export const Channel: StoryObj<typeof ChannelAvatar> = {
+type ChannelArgs = Pick<
+  Extract<AvatarProps, { type: 'channel'; emoji: string }>,
+  'type' | 'emoji'
+>
+
+export const Channel: StoryObj<ChannelArgs> = {
   args: {
     type: 'channel',
     emoji: '🍑',
-  },
+  } as ChannelArgs,
   render: args => (
     <Stack space flexDirection="row">
       <Stack space alignItems="flex-start">
-        <ChannelAvatar {...args} size={80} />
-        <ChannelAvatar {...args} size={32} />
-        <ChannelAvatar {...args} size={24} />
-        <ChannelAvatar {...args} size={20} />
+        <Avatar {...args} size={80} />
+        <Avatar {...args} size={32} />
+        <Avatar {...args} size={24} />
+        <Avatar {...args} size={20} />
       </Stack>
 
       <Stack space alignItems="flex-start">
-        <ChannelAvatar {...args} size={32} lock="locked" />
-        <ChannelAvatar {...args} size={24} lock="locked" />
-        <ChannelAvatar {...args} size={20} lock="locked" />
+        <Avatar {...args} size={32} lock="locked" />
+        <Avatar {...args} size={24} lock="locked" />
+        <Avatar {...args} size={20} lock="locked" />
       </Stack>
 
       <Stack space alignItems="flex-start">
-        <ChannelAvatar {...args} size={32} lock="unlocked" />
-        <ChannelAvatar {...args} size={24} lock="unlocked" />
-        <ChannelAvatar {...args} size={20} lock="unlocked" />
+        <Avatar {...args} size={32} lock="unlocked" />
+        <Avatar {...args} size={24} lock="unlocked" />
+        <Avatar {...args} size={20} lock="unlocked" />
       </Stack>
     </Stack>
   ),

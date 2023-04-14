@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
 
+import { LockedIcon, UnlockedIcon } from '@status-im/icons/12'
 import { Stack, styled, Unspaced } from '@tamagui/core'
 import { Platform } from 'react-native'
 
 import { Image } from '../image'
+import { Text } from '../text'
 import { tokens } from '../tokens'
 import { generateIdenticonRing } from './utils'
 
-import type { GetStyledVariants } from '@tamagui/core'
+import type { TextProps } from '../text'
+import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
 
 type Variants = GetStyledVariants<typeof Base>
 
@@ -17,6 +20,7 @@ type AvatarProps =
       size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
       src: string
       outline?: Variants['outline']
+      color?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
     }
   | {
@@ -24,20 +28,40 @@ type AvatarProps =
       size: 80 | 56 | 48 | 32
       src: string
       outline?: Variants['outline']
+      color?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
       colorHash?: number[][]
+    }
+  | {
+      type: 'channel'
+      size: 32 | 24 | 20
+      emoji: string
+      outline?: Variants['outline']
+      color?: ColorTokens
+      background?: ColorTokens
+      lock?: 'locked' | 'unlocked'
+    }
+  | {
+      type: 'channel'
+      size: 80
+      emoji: string
+      outline?: Variants['outline']
+      color?: ColorTokens
+      background?: ColorTokens
     }
   | {
       type: 'community'
       size: 80 | 32 | 24 | 20
       src: string
       outline?: Variants['outline']
+      color?: ColorTokens
     }
   | {
       type: 'account'
       size: 80 | 48 | 32 | 28 | 24 | 20
       src: string
       outline?: Variants['outline']
+      color?: ColorTokens
     }
 
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
@@ -65,14 +89,31 @@ const radii: Record<NonNullable<AvatarProps['size']>, number | undefined> = {
   '16': undefined,
 }
 
+const emojiSizes: Record<AvatarProps['size'], TextProps['size'] | undefined> = {
+  '80': 32,
+  '56': undefined,
+  '48': undefined,
+  '32': 15,
+  '28': undefined,
+  '24': 13,
+  '20': 11,
+  '16': undefined,
+}
+
 type AvatarWithIdenticon = Extract<AvatarProps, { colorHash?: number[][] }>
 
 function hasIdenticon(props: AvatarProps): props is AvatarWithIdenticon {
   return (props as AvatarWithIdenticon).colorHash !== undefined
 }
 
+type AvatarWithLock = Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }>
+
+function hasLock(props: AvatarProps): props is AvatarWithLock {
+  return (props as AvatarWithLock).lock !== undefined
+}
+
 const Avatar = (props: AvatarProps) => {
-  const { type, src, size, outline = false } = props
+  const { type, src, size, color = '$blue-50-opa-20', outline = false } = props
 
   // todo?: conditional hook(s)
 
@@ -99,6 +140,7 @@ const Avatar = (props: AvatarProps) => {
         padding={padding}
         size={size}
         outline={outline}
+        backgroundColor={color}
         // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -108,23 +150,43 @@ const Avatar = (props: AvatarProps) => {
           }),
         }}
       >
-        <Image
-          src={src}
-          backgroundColor={'$neutral-95'}
-          borderRadius={radius}
-          width="full"
-          aspectRatio={1}
-          onLoad={() => setStatus('loaded')}
-          onError={() => setStatus('error')}
-        />
+        {/* todo?: render fn(s) */}
 
-        {status === 'error' && <Fallback borderRadius={radius} />}
+        {(props.type === 'user' || props.type === 'account') && (
+          <>
+            <Image
+              src={src}
+              backgroundColor={color}
+              borderRadius={radius}
+              width="full"
+              aspectRatio={1}
+              onLoad={() => setStatus('loaded')}
+              onError={() => setStatus('error')}
+            />
+            {status === 'error' && (
+              <Fallback borderRadius={radius} backgroundColor={color} />
+            )}
+          </>
+        )}
+
+        {props.type === 'channel' && (
+          // fixme: Type 'undefined' is not assignable to type '32 | 11 | 13 | 15 | 19 | 27'
+          <Text size={emojiSizes[size] as TextProps['size']}>
+            {props.emoji}
+          </Text>
+        )}
       </Base>
 
       {props.type === 'user' && props.indicator && (
         <Unspaced>
           <Indicator size={size} state={props.indicator} />
         </Unspaced>
+      )}
+
+      {props.type === 'channel' && hasLock(props) && (
+        <LockBase variant={props.size}>
+          {props.lock === 'locked' ? <LockedIcon /> : <UnlockedIcon />}
+        </LockBase>
       )}
     </Stack>
   )
@@ -258,6 +320,31 @@ const Fallback = styled(Stack, {
 
   width: '100%',
   height: '100%',
+})
 
-  backgroundColor: '$neutral-95',
+const LockBase = styled(Stack, {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 16,
+  height: 16,
+  backgroundColor: '$white-100',
+  position: 'absolute',
+  borderRadius: '$16',
+
+  variants: {
+    variant: {
+      32: {
+        right: -4,
+        bottom: -4,
+      },
+      24: {
+        right: -4,
+        bottom: -4,
+      },
+      20: {
+        right: -6,
+        bottom: -6,
+      },
+    },
+  },
 })
