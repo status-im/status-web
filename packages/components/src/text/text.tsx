@@ -12,12 +12,11 @@ type Weight = NonNullable<Variants['weight']>
 
 type Props = {
   children: React.ReactNode
-  size?: 32 | 27 | 19 | 15 | 13 | 11 | undefined
+  size?: 27 | 19 | 15 | 13 | 11 | undefined
   color?: ColorTokens
   truncate?: boolean
   wrap?: false
 } & (
-  | { size: 32; weight?: Weight }
   | { size: 27; weight?: Weight }
   | { size: 19; weight?: Weight }
   | { size: 15; weight?: Weight; type?: Type }
@@ -46,11 +45,6 @@ const Base = styled(BaseText, {
     },
 
     size: {
-      32: {
-        fontSize: 32,
-        lineHeight: 40,
-        letterSpacing: -0.025,
-      },
       27: {
         fontSize: 27,
         lineHeight: 32,

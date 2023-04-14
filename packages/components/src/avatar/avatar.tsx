@@ -106,7 +106,7 @@ const radiusSizes: Record<
 }
 
 const emojiSizes: Record<AvatarProps['size'], TextProps['size'] | undefined> = {
-  '80': 32,
+  '80': 27,
   '56': undefined,
   '48': undefined,
   '32': 15,
@@ -117,8 +117,8 @@ const emojiSizes: Record<AvatarProps['size'], TextProps['size'] | undefined> = {
 }
 
 const textSizes: Record<NonNullable<AvatarProps['size']>, TextProps['size']> = {
-  '80': 32,
-  '56': 27,
+  '80': 27,
+  '56': 19,
   '48': 19,
   '32': 15,
   '28': 13,
