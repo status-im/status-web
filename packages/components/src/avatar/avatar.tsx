@@ -141,36 +141,12 @@ const iconSizes: Record<
   '16': <></>,
 }
 
-function hasIdenticon(
-  props: AvatarProps
-): props is Extract<AvatarProps, { colorHash?: number[][] }> {
-  return (
-    (props as Extract<AvatarProps, { colorHash?: number[][] }>).colorHash !==
-    undefined
-  )
-}
-
-function hasLock(
-  props: AvatarProps
-): props is Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }> {
-  return (
-    (props as Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }>).lock !==
-    undefined
-  )
-}
-
-function hasImage(
-  props: AvatarProps
-): props is Extract<AvatarProps, { src?: string }> {
-  return (props as Extract<AvatarProps, { src?: string }>).src !== undefined
-}
-
 const Avatar = (props: AvatarProps) => {
   const { type, size, backgroundColor = '$neutral-95', outline = false } = props
 
   // todo?: conditional hook(s)
 
-  const colorHash = hasIdenticon(props) ? props.colorHash : null
+  const colorHash = 'colorHash' in props ? props.colorHash : undefined
   const identiconRing = useMemo(() => {
     if (colorHash) {
       const gradient = generateIdenticonRing(colorHash)
@@ -183,7 +159,7 @@ const Avatar = (props: AvatarProps) => {
   const padding = identiconRing ? paddingSizes[size] : 0
   const radius =
     type === 'account' ? radiusSizes[size] : tokens.radius['full'].val
-  const src = hasImage(props) ? props.src : null
+  const src = 'src' in props ? props.src : undefined
 
   return (
     <Stack style={{ position: 'relative' }}>
@@ -275,7 +251,7 @@ const Avatar = (props: AvatarProps) => {
         </Unspaced>
       )}
 
-      {props.type === 'channel' && hasLock(props) && (
+      {props.type === 'channel' && 'lock' in props && (
         <LockBase variant={props.size}>
           {props.lock === 'locked' ? (
             <LockedIcon size={12} />
