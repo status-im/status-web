@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import { PendingIcon } from '@status-im/icons'
+=======
+import { PendingIcon } from '@status-im/icons/12'
+import { GroupIcon } from '@status-im/icons/16'
+>>>>>>> 668cc1d5 (context tag refactor)
 import { Stack } from '@tamagui/core'
 
 import { ContextTag } from './context-tag'
@@ -24,35 +29,85 @@ export const Base: Story = {
 }
 
 export const AllVariants: Story = {
-  args: {},
-  render: () => (
+  args: { size: 24 },
+  render: ({ size }) => (
     <Stack space flexDirection="row">
       <Stack space flexDirection="column" alignItems="flex-start">
-        <ContextTag label="Name" />
-        <ContextTag type="group" label="Group" />
         <ContextTag
-          src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images"
+          type="default"
+          user={{
+            name: 'User',
+            src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
+          }}
+          size={size}
+        />
+        <ContextTag
+          type="group"
+          group={{
+            name: 'Group',
+            icon: <GroupIcon />,
+          }}
+          size={size}
+        />
+        <ContextTag
           type="channel"
-          label={['Rarible', '# channel']}
+          channel={{
+            communityName: 'Rarible',
+            src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
+            name: 'channel',
+          }}
+          size={size}
         />
         <ContextTag
-          src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images"
           type="community"
-          label="Coinbase"
+          community={{
+            name: 'Rarible',
+            src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
+          }}
           outline={true}
+          size={size}
         />
-        <ContextTag type="token" label="10 ETH" />
-        <ContextTag type="network" label="Network" />
-        <ContextTag type="account" label="Account Name" />
-        <ContextTag type="collectible" label="Collectible #123" />
-        <ContextTag type="address" label="0x045...1ah" />
+        <ContextTag
+          type="token"
+          token={{
+            name: '10 ETH',
+            src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
+          }}
+          size={size}
+        />
+        <ContextTag
+          type="network"
+          network={{
+            name: 'Network',
+            src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
+          }}
+          size={size}
+        />
+        <ContextTag
+          type="account"
+          user={{
+            name: 'User Name',
+            emoji: '🐷',
+          }}
+          size={size}
+        />
+        <ContextTag
+          type="collectible"
+          collectible={{
+            name: 'Collectible #123',
+            src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
+          }}
+          size={size}
+        />
+        <ContextTag type="address" address="0x045...1ah" size={size} />
         <ContextTag
           icon={<PendingIcon size={12} />}
           type="icon"
           label="Context"
           outline
+          size={size}
         />
-        <ContextTag type="audio" label="00:32" />
+        <ContextTag type="audio" audioLength="00:32" size={size} />
       </Stack>
     </Stack>
   ),

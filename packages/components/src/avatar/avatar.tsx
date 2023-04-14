@@ -9,17 +9,27 @@ import { Text } from '../text'
 import { tokens } from '../tokens'
 import { generateIdenticonRing } from './utils'
 
+<<<<<<< HEAD
 import type { TextProps } from '../text'
 import type { RadiusTokens } from '../tokens'
 import type { IconProps } from '@status-im/icons'
 import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
+=======
+import type { RadiusTokens } from '../tokens'
+import type { GetStyledVariants } from '@tamagui/core'
+>>>>>>> 668cc1d5 (context tag refactor)
 
 type UserAvatarProps = {
   type: 'user'
   size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
+<<<<<<< HEAD
   name: string
   src?: string
   backgroundColor?: ColorTokens
+=======
+  shape?: 'circle' | 'rounded'
+  outline?: Variants['outline']
+>>>>>>> 668cc1d5 (context tag refactor)
   indicator?: GetStyledVariants<typeof Indicator>['state']
   colorHash?: number[][]
 }
@@ -32,12 +42,34 @@ type GroupAvatarProps = {
   backgroundColor?: ColorTokens
 }
 
+<<<<<<< HEAD
 type WalletAvatarProps = {
   type: 'wallet'
   size: 80 | 48 | 32 | 28 | 20
   name: string
   backgroundColor?: ColorTokens
 }
+=======
+const borderRadiusSizes: Record<NonNullable<Props['size']>, RadiusTokens> = {
+  80: '$16',
+  56: '$16',
+  48: '$12',
+  32: '$10',
+  28: '$8',
+  24: '$8',
+  20: '$6',
+  16: '$4',
+}
+
+const Avatar = (props: Props) => {
+  const {
+    src,
+    size,
+    shape = 'circle',
+    outline = false,
+    indicator = 'none',
+  } = props
+>>>>>>> 668cc1d5 (context tag refactor)
 
 type ChannelAvatarProps = {
   type: 'channel'
@@ -316,6 +348,7 @@ const Avatar = (props: AvatarProps) => {
   }
 
   return (
+<<<<<<< HEAD
     <Stack style={{ position: 'relative', height: 'fit-content' }}>
       <Base
         borderRadius={radius}
@@ -335,6 +368,42 @@ const Avatar = (props: AvatarProps) => {
       </Base>
       {renderBadge()}
     </Stack>
+=======
+    <Base
+      size={size}
+      outline={outline}
+      borderRadius={shape === 'circle' ? '$full' : borderRadiusSizes[size]}
+    >
+      {indicator !== 'none' && (
+        <Unspaced>
+          <Indicator size={size} state={indicator} />
+        </Unspaced>
+      )}
+      <Shape
+        borderRadius={shape === 'circle' ? '$full' : borderRadiusSizes[size]}
+      >
+        <Image
+          src={src}
+          width="full"
+          aspectRatio={1}
+          onLoad={() => setStatus('loaded')}
+          onError={() => setStatus('error')}
+        />
+
+        {status === 'error' && (
+          <Fallback
+            width={size}
+            height={size}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            PP
+          </Fallback>
+        )}
+      </Shape>
+    </Base>
+>>>>>>> 668cc1d5 (context tag refactor)
   )
 }
 
@@ -364,6 +433,7 @@ const Base = styled(Stack, {
         width: 80,
         height: 80,
       },
+<<<<<<< HEAD
       56: {
         width: 56,
         height: 56,
@@ -391,6 +461,14 @@ const Base = styled(Stack, {
       16: {
         width: 16,
         height: 16,
+=======
+    },
+
+    outline: {
+      true: {
+        borderWidth: 2,
+        borderColor: '$white-100',
+>>>>>>> 668cc1d5 (context tag refactor)
       },
     },
   } as const,
@@ -404,6 +482,11 @@ const Fallback = styled(Stack, {
 
   width: '100%',
   height: '100%',
+<<<<<<< HEAD
+=======
+  backgroundColor: '$white-100',
+  overflow: 'hidden',
+>>>>>>> 668cc1d5 (context tag refactor)
 })
 
 const Indicator = styled(Stack, {
