@@ -1,4 +1,4 @@
-import { PendingIcon } from '@status-im/icons/12'
+import { PendingIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { ContextTag } from './context-tag'
@@ -47,7 +47,7 @@ export const AllVariants: Story = {
         <ContextTag type="collectible" label="Collectible #123" />
         <ContextTag type="address" label="0x045...1ah" />
         <ContextTag
-          icon={<PendingIcon />}
+          icon={<PendingIcon size={12} />}
           type="icon"
           label="Context"
           outline

@@ -1,104 +1,98 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import * as icons12 from '@status-im/icons/12'
-import * as icons16 from '@status-im/icons/16'
-import * as icons20 from '@status-im/icons/20'
-import * as reactions from '@status-im/icons/reactions'
+import { createElement } from 'react'
+
+import * as Icon from '@status-im/icons'
 
 import { Text } from '../text'
 
-import type { IconProps } from '@status-im/icons/types'
+import type { IconProps } from '@status-im/icons'
 import type { Meta, StoryObj } from '@storybook/react'
-import type React from 'react'
+import type { ColorTokens } from 'tamagui'
 
-// More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta = {
-  title: 'icons',
-  // component: Button,
-  argTypes: {},
+  title: 'Iconography/Overview',
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&t=ZG8wYDswtYEV1Per-11',
+    },
+  },
 }
 
-type Story = StoryObj
+type Story = StoryObj<{
+  search: string
+  size: IconProps['size']
+  color: ColorTokens
+}>
 
 function unpascal(str: string) {
   return str.replace(/([A-Z])/g, ' $1').trim()
 }
 
-// More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
-export const All: Story = {
-  args: {},
-  render: () => {
+export const Overview: Story = {
+  args: {
+    search: '',
+    size: 20,
+    // color: '$primary-50',
+  },
+
+  argTypes: {
+    search: {
+      control: 'text',
+    },
+    size: {
+      control: 'select',
+      options: [16, 20, 12],
+    },
+    color: {
+      control: 'select',
+      options: [],
+    },
+  },
+
+  render: args => {
     return (
-      <>
-        <div style={{ display: 'grid', gap: 12 }}>
-          {Object.keys(icons12).map(name => {
-            // @ts-ignore
-            // eslint-disable-next-line import/namespace
-            const Icon = icons12[name] as React.FunctionComponent<IconProps>
-
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          gap: 20,
+        }}
+      >
+        {Object.entries(Icon)
+          .filter(icon => {
+            if (!args.search) return true
+            return icon[0].toLowerCase().includes(args.search.toLowerCase())
+          })
+          .map(([name, component]) => {
             return (
               <div
                 key={name}
-                style={{ display: 'flex', flexDirection: 'column' }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 10,
+                }}
               >
-                <Icon color="$background" />
-                <Text size={15}>{unpascal(name)}</Text>
+                <div
+                  style={{
+                    padding: 8,
+                    border: '1px solid #eee',
+                    borderRadius: 6,
+                  }}
+                >
+                  {createElement(component, {
+                    size: args.size,
+                    color: args.color,
+                  })}
+                </div>
+                <Text size={11} wrap={false}>
+                  {unpascal(name).replace(' Icon', '')}
+                </Text>
               </div>
             )
           })}
-        </div>
-        <div style={{ display: 'grid', gap: 12 }}>
-          {Object.keys(icons16).map(name => {
-            // @ts-ignore
-            // eslint-disable-next-line import/namespace
-            const Icon = icons16[name] as React.FunctionComponent<IconProps>
-
-            return (
-              <div
-                key={name}
-                style={{ display: 'flex', flexDirection: 'column' }}
-              >
-                <Icon color="$background" />
-                <Text size={15}>{unpascal(name)}</Text>
-              </div>
-            )
-          })}
-        </div>
-        <div style={{ display: 'grid', gap: 12 }}>
-          {Object.keys(icons20).map(name => {
-            // @ts-ignore
-            // eslint-disable-next-line import/namespace
-            const Icon = icons20[name] as React.FunctionComponent<IconProps>
-
-            return (
-              <div
-                key={name}
-                style={{ display: 'flex', flexDirection: 'column' }}
-              >
-                <Icon color="$background" />
-                <Text size={15}>{unpascal(name)}</Text>
-              </div>
-            )
-          })}
-        </div>
-        <div style={{ display: 'grid', gap: 12 }}>
-          {Object.keys(reactions).map(name => {
-            // @ts-ignore
-            // eslint-disable-next-line import/namespace
-            const Icon = reactions[name] as React.FunctionComponent<IconProps>
-
-            return (
-              <div
-                key={name}
-                style={{ display: 'flex', flexDirection: 'column' }}
-              >
-                <Icon color="$background" />
-                <Text size={15}>{unpascal(name)}</Text>
-              </div>
-            )
-          })}
-        </div>
-      </>
+      </div>
     )
   },
 }

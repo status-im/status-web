@@ -1,66 +1,50 @@
-function transformImports(arr) {
-  arr.forEach(object => {
-    if (object.source && object.source.value === 'react-native-svg') {
-      object.specifiers.forEach((specifier, index) => {
-        if (specifier.type === 'ImportDefaultSpecifier') {
-          specifier.type = 'ImportSpecifier'
-          specifier.imported = specifier.local
-        }
-
-        if (specifier.imported.name === 'IconProps') {
-          object.specifiers.splice(index, 1)
-        }
-      })
-    }
-  })
-}
-
-function replaceSvgPropsWithIconProps(node) {
-  node[0].typeAnnotation.typeAnnotation.typeName.name = 'IconProps'
-}
-
+/** @type {import('@svgr/babel-plugin-transform-svg-component').Template} */
 const template = (variables, { tpl }) => {
-  replaceSvgPropsWithIconProps(variables.props)
-  transformImports(variables.imports)
-
   return tpl`
-  ${variables.imports};
-  import { useTheme } from '@tamagui/core';
-  import { IconProps } from '../types';
-
-${variables.interfaces};
-
-const ${variables.componentName} = (${variables.props}) => {
-  const { color: token = '$neutral-100' } = props
-  const theme = useTheme();
-
-
-  /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const color = theme[token]?.val ?? token
-  return (
-    ${variables.jsx}
-  )
-};
-
-${variables.exports};
+      import { createIcon } from '../lib/create-icon'
+      ${'\n'}
+      const ${variables.componentName} = createIcon((props) => {
+        return (
+          ${variables.jsx}
+        )
+      });
+      ${'\n'}
+      ${variables.exports};
 `
 }
 
-const COLORS = ['#09101C']
-
+/** @type {import('@svgr/core').Config} */
 module.exports = {
   typescript: true,
   jsxRuntime: 'automatic',
-  native: true,
-  replaceAttrValues: {
-    ...COLORS.reduce((acc, color) => {
-      acc[color] = '{color}'
-      return acc
-    }, {}),
+  expandProps: 'start',
+  svgProps: {
+    focusable: '{false}',
+    'aria-hidden': '{true}',
+    width: '{props.width}',
+    height: '{props.height}',
   },
-  outDir: '.',
+  svgoConfig: {
+    plugins: [
+      {
+        name: 'preset-default',
+        params: {
+          overrides: {
+            // viewBox is required to resize SVGs with CSS.
+            // @see https://github.com/svg/svgo/issues/1128
+            removeViewBox: false,
+          },
+        },
+      },
+      'prefixIds',
+    ],
+  },
+  replaceAttrValues: {
+    // currentColor: '{props.color}',
+    '#09101C': '{props.color}',
+    '#000': '{props.color}',
+    '#0D1625': '{props.color}',
+  },
   filenameCase: 'kebab',
   template,
 }

@@ -1,4 +1,4 @@
-import { AlertIcon, PinIcon, RecentIcon } from '@status-im/icons/20'
+import { AlertIcon, PinIcon, RecentIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Banner } from './banner'
@@ -18,7 +18,7 @@ type Story = StoryObj<typeof Banner>
 
 export const Full: Story = {
   args: {
-    icon: <PinIcon />,
+    icon: <PinIcon size={20} />,
     children: 'Banner message',
     count: 5,
   },
@@ -33,7 +33,7 @@ export const NoIcon: Story = {
 
 export const NoCount: Story = {
   args: {
-    icon: <PinIcon />,
+    icon: <PinIcon size={20} />,
     children: 'Banner message',
   },
 }
@@ -41,7 +41,7 @@ export const NoCount: Story = {
 export const NetworkStateConnecting: Story = {
   args: {
     backgroundColor: '$neutral-80-opa-5',
-    icon: <RecentIcon />,
+    icon: <RecentIcon size={20} />,
     children: 'Connecting...',
   },
 }
@@ -49,7 +49,7 @@ export const NetworkStateConnecting: Story = {
 export const NetworkStateError: Story = {
   args: {
     backgroundColor: '$danger-50-opa-20',
-    icon: <AlertIcon />,
+    icon: <AlertIcon size={20} />,
     children: 'Network is down',
   },
 }
@@ -58,17 +58,23 @@ export const AllVariants: Story = {
   args: {},
   render: () => (
     <Stack space>
-      <Banner icon={<PinIcon />} count={5}>
+      <Banner icon={<PinIcon size={20} />} count={5}>
         Banner message
       </Banner>
       <Banner count={5}>Banner message</Banner>
-      <Banner backgroundColor="$neutral-80-opa-5" icon={<RecentIcon />}>
+      <Banner
+        backgroundColor="$neutral-80-opa-5"
+        icon={<RecentIcon size={20} />}
+      >
         Connecting...
       </Banner>
-      <Banner backgroundColor="$danger-50-opa-20" icon={<AlertIcon />}>
+      <Banner
+        backgroundColor="$danger-50-opa-20"
+        icon={<AlertIcon size={20} />}
+      >
         Network is down
       </Banner>
-      <Banner icon={<PinIcon />}>Banner message</Banner>
+      <Banner icon={<PinIcon size={20} />}>Banner message</Banner>
     </Stack>
   ),
 }

@@ -1,6 +1,6 @@
 import { cloneElement, Fragment } from 'react'
 
-import { ChevronRightIcon } from '@status-im/icons/16'
+import { ChevronRightIcon } from '@status-im/icons'
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
@@ -73,7 +73,7 @@ const ContextTag = (props: Props) => {
           if (i !== 0) {
             return (
               <Fragment key={item}>
-                <ChevronRightIcon color="$neutral-50" />
+                <ChevronRightIcon size={16} color="$neutral-50" />
                 <Label size={size}>{item}</Label>
               </Fragment>
             )

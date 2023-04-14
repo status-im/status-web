@@ -1,10 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["12", "16", "20", "reactions", "./react-native-svg.d.ts"],
+  "include": ["./index.ts", "./src", "./lib"],
 
   "compilerOptions": {
     "outDir": "./dist",
-    "declarationDir": "dist/types",
+    "declarationDir": "./dist/types",
     "resolveJsonModule": true
   }
 }

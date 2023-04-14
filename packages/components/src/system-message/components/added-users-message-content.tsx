@@ -1,4 +1,4 @@
-import { AddUserIcon } from '@status-im/icons/20'
+import { AddUserIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
 import { Avatar, IconAvatar } from '../../avatar'
@@ -22,10 +22,10 @@ const AddedUsersMessageContent = (props: Props) => {
         backgroundColor={state === 'landed' ? '$transparent' : '$blue-50-opa-5'}
         color="$blue-50"
       >
-        <AddUserIcon />
+        <AddUserIcon size={20} />
       </IconAvatar>
-      <Stack flexDirection="row" space={2} flexBasis="max-content" flexGrow={1}>
-        <Stack flexDirection="row" space={4} alignItems="center" flexGrow={1}>
+      <Stack flexDirection="row" gap={2} flexBasis="max-content" flexGrow={1}>
+        <Stack flexDirection="row" gap={4} alignItems="center" flexGrow={1}>
           <Avatar size={16} src={user.src} />
           <Text size={13} weight="semibold">
             {user.name}

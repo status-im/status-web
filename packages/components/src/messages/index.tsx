@@ -68,7 +68,7 @@ export const Messages = (props: Props) => {
       />
       <SystemMessage
         type="deleted"
-        text="Messaged deleted for everyone"
+        text="Message deleted for everyone"
         timestamp="9:45"
       />
       <Message
@@ -128,7 +128,7 @@ export const Messages = (props: Props) => {
       <SystemMessage
         state="landed"
         type="deleted"
-        text="Messaged deleted for you"
+        text="Message deleted for you"
         timestamp="10:12"
       />
       <Message

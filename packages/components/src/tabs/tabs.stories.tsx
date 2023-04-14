@@ -1,4 +1,4 @@
-import { PlaceholderIcon } from '@status-im/icons/20'
+import { PlaceholderIcon } from '@status-im/icons'
 
 import { Text } from '../text'
 import { Tabs } from './tabs'
@@ -39,7 +39,7 @@ export const Default: Story = {
     },
   },
   render(args) {
-    const icon = args.icon ? <PlaceholderIcon /> : undefined
+    const icon = args.icon ? <PlaceholderIcon size={20} /> : undefined
     const count = args.count ? 8 : undefined
 
     return (

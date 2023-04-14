@@ -1,7 +1,7 @@
 import { cloneElement, forwardRef } from 'react'
 
 import { Action, Description } from '@radix-ui/react-toast'
-import { CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
+import { CorrectIcon, IncorrectIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Button } from '../button'
@@ -30,10 +30,10 @@ const Toast = (props: Props) => {
     }
 
     if (props.type === 'positive') {
-      return <CorrectIcon />
+      return <CorrectIcon size={20} />
     }
 
-    return <IncorrectIcon />
+    return <IncorrectIcon size={20} />
   }
 
   return (

@@ -6,7 +6,7 @@ import { DynamicButton } from '../dynamic-button'
 
 const AnchorActions = () => {
   return (
-    <Stack flexDirection="row" space={8}>
+    <Stack flexDirection="row" gap={8}>
       <DynamicButton type="mention" count={1} />
       <DynamicButton type="notification" count={0} />
     </Stack>

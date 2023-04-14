@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PinIcon } from '@status-im/icons/16'
+import { PinIcon } from '@status-im/icons'
 import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
 
 import { Author } from '../author'
@@ -92,16 +92,16 @@ const Message = (props: MessageProps) => {
           alignItems="center"
           paddingLeft={40}
           paddingBottom={2}
-          space={2}
+          gap={2}
         >
-          <PinIcon color="$blue-50" />
+          <PinIcon size={16} color="$blue-50" />
           <Text size={11} weight="medium" color="$blue-50">
             Steve
           </Text>
         </Stack>
       )}
 
-      <XStack space={10}>
+      <XStack gap={10}>
         <Avatar
           size={32}
           src="https://images.unsplash.com/photo-1524638431109-93d95c968f03?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=500&ixid=MnwxfDB8MXxyYW5kb218MHx8Z2lybHx8fHx8fDE2NzM4ODQ0NzU&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=500"

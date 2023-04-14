@@ -67,7 +67,11 @@ export const ReactionsDialog = (props: Props) => {
             {Object.entries(reactions).map(([reaction, value]) => {
               const Icon = REACTIONS_ICONS[reaction as keyof ReactionsType]
               return (
-                <Tabs.Trigger key={reaction} value={reaction} icon={<Icon />}>
+                <Tabs.Trigger
+                  key={reaction}
+                  value={reaction}
+                  icon={<Icon size={20} />}
+                >
                   {value.size.toString()}
                 </Tabs.Trigger>
               )

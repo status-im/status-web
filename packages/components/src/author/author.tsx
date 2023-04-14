@@ -1,8 +1,4 @@
-import {
-  ContactIcon,
-  UntrustworthyIcon,
-  VerifiedIcon,
-} from '@status-im/icons/12'
+import { ContactIcon, UntrustworthyIcon, VerifiedIcon } from '@status-im/icons'
 import { XStack } from 'tamagui'
 
 import { Text } from '../text'
@@ -22,7 +18,7 @@ const Author = (props: Props) => {
   const { name, size = 13, nickname, status, address, time } = props
 
   return (
-    <XStack space={8} alignItems="center">
+    <XStack gap={8} alignItems="center">
       <XStack gap={4} alignItems="center">
         <Text size={size} weight="semibold">
           {name}
@@ -33,9 +29,11 @@ const Author = (props: Props) => {
             · {nickname}
           </Text>
         )}
-        {status === 'contact' && <ContactIcon />}
-        {status === 'verified' && <VerifiedIcon />}
-        {status === 'untrustworthy' && <UntrustworthyIcon />}
+        {status === 'contact' && <ContactIcon size={12} />}
+        {status === 'verified' && (
+          <VerifiedIcon size={12} color="$success-50" />
+        )}
+        {status === 'untrustworthy' && <UntrustworthyIcon size={12} />}
       </XStack>
 
       {(address || time) && (
