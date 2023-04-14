@@ -23,15 +23,6 @@ type AvatarProps =
       outline?: Variants['outline']
       backgroundColor?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
-    }
-  | {
-      type: 'user'
-      size: 80 | 56 | 48 | 32
-      name: string
-      src?: string
-      outline?: Variants['outline']
-      backgroundColor?: ColorTokens
-      indicator?: GetStyledVariants<typeof Indicator>['state']
       colorHash?: number[][]
     }
   | {
