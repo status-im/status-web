@@ -432,6 +432,9 @@ const LockBase = styled(Stack, {
 
   variants: {
     variant: {
+      80: {
+        display: 'none',
+      },
       32: {
         right: -4,
         bottom: -4,
@@ -445,5 +448,5 @@ const LockBase = styled(Stack, {
         bottom: -6,
       },
     },
-  },
+  } as const,
 })
