@@ -18,7 +18,8 @@ type AvatarProps =
   | {
       type: 'user'
       size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
-      src: string
+      name: string
+      src?: string
       outline?: Variants['outline']
       color?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
@@ -26,7 +27,8 @@ type AvatarProps =
   | {
       type: 'user'
       size: 80 | 56 | 48 | 32
-      src: string
+      name: string
+      src?: string
       outline?: Variants['outline']
       color?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
@@ -52,14 +54,16 @@ type AvatarProps =
   | {
       type: 'community'
       size: 80 | 32 | 24 | 20
-      src: string
+      name: string
+      src?: string
       outline?: Variants['outline']
       color?: ColorTokens
     }
   | {
       type: 'account'
       size: 80 | 48 | 32 | 28 | 24 | 20
-      src: string
+      name: string
+      src?: string
       outline?: Variants['outline']
       color?: ColorTokens
     }
@@ -67,7 +71,10 @@ type AvatarProps =
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
 // todo?: use tokens
-const paddings: Record<NonNullable<AvatarProps['size']>, number | undefined> = {
+const paddingSizes: Record<
+  NonNullable<AvatarProps['size']>,
+  number | undefined
+> = {
   '80': 4,
   '56': 2,
   '48': 2,
@@ -78,7 +85,10 @@ const paddings: Record<NonNullable<AvatarProps['size']>, number | undefined> = {
   '16': undefined,
 }
 
-const radii: Record<NonNullable<AvatarProps['size']>, number | undefined> = {
+const radiusSizes: Record<
+  NonNullable<AvatarProps['size']>,
+  number | undefined
+> = {
   '80': 16,
   '56': undefined,
   '48': 12,
@@ -100,20 +110,43 @@ const emojiSizes: Record<AvatarProps['size'], TextProps['size'] | undefined> = {
   '16': undefined,
 }
 
-type AvatarWithIdenticon = Extract<AvatarProps, { colorHash?: number[][] }>
-
-function hasIdenticon(props: AvatarProps): props is AvatarWithIdenticon {
-  return (props as AvatarWithIdenticon).colorHash !== undefined
+const textSizes: Record<NonNullable<AvatarProps['size']>, TextProps['size']> = {
+  '80': 32,
+  '56': 27,
+  '48': 19,
+  '32': 15,
+  '28': 13,
+  '24': 13,
+  '20': 11,
+  '16': 11,
 }
 
-type AvatarWithLock = Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }>
+function hasIdenticon(
+  props: AvatarProps
+): props is Extract<AvatarProps, { colorHash?: number[][] }> {
+  return (
+    (props as Extract<AvatarProps, { colorHash?: number[][] }>).colorHash !==
+    undefined
+  )
+}
 
-function hasLock(props: AvatarProps): props is AvatarWithLock {
-  return (props as AvatarWithLock).lock !== undefined
+function hasLock(
+  props: AvatarProps
+): props is Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }> {
+  return (
+    (props as Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }>).lock !==
+    undefined
+  )
+}
+
+function hasImage(
+  props: AvatarProps
+): props is Extract<AvatarProps, { src?: string }> {
+  return (props as Extract<AvatarProps, { src?: string }>).src !== undefined
 }
 
 const Avatar = (props: AvatarProps) => {
-  const { type, size, color = '$blue-50-opa-20', outline = false } = props
+  const { type, size, color = '$neutral-95', outline = false } = props
 
   // todo?: conditional hook(s)
 
@@ -127,8 +160,10 @@ const Avatar = (props: AvatarProps) => {
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
-  const radius = type === 'account' ? radii[size] : tokens.radius['full'].val
-  const padding = identiconRing ? paddings[size] : 0
+  const padding = identiconRing ? paddingSizes[size] : 0
+  const radius =
+    type === 'account' ? radiusSizes[size] : tokens.radius['full'].val
+  const src = hasImage(props) ? props.src : null
 
   return (
     <Stack style={{ position: 'relative' }}>
@@ -151,17 +186,29 @@ const Avatar = (props: AvatarProps) => {
 
         {(props.type === 'user' || props.type === 'account') && (
           <>
-            <Image
-              src={props.src}
-              backgroundColor={color}
-              borderRadius={radius}
-              width="full"
-              aspectRatio={1}
-              onLoad={() => setStatus('loaded')}
-              onError={() => setStatus('error')}
-            />
-            {status === 'error' && (
-              <Fallback borderRadius={radius} backgroundColor={color} />
+            {src ? (
+              <>
+                <Image
+                  src={src}
+                  backgroundColor={color}
+                  borderRadius={radius}
+                  width="full"
+                  aspectRatio={1}
+                  onLoad={() => setStatus('loaded')}
+                  onError={() => setStatus('error')}
+                />
+                {/* todo?: add fallback to Image */}
+                {status === 'error' && (
+                  <Fallback borderRadius={radius} backgroundColor={color} />
+                )}
+              </>
+            ) : (
+              <Fallback borderRadius={radius} backgroundColor={color}>
+                {/* fixme: contrasting color to background */}
+                <Text size={textSizes[size]} weight="medium" color="$white-100">
+                  {props.name.slice(0, 2).toUpperCase()}
+                </Text>
+              </Fallback>
             )}
           </>
         )}
@@ -314,6 +361,9 @@ const Indicator = styled(Stack, {
 
 const Fallback = styled(Stack, {
   name: 'AvatarFallback',
+
+  justifyContent: 'center',
+  alignItems: 'center',
 
   width: '100%',
   height: '100%',

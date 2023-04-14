@@ -32,7 +32,13 @@ const UserList = (props: Props) => {
               backgroundColor: '$primary-50-opa-5',
             }}
           >
-            <Avatar type="user" size={32} src={src} indicator={indicator} />
+            <Avatar
+              type="user"
+              name={authorProps.name}
+              size={32}
+              src={src}
+              indicator={indicator}
+            />
             <YStack>
               <Author {...authorProps} />
               <Text size={13} color="$neutral-50" type="monospace">

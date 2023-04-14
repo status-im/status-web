@@ -26,7 +26,7 @@ const Reply = (props: Props) => {
           </Stack>
         </Unspaced>
 
-        <Avatar type="user" size={16} src={src} />
+        <Avatar type="user" name={name} size={16} src={src} />
 
         <Text size={13} weight="semibold">
           {name}

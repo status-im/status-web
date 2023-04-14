@@ -56,7 +56,7 @@ const PinnedMessageContent = (props: Props) => {
           flexBasis="max-content"
         >
           <Stack flexDirection="row" gap={4}>
-            <Avatar type="user" size={16} src={author.src} />
+            <Avatar type="user" name={author.name} size={16} src={author.src} />
             <Text size={11} weight="semibold">
               {author.name}
             </Text>
