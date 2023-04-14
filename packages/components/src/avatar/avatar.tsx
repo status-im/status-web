@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { cloneElement, useMemo, useState } from 'react'
 
 import { LockedIcon, UnlockedIcon } from '@status-im/icons/12'
 import { Stack, styled, Unspaced } from '@tamagui/core'
@@ -21,7 +21,7 @@ type AvatarProps =
       name: string
       src?: string
       outline?: Variants['outline']
-      color?: ColorTokens
+      backgroundColor?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
     }
   | {
@@ -30,7 +30,7 @@ type AvatarProps =
       name: string
       src?: string
       outline?: Variants['outline']
-      color?: ColorTokens
+      backgroundColor?: ColorTokens
       indicator?: GetStyledVariants<typeof Indicator>['state']
       colorHash?: number[][]
     }
@@ -39,7 +39,7 @@ type AvatarProps =
       size: 32 | 24 | 20
       emoji: string
       outline?: Variants['outline']
-      color?: ColorTokens
+      backgroundColor?: ColorTokens
       background?: ColorTokens
       lock?: 'locked' | 'unlocked'
     }
@@ -48,7 +48,7 @@ type AvatarProps =
       size: 80
       emoji: string
       outline?: Variants['outline']
-      color?: ColorTokens
+      backgroundColor?: ColorTokens
       background?: ColorTokens
     }
   | {
@@ -57,7 +57,7 @@ type AvatarProps =
       name: string
       src?: string
       outline?: Variants['outline']
-      color?: ColorTokens
+      backgroundColor?: ColorTokens
     }
   | {
       type: 'account'
@@ -65,6 +65,14 @@ type AvatarProps =
       name: string
       src?: string
       outline?: Variants['outline']
+      backgroundColor?: ColorTokens
+    }
+  | {
+      type: 'icon'
+      size: 48 | 32 | 20
+      icon: React.ReactElement
+      outline?: Variants['outline']
+      backgroundColor?: ColorTokens
       color?: ColorTokens
     }
 
@@ -146,7 +154,7 @@ function hasImage(
 }
 
 const Avatar = (props: AvatarProps) => {
-  const { type, size, color = '$neutral-95', outline = false } = props
+  const { type, size, backgroundColor = '$neutral-95', outline = false } = props
 
   // todo?: conditional hook(s)
 
@@ -172,7 +180,7 @@ const Avatar = (props: AvatarProps) => {
         padding={padding}
         size={size}
         outline={outline}
-        backgroundColor={color}
+        backgroundColor={backgroundColor}
         // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -190,7 +198,7 @@ const Avatar = (props: AvatarProps) => {
               <>
                 <Image
                   src={src}
-                  backgroundColor={color}
+                  backgroundColor={backgroundColor}
                   borderRadius={radius}
                   width="full"
                   aspectRatio={1}
@@ -199,11 +207,14 @@ const Avatar = (props: AvatarProps) => {
                 />
                 {/* todo?: add fallback to Image */}
                 {status === 'error' && (
-                  <Fallback borderRadius={radius} backgroundColor={color} />
+                  <Fallback
+                    borderRadius={radius}
+                    backgroundColor={backgroundColor}
+                  />
                 )}
               </>
             ) : (
-              <Fallback borderRadius={radius} backgroundColor={color}>
+              <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
                 {/* fixme: contrasting color to background */}
                 <Text size={textSizes[size]} weight="medium" color="$white-100">
                   {props.name.slice(0, 2).toUpperCase()}
@@ -218,6 +229,10 @@ const Avatar = (props: AvatarProps) => {
           <Text size={emojiSizes[size] as TextProps['size']}>
             {props.emoji}
           </Text>
+        )}
+
+        {props.type === 'icon' && (
+          <>{cloneElement(props.icon, { color: props.color })}</>
         )}
       </Base>
 

@@ -1,7 +1,7 @@
 import { PinIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
-import { Avatar, IconAvatar } from '../../avatar'
+import { Avatar } from '../../avatar'
 import { Text } from '../../text'
 
 import type { SystemMessageState, User } from '../system-message'
@@ -27,12 +27,13 @@ const PinnedMessageContent = (props: Props) => {
 
   return (
     <>
-      <IconAvatar
+      <Avatar
+        type="icon"
+        size={32}
+        icon={<PinIcon size={20} />}
         backgroundColor={state === 'landed' ? '$transparent' : '$blue-50-opa-5'}
         color="$neutral-100"
-      >
-        <PinIcon size={20} />
-      </IconAvatar>
+      />
       <Stack
         flexDirection="column"
         gap={2}

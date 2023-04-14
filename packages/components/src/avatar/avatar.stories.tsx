@@ -1,3 +1,6 @@
+import { PlaceholderIcon as PlaceholderIcon12 } from '@status-im/icons/12'
+import { PlaceholderIcon as PlaceholderIcon16 } from '@status-im/icons/16'
+import { PlaceholderIcon as PlaceholderIcon20 } from '@status-im/icons/20'
 import { Stack } from '@tamagui/core'
 
 import { Avatar } from './avatar'
@@ -275,6 +278,29 @@ export const Channel: StoryObj<ChannelArgs> = {
         <Avatar {...args} size={32} lock="unlocked" />
         <Avatar {...args} size={24} lock="unlocked" />
         <Avatar {...args} size={20} lock="unlocked" />
+      </Stack>
+    </Stack>
+  ),
+}
+
+type IconArgs = Extract<AvatarProps, { type: 'icon' }>
+
+export const Icon: StoryObj<IconArgs> = {
+  args: {
+    type: 'icon',
+  } as IconArgs,
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=2931-44944&t=kcsW0DN5ochMPO1u-4',
+    },
+  },
+  render: args => (
+    <Stack space flexDirection="row">
+      <Stack space alignItems="flex-start">
+        <Avatar {...args} size={48} icon={<PlaceholderIcon20 />} />
+        <Avatar {...args} size={32} icon={<PlaceholderIcon16 />} />
+        <Avatar {...args} size={20} icon={<PlaceholderIcon12 />} />
       </Stack>
     </Stack>
   ),
