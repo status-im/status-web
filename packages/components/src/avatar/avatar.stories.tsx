@@ -243,6 +243,30 @@ export const Account: StoryObj<Extract<AvatarProps, { type: 'account' }>> = {
   ),
 }
 
+type CommunityArgs = Extract<AvatarProps, { type: 'community' }>
+
+export const community: StoryObj<CommunityArgs> = {
+  args: {
+    type: 'community',
+    src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
+  } as CommunityArgs,
+  parameters: {
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=8824-149725&t=kcsW0DN5ochMPO1u-4',
+    },
+  },
+  render: args => (
+    <Stack space flexDirection="row">
+      <Stack space alignItems="flex-start">
+        <Avatar {...args} size={32} />
+        <Avatar {...args} size={24} />
+        <Avatar {...args} size={20} />
+      </Stack>
+    </Stack>
+  ),
+}
+
 type ChannelArgs = Pick<
   Extract<AvatarProps, { type: 'channel'; emoji: string }>,
   'type' | 'emoji'

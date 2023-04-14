@@ -192,7 +192,9 @@ const Avatar = (props: AvatarProps) => {
       >
         {/* todo?: render fn(s) */}
 
-        {(props.type === 'user' || props.type === 'account') && (
+        {(props.type === 'user' ||
+          props.type === 'account' ||
+          props.type === 'community') && (
           <>
             {src ? (
               <>
