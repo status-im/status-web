@@ -234,7 +234,9 @@ const Avatar = (props: AvatarProps) => {
         )}
 
         {props.type === 'icon' && (
-          <>{cloneElement(props.icon, { color: props.color })}</>
+          <>
+            {cloneElement(props.icon, { color: props.color ?? '$white-100' })}
+          </>
         )}
       </Base>
 
