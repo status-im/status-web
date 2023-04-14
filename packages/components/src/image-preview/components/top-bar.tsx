@@ -15,6 +15,7 @@ import { IconButton } from '../../icon-button'
 import { Text } from '../../text'
 
 type Props = {
+  drawerOpen?: boolean
   onShowInfo: () => void
   onClose: () => void
   messageInfo: {
@@ -23,7 +24,7 @@ type Props = {
   }
 }
 const TopBar = (props: Props) => {
-  const { messageInfo, onClose, onShowInfo } = props
+  const { drawerOpen, messageInfo, onClose, onShowInfo } = props
   return (
     <Stack
       flexDirection="row"
@@ -48,13 +49,17 @@ const TopBar = (props: Props) => {
       </Stack>
       <Stack flexDirection="row" alignItems="center" gap={12}>
         <IconButton
+          selected={drawerOpen}
           icon={<InfoIcon />}
           variant="dark"
           onPress={() => onShowInfo()}
         />
-        <IconButton icon={<ShareIcon />} variant="dark" />
+        <IconButton icon={<ShareIcon color="$white-100" />} variant="dark" />
         <DropdownMenu>
-          <IconButton icon={<OptionsIcon />} variant="dark" />
+          <IconButton
+            icon={<OptionsIcon color="$white-100" />}
+            variant="dark"
+          />
           <DropdownMenu.Content align="end" width={188}>
             <DropdownMenu.Item
               icon={<CopyIcon />}
