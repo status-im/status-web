@@ -3,9 +3,16 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
-import { MessageType } from "./enums_pb.js";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf'
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
+import { MessageType } from './enums_pb.js'
 
 /**
  * @generated from message EmojiReaction
@@ -16,7 +23,7 @@ export class EmojiReaction extends Message<EmojiReaction> {
    *
    * @generated from field: uint64 clock = 1;
    */
-  clock = protoInt64.zero;
+  clock = protoInt64.zero
 
   /**
    * chat_id the ID of the chat the message belongs to, for query efficiency the chat_id is stored in the db even though the
@@ -24,74 +31,96 @@ export class EmojiReaction extends Message<EmojiReaction> {
    *
    * @generated from field: string chat_id = 2;
    */
-  chatId = "";
+  chatId = ''
 
   /**
    * message_id the ID of the target message that the user wishes to react to
    *
    * @generated from field: string message_id = 3;
    */
-  messageId = "";
+  messageId = ''
 
   /**
    * message_type is (somewhat confusingly) the ID of the type of chat the message belongs to
    *
    * @generated from field: MessageType message_type = 4;
    */
-  messageType = MessageType.UNKNOWN_MESSAGE_TYPE;
+  messageType = MessageType.UNKNOWN_MESSAGE_TYPE
 
   /**
    * type the ID of the emoji the user wishes to react with
    *
    * @generated from field: EmojiReaction.Type type = 5;
    */
-  type = EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE;
+  type = EmojiReaction_Type.UNKNOWN_EMOJI_REACTION_TYPE
 
   /**
    * whether this is a rectraction of a previously sent emoji
    *
    * @generated from field: bool retracted = 6;
    */
-  retracted = false;
+  retracted = false
 
   /**
    * Grant for organisation chat messages
    *
    * @generated from field: bytes grant = 7;
    */
-  grant = new Uint8Array(0);
+  grant = new Uint8Array(0)
 
   constructor(data?: PartialMessage<EmojiReaction>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "EmojiReaction";
+  static readonly runtime = proto3
+  static readonly typeName = 'EmojiReaction'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "clock", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "chat_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "message_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "message_type", kind: "enum", T: proto3.getEnumType(MessageType) },
-    { no: 5, name: "type", kind: "enum", T: proto3.getEnumType(EmojiReaction_Type) },
-    { no: 6, name: "retracted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 7, name: "grant", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'chat_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'message_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 4,
+      name: 'message_type',
+      kind: 'enum',
+      T: proto3.getEnumType(MessageType),
+    },
+    {
+      no: 5,
+      name: 'type',
+      kind: 'enum',
+      T: proto3.getEnumType(EmojiReaction_Type),
+    },
+    { no: 6, name: 'retracted', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+    { no: 7, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): EmojiReaction {
-    return new EmojiReaction().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): EmojiReaction {
+    return new EmojiReaction().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): EmojiReaction {
-    return new EmojiReaction().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): EmojiReaction {
+    return new EmojiReaction().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): EmojiReaction {
-    return new EmojiReaction().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): EmojiReaction {
+    return new EmojiReaction().fromJsonString(jsonString, options)
   }
 
-  static equals(a: EmojiReaction | PlainMessage<EmojiReaction> | undefined, b: EmojiReaction | PlainMessage<EmojiReaction> | undefined): boolean {
-    return proto3.util.equals(EmojiReaction, a, b);
+  static equals(
+    a: EmojiReaction | PlainMessage<EmojiReaction> | undefined,
+    b: EmojiReaction | PlainMessage<EmojiReaction> | undefined
+  ): boolean {
+    return proto3.util.equals(EmojiReaction, a, b)
   }
 }
 
@@ -135,13 +164,12 @@ export enum EmojiReaction_Type {
   ANGRY = 6,
 }
 // Retrieve enum metadata with: proto3.getEnumType(EmojiReaction_Type)
-proto3.util.setEnumType(EmojiReaction_Type, "EmojiReaction.Type", [
-  { no: 0, name: "UNKNOWN_EMOJI_REACTION_TYPE" },
-  { no: 1, name: "LOVE" },
-  { no: 2, name: "THUMBS_UP" },
-  { no: 3, name: "THUMBS_DOWN" },
-  { no: 4, name: "LAUGH" },
-  { no: 5, name: "SAD" },
-  { no: 6, name: "ANGRY" },
-]);
-
+proto3.util.setEnumType(EmojiReaction_Type, 'EmojiReaction.Type', [
+  { no: 0, name: 'UNKNOWN_EMOJI_REACTION_TYPE' },
+  { no: 1, name: 'LOVE' },
+  { no: 2, name: 'THUMBS_UP' },
+  { no: 3, name: 'THUMBS_DOWN' },
+  { no: 4, name: 'LAUGH' },
+  { no: 5, name: 'SAD' },
+  { no: 6, name: 'ANGRY' },
+])

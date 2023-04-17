@@ -3,10 +3,17 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
-import { ChatIdentity } from "./chat-identity_pb.js";
-import { URLParams } from "./url-data_pb.js";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf'
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
+import { ChatIdentity } from './chat-identity_pb.js'
+import { URLParams } from './url-data_pb.js'
 
 /**
  * @generated from message PushNotificationRegistration
@@ -15,111 +22,180 @@ export class PushNotificationRegistration extends Message<PushNotificationRegist
   /**
    * @generated from field: PushNotificationRegistration.TokenType token_type = 1;
    */
-  tokenType = PushNotificationRegistration_TokenType.UNKNOWN_TOKEN_TYPE;
+  tokenType = PushNotificationRegistration_TokenType.UNKNOWN_TOKEN_TYPE
 
   /**
    * @generated from field: string device_token = 2;
    */
-  deviceToken = "";
+  deviceToken = ''
 
   /**
    * @generated from field: string installation_id = 3;
    */
-  installationId = "";
+  installationId = ''
 
   /**
    * @generated from field: string access_token = 4;
    */
-  accessToken = "";
+  accessToken = ''
 
   /**
    * @generated from field: bool enabled = 5;
    */
-  enabled = false;
+  enabled = false
 
   /**
    * @generated from field: uint64 version = 6;
    */
-  version = protoInt64.zero;
+  version = protoInt64.zero
 
   /**
    * @generated from field: repeated bytes allowed_key_list = 7;
    */
-  allowedKeyList: Uint8Array[] = [];
+  allowedKeyList: Uint8Array[] = []
 
   /**
    * @generated from field: repeated bytes blocked_chat_list = 8;
    */
-  blockedChatList: Uint8Array[] = [];
+  blockedChatList: Uint8Array[] = []
 
   /**
    * @generated from field: bool unregister = 9;
    */
-  unregister = false;
+  unregister = false
 
   /**
    * @generated from field: bytes grant = 10;
    */
-  grant = new Uint8Array(0);
+  grant = new Uint8Array(0)
 
   /**
    * @generated from field: bool allow_from_contacts_only = 11;
    */
-  allowFromContactsOnly = false;
+  allowFromContactsOnly = false
 
   /**
    * @generated from field: string apn_topic = 12;
    */
-  apnTopic = "";
+  apnTopic = ''
 
   /**
    * @generated from field: bool block_mentions = 13;
    */
-  blockMentions = false;
+  blockMentions = false
 
   /**
    * @generated from field: repeated bytes allowed_mentions_chat_list = 14;
    */
-  allowedMentionsChatList: Uint8Array[] = [];
+  allowedMentionsChatList: Uint8Array[] = []
 
   constructor(data?: PartialMessage<PushNotificationRegistration>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationRegistration";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationRegistration'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "token_type", kind: "enum", T: proto3.getEnumType(PushNotificationRegistration_TokenType) },
-    { no: 2, name: "device_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "installation_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "access_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "enabled", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 6, name: "version", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 7, name: "allowed_key_list", kind: "scalar", T: 12 /* ScalarType.BYTES */, repeated: true },
-    { no: 8, name: "blocked_chat_list", kind: "scalar", T: 12 /* ScalarType.BYTES */, repeated: true },
-    { no: 9, name: "unregister", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 10, name: "grant", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 11, name: "allow_from_contacts_only", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 12, name: "apn_topic", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 13, name: "block_mentions", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 14, name: "allowed_mentions_chat_list", kind: "scalar", T: 12 /* ScalarType.BYTES */, repeated: true },
-  ]);
+    {
+      no: 1,
+      name: 'token_type',
+      kind: 'enum',
+      T: proto3.getEnumType(PushNotificationRegistration_TokenType),
+    },
+    {
+      no: 2,
+      name: 'device_token',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: 'installation_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'access_token',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'enabled', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+    { no: 6, name: 'version', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 7,
+      name: 'allowed_key_list',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+    {
+      no: 8,
+      name: 'blocked_chat_list',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+    { no: 9, name: 'unregister', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+    { no: 10, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 11,
+      name: 'allow_from_contacts_only',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
+    { no: 12, name: 'apn_topic', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 13,
+      name: 'block_mentions',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
+    {
+      no: 14,
+      name: 'allowed_mentions_chat_list',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationRegistration {
-    return new PushNotificationRegistration().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationRegistration {
+    return new PushNotificationRegistration().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationRegistration {
-    return new PushNotificationRegistration().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationRegistration {
+    return new PushNotificationRegistration().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationRegistration {
-    return new PushNotificationRegistration().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationRegistration {
+    return new PushNotificationRegistration().fromJsonString(
+      jsonString,
+      options
+    )
   }
 
-  static equals(a: PushNotificationRegistration | PlainMessage<PushNotificationRegistration> | undefined, b: PushNotificationRegistration | PlainMessage<PushNotificationRegistration> | undefined): boolean {
-    return proto3.util.equals(PushNotificationRegistration, a, b);
+  static equals(
+    a:
+      | PushNotificationRegistration
+      | PlainMessage<PushNotificationRegistration>
+      | undefined,
+    b:
+      | PushNotificationRegistration
+      | PlainMessage<PushNotificationRegistration>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationRegistration, a, b)
   }
 }
 
@@ -143,11 +219,15 @@ export enum PushNotificationRegistration_TokenType {
   FIREBASE_TOKEN = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(PushNotificationRegistration_TokenType)
-proto3.util.setEnumType(PushNotificationRegistration_TokenType, "PushNotificationRegistration.TokenType", [
-  { no: 0, name: "UNKNOWN_TOKEN_TYPE" },
-  { no: 1, name: "APN_TOKEN" },
-  { no: 2, name: "FIREBASE_TOKEN" },
-]);
+proto3.util.setEnumType(
+  PushNotificationRegistration_TokenType,
+  'PushNotificationRegistration.TokenType',
+  [
+    { no: 0, name: 'UNKNOWN_TOKEN_TYPE' },
+    { no: 1, name: 'APN_TOKEN' },
+    { no: 2, name: 'FIREBASE_TOKEN' },
+  ]
+)
 
 /**
  * @generated from message PushNotificationRegistrationResponse
@@ -156,45 +236,74 @@ export class PushNotificationRegistrationResponse extends Message<PushNotificati
   /**
    * @generated from field: bool success = 1;
    */
-  success = false;
+  success = false
 
   /**
    * @generated from field: PushNotificationRegistrationResponse.ErrorType error = 2;
    */
-  error = PushNotificationRegistrationResponse_ErrorType.UNKNOWN_ERROR_TYPE;
+  error = PushNotificationRegistrationResponse_ErrorType.UNKNOWN_ERROR_TYPE
 
   /**
    * @generated from field: bytes request_id = 3;
    */
-  requestId = new Uint8Array(0);
+  requestId = new Uint8Array(0)
 
   constructor(data?: PartialMessage<PushNotificationRegistrationResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationRegistrationResponse";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationRegistrationResponse'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 2, name: "error", kind: "enum", T: proto3.getEnumType(PushNotificationRegistrationResponse_ErrorType) },
-    { no: 3, name: "request_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'success', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+    {
+      no: 2,
+      name: 'error',
+      kind: 'enum',
+      T: proto3.getEnumType(PushNotificationRegistrationResponse_ErrorType),
+    },
+    { no: 3, name: 'request_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationRegistrationResponse {
-    return new PushNotificationRegistrationResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationRegistrationResponse {
+    return new PushNotificationRegistrationResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationRegistrationResponse {
-    return new PushNotificationRegistrationResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationRegistrationResponse {
+    return new PushNotificationRegistrationResponse().fromJson(
+      jsonValue,
+      options
+    )
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationRegistrationResponse {
-    return new PushNotificationRegistrationResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationRegistrationResponse {
+    return new PushNotificationRegistrationResponse().fromJsonString(
+      jsonString,
+      options
+    )
   }
 
-  static equals(a: PushNotificationRegistrationResponse | PlainMessage<PushNotificationRegistrationResponse> | undefined, b: PushNotificationRegistrationResponse | PlainMessage<PushNotificationRegistrationResponse> | undefined): boolean {
-    return proto3.util.equals(PushNotificationRegistrationResponse, a, b);
+  static equals(
+    a:
+      | PushNotificationRegistrationResponse
+      | PlainMessage<PushNotificationRegistrationResponse>
+      | undefined,
+    b:
+      | PushNotificationRegistrationResponse
+      | PlainMessage<PushNotificationRegistrationResponse>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationRegistrationResponse, a, b)
   }
 }
 
@@ -228,13 +337,17 @@ export enum PushNotificationRegistrationResponse_ErrorType {
   INTERNAL_ERROR = 4,
 }
 // Retrieve enum metadata with: proto3.getEnumType(PushNotificationRegistrationResponse_ErrorType)
-proto3.util.setEnumType(PushNotificationRegistrationResponse_ErrorType, "PushNotificationRegistrationResponse.ErrorType", [
-  { no: 0, name: "UNKNOWN_ERROR_TYPE" },
-  { no: 1, name: "MALFORMED_MESSAGE" },
-  { no: 2, name: "VERSION_MISMATCH" },
-  { no: 3, name: "UNSUPPORTED_TOKEN_TYPE" },
-  { no: 4, name: "INTERNAL_ERROR" },
-]);
+proto3.util.setEnumType(
+  PushNotificationRegistrationResponse_ErrorType,
+  'PushNotificationRegistrationResponse.ErrorType',
+  [
+    { no: 0, name: 'UNKNOWN_ERROR_TYPE' },
+    { no: 1, name: 'MALFORMED_MESSAGE' },
+    { no: 2, name: 'VERSION_MISMATCH' },
+    { no: 3, name: 'UNSUPPORTED_TOKEN_TYPE' },
+    { no: 4, name: 'INTERNAL_ERROR' },
+  ]
+)
 
 /**
  * @generated from message ContactCodeAdvertisement
@@ -243,45 +356,69 @@ export class ContactCodeAdvertisement extends Message<ContactCodeAdvertisement> 
   /**
    * @generated from field: repeated PushNotificationQueryInfo push_notification_info = 1;
    */
-  pushNotificationInfo: PushNotificationQueryInfo[] = [];
+  pushNotificationInfo: PushNotificationQueryInfo[] = []
 
   /**
    * @generated from field: ChatIdentity chat_identity = 2;
    */
-  chatIdentity?: ChatIdentity;
+  chatIdentity?: ChatIdentity
 
   /**
    * @generated from field: URLParams url_params = 3;
    */
-  urlParams?: URLParams;
+  urlParams?: URLParams
 
   constructor(data?: PartialMessage<ContactCodeAdvertisement>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "ContactCodeAdvertisement";
+  static readonly runtime = proto3
+  static readonly typeName = 'ContactCodeAdvertisement'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "push_notification_info", kind: "message", T: PushNotificationQueryInfo, repeated: true },
-    { no: 2, name: "chat_identity", kind: "message", T: ChatIdentity },
-    { no: 3, name: "url_params", kind: "message", T: URLParams },
-  ]);
+    {
+      no: 1,
+      name: 'push_notification_info',
+      kind: 'message',
+      T: PushNotificationQueryInfo,
+      repeated: true,
+    },
+    { no: 2, name: 'chat_identity', kind: 'message', T: ChatIdentity },
+    { no: 3, name: 'url_params', kind: 'message', T: URLParams },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ContactCodeAdvertisement {
-    return new ContactCodeAdvertisement().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): ContactCodeAdvertisement {
+    return new ContactCodeAdvertisement().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ContactCodeAdvertisement {
-    return new ContactCodeAdvertisement().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): ContactCodeAdvertisement {
+    return new ContactCodeAdvertisement().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ContactCodeAdvertisement {
-    return new ContactCodeAdvertisement().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): ContactCodeAdvertisement {
+    return new ContactCodeAdvertisement().fromJsonString(jsonString, options)
   }
 
-  static equals(a: ContactCodeAdvertisement | PlainMessage<ContactCodeAdvertisement> | undefined, b: ContactCodeAdvertisement | PlainMessage<ContactCodeAdvertisement> | undefined): boolean {
-    return proto3.util.equals(ContactCodeAdvertisement, a, b);
+  static equals(
+    a:
+      | ContactCodeAdvertisement
+      | PlainMessage<ContactCodeAdvertisement>
+      | undefined,
+    b:
+      | ContactCodeAdvertisement
+      | PlainMessage<ContactCodeAdvertisement>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(ContactCodeAdvertisement, a, b)
   }
 }
 
@@ -292,33 +429,51 @@ export class PushNotificationQuery extends Message<PushNotificationQuery> {
   /**
    * @generated from field: repeated bytes public_keys = 1;
    */
-  publicKeys: Uint8Array[] = [];
+  publicKeys: Uint8Array[] = []
 
   constructor(data?: PartialMessage<PushNotificationQuery>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationQuery";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationQuery'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "public_keys", kind: "scalar", T: 12 /* ScalarType.BYTES */, repeated: true },
-  ]);
+    {
+      no: 1,
+      name: 'public_keys',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationQuery {
-    return new PushNotificationQuery().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationQuery {
+    return new PushNotificationQuery().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationQuery {
-    return new PushNotificationQuery().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationQuery {
+    return new PushNotificationQuery().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationQuery {
-    return new PushNotificationQuery().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationQuery {
+    return new PushNotificationQuery().fromJsonString(jsonString, options)
   }
 
-  static equals(a: PushNotificationQuery | PlainMessage<PushNotificationQuery> | undefined, b: PushNotificationQuery | PlainMessage<PushNotificationQuery> | undefined): boolean {
-    return proto3.util.equals(PushNotificationQuery, a, b);
+  static equals(
+    a: PushNotificationQuery | PlainMessage<PushNotificationQuery> | undefined,
+    b: PushNotificationQuery | PlainMessage<PushNotificationQuery> | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationQuery, a, b)
   }
 }
 
@@ -329,69 +484,108 @@ export class PushNotificationQueryInfo extends Message<PushNotificationQueryInfo
   /**
    * @generated from field: string access_token = 1;
    */
-  accessToken = "";
+  accessToken = ''
 
   /**
    * @generated from field: string installation_id = 2;
    */
-  installationId = "";
+  installationId = ''
 
   /**
    * @generated from field: bytes public_key = 3;
    */
-  publicKey = new Uint8Array(0);
+  publicKey = new Uint8Array(0)
 
   /**
    * @generated from field: repeated bytes allowed_key_list = 4;
    */
-  allowedKeyList: Uint8Array[] = [];
+  allowedKeyList: Uint8Array[] = []
 
   /**
    * @generated from field: bytes grant = 5;
    */
-  grant = new Uint8Array(0);
+  grant = new Uint8Array(0)
 
   /**
    * @generated from field: uint64 version = 6;
    */
-  version = protoInt64.zero;
+  version = protoInt64.zero
 
   /**
    * @generated from field: bytes server_public_key = 7;
    */
-  serverPublicKey = new Uint8Array(0);
+  serverPublicKey = new Uint8Array(0)
 
   constructor(data?: PartialMessage<PushNotificationQueryInfo>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationQueryInfo";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationQueryInfo'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "access_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "installation_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "public_key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 4, name: "allowed_key_list", kind: "scalar", T: 12 /* ScalarType.BYTES */, repeated: true },
-    { no: 5, name: "grant", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 6, name: "version", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 7, name: "server_public_key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    {
+      no: 1,
+      name: 'access_token',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 2,
+      name: 'installation_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 3, name: 'public_key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 4,
+      name: 'allowed_key_list',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+    { no: 5, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 6, name: 'version', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 7,
+      name: 'server_public_key',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationQueryInfo {
-    return new PushNotificationQueryInfo().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationQueryInfo {
+    return new PushNotificationQueryInfo().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationQueryInfo {
-    return new PushNotificationQueryInfo().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationQueryInfo {
+    return new PushNotificationQueryInfo().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationQueryInfo {
-    return new PushNotificationQueryInfo().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationQueryInfo {
+    return new PushNotificationQueryInfo().fromJsonString(jsonString, options)
   }
 
-  static equals(a: PushNotificationQueryInfo | PlainMessage<PushNotificationQueryInfo> | undefined, b: PushNotificationQueryInfo | PlainMessage<PushNotificationQueryInfo> | undefined): boolean {
-    return proto3.util.equals(PushNotificationQueryInfo, a, b);
+  static equals(
+    a:
+      | PushNotificationQueryInfo
+      | PlainMessage<PushNotificationQueryInfo>
+      | undefined,
+    b:
+      | PushNotificationQueryInfo
+      | PlainMessage<PushNotificationQueryInfo>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationQueryInfo, a, b)
   }
 }
 
@@ -402,45 +596,72 @@ export class PushNotificationQueryResponse extends Message<PushNotificationQuery
   /**
    * @generated from field: repeated PushNotificationQueryInfo info = 1;
    */
-  info: PushNotificationQueryInfo[] = [];
+  info: PushNotificationQueryInfo[] = []
 
   /**
    * @generated from field: bytes message_id = 2;
    */
-  messageId = new Uint8Array(0);
+  messageId = new Uint8Array(0)
 
   /**
    * @generated from field: bool success = 3;
    */
-  success = false;
+  success = false
 
   constructor(data?: PartialMessage<PushNotificationQueryResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationQueryResponse";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationQueryResponse'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "info", kind: "message", T: PushNotificationQueryInfo, repeated: true },
-    { no: 2, name: "message_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 3, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-  ]);
+    {
+      no: 1,
+      name: 'info',
+      kind: 'message',
+      T: PushNotificationQueryInfo,
+      repeated: true,
+    },
+    { no: 2, name: 'message_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 3, name: 'success', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationQueryResponse {
-    return new PushNotificationQueryResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationQueryResponse {
+    return new PushNotificationQueryResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationQueryResponse {
-    return new PushNotificationQueryResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationQueryResponse {
+    return new PushNotificationQueryResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationQueryResponse {
-    return new PushNotificationQueryResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationQueryResponse {
+    return new PushNotificationQueryResponse().fromJsonString(
+      jsonString,
+      options
+    )
   }
 
-  static equals(a: PushNotificationQueryResponse | PlainMessage<PushNotificationQueryResponse> | undefined, b: PushNotificationQueryResponse | PlainMessage<PushNotificationQueryResponse> | undefined): boolean {
-    return proto3.util.equals(PushNotificationQueryResponse, a, b);
+  static equals(
+    a:
+      | PushNotificationQueryResponse
+      | PlainMessage<PushNotificationQueryResponse>
+      | undefined,
+    b:
+      | PushNotificationQueryResponse
+      | PlainMessage<PushNotificationQueryResponse>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationQueryResponse, a, b)
   }
 }
 
@@ -451,69 +672,96 @@ export class PushNotification extends Message<PushNotification> {
   /**
    * @generated from field: string access_token = 1;
    */
-  accessToken = "";
+  accessToken = ''
 
   /**
    * @generated from field: bytes chat_id = 2;
    */
-  chatId = new Uint8Array(0);
+  chatId = new Uint8Array(0)
 
   /**
    * @generated from field: bytes public_key = 3;
    */
-  publicKey = new Uint8Array(0);
+  publicKey = new Uint8Array(0)
 
   /**
    * @generated from field: string installation_id = 4;
    */
-  installationId = "";
+  installationId = ''
 
   /**
    * @generated from field: bytes message = 5;
    */
-  message = new Uint8Array(0);
+  message = new Uint8Array(0)
 
   /**
    * @generated from field: PushNotification.PushNotificationType type = 6;
    */
-  type = PushNotification_PushNotificationType.UNKNOWN_PUSH_NOTIFICATION_TYPE;
+  type = PushNotification_PushNotificationType.UNKNOWN_PUSH_NOTIFICATION_TYPE
 
   /**
    * @generated from field: bytes author = 7;
    */
-  author = new Uint8Array(0);
+  author = new Uint8Array(0)
 
   constructor(data?: PartialMessage<PushNotification>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotification";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotification'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "access_token", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "chat_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 3, name: "public_key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 4, name: "installation_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "message", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 6, name: "type", kind: "enum", T: proto3.getEnumType(PushNotification_PushNotificationType) },
-    { no: 7, name: "author", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    {
+      no: 1,
+      name: 'access_token',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 2, name: 'chat_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 3, name: 'public_key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 4,
+      name: 'installation_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'message', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 6,
+      name: 'type',
+      kind: 'enum',
+      T: proto3.getEnumType(PushNotification_PushNotificationType),
+    },
+    { no: 7, name: 'author', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotification {
-    return new PushNotification().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotification {
+    return new PushNotification().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotification {
-    return new PushNotification().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotification {
+    return new PushNotification().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotification {
-    return new PushNotification().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotification {
+    return new PushNotification().fromJsonString(jsonString, options)
   }
 
-  static equals(a: PushNotification | PlainMessage<PushNotification> | undefined, b: PushNotification | PlainMessage<PushNotification> | undefined): boolean {
-    return proto3.util.equals(PushNotification, a, b);
+  static equals(
+    a: PushNotification | PlainMessage<PushNotification> | undefined,
+    b: PushNotification | PlainMessage<PushNotification> | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotification, a, b)
   }
 }
 
@@ -542,12 +790,16 @@ export enum PushNotification_PushNotificationType {
   REQUEST_TO_JOIN_COMMUNITY = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(PushNotification_PushNotificationType)
-proto3.util.setEnumType(PushNotification_PushNotificationType, "PushNotification.PushNotificationType", [
-  { no: 0, name: "UNKNOWN_PUSH_NOTIFICATION_TYPE" },
-  { no: 1, name: "MESSAGE" },
-  { no: 2, name: "MENTION" },
-  { no: 3, name: "REQUEST_TO_JOIN_COMMUNITY" },
-]);
+proto3.util.setEnumType(
+  PushNotification_PushNotificationType,
+  'PushNotification.PushNotificationType',
+  [
+    { no: 0, name: 'UNKNOWN_PUSH_NOTIFICATION_TYPE' },
+    { no: 1, name: 'MESSAGE' },
+    { no: 2, name: 'MENTION' },
+    { no: 3, name: 'REQUEST_TO_JOIN_COMMUNITY' },
+  ]
+)
 
 /**
  * @generated from message PushNotificationRequest
@@ -556,39 +808,63 @@ export class PushNotificationRequest extends Message<PushNotificationRequest> {
   /**
    * @generated from field: repeated PushNotification requests = 1;
    */
-  requests: PushNotification[] = [];
+  requests: PushNotification[] = []
 
   /**
    * @generated from field: bytes message_id = 2;
    */
-  messageId = new Uint8Array(0);
+  messageId = new Uint8Array(0)
 
   constructor(data?: PartialMessage<PushNotificationRequest>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationRequest";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationRequest'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "requests", kind: "message", T: PushNotification, repeated: true },
-    { no: 2, name: "message_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    {
+      no: 1,
+      name: 'requests',
+      kind: 'message',
+      T: PushNotification,
+      repeated: true,
+    },
+    { no: 2, name: 'message_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationRequest {
-    return new PushNotificationRequest().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationRequest {
+    return new PushNotificationRequest().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationRequest {
-    return new PushNotificationRequest().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationRequest {
+    return new PushNotificationRequest().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationRequest {
-    return new PushNotificationRequest().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationRequest {
+    return new PushNotificationRequest().fromJsonString(jsonString, options)
   }
 
-  static equals(a: PushNotificationRequest | PlainMessage<PushNotificationRequest> | undefined, b: PushNotificationRequest | PlainMessage<PushNotificationRequest> | undefined): boolean {
-    return proto3.util.equals(PushNotificationRequest, a, b);
+  static equals(
+    a:
+      | PushNotificationRequest
+      | PlainMessage<PushNotificationRequest>
+      | undefined,
+    b:
+      | PushNotificationRequest
+      | PlainMessage<PushNotificationRequest>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationRequest, a, b)
   }
 }
 
@@ -599,51 +875,76 @@ export class PushNotificationReport extends Message<PushNotificationReport> {
   /**
    * @generated from field: bool success = 1;
    */
-  success = false;
+  success = false
 
   /**
    * @generated from field: PushNotificationReport.ErrorType error = 2;
    */
-  error = PushNotificationReport_ErrorType.UNKNOWN_ERROR_TYPE;
+  error = PushNotificationReport_ErrorType.UNKNOWN_ERROR_TYPE
 
   /**
    * @generated from field: bytes public_key = 3;
    */
-  publicKey = new Uint8Array(0);
+  publicKey = new Uint8Array(0)
 
   /**
    * @generated from field: string installation_id = 4;
    */
-  installationId = "";
+  installationId = ''
 
   constructor(data?: PartialMessage<PushNotificationReport>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationReport";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationReport'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "success", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-    { no: 2, name: "error", kind: "enum", T: proto3.getEnumType(PushNotificationReport_ErrorType) },
-    { no: 3, name: "public_key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 4, name: "installation_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    { no: 1, name: 'success', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+    {
+      no: 2,
+      name: 'error',
+      kind: 'enum',
+      T: proto3.getEnumType(PushNotificationReport_ErrorType),
+    },
+    { no: 3, name: 'public_key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 4,
+      name: 'installation_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationReport {
-    return new PushNotificationReport().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationReport {
+    return new PushNotificationReport().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationReport {
-    return new PushNotificationReport().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationReport {
+    return new PushNotificationReport().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationReport {
-    return new PushNotificationReport().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationReport {
+    return new PushNotificationReport().fromJsonString(jsonString, options)
   }
 
-  static equals(a: PushNotificationReport | PlainMessage<PushNotificationReport> | undefined, b: PushNotificationReport | PlainMessage<PushNotificationReport> | undefined): boolean {
-    return proto3.util.equals(PushNotificationReport, a, b);
+  static equals(
+    a:
+      | PushNotificationReport
+      | PlainMessage<PushNotificationReport>
+      | undefined,
+    b: PushNotificationReport | PlainMessage<PushNotificationReport> | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationReport, a, b)
   }
 }
 
@@ -672,12 +973,16 @@ export enum PushNotificationReport_ErrorType {
   NOT_REGISTERED = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(PushNotificationReport_ErrorType)
-proto3.util.setEnumType(PushNotificationReport_ErrorType, "PushNotificationReport.ErrorType", [
-  { no: 0, name: "UNKNOWN_ERROR_TYPE" },
-  { no: 1, name: "WRONG_TOKEN" },
-  { no: 2, name: "INTERNAL_ERROR" },
-  { no: 3, name: "NOT_REGISTERED" },
-]);
+proto3.util.setEnumType(
+  PushNotificationReport_ErrorType,
+  'PushNotificationReport.ErrorType',
+  [
+    { no: 0, name: 'UNKNOWN_ERROR_TYPE' },
+    { no: 1, name: 'WRONG_TOKEN' },
+    { no: 2, name: 'INTERNAL_ERROR' },
+    { no: 3, name: 'NOT_REGISTERED' },
+  ]
+)
 
 /**
  * @generated from message PushNotificationResponse
@@ -686,39 +991,62 @@ export class PushNotificationResponse extends Message<PushNotificationResponse> 
   /**
    * @generated from field: bytes message_id = 1;
    */
-  messageId = new Uint8Array(0);
+  messageId = new Uint8Array(0)
 
   /**
    * @generated from field: repeated PushNotificationReport reports = 2;
    */
-  reports: PushNotificationReport[] = [];
+  reports: PushNotificationReport[] = []
 
   constructor(data?: PartialMessage<PushNotificationResponse>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "PushNotificationResponse";
+  static readonly runtime = proto3
+  static readonly typeName = 'PushNotificationResponse'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "message_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "reports", kind: "message", T: PushNotificationReport, repeated: true },
-  ]);
+    { no: 1, name: 'message_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 2,
+      name: 'reports',
+      kind: 'message',
+      T: PushNotificationReport,
+      repeated: true,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): PushNotificationResponse {
-    return new PushNotificationResponse().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): PushNotificationResponse {
+    return new PushNotificationResponse().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): PushNotificationResponse {
-    return new PushNotificationResponse().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationResponse {
+    return new PushNotificationResponse().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): PushNotificationResponse {
-    return new PushNotificationResponse().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): PushNotificationResponse {
+    return new PushNotificationResponse().fromJsonString(jsonString, options)
   }
 
-  static equals(a: PushNotificationResponse | PlainMessage<PushNotificationResponse> | undefined, b: PushNotificationResponse | PlainMessage<PushNotificationResponse> | undefined): boolean {
-    return proto3.util.equals(PushNotificationResponse, a, b);
+  static equals(
+    a:
+      | PushNotificationResponse
+      | PlainMessage<PushNotificationResponse>
+      | undefined,
+    b:
+      | PushNotificationResponse
+      | PlainMessage<PushNotificationResponse>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(PushNotificationResponse, a, b)
   }
 }
-

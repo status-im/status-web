@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf'
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
 
 /**
  * @generated from message SignedPreKey
@@ -13,45 +20,67 @@ export class SignedPreKey extends Message<SignedPreKey> {
   /**
    * @generated from field: bytes signed_pre_key = 1;
    */
-  signedPreKey = new Uint8Array(0);
+  signedPreKey = new Uint8Array(0)
 
   /**
    * @generated from field: uint32 version = 2;
    */
-  version = 0;
+  version = 0
 
   /**
    * @generated from field: uint32 protocol_version = 3;
    */
-  protocolVersion = 0;
+  protocolVersion = 0
 
   constructor(data?: PartialMessage<SignedPreKey>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "SignedPreKey";
+  static readonly runtime = proto3
+  static readonly typeName = 'SignedPreKey'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "signed_pre_key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "version", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 3, name: "protocol_version", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-  ]);
+    {
+      no: 1,
+      name: 'signed_pre_key',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    { no: 2, name: 'version', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    {
+      no: 3,
+      name: 'protocol_version',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SignedPreKey {
-    return new SignedPreKey().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): SignedPreKey {
+    return new SignedPreKey().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SignedPreKey {
-    return new SignedPreKey().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): SignedPreKey {
+    return new SignedPreKey().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SignedPreKey {
-    return new SignedPreKey().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): SignedPreKey {
+    return new SignedPreKey().fromJsonString(jsonString, options)
   }
 
-  static equals(a: SignedPreKey | PlainMessage<SignedPreKey> | undefined, b: SignedPreKey | PlainMessage<SignedPreKey> | undefined): boolean {
-    return proto3.util.equals(SignedPreKey, a, b);
+  static equals(
+    a: SignedPreKey | PlainMessage<SignedPreKey> | undefined,
+    b: SignedPreKey | PlainMessage<SignedPreKey> | undefined
+  ): boolean {
+    return proto3.util.equals(SignedPreKey, a, b)
   }
 }
 
@@ -66,57 +95,75 @@ export class Bundle extends Message<Bundle> {
    *
    * @generated from field: bytes identity = 1;
    */
-  identity = new Uint8Array(0);
+  identity = new Uint8Array(0)
 
   /**
    * Installation id
    *
    * @generated from field: map<string, SignedPreKey> signed_pre_keys = 2;
    */
-  signedPreKeys: { [key: string]: SignedPreKey } = {};
+  signedPreKeys: { [key: string]: SignedPreKey } = {}
 
   /**
    * Prekey signature
    *
    * @generated from field: bytes signature = 4;
    */
-  signature = new Uint8Array(0);
+  signature = new Uint8Array(0)
 
   /**
    * When the bundle was created locally
    *
    * @generated from field: int64 timestamp = 5;
    */
-  timestamp = protoInt64.zero;
+  timestamp = protoInt64.zero
 
   constructor(data?: PartialMessage<Bundle>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "Bundle";
+  static readonly runtime = proto3
+  static readonly typeName = 'Bundle'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "identity", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "signed_pre_keys", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: SignedPreKey} },
-    { no: 4, name: "signature", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 5, name: "timestamp", kind: "scalar", T: 3 /* ScalarType.INT64 */ },
-  ]);
+    { no: 1, name: 'identity', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 2,
+      name: 'signed_pre_keys',
+      kind: 'map',
+      K: 9 /* ScalarType.STRING */,
+      V: { kind: 'message', T: SignedPreKey },
+    },
+    { no: 4, name: 'signature', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 5, name: 'timestamp', kind: 'scalar', T: 3 /* ScalarType.INT64 */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): Bundle {
-    return new Bundle().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): Bundle {
+    return new Bundle().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): Bundle {
-    return new Bundle().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): Bundle {
+    return new Bundle().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): Bundle {
-    return new Bundle().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): Bundle {
+    return new Bundle().fromJsonString(jsonString, options)
   }
 
-  static equals(a: Bundle | PlainMessage<Bundle> | undefined, b: Bundle | PlainMessage<Bundle> | undefined): boolean {
-    return proto3.util.equals(Bundle, a, b);
+  static equals(
+    a: Bundle | PlainMessage<Bundle> | undefined,
+    b: Bundle | PlainMessage<Bundle> | undefined
+  ): boolean {
+    return proto3.util.equals(Bundle, a, b)
   }
 }
 
@@ -129,41 +176,58 @@ export class BundleContainer extends Message<BundleContainer> {
    *
    * @generated from field: Bundle bundle = 1;
    */
-  bundle?: Bundle;
+  bundle?: Bundle
 
   /**
    * Private signed prekey
    *
    * @generated from field: bytes private_signed_pre_key = 2;
    */
-  privateSignedPreKey = new Uint8Array(0);
+  privateSignedPreKey = new Uint8Array(0)
 
   constructor(data?: PartialMessage<BundleContainer>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "BundleContainer";
+  static readonly runtime = proto3
+  static readonly typeName = 'BundleContainer'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "bundle", kind: "message", T: Bundle },
-    { no: 2, name: "private_signed_pre_key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'bundle', kind: 'message', T: Bundle },
+    {
+      no: 2,
+      name: 'private_signed_pre_key',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): BundleContainer {
-    return new BundleContainer().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): BundleContainer {
+    return new BundleContainer().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): BundleContainer {
-    return new BundleContainer().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): BundleContainer {
+    return new BundleContainer().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): BundleContainer {
-    return new BundleContainer().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): BundleContainer {
+    return new BundleContainer().fromJsonString(jsonString, options)
   }
 
-  static equals(a: BundleContainer | PlainMessage<BundleContainer> | undefined, b: BundleContainer | PlainMessage<BundleContainer> | undefined): boolean {
-    return proto3.util.equals(BundleContainer, a, b);
+  static equals(
+    a: BundleContainer | PlainMessage<BundleContainer> | undefined,
+    b: BundleContainer | PlainMessage<BundleContainer> | undefined
+  ): boolean {
+    return proto3.util.equals(BundleContainer, a, b)
   }
 }
 
@@ -176,57 +240,69 @@ export class DRHeader extends Message<DRHeader> {
    *
    * @generated from field: bytes key = 1;
    */
-  key = new Uint8Array(0);
+  key = new Uint8Array(0)
 
   /**
    * Number of the message in the sending chain
    *
    * @generated from field: uint32 n = 2;
    */
-  n = 0;
+  n = 0
 
   /**
    * Length of the previous sending chain
    *
    * @generated from field: uint32 pn = 3;
    */
-  pn = 0;
+  pn = 0
 
   /**
    * Bundle ID
    *
    * @generated from field: bytes id = 4;
    */
-  id = new Uint8Array(0);
+  id = new Uint8Array(0)
 
   constructor(data?: PartialMessage<DRHeader>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "DRHeader";
+  static readonly runtime = proto3
+  static readonly typeName = 'DRHeader'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "n", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 3, name: "pn", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 4, name: "id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 2, name: 'n', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 3, name: 'pn', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 4, name: 'id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DRHeader {
-    return new DRHeader().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DRHeader {
+    return new DRHeader().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DRHeader {
-    return new DRHeader().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DRHeader {
+    return new DRHeader().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DRHeader {
-    return new DRHeader().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DRHeader {
+    return new DRHeader().fromJsonString(jsonString, options)
   }
 
-  static equals(a: DRHeader | PlainMessage<DRHeader> | undefined, b: DRHeader | PlainMessage<DRHeader> | undefined): boolean {
-    return proto3.util.equals(DRHeader, a, b);
+  static equals(
+    a: DRHeader | PlainMessage<DRHeader> | undefined,
+    b: DRHeader | PlainMessage<DRHeader> | undefined
+  ): boolean {
+    return proto3.util.equals(DRHeader, a, b)
   }
 }
 
@@ -239,33 +315,45 @@ export class DHHeader extends Message<DHHeader> {
    *
    * @generated from field: bytes key = 1;
    */
-  key = new Uint8Array(0);
+  key = new Uint8Array(0)
 
   constructor(data?: PartialMessage<DHHeader>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "DHHeader";
+  static readonly runtime = proto3
+  static readonly typeName = 'DHHeader'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DHHeader {
-    return new DHHeader().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DHHeader {
+    return new DHHeader().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DHHeader {
-    return new DHHeader().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DHHeader {
+    return new DHHeader().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DHHeader {
-    return new DHHeader().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DHHeader {
+    return new DHHeader().fromJsonString(jsonString, options)
   }
 
-  static equals(a: DHHeader | PlainMessage<DHHeader> | undefined, b: DHHeader | PlainMessage<DHHeader> | undefined): boolean {
-    return proto3.util.equals(DHHeader, a, b);
+  static equals(
+    a: DHHeader | PlainMessage<DHHeader> | undefined,
+    b: DHHeader | PlainMessage<DHHeader> | undefined
+  ): boolean {
+    return proto3.util.equals(DHHeader, a, b)
   }
 }
 
@@ -278,41 +366,53 @@ export class X3DHHeader extends Message<X3DHHeader> {
    *
    * @generated from field: bytes key = 1;
    */
-  key = new Uint8Array(0);
+  key = new Uint8Array(0)
 
   /**
    * Used bundle's signed prekey
    *
    * @generated from field: bytes id = 4;
    */
-  id = new Uint8Array(0);
+  id = new Uint8Array(0)
 
   constructor(data?: PartialMessage<X3DHHeader>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "X3DHHeader";
+  static readonly runtime = proto3
+  static readonly typeName = 'X3DHHeader'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 4, name: "id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 4, name: 'id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): X3DHHeader {
-    return new X3DHHeader().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): X3DHHeader {
+    return new X3DHHeader().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): X3DHHeader {
-    return new X3DHHeader().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): X3DHHeader {
+    return new X3DHHeader().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): X3DHHeader {
-    return new X3DHHeader().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): X3DHHeader {
+    return new X3DHHeader().fromJsonString(jsonString, options)
   }
 
-  static equals(a: X3DHHeader | PlainMessage<X3DHHeader> | undefined, b: X3DHHeader | PlainMessage<X3DHHeader> | undefined): boolean {
-    return proto3.util.equals(X3DHHeader, a, b);
+  static equals(
+    a: X3DHHeader | PlainMessage<X3DHHeader> | undefined,
+    b: X3DHHeader | PlainMessage<X3DHHeader> | undefined
+  ): boolean {
+    return proto3.util.equals(X3DHHeader, a, b)
   }
 }
 
@@ -327,49 +427,61 @@ export class HRHeader extends Message<HRHeader> {
    *
    * @generated from field: uint32 key_id = 1;
    */
-  keyId = 0;
+  keyId = 0
 
   /**
    * Community message number for this key_id
    *
    * @generated from field: uint32 seq_no = 2;
    */
-  seqNo = 0;
+  seqNo = 0
 
   /**
    * Community ID
    *
    * @generated from field: bytes group_id = 3;
    */
-  groupId = new Uint8Array(0);
+  groupId = new Uint8Array(0)
 
   constructor(data?: PartialMessage<HRHeader>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "HRHeader";
+  static readonly runtime = proto3
+  static readonly typeName = 'HRHeader'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "key_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 2, name: "seq_no", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 3, name: "group_id", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'key_id', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 2, name: 'seq_no', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 3, name: 'group_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HRHeader {
-    return new HRHeader().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): HRHeader {
+    return new HRHeader().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HRHeader {
-    return new HRHeader().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): HRHeader {
+    return new HRHeader().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HRHeader {
-    return new HRHeader().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): HRHeader {
+    return new HRHeader().fromJsonString(jsonString, options)
   }
 
-  static equals(a: HRHeader | PlainMessage<HRHeader> | undefined, b: HRHeader | PlainMessage<HRHeader> | undefined): boolean {
-    return proto3.util.equals(HRHeader, a, b);
+  static equals(
+    a: HRHeader | PlainMessage<HRHeader> | undefined,
+    b: HRHeader | PlainMessage<HRHeader> | undefined
+  ): boolean {
+    return proto3.util.equals(HRHeader, a, b)
   }
 }
 
@@ -380,33 +492,45 @@ export class HRKeys extends Message<HRKeys> {
   /**
    * @generated from field: repeated HRKey keys = 1;
    */
-  keys: HRKey[] = [];
+  keys: HRKey[] = []
 
   constructor(data?: PartialMessage<HRKeys>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "HRKeys";
+  static readonly runtime = proto3
+  static readonly typeName = 'HRKeys'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "keys", kind: "message", T: HRKey, repeated: true },
-  ]);
+    { no: 1, name: 'keys', kind: 'message', T: HRKey, repeated: true },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HRKeys {
-    return new HRKeys().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): HRKeys {
+    return new HRKeys().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HRKeys {
-    return new HRKeys().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): HRKeys {
+    return new HRKeys().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HRKeys {
-    return new HRKeys().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): HRKeys {
+    return new HRKeys().fromJsonString(jsonString, options)
   }
 
-  static equals(a: HRKeys | PlainMessage<HRKeys> | undefined, b: HRKeys | PlainMessage<HRKeys> | undefined): boolean {
-    return proto3.util.equals(HRKeys, a, b);
+  static equals(
+    a: HRKeys | PlainMessage<HRKeys> | undefined,
+    b: HRKeys | PlainMessage<HRKeys> | undefined
+  ): boolean {
+    return proto3.util.equals(HRKeys, a, b)
   }
 }
 
@@ -417,39 +541,51 @@ export class HRKey extends Message<HRKey> {
   /**
    * @generated from field: uint32 key_id = 1;
    */
-  keyId = 0;
+  keyId = 0
 
   /**
    * @generated from field: bytes key = 2;
    */
-  key = new Uint8Array(0);
+  key = new Uint8Array(0)
 
   constructor(data?: PartialMessage<HRKey>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "HRKey";
+  static readonly runtime = proto3
+  static readonly typeName = 'HRKey'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "key_id", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-    { no: 2, name: "key", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'key_id', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 2, name: 'key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): HRKey {
-    return new HRKey().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): HRKey {
+    return new HRKey().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): HRKey {
-    return new HRKey().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): HRKey {
+    return new HRKey().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): HRKey {
-    return new HRKey().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): HRKey {
+    return new HRKey().fromJsonString(jsonString, options)
   }
 
-  static equals(a: HRKey | PlainMessage<HRKey> | undefined, b: HRKey | PlainMessage<HRKey> | undefined): boolean {
-    return proto3.util.equals(HRKey, a, b);
+  static equals(
+    a: HRKey | PlainMessage<HRKey> | undefined,
+    b: HRKey | PlainMessage<HRKey> | undefined
+  ): boolean {
+    return proto3.util.equals(HRKey, a, b)
   }
 }
 
@@ -462,59 +598,77 @@ export class EncryptedMessageProtocol extends Message<EncryptedMessageProtocol> 
   /**
    * @generated from field: X3DHHeader X3DH_header = 1;
    */
-  X3DHHeader?: X3DHHeader;
+  X3DHHeader?: X3DHHeader
 
   /**
    * @generated from field: DRHeader DR_header = 2;
    */
-  DRHeader?: DRHeader;
+  DRHeader?: DRHeader
 
   /**
    * @generated from field: DHHeader DH_header = 101;
    */
-  DHHeader?: DHHeader;
+  DHHeader?: DHHeader
 
   /**
    * @generated from field: HRHeader HR_header = 102;
    */
-  HRHeader?: HRHeader;
+  HRHeader?: HRHeader
 
   /**
    * Encrypted payload
    *
    * @generated from field: bytes payload = 3;
    */
-  payload = new Uint8Array(0);
+  payload = new Uint8Array(0)
 
   constructor(data?: PartialMessage<EncryptedMessageProtocol>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "EncryptedMessageProtocol";
+  static readonly runtime = proto3
+  static readonly typeName = 'EncryptedMessageProtocol'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "X3DH_header", kind: "message", T: X3DHHeader },
-    { no: 2, name: "DR_header", kind: "message", T: DRHeader },
-    { no: 101, name: "DH_header", kind: "message", T: DHHeader },
-    { no: 102, name: "HR_header", kind: "message", T: HRHeader },
-    { no: 3, name: "payload", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    { no: 1, name: 'X3DH_header', kind: 'message', T: X3DHHeader },
+    { no: 2, name: 'DR_header', kind: 'message', T: DRHeader },
+    { no: 101, name: 'DH_header', kind: 'message', T: DHHeader },
+    { no: 102, name: 'HR_header', kind: 'message', T: HRHeader },
+    { no: 3, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): EncryptedMessageProtocol {
-    return new EncryptedMessageProtocol().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): EncryptedMessageProtocol {
+    return new EncryptedMessageProtocol().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): EncryptedMessageProtocol {
-    return new EncryptedMessageProtocol().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): EncryptedMessageProtocol {
+    return new EncryptedMessageProtocol().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): EncryptedMessageProtocol {
-    return new EncryptedMessageProtocol().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): EncryptedMessageProtocol {
+    return new EncryptedMessageProtocol().fromJsonString(jsonString, options)
   }
 
-  static equals(a: EncryptedMessageProtocol | PlainMessage<EncryptedMessageProtocol> | undefined, b: EncryptedMessageProtocol | PlainMessage<EncryptedMessageProtocol> | undefined): boolean {
-    return proto3.util.equals(EncryptedMessageProtocol, a, b);
+  static equals(
+    a:
+      | EncryptedMessageProtocol
+      | PlainMessage<EncryptedMessageProtocol>
+      | undefined,
+    b:
+      | EncryptedMessageProtocol
+      | PlainMessage<EncryptedMessageProtocol>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(EncryptedMessageProtocol, a, b)
   }
 }
 
@@ -529,14 +683,14 @@ export class ProtocolMessage extends Message<ProtocolMessage> {
    *
    * @generated from field: string installation_id = 2;
    */
-  installationId = "";
+  installationId = ''
 
   /**
    * List of bundles
    *
    * @generated from field: repeated Bundle bundles = 3;
    */
-  bundles: Bundle[] = [];
+  bundles: Bundle[] = []
 
   /**
    * One to one message, encrypted, indexed by installation_id
@@ -544,43 +698,70 @@ export class ProtocolMessage extends Message<ProtocolMessage> {
    *
    * @generated from field: map<string, EncryptedMessageProtocol> encrypted_message = 101;
    */
-  encryptedMessage: { [key: string]: EncryptedMessageProtocol } = {};
+  encryptedMessage: { [key: string]: EncryptedMessageProtocol } = {}
 
   /**
    * Public chats, not encrypted
    *
    * @generated from field: bytes public_message = 102;
    */
-  publicMessage = new Uint8Array(0);
+  publicMessage = new Uint8Array(0)
 
   constructor(data?: PartialMessage<ProtocolMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "ProtocolMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'ProtocolMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 2, name: "installation_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "bundles", kind: "message", T: Bundle, repeated: true },
-    { no: 101, name: "encrypted_message", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: EncryptedMessageProtocol} },
-    { no: 102, name: "public_message", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-  ]);
+    {
+      no: 2,
+      name: 'installation_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 3, name: 'bundles', kind: 'message', T: Bundle, repeated: true },
+    {
+      no: 101,
+      name: 'encrypted_message',
+      kind: 'map',
+      K: 9 /* ScalarType.STRING */,
+      V: { kind: 'message', T: EncryptedMessageProtocol },
+    },
+    {
+      no: 102,
+      name: 'public_message',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ProtocolMessage {
-    return new ProtocolMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): ProtocolMessage {
+    return new ProtocolMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ProtocolMessage {
-    return new ProtocolMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): ProtocolMessage {
+    return new ProtocolMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ProtocolMessage {
-    return new ProtocolMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): ProtocolMessage {
+    return new ProtocolMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: ProtocolMessage | PlainMessage<ProtocolMessage> | undefined, b: ProtocolMessage | PlainMessage<ProtocolMessage> | undefined): boolean {
-    return proto3.util.equals(ProtocolMessage, a, b);
+  static equals(
+    a: ProtocolMessage | PlainMessage<ProtocolMessage> | undefined,
+    b: ProtocolMessage | PlainMessage<ProtocolMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(ProtocolMessage, a, b)
   }
 }
-

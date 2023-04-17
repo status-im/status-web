@@ -3,7 +3,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { proto3 } from "@bufbuild/protobuf";
+import { proto3 } from '@bufbuild/protobuf'
 
 /**
  * @generated from enum MessageType
@@ -49,15 +49,15 @@ export enum MessageType {
   SYSTEM_MESSAGE_GAP = 6,
 }
 // Retrieve enum metadata with: proto3.getEnumType(MessageType)
-proto3.util.setEnumType(MessageType, "MessageType", [
-  { no: 0, name: "UNKNOWN_MESSAGE_TYPE" },
-  { no: 1, name: "ONE_TO_ONE" },
-  { no: 2, name: "PUBLIC_GROUP" },
-  { no: 3, name: "PRIVATE_GROUP" },
-  { no: 4, name: "SYSTEM_MESSAGE_PRIVATE_GROUP" },
-  { no: 5, name: "COMMUNITY_CHAT" },
-  { no: 6, name: "SYSTEM_MESSAGE_GAP" },
-]);
+proto3.util.setEnumType(MessageType, 'MessageType', [
+  { no: 0, name: 'UNKNOWN_MESSAGE_TYPE' },
+  { no: 1, name: 'ONE_TO_ONE' },
+  { no: 2, name: 'PUBLIC_GROUP' },
+  { no: 3, name: 'PRIVATE_GROUP' },
+  { no: 4, name: 'SYSTEM_MESSAGE_PRIVATE_GROUP' },
+  { no: 5, name: 'COMMUNITY_CHAT' },
+  { no: 6, name: 'SYSTEM_MESSAGE_GAP' },
+])
 
 /**
  * @generated from enum ImageType
@@ -91,11 +91,10 @@ export enum ImageType {
   GIF = 4,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ImageType)
-proto3.util.setEnumType(ImageType, "ImageType", [
-  { no: 0, name: "UNKNOWN_IMAGE_TYPE" },
-  { no: 1, name: "PNG" },
-  { no: 2, name: "JPEG" },
-  { no: 3, name: "WEBP" },
-  { no: 4, name: "GIF" },
-]);
-
+proto3.util.setEnumType(ImageType, 'ImageType', [
+  { no: 0, name: 'UNKNOWN_IMAGE_TYPE' },
+  { no: 1, name: 'PNG' },
+  { no: 2, name: 'JPEG' },
+  { no: 3, name: 'WEBP' },
+  { no: 4, name: 'GIF' },
+])

@@ -3,9 +3,16 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
-import { ImageType } from "./enums_pb.js";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf'
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
+import { ImageType } from './enums_pb.js'
 
 /**
  * ChatIdentity represents the user defined identity associated with their public chat key
@@ -18,50 +25,50 @@ export class ChatIdentity extends Message<ChatIdentity> {
    *
    * @generated from field: uint64 clock = 1;
    */
-  clock = protoInt64.zero;
+  clock = protoInt64.zero
 
   /**
    * ens_name is the valid ENS name associated with the chat key
    *
    * @generated from field: string ens_name = 2;
    */
-  ensName = "";
+  ensName = ''
 
   /**
    * images is a string indexed mapping of images associated with an identity
    *
    * @generated from field: map<string, IdentityImage> images = 3;
    */
-  images: { [key: string]: IdentityImage } = {};
+  images: { [key: string]: IdentityImage } = {}
 
   /**
    * display name is the user set identity
    *
    * @generated from field: string display_name = 4;
    */
-  displayName = "";
+  displayName = ''
 
   /**
    * description is the user set description
    *
    * @generated from field: string description = 5;
    */
-  description = "";
+  description = ''
 
   /**
    * @generated from field: string color = 6;
    */
-  color = "";
+  color = ''
 
   /**
    * @generated from field: string emoji = 7;
    */
-  emoji = "";
+  emoji = ''
 
   /**
    * @generated from field: repeated SocialLink social_links = 8;
    */
-  socialLinks: SocialLink[] = [];
+  socialLinks: SocialLink[] = []
 
   /**
    * first known message timestamp in seconds (valid only for community chats for now)
@@ -70,41 +77,80 @@ export class ChatIdentity extends Message<ChatIdentity> {
    *
    * @generated from field: uint32 first_message_timestamp = 9;
    */
-  firstMessageTimestamp = 0;
+  firstMessageTimestamp = 0
 
   constructor(data?: PartialMessage<ChatIdentity>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "ChatIdentity";
+  static readonly runtime = proto3
+  static readonly typeName = 'ChatIdentity'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "clock", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "ens_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "images", kind: "map", K: 9 /* ScalarType.STRING */, V: {kind: "message", T: IdentityImage} },
-    { no: 4, name: "display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "description", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "color", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "emoji", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 8, name: "social_links", kind: "message", T: SocialLink, repeated: true },
-    { no: 9, name: "first_message_timestamp", kind: "scalar", T: 13 /* ScalarType.UINT32 */ },
-  ]);
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'ens_name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 3,
+      name: 'images',
+      kind: 'map',
+      K: 9 /* ScalarType.STRING */,
+      V: { kind: 'message', T: IdentityImage },
+    },
+    {
+      no: 4,
+      name: 'display_name',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 5,
+      name: 'description',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 6, name: 'color', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: 'emoji', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 8,
+      name: 'social_links',
+      kind: 'message',
+      T: SocialLink,
+      repeated: true,
+    },
+    {
+      no: 9,
+      name: 'first_message_timestamp',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatIdentity {
-    return new ChatIdentity().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): ChatIdentity {
+    return new ChatIdentity().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatIdentity {
-    return new ChatIdentity().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): ChatIdentity {
+    return new ChatIdentity().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatIdentity {
-    return new ChatIdentity().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): ChatIdentity {
+    return new ChatIdentity().fromJsonString(jsonString, options)
   }
 
-  static equals(a: ChatIdentity | PlainMessage<ChatIdentity> | undefined, b: ChatIdentity | PlainMessage<ChatIdentity> | undefined): boolean {
-    return proto3.util.equals(ChatIdentity, a, b);
+  static equals(
+    a: ChatIdentity | PlainMessage<ChatIdentity> | undefined,
+    b: ChatIdentity | PlainMessage<ChatIdentity> | undefined
+  ): boolean {
+    return proto3.util.equals(ChatIdentity, a, b)
   }
 }
 
@@ -120,65 +166,93 @@ export class IdentityImage extends Message<IdentityImage> {
    *
    * @generated from field: bytes payload = 1;
    */
-  payload = new Uint8Array(0);
+  payload = new Uint8Array(0)
 
   /**
    * source_type signals the image payload source
    *
    * @generated from field: IdentityImage.SourceType source_type = 2;
    */
-  sourceType = IdentityImage_SourceType.UNKNOWN_SOURCE_TYPE;
+  sourceType = IdentityImage_SourceType.UNKNOWN_SOURCE_TYPE
 
   /**
    * image_type signals the image type and method of parsing the payload
    *
    * @generated from field: ImageType image_type = 3;
    */
-  imageType = ImageType.UNKNOWN_IMAGE_TYPE;
+  imageType = ImageType.UNKNOWN_IMAGE_TYPE
 
   /**
    * encryption_keys is a list of encrypted keys that can be used to decrypted an encrypted payload
    *
    * @generated from field: repeated bytes encryption_keys = 4;
    */
-  encryptionKeys: Uint8Array[] = [];
+  encryptionKeys: Uint8Array[] = []
 
   /**
    * encrypted signals the encryption state of the payload, default is false.
    *
    * @generated from field: bool encrypted = 5;
    */
-  encrypted = false;
+  encrypted = false
 
   constructor(data?: PartialMessage<IdentityImage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "IdentityImage";
+  static readonly runtime = proto3
+  static readonly typeName = 'IdentityImage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "payload", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "source_type", kind: "enum", T: proto3.getEnumType(IdentityImage_SourceType) },
-    { no: 3, name: "image_type", kind: "enum", T: proto3.getEnumType(ImageType) },
-    { no: 4, name: "encryption_keys", kind: "scalar", T: 12 /* ScalarType.BYTES */, repeated: true },
-    { no: 5, name: "encrypted", kind: "scalar", T: 8 /* ScalarType.BOOL */ },
-  ]);
+    { no: 1, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 2,
+      name: 'source_type',
+      kind: 'enum',
+      T: proto3.getEnumType(IdentityImage_SourceType),
+    },
+    {
+      no: 3,
+      name: 'image_type',
+      kind: 'enum',
+      T: proto3.getEnumType(ImageType),
+    },
+    {
+      no: 4,
+      name: 'encryption_keys',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+    { no: 5, name: 'encrypted', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): IdentityImage {
-    return new IdentityImage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): IdentityImage {
+    return new IdentityImage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): IdentityImage {
-    return new IdentityImage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): IdentityImage {
+    return new IdentityImage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): IdentityImage {
-    return new IdentityImage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): IdentityImage {
+    return new IdentityImage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: IdentityImage | PlainMessage<IdentityImage> | undefined, b: IdentityImage | PlainMessage<IdentityImage> | undefined): boolean {
-    return proto3.util.equals(IdentityImage, a, b);
+  static equals(
+    a: IdentityImage | PlainMessage<IdentityImage> | undefined,
+    b: IdentityImage | PlainMessage<IdentityImage> | undefined
+  ): boolean {
+    return proto3.util.equals(IdentityImage, a, b)
   }
 }
 
@@ -211,11 +285,11 @@ export enum IdentityImage_SourceType {
   ENS_AVATAR = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(IdentityImage_SourceType)
-proto3.util.setEnumType(IdentityImage_SourceType, "IdentityImage.SourceType", [
-  { no: 0, name: "UNKNOWN_SOURCE_TYPE" },
-  { no: 1, name: "RAW_PAYLOAD" },
-  { no: 2, name: "ENS_AVATAR" },
-]);
+proto3.util.setEnumType(IdentityImage_SourceType, 'IdentityImage.SourceType', [
+  { no: 0, name: 'UNKNOWN_SOURCE_TYPE' },
+  { no: 1, name: 'RAW_PAYLOAD' },
+  { no: 2, name: 'ENS_AVATAR' },
+])
 
 /**
  * SocialLinks represents social link assosiated with given chat identity (personal/community)
@@ -226,39 +300,50 @@ export class SocialLink extends Message<SocialLink> {
   /**
    * @generated from field: string text = 1;
    */
-  text = "";
+  text = ''
 
   /**
    * @generated from field: string url = 2;
    */
-  url = "";
+  url = ''
 
   constructor(data?: PartialMessage<SocialLink>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "SocialLink";
+  static readonly runtime = proto3
+  static readonly typeName = 'SocialLink'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "text", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "url", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    { no: 1, name: 'text', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'url', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): SocialLink {
-    return new SocialLink().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): SocialLink {
+    return new SocialLink().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): SocialLink {
-    return new SocialLink().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): SocialLink {
+    return new SocialLink().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): SocialLink {
-    return new SocialLink().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): SocialLink {
+    return new SocialLink().fromJsonString(jsonString, options)
   }
 
-  static equals(a: SocialLink | PlainMessage<SocialLink> | undefined, b: SocialLink | PlainMessage<SocialLink> | undefined): boolean {
-    return proto3.util.equals(SocialLink, a, b);
+  static equals(
+    a: SocialLink | PlainMessage<SocialLink> | undefined,
+    b: SocialLink | PlainMessage<SocialLink> | undefined
+  ): boolean {
+    return proto3.util.equals(SocialLink, a, b)
   }
 }
-
