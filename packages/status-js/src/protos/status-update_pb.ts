@@ -3,8 +3,15 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf'
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
 
 /**
  * Specs:
@@ -17,7 +24,7 @@ import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
  * :INACTIVE
  * To Send - A single "INACTIVE" status ping
  * Display - Offline forever
- * Note: Only send pings if the user interacted with the app in the last x minutes. 
+ * Note: Only send pings if the user interacted with the app in the last x minutes.
  *
  * @generated from message StatusUpdate
  */
@@ -25,45 +32,67 @@ export class StatusUpdate extends Message<StatusUpdate> {
   /**
    * @generated from field: uint64 clock = 1;
    */
-  clock = protoInt64.zero;
+  clock = protoInt64.zero
 
   /**
    * @generated from field: StatusUpdate.StatusType status_type = 2;
    */
-  statusType = StatusUpdate_StatusType.UNKNOWN_STATUS_TYPE;
+  statusType = StatusUpdate_StatusType.UNKNOWN_STATUS_TYPE
 
   /**
    * @generated from field: string custom_text = 3;
    */
-  customText = "";
+  customText = ''
 
   constructor(data?: PartialMessage<StatusUpdate>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "StatusUpdate";
+  static readonly runtime = proto3
+  static readonly typeName = 'StatusUpdate'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "clock", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "status_type", kind: "enum", T: proto3.getEnumType(StatusUpdate_StatusType) },
-    { no: 3, name: "custom_text", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 2,
+      name: 'status_type',
+      kind: 'enum',
+      T: proto3.getEnumType(StatusUpdate_StatusType),
+    },
+    {
+      no: 3,
+      name: 'custom_text',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StatusUpdate {
-    return new StatusUpdate().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): StatusUpdate {
+    return new StatusUpdate().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StatusUpdate {
-    return new StatusUpdate().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): StatusUpdate {
+    return new StatusUpdate().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StatusUpdate {
-    return new StatusUpdate().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): StatusUpdate {
+    return new StatusUpdate().fromJsonString(jsonString, options)
   }
 
-  static equals(a: StatusUpdate | PlainMessage<StatusUpdate> | undefined, b: StatusUpdate | PlainMessage<StatusUpdate> | undefined): boolean {
-    return proto3.util.equals(StatusUpdate, a, b);
+  static equals(
+    a: StatusUpdate | PlainMessage<StatusUpdate> | undefined,
+    b: StatusUpdate | PlainMessage<StatusUpdate> | undefined
+  ): boolean {
+    return proto3.util.equals(StatusUpdate, a, b)
   }
 }
 
@@ -97,11 +126,10 @@ export enum StatusUpdate_StatusType {
   INACTIVE = 4,
 }
 // Retrieve enum metadata with: proto3.getEnumType(StatusUpdate_StatusType)
-proto3.util.setEnumType(StatusUpdate_StatusType, "StatusUpdate.StatusType", [
-  { no: 0, name: "UNKNOWN_STATUS_TYPE" },
-  { no: 1, name: "AUTOMATIC" },
-  { no: 2, name: "DO_NOT_DISTURB" },
-  { no: 3, name: "ALWAYS_ONLINE" },
-  { no: 4, name: "INACTIVE" },
-]);
-
+proto3.util.setEnumType(StatusUpdate_StatusType, 'StatusUpdate.StatusType', [
+  { no: 0, name: 'UNKNOWN_STATUS_TYPE' },
+  { no: 1, name: 'AUTOMATIC' },
+  { no: 2, name: 'DO_NOT_DISTURB' },
+  { no: 3, name: 'ALWAYS_ONLINE' },
+  { no: 4, name: 'INACTIVE' },
+])

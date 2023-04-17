@@ -14,7 +14,7 @@ const VALID_MULTIBASE_CODES = [
   'z', // base58btc
 ] as const
 
-type MultibaseCode = typeof VALID_MULTIBASE_CODES[number]
+type MultibaseCode = (typeof VALID_MULTIBASE_CODES)[number]
 
 /**
  * @see https://pkg.go.dev/github.com/multiformats/go-multicodec#pkg-types
@@ -23,7 +23,7 @@ const VALID_MULTICODEC_CODES = [
   231, // secp256k1-pub (compressed) (0xe7)
 ] as const
 
-type MulticodecCode = typeof VALID_MULTICODEC_CODES[number]
+type MulticodecCode = (typeof VALID_MULTICODEC_CODES)[number]
 
 /**
  * @see https://specs.status.im/spec/2#public-key-serialization for specification

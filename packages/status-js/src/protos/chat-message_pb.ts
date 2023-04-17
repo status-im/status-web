@@ -3,9 +3,16 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import type { BinaryReadOptions, FieldList, JsonReadOptions, JsonValue, PartialMessage, PlainMessage } from "@bufbuild/protobuf";
-import { Message, proto3, protoInt64 } from "@bufbuild/protobuf";
-import { ImageType, MessageType } from "./enums_pb.js";
+import type {
+  BinaryReadOptions,
+  FieldList,
+  JsonReadOptions,
+  JsonValue,
+  PartialMessage,
+  PlainMessage,
+} from '@bufbuild/protobuf'
+import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
+import { ImageType, MessageType } from './enums_pb.js'
 
 /**
  * @generated from message StickerMessage
@@ -14,39 +21,51 @@ export class StickerMessage extends Message<StickerMessage> {
   /**
    * @generated from field: string hash = 1;
    */
-  hash = "";
+  hash = ''
 
   /**
    * @generated from field: int32 pack = 2;
    */
-  pack = 0;
+  pack = 0
 
   constructor(data?: PartialMessage<StickerMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "StickerMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'StickerMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "hash", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: "pack", kind: "scalar", T: 5 /* ScalarType.INT32 */ },
-  ]);
+    { no: 1, name: 'hash', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'pack', kind: 'scalar', T: 5 /* ScalarType.INT32 */ },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): StickerMessage {
-    return new StickerMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): StickerMessage {
+    return new StickerMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): StickerMessage {
-    return new StickerMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): StickerMessage {
+    return new StickerMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): StickerMessage {
-    return new StickerMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): StickerMessage {
+    return new StickerMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: StickerMessage | PlainMessage<StickerMessage> | undefined, b: StickerMessage | PlainMessage<StickerMessage> | undefined): boolean {
-    return proto3.util.equals(StickerMessage, a, b);
+  static equals(
+    a: StickerMessage | PlainMessage<StickerMessage> | undefined,
+    b: StickerMessage | PlainMessage<StickerMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(StickerMessage, a, b)
   }
 }
 
@@ -57,39 +76,51 @@ export class ImageMessage extends Message<ImageMessage> {
   /**
    * @generated from field: bytes payload = 1;
    */
-  payload = new Uint8Array(0);
+  payload = new Uint8Array(0)
 
   /**
    * @generated from field: ImageType type = 2;
    */
-  type = ImageType.UNKNOWN_IMAGE_TYPE;
+  type = ImageType.UNKNOWN_IMAGE_TYPE
 
   constructor(data?: PartialMessage<ImageMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "ImageMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'ImageMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "payload", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "type", kind: "enum", T: proto3.getEnumType(ImageType) },
-  ]);
+    { no: 1, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 2, name: 'type', kind: 'enum', T: proto3.getEnumType(ImageType) },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ImageMessage {
-    return new ImageMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): ImageMessage {
+    return new ImageMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ImageMessage {
-    return new ImageMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): ImageMessage {
+    return new ImageMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ImageMessage {
-    return new ImageMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): ImageMessage {
+    return new ImageMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: ImageMessage | PlainMessage<ImageMessage> | undefined, b: ImageMessage | PlainMessage<ImageMessage> | undefined): boolean {
-    return proto3.util.equals(ImageMessage, a, b);
+  static equals(
+    a: ImageMessage | PlainMessage<ImageMessage> | undefined,
+    b: ImageMessage | PlainMessage<ImageMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(ImageMessage, a, b)
   }
 }
 
@@ -100,45 +131,67 @@ export class AudioMessage extends Message<AudioMessage> {
   /**
    * @generated from field: bytes payload = 1;
    */
-  payload = new Uint8Array(0);
+  payload = new Uint8Array(0)
 
   /**
    * @generated from field: AudioMessage.AudioType type = 2;
    */
-  type = AudioMessage_AudioType.UNKNOWN_AUDIO_TYPE;
+  type = AudioMessage_AudioType.UNKNOWN_AUDIO_TYPE
 
   /**
    * @generated from field: uint64 duration_ms = 3;
    */
-  durationMs = protoInt64.zero;
+  durationMs = protoInt64.zero
 
   constructor(data?: PartialMessage<AudioMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "AudioMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'AudioMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "payload", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: "type", kind: "enum", T: proto3.getEnumType(AudioMessage_AudioType) },
-    { no: 3, name: "duration_ms", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-  ]);
+    { no: 1, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 2,
+      name: 'type',
+      kind: 'enum',
+      T: proto3.getEnumType(AudioMessage_AudioType),
+    },
+    {
+      no: 3,
+      name: 'duration_ms',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): AudioMessage {
-    return new AudioMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): AudioMessage {
+    return new AudioMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): AudioMessage {
-    return new AudioMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): AudioMessage {
+    return new AudioMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): AudioMessage {
-    return new AudioMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): AudioMessage {
+    return new AudioMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: AudioMessage | PlainMessage<AudioMessage> | undefined, b: AudioMessage | PlainMessage<AudioMessage> | undefined): boolean {
-    return proto3.util.equals(AudioMessage, a, b);
+  static equals(
+    a: AudioMessage | PlainMessage<AudioMessage> | undefined,
+    b: AudioMessage | PlainMessage<AudioMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(AudioMessage, a, b)
   }
 }
 
@@ -162,11 +215,11 @@ export enum AudioMessage_AudioType {
   AMR = 2,
 }
 // Retrieve enum metadata with: proto3.getEnumType(AudioMessage_AudioType)
-proto3.util.setEnumType(AudioMessage_AudioType, "AudioMessage.AudioType", [
-  { no: 0, name: "UNKNOWN_AUDIO_TYPE" },
-  { no: 1, name: "AAC" },
-  { no: 2, name: "AMR" },
-]);
+proto3.util.setEnumType(AudioMessage_AudioType, 'AudioMessage.AudioType', [
+  { no: 0, name: 'UNKNOWN_AUDIO_TYPE' },
+  { no: 1, name: 'AAC' },
+  { no: 2, name: 'AMR' },
+])
 
 /**
  * @generated from message EditMessage
@@ -175,69 +228,86 @@ export class EditMessage extends Message<EditMessage> {
   /**
    * @generated from field: uint64 clock = 1;
    */
-  clock = protoInt64.zero;
+  clock = protoInt64.zero
 
   /**
    * Text of the message
    *
    * @generated from field: string text = 2;
    */
-  text = "";
+  text = ''
 
   /**
    * @generated from field: string chat_id = 3;
    */
-  chatId = "";
+  chatId = ''
 
   /**
    * @generated from field: string message_id = 4;
    */
-  messageId = "";
+  messageId = ''
 
   /**
    * Grant for community edit messages
    *
    * @generated from field: bytes grant = 5;
    */
-  grant = new Uint8Array(0);
+  grant = new Uint8Array(0)
 
   /**
    * The type of message (public/one-to-one/private-group-chat)
    *
    * @generated from field: MessageType message_type = 6;
    */
-  messageType = MessageType.UNKNOWN_MESSAGE_TYPE;
+  messageType = MessageType.UNKNOWN_MESSAGE_TYPE
 
   constructor(data?: PartialMessage<EditMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "EditMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'EditMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "clock", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "text", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "chat_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "message_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "grant", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 6, name: "message_type", kind: "enum", T: proto3.getEnumType(MessageType) },
-  ]);
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'text', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'chat_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'message_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 6,
+      name: 'message_type',
+      kind: 'enum',
+      T: proto3.getEnumType(MessageType),
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): EditMessage {
-    return new EditMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): EditMessage {
+    return new EditMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): EditMessage {
-    return new EditMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): EditMessage {
+    return new EditMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): EditMessage {
-    return new EditMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): EditMessage {
+    return new EditMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: EditMessage | PlainMessage<EditMessage> | undefined, b: EditMessage | PlainMessage<EditMessage> | undefined): boolean {
-    return proto3.util.equals(EditMessage, a, b);
+  static equals(
+    a: EditMessage | PlainMessage<EditMessage> | undefined,
+    b: EditMessage | PlainMessage<EditMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(EditMessage, a, b)
   }
 }
 
@@ -248,61 +318,78 @@ export class DeleteMessage extends Message<DeleteMessage> {
   /**
    * @generated from field: uint64 clock = 1;
    */
-  clock = protoInt64.zero;
+  clock = protoInt64.zero
 
   /**
    * @generated from field: string chat_id = 2;
    */
-  chatId = "";
+  chatId = ''
 
   /**
    * @generated from field: string message_id = 3;
    */
-  messageId = "";
+  messageId = ''
 
   /**
    * Grant for community delete messages
    *
    * @generated from field: bytes grant = 4;
    */
-  grant = new Uint8Array(0);
+  grant = new Uint8Array(0)
 
   /**
    * The type of message (public/one-to-one/private-group-chat)
    *
    * @generated from field: MessageType message_type = 5;
    */
-  messageType = MessageType.UNKNOWN_MESSAGE_TYPE;
+  messageType = MessageType.UNKNOWN_MESSAGE_TYPE
 
   constructor(data?: PartialMessage<DeleteMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "DeleteMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'DeleteMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "clock", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "chat_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 3, name: "message_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "grant", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 5, name: "message_type", kind: "enum", T: proto3.getEnumType(MessageType) },
-  ]);
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'chat_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'message_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 5,
+      name: 'message_type',
+      kind: 'enum',
+      T: proto3.getEnumType(MessageType),
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): DeleteMessage {
-    return new DeleteMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DeleteMessage {
+    return new DeleteMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): DeleteMessage {
-    return new DeleteMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DeleteMessage {
+    return new DeleteMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): DeleteMessage {
-    return new DeleteMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DeleteMessage {
+    return new DeleteMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: DeleteMessage | PlainMessage<DeleteMessage> | undefined, b: DeleteMessage | PlainMessage<DeleteMessage> | undefined): boolean {
-    return proto3.util.equals(DeleteMessage, a, b);
+  static equals(
+    a: DeleteMessage | PlainMessage<DeleteMessage> | undefined,
+    b: DeleteMessage | PlainMessage<DeleteMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(DeleteMessage, a, b)
   }
 }
 
@@ -315,7 +402,7 @@ export class ChatMessage extends Message<ChatMessage> {
    *
    * @generated from field: uint64 clock = 1;
    */
-  clock = protoInt64.zero;
+  clock = protoInt64.zero
 
   /**
    * Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
@@ -323,28 +410,28 @@ export class ChatMessage extends Message<ChatMessage> {
    *
    * @generated from field: uint64 timestamp = 2;
    */
-  timestamp = protoInt64.zero;
+  timestamp = protoInt64.zero
 
   /**
    * Text of the message
    *
    * @generated from field: string text = 3;
    */
-  text = "";
+  text = ''
 
   /**
    * Id of the message that we are replying to
    *
    * @generated from field: string response_to = 4;
    */
-  responseTo = "";
+  responseTo = ''
 
   /**
    * Ens name of the sender
    *
    * @generated from field: string ens_name = 5;
    */
-  ensName = "";
+  ensName = ''
 
   /**
    * Chat id, this field is symmetric for public-chats and private group chats,
@@ -354,103 +441,164 @@ export class ChatMessage extends Message<ChatMessage> {
    *
    * @generated from field: string chat_id = 6;
    */
-  chatId = "";
+  chatId = ''
 
   /**
    * The type of message (public/one-to-one/private-group-chat)
    *
    * @generated from field: MessageType message_type = 7;
    */
-  messageType = MessageType.UNKNOWN_MESSAGE_TYPE;
+  messageType = MessageType.UNKNOWN_MESSAGE_TYPE
 
   /**
    * The type of the content of the message
    *
    * @generated from field: ChatMessage.ContentType content_type = 8;
    */
-  contentType = ChatMessage_ContentType.UNKNOWN_CONTENT_TYPE;
+  contentType = ChatMessage_ContentType.UNKNOWN_CONTENT_TYPE
 
   /**
    * @generated from oneof ChatMessage.payload
    */
-  payload: {
-    /**
-     * @generated from field: StickerMessage sticker = 9;
-     */
-    value: StickerMessage;
-    case: "sticker";
-  } | {
-    /**
-     * @generated from field: ImageMessage image = 10;
-     */
-    value: ImageMessage;
-    case: "image";
-  } | {
-    /**
-     * @generated from field: AudioMessage audio = 11;
-     */
-    value: AudioMessage;
-    case: "audio";
-  } | {
-    /**
-     * @generated from field: bytes community = 12;
-     */
-    value: Uint8Array;
-    case: "community";
-  } | { case: undefined; value?: undefined } = { case: undefined };
+  payload:
+    | {
+        /**
+         * @generated from field: StickerMessage sticker = 9;
+         */
+        value: StickerMessage
+        case: 'sticker'
+      }
+    | {
+        /**
+         * @generated from field: ImageMessage image = 10;
+         */
+        value: ImageMessage
+        case: 'image'
+      }
+    | {
+        /**
+         * @generated from field: AudioMessage audio = 11;
+         */
+        value: AudioMessage
+        case: 'audio'
+      }
+    | {
+        /**
+         * @generated from field: bytes community = 12;
+         */
+        value: Uint8Array
+        case: 'community'
+      }
+    | { case: undefined; value?: undefined } = { case: undefined }
 
   /**
    * Grant for community chat messages
    *
    * @generated from field: bytes grant = 13;
    */
-  grant = new Uint8Array(0);
+  grant = new Uint8Array(0)
 
   /**
    * Message author's display name, introduced in version 1
    *
    * @generated from field: string display_name = 14;
    */
-  displayName = "";
+  displayName = ''
 
   constructor(data?: PartialMessage<ChatMessage>) {
-    super();
-    proto3.util.initPartial(data, this);
+    super()
+    proto3.util.initPartial(data, this)
   }
 
-  static readonly runtime = proto3;
-  static readonly typeName = "ChatMessage";
+  static readonly runtime = proto3
+  static readonly typeName = 'ChatMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: "clock", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 2, name: "timestamp", kind: "scalar", T: 4 /* ScalarType.UINT64 */ },
-    { no: 3, name: "text", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: "response_to", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 5, name: "ens_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 6, name: "chat_id", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-    { no: 7, name: "message_type", kind: "enum", T: proto3.getEnumType(MessageType) },
-    { no: 8, name: "content_type", kind: "enum", T: proto3.getEnumType(ChatMessage_ContentType) },
-    { no: 9, name: "sticker", kind: "message", T: StickerMessage, oneof: "payload" },
-    { no: 10, name: "image", kind: "message", T: ImageMessage, oneof: "payload" },
-    { no: 11, name: "audio", kind: "message", T: AudioMessage, oneof: "payload" },
-    { no: 12, name: "community", kind: "scalar", T: 12 /* ScalarType.BYTES */, oneof: "payload" },
-    { no: 13, name: "grant", kind: "scalar", T: 12 /* ScalarType.BYTES */ },
-    { no: 14, name: "display_name", kind: "scalar", T: 9 /* ScalarType.STRING */ },
-  ]);
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'timestamp', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 3, name: 'text', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 4,
+      name: 'response_to',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'ens_name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'chat_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 7,
+      name: 'message_type',
+      kind: 'enum',
+      T: proto3.getEnumType(MessageType),
+    },
+    {
+      no: 8,
+      name: 'content_type',
+      kind: 'enum',
+      T: proto3.getEnumType(ChatMessage_ContentType),
+    },
+    {
+      no: 9,
+      name: 'sticker',
+      kind: 'message',
+      T: StickerMessage,
+      oneof: 'payload',
+    },
+    {
+      no: 10,
+      name: 'image',
+      kind: 'message',
+      T: ImageMessage,
+      oneof: 'payload',
+    },
+    {
+      no: 11,
+      name: 'audio',
+      kind: 'message',
+      T: AudioMessage,
+      oneof: 'payload',
+    },
+    {
+      no: 12,
+      name: 'community',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      oneof: 'payload',
+    },
+    { no: 13, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 14,
+      name: 'display_name',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
 
-  static fromBinary(bytes: Uint8Array, options?: Partial<BinaryReadOptions>): ChatMessage {
-    return new ChatMessage().fromBinary(bytes, options);
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): ChatMessage {
+    return new ChatMessage().fromBinary(bytes, options)
   }
 
-  static fromJson(jsonValue: JsonValue, options?: Partial<JsonReadOptions>): ChatMessage {
-    return new ChatMessage().fromJson(jsonValue, options);
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): ChatMessage {
+    return new ChatMessage().fromJson(jsonValue, options)
   }
 
-  static fromJsonString(jsonString: string, options?: Partial<JsonReadOptions>): ChatMessage {
-    return new ChatMessage().fromJsonString(jsonString, options);
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): ChatMessage {
+    return new ChatMessage().fromJsonString(jsonString, options)
   }
 
-  static equals(a: ChatMessage | PlainMessage<ChatMessage> | undefined, b: ChatMessage | PlainMessage<ChatMessage> | undefined): boolean {
-    return proto3.util.equals(ChatMessage, a, b);
+  static equals(
+    a: ChatMessage | PlainMessage<ChatMessage> | undefined,
+    b: ChatMessage | PlainMessage<ChatMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(ChatMessage, a, b)
   }
 }
 
@@ -518,17 +666,16 @@ export enum ChatMessage_ContentType {
   SYSTEM_MESSAGE_GAP = 10,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ChatMessage_ContentType)
-proto3.util.setEnumType(ChatMessage_ContentType, "ChatMessage.ContentType", [
-  { no: 0, name: "UNKNOWN_CONTENT_TYPE" },
-  { no: 1, name: "TEXT_PLAIN" },
-  { no: 2, name: "STICKER" },
-  { no: 3, name: "STATUS" },
-  { no: 4, name: "EMOJI" },
-  { no: 5, name: "TRANSACTION_COMMAND" },
-  { no: 6, name: "SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP" },
-  { no: 7, name: "IMAGE" },
-  { no: 8, name: "AUDIO" },
-  { no: 9, name: "COMMUNITY" },
-  { no: 10, name: "SYSTEM_MESSAGE_GAP" },
-]);
-
+proto3.util.setEnumType(ChatMessage_ContentType, 'ChatMessage.ContentType', [
+  { no: 0, name: 'UNKNOWN_CONTENT_TYPE' },
+  { no: 1, name: 'TEXT_PLAIN' },
+  { no: 2, name: 'STICKER' },
+  { no: 3, name: 'STATUS' },
+  { no: 4, name: 'EMOJI' },
+  { no: 5, name: 'TRANSACTION_COMMAND' },
+  { no: 6, name: 'SYSTEM_MESSAGE_CONTENT_PRIVATE_GROUP' },
+  { no: 7, name: 'IMAGE' },
+  { no: 8, name: 'AUDIO' },
+  { no: 9, name: 'COMMUNITY' },
+  { no: 10, name: 'SYSTEM_MESSAGE_GAP' },
+])
