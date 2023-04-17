@@ -20,6 +20,7 @@ const AddedUsersMessageContent = (props: Props) => {
     <>
       <Avatar
         type="icon"
+        // fixme: map relative avatar size to icon size
         icon={<AddUserIcon size={20} />}
         size={32}
         backgroundColor={state === 'landed' ? '$transparent' : '$blue-50-opa-5'}

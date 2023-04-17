@@ -352,6 +352,7 @@ export const Channel: StoryObj<ChannelArgs> = {
       </Stack>
 
       <Stack space alignItems="flex-start">
+        <Avatar {...args} size={80} lock="unlocked" />
         <Avatar {...args} size={32} lock="unlocked" />
         <Avatar {...args} size={24} lock="unlocked" />
         <Avatar {...args} size={20} lock="unlocked" />

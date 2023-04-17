@@ -10,6 +10,7 @@ import { tokens } from '../tokens'
 import { generateIdenticonRing } from './utils'
 
 import type { TextProps } from '../text'
+import type { IconProps } from '@status-im/icons'
 import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
 
 type Variants = GetStyledVariants<typeof Base>
@@ -129,16 +130,16 @@ const textSizes: Record<NonNullable<AvatarProps['size']>, TextProps['size']> = {
 
 const iconSizes: Record<
   NonNullable<AvatarProps['size']>,
-  React.ReactElement
+  IconProps['size'] | undefined
 > = {
-  '80': <MembersIcon size={20} />,
-  '56': <></>,
-  '48': <MembersIcon size={20} />,
-  '32': <MembersIcon size={16} />,
-  '28': <MembersIcon size={16} />,
-  '24': <></>,
-  '20': <MembersIcon size={12} />,
-  '16': <></>,
+  '80': 20,
+  '56': undefined,
+  '48': 20,
+  '32': 16,
+  '28': 16,
+  '24': undefined,
+  '20': 12,
+  '16': undefined,
 }
 
 const Avatar = (props: AvatarProps) => {
@@ -208,10 +209,15 @@ const Avatar = (props: AvatarProps) => {
               <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
                 {/* fixme: contrasting color to background */}
                 {props.type === 'group' ? (
-                  cloneElement(iconSizes[size], { color: '$white-100' })
+                  cloneElement(
+                    <MembersIcon size={iconSizes[props.size] ?? 12} />,
+                    {
+                      color: '$white-100',
+                    }
+                  )
                 ) : (
                   <Text
-                    size={textSizes[size]}
+                    size={textSizes[props.size]}
                     weight="medium"
                     color="$white-100"
                   >
@@ -225,7 +231,11 @@ const Avatar = (props: AvatarProps) => {
 
         {props.type === 'wallet' && (
           <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
-            <Text size={textSizes[size]} weight="medium" color="$white-100">
+            <Text
+              size={textSizes[props.size]}
+              weight="medium"
+              color="$white-100"
+            >
               {props.name.slice(0, 2).toUpperCase()}
             </Text>
           </Fallback>
@@ -233,7 +243,7 @@ const Avatar = (props: AvatarProps) => {
 
         {props.type === 'channel' && (
           // fixme: Type 'undefined' is not assignable to type '32 | 11 | 13 | 15 | 19 | 27'
-          <Text size={emojiSizes[size] as TextProps['size']}>
+          <Text size={emojiSizes[props.size] as TextProps['size']}>
             {props.emoji}
           </Text>
         )}
@@ -247,16 +257,16 @@ const Avatar = (props: AvatarProps) => {
 
       {props.type === 'user' && props.indicator && (
         <Unspaced>
-          <Indicator size={size} state={props.indicator} />
+          <Indicator size={props.size} state={props.indicator} />
         </Unspaced>
       )}
 
       {props.type === 'channel' && 'lock' in props && (
         <LockBase variant={props.size}>
           {props.lock === 'locked' ? (
-            <LockedIcon size={12} />
+            <LockedIcon size={iconSizes[props.size] ?? 12} />
           ) : (
-            <UnlockedIcon size={12} />
+            <UnlockedIcon size={iconSizes[props.size] ?? 12} />
           )}
         </LockBase>
       )}
