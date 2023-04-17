@@ -1,6 +1,4 @@
-import { PlaceholderIcon as PlaceholderIcon12 } from '@status-im/icons/12'
-import { PlaceholderIcon as PlaceholderIcon16 } from '@status-im/icons/16'
-import { PlaceholderIcon as PlaceholderIcon20 } from '@status-im/icons/20'
+import { PlaceholderIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Avatar } from './avatar'
@@ -377,9 +375,9 @@ export const Icon: StoryObj<IconArgs> = {
   render: args => (
     <Stack space flexDirection="row">
       <Stack space alignItems="flex-start">
-        <Avatar {...args} size={48} icon={<PlaceholderIcon20 />} />
-        <Avatar {...args} size={32} icon={<PlaceholderIcon16 />} />
-        <Avatar {...args} size={20} icon={<PlaceholderIcon12 />} />
+        <Avatar {...args} size={48} icon={<PlaceholderIcon size={20} />} />
+        <Avatar {...args} size={32} icon={<PlaceholderIcon size={16} />} />
+        <Avatar {...args} size={20} icon={<PlaceholderIcon size={12} />} />
       </Stack>
     </Stack>
   ),
