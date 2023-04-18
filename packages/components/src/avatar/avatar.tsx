@@ -159,6 +159,8 @@ const Avatar = (props: AvatarProps) => {
   }, [colorHash])
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
+  const imageBackgroundColor =
+    status !== 'loaded' ? '$white-100' : '$transparent'
 
   const padding =
     props.type === 'user' && identiconRing ? userPaddingSizes[props.size] : 0
@@ -206,7 +208,7 @@ const Avatar = (props: AvatarProps) => {
           <>
             <Image
               src={props.src}
-              backgroundColor={backgroundColor}
+              backgroundColor={imageBackgroundColor}
               // todo: use tamagui image with token support
               borderRadius={
                 tokens.radius[
@@ -292,7 +294,7 @@ const Avatar = (props: AvatarProps) => {
         borderRadius={radius}
         padding={padding}
         size={props.size}
-        backgroundColor={backgroundColor}
+        backgroundColor={imageBackgroundColor}
         // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
