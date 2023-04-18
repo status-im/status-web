@@ -289,7 +289,7 @@ const Avatar = (props: AvatarProps) => {
   }
 
   return (
-    <Stack style={{ position: 'relative' }}>
+    <Stack style={{ position: 'relative', height: 'fit-content' }}>
       <Base
         borderRadius={radius}
         padding={padding}
