@@ -14,15 +14,11 @@ import type { RadiusTokens } from '../tokens'
 import type { IconProps } from '@status-im/icons'
 import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
 
-type Variants = GetStyledVariants<typeof Base>
-
 type UserAvatarProps = {
   type: 'user'
   size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
   name: string
   src?: string
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
   indicator?: GetStyledVariants<typeof Indicator>['state']
   colorHash?: number[][]
@@ -33,8 +29,6 @@ type GroupAvatarProps = {
   size: 80 | 48 | 32 | 28 | 20
   name: string
   src?: string
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -42,8 +36,6 @@ type WalletAvatarProps = {
   type: 'wallet'
   size: 80 | 48 | 32 | 28 | 20
   name: string
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -51,8 +43,6 @@ type ChannelAvatarProps = {
   type: 'channel'
   size: 80 | 32 | 24 | 20
   emoji: string
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
   background?: ColorTokens
   lock?: 'locked' | 'unlocked'
@@ -63,8 +53,6 @@ type CommunityAvatarProps = {
   size: 80 | 32 | 24 | 20
   name: string
   src?: string
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -73,8 +61,6 @@ type AccountAvatarProps = {
   size: 80 | 48 | 32 | 28 | 24 | 20
   name: string
   src?: string
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -82,8 +68,6 @@ type IconAvatarProps = {
   type: 'icon'
   size: 48 | 32 | 20
   icon: React.ReactElement
-  outline?: Variants['outline']
-  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
   color?: ColorTokens
 }
@@ -183,7 +167,6 @@ const Avatar = (props: AvatarProps) => {
   const backgroundColor =
     (props.type === 'channel' ? '$blue-50-opa-20' : props.backgroundColor) ??
     '$neutral-95'
-  const outlineColor = props.outlineColor ?? '$white-100'
 
   const renderContent = () => {
     switch (props.type) {
@@ -277,11 +260,7 @@ const Avatar = (props: AvatarProps) => {
 
         return (
           <Unspaced>
-            <Indicator
-              size={props.size}
-              state={props.indicator}
-              borderColor={outlineColor}
-            />
+            <Indicator size={props.size} state={props.indicator} />
           </Unspaced>
         )
       }
@@ -313,8 +292,6 @@ const Avatar = (props: AvatarProps) => {
         borderRadius={radius}
         padding={padding}
         size={props.size}
-        outline={props.outline}
-        borderColor={outlineColor}
         backgroundColor={backgroundColor}
         // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -385,13 +362,6 @@ const Base = styled(Stack, {
       16: {
         width: 16,
         height: 16,
-      },
-    },
-
-    outline: {
-      true: {
-        borderWidth: 2,
-        borderColor: '$white-100',
       },
     },
   } as const,

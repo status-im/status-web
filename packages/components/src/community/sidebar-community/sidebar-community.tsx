@@ -63,13 +63,21 @@ const SidebarCommunity = (props: Props) => {
       >
         <Stack paddingHorizontal={16} paddingBottom={16}>
           <Stack marginTop={-40} marginBottom={12}>
-            <Avatar
-              type="community"
-              name="Community"
-              src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images"
-              size={80}
-              outline
-            />
+            <Stack>
+              <Stack
+                borderWidth={2}
+                borderColor={'$white-100'}
+                borderRadius={'$full'}
+                width="fit-content"
+              >
+                <Avatar
+                  type="community"
+                  name="Community"
+                  src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images"
+                  size={80}
+                />
+              </Stack>
+            </Stack>
           </Stack>
           <Stack gap={8} marginBottom={12}>
             <Text size={27} weight="semibold">
