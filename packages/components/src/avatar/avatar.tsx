@@ -10,6 +10,7 @@ import { tokens } from '../tokens'
 import { generateIdenticonRing } from './utils'
 
 import type { TextProps } from '../text'
+import type { RadiusTokens } from '../tokens'
 import type { IconProps } from '@status-im/icons'
 import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
 
@@ -91,7 +92,6 @@ type AvatarProps =
 
 type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
 
-// todo?: use tokens
 const userPaddingSizes: Record<UserAvatarProps['size'], number> = {
   '80': 4,
   '56': 2,
@@ -103,13 +103,13 @@ const userPaddingSizes: Record<UserAvatarProps['size'], number> = {
   '16': 0,
 }
 
-const accountRadiusSizes: Record<AccountAvatarProps['size'], number> = {
-  '80': 16,
-  '48': 12,
-  '32': 10,
-  '28': 8,
-  '24': 8,
-  '20': 6,
+const accountRadiusSizes: Record<AccountAvatarProps['size'], RadiusTokens> = {
+  '80': '$16',
+  '48': '$12',
+  '32': '$10',
+  '28': '$8',
+  '24': '$8',
+  '20': '$6',
 }
 
 const channelEmojiSizes: Record<ChannelAvatarProps['size'], TextProps['size']> =
@@ -172,8 +172,8 @@ const Avatar = (props: AvatarProps) => {
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
   const padding = type === 'user' && identiconRing ? userPaddingSizes[size] : 0
-  const radius =
-    type === 'account' ? accountRadiusSizes[size] : tokens.radius['full'].val
+  const radius: RadiusTokens =
+    type === 'account' ? accountRadiusSizes[size] : '$full'
 
   const renderContent = () => {
     switch (props.type) {
@@ -214,7 +214,14 @@ const Avatar = (props: AvatarProps) => {
             <Image
               src={props.src}
               backgroundColor={backgroundColor}
-              borderRadius={radius}
+              // todo: use tamagui image with token support
+              borderRadius={
+                tokens.radius[
+                  radius
+                    .toString()
+                    .replace('$', '') as keyof typeof tokens.radius
+                ].val
+              }
               width="full"
               aspectRatio={1}
               onLoad={() => setStatus('loaded')}
