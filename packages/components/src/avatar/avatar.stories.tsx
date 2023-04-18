@@ -3,7 +3,15 @@ import { Stack } from '@tamagui/core'
 
 import { Avatar } from './avatar'
 
-import type { AvatarProps } from './avatar'
+import type {
+  AccountAvatarProps,
+  ChannelAvatarProps,
+  CommunityAvatarProps,
+  GroupAvatarProps,
+  IconAvatarProps,
+  UserAvatarProps,
+  WalletAvatarProps,
+} from './avatar'
 import type { Meta, StoryObj } from '@storybook/react'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
@@ -18,10 +26,7 @@ const meta: Meta<typeof Avatar> = {
   },
 }
 
-type UserArgs = Pick<
-  Extract<AvatarProps, { type: 'user'; src: string }>,
-  'type' | 'src' | 'name'
->
+type UserArgs = Pick<UserAvatarProps, 'type' | 'src' | 'name'>
 
 // More on writing stories with args: https://storybook.js.org/docs/7.0/react/writing-stories/args
 export const User: StoryObj<UserArgs> = {
@@ -217,7 +222,7 @@ export const User: StoryObj<UserArgs> = {
   ),
 }
 
-export const Group: StoryObj<Extract<AvatarProps, { type: 'group' }>> = {
+export const Group: StoryObj<GroupAvatarProps> = {
   args: {
     type: 'group',
     src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
@@ -248,7 +253,7 @@ export const Group: StoryObj<Extract<AvatarProps, { type: 'group' }>> = {
   ),
 }
 
-export const Wallet: StoryObj<Extract<AvatarProps, { type: 'wallet' }>> = {
+export const Wallet: StoryObj<WalletAvatarProps> = {
   args: {
     type: 'wallet',
     name: 'Wallet 1',
@@ -272,7 +277,7 @@ export const Wallet: StoryObj<Extract<AvatarProps, { type: 'wallet' }>> = {
   ),
 }
 
-export const Account: StoryObj<Extract<AvatarProps, { type: 'account' }>> = {
+export const Account: StoryObj<AccountAvatarProps> = {
   args: {
     type: 'account',
     name: 'My Account',
@@ -296,13 +301,11 @@ export const Account: StoryObj<Extract<AvatarProps, { type: 'account' }>> = {
   ),
 }
 
-type CommunityArgs = Extract<AvatarProps, { type: 'community' }>
-
-export const community: StoryObj<CommunityArgs> = {
+export const community: StoryObj<CommunityAvatarProps> = {
   args: {
     type: 'community',
     src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
-  } as CommunityArgs,
+  },
   parameters: {
     design: {
       type: 'figma',
@@ -320,10 +323,7 @@ export const community: StoryObj<CommunityArgs> = {
   ),
 }
 
-type ChannelArgs = Pick<
-  Extract<AvatarProps, { type: 'channel'; emoji: string }>,
-  'type' | 'emoji'
->
+type ChannelArgs = Pick<ChannelAvatarProps, 'type' | 'emoji'>
 
 export const Channel: StoryObj<ChannelArgs> = {
   args: {
@@ -352,7 +352,6 @@ export const Channel: StoryObj<ChannelArgs> = {
       </Stack>
 
       <Stack space alignItems="flex-start">
-        <Avatar {...args} size={80} lock="unlocked" />
         <Avatar {...args} size={32} lock="unlocked" />
         <Avatar {...args} size={24} lock="unlocked" />
         <Avatar {...args} size={20} lock="unlocked" />
@@ -361,12 +360,10 @@ export const Channel: StoryObj<ChannelArgs> = {
   ),
 }
 
-type IconArgs = Extract<AvatarProps, { type: 'icon' }>
-
-export const Icon: StoryObj<IconArgs> = {
+export const Icon: StoryObj<IconAvatarProps> = {
   args: {
     type: 'icon',
-  } as IconArgs,
+  },
   parameters: {
     design: {
       type: 'figma',

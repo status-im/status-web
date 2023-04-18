@@ -5,11 +5,10 @@ import { Avatar } from '../avatar'
 import { Text } from '../text'
 
 import type { AuthorProps } from '../author/author'
-import type { AvatarProps } from '../avatar'
+import type { UserAvatarProps } from '../avatar'
 
 type Props = {
-  users: (Pick<Extract<AvatarProps, { type: 'user' }>, 'src' | 'indicator'> &
-    AuthorProps)[]
+  users: (Pick<UserAvatarProps, 'src' | 'indicator'> & AuthorProps)[]
 }
 
 const UserList = (props: Props) => {

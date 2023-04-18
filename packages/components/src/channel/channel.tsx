@@ -8,14 +8,14 @@ import { Counter } from '../counter'
 import { DropdownMenu } from '../dropdown-menu'
 import { Text } from '../text'
 
-import type { AvatarProps } from '../avatar'
+import type { ChannelAvatarProps } from '../avatar'
 import type { ColorTokens } from 'tamagui'
 
 type Props = {
   children: string
   selected: boolean
-  emoji: Extract<AvatarProps, { type: 'channel' }>['emoji']
-  lock?: Extract<AvatarProps, { lock?: 'locked' | 'unlocked' }>['lock']
+  emoji: ChannelAvatarProps['emoji']
+  lock?: ChannelAvatarProps['lock']
   mentionCount?: number
 } & (
   | {
