@@ -22,6 +22,7 @@ type UserAvatarProps = {
   name: string
   src?: string
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
   indicator?: GetStyledVariants<typeof Indicator>['state']
   colorHash?: number[][]
@@ -33,6 +34,7 @@ type GroupAvatarProps = {
   name: string
   src?: string
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -41,6 +43,7 @@ type WalletAvatarProps = {
   size: 80 | 48 | 32 | 28 | 20
   name: string
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -49,6 +52,7 @@ type ChannelAvatarProps = {
   size: 80 | 32 | 24 | 20
   emoji: string
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
   background?: ColorTokens
   lock?: 'locked' | 'unlocked'
@@ -60,6 +64,7 @@ type CommunityAvatarProps = {
   name: string
   src?: string
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -69,6 +74,7 @@ type AccountAvatarProps = {
   name: string
   src?: string
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
 }
 
@@ -77,6 +83,7 @@ type IconAvatarProps = {
   size: 48 | 32 | 20
   icon: React.ReactElement
   outline?: Variants['outline']
+  outlineColor?: ColorTokens
   backgroundColor?: ColorTokens
   color?: ColorTokens
 }
@@ -159,8 +166,6 @@ const channelLockIconVariants: Record<
 }
 
 const Avatar = (props: AvatarProps) => {
-  const { type, size, backgroundColor = '$neutral-95', outline = false } = props
-
   const colorHash = 'colorHash' in props ? props.colorHash : undefined
   const identiconRing = useMemo(() => {
     if (colorHash) {
@@ -171,9 +176,14 @@ const Avatar = (props: AvatarProps) => {
 
   const [status, setStatus] = useState<ImageLoadingStatus>('idle')
 
-  const padding = type === 'user' && identiconRing ? userPaddingSizes[size] : 0
+  const padding =
+    props.type === 'user' && identiconRing ? userPaddingSizes[props.size] : 0
   const radius: RadiusTokens =
-    type === 'account' ? accountRadiusSizes[size] : '$full'
+    props.type === 'account' ? accountRadiusSizes[props.size] : '$full'
+  const backgroundColor =
+    (props.type === 'channel' ? '$blue-50-opa-20' : props.backgroundColor) ??
+    '$neutral-95'
+  const outlineColor = props.outlineColor ?? '$white-100'
 
   const renderContent = () => {
     switch (props.type) {
@@ -267,7 +277,11 @@ const Avatar = (props: AvatarProps) => {
 
         return (
           <Unspaced>
-            <Indicator size={props.size} state={props.indicator} />
+            <Indicator
+              size={props.size}
+              state={props.indicator}
+              borderColor={outlineColor}
+            />
           </Unspaced>
         )
       }
@@ -298,8 +312,9 @@ const Avatar = (props: AvatarProps) => {
       <Base
         borderRadius={radius}
         padding={padding}
-        size={size}
-        outline={outline}
+        size={props.size}
+        outline={props.outline}
+        borderColor={outlineColor}
         backgroundColor={backgroundColor}
         // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
