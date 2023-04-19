@@ -81,7 +81,7 @@ type AvatarProps =
   | AccountAvatarProps
   | IconAvatarProps
 
-type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
+type ImageLoadingStatus = 'loading' | 'loaded' | 'error'
 
 const userPaddingSizes: Record<UserAvatarProps['size'], number> = {
   '80': 4,
@@ -158,17 +158,37 @@ const Avatar = (props: AvatarProps) => {
     }
   }, [colorHash])
 
-  const [status, setStatus] = useState<ImageLoadingStatus>('idle')
-  const imageBackgroundColor =
-    status !== 'loaded' ? '$white-100' : '$transparent'
+  const [status, setStatus] = useState<ImageLoadingStatus>()
 
   const padding =
     props.type === 'user' && identiconRing ? userPaddingSizes[props.size] : 0
   const radius: RadiusTokens =
     props.type === 'account' ? accountRadiusSizes[props.size] : '$full'
-  const backgroundColor =
-    (props.type === 'channel' ? '$blue-50-opa-20' : props.backgroundColor) ??
-    '$neutral-95'
+  const backgroundColor = getBackgroundColor()
+
+  function getBackgroundColor(): ColorTokens {
+    if ('src' in props && props.src) {
+      switch (status) {
+        case 'error':
+          break
+        case 'loaded':
+          return '$transparent'
+        case 'loading':
+        default:
+          return '$white-100'
+      }
+    }
+
+    if (props.backgroundColor) {
+      return props.backgroundColor
+    }
+
+    if (props.type === 'channel') {
+      return '$blue-50-opa-20'
+    }
+
+    return '$neutral-95'
+  }
 
   const renderContent = () => {
     switch (props.type) {
@@ -208,7 +228,7 @@ const Avatar = (props: AvatarProps) => {
           <>
             <Image
               src={props.src}
-              backgroundColor={imageBackgroundColor}
+              backgroundColor={backgroundColor}
               // todo: use tamagui image with token support
               borderRadius={
                 tokens.radius[
@@ -219,6 +239,13 @@ const Avatar = (props: AvatarProps) => {
               }
               width="full"
               aspectRatio={1}
+              onLoadStart={() => {
+                if (status) {
+                  return
+                }
+
+                setStatus('loading')
+              }}
               onLoad={() => setStatus('loaded')}
               onError={() => setStatus('error')}
             />
@@ -294,7 +321,7 @@ const Avatar = (props: AvatarProps) => {
         borderRadius={radius}
         padding={padding}
         size={props.size}
-        backgroundColor={imageBackgroundColor}
+        backgroundColor={backgroundColor}
         // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
