@@ -1,0 +1,41 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc",
+    "clean": "rimraf .next .tamagui node_modules",
+    "serve": "NODE_ENV=production next start --port 8151"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.3",
+    "@scure/base": "^1.1.1",
+    "@status-im/components": "*",
+    "@status-im/icons": "*",
+    "@status-im/js": "*",
+    "@tamagui/next-theme": "1.7.7",
+    "next": "13.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-native-web": "^0.18.12"
+  },
+  "devDependencies": {
+    "@achingbrain/ssdp": "^4.0.1",
+    "@tamagui/next-plugin": "^1.9.18",
+    "@types/node": "^18.11.11",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
+    "autoprefixer": "^10.4.14",
+    "patch-package": "^6.5.1",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.3.1",
+    "typescript": "^5.0.3"
+  },
+  "engines": {
+    "node": "^18.x"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "react-native": ["react-native-web"],
+      "@/*": ["./*"]
+      // "@status-im/*": ["./node_modules/@status-im/*"]
+      // "@status-im/js": ["./node_modules/@status-im/js/packages/status-js"],
+      // "@status-im/components": [
+      //   "./node_modules/@status-im/components/packages/components"
+      // ]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "next.config.js"]
+}

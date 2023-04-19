@@ -23,6 +23,7 @@
     "web": "yarn workspace web dev",
     "mobile": "yarn workspace mobile dev",
     "desktop": "yarn workspace desktop dev",
+    "website": "yarn workspace website dev",
     "storybook": "yarn workspace @status-im/components storybook"
   },
   "resolutions": {
@@ -36,6 +37,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "eslint": "^8.37.0",
+    "eslint-config-next": "^13.2.4",
     "eslint-config-prettier": "^8.8.0",
     "eslint-import-resolver-node": "^0.3.7",
     "eslint-import-resolver-typescript": "^3.5.5",
@@ -48,6 +50,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.7",
     "rimraf": "^4.4.1",
     "turbo": "^1.8.8",
     "typescript": "^5.0.3",
