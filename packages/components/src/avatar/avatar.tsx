@@ -1,72 +1,354 @@
-import { useEffect, useState } from 'react'
+import { cloneElement, useMemo, useState } from 'react'
 
-import { Stack, styled, Text, Unspaced } from '@tamagui/core'
+import { LockedIcon, MembersIcon, UnlockedIcon } from '@status-im/icons'
+import { Stack, styled, Unspaced } from '@tamagui/core'
+import { Platform } from 'react-native'
 
 import { Image } from '../image'
+import { Text } from '../text'
+import { tokens } from '../tokens'
+import { generateIdenticonRing } from './utils'
 
-import type { GetStyledVariants } from '@tamagui/core'
+import type { TextProps } from '../text'
+import type { RadiusTokens } from '../tokens'
+import type { IconProps } from '@status-im/icons'
+import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
 
-type Variants = GetStyledVariants<typeof Base>
-
-type Props = {
-  src: string
+type UserAvatarProps = {
+  type: 'user'
   size: 80 | 56 | 48 | 32 | 28 | 24 | 20 | 16
-  shape?: Variants['shape']
-  outline?: Variants['outline']
+  name: string
+  src?: string
+  backgroundColor?: ColorTokens
   indicator?: GetStyledVariants<typeof Indicator>['state']
+  colorHash?: number[][]
 }
 
-type ImageLoadingStatus = 'idle' | 'loading' | 'loaded' | 'error'
+type GroupAvatarProps = {
+  type: 'group'
+  size: 80 | 48 | 32 | 28 | 20
+  name: string
+  src?: string
+  backgroundColor?: ColorTokens
+}
 
-const Avatar = (props: Props) => {
-  const {
-    src,
-    size,
-    shape = 'circle',
-    outline = false,
-    indicator = 'none',
-  } = props
+type WalletAvatarProps = {
+  type: 'wallet'
+  size: 80 | 48 | 32 | 28 | 20
+  name: string
+  backgroundColor?: ColorTokens
+}
 
-  const [status, setStatus] = useState<ImageLoadingStatus>('idle')
+type ChannelAvatarProps = {
+  type: 'channel'
+  size: 80 | 32 | 24 | 20
+  emoji: string
+  backgroundColor?: ColorTokens
+  background?: ColorTokens
+  lock?: 'locked' | 'unlocked'
+}
 
-  useEffect(() => {
-    setStatus('idle')
-  }, [src])
+type CommunityAvatarProps = {
+  type: 'community'
+  size: 80 | 32 | 24 | 20
+  name: string
+  src?: string
+  backgroundColor?: ColorTokens
+}
+
+type AccountAvatarProps = {
+  type: 'account'
+  size: 80 | 48 | 32 | 28 | 24 | 20
+  name: string
+  src?: string
+  backgroundColor?: ColorTokens
+}
+
+type IconAvatarProps = {
+  type: 'icon'
+  size: 48 | 32 | 20
+  icon: React.ReactElement
+  backgroundColor?: ColorTokens
+  color?: ColorTokens
+}
+
+type AvatarProps =
+  | UserAvatarProps
+  | GroupAvatarProps
+  | WalletAvatarProps
+  | ChannelAvatarProps
+  | CommunityAvatarProps
+  | AccountAvatarProps
+  | IconAvatarProps
+
+type ImageLoadingStatus = 'loading' | 'loaded' | 'error'
+
+const userPaddingSizes: Record<UserAvatarProps['size'], number> = {
+  '80': 4,
+  '56': 2,
+  '48': 2,
+  '32': 2,
+  '28': 0,
+  '24': 0,
+  '20': 0,
+  '16': 0,
+}
+
+const accountRadiusSizes: Record<AccountAvatarProps['size'], RadiusTokens> = {
+  '80': '$16',
+  '48': '$12',
+  '32': '$10',
+  '28': '$8',
+  '24': '$8',
+  '20': '$6',
+}
+
+const channelEmojiSizes: Record<ChannelAvatarProps['size'], TextProps['size']> =
+  {
+    // todo: design review
+    '80': 27,
+    '32': 15,
+    '24': 13,
+    '20': 11,
+  }
+
+const textSizes: Record<NonNullable<AvatarProps['size']>, TextProps['size']> = {
+  '80': 27,
+  '56': 19,
+  '48': 19,
+  '32': 15,
+  '28': 13,
+  '24': 13,
+  '20': 11,
+  '16': 11,
+}
+
+const groupMembersIconSizes: Record<
+  GroupAvatarProps['size'],
+  IconProps['size'] | number // to scales SVG
+> = {
+  // todo: design review
+  '80': 36,
+  '48': 20,
+  '32': 16,
+  '28': 16,
+  '20': 12,
+}
+
+const channelLockIconVariants: Record<
+  ChannelAvatarProps['size'],
+  {
+    baseVariant: GetStyledVariants<typeof LockBase>['variant']
+    iconSize: IconProps['size'] | number // to scales SVG
+  }
+> = {
+  // todo: design review
+  '80': { baseVariant: 80, iconSize: 40 },
+  '32': { baseVariant: 24, iconSize: 12 },
+  '24': { baseVariant: 24, iconSize: 12 },
+  '20': { baseVariant: 20, iconSize: 12 },
+}
+
+const Avatar = (props: AvatarProps) => {
+  const colorHash = 'colorHash' in props ? props.colorHash : undefined
+  const identiconRing = useMemo(() => {
+    if (colorHash) {
+      const gradient = generateIdenticonRing(colorHash)
+      return `conic-gradient(from 90deg, ${gradient})`
+    }
+  }, [colorHash])
+
+  const [status, setStatus] = useState<ImageLoadingStatus>()
+
+  const padding =
+    props.type === 'user' && identiconRing ? userPaddingSizes[props.size] : 0
+  const radius: RadiusTokens =
+    props.type === 'account' ? accountRadiusSizes[props.size] : '$full'
+  const backgroundColor = getBackgroundColor()
+
+  function getBackgroundColor(): ColorTokens {
+    if ('src' in props && props.src) {
+      switch (status) {
+        case 'error':
+          break
+        case 'loaded':
+          return '$transparent'
+        case 'loading':
+        default:
+          return '$white-100'
+      }
+    }
+
+    if (props.backgroundColor) {
+      return props.backgroundColor
+    }
+
+    if (props.type === 'channel') {
+      return '$blue-50-opa-20'
+    }
+
+    return '$neutral-95'
+  }
+
+  const renderContent = () => {
+    switch (props.type) {
+      case 'user':
+      case 'account':
+      case 'group':
+      case 'community': {
+        if (!props.src) {
+          return (
+            <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
+              {/* todo?: contrasting color to background */}
+              {props.type === 'group' ? (
+                cloneElement(
+                  <MembersIcon
+                    size={
+                      groupMembersIconSizes[props.size] as IconProps['size']
+                    }
+                  />,
+                  {
+                    color: '$white-100',
+                  }
+                )
+              ) : (
+                <Text
+                  size={textSizes[props.size]}
+                  weight="medium"
+                  color="$white-100"
+                >
+                  {props.name.slice(0, 2).toUpperCase()}
+                </Text>
+              )}
+            </Fallback>
+          )
+        }
+
+        return (
+          <>
+            <Image
+              src={props.src}
+              backgroundColor={backgroundColor}
+              // todo: use tamagui image with token support
+              borderRadius={
+                tokens.radius[
+                  radius
+                    .toString()
+                    .replace('$', '') as keyof typeof tokens.radius
+                ].val
+              }
+              width="full"
+              aspectRatio={1}
+              onLoadStart={() => {
+                if (status) {
+                  return
+                }
+
+                setStatus('loading')
+              }}
+              onLoad={() => setStatus('loaded')}
+              onError={() => setStatus('error')}
+            />
+            {/* todo?: add fallback to Image */}
+            {status === 'error' && (
+              <Fallback
+                borderRadius={radius}
+                backgroundColor={backgroundColor}
+              />
+            )}
+          </>
+        )
+      }
+      case 'wallet':
+        return (
+          <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
+            <Text
+              size={textSizes[props.size]}
+              weight="medium"
+              color="$white-100"
+            >
+              {props.name.slice(0, 2).toUpperCase()}
+            </Text>
+          </Fallback>
+        )
+      case 'channel':
+        return <Text size={channelEmojiSizes[props.size]}>{props.emoji}</Text>
+      case 'icon':
+        return cloneElement(props.icon, { color: props.color ?? '$white-100' })
+      default:
+        return
+    }
+  }
+
+  const renderBadge = () => {
+    switch (props.type) {
+      case 'user': {
+        if (!props.indicator) {
+          return
+        }
+
+        return (
+          <Unspaced>
+            <Indicator size={props.size} state={props.indicator} />
+          </Unspaced>
+        )
+      }
+      case 'channel': {
+        if (!props.lock) {
+          return
+        }
+
+        const iconVariant = channelLockIconVariants[props.size]
+
+        return (
+          <LockBase variant={iconVariant.baseVariant}>
+            {props.lock === 'locked' ? (
+              <LockedIcon size={iconVariant.iconSize as IconProps['size']} />
+            ) : (
+              <UnlockedIcon size={iconVariant.iconSize as IconProps['size']} />
+            )}
+          </LockBase>
+        )
+      }
+      default:
+        return
+    }
+  }
 
   return (
-    <Base size={size} shape={shape} outline={outline}>
-      {indicator !== 'none' && (
-        <Unspaced>
-          <Indicator size={size} state={indicator} />
-        </Unspaced>
-      )}
-      <Shape shape={shape}>
-        <Image
-          src={src}
-          width="full"
-          aspectRatio={1}
-          onLoad={() => setStatus('loaded')}
-          onError={() => setStatus('error')}
-        />
-
-        {status === 'error' && (
-          <Fallback
-            width={size}
-            height={size}
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            PP
-          </Fallback>
-        )}
-      </Shape>
-    </Base>
+    <Stack style={{ position: 'relative', height: 'fit-content' }}>
+      <Base
+        borderRadius={radius}
+        padding={padding}
+        size={props.size}
+        backgroundColor={backgroundColor}
+        // todo?: https://reactnative.dev/docs/images.html#background-image-via-nesting or svg instead
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        style={{
+          ...(Platform.OS === 'web' && {
+            background: identiconRing,
+          }),
+        }}
+      >
+        {renderContent()}
+      </Base>
+      {renderBadge()}
+    </Stack>
   )
 }
 
 export { Avatar }
-export type { Props as AvatarProps }
+export type {
+  AccountAvatarProps,
+  AvatarProps,
+  ChannelAvatarProps,
+  CommunityAvatarProps,
+  GroupAvatarProps,
+  IconAvatarProps,
+  UserAvatarProps,
+  WalletAvatarProps,
+}
 
 const Base = styled(Stack, {
   name: 'Avatar',
@@ -74,54 +356,54 @@ const Base = styled(Stack, {
   position: 'relative',
   justifyContent: 'center',
   alignItems: 'center',
+  overflow: 'hidden',
 
   variants: {
-    // defined in Avatar props
     size: {
-      '...': (size: number) => {
-        return {
-          width: size,
-          height: size,
-        }
+      80: {
+        width: 80,
+        height: 80,
       },
-    },
-
-    shape: {
-      circle: {
-        borderRadius: '$full',
+      56: {
+        width: 56,
+        height: 56,
       },
-      rounded: {
-        borderRadius: '$16',
+      48: {
+        width: 48,
+        height: 48,
       },
-    },
-
-    outline: {
-      true: {
-        borderWidth: 2,
-        borderColor: '$white-100',
+      32: {
+        width: 32,
+        height: 32,
+      },
+      28: {
+        width: 28,
+        height: 28,
+      },
+      24: {
+        width: 24,
+        height: 24,
+      },
+      20: {
+        width: 20,
+        height: 20,
+      },
+      16: {
+        width: 16,
+        height: 16,
       },
     },
   } as const,
 })
 
-const Shape = styled(Stack, {
-  name: 'AvatarShape',
+const Fallback = styled(Stack, {
+  name: 'AvatarFallback',
+
+  justifyContent: 'center',
+  alignItems: 'center',
 
   width: '100%',
   height: '100%',
-  backgroundColor: '$white-100',
-  overflow: 'hidden',
-
-  variants: {
-    shape: {
-      circle: {
-        borderRadius: '$full',
-      },
-      rounded: {
-        borderRadius: '$16',
-      },
-    },
-  },
 })
 
 const Indicator = styled(Stack, {
@@ -191,6 +473,31 @@ const Indicator = styled(Stack, {
   } as const,
 })
 
-const Fallback = styled(Text, {
-  name: 'AvatarFallback',
+const LockBase = styled(Stack, {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 16,
+  height: 16,
+  backgroundColor: '$white-100',
+  position: 'absolute',
+  borderRadius: '$full',
+
+  variants: {
+    variant: {
+      80: {
+        width: 48,
+        height: 48,
+        right: -14,
+        bottom: -14,
+      },
+      24: {
+        right: -4,
+        bottom: -4,
+      },
+      20: {
+        right: -6,
+        bottom: -6,
+      },
+    },
+  } as const,
 })
