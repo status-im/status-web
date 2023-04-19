@@ -1,7 +1,7 @@
 import { LoadingIcon, TrashIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
-import { IconAvatar } from '../../avatar'
+import { Avatar } from '../../avatar'
 import { Button } from '../../button'
 import { Text } from '../../text'
 
@@ -22,12 +22,13 @@ const DeletedMessageContent = (props: Props) => {
 
   return (
     <>
-      <IconAvatar
+      <Avatar
+        type="icon"
+        size={32}
+        icon={<TrashIcon size={20} />}
         backgroundColor={state === 'landed' ? '$transparent' : '$red-50-opa-5'}
         color="$neutral-100"
-      >
-        <TrashIcon size={20} />
-      </IconAvatar>
+      />
       <Stack
         flexDirection="row"
         gap={2}

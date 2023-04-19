@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { MutedIcon, NotificationIcon, OptionsIcon } from '@status-im/icons'
 import { Stack, styled } from 'tamagui'
 
-import { ChannelAvatar } from '../avatar'
+import { Avatar } from '../avatar'
 import { Counter } from '../counter'
 import { DropdownMenu } from '../dropdown-menu'
 import { Text } from '../text'
@@ -95,7 +95,7 @@ const Channel = (props: Props) => {
       state={active ? 'active' : selected ? 'selected' : undefined}
     >
       <Stack flexDirection="row" gap={8} alignItems="center">
-        <ChannelAvatar emoji={emoji} size={24} lock={lock} />
+        <Avatar type="channel" emoji={emoji} size={24} lock={lock} />
         <Text size={15} weight="medium" color={textColor}>
           # {children}
         </Text>
