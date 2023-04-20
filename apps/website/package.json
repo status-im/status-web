@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "TAMAGUI_TARGET='web' next dev",
     "build": "TAMAGUI_TARGET='web' next build",
     "start": "TAMAGUI_TARGET='web' next start",
