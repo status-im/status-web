@@ -4,7 +4,7 @@ import { ChevronRightIcon } from '@status-im/icons'
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
-import { AccountAvatar, Avatar, IconAvatar } from '../avatar'
+import { Avatar } from '../avatar'
 import { Text } from '../text'
 
 import type { AvatarProps, IconAvatarProps } from '../avatar'
@@ -103,9 +103,14 @@ const ContextTag = (props: Props) => {
       case 'channel': {
         return (
           <>
-            <Avatar size={avatarSizes[size]} src={props.channel.src} />
+            <Avatar
+              type="channel"
+              size={avatarSizes[size]}
+              src={props.channel.src}
+              name={props.channel.name}
+            />
             <Label size={size}>{props.channel.communityName}</Label>
-            <ChevronRightIcon color="$neutral-50" />
+            <ChevronRightIcon color="$neutral-50" size={20} />
             <Label size={size}>{`# ` + props.channel.name}</Label>
           </>
         )
@@ -128,7 +133,6 @@ const ContextTag = (props: Props) => {
       case 'audio': {
         return (
           <>
-            <AudioIcon color="$neutral-50" />
             <Label size={size}>{props.audioLength}</Label>
           </>
         )
@@ -136,10 +140,10 @@ const ContextTag = (props: Props) => {
       case 'account': {
         return (
           <>
-            <AccountAvatar
+            <Avatar
+              type="account"
               size={iconAvatarSizes[size]}
-              emoji={props.user.emoji}
-              shape="rounded"
+              name={props.user.emoji}
             />
             <Label size={size}>{props.user.name}</Label>
           </>
@@ -148,14 +152,15 @@ const ContextTag = (props: Props) => {
       case 'group': {
         return (
           <>
-            <IconAvatar
+            <Avatar
+              type="icon"
               size={iconAvatarSizes[size]}
               backgroundColor="$purple-50"
               color="$white-70"
             >
               {props.group.icon &&
                 cloneElement(props.group.icon, { color: '$neutral-50' })}
-            </IconAvatar>
+            </Avatar>
             <Label size={size}>{props.group.name}</Label>
           </>
         )
@@ -204,7 +209,6 @@ const ContextTag = (props: Props) => {
     >
       {/* <Avatar size={avatarSizes[size]} src={props.src} />
       {props.icon && cloneElement(props.icon, { color: '$neutral-50' })} */}
-
       {renderContent()}
     </Base>
   )

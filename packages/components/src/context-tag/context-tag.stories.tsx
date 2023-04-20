@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-import { PendingIcon } from '@status-im/icons'
-=======
-import { PendingIcon } from '@status-im/icons/12'
-import { GroupIcon } from '@status-im/icons/16'
->>>>>>> 668cc1d5 (context tag refactor)
+import { MembersIcon, PendingIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { ContextTag } from './context-tag'
@@ -45,7 +40,7 @@ export const AllVariants: Story = {
           type="group"
           group={{
             name: 'Group',
-            icon: <GroupIcon />,
+            icon: <MembersIcon size={16} />,
           }}
           size={size}
         />
