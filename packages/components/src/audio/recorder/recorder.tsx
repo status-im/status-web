@@ -1,210 +1,3 @@
-// import { useEffect, useRef, useState } from 'react'
-
-// import { AudioIcon, PauseIcon, PlayIcon, StopIcon } from '@status-im/icons'
-// import { Stack } from '@tamagui/core'
-// import WaveSurfer from 'wavesurfer.js'
-// import MicrophonePlugin from 'wavesurfer.js/src/plugin/microphone'
-
-// import { IconButton } from '../../icon-button'
-
-// export const Recorder = () => {
-//   const containerRef = useRef<HTMLDivElement>(null)
-//   const waveSurferRef = useRef<WaveSurfer | null>(null)
-//   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-//   const [isRecording, setIsRecording] = useState<boolean>(false)
-//   const [isPlaying, setIsPlaying] = useState<boolean>(false)
-//   const [audioBlob, setAudioBlob] = useState<Blob>()
-
-//   const progressColor = 'rgba(42, 121, 155, 1)'
-//   const waveColor = 'rgba(42, 121, 155, 0.2)'
-
-//   useEffect(() => {
-//     if (!containerRef.current) return
-
-//     const waveSurfer = WaveSurfer.create({
-//       container: containerRef.current,
-//       waveColor,
-//       progressColor,
-//       cursorColor: '#4353FF',
-//       barWidth: 2,
-//       barRadius: 3,
-//       cursorWidth: 0,
-//       barGap: 4,
-//       height: 32,
-//       maxCanvasWidth: 400,
-//       normalize: true,
-//       responsive: true,
-//       partialRender: true,
-//       mediaType: 'audio',
-//       mediaControls: true,
-//       backend: 'WebAudio',
-//       plugins: [
-//         MicrophonePlugin.create({
-//           bufferSize: 4096,
-//           numberOfInputChannels: 1,
-//           numberOfOutputChannels: 1,
-//           constraints: {
-//             video: false,
-//             audio: true,
-//           },
-//         }),
-//       ],
-//     })
-//     waveSurferRef.current = waveSurfer
-
-//     waveSurfer.load('https://wavesurfer-js.org/example/media/demo.wav')
-//     waveSurfer.on('ready', () => {
-//       console.log("I'm ready!")
-//     })
-
-//     return () => {
-//       waveSurfer.destroy()
-//     }
-//   }, [])
-
-//   const handleRecord = () => {
-//     if (waveSurferRef.current) {
-//       waveSurferRef.current.microphone.start()
-//     }
-//     navigator.mediaDevices
-//       .getUserMedia({ audio: true })
-//       .then(stream => {
-//         const mediaRecorder = new MediaRecorder(stream)
-
-//         mediaRecorderRef.current = mediaRecorder
-
-//         let chunks: Blob[] = []
-//         console.log('stream: ', mediaRecorder.stream)
-//         mediaRecorder.addEventListener('dataavailable', event => {
-//           chunks.push(event.data)
-//           console.log("here's the data: ", event.data)
-//         })
-
-//         setIsRecording(true)
-//         mediaRecorder.start()
-
-//         mediaRecorder.addEventListener('stop', () => {
-//           clearInterval(intervalId)
-
-//           const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' })
-//           setAudioBlob(blob)
-//           setIsRecording(false)
-//           chunks = []
-
-//           if (waveSurferRef.current) {
-//             waveSurferRef.current.empty()
-//             waveSurferRef.current.load(URL.createObjectURL(blob))
-//           }
-//         })
-
-//         setTimeout(() => {
-//           // Already stopped
-//           if (mediaRecorder.state === 'inactive') return
-//           mediaRecorder.stop()
-//           // Stops the recording after 2 minutes
-//         }, 120000)
-//       })
-//       .catch(err => {
-//         // Not allowed to record
-//         console.log('error: ', err)
-//       })
-//   }
-
-//   useEffect(() => {
-//     if (!waveSurferRef.current) return
-//     let mediaRecorder: MediaRecorder
-//     const audioChunks: Blob[] = []
-//     waveSurferRef.current.microphone.on('deviceReady', function (stream) {
-//       console.info('Device ready!')
-//       mediaRecorder = new MediaRecorder(stream)
-//       mediaRecorder.start()
-//       mediaRecorder.addEventListener('dataavailable', event => {
-//         audioChunks.push(event.data)
-//       })
-
-//       mediaRecorder.addEventListener('stop', () => {
-//         const audioBlob = new Blob(audioChunks)
-//         const audioUrl = URL.createObjectURL(audioBlob)
-//         const audio = new Audio(audioUrl)
-//         audio.play()
-//       })
-//     })
-//   }, [waveSurferRef])
-
-//   useEffect(() => {
-//     if (audioBlob) {
-//       const audioUrl = URL.createObjectURL(audioBlob)
-
-//       waveSurferRef.current?.load(audioUrl)
-//     }
-//   }, [audioBlob, waveSurferRef])
-
-//   useEffect(() => {
-//     if (waveSurferRef.current) {
-//       waveSurferRef.current.on('play', () => {
-//         setIsPlaying(true)
-//       })
-//       waveSurferRef.current.on('pause', () => {
-//         setIsPlaying(false)
-//       })
-//       waveSurferRef.current.on('finish', () => {
-//         setIsPlaying(false)
-//       })
-//     }
-//   }, [waveSurferRef])
-
-//   const handlePlay = () => {
-//     // setIsPlaying(true)
-//     waveSurferRef.current?.play()
-//   }
-
-//   const handleStopPlaying = () => {
-//     waveSurferRef.current?.pause()
-//     // setIsPlaying(false)
-//   }
-//   const handleStop = () => {
-//     setIsRecording(false)
-//     mediaRecorderRef.current?.stop()
-//   }
-
-//   return (
-//     <Stack flexDirection="row" width="100%" gap={12}>
-//       <Stack flexGrow={0}>
-//         {isRecording ? (
-//           <IconButton icon={<StopIcon size={12} />} onPress={handleStop} />
-//         ) : (
-//           <>
-//             {isPlaying ? (
-//               <IconButton
-//                 icon={<PauseIcon size={12} />}
-//                 onPress={handleStopPlaying}
-//               />
-//             ) : (
-//               <IconButton
-//                 icon={<PlayIcon size={12} />}
-//                 onPress={handlePlay}
-//                 // disabled={!audioBlob}
-//               />
-//             )}
-//             <IconButton
-//               icon={<AudioIcon size={12} />}
-//               // onPress={handleRecord}
-//               disabled={isRecording}
-//             />
-//           </>
-//         )}
-//       </Stack>
-//       <div
-//         style={{
-//           flexGrow: 1,
-//           height: 32,
-//         }}
-//         ref={containerRef}
-//       />
-//     </Stack>
-//   )
-// }
-
 // import { VoiceRecorder } from 'react-voice-recorder-player'
 
 // export function Recorder() {
@@ -247,6 +40,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { Stack } from '@tamagui/core'
+import { useWindowDimensions } from 'tamagui'
 
 interface Bar {
   x: number
@@ -269,17 +63,17 @@ export const Recorder = () => {
   const frequencyArrayRef = useRef<Float32Array | null>(null)
   const barsRef = useRef<Bar[]>([])
 
+  const dimensions = useWindowDimensions()
+
   useEffect(() => {
     let animationFrameId: number | null = null
-    console.log('canvasRef.current: ', canvasRef.current)
-    console.log('analyserRef.current: ', analyserRef.current)
 
     if (canvasRef.current && analiserData) {
       const canvas = canvasRef.current
       const ctx = canvas.getContext('2d')
 
       if (!ctx) return
-      const WIDTH = window.innerWidth * 0.5
+      const WIDTH = dimensions.width
       const HEIGHT = 96
 
       canvas.width = WIDTH
@@ -337,7 +131,7 @@ export const Recorder = () => {
     return () => {
       cancelAnimationFrame(animationFrameId!)
     }
-  }, [canvasRef, analyserRef, analiserData, isRecording])
+  }, [canvasRef, analyserRef, analiserData, isRecording, dimensions.width])
 
   const handleStartRecording = () => {
     setIsRecording(true)
