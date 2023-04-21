@@ -8,7 +8,7 @@
     "start": "TAMAGUI_TARGET='web' next start",
     "lint": "next lint",
     "typecheck": "tsc",
-    "clean": "rimraf .next .tamagui node_modules",
+    "clean": "rimraf .next .tamagui .vercel/output node_modules",
     "serve": "TAMAGUI_TARGET='web' NODE_ENV=production next start --port 8151"
   },
   "dependencies": {
