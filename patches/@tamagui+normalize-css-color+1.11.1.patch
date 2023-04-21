@@ -1,0 +1,97 @@
+diff --git a/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js b/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js
+index 5cc11a1..1fb47bd 100644
+--- a/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js
++++ b/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js
+@@ -27,10 +27,6 @@ const names = {
+   white: 4294967295,
+   black: 255
+ };
+-if (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === "native") {
+-  const allNames = require("./names.native").names;
+-  Object.assign(names, allNames);
+-}
+ // Annotate the CommonJS export names for ESM import in node:
+ 0 && (module.exports = {
+   names
+diff --git a/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js.map b/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js.map
+index ac619f5..ec186e1 100644
+--- a/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js.map
++++ b/node_modules/@tamagui/normalize-css-color/dist/cjs/names.js.map
+@@ -1,7 +1,7 @@
+ {
+   "version": 3,
+   "sources": ["../../src/names.ts"],
+-  "sourcesContent": ["export const names = {\n  // keep the basics\n  transparent: 0x00000000,\n  white: 0xffffffff,\n  black: 0x000000ff,\n}\n\nif (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === 'native') {\n  const allNames = require('./names.native').names\n  Object.assign(names, allNames)\n}\n"],
++  "sourcesContent": ["export const names = {\n  // keep the basics\n  transparent: 0x00000000,\n  white: 0xffffffff,\n  black: 0x000000ff,\n}\n\n"],
+   "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,MAAM,QAAQ;AAAA;AAAA,EAEnB,aAAa;AAAA,EACb,OAAO;AAAA,EACP,OAAO;AACT;AAEA,IAAI,QAAQ,IAAI,2BAA2B,QAAQ,IAAI,mBAAmB,UAAU;AAClF,QAAM,WAAW,QAAQ,gBAAgB,EAAE;AAC3C,SAAO,OAAO,OAAO,QAAQ;AAC/B;",
+   "names": []
+ }
+diff --git a/node_modules/@tamagui/normalize-css-color/dist/esm/names.js b/node_modules/@tamagui/normalize-css-color/dist/esm/names.js
+index 73189e9..3282988 100644
+--- a/node_modules/@tamagui/normalize-css-color/dist/esm/names.js
++++ b/node_modules/@tamagui/normalize-css-color/dist/esm/names.js
+@@ -4,10 +4,6 @@ const names = {
+   white: 4294967295,
+   black: 255
+ };
+-if (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === "native") {
+-  const allNames = require("./names.native").names;
+-  Object.assign(names, allNames);
+-}
+ export {
+   names
+ };
+diff --git a/node_modules/@tamagui/normalize-css-color/dist/esm/names.js.map b/node_modules/@tamagui/normalize-css-color/dist/esm/names.js.map
+index 0c02e92..d5162f3 100644
+--- a/node_modules/@tamagui/normalize-css-color/dist/esm/names.js.map
++++ b/node_modules/@tamagui/normalize-css-color/dist/esm/names.js.map
+@@ -1,7 +1,7 @@
+ {
+   "version": 3,
+   "sources": ["../../src/names.ts"],
+-  "sourcesContent": ["export const names = {\n  // keep the basics\n  transparent: 0x00000000,\n  white: 0xffffffff,\n  black: 0x000000ff,\n}\n\nif (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === 'native') {\n  const allNames = require('./names.native').names\n  Object.assign(names, allNames)\n}\n"],
++  "sourcesContent": ["export const names = {\n  // keep the basics\n  transparent: 0x00000000,\n  white: 0xffffffff,\n  black: 0x000000ff,\n}\n"],
+   "mappings": "AAAO,MAAM,QAAQ;AAAA;AAAA,EAEnB,aAAa;AAAA,EACb,OAAO;AAAA,EACP,OAAO;AACT;AAEA,IAAI,QAAQ,IAAI,2BAA2B,QAAQ,IAAI,mBAAmB,UAAU;AAClF,QAAM,WAAW,QAAQ,gBAAgB,EAAE;AAC3C,SAAO,OAAO,OAAO,QAAQ;AAC/B;",
+   "names": []
+ }
+diff --git a/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs b/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs
+index a24805e..d375731 100644
+--- a/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs
++++ b/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs
+@@ -4,10 +4,6 @@ const names = {
+   white: 4294967295,
+   black: 255
+ };
+-if (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === "native") {
+-  const allNames = require("./names.native").names;
+-  Object.assign(names, allNames);
+-}
+ export {
+   names
+ };
+diff --git a/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs.map b/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs.map
+index 0c02e92..d5162f3 100644
+--- a/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs.map
++++ b/node_modules/@tamagui/normalize-css-color/dist/esm/names.mjs.map
+@@ -1,7 +1,7 @@
+ {
+   "version": 3,
+   "sources": ["../../src/names.ts"],
+-  "sourcesContent": ["export const names = {\n  // keep the basics\n  transparent: 0x00000000,\n  white: 0xffffffff,\n  black: 0x000000ff,\n}\n\nif (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === 'native') {\n  const allNames = require('./names.native').names\n  Object.assign(names, allNames)\n}\n"],
++  "sourcesContent": ["export const names = {\n  // keep the basics\n  transparent: 0x00000000,\n  white: 0xffffffff,\n  black: 0x000000ff,\n}\n"],
+   "mappings": "AAAO,MAAM,QAAQ;AAAA;AAAA,EAEnB,aAAa;AAAA,EACb,OAAO;AAAA,EACP,OAAO;AACT;AAEA,IAAI,QAAQ,IAAI,2BAA2B,QAAQ,IAAI,mBAAmB,UAAU;AAClF,QAAM,WAAW,QAAQ,gBAAgB,EAAE;AAC3C,SAAO,OAAO,OAAO,QAAQ;AAC/B;",
+   "names": []
+ }
+diff --git a/node_modules/@tamagui/normalize-css-color/src/names.ts b/node_modules/@tamagui/normalize-css-color/src/names.ts
+index 6fc9f8c..105d1a8 100644
+--- a/node_modules/@tamagui/normalize-css-color/src/names.ts
++++ b/node_modules/@tamagui/normalize-css-color/src/names.ts
+@@ -4,8 +4,3 @@ export const names = {
+   white: 0xffffffff,
+   black: 0x000000ff,
+ }
+-
+-if (process.env.INCLUDE_CSS_COLOR_NAMES || process.env.TAMAGUI_TARGET === 'native') {
+-  const allNames = require('./names.native').names
+-  Object.assign(names, allNames)
+-}
