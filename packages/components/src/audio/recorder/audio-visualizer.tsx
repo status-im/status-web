@@ -2,24 +2,31 @@ import { useCallback, useEffect, useRef } from 'react'
 
 import { Stack } from '@tamagui/core'
 
-interface Bar {
+type Bar = {
   x: number
   y: number
   height: number
   width: number
 }
 
-const DEFAULT_FFT_SIZE = 256
+type Props = {
+  width?: number
+  height?: number
+  analyser: AnalyserNode | null
+}
+
 const TIME_OFF_SET = 80
-const TIME_BETWEEN_BARS = 0.5
+const TIME_BETWEEN_BARS = 0.6
 const BAR_WIDTH = 2
 
+// Our drawing bar function
 const drawBars = (ctx: CanvasRenderingContext2D, bars: Bar[]) => {
   bars.forEach((bar, index) => {
     ctx.fillStyle = `rgb(161, 171, 189)`
     ctx.fillRect(bar.x, bar.y, bar.width, bar.height)
 
-    bar.x = bar.x - BAR_WIDTH / 1.5
+    // Move the bar to the left
+    bar.x = bar.x - BAR_WIDTH / 2
 
     if (bar.x < 1) {
       bars.splice(index, 1)
@@ -27,15 +34,15 @@ const drawBars = (ctx: CanvasRenderingContext2D, bars: Bar[]) => {
   })
 }
 
-function AudioVisualizer() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+const AudioVisualizer = (props: Props) => {
+  const { width = '100%', height = 32, analyser } = props
 
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const barsRef = useRef<Bar[]>([])
-  const analyzerRef = useRef<AnalyserNode | null>(null)
   const lastBarTimeRef = useRef<number>(0)
 
+  // Main draw function
   const draw = useCallback(() => {
-    const now = Number(performance.now()) / TIME_OFF_SET
     const canvas = canvasRef.current
 
     if (!canvas) return
@@ -44,24 +51,16 @@ function AudioVisualizer() {
 
     if (!ctx) return
 
-    const WIDTH = window.innerWidth
-    const HEIGHT = window.innerHeight
+    canvas.height = height
+    canvas.width = window.innerWidth
 
-    canvas.width = WIDTH
-    canvas.height = HEIGHT
-    canvas.style.width = WIDTH + 'px'
-    canvas.style.height = HEIGHT + 'px'
+    // Get the frequency data from our analyser
+    const frequencyArray = new Float32Array(256)
+    const now = Number(performance.now()) / TIME_OFF_SET
 
-    ctx.fillStyle = 'rgb(255, 255, 255)'
-    ctx.fillRect(0, 0, WIDTH, HEIGHT)
-
-    const frequencyArray = new Float32Array(DEFAULT_FFT_SIZE)
-
-    if (
-      analyzerRef.current &&
-      now > lastBarTimeRef.current + TIME_BETWEEN_BARS
-    ) {
-      analyzerRef.current.getFloatTimeDomainData(frequencyArray)
+    // we only want to draw one bar every TIME_BETWEEN_BARS seconds
+    if (analyser && now > lastBarTimeRef.current + TIME_BETWEEN_BARS) {
+      analyser.getFloatTimeDomainData(frequencyArray)
 
       let maxFreq = -Infinity
 
@@ -69,6 +68,7 @@ function AudioVisualizer() {
 
       const freq = Math.max(maxFreq, Math.floor(maxFreq * 128))
 
+      // Add bar to our array
       barsRef.current.push({
         x: canvasRef.current.offsetWidth,
         y: canvasRef.current.offsetHeight / 2 - freq / 2,
@@ -80,24 +80,9 @@ function AudioVisualizer() {
     }
 
     drawBars(ctx, barsRef.current)
-
+    // Call again our draw function
     requestAnimationFrame(draw)
-  }, [])
-
-  useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-      const AudioContext = window.AudioContext
-      const audioContent = new AudioContext()
-      const streamSource = audioContent.createMediaStreamSource(stream)
-
-      const analyzer = audioContent.createAnalyser()
-      streamSource.connect(analyzer)
-      analyzer.fftSize = DEFAULT_FFT_SIZE
-
-      barsRef.current = []
-      analyzerRef.current = analyzer
-    })
-  }, [])
+  }, [analyser, height])
 
   useEffect(() => {
     const animationFrameId = requestAnimationFrame(draw)
@@ -111,7 +96,12 @@ function AudioVisualizer() {
     <Stack>
       <canvas
         ref={canvasRef}
-        style={{ overflowClipMargin: 'content-box', overflow: 'hidden' }}
+        style={{
+          overflowClipMargin: 'content-box',
+          overflow: 'hidden',
+          width,
+          height,
+        }}
       />
     </Stack>
   )
