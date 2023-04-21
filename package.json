@@ -12,6 +12,7 @@
   },
   "keywords": [],
   "scripts": {
+    "postinstall": "patch-package",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
@@ -49,6 +50,7 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
+    "patch-package": "^6.5.1",
     "prettier": "^2.8.7",
     "prettier-plugin-tailwindcss": "^0.2.7",
     "rimraf": "^4.4.1",
