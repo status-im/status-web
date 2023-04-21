@@ -46,7 +46,6 @@
     "@tamagui/react-native-media-driver": "1.11.1",
     "@tamagui/shorthands": "1.11.1",
     "@tamagui/theme-base": "1.11.1",
-    "@tamagui/vite-plugin": "1.11.1",
     "expo-blur": "^12.2.2",
     "expo-linear-gradient": "^12.1.2",
     "tamagui": "1.11.1",
