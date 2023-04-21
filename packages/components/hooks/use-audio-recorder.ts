@@ -1,32 +1,43 @@
-import { useCallback, useState } from 'react'
+import { useRef, useState } from 'react'
 
-export interface recorderControls {
+type RecorderControls = {
+  analyser: AnalyserNode | null
   startRecording: () => void
   stopRecording: () => void
-  togglePauseResume: () => void
-  recordingBlob?: Blob
+  deleteRecording: () => void
+  tooglePlayPause: () => void
+  audioBlob?: Blob
   isRecording: boolean
-  isPaused: boolean
+  isPlaying: boolean
   recordingTime: number
 }
 
-const useAudioRecorder: () => recorderControls = () => {
+/**
+ * A React hook that provides a set of methods to control audio recording
+ * @returns {RecorderControls} An object containing the following properties:
+ * - `analyser`: An `AnalyserNode` instance that can be used to analyze the audio stream
+ * - `startRecording`: A method that starts the recording
+ * - `stopRecording`: A method that stops the recording
+ * - `audioBlob`: A `Blob` instance containing the recorded audio
+ * - `isRecording`: A boolean value indicating whether the recording is in progress
+ * - `recordingTime`: A number indicating the time in seconds for which the recording has been in progress
+ **/
+
+const useAudioRecorder = (): RecorderControls => {
   const [isRecording, setIsRecording] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>()
   const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>()
-  const [recordingBlob, setRecordingBlob] = useState<Blob>()
-  const [analyserData, setAnalyserData] = useState<AnalyserNode | null>(null)
-  const [frequencyArray, setFrequencyArray] = useState<Float32Array | null>(
-    null
-  )
+  const [audioBlob, setAudioBlob] = useState<Blob>()
+  const analyserRef = useRef<AnalyserNode | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const startTimer: () => void = () => {
     const interval = setInterval(() => {
       setRecordingTime(time => time + 1)
     }, 1000)
     setTimerInterval(interval)
+    return () => clearInterval(interval)
   }
 
   const stopTimer: () => void = () => {
@@ -37,7 +48,7 @@ const useAudioRecorder: () => recorderControls = () => {
   /**
    * Calling this method would result in the recording to start. Sets `isRecording` to true
    */
-  const startRecording: () => void = useCallback(() => {
+  const startRecording: () => void = () => {
     if (timerInterval != null) return
 
     const audioContext = new AudioContext()
@@ -49,66 +60,71 @@ const useAudioRecorder: () => recorderControls = () => {
         const recorder: MediaRecorder = new MediaRecorder(stream)
         setMediaRecorder(recorder)
         recorder.start()
+
         startTimer()
 
         // Audio analysis
         const source = audioContext.createMediaStreamSource(stream)
         const analyser = audioContext.createAnalyser()
 
-        analyser.fftSize = 512
+        analyser.fftSize = 256
 
         source.connect(analyser)
-        analyser.connect(audioContext.destination)
-        setFrequencyArray(new Float32Array(analyser.fftSize))
 
-        setAnalyserData(analyser)
+        analyserRef.current = analyser
 
         // Recording
         recorder.addEventListener('dataavailable', event => {
-          setRecordingBlob(event.data)
+          setAudioBlob(event.data)
           recorder.stream.getTracks().forEach(t => t.stop())
           setMediaRecorder(null)
+
           audioContext.close()
         })
       })
       .catch(err => console.log(err))
-  }, [timerInterval])
+  }
 
   /**
-   * Calling this method results in a recording in progress being stopped and the resulting audio being present in `recordingBlob`. Sets `isRecording` to false
+   * Calling this method results in a recording in progress being stopped and the resulting audio being present in `audioBlob`. Sets `isRecording` to false
    */
-  const stopRecording: () => void = () => {
+  const stopRecording = () => {
     mediaRecorder?.stop()
     stopTimer()
     setRecordingTime(0)
     setIsRecording(false)
-    setIsPaused(false)
   }
 
   /**
-   * Calling this method would pause the recording if it is currently running or resume if it is paused. Toggles the value `isPaused`
+   * Calling this method results in deleting the recorded audio
    */
-  const togglePauseResume: () => void = () => {
-    if (isPaused) {
-      setIsPaused(false)
-      mediaRecorder?.resume()
-      startTimer()
-    } else {
-      setIsPaused(true)
+
+  const deleteRecording = () => {
+    setAudioBlob(undefined)
+    setRecordingTime(0)
+
+    if (mediaRecorder?.state === 'recording') {
+      mediaRecorder?.stop()
       stopTimer()
-      mediaRecorder?.pause()
     }
   }
 
+  /**
+   * Calling this method results in playing or pausing the recorded audio
+   */
+  const tooglePlayPause = () => {
+    setIsPlaying(!isPlaying)
+  }
+
   return {
-    analyserData,
-    frequencyArray,
+    analyser: analyserRef.current,
+    deleteRecording,
     startRecording,
+    isPlaying,
     stopRecording,
-    togglePauseResume,
-    recordingBlob,
+    tooglePlayPause,
+    audioBlob,
     isRecording,
-    isPaused,
     recordingTime,
   }
 }
