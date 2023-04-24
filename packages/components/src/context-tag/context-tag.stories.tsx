@@ -24,7 +24,7 @@ export const Base: Story = {
 }
 
 export const AllVariants: Story = {
-  args: { size: 24, outline: false, blur: false },
+  args: { size: 32, outline: false, blur: false },
   render: ({ size, outline, blur }) => (
     <Stack space flexDirection="row">
       <Stack space flexDirection="column" alignItems="flex-start">
@@ -42,7 +42,7 @@ export const AllVariants: Story = {
           type="group"
           group={{
             name: 'Group',
-            icon: <MembersIcon size={(size ?? 16) / 2} />,
+            icon: <MembersIcon size={(size ?? 32) / 2} />,
           }}
           size={size}
           outline={outline}
