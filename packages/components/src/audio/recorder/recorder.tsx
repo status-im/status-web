@@ -1,18 +1,13 @@
 import { useEffect } from 'react'
 
-import {
-  AudioIcon,
-  PauseIcon,
-  PlayIcon,
-  StopIcon,
-  TrashIcon,
-} from '@status-im/icons'
+import { AudioIcon, PauseIcon, PlayIcon, TrashIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { useAudioRecorder } from '../../../hooks'
 import { IconButton } from '../../icon-button'
 import { Text } from '../../text'
 import { AudioVisualizer } from './audio-visualizer'
+import { StopButton } from './components/stop-button'
 import { Player } from './player'
 
 const getSeconds = (s: number): number => s % 60
@@ -95,7 +90,6 @@ const Recorder = () => {
       {!isRecording && recordingTime === 0 && (
         <IconButton icon={<AudioIcon size={20} />} onPress={startRecording} />
       )}
-
       <Stack flexDirection="row">
         {(isRecording || audioBlob) && (
           <IconButton
@@ -103,9 +97,7 @@ const Recorder = () => {
             onPress={deleteRecording}
           />
         )}
-        {isRecording && (
-          <IconButton icon={<StopIcon size={20} />} onPress={stopRecording} />
-        )}
+        {isRecording && <StopButton onPress={stopRecording} />}
       </Stack>
     </Stack>
   )
