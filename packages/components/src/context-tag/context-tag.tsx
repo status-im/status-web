@@ -1,5 +1,5 @@
 import { ChevronRightIcon, PlayIcon } from '@status-im/icons'
-import { styled } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 import { View } from 'react-native'
 
 import { Avatar } from '../avatar'
@@ -102,9 +102,11 @@ const ContextTag = (props: Props) => {
               src={props.channel.src}
               name={props.channel.name}
             />
-            <Label size={size}>{props.channel.communityName}</Label>
-            <ChevronRightIcon color="$neutral-50" size={20} />
-            <Label size={size}>{`# ` + props.channel.name}</Label>
+            <Stack flexDirection="row" gap="$0">
+              <Label size={size}>{props.channel.communityName}</Label>
+              <ChevronRightIcon color="$neutral-50" size={20} />
+              <Label size={size}>{`# ` + props.channel.name}</Label>
+            </Stack>
           </>
         )
       }
