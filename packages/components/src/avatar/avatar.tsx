@@ -41,7 +41,7 @@ type WalletAvatarProps = {
 
 type ChannelAvatarProps = {
   type: 'channel'
-  size: 80 | 32 | 24 | 20
+  size: 80 | 32 | 28 | 24 | 20
   emoji: string
   backgroundColor?: ColorTokens
   background?: ColorTokens
@@ -50,7 +50,7 @@ type ChannelAvatarProps = {
 
 type CommunityAvatarProps = {
   type: 'community'
-  size: 80 | 32 | 24 | 20
+  size: 80 | 32 | 28 | 24 | 20
   name: string
   src?: string
   backgroundColor?: ColorTokens
@@ -66,7 +66,7 @@ type AccountAvatarProps = {
 
 type IconAvatarProps = {
   type: 'icon'
-  size: 48 | 32 | 20
+  size: 48 | 32 | 28 | 24 | 20
   icon: React.ReactElement
   backgroundColor?: ColorTokens
   color?: ColorTokens

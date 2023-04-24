@@ -1,13 +1,15 @@
-import { cloneElement } from 'react'
-
-import { ChevronRightIcon } from '@status-im/icons'
+import { ChevronRightIcon, PlayIcon } from '@status-im/icons'
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
 import { Avatar } from '../avatar'
 import { Text } from '../text'
 
-import type { AvatarProps, IconAvatarProps } from '../avatar'
+import type {
+  AvatarProps,
+  ChannelAvatarProps,
+  IconAvatarProps,
+} from '../avatar'
 import type { TextProps } from '../text'
 
 type Props = {
@@ -48,10 +50,23 @@ const avatarSizes: Record<NonNullable<Props['size']>, AvatarProps['size']> = {
   '24': 20,
 }
 
+const channelAvatarSizes: Record<
+  NonNullable<Props['size']>,
+  ChannelAvatarProps['size']
+> = {
+  '32': 28,
+  '24': 20,
+}
+
 const iconAvatarSizes: Record<
   NonNullable<Props['size']>,
   IconAvatarProps['size']
 > = {
+  '32': 28,
+  '24': 20,
+}
+
+const iconAudioSizes: Record<NonNullable<Props['size']>, 28 | 20> = {
   '32': 28,
   '24': 20,
 }
@@ -87,7 +102,12 @@ const ContextTag = (props: Props) => {
       case 'default': {
         return (
           <>
-            <Avatar size={avatarSizes[size]} src={props.user.src} />
+            <Avatar
+              type="user"
+              size={avatarSizes[size]}
+              src={props.user.src}
+              name={props.user.name}
+            />
             <Label size={size}>{props.user.name}</Label>
           </>
         )
@@ -95,7 +115,12 @@ const ContextTag = (props: Props) => {
       case 'community': {
         return (
           <>
-            <Avatar size={avatarSizes[size]} src={props.community.src} />
+            <Avatar
+              type="community"
+              size={channelAvatarSizes[size]}
+              src={props.community.src}
+              name={props.community.name}
+            />
             <Label size={size}>{props.community.name}</Label>
           </>
         )
@@ -103,12 +128,7 @@ const ContextTag = (props: Props) => {
       case 'channel': {
         return (
           <>
-            <Avatar
-              type="channel"
-              size={avatarSizes[size]}
-              src={props.channel.src}
-              name={props.channel.name}
-            />
+            <Avatar type="channel" size={channelAvatarSizes[size]} emoji="🐷" />
             <Label size={size}>{props.channel.communityName}</Label>
             <ChevronRightIcon color="$neutral-50" size={20} />
             <Label size={size}>{`# ` + props.channel.name}</Label>
@@ -118,7 +138,12 @@ const ContextTag = (props: Props) => {
       case 'token': {
         return (
           <>
-            <Avatar size={avatarSizes[size]} src={props.token.src} />
+            <Avatar
+              type="community"
+              size={channelAvatarSizes[size]}
+              src={props.token.src}
+              name={props.token.name}
+            />
             <Label size={size}>{props.token.name}</Label>
           </>
         )
@@ -133,6 +158,13 @@ const ContextTag = (props: Props) => {
       case 'audio': {
         return (
           <>
+            <Avatar
+              type="icon"
+              size={iconAudioSizes[size]}
+              icon={<PlayIcon size={16} />}
+              backgroundColor="$primary-50"
+              color="$white-100"
+            />
             <Label size={size}>{props.audioLength}</Label>
           </>
         )
@@ -157,10 +189,8 @@ const ContextTag = (props: Props) => {
               size={iconAvatarSizes[size]}
               backgroundColor="$purple-50"
               color="$white-70"
-            >
-              {props.group.icon &&
-                cloneElement(props.group.icon, { color: '$neutral-50' })}
-            </Avatar>
+              icon={props.group.icon}
+            />
             <Label size={size}>{props.group.name}</Label>
           </>
         )
@@ -168,7 +198,12 @@ const ContextTag = (props: Props) => {
       case 'network': {
         return (
           <>
-            <Avatar size={avatarSizes[size]} src={props.network.src} />
+            <Avatar
+              type="community"
+              size={channelAvatarSizes[size]}
+              src={props.network.src}
+              name={props.network.name}
+            />
             <Label size={size}>{props.network.name}</Label>
           </>
         )
@@ -177,9 +212,10 @@ const ContextTag = (props: Props) => {
         return (
           <>
             <Avatar
-              size={avatarSizes[size]}
+              type="account"
+              size={channelAvatarSizes[size]}
               src={props.collectible.src}
-              shape="rounded"
+              name={props.collectible.name}
             />
             <Label size={size}>{props.collectible.name}</Label>
           </>
@@ -188,7 +224,13 @@ const ContextTag = (props: Props) => {
       case 'icon': {
         return (
           <>
-            {props.icon && cloneElement(props.icon, { color: '$neutral-50' })}
+            <Avatar
+              type="icon"
+              size={iconAvatarSizes[size]}
+              icon={props.icon}
+              backgroundColor="$transparent"
+              color="$neutral-50"
+            />
             <Label size={size}>{props.label}</Label>
           </>
         )
@@ -207,8 +249,6 @@ const ContextTag = (props: Props) => {
       paddingHorizontal={size === 24 ? 8 : 12}
       paddingLeft={leftShelf ? 1 : size === 24 ? 8 : 12}
     >
-      {/* <Avatar size={avatarSizes[size]} src={props.src} />
-      {props.icon && cloneElement(props.icon, { color: '$neutral-50' })} */}
       {renderContent()}
     </Base>
   )

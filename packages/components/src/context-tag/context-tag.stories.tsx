@@ -24,8 +24,8 @@ export const Base: Story = {
 }
 
 export const AllVariants: Story = {
-  args: { size: 24 },
-  render: ({ size }) => (
+  args: { size: 24, outline: false, blur: false },
+  render: ({ size, outline, blur }) => (
     <Stack space flexDirection="row">
       <Stack space flexDirection="column" alignItems="flex-start">
         <ContextTag
@@ -35,14 +35,18 @@ export const AllVariants: Story = {
             src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
         <ContextTag
           type="group"
           group={{
             name: 'Group',
-            icon: <MembersIcon size={16} />,
+            icon: <MembersIcon size={(size ?? 16) / 2} />,
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
         <ContextTag
           type="channel"
@@ -52,6 +56,8 @@ export const AllVariants: Story = {
             name: 'channel',
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
         <ContextTag
           type="community"
@@ -59,8 +65,9 @@ export const AllVariants: Story = {
             name: 'Rarible',
             src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
           }}
-          outline={true}
+          outline={outline}
           size={size}
+          blur={blur}
         />
         <ContextTag
           type="token"
@@ -69,6 +76,8 @@ export const AllVariants: Story = {
             src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
         <ContextTag
           type="network"
@@ -77,6 +86,8 @@ export const AllVariants: Story = {
             src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
         <ContextTag
           type="account"
@@ -85,6 +96,8 @@ export const AllVariants: Story = {
             emoji: '🐷',
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
         <ContextTag
           type="collectible"
@@ -93,16 +106,31 @@ export const AllVariants: Story = {
             src: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.seadn.io%2Fgae%2FFG0QJ00fN3c_FWuPeUr9-T__iQl63j9hn5d6svW8UqOmia5zp3lKHPkJuHcvhZ0f_Pd6P2COo9tt9zVUvdPxG_9BBw%3Fw%3D500%26auto%3Dformat&f=1&nofb=1&ipt=c177cd71d8d0114080cfc6efd3f9e098ddaeb1b347919bd3089bf0aacb003b3e&ipo=images',
           }}
           size={size}
+          outline={outline}
+          blur={blur}
         />
-        <ContextTag type="address" address="0x045...1ah" size={size} />
         <ContextTag
-          icon={<PendingIcon size={12} />}
+          type="address"
+          address="0x045...1ah"
+          size={size}
+          outline={outline}
+          blur={blur}
+        />
+        <ContextTag
+          icon={<PendingIcon size={16} />}
           type="icon"
           label="Context"
-          outline
           size={size}
+          outline={outline}
+          blur={blur}
         />
-        <ContextTag type="audio" audioLength="00:32" size={size} />
+        <ContextTag
+          type="audio"
+          audioLength="00:32"
+          size={size}
+          outline={outline}
+          blur={blur}
+        />
       </Stack>
     </Stack>
   ),
