@@ -108,6 +108,7 @@ const channelEmojiSizes: Record<ChannelAvatarProps['size'], TextProps['size']> =
     // todo: design review
     '80': 27,
     '32': 15,
+    '28': 13,
     '24': 13,
     '20': 11,
   }
@@ -145,6 +146,7 @@ const channelLockIconVariants: Record<
   // todo: design review
   '80': { baseVariant: 80, iconSize: 40 },
   '32': { baseVariant: 24, iconSize: 12 },
+  '28': { baseVariant: 24, iconSize: 12 },
   '24': { baseVariant: 24, iconSize: 12 },
   '20': { baseVariant: 20, iconSize: 12 },
 }
