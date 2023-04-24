@@ -3,7 +3,6 @@ import { Stack } from 'tamagui'
 
 import { ContextTag } from './context-tag'
 
-import type { ContextTagProps } from './context-tag'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof ContextTag> = {
