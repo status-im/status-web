@@ -102,7 +102,7 @@ const ContextTag = (props: Props) => {
               src={props.channel.src}
               name={props.channel.name}
             />
-            <Stack flexDirection="row" gap="$0">
+            <Stack flexDirection="row" gap="$0" alignItems="center">
               <Label size={size}>{props.channel.communityName}</Label>
               <ChevronRightIcon color="$neutral-50" size={20} />
               <Label size={size}>{`# ` + props.channel.name}</Label>
