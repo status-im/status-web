@@ -36,6 +36,7 @@ const PinnedMessage = (props: Props) => {
               Pinned Messages
             </Text>
             <ContextTag
+              size={24}
               type="channel"
               channel={{
                 communityName: 'Rarible',

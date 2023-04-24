@@ -86,13 +86,7 @@ const Label = ({
 )
 
 const ContextTag = (props: Props) => {
-  const {
-    // type = 'default', // this is commented because it's not being used
-    size = 24,
-    blur = false,
-    outline,
-    type,
-  } = props
+  const { size = 24, blur = false, outline, type } = props
 
   const rounded = type === 'account' || type === 'collectible'
   const leftShelf = type !== 'address'
@@ -128,7 +122,12 @@ const ContextTag = (props: Props) => {
       case 'channel': {
         return (
           <>
-            <Avatar type="channel" size={channelAvatarSizes[size]} emoji="🐷" />
+            <Avatar
+              type="community"
+              size={channelAvatarSizes[size]}
+              src={props.channel.src}
+              name={props.channel.name}
+            />
             <Label size={size}>{props.channel.communityName}</Label>
             <ChevronRightIcon color="$neutral-50" size={20} />
             <Label size={size}>{`# ` + props.channel.name}</Label>
