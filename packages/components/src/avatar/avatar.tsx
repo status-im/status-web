@@ -283,7 +283,7 @@ const Avatar = (props: AvatarProps) => {
   const renderBadge = () => {
     switch (props.type) {
       case 'user': {
-        if (!props.indicator) {
+        if (!props.indicator || props.indicator === 'none') {
           return
         }
 
