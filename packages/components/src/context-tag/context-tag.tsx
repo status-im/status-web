@@ -5,11 +5,6 @@ import { View } from 'react-native'
 import { Avatar } from '../avatar'
 import { Text } from '../text'
 
-import type {
-  AvatarProps,
-  ChannelAvatarProps,
-  IconAvatarProps,
-} from '../avatar'
 import type { TextProps } from '../text'
 
 type Props = {
@@ -45,28 +40,7 @@ const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '24': 13,
 }
 
-const avatarSizes: Record<NonNullable<Props['size']>, AvatarProps['size']> = {
-  '32': 28,
-  '24': 20,
-}
-
-const channelAvatarSizes: Record<
-  NonNullable<Props['size']>,
-  ChannelAvatarProps['size']
-> = {
-  '32': 28,
-  '24': 20,
-}
-
-const iconAvatarSizes: Record<
-  NonNullable<Props['size']>,
-  IconAvatarProps['size']
-> = {
-  '32': 28,
-  '24': 20,
-}
-
-const iconAudioSizes: Record<NonNullable<Props['size']>, 28 | 20> = {
+const avatarSizes: Record<NonNullable<Props['size']>, 28 | 20> = {
   '32': 28,
   '24': 20,
 }
@@ -111,7 +85,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="community"
-              size={channelAvatarSizes[size]}
+              size={avatarSizes[size]}
               src={props.community.src}
               name={props.community.name}
             />
@@ -124,7 +98,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="community"
-              size={channelAvatarSizes[size]}
+              size={avatarSizes[size]}
               src={props.channel.src}
               name={props.channel.name}
             />
@@ -139,7 +113,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="community"
-              size={channelAvatarSizes[size]}
+              size={avatarSizes[size]}
               src={props.token.src}
               name={props.token.name}
             />
@@ -159,7 +133,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="icon"
-              size={iconAudioSizes[size]}
+              size={avatarSizes[size]}
               icon={<PlayIcon size={16} />}
               backgroundColor="$primary-50"
               color="$white-100"
@@ -173,7 +147,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="account"
-              size={iconAvatarSizes[size]}
+              size={avatarSizes[size]}
               name={props.user.emoji}
             />
             <Label size={size}>{props.user.name}</Label>
@@ -185,7 +159,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="icon"
-              size={iconAvatarSizes[size]}
+              size={avatarSizes[size]}
               backgroundColor="$purple-50"
               color="$white-70"
               icon={props.group.icon}
@@ -199,7 +173,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="community"
-              size={channelAvatarSizes[size]}
+              size={avatarSizes[size]}
               src={props.network.src}
               name={props.network.name}
             />
@@ -212,7 +186,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="account"
-              size={channelAvatarSizes[size]}
+              size={avatarSizes[size]}
               src={props.collectible.src}
               name={props.collectible.name}
             />
@@ -225,7 +199,7 @@ const ContextTag = (props: Props) => {
           <>
             <Avatar
               type="icon"
-              size={iconAvatarSizes[size]}
+              size={avatarSizes[size]}
               icon={props.icon}
               backgroundColor="$transparent"
               color="$neutral-50"
