@@ -3,13 +3,13 @@ import { useEffect, useRef } from 'react'
 import WaveSurfer from 'wavesurfer.js'
 
 type Props = {
-  audioBlob?: Blob
+  audio?: Blob | string
   isPlaying?: boolean
   onFinish?: () => void
 }
 
 export const Player = (props: Props) => {
-  const { audioBlob, isPlaying, onFinish } = props
+  const { audio, isPlaying, onFinish } = props
   const containerRef = useRef<HTMLDivElement>(null)
   const waveSurferRef = useRef<WaveSurfer | null>(null)
 
@@ -46,24 +46,28 @@ export const Player = (props: Props) => {
   }, [containerRef, waveSurferRef, onFinish])
 
   useEffect(() => {
-    if (audioBlob) {
-      const audioUrl = URL.createObjectURL(audioBlob)
+    if (audio) {
+      if (typeof audio === 'string') {
+        waveSurferRef.current?.load(audio)
+      } else {
+        const audioUrl = URL.createObjectURL(audio)
 
-      waveSurferRef.current?.load(audioUrl)
+        waveSurferRef.current?.load(audioUrl)
+      }
     } else {
       waveSurferRef.current?.empty()
     }
-  }, [audioBlob, waveSurferRef])
+  }, [audio, waveSurferRef])
 
   useEffect(() => {
-    if (!audioBlob || !waveSurferRef.current) return
+    if (!audio || !waveSurferRef.current) return
 
     if (isPlaying) {
       waveSurferRef.current.play()
     } else {
       waveSurferRef.current.pause()
     }
-  }, [audioBlob, isPlaying])
+  }, [audio, isPlaying])
 
   return (
     <div
