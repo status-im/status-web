@@ -18,8 +18,11 @@ type RecorderControls = {
  * - `analyser`: An `AnalyserNode` instance that can be used to analyze the audio stream
  * - `startRecording`: A method that starts the recording
  * - `stopRecording`: A method that stops the recording
+ * - `deleteRecording`: A method that deletes the recorded audio
+ * - `tooglePlayPause`: A method that toggles between playing and pausing the recorded audio
  * - `audioBlob`: A `Blob` instance containing the recorded audio
  * - `isRecording`: A boolean value indicating whether the recording is in progress
+ * - `isPlaying`: A boolean value indicating whether the recorded audio is being played
  * - `recordingTime`: A number indicating the time in seconds for which the recording has been in progress
  **/
 

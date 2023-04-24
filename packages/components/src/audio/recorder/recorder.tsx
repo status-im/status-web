@@ -64,7 +64,7 @@ const Recorder = () => {
             />
           )}
           <Player
-            audioBlob={audioBlob}
+            audio={audioBlob}
             isPlaying={isPlaying}
             onFinish={tooglePlayPause}
           />
