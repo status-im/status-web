@@ -277,13 +277,15 @@ const Avatar = (props: AvatarProps) => {
   const renderBadge = () => {
     switch (props.type) {
       case 'user': {
-        if (!props.indicator || props.indicator === 'none') {
+        const { indicator = 'none', size } = props
+
+        if (!indicator || indicator === 'none') {
           return
         }
 
         return (
           <Unspaced>
-            <Indicator size={props.size} state={props.indicator} />
+            <Indicator size={size} state={indicator} />
           </Unspaced>
         )
       }
