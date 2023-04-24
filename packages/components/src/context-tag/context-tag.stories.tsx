@@ -3,6 +3,7 @@ import { Stack } from '@tamagui/core'
 
 import { ContextTag } from './context-tag'
 
+import type { ContextTagProps } from './context-tag'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof ContextTag> = {
@@ -21,6 +22,11 @@ type Story = StoryObj<typeof ContextTag>
 
 export const Base: Story = {
   args: { label: 'Name', size: 24, outline: false, blur: false },
+}
+
+const iconSizes: Record<NonNullable<ContextTagProps['size']>, 16 | 12> = {
+  '32': 16,
+  '24': 12,
 }
 
 export const AllVariants: Story = {
@@ -42,7 +48,7 @@ export const AllVariants: Story = {
           type="group"
           group={{
             name: 'Group',
-            icon: <MembersIcon size={size / 2} />,
+            icon: <MembersIcon size={iconSizes[size]} />,
           }}
           size={size}
           outline={outline}
