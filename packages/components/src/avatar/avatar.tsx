@@ -201,16 +201,10 @@ const Avatar = (props: AvatarProps) => {
             <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
               {/* todo?: contrasting color to background */}
               {props.type === 'group' ? (
-                cloneElement(
-                  <MembersIcon
-                    size={
-                      groupMembersIconSizes[props.size] as IconProps['size']
-                    }
-                  />,
-                  {
-                    color: '$white-100',
-                  }
-                )
+                <MembersIcon
+                  size={groupMembersIconSizes[props.size] as IconProps['size']}
+                  color="$white-100"
+                />
               ) : (
                 <Text
                   size={textSizes[props.size]}
