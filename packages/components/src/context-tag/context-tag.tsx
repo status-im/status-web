@@ -63,7 +63,7 @@ const ContextTag = (props: Props) => {
   const { size = 24, blur = false, outline, type } = props
 
   const rounded = type === 'account' || type === 'collectible'
-  const leftShelf = type !== 'address'
+  const hasAvatar = type !== 'address'
 
   const renderContent = () => {
     switch (type) {
@@ -219,10 +219,8 @@ const ContextTag = (props: Props) => {
       blur={blur}
       borderRadius={rounded ? '$8' : '$full'}
       size={size}
-      gap={size === 24 ? 4 : 8}
-      paddingVertical={leftShelf ? 0 : 1}
-      paddingHorizontal={size === 24 ? 8 : 12}
-      paddingLeft={leftShelf ? 1 : size === 24 ? 8 : 12}
+      paddingVertical={hasAvatar ? 0 : 1}
+      paddingLeft={hasAvatar ? 1 : size === 24 ? 8 : 12}
     >
       {renderContent()}
     </Base>
@@ -259,10 +257,15 @@ const Base = styled(View, {
       },
     },
     size: {
-      '...': (size: number) => {
-        return {
-          height: size,
-        }
+      24: {
+        height: 24,
+        gap: 4,
+        paddingHorizontal: 8,
+      },
+      32: {
+        height: 32,
+        gap: 8,
+        paddingHorizontal: 12,
       },
     },
   } as const,
