@@ -41,7 +41,7 @@ type WalletAvatarProps = {
 
 type ChannelAvatarProps = {
   type: 'channel'
-  size: 80 | 32 | 24 | 20
+  size: 80 | 32 | 28 | 24 | 20
   emoji: string
   backgroundColor?: ColorTokens
   background?: ColorTokens
@@ -50,7 +50,7 @@ type ChannelAvatarProps = {
 
 type CommunityAvatarProps = {
   type: 'community'
-  size: 80 | 32 | 24 | 20
+  size: 80 | 32 | 28 | 24 | 20
   name: string
   src?: string
   backgroundColor?: ColorTokens
@@ -66,7 +66,7 @@ type AccountAvatarProps = {
 
 type IconAvatarProps = {
   type: 'icon'
-  size: 48 | 32 | 20
+  size: 48 | 32 | 28 | 24 | 20
   icon: React.ReactElement
   backgroundColor?: ColorTokens
   color?: ColorTokens
@@ -108,6 +108,7 @@ const channelEmojiSizes: Record<ChannelAvatarProps['size'], TextProps['size']> =
     // todo: design review
     '80': 27,
     '32': 15,
+    '28': 13,
     '24': 13,
     '20': 11,
   }
@@ -145,6 +146,7 @@ const channelLockIconVariants: Record<
   // todo: design review
   '80': { baseVariant: 80, iconSize: 40 },
   '32': { baseVariant: 24, iconSize: 12 },
+  '28': { baseVariant: 24, iconSize: 12 },
   '24': { baseVariant: 24, iconSize: 12 },
   '20': { baseVariant: 20, iconSize: 12 },
 }
