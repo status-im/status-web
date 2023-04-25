@@ -15,8 +15,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "TAMAGUI_TARGET='web' vite build --watch --mode development",
-    "build": "TAMAGUI_TARGET='web' vite build",
+    "dev": "vite build --watch --mode development",
+    "build": "vite build",
     "postbuild": "yarn build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",

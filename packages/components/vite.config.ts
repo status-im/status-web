@@ -18,7 +18,8 @@ const external = [
 export default defineConfig(({ mode }) => {
   return {
     define: {
-      TAMAGUI_TARGET: JSON.stringify('web'),
+      'process.env.TAMAGUI_TARGET': JSON.stringify('web'),
+      'process.env.INCLUDE_CSS_COLOR_NAMES': JSON.stringify(false),
     },
     build: {
       target: 'es2020',
