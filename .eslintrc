@@ -48,7 +48,7 @@
       "files": ["./apps/website/"],
       "extends": ["next", "next/core-web-vitals"]
       // "settings": {
-      //   "import/resolver": {
+      //   "import/resolver": { 
       //     "typescript": {
       //       "extensions": [".js", ".jsx", ".ts", ".tsx"],
       //       "project": ["tsconfig.json", "apps/website/tsconfig.json"]

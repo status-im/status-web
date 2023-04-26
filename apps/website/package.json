@@ -9,7 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc",
     "clean": "rimraf .next .tamagui .vercel/output node_modules",
-    "serve": "next start --port 8151"
+    "preview": "next start --port 8151"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.3",
