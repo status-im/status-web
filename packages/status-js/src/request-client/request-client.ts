@@ -356,4 +356,4 @@ export async function createRequestClient(
   return await RequestClient.start(options)
 }
 
-export type { RequestClient }
+export { RequestClient }
