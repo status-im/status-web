@@ -4,7 +4,7 @@ import { PauseIcon, PlayIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { IconButton } from '../icon-button'
-import { Player } from './recorder/player'
+import { Player } from './player/player'
 
 type AudioMessageProps = {
   url: string

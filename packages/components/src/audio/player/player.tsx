@@ -26,6 +26,7 @@ export const Player = (props: Props) => {
       progressColor,
       barWidth: 2,
       barRadius: 3,
+      barMinHeight: 1,
       cursorWidth: 0,
       barGap: 4,
       height: 32,
@@ -37,13 +38,16 @@ export const Player = (props: Props) => {
     })
     waveSurferRef.current = waveSurfer
     waveSurferRef.current.on('finish', () => {
+      // Callback when the audio is finished playing and we reset the player
       onFinish?.()
+      waveSurfer.seekTo(0)
     })
 
     return () => {
       waveSurfer.destroy()
     }
-  }, [containerRef, waveSurferRef, onFinish])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [containerRef, waveSurferRef])
 
   useEffect(() => {
     if (audio) {

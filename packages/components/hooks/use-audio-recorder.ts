@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type RecorderControls = {
   analyser: AnalyserNode | null
@@ -30,29 +30,28 @@ const useAudioRecorder = (): RecorderControls => {
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>()
-  const [timerInterval, setTimerInterval] = useState<NodeJS.Timer>()
+  const timeIntervalRef = useRef<NodeJS.Timer | null>(null)
   const [audioBlob, setAudioBlob] = useState<Blob>()
   const analyserRef = useRef<AnalyserNode | null>(null)
+
   const [isPlaying, setIsPlaying] = useState(false)
 
   const startTimer: () => void = () => {
-    const interval = setInterval(() => {
+    timeIntervalRef.current = setInterval(() => {
       setRecordingTime(time => time + 1)
     }, 1000)
-    setTimerInterval(interval)
-    return () => clearInterval(interval)
   }
 
   const stopTimer: () => void = () => {
-    timerInterval != null && clearInterval(timerInterval)
-    setTimerInterval(undefined)
+    timeIntervalRef.current && clearInterval(timeIntervalRef.current)
+    timeIntervalRef.current = null
   }
 
   /**
    * Calling this method would result in the recording to start. Sets `isRecording` to true
    */
   const startRecording: () => void = () => {
-    if (timerInterval != null) return
+    if (timeIntervalRef.current !== null) return
 
     const audioContext = new AudioContext()
 
@@ -84,6 +83,8 @@ const useAudioRecorder = (): RecorderControls => {
 
           audioContext.close()
         })
+
+        recorder.addEventListener
       })
       .catch(err => console.log(err))
   }
@@ -104,20 +105,18 @@ const useAudioRecorder = (): RecorderControls => {
 
   const deleteRecording = () => {
     setAudioBlob(undefined)
-    setRecordingTime(0)
-
-    if (mediaRecorder?.state === 'recording') {
-      mediaRecorder?.stop()
-      stopTimer()
-    }
   }
 
   /**
    * Calling this method results in playing or pausing the recorded audio
    */
   const tooglePlayPause = () => {
-    setIsPlaying(!isPlaying)
+    setIsPlaying(prevIsPlaying => !prevIsPlaying)
   }
+
+  useEffect(() => {
+    return () => clearInterval(timeIntervalRef.current as NodeJS.Timer)
+  }, [])
 
   return {
     analyser: analyserRef.current,

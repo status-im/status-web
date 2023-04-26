@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { AudioVisualizer } from './audio-visualizer'
 
@@ -16,22 +16,27 @@ const meta: Meta<typeof AudioVisualizer> = {
   },
   decorators: [
     Story => {
-      // const analyzerRef = useRef<AnalyserNode | null>(null)
       const [analyser, setAnalyser] = useState<AnalyserNode | null>(null)
+      const audioContentRef = useRef<AudioContext | null>(null)
+
       useEffect(() => {
-        console.log('HERE')
         navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
           const AudioContext = window.AudioContext
-          const audioContent = new AudioContext()
-          const streamSource = audioContent.createMediaStreamSource(stream)
+          audioContentRef.current = new AudioContext()
+          const streamSource =
+            audioContentRef.current.createMediaStreamSource(stream)
 
-          const analyzer = audioContent.createAnalyser()
-          console.log(analyzer)
+          const analyzer = audioContentRef.current.createAnalyser()
+
           analyzer.fftSize = 256
           streamSource.connect(analyzer)
 
           setAnalyser(analyzer)
         })
+
+        return () => {
+          audioContentRef.current?.close()
+        }
       }, [])
 
       return (
@@ -49,6 +54,7 @@ const meta: Meta<typeof AudioVisualizer> = {
 type Story = StoryObj<typeof AudioVisualizer>
 
 export const Default: Story = {
+  name: 'AudioVisualizer',
   args: {},
 }
 

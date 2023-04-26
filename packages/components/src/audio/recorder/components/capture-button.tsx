@@ -1,13 +1,13 @@
-import { useEffect } from 'react'
+import { memo, useEffect, useRef } from 'react'
 
-import { StopIcon } from '@status-im/icons'
+import { AudioIcon, StopIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 import { Animated, StyleSheet } from 'react-native'
 
 const SIZE = 56
 const COLOR = '#2A799B'
 const BORDER_COLOR = '#2A799B'
-const NUM_OF_RINGS = 10
+const NUM_OF_RINGS = 5
 const DURATION = 5000
 const DELAY = 1000
 
@@ -17,10 +17,12 @@ type RingProps = {
 
 type Props = {
   onPress: () => void
+  isRecording?: boolean
 }
 
-const StopButton = (props: Props) => {
-  const { onPress } = props
+const CaptureButton = (props: Props) => {
+  const { onPress, isRecording } = props
+
   return (
     <Stack
       animation="fast"
@@ -30,21 +32,30 @@ const StopButton = (props: Props) => {
       pressStyle={{
         scale: 0.9,
       }}
+      hoverStyle={{
+        opacity: 0.9,
+      }}
     >
-      <StopIcon size={20} color="$white-100" />
-      {[...Array(NUM_OF_RINGS)].map((_, index) => (
-        <Ring key={index} index={index} />
-      ))}
+      {isRecording ? (
+        <StopIcon size={20} color="$white-100" />
+      ) : (
+        <AudioIcon size={20} color="$white-100" />
+      )}
+      {isRecording &&
+        [...Array(NUM_OF_RINGS)].map((_, index) => (
+          <Ring key={index} index={index} />
+        ))}
     </Stack>
   )
 }
 
-export { StopButton }
+export { CaptureButton }
 
-const Ring = (props: RingProps) => {
+const RingBeforeMemoization = (props: RingProps) => {
   const { index } = props
   const scaleValue = new Animated.Value(1)
   const opacityValue = new Animated.Value(0.3)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const scaleAnimation = Animated.loop(
     Animated.parallel([
@@ -62,9 +73,16 @@ const Ring = (props: RingProps) => {
   )
 
   useEffect(() => {
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       scaleAnimation.start()
     }, index * DELAY)
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+      scaleAnimation.stop()
+    }
   }, [index, scaleAnimation])
 
   return (
@@ -91,6 +109,9 @@ const Ring = (props: RingProps) => {
   )
 }
 
+// We need to memoize the component to avoid re-rendering
+const Ring = memo(RingBeforeMemoization)
+
 const styles = StyleSheet.create({
   button: {
     width: SIZE,
@@ -105,5 +126,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: SIZE / 2,
     borderWidth: 1,
+    borderStyle: 'dotted',
   },
 })
