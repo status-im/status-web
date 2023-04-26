@@ -30,7 +30,7 @@
     "protos:list": "buf ls-files src/protos",
     "protos:lint": "buf lint src/protos",
     "protos": "buf generate src/protos",
-    "clean": "rm -rf dist node_modules .turbo"
+    "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^1.0.0",

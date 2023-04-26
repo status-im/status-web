@@ -1,0 +1,17 @@
+diff --git a/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js b/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js
+index bcce6af..f687757 100644
+--- a/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js
++++ b/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js
+@@ -1,11 +1,8 @@
+ import { v4 } from 'uuid';
+ import { defaultSocketOptions } from './default-socket-options.js';
+ import util from 'util';
+-import { createRequire } from 'module';
+ import mergeOptions from 'merge-options';
+-const req = createRequire(import.meta.url);
+-const pkg = req('../../package.json');
+-const DEFAULT_SSDP_SIGNATURE = util.format('node.js/%s UPnP/1.1 %s/%s', process.version.substring(1), pkg.name, pkg.version);
++const DEFAULT_SSDP_SIGNATURE = util.format('node.js/%s UPnP/1.1 %s/%s', process.version.substring(1), '@achingbrain/ssdp', '4.0.1');
+ export function defaultSsdpOptions(options) {
+     return mergeOptions(options ?? {}, {
+         usn: `uuid:${v4()}`,
