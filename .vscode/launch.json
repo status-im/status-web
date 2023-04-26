@@ -59,6 +59,44 @@
       "smartStep": true,
       "console": "integratedTerminal",
       "sourceMaps": true
+    },
+    {
+      "name": "Next.js: debug server-side",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "yarn dev"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "skipFiles": [
+        ".next/**",
+        "${workspaceFolder}/node_modules/**",
+        "<node_internals>/**",
+        "**/webpack-internal://**"
+      ],
+      "runtimeArgs": ["--auto-open-devtools-for-tabs"]
+    },
+    // todo: consider https://code.visualstudio.com/docs/editor/debugging#_compound-launch-configurations instead
+    // todo: consider client+prelaunch as full stack
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "yarn dev -p 3000",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "action": "startDebugging",
+        "name": "Next.js: debug client-side",
+        "killOnServerStop": false
+      },
+      "skipFiles": [
+        ".next/**",
+        "${workspaceFolder}/node_modules/**",
+        "<node_internals>/**"
+      ]
     }
   ]
 }
