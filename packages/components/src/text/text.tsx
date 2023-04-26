@@ -12,7 +12,6 @@ type Weight = NonNullable<Variants['weight']>
 
 type Props = {
   children: React.ReactNode
-  size?: 27 | 19 | 15 | 13 | 11 | undefined
   color?: ColorTokens
   truncate?: boolean
   wrap?: false
@@ -27,8 +26,8 @@ type Props = {
 // TODO: monospace should be used only for variant. Extract to separate <Address> component?
 // TODO: Ubuntu Mono should be used only for code snippets. Extract to separate <Code> component?
 const Text = (props: Props, ref: Ref<RNText>) => {
-  const { color = '$neutral-100', size = 13, ...rest } = props
-  return <Base {...rest} ref={ref} color={color} size={size} />
+  const { color = '$neutral-100', ...rest } = props
+  return <Base {...rest} ref={ref} color={color} />
 }
 
 const Base = styled(BaseText, {

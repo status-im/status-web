@@ -203,16 +203,10 @@ const Avatar = (props: AvatarProps) => {
             <Fallback borderRadius={radius} backgroundColor={backgroundColor}>
               {/* todo?: contrasting color to background */}
               {props.type === 'group' ? (
-                cloneElement(
-                  <MembersIcon
-                    size={
-                      groupMembersIconSizes[props.size] as IconProps['size']
-                    }
-                  />,
-                  {
-                    color: '$white-100',
-                  }
-                )
+                <MembersIcon
+                  size={groupMembersIconSizes[props.size] as IconProps['size']}
+                  color="$white-100"
+                />
               ) : (
                 <Text
                   size={textSizes[props.size]}
@@ -285,13 +279,15 @@ const Avatar = (props: AvatarProps) => {
   const renderBadge = () => {
     switch (props.type) {
       case 'user': {
-        if (!props.indicator) {
+        const { indicator = 'none', size } = props
+
+        if (!indicator || indicator === 'none') {
           return
         }
 
         return (
           <Unspaced>
-            <Indicator size={props.size} state={props.indicator} />
+            <Indicator size={size} state={indicator} />
           </Unspaced>
         )
       }
