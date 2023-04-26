@@ -17,6 +17,7 @@ const meta: Meta<typeof Recorder> = {
 type Story = StoryObj<typeof Recorder>
 
 export const Default: Story = {
+  name: 'Recorder',
   args: {},
 }
 

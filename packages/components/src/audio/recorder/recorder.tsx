@@ -6,9 +6,9 @@ import { Stack, styled } from '@tamagui/core'
 import { useAudioRecorder } from '../../../hooks'
 import { IconButton } from '../../icon-button'
 import { Text } from '../../text'
-import { AudioVisualizer } from './audio-visualizer'
-import { StopButton } from './components/stop-button'
-import { Player } from './player'
+import { AudioVisualizer } from '../audio-visualizer/audio-visualizer'
+import { Player } from './../player/player'
+import { CaptureButton } from './components/capture-button'
 
 const getSeconds = (s: number): number => s % 60
 const getMinutes = (s: number): number => Math.floor((s % 3600) / 60)
@@ -31,43 +31,50 @@ const Recorder = () => {
     analyser,
     deleteRecording,
     startRecording,
-    isPlaying,
     stopRecording,
+    isPlaying,
+    tooglePlayPause,
     isRecording,
     recordingTime,
     audioBlob,
-    tooglePlayPause,
   } = useAudioRecorder()
 
   // Stop recording if recording time exceeds TIMEOUT value
   useEffect(() => {
-    if (recordingTime > TIMEOUT) stopRecording()
+    if (recordingTime > TIMEOUT) {
+      return stopRecording()
+    }
   }, [recordingTime, stopRecording])
 
   return (
     <Stack
       flexDirection="row"
       alignItems="center"
-      justifyContent="space-between"
+      justifyContent={isRecording || audioBlob ? 'space-between' : 'flex-end'}
+      height={56}
     >
-      {audioBlob && (
+      {audioBlob && !isRecording && (
         <Stack flexDirection="row" alignItems="center" flexGrow={1}>
-          {isPlaying ? (
-            <IconButton
-              icon={<PauseIcon size={20} />}
-              onPress={tooglePlayPause}
+          <Stack mr={16}>
+            {isPlaying ? (
+              <IconButton
+                icon={<PauseIcon size={20} />}
+                onPress={tooglePlayPause}
+              />
+            ) : (
+              <IconButton
+                icon={<PlayIcon size={20} />}
+                onPress={tooglePlayPause}
+              />
+            )}
+          </Stack>
+          <Stack pr={20} flexGrow={1}>
+            <Player
+              audio={audioBlob}
+              isPlaying={isPlaying}
+              onFinish={tooglePlayPause}
             />
-          ) : (
-            <IconButton
-              icon={<PlayIcon size={20} />}
-              onPress={tooglePlayPause}
-            />
-          )}
-          <Player
-            audio={audioBlob}
-            isPlaying={isPlaying}
-            onFinish={tooglePlayPause}
-          />
+          </Stack>
         </Stack>
       )}
       {isRecording && (
@@ -82,22 +89,29 @@ const Recorder = () => {
           <Text weight="semibold" size={11}>
             {formatTimer(recordingTime)}
           </Text>
-          <Stack flexGrow={1} width="100%">
+          <Stack flexGrow={1} width="100%" pl={20}>
             <AudioVisualizer analyser={analyser} />
           </Stack>
         </Stack>
       )}
-      {!isRecording && recordingTime === 0 && (
+      {!isRecording && recordingTime === 0 && !audioBlob && (
         <IconButton icon={<AudioIcon size={20} />} onPress={startRecording} />
       )}
-      <Stack flexDirection="row">
+      <Stack flexDirection="row" alignItems="center" justifyContent="flex-end">
         {(isRecording || audioBlob) && (
           <IconButton
             icon={<TrashIcon size={20} color="$danger-50" />}
             onPress={deleteRecording}
           />
         )}
-        {isRecording && <StopButton onPress={stopRecording} />}
+        {(isRecording || audioBlob) && (
+          <Stack justifyContent="center" alignItems="center" ml={20}>
+            <CaptureButton
+              onPress={isRecording ? stopRecording : startRecording}
+              isRecording={isRecording}
+            />
+          </Stack>
+        )}
       </Stack>
     </Stack>
   )

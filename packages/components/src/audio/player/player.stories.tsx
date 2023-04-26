@@ -1,9 +1,9 @@
-import { StopButton } from './stop-button'
+import { Player } from './player'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta<typeof StopButton> = {
-  component: StopButton,
+const meta: Meta<typeof Player> = {
+  component: Player,
   argTypes: {},
   args: {},
   parameters: {
@@ -14,10 +14,13 @@ const meta: Meta<typeof StopButton> = {
   },
 }
 
-type Story = StoryObj<typeof StopButton>
+type Story = StoryObj<typeof Player>
 
 export const Default: Story = {
-  args: {},
+  name: 'Player',
+  args: {
+    audio: 'https://wavesurfer-js.org/example/media/demo.wav',
+  },
 }
 
 export default meta

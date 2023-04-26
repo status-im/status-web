@@ -16,16 +16,15 @@ type Props = {
 }
 
 const TIME_OFF_SET = 80
-const TIME_BETWEEN_BARS = 0.4
-const BAR_WIDTH = 3
+const TIME_BETWEEN_BARS = 0.6
+const BAR_WIDTH = 2
 
 // Our drawing bar function
 const drawBars = (ctx: CanvasRenderingContext2D, bars: Bar[]) => {
   bars.forEach((bar, index) => {
-    ctx.fillStyle = 'rgba(161, 171, 189, 1)'
-
-    ctx.roundRect(bar.x, bar.y, bar.width, bar.height, bar.height / 2)
-    ctx.fill()
+    // Draw the bar
+    ctx.fillStyle = `rgb(161, 171, 189)`
+    ctx.fillRect(bar.x, bar.y, bar.width, bar.height)
 
     // Move the bar to the left
     bar.x = bar.x - BAR_WIDTH / 2
