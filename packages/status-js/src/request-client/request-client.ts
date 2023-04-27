@@ -38,9 +38,12 @@ class RequestClient {
   /** Cache. */
   public readonly wakuMessages: Set<string>
 
-  constructor(waku: WakuLight) {
+  private started: boolean
+
+  constructor(waku: WakuLight, started = false) {
     this.waku = waku
     this.wakuMessages = new Set()
+    this.started = started
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
@@ -67,7 +70,8 @@ class RequestClient {
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
 
-      client = new RequestClient(waku)
+      const started = true
+      client = new RequestClient(waku, started)
     } catch (error) {
       if (waku) {
         await waku.stop()
@@ -80,7 +84,13 @@ class RequestClient {
   }
 
   public async stop() {
+    if (!this.started) {
+      throw new Error('Waku instance not created by class initialization')
+    }
+
     await this.waku.stop()
+
+    this.started = false
   }
 
   public fetchCommunity = async (
@@ -127,8 +137,8 @@ class RequestClient {
     return mapUser(contactCodeAdvertisement, publicKey)
   }
 
-  private fetchCommunityDescription = async (
-    /** Uncompressed */
+  public fetchCommunityDescription = async (
+    /** Compressed */
     publicKey: string
   ): Promise<CommunityDescription | undefined> => {
     const contentTopic = idToContentTopic(publicKey)
@@ -317,4 +327,4 @@ export async function createRequestClient(
   return await RequestClient.start(options)
 }
 
-export type { RequestClient }
+export { RequestClient }
