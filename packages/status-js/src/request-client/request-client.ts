@@ -137,8 +137,8 @@ class RequestClient {
     return mapUser(contactCodeAdvertisement, publicKey)
   }
 
-  private fetchCommunityDescription = async (
-    /** Uncompressed */
+  public fetchCommunityDescription = async (
+    /** Compressed */
     publicKey: string
   ): Promise<CommunityDescription | undefined> => {
     const contentTopic = idToContentTopic(publicKey)
