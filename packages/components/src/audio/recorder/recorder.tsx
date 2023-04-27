@@ -1,30 +1,17 @@
 import { useEffect } from 'react'
 
-import { AudioIcon, PauseIcon, PlayIcon, TrashIcon } from '@status-im/icons'
+import { AudioIcon, TrashIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { useAudioRecorder } from '../../../hooks'
+import { formatTimer } from '../../../utils'
 import { IconButton } from '../../icon-button'
 import { Text } from '../../text'
 import { AudioVisualizer } from '../audio-visualizer/audio-visualizer'
 import { Player } from './../player/player'
 import { CaptureButton } from './components/capture-button'
 
-const getSeconds = (s: number): number => s % 60
-const getMinutes = (s: number): number => Math.floor((s % 3600) / 60)
-const getHours = (s: number): number => Math.floor(s / 3600)
-
-const pad = (n: number): string => n.toString().padStart(2, '0')
-
 const TIMEOUT = 120 // seconds
-
-export function formatTimer(seconds: number): string {
-  const s: number = getSeconds(seconds)
-  const m: number = getMinutes(seconds)
-  const h: number = getHours(seconds)
-
-  return `${pad(h)}:${pad(m)}:${pad(s)}`
-}
 
 const Recorder = () => {
   const {
@@ -32,8 +19,6 @@ const Recorder = () => {
     deleteRecording,
     startRecording,
     stopRecording,
-    isPlaying,
-    tooglePlayPause,
     isRecording,
     recordingTime,
     audioBlob,
@@ -55,25 +40,8 @@ const Recorder = () => {
     >
       {audioBlob && !isRecording && (
         <Stack flexDirection="row" alignItems="center" flexGrow={1}>
-          <Stack mr={16}>
-            {isPlaying ? (
-              <IconButton
-                icon={<PauseIcon size={20} />}
-                onPress={tooglePlayPause}
-              />
-            ) : (
-              <IconButton
-                icon={<PlayIcon size={20} />}
-                onPress={tooglePlayPause}
-              />
-            )}
-          </Stack>
           <Stack pr={20} flexGrow={1}>
-            <Player
-              audio={audioBlob}
-              isPlaying={isPlaying}
-              onFinish={tooglePlayPause}
-            />
+            <Player audio={audioBlob} />
           </Stack>
         </Stack>
       )}
@@ -97,10 +65,18 @@ const Recorder = () => {
       {!isRecording && recordingTime === 0 && !audioBlob && (
         <IconButton icon={<AudioIcon size={20} />} onPress={startRecording} />
       )}
-      <Stack flexDirection="row" alignItems="center" justifyContent="flex-end">
+      <Stack
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="flex-end"
+        flexShrink={1}
+      >
         {(isRecording || audioBlob) && (
           <IconButton
-            icon={<TrashIcon size={20} color="$danger-50" />}
+            circular
+            variant="danger"
+            overrideColor="$white-100"
+            icon={<TrashIcon size={20} />}
             onPress={deleteRecording}
           />
         )}

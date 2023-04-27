@@ -9,7 +9,7 @@ const meta: Meta<typeof Recorder> = {
   parameters: {
     design: {
       type: 'figma',
-      url: 'https://www.figma.com/file/qSIh8wh9EVdY8S2sZce15n/Composer-for-Web?node-id=7131%3A360528&t=11hKj5jyWVroXgdu-4',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?type=design&node-id=5626-158332&t=9spXA4EwpDCL6d4f-0',
     },
   },
 }

@@ -126,6 +126,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: SIZE / 2,
     borderWidth: 1,
-    borderStyle: 'dotted',
   },
 })

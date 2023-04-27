@@ -6,6 +6,7 @@ import { usePressableColors } from '../hooks/use-pressable-colors'
 
 import type { GetVariants, PressableProps } from '../types'
 import type { Ref } from 'react'
+import type { ColorTokens } from 'tamagui'
 
 type Variants = GetVariants<typeof Base>
 
@@ -15,6 +16,8 @@ type Props = PressableProps & {
   selected?: boolean
   blur?: boolean
   disabled?: boolean
+  circular?: boolean
+  overrideColor?: ColorTokens
   // FIXME: enforce aria-label for accessibility
   // 'aria-label'?: string
   // FIXME: update to latest RN
@@ -23,7 +26,14 @@ type Props = PressableProps & {
 }
 
 const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { icon, blur, variant = 'default', ...buttonProps } = props
+  const {
+    icon,
+    blur,
+    variant = 'default',
+    circular,
+    overrideColor,
+    ...buttonProps
+  } = props
 
   const { pressableProps, color } = usePressableColors(
     {
@@ -47,9 +57,10 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
       active={blur ? undefined : selected ? variant : undefined}
       variantBlur={blur ? variant : undefined}
       activeBlur={blur ? (selected ? variant : undefined) : undefined}
+      circular={circular}
     >
       {cloneElement(icon, {
-        color,
+        color: overrideColor || color,
         size: 20,
       })}
     </Base>
@@ -109,6 +120,16 @@ const Base = styled(Stack, {
           borderColor: '$neutral-20',
         },
       },
+
+      danger: {
+        backgroundColor: '$danger-50',
+        borderColor: 'transparent',
+        hoverStyle: { backgroundColor: '$danger-60' },
+        pressStyle: {
+          backgroundColor: '$danger-60',
+          borderColor: '$danger-60',
+        },
+      },
     },
 
     active: {
@@ -125,6 +146,11 @@ const Base = styled(Stack, {
       ghost: {
         backgroundColor: '$neutral-10',
         borderColor: '$neutral-20',
+      },
+
+      danger: {
+        backgroundColor: '$danger-60',
+        borderColor: '$danger-60',
       },
     },
 
@@ -157,6 +183,11 @@ const Base = styled(Stack, {
           borderColor: '$neutral-80-opa-10',
         },
       },
+
+      danger: {
+        backgroundColor: '$danger-60',
+        borderColor: 'transparent',
+      },
     },
 
     activeBlur: {
@@ -173,6 +204,17 @@ const Base = styled(Stack, {
       ghost: {
         backgroundColor: '$neutral-80-opa-5',
         borderColor: '$neutral-80-opa-10',
+      },
+
+      danger: {
+        backgroundColor: '$danger-60',
+        borderColor: '$danger-60',
+      },
+    },
+
+    circular: {
+      true: {
+        borderRadius: '$full',
       },
     },
 
