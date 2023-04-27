@@ -1,21 +1,35 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+import { PauseIcon, PlayIcon } from '@status-im/icons'
+import { Stack } from '@tamagui/core'
 import WaveSurfer from 'wavesurfer.js'
+
+import { formatTimer } from '../../../utils'
+import { IconButton } from '../../icon-button'
+import { WaveformSkeleton } from '../../skeleton'
+import { Text } from '../../text'
 
 type Props = {
   audio?: Blob | string
-  isPlaying?: boolean
-  onFinish?: () => void
+  variant?: 'remaining-time' | 'progress'
 }
 
 export const Player = (props: Props) => {
-  const { audio, isPlaying, onFinish } = props
+  const { audio, variant = 'progress' } = props
   const containerRef = useRef<HTMLDivElement>(null)
   const waveSurferRef = useRef<WaveSurfer | null>(null)
+  const [remainingTime, setRemainingTime] = useState<number>(0)
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
 
-  // TODO - use theme tokens when dark mode is ready
+  // TODO - use theme tokens when dark mode is ready. Also the color for the UI should come for the community color selection
   const progressColor = 'rgba(42, 121, 155, 1)'
   const waveColor = 'rgba(161, 171, 189, 1)'
+
+  const isProgress = variant === 'progress'
+  const isRemainingTime = variant === 'remaining-time'
+
+  const isPaused = !isPlaying && !isLoading
 
   useEffect(() => {
     if (!containerRef.current) return
@@ -37,16 +51,31 @@ export const Player = (props: Props) => {
       backend: 'WebAudio',
     })
     waveSurferRef.current = waveSurfer
+
+    waveSurferRef.current.on('ready', () => {
+      setIsLoading(false)
+    })
+
+    waveSurferRef.current.on('audioprocess', () => {
+      setRemainingTime(waveSurfer.getDuration() - waveSurfer.getCurrentTime())
+    })
+
+    waveSurferRef.current.on('play', () => {
+      setIsPlaying(true)
+    })
+
+    waveSurferRef.current.on('pause', () => {
+      setIsPlaying(false)
+    })
+
     waveSurferRef.current.on('finish', () => {
-      // Callback when the audio is finished playing and we reset the player
-      onFinish?.()
+      setIsPlaying(false)
       waveSurfer.seekTo(0)
     })
 
     return () => {
       waveSurfer.destroy()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef, waveSurferRef])
 
   useEffect(() => {
@@ -63,24 +92,56 @@ export const Player = (props: Props) => {
     }
   }, [audio, waveSurferRef])
 
-  useEffect(() => {
-    if (!audio || !waveSurferRef.current) return
-
-    if (isPlaying) {
-      waveSurferRef.current.play()
-    } else {
-      waveSurferRef.current.pause()
-    }
-  }, [audio, isPlaying])
-
   return (
-    <div
-      style={{
-        flexGrow: 1,
-        height: 32,
-        width: '100%',
-      }}
-      ref={containerRef}
-    />
+    <Stack flex={1} flexDirection="row" alignItems="center" width="100%">
+      {isLoading && (
+        <Stack position="absolute" top={0} left={0} width="70%">
+          <WaveformSkeleton />
+        </Stack>
+      )}
+      <Stack pr={12}>
+        {isPlaying && (
+          <IconButton
+            circular
+            icon={<PauseIcon size={20} color={'$white-100'} />}
+            onPress={() => waveSurferRef.current?.pause()}
+          />
+        )}
+
+        {isPaused && (
+          <IconButton
+            circular
+            icon={<PlayIcon size={20} color={'$white-100'} />}
+            onPress={() => waveSurferRef.current?.play()}
+          />
+        )}
+      </Stack>
+      {isProgress && !isLoading && (
+        <Stack width={52} pr={12}>
+          <Text size={13} weight="medium">
+            {formatTimer(
+              Math.round(waveSurferRef.current?.getCurrentTime() || 0)
+            )}
+          </Text>
+        </Stack>
+      )}
+
+      <div
+        style={{
+          flexGrow: 1,
+          height: 32,
+          width: '100%',
+          opacity: isLoading ? 0 : 1,
+        }}
+        ref={containerRef}
+      />
+      {isRemainingTime && !isLoading && (
+        <Stack width={54} pl={16}>
+          <Text size={13} weight="medium">
+            {formatTimer(Math.round(remainingTime))}
+          </Text>
+        </Stack>
+      )}
+    </Stack>
   )
 }

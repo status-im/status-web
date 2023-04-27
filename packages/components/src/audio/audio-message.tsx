@@ -1,23 +1,13 @@
-import { useState } from 'react'
-
-import { PauseIcon, PlayIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
-import { IconButton } from '../icon-button'
 import { Player } from './player/player'
 
 type AudioMessageProps = {
-  url: string
+  url: string | Blob
 }
 
 const AudioMessage = (props: AudioMessageProps) => {
   const { url } = props
-
-  const [isPlaying, setIsPlaying] = useState(false)
-
-  const handleTooglePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
 
   return (
     <Stack
@@ -30,24 +20,7 @@ const AudioMessage = (props: AudioMessageProps) => {
       p={12}
       maxWidth={320}
     >
-      <Stack pr={16}>
-        {isPlaying ? (
-          <IconButton
-            icon={<PauseIcon size={20} color={'$white-100'} />}
-            onPress={handleTooglePlayPause}
-          />
-        ) : (
-          <IconButton
-            icon={<PlayIcon size={20} color={'$white-100'} />}
-            onPress={handleTooglePlayPause}
-          />
-        )}
-      </Stack>
-      <Player
-        audio={url}
-        isPlaying={isPlaying}
-        onFinish={() => setIsPlaying(false)}
-      />
+      <Player audio={url} variant="remaining-time" />
     </Stack>
   )
 }

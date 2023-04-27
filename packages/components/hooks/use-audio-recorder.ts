@@ -5,10 +5,8 @@ type RecorderControls = {
   startRecording: () => void
   stopRecording: () => void
   deleteRecording: () => void
-  tooglePlayPause: () => void
   audioBlob?: Blob
   isRecording: boolean
-  isPlaying: boolean
   recordingTime: number
 }
 
@@ -33,8 +31,7 @@ const useAudioRecorder = (): RecorderControls => {
   const timeIntervalRef = useRef<NodeJS.Timer | null>(null)
   const [audioBlob, setAudioBlob] = useState<Blob>()
   const analyserRef = useRef<AnalyserNode | null>(null)
-
-  const [isPlaying, setIsPlaying] = useState(false)
+  const [shouldDelete, setShouldDelete] = useState(false)
 
   const startTimer: () => void = () => {
     timeIntervalRef.current = setInterval(() => {
@@ -83,36 +80,45 @@ const useAudioRecorder = (): RecorderControls => {
 
           audioContext.close()
         })
-
-        recorder.addEventListener
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        // TODO: Handle error
+        console.log(err)
+      })
   }
 
   /**
    * Calling this method results in a recording in progress being stopped and the resulting audio being present in `audioBlob`. Sets `isRecording` to false
    */
   const stopRecording = () => {
-    mediaRecorder?.stop()
+    if (mediaRecorder?.state === 'recording') {
+      mediaRecorder?.stop()
+    }
     stopTimer()
     setRecordingTime(0)
     setIsRecording(false)
-  }
 
+    // Delay the deletion of the recording
+    setTimeout(() => {
+      if (!shouldDelete) return
+      deleteRecording()
+    }, 100)
+  }
   /**
    * Calling this method results in deleting the recorded audio
    */
 
   const deleteRecording = () => {
-    setAudioBlob(undefined)
+    stopRecording()
+    setShouldDelete(true)
   }
 
-  /**
-   * Calling this method results in playing or pausing the recorded audio
-   */
-  const tooglePlayPause = () => {
-    setIsPlaying(prevIsPlaying => !prevIsPlaying)
-  }
+  useEffect(() => {
+    if (shouldDelete && !isRecording && audioBlob) {
+      setAudioBlob(undefined)
+      setShouldDelete(false)
+    }
+  }, [shouldDelete, isRecording, audioBlob])
 
   useEffect(() => {
     return () => clearInterval(timeIntervalRef.current as NodeJS.Timer)
@@ -122,9 +128,7 @@ const useAudioRecorder = (): RecorderControls => {
     analyser: analyserRef.current,
     deleteRecording,
     startRecording,
-    isPlaying,
     stopRecording,
-    tooglePlayPause,
     audioBlob,
     isRecording,
     recordingTime,

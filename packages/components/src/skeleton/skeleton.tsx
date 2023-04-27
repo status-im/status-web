@@ -7,12 +7,13 @@ type Props = StackProps & {
   width?: number | string
   height?: number | string
   borderRadius?: RadiusTokens
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'tertiary'
 }
 
 const skeletonColor: Record<NonNullable<Props['variant']>, ColorTokens> = {
   primary: '$neutral-10',
   secondary: '$neutral-20',
+  tertiary: '$neutral-30',
 }
 
 const Skeleton = (props: Props) => {
