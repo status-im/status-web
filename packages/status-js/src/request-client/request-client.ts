@@ -71,7 +71,6 @@ class RequestClient {
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
 
       const started = true
-
       client = new RequestClient(waku, started)
     } catch (error) {
       if (waku) {
@@ -86,8 +85,7 @@ class RequestClient {
 
   public async stop() {
     if (!this.started) {
-      // todo?: throw error
-      return
+      throw new Error('Waku instance not created by class initialization')
     }
 
     await this.waku.stop()
