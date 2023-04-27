@@ -184,8 +184,6 @@ class RequestClient {
         return
       }
 
-      console.log(decodedCommunityDescription)
-
       const decodedCommunityPublicKey = `0x${compressPublicKey(
         message.signerPublicKey
       )}`
