@@ -97,9 +97,7 @@ class RequestClient {
     /** Uncompressed */
     publicKey: string
   ): Promise<CommunityInfo | undefined> => {
-    const communityDescription = await (
-      await this.fetchCommunityDescription([publicKey])
-    ).get(publicKey)
+    const communityDescription = await this.fetchCommunityDescription(publicKey)
 
     if (!communityDescription) {
       return
@@ -113,9 +111,7 @@ class RequestClient {
     publicKey: string,
     uuid: string
   ): Promise<ChannelInfo | undefined> => {
-    const communityDescription = await (
-      await this.fetchCommunityDescription([publicKey])
-    ).get(publicKey)
+    const communityDescription = await this.fetchCommunityDescription(publicKey)
 
     if (!communityDescription) {
       return
@@ -141,78 +137,57 @@ class RequestClient {
     return mapUser(contactCodeAdvertisement, publicKey)
   }
 
-  public fetchCommunityDescription = async (
-    /** Compressed */
-    publicKeys: string[]
-  ): Promise<Map<string, CommunityDescription>> => {
-    const decoderPromises = publicKeys.map(async publicKey => {
-      const contentTopic = idToContentTopic(publicKey)
-      const symmetricKey = await generateKeyFromPassword(publicKey)
+  private fetchCommunityDescription = async (
+    /** Uncompressed */
+    publicKey: string
+  ): Promise<CommunityDescription | undefined> => {
+    const contentTopic = idToContentTopic(publicKey)
+    const symmetricKey = await generateKeyFromPassword(publicKey)
 
-      return new SymDecoder(contentTopic, symmetricKey)
-    })
+    let communityDescription: CommunityDescription | undefined = undefined
+    await this.waku.store.queryOrderedCallback(
+      [new SymDecoder(contentTopic, symmetricKey)],
+      wakuMessage => {
+        // handle
+        const message = this.handleWakuMessage(wakuMessage)
 
-    const decoders = await Promise.all(decoderPromises)
+        if (!message) {
+          return
+        }
 
-    const communityDescription: Map<string, CommunityDescription> = new Map()
-    await this.waku.store.queryOrderedCallback(decoders, wakuMessage => {
-      // handle
-      const message = this.handleWakuMessage(wakuMessage)
+        if (
+          message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+        ) {
+          return
+        }
 
-      if (!message) {
-        return
-      }
-
-      if (
-        message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-      ) {
-        return
-      }
-
-      // decode
-      const decodedCommunityDescription = CommunityDescription.fromBinary(
-        message.payload
-      )
-
-      // validate
-      if (
-        !isClockValid(
-          BigInt(decodedCommunityDescription.clock),
-          message.timestamp
+        // decode
+        const decodedCommunityDescription = CommunityDescription.fromBinary(
+          message.payload
         )
-      ) {
-        return
+
+        // validate
+        if (
+          !isClockValid(
+            BigInt(decodedCommunityDescription.clock),
+            message.timestamp
+          )
+        ) {
+          return
+        }
+
+        if (publicKey !== `0x${compressPublicKey(message.signerPublicKey)}`) {
+          return
+        }
+
+        if (!communityDescription) {
+          communityDescription = decodedCommunityDescription
+        }
+
+        // stop
+        return true
       }
-
-      const decodedCommunityPublicKey = `0x${compressPublicKey(
-        message.signerPublicKey
-      )}`
-
-      if (!publicKeys.includes(decodedCommunityPublicKey)) {
-        return
-      }
-
-      if (!communityDescription.has(decodedCommunityPublicKey)) {
-        // todo?: ensure mapping back to original pk format if deserialized in this fn
-        communityDescription.set(
-          decodedCommunityPublicKey,
-          decodedCommunityDescription
-        )
-      }
-
-      // skip
-      // todo?: skip decoder if community is found; impossible?
-
-      // stop
-      // todo?: stop when last community; if decoders/pks served in order
-      if (publicKeys.some(publicKey => !communityDescription.has(publicKey))) {
-        return
-      }
-
-      const stop = true
-
-      return stop
-    })
+    )
 
     return communityDescription
   }
