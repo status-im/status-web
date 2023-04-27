@@ -15,7 +15,7 @@ export { EthereumClient } from './ethereum-client/ethereum-client'
 export type { ChannelInfo } from './request-client/map-channel'
 export type { CommunityInfo } from './request-client/map-community'
 export type { UserInfo } from './request-client/map-user'
-export type { RequestClient } from './request-client/request-client'
+export { RequestClient } from './request-client/request-client'
 export { createRequestClient } from './request-client/request-client'
 export { deserializePublicKey } from './utils/deserialize-public-key'
 export {
