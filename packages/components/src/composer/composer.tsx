@@ -65,7 +65,6 @@ const Composer = (props: Props) => {
         px={16}
         width="100%"
         py={12}
-        overflow="hidden"
       >
         {chatState?.type === 'reply' && (
           <Stack paddingLeft={4} paddingBottom={4}>
@@ -200,6 +199,7 @@ const Composer = (props: Props) => {
             )}
           </XStack>
         )}
+
         <Stack
           bottom={-12}
           right={0}
@@ -215,6 +215,11 @@ const Composer = (props: Props) => {
           <Recorder
             onRecordingStart={() => setRecordingModeEnabled(true)}
             onDeletingRecording={() => setRecordingModeEnabled(false)}
+            onSendRecording={(audioBlob: Blob) => {
+              // TODO: send audio blob to backend
+              console.log(audioBlob)
+              setRecordingModeEnabled(false)
+            }}
           />
         </Stack>
       </Shadow>

@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-import { AudioIcon, TrashIcon } from '@status-im/icons'
+import { ArrowTopIcon, AudioIcon, TrashIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { useAudioRecorder } from '../../../hooks'
@@ -17,10 +17,13 @@ const TIMEOUT = 120 // seconds
 type Props = {
   onRecordingStart?: () => void
   onDeletingRecording?: () => void
+  onSendRecording?: (audio: Blob) => void
 }
 
 const Recorder = (props: Props) => {
-  const { onRecordingStart, onDeletingRecording } = props
+  const { onRecordingStart, onDeletingRecording, onSendRecording } = props
+
+  const [shouldSendRecording, setShouldSendRecording] = useState<boolean>(false)
   const {
     analyser,
     deleteRecording,
@@ -38,12 +41,22 @@ const Recorder = (props: Props) => {
     }
   }, [recordingTime, stopRecording])
 
+  useEffect(() => {
+    if (audioBlob && shouldSendRecording) {
+      onSendRecording?.(audioBlob)
+      deleteRecording()
+      setShouldSendRecording(false)
+    }
+  }, [audioBlob, deleteRecording, onSendRecording, shouldSendRecording])
+
   return (
     <Stack
       flexDirection="row"
       alignItems="center"
       justifyContent={isRecording || audioBlob ? 'space-between' : 'flex-end'}
       height={56}
+      width="100%"
+      flex={1}
     >
       {audioBlob && !isRecording && (
         <Stack flexDirection="row" alignItems="center" flexGrow={1}>
@@ -80,33 +93,62 @@ const Recorder = (props: Props) => {
           }}
         />
       )}
-      <Stack
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="flex-end"
-        flexShrink={1}
-      >
-        {(isRecording || audioBlob) && (
-          <IconButton
-            circular
-            variant="danger"
-            overrideColor="$white-100"
-            icon={<TrashIcon size={20} />}
-            onPress={() => {
-              deleteRecording()
-              onDeletingRecording?.()
-            }}
-          />
-        )}
-        {(isRecording || audioBlob) && (
-          <Stack justifyContent="center" alignItems="center" ml={20}>
-            <CaptureButton
-              onPress={isRecording ? stopRecording : startRecording}
-              isRecording={isRecording}
+      {(isRecording || audioBlob) && (
+        <Stack
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="flex-start"
+          flexShrink={1}
+          width={120}
+        >
+          <Stack
+            flexDirection="row"
+            alignItems="flex-end"
+            justifyContent="flex-start"
+            height={96}
+            width={120}
+            overflow="hidden"
+            position="absolute"
+            bottom={-28}
+            right={-16}
+          >
+            <Stack
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Stack pr={16}>
+                <IconButton
+                  circular
+                  variant="danger"
+                  overrideColor="$white-100"
+                  icon={<TrashIcon size={20} />}
+                  onPress={() => {
+                    deleteRecording()
+                    onDeletingRecording?.()
+                  }}
+                />
+              </Stack>
+              <CaptureButton
+                onPress={isRecording ? stopRecording : startRecording}
+                isRecording={isRecording}
+              />
+            </Stack>
+          </Stack>
+          <Stack position="absolute" bottom={56} right={0}>
+            {/* TODO fix variant to receive the community color option */}
+            <IconButton
+              circular
+              variant="default"
+              icon={<ArrowTopIcon size={20} />}
+              onPress={() => {
+                stopRecording()
+                setShouldSendRecording(true)
+              }}
             />
           </Stack>
-        )}
-      </Stack>
+        </Stack>
+      )}
     </Stack>
   )
 }
