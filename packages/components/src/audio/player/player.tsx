@@ -12,10 +12,12 @@ import { Text } from '../../text'
 type Props = {
   audio?: Blob | string
   variant?: 'remaining-time' | 'progress'
+  hasLoader?: boolean
 }
 
 export const Player = (props: Props) => {
-  const { audio, variant = 'progress' } = props
+  const { audio, variant = 'progress', hasLoader } = props
+
   const containerRef = useRef<HTMLDivElement>(null)
   const waveSurferRef = useRef<WaveSurfer | null>(null)
   const [remainingTime, setRemainingTime] = useState<number>(0)
@@ -92,9 +94,13 @@ export const Player = (props: Props) => {
     }
   }, [audio, waveSurferRef])
 
+  useEffect(() => {
+    waveSurferRef.current?.drawBuffer()
+  }, [waveSurferRef, isLoading])
+
   return (
     <Stack flex={1} flexDirection="row" alignItems="center" width="100%">
-      {isLoading && (
+      {isLoading && hasLoader && (
         <Stack position="absolute" top={0} left={0} width="70%">
           <WaveformSkeleton />
         </Stack>
@@ -116,8 +122,8 @@ export const Player = (props: Props) => {
           />
         )}
       </Stack>
-      {isProgress && !isLoading && (
-        <Stack width={52} pr={12}>
+      {isProgress && (
+        <Stack px={12} width={62}>
           <Text size={13} weight="medium">
             {formatTimer(
               Math.round(waveSurferRef.current?.getCurrentTime() || 0)

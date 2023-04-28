@@ -20,7 +20,7 @@ const AudioMessage = (props: AudioMessageProps) => {
       p={12}
       maxWidth={320}
     >
-      <Player audio={url} variant="remaining-time" />
+      <Player audio={url} variant="remaining-time" hasLoader />
     </Stack>
   )
 }
