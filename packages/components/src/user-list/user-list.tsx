@@ -5,10 +5,10 @@ import { Avatar } from '../avatar'
 import { Text } from '../text'
 
 import type { AuthorProps } from '../author/author'
-import type { AvatarProps } from '../avatar'
+import type { UserAvatarProps } from '../avatar'
 
 type Props = {
-  users: (Pick<AvatarProps, 'src' | 'indicator'> & AuthorProps)[]
+  users: (Pick<UserAvatarProps, 'src' | 'indicator'> & AuthorProps)[]
 }
 
 const UserList = (props: Props) => {
@@ -31,7 +31,13 @@ const UserList = (props: Props) => {
               backgroundColor: '$primary-50-opa-5',
             }}
           >
-            <Avatar size={32} src={src} indicator={indicator} />
+            <Avatar
+              type="user"
+              name={authorProps.name}
+              size={32}
+              src={src}
+              indicator={indicator}
+            />
             <YStack>
               <Author {...authorProps} />
               <Text size={13} color="$neutral-50" type="monospace">

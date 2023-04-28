@@ -59,12 +59,26 @@ const Base = styled(RNImage, {
   variants: {
     radius: {
       none: {},
+      6: {
+        borderRadius: 6,
+      },
+      8: {
+        borderRadius: 8,
+      },
+      10: {
+        borderRadius: 10,
+      },
       12: {
         borderRadius: 12, // fix this once Image is migrated to tamagui image
+      },
+      16: {
+        borderRadius: 16,
       },
       full: {
         borderRadius: 999, // fix this once Image is migrated to tamagui image
       },
     },
   },
+
+  backgroundColor: '$white-100',
 })
