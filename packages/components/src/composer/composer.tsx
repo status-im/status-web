@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useImageUpload } from '@status-im/components/hooks'
 import {
   ArrowTopIcon,
-  AudioIcon,
   ClearIcon,
   FormatIcon,
   ImageIcon,
@@ -12,6 +11,7 @@ import {
 import { BlurView } from 'expo-blur'
 import { AnimatePresence, Stack, XStack } from 'tamagui'
 
+import { Recorder } from '../audio'
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
 import { Image } from '../image'
@@ -29,6 +29,7 @@ const Composer = (props: Props) => {
   const { blur } = props
 
   const [isFocused, setIsFocused] = useState(false)
+  const [recordingModeEnabled, setRecordingModeEnabled] = useState(false)
   const [text, setText] = useState('')
 
   const {
@@ -64,6 +65,7 @@ const Composer = (props: Props) => {
         px={16}
         width="100%"
         py={12}
+        overflow="hidden"
       >
         {chatState?.type === 'reply' && (
           <Stack paddingLeft={4} paddingBottom={4}>
@@ -77,6 +79,7 @@ const Composer = (props: Props) => {
         )}
 
         <Input
+          animation="fast"
           className="composer-input"
           placeholder="Type something..."
           px={0}
@@ -85,6 +88,9 @@ const Composer = (props: Props) => {
           onBlur={() => setIsFocused(false)}
           onFocus={() => setIsFocused(true)}
           onChangeText={setText}
+          opacity={recordingModeEnabled ? 0 : 1}
+          disabled={recordingModeEnabled}
+          cursor={recordingModeEnabled ? 'default' : 'text'}
         />
         <input
           ref={imageUploaderInputRef}
@@ -156,49 +162,61 @@ const Composer = (props: Props) => {
             </XStack>
           )}
         </AnimatePresence>
-        <XStack
-          alignItems="center"
-          justifyContent="space-between"
-          paddingTop={12}
-          backgroundColor="transparent"
-        >
-          <Stack gap={12} flexDirection="row" backgroundColor="transparent">
-            <label htmlFor="image-uploader-input">
+        {!recordingModeEnabled && (
+          <XStack
+            alignItems="center"
+            justifyContent="space-between"
+            paddingTop={12}
+            backgroundColor="transparent"
+          >
+            <Stack gap={12} flexDirection="row" backgroundColor="transparent">
+              <label htmlFor="image-uploader-input">
+                <IconButton
+                  variant="outline"
+                  icon={<ImageIcon size={20} />}
+                  disabled={isImageUploadDisabled}
+                  blur={iconButtonBlurred}
+                />
+              </label>
               <IconButton
                 variant="outline"
-                icon={<ImageIcon size={20} />}
-                disabled={isImageUploadDisabled}
+                icon={<ReactionIcon size={20} />}
                 blur={iconButtonBlurred}
               />
-            </label>
-            <IconButton
-              variant="outline"
-              icon={<ReactionIcon size={20} />}
-              blur={iconButtonBlurred}
-            />
-            <IconButton
-              variant="outline"
-              icon={<FormatIcon size={20} />}
-              disabled
-              blur={iconButtonBlurred}
-            />
-          </Stack>
-          {showSendButton ? (
-            <Button
-              variant="primary"
-              shape="circle"
-              icon={<ArrowTopIcon size={20} />}
-              size={32}
-            />
-          ) : (
-            <Button
-              variant="outline"
-              icon={<AudioIcon size={20} />}
-              size={32}
-              // blurred={iconButtonBlurred}
-            />
-          )}
-        </XStack>
+              <IconButton
+                variant="outline"
+                icon={<FormatIcon size={20} />}
+                disabled
+                blur={iconButtonBlurred}
+              />
+            </Stack>
+            {showSendButton && (
+              <Button
+                variant="primary"
+                shape="circle"
+                icon={<ArrowTopIcon size={20} />}
+                size={32}
+              />
+            )}
+          </XStack>
+        )}
+        <Stack
+          bottom={-12}
+          right={0}
+          marginTop={-12}
+          width={'100%'}
+          opacity={showSendButton ? 0 : 1}
+          {...(!recordingModeEnabled && {
+            bottom: 0,
+            right: 16,
+            position: 'absolute',
+          })}
+        >
+          <Recorder
+            onRecordingStart={() => setRecordingModeEnabled(true)}
+            onDeletingRecording={() => setRecordingModeEnabled(false)}
+          />
+        </Stack>
       </Shadow>
     </BlurView>
   )

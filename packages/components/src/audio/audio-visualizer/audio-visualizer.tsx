@@ -53,7 +53,7 @@ const AudioVisualizer = (props: Props) => {
     if (!ctx) return
 
     canvas.height = height
-    canvas.width = window.innerWidth
+    canvas.width = canvas.parentElement?.offsetWidth || window.innerWidth
 
     // Get the frequency data from our analyser
     const frequencyArray = new Float32Array(256)
@@ -71,7 +71,7 @@ const AudioVisualizer = (props: Props) => {
 
       // Add bar to our array
       barsRef.current.push({
-        x: canvasRef.current.offsetWidth,
+        x: canvas.width - 80,
         y: canvasRef.current.offsetHeight / 2 - freq / 2,
         height: freq,
         width: BAR_WIDTH,
@@ -98,7 +98,6 @@ const AudioVisualizer = (props: Props) => {
       <canvas
         ref={canvasRef}
         style={{
-          overflowClipMargin: 'content-box',
           overflow: 'hidden',
           width,
           height,
