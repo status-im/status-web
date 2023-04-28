@@ -1,12 +1,11 @@
 import { memo, useEffect, useRef } from 'react'
 
 import { AudioIcon, StopIcon } from '@status-im/icons'
-import { Stack } from '@tamagui/core'
+import { Stack, useTheme } from '@tamagui/core'
 import { Animated, StyleSheet } from 'react-native'
 
 const SIZE = 56
-const COLOR = '#2A799B'
-const BORDER_COLOR = '#2A799B'
+
 const NUM_OF_RINGS = 5
 const DURATION = 5000
 const DELAY = 1000
@@ -35,6 +34,7 @@ const CaptureButton = (props: Props) => {
       hoverStyle={{
         opacity: 0.9,
       }}
+      backgroundColor="$primary"
     >
       {isRecording ? (
         <StopIcon size={20} color="$white-100" />
@@ -56,6 +56,10 @@ const RingBeforeMemoization = (props: RingProps) => {
   const scaleValue = new Animated.Value(1)
   const opacityValue = new Animated.Value(0.3)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  const theme = useTheme()
+
+  const color = theme['primary']?.val
 
   const scaleAnimation = Animated.loop(
     Animated.parallel([
@@ -101,7 +105,7 @@ const RingBeforeMemoization = (props: RingProps) => {
           height: SIZE,
           borderRadius: SIZE / 2,
           borderWidth: 1,
-          borderColor: BORDER_COLOR,
+          borderColor: color,
           position: 'absolute',
         },
       ]}
@@ -117,7 +121,6 @@ const styles = StyleSheet.create({
     width: SIZE,
     height: SIZE,
     borderRadius: SIZE / 2,
-    backgroundColor: COLOR,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',

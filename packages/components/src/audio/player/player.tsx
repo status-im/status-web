@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { PauseIcon, PlayIcon } from '@status-im/icons'
-import { Stack } from '@tamagui/core'
+import { Stack, useTheme } from '@tamagui/core'
 import WaveSurfer from 'wavesurfer.js'
 
 import { formatTimer } from '../../../utils'
@@ -25,7 +25,11 @@ export const Player = (props: Props) => {
   const [isLoading, setIsLoading] = useState<boolean>(true)
 
   // TODO - use theme tokens when dark mode is ready. Also the color for the UI should come for the community color selection
-  const progressColor = 'rgba(42, 121, 155, 1)'
+
+  const theme = useTheme()
+
+  const progressColor = theme['primary']?.val
+
   const waveColor = 'rgba(161, 171, 189, 1)'
 
   const isProgress = variant === 'progress'
@@ -78,7 +82,7 @@ export const Player = (props: Props) => {
     return () => {
       waveSurfer.destroy()
     }
-  }, [containerRef, waveSurferRef])
+  }, [containerRef, progressColor, waveSurferRef])
 
   useEffect(() => {
     if (audio) {

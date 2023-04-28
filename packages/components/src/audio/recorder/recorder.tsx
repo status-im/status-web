@@ -5,6 +5,7 @@ import { Stack, styled } from '@tamagui/core'
 
 import { useAudioRecorder } from '../../../hooks'
 import { formatTimer } from '../../../utils'
+import { Button } from '../../button'
 import { IconButton } from '../../icon-button'
 import { Text } from '../../text'
 import { AudioVisualizer } from '../audio-visualizer/audio-visualizer'
@@ -13,7 +14,13 @@ import { CaptureButton } from './components/capture-button'
 
 const TIMEOUT = 120 // seconds
 
-const Recorder = () => {
+type Props = {
+  onRecordingStart?: () => void
+  onDeletingRecording?: () => void
+}
+
+const Recorder = (props: Props) => {
+  const { onRecordingStart, onDeletingRecording } = props
   const {
     analyser,
     deleteRecording,
@@ -63,7 +70,15 @@ const Recorder = () => {
         </Stack>
       )}
       {!isRecording && recordingTime === 0 && !audioBlob && (
-        <IconButton icon={<AudioIcon size={20} />} onPress={startRecording} />
+        <Button
+          variant="outline"
+          icon={<AudioIcon size={20} />}
+          size={32}
+          onPress={() => {
+            startRecording()
+            onRecordingStart?.()
+          }}
+        />
       )}
       <Stack
         flexDirection="row"
@@ -77,7 +92,10 @@ const Recorder = () => {
             variant="danger"
             overrideColor="$white-100"
             icon={<TrashIcon size={20} />}
-            onPress={deleteRecording}
+            onPress={() => {
+              deleteRecording()
+              onDeletingRecording?.()
+            }}
           />
         )}
         {(isRecording || audioBlob) && (

@@ -102,7 +102,7 @@ const useAudioRecorder = (): RecorderControls => {
     setTimeout(() => {
       if (!shouldDelete) return
       deleteRecording()
-    }, 100)
+    }, 200)
   }
   /**
    * Calling this method results in deleting the recorded audio
