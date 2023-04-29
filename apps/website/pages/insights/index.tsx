@@ -163,7 +163,7 @@ export const EpicOverview = ({
   )
 }
 
-// USE https://airbnb.io/visx/annotation
+// USE https://airbnb.io/visx/areas
 const ChartPreview = () => (
   <svg
     width="100%"
