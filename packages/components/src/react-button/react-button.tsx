@@ -17,6 +17,7 @@ import { Text } from '../text'
 import type { ReactionType } from '../messages/types'
 import type { PressableProps } from '../types'
 import type { Ref } from 'react'
+import type { View } from 'react-native'
 
 export const REACTIONS_ICONS = {
   love: LoveIcon,
@@ -37,7 +38,7 @@ type Props = PressableProps & {
   'aria-selected'?: boolean
 }
 
-const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
+const ReactButton = (props: Props, ref: Ref<View>) => {
   const { type, count, ...pressableProps } = props
 
   const Icon = REACTIONS_ICONS[type]
