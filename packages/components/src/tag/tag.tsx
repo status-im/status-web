@@ -1,12 +1,16 @@
+import { createElement } from 'react'
+
 import { Stack, styled } from '@tamagui/core'
 
 import { Text } from '../text'
 
 import type { TextProps } from '../text'
+import type { IconProps } from '@status-im/icons'
+import type { ComponentType } from 'react'
 
 type Props = {
   size: 32 | 24
-  emoji?: string
+  icon?: string | ComponentType<IconProps>
   label?: string
   selected?: boolean
   disabled?: boolean
@@ -17,17 +21,34 @@ const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '24': 13,
 }
 
+const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
+  '32': 20,
+  '24': 12,
+}
+
 const Tag = (props: Props) => {
-  const { size, emoji, label, selected, disabled } = props
+  const { size, icon, label, selected, disabled } = props
+
+  const renderIcon = () => {
+    if (!icon) {
+      return null
+    }
+
+    if (typeof icon === 'string') {
+      return <Text size={textSizes[size]}>{icon}</Text>
+    }
+
+    return createElement(icon, { size: iconSizes[size] })
+  }
 
   return (
     <Base
       size={size}
       selected={selected}
       disabled={disabled}
-      emojiOnly={Boolean(emoji && !label)}
+      emojiOnly={Boolean(icon && !label)}
     >
-      {emoji && <Text size={textSizes[size]}>{emoji}</Text>}
+      {renderIcon()}
       {label && (
         <Text size={textSizes[size]} weight="medium">
           {label}
@@ -36,6 +57,9 @@ const Tag = (props: Props) => {
     </Base>
   )
 }
+
+export { Tag }
+export type { Props as TagProps }
 
 const Base = styled(Stack, {
   display: 'flex',
@@ -83,5 +107,3 @@ const Base = styled(Stack, {
     },
   },
 })
-
-export { Tag }
