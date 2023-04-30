@@ -46,7 +46,7 @@ const Tag = (props: Props) => {
       size={size}
       selected={selected}
       disabled={disabled}
-      emojiOnly={Boolean(icon && !label)}
+      iconOnly={Boolean(icon && !label)}
     >
       {renderIcon()}
       {label && (
@@ -100,7 +100,7 @@ const Base = styled(Stack, {
       },
     },
 
-    emojiOnly: {
+    iconOnly: {
       true: {
         paddingHorizontal: 0,
       },
