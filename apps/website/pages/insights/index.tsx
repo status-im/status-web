@@ -86,18 +86,9 @@ export default function InsightsPage() {
 
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <Tag
-              size={32}
-              label="In Progress"
-              emoji={<OpenIcon size={20} />}
-              selected
-            />
-            <Tag size={32} label="Closed" emoji={<DoneIcon size={20} />} />
-            <Tag
-              size={32}
-              label="Not Started"
-              emoji={<NotStartedIcon size={20} />}
-            />
+            <Tag size={32} label="In Progress" icon={OpenIcon} selected />
+            <Tag size={32} label="Closed" icon={DoneIcon} />
+            <Tag size={32} label="Not Started" icon={NotStartedIcon} />
           </div>
 
           <div className="flex gap-2">
