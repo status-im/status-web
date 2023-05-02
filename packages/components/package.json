@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "dev": "vite build --watch --mode development",
+    "rebuild": "yarn build --force",
     "build": "vite build",
     "postbuild": "yarn build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
