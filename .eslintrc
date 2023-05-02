@@ -46,10 +46,7 @@
     {
       // TODO: add https://github.com/francoismassart/eslint-plugin-tailwindcss
       "files": ["./apps/website/"],
-      "extends": [
-        // "next"
-        "next/core-web-vitals"
-      ]
+      "extends": ["next", "next/core-web-vitals"]
       // "settings": {
       //   "import/resolver": {
       //     "typescript": {
