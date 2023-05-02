@@ -56,5 +56,8 @@
   ],
   "publishConfig": {
     "access": "public"
+  },
+  "browser": {
+    "./src/utils/encode-url-data": false
   }
 }
