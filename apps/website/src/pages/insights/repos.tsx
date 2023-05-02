@@ -3,9 +3,11 @@ import { useMemo } from 'react'
 import { Text } from '@status-im/components'
 import Link from 'next/link'
 
-import { Layout } from '.'
+import { InsightsLayout } from '@/layouts/insights-layout'
 
-export default function ReposPage() {
+import type { Page } from 'next'
+
+const ReposPage: Page = () => {
   const repos = useMemo(() => {
     return [
       {
@@ -46,8 +48,9 @@ export default function ReposPage() {
       },
     ]
   }, [])
+
   return (
-    <Layout>
+    <>
       <div className="mb-6">
         <Text size={27} weight="semibold">
           Repos
@@ -84,6 +87,10 @@ export default function ReposPage() {
           </Link>
         ))}
       </div>
-    </Layout>
+    </>
   )
 }
+
+ReposPage.getLayout = InsightsLayout
+
+export default ReposPage

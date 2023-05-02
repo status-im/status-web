@@ -3,23 +3,9 @@ import { useMemo } from 'react'
 import { Avatar, Button, Tag, Text } from '@status-im/components'
 import Link from 'next/link'
 
-import { EpicOverview, Layout } from '.'
-
-export default function InsightsDetailPage() {
-  return (
-    <Layout>
-      <EpicOverview
-        title="Communities protocol"
-        description="Detecting keycard reader removal for the beginning of each flow"
-        large
-      />
-
-      <div role="separator" className="bg-neutral-10 -mx-6 my-6 h-px" />
-
-      <TableIssues />
-    </Layout>
-  )
-}
+// type Props = {
+//   issues: Issue[]
+// }
 
 export const TableIssues = () => {
   const issues = useMemo(() => {

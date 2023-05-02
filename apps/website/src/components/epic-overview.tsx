@@ -1,136 +1,24 @@
-import { useMemo } from 'react'
+import { Tag, Text } from '@status-im/components'
+import { OpenIcon } from '@status-im/icons'
 
-import { Button, IconButton, Shadow, Tag, Text } from '@status-im/components'
-import {
-  DoneIcon,
-  LockedIcon,
-  NotStartedIcon,
-  OpenIcon,
-  SearchIcon,
-  SortIcon,
-  StatusIcon,
-} from '@status-im/icons'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-
-import type { LinkProps } from 'next/link'
-
-const NavLink = (props: LinkProps & { children: string }) => {
-  const { children, ...linkProps } = props
-
-  const { asPath } = useRouter()
-  const active = asPath === props.href
-
-  return (
-    <Link
-      className={`flex h-8 items-center rounded-[10px] px-3 ${
-        active && 'bg-neutral-10 '
-      }`}
-      {...linkProps}
-    >
-      <Text size={15} weight="medium">
-        {children}
-      </Text>
-    </Link>
-  )
-}
-
-export const Layout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <>
-      <div className="sticky top-0 z-10 grid grid-cols-3 items-center px-4 py-3 backdrop-blur-sm">
-        <StatusIcon size={20} />
-
-        <nav className="flex flex-1 justify-center gap-3">
-          <NavLink href="/insights">Epics</NavLink>
-          <NavLink href="/insights/detail">Detail</NavLink>
-          <NavLink href="/insights/orphans">Orphans</NavLink>
-          <NavLink href="/insights/repos">Repos</NavLink>
-        </nav>
-
-        <div className="flex justify-end">
-          <Button size={32} variant="outline" icon={<LockedIcon size={20} />}>
-            Log in
-          </Button>
-        </div>
-      </div>
-
-      <div className="px-6 py-4 pb-10">{children}</div>
-    </>
-  )
-}
-
-export default function InsightsPage() {
-  const epics = useMemo(() => {
-    return [
-      {
-        id: 1,
-        title: 'Communities protocol',
-        description: 'Support Encrypted Communities',
-      },
-      {
-        id: 5155,
-        title: 'Keycard',
-        description:
-          'Detecting keycard reader removal for the beginning of each flow',
-      },
-    ]
-  }, [])
-
-  return (
-    <Layout>
-      <div className="space-y-4">
-        <Text size={27} weight="semibold">
-          Epics
-        </Text>
-
-        <div className="flex justify-between">
-          <div className="flex gap-2">
-            <Tag size={32} label="In Progress" icon={OpenIcon} selected />
-            <Tag size={32} label="Closed" icon={DoneIcon} />
-            <Tag size={32} label="Not Started" icon={NotStartedIcon} />
-          </div>
-
-          <div className="flex gap-2">
-            <IconButton variant="outline" icon={<SearchIcon size={20} />} />
-            <IconButton variant="outline" icon={<SortIcon size={20} />} />
-          </div>
-        </div>
-
-        <div className="grid gap-4">
-          {epics.map(epic => (
-            <Shadow
-              key={epic.id}
-              variant="$2"
-              className="rounded-2xl px-4 py-3"
-            >
-              <EpicOverview title={epic.title} description={epic.description} />
-            </Shadow>
-          ))}
-        </div>
-      </div>
-    </Layout>
-  )
-}
-
-export const EpicOverview = ({
-  title,
-  description,
-  large,
-}: {
+type Props = {
   title: string
   description: string
-  large?: boolean
-}) => {
+  fullscreen?: boolean
+}
+
+export const EpicOverview = (props: Props) => {
+  const { title, description, fullscreen } = props
+
   return (
     <div>
       <div className="flex items-center gap-1">
-        <Text size={large ? 27 : 19} weight="semibold">
+        <Text size={fullscreen ? 27 : 19} weight="semibold">
           {title}
         </Text>
         <OpenIcon size={20} />
       </div>
-      <Text size={large ? 19 : 15} color="$neutral-50">
+      <Text size={fullscreen ? 19 : 15} color="$neutral-50">
         {description}
       </Text>
       <div className="flex py-3">
