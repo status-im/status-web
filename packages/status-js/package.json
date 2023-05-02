@@ -6,11 +6,6 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
-  "#exports": {
-    "types": "./dist/types/index.d.ts",
-    "import": "./dist/index.es.js",
-    "default": "./dist/index.es.js"
-  },
   "repository": {
     "url": "https://github.com/status-im/status-web.git",
     "directory": "packages/status-js",
@@ -22,7 +17,6 @@
   "scripts": {
     "test": "vitest",
     "dev": "vite build --watch --mode development",
-    "rebuild": "yarn build --force",
     "build": "vite build",
     "postbuild": "yarn build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
