@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { IconButton, Shadow, Tag, Text } from '@status-im/components'
 import {
   DoneIcon,
@@ -14,23 +12,21 @@ import { InsightsLayout } from '@/layouts/insights-layout'
 
 import type { Page } from 'next'
 
-const InsightsPage: Page = () => {
-  const epics = useMemo(() => {
-    return [
-      {
-        id: 1,
-        title: 'Communities protocol',
-        description: 'Support Encrypted Communities',
-      },
-      {
-        id: 5155,
-        title: 'Keycard',
-        description:
-          'Detecting keycard reader removal for the beginning of each flow',
-      },
-    ]
-  }, [])
+const epics = [
+  {
+    id: 1,
+    title: 'Communities protocol',
+    description: 'Support Encrypted Communities',
+  },
+  {
+    id: 5155,
+    title: 'Keycard',
+    description:
+      'Detecting keycard reader removal for the beginning of each flow',
+  },
+]
 
+const InsightsPage: Page = () => {
   return (
     <div className="space-y-4">
       <Text size={27} weight="semibold">

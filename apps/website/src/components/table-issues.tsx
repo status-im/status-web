@@ -1,43 +1,35 @@
-import { useMemo } from 'react'
-
 import { Avatar, Button, Tag, Text } from '@status-im/components'
 import Link from 'next/link'
 
-// type Props = {
-//   issues: Issue[]
-// }
+const issues = [
+  {
+    id: 5154,
+    title: 'Add support for encrypted communities',
+    status: 'Open',
+  },
+  {
+    id: 5155,
+    title: 'Add support for encrypted communities',
+    status: 'Open',
+  },
+  {
+    id: 4,
+    title: 'Add support for encrypted communities',
+    status: 'Open',
+  },
+  {
+    id: 4324,
+    title: 'Add support for encrypted communities',
+    status: 'Open',
+  },
+  {
+    id: 876,
+    title: 'Add support for encrypted communities',
+    status: 'Open',
+  },
+]
 
 export const TableIssues = () => {
-  const issues = useMemo(() => {
-    return [
-      {
-        id: 5154,
-        title: 'Add support for encrypted communities',
-        status: 'Open',
-      },
-      {
-        id: 5155,
-        title: 'Add support for encrypted communities',
-        status: 'Open',
-      },
-      {
-        id: 4,
-        title: 'Add support for encrypted communities',
-        status: 'Open',
-      },
-      {
-        id: 4324,
-        title: 'Add support for encrypted communities',
-        status: 'Open',
-      },
-      {
-        id: 876,
-        title: 'Add support for encrypted communities',
-        status: 'Open',
-      },
-    ]
-  }, [])
-
   return (
     <div className="border-neutral-10  overflow-hidden rounded-2xl border">
       <div className="bg-neutral-5 border-neutral-10 border-b p-3">

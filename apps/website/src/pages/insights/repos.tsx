@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { Text } from '@status-im/components'
 import Link from 'next/link'
 
@@ -7,48 +5,46 @@ import { InsightsLayout } from '@/layouts/insights-layout'
 
 import type { Page } from 'next'
 
-const ReposPage: Page = () => {
-  const repos = useMemo(() => {
-    return [
-      {
-        name: 'status-web',
-        description: 'a free (libre) open source, mobile OS for Ethereum.',
-        issues: 10,
-        stars: 5,
-      },
-      {
-        name: 'status-mobile',
-        description: 'a free (libre) open source, mobile OS for Ethereum.',
-        issues: 10,
-        stars: 5,
-      },
-      {
-        name: 'status-desktop',
-        description: 'a free (libre) open source, mobile OS for Ethereum.',
-        issues: 10,
-        stars: 5,
-      },
-      {
-        name: 'status-go',
-        description: 'a free (libre) open source, mobile OS for Ethereum.',
-        issues: 10,
-        stars: 5,
-      },
-      {
-        name: 'nimbus-eth2',
-        description: 'a free (libre) open source, mobile OS for Ethereum.',
-        issues: 10,
-        stars: 5,
-      },
-      {
-        name: 'help.status.im',
-        description: 'help.status.im',
-        issues: 10,
-        stars: 5,
-      },
-    ]
-  }, [])
+const repos = [
+  {
+    name: 'status-web',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'status-mobile',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'status-desktop',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'status-go',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'nimbus-eth2',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'help.status.im',
+    description: 'help.status.im',
+    issues: 10,
+    stars: 5,
+  },
+]
 
+const ReposPage: Page = () => {
   return (
     <>
       <div className="mb-6">
