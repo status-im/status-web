@@ -11,6 +11,7 @@ process.env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD = '1'
 
 /** @type {import('next').NextConfig} */
 let config = {
+  // output: 'export',
   reactStrictMode: true,
   typescript: {
     ignoreBuildErrors: true,
@@ -29,6 +30,16 @@ let config = {
   experimental: {
     legacyBrowsers: false,
     // esmExternals: 'loose',
+  },
+
+  redirects: async () => {
+    return [
+      {
+        source: '/',
+        destination: '/insights',
+        permanent: false,
+      },
+    ]
   },
 }
 

@@ -3,7 +3,7 @@ import { Children } from 'react'
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document'
 import { AppRegistry } from 'react-native'
 
-import Tamagui from '../tamagui.config'
+import Tamagui from '../../tamagui.config'
 
 import type { DocumentContext } from 'next/document'
 
