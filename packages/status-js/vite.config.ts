@@ -1,5 +1,3 @@
-/// <reference types="vitest" />
-
 import { defineConfig } from 'vite'
 
 import { dependencies } from './package.json'
@@ -30,7 +28,7 @@ export default defineConfig(({ mode }) => {
       lib: {
         entry: './src/index.ts',
         fileName: 'index',
-        formats: ['es'],
+        formats: ['es', 'cjs'],
       },
       sourcemap: true,
       emptyOutDir: mode === 'production',
