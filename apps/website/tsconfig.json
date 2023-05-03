@@ -10,7 +10,7 @@
     "baseUrl": ".",
     "paths": {
       "react-native": ["react-native-web"],
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
       // "@status-im/*": ["./node_modules/@status-im/*"]
       // "@status-im/js": ["./node_modules/@status-im/js/packages/status-js"],
       // "@status-im/components": [
@@ -19,5 +19,5 @@
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "next.config.js"]
+  "exclude": ["node_modules", "next.config.js", "tailwind.config.js"]
 }

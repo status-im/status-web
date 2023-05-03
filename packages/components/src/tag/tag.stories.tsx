@@ -22,13 +22,13 @@ export const Default: Story = {
     return (
       <Stack space flexDirection="row">
         <Stack space alignItems="flex-start">
-          <Tag emoji="🐷" label="Tag" size={32} />
-          <Tag emoji="🐷" label="Tag" size={32} selected />
-          <Tag emoji="🐷" label="Tag" size={32} disabled />
-          <Tag emoji="🐷" size={32} />
+          <Tag icon="🐷" label="Tag" size={32} />
+          <Tag icon="🐷" label="Tag" size={32} selected />
+          <Tag icon="🐷" label="Tag" size={32} disabled />
+          <Tag icon="🐷" size={32} />
 
-          <Tag emoji="🐷" label="Tag" size={24} />
-          <Tag emoji="🐷" size={24} />
+          <Tag icon="🐷" label="Tag" size={24} />
+          <Tag icon="🐷" size={24} />
         </Stack>
 
         <Stack space alignItems="flex-start">

@@ -21,13 +21,12 @@
     }
   },
   "scripts": {
-    "sync": " vite-node scripts/sync.ts",
+    "sync": "vite-node scripts/sync.ts && yarn generate",
+    "generate": "rimraf src && svgr svg --out-dir src",
     "dev": "vite build --watch --mode development",
-    "build:icons": "rimraf src && svgr svg --out-dir src",
-    "build:types": "tsc --noEmit false --emitDeclarationOnly",
-    "prebuild": "yarn build:icons",
     "build": "vite build",
     "postbuild": "yarn build:types",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "#test": "vitest",
     "typecheck": "tsc",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
