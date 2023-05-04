@@ -31,16 +31,6 @@ let config = {
     legacyBrowsers: false,
     // esmExternals: 'loose',
   },
-
-  redirects: async () => {
-    return [
-      {
-        source: '/',
-        destination: '/insights',
-        permanent: false,
-      },
-    ]
-  },
 }
 
 const plugins = [
