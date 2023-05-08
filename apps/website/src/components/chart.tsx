@@ -1,6 +1,9 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { animated, config, useSpring } from '@react-spring/web'
+import { Text } from '@status-im/components'
+import { DoneIcon, OpenIcon } from '@status-im/icons'
+import { Stack } from '@tamagui/core'
 import { AxisBottom, AxisLeft } from '@visx/axis'
 import { curveMonotoneX } from '@visx/curve'
 import { localPoint } from '@visx/event'
@@ -28,14 +31,21 @@ const colors = {
   closed: '#23ADA0',
   background: '#F0F2F5',
   marker: '#09101C',
+  totalGradient: 'rgba(233, 84, 96, 0.3)',
+  closedGradient: 'rgba(35, 173, 160, 0.3)',
+  white: '#FFF',
 }
 
 // defining tooltip styles
 const tooltipStyles = {
   ...defaultStyles,
-  minWidth: 60,
-  backgroundColor: colors.background,
-  marginLeft: 60,
+  minWidth: 272,
+  padding: 12,
+  backgroundColor: '#FFF',
+  border: '1px solid #F0F2F5',
+  boxShadow: '0px 2px 20px rgba(9, 16, 28, 0.04)',
+  borderRadius: 20,
+  marginLeft: 40,
 }
 
 type DayType = {
@@ -49,6 +59,10 @@ interface Props {
   width?: number
   height?: number
 }
+
+const formatDate = timeFormat('%b %d %Y')
+const calculatePercentage = (value: number, total: number): number =>
+  Math.round((value / total) * 100)
 
 const ChartComponent = (props: Props): JSX.Element => {
   const { data, width: defaultWidth, height: defaultHeight } = props
@@ -87,20 +101,35 @@ const ChartComponent = (props: Props): JSX.Element => {
   const getDate = useCallback((d: DayType) => new Date(d?.date), [])
   const bisectDate = bisector((d: DayType) => new Date(d?.date)).left
   // Convert data to array of objects with `date` and `value` properties
-  const totalIssuesData = data.map(d => ({
-    date: new Date(d.date),
-    value: getTotalIssues(d),
-  }))
+  const totalIssuesData = useMemo(
+    () =>
+      data.map(d => ({
+        date: new Date(d.date),
+        value: getTotalIssues(d),
+      })),
+    [data, getTotalIssues]
+  )
 
-  const closedIssuesData = data.map(d => ({
-    date: new Date(d.date),
-    value: getClosedIssues(d),
-  }))
+  const closedIssuesData = useMemo(
+    () =>
+      data.map(d => ({
+        date: new Date(d.date),
+        value: getClosedIssues(d),
+      })),
+    [data, getClosedIssues]
+  )
 
   // tooltip parameters
   const { tooltipData: tooltip, showTooltip, hideTooltip } = useTooltip()
 
-  const tooltipData = tooltip as DayType
+  const tooltipData = tooltip as DayType & {
+    completedIssuesPercentage: number
+    openIssuesPercentage: number
+    totalIssues: number
+    openIssues: number
+    closedIssues: number
+    formattedDate: string
+  }
 
   // Define spring for circle position
   const circleSpringTotal = useSpring({
@@ -127,6 +156,10 @@ const ChartComponent = (props: Props): JSX.Element => {
     config: config.gentle,
   })
 
+  const [springProps, setSpringProps] = useSpring(() => ({
+    totalIssues: 0,
+  }))
+
   const handleTooltip = useCallback(
     (event: EventType) => {
       const { x } = localPoint(event) || { x: 0 }
@@ -145,11 +178,47 @@ const ChartComponent = (props: Props): JSX.Element => {
             : d0
       }
 
+      const closedIssues = getClosedIssues(d)
+      const totalIssues = getTotalIssues(d)
+      const openIssues = totalIssues - closedIssues
+
+      const completedIssuesPercentage = calculatePercentage(
+        closedIssues,
+        totalIssues
+      )
+
+      const openIssuesPercentage = calculatePercentage(openIssues, totalIssues)
+
+      setSpringProps({
+        totalIssues,
+        from: { totalIssues: springProps.totalIssues },
+        config: { tension: 500, friction: 50 },
+      })
+
       showTooltip({
-        tooltipData: d,
+        tooltipData: {
+          ...d,
+          formattedDate: formatDate(getDate(d)),
+          completedIssuesPercentage,
+          openIssuesPercentage,
+          closedIssues,
+          totalIssues,
+          openIssues,
+        },
       })
     },
-    [xScale, margin.left, bisectDate, data, getDate, showTooltip]
+    [
+      xScale,
+      margin.left,
+      bisectDate,
+      data,
+      getDate,
+      getClosedIssues,
+      getTotalIssues,
+      setSpringProps,
+      springProps.totalIssues,
+      showTooltip,
+    ]
   )
 
   return (
@@ -163,18 +232,21 @@ const ChartComponent = (props: Props): JSX.Element => {
             hideTicks
             hideAxisLine
             hideZero
-            tickValues={xScale.ticks(8)}
-            tickComponent={({ formattedValue, ...tickProps }) => (
-              <text
-                {...tickProps}
-                fill="#A1ABBD"
-                fontSize={11}
-                textAnchor="middle"
-                dy=".33em"
-              >
-                {formattedValue}
-              </text>
-            )}
+            tickLabelProps={(_, index) => {
+              const textAnchor =
+                index === 0
+                  ? 'start'
+                  : index === data.length - 1
+                  ? 'end'
+                  : 'middle'
+              return {
+                dx: index === 0 ? '0.5em' : '0',
+                dy: '.33em',
+                fill: '#A1ABBD',
+                fontSize: 11,
+                textAnchor,
+              }
+            }}
             tickFormat={value => {
               if (typeof value === 'number') {
                 return value.toString() // Handle number values
@@ -206,7 +278,6 @@ const ChartComponent = (props: Props): JSX.Element => {
 
           <GridColumns
             scale={xScale}
-            numTicks={data.length}
             width={innerWidth}
             height={innerHeight}
             stroke="#F0F2F5"
@@ -218,7 +289,7 @@ const ChartComponent = (props: Props): JSX.Element => {
             id="gradient"
             from={colors.total}
             to={colors.background}
-            fromOpacity={0.8}
+            fromOpacity={0.05}
             toOpacity={0}
           />
 
@@ -226,7 +297,7 @@ const ChartComponent = (props: Props): JSX.Element => {
             id="gradient-open"
             from={colors.closed}
             to={colors.background}
-            fromOpacity={0.8}
+            fromOpacity={0.05}
             toOpacity={0}
           />
 
@@ -325,9 +396,81 @@ const ChartComponent = (props: Props): JSX.Element => {
           style={{ ...tooltipStyles, opacity: opacityAnimation.opacity }}
           className="rounded-2xl"
         >
-          <p>{`Total Issues: ${getTotalIssues(tooltipData)}`}</p>
-          <p>{`Closed Issues: ${getClosedIssues(tooltipData)}`}</p>
-          <p>{`${tooltipData.date}`}</p>
+          <Stack flexDirection="row" alignItems="center">
+            <Text size={19} weight="semibold">
+              {springProps.totalIssues
+                .to(value => Math.round(value))
+                .get()
+                .toLocaleString()}
+            </Text>
+            <Stack ml={3} alignItems="center">
+              <Text size={15} weight="medium">
+                issues
+              </Text>
+            </Stack>
+          </Stack>
+          <Stack pb={12}>
+            <Text size={13} weight="medium" color="$neutral-50">
+              {tooltipData.formattedDate}
+            </Text>
+          </Stack>
+
+          <Stack
+            borderWidth={1}
+            borderRadius="$8"
+            borderColor="$danger-50-opa-30"
+            backgroundColor="$danger-50-opa-10"
+          >
+            <Stack
+              animation="slow"
+              height={8}
+              backgroundColor="$success-50"
+              width={`${tooltipData.completedIssuesPercentage}%`}
+              borderRadius="$8"
+            />
+          </Stack>
+          <Stack flexDirection="row" alignItems="center" pt={18}>
+            <OpenIcon size={16} color="$neutral-40" />
+            <Stack px={4}>
+              <Text size={13} weight="medium">
+                {tooltipData.openIssues} open
+              </Text>
+            </Stack>
+            <Stack
+              backgroundColor="$danger-50-opa-30"
+              borderRadius="$20"
+              px={6}
+              py={2}
+              minWidth={36}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Text size={11} weight="medium" color="$danger-50">
+                {`${tooltipData.openIssuesPercentage}%`}
+              </Text>
+            </Stack>
+          </Stack>
+          <Stack flexDirection="row" alignItems="center" pt={8}>
+            <DoneIcon size={16} color="$neutral-40" />
+            <Stack px={4}>
+              <Text size={13} weight="medium">
+                {tooltipData.closedIssues} closes
+              </Text>
+            </Stack>
+            <Stack
+              minWidth={36}
+              backgroundColor="$success-50-opa-30"
+              borderRadius="$20"
+              px={6}
+              py={2}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Text size={11} weight="medium" color="$success-50">
+                {`${tooltipData.completedIssuesPercentage}%`}
+              </Text>
+            </Stack>
+          </Stack>
         </AnimatedTooltip>
       ) : null}
     </div>
