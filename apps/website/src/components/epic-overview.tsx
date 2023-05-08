@@ -36,23 +36,23 @@ const DATA = [
   },
   {
     date: '2022-01-31',
-    open_issues: 0,
-    closed_issues: 160,
+    open_issues: 30,
+    closed_issues: 90,
   },
   {
     date: '2022-02-01',
-    open_issues: 0,
-    closed_issues: 160,
+    open_issues: 25,
+    closed_issues: 95,
   },
   {
     date: '2022-02-02',
-    open_issues: 0,
-    closed_issues: 160,
+    open_issues: 20,
+    closed_issues: 100,
   },
   {
     date: '2022-02-03',
-    open_issues: 0,
-    closed_issues: 160,
+    open_issues: 10,
+    closed_issues: 110,
   },
 ]
 
