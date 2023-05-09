@@ -4,13 +4,12 @@ import { animated, config, useSpring } from '@react-spring/web'
 import { Text } from '@status-im/components'
 import { DoneIcon, OpenIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
-import { AxisBottom, AxisLeft } from '@visx/axis'
 import { curveMonotoneX } from '@visx/curve'
 import { localPoint } from '@visx/event'
 import { GlyphCircle } from '@visx/glyph'
 import { LinearGradient } from '@visx/gradient'
-import { GridColumns } from '@visx/grid'
 import { Group } from '@visx/group'
+import { AnimatedAxis, AnimatedGridColumns } from '@visx/react-spring'
 import { ParentSize } from '@visx/responsive'
 import { scaleLinear, scaleTime } from '@visx/scale'
 import { AreaClosed, Line, LinePath } from '@visx/shape'
@@ -21,14 +20,13 @@ import { timeFormat } from 'd3-time-format'
 import type { EventType } from '@visx/event/lib/types'
 
 const AnimatedLinePath = animated(LinePath)
-
 const AnimatedCircle = animated(GlyphCircle)
-
 const AnimatedLine = animated(Line)
 const AnimatedGroup = animated(Group)
 const AnimatedTooltip = animated(TooltipWithBounds)
 const AnimatedAreaClosed = animated(AreaClosed)
 
+// defining colors
 const colors = {
   total: '#E95460',
   closed: '#23ADA0',
@@ -176,8 +174,8 @@ const ChartComponent = (props: Props): JSX.Element => {
   }))
 
   const [clipPathAnimation] = useSpring(() => ({
-    from: { clipPath: 'inset(0 100% 0px 0px)' },
-    to: { clipPath: 'inset(0 0px 0px 0px)' },
+    from: { clipPath: 'inset(0 100% 0 0)' },
+    to: { clipPath: 'inset(0 0 0 0)' },
     config: { duration: 600 },
   }))
 
@@ -216,7 +214,7 @@ const ChartComponent = (props: Props): JSX.Element => {
         from: { totalIssues: springProps.totalIssues },
         config: { tension: 500, friction: 10 },
       })
-
+      // setNum(totalIssues)
       showTooltip({
         tooltipData: {
           ...d,
@@ -248,7 +246,9 @@ const ChartComponent = (props: Props): JSX.Element => {
       <svg width={width} height={height} overflow="visible">
         <Group left={margin.left} top={margin.top}>
           {/* x-axis */}
-          <AxisBottom
+          <AnimatedAxis
+            animationTrajectory="outside"
+            orientation="bottom"
             top={innerHeight}
             scale={xScale}
             hideTicks
@@ -282,30 +282,32 @@ const ChartComponent = (props: Props): JSX.Element => {
             }}
           />
           {/* y-axis */}
-          <AxisLeft
+          <AnimatedAxis
+            animationTrajectory="outside"
+            orientation="left"
             scale={yScale}
             hideTicks
             hideAxisLine
-            tickComponent={({ formattedValue, ...tickProps }) => (
+            numTicks={data.length > 8 ? 8 : data.length}
+            tickComponent={({ formattedValue }) => (
               <text
-                {...tickProps}
                 fill="#A1ABBD"
                 fontSize={11}
                 textAnchor="middle"
                 dx="-1em"
+                fontFamily="Inter, sans-serif"
               >
                 {formattedValue}
               </text>
             )}
           />
 
-          <GridColumns
+          <AnimatedGridColumns
             scale={xScale}
-            width={innerWidth}
             height={innerHeight}
             stroke="#F0F2F5"
-            strokeOpacity={1}
             strokeDasharray="4,2"
+            animationTrajectory="center"
           />
 
           <LinearGradient
@@ -450,10 +452,7 @@ const ChartComponent = (props: Props): JSX.Element => {
         >
           <Stack flexDirection="row" alignItems="center">
             <Text size={19} weight="semibold">
-              {springProps.totalIssues
-                .to(value => Math.round(value))
-                .get()
-                .toLocaleString()}
+              {springProps.totalIssues.to(val => Math.floor(val)).get()}
             </Text>
             <Stack ml={3} alignItems="center">
               <Text size={15} weight="medium">
