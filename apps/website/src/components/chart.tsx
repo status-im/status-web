@@ -20,11 +20,14 @@ import { timeFormat } from 'd3-time-format'
 
 import type { EventType } from '@visx/event/lib/types'
 
+const AnimatedLinePath = animated(LinePath)
+
 const AnimatedCircle = animated(GlyphCircle)
 
 const AnimatedLine = animated(Line)
 const AnimatedGroup = animated(Group)
 const AnimatedTooltip = animated(TooltipWithBounds)
+const AnimatedAreaClosed = animated(AreaClosed)
 
 const colors = {
   total: '#E95460',
@@ -46,6 +49,11 @@ const tooltipStyles = {
   boxShadow: '0px 2px 20px rgba(9, 16, 28, 0.04)',
   borderRadius: 20,
   marginLeft: 40,
+}
+
+type Datum = {
+  date: Date
+  value: number
 }
 
 type DayType = {
@@ -160,6 +168,20 @@ const ChartComponent = (props: Props): JSX.Element => {
     totalIssues: 0,
   }))
 
+  const [drawingLineStyle] = useSpring(() => ({
+    from: { strokeDasharray: `${3000}, ${0}` },
+    to: { strokeDasharray: `${0}, ${3000}` },
+    reverse: true,
+    config: { duration: 2000, delay: 1000 },
+  }))
+
+  const [clipPathAnimation] = useSpring(() => ({
+    from: { clipPath: 'inset(0 100% 0px 0px)' },
+    to: { clipPath: 'inset(0 0px 0px 0px)' },
+    config: { duration: 600 },
+  }))
+
+  // Define tooltip handler
   const handleTooltip = useCallback(
     (event: EventType) => {
       const { x } = localPoint(event) || { x: 0 }
@@ -192,7 +214,7 @@ const ChartComponent = (props: Props): JSX.Element => {
       setSpringProps({
         totalIssues,
         from: { totalIssues: springProps.totalIssues },
-        config: { tension: 500, friction: 50 },
+        config: { tension: 500, friction: 10 },
       })
 
       showTooltip({
@@ -243,6 +265,7 @@ const ChartComponent = (props: Props): JSX.Element => {
                 dx: index === 0 ? '0.5em' : '0',
                 dy: '.33em',
                 fill: '#A1ABBD',
+                fontFamily: 'Inter, sans-serif',
                 fontSize: 11,
                 textAnchor,
               }
@@ -302,43 +325,72 @@ const ChartComponent = (props: Props): JSX.Element => {
           />
 
           {/* Total issues line */}
-          <LinePath
+
+          <AnimatedLinePath
             data={totalIssuesData}
-            x={d => xScale(d.date)}
-            y={d => yScale(d.value)}
+            x={d => {
+              const datum = d as Datum
+              return xScale(datum.date)
+            }}
+            y={d => {
+              const datum = d as Datum
+              return yScale(datum.value)
+            }}
             stroke={colors.total}
             strokeWidth={2}
             curve={curveMonotoneX}
+            style={drawingLineStyle}
           />
 
           {/* Closed issues line */}
-          <LinePath
+          <AnimatedLinePath
             data={closedIssuesData}
-            x={d => xScale(d.date)}
-            y={d => yScale(d.value)}
+            x={d => {
+              const datum = d as Datum
+              return xScale(datum.date)
+            }}
+            y={d => {
+              const datum = d as Datum
+              return yScale(datum.value)
+            }}
             stroke={colors.closed}
             strokeWidth={2}
             curve={curveMonotoneX}
+            style={drawingLineStyle}
           />
 
           {/* Total issues area */}
-          <AreaClosed
+          <AnimatedAreaClosed
             data={totalIssuesData}
-            x={d => xScale(d.date)}
-            y={d => yScale(d.value)}
+            x={d => {
+              const datum = d as Datum
+              return xScale(datum.date)
+            }}
+            y={d => {
+              const datum = d as Datum
+              return yScale(datum.value)
+            }}
             yScale={yScale}
             fill="url(#gradient)"
             curve={curveMonotoneX}
+            style={clipPathAnimation}
           />
 
           {/* Closed issues area */}
-          <AreaClosed
+          <AnimatedAreaClosed
             data={closedIssuesData}
-            x={d => xScale(d.date)}
-            y={d => yScale(d.value)}
+            x={d => {
+              const datum = d as Datum
+              return xScale(datum.date)
+            }}
+            y={d => {
+              const datum = d as Datum
+              return yScale(datum.value)
+            }}
             yScale={yScale}
             fill="url(#gradient-open)"
             curve={curveMonotoneX}
+            style={clipPathAnimation}
           />
           {tooltipData && (
             <>
