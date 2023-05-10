@@ -1,8 +1,7 @@
 import { Button, Text } from '@status-im/components'
-import { CommunitiesIcon } from '@status-im/icons'
 import Link from 'next/link'
 
-import { LINKS } from '@/config/links'
+import { LINKS, SOCIALS } from '@/config/links'
 
 import { Logo } from './logo'
 
@@ -10,12 +9,11 @@ import type { Links } from '@/config/links'
 
 export const PageFooter = () => {
   return (
-    <footer className="p-6 pb-3">
+    <footer className="px-6 pb-3 pt-14">
+      <div className="mb-6">
+        <Logo />
+      </div>
       <div className="mb-10 grid grid-cols-2 lg:grid-cols-8">
-        <div>
-          <Logo />
-        </div>
-
         {Object.entries(LINKS).map(([title, links]) => (
           <Section key={title} title={title} links={links} />
         ))}
@@ -24,9 +22,12 @@ export const PageFooter = () => {
           <Text size={13} color="$neutral-50">
             {"Let's connect"}
           </Text>
-
-          <div className="flex">
-            <CommunitiesIcon size={20} color="$neutral-40" />
+          <div className="flex flex-col">
+            {Object.values(SOCIALS).map(social => (
+              <Text size={11} key={social.name}>
+                {social.name}
+              </Text>
+            ))}
           </div>
         </div>
       </div>
