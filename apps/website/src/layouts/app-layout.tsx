@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { Logo } from '@/components/logo'
+import { PageFooter } from '@/components/page-footer'
 import { LINKS } from '@/config/links'
 
 import type { LogoProps } from '@/components/logo'
@@ -39,13 +40,15 @@ export const AppLayout: PageLayout = page => {
             variant="darkGrey"
             icon={<DownloadIcon size={20} />}
           >
-            Get Status
+            Sign up for early access
           </Button>
         </div>
       </div>
 
       {/* <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">{page}</div> */}
       {page}
+
+      <PageFooter />
     </div>
   )
 }
