@@ -13,7 +13,7 @@ let config = {
     ignoreBuildErrors: true,
   },
   images: {
-    disableStaticImages: true,
+    // disableStaticImages: true,
   },
   transpilePackages: [
     // 'react-native',
