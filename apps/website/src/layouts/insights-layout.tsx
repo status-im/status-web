@@ -9,7 +9,7 @@ import type { LinkProps } from 'next/link'
 
 export const InsightsLayout: PageLayout = page => {
   return AppLayout(
-    <div className="bg-white-100 mx-1 grid min-h-full grid-cols-[320px_1fr] items-stretch rounded-3xl ">
+    <div className="bg-white-100 mx-1 grid grid-cols-[320px_1fr] items-stretch rounded-3xl">
       <aside className="border-neutral-10 flex flex-col gap-3 border-r p-5">
         <NavLink href="/insights">Epics</NavLink>
         <NavLink href="/insights/detail">Detail</NavLink>
