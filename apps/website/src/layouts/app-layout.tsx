@@ -7,22 +7,15 @@ import { Logo } from '@/components/logo'
 import { PageFooter } from '@/components/page-footer'
 import { LINKS } from '@/config/links'
 
-import type { LogoProps } from '@/components/logo'
 import type { PageLayout } from 'next'
 
 export const AppLayout: PageLayout = page => {
-  const { asPath } = useRouter()
-
-  let logoVariant: LogoProps['variant'] = 'default'
-  if (asPath.includes('/insights')) {
-    logoVariant = 'dev'
-  }
   return (
     <div className="min-h-full bg-neutral-100">
       <div className="flex items-center px-6 py-3">
         <div className="mr-3">
           <Link href="/">
-            <Logo variant={logoVariant} />
+            <Logo />
           </Link>
         </div>
 
