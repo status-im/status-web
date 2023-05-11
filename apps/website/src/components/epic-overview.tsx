@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { Tag, Text } from '@status-im/components'
 import { OpenIcon } from '@status-im/icons'
 
@@ -100,6 +102,18 @@ type Props = {
 export const EpicOverview = (props: Props) => {
   const { title, description, fullscreen } = props
 
+  // Simulating loading state
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false)
+    }, 2000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
+
   return (
     <div style={{ position: 'relative' }}>
       <div className="flex items-center gap-1">
@@ -115,7 +129,7 @@ export const EpicOverview = (props: Props) => {
         <Tag size={24} label="E:CommunitiesProtocol" />
       </div>
 
-      <Chart data={DATA} height={300} />
+      <Chart data={DATA} height={300} isLoading={isLoading} />
 
       <div className="flex justify-between pt-3">
         <div className="flex gap-1">
