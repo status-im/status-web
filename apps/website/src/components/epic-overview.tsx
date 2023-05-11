@@ -1,7 +1,7 @@
 import { Tag, Text } from '@status-im/components'
 import { OpenIcon } from '@status-im/icons'
 
-import { Chart } from './chart'
+import { Chart } from './chart/chart'
 
 const DATA = [
   {
@@ -47,12 +47,47 @@ const DATA = [
   {
     date: '2022-02-02',
     open_issues: 20,
-    closed_issues: 100,
+    closed_issues: 98,
   },
   {
     date: '2022-02-03',
     open_issues: 10,
-    closed_issues: 110,
+    closed_issues: 130,
+  },
+  {
+    date: '2022-02-04',
+    open_issues: 10,
+    closed_issues: 140,
+  },
+  {
+    date: '2022-02-05',
+    open_issues: 10,
+    closed_issues: 150,
+  },
+  {
+    date: '2022-02-06',
+    open_issues: 10,
+    closed_issues: 160,
+  },
+  {
+    date: '2022-02-07',
+    open_issues: 10,
+    closed_issues: 180,
+  },
+  {
+    date: '2022-02-08',
+    open_issues: 10,
+    closed_issues: 190,
+  },
+  {
+    date: '2022-02-09',
+    open_issues: 10,
+    closed_issues: 200,
+  },
+  {
+    date: '2022-02-10',
+    open_issues: 0,
+    closed_issues: 220,
   },
 ]
 
@@ -66,7 +101,7 @@ export const EpicOverview = (props: Props) => {
   const { title, description, fullscreen } = props
 
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
       <div className="flex items-center gap-1">
         <Text size={fullscreen ? 27 : 19} weight="semibold">
           {title}
