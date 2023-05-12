@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "TAMAGUI_TARGET='web' vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "dev": "TAMAGUI_TARGET=web vite",
+    "build": "tsc && TAMAGUI_TARGET=web vite build",
+    "preview": "TAMAGUI_TARGET=web vite preview",
     "lint": "eslint src",
     "typecheck": "tsc",
     "clean": "rimraf node_modules .turbo"
