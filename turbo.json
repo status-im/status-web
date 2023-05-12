@@ -1,10 +1,14 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "baseBranch": "origin/main",
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
+    },
+    "website#build": {
+      "dependsOn": ["^build"],
+      "env": ["TAMAGUI_TARGET", "TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD"],
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "dev": {
       "cache": false
@@ -23,5 +27,6 @@
       "cache": false
     }
   },
+  "globalEnv": ["GITHUB_TOKEN"],
   "globalDependencies": ["tsconfig.base.json"]
 }
