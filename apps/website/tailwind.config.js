@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme')
 const colors = require('@status-im/colors')
+const plugin = require('tailwindcss/plugin')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -24,8 +25,38 @@ module.exports = {
       bold: '700',
     },
 
-    extend: {},
-  },
+    extend: {
+      transitionProperty: {
+        height: 'height',
+      },
 
-  plugins: [],
+      keyframes: {
+        heightIn: {
+          from: { height: 0 },
+          // to: { height: 296 },
+          to: { height: 'var(--radix-navigation-menu-viewport-height)' },
+        },
+        heightOut: {
+          from: { height: 'var(--radix-navigation-menu-viewport-height)' },
+          // from: { height: 296 },
+          to: { height: 0 },
+        },
+      },
+    },
+
+    animation: {
+      heightIn: 'heightIn 250ms ease',
+      heightOut: 'heightOut 250ms ease',
+    },
+  },
+  plugins: [
+    require('tailwindcss-animate'),
+    plugin(({ matchUtilities }) => {
+      matchUtilities({
+        perspective: value => ({
+          perspective: value,
+        }),
+      })
+    }),
+  ],
 }
