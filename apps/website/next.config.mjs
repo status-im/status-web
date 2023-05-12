@@ -2,8 +2,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 /** @type {import('next').NextConfig} */
-const { withTamagui } = require('@tamagui/next-plugin')
-const { join } = require('path')
+import withMDX from '@next/mdx'
+import tamagui from '@tamagui/next-plugin'
+import { join } from 'path'
+import remarkBreaks from 'remark-breaks'
+import remarkDirective from 'remark-directive'
+import remarkGfm from 'remark-gfm'
 
 process.env.IGNORE_TS_CONFIG_PATHS = 'true'
 process.env.TAMAGUI_TARGET = 'web'
@@ -13,6 +17,9 @@ process.env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD = '1'
 let config = {
   // output: 'export',
   reactStrictMode: true,
+  pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
+
+  // TODO: REMOVE!
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -34,7 +41,19 @@ let config = {
 }
 
 const plugins = [
-  withTamagui({
+  withMDX({
+    extension: /\.mdx?$/,
+    options: {
+      // If you use remark-gfm, you'll need to use next.config.mjs
+      // as the package is ESM only
+      // https://github.com/remarkjs/remark-gfm#install
+      remarkPlugins: [remarkGfm, remarkDirective, remarkBreaks],
+      rehypePlugins: [],
+      // If you use `MDXProvider`, uncomment the following line.
+      providerImportSource: '@mdx-js/react',
+    },
+  }),
+  tamagui.withTamagui({
     config: './tamagui.config.ts',
     components: [
       // fixme?: works without it
@@ -61,9 +80,10 @@ const plugins = [
       'Modal',
     ],
   }),
+  withMDX,
 ]
 
-module.exports = () => {
+export default () => {
   for (const plugin of plugins) {
     config = {
       ...config,

@@ -12,6 +12,7 @@
     "serve": "TAMAGUI_TARGET='web' NODE_ENV=production next start --port 8151"
   },
   "dependencies": {
+    "@mdx-js/react": "^2.3.0",
     "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-navigation-menu": "^1.1.2",
     "@scure/base": "^1.1.1",
@@ -29,12 +30,17 @@
   },
   "devDependencies": {
     "@achingbrain/ssdp": "^4.0.1",
+    "@mdx-js/loader": "^2.3.0",
+    "@next/mdx": "^13.4.2",
     "@tamagui/next-plugin": "1.11.1",
     "@types/node": "^18.11.11",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
+    "remark-breaks": "^3.0.3",
+    "remark-directive": "^2.0.1",
+    "remark-gfm": "^3.0.1",
     "tailwindcss": "^3.3.1",
     "tailwindcss-animate": "^1.0.5",
     "typescript": "^5.0.3"
