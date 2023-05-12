@@ -1,7 +1,7 @@
 import { Stack } from '@tamagui/core'
 import { ParentSize } from '@visx/responsive'
 
-import { ChartComponent, Loading } from './components'
+import { ChartComponent, Empty, Loading } from './components'
 
 type DayType = {
   date: string
@@ -29,9 +29,9 @@ const Chart = (props: Props) => {
 
   if (!data.length) {
     return (
-      <div className="flex items-center justify-center">
-        <p className="text-gray-900">No data available</p>
-      </div>
+      <Stack width={width} height={rest.height}>
+        <Empty />
+      </Stack>
     )
   }
 

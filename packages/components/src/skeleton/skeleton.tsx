@@ -1,3 +1,5 @@
+import './skeleton.css'
+
 import { Stack, useTheme } from '@tamagui/core'
 
 import type { RadiusTokens } from '../tokens'
