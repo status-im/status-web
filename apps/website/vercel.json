@@ -6,6 +6,6 @@
     }
   },
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json} ../../packages/{colors,components,icons} ./",
-  "installCommand": "yarn install --frozen-lockfile",
+  "installCommand": "yarn install --cwd ../../ --frozen-lockfile",
   "buildCommand": "turbo run build --filter=website..."
 }
