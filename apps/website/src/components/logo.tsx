@@ -3,8 +3,8 @@ import { useRouter } from 'next/router'
 import { match, P } from 'ts-pattern'
 
 import logoSrc from '../../public/images/logo/default.svg'
-import devLogoSrc from '../../public/images/logo/dev.svg'
-import learnLogoSrc from '../../public/images/logo/learn.svg'
+import logoDevSrc from '../../public/images/logo/dev.svg'
+import logoLearnSrc from '../../public/images/logo/learn.svg'
 
 type Props = {
   label?: boolean
@@ -16,15 +16,15 @@ export const Logo = (props: Props) => {
   const { pathname } = useRouter()
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-shrink-0 items-center gap-2">
       {match(pathname)
         .with(
           P.when(p => p.startsWith('/insights')),
-          () => <Image src={devLogoSrc} alt="Status logo" />
+          () => <Image src={logoDevSrc} alt="Status logo" />
         )
         .with(
           P.when(p => p.startsWith('/learn')),
-          () => <Image src={learnLogoSrc} alt="Status logo" />
+          () => <Image src={logoLearnSrc} alt="Status logo" />
         )
         .with(
           P.when(p => p.startsWith('/blog')),

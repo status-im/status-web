@@ -2,14 +2,14 @@ import { AppLayout } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
 
-const BlogPage: Page = () => {
+const LearnPage: Page = () => {
   return (
     <div>
-      <h1>Blog</h1>
+      <h1>Learn</h1>
     </div>
   )
 }
 
-BlogPage.getLayout = AppLayout
+LearnPage.getLayout = AppLayout
 
-export default BlogPage
+export default LearnPage
