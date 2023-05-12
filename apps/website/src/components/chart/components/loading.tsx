@@ -15,7 +15,7 @@ const Loading = () => {
             <Skeleton key={i} width={20} height={12} />
           ))}
         </div>
-        <div className="flex h-full w-full justify-between">
+        <div className="flex h-full w-full justify-between pb-4">
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               className="h-full w-1"

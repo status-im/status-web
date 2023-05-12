@@ -78,7 +78,7 @@ const useAnimations = (props: Props) => {
     from: { strokeDasharray: `${3000}, ${0}` },
     to: { strokeDasharray: `${0}, ${3000}` },
     reverse: true,
-    config: { duration: 2000, delay: 1000 },
+    config: { duration: 2000 },
   }))
 
   const [drawingGridColumns] = useSpring(() => ({
@@ -90,7 +90,7 @@ const useAnimations = (props: Props) => {
   const [clipPathAnimation] = useSpring(() => ({
     from: { clipPath: 'inset(0 100% 0 0)' },
     to: { clipPath: 'inset(0 0 0 0)' },
-    config: { duration: 780 },
+    config: { duration: 800 },
   }))
 
   return {
