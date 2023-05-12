@@ -16,7 +16,7 @@
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
-    "build": "turbo run build  --filter=@status-im/*",
+    "build": "turbo run build --filter=@status-im/*",
     "lint": "eslint --cache --cache-location ./node_modules/.cache/eslint/.eslint-cache .",
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
