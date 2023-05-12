@@ -1,14 +1,14 @@
 export const LINKS = {
   Features: [
-    { name: 'Communities', href: '/' },
-    { name: 'Messenger', href: '/' },
-    { name: 'Wallet', href: '/' },
-    { name: 'Browser', href: '/' },
+    { name: 'Communities', href: '/features/communities' },
+    { name: 'Messenger', href: '/features/messenger' },
+    { name: 'Wallet', href: '/features/wallet' },
+    { name: 'Browser', href: '/features/browser' },
   ],
   Platforms: [
-    { name: 'Mobile', href: '/' },
-    { name: 'Desktop', href: '/' },
-    { name: 'Web', href: '/' },
+    { name: 'Mobile', href: '/platforms/mobile' },
+    { name: 'Desktop', href: '/platforms/desktop' },
+    { name: 'Web', href: '/platforms/web' },
   ],
   About: [
     { name: 'Mission', href: '/' },
@@ -27,7 +27,7 @@ export const LINKS = {
   Collaborate: [
     { name: 'Discuss', href: '/' },
     { name: 'Feature upvote', href: '/' },
-    { name: 'Blog', href: '/' },
+    { name: 'Blog', href: '/blog' },
     { name: 'Translations', href: '/' },
     { name: 'Community groups', href: '/' },
     { name: 'Jobs', href: '/' },
