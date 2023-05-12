@@ -97,3 +97,11 @@ export const AppLayout: PageLayout = page => {
     </>
   )
 }
+
+export const PageBody = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
+      {children}
+    </div>
+  )
+}
