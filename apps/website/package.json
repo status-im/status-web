@@ -3,13 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "TAMAGUI_TARGET='web' next dev",
-    "build": "TAMAGUI_TARGET='web' next build",
-    "start": "TAMAGUI_TARGET='web' next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc",
     "clean": "rimraf .next .tamagui .vercel/output node_modules",
-    "serve": "TAMAGUI_TARGET='web' NODE_ENV=production next start --port 8151"
+    "serve": "next start --port 8151"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.3",
