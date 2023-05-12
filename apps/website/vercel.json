@@ -5,7 +5,7 @@
       "main": false
     }
   },
-  "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json} ../../packages/{colors,components,icons} ./",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,components,icons,status-js} ./",
   "installCommand": "yarn install --cwd ../../ --frozen-lockfile",
   "buildCommand": "turbo run build --cwd ../../ --filter=website..."
 }
