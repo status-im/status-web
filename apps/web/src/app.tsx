@@ -29,7 +29,7 @@ const updateProperty = (property: string, value: number) => {
 }
 
 function App() {
-  const [loading, setLoading] = useState(false)
+  const [loading /*, setLoading*/] = useState(false)
   const [showMembers, setShowMembers] = useState(false)
 
   // TODO: Use it to simulate loading
@@ -61,14 +61,14 @@ function App() {
   useResizeObserver<HTMLDivElement>({
     ref: topbarRef,
     onResize({ height }) {
-      updateProperty('--topbar-height', height)
+      updateProperty('--topbar-height', height!)
     },
   })
 
   useResizeObserver<HTMLDivElement>({
     ref: composerRef,
     onResize({ height }) {
-      updateProperty('--composer-height', height)
+      updateProperty('--composer-height', height!)
     },
   })
 
@@ -77,7 +77,7 @@ function App() {
   })
 
   useEffect(() => {
-    contentRef.current.scrollTop = contentRef.current.scrollHeight
+    contentRef.current!.scrollTop = contentRef.current!.scrollHeight
   }, [selectedChannel])
 
   return (
@@ -97,7 +97,7 @@ function App() {
         <div id="topbar" ref={topbarRef}>
           <Topbar
             blur={scrollPosition !== 'top'}
-            channel={selectedChannel}
+            channel={selectedChannel!}
             showMembers={showMembers}
             onMembersPress={() => setShowMembers(show => !show)}
             pinnedMessages={[

@@ -16,7 +16,7 @@ export function useScrollPosition(options: Options) {
   positionRef.current = position
 
   useEffect(() => {
-    const node = ref.current
+    const node = ref.current!
 
     const handleScroll = () => {
       if (!node) return
