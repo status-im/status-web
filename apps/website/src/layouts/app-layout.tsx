@@ -1,6 +1,6 @@
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { Button, Text } from '@status-im/components'
-import { DownloadIcon, ExternalIcon } from '@status-im/icons'
+import { ChevronRightIcon, DownloadIcon, ExternalIcon } from '@status-im/icons'
 import { cx } from 'class-variance-authority'
 
 import { Logo } from '@/components/logo'
@@ -11,6 +11,7 @@ import { LINKS } from '@/config/links'
 import { Link } from '../components/link'
 
 import type { PageLayout } from 'next'
+import type React from 'react'
 
 export const AppLayout: PageLayout = page => {
   return (
@@ -105,3 +106,23 @@ export const PageBody = ({ children }: { children: React.ReactNode }) => {
     </div>
   )
 }
+
+export const Breadcrumbs = () => {
+  return (
+    <div className="border-neutral-10 flex h-12 items-center gap-3 border-b px-5">
+      <Text size={15} weight="medium">
+        Status Help
+      </Text>
+      <ChevronRightIcon size={20} />
+      <Text size={15} weight="medium">
+        Getting started
+      </Text>
+      <ChevronRightIcon size={20} />
+      <Text size={15} weight="medium">
+        Amazing document that will helps the user in the app
+      </Text>
+    </div>
+  )
+}
+
+// Breadcrumbs.Item = ({ children, href }) => {}
