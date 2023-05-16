@@ -26,6 +26,7 @@
     // "noUncheckedIndexedAccess": true,
     // "noPropertyAccessFromIndexSignature": true /* Enforces using indexed accessors for keys declared using an indexed type */,
     "skipLibCheck": true,
-    "pretty": true
+    "pretty": true,
+    "resolveJsonModule": true
   }
 }

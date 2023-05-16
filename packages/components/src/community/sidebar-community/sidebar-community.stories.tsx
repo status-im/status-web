@@ -40,7 +40,7 @@ export const Default: Story = {
 
 export const Loading: Story = {
   args: {
-    loading:true
+    loading: true,
   },
 }
 
