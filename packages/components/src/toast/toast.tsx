@@ -7,6 +7,9 @@ import { Stack, styled } from '@tamagui/core'
 import { Button } from '../button'
 import { Text } from '../text'
 
+import type { TamaguiElement } from '@tamagui/core'
+import type { Ref } from 'react'
+
 type Props = {
   message: string
   action?: string
@@ -21,7 +24,7 @@ type Props = {
     }
 )
 
-const Toast = (props: Props) => {
+const Toast = (props: Props, ref: Ref<TamaguiElement>) => {
   const { message, action, onAction } = props
 
   const renderIcon = () => {
@@ -37,7 +40,7 @@ const Toast = (props: Props) => {
   }
 
   return (
-    <Base action={Boolean(action)}>
+    <Base action={Boolean(action)} ref={ref}>
       <Stack flex={1} flexDirection="row" gap={4}>
         <Stack width={20}>{renderIcon()}</Stack>
         <Description asChild>
