@@ -10,6 +10,10 @@
       "env": ["TAMAGUI_TARGET", "TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
+    "components#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "storybook-static/**"]
+    },
     "dev": {
       "cache": false
     },

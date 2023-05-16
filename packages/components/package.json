@@ -22,8 +22,8 @@
     "lint": "eslint src",
     "typecheck": "tsc",
     "storybook": "node ./scripts/storybook.js",
-    "storybook:dev": "TAMAGUI_TARGET='web' storybook dev -p 3001",
-    "storybook:build": "TAMAGUI_TARGET='web' storybook build",
+    "storybook:dev": "storybook dev -p 3001",
+    "storybook:build": "storybook build",
     "clean": "rimraf node_modules dist .turbo storybook-static .tamagui"
   },
   "peerDependencies": {
