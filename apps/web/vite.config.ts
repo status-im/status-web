@@ -28,9 +28,6 @@ export default defineConfig(({ mode }) => {
     define: {
       global: 'window',
       'process.env.TAMAGUI_TARGET': JSON.stringify(env.TAMAGUI_TARGET),
-      'process.env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD': JSON.stringify(
-        env.TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD
-      ),
     },
     plugins: [
       react(),
