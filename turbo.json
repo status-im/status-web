@@ -5,6 +5,10 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "web#build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
     "website#build": {
       "dependsOn": ["^build"],
       "env": ["TAMAGUI_TARGET", "TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD"],
