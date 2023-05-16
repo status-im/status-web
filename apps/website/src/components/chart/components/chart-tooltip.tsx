@@ -64,12 +64,7 @@ const ChartTooltip = (props: Props) => {
         </Text>
       </Stack>
 
-      <Stack
-        borderWidth={1}
-        borderRadius="$8"
-        borderColor="$danger-50-opa-30"
-        backgroundColor="$danger-50-opa-10"
-      >
+      <Stack borderRadius="$8" backgroundColor="$danger-50-opa-10">
         <Stack
           animation="slow"
           height={8}
