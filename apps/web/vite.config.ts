@@ -26,7 +26,8 @@ export default defineConfig(({ mode }) => {
       },
     },
     define: {
-      global: 'window',
+      // @see https://github.com/tamagui/tamagui/blob/a0d5fa0d05e6988a7cfa2a5e7823f295b82bae10/packages/tamagui/src/setup.ts#LL20C1-L20C28
+      global: 'globalThis',
       'process.env.TAMAGUI_TARGET': JSON.stringify(env.TAMAGUI_TARGET),
     },
     plugins: [
