@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "yarn build:types && yarn storybook:build",
+    "postbuild": "yarn build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "typecheck": "tsc",
