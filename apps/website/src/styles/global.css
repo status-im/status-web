@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply !bg-neutral-100;
+  }
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -8,12 +18,7 @@
 }
 
 :root {
-  font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 400;
-
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
   /* color: rgba(255, 255, 255, 0.87); */
   /* background-color: #fff; */
 
@@ -35,12 +40,16 @@
   3. Allow percentage-based heights in the application
 */
 html,
-body {
+body,
+#__next,
+#app {
   width: 100vw;
-  min-height: 100%;
+  min-height: 100vh;
   /* overflow: hidden; */
   overscroll-behavior-y: none; /* not working on Safari */
+  user-select: none;
 }
+
 /*
   Typographic tweaks!
   4. Add accessible line-height
@@ -52,6 +61,7 @@ body {
   padding: 0;
   -webkit-overflow-scrolling: touch;
 }
+
 /*
   6. Improve media defaults
 */
@@ -63,6 +73,7 @@ svg {
   display: block;
   max-width: 100%;
 }
+
 /*
   7. Remove built-in form typography styles
 */
@@ -73,6 +84,7 @@ select {
   font: inherit;
   all: unset;
 }
+
 /*
   8. Avoid text overflows
 */
@@ -88,7 +100,6 @@ h6 {
 /*
   9. Create a root stacking context
 */
-#root,
 #__next {
   isolation: isolate;
 }

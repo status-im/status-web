@@ -1,6 +1,6 @@
 import { Text } from '@status-im/components'
-import Link from 'next/link'
 
+import { Link } from '@/components/link'
 import { InsightsLayout } from '@/layouts/insights-layout'
 
 import type { Page } from 'next'
@@ -53,14 +53,12 @@ const ReposPage: Page = () => {
         </Text>
       </div>
 
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-3 gap-5">
         {repos.map(repo => (
           <Link
             key={repo.name}
             href={`https://github.com/status-im/${repo.name}`}
-            className="border-neutral-10 hover:border-neutral-40 flex flex-col rounded-2xl border px-4 py-3 transition-colors duration-200"
-            target="_blank"
-            rel="noopener noreferrer"
+            className="border-neutral-10 hover:border-neutral-40 flex h-[124px] flex-col rounded-2xl border px-4 py-3 transition-colors duration-200"
           >
             <Text size={15} weight="semibold">
               {repo.name}

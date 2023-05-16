@@ -13,7 +13,7 @@ let config = {
     ignoreBuildErrors: true,
   },
   images: {
-    disableStaticImages: true,
+    // disableStaticImages: true,
   },
   transpilePackages: [
     // 'react-native',
@@ -26,16 +26,6 @@ let config = {
   experimental: {
     legacyBrowsers: false,
     // esmExternals: 'loose',
-  },
-
-  redirects: async () => {
-    return [
-      {
-        source: '/',
-        destination: '/insights',
-        permanent: false,
-      },
-    ]
   },
 }
 
