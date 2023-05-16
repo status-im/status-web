@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme')
@@ -59,4 +60,21 @@ module.exports = {
       })
     }),
   ],
+=======
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    // './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+
+    // todo: move all to `src` directory
+    // // Or if using `src` directory:
+    // './src/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+>>>>>>> 593dccf (Setup apps/website (#383))
 }

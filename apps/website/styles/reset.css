@@ -14,8 +14,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #fff;
+  /* color: rgba(255, 255, 255, 0.87); */
+  /* background-color: #fff; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -36,7 +36,10 @@
 */
 html,
 body {
-  min-height: 100%;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  overscroll-behavior-y: none; /* not working on Safari */
 }
 /*
   Typographic tweaks!
@@ -55,6 +58,7 @@ body {
 img,
 picture,
 video,
+canvas,
 svg {
   display: block;
   max-width: 100%;
@@ -87,11 +91,4 @@ h6 {
 #root,
 #__next {
   isolation: isolate;
-}
-
-/*
-  10. Remove user selection on buttons
-*/
-button {
-  user-select: none;
 }

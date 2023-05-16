@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#__next {
+  height: 100%;
+  overscroll-behavior: none;
+  user-select: none;
+  color: #000;
+}
+
+*::selection {
+  color: #fff;
+  background: hsla(229, 71%, 57%, 1);
+}
+
+#app {
+  position: relative;
+  isolation: isolate;
+  height: 100%;
+}
