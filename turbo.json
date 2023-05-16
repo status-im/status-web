@@ -11,7 +11,7 @@
     },
     "website#build": {
       "dependsOn": ["^build"],
-      "env": ["TAMAGUI_TARGET", "TAMAGUI_DISABLE_WARN_DYNAMIC_LOAD"],
+      "env": ["TAMAGUI_TARGET"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "components#build": {
