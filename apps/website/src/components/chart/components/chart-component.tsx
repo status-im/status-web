@@ -131,7 +131,6 @@ const ChartComponent = (props: Props): JSX.Element => {
                   ? 'end'
                   : 'middle'
               return {
-                dx: index === 0 ? '0.5em' : '0',
                 dy: '.33em',
                 fill: '#A1ABBD',
                 fontFamily: 'Inter, sans-serif',
