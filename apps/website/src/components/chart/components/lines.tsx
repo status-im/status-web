@@ -2,6 +2,8 @@ import { animated } from '@react-spring/web'
 import { curveMonotoneX } from '@visx/curve'
 import { LinePath } from '@visx/shape'
 
+import { colors } from './chart-component'
+
 import type { SpringValue } from '@react-spring/web'
 import type { ScaleLinear, ScaleTime } from 'd3-scale'
 
@@ -11,11 +13,6 @@ type Datum = {
 }
 
 type Props = {
-  colors: {
-    total: string
-    closed: string
-    background: string
-  }
   yScale: ScaleLinear<number, number, never>
   xScale: ScaleTime<number, number, never>
   totalIssuesData: Datum[]
@@ -30,7 +27,6 @@ const AnimatedLinePath = animated(LinePath)
 const Lines = (props: Props) => {
   const {
     closedIssuesData,
-    colors,
     drawingLineStyle,
     xScale,
     yScale,

@@ -3,6 +3,8 @@ import { curveMonotoneX } from '@visx/curve'
 import { LinearGradient } from '@visx/gradient'
 import { AreaClosed } from '@visx/shape'
 
+import { colors } from './chart-component'
+
 import type { SpringValue } from '@react-spring/web'
 import type { ScaleLinear, ScaleTime } from 'd3-scale'
 
@@ -12,11 +14,6 @@ type Datum = {
 }
 
 type Props = {
-  colors: {
-    total: string
-    closed: string
-    background: string
-  }
   yScale: ScaleLinear<number, number, never>
   xScale: ScaleTime<number, number, never>
   totalIssuesData: Datum[]
@@ -30,7 +27,6 @@ const AnimatedAreaClosed = animated(AreaClosed)
 
 const Areas = (props: Props) => {
   const {
-    colors,
     clipPathAnimation,
     closedIssuesData,
     totalIssuesData,

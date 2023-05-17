@@ -3,14 +3,12 @@ import { GlyphCircle } from '@visx/glyph'
 import { Group } from '@visx/group'
 import { Line } from '@visx/shape'
 
+import { colors } from './chart-component'
+
 import type { SpringValue } from '@react-spring/web'
 
 type Props = {
   innerHeight: number
-  colors: {
-    marker: string
-    background: string
-  }
   circleSpringTotal: {
     x: SpringValue<number>
     y: SpringValue<number>
@@ -31,7 +29,6 @@ const AnimatedGroup = animated(Group)
 const Markers = (props: Props) => {
   const {
     innerHeight,
-    colors,
     circleSpringTotal,
     opacityAnimation,
     circleSpringClosed,

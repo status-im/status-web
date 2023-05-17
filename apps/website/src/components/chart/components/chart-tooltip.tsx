@@ -4,20 +4,13 @@ import { DoneIcon, OpenIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 import { defaultStyles, TooltipWithBounds } from '@visx/tooltip'
 
+import type { TooltipData } from '../hooks/use-chart-tooltip'
 import type { SpringValue } from '@react-spring/web'
 
 const AnimatedTooltip = animated(TooltipWithBounds)
 
 type Props = {
-  tooltipData: {
-    totalIssues: number
-    closedIssues: number
-    date: string
-    formattedDate: string
-    openIssuesPercentage: number
-    completedIssuesPercentage: number
-    openIssues: number
-  }
+  tooltipData: TooltipData
   opacityAnimation: {
     opacity: SpringValue<number>
   }
@@ -28,7 +21,7 @@ type Props = {
 }
 
 // defining tooltip styles
-const tooltipStyles = {
+const tooltipStyles: React.CSSProperties = {
   ...defaultStyles,
   minWidth: 272,
   padding: 12,

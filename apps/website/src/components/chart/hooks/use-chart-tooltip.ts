@@ -7,7 +7,7 @@ import { bisector, extent } from 'd3-array'
 
 import { getClosedIssues, getTotalIssues } from '../helpers/get-data'
 import { formatDate } from '../utils/format-time'
-import { calculatePercentage } from '../utils/get-percentage'
+import { getPercentage } from '../utils/get-percentage'
 
 import type { DayType } from '../chart'
 import type { EventType } from '@visx/event/lib/types'
@@ -24,6 +24,16 @@ type Props = {
   }
 }
 
+type TooltipData = {
+  date: string
+  completedIssuesPercentage: number
+  openIssuesPercentage: number
+  totalIssues: number
+  openIssues: number
+  closedIssues: number
+  formattedDate: string
+}
+
 /**
  * An custom hook that handles the tooltip logic
  * @param data - the data to be used in the chart
@@ -32,24 +42,29 @@ type Props = {
  * @param innerWidth - the inner width of the chart
 
  * @returns tooltipData - the data to be used in the tooltip
- * @returns showTooltip - a function that shows the tooltip
+ * @returns updateTooltip - a function that updates the tooltip
  * @returns hideTooltip - a function that hides the tooltip
- 
+  * @returns tooltipOpen - a boolean that indicates if the tooltip is open
  **/
 
 const useChartTooltip = (props: Props) => {
   const { data, margin, dates, innerWidth } = props
   // tooltip parameters
-  const { tooltipData: tooltip, showTooltip, hideTooltip } = useTooltip()
+  const { tooltipData, showTooltip, hideTooltip, tooltipOpen } =
+    useTooltip<TooltipData>({
+      tooltipData: {
+        date: '',
+        completedIssuesPercentage: 0,
+        openIssuesPercentage: 0,
+        totalIssues: 0,
+        openIssues: 0,
+        closedIssues: 0,
+        formattedDate: '',
+      },
+    })
 
-  const tooltipData = tooltip as DayType & {
-    completedIssuesPercentage: number
-    openIssuesPercentage: number
-    totalIssues: number
-    openIssues: number
-    closedIssues: number
-    formattedDate: string
-  }
+  // Assert the type of tooltipData to TooltipData
+  const tooltipDataAsserted = tooltipData as TooltipData
 
   const filteredDates = dates.filter(Boolean) // filters out undefined values
 
@@ -63,7 +78,7 @@ const useChartTooltip = (props: Props) => {
   })
 
   // Define tooltip handler
-  const handleTooltip = useCallback(
+  const updateTooltip = useCallback(
     (event: EventType) => {
       const { x } = localPoint(event) || { x: 0 }
       const x0 = xScale.invert(x - margin.left)
@@ -85,16 +100,13 @@ const useChartTooltip = (props: Props) => {
       const totalIssues = getTotalIssues(d)
       const openIssues = totalIssues - closedIssues
 
-      const completedIssuesPercentage = calculatePercentage(
-        closedIssues,
-        totalIssues
-      )
+      const completedIssuesPercentage = getPercentage(closedIssues, totalIssues)
 
-      const openIssuesPercentage = calculatePercentage(openIssues, totalIssues)
+      const openIssuesPercentage = getPercentage(openIssues, totalIssues)
 
       showTooltip({
         tooltipData: {
-          ...d,
+          date: d?.date,
           formattedDate: formatDate(getDate(d)),
           completedIssuesPercentage,
           openIssuesPercentage,
@@ -108,10 +120,12 @@ const useChartTooltip = (props: Props) => {
   )
 
   return {
-    tooltipData,
+    tooltipData: tooltipDataAsserted,
     hideTooltip,
-    handleTooltip,
+    updateTooltip,
+    tooltipOpen,
   }
 }
 
 export { useChartTooltip }
+export type { TooltipData, Props as UseChartTooltipProps }

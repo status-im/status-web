@@ -11,17 +11,16 @@ type DayType = {
 
 interface Props {
   data: DayType[]
-  width?: number
   height?: number
   isLoading?: boolean
 }
 
 const Chart = (props: Props) => {
-  const { width, data, isLoading, ...rest } = props
+  const { data, isLoading, ...rest } = props
 
   if (isLoading) {
     return (
-      <Stack width={width} height={rest.height}>
+      <Stack width="100%" height={rest.height}>
         <Loading />
       </Stack>
     )
@@ -29,7 +28,7 @@ const Chart = (props: Props) => {
 
   if (!data.length) {
     return (
-      <Stack width={width} height={rest.height}>
+      <Stack width="100%" height={rest.height}>
         <Empty />
       </Stack>
     )
@@ -37,8 +36,8 @@ const Chart = (props: Props) => {
 
   return (
     <ParentSize style={{ maxHeight: 326 }}>
-      {({ width: w }) => {
-        return <ChartComponent {...rest} data={data} width={width || w} />
+      {({ width }) => {
+        return <ChartComponent {...rest} data={data} width={width} />
       }}
     </ParentSize>
   )

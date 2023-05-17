@@ -1,8 +1,7 @@
 import { config, useSpring } from '@react-spring/web'
 
-import { getClosedIssues, getTotalIssues } from '../helpers/get-data'
-
 import type { DayType } from '../chart'
+import type { TooltipData } from './use-chart-tooltip'
 import type { ScaleLinear, ScaleTime } from 'd3-scale'
 
 type Props = {
@@ -16,14 +15,7 @@ type Props = {
     left: number
   }
   innerHeight: number
-  tooltipData: DayType & {
-    completedIssuesPercentage: number
-    openIssuesPercentage: number
-    totalIssues: number
-    openIssues: number
-    closedIssues: number
-    formattedDate: string
-  }
+  tooltipData: TooltipData
 }
 
 /**
@@ -51,14 +43,14 @@ const useAnimations = (props: Props) => {
 
   // Define spring for circle position
   const circleSpringTotal = useSpring({
-    x: xScale(new Date(tooltipData?.date)),
-    y: yScale(getTotalIssues(tooltipData)),
+    x: xScale(new Date(tooltipData?.date || '')),
+    y: yScale(tooltipData?.totalIssues),
     config: config.gentle,
   })
 
   const circleSpringClosed = useSpring({
     x: xScale(new Date(tooltipData?.date)),
-    y: yScale(getClosedIssues(tooltipData)),
+    y: yScale(tooltipData?.closedIssues),
     config: config.gentle,
   })
 

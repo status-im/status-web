@@ -15,10 +15,10 @@ import { ChartTooltip } from './chart-tooltip'
 import { Lines } from './lines'
 import { Markers } from './markers'
 
-import type { ChartProps } from '../chart'
+import type { DayType } from '../chart'
 
 // defining colors
-const colors = {
+export const colors = {
   total: '#E95460',
   closed: '#23ADA0',
   background: '#F0F2F5',
@@ -26,11 +26,17 @@ const colors = {
   totalGradient: 'rgba(233, 84, 96, 0.3)',
   closedGradient: 'rgba(35, 173, 160, 0.3)',
   white: '#FFF',
+} as const
+
+interface Props {
+  data: DayType[]
+  height?: number
+  width?: number
 }
 
 const AnimatedGridColumns = animated(GridColumns)
 
-const ChartComponent = (props: ChartProps): JSX.Element => {
+const ChartComponent = (props: Props): JSX.Element => {
   const { data, width: defaultWidth, height: defaultHeight } = props
 
   // Extract dates, open issues, and closed issues from data
@@ -61,12 +67,13 @@ const ChartComponent = (props: ChartProps): JSX.Element => {
     nice: true,
   })
 
-  const { tooltipData, handleTooltip, hideTooltip } = useChartTooltip({
-    data,
-    margin,
-    dates,
-    innerWidth,
-  })
+  const { tooltipData, updateTooltip, hideTooltip, tooltipOpen } =
+    useChartTooltip({
+      data,
+      margin,
+      dates,
+      innerWidth,
+    })
 
   const {
     circleSpringClosed,
@@ -179,7 +186,6 @@ const ChartComponent = (props: ChartProps): JSX.Element => {
 
           <Lines
             closedIssuesData={closedIssuesData}
-            colors={colors}
             drawingLineStyle={drawingLineStyle}
             totalIssuesData={totalIssuesData}
             xScale={xScale}
@@ -189,16 +195,14 @@ const ChartComponent = (props: ChartProps): JSX.Element => {
           <Areas
             clipPathAnimation={clipPathAnimation}
             closedIssuesData={closedIssuesData}
-            colors={colors}
             totalIssuesData={totalIssuesData}
             xScale={xScale}
             yScale={yScale}
           />
-          {tooltipData && (
+          {tooltipOpen && (
             <Markers
               circleSpringClosed={circleSpringClosed}
               circleSpringTotal={circleSpringTotal}
-              colors={colors}
               innerHeight={innerHeight}
               opacityAnimation={opacityAnimation}
             />
@@ -208,16 +212,16 @@ const ChartComponent = (props: ChartProps): JSX.Element => {
             y={0}
             width={innerWidth}
             height={innerHeight}
-            onTouchStart={handleTooltip}
+            onTouchStart={updateTooltip}
             fill="transparent"
-            onTouchMove={handleTooltip}
-            onMouseMove={handleTooltip}
+            onTouchMove={updateTooltip}
+            onMouseMove={updateTooltip}
             onMouseLeave={() => hideTooltip()}
           />
         </Group>
       </svg>
       {/* render a tooltip */}
-      {tooltipData && (
+      {tooltipOpen && (
         <ChartTooltip
           tooltipAnimation={tooltipAnimation}
           opacityAnimation={opacityAnimation}
