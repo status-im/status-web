@@ -8,6 +8,8 @@ import { join } from 'path'
 import remarkBreaks from 'remark-breaks'
 import remarkDirective from 'remark-directive'
 import remarkGfm from 'remark-gfm'
+import remarkAdmonitions from 'remark-github-beta-blockquote-admonitions'
+import remarkFrontmatter from 'remark-frontmatter'
 
 /** @type {import('next').NextConfig} */
 let config = {
@@ -43,7 +45,19 @@ const plugins = [
       // If you use remark-gfm, you'll need to use next.config.mjs
       // as the package is ESM only
       // https://github.com/remarkjs/remark-gfm#install
-      remarkPlugins: [remarkGfm, remarkDirective, remarkBreaks],
+      remarkPlugins: [
+        remarkGfm,
+        remarkDirective,
+        remarkBreaks,
+        [remarkFrontmatter, { type: 'yaml', marker: '-' }]
+        [
+          remarkAdmonitions,
+          {
+            titleFilter: ['note', 'tip', 'caution'],
+            titleUnwrap: true,
+          },
+        ],
+      ],
       rehypePlugins: [],
       // If you use `MDXProvider`, uncomment the following line.
       providerImportSource: '@mdx-js/react',
