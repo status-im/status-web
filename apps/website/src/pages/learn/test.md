@@ -3,17 +3,23 @@ hide:
   - navigation
 ---
 
-![This is an image explanation for screen readers](./media/header.png)
+![This is an image explanation for screen readers](./media.png)
 {==**[01]**==}
 
 # Doc example with all Markdown components
 
-{==**[02]**==}
+> **Note**
+> Dream of the mind's eye invent the universe from which we spring with prettystories for which there's little good evidence concept.
+
+fadsf
+
+> **tip**
+> Dream of the mind's eye invent the universe from which we spring with prettystories for which there's little good evidence concept.
 
 !!! note ""
 Dream of the mind's eye invent the universe from which we spring with pretty stories for which there's little good evidence concept. {==**[03]**==}
 
-The only home we've ever known Flatland gathered by gravity tendrils of gossamer clouds kindling the energy hidden in matter worldlets. [Decipherment network of wormholes](./index.md) {==**[04]**==} explorations white dwarf colonies Sea of Tranquility. {==**[05]**==}
+The only home we've ever known Flatland gathered by gravity tendrils of gossamer clouds kindling the energy hidden in matter worldlets. [Decipherment network of wormholes](./index.md 'hello') {==**[04]**==} explorations white dwarf colonies Sea of Tranquility. {==**[05]**==}
 
 Intelligent beings across the network of wormholes rich in heavy atoms paroxysm of global death with pretty stories for which there's little good evidence. {==**[06]**==}
 

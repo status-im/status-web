@@ -3,6 +3,7 @@ import { Text } from '@status-im/components'
 // import Image from 'next/image'
 import Link from 'next/link'
 
+import { InformationBox } from '@/components/information-box'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 
 import Test from './test.md'
@@ -46,6 +47,10 @@ const components = {
   // ),
   // pre: Pre,
   // code: InlineCode,
+  blockquote: (props: ComponentProps<'blockquote'>) => {
+    console.log(props)
+    return <InformationBox type="tip" message="hi" />
+  },
 }
 
 const LearnPage: Page = () => {
@@ -55,6 +60,18 @@ const LearnPage: Page = () => {
         <h1>Learn</h1>
         <div className="mx-auto max-w-[542px]">
           <MDXProvider components={components}>
+            <InformationBox
+              type="info"
+              message="Status doesn’t know your password and can’t reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. "
+            />
+            <InformationBox
+              type="tip"
+              message="Status doesn’t know your password and can’t reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. "
+            />
+            <InformationBox
+              type="caution"
+              message="Status doesn’t know your password and can’t reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. "
+            />
             <Test />
           </MDXProvider>
         </div>
