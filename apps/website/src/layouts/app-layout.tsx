@@ -6,7 +6,7 @@ import { cx } from 'class-variance-authority'
 import { Logo } from '@/components/logo'
 import { NavMenu } from '@/components/nav-menu'
 import { PageFooter } from '@/components/page-footer'
-import { LINKS } from '@/config/links'
+import { ROUTES } from '@/config/routes'
 
 import { Link } from '../components/link'
 
@@ -28,7 +28,7 @@ export const AppLayout: PageLayout = page => {
 
             <div className="flex-1">
               <NavigationMenu.List className="flex items-center">
-                {Object.entries(LINKS).map(([name, links]) => (
+                {Object.entries(ROUTES).map(([name, links]) => (
                   <NavigationMenu.Item key={name}>
                     <NavigationMenu.Trigger className="py-4 pr-5 aria-expanded:opacity-50">
                       <Text size={15} weight="medium" color="$white-100">

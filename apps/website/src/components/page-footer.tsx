@@ -1,11 +1,11 @@
 import { Button, Text } from '@status-im/components'
 import Link from 'next/link'
 
-import { LINKS, SOCIALS } from '@/config/links'
+import { ROUTES, SOCIALS } from '@/config/routes'
 
 import { Logo } from './logo'
 
-import type { Links } from '@/config/links'
+import type { Routes } from '@/config/routes'
 
 export const PageFooter = () => {
   return (
@@ -14,7 +14,7 @@ export const PageFooter = () => {
         <Logo />
       </div>
       <div className="mb-10 grid grid-cols-2 lg:grid-cols-8">
-        {Object.entries(LINKS).map(([title, links]) => (
+        {Object.entries(ROUTES).map(([title, links]) => (
           <Section key={title} title={title} links={links} />
         ))}
 
@@ -80,7 +80,7 @@ export const PageFooter = () => {
 
 type SectionProps = {
   title: string
-  links: Links
+  links: Routes
 }
 
 const Section = (props: SectionProps) => {

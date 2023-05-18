@@ -1,4 +1,4 @@
-export const LINKS = {
+export const ROUTES = {
   Features: [
     { name: 'Communities', href: '/features/communities' },
     { name: 'Messenger', href: '/features/messenger' },
@@ -64,4 +64,4 @@ export const SOCIALS = {
   },
 }
 
-export type Links = (typeof LINKS)[keyof typeof LINKS]
+export type Routes = (typeof ROUTES)[keyof typeof ROUTES]
