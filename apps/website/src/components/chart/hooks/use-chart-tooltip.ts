@@ -49,6 +49,7 @@ type TooltipData = {
 
 const useChartTooltip = (props: Props) => {
   const { data, margin, dates, innerWidth } = props
+
   // tooltip parameters
   const { tooltipData, showTooltip, hideTooltip, tooltipOpen } =
     useTooltip<TooltipData>({
@@ -62,9 +63,6 @@ const useChartTooltip = (props: Props) => {
         formattedDate: '',
       },
     })
-
-  // Assert the type of tooltipData to TooltipData
-  const tooltipDataAsserted = tooltipData as TooltipData
 
   const filteredDates = dates.filter(Boolean) // filters out undefined values
 
@@ -120,7 +118,7 @@ const useChartTooltip = (props: Props) => {
   )
 
   return {
-    tooltipData: tooltipDataAsserted,
+    tooltipData: tooltipData!,
     hideTooltip,
     updateTooltip,
     tooltipOpen,
