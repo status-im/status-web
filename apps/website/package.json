@@ -14,6 +14,7 @@
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-navigation-menu": "^1.1.2",
+    "@react-spring/web": "^9.7.2",
     "@scure/base": "^1.1.1",
     "@status-im/colors": "*",
     "@status-im/components": "*",
@@ -21,6 +22,9 @@
     "@status-im/js": "*",
     "@tamagui/next-theme": "1.11.1",
     "class-variance-authority": "^0.6.0",
+    "@visx/visx": "^2.18.0",
+    "d3-array": "^3.2.3",
+    "d3-time-format": "^4.1.0",
     "next": "13.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -30,6 +34,8 @@
   "devDependencies": {
     "@achingbrain/ssdp": "^4.0.1",
     "@tamagui/next-plugin": "1.11.1",
+    "@types/d3-array": "^3.0.4",
+    "@types/d3-time-format": "^4.0.0",
     "@types/node": "^18.11.11",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",

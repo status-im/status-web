@@ -4,7 +4,6 @@ import type { Preview } from '@storybook/react'
 import { Provider, ToastContainer } from '../src'
 
 import './reset.css'
-import './components.css'
 
 // export const parameters: Parameters = {
 //   actions: { argTypesRegex: '^on[A-Z].*' },
