@@ -15,9 +15,10 @@ export async function signEncodedURLData(
 
 export function verifyEncodedURLData(
   encodedSignature: string,
-  encodedURLData: EncodedURLData
+  encodedURLData: EncodedURLData,
+  publicKey?: string
 ): boolean {
   const signature = base64url.decode(encodedSignature)
 
-  return verifySignedData(signature, encodedURLData)
+  return verifySignedData(signature, encodedURLData, publicKey)
 }
