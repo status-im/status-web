@@ -20738,6 +20738,11 @@ tinybench@^2.3.1:
   resolved "https://registry.yarnpkg.com/tinybench/-/tinybench-2.4.0.tgz#83f60d9e5545353610fe7993bd783120bc20c7a7"
   integrity sha512-iyziEiyFxX4kyxSp+MtY1oCH/lvjH3PxFN8PGCDeqcZWAJ/i+9y+nL85w99PxVzrIvew/GSkSbDYtiGVa85Afg==
 
+tinykeys@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/tinykeys/-/tinykeys-1.4.0.tgz#c2986cd0184c86e943a6b17acc0352e42b542dff"
+  integrity sha512-ysnVd2E4nWbNXIbHaUidcKGLTmNimqP0hdpsD0Ph5hPJ84ntCF6PHj+Jg3im9nZt9/hNsBg/E6m1psHc2KaPnQ==
+
 tinypool@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/tinypool/-/tinypool-0.4.0.tgz#3cf3ebd066717f9f837e8d7d31af3c127fdb5446"
