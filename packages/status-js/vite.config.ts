@@ -26,9 +26,20 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'es2020',
       lib: {
-        entry: './src/index.ts',
-        fileName: 'index',
-        formats: ['es', 'cjs'],
+        entry: ['./src/index.ts', './src/utils/encode-url-data.ts'],
+        fileName: (format, entryName) => {
+          if (!['es'].includes(format)) {
+            throw new Error(`Unexpected format: ${format}`)
+          }
+
+          switch (format) {
+            case 'es':
+              return `${entryName}.js`
+            default:
+              throw new Error(`Undefined format: ${format}`)
+          }
+        },
+        formats: ['es'],
       },
       sourcemap: true,
       emptyOutDir: mode === 'production',

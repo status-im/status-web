@@ -10,12 +10,10 @@
     "baseUrl": ".",
     "paths": {
       "react-native": ["react-native-web"],
-      "@/*": ["./src/*"]
-      // "@status-im/*": ["./node_modules/@status-im/*"]
-      // "@status-im/js": ["./node_modules/@status-im/js/packages/status-js"],
-      // "@status-im/components": [
-      //   "./node_modules/@status-im/components/packages/components"
-      // ]
+      "@/*": ["./src/*"],
+      "@status-im/js/encode-url-data": [
+        "../../packages/status-js/src/utils/encode-url-data"
+      ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
