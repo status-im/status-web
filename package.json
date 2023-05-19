@@ -7,7 +7,8 @@
       "packages/colors",
       "packages/icons",
       "packages/components",
-      "apps/*"
+      "apps/web",
+      "apps/website"
     ]
   },
   "keywords": [],
