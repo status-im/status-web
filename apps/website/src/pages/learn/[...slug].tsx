@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useLiveReload, useMDXComponent } from 'next-contentlayer/hooks'
 
 import { InformationBox } from '@/components/information-box'
+import { SearchButton } from '@/components/search-button'
 import { AppLayout, Breadcrumbs, PageBody } from '@/layouts/app-layout'
 
 import type { Doc } from '@docs'
@@ -83,7 +84,6 @@ export const components = {
   // pre: Pre,
   // code: InlineCode,
   blockquote: (props: ComponentProps<'blockquote'>) => {
-    console.log(props)
     return <InformationBox type="tip" message="hi" />
   },
 }
@@ -115,14 +115,12 @@ const TOC = () => {
 }
 
 const DocsDetailPage: Page<Props> = ({ doc }) => {
-  console.log('doc:', { doc })
-
   useLiveReload()
   const Content = useMDXComponent(doc.body.code)
 
   return (
     <PageBody>
-      <Breadcrumbs />
+      <Breadcrumbs action={<SearchButton size={32} />} />
       <div className="grid grid-cols-[auto,790px,auto]">
         <div>sidebar</div>
         <div className="mx-auto max-w-[542px] py-20">

@@ -1,78 +1,74 @@
-import { MDXProvider } from '@mdx-js/react'
-import { Text } from '@status-im/components'
-// import Image from 'next/image'
-import Link from 'next/link'
+import { Button, Shadow, Text } from '@status-im/components'
+import { ArrowRightIcon, StatusIcon } from '@status-im/icons'
 
-import { InformationBox } from '@/components/information-box'
+import { SearchButton } from '@/components/search-button'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 
-// import Test from './test.md'
 import type { Page } from 'next'
-// import type { ImageProps } from 'next/image'
-import type { ComponentProps } from 'react'
-
-export const components = {
-  h1: (props: ComponentProps<'h1'>) => (
-    <h1 className="text-[40px] font-bold" {...props}>
-      {props.children}
-    </h1>
-  ),
-  h2: (props: ComponentProps<'h2'>) => (
-    <h2 className="mb-4 mt-8 text-[27px] font-semibold" {...props}>
-      {props.children}
-    </h2>
-  ),
-  h3: (props: ComponentProps<'h3'>) => (
-    <h3 className="mb-2 text-[19px] font-semibold" {...props}>
-      {props.children}
-    </h3>
-  ),
-  a: (props: ComponentProps<'a'>) => (
-    // @ts-expect-error something with ref
-    <Link href={props.href!} {...props}>
-      <Text size={15} color="$primary-50" weight="semibold">
-        {props.children}
-      </Text>
-    </Link>
-  ),
-  p: (props: ComponentProps<'p'>) => <Text size={15}>{props.children}</Text>,
-  // img: (props: ImageProps) => (
-  //   <Image
-  //     alt={props.alt}
-  //     sizes="100vw"
-  //     style={{ width: '100%', height: 'auto' }}
-  //     {...props}
-  //   />
-  // ),
-  // pre: Pre,
-  // code: InlineCode,
-  blockquote: (props: ComponentProps<'blockquote'>) => {
-    console.log(props)
-    return <InformationBox type="tip" message="hi" />
-  },
-}
 
 const LearnPage: Page = () => {
   return (
-    <div>
+    <div className="[--max-width:1186px]">
       <PageBody>
-        <h1>Learn</h1>
-        <div className="mx-auto max-w-[542px]">
-          {/* onents}> */}
-          <InformationBox
-            type="info"
-            message="Status doesn’t know your password and can’t reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. "
-          />
-          <InformationBox
-            type="tip"
-            message="Status doesn’t know your password and can’t reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. "
-          />
-          <InformationBox
-            type="caution"
-            message="Status doesn’t know your password and can’t reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. "
-          />
-          {/* <Test /> */}
-          {/* </MDXProvider> */}
+        <div className="mx-auto max-w-[var(--max-width)] py-20">
+          <div className="mb-20 flex items-end justify-between">
+            <div>
+              <h1 className="text-[64px] font-bold">{"Let's help you"}</h1>
+              <Text size={19}>
+                Technical, short form guides on how to setup and use the app
+              </Text>
+            </div>
+
+            <SearchButton size={38} />
+          </div>
+
+          <div className="grid grid-cols-3 gap-5">
+            {[...Array(6)].map((_, i) => (
+              <Shadow
+                key={i}
+                className="border-neutral-10 flex rounded-[20px] border p-4"
+              >
+                <div className="mb-5 grid gap-1">
+                  <Text size={19} weight="semibold">
+                    Getting started
+                  </Text>
+                  <Text size={15}>
+                    Find out what makes Status unique, run Status for the first
+                    time and discover essential app features.
+                  </Text>
+                </div>
+
+                <div className="flex">
+                  <Button
+                    variant="outline"
+                    size={32}
+                    iconAfter={<ArrowRightIcon size={20} color="$neutral-50" />}
+                  >
+                    Learn more
+                  </Button>
+                </div>
+              </Shadow>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-neutral-30 border-t border-dashed py-10">
+          <div className="mx-auto flex max-w-[var(--max-width)] flex-col items-start">
+            <div className="mb-4 flex flex-col">
+              <Text size={19} weight="semibold">
+                Didn’t find answers?
+              </Text>
+              <Text size={15}>Ask around in our community!</Text>
+            </div>
+
+            <Button
+              variant="outline"
+              size={32}
+              iconAfter={<StatusIcon size={20} color="$neutral-50" />}
+            >
+              Say Hello in
+            </Button>
+          </div>
         </div>
       </PageBody>
     </div>

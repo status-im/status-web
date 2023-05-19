@@ -107,20 +107,30 @@ export const PageBody = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export const Breadcrumbs = () => {
+type BreadcrumbsProps = {
+  action?: React.ReactNode
+}
+
+export const Breadcrumbs = (props: BreadcrumbsProps) => {
+  const { action = null } = props
+
   return (
-    <div className="border-neutral-10 flex h-12 items-center gap-3 border-b px-5">
-      <Text size={15} weight="medium">
-        Status Help
-      </Text>
-      <ChevronRightIcon size={20} />
-      <Text size={15} weight="medium">
-        Getting started
-      </Text>
-      <ChevronRightIcon size={20} />
-      <Text size={15} weight="medium">
-        Amazing document that will helps the user in the app
-      </Text>
+    <div className="border-neutral-10 flex h-12 items-center justify-between border-b px-5">
+      <div className="flex gap-3">
+        <Text size={15} weight="medium">
+          Status Help
+        </Text>
+        <ChevronRightIcon size={20} />
+        <Text size={15} weight="medium">
+          Getting started
+        </Text>
+        <ChevronRightIcon size={20} />
+        <Text size={15} weight="medium">
+          Amazing document that will helps the user in the app
+        </Text>
+      </div>
+
+      {action}
     </div>
   )
 }
