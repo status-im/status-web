@@ -1,17 +1,15 @@
-import { base64url } from '@scure/base'
-
 const BASE_URL = 'https://status.app'
 
 export function createCommunityURLWithPublicKey(publicKey: string): URL {
   return new URL(`${BASE_URL}/c#${publicKey}`)
 }
 
-export function createCommunityURLWithSignature(
+export function createCommunityURLWithData(
   encodedCommunityURLData: string,
-  signature: Uint8Array
+  encodedVerificationURLData: string
 ): URL {
   return new URL(
-    `${BASE_URL}/c/${encodedCommunityURLData}#${base64url.encode(signature)}`
+    `${BASE_URL}/c/${encodedCommunityURLData}#${encodedVerificationURLData}`
   )
 }
 
@@ -22,12 +20,12 @@ export function createChannelURLWithPublicKey(
   return new URL(`${BASE_URL}/cc/${channelUuid}#${communityPublicKey}`)
 }
 
-export function createChannelURLWithSignature(
+export function createChannelURLWithData(
   encodedChannelURLData: string,
-  signature: Uint8Array
+  encodedVerificationURLData: string
 ): URL {
   return new URL(
-    `${BASE_URL}/cc/${encodedChannelURLData}#${base64url.encode(signature)}`
+    `${BASE_URL}/cc/${encodedChannelURLData}#${encodedVerificationURLData}`
   )
 }
 
@@ -35,11 +33,11 @@ export function createUserURLWithPublicKey(publicKey: string): URL {
   return new URL(`${BASE_URL}/u#${publicKey}`)
 }
 
-export function createUserURLWithSignature(
+export function createUserURLWithData(
   encodedURLData: string,
-  signature: Uint8Array
+  encodedVerificationURLData: string
 ): URL {
   return new URL(
-    `${BASE_URL}/u/${encodedURLData}#${base64url.encode(signature)}`
+    `${BASE_URL}/u/${encodedURLData}#${encodedVerificationURLData}`
   )
 }

@@ -13,7 +13,7 @@ import type {
 } from '@bufbuild/protobuf'
 import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
 import { ChatIdentity } from './chat-identity_pb.js'
-import { URLParams } from './url-data_pb.js'
+import { URLParams } from './url_pb.js'
 
 /**
  * @generated from message Grant
