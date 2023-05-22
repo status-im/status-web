@@ -111,12 +111,12 @@ export function PreviewPage(props: PreviewPageProps) {
                       <Avatar
                         type="channel"
                         emoji={verifiedData.emoji!}
-                        size={32}
+                        size={80}
                       />
                     )}
                     {type === 'profile' && (
                       <Avatar
-                        type="account"
+                        type="user"
                         name={verifiedData.displayName}
                         src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
                         size={80}
@@ -154,7 +154,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     </>
                   )}
                   {type === 'channel' && (
-                    <div>
+                    <div className="flex items-center gap-1">
                       <Text size={13}>Channel in</Text>
                       <ContextTag
                         type="community"
@@ -162,7 +162,6 @@ export function PreviewPage(props: PreviewPageProps) {
                           name: verifiedData.community.displayName,
                           src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
                         }}
-                        outline
                       />
                     </div>
                   )}
