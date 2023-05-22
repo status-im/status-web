@@ -5,6 +5,7 @@ import {
   Button,
   ContextTag,
   Counter,
+  Tag,
   Text,
   ToastContainer,
 } from '@status-im/components'
@@ -20,6 +21,7 @@ import { QrDialog } from './qr-dialog'
 // import bannerImage from '../public/banner-waku.png'
 // import type { ServerSideProps } from '@/server/ssr'
 import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
+import type { CSSProperties } from 'react'
 
 type Type = 'community' | 'channel' | 'profile'
 
@@ -78,10 +80,12 @@ export function PreviewPage(props: PreviewPageProps) {
       {verifiedData && (
         <>
           {/* todo: (system or both?) install banner */}
-
-          <div className="relative h-full bg-gradient-to-b from-indigo-500 to-white to-20% xl:grid xl:grid-cols-[560px,auto]">
+          <div
+            style={getGradientStyles(verifiedData)}
+            className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
+          >
             <div className="absolute left-0 right-0 top-0 xl:hidden">
-              <div className="absolute h-full w-full bg-gradient-to-t from-white" />
+              <div className="absolute h-full w-full bg-gradient-to-t from-[#fff]" />
               <img
                 className="aspect-video object-cover"
                 src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
@@ -89,59 +93,63 @@ export function PreviewPage(props: PreviewPageProps) {
               />
             </div>
 
-            <div className="relative z-20">
+            <div className="relative z-20 pb-10">
               <div className="mx-auto px-5 pt-20 xl:px-20">
                 <div className="mb-10">
-                  {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
-                  {type === 'community' && (
-                    <Avatar
-                      type="community"
-                      name={verifiedData.displayName}
-                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                      size={80}
-                    />
-                  )}
-                  {type === 'channel' && (
-                    <Avatar
-                      type="channel"
-                      emoji={verifiedData.emoji!}
-                      size={32}
-                    />
-                  )}
-                  {type === 'profile' && (
-                    <Avatar
-                      type="account"
-                      name={verifiedData.displayName}
-                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                      size={80}
-                    />
-                  )}
+                  <div className="mb-2 xl:mb-4">
+                    {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
+                    {type === 'community' && (
+                      <Avatar
+                        type="community"
+                        name={verifiedData.displayName}
+                        src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                        size={80}
+                      />
+                    )}
+                    {type === 'channel' && (
+                      <Avatar
+                        type="channel"
+                        emoji={verifiedData.emoji!}
+                        size={32}
+                      />
+                    )}
+                    {type === 'profile' && (
+                      <Avatar
+                        type="account"
+                        name={verifiedData.displayName}
+                        src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                        size={80}
+                      />
+                    )}
+                  </div>
 
                   <h1 className="mb-3 text-4xl font-bold text-gray-900 xl:text-6xl">
                     {type === 'channel' && '#'} {verifiedData.displayName}
                   </h1>
-                  <p className="mb-4 text-[15px] text-gray-900 xl:text-[19px]">
+                  <p className="mb-3 text-[15px] text-neutral-100 xl:text-[19px]">
                     {verifiedData.description}
                   </p>
 
                   {type === 'community' && (
                     <>
-                      <div className="mb-5 flex items-center gap-1">
+                      <div className="flex items-center gap-1">
                         <MembersIcon size={20} />
-                        <span className="text-[15px]">446.7K</span>
+                        <Text size={15}>
+                          {formatNumber(verifiedData.membersCount)}
+                        </Text>
                       </div>
-
-                      <div className="flex gap-3">
-                        <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
-                          Art
+                      {verifiedData.tags?.length > 0 && (
+                        <div className="mt-5 flex gap-3">
+                          {verifiedData.tags.map(tag => (
+                            <Tag
+                              key={tag.emoji + tag.text}
+                              size={32}
+                              icon={tag.emoji}
+                              label={tag.text}
+                            />
+                          ))}
                         </div>
-                        <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
-                          Crypto
-                        </div>
-                        <div className="h-8 rounded-full bg-gray-200 px-3 text-sm">
-                          NFT
-                        </div>
-                      </div>
+                      )}
                     </>
                   )}
                   {type === 'channel' && (
@@ -167,13 +175,13 @@ export function PreviewPage(props: PreviewPageProps) {
                 </div>
 
                 <div className="mb-6 grid gap-3">
-                  <div className="rounded-2xl border bg-white px-4 py-3">
-                    <h3 className="text-[15px] font-bold xl:text-[19px]">
+                  <div className="border-neutral-10 bg-white-100 rounded-2xl border px-4 py-3">
+                    <h3 className="mb-2 text-[15px] font-semibold xl:text-[19px]">
                       {INSTRUCTIONS_HEADING[type]}
                     </h3>
                     <ul>
                       <ListItem order={1}>
-                        <Button size={24} icon={<DownloadIcon size={20} />}>
+                        <Button size={24} icon={<DownloadIcon size={12} />}>
                           Install
                         </Button>
                         <Text size={13}>the Status app</Text>
@@ -194,7 +202,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     </ul>
                   </div>
 
-                  <div className="flex flex-col items-start gap-4 rounded-2xl border bg-white p-4 pt-3">
+                  <div className="border-neutral-10 flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
                     <div className="flex flex-col gap-1">
                       <Text size={15} weight="semibold">
                         Have Status on your phone?
@@ -256,6 +264,20 @@ export function PreviewPage(props: PreviewPageProps) {
       )}
     </>
   )
+}
+
+const formatNumber = (n: number) => {
+  const formatter = Intl.NumberFormat('en', { notation: 'compact' })
+  return formatter.format(n)
+}
+
+const getGradientStyles = (
+  data: NonNullable<PreviewPageProps['verifiedData']>
+): CSSProperties => {
+  return {
+    // @ts-expect-error CSSProperties do not handle inline CSS variables
+    '--gradient-color': 'color' in data ? data.color : undefined,
+  }
 }
 
 type ListItemProps = {
