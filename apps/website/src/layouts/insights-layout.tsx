@@ -1,4 +1,4 @@
-import { SideMenu } from '../components/side-menu/side-menu'
+import { SideMenu } from '../components'
 import { AppLayout } from './app-layout'
 
 import type { PageLayout } from 'next'
