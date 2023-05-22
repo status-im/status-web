@@ -1,11 +1,12 @@
 import { getPublicKey, utils } from 'ethereum-cryptography/secp256k1'
 import { bytesToHex, hexToBytes } from 'ethereum-cryptography/utils'
 
-import { compressPublicKey } from '../utils/compress-public-key'
-import { createUserURLWithPublicKey } from '../utils/create-url'
+import { createUserURLWithChatKey } from '../utils/create-url'
 import { generateUsername } from '../utils/generate-username'
+import { serializePublicKey } from '../utils/serialize-public-key'
 import { signData, verifySignedData } from '../utils/sign-data'
 
+import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
 import type { Client } from './client'
 import type { Community } from './community/community'
 
@@ -18,7 +19,9 @@ export class Account {
   publicKey: string
   chatKey: string
   username: string
+  ensName?: string
   membership: MembershipStatus
+  description?: ContactCodeAdvertisement
 
   constructor(client: Client, initialAccount?: Account) {
     this.#client = client
@@ -30,13 +33,13 @@ export class Account {
 
     this.privateKey = bytesToHex(privateKey)
     this.publicKey = bytesToHex(publicKey)
-    this.chatKey = '0x' + compressPublicKey(this.publicKey)
+    this.chatKey = serializePublicKey(this.publicKey)
     this.username = generateUsername('0x' + this.publicKey)
     this.membership = initialAccount ? initialAccount.membership : 'none'
   }
 
   public get link(): URL {
-    return createUserURLWithPublicKey(this.chatKey)
+    return createUserURLWithChatKey(this.chatKey)
   }
 
   async sign(payload: Uint8Array | string) {

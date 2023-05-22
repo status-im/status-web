@@ -7,10 +7,11 @@ import { ApplicationMetadataMessage_Type } from '../../protos/application-metada
 import { CommunityRequestToJoin } from '../../protos/communities_pb'
 import { MessageType } from '../../protos/enums_pb'
 import { compressPublicKey } from '../../utils/compress-public-key'
-import { createCommunityURLWithPublicKey } from '../../utils/create-url'
+import { createCommunityURLWithChatKey } from '../../utils/create-url'
 import { generateKeyFromPassword } from '../../utils/generate-key-from-password'
 import { getNextClock } from '../../utils/get-next-clock'
 import { idToContentTopic } from '../../utils/id-to-content-topic'
+import { serializePublicKey } from '../../utils/serialize-public-key'
 import { Chat } from '../chat'
 import { Member } from '../member'
 
@@ -27,6 +28,7 @@ export class Community {
 
   /** Compressed. */
   public publicKey: string
+  public chatKey: string
   public id: string
   private contentTopic!: string
   private symmetricKey!: Uint8Array
@@ -40,6 +42,7 @@ export class Community {
     this.client = client
 
     this.publicKey = publicKey
+    this.chatKey = serializePublicKey(this.publicKey)
     this.id = publicKey.replace(/^0[xX]/, '')
 
     this.#clock = BigInt(Date.now())
@@ -85,7 +88,7 @@ export class Community {
   }
 
   public get link(): URL {
-    return createCommunityURLWithPublicKey(this.publicKey)
+    return createCommunityURLWithChatKey(this.chatKey)
   }
 
   public fetch = async () => {
