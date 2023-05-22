@@ -202,11 +202,11 @@ export function PreviewPage(props: PreviewPageProps) {
                       <Text size={13}>Scan the QR code with your device</Text>
                     </div>
 
-                    <QrDialog>
+                    <QrDialog value="FIXME:http://localhost:3000/c/G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi#QJdN5DUCTMPsTcLxkUVC4GZSfny_9UVWPpZZ40BlDswhCyaT-bHwLM4X6t4UWHMeMO660WSS2K3Yo0D-E0zRDgA=;0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133">
                       <Button
                         variant="grey"
                         size={32}
-                        icon={<QrCodeIcon size={20} />}
+                        icon={<QrCodeIcon size={20} color="$neutral-50" />}
                       >
                         Show QR code
                       </Button>
