@@ -1,6 +1,6 @@
 import '@/styles/global.css'
 
-import { Provider } from '@status-im/components'
+import { ThemeProvider } from '@status-im/components'
 import { Inter } from 'next/font/google'
 
 import type { Page, PageLayout } from 'next'
@@ -21,7 +21,7 @@ export default function App({ Component, pageProps }: Props) {
 
   return (
     <div id="app" className={inter.variable + ' font-sans'}>
-      <Provider>{getLayout(<Component {...pageProps} />)}</Provider>
+      <ThemeProvider>{getLayout(<Component {...pageProps} />)}</ThemeProvider>
     </div>
   )
 }
