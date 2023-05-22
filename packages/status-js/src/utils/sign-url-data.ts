@@ -1,24 +1,51 @@
 import { base64url } from '@scure/base'
+import { getPublicKey } from 'ethereum-cryptography/secp256k1'
+import { bytesToHex } from 'ethereum-cryptography/utils'
 
+import { deserializePublicKey } from './deserialize-public-key'
+import {
+  decodeVerificationURLHash,
+  encodeVerificationURLHash,
+} from './encode-url-hash'
+import { serializePublicKey } from './serialize-public-key'
 import { signData, verifySignedData } from './sign-data'
 
 import type { EncodedURLData } from './encode-url-data'
+import type { EncodedVerificationURLHash } from './encode-url-hash'
 
 export async function signEncodedURLData(
   encodedURLData: EncodedURLData,
   privateKey: Uint8Array | string
-): Promise<string> {
+): Promise<EncodedVerificationURLHash> {
   const signature = await signData(encodedURLData, privateKey)
 
-  return base64url.encode(signature)
+  const encodedSignature = base64url.encode(signature)
+  const serializedPublicKey = serializePublicKey(
+    `0x${bytesToHex(getPublicKey(privateKey))}`
+  )
+
+  return encodeVerificationURLHash({
+    signature: encodedSignature,
+    publicKey: serializedPublicKey,
+  })
 }
 
 export function verifyEncodedURLData(
-  encodedSignature: string,
   encodedURLData: EncodedURLData,
-  publicKey?: string
+  encodedVerificationURLHash: EncodedVerificationURLHash
 ): boolean {
-  const signature = base64url.decode(encodedSignature)
+  const { signature, publicKey } = decodeVerificationURLHash(
+    encodedVerificationURLHash
+  )
 
-  return verifySignedData(signature, encodedURLData, publicKey)
+  const decodedSignature = base64url.decode(signature)
+  const deserializedPublicKey = deserializePublicKey(publicKey, {
+    compress: false,
+  })
+
+  return verifySignedData(
+    decodedSignature,
+    encodedURLData,
+    deserializedPublicKey
+  )
 }

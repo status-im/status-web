@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 
+import { encodeVerificationURLHash } from './encode-url-hash'
 import { signEncodedURLData, verifyEncodedURLData } from './sign-url-data'
 
 import type { EncodedURLData } from './encode-url-data'
@@ -14,19 +15,26 @@ const encodedURLData =
   'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=' as EncodedURLData
 
 test('should verify URL data and correspoinding signature', async () => {
-  const signature = await signEncodedURLData(encodedURLData, privateKey)
-
-  expect(signature).toBe(
-    'k-n7d-9Pcx6ht87F4riP5xAw1v7S-e1HGMRaeaO068Q3IF1Jo8xOyeMT9Yr3Wv349Z2CdBzylw8M83CgQhcMogA='
+  const encodedVerificationURLHash = await signEncodedURLData(
+    encodedURLData,
+    privateKey
   )
-  expect(verifyEncodedURLData(signature, encodedURLData, publicKey)).toBe(true)
+
+  expect(verifyEncodedURLData(encodedURLData, encodedVerificationURLHash)).toBe(
+    true
+  )
 })
 
 test('should not verify URL data and random signature', async () => {
   const randomSignature =
     'OyOgY6Zta8S7U4l5Bv_9E_7snALhixwvjxORVAVJ-YJk-tMSGgstOy5XEEQx25TQJIAtpWf8eHnEmV8V-GmouQA='
 
-  expect(verifyEncodedURLData(randomSignature, encodedURLData, publicKey)).toBe(
+  const encodedVerificationURLHash = encodeVerificationURLHash({
+    signature: randomSignature,
+    publicKey,
+  })
+
+  expect(verifyEncodedURLData(encodedURLData, encodedVerificationURLHash)).toBe(
     false
   )
   // see https://github.com/paulmillr/noble-secp256k1/issues/43#issuecomment-1020214968
@@ -39,8 +47,13 @@ test('should not verify random URL data and random signature', async () => {
   const randomSignature =
     'k-n7d-9Pcx6ht87F4riP5xAw1v7S-e1HGMRaeaO068Q3IF1Jo8xOyeMT9Yr3Wv349Z2CdBzylw8M83CgQhcMogA='
 
+  const encodedVerificationURLHash = encodeVerificationURLHash({
+    signature: randomSignature,
+    publicKey,
+  })
+
   expect(
-    verifyEncodedURLData(randomSignature, randomEncodedURLData, publicKey)
+    verifyEncodedURLData(randomEncodedURLData, encodedVerificationURLHash)
   ).toBe(false)
   // see https://github.com/paulmillr/noble-secp256k1/issues/43#issuecomment-1020214968
   // expect(verifyEncodedURLData(randomSignature, randomEncodedURLData)).toBe(
