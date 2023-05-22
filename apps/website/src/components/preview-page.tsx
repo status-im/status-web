@@ -95,7 +95,8 @@ export function PreviewPage(props: PreviewPageProps) {
 
             <div className="relative z-20 pb-10">
               <div className="mx-auto px-5 pt-20 xl:px-20">
-                <div className="mb-10">
+                {/* HERO */}
+                <div className="mb-8 xl:mb-10">
                   <div className="mb-2 xl:mb-4">
                     {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
                     {type === 'community' && (
@@ -174,6 +175,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     )}
                 </div>
 
+                {/* INSTRUCTIONS */}
                 <div className="mb-6 grid gap-3">
                   <div className="border-neutral-10 bg-white-100 rounded-2xl border px-4 py-3">
                     <h3 className="mb-2 text-[15px] font-semibold xl:text-[19px]">
@@ -222,6 +224,7 @@ export function PreviewPage(props: PreviewPageProps) {
                   </div>
                 </div>
 
+                {/* FOOTER */}
                 <div className="flex items-center gap-1 text-gray-800">
                   <Text size={13} color="$neutral-50">
                     Powered by
