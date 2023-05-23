@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import * as Accordion from '@radix-ui/react-accordion'
+import { useRouter } from 'next/router'
 
 import { NavLink } from './nav-link'
 import { NavNestedLinks } from './nav-nested-links'
@@ -22,6 +23,17 @@ const SideBar = (props: Props) => {
   const { data } = props
 
   const [label, setLabel] = useState<string>('')
+
+  const { asPath } = useRouter()
+
+  const defaultLabel = data?.find(
+    item =>
+      item.href === asPath || item.links?.find(link => link.href === asPath)
+  )?.label
+
+  useEffect(() => {
+    setLabel(defaultLabel || '')
+  }, [defaultLabel])
 
   return (
     <div className="border-neutral-10 border-r p-5">

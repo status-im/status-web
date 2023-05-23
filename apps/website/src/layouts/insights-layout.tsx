@@ -10,31 +10,31 @@ const MENU_LINKS = [
     links: [
       {
         label: 'Overview',
-        href: '/insights',
+        href: '/insights/epics',
       },
       {
         label: 'Community Protocol',
-        href: '/insights/community-protocol',
+        href: '/insights/epics/community-protocol',
       },
       {
         label: 'Keycard',
-        href: '/insights/keycard',
+        href: '/insights/epics/keycard',
       },
       {
         label: 'Notifications Settings',
-        href: '/insights/notifications-settings',
+        href: '/insights/epics/notifications-settings',
       },
       {
         label: 'Wallet',
-        href: '/insights/wallet',
+        href: '/insights/epics/wallet',
       },
       {
         label: 'Communities',
-        href: '/insights/communities',
+        href: '/insights/epics/communities',
       },
       {
         label: 'Acitivity Center',
-        href: '/insights/dependencies',
+        href: '/insights/epics/activity-center',
       },
     ],
   },
@@ -42,28 +42,32 @@ const MENU_LINKS = [
     label: 'Workstreams',
     links: [
       {
+        label: 'Overview',
+        href: '/insights/workstreams',
+      },
+      {
         label: 'Community Protocol 2',
-        href: '/insights/community-protocol-1',
+        href: '/insights/workstreams/community-protocol-2',
       },
       {
         label: 'Keycard 2',
-        href: '/insights/keycard-2',
+        href: '/insights/workstreams/keycard-2',
       },
       {
         label: 'Notifications Settings 2',
-        href: '/insights/notifications-settings-2',
+        href: '/insights/workstreams/notifications-settings-2',
       },
       {
         label: 'Wallet 2',
-        href: '/insights/wallet-2',
+        href: '/insights/workstreams/wallet-2',
       },
       {
         label: 'Communities 2',
-        href: '/insights/communities-2',
+        href: '/insights/workstreams/communities-2',
       },
       {
         label: 'Acitivity Center 2',
-        href: '/insights/dependencies-2',
+        href: '/insights/workstreams/activity-center-2',
       },
     ],
   },
@@ -81,7 +85,7 @@ export const InsightsLayout: PageLayout = page => {
   return AppLayout(
     <div className="bg-white-100 relative mx-1 flex min-h-[calc(100vh-56px-4px)] rounded-3xl">
       <SideBar data={MENU_LINKS} />
-      <main className="flex-1 p-10">{page}</main>
+      <main className="flex-1">{page}</main>
     </div>
   )
 }
