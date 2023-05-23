@@ -16,6 +16,11 @@
       "browser": null,
       "import": "./dist/encode-url-data.js"
     },
+    "./encode-url-hash": {
+      "types": "./dist/types/utils/encode-url-hash.d.ts",
+      "browser": null,
+      "import": "./dist/encode-url-hash.js"
+    },
     "./package.json": "./package.json"
   },
   "repository": {

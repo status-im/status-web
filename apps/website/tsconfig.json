@@ -13,6 +13,9 @@
       "@/*": ["./src/*"],
       "@status-im/js/encode-url-data": [
         "../../packages/status-js/src/utils/encode-url-data"
+      ],
+      "@status-im/js/encode-url-hash": [
+        "../../packages/status-js/src/utils/encode-url-hash"
       ]
     }
   },
