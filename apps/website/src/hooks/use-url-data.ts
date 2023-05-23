@@ -45,7 +45,7 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
           setError('INVALID_PUBLIC_KEY')
         }
       } else {
-        const hash = window.location.hash
+        const hash = window.location.hash.replace('#', '')
         const { signature, publicKey } = decodeVerificationURLHash(hash)
 
         if (!signature || !publicKey) {
