@@ -10,7 +10,8 @@ import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 
 export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
   unverifiedDecodedData: T | undefined | null,
-  unverifiedEncodedData: string | undefined | null
+  unverifiedEncodedData: string | undefined | null,
+  compress: boolean
 ) => {
   // todo: unify pk under class (e.g. for user fetching)
   const [publicKey, setPublicKey] = useState<string>()
@@ -37,7 +38,7 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
         }
 
         try {
-          const publicKey = deserializePublicKey(hash)
+          const publicKey = deserializePublicKey(hash, { compress })
 
           setPublicKey(publicKey)
         } catch (error) {
@@ -55,7 +56,7 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
           const verifiedDecodedData = unverifiedDecodedData
 
           setData(verifiedDecodedData)
-          setPublicKey(deserializePublicKey(publicKey))
+          setPublicKey(deserializePublicKey(publicKey, { compress }))
         }
       }
     } catch (error) {

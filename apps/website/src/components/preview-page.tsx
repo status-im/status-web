@@ -81,7 +81,7 @@ export function PreviewPage(props: PreviewPageProps) {
     publicKey,
     verifiedURLData,
     error: urlError,
-  } = useURLData(unverifiedData, encodedData)
+  } = useURLData(unverifiedData, encodedData, type === 'profile' ? false : true)
 
   const toast = useToast()
 

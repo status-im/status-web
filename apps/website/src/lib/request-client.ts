@@ -6,7 +6,7 @@ let client: RequestClient | undefined
 
 export async function getRequestClient(): Promise<RequestClient> {
   if (!client) {
-    client = await createRequestClient({ environment: 'test' })
+    client = await createRequestClient({ environment: 'production' })
 
     return client
   }
