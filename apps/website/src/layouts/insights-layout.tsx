@@ -1,4 +1,4 @@
-import { SideMenu } from '../components'
+import { SideBar } from '../components'
 import { AppLayout } from './app-layout'
 
 import type { PageLayout } from 'next'
@@ -39,7 +39,36 @@ const MENU_LINKS = [
     ],
   },
   {
-    label: 'Orhans',
+    label: 'Workstreams',
+    links: [
+      {
+        label: 'Community Protocol 2',
+        href: '/insights/community-protocol-1',
+      },
+      {
+        label: 'Keycard 2',
+        href: '/insights/keycard-2',
+      },
+      {
+        label: 'Notifications Settings 2',
+        href: '/insights/notifications-settings-2',
+      },
+      {
+        label: 'Wallet 2',
+        href: '/insights/wallet-2',
+      },
+      {
+        label: 'Communities 2',
+        href: '/insights/communities-2',
+      },
+      {
+        label: 'Acitivity Center 2',
+        href: '/insights/dependencies-2',
+      },
+    ],
+  },
+  {
+    label: 'Orphans',
     href: '/insights/orphans',
   },
   {
@@ -51,7 +80,7 @@ const MENU_LINKS = [
 export const InsightsLayout: PageLayout = page => {
   return AppLayout(
     <div className="bg-white-100 relative mx-1 flex min-h-[calc(100vh-56px-4px)] rounded-3xl">
-      <SideMenu data={MENU_LINKS} />
+      <SideBar data={MENU_LINKS} />
       <main className="flex-1 p-10">{page}</main>
     </div>
   )

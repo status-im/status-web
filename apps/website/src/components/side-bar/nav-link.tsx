@@ -3,26 +3,20 @@ import { useRouter } from 'next/router'
 
 import { Link } from '../link'
 
-import type { Url } from 'next/dist/shared/lib/router/router'
 import type { LinkProps } from 'next/link'
 
 const NavLink = (
   props: LinkProps & {
     children: string
-    handleLinkClick: (href: Url) => void
   }
 ) => {
-  const { children, handleLinkClick, ...linkProps } = props
+  const { children, ...linkProps } = props
 
   const { asPath } = useRouter()
   const active = asPath === props.href
 
   return (
-    <Link
-      className="pl-5 transition-opacity hover:opacity-50"
-      onClick={() => handleLinkClick(props.href)}
-      {...linkProps}
-    >
+    <Link className="pl-5 transition-opacity hover:opacity-50" {...linkProps}>
       <Text
         size={19}
         weight="medium"
