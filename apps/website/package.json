@@ -27,6 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.18.12",
+    "react-query": "^3.39.3",
     "ts-pattern": "^4.3.0"
   },
   "devDependencies": {

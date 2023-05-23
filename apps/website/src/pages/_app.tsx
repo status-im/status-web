@@ -2,9 +2,12 @@ import '@/styles/global.css'
 
 import { ThemeProvider } from '@status-im/components'
 import { Inter } from 'next/font/google'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 import type { Page, PageLayout } from 'next'
 import type { AppProps } from 'next/app'
+
+const queryClient = new QueryClient()
 
 const inter = Inter({
   variable: '--font-inter',
@@ -21,7 +24,9 @@ export default function App({ Component, pageProps }: Props) {
 
   return (
     <div id="app" className={inter.variable + ' font-sans'}>
-      <ThemeProvider>{getLayout(<Component {...pageProps} />)}</ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider>{getLayout(<Component {...pageProps} />)}</ThemeProvider>
+      </QueryClientProvider>
     </div>
   )
 }
