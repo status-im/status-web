@@ -261,9 +261,9 @@ export function PreviewPage(props: PreviewPageProps) {
               globalThis.twemoji.parse(document.body)
             }}
           /> */}
-          <ToastContainer />
         </>
       )}
+      <ToastContainer />
     </>
   )
 }
