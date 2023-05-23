@@ -1,5 +1,4 @@
 // todo?: rename to preview/onboarding/sharing/conversion-page/screen/invite.tsx
-import { useEffect } from 'react'
 
 import {
   Avatar,
@@ -16,11 +15,12 @@ import {
 // import { Image } from 'react-native'
 import { DownloadIcon, MembersIcon, QrCodeIcon } from '@status-im/icons'
 import { indicesToTags, publicKeyToEmojiHash } from '@status-im/js'
+import { useQuery } from '@tanstack/react-query'
 
 import { Head } from '@/components/head'
 import { ERROR_CODES } from '@/consts/error-codes'
 import { useURLData } from '@/hooks/use-url-data'
-import { useWakuData } from '@/hooks/use-waku'
+import { getRequestClient } from '@/lib/request-client'
 
 import { ErrorPage } from './error-page'
 import { QrDialog } from './qr-dialog'
@@ -83,34 +83,50 @@ export function PreviewPage(props: PreviewPageProps) {
     error: urlError,
   } = useURLData(unverifiedData, encodedData)
 
-  const {
-    verifiedWakuData,
-    // error: wakuError,
-    loading,
-    refetch,
-  } = useWakuData(
-    type,
-    publicKey,
-    'channelUuid' in props ? props.channelUuid : undefined
-  )
-
   const toast = useToast()
 
-  useEffect(() => {
-    if (!loading && !verifiedWakuData) {
-      toast.negative("Couldn't fetch information", {
-        action: 'Retry',
-        onAction: refetch,
-      })
-    }
-  }, [loading])
+  const {
+    data: verifiedWakuData,
+    isLoading,
+    status,
+    refetch,
+  } = useQuery({
+    queryKey: [type],
+    enabled: !!publicKey,
+    queryFn: async ({ queryKey }) => {
+      const client = await getRequestClient()
 
-  // fixme: data is actually diff
-  useEffect(() => {
-    if (verifiedURLData && verifiedWakuData) {
-      toast.positive('Information just updated')
-    }
-  }, [verifiedWakuData])
+      switch (queryKey[0]) {
+        case 'community': {
+          return client.fetchCommunity(publicKey!) || null
+        }
+        case 'channel': {
+          if ('channelUuid' in props && props.channelUuid) {
+            return client.fetchChannel(publicKey!, props.channelUuid)
+          }
+          return
+        }
+        case 'profile':
+          return client.fetchUser(publicKey!)
+      }
+    },
+    onSettled: (data, error) => {
+      if (!data || error) {
+        toast.negative("Couldn't fetch information", {
+          action: 'Retry',
+          onAction: refetch,
+        })
+
+        return
+      }
+
+      // if (verifiedURLData && verifiedWakuData) {
+      //   toast.positive('Information just updated')
+      // }
+    },
+  })
+
+  const loading = status === 'loading' || isLoading
 
   const verifiedData = verifiedURLData ?? verifiedWakuData
 
