@@ -1,15 +1,16 @@
-// todo?: rename to use-encoded-url-data
+// todo?: rename to use-encoded-url-data, url-params
 
 import { useEffect, useState } from 'react'
 
 import { deserializePublicKey, verifyEncodedURLData } from '@status-im/js'
+import { decodeVerificationURLHash } from '@status-im/js/encode-url-hash'
 
 import type { ERROR_CODES } from '@/consts/error-codes'
 import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 
 export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
-  unverifiedDecodedData: T | undefined,
-  unverifiedEcodedData: string | undefined
+  unverifiedDecodedData: T | undefined | null,
+  unverifiedEncodedData: string | undefined | null
 ) => {
   // todo: unify pk under class (e.g. for user fetching)
   const [publicKey, setPublicKey] = useState<string>()
@@ -25,10 +26,16 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
       //   return
       // }
 
-      if (!unverifiedDecodedData || !unverifiedEcodedData) {
+      if (!unverifiedDecodedData || !unverifiedEncodedData) {
         // todo?: extend spec for more than just public key after # (e.i. ens name, signature)
-        // todo?: encode it
         const hash = window.location.hash.replace('#', '')
+
+        if (!hash) {
+          setError('NOT_FOUND')
+
+          return
+        }
+
         try {
           const publicKey = deserializePublicKey(hash)
 
@@ -37,21 +44,16 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
           setError('INVALID_PUBLIC_KEY')
         }
       } else {
-        const [urlSignature, publicKey] = window.location.hash
-          .replace('#', '')
-          .split(';')
+        const hash = window.location.hash
+        const { signature, publicKey } = decodeVerificationURLHash(hash)
 
-        if (!urlSignature || !publicKey) {
+        if (!signature || !publicKey) {
           setError('UNVERIFIED_CONTENT')
-        } else if (
-          !verifyEncodedURLData(urlSignature, unverifiedEcodedData, publicKey)
-        ) {
+        } else if (!verifyEncodedURLData(unverifiedEncodedData, hash)) {
           setError('UNVERIFIED_CONTENT')
         } else {
           const verifiedDecodedData = unverifiedDecodedData
 
-          // fixme!: set only verified data
-          // setVerifiedData(props.unverifiedData)
           setData(verifiedDecodedData)
           setPublicKey(deserializePublicKey(publicKey))
         }

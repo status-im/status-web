@@ -19,7 +19,8 @@ const useWaku = (
 
     const load = async () => {
       const client = await createRequestClient({
-        environment: 'test',
+        // environment: 'test',
+        environment: 'production',
       })
 
       // onReady(client)

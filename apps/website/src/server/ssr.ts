@@ -13,16 +13,16 @@ type DecodeType =
   | typeof decodeChannelURLData
   | typeof decodeUserURLData
 
-export type ServerSideProps<T = ReturnType<DecodeType>> =
-  | { errorCode: number }
-  | {
-      encodedData: string | null
-      unverifiedData: T | null
-    }
+export type ServerSideProps<T = ReturnType<DecodeType>> = {
+  encodedData: string | null
+  unverifiedData: T | null
+  errorCode?: number
+  channelUuid?: string
+}
 
 type Query = ParsedUrlQuery & {
-  entity: string
-  slug: string[]
+  // entity: string
+  slug: string
 }
 
 export function createGetServerSideProps(decodeURLData: DecodeType) {
@@ -33,8 +33,22 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
     try {
       const { params, res } = context
 
-      // todo?: change route; c/[[data]]/index.tsx
-      const encodedData = params!.slug?.[0]
+      const channelUiid = params!.slug.match(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      )
+
+      if (channelUiid) {
+        const props: ServerSideProps = {
+          channelUuid: channelUiid[0],
+          encodedData: null,
+          unverifiedData: null,
+        }
+
+        return { props }
+      }
+
+      const encodedData = params!.slug
+
       if (!encodedData) {
         const props: ServerSideProps = {
           encodedData: null,
@@ -66,6 +80,8 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
 
       const props: ServerSideProps = {
         errorCode: ERROR_CODES.INTERNAL_SERVER_ERROR,
+        encodedData: null,
+        unverifiedData: null,
       }
 
       return { props }
