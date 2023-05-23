@@ -91,6 +91,7 @@ export function PreviewPage(props: PreviewPageProps) {
     status,
     refetch,
   } = useQuery({
+    refetchOnWindowFocus: false,
     queryKey: [type],
     enabled: !!publicKey,
     queryFn: async ({ queryKey }) => {
@@ -98,20 +99,24 @@ export function PreviewPage(props: PreviewPageProps) {
 
       switch (queryKey[0]) {
         case 'community': {
-          return client.fetchCommunity(publicKey!) || null
+          return (await client.fetchCommunity(publicKey!)) ?? null
         }
         case 'channel': {
           if ('channelUuid' in props && props.channelUuid) {
-            return client.fetchChannel(publicKey!, props.channelUuid)
+            return (
+              (await client.fetchChannel(publicKey!, props.channelUuid)) ?? null
+            )
           }
-          return
+
+          return null
         }
         case 'profile':
-          return client.fetchUser(publicKey!)
+          return (await client.fetchUser(publicKey!)) ?? null
       }
     },
     onSettled: (data, error) => {
       if (!data || error) {
+        // todo?: rephrase to "fetch latest"
         toast.negative("Couldn't fetch information", {
           action: 'Retry',
           onAction: refetch,
@@ -128,9 +133,9 @@ export function PreviewPage(props: PreviewPageProps) {
 
   const loading = status === 'loading' || isLoading
 
-  const verifiedData = verifiedURLData ?? verifiedWakuData
+  const verifiedData = verifiedWakuData ?? verifiedURLData
 
-  if (!verifiedData && errorCode) {
+  if (errorCode) {
     return <ErrorPage errorCode={errorCode} />
   }
 
@@ -138,236 +143,236 @@ export function PreviewPage(props: PreviewPageProps) {
     return <ErrorPage errorCode={ERROR_CODES[urlError]} />
   }
 
+  if (!loading && !verifiedData) {
+    return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
+  }
+
+  if (loading && !verifiedData) {
+    return (
+      <>
+        <div>
+          {/* avatar */}
+          <Skeleton
+            height={80}
+            width={80}
+            borderRadius="$full"
+            borderWidth={2}
+            borderColor="$white-100"
+            variant="secondary"
+          />
+          {/* display name */}
+          <Skeleton
+            height={24}
+            width={104}
+            borderRadius="$8"
+            mb={14}
+            variant="secondary"
+          />
+          {/* description */}
+          <Skeleton
+            height={16}
+            width={312}
+            borderRadius="$8"
+            mb={8}
+            variant="secondary"
+          />
+          <div></div>
+
+          <div></div>
+          <div></div>
+
+          <div></div>
+        </div>
+        <div></div>
+      </>
+    )
+  }
+
   return (
     <>
       <Head index={props.index} />
       <>
         {/* todo: theme; based on user system settings */}
-        {loading && !verifiedData && (
-          <>
-            <div>
-              {/* avatar */}
-              <Skeleton
-                height={80}
-                width={80}
-                borderRadius="$full"
-                borderWidth={2}
-                borderColor="$white-100"
-                variant="secondary"
-              />
-              {/* display name */}
-              <Skeleton
-                height={24}
-                width={104}
-                borderRadius="$8"
-                mb={14}
-                variant="secondary"
-              />
-              {/* description */}
-              <Skeleton
-                height={16}
-                width={312}
-                borderRadius="$8"
-                mb={8}
-                variant="secondary"
-              />
-              <div></div>
+        {/* todo: (system or both?) install banner */}
+        <div
+          style={getGradientStyles(verifiedData)}
+          className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
+        >
+          <div className="absolute left-0 right-0 top-0 xl:hidden">
+            <div className="absolute h-full w-full bg-gradient-to-t from-[#fff]" />
+            <img
+              className="aspect-video object-cover"
+              src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
+              alt=""
+            />
+          </div>
 
-              <div></div>
-              <div></div>
+          <div className="relative z-20 pb-10">
+            <div className="mx-auto px-5 pt-20 xl:px-20">
+              {/* HERO */}
+              <div className="mb-8 xl:mb-10">
+                <div className="mb-2 xl:mb-4">
+                  {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
+                  {type === 'community' && (
+                    <Avatar
+                      type="community"
+                      name={verifiedData.displayName}
+                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                      size={80}
+                    />
+                  )}
+                  {type === 'channel' && (
+                    <Avatar
+                      type="channel"
+                      emoji={verifiedData.emoji!}
+                      size={80}
+                    />
+                  )}
+                  {type === 'profile' && (
+                    <Avatar
+                      type="user"
+                      name={verifiedData.displayName}
+                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                      size={80}
+                    />
+                  )}
+                </div>
 
-              <div></div>
-            </div>
-            <div></div>
-          </>
-        )}
-        {!loading && !verifiedData && (
-          <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
-        )}
-        {verifiedData && (
-          <>
-            {/* todo: (system or both?) install banner */}
-            <div
-              style={getGradientStyles(verifiedData)}
-              className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
-            >
-              <div className="absolute left-0 right-0 top-0 xl:hidden">
-                <div className="absolute h-full w-full bg-gradient-to-t from-[#fff]" />
-                <img
-                  className="aspect-video object-cover"
-                  src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
-                  alt=""
-                />
+                <h1 className="mb-3 text-4xl font-bold text-gray-900 xl:text-6xl">
+                  {type === 'channel' && '#'} {verifiedData.displayName}
+                </h1>
+                <p className="mb-3 text-[15px] text-neutral-100 xl:text-[19px]">
+                  {verifiedData.description}
+                </p>
+
+                {type === 'community' && (
+                  <>
+                    <div className="flex items-center gap-1">
+                      <MembersIcon size={20} />
+                      <Text size={15}>
+                        {formatNumber(verifiedData.membersCount)}
+                      </Text>
+                    </div>
+                    {verifiedData.tags?.length > 0 && (
+                      <div className="mt-5 flex gap-3">
+                        {verifiedData.tags.map(tag => (
+                          <Tag
+                            key={tag.emoji + tag.text}
+                            size={32}
+                            icon={tag.emoji}
+                            label={tag.text}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </>
+                )}
+                {type === 'channel' && (
+                  <div className="flex items-center gap-1">
+                    <Text size={13}>Channel in</Text>
+                    <ContextTag
+                      type="community"
+                      community={{
+                        name: verifiedData.community.displayName,
+                        src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
+                      }}
+                    />
+                  </div>
+                )}
+                {type === 'profile' &&
+                  'publicKey' in props &&
+                  props.publicKey && (
+                    <Text size={13}>
+                      {publicKeyToEmojiHash(props.publicKey)}
+                    </Text>
+                  )}
               </div>
 
-              <div className="relative z-20 pb-10">
-                <div className="mx-auto px-5 pt-20 xl:px-20">
-                  {/* HERO */}
-                  <div className="mb-8 xl:mb-10">
-                    <div className="mb-2 xl:mb-4">
-                      {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
-                      {type === 'community' && (
-                        <Avatar
-                          type="community"
-                          name={verifiedData.displayName}
-                          src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                          size={80}
-                        />
-                      )}
-                      {type === 'channel' && (
-                        <Avatar
-                          type="channel"
-                          emoji={verifiedData.emoji!}
-                          size={80}
-                        />
-                      )}
-                      {type === 'profile' && (
-                        <Avatar
-                          type="user"
-                          name={verifiedData.displayName}
-                          src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
-                          size={80}
-                        />
-                      )}
-                    </div>
+              {/* INSTRUCTIONS */}
+              <div className="mb-6 grid gap-3">
+                <div className="border-neutral-10 bg-white-100 rounded-2xl border px-4 py-3">
+                  <h3 className="mb-2 text-[15px] font-semibold xl:text-[19px]">
+                    {INSTRUCTIONS_HEADING[type]}
+                  </h3>
+                  <ul>
+                    <ListItem order={1}>
+                      <Button size={24} icon={<DownloadIcon size={12} />}>
+                        Install
+                      </Button>
+                      <Text size={13}>the Status app</Text>
+                    </ListItem>
+                    {/* todo?: delete step; merge with download */}
+                    <ListItem order={2}>
+                      <Text size={13}>Install Status</Text>
+                    </ListItem>
+                    <ListItem order={3}>
+                      <Text size={13}>Complete the onboarding</Text>
+                    </ListItem>
+                    <ListItem order={4}>
+                      <Button size={24} variant="grey">
+                        {JOIN_BUTTON_LABEL[type]}
+                      </Button>
+                      <Text size={13}>and voilá</Text>
+                    </ListItem>
+                  </ul>
+                </div>
 
-                    <h1 className="mb-3 text-4xl font-bold text-gray-900 xl:text-6xl">
-                      {type === 'channel' && '#'} {verifiedData.displayName}
-                    </h1>
-                    <p className="mb-3 text-[15px] text-neutral-100 xl:text-[19px]">
-                      {verifiedData.description}
-                    </p>
-
-                    {type === 'community' && (
-                      <>
-                        <div className="flex items-center gap-1">
-                          <MembersIcon size={20} />
-                          <Text size={15}>
-                            {formatNumber(verifiedData.membersCount)}
-                          </Text>
-                        </div>
-                        {verifiedData.tags?.length > 0 && (
-                          <div className="mt-5 flex gap-3">
-                            {verifiedData.tags.map(tag => (
-                              <Tag
-                                key={tag.emoji + tag.text}
-                                size={32}
-                                icon={tag.emoji}
-                                label={tag.text}
-                              />
-                            ))}
-                          </div>
-                        )}
-                      </>
-                    )}
-                    {type === 'channel' && (
-                      <div className="flex items-center gap-1">
-                        <Text size={13}>Channel in</Text>
-                        <ContextTag
-                          type="community"
-                          community={{
-                            name: verifiedData.community.displayName,
-                            src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
-                          }}
-                        />
-                      </div>
-                    )}
-                    {type === 'profile' &&
-                      'publicKey' in props &&
-                      props.publicKey && (
-                        <Text size={13}>
-                          {publicKeyToEmojiHash(props.publicKey)}
-                        </Text>
-                      )}
-                  </div>
-
-                  {/* INSTRUCTIONS */}
-                  <div className="mb-6 grid gap-3">
-                    <div className="border-neutral-10 bg-white-100 rounded-2xl border px-4 py-3">
-                      <h3 className="mb-2 text-[15px] font-semibold xl:text-[19px]">
-                        {INSTRUCTIONS_HEADING[type]}
-                      </h3>
-                      <ul>
-                        <ListItem order={1}>
-                          <Button size={24} icon={<DownloadIcon size={12} />}>
-                            Install
-                          </Button>
-                          <Text size={13}>the Status app</Text>
-                        </ListItem>
-                        {/* todo?: delete step; merge with download */}
-                        <ListItem order={2}>
-                          <Text size={13}>Install Status</Text>
-                        </ListItem>
-                        <ListItem order={3}>
-                          <Text size={13}>Complete the onboarding</Text>
-                        </ListItem>
-                        <ListItem order={4}>
-                          <Button size={24} variant="grey">
-                            {JOIN_BUTTON_LABEL[type]}
-                          </Button>
-                          <Text size={13}>and voilá</Text>
-                        </ListItem>
-                      </ul>
-                    </div>
-
-                    <div className="border-neutral-10 bg-white-100 flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
-                      <div className="flex flex-col gap-1">
-                        <Text size={15} weight="semibold">
-                          Have Status on your phone?
-                        </Text>
-                        <Text size={13}>Scan the QR code with your device</Text>
-                      </div>
-
-                      <QrDialog value="FIXME:http://localhost:3000/c/G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi#QJdN5DUCTMPsTcLxkUVC4GZSfny_9UVWPpZZ40BlDswhCyaT-bHwLM4X6t4UWHMeMO660WSS2K3Yo0D-E0zRDgA=;0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133">
-                        <Button
-                          variant="grey"
-                          size={32}
-                          icon={<QrCodeIcon size={20} color="$neutral-50" />}
-                        >
-                          Show QR code
-                        </Button>
-                      </QrDialog>
-                    </div>
-                  </div>
-
-                  {/* FOOTER */}
-                  <div className="flex items-center gap-1 text-gray-800">
-                    <Text size={13} color="$neutral-50">
-                      Powered by
+                <div className="border-neutral-10 bg-white-100 flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
+                  <div className="flex flex-col gap-1">
+                    <Text size={15} weight="semibold">
+                      Have Status on your phone?
                     </Text>
-                    <StatusLogo />
+                    <Text size={13}>Scan the QR code with your device</Text>
                   </div>
+
+                  <QrDialog value="FIXME:http://localhost:3000/c/G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi#QJdN5DUCTMPsTcLxkUVC4GZSfny_9UVWPpZZ40BlDswhCyaT-bHwLM4X6t4UWHMeMO660WSS2K3Yo0D-E0zRDgA=;0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133">
+                    <Button
+                      variant="grey"
+                      size={32}
+                      icon={<QrCodeIcon size={20} color="$neutral-50" />}
+                    >
+                      Show QR code
+                    </Button>
+                  </QrDialog>
                 </div>
               </div>
 
-              <div className="hidden p-2 xl:block">
-                <div className="h-full rounded-[20px] bg-gray-200">
-                  {/* <Image
+              {/* FOOTER */}
+              <div className="flex items-center gap-1 text-gray-800">
+                <Text size={13} color="$neutral-50">
+                  Powered by
+                </Text>
+                <StatusLogo />
+              </div>
+            </div>
+          </div>
+
+          <div className="hidden p-2 xl:block">
+            <div className="h-full rounded-[20px] bg-gray-200">
+              {/* <Image
               src="/banner-waku.png"
               fill
               style={{ objectFit: 'contain' }}
               alt=""
               // className="h-full w-full rounded object-cover"
             /> */}
-                  <img
-                    className="h-full w-full rounded-[20px] object-cover"
-                    src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
-                    // src={bannerImage}
-                    alt=""
-                  />
-                </div>
-              </div>
+              <img
+                className="h-full w-full rounded-[20px] object-cover"
+                src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
+                // src={bannerImage}
+                alt=""
+              />
             </div>
+          </div>
+        </div>
 
-            {/* fixme?: useEffect https://github.com/vercel/next.js/discussions/29737
+        {/* fixme?: useEffect https://github.com/vercel/next.js/discussions/29737
           <Script
             src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"
             onLoad={() => {
               globalThis.twemoji.parse(document.body)
             }}
           /> */}
-          </>
-        )}
 
         <ToastContainer />
       </>
