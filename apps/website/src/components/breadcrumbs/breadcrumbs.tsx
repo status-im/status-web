@@ -14,12 +14,13 @@ const Breadcrumbs = (props: Props) => {
 
   const router = useRouter()
   const { asPath } = router
+  console.log('Breadcrumbs > asPath:', asPath)
 
   // Splits the current path into segments
   const segments = asPath.split('/').filter(segment => segment !== '')
 
   return (
-    <nav className="flex items-center space-x-1">
+    <div className="border-neutral-10 flex h-[50px] items-center space-x-1 border-b px-5">
       {segments.map((segment, index) => {
         // Builds the path up to the current segment
         const path = `/${segments.slice(0, index + 1).join('/')}`
@@ -53,7 +54,7 @@ const Breadcrumbs = (props: Props) => {
           </div>
         )
       })}
-    </nav>
+    </div>
   )
 }
 

@@ -8,9 +8,7 @@ import type { Page } from 'next'
 const WorkstreamDetailPage: Page = () => {
   return (
     <div>
-      <div className="border-neutral-10 border-b px-5 py-3">
-        <Breadcrumbs />
-      </div>
+      <Breadcrumbs />
       <div className="px-10 py-6">
         <EpicOverview
           title="Communities protocol"
