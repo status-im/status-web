@@ -56,41 +56,6 @@ const DATA = [
     open_issues: 10,
     closed_issues: 130,
   },
-  {
-    date: '2022-02-04',
-    open_issues: 10,
-    closed_issues: 140,
-  },
-  {
-    date: '2022-02-05',
-    open_issues: 10,
-    closed_issues: 150,
-  },
-  {
-    date: '2022-02-06',
-    open_issues: 10,
-    closed_issues: 160,
-  },
-  {
-    date: '2022-02-07',
-    open_issues: 10,
-    closed_issues: 180,
-  },
-  {
-    date: '2022-02-08',
-    open_issues: 10,
-    closed_issues: 190,
-  },
-  {
-    date: '2022-02-09',
-    open_issues: 10,
-    closed_issues: 200,
-  },
-  {
-    date: '2022-02-10',
-    open_issues: 0,
-    closed_issues: 220,
-  },
 ]
 
 type Props = {
