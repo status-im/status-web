@@ -31,8 +31,8 @@ export async function signEncodedURLData(
 }
 
 export function verifyEncodedURLData(
-  encodedURLData: EncodedURLData,
-  encodedVerificationURLHash: EncodedVerificationURLHash
+  encodedURLData: string,
+  encodedVerificationURLHash: string
 ): boolean {
   const { signature, publicKey } = decodeVerificationURLHash(
     encodedVerificationURLHash

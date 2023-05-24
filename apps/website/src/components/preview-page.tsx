@@ -11,10 +11,7 @@ import {
   ToastContainer,
   useToast,
 } from '@status-im/components'
-// import Script from 'next/script'
-// import { Image } from 'react-native'
 import { DownloadIcon, MembersIcon, QrCodeIcon } from '@status-im/icons'
-import { indicesToTags, publicKeyToEmojiHash } from '@status-im/js'
 import { useQuery } from '@tanstack/react-query'
 
 import { Head } from '@/components/head'
@@ -37,24 +34,43 @@ type Type = 'community' | 'channel' | 'profile'
 
 type PreviewPageProps = {
   type: Type
-  encodedData?: string | null
-  errorCode?: number
+  unverifiedEncodedData?: string | null
+  serverErrorCode?: number
   index?: boolean
 } & (
   | {
       type: 'community'
-      unverifiedData?: ReturnType<typeof decodeCommunityURLData> | null
+      unverifiedDecodedData?: ReturnType<typeof decodeCommunityURLData> | null
     }
   | {
       type: 'channel'
-      unverifiedData?: ReturnType<typeof decodeChannelURLData> | null
+      unverifiedDecodedData?: ReturnType<typeof decodeChannelURLData> | null
       channelUuid?: string
     }
   | {
       type: 'profile'
-      unverifiedData?: ReturnType<typeof decodeUserURLData> | null
+      unverifiedDecodedData?: ReturnType<typeof decodeUserURLData> | null
     }
 )
+
+export type VerifiedData =
+  | {
+      type: 'community'
+      info: CommunityInfo
+    }
+  | {
+      type: 'channel'
+      info:
+        | ChannelInfo
+        // if from url
+        | (Omit<ChannelInfo, 'community'> & {
+            community: Pick<ChannelInfo['community'], 'displayName'>
+          })
+    }
+  | {
+      type: 'profile'
+      info: UserInfo
+    }
 
 const INSTRUCTIONS_HEADING: Record<Type, string> = {
   community: 'How to join this community:',
@@ -69,21 +85,25 @@ const JOIN_BUTTON_LABEL: Record<Type, string> = {
 }
 
 export function PreviewPage(props: PreviewPageProps) {
-  const { type, unverifiedData, encodedData, errorCode } = props
+  const {
+    type,
+    unverifiedDecodedData,
+    unverifiedEncodedData,
+    serverErrorCode,
+  } = props
+
+  const toast = useToast()
 
   // todo: default og image, not dynamic
-  // const ogImageUrl = getOgImageUrl(props.unverifiedData)
-
+  // const ogImageUrl = getOgImageUrl(props.unverifiedDecodedData)
   // todo?: pass meta, info as component
   // todo?: pass image, color as props
 
   const {
     publicKey,
     verifiedURLData,
-    error: urlError,
-  } = useURLData(unverifiedData, encodedData, type === 'profile' ? false : true)
-
-  const toast = useToast()
+    errorCode: urlErrorCode,
+  } = useURLData(type, unverifiedDecodedData, unverifiedEncodedData)
 
   const {
     data: verifiedWakuData,
@@ -94,24 +114,48 @@ export function PreviewPage(props: PreviewPageProps) {
     refetchOnWindowFocus: false,
     queryKey: [type],
     enabled: !!publicKey,
-    queryFn: async ({ queryKey }) => {
+    queryFn: async function ({ queryKey }): Promise<VerifiedData | null> {
       const client = await getRequestClient()
 
       switch (queryKey[0]) {
         case 'community': {
-          return (await client.fetchCommunity(publicKey!)) ?? null
-        }
-        case 'channel': {
-          if ('channelUuid' in props && props.channelUuid) {
-            return (
-              (await client.fetchChannel(publicKey!, props.channelUuid)) ?? null
-            )
+          const info = await client.fetchCommunity(publicKey!)
+
+          if (!info) {
+            return null
           }
 
-          return null
+          return { type: 'community', info }
         }
-        case 'profile':
-          return (await client.fetchUser(publicKey!)) ?? null
+        case 'channel': {
+          const channelUuid =
+            'channelUuid' in props && props.channelUuid
+              ? props.channelUuid
+              : undefined
+
+          if (!channelUuid) {
+            return null
+          }
+
+          const info = await client.fetchChannel(publicKey!, channelUuid)
+
+          if (!info) {
+            return null
+          }
+
+          return { type: 'channel', info }
+        }
+        case 'profile': {
+          const info = await client.fetchUser(publicKey!)
+
+          if (!info) {
+            return null
+            return null
+            return null
+          }
+
+          return { type: 'profile', info }
+        }
       }
     },
     onSettled: (data, error) => {
@@ -132,15 +176,15 @@ export function PreviewPage(props: PreviewPageProps) {
   })
 
   const loading = status === 'loading' || isLoading
+  const verifiedData: VerifiedData | undefined =
+    verifiedWakuData ?? verifiedURLData
 
-  const verifiedData = verifiedWakuData ?? verifiedURLData
-
-  if (errorCode) {
-    return <ErrorPage errorCode={errorCode} />
+  if (serverErrorCode) {
+    return <ErrorPage errorCode={serverErrorCode} />
   }
 
-  if (urlError) {
-    return <ErrorPage errorCode={ERROR_CODES[urlError]} />
+  if (urlErrorCode) {
+    return <ErrorPage errorCode={urlErrorCode} />
   }
 
   if (!loading && !verifiedData) {
@@ -213,25 +257,26 @@ export function PreviewPage(props: PreviewPageProps) {
               <div className="mb-8 xl:mb-10">
                 <div className="mb-2 xl:mb-4">
                   {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
-                  {type === 'community' && (
+                  {verifiedData.type === 'community' && (
                     <Avatar
                       type="community"
-                      name={verifiedData.displayName}
+                      name={verifiedData.info.displayName}
                       src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
                       size={80}
                     />
                   )}
-                  {type === 'channel' && (
+                  {verifiedData.type === 'channel' && (
                     <Avatar
                       type="channel"
-                      emoji={verifiedData.emoji!}
+                      name={verifiedData.info.displayName}
+                      emoji={verifiedData.info.emoji}
                       size={80}
                     />
                   )}
-                  {type === 'profile' && (
+                  {verifiedData.type === 'profile' && (
                     <Avatar
                       type="user"
-                      name={verifiedData.displayName}
+                      name={verifiedData.info.displayName}
                       src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
                       size={80}
                     />
@@ -239,23 +284,24 @@ export function PreviewPage(props: PreviewPageProps) {
                 </div>
 
                 <h1 className="mb-3 text-4xl font-bold text-gray-900 xl:text-6xl">
-                  {type === 'channel' && '#'} {verifiedData.displayName}
+                  {verifiedData.type === 'channel' && '#'}
+                  {verifiedData.info.displayName}
                 </h1>
                 <p className="mb-3 text-[15px] text-neutral-100 xl:text-[19px]">
-                  {verifiedData.description}
+                  {verifiedData.info.description}
                 </p>
 
-                {type === 'community' && (
+                {verifiedData.type === 'community' && (
                   <>
                     <div className="flex items-center gap-1">
                       <MembersIcon size={20} />
                       <Text size={15}>
-                        {formatNumber(verifiedData.membersCount)}
+                        {formatNumber(verifiedData.info.membersCount)}
                       </Text>
                     </div>
-                    {verifiedData.tags?.length > 0 && (
+                    {verifiedData.info.tags?.length > 0 && (
                       <div className="mt-5 flex gap-3">
-                        {verifiedData.tags.map(tag => (
+                        {verifiedData.info.tags.map(tag => (
                           <Tag
                             key={tag.emoji + tag.text}
                             size={32}
@@ -267,25 +313,21 @@ export function PreviewPage(props: PreviewPageProps) {
                     )}
                   </>
                 )}
-                {type === 'channel' && (
+                {verifiedData.type === 'channel' && (
                   <div className="flex items-center gap-1">
                     <Text size={13}>Channel in</Text>
                     <ContextTag
                       type="community"
                       community={{
-                        name: verifiedData.community.displayName,
+                        name: verifiedData.info.community.displayName,
                         src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
                       }}
                     />
                   </div>
                 )}
-                {type === 'profile' &&
-                  'publicKey' in props &&
-                  props.publicKey && (
-                    <Text size={13}>
-                      {publicKeyToEmojiHash(props.publicKey)}
-                    </Text>
-                  )}
+                {verifiedData.type === 'profile' && (
+                  <Text size={13}>{verifiedData.info.emojiHash}</Text>
+                )}
               </div>
 
               {/* INSTRUCTIONS */}
@@ -366,14 +408,6 @@ export function PreviewPage(props: PreviewPageProps) {
           </div>
         </div>
 
-        {/* fixme?: useEffect https://github.com/vercel/next.js/discussions/29737
-          <Script
-            src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js"
-            onLoad={() => {
-              globalThis.twemoji.parse(document.body)
-            }}
-          /> */}
-
         <ToastContainer />
       </>
     </>
@@ -385,9 +419,7 @@ const formatNumber = (n: number) => {
   return formatter.format(n)
 }
 
-const getGradientStyles = (
-  data: NonNullable<PreviewPageProps['verifiedData']>
-): CSSProperties => {
+const getGradientStyles = (data: VerifiedData): CSSProperties => {
   return {
     // @ts-expect-error CSSProperties do not handle inline CSS variables
     '--gradient-color': 'color' in data ? data.color : undefined,

@@ -14,14 +14,23 @@ type DecodeType =
   | typeof decodeUserURLData
 
 export type ServerSideProps<T = ReturnType<DecodeType>> = {
-  encodedData: string | null
-  unverifiedData: T | null
-  errorCode?: number
+  /**
+   * For verifying on client without decoding or re-encoding.
+   *
+   * Verification in general is done on encoded data, so it is not
+   * decoded, decompressed and deserialized unnecessarily if not to be
+   * displayed or othwerwise needed.
+   */
+  uverifiedEncodedData: string | null
+  /**
+   * For instaneous preview even if the data is not verified yet.
+   */
+  unverifiedDecodedData: T | null
+  serverErrorCode?: number
   channelUuid?: string
 }
 
 type Query = ParsedUrlQuery & {
-  // entity: string
   slug: string
 }
 
@@ -33,15 +42,15 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
     try {
       const { params, res } = context
 
-      const channelUiid = params!.slug.match(
+      const channelUuid = params!.slug.match(
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
       )
 
-      if (channelUiid) {
+      if (channelUuid) {
         const props: ServerSideProps = {
-          channelUuid: channelUiid[0],
-          encodedData: null,
-          unverifiedData: null,
+          channelUuid: channelUuid[0],
+          uverifiedEncodedData: null,
+          unverifiedDecodedData: null,
         }
 
         return { props }
@@ -51,8 +60,8 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
 
       if (!encodedData) {
         const props: ServerSideProps = {
-          encodedData: null,
-          unverifiedData: null,
+          uverifiedEncodedData: null,
+          unverifiedDecodedData: null,
         }
 
         return { props }
@@ -60,8 +69,8 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
 
       const decodedData = decodeURLData(encodedData)
       const props: ServerSideProps = {
-        encodedData: encodedData,
-        unverifiedData: decodedData || null,
+        uverifiedEncodedData: encodedData,
+        unverifiedDecodedData: decodedData || null,
       }
 
       // fixme: set Cache-Control
@@ -79,9 +88,9 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
       console.error(error)
 
       const props: ServerSideProps = {
-        errorCode: ERROR_CODES.INTERNAL_SERVER_ERROR,
-        encodedData: null,
-        unverifiedData: null,
+        serverErrorCode: ERROR_CODES.INTERNAL_SERVER_ERROR,
+        uverifiedEncodedData: null,
+        unverifiedDecodedData: null,
       }
 
       return { props }

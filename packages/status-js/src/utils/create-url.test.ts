@@ -18,6 +18,8 @@ import type {
   CommunityDescription,
 } from '../protos/communities_pb'
 import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
+import type { Channel as ChannelProto } from '../protos/url_pb'
+import type { PlainMessage } from '@bufbuild/protobuf'
 
 /**
  * @see https://github.com/microsoft/TypeScript/issues/24509
@@ -115,7 +117,7 @@ describe('Create URLs', () => {
             community: {
               displayName: community.description.identity!.displayName,
             },
-          },
+          } as unknown as PlainMessage<ChannelProto>,
           community.privateKey
         )
       ).toString()

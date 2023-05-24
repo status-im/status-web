@@ -12,6 +12,7 @@ import { decodeVerificationURLHash } from '@status-im/js/encode-url-hash'
 
 import { ERROR_CODES } from '@/consts/error-codes'
 
+import type { VerifiedData } from '@/components/preview-page'
 import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 import type {
   decodeChannelURLData,
@@ -30,13 +31,7 @@ export const useURLData = (
   unverifiedEncodedData: string | undefined | null
 ) => {
   const [publicKey, setPublicKey] = useState<string>()
-  const [info, setInfo] = useState<
-    | CommunityInfo
-    | (Omit<ChannelInfo, 'community'> & {
-        community: Pick<ChannelInfo['community'], 'displayName'>
-      })
-    | UserInfo
-  >()
+  const [info, setInfo] = useState<VerifiedData>()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
 
   const compressPublicKey = type === 'profile'
@@ -95,7 +90,7 @@ export const useURLData = (
                 tags: indicesToTags(data.tagIndices),
               }
 
-              setInfo(info)
+              setInfo({ type: 'community', info })
 
               break
             }
@@ -113,7 +108,7 @@ export const useURLData = (
                 community: { displayName: data.community.displayName },
               }
 
-              setInfo(info)
+              setInfo({ type: 'channel', info })
 
               break
             }
@@ -127,7 +122,7 @@ export const useURLData = (
                 emojiHash: publicKeyToEmojiHash(deserializedPublicKey),
               }
 
-              setInfo(info)
+              setInfo({ type: 'profile', info })
 
               break
             }

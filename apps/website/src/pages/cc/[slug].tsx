@@ -13,9 +13,9 @@ export default function ChannelPreviewPage(
   return (
     <PreviewPage
       type="channel"
-      errorCode={props.errorCode}
-      unverifiedData={props.unverifiedData}
-      encodedData={props.encodedData}
+      serverErrorCode={props.serverErrorCode}
+      unverifiedDecodedData={props.unverifiedDecodedData}
+      unverifiedEncodedData={props.uverifiedEncodedData}
       channelUuid={props.channelUuid}
     />
   )

@@ -5,14 +5,14 @@ import type { Tag } from './map-community'
 export const indicesToTags = (indices: number[]) => {
   const tagsMapByIndex = Object.entries(tagsMap)
 
-  return indices.reduce<Array<[Tag['text'], Tag['emoji']]>>((tags, index) => {
+  return indices.reduce<Tag[]>((tags, index) => {
     const tag = tagsMapByIndex[index]
 
     if (!tag) {
       return tags
     }
 
-    tags.push([tag[0], tag[1]])
+    tags.push({ text: tag[0], emoji: tag[1] })
 
     return tags
   }, [])
