@@ -1,4 +1,4 @@
-import { SideBar } from '../components'
+import { SidebarMenu } from '../components'
 import { AppLayout } from './app-layout'
 
 import type { PageLayout } from 'next'
@@ -84,7 +84,7 @@ const MENU_LINKS = [
 export const InsightsLayout: PageLayout = page => {
   return AppLayout(
     <div className="bg-white-100 relative mx-1 flex min-h-[calc(100vh-56px-4px)] rounded-3xl">
-      <SideBar data={MENU_LINKS} />
+      <SidebarMenu data={MENU_LINKS} />
       <main className="flex-1">{page}</main>
     </div>
   )

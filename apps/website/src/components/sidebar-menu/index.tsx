@@ -19,7 +19,7 @@ type Props = {
   }[]
 }
 
-const SideBar = (props: Props) => {
+const SidebarMenu = (props: Props) => {
   const { data } = props
 
   const [label, setLabel] = useState<string>('')
@@ -77,4 +77,4 @@ const SideBar = (props: Props) => {
   )
 }
 
-export { SideBar }
+export { SidebarMenu }
