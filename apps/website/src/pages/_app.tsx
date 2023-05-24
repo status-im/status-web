@@ -1,4 +1,5 @@
 import '@/styles/global.css'
+import '@/styles/nav-nested-links.css'
 
 import { Provider } from '@status-im/components'
 import { Inter } from 'next/font/google'
