@@ -147,7 +147,7 @@ export function PreviewPage(props: PreviewPageProps) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
 
-  if (loading && !verifiedData) {
+  if ((loading && !verifiedData) || !verifiedData) {
     return (
       <>
         <div>
