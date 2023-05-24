@@ -190,7 +190,7 @@ export function PreviewPage(props: PreviewPageProps) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
 
-  if ((loading && !verifiedData) || !verifiedData) {
+  if ((loading && !verifiedData) || !verifiedData || !publicKey) {
     return (
       <>
         <div className="xl:grid xl:grid-cols-[560px,auto]">
@@ -441,7 +441,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     <Text size={13}>Scan the QR code with your device</Text>
                   </div>
 
-                  <QrDialog value="FIXME:http://localhost:3000/c/G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi#QJdN5DUCTMPsTcLxkUVC4GZSfny_9UVWPpZZ40BlDswhCyaT-bHwLM4X6t4UWHMeMO660WSS2K3Yo0D-E0zRDgA=;0x029f196bbfef4fa6a5eb81dd802133a63498325445ca1af1d154b1bb4542955133">
+                  <QrDialog value={publicKey}>
                     <Button
                       variant="grey"
                       size={32}
