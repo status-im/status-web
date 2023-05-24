@@ -150,8 +150,6 @@ export function PreviewPage(props: PreviewPageProps) {
 
           if (!info) {
             return null
-            return null
-            return null
           }
 
           return { type: 'profile', info }

@@ -34,7 +34,7 @@ export const useURLData = (
   const [info, setInfo] = useState<VerifiedData>()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
 
-  const compressPublicKey = type === 'profile'
+  const compressPublicKey = type !== 'profile'
 
   useEffect(() => {
     try {
