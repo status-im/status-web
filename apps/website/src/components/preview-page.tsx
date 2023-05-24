@@ -193,40 +193,107 @@ export function PreviewPage(props: PreviewPageProps) {
   if ((loading && !verifiedData) || !verifiedData) {
     return (
       <>
-        <div>
-          {/* avatar */}
-          <Skeleton
-            height={80}
-            width={80}
-            borderRadius="$full"
-            borderWidth={2}
-            borderColor="$white-100"
-            variant="secondary"
-          />
-          {/* display name */}
-          <Skeleton
-            height={24}
-            width={104}
-            borderRadius="$8"
-            mb={14}
-            variant="secondary"
-          />
-          {/* description */}
-          <Skeleton
-            height={16}
-            width={312}
-            borderRadius="$8"
-            mb={8}
-            variant="secondary"
-          />
-          <div></div>
+        <div className="xl:grid xl:grid-cols-[560px,auto]">
+          <div className="pb-10">
+            <div className="mx-auto px-5 pt-20 xl:px-20">
+              <div className="mb-8 xl:mb-10">
+                {/* avatar */}
+                <div className="mb-2 xl:mb-4">
+                  <Skeleton
+                    height={80}
+                    width={80}
+                    borderRadius="$full"
+                    borderWidth={2}
+                    borderColor="$white-100"
+                    variant="secondary"
+                  />
+                </div>
+                {/* display name */}
+                <Skeleton
+                  height={48}
+                  width={240}
+                  borderRadius="$8"
+                  mb={14}
+                  variant="secondary"
+                />
+                {/* description */}
+                <Skeleton
+                  height={24}
+                  width={400}
+                  borderRadius="$8"
+                  mb={8}
+                  variant="secondary"
+                />
+                {/* description */}
+                <Skeleton
+                  height={24}
+                  width={302}
+                  borderRadius="$8"
+                  mb={8}
+                  variant="secondary"
+                />
+              </div>
 
-          <div></div>
-          <div></div>
+              <div className="mb-6 grid gap-3">
+                {/* instructions */}
+                <Skeleton
+                  height={184}
+                  width={400}
+                  borderRadius="$8"
+                  mb={14}
+                  variant="secondary"
+                />
+                {/* instructions */}
+                <Skeleton
+                  height={118}
+                  width={400}
+                  borderRadius="$8"
+                  mb={14}
+                  variant="secondary"
+                />
+              </div>
 
-          <div></div>
+              <div className="flex items-center gap-1">
+                <Skeleton
+                  height={16}
+                  width={70}
+                  borderRadius="$8"
+                  borderWidth={2}
+                  borderColor="$white-100"
+                  variant="secondary"
+                />
+                {/* logo */}
+                <Skeleton
+                  height={24}
+                  width={24}
+                  borderRadius="$full"
+                  borderWidth={2}
+                  borderColor="$white-100"
+                  variant="secondary"
+                />
+                <Skeleton
+                  height={16}
+                  width={70}
+                  borderRadius="$8"
+                  borderWidth={2}
+                  borderColor="$white-100"
+                  variant="secondary"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="hidden p-2 xl:block">
+            {/* banner */}
+            <Skeleton
+              height={878}
+              width={944}
+              borderRadius="$8"
+              borderWidth={2}
+              borderColor="$white-100"
+              variant="secondary"
+            />
+          </div>
         </div>
-        <div></div>
       </>
     )
   }
