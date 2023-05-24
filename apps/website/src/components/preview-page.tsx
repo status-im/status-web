@@ -1,5 +1,6 @@
 // todo?: rename to preview/onboarding/sharing/conversion-page/screen/invite.tsx
 
+import { neutral } from '@status-im/colors'
 import {
   Avatar,
   Button,
@@ -230,6 +231,9 @@ export function PreviewPage(props: PreviewPageProps) {
     )
   }
 
+  const avatarURL = getAvatarURL(verifiedData)
+  const bannerURL = getBannerURL(verifiedData)
+
   return (
     <>
       <Head index={props.index} />
@@ -242,11 +246,13 @@ export function PreviewPage(props: PreviewPageProps) {
         >
           <div className="absolute left-0 right-0 top-0 xl:hidden">
             <div className="absolute h-full w-full bg-gradient-to-t from-[#fff]" />
-            <img
-              className="aspect-video object-cover"
-              src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
-              alt=""
-            />
+            {bannerURL && (
+              <img
+                className="aspect-video object-cover"
+                src={bannerURL}
+                alt=""
+              />
+            )}
           </div>
 
           <div className="relative z-20 pb-10">
@@ -259,7 +265,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     <Avatar
                       type="community"
                       name={verifiedData.info.displayName}
-                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                      src={avatarURL}
                       size={80}
                     />
                   )}
@@ -275,7 +281,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     <Avatar
                       type="user"
                       name={verifiedData.info.displayName}
-                      src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80"
+                      src={avatarURL}
                       size={80}
                     />
                   )}
@@ -318,7 +324,10 @@ export function PreviewPage(props: PreviewPageProps) {
                       type="community"
                       community={{
                         name: verifiedData.info.community.displayName,
-                        src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
+                        src: getAvatarURL({
+                          type: 'community',
+                          info: verifiedData.info.community as CommunityInfo,
+                        }),
                       }}
                     />
                   </div>
@@ -388,20 +397,22 @@ export function PreviewPage(props: PreviewPageProps) {
           </div>
 
           <div className="hidden p-2 xl:block">
-            <div className="h-full rounded-[20px] bg-gray-200">
-              {/* <Image
-              src="/banner-waku.png"
-              fill
-              style={{ objectFit: 'contain' }}
-              alt=""
-              // className="h-full w-full rounded object-cover"
-            /> */}
-              <img
-                className="h-full w-full rounded-[20px] object-cover"
-                src="https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2574&q=80"
-                // src={bannerImage}
-                alt=""
-              />
+            <div
+              style={{
+                backgroundColor:
+                  'color' in verifiedData.info
+                    ? verifiedData.info.color
+                    : neutral[100],
+              }}
+              className="h-full rounded-[20px]"
+            >
+              {bannerURL && (
+                <img
+                  className="h-full w-full rounded-[20px] object-cover object-center"
+                  src={bannerURL}
+                  alt=""
+                />
+              )}
             </div>
           </div>
         </div>
@@ -420,8 +431,61 @@ const formatNumber = (n: number) => {
 const getGradientStyles = (data: VerifiedData): CSSProperties => {
   return {
     // @ts-expect-error CSSProperties do not handle inline CSS variables
-    '--gradient-color': 'color' in data ? data.color : undefined,
+    '--gradient-color': 'color' in data.info ? data.info.color : neutral[100],
   }
+}
+
+const getAvatarURL = (data: VerifiedData): string | undefined => {
+  let avatar: Uint8Array | undefined
+  switch (data.type) {
+    case 'community':
+      avatar = data.info.photo
+
+      break
+    case 'profile':
+      avatar = data.info.photo
+
+      break
+  }
+
+  if (!avatar) {
+    return
+  }
+
+  const url = URL.createObjectURL(
+    new Blob([avatar], {
+      type: 'image/jpeg',
+    })
+  )
+
+  return url
+}
+
+const getBannerURL = (data: VerifiedData): string | undefined => {
+  let banner: Uint8Array | undefined
+  switch (data.type) {
+    case 'community':
+      banner = data.info.banner
+
+      break
+    case 'channel':
+      banner =
+        'banner' in data.info.community ? data.info.community.banner : undefined
+
+      break
+  }
+
+  if (!banner) {
+    return
+  }
+
+  const url = URL.createObjectURL(
+    new Blob([banner], {
+      type: 'image/jpeg',
+    })
+  )
+
+  return url
 }
 
 type ListItemProps = {
