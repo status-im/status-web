@@ -3,20 +3,20 @@ import {
   defineNestedType,
   makeSource,
 } from '@contentlayer/source-files'
+import remarkHeadings from '@vcarl/remark-headings'
 // import { toc } from 'mdast-util-toc'
 import * as fs from 'node:fs/promises'
 import path from 'node:path'
+import { remark } from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkAdmonitions from 'remark-github-beta-blockquote-admonitions'
-import remarkToc from 'remark-toc'
 
 // const remarkBreaks = require('remark-breaks')
 // const remarkDirective = require('remark-directive')
-// const remarkFrontmatter = require('remark-frontmatter')
-// const remarkGfm = require('remark-gfm')
-// const remarkAdmonitions = require('remark-github-beta-blockquote-admonitions')
 
-const contentDirPath = 'docs'
+const CONTENT_DIR_PATH = 'docs'
+
+export type DocHeading = { level: 1 | 2 | 3; value: string }
 
 const HeroImage = defineNestedType(() => ({
   name: 'HeroImage',
@@ -45,12 +45,31 @@ export const Doc = defineDocumentType(() => ({
       type: 'string',
       resolve: doc => `/learn/${doc._raw.flattenedPath}`,
     },
-    toc: {
+    pathSegments: {
       type: 'json',
-      resolve: doc => {
-        console.log('DOCS', doc.body.code)
-
-        return {}
+      resolve: doc =>
+        doc._raw.flattenedPath
+          .split('/')
+          // skip `/docs` prefix
+          .slice(1)
+          .map(dirName => {
+            const re = /^((\d+)-)?(.*)$/
+            const [, , orderStr, pathName] = dirName.match(re) ?? []
+            const order = orderStr ? parseInt(orderStr) : 0
+            return { order, pathName }
+          }),
+    },
+    headings: {
+      // @ts-expect-error TODO
+      type: '{ level: 1 | 2 | 3; value: string }[]',
+      resolve: async doc => {
+        const result = await remark().use(remarkHeadings).process(doc.body.raw)
+        return (
+          result.data.headings as { depth: number; value: string }[]
+        ).map<DocHeading>(({ depth, value }) => ({
+          level: depth as DocHeading['level'],
+          value,
+        }))
       },
     },
 
@@ -58,7 +77,7 @@ export const Doc = defineDocumentType(() => ({
       type: 'date',
       resolve: async (doc): Promise<Date> => {
         const stats = await fs.stat(
-          path.join(contentDirPath, doc._raw.sourceFilePath)
+          path.join(CONTENT_DIR_PATH, doc._raw.sourceFilePath)
         )
         return stats.mtime
       },
@@ -67,9 +86,9 @@ export const Doc = defineDocumentType(() => ({
 }))
 
 export default makeSource({
-  contentDirPath,
+  contentDirPath: CONTENT_DIR_PATH,
   documentTypes: [Doc],
   mdx: {
-    remarkPlugins: [remarkGfm, remarkToc, remarkAdmonitions],
+    remarkPlugins: [remarkGfm, remarkAdmonitions],
   },
 })
