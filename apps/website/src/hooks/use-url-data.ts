@@ -2,22 +2,44 @@
 
 import { useEffect, useState } from 'react'
 
-import { deserializePublicKey, verifyEncodedURLData } from '@status-im/js'
+import {
+  deserializePublicKey,
+  indicesToTags,
+  publicKeyToEmojiHash,
+  verifyEncodedURLData,
+} from '@status-im/js'
 import { decodeVerificationURLHash } from '@status-im/js/encode-url-hash'
 
-import type { ERROR_CODES } from '@/consts/error-codes'
-import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
+import { ERROR_CODES } from '@/consts/error-codes'
 
-export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
-  unverifiedDecodedData: T | undefined | null,
-  unverifiedEncodedData: string | undefined | null,
-  compress: boolean
+import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
+import type {
+  decodeChannelURLData,
+  decodeCommunityURLData,
+  decodeUserURLData,
+} from '@status-im/js/encode-url-data'
+
+export const useURLData = (
+  type: 'community' | 'channel' | 'profile',
+  unverifiedDecodedData:
+    | ReturnType<typeof decodeCommunityURLData>
+    | ReturnType<typeof decodeChannelURLData>
+    | ReturnType<typeof decodeUserURLData>
+    | undefined
+    | null,
+  unverifiedEncodedData: string | undefined | null
 ) => {
-  // todo: unify pk under class (e.g. for user fetching)
   const [publicKey, setPublicKey] = useState<string>()
-  // todo?: rename data to content
-  const [data, setData] = useState<T>()
+  const [info, setInfo] = useState<
+    | CommunityInfo
+    | (Omit<ChannelInfo, 'community'> & {
+        community: Pick<ChannelInfo['community'], 'displayName'>
+      })
+    | UserInfo
+  >()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
+
+  const compressPublicKey = type === 'profile'
 
   useEffect(() => {
     try {
@@ -38,7 +60,9 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
         }
 
         try {
-          const publicKey = deserializePublicKey(hash, { compress })
+          const publicKey = deserializePublicKey(hash, {
+            compress: compressPublicKey,
+          })
 
           setPublicKey(publicKey)
         } catch (error) {
@@ -53,10 +77,63 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
         } else if (!verifyEncodedURLData(unverifiedEncodedData, hash)) {
           setError('UNVERIFIED_CONTENT')
         } else {
-          const verifiedDecodedData = unverifiedDecodedData
+          const deserializedPublicKey = deserializePublicKey(publicKey, {
+            compress: compressPublicKey,
+          })
 
-          setData(verifiedDecodedData)
-          setPublicKey(deserializePublicKey(publicKey, { compress }))
+          const verifiedDecodedData = unverifiedDecodedData
+          switch (type) {
+            case 'community': {
+              const data = verifiedDecodedData as Required<
+                ReturnType<typeof decodeCommunityURLData>
+              >
+              const info: CommunityInfo = {
+                displayName: data.displayName,
+                description: data.description,
+                color: data.color,
+                membersCount: data.membersCount,
+                tags: indicesToTags(data.tagIndices),
+              }
+
+              setInfo(info)
+
+              break
+            }
+            case 'channel': {
+              const data = verifiedDecodedData as Required<
+                ReturnType<typeof decodeChannelURLData>
+              >
+              const info: Omit<ChannelInfo, 'community'> & {
+                community: Pick<ChannelInfo['community'], 'displayName'>
+              } = {
+                displayName: data.displayName,
+                description: data.description,
+                color: data.color,
+                emoji: data.emoji,
+                community: { displayName: data.community.displayName },
+              }
+
+              setInfo(info)
+
+              break
+            }
+            case 'profile': {
+              const data = verifiedDecodedData as Required<
+                ReturnType<typeof decodeUserURLData>
+              >
+              const info: UserInfo = {
+                displayName: data.displayName,
+                description: data.description,
+                emojiHash: publicKeyToEmojiHash(deserializedPublicKey),
+              }
+
+              setInfo(info)
+
+              break
+            }
+          }
+
+          setPublicKey(publicKey)
         }
       }
     } catch (error) {
@@ -66,7 +143,7 @@ export const useURLData = <T extends CommunityInfo | ChannelInfo | UserInfo>(
 
   return {
     publicKey,
-    verifiedURLData: data,
-    error,
+    verifiedURLData: info,
+    errorCode: error ? ERROR_CODES[error] : undefined,
   }
 }
