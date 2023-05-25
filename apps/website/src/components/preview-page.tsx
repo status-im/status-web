@@ -199,7 +199,7 @@ export function PreviewPage(props: PreviewPageProps) {
   if ((loading && !verifiedData) || !verifiedData || !publicKey) {
     return (
       <>
-        <div className="xl:grid xl:grid-cols-[560px,auto]">
+        <div className="h-full xl:grid xl:grid-cols-[560px,auto]">
           <div className="pb-10">
             <div className="mx-auto px-5 pt-20 xl:px-20">
               <div className="mb-8 xl:mb-10">
@@ -291,8 +291,8 @@ export function PreviewPage(props: PreviewPageProps) {
           <div className="hidden p-2 xl:block">
             {/* banner */}
             <Skeleton
-              height={878}
-              width={944}
+              height="100%"
+              width="100%"
               borderRadius="$8"
               borderWidth={2}
               borderColor="$white-100"
