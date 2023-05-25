@@ -15,7 +15,6 @@ export default function CommunityPreviewPage(
   return (
     <PreviewPage
       type="community"
-      serverErrorCode={props.serverErrorCode}
       unverifiedDecodedData={props.unverifiedDecodedData}
       unverifiedEncodedData={props.uverifiedEncodedData}
     />

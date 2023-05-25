@@ -13,7 +13,6 @@ export default function UserPreviewPage(
   return (
     <PreviewPage
       type="profile"
-      serverErrorCode={props.serverErrorCode}
       unverifiedDecodedData={props.unverifiedDecodedData}
       unverifiedEncodedData={props.uverifiedEncodedData}
     />

@@ -38,7 +38,6 @@ type Type = 'community' | 'channel' | 'profile'
 type PreviewPageProps = {
   type: Type
   unverifiedEncodedData?: string | null
-  serverErrorCode?: number
   index?: boolean
 } & (
   | {
@@ -88,12 +87,7 @@ const JOIN_BUTTON_LABEL: Record<Type, string> = {
 }
 
 export function PreviewPage(props: PreviewPageProps) {
-  const {
-    type,
-    unverifiedDecodedData,
-    unverifiedEncodedData,
-    serverErrorCode,
-  } = props
+  const { type, unverifiedDecodedData, unverifiedEncodedData } = props
 
   const { asPath } = useRouter()
 
@@ -200,10 +194,6 @@ export function PreviewPage(props: PreviewPageProps) {
   const loading = status === 'loading' || isLoading
   const verifiedData: VerifiedData | undefined =
     verifiedWakuData ?? verifiedURLData
-
-  if (serverErrorCode) {
-    return <ErrorPage errorCode={serverErrorCode} />
-  }
 
   if (urlErrorCode) {
     return <ErrorPage errorCode={urlErrorCode} />

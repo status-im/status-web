@@ -26,7 +26,6 @@ export type ServerSideProps<T = ReturnType<DecodeType>> = {
    * For instaneous preview even if the data is not verified yet.
    */
   unverifiedDecodedData: T | null
-  serverErrorCode?: number
   channelUuid?: string
 }
 
@@ -85,15 +84,7 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
 
       return { props }
     } catch (error) {
-      console.error(error)
-
-      const props: ServerSideProps = {
-        serverErrorCode: ERROR_CODES.INTERNAL_SERVER_ERROR,
-        uverifiedEncodedData: null,
-        unverifiedDecodedData: null,
-      }
-
-      return { props }
+      return { notFound: true }
     }
   }
 

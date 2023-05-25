@@ -13,7 +13,6 @@ export default function ChannelPreviewPage(
   return (
     <PreviewPage
       type="channel"
-      serverErrorCode={props.serverErrorCode}
       unverifiedDecodedData={props.unverifiedDecodedData}
       unverifiedEncodedData={props.uverifiedEncodedData}
       channelUuid={props.channelUuid}
