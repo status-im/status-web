@@ -1,4 +1,5 @@
 import '@/styles/global.css'
+import '@/styles/nav-nested-links.css'
 
 import { ThemeProvider } from '@status-im/components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'

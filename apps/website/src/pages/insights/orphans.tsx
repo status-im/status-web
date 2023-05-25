@@ -7,7 +7,7 @@ import type { Page } from 'next'
 
 const OrphansPage: Page = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-10">
       <Text size={27} weight="semibold">
         Orphans
       </Text>

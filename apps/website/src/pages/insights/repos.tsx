@@ -46,7 +46,7 @@ const repos = [
 
 const ReposPage: Page = () => {
   return (
-    <>
+    <div className="p-10">
       <div className="mb-6">
         <Text size={27} weight="semibold">
           Repos
@@ -81,7 +81,7 @@ const ReposPage: Page = () => {
           </Link>
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
