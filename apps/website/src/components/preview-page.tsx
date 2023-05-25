@@ -1,5 +1,7 @@
 // todo?: rename to preview/onboarding/sharing/conversion-page/screen/invite.tsx
 
+import { useMemo } from 'react'
+
 import { neutral } from '@status-im/colors'
 import {
   Avatar,
@@ -195,6 +197,17 @@ export function PreviewPage(props: PreviewPageProps) {
   const verifiedData: VerifiedData | undefined =
     verifiedWakuData ?? verifiedURLData
 
+  const { avatarURL, bannerURL } = useMemo(() => {
+    if (!verifiedData) {
+      return {}
+    }
+
+    const avatarURL = getAvatarURL(verifiedData)
+    const bannerURL = getBannerURL(verifiedData)
+
+    return { avatarURL, bannerURL }
+  }, [verifiedData])
+
   if (urlErrorCode) {
     return <ErrorPage errorCode={urlErrorCode} />
   }
@@ -310,9 +323,6 @@ export function PreviewPage(props: PreviewPageProps) {
       </>
     )
   }
-
-  const avatarURL = getAvatarURL(verifiedData)
-  const bannerURL = getBannerURL(verifiedData)
 
   return (
     <>
