@@ -33,7 +33,7 @@ export class Account {
 
     this.privateKey = bytesToHex(privateKey)
     this.publicKey = bytesToHex(publicKey)
-    this.chatKey = serializePublicKey(this.publicKey)
+    this.chatKey = serializePublicKey('0x' + this.publicKey)
     this.username = generateUsername('0x' + this.publicKey)
     this.membership = initialAccount ? initialAccount.membership : 'none'
   }
