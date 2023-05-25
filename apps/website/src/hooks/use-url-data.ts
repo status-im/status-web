@@ -128,7 +128,7 @@ export const useURLData = (
             }
           }
 
-          setPublicKey(publicKey)
+          setPublicKey(deserializedPublicKey)
         }
       }
     } catch (error) {
