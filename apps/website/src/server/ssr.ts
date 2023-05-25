@@ -1,5 +1,3 @@
-import { ERROR_CODES } from '@/consts/error-codes'
-
 import type {
   decodeChannelURLData,
   decodeCommunityURLData,
