@@ -73,13 +73,7 @@ export const Default: Story = {
             icon="🐷"
             color="$purple-50"
           />
-          <Tag
-            label="New tag with icon"
-            size={24}
-            color="#FF7D46"
-            icon="🥷🏾"
-            selected
-          />
+          <Tag label="New tag with icon" size={24} color="#FF7D46" icon="🥷🏾" />
         </Stack>
       </Stack>
     )

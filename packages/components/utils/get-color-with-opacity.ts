@@ -1,3 +1,9 @@
+/**
+ * Gets the color with opacity based on the original color and opacity value
+ * @param color - the original color
+ * @param opacity - the opacity value
+ * @returns the color with opacity
+ **/
 function getColorWithOpacity(color: string, opacity: number): string {
   // Parse the color string based on the format
   let match

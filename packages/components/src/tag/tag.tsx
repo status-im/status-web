@@ -1,14 +1,13 @@
 import { createElement } from 'react'
 
-import { getColorWithOpacity } from '@status-im/components/utils/get-color-with-opacity'
 import { Stack, styled } from '@tamagui/core'
 
 import { Text } from '../text'
-import { tokens } from '../tokens'
+import { getCustomStyles } from './get-custom-styles'
 
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
-import type { ColorTokens, StackStyleProps } from '@tamagui/core'
+import type { ColorTokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
 
 type Props = {
@@ -21,11 +20,6 @@ type Props = {
   color?: ColorTokens | string
 }
 
-// TypeGuard for ColorTokens
-function isColorTokens(value: string | ColorTokens): value is ColorTokens {
-  return typeof value === 'string' && value.startsWith('$')
-}
-
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '32': 15,
   '24': 13,
@@ -34,47 +28,6 @@ const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
 const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
   '32': 20,
   '24': 12,
-}
-
-const getCustomStyles = (props: Props): StackStyleProps | null => {
-  const { color: colorFromProps, icon } = props
-
-  if (!colorFromProps) {
-    return null
-  }
-
-  let color: string | ColorTokens = colorFromProps
-
-  if (isColorTokens(colorFromProps)) {
-    color =
-      tokens.color[colorFromProps.replace('$', '') as keyof typeof tokens.color]
-        ?.val
-  }
-
-  if (icon) {
-    return {
-      borderColor: getColorWithOpacity(color!, 0.2),
-      backgroundColor: getColorWithOpacity(color!, 0.1),
-      pressStyle: {
-        backgroundColor: getColorWithOpacity(color, 0.2),
-        borderColor: getColorWithOpacity(color, 0.3),
-      },
-      hoverStyle: {
-        backgroundColor: getColorWithOpacity(color, 0.2),
-        borderColor: getColorWithOpacity(color, 0.3),
-      },
-    }
-  }
-
-  return {
-    borderColor: getColorWithOpacity(color, 0.2),
-    pressStyle: {
-      borderColor: getColorWithOpacity(color, 0.3),
-    },
-    hoverStyle: {
-      borderColor: getColorWithOpacity(color, 0.3),
-    },
-  }
 }
 
 const Tag = (props: Props) => {
@@ -132,9 +85,11 @@ const Base = styled(Stack, {
 
   hoverStyle: {
     borderColor: '$neutral-30',
+    backgroundColor: '$neutral-5',
   },
   pressStyle: {
     borderColor: '$neutral-30',
+    backgroundColor: '$neutral-5',
   },
 
   variants: {
