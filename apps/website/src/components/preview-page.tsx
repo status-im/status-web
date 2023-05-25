@@ -14,6 +14,8 @@ import {
 } from '@status-im/components'
 import { DownloadIcon, MembersIcon, QrCodeIcon } from '@status-im/icons'
 import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
+import { Linking } from 'react-native'
 
 import { Head } from '@/components/head'
 import { ERROR_CODES } from '@/consts/error-codes'
@@ -93,12 +95,33 @@ export function PreviewPage(props: PreviewPageProps) {
     serverErrorCode,
   } = props
 
+  const { asPath } = useRouter()
+
   const toast = useToast()
 
   // todo: default og image, not dynamic
   // const ogImageUrl = getOgImageUrl(props.unverifiedDecodedData)
   // todo?: pass meta, info as component
   // todo?: pass image, color as props
+
+  /**
+   * note: `Linking.canOpenURL` always returns `true` despite `Linking.openURL`
+   * throwing `Failed to launch '...' because the scheme does not have a registered handler.`
+   * on fail.
+   *
+   * @see https://github.com/necolas/react-native-web/blob/57e2482eef9efad940e1696e6ab1f8b89227a4fa/packages/react-native-web/src/exports/Linking/index.js#L71
+   * @see https://github.com/chromium/chromium/blob/a669c4de4e0634801af1241abb422082eb143196/chrome/browser/external_protocol/external_protocol_handler.cc#L147C5-L150
+   */
+  // const [canOpen, setCanOpen] = useState<boolean>()
+  // useEffect(() => {
+  //   const check = async () => {
+  //     const canOpen = await Linking.canOpenURL(`status-app://${asPath}`)
+
+  //     setCanOpen(canOpen)
+  //   }
+
+  //   check()
+  // }, [asPath])
 
   const {
     publicKey,
@@ -412,10 +435,13 @@ export function PreviewPage(props: PreviewPageProps) {
                   </h3>
                   <ul>
                     <ListItem order={1}>
-                      <Button size={24} icon={<DownloadIcon size={12} />}>
-                        Install
+                      <Button
+                        size={24}
+                        icon={<DownloadIcon size={12} />}
+                        disabled
+                      >
+                        Sign up for early access
                       </Button>
-                      <Text size={13}>the Status app</Text>
                     </ListItem>
                     {/* todo?: delete step; merge with download */}
                     <ListItem order={2}>
@@ -425,7 +451,18 @@ export function PreviewPage(props: PreviewPageProps) {
                       <Text size={13}>Complete the onboarding</Text>
                     </ListItem>
                     <ListItem order={4}>
-                      <Button size={24} variant="grey">
+                      <Button
+                        size={24}
+                        variant="grey"
+                        onPress={() => {
+                          Linking.openURL(
+                            `status-app://${asPath.replace(/\//, '')}`,
+                            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
+                            // @ts-ignore @see https://github.com/necolas/react-native-web/blob/57e2482eef9efad940e1696e6ab1f8b89227a4fa/packages/react-native-web/src/exports/Linking/index.js#L84 for target
+                            '_self'
+                          )
+                        }}
+                      >
                         {JOIN_BUTTON_LABEL[type]}
                       </Button>
                       <Text size={13}>and voilá</Text>
@@ -436,7 +473,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 <div className="border-neutral-10 bg-white-100 flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
                   <div className="flex flex-col gap-1">
                     <Text size={15} weight="semibold">
-                      Have Status on your phone?
+                      Have Status already?
                     </Text>
                     <Text size={13}>Scan the QR code with your device</Text>
                   </div>
