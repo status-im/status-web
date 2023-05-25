@@ -17,7 +17,6 @@ import {
 import { DownloadIcon, MembersIcon, QrCodeIcon } from '@status-im/icons'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import { Linking } from 'react-native'
 
 import { Head } from '@/components/head'
 import { ERROR_CODES } from '@/consts/error-codes'
@@ -99,25 +98,6 @@ export function PreviewPage(props: PreviewPageProps) {
   // const ogImageUrl = getOgImageUrl(props.unverifiedDecodedData)
   // todo?: pass meta, info as component
   // todo?: pass image, color as props
-
-  /**
-   * note: `Linking.canOpenURL` always returns `true` despite `Linking.openURL`
-   * throwing `Failed to launch '...' because the scheme does not have a registered handler.`
-   * on fail.
-   *
-   * @see https://github.com/necolas/react-native-web/blob/57e2482eef9efad940e1696e6ab1f8b89227a4fa/packages/react-native-web/src/exports/Linking/index.js#L71
-   * @see https://github.com/chromium/chromium/blob/a669c4de4e0634801af1241abb422082eb143196/chrome/browser/external_protocol/external_protocol_handler.cc#L147C5-L150
-   */
-  // const [canOpen, setCanOpen] = useState<boolean>()
-  // useEffect(() => {
-  //   const check = async () => {
-  //     const canOpen = await Linking.canOpenURL(`status-app://${asPath}`)
-
-  //     setCanOpen(canOpen)
-  //   }
-
-  //   check()
-  // }, [asPath])
 
   const {
     publicKey,
@@ -455,11 +435,10 @@ export function PreviewPage(props: PreviewPageProps) {
                         size={24}
                         variant="grey"
                         onPress={() => {
-                          Linking.openURL(
+                          window.open(
                             `status-app://${asPath.replace(/\//, '')}`,
-                            /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-                            // @ts-ignore @see https://github.com/necolas/react-native-web/blob/57e2482eef9efad940e1696e6ab1f8b89227a4fa/packages/react-native-web/src/exports/Linking/index.js#L84 for target
-                            '_self'
+                            '_self',
+                            'noopener'
                           )
                         }}
                       >
