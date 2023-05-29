@@ -413,7 +413,9 @@ export function PreviewPage(props: PreviewPageProps) {
                   </div>
                 )}
                 {verifiedData.type === 'profile' && (
-                  <Text size={13}>{verifiedData.info.emojiHash}</Text>
+                  <p className="text-[16px] tracking-[.2em]">
+                    {verifiedData.info.emojiHash}
+                  </p>
                 )}
               </div>
 
