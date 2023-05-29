@@ -320,10 +320,10 @@ export function PreviewPage(props: PreviewPageProps) {
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
           <div className="absolute left-0 right-0 top-0 xl:hidden">
-            <div className="absolute h-full w-full bg-gradient-to-t from-[#fff]" />
+            <div className="from-white-100 to-white-60 absolute h-full w-full bg-gradient-to-t" />
             {bannerURL && (
               <img
-                className="aspect-video object-cover"
+                className="aspect-video h-full w-full object-cover"
                 src={bannerURL}
                 alt=""
               />
