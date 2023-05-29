@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import {
   deserializePublicKey,
   indicesToTags,
+  publicKeyToColorHash,
   publicKeyToEmojiHash,
   verifyEncodedURLData,
 } from '@status-im/js'
@@ -131,6 +132,7 @@ export const useURLData = (
           const info: UserInfo = {
             displayName: data.displayName,
             description: data.description,
+            colorHash: publicKeyToColorHash(deserializedPublicKey),
             emojiHash: publicKeyToEmojiHash(deserializedPublicKey),
           }
 

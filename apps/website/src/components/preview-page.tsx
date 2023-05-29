@@ -360,6 +360,7 @@ export function PreviewPage(props: PreviewPageProps) {
                       name={verifiedData.info.displayName}
                       src={avatarURL}
                       size={80}
+                      colorHash={verifiedData.info.colorHash}
                     />
                   )}
                 </div>
