@@ -350,6 +350,8 @@ export function PreviewPage(props: PreviewPageProps) {
                       name={verifiedData.info.displayName}
                       emoji={verifiedData.info.emoji}
                       size={80}
+                      // fixme: use `verifiedData.info.color` (e.g. #000000 format)
+                      backgroundColor="$neutral-100"
                     />
                   )}
                   {verifiedData.type === 'profile' && (
