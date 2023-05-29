@@ -147,7 +147,7 @@ export const useURLData = (
       console.error(error)
       setError('INTERNAL_SERVER_ERROR')
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     publicKey,
