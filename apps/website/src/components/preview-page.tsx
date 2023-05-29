@@ -14,7 +14,12 @@ import {
   ToastContainer,
   useToast,
 } from '@status-im/components'
-import { DownloadIcon, MembersIcon, QrCodeIcon } from '@status-im/icons'
+import {
+  DownloadIcon,
+  InfoIcon,
+  MembersIcon,
+  QrCodeIcon,
+} from '@status-im/icons'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 
@@ -167,9 +172,9 @@ export function PreviewPage(props: PreviewPageProps) {
         return
       }
 
-      // if (verifiedURLData && verifiedWakuData) {
-      //   toast.positive('Information just updated')
-      // }
+      if (verifiedURLData) {
+        toast.custom('Information just updated', <InfoIcon size={20} />)
+      }
     },
   })
 
@@ -218,7 +223,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 <Skeleton
                   height={48}
                   width={240}
-                  borderRadius="$8"
+                  borderRadius="$12"
                   mb={14}
                   variant="secondary"
                 />
@@ -245,7 +250,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 <Skeleton
                   height={184}
                   width={400}
-                  borderRadius="$8"
+                  borderRadius="$16"
                   mb={14}
                   variant="secondary"
                 />
@@ -253,7 +258,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 <Skeleton
                   height={118}
                   width={400}
-                  borderRadius="$8"
+                  borderRadius="$16"
                   mb={14}
                   variant="secondary"
                 />
@@ -263,7 +268,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 <Skeleton
                   height={16}
                   width={70}
-                  borderRadius="$8"
+                  borderRadius="$6"
                   borderWidth={2}
                   borderColor="$white-100"
                   variant="secondary"
@@ -280,7 +285,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 <Skeleton
                   height={16}
                   width={70}
-                  borderRadius="$8"
+                  borderRadius="$6"
                   borderWidth={2}
                   borderColor="$white-100"
                   variant="secondary"
@@ -293,7 +298,7 @@ export function PreviewPage(props: PreviewPageProps) {
             <Skeleton
               height="100%"
               width="100%"
-              borderRadius="$8"
+              borderRadius="$20"
               borderWidth={2}
               borderColor="$white-100"
               variant="secondary"
@@ -311,7 +316,7 @@ export function PreviewPage(props: PreviewPageProps) {
         {/* todo: theme; based on user system settings */}
         {/* todo: (system or both?) install banner */}
         <div
-          style={getGradientStyles(verifiedData)}
+          style={!bannerURL ? getGradientStyles(verifiedData) : undefined}
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
           <div className="absolute left-0 right-0 top-0 xl:hidden">
@@ -328,9 +333,8 @@ export function PreviewPage(props: PreviewPageProps) {
           <div className="relative z-20 pb-10">
             <div className="mx-auto px-5 pt-20 xl:px-20">
               {/* HERO */}
-              <div className="mb-8 xl:mb-10">
+              <div className="mb-[32px] xl:mb-[35px]">
                 <div className="mb-2 xl:mb-4">
-                  {/* <div className="aspect-square w-20 rounded-full bg-gray-300"></div> */}
                   {verifiedData.type === 'community' && (
                     <Avatar
                       type="community"
@@ -357,24 +361,24 @@ export function PreviewPage(props: PreviewPageProps) {
                   )}
                 </div>
 
-                <h1 className="mb-3 text-4xl font-bold text-gray-900 xl:text-6xl">
+                <h1 className="mb-3 text-[40px] font-semibold xl:text-[64px]">
                   {verifiedData.type === 'channel' && '#'}
                   {verifiedData.info.displayName}
                 </h1>
-                <p className="mb-3 text-[15px] text-neutral-100 xl:text-[19px]">
+                <p className="mb-4 text-[15px] text-neutral-100 xl:text-[19px]">
                   {verifiedData.info.description}
                 </p>
 
                 {verifiedData.type === 'community' && (
                   <>
-                    <div className="flex items-center gap-1">
-                      <MembersIcon size={20} />
+                    <div className="mb-4 flex items-center gap-1">
+                      <MembersIcon size={20} color="$neutral-50" />
                       <Text size={15}>
                         {formatNumber(verifiedData.info.membersCount)}
                       </Text>
                     </div>
                     {verifiedData.info.tags?.length > 0 && (
-                      <div className="mt-5 flex gap-3">
+                      <div className="flex flex-wrap gap-[6px] xl:gap-[11px]">
                         {verifiedData.info.tags.map(tag => (
                           <Tag
                             key={tag.emoji + tag.text}
@@ -389,7 +393,9 @@ export function PreviewPage(props: PreviewPageProps) {
                 )}
                 {verifiedData.type === 'channel' && (
                   <div className="flex items-center gap-1">
-                    <Text size={13}>Channel in</Text>
+                    <Text size={13} color="$neutral-40">
+                      Channel in
+                    </Text>
                     <ContextTag
                       type="community"
                       community={{
@@ -470,7 +476,7 @@ export function PreviewPage(props: PreviewPageProps) {
               </div>
 
               {/* FOOTER */}
-              <div className="flex items-center gap-1 text-gray-800">
+              <div className="flex items-center gap-1">
                 <Text size={13} color="$neutral-50">
                   Powered by
                 </Text>
