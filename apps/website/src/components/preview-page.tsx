@@ -293,7 +293,7 @@ export function PreviewPage(props: PreviewPageProps) {
               </div>
             </div>
           </div>
-          <div className="hidden p-2 xl:block">
+          <div className="hidden h-full max-h-[944px] p-2 xl:block">
             {/* banner */}
             <Skeleton
               height="100%"
@@ -361,7 +361,7 @@ export function PreviewPage(props: PreviewPageProps) {
                   )}
                 </div>
 
-                <h1 className="mb-3 text-[40px] font-semibold xl:text-[64px]">
+                <h1 className="mb-3 text-[40px] font-semibold leading-[44px] xl:text-[64px] xl:leading-[68px]">
                   {verifiedData.type === 'channel' && '#'}
                   {verifiedData.info.displayName}
                 </h1>
@@ -487,17 +487,21 @@ export function PreviewPage(props: PreviewPageProps) {
 
           <div className="hidden p-2 xl:block">
             <div
-              style={{
-                backgroundColor:
-                  'color' in verifiedData.info
-                    ? verifiedData.info.color
-                    : neutral[100],
-              }}
+              style={
+                !bannerURL
+                  ? {
+                      backgroundColor:
+                        'color' in verifiedData.info
+                          ? verifiedData.info.color
+                          : neutral[100],
+                    }
+                  : undefined
+              }
               className="h-full rounded-[20px]"
             >
               {bannerURL && (
                 <img
-                  className="h-full w-full rounded-[20px] object-cover object-center"
+                  className="h-full max-h-[944px] w-full rounded-[20px] object-cover object-center"
                   src={bannerURL}
                   alt=""
                 />
