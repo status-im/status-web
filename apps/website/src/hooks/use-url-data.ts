@@ -46,7 +46,6 @@ export const useURLData = (
       // }
 
       if (!unverifiedDecodedData || !unverifiedEncodedData) {
-        // todo?: extend spec for more than just public key after # (e.i. ens name, signature)
         const hash = window.location.hash.replace('#', '')
 
         if (!hash) {
@@ -62,78 +61,88 @@ export const useURLData = (
 
           setPublicKey(publicKey)
         } catch (error) {
+          console.error(error)
           setError('INVALID_PUBLIC_KEY')
         }
-      } else {
-        const hash = window.location.hash.replace('#', '')
-        const { signature, publicKey } = decodeVerificationURLHash(hash)
 
-        if (!signature || !publicKey) {
-          setError('UNVERIFIED_CONTENT')
-        } else if (!verifyEncodedURLData(unverifiedEncodedData, hash)) {
-          setError('UNVERIFIED_CONTENT')
-        } else {
-          const deserializedPublicKey = deserializePublicKey(publicKey, {
-            compress: compressPublicKey,
-          })
+        return
+      }
 
-          const verifiedDecodedData = unverifiedDecodedData
-          switch (type) {
-            case 'community': {
-              const data = verifiedDecodedData as Required<
-                ReturnType<typeof decodeCommunityURLData>
-              >
-              const info: CommunityInfo = {
-                displayName: data.displayName,
-                description: data.description,
-                color: data.color,
-                membersCount: data.membersCount,
-                tags: indicesToTags(data.tagIndices),
-              }
+      const hash = window.location.hash.replace('#', '')
+      const { signature, publicKey } = decodeVerificationURLHash(hash)
 
-              setInfo({ type: 'community', info })
+      if (!signature || !publicKey) {
+        setError('UNVERIFIED_CONTENT')
 
-              break
-            }
-            case 'channel': {
-              const data = verifiedDecodedData as Required<
-                ReturnType<typeof decodeChannelURLData>
-              >
-              const info: Omit<ChannelInfo, 'community'> & {
-                community: Pick<ChannelInfo['community'], 'displayName'>
-              } = {
-                displayName: data.displayName,
-                description: data.description,
-                color: data.color,
-                emoji: data.emoji,
-                community: { displayName: data.community.displayName },
-              }
+        return
+      }
 
-              setInfo({ type: 'channel', info })
-              setChannelUuid(data.uuid)
+      if (!verifyEncodedURLData(unverifiedEncodedData, hash)) {
+        setError('UNVERIFIED_CONTENT')
 
-              break
-            }
-            case 'profile': {
-              const data = verifiedDecodedData as Required<
-                ReturnType<typeof decodeUserURLData>
-              >
-              const info: UserInfo = {
-                displayName: data.displayName,
-                description: data.description,
-                emojiHash: publicKeyToEmojiHash(deserializedPublicKey),
-              }
+        return
+      }
 
-              setInfo({ type: 'profile', info })
+      const deserializedPublicKey = deserializePublicKey(publicKey, {
+        compress: compressPublicKey,
+      })
 
-              break
-            }
+      const verifiedDecodedData = unverifiedDecodedData
+      switch (type) {
+        case 'community': {
+          const data = verifiedDecodedData as Required<
+            ReturnType<typeof decodeCommunityURLData>
+          >
+          const info: CommunityInfo = {
+            displayName: data.displayName,
+            description: data.description,
+            color: data.color,
+            membersCount: data.membersCount,
+            tags: indicesToTags(data.tagIndices),
           }
 
-          setPublicKey(deserializedPublicKey)
+          setInfo({ type: 'community', info })
+
+          break
+        }
+        case 'channel': {
+          const data = verifiedDecodedData as Required<
+            ReturnType<typeof decodeChannelURLData>
+          >
+          const info: Omit<ChannelInfo, 'community'> & {
+            community: Pick<ChannelInfo['community'], 'displayName'>
+          } = {
+            displayName: data.displayName,
+            description: data.description,
+            color: data.color,
+            emoji: data.emoji,
+            community: { displayName: data.community.displayName },
+          }
+
+          setInfo({ type: 'channel', info })
+          setChannelUuid(data.uuid)
+
+          break
+        }
+        case 'profile': {
+          const data = verifiedDecodedData as Required<
+            ReturnType<typeof decodeUserURLData>
+          >
+          const info: UserInfo = {
+            displayName: data.displayName,
+            description: data.description,
+            emojiHash: publicKeyToEmojiHash(deserializedPublicKey),
+          }
+
+          setInfo({ type: 'profile', info })
+
+          break
         }
       }
+
+      setPublicKey(deserializedPublicKey)
     } catch (error) {
+      console.error(error)
       setError('INTERNAL_SERVER_ERROR')
     }
   }, [])
