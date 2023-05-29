@@ -497,7 +497,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     }
                   : undefined
               }
-              className="h-full rounded-[20px]"
+              className="h-full max-h-[944px] w-full rounded-[20px]"
             >
               {bannerURL && (
                 <img
