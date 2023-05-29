@@ -106,6 +106,7 @@ export function PreviewPage(props: PreviewPageProps) {
 
   const {
     publicKey,
+    channelUuid: urlChannelUuid,
     verifiedURLData,
     errorCode: urlErrorCode,
   } = useURLData(type, unverifiedDecodedData, unverifiedEncodedData)
@@ -136,7 +137,7 @@ export function PreviewPage(props: PreviewPageProps) {
           const channelUuid =
             'channelUuid' in props && props.channelUuid
               ? props.channelUuid
-              : undefined
+              : urlChannelUuid
 
           if (!channelUuid) {
             return null

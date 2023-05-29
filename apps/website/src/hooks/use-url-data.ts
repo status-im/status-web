@@ -31,6 +31,7 @@ export const useURLData = (
   unverifiedEncodedData: string | undefined | null
 ) => {
   const [publicKey, setPublicKey] = useState<string>()
+  const [channelUuid, setChannelUuid] = useState<string>()
   const [info, setInfo] = useState<VerifiedData>()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
 
@@ -109,6 +110,7 @@ export const useURLData = (
               }
 
               setInfo({ type: 'channel', info })
+              setChannelUuid(data.uuid)
 
               break
             }
@@ -138,6 +140,7 @@ export const useURLData = (
 
   return {
     publicKey,
+    channelUuid,
     verifiedURLData: info,
     errorCode: error ? ERROR_CODES[error] : undefined,
   }
