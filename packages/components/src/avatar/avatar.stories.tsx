@@ -323,11 +323,12 @@ export const community: StoryObj<CommunityAvatarProps> = {
   ),
 }
 
-type ChannelArgs = Pick<ChannelAvatarProps, 'type' | 'emoji'>
+type ChannelArgs = Pick<ChannelAvatarProps, 'type' | 'emoji' | 'name'>
 
 export const Channel: StoryObj<ChannelArgs> = {
   args: {
     type: 'channel',
+    name: 'random',
     emoji: '🍑',
   } as ChannelArgs,
   parameters: {

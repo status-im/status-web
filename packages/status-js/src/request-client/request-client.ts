@@ -94,7 +94,7 @@ class RequestClient {
   }
 
   public fetchCommunity = async (
-    /** Uncompressed */
+    /** Compressed */
     publicKey: string
   ): Promise<CommunityInfo | undefined> => {
     const communityDescription = await this.fetchCommunityDescription(publicKey)

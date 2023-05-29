@@ -69,6 +69,7 @@ const Base = styled(Stack, {
   borderWidth: 1,
   borderColor: '$neutral-20',
   borderRadius: '$full',
+  backgroundColor: '$white-100',
 
   variants: {
     size: {

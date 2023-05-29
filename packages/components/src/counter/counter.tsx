@@ -1,5 +1,4 @@
-import { styled } from '@tamagui/core'
-import { View } from 'react-native'
+import { Stack, styled } from '@tamagui/core'
 
 import { Text } from '../text'
 
@@ -29,7 +28,7 @@ const Counter = (props: Props) => {
 export { Counter }
 export type { Props as CounterProps }
 
-const Base = styled(View, {
+const Base = styled(Stack, {
   padding: 2,
   display: 'inline-flex',
   justifyContent: 'center',
@@ -37,7 +36,7 @@ const Base = styled(View, {
   flexBasis: 'fit-content',
 })
 
-const Content = styled(View, {
+const Content = styled(Stack, {
   backgroundColor: '$primary-50',
   paddingHorizontal: 3,
   paddingVertical: 0,

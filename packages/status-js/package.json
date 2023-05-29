@@ -3,9 +3,26 @@
   "version": "0.2.0",
   "license": "MIT OR Apache-2.0",
   "type": "module",
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./encode-url-data": {
+      "types": "./dist/types/utils/encode-url-data.d.ts",
+      "browser": null,
+      "import": "./dist/encode-url-data.js"
+    },
+    "./encode-url-hash": {
+      "types": "./dist/types/utils/encode-url-hash.d.ts",
+      "browser": null,
+      "import": "./dist/encode-url-hash.js"
+    },
+    "./package.json": "./package.json"
+  },
   "repository": {
     "url": "https://github.com/status-im/status-web.git",
     "directory": "packages/status-js",
@@ -50,8 +67,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "browser": {
-    "./src/utils/encode-url-data": false
   }
 }

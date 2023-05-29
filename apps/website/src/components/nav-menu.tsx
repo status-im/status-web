@@ -85,7 +85,7 @@ export const NavMenu = () => {
         </NavigationMenu.List>
 
         <Button size={32} icon={<DownloadIcon size={20} />}>
-          Get Status
+          Sign up for early access
         </Button>
       </div>
 

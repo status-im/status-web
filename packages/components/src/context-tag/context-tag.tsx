@@ -22,7 +22,7 @@ type Props = {
         icon: React.ReactElement
       }
     }
-  | { type: 'community'; community: { name: string; src: string } }
+  | { type: 'community'; community: { name: string; src?: string } }
   | {
       type: 'channel'
       channel: { communityName: string; src: string; name: string }

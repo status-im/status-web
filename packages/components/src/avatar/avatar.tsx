@@ -42,7 +42,8 @@ type WalletAvatarProps = {
 type ChannelAvatarProps = {
   type: 'channel'
   size: 80 | 32 | 28 | 24 | 20
-  emoji: string
+  name: string
+  emoji?: string
   backgroundColor?: ColorTokens
   background?: ColorTokens
   lock?: 'locked' | 'unlocked'
@@ -268,7 +269,15 @@ const Avatar = (props: AvatarProps) => {
           </Fallback>
         )
       case 'channel':
-        return <Text size={channelEmojiSizes[props.size]}>{props.emoji}</Text>
+        if (props.emoji) {
+          return <Text size={channelEmojiSizes[props.size]}>{props.emoji}</Text>
+        }
+
+        return (
+          <Text size={textSizes[props.size]}>
+            {props.name.slice(0, 1).toUpperCase()}
+          </Text>
+        )
       case 'icon':
         return cloneElement(props.icon, { color: props.color ?? '$white-100' })
       default:

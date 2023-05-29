@@ -9,7 +9,7 @@ import {
   encodeUserURLData,
 } from './encode-url-data'
 
-import type { Channel } from '../protos/url-data_pb'
+import type { Channel } from '../protos/url_pb'
 import type { PlainMessage } from '@bufbuild/protobuf'
 
 describe('Encode URL data', () => {

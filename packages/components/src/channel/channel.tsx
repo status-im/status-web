@@ -95,7 +95,13 @@ const Channel = (props: Props) => {
       state={active ? 'active' : selected ? 'selected' : undefined}
     >
       <Stack flexDirection="row" gap={8} alignItems="center">
-        <Avatar type="channel" emoji={emoji} size={24} lock={lock} />
+        <Avatar
+          type="channel"
+          name={children}
+          emoji={emoji}
+          size={24}
+          lock={lock}
+        />
         <Text size={15} weight="medium" color={textColor}>
           # {children}
         </Text>

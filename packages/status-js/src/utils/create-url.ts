@@ -1,45 +1,75 @@
-import { base64url } from '@scure/base'
+import {
+  encodeChannelURLData,
+  encodeCommunityURLData,
+  encodeUserURLData,
+} from './encode-url-data'
+import { signEncodedURLData } from './sign-url-data'
+
+import type { Channel, Community, User } from '../protos/url_pb'
+import type { PlainMessage } from '@bufbuild/protobuf'
 
 const BASE_URL = 'https://status.app'
 
-export function createCommunityURLWithPublicKey(publicKey: string): URL {
-  return new URL(`${BASE_URL}/c#${publicKey}`)
+export function createCommunityURLWithChatKey(chatKey: string): URL {
+  return new URL(`${BASE_URL}/c#${chatKey}`)
 }
 
-export function createCommunityURLWithSignature(
-  encodedCommunityURLData: string,
-  signature: Uint8Array
-): URL {
+export async function createCommunityURLWithData(
+  communityData: PlainMessage<Community>,
+  communityPrivateKey: Uint8Array | string
+): Promise<URL> {
+  const encodedURLData = encodeCommunityURLData(communityData)
+  const encodedVerificationURLHash = await signEncodedURLData(
+    encodedURLData,
+    communityPrivateKey
+  )
+
   return new URL(
-    `${BASE_URL}/c/${encodedCommunityURLData}#${base64url.encode(signature)}`
+    `${BASE_URL}/c/${encodedURLData}#${encodedVerificationURLHash}`
   )
 }
 
-export function createChannelURLWithPublicKey(
+export function createChannelURLWithChatKey(
   channelUuid: string,
-  communityPublicKey: string
+  communityChatKey: string
 ): URL {
-  return new URL(`${BASE_URL}/cc/${channelUuid}#${communityPublicKey}`)
+  return new URL(`${BASE_URL}/cc/${channelUuid}#${communityChatKey}`)
 }
 
-export function createChannelURLWithSignature(
-  encodedChannelURLData: string,
-  signature: Uint8Array
-): URL {
+export async function createChannelURLWithData(
+  channelData: PlainMessage<Channel>,
+  communityPrivateKey: Uint8Array | string
+): Promise<URL> {
+  const encodedURLData = encodeChannelURLData(channelData)
+  const encodedVerificationURLHash = await signEncodedURLData(
+    encodedURLData,
+    communityPrivateKey
+  )
+
   return new URL(
-    `${BASE_URL}/cc/${encodedChannelURLData}#${base64url.encode(signature)}`
+    `${BASE_URL}/cc/${encodedURLData}#${encodedVerificationURLHash}`
   )
 }
 
-export function createUserURLWithPublicKey(publicKey: string): URL {
-  return new URL(`${BASE_URL}/u#${publicKey}`)
+export function createUserURLWithENS(ensName: string): URL {
+  return new URL(`${BASE_URL}/u#${ensName}`)
 }
 
-export function createUserURLWithSignature(
-  encodedURLData: string,
-  signature: Uint8Array
-): URL {
+export function createUserURLWithChatKey(chatKey: string): URL {
+  return new URL(`${BASE_URL}/u#${chatKey}`)
+}
+
+export async function createUserURLWithData(
+  userData: PlainMessage<User>,
+  userPrivateKey: Uint8Array | string
+): Promise<URL> {
+  const encodedURLData = encodeUserURLData(userData)
+  const encodedVerificationURLHash = await signEncodedURLData(
+    encodedURLData,
+    userPrivateKey
+  )
+
   return new URL(
-    `${BASE_URL}/u/${encodedURLData}#${base64url.encode(signature)}`
+    `${BASE_URL}/u/${encodedURLData}#${encodedVerificationURLHash}`
   )
 }

@@ -1,7 +1,7 @@
 import { base64url } from '@scure/base'
 import { brotliCompressSync, brotliDecompressSync } from 'zlib'
 
-import { Channel, Community, URLData, User } from '../protos/url-data_pb'
+import { Channel, Community, URLData, User } from '../protos/url_pb'
 
 import type { PlainMessage } from '@bufbuild/protobuf'
 

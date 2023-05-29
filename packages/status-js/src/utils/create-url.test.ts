@@ -1,85 +1,165 @@
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 import {
-  createChannelURLWithPublicKey,
-  createChannelURLWithSignature,
-  createCommunityURLWithPublicKey,
-  createCommunityURLWithSignature,
-  createUserURLWithPublicKey,
-  createUserURLWithSignature,
+  createChannelURLWithChatKey,
+  createChannelURLWithData,
+  createCommunityURLWithChatKey,
+  createCommunityURLWithData,
+  createUserURLWithChatKey,
+  createUserURLWithData,
+  createUserURLWithENS,
 } from './create-url'
 
+import type { Account } from '../client/account'
+import type { Chat } from '../client/chat'
+import type { Community } from '../client/community/community'
+import type {
+  CommunityChat,
+  CommunityDescription,
+} from '../protos/communities_pb'
+import type { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
+import type { Channel as ChannelProto } from '../protos/url_pb'
+import type { PlainMessage } from '@bufbuild/protobuf'
+
+/**
+ * @see https://github.com/microsoft/TypeScript/issues/24509
+ */
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P]
+}
+
 describe('Create URLs', () => {
-  test('should create community URL', () => {
-    expect(
-      createCommunityURLWithPublicKey(
-        'zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
-      ).toString()
-    ).toBe(
-      'https://status.app/c#zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
+  test('should create community URL', async () => {
+    const community = vi.fn() as unknown as Mutable<
+      Community & { privateKey: string }
+    >
+    community.privateKey =
+      '87734578951189d843c7acd05b133a0e0d02c4110ea961df812f7ea15648e0d8'
+    community.chatKey = 'zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
+    community.description = {
+      members: {
+        '0x04b226ea6d3a96a6ef43106d773c730179d91f5a1d8d701ab40a8f576811fcc8de36df0b756938cc540cd24590a49791aec1489a1ba4af9a13ebdfbc7c3115283d':
+          {},
+      },
+      identity: {
+        description: 'Coloring the world with joy • ᴗ •',
+        displayName: 'Doodles',
+        color: '#131D2F',
+      },
+      tags: ['Art', 'NFT', 'Web3'],
+    } as unknown as CommunityDescription
+
+    expect(createCommunityURLWithChatKey(community.chatKey).toString()).toBe(
+      'https://status.app/c#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
     )
     expect(
-      createCommunityURLWithSignature(
-        'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=',
-        new Uint8Array([
-          94, 52, 162, 140, 177, 216, 189, 16, 47, 100, 230, 195, 33, 131, 3,
-          66, 86, 100, 186, 198, 234, 159, 193, 19, 133, 58, 232, 29, 52, 159,
-          5, 113, 2, 146, 158, 85, 67, 236, 96, 96, 219, 109, 146, 23, 0, 141,
-          1, 30, 20, 187, 181, 204, 82, 68, 22, 26, 208, 232, 206, 93, 52, 119,
-          148, 57, 0,
-        ])
+      (
+        await createCommunityURLWithData(
+          {
+            description: community.description.identity!.description,
+            displayName: community.description.identity!.displayName,
+            color: community.description.identity!.color,
+            membersCount: 446_744,
+            tagIndices: [1, 33, 51],
+          },
+          community.privateKey
+        )
       ).toString()
     ).toBe(
-      'https://status.app/c/G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=#XjSijLHYvRAvZObDIYMDQlZkusbqn8EThTroHTSfBXECkp5VQ-xgYNttkhcAjQEeFLu1zFJEFhrQ6M5dNHeUOQA='
+      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#Co0BClhRbk8yaHc1dFZBRS1NRDVpOE1xNHNfb0dXZDByUkZtbE9iZ1JVTlFYdFVOd1AxaXhGdzkxNFk0LUJRcEYwOEtPcXBhVUxDaDdVQ3RsV1ItTzBZUDhNd0E9EjF6UTNzaFlTSHA3R29pWGFhdUpNbkRjandVMnlOamR6cFhMb3NBV2FwUFM0Q0Z4YzEx'
     )
   })
 
-  test('should create channel URL', () => {
+  test('should create channel URL', async () => {
+    const community = vi.fn() as unknown as Community & { privateKey: string }
+    community.privateKey =
+      '87734578951189d843c7acd05b133a0e0d02c4110ea961df812f7ea15648e0d8'
+    community.chatKey = 'zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
+    community.description = {
+      members: {
+        '0x04b226ea6d3a96a6ef43106d773c730179d91f5a1d8d701ab40a8f576811fcc8de36df0b756938cc540cd24590a49791aec1489a1ba4af9a13ebdfbc7c3115283d':
+          {},
+      },
+      identity: {
+        description: 'Coloring the world with joy • ᴗ •',
+        displayName: 'Doodles',
+        color: '#131D2F',
+      },
+      tags: ['Art', 'NFT', 'Web3'],
+    } as unknown as CommunityDescription
+
+    const chat = vi.fn() as unknown as Mutable<Chat>
+    chat.uuid = '003cdcd5-e065-48f9-b166-b1a94ac75a11'
+    chat.description = {
+      identity: {
+        description:
+          'The quick brown fox jumped over the lazy dog because it was too lazy to go around.',
+        displayName: 'design',
+        emoji: '🍿',
+        color: '#131D2F',
+      },
+    } as unknown as CommunityChat
+
     expect(
-      createChannelURLWithPublicKey(
-        '30804ea7-bd66-4d5d-91eb-b2dcfe2515b3',
-        'zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
-      ).toString()
+      createChannelURLWithChatKey(chat.uuid, community.chatKey).toString()
     ).toBe(
-      'https://status.app/cc/30804ea7-bd66-4d5d-91eb-b2dcfe2515b3#zQ3shY7r4cAdg4eUF5dfcuCqCFzWmdjHW4SX5hspM9ucAarfU'
+      'https://status.app/cc/003cdcd5-e065-48f9-b166-b1a94ac75a11#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
     )
     expect(
-      createChannelURLWithSignature(
-        'G70BYJwHdqxloHnQV-SSlY7OfdEB_f8igUIHtomMR1igUTaaRSFVBhJ-mjSn8BPqdBHk0PiHrEsBk8WBTo6_gK0tSiwQDLCWpwnmKeU2Bo7j005CuygCCwWebictMe-XLrHfyPEUmLllOKoRCBtcLDALSYQvF5NCoieM550vx-sAmlmSK871edYL67bCK-PPYghGByWEGNMFs9lOIoFx2H_mJDkNNs9bYsbbaRl_uoStzrokUn0u578yAg16mYwLh-287482y4Ibg9640rAW9JNkrfwstJ2qbLLXJ2CYUOa5ftZlFZk2TnzTxIGvfdznZLVXePelos5rWwI=',
-        new Uint8Array([
-          94, 52, 162, 140, 177, 216, 189, 16, 47, 100, 230, 195, 33, 131, 3,
-          66, 86, 100, 186, 198, 234, 159, 193, 19, 133, 58, 232, 29, 52, 159,
-          5, 113, 2, 146, 158, 85, 67, 236, 96, 96, 219, 109, 146, 23, 0, 141,
-          1, 30, 20, 187, 181, 204, 82, 68, 22, 26, 208, 232, 206, 93, 52, 119,
-          148, 57, 0,
-        ])
+      (
+        await createChannelURLWithData(
+          {
+            description: chat.description.identity!.description,
+            displayName: chat.description.identity!.displayName,
+            emoji: chat.description.identity!.emoji,
+            color: chat.description.identity!.color,
+            uuid: chat.uuid,
+            community: {
+              displayName: community.description.identity!.displayName,
+            },
+          } as unknown as PlainMessage<ChannelProto>,
+          community.privateKey
+        )
       ).toString()
     ).toBe(
-      'https://status.app/cc/G70BYJwHdqxloHnQV-SSlY7OfdEB_f8igUIHtomMR1igUTaaRSFVBhJ-mjSn8BPqdBHk0PiHrEsBk8WBTo6_gK0tSiwQDLCWpwnmKeU2Bo7j005CuygCCwWebictMe-XLrHfyPEUmLllOKoRCBtcLDALSYQvF5NCoieM550vx-sAmlmSK871edYL67bCK-PPYghGByWEGNMFs9lOIoFx2H_mJDkNNs9bYsbbaRl_uoStzrokUn0u578yAg16mYwLh-287482y4Ibg9640rAW9JNkrfwstJ2qbLLXJ2CYUOa5ftZlFZk2TnzTxIGvfdznZLVXePelos5rWwI=#XjSijLHYvRAvZObDIYMDQlZkusbqn8EThTroHTSfBXECkp5VQ-xgYNttkhcAjQEeFLu1zFJEFhrQ6M5dNHeUOQA='
+      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#Co0BClg3YWVCLU02cElidnBTVkdNNFRlSmtLV1B5YTRZUkFIYnE0YW1MMGNIbFNCcFJLbjdfbHlSNGt4RURvMmhDNGtvcVBXWWVfYWsyUjljU1ZLU2lWX25OQUE9EjF6UTNzaFlTSHA3R29pWGFhdUpNbkRjandVMnlOamR6cFhMb3NBV2FwUFM0Q0Z4YzEx'
     )
   })
 
-  test('should create user URL', () => {
-    expect(
-      createUserURLWithPublicKey(
-        'zQ3shUHp2rAM1yqBYeo6LhFbtrozG5mZeA6cRoGohsudtsieT'
-      ).toString()
-    ).toBe(
-      'https://status.app/u#zQ3shUHp2rAM1yqBYeo6LhFbtrozG5mZeA6cRoGohsudtsieT'
+  test('should create user URL', async () => {
+    const account = vi.fn() as unknown as Mutable<Account>
+    account.ensName = 'testing.stateofus.eth'
+    account.privateKey =
+      'e922443102af10422970269a8bc575cbdfd70487e4d9051f4b091edd8def5254'
+    account.chatKey = 'zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj'
+    account.description = {
+      chatIdentity: {
+        description:
+          'Visual designer @Status, cat lover, pizza enthusiast, yoga afficionada',
+        displayName: 'Mark Cole',
+        color: '#BA434D',
+      },
+    } as unknown as ContactCodeAdvertisement
+
+    expect(createUserURLWithENS(account.ensName).toString()).toBe(
+      'https://status.app/u#testing.stateofus.eth'
+    )
+    expect(createUserURLWithChatKey(account.chatKey).toString()).toBe(
+      'https://status.app/u#zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj'
     )
     expect(
-      createUserURLWithSignature(
-        'GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg==',
-        new Uint8Array([
-          96, 175, 248, 14, 248, 9, 32, 79, 13, 43, 138, 182, 215, 25, 138, 187,
-          188, 246, 133, 199, 190, 112, 234, 162, 99, 181, 248, 13, 136, 66, 65,
-          37, 106, 108, 229, 159, 10, 69, 241, 50, 134, 122, 138, 171, 62, 252,
-          197, 77, 125, 77, 161, 58, 114, 26, 200, 93, 51, 255, 113, 127, 132,
-          154, 145, 164, 1,
-        ])
+      (
+        await createUserURLWithData(
+          {
+            description: account.description.chatIdentity!.description,
+            displayName: account.description.chatIdentity!.displayName,
+            color: account.description.chatIdentity!.color,
+          },
+          account.privateKey
+        )
       ).toString()
     ).toBe(
-      'https://status.app/u/GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg==#YK_4DvgJIE8NK4q21xmKu7z2hce-cOqiY7X4DYhCQSVqbOWfCkXxMoZ6iqs-_MVNfU2hOnIayF0z_3F_hJqRpAE='
+      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#Co0BClhMYlFVZEpESENLb2k4RHpvWXlYODlicEtyVGpWVjNTaHFIM0U2NGJEaWZKQjJHa2VkdExCZlZLQTAyUmJVZlgwNzRwYjlpM293R3dSZFM2eF9udHhyUUE9EjF6UTNzaHdRUGhSdURKU2pWR1ZCblRqQ2RnWHk1aTlXUWFlVlBkR0pENnlUYXJKUVNq'
     )
   })
 })

@@ -25,7 +25,7 @@ const HomePage: Page = () => {
           <div className="grid gap-4">
             <div className="flex gap-3">
               <Button size={40} icon={<DownloadIcon size={20} />}>
-                Get Status
+                Sign up for early access
               </Button>
               <Button size={40} variant="outline" icon={<PlayIcon size={20} />}>
                 Watch Video

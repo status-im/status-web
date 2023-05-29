@@ -11,7 +11,7 @@ import {
 } from '../protos/chat-message_pb'
 import { EmojiReaction, EmojiReaction_Type } from '../protos/emoji-reaction_pb'
 import { MessageType } from '../protos/enums_pb'
-import { createChannelURLWithPublicKey } from '../utils/create-url'
+import { createChannelURLWithChatKey } from '../utils/create-url'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { getNextClock } from '../utils/get-next-clock'
 import { idToContentTopic } from '../utils/id-to-content-topic'
@@ -155,10 +155,7 @@ export class Chat {
   }
 
   public get link(): URL {
-    return createChannelURLWithPublicKey(
-      this.uuid,
-      this.client.community.publicKey
-    )
+    return createChannelURLWithChatKey(this.uuid, this.client.community.chatKey)
   }
 
   public onChange = (callback: (description: CommunityChat) => void) => {
