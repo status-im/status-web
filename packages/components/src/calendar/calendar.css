@@ -13,7 +13,6 @@
   color: var(--rdp-text-color);
   font-family: Inter, sans-serif;
   font-weight: 500;
-  margin: 0.75rem;
   user-select: none;
 }
 
@@ -101,6 +100,7 @@
   max-width: calc(var(--rdp-cell-size) * 7);
   border-collapse: separate;
   border-spacing: 0 2px;
+  padding: 0 0.75rem 0.625rem 0.75rem;
 }
 
 .rdp-with_weeknumber .rdp-table {
@@ -142,6 +142,7 @@
 
 .rdp-nav {
   white-space: nowrap;
+  padding: 0.375rem 0.375rem 0 0.75rem;
 }
 
 .rdp-multiple_months .rdp-caption_start .rdp-nav {
