@@ -29,7 +29,8 @@ export default class Document extends NextDocument {
             id="tamagui"
             dangerouslySetInnerHTML={{ __html: Tamagui.getCSS() }}
           />
-          <meta name="theme-color" content="#09101C" />
+          {/* todo: ask about the expected color */}
+          <meta name="theme-color" content="#4360DF" />
         </Head>
         <body>
           <Main />

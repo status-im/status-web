@@ -9,6 +9,7 @@ type Props = {
 export const ErrorPage = (props: Props) => {
   const { errorCode } = props
 
+  // todo?: head
   switch (errorCode) {
     // todo!: design review, not in designs
     case ERROR_CODES.NOT_FOUND:
