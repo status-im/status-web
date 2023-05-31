@@ -5,7 +5,9 @@ import type { TagProps } from './tag'
 import type { ColorTokens, StackStyleProps } from '@tamagui/core'
 
 // TypeGuard for ColorTokens
-function isColorTokens(value: string | ColorTokens): value is ColorTokens {
+function isColorTokens(
+  value: `#${string}` | ColorTokens
+): value is ColorTokens {
   return typeof value === 'string' && value.startsWith('$')
 }
 
@@ -21,7 +23,7 @@ const getCustomStyles = (props: TagProps): StackStyleProps | null => {
     return null
   }
 
-  let color = colorFromProps
+  let color: ColorTokens | string = colorFromProps
 
   if (isColorTokens(colorFromProps)) {
     const colorToken = colorFromProps.replace(

@@ -42,31 +42,9 @@ export const Default: Story = {
           <Tag label="New tag" size={24} disabled selected />
           <Tag label="New tag" size={24} color="#FF7D46" />
 
-          <Tag label="New tag #7140FD" size={24} color="#7140FD" />
+          <Tag label="New tag #7140FD" size={24} color="#BA34F5" />
           <Tag label="New tag #7140FD" size={24} color="#7140FD" icon="🧙‍♂️" />
 
-          <Tag
-            label="New tag rgb(113, 64, 253)"
-            size={24}
-            color="rgb(113, 64, 253)"
-          />
-          <Tag
-            label="New tag rgb(113, 64, 253)"
-            size={24}
-            color="rgb(113, 64, 253)"
-            icon="🧙‍♂️"
-          />
-          <Tag
-            label="New tag hsl(202, 79%, 47%)"
-            size={24}
-            color="hsl(202, 79%, 47%)"
-          />
-          <Tag
-            label="New tag hsl(202, 79%, 47%)"
-            size={24}
-            color="hsl(202, 79%, 47%)"
-            icon="🧙‍♂️"
-          />
           <Tag
             label="custom color purple"
             size={24}

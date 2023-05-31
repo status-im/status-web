@@ -17,7 +17,7 @@ type Props = {
   selected?: boolean
   disabled?: boolean
   onPress?: () => void
-  color?: ColorTokens | string
+  color?: ColorTokens | `#${string}`
 }
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
