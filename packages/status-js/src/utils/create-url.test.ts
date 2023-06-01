@@ -66,7 +66,7 @@ describe('Create URLs', () => {
         )
       ).toString()
     ).toBe(
-      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#Co0BClhRbk8yaHc1dFZBRS1NRDVpOE1xNHNfb0dXZDByUkZtbE9iZ1JVTlFYdFVOd1AxaXhGdzkxNFk0LUJRcEYwOEtPcXBhVUxDaDdVQ3RsV1ItTzBZUDhNd0E9EjF6UTNzaFlTSHA3R29pWGFhdUpNbkRjandVMnlOamR6cFhMb3NBV2FwUFM0Q0Z4YzEx'
+      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#QnO2hw5tVAE-MD5i8Mq4s_oGWd0rRFmlObgRUNQXtUNwP1ixFw914Y4-BQpF08KOqpaULCh7UCtlWR-O0YP8MwA='
     )
   })
 
@@ -122,7 +122,7 @@ describe('Create URLs', () => {
         )
       ).toString()
     ).toBe(
-      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#Co0BClg3YWVCLU02cElidnBTVkdNNFRlSmtLV1B5YTRZUkFIYnE0YW1MMGNIbFNCcFJLbjdfbHlSNGt4RURvMmhDNGtvcVBXWWVfYWsyUjljU1ZLU2lWX25OQUE9EjF6UTNzaFlTSHA3R29pWGFhdUpNbkRjandVMnlOamR6cFhMb3NBV2FwUFM0Q0Z4YzEx'
+      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#7aeB-M6pIbvpSVGM4TeJkKWPya4YRAHbq4amL0cHlSBpRKn7_lyR4kxEDo2hC4koqPWYe_ak2R9cSVKSiV_nNAA='
     )
   })
 
@@ -159,7 +159,7 @@ describe('Create URLs', () => {
         )
       ).toString()
     ).toBe(
-      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#Co0BClhMYlFVZEpESENLb2k4RHpvWXlYODlicEtyVGpWVjNTaHFIM0U2NGJEaWZKQjJHa2VkdExCZlZLQTAyUmJVZlgwNzRwYjlpM293R3dSZFM2eF9udHhyUUE9EjF6UTNzaHdRUGhSdURKU2pWR1ZCblRqQ2RnWHk1aTlXUWFlVlBkR0pENnlUYXJKUVNq'
+      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#LbQUdJDHCKoi8DzoYyX89bpKrTjVV3ShqH3E64bDifJB2GkedtLBfVKA02RbUfX074pb9i3owGwRdS6x_ntxrQA='
     )
   })
 })

@@ -19,14 +19,12 @@ export async function createCommunityURLWithData(
   communityPrivateKey: Uint8Array | string
 ): Promise<URL> {
   const encodedURLData = encodeCommunityURLData(communityData)
-  const encodedVerificationURLHash = await signEncodedURLData(
+  const encodedSignature = await signEncodedURLData(
     encodedURLData,
     communityPrivateKey
   )
 
-  return new URL(
-    `${BASE_URL}/c/${encodedURLData}#${encodedVerificationURLHash}`
-  )
+  return new URL(`${BASE_URL}/c/${encodedURLData}#${encodedSignature}`)
 }
 
 export function createChannelURLWithChatKey(
@@ -41,14 +39,12 @@ export async function createChannelURLWithData(
   communityPrivateKey: Uint8Array | string
 ): Promise<URL> {
   const encodedURLData = encodeChannelURLData(channelData)
-  const encodedVerificationURLHash = await signEncodedURLData(
+  const encodedSignature = await signEncodedURLData(
     encodedURLData,
     communityPrivateKey
   )
 
-  return new URL(
-    `${BASE_URL}/cc/${encodedURLData}#${encodedVerificationURLHash}`
-  )
+  return new URL(`${BASE_URL}/cc/${encodedURLData}#${encodedSignature}`)
 }
 
 export function createUserURLWithENS(ensName: string): URL {
@@ -64,12 +60,10 @@ export async function createUserURLWithData(
   userPrivateKey: Uint8Array | string
 ): Promise<URL> {
   const encodedURLData = encodeUserURLData(userData)
-  const encodedVerificationURLHash = await signEncodedURLData(
+  const encodedSignature = await signEncodedURLData(
     encodedURLData,
     userPrivateKey
   )
 
-  return new URL(
-    `${BASE_URL}/u/${encodedURLData}#${encodedVerificationURLHash}`
-  )
+  return new URL(`${BASE_URL}/u/${encodedURLData}#${encodedSignature}`)
 }

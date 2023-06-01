@@ -1,7 +1,9 @@
 import { expect, test } from 'vitest'
 
-import { encodeVerificationURLHash } from './encode-url-hash'
-import { signEncodedURLData, verifyEncodedURLData } from './sign-url-data'
+import {
+  recoverPublicKeyFromEncodedURLData,
+  signEncodedURLData,
+} from './sign-url-data'
 
 import type { EncodedURLData } from './encode-url-data'
 
@@ -13,50 +15,41 @@ const publicKey =
   '0x04f9134866f2bd8f45f2bc7893c95a6b989378c370088c9a1a5a53eda2ebb8a1e8386921592b6bd56fc3573f03c46df3396cc42e2993cdc001855c858865d768a7'
 const encodedURLData =
   'G74AgK0ObFNmYT-WC_Jcc9KfSjHXAQo9THKEEbgPaJoItceMES-bUxr2Tj9efv447rRefBIUg9CEsSFyjBOFTRdZ9PH2wUOW8hVNYqIje3BC96mZ8uFogqM6k7gCCJnMHy4ulsmsgHTdeh5dAzTNNuG8m9XB8oVeildTCKlRhINnTZh4kAl5sP8SzBB4V2_I41a8PKl3mcS0z_eF5gA=' as EncodedURLData
+const encodedSignature =
+  'k-n7d-9Pcx6ht87F4riP5xAw1v7S-e1HGMRaeaO068Q3IF1Jo8xOyeMT9Yr3Wv349Z2CdBzylw8M83CgQhcMogA='
 
-test('should verify URL data and correspoinding signature', async () => {
-  const encodedVerificationURLHash = await signEncodedURLData(
-    encodedURLData,
-    privateKey
-  )
-
-  expect(verifyEncodedURLData(encodedURLData, encodedVerificationURLHash)).toBe(
-    true
+test('should sign URL data', async () => {
+  expect(await signEncodedURLData(encodedURLData, privateKey)).toBe(
+    encodedSignature
   )
 })
 
-test('should not verify URL data and random signature', async () => {
-  const randomSignature =
+test('should recover original public key from URL data', async () => {
+  expect(
+    await recoverPublicKeyFromEncodedURLData(encodedURLData, encodedSignature)
+  ).toBe(publicKey)
+})
+
+test('should not recover original public key from same URL data but changed signature', async () => {
+  const changedEncodedSignature =
     'OyOgY6Zta8S7U4l5Bv_9E_7snALhixwvjxORVAVJ-YJk-tMSGgstOy5XEEQx25TQJIAtpWf8eHnEmV8V-GmouQA='
 
-  const encodedVerificationURLHash = encodeVerificationURLHash({
-    signature: randomSignature,
-    publicKey,
-  })
-
-  expect(verifyEncodedURLData(encodedURLData, encodedVerificationURLHash)).toBe(
-    false
-  )
-  // see https://github.com/paulmillr/noble-secp256k1/issues/43#issuecomment-1020214968
-  // expect(verifyEncodedURLData(randomSignature, encodedURLData)).toBe(false)
+  expect(
+    await recoverPublicKeyFromEncodedURLData(
+      encodedURLData,
+      changedEncodedSignature
+    )
+  ).not.toBe(publicKey)
 })
 
-test('should not verify random URL data and random signature', async () => {
-  const randomEncodedURLData =
+test('should not recover original public key from same signature but changed URL data', async () => {
+  const changedEncodedURLData =
     'CyeACk0KHkxvcmVtIGlwc3VtIGRvbG9yIHNpdCBlZ2VzdGFzLhIYV2UgZG8gbm90IHN1cHBvcnQgQWxpY2UuGMCEPSIHIzQzNjBERioEAQIDBAM=' as EncodedURLData
-  const randomSignature =
-    'k-n7d-9Pcx6ht87F4riP5xAw1v7S-e1HGMRaeaO068Q3IF1Jo8xOyeMT9Yr3Wv349Z2CdBzylw8M83CgQhcMogA='
-
-  const encodedVerificationURLHash = encodeVerificationURLHash({
-    signature: randomSignature,
-    publicKey,
-  })
 
   expect(
-    verifyEncodedURLData(randomEncodedURLData, encodedVerificationURLHash)
-  ).toBe(false)
-  // see https://github.com/paulmillr/noble-secp256k1/issues/43#issuecomment-1020214968
-  // expect(verifyEncodedURLData(randomSignature, randomEncodedURLData)).toBe(
-  //   false
-  // )
+    await recoverPublicKeyFromEncodedURLData(
+      changedEncodedURLData,
+      encodedSignature
+    )
+  ).not.toBe(publicKey)
 })
