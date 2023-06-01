@@ -43,25 +43,25 @@ type Type = 'community' | 'channel' | 'profile'
 
 type PreviewPageProps = {
   type: Type
-  unverifiedEncodedData?: string | null
+  encodedData?: string | null
   index?: boolean
 } & (
   | {
       type: 'community'
-      unverifiedDecodedData?: ReturnType<typeof decodeCommunityURLData> | null
+      decodedData?: ReturnType<typeof decodeCommunityURLData> | null
     }
   | {
       type: 'channel'
-      unverifiedDecodedData?: ReturnType<typeof decodeChannelURLData> | null
+      decodedData?: ReturnType<typeof decodeChannelURLData> | null
       channelUuid?: string
     }
   | {
       type: 'profile'
-      unverifiedDecodedData?: ReturnType<typeof decodeUserURLData> | null
+      decodedData?: ReturnType<typeof decodeUserURLData> | null
     }
 )
 
-export type VerifiedData =
+export type Data =
   | {
       type: 'community'
       info: CommunityInfo
@@ -93,26 +93,26 @@ const JOIN_BUTTON_LABEL: Record<Type, string> = {
 }
 
 export function PreviewPage(props: PreviewPageProps) {
-  const { type, unverifiedDecodedData, unverifiedEncodedData } = props
+  const { type, decodedData, encodedData } = props
 
   const { asPath } = useRouter()
 
   const toast = useToast()
 
   // todo: default og image, not dynamic
-  // const ogImageUrl = getOgImageUrl(props.unverifiedDecodedData)
+  // const ogImageUrl = getOgImageUrl(props.decodedData)
   // todo?: pass meta, info as component
   // todo?: pass image, color as props
 
   const {
     publicKey,
     channelUuid: urlChannelUuid,
-    verifiedURLData,
+    data: urlData,
     errorCode: urlErrorCode,
-  } = useURLData(type, unverifiedDecodedData, unverifiedEncodedData)
+  } = useURLData(type, decodedData, encodedData)
 
   const {
-    data: verifiedWakuData,
+    data: wakuData,
     isLoading,
     status,
     refetch,
@@ -120,7 +120,7 @@ export function PreviewPage(props: PreviewPageProps) {
     refetchOnWindowFocus: false,
     queryKey: [type],
     enabled: !!publicKey,
-    queryFn: async function ({ queryKey }): Promise<VerifiedData | null> {
+    queryFn: async function ({ queryKey }): Promise<Data | null> {
       const client = await getRequestClient()
 
       switch (queryKey[0]) {
@@ -173,36 +173,35 @@ export function PreviewPage(props: PreviewPageProps) {
         return
       }
 
-      if (verifiedURLData) {
+      if (urlData) {
         toast.custom('Information just updated', <InfoIcon size={20} />)
       }
     },
   })
 
   const loading = status === 'loading' || isLoading
-  const verifiedData: VerifiedData | undefined =
-    verifiedWakuData ?? verifiedURLData
+  const data: Data | undefined = wakuData ?? urlData
 
   const { avatarURL, bannerURL } = useMemo(() => {
-    if (!verifiedData) {
+    if (!data) {
       return {}
     }
 
-    const avatarURL = getAvatarURL(verifiedData)
-    const bannerURL = getBannerURL(verifiedData)
+    const avatarURL = getAvatarURL(data)
+    const bannerURL = getBannerURL(data)
 
     return { avatarURL, bannerURL }
-  }, [verifiedData])
+  }, [data])
 
   if (urlErrorCode) {
     return <ErrorPage errorCode={urlErrorCode} />
   }
 
-  if (!loading && !verifiedData) {
+  if (!loading && !data) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
 
-  if ((loading && !verifiedData) || !verifiedData || !publicKey) {
+  if ((loading && !data) || !data || !publicKey) {
     return (
       <>
         <div className="h-full xl:grid xl:grid-cols-[560px,auto]">
@@ -317,7 +316,7 @@ export function PreviewPage(props: PreviewPageProps) {
         {/* todo: theme; based on user system settings */}
         {/* todo: (system or both?) install banner */}
         <div
-          style={!bannerURL ? getGradientStyles(verifiedData) : undefined}
+          style={!bannerURL ? getGradientStyles(data) : undefined}
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
           <div className="absolute left-0 right-0 top-0 xl:hidden">
@@ -336,54 +335,54 @@ export function PreviewPage(props: PreviewPageProps) {
               {/* HERO */}
               <div className="mb-[32px] xl:mb-[35px]">
                 <div className="mb-2 xl:mb-4">
-                  {verifiedData.type === 'community' && (
+                  {data.type === 'community' && (
                     <Avatar
                       type="community"
-                      name={verifiedData.info.displayName}
+                      name={data.info.displayName}
                       src={avatarURL}
                       size={80}
                     />
                   )}
-                  {verifiedData.type === 'channel' && (
+                  {data.type === 'channel' && (
                     <Avatar
                       type="channel"
-                      name={verifiedData.info.displayName}
-                      emoji={verifiedData.info.emoji}
+                      name={data.info.displayName}
+                      emoji={data.info.emoji}
                       size={80}
-                      // fixme: use `verifiedData.info.color` (e.g. #000000 format)
+                      // fixme: use `data.info.color` (e.g. #000000 format)
                       backgroundColor="$neutral-100"
                     />
                   )}
-                  {verifiedData.type === 'profile' && (
+                  {data.type === 'profile' && (
                     <Avatar
                       type="user"
-                      name={verifiedData.info.displayName}
+                      name={data.info.displayName}
                       src={avatarURL}
                       size={80}
-                      colorHash={verifiedData.info.colorHash}
+                      colorHash={data.info.colorHash}
                     />
                   )}
                 </div>
 
                 <h1 className="mb-3 text-[40px] font-semibold leading-[44px] xl:text-[64px] xl:leading-[68px]">
-                  {verifiedData.type === 'channel' && '#'}
-                  {verifiedData.info.displayName}
+                  {data.type === 'channel' && '#'}
+                  {data.info.displayName}
                 </h1>
                 <p className="mb-4 text-[15px] text-neutral-100 xl:text-[19px]">
-                  {verifiedData.info.description}
+                  {data.info.description}
                 </p>
 
-                {verifiedData.type === 'community' && (
+                {data.type === 'community' && (
                   <>
                     <div className="mb-4 flex items-center gap-1">
                       <MembersIcon size={20} color="$neutral-50" />
                       <Text size={15}>
-                        {formatNumber(verifiedData.info.membersCount)}
+                        {formatNumber(data.info.membersCount)}
                       </Text>
                     </div>
-                    {verifiedData.info.tags?.length > 0 && (
+                    {data.info.tags?.length > 0 && (
                       <div className="flex flex-wrap gap-[6px] xl:gap-[11px]">
-                        {verifiedData.info.tags.map(tag => (
+                        {data.info.tags.map(tag => (
                           <Tag
                             key={tag.emoji + tag.text}
                             size={32}
@@ -395,7 +394,7 @@ export function PreviewPage(props: PreviewPageProps) {
                     )}
                   </>
                 )}
-                {verifiedData.type === 'channel' && (
+                {data.type === 'channel' && (
                   <div className="flex items-center gap-1">
                     <Text size={13} color="$neutral-40">
                       Channel in
@@ -403,18 +402,18 @@ export function PreviewPage(props: PreviewPageProps) {
                     <ContextTag
                       type="community"
                       community={{
-                        name: verifiedData.info.community.displayName,
+                        name: data.info.community.displayName,
                         src: getAvatarURL({
                           type: 'community',
-                          info: verifiedData.info.community as CommunityInfo,
+                          info: data.info.community as CommunityInfo,
                         }),
                       }}
                     />
                   </div>
                 )}
-                {verifiedData.type === 'profile' && (
+                {data.type === 'profile' && (
                   <p className="text-[16px] tracking-[.2em]">
-                    {verifiedData.info.emojiHash}
+                    {data.info.emojiHash}
                   </p>
                 )}
               </div>
@@ -497,9 +496,7 @@ export function PreviewPage(props: PreviewPageProps) {
                 !bannerURL
                   ? {
                       backgroundColor:
-                        'color' in verifiedData.info
-                          ? verifiedData.info.color
-                          : neutral[100],
+                        'color' in data.info ? data.info.color : neutral[100],
                     }
                   : undefined
               }
@@ -527,14 +524,14 @@ const formatNumber = (n: number) => {
   return formatter.format(n)
 }
 
-const getGradientStyles = (data: VerifiedData): CSSProperties => {
+const getGradientStyles = (data: Data): CSSProperties => {
   return {
     // @ts-expect-error CSSProperties do not handle inline CSS variables
     '--gradient-color': 'color' in data.info ? data.info.color : neutral[100],
   }
 }
 
-const getAvatarURL = (data: VerifiedData): string | undefined => {
+const getAvatarURL = (data: Data): string | undefined => {
   let avatar: Uint8Array | undefined
   switch (data.type) {
     case 'community':
@@ -560,7 +557,7 @@ const getAvatarURL = (data: VerifiedData): string | undefined => {
   return url
 }
 
-const getBannerURL = (data: VerifiedData): string | undefined => {
+const getBannerURL = (data: Data): string | undefined => {
   let banner: Uint8Array | undefined
   switch (data.type) {
     case 'community':

@@ -13,8 +13,8 @@ export default function ChannelPreviewPage(
   return (
     <PreviewPage
       type="channel"
-      unverifiedDecodedData={props.unverifiedDecodedData}
-      unverifiedEncodedData={props.uverifiedEncodedData}
+      decodedData={props.decodedData}
+      encodedData={props.encodedData}
       channelUuid={props.channelUuid}
     />
   )

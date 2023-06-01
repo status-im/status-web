@@ -13,8 +13,8 @@ export default function UserPreviewPage(
   return (
     <PreviewPage
       type="profile"
-      unverifiedDecodedData={props.unverifiedDecodedData}
-      unverifiedEncodedData={props.uverifiedEncodedData}
+      decodedData={props.decodedData}
+      encodedData={props.encodedData}
     />
   )
 }

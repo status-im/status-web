@@ -13,17 +13,13 @@ type DecodeType =
 
 export type ServerSideProps<T = ReturnType<DecodeType>> = {
   /**
-   * For verifying on client without decoding or re-encoding.
-   *
-   * Verification in general is done on encoded data, so it is not
-   * decoded, decompressed and deserialized unnecessarily if not to be
-   * displayed or othwerwise needed.
+   * For verifying on client without re-encoding.
    */
-  uverifiedEncodedData: string | null
+  encodedData: string | null
   /**
-   * For instaneous preview even if the data is not verified yet.
+   * For instaneous preview of the content.
    */
-  unverifiedDecodedData: T | null
+  decodedData: T | null
   channelUuid?: string
 }
 
@@ -46,8 +42,8 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
       if (channelUuid) {
         const props: ServerSideProps = {
           channelUuid: channelUuid[0],
-          uverifiedEncodedData: null,
-          unverifiedDecodedData: null,
+          encodedData: null,
+          decodedData: null,
         }
 
         return { props }
@@ -57,8 +53,8 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
 
       if (!encodedData) {
         const props: ServerSideProps = {
-          uverifiedEncodedData: null,
-          unverifiedDecodedData: null,
+          encodedData: null,
+          decodedData: null,
         }
 
         return { props }
@@ -66,8 +62,8 @@ export function createGetServerSideProps(decodeURLData: DecodeType) {
 
       const decodedData = decodeURLData(encodedData)
       const props: ServerSideProps = {
-        uverifiedEncodedData: encodedData,
-        unverifiedDecodedData: decodedData || null,
+        encodedData,
+        decodedData: decodedData || null,
       }
 
       // fixme: set Cache-Control
