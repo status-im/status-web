@@ -116,3 +116,10 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: none;
+}
