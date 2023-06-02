@@ -1,6 +1,6 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Stack, styled } from 'tamagui'
+import { Stack, styled } from '@tamagui/core'
 
 import { usePressableColors } from '../hooks/use-pressable-colors'
 
