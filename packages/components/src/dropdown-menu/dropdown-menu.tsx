@@ -1,6 +1,7 @@
-import { cloneElement } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import {
+  CheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -8,8 +9,9 @@ import {
   Root,
   Trigger,
 } from '@radix-ui/react-dropdown-menu'
-import { styled } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 
+import { Checkbox } from '../selectors'
 import { Text } from '../text'
 
 interface Props {
@@ -35,6 +37,7 @@ interface DropdownMenuItemProps {
   icon: React.ReactElement
   label: string
   onSelect: () => void
+  selected?: boolean
   danger?: boolean
 }
 
@@ -53,6 +56,38 @@ const MenuItem = (props: DropdownMenuItemProps) => {
     </ItemBase>
   )
 }
+
+interface DropdownMenuCheckboxItemProps {
+  icon: React.ReactElement
+  label: string
+  onSelect: () => void
+  checked?: boolean
+  danger?: boolean
+}
+
+const DropdownMenuCheckboxItem = forwardRef<
+  HTMLDivElement,
+  DropdownMenuCheckboxItemProps
+>(function _DropdownMenuCheckboxItem(props, forwardedRef) {
+  const { checked, label, icon, onSelect } = props
+
+  const handleSelect = (event: Event) => {
+    event.preventDefault()
+    onSelect()
+  }
+
+  return (
+    <ItemBaseCheckbox {...props} ref={forwardedRef} onSelect={handleSelect}>
+      <Stack flexDirection="row" gap={8} alignItems="center">
+        {cloneElement(icon, { color: '$neutral-50' })}
+        <Text size={15} weight="medium" color="$neutral-100">
+          {label}
+        </Text>
+      </Stack>
+      <Checkbox id={label} selected={checked} variant="outline" />
+    </ItemBaseCheckbox>
+  )
+})
 
 const Content = styled(DropdownMenuContent, {
   name: 'DropdownMenuContent',
@@ -90,6 +125,30 @@ const ItemBase = styled(DropdownMenuItem, {
   },
 })
 
+const ItemBaseCheckbox = styled(CheckboxItem, {
+  name: 'DropdownMenuCheckboxItem',
+  acceptsClassName: true,
+
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+
+  height: 32,
+  paddingHorizontal: 8,
+  borderRadius: '$10',
+  cursor: 'pointer',
+  userSelect: 'none',
+  gap: 8,
+
+  hoverStyle: {
+    backgroundColor: '$neutral-5',
+  },
+
+  pressStyle: {
+    backgroundColor: '$neutral-10',
+  },
+})
+
 const Separator = styled(DropdownMenuSeparator, {
   name: 'DropdownMenuSeparator',
   acceptsClassName: true,
@@ -104,6 +163,7 @@ const Separator = styled(DropdownMenuSeparator, {
 DropdownMenu.Content = Content
 DropdownMenu.Item = MenuItem
 DropdownMenu.Separator = Separator
+DropdownMenu.CheckboxItem = DropdownMenuCheckboxItem
 
 export { DropdownMenu }
 export type DropdownMenuProps = Omit<Props, 'children'>

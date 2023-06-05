@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
-import { Avatar, Button, Input, Tag, Text } from '@status-im/components'
-import { DropdownMenu } from '@status-im/components/src/dropdown-menu'
-import { DropdownIcon, OpenIcon, SearchIcon } from '@status-im/icons'
+import { Avatar, Button, Tag, Text } from '@status-im/components'
+import { OpenIcon } from '@status-im/icons'
 import Link from 'next/link'
+
+import { FilterAuthor } from './filters/filter-author'
 
 const issues = [
   {
@@ -92,11 +93,6 @@ const authors = [
 export const TableIssues = () => {
   const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
 
-  const [authorFilterText, setAuthorFilterText] = useState('')
-  const filteredAuthors = authors.filter(author =>
-    author.name.toLowerCase().includes(authorFilterText.toLowerCase())
-  )
-
   return (
     <div className="border-neutral-10  overflow-hidden rounded-2xl border">
       <div className="bg-neutral-5 border-neutral-10 flex border-b p-3">
@@ -123,48 +119,7 @@ export const TableIssues = () => {
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-end">
-            <div className="pr-3">
-              <DropdownMenu>
-                <Button
-                  size={32}
-                  variant="outline"
-                  iconAfter={<DropdownIcon size={20} />}
-                >
-                  Author
-                </Button>
-                <DropdownMenu.Content sideOffset={10} align="end">
-                  <div className="p-2 px-1">
-                    <Input
-                      placeholder="Find Author"
-                      icon={<SearchIcon size={20} />}
-                      size={32}
-                      value={authorFilterText}
-                      onChangeText={setAuthorFilterText}
-                    />
-                  </div>
-                  {filteredAuthors.map(author => (
-                    <DropdownMenu.Item
-                      key={author.id}
-                      icon={
-                        <Avatar
-                          name={author.name}
-                          src={author.avatar}
-                          size={16}
-                          type="user"
-                        />
-                      }
-                      label={author.name}
-                      onSelect={() => alert('Author: ' + author.name)}
-                    />
-                  ))}
-                  {filteredAuthors.length === 0 && (
-                    <div className="p-2 py-1">
-                      <Text size={13}> No authors found</Text>
-                    </div>
-                  )}
-                </DropdownMenu.Content>
-              </DropdownMenu>
-            </div>
+            <FilterAuthor authors={authors} />
             <div className="pr-3">
               <Button size={32} variant="ghost">
                 Filter

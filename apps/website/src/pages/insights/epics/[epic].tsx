@@ -1,6 +1,4 @@
-import { Breadcrumbs } from '@/components'
-import { EpicOverview } from '@/components/epic-overview'
-import { TableIssues } from '@/components/table-issues'
+import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
 import { InsightsLayout } from '@/layouts/insights-layout'
 
 import type { Page } from 'next'
