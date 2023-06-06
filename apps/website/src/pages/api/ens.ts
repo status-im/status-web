@@ -2,9 +2,13 @@ import { getEthereumClient } from '@/lib/ethereum-client'
 
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+export type EnsResponse = {
+  publicKey: string
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<EnsResponse>
 ) {
   const { ensName, compress } = JSON.parse(req.body)
 
