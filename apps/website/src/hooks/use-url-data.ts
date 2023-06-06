@@ -13,6 +13,7 @@ import {
 import { ERROR_CODES } from '@/consts/error-codes'
 
 import type { Data } from '@/components/preview-page'
+import type { EnsResponse } from '@/pages/api/ens'
 import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 import type {
   decodeChannelURLData,
@@ -59,27 +60,24 @@ export const useURLData = (
         // recover public key from ENS name
         const ensName = hash.match(/^.+\.eth$/)?.[0]
         if (ensName) {
-          setIsLoading(true)
-          fetch('/api/ens', {
-            method: 'POST',
-            body: JSON.stringify({ ensName, compress: compressPublicKey }),
-          })
-            .then(res => res.json())
-            .then(({ publicKey }) => {
-              if (!publicKey) {
-                setError('INVALID_ENS_NAME')
-                setIsLoading(false)
-
-                return
-              }
+          const fetchEnsPubkey = async () => {
+            try {
+              const response = await fetch('/api/ens', {
+                method: 'POST',
+                body: JSON.stringify({ ensName, compress: compressPublicKey }),
+              })
+              const { publicKey } = (await response.json()) as EnsResponse
 
               setPublicKey(publicKey)
-              setIsLoading(false)
-            })
-            .catch(() => {
+            } catch {
               setError('INVALID_ENS_NAME')
-              setIsLoading(false)
-            })
+            }
+
+            setIsLoading(false)
+          }
+
+          setIsLoading(true)
+          fetchEnsPubkey()
 
           return
         }
