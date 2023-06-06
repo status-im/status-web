@@ -8,7 +8,10 @@ export class EthereumClient {
     this.provider = new ethers.JsonRpcProvider(url)
   }
 
-  async resolveChatKey(ensName: string): Promise<string | undefined> {
+  async resolvePublicKey(
+    ensName: string,
+    options: { compress: boolean }
+  ): Promise<string | undefined> {
     try {
       const resolver = await this.provider.getResolver(ensName)
 
@@ -32,7 +35,7 @@ export class EthereumClient {
       const point = new Point(px, py)
       point.assertValidity()
 
-      const hex = point.toHex(true)
+      const hex = point.toHex(options.compress)
 
       return `0x${hex}`
     } catch {
