@@ -26,11 +26,7 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'es2020',
       lib: {
-        entry: [
-          './src/index.ts',
-          './src/utils/encode-url-data.ts',
-          './src/utils/encode-url-hash.ts',
-        ],
+        entry: ['./src/index.ts', './src/utils/encode-url-data.ts'],
         fileName: (format, entryName) => {
           if (!['es'].includes(format)) {
             throw new Error(`Unexpected format: ${format}`)

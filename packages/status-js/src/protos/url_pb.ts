@@ -268,61 +268,6 @@ export class User extends Message<User> {
 }
 
 /**
- * @generated from message Verification
- */
-export class Verification extends Message<Verification> {
-  /**
-   * @generated from field: string signature = 1;
-   */
-  signature = ''
-
-  /**
-   * @generated from field: string public_key = 2;
-   */
-  publicKey = ''
-
-  constructor(data?: PartialMessage<Verification>) {
-    super()
-    proto3.util.initPartial(data, this)
-  }
-
-  static readonly runtime = proto3
-  static readonly typeName = 'Verification'
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: 'signature', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
-    { no: 2, name: 'public_key', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
-  ])
-
-  static fromBinary(
-    bytes: Uint8Array,
-    options?: Partial<BinaryReadOptions>
-  ): Verification {
-    return new Verification().fromBinary(bytes, options)
-  }
-
-  static fromJson(
-    jsonValue: JsonValue,
-    options?: Partial<JsonReadOptions>
-  ): Verification {
-    return new Verification().fromJson(jsonValue, options)
-  }
-
-  static fromJsonString(
-    jsonString: string,
-    options?: Partial<JsonReadOptions>
-  ): Verification {
-    return new Verification().fromJsonString(jsonString, options)
-  }
-
-  static equals(
-    a: Verification | PlainMessage<Verification> | undefined,
-    b: Verification | PlainMessage<Verification> | undefined
-  ): boolean {
-    return proto3.util.equals(Verification, a, b)
-  }
-}
-
-/**
  * @generated from message URLData
  */
 export class URLData extends Message<URLData> {
@@ -370,57 +315,6 @@ export class URLData extends Message<URLData> {
     b: URLData | PlainMessage<URLData> | undefined
   ): boolean {
     return proto3.util.equals(URLData, a, b)
-  }
-}
-
-/**
- * @generated from message URLHash
- */
-export class URLHash extends Message<URLHash> {
-  /**
-   * Verification
-   *
-   * @generated from field: bytes content = 1;
-   */
-  content = new Uint8Array(0)
-
-  constructor(data?: PartialMessage<URLHash>) {
-    super()
-    proto3.util.initPartial(data, this)
-  }
-
-  static readonly runtime = proto3
-  static readonly typeName = 'URLHash'
-  static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: 'content', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
-  ])
-
-  static fromBinary(
-    bytes: Uint8Array,
-    options?: Partial<BinaryReadOptions>
-  ): URLHash {
-    return new URLHash().fromBinary(bytes, options)
-  }
-
-  static fromJson(
-    jsonValue: JsonValue,
-    options?: Partial<JsonReadOptions>
-  ): URLHash {
-    return new URLHash().fromJson(jsonValue, options)
-  }
-
-  static fromJsonString(
-    jsonString: string,
-    options?: Partial<JsonReadOptions>
-  ): URLHash {
-    return new URLHash().fromJsonString(jsonString, options)
-  }
-
-  static equals(
-    a: URLHash | PlainMessage<URLHash> | undefined,
-    b: URLHash | PlainMessage<URLHash> | undefined
-  ): boolean {
-    return proto3.util.equals(URLHash, a, b)
   }
 }
 

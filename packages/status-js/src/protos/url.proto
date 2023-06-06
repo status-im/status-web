@@ -23,19 +23,9 @@ message User {
  string color = 3;
 }
 
-message Verification {
-	string signature = 1;
-	string public_key = 2;
-}
-
 message URLData {
  // Community, Channel, or User
  bytes content = 1;
-}
-
-message URLHash {
-	// Verification
-	bytes content = 1;
 }
 
 message URLParams {

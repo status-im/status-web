@@ -21,17 +21,6 @@ export const ErrorPage = (props: Props) => {
         </div>
       )
 
-    // todo!: design review, not in designs
-    case ERROR_CODES.UNVERIFIED_CONTENT:
-      return (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-8 bg-white text-center">
-          <div className="h-[160px] w-[160px] rounded-full bg-[#ffd455]" />
-          <Text size={27} weight="semibold">
-            Unverified content.
-          </Text>
-        </div>
-      )
-
     case ERROR_CODES.INTERNAL_SERVER_ERROR:
     default:
       return (

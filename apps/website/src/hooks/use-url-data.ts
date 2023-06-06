@@ -7,13 +7,12 @@ import {
   indicesToTags,
   publicKeyToColorHash,
   publicKeyToEmojiHash,
-  verifyEncodedURLData,
+  recoverPublicKeyFromEncodedURLData,
 } from '@status-im/js'
-import { decodeVerificationURLHash } from '@status-im/js/encode-url-hash'
 
 import { ERROR_CODES } from '@/consts/error-codes'
 
-import type { VerifiedData } from '@/components/preview-page'
+import type { Data } from '@/components/preview-page'
 import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 import type {
   decodeChannelURLData,
@@ -23,17 +22,17 @@ import type {
 
 export const useURLData = (
   type: 'community' | 'channel' | 'profile',
-  unverifiedDecodedData:
+  decodedData:
     | ReturnType<typeof decodeCommunityURLData>
     | ReturnType<typeof decodeChannelURLData>
     | ReturnType<typeof decodeUserURLData>
     | undefined
     | null,
-  unverifiedEncodedData: string | undefined | null
+  encodedData: string | undefined | null
 ) => {
   const [publicKey, setPublicKey] = useState<string>()
   const [channelUuid, setChannelUuid] = useState<string>()
-  const [info, setInfo] = useState<VerifiedData>()
+  const [data, setData] = useState<Data>()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
 
   const compressPublicKey = type !== 'profile'
@@ -46,9 +45,10 @@ export const useURLData = (
       //   return
       // }
 
-      if (!unverifiedDecodedData || !unverifiedEncodedData) {
-        const hash = window.location.hash.replace('#', '')
+      const hash = window.location.hash.replace('#', '')
 
+      // use provided public key
+      if (!decodedData || !encodedData) {
         if (!hash) {
           setError('NOT_FOUND')
 
@@ -61,37 +61,39 @@ export const useURLData = (
           })
 
           setPublicKey(publicKey)
+
+          return
         } catch (error) {
           console.error(error)
           setError('INVALID_PUBLIC_KEY')
+
+          return
         }
+      }
+
+      // recover public key
+      let deserializedPublicKey
+      try {
+        const recoveredPublicKey = recoverPublicKeyFromEncodedURLData(
+          encodedData,
+          hash
+        )
+        deserializedPublicKey = deserializePublicKey(recoveredPublicKey, {
+          compress: compressPublicKey,
+        })
+
+        setPublicKey(deserializedPublicKey)
+      } catch (error) {
+        console.error(error)
+        setError('INVALID_PUBLIC_KEY')
 
         return
       }
 
-      const hash = window.location.hash.replace('#', '')
-      const { signature, publicKey } = decodeVerificationURLHash(hash)
-
-      if (!signature || !publicKey) {
-        setError('UNVERIFIED_CONTENT')
-
-        return
-      }
-
-      if (!verifyEncodedURLData(unverifiedEncodedData, hash)) {
-        setError('UNVERIFIED_CONTENT')
-
-        return
-      }
-
-      const deserializedPublicKey = deserializePublicKey(publicKey, {
-        compress: compressPublicKey,
-      })
-
-      const verifiedDecodedData = unverifiedDecodedData
+      // map data
       switch (type) {
         case 'community': {
-          const data = verifiedDecodedData as Required<
+          const data = decodedData as Required<
             ReturnType<typeof decodeCommunityURLData>
           >
           const info: CommunityInfo = {
@@ -102,12 +104,12 @@ export const useURLData = (
             tags: indicesToTags(data.tagIndices),
           }
 
-          setInfo({ type: 'community', info })
+          setData({ type: 'community', info })
 
-          break
+          return
         }
         case 'channel': {
-          const data = verifiedDecodedData as Required<
+          const data = decodedData as Required<
             ReturnType<typeof decodeChannelURLData>
           >
           const info: Omit<ChannelInfo, 'community'> & {
@@ -120,13 +122,13 @@ export const useURLData = (
             community: { displayName: data.community.displayName },
           }
 
-          setInfo({ type: 'channel', info })
+          setData({ type: 'channel', info })
           setChannelUuid(data.uuid)
 
-          break
+          return
         }
         case 'profile': {
-          const data = verifiedDecodedData as Required<
+          const data = decodedData as Required<
             ReturnType<typeof decodeUserURLData>
           >
           const info: UserInfo = {
@@ -136,13 +138,11 @@ export const useURLData = (
             emojiHash: publicKeyToEmojiHash(deserializedPublicKey),
           }
 
-          setInfo({ type: 'profile', info })
+          setData({ type: 'profile', info })
 
-          break
+          return
         }
       }
-
-      setPublicKey(deserializedPublicKey)
     } catch (error) {
       console.error(error)
       setError('INTERNAL_SERVER_ERROR')
@@ -152,7 +152,7 @@ export const useURLData = (
   return {
     publicKey,
     channelUuid,
-    verifiedURLData: info,
+    data,
     errorCode: error ? ERROR_CODES[error] : undefined,
   }
 }
