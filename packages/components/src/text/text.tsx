@@ -12,7 +12,7 @@ type Weight = NonNullable<Variants['weight']>
 
 type Props = {
   children: React.ReactNode
-  color?: ColorTokens
+  color?: ColorTokens | string
   truncate?: boolean
   wrap?: false
 } & (

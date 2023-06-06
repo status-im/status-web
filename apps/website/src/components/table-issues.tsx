@@ -56,10 +56,10 @@ export const TableIssues = () => {
 
             <div className="flex gap-3">
               <div className="flex gap-1">
-                <Tag size={24} label="E:Syncing" />
-                <Tag size={24} label="E:Wallet" />
-                <Tag size={24} label="Feature" />
-                <Tag size={24} label="Web" />
+                <Tag size={24} label="E:Syncing" color="$orange-50" />
+                <Tag size={24} label="E:Wallet" color="$green-50" />
+                <Tag size={24} label="Feature" color="$pink-50" />
+                <Tag size={24} label="Web" color="$purple-50" />
               </div>
 
               <Tag size={24} label="9435" />

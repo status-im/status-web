@@ -1,3 +1,4 @@
+import { NftIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Tag } from './tag'
@@ -26,6 +27,7 @@ export const Default: Story = {
           <Tag icon="🐷" label="Tag" size={32} selected />
           <Tag icon="🐷" label="Tag" size={32} disabled />
           <Tag icon="🐷" size={32} />
+          <Tag icon={NftIcon} size={32} label="bajoras" />
 
           <Tag icon="🐷" label="Tag" size={24} />
           <Tag icon="🐷" size={24} />
@@ -37,6 +39,19 @@ export const Default: Story = {
           <Tag label="Tag" size={32} disabled />
 
           <Tag label="Tag" size={24} />
+          <Tag label="New tag" size={24} disabled selected />
+          <Tag label="New tag" size={24} color="#FF7D46" />
+
+          <Tag label="New tag #7140FD" size={24} color="#BA34F5" />
+          <Tag label="New tag #7140FD" size={24} color="#7140FD" icon="🧙‍♂️" />
+
+          <Tag
+            label="custom color purple"
+            size={24}
+            icon="🐷"
+            color="$purple-50"
+          />
+          <Tag label="New tag with icon" size={24} color="#FF7D46" icon="🥷🏾" />
         </Stack>
       </Stack>
     )

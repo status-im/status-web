@@ -133,7 +133,7 @@ const ChartComponent = (props: Props): JSX.Element => {
               return {
                 dy: '.33em',
                 fill: '#A1ABBD',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'Menlo',
                 fontSize: 11,
                 textAnchor,
               }
@@ -161,6 +161,7 @@ const ChartComponent = (props: Props): JSX.Element => {
                 {...tickProps}
                 fill="#A1ABBD"
                 fontSize={11}
+                fontFamily="Menlo"
                 textAnchor="middle"
                 dx="-1em"
               >

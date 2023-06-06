@@ -3,9 +3,11 @@ import { createElement } from 'react'
 import { Stack, styled } from '@tamagui/core'
 
 import { Text } from '../text'
+import { getCustomStyles } from './get-custom-styles'
 
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
+import type { ColorTokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
 
 type Props = {
@@ -14,6 +16,8 @@ type Props = {
   label?: string
   selected?: boolean
   disabled?: boolean
+  onPress?: () => void
+  color?: ColorTokens | `#${string}`
 }
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
@@ -27,7 +31,7 @@ const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
 }
 
 const Tag = (props: Props) => {
-  const { size, icon, label, selected, disabled } = props
+  const { size, icon, label, selected, disabled, onPress, color } = props
 
   const renderIcon = () => {
     if (!icon) {
@@ -47,10 +51,12 @@ const Tag = (props: Props) => {
       selected={selected}
       disabled={disabled}
       iconOnly={Boolean(icon && !label)}
+      onPress={() => onPress?.()}
+      {...getCustomStyles(props)}
     >
       {renderIcon()}
       {label && (
-        <Text size={textSizes[size]} weight="medium">
+        <Text size={textSizes[size]} weight="medium" {...(color && { color })}>
           {label}
         </Text>
       )}
@@ -62,6 +68,10 @@ export { Tag }
 export type { Props as TagProps }
 
 const Base = styled(Stack, {
+  tag: 'tag',
+  name: 'Tag',
+  accessibilityRole: 'button',
+
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -70,6 +80,18 @@ const Base = styled(Stack, {
   borderColor: '$neutral-20',
   borderRadius: '$full',
   backgroundColor: '$white-100',
+
+  animation: 'fast',
+  cursor: 'pointer',
+
+  hoverStyle: {
+    borderColor: '$neutral-30',
+    backgroundColor: '$neutral-5',
+  },
+  pressStyle: {
+    borderColor: '$neutral-30',
+    backgroundColor: '$neutral-5',
+  },
 
   variants: {
     size: {
@@ -86,11 +108,19 @@ const Base = styled(Stack, {
         gap: 5,
       },
     },
-
     selected: {
       true: {
         backgroundColor: '$primary-50-opa-10',
         borderColor: '$primary-50',
+
+        hoverStyle: {
+          backgroundColor: '$primary-50-opa-20',
+          borderColor: '$primary-60',
+        },
+        pressStyle: {
+          backgroundColor: '$primary-50-opa-20',
+          borderColor: '$primary-60',
+        },
       },
     },
 

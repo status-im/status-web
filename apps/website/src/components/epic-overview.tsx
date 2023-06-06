@@ -56,41 +56,6 @@ const DATA = [
     open_issues: 10,
     closed_issues: 130,
   },
-  {
-    date: '2022-02-04',
-    open_issues: 10,
-    closed_issues: 140,
-  },
-  {
-    date: '2022-02-05',
-    open_issues: 10,
-    closed_issues: 150,
-  },
-  {
-    date: '2022-02-06',
-    open_issues: 10,
-    closed_issues: 160,
-  },
-  {
-    date: '2022-02-07',
-    open_issues: 10,
-    closed_issues: 180,
-  },
-  {
-    date: '2022-02-08',
-    open_issues: 10,
-    closed_issues: 190,
-  },
-  {
-    date: '2022-02-09',
-    open_issues: 10,
-    closed_issues: 200,
-  },
-  {
-    date: '2022-02-10',
-    open_issues: 0,
-    closed_issues: 220,
-  },
 ]
 
 type Props = {
@@ -126,20 +91,20 @@ export const EpicOverview = (props: Props) => {
         {description}
       </Text>
       <div className="flex py-3">
-        <Tag size={24} label="E:CommunitiesProtocol" />
+        <Tag size={24} label="E:CommunitiesProtocol" color="$blue-50" />
       </div>
 
       <Chart data={DATA} height={300} isLoading={isLoading} />
 
       <div className="flex justify-between pt-3">
         <div className="flex gap-1">
-          <Tag size={24} label="Communities" />
-          <Tag size={24} label="Wallet" />
+          <Tag size={24} label="Communities" color="#FF7D46" icon="🧙‍♂️" />
+          <Tag size={24} label="Wallet" color="#7140FD" icon="🎎" />
         </div>
 
         <div className="flex gap-1">
-          <Tag size={24} label="M:0.11.0" />
-          <Tag size={24} label="M:0.12.0" />
+          <Tag size={24} label="M:0.11.0" color="$danger-50" />
+          <Tag size={24} label="M:0.12.0" color="$success-50" />
         </div>
       </div>
     </div>
