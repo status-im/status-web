@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
-import { Avatar, Button, Tag, Text } from '@status-im/components'
-import { OpenIcon } from '@status-im/icons'
+import { Avatar, Button, Input, Tag, Text } from '@status-im/components'
+import { OpenIcon, SearchIcon } from '@status-im/icons'
 import Link from 'next/link'
 
 import { FilterAuthor } from './filters/filter-author'
+
+import type { TextInput } from 'react-native'
 
 const issues = [
   {
@@ -93,6 +95,10 @@ const authors = [
 export const TableIssues = () => {
   const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
 
+  const [issuesSearchText, setIssuesSearchText] = useState('')
+  const inputRef = useRef<TextInput>(null)
+  const [isMinimized, setIsMinimized] = useState(true)
+
   return (
     <div className="border-neutral-10  overflow-hidden rounded-2xl border">
       <div className="bg-neutral-5 border-neutral-10 flex border-b p-3">
@@ -119,6 +125,19 @@ export const TableIssues = () => {
         </div>
         <div className="flex-1">
           <div className="flex items-center justify-end">
+            <div className="flex px-1">
+              <Input
+                placeholder="Find Author"
+                icon={<SearchIcon size={20} />}
+                size={32}
+                value={issuesSearchText}
+                onChangeText={setIssuesSearchText}
+                onHandleMinimized={() => setIsMinimized(!isMinimized)}
+                minimized={isMinimized}
+                direction="rtl"
+                ref={inputRef}
+              />
+            </div>
             <FilterAuthor authors={authors} />
             <div className="pr-3">
               <Button size={32} variant="ghost">
