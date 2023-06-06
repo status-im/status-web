@@ -34,6 +34,7 @@ export const useURLData = (
   const [channelUuid, setChannelUuid] = useState<string>()
   const [data, setData] = useState<Data>()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const compressPublicKey = type !== 'profile'
 
@@ -47,7 +48,7 @@ export const useURLData = (
 
       const hash = window.location.hash.replace('#', '')
 
-      // use provided public key
+      // use provided public key or recover it from ENS name
       if (!decodedData || !encodedData) {
         if (!hash) {
           setError('NOT_FOUND')
@@ -55,6 +56,35 @@ export const useURLData = (
           return
         }
 
+        // recover public key from ENS name
+        const ensName = hash.match(/^.+\.eth$/)?.[0]
+        if (ensName) {
+          setIsLoading(true)
+          fetch('/api/ens', {
+            method: 'POST',
+            body: JSON.stringify({ ensName, compress: compressPublicKey }),
+          })
+            .then(res => res.json())
+            .then(({ publicKey }) => {
+              if (!publicKey) {
+                setError('INVALID_ENS_NAME')
+                setIsLoading(false)
+
+                return
+              }
+
+              setPublicKey(publicKey)
+              setIsLoading(false)
+            })
+            .catch(() => {
+              setError('INVALID_ENS_NAME')
+              setIsLoading(false)
+            })
+
+          return
+        }
+
+        // use provided public key
         try {
           const publicKey = deserializePublicKey(hash, {
             compress: compressPublicKey,
@@ -71,7 +101,7 @@ export const useURLData = (
         }
       }
 
-      // recover public key
+      // recover public key from encoded data
       let deserializedPublicKey
       try {
         const recoveredPublicKey = recoverPublicKeyFromEncodedURLData(
@@ -154,5 +184,6 @@ export const useURLData = (
     channelUuid,
     data,
     errorCode: error ? ERROR_CODES[error] : undefined,
+    isLoading,
   }
 }
