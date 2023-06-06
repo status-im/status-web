@@ -79,7 +79,7 @@ const DropdownMenuCheckboxItem = forwardRef<
   return (
     <ItemBaseCheckbox {...props} ref={forwardedRef} onSelect={handleSelect}>
       <Stack flexDirection="row" gap={8} alignItems="center">
-        {cloneElement(icon, { color: '$neutral-50' })}
+        {cloneElement(icon)}
         <Text size={15} weight="medium" color="$neutral-100">
           {label}
         </Text>

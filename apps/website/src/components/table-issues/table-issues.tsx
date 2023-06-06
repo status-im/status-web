@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react'
 
 import { Avatar, Button, Input, Tag, Text } from '@status-im/components'
-import { OpenIcon, SearchIcon } from '@status-im/icons'
+import { SearchIcon } from '@status-im/icons'
 import Link from 'next/link'
 
-import { FilterAuthor } from './filters/filter-author'
+import { FilterWithCheckboxes, Tabs } from './filters'
 
+import type { FilterWithCheckboxesProps } from './filters/filter-with-checkboxes'
 import type { TextInput } from 'react-native'
 
 const issues = [
@@ -51,25 +52,7 @@ const issues = [
   },
 ]
 
-const authors = [
-  {
-    id: 1,
-    name: 'Tobias',
-    avatar:
-      'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
-  },
-  {
-    id: 2,
-    name: 'Arnold',
-    avatar:
-      'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
-  },
-  {
-    id: 3,
-    name: 'Alisher',
-    avatar:
-      'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
-  },
+const authors: FilterWithCheckboxesProps['data'] = [
   {
     id: 4,
     name: 'marcelines',
@@ -92,9 +75,53 @@ const authors = [
   },
 ]
 
-export const TableIssues = () => {
-  const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
+const epics: FilterWithCheckboxesProps['data'] = [
+  {
+    id: 4,
+    name: 'E:ActivityCenter',
+    color: '$orange-60',
+  },
+  {
+    id: 5,
+    name: 'E:Keycard',
+    color: '$purple-60',
+  },
+  {
+    id: 6,
+    name: 'E:Wallet',
+    color: '$pink-60',
+  },
+  {
+    id: 7,
+    name: 'E:Chat',
+    color: '$beige-60',
+  },
+]
 
+const labels: FilterWithCheckboxesProps['data'] = [
+  {
+    id: 4,
+    name: 'Mobile',
+    color: '$blue-60',
+  },
+  {
+    id: 5,
+    name: 'Frontend',
+    color: '$brown-50',
+  },
+  {
+    id: 6,
+    name: 'Backend',
+    color: '$red-60',
+  },
+  {
+    id: 7,
+    name: 'Desktop',
+    color: '$green-60',
+  },
+]
+
+export const TableIssues = () => {
   const [issuesSearchText, setIssuesSearchText] = useState('')
   const inputRef = useRef<TextInput>(null)
   const [isMinimized, setIsMinimized] = useState(true)
@@ -102,30 +129,10 @@ export const TableIssues = () => {
   return (
     <div className="border-neutral-10  overflow-hidden rounded-2xl border">
       <div className="bg-neutral-5 border-neutral-10 flex border-b p-3">
-        <div className="flex">
-          <div className="pr-3">
-            <Button
-              size={32}
-              variant={activeTab === 'open' ? 'darkGrey' : 'grey'}
-              onPress={() => setActiveTab('open')}
-              icon={<OpenIcon size={20} />}
-            >
-              784 Open
-            </Button>
-          </div>
-          <div className="pr-3">
-            <Button
-              size={32}
-              variant={activeTab === 'closed' ? 'darkGrey' : 'grey'}
-              onPress={() => setActiveTab('closed')}
-            >
-              1012 closed
-            </Button>
-          </div>
-        </div>
+        <Tabs />
         <div className="flex-1">
           <div className="flex items-center justify-end">
-            <div className="flex px-1">
+            <div className="pr-2">
               <Input
                 placeholder="Find Author"
                 icon={<SearchIcon size={20} />}
@@ -138,17 +145,22 @@ export const TableIssues = () => {
                 ref={inputRef}
               />
             </div>
-            <FilterAuthor authors={authors} />
-            <div className="pr-3">
-              <Button size={32} variant="ghost">
-                Filter
-              </Button>
-            </div>
-            <div className="pr-3">
-              <Button size={32} variant="ghost">
-                Sort
-              </Button>
-            </div>
+            <FilterWithCheckboxes
+              data={authors}
+              label="Author"
+              noResultsText="No author found"
+            />
+            <FilterWithCheckboxes
+              data={epics}
+              label="Epics"
+              noResultsText="No epics found"
+            />
+            <FilterWithCheckboxes
+              data={labels}
+              label="Label"
+              noResultsText="No labels found"
+              noPadding
+            />
           </div>
         </div>
       </div>
