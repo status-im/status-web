@@ -1,15 +1,11 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
-import { envSchema } from 'env.mjs'
+import type { env } from './src/config/env.mjs'
 
-/* eslint-enable @typescript-eslint/consistent-type-imports */
-import type { z } from 'zod'
-
-type EnvSchemaType = z.infer<typeof envSchema>
+type Env = typeof env
 
 declare global {
   namespace NodeJS {
     /* eslint-disable @typescript-eslint/no-empty-interface */
-    interface ProcessEnv extends EnvSchemaType {}
+    interface ProcessEnv extends Env {}
     /* eslint-enable @typescript-eslint/no-empty-interface */
   }
 }
