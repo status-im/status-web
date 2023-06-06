@@ -3,6 +3,10 @@
 import tamagui_next_plugin from '@tamagui/next-plugin'
 import { join } from 'node:path'
 
+import { envSchema } from './env.mjs'
+
+envSchema.parse(process.env)
+
 const { withTamagui } = tamagui_next_plugin
 
 /** @type {import('next').NextConfig} */
