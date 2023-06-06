@@ -1,10 +1,29 @@
 import { Button, Shadow, Tag, Text } from '@status-im/components'
 
+import { Link } from '@/components/link'
 import { AppLayout } from '@/layouts/app-layout'
+import { getPosts } from '@/lib/ghost'
 
-import type { Page } from 'next'
+import type { PostOrPage } from '@tryghost/content-api'
+import type { GetStaticProps, InferGetStaticPropsType, Page } from 'next'
 
-const BlogPage: Page = () => {
+export const getStaticProps: GetStaticProps<{
+  posts: PostOrPage[]
+}> = async () => {
+  const posts = await getPosts()
+
+  return {
+    props: {
+      posts,
+    },
+  }
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticProps>
+
+const BlogPage: Page<Props> = props => {
+  const { posts } = props
+
   return (
     <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
       <div className="mx-auto max-w-[1184px] py-32">
@@ -15,8 +34,8 @@ const BlogPage: Page = () => {
 
         <div>
           <div className="mt-16 grid grid-cols-3 gap-5">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(v => (
-              <PostCard key={v} />
+            {posts.map(post => (
+              <PostCard key={post.id} post={post} />
             ))}
           </div>
         </div>
@@ -29,37 +48,47 @@ const BlogPage: Page = () => {
   )
 }
 
-const PostCard = () => {
+type PostCardProps = {
+  post: PostOrPage
+}
+
+const PostCard = (props: PostCardProps) => {
+  const { post } = props
+
   return (
-    <Shadow className="border-neutral-5 rounded-[20px] border">
-      <div className="flex flex-col gap-2 p-4">
-        <div className="self-start">
-          <Tag size={24} label="Updates" />
-        </div>
-        <Text size={19} weight="semibold">
-          Long form articles, thoughts, and ideas.
-        </Text>
-        <div className="flex gap-1">
-          <Text size={15} weight="semibold">
-            Status
+    <Link href={`/blog/${post.slug}`}>
+      <Shadow className="border-neutral-5 rounded-[20px] border">
+        <div className="flex flex-col gap-2 p-4">
+          <div className="self-start">
+            {post.primary_tag && (
+              <Tag size={24} label={post.primary_tag.name!} />
+            )}
+          </div>
+          <Text size={19} weight="semibold">
+            {post.title}
           </Text>
-          <Text size={15} color="$neutral-50">
-            on Jul 12, 2022
-          </Text>
+          <div className="flex gap-1">
+            <Text size={15} weight="semibold">
+              Status
+            </Text>
+            <Text size={15} color="$neutral-50">
+              on {post.published_at}
+            </Text>
+          </div>
         </div>
-      </div>
-      <div className="px-2 pb-2">
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <img
-          className="rounded-2xl"
-          style={{
-            aspectRatio: '366/206',
-            objectFit: 'cover',
-          }}
-          src="https://images.unsplash.com/photo-1683053243792-28e9d984c25a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1780&q=80"
-        />
-      </div>
-    </Shadow>
+        <div className="px-2 pb-2">
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <img
+            className="rounded-2xl"
+            style={{
+              aspectRatio: '366/206',
+              objectFit: 'cover',
+            }}
+            src={post.feature_image!}
+          />
+        </div>
+      </Shadow>
+    </Link>
   )
 }
 
