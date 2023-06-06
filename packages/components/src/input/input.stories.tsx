@@ -69,6 +69,7 @@ const InputSearchMinimzed = () => {
         icon={<SearchIcon size={20} />}
         onClear={() => setValue('')}
         size={32}
+        direction="rtl"
         minimized={isMinimized}
         ref={inputRef}
       />
