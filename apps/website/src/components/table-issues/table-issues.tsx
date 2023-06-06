@@ -145,22 +145,9 @@ export const TableIssues = () => {
                 ref={inputRef}
               />
             </div>
-            <FilterWithCheckboxes
-              data={authors}
-              label="Author"
-              noResultsText="No author found"
-            />
-            <FilterWithCheckboxes
-              data={epics}
-              label="Epics"
-              noResultsText="No epics found"
-            />
-            <FilterWithCheckboxes
-              data={labels}
-              label="Label"
-              noResultsText="No labels found"
-              noPadding
-            />
+            <FilterWithCheckboxes data={authors} label="Author" />
+            <FilterWithCheckboxes data={epics} label="Epics" />
+            <FilterWithCheckboxes data={labels} label="Label" noPadding />
           </div>
         </div>
       </div>

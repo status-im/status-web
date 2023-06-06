@@ -16,11 +16,10 @@ type Props = {
     color?: ColorTokens | `#${string}`
   }[]
   label: string
-  noResultsText?: string
   noPadding?: boolean
 }
 const FilterWithCheckboxes = (props: Props) => {
-  const { data, label, noResultsText, noPadding } = props
+  const { data, label, noPadding } = props
 
   const [filterText, setFilterText] = useState('')
 
@@ -91,8 +90,24 @@ const FilterWithCheckboxes = (props: Props) => {
             )
           })}
           {filteredData.length === 0 && (
-            <div className="p-2 py-1">
-              <Text size={13}>{noResultsText}</Text>
+            <div className="flex flex-col items-center justify-center p-2 py-1">
+              <img
+                className="pb-3 invert"
+                alt="No results"
+                src={'/assets/filters/empty.png'}
+                width={80}
+                height={80}
+              />
+              <div className="pb-[2px]">
+                <Text size={15} weight="semibold">
+                  No options found
+                </Text>
+              </div>
+              <div className="text-center">
+                <Text size={13}>
+                  We didn&apos;t find results that match your search
+                </Text>
+              </div>
             </div>
           )}
         </DropdownMenu.Content>
