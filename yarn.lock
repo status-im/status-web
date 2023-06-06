@@ -7776,7 +7776,7 @@
   integrity sha512-0QhaE5mhaQbFlip4MX7n1nwCX8gax6Da1LsP2fZ/BU6xW9zyEmV6NX7DPelDxq1rr2NiBJh30vx9RIp80YeA/A==
   dependencies:
     "@use-gesture/core" "10.2.26"
-    
+
 "@vercel/og@^0.5.4":
   version "0.5.4"
   resolved "https://registry.yarnpkg.com/@vercel/og/-/og-0.5.4.tgz#71de6335b94d0032b325936337c0259d85b9de19"
