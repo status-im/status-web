@@ -171,7 +171,7 @@ const InputContainer = styled(Stack, {
 
   paddingHorizontal: 12,
 
-  animation: 'medium',
+  animation: 'fast',
   width: '100%',
 
   hoverStyle: {

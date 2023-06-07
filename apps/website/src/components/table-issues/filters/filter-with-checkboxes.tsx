@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { cloneElement, useState } from 'react'
 
 import { Avatar, Button, Input, Text } from '@status-im/components'
 import { DropdownMenu } from '@status-im/components/src/dropdown-menu'
@@ -8,16 +8,39 @@ import { ColorCircle } from './components/color-circle'
 
 import type { ColorTokens } from '@tamagui/core'
 
+type Data = {
+  id: number
+  name: string
+  avatar?: string | React.ReactElement
+  color?: ColorTokens | `#${string}`
+}
+
 type Props = {
-  data: {
-    id: number
-    name: string
-    avatar?: string
-    color?: ColorTokens | `#${string}`
-  }[]
+  data: Data[]
   label: string
   noPadding?: boolean
 }
+
+const isAvatar = (value: unknown): value is string => {
+  return typeof value === 'string' && value !== null
+}
+
+const RenderIcon = (props: Data) => {
+  if (props.color) {
+    return <ColorCircle color={props.color} />
+  }
+
+  if (!props.avatar) {
+    return <></>
+  }
+
+  if (isAvatar(props.avatar)) {
+    return <Avatar src={props.avatar} size={16} name={props.name} type="user" />
+  }
+
+  return cloneElement(props.avatar) || <></>
+}
+
 const FilterWithCheckboxes = (props: Props) => {
   const { data, label, noPadding } = props
 
@@ -32,7 +55,7 @@ const FilterWithCheckboxes = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className={noPadding ? '' : 'pr-3'}>
+    <div className={noPadding ? '' : 'pr-2'}>
       <DropdownMenu onOpenChange={() => setIsOpen(!isOpen)}>
         <Button
           size={32}
@@ -63,18 +86,7 @@ const FilterWithCheckboxes = (props: Props) => {
             return (
               <DropdownMenu.CheckboxItem
                 key={filtered.id}
-                icon={
-                  filtered.color ? (
-                    <ColorCircle color={filtered.color} />
-                  ) : (
-                    <Avatar
-                      name={filtered.name}
-                      src={filtered.avatar}
-                      size={16}
-                      type="user"
-                    />
-                  )
-                }
+                icon={<RenderIcon {...filtered} />}
                 label={filtered.name}
                 checked={selectedValues.includes(filtered.id)}
                 onSelect={() => {

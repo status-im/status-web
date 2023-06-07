@@ -93,8 +93,8 @@ const Base = styled(Stack, {
 
       outline: {
         backgroundColor: 'transparent',
-        borderColor: '$neutral-20',
-        hoverStyle: { borderColor: '$neutral-30' },
+        borderColor: '$neutral-30',
+        hoverStyle: { borderColor: '$neutral-40' },
         pressStyle: {
           borderColor: '$neutral-20',
           backgroundColor: '$neutral-10',

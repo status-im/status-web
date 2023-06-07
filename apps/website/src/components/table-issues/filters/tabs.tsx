@@ -9,14 +9,14 @@ const Tabs = (): JSX.Element => {
 
   return (
     <div className="flex">
-      <div className="flex items-center pr-3">
+      <div className="flex items-center pr-4">
         <button
           className={`flex cursor-pointer flex-row items-center transition-colors ${
             isOpen ? 'text-neutral-100' : 'text-neutral-50'
           }`}
           onClick={() => setActiveTab('open')}
         >
-          <OpenIcon size={16} color={isOpen ? '$neutral-100' : '$neutral-50'} />
+          <OpenIcon size={20} color={isOpen ? '$neutral-100' : '$neutral-50'} />
           <span className="pl-1 text-[15px]">784 Open</span>
         </button>
       </div>
@@ -28,7 +28,7 @@ const Tabs = (): JSX.Element => {
           onClick={() => setActiveTab('closed')}
         >
           <DoneIcon
-            size={16}
+            size={20}
             color={!isOpen ? '$neutral-100' : '$neutral-50'}
           />
           <span className="pl-1 text-[15px]">1012 Closed</span>

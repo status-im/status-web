@@ -9,6 +9,7 @@ import {
   Root,
   Trigger,
 } from '@radix-ui/react-dropdown-menu'
+import { CheckIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Checkbox } from '../selectors'
@@ -34,7 +35,7 @@ const DropdownMenu = (props: Props) => {
 }
 
 interface DropdownMenuItemProps {
-  icon: React.ReactElement
+  icon?: React.ReactElement
   label: string
   onSelect: () => void
   selected?: boolean
@@ -42,23 +43,26 @@ interface DropdownMenuItemProps {
 }
 
 const MenuItem = (props: DropdownMenuItemProps) => {
-  const { icon, label, onSelect, danger } = props
+  const { icon, label, onSelect, danger, selected } = props
 
   const iconColor = danger ? '$danger-50' : '$neutral-50'
   const textColor = danger ? '$danger-50' : '$neutral-100'
 
   return (
     <ItemBase onSelect={onSelect}>
-      {cloneElement(icon, { color: iconColor })}
-      <Text size={15} weight="medium" color={textColor}>
-        {label}
-      </Text>
+      <Stack flexDirection="row" gap={8} alignItems="center">
+        {icon && cloneElement(icon, { color: iconColor })}
+        <Text size={15} weight="medium" color={textColor}>
+          {label}
+        </Text>
+      </Stack>
+      {selected && <CheckIcon size={20} color={iconColor} />}
     </ItemBase>
   )
 }
 
 interface DropdownMenuCheckboxItemProps {
-  icon: React.ReactElement
+  icon?: React.ReactElement
   label: string
   onSelect: () => void
   checked?: boolean
@@ -79,7 +83,7 @@ const DropdownMenuCheckboxItem = forwardRef<
   return (
     <ItemBaseCheckbox {...props} ref={forwardedRef} onSelect={handleSelect}>
       <Stack flexDirection="row" gap={8} alignItems="center">
-        {cloneElement(icon)}
+        {icon && cloneElement(icon)}
         <Text size={15} weight="medium" color="$neutral-100">
           {label}
         </Text>
@@ -109,6 +113,8 @@ const ItemBase = styled(DropdownMenuItem, {
 
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'space-between',
+
   height: 32,
   paddingHorizontal: 8,
   borderRadius: '$10',

@@ -11,8 +11,12 @@ function isColorTokens(
 
 const ColorCircle = ({
   color: colorFromProps,
+  opacity = 40,
+  size = 16,
 }: {
-  color?: ColorTokens | `#${string}`
+  color: ColorTokens | `#${string}`
+  opacity?: number
+  size?: number
 }) => {
   if (!colorFromProps) {
     return null
@@ -32,9 +36,9 @@ const ColorCircle = ({
     <div
       className="rounded-full"
       style={{
-        width: 16,
-        height: 16,
-        backgroundColor: `color-mix(in srgb, ${color} ${40}%, transparent)`,
+        width: size,
+        height: size,
+        backgroundColor: `color-mix(in srgb, ${color} ${opacity}%, transparent)`,
         border: `1px solid ${color}`,
       }}
     />

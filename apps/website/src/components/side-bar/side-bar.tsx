@@ -37,7 +37,7 @@ const SideBar = (props: Props) => {
 
   return (
     <div className="border-neutral-10 border-r p-5">
-      <aside className=" sticky top-5 min-w-[320px]">
+      <aside className=" sticky top-5 w-[280px]">
         <Accordion.Root
           type="single"
           collapsible
