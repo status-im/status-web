@@ -6,6 +6,7 @@ import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'
 import { unified } from 'unified'
 
+import { Breadcrumbs } from '@/components'
 import { AppLayout } from '@/layouts/app-layout'
 import { getPostBySlug, getSlugs } from '@/lib/ghost'
 
@@ -130,6 +131,9 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
 
   return (
     <div className="bg-white-100 min-h-screen">
+      <div className="border-neutral-10 border-b px-5 py-3">
+        <Breadcrumbs cutFirstSegment={false} />
+      </div>
       <div className="mx-auto max-w-2xl">
         <div className="flex">
           <Tag size={32} label={post.primary_tag!.name!} />
