@@ -224,6 +224,11 @@ export function PreviewPage(props: PreviewPageProps) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
 
+  const urlOrigin = process.env.VERCEL_URL
+    ? 'https://' + process.env.VERCEL_URL
+    : ''
+
+  // todo?: head
   if ((loading && !data) || !data || !publicKey) {
     return (
       <>
@@ -233,12 +238,12 @@ export function PreviewPage(props: PreviewPageProps) {
         generated would not effectively override actual shared link on clicking */}
           <meta
             property="og:image"
-            content="/assets/preview/entity.png"
+            content={`${urlOrigin}/assets/preview/entity.png`}
             key="og:image"
           />
           <meta
             property="twitter:image"
-            content="/assets/preview/entity.png"
+            content={`${urlOrigin}/assets/preview/entity.png`}
             key="twitter:image"
           />
           <meta property="al:ios:url" content={`https://status.app${asPath}`} />
@@ -368,7 +373,7 @@ export function PreviewPage(props: PreviewPageProps) {
         {/* todo?: does it really matter if server-rendered; same with some/all others */}
         <meta
           property="og:image"
-          content="/assets/preview/entity.png"
+          content={`${urlOrigin}/assets/preview/entity.png`}
           key="og:image"
         />
         <meta
@@ -385,7 +390,7 @@ export function PreviewPage(props: PreviewPageProps) {
         />
         <meta
           property="twitter:image"
-          content="/assets/preview/entity.png"
+          content={`${urlOrigin}/assets/preview/entity.png`}
           key="twitter:image"
         />
         <meta
@@ -403,7 +408,7 @@ export function PreviewPage(props: PreviewPageProps) {
           style={!bannerURL ? getGradientStyles(data) : undefined}
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
-          <div className="absolute left-0 right-0 top-0 xl:hidden">
+          <div className="absolute inset-x-0 top-0 xl:hidden">
             <div className="absolute h-full w-full bg-gradient-to-t from-white-100 to-white-60" />
             {bannerURL && (
               <img

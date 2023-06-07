@@ -24,6 +24,10 @@ type Props = AppProps & {
 export default function App({ Component, pageProps }: Props) {
   const getLayout: PageLayout = Component.getLayout || (page => page)
 
+  const urlOrigin = process.env.VERCEL_URL
+    ? 'https://' + process.env.VERCEL_URL
+    : ''
+
   return (
     <>
       <Head>
@@ -50,7 +54,7 @@ export default function App({ Component, pageProps }: Props) {
         {/* todo?: set `key` for others too */}
         <meta
           property="og:image"
-          content="/assets/preview/page.png"
+          content={`${urlOrigin}/assets/preview/page.png`}
           key="og:image"
         />
         <meta property="twitter:card" content="summary_large_image" />
@@ -64,7 +68,7 @@ export default function App({ Component, pageProps }: Props) {
         />
         <meta
           property="twitter:image"
-          content="/assets/preview/page.png"
+          content={`%${urlOrigin}/assets/preview/page.png`}
           key="twitter:image"
         />
         <meta name="twitter:site" content="@ethstatus" />
