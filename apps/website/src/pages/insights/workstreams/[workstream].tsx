@@ -9,15 +9,14 @@ const WorkstreamDetailPage: Page = () => {
       <div className="border-neutral-10 border-b px-5 py-3">
         <Breadcrumbs />
       </div>
-      <div className="px-10 py-6">
+      <div className="border-neutral-10 border-b px-10 py-6">
         <EpicOverview
           title="Communities protocol"
           description="Detecting keycard reader removal for the beginning of each flow"
           fullscreen
         />
-
-        <div role="separator" className="bg-neutral-10 -mx-6 my-6 h-px" />
-
+      </div>
+      <div className="border-neutral-10 border-b px-10 py-6">
         <TableIssues />
       </div>
     </div>

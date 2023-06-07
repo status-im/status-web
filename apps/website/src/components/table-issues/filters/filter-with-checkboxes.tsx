@@ -4,6 +4,8 @@ import { Avatar, Button, Input, Text } from '@status-im/components'
 import { DropdownMenu } from '@status-im/components/src/dropdown-menu'
 import { DropdownIcon, SearchIcon } from '@status-im/icons'
 
+import { useCurrentBreakpoint } from '@/hooks/use-current-breakpoint'
+
 import { ColorCircle } from './components/color-circle'
 
 import type { ColorTokens } from '@tamagui/core'
@@ -54,6 +56,8 @@ const FilterWithCheckboxes = (props: Props) => {
   const [selectedValues, setSelectedValues] = useState<number[]>([])
   const [isOpen, setIsOpen] = useState(false)
 
+  const currentBreakpoint = useCurrentBreakpoint()
+
   return (
     <div className={noPadding ? '' : 'pr-2'}>
       <DropdownMenu onOpenChange={() => setIsOpen(!isOpen)}>
@@ -72,7 +76,10 @@ const FilterWithCheckboxes = (props: Props) => {
         >
           {label}
         </Button>
-        <DropdownMenu.Content sideOffset={10} align="end">
+        <DropdownMenu.Content
+          sideOffset={10}
+          align={currentBreakpoint === '2xl' ? 'end' : 'start'}
+        >
           <div className="p-2 px-1">
             <Input
               placeholder="Find epics"
