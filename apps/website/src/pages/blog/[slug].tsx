@@ -1,6 +1,7 @@
 import { createElement, Fragment, useMemo } from 'react'
 
-import { Tag, Text } from '@status-im/components'
+import { Provider, Tag, Text } from '@status-im/components'
+import { renderToString } from 'react-dom/server'
 import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'
 import { unified } from 'unified'
@@ -43,11 +44,46 @@ export const getStaticProps: GetStaticProps<
     }
   }
 
+  const r = unified()
+    .use(rehypeParse, { fragment: true })
+    .use(rehypeReact, {
+      createElement,
+      Fragment,
+      components: {
+        a: (props: React.ComponentProps<'a'>) => (
+          <a {...props} className="text-customisation-blue-50 underline">
+            {props.children!}
+          </a>
+        ),
+        p: ({ children }: React.ComponentProps<'p'>) => (
+          <p className="">
+            <Text size={19} weight="regular">
+              {children}
+            </Text>
+          </p>
+        ),
+        img: (props: React.ComponentProps<'img'>) => (
+          <img {...props} className="rounded-[20px]" /> // eslint-disable-line jsx-a11y/alt-text
+        ),
+        h2: ({ children, ...rest }: React.ComponentProps<'h2'>) => (
+          <h2 {...rest}>
+            <Text size={27}>{children}</Text>
+          </h2>
+        ),
+        ul: (props: React.ComponentProps<'ul'>) => (
+          <ul {...props} className="list-inside list-disc" />
+        ),
+      },
+    })
+    .processSync(post.html!).result
+
+  const html = renderToString(<Provider>{r}</Provider>)
+
   return {
     props: {
       post: {
         ...post,
-        jsx: JSON.stringify(r),
+        hhh: html,
       },
     },
   }
@@ -108,6 +144,10 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
       />
 
       <div className="mx-auto grid max-w-2xl gap-4">{result}</div>
+      {/* <div
+        className="mx-auto grid max-w-2xl gap-4"
+        dangerouslySetInnerHTML={{ __html: post.hhh }}
+      /> */}
     </div>
   )
 }
