@@ -19,6 +19,15 @@
         "appIDs": [
           "DTX7Z4U3YA.im.status.ethereum.test"
         ]
+      },
+      {
+        "appID": "46H86FR76G.im.status.ethereum.test",
+        "paths": [
+          "*"
+        ],
+        "appIDs": [
+          "46H86FR76G.im.status.ethereum.test"
+        ]
       }
     ]
   }
