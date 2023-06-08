@@ -7,6 +7,12 @@
         "paths": [
           "*"
         ]
+      },
+      {
+        "appID": "DTX7Z4U3YA.im.status.ethereum.test",
+        "paths": [
+          "*"
+        ]
       }
     ]
   }
