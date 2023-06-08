@@ -27,6 +27,19 @@ let config = {
     legacyBrowsers: false,
     // esmExternals: 'loose',
   },
+  headers: async () => {
+    return [
+      {
+        source: '/.well-known/apple-app-site-association',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/json',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 const plugins = [

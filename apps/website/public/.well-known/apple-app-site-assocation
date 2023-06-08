@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "DTX7Z4U3YA.im.status.ethereum",
+        "paths": [
+          "*"
+        ]
+      }
+    ]
+  }
+}
