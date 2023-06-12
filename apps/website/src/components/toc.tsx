@@ -2,7 +2,7 @@ import { Text } from '@status-im/components'
 
 import { Link } from './link'
 
-import type { Doc } from 'contentlayer/generated'
+import type { Doc } from '@docs'
 
 type TOCProps = {
   headings: Doc['headings']
