@@ -60,7 +60,7 @@ body,
   min-height: 100vh;
   /* overflow: hidden; */
   overscroll-behavior-y: none; /* not working on Safari */
-  user-select: none;
+  /* user-select: none; */
 }
 
 /*
