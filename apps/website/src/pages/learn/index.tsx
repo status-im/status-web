@@ -1,9 +1,11 @@
-import { Button, Shadow, Text } from '@status-im/components'
+import { Button, Text } from '@status-im/components'
 import { ArrowRightIcon, StatusIcon } from '@status-im/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { HighlightMatches } from '@/components/highlight-matches'
 import { SearchButton } from '@/components/search-button'
+import { useSearchEngine } from '@/hooks/use-search-engine'
 // import { ROUTES } from '@/config/routes'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 
@@ -50,6 +52,8 @@ const SECTIONS = [
 ] as const
 
 const LearnPage: Page = () => {
+  const search = useSearchEngine()
+
   return (
     <div className="[--max-width:1186px]">
       <PageBody>
@@ -61,8 +65,55 @@ const LearnPage: Page = () => {
                 Technical, short form guides on how to setup and use the app
               </Text>
             </div>
-
             <SearchButton size={38} />
+          </div>
+
+          <div className="h-100 aspect-video w-full border border-dashed p-4">
+            <input
+              className="bg-neutral-20 border-neutral-60 block w-full rounded border p-4"
+              onChange={async e => search.query(e.target.value)}
+            />
+
+            <div className="flex flex-col gap-3 p-10">
+              {search.results.map(result => {
+                return (
+                  <div
+                    key={result.title}
+                    className="bg-neutral-20 flex flex-col"
+                  >
+                    <Text size={19} weight="semibold">
+                      <HighlightMatches
+                        text={result.title}
+                        searchWords={result.match}
+                      />
+                    </Text>
+                    {result.headings.map((heading, idx) => (
+                      <div
+                        key={heading.text + idx}
+                        className="flex flex-col gap-2"
+                      >
+                        <Text size={13} weight="semibold">
+                          <HighlightMatches
+                            text={heading.text}
+                            searchWords={heading.match}
+                          />
+                        </Text>
+                        {heading.paragraphs.map(({ text, match }, idx) => {
+                          return (
+                            <Text size={13} key={text + idx}>
+                              <HighlightMatches
+                                text={text}
+                                searchWords={match}
+                              />
+                            </Text>
+                          )
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-5">
