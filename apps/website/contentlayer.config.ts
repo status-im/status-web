@@ -8,6 +8,7 @@ import { slug as slugify } from 'github-slugger'
 import { toString } from 'mdast-util-to-string'
 import * as fs from 'node:fs/promises'
 import path from 'node:path'
+import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import { remark } from 'remark'
 import remarkDirective from 'remark-directive'
@@ -170,7 +171,36 @@ export default makeSource({
   documentTypes: [Doc],
   mdx: {
     remarkPlugins: [remarkGfm, remarkDirective, remarkAdmonition],
-    rehypePlugins: [rehypeSlug],
+    rehypePlugins: [
+      rehypeSlug,
+
+      [
+        rehypePrettyCode,
+        {
+          // Use one of Shiki's packaged themes
+          theme: 'github-light',
+          // Keep the background or use a custom background color?
+          // keepBackground: true,
+          // Callback hooks to add custom logic to nodes when visiting
+          // them.
+          onVisitLine(node) {
+            // Prevent lines from collapsing in `display: grid` mode, and
+            // allow empty lines to be copy/pasted
+            if (node.children.length === 0) {
+              node.children = [{ type: 'text', value: ' ' }]
+            }
+          },
+          onVisitHighlightedLine(node) {
+            // Each line node by default has `class="line"`.
+            node.properties.className.push('highlighted')
+          },
+          onVisitHighlightedWord(node) {
+            // Each word node has no className by default.
+            node.properties.className = ['word']
+          },
+        },
+      ],
+    ],
   },
   onSuccess: async importData => {
     const { allDocs } = await importData()
