@@ -1,5 +1,5 @@
-import base from '@sindresorhus/slugify'
+import { slug } from 'github-slugger'
 
 export function slugify(value: string): string {
-  return base(value, { separator: '-' })
+  return slug(value)
 }
