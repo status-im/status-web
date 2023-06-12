@@ -9,7 +9,7 @@ import { NavNestedLinks } from './nav-nested-links'
 import type { Url } from 'next/dist/shared/lib/router/router'
 
 type Props = {
-  data?: {
+  items?: {
     label: string
     href?: Url
     links?: {
@@ -20,13 +20,13 @@ type Props = {
 }
 
 const SidebarMenu = (props: Props) => {
-  const { data } = props
+  const { items } = props
 
   const [label, setLabel] = useState<string>('')
 
   const { asPath } = useRouter()
 
-  const defaultLabel = data?.find(
+  const defaultLabel = items?.find(
     item =>
       item.href === asPath || item.links?.find(link => link.href === asPath)
   )?.label
@@ -45,8 +45,8 @@ const SidebarMenu = (props: Props) => {
           onValueChange={value => setLabel(value)}
           className="accordion-root flex flex-col gap-3"
         >
-          {data?.map((item, index) => {
-            if (item.links) {
+          {items?.map((item, index) => {
+            if (item.links && item.links.length > 0) {
               return (
                 <NavNestedLinks
                   key={index}

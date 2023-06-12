@@ -13,6 +13,7 @@ import { AppLayout, PageBody } from '@/layouts/app-layout'
 import { createTree } from '@/utils/link-tree'
 
 import type { InformationBoxProps } from '@/components/admonition'
+import type { BreadcrumbsProps } from '@/components/breadcrumbs'
 import type { Doc } from '@docs'
 import type { GetStaticPaths, GetStaticProps, Page } from 'next'
 import type { ComponentProps } from 'react'
@@ -177,7 +178,7 @@ const components = {
 type Props = {
   doc: Doc
   tree: string
-  breadcrumbs: { label: string; href: string }[]
+  breadcrumbs: BreadcrumbsProps['items']
 }
 
 const DocsDetailPage: Page<Props> = props => {
