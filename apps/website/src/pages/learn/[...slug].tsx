@@ -10,7 +10,7 @@ import { SearchButton } from '@/components/search-button'
 import { SidebarMenu } from '@/components/sidebar-menu'
 import { TOC } from '@/components/toc'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
-import { createTree } from '@/utils/link-tree'
+import { buildLinkTree } from '@/utils/build-link-tree'
 
 import type { InformationBoxProps } from '@/components/admonition'
 import type { BreadcrumbsProps } from '@/components/breadcrumbs'
@@ -64,7 +64,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   return {
     props: {
       doc,
-      tree: JSON.stringify(createTree(allDocs)),
+      tree: JSON.stringify(buildLinkTree(allDocs)),
       breadcrumbs,
     },
   }
