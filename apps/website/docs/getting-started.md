@@ -23,6 +23,10 @@ Consectetur exercitation minim duis excepteur quis culpa veniam dolor. Sit ipsum
 
 Aliquip exercitation ut commodo ullamco mollit et occaecat exercitation. Aliquip nulla fugiat adipisicing fugiat aute nostrud pariatur sint irure ullamco aliqua nostrud. Ea elit reprehenderit amet est esse culpa sit. Aliqua minim ad eiusmod duis. Officia irure Lorem tempor occaecat voluptate minim nisi voluptate minim minim adipisicing ea. Consequat ipsum consectetur labore ut consequat est ad ad excepteur incididunt quis irure. Deserunt ea magna fugiat sunt ea.
 
+## Images
+
+![community card](/docs/images/media.png)
+
 ## Lists
 
 ### Unordered
