@@ -3,8 +3,8 @@ import { Avatar, Button, Text } from '@status-im/components'
 import { BulletIcon, CheckIcon, EditIcon } from '@status-im/icons'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 
+import { Admonition } from '@/components/admonition'
 import { Breadcrumbs } from '@/components/breadcrumbs'
-import { InformationBox } from '@/components/information-box'
 import { Link } from '@/components/link'
 import { SearchButton } from '@/components/search-button'
 import { SidebarMenu } from '@/components/sidebar-menu'
@@ -12,7 +12,7 @@ import { TOC } from '@/components/toc'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 import { createTree } from '@/utils/link-tree'
 
-import type { InformationBoxProps } from '@/components/information-box'
+import type { InformationBoxProps } from '@/components/admonition'
 import type { Doc } from '@docs'
 import type { GetStaticPaths, GetStaticProps, Page } from 'next'
 import type { ComponentProps } from 'react'
@@ -37,6 +37,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
     d => d.slug.join('/') === params!.slug.join('/')
   )!
 
+  // root
   const breadcrumbs = [
     {
       label: 'Status Help',
@@ -53,6 +54,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
     })
   }
 
+  // current page
   breadcrumbs.push({
     label: doc.title,
     href: doc.url,
@@ -167,7 +169,7 @@ const components = {
   // code: InlineCode,
   Admonition: (props: InformationBoxProps) => (
     <div className="my-5">
-      <InformationBox {...props} />
+      <Admonition {...props} />
     </div>
   ),
 }
