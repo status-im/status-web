@@ -14,6 +14,7 @@ import remarkDirective from 'remark-directive'
 import remarkGfm from 'remark-gfm'
 // import remarkAdmonitions from 'remark-github-beta-blockquote-admonitions'
 // import remarkBreaks from 'remark-breaks'
+import strip from 'strip-markdown'
 import { visit } from 'unist-util-visit'
 
 import type { Plugin } from 'unified'
@@ -170,5 +171,30 @@ export default makeSource({
   mdx: {
     remarkPlugins: [remarkGfm, remarkDirective, remarkAdmonition],
     rehypePlugins: [rehypeSlug],
+  },
+  onSuccess: async importData => {
+    const { allDocs } = await importData()
+
+    const basePath = '/docs'
+    const index: DocIndex[] = []
+
+    for (const doc of allDocs) {
+      const result = await remark()
+        .use(strip, {
+          keep: ['heading'],
+        })
+        .use(remarkGfm)
+        .use(remarkIndexer, { path: basePath + '/' + doc._raw.flattenedPath })
+        .process(doc.body.raw)
+
+      index.push({
+        title: doc.title,
+        path: basePath + '/' + doc._raw.flattenedPath,
+        content: result.data.index as DocIndex['content'],
+      })
+    }
+
+    const filePath = path.resolve('./public/docs/en.json')
+    fs.writeFile(filePath, JSON.stringify(index))
   },
 })
