@@ -17,6 +17,7 @@
         "Consectetur exercitation minim duis excepteur quis culpa veniam dolor. Sit ipsum adipisicing eiusmod aliqua. Labore amet minim reprehenderit magna sunt ad minim nisi aliqua. Cupidatat dolore aliquip excepteur sit duis incididunt qui id ea. Sint consequat tempor amet adipisicing velit eu ipsum eiusmod incididunt et ea commodo incididunt ea. Excepteur voluptate ullamco est ea occaecat velit.",
         "Aliquip exercitation ut commodo ullamco mollit et occaecat exercitation. Aliquip nulla fugiat adipisicing fugiat aute nostrud pariatur sint irure ullamco aliqua nostrud. Ea elit reprehenderit amet est esse culpa sit. Aliqua minim ad eiusmod duis. Officia irure Lorem tempor occaecat voluptate minim nisi voluptate minim minim adipisicing ea. Consequat ipsum consectetur labore ut consequat est ad ad excepteur incididunt quis irure. Deserunt ea magna fugiat sunt ea."
       ],
+      "Images": ["community card"],
       "Unordered": ["one", "two", "three"],
       "Ordered": ["one", "two", "three"],
       "Tasks": ["one", "two", "three"],
@@ -24,7 +25,8 @@
         ":::warn\nHere is some warning\n:::",
         ":::info\nHere is some warning\n:::",
         ":::tip\nHere is some warning\n:::"
-      ]
+      ],
+      "Code blocks": ["Needs some improvement on styling."]
     }
   },
   {

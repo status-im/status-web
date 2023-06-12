@@ -24,11 +24,11 @@ type Links = {
 
 function createLinks(tree: Tree): Links {
   return Object.entries(tree).map(([key, value]) => {
-    const { title, href, _nested } = value
+    const { title, href, ...pages } = value
     return {
       label: (title ?? capitalize(key)) as string,
       href: href,
-      links: createLinks(_nested),
+      links: createLinks(pages),
     }
   })
 }
@@ -37,7 +37,7 @@ type Tree = {
   [key: string]: {
     title?: string
     href?: string
-    _nested: Tree
+    // _nested: Tree
   }
 }
 
@@ -48,7 +48,7 @@ export const buildLinkTree = (docs: Doc[]) => {
     const value = {
       title: doc.title,
       href: doc.url,
-      _nested: {},
+      // _nested: {},
     }
 
     if (doc.slug.length === 1) {
@@ -58,7 +58,7 @@ export const buildLinkTree = (docs: Doc[]) => {
         tree,
         [
           ...doc.slug.slice(0, doc.slug.length - 1),
-          '_nested',
+          // '_nested',
           doc.slug[doc.slug.length - 1],
         ],
         value
