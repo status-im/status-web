@@ -13,10 +13,14 @@ let config = {
   reactStrictMode: true,
   pageExtensions: ['ts', 'tsx', 'md', 'mdx'],
 
-  // TODO: REMOVE!
+  // runs on the root level
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   images: {
     // disableStaticImages: true,
   },
