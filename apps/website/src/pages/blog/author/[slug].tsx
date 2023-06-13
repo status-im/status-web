@@ -7,7 +7,7 @@ import { getAuthorSlugs, getPostsByAuthorSlug } from '@/lib/ghost'
 
 import { PostCard } from '..'
 
-import type { PostsOrPages } from '@tryghost/content-api'
+import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type {
   GetStaticPaths,
   GetStaticProps,
@@ -28,7 +28,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
 export const getStaticProps: GetStaticProps<
   {
-    posts: PostsOrPages
+    posts: PostOrPage[]
     meta: PostsOrPages['meta']
   },
   Params
