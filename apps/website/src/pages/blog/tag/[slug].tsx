@@ -41,8 +41,8 @@ export const getStaticProps: GetStaticProps<
 
   if (!posts || !posts.length) {
     return {
-      // notFound: true,
-      redirect: { destination: '/blog', permanent: false },
+      notFound: true,
+      // redirect: { destination: '/blog', permanent: false },
     }
   }
 

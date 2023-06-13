@@ -1,6 +1,8 @@
 import { Avatar, Button, Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+// import { redirect } from 'next/navigation'
+// import { useRouter } from 'next/router'
 import { Breadcrumbs } from '@/components'
 import { AppLayout } from '@/layouts/app-layout'
 import { getAuthorSlugs, getPostsByAuthorSlug } from '@/lib/ghost'
@@ -37,8 +39,8 @@ export const getStaticProps: GetStaticProps<
 
   if (!posts || !posts.length) {
     return {
-      // notFound: true,
-      redirect: { destination: '/blog', permanent: false },
+      notFound: true,
+      // redirect: { destination: '/blog', permanent: false },
     }
   }
 
@@ -53,6 +55,12 @@ export const getStaticProps: GetStaticProps<
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
+  // const { isFallback } = useRouter()
+
+  // if (isFallback || !posts.length) {
+  //   redirect('/blog')
+  // }
+
   // todo?: enforce primary tag
   const author = posts[0].primary_author!
 
