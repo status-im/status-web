@@ -185,7 +185,7 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
         </div>
 
         <div>
-          <Text size={19} weight="regular" truncate={3}>
+          <Text size={19} weight="regular">
             {post.excerpt}
           </Text>
         </div>
@@ -234,9 +234,8 @@ export const PostCard = (props: PostCardProps) => {
             </div>
           )}
 
-          {/* <div className="row-[span_2_/_span_4]"> */}
           <div>
-            <Text size={19} weight="semibold" truncate={2}>
+            <Text size={19} weight="semibold">
               {post.title}
             </Text>
           </div>

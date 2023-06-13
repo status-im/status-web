@@ -113,7 +113,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
           <Text size={19}>{author.meta_description}</Text>
         </div>
 
-        <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(384px,1fr))] gap-5">
+        <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
           {_posts.map(post => (
             <PostCard key={post.id} post={post} showAuthor={false} />
           ))}
