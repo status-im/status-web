@@ -34,13 +34,16 @@ export const getPostBySlug = async (slug: string) => {
   )
 }
 
-export const getPostsByTagSlug = async (slug: string) => {
-  return await ghost.posts.browse({
+export const getPostsByTagSlug = async (slug: string, page = 0) => {
+  const response = await ghost.posts.browse({
     filter: `tag:${slug}+visibility:public`,
     include: ['tags', 'authors'],
-    limit: 'all',
+    limit: 6,
     order: 'published_at DESC',
+    page,
   })
+
+  return { posts: [...response], meta: response.meta }
 }
 
 export const getPostsByAuthorSlug = async (slug: string) => {

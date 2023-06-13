@@ -1,4 +1,5 @@
-import { Text } from '@status-im/components'
+import { Button, Text } from '@status-im/components'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { Breadcrumbs } from '@/components'
 import { AppLayout } from '@/layouts/app-layout'
@@ -21,6 +22,10 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
   return {
     paths: slugs.map(slug => ({ params: { slug } })),
+    /** If fallback is false, then any paths not returned by getStaticPaths will result in a 404 page.
+     *
+     * @see https://nextjs.org/docs/pages/api-reference/functions/get-static-paths#fallback-false
+     */
     fallback: false,
   }
 }
@@ -28,10 +33,11 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 export const getStaticProps: GetStaticProps<
   {
     posts: PostsOrPages
+    meta: PostsOrPages['meta']
   },
   Params
 > = async context => {
-  const posts = await getPostsByTagSlug(context.params!.slug)
+  const { posts, meta } = await getPostsByTagSlug(context.params!.slug)
 
   if (!posts || !posts.length) {
     return {
@@ -43,14 +49,44 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       posts,
+      meta,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const BlogTagPage: Page<Props> = ({ posts }) => {
+const BlogTagPage: Page<Props> = ({ posts, meta }) => {
   const tag = posts[0].primary_tag!
+
+  const {
+    data,
+    // error,
+    fetchNextPage,
+    hasNextPage,
+    // isFetching,
+    // isFetchingNextPage,
+    // status,
+    // isFetched,
+  } = useInfiniteQuery({
+    queryKey: ['posts', tag.slug],
+    queryFn: async ({ pageParam: page, queryKey }) => {
+      const [, tag] = queryKey
+
+      const { posts, meta } = await getPostsByTagSlug(tag, page)
+
+      return { posts, meta }
+    },
+    getNextPageParam: ({ meta }) => meta.pagination.next,
+    initialData: { pages: [{ posts, meta }], pageParams: [0] },
+    staleTime: Infinity,
+  })
+
+  if (!data) {
+    return null
+  }
+
+  const _posts = data.pages.flatMap(page => page.posts)
 
   return (
     <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
@@ -67,11 +103,19 @@ const BlogTagPage: Page<Props> = ({ posts }) => {
         </div>
 
         <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(384px,1fr))] gap-5">
-          {posts.map(post => (
+          {_posts.map(post => (
             <PostCard key={post.id} post={post} showTag={false} />
           ))}
         </div>
       </div>
+
+      {hasNextPage && (
+        <div className="flex justify-center pt-8">
+          <Button variant="outline" onPress={() => fetchNextPage()}>
+            Load more posts
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
