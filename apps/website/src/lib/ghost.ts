@@ -1,16 +1,26 @@
 import GhostContentAPI from '@tryghost/content-api'
 
+/** @see https://ghost.org/docs/content-api# */
 const ghost = new GhostContentAPI({
   url: 'https://demo.ghost.io',
   key: '22444f78447824223cefc48062',
   version: 'v5.0',
 })
 
-export const getPosts = async () => {
-  return await ghost.posts.browse({
-    limit: 'all',
+type Params = { limit: number; page?: number; tag?: string }
+
+export const getPosts = async (params = {} as Params) => {
+  const { limit, page = 0, tag } = params
+
+  const response = await ghost.posts.browse({
+    limit,
     include: ['tags', 'authors'],
+    order: 'published_at DESC',
+    page,
+    ...(tag && { filter: `tag:${tag}` }),
   })
+
+  return { posts: [...response], meta: response.meta }
 }
 
 export const getPostBySlug = async (slug: string) => {
@@ -24,11 +34,58 @@ export const getPostBySlug = async (slug: string) => {
   )
 }
 
-export const getSlugs = async (): Promise<string[]> => {
+export const getPostsByTagSlug = async (slug: string) => {
+  return await ghost.posts.browse({
+    filter: `tag:${slug}+visibility:public`,
+    include: ['tags', 'authors'],
+    limit: 'all',
+    order: 'published_at DESC',
+  })
+}
+
+export const getPostsByAuthorSlug = async (slug: string) => {
+  return await ghost.posts.browse({
+    filter: `author:${slug}+visibility:public`,
+    include: ['tags', 'authors'],
+    limit: 'all',
+    order: 'published_at DESC',
+  })
+}
+
+export const getPostSlugs = async (): Promise<string[]> => {
   const posts = await ghost.posts.browse({
     limit: 'all',
     fields: 'slug',
+    filter: 'visibility:public',
   })
 
   return posts.map(post => post.slug)
+}
+
+export const getTags = async () => {
+  return await ghost.tags.browse({
+    limit: 'all',
+    fields: 'name,slug',
+    filter: 'visibility:public',
+  })
+}
+
+export const getTagSlugs = async (): Promise<string[]> => {
+  const tags = await ghost.tags.browse({
+    limit: 'all',
+    fields: 'slug',
+    filter: 'visibility:public',
+  })
+
+  return tags.map(tag => tag.slug)
+}
+
+export const getAuthorSlugs = async (): Promise<string[]> => {
+  const authors = await ghost.authors.browse({
+    limit: 'all',
+    fields: 'slug',
+    filter: 'visibility:public',
+  })
+
+  return authors.map(author => author.slug)
 }
