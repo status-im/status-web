@@ -7,13 +7,13 @@ const ghost = new GhostContentAPI({
   version: 'v5.0',
 })
 
-type Params = { limit: number; page?: number; tag?: string }
+type Params = { page?: number; tag?: string }
 
 export const getPosts = async (params = {} as Params) => {
-  const { limit, page = 0, tag } = params
+  const { page = 0, tag } = params
 
   const response = await ghost.posts.browse({
-    limit,
+    limit: 7,
     include: ['tags', 'authors'],
     order: 'published_at DESC',
     page,

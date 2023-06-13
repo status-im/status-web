@@ -10,14 +10,12 @@ import { getPosts, getTags } from '@/lib/ghost'
 import type { PostOrPage, PostsOrPages, Tags } from '@tryghost/content-api'
 import type { GetStaticProps, InferGetStaticPropsType, Page } from 'next'
 
-const POSTS_LIMIT = 7
-
 export const getStaticProps: GetStaticProps<{
   tags: Tags
   posts: PostOrPage[]
   meta: PostsOrPages['meta']
 }> = async () => {
-  const { posts, meta } = await getPosts({ limit: POSTS_LIMIT })
+  const { posts, meta } = await getPosts()
   const tags = await getTags()
 
   return {
@@ -34,16 +32,6 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>
 const BlogPage: Page<Props> = props => {
   const { tags: initialTags, posts, meta } = props
 
-  // const tags = posts.reduce((map, post) => {
-  //   if (post.primary_tag) {
-  //     const name = post.primary_tag.name
-  //     const slug = post.primary_tag.slug
-
-  //     map.set(slug, { name, slug })
-  //   }
-
-  //   return map
-  // }, new Map() as Map<string, { name?: string; slug: string }>)
   const tags = new Map<string, { name?: string; slug: string }>(
     initialTags.map(tag => [tag.slug, tag])
   )
@@ -58,14 +46,14 @@ const BlogPage: Page<Props> = props => {
     hasNextPage,
     // isFetching,
     // isFetchingNextPage,
-    status,
-    isFetched,
+    // status,
+    // isFetched,
   } = useInfiniteQuery({
     queryKey: ['posts', tag],
     queryFn: async ({ pageParam: page, queryKey }) => {
       const [, tag] = queryKey
 
-      const { posts, meta } = await getPosts({ limit: POSTS_LIMIT, page, tag })
+      const { posts, meta } = await getPosts({ page, tag })
 
       let filteredPosts = posts
       if (tag && tags.has(tag)) {
