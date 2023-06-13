@@ -20,7 +20,7 @@ export const AppLayout: PageLayout = page => {
       </div>
       <div className="min-h-full bg-neutral-100">
         <NavigationMenu.Root>
-          <div className="flex items-center px-6">
+          <div className="flex items-center px-6 py-3">
             <div className="mr-5">
               <Link href="/">
                 <Logo />
@@ -31,7 +31,7 @@ export const AppLayout: PageLayout = page => {
               <NavigationMenu.List className="flex items-center">
                 {Object.entries(LINKS).map(([name, links]) => (
                   <NavigationMenu.Item key={name}>
-                    <NavigationMenu.Trigger className="py-4 pr-5 aria-expanded:opacity-50">
+                    <NavigationMenu.Trigger className="pr-5 aria-expanded:opacity-50">
                       <Text size={15} weight="medium" color="$white-100">
                         {name}
                       </Text>
