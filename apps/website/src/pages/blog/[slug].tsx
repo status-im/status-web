@@ -1,14 +1,15 @@
 import { createElement, Fragment, useMemo } from 'react'
 
-import { Provider, Tag, Text } from '@status-im/components'
+import { Avatar, Provider, Tag, Text } from '@status-im/components'
 import { renderToString } from 'react-dom/server'
 import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'
 import { unified } from 'unified'
 
 import { Breadcrumbs } from '@/components'
+import { formatDate } from '@/components/chart/utils/format-time'
 import { AppLayout } from '@/layouts/app-layout'
-import { getPostBySlug, getSlugs } from '@/lib/ghost'
+import { getPostBySlug, getPostSlugs } from '@/lib/ghost'
 
 import type { PostOrPage } from '@tryghost/content-api'
 import type {
@@ -22,7 +23,7 @@ import type React from 'react'
 type Params = { slug: string }
 
 export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const slugs = await getSlugs()
+  const slugs = await getPostSlugs()
 
   return {
     paths: slugs.map(slug => ({ params: { slug } })),
@@ -68,7 +69,9 @@ export const getStaticProps: GetStaticProps<
         ),
         h2: ({ children, ...rest }: React.ComponentProps<'h2'>) => (
           <h2 {...rest}>
-            <Text size={27}>{children}</Text>
+            <Text size={27} weight="semibold">
+              {children}
+            </Text>
           </h2>
         ),
         ul: (props: React.ComponentProps<'ul'>) => (
@@ -84,6 +87,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       post: {
         ...post,
+        // fixme?: name html
         hhh: html,
       },
     },
@@ -93,6 +97,8 @@ export const getStaticProps: GetStaticProps<
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const BlogDetailPage: Page<Props> = ({ post }) => {
+  const author = post.primary_author!
+
   // todo?: MOVE TO SERVER SIDE
   const result = useMemo(() => {
     return unified()
@@ -118,7 +124,9 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
           ),
           h2: ({ children, ...rest }: React.ComponentProps<'h2'>) => (
             <h2 {...rest}>
-              <Text size={27}>{children}</Text>
+              <Text size={27} weight="semibold">
+                {children}
+              </Text>
             </h2>
           ),
           ul: (props: React.ComponentProps<'ul'>) => (
@@ -130,28 +138,80 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
   }, [post.html])
 
   return (
-    <div className="bg-white-100 min-h-screen">
+    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
       <div className="border-neutral-10 border-b px-5 py-3">
+        {/* fimxe: use title not slug */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>
-      <div className="mx-auto max-w-2xl">
-        <div className="flex">
-          <Tag size={32} label={post.primary_tag!.name!} />
+
+      <div className="p-5 xl:p-6">
+        <div className="mx-auto flex max-w-2xl flex-col gap-3">
+          <div className="mt-20 flex">
+            {post.primary_tag && (
+              <Tag size={32} label={post.primary_tag!.name!} />
+            )}
+          </div>
+
+          <h1 className="text-6xl font-bold">{post.title!}</h1>
+
+          <div className="mt-auto flex h-5 items-center gap-1">
+            <Avatar
+              type="user"
+              size={20}
+              name={author.name ?? author.slug}
+              src={author.profile_image ?? undefined}
+            />
+            <Text size={15} weight="semibold">
+              {author.name ?? author.slug}
+            </Text>
+            <Text size={15} color="$neutral-50">
+              on {formatDate(new Date(post.published_at!))}
+            </Text>
+          </div>
         </div>
-        <h1 className="text-6xl">{post.title!}</h1>
-      </div>
 
-      <img
-        src={post.feature_image!}
-        className="mx-auto my-10 rounded-[20px]"
-        alt={post.feature_image_alt!}
-      />
+        <img
+          src={post.feature_image!}
+          className="mx-auto my-10 aspect-[1456/470] rounded-[20px] object-cover"
+          alt={post.feature_image_alt!}
+        />
 
-      <div className="mx-auto grid max-w-2xl gap-4">{result}</div>
-      {/* <div
+        <div className="relative mx-auto grid max-w-2xl gap-4">
+          {result}
+
+          {/* todo?: social, sticky */}
+
+          <div className="flex flex-row gap-2">
+            <Avatar
+              type="user"
+              size={32}
+              name={author.name ?? author.slug}
+              src={author.profile_image ?? undefined}
+            />
+            <div className="flex">
+              <Text size={15} weight="semibold">
+                {author.name ?? author.slug}
+              </Text>
+              <Text size={15} color="$neutral-50">
+                {author.meta_description}
+              </Text>
+            </div>
+          </div>
+
+          {/* todo: social */}
+          {/* <div>
+            <Text size={15} color="$neutral-50">
+              Share article on:
+            </Text>
+          </div> */}
+        </div>
+        {/* <div
         className="mx-auto grid max-w-2xl gap-4"
         dangerouslySetInnerHTML={{ __html: post.hhh }}
       /> */}
+
+        {/* todo?: related articles */}
+      </div>
     </div>
   )
 }
