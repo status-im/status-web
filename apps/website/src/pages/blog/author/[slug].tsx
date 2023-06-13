@@ -1,4 +1,5 @@
-import { Avatar, Text } from '@status-im/components'
+import { Avatar, Button, Text } from '@status-im/components'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { Breadcrumbs } from '@/components'
 import { AppLayout } from '@/layouts/app-layout'
@@ -27,11 +28,12 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 
 export const getStaticProps: GetStaticProps<
   {
-    authors: PostsOrPages
+    posts: PostsOrPages
+    meta: PostsOrPages['meta']
   },
   Params
 > = async context => {
-  const posts = await getPostsByAuthorSlug(context.params!.slug)
+  const { posts, meta } = await getPostsByAuthorSlug(context.params!.slug)
 
   if (!posts || !posts.length) {
     return {
@@ -42,16 +44,46 @@ export const getStaticProps: GetStaticProps<
 
   return {
     props: {
-      authors: posts,
+      posts,
+      meta,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const BlogAuthorPage: Page<Props> = ({ authors: posts }) => {
-  // todo?: enfore primary tag
+const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
+  // todo?: enforce primary tag
   const author = posts[0].primary_author!
+
+  const {
+    data,
+    // error,
+    fetchNextPage,
+    hasNextPage,
+    // isFetching,
+    // isFetchingNextPage,
+    // status,
+    // isFetched,
+  } = useInfiniteQuery({
+    queryKey: ['posts', author.slug],
+    queryFn: async ({ pageParam: page, queryKey }) => {
+      const [, tag] = queryKey
+
+      const { posts, meta } = await getPostsByAuthorSlug(tag, page)
+
+      return { posts, meta }
+    },
+    getNextPageParam: ({ meta }) => meta.pagination.next,
+    initialData: { pages: [{ posts, meta }], pageParams: [0] },
+    staleTime: Infinity,
+  })
+
+  if (!data) {
+    return null
+  }
+
+  const _posts = data.pages.flatMap(page => page.posts)
 
   return (
     <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
@@ -59,6 +91,7 @@ const BlogAuthorPage: Page<Props> = ({ authors: posts }) => {
         {/* todo?: cut second segment */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>
+
       <div className="mx-auto max-w-[1192px] py-32">
         <div className="mb-8 grid gap-2">
           <Avatar
@@ -73,11 +106,19 @@ const BlogAuthorPage: Page<Props> = ({ authors: posts }) => {
         </div>
 
         <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(384px,1fr))] gap-5">
-          {posts.map(post => (
+          {_posts.map(post => (
             <PostCard key={post.id} post={post} showAuthor={false} />
           ))}
         </div>
       </div>
+
+      {hasNextPage && (
+        <div className="flex justify-center pt-8">
+          <Button variant="outline" onPress={() => fetchNextPage()}>
+            Load more posts
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
