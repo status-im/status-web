@@ -15,7 +15,9 @@ import type { PageLayout } from 'next'
 export const AppLayout: PageLayout = page => {
   return (
     <>
-      <NavMenu />
+      <div className="hidden lg:block">
+        <NavMenu />
+      </div>
       <div className="min-h-full bg-neutral-100">
         <NavigationMenu.Root>
           <div className="flex items-center px-6">
@@ -25,7 +27,7 @@ export const AppLayout: PageLayout = page => {
               </Link>
             </div>
 
-            <div className="flex-1">
+            <div className="hidden flex-1 lg:flex">
               <NavigationMenu.List className="flex items-center">
                 {Object.entries(LINKS).map(([name, links]) => (
                   <NavigationMenu.Item key={name}>
@@ -64,7 +66,7 @@ export const AppLayout: PageLayout = page => {
               </NavigationMenu.List>
             </div>
 
-            <div className="flex justify-end">
+            <div className="hidden justify-end lg:flex">
               <Button
                 size={32}
                 variant="darkGrey"
