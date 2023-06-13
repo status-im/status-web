@@ -80,15 +80,17 @@ const BlogPage: Page<Props> = props => {
     data?.pages.flatMap(page => page.posts) ?? []
 
   return (
-    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl p-5">
-      <div className="mx-auto max-w-[1192px] py-32">
-        <div className="mb-8 grid gap-2">
-          <h1 className="text-7xl font-bold">Blog.</h1>
+    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl px-5">
+      <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
+        <div className="mb-10 grid gap-2">
+          <h1 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
+            Blog.
+          </h1>
           <Text size={19}>Long form articles, thoughts, and ideas.</Text>
         </div>
 
         {/* todo?: radix toggle group; or combobox with cmdk */}
-        <div className="mb-8 hidden gap-2">
+        <div className="mb-12 hidden gap-2">
           {[...tags.entries()].map(([id, tag]) => (
             // {/* {[...tags.values()].map(tag => ( */}
             <div
@@ -126,11 +128,11 @@ const BlogPage: Page<Props> = props => {
         </div>
 
         <div>
-          <div>
+          <div className="mb-[44px] xl:mb-12">
             <HighlightedPostCard post={highlightedPost} />
           </div>
 
-          <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(384px,1fr))] gap-5">
+          <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
             {rest.map(post => (
               <PostCard key={post.id} post={post} />
             ))}
@@ -138,7 +140,7 @@ const BlogPage: Page<Props> = props => {
         </div>
 
         {hasNextPage && (
-          <div className="flex justify-center pt-8">
+          <div className="mt-8 flex justify-center">
             <Button variant="outline" onPress={() => fetchNextPage()}>
               Load more posts
             </Button>
@@ -161,7 +163,7 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
     // <Link href={`/blog/${post.slug}`} className="flex flex-row-reverse gap-7">
     <Link
       href={`/blog/${post.slug}`}
-      className="grid grid-cols-1 gap-7 xl:grid-cols-3"
+      className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-7"
     >
       <div className="col-span-2 w-full flex-[2] shrink-0">
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
@@ -171,7 +173,7 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
         />
       </div>
 
-      <div className="flex flex-[1] flex-col gap-2 p-0">
+      <div className="flex flex-[1] flex-col gap-2 xl:py-5 xl:pr-5">
         <div className="h-6 overflow-hidden">
           {post.primary_tag && (
             <div className="flex">
@@ -181,7 +183,9 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
         </div>
 
         <div>
-          <span className="line-clamp-3 text-4xl font-bold">{post.title}</span>
+          <span className="text-4xl font-semibold xl:font-bold">
+            {post.title}
+          </span>
         </div>
 
         <div>
@@ -190,7 +194,7 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
           </Text>
         </div>
 
-        <div className="mt-auto flex h-5 gap-1">
+        <div className="mt-auto flex h-5 items-center gap-1">
           <Avatar
             type="user"
             size={20}
@@ -222,7 +226,6 @@ export const PostCard = (props: PostCardProps) => {
   return (
     <Shadow className="border-neutral-5 h-full rounded-[20px] border">
       <Link href={`/blog/${post.slug}`} className="flex h-full w-full flex-col">
-        {/* <div className="grid grow grid-rows-[1fr,2fr,1fr] gap-0 p-4"> */}
         <div className="flex grow flex-col gap-2 p-4">
           {showTag && (
             <div className="h-6 overflow-hidden">
@@ -267,7 +270,7 @@ export const PostCard = (props: PostCardProps) => {
         <div className={'w-full px-2 pb-2'}>
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <img
-            className="aspect-[366/206] h-full w-full rounded-2xl object-cover"
+            className="aspect-[334/188] h-full w-full rounded-2xl object-cover"
             src={post.feature_image!}
           />
         </div>
