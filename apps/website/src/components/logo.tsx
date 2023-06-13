@@ -28,6 +28,7 @@ export const Logo = (props: Props) => {
         )
         .with(
           P.when(p => p.startsWith('/blog')),
+          // fixme: logo svg
           () => <Image src={logoSrc} alt="Status logo" />
         )
         .otherwise(() => (
