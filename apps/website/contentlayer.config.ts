@@ -24,7 +24,7 @@ import type { Node } from 'unist'
 const CONTENT_DIR_PATH = 'docs'
 
 export type DocHeading = {
-  level: 1 | 2 | 3
+  level: 1 | 2
   value: string
 }
 
@@ -91,7 +91,7 @@ export const Doc = defineDocumentType(() => ({
         return (result.data.headings as { depth: number; value: string }[])
           .filter(({ depth }) => [1, 2].includes(depth))
           .map<DocHeading>(({ depth, value }) => ({
-            level: depth as DocHeading['level'],
+            level: depth as 1 | 2,
             value,
             slug: slugify(value),
           }))

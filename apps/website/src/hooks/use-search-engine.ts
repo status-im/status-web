@@ -50,8 +50,8 @@ export const useSearchEngine = (limit = 5) => {
       return miniSearch
     }
 
-    const res = await fetch('/docs/en.json')
-    const docIndex: DocIndex[] = await res.json()
+    const docIndex = (await import('../../.contentlayer/en.json'))
+      .default as unknown as DocIndex[]
 
     const docs: SearchDoc[] = []
     let id = 0
