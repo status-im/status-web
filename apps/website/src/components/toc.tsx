@@ -13,7 +13,7 @@ export const TOC = (props: TOCProps) => {
   return (
     <div className="sticky top-0 flex flex-col gap-3 pt-20">
       <Text size={13} weight="medium" color="$neutral-50">
-        On this page
+        In this article
       </Text>
       <div className="flex flex-col gap-2">
         {headings.map((heading, index) => (
