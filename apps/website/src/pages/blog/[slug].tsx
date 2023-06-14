@@ -138,8 +138,8 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
   }, [post.html])
 
   return (
-    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
-      <div className="border-neutral-10 border-b px-5 py-3">
+    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100">
+      <div className="border-b border-neutral-10 px-5 py-3">
         {/* fimxe: use title not slug */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>

@@ -118,7 +118,7 @@ const ActionCard = (props: ActionCardProps) => {
   const { title, description, action } = props
 
   return (
-    <div className="bg-netural-95 border-neutral-90 flex items-center rounded-[20px] border px-5 py-3">
+    <div className="bg-netural-95 flex items-center rounded-[20px] border border-neutral-90 px-5 py-3">
       <div className="grid flex-1 gap-px">
         <Text size={19} color="$white-100" weight="semibold">
           {title}

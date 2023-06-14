@@ -38,7 +38,7 @@ export const NavMenu = () => {
       data-visible={visible}
       className={cx([
         'fixed left-1/2 top-5 z-10 min-w-[746px] -translate-x-1/2 overflow-hidden',
-        'bg-blur-neutral-80/80 border-neutral-80/5 rounded-2xl border backdrop-blur-md',
+        'rounded-2xl border border-neutral-80/5 bg-blur-neutral-80/80 backdrop-blur-md',
         'data-[visible=false]:pointer-events-none',
         'opacity-0 transition-opacity data-[visible=true]:opacity-100',
       ])}
@@ -58,7 +58,7 @@ export const NavMenu = () => {
                 className={cx([
                   'grid gap-3 pb-12 pl-[60px] pt-6',
                   'data-[state=open]:animate-in',
-                  'data-[state=closed]:animate-out fade-out-20',
+                  'fade-out-20 data-[state=closed]:animate-out',
                 ])}
               >
                 {links.map(link => {
@@ -91,8 +91,8 @@ export const NavMenu = () => {
 
       <NavigationMenu.Viewport
         className={cx([
-          'data-[state=open]:animate-heightIn data-[state=closed]:animate-heightOut',
-          'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
+          'data-[state=closed]:animate-heightOut data-[state=open]:animate-heightIn',
+          'h-[var(--radix-navigation-menu-viewport-height)] transition-height',
         ])}
       />
     </NavigationMenu.Root>

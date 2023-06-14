@@ -89,8 +89,8 @@ const BlogTagPage: Page<Props> = ({ posts, meta }) => {
   const _posts = data.pages.flatMap(page => page.posts)
 
   return (
-    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">
-      <div className="border-neutral-10 border-b px-5 py-3">
+    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100">
+      <div className="border-b border-neutral-10 px-5 py-3">
         {/* todo?: cut second segment */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>

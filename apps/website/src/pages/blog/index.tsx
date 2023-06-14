@@ -80,7 +80,7 @@ const BlogPage: Page<Props> = props => {
     data?.pages.flatMap(page => page.posts) ?? []
 
   return (
-    <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl px-5">
+    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100 px-5">
       <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
         <div className="mb-10 grid gap-2">
           <h1 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
@@ -100,7 +100,7 @@ const BlogPage: Page<Props> = props => {
               //   console.log('click')
               // }}
             >
-              <Shadow className="border-neutral-5 rounded-[20px] border">
+              <Shadow className="rounded-[20px] border border-neutral-5">
                 {/* todo: icon; if api provides or fallback? */}
                 {/* <Tag size={24} label={tag.name} /> */}
                 <Button
@@ -224,7 +224,7 @@ export const PostCard = (props: PostCardProps) => {
   const author = post.primary_author!
 
   return (
-    <Shadow className="border-neutral-5 h-full rounded-[20px] border">
+    <Shadow className="h-full rounded-[20px] border border-neutral-5">
       <Link href={`/blog/${post.slug}`} className="flex h-full w-full flex-col">
         <div className="flex grow flex-col gap-2 p-4">
           {showTag && (

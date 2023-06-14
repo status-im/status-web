@@ -83,7 +83,7 @@ const MENU_LINKS = [
 
 export const InsightsLayout: PageLayout = page => {
   return AppLayout(
-    <div className="bg-white-100 relative mx-1 flex min-h-[calc(100vh-56px-4px)] rounded-3xl">
+    <div className="relative mx-1 flex min-h-[calc(100vh-56px-4px)] rounded-3xl bg-white-100">
       <SideBar data={MENU_LINKS} />
       <main className="flex-1">{page}</main>
     </div>

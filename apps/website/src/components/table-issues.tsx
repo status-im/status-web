@@ -31,19 +31,19 @@ const issues = [
 
 export const TableIssues = () => {
   return (
-    <div className="border-neutral-10  overflow-hidden rounded-2xl border">
-      <div className="bg-neutral-5 border-neutral-10 border-b p-3">
+    <div className="overflow-hidden rounded-2xl border border-neutral-10">
+      <div className="border-b border-neutral-10 bg-neutral-5 p-3">
         <Text size={15} weight="medium">
           784 Open
         </Text>
       </div>
 
-      <div className="divide-neutral-10 divide-y">
+      <div className="divide-y divide-neutral-10">
         {issues.map(issue => (
           <Link
             key={issue.id}
             href={`https://github.com/status-im/status-react/issues/${issue.id}`}
-            className="hover:bg-neutral-5 flex items-center justify-between px-4 py-3 transition-colors duration-200"
+            className="flex items-center justify-between px-4 py-3 transition-colors duration-200 hover:bg-neutral-5"
           >
             <div className="flex flex-col">
               <Text size={15} weight="medium">

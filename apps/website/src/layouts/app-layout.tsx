@@ -78,8 +78,8 @@ export const AppLayout: PageLayout = page => {
           </div>
           <NavigationMenu.Viewport
             className={cx([
-              'data-[state=open]:animate-heightIn data-[state=closed]:animate-heightOut',
-              'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
+              'data-[state=closed]:animate-heightOut data-[state=open]:animate-heightIn',
+              'h-[var(--radix-navigation-menu-viewport-height)] transition-height',
               // 'data-[state=open]:animate-heightIn animate-',
               // 'data-[state=closed]:animate-heightOut',
               // 'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
