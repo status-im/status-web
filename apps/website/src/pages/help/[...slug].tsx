@@ -44,7 +44,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   const breadcrumbs = [
     {
       label: 'Status Help',
-      href: '/learn',
+      href: '/help',
     },
   ]
 

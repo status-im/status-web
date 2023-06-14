@@ -67,7 +67,7 @@ export const Doc = defineDocumentType(() => ({
     },
     url: {
       type: 'string',
-      resolve: doc => `/learn/${doc._raw.flattenedPath}`,
+      resolve: doc => `/help/${doc._raw.flattenedPath}`,
     },
     pathSegments: {
       type: 'json',

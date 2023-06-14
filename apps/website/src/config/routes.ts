@@ -17,12 +17,12 @@ export const ROUTES = {
     { name: 'Partners', href: '/' },
     { name: 'Press Kit', href: '/' },
   ],
-  Learn: [
-    { name: 'Getting Started', href: '/learn/' },
-    { name: 'Using Status', href: '/learn/' },
-    { name: 'Communities', href: '/learn/' },
-    { name: 'Wallet', href: '/learn/' },
-    { name: 'Profile', href: '/learn/' },
+  Help: [
+    { name: 'Getting Started', href: '/help/' },
+    { name: 'Using Status', href: '/help/' },
+    { name: 'Communities', href: '/help/' },
+    { name: 'Wallet', href: '/help/' },
+    { name: 'Profile', href: '/help/' },
   ],
   Collaborate: [
     { name: 'Discuss', href: '/' },

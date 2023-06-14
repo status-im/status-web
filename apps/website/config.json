@@ -2,14 +2,14 @@
   "menu": [
     {
       "label": "Getting Started",
-      "href": "/learn/getting-started"
+      "href": "/help/getting-started"
     },
     {
       "label": "Messaging",
       "links": [
         {
           "label": "SMS",
-          "href": "/learn/messaging/sms"
+          "href": "/help/messaging/sms"
         }
       ]
     }

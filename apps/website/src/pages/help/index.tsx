@@ -9,11 +9,11 @@ import { useSearchEngine } from '@/hooks/use-search-engine'
 // import { ROUTES } from '@/config/routes'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 
-import img3 from '../../../public/images/learn/communities.png'
-import img1 from '../../../public/images/learn/getting-started.png'
-import img5 from '../../../public/images/learn/profile-and-preferences.png'
-import img2 from '../../../public/images/learn/using-status.png'
-import img4 from '../../../public/images/learn/wallet.png'
+import img3 from '../../../public/images/help/communities.png'
+import img1 from '../../../public/images/help/getting-started.png'
+import img5 from '../../../public/images/help/profile-and-preferences.png'
+import img2 from '../../../public/images/help/using-status.png'
+import img4 from '../../../public/images/help/wallet.png'
 
 import type { Page } from 'next'
 
@@ -51,7 +51,7 @@ const SECTIONS = [
   },
 ] as const
 
-const LearnPage: Page = () => {
+const HelpPage: Page = () => {
   const search = useSearchEngine()
 
   return (
@@ -119,7 +119,7 @@ const LearnPage: Page = () => {
           <div className="grid grid-cols-3 gap-5">
             {SECTIONS.map(section => (
               <Link
-                href="/learn/getting-started"
+                href="/help/getting-started"
                 key={section.title}
                 className="border-neutral-10 shadow-1 hover:shadow-3 flex flex-col rounded-[20px] border p-4 transition duration-100 hover:scale-[1.01]"
               >
@@ -168,6 +168,6 @@ const LearnPage: Page = () => {
   )
 }
 
-LearnPage.getLayout = AppLayout
+HelpPage.getLayout = AppLayout
 
-export default LearnPage
+export default HelpPage
