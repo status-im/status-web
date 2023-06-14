@@ -57,35 +57,9 @@ Here is some warning
 Here is some warning <br/>
 :::
 
-<Admonition type="tip" text="This is a tip for you" />
-
-fkldsjfaksdjfaksdf
-
 :::tip
 Here is some warning
 :::
-
-| Approach            | Steps                                                                                                                                                                                                | Availability                          |
-| :------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------ |
-| Apollonius of Perga | 1. Hydrogen atoms are :mobile-audio: **creatures** of the cosmos. {==**[20]**==}</br>2. Inconspicuous motes of rock and gas</br>3. Corpus callosum globular star cluster citizens of distant epochs. | :material-square:                     |
-| Tingling            | 1. Billions upon billions rich in mystery rich.</br>2. Heavy :mobile-pin: **Atoms** another world billions upon billions.</br>3. A very small stage in a vast :mobile-privacy: **Cosmic** arena.     | :material-square: :material-triangle: |
-| Kindling            | 1. Vanquish the impossible shores of the :mobile-qr-code: **Cosmic** ocean.</br>1. Flatland are creatures of the cosmos culture tesseract                                                            | :material-triangle:                   |
-
-<Table headings={["Aproch]}>
-
-<Row>
-1. Vanquish the impossible shores of the :mobile-qr-code: **Cosmic** ocean.
-2. Flatland are creatures of the cosmos culture tesseract | :material-triangle:
-3. $#423423
-</Row>
-<Row>
-1. Vanquish the impossible shores of the :mobile-qr-code: **Cosmic** ocean.</br>1. Flatland are creatures of the cosmos culture tesseract | :material-triangle:
-</Row>
-<Row>
-1. Vanquish the impossible shores of the :mobile-qr-code: **Cosmic** ocean.</br>1. Flatland are creatures of the cosmos culture tesseract | :material-triangle:
-</Row>
-
-</Table>
 
 ### Code blocks
 
