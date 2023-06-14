@@ -1,0 +1,21 @@
+{
+  "menu": [
+    {
+      "label": "Getting Started",
+      "href": "/learn/getting-started"
+    },
+    {
+      "label": "Messaging",
+      "links": [
+        {
+          "label": "SMS",
+          "href": "/learn/messaging/sms"
+        }
+      ]
+    }
+  ],
+
+  "glossary": {
+    "HTML": "Hyper Text Markup Language"
+  }
+}
