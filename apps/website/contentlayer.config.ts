@@ -84,17 +84,17 @@ export const Doc = defineDocumentType(() => ({
     },
     headings: {
       // @ts-expect-error TODO
-      type: '{ level: 1 | 2 | 3; value: string, slug: string }[]',
+      type: '{ level: 1 | 2; value: string, slug: string }[]',
       resolve: async doc => {
         const result = await remark().use(remarkHeadings).process(doc.body.raw)
 
-        return (
-          result.data.headings as { depth: number; value: string }[]
-        ).map<DocHeading>(({ depth, value }) => ({
-          level: depth as DocHeading['level'],
-          value,
-          slug: slugify(value),
-        }))
+        return (result.data.headings as { depth: number; value: string }[])
+          .filter(({ depth }) => [1, 2].includes(depth))
+          .map<DocHeading>(({ depth, value }) => ({
+            level: depth as DocHeading['level'],
+            value,
+            slug: slugify(value),
+          }))
       },
     },
     last_edited: {
@@ -224,7 +224,8 @@ export default makeSource({
       })
     }
 
-    const filePath = path.resolve('./public/docs/en.json')
+    const filePath = path.resolve('./.contentlayer/en.json')
+
     fs.writeFile(filePath, JSON.stringify(index))
   },
 })
