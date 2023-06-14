@@ -6,15 +6,13 @@ import { useRouter } from 'next/router'
 import { NavLink } from './nav-link'
 import { NavNestedLinks } from './nav-nested-links'
 
-import type { Url } from 'next/dist/shared/lib/router/router'
-
 type Props = {
-  items?: {
+  items: {
     label: string
-    href?: Url
+    href?: string
     links?: {
       label: string
-      href: Url
+      href: string
     }[]
   }[]
 }
@@ -78,3 +76,4 @@ const SidebarMenu = (props: Props) => {
 }
 
 export { SidebarMenu }
+export type { Props as SidebarMenuProps }

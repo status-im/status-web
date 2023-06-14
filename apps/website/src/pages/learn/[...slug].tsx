@@ -10,10 +10,12 @@ import { SearchButton } from '@/components/search-button'
 import { SidebarMenu } from '@/components/sidebar-menu'
 import { TOC } from '@/components/toc'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
-import { buildLinkTree } from '@/utils/build-link-tree'
+
+import config from '../../../config.json'
 
 import type { InformationBoxProps } from '@/components/admonition'
 import type { BreadcrumbsProps } from '@/components/breadcrumbs'
+import type { SidebarMenuProps } from '@/components/sidebar-menu'
 import type { Doc } from '@docs'
 import type { GetStaticPaths, GetStaticProps, Page } from 'next'
 import type { ComponentProps } from 'react'
@@ -64,7 +66,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
   return {
     props: {
       doc,
-      tree: JSON.stringify(buildLinkTree(allDocs)),
+      menu: config.menu,
       breadcrumbs,
     },
   }
@@ -177,12 +179,12 @@ const components = {
 
 type Props = {
   doc: Doc
-  tree: string
+  menu: SidebarMenuProps['items']
   breadcrumbs: BreadcrumbsProps['items']
 }
 
 const DocsDetailPage: Page<Props> = props => {
-  const { doc, tree, breadcrumbs } = props
+  const { doc, menu, breadcrumbs } = props
 
   const Content = useMDXComponent(doc.body.code)
 
@@ -198,7 +200,7 @@ const DocsDetailPage: Page<Props> = props => {
 
       <div className="grid grid-cols-[320px_1fr_380px]">
         {/* Menu */}
-        <SidebarMenu items={JSON.parse(tree)} />
+        <SidebarMenu items={menu} />
 
         {/* Content */}
         <div className="mx-auto max-w-[542px] py-20">
