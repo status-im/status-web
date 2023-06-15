@@ -1,4 +1,4 @@
 {
-  "root": false,
-  "extends": ["plugin:tailwindcss/recommended"]
+  "root": true,
+  "extends": ["custom", "plugin:tailwindcss/recommended"]
 }

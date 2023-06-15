@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1.0.0",
+    "eslint-config-custom": "*",
     "happy-dom": "^9.1.7"
   },
   "files": [
