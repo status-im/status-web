@@ -3,6 +3,7 @@
   "private": true,
   "workspaces": {
     "packages": [
+      "packages/eslint-config-custom",
       "packages/status-js",
       "packages/colors",
       "packages/icons",
