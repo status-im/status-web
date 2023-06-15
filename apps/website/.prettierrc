@@ -2,5 +2,5 @@
   "semi": false,
   "singleQuote": true,
   "arrowParens": "avoid",
-  "tailwindConfig": "./tailwind.config.js"
+  "tailwindConfig": "./tailwind.config.cjs"
 }
