@@ -6,7 +6,7 @@ import { Text } from '../text'
 
 import type { TextProps } from '../text'
 import type { GetVariants, MapVariant, PressableProps } from '../types'
-import type { StackProps } from '@tamagui/core'
+import type { ColorTokens, StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
 
 type Variants = GetVariants<typeof Base>
@@ -19,6 +19,16 @@ type Props = PressableProps & {
   icon?: React.ReactElement
   iconAfter?: React.ReactElement
   disabled?: boolean
+  customColors?: {
+    color?: ColorTokens
+    backgroundColor?: ColorTokens
+    hoverStyle?: {
+      backgroundColor: ColorTokens
+    }
+    pressStyle?: {
+      backgroundColor: ColorTokens
+    }
+  }
 }
 
 const textColors: MapVariant<typeof Base, 'variant'> = {
@@ -45,13 +55,14 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     children,
     icon,
     iconAfter,
+    customColors,
     ...buttonProps
   } = props
 
   // TODO: provider aria-label if button has only icon
   const iconOnly = !children && Boolean(icon)
 
-  const textColor = textColors[variant]
+  const textColor = customColors?.color || textColors[variant]
   const textSize = textSizes[size]
 
   return (
@@ -62,8 +73,13 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       radius={shape === 'circle' ? 'full' : size}
       size={size}
       iconOnly={iconOnly}
+      backgroundColor={customColors?.backgroundColor}
+      hoverStyle={customColors?.hoverStyle}
+      pressStyle={customColors?.pressStyle}
     >
-      {icon ? cloneElement(icon, { color: '$neutral-40' }) : null}
+      {icon
+        ? cloneElement(icon, { color: customColors?.color || '$neutral-40' })
+        : null}
       <Text weight="medium" color={textColor} size={textSize}>
         {children}
       </Text>

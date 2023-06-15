@@ -89,8 +89,11 @@ export const AppLayout: PageLayout = page => {
         </NavigationMenu.Root>
 
         {/* ROUNDED WHITE BG */}
-        {/* <div className="bg-white-100 mx-1 min-h-[900px] rounded-3xl">{page}</div> */}
-        {page}
+        <div className="flex justify-center">
+          <div className="bg-white-100 mx-1 min-h-[900px] max-w-[1504px] rounded-3xl">
+            {page}
+          </div>
+        </div>
 
         <PageFooter />
       </div>
