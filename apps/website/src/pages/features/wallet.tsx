@@ -57,7 +57,7 @@ const WalletPage: Page = () => {
         </div>
 
         <ComparisionSection />
-        <div className="border-neutral-10 bg-white-100 relative rounded-[20px] border-t py-[160px] mix-blend-normal">
+        <div className="border-neutral-10 bg-white-100 relative rounded-[48px] border-t py-[160px] mix-blend-normal shadow-[0_-2px_20px_rgba(9,16,28,0.04)]">
           <TwoColsSection
             title="New address format"
             description="A way for wallets to automatically signal which chains they can receive funds on. So you don’t have to."

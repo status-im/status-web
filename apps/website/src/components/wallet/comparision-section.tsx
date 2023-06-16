@@ -66,8 +66,11 @@ const ComparisionSection = () => {
         style={{
           top: `${top}px`,
           bottom: `${bottom}px`,
+          left: -40,
+          // TODO: use font from design when it's ready
+          fontFamily: 'Menlo',
         }}
-        className="text-neutral-80/5 absolute whitespace-nowrap  font-mono text-[240px] font-bold leading-[212px]"
+        className="text-neutral-80/5 absolute whitespace-nowrap  text-[240px] font-bold leading-[212px]"
       >
         eth:opt:arb:0xAgafhja
       </h1>
