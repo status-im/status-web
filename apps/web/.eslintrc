@@ -1,4 +1,9 @@
 {
   "root": true,
-  "extends": ["custom"]
+  "extends": [
+    "custom",
+    "plugin:tailwindcss/recommended",
+    "next",
+    "next/core-web-vitals"
+  ]
 }

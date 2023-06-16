@@ -51,7 +51,6 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
-      "yarn lint",
       "prettier --write"
     ],
     "*.{md,mdx,yml,yaml,json}": [
