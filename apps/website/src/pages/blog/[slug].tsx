@@ -53,8 +53,10 @@ export const getStaticProps: GetStaticProps<
       Fragment,
       components: {
         a: (props: React.ComponentProps<'a'>) => (
-          <a {...props} className="text-customisation-blue-50 underline">
-            {props.children!}
+          <a {...props}>
+            <Text size={19} weight="regular" color="$blue-50">
+              {props.children!}
+            </Text>
           </a>
         ),
         p: ({ children }: React.ComponentProps<'p'>) => (
@@ -108,8 +110,10 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
         Fragment,
         components: {
           a: (props: React.ComponentProps<'a'>) => (
-            <a {...props} className="text-customisation-blue-50 underline">
-              {props.children!}
+            <a {...props}>
+              <Text size={19} weight="regular" color="$blue-50">
+                {props.children!}
+              </Text>
             </a>
           ),
           p: ({ children }: React.ComponentProps<'p'>) => (
@@ -138,80 +142,84 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
   }, [post.html])
 
   return (
-    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100">
-      <div className="border-b border-neutral-10 px-5 py-3">
+    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+      <div className="border-b border-neutral-10 px-5 py-[13px]">
         {/* fimxe: use title not slug */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>
 
-      <div className="p-5 xl:p-6">
-        <div className="mx-auto flex max-w-2xl flex-col gap-3">
-          <div className="mt-20 flex">
-            {post.primary_tag && (
-              <Tag size={32} label={post.primary_tag!.name!} />
-            )}
-          </div>
+      <div className="mx-auto flex max-w-2xl flex-col gap-3 px-5 pb-6 pt-12 lg:pt-20">
+        <div className="flex">
+          {post.primary_tag && (
+            <Tag size={32} label={post.primary_tag!.name!} />
+          )}
+        </div>
 
-          <h1 className="text-6xl font-bold">{post.title!}</h1>
+        <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
+          {post.title!}
+        </h1>
 
-          <div className="mt-auto flex h-5 items-center gap-1">
-            <Avatar
-              type="user"
-              size={20}
-              name={author.name ?? author.slug}
-              src={author.profile_image ?? undefined}
-            />
+        <div className="mt-auto flex h-5 items-center gap-1">
+          <Avatar
+            type="user"
+            size={20}
+            name={author.name ?? author.slug}
+            src={author.profile_image ?? undefined}
+          />
+          <Text size={15} weight="semibold">
+            {author.name ?? author.slug}
+          </Text>
+          <Text size={15} color="$neutral-50">
+            on {formatDate(new Date(post.published_at!))}
+          </Text>
+        </div>
+      </div>
+
+      <div className="w-full px-2 py-4 lg:px-6 lg:py-10">
+        <img
+          src={post.feature_image!}
+          className="aspect-[374/182] h-full w-full rounded-[20px] object-cover lg:aspect-[1456/470]"
+          alt={post.feature_image_alt!}
+        />
+      </div>
+
+      {/* fixme!: diff padding/gap per heading section and <p>s; affect only certain elements (e.g no bottom p/m for heading) */}
+      <div className="mx-auto grid max-w-2xl gap-12 px-5 py-6">{result}</div>
+
+      {/* todo?: social, sticky */}
+
+      <div className="mx-auto flex max-w-2xl flex-col gap-[17px] px-5 py-6">
+        <div className="flex flex-row items-center gap-2">
+          <Avatar
+            type="user"
+            size={32}
+            name={author.name ?? author.slug}
+            src={author.profile_image ?? undefined}
+          />
+          <div className="flex flex-col">
             <Text size={15} weight="semibold">
               {author.name ?? author.slug}
             </Text>
-            <Text size={15} color="$neutral-50">
-              on {formatDate(new Date(post.published_at!))}
+            <Text size={13} color="$neutral-50">
+              {author.meta_description}
             </Text>
           </div>
         </div>
 
-        <img
-          src={post.feature_image!}
-          className="mx-auto my-10 aspect-[1456/470] rounded-[20px] object-cover"
-          alt={post.feature_image_alt!}
-        />
-
-        <div className="relative mx-auto grid max-w-2xl gap-4">
-          {result}
-
-          {/* todo?: social, sticky */}
-
-          <div className="flex flex-row gap-2">
-            <Avatar
-              type="user"
-              size={32}
-              name={author.name ?? author.slug}
-              src={author.profile_image ?? undefined}
-            />
-            <div className="flex">
-              <Text size={15} weight="semibold">
-                {author.name ?? author.slug}
-              </Text>
-              <Text size={15} color="$neutral-50">
-                {author.meta_description}
-              </Text>
-            </div>
-          </div>
-
-          {/* todo: social */}
-          {/* <div>
+        {/* todo: social */}
+        {/* <div>
             <Text size={15} color="$neutral-50">
               Share article on:
             </Text>
           </div> */}
-        </div>
-        {/* <div
+      </div>
+
+      {/* <div
         className="mx-auto grid max-w-2xl gap-4"
         dangerouslySetInnerHTML={{ __html: post.hhh }}
       /> */}
 
-        {/* todo?: related articles */}
-      </div>
+      {/* todo?: related articles */}
     </div>
   )
 }

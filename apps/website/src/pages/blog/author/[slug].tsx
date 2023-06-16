@@ -94,39 +94,42 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
   const _posts = data.pages.flatMap(page => page.posts)
 
   return (
-    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100">
-      <div className="border-b border-neutral-10 px-5 py-3">
-        {/* todo?: cut second segment */}
+    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+      <div className="border-b border-neutral-10 px-5 py-[13px]">
         <Breadcrumbs cutFirstSegment={false} />
       </div>
 
-      <div className="mx-auto max-w-[1192px] py-32">
-        <div className="mb-8 grid gap-2">
-          <Avatar
-            type="user"
-            size={56}
-            name={author.name ?? author.slug}
-            src={author.profile_image ?? undefined}
-          />
-          <h1 className="text-7xl font-bold">{author.name}</h1>
-          {/* todo?: no desc; enforce */}
-          <Text size={19}>{author.meta_description}</Text>
-        </div>
+      <div className="px-5">
+        <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
+          <div className="mb-12 grid gap-2">
+            <Avatar
+              type="user"
+              size={56}
+              name={author.name ?? author.slug}
+              src={author.profile_image ?? undefined}
+            />
+            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
+              {author.name}
+            </h1>
+            {/* todo?: no desc; enforce */}
+            <Text size={19}>{author.meta_description}</Text>
+          </div>
 
-        <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
-          {_posts.map(post => (
-            <PostCard key={post.id} post={post} showAuthor={false} />
-          ))}
+          <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
+            {_posts.map(post => (
+              <PostCard key={post.id} post={post} showAuthor={false} />
+            ))}
+          </div>
+
+          {hasNextPage && (
+            <div className="mt-8 flex justify-center">
+              <Button variant="outline" onPress={() => fetchNextPage()}>
+                Load more posts
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-
-      {hasNextPage && (
-        <div className="flex justify-center pt-8">
-          <Button variant="outline" onPress={() => fetchNextPage()}>
-            Load more posts
-          </Button>
-        </div>
-      )}
     </div>
   )
 }

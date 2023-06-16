@@ -89,33 +89,42 @@ const BlogTagPage: Page<Props> = ({ posts, meta }) => {
   const _posts = data.pages.flatMap(page => page.posts)
 
   return (
-    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100">
-      <div className="border-b border-neutral-10 px-5 py-3">
+    // layout 1 (showBreadcrumbs, showHighlightedPostCard, ?posts=renderPosts())
+    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+      {/* layout 2 */}
+      {/* breadcumbs */}
+      <div className="border-b border-neutral-10 px-5 py-[13px]">
         {/* todo?: cut second segment */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>
 
-      <div className="mx-auto max-w-[1192px] py-32">
-        <div className="mb-8 grid gap-2">
-          {/* todo: tag icon */}
-          <h1 className="text-7xl font-bold">{tag.name}</h1>
-          <Text size={19}>{tag.description}</Text>
-        </div>
+      <div className="px-5">
+        <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
+          {/* content */}
+          {/* note: diff mb than index.ts (mb-12 vs. mb-10) */}
+          <div className="mb-12 grid gap-2">
+            {/* todo: tag icon */}
+            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
+              {tag.name}
+            </h1>
+            <Text size={19}>{tag.description}</Text>
+          </div>
 
-        <div className="mt-12 grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
-          {_posts.map(post => (
-            <PostCard key={post.id} post={post} showTag={false} />
-          ))}
+          <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
+            {_posts.map(post => (
+              <PostCard key={post.id} post={post} showTag={false} />
+            ))}
+          </div>
+
+          {hasNextPage && (
+            <div className="mt-8 flex justify-center">
+              <Button variant="outline" onPress={() => fetchNextPage()}>
+                Load more posts
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-
-      {hasNextPage && (
-        <div className="flex justify-center pt-8">
-          <Button variant="outline" onPress={() => fetchNextPage()}>
-            Load more posts
-          </Button>
-        </div>
-      )}
     </div>
   )
 }

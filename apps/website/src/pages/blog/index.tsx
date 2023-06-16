@@ -80,72 +80,74 @@ const BlogPage: Page<Props> = props => {
     data?.pages.flatMap(page => page.posts) ?? []
 
   return (
-    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100 px-5">
-      <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
-        <div className="mb-10 grid gap-2">
-          <h1 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
-            Blog.
-          </h1>
-          <Text size={19}>Long form articles, thoughts, and ideas.</Text>
-        </div>
-
-        {/* todo?: radix toggle group; or combobox with cmdk */}
-        <div className="mb-12 hidden gap-2">
-          {[...tags.entries()].map(([id, tag]) => (
-            // {/* {[...tags.values()].map(tag => ( */}
-            <div
-              key={id}
-              // key={tag}
-              // onClick={() => {
-              //   console.log('click')
-              // }}
-            >
-              <Shadow className="rounded-[20px] border border-neutral-5">
-                {/* todo: icon; if api provides or fallback? */}
-                {/* <Tag size={24} label={tag.name} /> */}
-                <Button
-                  size={32}
-                  variant="outline"
-                  onPress={() => {
-                    // const url = new URL(window.location.href)
-                    // url.searchParams.set('tag', tag.slug)
-
-                    // router.replace(url.pathname + url.search, undefined, {
-                    //   scroll: false,
-                    // })
-                    router.replace(
-                      { query: { ...router.query, tag: tag.slug } },
-                      undefined,
-                      { scroll: false }
-                    )
-                  }}
-                >
-                  {tag.name ?? tag.slug}
-                </Button>
-              </Shadow>
-            </div>
-          ))}
-        </div>
-
-        <div>
-          <div className="mb-[44px] xl:mb-12">
-            <HighlightedPostCard post={highlightedPost} />
+    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+      <div className="px-5">
+        <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
+          <div className="mb-10 grid gap-2">
+            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
+              Blog.
+            </h1>
+            <Text size={19}>Long form articles, thoughts, and ideas.</Text>
           </div>
 
-          <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
-            {rest.map(post => (
-              <PostCard key={post.id} post={post} />
+          {/* todo?: radix toggle group; or combobox with cmdk */}
+          <div className="mb-12 hidden gap-2">
+            {[...tags.entries()].map(([id, tag]) => (
+              // {/* {[...tags.values()].map(tag => ( */}
+              <div
+                key={id}
+                // key={tag}
+                // onClick={() => {
+                //   console.log('click')
+                // }}
+              >
+                <Shadow className="rounded-[20px] border border-neutral-5">
+                  {/* todo: icon; if api provides or fallback? */}
+                  {/* <Tag size={24} label={tag.name} /> */}
+                  <Button
+                    size={32}
+                    variant="outline"
+                    onPress={() => {
+                      // const url = new URL(window.location.href)
+                      // url.searchParams.set('tag', tag.slug)
+
+                      // router.replace(url.pathname + url.search, undefined, {
+                      //   scroll: false,
+                      // })
+                      router.replace(
+                        { query: { ...router.query, tag: tag.slug } },
+                        undefined,
+                        { scroll: false }
+                      )
+                    }}
+                  >
+                    {tag.name ?? tag.slug}
+                  </Button>
+                </Shadow>
+              </div>
             ))}
           </div>
-        </div>
 
-        {hasNextPage && (
-          <div className="mt-8 flex justify-center">
-            <Button variant="outline" onPress={() => fetchNextPage()}>
-              Load more posts
-            </Button>
+          <div>
+            <div className="mb-[44px] xl:mb-12">
+              <HighlightedPostCard post={highlightedPost} />
+            </div>
+
+            <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(334px,1fr))] gap-5">
+              {rest.map(post => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
           </div>
-        )}
+
+          {hasNextPage && (
+            <div className="mt-8 flex justify-center">
+              <Button variant="outline" onPress={() => fetchNextPage()}>
+                Load more posts
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -183,7 +185,7 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
         </div>
 
         <div>
-          <span className="text-4xl font-semibold xl:font-bold">
+          <span className="text-[27px] font-semibold leading-[32px] tracking-[-.021em] lg:text-[40px] lg:font-bold lg:leading-[44px] lg:tracking-[-.02em]">
             {post.title}
           </span>
         </div>
@@ -267,7 +269,7 @@ export const PostCard = (props: PostCardProps) => {
           )}
         </div>
 
-        <div className={'w-full px-2 pb-2'}>
+        <div className="w-full px-2 pb-2">
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <img
             className="aspect-[334/188] h-full w-full rounded-2xl object-cover"
