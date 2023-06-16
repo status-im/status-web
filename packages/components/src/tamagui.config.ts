@@ -45,6 +45,7 @@ export const config = createTamagui({
   },
   themes,
   tokens: {
+    // fixme?: use `@status-im/colors`; or at least fix/regen all values here
     colors: {
       ...tokens.color,
     },
