@@ -19,6 +19,7 @@ type Props = PressableProps & {
   icon?: React.ReactElement
   iconAfter?: React.ReactElement
   disabled?: boolean
+  fullWidth?: boolean
   customColors?: {
     color?: ColorTokens
     backgroundColor?: ColorTokens
@@ -56,6 +57,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     icon,
     iconAfter,
     customColors,
+    fullWidth,
     ...buttonProps
   } = props
 
@@ -76,6 +78,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       backgroundColor={customColors?.backgroundColor}
       hoverStyle={customColors?.hoverStyle}
       pressStyle={customColors?.pressStyle}
+      width={fullWidth ? '100%' : 'auto'}
     >
       {icon
         ? cloneElement(icon, { color: customColors?.color || '$neutral-40' })

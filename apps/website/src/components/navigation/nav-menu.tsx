@@ -7,8 +7,8 @@ import { cx } from 'class-variance-authority'
 
 import { LINKS } from '@/config/links'
 
-import { Link } from './link'
-import { Logo } from './logo'
+import { Link } from '../link'
+import { Logo } from '../logo'
 
 export const NavMenu = () => {
   const [visible, setVisible] = useState(false)
@@ -25,6 +25,9 @@ export const NavMenu = () => {
       }
     }
 
+    const isMobile = window.innerWidth < 768
+
+    if (isMobile) return
     handleScroll()
 
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -37,10 +40,11 @@ export const NavMenu = () => {
     <NavigationMenu.Root
       data-visible={visible}
       className={cx([
-        'fixed left-1/2 top-5 z-10 min-w-[746px] -translate-x-1/2 overflow-hidden',
+        'fixed left-1/2 top-5 z-10 w-max min-w-[746px] -translate-x-1/2 overflow-hidden',
         'bg-blur-neutral-80/80 border-neutral-80/5 rounded-2xl border backdrop-blur-md',
         'data-[visible=false]:pointer-events-none',
         'opacity-0 transition-opacity data-[visible=true]:opacity-100',
+        'hidden lg:block',
       ])}
     >
       <div className="flex items-center p-2">
