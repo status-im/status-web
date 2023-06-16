@@ -1,5 +1,6 @@
+import { FloatingMenuDesktop } from '@/components/navigation/floating-menu-desktop'
+import { FloatingMenuMobile } from '@/components/navigation/floating-menu-mobile'
 import { NavDesktop } from '@/components/navigation/nav-desktop'
-import { NavMenu } from '@/components/navigation/nav-menu'
 import { NavMobile } from '@/components/navigation/nav-mobile'
 import { PageFooter } from '@/components/page-footer'
 
@@ -8,7 +9,8 @@ import type { PageLayout } from 'next'
 export const AppLayout: PageLayout = page => {
   return (
     <>
-      <NavMenu />
+      <FloatingMenuDesktop />
+      <FloatingMenuMobile />
       <div className=" min-h-full bg-neutral-100">
         <NavDesktop />
         <NavMobile />

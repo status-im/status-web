@@ -6,6 +6,7 @@ import {
   ChevronRightIcon,
   CloseIcon,
   DownloadIcon,
+  ExternalIcon,
   MenuIcon,
 } from '@status-im/icons'
 
@@ -22,7 +23,7 @@ const NavMobile = () => {
   const handleToggle = () => {
     setOpen(prevOpen => !prevOpen)
 
-    // Add the following code to disable scrolling when the menu is open
+    // Adds the following code to disable scrolling when the menu is open
     const rootElement = document.documentElement
     if (open) {
       rootElement.style.overflowY = 'auto'
@@ -78,23 +79,22 @@ const NavMobile = () => {
                     </Text>
                   </Accordion.Trigger>
                   <Accordion.Content className="accordion-content">
-                    <div
-                      style={{
-                        overflow: 'hidden',
-                        paddingLeft: 20,
-                      }}
-                    >
+                    <div className="overflow-hidden py-5">
                       {links.map((link, index) => {
-                        const paddingClassName = index === 0 ? 'pt-5' : 'pt-2'
+                        const paddingClassName = index === 0 ? 'pt-5' : 'pt-3'
                         const paddingLastChild =
                           index === links.length - 1 ? 'pb-5' : ''
 
+                        const external = link.href.startsWith('http')
                         return (
                           <div
                             key={link.name + index}
                             className={`transition-opacity hover:opacity-50 ${paddingClassName} ${paddingLastChild}`}
                           >
-                            <Link href={link.href}>
+                            <Link
+                              href={link.href}
+                              className="flex items-center gap-1"
+                            >
                               <Text
                                 size={15}
                                 weight="medium"
@@ -102,6 +102,10 @@ const NavMobile = () => {
                               >
                                 {link.name}
                               </Text>
+
+                              {external && (
+                                <ExternalIcon size={20} color="$white-100" />
+                              )}
                             </Link>
                           </div>
                         )
@@ -116,7 +120,7 @@ const NavMobile = () => {
         <div className="flex justify-center py-3">
           <Button
             size={40}
-            variant="primary"
+            variant="grey"
             icon={<DownloadIcon size={20} />}
             fullWidth
           >

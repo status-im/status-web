@@ -10,7 +10,7 @@ import { LINKS } from '@/config/links'
 import { Link } from '../link'
 import { Logo } from '../logo'
 
-export const NavMenu = () => {
+const FloatingMenuDesktop = () => {
   const [visible, setVisible] = useState(false)
 
   // Using ref to prevent re-running of useEffect
@@ -102,3 +102,5 @@ export const NavMenu = () => {
     </NavigationMenu.Root>
   )
 }
+
+export { FloatingMenuDesktop }
