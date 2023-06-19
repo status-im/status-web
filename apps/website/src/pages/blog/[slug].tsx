@@ -82,6 +82,9 @@ export const getStaticProps: GetStaticProps<
         figure: (props: React.ComponentProps<'figure'>) => (
           <figure {...props} className="leading-[26px]" />
         ),
+        pre: (props: React.ComponentProps<'pre'>) => (
+          <pre {...props} className="overflow-scroll" />
+        ),
       },
     })
     .processSync(post.html!).result
@@ -141,6 +144,9 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
           ),
           figure: (props: React.ComponentProps<'figure'>) => (
             <figure {...props} className="leading-[26px]" />
+          ),
+          pre: (props: React.ComponentProps<'pre'>) => (
+            <pre {...props} className="overflow-scroll" />
           ),
         },
       })
