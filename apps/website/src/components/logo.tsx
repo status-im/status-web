@@ -16,7 +16,7 @@ export const Logo = (props: Props) => {
   const { pathname } = useRouter()
 
   return (
-    <div className="flex flex-shrink-0 items-center gap-2">
+    <div className="flex shrink-0 items-center gap-2">
       {match(pathname)
         .with(
           P.when(p => p.startsWith('/insights')),
@@ -28,7 +28,6 @@ export const Logo = (props: Props) => {
         )
         .with(
           P.when(p => p.startsWith('/blog')),
-          // fixme: logo svg
           () => <Image src={logoSrc} alt="Status logo" />
         )
         .otherwise(() => (

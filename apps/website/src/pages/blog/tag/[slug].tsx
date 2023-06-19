@@ -94,7 +94,6 @@ const BlogTagPage: Page<Props> = ({ posts, meta }) => {
       {/* layout 2 */}
       {/* breadcumbs */}
       <div className="border-b border-neutral-10 px-5 py-[13px]">
-        {/* todo?: cut second segment */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>
 
@@ -103,7 +102,6 @@ const BlogTagPage: Page<Props> = ({ posts, meta }) => {
           {/* content */}
           {/* note: diff mb than index.ts (mb-12 vs. mb-10) */}
           <div className="mb-12 grid gap-2">
-            {/* todo: tag icon */}
             <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
               {tag.name}
             </h1>

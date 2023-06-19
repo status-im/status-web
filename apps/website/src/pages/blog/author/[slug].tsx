@@ -61,7 +61,6 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
   //   redirect('/blog')
   // }
 
-  // todo?: enforce primary tag
   const author = posts[0].primary_author!
 
   const {
@@ -111,7 +110,6 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
             <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
               {author.name}
             </h1>
-            {/* todo?: no desc; enforce */}
             <Text size={19}>{author.meta_description}</Text>
           </div>
 

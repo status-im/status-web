@@ -90,7 +90,6 @@ const BlogPage: Page<Props> = props => {
             <Text size={19}>Long form articles, thoughts, and ideas.</Text>
           </div>
 
-          {/* todo?: radix toggle group; or combobox with cmdk */}
           <div className="mb-12 hidden gap-2">
             {[...tags.entries()].map(([id, tag]) => (
               // {/* {[...tags.values()].map(tag => ( */}
@@ -102,8 +101,6 @@ const BlogPage: Page<Props> = props => {
                 // }}
               >
                 <Shadow className="rounded-[20px] border border-neutral-5">
-                  {/* todo: icon; if api provides or fallback? */}
-                  {/* <Tag size={24} label={tag.name} /> */}
                   <Button
                     size={32}
                     variant="outline"

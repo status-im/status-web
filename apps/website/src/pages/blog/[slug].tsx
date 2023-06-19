@@ -156,7 +156,6 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
   return (
     <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
       <div className="border-b border-neutral-10 px-5 py-[13px]">
-        {/* fimxe: use title not slug */}
         <Breadcrumbs cutFirstSegment={false} />
       </div>
 
@@ -195,12 +194,9 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
         />
       </div>
 
-      {/* fixme!: diff padding/gap per heading section and <p>s; affect only certain elements (e.g no bottom p/m for heading) */}
       <div className="mx-auto flex max-w-2xl flex-col gap-12 px-5 py-6">
         {result}
       </div>
-
-      {/* todo?: social, sticky */}
 
       <div className="mx-auto flex max-w-2xl flex-col gap-[17px] px-5 py-6">
         <div className="flex flex-row items-center gap-2">
@@ -219,21 +215,12 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
             </Text>
           </div>
         </div>
-
-        {/* todo: social */}
-        {/* <div>
-            <Text size={15} color="$neutral-50">
-              Share article on:
-            </Text>
-          </div> */}
       </div>
 
       {/* <div
         className="mx-auto grid max-w-2xl gap-4"
         dangerouslySetInnerHTML={{ __html: post.hhh }}
       /> */}
-
-      {/* todo?: related articles */}
     </div>
   )
 }
