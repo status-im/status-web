@@ -82,7 +82,7 @@ const BlogPage: Page<Props> = props => {
   return (
     <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
       <div className="px-5">
-        <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
+        <div className="mx-auto max-w-[1184px] pb-24 pt-12 lg:pb-32 lg:pt-20">
           <div className="mb-10 grid gap-2">
             <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
               Blog.

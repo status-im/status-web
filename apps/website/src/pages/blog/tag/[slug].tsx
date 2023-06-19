@@ -99,7 +99,7 @@ const BlogTagPage: Page<Props> = ({ posts, meta }) => {
       </div>
 
       <div className="px-5">
-        <div className="mx-auto max-w-[1192px] pb-24 pt-12 lg:pb-32 lg:pt-20">
+        <div className="mx-auto max-w-[1184px] pb-24 pt-12 lg:pb-32 lg:pt-20">
           {/* content */}
           {/* note: diff mb than index.ts (mb-12 vs. mb-10) */}
           <div className="mb-12 grid gap-2">
