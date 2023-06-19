@@ -34,7 +34,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         </div>
         {hasPreFooter && <Prefooter />}
         <Footer hasBorderTop={hasPreFooter} />
-        <FooterMobile />
+        <FooterMobile hasBorderTop={hasPreFooter} />
       </div>
     </>
   )

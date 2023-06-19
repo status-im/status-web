@@ -7,9 +7,19 @@ import { AccordionMenu } from '../navigation/accordion-menu'
 import { Dot } from './components/dot'
 import { MessariIcon } from './components/messari-icon'
 
-export const FooterMobile = () => {
+type Props = {
+  hasBorderTop?: boolean
+}
+
+export const FooterMobile = (props: Props) => {
+  const { hasBorderTop } = props
+
+  const borderTopClassnames = hasBorderTop ? 'border-t' : 'border-t-0'
+
   return (
-    <footer className="block pb-12 sm:hidden">
+    <footer
+      className={`border-neutral-80 block border-dashed ${borderTopClassnames} pb-12 sm:hidden`}
+    >
       <div className="">
         <div className="flex flex-col px-2 pt-6">
           <div className="px-3 pb-3">
