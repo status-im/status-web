@@ -44,7 +44,7 @@ const FloatingMenuDesktop = () => {
         'bg-blur-neutral-80/80 border-neutral-80/5 rounded-2xl border backdrop-blur-md',
         'data-[visible=false]:pointer-events-none',
         'opacity-0 transition-opacity data-[visible=true]:opacity-100',
-        'hidden lg:block',
+        'md-lg:block hidden',
       ])}
     >
       <div className="flex items-center p-2">
