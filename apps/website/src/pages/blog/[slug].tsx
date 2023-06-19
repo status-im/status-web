@@ -196,7 +196,9 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
       </div>
 
       {/* fixme!: diff padding/gap per heading section and <p>s; affect only certain elements (e.g no bottom p/m for heading) */}
-      <div className="mx-auto grid max-w-2xl gap-12 px-5 py-6">{result}</div>
+      <div className="mx-auto flex max-w-2xl flex-col gap-12 px-5 py-6">
+        {result}
+      </div>
 
       {/* todo?: social, sticky */}
 
