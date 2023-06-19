@@ -125,6 +125,8 @@ const FeatureGrid = () => {
   )
 }
 
-HomePage.getLayout = AppLayout
+HomePage.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default HomePage

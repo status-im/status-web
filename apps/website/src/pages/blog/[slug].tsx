@@ -10,6 +10,8 @@ const BlogDetailPage: Page = () => {
   )
 }
 
-BlogDetailPage.getLayout = AppLayout
+BlogDetailPage.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default BlogDetailPage
