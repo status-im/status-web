@@ -8,19 +8,17 @@ type Props = {
   title: string
   links: Links
   noBorderLeft?: boolean
-  noBorderTop?: boolean
+  hasBorderTop?: boolean
 }
 
 const Section = (props: Props) => {
-  const { title, links, noBorderLeft, noBorderTop } = props
-  const noBorderTopClassnames = noBorderTop
-    ? 'border-t-0 pt-0'
-    : 'border-t pt-6'
+  const { title, links, noBorderLeft, hasBorderTop } = props
+  const hasBorderTopClassnames = hasBorderTop ? 'border-t' : 'border-t-0'
 
   return (
-    <div className={noBorderTop ? 'pt-6' : 'pt-0'}>
+    <div>
       <div
-        className={`border-neutral-80 relative grid gap-3 ${noBorderTopClassnames} border-dashed px-5 pb-6 pt-6 lg:border-l lg:pb-0 ${
+        className={`border-neutral-80 relative grid gap-3 ${hasBorderTopClassnames} border-dashed px-5 pb-6 pt-6 lg:border-l lg:pb-0 ${
           noBorderLeft ? 'border-l-0' : 'border-l'
         }`}
       >

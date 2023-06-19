@@ -1,7 +1,8 @@
 import { SideBar } from '../components'
 import { AppLayout } from './app-layout'
 
-import type { PageLayout } from 'next'
+// import type { PageLayout } from 'next'
+import type { ReactNode } from 'react'
 
 // Eventually this will be fetched from the API, at least the nested links
 const MENU_LINKS = [
@@ -81,14 +82,17 @@ const MENU_LINKS = [
   },
 ]
 
-export const InsightsLayout: PageLayout = page => {
-  return AppLayout({
-    page: (
+interface InsightsLayoutProps {
+  children: ReactNode
+}
+
+export const InsightsLayout: React.FC<InsightsLayoutProps> = ({ children }) => {
+  return (
+    <AppLayout hasPreFooter={false}>
       <div className="bg-white-100 relative mx-1 flex min-h-[calc(100vh-56px-4px)] w-full rounded-3xl">
         <SideBar data={MENU_LINKS} />
-        <main className="flex-1">{page}</main>
+        <main className="flex-1">{children}</main>
       </div>
-    ),
-    hasPreFooter: false,
-  })
+    </AppLayout>
+  )
 }

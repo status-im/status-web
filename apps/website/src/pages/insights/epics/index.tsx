@@ -59,12 +59,13 @@ const EpicsPage: Page = () => {
           </Shadow>
         ))}
       </div>
-
       <DatePicker selected={selectedDates} onSelect={setSelectedDates} />
     </div>
   )
 }
 
-EpicsPage.getLayout = InsightsLayout
+EpicsPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default EpicsPage

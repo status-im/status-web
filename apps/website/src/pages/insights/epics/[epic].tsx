@@ -26,6 +26,8 @@ const EpicsDetailPage: Page = () => {
   )
 }
 
-EpicsDetailPage.getLayout = InsightsLayout
+EpicsDetailPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default EpicsDetailPage

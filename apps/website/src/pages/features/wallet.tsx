@@ -88,6 +88,8 @@ const WalletPage: Page = () => {
   )
 }
 
-WalletPage.getLayout = AppLayout
+WalletPage.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default WalletPage

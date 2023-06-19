@@ -4,36 +4,36 @@ import { FloatingMenuDesktop } from '@/components/navigation/floating-menu-deskt
 import { FloatingMenuMobile } from '@/components/navigation/floating-menu-mobile'
 import { NavDesktop } from '@/components/navigation/nav-desktop'
 import { NavMobile } from '@/components/navigation/nav-mobile'
+import { Prefooter } from '@/components/pre-footer'
 
-import type { ReactElement, ReactNode } from 'react'
+// import type { PageLayout } from 'next'
+import type { ReactElement } from 'react'
 
-type Props = {
+type AppLayoutProps = {
   hasPreFooter?: boolean
-  page: ReactElement
+  children: ReactElement
 }
-export const AppLayout = (props: Props): ReactNode => {
-  const hasPreFooter = props?.hasPreFooter
 
+export const AppLayout: React.FC<AppLayoutProps> = ({
+  hasPreFooter = true,
+  children,
+}) => {
   return (
     <>
       <FloatingMenuDesktop />
       <FloatingMenuMobile />
-      <div className=" min-h-full bg-neutral-100">
+      <div className="min-h-full bg-neutral-100">
         <NavDesktop />
         <NavMobile />
 
         {/* ROUNDED WHITE BG */}
         <div className="flex justify-center">
           <div className="bg-white-100 mx-1 min-h-[900px] w-full max-w-[1504px] rounded-3xl">
-            {props.page}
+            {children}
           </div>
         </div>
-        {hasPreFooter && (
-          <div className="border-l-customisation-orange-50 mx-1 min-h-[900px] w-full max-w-[1504px] rounded-3xl">
-            This is the prefooter
-          </div>
-        )}
-        <Footer noBorderTop={!hasPreFooter} />
+        {hasPreFooter && <Prefooter />}
+        <Footer hasBorderTop={hasPreFooter} />
         <FooterMobile />
       </div>
     </>
