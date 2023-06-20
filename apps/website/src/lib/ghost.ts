@@ -9,7 +9,7 @@ const ghost = new GhostContentAPI({
 
 type Params = { page?: number; tag?: string }
 
-export const getPosts = async (params = {} as Params) => {
+export const getPosts = async (params: Params = {}) => {
   const { page = 0, tag } = params
 
   const response = await ghost.posts.browse({
