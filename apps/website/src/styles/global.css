@@ -117,8 +117,3 @@ button,
 [type='submit'] {
   -webkit-appearance: none;
 }
-
-html,
-body {
-  line-height: 0;
-}

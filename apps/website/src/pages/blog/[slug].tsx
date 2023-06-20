@@ -77,10 +77,7 @@ export const getStaticProps: GetStaticProps<
           </h2>
         ),
         ul: (props: React.ComponentProps<'ul'>) => (
-          <ul {...props} className="list-inside list-disc leading-[26px]" />
-        ),
-        figure: (props: React.ComponentProps<'figure'>) => (
-          <figure {...props} className="leading-[26px]" />
+          <ul {...props} className="list-inside list-disc" />
         ),
         pre: (props: React.ComponentProps<'pre'>) => (
           <pre {...props} className="overflow-scroll" />
@@ -140,10 +137,7 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
             </h2>
           ),
           ul: (props: React.ComponentProps<'ul'>) => (
-            <ul {...props} className="list-inside list-disc leading-[26px]" />
-          ),
-          figure: (props: React.ComponentProps<'figure'>) => (
-            <figure {...props} className="leading-[26px]" />
+            <ul {...props} className="list-inside list-disc" />
           ),
           pre: (props: React.ComponentProps<'pre'>) => (
             <pre {...props} className="overflow-scroll" />
