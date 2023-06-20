@@ -1,26 +1,22 @@
 import { Avatar, Button, Shadow, Tag, Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 
 import { formatDate } from '@/components/chart/utils/format-time'
 import { Link } from '@/components/link'
 import { AppLayout } from '@/layouts/app-layout'
-import { getPosts, getTags } from '@/lib/ghost'
+import { getPosts } from '@/lib/ghost'
 
-import type { PostOrPage, PostsOrPages, Tags } from '@tryghost/content-api'
+import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type { GetStaticProps, InferGetStaticPropsType, Page } from 'next'
 
 export const getStaticProps: GetStaticProps<{
-  tags: Tags
   posts: PostOrPage[]
   meta: PostsOrPages['meta']
 }> = async () => {
   const { posts, meta } = await getPosts()
-  const tags = await getTags()
 
   return {
     props: {
-      tags,
       posts,
       meta,
     },
@@ -30,14 +26,7 @@ export const getStaticProps: GetStaticProps<{
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
 const BlogPage: Page<Props> = props => {
-  const { tags: initialTags, posts, meta } = props
-
-  const tags = new Map<string, { name?: string; slug: string }>(
-    initialTags.map(tag => [tag.slug, tag])
-  )
-
-  const router = useRouter()
-  const { tag } = router.query as { tag?: string }
+  const { posts, meta } = props
 
   const {
     data,
@@ -49,26 +38,14 @@ const BlogPage: Page<Props> = props => {
     // status,
     // isFetched,
   } = useInfiniteQuery({
-    queryKey: ['posts', tag],
-    queryFn: async ({ pageParam: page, queryKey }) => {
-      const [, tag] = queryKey
+    queryKey: ['posts'],
+    queryFn: async ({ pageParam: page }) => {
+      const { posts, meta } = await getPosts({ page })
 
-      const { posts, meta } = await getPosts({ page, tag })
-
-      let filteredPosts = posts
-      if (tag && tags.has(tag)) {
-        filteredPosts = filteredPosts.filter(
-          post => post.primary_tag?.slug === tag
-        )
-      }
-
-      return { posts: filteredPosts, meta }
+      return { posts, meta }
     },
     getNextPageParam: ({ meta }) => meta.pagination.next,
-    ...(!tag && {
-      initialData: { pages: [{ posts, meta }], pageParams: [1] },
-      // staleTime: Infinity,
-    }),
+    initialData: { pages: [{ posts, meta }], pageParams: [1] },
     staleTime: Infinity,
   })
 
@@ -88,41 +65,6 @@ const BlogPage: Page<Props> = props => {
               Blog.
             </h1>
             <Text size={19}>Long form articles, thoughts, and ideas.</Text>
-          </div>
-
-          <div className="mb-12 hidden gap-2">
-            {[...tags.entries()].map(([id, tag]) => (
-              // {/* {[...tags.values()].map(tag => ( */}
-              <div
-                key={id}
-                // key={tag}
-                // onClick={() => {
-                //   console.log('click')
-                // }}
-              >
-                <Shadow className="rounded-[20px] border border-neutral-5">
-                  <Button
-                    size={32}
-                    variant="outline"
-                    onPress={() => {
-                      // const url = new URL(window.location.href)
-                      // url.searchParams.set('tag', tag.slug)
-
-                      // router.replace(url.pathname + url.search, undefined, {
-                      //   scroll: false,
-                      // })
-                      router.replace(
-                        { query: { ...router.query, tag: tag.slug } },
-                        undefined,
-                        { scroll: false }
-                      )
-                    }}
-                  >
-                    {tag.name ?? tag.slug}
-                  </Button>
-                </Shadow>
-              </div>
-            ))}
           </div>
 
           <div>
