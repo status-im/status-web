@@ -1,6 +1,6 @@
 import { createIcon } from '../lib/create-icon'
 
-const SvgRecentIcon = createIcon(props => {
+const SvgCrossCircleIcon = createIcon(props => {
   return (
     <svg
       {...props}
@@ -12,14 +12,15 @@ const SvgRecentIcon = createIcon(props => {
       focusable={false}
       aria-hidden={true}
     >
+      <circle cx={10} cy={10} r={7.5} fill="#E95460" />
       <path
-        fill={props.color}
+        fill="#fff"
         fillRule="evenodd"
-        d="M3.6 10a6.4 6.4 0 1 1 12.8 0 6.4 6.4 0 0 1-12.8 0ZM10 2.4a7.6 7.6 0 1 0 0 15.2 7.6 7.6 0 0 0 0-15.2Zm.6 3.6v3.4h2.9v1.2H9.4V6h1.2Z"
+        d="m10 10.849 2.05 2.05.849-.848-2.05-2.05 2.05-2.052-.848-.848L10 9.15 7.95 7.1l-.85.848L9.152 10l-2.05 2.05.849.85L10 10.848Z"
         clipRule="evenodd"
       />
     </svg>
   )
 })
 
-export default SvgRecentIcon
+export default SvgCrossCircleIcon

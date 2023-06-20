@@ -12,7 +12,7 @@
     clip-rule="evenodd"
   />
   <mask
-    id="prefix__mask0_347_48"
+    id="mask0_347_48"
     width="2"
     height="13"
     x="9"
@@ -21,17 +21,17 @@
     style="mask-type: alpha"
   >
     <path
-      fill="url(#prefix__paint0_linear_347_48)"
+      fill="url(#paint0_linear_347_48)"
       d="M0 0h2v12H0z"
       transform="matrix(-1 0 0 1 11 3.5)"
     />
   </mask>
-  <g mask="url(#prefix__mask0_347_48)">
+  <g mask="url(#mask0_347_48)">
     <path stroke="#09101C" stroke-width="1.2" d="M10 3.5V15" />
   </g>
   <defs>
     <linearGradient
-      id="prefix__paint0_linear_347_48"
+      id="paint0_linear_347_48"
       x1="1"
       x2="1"
       y1=".5"

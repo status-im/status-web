@@ -1,6 +1,6 @@
 import { createIcon } from '../lib/create-icon'
 
-const SvgRecentIcon = createIcon(props => {
+const SvgMessengerIcon = createIcon(props => {
   return (
     <svg
       {...props}
@@ -15,11 +15,11 @@ const SvgRecentIcon = createIcon(props => {
       <path
         fill={props.color}
         fillRule="evenodd"
-        d="M3.6 10a6.4 6.4 0 1 1 12.8 0 6.4 6.4 0 0 1-12.8 0ZM10 2.4a7.6 7.6 0 1 0 0 15.2 7.6 7.6 0 0 0 0-15.2Zm.6 3.6v3.4h2.9v1.2H9.4V6h1.2Z"
+        d="M1.9 8.5a6.6 6.6 0 0 1 6.6-6.6h2.638a6.962 6.962 0 0 1 3.53 12.962l-5.364 3.155-.904.532V15.1a6.6 6.6 0 0 1-6.5-6.6Zm6.6-5.4a5.4 5.4 0 0 0 0 10.8h1.1v2.551l4.46-2.623A5.761 5.761 0 0 0 11.138 3.1H8.5ZM7 6.4h6v1.2H7V6.4Zm4.5 3H7v1.2h4.5V9.4Z"
         clipRule="evenodd"
       />
     </svg>
   )
 })
 
-export default SvgRecentIcon
+export default SvgMessengerIcon
