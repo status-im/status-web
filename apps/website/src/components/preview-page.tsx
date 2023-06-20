@@ -109,8 +109,10 @@ export function PreviewPage(props: PreviewPageProps) {
     channelUuid: urlChannelUuid,
     data: urlData,
     errorCode: urlErrorCode,
+    isLoading: urlIsLoading,
   } = useURLData(type, decodedData, encodedData)
 
+  const wakuQueryIsEnabled = Boolean(publicKey)
   const {
     data: wakuData,
     isLoading,
@@ -119,7 +121,7 @@ export function PreviewPage(props: PreviewPageProps) {
   } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: [type],
-    enabled: !!publicKey,
+    enabled: wakuQueryIsEnabled,
     queryFn: async function ({ queryKey }): Promise<Data | null> {
       const client = await getRequestClient()
 
@@ -179,7 +181,20 @@ export function PreviewPage(props: PreviewPageProps) {
     },
   })
 
-  const loading = status === 'loading' || isLoading
+  const loading = getLoading()
+
+  function getLoading(): boolean {
+    if (urlIsLoading) {
+      return true
+    }
+
+    if (wakuQueryIsEnabled) {
+      return status === 'loading' || isLoading
+    }
+
+    return false
+  }
+
   const data: Data | undefined = wakuData ?? urlData
 
   const { avatarURL, bannerURL } = useMemo(() => {
