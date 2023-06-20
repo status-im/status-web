@@ -66,7 +66,7 @@ const BlogPage: Page<Props> = props => {
     },
     getNextPageParam: ({ meta }) => meta.pagination.next,
     ...(!tag && {
-      initialData: { pages: [{ posts, meta }], pageParams: [0] },
+      initialData: { pages: [{ posts, meta }], pageParams: [1] },
       // staleTime: Infinity,
     }),
     staleTime: Infinity,

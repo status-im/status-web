@@ -82,7 +82,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
       return { posts, meta }
     },
     getNextPageParam: ({ meta }) => meta.pagination.next,
-    initialData: { pages: [{ posts, meta }], pageParams: [0] },
+    initialData: { pages: [{ posts, meta }], pageParams: [1] },
     staleTime: Infinity,
   })
 
