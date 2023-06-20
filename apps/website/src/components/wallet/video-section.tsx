@@ -7,7 +7,7 @@ const VideoSection = () => {
     <div className="relative flex flex-col md:flex-row">
       <ParalaxCircle initialLeft={-100} initialTop={-100} />
 
-      <div className="relative flex flex-col px-5 pt-24 lg:px-[164px] lg:pt-[240px]">
+      <div className="relative z-[1] flex flex-col px-5 pt-24 lg:px-[164px] lg:pt-[240px]">
         <h1 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
           Fully
           <br />

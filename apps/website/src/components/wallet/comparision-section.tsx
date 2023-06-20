@@ -50,7 +50,7 @@ const ComparisionSection = () => {
             ))}
           </div>
         </div>
-        <div className="border-neutral-80/20 border-r border-dashed px-10 py-[160px]">
+        <div className="px-10 py-[160px]">
           <Text size={19} weight="semibold">
             Status Wallet
           </Text>
@@ -70,7 +70,7 @@ const ComparisionSection = () => {
           // TODO: use font from design when it's ready
           fontFamily: 'Menlo',
         }}
-        className="text-neutral-80/5 absolute whitespace-nowrap  text-[240px] font-bold leading-[212px]"
+        className="text-neutral-80/5 absolute whitespace-nowrap text-[240px] font-bold leading-[212px]"
       >
         eth:opt:arb:0xAgafhja
       </h1>
