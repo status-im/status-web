@@ -23,7 +23,7 @@
     "@tamagui/next-theme": "1.11.1",
     "@tanstack/react-query": "^4.29.7",
     "@vercel/og": "^0.5.4",
-    "@tryghost/content-api": "^1.11.11",
+    "@tryghost/content-api": "^1.11.13",
     "@visx/visx": "^2.18.0",
     "class-variance-authority": "^0.6.0",
     "d3-array": "^3.2.3",
