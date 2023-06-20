@@ -9,15 +9,15 @@ const ghost = new GhostContentAPI({
   version: 'v5.0',
 })
 
-type Params = { page?: number; tag?: string }
+type Params = { page?: number; limit?: number; tag?: string }
 
 export const getPosts = async (params: Params = {}) => {
-  const { page = 1, tag } = params
+  const { page = 1, limit = 7, tag } = params
 
   const response = await ghost.posts.browse({
-    limit: 7,
     include: ['tags', 'authors'],
     order: 'published_at DESC',
+    limit,
     page,
     ...(tag && { filter: `tag:${tag}` }),
     filter: 'visibility:public',
@@ -28,9 +28,7 @@ export const getPosts = async (params: Params = {}) => {
 
 export const getPostBySlug = async (slug: string) => {
   return await ghost.posts.read(
-    {
-      slug,
-    },
+    { slug },
     {
       include: ['tags', 'authors'],
     }
