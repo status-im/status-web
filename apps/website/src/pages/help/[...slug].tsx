@@ -217,7 +217,7 @@ const DocsDetailPage: Page<Props> = props => {
                   src={`https://github.com/${doc.author}.png`}
                 />
                 <Text size={15} weight="semibold">
-                  Jorge Campo
+                  {doc.author}
                 </Text>
               </Link>
               <Text size={15} color="$neutral-50">
@@ -254,7 +254,9 @@ const DocsDetailPage: Page<Props> = props => {
         </div>
 
         {/* Table of contents */}
-        <TOC headings={doc.headings} />
+        <div className="sticky top-0 hidden pt-20 xl:block">
+          <TOC headings={doc.headings} />
+        </div>
       </div>
     </PageBody>
   )

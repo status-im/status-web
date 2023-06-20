@@ -11,7 +11,7 @@ type TOCProps = {
 export const TOC = (props: TOCProps) => {
   const { headings } = props
   return (
-    <div className="sticky top-0 flex flex-col gap-3 pt-20">
+    <div className="flex flex-col gap-3">
       <Text size={13} weight="medium" color="$neutral-50">
         In this article
       </Text>
