@@ -123,3 +123,10 @@ button,
 [type='submit'] {
   -webkit-appearance: none;
 }
+
+/*
+ 10. Style code blocks in markdown
+*/
+pre > code {
+  display: grid;
+}
