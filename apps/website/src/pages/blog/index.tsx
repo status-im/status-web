@@ -1,6 +1,9 @@
+import { useMemo } from 'react'
+
 import { Avatar, Button, Shadow, Tag, Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+// import Image from 'next/image'
 import { formatDate } from '@/components/chart/utils/format-time'
 import { Link } from '@/components/link'
 import { AppLayout } from '@/layouts/app-layout'
@@ -39,22 +42,18 @@ const BlogPage: Page<Props> = props => {
     // isFetched,
   } = useInfiniteQuery({
     queryKey: ['posts'],
-    queryFn: async ({ pageParam: page }) => {
-      const { posts, meta } = await getPosts({ page })
-
-      return { posts, meta }
-    },
+    queryFn: async ({ pageParam: page }) => await getPosts({ page }),
     getNextPageParam: ({ meta }) => meta.pagination.next,
     initialData: { pages: [{ posts, meta }], pageParams: [1] },
     staleTime: Infinity,
   })
 
-  if (!data) {
-    return null
-  }
-
-  const [highlightedPost, ...rest] =
-    data?.pages.flatMap(page => page.posts) ?? []
+  const { highlightedPost, visiblePosts } = useMemo(() => {
+    const [highlightedPost, ...posts] = data!.pages.flatMap(page => page.posts)
+    const maxLength = posts.length - (posts.length % 3) // the number of posts should be divisible by 3
+    const visiblePosts = posts.slice(0, maxLength)
+    return { highlightedPost, visiblePosts }
+  }, [data])
 
   return (
     <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
@@ -73,7 +72,7 @@ const BlogPage: Page<Props> = props => {
             </div>
 
             <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
-              {rest.map(post => (
+              {visiblePosts.map(post => (
                 <PostCard key={post.id} post={post} />
               ))}
             </div>
@@ -107,10 +106,10 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
       className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-7"
     >
       <div className="col-span-2 w-full flex-[2] shrink-0">
-        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <img
           className="aspect-[366/206] h-full w-full rounded-2xl object-cover"
           src={post.feature_image!}
+          alt={post.feature_image_alt!}
         />
       </div>
 
