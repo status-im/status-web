@@ -18,7 +18,8 @@ export const ROUTES = {
     { name: 'Press Kit', href: '/' },
   ],
   Help: [
-    { name: 'Getting Started', href: '/help/' },
+    { name: 'Overview', href: '/help' },
+    { name: 'Getting Started', href: '/help/getting-started' },
     { name: 'Using Status', href: '/help/' },
     { name: 'Communities', href: '/help/' },
     { name: 'Wallet', href: '/help/' },
