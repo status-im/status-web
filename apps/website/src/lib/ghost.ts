@@ -18,6 +18,7 @@ export const getPosts = async (params: Params = {}) => {
     order: 'published_at DESC',
     page,
     ...(tag && { filter: `tag:${tag}` }),
+    filter: 'visibility:public',
   })
 
   return { posts: [...response], meta: response.meta }
