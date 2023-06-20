@@ -1,7 +1,6 @@
 import { SideBar } from '../components'
 import { AppLayout } from './app-layout'
 
-// import type { PageLayout } from 'next'
 import type { ReactNode } from 'react'
 
 // Eventually this will be fetched from the API, at least the nested links

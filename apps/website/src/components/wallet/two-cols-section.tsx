@@ -10,7 +10,7 @@ type TwoColsSectionProps = {
   imageSecondaryAlt: string
   secondaryDescription: string
   secondaryTitle: string
-  complemntaryDescription?: {
+  complementaryDescription?: {
     title: string
     description: string
   }
