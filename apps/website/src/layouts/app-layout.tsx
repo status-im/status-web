@@ -6,7 +6,6 @@ import { NavDesktop } from '@/components/navigation/nav-desktop'
 import { NavMobile } from '@/components/navigation/nav-mobile'
 import { Prefooter } from '@/components/pre-footer'
 
-// import type { PageLayout } from 'next'
 import type { ReactElement } from 'react'
 
 type AppLayoutProps = {
@@ -28,7 +27,8 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 
         {/* ROUNDED WHITE BG */}
         <div className="flex justify-center lg:p-1">
-          <div className="bg-white-100 min-h-[900px] w-full max-w-[1504px] rounded-3xl">
+          {/* TODO Check max-width to use */}
+          <div className="bg-white-100 min-h-[900px] w-full rounded-3xl">
             {children}
           </div>
         </div>

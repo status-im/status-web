@@ -9,10 +9,10 @@ import { LINKS } from '@/config/links'
 import { Link } from '../link'
 
 const AccordionMenu = () => {
-  const [openLink, setOpen] = useState('')
+  const [openLink, setOpenLink] = useState('')
 
   const handleToggle = (value: string) => {
-    setOpen(value === openLink ? '' : value)
+    setOpenLink(value === openLink ? '' : value)
   }
 
   return (
