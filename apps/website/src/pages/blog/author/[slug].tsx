@@ -90,7 +90,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
     return null
   }
 
-  const _posts = data.pages.flatMap(page => page.posts)
+  const allPosts = data.pages.flatMap(page => page.posts)
 
   return (
     <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
@@ -114,7 +114,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
           </div>
 
           <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
-            {_posts.map(post => (
+            {allPosts.map(post => (
               <PostCard key={post.id} post={post} showAuthor={false} />
             ))}
           </div>
