@@ -12,7 +12,7 @@ const ParalaxCircle = (props: ParalaxProps) => {
 
   return (
     <div
-      className=" bg-customisation-yellow-50 absolute z-[0] h-[676px] w-[676px] rounded-full opacity-[0.08] blur-[260px]"
+      className=" bg-customisation-yellow-50 absolute z-[0] h-[676px] w-[676px] rounded-full opacity-[0.10] blur-[260px]"
       style={{
         left: `${props.initialLeft}px`,
         top: `${top}px`,

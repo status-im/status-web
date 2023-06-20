@@ -8,8 +8,8 @@ import type { Page } from 'next'
 const HomePage: Page = () => {
   return (
     <>
-      <div className="bg-white-100 mx-1 rounded-3xl py-32">
-        <div className="mx-40 mb-40 grid gap-8">
+      <div className="px-5 py-32 lg:px-40">
+        <div className="mb-40 grid gap-8 px-5 ">
           <div className="grid gap-6">
             <h1 className="text-7xl font-bold">
               Make the
@@ -23,7 +23,7 @@ const HomePage: Page = () => {
           </div>
 
           <div className="grid gap-4">
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 lg:flex-col">
               <Button size={40} icon={<DownloadIcon size={20} />}>
                 Sign up for early access
               </Button>
@@ -80,7 +80,7 @@ type FeatureSectionProps = {
 const FeatureSection = ({ title, description }: FeatureSectionProps) => {
   return (
     <section className="px-10">
-      <div className="mb-24 flex justify-between">
+      <div className="mb-24 flex flex-col justify-between lg:flex-row">
         <h2 className="flex-1 whitespace-pre-line text-6xl font-bold">
           {title}
         </h2>

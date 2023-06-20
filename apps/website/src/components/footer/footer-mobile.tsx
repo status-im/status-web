@@ -14,11 +14,11 @@ type Props = {
 export const FooterMobile = (props: Props) => {
   const { hasBorderTop } = props
 
-  const borderTopClassnames = hasBorderTop ? 'border-t' : 'border-t-0'
-
   return (
     <footer
-      className={`border-neutral-80 block border-dashed ${borderTopClassnames} pb-12 sm:hidden`}
+      className={`border-neutral-80 block border-dashed ${
+        hasBorderTop ? 'border-t' : 'border-t-0'
+      } pb-12 sm:hidden`}
     >
       <div className="">
         <div className="flex flex-col px-2 pt-6">

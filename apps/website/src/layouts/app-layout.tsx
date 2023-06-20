@@ -22,13 +22,13 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     <>
       <FloatingMenuDesktop />
       <FloatingMenuMobile />
-      <div className="min-h-full bg-neutral-100">
+      <div className="min-h-full w-full bg-neutral-100">
         <NavDesktop />
         <NavMobile />
 
         {/* ROUNDED WHITE BG */}
-        <div className="flex justify-center">
-          <div className="bg-white-100 mx-1 min-h-[900px] w-full max-w-[1504px] rounded-3xl">
+        <div className="flex justify-center lg:p-1">
+          <div className="bg-white-100 min-h-[900px] w-full max-w-[1504px] rounded-3xl">
             {children}
           </div>
         </div>

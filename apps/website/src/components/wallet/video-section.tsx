@@ -4,19 +4,11 @@ import { ParalaxCircle } from './parallax-circle'
 
 const VideoSection = () => {
   return (
-    <div className="relative">
+    <div className="relative flex flex-col md:flex-row">
       <ParalaxCircle initialLeft={-100} initialTop={-100} />
-      <div className="absolute right-[-5px] top-0 flex justify-center">
-        <video autoPlay loop muted playsInline>
-          <source
-            src="/images/wallet/vitalik.mp4"
-            type="video/mp4;codecs=hvc1"
-          />
-          <source src="/images/wallet/vitalik.webm" type="video/webm" />
-        </video>
-      </div>
-      <div className="relative flex flex-col pl-[164px] pt-[240px]">
-        <h1 className="text-[64px] font-bold leading-[68px]">
+
+      <div className="relative flex flex-col px-5 pt-24 lg:px-[164px] lg:pt-[240px]">
+        <h1 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
           Fully
           <br />
           Decentralized
@@ -25,7 +17,7 @@ const VideoSection = () => {
         </h1>
 
         <div className="flex max-w-[462px] flex-col pt-4">
-          <Text size={19}>
+          <Text size={27}>
             Status supports blockchain networks that are fully committed to
             decentralization.
           </Text>
@@ -67,6 +59,15 @@ const VideoSection = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="relative right-[-5px] top-0 flex justify-center md:absolute">
+        <video autoPlay loop muted playsInline>
+          <source
+            src="/images/wallet/vitalik.mp4"
+            type="video/mp4;codecs=hvc1"
+          />
+          <source src="/images/wallet/vitalik.webm" type="video/webm" />
+        </video>
       </div>
     </div>
   )

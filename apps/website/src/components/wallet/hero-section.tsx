@@ -6,7 +6,7 @@ import { ParalaxCircle } from './parallax-circle'
 const HeroSection = () => {
   return (
     <>
-      <div className="relative mx-40 mb-24 grid gap-8">
+      <div className="relative mb-16 grid px-5 lg:mb-24 lg:px-40">
         <ParalaxCircle initialLeft={-206} initialTop={-170} />
         <div className="relative flex flex-col items-center justify-center">
           <div className="inline-flex">
@@ -17,7 +17,7 @@ const HeroSection = () => {
               label="Wallet"
             />
           </div>
-          <h1 className="max-w-[600px] py-4 pb-5 text-center text-[88px] font-bold leading-[84px]">
+          <h1 className="max-w-[600px] py-4 pb-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
             The future
             <br />
             is multi-chain
@@ -31,7 +31,7 @@ const HeroSection = () => {
         </div>
 
         <div className="relative flex justify-center">
-          <div className="border-neutral-80/20 mt-16 inline-flex rounded-[20px] border border-dashed p-2">
+          <div className="border-neutral-80/20 mt-6 inline-flex rounded-[20px] border border-dashed p-2 lg:mt-16">
             <Button
               size={40}
               icon={<DownloadIcon size={20} />}

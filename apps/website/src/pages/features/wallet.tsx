@@ -13,7 +13,7 @@ import type { Page } from 'next'
 const WalletPage: Page = () => {
   return (
     <>
-      <div className="overflow-hidden pt-32">
+      <div className="overflow-hidden pt-16 lg:pt-32">
         <HeroSection />
         <VideoSection />
         <div className="relative pt-[220px]">
