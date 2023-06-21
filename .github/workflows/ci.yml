@@ -6,6 +6,11 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+env:
+  NEXT_PUBLIC_GHOST_API_KEY: ${{ secrets.NEXT_PUBLIC_GHOST_API_KEY }}
+  INFURA_API_KEY: ${{ secrets.INFURA_API_KEY }}
+  TAMAGUI_TARGET: ${{ vars.TAMAGUI_TARGET }}
+
 jobs:
   build:
     name: Build and Test
