@@ -80,10 +80,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint"
-    ]
   }
 }

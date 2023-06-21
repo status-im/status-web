@@ -40,10 +40,5 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "@status-im/eslint-config": "*",
     "typescript": "^5.0.3"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint"
-    ]
   }
 }

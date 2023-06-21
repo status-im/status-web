@@ -27,10 +27,5 @@
     "@status-im/eslint-config": "*",
     "typescript": "^5.0.3",
     "vite": "^4.2.1"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint"
-    ]
   }
 }

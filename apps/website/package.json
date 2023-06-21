@@ -59,10 +59,5 @@
   },
   "engines": {
     "node": "^18.x"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint"
-    ]
   }
 }
