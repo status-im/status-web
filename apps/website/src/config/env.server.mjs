@@ -6,4 +6,4 @@ export const envSchema = z.object({
   NEXT_PUBLIC_GHOST_API_KEY: z.string(),
 })
 
-export const envServer = envSchema.parse(process.env)
+export const serverEnv = envSchema.parse(process.env)

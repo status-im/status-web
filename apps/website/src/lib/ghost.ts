@@ -1,11 +1,11 @@
 import GhostContentAPI from '@tryghost/content-api'
 
-import { envClient } from '@/config/env.client.mjs'
+import { clientEnv } from '@/config/env.client.mjs'
 
 /** @see https://ghost.org/docs/content-api# */
 const ghost = new GhostContentAPI({
   url: 'https://our.status.im',
-  key: envClient.NEXT_PUBLIC_GHOST_API_KEY,
+  key: clientEnv.NEXT_PUBLIC_GHOST_API_KEY,
   version: 'v5.0',
 })
 

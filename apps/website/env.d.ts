@@ -1,7 +1,7 @@
-import type { envClient } from './src/config/env.client.mjs'
-import type { envServer } from './src/config/env.server.mjs'
+import type { clientEnv } from './src/config/env.client.mjs'
+import type { serverEnv } from './src/config/env.server.mjs'
 
-type Env = typeof envClient & typeof envServer
+type Env = typeof clientEnv & typeof serverEnv
 
 declare global {
   namespace NodeJS {
