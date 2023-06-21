@@ -1,0 +1,13 @@
+{
+  "root": true,
+  "extends": ["@status-im/eslint-config"],
+  "overrides": [
+    {
+      "files": ["./src/protos/**/*_pb.ts"],
+      "rules": {
+        "eslint-comments/disable-enable-pair": "off",
+        "eslint-comments/no-unlimited-disable": "off"
+      }
+    }
+  ]
+}

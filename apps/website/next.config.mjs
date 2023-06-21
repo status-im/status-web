@@ -1,7 +1,8 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable import/default */
 
-import './src/config/env.mjs'
+import './src/config/env.server.mjs'
+import './src/config/env.client.mjs'
 
 import tamagui_next_plugin from '@tamagui/next-plugin'
 import { join } from 'node:path'

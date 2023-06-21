@@ -15,21 +15,23 @@ import type { PageLayout } from 'next'
 export const AppLayout: PageLayout = page => {
   return (
     <>
-      <NavMenu />
+      <div className="hidden lg:block">
+        <NavMenu />
+      </div>
       <div className="min-h-full bg-neutral-100">
         <NavigationMenu.Root>
-          <div className="flex items-center px-6">
+          <div className="flex items-center px-6 py-3">
             <div className="mr-5">
               <Link href="/">
                 <Logo />
               </Link>
             </div>
 
-            <div className="flex-1">
+            <div className="hidden flex-1 lg:flex">
               <NavigationMenu.List className="flex items-center">
                 {Object.entries(LINKS).map(([name, links]) => (
                   <NavigationMenu.Item key={name}>
-                    <NavigationMenu.Trigger className="py-4 pr-5 aria-expanded:opacity-50">
+                    <NavigationMenu.Trigger className="pr-5 aria-expanded:opacity-50">
                       <Text size={15} weight="medium" color="$white-100">
                         {name}
                       </Text>
@@ -64,7 +66,7 @@ export const AppLayout: PageLayout = page => {
               </NavigationMenu.List>
             </div>
 
-            <div className="flex justify-end">
+            <div className="hidden justify-end lg:flex">
               <Button
                 size={32}
                 variant="darkGrey"
@@ -76,8 +78,8 @@ export const AppLayout: PageLayout = page => {
           </div>
           <NavigationMenu.Viewport
             className={cx([
-              'data-[state=open]:animate-heightIn data-[state=closed]:animate-heightOut',
-              'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
+              'data-[state=closed]:animate-heightOut data-[state=open]:animate-heightIn',
+              'h-[var(--radix-navigation-menu-viewport-height)] transition-height',
               // 'data-[state=open]:animate-heightIn animate-',
               // 'data-[state=closed]:animate-heightOut',
               // 'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
