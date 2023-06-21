@@ -214,12 +214,10 @@ export function PreviewPage(props: PreviewPageProps) {
     return { avatarURL, bannerURL }
   }, [data])
 
-  // todo?: head
   if (urlErrorCode) {
     return <ErrorPage errorCode={urlErrorCode} />
   }
 
-  // todo?: head
   if (!loading && !data) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
@@ -228,7 +226,6 @@ export function PreviewPage(props: PreviewPageProps) {
     ? 'https://' + process.env.VERCEL_URL
     : ''
 
-  // todo?: head
   if ((loading && !data) || !data || !publicKey) {
     return (
       <>
@@ -246,10 +243,15 @@ export function PreviewPage(props: PreviewPageProps) {
             content={`${urlOrigin}/assets/preview/entity.png`}
             key="twitter:image"
           />
-          <meta property="al:ios:url" content={`https://status.app${asPath}`} />
+          <meta
+            property="al:ios:url"
+            content={`https://status.app${asPath}`}
+            key="al:ios:url"
+          />
           <meta
             property="al:android:url"
             content={`https://status.app${asPath}`}
+            key="al:android:url"
           />
           {!index && <meta name="robots" content="noindex" />}
         </Head>

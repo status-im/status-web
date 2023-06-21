@@ -5,6 +5,8 @@ import { ThemeProvider } from '@status-im/components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Inter } from 'next/font/google'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { match, P } from 'ts-pattern'
 
 import type { Page, PageLayout } from 'next'
 import type { AppProps } from 'next/app'
@@ -28,10 +30,11 @@ export default function App({ Component, pageProps }: Props) {
     ? 'https://' + process.env.VERCEL_URL
     : ''
 
+  const { pathname, asPath } = useRouter()
+
   return (
     <>
       <Head>
-        {/* note: should not be in `_document.tsx` */}
         <title>Status - Private, Secure Communication</title>
 
         <meta name="title" content="Status - Private, Secure Communication" />
@@ -40,9 +43,7 @@ export default function App({ Component, pageProps }: Props) {
           content="Status brings the power of Ethereum into your pocket by combining a messenger, crypto-wallet, and Web3 browser."
         />
         <meta property="og:type" content="website" />
-        {/* fixme?: useRouter().asPath to set content */}
-        {/* fixme?: use status-app:// instead of https:// because of Windows platform */}
-        <meta property="og:url" content="https://status.app/" />
+        <meta property="og:url" content={`https://status.app${asPath}`} />
         <meta
           property="og:title"
           content="Status - Private, Secure Communication"
@@ -51,7 +52,6 @@ export default function App({ Component, pageProps }: Props) {
           property="og:description"
           content="Status brings the power of Ethereum into your pocket by combining a messenger, crypto-wallet, and Web3 browser."
         />
-        {/* todo?: set `key` for others too */}
         <meta
           property="og:image"
           content={`${urlOrigin}/assets/preview/page.png`}
@@ -73,14 +73,21 @@ export default function App({ Component, pageProps }: Props) {
         />
         <meta name="twitter:site" content="@ethstatus" />
         <meta name="apple-itunes-app" content="app-id=1178893006" />
-        {/* todo?: use https instead */}
-        <meta property="al:ios:url" content="status-app://" />
+        <meta
+          property="al:ios:url"
+          content={`https://status.app${asPath}`}
+          key="al:ios:url"
+        />
         <meta property="al:ios:app_store_id" content="1178893006" />
         <meta
           property="al:ios:app_name"
           content="Status — Ethereum. Anywhere"
         />
-        <meta property="al:android:url" content="status-app://" />
+        <meta
+          property="al:android:url"
+          content={`https://status.app${asPath}`}
+          key="al:android:url"
+        />
         <meta property="al:android:package" content="im.status.ethereum" />
         <meta
           property="al:android:app_name"
@@ -91,85 +98,60 @@ export default function App({ Component, pageProps }: Props) {
           name="msapplication-TileImage"
           content="/assets/favicon/ms-icon-144x144.png"
         />
-        {/* todo?: set/point to our blog */}
-        {/* <meta
+        <meta
           property="article:publisher"
           content="https://www.facebook.com/ethstatus"
-        /> */}
-
-        {/* todo?: add `apple-touch-icon-precomposed.png` as `link` too */}
-        {/* todo?: ask if all dimensions are necessary */}
-        <link
-          rel="apple-touch-icon"
-          sizes="57x57"
-          href="/assets/favicon/apple-icon-57x57.png"
         />
-        <link
-          rel="apple-touch-icon"
-          sizes="60x60"
-          href="/assets/favicon/apple-icon-60x60.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="72x72"
-          href="/assets/favicon/apple-icon-72x72.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="76x76"
-          href="/assets/favicon/apple-icon-76x76.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="114x114"
-          href="/assets/favicon/apple-icon-114x114.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="120x120"
-          href="/assets/favicon/apple-icon-120x120.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="144x144"
-          href="/assets/favicon/apple-icon-144x144.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="152x152"
-          href="/assets/favicon/apple-icon-152x152.png"
-        />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/assets/favicon/apple-icon-180x180.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="192x192"
-          href="/assets/favicon/android-icon-192x192.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/assets/favicon/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="96x96"
-          href="/assets/favicon/favicon-96x96.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/assets/favicon/favicon-16x16.png"
-        />
-        <link rel="manifest" href="/assets/favicon/manifest.json" />
-        <link rel="icon" href="/favicon.ico" />
+        {match(pathname)
+          .with(
+            P.when(p => p.startsWith('/insights')),
+            () => (
+              <>
+                <link rel="icon" href="/assets/favicon/dev.png" />
+                <link rel="apple-touch-icon" href="/assets/favicon/dev.png" />
+                <link
+                  rel="apple-touch-icon-precomposed"
+                  href="/assets/favicon/dev.png"
+                />
+              </>
+            )
+          )
+          .with(
+            P.when(p => p.startsWith('/learn')),
+            () => (
+              <>
+                <link rel="icon" href="/assets/favicon/learn.png" />
+                <link rel="apple-touch-icon" href="/assets/favicon/learn.png" />
+                <link
+                  rel="apple-touch-icon-precomposed"
+                  href="/assets/favicon/learn.png"
+                />
+              </>
+            )
+          )
+          .with(
+            P.when(p => p.startsWith('/blog')),
+            () => (
+              <>
+                <link rel="icon" href="/assets/favicon/blog.png" />
+                <link rel="apple-touch-icon" href="/assets/favicon/blog.png" />
+                <link
+                  rel="apple-touch-icon-precomposed"
+                  href="/assets/favicon/blog.png"
+                />
+              </>
+            )
+          )
+          .otherwise(() => (
+            <>
+              <link rel="icon" href="/assets/favicon/default.png" />
+              <link rel="apple-touch-icon" href="/assets/favicon/default.png" />
+              <link
+                rel="apple-touch-icon-precomposed"
+                href="/assets/favicon/default.png"
+              />
+            </>
+          ))}
       </Head>
       <div id="app" className={inter.variable + ' font-sans'}>
         <QueryClientProvider client={queryClient}>
