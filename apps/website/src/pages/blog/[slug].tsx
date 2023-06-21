@@ -36,7 +36,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 export const getStaticProps: GetStaticProps<
   {
     post: PostOrPage
-    relatedPosts?: PostOrPage[]
+    relatedPosts: PostOrPage[]
   },
   Params
 > = async context => {
@@ -49,7 +49,7 @@ export const getStaticProps: GetStaticProps<
     }
   }
 
-  let relatedPosts: PostOrPage[] | undefined
+  let relatedPosts: PostOrPage[] = []
   if (post.primary_tag) {
     const { posts } = await getPostsByTagSlug(post.primary_tag.slug)
 
@@ -223,15 +223,16 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts }) => {
         </div>
       </div>
 
-      {relatedPosts?.length && (
-        <div className="border-t border-neutral-10 bg-neutral-5 px-5 pb-[64px] pt-[48px] lg:px-10">
+      {relatedPosts.length && (
+        <div className="border-t border-neutral-10 bg-neutral-5 px-5 pb-[64px] pt-12 lg:px-10">
           <div className="mb-6">
             <Text size={27} weight="semibold">
               Related articles
             </Text>
           </div>
 
-          <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
+          {/* <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5"> */}
+          <div className="grid  gap-5 md:grid-cols-2 xl:grid-cols-4">
             {relatedPosts.map(post => (
               <PostCard key={post.id} post={post} />
             ))}
