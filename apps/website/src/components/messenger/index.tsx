@@ -1,0 +1,6 @@
+export { ComparisionSection } from './comparision-section'
+export { HandsSection } from './hands-section'
+export { HeroSection } from './hero-section'
+export { ParalaxCircle } from './parallax-circle'
+export { TwoColsSection } from './two-cols-section'
+export { VideoSection } from './video-section'
