@@ -1,4 +1,5 @@
 import { Text } from '@status-im/components'
+import { cva } from 'class-variance-authority'
 
 import { Link } from '../link'
 
@@ -7,20 +8,47 @@ import type { Links } from '@/config/links'
 type Props = {
   title: string
   links: Links
-  noBorderLeft?: boolean
+  hasBorderLeft?: boolean
   hasBorderTop?: boolean
 }
 
+const section = cva(
+  [
+    'border-neutral-80',
+    'relative',
+    'grid',
+    'gap-3',
+    'border-dashed',
+    'px-5',
+    'pb-6',
+    'pt-6',
+    'lg:border-l',
+    'lg:pb-0',
+  ],
+  {
+    variants: {
+      hasBorderTop: {
+        true: ['border-t'],
+        false: ['border-t-0'],
+      },
+      hasBorderLeft: {
+        true: ['border-l'],
+        false: ['border-l-0'],
+      },
+    },
+  }
+)
+
 const Section = (props: Props) => {
-  const { title, links, noBorderLeft, hasBorderTop } = props
-  const hasBorderTopClassnames = hasBorderTop ? 'border-t' : 'border-t-0'
+  const { title, links, hasBorderLeft, hasBorderTop } = props
 
   return (
     <div>
       <div
-        className={`border-neutral-80 relative grid gap-3 ${hasBorderTopClassnames} border-dashed px-5 pb-6 pt-6 lg:border-l lg:pb-0 ${
-          noBorderLeft ? 'border-l-0' : 'border-l'
-        }`}
+        className={section({
+          hasBorderTop,
+          hasBorderLeft,
+        })}
       >
         <div
           style={{

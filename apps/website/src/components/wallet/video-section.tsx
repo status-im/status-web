@@ -8,13 +8,13 @@ const VideoSection = () => {
       <ParalaxCircle initialLeft={-100} initialTop={-100} />
 
       <div className="relative z-[1] flex flex-col px-5 pt-24 lg:px-[164px] lg:pt-[240px]">
-        <h1 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
+        <h2 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
           Fully
           <br />
           Decentralized
           <br />
           Networks
-        </h1>
+        </h2>
 
         <div className="flex max-w-[462px] flex-col pt-4">
           <Text size={27}>
@@ -32,7 +32,7 @@ const VideoSection = () => {
                 type="network"
                 network={{
                   name: 'Mainnet',
-                  src: '/images/wallet/ethereum.png',
+                  src: '/assets/wallet/ethereum.png',
                 }}
                 size={24}
               />
@@ -42,7 +42,7 @@ const VideoSection = () => {
                 type="network"
                 network={{
                   name: 'Optmism',
-                  src: '/images/wallet/optimism.png',
+                  src: '/assets/wallet/optimism.png',
                 }}
                 size={24}
               />
@@ -52,7 +52,7 @@ const VideoSection = () => {
                 type="network"
                 network={{
                   name: 'Arbitrum',
-                  src: '/images/wallet/arbitrum.png',
+                  src: '/assets/wallet/arbitrum.png',
                 }}
                 size={24}
               />
@@ -63,10 +63,10 @@ const VideoSection = () => {
       <div className="relative right-[-5px] top-0 flex justify-center md:absolute">
         <video autoPlay loop muted playsInline>
           <source
-            src="/images/wallet/vitalik.mp4"
+            src="/assets/wallet/vitalik.mp4"
             type="video/mp4;codecs=hvc1"
           />
-          <source src="/images/wallet/vitalik.webm" type="video/webm" />
+          <source src="/assets/wallet/vitalik.webm" type="video/webm" />
         </video>
       </div>
     </div>

@@ -62,7 +62,7 @@ const ComparisionSection = () => {
         </div>
         <ParalaxCircle initialTop={-600} />
       </div>
-      <h1
+      <p
         style={{
           top: `${top}px`,
           bottom: `${bottom}px`,
@@ -73,7 +73,7 @@ const ComparisionSection = () => {
         className="text-neutral-80/5 absolute whitespace-nowrap text-[240px] font-bold leading-[212px]"
       >
         eth:opt:arb:0xAgafhja
-      </h1>
+      </p>
     </div>
   )
 }

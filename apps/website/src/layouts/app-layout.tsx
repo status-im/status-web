@@ -1,7 +1,6 @@
 import { Footer } from '@/components/footer/footer'
 import { FooterMobile } from '@/components/footer/footer-mobile'
-import { FloatingMenuDesktop } from '@/components/navigation/floating-menu-desktop'
-import { FloatingMenuMobile } from '@/components/navigation/floating-menu-mobile'
+import { FloatingMenu } from '@/components/navigation/floating-menu'
 import { NavDesktop } from '@/components/navigation/nav-desktop'
 import { NavMobile } from '@/components/navigation/nav-mobile'
 import { Prefooter } from '@/components/pre-footer'
@@ -19,8 +18,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   return (
     <>
-      <FloatingMenuDesktop />
-      <FloatingMenuMobile />
+      <FloatingMenu />
       <div className="min-h-full w-full bg-neutral-100">
         <NavDesktop />
         <NavMobile />

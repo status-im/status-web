@@ -2,14 +2,14 @@ import { Text } from '@status-im/components'
 
 const HandsSection = () => {
   return (
-    <div className="relative bg-[url('/images/wallet/background-pattern.png')] bg-[length:100%_100%] bg-no-repeat py-[322px]">
+    <div className="relative bg-[url('/assets/wallet/background-pattern.png')] bg-[length:100%_100%] bg-no-repeat py-[322px]">
       <div className="mx-40 mb-24">
         <div className="flex flex-col items-center justify-center">
-          <h1 className="max-w-[600px] py-4 pb-5 text-center text-[64px] font-bold leading-[68px]">
+          <h2 className="max-w-[600px] py-4 pb-5 text-center text-[64px] font-bold leading-[68px]">
             Take control
             <br />
             of your crypto
-          </h1>
+          </h2>
           <span className="max-w-xl text-center font-bold">
             <Text size={27}>
               No one (including Status!) has the power to freeze, lock-out or
@@ -20,7 +20,7 @@ const HandsSection = () => {
       </div>
       <div className="relative z-[2] flex justify-center pt-[320px]">
         <div className="mr-24 flex max-w-[381px] flex-col items-center">
-          <img src="/images/wallet/skull.png" alt="skull" width="48px" />
+          <img src="/assets/wallet/skull.png" alt="skull" width="48px" />
           <div className="flex flex-col items-center pt-4 text-center">
             <Text size={27} weight="semibold">
               Ethereum based assets
@@ -32,7 +32,7 @@ const HandsSection = () => {
           </div>
         </div>
         <div className="flex max-w-[381px] flex-col items-center">
-          <img src="/images/wallet/nft.png" alt="nft" width="48px" />
+          <img src="/assets/wallet/nft.png" alt="nft" width="48px" />
           <div className="flex flex-col items-center pt-4 text-center">
             <Text size={27} weight="semibold">
               NFTs and collectibles
@@ -45,12 +45,12 @@ const HandsSection = () => {
         </div>
       </div>
       <img
-        src="/images/wallet/hands.png"
+        src="/assets/wallet/hands.png"
         alt="hands"
         className="absolute left-0 top-0 w-full"
       />
       <img
-        src="/images/wallet/gentleman.png"
+        src="/assets/wallet/gentleman.png"
         alt="gentleman"
         className="absolute bottom-0 left-0 mix-blend-multiply"
         width={403}

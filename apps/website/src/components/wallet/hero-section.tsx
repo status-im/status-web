@@ -1,11 +1,12 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon, WalletIcon } from '@status-im/icons'
 
+import { GridHero } from '../cards/grid-hero'
 import { ParalaxCircle } from './parallax-circle'
 
 const HeroSection = () => {
   return (
-    <>
+    <div className="flex w-full flex-col items-center">
       <div className="relative mb-16 grid px-5 lg:mb-24 lg:px-40">
         <ParalaxCircle initialLeft={-206} initialTop={-170} />
         <div className="relative flex flex-col items-center justify-center">
@@ -31,60 +32,38 @@ const HeroSection = () => {
         </div>
 
         <div className="relative flex justify-center">
-          <div className="border-neutral-80/20 mt-6 inline-flex rounded-[20px] border border-dashed p-2 lg:mt-16">
+          <div className="border-neutral-80/20 mt-6 inline-flex rounded-[20px] border border-dashed p-2 lg:mt-8">
             <Button
               size={40}
               icon={<DownloadIcon size={20} />}
-              customColors={{
-                backgroundColor: '$yellow-50',
-                color: '$white-100',
-                hoverStyle: { backgroundColor: '$yellow-60' },
-                pressStyle: { backgroundColor: '$yellow-50' },
-              }}
+              variant="yellow"
             >
               Sign up for early access
             </Button>
           </div>
         </div>
       </div>
-
-      <div className="relative z-[2] flex justify-center px-10">
-        <div className="grid max-w-[1504px] auto-rows-[1fr] grid-cols-3 gap-[19px]">
-          <div className="row-span-2">
-            <div className="bg-customisation-yellow/10 rounded-[40px] px-[73px] py-[68px]">
-              <img
-                src="/images/wallet/1.png"
-                alt="wallet-1"
-                className="border-customisation-yellow/10 rounded-3xl border-4"
-              />
-            </div>
-          </div>
-          <div className="row-span-2">
-            <div className="bg-customisation-yellow/10 rounded-[40px] px-[73px] py-[68px]">
-              <img
-                src="/images/wallet/2.png"
-                alt="wallet-2"
-                className="border-customisation-yellow/5 rounded-3xl border-4"
-              />
-            </div>
-          </div>
-          <div>
-            <div className="bg-customisation-yellow/10 flex h-full items-end justify-end rounded-[40px] px-[73px] pt-[68px]">
-              <img
-                src="/images/wallet/3.png"
-                alt="wallet-3"
-                className="border-customisation-yellow/5 rounded-3xl rounded-b-none border-4 border-b-0"
-              />
-            </div>
-          </div>
-          <div>
-            <div className="bg-customisation-yellow/10 flex h-full items-center justify-center rounded-[40px] px-[73px]">
-              <img src="/images/wallet/wallet-4.png" alt="wallet-4" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
+      <GridHero
+        borderColor="border-customisation-yellow/5"
+        backgroundColor="bg-customisation-yellow/10"
+        cardOne={{
+          alt: 'wallet-1',
+          image: '/assets/wallet/1.png',
+        }}
+        cardTwo={{
+          alt: 'wallet-2',
+          image: '/assets/wallet/2.png',
+        }}
+        cardThree={{
+          alt: 'wallet-3',
+          image: '/assets/wallet/3.png',
+        }}
+        cardFour={{
+          alt: 'wallet-4',
+          image: '/assets/wallet/vegas.png',
+        }}
+      />
+    </div>
   )
 }
 

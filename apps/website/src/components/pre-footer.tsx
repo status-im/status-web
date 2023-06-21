@@ -24,12 +24,7 @@ const Prefooter = () => {
               <Button
                 size={40}
                 icon={<DownloadIcon size={20} />}
-                customColors={{
-                  backgroundColor: '$yellow-50',
-                  color: '$white-100',
-                  hoverStyle: { backgroundColor: '$yellow-60' },
-                  pressStyle: { backgroundColor: '$yellow-50' },
-                }}
+                variant="yellow"
               >
                 Sign up for early access
               </Button>

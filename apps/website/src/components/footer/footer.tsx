@@ -1,4 +1,5 @@
 import { Text } from '@status-im/components'
+import { cva } from 'class-variance-authority'
 
 import { LINKS, SOCIALS } from '@/config/links'
 
@@ -11,6 +12,26 @@ type Props = {
   hasBorderTop?: boolean
 }
 
+const section = cva(
+  [
+    'border-neutral-80',
+    'mb-6',
+    'flex',
+    'items-start',
+    'border-dashed',
+    'pl-6',
+    'pt-6',
+  ],
+  {
+    variants: {
+      hasBorderTop: {
+        true: ['border-t'],
+        false: ['border-t-0'],
+      },
+    },
+  }
+)
+
 export const Footer = (props: Props) => {
   const { hasBorderTop } = props
 
@@ -18,9 +39,9 @@ export const Footer = (props: Props) => {
     <footer className="hidden pb-3 sm:block">
       <div className="grid grid-cols-4 gap-5 sm:gap-0 lg:mb-10 lg:grid-cols-8">
         <div
-          className={`border-neutral-80 mb-6 ${
-            hasBorderTop ? 'border-t' : 'border-t-0'
-          } flex items-start border-dashed pl-6 pt-6`}
+          className={section({
+            hasBorderTop,
+          })}
         >
           <Logo />
         </div>
@@ -29,7 +50,7 @@ export const Footer = (props: Props) => {
             key={title}
             title={title}
             links={links}
-            noBorderLeft={index === 3}
+            hasBorderLeft={index !== 3}
             hasBorderTop={hasBorderTop}
           />
         ))}

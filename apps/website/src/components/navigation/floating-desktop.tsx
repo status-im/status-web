@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from 'react'
-
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { Button, Text } from '@status-im/components'
 import { DownloadIcon, ExternalIcon } from '@status-im/icons'
@@ -10,41 +8,20 @@ import { LINKS } from '@/config/links'
 import { Link } from '../link'
 import { Logo } from '../logo'
 
-const FloatingMenuDesktop = () => {
-  const [visible, setVisible] = useState(false)
+type Props = {
+  visible: boolean
+}
 
-  // Using ref to prevent re-running of useEffect
-  const visibleRef = useRef(visible)
-  visibleRef.current = visible
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 60) {
-        visibleRef.current === false && setVisible(true)
-      } else {
-        visibleRef.current === true && setVisible(false)
-      }
-    }
-
-    const isMobile = window.innerWidth < 768
-
-    if (isMobile) return
-    handleScroll()
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+const FloatingDesktop = (props: Props) => {
+  const { visible } = props
 
   return (
     <NavigationMenu.Root
       data-visible={visible}
       className={cx([
-        'fixed left-1/2 top-5 z-10 w-max min-w-[746px] -translate-x-1/2 overflow-hidden',
-        'bg-blur-neutral-80/80 border-neutral-80/5 rounded-2xl border backdrop-blur-md',
         'data-[visible=false]:pointer-events-none',
+        'data-[visible=true]:pointer-events-auto',
         'opacity-0 transition-opacity data-[visible=true]:opacity-100',
-        'md-lg:block hidden',
       ])}
     >
       <div className="flex items-center p-2">
@@ -103,4 +80,4 @@ const FloatingMenuDesktop = () => {
   )
 }
 
-export { FloatingMenuDesktop }
+export { FloatingDesktop }

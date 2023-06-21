@@ -33,10 +33,10 @@ const TwoColsSection = (props: TwoColsSectionProps) => {
   return (
     <div className="relative z-[3] grid grid-flow-dense auto-rows-[1fr] grid-cols-2 gap-36 px-[160px]">
       <div
-        className={`${directionOrder} flex justify-center overflow-hidden rounded-[32px] bg-[url('/images/wallet/border.png')] bg-[length:100%_100%] bg-no-repeat`}
+        className={`${directionOrder} flex justify-center overflow-hidden rounded-[32px] bg-[url('/assets/wallet/border.png')] bg-[length:100%_100%] bg-no-repeat`}
       >
         <div className="bg-customisation-yellow/5 relative flex w-full justify-center py-[68px]">
-          <div className="absolute left-0 top-0 h-full w-full bg-[url('/images/wallet/texture.png')] bg-contain bg-[left_top_0] bg-no-repeat" />
+          <div className="absolute left-0 top-0 h-full w-full bg-[url('/assets/wallet/texture.png')] bg-contain bg-[left_top_0] bg-no-repeat" />
           <img
             src={image}
             alt={imageAlt}
