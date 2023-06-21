@@ -233,16 +233,16 @@ export function PreviewPage(props: PreviewPageProps) {
           <meta property="og:url" content={`https://status.app${asPath}`} />
           {/* todo: test if server-rendered version with which a (social) card would be
         generated would not effectively override actual shared link on clicking */}
-          <meta
+          {/* <meta
             property="og:image"
             content={`${urlOrigin}/assets/preview/entity.png`}
             key="og:image"
-          />
-          <meta
+          /> */}
+          {/* <meta
             property="twitter:image"
             content={`${urlOrigin}/assets/preview/entity.png`}
             key="twitter:image"
-          />
+          /> */}
           <meta
             property="al:ios:url"
             content={`https://status.app${asPath}`}
@@ -372,23 +372,22 @@ export function PreviewPage(props: PreviewPageProps) {
           property="og:title"
           content={`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
         />
-        {/* todo?: does it really matter if server-rendered; same with some/all others */}
-        <meta
+        {/* <meta
           property="og:image"
           content={`${urlOrigin}/assets/preview/entity.png`}
           key="og:image"
-        />
+        /> */}
         <meta property="og:description" content={data.info.description} />
         <meta
           property="twitter:title"
           content={`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
         />
         <meta property="twitter:description" content={data.info.description} />
-        <meta
+        {/* <meta
           property="twitter:image"
           content={`${urlOrigin}/assets/preview/entity.png`}
           key="twitter:image"
-        />
+        /> */}
         <meta
           name="apple-itunes-app"
           content={`app-id=1178893006, app-argument=status-app://${asPath.replace(

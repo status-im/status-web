@@ -52,11 +52,11 @@ export default function App({ Component, pageProps }: Props) {
           property="og:description"
           content="Status brings the power of Ethereum into your pocket by combining a messenger, crypto-wallet, and Web3 browser."
         />
-        <meta
+        {/* <meta
           property="og:image"
           content={`${urlOrigin}/assets/preview/page.png`}
           key="og:image"
-        />
+        /> */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:title"
@@ -66,11 +66,11 @@ export default function App({ Component, pageProps }: Props) {
           property="twitter:description"
           content="Status brings the power of Ethereum into your pocket by combining a messenger, crypto-wallet, and Web3 browser."
         />
-        <meta
+        {/* <meta
           property="twitter:image"
           content={`%${urlOrigin}/assets/preview/page.png`}
           key="twitter:image"
-        />
+        /> */}
         <meta name="twitter:site" content="@ethstatus" />
         <meta name="apple-itunes-app" content="app-id=1178893006" />
         <meta
