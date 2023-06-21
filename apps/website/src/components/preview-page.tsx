@@ -362,13 +362,13 @@ export function PreviewPage(props: PreviewPageProps) {
     <>
       <Head>
         <title>
-          {`${ACTION_VERB[type]} ${verifiedData.info.displayName} in Status`}
+          {`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
         </title>
 
         <meta property="og:url" content={`https://status.app${asPath}`} />
         <meta
           property="og:title"
-          content={`${ACTION_VERB[type]} ${verifiedData.info.displayName} in Status`}
+          content={`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
         />
         {/* todo?: does it really matter if server-rendered; same with some/all others */}
         <meta
@@ -376,18 +376,12 @@ export function PreviewPage(props: PreviewPageProps) {
           content={`${urlOrigin}/assets/preview/entity.png`}
           key="og:image"
         />
-        <meta
-          property="og:description"
-          content={verifiedData.info.description}
-        />
+        <meta property="og:description" content={data.info.description} />
         <meta
           property="twitter:title"
-          content={`${ACTION_VERB[type]} ${verifiedData.info.displayName} in Status`}
+          content={`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
         />
-        <meta
-          property="twitter:description"
-          content={verifiedData.info.description}
-        />
+        <meta property="twitter:description" content={data.info.description} />
         <meta
           property="twitter:image"
           content={`${urlOrigin}/assets/preview/entity.png`}
