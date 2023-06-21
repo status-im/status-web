@@ -56,7 +56,6 @@ const HeroSection = () => {
         cardThree={{
           alt: 'wallet-3',
           image: '/assets/wallet/3.png',
-          alignment: 'top',
         }}
         cardFour={{
           alt: 'wallet-4',
