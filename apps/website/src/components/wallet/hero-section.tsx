@@ -44,8 +44,7 @@ const HeroSection = () => {
         </div>
       </div>
       <GridHero
-        borderColor="border-customisation-yellow/5"
-        backgroundColor="bg-customisation-yellow/10"
+        color="yellow"
         cardOne={{
           alt: 'wallet-1',
           image: '/assets/wallet/1.png',
@@ -57,6 +56,7 @@ const HeroSection = () => {
         cardThree={{
           alt: 'wallet-3',
           image: '/assets/wallet/3.png',
+          alignment: 'top',
         }}
         cardFour={{
           alt: 'wallet-4',
