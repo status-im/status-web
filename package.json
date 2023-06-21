@@ -3,7 +3,7 @@
   "private": true,
   "workspaces": {
     "packages": [
-      "packages/eslint-config-custom",
+      "packages/eslint-config*",
       "packages/status-js",
       "packages/colors",
       "packages/icons",
@@ -36,7 +36,7 @@
     "@changesets/cli": "^2.23.0",
     "@tsconfig/strictest": "^2.0.0",
     "@types/prettier": "^2.7.2",
-    "eslint-config-custom": "*",
+    "@status-im/eslint-config": "*",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "patch-package": "^6.5.1",

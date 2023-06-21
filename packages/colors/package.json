@@ -35,7 +35,7 @@
   "devDependencies": {
     "@clack/prompts": "^0.6.3",
     "colorjs.io": "^0.4.3",
-    "eslint-config-custom": "*",
+    "@status-im/eslint-config": "*",
     "figma-api": "^1.11.0",
     "fs-extra": "^11.1.1",
     "vite": "^4.1.4",

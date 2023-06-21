@@ -1,7 +1,6 @@
 {
-  "private": true,
   "version": "0.1.0",
-  "name": "eslint-config-custom",
+  "name": "@status-im/eslint-config",
   "main": "index.js",
   "exports": {
     ".": {
