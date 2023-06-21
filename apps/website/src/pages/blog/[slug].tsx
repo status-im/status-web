@@ -9,7 +9,9 @@ import { unified } from 'unified'
 import { Breadcrumbs } from '@/components'
 import { formatDate } from '@/components/chart/utils/format-time'
 import { AppLayout } from '@/layouts/app-layout'
-import { getPostBySlug, getPostSlugs } from '@/lib/ghost'
+import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '@/lib/ghost'
+
+import { PostCard } from '.'
 
 import type { PostOrPage } from '@tryghost/content-api'
 import type {
@@ -34,6 +36,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
 export const getStaticProps: GetStaticProps<
   {
     post: PostOrPage
+    relatedPosts?: PostOrPage[]
   },
   Params
 > = async context => {
@@ -44,6 +47,14 @@ export const getStaticProps: GetStaticProps<
       // notFound: true,
       redirect: { destination: '/blog', permanent: false },
     }
+  }
+
+  let relatedPosts: PostOrPage[] | undefined
+  if (post.primary_tag) {
+    const { posts } = await getPostsByTagSlug(post.primary_tag.slug)
+
+    const filteredPosts = posts.filter(p => p.slug !== post.slug).slice(0, 4)
+    relatedPosts = filteredPosts
   }
 
   const r = unified()
@@ -95,13 +106,14 @@ export const getStaticProps: GetStaticProps<
         // fixme?: name html
         hhh: html,
       },
+      relatedPosts,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const BlogDetailPage: Page<Props> = ({ post }) => {
+const BlogDetailPage: Page<Props> = ({ post, relatedPosts }) => {
   const author = post.primary_author!
 
   // todo?: MOVE TO SERVER SIDE
@@ -210,6 +222,22 @@ const BlogDetailPage: Page<Props> = ({ post }) => {
           </div>
         </div>
       </div>
+
+      {relatedPosts?.length && (
+        <div className="border-t border-neutral-10 bg-neutral-5 px-5 pb-[64px] pt-[48px] lg:px-10">
+          <div className="mb-6">
+            <Text size={27} weight="semibold">
+              Related articles
+            </Text>
+          </div>
+
+          <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
+            {relatedPosts.map(post => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* <div
         className="mx-auto grid max-w-2xl gap-4"

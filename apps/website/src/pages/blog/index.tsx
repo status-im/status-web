@@ -164,8 +164,11 @@ export const PostCard = (props: PostCardProps) => {
   const author = post.primary_author!
 
   return (
-    <Shadow className="h-full rounded-[20px] border border-neutral-5">
-      <Link href={`/blog/${post.slug}`} className="flex h-full w-full flex-col">
+    <Shadow className="h-full rounded-[20px]">
+      <Link
+        href={`/blog/${post.slug}`}
+        className="flex h-full w-full flex-col rounded-[20px] border border-neutral-5 bg-white-100"
+      >
         <div className="flex grow flex-col gap-2 p-4">
           {showTag && (
             <div className="h-6 overflow-hidden">
