@@ -30,6 +30,7 @@ let config = {
   experimental: {
     legacyBrowsers: false,
     // esmExternals: 'loose',
+    scrollRestoration: true,
   },
 }
 
