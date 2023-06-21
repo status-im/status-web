@@ -61,7 +61,7 @@ export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
 
 export const getPostSlugs = async (): Promise<string[]> => {
   const posts = await ghost.posts.browse({
-    limit: 'all',
+    limit: '7',
     fields: 'slug',
     filter: 'visibility:public',
   })
