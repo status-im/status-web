@@ -5,7 +5,7 @@ import { NavDesktop } from '@/components/navigation/nav-desktop'
 import { NavMobile } from '@/components/navigation/nav-mobile'
 import { Prefooter } from '@/components/pre-footer'
 
-import type { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 
 type AppLayoutProps = {
   hasPreFooter?: boolean
@@ -35,5 +35,21 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         <FooterMobile hasBorderTop={hasPreFooter} />
       </div>
     </>
+  )
+}
+
+export const Content = ({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) => {
+  return (
+    <div
+      className={`bg-white-100 min-h-[900px] w-full rounded-3xl ${className}`}
+    >
+      {children}
+    </div>
   )
 }
