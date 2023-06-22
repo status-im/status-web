@@ -222,9 +222,9 @@ export function PreviewPage(props: PreviewPageProps) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
 
-  const urlOrigin = process.env.VERCEL_URL
-    ? 'https://' + process.env.VERCEL_URL
-    : ''
+  // const urlOrigin = process.env.VERCEL_URL
+  //   ? 'https://' + process.env.VERCEL_URL
+  //   : ''
 
   if ((loading && !data) || !data || !publicKey) {
     return (
