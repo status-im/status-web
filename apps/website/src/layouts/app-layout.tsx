@@ -26,7 +26,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         {/* ROUNDED WHITE BG */}
         <div className="flex justify-center lg:p-1">
           {/* TODO Check max-width to use */}
-          <div className="bg-white-100 min-h-[900px] w-full rounded-3xl">
+          <div className="min-h-[900px] w-full rounded-3xl bg-white-100">
             {children}
           </div>
         </div>

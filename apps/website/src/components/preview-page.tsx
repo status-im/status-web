@@ -334,7 +334,7 @@ export function PreviewPage(props: PreviewPageProps) {
           style={!bannerURL ? getGradientStyles(data) : undefined}
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
-          <div className="absolute left-0 right-0 top-0 xl:hidden">
+          <div className="absolute inset-x-0 top-0 xl:hidden">
             <div className="absolute h-full w-full bg-gradient-to-t from-white-100 to-white-60" />
             {bannerURL && (
               <img

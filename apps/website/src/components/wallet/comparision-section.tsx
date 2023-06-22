@@ -11,8 +11,8 @@ const ComparisionSection = () => {
 
   return (
     <div className="relative">
-      <div className="border-neutral-80/20 bg-white-100 relative grid grid-cols-4 border-t border-dashed mix-blend-normal">
-        <div className="border-neutral-80/20 col-span-2 border-r border-dashed py-[160px] pl-10 pr-[60px]">
+      <div className="relative grid grid-cols-4 border-t border-dashed border-neutral-80/20 bg-white-100 mix-blend-normal">
+        <div className="col-span-2 border-r border-dashed border-neutral-80/20 py-[160px] pl-10 pr-[60px]">
           <div className="flex h-full flex-col justify-between">
             <div className="inline-flex max-w-[646px] flex-col">
               <div className="inline-flex">
@@ -24,7 +24,7 @@ const ComparisionSection = () => {
               </h2>
             </div>
 
-            <div className="border-neutral-80/20 mt-16 flex max-w-[341px] flex-col rounded-[20px] border border-dashed p-4 pt-4">
+            <div className="mt-16 flex max-w-[341px] flex-col rounded-[20px] border border-dashed border-neutral-80/20 p-4">
               <Text size={19} weight="semibold">
                 Finally! Multi-chain done right!
               </Text>
@@ -40,7 +40,7 @@ const ComparisionSection = () => {
             </div>
           </div>
         </div>
-        <div className="border-neutral-80/20  border-r border-dashed px-10 py-[160px]">
+        <div className="border-r  border-dashed border-neutral-80/20 px-10 py-[160px]">
           <Text size={19} weight="semibold">
             Other wallets
           </Text>
@@ -70,7 +70,7 @@ const ComparisionSection = () => {
           // TODO: use font from design when it's ready
           fontFamily: 'Menlo',
         }}
-        className="text-neutral-80/5 absolute whitespace-nowrap text-[240px] font-bold leading-[212px]"
+        className="absolute whitespace-nowrap text-[240px] font-bold leading-[212px] text-neutral-80/5"
       >
         eth:opt:arb:0xAgafhja
       </p>
@@ -154,7 +154,7 @@ const Item = (props: {
   const isNumber = typeof count === 'number'
   return (
     <div
-      className={`border-neutral-80/20 flex ${
+      className={`flex border-neutral-80/20 ${
         noBorder ? 'border-b-0' : 'border-b'
       } border-dashed py-3`}
     >

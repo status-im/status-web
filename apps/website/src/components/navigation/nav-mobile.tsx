@@ -19,7 +19,7 @@ const NavMobile = () => {
   }
 
   return (
-    <div className="md-lg:hidden z-10 flex flex-col items-center justify-between px-5 py-3 pb-1">
+    <div className="z-10 flex flex-col items-center justify-between px-5 py-3 pb-1 md-lg:hidden">
       <div className="z-10 flex w-full items-center justify-between">
         <div className="flex">
           <Link href="/">
@@ -46,7 +46,7 @@ const NavMobile = () => {
           pointerEvents: open ? 'auto' : 'none',
           overflow: 'auto',
         }}
-        className={`bg-blur-neutral-100/70  z-10 flex w-full flex-col justify-between pt-2 transition-all duration-300`}
+        className={`z-10  flex w-full flex-col justify-between bg-blur-neutral-100/70 pt-2 transition-all duration-300`}
       >
         <AccordionMenu />
         <div className="flex justify-center py-3">

@@ -88,7 +88,7 @@ interface InsightsLayoutProps {
 export const InsightsLayout: React.FC<InsightsLayoutProps> = ({ children }) => {
   return (
     <AppLayout hasPreFooter={false}>
-      <div className="bg-white-100 relative mx-1 flex min-h-[calc(100vh-56px-4px)] w-full rounded-3xl">
+      <div className="relative mx-1 flex min-h-[calc(100vh-56px-4px)] w-full rounded-3xl bg-white-100">
         <SideBar data={MENU_LINKS} />
         <main className="flex-1">{children}</main>
       </div>

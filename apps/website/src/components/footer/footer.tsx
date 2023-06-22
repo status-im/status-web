@@ -55,8 +55,8 @@ export const Footer = (props: Props) => {
           />
         ))}
       </div>
-      <div className="md-lg:flex-row item-start md-lg:items-center flex flex-col justify-between gap-2 px-5 lg:px-6">
-        <div className="item-center flex gap-3">
+      <div className="flex flex-col items-start justify-between gap-2 px-5 lg:px-6 md-lg:flex-row md-lg:items-center">
+        <div className="flex items-center gap-3">
           <Text size={11} color="$neutral-50">
             © Status Research & Development GmbH
           </Text>

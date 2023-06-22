@@ -16,7 +16,7 @@ export const FooterMobile = (props: Props) => {
 
   return (
     <footer
-      className={`border-neutral-80 block border-dashed ${
+      className={`block border-dashed border-neutral-80 ${
         hasBorderTop ? 'border-t' : 'border-t-0'
       } pb-12 sm:hidden`}
     >
@@ -30,7 +30,7 @@ export const FooterMobile = (props: Props) => {
           </div>
         </div>
 
-        <div className="border-neutral-80 flex flex-col items-center gap-2 border-t border-dashed px-6 pt-6">
+        <div className="flex flex-col items-center gap-2 border-t border-dashed border-neutral-80 px-6 pt-6">
           <div className="flex w-full flex-col items-start gap-2 ">
             <Text size={11} color="$neutral-50">
               © Status Research & Development GmbH

@@ -7,11 +7,11 @@ import { ComingSoon } from './coming-soon'
 
 const Prefooter = () => {
   return (
-    <div className="bg-neutral-100 p-5 pb-[120px] pt-[120px]">
+    <div className="bg-neutral-100 p-5 py-[120px]">
       <div className="flex justify-center">
         <div className="flex flex-col items-center justify-center">
           <Image src={logoSrc} alt="Status logo" width={80} />
-          <h1 className="text-white-100 py-4 pb-3 pt-5 text-center text-[40px] font-bold leading-[44px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
+          <h1 className="py-4 pb-3 pt-5 text-center text-[40px] font-bold leading-[44px] text-white-100 lg:pb-5 lg:text-[88px] lg:leading-[84px]">
             Be unstoppable
           </h1>
           <span className="max-w-md text-center font-bold">
