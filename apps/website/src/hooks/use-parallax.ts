@@ -24,7 +24,7 @@ function useParalax(props?: ParalaxProps) {
       setTop(scrollY / PARALLAX_SPEED + initialTop)
       setBottom(scrollY / PARALLAX_SPEED + initialBottom)
     }
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [initialBottom, initialTop])
 
