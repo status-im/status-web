@@ -11,7 +11,7 @@ import { Link } from '../link'
 const NavDesktop = () => {
   return (
     <>
-      <NavigationMenu.Root className="md-lg:block hidden">
+      <NavigationMenu.Root className="relative z-10 hidden md-lg:block">
         <div className="flex items-center px-6">
           <div className="mr-5 flex shrink-0 ">
             <Link href="/">
@@ -70,8 +70,8 @@ const NavDesktop = () => {
         </div>
         <NavigationMenu.Viewport
           className={cx([
-            'data-[state=open]:animate-heightIn data-[state=closed]:animate-heightOut',
-            'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
+            'data-[state=closed]:animate-heightOut data-[state=open]:animate-heightIn',
+            'h-[var(--radix-navigation-menu-viewport-height)] transition-height',
             // 'data-[state=open]:animate-heightIn animate-',
             // 'data-[state=closed]:animate-heightOut',
             // 'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
