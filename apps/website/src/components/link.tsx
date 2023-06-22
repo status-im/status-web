@@ -1,8 +1,8 @@
 import NextLink from 'next/link'
 
-import type { ComponentProps } from 'react'
+import type { ComponentPropsWithRef } from 'react'
 
-export const Link = (props: ComponentProps<typeof NextLink>) => {
+export const Link = (props: ComponentPropsWithRef<typeof NextLink>) => {
   const external =
     typeof props.href === 'string'
       ? props.href.startsWith('http')

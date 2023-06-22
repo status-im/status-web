@@ -14,7 +14,7 @@ module.exports = {
     fontFamily: {
       sans: ['var(--font-inter)', ...fontFamily.sans],
     },
-    colors,
+    colors: colors,
 
     // use <Text /> from @status-im/components or arbitrary values
     // fontSize: {},

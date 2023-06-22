@@ -36,7 +36,7 @@ const SideBar = (props: Props) => {
   }, [defaultLabel])
 
   return (
-    <div className="border-neutral-10 border-r p-5">
+    <div className="border-r border-neutral-10 p-5">
       <aside className=" sticky top-5 min-w-[320px]">
         <Accordion.Root
           type="single"

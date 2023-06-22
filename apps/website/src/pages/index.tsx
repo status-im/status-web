@@ -44,7 +44,7 @@ const HomePage: Page = () => {
       </div>
 
       <div className="text-center">
-        <h2 className="text-white-100 text-4xl">
+        <h2 className="text-4xl text-white-100">
           Own a community? Time to take back control!
         </h2>
         <Text size={19} color="$white-100">
@@ -52,7 +52,7 @@ const HomePage: Page = () => {
         </Text>
       </div>
 
-      <div className="bg-white-100 mx-1 space-y-[200px] rounded-3xl py-32">
+      <div className="mx-1 space-y-[200px] rounded-3xl bg-white-100 py-32">
         <FeatureSection
           title={`Chat privately\nwith friends`}
           description="Protect your right to free speech with e2e encryption & metadata privacy."
@@ -101,22 +101,22 @@ const FeatureSection = ({ title, description }: FeatureSectionProps) => {
 const FeatureGrid = () => {
   return (
     <div className="grid h-[800px] grid-cols-3 grid-rows-2 gap-5">
-      <div className="border-neutral-80/5 row-span-2 rounded-[32px] border">
+      <div className="row-span-2 rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
       </div>
-      <div className="border-neutral-80/5 rounded-[32px] border">
+      <div className="rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
       </div>
-      <div className="border-neutral-80/5 row-span-2 rounded-[32px] border">
+      <div className="row-span-2 rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
       </div>
-      <div className="border-neutral-80/5 rounded-[32px] border">
+      <div className="rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>

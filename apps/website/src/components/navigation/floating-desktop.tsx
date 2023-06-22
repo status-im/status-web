@@ -39,7 +39,7 @@ const FloatingDesktop = (props: Props) => {
                 className={cx([
                   'grid gap-3 pb-12 pl-[60px] pt-6',
                   'data-[state=open]:animate-in',
-                  'data-[state=closed]:animate-out fade-out-20',
+                  'fade-out-20 data-[state=closed]:animate-out',
                 ])}
               >
                 {links.map(link => {
@@ -72,8 +72,8 @@ const FloatingDesktop = (props: Props) => {
 
       <NavigationMenu.Viewport
         className={cx([
-          'data-[state=open]:animate-heightIn data-[state=closed]:animate-heightOut',
-          'transition-height h-[var(--radix-navigation-menu-viewport-height)]',
+          'data-[state=closed]:animate-heightOut data-[state=open]:animate-heightIn',
+          'h-[var(--radix-navigation-menu-viewport-height)] transition-height',
         ])}
       />
     </NavigationMenu.Root>

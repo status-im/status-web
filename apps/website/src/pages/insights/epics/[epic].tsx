@@ -8,7 +8,7 @@ import type { Page } from 'next'
 const EpicsDetailPage: Page = () => {
   return (
     <div>
-      <div className="border-neutral-10 border-b px-5 py-3">
+      <div className="border-b border-neutral-10 px-5 py-3">
         <Breadcrumbs />
       </div>
       <div className="px-10 py-6">
@@ -18,7 +18,7 @@ const EpicsDetailPage: Page = () => {
           fullscreen
         />
 
-        <div role="separator" className="bg-neutral-10 -mx-6 my-6 h-px" />
+        <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
 
         <TableIssues />
       </div>

@@ -1,9 +1,13 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/default */
 
-/** @type {import('next').NextConfig} */
-const { withTamagui } = require('@tamagui/next-plugin')
-const { join } = require('path')
+import './src/config/env.server.mjs'
+import './src/config/env.client.mjs'
+
+import tamagui_next_plugin from '@tamagui/next-plugin'
+import { join } from 'node:path'
+
+const { withTamagui } = tamagui_next_plugin
 
 /** @type {import('next').NextConfig} */
 let config = {
@@ -59,7 +63,7 @@ const plugins = [
   }),
 ]
 
-module.exports = () => {
+export default () => {
   for (const plugin of plugins) {
     config = {
       ...config,

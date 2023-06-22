@@ -63,6 +63,7 @@
     "@storybook/testing-library": "^0.1.0",
     "@tamagui/vite-plugin": "1.11.1",
     "@vitejs/plugin-react-swc": "^3.2.0",
+    "@status-im/eslint-config": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-svg": "^13.8.0",
