@@ -26,9 +26,9 @@ type Props = AppProps & {
 export default function App({ Component, pageProps }: Props) {
   const getLayout: PageLayout = Component.getLayout || (page => page)
 
-  const urlOrigin = process.env.VERCEL_URL
-    ? 'https://' + process.env.VERCEL_URL
-    : ''
+  // const urlOrigin = process.env.VERCEL_URL
+  //   ? 'https://' + process.env.VERCEL_URL
+  //   : ''
 
   const { pathname, asPath } = useRouter()
 
@@ -92,11 +92,6 @@ export default function App({ Component, pageProps }: Props) {
         <meta
           property="al:android:app_name"
           content="Status — Ethereum. Anywhere"
-        />
-        <meta name="msapplication-TileColor" content="#4360DF" />
-        <meta
-          name="msapplication-TileImage"
-          content="/assets/favicon/ms-icon-144x144.png"
         />
         <meta
           property="article:publisher"
