@@ -8,10 +8,11 @@ import logoLearnSrc from '../../public/images/logo/learn.svg'
 
 type Props = {
   label?: boolean
+  isTopbarDesktop?: boolean
 }
 
 export const Logo = (props: Props) => {
-  const { label = true } = props
+  const { label = true, isTopbarDesktop } = props
 
   const { pathname } = useRouter()
 
@@ -39,7 +40,7 @@ export const Logo = (props: Props) => {
           width="70"
           height="16"
           fill="none"
-          className="mr-[10px]"
+          className={`mr-[10px] ${isTopbarDesktop ? 'hidden lg:block' : ''}`}
         >
           <path
             fill="#fff"

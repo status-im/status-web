@@ -64,6 +64,8 @@ const WorkstreamsPage: Page = () => {
   )
 }
 
-WorkstreamsPage.getLayout = InsightsLayout
+WorkstreamsPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default WorkstreamsPage

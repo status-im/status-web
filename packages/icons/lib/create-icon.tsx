@@ -14,9 +14,15 @@ import type { ComponentType, SVGProps } from 'react'
 //   }
 // }
 
+function isColorTokens(
+  value: `#${string}` | ColorTokens
+): value is ColorTokens {
+  return typeof value === 'string' && value.startsWith('$')
+}
+
 export interface IconProps extends SVGProps<SVGSVGElement> {
   size: 12 | 16 | 20
-  color?: ColorTokens
+  color?: ColorTokens | `#${string}`
 }
 
 export function createIcon<P extends SVGProps<SVGSVGElement>>(
@@ -25,7 +31,7 @@ export function createIcon<P extends SVGProps<SVGSVGElement>>(
   const Icon = forwardRef<SVGElement, IconProps>((props, ref) => {
     const { size, color = '$neutral-100', ...rest } = props
     const theme = useTheme()
-    const token = theme[color]?.val
+    const token = isColorTokens(color) ? theme[color]?.val : color
 
     return createElement(Component, {
       ref,

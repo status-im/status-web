@@ -222,6 +222,8 @@ export const PostCard = (props: PostCardProps) => {
   )
 }
 
-BlogPage.getLayout = AppLayout
+BlogPage.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default BlogPage

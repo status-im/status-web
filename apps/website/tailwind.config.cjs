@@ -30,6 +30,10 @@ module.exports = {
         height: 'height',
       },
 
+      screens: {
+        'md-lg': { raw: '(min-width: 868px)' },
+      },
+
       keyframes: {
         heightIn: {
           from: { height: 0 },

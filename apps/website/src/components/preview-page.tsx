@@ -334,8 +334,8 @@ export function PreviewPage(props: PreviewPageProps) {
           style={!bannerURL ? getGradientStyles(data) : undefined}
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
-          <div className="absolute left-0 right-0 top-0 xl:hidden">
-            <div className="from-white-100 to-white-60 absolute h-full w-full bg-gradient-to-t" />
+          <div className="absolute inset-x-0 top-0 xl:hidden">
+            <div className="absolute h-full w-full bg-gradient-to-t from-white-100 to-white-60" />
             {bannerURL && (
               <img
                 className="aspect-video h-full w-full object-cover"
@@ -435,7 +435,7 @@ export function PreviewPage(props: PreviewPageProps) {
 
               {/* INSTRUCTIONS */}
               <div className="mb-6 grid gap-3">
-                <div className="border-neutral-10 bg-white-100 rounded-2xl border px-4 py-3">
+                <div className="rounded-2xl border border-neutral-10 bg-white-100 px-4 py-3">
                   <h3 className="mb-2 text-[15px] font-semibold xl:text-[19px]">
                     {INSTRUCTIONS_HEADING[type]}
                   </h3>
@@ -475,7 +475,7 @@ export function PreviewPage(props: PreviewPageProps) {
                   </ul>
                 </div>
 
-                <div className="border-neutral-10 bg-white-100 flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
+                <div className="flex flex-col items-start gap-4 rounded-2xl border border-neutral-10 bg-white-100 p-4 pt-3">
                   <div className="flex flex-col gap-1">
                     <Text size={15} weight="semibold">
                       Have Status already?

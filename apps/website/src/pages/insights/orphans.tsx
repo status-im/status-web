@@ -17,6 +17,8 @@ const OrphansPage: Page = () => {
   )
 }
 
-OrphansPage.getLayout = InsightsLayout
+OrphansPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default OrphansPage

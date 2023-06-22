@@ -85,6 +85,8 @@ const ReposPage: Page = () => {
   )
 }
 
-ReposPage.getLayout = InsightsLayout
+ReposPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default ReposPage
