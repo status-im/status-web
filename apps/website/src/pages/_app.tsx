@@ -103,11 +103,11 @@ export default function App({ Component, pageProps }: Props) {
             () => (
               <>
                 <link rel="icon" href="/assets/favicon/dev.png" />
-                <link rel="apple-touch-icon" href="/assets/favicon/dev.png" />
+                {/* <link rel="apple-touch-icon" href="/assets/favicon/dev.png" />
                 <link
                   rel="apple-touch-icon-precomposed"
                   href="/assets/favicon/dev.png"
-                />
+                /> */}
               </>
             )
           )
@@ -116,11 +116,11 @@ export default function App({ Component, pageProps }: Props) {
             () => (
               <>
                 <link rel="icon" href="/assets/favicon/learn.png" />
-                <link rel="apple-touch-icon" href="/assets/favicon/learn.png" />
+                {/* <link rel="apple-touch-icon" href="/assets/favicon/learn.png" />
                 <link
                   rel="apple-touch-icon-precomposed"
                   href="/assets/favicon/learn.png"
-                />
+                /> */}
               </>
             )
           )
@@ -129,22 +129,22 @@ export default function App({ Component, pageProps }: Props) {
             () => (
               <>
                 <link rel="icon" href="/assets/favicon/blog.png" />
-                <link rel="apple-touch-icon" href="/assets/favicon/blog.png" />
+                {/* <link rel="apple-touch-icon" href="/assets/favicon/blog.png" />
                 <link
                   rel="apple-touch-icon-precomposed"
                   href="/assets/favicon/blog.png"
-                />
+                /> */}
               </>
             )
           )
           .otherwise(() => (
             <>
               <link rel="icon" href="/assets/favicon/default.png" />
-              <link rel="apple-touch-icon" href="/assets/favicon/default.png" />
+              {/* <link rel="apple-touch-icon" href="/assets/favicon/default.png" />
               <link
                 rel="apple-touch-icon-precomposed"
                 href="/assets/favicon/default.png"
-              />
+              /> */}
             </>
           ))}
       </Head>
