@@ -1,47 +1,53 @@
 import { Button, Text } from '@status-im/components'
 import { DownloadIcon, PlayIcon } from '@status-im/icons'
 
-import { AppLayout } from '@/layouts/app-layout'
+import { AppLayout, Content } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
 
 const HomePage: Page = () => {
   return (
     <>
-      <div className="px-5 py-32 lg:px-40">
-        <div className="mb-40 grid gap-8 px-5 ">
-          <div className="grid gap-6">
-            <h1 className="text-7xl font-bold">
-              Make the
-              <br />
-              jump to web3
-            </h1>
+      <Content>
+        <div className="px-5 py-32 lg:px-40">
+          <div className="mb-40 grid gap-8 px-5 ">
+            <div className="grid gap-6">
+              <h1 className="text-7xl font-bold">
+                Make the
+                <br />
+                jump to web3
+              </h1>
 
-            <Text size={19}>
-              An open source, decentralized communication super app
-            </Text>
-          </div>
-
-          <div className="grid gap-4">
-            <div className="flex flex-col gap-3 lg:flex-col">
-              <Button size={40} icon={<DownloadIcon size={20} />}>
-                Sign up for early access
-              </Button>
-              <Button size={40} variant="outline" icon={<PlayIcon size={20} />}>
-                Watch Video
-              </Button>
+              <Text size={19}>
+                An open source, decentralized communication super app
+              </Text>
             </div>
-            <Text size={11} color="$neutral-50">
-              Avaliable for Mac, Windows, Linux, iOS & Android
-            </Text>
-          </div>
-        </div>
 
-        <FeatureSection
-          title={`Discover your \n community`}
-          description="Join self-sovereign decentralized communities and start chatting."
-        />
-      </div>
+            <div className="grid gap-4">
+              <div className="flex flex-col gap-3 lg:flex-col">
+                <Button size={40} icon={<DownloadIcon size={20} />}>
+                  Sign up for early access
+                </Button>
+                <Button
+                  size={40}
+                  variant="outline"
+                  icon={<PlayIcon size={20} />}
+                >
+                  Watch Video
+                </Button>
+              </div>
+              <Text size={11} color="$neutral-50">
+                Avaliable for Mac, Windows, Linux, iOS & Android
+              </Text>
+            </div>
+          </div>
+
+          <FeatureSection
+            title={`Discover your \n community`}
+            description="Join self-sovereign decentralized communities and start chatting."
+          />
+        </div>
+      </Content>
 
       <div className="text-center">
         <h2 className="text-4xl text-white-100">
@@ -52,22 +58,24 @@ const HomePage: Page = () => {
         </Text>
       </div>
 
-      <div className="mx-1 space-y-[200px] rounded-3xl bg-white-100 py-32">
-        <FeatureSection
-          title={`Chat privately\nwith friends`}
-          description="Protect your right to free speech with e2e encryption & metadata privacy."
-        />
-        <FeatureSection
-          title={`Own your\ncrypto`}
-          description="Own your keys to safely send and manage your assets and collectibles."
-        />
-        <FeatureSection
-          title={`Explore the\nworld of web3`}
-          description="Browse decentralized exchanges, marketplaces, and social networks"
-        />
+      <Content>
+        <div className="bg-white-100 mx-1 space-y-[200px] rounded-3xl py-32">
+          <FeatureSection
+            title={`Chat privately\nwith friends`}
+            description="Protect your right to free speech with e2e encryption & metadata privacy."
+          />
+          <FeatureSection
+            title={`Own your\ncrypto`}
+            description="Own your keys to safely send and manage your assets and collectibles."
+          />
+          <FeatureSection
+            title={`Explore the\nworld of web3`}
+            description="Browse decentralized exchanges, marketplaces, and social networks"
+          />
 
-        <FeatureGrid />
-      </div>
+          <FeatureGrid />
+        </div>
+      </Content>
     </>
   )
 }
