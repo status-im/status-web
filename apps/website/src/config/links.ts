@@ -8,9 +8,9 @@ import {
 export const LINKS = {
   Features: [
     { name: 'Communities', href: '/features/communities' },
+    { name: 'Create Communiy', href: '/features/create-community' },
     { name: 'Messenger', href: '/features/messenger' },
     { name: 'Wallet', href: '/features/wallet' },
-    { name: 'Browser', href: '/features/browser' },
   ],
   Platforms: [
     { name: 'Mobile', href: '/platforms/mobile' },
@@ -21,7 +21,6 @@ export const LINKS = {
     { name: 'Mission', href: '/' },
     { name: 'Principles', href: '/' },
     { name: 'Team', href: '/' },
-    { name: 'Partners', href: '/' },
     { name: 'Press Kit', href: '/' },
   ],
   Learn: [
@@ -36,7 +35,7 @@ export const LINKS = {
     { name: 'Feature upvote', href: '/' },
     { name: 'Blog', href: '/blog' },
     { name: 'Translations', href: '/' },
-    { name: 'Community groups', href: '/' },
+    // { name: 'Community groups', href: '/' },
     { name: 'Jobs', href: '/' },
   ],
   Developers: [
@@ -45,10 +44,10 @@ export const LINKS = {
     { name: 'Integrations', href: '/' },
   ],
   SNT: [
-    { name: 'Token', href: '/' },
+    // { name: 'Token', href: '/' },
     { name: 'Governance', href: '/' },
     { name: 'Curate', href: '/' },
-    { name: 'Exchanges', href: '/' },
+    // { name: 'Exchanges', href: '/' },
   ],
 } as const
 
@@ -56,7 +55,7 @@ export const LINKS = {
 export const SOCIALS = {
   status: {
     name: 'Status',
-    href: '<TODO>',
+    href: 'TODO',
     icon: CommunitiesIcon,
   },
   twitter: {
