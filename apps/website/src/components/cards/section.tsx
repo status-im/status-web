@@ -3,23 +3,24 @@ import { PopupIcon } from '@status-im/icons'
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
 
+import { type Illustration, illustrations } from '@/config/illustrations'
+
 import { Border } from './border'
 
 import type { StaticImageData } from 'next/image'
 
 type Props = {
-  direction?: 'ltr' | 'rtl'
+  icon: Illustration
   title: string
   description: string
+  secondaryTitle: string
+  secondaryDescription: string
   image: StaticImageData
   imageAlt: string
-  imageSecondary: StaticImageData
-  imageSecondaryAlt: string
-  secondaryDescription: string
-  secondaryTitle: string
   customNode?: React.ReactNode
   color: 'yellow' | 'turquoise' | 'purple'
   information?: string
+  direction?: 'ltr' | 'rtl'
 }
 
 const containerClassNames = cva(
@@ -42,18 +43,15 @@ const containerClassNames = cva(
   }
 )
 
-const imageClassNames = cva(
-  ['rounded-3xl', 'border-4', 'h-auto max-h-[724px] w-auto'],
-  {
-    variants: {
-      color: {
-        yellow: ['border-customisation-yellow/5'],
-        turquoise: ['border-customisation-turquoise/5'],
-        purple: ['border-customisation-purple/5'],
-      },
+const imageClassNames = cva(['rounded-3xl', 'h-auto max-h-[724px] w-auto'], {
+  variants: {
+    color: {
+      //   yellow: ['border-customisation-yellow/5'],
+      //   turquoise: ['border-customisation-turquoise/5'],
+      //   purple: ['border-customisation-purple/5'],
     },
-  }
-)
+  },
+})
 
 const borderContainerClassNames = cva(
   ['absolute left-0 top-0', 'w-full', 'h-[100%]'],
@@ -75,8 +73,7 @@ const Section = (props: Props) => {
     description,
     image,
     imageAlt,
-    imageSecondary,
-    imageSecondaryAlt,
+    icon,
     secondaryDescription,
     secondaryTitle,
     direction = 'ltr',
@@ -84,8 +81,10 @@ const Section = (props: Props) => {
 
   const directionOrder = direction === 'ltr' ? 'order-0' : 'order-1'
 
+  const illustration = illustrations[icon]
+
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center py-20">
       <div className="relative z-[3] grid auto-cols-auto grid-flow-dense auto-rows-[1fr] grid-cols-1 gap-24 px-5 md:grid-cols-2 lg:gap-12 lg:px-[100px] xl:gap-[140px]">
         <div
           className={`${directionOrder} flex max-w-[1504px] justify-center overflow-hidden rounded-[32px]`}
@@ -105,8 +104,8 @@ const Section = (props: Props) => {
         <div className="flex flex-col justify-start md:justify-center">
           <div className="flex flex-col">
             <Image
-              src={imageSecondary}
-              alt={imageSecondaryAlt}
+              src={illustration.src}
+              alt={illustration.alt}
               width={48}
               height={48}
             />

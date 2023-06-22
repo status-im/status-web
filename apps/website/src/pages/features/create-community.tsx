@@ -7,21 +7,17 @@ import heroImage1 from '@assets/create-community/grid-1.png'
 import heroImage2 from '@assets/create-community/grid-2.png'
 import heroImage3 from '@assets/create-community/grid-3.png'
 import heroImage4 from '@assets/create-community/grid-4.png'
+import sectionImage1 from '@assets/create-community/section-1.png'
+import sectionImage2 from '@assets/create-community/section-2.png'
 import { Text } from '@status-im/components'
 import Image from 'next/image'
 
+import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
-import { TwoColsSection } from '@/components/messenger'
 import { SectionLarge } from '@/components/section-large'
+import { illustrations } from '@/config/illustrations'
 import { AppLayout, Content } from '@/layouts/app-layout'
-
-import dogeImage from '../../../public/images/illustrations/doge.png'
-import duckImage from '../../../public/images/illustrations/duck.png'
-import flowerImage from '../../../public/images/illustrations/flower.png'
-import handImage from '../../../public/images/illustrations/hand.png'
-import megaphoneImage from '../../../public/images/illustrations/megaphone.png'
-import mushroomImage from '../../../public/images/illustrations/mushroom.png'
 
 import type { Page } from 'next'
 
@@ -30,37 +26,37 @@ const featureList = [
     title: 'Decentralized',
     description:
       'Communities are literally powered by their members running the Status Desktop app.',
-    imageSrc: dogeImage,
+    image: illustrations.doge,
   },
   {
     title: 'Permissionless',
     description:
       'Nobody can stop you creating a community, because nobody controls Status’ p2p network.',
-    imageSrc: mushroomImage,
+    image: illustrations.mushroom,
   },
   {
     title: 'Self-sovereign',
     description:
       'Each community can set it’s own rules, whatever they are.  And is responsible for it’s own actions. ',
-    imageSrc: handImage,
+    image: illustrations.hand,
   },
   {
     title: '100% Free to use',
     description:
       'No paid tier. No artificially imposed limits. No commission charged on community token sales.',
-    imageSrc: duckImage,
+    image: illustrations.duck,
   },
   {
     title: '100% Open source',
     description:
       'Status itself is a community project.  Anyone can build, contribute to and fork it’s source code.',
-    imageSrc: flowerImage,
+    image: illustrations.flower,
   },
   {
     title: '100% Freedom',
     description:
       'Status’s mission is to protect free speech, uphold human rights and defend privacy.',
-    imageSrc: megaphoneImage,
+    image: illustrations.megaphone,
   },
 ]
 
@@ -84,8 +80,8 @@ const CreateCommunityPage: Page = () => {
         {featureList.map(feature => (
           <div key={feature.title} className="flex flex-col">
             <Image
-              src={feature.imageSrc}
-              alt={feature.title}
+              src={feature.image.src}
+              alt={feature.image.alt}
               width={48}
               height={48}
               className="mb-4"
@@ -108,18 +104,17 @@ const CreateCommunityPage: Page = () => {
         description="Imagine a community group chat platform designed to work with crypto from the ground up."
         description2="With token gating, minting, airdrop and retail tools, the possibilities for your community are limitless."
       >
-        <TwoColsSection
+        {/* <Section
+          icon="lock"
           title="Token gating"
           description="Only let hodlers of specific tokens read or post to channels. Or require tokens to join your community."
           // TODO: explanation
-          image="/assets/create-community/8.png"
-          imageAlt="wallet-5"
-          imageSecondary="/images/wallet/pizza.png"
-          imageSecondaryAlt="pizza"
           secondaryTitle="Powerful permissions"
           secondaryDescription="Use ERC-20, NFT and ENS tokens plus AND and OR statements in rules. Set channels so anybody can read, but tokens are required to post. Assign admin permissions with remotely destructible soulbound tokens. And much, much more!"
+          image="/assets/create-community/8.png"
+          imageAlt="wallet-5"
           direction="rtl"
-        />
+        /> */}
 
         <div className="grid grid-flow-col gap-5">
           {[1, 2, 3].map(item => (
@@ -157,27 +152,27 @@ const CreateCommunityPage: Page = () => {
 
       {/* FULL PAGE SCREENSHOT */}
 
-      <TwoColsSection
+      <Section
+        color="turquoise"
+        icon="ufo"
         title="Make your community discoverable"
         description="Propose your community for inclusion in the ‘community directory’ that lets Status users discover communities."
-        // todo explanation
-        image="/assets/create-community/8.png"
-        imageAlt="wallet-2"
-        imageSecondary="/images/wallet/skull.png"
-        imageSecondaryAlt="skull"
         secondaryTitle="It’s up to SNT hodlers "
         secondaryDescription="The directory is curated by an autonomous dApp where SNT hodlers vote. So Status doesn’t have any control over which communities are featured."
+        // todo explanation
+        image={sectionImage1}
+        imageAlt="wallet-2"
       />
-      <TwoColsSection
+      <Section
+        color="turquoise"
+        icon="cog"
         title="Import from Discord"
         description="Does your community have an existing Discord server? All message history can be imported into Status."
-        // TODO: explanation
-        image="/assets/create-community/8.png"
-        imageAlt="wallet-5"
-        imageSecondary="/images/wallet/pizza.png"
-        imageSecondaryAlt="pizza"
         secondaryTitle="Don’t lose those dank memes"
         secondaryDescription="When your community makes the switch to Status, no message from it’s old Discord is lost. So your community’s dank memes are safe. 😎"
+        // TODO: explanation
+        image={sectionImage2}
+        imageAlt="wallet-5"
         direction="rtl"
       />
     </Content>

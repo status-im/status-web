@@ -8,12 +8,14 @@ import image2 from '@assets/communities/grid-2.png'
 import image3 from '@assets/communities/grid-3.png'
 import image4 from '@assets/communities/grid-4.png'
 // import image5 from '@assets/communities/grid-5.png'
+import sectionImage1 from '@assets/communities/section-1.png'
+import sectionImage2 from '@assets/communities/section-2.png'
 import { Text } from '@status-im/components'
 import Image from 'next/image'
 
+import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
-import { TwoColsSection, VideoSection } from '@/components/messenger'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
@@ -31,29 +33,29 @@ const CommunitiesPage: Page = () => {
 
       {/* title="Fully Decentralized Communities" */}
       {/* description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation." */}
-      <VideoSection />
+      {/* <VideoSection /> */}
 
-      <TwoColsSection
+      <Section
+        icon="skull"
         title="Token gated channels & communities"
         description="Access exclusive community spaces and content. Controlled access plus moderation for high signal to noise."
-        image="/assets/communities/6.png"
-        imageAlt="wallet-5"
-        imageSecondary="/images/wallet/pizza.png"
-        imageSecondaryAlt="pizza"
         secondaryTitle="Become eligible for airdrops"
         secondaryDescription="Every Status Community can create their own tokens and optionally airdrop tokens to their members.  Of course of doing an airdrop or not is enterally the individual choice of each community"
+        image={sectionImage1}
+        imageAlt="wallet-5"
+        color="turquoise"
       />
 
-      <TwoColsSection
+      <Section
+        icon="skull"
         title="DeFi, DAO and NFT communities"
         description="Status Communities is built around tokenised functionality, perfect for blockchain enthusiast communities."
-        image="/assets/communities/5.png"
-        imageAlt="wallet-5"
-        imageSecondary="/images/wallet/pizza.png"
-        imageSecondaryAlt="pizza"
         secondaryTitle="Every community sets its own rules"
         secondaryDescription="Anybody can create a community, which is it’s own self-sovereign space.  This means that what each community does is enterally up to them.  Join the ones you like, leave the ones you don’t."
         direction="rtl"
+        image={sectionImage2}
+        imageAlt="wallet-5"
+        color="turquoise"
       />
 
       <div className="pb-60 pt-40">

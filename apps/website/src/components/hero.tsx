@@ -1,6 +1,7 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon, WalletIcon } from '@status-im/icons'
-import Image from 'next/image'
+
+import { GridHero } from './cards'
 
 import type { StaticImageData } from 'next/image'
 
@@ -16,14 +17,19 @@ export const Hero = (props: Props) => {
   const { type, title, description, color, images } = props
 
   return (
-    <>
+    <div className="flex w-full flex-col items-center">
       <div className="relative mb-16 grid px-5 pb-24 pt-16 lg:mb-24 lg:px-40 lg:pt-[120px]">
         {/* <ParalaxCircle initialLeft={-206} initialTop={-170} /> */}
         <div className="relative flex flex-col items-center justify-center">
           <div className="inline-flex">
-            <Tag size={32} icon={WalletIcon} color="$yellow-50" label={type} />
+            <Tag
+              size={32}
+              icon={WalletIcon}
+              color={`$${color}-50`}
+              label={type}
+            />
           </div>
-          <h1 className="max-w-[1000px] py-4 pb-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
+          <h1 className="max-w-[1000px] py-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
             {title}
           </h1>
           <span className="max-w-md text-center font-bold">
@@ -32,7 +38,7 @@ export const Hero = (props: Props) => {
         </div>
 
         <div className="relative flex justify-center">
-          <div className="border-neutral-80/20 mt-6 inline-flex rounded-[20px] border border-dashed p-2 lg:mt-16">
+          <div className="mt-6 inline-flex rounded-[20px] border border-dashed border-neutral-80/20 p-2 lg:mt-16">
             <Button size={40} icon={<DownloadIcon size={20} />}>
               Sign up for early access
             </Button>
@@ -40,7 +46,28 @@ export const Hero = (props: Props) => {
         </div>
       </div>
 
-      <div className="relative z-[2] flex justify-center px-10">
+      <GridHero
+        color={color}
+        images={images}
+        cardOne={{
+          alt: 'wallet-1',
+          image: images[0],
+        }}
+        cardTwo={{
+          alt: 'wallet-2',
+          image: images[1],
+        }}
+        cardThree={{
+          alt: 'wallet-3',
+          image: images[2],
+        }}
+        cardFour={{
+          alt: 'wallet-4',
+          image: images[3],
+        }}
+      />
+
+      {/* <div className="relative z-[2] flex justify-center px-10">
         <div className="grid max-w-[1504px] auto-rows-[1fr] grid-cols-3 gap-[19px]">
           <div className="row-span-2">
             <div className="bg-customisation-yellow/10 rounded-[40px] px-[73px] py-[68px]">
@@ -73,7 +100,7 @@ export const Hero = (props: Props) => {
             </div>
           </div>
         </div>
-      </div>
-    </>
+      </div> */}
+    </div>
   )
 }

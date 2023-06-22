@@ -11,16 +11,14 @@ import heroImage1 from '@assets/messenger/hero-1.png'
 import heroImage2 from '@assets/messenger/hero-2.png'
 import heroImage3 from '@assets/messenger/hero-3.png'
 import heroImage4 from '@assets/messenger/hero-4.png'
+import sectionImage1 from '@assets/messenger/section-1.png'
+import sectionImage2 from '@assets/messenger/section-2.png'
 import { Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 import Image from 'next/image'
 
+import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
-import {
-  HandsSection,
-  TwoColsSection,
-  VideoSection,
-} from '@/components/messenger'
 import { SectionLarge } from '@/components/section-large'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
@@ -46,25 +44,25 @@ const MessengerPage: Page = () => {
         <div className="overflow-hidden pt-16 lg:pt-32">
           {/* Fully Decentralized Messaging */}
           {/* Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation. */}
-          <VideoSection />
+          {/* <VideoSection /> */}
 
-          <TwoColsSection
+          <Section
+            color="purple"
+            icon="skull"
             title="Private 1:1 messaging"
             description="E2E encrypted with perfect forward secrecy and metadata privacy.  "
-            image="/images/wallet/4.png"
+            image={sectionImage1}
             imageAlt="wallet-2"
-            imageSecondary="/images/wallet/skull.png"
-            imageSecondaryAlt="skull"
             secondaryTitle="Communicate pseudonymously"
             secondaryDescription="No identifying information required to use Status. We don’t force you to divulge for your phone number, email, bank card, google or facebook account (or anything else)."
           />
-          <TwoColsSection
+          <Section
+            color="purple"
+            icon="pizza"
             title="Private 1:1 messaging"
             description="E2E encrypted with perfect forward secrecy and metadata privacy.  "
-            image="/images/wallet/5.png"
+            image={sectionImage2}
             imageAlt="wallet-5"
-            imageSecondary="/images/wallet/pizza.png"
-            imageSecondaryAlt="pizza"
             secondaryDescription="Status automatically calculates the cheapest way of moving tokens from A to B, considering: gas prices, chains your tokens are on, chains the recipient uses, and bridge costs. All in real time."
             secondaryTitle="Cost efficient"
             direction="rtl"
@@ -73,39 +71,39 @@ const MessengerPage: Page = () => {
           {/* <ComparisionSection /> */}
 
           {/* <div className="border-neutral-10 bg-white-100 relative rounded-[48px] border-t py-[160px] mix-blend-normal shadow-[0_-2px_20px_rgba(9,16,28,0.04)]">
-        <TwoColsSection
+        <Section
           title="New address format"
           description="A way for wallets to automatically signal which chains they can receive funds on. So you don’t have to."
           image="/images/wallet/7.png"
           imageAlt="wallet-7"
-          imageSecondary="/images/wallet/cube.png"
-          imageSecondaryAlt="cube"
+
+
           secondaryDescription="Status is working with other wallets to ensure EIP-3770 with multiple chain shortName prefixes becomes the new ethereum address standard."
           secondaryTitle="On the path to adoption"
           direction="rtl"
         />
         <div className="relative pt-[160px]">
-          <TwoColsSection
+          <Section
             title="Total balance graphs"
             description="Who doesn’t want to see how their ‘crypto portfolio number’ has gone up or down over time?"
             image="/images/wallet/8.png"
             imageAlt="wallet-8"
-            imageSecondary="/images/wallet/megaphone.png"
-            imageSecondaryAlt="megaphone"
+
+
             secondaryDescription="Everything is taken into account: fluctuations in fiat exchange rates, daily valuation updates of every crypto asset you hodl, and how your balance changes when tokens are sent/received"
             secondaryTitle="Graphs that do maths"
           />
         </div>
       </div> */}
-          <HandsSection />
+          {/* <HandsSection /> */}
         </div>
       </Content>
 
       <div className="py-[200px]">
-        <h2 className="text-white-100 font-bold">
+        <h2 className="font-bold text-white-100">
           Keep who your friends are private
         </h2>
-        <p className="text-white-100 font-bold">
+        <p className="font-bold text-white-100">
           End to end encryption is important, but it doesn’t stop an
           eavesdropper knowing who is talking to who. Status’ metadata privacy
           fixes this - it means that even who you message with can’t be
@@ -214,7 +212,7 @@ const FeatureItem = ({
   return (
     <div
       className={cx([
-        'border-neutral-80/10 flex flex-col items-center rounded-[36px] border text-center',
+        'flex flex-col items-center rounded-[36px] border border-neutral-80/10 text-center',
         span,
         reverse && 'flex-col-reverse',
       ])}
