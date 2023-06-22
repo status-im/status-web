@@ -11,6 +11,7 @@
     "paths": {
       "react-native": ["react-native-web"],
       "@/*": ["./src/*"],
+      "@assets/*": ["./public/assets/*"],
       "@status-im/js/encode-url-data": [
         "../../packages/status-js/src/utils/encode-url-data"
       ],
