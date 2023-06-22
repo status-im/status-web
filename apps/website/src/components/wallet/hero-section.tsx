@@ -1,5 +1,9 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon, WalletIcon } from '@status-im/icons'
+import image1 from 'public/assets/wallet/1.png'
+import image2 from 'public/assets/wallet/2.png'
+import image3 from 'public/assets/wallet/3.png'
+import image4 from 'public/assets/wallet/vegas.png'
 
 import { GridHero } from '../cards/grid-hero'
 import { ParalaxCircle } from './parallax-circle'
@@ -18,7 +22,7 @@ const HeroSection = () => {
               label="Wallet"
             />
           </div>
-          <h1 className="max-w-[600px] py-4 pb-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
+          <h1 className="max-w-[600px] py-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
             The future
             <br />
             is multi-chain
@@ -32,7 +36,7 @@ const HeroSection = () => {
         </div>
 
         <div className="relative flex justify-center">
-          <div className="border-neutral-80/20 mt-6 inline-flex rounded-[20px] border border-dashed p-2 lg:mt-8">
+          <div className="mt-6 inline-flex rounded-[20px] border border-dashed border-neutral-80/20 p-2 lg:mt-8">
             <Button
               size={40}
               icon={<DownloadIcon size={20} />}
@@ -47,19 +51,19 @@ const HeroSection = () => {
         color="yellow"
         cardOne={{
           alt: 'wallet-1',
-          image: '/assets/wallet/1.png',
+          image: image1,
         }}
         cardTwo={{
           alt: 'wallet-2',
-          image: '/assets/wallet/2.png',
+          image: image2,
         }}
         cardThree={{
           alt: 'wallet-3',
-          image: '/assets/wallet/3.png',
+          image: image3,
         }}
         cardFour={{
           alt: 'wallet-4',
-          image: '/assets/wallet/vegas.png',
+          image: image4,
         }}
       />
     </div>

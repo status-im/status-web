@@ -1,4 +1,7 @@
 import { cva } from 'class-variance-authority'
+import Image from 'next/image'
+
+import type { StaticImageData } from 'next/image'
 
 // Variants for the grid hero class names
 const biggerCardClassNames = cva(
@@ -74,7 +77,7 @@ const thirdCardClassNames = cva(
 const fourthCardClassNames = cva(
   [
     'flex min-w-[calc(50%-10px)] rounded-[40px]',
-    'flex-grow items-center justify-center px-0 sm:px-5 md:px-10 lg:px-5 2xl:px-10',
+    'grow items-center justify-center px-0 sm:px-5 md:px-10 lg:px-5 2xl:px-10',
   ],
   {
     variants: {
@@ -90,20 +93,20 @@ const fourthCardClassNames = cva(
 type Props = {
   color: 'yellow' | 'turquoise' | 'purple'
   cardOne: {
-    image: string
+    image: StaticImageData
     alt: string
   }
   cardTwo: {
-    image: string
+    image: StaticImageData
     alt: string
   }
   cardThree: {
-    image: string
+    image: StaticImageData
     alt: string
     alignment?: 'top' | 'bottom'
   }
   cardFour: {
-    image: string
+    image: StaticImageData
     alt: string
   }
 }
@@ -116,14 +119,14 @@ const GridHero = (props: Props) => {
       <div className="flex min-w-[712px] flex-row gap-3 sm:min-w-fit sm:flex-col sm:gap-5 lg:flex-row">
         <div className="flex flex-row gap-3 sm:gap-5">
           <div className={biggerCardClassNames({ color })}>
-            <img
+            <Image
               src={cardOne.image}
               alt={cardOne.alt}
               className={imagesWithBorders({ color })}
             />
           </div>
           <div className={biggerCardClassNames({ color })}>
-            <img
+            <Image
               src={cardTwo.image}
               alt={cardTwo.alt}
               className={imagesWithBorders({ color })}
@@ -137,7 +140,7 @@ const GridHero = (props: Props) => {
               alignment: cardThree.alignment || 'bottom',
             })}
           >
-            <img
+            <Image
               src={cardThree.image}
               alt={cardThree.alt}
               className={imagesWithBordersTopOrBottom({
@@ -147,7 +150,7 @@ const GridHero = (props: Props) => {
             />
           </div>
           <div className={fourthCardClassNames({ color })}>
-            <img src={cardFour.image} alt={cardFour.alt} />
+            <Image src={cardFour.image} alt={cardFour.alt} />
           </div>
         </div>
       </div>
