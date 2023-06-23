@@ -1,7 +1,0 @@
----
-id: 540
-revision: '0'
-language: en
----
-
-# How to airdrop tokens in Status
