@@ -13,6 +13,7 @@ import rehypeSlug from 'rehype-slug'
 import { remark } from 'remark'
 import remarkDirective from 'remark-directive'
 import remarkGfm from 'remark-gfm'
+// import remarkMessageControl from 'remark-message-control'
 // import remarkAdmonitions from 'remark-github-beta-blockquote-admonitions'
 // import remarkBreaks from 'remark-breaks'
 import strip from 'strip-markdown'
@@ -50,8 +51,11 @@ export const Doc = defineDocumentType(() => ({
   contentType: 'mdx',
 
   fields: {
-    title: { type: 'string', required: true },
-    author: { type: 'string', required: true },
+    id: { type: 'number', required: false },
+    revision: { type: 'string', required: false },
+    language: { type: 'string', required: false },
+    title: { type: 'string', required: false },
+    author: { type: 'string', required: false },
     image: { type: 'nested', of: HeroImage, required: false },
   },
 
@@ -60,28 +64,35 @@ export const Doc = defineDocumentType(() => ({
       // @ts-expect-error TODO
       type: 'string[]',
       resolve: doc => doc._raw.flattenedPath.split('/'),
-    },
-    titleSlug: {
-      type: 'string',
-      resolve: doc => slugify(doc.title),
+      // resolve: doc => {
+      //   return getPathSegments(doc._raw.flattenedPath).map(
+      //     ({ pathName }) => pathName
+      //   )
+      // },
     },
     url: {
       type: 'string',
       resolve: doc => `/help/${doc._raw.flattenedPath}`,
+
+      // resolve: doc => {
+      //   const slug = getPathSegments(doc._raw.flattenedPath).map(
+      //     ({ pathName }) => pathName
+      //   )
+
+      //   return `/help/${slug.join('/')}`
+      // },
     },
     pathSegments: {
-      type: 'json',
-      resolve: doc =>
-        doc._raw.flattenedPath
-          .split('/')
-          .slice(1) // skip content dir path – `/docs`
-          .map(dirName => {
-            const re = /^((\d+)-)?(.*)$/
-            const [, , orderStr, pathName] = dirName.match(re) ?? []
-            const order = orderStr ? parseInt(orderStr) : 0
-            return { order, pathName }
-          }),
+      // @ts-expect-error TODO
+      type: '{ order: number; pathName: string }[]',
+      resolve: doc => getPathSegments(doc._raw.flattenedPath),
     },
+
+    titleSlug: {
+      type: 'string',
+      resolve: doc => slugify(doc.title),
+    },
+
     headings: {
       // @ts-expect-error TODO
       type: '{ level: 1 | 2; value: string, slug: string }[]',
@@ -108,6 +119,20 @@ export const Doc = defineDocumentType(() => ({
     },
   },
 }))
+
+function getPathSegments(filePath: string) {
+  return (
+    filePath
+      .split('/')
+      // .slice(1) // skip content dir path – `/docs`
+      .map(fileName => {
+        const re = /^((\d+)-)?(.*)$/
+        const [, , orderStr, pathName] = fileName.match(re) ?? []
+        const order = orderStr ? parseInt(orderStr) : 0
+        return { order, pathName }
+      })
+  )
+}
 
 const remarkAdmonition: Plugin = () => {
   return tree => {
@@ -170,7 +195,12 @@ export default makeSource({
   contentDirPath: CONTENT_DIR_PATH,
   documentTypes: [Doc],
   mdx: {
-    remarkPlugins: [remarkGfm, remarkDirective, remarkAdmonition],
+    remarkPlugins: [
+      remarkGfm,
+      remarkDirective,
+      remarkAdmonition,
+      // [remarkMessageControl, { name: 'hello' }],
+    ],
     rehypePlugins: [
       rehypeSlug,
 

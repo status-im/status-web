@@ -11,48 +11,55 @@ type Props = {
     label: string
     href: string
   }[]
+  action?: React.ReactElement
 }
 
 const Breadcrumbs = (props: Props) => {
-  const { items } = props
+  const { items, action = null } = props
 
   const { asPath } = useRouter()
   const [rawPath] = asPath.split('#')
 
   return (
-    <div className="border-neutral-10 flex h-[50px] items-center space-x-1 border-b px-5 capitalize">
-      {items.map((item, index) => {
-        const divider =
-          index > 0 ? <ChevronRightIcon size={20} color="$neutral-50" /> : null
-        const active = item.href === rawPath
+    <div className="border-neutral-10 flex h-[50px] items-center justify-between border-b px-5 capitalize">
+      <div className="flex items-center gap-1">
+        {items.map((item, index) => {
+          const divider =
+            index > 0 ? (
+              <ChevronRightIcon size={20} color="$neutral-50" />
+            ) : null
+          const active = item.href === rawPath
 
-        if (active) {
+          if (active) {
+            return (
+              <Fragment key={item.href + index}>
+                {divider}
+                <Text
+                  key={item.label + index}
+                  size={15}
+                  color="$neutral-50"
+                  weight="medium"
+                >
+                  {item.label}
+                </Text>
+              </Fragment>
+            )
+          }
+
           return (
             <Fragment key={item.href + index}>
               {divider}
-              <Text
-                key={item.label + index}
-                size={15}
-                color="$neutral-50"
-                weight="medium"
-              >
-                {item.label}
-              </Text>
+              <Link href={item.href}>
+                <Text size={15} color="$neutral-100" weight="medium">
+                  {item.label}
+                </Text>
+              </Link>
             </Fragment>
           )
-        }
+        })}
+      </div>
 
-        return (
-          <Fragment key={item.href + index}>
-            {divider}
-            <Link href={item.href}>
-              <Text size={15} color="$neutral-100" weight="medium">
-                {item.label}
-              </Text>
-            </Link>
-          </Fragment>
-        )
-      })}
+      {action}
     </div>
   )
 }

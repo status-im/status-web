@@ -1,6 +1,6 @@
 ---
 id: 29
-revision: 0
+revision: '0'
 language: en
 ---
 
@@ -36,7 +36,7 @@ You can configure these community settings:
 | **Any member can pin a message** | Any community member can [pin messages][pin-a-message] when this setting is checked. If the setting is unchecked, only the community owner can pin messages.                                                                                                                |
 
 !!! note
-The Community history service uses the [BitTorrent peer-to-peer network :octicons-tab-external-16:][bittorrent-peer-to-peer-network]{:target="\_blank"} to store and retrieve community messages older than 30 days. Status uses a decentralized network and does not store this information.
+The Community history service uses the [BitTorrent peer-to-peer network :octicons-tab-external-16:][bittorrent-peer-to-peer-network] to store and retrieve community messages older than 30 days. Status uses a decentralized network and does not store this information.
 
 ## Describe your community and its rules
 

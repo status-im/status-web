@@ -68,3 +68,32 @@ export const buildLinkTree = (docs: Doc[]) => {
 
   return createLinks(tree)
 }
+// import type { TreeNode } from 'types/TreeNode'
+
+type TreeNode = any
+
+export const buildDocsTree = (
+  docs: Doc[],
+  parentSlug: string[] = []
+): TreeNode[] => {
+  const level = parentSlug.length
+
+  return docs
+    .filter(
+      doc =>
+        doc.pathSegments.length === level + 1 &&
+        doc.slug.join('/').startsWith(parentSlug.join('/'))
+    )
+    .sort((a, b) => a.pathSegments[level].order - b.pathSegments[level].order)
+    .map<TreeNode>(doc => ({
+      // nav_title: doc.nav_title ?? null,
+      label: doc.title,
+      href: doc.url,
+      // label: doc.label ?? null,
+      // excerpt: doc.excerpt ?? null,
+      // urlPath: doc.url_path,
+      // collapsible: doc.collapsible ?? null,
+      // collapsed: doc.collapsed ?? null,
+      links: buildDocsTree(docs, doc.slug),
+    }))
+}

@@ -10,12 +10,13 @@ import { SearchButton } from '@/components/search-button'
 import { SidebarMenu } from '@/components/sidebar-menu'
 import { TOC } from '@/components/toc'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
+import { buildDocsTree } from '@/utils/build-link-tree'
 
 import config from '../../../config.json'
 
 import type { InformationBoxProps } from '@/components/admonition'
 import type { BreadcrumbsProps } from '@/components/breadcrumbs'
-import type { SidebarMenuProps } from '@/components/sidebar-menu'
+// import type { SidebarMenuProps } from '@/components/sidebar-menu'
 import type { Doc } from '@docs'
 import type { GetStaticPaths, GetStaticProps, Page } from 'next'
 import type { ComponentProps } from 'react'
@@ -59,14 +60,14 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({
 
   // current page
   breadcrumbs.push({
-    label: doc.title,
+    label: doc.title ?? 'Untitled',
     href: doc.url,
   })
 
   return {
     props: {
       doc,
-      menu: config.menu,
+      menu: JSON.stringify(buildDocsTree(allDocs)),
       breadcrumbs,
     },
   }
@@ -117,14 +118,25 @@ const components = {
       </h3>
     )
   },
-  a: (props: ComponentProps<'a'>) => (
-    // @ts-expect-error something with ref
-    <Link href={props.href!} {...props}>
-      <Text size={15} color="$primary-50" weight="semibold">
-        {props.children}
-      </Text>
-    </Link>
-  ),
+  a: (props: ComponentProps<'a'>) => {
+    console.log('components > a > props:', props)
+    console.log(
+      new URL(
+        props.href!,
+        typeof window === 'undefined'
+          ? 'http://localhost'
+          : window.location.origin
+      )
+    )
+    return (
+      // @ts-expect-error something with ref
+      <Link href={props.href!} {...props}>
+        <Text size={15} color="$primary-50" weight="semibold">
+          {props.children}
+        </Text>
+      </Link>
+    )
+  },
   p: (props: ComponentProps<'p'>) => (
     <div className="mb-5 mt-3">
       <Text size={15}>{props.children}</Text>
@@ -179,12 +191,48 @@ const components = {
 
 type Props = {
   doc: Doc
-  menu: SidebarMenuProps['items']
+  // menu: SidebarMenuProps['items']
+  menu: string
   breadcrumbs: BreadcrumbsProps['items']
 }
 
+function transformArray(arr: any[]): Result {
+  return arr.map(item => {
+    const [label, value] = Object.entries(item)[0]
+    if (Array.isArray(value)) {
+      return {
+        label,
+        links: value.map(link => {
+          if (typeof link === 'string') {
+            return { label: 'Index', href: '/help/' + link.replace('.md', '') }
+          }
+          const [linkLabel, linkValue] = Object.entries(link)[0]
+          if (Array.isArray(linkValue)) {
+            return {
+              label: linkLabel,
+              links: linkValue.map(nestedLink => {
+                const [nestedLabel, nestedHref] = Object.entries(nestedLink)[0]
+                return {
+                  label: nestedLabel,
+                  href: '/help/' + nestedHref.replace('.md', ''),
+                }
+              }),
+            }
+          }
+          return {
+            label: linkLabel,
+            href: '/help/' + linkValue.replace('.md', ''),
+          }
+        }),
+      }
+    }
+    return { label, href: value }
+  })
+}
+
 const DocsDetailPage: Page<Props> = props => {
-  const { doc, menu, breadcrumbs } = props
+  const { doc, breadcrumbs } = props
+  console.log('doc:', doc)
 
   const Content = useMDXComponent(doc.body.code)
 
@@ -193,14 +241,16 @@ const DocsDetailPage: Page<Props> = props => {
       {/* Header */}
       <div className="flex">
         <div className="flex-1">
-          <Breadcrumbs items={breadcrumbs} />
+          <Breadcrumbs
+            items={breadcrumbs}
+            action={<SearchButton size={32} />}
+          />
         </div>
-        <SearchButton size={32} />
       </div>
 
-      <div className="grid grid-cols-[320px_1fr_380px]">
+      <div className="grid px-4 xl:grid-cols-[320px_1fr_380px]">
         {/* Menu */}
-        <SidebarMenu items={menu} />
+        <SidebarMenu items={transformArray(config.nav)} />
 
         {/* Content */}
         <div className="mx-auto max-w-[542px] py-20">
@@ -250,7 +300,13 @@ const DocsDetailPage: Page<Props> = props => {
           {doc.image && (
             <img src={doc.image.src} alt={doc.image.alt} className="mb-10" />
           )}
-          <Content components={components} />
+          {doc.body.raw === '' ? (
+            <Admonition type="info">
+              {"We're working on this content."}
+            </Admonition>
+          ) : (
+            <Content components={components} />
+          )}
         </div>
 
         {/* Table of contents */}

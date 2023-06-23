@@ -1,6 +1,6 @@
 ---
 id: 345
-revision: 0
+revision: '0'
 language: en
 ---
 

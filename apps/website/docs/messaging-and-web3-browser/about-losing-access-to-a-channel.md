@@ -1,15 +1,15 @@
 ---
 id: 295
-revision: 0
+revision: '0'
 language: en
+title: About losing access to a channel
 ---
-
-# About losing access to a channel
 
 There are two types of channels in [Status Communities][about-status-communities]: [public and private][channels-your-quick-start-guide]. When you join a community, you automatically get access to all public channels and private channels for which you meet the [channel requirements][understand-token-requirements-in-channels].
 
-!!! tip
+:::tip
 Private channels show a :mobile-locked-lock: lock icon next to the channel name.
+:::
 
 You can lose access to a channel for two reasons:
 

@@ -3,7 +3,7 @@ import { ArrowRightIcon, StatusIcon } from '@status-im/icons'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { HighlightMatches } from '@/components/highlight-matches'
+// import { HighlightMatches } from '@/components/highlight-matches'
 import { SearchButton } from '@/components/search-button'
 import { useSearchEngine } from '@/hooks/use-search-engine'
 // import { ROUTES } from '@/config/routes'
@@ -68,7 +68,7 @@ const HelpPage: Page = () => {
             <SearchButton size={38} />
           </div>
 
-          <div className="h-100 aspect-video w-full border border-dashed p-4">
+          {/* <div className="h-100 aspect-video w-full border border-dashed p-4">
             <input
               className="bg-neutral-20 border-neutral-60 block w-full rounded border p-4"
               onChange={async e => search.query(e.target.value)}
@@ -114,7 +114,7 @@ const HelpPage: Page = () => {
                 )
               })}
             </div>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-3 gap-5">
             {SECTIONS.map(section => (
@@ -149,7 +149,7 @@ const HelpPage: Page = () => {
           <div className="mx-auto flex max-w-[var(--max-width)] flex-col items-start">
             <div className="mb-4 flex flex-col">
               <Text size={19} weight="semibold">
-                Didn’t find answers?
+                Didn't find answers?
               </Text>
               <Text size={15}>Ask around in our community!</Text>
             </div>

@@ -1,6 +1,6 @@
 ---
 id: 305
-revision: 0
+revision: '0'
 ---
 
 # Kick or ban someone from your community

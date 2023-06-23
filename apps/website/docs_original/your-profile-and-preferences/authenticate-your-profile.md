@@ -1,6 +1,6 @@
 ---
 id:
-revision: 0
+revision: '0'
 language: en
 ---
 

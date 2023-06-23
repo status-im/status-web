@@ -13,6 +13,10 @@ type NavLinkProps = {
   links: {
     label: string
     href: Url
+    links?: {
+      label: string
+      href: Url
+    }[]
   }[]
 }
 
@@ -44,6 +48,34 @@ const NavNestedLinks = (props: NavLinkProps) => {
 
               const paddingClassName = index === 0 ? 'pt-5' : 'pt-2'
               const paddingLastChild = index === links.length - 1 ? 'pb-5' : ''
+
+              if (link.links && link.links.length > 0) {
+                return (
+                  <div key={link.label + index}>
+                    <Text size={13} color="$neutral-50" weight="medium">
+                      {link.label}
+                    </Text>
+                    {link.links.map((sublink, subindex) => {
+                      return (
+                        <div
+                          key={sublink.label + subindex}
+                          className={`transition-opacity hover:opacity-50 ${paddingClassName} ${paddingLastChild}`}
+                        >
+                          <Link href={sublink.href}>
+                            <Text
+                              size={15}
+                              weight="medium"
+                              color={active ? '$neutral-50' : '$neutral-100'}
+                            >
+                              {sublink.label}
+                            </Text>
+                          </Link>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )
+              }
 
               return (
                 <div

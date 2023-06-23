@@ -13,6 +13,10 @@ type Props = {
     links?: {
       label: string
       href: string
+      links?: {
+        label: string
+        href: string
+      }[]
     }[]
   }[]
 }
