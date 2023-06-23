@@ -132,47 +132,7 @@ const BlogPage: Page<BlogPageProps> = ({
   const router = useRouter()
   const tag = (router.query.tag as string | undefined) ?? initialTag
 
-  // const filteredPosts = initialPosts.filter(post =>
-  //   post.tags?.some(currentTag => currentTag.slug === tag)
-  // )
-
-  // console.log('BlogPage:tag', tag)
-  // console.log('BlogPage:posts', initialPosts)
-
-  // const tag = query.tag ?? _tag
-
-  // const { tag } = router.query as { tag?: string }
-  // const initialPosts = tag
-  //   ? posts.filter(post =>
-  //       post.tags?.some(currentTag => currentTag.slug === tag)
-  //     )
-  //   : posts
-
-  // const url = new URL(window.location.href)
-  // const _tag = url.searchParams.get('tag') ?? undefined
-
-  // useEffect(() => {
-  //   console.log('useEffect')
-  //   // const url = new URL(window.location.href)
-  //   // const tag = url.searchParams.get('tag') ?? undefined
-  //   const { tag } = router.query as { tag?: string }
-
-  //   if (!tag) {
-  //     const url = new URL(window.location.href)
-  //     const tag = url.searchParams.get('tag') ?? undefined
-
-  //     if (tag) {
-  //       setTag(tag)
-  //     }
-
-  //     return
-  //   }
-
-  //   setTag(tag)
-  // }, [])
-
   const {
-    // data: ghostData,
     data,
     // error,
     fetchNextPage,
@@ -198,62 +158,18 @@ const BlogPage: Page<BlogPageProps> = ({
       return response
     },
     getNextPageParam: ({ meta }) => meta.pagination.next,
-    // initialData: {
-    //   pages: [{ posts, meta }],
-    //   pageParams: [1],
-    // },
-    // initialData: {
-    //   pages: [{ posts: initialPosts, meta }],
-    //   pageParams: [1],
-    // },
-    // ...(((initialPosts.length > 0 && router.query.tag === undefined) ||
-    //   (initialPosts.length > 0 &&
-    //     router.query.tag &&
-    //     initialTag &&
-    //     router.query.tag === initialTag)) && {
     initialData: {
       pages: [
         {
-          posts:
-            // posts
-            // filteredPosts,
-            initialPosts,
+          posts: initialPosts,
           meta,
         },
       ],
       pageParams: [1],
     },
-    //   // staleTime: Infinity,
-    // }),
-    // staleTime: Infinity,
   })
 
-  // console.log('render:data:params', ghostData?.pageParams)
-  // console.log(
-  //   'render:data:posts',
-  //   ghostData?.pages.flatMap(page => page.posts) ?? []
-  // )
-
-  // const posts: PostOrPage[] = ghostData?.pages.flatMap(page => page.posts) ?? []
-
-  // let posts: PostOrPage[] = []
-  // if (ghostData && router.query.tag !== initialTag) {
-  //   console.log('FILTER')
-
-  //   posts = ghostData.pages.flatMap(page => page.posts)
-  //   .filter(post => post.tags?.some(currentTag => currentTag.slug === tag))
-  // }
-
   const { highlightedPost, visiblePosts } = useMemo(() => {
-    // if (!data) {
-    //   return {}
-    // }
-
-    // if (!posts.length) {
-    //   return {}
-    // }
-
-    // const [highlightedPost, ...restPosts] = posts
     const [highlightedPost, ...restPosts] =
       data?.pages.flatMap(page => page.posts) ?? []
 
@@ -262,7 +178,6 @@ const BlogPage: Page<BlogPageProps> = ({
 
     return { highlightedPost, visiblePosts }
   }, [data])
-  // }, [posts])
 
   // loading/skeleton if not complete
 
@@ -284,26 +199,8 @@ const BlogPage: Page<BlogPageProps> = ({
                   <Link
                     href={{ query: { ...router.query, tag: filterTag.slug } }}
                     className="flex h-[32px] items-center gap-2 rounded-[10px] border border-solid border-neutral-10 pl-2 pr-3 data-[active=true]:bg-neutral-10"
-                    // onClick={() => {
-                    //   console.log(tag.slug)
-                    //   // const url = new URL(window.location.href)
-                    //   // url.searchParams.set('tag', selectedTag.slug)
-
-                    //   // router.replace(url.pathname + url.search, undefined, {
-                    //   //   scroll: false,
-                    //   // })
-
-                    //   router.replace(
-                    //     { query: { ...router.query, tag: tag.slug } },
-                    //     undefined,
-                    //     { scroll: false }
-                    //   )
-
-                    //   // setTag(tag.slug)
-
-                    //   // router.push('/blog/tag/' + tag.slug)
-                    // }}
                     data-active={filterTag.slug === tag}
+                    scroll={false}
                   >
                     {filterTag.icon}
                     <Text size={15}>{filterTag.name}</Text>
