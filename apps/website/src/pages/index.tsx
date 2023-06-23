@@ -61,13 +61,17 @@ const HomePage: Page = () => {
       </Content>
 
       {/* DARK SECTION */}
-      <div className="min-h-[400px] bg-neutral-100 text-center">
-        <h2 className="text-4xl text-white-100">
-          Own a community? Time to take back control!
-        </h2>
-        <Text size={19} color="$white-100">
-          {"Don't give Discord and Telegram power over your community."}
-        </Text>
+      <div className="flex flex-col items-center justify-center bg-neutral-100 py-20">
+        {/* <Tag size={32} label="Create community" color="$turquoise-50-opa-20" /> */}
+        <div className="mb-8 text-center">
+          <h2 className="text-40 text-white-100 lg:text-64">
+            Take back control!
+          </h2>
+          <Text size={19} color="$white-100">
+            Don’t give Discord or Telegram power over your community.
+          </Text>
+        </div>
+        <Button variant="outline">Set your community free</Button>
       </div>
 
       <Content>
@@ -198,7 +202,7 @@ const FeatureSection = (props: SectionProps) => {
           // color={`$${color}-50`}
           label={type}
         />
-        <h2 className="flex-1 whitespace-pre-line text-64 font-bold">
+        <h2 className="flex-1 whitespace-pre-line text-40 lg:text-64">
           {title}
         </h2>
         <Text size={27}>{description}</Text>

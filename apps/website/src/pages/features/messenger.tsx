@@ -101,15 +101,15 @@ const MessengerPage: Page = () => {
       </Content>
 
       <div className="py-[200px]">
-        <h2 className="font-bold text-white-100">
+        <h2 className="text-64 text-white-100">
           Keep who your friends are private
         </h2>
-        <p className="font-bold text-white-100">
+        <Text size={19} color="$white-100">
           End to end encryption is important, but it doesn’t stop an
           eavesdropper knowing who is talking to who. Status’ metadata privacy
           fixes this - it means that even who you message with can’t be
           surveilled.
-        </p>
+        </Text>
       </div>
 
       <Content>
