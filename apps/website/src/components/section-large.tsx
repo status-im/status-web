@@ -12,7 +12,7 @@ export const SectionLarge = (props: Props) => {
   return (
     <div>
       <div className="mx-auto max-w-[702px] gap-4 text-center">
-        <h2 className="text-[64px] font-bold leading-[68px]">{title}</h2>
+        <h2 className="text-title-2">{title}</h2>
         <Text size={27}>{description}</Text>
       </div>
       {children}

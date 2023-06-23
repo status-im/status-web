@@ -11,16 +11,20 @@ type Props = {
   description: string
   color: string
   images: [StaticImageData, StaticImageData, StaticImageData, StaticImageData]
+  maxWidth: number
 }
 
 export const Hero = (props: Props) => {
-  const { type, title, description, color, images } = props
+  const { type, title, description, color, images, maxWidth } = props
 
   return (
     <div className="flex w-full flex-col items-center">
       <div className="relative mb-16 grid px-5 pb-24 pt-16 lg:mb-24 lg:px-40 lg:pt-[120px]">
         {/* <ParalaxCircle initialLeft={-206} initialTop={-170} /> */}
-        <div className="relative flex flex-col items-center justify-center">
+        <div
+          className="relative flex flex-col items-center justify-center text-center"
+          style={{ maxWidth }}
+        >
           <div className="inline-flex">
             <Tag
               size={32}
@@ -29,12 +33,12 @@ export const Hero = (props: Props) => {
               label={type}
             />
           </div>
-          <h1 className="max-w-[1000px] py-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
+          <h1 className="max-w-[1000px] py-4 text-center text-title-1 lg:pb-5">
             {title}
           </h1>
-          <span className="max-w-md text-center font-bold">
+          <div className="whitespace-pre-line">
             <Text size={19}>{description}</Text>
-          </span>
+          </div>
         </div>
 
         <div className="relative flex justify-center">

@@ -1,11 +1,11 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon, WalletIcon } from '@status-im/icons'
-import image1 from 'public/assets/wallet/1.png'
-import image2 from 'public/assets/wallet/2.png'
-import image3 from 'public/assets/wallet/3.png'
-import image4 from 'public/assets/wallet/vegas.png'
 
-import { GridHero } from '../cards/grid-hero'
+// import image1 from 'public/assets/wallet/1.png'
+// import image2 from 'public/assets/wallet/2.png'
+// import image3 from 'public/assets/wallet/3.png'
+// import image4 from 'public/assets/wallet/vegas.png'
+// import { GridHero } from '../cards/grid-hero'
 import { ParalaxCircle } from './parallax-circle'
 
 const HeroSection = () => {
@@ -47,7 +47,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <GridHero
+      {/* <GridHero
         color="yellow"
         cardOne={{
           alt: 'wallet-1',
@@ -65,7 +65,7 @@ const HeroSection = () => {
           alt: 'wallet-4',
           image: image4,
         }}
-      />
+      /> */}
     </div>
   )
 }

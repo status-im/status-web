@@ -5,7 +5,7 @@ const HandsSection = () => {
     <div className="relative bg-[url('/assets/wallet/background-pattern.png')] bg-[length:100%_100%] bg-no-repeat py-[322px]">
       <div className="mx-40 mb-24">
         <div className="flex flex-col items-center justify-center">
-          <h2 className="max-w-[600px] py-4 pb-5 text-center text-[64px] font-bold leading-[68px]">
+          <h2 className="max-w-[600px] py-4 pb-5 text-center text-title-2">
             Take control
             <br />
             of your crypto
