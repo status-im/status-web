@@ -1,10 +1,9 @@
 ---
 id: 231
-revision: 0
+revision: '0'
 language: en
+title: Share images in Status
 ---
-
-# Share images in Status
 
 !!! note ""
 Sharing images is not available on Status Web.

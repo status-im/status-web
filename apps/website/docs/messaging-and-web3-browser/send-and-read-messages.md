@@ -1,10 +1,9 @@
 ---
-id: 246
-revision: 0
+id: 180
+revision: '0'
 language: en
+title: Send and read messages
 ---
-
-# Find people on Status
 
 :octicons-tools-24: In progress
 

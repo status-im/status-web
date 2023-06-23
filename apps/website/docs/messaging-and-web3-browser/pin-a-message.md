@@ -1,10 +1,9 @@
 ---
 id: 339
-revision: 0
+revision: '0'
 language: en
+title: Pin a message
 ---
-
-# Pin a message
 
 You can pin important information in group chats so that it doesn't get lost in the message history. For example, you can pin your chat rules, event announcements and FAQ.
 

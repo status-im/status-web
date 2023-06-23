@@ -1,10 +1,9 @@
 ---
 id: 267
-revision: 0
+revision: '0'
 language: en
+title: Create a group chat
 ---
-
-# Create a group chat
 
 Group chats are conversations of more than two people. To invite someone to a group chat, you need to have them on your Status contact list.
 

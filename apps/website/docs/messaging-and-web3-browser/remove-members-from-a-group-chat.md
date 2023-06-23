@@ -1,10 +1,9 @@
 ---
 id: 277
-revision: 0
+revision: '0'
 language: en
+title: Remove members from a group chat
 ---
-
-# Remove members from a group chat
 
 A [group chat][understand-group-chats] owner can remove members from a group chat. As a group chat owner, you're free to set your own rules and remove members who misbehave. Regular members can't remove other members.
 

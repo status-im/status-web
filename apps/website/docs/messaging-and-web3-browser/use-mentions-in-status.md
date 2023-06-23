@@ -1,10 +1,9 @@
 ---
-id: 329
-revision: 0
+id: 559
+revision: '0'
 language: en
+title: Use mentions in Status
 ---
-
-# Add, remove or share sticker sets
 
 :octicons-tools-24: In progress
 

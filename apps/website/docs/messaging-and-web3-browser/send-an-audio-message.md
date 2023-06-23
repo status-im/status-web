@@ -1,10 +1,9 @@
 ---
 id: 245
-revision: 0
+revision: '0'
 language: en
+title: Send an audio message
 ---
-
-# Send an audio message
 
 You can send an audio message in Status to communicate with your contacts. You can use audio messages to share ideas and updates. Anyone in a channel, group chat or direct message (DM) can play and send audio messages.
 

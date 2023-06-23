@@ -1,10 +1,9 @@
 ---
-id: 275
-revision: 0
+id: 274
+revision: '0'
 language: en
+title: Understand group chats
 ---
-
-# Customize a group chat
 
 :octicons-tools-24:
 

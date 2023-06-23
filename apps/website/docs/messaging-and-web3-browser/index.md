@@ -1,7 +1,6 @@
 ---
+title: Messaging and Web3 browser
 ---
-
-# Messaging and Web3 browser
 
 Send messages and files, create group chats or explore decentralized apps with the Status Web3 browser.
 

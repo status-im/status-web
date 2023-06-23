@@ -1,10 +1,9 @@
 ---
 id: 320
-revision: 0
+revision: '0'
 language: en
+title: Clear group chat history
 ---
-
-# Clear group chat history
 
 Clearing a group chat history clears all messages inside the chat. Only the group chat owner can clear its history for all members.
 

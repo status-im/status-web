@@ -1,10 +1,9 @@
 ---
 id: 249
-revision: 0
+revision: '0'
 language: en
+title: Edit and delete your messages
 ---
-
-# Edit and delete your messages
 
 Instead of a centralized server, Status uses a [peer-to-peer network][about-status-messages] to store and distribute messages. When you edit or delete a message, the peer-to-peer network distributes your changes to other users running the Status app.
 
@@ -25,7 +24,7 @@ Be careful with what you share, especially in communities. Once published to the
 - In communities and group chats, you can hide messages you don't want to see with **Delete for me**. Everyone else will still be able to see this message.
 - To delete a message for everyone, select **Delete for everyone**. You can only delete your own messages.
 
-## Edit your messages {: #edit-messages }
+## Edit your messages
 
 === "Mobile"
 
@@ -41,7 +40,7 @@ Be careful with what you share, especially in communities. Once published to the
     2. Hover over your message and click :desktop-edit: **Edit**.
     3. Make your changes and click **Save**.
 
-## Delete your messages {: #delete-messages }
+## Delete your messages
 
 === "Mobile"
 

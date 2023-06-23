@@ -1,10 +1,9 @@
 ---
-id: 323
-revision: 0
+id: 626
+revision: '0'
 language: en
+title: Share a group chat
 ---
-
-# Change who can invite you to group chats
 
 :octicons-tools-24: In progress
 

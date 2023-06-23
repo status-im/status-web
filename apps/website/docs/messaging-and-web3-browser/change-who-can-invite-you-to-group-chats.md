@@ -1,10 +1,9 @@
 ---
-id: 600
-revision: 0
+id: 323
+revision: '0'
 language: en
+title: Change who can invite you to group chats
 ---
-
-# Uninstall the Status desktop app
 
 :octicons-tools-24: In progress
 

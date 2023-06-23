@@ -1,10 +1,9 @@
 ---
-id: 274
-revision: 0
+id: 620
+revision: '0'
 language: en
+title: Understand direct messages
 ---
-
-# Understand group chats
 
 :octicons-tools-24:
 

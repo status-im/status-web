@@ -1,10 +1,9 @@
 ---
-id: 317
-revision: 0
+id: 246
+revision: '0'
 language: en
+title: Find people on Status
 ---
-
-# Delete a chat with someone
 
 :octicons-tools-24: In progress
 

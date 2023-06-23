@@ -1,10 +1,9 @@
 ---
 id: 272
-revision: 0
+revision: '0'
 language: en
+title: Delete a group chat
 ---
-
-# Delete a group chat
 
 If you don’t need a [group chat][understand-group-chats] anymore, you can delete the chat. Once you do that, the chat history and member list are gone forever, with no way to recover this or any other data.
 

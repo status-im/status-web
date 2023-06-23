@@ -1,10 +1,9 @@
 ---
 id: 278
-revision: 0
+revision: '0'
 language: en
+title: Leave a group chat
 ---
-
-# Leave a group chat
 
 If you don’t want to be a member of a [group chat][understand-group-chats] anymore, you can leave the chat. You can always [re-join the chat][join-a-group-chat] later if you change your mind.
 

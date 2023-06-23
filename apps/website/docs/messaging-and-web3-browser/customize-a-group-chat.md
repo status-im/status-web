@@ -1,10 +1,9 @@
 ---
-id: 620
-revision: 0
+id: 275
+revision: '0'
 language: en
+title: Customize a group chat
 ---
-
-# Understand direct messages
 
 :octicons-tools-24:
 

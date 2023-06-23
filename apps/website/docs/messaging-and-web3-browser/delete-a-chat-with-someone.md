@@ -1,10 +1,9 @@
 ---
-id: 626
-revision: 0
+id: 317
+revision: '0'
 language: en
+title: Delete a chat with someone
 ---
-
-# Share a group chat
 
 :octicons-tools-24: In progress
 

@@ -1,10 +1,9 @@
 ---
 id: 125
-revision: 0
+revision: '0'
 language: en
+title: About Status messages
 ---
-
-# About Status messages
 
 Messaging is a critical Status component. The Status app combines [peer-to-peer messaging][peer-to-peer-messaging] technologies with robust end-to-end encryption across all your devices. Peer-to-peer messaging eliminates the need for centralized servers and intermediaries, providing a censorship-resistant alternative to other popular messaging apps.
 
@@ -31,22 +30,22 @@ We've built the Status app to keep your messages and information out of our reac
 !!! tip
 For answers to general questions about your Status messages, check the [Messages FAQ][messages-faq] topic.
 
-## Understand peer-to-peer messaging {: #peer-to-peer-messaging }
+## Understand peer-to-peer messaging
 
-Status provides resilient messaging without relying on centralized servers, data centers, or service providers. The Status app uses [Waku :octicons-tab-external-16:][waku]{:target="\_blank"}, a peer-to-peer protocol for private, secure, and censorship-resistant communication.
+Status provides resilient messaging without relying on centralized servers, data centers, or service providers. The Status app uses [Waku :octicons-tab-external-16:][waku], a peer-to-peer protocol for private, secure, and censorship-resistant communication.
 
 Unlike centralized networks (A), which depend on a central server to relay messages, peer-to-peer networks (B) encrypt and broadcast every message to all participant nodes. A node is a computer or smartphone that relays messages to other nodes or temporarily stores them for disconnected peers. Even when all nodes can access your messages, the content is encrypted so that only you and the intended recipients can read them.
 
-![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](./about-status-messages/125-0-1-dark.png#only-light)
-![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](./about-status-messages/125-0-1-light.png#only-dark)
+![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](../../docs_original/messaging-and-web3-browser/about-status-messages/125-0-1-dark.png#only-light)
+![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](../../docs_original/messaging-and-web3-browser/about-status-messages/125-0-1-light.png#only-dark)
 
-## Built-in privacy and security {: #privacy-and-security }
+## Built-in privacy and security
 
 The Status app secures your messages the entire time they are in transit using end-to-end encryption. This industry standard protection uses strong encryption keys and ensures that only you and the recipients can read your messages. No one else (not even Status) can read your conversations or identify you or other participants.
 
 When you communicate with someone on the Status app, your messages, attachments, sender metadata, group chats, and group metadata are all end-to-end encrypted.
 
-Status incorporates the [Perfect Forward Secrecy :octicons-tab-external-16:][perfect-forward-secrecy]{:target="\_blank"} (PFS) encryption mechanism, ensuring that encryption keys change on every message. If your keys are compromised, only the associated message is compromised. All previous messages remain private.
+Status incorporates the [Perfect Forward Secrecy :octicons-tab-external-16:][perfect-forward-secrecy] (PFS) encryption mechanism, ensuring that encryption keys change on every message. If your keys are compromised, only the associated message is compromised. All previous messages remain private.
 
 !!! note
 Status messaging protects your privacy in one-to-one communications, chat groups, public chats, and Communities.

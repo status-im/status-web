@@ -1,10 +1,9 @@
 ---
 id: 386
-revision: 0
+revision: '0'
 language: en
+title: React and reply to messages
 ---
-
-# React and reply to messages
 
 In Status, you can reply to specific messages and react with emojis.
 

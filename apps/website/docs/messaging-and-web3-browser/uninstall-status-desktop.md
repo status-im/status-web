@@ -1,10 +1,9 @@
 ---
-id: 627
-revision: 0
+id: 600
+revision: '0'
 language: en
+title: Uninstall the Status desktop app
 ---
-
-# Share a conversation
 
 :octicons-tools-24: In progress
 
