@@ -147,13 +147,7 @@ const BlogPage: Page<BlogPageProps> = ({
     queryFn: async ({ pageParam: page, queryKey }) => {
       const [, tag] = queryKey
 
-      console.log('queryFn:page', page)
-      console.log('queryFn:tag', tag)
-
       const response = await getPosts({ page, tag })
-
-      console.log('queryFn:posts', response.posts)
-      console.log('queryFn:meta', response.meta)
 
       return response
     },
