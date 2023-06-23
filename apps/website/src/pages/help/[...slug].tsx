@@ -119,15 +119,15 @@ const components = {
     )
   },
   a: (props: ComponentProps<'a'>) => {
-    console.log('components > a > props:', props)
-    console.log(
-      new URL(
-        props.href!,
-        typeof window === 'undefined'
-          ? 'http://localhost'
-          : window.location.origin
-      )
-    )
+    // console.log('components > a > props:', props)
+    // console.log(
+    //   new URL(
+    //     props.href!,
+    //     typeof window === 'undefined'
+    //       ? 'http://localhost'
+    //       : window.location.origin
+    //   )
+    // )
     return (
       // @ts-expect-error something with ref
       <Link href={props.href!} {...props}>
@@ -232,7 +232,6 @@ function transformArray(arr: any[]): Result {
 
 const DocsDetailPage: Page<Props> = props => {
   const { doc, breadcrumbs } = props
-  console.log('doc:', doc)
 
   const Content = useMDXComponent(doc.body.code)
 
