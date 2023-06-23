@@ -2,9 +2,8 @@
 id: 496
 revision: '0'
 language: en
+title: Transfer your community's ownership
 ---
-
-# Transfer your community's ownership
 
 :octicons-beaker-24: Beta
 
@@ -12,8 +11,9 @@ If you can't manage your Status Community anymore, you can transfer the ownershi
 
 When you transfer the ownership, the new owner's computer becomes a community node with full control of the community, including its settings, permissions and membership approvals.
 
-!!! tip
+:::tip
 If you need help managing your community, consider adding others as admins. For more information, check out [Delegate admin functions to community members][delegate-admin-functions-to-community-members].
+:::
 
 ## Current security issues you should consider
 
@@ -24,8 +24,9 @@ The current system for transferring ownership of Status Communities has two impo
 
 We're working on implementing a token-based ownership model to solve these problems. In the meantime, be extra cautious when handling your community key and keep it safe. For example, don't save your community's private key in an online storage service or screenshot.
 
-!!! warning "Caution"
+:::warn
 Read and consider the security implications before you transfer the ownership of your community or become the new owner of someone else's community.
+:::
 
 ## How to transfer your community ownership
 

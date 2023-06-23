@@ -2,12 +2,12 @@
 id: 211
 revision: '0'
 language: en
+title: Use a throwaway profile in Status Web
 ---
 
-# Use a throwaway profile in Status Web
-
-!!! note ""
+:::info
 Throwaway profiles are only available in Status Web.
+:::
 
 Use a [throwaway profile][understand-throwaway-profiles-in-status-web] when you want to participate in a Status Web Community without revealing your identity. A throwaway profile is not linked to any identifiable information or other Status profile you may have.
 
@@ -29,8 +29,9 @@ The throwaway profile information remains in your browser cache and persists acr
     1. From the right sidebar, click :status-log-out: **logout** next to your profile name.
     1. On the **Disconnect** pop-up, click **Disconnect**.
 
-!!! tip
+:::tip
 You can also delete the throwaway profile information by clearing your browser cache.
+:::
 
 ## Common questions
 
