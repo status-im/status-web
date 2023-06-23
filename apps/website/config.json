@@ -2,7 +2,7 @@
   "nav": [
     {
       "Getting started": [
-        "/getting-started/index.md",
+        "/getting-started",
         {
           "Intro to Status": [
             {
@@ -83,7 +83,7 @@
     },
     {
       "Messaging": [
-        "/messaging-and-web3-browser/index.md",
+        "/messaging-and-web3-browser",
         {
           "Direct messages": [
             {
@@ -197,7 +197,7 @@
     },
     {
       "Communities": [
-        "/status-communities/index.md",
+        "/status-communities",
         {
           "Status Communities": [
             {
@@ -377,7 +377,7 @@
     },
     {
       "Wallet": [
-        "/status-wallet/index.md",
+        "/status-wallet",
         {
           "Getting started": [
             {
@@ -423,7 +423,7 @@
     },
     {
       "Your profile": [
-        "/your-profile-and-preferences/index.md",
+        "/your-profile-and-preferences",
         {
           "Manage your profile": [
             {
@@ -578,7 +578,7 @@
       ]
     },
     {
-      "Network nodes": ["network-nodes-and-statistics/index.md"]
+      "Network nodes": ["network-nodes-and-statistics"]
     }
   ]
 }
