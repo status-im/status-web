@@ -24,11 +24,11 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         <NavMobile />
 
         {/* ROUNDED WHITE BG */}
-        <div className="flex justify-center lg:p-1">
+        <div className="lg:p-1">
           {/* TODO Check max-width to use */}
-          <div className="min-h-[900px] w-full rounded-3xl bg-white-100">
-            {children}
-          </div>
+          {/* <div className="min-h-[900px] w-full rounded-3xl"></div> */}
+
+          {children}
         </div>
         {hasPreFooter && <Prefooter />}
         <Footer hasBorderTop={hasPreFooter} />
@@ -47,7 +47,7 @@ export const Content = ({
 }) => {
   return (
     <div
-      className={`bg-white-100 min-h-[900px] w-full rounded-3xl ${className}`}
+      className={`min-h-[900px] w-full rounded-3xl bg-white-100 ${className} overflow-hidden`}
     >
       {children}
     </div>
