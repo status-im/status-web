@@ -1,10 +1,9 @@
 ---
-id: 98
-revision: 0
+id: 101
+revision: '0'
 language: en
+title: What is Status
 ---
-
-# How to use Status: your quick start guide
 
 :octicons-tools-24: In progress
 

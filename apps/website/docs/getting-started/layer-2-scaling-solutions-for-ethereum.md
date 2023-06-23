@@ -1,10 +1,9 @@
 ---
-id: 106
-revision: 0
+id: 594
+revision: '0'
 language: en
+title: Layer-2 scaling solutions for Ethereum
 ---
-
-# Download the Status mobile app
 
 :octicons-tools-24: In progress
 

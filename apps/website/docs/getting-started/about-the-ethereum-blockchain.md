@@ -1,10 +1,9 @@
 ---
-id: 101
-revision: 0
+id: 438
+revision: '0'
 language: en
+title: About the Ethereum blockchain
 ---
-
-# What is Status
 
 :octicons-tools-24: In progress
 

@@ -1,10 +1,9 @@
 ---
-id: 594
-revision: 0
+id: 103
+revision: '0'
 language: en
+title: Join a Status Community
 ---
-
-# Layer-2 scaling solutions for Ethereum
 
 :octicons-tools-24: In progress
 

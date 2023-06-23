@@ -1,4 +1,0 @@
----
----
-
-# Download Status for Windows

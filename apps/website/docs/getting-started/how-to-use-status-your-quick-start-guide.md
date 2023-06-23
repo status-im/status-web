@@ -1,10 +1,9 @@
 ---
-id: 103
-revision: 0
+id: 98
+revision: '0'
 language: en
+title: 'How to use Status: your quick start guide'
 ---
-
-# Join a Status Community
 
 :octicons-tools-24: In progress
 
