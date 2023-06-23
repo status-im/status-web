@@ -22,5 +22,6 @@ A direct message (or DM, for short) is a communication between you and another p
     1. From your contact list, select the person you want to chat with.
     1. Click **Confirm** and start sending messages.
 
-!!! tip
+:::tip
 In direct messages, you can send text messages, [images][share-images-in-status], [GIFs, stickers][send-gifs-and-stickers] and [audio messages][send-an-audio-message]. You can [format][format-your-messages], [edit][edit-messages] and [delete][delete-messages] your messages.
+:::

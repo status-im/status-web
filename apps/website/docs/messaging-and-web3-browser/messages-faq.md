@@ -27,8 +27,9 @@ The Status peer-to-peer network ensures the resilience of the messaging network.
 
 Status supports free speech infrastructure that prevents us, or anyone else, from censoring you.
 
-!!! note
+:::info
 Nodes in the network still rely on having an internet connection. So if your internet provider (or an authoritarian regime) shuts down your network, Status messaging won't work.
+:::
 
 ## Status messaging
 
@@ -52,8 +53,9 @@ The [peer-to-peer network][about-status-messages] store messages that couldn't b
 
 Status implements end-to-end encryption (E2EE) using [cryptographic keys][understand-your-status-keys-and-recovery-phrase]. When you send a message, the message is encrypted using the recipient's public key. The only way to decrypt the message and read its content is by using the recipient's private key. Even if a malicious actor intercepts the message, they can't read its content as they don't have the private key.
 
-!!! note
+:::info
 The [Waku network][waku] implements additional privacy capabilities in addition to E2EE, such as sender anonymity or metadata protection.
+:::
 
 ### Other messaging apps use E2EE encryption; why use Status?
 
@@ -69,8 +71,9 @@ No. No one besides you and the intended recipient can read your messages. For mo
 
 Anybody running the Status app becomes a node in the peer-to-peer network. This contributes to a more decentralized and resilient network.
 
-!!! note
+:::info
 Currently, Status runs nodes to ensure messages can be delivered reliably to disconnected peers.While all traffic is encrypted and out of Status reach, we hope to reduce Status participation progressively.
+:::
 
 ### Is Status really decentralized if Status runs some of the network nodes?
 

@@ -9,8 +9,9 @@ You can link your existing Ethereum address to a new Status profile. For instanc
 
 If you already have a Status account and used your profile in the past 30 days, you can restore it with the profile's recovery phrase.
 
-!!! tip
+:::tip
 If you already use Status on one device and want to add your profile and funds to a new device, you don't need your recovery phrase. [Sync your new device][add-a-new-device-to-your-status-profile] for the best experience.
+:::
 
 ## What to expect
 
@@ -29,8 +30,9 @@ This table summarizes your options when you have a recovery phrase:
 
 (:material-check: available, :octicons-x-24: not available )
 
-!!! tip
+:::tip
 Creating or restoring a profile using a recovery phrase follows the same procedure.
+:::
 
 ## Create or restore your profile using a recovery phrase
 
@@ -76,8 +78,9 @@ When you restore your Status profile using a recovery phrase, Status tries to pu
     1. Confirm your password again and click **Finalize Status Password Creation**.
     1. Enable your device's biometrics (fingerprint, face or other) to fill in your password. Alternatively, click **I prefer to use my password**.
 
-!!! Warning "Caution"
+:::warn
 Status doesn't know your password and can't reset it for you. If you forget your password, you may lose access to your Status profile and wallet funds. Remember your Status password, keep it in a safe place and don't share it with anyone.
+:::
 
 ## Customize your profile
 

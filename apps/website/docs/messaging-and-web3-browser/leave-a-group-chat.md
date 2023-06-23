@@ -11,8 +11,9 @@ Once you leave, a note appears in the group chat's message history letting other
 
 If someone is adding you to group chats you don't want to be in, consider [changing who can invite you to group chats][change-who-can-invite-you-to-group-chats] or [blocking that person][block-someone-in-status].
 
-!!! note
+:::info
 The group chat owner can't leave without deleting the chat for everyone. For more information, check out [Delete a group chat][delete-a-group-chat].
+:::
 
 ## Leave a group chat
 

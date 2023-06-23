@@ -13,8 +13,9 @@ In some cases, users may still see your original messages, even after you edit o
 - Run a custom build of the Status app that doesn't support message editing and deletion by choice.
 - Disconnect from the network before receiving your latest changes.
 
-!!! note
+:::info
 Be careful with what you share, especially in communities. Once published to the network, what you shared may still remain on someone's device even if you choose to delete it later.
+:::
 
 ### What to expect
 

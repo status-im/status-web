@@ -9,8 +9,9 @@ Clearing a group chat history clears all messages inside the chat. Only the grou
 
 If you’re not the owner, you’ll clear the chat history just for yourself. Everyone else will still see the full history.
 
-!!! note
+:::info
 Once you clear the chat history, it can't be retrieved or restored.
+:::
 
 ## Clear group chat history
 

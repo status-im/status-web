@@ -13,11 +13,13 @@ If the person you want to chat with doesn't have a Status profile yet, you can [
 
 To add someone to your contact list, you need their [chat key][understand-your-status-keys-and-recovery-phrase], which represents their public Status profile. They can share it with you, so ask them to [Share their Status profile with you][share-your-status-profile]. You can also use their QR code to add them to contacts.
 
-!!! tip
+:::tip
 To add someone you know from a group chat or community, simply right-click their name and select :desktop-add-user: **Send a contact request**.
+:::
 
-!!! tip
+:::tip
 To respond to contact requests, check out [Respond to a contact request][respond-to-a-contact-request].
+:::
 
 ## Add a contact
 
@@ -30,8 +32,9 @@ To respond to contact requests, check out [Respond to a contact request][respond
     1. Tap :mobile-profile: **View profile** > :mobile-profile: **Send contact request**.
     1. In your introductory message, briefly explain who you are and why you want to add them to your contacts. This is the first message your contact sees from you. Once you're done, tap **Send contact request**.
 
-    !!! tip
-        To see someone's QR code, ask them to go to **Messages** > :mobile-qr-code: **Share**. Follow the steps below to add them to contacts using this code.
+:::tip
+To see someone's QR code, ask them to go to **Messages** > :mobile-qr-code: **Share**. Follow the steps below to add them to contacts using this code.
+:::
 
 === "Desktop"
 
