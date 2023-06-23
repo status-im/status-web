@@ -26,6 +26,25 @@ module.exports = {
     },
 
     extend: {
+      fontSize: {
+        'title-1': [
+          '5.5rem',
+          {
+            lineHeight: '5.25rem',
+            letterSpacing: '-0.1155rem',
+            fontWeight: '700',
+          },
+        ],
+        'title-2': [
+          '4rem',
+          {
+            lineHeight: '4.25rem',
+            letterSpacing: '-0.08rem',
+            fontWeight: '700',
+          },
+        ],
+      },
+
       transitionProperty: {
         height: 'height',
       },
