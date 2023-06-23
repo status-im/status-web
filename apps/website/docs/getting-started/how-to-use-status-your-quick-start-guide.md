@@ -4,8 +4,3 @@ revision: '0'
 language: en
 title: 'How to use Status: your quick start guide'
 ---
-
-:octicons-tools-24: In progress
-
-!!! note ""
-We're working on this content.

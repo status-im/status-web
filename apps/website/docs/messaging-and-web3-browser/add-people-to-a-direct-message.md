@@ -4,8 +4,3 @@ revision: '0'
 language: en
 title: Add people to a direct message
 ---
-
-:octicons-tools-24: In progress
-
-!!! note ""
-We're working on this content.
