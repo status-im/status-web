@@ -1,21 +1,587 @@
 {
-  "menu": [
+  "nav": [
     {
-      "label": "Getting Started",
-      "href": "/help/getting-started"
-    },
-    {
-      "label": "Messaging",
-      "links": [
+      "Getting started": [
+        "/getting-started/index.md",
         {
-          "label": "SMS",
-          "href": "/help/messaging/sms"
+          "Intro to Status": [
+            {
+              "What is Status": "/getting-started/what-is-status.md"
+            },
+            {
+              "How to use Status – your quick start quide": "/getting-started/how-to-use-status-your-quick-start-guide.md"
+            },
+            {
+              "Understand your actions in Status": "/getting-started/understand-your-actions-in-status.md"
+            },
+            {
+              "About the Ethereum blockchain": "/getting-started/about-the-ethereum-blockchain.md"
+            }
+          ]
+        },
+        {
+          "Getting started for new users": [
+            {
+              "Run the Status app for the first time": "/getting-started/run-the-status-app-for-the-first-time.md"
+            },
+            {
+              "Create or restore your Status profile using a recovery phrase": "/getting-started/create-or-restore-your-status-profile-using-a-recovery-phrase.md"
+            },
+            {
+              "Sign into your Status profile on a new device": "/getting-started/sign-into-your-status-profile-on-a-new-device.md"
+            },
+            {
+              "Add a contact in Status": "/getting-started/add-a-contact-in-status.md"
+            },
+            {
+              "Join a Status Community": "/getting-started/join-a-status-community.md"
+            },
+            {
+              "Invite friends to Status": "/getting-started/invite-friends-to-status.md"
+            },
+            {
+              "Status Wallet – your quick start guide": "/status-wallet/status-wallet-your-quick-start-guide.md"
+            },
+            {
+              "Sign into your Status profile on a new device": "/your-profile-and-preferences/sign-into-your-status-profile-on-a-new-device.md"
+            }
+          ]
+        },
+        {
+          "Getting started with your community": [
+            {
+              "Create a Status Community": "/status-communities/create-a-status-community.md"
+            },
+            {
+              "Getting started for community owners": "/status-communities/getting-started-for-community-owners.md"
+            },
+            {
+              "About Status Web Communities": "/status-communities/about-status-web-communities.md"
+            }
+          ]
+        },
+        {
+          "Download Status": [
+            {
+              "Download Status for Windows": "/getting-started/download-status-for-windows.md"
+            },
+            {
+              "Download Status for Mac": "/getting-started/download-status-for-mac.md"
+            },
+            {
+              "Download Status for Linux": "/getting-started/download-status-for-linux.md"
+            },
+            {
+              "Download the Status mobile app": "/getting-started/download-the-status-mobile-app.md"
+            },
+            {
+              "If you upgrade from the old Status app": "/getting-started/if-you-upgrade-from-the-old-status-app.md"
+            }
+          ]
         }
       ]
+    },
+    {
+      "Messaging": [
+        "/messaging-and-web3-browser/index.md",
+        {
+          "Direct messages": [
+            {
+              "Understand direct messages": "/messaging-and-web3-browser/understand-direct-messages.md"
+            },
+            {
+              "Share your Status profile": "/your-profile-and-preferences/share-your-status-profile.md"
+            },
+            {
+              "Find people on Status": "/messaging-and-web3-browser/find-people-on-status.md"
+            },
+            {
+              "Add a contact in Status": "/messaging-and-web3-browser/add-a-contact-in-status.md"
+            },
+            {
+              "Send direct messages to your contact": "/messaging-and-web3-browser/send-direct-messages-to-your-contacts.md"
+            },
+            {
+              "Add peopple to a direct message": "/messaging-and-web3-browser/add-people-to-a-direct-message.md"
+            },
+            {
+              "Delete a chat with someone": "/messaging-and-web3-browser/delete-a-chat-with-someone.md"
+            }
+          ]
+        },
+        {
+          "Group chats": [
+            {
+              "Understand group chats": "/messaging-and-web3-browser/understand-group-chats.md"
+            },
+            {
+              "Create a group chat": "/messaging-and-web3-browser/create-a-group-chat.md"
+            },
+            {
+              "Customize a group chat": "/messaging-and-web3-browser/customize-a-group-chat.md"
+            },
+            {
+              "Add members to a group chat": "/messaging-and-web3-browser/add-members-to-a-group-chat.md"
+            },
+            {
+              "Join a group chat": "/messaging-and-web3-browser/join-a-group-chat.md"
+            },
+            {
+              "Clear group chat history": "/messaging-and-web3-browser/clear-group-chat-history.md"
+            },
+            {
+              "Change who can invite you to group chats": "/messaging-and-web3-browser/change-who-can-invite-you-to-group-chats.md"
+            },
+            {
+              "Remove members from a group chat": "/messaging-and-web3-browser/remove-members-from-a-group-chat.md"
+            },
+            {
+              "Delete a group chat": "/messaging-and-web3-browser/delete-a-group-chat.md"
+            },
+            {
+              "Leave a group chat": "/messaging-and-web3-browser/leave-a-group-chat.md"
+            }
+          ]
+        },
+        {
+          "Message features and tools": [
+            {
+              "About Status messages": "/messaging-and-web3-browser/about-status-messages.md"
+            },
+            {
+              "Messages FAQ": "/messaging-and-web3-browser/messages-faq.md"
+            },
+            {
+              "Format your messages": "/messaging-and-web3-browser/format-your-messages.md"
+            },
+            {
+              "Edit and delete your messages": "/messaging-and-web3-browser/edit-and-delete-your-messages.md"
+            },
+            {
+              "Pin a message": "/messaging-and-web3-browser/pin-a-message.md"
+            },
+            {
+              "React and reply to messages": "/messaging-and-web3-browser/react-and-reply-to-messages.md"
+            },
+            {
+              "Enable rich link previews in messages": "/messaging-and-web3-browser/enable-rich-link-previews-in-messages.md"
+            },
+            {
+              "Use mentions in Status": "/messaging-and-web3-browser/use-mentions-in-status.md"
+            },
+            {
+              "Mute your notifications": "/messaging-and-web3-browser/mute-your-notifications.md"
+            }
+          ]
+        },
+        {
+          "Share files and conversations": [
+            {
+              "Share images in Status": "/messaging-and-web3-browser/share-images-in-status.md"
+            },
+            {
+              "Send an audio message": "/messaging-and-web3-browser/send-an-audio-message.md"
+            },
+            {
+              "Send GIFs and stickers": "/messaging-and-web3-browser/send-gifs-and-stickers.md"
+            },
+            {
+              "Add, remove or share sticker sets": "/messaging-and-web3-browser/add-remove-or-share-sticker-sets.md"
+            },
+            {
+              "Share a conversation": "/messaging-and-web3-browser/share-a-conversation.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Communities": [
+        "/status-communities/index.md",
+        {
+          "Status Communities": [
+            {
+              "Import a community someone shares with you": "/status-communities/import-a-community-someone-shares-with-you.md"
+            },
+            {
+              "Invite people to a Status community": "/status-communities/invite-people-to-a-status-community.md"
+            },
+            {
+              "About community request approvals": "/status-communities/about-community-request-approvals.md"
+            },
+            {
+              "Understand token requirements in communities": "/status-communities/understand-token-requirements-in-communities.md"
+            },
+            {
+              "About losing access to a community": "/status-communities/about-losing-access-to-a-community.md"
+            }
+          ]
+        },
+        {
+          "Channels": [
+            {
+              "Channels your quick start guide": "/status-communities/channels-your-quick-start-guide.md"
+            },
+            {
+              "Join a channel": "/status-communities/join-a-channel.md"
+            },
+            {
+              "Understand token requirements in channels": "/status-communities/understand-token-requirements-in-channels.md"
+            },
+            {
+              "About losing access to a channel": "/status-communities/about-losing-access-to-a-channel.md"
+            }
+          ]
+        },
+        {
+          "Create your community": [
+            {
+              "Getting started for community owners": "/status-communities/getting-started-for-community-owners.md"
+            },
+            {
+              "Create a Status community": "/status-communities/create-a-status-community.md"
+            },
+            {
+              "Customize your community": "/status-communities/customize-your-community.md"
+            },
+            {
+              "Import a Discord Community into status": "/status-communities/import-a-discord-community-into-status.md"
+            },
+            {
+              "Back up your community's private key": "/status-communities/back-up-your-community-s-private-key.md"
+            }
+          ]
+        },
+        {
+          "Administer your community": [
+            {
+              "Manage community join requests": "/status-communities/manage-community-join-requests.md"
+            },
+            {
+              "About the control node in Status Communities": "/status-communities/about-the-control-node-in-status-communities.md"
+            },
+            {
+              "Replace your community's control node": "/status-communities/replace-your-community-s-control-node.md"
+            },
+            {
+              "Transfer your community's ownership": "/status-communities/transfer-your-community-s-ownership.md"
+            },
+            {
+              "Restore your Status Community": "/status-communities/restore-your-status-community.md"
+            },
+            {
+              "About the Community History Service": "/status-communities/about-the-community-history-service.md"
+            },
+            {
+              "Turn off the Community History Service": "/status-communities/turn-off-the-community-history-service.md"
+            },
+            {
+              "Kick or ban someone from your community": "/status-communities/kick-or-ban-someone-from-your-community.md"
+            },
+            {
+              "Delete your Status Community": "/status-communities/delete-your-status-community.md"
+            }
+          ]
+        },
+        {
+          "Administer channels": [
+            {
+              "Create a channel": "/status-communities/create-a-channel.md"
+            },
+            {
+              "Customize your channel": "/status-communities/customize-your-channel.md"
+            },
+            {
+              "Change a private channel to public": "/status-communities/change-a-private-channel-to-public.md"
+            },
+            {
+              "Set up channel permissions": "/status-communities/set-up-channel-permissions.md"
+            },
+            {
+              "Set a view-only channel": "/status-communities/set-up-a-view-only-channel.md"
+            },
+            {
+              "Set a private channel": "/status-communities/set-up-a-private-channel.md"
+            },
+            {
+              "Delete a channel": "/status-communities/delete-a-channel.md"
+            }
+          ]
+        },
+        {
+          "Use tokens and set community permissions": [
+            {
+              "Token-based access to communities and channels": "/status-communities/token-based-access-to-communities-and-channels.md"
+            },
+            {
+              "Set up a private community": "/status-communities/set-up-a-private-community.md"
+            },
+            {
+              "Change a private community to public": "/status-communities/change-a-private-community-to-public.md"
+            },
+            {
+              "Permissions by role in Status Communities": "/status-communities/permissions-by-role-in-status-communities.md"
+            },
+            {
+              "Set up your community permissions": "/status-communities/set-up-your-community-permissions.md"
+            },
+            {
+              "Grant exclusive access with custom tokens": "/status-communities/grant-exclusive-access-with-custom-tokens.md"
+            },
+            {
+              "Permissions by role in Status Communities": "/status-communities/permissions-by-role-in-status-communities.md"
+            },
+            {
+              "Set up your community permissions": "/status-communities/set-up-your-community-permissions.md"
+            },
+            {
+              "Grant exclusive access with tokens": "/status-communities/grant-exclusive-access-with-tokens.md"
+            },
+            {
+              "Mint tokens for your community": "/status-communities/mint-tokens-for-your-community.md"
+            },
+            {
+              "How to mint an admin token": "/status-communities/how-to-mint-an-admin-token.md"
+            },
+            {
+              "Import tokens to your community": "/status-communities/import-tokens-to-your-community.md"
+            },
+            {
+              "How to airdrop tokens in status": "/status-communities/how-to-airdrop-tokens-in-status.md"
+            },
+            {
+              "Delegate admin functions to community members": "/status-communities/delegate-admin-functions-to-community-members.md"
+            },
+            {
+              "Remotely self destruct a token": "/status-communities/remotely-self-destruct-a-token.md"
+            },
+            {
+              "Burn your community tokens": "/status-communities/burn-your-community-tokens.md"
+            }
+          ]
+        },
+        {
+          "Status Web Communities": [
+            {
+              "About status web communities": "/status-communities/about-status-web-communities.md"
+            },
+            {
+              "Join a Community on Status Web": "/status-communities/join-a-community-on-status-web.md"
+            },
+            {
+              "Use a throwaway profile in Status Web": "/status-communities/use-a-throwaway-profile-in-status-web.md"
+            },
+            {
+              "Understand throwaway profiles in Status Web": "/status-communities/understand-throwaway-profiles-in-status-web.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Wallet": [
+        "/status-wallet/index.md",
+        {
+          "Getting started": [
+            {
+              "Status Wallet FAQ": "/status-wallet/status-wallet-faq.md"
+            }
+          ]
+        },
+        {
+          "Send and receive crypto": [
+            {
+              "Receive crypto": "/status-wallet/receive-crypto.md"
+            },
+            {
+              "Send crypto to your Status Wallet": "/status-wallet/send-crypto-to-your-status-wallet.md"
+            },
+            {
+              "Understand network fees": "/status-wallet/understand-network-fees.md"
+            }
+          ]
+        },
+        {
+          "Privacy and security": [
+            {
+              "If someone else has access to your Wallet": "/status-wallet/if-someone-else-has-access-to-your-wallet.md"
+            }
+          ]
+        },
+        {
+          "Understand crypto assets": [
+            {
+              "Understand wrapped tokens": "/status-wallet/understand-wrapped-tokens.md"
+            }
+          ]
+        },
+        {
+          "Handle your crypto": [
+            {
+              "Delete your wallet": "/status-wallet/delete-your-wallet.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Your profile": [
+        "/your-profile-and-preferences/index.md",
+        {
+          "Manage your profile": [
+            {
+              "Create and use additional Status profiles": "/your-profile-and-preferences/create-and-use-additional-status-profiles.md"
+            },
+            {
+              "Sign into your Status profile on a new device": "/your-profile-and-preferences/sign-into-your-status-profile-on-a-new-device.md"
+            },
+            {
+              "View and edit your Status profile": "/your-profile-and-preferences/view-and-edit-your-status-profile.md"
+            },
+            {
+              "Share your Status profile": "/your-profile-and-preferences/share-your-status-profile.md"
+            },
+            {
+              "Sync your profile across devices": "/your-profile-and-preferences/sync-your-profile-across-devices.md"
+            },
+            {
+              "Remove a Status profile from your profile list": "/your-profile-and-preferences/remove-a-status-profile-from-your-profile-list.md"
+            },
+            {
+              "Log out of Status": "/your-profile-and-preferences/log-out-of-status.md"
+            },
+            {
+              "Delete your Status profile": "/your-profile-and-preferences/delete-your-status-profile.md"
+            }
+          ]
+        },
+        {
+          "Change your settings and preferences": [
+            {
+              "Status settings reference": "/your-profile-and-preferences/status-settings-reference.md"
+            },
+            {
+              "Enable rich link previews in messages": "/your-profile-and-preferences/enable-rich-link-previews-in-messages.md"
+            },
+            {
+              "Register or add your ENS name in Status": "/your-profile-and-preferences/register-or-add-your-ens-name-in-status.md"
+            },
+            {
+              "Set the default browser in Status": "/your-profile-and-preferences/set-the-default-browser-in-status.md"
+            }
+          ]
+        },
+        {
+          "Adjust your notifications": [
+            {
+              "Your Status notifications guide": "/your-profile-and-preferences/your-status-notifications-guide.md"
+            },
+            {
+              "Set up your notification settings": "/your-profile-and-preferences/set-up-your-notification-settings.md"
+            },
+            {
+              "View notifications and updates": "/your-profile-and-preferences/view-notifications-and-updates.md"
+            },
+            {
+              "Mute your notifications": "/your-profile-and-preferences/mute-your-notifications.md"
+            },
+            {
+              "Customize direct message notifications": "/your-profile-and-preferences/customize-direct-message-notifications.md"
+            },
+            {
+              "Configure mentions and all other messages": "/your-profile-and-preferences/configure-mentions-and-all-other-messages.md"
+            },
+            {
+              "Customize group chat notifications": "/your-profile-and-preferences/customize-group-chat-notifications.md"
+            },
+            {
+              "Configure community and channel notifications": "/your-profile-and-preferences/configure-community-and-channel-notifications.md"
+            },
+            {
+              "Set up and customize notification exceptions": "/your-profile-and-preferences/set-up-and-customize-notification-exceptions.md"
+            },
+            {
+              "Customize membership request notifications": "/your-profile-and-preferences/customize-membership-request-notifications.md"
+            },
+            {
+              "Reset your notification settings": "/your-profile-and-preferences/reset-your-notification-settings.md"
+            }
+          ]
+        },
+        {
+          "Your profile security and privacy": [
+            {
+              "Back up and secure your recovery phrase": "/your-profile-and-preferences/back-up-and-secure-your-recovery-phrase.md"
+            },
+            {
+              "Understand your Status keys and recovery phrase": "/your-profile-and-preferences/understand-your-status-keys-and-recovery-phrase.md"
+            },
+            {
+              "View your profile as someone else": "/your-profile-and-preferences/view-your-profile-as-someone-else.md"
+            },
+            {
+              "About changing your password": "/your-profile-and-preferences/about-changing-your-password.md"
+            },
+            {
+              "Set up biometric authentication": "/your-profile-and-preferences/set-up-biometic-authentication.md"
+            },
+            {
+              "FAQ - Status keys and recovery phrase": "/your-profile-and-preferences/faq-status-keys-and-recovery-phrase.md"
+            },
+            {
+              "Block or unblock someone in Status": "/your-profile-and-preferences/block-or-unblock-someone-in-status.md"
+            },
+            {
+              "Stay anonymous when your messages are forwarded": "/your-profile-and-preferences/stay-anonymous-when-your-messages-are-forwarded.md"
+            },
+            {
+              "Set up automatic locking for the Status app": "/your-profile-and-preferences/set-up-automatic-locking-for-the-status-app.md"
+            }
+          ]
+        },
+        {
+          "Troubleshooting": [
+            {
+              "If you lose your Status password or recovery phrase": "/your-profile-and-preferences/if-you-lose-your-status-password-or-recovery-phrase.md"
+            },
+            {
+              "Uninstall Status desktop": "/your-profile-and-preferences/uninstall-status-desktop.md"
+            },
+            {
+              "Common issues when the community's control node is offline": "/your-profile-and-preferences/common-issues-when-the-community-s-control-node-is-offline.md"
+            }
+          ]
+        },
+        {
+          "Use your Keycard": [
+            {
+              "Keycard - your quick start guide": "/your-profile-and-preferences/keycard-your-quick-start-guide.md"
+            },
+            {
+              "Create or restore your Status profile using Keycard": "/your-profile-and-preferences/create-or-restore-your-status-profile-using-keycard.md"
+            }
+          ]
+        },
+        {
+          "Handle your contact list and user verification": [
+            {
+              "Remove a contact from Status": "/your-profile-and-preferences/remove-a-contact-from-status.md"
+            },
+            {
+              "Respond to a contact request": "/your-profile-and-preferences/respond-to-a-contact-request.md"
+            },
+            {
+              "Understand Status profile labels": "/your-profile-and-preferences/understand-status-profile-labels.md"
+            },
+            {
+              "Add or remove a nickname from someone else's profile": "/your-profile-and-preferences/add-or-remove-a-nickname-from-someone-else-s-profile.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Network nodes": ["network-nodes-and-statistics/index.md"]
     }
-  ],
-
-  "glossary": {
-    "HTML": "Hyper Text Markup Language"
-  }
+  ]
 }
