@@ -81,9 +81,7 @@ const AnchorLink = ({
   children: React.ReactNode
 }) => (
   <>
-    <span className="absolute -left-6 hidden text-slate-400 dark:text-slate-600 lg:group-hover:inline">
-      #
-    </span>
+    <span className="absolute -left-6 hidden lg:group-hover:inline">#</span>
     <Link href={`#${id}`} aria-hidden="true" tabIndex={-1}>
       {children}
     </Link>
@@ -168,7 +166,7 @@ const components = {
   hr: (props: ComponentProps<'hr'>) => (
     <div className="my-5 flex justify-center gap-3" role="separator" {...props}>
       {[1, 2, 3].map(i => (
-        <div key={i} className="bg-neutral-10 h-2 w-2 rounded-full" />
+        <div key={i} className="h-2 w-2 rounded-full bg-neutral-10" />
       ))}
     </div>
   ),
@@ -196,7 +194,7 @@ type Props = {
   breadcrumbs: BreadcrumbsProps['items']
 }
 
-function transformArray(arr: any[]): Result {
+function transformArray(arr: any[]): any {
   return arr.map(item => {
     const [label, value] = Object.entries(item)[0]
     if (Array.isArray(value)) {
@@ -206,12 +204,14 @@ function transformArray(arr: any[]): Result {
           if (typeof link === 'string') {
             return { label: 'Index', href: '/help/' + link.replace('.md', '') }
           }
-          const [linkLabel, linkValue] = Object.entries(link)[0]
+          const [linkLabel, linkValue] = Object.entries(link)[0] as [any, any]
           if (Array.isArray(linkValue)) {
             return {
               label: linkLabel,
               links: linkValue.map(nestedLink => {
-                const [nestedLabel, nestedHref] = Object.entries(nestedLink)[0]
+                const [nestedLabel, nestedHref] = Object.entries(
+                  nestedLink
+                )[0] as [any, any]
                 return {
                   label: nestedLabel,
                   href: '/help/' + nestedHref.replace('.md', ''),

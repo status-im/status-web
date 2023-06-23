@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 // import { HighlightMatches } from '@/components/highlight-matches'
 import { SearchButton } from '@/components/search-button'
-import { useSearchEngine } from '@/hooks/use-search-engine'
+// import { useSearchEngine } from '@/hooks/use-search-engine'
 // import { ROUTES } from '@/config/routes'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 
@@ -52,7 +52,7 @@ const SECTIONS = [
 ] as const
 
 const HelpPage: Page = () => {
-  const search = useSearchEngine()
+  // const search = useSearchEngine()
 
   return (
     <div className="[--max-width:1186px]">
@@ -121,7 +121,7 @@ const HelpPage: Page = () => {
               <Link
                 href="/help/getting-started"
                 key={section.title}
-                className="border-neutral-10 shadow-1 hover:shadow-3 flex flex-col rounded-[20px] border p-4 transition duration-100 hover:scale-[1.01]"
+                className="flex flex-col rounded-[20px] border border-neutral-10 p-4 shadow-1 transition duration-100 hover:scale-[1.01] hover:shadow-3"
               >
                 <div className="mb-3">{section.icon}</div>
                 <div className="mb-5 grid flex-1 gap-1">
@@ -145,11 +145,11 @@ const HelpPage: Page = () => {
           </div>
         </div>
 
-        <div className="border-neutral-30 border-t border-dashed py-10">
+        <div className="border-t border-dashed border-neutral-30 py-10">
           <div className="mx-auto flex max-w-[var(--max-width)] flex-col items-start">
             <div className="mb-4 flex flex-col">
               <Text size={19} weight="semibold">
-                Didn't find answers?
+                {"Didn't find answers?"}
               </Text>
               <Text size={15}>Ask around in our community!</Text>
             </div>

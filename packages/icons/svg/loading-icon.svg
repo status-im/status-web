@@ -11,7 +11,7 @@
     d="M10.1 2.6a7.5 7.5 0 1 0 7.5 7.5"
   />
   <mask
-    id="prefix__mask0_1036_13"
+    id="mask0_1036_13"
     width="10"
     height="10"
     x="9"
@@ -19,9 +19,9 @@
     maskUnits="userSpaceOnUse"
     style="mask-type: alpha"
   >
-    <path fill="url(#prefix__paint0_linear_1036_13)" d="M9 1h10v10H9z" />
+    <path fill="url(#paint0_linear_1036_13)" d="M9 1h10v10H9z" />
   </mask>
-  <g mask="url(#prefix__mask0_1036_13)">
+  <g mask="url(#mask0_1036_13)">
     <path
       stroke="#09101C"
       stroke-width="1.2"
@@ -30,7 +30,7 @@
   </g>
   <defs>
     <linearGradient
-      id="prefix__paint0_linear_1036_13"
+      id="paint0_linear_1036_13"
       x1="11"
       x2="15.396"
       y1="3"

@@ -8,15 +8,16 @@ import logoLearnSrc from '../../public/images/logo/learn.svg'
 
 type Props = {
   label?: boolean
+  isTopbarDesktop?: boolean
 }
 
 export const Logo = (props: Props) => {
-  const { label = true } = props
+  const { label = true, isTopbarDesktop } = props
 
   const { pathname } = useRouter()
 
   return (
-    <div className="flex flex-shrink-0 items-center gap-2">
+    <div className="flex shrink-0 items-center gap-2">
       {match(pathname)
         .with(
           P.when(p => p.startsWith('/insights')),
@@ -39,7 +40,7 @@ export const Logo = (props: Props) => {
           width="70"
           height="16"
           fill="none"
-          className="mr-[10px]"
+          className={`mr-[10px] ${isTopbarDesktop ? 'hidden lg:block' : ''}`}
         >
           <path
             fill="#fff"

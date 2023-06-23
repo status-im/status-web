@@ -24,7 +24,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "env.d.ts",
     ".contentlayer/generated"
   ],
-  "exclude": ["node_modules", "next.config.js", "tailwind.config.js"]
+  "exclude": ["node_modules", "next.config.mjs", "tailwind.config.js"]
 }

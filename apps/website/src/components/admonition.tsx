@@ -32,12 +32,12 @@ const Admonition = (props: Props) => {
   )
 }
 
-const styles = cva(['rounded-xl border overflow-hidden'], {
+const styles = cva(['overflow-hidden rounded-xl border'], {
   variants: {
     type: {
-      info: 'bg-customisation-blue/10 border-customisation-blue/5',
-      tip: 'bg-success-/10 border-success-/5',
-      warn: 'bg-customisation-orange/10 border-customisation-orange/5',
+      info: 'border-customisation-blue/5 bg-customisation-blue/10',
+      tip: 'border-success-/5 bg-success-/10',
+      warn: 'border-customisation-orange/5 bg-customisation-orange/10',
     },
   },
 })

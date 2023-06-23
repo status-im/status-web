@@ -66,7 +66,7 @@ const EpicsDetailPage: Page<Props> = props => {
           fullscreen
         />
 
-        <div role="separator" className="bg-neutral-10 -mx-6 my-6 h-px" />
+        <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
 
         <TableIssues />
       </div>
@@ -74,6 +74,8 @@ const EpicsDetailPage: Page<Props> = props => {
   )
 }
 
-EpicsDetailPage.getLayout = InsightsLayout
+EpicsDetailPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default EpicsDetailPage

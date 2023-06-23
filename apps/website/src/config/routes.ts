@@ -1,3 +1,10 @@
+import {
+  AdvancedIcon,
+  AirdropIcon,
+  CommunitiesIcon,
+  TokenIcon,
+} from '@status-im/icons'
+
 export const ROUTES = {
   Features: [
     { name: 'Communities', href: '/features/communities' },
@@ -46,22 +53,27 @@ export const ROUTES = {
   ],
 } as const
 
+// TODO Update icons when available
 export const SOCIALS = {
   status: {
     name: 'Status',
     href: '<TODO>',
+    icon: CommunitiesIcon,
   },
   twitter: {
     name: 'Twitter',
     href: 'https://twitter.com/ethstatus',
+    icon: TokenIcon,
   },
   github: {
     name: 'GitHub',
     href: 'https://github.com/status-im',
+    icon: AirdropIcon,
   },
   youtube: {
     name: 'YouTube',
     href: 'https://youtube.com/<TODO>',
+    icon: AdvancedIcon,
   },
 }
 

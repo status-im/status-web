@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import { IconButton, Shadow, Tag, Text } from '@status-im/components'
 import {
   DoneIcon,
@@ -7,9 +9,11 @@ import {
   SortIcon,
 } from '@status-im/icons'
 
+import { DatePicker } from '@/components/datepicker/datepicker'
 import { EpicOverview } from '@/components/epic-overview'
 import { InsightsLayout } from '@/layouts/insights-layout'
 
+import type { DateRange } from '@status-im/components/src/calendar/calendar'
 import type { Page } from 'next'
 
 export const epics = [
@@ -27,6 +31,8 @@ export const epics = [
 ]
 
 const EpicsPage: Page = () => {
+  const [selectedDates, setSelectedDates] = useState<DateRange>()
+
   return (
     <div className="space-y-4 p-10">
       <Text size={27} weight="semibold">
@@ -53,10 +59,13 @@ const EpicsPage: Page = () => {
           </Shadow>
         ))}
       </div>
+      <DatePicker selected={selectedDates} onSelect={setSelectedDates} />
     </div>
   )
 }
 
-EpicsPage.getLayout = InsightsLayout
+EpicsPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default EpicsPage

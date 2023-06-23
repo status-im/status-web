@@ -58,7 +58,7 @@ const ReposPage: Page = () => {
           <Link
             key={repo.name}
             href={`https://github.com/status-im/${repo.name}`}
-            className="border-neutral-10 hover:border-neutral-40 flex h-[124px] flex-col rounded-2xl border px-4 py-3 transition-colors duration-200"
+            className="flex h-[124px] flex-col rounded-2xl border border-neutral-10 px-4 py-3 transition-colors duration-200 hover:border-neutral-40"
           >
             <Text size={15} weight="semibold">
               {repo.name}
@@ -85,6 +85,8 @@ const ReposPage: Page = () => {
   )
 }
 
-ReposPage.getLayout = InsightsLayout
+ReposPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default ReposPage

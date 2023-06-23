@@ -21,7 +21,7 @@ const Breadcrumbs = (props: Props) => {
   const [rawPath] = asPath.split('#')
 
   return (
-    <div className="border-neutral-10 flex h-[50px] items-center justify-between border-b px-5 capitalize">
+    <div className="flex h-[50px] items-center justify-between border-b border-neutral-10 px-5 capitalize">
       <div className="flex items-center gap-1">
         {items.map((item, index) => {
           const divider =

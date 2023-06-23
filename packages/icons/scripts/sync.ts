@@ -34,7 +34,7 @@ const FILE_KEY = 'qLLuMLfpGxK9OfpIavwsmK'
 
 const NODE_IDS = {
   '3239:987': 'icons',
-  // '3227:1083': 'social',
+  '3227:1083': 'social',
   // '942:77': 'reactions',
   '942:218': 'love',
   '942:217': 'thumbs-up',

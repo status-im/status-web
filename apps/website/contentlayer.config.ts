@@ -54,7 +54,7 @@ export const Doc = defineDocumentType(() => ({
     id: { type: 'number', required: false },
     revision: { type: 'string', required: false },
     language: { type: 'string', required: false },
-    title: { type: 'string', required: false },
+    title: { type: 'string', required: true },
     author: { type: 'string', required: false },
     image: { type: 'nested', of: HeroImage, required: false },
   },

@@ -40,7 +40,7 @@ export const SearchButton = (props: Props) => {
 }
 
 const styles = cva(
-  'shadow-1 border-neutral-20 inline-flex items-center rounded-xl border',
+  'inline-flex items-center rounded-xl border border-neutral-20 shadow-1',
   {
     variants: {
       size: {
