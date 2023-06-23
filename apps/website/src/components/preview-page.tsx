@@ -379,7 +379,7 @@ export function PreviewPage(props: PreviewPageProps) {
                   )}
                 </div>
 
-                <h1 className="mb-3 text-[40px] font-semibold leading-[44px] xl:text-[64px] xl:leading-[68px]">
+                <h1 className="mb-3 text-40 xl:text-64">
                   {data.type === 'channel' && '#'}
                   {data.info.displayName}
                 </h1>

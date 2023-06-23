@@ -14,10 +14,53 @@ module.exports = {
     fontFamily: {
       sans: ['var(--font-inter)', ...fontFamily.sans],
     },
-    colors: colors,
 
     // use <Text /> from @status-im/components or arbitrary values
-    // fontSize: {},
+    fontSize: {
+      88: [
+        '5.5rem',
+        {
+          lineHeight: '5.25rem',
+          letterSpacing: '-0.1155rem',
+          fontWeight: '700',
+        },
+      ],
+      64: [
+        '4rem',
+        {
+          lineHeight: '4.25rem',
+          letterSpacing: '-0.08rem',
+          fontWeight: '700',
+        },
+      ],
+      48: [
+        '3rem',
+        {
+          lineHeight: '3.125rem',
+          letterSpacing: '-0.06rem',
+          fontWeight: '700',
+        },
+      ],
+      40: [
+        '2.5rem',
+        {
+          lineHeight: '2.75rem',
+          letterSpacing: '-0.05rem',
+          fontWeight: '700',
+        },
+      ],
+      27: [
+        '1.6875rem',
+        {
+          lineHeight: '2rem',
+          letterSpacing: '-0.03544rem',
+          fontWeight: '600',
+        },
+      ],
+    },
+
+    colors: colors,
+
     fontWeight: {
       regular: '400',
       medium: '500',
@@ -26,25 +69,6 @@ module.exports = {
     },
 
     extend: {
-      fontSize: {
-        'title-1': [
-          '5.5rem',
-          {
-            lineHeight: '5.25rem',
-            letterSpacing: '-0.1155rem',
-            fontWeight: '700',
-          },
-        ],
-        'title-2': [
-          '4rem',
-          {
-            lineHeight: '4.25rem',
-            letterSpacing: '-0.08rem',
-            fontWeight: '700',
-          },
-        ],
-      },
-
       transitionProperty: {
         height: 'height',
       },

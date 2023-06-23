@@ -22,7 +22,7 @@ const HeroSection = () => {
               label="Wallet"
             />
           </div>
-          <h1 className="max-w-[600px] py-4 text-center text-[48px] font-bold leading-[50px] lg:pb-5 lg:text-[88px] lg:leading-[84px]">
+          <h1 className="max-w-[600px] py-4 text-center text-48 lg:pb-5 lg:text-88">
             The future
             <br />
             is multi-chain

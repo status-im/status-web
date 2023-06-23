@@ -1,9 +1,8 @@
-import { Button, DividerDate, Tag, Text } from '@status-im/components'
+import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon, PlayIcon } from '@status-im/icons'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
-import { illustrations } from '@/config/illustrations'
 import { LINKS } from '@/config/links'
 import { stickers } from '@/config/stickers'
 import { AppLayout, Content } from '@/layouts/app-layout'
@@ -18,7 +17,7 @@ const HomePage: Page = () => {
         <div className="px-5 py-32 lg:px-40">
           <div className="mb-40 grid gap-8 px-5 ">
             <div className="grid gap-6">
-              <h1 className="text-title-1">
+              <h1 className="text-88">
                 Make the
                 <br />
                 jump to web3
@@ -62,7 +61,7 @@ const HomePage: Page = () => {
       </Content>
 
       {/* DARK SECTION */}
-      <div className="text-center">
+      <div className="min-h-[400px] bg-neutral-100 text-center">
         <h2 className="text-4xl text-white-100">
           Own a community? Time to take back control!
         </h2>
@@ -199,7 +198,7 @@ const FeatureSection = (props: SectionProps) => {
           // color={`$${color}-50`}
           label={type}
         />
-        <h2 className="flex-1 whitespace-pre-line text-6xl font-bold">
+        <h2 className="flex-1 whitespace-pre-line text-64 font-bold">
           {title}
         </h2>
         <Text size={27}>{description}</Text>

@@ -169,7 +169,7 @@ const MessengerPage: Page = () => {
         <div className="py-40"></div>
 
         <div>
-          <h2 className="text-center text-[64px] font-bold leading-[68px]">
+          <h2 className="text-center text-64">
             Your assets.
             <br />
             Your identity.

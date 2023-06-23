@@ -33,7 +33,7 @@ export const Hero = (props: Props) => {
               label={type}
             />
           </div>
-          <h1 className="max-w-[1000px] py-4 text-center text-title-1 lg:pb-5">
+          <h1 className="max-w-[1000px] py-4 text-center text-88 lg:pb-5">
             {title}
           </h1>
           <div className="whitespace-pre-line">

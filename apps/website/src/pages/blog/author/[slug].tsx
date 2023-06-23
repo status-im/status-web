@@ -107,9 +107,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
               name={author.name ?? author.slug}
               src={author.profile_image ?? undefined}
             />
-            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
-              {author.name}
-            </h1>
+            <h1 className="text-40 lg:text-64">{author.name}</h1>
             <Text size={19}>{author.meta_description}</Text>
           </div>
 

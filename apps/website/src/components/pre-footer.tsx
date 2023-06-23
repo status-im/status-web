@@ -11,11 +11,11 @@ const Prefooter = () => {
       <div className="flex justify-center">
         <div className="flex flex-col items-center justify-center">
           <Image src={logoSrc} alt="Status logo" width={80} />
-          <h1 className="py-4 pb-3 pt-5 text-center text-[40px] font-bold leading-[44px] text-white-100 lg:pb-5 lg:text-[88px] lg:leading-[84px]">
+          <h1 className="py-4 pb-3 pt-5 text-40 text-white-100 lg:pb-5 lg:text-88">
             Be unstoppable
           </h1>
-          <span className="max-w-md text-center font-bold">
-            <Text size={19} color={'$white-100'}>
+          <span className="">
+            <Text size={19} color="$white-100">
               Use the open source, decentralized crypto communication super app.
             </Text>
           </span>

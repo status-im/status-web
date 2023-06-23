@@ -18,7 +18,7 @@ const ComparisionSection = () => {
               <div className="inline-flex">
                 <Tag label="Use case" size={24} />
               </div>
-              <h2 className="pt-4 text-[40px] font-bold leading-[44px]">
+              <h2 className="pt-4 text-40">
                 Alice has 50 DAI on both Ethereum Mainnet and Optimism and wants
                 to send 100 DAI to Bob on Arbitrum.
               </h2>

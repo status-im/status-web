@@ -6,7 +6,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 // import Image from 'next/image'
 import { formatDate } from '@/components/chart/utils/format-time'
 import { Link } from '@/components/link'
-import { AppLayout } from '@/layouts/app-layout'
+import { AppLayout, Content } from '@/layouts/app-layout'
 import { getPosts } from '@/lib/ghost'
 
 import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
@@ -56,13 +56,11 @@ const BlogPage: Page<Props> = props => {
   }, [data])
 
   return (
-    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+    <Content>
       <div className="px-5">
         <div className="mx-auto max-w-[1184px] pb-24 pt-12 lg:pb-32 lg:pt-20">
           <div className="mb-10 grid gap-2">
-            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
-              Blog.
-            </h1>
+            <h1 className="text-40 tracking-[-.02em] lg:text-64">Blog.</h1>
             <Text size={19}>Long form articles, thoughts, and ideas.</Text>
           </div>
 
@@ -87,7 +85,7 @@ const BlogPage: Page<Props> = props => {
           )}
         </div>
       </div>
-    </div>
+    </Content>
   )
 }
 
@@ -123,9 +121,7 @@ export const HighlightedPostCard = (props: HighlightedPostCardProps) => {
         </div>
 
         <div>
-          <span className="text-[27px] font-semibold leading-[32px] tracking-[-.021em] lg:text-[40px] lg:font-bold lg:leading-[44px] lg:tracking-[-.02em]">
-            {post.title}
-          </span>
+          <span className="text-27 lg:text-40">{post.title}</span>
         </div>
 
         <div>

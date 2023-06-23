@@ -8,7 +8,7 @@ const VideoSection = () => {
       <ParalaxCircle initialLeft={-100} initialTop={-100} />
 
       <div className="relative z-[1] flex flex-col px-5 pt-24 lg:px-[164px] lg:pt-[240px]">
-        <h2 className="text-[40px] font-bold leading-[44px] lg:text-[64px] lg:leading-[68px]">
+        <h2 className="text-40 lg:text-64">
           Fully
           <br />
           Decentralized
