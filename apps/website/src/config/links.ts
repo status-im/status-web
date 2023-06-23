@@ -40,13 +40,13 @@ export const LINKS = {
   ],
   Developers: [
     { name: 'Repos', href: 'https://github.com/status-im' },
-    { name: 'Insights', href: '/insights' },
+    { name: 'Insights', href: '/insights/epics' },
     { name: 'Integrations', href: '/' },
   ],
   SNT: [
     // { name: 'Token', href: '/' },
     { name: 'Governance', href: '/' },
-    { name: 'Curate', href: '/' },
+    { name: 'Curate', href: 'https://curate.status.app' },
     // { name: 'Exchanges', href: '/' },
   ],
 } as const
