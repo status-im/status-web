@@ -40,6 +40,7 @@ const MessengerPage: Page = () => {
             heroImage4,
             // heroImage5,
           ]}
+          maxWidth={574}
         />
         <div className="overflow-hidden pt-16 lg:pt-32">
           {/* Fully Decentralized Messaging */}

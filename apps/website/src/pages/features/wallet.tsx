@@ -14,7 +14,7 @@ import { Hero } from '@/components/hero'
 import {
   ComparisionSection,
   HandsSection,
-  HeroSection,
+  // HeroSection,
   ParalaxCircle,
   VideoSection,
 } from '@/components/wallet'
@@ -31,6 +31,7 @@ const WalletPage: Page = () => {
         description="L2s made simple - send and manage your crypto easily and safely across multiple networks."
         images={[heroImage1, heroImage2, heroImage3, heroImage4]}
         color="yellow"
+        maxWidth={700}
       />
       {/* <HeroSection /> */}
       <VideoSection />

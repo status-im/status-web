@@ -69,6 +69,7 @@ const CreateCommunityPage: Page = () => {
         description="Make your community autonomous and self sovereign."
         images={[heroImage1, heroImage2, heroImage3, heroImage4]}
         color="turquoise"
+        maxWidth={942}
       />
 
       {/* <HeroSection /> */}

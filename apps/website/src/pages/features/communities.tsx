@@ -29,6 +29,7 @@ const CommunitiesPage: Page = () => {
         description="Find your tribe in the metaverse of truly free Status communities."
         color="turquoise"
         images={[image1, image2, image3, image4]}
+        maxWidth={702}
       />
 
       {/* title="Fully Decentralized Communities" */}
@@ -60,9 +61,7 @@ const CommunitiesPage: Page = () => {
 
       <div className="pb-60 pt-40">
         <div className="grid max-w-[475px] gap-4 pb-40">
-          <h2 className="text-[64px] font-bold leading-[68px]">
-            Your next community
-          </h2>
+          <h2 className="text-title-2">Your next community</h2>
           <Text size={27}>
             Explore the metaverse of communities and find your kindred spirits
             in the Status Community Directory.
@@ -72,9 +71,7 @@ const CommunitiesPage: Page = () => {
 
       <div className="py-40">
         <div className="mx-auto max-w-[702px] gap-4 text-center">
-          <h2 className="text-[64px] font-bold leading-[68px]">
-            A wonderful chat experience
-          </h2>
+          <h2 className="text-title-2">A wonderful chat experience</h2>
           <Text size={27}>
             Give your community a unique look that reflects it’s passions and
             values. Or just look cool ✨
