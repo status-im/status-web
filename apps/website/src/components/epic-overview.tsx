@@ -1,19 +1,19 @@
-import { useEffect, useState } from 'react'
-
 import { Tag, Text } from '@status-im/components'
 import { OpenIcon } from '@status-im/icons'
 
 import { Chart } from './chart/chart'
 
+import type { Burnup } from '@/pages/insights/epics/[epic]'
+
 const DATA = [
   {
     date: '2022-01-25',
     open_issues: 100,
-    closed_issues: 2,
+    closed_issues: 0,
   },
   {
     date: '2022-01-26',
-    open_issues: 100,
+    open_issues: 0,
     closed_issues: 10,
   },
   {
@@ -62,22 +62,49 @@ type Props = {
   title: string
   description: string
   fullscreen?: boolean
+  isLoading?: boolean
+  burnup?: Burnup[]
 }
 
 export const EpicOverview = (props: Props) => {
-  const { title, description, fullscreen } = props
+  const { title, description, fullscreen, isLoading, burnup } = props
 
   // Simulating loading state
-  const [isLoading, setIsLoading] = useState(true)
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+  // const [isLoading, setIsLoading] = useState(true)
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setIsLoading(false)
+  //   }, 2000)
 
-    return () => {
-      clearTimeout(timeout)
-    }
-  }, [])
+  //   return () => {
+  //     clearTimeout(timeout)
+  //   }
+  // }, [])
+
+  const filteredData = burnup?.reduce(
+    (
+      accumulator: {
+        date: string
+        open_issues: number
+        closed_issues: number
+      }[],
+      current: Burnup
+    ) => {
+      const existingItem = accumulator.find(
+        item => item.date === current.date_field
+      )
+      if (!existingItem) {
+        accumulator.push({
+          date: current.date_field,
+          open_issues: current.cumulative_opened_issues,
+          closed_issues: current.cumulative_closed_issues,
+        })
+      }
+
+      return accumulator
+    },
+    []
+  )
 
   return (
     <div style={{ position: 'relative' }}>
@@ -94,7 +121,7 @@ export const EpicOverview = (props: Props) => {
         <Tag size={24} label="E:CommunitiesProtocol" color="$blue-50" />
       </div>
 
-      <Chart data={DATA} height={300} isLoading={isLoading} />
+      <Chart data={filteredData || DATA} height={300} isLoading={isLoading} />
 
       <div className="flex justify-between pt-3">
         <div className="flex gap-1">

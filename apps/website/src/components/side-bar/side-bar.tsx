@@ -5,10 +5,12 @@ import { useRouter } from 'next/router'
 
 import { NavLink } from './nav-link'
 import { NavNestedLinks } from './nav-nested-links'
+import { SkeletonPlaceholder } from './skeleton-placeholder'
 
 import type { Url } from 'next/dist/shared/lib/router/router'
 
 type Props = {
+  isLoading?: boolean
   data?: {
     label: string
     href?: Url
@@ -20,7 +22,7 @@ type Props = {
 }
 
 const SideBar = (props: Props) => {
-  const { data } = props
+  const { data, isLoading } = props
 
   const [label, setLabel] = useState<string>('')
 
@@ -37,41 +39,41 @@ const SideBar = (props: Props) => {
 
   return (
     <div className="border-r border-neutral-10 p-5">
-      <aside className=" sticky top-5 min-w-[320px]">
-        <Accordion.Root
-          type="single"
-          collapsible
-          value={label}
-          onValueChange={value => setLabel(value)}
-          className="accordion-root flex flex-col gap-3"
-        >
-          {data?.map((item, index) => {
-            if (item.links) {
-              return (
-                <NavNestedLinks
-                  key={index}
-                  label={item.label}
-                  links={item.links}
-                />
-              )
-            }
+      <aside className="sticky top-5 min-w-[320px]">
+        {isLoading ? (
+          <SkeletonPlaceholder />
+        ) : (
+          <Accordion.Root
+            type="single"
+            collapsible
+            value={label}
+            onValueChange={value => setLabel(value)}
+            className="flex flex-col gap-3"
+          >
+            {data?.map((item, index) => {
+              if (item.links) {
+                return (
+                  <NavNestedLinks
+                    key={index}
+                    label={item.label}
+                    links={item.links}
+                  />
+                )
+              }
 
-            return (
-              <Accordion.Item
-                key={item.label}
-                value={item.label}
-                className="accordion-item"
-              >
-                <Accordion.Trigger
-                  className="accordion-trigger"
-                  onClick={() => setLabel(item.label)}
-                >
-                  <NavLink href={item.href || ''}>{item.label}</NavLink>
-                </Accordion.Trigger>
-              </Accordion.Item>
-            )
-          })}
-        </Accordion.Root>
+              return (
+                <Accordion.Item key={item.label} value={item.label}>
+                  <Accordion.Trigger
+                    className="accordion-trigger"
+                    onClick={() => setLabel(item.label)}
+                  >
+                    <NavLink href={item.href || ''}>{item.label}</NavLink>
+                  </Accordion.Trigger>
+                </Accordion.Item>
+              )
+            })}
+          </Accordion.Root>
+        )}
       </aside>
     </div>
   )
