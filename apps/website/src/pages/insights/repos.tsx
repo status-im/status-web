@@ -1,14 +1,17 @@
 import { Text } from '@status-im/components'
-import { useQuery } from '@tanstack/react-query'
 
 import { Link } from '@/components/link'
 import { InsightsLayout } from '@/layouts/insights-layout'
+import { api } from '@/lib/graphql'
+import { useGetRepositoriesQuery } from '@/lib/graphql/generated/hooks'
 
-import { fetchQueryFromHasura } from '../api/hasura'
-
+import type {
+  GetRepositoriesQuery,
+  GetRepositoriesQueryVariables,
+} from '@/lib/graphql/generated/operations'
 import type { Page } from 'next'
 
-const QUERY = `
+const GET_REPOS = /* GraphQL */ `
   query getRepositories {
     gh_repositories {
       description
@@ -21,23 +24,12 @@ const QUERY = `
   }
 `
 
-type Repo = {
-  description: string
-  full_name: string
-  name: string
-  open_issues_count: number
-  stargazers_count: number
-  visibility: string
-}
-
 type Props = {
-  repos: Repo[]
+  repos: GetRepositoriesQuery
 }
 
 const ReposPage: Page<Props> = props => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['getRepositories'],
-    queryFn: () => fetchQueryFromHasura(QUERY),
+  const { data, isLoading } = useGetRepositoriesQuery(undefined, {
     initialData: props.repos,
   })
 
@@ -45,7 +37,7 @@ const ReposPage: Page<Props> = props => {
     return <div>Loading...</div>
   }
 
-  const repos: Repo[] = data?.data?.gh_repositories || []
+  const repos = data?.gh_repositories || []
 
   return (
     <div className="p-10">
@@ -94,8 +86,12 @@ ReposPage.getLayout = function getLayout(page) {
 }
 
 export async function getStaticProps() {
-  const result = await fetchQueryFromHasura(QUERY)
-  return { props: { repos: result?.data?.gh_repositories || [] } }
+  const result = await api<GetRepositoriesQuery, GetRepositoriesQueryVariables>(
+    GET_REPOS,
+    undefined
+  )
+
+  return { props: { repos: result.gh_repositories || [] } }
 }
 
 export default ReposPage
