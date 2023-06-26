@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { NavLink } from './nav-link'
 import { NavNestedLinks } from './nav-nested-links'
 import { SkeletonPlaceholder } from './skeleton-placeholder'
+import { decodeUriComponent } from './utils'
 
 import type { Url } from 'next/dist/shared/lib/router/router'
 
@@ -30,7 +31,8 @@ const SideBar = (props: Props) => {
 
   const defaultLabel = data?.find(
     item =>
-      item.href === asPath || item.links?.find(link => link.href === asPath)
+      item.href === decodeUriComponent(asPath) ||
+      item.links?.find(link => link.href === decodeUriComponent(asPath))
   )?.label
 
   useEffect(() => {

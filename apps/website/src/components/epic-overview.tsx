@@ -3,7 +3,7 @@ import { OpenIcon } from '@status-im/icons'
 
 import { Chart } from './chart/chart'
 
-import type { Burnup } from '@/pages/insights/epics/[epic]'
+import type { GetBurnupQuery } from '@/lib/graphql/generated/operations'
 
 const DATA = [
   {
@@ -63,23 +63,11 @@ type Props = {
   description: string
   fullscreen?: boolean
   isLoading?: boolean
-  burnup?: Burnup[]
+  burnup?: GetBurnupQuery['gh_burnup']
 }
 
 export const EpicOverview = (props: Props) => {
   const { title, description, fullscreen, isLoading, burnup } = props
-
-  // Simulating loading state
-  // const [isLoading, setIsLoading] = useState(true)
-  // useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setIsLoading(false)
-  //   }, 2000)
-
-  //   return () => {
-  //     clearTimeout(timeout)
-  //   }
-  // }, [])
 
   const filteredData = burnup?.reduce(
     (
@@ -88,16 +76,16 @@ export const EpicOverview = (props: Props) => {
         open_issues: number
         closed_issues: number
       }[],
-      current: Burnup
+      current: GetBurnupQuery['gh_burnup'][0]
     ) => {
       const existingItem = accumulator.find(
         item => item.date === current.date_field
       )
       if (!existingItem) {
         accumulator.push({
-          date: current.date_field,
-          open_issues: current.cumulative_opened_issues,
-          closed_issues: current.cumulative_closed_issues,
+          date: current?.date_field,
+          open_issues: current?.cumulative_opened_issues,
+          closed_issues: current?.cumulative_closed_issues,
         })
       }
 

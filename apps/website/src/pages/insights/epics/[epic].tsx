@@ -1,64 +1,137 @@
-import { useQuery } from '@tanstack/react-query'
+import { useEffect, useRef } from 'react'
+
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 
 import { Breadcrumbs } from '@/components'
 import { EpicOverview } from '@/components/epic-overview'
 import { TableIssues } from '@/components/table-issues'
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
-import { fetchQueryFromHasura } from '@/pages/api/hasura'
+import { api } from '@/lib/graphql'
 
+import type {
+  GetBurnupQuery,
+  GetBurnupQueryVariables,
+  GetEpicIssuesCountQuery,
+  GetEpicIssuesCountQueryVariables,
+  GetIssuesByEpicQuery,
+  GetIssuesByEpicQueryVariables,
+} from '@/lib/graphql/generated/operations'
 import type { GetServerSidePropsContext, Page } from 'next'
 
-function getQuery(epicName: string): string {
-  return `
-    query getBurnup {
-      gh_burnup(where: {
-        epic_name: {
-          _eq: "${epicName}"
-        },
-      }, order_by: {
-        date_field: asc
-      }) {
-        author
-        assignee
-        cumulative_closed_issues
-        cumulative_opened_issues
-        date_field
-        epic_name
-        epic_color
-        repository
-      }
+const GET_BURNUP = /* GraphQL */ `
+  query getBurnup($epicName: String!) {
+    gh_burnup(
+      where: { epic_name: { _eq: $epicName } }
+      order_by: { date_field: asc }
+    ) {
+      author
+      assignee
+      cumulative_closed_issues
+      cumulative_opened_issues
+      date_field
+      epic_name
+      epic_color
+      repository
     }
-  `
-}
+  }
+`
 
-export type Burnup = {
-  assignee: string
-  author: string
-  cumulative_closed_issues: number
-  cumulative_opened_issues: number
-  date_field: string
-  epic_color: string
-  epic_name: string
-  repository: string
-}
+const GET_ISSUES_BY_EPIC = /* GraphQL */ `
+  query getIssuesByEpic($epicName: String!, $limit: Int!, $offset: Int!) {
+    gh_epic_issues(
+      where: { epic_name: { _eq: $epicName } }
+      order_by: { created_at: asc }
+      limit: $limit
+      offset: $offset
+    ) {
+      assignee
+      author
+      closed_at
+      created_at
+      epic_color
+      epic_name
+      repository
+      stage
+      title
+      issue_number
+    }
+  }
+`
+
+const GET_EPIC_ISSUES_COUNT = /* GraphQL */ `
+  query getEpicIssuesCount($epicName: String!) {
+    gh_epic_issues(where: { epic_name: { _eq: $epicName } }) {
+      closed_at
+    }
+  }
+`
 
 type Props = {
-  burnup: Burnup[]
+  burnup: GetBurnupQuery['gh_burnup']
+  count: {
+    total: number
+    closed: number
+    open: number
+  }
 }
+
+const LIMIT = 10
 
 const EpicsDetailPage: Page<Props> = props => {
   const router = useRouter()
 
   const { epic: epicName } = router.query
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['getBurnup', epicName],
-    queryFn: () => fetchQueryFromHasura(getQuery(String(epicName))),
-    initialData: props.burnup,
-  })
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+  } = useInfiniteQuery(
+    ['getIssuesByEpic', epicName],
+    async ({ pageParam = 0 }) => {
+      const result = await api<
+        GetIssuesByEpicQuery,
+        GetIssuesByEpicQueryVariables
+      >(GET_ISSUES_BY_EPIC, {
+        epicName: epicName as string,
+        limit: LIMIT,
+        offset: pageParam,
+      })
 
-  const burnup: Burnup[] = data?.data?.gh_burnup || []
+      return result?.gh_epic_issues || []
+    },
+    {
+      getNextPageParam: (lastPage, pages) => {
+        if (lastPage.length < LIMIT) {
+          return undefined
+        }
+
+        return pages.length * LIMIT
+      },
+    }
+  )
+
+  const burnup = props.burnup || []
+
+  const issues =
+    data?.pages.reduce((acc, page) => {
+      return [...acc, ...page]
+    }, []) || []
+
+  const endOfPageRef = useRef<HTMLDivElement | null>(null)
+  const entry = useIntersectionObserver(endOfPageRef, {})
+  const isVisible = !!entry?.isIntersecting
+
+  useEffect(() => {
+    if (isVisible && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage()
+    }
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage, isVisible])
 
   return (
     <div>
@@ -71,12 +144,21 @@ const EpicsDetailPage: Page<Props> = props => {
           description="Detecting keycard reader removal for the beginning of each flow"
           fullscreen
           burnup={burnup}
-          isLoading={isLoading}
         />
 
         <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
 
-        <TableIssues />
+        <TableIssues data={issues} count={props.count} isLoading={isLoading} />
+        <div ref={endOfPageRef}>
+          <div>
+            {isFetchingNextPage
+              ? 'Loading more...'
+              : hasNextPage
+              ? 'Load More'
+              : 'Nothing more to load'}
+          </div>
+        </div>
+        <div>{isFetching && !isFetchingNextPage ? 'Fetching...' : null}</div>
       </div>
     </div>
   )
@@ -88,8 +170,35 @@ EpicsDetailPage.getLayout = function getLayout(page) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { epic } = context.query
-  const result = await fetchQueryFromHasura(getQuery(String(epic)))
-  return { props: { burnup: result?.data?.gh_burnup || [] } }
+
+  const result = await api<GetBurnupQuery, GetBurnupQueryVariables>(
+    GET_BURNUP,
+    {
+      epicName: String(epic),
+    }
+  )
+
+  const resultIssuesCount = await api<
+    GetEpicIssuesCountQuery,
+    GetEpicIssuesCountQueryVariables
+  >(GET_EPIC_ISSUES_COUNT, {
+    epicName: String(epic),
+  })
+
+  const count = {
+    total: resultIssuesCount.gh_epic_issues.length,
+    closed: resultIssuesCount.gh_epic_issues.filter(issue => issue.closed_at)
+      .length,
+    open: resultIssuesCount.gh_epic_issues.filter(issue => !issue.closed_at)
+      .length,
+  }
+
+  return {
+    props: {
+      burnup: result.gh_burnup || [],
+      count,
+    },
+  }
 }
 
 export default EpicsDetailPage
