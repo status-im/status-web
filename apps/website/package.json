@@ -7,7 +7,7 @@
     "build": "contentlayer build && next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc",
+    "typecheck": "contentlayer build && tsc",
     "clean": "rimraf .next .tamagui .turbo .vercel/output node_modules",
     "preview": "next start --port 8151"
   },
