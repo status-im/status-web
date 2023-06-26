@@ -168,6 +168,8 @@ const HelpPage: Page = () => {
   )
 }
 
-HelpPage.getLayout = AppLayout
+HelpPage.getLayout = page => {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default HelpPage

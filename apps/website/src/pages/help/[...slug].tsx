@@ -317,6 +317,8 @@ const DocsDetailPage: Page<Props> = props => {
   )
 }
 
-DocsDetailPage.getLayout = AppLayout
+DocsDetailPage.getLayout = page => {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default DocsDetailPage
