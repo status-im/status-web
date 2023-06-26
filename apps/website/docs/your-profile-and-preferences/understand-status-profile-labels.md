@@ -27,8 +27,7 @@ If you're in doubt about your Status contact's identity, you can [send them an i
 
 Depending on their response, you then mark them as trusted or untrusted. Once you do, a label appears next to their profile name: :mobile-trusted: Trusted or :mobile-untrusted: Untrusted.
 
-![There are several types of labels and label combinations you can use to mark someone else's profile.](./understand-status-profile-labels/393-0-1-light.png#only-light)
-![There are several types of labels and label combinations you can use to mark someone else's profile.](./understand-status-profile-labels/393-0-1-dark.png#only-dark)
+![There are several types of labels and label combinations you can use to mark someone else's profile.](/assets/docs/your-profile-and-preferences/understand-status-profile-labels/393-0-1-light.png)
 
 ### :mobile-contact: Contact
 

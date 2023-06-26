@@ -37,8 +37,7 @@ Status provides resilient messaging without relying on centralized servers, data
 
 Unlike centralized networks (A), which depend on a central server to relay messages, peer-to-peer networks (B) encrypt and broadcast every message to all participant nodes. A node is a computer or smartphone that relays messages to other nodes or temporarily stores them for disconnected peers. Even when all nodes can access your messages, the content is encrypted so that only you and the intended recipients can read them.
 
-![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](../../docs_original/messaging-and-web3-browser/about-status-messages/125-0-1-dark.png#only-light)
-![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](../../docs_original/messaging-and-web3-browser/about-status-messages/125-0-1-light.png#only-dark)
+![The peer-to-peer network sends messages to every node and doesn't rely on a central server.](/assets/docs/messaging-and-web3-browser/about-status-messages/125-0-1-dark.png)
 
 ## Built-in privacy and security
 
