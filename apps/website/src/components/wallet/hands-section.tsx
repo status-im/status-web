@@ -1,4 +1,7 @@
 import { Text } from '@status-im/components'
+import Image from 'next/image'
+
+import { illustrations } from '@/config/illustrations'
 
 const HandsSection = () => {
   return (
@@ -19,30 +22,41 @@ const HandsSection = () => {
         </div>
       </div>
       <div className="relative z-[2] flex justify-center pt-[320px]">
-        <div className="mr-24 flex max-w-[381px] flex-col items-center">
-          <img src="/assets/wallet/skull.png" alt="skull" width="48px" />
-          <div className="flex flex-col items-center pt-4 text-center">
-            <Text size={27} weight="semibold">
-              Ethereum based assets
-            </Text>
-            <Text size={19}>
-              We support all assets in the Uniswap Labs default tokenlist and
-              those minted by communities using Status.
-            </Text>
+        {[
+          {
+            icon: illustrations.skull,
+            title: 'Ethereum based assets',
+            description:
+              'We support all assets in the Uniswap Labs default tokenlist and those minted by communities using Status.',
+          },
+          {
+            icon: illustrations.nft,
+            title: 'NFTs and collectibles',
+            description:
+              'We will display any NFTs or collectibles listed on OpenSea plus those minted by communities using Status.',
+          },
+        ].map(item => (
+          <div
+            key={item.title}
+            className="mr-24 flex max-w-[381px] flex-col items-center"
+          >
+            <Image
+              src={item.icon.src}
+              alt={item.icon.alt}
+              width={48}
+              height={48}
+            />
+            <div className="flex flex-col items-center pt-4 text-center">
+              <Text size={27} weight="semibold">
+                Ethereum based assets
+              </Text>
+              <Text size={19}>
+                We support all assets in the Uniswap Labs default tokenlist and
+                those minted by communities using Status.
+              </Text>
+            </div>
           </div>
-        </div>
-        <div className="flex max-w-[381px] flex-col items-center">
-          <img src="/assets/wallet/nft.png" alt="nft" width="48px" />
-          <div className="flex flex-col items-center pt-4 text-center">
-            <Text size={27} weight="semibold">
-              NFTs and collectibles
-            </Text>
-            <Text size={19}>
-              We will display any NFTs or collectibles listed on OpenSea plus
-              those minted by communities using Status.
-            </Text>
-          </div>
-        </div>
+        ))}
       </div>
       <img
         src="/assets/wallet/hands.png"

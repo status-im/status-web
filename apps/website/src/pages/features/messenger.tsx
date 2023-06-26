@@ -7,12 +7,12 @@ import featureImage6 from '@assets/messenger/feature-6.png'
 import featureImage7 from '@assets/messenger/feature-7.png'
 import featureImage8 from '@assets/messenger/feature-8.png'
 import featureImage9 from '@assets/messenger/feature-9.png'
-import heroImage1 from '@assets/messenger/hero-1.png'
-import heroImage2 from '@assets/messenger/hero-2.png'
-import heroImage3 from '@assets/messenger/hero-3.png'
-import heroImage4 from '@assets/messenger/hero-4.png'
-import sectionImage1 from '@assets/messenger/section-1.png'
-import sectionImage2 from '@assets/messenger/section-2.png'
+import heroImage1 from '@assets/messenger/hero-01.png'
+import heroImage2 from '@assets/messenger/hero-02.png'
+import heroImage3 from '@assets/messenger/hero-03.png'
+import heroImage4 from '@assets/messenger/hero-04.png'
+import sectionImage1 from '@assets/messenger/section-01.png'
+import sectionImage2 from '@assets/messenger/section-02.png'
 import { Text } from '@status-im/components'
 import { cx } from 'class-variance-authority'
 import Image from 'next/image'
@@ -33,13 +33,7 @@ const MessengerPage: Page = () => {
           title="Chat privately with friends"
           description="Protect your right to free speech. 1:1 and group chats with e2e encryption, perfect forward secrecy and metadata privacy."
           color="purple"
-          images={[
-            heroImage1,
-            heroImage2,
-            heroImage3,
-            heroImage4,
-            // heroImage5,
-          ]}
+          images={[heroImage1, heroImage2, heroImage3, heroImage4]}
           maxWidth={574}
         />
         <div className="overflow-hidden pt-16 lg:pt-32">

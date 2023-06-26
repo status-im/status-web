@@ -7,10 +7,24 @@ import { LINKS } from '@/config/links'
 import { stickers } from '@/config/stickers'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
+// import heroImage1 from '@assets/homepage/hero-01.png'
+// TODO: import heroImage2 from '@assets/homepage/hero-02.png'
+// import heroImage3 from '@assets/homepage/hero-03.png'
+// import heroImage4 from '@assets/homepage/hero-04.png'
+// import messengerImage1 from '@assets/homepage/messenger-01.png'
+// import messengerImage2 from '@assets/homepage/messenger-02.png'
+// import messengerImage3 from '@assets/homepage/messenger-03.png'
+// import messengerImage4 from '@assets/homepage/messenger-04.png'
+// import walletImage1 from '@assets/homepage/wallet-01.png'
+// TODO: import walletImage2 from '@assets/homepage/wallet-02-placeholder.png'
+// import walletImage3 from '@assets/homepage/wallet-03.png'
+// import walletImage4 from '@assets/homepage/wallet-04.png'
+// import sectionImage1 from '@assets/homepage/section-01.png'
 import type { Page } from 'next'
 
 const HomePage: Page = () => {
   const router = useRouter()
+
   return (
     <>
       <Content>

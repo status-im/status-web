@@ -1,13 +1,13 @@
 import { Text } from '@status-im/components'
-import imageSection1 from 'public/assets/wallet/4.png'
-import imageSection2 from 'public/assets/wallet/5.png'
-import imageSection3 from 'public/assets/wallet/6.png'
-import imageSection4 from 'public/assets/wallet/7.png'
-import imageSection5 from 'public/assets/wallet/8.png'
-import heroImage1 from 'public/assets/wallet/hero-1.png'
-import heroImage2 from 'public/assets/wallet/hero-2.png'
-import heroImage3 from 'public/assets/wallet/hero-3.png'
-import heroImage4 from 'public/assets/wallet/hero-4.png'
+import heroImage1 from 'public/assets/wallet/hero-01.png'
+import heroImage2 from 'public/assets/wallet/hero-02.png'
+import heroImage3 from 'public/assets/wallet/hero-03.png'
+import heroImage4 from 'public/assets/wallet/hero-04.png'
+import sectionImage1 from 'public/assets/wallet/section-01.png'
+import sectionImage2 from 'public/assets/wallet/section-02.png'
+import sectionImage3 from 'public/assets/wallet/section-03.png'
+import sectionImage4 from 'public/assets/wallet/section-04.png'
+import sectionImage5 from 'public/assets/wallet/section-05.png'
 
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
@@ -43,7 +43,7 @@ const WalletPage: Page = () => {
             color="yellow"
             title="True multi-chain experience"
             description=" All networks, all the time. See all your assets and NFTs in one place, even if spread across multiple blockchains."
-            image={imageSection1}
+            image={sectionImage1}
             imageAlt="wallet-2"
             secondaryDescription=" You can treat it like other wallets by selecting individual chains manually. But once you’ve tried the Status ‘all chains, always’ way of doing things, you won’t want to go back."
             secondaryTitle=" Can be used as ‘single chain at a time’ wallet"
@@ -56,7 +56,7 @@ const WalletPage: Page = () => {
             color="yellow"
             title="Simple token sending"
             description=" Select token, amount and press “Send”. Need to bridge between blockchains? Status does this automatically."
-            image={imageSection2}
+            image={sectionImage2}
             imageAlt="wallet-5"
             secondaryDescription="Status automatically calculates the cheapest way of moving tokens from A to B, considering: gas prices, chains your tokens are on, chains the recipient uses, and bridge costs. All in real time."
             secondaryTitle="Cost efficient"
@@ -82,7 +82,7 @@ const WalletPage: Page = () => {
             color="yellow"
             title="Full control for power users"
             description="Select exact amounts to send from each blockchain, and precisely set the chains the recipient will receive funds on."
-            image={imageSection3}
+            image={sectionImage3}
             imageAlt="wallet-6"
             secondaryDescription="Gas limit, max base fee, max priority fee, input data and nounce value for every transaction in each transaction bundle. If you really want to..."
             secondaryTitle="Pro user? You can edit:"
@@ -91,13 +91,14 @@ const WalletPage: Page = () => {
         </div>
 
         <ComparisionSection />
+
         <div className="relative rounded-[48px] border-t border-neutral-10 bg-white-100 py-0 mix-blend-normal shadow-[0_-2px_20px_rgba(9,16,28,0.04)] md:py-[160px]">
           <Section
             icon="rubik"
             color="yellow"
             title="New address format"
             description="A way for wallets to automatically signal which chains they can receive funds on. So you don’t have to."
-            image={imageSection4}
+            image={sectionImage4}
             imageAlt="wallet-7"
             secondaryDescription="Status is working with other wallets to ensure EIP-3770 with multiple chain shortName prefixes becomes the new ethereum address standard."
             secondaryTitle="On the path to adoption"
@@ -109,7 +110,7 @@ const WalletPage: Page = () => {
               color="yellow"
               title="Total balance graphs"
               description="Who doesn’t want to see how their ‘crypto portfolio number’ has gone up or down over time?"
-              image={imageSection5}
+              image={sectionImage5}
               imageAlt="wallet-8"
               secondaryDescription="Everything is taken into account: fluctuations in fiat exchange rates, daily valuation updates of every crypto asset you hodl, and how your balance changes when tokens are sent/received"
               secondaryTitle="Graphs that do maths"

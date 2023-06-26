@@ -3,13 +3,13 @@ import featureImage2 from '@assets/communities/feature-2.png'
 import featureImage3 from '@assets/communities/feature-3.png'
 import featureImage4 from '@assets/communities/feature-4.png'
 import featureImage5 from '@assets/communities/feature-5.png'
-import image1 from '@assets/communities/grid-1.png'
-import image2 from '@assets/communities/grid-2.png'
-import image3 from '@assets/communities/grid-3.png'
-import image4 from '@assets/communities/grid-4.png'
+import heroImage1 from '@assets/communities/hero-01.png'
+import heroImage2 from '@assets/communities/hero-02.png'
+import heroImage3 from '@assets/communities/hero-03.png'
+import heroImage4 from '@assets/communities/hero-04.png'
 // import image5 from '@assets/communities/grid-5.png'
-import sectionImage1 from '@assets/communities/section-1.png'
-import sectionImage2 from '@assets/communities/section-2.png'
+import sectionImage1 from '@assets/communities/section-01.png'
+import sectionImage2 from '@assets/communities/section-02.png'
 import { Text } from '@status-im/components'
 import Image from 'next/image'
 
@@ -28,7 +28,7 @@ const CommunitiesPage: Page = () => {
         title="Discover your community"
         description="Find your tribe in the metaverse of truly free Status communities."
         color="turquoise"
-        images={[image1, image2, image3, image4]}
+        images={[heroImage1, heroImage2, heroImage3, heroImage4]}
         maxWidth={702}
       />
 
