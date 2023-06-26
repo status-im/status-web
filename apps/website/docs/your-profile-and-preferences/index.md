@@ -1,7 +1,6 @@
 ---
+title: Your profile and preferences
 ---
-
-# Your profile and preferences
 
 Set up your Status profile and notifications, customize your settings and fix common issues.
 
