@@ -31,5 +31,6 @@ There are four reasons:
 | Token requirements change | The token requirements to access the community have changed and your tokens do not longer satisfy these requirements. Open the community page to review the new token requirements. | Token-gated communities          |
 | Your tokens change        | Your tokens or token amounts have changed and you don't longer satisfy the community requirements. Open the community page to verify your eligibility.                              | Token-gated communities          |
 
-!!!warn
+:::warn
 Community owners can lose access to their community if they have to restore the profile on a different device and don't [back up the community key][backup-your-community-key].
+:::
