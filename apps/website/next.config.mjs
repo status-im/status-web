@@ -1,17 +1,17 @@
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable import/default */
 
-/** @type {import('next').NextConfig} */
-// const withMDX = require('@next/mdx')
+// For "Build dependencies behind this expression are ignored and might cause incorrect cache invalidation." warning
+// @see https://github.com/contentlayerdev/contentlayer/issues/129#issuecomment-1080416633
 
 import './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
-import tamagui_next_plugin from '@tamagui/next-plugin'
-import { join } from 'node:path'
+import tamaguiNextPlugin from '@tamagui/next-plugin'
 import { withContentlayer } from 'next-contentlayer'
+import { join } from 'node:path'
 
-const { withTamagui } = tamagui_next_plugin
+const { withTamagui } = tamaguiNextPlugin
 
 /** @type {import('next').NextConfig} */
 let config = {
