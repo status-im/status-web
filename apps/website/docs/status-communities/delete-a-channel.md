@@ -1,7 +1,7 @@
 ---
 id: 403
 revision: '0'
-language: EN
+language: en
 title: Delete a channel
 ---
 

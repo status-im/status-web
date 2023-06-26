@@ -1,7 +1,7 @@
 ---
 id: 103
 revision: '0'
-language: EN
+language: en
 title: Join a Status Community
 ---
 
