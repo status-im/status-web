@@ -1,3 +1,5 @@
+import { ParallaxProvider } from 'react-scroll-parallax'
+
 import { Footer } from '@/components/footer/footer'
 import { FooterMobile } from '@/components/footer/footer-mobile'
 import { FloatingMenu } from '@/components/navigation/floating-menu'
@@ -24,12 +26,14 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         <NavMobile />
 
         {/* ROUNDED WHITE BG */}
-        <div className="lg:p-1">
-          {/* TODO Check max-width to use */}
-          {/* <div className="min-h-[900px] w-full rounded-3xl"></div> */}
+        <ParallaxProvider>
+          <div className="lg:p-1">
+            {/* TODO Check max-width to use */}
+            {/* <div className="min-h-[900px] w-full rounded-3xl"></div> */}
 
-          {children}
-        </div>
+            {children}
+          </div>
+        </ParallaxProvider>
         {hasPreFooter && <Prefooter />}
         <Footer hasBorderTop={hasPreFooter} />
         <FooterMobile hasBorderTop={hasPreFooter} />
