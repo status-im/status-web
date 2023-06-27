@@ -58,19 +58,6 @@ export default function App({ Component, pageProps }: Props) {
           key="og:image"
         /> */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta
-          property="twitter:title"
-          content="Status - Private, Secure Communication"
-        />
-        <meta
-          property="twitter:description"
-          content="Status brings the power of Ethereum into your pocket by combining a messenger, crypto-wallet, and Web3 browser."
-        />
-        {/* <meta
-          property="twitter:image"
-          content={`%${urlOrigin}/assets/preview/page.png`}
-          key="twitter:image"
-        /> */}
         <meta name="twitter:site" content="@ethstatus" />
         <meta name="apple-itunes-app" content="app-id=1178893006" />
         <meta

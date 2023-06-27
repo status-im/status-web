@@ -238,11 +238,6 @@ export function PreviewPage(props: PreviewPageProps) {
             content={`${urlOrigin}/assets/preview/entity.png`}
             key="og:image"
           /> */}
-          {/* <meta
-            property="twitter:image"
-            content={`${urlOrigin}/assets/preview/entity.png`}
-            key="twitter:image"
-          /> */}
           <meta
             property="al:ios:url"
             content={`https://status.app${asPath}`}
@@ -378,16 +373,6 @@ export function PreviewPage(props: PreviewPageProps) {
           key="og:image"
         /> */}
         <meta property="og:description" content={data.info.description} />
-        <meta
-          property="twitter:title"
-          content={`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
-        />
-        <meta property="twitter:description" content={data.info.description} />
-        {/* <meta
-          property="twitter:image"
-          content={`${urlOrigin}/assets/preview/entity.png`}
-          key="twitter:image"
-        /> */}
         <meta
           name="apple-itunes-app"
           content={`app-id=1178893006, app-argument=status-app://${asPath.replace(
