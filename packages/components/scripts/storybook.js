@@ -7,7 +7,7 @@
 const child_process = require('node:child_process')
 const process = require('node:process')
 
-const subprocess = child_process.spawn('yarn', ['storybook:dev'], {
+const subprocess = child_process.spawn('pnpm', ['storybook:dev'], {
   detached: true,
   stdio: 'inherit',
 })
