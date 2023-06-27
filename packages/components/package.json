@@ -4,7 +4,6 @@
   "sideEffects": [
     "*.css"
   ],
-  "private": true,
   "#module": "./src/index.tsx",
   "types": "./src/index.tsx",
   "main": "./dist/index.js",
