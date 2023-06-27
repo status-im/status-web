@@ -2,33 +2,36 @@ import { useEffect, useState } from 'react'
 
 type ParalaxProps = {
   initialLeft?: number
-  initialTop?: number
+  top?: number
   initialRight?: number
-  initialBottom?: number
+  bottom?: number
 }
 
 const PARALLAX_SPEED = 4
 
 function useParalax(props?: ParalaxProps) {
-  const initialTop = props?.initialTop || 0
-  const initialBottom = props?.initialBottom || 0
+  const top = props?.top ?? 0
+  const bottom = props?.bottom ?? 0
 
-  const [top, setTop] = useState(initialTop)
-
-  const [bottom, setBottom] = useState(initialBottom)
+  const [position, setPosition] = useState({
+    top,
+    bottom,
+  })
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY
 
-      setTop(scrollY / PARALLAX_SPEED + initialTop)
-      setBottom(scrollY / PARALLAX_SPEED + initialBottom)
+      setPosition({
+        top: scrollY / PARALLAX_SPEED + top,
+        bottom: scrollY / PARALLAX_SPEED + bottom,
+      })
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [initialBottom, initialTop])
+  }, [top, bottom])
 
-  return { top, bottom }
+  return position
 }
 
 export { useParalax }
