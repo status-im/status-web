@@ -8,7 +8,7 @@ import { Flex } from '../flex'
 import { Tag } from '../tag'
 import { Text } from '../text'
 
-import type { Notification } from '@status-im/js'
+import type { Notification } from '@felicio/js'
 
 const Base = styled('div', {
   display: 'flex',

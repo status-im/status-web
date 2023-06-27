@@ -1,4 +1,4 @@
-import { Community } from '@status-im/react'
+import { Community } from '@felicio/react'
 
 const publicKey = process.env.PUBLIC_KEY
 

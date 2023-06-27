@@ -1,4 +1,4 @@
-import { Button, Text } from '@status-im/components'
+import { Button, Text } from '@felicio/components'
 
 type Props = {
   title: string

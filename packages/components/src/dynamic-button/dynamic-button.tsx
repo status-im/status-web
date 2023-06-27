@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { ArrowDownIcon, MentionIcon } from '@status-im/icons'
+import { ArrowDownIcon, MentionIcon } from '@felicio/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Shadow } from '../shadow'

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { MessageContentType } from '@status-im/js'
+import { MessageContentType } from '@felicio/js'
 import sub from 'date-fns/sub'
 
 import { useProtocol } from './use-protocol'
 
-import type { Message, Reaction, Reactions } from '@status-im/js'
+import type { Message, Reaction, Reactions } from '@felicio/js'
 
 interface Result {
   data: Message[]

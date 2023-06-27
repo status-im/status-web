@@ -1,4 +1,4 @@
-import { Text } from '@status-im/components'
+import { Text } from '@felicio/components'
 import { useRouter } from 'next/router'
 
 import { Link } from '../link'

@@ -1,4 +1,4 @@
-import { Avatar, Button, Text } from '@status-im/components'
+import { Avatar, Button, Text } from '@felicio/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 // import { redirect } from 'next/navigation'

@@ -1,5 +1,5 @@
-import { Button, Text } from '@status-im/components'
-import { DownloadIcon, PlayIcon } from '@status-im/icons'
+import { Button, Text } from '@felicio/components'
+import { DownloadIcon, PlayIcon } from '@felicio/icons'
 
 import { AppLayout } from '@/layouts/app-layout'
 

@@ -1,11 +1,11 @@
-import { IconButton, Shadow, Tag, Text } from '@status-im/components'
+import { IconButton, Shadow, Tag, Text } from '@felicio/components'
 import {
   DoneIcon,
   NotStartedIcon,
   OpenIcon,
   SearchIcon,
   SortIcon,
-} from '@status-im/icons'
+} from '@felicio/icons'
 
 import { EpicOverview } from '@/components/epic-overview'
 import { InsightsLayout } from '@/layouts/insights-layout'

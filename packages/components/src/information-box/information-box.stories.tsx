@@ -1,4 +1,4 @@
-import { InfoIcon } from '@status-im/icons'
+import { InfoIcon } from '@felicio/icons'
 
 import { InformationBox } from './information-box'
 

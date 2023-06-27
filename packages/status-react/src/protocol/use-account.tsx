@@ -1,6 +1,6 @@
 import { useProtocol } from './use-protocol'
 
-import type { Account } from '@status-im/js'
+import type { Account } from '@felicio/js'
 
 export const useAccount = () => {
   const { client, account } = useProtocol()

@@ -1,4 +1,4 @@
-import { CloseIcon, PinIcon } from '@status-im/icons'
+import { CloseIcon, PinIcon } from '@felicio/icons'
 import { Stack } from '@tamagui/core'
 import { Pressable } from 'react-native'
 

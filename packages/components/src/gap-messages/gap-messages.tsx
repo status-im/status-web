@@ -1,4 +1,4 @@
-import { InfoIcon } from '@status-im/icons'
+import { InfoIcon } from '@felicio/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Text } from '../text'

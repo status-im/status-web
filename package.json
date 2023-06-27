@@ -15,10 +15,10 @@
   "scripts": {
     "postinstall": "patch-package",
     "prepare": "husky install",
-    "test": "turbo run test --filter=@status-im/* -- --run",
-    "dev": "turbo run dev --filter=@status-im/* --parallel",
-    "build": "turbo run build --filter=@status-im/*",
-    "lint": "turbo run lint --filter=@status-im/* --filter=website --filter=web",
+    "test": "turbo run test --filter=@felicio/* -- --run",
+    "dev": "turbo run dev --filter=@felicio/* --parallel",
+    "build": "turbo run build --filter=@felicio/*",
+    "lint": "turbo run lint --filter=@felicio/* --filter=website --filter=web",
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
@@ -26,7 +26,7 @@
     "mobile": "yarn workspace mobile dev",
     "desktop": "yarn workspace desktop dev",
     "website": "yarn workspace website dev",
-    "storybook": "yarn workspace @status-im/components storybook"
+    "storybook": "yarn workspace @felicio/components storybook"
   },
   "resolutions": {
     "@types/react": "18.0.33",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
-    "@status-im/eslint-config": "*",
+    "@felicio/eslint-config": "*",
     "@tsconfig/strictest": "^2.0.0",
     "@types/prettier": "^2.7.2",
     "husky": "^8.0.3",

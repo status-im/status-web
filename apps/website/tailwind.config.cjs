@@ -1,7 +1,7 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme')
-const colors = require('@status-im/colors')
+const colors = require('@felicio/colors')
 const plugin = require('tailwindcss/plugin')
 
 /** @type {import('tailwindcss').Config} */
@@ -16,7 +16,7 @@ module.exports = {
     },
     colors: colors,
 
-    // use <Text /> from @status-im/components or arbitrary values
+    // use <Text /> from @felicio/components or arbitrary values
     // fontSize: {},
     fontWeight: {
       regular: '400',

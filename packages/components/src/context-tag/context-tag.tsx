@@ -1,4 +1,4 @@
-import { ChevronRightIcon, PlayIcon } from '@status-im/icons'
+import { ChevronRightIcon, PlayIcon } from '@felicio/icons'
 import { Stack, styled } from '@tamagui/core'
 import { View } from 'react-native'
 

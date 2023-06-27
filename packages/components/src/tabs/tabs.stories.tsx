@@ -1,4 +1,4 @@
-import { PlaceholderIcon } from '@status-im/icons'
+import { PlaceholderIcon } from '@felicio/icons'
 
 import { Text } from '../text'
 import { Tabs } from './tabs'

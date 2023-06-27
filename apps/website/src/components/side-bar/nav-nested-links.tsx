@@ -1,7 +1,7 @@
+import { Text } from '@felicio/components'
+import { ChevronRightIcon } from '@felicio/icons'
 import * as Accordion from '@radix-ui/react-accordion'
 import {} from '@radix-ui/react-accordion'
-import { Text } from '@status-im/components'
-import { ChevronRightIcon } from '@status-im/icons'
 import { useRouter } from 'next/router'
 
 import { Link } from '../link'

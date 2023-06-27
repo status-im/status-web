@@ -1,4 +1,4 @@
-import { PinIcon } from '@status-im/icons'
+import { PinIcon } from '@felicio/icons'
 import { Stack } from 'tamagui'
 
 import { Avatar } from '../../avatar'

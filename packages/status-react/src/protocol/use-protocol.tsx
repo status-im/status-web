@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { Context } from './provider'
 
 import type { Action, State } from './provider'
-import type { Client, Community } from '@status-im/js'
+import type { Client, Community } from '@felicio/js'
 import type React from 'react'
 
 export function useProtocol() {

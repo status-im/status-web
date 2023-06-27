@@ -1,4 +1,4 @@
-import { LoadingIcon, TrashIcon } from '@status-im/icons'
+import { LoadingIcon, TrashIcon } from '@felicio/icons'
 import { Stack } from 'tamagui'
 
 import { Avatar } from '../../avatar'

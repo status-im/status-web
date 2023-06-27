@@ -1,5 +1,5 @@
-import { Button, Tag, Text } from '@status-im/components'
-import { DownloadIcon, WalletIcon } from '@status-im/icons'
+import { Button, Tag, Text } from '@felicio/components'
+import { DownloadIcon, WalletIcon } from '@felicio/icons'
 import image1 from 'public/assets/wallet/1.png'
 import image2 from 'public/assets/wallet/2.png'
 import image3 from 'public/assets/wallet/3.png'

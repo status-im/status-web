@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { MutedIcon, NotificationIcon, OptionsIcon } from '@status-im/icons'
+import { MutedIcon, NotificationIcon, OptionsIcon } from '@felicio/icons'
 import { Stack, styled } from 'tamagui'
 
 import { Avatar } from '../avatar'

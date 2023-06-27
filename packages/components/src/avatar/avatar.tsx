@@ -1,6 +1,6 @@
 import { cloneElement, useMemo, useState } from 'react'
 
-import { LockedIcon, MembersIcon, UnlockedIcon } from '@status-im/icons'
+import { LockedIcon, MembersIcon, UnlockedIcon } from '@felicio/icons'
 import { Stack, styled, Unspaced } from '@tamagui/core'
 import { Platform } from 'react-native'
 
@@ -11,7 +11,7 @@ import { generateIdenticonRing } from './utils'
 
 import type { TextProps } from '../text'
 import type { RadiusTokens } from '../tokens'
-import type { IconProps } from '@status-im/icons'
+import type { IconProps } from '@felicio/icons'
 import type { ColorTokens, GetStyledVariants } from '@tamagui/core'
 
 type UserAvatarProps = {

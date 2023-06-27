@@ -1,4 +1,4 @@
-import { Avatar, Button, Tag, Text } from '@status-im/components'
+import { Avatar, Button, Tag, Text } from '@felicio/components'
 import Link from 'next/link'
 
 const issues = [

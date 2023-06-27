@@ -1,4 +1,4 @@
-import { NftIcon } from '@status-im/icons'
+import { NftIcon } from '@felicio/icons'
 import { Stack } from '@tamagui/core'
 
 import { Tag } from './tag'

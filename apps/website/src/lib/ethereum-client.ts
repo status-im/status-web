@@ -1,4 +1,4 @@
-import { EthereumClient } from '@status-im/js'
+import { EthereumClient } from '@felicio/js'
 
 import { serverEnv } from '@/config/env.server.mjs'
 

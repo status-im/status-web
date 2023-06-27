@@ -6,7 +6,7 @@ import {
   PinIcon,
   ReplyIcon,
   TrashIcon,
-} from '@status-im/icons'
+} from '@felicio/icons'
 import { action } from '@storybook/addon-actions'
 
 import { Button } from '../button'

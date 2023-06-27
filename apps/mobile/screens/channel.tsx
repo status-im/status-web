@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { Composer, Messages } from '@status-im/components'
+import { Composer, Messages } from '@felicio/components'
 import { Stack, useTheme } from '@tamagui/core'
 import { StatusBar } from 'expo-status-bar'
 import {

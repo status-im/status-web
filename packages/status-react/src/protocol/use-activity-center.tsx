@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useProtocol } from './use-protocol'
 
-import type { ActivityCenterLatest } from '@status-im/js'
+import type { ActivityCenterLatest } from '@felicio/js'
 
 export const useActivityCenter = () => {
   const { client } = useProtocol()

@@ -1,19 +1,19 @@
 import { useState } from 'react'
 
-import { IconButton, Shadow, Tag, Text } from '@status-im/components'
+import { IconButton, Shadow, Tag, Text } from '@felicio/components'
 import {
   DoneIcon,
   NotStartedIcon,
   OpenIcon,
   SearchIcon,
   SortIcon,
-} from '@status-im/icons'
+} from '@felicio/icons'
 
 import { DatePicker } from '@/components/datepicker/datepicker'
 import { EpicOverview } from '@/components/epic-overview'
 import { InsightsLayout } from '@/layouts/insights-layout'
 
-import type { DateRange } from '@status-im/components/src/calendar/calendar'
+import type { DateRange } from '@felicio/components/src/calendar/calendar'
 import type { Page } from 'next'
 
 const epics = [

@@ -24,8 +24,8 @@ let config = {
     'react-native-web',
     // 'expo-modules-core',
     'expo-blur',
-    // '@status-im/components',
-    // '@status-im/js',
+    // '@felicio/components',
+    // '@felicio/js',
   ],
   experimental: {
     legacyBrowsers: false,
@@ -38,9 +38,9 @@ const plugins = [
     config: './tamagui.config.ts',
     components: [
       // fixme?: works without it
-      // '@status-im/icons',
-      '@status-im/components',
-      // './node_modules/@status-im/components/packages/components/dist',
+      // '@felicio/icons',
+      '@felicio/components',
+      // './node_modules/@felicio/components/packages/components/dist',
     ],
     importsWhitelist: ['constants.js', 'colors.js'],
     logTimings: true,

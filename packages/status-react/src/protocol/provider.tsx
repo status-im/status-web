@@ -1,11 +1,11 @@
 import { createContext, useEffect, useReducer } from 'react'
 
-import { createClient } from '@status-im/js'
+import { createClient } from '@felicio/js'
 
 import { Failed } from '../components/failed'
 import { Loading } from '../components/loading'
 
-import type { Account, Client, ClientOptions, Community } from '@status-im/js'
+import type { Account, Client, ClientOptions, Community } from '@felicio/js'
 import type React from 'react'
 
 export const Context = createContext<State | undefined>(undefined)

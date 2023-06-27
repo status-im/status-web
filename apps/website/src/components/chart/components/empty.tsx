@@ -1,4 +1,4 @@
-import { Image, Text } from '@status-im/components'
+import { Image, Text } from '@felicio/components'
 
 import { LineA, LineB } from './assets'
 

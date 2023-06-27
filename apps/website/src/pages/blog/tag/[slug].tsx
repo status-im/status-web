@@ -1,4 +1,4 @@
-import { Button, Text } from '@status-im/components'
+import { Button, Text } from '@felicio/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { Breadcrumbs } from '@/components'

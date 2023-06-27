@@ -1,7 +1,7 @@
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable import/namespace */
 
-import { Sidebar } from '@status-im/components'
+import { Sidebar } from '@felicio/components'
 import { Stack } from '@tamagui/core'
 import { StatusBar } from 'expo-status-bar'
 import { ScrollView } from 'tamagui'

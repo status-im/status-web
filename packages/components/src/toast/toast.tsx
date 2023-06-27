@@ -1,7 +1,7 @@
 import { cloneElement, forwardRef } from 'react'
 
+import { CorrectIcon, IncorrectIcon } from '@felicio/icons'
 import { Action, Description } from '@radix-ui/react-toast'
-import { CorrectIcon, IncorrectIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Button } from '../button'

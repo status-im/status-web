@@ -1,6 +1,6 @@
 import { createElement, Fragment, useMemo } from 'react'
 
-import { Avatar, Provider, Tag, Text } from '@status-im/components'
+import { Avatar, Provider, Tag, Text } from '@felicio/components'
 import { renderToString } from 'react-dom/server'
 import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { useProtocol } from './use-protocol'
 
-import type { Community } from '@status-im/js'
+import type { Community } from '@felicio/js'
 
 export type Chat = Community['description']['chats'][0] & {
   id: string

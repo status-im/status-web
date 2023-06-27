@@ -1,7 +1,7 @@
 {
   "root": true,
   "extends": [
-    "@status-im/eslint-config",
+    "@felicio/eslint-config",
     "plugin:tailwindcss/recommended",
     "next",
     "next/core-web-vitals"

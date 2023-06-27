@@ -1,6 +1,6 @@
-import { createRequestClient } from '@status-im/js'
+import { createRequestClient } from '@felicio/js'
 
-import type { RequestClient } from '@status-im/js'
+import type { RequestClient } from '@felicio/js'
 
 let client: RequestClient | undefined
 

@@ -1,4 +1,4 @@
-import { PlaceholderIcon } from '@status-im/icons'
+import { PlaceholderIcon } from '@felicio/icons'
 import { Stack } from '@tamagui/core'
 
 import { Button } from '../button'

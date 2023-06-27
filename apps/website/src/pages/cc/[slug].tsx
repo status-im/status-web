@@ -1,4 +1,4 @@
-import { decodeChannelURLData } from '@status-im/js/encode-url-data'
+import { decodeChannelURLData } from '@felicio/js/encode-url-data'
 
 import { PreviewPage } from '@/components/preview-page'
 import { createGetServerSideProps } from '@/server/ssr'

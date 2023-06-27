@@ -1,4 +1,4 @@
-import { CloseIcon, SadIcon } from '@status-im/icons'
+import { CloseIcon, SadIcon } from '@felicio/icons'
 import { Path, Svg } from 'react-native-svg'
 import { Stack, Unspaced, XStack } from 'tamagui'
 

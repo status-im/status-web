@@ -8,7 +8,7 @@ import {
   SadIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
-} from '@status-im/icons'
+} from '@felicio/icons'
 import { styled } from '@tamagui/core'
 import { Stack } from '@tamagui/web'
 

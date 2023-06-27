@@ -1,4 +1,4 @@
-import { MemoryRouter } from '@status-im/react'
+import { MemoryRouter } from '@felicio/react'
 import dynamic from 'next/dynamic'
 
 const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY
@@ -18,7 +18,7 @@ const environment = process.env.NEXT_PUBLIC_ENVIRONMENT as 'production' | 'test'
  * The workaround *for now* is to use the dynamic import and render the component on the client.
  */
 const Community = dynamic(
-  import('@status-im/react').then(({ Community }) => Community),
+  import('@felicio/react').then(({ Community }) => Community),
   { ssr: false }
 )
 

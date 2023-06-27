@@ -16,7 +16,7 @@
     "@babel/runtime": "^7.18.9",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/native-stack": "^6.9.8",
-    "@status-im/components": "*",
+    "@felicio/components": "*",
     "expo": "~47.0.12",
     "expo-constants": "^14.0.2",
     "expo-dev-client": "^2.0.1",
@@ -38,7 +38,7 @@
     "@types/react-native": "~0.70.6",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
-    "@status-im/eslint-config": "*",
+    "@felicio/eslint-config": "*",
     "typescript": "^5.0.3"
   }
 }

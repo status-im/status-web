@@ -1,4 +1,4 @@
-import { Skeleton } from '@status-im/components'
+import { Skeleton } from '@felicio/components'
 
 const Loading = () => {
   return (

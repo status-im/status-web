@@ -1,8 +1,8 @@
 import { cloneElement, useState } from 'react'
 
+import { Button, Text } from '@felicio/components'
+import { CloseIcon } from '@felicio/icons'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button, Text } from '@status-im/components'
-import { CloseIcon } from '@status-im/icons'
 import { QRCodeSVG } from 'qrcode.react'
 
 type Props = {
