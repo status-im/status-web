@@ -1,5 +1,5 @@
-import featureImage1 from '@assets/messenger/feature-1.png'
-import featureImage2 from '@assets/messenger/feature-2.png'
+// import featureImage1 from '@assets/messenger/feature-1.png'
+// import featureImage2 from '@assets/messenger/feature-2.png'
 import featureImage3 from '@assets/messenger/feature-3.png'
 import featureImage4 from '@assets/messenger/feature-4.png'
 import featureImage5 from '@assets/messenger/feature-5.png'
@@ -60,7 +60,7 @@ const MessengerPage: Page = () => {
             imageAlt="wallet-5"
             secondaryDescription="Status automatically calculates the cheapest way of moving tokens from A to B, considering: gas prices, chains your tokens are on, chains the recipient uses, and bridge costs. All in real time."
             secondaryTitle="Cost efficient"
-            direction="rtl"
+            reverse
           />
 
           {/* <ComparisionSection /> */}
@@ -75,7 +75,7 @@ const MessengerPage: Page = () => {
 
           secondaryDescription="Status is working with other wallets to ensure EIP-3770 with multiple chain shortName prefixes becomes the new ethereum address standard."
           secondaryTitle="On the path to adoption"
-          direction="rtl"
+          reverse
         />
         <div className="relative pt-[160px]">
           <Section

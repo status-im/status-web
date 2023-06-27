@@ -60,7 +60,7 @@ const WalletPage: Page = () => {
             imageAlt="wallet-5"
             secondaryDescription="Status automatically calculates the cheapest way of moving tokens from A to B, considering: gas prices, chains your tokens are on, chains the recipient uses, and bridge costs. All in real time."
             secondaryTitle="Cost efficient"
-            direction="rtl"
+            reverse
             customNode={
               <div className="relative rounded-2xl border border-neutral-80/5 px-4 py-3">
                 <Text size={15} color="$neutral-50">
@@ -102,7 +102,7 @@ const WalletPage: Page = () => {
             imageAlt="wallet-7"
             secondaryDescription="Status is working with other wallets to ensure EIP-3770 with multiple chain shortName prefixes becomes the new ethereum address standard."
             secondaryTitle="On the path to adoption"
-            direction="rtl"
+            reverse
           />
           <div className="relative pt-0 md:pt-[160px]">
             <Section

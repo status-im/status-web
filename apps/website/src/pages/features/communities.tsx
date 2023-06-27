@@ -53,7 +53,7 @@ const CommunitiesPage: Page = () => {
         description="Status Communities is built around tokenised functionality, perfect for blockchain enthusiast communities."
         secondaryTitle="Every community sets its own rules"
         secondaryDescription="Anybody can create a community, which is it’s own self-sovereign space.  This means that what each community does is enterally up to them.  Join the ones you like, leave the ones you don’t."
-        direction="rtl"
+        reverse
         image={sectionImage2}
         imageAlt="wallet-5"
         color="turquoise"

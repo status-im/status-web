@@ -135,7 +135,7 @@ const CreateCommunityPage: Page = () => {
           secondaryDescription="Use ERC-20, NFT and ENS tokens plus AND and OR statements in rules. Set channels so anybody can read, but tokens are required to post. Assign admin permissions with remotely destructible soulbound tokens. And much, much more!"
           image={featureImage1}
           imageAlt="wallet-5"
-          direction="ltr"
+          reverse
         />
 
         <div className="grid grid-flow-col gap-5 bg-[url(https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80)] bg-cover p-20">
@@ -208,7 +208,7 @@ const CreateCommunityPage: Page = () => {
         // TODO: explanation
         image={sectionImage2}
         imageAlt="wallet-5"
-        direction="rtl"
+        reverse
       />
     </Content>
   )
