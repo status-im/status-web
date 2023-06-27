@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "@tsconfig/strictest": "^2.0.0",
     "@types/prettier": "^2.7.2",
     "husky": "^8.0.3",

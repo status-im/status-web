@@ -23,7 +23,7 @@ importers:
         specifier: ^2.23.0
         version: 2.23.0
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:packages/eslint-config
       '@tsconfig/strictest':
         specifier: ^2.0.0
@@ -57,10 +57,10 @@ importers:
         version: 5.0.3
       vite:
         specifier: ^4.2.1
-        version: 4.2.1(@types/node@18.16.14)
+        version: 4.2.1(@types/node@18.15.11)
       vite-node:
         specifier: ^0.29.8
-        version: 0.29.8(@types/node@18.16.14)
+        version: 0.29.8
       vitest:
         specifier: ^0.29.8
         version: 0.29.8
@@ -111,7 +111,7 @@ importers:
         specifier: ^6.9.8
         version: 6.9.12(@react-navigation/native@6.1.6)(react-native-safe-area-context@4.4.1)(react-native-screens@3.18.2)(react-native@0.70.5)(react@18.2.0)
       '@status-im/components':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/components
       expo:
         specifier: ~47.0.12
@@ -160,7 +160,7 @@ importers:
         specifier: ^0.3.21
         version: 0.3.22
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/eslint-config
       '@tamagui/babel-plugin':
         specifier: 1.11.1
@@ -181,10 +181,10 @@ importers:
   apps/web:
     dependencies:
       '@status-im/components':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/components
       '@status-im/icons':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/icons
       '@tamagui/core':
         specifier: 1.11.1
@@ -203,7 +203,7 @@ importers:
         version: 9.1.0(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/eslint-config
       '@tamagui/vite-plugin':
         specifier: 1.11.1
@@ -222,10 +222,13 @@ importers:
         version: 5.0.3
       vite:
         specifier: ^4.2.1
-        version: 4.2.1(@types/node@18.16.14)
+        version: 4.2.1(@types/node@18.15.11)
 
   apps/website:
     dependencies:
+      '@radix-ui/react-accordion':
+        specifier: ^1.1.1
+        version: 1.1.1(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-dialog':
         specifier: ^1.0.3
         version: 1.0.3(@types/react@18.0.33)(react-dom@18.2.0)(react@18.2.0)
@@ -239,29 +242,62 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       '@status-im/colors':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/colors
       '@status-im/components':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/components
       '@status-im/icons':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/icons
       '@status-im/js':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/status-js
+      '@tamagui/core':
+        specifier: 1.11.1
+        version: 1.11.1(react-native@0.70.5)(react@18.2.0)
       '@tamagui/next-theme':
         specifier: 1.11.1
         version: 1.11.1(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^4.29.7
-        version: 4.29.7(react-dom@18.2.0)(react@18.2.0)
+        version: 4.29.7(react-dom@18.2.0)(react-native@0.70.5)(react@18.2.0)
       '@tryghost/content-api':
         specifier: ^1.11.13
         version: 1.11.13
       '@vercel/og':
         specifier: ^0.5.4
         version: 0.5.4
+      '@visx/axis':
+        specifier: ^3.1.0
+        version: 3.1.0(react@18.2.0)
+      '@visx/curve':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@visx/glyph':
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
+      '@visx/gradient':
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
+      '@visx/grid':
+        specifier: ^3.0.1
+        version: 3.0.1(react@18.2.0)
+      '@visx/group':
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
+      '@visx/responsive':
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
+      '@visx/scale':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@visx/shape':
+        specifier: ^3.0.0
+        version: 3.0.0(react@18.2.0)
+      '@visx/tooltip':
+        specifier: ^3.1.2
+        version: 3.1.2(react-dom@18.2.0)(react@18.2.0)
       '@visx/visx':
         specifier: ^2.18.0
         version: 2.18.0(@react-spring/web@9.7.2)(react-dom@18.2.0)(react@18.2.0)
@@ -300,14 +336,14 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(patch_hash=bnv7pwkzzyy7frnjb2mzpom2aa)
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../../packages/eslint-config
       '@tailwindcss/typography':
         specifier: ^0.5.9
         version: 0.5.9(tailwindcss@3.3.1)
       '@tamagui/next-plugin':
         specifier: 1.11.1
-        version: 1.11.1(@babel/core@7.21.8)(next@13.2.4)(react-dom@18.2.0)(react-native-web@0.18.12)(react@18.2.0)(webpack@5.88.0)
+        version: 1.11.1(@babel/core@7.21.8)(next@13.2.4)(react-dom@18.2.0)(react-native-web@0.18.12)(react-native@0.70.5)(react@18.2.0)(webpack@5.88.0)
       '@types/d3-array':
         specifier: ^3.0.4
         version: 3.0.4
@@ -360,7 +396,7 @@ importers:
         specifier: ^0.6.3
         version: 0.6.3
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../eslint-config
       colorjs.io:
         specifier: ^0.4.3
@@ -376,7 +412,7 @@ importers:
         version: 4.1.4
       vite-node:
         specifier: ^0.29.7
-        version: 0.29.8(@types/node@18.16.14)
+        version: 0.29.8
 
   packages/components:
     dependencies:
@@ -408,10 +444,10 @@ importers:
         specifier: ^1.0.5
         version: 1.0.5(@types/react@18.0.33)(react-dom@18.2.0)(react@18.2.0)
       '@status-im/colors':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../colors
       '@status-im/icons':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../icons
       '@tamagui/animations-css':
         specifier: 1.11.1
@@ -463,7 +499,7 @@ importers:
         version: 4.3.7(react@18.2.0)
     devDependencies:
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../eslint-config
       '@storybook/addon-actions':
         specifier: ^7.0.24
@@ -530,7 +566,7 @@ importers:
         version: 3.0.0(react-dom@18.2.0)(react@18.2.0)
       vite:
         specifier: ^4.2.1
-        version: 4.2.1(@types/node@18.16.14)
+        version: 4.2.1(@types/node@18.15.11)
 
   packages/eslint-config:
     devDependencies:
@@ -599,7 +635,7 @@ importers:
         specifier: ^0.6.3
         version: 0.6.3
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../eslint-config
       '@svgr/cli':
         specifier: ^6.5.1
@@ -639,7 +675,7 @@ importers:
         version: 4.1.4
       vite-node:
         specifier: ^0.29.7
-        version: 0.29.8(@types/node@18.16.14)
+        version: 0.29.8
 
   packages/status-js:
     dependencies:
@@ -666,7 +702,7 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0(@bufbuild/protobuf@1.0.0)
       '@status-im/eslint-config':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../eslint-config
       happy-dom:
         specifier: ^9.1.7
@@ -1251,6 +1287,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -1277,6 +1314,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
       '@babel/helper-skip-transparent-expression-wrappers': 7.20.0
       '@babel/plugin-proposal-optional-chaining': 7.21.0(@babel/core@7.20.12)
+    dev: false
 
   /@babel/plugin-bugfix-v8-spread-parameters-in-optional-chaining@7.20.7(@babel/core@7.21.8):
     resolution:
@@ -1371,6 +1409,7 @@ packages:
       '@babel/plugin-syntax-class-static-block': 7.14.5(@babel/core@7.20.12)
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/plugin-proposal-class-static-block@7.21.0(@babel/core@7.21.8):
     resolution:
@@ -1438,6 +1477,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
       '@babel/plugin-syntax-dynamic-import': 7.8.3(@babel/core@7.20.12)
+    dev: false
 
   /@babel/plugin-proposal-dynamic-import@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -1490,6 +1530,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
       '@babel/plugin-syntax-export-namespace-from': 7.8.3(@babel/core@7.20.12)
+    dev: false
 
   /@babel/plugin-proposal-export-namespace-from@7.18.9(@babel/core@7.21.8):
     resolution:
@@ -1516,6 +1557,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
       '@babel/plugin-syntax-json-strings': 7.8.3(@babel/core@7.20.12)
+    dev: false
 
   /@babel/plugin-proposal-json-strings@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -1542,6 +1584,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
       '@babel/plugin-syntax-logical-assignment-operators': 7.10.4(@babel/core@7.20.12)
+    dev: false
 
   /@babel/plugin-proposal-logical-assignment-operators@7.20.7(@babel/core@7.21.8):
     resolution:
@@ -1594,6 +1637,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
       '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.20.12)
+    dev: false
 
   /@babel/plugin-proposal-numeric-separator@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -1708,6 +1752,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/plugin-proposal-private-methods@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -1740,6 +1785,7 @@ packages:
       '@babel/plugin-syntax-private-property-in-object': 7.14.5(@babel/core@7.20.12)
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/plugin-proposal-private-property-in-object@7.21.0(@babel/core@7.21.8):
     resolution:
@@ -1770,6 +1816,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-create-regexp-features-plugin': 7.20.5(@babel/core@7.20.12)
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-proposal-unicode-property-regex@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -1839,6 +1886,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-class-static-block@7.14.5(@babel/core@7.21.8):
     resolution:
@@ -1934,6 +1982,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-export-namespace-from@7.8.3(@babel/core@7.21.8):
     resolution:
@@ -1981,6 +2030,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-import-assertions@7.20.0(@babel/core@7.21.8):
     resolution:
@@ -2004,6 +2054,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-import-meta@7.10.4(@babel/core@7.21.8):
     resolution:
@@ -2026,6 +2077,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-json-strings@7.8.3(@babel/core@7.21.8):
     resolution:
@@ -2072,6 +2124,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.21.8):
     resolution:
@@ -2116,6 +2169,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-numeric-separator@7.10.4(@babel/core@7.21.8):
     resolution:
@@ -2205,6 +2259,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-private-property-in-object@7.14.5(@babel/core@7.21.8):
     resolution:
@@ -2229,6 +2284,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-syntax-top-level-await@7.14.5(@babel/core@7.21.8):
     resolution:
@@ -2476,6 +2532,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-create-regexp-features-plugin': 7.20.5(@babel/core@7.20.12)
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-transform-dotall-regex@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -2501,6 +2558,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-transform-duplicate-keys@7.18.9(@babel/core@7.21.8):
     resolution:
@@ -2680,6 +2738,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/plugin-transform-modules-amd@7.20.11(@babel/core@7.21.8):
     resolution:
@@ -2744,6 +2803,7 @@ packages:
       '@babel/helper-validator-identifier': 7.19.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/plugin-transform-modules-systemjs@7.20.11(@babel/core@7.21.8):
     resolution:
@@ -2776,6 +2836,7 @@ packages:
       '@babel/helper-plugin-utils': 7.21.5
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/plugin-transform-modules-umd@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -2829,6 +2890,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-transform-new-target@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -3063,6 +3125,7 @@ packages:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
       regenerator-transform: 0.15.1
+    dev: false
 
   /@babel/plugin-transform-regenerator@7.21.5(@babel/core@7.21.8):
     resolution:
@@ -3088,6 +3151,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-transform-reserved-words@7.18.6(@babel/core@7.21.8):
     resolution:
@@ -3248,6 +3312,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-transform-typeof-symbol@7.18.9(@babel/core@7.21.8):
     resolution:
@@ -3306,6 +3371,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.12
       '@babel/helper-plugin-utils': 7.21.5
+    dev: false
 
   /@babel/plugin-transform-unicode-escapes@7.21.5(@babel/core@7.21.8):
     resolution:
@@ -3433,6 +3499,7 @@ packages:
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
 
   /@babel/preset-env@7.21.5(@babel/core@7.21.8):
     resolution:
@@ -3551,6 +3618,7 @@ packages:
       '@babel/plugin-transform-dotall-regex': 7.18.6(@babel/core@7.20.12)
       '@babel/types': 7.21.5
       esutils: 2.0.3
+    dev: false
 
   /@babel/preset-modules@0.1.5(@babel/core@7.21.8):
     resolution:
@@ -5499,7 +5567,7 @@ packages:
       magic-string: 0.27.0
       react-docgen-typescript: 2.2.2(typescript@5.0.3)
       typescript: 5.0.3
-      vite: 4.2.1(@types/node@18.16.14)
+      vite: 4.2.1
     dev: true
 
   /@jridgewell/gen-mapping@0.1.1:
@@ -8918,7 +8986,7 @@ packages:
       remark-slug: 6.1.0
       rollup: 3.20.2
       typescript: 5.0.3
-      vite: 4.2.1(@types/node@18.16.14)
+      vite: 4.2.1
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -9480,7 +9548,7 @@ packages:
       react: 18.2.0
       react-docgen: 6.0.0-alpha.3
       react-dom: 18.2.0(react@18.2.0)
-      vite: 4.2.1(@types/node@18.16.14)
+      vite: 4.2.1
     transitivePeerDependencies:
       - '@preact/preset-vite'
       - '@storybook/mdx1-csf'
@@ -10795,7 +10863,7 @@ packages:
       - react-native
     dev: false
 
-  /@tamagui/next-plugin@1.11.1(@babel/core@7.21.8)(next@13.2.4)(react-dom@18.2.0)(react-native-web@0.18.12)(react@18.2.0)(webpack@5.88.0):
+  /@tamagui/next-plugin@1.11.1(@babel/core@7.21.8)(next@13.2.4)(react-dom@18.2.0)(react-native-web@0.18.12)(react-native@0.70.5)(react@18.2.0)(webpack@5.88.0):
     resolution:
       {
         integrity: sha512-6rNZY0d6VL3sbHnx0T34c0243gaNUFcfn0P9FGcDq6A9/gEdmt8PRWBeEdmqf7UdUu3h7/oLkoIn735tAnFdnA==,
@@ -10815,7 +10883,7 @@ packages:
       file-loader: 6.2.0(webpack@5.88.0)
       html-webpack-plugin: 5.5.1(webpack@5.88.0)
       next: 13.2.4(@babel/core@7.21.8)(react-dom@18.2.0)(react@18.2.0)
-      tamagui-loader: 1.11.1(react-dom@18.2.0)(react-native-web@0.18.12)(react@18.2.0)
+      tamagui-loader: 1.11.1(react-dom@18.2.0)(react-native-web@0.18.12)(react-native@0.70.5)(react@18.2.0)
       thread-loader: 3.0.4(webpack@5.88.0)
       url-loader: 4.1.1(file-loader@6.2.0)(webpack@5.88.0)
     transitivePeerDependencies:
@@ -11596,7 +11664,7 @@ packages:
       }
     dev: false
 
-  /@tanstack/react-query@4.29.7(react-dom@18.2.0)(react@18.2.0):
+  /@tanstack/react-query@4.29.7(react-dom@18.2.0)(react-native@0.70.5)(react@18.2.0):
     resolution:
       {
         integrity: sha512-ijBWEzAIo09fB1yd22slRZzprrZ5zMdWYzBnCg5qiXuFbH78uGN1qtGz8+Ed4MuhaPaYSD+hykn+QEKtQviEtg==,
@@ -11614,6 +11682,7 @@ packages:
       '@tanstack/query-core': 4.29.7
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      react-native: 0.70.5(@babel/core@7.21.8)(@babel/preset-env@7.21.5)(react@18.2.0)
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
@@ -11939,6 +12008,15 @@ packages:
       '@types/d3-color': 1.4.2
     dev: false
 
+  /@types/d3-interpolate@3.0.1:
+    resolution:
+      {
+        integrity: sha512-jx5leotSeac3jr0RePOH1KdR9rISG91QIE4Q2PYTu4OymLTZfA3SrnURSLzKH48HmXVUru50b8nje4E79oQSQw==,
+      }
+    dependencies:
+      '@types/d3-color': 1.4.2
+    dev: false
+
   /@types/d3-path@1.0.9:
     resolution:
       {
@@ -11957,6 +12035,15 @@ packages:
     resolution:
       {
         integrity: sha512-gGqr7x1ost9px3FvIfUMi5XA/F/yAf4UkUDtdQhpH92XCT0Oa7zkkRzY61gPVJq+DxpHn/btouw5ohWkbBsCzQ==,
+      }
+    dependencies:
+      '@types/d3-time': 2.1.1
+    dev: false
+
+  /@types/d3-scale@4.0.3:
+    resolution:
+      {
+        integrity: sha512-PATBiMCpvHJSMtZAMEhc2WyL+hnzarKzI6wAHYjhsonjWJYGq5BXTzQjv4l8m2jO183/4wZ90rKvSeT7o72xNQ==,
       }
     dependencies:
       '@types/d3-time': 2.1.1
@@ -12767,10 +12854,45 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@visx/axis@3.1.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-JDj/1VYx0JO0pHFtwoFtYcnqdoZFh/dpHImEl169S5nTslSFlIoNTXA/ekpBP6ELkEZ59gmF1X5k29x6MFBwCA==,
+      }
+    peerDependencies:
+      react: ^16.3.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.0.33
+      '@visx/group': 3.0.0(react@18.2.0)
+      '@visx/point': 3.0.1
+      '@visx/scale': 3.0.0
+      '@visx/shape': 3.0.0(react@18.2.0)
+      '@visx/text': 3.0.0(react@18.2.0)
+      classnames: 2.3.2
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /@visx/bounds@2.17.0(react-dom@18.2.0)(react@18.2.0):
     resolution:
       {
         integrity: sha512-XsoyTAyCm+DZbrPgP3IZFZAcNqBmXFBLSep04TqnrEA3hf16GxIzcpaGe+hAVhPg5yzBdjc7tLk6s0h5F44niA==,
+      }
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+      react-dom: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.0.33
+      '@types/react-dom': 18.0.11
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@visx/bounds@3.0.0(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-YQaSSER9erxlhppzRms6cvYdKqcIwk6eksrGdbJkBoHobhPo1JCIUXlmrA4qgrEnXInPJpueGE+PE5F+Dk12DA==,
       }
     peerDependencies:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
@@ -12818,6 +12940,16 @@ packages:
     resolution:
       {
         integrity: sha512-8Fw2ZalgYbpeoelLqTOmMs/wD8maSKsKS9rRIwmHZ0O0XxY8iG9oVYbD4CLWzf/uFWCY6+qofk4J1g9BWQSXJQ==,
+      }
+    dependencies:
+      '@types/d3-shape': 1.3.8
+      d3-shape: 1.3.7
+    dev: false
+
+  /@visx/curve@3.0.0:
+    resolution:
+      {
+        integrity: sha512-kvHJDLBeczTQ87ZExSTfRxej06l6o6UiQ0NHf9+xpAin06y6Qk1ThOHHWJTGM6KGzwlu7jEauJGHwZs6nMhDvA==,
       }
     dependencies:
       '@types/d3-shape': 1.3.8
@@ -12884,10 +13016,40 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@visx/glyph@3.0.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-r1B0IocfWfhTABKjam0qqsWKjxLxZfGwefnwn8IcfELSd9iAUtLbI/46nP4roQRHhB/Wl3RBbgA97fZw8f1MxA==,
+      }
+    peerDependencies:
+      react: ^16.3.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/d3-shape': 1.3.8
+      '@types/react': 18.0.33
+      '@visx/group': 3.0.0(react@18.2.0)
+      classnames: 2.3.2
+      d3-shape: 1.3.7
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /@visx/gradient@2.17.0(react@18.2.0):
     resolution:
       {
         integrity: sha512-3vyMzSR5iSo8+nKOx+bQZpFXqFGVzCrRbuStxTH4Ag0KFATOYnjCsypjD+gc2DEVzkarVGy0V9kRfFIH09r8Fg==,
+      }
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.0.33
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@visx/gradient@3.0.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-UoM9R9PIPLO/w7hCW9gFncrLdpKNqh13sLS9/0Iy6b75uP2l05FLG2HX4kXljeyOrj4/XyzRCMYm0HHk/p5iMA==,
       }
     peerDependencies:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
@@ -12916,10 +13078,43 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@visx/grid@3.0.1(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-cln5CVvFG58C5Uz1Uf0KRBFmGmgD1NALOQdYDu5yPsTuY2yLzVYPvCIlYBMdUtE0uzfNq972SmkZHfZYs03jxQ==,
+      }
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.0.33
+      '@visx/curve': 3.0.0
+      '@visx/group': 3.0.0(react@18.2.0)
+      '@visx/point': 3.0.1
+      '@visx/scale': 3.0.0
+      '@visx/shape': 3.0.0(react@18.2.0)
+      classnames: 2.3.2
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /@visx/group@2.17.0(react@18.2.0):
     resolution:
       {
         integrity: sha512-60Y2dIKRh3cp/Drpq//wM067ZNrnCcvFCXufPgIihv0Ix8O7oMsYxu3ch4XUMjks+U2IAZQr5Dnc+C9sTQFkhw==,
+      }
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.0.33
+      classnames: 2.3.2
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@visx/group@3.0.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-SFjXhTMcsaVAb1/TVL1KM5vn8gQTIVgSx0ATdDl4BJSFp2ym1lO8LY4jpV4SFweaHnWxVwrrfGLTn5QsYnvmjQ==,
       }
     peerDependencies:
       react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
@@ -13040,6 +13235,13 @@ packages:
       }
     dev: false
 
+  /@visx/point@3.0.1:
+    resolution:
+      {
+        integrity: sha512-S5WOBMgEP2xHcgs3A2BFB2vwzrk0tMmn3PGZAbQJ+lu4HlnalDP72klUnxLTH8xclNNvpUHtHM5eLIJXyHx6Pw==,
+      }
+    dev: false
+
   /@visx/react-spring@2.18.0(@react-spring/web@9.7.2)(react@18.2.0):
     resolution:
       {
@@ -13076,6 +13278,21 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@visx/responsive@3.0.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-immnxQwOWlrxbnlCIqJWuDpPfrM6tglgMTN1WsyXyGluLMJqhuuxqxllfXaRPkQFS4fcvs66KCEELdazh96U2w==,
+      }
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/lodash': 4.14.194
+      '@types/react': 18.0.33
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /@visx/scale@2.18.0:
     resolution:
       {
@@ -13087,6 +13304,20 @@ packages:
       '@types/d3-time': 2.1.1
       d3-interpolate: 1.4.0
       d3-scale: 3.3.0
+      d3-time: 2.1.1
+    dev: false
+
+  /@visx/scale@3.0.0:
+    resolution:
+      {
+        integrity: sha512-WSf+wrxZEvu5TPGfGTafzzX1MbogbIxfD9ZKM9p7xfw65v23G0dNMy4bqVBUbOJigONoQkIZyqQ+gz5AJ/ioIg==,
+      }
+    dependencies:
+      '@types/d3-interpolate': 3.0.1
+      '@types/d3-scale': 4.0.3
+      '@types/d3-time': 2.1.1
+      d3-interpolate: 3.0.1
+      d3-scale: 4.0.2
       d3-time: 2.1.1
     dev: false
 
@@ -13113,10 +13344,50 @@ packages:
       react: 18.2.0
     dev: false
 
+  /@visx/shape@3.0.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-t6lpP9bIA1vwChDwiOUWl92ro29XF/M8IVNWRA0pm4LGxGGTACvxG3Agfcdi3JprahUVqPpnRCwuR36PDanq3Q==,
+      }
+    peerDependencies:
+      react: ^16.3.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/d3-path': 1.0.9
+      '@types/d3-shape': 1.3.8
+      '@types/lodash': 4.14.194
+      '@types/react': 18.0.33
+      '@visx/curve': 3.0.0
+      '@visx/group': 3.0.0(react@18.2.0)
+      '@visx/scale': 3.0.0
+      classnames: 2.3.2
+      d3-path: 1.0.9
+      d3-shape: 1.3.7
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
   /@visx/text@2.17.0(react@18.2.0):
     resolution:
       {
         integrity: sha512-Eu6b8SMI+LU4O6H4l/QhCa7c4GtDTQO6jhSYuU70pdTST1Bm74nImPGekG2xDW3uxaLlkb8fDpvXag0Z7v+vlQ==,
+      }
+    peerDependencies:
+      react: ^16.3.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/lodash': 4.14.194
+      '@types/react': 18.0.33
+      classnames: 2.3.2
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 18.2.0
+      reduce-css-calc: 1.3.0
+    dev: false
+
+  /@visx/text@3.0.0(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-LW6v5T/gpd9RGw83/ScXncYc6IlcfzXTpaN8WbbxLRI65gdvSqrykwAMR0cbpQmzoVFuZXljqOf0QslHGnBg1w==,
       }
     peerDependencies:
       react: ^16.3.0-0 || ^17.0.0-0 || ^18.0.0-0
@@ -13157,6 +13428,24 @@ packages:
     dependencies:
       '@types/react': 18.0.33
       '@visx/bounds': 2.17.0(react-dom@18.2.0)(react@18.2.0)
+      classnames: 2.3.2
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-use-measure: 2.1.1(react-dom@18.2.0)(react@18.2.0)
+    dev: false
+
+  /@visx/tooltip@3.1.2(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-p46qztGRNkEDbxzc3V1virahvz3UQ29TzddUjA0oaTIBCrOd9UJuLvv1Tq9OpeUYPdbrO/ZRwaEeri2pbwv04Q==,
+      }
+    peerDependencies:
+      react: ^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0
+      react-dom: ^16.8.0-0 || ^17.0.0-0 || ^18.0.0-0
+    dependencies:
+      '@types/react': 18.0.33
+      '@visx/bounds': 3.0.0(react-dom@18.2.0)(react@18.2.0)
       classnames: 2.3.2
       prop-types: 15.8.1
       react: 18.2.0
@@ -13299,7 +13588,7 @@ packages:
       vite: ^4
     dependencies:
       '@swc/core': 1.3.40
-      vite: 4.2.1(@types/node@18.16.14)
+      vite: 4.2.1
     dev: true
 
   /@vitejs/plugin-react@3.1.0(vite@4.2.1):
@@ -16219,6 +16508,16 @@ packages:
       d3-color: 2.0.0
     dev: false
 
+  /d3-interpolate@3.0.1:
+    resolution:
+      {
+        integrity: sha512-3bYs1rOD33uo8aqJfKP3JWPAibgw8Zm2+L9vBKEHJ2Rg+viTR7o5Mmv5mZcieN+FRYaAOWX5SJATX6k1PWz72g==,
+      }
+    engines: { node: '>=12' }
+    dependencies:
+      d3-color: 2.0.0
+    dev: false
+
   /d3-path@1.0.9:
     resolution:
       {
@@ -16251,6 +16550,20 @@ packages:
       d3-interpolate: 2.0.1
       d3-time: 2.1.1
       d3-time-format: 3.0.0
+    dev: false
+
+  /d3-scale@4.0.2:
+    resolution:
+      {
+        integrity: sha512-GZW464g1SH7ag3Y7hXjf8RoUuAFIqklOAq3MRl4OaWabTFJY9PN/E1YklhXLh+OQ3fM9yS2nOkCoS+WLZ6kvxQ==,
+      }
+    engines: { node: '>=12' }
+    dependencies:
+      d3-array: 3.2.3
+      d3-format: 2.0.0
+      d3-interpolate: 3.0.1
+      d3-time: 3.1.0
+      d3-time-format: 4.1.0
     dev: false
 
   /d3-shape@1.3.7:
@@ -21747,7 +22060,7 @@ packages:
       '@babel/plugin-proposal-nullish-coalescing-operator': 7.18.6(@babel/core@7.21.8)
       '@babel/plugin-proposal-optional-chaining': 7.21.0(@babel/core@7.21.8)
       '@babel/plugin-transform-modules-commonjs': 7.21.5(@babel/core@7.21.8)
-      '@babel/preset-env': 7.21.5(@babel/core@7.20.12)
+      '@babel/preset-env': 7.21.5(@babel/core@7.21.8)
       '@babel/preset-flow': 7.18.6(@babel/core@7.21.8)
       '@babel/preset-typescript': 7.18.6(@babel/core@7.21.8)
       '@babel/register': 7.18.9(@babel/core@7.21.8)
@@ -28039,7 +28352,7 @@ packages:
       - ts-node
     dev: true
 
-  /tamagui-loader@1.11.1(react-dom@18.2.0)(react-native-web@0.18.12)(react@18.2.0):
+  /tamagui-loader@1.11.1(react-dom@18.2.0)(react-native-web@0.18.12)(react-native@0.70.5)(react@18.2.0):
     resolution:
       {
         integrity: sha512-62pbfOC+DuthNwP8P8FBv5Tvf7luTKZ0KMKe6NZWrZ5BOUyGdb6UFnKCE8GC0HCss3ueSFnYj3kV8QCFAdX2Zg==,
@@ -29593,6 +29906,30 @@ packages:
       vfile-message: 3.1.4
     dev: true
 
+  /vite-node@0.29.8:
+    resolution:
+      {
+        integrity: sha512-b6OtCXfk65L6SElVM20q5G546yu10/kNrhg08afEoWlFRJXFq9/6glsvSVY+aI6YeC1tu2TtAqI2jHEQmOmsFw==,
+      }
+    engines: { node: '>=v14.16.0' }
+    hasBin: true
+    dependencies:
+      cac: 6.7.14
+      debug: 4.3.4
+      mlly: 1.2.0
+      pathe: 1.1.0
+      picocolors: 1.0.0
+      vite: 4.2.1
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+    dev: true
+
   /vite-node@0.29.8(@types/node@18.16.14):
     resolution:
       {
@@ -29646,6 +29983,42 @@ packages:
         optional: true
     dependencies:
       esbuild: 0.16.17
+      postcss: 8.4.24
+      resolve: 1.22.2
+      rollup: 3.20.2
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite@4.2.1:
+    resolution:
+      {
+        integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==,
+      }
+    engines: { node: ^14.18.0 || >=16.0.0 }
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      esbuild: 0.17.15
       postcss: 8.4.24
       resolve: 1.22.2
       rollup: 3.20.2
