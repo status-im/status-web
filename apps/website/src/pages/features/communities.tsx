@@ -10,12 +10,13 @@ import heroImage4 from '@assets/communities/hero-04.png'
 // import image5 from '@assets/communities/grid-5.png'
 import sectionImage1 from '@assets/communities/section-01.png'
 import sectionImage2 from '@assets/communities/section-02.png'
-import { Text } from '@status-im/components'
+import { Button, Text } from '@status-im/components'
 import Image from 'next/image'
 
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
+import { Link } from '@/components/link'
 import { VideoSection } from '@/components/video-section'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
@@ -63,23 +64,32 @@ const CommunitiesPage: Page = () => {
         />
       </div>
 
-      <div className="pb-60 pt-40">
-        <div className="grid max-w-[475px] gap-4 pb-40">
+      <div className="mx-auto max-w-[1200px] pb-60 pt-40">
+        <div className="grid gap-4 pb-40">
           <h2 className="text-64">Your next community</h2>
           <Text size={27}>
             Explore the metaverse of communities and find your kindred spirits
             in the Status Community Directory.
           </Text>
+          <div className="flex min-w-[1200px] flex-row gap-10 overflow-x-auto">
+            <Image src={heroImage4} alt="TODO" />
+            <Image src={heroImage4} alt="TODO" />
+            <Image src={heroImage4} alt="TODO" />
+            <Image src={heroImage4} alt="TODO" />
+          </div>
         </div>
       </div>
 
-      <div className="py-40">
+      <div className="rounded-[40px] bg-customisation-turquoise/5 py-40">
         <div className="mx-auto max-w-[702px] gap-4 text-center">
-          <h2 className="text-64">A wonderful chat experience</h2>
+          <h2 className="pb-4 text-64">A wonderful chat experience</h2>
           <Text size={27}>
             Give your community a unique look that reflects it’s passions and
             values. Or just look cool ✨
           </Text>
+        </div>
+        <div className="flex justify-center pb-10 pt-8">
+          <Button variant="outline">See messenger features</Button>
         </div>
 
         {/* TODO: add row spans */}

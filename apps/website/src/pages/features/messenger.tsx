@@ -98,8 +98,8 @@ const MessengerPage: Page = () => {
         </div>
       </Content>
 
-      <div className="py-[200px]">
-        <h2 className="text-64 text-white-100">
+      <div className="m-auto max-w-[700px] px-16 pb-[352px] pt-[524px] text-center">
+        <h2 className="pb-3 text-64 text-white-100">
           Keep who your friends are private
         </h2>
         <Text size={19} color="$white-100">
