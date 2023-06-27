@@ -77,8 +77,5 @@
     "LICENSE-MIT",
     "LICENSE-APACHE-v2",
     "package.json"
-  ],
-  "publishConfig": {
-    "access": "public"
-  }
+  ]
 }
