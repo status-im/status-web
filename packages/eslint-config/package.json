@@ -27,5 +27,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-tailwindcss": "^3.12.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

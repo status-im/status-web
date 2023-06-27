@@ -52,5 +52,8 @@
     "svgo": "^3.0.2",
     "vite": "^4.1.4",
     "vite-node": "^0.29.7"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
