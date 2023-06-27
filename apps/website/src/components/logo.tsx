@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { match, P } from 'ts-pattern'
 
+import logoBlogSrc from '../../public/images/logo/blog.svg'
 import logoSrc from '../../public/images/logo/default.svg'
 import logoDevSrc from '../../public/images/logo/dev.svg'
 import logoLearnSrc from '../../public/images/logo/learn.svg'
@@ -29,7 +30,7 @@ export const Logo = (props: Props) => {
         )
         .with(
           P.when(p => p.startsWith('/blog')),
-          () => <Image src={logoSrc} alt="Status logo" />
+          () => <Image src={logoBlogSrc} alt="Status logo" />
         )
         .otherwise(() => (
           <Image src={logoSrc} alt="Status logo" />
