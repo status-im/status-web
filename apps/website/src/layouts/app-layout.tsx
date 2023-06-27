@@ -47,7 +47,7 @@ export const Content = ({
 }) => {
   return (
     <div
-      className={`min-h-[900px] w-full rounded-3xl bg-white-100 ${className} overflow-hidden`}
+      className={`relative min-h-[900px] w-full rounded-3xl bg-white-100 ${className} z-10 overflow-hidden`}
     >
       {children}
     </div>
