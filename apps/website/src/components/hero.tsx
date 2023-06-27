@@ -19,7 +19,7 @@ export const Hero = (props: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <div className="relative mb-16 grid px-5 pb-24 pt-16 lg:mb-24 lg:px-40 lg:pt-[120px]">
+      <div className="relative grid px-5 py-16 lg:px-40 lg:pb-24 lg:pt-[120px]">
         {/* <ParalaxCircle initialLeft={-206} initialTop={-170} /> */}
         <div
           className="relative flex flex-col items-center justify-center text-center"
@@ -33,16 +33,16 @@ export const Hero = (props: Props) => {
               label={type}
             />
           </div>
-          <h1 className="max-w-[1000px] py-4 text-center text-88 lg:pb-5">
+          <h1 className="max-w-[1000px] py-4 text-center text-48 lg:pb-5 lg:text-88">
             {title}
           </h1>
           <div className="whitespace-pre-line">
-            <Text size={19}>{description}</Text>
+            <Text size={27}>{description}</Text>
           </div>
         </div>
 
         <div className="relative flex justify-center">
-          <div className="mt-6 inline-flex rounded-[20px] border border-dashed border-neutral-80/20 p-2 lg:mt-16">
+          <div className="mt-6 inline-flex rounded-[20px] border border-dashed border-neutral-80/20 p-2 lg:mt-8">
             <Button size={40} icon={<DownloadIcon size={20} />} variant={color}>
               Sign up for early access
             </Button>

@@ -7,6 +7,7 @@ import heroImage1 from '@assets/create-community/hero-01.png'
 import heroImage2 from '@assets/create-community/hero-02.png'
 import heroImage3 from '@assets/create-community/hero-03.png'
 import heroImage4 from '@assets/create-community/hero-04.png'
+import screenshot from '@assets/create-community/screenshot-01.png'
 import sectionImage1 from '@assets/create-community/section-01.png'
 import sectionImage2 from '@assets/create-community/section-02.png'
 import { Text } from '@status-im/components'
@@ -15,6 +16,7 @@ import Image from 'next/image'
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
+import { SectionDesktopScreenshot } from '@/components/section-desktop-screenshot'
 import { SectionLarge } from '@/components/section-large'
 import { VideoSection } from '@/components/video-section'
 import { illustrations } from '@/config/illustrations'
@@ -99,7 +101,7 @@ const CreateCommunityPage: Page = () => {
         description="By using Status, your community can regain control of it’s destiny and data."
       />
 
-      <div className="m-auto grid max-w-[1083px] grid-cols-3 gap-20 py-40">
+      <div className="m-auto grid max-w-[1083px] grid-cols-1 gap-12 px-5 pb-24 pt-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-20 lg:px-0 lg:py-40">
         {featureList.map(feature => (
           <div key={feature.title} className="flex flex-col">
             <Image
@@ -125,7 +127,7 @@ const CreateCommunityPage: Page = () => {
         <Section
           icon="lock"
           title="Token gating"
-          color="turquoise"
+          color="none"
           description="Only let hodlers of specific tokens read or post to channels. Or require tokens to join your community."
           secondaryTitle="Powerful permissions"
           secondaryDescription="Use ERC-20, NFT and ENS tokens plus AND and OR statements in rules. Set channels so anybody can read, but tokens are required to post. Assign admin permissions with remotely destructible soulbound tokens. And much, much more!"
@@ -134,7 +136,7 @@ const CreateCommunityPage: Page = () => {
           reverse
         />
 
-        <div className="grid grid-flow-col gap-5 bg-[url(https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80)] bg-cover p-20">
+        <div className="grid grid-flow-col gap-5 p-20">
           {tokenFeaturesList.map(({ title, description, image }) => (
             <div
               key={title}
@@ -169,17 +171,12 @@ const CreateCommunityPage: Page = () => {
         </ImageGrid>
       </SectionLarge>
 
-      <div className="flex flex-col">
-        <Text size={27} weight="semibold">
-          Share your community
-        </Text>
-        <div className="relative flex pt-1">
-          <Text size={27}>
-            Using web URLs that can be posted on Web2 social media. User
-            doesn&rsquo;t have Status? Open in browser.
-          </Text>
-        </div>
-      </div>
+      <SectionDesktopScreenshot
+        title="Share your community"
+        description="Using web URLs that can be posted on Web2 social media. User doesn’t have Status? Open in browser."
+        image={screenshot}
+        icon="pizza"
+      />
 
       {/* FULL PAGE SCREENSHOT */}
 

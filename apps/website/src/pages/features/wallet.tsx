@@ -24,14 +24,14 @@ import type { Page } from 'next'
 const WalletPage: Page = () => {
   return (
     <Content>
-      <div className="overflow-hidden pt-16 lg:pt-32">
+      <div className="overflow-hidden">
         <Hero
           type="Wallet"
-          title="The future is multi-chain"
+          title="The future is multi-chain"
           description="L2s made simple - send and manage your crypto easily and safely across multiple networks."
           images={[heroImage1, heroImage2, heroImage3, heroImage4]}
           color="yellow"
-          maxWidth={700}
+          maxWidth={570}
         />
         <VideoSection />
 

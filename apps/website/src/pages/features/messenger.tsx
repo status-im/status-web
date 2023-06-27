@@ -1,3 +1,4 @@
+import screenshot from '@assets/create-community/screenshot-01.png'
 // import featureImage1 from '@assets/messenger/feature-1.png'
 // import featureImage2 from '@assets/messenger/feature-2.png'
 import featureImage3 from '@assets/messenger/feature-3.png'
@@ -19,6 +20,7 @@ import Image from 'next/image'
 
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
+import { SectionDesktopScreenshot } from '@/components/section-desktop-screenshot'
 import { SectionLarge } from '@/components/section-large'
 import { VideoSection } from '@/components/video-section'
 import { AppLayout, Content } from '@/layouts/app-layout'
@@ -35,7 +37,7 @@ const MessengerPage: Page = () => {
           description="Protect your right to free speech. 1:1 and group chats with e2e encryption, perfect forward secrecy and metadata privacy."
           color="purple"
           images={[heroImage1, heroImage2, heroImage3, heroImage4]}
-          maxWidth={574}
+          maxWidth={581}
         />
         <div className="lg:pb-20">
           <VideoSection
@@ -193,6 +195,13 @@ const MessengerPage: Page = () => {
             </div>
           </div>
         </div>
+        <SectionDesktopScreenshot
+          title="Share your profile"
+          description="Using web URLs that can be posted on Web2 social media. User doesn’t have Status? Open in browser."
+          // fix screenshot
+          image={screenshot}
+          icon="pizza"
+        />
       </Content>
     </>
   )
