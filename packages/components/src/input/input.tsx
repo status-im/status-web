@@ -1,5 +1,6 @@
-import { cloneElement, forwardRef, useState } from 'react'
+import { cloneElement, forwardRef, useRef, useState } from 'react'
 
+import { composeRefs } from '@radix-ui/react-compose-refs'
 import { ClearIcon } from '@status-im/icons'
 import { setupReactNative, Stack, styled } from '@tamagui/core'
 import { focusableInputHOC } from '@tamagui/focusable'
@@ -51,6 +52,8 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
 
   const isRetractable = variant === 'retractable'
 
+  const inputRef = useRef<TextInput>(null)
+
   return (
     <Stack flexDirection={direction === 'ltr' ? 'row' : 'row-reverse'}>
       {Boolean(label || endLabel) && (
@@ -80,7 +83,7 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore ref is not inferred correctly here
-            ref?.current?.focus()
+            inputRef?.current?.focus()
           }
         }}
       >
@@ -91,7 +94,7 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
           value={value}
           placeholder={isMinimized && !value ? '' : placeholder}
           flex={1}
-          ref={ref}
+          ref={composeRefs(ref, inputRef)}
           onBlur={() => {
             if (!value && isRetractable && !isMinimized) {
               setIsMinimized(true)

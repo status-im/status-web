@@ -12,7 +12,7 @@ import {
 import { CheckIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
-import { Checkbox } from '../selectors'
+import { Checkbox } from '../checkbox'
 import { Text } from '../text'
 
 interface Props {

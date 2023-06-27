@@ -1,6 +1,7 @@
 export * from './anchor-actions'
 export * from './avatar'
 export * from './button'
+export * from './checkbox'
 export * from './community'
 export * from './composer'
 export * from './context-tag'

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 import { Avatar, Button, Input, Tag, Text } from '@status-im/components'
 import { ProfileIcon, SearchIcon } from '@status-im/icons'
@@ -10,7 +10,6 @@ import { DropdownFilter, DropdownSort, Tabs } from './filters'
 
 import type { DropdownFilterProps } from './filters/dropdown-filter'
 import type { DropdownSortProps } from './filters/dropdown-sort'
-import type { TextInput } from 'react-native'
 
 const issues = [
   {
@@ -216,7 +215,6 @@ const sortOptions: DropdownSortProps['data'] = [
 
 const TableIssues = () => {
   const [issuesSearchText, setIssuesSearchText] = useState('')
-  const inputRef = useRef<TextInput>(null)
 
   const currentBreakpoint = useCurrentBreakpoint()
 
@@ -238,7 +236,6 @@ const TableIssues = () => {
                       onChangeText={setIssuesSearchText}
                       variant="retractable"
                       direction={currentBreakpoint === '2xl' ? 'rtl' : 'ltr'}
-                      ref={inputRef}
                     />
                   </div>
 

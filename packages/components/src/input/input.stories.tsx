@@ -1,11 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { SearchIcon } from '@status-im/icons'
 
 import { Input } from './input'
 
 import type { Meta, StoryObj } from '@storybook/react'
-import type { TextInput } from 'react-native'
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta: Meta<typeof Input> = {
@@ -19,7 +18,6 @@ type Story = StoryObj<typeof Input>
 export const Primary: Story = {
   args: {
     placeholder: 'Type something...',
-    // children: 'Click me',
   },
 }
 
@@ -56,13 +54,9 @@ const InputSearch = () => {
 const InputSearchMinimzed = () => {
   const [value, setValue] = useState('')
 
-  const [isMinimized, setIsMinimized] = useState(true)
-  const inputRef = useRef<TextInput>(null)
-
   return (
     <>
       <Input
-        onHandleMinimized={() => setIsMinimized(!isMinimized)}
         placeholder="Please type something..."
         value={value}
         onChangeText={setValue}
@@ -70,8 +64,7 @@ const InputSearchMinimzed = () => {
         onClear={() => setValue('')}
         size={32}
         direction="rtl"
-        minimized={isMinimized}
-        ref={inputRef}
+        variant="retractable"
       />
     </>
   )
@@ -89,7 +82,6 @@ export const WithError: Story = {
   args: {
     placeholder: 'Type something...',
     error: true,
-    // children: 'Click me',
   },
 }
 
