@@ -8,15 +8,18 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 
 // const fullConfig = resolveConfig(tailwindConfig)
 
-export function useCurrentBreakpoint() {
-  const [currentBreakpoint, setCurrentBreakpoint] = useState('')
+type Breakpoint = keyof (typeof defaultTheme)['screens']
+
+export function useCurrentBreakpoint(): Breakpoint {
+  const [breakpoint, setBreakpoint] = useState<Breakpoint>('sm')
 
   useEffect(() => {
     const handleResize = () => {
       const screenWidth = window.innerWidth
-      const breakpoints = defaultTheme.screens
-        ? Object.entries(defaultTheme.screens)
-        : []
+      const breakpoints = Object.entries(defaultTheme.screens) as [
+        Breakpoint,
+        string
+      ][]
 
       for (let i = breakpoints.length - 1; i >= 0; i--) {
         const [breakpoint, minWidth] = breakpoints[i]
@@ -24,8 +27,8 @@ export function useCurrentBreakpoint() {
         const convertedMinWidth = parseInt(minWidth, 10)
 
         if (screenWidth >= convertedMinWidth) {
-          setCurrentBreakpoint(breakpoint)
-          break
+          setBreakpoint(breakpoint)
+          return
         }
       }
     }
@@ -39,5 +42,5 @@ export function useCurrentBreakpoint() {
     }
   }, [])
 
-  return currentBreakpoint || 'sm' // Default breakpoint if none matches or during SSR
+  return breakpoint
 }
