@@ -3,6 +3,7 @@ import { cloneElement, useState } from 'react'
 import { Avatar, Button, Input, Text } from '@status-im/components'
 import { DropdownMenu } from '@status-im/components/src/dropdown-menu'
 import { DropdownIcon, SearchIcon } from '@status-im/icons'
+import Image from 'next/image'
 
 import { useCurrentBreakpoint } from '@/hooks/use-current-breakpoint'
 
@@ -110,7 +111,7 @@ const DropdownFilter = (props: Props) => {
           })}
           {filteredData.length === 0 && (
             <div className="flex flex-col items-center justify-center p-2 py-1">
-              <img
+              <Image
                 className="pb-3 invert"
                 alt="No results"
                 src={'/assets/filters/empty.png'}
