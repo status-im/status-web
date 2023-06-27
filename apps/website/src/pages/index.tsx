@@ -58,13 +58,9 @@ const HomePage: Page = () => {
               </Button>
             </div>
           </div>
-
-          {/* <FeatureSection
-            title={`Discover your \n community`}
-            description="Join self-sovereign decentralized communities and start chatting."
-          /> */}
         </div>
 
+        {/* COMMUNITIES */}
         <FeatureSection
           type="Communities"
           title="Discover your community"
@@ -132,6 +128,7 @@ const HomePage: Page = () => {
       </div>
 
       <Content>
+        {/* MESSENGER */}
         <FeatureSection
           type="Messenger"
           title="Chat privately with friends"
@@ -183,6 +180,8 @@ const HomePage: Page = () => {
           <div className="absolute -bottom-32 left-0 h-[676px] w-[676px] rounded-full bg-customisation-purple-50 opacity-10 blur-[250px]" />
           <div className="absolute right-[140px] top-0 h-[676px] w-[676px] -translate-y-1/2 rounded-full bg-customisation-purple-50 opacity-20 blur-[250px]" />
         </FeatureSection>
+
+        {/* WALLET */}
         <FeatureSection
           type="Wallet"
           title="The future is multi-chain"
@@ -218,6 +217,45 @@ const HomePage: Page = () => {
           ]}
         >
           <div className="absolute right-0 top-0 h-[676px] w-[676px] -translate-y-1/2 translate-x-1/2 rounded-full bg-customisation-yellow-50 opacity-20 blur-[250px]" />
+        </FeatureSection>
+
+        {/* DAPP BROWSER */}
+        <FeatureSection
+          type="Browser"
+          title="Explore dApps"
+          description="Interact trustlessly with Web3 dApps, DAOs, NFTs, DeFi and much more"
+          images={[
+            { src: walletImage1, alt: '', width: 334 },
+            // {src:walletImage2, alt: '', label:""},
+            {
+              src: walletImage3,
+              alt: '',
+              label:
+                'Fully self-custodial. Nobody can stop you using your tokens.',
+              align: 'bottom',
+              width: 334,
+              half: true,
+            },
+            {
+              src: walletImage3,
+              alt: '',
+              label: 'See how your total balances change over time, in fiat.',
+              align: 'bottom',
+              width: 334,
+              half: true,
+            },
+            {
+              src: walletImage4,
+              alt: '',
+              label:
+                'Send with automatic bridging. No more multi-chain hassle.',
+              align: 'bottom',
+              width: 380,
+            },
+          ]}
+        >
+          <div className="absolute bottom-0 right-1/2 h-[676px] w-[676px] translate-x-1/2 translate-y-1/2 rounded-full bg-customisation-magenta-50 opacity-10 blur-[250px]" />
+          <div className="absolute right-0 top-0 h-[676px] w-[676px] -translate-y-1/2 translate-x-1/2 rounded-full bg-customisation-magenta-50 opacity-10 blur-[250px]" />
         </FeatureSection>
 
         <div className="relative grid grid-cols-2 items-center gap-[140px] overflow-hidden">
@@ -321,7 +359,7 @@ type FeatureImage = {
 }
 
 type SectionProps = {
-  type: 'Communities' | 'Create Community' | 'Wallet' | 'Messenger'
+  type: 'Communities' | 'Create Community' | 'Wallet' | 'Messenger' | 'Browser'
   title: string
   description: string
   images: [FeatureImage, FeatureImage, FeatureImage, FeatureImage]
