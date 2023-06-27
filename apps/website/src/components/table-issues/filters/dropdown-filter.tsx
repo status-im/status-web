@@ -20,7 +20,7 @@ type Data = {
 type Props = {
   data: Data[]
   label: string
-  noPadding?: boolean
+  placeholder?: string
 }
 
 const isAvatar = (value: unknown): value is string => {
@@ -43,8 +43,8 @@ const RenderIcon = (props: Data) => {
   return cloneElement(props.avatar) || <></>
 }
 
-const FilterWithCheckboxes = (props: Props) => {
-  const { data, label, noPadding } = props
+const DropdownFilter = (props: Props) => {
+  const { data, label, placeholder } = props
 
   const [filterText, setFilterText] = useState('')
 
@@ -59,7 +59,7 @@ const FilterWithCheckboxes = (props: Props) => {
   const currentBreakpoint = useCurrentBreakpoint()
 
   return (
-    <div className={noPadding ? '' : 'pr-2'}>
+    <div>
       <DropdownMenu onOpenChange={() => setIsOpen(!isOpen)}>
         <Button
           size={32}
@@ -82,7 +82,7 @@ const FilterWithCheckboxes = (props: Props) => {
         >
           <div className="p-2 px-1">
             <Input
-              placeholder="Find epics"
+              placeholder={placeholder || 'Search'}
               icon={<SearchIcon size={20} />}
               size={32}
               value={filterText}
@@ -135,5 +135,5 @@ const FilterWithCheckboxes = (props: Props) => {
   )
 }
 
-export { FilterWithCheckboxes }
-export type { Props as FilterWithCheckboxesProps }
+export { DropdownFilter }
+export type { Props as DropdownFilterProps }

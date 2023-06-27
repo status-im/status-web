@@ -11,17 +11,15 @@ type Data = {
 
 type Props = {
   data: Data[]
-
-  noPadding?: boolean
 }
 
-const Sort = (props: Props) => {
-  const { data, noPadding } = props
+const DropdownSort = (props: Props) => {
+  const { data } = props
 
   const [selectedValue, setSelectedValue] = useState<number>()
 
   return (
-    <div className={noPadding ? '' : 'pr-2'}>
+    <div>
       <DropdownMenu>
         <div className="relative">
           <IconButton icon={<SortIcon size={20} />} variant="outline" />
@@ -69,5 +67,5 @@ const Sort = (props: Props) => {
   )
 }
 
-export { Sort }
-export type { Props as SortProps }
+export { DropdownSort }
+export type { Props as DropdownSortProps }

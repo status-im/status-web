@@ -6,10 +6,10 @@ import Link from 'next/link'
 
 import { useCurrentBreakpoint } from '@/hooks/use-current-breakpoint'
 
-import { FilterWithCheckboxes, Sort, Tabs } from './filters'
+import { DropdownFilter, DropdownSort, Tabs } from './filters'
 
-import type { FilterWithCheckboxesProps } from './filters/filter-with-checkboxes'
-import type { SortProps } from './filters/sort'
+import type { DropdownFilterProps } from './filters/dropdown-filter'
+import type { DropdownSortProps } from './filters/dropdown-sort'
 import type { TextInput } from 'react-native'
 
 const issues = [
@@ -55,7 +55,7 @@ const issues = [
   },
 ]
 
-const authors: FilterWithCheckboxesProps['data'] = [
+const authors: DropdownFilterProps['data'] = [
   {
     id: 4,
     name: 'marcelines',
@@ -78,7 +78,7 @@ const authors: FilterWithCheckboxesProps['data'] = [
   },
 ]
 
-const epics: FilterWithCheckboxesProps['data'] = [
+const epics: DropdownFilterProps['data'] = [
   {
     id: 4,
     name: 'E:ActivityCenter',
@@ -101,7 +101,7 @@ const epics: FilterWithCheckboxesProps['data'] = [
   },
 ]
 
-const labels: FilterWithCheckboxesProps['data'] = [
+const labels: DropdownFilterProps['data'] = [
   {
     id: 4,
     name: 'Mobile',
@@ -124,7 +124,7 @@ const labels: FilterWithCheckboxesProps['data'] = [
   },
 ]
 
-const assignees: FilterWithCheckboxesProps['data'] = [
+const assignees: DropdownFilterProps['data'] = [
   {
     id: 1,
     name: 'Unassigned',
@@ -152,7 +152,7 @@ const assignees: FilterWithCheckboxesProps['data'] = [
   },
 ]
 
-const repositories: FilterWithCheckboxesProps['data'] = [
+const repositories: DropdownFilterProps['data'] = [
   {
     id: 1,
     name: 'status-mobile',
@@ -191,7 +191,7 @@ const repositories: FilterWithCheckboxesProps['data'] = [
   },
 ]
 
-const sortOptions: SortProps['data'] = [
+const sortOptions: DropdownSortProps['data'] = [
   {
     id: 1,
     name: 'Default',
@@ -217,7 +217,6 @@ const sortOptions: SortProps['data'] = [
 const TableIssues = () => {
   const [issuesSearchText, setIssuesSearchText] = useState('')
   const inputRef = useRef<TextInput>(null)
-  const [isMinimized, setIsMinimized] = useState(true)
 
   const currentBreakpoint = useCurrentBreakpoint()
 
@@ -228,29 +227,51 @@ const TableIssues = () => {
           <Tabs />
           <div className="flex-1">
             <div className="flex items-center 2xl:justify-end">
-              <div className="flex w-full justify-between pr-2 pt-4 2xl:justify-end 2xl:pt-0">
-                <div className="flex">
-                  <div className="pr-2 transition-all">
+              <div className="flex w-full justify-between pt-4 2xl:justify-end 2xl:pt-0">
+                <div className="flex gap-2">
+                  <div className="transition-all">
                     <Input
                       placeholder="Find Author"
                       icon={<SearchIcon size={20} />}
                       size={32}
                       value={issuesSearchText}
                       onChangeText={setIssuesSearchText}
-                      onHandleMinimized={() => setIsMinimized(!isMinimized)}
-                      minimized={isMinimized}
+                      variant="retractable"
                       direction={currentBreakpoint === '2xl' ? 'rtl' : 'ltr'}
                       ref={inputRef}
                     />
                   </div>
 
-                  <FilterWithCheckboxes data={authors} label="Author" />
-                  <FilterWithCheckboxes data={epics} label="Epics" />
-                  <FilterWithCheckboxes data={labels} label="Labels" />
-                  <FilterWithCheckboxes data={assignees} label="Assignee" />
-                  <FilterWithCheckboxes data={repositories} label="Repos" />
+                  <DropdownFilter
+                    data={authors}
+                    label="Author"
+                    placeholder="Find author"
+                  />
+                  <DropdownFilter
+                    data={epics}
+                    label="Epics"
+                    placeholder="Find epic"
+                  />
+                  <DropdownFilter
+                    data={labels}
+                    label="Labels"
+                    placeholder="Find label"
+                  />
+                  <DropdownFilter
+                    data={assignees}
+                    label="Assignee"
+                    placeholder="Find assignee"
+                  />
+                  <DropdownFilter
+                    data={repositories}
+                    label="Repos"
+                    placeholder="Find repo"
+                  />
                 </div>
-                <Sort data={sortOptions} noPadding />
+
+                <div className="pl-2">
+                  <DropdownSort data={sortOptions} />
+                </div>
               </div>
             </div>
           </div>

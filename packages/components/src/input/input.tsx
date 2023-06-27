@@ -1,4 +1,4 @@
-import { cloneElement, forwardRef } from 'react'
+import { cloneElement, forwardRef, useState } from 'react'
 
 import { ClearIcon } from '@status-im/icons'
 import { setupReactNative, Stack, styled } from '@tamagui/core'
@@ -24,10 +24,9 @@ type Props = GetProps<typeof InputFrame> & {
   icon?: React.ReactElement
   label?: string
   onClear?: () => void
-  onHandleMinimized?: (isMinimized: boolean) => void
+  variant?: 'default' | 'retractable'
   size?: 40 | 32
   error?: boolean
-  minimized?: boolean
   direction?: 'ltr' | 'rtl'
 }
 
@@ -41,13 +40,16 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
     label,
     onClear,
     size = 40,
-    minimized,
     placeholder,
     value,
     direction = 'ltr',
-    onHandleMinimized,
+    variant = 'default',
     ...rest
   } = props
+
+  const [isMinimized, setIsMinimized] = useState(variant === 'retractable')
+
+  const isRetractable = variant === 'retractable'
 
   return (
     <Stack flexDirection={direction === 'ltr' ? 'row' : 'row-reverse'}>
@@ -68,13 +70,13 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
       <InputContainer
         size={size}
         error={error}
-        minimized={minimized}
+        minimized={isMinimized}
         onPress={event => {
           event.stopPropagation()
           event.preventDefault()
 
-          if (onHandleMinimized && minimized) {
-            onHandleMinimized(false)
+          if (isRetractable && isMinimized) {
+            setIsMinimized(false)
 
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore ref is not inferred correctly here
@@ -87,12 +89,12 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
         ) : null}
         <InputBase
           value={value}
-          placeholder={minimized && !value ? '' : placeholder}
+          placeholder={isMinimized && !value ? '' : placeholder}
           flex={1}
           ref={ref}
           onBlur={() => {
-            if (!value && onHandleMinimized && !minimized) {
-              onHandleMinimized?.(true)
+            if (!value && isRetractable && !isMinimized) {
+              setIsMinimized(true)
             }
           }}
           {...rest}
