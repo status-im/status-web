@@ -27,6 +27,10 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.5
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
