@@ -73,7 +73,7 @@ In your project,
 Install package:
 
 ```sh
-npm install @status-im/react
+pnpm install @status-im/react
 ```
 
 Import component:
