@@ -1,3 +1,6 @@
+import { Text } from '@status-im/components'
+import { ChevronRightIcon } from '@status-im/icons'
+
 import { Footer } from '@/components/footer/footer'
 import { FooterMobile } from '@/components/footer/footer-mobile'
 import { FloatingMenu } from '@/components/navigation/floating-menu'
@@ -37,3 +40,41 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     </>
   )
 }
+
+export const PageBody = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="mx-1 min-h-[900px] rounded-3xl bg-white-100">
+      {children}
+    </div>
+  )
+}
+
+type BreadcrumbsProps = {
+  action?: React.ReactNode
+}
+
+export const Breadcrumbs = (props: BreadcrumbsProps) => {
+  const { action = null } = props
+
+  return (
+    <div className="flex h-12 items-center justify-between border-b border-neutral-10 px-5">
+      <div className="flex gap-3">
+        <Text size={15} weight="medium">
+          Status Help
+        </Text>
+        <ChevronRightIcon size={20} />
+        <Text size={15} weight="medium">
+          Getting started
+        </Text>
+        <ChevronRightIcon size={20} />
+        <Text size={15} weight="medium">
+          Amazing document that will helps the user in the app
+        </Text>
+      </div>
+
+      {action}
+    </div>
+  )
+}
+
+// Breadcrumbs.Item = ({ children, href }) => {}

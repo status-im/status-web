@@ -1,7 +1,7 @@
 import { Text } from '@status-im/components'
 import { cva } from 'class-variance-authority'
 
-import { LINKS, SOCIALS } from '@/config/links'
+import { ROUTES, SOCIALS } from '@/config/routes'
 
 import { Logo } from '../logo'
 import { Dot } from './components/dot'
@@ -45,11 +45,11 @@ export const Footer = (props: Props) => {
         >
           <Logo />
         </div>
-        {Object.entries(LINKS).map(([title, links], index) => (
+        {Object.entries(ROUTES).map(([title, links], index) => (
           <Section
             key={title}
             title={title}
-            links={links}
+            routes={links}
             hasBorderLeft={index !== 3}
             hasBorderTop={hasBorderTop}
           />
