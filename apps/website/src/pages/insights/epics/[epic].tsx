@@ -65,7 +65,8 @@ const EpicsDetailPage: Page<Props> = props => {
           description={epic.description}
           fullscreen
         />
-
+      </div>
+      <div className="border-b border-neutral-10 px-10 py-6">
         <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
 
         <TableIssues />

@@ -2,34 +2,135 @@ import { useMemo } from 'react'
 
 import { Avatar, Button, Shadow, Tag, Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
 
-// import Image from 'next/image'
 import { formatDate } from '@/components/chart/utils/format-time'
 import { Link } from '@/components/link'
 import { AppLayout } from '@/layouts/app-layout'
 import { getPosts } from '@/lib/ghost'
 
 import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
-import type { GetStaticProps, InferGetStaticPropsType, Page } from 'next'
+import type {
+  GetServerSideProps,
+  InferGetServerSidePropsType,
+  Page,
+} from 'next'
 
-export const getStaticProps: GetStaticProps<{
+const FILTER_TAGS = [
+  {
+    id: '63b48c62fc2070000104be8c',
+    slug: 'news-and-announcements',
+    name: 'News & Announcements',
+    icon: (
+      <Image
+        src="/images/tags/news-and-announcements-20x20.png"
+        alt="Latest news on Products built by Status Network"
+        width={20}
+        height={20}
+        unoptimized
+      />
+    ),
+  },
+  {
+    id: '63b48c62fc2070000104bea2',
+    slug: 'product',
+    name: 'Product',
+    icon: (
+      <Image
+        src="/images/tags/product-20x20.png"
+        alt="Latest news on Products built by Status Network"
+        width={20}
+        height={20}
+        unoptimized
+      />
+    ),
+  },
+  {
+    id: '63b48c62fc2070000104be61',
+    slug: 'developers',
+    name: 'Developers',
+    icon: (
+      <Image
+        src="/images/tags/developers-20x20.png"
+        alt="Latest news on Products built by Status Network"
+        width={20}
+        height={20}
+        unoptimized
+      />
+    ),
+  },
+  {
+    id: '63b48c62fc2070000104bea4',
+    slug: 'privacy-security',
+    name: 'Privacy & Security',
+    icon: (
+      <Image
+        src="/images/tags/privacy-security-20x20.png"
+        alt="Latest news on Products built by Status Network"
+        width={20}
+        height={20}
+        unoptimized
+      />
+    ),
+  },
+  {
+    id: '63b48c62fc2070000104be60',
+    slug: 'dapps',
+    name: 'Dapps',
+    icon: (
+      <Image
+        src="/images/tags/dapps-20x20.png"
+        alt="Latest news on Products built by Status Network"
+        width={20}
+        height={20}
+        unoptimized
+      />
+    ),
+  },
+  {
+    id: '63b48c62fc2070000104be64',
+    slug: 'community',
+    name: 'Community',
+    icon: (
+      <Image
+        src="/images/tags/community-20x20.png"
+        alt="Latest news on Products built by Status Network"
+        width={20}
+        height={20}
+        unoptimized
+      />
+    ),
+  },
+]
+
+export const getServerSideProps: GetServerSideProps<{
   posts: PostOrPage[]
   meta: PostsOrPages['meta']
-}> = async () => {
-  const { posts, meta } = await getPosts()
+  tag?: string
+}> = async ({ query }) => {
+  const tag = query?.tag as string | undefined
+
+  const { posts, meta } = await getPosts({ tag })
 
   return {
     props: {
       posts,
       meta,
+      ...(tag && { tag }),
     },
   }
 }
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>
+type BlogPageProps = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const BlogPage: Page<Props> = props => {
-  const { posts, meta } = props
+const BlogPage: Page<BlogPageProps> = ({
+  posts: initialPosts,
+  meta,
+  tag: initialTag,
+}) => {
+  const router = useRouter()
+  const tag = (router.query.tag as string | undefined) ?? initialTag
 
   const {
     data,
@@ -41,40 +142,80 @@ const BlogPage: Page<Props> = props => {
     // status,
     // isFetched,
   } = useInfiniteQuery({
-    queryKey: ['posts'],
-    queryFn: async ({ pageParam: page }) => await getPosts({ page }),
+    refetchOnWindowFocus: false,
+    queryKey: ['posts', tag],
+    queryFn: async ({ pageParam: page, queryKey }) => {
+      const [, tag] = queryKey
+
+      const response = await getPosts({ page, tag })
+
+      return response
+    },
     getNextPageParam: ({ meta }) => meta.pagination.next,
-    initialData: { pages: [{ posts, meta }], pageParams: [1] },
-    staleTime: Infinity,
+    initialData: {
+      pages: [
+        {
+          posts: initialPosts,
+          meta,
+        },
+      ],
+      pageParams: [1],
+    },
   })
 
   const { highlightedPost, visiblePosts } = useMemo(() => {
-    const [highlightedPost, ...posts] = data!.pages.flatMap(page => page.posts)
-    const maxLength = posts.length - (posts.length % 3) // the number of posts should be divisible by 3
-    const visiblePosts = posts.slice(0, maxLength)
+    const [highlightedPost, ...restPosts] =
+      data?.pages.flatMap(page => page.posts) ?? []
+
+    const maxLength = restPosts.length - (restPosts.length % 3) // the number of posts should be divisible by 3
+    const visiblePosts = restPosts.slice(0, maxLength)
+
     return { highlightedPost, visiblePosts }
   }, [data])
 
+  // loading/skeleton if not complete
+
   return (
     <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
-      <div className="px-5">
+      <div className="overflow-x-hidden px-5">
         <div className="mx-auto max-w-[1184px] pb-24 pt-12 lg:pb-32 lg:pt-20">
-          <div className="mb-10 grid gap-2">
+          <div className=" grid gap-2">
             <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
               Blog.
             </h1>
             <Text size={19}>Long form articles, thoughts, and ideas.</Text>
           </div>
 
+          <div className="no-scrollbar mr-[-2rem] flex gap-2 overflow-x-scroll pb-12 pr-8 pt-10">
+            {FILTER_TAGS.map(filterTag => (
+              <div key={filterTag.id} className="shrink-0">
+                <Shadow className="rounded-[10px]">
+                  <Link
+                    href={{ query: { ...router.query, tag: filterTag.slug } }}
+                    className="flex h-[32px] items-center gap-2 rounded-[10px] border border-solid border-neutral-10 pl-2 pr-3 data-[active=true]:bg-neutral-10"
+                    data-active={filterTag.slug === tag}
+                    scroll={false}
+                  >
+                    {filterTag.icon}
+                    <Text size={15}>{filterTag.name}</Text>
+                  </Link>
+                </Shadow>
+              </div>
+            ))}
+          </div>
+
           <div>
             <div className="mb-[44px] xl:mb-12">
-              <HighlightedPostCard post={highlightedPost} />
+              {highlightedPost && (
+                <HighlightedPostCard post={highlightedPost} />
+              )}
             </div>
 
             <div className="grid auto-rows-[1fr] grid-cols-[repeat(auto-fill,minmax(350px,1fr))] gap-5">
-              {visiblePosts.map(post => (
-                <PostCard key={post.id} post={post} />
-              ))}
+              {visiblePosts &&
+                visiblePosts.map(post => (
+                  <PostCard key={post.id} post={post} />
+                ))}
             </div>
           </div>
 

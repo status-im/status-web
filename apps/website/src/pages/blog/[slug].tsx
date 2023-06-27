@@ -238,7 +238,7 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts, breadcrumbs }) => {
         </div>
       </div>
 
-      {relatedPosts.length && (
+      {relatedPosts.length > 0 && (
         <div className="border-t border-neutral-10 bg-neutral-5 px-5 pb-[64px] pt-12 lg:px-10">
           <div className="mb-6">
             <Text size={27} weight="semibold">

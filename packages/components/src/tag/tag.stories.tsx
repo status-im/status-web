@@ -42,7 +42,7 @@ export const Default: Story = {
           <Tag label="New tag" size={24} disabled selected />
           <Tag label="New tag" size={24} color="#FF7D46" />
 
-          <Tag label="New tag #7140FD" size={24} color="#BA34F5" />
+          <Tag label="New tag #BA34F5" size={24} color="#BA34F5" />
           <Tag label="New tag #7140FD" size={24} color="#7140FD" icon="🧙‍♂️" />
 
           <Tag
