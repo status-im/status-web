@@ -1,6 +1,6 @@
 import { Text } from '@status-im/components'
 import { PopupIcon } from '@status-im/icons'
-import { cva, cx } from 'class-variance-authority'
+import { cx } from 'class-variance-authority'
 import Image from 'next/image'
 
 import { type Illustration, illustrations } from '@/config/illustrations'
@@ -21,7 +21,6 @@ type Props = {
   imageAlt: string
   customNode?: React.ReactNode
   color: 'yellow' | 'turquoise' | 'purple' | 'none'
-  direction?: 'ltr' | 'rtl'
   reverse?: boolean
 }
 
@@ -37,34 +36,28 @@ const Section = (props: Props) => {
     secondaryDescription,
     secondaryTitle,
     secondaryExplanation,
-    direction = 'ltr',
-    reverse = direction === 'rtl',
+    reverse,
   } = props
-
-  const directionOrder = direction === 'ltr' ? 'order-0' : 'order-1'
 
   const illustration = illustrations[icon]
 
   return (
-    <div className="flex justify-center py-20">
+    <div className="justify-center px-5 py-12 lg:flex lg:px-0 lg:py-20">
       <div className="relative z-[3]">
         <div
           className={cx([
-            'flex items-center lg:gap-12 lg:px-[100px] xl:gap-[140px]',
-            reverse && 'flex-row-reverse',
+            'flex flex-col gap-12 lg:items-center xl:gap-[140px]',
+            reverse ? 'lg:flex-row' : 'lg:flex-row-reverse',
           ])}
         >
-          <div
-            className={`${directionOrder} flex max-w-[1504px] justify-center overflow-hidden rounded-[32px]`}
-          >
-            <ScreenshotImage image={image} alt={imageAlt} color={color} />
-          </div>
-
-          <div className="flex max-w-[462px] flex-col justify-start md:justify-center">
+          <div className="flex flex-col justify-start lg:max-w-[462px] lg:justify-center">
             <div className="flex flex-col">
-              <Image {...illustration} alt={illustration.alt} />
-
-              <div className="flex flex-col pt-4">
+              <Image
+                {...illustration}
+                alt={illustration.alt}
+                className="mb-4"
+              />
+              <div className="mb-5 flex flex-col lg:mb-16">
                 <Text size={27} weight="semibold">
                   {title}
                 </Text>
@@ -80,7 +73,7 @@ const Section = (props: Props) => {
                 </div>
               </div>
 
-              <div className="mt-16 flex flex-col rounded-[20px] border border-dashed border-neutral-80/20 p-4">
+              <div className="flex flex-col rounded-[20px] border border-dashed border-neutral-80/20 p-4">
                 <Text size={19} weight="semibold">
                   {secondaryTitle}
                 </Text>
@@ -100,6 +93,12 @@ const Section = (props: Props) => {
                 )}
               </div>
             </div>
+          </div>
+
+          <div
+            className={`flex max-w-[1504px] justify-center overflow-hidden rounded-[32px]`}
+          >
+            <ScreenshotImage image={image} alt={imageAlt} color={color} />
           </div>
         </div>
       </div>

@@ -38,7 +38,7 @@ const CommunitiesPage: Page = () => {
         description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation."
       />
 
-      <div className="pb-20">
+      <div className="pb-12 lg:pb-20">
         <Section
           icon="skull"
           title="Token gated channels & communities"

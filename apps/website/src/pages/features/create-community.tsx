@@ -112,12 +112,7 @@ const CreateCommunityPage: Page = () => {
             <Text size={27} weight="semibold">
               {feature.title}
             </Text>
-            <Text
-              size={19}
-              //  color="$white-80"
-            >
-              {feature.description}
-            </Text>
+            <Text size={19}>{feature.description}</Text>
           </div>
         ))}
       </div>

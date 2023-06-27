@@ -37,7 +37,7 @@ const MessengerPage: Page = () => {
           images={[heroImage1, heroImage2, heroImage3, heroImage4]}
           maxWidth={574}
         />
-        <div className="pb-20">
+        <div className="lg:pb-20">
           <VideoSection
             title="Fully Decentralized Messaging"
             description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation."

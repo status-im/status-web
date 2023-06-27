@@ -35,7 +35,7 @@ const WalletPage: Page = () => {
         />
         <VideoSection />
 
-        <div className="pb-20">
+        <div className="pb-12 lg:pb-20">
           <ParalaxCircle
             color="bg-customisation-yellow-50"
             right={-100}
@@ -95,7 +95,7 @@ const WalletPage: Page = () => {
 
         <ComparisionSection />
 
-        <div className="relative z-10 rounded-t-[48px] border-t border-neutral-10 bg-white-100 py-0 pt-20 mix-blend-normal shadow-[0_-2px_20px_0px_rgba(9,16,28,0.04)]">
+        <div className="relative z-10 rounded-t-[48px] border-t border-neutral-10 bg-white-100 mix-blend-normal shadow-[0_-2px_20px_0px_rgba(9,16,28,0.04)] lg:pt-20">
           <Section
             icon="rubik"
             color="yellow"
