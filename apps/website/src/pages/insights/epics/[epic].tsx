@@ -3,9 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 
-import { Breadcrumbs } from '@/components'
-import { EpicOverview } from '@/components/epic-overview'
-import { TableIssues } from '@/components/table-issues'
+import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
 import { api } from '@/lib/graphql'
@@ -132,13 +130,15 @@ const EpicsDetailPage: Page<Props> = props => {
       <div className="border-b border-neutral-10 px-5 py-3">
         <Breadcrumbs />
       </div>
-      <div className="px-10 py-6">
+      <div className="border-b border-neutral-10 px-10 py-6">
         <EpicOverview
           title="Communities protocol"
           description="Detecting keycard reader removal for the beginning of each flow"
           fullscreen
           burnup={burnup}
         />
+      </div>
+      <div className="border-b border-neutral-10 px-10 py-6">
         <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
         <TableIssues
           data={issues}

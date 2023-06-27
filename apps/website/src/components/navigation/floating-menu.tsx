@@ -55,7 +55,7 @@ const FloatingMenu = (): JSX.Element => {
         }}
         className={cx([
           'fixed left-1/2 top-1 z-10 flex -translate-x-1/2 flex-col items-center justify-between p-2 pb-0 lg:hidden',
-          'bg-blur-neutral-80/80 border-neutral-80/5 rounded-2xl border backdrop-blur-md',
+          'rounded-2xl border border-neutral-80/5 bg-blur-neutral-80/80 backdrop-blur-md',
           ' w-[calc(100%-24px)]',
           ' opacity-0 transition-opacity data-[visible=true]:opacity-100',
           'z-10',
@@ -69,8 +69,8 @@ const FloatingMenu = (): JSX.Element => {
         }}
         className={cx([
           'fixed left-1/2 top-5 z-10 w-max min-w-[746px] -translate-x-1/2 overflow-hidden',
-          'bg-blur-neutral-80/80 border-neutral-80/5 rounded-2xl border backdrop-blur-md',
-          'md-lg:block hidden',
+          'rounded-2xl border border-neutral-80/5 bg-blur-neutral-80/80 backdrop-blur-md',
+          'hidden md-lg:block',
         ])}
       >
         <FloatingDesktop visible={visible} />

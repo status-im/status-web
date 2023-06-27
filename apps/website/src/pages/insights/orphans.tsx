@@ -1,6 +1,6 @@
 import { Text } from '@status-im/components'
 
-import { TableIssues } from '@/components/table-issues'
+import { TableIssues } from '@/components'
 import { InsightsLayout } from '@/layouts/insights-layout'
 import { api } from '@/lib/graphql'
 import { useGetOrphansQuery } from '@/lib/graphql/generated/hooks'
