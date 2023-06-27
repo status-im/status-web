@@ -117,7 +117,7 @@ const GridHero = (props: Props) => {
   return (
     <div className="relative z-[2] flex w-full max-w-[1504px] justify-start overflow-x-auto px-5 sm:justify-center sm:px-10">
       <div className="flex min-w-[712px] flex-row gap-3 sm:min-w-fit sm:flex-col sm:gap-5 lg:flex-row">
-        <div className="flex snap-x snap-mandatory flex-row gap-3 sm:gap-5 ">
+        <div className="flex flex-row gap-3 sm:gap-5">
           <div className={biggerCardClassNames({ color })}>
             <Image
               src={cardOne.image}
