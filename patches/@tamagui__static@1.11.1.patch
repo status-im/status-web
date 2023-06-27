@@ -1,7 +1,7 @@
-diff --git a/node_modules/@tamagui/static/dist/cjs/extractor/bundle.js b/node_modules/@tamagui/static/dist/cjs/extractor/bundle.js
-index 0709a69..5138aa5 100644
---- a/node_modules/@tamagui/static/dist/cjs/extractor/bundle.js
-+++ b/node_modules/@tamagui/static/dist/cjs/extractor/bundle.js
+diff --git a/dist/cjs/extractor/bundle.js b/dist/cjs/extractor/bundle.js
+index 0709a6900240a1889b79bf28af02040ebe9a2522..5138aa55fab81179cb18732cf354d1e173973583 100644
+--- a/dist/cjs/extractor/bundle.js
++++ b/dist/cjs/extractor/bundle.js
 @@ -87,7 +87,18 @@ function getESBuildConfig({ entryPoints, resolvePlatformSpecificEntries, ...opti
          ...aliases
        })
