@@ -2,7 +2,7 @@ import { Button, Counter, Tag, Text } from '@status-im/components'
 
 import { useParalax } from '@/hooks/use-parallax'
 
-import { ParalaxCircle } from './parallax-circle'
+import { ParalaxCircle } from '../parallax-circle'
 
 const ComparisionSection = () => {
   const { top, bottom } = useParalax({
@@ -60,7 +60,7 @@ const ComparisionSection = () => {
             ))}
           </div>
         </div>
-        <ParalaxCircle initialTop={-600} />
+        <ParalaxCircle color="bg-customisation-yellow-50" top={-600} />
       </div>
       <p
         style={{

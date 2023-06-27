@@ -20,6 +20,7 @@ import { cx } from 'class-variance-authority'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
+import { ParalaxCircle } from '@/components/parallax-circle'
 import { LINKS } from '@/config/links'
 import { stickers } from '@/config/stickers'
 import { AppLayout, Content } from '@/layouts/app-layout'
@@ -33,7 +34,7 @@ const HomePage: Page = () => {
   return (
     <>
       <Content>
-        <div className="p-40">
+        <div className="relative overflow-hidden border-b border-dashed border-neutral-30 p-40">
           <div className="grid gap-8">
             <div className="grid max-w-[582px] gap-6">
               <h1 className="text-88">
@@ -58,6 +59,12 @@ const HomePage: Page = () => {
               </Button>
             </div>
           </div>
+
+          <ParalaxCircle
+            color="bg-customisation-blue-50"
+            bottom={-194}
+            left={-106}
+          />
         </div>
 
         {/* COMMUNITIES */}
@@ -94,7 +101,11 @@ const HomePage: Page = () => {
             { src: communitiesImage4, alt: '', label: '', width: 334 },
           ]}
         >
-          <div className="absolute right-[90px] top--[110px] h-[676px] w-[676px] rounded-full bg-customisation-turquoise-50 opacity-10 blur-[250px]" />
+          <ParalaxCircle
+            color="bg-customisation-turquoise-50"
+            right={90}
+            top={-110}
+          />
         </FeatureSection>
       </Content>
 
@@ -177,8 +188,16 @@ const HomePage: Page = () => {
             alt=""
             className="absolute right-[351px] top-[485px]"
           />
-          <div className="absolute -bottom-32 left-0 h-[676px] w-[676px] rounded-full bg-customisation-purple-50 opacity-10 blur-[250px]" />
-          <div className="absolute right-[140px] top-0 h-[676px] w-[676px] -translate-y-1/2 rounded-full bg-customisation-purple-50 opacity-20 blur-[250px]" />
+          <ParalaxCircle
+            color="bg-customisation-purple-50"
+            bottom={-32}
+            left={0}
+          />
+          <ParalaxCircle
+            color="bg-customisation-purple-50"
+            right={140}
+            top={-338}
+          />
         </FeatureSection>
 
         {/* WALLET */}
@@ -216,7 +235,11 @@ const HomePage: Page = () => {
             },
           ]}
         >
-          <div className="absolute right-0 top-0 h-[676px] w-[676px] -translate-y-1/2 translate-x-1/2 rounded-full bg-customisation-yellow-50 opacity-20 blur-[250px]" />
+          <ParalaxCircle
+            color="bg-customisation-yellow-50"
+            top={-338}
+            right={338}
+          />
         </FeatureSection>
 
         {/* DAPP BROWSER */}
@@ -254,8 +277,14 @@ const HomePage: Page = () => {
             },
           ]}
         >
-          <div className="absolute bottom-0 right-1/2 h-[676px] w-[676px] translate-x-1/2 translate-y-1/2 rounded-full bg-customisation-magenta-50 opacity-10 blur-[250px]" />
-          <div className="absolute right-0 top-0 h-[676px] w-[676px] -translate-y-1/2 translate-x-1/2 rounded-full bg-customisation-magenta-50 opacity-10 blur-[250px]" />
+          <ParalaxCircle
+            color="bg-customisation-magenta-50"
+            className="bottom-0 right-1/2  translate-x-1/2 translate-y-1/2"
+          />
+          <ParalaxCircle
+            color="bg-customisation-magenta-50"
+            className="right-0 top-0  -translate-y-1/2 translate-x-1/2"
+          />
         </FeatureSection>
 
         <div className="relative grid grid-cols-2 items-center gap-[140px] overflow-hidden">
@@ -273,7 +302,10 @@ const HomePage: Page = () => {
             <Button variant="outline">Learn More</Button>
           </div>
 
-          <div className="absolute bottom-0 left-1/3  h-[676px] w-[676px] translate-y-1/2 rounded-full bg-customisation-army-50 opacity-10 blur-[250px]" />
+          <ParalaxCircle
+            color="bg-customisation-army-50"
+            className="bottom-0 left-1/3   translate-y-1/2"
+          />
         </div>
 
         <div className="relative border-t border-dashed border-neutral-30">

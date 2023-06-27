@@ -11,11 +11,10 @@ import sectionImage5 from 'public/assets/wallet/section-05.png'
 
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
+import { ParalaxCircle } from '@/components/parallax-circle'
 import {
   ComparisionSection,
   HandsSection,
-  // HeroSection,
-  ParalaxCircle,
   VideoSection,
 } from '@/components/wallet'
 import { AppLayout, Content } from '@/layouts/app-layout'
@@ -34,11 +33,14 @@ const WalletPage: Page = () => {
           color="yellow"
           maxWidth={700}
         />
-        {/* <HeroSection /> */}
         <VideoSection />
 
         <div className="pb-20">
-          <ParalaxCircle initialRight={-100} initialTop={-100} />
+          <ParalaxCircle
+            color="bg-customisation-yellow-50"
+            right={-100}
+            top={-100}
+          />
           <Section
             icon="skull"
             color="yellow"
@@ -84,7 +86,11 @@ const WalletPage: Page = () => {
             secondaryDescription="Gas limit, max base fee, max priority fee, input data and nounce value for every transaction in each transaction bundle. If you really want to..."
             secondaryTitle="Pro user? You can edit:"
           />
-          <ParalaxCircle initialRight={-200} initialTop={-300} />
+          <ParalaxCircle
+            color="bg-customisation-yellow-50"
+            right={-200}
+            top={-300}
+          />
         </div>
 
         <ComparisionSection />
