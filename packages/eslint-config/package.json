@@ -1,5 +1,5 @@
 {
-  "name": "@status-im/eslint-config",
+  "name": "@felicio/eslint-config",
   "version": "0.1.0",
   "main": "index.js",
   "exports": {
