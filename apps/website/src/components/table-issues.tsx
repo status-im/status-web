@@ -1,7 +1,4 @@
-import { useEffect } from 'react'
-
-import { Avatar, Tag, Text } from '@status-im/components'
-import { useQueryClient } from '@tanstack/react-query'
+import { Avatar, Skeleton, Tag, Text } from '@status-im/components'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 
@@ -33,25 +30,12 @@ function isIssues(
 }
 
 export const TableIssues = (props: Props) => {
-  const { data, count } = props
+  const { data, count, isLoading } = props
 
   const issues = data || []
 
-  const queryClient = useQueryClient()
-
-  useEffect(() => {
-    return () => {
-      queryClient.invalidateQueries(['getIssuesByEpic'])
-    }
-  }, [queryClient])
-
   return (
-    <div
-      style={{
-        opacity: props.isLoading ? 0.5 : 1,
-      }}
-      className="overflow-hidden rounded-2xl border border-neutral-10 transition-opacity"
-    >
+    <div className="mb-8 overflow-hidden rounded-2xl border border-neutral-10 transition-opacity">
       <div className="border-b border-neutral-10 bg-neutral-5 p-3">
         <Text size={15} weight="medium">
           {count?.open || 0} Open
@@ -77,8 +61,10 @@ export const TableIssues = (props: Props) => {
                 </Text>
                 <Text size={13} color="$neutral-50">
                   #{issue.issue_number} •{' '}
-                  {formatDistanceToNow(new Date(issue.created_at))} ago by{' '}
-                  {issue.author}
+                  {formatDistanceToNow(new Date(issue.created_at), {
+                    addSuffix: true,
+                  })}{' '}
+                  by {issue.author}
                 </Text>
               </div>
 
@@ -90,18 +76,23 @@ export const TableIssues = (props: Props) => {
                     color={`#${issue.epic_color}` || '$primary'}
                   />
                 </div>
-                <Tag size={24} label="9435" />
                 <Avatar type="user" size={24} name={issue.author || ''} />
               </div>
             </Link>
           ))}
+        {isLoading && (
+          <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex h-10 grow flex-col justify-between">
+              <Skeleton width={340} height={18} />
+              <Skeleton width={200} height={12} />
+            </div>
+            <div className="flex flex-auto flex-row justify-end gap-2">
+              <Skeleton width={85} height={24} />
+              <Skeleton width={24} height={24} />
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* <div className="p-3">
-        <Button size={40} variant="outline">
-          Show more 10
-        </Button>
-      </div> */}
     </div>
   )
 }

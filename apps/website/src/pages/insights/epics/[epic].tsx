@@ -42,7 +42,7 @@ const GET_ISSUES_BY_EPIC = /* GraphQL */ `
   query getIssuesByEpic($epicName: String!, $limit: Int!, $offset: Int!) {
     gh_epic_issues(
       where: { epic_name: { _eq: $epicName } }
-      order_by: { created_at: asc }
+      order_by: { created_at: desc }
       limit: $limit
       offset: $offset
     ) {
@@ -84,37 +84,31 @@ const EpicsDetailPage: Page<Props> = props => {
 
   const { epic: epicName } = router.query
 
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-  } = useInfiniteQuery(
-    ['getIssuesByEpic', epicName],
-    async ({ pageParam = 0 }) => {
-      const result = await api<
-        GetIssuesByEpicQuery,
-        GetIssuesByEpicQueryVariables
-      >(GET_ISSUES_BY_EPIC, {
-        epicName: epicName as string,
-        limit: LIMIT,
-        offset: pageParam,
-      })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery(
+      ['getIssuesByEpic', epicName],
+      async ({ pageParam = 0 }) => {
+        const result = await api<
+          GetIssuesByEpicQuery,
+          GetIssuesByEpicQueryVariables
+        >(GET_ISSUES_BY_EPIC, {
+          epicName: epicName as string,
+          limit: LIMIT,
+          offset: pageParam,
+        })
 
-      return result?.gh_epic_issues || []
-    },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (lastPage.length < LIMIT) {
-          return undefined
-        }
-
-        return pages.length * LIMIT
+        return result?.gh_epic_issues || []
       },
-    }
-  )
+      {
+        getNextPageParam: (lastPage, pages) => {
+          if (lastPage.length < LIMIT) {
+            return undefined
+          }
+
+          return pages.length * LIMIT
+        },
+      }
+    )
 
   const burnup = props.burnup || []
 
@@ -145,20 +139,13 @@ const EpicsDetailPage: Page<Props> = props => {
           fullscreen
           burnup={burnup}
         />
-
         <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
-
-        <TableIssues data={issues} count={props.count} isLoading={isLoading} />
-        <div ref={endOfPageRef}>
-          <div>
-            {isFetchingNextPage
-              ? 'Loading more...'
-              : hasNextPage
-              ? 'Load More'
-              : 'Nothing more to load'}
-          </div>
-        </div>
-        <div>{isFetching && !isFetchingNextPage ? 'Fetching...' : null}</div>
+        <TableIssues
+          data={issues}
+          count={props.count}
+          isLoading={isFetchingNextPage}
+        />
+        <div ref={endOfPageRef} />
       </div>
     </div>
   )

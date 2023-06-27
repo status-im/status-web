@@ -5,6 +5,38 @@ import { createFetcher } from '../api'
 import type * as Types from './operations'
 import type { UseQueryOptions } from '@tanstack/react-query'
 
+export const GetEpicMenuLinksDocument = `
+    query getEpicMenuLinks {
+  gh_epics(where: {status: {_eq: "In Progress"}}) {
+    epic_name
+    status
+  }
+}
+    `
+export const useGetEpicMenuLinksQuery = <
+  TData = Types.GetEpicMenuLinksQuery,
+  TError = GraphqlApiError
+>(
+  variables?: Types.GetEpicMenuLinksQueryVariables,
+  options?: UseQueryOptions<Types.GetEpicMenuLinksQuery, TError, TData>
+) =>
+  useQuery<Types.GetEpicMenuLinksQuery, TError, TData>(
+    variables === undefined
+      ? ['getEpicMenuLinks']
+      : ['getEpicMenuLinks', variables],
+    createFetcher<
+      Types.GetEpicMenuLinksQuery,
+      Types.GetEpicMenuLinksQueryVariables
+    >(GetEpicMenuLinksDocument, variables),
+    options
+  )
+
+useGetEpicMenuLinksQuery.getKey = (
+  variables?: Types.GetEpicMenuLinksQueryVariables
+) =>
+  variables === undefined
+    ? ['getEpicMenuLinks']
+    : ['getEpicMenuLinks', variables]
 export const GetBurnupDocument = `
     query getBurnup($epicName: String!) {
   gh_burnup(where: {epic_name: {_eq: $epicName}}, order_by: {date_field: asc}) {
@@ -43,7 +75,7 @@ export const GetIssuesByEpicDocument = `
     query getIssuesByEpic($epicName: String!, $limit: Int!, $offset: Int!) {
   gh_epic_issues(
     where: {epic_name: {_eq: $epicName}}
-    order_by: {created_at: asc}
+    order_by: {created_at: desc}
     limit: $limit
     offset: $offset
   ) {

@@ -1,16 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
-
-import { fetchQueryFromHasura } from '@/pages/api/hasura'
+import { useGetEpicMenuLinksQuery } from '@/lib/graphql/generated/hooks'
 
 import { SideBar } from '../components'
 import { AppLayout } from './app-layout'
 
 import type { ReactNode } from 'react'
 
-const QUERY = `
+// TODO: find away to avoid export this query because of the warning of const not being used
+export const GET_EPIC_LINKS = /* GraphQL */ `
   query getEpicMenuLinks {
-    gh_epics {
+    gh_epics(where: { status: { _eq: "In Progress" } }) {
       epic_name
+      status
     }
   }
 `
@@ -30,20 +30,13 @@ interface InsightsLayoutProps {
   children: ReactNode
 }
 
-type Epic = {
-  epic_name: string
-}
-
 export const InsightsLayout: React.FC<InsightsLayoutProps> = ({ children }) => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['getEpicMenuLinks'], // Add repository and epicName to queryKey
-    queryFn: () => fetchQueryFromHasura(QUERY), // Pass repository and epicName to getQuery function
-  })
+  const { data, isLoading } = useGetEpicMenuLinksQuery()
 
   const epicLinks =
-    data?.data?.gh_epics.map((epic: Epic) => {
+    data?.gh_epics.map(epic => {
       return {
-        label: epic.epic_name,
+        label: epic.epic_name || '',
         href: `/insights/epics/${epic.epic_name}`,
       }
     }) || []

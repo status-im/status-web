@@ -1,5 +1,18 @@
 import type * as Types from './schemas'
 
+export type GetEpicMenuLinksQueryVariables = Types.Exact<{
+  [key: string]: never
+}>
+
+export type GetEpicMenuLinksQuery = {
+  __typename?: 'query_root'
+  gh_epics: Array<{
+    __typename?: 'gh_epics'
+    epic_name?: string | null
+    status?: string | null
+  }>
+}
+
 export type GetBurnupQueryVariables = Types.Exact<{
   epicName: Types.Scalars['String']['input']
 }>
