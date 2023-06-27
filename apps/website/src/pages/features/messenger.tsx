@@ -20,6 +20,7 @@ import Image from 'next/image'
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { SectionLarge } from '@/components/section-large'
+import { VideoSection } from '@/components/video-section'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
@@ -36,16 +37,17 @@ const MessengerPage: Page = () => {
           images={[heroImage1, heroImage2, heroImage3, heroImage4]}
           maxWidth={574}
         />
-        <div className="overflow-hidden pt-16 lg:pt-32">
-          {/* Fully Decentralized Messaging */}
-          {/* Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation. */}
-          {/* <VideoSection /> */}
+        <div className="pb-20">
+          <VideoSection
+            title="Fully Decentralized Messaging"
+            description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation."
+          />
 
           <Section
             color="purple"
             icon="skull"
             title="Private 1:1 messaging"
-            description="E2E encrypted with perfect forward secrecy and metadata privacy.  "
+            description="E2E encrypted with perfect forward secrecy and metadata privacy."
             image={sectionImage1}
             imageAlt="wallet-2"
             secondaryTitle="Communicate pseudonymously"
@@ -54,12 +56,12 @@ const MessengerPage: Page = () => {
           <Section
             color="purple"
             icon="pizza"
-            title="Private 1:1 messaging"
-            description="E2E encrypted with perfect forward secrecy and metadata privacy.  "
+            title="Unstoppable group chats"
+            description="Chat with friends safely, knowing the conversation doesn’t leave the group"
             image={sectionImage2}
             imageAlt="wallet-5"
-            secondaryDescription="Status automatically calculates the cheapest way of moving tokens from A to B, considering: gas prices, chains your tokens are on, chains the recipient uses, and bridge costs. All in real time."
-            secondaryTitle="Cost efficient"
+            secondaryTitle="With up to 20 people in each group chat"
+            secondaryDescription="Some other platforms like Discord only let you create group chats with a maximum of 10 people. Status lets you create 20 person chats today and potentially even larger group chats tomorrow!"
             reverse
           />
 

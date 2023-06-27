@@ -16,6 +16,7 @@ import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
 import { SectionLarge } from '@/components/section-large'
+import { VideoSection } from '@/components/video-section'
 import { illustrations } from '@/config/illustrations'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
@@ -93,10 +94,10 @@ const CreateCommunityPage: Page = () => {
         maxWidth={942}
       />
 
-      {/* <HeroSection /> */}
-      {/* Decentralized. Permissionless. Free. */}
-      {/* By using Status, your community can regain control of it’s destiny and data. */}
-      {/* <VideoSection /> */}
+      <VideoSection
+        title="Decentralized. Permissionless. Free."
+        description="By using Status, your community can regain control of it’s destiny and data."
+      />
 
       <div className="m-auto grid max-w-[1083px] grid-cols-3 gap-20 py-40">
         {featureList.map(feature => (
@@ -187,29 +188,31 @@ const CreateCommunityPage: Page = () => {
 
       {/* FULL PAGE SCREENSHOT */}
 
-      <Section
-        color="turquoise"
-        icon="ufo"
-        title="Make your community discoverable"
-        description="Propose your community for inclusion in the ‘community directory’ that lets Status users discover communities."
-        secondaryTitle="It’s up to SNT hodlers "
-        secondaryDescription="The directory is curated by an autonomous dApp where SNT hodlers vote. So Status doesn’t have any control over which communities are featured."
-        // todo explanation
-        image={sectionImage1}
-        imageAlt="wallet-2"
-      />
-      <Section
-        color="turquoise"
-        icon="cog"
-        title="Import from Discord"
-        description="Does your community have an existing Discord server? All message history can be imported into Status."
-        secondaryTitle="Don’t lose those dank memes"
-        secondaryDescription="When your community makes the switch to Status, no message from it’s old Discord is lost. So your community’s dank memes are safe. 😎"
-        // TODO: explanation
-        image={sectionImage2}
-        imageAlt="wallet-5"
-        reverse
-      />
+      <div className="pb-20">
+        <Section
+          color="turquoise"
+          icon="ufo"
+          title="Make your community discoverable"
+          explanation="TODO"
+          description="Propose your community for inclusion in the ‘community directory’ that lets Status users discover communities."
+          secondaryTitle="It’s up to SNT hodlers "
+          secondaryDescription="The directory is curated by an autonomous dApp where SNT hodlers vote. So Status doesn’t have any control over which communities are featured."
+          image={sectionImage1}
+          imageAlt="wallet-2"
+        />
+        <Section
+          color="turquoise"
+          icon="cog"
+          title="Import from Discord"
+          explanation="TODO"
+          description="Does your community have an existing Discord server? All message history can be imported into Status."
+          secondaryTitle="Don’t lose those dank memes"
+          secondaryDescription="When your community makes the switch to Status, no message from it’s old Discord is lost. So your community’s dank memes are safe. 😎"
+          image={sectionImage2}
+          imageAlt="wallet-5"
+          reverse
+        />
+      </div>
     </Content>
   )
 }

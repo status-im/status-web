@@ -16,6 +16,7 @@ import Image from 'next/image'
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
+import { VideoSection } from '@/components/video-section'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
@@ -32,32 +33,35 @@ const CommunitiesPage: Page = () => {
         maxWidth={702}
       />
 
-      {/* title="Fully Decentralized Communities" */}
-      {/* description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation." */}
-      {/* <VideoSection /> */}
-
-      <Section
-        icon="skull"
-        title="Token gated channels & communities"
-        description="Access exclusive community spaces and content. Controlled access plus moderation for high signal to noise."
-        secondaryTitle="Become eligible for airdrops"
-        secondaryDescription="Every Status Community can create their own tokens and optionally airdrop tokens to their members.  Of course of doing an airdrop or not is enterally the individual choice of each community"
-        image={sectionImage1}
-        imageAlt="wallet-5"
-        color="turquoise"
+      <VideoSection
+        title="Fully Decentralized Communities"
+        description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation."
       />
 
-      <Section
-        icon="skull"
-        title="DeFi, DAO and NFT communities"
-        description="Status Communities is built around tokenised functionality, perfect for blockchain enthusiast communities."
-        secondaryTitle="Every community sets its own rules"
-        secondaryDescription="Anybody can create a community, which is it’s own self-sovereign space.  This means that what each community does is enterally up to them.  Join the ones you like, leave the ones you don’t."
-        reverse
-        image={sectionImage2}
-        imageAlt="wallet-5"
-        color="turquoise"
-      />
+      <div className="pb-20">
+        <Section
+          icon="skull"
+          title="Token gated channels & communities"
+          description="Access exclusive community spaces and content. Controlled access plus moderation for high signal to noise."
+          secondaryTitle="Become eligible for airdrops"
+          secondaryDescription="Every Status Community can create their own tokens and optionally airdrop tokens to their members.  Of course of doing an airdrop or not is enterally the individual choice of each community"
+          image={sectionImage1}
+          imageAlt="wallet-5"
+          color="turquoise"
+        />
+
+        <Section
+          icon="skull"
+          title="DeFi, DAO and NFT communities"
+          description="Status Communities is built around tokenised functionality, perfect for blockchain enthusiast communities."
+          secondaryTitle="Every community sets its own rules"
+          secondaryDescription="Anybody can create a community, which is it’s own self-sovereign space.  This means that what each community does is enterally up to them.  Join the ones you like, leave the ones you don’t."
+          reverse
+          image={sectionImage2}
+          imageAlt="wallet-5"
+          color="turquoise"
+        />
+      </div>
 
       <div className="pb-60 pt-40">
         <div className="grid max-w-[475px] gap-4 pb-40">

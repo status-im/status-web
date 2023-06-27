@@ -36,7 +36,8 @@ const WalletPage: Page = () => {
         />
         {/* <HeroSection /> */}
         <VideoSection />
-        <div className="relative pt-0 md:pt-[220px]">
+
+        <div className="pb-20">
           <ParalaxCircle initialRight={-100} initialTop={-100} />
           <Section
             icon="skull"
@@ -47,10 +48,8 @@ const WalletPage: Page = () => {
             imageAlt="wallet-2"
             secondaryDescription=" You can treat it like other wallets by selecting individual chains manually. But once you’ve tried the Status ‘all chains, always’ way of doing things, you won’t want to go back."
             secondaryTitle=" Can be used as ‘single chain at a time’ wallet"
-            information="This has some information so it will show the icon to open the dialog"
+            explanation="This has some information so it will show the icon to open the dialog"
           />
-        </div>
-        <div className="relative pt-24 md:pt-[160px]">
           <Section
             icon="pizza"
             color="yellow"
@@ -75,8 +74,6 @@ const WalletPage: Page = () => {
               </div>
             }
           />
-        </div>
-        <div className="relative py-0 md:py-[160px]">
           <Section
             icon="duck"
             color="yellow"
@@ -92,32 +89,34 @@ const WalletPage: Page = () => {
 
         <ComparisionSection />
 
-        <div className="relative rounded-[48px] border-t border-neutral-10 bg-white-100 py-0 mix-blend-normal shadow-[0_-2px_20px_rgba(9,16,28,0.04)] md:py-[160px]">
+        <div className="relative z-10 rounded-t-[48px] border-t border-neutral-10 bg-white-100 py-0 pt-20 mix-blend-normal shadow-[0_-2px_20px_0px_rgba(9,16,28,0.04)]">
           <Section
             icon="rubik"
             color="yellow"
             title="New address format"
             description="A way for wallets to automatically signal which chains they can receive funds on. So you don’t have to."
+            explanation="TODO"
             image={sectionImage4}
             imageAlt="wallet-7"
             secondaryDescription="Status is working with other wallets to ensure EIP-3770 with multiple chain shortName prefixes becomes the new ethereum address standard."
             secondaryTitle="On the path to adoption"
             reverse
           />
-          <div className="relative pt-0 md:pt-[160px]">
-            <Section
-              icon="megaphone"
-              color="yellow"
-              title="Total balance graphs"
-              description="Who doesn’t want to see how their ‘crypto portfolio number’ has gone up or down over time?"
-              image={sectionImage5}
-              imageAlt="wallet-8"
-              secondaryDescription="Everything is taken into account: fluctuations in fiat exchange rates, daily valuation updates of every crypto asset you hodl, and how your balance changes when tokens are sent/received"
-              secondaryTitle="Graphs that do maths"
-            />
-          </div>
+          <Section
+            icon="megaphone"
+            color="yellow"
+            title="Total balance graphs"
+            description="Who doesn’t want to see how their ‘crypto portfolio number’ has gone up or down over time?"
+            image={sectionImage5}
+            imageAlt="wallet-8"
+            secondaryDescription="Everything is taken into account: fluctuations in fiat exchange rates, daily valuation updates of every crypto asset you hodl, and how your balance changes when tokens are sent/received"
+            secondaryTitle="Graphs that do maths"
+            secondaryExplanation="TODO"
+          />
         </div>
-        <HandsSection />
+        <div className="relative z-20 bg-white-100">
+          <HandsSection />
+        </div>
       </div>
     </Content>
   )

@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import { type Illustration, illustrations } from '@/config/illustrations'
 
-import { Border } from './border'
+import { ScreenshotImage } from '../screenshot-image'
 
 import type { StaticImageData } from 'next/image'
 
@@ -13,73 +13,30 @@ type Props = {
   icon: Illustration
   title: string
   description: string
+  explanation?: string
   secondaryTitle: string
   secondaryDescription: string
+  secondaryExplanation?: string
   image: StaticImageData
   imageAlt: string
   customNode?: React.ReactNode
   color: 'yellow' | 'turquoise' | 'purple' | 'none'
-  information?: string
   direction?: 'ltr' | 'rtl'
   reverse?: boolean
 }
-
-const containerClassNames = cva(
-  [
-    'relative flex w-[582px] justify-center',
-    'overflow-hidden',
-    'max-h-[854px]',
-    'max-w-[582px]',
-    'rounded-[32px]',
-    'py-[65px]',
-  ],
-  {
-    variants: {
-      color: {
-        yellow: ['bg-customisation-yellow/10'],
-        turquoise: ['bg-customisation-turquoise/10'],
-        purple: ['bg-customisation-purple/10'],
-      },
-    },
-  }
-)
-
-const imageClassNames = cva(
-  ['rounded-3xl', 'h-auto max-h-[724px] w-auto border-4'],
-  {
-    variants: {
-      color: {
-        yellow: ['border-customisation-yellow/5'],
-        turquoise: ['border-customisation-turquoise/5'],
-        purple: ['border-customisation-purple/5'],
-      },
-    },
-  }
-)
-
-const borderContainerClassNames = cva(
-  ['absolute left-0 top-0', 'w-full', 'h-[100%]'],
-  {
-    variants: {
-      color: {
-        yellow: ['text-customisation-yellow/5'],
-        turquoise: ['text-customisation-turquoise/5'],
-        purple: ['text-customisation-purple/5'],
-      },
-    },
-  }
-)
 
 const Section = (props: Props) => {
   const {
     title,
     color,
     description,
+    explanation,
     image,
     imageAlt,
     icon,
     secondaryDescription,
     secondaryTitle,
+    secondaryExplanation,
     direction = 'ltr',
     reverse = direction === 'rtl',
   } = props
@@ -100,17 +57,7 @@ const Section = (props: Props) => {
           <div
             className={`${directionOrder} flex max-w-[1504px] justify-center overflow-hidden rounded-[32px]`}
           >
-            <div className={containerClassNames({ color })}>
-              <div className={borderContainerClassNames({ color })}>
-                <Border />
-              </div>
-              <div className="absolute left-0 top-0 h-full w-full bg-[url('/assets/wallet/texture.png')] bg-contain bg-[left_top_0] bg-no-repeat" />
-              <Image
-                src={image}
-                alt={imageAlt}
-                className={imageClassNames({ color })}
-              />
-            </div>
+            <ScreenshotImage image={image} alt={imageAlt} color={color} />
           </div>
 
           <div className="flex max-w-[462px] flex-col justify-start md:justify-center">
@@ -122,7 +69,14 @@ const Section = (props: Props) => {
                   {title}
                 </Text>
                 <div className="relative flex pt-1">
-                  <Text size={27}>{description}</Text>
+                  <Text size={27}>
+                    {description}
+                    {explanation && (
+                      <span className="relative left-1 top-1 inline-block">
+                        <PopupIcon size={20} color="$neutral-50" />
+                      </span>
+                    )}
+                  </Text>
                 </div>
               </div>
 
@@ -133,7 +87,7 @@ const Section = (props: Props) => {
                 <div className="flex pt-1">
                   <Text size={19}>
                     {secondaryDescription}
-                    {props.information && (
+                    {secondaryExplanation && (
                       <span className="relative left-1 top-1 inline-block">
                         <PopupIcon size={20} color="$neutral-50" />
                       </span>
