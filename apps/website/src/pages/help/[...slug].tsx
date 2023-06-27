@@ -11,6 +11,7 @@ import { SidebarMenu } from '@/components/sidebar-menu'
 import { TOC } from '@/components/toc'
 import { AppLayout, PageBody } from '@/layouts/app-layout'
 import { buildDocsTree } from '@/utils/build-link-tree'
+import { slugify } from '@/utils/slugify'
 
 import config from '../../../config.json'
 
@@ -201,32 +202,20 @@ function transformArray(arr: any[]): any {
       return {
         label,
         links: value.map(link => {
-          if (typeof link === 'string') {
-            return { label: 'Index', href: '/help/' + link.replace('.md', '') }
-          }
           const [linkLabel, linkValue] = Object.entries(link)[0] as [any, any]
-          if (Array.isArray(linkValue)) {
-            return {
-              label: linkLabel,
-              links: linkValue.map(nestedLink => {
-                const [nestedLabel, nestedHref] = Object.entries(
-                  nestedLink
-                )[0] as [any, any]
-                return {
-                  label: nestedLabel,
-                  href: '/help/' + nestedHref.replace('.md', ''),
-                }
-              }),
-            }
-          }
+
           return {
             label: linkLabel,
-            href: '/help/' + linkValue.replace('.md', ''),
+            href: '/help/' + linkValue + '#' + slugify(linkLabel),
           }
         }),
       }
     }
-    return { label, href: value }
+
+    return {
+      label,
+      href: value,
+    }
   })
 }
 

@@ -27,10 +27,10 @@ export const ROUTES = {
   Help: [
     { name: 'Overview', href: '/help' },
     { name: 'Getting Started', href: '/help/getting-started' },
-    { name: 'Using Status', href: '/help/' },
-    { name: 'Communities', href: '/help/' },
-    { name: 'Wallet', href: '/help/' },
-    { name: 'Profile', href: '/help/' },
+    { name: 'Messaging', href: '/help/messaging-and-web3-browser' },
+    { name: 'Communities', href: '/help/status-communities' },
+    { name: 'Wallet', href: '/help/status-wallet' },
+    { name: 'Profile', href: '/help/your-profile-and-preferences' },
   ],
   Collaborate: [
     { name: 'Discuss', href: '/' },
