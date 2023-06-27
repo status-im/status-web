@@ -21,16 +21,16 @@
     }
   },
   "scripts": {
-    "sync": "vite-node scripts/sync.ts && yarn generate",
+    "sync": "vite-node scripts/sync.ts && pnpm generate",
     "generate": "rimraf src && svgr svg --out-dir src",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "yarn build:types",
+    "postbuild": "pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "#test": "vitest",
     "typecheck": "tsc",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "pnpm lint --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "clean": "rimraf dist node_modules .turbo"
   },

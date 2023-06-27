@@ -22,11 +22,11 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
-    "web": "yarn workspace web dev",
-    "mobile": "yarn workspace mobile dev",
-    "desktop": "yarn workspace desktop dev",
-    "website": "yarn workspace website dev",
-    "storybook": "yarn workspace @status-im/components storybook"
+    "web": "pnpm --filter=web dev",
+    "mobile": "pnpm --filter=mobile dev",
+    "desktop": "pnpm --filter=desktop dev",
+    "website": "pnpm --filter=website dev",
+    "storybook": "pnpm --filter=components storybook"
   },
   "resolutions": {
     "@types/react": "18.0.33",
@@ -58,5 +58,5 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@1.22.17"
+  "packageManager": "pnpm@8.6.5"
 }

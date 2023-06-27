@@ -23,11 +23,11 @@
     "dev": "vite build --watch --mode development",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "build": "vite build",
-    "postbuild": "yarn build:types",
+    "postbuild": "pnpm build:types",
     "#test": "vitest",
     "typecheck": "tsc",
     "lint": "eslint src",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "pnpm lint --fix",
     "format": "prettier --write src",
     "clean": "rimraf dist node_modules .turbo"
   },

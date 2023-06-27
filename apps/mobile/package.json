@@ -5,8 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "expo start -c",
-    "ios": "TAMAGUI_TARGET=native yarn expo run:ios",
-    "android": "TAMAGUI_TARGET=native yarn expo run:android",
+    "ios": "TAMAGUI_TARGET=native pnpm expo run:ios",
+    "android": "TAMAGUI_TARGET=native pnpm expo run:android",
     "start": "expo start --dev-client",
     "lint": "eslint screens",
     "#typecheck": "tsc",

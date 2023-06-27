@@ -1,0 +1,7 @@
+packages:
+  - 'packages/eslint-config'
+  - 'packages/status-js'
+  - 'packages/colors'
+  - 'packages/icons'
+  - 'packages/components'
+  - 'apps/*'

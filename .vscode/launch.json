@@ -65,7 +65,7 @@
       "type": "node-terminal",
       "request": "launch",
       "cwd": "${workspaceFolder}/apps/website",
-      "command": "yarn dev"
+      "command": "pnpm dev"
     },
     {
       "name": "Attach to Website via Next.js (client-side)",
@@ -89,7 +89,7 @@
       "type": "node-terminal",
       "request": "launch",
       "cwd": "${workspaceFolder}/apps/website",
-      "command": "yarn dev -p 3000",
+      "command": "pnpm dev -p 3000",
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "action": "startDebugging",
