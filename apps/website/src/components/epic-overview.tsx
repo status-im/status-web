@@ -84,8 +84,9 @@ export const EpicOverview = (props: Props) => {
       if (!existingItem) {
         accumulator.push({
           date: current?.date_field,
-          open_issues: current?.cumulative_opened_issues,
-          closed_issues: current?.cumulative_closed_issues,
+          open_issues:
+            current?.total_opened_issues - current?.total_closed_issues,
+          closed_issues: current?.total_closed_issues,
         })
       }
 

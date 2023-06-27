@@ -38,16 +38,15 @@ useGetEpicMenuLinksQuery.getKey = (
     ? ['getEpicMenuLinks']
     : ['getEpicMenuLinks', variables]
 export const GetBurnupDocument = `
-    query getBurnup($epicName: String!) {
-  gh_burnup(where: {epic_name: {_eq: $epicName}}, order_by: {date_field: asc}) {
-    author
-    assignee
-    cumulative_closed_issues
-    cumulative_opened_issues
-    date_field
+    query getBurnup($epicName: String!, $startDate: timestamptz) {
+  gh_burnup(
+    where: {epic_name: {_eq: $epicName}, date_field: {_gte: $startDate}}
+    order_by: {date_field: asc}
+  ) {
     epic_name
-    epic_color
-    repository
+    total_closed_issues
+    total_opened_issues
+    date_field
   }
 }
     `
@@ -72,13 +71,16 @@ useGetBurnupQuery.getKey = (variables: Types.GetBurnupQueryVariables) => [
   variables,
 ]
 export const GetIssuesByEpicDocument = `
-    query getIssuesByEpic($epicName: String!, $limit: Int!, $offset: Int!) {
+    query getIssuesByEpic($epicName: String!, $author: [String!], $assignee: [String!], $repository: [String!], $authorExists: Boolean!, $assigneeExists: Boolean!, $repositoryExists: Boolean!, $state: String!, $limit: Int!, $offset: Int!) {
   gh_epic_issues(
-    where: {epic_name: {_eq: $epicName}}
+    where: {epic_name: {_eq: $epicName}, author: {_in: $author}, stage: {_eq: $state}, assignee: {_in: $assignee}, repository: {_in: $repository}}
     order_by: {created_at: desc}
     limit: $limit
     offset: $offset
   ) {
+    assignee @include(if: $assigneeExists)
+    author @include(if: $authorExists)
+    repository @include(if: $repositoryExists)
     assignee
     author
     closed_at
@@ -89,6 +91,7 @@ export const GetIssuesByEpicDocument = `
     stage
     title
     issue_number
+    issue_url
   }
 }
     `
@@ -137,6 +140,48 @@ export const useGetEpicIssuesCountQuery = <
 useGetEpicIssuesCountQuery.getKey = (
   variables: Types.GetEpicIssuesCountQueryVariables
 ) => ['getEpicIssuesCount', variables]
+export const GetFiltersDocument = `
+    query getFilters($epicName: String!) {
+  authors: gh_epic_issues(
+    where: {epic_name: {_eq: $epicName}, author: {_is_null: false}}
+    distinct_on: author
+  ) {
+    author
+  }
+  assignees: gh_epic_issues(
+    where: {epic_name: {_eq: $epicName}, assignee: {_is_null: false}}
+    distinct_on: assignee
+  ) {
+    assignee
+  }
+  repos: gh_epic_issues(
+    where: {epic_name: {_eq: $epicName}}
+    distinct_on: repository
+  ) {
+    repository
+  }
+}
+    `
+export const useGetFiltersQuery = <
+  TData = Types.GetFiltersQuery,
+  TError = GraphqlApiError
+>(
+  variables: Types.GetFiltersQueryVariables,
+  options?: UseQueryOptions<Types.GetFiltersQuery, TError, TData>
+) =>
+  useQuery<Types.GetFiltersQuery, TError, TData>(
+    ['getFilters', variables],
+    createFetcher<Types.GetFiltersQuery, Types.GetFiltersQueryVariables>(
+      GetFiltersDocument,
+      variables
+    ),
+    options
+  )
+
+useGetFiltersQuery.getKey = (variables: Types.GetFiltersQueryVariables) => [
+  'getFilters',
+  variables,
+]
 export const GetOrphansDocument = `
     query getOrphans {
   gh_orphans {

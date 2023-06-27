@@ -15,25 +15,35 @@ export type GetEpicMenuLinksQuery = {
 
 export type GetBurnupQueryVariables = Types.Exact<{
   epicName: Types.Scalars['String']['input']
+  startDate?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
 }>
 
 export type GetBurnupQuery = {
   __typename?: 'query_root'
   gh_burnup: Array<{
     __typename?: 'gh_burnup'
-    author?: string | null
-    assignee?: string | null
-    cumulative_closed_issues?: any | null
-    cumulative_opened_issues?: any | null
-    date_field?: any | null
     epic_name?: string | null
-    epic_color?: string | null
-    repository?: string | null
+    total_closed_issues?: any | null
+    total_opened_issues?: any | null
+    date_field?: any | null
   }>
 }
 
 export type GetIssuesByEpicQueryVariables = Types.Exact<{
   epicName: Types.Scalars['String']['input']
+  author?: Types.InputMaybe<
+    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
+  >
+  assignee?: Types.InputMaybe<
+    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
+  >
+  repository?: Types.InputMaybe<
+    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
+  >
+  authorExists: Types.Scalars['Boolean']['input']
+  assigneeExists: Types.Scalars['Boolean']['input']
+  repositoryExists: Types.Scalars['Boolean']['input']
+  state: Types.Scalars['String']['input']
   limit: Types.Scalars['Int']['input']
   offset: Types.Scalars['Int']['input']
 }>
@@ -44,14 +54,15 @@ export type GetIssuesByEpicQuery = {
     __typename?: 'gh_epic_issues'
     assignee?: string | null
     author?: string | null
+    repository?: string | null
     closed_at?: any | null
     created_at?: any | null
     epic_color?: string | null
     epic_name?: string | null
-    repository?: string | null
     stage?: string | null
     title?: string | null
     issue_number?: any | null
+    issue_url?: string | null
   }>
 }
 
@@ -65,6 +76,17 @@ export type GetEpicIssuesCountQuery = {
     __typename?: 'gh_epic_issues'
     closed_at?: any | null
   }>
+}
+
+export type GetFiltersQueryVariables = Types.Exact<{
+  epicName: Types.Scalars['String']['input']
+}>
+
+export type GetFiltersQuery = {
+  __typename?: 'query_root'
+  authors: Array<{ __typename?: 'gh_epic_issues'; author?: string | null }>
+  assignees: Array<{ __typename?: 'gh_epic_issues'; assignee?: string | null }>
+  repos: Array<{ __typename?: 'gh_epic_issues'; repository?: string | null }>
 }
 
 export type GetOrphansQueryVariables = Types.Exact<{ [key: string]: never }>

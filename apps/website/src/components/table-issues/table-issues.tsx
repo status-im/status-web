@@ -1,156 +1,21 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Avatar, Input, Skeleton, Tag, Text } from '@status-im/components'
-import { ProfileIcon, SearchIcon } from '@status-im/icons'
+import { ActiveMembersIcon, OpenIcon, SearchIcon } from '@status-im/icons'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 
 import { useCurrentBreakpoint } from '@/hooks/use-current-breakpoint'
 
+import { Empty } from './empty'
 import { DropdownFilter, DropdownSort, Tabs } from './filters'
 
-import type { DropdownFilterProps } from './filters/dropdown-filter'
 import type { DropdownSortProps } from './filters/dropdown-sort'
 import type {
+  GetFiltersQuery,
   GetIssuesByEpicQuery,
   GetOrphansQuery,
 } from '@/lib/graphql/generated/operations'
-
-const authors: DropdownFilterProps['data'] = [
-  {
-    id: 4,
-    name: 'marcelines',
-    avatar: 'https://avatars.githubusercontent.com/u/29401404?v=4',
-  },
-  {
-    id: 5,
-    name: 'prichodko',
-    avatar: 'https://avatars.githubusercontent.com/u/14926950?v=4',
-  },
-  {
-    id: 6,
-    name: 'felicio',
-    avatar: 'https://avatars.githubusercontent.com/u/13265126?v=4',
-  },
-  {
-    id: 7,
-    name: 'jkbktl',
-    avatar: 'https://avatars.githubusercontent.com/u/520927?v=4',
-  },
-]
-
-const epics: DropdownFilterProps['data'] = [
-  {
-    id: 4,
-    name: 'E:ActivityCenter',
-    color: '$orange-60',
-  },
-  {
-    id: 5,
-    name: 'E:Keycard',
-    color: '$purple-60',
-  },
-  {
-    id: 6,
-    name: 'E:Wallet',
-    color: '$pink-60',
-  },
-  {
-    id: 7,
-    name: 'E:Chat',
-    color: '$beige-60',
-  },
-]
-
-const labels: DropdownFilterProps['data'] = [
-  {
-    id: 4,
-    name: 'Mobile',
-    color: '$blue-60',
-  },
-  {
-    id: 5,
-    name: 'Frontend',
-    color: '$brown-50',
-  },
-  {
-    id: 6,
-    name: 'Backend',
-    color: '$red-60',
-  },
-  {
-    id: 7,
-    name: 'Desktop',
-    color: '$green-60',
-  },
-]
-
-const assignees: DropdownFilterProps['data'] = [
-  {
-    id: 1,
-    name: 'Unassigned',
-    avatar: <ProfileIcon size={16} />,
-  },
-  {
-    id: 4,
-    name: 'marcelines',
-    avatar: 'https://avatars.githubusercontent.com/u/29401404?v=4',
-  },
-  {
-    id: 5,
-    name: 'prichodko',
-    avatar: 'https://avatars.githubusercontent.com/u/14926950?v=4',
-  },
-  {
-    id: 6,
-    name: 'felicio',
-    avatar: 'https://avatars.githubusercontent.com/u/13265126?v=4',
-  },
-  {
-    id: 7,
-    name: 'jkbktl',
-    avatar: 'https://avatars.githubusercontent.com/u/520927?v=4',
-  },
-]
-
-const repositories: DropdownFilterProps['data'] = [
-  {
-    id: 1,
-    name: 'status-mobile',
-  },
-  {
-    id: 2,
-    name: 'status-desktop',
-  },
-  {
-    id: 3,
-    name: 'status-web',
-  },
-  {
-    id: 4,
-    name: 'status-go',
-  },
-  {
-    id: 5,
-    name: 'nwaku',
-  },
-  {
-    id: 6,
-    name: 'go-waku',
-  },
-  {
-    id: 7,
-    name: 'js-waku',
-  },
-  {
-    id: 8,
-    name: 'nimbus-eth2',
-  },
-  {
-    id: 9,
-    name: 'help.status.im',
-  },
-]
 
 const sortOptions: DropdownSortProps['data'] = [
   {
@@ -178,18 +43,21 @@ const sortOptions: DropdownSortProps['data'] = [
 type Props = {
   isLoading?: boolean
   data?: GetOrphansQuery['gh_orphans'] | GetIssuesByEpicQuery['gh_epic_issues']
+  filters?: GetFiltersQuery
   count?: {
     total: number
     closed: number
     open: number
   }
+  activeTab: 'open' | 'closed'
+  handleTabChange: (tab: 'open' | 'closed') => void
+  selectedAuthors: string[]
+  handleSelectedAuthors: (values: string[]) => void
+  selectedAssignees: string[]
+  handleSelectedAssignees: (values: string[]) => void
+  selectedRepos: string[]
+  handleSelectedRepos: (values: string[]) => void
 }
-
-// function isOrphans(
-//   data: GetOrphansQuery['gh_orphans'] | GetIssuesByEpicQuery['gh_epic_issues']
-// ): data is GetOrphansQuery['gh_orphans'] {
-//   return 'labels' in data[0]
-// }
 
 function isIssues(
   data: GetOrphansQuery['gh_orphans'] | GetIssuesByEpicQuery['gh_epic_issues']
@@ -202,15 +70,36 @@ const TableIssues = (props: Props) => {
 
   const currentBreakpoint = useCurrentBreakpoint()
 
-  const { data, count, isLoading } = props
+  const {
+    data,
+    count,
+    isLoading,
+    filters,
+    handleTabChange,
+    activeTab,
+    selectedAuthors,
+    handleSelectedAuthors,
+    selectedAssignees,
+    handleSelectedAssignees,
+    selectedRepos,
+    handleSelectedRepos,
+  } = props
 
-  const issues = data || []
+  const filteredIssues = useMemo(() => {
+    if (!data) {
+      return []
+    }
+
+    return data || []
+  }, [data])
 
   return (
     <div className="overflow-hidden  rounded-2xl border border-neutral-10">
       <div className="flex border-b border-neutral-10 bg-neutral-5 p-3">
         <div className="flex w-full flex-col 2xl:flex-row 2xl:justify-between">
           <Tabs
+            handleTabChange={handleTabChange}
+            activeTab={activeTab}
             count={{
               closed: count?.closed || 0,
               open: count?.open || 0,
@@ -233,27 +122,44 @@ const TableIssues = (props: Props) => {
                   </div>
 
                   <DropdownFilter
-                    data={authors}
+                    handleSelectedValues={handleSelectedAuthors}
+                    selectedValues={selectedAuthors}
+                    data={
+                      filters?.authors.map(author => {
+                        return {
+                          id: author.author || '',
+                          name: author.author || '',
+                        }
+                      }) || []
+                    }
                     label="Author"
-                    placeholder="Find author"
+                    placeholder="Find author "
                   />
                   <DropdownFilter
-                    data={epics}
-                    label="Epics"
-                    placeholder="Find epic"
-                  />
-                  <DropdownFilter
-                    data={labels}
-                    label="Labels"
-                    placeholder="Find label"
-                  />
-                  <DropdownFilter
-                    data={assignees}
+                    handleSelectedValues={handleSelectedAssignees}
+                    selectedValues={selectedAssignees}
+                    data={
+                      filters?.assignees.map(assignee => {
+                        return {
+                          id: assignee.assignee || '',
+                          name: assignee.assignee || '',
+                        }
+                      }) || []
+                    }
                     label="Assignee"
                     placeholder="Find assignee"
                   />
                   <DropdownFilter
-                    data={repositories}
+                    handleSelectedValues={handleSelectedRepos}
+                    selectedValues={selectedRepos}
+                    data={
+                      filters?.repos.map(repo => {
+                        return {
+                          id: repo.repository || '',
+                          name: repo.repository || '',
+                        }
+                      }) || []
+                    }
                     label="Repos"
                     placeholder="Find repo"
                   />
@@ -268,26 +174,35 @@ const TableIssues = (props: Props) => {
         </div>
       </div>
 
-      <div className="divide-y divide-neutral-10">
-        {issues.length !== 0 &&
-          isIssues(issues) &&
-          issues.map(issue => (
+      <div className="relative divide-y divide-neutral-10">
+        {filteredIssues.length !== 0 &&
+          isIssues(filteredIssues) &&
+          filteredIssues.map(issue => (
             <Link
               key={issue.issue_number}
-              href={`https://github.com/status-im/${issue.repository}/issues/${issue.issue_number}`}
+              href={issue.issue_url || ''}
               className="flex items-center justify-between px-4 py-3 transition-colors duration-200 hover:bg-neutral-5"
             >
-              <div className="flex flex-col">
-                <Text size={15} weight="medium">
-                  {issue.title}
-                </Text>
-                <Text size={13} color="$neutral-50">
-                  #{issue.issue_number} •{' '}
-                  {formatDistanceToNow(new Date(issue.created_at), {
-                    addSuffix: true,
-                  })}{' '}
-                  by {issue.author}
-                </Text>
+              <div className="flex flex-row items-start gap-2 ">
+                <div className="pt-1">
+                  {issue.stage === 'open' ? (
+                    <OpenIcon size={20} color="$neutral-50" />
+                  ) : (
+                    <ActiveMembersIcon size={20} color="$neutral-50" />
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <Text size={15} weight="medium">
+                    {issue.title}
+                  </Text>
+                  <Text size={13} color="$neutral-50">
+                    #{issue.issue_number} •{' '}
+                    {formatDistanceToNow(new Date(issue.created_at), {
+                      addSuffix: true,
+                    })}{' '}
+                    by {issue.author}
+                  </Text>
+                </div>
               </div>
 
               <div className="flex gap-3">
@@ -302,6 +217,11 @@ const TableIssues = (props: Props) => {
               </div>
             </Link>
           ))}
+        {filteredIssues.length === 0 && !isLoading && (
+          <div className="py-11">
+            <Empty />
+          </div>
+        )}
         {isLoading && (
           <div className="flex items-center justify-between px-4 py-3">
             <div className="flex h-10 grow flex-col justify-between">

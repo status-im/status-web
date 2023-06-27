@@ -1,4 +1,4 @@
-import { cloneElement, useState } from 'react'
+import { cloneElement, useMemo, useState } from 'react'
 
 import { Avatar, Button, Input, Text } from '@status-im/components'
 import { DropdownMenu } from '@status-im/components/src/dropdown-menu'
@@ -12,7 +12,7 @@ import { ColorCircle } from './components/color-circle'
 import type { ColorTokens } from '@tamagui/core'
 
 type Data = {
-  id: number
+  id: string
   name: string
   avatar?: string | React.ReactElement
   color?: ColorTokens | `#${string}`
@@ -22,6 +22,8 @@ type Props = {
   data: Data[]
   label: string
   placeholder?: string
+  selectedValues: string[]
+  handleSelectedValues: (values: string[]) => void
 }
 
 const isAvatar = (value: unknown): value is string => {
@@ -45,16 +47,19 @@ const RenderIcon = (props: Data) => {
 }
 
 const DropdownFilter = (props: Props) => {
-  const { data, label, placeholder } = props
+  const { data, label, placeholder, selectedValues, handleSelectedValues } =
+    props
 
   const [filterText, setFilterText] = useState('')
 
-  // TODO - this will be improved by having a debounced search and use memoization
-  const filteredData = data.filter(label =>
-    label.name.toLowerCase().includes(filterText.toLowerCase())
+  const filteredData = useMemo(
+    () =>
+      data.filter(label =>
+        label.name.toLowerCase().includes(filterText.toLowerCase())
+      ),
+    [data, filterText]
   )
 
-  const [selectedValues, setSelectedValues] = useState<number[]>([])
   const [isOpen, setIsOpen] = useState(false)
 
   const currentBreakpoint = useCurrentBreakpoint()
@@ -99,11 +104,11 @@ const DropdownFilter = (props: Props) => {
                 checked={selectedValues.includes(filtered.id)}
                 onSelect={() => {
                   if (selectedValues.includes(filtered.id)) {
-                    setSelectedValues(
+                    handleSelectedValues(
                       selectedValues.filter(id => id !== filtered.id)
                     )
                   } else {
-                    setSelectedValues([...selectedValues, filtered.id])
+                    handleSelectedValues([...selectedValues, filtered.id])
                   }
                 }}
               />

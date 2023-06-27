@@ -86,14 +86,10 @@ export enum Cursor_Ordering {
 /** columns and relationships of "gh_burnup" */
 export type Gh_Burnup = {
   __typename?: 'gh_burnup'
-  assignee?: Maybe<Scalars['String']['output']>
-  author?: Maybe<Scalars['String']['output']>
-  cumulative_closed_issues?: Maybe<Scalars['bigint']['output']>
-  cumulative_opened_issues?: Maybe<Scalars['bigint']['output']>
   date_field?: Maybe<Scalars['timestamptz']['output']>
-  epic_color?: Maybe<Scalars['String']['output']>
   epic_name?: Maybe<Scalars['String']['output']>
-  repository?: Maybe<Scalars['String']['output']>
+  total_closed_issues?: Maybe<Scalars['bigint']['output']>
+  total_opened_issues?: Maybe<Scalars['bigint']['output']>
 }
 
 /** Boolean expression to filter rows from the table "gh_burnup". All fields are combined with a logical 'AND'. */
@@ -101,46 +97,30 @@ export type Gh_Burnup_Bool_Exp = {
   _and?: InputMaybe<Array<Gh_Burnup_Bool_Exp>>
   _not?: InputMaybe<Gh_Burnup_Bool_Exp>
   _or?: InputMaybe<Array<Gh_Burnup_Bool_Exp>>
-  assignee?: InputMaybe<String_Comparison_Exp>
-  author?: InputMaybe<String_Comparison_Exp>
-  cumulative_closed_issues?: InputMaybe<Bigint_Comparison_Exp>
-  cumulative_opened_issues?: InputMaybe<Bigint_Comparison_Exp>
   date_field?: InputMaybe<Timestamptz_Comparison_Exp>
-  epic_color?: InputMaybe<String_Comparison_Exp>
   epic_name?: InputMaybe<String_Comparison_Exp>
-  repository?: InputMaybe<String_Comparison_Exp>
+  total_closed_issues?: InputMaybe<Bigint_Comparison_Exp>
+  total_opened_issues?: InputMaybe<Bigint_Comparison_Exp>
 }
 
 /** Ordering options when selecting data from "gh_burnup". */
 export type Gh_Burnup_Order_By = {
-  assignee?: InputMaybe<Order_By>
-  author?: InputMaybe<Order_By>
-  cumulative_closed_issues?: InputMaybe<Order_By>
-  cumulative_opened_issues?: InputMaybe<Order_By>
   date_field?: InputMaybe<Order_By>
-  epic_color?: InputMaybe<Order_By>
   epic_name?: InputMaybe<Order_By>
-  repository?: InputMaybe<Order_By>
+  total_closed_issues?: InputMaybe<Order_By>
+  total_opened_issues?: InputMaybe<Order_By>
 }
 
 /** select columns of table "gh_burnup" */
 export enum Gh_Burnup_Select_Column {
   /** column name */
-  Assignee = 'assignee',
-  /** column name */
-  Author = 'author',
-  /** column name */
-  CumulativeClosedIssues = 'cumulative_closed_issues',
-  /** column name */
-  CumulativeOpenedIssues = 'cumulative_opened_issues',
-  /** column name */
   DateField = 'date_field',
-  /** column name */
-  EpicColor = 'epic_color',
   /** column name */
   EpicName = 'epic_name',
   /** column name */
-  Repository = 'repository',
+  TotalClosedIssues = 'total_closed_issues',
+  /** column name */
+  TotalOpenedIssues = 'total_opened_issues',
 }
 
 /** Streaming cursor of the table "gh_burnup" */
@@ -153,14 +133,10 @@ export type Gh_Burnup_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Gh_Burnup_Stream_Cursor_Value_Input = {
-  assignee?: InputMaybe<Scalars['String']['input']>
-  author?: InputMaybe<Scalars['String']['input']>
-  cumulative_closed_issues?: InputMaybe<Scalars['bigint']['input']>
-  cumulative_opened_issues?: InputMaybe<Scalars['bigint']['input']>
   date_field?: InputMaybe<Scalars['timestamptz']['input']>
-  epic_color?: InputMaybe<Scalars['String']['input']>
   epic_name?: InputMaybe<Scalars['String']['input']>
-  repository?: InputMaybe<Scalars['String']['input']>
+  total_closed_issues?: InputMaybe<Scalars['bigint']['input']>
+  total_opened_issues?: InputMaybe<Scalars['bigint']['input']>
 }
 
 /** columns and relationships of "gh_epic_issues" */
@@ -173,6 +149,7 @@ export type Gh_Epic_Issues = {
   epic_color?: Maybe<Scalars['String']['output']>
   epic_name?: Maybe<Scalars['String']['output']>
   issue_number?: Maybe<Scalars['bigint']['output']>
+  issue_url?: Maybe<Scalars['String']['output']>
   repository?: Maybe<Scalars['String']['output']>
   stage?: Maybe<Scalars['String']['output']>
   title?: Maybe<Scalars['String']['output']>
@@ -190,6 +167,7 @@ export type Gh_Epic_Issues_Bool_Exp = {
   epic_color?: InputMaybe<String_Comparison_Exp>
   epic_name?: InputMaybe<String_Comparison_Exp>
   issue_number?: InputMaybe<Bigint_Comparison_Exp>
+  issue_url?: InputMaybe<String_Comparison_Exp>
   repository?: InputMaybe<String_Comparison_Exp>
   stage?: InputMaybe<String_Comparison_Exp>
   title?: InputMaybe<String_Comparison_Exp>
@@ -204,6 +182,7 @@ export type Gh_Epic_Issues_Order_By = {
   epic_color?: InputMaybe<Order_By>
   epic_name?: InputMaybe<Order_By>
   issue_number?: InputMaybe<Order_By>
+  issue_url?: InputMaybe<Order_By>
   repository?: InputMaybe<Order_By>
   stage?: InputMaybe<Order_By>
   title?: InputMaybe<Order_By>
@@ -225,6 +204,8 @@ export enum Gh_Epic_Issues_Select_Column {
   EpicName = 'epic_name',
   /** column name */
   IssueNumber = 'issue_number',
+  /** column name */
+  IssueUrl = 'issue_url',
   /** column name */
   Repository = 'repository',
   /** column name */
@@ -250,6 +231,7 @@ export type Gh_Epic_Issues_Stream_Cursor_Value_Input = {
   epic_color?: InputMaybe<Scalars['String']['input']>
   epic_name?: InputMaybe<Scalars['String']['input']>
   issue_number?: InputMaybe<Scalars['bigint']['input']>
+  issue_url?: InputMaybe<Scalars['String']['input']>
   repository?: InputMaybe<Scalars['String']['input']>
   stage?: InputMaybe<Scalars['String']['input']>
   title?: InputMaybe<Scalars['String']['input']>
@@ -331,6 +313,7 @@ export type Gh_Issues = {
   closed_at?: Maybe<Scalars['timestamptz']['output']>
   created_at?: Maybe<Scalars['timestamptz']['output']>
   issue_number?: Maybe<Scalars['bigint']['output']>
+  issue_url?: Maybe<Scalars['String']['output']>
   labels?: Maybe<Scalars['String']['output']>
   repository?: Maybe<Scalars['String']['output']>
   stage?: Maybe<Scalars['String']['output']>
@@ -347,6 +330,7 @@ export type Gh_Issues_Bool_Exp = {
   closed_at?: InputMaybe<Timestamptz_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   issue_number?: InputMaybe<Bigint_Comparison_Exp>
+  issue_url?: InputMaybe<String_Comparison_Exp>
   labels?: InputMaybe<String_Comparison_Exp>
   repository?: InputMaybe<String_Comparison_Exp>
   stage?: InputMaybe<String_Comparison_Exp>
@@ -360,6 +344,7 @@ export type Gh_Issues_Order_By = {
   closed_at?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   issue_number?: InputMaybe<Order_By>
+  issue_url?: InputMaybe<Order_By>
   labels?: InputMaybe<Order_By>
   repository?: InputMaybe<Order_By>
   stage?: InputMaybe<Order_By>
@@ -378,6 +363,8 @@ export enum Gh_Issues_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   IssueNumber = 'issue_number',
+  /** column name */
+  IssueUrl = 'issue_url',
   /** column name */
   Labels = 'labels',
   /** column name */
@@ -403,6 +390,7 @@ export type Gh_Issues_Stream_Cursor_Value_Input = {
   closed_at?: InputMaybe<Scalars['timestamptz']['input']>
   created_at?: InputMaybe<Scalars['timestamptz']['input']>
   issue_number?: InputMaybe<Scalars['bigint']['input']>
+  issue_url?: InputMaybe<Scalars['String']['input']>
   labels?: InputMaybe<Scalars['String']['input']>
   repository?: InputMaybe<Scalars['String']['input']>
   stage?: InputMaybe<Scalars['String']['input']>
@@ -417,6 +405,7 @@ export type Gh_Orphans = {
   closed_at?: Maybe<Scalars['timestamptz']['output']>
   created_at?: Maybe<Scalars['timestamptz']['output']>
   issue_number?: Maybe<Scalars['bigint']['output']>
+  issue_url?: Maybe<Scalars['String']['output']>
   labels?: Maybe<Scalars['String']['output']>
   repository?: Maybe<Scalars['String']['output']>
   stage?: Maybe<Scalars['String']['output']>
@@ -433,6 +422,7 @@ export type Gh_Orphans_Bool_Exp = {
   closed_at?: InputMaybe<Timestamptz_Comparison_Exp>
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>
   issue_number?: InputMaybe<Bigint_Comparison_Exp>
+  issue_url?: InputMaybe<String_Comparison_Exp>
   labels?: InputMaybe<String_Comparison_Exp>
   repository?: InputMaybe<String_Comparison_Exp>
   stage?: InputMaybe<String_Comparison_Exp>
@@ -446,6 +436,7 @@ export type Gh_Orphans_Order_By = {
   closed_at?: InputMaybe<Order_By>
   created_at?: InputMaybe<Order_By>
   issue_number?: InputMaybe<Order_By>
+  issue_url?: InputMaybe<Order_By>
   labels?: InputMaybe<Order_By>
   repository?: InputMaybe<Order_By>
   stage?: InputMaybe<Order_By>
@@ -464,6 +455,8 @@ export enum Gh_Orphans_Select_Column {
   CreatedAt = 'created_at',
   /** column name */
   IssueNumber = 'issue_number',
+  /** column name */
+  IssueUrl = 'issue_url',
   /** column name */
   Labels = 'labels',
   /** column name */
@@ -489,6 +482,7 @@ export type Gh_Orphans_Stream_Cursor_Value_Input = {
   closed_at?: InputMaybe<Scalars['timestamptz']['input']>
   created_at?: InputMaybe<Scalars['timestamptz']['input']>
   issue_number?: InputMaybe<Scalars['bigint']['input']>
+  issue_url?: InputMaybe<Scalars['String']['input']>
   labels?: InputMaybe<Scalars['String']['input']>
   repository?: InputMaybe<Scalars['String']['input']>
   stage?: InputMaybe<Scalars['String']['input']>

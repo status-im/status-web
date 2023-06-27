@@ -1,7 +1,5 @@
 import { Image, Text } from '@status-im/components'
 
-import { LineA, LineB } from './assets'
-
 const Empty = () => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
@@ -17,12 +15,7 @@ const Empty = () => {
             Try adjusting your search or filter to find what you’re looking for.
           </Text>
         </div>
-        <div className="absolute left-[50%] top-16 w-full opacity-60">
-          <LineA />
-        </div>
-        <div className="absolute left-0 top-28 w-full opacity-60">
-          <LineB />
-        </div>
+
         <div
           className="absolute left-0 top-0 h-24 w-full"
           style={{
