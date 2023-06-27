@@ -6,23 +6,27 @@ import type { Page } from 'next'
 const EpicsDetailPage: Page = () => {
   return (
     <div>
-      <div className="border-neutral-10 border-b px-5 py-3">
+      <div className="border-b border-neutral-10 px-5 py-3">
         <Breadcrumbs />
       </div>
-      <div className="border-neutral-10 border-b px-10 py-6">
+      <div className="border-b border-neutral-10 px-10 py-6">
         <EpicOverview
           title="Communities protocol"
           description="Detecting keycard reader removal for the beginning of each flow"
           fullscreen
         />
       </div>
-      <div className="border-neutral-10 border-b px-10 py-6">
+      <div className="border-b border-neutral-10 px-10 py-6">
+        <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
+
         <TableIssues />
       </div>
     </div>
   )
 }
 
-EpicsDetailPage.getLayout = InsightsLayout
+EpicsDetailPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default EpicsDetailPage

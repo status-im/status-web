@@ -13,6 +13,7 @@ import {
 import { ERROR_CODES } from '@/consts/error-codes'
 
 import type { Data } from '@/components/preview-page'
+import type { EnsResponse } from '@/pages/api/ens'
 import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 import type {
   decodeChannelURLData,
@@ -34,6 +35,7 @@ export const useURLData = (
   const [channelUuid, setChannelUuid] = useState<string>()
   const [data, setData] = useState<Data>()
   const [error, setError] = useState<keyof typeof ERROR_CODES>()
+  const [isLoading, setIsLoading] = useState(false)
 
   const compressPublicKey = type !== 'profile'
 
@@ -47,7 +49,7 @@ export const useURLData = (
 
       const hash = window.location.hash.replace('#', '')
 
-      // use provided public key
+      // use provided public key or recover it from ENS name
       if (!decodedData || !encodedData) {
         if (!hash) {
           setError('NOT_FOUND')
@@ -55,6 +57,32 @@ export const useURLData = (
           return
         }
 
+        // recover public key from ENS name
+        const ensName = hash.match(/^.+\.eth$/)?.[0]
+        if (ensName) {
+          const fetchEnsPubkey = async () => {
+            try {
+              const response = await fetch('/api/ens', {
+                method: 'POST',
+                body: JSON.stringify({ ensName, compress: compressPublicKey }),
+              })
+              const { publicKey } = (await response.json()) as EnsResponse
+
+              setPublicKey(publicKey)
+            } catch {
+              setError('INVALID_ENS_NAME')
+            }
+
+            setIsLoading(false)
+          }
+
+          setIsLoading(true)
+          fetchEnsPubkey()
+
+          return
+        }
+
+        // use provided public key
         try {
           const publicKey = deserializePublicKey(hash, {
             compress: compressPublicKey,
@@ -71,7 +99,7 @@ export const useURLData = (
         }
       }
 
-      // recover public key
+      // recover public key from encoded data
       let deserializedPublicKey
       try {
         const recoveredPublicKey = recoverPublicKeyFromEncodedURLData(
@@ -154,5 +182,6 @@ export const useURLData = (
     channelUuid,
     data,
     errorCode: error ? ERROR_CODES[error] : undefined,
+    isLoading,
   }
 }

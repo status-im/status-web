@@ -26,8 +26,8 @@ export const QrDialog = (props: Props) => {
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed inset-0 flex items-center justify-center focus:outline-none">
           <div>
             <div className="flex flex-col items-center gap-4">
-              <div className="bg-white-5 aspect-square w-full max-w-[335px] rounded-2xl p-3">
-                <div className="bg-white-100 rounded-xl p-3">
+              <div className="aspect-square w-full max-w-[335px] rounded-2xl bg-white-5 p-3">
+                <div className="rounded-xl bg-white-100 p-3">
                   <QRCodeSVG value={value} height={286} width={286} />
                 </div>
               </div>

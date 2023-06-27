@@ -13,7 +13,7 @@ export const ErrorPage = (props: Props) => {
     // todo!: design review, not in designs
     case ERROR_CODES.NOT_FOUND:
       return (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-8 bg-white text-center">
+        <div className="bg-white flex h-full w-full flex-col items-center justify-center gap-8 text-center">
           <div className="h-[160px] w-[160px] rounded-full bg-[#b3b3b3]" />
           <Text size={27} weight="semibold">
             Page not found.
@@ -24,7 +24,7 @@ export const ErrorPage = (props: Props) => {
     case ERROR_CODES.INTERNAL_SERVER_ERROR:
     default:
       return (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-8 bg-white text-center">
+        <div className="bg-white flex h-full w-full flex-col items-center justify-center gap-8 text-center">
           <div className="h-[160px] w-[160px] rounded-full bg-[hsla(355,47%,50%,1)]" />
           <div className="flex flex-col gap-2">
             <Text size={27} weight="semibold">

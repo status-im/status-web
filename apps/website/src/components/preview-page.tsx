@@ -21,9 +21,9 @@ import {
   QrCodeIcon,
 } from '@status-im/icons'
 import { useQuery } from '@tanstack/react-query'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-import { Head } from '@/components/head'
 import { ERROR_CODES } from '@/consts/error-codes'
 import { useURLData } from '@/hooks/use-url-data'
 import { getRequestClient } from '@/lib/request-client'
@@ -80,6 +80,12 @@ export type Data =
       info: UserInfo
     }
 
+const ACTION_VERB: Record<Type, string> = {
+  community: 'Join',
+  channel: 'View',
+  profile: 'Open',
+}
+
 const INSTRUCTIONS_HEADING: Record<Type, string> = {
   community: 'How to join this community:',
   channel: 'How to join this channel:',
@@ -93,7 +99,7 @@ const JOIN_BUTTON_LABEL: Record<Type, string> = {
 }
 
 export function PreviewPage(props: PreviewPageProps) {
-  const { type, decodedData, encodedData } = props
+  const { type, decodedData, encodedData, index } = props
 
   const { asPath } = useRouter()
 
@@ -109,8 +115,10 @@ export function PreviewPage(props: PreviewPageProps) {
     channelUuid: urlChannelUuid,
     data: urlData,
     errorCode: urlErrorCode,
+    isLoading: urlIsLoading,
   } = useURLData(type, decodedData, encodedData)
 
+  const wakuQueryIsEnabled = Boolean(publicKey)
   const {
     data: wakuData,
     isLoading,
@@ -119,7 +127,7 @@ export function PreviewPage(props: PreviewPageProps) {
   } = useQuery({
     refetchOnWindowFocus: false,
     queryKey: [type],
-    enabled: !!publicKey,
+    enabled: wakuQueryIsEnabled,
     queryFn: async function ({ queryKey }): Promise<Data | null> {
       const client = await getRequestClient()
 
@@ -179,7 +187,20 @@ export function PreviewPage(props: PreviewPageProps) {
     },
   })
 
-  const loading = status === 'loading' || isLoading
+  const loading = getLoading()
+
+  function getLoading(): boolean {
+    if (urlIsLoading) {
+      return true
+    }
+
+    if (wakuQueryIsEnabled) {
+      return status === 'loading' || isLoading
+    }
+
+    return false
+  }
+
   const data: Data | undefined = wakuData ?? urlData
 
   const { avatarURL, bannerURL } = useMemo(() => {
@@ -201,9 +222,34 @@ export function PreviewPage(props: PreviewPageProps) {
     return <ErrorPage errorCode={ERROR_CODES.NOT_FOUND} />
   }
 
+  // const urlOrigin = process.env.VERCEL_URL
+  //   ? 'https://' + process.env.VERCEL_URL
+  //   : ''
+
   if ((loading && !data) || !data || !publicKey) {
     return (
       <>
+        <Head>
+          <meta property="og:url" content={`https://status.app${asPath}`} />
+          {/* todo: test if server-rendered version with which a (social) card would be
+        generated would not effectively override actual shared link on clicking */}
+          {/* <meta
+            property="og:image"
+            content={`${urlOrigin}/assets/preview/entity.png`}
+            key="og:image"
+          /> */}
+          <meta
+            property="al:ios:url"
+            content={`https://status.app${asPath}`}
+            key="al:ios:url"
+          />
+          <meta
+            property="al:android:url"
+            content={`https://status.app${asPath}`}
+            key="al:android:url"
+          />
+          {!index && <meta name="robots" content="noindex" />}
+        </Head>
         <div className="h-full xl:grid xl:grid-cols-[560px,auto]">
           <div className="pb-10">
             <div className="mx-auto px-5 pt-20 xl:px-20">
@@ -311,16 +357,39 @@ export function PreviewPage(props: PreviewPageProps) {
 
   return (
     <>
-      <Head index={props.index} />
+      <Head>
+        <title>
+          {`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
+        </title>
+
+        <meta property="og:url" content={`https://status.app${asPath}`} />
+        <meta
+          property="og:title"
+          content={`${ACTION_VERB[type]} ${data.info.displayName} in Status`}
+        />
+        {/* <meta
+          property="og:image"
+          content={`${urlOrigin}/assets/preview/entity.png`}
+          key="og:image"
+        /> */}
+        <meta property="og:description" content={data.info.description} />
+        <meta
+          name="apple-itunes-app"
+          content={`app-id=1178893006, app-argument=status-app://${asPath.replace(
+            /\//,
+            ''
+          )}`}
+        />
+        {!index && <meta name="robots" content="noindex" />}
+      </Head>
       <>
         {/* todo: theme; based on user system settings */}
-        {/* todo: (system or both?) install banner */}
         <div
           style={!bannerURL ? getGradientStyles(data) : undefined}
           className="relative h-full bg-gradient-to-b from-[var(--gradient-color)] to-[#fff] to-20% xl:grid xl:grid-cols-[560px,auto]"
         >
-          <div className="absolute left-0 right-0 top-0 xl:hidden">
-            <div className="from-white-100 to-white-60 absolute h-full w-full bg-gradient-to-t" />
+          <div className="absolute inset-x-0 top-0 xl:hidden">
+            <div className="absolute h-full w-full bg-gradient-to-t from-white-100 to-white-60" />
             {bannerURL && (
               <img
                 className="aspect-video h-full w-full object-cover"
@@ -420,7 +489,7 @@ export function PreviewPage(props: PreviewPageProps) {
 
               {/* INSTRUCTIONS */}
               <div className="mb-6 grid gap-3">
-                <div className="border-neutral-10 bg-white-100 rounded-2xl border px-4 py-3">
+                <div className="rounded-2xl border border-neutral-10 bg-white-100 px-4 py-3">
                   <h3 className="mb-2 text-[15px] font-semibold xl:text-[19px]">
                     {INSTRUCTIONS_HEADING[type]}
                   </h3>
@@ -460,7 +529,7 @@ export function PreviewPage(props: PreviewPageProps) {
                   </ul>
                 </div>
 
-                <div className="border-neutral-10 bg-white-100 flex flex-col items-start gap-4 rounded-2xl border p-4 pt-3">
+                <div className="flex flex-col items-start gap-4 rounded-2xl border border-neutral-10 bg-white-100 p-4 pt-3">
                   <div className="flex flex-col gap-1">
                     <Text size={15} weight="semibold">
                       Have Status already?

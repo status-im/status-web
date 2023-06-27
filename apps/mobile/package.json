@@ -38,6 +38,7 @@
     "@types/react-native": "~0.70.6",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
+    "@status-im/eslint-config": "*",
     "typescript": "^5.0.3"
   }
 }

@@ -42,7 +42,10 @@ const Tag = (props: Props) => {
       return <Text size={textSizes[size]}>{icon}</Text>
     }
 
-    return createElement(icon, { size: iconSizes[size] })
+    return createElement(icon, {
+      size: iconSizes[size],
+      color,
+    })
   }
 
   return (

@@ -8,20 +8,20 @@ const SvgAngryIcon = createIcon(props => {
       width={props.width}
       height={props.height}
       fill="none"
-      viewBox="0 0 12 12"
+      viewBox="0 0 20 20"
       focusable={false}
       aria-hidden={true}
     >
-      <circle cx={6} cy={6} r={6} fill="url(#angry-icon_svg__a)" />
-      <circle cx={6} cy={6} r={6} fill="url(#angry-icon_svg__b)" />
+      <circle cx={10} cy={10} r={10} fill="url(#angry-icon_svg__a)" />
+      <circle cx={10} cy={10} r={10} fill="url(#angry-icon_svg__b)" />
       <path
         fill="#424242"
-        d="M2.754 4.198a.328.328 0 1 0-.258.604l.792.339c.105.045.144.175.113.286a.751.751 0 0 0 1.416.488c.022-.053.082-.083.135-.06l.169.072a.328.328 0 0 0 .258-.604L2.754 4.198Zm6.494 0a.328.328 0 1 1 .258.604l-.792.339c-.106.045-.144.175-.114.286a.75.75 0 0 1-1.415.488c-.022-.053-.083-.083-.136-.06l-.168.072a.328.328 0 0 1-.258-.604l2.625-1.125Z"
+        d="M4.59 6.997a.547.547 0 1 0-.43 1.006l1.32.565c.176.076.24.292.189.477a1.251 1.251 0 0 0 2.36.813c.036-.088.137-.138.225-.1l.28.12a.547.547 0 0 0 .431-1.006L4.59 6.997Zm10.823 0a.547.547 0 1 1 .43 1.006l-1.32.565c-.176.076-.24.292-.189.477a1.25 1.25 0 0 1-2.36.813c-.036-.088-.137-.138-.225-.1l-.28.12a.547.547 0 0 1-.431-1.006l4.375-1.875Z"
       />
       <path
         fill="#772622"
         fillRule="evenodd"
-        d="M6 8.203a1.92 1.92 0 0 0-1.602.86.328.328 0 1 1-.546-.364 2.576 2.576 0 0 1 4.296 0 .328.328 0 1 1-.546.364A1.92 1.92 0 0 0 6 8.203Z"
+        d="M10 13.672a3.2 3.2 0 0 0-2.67 1.432.547.547 0 0 1-.91-.605 4.293 4.293 0 0 1 3.58-1.92 4.29 4.29 0 0 1 3.58 1.92.547.547 0 0 1-.91.605A3.2 3.2 0 0 0 10 13.672Z"
         clipRule="evenodd"
       />
       <defs>
@@ -30,7 +30,7 @@ const SvgAngryIcon = createIcon(props => {
           cx={0}
           cy={0}
           r={1}
-          gradientTransform="rotate(124.563 3.39 3.337) scale(10.2458 13.3012)"
+          gradientTransform="rotate(124.563 5.651 5.561) scale(17.0763 22.1686)"
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#FFD764" stopOpacity={0.2} />
@@ -38,10 +38,10 @@ const SvgAngryIcon = createIcon(props => {
         </radialGradient>
         <linearGradient
           id="angry-icon_svg__a"
-          x1={6}
-          x2={6}
+          x1={10}
+          x2={10}
           y1={0}
-          y2={12}
+          y2={20}
           gradientUnits="userSpaceOnUse"
         >
           <stop offset={0.11} stopColor="#EA6433" />

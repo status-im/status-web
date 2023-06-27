@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-neutral-100;
-  }
-}
-
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
@@ -17,6 +11,17 @@
   }
   100% {
     background-position: 0% 50%;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 
@@ -115,4 +120,11 @@ h6 {
 */
 #__next {
   isolation: isolate;
+}
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: none;
 }

@@ -8,8 +8,8 @@ import type { Page } from 'next'
 const HomePage: Page = () => {
   return (
     <>
-      <div className="bg-white-100 mx-1 rounded-3xl py-32">
-        <div className="mx-40 mb-40 grid gap-8">
+      <div className="px-5 py-32 lg:px-40">
+        <div className="mb-40 grid gap-8 px-5 ">
           <div className="grid gap-6">
             <h1 className="text-7xl font-bold">
               Make the
@@ -23,7 +23,7 @@ const HomePage: Page = () => {
           </div>
 
           <div className="grid gap-4">
-            <div className="flex gap-3">
+            <div className="flex flex-col gap-3 lg:flex-col">
               <Button size={40} icon={<DownloadIcon size={20} />}>
                 Sign up for early access
               </Button>
@@ -44,7 +44,7 @@ const HomePage: Page = () => {
       </div>
 
       <div className="text-center">
-        <h2 className="text-white-100 text-4xl">
+        <h2 className="text-4xl text-white-100">
           Own a community? Time to take back control!
         </h2>
         <Text size={19} color="$white-100">
@@ -52,7 +52,7 @@ const HomePage: Page = () => {
         </Text>
       </div>
 
-      <div className="bg-white-100 mx-1 space-y-[200px] rounded-3xl py-32">
+      <div className="mx-1 space-y-[200px] rounded-3xl bg-white-100 py-32">
         <FeatureSection
           title={`Chat privately\nwith friends`}
           description="Protect your right to free speech with e2e encryption & metadata privacy."
@@ -80,7 +80,7 @@ type FeatureSectionProps = {
 const FeatureSection = ({ title, description }: FeatureSectionProps) => {
   return (
     <section className="px-10">
-      <div className="mb-24 flex justify-between">
+      <div className="mb-24 flex flex-col justify-between lg:flex-row">
         <h2 className="flex-1 whitespace-pre-line text-6xl font-bold">
           {title}
         </h2>
@@ -101,22 +101,22 @@ const FeatureSection = ({ title, description }: FeatureSectionProps) => {
 const FeatureGrid = () => {
   return (
     <div className="grid h-[800px] grid-cols-3 grid-rows-2 gap-5">
-      <div className="border-neutral-80/5 row-span-2 rounded-[32px] border">
+      <div className="row-span-2 rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
       </div>
-      <div className="border-neutral-80/5 rounded-[32px] border">
+      <div className="rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
       </div>
-      <div className="border-neutral-80/5 row-span-2 rounded-[32px] border">
+      <div className="row-span-2 rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
       </div>
-      <div className="border-neutral-80/5 rounded-[32px] border">
+      <div className="rounded-[32px] border border-neutral-80/5">
         <Text size={27} weight="semibold">
           Title
         </Text>
@@ -125,6 +125,8 @@ const FeatureGrid = () => {
   )
 }
 
-HomePage.getLayout = AppLayout
+HomePage.getLayout = function getLayout(page) {
+  return <AppLayout>{page}</AppLayout>
+}
 
 export default HomePage

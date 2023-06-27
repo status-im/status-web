@@ -2,21 +2,23 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { match, P } from 'ts-pattern'
 
+import logoBlogSrc from '../../public/images/logo/blog.svg'
 import logoSrc from '../../public/images/logo/default.svg'
 import logoDevSrc from '../../public/images/logo/dev.svg'
 import logoLearnSrc from '../../public/images/logo/learn.svg'
 
 type Props = {
   label?: boolean
+  isTopbarDesktop?: boolean
 }
 
 export const Logo = (props: Props) => {
-  const { label = true } = props
+  const { label = true, isTopbarDesktop } = props
 
   const { pathname } = useRouter()
 
   return (
-    <div className="flex flex-shrink-0 items-center gap-2">
+    <div className="flex shrink-0 items-center gap-2">
       {match(pathname)
         .with(
           P.when(p => p.startsWith('/insights')),
@@ -28,7 +30,7 @@ export const Logo = (props: Props) => {
         )
         .with(
           P.when(p => p.startsWith('/blog')),
-          () => <Image src={logoSrc} alt="Status logo" />
+          () => <Image src={logoBlogSrc} alt="Status logo" />
         )
         .otherwise(() => (
           <Image src={logoSrc} alt="Status logo" />
@@ -39,7 +41,7 @@ export const Logo = (props: Props) => {
           width="70"
           height="16"
           fill="none"
-          className="mr-[10px]"
+          className={`mr-[10px] ${isTopbarDesktop ? 'hidden lg:block' : ''}`}
         >
           <path
             fill="#fff"

@@ -77,7 +77,7 @@ const ReposPage: Page = () => {
           <Shadow key={repo.name}>
             <Link
               href={`https://github.com/status-im/${repo.name}`}
-              className="border-neutral-10 hover:border-neutral-40 flex h-[124px] flex-col justify-between rounded-2xl border px-4 py-3 transition-colors duration-200"
+              className="flex h-[124px] flex-col justify-between rounded-2xl border border-neutral-10 px-4 py-3 transition-colors duration-200 hover:border-neutral-40"
             >
               <div className="flex flex-col">
                 <Text size={15} weight="semibold">
@@ -122,6 +122,8 @@ const ReposPage: Page = () => {
   )
 }
 
-ReposPage.getLayout = InsightsLayout
+ReposPage.getLayout = function getLayout(page) {
+  return <InsightsLayout>{page}</InsightsLayout>
+}
 
 export default ReposPage
