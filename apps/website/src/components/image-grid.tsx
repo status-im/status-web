@@ -20,10 +20,11 @@ const ImageGrid = (props: Props) => {
 type ItemProps = {
   src: StaticImageData
   span: 1 | 2 | 3 | 4 | 5 | 6
+  alt: string
 }
 
 const Item = (props: ItemProps) => {
-  const { src, span } = props
+  const { src, span, alt } = props
 
   return (
     <div
@@ -37,7 +38,7 @@ const Item = (props: ItemProps) => {
         span === 6 && 'row-span-6',
       ])}
     >
-      <Image src={src} alt="TODO" />
+      <Image src={src} alt={alt} />
     </div>
   )
 }

@@ -18,7 +18,7 @@ type Props = {
   image: StaticImageData
   imageAlt: string
   customNode?: React.ReactNode
-  color: 'yellow' | 'turquoise' | 'purple'
+  color: 'yellow' | 'turquoise' | 'purple' | 'none'
   information?: string
   direction?: 'ltr' | 'rtl'
 }

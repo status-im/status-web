@@ -60,6 +60,27 @@ const featureList = [
   },
 ]
 
+const tokenFeaturesList = [
+  {
+    title: 'Token minting',
+    description:
+      'Mint NFT and ERC-20 tokens on any chain. Choose from finite or unlimited supply. Create soulbound and remotely destructible NFTs.',
+    image: featureImage2,
+  },
+  {
+    title: 'Token airdrop',
+    description:
+      'Airdrop newly minted or pre-existing tokens to current and prospective members to grow your community and reward engagement.',
+    image: featureImage2,
+  },
+  {
+    title: 'Token retail',
+    description:
+      'Sell tokens for fixed prices. Earnings deposited into any address, which could be a multi-sig. Token gate your token sales. 0% fee.',
+    image: featureImage2,
+  },
+]
+
 const CreateCommunityPage: Page = () => {
   return (
     <Content className="bg-neutral-80">
@@ -77,7 +98,7 @@ const CreateCommunityPage: Page = () => {
       {/* By using Status, your community can regain control of it’s destiny and data. */}
       {/* <VideoSection /> */}
 
-      <div className="grid grid-cols-3 gap-20 py-40">
+      <div className="m-auto grid max-w-[1083px] grid-cols-3 gap-20 py-40">
         {featureList.map(feature => (
           <div key={feature.title} className="flex flex-col">
             <Image
@@ -85,7 +106,7 @@ const CreateCommunityPage: Page = () => {
               alt={feature.image.alt}
               width={48}
               height={48}
-              className="mb-4"
+              className="mb-4 ml-0"
             />
             <Text size={27} weight="semibold">
               {feature.title}
@@ -105,31 +126,32 @@ const CreateCommunityPage: Page = () => {
         description="Imagine a community group chat platform designed to work with crypto from the ground up."
         description2="With token gating, minting, airdrop and retail tools, the possibilities for your community are limitless."
       >
-        {/* <Section
+        <Section
           icon="lock"
           title="Token gating"
+          color="none"
           description="Only let hodlers of specific tokens read or post to channels. Or require tokens to join your community."
-          // TODO: explanation
           secondaryTitle="Powerful permissions"
           secondaryDescription="Use ERC-20, NFT and ENS tokens plus AND and OR statements in rules. Set channels so anybody can read, but tokens are required to post. Assign admin permissions with remotely destructible soulbound tokens. And much, much more!"
-          image="/assets/create-community/8.png"
+          image={featureImage1}
           imageAlt="wallet-5"
-          direction="rtl"
-        /> */}
+          direction="ltr"
+        />
 
-        <div className="grid grid-flow-col gap-5">
-          {[1, 2, 3].map(item => (
-            <div key={item} className="rounded-[36px] backdrop-blur-lg">
+        <div className="grid grid-flow-col gap-5 bg-[url(https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1287&q=80)] bg-cover p-20">
+          {tokenFeaturesList.map(({ title, description, image }) => (
+            <div
+              key={title}
+              className="rounded-[36px] border border-neutral-20 backdrop-blur-lg"
+            >
               <div className="flex flex-col p-6">
-                <Text size={27} weight="semibold">
-                  Token minting
-                </Text>
-                <Text size={19}>
-                  Mint NFT and ERC-20 tokens on any chain. Choose from finite or
-                  unlimited supply. Create soulbound and remotely destructible
-                  NFTs.
-                  {/* TODO EXPLAINATION */}
-                </Text>
+                <div className="flex flex-col pb-24">
+                  <Text size={27} weight="semibold">
+                    {title}
+                  </Text>
+                  <Text size={19}>{description}</Text>
+                </div>
+                <Image src={image} alt={title} />
               </div>
             </div>
           ))}
@@ -150,6 +172,18 @@ const CreateCommunityPage: Page = () => {
           <ImageGrid.Item src={featureImage5} alt="feature-5" span={3} />
         </ImageGrid>
       </SectionLarge>
+
+      <div className="flex flex-col">
+        <Text size={27} weight="semibold">
+          Share your community
+        </Text>
+        <div className="relative flex pt-1">
+          <Text size={27}>
+            Using web URLs that can be posted on Web2 social media. User
+            doesn&rsquo;t have Status? Open in browser.
+          </Text>
+        </div>
+      </div>
 
       {/* FULL PAGE SCREENSHOT */}
 
