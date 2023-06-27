@@ -43,7 +43,7 @@ export const Hero = (props: Props) => {
 
         <div className="relative flex justify-center">
           <div className="mt-6 inline-flex rounded-[20px] border border-dashed border-neutral-80/20 p-2 lg:mt-16">
-            <Button size={40} icon={<DownloadIcon size={20} />}>
+            <Button size={40} icon={<DownloadIcon size={20} />} variant={color}>
               Sign up for early access
             </Button>
           </div>
