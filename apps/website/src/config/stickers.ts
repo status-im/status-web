@@ -3,7 +3,6 @@ import grumpyCat from '@images/stickers/grumpy-cat.png'
 import pizza from '@images/stickers/pizza.png'
 import punk from '@images/stickers/punk.png'
 import smudgeCat from '@images/stickers/smudge-cat.png'
-import { StaticImageData } from 'next/image'
 
 export type Sticker = keyof typeof stickers
 
