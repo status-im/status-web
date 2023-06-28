@@ -1,3 +1,7 @@
+import { useEffect, useState } from 'react'
+
+import { SearchIcon } from '@status-im/icons'
+
 import { Input } from './input'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -14,7 +18,70 @@ type Story = StoryObj<typeof Input>
 export const Primary: Story = {
   args: {
     placeholder: 'Type something...',
-    // children: 'Click me',
+  },
+}
+
+const InputSearch = () => {
+  const [value, setValue] = useState('')
+
+  // limit input to 100 characters just for demo purposes
+  useEffect(() => {
+    if (value.length > 100) {
+      setValue(value.slice(0, 100))
+    }
+  }, [value])
+
+  return (
+    <>
+      <Input
+        placeholder="Please type something..."
+        value={value}
+        onChangeText={setValue}
+        icon={<SearchIcon size={20} />}
+        onClear={() => setValue('')}
+        label="Search"
+        endLabel={`${value.length}/100`}
+        size={40}
+        button={{
+          label: 'Confirm',
+          onPress: () => alert('Confirmed!'),
+        }}
+      />
+    </>
+  )
+}
+
+const InputSearchMinimzed = () => {
+  const [value, setValue] = useState('')
+
+  return (
+    <>
+      <Input
+        placeholder="Please type something..."
+        value={value}
+        onChangeText={setValue}
+        icon={<SearchIcon size={20} />}
+        onClear={() => setValue('')}
+        size={32}
+        direction="rtl"
+        variant="retractable"
+      />
+    </>
+  )
+}
+
+export const Minimized: Story = {
+  render: () => <InputSearchMinimzed />,
+}
+
+export const CompleteExample: Story = {
+  render: () => <InputSearch />,
+}
+
+export const WithError: Story = {
+  args: {
+    placeholder: 'Type something...',
+    error: true,
   },
 }
 

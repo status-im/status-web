@@ -21,7 +21,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import { ParalaxCircle } from '@/components/parallax-circle'
-import { LINKS } from '@/config/links'
+import { ROUTES } from '@/config/routes'
 import { stickers } from '@/config/stickers'
 import { AppLayout, Content } from '@/layouts/app-layout'
 
@@ -358,7 +358,7 @@ const PREFOOTER_LIST = [
       'Building apps to uphold human rights, protect free speech & defend privacy.',
     link: {
       label: 'Our Mission',
-      href: LINKS.About[0].href,
+      href: ROUTES.About[0].href,
     },
   },
   {
@@ -367,7 +367,7 @@ const PREFOOTER_LIST = [
       'Participate in Status’ governance and help guide development with SNT.',
     link: {
       label: 'About SNT',
-      href: LINKS.About.find(link => link.name === 'Mission')!.href,
+      href: ROUTES.About.find(link => link.name === 'Mission')!.href,
     },
   },
   {
@@ -376,7 +376,7 @@ const PREFOOTER_LIST = [
       'Follow development progress as we build a truly decentralized super app.',
     link: {
       label: 'Read the blog',
-      href: LINKS.Collaborate.find(link => link.name === 'Blog')!.href,
+      href: ROUTES.Collaborate.find(link => link.name === 'Blog')!.href,
     },
   },
 ]

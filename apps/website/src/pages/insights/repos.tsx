@@ -1,4 +1,5 @@
-import { Text } from '@status-im/components'
+import { Shadow, Text } from '@status-im/components'
+import { OpenIcon, UnlockedIcon } from '@status-im/icons'
 
 import { Link } from '@/components/link'
 import { InsightsLayout } from '@/layouts/insights-layout'
@@ -31,6 +32,24 @@ const repos = [
     stars: 5,
   },
   {
+    name: 'nim-waku',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'go-waku',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
+    name: 'js-waku',
+    description: 'a free (libre) open source, mobile OS for Ethereum.',
+    issues: 10,
+    stars: 5,
+  },
+  {
     name: 'nimbus-eth2',
     description: 'a free (libre) open source, mobile OS for Ethereum.',
     issues: 10,
@@ -55,30 +74,48 @@ const ReposPage: Page = () => {
 
       <div className="grid grid-cols-3 gap-5">
         {repos.map(repo => (
-          <Link
-            key={repo.name}
-            href={`https://github.com/status-im/${repo.name}`}
-            className="flex h-[124px] flex-col rounded-2xl border border-neutral-10 px-4 py-3 transition-colors duration-200 hover:border-neutral-40"
-          >
-            <Text size={15} weight="semibold">
-              {repo.name}
-            </Text>
-            <Text size={15} color="$neutral-50">
-              {repo.description}
-            </Text>
+          <Shadow key={repo.name}>
+            <Link
+              href={`https://github.com/status-im/${repo.name}`}
+              className="flex h-[124px] flex-col justify-between rounded-2xl border border-neutral-10 px-4 py-3 transition-colors duration-200 hover:border-neutral-40"
+            >
+              <div className="flex flex-col">
+                <Text size={15} weight="semibold">
+                  {repo.name}
+                </Text>
+                <Text size={15} color="$neutral-50">
+                  {repo.description}
+                </Text>
+              </div>
 
-            <div className="flex gap-3 pt-4">
-              <Text size={13} weight="medium" color="$neutral-50">
-                Public
-              </Text>
-              <Text size={13} weight="medium" color="$neutral-50">
-                42 Issues
-              </Text>
-              <Text size={13} weight="medium" color="$neutral-50">
-                32
-              </Text>
-            </div>
-          </Link>
+              <div className="flex gap-3 pt-4">
+                <div className="flex items-center">
+                  <div className="pr-1">
+                    <UnlockedIcon size={12} color="$neutral-50" />
+                  </div>
+                  <Text size={13} weight="medium" color="$neutral-100">
+                    Public
+                  </Text>
+                </div>
+                <div className="flex items-center">
+                  <div className="pr-1">
+                    <OpenIcon size={12} color="$neutral-50" />
+                  </div>
+                  <Text size={13} weight="medium" color="$neutral-100">
+                    42 issues
+                  </Text>
+                </div>
+                <div className="flex items-center">
+                  <div className="pr-1">
+                    <OpenIcon size={12} color="$neutral-50" />
+                  </div>
+                  <Text size={13} weight="medium" color="$neutral-100">
+                    32
+                  </Text>
+                </div>
+              </div>
+            </Link>
+          </Shadow>
         ))}
       </div>
     </div>

@@ -1,2 +1,2 @@
-export { Breadcrumbs } from './breadcrumbs/breadcrumbs'
-export { SideBar } from './side-bar/side-bar'
+export { EpicOverview } from './epic-overview'
+export { TableIssues } from './table-issues/table-issues'

@@ -1,12 +1,14 @@
 import { Button, Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import title from 'title'
 
-import { Breadcrumbs } from '@/components'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { AppLayout } from '@/layouts/app-layout'
 import { getPostsByTagSlug, getTagSlugs } from '@/lib/ghost'
 
 import { PostCard } from '..'
 
+import type { BreadcrumbsProps } from '@/components/breadcrumbs'
 import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type {
   GetStaticPaths,
@@ -34,6 +36,7 @@ export const getStaticProps: GetStaticProps<
   {
     posts: PostOrPage[]
     meta: PostsOrPages['meta']
+    breadcrumbs: BreadcrumbsProps['items']
   },
   Params
 > = async context => {
@@ -46,17 +49,32 @@ export const getStaticProps: GetStaticProps<
     }
   }
 
+  // root
+  const breadcrumbs = [
+    {
+      label: 'Blog',
+      href: '/blog',
+    },
+    {
+      label: title(context.params!.slug),
+      href: `/blog/tag/${context.params!.slug}`,
+    },
+  ]
+
   return {
     props: {
       posts,
       meta,
+      breadcrumbs,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const BlogTagPage: Page<Props> = ({ posts, meta }) => {
+const BlogTagPage: Page<Props> = (props: Props) => {
+  const { posts, meta, breadcrumbs } = props
+
   const tag = posts[0].primary_tag!
 
   const {
@@ -94,7 +112,7 @@ const BlogTagPage: Page<Props> = ({ posts, meta }) => {
       {/* layout 2 */}
       {/* breadcumbs */}
       <div className="border-b border-neutral-10 px-5 py-[13px]">
-        <Breadcrumbs cutFirstSegment={false} />
+        <Breadcrumbs items={breadcrumbs} />
       </div>
 
       <div className="px-5">
