@@ -1,5 +1,13 @@
 # @felicio/components
 
+## 0.0.6
+
+### Patch Changes
+
+- add tamagui deps
+- Updated dependencies
+  - @felicio/icons@0.0.6
+
 ## 0.0.5
 
 ### Patch Changes
