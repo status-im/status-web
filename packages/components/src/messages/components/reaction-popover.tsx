@@ -5,7 +5,7 @@ import {
   SadIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
-} from '@felicio/icons'
+} from '@status-im/icons'
 import { XStack } from 'tamagui'
 
 import { IconButton } from '../../icon-button'

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { Avatar, Button, Shadow, Tag, Text } from '@felicio/components'
+import { Avatar, Button, Shadow, Tag, Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/router'

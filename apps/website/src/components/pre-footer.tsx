@@ -1,5 +1,5 @@
-import { Button, Text } from '@felicio/components'
-import { DownloadIcon } from '@felicio/icons'
+import { Button, Text } from '@status-im/components'
+import { DownloadIcon } from '@status-im/icons'
 import Image from 'next/image'
 
 import logoSrc from '../../public/images/logo/default.svg'

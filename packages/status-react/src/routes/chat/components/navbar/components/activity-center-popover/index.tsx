@@ -18,7 +18,7 @@ import {
   Tooltip,
 } from '../../../../../../system'
 
-import type { Notification } from '@felicio/js'
+import type { Notification } from '@status-im/js'
 
 export const ActivityCenterPopover = () => {
   const [open, setOpen] = useState(false)

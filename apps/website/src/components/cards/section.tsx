@@ -1,5 +1,5 @@
-import { Text } from '@felicio/components'
-import { PopupIcon } from '@felicio/icons'
+import { Text } from '@status-im/components'
+import { PopupIcon } from '@status-im/icons'
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
 

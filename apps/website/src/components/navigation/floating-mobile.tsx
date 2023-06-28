@@ -1,5 +1,5 @@
-import { Button, IconButton } from '@felicio/components'
-import { CloseIcon, DownloadIcon, MenuIcon } from '@felicio/icons'
+import { Button, IconButton } from '@status-im/components'
+import { CloseIcon, DownloadIcon, MenuIcon } from '@status-im/icons'
 
 import { Link } from '../link'
 import { Logo } from '../logo'

@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from '@felicio/icons'
+import { ChevronRightIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Counter } from '../../counter'

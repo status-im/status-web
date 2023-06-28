@@ -1,3 +1,3 @@
-import { config } from '@felicio/components'
+import { config } from '@status-im/components'
 
 export default config

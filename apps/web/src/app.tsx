@@ -10,7 +10,7 @@ import {
   Topbar,
   useAppDispatch,
   useAppState,
-} from '@felicio/components'
+} from '@status-im/components'
 import useResizeObserver from 'use-resize-observer'
 
 import { useScrollPosition } from './hooks/use-scroll-position'

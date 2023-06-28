@@ -1,6 +1,6 @@
 import { useProtocol } from './use-protocol'
 
-import type { Member } from '@felicio/js'
+import type { Member } from '@status-im/js'
 
 export const useMembers = (): Member[] => {
   const { client, account } = useProtocol()

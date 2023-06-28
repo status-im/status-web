@@ -1,6 +1,6 @@
 {
   "root": true,
-  "extends": ["@felicio/eslint-config"],
+  "extends": ["@status-im/eslint-config"],
   "overrides": [
     {
       "files": ["./src/protos/**/*_pb.ts"],

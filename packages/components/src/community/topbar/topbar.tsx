@@ -9,7 +9,7 @@ import {
   ShareIcon,
   TrashIcon,
   UpToDateIcon,
-} from '@felicio/icons'
+} from '@status-im/icons'
 import { Stack, Text as RNText } from '@tamagui/core'
 import { BlurView } from 'expo-blur'
 

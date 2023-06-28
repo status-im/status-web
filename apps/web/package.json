@@ -11,8 +11,8 @@
     "clean": "rimraf node_modules dist .turbo"
   },
   "dependencies": {
-    "@felicio/components": "*",
-    "@felicio/icons": "*",
+    "@status-im/components": "*",
+    "@status-im/icons": "*",
     "@tamagui/core": "1.36.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -24,7 +24,7 @@
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.2.0",
-    "@felicio/eslint-config": "*",
+    "@status-im/eslint-config": "*",
     "typescript": "^5.0.3",
     "vite": "^4.2.1"
   }

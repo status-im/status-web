@@ -11,10 +11,10 @@
     "paths": {
       "react-native": ["react-native-web"],
       "@/*": ["./src/*"],
-      "@felicio/js/encode-url-data": [
+      "@status-im/js/encode-url-data": [
         "../../packages/status-js/src/utils/encode-url-data"
       ],
-      "@felicio/js/encode-url-hash": [
+      "@status-im/js/encode-url-hash": [
         "../../packages/status-js/src/utils/encode-url-hash"
       ]
     }

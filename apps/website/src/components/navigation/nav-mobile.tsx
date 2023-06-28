@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import { Button, IconButton } from '@felicio/components'
-import { CloseIcon, DownloadIcon, MenuIcon } from '@felicio/icons'
+import { Button, IconButton } from '@status-im/components'
+import { CloseIcon, DownloadIcon, MenuIcon } from '@status-im/icons'
 
 import { Logo } from '@/components/logo'
 import { useLockScroll } from '@/hooks/use-lock-scroll'

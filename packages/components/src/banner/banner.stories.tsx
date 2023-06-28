@@ -1,4 +1,4 @@
-import { AlertIcon, PinIcon, RecentIcon } from '@felicio/icons'
+import { AlertIcon, PinIcon, RecentIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Banner } from './banner'

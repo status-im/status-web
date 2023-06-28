@@ -1,10 +1,10 @@
 import { createElement } from 'react'
 
-import * as Icon from '@felicio/icons'
+import * as Icon from '@status-im/icons'
 
 import { Text } from '../text'
 
-import type { IconProps } from '@felicio/icons'
+import type { IconProps } from '@status-im/icons'
 import type { Meta, StoryObj } from '@storybook/react'
 import type { ColorTokens } from 'tamagui'
 

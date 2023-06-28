@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@felicio/icons'
+import { ChevronLeftIcon, ChevronRightIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 import { format } from 'date-fns'
 import { useNavigation } from 'react-day-picker'

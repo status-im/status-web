@@ -1,4 +1,4 @@
-import { Text } from '@felicio/components'
+import { Text } from '@status-im/components'
 
 const HandsSection = () => {
   return (

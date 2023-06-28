@@ -6,7 +6,7 @@ import { Text } from '../text'
 import { getCustomStyles } from './get-custom-styles'
 
 import type { TextProps } from '../text'
-import type { IconProps } from '@felicio/icons'
+import type { IconProps } from '@status-im/icons'
 import type { ColorTokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
 

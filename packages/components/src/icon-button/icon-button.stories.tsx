@@ -1,4 +1,4 @@
-import { OptionsIcon } from '@felicio/icons'
+import { OptionsIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
 import { IconButton } from './icon-button'

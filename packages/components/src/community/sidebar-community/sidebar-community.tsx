@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import { CommunitiesIcon, MembersIcon } from '@felicio/icons'
 import * as Accordion from '@radix-ui/react-accordion'
+import { CommunitiesIcon, MembersIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 
 import { Avatar } from '../../avatar'

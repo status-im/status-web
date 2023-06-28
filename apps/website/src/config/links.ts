@@ -3,7 +3,7 @@ import {
   AirdropIcon,
   CommunitiesIcon,
   TokenIcon,
-} from '@felicio/icons'
+} from '@status-im/icons'
 
 export const LINKS = {
   Features: [

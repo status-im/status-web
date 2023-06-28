@@ -1,5 +1,5 @@
 {
-  "name": "@felicio/js",
+  "name": "@status-im/js",
   "version": "0.2.5",
   "license": "MIT OR Apache-2.0",
   "type": "module",
@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1.0.0",
-    "@felicio/eslint-config": "*",
+    "@status-im/eslint-config": "*",
     "happy-dom": "^9.1.7"
   },
   "files": [

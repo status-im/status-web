@@ -8,18 +8,18 @@ import {
   publicKeyToColorHash,
   publicKeyToEmojiHash,
   recoverPublicKeyFromEncodedURLData,
-} from '@felicio/js'
+} from '@status-im/js'
 
 import { ERROR_CODES } from '@/consts/error-codes'
 
 import type { Data } from '@/components/preview-page'
 import type { EnsResponse } from '@/pages/api/ens'
-import type { ChannelInfo, CommunityInfo, UserInfo } from '@felicio/js'
+import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 import type {
   decodeChannelURLData,
   decodeCommunityURLData,
   decodeUserURLData,
-} from '@felicio/js/encode-url-data'
+} from '@status-im/js/encode-url-data'
 
 export const useURLData = (
   type: 'community' | 'channel' | 'profile',

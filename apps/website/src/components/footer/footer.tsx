@@ -1,4 +1,4 @@
-import { Text } from '@felicio/components'
+import { Text } from '@status-im/components'
 import { cva } from 'class-variance-authority'
 
 import { LINKS, SOCIALS } from '@/config/links'

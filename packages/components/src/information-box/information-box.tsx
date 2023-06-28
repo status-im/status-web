@@ -1,6 +1,6 @@
 import { cloneElement } from 'react'
 
-import { CloseIcon } from '@felicio/icons'
+import { CloseIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 
 import { Button } from '../button'

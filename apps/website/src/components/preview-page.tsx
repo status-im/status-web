@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 
-import { neutral } from '@felicio/colors'
+import { neutral } from '@status-im/colors'
 import {
   Avatar,
   Button,
@@ -13,8 +13,13 @@ import {
   Text,
   ToastContainer,
   useToast,
-} from '@felicio/components'
-import { DownloadIcon, InfoIcon, MembersIcon, QrCodeIcon } from '@felicio/icons'
+} from '@status-im/components'
+import {
+  DownloadIcon,
+  InfoIcon,
+  MembersIcon,
+  QrCodeIcon,
+} from '@status-im/icons'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 
@@ -26,12 +31,12 @@ import { getRequestClient } from '@/lib/request-client'
 import { ErrorPage } from './error-page'
 import { QrDialog } from './qr-dialog'
 
-import type { ChannelInfo, CommunityInfo, UserInfo } from '@felicio/js'
+import type { ChannelInfo, CommunityInfo, UserInfo } from '@status-im/js'
 import type {
   decodeChannelURLData,
   decodeCommunityURLData,
   decodeUserURLData,
-} from '@felicio/js/encode-url-data'
+} from '@status-im/js/encode-url-data'
 import type { CSSProperties } from 'react'
 
 type Type = 'community' | 'channel' | 'profile'

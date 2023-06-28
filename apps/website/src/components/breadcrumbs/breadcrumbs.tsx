@@ -1,5 +1,5 @@
-import { Text } from '@felicio/components'
-import { ChevronRightIcon } from '@felicio/icons'
+import { Text } from '@status-im/components'
+import { ChevronRightIcon } from '@status-im/icons'
 import { useRouter } from 'next/router'
 
 import { Link } from '../link'

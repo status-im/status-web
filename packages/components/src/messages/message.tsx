@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PinIcon } from '@felicio/icons'
+import { PinIcon } from '@status-im/icons'
 import { Stack, styled, Unspaced, XStack, YStack } from 'tamagui'
 
 import { Author } from '../author'

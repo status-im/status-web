@@ -1,4 +1,4 @@
-import { ContactIcon, UntrustworthyIcon, VerifiedIcon } from '@felicio/icons'
+import { ContactIcon, UntrustworthyIcon, VerifiedIcon } from '@status-im/icons'
 import { XStack } from 'tamagui'
 
 import { Text } from '../text'

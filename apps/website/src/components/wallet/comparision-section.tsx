@@ -1,4 +1,4 @@
-import { Button, Counter, Tag, Text } from '@felicio/components'
+import { Button, Counter, Tag, Text } from '@status-im/components'
 
 import { useParalax } from '@/hooks/use-parallax'
 

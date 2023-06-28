@@ -1,4 +1,4 @@
-import { decodeCommunityURLData } from '@felicio/js/encode-url-data'
+import { decodeCommunityURLData } from '@status-im/js/encode-url-data'
 
 import { PreviewPage } from '@/components/preview-page'
 import { createGetServerSideProps } from '@/server/ssr'

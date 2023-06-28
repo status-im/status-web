@@ -6,7 +6,7 @@ import { defineConfig, loadEnv } from 'vite'
 import type { PluginOption } from 'vite'
 
 const tamaguiConfig = {
-  components: ['@felicio/components'],
+  components: ['@status-im/components'],
   config: './tamagui.config.ts',
   // useReactNativeWebLite: true,
 }
@@ -19,10 +19,10 @@ export default defineConfig(({ mode }) => {
     resolve: {
       // mainFields: ['module', 'jsnext:main', 'jsnext'],
       alias: {
-        '@felicio/components/hooks': path.resolve(
+        '@status-im/components/hooks': path.resolve(
           '../../packages/components/hooks'
         ),
-        '@felicio/components': path.resolve('../../packages/components/src'),
+        '@status-im/components': path.resolve('../../packages/components/src'),
       },
     },
     define: {

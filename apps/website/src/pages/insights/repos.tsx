@@ -1,4 +1,4 @@
-import { Text } from '@felicio/components'
+import { Text } from '@status-im/components'
 
 import { Link } from '@/components/link'
 import { InsightsLayout } from '@/layouts/insights-layout'

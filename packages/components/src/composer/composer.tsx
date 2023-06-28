@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useImageUpload } from '@felicio/components/hooks'
+import { useImageUpload } from '@status-im/components/hooks'
 import {
   ArrowTopIcon,
   AudioIcon,
@@ -8,7 +8,7 @@ import {
   FormatIcon,
   ImageIcon,
   ReactionIcon,
-} from '@felicio/icons'
+} from '@status-im/icons'
 import { BlurView } from 'expo-blur'
 import { AnimatePresence, Stack, XStack } from 'tamagui'
 

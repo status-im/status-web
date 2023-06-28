@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["@felicio/eslint-config"]
+  "extends": ["@status-im/eslint-config"]
 }

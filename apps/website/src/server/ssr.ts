@@ -2,7 +2,7 @@ import type {
   decodeChannelURLData,
   decodeCommunityURLData,
   decodeUserURLData,
-} from '@felicio/js/encode-url-data'
+} from '@status-im/js/encode-url-data'
 import type { GetServerSideProps } from 'next'
 import type { ParsedUrlQuery } from 'querystring'
 

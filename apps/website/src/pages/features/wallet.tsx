@@ -1,4 +1,4 @@
-import { Text } from '@felicio/components'
+import { Text } from '@status-im/components'
 import imageSection1 from 'public/assets/wallet/4.png'
 import imageSection2 from 'public/assets/wallet/5.png'
 import imageSection3 from 'public/assets/wallet/6.png'

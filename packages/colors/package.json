@@ -1,5 +1,5 @@
 {
-  "name": "@felicio/colors",
+  "name": "@status-im/colors",
   "version": "0.0.6",
   "files": [
     "types",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "@clack/prompts": "^0.6.3",
     "colorjs.io": "^0.4.3",
-    "@felicio/eslint-config": "*",
+    "@status-im/eslint-config": "*",
     "figma-api": "^1.11.0",
     "fs-extra": "^11.1.1",
     "vite": "^4.1.4",

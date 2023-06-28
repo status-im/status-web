@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
-import { Tag, Text } from '@felicio/components'
-import { OpenIcon } from '@felicio/icons'
+import { Tag, Text } from '@status-im/components'
+import { OpenIcon } from '@status-im/icons'
 
 import { Chart } from './chart/chart'
 

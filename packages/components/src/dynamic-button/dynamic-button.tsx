@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { ArrowDownIcon, MentionIcon } from '@felicio/icons'
+import { ArrowDownIcon, MentionIcon } from '@status-im/icons'
 import { styled } from '@tamagui/core'
 import { Pressable } from 'react-native'
 

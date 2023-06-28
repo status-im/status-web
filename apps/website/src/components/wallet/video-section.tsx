@@ -1,4 +1,4 @@
-import { ContextTag, Text } from '@felicio/components'
+import { ContextTag, Text } from '@status-im/components'
 
 import { ParalaxCircle } from './parallax-circle'
 

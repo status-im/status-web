@@ -10,7 +10,7 @@
     "clean": "rimraf node_modules dist"
   },
   "dependencies": {
-    "@felicio/react": "^0.1.1",
+    "@status-im/react": "^0.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

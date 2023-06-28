@@ -1,6 +1,6 @@
-import { Text } from '@felicio/components'
-import { DoneIcon, OpenIcon } from '@felicio/icons'
 import { animated } from '@react-spring/web'
+import { Text } from '@status-im/components'
+import { DoneIcon, OpenIcon } from '@status-im/icons'
 import { Stack } from '@tamagui/core'
 import { defaultStyles, TooltipWithBounds } from '@visx/tooltip'
 

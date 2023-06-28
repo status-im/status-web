@@ -73,13 +73,13 @@ In your project,
 Install package:
 
 ```sh
-npm install @felicio/react
+npm install @status-im/react
 ```
 
 Import component:
 
 ```js
-import { Community } from '@felicio/react'
+import { Community } from '@status-im/react'
 ```
 
 Set component props:

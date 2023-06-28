@@ -10,7 +10,7 @@ import {
   PinIcon,
   ReplyIcon,
   TrashIcon,
-} from '@felicio/icons'
+} from '@status-im/icons'
 
 import { DropdownMenu } from '../../dropdown-menu'
 import { IconButton } from '../../icon-button'

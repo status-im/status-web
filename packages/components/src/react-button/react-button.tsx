@@ -8,7 +8,7 @@ import {
   SadIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
-} from '@felicio/icons'
+} from '@status-im/icons'
 import { styled } from '@tamagui/core'
 import { Pressable } from 'react-native'
 

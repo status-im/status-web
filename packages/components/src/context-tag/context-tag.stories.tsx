@@ -1,4 +1,4 @@
-import { MembersIcon, PendingIcon } from '@felicio/icons'
+import { MembersIcon, PendingIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
 import { ContextTag } from './context-tag'
