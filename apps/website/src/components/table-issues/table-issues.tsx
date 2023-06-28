@@ -11,7 +11,8 @@ import { DropdownFilter, DropdownSort, Tabs } from './filters'
 
 import type { DropdownSortProps } from './filters/dropdown-sort'
 import type {
-  GetFiltersQuery,
+  GetFiltersForOrphansQuery,
+  GetFiltersWithEpicQuery,
   GetIssuesByEpicQuery,
   GetOrphansQuery,
 } from '@/lib/graphql/generated/operations'
@@ -30,7 +31,7 @@ const sortOptions: DropdownSortProps['data'] = [
 type Props = {
   isLoading?: boolean
   data?: GetOrphansQuery['gh_orphans'] | GetIssuesByEpicQuery['gh_epic_issues']
-  filters?: GetFiltersQuery
+  filters?: GetFiltersWithEpicQuery | GetFiltersForOrphansQuery
   count?: {
     total?: number
     closed?: number
@@ -48,12 +49,6 @@ type Props = {
   handleOrderByValue: (value: Order_By) => void
   handleSearchFilter: (value: string) => void
   searchFilterValue: string
-}
-
-function isIssues(
-  data: GetOrphansQuery['gh_orphans'] | GetIssuesByEpicQuery['gh_epic_issues']
-): data is GetIssuesByEpicQuery['gh_epic_issues'] {
-  return 'assignee' in data[0]
 }
 
 const TableIssues = (props: Props) => {
@@ -96,7 +91,7 @@ const TableIssues = (props: Props) => {
                 <div className="flex gap-2">
                   <div className="transition-all">
                     <Input
-                      placeholder="Find Author"
+                      placeholder="Find issue..."
                       icon={<SearchIcon size={20} />}
                       size={32}
                       value={searchFilterValue}
@@ -149,7 +144,6 @@ const TableIssues = (props: Props) => {
                     placeholder="Find repo"
                   />
                 </div>
-
                 <div className="pl-2">
                   <DropdownSort
                     data={sortOptions}
@@ -165,7 +159,6 @@ const TableIssues = (props: Props) => {
 
       <div className="relative divide-y divide-neutral-10">
         {data.length !== 0 &&
-          isIssues(data) &&
           data.map(issue => (
             <Link
               key={issue.issue_number}
@@ -180,8 +173,8 @@ const TableIssues = (props: Props) => {
                     <ActiveMembersIcon size={20} color="$neutral-50" />
                   )}
                 </div>
-                <div className="flex flex-col">
-                  <Text size={15} weight="medium">
+                <div className="flex max-w-lg flex-col">
+                  <Text size={15} weight="medium" truncate>
                     {issue.title}
                   </Text>
                   <Text size={13} color="$neutral-50">
@@ -195,13 +188,26 @@ const TableIssues = (props: Props) => {
               </div>
 
               <div className="flex gap-3">
-                <div className="flex gap-1">
+                {'epic_name' in issue && issue.epic_name && (
                   <Tag
                     size={24}
                     label={issue.epic_name || ''}
                     color={`#${issue.epic_color}` || '$primary'}
                   />
-                </div>
+                )}
+
+                {'labels' in issue &&
+                  issue.labels &&
+                  JSON.parse(issue.labels).map(
+                    (label: { id: string; name: string; color: string }) => (
+                      <Tag
+                        key={label.id}
+                        size={24}
+                        label={label.name}
+                        color={`#${label.color}`}
+                      />
+                    )
+                  )}
                 <Avatar type="user" size={24} name={issue.author || ''} />
               </div>
             </Link>

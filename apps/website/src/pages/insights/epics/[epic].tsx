@@ -10,7 +10,7 @@ import { InsightsLayout } from '@/layouts/insights-layout'
 import { api } from '@/lib/graphql'
 import {
   useGetEpicIssuesCountQuery,
-  useGetFiltersQuery,
+  useGetFiltersWithEpicQuery,
 } from '@/lib/graphql/generated/hooks'
 import { Order_By } from '@/lib/graphql/generated/schemas'
 
@@ -19,8 +19,8 @@ import type {
   GetBurnupQueryVariables,
   GetEpicIssuesCountQuery,
   GetEpicIssuesCountQueryVariables,
-  GetFiltersQuery,
-  GetFiltersQueryVariables,
+  GetFiltersWithEpicQuery,
+  GetFiltersWithEpicQueryVariables,
   GetIssuesByEpicQuery,
   GetIssuesByEpicQueryVariables,
 } from '@/lib/graphql/generated/operations'
@@ -76,8 +76,8 @@ const GET_EPIC_ISSUES_COUNT = /* GraphQL */ `
   }
 `
 
-const GET_FILTERS = /* GraphQL */ `
-  query getFilters($epicName: String!) {
+const GET_FILTERS_WITH_EPIC = /* GraphQL */ `
+  query getFiltersWithEpic($epicName: String!) {
     authors: gh_epic_issues(
       where: { epic_name: { _eq: $epicName }, author: { _is_null: false } }
       distinct_on: author
@@ -102,7 +102,7 @@ const GET_FILTERS = /* GraphQL */ `
 type Props = {
   burnup: GetBurnupQuery['gh_burnup']
   count: GetEpicIssuesCountQuery
-  filters: GetFiltersQuery
+  filters: GetFiltersWithEpicQuery
 }
 
 const LIMIT = 10
@@ -193,7 +193,7 @@ const EpicsDetailPage: Page<Props> = props => {
       }
     )
 
-  const { data: filters } = useGetFiltersQuery(
+  const { data: filters } = useGetFiltersWithEpicQuery(
     {
       epicName: epicName as string,
     },
@@ -225,12 +225,7 @@ const EpicsDetailPage: Page<Props> = props => {
         <Breadcrumbs />
       </div>
       <div className="border-b border-neutral-10 px-10 py-6">
-        <EpicOverview
-          title="Communities protocol"
-          description="Detecting keycard reader removal for the beginning of each flow"
-          fullscreen
-          burnup={burnup}
-        />
+        <EpicOverview title={epicName as string} fullscreen burnup={burnup} />
       </div>
       <div className="border-b border-neutral-10 px-10 py-6">
         <TableIssues
@@ -281,12 +276,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
   })
 
-  const resultFilters = await api<GetFiltersQuery, GetFiltersQueryVariables>(
-    GET_FILTERS,
-    {
-      epicName: String(epic),
-    }
-  )
+  const resultFilters = await api<
+    GetFiltersWithEpicQuery,
+    GetFiltersWithEpicQueryVariables
+  >(GET_FILTERS_WITH_EPIC, {
+    epicName: String(epic),
+  })
 
   return {
     props: {

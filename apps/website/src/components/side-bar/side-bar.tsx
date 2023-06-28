@@ -41,7 +41,7 @@ const SideBar = (props: Props) => {
 
   return (
     <div className="border-r border-neutral-10 p-5">
-      <aside className="sticky top-5 min-w-[320px]">
+      <aside className="sticky top-5 w-[280px]">
         {isLoading ? (
           <SkeletonPlaceholder />
         ) : (

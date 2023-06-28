@@ -137,8 +137,8 @@ export const useGetEpicIssuesCountQuery = <
 useGetEpicIssuesCountQuery.getKey = (
   variables: Types.GetEpicIssuesCountQueryVariables
 ) => ['getEpicIssuesCount', variables]
-export const GetFiltersDocument = `
-    query getFilters($epicName: String!) {
+export const GetFiltersWithEpicDocument = `
+    query getFiltersWithEpic($epicName: String!) {
   authors: gh_epic_issues(
     where: {epic_name: {_eq: $epicName}, author: {_is_null: false}}
     distinct_on: author
@@ -159,33 +159,39 @@ export const GetFiltersDocument = `
   }
 }
     `
-export const useGetFiltersQuery = <
-  TData = Types.GetFiltersQuery,
+export const useGetFiltersWithEpicQuery = <
+  TData = Types.GetFiltersWithEpicQuery,
   TError = GraphqlApiError
 >(
-  variables: Types.GetFiltersQueryVariables,
-  options?: UseQueryOptions<Types.GetFiltersQuery, TError, TData>
+  variables: Types.GetFiltersWithEpicQueryVariables,
+  options?: UseQueryOptions<Types.GetFiltersWithEpicQuery, TError, TData>
 ) =>
-  useQuery<Types.GetFiltersQuery, TError, TData>(
-    ['getFilters', variables],
-    createFetcher<Types.GetFiltersQuery, Types.GetFiltersQueryVariables>(
-      GetFiltersDocument,
-      variables
-    ),
+  useQuery<Types.GetFiltersWithEpicQuery, TError, TData>(
+    ['getFiltersWithEpic', variables],
+    createFetcher<
+      Types.GetFiltersWithEpicQuery,
+      Types.GetFiltersWithEpicQueryVariables
+    >(GetFiltersWithEpicDocument, variables),
     options
   )
 
-useGetFiltersQuery.getKey = (variables: Types.GetFiltersQueryVariables) => [
-  'getFilters',
-  variables,
-]
+useGetFiltersWithEpicQuery.getKey = (
+  variables: Types.GetFiltersWithEpicQueryVariables
+) => ['getFiltersWithEpic', variables]
 export const GetOrphansDocument = `
-    query getOrphans {
-  gh_orphans {
+    query getOrphans($where: gh_orphans_bool_exp!, $limit: Int!, $offset: Int!, $orderBy: order_by) {
+  gh_orphans(
+    where: $where
+    order_by: {created_at: $orderBy}
+    limit: $limit
+    offset: $offset
+  ) {
     labels
     assignee
     author
     issue_number
+    issue_url
+    created_at
     closed_at
     repository
     stage
@@ -197,11 +203,11 @@ export const useGetOrphansQuery = <
   TData = Types.GetOrphansQuery,
   TError = GraphqlApiError
 >(
-  variables?: Types.GetOrphansQueryVariables,
+  variables: Types.GetOrphansQueryVariables,
   options?: UseQueryOptions<Types.GetOrphansQuery, TError, TData>
 ) =>
   useQuery<Types.GetOrphansQuery, TError, TData>(
-    variables === undefined ? ['getOrphans'] : ['getOrphans', variables],
+    ['getOrphans', variables],
     createFetcher<Types.GetOrphansQuery, Types.GetOrphansQueryVariables>(
       GetOrphansDocument,
       variables
@@ -209,8 +215,76 @@ export const useGetOrphansQuery = <
     options
   )
 
-useGetOrphansQuery.getKey = (variables?: Types.GetOrphansQueryVariables) =>
-  variables === undefined ? ['getOrphans'] : ['getOrphans', variables]
+useGetOrphansQuery.getKey = (variables: Types.GetOrphansQueryVariables) => [
+  'getOrphans',
+  variables,
+]
+export const GetOrphansCountDocument = `
+    query getOrphansCount($where: gh_orphans_bool_exp!) {
+  gh_orphans(where: $where) {
+    closed_at
+  }
+}
+    `
+export const useGetOrphansCountQuery = <
+  TData = Types.GetOrphansCountQuery,
+  TError = GraphqlApiError
+>(
+  variables: Types.GetOrphansCountQueryVariables,
+  options?: UseQueryOptions<Types.GetOrphansCountQuery, TError, TData>
+) =>
+  useQuery<Types.GetOrphansCountQuery, TError, TData>(
+    ['getOrphansCount', variables],
+    createFetcher<
+      Types.GetOrphansCountQuery,
+      Types.GetOrphansCountQueryVariables
+    >(GetOrphansCountDocument, variables),
+    options
+  )
+
+useGetOrphansCountQuery.getKey = (
+  variables: Types.GetOrphansCountQueryVariables
+) => ['getOrphansCount', variables]
+export const GetFiltersForOrphansDocument = `
+    query getFiltersForOrphans {
+  authors: gh_orphans(where: {author: {_is_null: false}}, distinct_on: author) {
+    author
+  }
+  assignees: gh_orphans(
+    where: {assignee: {_is_null: false}}
+    distinct_on: assignee
+  ) {
+    assignee
+  }
+  repos: gh_orphans(distinct_on: repository) {
+    repository
+  }
+}
+    `
+export const useGetFiltersForOrphansQuery = <
+  TData = Types.GetFiltersForOrphansQuery,
+  TError = GraphqlApiError
+>(
+  variables?: Types.GetFiltersForOrphansQueryVariables,
+  options?: UseQueryOptions<Types.GetFiltersForOrphansQuery, TError, TData>
+) =>
+  useQuery<Types.GetFiltersForOrphansQuery, TError, TData>(
+    variables === undefined
+      ? ['getFiltersForOrphans']
+      : ['getFiltersForOrphans', variables],
+    createFetcher<
+      Types.GetFiltersForOrphansQuery,
+      Types.GetFiltersForOrphansQueryVariables
+    >(GetFiltersForOrphansDocument, variables),
+    options
+  )
+
+useGetFiltersForOrphansQuery.getKey = (
+  variables?: Types.GetFiltersForOrphansQueryVariables
+) =>
+  variables === undefined
+    ? ['getFiltersForOrphans']
+    : ['getFiltersForOrphans', variables]
 export const GetRepositoriesDocument = `
     query getRepositories {
   gh_repositories {

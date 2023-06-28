@@ -98,9 +98,10 @@ const useChartTooltip = (props: Props) => {
       const totalIssues = getTotalIssues(d)
       const openIssues = totalIssues - closedIssues
 
-      const completedIssuesPercentage = getPercentage(closedIssues, totalIssues)
+      const completedIssuesPercentage =
+        getPercentage(closedIssues, totalIssues) || 0
 
-      const openIssuesPercentage = getPercentage(openIssues, totalIssues)
+      const openIssuesPercentage = getPercentage(openIssues, totalIssues) || 0
 
       showTooltip({
         tooltipData: {

@@ -60,7 +60,7 @@ const DATA = [
 
 type Props = {
   title: string
-  description: string
+  description?: string
   fullscreen?: boolean
   isLoading?: boolean
   burnup?: GetBurnupQuery['gh_burnup']
@@ -103,26 +103,30 @@ export const EpicOverview = (props: Props) => {
         </Text>
         <OpenIcon size={20} />
       </div>
-      <Text size={fullscreen ? 19 : 15} color="$neutral-50">
-        {description}
-      </Text>
+      {Boolean(description) && (
+        <Text size={fullscreen ? 19 : 15} color="$neutral-50">
+          {description}
+        </Text>
+      )}
       <div className="flex py-3">
-        <Tag size={24} label="E:CommunitiesProtocol" color="$blue-50" />
+        <Tag size={24} label={title} color="$blue-50" />
       </div>
 
       <Chart data={filteredData || DATA} height={300} isLoading={isLoading} />
 
-      <div className="flex justify-between pt-3">
+      {/* TODO - Add theses when we have milestones and/or labels */}
+      {/* <div className="flex justify-between pt-3">
         <div className="flex gap-1">
           <Tag size={24} label="Communities" color="#FF7D46" icon="🧙‍♂️" />
           <Tag size={24} label="Wallet" color="#7140FD" icon="🎎" />
         </div>
 
+       
         <div className="flex gap-1">
           <Tag size={24} label="M:0.11.0" color="$danger-50" />
           <Tag size={24} label="M:0.12.0" color="$success-50" />
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

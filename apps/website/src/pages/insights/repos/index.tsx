@@ -6,6 +6,8 @@ import { InsightsLayout } from '@/layouts/insights-layout'
 import { api } from '@/lib/graphql'
 import { useGetRepositoriesQuery } from '@/lib/graphql/generated/hooks'
 
+import { LoadingSkeleton } from './loading-skeleton'
+
 import type {
   GetRepositoriesQuery,
   GetRepositoriesQueryVariables,
@@ -29,13 +31,16 @@ type Props = {
   repos: GetRepositoriesQuery
 }
 
+const capitalizeString = (word: string) =>
+  word.charAt(0).toUpperCase() + word.slice(1)
+
 const ReposPage: Page<Props> = props => {
   const { data, isLoading } = useGetRepositoriesQuery(undefined, {
     initialData: props.repos,
   })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <LoadingSkeleton />
   }
 
   const repos = data?.gh_repositories || []
@@ -69,7 +74,7 @@ const ReposPage: Page<Props> = props => {
                     <UnlockedIcon size={12} color="$neutral-50" />
                   </div>
                   <Text size={13} weight="medium" color="$neutral-100">
-                    {repo.visibility}
+                    {repo.visibility && capitalizeString(repo.visibility)}
                   </Text>
                 </div>
                 <div className="flex items-center">

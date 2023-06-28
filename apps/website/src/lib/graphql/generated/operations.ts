@@ -66,18 +66,23 @@ export type GetEpicIssuesCountQuery = {
   }>
 }
 
-export type GetFiltersQueryVariables = Types.Exact<{
+export type GetFiltersWithEpicQueryVariables = Types.Exact<{
   epicName: Types.Scalars['String']['input']
 }>
 
-export type GetFiltersQuery = {
+export type GetFiltersWithEpicQuery = {
   __typename?: 'query_root'
   authors: Array<{ __typename?: 'gh_epic_issues'; author?: string | null }>
   assignees: Array<{ __typename?: 'gh_epic_issues'; assignee?: string | null }>
   repos: Array<{ __typename?: 'gh_epic_issues'; repository?: string | null }>
 }
 
-export type GetOrphansQueryVariables = Types.Exact<{ [key: string]: never }>
+export type GetOrphansQueryVariables = Types.Exact<{
+  where: Types.Gh_Orphans_Bool_Exp
+  limit: Types.Scalars['Int']['input']
+  offset: Types.Scalars['Int']['input']
+  orderBy?: Types.InputMaybe<Types.Order_By>
+}>
 
 export type GetOrphansQuery = {
   __typename?: 'query_root'
@@ -87,11 +92,33 @@ export type GetOrphansQuery = {
     assignee?: string | null
     author?: string | null
     issue_number?: any | null
+    issue_url?: string | null
+    created_at?: any | null
     closed_at?: any | null
     repository?: string | null
     stage?: string | null
     title?: string | null
   }>
+}
+
+export type GetOrphansCountQueryVariables = Types.Exact<{
+  where: Types.Gh_Orphans_Bool_Exp
+}>
+
+export type GetOrphansCountQuery = {
+  __typename?: 'query_root'
+  gh_orphans: Array<{ __typename?: 'gh_orphans'; closed_at?: any | null }>
+}
+
+export type GetFiltersForOrphansQueryVariables = Types.Exact<{
+  [key: string]: never
+}>
+
+export type GetFiltersForOrphansQuery = {
+  __typename?: 'query_root'
+  authors: Array<{ __typename?: 'gh_orphans'; author?: string | null }>
+  assignees: Array<{ __typename?: 'gh_orphans'; assignee?: string | null }>
+  repos: Array<{ __typename?: 'gh_orphans'; repository?: string | null }>
 }
 
 export type GetRepositoriesQueryVariables = Types.Exact<{

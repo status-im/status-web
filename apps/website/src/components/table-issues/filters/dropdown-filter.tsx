@@ -82,6 +82,7 @@ const DropdownFilter = (props: Props) => {
         >
           {label}
         </Button>
+
         <DropdownMenu.Content
           sideOffset={10}
           align={currentBreakpoint === '2xl' ? 'end' : 'start'}
