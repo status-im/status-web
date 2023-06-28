@@ -99,7 +99,7 @@ export default function App({ Component, pageProps }: Props) {
             )
           )
           .with(
-            P.when(p => p.startsWith('/learn')),
+            P.when(p => p.startsWith('/help')),
             () => (
               <>
                 <link rel="icon" href="/assets/favicon/learn.png" />
