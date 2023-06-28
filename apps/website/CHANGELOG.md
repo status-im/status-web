@@ -1,5 +1,16 @@
 # website
 
+## 0.1.4
+
+### Patch Changes
+
+- upgrade tamagui and react-native-web
+- Updated dependencies
+  - @felicio/colors@0.0.5
+  - @felicio/components@0.0.5
+  - @felicio/icons@0.0.5
+  - @felicio/js@0.2.4
+
 ## 0.1.3
 
 ### Patch Changes

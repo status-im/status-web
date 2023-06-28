@@ -1,5 +1,11 @@
 # @felicio/js
 
+## 0.2.4
+
+### Patch Changes
+
+- upgrade tamagui and react-native-web
+
 ## 0.2.3
 
 ### Patch Changes
