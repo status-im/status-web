@@ -1,6 +1,6 @@
 {
   "name": "@status-im/eslint-config",
-  "version": "0.1.6",
+  "version": "0.1.0",
   "main": "index.js",
   "exports": {
     ".": {
