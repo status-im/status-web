@@ -1,8 +1,8 @@
 import {
-  AdvancedIcon,
-  AirdropIcon,
-  CommunitiesIcon,
-  TokenIcon,
+  GithubIcon,
+  StatusIcon,
+  TwitterIcon,
+  YoutubeIcon,
 } from '@status-im/icons'
 
 export const LINKS = {
@@ -56,22 +56,22 @@ export const SOCIALS = {
   status: {
     name: 'Status',
     href: 'TODO',
-    icon: CommunitiesIcon,
+    icon: StatusIcon,
   },
   twitter: {
     name: 'Twitter',
     href: 'https://twitter.com/ethstatus',
-    icon: TokenIcon,
+    icon: TwitterIcon,
   },
   github: {
     name: 'GitHub',
     href: 'https://github.com/status-im',
-    icon: AirdropIcon,
+    icon: GithubIcon,
   },
   youtube: {
     name: 'YouTube',
     href: 'https://youtube.com/<TODO>',
-    icon: AdvancedIcon,
+    icon: YoutubeIcon,
   },
 }
 
