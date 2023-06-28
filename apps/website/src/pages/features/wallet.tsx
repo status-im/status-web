@@ -1,13 +1,13 @@
+import heroImage1 from '@assets/wallet/hero-01.png'
+import heroImage2 from '@assets/wallet/hero-02.png'
+import heroImage3 from '@assets/wallet/hero-03.png'
+import heroImage4 from '@assets/wallet/hero-04.png'
+import sectionImage1 from '@assets/wallet/section-01.png'
+import sectionImage2 from '@assets/wallet/section-02.png'
+import sectionImage3 from '@assets/wallet/section-03.png'
+import sectionImage4 from '@assets/wallet/section-04.png'
+import sectionImage5 from '@assets/wallet/section-05.png'
 import { Text } from '@status-im/components'
-import heroImage1 from 'public/assets/wallet/hero-01.png'
-import heroImage2 from 'public/assets/wallet/hero-02.png'
-import heroImage3 from 'public/assets/wallet/hero-03.png'
-import heroImage4 from 'public/assets/wallet/hero-04.png'
-import sectionImage1 from 'public/assets/wallet/section-01.png'
-import sectionImage2 from 'public/assets/wallet/section-02.png'
-import sectionImage3 from 'public/assets/wallet/section-03.png'
-import sectionImage4 from 'public/assets/wallet/section-04.png'
-import sectionImage5 from 'public/assets/wallet/section-05.png'
 
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
@@ -45,11 +45,11 @@ const WalletPage: Page = () => {
             icon="skull"
             color="yellow"
             title="True multi-chain experience"
-            description=" All networks, all the time. See all your assets and NFTs in one place, even if spread across multiple blockchains."
+            description="All networks, all the time. See all your assets and NFTs in one place, even if spread across multiple blockchains."
             image={sectionImage1}
             imageAlt="wallet-2"
-            secondaryDescription=" You can treat it like other wallets by selecting individual chains manually. But once you’ve tried the Status ‘all chains, always’ way of doing things, you won’t want to go back."
-            secondaryTitle=" Can be used as ‘single chain at a time’ wallet"
+            secondaryDescription="You can treat it like other wallets by selecting individual chains manually. But once you’ve tried the Status ‘all chains, always’ way of doing things, you won’t want to go back."
+            secondaryTitle="Can be used as ‘single chain at a time’ wallet"
             explanation="This has some information so it will show the icon to open the dialog"
           />
           <Section
