@@ -2,8 +2,8 @@ import { ActiveMembersIcon, OpenIcon } from '@status-im/icons'
 
 type Props = {
   count: {
-    open: number
-    closed: number
+    open?: number
+    closed?: number
   }
   activeTab: 'open' | 'closed'
   handleTabChange: (tab: 'open' | 'closed') => void
@@ -22,7 +22,9 @@ const Tabs = (props: Props): JSX.Element => {
           onClick={() => handleTabChange('open')}
         >
           <OpenIcon size={20} color={isOpen ? '$neutral-100' : '$neutral-50'} />
-          <span className="pl-1 text-[15px]">{count.open} Open</span>
+          <span className="pl-1 text-[15px]">
+            {typeof count.open === 'number' ? count.open : '-'} Open
+          </span>
         </button>
       </div>
       <div className="flex items-center pr-3">
@@ -36,7 +38,9 @@ const Tabs = (props: Props): JSX.Element => {
             size={20}
             color={!isOpen ? '$neutral-100' : '$neutral-50'}
           />
-          <span className="pl-1 text-[15px]">{count.closed} Closed</span>
+          <span className="pl-1 text-[15px]">
+            {typeof count.closed === 'number' ? count.closed : '-'} Closed
+          </span>
         </button>
       </div>
     </div>

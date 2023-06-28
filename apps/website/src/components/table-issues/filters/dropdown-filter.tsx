@@ -66,7 +66,7 @@ const DropdownFilter = (props: Props) => {
 
   return (
     <div>
-      <DropdownMenu onOpenChange={() => setIsOpen(!isOpen)}>
+      <DropdownMenu onOpenChange={() => setIsOpen(!isOpen)} modal={false}>
         <Button
           size={32}
           variant="outline"

@@ -71,16 +71,13 @@ useGetBurnupQuery.getKey = (variables: Types.GetBurnupQueryVariables) => [
   variables,
 ]
 export const GetIssuesByEpicDocument = `
-    query getIssuesByEpic($epicName: String!, $author: [String!], $assignee: [String!], $repository: [String!], $authorExists: Boolean!, $assigneeExists: Boolean!, $repositoryExists: Boolean!, $state: String!, $limit: Int!, $offset: Int!) {
+    query getIssuesByEpic($where: gh_epic_issues_bool_exp!, $limit: Int!, $offset: Int!, $orderBy: order_by) {
   gh_epic_issues(
-    where: {epic_name: {_eq: $epicName}, author: {_in: $author}, stage: {_eq: $state}, assignee: {_in: $assignee}, repository: {_in: $repository}}
-    order_by: {created_at: desc}
+    where: $where
+    order_by: {created_at: $orderBy}
     limit: $limit
     offset: $offset
   ) {
-    assignee @include(if: $assigneeExists)
-    author @include(if: $authorExists)
-    repository @include(if: $repositoryExists)
     assignee
     author
     closed_at
@@ -115,8 +112,8 @@ useGetIssuesByEpicQuery.getKey = (
   variables: Types.GetIssuesByEpicQueryVariables
 ) => ['getIssuesByEpic', variables]
 export const GetEpicIssuesCountDocument = `
-    query getEpicIssuesCount($epicName: String!) {
-  gh_epic_issues(where: {epic_name: {_eq: $epicName}}) {
+    query getEpicIssuesCount($where: gh_epic_issues_bool_exp!) {
+  gh_epic_issues(where: $where) {
     closed_at
   }
 }

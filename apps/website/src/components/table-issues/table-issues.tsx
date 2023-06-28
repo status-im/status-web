@@ -1,11 +1,10 @@
-import { useMemo, useState } from 'react'
-
 import { Avatar, Input, Skeleton, Tag, Text } from '@status-im/components'
 import { ActiveMembersIcon, OpenIcon, SearchIcon } from '@status-im/icons'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 
 import { useCurrentBreakpoint } from '@/hooks/use-current-breakpoint'
+import { Order_By } from '@/lib/graphql/generated/schemas'
 
 import { Empty } from './empty'
 import { DropdownFilter, DropdownSort, Tabs } from './filters'
@@ -19,24 +18,12 @@ import type {
 
 const sortOptions: DropdownSortProps['data'] = [
   {
-    id: 1,
-    name: 'Default',
+    id: Order_By.Asc,
+    name: 'Ascending',
   },
   {
-    id: 2,
-    name: 'Alphabetical',
-  },
-  {
-    id: 3,
-    name: 'Creation date',
-  },
-  {
-    id: 4,
-    name: 'Updated',
-  },
-  {
-    id: 5,
-    name: 'Completion',
+    id: Order_By.Desc,
+    name: 'Descending',
   },
 ]
 
@@ -45,9 +32,9 @@ type Props = {
   data?: GetOrphansQuery['gh_orphans'] | GetIssuesByEpicQuery['gh_epic_issues']
   filters?: GetFiltersQuery
   count?: {
-    total: number
-    closed: number
-    open: number
+    total?: number
+    closed?: number
+    open?: number
   }
   activeTab: 'open' | 'closed'
   handleTabChange: (tab: 'open' | 'closed') => void
@@ -57,6 +44,10 @@ type Props = {
   handleSelectedAssignees: (values: string[]) => void
   selectedRepos: string[]
   handleSelectedRepos: (values: string[]) => void
+  orderByValue: Order_By
+  handleOrderByValue: (value: Order_By) => void
+  handleSearchFilter: (value: string) => void
+  searchFilterValue: string
 }
 
 function isIssues(
@@ -66,12 +57,10 @@ function isIssues(
 }
 
 const TableIssues = (props: Props) => {
-  const [issuesSearchText, setIssuesSearchText] = useState('')
-
   const currentBreakpoint = useCurrentBreakpoint()
 
   const {
-    data,
+    data = [],
     count,
     isLoading,
     filters,
@@ -83,26 +72,22 @@ const TableIssues = (props: Props) => {
     handleSelectedAssignees,
     selectedRepos,
     handleSelectedRepos,
+    orderByValue,
+    handleOrderByValue,
+    handleSearchFilter,
+    searchFilterValue,
   } = props
 
-  const filteredIssues = useMemo(() => {
-    if (!data) {
-      return []
-    }
-
-    return data || []
-  }, [data])
-
   return (
-    <div className="overflow-hidden  rounded-2xl border border-neutral-10">
+    <div className=" rounded-2xl border border-neutral-10">
       <div className="flex border-b border-neutral-10 bg-neutral-5 p-3">
         <div className="flex w-full flex-col 2xl:flex-row 2xl:justify-between">
           <Tabs
             handleTabChange={handleTabChange}
             activeTab={activeTab}
             count={{
-              closed: count?.closed || 0,
-              open: count?.open || 0,
+              closed: count?.closed,
+              open: count?.open,
             }}
           />
           <div className="flex-1">
@@ -114,8 +99,8 @@ const TableIssues = (props: Props) => {
                       placeholder="Find Author"
                       icon={<SearchIcon size={20} />}
                       size={32}
-                      value={issuesSearchText}
-                      onChangeText={setIssuesSearchText}
+                      value={searchFilterValue}
+                      onChangeText={handleSearchFilter}
                       variant="retractable"
                       direction={currentBreakpoint === '2xl' ? 'rtl' : 'ltr'}
                     />
@@ -166,7 +151,11 @@ const TableIssues = (props: Props) => {
                 </div>
 
                 <div className="pl-2">
-                  <DropdownSort data={sortOptions} />
+                  <DropdownSort
+                    data={sortOptions}
+                    handleOrderByValue={handleOrderByValue}
+                    orderByValue={orderByValue}
+                  />
                 </div>
               </div>
             </div>
@@ -175,9 +164,9 @@ const TableIssues = (props: Props) => {
       </div>
 
       <div className="relative divide-y divide-neutral-10">
-        {filteredIssues.length !== 0 &&
-          isIssues(filteredIssues) &&
-          filteredIssues.map(issue => (
+        {data.length !== 0 &&
+          isIssues(data) &&
+          data.map(issue => (
             <Link
               key={issue.issue_number}
               href={issue.issue_url || ''}
@@ -217,7 +206,7 @@ const TableIssues = (props: Props) => {
               </div>
             </Link>
           ))}
-        {filteredIssues.length === 0 && !isLoading && (
+        {data.length === 0 && !isLoading && (
           <div className="py-11">
             <Empty />
           </div>

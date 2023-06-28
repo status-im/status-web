@@ -30,22 +30,10 @@ export type GetBurnupQuery = {
 }
 
 export type GetIssuesByEpicQueryVariables = Types.Exact<{
-  epicName: Types.Scalars['String']['input']
-  author?: Types.InputMaybe<
-    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
-  >
-  assignee?: Types.InputMaybe<
-    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
-  >
-  repository?: Types.InputMaybe<
-    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
-  >
-  authorExists: Types.Scalars['Boolean']['input']
-  assigneeExists: Types.Scalars['Boolean']['input']
-  repositoryExists: Types.Scalars['Boolean']['input']
-  state: Types.Scalars['String']['input']
+  where: Types.Gh_Epic_Issues_Bool_Exp
   limit: Types.Scalars['Int']['input']
   offset: Types.Scalars['Int']['input']
+  orderBy?: Types.InputMaybe<Types.Order_By>
 }>
 
 export type GetIssuesByEpicQuery = {
@@ -54,11 +42,11 @@ export type GetIssuesByEpicQuery = {
     __typename?: 'gh_epic_issues'
     assignee?: string | null
     author?: string | null
-    repository?: string | null
     closed_at?: any | null
     created_at?: any | null
     epic_color?: string | null
     epic_name?: string | null
+    repository?: string | null
     stage?: string | null
     title?: string | null
     issue_number?: any | null
@@ -67,7 +55,7 @@ export type GetIssuesByEpicQuery = {
 }
 
 export type GetEpicIssuesCountQueryVariables = Types.Exact<{
-  epicName: Types.Scalars['String']['input']
+  where: Types.Gh_Epic_Issues_Bool_Exp
 }>
 
 export type GetEpicIssuesCountQuery = {

@@ -4,10 +4,15 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 
 import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
+import { useDebounce } from '@/hooks/use-debounce'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
 import { api } from '@/lib/graphql'
-import { useGetFiltersQuery } from '@/lib/graphql/generated/hooks'
+import {
+  useGetEpicIssuesCountQuery,
+  useGetFiltersQuery,
+} from '@/lib/graphql/generated/hooks'
+import { Order_By } from '@/lib/graphql/generated/schemas'
 
 import type {
   GetBurnupQuery,
@@ -37,26 +42,14 @@ const GET_BURNUP = /* GraphQL */ `
 
 const GET_ISSUES_BY_EPIC = /* GraphQL */ `
   query getIssuesByEpic(
-    $epicName: String!
-    $author: [String!]
-    $assignee: [String!]
-    $repository: [String!]
-    $authorExists: Boolean!
-    $assigneeExists: Boolean!
-    $repositoryExists: Boolean!
-    $state: String!
+    $where: gh_epic_issues_bool_exp!
     $limit: Int!
     $offset: Int!
+    $orderBy: order_by
   ) {
     gh_epic_issues(
-      where: {
-        epic_name: { _eq: $epicName }
-        author: { _in: $author }
-        stage: { _eq: $state }
-        assignee: { _in: $assignee }
-        repository: { _in: $repository }
-      }
-      order_by: { created_at: desc }
+      where: $where
+      order_by: { created_at: $orderBy }
       limit: $limit
       offset: $offset
     ) {
@@ -76,8 +69,8 @@ const GET_ISSUES_BY_EPIC = /* GraphQL */ `
 `
 
 const GET_EPIC_ISSUES_COUNT = /* GraphQL */ `
-  query getEpicIssuesCount($epicName: String!) {
-    gh_epic_issues(where: { epic_name: { _eq: $epicName } }) {
+  query getEpicIssuesCount($where: gh_epic_issues_bool_exp!) {
+    gh_epic_issues(where: $where) {
       closed_at
     }
   }
@@ -108,11 +101,7 @@ const GET_FILTERS = /* GraphQL */ `
 
 type Props = {
   burnup: GetBurnupQuery['gh_burnup']
-  count: {
-    total: number
-    closed: number
-    open: number
-  }
+  count: GetEpicIssuesCountQuery
   filters: GetFiltersQuery
 }
 
@@ -127,6 +116,32 @@ const EpicsDetailPage: Page<Props> = props => {
   const [selectedAuthors, setSelectedAuthors] = useState<string[]>([])
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([])
   const [selectedRepos, setSelectedRepos] = useState<string[]>([])
+  const [orderByValue, setOrderByValue] = useState<Order_By>(Order_By.Desc)
+
+  const [searchFilter, setSearchFilter] = useState<string>('')
+  const debouncedSearchFilter = useDebounce<string>(searchFilter)
+
+  const { data: dataCounter } = useGetEpicIssuesCountQuery({
+    where: {
+      epic_name: { _eq: epicName as string },
+      ...(selectedAuthors.length > 0 && {
+        author: { _in: selectedAuthors },
+      }),
+      ...(selectedAssignees.length > 0 && {
+        assignee: { _in: selectedAssignees },
+      }),
+      ...(selectedRepos.length > 0 && {
+        repository: { _in: selectedRepos },
+      }),
+      title: { _ilike: `%${debouncedSearchFilter}%` },
+    },
+  })
+
+  const count = {
+    total: dataCounter?.gh_epic_issues.length,
+    closed: dataCounter?.gh_epic_issues.filter(issue => issue.closed_at).length,
+    open: dataCounter?.gh_epic_issues.filter(issue => !issue.closed_at).length,
+  }
 
   const { data, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -134,25 +149,35 @@ const EpicsDetailPage: Page<Props> = props => {
         'getIssuesByEpic',
         epicName,
         activeTab,
-        selectedAuthors,
         selectedAssignees,
         selectedRepos,
+        selectedAuthors,
+        orderByValue,
+        debouncedSearchFilter,
       ],
       async ({ pageParam = 0 }) => {
         const result = await api<
           GetIssuesByEpicQuery,
           GetIssuesByEpicQueryVariables
         >(GET_ISSUES_BY_EPIC, {
-          epicName: epicName as string,
+          where: {
+            epic_name: { _eq: epicName as string },
+            stage: { _eq: activeTab },
+            ...(selectedAuthors.length > 0 && {
+              author: { _in: selectedAuthors },
+            }),
+            ...(selectedAssignees.length > 0 && {
+              assignee: { _in: selectedAssignees },
+            }),
+            ...(selectedRepos.length > 0 && {
+              repository: { _in: selectedRepos },
+            }),
+            title: { _ilike: `%${debouncedSearchFilter}%` },
+          },
           limit: LIMIT,
           offset: pageParam,
-          state: activeTab,
-          author: selectedAuthors,
-          assignee: selectedAssignees,
-          repository: selectedRepos,
-          assigneeExists: selectedAssignees.length !== 0,
-          authorExists: selectedAuthors.length !== 0,
-          repositoryExists: selectedRepos.length !== 0,
+
+          orderBy: orderByValue,
         })
 
         return result?.gh_epic_issues || []
@@ -208,10 +233,9 @@ const EpicsDetailPage: Page<Props> = props => {
         />
       </div>
       <div className="border-b border-neutral-10 px-10 py-6">
-        <div role="separator" className="-mx-6 my-6 h-px bg-neutral-10" />
         <TableIssues
           data={issues}
-          count={props.count}
+          count={count}
           isLoading={isFetchingNextPage || isFetching}
           filters={filters}
           handleTabChange={setActiveTab}
@@ -222,6 +246,10 @@ const EpicsDetailPage: Page<Props> = props => {
           handleSelectedAssignees={setSelectedAssignees}
           selectedRepos={selectedRepos}
           handleSelectedRepos={setSelectedRepos}
+          orderByValue={orderByValue}
+          handleOrderByValue={setOrderByValue}
+          searchFilterValue={searchFilter}
+          handleSearchFilter={setSearchFilter}
         />
         <div ref={endOfPageRef} />
       </div>
@@ -248,7 +276,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     GetEpicIssuesCountQuery,
     GetEpicIssuesCountQueryVariables
   >(GET_EPIC_ISSUES_COUNT, {
-    epicName: String(epic),
+    where: {
+      epic_name: { _eq: String(epic) },
+    },
   })
 
   const resultFilters = await api<GetFiltersQuery, GetFiltersQueryVariables>(
@@ -258,19 +288,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   )
 
-  const count = {
-    total: resultIssuesCount.gh_epic_issues.length,
-    closed: resultIssuesCount.gh_epic_issues.filter(issue => issue.closed_at)
-      .length,
-    open: resultIssuesCount.gh_epic_issues.filter(issue => !issue.closed_at)
-      .length,
-  }
-
   return {
     props: {
       burnup: result.gh_burnup || [],
-      count,
+      count: resultIssuesCount,
       filters: resultFilters,
+      key: epic,
     },
   }
 }
