@@ -73,6 +73,14 @@ module.exports = {
     },
 
     extend: {
+      spacing: {
+        30: '7.5rem',
+      },
+
+      maxWidth: {
+        page: 1504,
+      },
+
       transitionProperty: {
         height: 'height',
       },
