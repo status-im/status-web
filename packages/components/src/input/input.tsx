@@ -49,7 +49,7 @@ export const InputFrame = styled(
     },
 
     defaultVariants: {
-      blurred: '$false',
+      blurred: false,
     },
   },
   {
