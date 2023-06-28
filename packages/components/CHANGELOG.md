@@ -1,5 +1,14 @@
 # @felicio/components
 
+## 0.0.7
+
+### Patch Changes
+
+- publish dist/
+- Updated dependencies
+  - @felicio/colors@0.0.6
+  - @felicio/icons@0.0.7
+
 ## 0.0.6
 
 ### Patch Changes

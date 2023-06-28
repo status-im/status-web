@@ -1,5 +1,11 @@
 # @felicio/colors
 
+## 0.0.6
+
+### Patch Changes
+
+- publish dist/
+
 ## 0.0.5
 
 ### Patch Changes
