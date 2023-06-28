@@ -45,6 +45,7 @@
     "@tamagui/react-native-media-driver": "1.36.4",
     "@tamagui/shorthands": "1.36.4",
     "@tamagui/theme-base": "1.36.4",
+    "@tamagui/web": "1.36.4",
     "date-fns": "^2.30.0",
     "expo-blur": "^12.2.2",
     "expo-linear-gradient": "^12.1.2",

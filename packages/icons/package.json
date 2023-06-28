@@ -33,6 +33,11 @@
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "clean": "rimraf dist node_modules .turbo"
   },
+  "dependencies": {
+    "@tamagui/core": "1.36.4",
+    "@tamagui/web": "1.36.4",
+    "tamagui": "1.36.4"
+  },
   "peerDependencies": {
     "react": "^16.x || ^17.x || ^18.x",
     "react-dom": "*",
