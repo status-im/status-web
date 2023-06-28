@@ -7,6 +7,7 @@ if (typeof window !== 'undefined') {
 }
 
 export const envSchema = z.object({
+  VERCEL_ENV: z.string().optional(),
   INFURA_API_KEY: z.string(),
   TAMAGUI_TARGET: z.literal('web'),
   NEXT_PUBLIC_GHOST_API_KEY: z.string(),
