@@ -49,14 +49,10 @@
     "vite-node": "^0.29.8",
     "vitest": "^0.29.8"
   },
+  "packageManager": "yarn@1.22.17",
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,mjs}": [
-      "eslint",
-      "prettier --write"
-    ],
     "*.{md,mdx,yml,yaml,json}": [
       "prettier --write"
     ]
-  },
-  "packageManager": "yarn@1.22.17"
+  }
 }

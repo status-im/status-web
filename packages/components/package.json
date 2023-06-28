@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.1.1",
+    "@radix-ui/react-checkbox": "^1.0.4",
     "@radix-ui/react-dialog": "^1.0.3",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
     "@radix-ui/react-popover": "^1.0.5",
@@ -75,5 +76,14 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs}": [
+      "eslint",
+      "prettier --write"
+    ],
+    "*.{md,mdx,yml,yaml,json}": [
+      "prettier --write"
+    ]
   }
 }

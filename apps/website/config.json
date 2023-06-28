@@ -1,0 +1,60 @@
+{
+  "nav": [
+    {
+      "Getting started": [
+        { "Intro to Status": "/getting-started" },
+        { "Getting started for new users": "/getting-started" },
+        { "Getting started with your community": "/getting-started" },
+        { "Download Status": "/getting-started" }
+      ]
+    },
+    {
+      "Messaging": [
+        { "Direct messages": "/messaging-and-web3-browser" },
+        { "Group chats": "/messaging-and-web3-browser" },
+        { "Message features and tools": "/messaging-and-web3-browser" },
+        { "Share files and conversations": "/messaging-and-web3-browser" }
+      ]
+    },
+    {
+      "Communities": [
+        { "Status Communities": "/status-communities" },
+        { "Channels": "/status-communities" },
+        { "Create your community": "/status-communities" },
+        { "Administer your community": "/status-communities" },
+        { "Administer channels": "/status-communities" },
+        { "Use tokens and set community permissions": "/status-communities" },
+        { "Status Web Communities": "/status-communities" }
+      ]
+    },
+    {
+      "Wallet": [
+        { "Getting started": "/status-wallet" },
+        { "Send and receive crypto": "/status-wallet" },
+        { "Privacy and security": "/status-wallet" },
+        { "Understand crypto assets": "/status-wallet" },
+        { "Handle your crypto": "/status-wallet" }
+      ]
+    },
+    {
+      "Your profile": [
+        { "Manage your profile": "/your-profile-and-preferences" },
+        {
+          "Change your settings and preferences": "/your-profile-and-preferences"
+        },
+        { "Adjust your notifications": "/your-profile-and-preferences" },
+        {
+          "Your profile security and privacy": "/your-profile-and-preferences"
+        },
+        { "Troubleshooting": "/your-profile-and-preferences" },
+        { "Use your Keycard": "/your-profile-and-preferences" },
+        {
+          "Handle your contact list and user verification": "/your-profile-and-preferences"
+        }
+      ]
+    },
+    {
+      "Network nodes": ["network-nodes-and-statistics"]
+    }
+  ]
+}
