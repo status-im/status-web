@@ -14,6 +14,7 @@ import { Text } from '@status-im/components'
 import Image from 'next/image'
 
 import { Section } from '@/components/cards'
+import { FeatureList } from '@/components/feature-list'
 import { Hero } from '@/components/hero'
 import { ImageGrid } from '@/components/image-grid'
 import { SectionDesktopScreenshot } from '@/components/section-desktop-screenshot'
@@ -24,7 +25,7 @@ import { AppLayout, Content } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
 
-const featureList = [
+const FEATURE_LIST = [
   {
     title: 'Decentralized',
     description:
@@ -63,7 +64,7 @@ const featureList = [
   },
 ]
 
-const tokenFeaturesList = [
+const TOKEN_FEATURE_LIST = [
   {
     title: 'Token minting',
     description:
@@ -101,23 +102,7 @@ const CreateCommunityPage: Page = () => {
         description="By using Status, your community can regain control of it’s destiny and data."
       />
 
-      <div className="m-auto grid max-w-[1083px] grid-cols-1 gap-12 px-5 pb-24 pt-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-20 lg:px-0 lg:py-40">
-        {featureList.map(feature => (
-          <div key={feature.title} className="flex flex-col">
-            <Image
-              src={feature.image.src}
-              alt={feature.image.alt}
-              width={48}
-              height={48}
-              className="mb-4 ml-0"
-            />
-            <Text size={27} weight="semibold">
-              {feature.title}
-            </Text>
-            <Text size={19}>{feature.description}</Text>
-          </div>
-        ))}
-      </div>
+      <FeatureList list={FEATURE_LIST} />
 
       <SectionLarge
         title="Crypto native"
@@ -137,7 +122,7 @@ const CreateCommunityPage: Page = () => {
         />
 
         <div className="grid grid-flow-col gap-5 p-20">
-          {tokenFeaturesList.map(({ title, description, image }) => (
+          {TOKEN_FEATURE_LIST.map(({ title, description, image }) => (
             <div
               key={title}
               className="rounded-[36px] border border-neutral-20 backdrop-blur-lg"
