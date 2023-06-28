@@ -11,7 +11,7 @@ const VideoSection = (props: Props) => {
   const { title, description } = props
 
   return (
-    <div className="pt- relative px-40 pb-48 pt-60 md:flex">
+    <div className="container relative pb-48 pt-60 md:flex">
       {/* <ParalaxCircle initialLeft={-100} initialTop={-100} /> */}
 
       <div className="relative z-[1] flex flex-col">

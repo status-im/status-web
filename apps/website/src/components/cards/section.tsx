@@ -42,7 +42,7 @@ const Section = (props: Props) => {
   const illustration = illustrations[icon]
 
   return (
-    <div className="justify-center px-5 py-12 lg:flex lg:px-0 lg:py-20">
+    <div className="container justify-center py-12 lg:flex lg:py-20">
       <div className="relative z-[3]">
         <div
           className={cx([
@@ -50,7 +50,7 @@ const Section = (props: Props) => {
             reverse ? 'lg:flex-row' : 'lg:flex-row-reverse',
           ])}
         >
-          <div className="flex flex-col justify-start lg:max-w-[462px] lg:justify-center">
+          <div className="flex flex-1 flex-col justify-start lg:justify-center">
             <div className="flex flex-col">
               <Image
                 {...illustration}
@@ -95,9 +95,7 @@ const Section = (props: Props) => {
             </div>
           </div>
 
-          <div
-            className={`flex max-w-[1504px] justify-center overflow-hidden rounded-[32px]`}
-          >
+          <div className="flex flex-1 justify-center overflow-hidden rounded-[32px]">
             <ScreenshotImage image={image} alt={imageAlt} color={color} />
           </div>
         </div>

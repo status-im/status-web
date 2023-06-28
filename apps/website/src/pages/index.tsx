@@ -34,7 +34,7 @@ const HomePage: Page = () => {
   return (
     <>
       <Content>
-        <div className="relative overflow-hidden border-b border-dashed border-neutral-30 p-40">
+        <div className="relative overflow-hidden p-40">
           <div className="grid gap-8">
             <div className="grid max-w-[582px] gap-6">
               <h1 className="text-88">
@@ -323,10 +323,11 @@ const HomePage: Page = () => {
             height={110}
             className="absolute bottom-10 left-5"
           />
-          <div className="mx-auto flex justify-center divide-x divide-dashed divide-neutral-30">
+
+          <div className="container flex justify-center divide-x divide-dashed divide-neutral-30 lg:px-30">
             {PREFOOTER_LIST.map(({ title, description, link }) => (
               <div key={title} className="px-10 py-40">
-                <div className="mb-6 w-full max-w-[330px] gap-1">
+                <div className="mb-6 gap-1">
                   <h3>
                     <Text size={27} weight="semibold">
                       {title}
