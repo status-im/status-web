@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
+import { View } from 'react-native'
 
 import { Text } from '../text'
 import { getCustomStyles } from './get-custom-styles'
@@ -9,6 +10,7 @@ import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
 import type { ColorTokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
+import type { PressableProps } from 'react-native'
 
 type Props = {
   size: 32 | 24
@@ -16,7 +18,7 @@ type Props = {
   label?: string
   selected?: boolean
   disabled?: boolean
-  onPress?: () => void
+  onPress?: PressableProps['onPress']
   color?: ColorTokens | `#${string}`
 }
 
@@ -54,8 +56,11 @@ const Tag = (props: Props) => {
       selected={selected}
       disabled={disabled}
       iconOnly={Boolean(icon && !label)}
-      onPress={() => onPress?.()}
       {...getCustomStyles(props)}
+      {...(onPress && {
+        role: 'button',
+        onPress,
+      })}
     >
       {renderIcon()}
       {label && (
@@ -70,11 +75,10 @@ const Tag = (props: Props) => {
 export { Tag }
 export type { Props as TagProps }
 
-const Base = styled(Stack, {
-  tag: 'tag',
+const Base = styled(View, {
   name: 'Tag',
-  accessibilityRole: 'button',
 
+  userSelect: 'none',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -85,7 +89,6 @@ const Base = styled(Stack, {
   backgroundColor: '$white-100',
 
   animation: 'fast',
-  cursor: 'pointer',
 
   hoverStyle: {
     borderColor: '$neutral-30',

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .container {
+    @apply mx-auto max-w-[1504px] px-5 lg:px-40;
+  }
+  .border-dashed-default {
+    @apply border-dashed border-neutral-80/20;
+  }
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

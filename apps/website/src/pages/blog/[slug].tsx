@@ -8,7 +8,7 @@ import { unified } from 'unified'
 
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { formatDate } from '@/components/chart/utils/format-time'
-import { AppLayout } from '@/layouts/app-layout'
+import { AppLayout, Content } from '@/layouts/app-layout'
 import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '@/lib/ghost'
 
 import { PostCard } from '.'
@@ -175,7 +175,7 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts, breadcrumbs }) => {
   }, [post.html])
 
   return (
-    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+    <Content>
       <div className="border-b border-neutral-10 px-5 py-[13px]">
         <Breadcrumbs items={breadcrumbs} />
       </div>
@@ -187,9 +187,7 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts, breadcrumbs }) => {
           )}
         </div>
 
-        <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
-          {post.title!}
-        </h1>
+        <h1 className="text-40 lg:text-64">{post.title!}</h1>
 
         <div className="mt-auto flex h-5 items-center gap-1">
           <Avatar
@@ -259,7 +257,7 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts, breadcrumbs }) => {
         className="mx-auto grid max-w-2xl gap-4"
         dangerouslySetInnerHTML={{ __html: post.hhh }}
       /> */}
-    </div>
+    </Content>
   )
 }
 

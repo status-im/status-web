@@ -1,14 +1,9 @@
 import { Button, Counter, Tag, Text } from '@status-im/components'
+import { Parallax } from 'react-scroll-parallax'
 
-import { useParalax } from '@/hooks/use-parallax'
-
-import { ParalaxCircle } from './parallax-circle'
+import { ParalaxCircle } from '../parallax-circle'
 
 const ComparisionSection = () => {
-  const { top, bottom } = useParalax({
-    initialTop: -690,
-  })
-
   return (
     <div className="relative">
       <div className="relative grid grid-cols-4 border-t border-dashed border-neutral-80/20 bg-white-100 mix-blend-normal">
@@ -18,7 +13,7 @@ const ComparisionSection = () => {
               <div className="inline-flex">
                 <Tag label="Use case" size={24} />
               </div>
-              <h2 className="pt-4 text-[40px] font-bold leading-[44px]">
+              <h2 className="pt-4 text-40">
                 Alice has 50 DAI on both Ethereum Mainnet and Optimism and wants
                 to send 100 DAI to Bob on Arbitrum.
               </h2>
@@ -60,20 +55,18 @@ const ComparisionSection = () => {
             ))}
           </div>
         </div>
-        <ParalaxCircle initialTop={-600} />
+        <ParalaxCircle color="bg-customisation-yellow-50" top={-600} />
       </div>
-      <p
+      <Parallax
+        translateY={[30, -20]}
         style={{
-          top: `${top}px`,
-          bottom: `${bottom}px`,
-          left: -40,
           // TODO: use font from design when it's ready
           fontFamily: 'Menlo',
         }}
-        className="absolute whitespace-nowrap text-[240px] font-bold leading-[212px] text-neutral-80/5"
+        className="whitespace-nowrap text-[240px] font-bold leading-[212px] text-neutral-80/5"
       >
         eth:opt:arb:0xAgafhja
-      </p>
+      </Parallax>
     </div>
   )
 }
