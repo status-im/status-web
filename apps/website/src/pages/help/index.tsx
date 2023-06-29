@@ -4,45 +4,40 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { SearchButton } from '@/components/search-button'
+import { illustrations } from '@/config/illustrations'
 import { ROUTES } from '@/config/routes'
-import { AppLayout, PageBody } from '@/layouts/app-layout'
-
-import img3 from '../../../public/images/help/communities.png'
-import img1 from '../../../public/images/help/getting-started.png'
-import img5 from '../../../public/images/help/profile-and-preferences.png'
-import img2 from '../../../public/images/help/using-status.png'
-import img4 from '../../../public/images/help/wallet.png'
+import { AppLayout, Content } from '@/layouts/app-layout'
 
 import type { Page } from 'next'
 
 const METADATA = {
   Overview: {
-    icon: <Image src={img1} alt="" width={48} height={48} />,
+    icon: illustrations.skull,
     description:
       'Find out what makes Status unique, run Status for the first time and discover essential app features.',
   },
   'Getting Started': {
-    icon: <Image src={img1} alt="" width={48} height={48} />,
+    icon: illustrations.skull,
     description:
       'Find out what makes Status unique, run Status for the first time and discover essential app features.',
   },
   Messaging: {
-    icon: <Image src={img2} alt="" width={48} height={48} />,
+    icon: illustrations.pizza,
     description:
       'Send messages, create group chats or explore decentralized apps with the Status dApp browser.',
   },
   Communities: {
-    icon: <Image src={img3} alt="" width={48} height={48} />,
+    icon: illustrations.megaphone,
     description:
       "Create your community, set up private channels or join others' communities and channels.",
   },
   Wallet: {
-    icon: <Image src={img4} alt="" width={48} height={48} />,
+    icon: illustrations.lock,
     description:
       'Store, send, receive and bridge crypto safely and anonymously.',
   },
   Profile: {
-    icon: <Image src={img5} alt="" width={48} height={48} />,
+    icon: illustrations.mushroom,
     description:
       'Set up your Status profile and notifications, customize your settings and fix common issues.',
   },
@@ -51,7 +46,7 @@ const METADATA = {
 const HelpPage: Page = () => {
   return (
     <div className="[--max-width:1186px]">
-      <PageBody>
+      <Content>
         <div className="mx-auto max-w-[var(--max-width)] py-20">
           <div className="mb-20 flex items-end justify-between">
             <div>
@@ -73,7 +68,9 @@ const HelpPage: Page = () => {
                   key={route.name}
                   className="flex flex-col rounded-[20px] border border-neutral-10 p-4 shadow-1 transition duration-100 hover:scale-[1.01] hover:shadow-3"
                 >
-                  <div className="mb-3">{icon}</div>
+                  <div className="mb-3">
+                    <Image {...icon} alt={icon.alt} />
+                  </div>
                   <div className="mb-5 grid flex-1 gap-1">
                     <Text size={19} weight="semibold">
                       {route.name}
@@ -116,7 +113,7 @@ const HelpPage: Page = () => {
             </Button>
           </div>
         </div>
-      </PageBody>
+      </Content>
     </div>
   )
 }
