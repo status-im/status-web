@@ -1,3 +1,7 @@
+// import communityCardImage01 from '@assets/communities/community-card-01.png'
+// import communityCardImage02 from '@assets/communities/community-card-02.png'
+// import communityCardImage03 from '@assets/communities/community-card-03.png'
+// import communityCardImage04 from '@assets/communities/community-card-04.png'
 import featureImage1 from '@assets/communities/feature-01.png'
 import featureImage2 from '@assets/communities/feature-02.png'
 import featureImage3 from '@assets/communities/feature-03.png'
