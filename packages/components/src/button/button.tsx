@@ -1,13 +1,14 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
+import { Pressable } from 'react-native'
 
 import { Text } from '../text'
 
 import type { TextProps } from '../text'
 import type { GetVariants, MapVariant, PressableProps } from '../types'
-import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
+import type { View } from 'react-native'
 
 type Variants = GetVariants<typeof Base>
 
@@ -51,7 +52,7 @@ const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '24': 13,
 }
 
-const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
+const Button = (props: Props, ref: Ref<View>) => {
   const {
     variant = 'primary',
     shape = 'default',
@@ -71,7 +72,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base
-      {...(buttonProps as unknown as StackProps)} // TODO: Tamagui has incorrect types for PressableProps
+      {...buttonProps}
       ref={ref}
       variant={variant}
       radius={shape === 'circle' ? 'full' : size}
@@ -93,7 +94,7 @@ const _Button = forwardRef(Button)
 export { _Button as Button }
 export type { Props as ButtonProps }
 
-const Base = styled(Stack, {
+const Base = styled(Pressable, {
   tag: 'button',
   name: 'Button',
   accessibilityRole: 'button',

@@ -13,14 +13,14 @@
   "dependencies": {
     "@status-im/components": "*",
     "@status-im/icons": "*",
-    "@tamagui/core": "1.11.1",
+    "@tamagui/core": "1.36.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.18.12",
     "use-resize-observer": "^9.1.0"
   },
   "devDependencies": {
-    "@tamagui/vite-plugin": "1.11.1",
+    "@tamagui/vite-plugin": "1.36.4",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.2.0",

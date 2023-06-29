@@ -1,6 +1,6 @@
 {
-  "version": "0.1.0",
   "name": "@status-im/eslint-config",
+  "version": "0.1.0",
   "main": "index.js",
   "exports": {
     ".": {
@@ -12,7 +12,7 @@
   "scripts": {
     "clean": "rimraf node_modules"
   },
-  "devDependencies": {
+  "dependencies": {
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
     "eslint": "^8.42.0",
@@ -27,5 +27,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-tailwindcss": "^3.12.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

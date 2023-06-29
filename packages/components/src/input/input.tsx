@@ -155,8 +155,12 @@ const InputFrame = styled(
           placeholderTextColor: '$placeHolderColorBlurred',
         },
       },
-    } as const,
-  },
+    },
+
+    defaultVariants: {
+      blurred: false,
+    },
+  } as const,
   {
     isInput: true,
   }
