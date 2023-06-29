@@ -25,8 +25,8 @@ export const FeatureList = (props: Props) => {
             <Image {...icon} alt={icon.alt} className="mb-4 ml-10" />
             <div
               className={cx(
-                'flex flex-col border-dashed lg:border-l-[1px] lg:pl-10',
-                (i === 0 || i === 3) && 'lg:border-l-0',
+                'flex flex-col border-dashed lg:pl-10',
+                i % 3 === 0 ? 'lg:border-l-0' : 'lg:border-l-[1px]',
                 dark ? 'border-l-neutral-70' : 'border-l-neutral-30'
               )}
             >
