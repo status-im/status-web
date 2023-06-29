@@ -16,6 +16,10 @@ jobs:
         with:
           node-version: 18
       - run: yarn install --frozen-lockfile
+      - run: yarn build
+      - run: yarn typecheck
+      - run: yarn lint && yarn format --check
+      - run: yarn test
       - uses: changesets/action@v1
         id: changesets
         with:
