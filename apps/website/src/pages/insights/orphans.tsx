@@ -167,7 +167,10 @@ const OrphansPage: Page<Props> = props => {
     }, []) || []
 
   const endOfPageRef = useRef<HTMLDivElement | null>(null)
-  const entry = useIntersectionObserver(endOfPageRef, {})
+  const entry = useIntersectionObserver(endOfPageRef, {
+    rootMargin: '800px',
+    threshold: 0,
+  })
   const isVisible = !!entry?.isIntersecting
 
   useEffect(() => {
@@ -177,14 +180,14 @@ const OrphansPage: Page<Props> = props => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, isVisible])
 
   return (
-    <div className="space-y-6 p-10">
+    <div className="space-y-6 scroll-smooth p-10">
       <Text size={27} weight="semibold">
         Orphans
       </Text>
       <TableIssues
         data={orphans}
         count={count}
-        isLoading={isFetchingNextPage || isFetching}
+        isLoading={isFetchingNextPage || isFetching || hasNextPage}
         filters={props.filters}
         handleTabChange={setActiveTab}
         activeTab={activeTab}

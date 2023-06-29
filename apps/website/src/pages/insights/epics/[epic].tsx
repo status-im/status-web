@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import { useRouter } from 'next/router'
 
 import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
@@ -9,6 +10,7 @@ import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
 import { api } from '@/lib/graphql'
 import {
+  useGetBurnupQuery,
   useGetEpicIssuesCountQuery,
   useGetFiltersWithEpicQuery,
 } from '@/lib/graphql/generated/hooks'
@@ -24,12 +26,29 @@ import type {
   GetIssuesByEpicQuery,
   GetIssuesByEpicQueryVariables,
 } from '@/lib/graphql/generated/operations'
+import type { DateRange } from '@status-im/components/src/calendar/calendar'
 import type { GetServerSidePropsContext, Page } from 'next'
 
 const GET_BURNUP = /* GraphQL */ `
-  query getBurnup($epicName: String!, $startDate: timestamptz) {
+  query getBurnup($epicName: String!, $from: timestamptz, $to: timestamptz) {
     gh_burnup(
-      where: { epic_name: { _eq: $epicName }, date_field: { _gte: $startDate } }
+      where: {
+        epic_name: { _eq: $epicName }
+        _or: [
+          {
+            _and: [
+              { date_field: { _gte: $from } }
+              { date_field: { _lt: $to } }
+            ]
+          }
+          {
+            _and: [
+              { date_field: { _gt: $from } }
+              { date_field: { _lte: $to } }
+            ]
+          }
+        ]
+      }
       order_by: { date_field: asc }
     ) {
       epic_name
@@ -100,9 +119,13 @@ const GET_FILTERS_WITH_EPIC = /* GraphQL */ `
 `
 
 type Props = {
-  burnup: GetBurnupQuery['gh_burnup']
+  burnup: GetBurnupQuery
   count: GetEpicIssuesCountQuery
   filters: GetFiltersWithEpicQuery
+  initialDates: {
+    from: string
+    to: string
+  }
 }
 
 const LIMIT = 10
@@ -120,6 +143,19 @@ const EpicsDetailPage: Page<Props> = props => {
 
   const [searchFilter, setSearchFilter] = useState<string>('')
   const debouncedSearchFilter = useDebounce<string>(searchFilter)
+
+  const [selectedDates, setSelectedDates] = useState<DateRange>()
+
+  const { data: dataBurnup } = useGetBurnupQuery(
+    {
+      epicName: epicName as string,
+      from: props.initialDates.from,
+      to: props.initialDates.to,
+    },
+    {
+      initialData: props.burnup,
+    }
+  )
 
   const { data: dataCounter } = useGetEpicIssuesCountQuery({
     where: {
@@ -142,6 +178,8 @@ const EpicsDetailPage: Page<Props> = props => {
     closed: dataCounter?.gh_epic_issues.filter(issue => issue.closed_at).length,
     open: dataCounter?.gh_epic_issues.filter(issue => !issue.closed_at).length,
   }
+
+  const burnup = dataBurnup?.gh_burnup || []
 
   const { data, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -176,7 +214,6 @@ const EpicsDetailPage: Page<Props> = props => {
           },
           limit: LIMIT,
           offset: pageParam,
-
           orderBy: orderByValue,
         })
 
@@ -202,15 +239,15 @@ const EpicsDetailPage: Page<Props> = props => {
     }
   )
 
-  const burnup = props.burnup || []
-
   const issues =
     data?.pages.reduce((acc, page) => {
       return [...acc, ...page]
     }, []) || []
 
   const endOfPageRef = useRef<HTMLDivElement | null>(null)
-  const entry = useIntersectionObserver(endOfPageRef, {})
+  const entry = useIntersectionObserver(endOfPageRef, {
+    rootMargin: '800px',
+  })
   const isVisible = !!entry?.isIntersecting
 
   useEffect(() => {
@@ -225,13 +262,19 @@ const EpicsDetailPage: Page<Props> = props => {
         <Breadcrumbs />
       </div>
       <div className="border-b border-neutral-10 px-10 py-6">
-        <EpicOverview title={epicName as string} fullscreen burnup={burnup} />
+        <EpicOverview
+          title={epicName as string}
+          fullscreen
+          burnup={burnup}
+          selectedDates={selectedDates}
+          setSelectedDates={setSelectedDates}
+        />
       </div>
       <div className="border-b border-neutral-10 px-10 py-6">
         <TableIssues
           data={issues}
           count={count}
-          isLoading={isFetchingNextPage || isFetching}
+          isLoading={isFetchingNextPage || isFetching || hasNextPage}
           filters={filters}
           handleTabChange={setActiveTab}
           activeTab={activeTab}
@@ -259,11 +302,18 @@ EpicsDetailPage.getLayout = function getLayout(page) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { epic } = context.query
 
+  // TODO: get initial date based on the epic when available
+  const initialDates = {
+    from: '2017-01-01',
+    to: format(new Date(), 'yyyy-MM-dd'),
+  }
+
   const result = await api<GetBurnupQuery, GetBurnupQueryVariables>(
     GET_BURNUP,
     {
       epicName: String(epic),
-      startDate: '2017-01-01',
+      from: '2017-01-01',
+      to: format(new Date(), 'yyyy-MM-dd'),
     }
   )
 
@@ -285,9 +335,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   return {
     props: {
-      burnup: result.gh_burnup || [],
+      burnup: result,
       count: resultIssuesCount,
       filters: resultFilters,
+      initialDates,
       key: epic,
     },
   }

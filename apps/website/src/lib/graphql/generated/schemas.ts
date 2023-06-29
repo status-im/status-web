@@ -150,6 +150,7 @@ export type Gh_Epic_Issues = {
   epic_name?: Maybe<Scalars['String']['output']>
   issue_number?: Maybe<Scalars['bigint']['output']>
   issue_url?: Maybe<Scalars['String']['output']>
+  labels?: Maybe<Scalars['String']['output']>
   repository?: Maybe<Scalars['String']['output']>
   stage?: Maybe<Scalars['String']['output']>
   title?: Maybe<Scalars['String']['output']>
@@ -168,6 +169,7 @@ export type Gh_Epic_Issues_Bool_Exp = {
   epic_name?: InputMaybe<String_Comparison_Exp>
   issue_number?: InputMaybe<Bigint_Comparison_Exp>
   issue_url?: InputMaybe<String_Comparison_Exp>
+  labels?: InputMaybe<String_Comparison_Exp>
   repository?: InputMaybe<String_Comparison_Exp>
   stage?: InputMaybe<String_Comparison_Exp>
   title?: InputMaybe<String_Comparison_Exp>
@@ -183,6 +185,7 @@ export type Gh_Epic_Issues_Order_By = {
   epic_name?: InputMaybe<Order_By>
   issue_number?: InputMaybe<Order_By>
   issue_url?: InputMaybe<Order_By>
+  labels?: InputMaybe<Order_By>
   repository?: InputMaybe<Order_By>
   stage?: InputMaybe<Order_By>
   title?: InputMaybe<Order_By>
@@ -206,6 +209,8 @@ export enum Gh_Epic_Issues_Select_Column {
   IssueNumber = 'issue_number',
   /** column name */
   IssueUrl = 'issue_url',
+  /** column name */
+  Labels = 'labels',
   /** column name */
   Repository = 'repository',
   /** column name */
@@ -232,6 +237,7 @@ export type Gh_Epic_Issues_Stream_Cursor_Value_Input = {
   epic_name?: InputMaybe<Scalars['String']['input']>
   issue_number?: InputMaybe<Scalars['bigint']['input']>
   issue_url?: InputMaybe<Scalars['String']['input']>
+  labels?: InputMaybe<Scalars['String']['input']>
   repository?: InputMaybe<Scalars['String']['input']>
   stage?: InputMaybe<Scalars['String']['input']>
   title?: InputMaybe<Scalars['String']['input']>
@@ -242,6 +248,7 @@ export type Gh_Epics = {
   __typename?: 'gh_epics'
   closed_count?: Maybe<Scalars['bigint']['output']>
   epic_color?: Maybe<Scalars['String']['output']>
+  epic_description?: Maybe<Scalars['String']['output']>
   epic_name?: Maybe<Scalars['String']['output']>
   opened_count?: Maybe<Scalars['bigint']['output']>
   status?: Maybe<Scalars['String']['output']>
@@ -255,6 +262,7 @@ export type Gh_Epics_Bool_Exp = {
   _or?: InputMaybe<Array<Gh_Epics_Bool_Exp>>
   closed_count?: InputMaybe<Bigint_Comparison_Exp>
   epic_color?: InputMaybe<String_Comparison_Exp>
+  epic_description?: InputMaybe<String_Comparison_Exp>
   epic_name?: InputMaybe<String_Comparison_Exp>
   opened_count?: InputMaybe<Bigint_Comparison_Exp>
   status?: InputMaybe<String_Comparison_Exp>
@@ -265,6 +273,7 @@ export type Gh_Epics_Bool_Exp = {
 export type Gh_Epics_Order_By = {
   closed_count?: InputMaybe<Order_By>
   epic_color?: InputMaybe<Order_By>
+  epic_description?: InputMaybe<Order_By>
   epic_name?: InputMaybe<Order_By>
   opened_count?: InputMaybe<Order_By>
   status?: InputMaybe<Order_By>
@@ -277,6 +286,8 @@ export enum Gh_Epics_Select_Column {
   ClosedCount = 'closed_count',
   /** column name */
   EpicColor = 'epic_color',
+  /** column name */
+  EpicDescription = 'epic_description',
   /** column name */
   EpicName = 'epic_name',
   /** column name */
@@ -299,6 +310,7 @@ export type Gh_Epics_Stream_Cursor_Input = {
 export type Gh_Epics_Stream_Cursor_Value_Input = {
   closed_count?: InputMaybe<Scalars['bigint']['input']>
   epic_color?: InputMaybe<Scalars['String']['input']>
+  epic_description?: InputMaybe<Scalars['String']['input']>
   epic_name?: InputMaybe<Scalars['String']['input']>
   opened_count?: InputMaybe<Scalars['bigint']['input']>
   status?: InputMaybe<Scalars['String']['input']>

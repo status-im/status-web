@@ -55,7 +55,12 @@ const EpicsPage: Page = () => {
       <div className="grid gap-4">
         {epics.map(epic => (
           <Shadow key={epic.id} variant="$2" className="rounded-2xl px-4 py-3">
-            <EpicOverview title={epic.title} description={epic.description} />
+            <EpicOverview
+              title={epic.title}
+              description={epic.description}
+              selectedDates={selectedDates}
+              setSelectedDates={setSelectedDates}
+            />
           </Shadow>
         ))}
       </div>

@@ -15,7 +15,8 @@ export type GetEpicMenuLinksQuery = {
 
 export type GetBurnupQueryVariables = Types.Exact<{
   epicName: Types.Scalars['String']['input']
-  startDate?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
+  from?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
+  to?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
 }>
 
 export type GetBurnupQuery = {

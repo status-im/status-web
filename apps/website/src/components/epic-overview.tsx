@@ -2,8 +2,10 @@ import { Tag, Text } from '@status-im/components'
 import { OpenIcon } from '@status-im/icons'
 
 import { Chart } from './chart/chart'
+import { DatePicker } from './datepicker/datepicker'
 
 import type { GetBurnupQuery } from '@/lib/graphql/generated/operations'
+import type { DateRange } from '@status-im/components/src/calendar/calendar'
 
 const DATA = [
   {
@@ -64,10 +66,20 @@ type Props = {
   fullscreen?: boolean
   isLoading?: boolean
   burnup?: GetBurnupQuery['gh_burnup']
+  selectedDates?: DateRange
+  setSelectedDates: (date?: DateRange) => void
 }
 
 export const EpicOverview = (props: Props) => {
-  const { title, description, fullscreen, isLoading, burnup } = props
+  const {
+    title,
+    description,
+    fullscreen,
+    isLoading,
+    burnup,
+    selectedDates,
+    setSelectedDates,
+  } = props
 
   const filteredData = burnup?.reduce(
     (
@@ -97,17 +109,21 @@ export const EpicOverview = (props: Props) => {
 
   return (
     <div style={{ position: 'relative' }}>
-      <div className="flex items-center gap-1">
-        <Text size={fullscreen ? 27 : 19} weight="semibold">
-          {title}
-        </Text>
-        <OpenIcon size={20} />
+      <div className="flex justify-between">
+        <div className="flex items-center gap-1">
+          <Text size={fullscreen ? 27 : 19} weight="semibold">
+            {title}
+          </Text>
+          <OpenIcon size={20} />
+        </div>
+        <DatePicker selected={selectedDates} onSelect={setSelectedDates} />
       </div>
       {Boolean(description) && (
         <Text size={fullscreen ? 19 : 15} color="$neutral-50">
           {description}
         </Text>
       )}
+
       <div className="flex py-3">
         <Tag size={24} label={title} color="$blue-50" />
       </div>

@@ -25,11 +25,10 @@ const FloatingMenu = (): JSX.Element => {
   useLockScroll(open)
 
   useScroll({
-    onChange: ({ value: { scrollYProgress } }) => {
+    onChange: ({ value: { scrollY } }) => {
       const isMenuOpen = openRef.current
-      const isScrollingUp = scrollYProgress < scrollYRef.current
-      const detectionPoint = scrollYProgress > 0.005
-
+      const isScrollingUp = scrollY < scrollYRef.current
+      const detectionPoint = scrollY > 0.005
       if (detectionPoint && isScrollingUp) {
         if (!visibleRef.current) {
           setVisible(true)
@@ -39,7 +38,7 @@ const FloatingMenu = (): JSX.Element => {
           setVisible(false)
         }
       }
-      scrollYRef.current = scrollYProgress
+      scrollYRef.current = scrollY
     },
     default: {
       immediate: true,

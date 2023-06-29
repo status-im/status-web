@@ -38,9 +38,9 @@ useGetEpicMenuLinksQuery.getKey = (
     ? ['getEpicMenuLinks']
     : ['getEpicMenuLinks', variables]
 export const GetBurnupDocument = `
-    query getBurnup($epicName: String!, $startDate: timestamptz) {
+    query getBurnup($epicName: String!, $from: timestamptz, $to: timestamptz) {
   gh_burnup(
-    where: {epic_name: {_eq: $epicName}, date_field: {_gte: $startDate}}
+    where: {epic_name: {_eq: $epicName}, _or: [{_and: [{date_field: {_gte: $from}}, {date_field: {_lt: $to}}]}, {_and: [{date_field: {_gt: $from}}, {date_field: {_lte: $to}}]}]}
     order_by: {date_field: asc}
   ) {
     epic_name
