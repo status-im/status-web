@@ -163,7 +163,7 @@ const BrandSection = (props: BrandSectionProps) => {
 }
 
 const LogoSection = (
-  props: Omit<BrandSectionProps, 'children'> & { logos: any[] }
+  props: Omit<BrandSectionProps, 'children'> & { logos: number[] }
 ) => {
   const { logos, ...sectionProps } = props
 
@@ -187,6 +187,7 @@ type Color = {
   hex: string
   invert: boolean
 }
+
 const ColorSection = (
   props: Omit<BrandSectionProps, 'children'> & { colors: Color[] }
 ) => {
@@ -194,23 +195,24 @@ const ColorSection = (
 
   return (
     <BrandSection {...sectionProps}>
-      {colors.map(color => {
-        const textColor = color.invert ? '$neutral-100' : '$white-100'
+      {colors.map(({ hex, rgb, name, invert }) => {
+        const textColor = invert ? '$neutral-100' : '$white-100'
+
         return (
           <div
-            key={color.name}
-            style={{ background: color.hex }}
+            key={name}
+            style={{ background: hex }}
             className="flex flex-col gap-12 rounded-[20px] border border-neutral-80/5 bg-white-100 p-5"
           >
             <Text size={19} weight="semibold" color={textColor}>
-              {color.name}
+              {name}
             </Text>
             <div className="flex flex-col uppercase">
               <Text size={15} color={textColor}>
-                {color.hex}
+                {hex}
               </Text>
               <Text size={15} color={textColor}>
-                RGB {[color.rgb.r, color.rgb.g, color.rgb.b].join(',')}
+                RGB {[rgb.r, rgb.g, rgb.b].join(',')}
               </Text>
             </div>
           </div>
@@ -221,17 +223,16 @@ const ColorSection = (
 }
 
 const AssetSection = (
-  props: Omit<BrandSectionProps, 'children'> & { assets: any[] }
+  props: Omit<BrandSectionProps, 'children'> & { assets: number[] }
 ) => {
   const { assets, ...sectionProps } = props
 
   return (
     <BrandSection {...sectionProps}>
       {assets.map((asset, index) => (
-        <div
-          key={index}
-          className="border border-neutral-80/5 bg-white-100"
-        ></div>
+        <div key={index} className="border border-neutral-80/5 bg-white-100">
+          ASSET HERE {asset}
+        </div>
       ))}
     </BrandSection>
   )
