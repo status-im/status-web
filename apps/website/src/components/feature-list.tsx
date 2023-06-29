@@ -18,7 +18,7 @@ type Props = {
 export const FeatureList = (props: Props) => {
   const { list, dark = false } = props
   return (
-    <div className="container pb-24 pt-12 lg:m-auto lg:gap-10">
+    <div className="container lg:m-auto lg:gap-10">
       <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:-ml-10 lg:grid-cols-3">
         {list.map(({ title, icon, description }, i) => (
           <div key={title} className="flex flex-col">
