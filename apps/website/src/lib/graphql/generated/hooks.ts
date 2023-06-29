@@ -6,9 +6,9 @@ import type * as Types from './operations'
 import type { UseQueryOptions } from '@tanstack/react-query'
 
 export const GetBurnupDocument = `
-    query getBurnup($epicName: String!, $from: timestamptz, $to: timestamptz) {
+    query getBurnup($epicNames: [String!], $from: timestamptz, $to: timestamptz) {
   gh_burnup(
-    where: {epic_name: {_eq: $epicName}, _or: [{_and: [{date_field: {_gte: $from}}, {date_field: {_lt: $to}}]}, {_and: [{date_field: {_gt: $from}}, {date_field: {_lte: $to}}]}]}
+    where: {epic_name: {_in: $epicNames}, _or: [{_and: [{date_field: {_gte: $from}}, {date_field: {_lt: $to}}]}, {_and: [{date_field: {_gt: $from}}, {date_field: {_lte: $to}}]}]}
     order_by: {date_field: asc}
   ) {
     epic_name
@@ -22,11 +22,11 @@ export const useGetBurnupQuery = <
   TData = Types.GetBurnupQuery,
   TError = GraphqlApiError
 >(
-  variables: Types.GetBurnupQueryVariables,
+  variables?: Types.GetBurnupQueryVariables,
   options?: UseQueryOptions<Types.GetBurnupQuery, TError, TData>
 ) =>
   useQuery<Types.GetBurnupQuery, TError, TData>(
-    ['getBurnup', variables],
+    variables === undefined ? ['getBurnup'] : ['getBurnup', variables],
     createFetcher<Types.GetBurnupQuery, Types.GetBurnupQueryVariables>(
       GetBurnupDocument,
       variables
@@ -34,10 +34,8 @@ export const useGetBurnupQuery = <
     options
   )
 
-useGetBurnupQuery.getKey = (variables: Types.GetBurnupQueryVariables) => [
-  'getBurnup',
-  variables,
-]
+useGetBurnupQuery.getKey = (variables?: Types.GetBurnupQueryVariables) =>
+  variables === undefined ? ['getBurnup'] : ['getBurnup', variables]
 export const GetIssuesByEpicDocument = `
     query getIssuesByEpic($where: gh_epic_issues_bool_exp!, $limit: Int!, $offset: Int!, $orderBy: order_by) {
   gh_epic_issues(
@@ -147,8 +145,14 @@ useGetFiltersWithEpicQuery.getKey = (
   variables: Types.GetFiltersWithEpicQueryVariables
 ) => ['getFiltersWithEpic', variables]
 export const GetEpicMenuLinksDocument = `
-    query getEpicMenuLinks {
-  gh_epics {
+    query getEpicMenuLinks($where: gh_epics_bool_exp, $orderBy: [gh_epics_order_by!], $limit: Int, $offset: Int) {
+  gh_epics(
+    where: $where
+    order_by: $orderBy
+    limit: $limit
+    offset: $offset
+    distinct_on: epic_name
+  ) {
     epic_name
     epic_color
     epic_description

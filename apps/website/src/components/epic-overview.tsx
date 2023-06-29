@@ -7,59 +7,6 @@ import { DatePicker } from './datepicker/datepicker'
 import type { GetBurnupQuery } from '@/lib/graphql/generated/operations'
 import type { DateRange } from '@status-im/components/src/calendar/calendar'
 
-const DATA = [
-  {
-    date: '2022-01-25',
-    open_issues: 100,
-    closed_issues: 0,
-  },
-  {
-    date: '2022-01-26',
-    open_issues: 0,
-    closed_issues: 10,
-  },
-  {
-    date: '2022-01-27',
-    open_issues: 100,
-    closed_issues: 20,
-  },
-  {
-    date: '2022-01-28',
-    open_issues: 90,
-    closed_issues: 30,
-  },
-  {
-    date: '2022-01-29',
-    open_issues: 80,
-    closed_issues: 40,
-  },
-  {
-    date: '2022-01-30',
-    open_issues: 40,
-    closed_issues: 80,
-  },
-  {
-    date: '2022-01-31',
-    open_issues: 30,
-    closed_issues: 90,
-  },
-  {
-    date: '2022-02-01',
-    open_issues: 25,
-    closed_issues: 95,
-  },
-  {
-    date: '2022-02-02',
-    open_issues: 20,
-    closed_issues: 98,
-  },
-  {
-    date: '2022-02-03',
-    open_issues: 10,
-    closed_issues: 130,
-  },
-]
-
 type Props = {
   title: string
   description?: string
@@ -69,6 +16,7 @@ type Props = {
   burnup?: GetBurnupQuery['gh_burnup']
   selectedDates?: DateRange
   setSelectedDates: (date?: DateRange) => void
+  showPicker?: boolean
 }
 
 export const EpicOverview = (props: Props) => {
@@ -81,8 +29,10 @@ export const EpicOverview = (props: Props) => {
     burnup,
     selectedDates,
     setSelectedDates,
+    showPicker = true,
   } = props
 
+  console.log('isLoading', isLoading)
   const filteredData = burnup?.reduce(
     (
       accumulator: {
@@ -118,7 +68,9 @@ export const EpicOverview = (props: Props) => {
           </Text>
           <OpenIcon size={20} />
         </div>
-        <DatePicker selected={selectedDates} onSelect={setSelectedDates} />
+        {showPicker && (
+          <DatePicker selected={selectedDates} onSelect={setSelectedDates} />
+        )}
       </div>
       {Boolean(description) && (
         <Text size={fullscreen ? 19 : 15} color="$neutral-50">
@@ -130,7 +82,7 @@ export const EpicOverview = (props: Props) => {
         <Tag size={24} label={title} color={color} />
       </div>
 
-      <Chart data={filteredData || DATA} height={300} isLoading={isLoading} />
+      <Chart data={filteredData || []} height={300} isLoading={isLoading} />
 
       {/* TODO - Add theses when we have milestones and/or labels */}
       {/* <div className="flex justify-between pt-3">

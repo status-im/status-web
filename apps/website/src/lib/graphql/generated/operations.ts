@@ -1,7 +1,9 @@
 import type * as Types from './schemas'
 
 export type GetBurnupQueryVariables = Types.Exact<{
-  epicName: Types.Scalars['String']['input']
+  epicNames?: Types.InputMaybe<
+    Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']
+  >
   from?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
   to?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
 }>
@@ -66,7 +68,12 @@ export type GetFiltersWithEpicQuery = {
 }
 
 export type GetEpicMenuLinksQueryVariables = Types.Exact<{
-  [key: string]: never
+  where?: Types.InputMaybe<Types.Gh_Epics_Bool_Exp>
+  orderBy?: Types.InputMaybe<
+    Array<Types.Gh_Epics_Order_By> | Types.Gh_Epics_Order_By
+  >
+  limit?: Types.InputMaybe<Types.Scalars['Int']['input']>
+  offset?: Types.InputMaybe<Types.Scalars['Int']['input']>
 }>
 
 export type GetEpicMenuLinksQuery = {

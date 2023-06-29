@@ -1,8 +1,8 @@
 export const GET_BURNUP = /* GraphQL */ `
-  query getBurnup($epicName: String!, $from: timestamptz, $to: timestamptz) {
+  query getBurnup($epicNames: [String!], $from: timestamptz, $to: timestamptz) {
     gh_burnup(
       where: {
-        epic_name: { _eq: $epicName }
+        epic_name: { _in: $epicNames }
         _or: [
           {
             _and: [
@@ -88,8 +88,19 @@ export const GET_FILTERS_WITH_EPIC = /* GraphQL */ `
 `
 
 export const GET_EPIC_LINKS = /* GraphQL */ `
-  query getEpicMenuLinks {
-    gh_epics {
+  query getEpicMenuLinks(
+    $where: gh_epics_bool_exp
+    $orderBy: [gh_epics_order_by!]
+    $limit: Int
+    $offset: Int
+  ) {
+    gh_epics(
+      where: $where
+      order_by: $orderBy
+      limit: $limit
+      offset: $offset
+      distinct_on: epic_name
+    ) {
       epic_name
       epic_color
       epic_description

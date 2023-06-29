@@ -78,13 +78,15 @@ const EpicsDetailPage: Page<Props> = props => {
 
   const [selectedDates, setSelectedDates] = useState<DateRange>()
 
-  const { data: dataBurnup } = useGetBurnupQuery(
+  const { data: dataBurnup, isFetching: isLoadingBurnup } = useGetBurnupQuery(
     {
-      epicName: epicName as string,
-      from: initialDates.from,
-      to: initialDates.to,
+      epicNames: epicName,
+      from: selectedDates?.from || initialDates.from,
+      to: selectedDates?.to || initialDates.to,
     },
     {
+      // Prevent animation if we go out of the page
+      refetchOnWindowFocus: false,
       initialData: props.burnup,
     }
   )
@@ -198,6 +200,7 @@ const EpicsDetailPage: Page<Props> = props => {
           color={epic.color}
           fullscreen
           burnup={burnup}
+          isLoading={isLoadingBurnup}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
         />
@@ -253,7 +256,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const [resultBurnup, resultIssuesCount, resultFilters] = await Promise.all([
     api<GetBurnupQuery, GetBurnupQueryVariables>(GET_BURNUP, {
-      epicName: String(epic),
+      epicNames: String(epic),
       from: initialDates.from,
       to: initialDates.to,
     }),
