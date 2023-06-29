@@ -7,6 +7,12 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+env:
+  NEXT_PUBLIC_GHOST_API_URL: ''
+  NEXT_PUBLIC_GHOST_API_KEY: ''
+  INFURA_API_KEY: ''
+  TAMAGUI_TARGET: 'web'
+
 jobs:
   release:
     runs-on: ubuntu-latest
