@@ -2,6 +2,7 @@ import { Children, cloneElement, forwardRef } from 'react'
 
 import { Content, List, Root, Trigger } from '@radix-ui/react-tabs'
 import { Stack } from '@tamagui/web'
+import { Pressable } from 'react-native'
 import { styled } from 'tamagui'
 
 import { Counter } from '../counter'
@@ -116,7 +117,7 @@ Tabs.Content = Content
 export { Tabs }
 export type { Props as TabsProps }
 
-const TriggerBase = styled(Stack, {
+const TriggerBase = styled(Pressable, {
   tag: 'button',
 
   flexDirection: 'row',
