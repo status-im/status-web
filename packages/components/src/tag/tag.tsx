@@ -10,6 +10,7 @@ import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
 import type { ColorTokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
+import type { PressableProps } from 'react-native'
 
 type Props = {
   size: 32 | 24
@@ -17,7 +18,7 @@ type Props = {
   label?: string
   selected?: boolean
   disabled?: boolean
-  onPress?: () => void
+  onPress?: PressableProps['onPress']
   color?: ColorTokens | `#${string}`
 }
 
@@ -55,8 +56,11 @@ const Tag = (props: Props) => {
       selected={selected}
       disabled={disabled}
       iconOnly={Boolean(icon && !label)}
-      onPress={() => onPress?.()}
       {...getCustomStyles(props)}
+      {...(onPress && {
+        role: 'button',
+        onPress,
+      })}
     >
       {renderIcon()}
       {label && (
@@ -73,8 +77,8 @@ export type { Props as TagProps }
 
 const Base = styled(View, {
   name: 'Tag',
-  role: 'button',
 
+  userSelect: 'none',
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
@@ -85,7 +89,6 @@ const Base = styled(View, {
   backgroundColor: '$white-100',
 
   animation: 'fast',
-  cursor: 'pointer',
 
   hoverStyle: {
     borderColor: '$neutral-30',
