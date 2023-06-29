@@ -22,7 +22,7 @@ export const ROUTES = {
     { name: 'Mission', href: '/' },
     { name: 'Principles', href: '/' },
     { name: 'Team', href: '/' },
-    { name: 'Press Kit', href: '/' },
+    { name: 'Brand', href: '/brand' },
   ],
   Help: [
     { name: 'Overview', href: '/help' },
