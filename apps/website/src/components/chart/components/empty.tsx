@@ -17,7 +17,7 @@ const Empty = () => {
             Try adjusting your search or filter to find what you’re looking for.
           </Text>
         </div>
-        <div className="absolute left-[50%] top-16 w-full opacity-60">
+        <div className="absolute left-[50%] top-16 w-full translate-x-[-50%] opacity-60">
           <LineA />
         </div>
         <div className="absolute left-0 top-28 w-full opacity-60">

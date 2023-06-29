@@ -1,6 +1,6 @@
 import { Text } from '@status-im/components'
 
-import { SOCIALS } from '@/config/links'
+import { SOCIALS } from '@/config/routes'
 
 import { Logo } from '../logo'
 import { AccordionMenu } from '../navigation/accordion-menu'

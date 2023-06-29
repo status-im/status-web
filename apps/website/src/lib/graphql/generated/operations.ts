@@ -1,18 +1,5 @@
 import type * as Types from './schemas'
 
-export type GetEpicMenuLinksQueryVariables = Types.Exact<{
-  [key: string]: never
-}>
-
-export type GetEpicMenuLinksQuery = {
-  __typename?: 'query_root'
-  gh_epics: Array<{
-    __typename?: 'gh_epics'
-    epic_name?: string | null
-    status?: string | null
-  }>
-}
-
 export type GetBurnupQueryVariables = Types.Exact<{
   epicName: Types.Scalars['String']['input']
   from?: Types.InputMaybe<Types.Scalars['timestamptz']['input']>
@@ -78,6 +65,38 @@ export type GetFiltersWithEpicQuery = {
   repos: Array<{ __typename?: 'gh_epic_issues'; repository?: string | null }>
 }
 
+export type GetEpicMenuLinksQueryVariables = Types.Exact<{
+  [key: string]: never
+}>
+
+export type GetEpicMenuLinksQuery = {
+  __typename?: 'query_root'
+  gh_epics: Array<{
+    __typename?: 'gh_epics'
+    epic_name?: string | null
+    epic_color?: string | null
+    epic_description?: string | null
+    status?: string | null
+  }>
+}
+
+export type GetRepositoriesQueryVariables = Types.Exact<{
+  [key: string]: never
+}>
+
+export type GetRepositoriesQuery = {
+  __typename?: 'query_root'
+  gh_repositories: Array<{
+    __typename?: 'gh_repositories'
+    description?: string | null
+    full_name?: string | null
+    name?: string | null
+    open_issues_count?: any | null
+    stargazers_count?: any | null
+    visibility?: string | null
+  }>
+}
+
 export type GetOrphansQueryVariables = Types.Exact<{
   where: Types.Gh_Orphans_Bool_Exp
   limit: Types.Scalars['Int']['input']
@@ -120,21 +139,4 @@ export type GetFiltersForOrphansQuery = {
   authors: Array<{ __typename?: 'gh_orphans'; author?: string | null }>
   assignees: Array<{ __typename?: 'gh_orphans'; assignee?: string | null }>
   repos: Array<{ __typename?: 'gh_orphans'; repository?: string | null }>
-}
-
-export type GetRepositoriesQueryVariables = Types.Exact<{
-  [key: string]: never
-}>
-
-export type GetRepositoriesQuery = {
-  __typename?: 'query_root'
-  gh_repositories: Array<{
-    __typename?: 'gh_repositories'
-    description?: string | null
-    full_name?: string | null
-    name?: string | null
-    open_issues_count?: any | null
-    stargazers_count?: any | null
-    visibility?: string | null
-  }>
 }

@@ -1,19 +1,5 @@
-import { useGetEpicMenuLinksQuery } from '@/lib/graphql/generated/hooks'
-
-import { SideBar } from '../components'
+import { SidebarMenu } from '../components'
 import { AppLayout } from './app-layout'
-
-import type { ReactNode } from 'react'
-
-// TODO: find away to avoid export this query because of the warning of const not being used
-export const GET_EPIC_LINKS = /* GraphQL */ `
-  query getEpicMenuLinks {
-    gh_epics(where: { status: { _eq: "In Progress" } }) {
-      epic_name
-      status
-    }
-  }
-`
 
 const STATIC_LINKS = [
   {
@@ -27,17 +13,19 @@ const STATIC_LINKS = [
 ]
 
 interface InsightsLayoutProps {
-  children: ReactNode
+  children: React.ReactNode
+  links: string[]
 }
 
-export const InsightsLayout: React.FC<InsightsLayoutProps> = ({ children }) => {
-  const { data, isLoading } = useGetEpicMenuLinksQuery()
-
+export const InsightsLayout: React.FC<InsightsLayoutProps> = ({
+  children,
+  links: linksFromProps,
+}) => {
   const epicLinks =
-    data?.gh_epics.map(epic => {
+    linksFromProps?.map(epic => {
       return {
-        label: epic.epic_name || '',
-        href: `/insights/epics/${epic.epic_name}`,
+        label: epic || '',
+        href: `/insights/epics/${epic}`,
       }
     }) || []
 
@@ -57,9 +45,9 @@ export const InsightsLayout: React.FC<InsightsLayoutProps> = ({ children }) => {
 
   return (
     <AppLayout hasPreFooter={false}>
-      <div className="relative mx-1 flex min-h-[calc(100vh-56px-4px)] w-full rounded-3xl bg-white-100">
-        {<SideBar data={links} isLoading={isLoading} />}
-        <main className="flex-1">{children}</main>
+      <div className="relative flex min-h-[calc(100vh-56px-4px)] w-full rounded-3xl bg-white-100">
+        {<SidebarMenu items={links} />}
+        <main className="flex-1 pb-8">{children}</main>
       </div>
     </AppLayout>
   )

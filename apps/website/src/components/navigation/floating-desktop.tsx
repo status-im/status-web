@@ -3,7 +3,7 @@ import { Button, Text } from '@status-im/components'
 import { DownloadIcon, ExternalIcon } from '@status-im/icons'
 import { cx } from 'class-variance-authority'
 
-import { LINKS } from '@/config/links'
+import { ROUTES } from '@/config/routes'
 
 import { Link } from '../link'
 import { Logo } from '../logo'
@@ -27,7 +27,7 @@ const FloatingDesktop = (props: Props) => {
       <div className="flex items-center p-2">
         <Logo label={false} />
         <NavigationMenu.List className="flex items-center pl-5">
-          {Object.entries(LINKS).map(([name, links]) => (
+          {Object.entries(ROUTES).map(([name, links]) => (
             <NavigationMenu.Item key={name}>
               <NavigationMenu.Trigger className="pr-5 aria-expanded:opacity-50">
                 <Text size={15} weight="medium" color="$white-100">

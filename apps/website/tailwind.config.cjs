@@ -24,6 +24,10 @@ module.exports = {
       semibold: '600',
       bold: '700',
     },
+    boxShadow: {
+      1: '0px 2px 20px rgba(9, 16, 28, 0.04)',
+      3: '0px 8px 30px rgba(9, 16, 28, 0.12);',
+    },
 
     extend: {
       transitionProperty: {

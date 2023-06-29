@@ -8,6 +8,13 @@ import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
+import {
+  GET_BURNUP,
+  GET_EPIC_ISSUES_COUNT,
+  GET_EPIC_LINKS,
+  GET_FILTERS_WITH_EPIC,
+  GET_ISSUES_BY_EPIC,
+} from '@/lib/burnup'
 import { api } from '@/lib/graphql'
 import {
   useGetBurnupQuery,
@@ -16,11 +23,14 @@ import {
 } from '@/lib/graphql/generated/hooks'
 import { Order_By } from '@/lib/graphql/generated/schemas'
 
+import type { BreadcrumbsProps } from '@/components/breadcrumbs'
 import type {
   GetBurnupQuery,
   GetBurnupQueryVariables,
   GetEpicIssuesCountQuery,
   GetEpicIssuesCountQueryVariables,
+  GetEpicMenuLinksQuery,
+  GetEpicMenuLinksQueryVariables,
   GetFiltersWithEpicQuery,
   GetFiltersWithEpicQueryVariables,
   GetIssuesByEpicQuery,
@@ -29,96 +39,17 @@ import type {
 import type { DateRange } from '@status-im/components/src/calendar/calendar'
 import type { GetServerSidePropsContext, Page } from 'next'
 
-const GET_BURNUP = /* GraphQL */ `
-  query getBurnup($epicName: String!, $from: timestamptz, $to: timestamptz) {
-    gh_burnup(
-      where: {
-        epic_name: { _eq: $epicName }
-        _or: [
-          {
-            _and: [
-              { date_field: { _gte: $from } }
-              { date_field: { _lt: $to } }
-            ]
-          }
-          {
-            _and: [
-              { date_field: { _gt: $from } }
-              { date_field: { _lte: $to } }
-            ]
-          }
-        ]
-      }
-      order_by: { date_field: asc }
-    ) {
-      epic_name
-      total_closed_issues
-      total_opened_issues
-      date_field
-    }
-  }
-`
+type Epic = {
+  title: string
+  color: string
 
-const GET_ISSUES_BY_EPIC = /* GraphQL */ `
-  query getIssuesByEpic(
-    $where: gh_epic_issues_bool_exp!
-    $limit: Int!
-    $offset: Int!
-    $orderBy: order_by
-  ) {
-    gh_epic_issues(
-      where: $where
-      order_by: { created_at: $orderBy }
-      limit: $limit
-      offset: $offset
-    ) {
-      assignee
-      author
-      closed_at
-      created_at
-      epic_color
-      epic_name
-      repository
-      stage
-      title
-      issue_number
-      issue_url
-    }
-  }
-`
-
-const GET_EPIC_ISSUES_COUNT = /* GraphQL */ `
-  query getEpicIssuesCount($where: gh_epic_issues_bool_exp!) {
-    gh_epic_issues(where: $where) {
-      closed_at
-    }
-  }
-`
-
-const GET_FILTERS_WITH_EPIC = /* GraphQL */ `
-  query getFiltersWithEpic($epicName: String!) {
-    authors: gh_epic_issues(
-      where: { epic_name: { _eq: $epicName }, author: { _is_null: false } }
-      distinct_on: author
-    ) {
-      author
-    }
-    assignees: gh_epic_issues(
-      where: { epic_name: { _eq: $epicName }, assignee: { _is_null: false } }
-      distinct_on: assignee
-    ) {
-      assignee
-    }
-    repos: gh_epic_issues(
-      where: { epic_name: { _eq: $epicName } }
-      distinct_on: repository
-    ) {
-      repository
-    }
-  }
-`
+  description: string
+}
 
 type Props = {
+  links: string[]
+  epic: Epic
+  breadcrumbs: BreadcrumbsProps['items']
   burnup: GetBurnupQuery
   count: GetEpicIssuesCountQuery
   filters: GetFiltersWithEpicQuery
@@ -135,6 +66,8 @@ const EpicsDetailPage: Page<Props> = props => {
 
   const { epic: epicName } = router.query
 
+  const { epic, breadcrumbs, links, initialDates } = props
+
   const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
   const [selectedAuthors, setSelectedAuthors] = useState<string[]>([])
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([])
@@ -149,8 +82,8 @@ const EpicsDetailPage: Page<Props> = props => {
   const { data: dataBurnup } = useGetBurnupQuery(
     {
       epicName: epicName as string,
-      from: props.initialDates.from,
-      to: props.initialDates.to,
+      from: initialDates.from,
+      to: initialDates.to,
     },
     {
       initialData: props.burnup,
@@ -257,20 +190,19 @@ const EpicsDetailPage: Page<Props> = props => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, isVisible])
 
   return (
-    <div>
-      <div className="border-b border-neutral-10 px-5 py-3">
-        <Breadcrumbs />
-      </div>
-      <div className="border-b border-neutral-10 px-10 py-6">
+    <InsightsLayout links={links}>
+      <Breadcrumbs items={breadcrumbs} />
+      <div className="px-10 py-6">
         <EpicOverview
-          title={epicName as string}
+          title={epic.title}
+          description={epic.description}
           fullscreen
           burnup={burnup}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
         />
       </div>
-      <div className="border-b border-neutral-10 px-10 py-6">
+      <div className="border-neutral-10 px-10 py-6">
         <TableIssues
           data={issues}
           count={count}
@@ -291,16 +223,27 @@ const EpicsDetailPage: Page<Props> = props => {
         />
         <div ref={endOfPageRef} />
       </div>
-    </div>
+    </InsightsLayout>
   )
 }
 
-EpicsDetailPage.getLayout = function getLayout(page) {
-  return <InsightsLayout>{page}</InsightsLayout>
-}
+export default EpicsDetailPage
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { epic } = context.query
+
+  const links = await api<
+    GetEpicMenuLinksQuery,
+    GetEpicMenuLinksQueryVariables
+  >(GET_EPIC_LINKS)
+
+  const epicLinkExists = links?.gh_epics.find(link => link.epic_name === epic)
+
+  if (!epicLinkExists) {
+    return {
+      redirect: { destination: '/insights/epics', permanent: false },
+    }
+  }
 
   // TODO: get initial date based on the epic when available
   const initialDates = {
@@ -308,40 +251,54 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     to: format(new Date(), 'yyyy-MM-dd'),
   }
 
-  const result = await api<GetBurnupQuery, GetBurnupQueryVariables>(
-    GET_BURNUP,
-    {
+  const [resultBurnup, resultIssuesCount, resultFilters] = await Promise.all([
+    api<GetBurnupQuery, GetBurnupQueryVariables>(GET_BURNUP, {
       epicName: String(epic),
-      from: '2017-01-01',
-      to: format(new Date(), 'yyyy-MM-dd'),
-    }
-  )
-
-  const resultIssuesCount = await api<
-    GetEpicIssuesCountQuery,
-    GetEpicIssuesCountQueryVariables
-  >(GET_EPIC_ISSUES_COUNT, {
-    where: {
-      epic_name: { _eq: String(epic) },
-    },
-  })
-
-  const resultFilters = await api<
-    GetFiltersWithEpicQuery,
-    GetFiltersWithEpicQueryVariables
-  >(GET_FILTERS_WITH_EPIC, {
-    epicName: String(epic),
-  })
+      from: initialDates.from,
+      to: initialDates.to,
+    }),
+    api<GetEpicIssuesCountQuery, GetEpicIssuesCountQueryVariables>(
+      GET_EPIC_ISSUES_COUNT,
+      {
+        where: {
+          epic_name: { _eq: String(epic) },
+        },
+      }
+    ),
+    api<GetFiltersWithEpicQuery, GetFiltersWithEpicQueryVariables>(
+      GET_FILTERS_WITH_EPIC,
+      {
+        epicName: String(epic),
+      }
+    ),
+  ])
 
   return {
     props: {
-      burnup: result,
-      count: resultIssuesCount,
-      filters: resultFilters,
+      links:
+        links?.gh_epics
+          .filter(epic => epic.status === 'In Progress')
+          .map(epic => epic.epic_name) || [],
+      burnup: resultBurnup?.gh_burnup || [],
+      count: resultIssuesCount?.gh_epic_issues,
+      filters: resultFilters || [],
       initialDates,
+      epic: {
+        title: String(epic),
+        description: '',
+        color: '',
+      },
+      breadcrumbs: [
+        {
+          label: 'Epics',
+          href: '/insights/epics',
+        },
+        {
+          label: "Epic's name",
+          href: `/insights/epics/${epic}`,
+        },
+      ],
       key: epic,
     },
   }
 }
-
-export default EpicsDetailPage

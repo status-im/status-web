@@ -57,7 +57,7 @@ const FloatingMenu = (): JSX.Element => {
           'rounded-2xl border border-neutral-80/5 bg-blur-neutral-80/80 backdrop-blur-md',
           ' w-[calc(100%-24px)]',
           ' opacity-0 transition-opacity data-[visible=true]:opacity-100',
-          'z-10',
+          'z-20',
         ])}
       >
         <FloatingMobile open={open} setOpen={setOpen} />

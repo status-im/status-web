@@ -5,38 +5,6 @@ import { createFetcher } from '../api'
 import type * as Types from './operations'
 import type { UseQueryOptions } from '@tanstack/react-query'
 
-export const GetEpicMenuLinksDocument = `
-    query getEpicMenuLinks {
-  gh_epics(where: {status: {_eq: "In Progress"}}) {
-    epic_name
-    status
-  }
-}
-    `
-export const useGetEpicMenuLinksQuery = <
-  TData = Types.GetEpicMenuLinksQuery,
-  TError = GraphqlApiError
->(
-  variables?: Types.GetEpicMenuLinksQueryVariables,
-  options?: UseQueryOptions<Types.GetEpicMenuLinksQuery, TError, TData>
-) =>
-  useQuery<Types.GetEpicMenuLinksQuery, TError, TData>(
-    variables === undefined
-      ? ['getEpicMenuLinks']
-      : ['getEpicMenuLinks', variables],
-    createFetcher<
-      Types.GetEpicMenuLinksQuery,
-      Types.GetEpicMenuLinksQueryVariables
-    >(GetEpicMenuLinksDocument, variables),
-    options
-  )
-
-useGetEpicMenuLinksQuery.getKey = (
-  variables?: Types.GetEpicMenuLinksQueryVariables
-) =>
-  variables === undefined
-    ? ['getEpicMenuLinks']
-    : ['getEpicMenuLinks', variables]
 export const GetBurnupDocument = `
     query getBurnup($epicName: String!, $from: timestamptz, $to: timestamptz) {
   gh_burnup(
@@ -178,6 +146,74 @@ export const useGetFiltersWithEpicQuery = <
 useGetFiltersWithEpicQuery.getKey = (
   variables: Types.GetFiltersWithEpicQueryVariables
 ) => ['getFiltersWithEpic', variables]
+export const GetEpicMenuLinksDocument = `
+    query getEpicMenuLinks {
+  gh_epics {
+    epic_name
+    epic_color
+    epic_description
+    status
+  }
+}
+    `
+export const useGetEpicMenuLinksQuery = <
+  TData = Types.GetEpicMenuLinksQuery,
+  TError = GraphqlApiError
+>(
+  variables?: Types.GetEpicMenuLinksQueryVariables,
+  options?: UseQueryOptions<Types.GetEpicMenuLinksQuery, TError, TData>
+) =>
+  useQuery<Types.GetEpicMenuLinksQuery, TError, TData>(
+    variables === undefined
+      ? ['getEpicMenuLinks']
+      : ['getEpicMenuLinks', variables],
+    createFetcher<
+      Types.GetEpicMenuLinksQuery,
+      Types.GetEpicMenuLinksQueryVariables
+    >(GetEpicMenuLinksDocument, variables),
+    options
+  )
+
+useGetEpicMenuLinksQuery.getKey = (
+  variables?: Types.GetEpicMenuLinksQueryVariables
+) =>
+  variables === undefined
+    ? ['getEpicMenuLinks']
+    : ['getEpicMenuLinks', variables]
+export const GetRepositoriesDocument = `
+    query getRepositories {
+  gh_repositories {
+    description
+    full_name
+    name
+    open_issues_count
+    stargazers_count
+    visibility
+  }
+}
+    `
+export const useGetRepositoriesQuery = <
+  TData = Types.GetRepositoriesQuery,
+  TError = GraphqlApiError
+>(
+  variables?: Types.GetRepositoriesQueryVariables,
+  options?: UseQueryOptions<Types.GetRepositoriesQuery, TError, TData>
+) =>
+  useQuery<Types.GetRepositoriesQuery, TError, TData>(
+    variables === undefined
+      ? ['getRepositories']
+      : ['getRepositories', variables],
+    createFetcher<
+      Types.GetRepositoriesQuery,
+      Types.GetRepositoriesQueryVariables
+    >(GetRepositoriesDocument, variables),
+    options
+  )
+
+useGetRepositoriesQuery.getKey = (
+  variables?: Types.GetRepositoriesQueryVariables
+) =>
+  variables === undefined ? ['getRepositories'] : ['getRepositories', variables]
 export const GetOrphansDocument = `
     query getOrphans($where: gh_orphans_bool_exp!, $limit: Int!, $offset: Int!, $orderBy: order_by) {
   gh_orphans(
@@ -285,37 +321,3 @@ useGetFiltersForOrphansQuery.getKey = (
   variables === undefined
     ? ['getFiltersForOrphans']
     : ['getFiltersForOrphans', variables]
-export const GetRepositoriesDocument = `
-    query getRepositories {
-  gh_repositories {
-    description
-    full_name
-    name
-    open_issues_count
-    stargazers_count
-    visibility
-  }
-}
-    `
-export const useGetRepositoriesQuery = <
-  TData = Types.GetRepositoriesQuery,
-  TError = GraphqlApiError
->(
-  variables?: Types.GetRepositoriesQueryVariables,
-  options?: UseQueryOptions<Types.GetRepositoriesQuery, TError, TData>
-) =>
-  useQuery<Types.GetRepositoriesQuery, TError, TData>(
-    variables === undefined
-      ? ['getRepositories']
-      : ['getRepositories', variables],
-    createFetcher<
-      Types.GetRepositoriesQuery,
-      Types.GetRepositoriesQueryVariables
-    >(GetRepositoriesDocument, variables),
-    options
-  )
-
-useGetRepositoriesQuery.getKey = (
-  variables?: Types.GetRepositoriesQueryVariables
-) =>
-  variables === undefined ? ['getRepositories'] : ['getRepositories', variables]

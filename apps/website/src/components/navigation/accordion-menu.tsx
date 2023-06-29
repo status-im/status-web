@@ -4,7 +4,7 @@ import * as Accordion from '@radix-ui/react-accordion'
 import { Text } from '@status-im/components'
 import { ChevronRightIcon, ExternalIcon } from '@status-im/icons'
 
-import { LINKS } from '@/config/links'
+import { ROUTES } from '@/config/routes'
 
 import { Link } from '../link'
 
@@ -17,7 +17,7 @@ const AccordionMenu = () => {
 
   return (
     <div className="flex flex-col px-3">
-      {Object.entries(LINKS).map(([name, links]) => (
+      {Object.entries(ROUTES).map(([name, routes]) => (
         <Accordion.Root
           key={name}
           type="single"
@@ -38,19 +38,19 @@ const AccordionMenu = () => {
               </Accordion.Trigger>
               <Accordion.Content className="accordion-content pl-5">
                 <div className="overflow-hidden">
-                  {links.map((link, index) => {
-                    const external = link.href.startsWith('http')
+                  {routes.map((route, index) => {
+                    const external = route.href.startsWith('http')
                     return (
                       <div
-                        key={link.name + index}
+                        key={route.name + index}
                         className={`pt-3 transition-opacity first-of-type:pt-5 last-of-type:pb-5 hover:opacity-50`}
                       >
                         <Link
-                          href={link.href}
+                          href={route.href}
                           className="flex items-center gap-1"
                         >
                           <Text size={15} weight="medium" color="$white-100">
-                            {link.name}
+                            {route.name}
                           </Text>
 
                           {external && (

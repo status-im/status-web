@@ -7,11 +7,19 @@ import { TableIssues } from '@/components'
 import { useDebounce } from '@/hooks/use-debounce'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
+import {
+  GET_EPIC_LINKS,
+  GET_FILTERS_FOR_ORPHANS,
+  GET_ORPHANS,
+  GET_ORPHANS_COUNT,
+} from '@/lib/burnup'
 import { api } from '@/lib/graphql'
 import { useGetOrphansCountQuery } from '@/lib/graphql/generated/hooks'
 import { Order_By } from '@/lib/graphql/generated/schemas'
 
 import type {
+  GetEpicMenuLinksQuery,
+  GetEpicMenuLinksQueryVariables,
   GetFiltersForOrphansQuery,
   GetFiltersForOrphansQueryVariables,
   GetOrphansCountQuery,
@@ -21,69 +29,17 @@ import type {
 } from '@/lib/graphql/generated/operations'
 import type { Page } from 'next'
 
-const GET_ORPHANS = /* GraphQL */ `
-  query getOrphans(
-    $where: gh_orphans_bool_exp!
-    $limit: Int!
-    $offset: Int!
-    $orderBy: order_by
-  ) {
-    gh_orphans(
-      where: $where
-      order_by: { created_at: $orderBy }
-      limit: $limit
-      offset: $offset
-    ) {
-      labels
-      assignee
-      author
-      issue_number
-      issue_url
-      created_at
-      closed_at
-      repository
-      stage
-      title
-    }
-  }
-`
-
-const GET_ORPHANS_COUNT = /* GraphQL */ `
-  query getOrphansCount($where: gh_orphans_bool_exp!) {
-    gh_orphans(where: $where) {
-      closed_at
-    }
-  }
-`
-
-const GET_FILTERS_FOR_ORPHANS = /* GraphQL */ `
-  query getFiltersForOrphans {
-    authors: gh_orphans(
-      where: { author: { _is_null: false } }
-      distinct_on: author
-    ) {
-      author
-    }
-    assignees: gh_orphans(
-      where: { assignee: { _is_null: false } }
-      distinct_on: assignee
-    ) {
-      assignee
-    }
-    repos: gh_orphans(distinct_on: repository) {
-      repository
-    }
-  }
-`
-
 type Props = {
   orphans: GetOrphansQuery
   filters: GetFiltersForOrphansQuery
+  links: string[]
 }
 
 const LIMIT = 50
 
 const OrphansPage: Page<Props> = props => {
+  const { links } = props
+
   const [activeTab, setActiveTab] = useState<'open' | 'closed'>('open')
   const [selectedAuthors, setSelectedAuthors] = useState<string[]>([])
   const [selectedAssignees, setSelectedAssignees] = useState<string[]>([])
@@ -180,68 +136,67 @@ const OrphansPage: Page<Props> = props => {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, isVisible])
 
   return (
-    <div className="space-y-6 scroll-smooth p-10">
-      <Text size={27} weight="semibold">
-        Orphans
-      </Text>
-      <TableIssues
-        data={orphans}
-        count={count}
-        isLoading={isFetchingNextPage || isFetching || hasNextPage}
-        filters={props.filters}
-        handleTabChange={setActiveTab}
-        activeTab={activeTab}
-        selectedAuthors={selectedAuthors}
-        handleSelectedAuthors={setSelectedAuthors}
-        selectedAssignees={selectedAssignees}
-        handleSelectedAssignees={setSelectedAssignees}
-        selectedRepos={selectedRepos}
-        handleSelectedRepos={setSelectedRepos}
-        orderByValue={orderByValue}
-        handleOrderByValue={setOrderByValue}
-        searchFilterValue={searchFilter}
-        handleSearchFilter={setSearchFilter}
-      />
-      <div ref={endOfPageRef} />
-    </div>
+    <InsightsLayout links={links}>
+      <div className="space-y-6 scroll-smooth p-10">
+        <Text size={27} weight="semibold">
+          Orphans
+        </Text>
+        <TableIssues
+          data={orphans}
+          count={count}
+          isLoading={isFetchingNextPage || isFetching || hasNextPage}
+          filters={props.filters}
+          handleTabChange={setActiveTab}
+          activeTab={activeTab}
+          selectedAuthors={selectedAuthors}
+          handleSelectedAuthors={setSelectedAuthors}
+          selectedAssignees={selectedAssignees}
+          handleSelectedAssignees={setSelectedAssignees}
+          selectedRepos={selectedRepos}
+          handleSelectedRepos={setSelectedRepos}
+          orderByValue={orderByValue}
+          handleOrderByValue={setOrderByValue}
+          searchFilterValue={searchFilter}
+          handleSearchFilter={setSearchFilter}
+        />
+        <div ref={endOfPageRef} />
+      </div>
+    </InsightsLayout>
   )
 }
 
-OrphansPage.getLayout = function getLayout(page) {
-  return <InsightsLayout>{page}</InsightsLayout>
-}
-
-export async function getStaticProps() {
-  const result = await api<GetOrphansQuery, GetOrphansQueryVariables>(
-    GET_ORPHANS,
-    {
+export async function getServerSideProps() {
+  const [links, repos, filters, resultIssuesCount] = await Promise.all([
+    api<GetEpicMenuLinksQuery, GetEpicMenuLinksQueryVariables>(GET_EPIC_LINKS),
+    api<GetOrphansQuery, GetOrphansQueryVariables>(GET_ORPHANS, {
       where: {
         stage: { _eq: 'open' },
       },
       limit: LIMIT,
       offset: 0,
       orderBy: Order_By.Desc,
-    }
-  )
-
-  const resultFilters = await api<
-    GetFiltersForOrphansQuery,
-    GetFiltersForOrphansQueryVariables
-  >(GET_FILTERS_FOR_ORPHANS)
-
-  const resultIssuesCount = await api<
-    GetOrphansCountQuery,
-    GetOrphansCountQueryVariables
-  >(GET_ORPHANS_COUNT, {
-    where: {
-      stage: { _eq: 'open' },
-    },
-  })
+    }),
+    api<GetFiltersForOrphansQuery, GetFiltersForOrphansQueryVariables>(
+      GET_FILTERS_FOR_ORPHANS
+    ),
+    api<GetOrphansCountQuery, GetOrphansCountQueryVariables>(
+      GET_ORPHANS_COUNT,
+      {
+        where: {
+          stage: { _eq: 'open' },
+        },
+      }
+    ),
+  ])
 
   return {
     props: {
-      repos: result.gh_orphans || [],
-      filters: resultFilters,
+      links:
+        links?.gh_epics
+          .filter(epic => epic.status === 'In Progress')
+          .map(epic => epic.epic_name) || [],
+      repos: repos.gh_orphans || [],
+      filters,
       count: resultIssuesCount,
     },
   }

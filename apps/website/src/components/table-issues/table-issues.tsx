@@ -74,8 +74,8 @@ const TableIssues = (props: Props) => {
   } = props
 
   return (
-    <div className=" rounded-2xl border border-neutral-10">
-      <div className="flex border-b border-neutral-10 bg-neutral-5 p-3">
+    <div className="overflow-hidden rounded-2xl border border-neutral-20 shadow-1">
+      <div className="flex border-b border-neutral-20 bg-neutral-5 p-3">
         <div className="flex w-full flex-col 2xl:flex-row 2xl:justify-between">
           <Tabs
             handleTabChange={handleTabChange}

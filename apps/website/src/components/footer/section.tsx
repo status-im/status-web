@@ -3,11 +3,11 @@ import { cva } from 'class-variance-authority'
 
 import { Link } from '../link'
 
-import type { Links } from '@/config/links'
+import type { Routes } from '@/config/routes'
 
 type Props = {
   title: string
-  links: Links
+  routes: Routes
   hasBorderLeft?: boolean
   hasBorderTop?: boolean
 }
@@ -40,7 +40,7 @@ const section = cva(
 )
 
 const Section = (props: Props) => {
-  const { title, links, hasBorderLeft, hasBorderTop } = props
+  const { title, routes, hasBorderLeft, hasBorderTop } = props
 
   return (
     <div>
@@ -61,11 +61,11 @@ const Section = (props: Props) => {
           {title}
         </Text>
         <ul className="grid gap-1">
-          {links.map(link => (
-            <li key={link.name}>
-              <Link href={link.href}>
+          {routes.map(route => (
+            <li key={route.name}>
+              <Link href={route.href}>
                 <Text size={15} color="$white-100" weight="medium">
-                  {link.name}
+                  {route.name}
                 </Text>
               </Link>
             </li>

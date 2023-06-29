@@ -1,4 +1,4 @@
-export { Breadcrumbs } from './breadcrumbs/breadcrumbs'
+export { Breadcrumbs } from './breadcrumbs'
 export { EpicOverview } from './epic-overview'
-export { SideBar } from './side-bar/side-bar'
+export { SidebarMenu } from './sidebar-menu'
 export { TableIssues } from './table-issues/table-issues'
