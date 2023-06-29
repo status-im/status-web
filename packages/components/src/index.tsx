@@ -25,6 +25,7 @@ export * from './skeleton'
 export * from './tag'
 export * from './text'
 export * from './toast'
+export * from './tokens'
 export * from './user-list'
 // eslint-disable-next-line simple-import-sort/exports
 export { config } from './tamagui.config'
