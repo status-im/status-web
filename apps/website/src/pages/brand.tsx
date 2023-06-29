@@ -3,22 +3,11 @@ import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon } from '@status-im/icons'
 
 import { AppLayout, Content } from '@/layouts/app-layout'
+import { rgbToHex } from '@/utils/rgb-to-hex'
 
 import type { GetStaticProps, Page } from 'next'
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  function rgbToHex(color: { r: number; g: number; b: number }): string {
-    // Convert decimal values to hexadecimal
-    const red = color.r.toString(16).padStart(2, '0')
-    const green = color.g.toString(16).padStart(2, '0')
-    const blue = color.b.toString(16).padStart(2, '0')
-
-    // Concatenate the hexadecimal values
-    const hexValue = `#${red}${green}${blue}`
-
-    return hexValue
-  }
-
   const transformColor = (name: string, rgba: string, invert = false) => {
     const [r, g, b] = rgba.match(/\d+/g)!.map(Number)
     return {
