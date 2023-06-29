@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.2.1
+
+### Patch Changes
+
+- 39462bf: export tokens
+
 ## 0.2.0
 
 ### Minor Changes
