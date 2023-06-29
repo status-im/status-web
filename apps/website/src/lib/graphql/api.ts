@@ -1,14 +1,12 @@
-/* eslint-disable eslint-comments/disable-enable-pair */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GraphQLClient } from 'graphql-request'
 
-import type { RequestDocument, Variables } from 'graphql-request/src/types'
+import type { RequestDocument, Variables } from 'graphql-request'
 
 export const GRAPHQL_ENDPOINT = `https://hasura.infra.status.im/v1/graphql`
 
-export const api = <T = any, K extends Variables = Variables>(
+export const api = <T, V extends Variables = Variables>(
   operation: RequestDocument,
-  variables?: K,
+  variables?: V,
   headers?: Record<string, string>
 ): Promise<T> => {
   const client = new GraphQLClient(GRAPHQL_ENDPOINT, {
@@ -21,9 +19,9 @@ export const api = <T = any, K extends Variables = Variables>(
   return client.request<T>(operation, variables as Variables)
 }
 
-export const createFetcher = <T = any, K extends Variables = Variables>(
+export const createFetcher = <T, V extends Variables = Variables>(
   operation: string,
-  variables?: K
-): (() => Promise<T>) => {
-  return () => api<T, K>(operation, variables)
+  variables?: V
+) => {
+  return () => api<T, V>(operation, variables)
 }
