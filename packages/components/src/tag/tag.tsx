@@ -1,6 +1,7 @@
 import { createElement } from 'react'
 
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
+import { View } from 'react-native'
 
 import { Text } from '../text'
 import { getCustomStyles } from './get-custom-styles'
@@ -70,10 +71,9 @@ const Tag = (props: Props) => {
 export { Tag }
 export type { Props as TagProps }
 
-const Base = styled(Stack, {
-  tag: 'tag',
+const Base = styled(View, {
   name: 'Tag',
-  accessibilityRole: 'button',
+  role: 'button',
 
   display: 'flex',
   flexDirection: 'row',

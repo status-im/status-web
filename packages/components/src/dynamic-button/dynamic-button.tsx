@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 
 import { ArrowDownIcon, MentionIcon } from '@status-im/icons'
 import { styled } from '@tamagui/core'
-import { Pressable } from 'react-native'
+import { View } from 'react-native'
 
 import { Shadow } from '../shadow'
 import { Text } from '../text'
@@ -10,7 +10,6 @@ import { Text } from '../text'
 import type { GetVariants, PressableProps } from '../types'
 import type { ColorTokens } from '@tamagui/core'
 import type { Ref } from 'react'
-import type { View } from 'react-native'
 
 type Variants = GetVariants<typeof Button>
 
@@ -50,10 +49,9 @@ const _DynamicButton = forwardRef(DynamicButton)
 export { _DynamicButton as DynamicButton }
 export type { Props as DynamicButtonProps }
 
-const Button = styled(Pressable, {
+const Button = styled(View, {
   name: 'DynamicButton',
-  tag: 'button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',

@@ -8,12 +8,12 @@ import type {
 import type { PressableProps as NativePressableProps } from 'react-native'
 
 type PressableProps = {
-  onHoverIn?: Exclude<NativePressableProps['onHoverIn'], null>
-  onHoverOut?: NativePressableProps['onHoverOut']
-  onPress?: NativePressableProps['onPress']
-  onPressIn?: NativePressableProps['onPressIn']
-  onPressOut?: NativePressableProps['onPressOut']
-  onLongPress?: NativePressableProps['onLongPress']
+  onHoverIn?: VoidFunction
+  onHoverOut?: VoidFunction
+  onPress?: VoidFunction
+  onPressIn?: VoidFunction
+  onPressOut?: VoidFunction
+  onLongPress?: VoidFunction
   delayHoverIn?: NativePressableProps['delayHoverIn']
   delayHoverOut?: NativePressableProps['delayHoverOut']
   delayLongPress?: NativePressableProps['delayLongPress']
