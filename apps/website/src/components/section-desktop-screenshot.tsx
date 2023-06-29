@@ -10,10 +10,11 @@ type Props = {
   title: string
   description: string
   image: StaticImageData
+  dark?: boolean
 }
 
 export const SectionDesktopScreenshot = (props: Props) => {
-  const { icon, title, description, image } = props
+  const { icon, title, description, image, dark } = props
 
   const illustration = illustrations[icon]
 
@@ -29,11 +30,13 @@ export const SectionDesktopScreenshot = (props: Props) => {
           />
 
           <div className="flex flex-col pt-4">
-            <Text size={27} weight="semibold">
+            <Text size={27} weight="semibold" color={dark ? '$white-100' : ''}>
               {title}
             </Text>
             <div className="relative flex pt-1">
-              <Text size={27}>{description}</Text>
+              <Text size={27} color={dark ? '$white-100' : ''}>
+                {description}
+              </Text>
             </div>
           </div>
         </div>

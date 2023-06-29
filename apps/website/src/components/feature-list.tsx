@@ -25,15 +25,21 @@ export const FeatureList = (props: Props) => {
             <Image {...image} alt={image.alt} className="mb-4 ml-10" />
             <div
               className={cx(
-                'flex flex-col border-dashed border-l-neutral-30 lg:border-l-[1px] lg:pl-10',
+                'flex flex-col border-dashed lg:border-l-[1px] lg:pl-10',
                 (i === 0 || i === 3) && 'lg:border-l-0',
-                dark && 'border-l-neutral-70'
+                dark ? 'border-l-neutral-70' : 'border-l-neutral-30'
               )}
             >
-              <Text size={27} weight="semibold">
+              <Text
+                size={27}
+                weight="semibold"
+                color={dark ? '$white-100' : ''}
+              >
                 {title}
               </Text>
-              <Text size={19}>{description}</Text>
+              <Text size={19} color={dark ? '$white-100' : ''}>
+                {description}
+              </Text>
             </div>
           </div>
         ))}

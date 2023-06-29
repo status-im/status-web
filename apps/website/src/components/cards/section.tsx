@@ -22,6 +22,7 @@ type Props = {
   customNode?: React.ReactNode
   color: 'yellow' | 'turquoise' | 'purple' // | 'none'
   reverse?: boolean
+  dark?: boolean
 }
 
 const Section = (props: Props) => {
@@ -37,6 +38,7 @@ const Section = (props: Props) => {
     secondaryTitle,
     secondaryExplanation,
     reverse,
+    dark = false,
   } = props
 
   const illustration = illustrations[icon]
@@ -58,11 +60,15 @@ const Section = (props: Props) => {
                 className="mb-4"
               />
               <div className="mb-5 flex flex-col lg:mb-16">
-                <Text size={27} weight="semibold">
+                <Text
+                  size={27}
+                  weight="semibold"
+                  color={dark ? '$white-100' : ''}
+                >
                   {title}
                 </Text>
                 <div className="relative flex pt-1">
-                  <Text size={27}>
+                  <Text size={27} color={dark ? '$white-100' : ''}>
                     {description}
                     {explanation && (
                       <span className="relative left-1 top-1 inline-block">
@@ -73,12 +79,23 @@ const Section = (props: Props) => {
                 </div>
               </div>
 
-              <div className="flex flex-col rounded-[20px] border border-dashed border-neutral-80/20 p-4">
-                <Text size={19} weight="semibold">
+              <div
+                className={cx(
+                  'flex flex-col rounded-[20px] border border-dashed p-4',
+                  dark
+                    ? 'border-white-10 bg-neutral-80/20'
+                    : 'border-neutral-80/20'
+                )}
+              >
+                <Text
+                  size={19}
+                  weight="semibold"
+                  color={dark ? '$white-100' : ''}
+                >
                   {secondaryTitle}
                 </Text>
                 <div className="flex pt-1">
-                  <Text size={19}>
+                  <Text size={19} color={dark ? '$white-100' : ''}>
                     {secondaryDescription}
                     {secondaryExplanation && (
                       <span className="relative left-1 top-1 inline-block">

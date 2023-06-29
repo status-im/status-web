@@ -92,7 +92,7 @@ const TOKEN_FEATURE_LIST = [
 
 const CreateCommunityPage: Page = () => {
   return (
-    <Content className="bg-neutral-80">
+    <Content dark>
       <Hero
         type="Create Community"
         title="Your community can take back control"
@@ -100,20 +100,23 @@ const CreateCommunityPage: Page = () => {
         images={[heroImage1, heroImage2, heroImage3, heroImage4]}
         color="turquoise"
         maxWidth={942}
+        dark
       />
 
       <VideoSection
         title="Decentralized. Permissionless. Free."
         description="By using Status, your community can regain control of it’s destiny and data."
         image={{ ...illustrationMain, width: 746, height: 707 }}
+        dark
       />
 
-      <FeatureList list={FEATURE_LIST} />
+      <FeatureList list={FEATURE_LIST} dark />
 
       <SectionLarge
         title="Crypto native"
         description="Imagine a community group chat platform designed to work with crypto from the ground up."
         description2="With token gating, minting, airdrop and retail tools, the possibilities for your community are limitless."
+        dark
       >
         <Section
           icon="lock"
@@ -125,20 +128,23 @@ const CreateCommunityPage: Page = () => {
           secondaryDescription="Use ERC-20, NFT and ENS tokens plus AND and OR statements in rules. Set channels so anybody can read, but tokens are required to post. Assign admin permissions with remotely destructible soulbound tokens. And much, much more!"
           image={featureImage1}
           imageAlt="wallet-5"
+          dark
         />
 
         <div className="grid grid-flow-col gap-5 p-20">
           {TOKEN_FEATURE_LIST.map(({ title, description, image }) => (
             <div
               key={title}
-              className="rounded-[36px] border border-neutral-20 backdrop-blur-lg"
+              className="rounded-[36px] border border-white-5 backdrop-blur-lg"
             >
               <div className="flex flex-col p-6">
                 <div className="flex flex-col pb-24">
-                  <Text size={27} weight="semibold">
+                  <Text size={27} weight="semibold" color="$white-100">
                     {title}
                   </Text>
-                  <Text size={19}>{description}</Text>
+                  <Text size={19} color="$white-100">
+                    {description}
+                  </Text>
                 </div>
                 <Image src={image} alt={title} />
               </div>
@@ -150,6 +156,7 @@ const CreateCommunityPage: Page = () => {
       <SectionLarge
         title="Your brand. Your community."
         description="Give your community a unique look that reflects it’s passions and values. Or just look cool ✨"
+        dark
       >
         <ImageGrid>
           <ImageGrid.Item src={brandTurquoiseImage1} alt="feature-1" span={5} />
@@ -167,6 +174,7 @@ const CreateCommunityPage: Page = () => {
         description="Using web URLs that can be posted on Web2 social media. User doesn’t have Status? Open in browser."
         image={screenshot}
         icon="pizza"
+        dark
       />
 
       {/* FULL PAGE SCREENSHOT */}
@@ -182,6 +190,7 @@ const CreateCommunityPage: Page = () => {
           secondaryDescription="The directory is curated by an autonomous dApp where SNT hodlers vote. So Status doesn’t have any control over which communities are featured."
           image={sectionImage1}
           imageAlt="wallet-2"
+          dark
         />
         <Section
           color="turquoise"
@@ -194,6 +203,7 @@ const CreateCommunityPage: Page = () => {
           image={sectionImage2}
           imageAlt="wallet-5"
           reverse
+          dark
         />
       </div>
     </Content>

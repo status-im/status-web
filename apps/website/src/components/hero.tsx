@@ -1,5 +1,6 @@
 import { Button, Tag, Text } from '@status-im/components'
 import { DownloadIcon, WalletIcon } from '@status-im/icons'
+import { cx } from 'class-variance-authority'
 
 import { GridHero } from './cards'
 
@@ -12,10 +13,11 @@ type Props = {
   color: 'yellow' | 'turquoise' | 'purple'
   images: [StaticImageData, StaticImageData, StaticImageData, StaticImageData]
   maxWidth: number
+  dark?: boolean
 }
 
 export const Hero = (props: Props) => {
-  const { type, title, description, color, images, maxWidth } = props
+  const { type, title, description, color, images, maxWidth, dark } = props
 
   return (
     <div className="flex w-full flex-col items-center">
@@ -33,11 +35,18 @@ export const Hero = (props: Props) => {
               label={type}
             />
           </div>
-          <h1 className="max-w-[1000px] py-4 text-center text-48 lg:pb-5 lg:text-88">
+          <h1
+            className={cx(
+              'max-w-[1000px] py-4 text-center text-48 lg:pb-5 lg:text-88',
+              dark && 'text-white-100'
+            )}
+          >
             {title}
           </h1>
           <div className="whitespace-pre-line">
-            <Text size={27}>{description}</Text>
+            <Text size={27} color={dark ? '$white-100' : ''}>
+              {description}
+            </Text>
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+import { cx } from 'class-variance-authority'
 import { ParallaxProvider } from 'react-scroll-parallax'
 
 import { Footer } from '@/components/footer/footer'
@@ -45,13 +46,18 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 export const Content = ({
   children,
   className,
+  dark = false,
 }: {
   children: ReactNode
   className?: string
+  dark?: boolean
 }) => {
   return (
     <div
-      className={`relative min-h-[900px] w-full rounded-3xl bg-white-100 ${className} z-10 overflow-hidden`}
+      className={cx(
+        `relative min-h-[900px] w-full rounded-3xl ${className} z-10 overflow-hidden`,
+        dark ? 'bg-neutral-95' : 'bg-white-100'
+      )}
     >
       {children}
     </div>
