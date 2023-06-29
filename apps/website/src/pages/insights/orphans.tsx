@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { Text } from '@status-im/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
@@ -117,10 +117,10 @@ const OrphansPage: Page<Props> = props => {
     open: dataCounter?.gh_orphans.filter(issue => !issue.closed_at).length,
   }
 
-  const orphans =
-    data?.pages.reduce((acc, page) => {
-      return [...acc, ...page]
-    }, []) || []
+  const orphans = useMemo(
+    () => data?.pages.flatMap(page => page) || [],
+    [data?.pages]
+  )
 
   const endOfPageRef = useRef<HTMLDivElement | null>(null)
   const entry = useIntersectionObserver(endOfPageRef, {

@@ -78,7 +78,7 @@ const TableIssues = (props: Props) => {
       <div className="flex border-b border-neutral-20 bg-neutral-5 p-3">
         <div className="flex w-full flex-col 2xl:flex-row 2xl:justify-between">
           <Tabs
-            handleTabChange={handleTabChange}
+            onTabChange={handleTabChange}
             activeTab={activeTab}
             count={{
               closed: count?.closed,
@@ -102,7 +102,7 @@ const TableIssues = (props: Props) => {
                   </div>
 
                   <DropdownFilter
-                    handleSelectedValues={handleSelectedAuthors}
+                    onSelectedValuesChange={handleSelectedAuthors}
                     selectedValues={selectedAuthors}
                     data={
                       filters?.authors.map(author => {
@@ -116,7 +116,7 @@ const TableIssues = (props: Props) => {
                     placeholder="Find author "
                   />
                   <DropdownFilter
-                    handleSelectedValues={handleSelectedAssignees}
+                    onSelectedValuesChange={handleSelectedAssignees}
                     selectedValues={selectedAssignees}
                     data={
                       filters?.assignees.map(assignee => {
@@ -130,7 +130,7 @@ const TableIssues = (props: Props) => {
                     placeholder="Find assignee"
                   />
                   <DropdownFilter
-                    handleSelectedValues={handleSelectedRepos}
+                    onSelectedValuesChange={handleSelectedRepos}
                     selectedValues={selectedRepos}
                     data={
                       filters?.repos.map(repo => {
@@ -147,7 +147,7 @@ const TableIssues = (props: Props) => {
                 <div className="pl-2">
                   <DropdownSort
                     data={sortOptions}
-                    handleOrderByValue={handleOrderByValue}
+                    onOrderByValueChange={handleOrderByValue}
                     orderByValue={orderByValue}
                   />
                 </div>

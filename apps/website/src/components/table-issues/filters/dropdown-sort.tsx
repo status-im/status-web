@@ -12,11 +12,11 @@ type Data = {
 type Props = {
   data: Data[]
   orderByValue: Order_By
-  handleOrderByValue: (value: Order_By) => void
+  onOrderByValueChange: (value: Order_By) => void
 }
 
 const DropdownSort = (props: Props) => {
-  const { data, orderByValue, handleOrderByValue } = props
+  const { data, orderByValue, onOrderByValueChange } = props
 
   return (
     <div>
@@ -36,7 +36,7 @@ const DropdownSort = (props: Props) => {
                 key={option.id}
                 label={option.name}
                 onSelect={() => {
-                  handleOrderByValue(option.id)
+                  onOrderByValueChange(option.id)
                 }}
                 selected={orderByValue === option.id}
               />

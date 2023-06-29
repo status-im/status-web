@@ -125,7 +125,7 @@ const EpicsPage: Page<Props> = props => {
     )
 
   const epics = useMemo(() => {
-    return data?.pages.flat() || []
+    return data?.pages.flatMap(page => page) || []
   }, [data])
 
   const endOfPageRef = useRef<HTMLDivElement | null>(null)
@@ -182,7 +182,7 @@ const EpicsPage: Page<Props> = props => {
             />
             <DropdownSort
               data={sortOptions}
-              handleOrderByValue={setOrderByValue}
+              onOrderByValueChange={setOrderByValue}
               orderByValue={orderByValue}
             />
           </div>

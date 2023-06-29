@@ -23,7 +23,7 @@ type Props = {
   label: string
   placeholder?: string
   selectedValues: string[]
-  handleSelectedValues: (values: string[]) => void
+  onSelectedValuesChange: (values: string[]) => void
 }
 
 const isAvatar = (value: unknown): value is string => {
@@ -47,7 +47,7 @@ const RenderIcon = (props: Data) => {
 }
 
 const DropdownFilter = (props: Props) => {
-  const { data, label, placeholder, selectedValues, handleSelectedValues } =
+  const { data, label, placeholder, selectedValues, onSelectedValuesChange } =
     props
 
   const [filterText, setFilterText] = useState('')
@@ -105,11 +105,11 @@ const DropdownFilter = (props: Props) => {
                 checked={selectedValues.includes(filtered.id)}
                 onSelect={() => {
                   if (selectedValues.includes(filtered.id)) {
-                    handleSelectedValues(
+                    onSelectedValuesChange(
                       selectedValues.filter(id => id !== filtered.id)
                     )
                   } else {
-                    handleSelectedValues([...selectedValues, filtered.id])
+                    onSelectedValuesChange([...selectedValues, filtered.id])
                   }
                 }}
               />

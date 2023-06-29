@@ -6,10 +6,10 @@ type Props = {
     closed?: number
   }
   activeTab: 'open' | 'closed'
-  handleTabChange: (tab: 'open' | 'closed') => void
+  onTabChange: (tab: 'open' | 'closed') => void
 }
 const Tabs = (props: Props): JSX.Element => {
-  const { count, activeTab, handleTabChange } = props
+  const { count, activeTab, onTabChange } = props
   const isOpen = activeTab === 'open'
 
   return (
@@ -19,7 +19,7 @@ const Tabs = (props: Props): JSX.Element => {
           className={`flex cursor-pointer flex-row items-center transition-colors ${
             isOpen ? 'text-neutral-100' : 'text-neutral-50'
           }`}
-          onClick={() => handleTabChange('open')}
+          onClick={() => onTabChange('open')}
         >
           <OpenIcon size={20} color={isOpen ? '$neutral-100' : '$neutral-50'} />
           <span className="pl-1 text-[15px]">
@@ -32,7 +32,7 @@ const Tabs = (props: Props): JSX.Element => {
           className={`flex cursor-pointer flex-row items-center transition-colors ${
             !isOpen ? 'text-neutral-100' : 'text-neutral-50'
           }`}
-          onClick={() => handleTabChange('closed')}
+          onClick={() => onTabChange('closed')}
         >
           <ActiveMembersIcon
             size={20}

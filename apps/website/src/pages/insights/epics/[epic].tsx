@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -173,10 +173,10 @@ const EpicsDetailPage: Page<Props> = props => {
     }
   )
 
-  const issues =
-    data?.pages.reduce((acc, page) => {
-      return [...acc, ...page]
-    }, []) || []
+  const issues = useMemo(
+    () => data?.pages.flatMap(page => page) || [],
+    [data?.pages]
+  )
 
   const endOfPageRef = useRef<HTMLDivElement | null>(null)
   const entry = useIntersectionObserver(endOfPageRef, {
