@@ -16,6 +16,7 @@ export const ROUTES = {
     { name: 'Mobile', href: '/platforms/mobile' },
     { name: 'Desktop', href: '/platforms/desktop' },
     { name: 'Web', href: '/platforms/web' },
+    { name: 'Keycard', href: '/keycard' },
   ],
   About: [
     { name: 'Mission', href: '/' },
