@@ -9,7 +9,7 @@ import { Link } from '@/components/link'
 import { SearchButton } from '@/components/search-button'
 import { SidebarMenu } from '@/components/sidebar-menu'
 import { TOC } from '@/components/toc'
-import { AppLayout, PageBody } from '@/layouts/app-layout'
+import { AppLayout, Content } from '@/layouts/app-layout'
 import { buildDocsTree } from '@/utils/build-link-tree'
 import { slugify } from '@/utils/slugify'
 
@@ -222,10 +222,10 @@ function transformArray(arr: any[]): any {
 const DocsDetailPage: Page<Props> = props => {
   const { doc, breadcrumbs } = props
 
-  const Content = useMDXComponent(doc.body.code)
+  const DocContent = useMDXComponent(doc.body.code)
 
   return (
-    <PageBody>
+    <Content>
       {/* Header */}
       <div className="flex">
         <div className="flex-1">
@@ -293,7 +293,7 @@ const DocsDetailPage: Page<Props> = props => {
               {"We're working on this content."}
             </Admonition>
           ) : (
-            <Content components={components} />
+            <DocContent components={components} />
           )}
         </div>
 
@@ -302,7 +302,7 @@ const DocsDetailPage: Page<Props> = props => {
           <TOC headings={doc.headings} />
         </div>
       </div>
-    </PageBody>
+    </Content>
   )
 }
 

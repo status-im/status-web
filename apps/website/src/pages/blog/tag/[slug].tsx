@@ -120,9 +120,7 @@ const BlogTagPage: Page<Props> = (props: Props) => {
           {/* content */}
           {/* note: diff mb than index.ts (mb-12 vs. mb-10) */}
           <div className="mb-12 grid gap-2">
-            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
-              {tag.name}
-            </h1>
+            <h1 className="text-40 tracking-[-.02em] lg:text-64">{tag.name}</h1>
             <Text size={19}>{tag.description}</Text>
           </div>
 

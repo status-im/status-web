@@ -1,16 +1,16 @@
 import {
-  AdvancedIcon,
-  AirdropIcon,
-  CommunitiesIcon,
-  TokenIcon,
+  GithubIcon,
+  StatusIcon,
+  TwitterIcon,
+  YoutubeIcon,
 } from '@status-im/icons'
 
 export const ROUTES = {
   Features: [
     { name: 'Communities', href: '/features/communities' },
+    { name: 'Create Communiy', href: '/features/create-community' },
     { name: 'Messenger', href: '/features/messenger' },
     { name: 'Wallet', href: '/features/wallet' },
-    { name: 'Browser', href: '/features/browser' },
   ],
   Platforms: [
     { name: 'Mobile', href: '/platforms/mobile' },
@@ -21,7 +21,6 @@ export const ROUTES = {
     { name: 'Mission', href: '/' },
     { name: 'Principles', href: '/' },
     { name: 'Team', href: '/' },
-    { name: 'Partners', href: '/' },
     { name: 'Press Kit', href: '/' },
   ],
   Help: [
@@ -37,19 +36,19 @@ export const ROUTES = {
     { name: 'Feature upvote', href: '/' },
     { name: 'Blog', href: '/blog' },
     { name: 'Translations', href: '/' },
-    { name: 'Community groups', href: '/' },
+    // { name: 'Community groups', href: '/' },
     { name: 'Jobs', href: '/' },
   ],
   Developers: [
     { name: 'Repos', href: 'https://github.com/status-im' },
-    { name: 'Insights', href: '/insights' },
+    { name: 'Insights', href: '/insights/epics' },
     { name: 'Integrations', href: '/' },
   ],
   SNT: [
-    { name: 'Token', href: '/' },
+    // { name: 'Token', href: '/' },
     { name: 'Governance', href: '/' },
-    { name: 'Curate', href: '/' },
-    { name: 'Exchanges', href: '/' },
+    { name: 'Curate', href: 'https://curate.status.app' },
+    // { name: 'Exchanges', href: '/' },
   ],
 } as const
 
@@ -57,23 +56,23 @@ export const ROUTES = {
 export const SOCIALS = {
   status: {
     name: 'Status',
-    href: '<TODO>',
-    icon: CommunitiesIcon,
+    href: 'TODO',
+    icon: StatusIcon,
   },
   twitter: {
     name: 'Twitter',
     href: 'https://twitter.com/ethstatus',
-    icon: TokenIcon,
+    icon: TwitterIcon,
   },
   github: {
     name: 'GitHub',
     href: 'https://github.com/status-im',
-    icon: AirdropIcon,
+    icon: GithubIcon,
   },
   youtube: {
     name: 'YouTube',
     href: 'https://youtube.com/<TODO>',
-    icon: AdvancedIcon,
+    icon: YoutubeIcon,
   },
 }
 
