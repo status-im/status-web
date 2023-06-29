@@ -2,12 +2,11 @@ import { Shadow, Text } from '@status-im/components'
 import { OpenIcon, UnlockedIcon } from '@status-im/icons'
 
 import { Link } from '@/components/link'
+import { LoadingSkeleton } from '@/components/repos/loading-skeleton'
 import { InsightsLayout } from '@/layouts/insights-layout'
 import { GET_EPIC_LINKS, GET_REPOS } from '@/lib/burnup'
 import { api } from '@/lib/graphql'
 import { useGetRepositoriesQuery } from '@/lib/graphql/generated/hooks'
-
-import { LoadingSkeleton } from './loading-skeleton'
 
 import type {
   GetEpicMenuLinksQuery,
