@@ -63,6 +63,7 @@ const DATA = [
 type Props = {
   title: string
   description?: string
+  color?: `#${string}`
   fullscreen?: boolean
   isLoading?: boolean
   burnup?: GetBurnupQuery['gh_burnup']
@@ -74,6 +75,7 @@ export const EpicOverview = (props: Props) => {
   const {
     title,
     description,
+    color,
     fullscreen,
     isLoading,
     burnup,
@@ -125,7 +127,7 @@ export const EpicOverview = (props: Props) => {
       )}
 
       <div className="flex py-3">
-        <Tag size={24} label={title} color="$blue-50" />
+        <Tag size={24} label={title} color={color} />
       </div>
 
       <Chart data={filteredData || DATA} height={300} isLoading={isLoading} />

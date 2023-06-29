@@ -41,8 +41,7 @@ import type { GetServerSidePropsContext, Page } from 'next'
 
 type Epic = {
   title: string
-  color: string
-
+  color: `#${string}`
   description: string
 }
 
@@ -196,6 +195,7 @@ const EpicsDetailPage: Page<Props> = props => {
         <EpicOverview
           title={epic.title}
           description={epic.description}
+          color={epic.color}
           fullscreen
           burnup={burnup}
           selectedDates={selectedDates}
@@ -285,8 +285,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       initialDates,
       epic: {
         title: String(epic),
-        description: '',
-        color: '',
+        description: epicLinkExists?.epic_description || '',
+        color: epicLinkExists.epic_color
+          ? `#${epicLinkExists.epic_color}`
+          : '#4360df',
       },
       breadcrumbs: [
         {
@@ -294,7 +296,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
           href: '/insights/epics',
         },
         {
-          label: "Epic's name",
+          label: epic,
           href: `/insights/epics/${epic}`,
         },
       ],

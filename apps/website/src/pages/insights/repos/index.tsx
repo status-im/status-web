@@ -73,15 +73,35 @@ const ReposPage: Page<Props> = props => {
                     <div className="pr-1">
                       <OpenIcon size={12} color="$neutral-50" />
                     </div>
-                    <Text size={13} weight="medium" color="$neutral-50">
+                    <Text size={13} weight="medium" color="$neutral-100">
                       {repo.open_issues_count} Issues
                     </Text>
                   </div>
                   <div className="flex items-center">
                     <div className="pr-1">
-                      <OpenIcon size={12} color="$neutral-50" />
+                      {/* TODO Change the correct star icon when available */}
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 12 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clip-path="url(#clip0_3507_951)">
+                          <path
+                            d="M6.00004 1C6.33333 1 7.66667 4.32285 7.66667 4.32285C7.66667 4.32285 11 4.32285 11 4.7382C11 5.15356 8.08333 7.23033 8.08333 7.23033C8.08333 7.23033 9.66667 10.6363 9.33333 10.9685C9 11.3008 6.00004 8.89176 6.00004 8.89176C6.00004 8.89176 3 11.3008 2.66667 10.9685C2.33333 10.6363 3.91667 7.23033 3.91667 7.23033C3.91667 7.23033 1 5.15356 1 4.7382C1 4.32285 4.33333 4.32285 4.33333 4.32285C4.33333 4.32285 5.66674 1 6.00004 1Z"
+                            stroke="#647084"
+                            stroke-width="1.1"
+                          />
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_3507_951">
+                            <rect width="12" height="12" fill="white" />
+                          </clipPath>
+                        </defs>
+                      </svg>
                     </div>
-                    <Text size={13} weight="medium" color="$neutral-50">
+                    <Text size={13} weight="medium" color="$neutral-100">
                       {repo.stargazers_count} Stars
                     </Text>
                   </div>
