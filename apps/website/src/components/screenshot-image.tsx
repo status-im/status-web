@@ -8,6 +8,7 @@ import type { StaticImageData } from 'next/image'
 type Props = {
   image: StaticImageData
   alt: string
+  color: 'yellow' | 'turquoise' | 'purple'
 }
 
 const containerClassNames = cva(

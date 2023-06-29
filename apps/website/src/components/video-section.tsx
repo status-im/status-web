@@ -8,7 +8,7 @@ import type { StaticImageData } from 'next/image'
 type Props = {
   title: string
   description: string
-  image: StaticImageData
+  image?: StaticImageData
 }
 
 const VideoSection = (props: Props) => {
@@ -25,7 +25,7 @@ const VideoSection = (props: Props) => {
         </div>
       </div>
       <div className="relative right-0 top-0 flex justify-center md:absolute">
-        {image && <Image src={image} />}
+        {image && <Image src={image} alt="TODO" />}
         {/* <video autoPlay loop muted playsInline>
           <source
             src="/assets/wallet/vitalik.mp4"

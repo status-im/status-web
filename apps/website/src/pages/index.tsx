@@ -279,11 +279,13 @@ const HomePage: Page = () => {
         >
           <ParalaxCircle
             color="bg-customisation-magenta-50"
-            className="bottom-0 right-1/2  translate-x-1/2 translate-y-1/2"
+            right={750}
+            top={-338}
           />
           <ParalaxCircle
             color="bg-customisation-magenta-50"
-            className="right-0 top-0  -translate-y-1/2 translate-x-1/2"
+            top={-338}
+            right={-338}
           />
         </FeatureSection>
 
@@ -304,7 +306,8 @@ const HomePage: Page = () => {
 
           <ParalaxCircle
             color="bg-customisation-army-50"
-            className="bottom-0 left-1/3   translate-y-1/2"
+            left={501}
+            top={300}
           />
         </div>
 

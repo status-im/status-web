@@ -9,7 +9,7 @@ type Props = {
   type: 'Communities' | 'Create Community' | 'Wallet' | 'Messenger'
   title: string
   description: string
-  color: string
+  color: 'yellow' | 'turquoise' | 'purple'
   images: [StaticImageData, StaticImageData, StaticImageData, StaticImageData]
   maxWidth: number
 }
@@ -52,7 +52,6 @@ export const Hero = (props: Props) => {
 
       <GridHero
         color={color}
-        images={images}
         cardOne={{
           alt: 'wallet-1',
           image: images[0],

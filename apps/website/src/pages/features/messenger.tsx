@@ -186,9 +186,7 @@ const MessengerPage: Page = () => {
               {['blue', 'pink', 'orange', 'green'].map(color => (
                 <div
                   key={color}
-                  style={{
-                    '--bg-color': color,
-                  }}
+                  style={{ ['--bg-color' as string]: color }}
                   className={`h-[24px] w-[24px] rounded-full bg-[var(--bg-color)]`}
                 />
               ))}
@@ -223,7 +221,7 @@ const FeatureItem = ({
         reverse && 'flex-col-reverse',
       ])}
     >
-      <Image src={imageSrc} width={imageWidth} quality={80} />
+      <Image src={imageSrc} width={imageWidth} quality={80} alt={imageAlt} />
       <div className="py-4">
         <Text size={27} weight="semibold">
           {label}

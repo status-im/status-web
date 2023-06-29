@@ -118,7 +118,8 @@ const CreateCommunityPage: Page = () => {
         <Section
           icon="lock"
           title="Token gating"
-          color="none"
+          // TODO: color="none"
+          color="turquoise"
           description="Only let hodlers of specific tokens read or post to channels. Or require tokens to join your community."
           secondaryTitle="Powerful permissions"
           secondaryDescription="Use ERC-20, NFT and ENS tokens plus AND and OR statements in rules. Set channels so anybody can read, but tokens are required to post. Assign admin permissions with remotely destructible soulbound tokens. And much, much more!"
