@@ -1,6 +1,9 @@
+import gentlemanImage from '@assets/wallet/gentleman.png'
+import illustartionHandsDesktop from '@assets/wallet/illustration-hands-desktop.png'
 import { Text } from '@status-im/components'
 import Image from 'next/image'
 
+// import illustartionHandsMobile from '@assets/wallet/illustration-hands-mobile.png'
 import { illustrations } from '@/config/illustrations'
 
 const HandsSection = () => {
@@ -58,16 +61,17 @@ const HandsSection = () => {
           </div>
         ))}
       </div>
-      <img
-        src="/assets/wallet/hands.png"
+      <Image
+        src={illustartionHandsDesktop}
         alt="hands"
         className="absolute left-0 top-0 w-full"
       />
-      <img
-        src="/assets/wallet/gentleman.png"
+      <Image
+        src={gentlemanImage}
         alt="gentleman"
-        className="absolute bottom-0 left-0 mix-blend-multiply"
-        width={403}
+        className="absolute bottom-0 left-7"
+        width={183}
+        height={236}
       />
     </div>
   )

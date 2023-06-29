@@ -1,14 +1,18 @@
-import { ContextTag, Text } from '@status-im/components'
+import { Text } from '@status-im/components'
+import Image from 'next/image'
+
+import type { StaticImageData } from 'next/image'
 
 // import { ParalaxCircle } from './parallax-circle'
 
 type Props = {
   title: string
   description: string
+  image: StaticImageData
 }
 
 const VideoSection = (props: Props) => {
-  const { title, description } = props
+  const { title, description, image } = props
 
   return (
     <div className="container relative pb-48 pt-60 md:flex">
@@ -20,7 +24,8 @@ const VideoSection = (props: Props) => {
           <Text size={27}>{description}</Text>
         </div>
       </div>
-      <div className="relative right-[-5px] top-0 flex justify-center md:absolute">
+      <div className="relative right-0 top-0 flex justify-center md:absolute">
+        {image && <Image src={image} />}
         {/* <video autoPlay loop muted playsInline>
           <source
             src="/assets/wallet/vitalik.mp4"
