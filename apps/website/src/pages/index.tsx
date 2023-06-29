@@ -11,7 +11,7 @@ import messengerImage3 from '@assets/homepage/messenger-03.png'
 import messengerImage4 from '@assets/homepage/messenger-04.png'
 // TODO: import sectionImage1 from '@assets/homepage/section-01.png'
 import walletImage1 from '@assets/homepage/wallet-01.png'
-// TODO: import walletImage2 from '@assets/homepage/wallet-02-placeholder.png'
+import walletImage2 from '@assets/homepage/wallet-02.png'
 import walletImage3 from '@assets/homepage/wallet-03.png'
 import walletImage4 from '@assets/homepage/wallet-04.png'
 import { Button, Tag, Text } from '@status-im/components'
@@ -207,14 +207,13 @@ const HomePage: Page = () => {
           description="L2s made simple - send and manage your crypto easily and safely across multiple networks."
           images={[
             { src: walletImage1, alt: '', width: 334 },
-            // {src:walletImage2, alt: '', label:""},
             {
-              src: walletImage3,
+              src: walletImage2,
               alt: '',
               label:
                 'Fully self-custodial. Nobody can stop you using your tokens.',
               align: 'bottom',
-              width: 334,
+              width: 316,
               half: true,
             },
             {
