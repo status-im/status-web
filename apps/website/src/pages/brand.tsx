@@ -64,7 +64,7 @@ const BrandPage: Page<Props> = props => {
           <br />
           brand assets
         </h1>
-        <div className="flex max-w-[462px] flex-col items-center gap-3 rounded-2xl border border-dashed border-neutral-80/20 p-2 pl-3 md:flex-row md:gap-10">
+        <div className="flex w-full flex-col gap-3 rounded-2xl border border-dashed border-neutral-80/20 p-2 pl-3 sm:max-w-[462px] sm:flex-row sm:items-center sm:gap-10">
           <Text size={13}>
             This ZIP file contains Status logos, partnership badges, and product
             assets.
@@ -141,8 +141,8 @@ const BrandSection = (props: BrandSectionProps) => {
   const { title, description, children } = props
 
   return (
-    <section className="container grid gap-10 py-12 lg:py-20">
-      <div className="flex items-center justify-between">
+    <section className="container py-12 lg:py-20">
+      <div className="flex flex-col gap-5 pb-12 md:flex-row md:items-center md:justify-between md:gap-0 md:pb-10">
         <div className="grid">
           <h2 className="text-27 font-semibold">{title}</h2>
           <Text size={27} weight="regular">
