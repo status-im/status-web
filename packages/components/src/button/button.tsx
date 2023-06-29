@@ -1,14 +1,13 @@
 import { cloneElement, forwardRef } from 'react'
 
 import { styled } from '@tamagui/core'
-import { Pressable } from 'react-native'
+import { View } from 'react-native'
 
 import { Text } from '../text'
 
 import type { TextProps } from '../text'
 import type { GetVariants, MapVariant, PressableProps } from '../types'
 import type { Ref } from 'react'
-import type { View } from 'react-native'
 
 type Variants = GetVariants<typeof Base>
 
@@ -94,10 +93,9 @@ const _Button = forwardRef(Button)
 export { _Button as Button }
 export type { Props as ButtonProps }
 
-const Base = styled(Pressable, {
-  tag: 'button',
+const Base = styled(View, {
   name: 'Button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   display: 'flex',
   flexDirection: 'row',

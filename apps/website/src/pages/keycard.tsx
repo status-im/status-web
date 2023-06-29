@@ -132,36 +132,36 @@ const FEATURE_LIST = [
     title: 'Top tier security',
     description:
       'Our hardware security successfully passed Common Criteria EAL6+ certification ',
-    image: illustrations.doge,
+    icon: illustrations.doge,
   },
   {
     title: 'Keys stored in the card',
     description:
       'It’s impossible for Status or any government to extract your private keys from keycard',
-    image: illustrations.mushroom,
+    icon: illustrations.mushroom,
   },
   {
     title: 'Feature 3',
     description:
       'Here will say something more about security and how kc is revolutionary when it comes to security',
-    image: illustrations.hand,
+    icon: illustrations.hand,
   },
   {
     title: 'Mobile friendly',
     description:
       'Keycard is using NFC which is natively embedded in all mobile phones',
-    image: illustrations.duck,
+    icon: illustrations.duck,
   },
   {
     title: 'No need to charge',
     description: 'Keycard has no battery so it’s always ready to go.',
-    image: illustrations.flower,
+    icon: illustrations.flower,
   },
   {
     title: 'Easy to carry around',
     description:
       'Its credit card form factor is small and convenient to fit in any wallet.',
-    image: illustrations.megaphone,
+    icon: illustrations.megaphone,
   },
 ]
 

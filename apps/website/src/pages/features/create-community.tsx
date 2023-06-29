@@ -35,37 +35,37 @@ const FEATURE_LIST = [
     title: 'Decentralized',
     description:
       'Communities are literally powered by their members running the Status Desktop app.',
-    image: illustrations.doge,
+    icon: illustrations.doge,
   },
   {
     title: 'Permissionless',
     description:
       'Nobody can stop you creating a community, because nobody controls Status’ p2p network.',
-    image: illustrations.mushroom,
+    icon: illustrations.mushroom,
   },
   {
     title: 'Self-sovereign',
     description:
       'Each community can set it’s own rules, whatever they are.  And is responsible for it’s own actions. ',
-    image: illustrations.hand,
+    icon: illustrations.hand,
   },
   {
     title: '100% Free to use',
     description:
       'No paid tier. No artificially imposed limits. No commission charged on community token sales.',
-    image: illustrations.duck,
+    icon: illustrations.duck,
   },
   {
     title: '100% Open source',
     description:
       'Status itself is a community project.  Anyone can build, contribute to and fork it’s source code.',
-    image: illustrations.flower,
+    icon: illustrations.flower,
   },
   {
     title: '100% Freedom',
     description:
       'Status’s mission is to protect free speech, uphold human rights and defend privacy.',
-    image: illustrations.megaphone,
+    icon: illustrations.megaphone,
   },
 ]
 

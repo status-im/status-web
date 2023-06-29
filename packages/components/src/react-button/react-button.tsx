@@ -10,14 +10,13 @@ import {
   ThumbsUpIcon,
 } from '@status-im/icons'
 import { styled } from '@tamagui/core'
-import { Pressable } from 'react-native'
+import { View } from 'react-native'
 
 import { Text } from '../text'
 
 import type { ReactionType } from '../messages/types'
 import type { PressableProps } from '../types'
 import type { Ref } from 'react'
-import type { View } from 'react-native'
 
 export const REACTIONS_ICONS = {
   love: LoveIcon,
@@ -63,10 +62,9 @@ const _ReactButton = forwardRef(ReactButton)
 export { _ReactButton as ReactButton }
 export type { Props as ReactButtonProps }
 
-const Button = styled(Pressable, {
+const Button = styled(View, {
   name: 'ReactButton',
-  tag: 'button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',

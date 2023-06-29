@@ -106,7 +106,6 @@ const _Input = (props: Props, ref: Ref<TextInput>) => {
           {Boolean(onClear) && !!value && (
             <Stack
               role="button"
-              accessibilityRole="button"
               pr={4}
               onPress={onClear}
               cursor="pointer"

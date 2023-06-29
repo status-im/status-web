@@ -38,7 +38,7 @@ export const ROUTES = {
     { name: 'Blog', href: '/blog' },
     { name: 'Translations', href: '/' },
     // { name: 'Community groups', href: '/' },
-    { name: 'Jobs', href: '/' },
+    { name: 'Jobs', href: '/jobs' },
   ],
   Developers: [
     { name: 'Repos', href: 'https://github.com/status-im' },

@@ -6,6 +6,9 @@
   .container {
     @apply mx-auto max-w-[1504px] px-5 lg:px-40;
   }
+  .border-dashed-default {
+    @apply border-dashed border-neutral-80/20;
+  }
 }
 
 @keyframes gradient {

@@ -1,13 +1,12 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Pressable } from 'react-native'
+import { View } from 'react-native'
 import { styled } from 'tamagui'
 
 import { usePressableColors } from '../hooks/use-pressable-colors'
 
 import type { GetVariants, PressableProps } from '../types'
 import type { Ref } from 'react'
-import type { View } from 'react-native'
 
 type Variants = GetVariants<typeof Base>
 
@@ -63,10 +62,9 @@ const _IconButton = forwardRef(IconButton)
 export { _IconButton as IconButton }
 export type { Props as IconButtonProps }
 
-const Base = styled(Pressable, {
+const Base = styled(View, {
   name: 'IconButton',
-  tag: 'button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',
