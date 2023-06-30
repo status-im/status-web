@@ -12,6 +12,7 @@ import heroImage1 from '@assets/messenger/hero-01.png'
 import heroImage2 from '@assets/messenger/hero-02.png'
 import heroImage3 from '@assets/messenger/hero-03.png'
 import heroImage4 from '@assets/messenger/hero-04.png'
+import identityNote from '@assets/messenger/identity-note.png'
 import sectionImage1 from '@assets/messenger/section-01.png'
 import sectionImage2 from '@assets/messenger/section-02.png'
 import { Text } from '@status-im/components'
@@ -98,16 +99,20 @@ const MessengerPage: Page = () => {
         </div>
       </Content>
 
-      <div className="m-auto max-w-[700px] px-16 pb-[352px] pt-[524px] text-center">
-        <h2 className="pb-3 text-64 text-white-100">
-          Keep who your friends are private
-        </h2>
-        <Text size={19} color="$white-100">
-          End to end encryption is important, but it doesn’t stop an
-          eavesdropper knowing who is talking to who. Status’ metadata privacy
-          fixes this - it means that even who you message with can’t be
-          surveilled.
-        </Text>
+      <div className="bg-[url('/assets/messenger/illustration-security-01.png')] bg-[length:100%] bg-[center_top_-5rem] bg-no-repeat lg:bg-cover lg:bg-[center_top_-10rem]">
+        <div className="bg-[url('/assets/messenger/illustration-security-02.png')] bg-cover bg-[center_bottom_-5rem] bg-no-repeat lg:bg-[center_bottom_-10rem]">
+          <div className="m-auto max-w-[700px] px-16 pb-40 pt-44 text-center md:pb-[352px] md:pt-[524px]">
+            <h2 className="pb-3 text-40 text-white-100 md:text-64">
+              Keep who your friends are private
+            </h2>
+            <Text size={19} color="$white-100">
+              End to end encryption is important, but it doesn’t stop an
+              eavesdropper knowing who is talking to who. Status’ metadata
+              privacy fixes this - it means that even who you message with can’t
+              be surveilled.
+            </Text>
+          </div>
+        </div>
       </div>
 
       <Content>
@@ -166,33 +171,45 @@ const MessengerPage: Page = () => {
         </SectionLarge>
         <div className="py-40"></div>
 
-        <div>
-          <h2 className="text-center text-64">
-            Your assets.
-            <br />
-            Your identity.
-          </h2>
-          <Text size={27}>
-            Showcase some or all of your tokens, memberships and accounts with
-            friends, the world, or keep private.
-          </Text>
+        <div className="container justify-center py-12 lg:flex lg:py-20">
+          <div className="relative z-[3]">
+            <div
+              className={cx(
+                'flex flex-col gap-12 lg:flex-row lg:items-center xl:gap-[120px]'
+              )}
+            >
+              <div className="flex flex-1 flex-col justify-start lg:justify-center">
+                <div className="flex flex-col">
+                  <div className="mb-5 flex flex-col lg:mb-16">
+                    <h2 className="text-left text-40 lg:text-64">
+                      Your assets.
+                      <br />
+                      Your identity.
+                    </h2>
+                    <div className="relative flex pt-1">
+                      <Text size={27}>
+                        Showcase some or all of your tokens, memberships and
+                        accounts with friends, the world, or keep private.
+                      </Text>
+                    </div>
+                    <Image
+                      src={identityNote}
+                      alt="Your identity"
+                      className="my-6"
+                      height="24"
+                      width="183"
+                    />
+                  </div>
+                </div>
+              </div>
 
-          <div>
-            <Text size={13} color="$neutral-40" weight="medium">
-              Preview examples
-            </Text>
-
-            <div className="flex gap-1">
-              {['blue', 'pink', 'orange', 'green'].map(color => (
-                <div
-                  key={color}
-                  style={{ ['--bg-color' as string]: color }}
-                  className={`h-[24px] w-[24px] rounded-full bg-[var(--bg-color)]`}
-                />
-              ))}
+              <div className="flex flex-1 justify-center overflow-hidden rounded-[32px]">
+                <Image src={heroImage2} alt="Your identity" className="mb-4" />
+              </div>
             </div>
           </div>
         </div>
+
         <SectionDesktopScreenshot
           title="Share your profile"
           description="Using web URLs that can be posted on Web2 social media. User doesn’t have Status? Open in browser."

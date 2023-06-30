@@ -6,8 +6,68 @@
   .container {
     @apply mx-auto max-w-[1504px] px-5 lg:px-40;
   }
+
   .border-dashed-default {
     @apply border-dashed border-neutral-80/20;
+  }
+
+  .gallery {
+    width: 100%;
+    display: grid;
+    padding-bottom: 100px;
+    grid-template-columns:
+      [full-start] 1fr
+      [content-start]
+      min(1184px, 100% - 40px)
+      [content-end]
+      1fr [full-end];
+  }
+
+  .gallery-wrapper {
+    grid-column: full;
+    display: grid;
+    grid-template-columns: inherit;
+    padding-block: 150px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    scroll-padding-left: 40px;
+  }
+
+  .gallery-inside {
+    grid-column: content;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .gallery-inside::after {
+    content: '';
+    align-self: stretch;
+    padding-inline-end: max(20px, (100vw - 1024px) / 2 - 20px);
+  }
+
+  @media (min-width: 1024px) {
+    .gallery {
+      grid-template-columns:
+        [full-start] 1fr
+        [content-start]
+        min(1184px, 100% - 320px)
+        [content-end]
+        1fr [full-end];
+    }
+
+    .gallery-wrapper {
+      scroll-padding-left: 295px;
+    }
+
+    .gallery-inside::after {
+      content: '';
+      align-self: stretch;
+      padding-inline-end: max(160px, (100vw - 1184px) / 2 - 160px);
+    }
   }
 }
 

@@ -1,7 +1,11 @@
-// import communityCardImage01 from '@assets/communities/community-card-01.png'
-// import communityCardImage02 from '@assets/communities/community-card-02.png'
-// import communityCardImage03 from '@assets/communities/community-card-03.png'
-// import communityCardImage04 from '@assets/communities/community-card-04.png'
+import communityCardImage01 from '@assets/communities/community-card-01.png'
+import communityCardImage02 from '@assets/communities/community-card-02.png'
+import communityCardImage03 from '@assets/communities/community-card-03.png'
+import communityCardImage04 from '@assets/communities/community-card-04.png'
+import communityCardNote01 from '@assets/communities/community-card-note-01.png'
+import communityCardNote02 from '@assets/communities/community-card-note-02.png'
+import communityCardNote03 from '@assets/communities/community-card-note-03.png'
+import communityCardNote04 from '@assets/communities/community-card-note-04.png'
 import featureImage1 from '@assets/communities/feature-01.png'
 import featureImage2 from '@assets/communities/feature-02.png'
 import featureImage3 from '@assets/communities/feature-03.png'
@@ -38,13 +42,11 @@ const CommunitiesPage: Page = () => {
         images={[heroImage1, heroImage2, heroImage3, heroImage4]}
         maxWidth={702}
       />
-
       <VideoSection
         title="Fully Decentralized Communities"
         description="Status’ Waku p2p messaging network is powered by people running Status Desktop - true decentralisation."
         image={{ ...illustrationMain, width: 765, height: 725 }}
       />
-
       <div className="pb-12 lg:pb-20">
         <Section
           icon="skull"
@@ -69,26 +71,92 @@ const CommunitiesPage: Page = () => {
           color="turquoise"
         />
       </div>
-
-      <div className="mx-auto max-w-[1200px] pb-60 pt-40">
-        <div className="grid gap-4 pb-40">
-          <h2 className="text-64">Your next community</h2>
+      <div className="border-t-[1px] border-dashed border-neutral-80/20" />
+      <div className="container pt-24 lg:pt-40">
+        <div className="grid max-w-[475px] gap-4">
+          <h2 className="text-40 lg:text-64">Your next community</h2>
           <Text size={27}>
             Explore the metaverse of communities and find your kindred spirits
-            in the Status Community Directory.
+            in the Status&nbsp;Community Directory.
           </Text>
-          <div className="flex min-w-[1200px] flex-row gap-10 overflow-x-auto">
-            <Image src={heroImage4} alt="TODO" />
-            <Image src={heroImage4} alt="TODO" />
-            <Image src={heroImage4} alt="TODO" />
-            <Image src={heroImage4} alt="TODO" />
-          </div>
         </div>
       </div>
 
-      <div className="rounded-[40px] bg-customisation-turquoise/5 py-40">
+      <div className="gallery">
+        <div className="gallery-wrapper">
+          <div className="gallery-inside">
+            <div className="relative min-h-[230px] min-w-[335px] snap-start">
+              <Image
+                src={communityCardImage01}
+                alt="TODO"
+                className="relative rounded-2xl shadow-2"
+                width="335"
+                height="230"
+              />
+              <Image
+                src={communityCardNote01}
+                alt="TODO"
+                className="absolute left-[130px] top-[205px]"
+                width="173"
+                height="162"
+              />
+            </div>
+            <div className="relative min-h-[230px] min-w-[335px] snap-start">
+              <Image
+                src={communityCardImage02}
+                alt="TODO"
+                className="relative rounded-2xl shadow-2"
+                width="335"
+                height="230"
+              />
+              <Image
+                src={communityCardNote02}
+                alt="TODO"
+                className="absolute left-[55px] top-[-70px]"
+                width="258"
+                height="38"
+              />
+            </div>
+            <div className="relative min-h-[230px] min-w-[335px] snap-start">
+              <Image
+                src={communityCardImage03}
+                alt="TODO"
+                className="relative rounded-2xl shadow-2"
+                width="335"
+                height="230"
+              />
+              <Image
+                src={communityCardNote03}
+                alt="TODO"
+                className="absolute left-[-97px] top-[150px]"
+                height="166"
+                width="230"
+              />
+              <Image
+                src={communityCardNote04}
+                alt="TODO"
+                className="absolute left-[120px] top-[-130px]"
+                height="175"
+                width="184"
+              />
+            </div>
+            <div className="relative min-h-[230px] min-w-[335px] snap-start">
+              <Image
+                src={communityCardImage04}
+                alt="TODO"
+                className="relative rounded-2xl shadow-2"
+                width="335"
+                height="230"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="container rounded-[40px] bg-customisation-turquoise/5 py-40">
         <div className="mx-auto max-w-[702px] gap-4 text-center">
-          <h2 className="pb-4 text-64">A wonderful chat experience</h2>
+          <h2 className="pb-4 text-40 lg:text-64">
+            A wonderful chat experience
+          </h2>
           <Text size={27}>
             Give your community a unique look that reflects it’s passions and
             values. Or just look cool ✨

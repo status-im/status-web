@@ -1,10 +1,17 @@
 import { Button, Tag, Text } from '@status-im/components'
-import { DownloadIcon, WalletIcon } from '@status-im/icons'
+import {
+  CommunitiesIcon,
+  DownloadIcon,
+  MessengerIcon,
+  WalletIcon,
+} from '@status-im/icons'
 import { cx } from 'class-variance-authority'
 
 import { GridHero } from './cards'
 
+import type { IconProps } from '@status-im/icons'
 import type { StaticImageData } from 'next/image'
+import type { ComponentType } from 'react'
 
 type Props = {
   type: 'Communities' | 'Create Community' | 'Wallet' | 'Messenger'
@@ -14,6 +21,13 @@ type Props = {
   images: [StaticImageData, StaticImageData, StaticImageData, StaticImageData]
   maxWidth: number
   dark?: boolean
+}
+
+const icons: Record<Props['type'], ComponentType<IconProps>> = {
+  Wallet: WalletIcon,
+  Communities: CommunitiesIcon,
+  'Create Community': CommunitiesIcon,
+  Messenger: MessengerIcon,
 }
 
 export const Hero = (props: Props) => {
@@ -30,7 +44,7 @@ export const Hero = (props: Props) => {
           <div className="inline-flex">
             <Tag
               size={32}
-              icon={WalletIcon}
+              icon={icons[type]}
               color={`$${color}-50`}
               label={type}
             />
