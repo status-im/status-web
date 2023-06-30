@@ -1,0 +1,23 @@
+diff --git a/package.json b/package.json
+index 74d83a36fa57f2fd84e2c4e1d0d1c42a4c21e938..3c0788c281f0fc4e3f269ebdb66e3323201a7a38 100644
+--- a/package.json
++++ b/package.json
+@@ -3,9 +3,18 @@
+   "version": "3.1.0",
+   "description": "visx axis",
+   "sideEffects": false,
++  "type": "module",
+   "main": "lib/index.js",
+   "module": "esm/index.js",
+   "types": "lib/index.d.ts",
++  "exports": {
++    "./package.json": "./package.json",
++    ".": {
++      "types": "./lib/index.d.ts",
++      "import": "./esm/index.js",
++      "require": "./lib/index.js"
++    }
++  },
+   "files": [
+     "lib",
+     "esm"

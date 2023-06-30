@@ -3,12 +3,13 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 // import { redirect } from 'next/navigation'
 // import { useRouter } from 'next/router'
-import { Breadcrumbs } from '@/components'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { AppLayout } from '@/layouts/app-layout'
 import { getAuthorSlugs, getPostsByAuthorSlug } from '@/lib/ghost'
 
 import { PostCard } from '..'
 
+import type { BreadcrumbsProps } from '@/components/breadcrumbs'
 import type { PostOrPage, PostsOrPages } from '@tryghost/content-api'
 import type {
   GetStaticPaths,
@@ -32,6 +33,7 @@ export const getStaticProps: GetStaticProps<
   {
     posts: PostOrPage[]
     meta: PostsOrPages['meta']
+    breadcrumbs: BreadcrumbsProps['items']
   },
   Params
 > = async context => {
@@ -44,17 +46,30 @@ export const getStaticProps: GetStaticProps<
     }
   }
 
+  // root
+  const breadcrumbs = [
+    {
+      label: 'Blog',
+      href: '/blog',
+    },
+    {
+      label: posts[0].primary_author!.name ?? posts[0].primary_author!.slug,
+      href: `/blog/author/${posts[0].slug}`,
+    },
+  ]
+
   return {
     props: {
       posts,
       meta,
+      breadcrumbs,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
+const BlogAuthorPage: Page<Props> = ({ posts, meta, breadcrumbs }) => {
   // const { isFallback } = useRouter()
 
   // if (isFallback || !posts.length) {
@@ -95,7 +110,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
   return (
     <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
       <div className="border-b border-neutral-10 px-5 py-[13px]">
-        <Breadcrumbs cutFirstSegment={false} />
+        <Breadcrumbs items={breadcrumbs} />
       </div>
 
       <div className="px-5">
@@ -107,9 +122,7 @@ const BlogAuthorPage: Page<Props> = ({ posts, meta }) => {
               name={author.name ?? author.slug}
               src={author.profile_image ?? undefined}
             />
-            <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
-              {author.name}
-            </h1>
+            <h1 className="text-40 lg:text-64">{author.name}</h1>
             <Text size={19}>{author.meta_description}</Text>
           </div>
 

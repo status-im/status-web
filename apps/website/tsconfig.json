@@ -11,6 +11,9 @@
     "paths": {
       "react-native": ["react-native-web"],
       "@/*": ["./src/*"],
+      "@assets/*": ["./public/assets/*"],
+      "@images/*": ["./public/images/*"],
+      "@docs": ["./.contentlayer/generated"],
       "@status-im/js/encode-url-data": [
         "../../packages/status-js/src/utils/encode-url-data"
       ],
@@ -19,6 +22,12 @@
       ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "env.d.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "env.d.ts",
+    ".contentlayer/generated"
+  ],
   "exclude": ["node_modules", "next.config.mjs", "tailwind.config.js"]
 }

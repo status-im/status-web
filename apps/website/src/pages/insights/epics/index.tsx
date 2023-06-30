@@ -16,14 +16,14 @@ import { InsightsLayout } from '@/layouts/insights-layout'
 import type { DateRange } from '@status-im/components/src/calendar/calendar'
 import type { Page } from 'next'
 
-const epics = [
+export const epics = [
   {
-    id: 1,
+    id: '1',
     title: 'Communities protocol',
     description: 'Support Encrypted Communities',
   },
   {
-    id: 5155,
+    id: '5155',
     title: 'Keycard',
     description:
       'Detecting keycard reader removal for the beginning of each flow',

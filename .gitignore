@@ -104,3 +104,6 @@ web-build/
 
 # Local
 **/.data
+
+# Contentlayer
+.contentlayer

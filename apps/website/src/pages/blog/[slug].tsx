@@ -6,13 +6,14 @@ import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'
 import { unified } from 'unified'
 
-import { Breadcrumbs } from '@/components'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { formatDate } from '@/components/chart/utils/format-time'
-import { AppLayout } from '@/layouts/app-layout'
+import { AppLayout, Content } from '@/layouts/app-layout'
 import { getPostBySlug, getPostsByTagSlug, getPostSlugs } from '@/lib/ghost'
 
 import { PostCard } from '.'
 
+import type { BreadcrumbsProps } from '@/components/breadcrumbs'
 import type { PostOrPage } from '@tryghost/content-api'
 import type {
   GetStaticPaths,
@@ -37,6 +38,7 @@ export const getStaticProps: GetStaticProps<
   {
     post: PostOrPage
     relatedPosts: PostOrPage[]
+    breadcrumbs: BreadcrumbsProps['items']
   },
   Params
 > = async context => {
@@ -99,6 +101,18 @@ export const getStaticProps: GetStaticProps<
 
   const html = renderToString(<Provider>{r}</Provider>)
 
+  // root
+  const breadcrumbs = [
+    {
+      label: 'Blog',
+      href: '/blog',
+    },
+    {
+      label: post.title!,
+      href: `/blog/${post.slug}`,
+    },
+  ]
+
   return {
     props: {
       post: {
@@ -107,13 +121,14 @@ export const getStaticProps: GetStaticProps<
         hhh: html,
       },
       relatedPosts,
+      breadcrumbs,
     },
   }
 }
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>
 
-const BlogDetailPage: Page<Props> = ({ post, relatedPosts }) => {
+const BlogDetailPage: Page<Props> = ({ post, relatedPosts, breadcrumbs }) => {
   const author = post.primary_author!
 
   // todo?: MOVE TO SERVER SIDE
@@ -160,9 +175,9 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts }) => {
   }, [post.html])
 
   return (
-    <div className="min-h-[900px] rounded-3xl bg-white-100 lg:mx-1">
+    <Content>
       <div className="border-b border-neutral-10 px-5 py-[13px]">
-        <Breadcrumbs cutFirstSegment={false} />
+        <Breadcrumbs items={breadcrumbs} />
       </div>
 
       <div className="mx-auto flex max-w-2xl flex-col gap-3 px-5 pb-6 pt-12 lg:pt-20">
@@ -172,9 +187,7 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts }) => {
           )}
         </div>
 
-        <h1 className="text-[40px] font-bold leading-[44px] tracking-[-.02em] lg:text-[64px] lg:leading-[68px]">
-          {post.title!}
-        </h1>
+        <h1 className="text-40 lg:text-64">{post.title!}</h1>
 
         <div className="mt-auto flex h-5 items-center gap-1">
           <Avatar
@@ -244,7 +257,7 @@ const BlogDetailPage: Page<Props> = ({ post, relatedPosts }) => {
         className="mx-auto grid max-w-2xl gap-4"
         dangerouslySetInnerHTML={{ __html: post.hhh }}
       /> */}
-    </div>
+    </Content>
   )
 }
 

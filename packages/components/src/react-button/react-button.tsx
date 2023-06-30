@@ -10,7 +10,7 @@ import {
   ThumbsUpIcon,
 } from '@status-im/icons'
 import { styled } from '@tamagui/core'
-import { Stack } from '@tamagui/web'
+import { View } from 'react-native'
 
 import { Text } from '../text'
 
@@ -37,8 +37,8 @@ type Props = PressableProps & {
   'aria-selected'?: boolean
 }
 
-const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { type, count, ...pressableProps } = props
+const ReactButton = (props: Props, ref: Ref<View>) => {
+  const { type, count, ...buttonProps } = props
 
   const Icon = REACTIONS_ICONS[type]
 
@@ -46,11 +46,7 @@ const ReactButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
     props.selected || props['aria-expanded'] || props['aria-selected']
 
   return (
-    <Button
-      {...(pressableProps as unknown as object)}
-      ref={ref}
-      selected={selected}
-    >
+    <Button {...buttonProps} ref={ref} selected={selected}>
       <Icon size={20} color="$neutral-100" />
       {count && (
         <Text size={13} weight="medium" wrap={false}>
@@ -66,10 +62,9 @@ const _ReactButton = forwardRef(ReactButton)
 export { _ReactButton as ReactButton }
 export type { Props as ReactButtonProps }
 
-const Button = styled(Stack, {
+const Button = styled(View, {
   name: 'ReactButton',
-  tag: 'button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',

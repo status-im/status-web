@@ -1,18 +1,68 @@
-import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
+import { Breadcrumbs } from '@/components/breadcrumbs'
+import { EpicOverview } from '@/components/epic-overview'
+import { TableIssues } from '@/components/table-issues'
 import { InsightsLayout } from '@/layouts/insights-layout'
 
-import type { Page } from 'next'
+import { epics } from '.'
 
-const EpicsDetailPage: Page = () => {
+import type { BreadcrumbsProps } from '@/components/breadcrumbs'
+import type { GetStaticPaths, GetStaticProps, Page } from 'next'
+
+type Params = { epic: string }
+
+type Epic = (typeof epics)[number]
+
+export const getStaticPaths: GetStaticPaths<Params> = async () => {
+  const paths = epics.map(epic => ({
+    params: { epic: epic.id },
+  }))
+
+  return { paths, fallback: false }
+}
+
+export const getStaticProps: GetStaticProps<Props, Params> = async context => {
+  const epic = epics.find(epic => epic.id === context.params!.epic)!
+
+  if (!epic) {
+    return {
+      // notFound: true,
+      redirect: { destination: '/insights/epics', permanent: false },
+    }
+  }
+
+  return {
+    props: {
+      epic,
+      breadcrumbs: [
+        {
+          label: 'Epics',
+          href: '/insights/epics',
+        },
+        {
+          label: epic.title,
+          href: `/insights/epics/${epic.id}`,
+        },
+      ],
+    },
+  }
+}
+
+type Props = {
+  epic: Epic
+  breadcrumbs: BreadcrumbsProps['items']
+}
+
+const EpicsDetailPage: Page<Props> = props => {
+  const { epic, breadcrumbs } = props
+
   return (
     <div>
-      <div className="border-b border-neutral-10 px-5 py-3">
-        <Breadcrumbs />
-      </div>
-      <div className="border-b border-neutral-10 px-10 py-6">
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div className="px-10 py-6">
         <EpicOverview
-          title="Communities protocol"
-          description="Detecting keycard reader removal for the beginning of each flow"
+          title={epic.title}
+          description={epic.description}
           fullscreen
         />
       </div>

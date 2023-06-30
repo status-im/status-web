@@ -2,6 +2,7 @@ import { Children, cloneElement, forwardRef } from 'react'
 
 import { Content, List, Root, Trigger } from '@radix-ui/react-tabs'
 import { Stack } from '@tamagui/web'
+import { View } from 'react-native'
 import { styled } from 'tamagui'
 
 import { Counter } from '../counter'
@@ -11,7 +12,6 @@ import { Text } from '../text'
 import type { TextProps } from '../text'
 import type { GetVariants } from '../types'
 import type { Ref } from 'react'
-import type { View } from 'react-native'
 
 type Variants = GetVariants<typeof TriggerBase>
 
@@ -116,8 +116,9 @@ Tabs.Content = Content
 export { Tabs }
 export type { Props as TabsProps }
 
-const TriggerBase = styled(Stack, {
-  tag: 'button',
+const TriggerBase = styled(View, {
+  name: 'Trigger',
+  role: 'button',
 
   flexDirection: 'row',
   alignItems: 'center',

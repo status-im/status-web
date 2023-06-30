@@ -1,7 +1,6 @@
 {
   "name": "@status-im/colors",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.2.0",
   "files": [
     "types",
     "dist",
@@ -40,5 +39,17 @@
     "fs-extra": "^11.1.1",
     "vite": "^4.1.4",
     "vite-node": "^0.29.7"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs}": [
+      "eslint",
+      "prettier --write"
+    ],
+    "*.{md,mdx,yml,yaml,json}": [
+      "prettier --write"
+    ]
   }
 }

@@ -4,7 +4,7 @@ import { DownloadIcon, ExternalIcon } from '@status-im/icons'
 import { cx } from 'class-variance-authority'
 
 import { Logo } from '@/components/logo'
-import { LINKS } from '@/config/links'
+import { ROUTES } from '@/config/routes'
 
 import { Link } from '../link'
 
@@ -21,7 +21,7 @@ const NavDesktop = () => {
 
           <div className="flex-1">
             <NavigationMenu.List className="flex items-center">
-              {Object.entries(LINKS).map(([name, links]) => (
+              {Object.entries(ROUTES).map(([name, routes]) => (
                 <NavigationMenu.Item key={name}>
                   <NavigationMenu.Trigger className="py-4 pr-5 aria-expanded:opacity-50">
                     <Text size={15} weight="medium" color="$white-100">
@@ -29,13 +29,13 @@ const NavDesktop = () => {
                     </Text>
                   </NavigationMenu.Trigger>
                   <NavigationMenu.Content className="grid gap-3 pb-8 pl-[164px] pt-3">
-                    {links.map(link => {
-                      const external = link.href.startsWith('http')
+                    {routes.map(route => {
+                      const external = route.href.startsWith('http')
 
                       return (
-                        <NavigationMenu.Link key={link.name} asChild>
+                        <NavigationMenu.Link key={route.name} asChild>
                           <Link
-                            href={link.href}
+                            href={route.href}
                             className="flex items-center gap-1"
                           >
                             <Text
@@ -43,7 +43,7 @@ const NavDesktop = () => {
                               weight="semibold"
                               color="$white-100"
                             >
-                              {link.name}
+                              {route.name}
                             </Text>
                             {external && (
                               <ExternalIcon size={20} color="$white-100" />

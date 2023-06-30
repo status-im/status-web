@@ -5,6 +5,14 @@ on:
     branches:
       - main
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NEXT_PUBLIC_GHOST_API_URL: ''
+  NEXT_PUBLIC_GHOST_API_KEY: ''
+  INFURA_API_KEY: ''
+  TAMAGUI_TARGET: 'web'
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -12,8 +20,12 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm lint && pnpm format --check
+      - run: pnpm test
       - uses: changesets/action@v1
         id: changesets
         with:

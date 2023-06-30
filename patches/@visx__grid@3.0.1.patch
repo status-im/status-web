@@ -1,0 +1,23 @@
+diff --git a/package.json b/package.json
+index 96431f146463c190e6e292baad326a90e287d01b..9dbb04e1ad8a5113ba52b7f52b9b898ecbad3268 100644
+--- a/package.json
++++ b/package.json
+@@ -3,9 +3,18 @@
+   "version": "3.0.1",
+   "description": "visx grid",
+   "sideEffects": false,
++  "type": "module",
+   "main": "lib/index.js",
+   "module": "esm/index.js",
+   "types": "lib/index.d.ts",
++  "exports": {
++    "./package.json": "./package.json",
++    ".": {
++      "types": "./lib/index.d.ts",
++      "import": "./esm/index.js",
++      "require": "./lib/index.js"
++    }
++  },
+   "files": [
+     "lib",
+     "esm"

@@ -1,6 +1,7 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Stack, styled } from '@tamagui/core'
+import { View } from 'react-native'
+import { styled } from 'tamagui'
 
 import { usePressableColors } from '../hooks/use-pressable-colors'
 
@@ -22,7 +23,7 @@ type Props = PressableProps & {
   'aria-selected'?: boolean
 }
 
-const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
+const IconButton = (props: Props, ref: Ref<View>) => {
   const { icon, blur, variant = 'default', ...buttonProps } = props
 
   const { pressableProps, color } = usePressableColors(
@@ -40,7 +41,7 @@ const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
   return (
     <Base
-      {...(buttonProps as unknown as object)} // TODO: Tamagui has incorrect types for PressableProps
+      {...buttonProps}
       {...pressableProps}
       ref={ref}
       variant={blur ? undefined : variant}
@@ -61,10 +62,9 @@ const _IconButton = forwardRef(IconButton)
 export { _IconButton as IconButton }
 export type { Props as IconButtonProps }
 
-const Base = styled(Stack, {
+const Base = styled(View, {
   name: 'IconButton',
-  tag: 'button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',

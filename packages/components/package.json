@@ -1,10 +1,9 @@
 {
   "name": "@status-im/components",
-  "version": "0.0.1",
+  "version": "0.2.1",
   "sideEffects": [
     "*.css"
   ],
-  "private": true,
   "#module": "./src/index.tsx",
   "types": "./src/index.tsx",
   "main": "./dist/index.js",
@@ -41,21 +40,21 @@
     "@radix-ui/react-tooltip": "^1.0.5",
     "@status-im/colors": "workspace:*",
     "@status-im/icons": "workspace:*",
-    "@tamagui/animations-css": "1.11.1",
-    "@tamagui/animations-react-native": "1.11.1",
-    "@tamagui/core": "1.11.1",
-    "@tamagui/focusable": "1.11.1",
-    "@tamagui/font-inter": "1.11.1",
-    "@tamagui/linear-gradient": "1.11.1",
-    "@tamagui/react-native-media-driver": "1.11.1",
-    "@tamagui/shorthands": "1.11.1",
-    "@tamagui/theme-base": "1.11.1",
-    "@tamagui/web": "1.11.1",
+    "@tamagui/focusable": "1.36.4",
+    "@tamagui/linear-gradient": "1.36.4",
+    "@tamagui/animations-css": "1.36.4",
+    "@tamagui/animations-react-native": "1.36.4",
+    "@tamagui/core": "1.36.4",
+    "@tamagui/font-inter": "1.36.4",
+    "@tamagui/react-native-media-driver": "1.36.4",
+    "@tamagui/shorthands": "1.36.4",
+    "@tamagui/theme-base": "1.36.4",
+    "@tamagui/web": "1.36.4",
     "date-fns": "^2.30.0",
     "expo-blur": "^12.2.2",
     "expo-linear-gradient": "^12.1.2",
     "react-day-picker": "^8.7.1",
-    "tamagui": "1.11.1",
+    "tamagui": "1.36.4",
     "zustand": "^4.3.7"
   },
   "devDependencies": {
@@ -69,18 +68,30 @@
     "@storybook/react": "7.0.2",
     "@storybook/react-vite": "7.0.2",
     "@storybook/testing-library": "^0.1.0",
-    "@tamagui/vite-plugin": "1.11.1",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@types/react-native": "~0.70.6",
+    "@tamagui/vite-plugin": "1.36.4",
     "@vitejs/plugin-react-swc": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-svg": "^13.8.0",
-    "react-native-web": "^0.18.12",
+    "react-native-web": "^0.19.5",
     "storybook": "7.0.2",
     "storybook-addon-designs": "7.0.0-beta.2",
     "storybook-dark-mode": "^3.0.0",
     "vite": "^4.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs}": [
+      "eslint",
+      "prettier --write"
+    ],
+    "*.{md,mdx,yml,yaml,json}": [
+      "prettier --write"
+    ]
   }
 }

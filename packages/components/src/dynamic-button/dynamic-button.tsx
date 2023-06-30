@@ -1,7 +1,8 @@
 import { forwardRef } from 'react'
 
 import { ArrowDownIcon, MentionIcon } from '@status-im/icons'
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
+import { View } from 'react-native'
 
 import { Shadow } from '../shadow'
 import { Text } from '../text'
@@ -17,8 +18,8 @@ type Props = PressableProps & {
   count: number
 }
 
-const DynamicButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const { type, count, ...pressableProps } = props
+const DynamicButton = (props: Props, ref: Ref<View>) => {
+  const { type, count, ...buttonProps } = props
 
   const color: ColorTokens = '$white-100'
   const showCount = Boolean(count)
@@ -26,7 +27,7 @@ const DynamicButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
   return (
     <Shadow variant="$2" borderRadius="$full">
       <Button
-        {...(pressableProps as unknown as object)} // TODO: Tamagui has incorrect types for PressableProps
+        {...buttonProps}
         ref={ref}
         type={type}
         iconOnly={showCount === false}
@@ -48,10 +49,9 @@ const _DynamicButton = forwardRef(DynamicButton)
 export { _DynamicButton as DynamicButton }
 export type { Props as DynamicButtonProps }
 
-const Button = styled(Stack, {
+const Button = styled(View, {
   name: 'DynamicButton',
-  tag: 'button',
-  accessibilityRole: 'button',
+  role: 'button',
 
   cursor: 'pointer',
   userSelect: 'none',
