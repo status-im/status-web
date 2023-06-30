@@ -4,11 +4,9 @@
   "sideEffects": [
     "*.css"
   ],
-  "#module": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "types": "./dist/types/src/index.d.ts",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "#types": "./dist/types/index.d.ts",
   "files": [
     "types",
     "dist"
