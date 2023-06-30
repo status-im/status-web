@@ -1,7 +1,7 @@
 import { Stack } from '@tamagui/core'
 import { ParentSize } from '@visx/responsive'
 
-import { ChartComponent, Empty, Loading } from './components'
+import { ChartComponent, Loading } from './components'
 
 type DayType = {
   date: string
@@ -22,14 +22,6 @@ const Chart = (props: Props) => {
     return (
       <Stack width="100%" height={rest.height}>
         <Loading />
-      </Stack>
-    )
-  }
-
-  if (!data.length) {
-    return (
-      <Stack width="100%" height={rest.height}>
-        <Empty />
       </Stack>
     )
   }

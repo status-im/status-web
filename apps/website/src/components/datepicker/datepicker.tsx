@@ -1,6 +1,7 @@
 import { Calendar } from '@status-im/components/src/calendar/calendar'
 import { Popover } from '@status-im/components/src/popover'
 import { EditIcon } from '@status-im/icons'
+import { addDays } from 'date-fns'
 
 import { formatDate } from '../chart/utils/format-time'
 
@@ -35,6 +36,7 @@ const DatePicker = (props: Props) => {
             selected={selected}
             onSelect={onSelect}
             fixedWeeks
+            disabled={{ from: addDays(new Date(), 1) }}
           />
         </Popover.Content>
       </Popover>

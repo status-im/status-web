@@ -1,23 +1,22 @@
-import { useState } from 'react'
-
 import { IconButton, Text } from '@status-im/components'
 import { DropdownMenu } from '@status-im/components/src/dropdown-menu'
 import { SortIcon } from '@status-im/icons'
-import Image from 'next/image'
+
+import type { Order_By } from '@/lib/graphql/generated/schemas'
 
 type Data = {
-  id: number
+  id: Order_By
   name: string
 }
 
 type Props = {
   data: Data[]
+  orderByValue: Order_By
+  onOrderByValueChange: (value: Order_By) => void
 }
 
 const DropdownSort = (props: Props) => {
-  const { data } = props
-
-  const [selectedValue, setSelectedValue] = useState<number>()
+  const { data, orderByValue, onOrderByValueChange } = props
 
   return (
     <div>
@@ -37,31 +36,12 @@ const DropdownSort = (props: Props) => {
                 key={option.id}
                 label={option.name}
                 onSelect={() => {
-                  setSelectedValue(option.id)
+                  onOrderByValueChange(option.id)
                 }}
-                selected={selectedValue === option.id}
+                selected={orderByValue === option.id}
               />
             )
           })}
-          {data.length === 0 && (
-            <div className="flex flex-col items-center justify-center p-2 py-1">
-              <Image
-                className="pb-3 invert"
-                alt="No results"
-                src={'/assets/filters/empty.png'}
-                width={80}
-                height={80}
-              />
-              <div className="pb-[2px]">
-                <Text size={15} weight="semibold">
-                  No options found
-                </Text>
-              </div>
-              <div className="text-center">
-                <Text size={13}>We didn&apos;t find any results</Text>
-              </div>
-            </div>
-          )}
         </DropdownMenu.Content>
       </DropdownMenu>
     </div>

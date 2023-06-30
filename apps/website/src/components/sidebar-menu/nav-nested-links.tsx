@@ -5,6 +5,7 @@ import { ChevronRightIcon } from '@status-im/icons'
 import { useRouter } from 'next/router'
 
 import { Link } from '../link'
+import { decodeUriComponent } from './utils'
 
 import type { Url } from 'next/dist/shared/lib/router/router'
 
@@ -26,7 +27,7 @@ const NavNestedLinks = (props: NavLinkProps) => {
   const { asPath } = useRouter()
 
   return (
-    <Accordion.Item value={label} className="accordion-item">
+    <Accordion.Item value={label}>
       <div>
         <Accordion.Trigger className="accordion-trigger">
           <div className="accordion-chevron inline-flex h-5 w-5">
@@ -44,7 +45,7 @@ const NavNestedLinks = (props: NavLinkProps) => {
             }}
           >
             {links.map((link, index) => {
-              const active = asPath === link.href
+              const active = decodeUriComponent(asPath) === link.href
 
               const paddingClassName = index === 0 ? 'pt-5' : 'pt-2'
               const paddingLastChild = index === links.length - 1 ? 'pb-5' : ''

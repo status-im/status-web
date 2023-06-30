@@ -91,7 +91,7 @@ const ChartTooltip = (props: Props) => {
         <DoneIcon size={16} color="$neutral-40" />
         <Stack px={4}>
           <Text size={13} weight="medium">
-            {tooltipData.closedIssues} closes
+            {tooltipData.closedIssues} closed
           </Text>
         </Stack>
         <Stack

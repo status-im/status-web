@@ -63,7 +63,10 @@ const ChartComponent = (props: Props): JSX.Element => {
 
   const yScale = scaleLinear({
     domain: [0, max(totalIssues) || 0],
-    range: [innerHeight, 0],
+    range: [
+      innerHeight,
+      totalIssues.every(issue => issue === 0) ? innerHeight : 0,
+    ], // Adjusted the range to start from innerHeight instead of 0
     nice: true,
   })
 
