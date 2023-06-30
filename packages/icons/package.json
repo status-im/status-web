@@ -20,6 +20,7 @@
     }
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "sync": "vite-node scripts/sync.ts && pnpm generate",
     "generate": "rimraf src && svgr svg --out-dir src",
     "dev": "vite build --watch --mode development",

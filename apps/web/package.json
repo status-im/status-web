@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "TAMAGUI_TARGET=web vite",
     "build": "tsc && TAMAGUI_TARGET=web vite build",
     "preview": "TAMAGUI_TARGET=web vite preview",

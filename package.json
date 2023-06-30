@@ -13,6 +13,7 @@
   },
   "keywords": [],
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",

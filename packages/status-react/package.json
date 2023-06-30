@@ -19,6 +19,7 @@
     "url": "https://github.com/status-im/status-web/issues"
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "#test": "vitest",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
