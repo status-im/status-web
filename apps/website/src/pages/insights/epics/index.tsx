@@ -32,7 +32,7 @@ type Props = {
   links: string[]
 }
 
-const LIMIT = 1
+const LIMIT = 3
 
 const sortOptions: DropdownSortProps['data'] = [
   {
@@ -243,9 +243,9 @@ const EpicsPage: Page<Props> = props => {
                 placeholderComponent={
                   <Shadow
                     variant="$2"
-                    className="h-[398px]  rounded-2xl px-4 py-3"
+                    className="h-[398px] rounded-2xl px-4 py-3"
                   >
-                    <div className="flex h-full flex-col  p-5">
+                    <div className="flex h-full flex-col p-5">
                       <Loading />
                     </div>
                   </Shadow>
@@ -265,34 +265,17 @@ const EpicsPage: Page<Props> = props => {
                 </Shadow>
               </RenderIfVisible>
             ))}
+            <div ref={endOfPageRef} />
 
             {(isFetching || isFetchingNextPage || hasNextPage) && (
-              <div className="flex flex-col gap-4">
-                <Shadow
-                  variant="$2"
-                  className="h-[398px] rounded-2xl px-4 py-3"
-                >
-                  <div className="flex h-full flex-col p-5">
-                    <Loading />
-                  </div>
-                </Shadow>
-                <Shadow
-                  variant="$2"
-                  className="h-[398px] rounded-2xl px-4 py-3"
-                >
-                  <div className="flex h-full flex-col p-5">
-                    <Loading />
-                  </div>
-                </Shadow>
-                <Shadow
-                  variant="$2"
-                  className="h-[398px] rounded-2xl px-4 py-3"
-                >
-                  <div className="flex h-full flex-col p-5">
-                    <Loading />
-                  </div>
-                </Shadow>
-              </div>
+              <Shadow
+                variant="$2"
+                className="mt-[-1rem] h-[398px] rounded-2xl px-4 py-3"
+              >
+                <div className="flex h-full flex-col p-5">
+                  <Loading />
+                </div>
+              </Shadow>
             )}
 
             {!isFetching && !isFetchingNextPage && epics.length === 0 && (
@@ -301,7 +284,6 @@ const EpicsPage: Page<Props> = props => {
               </div>
             )}
           </div>
-          <div ref={endOfPageRef} />
         </div>
         <DatePicker selected={selectedDates} onSelect={setSelectedDates} />
       </div>
