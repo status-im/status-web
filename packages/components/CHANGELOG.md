@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.2.2
+
+### Patch Changes
+
+- c203e6f: export types
+
 ## 0.2.1
 
 ### Patch Changes
