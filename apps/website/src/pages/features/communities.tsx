@@ -21,7 +21,6 @@ import illustrationMain from '@assets/communities/illustration-main.png'
 import sectionImage1 from '@assets/communities/section-01.png'
 import sectionImage2 from '@assets/communities/section-02.png'
 import { Button, Text } from '@status-im/components'
-import { cx } from 'class-variance-authority'
 import Image from 'next/image'
 
 import { Section } from '@/components/cards'
