@@ -15,7 +15,7 @@ Community owners can set up permissions using three different variables: `Who ho
 
 - Using channel permissions, community owners can restrict channel access and actions to specific people based on token requirements.
 - Only the community owner can set up channel permissions.
-- Use [community permissions][set-up-a-private-community] to make the entire community private. You can combine community-level and channel-level permission in the same community.
+- Use [community permissions](./set-up-a-private-community.md) to make the entire community private. You can combine community-level and channel-level permission in the same community.
 - When you delete a private channel, the channel permissions are lost. If you recreate the channel, you need to set up its permission again.
 
 ## Set up channel permission

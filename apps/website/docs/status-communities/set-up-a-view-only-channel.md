@@ -6,22 +6,22 @@ title: Set up a view-only channel
 ---
 
 :::info
-Currently, you can only set up a view-only channel using Status desktop. [:octicons-desktop-download-16: Download Status desktop][status-web-download].
+Currently, you can only set up a view-only channel using Status desktop. [:octicons-desktop-download-16: Download Status desktop](https://status.im/get).
 :::
 
-In a view-only channel, everyone with access can view the conversation, but they can't respond or write in the channel. The community [owner or admin][permissions-by-role-in-status-communities] can designate certain people or groups to write in the view-only channel.
+In a view-only channel, everyone with access can view the conversation, but they can't respond or write in the channel. The community [owner or admin](./permissions-by-role-in-status-communities.md) can designate certain people or groups to write in the view-only channel.
 
 :::info
-Members with view-only access to the channel can still [react][react-and-reply-to-messages] on the channel's messages.
+Members with view-only access to the channel can still [react](../messaging-and-web3-browser/react-and-reply-to-messages.md) on the channel's messages.
 :::
 
-To learn how to use read-only channels in your community, check out [About view-only channels][about-view-only-channels].
+To learn how to use read-only channels in your community, check out [About view-only channels](./about-view-only-channels.md).
 
 ## What to expect
 
 - Community owners and admins can always view and write in the community channels, irrespective of the view-only permissions.
-- You can configure view-only channels with or without tokens. Using tokens requires more steps, but provides more options. For example, [minting][mint-tokens-for-your-community] and [airdropping][how-to-airdrop-tokens-in-status] tokens can incentivize community engagement.
-- When using tokens, [mint a community token][mint-tokens-for-your-community] and share the token with everyone you want to have view-only access.
+- You can configure view-only channels with or without tokens. Using tokens requires more steps, but provides more options. For example, [minting](./mint-tokens-for-your-community.md) and [airdropping](./how-to-airdrop-tokens-in-status.md) tokens can incentivize community engagement.
+- When using tokens, [mint a community token](./mint-tokens-for-your-community.md) and share the token with everyone you want to have view-only access.
 - Once you set up the view-only permission, only members who meet its criteria can access the channel. However, their access is limited to read-only.
 - Owners can set up [additional post permissions](#grant-someone-post-permissions-in-a-view-only-channel) in read-only channels for specific members.
 
@@ -41,9 +41,9 @@ Using channel permissions, you can set up a view-only channel without tokens.
 
 ## Set up a view-only channel with token-based permissions
 
-Depending on your community's needs, you may want the view-only channel permission linked to a token. You can use an existing token (such as SNT or DAI, for example), or [a token you mint][mint-tokens-for-your-community] for the community.
+Depending on your community's needs, you may want the view-only channel permission linked to a token. You can use an existing token (such as SNT or DAI, for example), or [a token you mint](./mint-tokens-for-your-community.md) for the community.
 
-If you mint a [collectible][collectibles-your-quick-start-guide] to manage the view-only access, enable the `Non-transferable (Soulbound)` and `Remotely-destruct` options to maintain control of who has view-only access to the channel. For more information, check out the [available collectible options][set-up-collectible-options].
+If you mint a [collectible](../status-wallet/collectibles-your-quick-start-guide.md) to manage the view-only access, enable the `Non-transferable (Soulbound)` and `Remotely-destruct` options to maintain control of who has view-only access to the channel. For more information, check out the [available collectible options](./mint-tokens-for-your-community#set-up-collectible-options.md).
 
 === "Desktop"
 
@@ -65,4 +65,4 @@ Optionally, check :desktop-hide: **Hide permission** to hide this permission fro
 
 ## Grant someone post permissions in a view-only channel
 
-If you want someone else to post content in a view-only channel, configure this person's `View and post` permission. For information on configuring channel permissions, check out [Set up channel permissions][set-up-channel-permissions].
+If you want someone else to post content in a view-only channel, configure this person's `View and post` permission. For information on configuring channel permissions, check out [Set up channel permissions](./set-up-channel-permissions.md).

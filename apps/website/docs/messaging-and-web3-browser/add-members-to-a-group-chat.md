@@ -5,9 +5,9 @@ language: en
 title: Add members to a group chat
 ---
 
-Any member of an existing group chat can add their [Status contacts][send-a-contact-request] to the chat. The maximum number of members is 50. Due to Status's security policy, new joiners won't be able to see the previous message history.
+Any member of an existing group chat can add their [Status contacts](./send-a-contact-request.md) to the chat. The maximum number of members is 50. Due to Status's security policy, new joiners won't be able to see the previous message history.
 
-If you want to create a new chat, see [Create a group chat][create-a-group-chat] instead.
+If you want to create a new chat, see [Create a group chat](./create-a-group-chat.md) instead.
 
 ## Add members
 

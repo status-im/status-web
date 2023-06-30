@@ -7,11 +7,11 @@ title: Add a contact in Status
 
 To start a chat with someone, you first need to add them to your contacts.
 
-After sending a contact request, wait for the other person to accept it. Once they do that, both you and them can send each other [direct messages][send-direct-messages-to-your-contacts] and invite each other to [group chats][add-members-to-a-group-chat].
+After sending a contact request, wait for the other person to accept it. Once they do that, both you and them can send each other [direct messages](../messaging-and-web3-browser/send-direct-messages-to-your-contacts.md) and invite each other to [group chats](../messaging-and-web3-browser/add-members-to-a-group-chat.md).
 
-If the person you want to chat with doesn't have a Status profile yet, you can [invite them to join Status][invite-friends-to-status].
+If the person you want to chat with doesn't have a Status profile yet, you can [invite them to join Status](../getting-started/invite-friends-to-status.md).
 
-To add someone to your contact list, you need their [chat key][understand-your-status-keys-and-recovery-phrase], which represents their public Status profile. They can share it with you, so ask them to [Share their Status profile with you][share-your-status-profile]. You can also use their QR code to add them to contacts.
+To add someone to your contact list, you need their [chat key](./understand-your-status-keys-and-recovery-phrase.md), which represents their public Status profile. They can share it with you, so ask them to [Share their Status profile with you](./share-your-status-profile.md). You can also use their QR code to add them to contacts.
 
 :::tip
 To add someone you know from a group chat or community, simply right-click their name and select :desktop-add-user: **Send a contact request**.

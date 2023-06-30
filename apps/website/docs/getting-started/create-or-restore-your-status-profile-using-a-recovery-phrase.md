@@ -5,18 +5,18 @@ language: en
 title: Create or restore your Status profile using a recovery phrase
 ---
 
-You can link your existing Ethereum address to a new Status profile. For instance, if you already have a [non-custodial Ethereum wallet][status-wallet-your-quick-start-guide] such as Metamask or Trust Wallet, you already have an Ethereum address and a [recovery phrase][understand-your-status-keys-and-recovery-phrase].
+You can link your existing Ethereum address to a new Status profile. For instance, if you already have a [non-custodial Ethereum wallet](../status-wallet/status-wallet-your-quick-start-guide.md) such as Metamask or Trust Wallet, you already have an Ethereum address and a [recovery phrase](../your-profile-and-preferences/understand-your-status-keys-and-recovery-phrase.md).
 
 If you already have a Status account and used your profile in the past 30 days, you can restore it with the profile's recovery phrase.
 
 :::tip
-If you already use Status on one device and want to add your profile and funds to a new device, you don't need your recovery phrase. [Sync your new device][add-a-new-device-to-your-status-profile] for the best experience.
+If you already use Status on one device and want to add your profile and funds to a new device, you don't need your recovery phrase. [Sync your new device](./add-a-new-device-to-your-status-profile.md) for the best experience.
 :::
 
 ## What to expect
 
-- Your wallet funds are safe and recoverable as long as you know your recovery phrase and [keep it safe][back-up-and-secure-your-recovery-phrase].
-- When you import an existing Ethereum address from a wallet, you can operate with your funds using [Status Wallet][how-to-use-wallet-your-quick-start-guide].
+- Your wallet funds are safe and recoverable as long as you know your recovery phrase and [keep it safe](../your-profile-and-preferences/back-up-and-secure-your-recovery-phrase.md).
+- When you import an existing Ethereum address from a wallet, you can operate with your funds using [Status Wallet](../how-to-use-wallet-your-quick-start-guide.md).
 - If you already use Status but don't have access to your previous device, you can restore your Status profile on a new device if you have used the app within the past 30 days.
 - If you don't have access to your previous device and haven't used Status in the past 30 days, your funds are safe, but your profile is unrecoverable. You can still use your recovery phrase to create a new profile, but your previous profile configuration (contacts, profile settings and community membership) is lost.
 
@@ -36,7 +36,7 @@ Creating or restoring a profile using a recovery phrase follows the same procedu
 
 ## Create or restore your profile using a recovery phrase
 
-When you restore your Status profile using a recovery phrase, Status tries to pull your information from the [decentralized Waku network][peer-to-peer-messaging]. Status doesn't use centralized servers and doesn't store your profile information.
+When you restore your Status profile using a recovery phrase, Status tries to pull your information from the [decentralized Waku network](../messaging-and-web3-browser/about-status-messages#peer-to-peer-messaging.md). Status doesn't use centralized servers and doesn't store your profile information.
 
 === "Mobile"
 
@@ -56,14 +56,14 @@ When you restore your Status profile using a recovery phrase, Status tries to pu
     1. On the **profile identifiers** screen, you can learn more about your Status profile or tap **Skip** to finish the profile setup.
     1. Tap **Start using Status**.
 
-    If Status finds an existing profile in the [Waku network][peer-to-peer-messaging], you can use your existing profile or the one you have just created. When you choose your existing profile, [synchronize this profile][add-a-new-device-to-your-status-profile] with your device.
+    If Status finds an existing profile in the [Waku network](../messaging-and-web3-browser/about-status-messages#peer-to-peer-messaging.md), you can use your existing profile or the one you have just created. When you choose your existing profile, [synchronize this profile](./add-a-new-device-to-your-status-profile.md) with your device.
 
 === "Desktop"
 
     ### Step 1: Enter your recovery phrase words
 
     1. Open the Status app. Your operating system may ask you to set your notification preferences for Status. In the **Allow notifications** screen, click **OK, got it**.
-    1. Check the box to accept the Status **Terms of Use and Privacy Policy** and click **Get Started**. You can find and read this information on the [Status website :octicons-tab-external-16:][status-website].
+    1. Check the box to accept the Status **Terms of Use and Privacy Policy** and click **Get Started**. You can find and read this information on the [Status website :octicons-tab-external-16:](https://status.im).
     1. On the welcome screen, click **I am new to Status**.
     1. Click **Import a recovery phrase** and, on the next screen, click **Import a recovery phrase** again.
     1. Enter the 12, 18 or 24 words in your recovery phrase, separated by a space.
@@ -84,7 +84,7 @@ Status doesn't know your password and can't reset it for you. If you forget your
 
 ## Customize your profile
 
-Here you only fill out basic information. You can customize your Status profile further at any time in the [Status settings][edit-your-status-profile].
+Here you only fill out basic information. You can customize your Status profile further at any time in the [Status settings](../edit-your-status-profile.md).
 
 === "Mobile"
 

@@ -9,10 +9,10 @@ In Status, you can label profiles as trusted or untrusted. This is useful when y
 
 Identity verification and profile labels help you keep in mind whether you should trust someone without alerting them to your decision.
 
-For example, if you're managing a corporate community and someone requests to join claiming to be an employee, you can try [verifying their identity][verify-your-contacts-identity]. If they fail to pass, you can mark them as untrusted but keep them in your contacts to understand who was trying to impersonate an employee and infiltrate your company's private community.
+For example, if you're managing a corporate community and someone requests to join claiming to be an employee, you can try [verifying their identity](./verify-your-contacts-identity.md). If they fail to pass, you can mark them as untrusted but keep them in your contacts to understand who was trying to impersonate an employee and infiltrate your company's private community.
 
 :::info
-To see a label on someone's profile, [mark this profile as trusted or untrusted][verify-your-contacts-identity].
+To see a label on someone's profile, [mark this profile as trusted or untrusted](./verify-your-contacts-identity.md).
 :::
 
 ## The basics
@@ -23,7 +23,7 @@ To see a label on someone's profile, [mark this profile as trusted or untrusted]
 
 ## Status profile labels
 
-If you're in doubt about your Status contact's identity, you can [send them an identity verification request][verify-your-contacts-identity]. In this request, you ask a question only this person can know the answer to.
+If you're in doubt about your Status contact's identity, you can [send them an identity verification request](./verify-your-contacts-identity.md). In this request, you ask a question only this person can know the answer to.
 
 Depending on their response, you then mark them as trusted or untrusted. Once you do, a label appears next to their profile name: :mobile-trusted: Trusted or :mobile-untrusted: Untrusted.
 

@@ -5,7 +5,7 @@ language: en
 title: Share your Status profile
 ---
 
-If someone wants to add you as a contact in Status, you need to share your profile with them. You can share your profile link or your QR code containing that link with your [chat key][your-chatkey-emojihash-and-identicon-ring]. They can use either of those to [add you to their contacts][add-a-contact-in-status].
+If someone wants to add you as a contact in Status, you need to share your profile with them. You can share your profile link or your QR code containing that link with your [chat key](./your-chatkey-emojihash-and-identicon-ring.md). They can use either of those to [add you to their contacts](./add-a-contact-in-status.md).
 
 ## Share your Status profile
 

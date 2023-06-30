@@ -7,12 +7,12 @@ title: Transfer your community's ownership
 
 :octicons-beaker-24: Beta
 
-If you can't manage your Status Community anymore, you can transfer the ownership to someone else. To transfer your community's ownership, you need a [backup of the community's private key][back-up-your-community-s-private-key].
+If you can't manage your Status Community anymore, you can transfer the ownership to someone else. To transfer your community's ownership, you need a [backup of the community's private key](./back-up-your-community-s-private-key.md).
 
 When you transfer the ownership, the new owner's computer becomes a community node with full control of the community, including its settings, permissions and membership approvals.
 
 :::tip
-If you need help managing your community, consider adding others as admins. For more information, check out [Delegate admin functions to community members][delegate-admin-functions-to-community-members].
+If you need help managing your community, consider adding others as admins. For more information, check out [Delegate admin functions to community members](./delegate-admin-functions-to-community-members.md).
 :::
 
 ## Current security issues you should consider
@@ -32,10 +32,10 @@ Read and consider the security implications before you transfer the ownership of
 
 Here's how to transfer your community:
 
-- [x] [Back up your community's private key][back-up-your-community-s-private-key].
+- [x] [Back up your community's private key](./back-up-your-community-s-private-key.md).
 - [x] Handle over the private key to the new community owner.
-- [x] Ask the new owner to [restore the community][restore-your-status-community] using the private key.
-- [x] [Leave the community][leave-a-status-community]. If you wish, join the community again as a member.
+- [x] Ask the new owner to [restore the community](./restore-your-status-community.md) using the private key.
+- [x] [Leave the community](./leave-a-status-community.md). If you wish, join the community again as a member.
 - [x] Delete or destroy any copy you own of the private key.
 
 \*[Beta]: This software feature is currently incomplete or in beta, and is subject to change at any time.

@@ -8,13 +8,13 @@ title: Remove a Status profile from your profile list
 If you don't want a profile to show up on your device, you can remove it.
 
 :::info
-A profile removed from your device is not deleted. Check out [Delete your Status profile][delete-your-status-profile].
+A profile removed from your device is not deleted. Check out [Delete your Status profile](./delete-your-status-profile.md).
 :::
 
 ## What to expect
 
 - When you remove a profile from one device, the associated data is deleted from that device. To delete the data from all devices, repeat the procedure on all devices where you use the profile.
-- If you don't log into your Status profile for 30 days or more (on any device), your crypto funds are safe, but your profile is [irrecoverably lost][delete-your-status-profile]. You can always create another Status profile [using your recovery phrase][create-or-restore-your-status-profile-using-a-recovery-phrase]
+- If you don't log into your Status profile for 30 days or more (on any device), your crypto funds are safe, but your profile is [irrecoverably lost](./delete-your-status-profile.md). You can always create another Status profile [using your recovery phrase](../getting-started/create-or-restore-your-status-profile-using-a-recovery-phrase.md)
 
 ## Remove a Status profile
 
@@ -36,5 +36,5 @@ A profile removed from your device is not deleted. Check out [Delete your Status
     1. Click **Remove Profile** to confirm.
 
 :::info
-Within 30 days, you can [restore this profile][create-or-restore-your-status-profile-using-a-recovery-phrase] if you want to use it again.
+Within 30 days, you can [restore this profile](../getting-started/create-or-restore-your-status-profile-using-a-recovery-phrase.md) if you want to use it again.
 :::

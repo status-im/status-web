@@ -9,15 +9,15 @@ Block explorers are tools you can use to browse blockchain data. With block expl
 
 Since all Ethereum blockchain data is public and pseudonymous, it doesn't matter whose transactions you're exploring. You can view the details of both your own and others' transactions.
 
-Block explorers are network-specific. This means that for [bridge transactions][crypto-bridging-your-quick-start-guide], you need to use two or more different block explorers, one for each chain. In your Status Wallet, you can find the Bridge field and transaction hashes for each chain. For more details, check out [Understand your transaction details][understand-your-transaction-details].
+Block explorers are network-specific. This means that for [bridge transactions](./crypto-bridging-your-quick-start-guide.md), you need to use two or more different block explorers, one for each chain. In your Status Wallet, you can find the Bridge field and transaction hashes for each chain. For more details, check out [Understand your transaction details](./understand-your-transaction-details.md).
 
 ## Use block explorers
 
 :::tip
-For details on where find your Status Wallet address, check out [Receive crypto][receive-crypto].
+For details on where find your Status Wallet address, check out [Receive crypto](./receive-crypto.md).
 :::
 
-To get started with block explorers, copy your Status Wallet address and look it up on a block explorer of your choice. For example, you can use [Etherscan][etherscan], [Blockchair][blockchair] or [beaconcha.in][beaconchain] for the Ethereum mainnet. If you're using [an L2 or a sidechain][understand-l2s-and-sidechains], you need to find a block explorer for this network.
+To get started with block explorers, copy your Status Wallet address and look it up on a block explorer of your choice. For example, you can use [Etherscan](https://etherscan.io/), [Blockchair](https://blockchair.com/ethereum/) or [beaconcha.in](https://beaconcha.in/) for the Ethereum mainnet. If you're using [an L2 or a sidechain](./understand-l2s-and-sidechains.md), you need to find a block explorer for this network.
 
 ## Explore transaction data
 
@@ -32,19 +32,19 @@ To view your transaction details in your Status Wallet, go to the Wallet home sc
 | Field              | Description                                                                                                                                                                     |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Transaction hash   | Your transaction's unique ID.                                                                                                                                                   |
-| Status             | Your transaction's status: for example, processing or completed. For more details on each status, check out [Understand transaction statuses][understand-transaction-statuses]. |
+| Status             | Your transaction's status: for example, processing or completed. For more details on each status, check out [Understand transaction statuses](./understand-transaction-statuses.md). |
 | From               | The address this transaction was sent from.                                                                                                                                     |
 | To                 | The address this transaction was sent to.                                                                                                                                       |
 | Block              | The block your transaction was added to. Blocks are structures within the blockchain. Each block has a unique ID and includes multiple transactions.                            |
 | Value              | The total ETH value that is transferred.                                                                                                                                        |
 | Tokens transferred | A list of tokens that are transferred in this transaction, if any.                                                                                                              |
 | Timestamp          | The date and time at which your transaction was completed.                                                                                                                      |
-| Transaction fee    | The [network fee][understand-network-fees] that was charged for your transaction.                                                                                               |
+| Transaction fee    | The [network fee](./understand-network-fees.md) that was charged for your transaction.                                                                                               |
 
 ### Advanced data
 
 | Field         | Description                                                                                                                                                                                                                                                                                                                                     |
 | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Nonce         | The transaction number for the `from` address. The first transaction for each address has a nonce of 0. You can use nonces to cancel or resend transactions that are still processing. For more details, check out [Cancel transactions][cancel-transactions] and [Handle pending or stuck transactions][handle-pending-or-stuck-transactions]. |
-| Gas price     | Cost per [unit of gas for this transaction][understand-network-fees], in gwei.                                                                                                                                                                                                                                                                  |
-| Confirmations | The [number of confirmations][understand-confirmations] this transaction currently has.                                                                                                                                                                                                                                                         |
+| Nonce         | The transaction number for the `from` address. The first transaction for each address has a nonce of 0. You can use nonces to cancel or resend transactions that are still processing. For more details, check out [Cancel transactions](./cancel-transactions.md) and [Handle pending or stuck transactions](./handle-pending-or-stuck-transactions.md). |
+| Gas price     | Cost per [unit of gas for this transaction](./understand-network-fees.md), in gwei.                                                                                                                                                                                                                                                                  |
+| Confirmations | The [number of confirmations](../understand-confirmations.md) this transaction currently has.                                                                                                                                                                                                                                                         |

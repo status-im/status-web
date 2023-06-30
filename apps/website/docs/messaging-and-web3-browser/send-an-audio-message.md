@@ -10,7 +10,7 @@ You can send an audio message in Status to communicate with your contacts. You c
 You can record an audio message up to one minute long and send as many audio messages as you want.
 
 :::info
-Deleting an audio message in Status works as deleting any other message. Check out [Edit and delete your messages][delete-your-messages] for more information.
+Deleting an audio message in Status works as deleting any other message. Check out [Edit and delete your messages](../delete-your-messages.md) for more information.
 :::
 
 ## Record and send an audio message

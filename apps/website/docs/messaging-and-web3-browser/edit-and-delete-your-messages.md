@@ -5,7 +5,7 @@ language: en
 title: Edit and delete your messages
 ---
 
-Instead of a centralized server, Status uses a [peer-to-peer network][about-status-messages] to store and distribute messages. When you edit or delete a message, the peer-to-peer network distributes your changes to other users running the Status app.
+Instead of a centralized server, Status uses a [peer-to-peer network](./about-status-messages.md) to store and distribute messages. When you edit or delete a message, the peer-to-peer network distributes your changes to other users running the Status app.
 
 In some cases, users may still see your original messages, even after you edit or delete them. For example, some users can:
 

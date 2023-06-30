@@ -9,7 +9,7 @@ title: Turn off the Community History Service
 Currently, you can only configure the Community History Service using Status desktop.
 :::
 
-You may want to turn off the [Community History Service][about-the-community-history-service] to [protect community members' IP addresses][how-chs-works] or when your computer runs out of storage space.
+You may want to turn off the [Community History Service](./about-the-community-history-service.md) to [protect community members' IP addresses](./about-the-community-history-service#how-chs-works.md) or when your computer runs out of storage space.
 
 ## What to expect
 

@@ -10,7 +10,7 @@ Using your Status profile, you can access and use the different Status app featu
 You can create multiple profiles for different purposes. For example, you may want to use different profiles for work, social activities and connecting with families.
 
 :::info
-If you want to remove a profile, read [Remove a Status profile][remove-a-status-profile].
+If you want to remove a profile, read [Remove a Status profile](../remove-a-status-profile.md).
 :::
 
 ## Create an additional profile
@@ -22,7 +22,7 @@ To create an additional profile, you follow a similar process to creating your f
     1. From the tab bar, tap :mobile-communities: **Communities**, then tap your profile picture.
     1. From the top navigation, tap :mobile-multi-profile: **Profiles**.
     1. Tap :desktop-plus: **Add**, and then tap :desktop-plus: **Create a new profile**.
-    1. Read [Create a new Status profile][new-profile] and follow the instructions.
+    1. Read [Create a new Status profile](../getting-started/run-the-status-app-for-the-first-time#new-profile.md) and follow the instructions.
 
 === "Desktop"
 
@@ -31,10 +31,10 @@ To create an additional profile, you follow a similar process to creating your f
     1. Open the Status app. Click **Cancel** if you're prompted to sign in.
     1. Click :desktop-chevron-down: **Arrow** and then click :desktop-plus: **Add new user**.
     1. Click **Generate new keys**.
-    1. Read [Create a new Status profile][new-profile] and follow the instructions described in step 2.
+    1. Read [Create a new Status profile](../getting-started/run-the-status-app-for-the-first-time#new-profile.md) and follow the instructions described in step 2.
 
 :::info
-If you want to create a profile using your Keycard, read [Create or restore your Status profile using Keycard][create-or-restore-your-status-profile-using-keycard].
+If you want to create a profile using your Keycard, read [Create or restore your Status profile using Keycard](./create-or-restore-your-status-profile-using-keycard.md).
 :::
 
 ## Add an existing profile
@@ -43,7 +43,7 @@ If you have another Status profile you can add it to your device. For example, y
 
 === "Mobile"
 
-    If the profile to add is logged in on another device, read [Sync your profile on a new device][sync-new-device] and follow the instructions. Otherwise, [log out of Status][log-out-of-status] and sign in [using your recovery phrase][create-or-restore-your-status-profile-using-a-recovery-phrase] or [Keycard][create-or-restore-your-status-profile-using-keycard].
+    If the profile to add is logged in on another device, read [Sync your profile on a new device](../sync-new-device.md) and follow the instructions. Otherwise, [log out of Status](./log-out-of-status.md) and sign in [using your recovery phrase](../getting-started/create-or-restore-your-status-profile-using-a-recovery-phrase.md) or [Keycard](./create-or-restore-your-status-profile-using-keycard.md).
 
 === "Desktop"
 
@@ -53,7 +53,7 @@ If you have another Status profile you can add it to your device. For example, y
     1. Click :desktop-chevron-down: **Arrow** and then click **Add existing Status user** to sign in.
 
 :::info
-If you want to add an existing Status profile using its recovery phrase, read [Create or restore your Status profile using a recovery phrase][create-or-restore-your-status-profile-using-a-recovery-phrase]. If you want to add an existing Status profile using your Keycard, read [Create or restore your Status profile using Keycard][create-or-restore-your-status-profile-using-keycard].
+If you want to add an existing Status profile using its recovery phrase, read [Create or restore your Status profile using a recovery phrase](../getting-started/create-or-restore-your-status-profile-using-a-recovery-phrase.md). If you want to add an existing Status profile using your Keycard, read [Create or restore your Status profile using Keycard](./create-or-restore-your-status-profile-using-keycard.md).
 :::
 
 ## Switch profiles

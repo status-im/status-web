@@ -6,18 +6,18 @@ title: About view-only channels
 ---
 
 :::info
-Currently, you can only set up and manage view-only channels using Status desktop. [:octicons-desktop-download-16: Download Status desktop][status-web-download].
+Currently, you can only set up and manage view-only channels using Status desktop. [:octicons-desktop-download-16: Download Status desktop](https://status.im/get).
 :::
 
-[Channels][channels-your-quick-start-guide] are spaces for conversation, discussion and information sharing. By default, all community members with access to a channel can read and send messages.
+[Channels](./channels-your-quick-start-guide.md) are spaces for conversation, discussion and information sharing. By default, all community members with access to a channel can read and send messages.
 
-As a community [owner or admin][permissions-by-role-in-status-communities], you can set a channel as view-only. To learn how to do that, check out [Set up a view-only channel][set-up-a-view-only-channel].
+As a community [owner or admin](./permissions-by-role-in-status-communities.md), you can set a channel as view-only. To learn how to do that, check out [Set up a view-only channel](./set-up-a-view-only-channel.md).
 
 A read-only channel helps maintain clear, uninterrupted communication for specific purposes. While members can't respond directly in these channels, they are crucial in keeping your community informed and engaged.
 
 ## View-only channel permission
 
-When you [set up a channel permission][set-up-channel-permissions], only members who meet the criteria for that permission can perform the associated action within that channel.
+When you [set up a channel permission](./set-up-channel-permissions.md), only members who meet the criteria for that permission can perform the associated action within that channel.
 
 This is how the `View` and `View and post` channel permissions work in your community.
 
@@ -30,7 +30,7 @@ This is how the `View` and `View and post` channel permissions work in your comm
 (:material-check-all: view and post, :material-check: view only, :octicons-x-24: no access)
 
 :::tip
-Members with view-only access to the channel can still [react][react-and-reply-to-messages] to messages in the channel with emojis.
+Members with view-only access to the channel can still [react](../messaging-and-web3-browser/react-and-reply-to-messages.md) to messages in the channel with emojis.
 :::
 
 ## Using a view-only channel
@@ -51,4 +51,4 @@ View-only channels can help keep your community organized and focused. Here are 
 
 - **Voting or pooling areas**
 
-  Because members with view-only access can still [react][react-and-reply-to-messages] to messages in view-only channels, owners can use them for voting on different topics or proposals.
+  Because members with view-only access can still [react](../messaging-and-web3-browser/react-and-reply-to-messages.md) to messages in view-only channels, owners can use them for voting on different topics or proposals.

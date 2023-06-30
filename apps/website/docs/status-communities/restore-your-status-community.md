@@ -6,13 +6,13 @@ title: Restore your Status Community
 ---
 
 :::info
-Currently, you can only restore your community using [Status desktop][download-status].
+Currently, you can only restore your community using [Status desktop](../getting-started/#download-status.md).
 :::
 
 If you lose access to the computer where you run your Status Community, you can restore the community onto another device using the community's private key. This process creates a new community node.
 
 :::info
-You can also use the community's private key to [transfer the community's ownership][transfer-your-community-s-ownership].
+You can also use the community's private key to [transfer the community's ownership](./transfer-your-community-s-ownership.md).
 :::
 
 The community's private key is a large string of characters stored in the Status app and protected by your Status password. Anyone with access to this key may become the community owner and control its settings, permissions and membership approvals.
@@ -24,13 +24,13 @@ We're aware of this issue and plan to implement a secure solution in a future re
 
 ## What to expect
 
-- The community's private key represents proof of ownership but doesn't store the community configuration and messages. Your community configuration and messages are stored in the Waku [peer-to-peer network][peer-to-peer-messaging].
-- When you [delete your Status Community][delete-your-status-community], all the community messages and settings are irretrievably lost, even if you have the community's private key.
-- If you want to manage your community from multiple computers, don't restore the community using the private key. Instead, [set up additional computers][manage-your-community-from-different-computers] to manage your community.
+- The community's private key represents proof of ownership but doesn't store the community configuration and messages. Your community configuration and messages are stored in the Waku [peer-to-peer network](../messaging-and-web3-browser/about-status-messages#peer-to-peer-messaging.md).
+- When you [delete your Status Community](./delete-your-status-community.md), all the community messages and settings are irretrievably lost, even if you have the community's private key.
+- If you want to manage your community from multiple computers, don't restore the community using the private key. Instead, [set up additional computers](../manage-your-community-from-different-computers.md) to manage your community.
 
 ## Restore your community
 
-To restore your Status Community, you need to back up your private community key first. For instructions, read [Back up your community's private key][back-up-your-community-s-private-key]. To [transfer your community's ownership][transfer-your-community-s-ownership], ask the new owner to complete these steps on their computer using their Status profile.
+To restore your Status Community, you need to back up your private community key first. For instructions, read [Back up your community's private key](./back-up-your-community-s-private-key.md). To [transfer your community's ownership](./transfer-your-community-s-ownership.md), ask the new owner to complete these steps on their computer using their Status profile.
 
 === "Desktop"
 

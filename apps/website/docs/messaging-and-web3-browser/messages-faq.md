@@ -5,15 +5,15 @@ language: en
 title: Messages FAQ
 ---
 
-Messaging others is an important part of your Status experience, along with [Status Communities][how-to-use-communities-your-quick-start-guide], the [Status Wallet][status-wallet-your-quick-start-guide] and the [Status Web3 browser][how-to-use-status-browser-your-quick-start-guide]. In Status, you can message others and chat in communities privately and securely.
+Messaging others is an important part of your Status experience, along with [Status Communities](../status-communities/how-to-use-communities-your-quick-start-guide.md), the [Status Wallet](../status-wallet/status-wallet-your-quick-start-guide.md) and the [Status Web3 browser](./how-to-use-status-browser-your-quick-start-guide.md). In Status, you can message others and chat in communities privately and securely.
 
-The Status app provides a privacy-centric messenger using decentralized [peer-to-peer (P2P) technology][about-status-messages] and strong end-to-end (E2EE) encryption.
+The Status app provides a privacy-centric messenger using decentralized [peer-to-peer (P2P) technology](./about-status-messages.md) and strong end-to-end (E2EE) encryption.
 
 ## General questions
 
 ### What makes Status messaging decentralized?
 
-Instead of centralized networks, which rely on servers controlled by corporations or governments, Status uses a distributed network of nodes. This network is based on Waku, a [peer-to-peer protocol][about-status-messages] for private, secure and censorship-resistant communication.
+Instead of centralized networks, which rely on servers controlled by corporations or governments, Status uses a distributed network of nodes. This network is based on Waku, a [peer-to-peer protocol](./about-status-messages.md) for private, secure and censorship-resistant communication.
 
 In a distributed network, users can securely and directly exchange data without intermediaries that could potentially compromise their privacy.
 
@@ -35,26 +35,26 @@ Nodes in the network still rely on having an internet connection. So if your int
 
 ### Are my messages in the blockchain?
 
-No, your messages are not in the blockchain and are not transported through the [Ethereum network][about-the-ethereum-blockchain]. Messages are temporarily stored in the peer-to-peer network.
+No, your messages are not in the blockchain and are not transported through the [Ethereum network](../getting-started/about-the-ethereum-blockchain.md). Messages are temporarily stored in the peer-to-peer network.
 
 ### Can I delete my messages?
 
-Yes, you can always [edit and delete your messages][edit-and-delete-your-messages].
+Yes, you can always [edit and delete your messages](./edit-and-delete-your-messages.md).
 
-In some cases, users may still see your original messages, even after you edit or delete them. Check out [Edit and delete your messages][edit-and-delete-your-messages] for more information.
+In some cases, users may still see your original messages, even after you edit or delete them. Check out [Edit and delete your messages](./edit-and-delete-your-messages.md) for more information.
 
 ### If I'm disconnected, can I still access my messages?
 
-The [peer-to-peer network][about-status-messages] store messages that couldn't be delivered for up to 30 days. Your device downloads and securely stores these messages permanently when you connect to the network. Messages stored on your device are always available offline.
+The [peer-to-peer network](./about-status-messages.md) store messages that couldn't be delivered for up to 30 days. Your device downloads and securely stores these messages permanently when you connect to the network. Messages stored on your device are always available offline.
 
 ## Privacy and security
 
 ### How does Status protect my privacy?
 
-Status implements end-to-end encryption (E2EE) using [cryptographic keys][understand-your-status-keys-and-recovery-phrase]. When you send a message, the message is encrypted using the recipient's public key. The only way to decrypt the message and read its content is by using the recipient's private key. Even if a malicious actor intercepts the message, they can't read its content as they don't have the private key.
+Status implements end-to-end encryption (E2EE) using [cryptographic keys](../your-profile-and-preferences/understand-your-status-keys-and-recovery-phrase.md). When you send a message, the message is encrypted using the recipient's public key. The only way to decrypt the message and read its content is by using the recipient's private key. Even if a malicious actor intercepts the message, they can't read its content as they don't have the private key.
 
 :::info
-The [Waku network][waku] implements additional privacy capabilities in addition to E2EE, such as sender anonymity or metadata protection.
+The [Waku network](https://waku.org/) implements additional privacy capabilities in addition to E2EE, such as sender anonymity or metadata protection.
 :::
 
 ### Other messaging apps use E2EE encryption; why use Status?
@@ -65,7 +65,7 @@ We've built Status so your information is secure and out of our reach. However, 
 
 ### Can Status read my messages?
 
-No. No one besides you and the intended recipient can read your messages. For more information on how Status messaging protects your privacy, check out [About your Status keys][about-status-keys].
+No. No one besides you and the intended recipient can read your messages. For more information on how Status messaging protects your privacy, check out [About your Status keys](../your-profile-and-preferences/understand-your-status-keys-and-recovery-phrase#about-status-keys.md).
 
 ### Who owns the peer-to-peer network nodes?
 

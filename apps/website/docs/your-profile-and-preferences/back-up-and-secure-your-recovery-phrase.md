@@ -5,10 +5,10 @@ language: en
 title: Back up and secure your recovery phrase
 ---
 
-Your Status recovery phrase (also known as a seed phrase or backup phrase) consists of 12 words that can be used to regenerate your [private key][understand-your-status-keys-and-recovery-phrase]. If you lose your private key or it is compromised, you lose access to your Status profile and funds forever. For this reason, you must always backup your recovery phrase and keep it safe.
+Your Status recovery phrase (also known as a seed phrase or backup phrase) consists of 12 words that can be used to regenerate your [private key](./understand-your-status-keys-and-recovery-phrase.md). If you lose your private key or it is compromised, you lose access to your Status profile and funds forever. For this reason, you must always backup your recovery phrase and keep it safe.
 
 :::warn
-Status can't recover your Status password or recovery phrase for you. It is your responsibility to keep this information safe. Check out [If you lose your Status password or recovery phrase][if-you-lose-your-status-password-or-recovery-phrase] for more information.
+Status can't recover your Status password or recovery phrase for you. It is your responsibility to keep this information safe. Check out [If you lose your Status password or recovery phrase](./if-you-lose-your-status-password-or-recovery-phrase.md) for more information.
 :::
 
 ## Back up your recovery phrase
@@ -50,7 +50,7 @@ For security reasons, your recovery phrase is permanently removed from your devi
 
 ## Secure your recovery phrase
 
-If you lose your recovery phrase or someone else gets access to it, you lose access to your Status profile and funds in the [Status Wallet][status-wallet-your-quick-start-guide].
+If you lose your recovery phrase or someone else gets access to it, you lose access to your Status profile and funds in the [Status Wallet](../status-wallet/status-wallet-your-quick-start-guide.md).
 
 Here are some tips on how to keep your recovery phrase secure:
 
@@ -73,7 +73,7 @@ Here are some tips on how to keep your recovery phrase secure:
 
 - **Use a hardware wallet**
 
-  Hardware wallets add an extra layer of security to your recovery phrase. The [Keycard][about-keycard] hardware wallet integrates with the Status app and is compatible with all major cryptocurrencies.
+  Hardware wallets add an extra layer of security to your recovery phrase. The [Keycard](../about-keycard.md) hardware wallet integrates with the Status app and is compatible with all major cryptocurrencies.
 
 - **Use multiple backups**
 

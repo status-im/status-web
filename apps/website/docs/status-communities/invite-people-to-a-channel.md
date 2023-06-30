@@ -48,5 +48,5 @@ There are three different options you can invite someone to a channel.
     | Share a link | 1. In the **Invite Contacts** pop-up window, click :desktop-copy: **Copy** next to the link. <br/> 2. Switch to the app where you want to share the link and paste it there.
 
 :::tip
-After opening the link or scanning the QR code, people can [install Status][run-the-status-app-for-the-first-time] if they haven't already.
+After opening the link or scanning the QR code, people can [install Status](../getting-started/run-the-status-app-for-the-first-time.md) if they haven't already.
 :::

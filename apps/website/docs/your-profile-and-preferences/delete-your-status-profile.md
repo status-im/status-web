@@ -5,7 +5,7 @@ language: en
 title: Delete your Status profile
 ---
 
-Status uses a [peer-to-peer network][peer-to-peer-messaging] that temporarily stores your profile information and data. Because of this decentralized network, there is no one-click way to delete your profile and all associated data.
+Status uses a [peer-to-peer network](../messaging-and-web3-browser/about-status-messages#peer-to-peer-messaging.md) that temporarily stores your profile information and data. Because of this decentralized network, there is no one-click way to delete your profile and all associated data.
 
 ## What to expect
 
@@ -18,8 +18,8 @@ Status uses a [peer-to-peer network][peer-to-peer-messaging] that temporarily st
 
 Here are things you can do if you want to stop using a profile:
 
-- [x] [Transfer assets][send-crypto] out of your Status wallet.
+- [x] [Transfer assets](../status-wallet/send-crypto.md) out of your Status wallet.
 - [x] Inform your contacts the profile is out of use.
-- [x] [Leave group chats][leave-a-group-chat] and [communities][leave-a-status-community] you joined.
-- [x] [Edit your profile][edit-your-profile] and remove your personal information.
-- [x] [Remove your profile][remove-a-status-profile-from-your-profile-list] from all your devices and leave it inactive for 30 days.
+- [x] [Leave group chats](../messaging-and-web3-browser/leave-a-group-chat.md) and [communities](../status-communities/leave-a-status-community.md) you joined.
+- [x] [Edit your profile](../edit-your-profile.md) and remove your personal information.
+- [x] [Remove your profile](./remove-a-status-profile-from-your-profile-list.md) from all your devices and leave it inactive for 30 days.

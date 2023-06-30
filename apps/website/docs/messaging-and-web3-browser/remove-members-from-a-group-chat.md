@@ -5,9 +5,9 @@ language: en
 title: Remove members from a group chat
 ---
 
-A [group chat][understand-group-chats] owner can remove members from a group chat. As a group chat owner, you're free to set your own rules and remove members who misbehave. Regular members can't remove other members.
+A [group chat](./understand-group-chats.md) owner can remove members from a group chat. As a group chat owner, you're free to set your own rules and remove members who misbehave. Regular members can't remove other members.
 
-If you remove someone by mistake or change your mind about them later, you can always [re-add them to the chat][add-members-to-a-group-chat].
+If you remove someone by mistake or change your mind about them later, you can always [re-add them to the chat](./add-members-to-a-group-chat.md).
 
 ## Remove members
 

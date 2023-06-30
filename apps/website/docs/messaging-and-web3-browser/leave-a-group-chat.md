@@ -5,14 +5,14 @@ language: en
 title: Leave a group chat
 ---
 
-If you don’t want to be a member of a [group chat][understand-group-chats] anymore, you can leave the chat. You can always [re-join the chat][join-a-group-chat] later if you change your mind.
+If you don’t want to be a member of a [group chat](./understand-group-chats.md) anymore, you can leave the chat. You can always [re-join the chat](./join-a-group-chat.md) later if you change your mind.
 
 Once you leave, a note appears in the group chat's message history letting other members know that you left the chat. You will still be able to access the group chat messages that were sent before you left.
 
-If someone is adding you to group chats you don't want to be in, consider [changing who can invite you to group chats][change-who-can-invite-you-to-group-chats] or [blocking that person][block-someone-in-status].
+If someone is adding you to group chats you don't want to be in, consider [changing who can invite you to group chats](./change-who-can-invite-you-to-group-chats.md) or [blocking that person](../block-someone-in-status.md).
 
 :::info
-The group chat owner can't leave without deleting the chat for everyone. For more information, check out [Delete a group chat][delete-a-group-chat].
+The group chat owner can't leave without deleting the chat for everyone. For more information, check out [Delete a group chat](./delete-a-group-chat.md).
 :::
 
 ## Leave a group chat

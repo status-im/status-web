@@ -7,7 +7,7 @@ title: React and reply to messages
 
 In Status, you can reply to specific messages and react with emojis.
 
-Replies are useful for when you want to make it clear who you are responding to, as well as receive a faster reply from them. Users whose messages you reply to receive notifications in their [Notification Centre][your-status-notifications-guide].
+Replies are useful for when you want to make it clear who you are responding to, as well as receive a faster reply from them. Users whose messages you reply to receive notifications in their [Notification Centre](../your-profile-and-preferences/your-status-notifications-guide.md).
 
 Reactions are helpful when you want to show others that you saw their message. Users whose messages you react to do not receive any notifications.
 

@@ -18,7 +18,7 @@ With the manual approval option, you receive a notification whenever someone req
 - Users don't receive a notification when a community owner or admin rejects their join request. Users only get a notification when the request to join is accepted.
 - The community screen is where the user can find out if their request was approved or denied.
 - If your control node is offline (for example, when you turn off your computer or close the Status desktop app), automatic join requests are rejected, and manual join requests time out in seven days. Keep the Status desktop app running as much as possible.
-- In addition to manual approval, you can set up [token requirements][understand-token-requirements-in-communities] to join communities. Manual approval and token requirements work independently.
+- In addition to manual approval, you can set up [token requirements](./understand-token-requirements-in-communities.md) to join communities. Manual approval and token requirements work independently.
 
 :::info
 Status Communities take into account token requirements before membership requests.

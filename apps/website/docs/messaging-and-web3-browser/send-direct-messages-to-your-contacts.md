@@ -5,7 +5,7 @@ language: en
 title: Send direct messages to your contacts
 ---
 
-A direct message (or DM, for short) is a communication between you and another person. In Status, you can send direct messages to people in your contact list. If the person is not your contact yet, [send a contact request][add-a-contact-in-status] first.
+A direct message (or DM, for short) is a communication between you and another person. In Status, you can send direct messages to people in your contact list. If the person is not your contact yet, [send a contact request](../your-profile-and-preferences/add-a-contact-in-status.md) first.
 
 ## Send direct messages
 
@@ -23,5 +23,5 @@ A direct message (or DM, for short) is a communication between you and another p
     1. Click **Confirm** and start sending messages.
 
 :::tip
-In direct messages, you can send text messages, [images][share-images-in-status], [GIFs, stickers][send-gifs-and-stickers] and [audio messages][send-an-audio-message]. You can [format][format-your-messages], [edit][edit-messages] and [delete][delete-messages] your messages.
+In direct messages, you can send text messages, [images](./share-images-in-status.md), [GIFs, stickers](./send-gifs-and-stickers.md) and [audio messages](./send-an-audio-message.md). You can [format](./format-your-messages.md), [edit](./edit-and-delete-your-messages#edit-messages.md) and [delete](./edit-and-delete-your-messages#delete-messages.md) your messages.
 :::

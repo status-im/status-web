@@ -9,7 +9,7 @@ title: Use a throwaway profile in Status Web
 Throwaway profiles are only available in Status Web.
 :::
 
-Use a [throwaway profile][understand-throwaway-profiles-in-status-web] when you want to participate in a Status Web Community without revealing your identity. A throwaway profile is not linked to any identifiable information or other Status profile you may have.
+Use a [throwaway profile](./understand-throwaway-profiles-in-status-web.md) when you want to participate in a Status Web Community without revealing your identity. A throwaway profile is not linked to any identifiable information or other Status profile you may have.
 
 ## Use a throwaway profile
 

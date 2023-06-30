@@ -7,12 +7,12 @@ title: Create a Status Community
 
 :::info
 Currently, you can only create and administer communities using the Status desktop app.
-[Download Status desktop :octicons-desktop-download-16:][status-web-download]
+[Download Status desktop :octicons-desktop-download-16:](https://status.im/get)
 :::
 
-A [Status Community][about-status-communities] is a place where you can connect and communicate with people who share your interests. Communities are ideal for those with a passion or hobby, study groups, gaming communities, professional network groups, or creators looking to generate income from their content without intermediaries.
+A [Status Community](./about-status-communities.md) is a place where you can connect and communicate with people who share your interests. Communities are ideal for those with a passion or hobby, study groups, gaming communities, professional network groups, or creators looking to generate income from their content without intermediaries.
 
-As a community owner, you can create open communities or [restrict community access using tokens][set-up-a-private-community], control [membership approval][set-up-your-community-s-approval-options] and organize discussion groups in [channels][create-a-channel]. Owners have complete control over their community and are responsible for maintaining its rules.
+As a community owner, you can create open communities or [restrict community access using tokens](./set-up-a-private-community.md), control [membership approval](../set-up-your-community-s-approval-options.md) and organize discussion groups in [channels](./create-a-channel.md). Owners have complete control over their community and are responsible for maintaining its rules.
 
 ## Create a community
 
@@ -33,11 +33,11 @@ You can configure these community settings:
 | Setting                          | Description                                                                                                                                                           |
 | :------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Community history service**    | Status Communities store up to 30 days of chat history by default. When this option is checked, community members can see messages older than 30 days.                |
-| **Request to join required**     | Community owners must manually approve each join request if this setting is checked. This option applies to [open and private][about-status-communities] communities. |
-| **Any member can pin a message** | Any community member can [pin messages][pin-a-message] when this setting is checked. If the setting is unchecked, only the community owner can pin messages.          |
+| **Request to join required**     | Community owners must manually approve each join request if this setting is checked. This option applies to [open and private](./about-status-communities.md) communities. |
+| **Any member can pin a message** | Any community member can [pin messages](../messaging-and-web3-browser/pin-a-message.md) when this setting is checked. If the setting is unchecked, only the community owner can pin messages.          |
 
 :::info
-The Community history service uses the [BitTorrent peer-to-peer network :octicons-tab-external-16:][bittorrent-peer-to-peer-network] to store and retrieve community messages older than 30 days. Status uses a decentralized network and does not store this information.
+The Community history service uses the [BitTorrent peer-to-peer network :octicons-tab-external-16:](https://en.wikipedia.org/wiki/BitTorrent) to store and retrieve community messages older than 30 days. Status uses a decentralized network and does not store this information.
 :::
 
 ## Describe your community and its rules

@@ -9,7 +9,7 @@ As a community owner in Status, you can use tokens to create different access le
 
 For example, you can use tokens to organize a conference with community access limited to token holders and exclusive channels just for speakers. If you are an artist or content creator, you can set up a community for your fans and give certain fans access to exclusive channels where you release new content.
 
-The options are many, allowing you to create an environment tailored to your community's needs. For more examples of using tokens to provide exclusive access to your community, check out [Token-based access to communities and channels][token-based-access-to-communities-and-channels].
+The options are many, allowing you to create an environment tailored to your community's needs. For more examples of using tokens to provide exclusive access to your community, check out [Token-based access to communities and channels](./token-based-access-to-communities-and-channels.md).
 
 ## Practical example: use a Status Community to organize an event
 
@@ -28,10 +28,10 @@ You start minting the community tokens you need to organize the event. In this p
 Currently, you can only mint collectibles.
 :::
 
-- [x] [Mint a new collectible][mint-tokens-for-your-community] to grant general access to the event attendees.
-- [x] Customize the general-access [collectible options][set-up-collectible-options]. For example, you may want to turn on `Unlimited supply` and turn off the `Not transferable (Soulbound)` option.
-- [x] [Mint a collectible][mint-tokens-for-your-community] to grant exclusive access to the event speakers.
-- [x] Configure the VIP-access [collectible options][set-up-collectible-options]. In this case, you may want to turn off `Ulimited supply` and turn on the `Not transferable (Soulbound)` and `Remote self-destruct` options.
+- [x] [Mint a new collectible](./mint-tokens-for-your-community.md) to grant general access to the event attendees.
+- [x] Customize the general-access [collectible options](./mint-tokens-for-your-community#set-up-collectible-options.md). For example, you may want to turn on `Unlimited supply` and turn off the `Not transferable (Soulbound)` option.
+- [x] [Mint a collectible](./mint-tokens-for-your-community.md) to grant exclusive access to the event speakers.
+- [x] Configure the VIP-access [collectible options](./mint-tokens-for-your-community#set-up-collectible-options.md). In this case, you may want to turn off `Ulimited supply` and turn on the `Not transferable (Soulbound)` and `Remote self-destruct` options.
 
 :::info
 You can't change the collectible description or options after minting.
@@ -39,7 +39,7 @@ You can't change the collectible description or options after minting.
 
 ### Step 2: create the token-based permissions
 
-To create the permissions, check out [Set up your community permissions][set-up-your-community-permissions]. In this example, you create two different permissions using the tokens from the [previous step](#step-1-mint-the-community-tokens):
+To create the permissions, check out [Set up your community permissions](./set-up-your-community-permissions.md). In this example, you create two different permissions using the tokens from the [previous step](#step-1-mint-the-community-tokens):
 
 - Community-level permission to grant general access to the conference attendees.
 - Channel-level permission to grant exclusive channel access to the event speakers.
@@ -61,7 +61,7 @@ You can also set up exclusive access to communities or channels for holders of a
 
 ### Step 3: distribute tokens to attendees and speakers
 
-After you [create the permissions](#step-2-create-the-token-based-permissions), you can distribute the tokens via [airdrops][how-to-airdrop-tokens-in-status] to all the conference's participants:
+After you [create the permissions](#step-2-create-the-token-based-permissions), you can distribute the tokens via [airdrops](./how-to-airdrop-tokens-in-status.md) to all the conference's participants:
 
 - [x] Airdrop the general-access token to the conference attendees and speakers.
 - [x] Airdrop the VIP-access token to the conference speakers only.
