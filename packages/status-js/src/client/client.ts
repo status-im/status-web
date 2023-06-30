@@ -78,7 +78,7 @@ class Client {
 
       for (const connection of this.waku.libp2p.connectionManager.getConnections()) {
         try {
-          await this.waku.libp2p.ping(connection.remoteAddr)
+          await this.waku.libp2p.ping(connection.remoteAddr as any)
 
           if (!this.connected) {
             this.connected = true
