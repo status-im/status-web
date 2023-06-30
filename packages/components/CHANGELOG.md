@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.2.3
+
+### Patch Changes
+
+- ef5bf58: [components] export tabs
+
 ## 0.2.2
 
 ### Patch Changes
