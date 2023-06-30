@@ -30,13 +30,32 @@ let config = {
   images: {
     // disableStaticImages: true,
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@achingbrain/nat-port-mapper': false,
+      }
+    }
+
+    return config
+  },
   transpilePackages: [
     // 'react-native',
     'react-native-web',
     // 'expo-modules-core',
     'expo-blur',
-    // '@status-im/components',
-    // '@status-im/js',
+    '@status-im/icons',
+    '@status-im/components',
+    '@status-im/js',
+    '@visx/axis',
+    '@visx/grid',
+    '@visx/scale',
+    // '@visx'
+    // 'd3-scale',
+    // '@achingbrain/nat-port-mapper',
+    // 'js-waku',
+    // 'libp2p',
   ],
   experimental: {
     legacyBrowsers: false,

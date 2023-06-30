@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "scripts": {
-    "postinstall": "patch-package",
+    "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
@@ -22,11 +22,11 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
-    "web": "yarn workspace web dev",
-    "mobile": "yarn workspace mobile dev",
-    "desktop": "yarn workspace desktop dev",
-    "website": "yarn workspace website dev",
-    "storybook": "yarn workspace @status-im/components storybook"
+    "web": "pnpm --filter=web dev",
+    "mobile": "pnpm --filter=mobile dev",
+    "desktop": "pnpm --filter=desktop dev",
+    "website": "pnpm --filter=website dev",
+    "storybook": "pnpm --filter=components storybook"
   },
   "resolutions": {
     "@types/react": "18.0.33",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "@tsconfig/strictest": "^2.0.0",
     "@types/prettier": "^2.7.2",
     "husky": "^8.0.3",
@@ -49,10 +49,18 @@
     "vite-node": "^0.29.8",
     "vitest": "^0.29.8"
   },
-  "packageManager": "yarn@1.22.17",
   "lint-staged": {
     "*.{md,mdx,yml,yaml,json}": [
       "prettier --write"
     ]
+  },
+  "packageManager": "pnpm@8.6.5",
+  "pnpm": {
+    "patchedDependencies": {
+      "@achingbrain/ssdp@4.0.1": "patches/@achingbrain__ssdp@4.0.1.patch",
+      "@visx/axis@3.1.0": "patches/@visx__axis@3.1.0.patch",
+      "@visx/grid@3.0.1": "patches/@visx__grid@3.0.1.patch",
+      "@visx/scale@3.0.0": "patches/@visx__scale@3.0.0.patch"
+    }
   }
 }

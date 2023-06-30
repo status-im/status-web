@@ -32,10 +32,11 @@
     "url": "https://github.com/status-im/status-web/issues"
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "test": "vitest",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "yarn build:types",
+    "postbuild": "pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "typecheck": "tsc",
@@ -50,12 +51,12 @@
     "@scure/base": "^1.1.1",
     "ethereum-cryptography": "^1.0.3",
     "ethers": "^6.2.1",
-    "js-waku": "^0.30.0",
+    "js-waku": "0.30.0",
     "multiformats": "^11.0.1"
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "^1.0.0",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "happy-dom": "^9.1.7"
   },
   "files": [

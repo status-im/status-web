@@ -41,7 +41,6 @@ const CustomRow = (props: RowProps): JSX.Element => {
             className={cellClassNames()}
             style={styles.cell}
             key={getUnixTime(date)}
-            role="presentation"
           >
             <Day displayMonth={props.displayMonth} date={date} />
           </td>

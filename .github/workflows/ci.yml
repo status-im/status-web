@@ -28,23 +28,27 @@ jobs:
         with:
           fetch-depth: 2
 
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.6.5
+
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: yarn build
+        run: pnpm build
 
       - name: Typecheck
-        run: yarn typecheck
+        run: pnpm typecheck
 
       - name: Lint
-        run: yarn lint && yarn format --check
+        run: pnpm lint && pnpm format --check
 
       - name: Test
-        run: yarn test
+        run: pnpm test

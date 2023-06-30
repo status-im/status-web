@@ -4,9 +4,10 @@
   "main": "index.js",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "expo start -c",
-    "ios": "TAMAGUI_TARGET=native yarn expo run:ios",
-    "android": "TAMAGUI_TARGET=native yarn expo run:android",
+    "ios": "TAMAGUI_TARGET=native pnpm expo run:ios",
+    "android": "TAMAGUI_TARGET=native pnpm expo run:android",
     "start": "expo start --dev-client",
     "lint": "eslint screens",
     "#typecheck": "tsc",
@@ -16,7 +17,7 @@
     "@babel/runtime": "^7.18.9",
     "@react-navigation/native": "^6.1.2",
     "@react-navigation/native-stack": "^6.9.8",
-    "@status-im/components": "*",
+    "@status-im/components": "workspace:*",
     "expo": "~47.0.12",
     "expo-constants": "^14.0.2",
     "expo-dev-client": "^2.0.1",
@@ -38,7 +39,7 @@
     "@types/react-native": "~0.70.6",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "typescript": "^5.0.3"
   }
 }

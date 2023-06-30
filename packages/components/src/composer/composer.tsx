@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import { useImageUpload } from '@status-im/components/hooks'
 import {
   ArrowTopIcon,
   AudioIcon,
@@ -12,6 +11,7 @@ import {
 import { BlurView } from 'expo-blur'
 import { AnimatePresence, Stack, XStack } from 'tamagui'
 
+import { useImageUpload } from '../../hooks'
 import { Button } from '../button'
 import { IconButton } from '../icon-button'
 import { Image } from '../image'
