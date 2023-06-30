@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/{colors,components,icons,status-js} ./",
-  "installCommand": "pnpm install --cwd ../../ --frozen-lockfile",
+  "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
   "buildCommand": "turbo run build --cwd ../../ --filter=website..."
 }
