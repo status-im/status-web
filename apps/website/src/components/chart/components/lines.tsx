@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web'
-import { curveBasisOpen } from '@visx/curve'
+import { curveBasis } from '@visx/curve'
 import { LinePath } from '@visx/shape'
 
 import { colors } from './chart-component'
@@ -47,7 +47,7 @@ const Lines = (props: Props) => {
         }}
         stroke={colors.total}
         strokeWidth={2}
-        curve={curveBasisOpen}
+        curve={curveBasis}
         style={drawingLineStyle}
       />
 
@@ -64,7 +64,7 @@ const Lines = (props: Props) => {
         }}
         stroke={colors.closed}
         strokeWidth={2}
-        curve={curveBasisOpen}
+        curve={curveBasis}
         style={drawingLineStyle}
       />
     </>

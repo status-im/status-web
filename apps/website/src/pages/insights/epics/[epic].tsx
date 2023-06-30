@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { format } from 'date-fns'
+import { differenceInCalendarDays, format } from 'date-fns'
 import { useRouter } from 'next/router'
 
 import { Breadcrumbs, EpicOverview, TableIssues } from '@/components'
@@ -9,7 +9,6 @@ import { useDebounce } from '@/hooks/use-debounce'
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer'
 import { InsightsLayout } from '@/layouts/insights-layout'
 import {
-  GET_BURNUP,
   GET_EPIC_ISSUES_COUNT,
   GET_EPIC_LINKS,
   GET_FILTERS_WITH_EPIC,
@@ -26,7 +25,6 @@ import { Order_By } from '@/lib/graphql/generated/schemas'
 import type { BreadcrumbsProps } from '@/components/breadcrumbs'
 import type {
   GetBurnupQuery,
-  GetBurnupQueryVariables,
   GetEpicIssuesCountQuery,
   GetEpicIssuesCountQueryVariables,
   GetEpicMenuLinksQuery,
@@ -49,7 +47,6 @@ type Props = {
   links: string[]
   epic: Epic
   breadcrumbs: BreadcrumbsProps['items']
-  burnup: GetBurnupQuery
   count: GetEpicIssuesCountQuery
   filters: GetFiltersWithEpicQuery
   initialDates: {
@@ -77,8 +74,9 @@ const EpicsDetailPage: Page<Props> = props => {
   const debouncedSearchFilter = useDebounce<string>(searchFilter)
 
   const [selectedDates, setSelectedDates] = useState<DateRange>()
+  const [burnupData, setBurnupData] = useState<GetBurnupQuery['gh_burnup']>()
 
-  const { data: dataBurnup, isFetching: isLoadingBurnup } = useGetBurnupQuery(
+  const { isFetching: isLoadingBurnup } = useGetBurnupQuery(
     {
       epicNames: epicName,
       from: selectedDates?.from || initialDates.from,
@@ -87,7 +85,60 @@ const EpicsDetailPage: Page<Props> = props => {
     {
       // Prevent animation if we go out of the page
       refetchOnWindowFocus: false,
-      initialData: props.burnup,
+      onSuccess: data => {
+        const differenceBetweenSelectedDates = differenceInCalendarDays(
+          selectedDates?.to || new Date(),
+          selectedDates?.from || new Date()
+        )
+
+        const rate = 50 // 1 sample per 50 days
+
+        let samplingRate = rate // Use the default rate as the initial value
+
+        if (differenceBetweenSelectedDates > 0) {
+          // Calculate the total number of data points within the selected date range
+          const totalDataPoints = data?.gh_burnup.length || 0
+
+          // Calculate the desired number of data points based on the sampling rate
+          const desiredDataPoints = Math.ceil(totalDataPoints / rate)
+
+          // Calculate the actual sampling rate based on the desired number of data points
+          samplingRate = Math.max(
+            1,
+            Math.floor(totalDataPoints / desiredDataPoints)
+          )
+        }
+
+        // Downsampling the burnup data
+        const downsampledData: GetBurnupQuery['gh_burnup'] = []
+
+        if (data?.gh_burnup.length > 0) {
+          data?.gh_burnup.forEach((dataPoint, index) => {
+            if (index % samplingRate === 0) {
+              downsampledData.push(dataPoint)
+            }
+          })
+        }
+
+        if (
+          selectedDates?.from &&
+          selectedDates?.to &&
+          data?.gh_burnup.length === 0
+        ) {
+          downsampledData.push({
+            date_field: selectedDates.from,
+            total_closed_issues: 0,
+            total_opened_issues: 0,
+          })
+          downsampledData.push({
+            date_field: selectedDates.to,
+            total_closed_issues: 0,
+            total_opened_issues: 0,
+          })
+        }
+
+        setBurnupData(downsampledData)
+      },
     }
   )
 
@@ -112,8 +163,6 @@ const EpicsDetailPage: Page<Props> = props => {
     closed: dataCounter?.gh_epic_issues.filter(issue => issue.closed_at).length,
     open: dataCounter?.gh_epic_issues.filter(issue => !issue.closed_at).length,
   }
-
-  const burnup = dataBurnup?.gh_burnup || []
 
   const { data, isFetching, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery(
@@ -199,7 +248,7 @@ const EpicsDetailPage: Page<Props> = props => {
           description={epic.description}
           color={epic.color}
           fullscreen
-          burnup={burnup}
+          burnup={burnupData}
           isLoading={isLoadingBurnup}
           selectedDates={selectedDates}
           setSelectedDates={setSelectedDates}
@@ -254,12 +303,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     to: format(new Date(), 'yyyy-MM-dd'),
   }
 
-  const [resultBurnup, resultIssuesCount, resultFilters] = await Promise.all([
-    api<GetBurnupQuery, GetBurnupQueryVariables>(GET_BURNUP, {
-      epicNames: String(epic),
-      from: initialDates.from,
-      to: initialDates.to,
-    }),
+  const [resultIssuesCount, resultFilters] = await Promise.all([
     api<GetEpicIssuesCountQuery, GetEpicIssuesCountQueryVariables>(
       GET_EPIC_ISSUES_COUNT,
       {
@@ -282,7 +326,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         links?.gh_epics
           .filter(epic => epic.status === 'In Progress')
           .map(epic => epic.epic_name) || [],
-      burnup: resultBurnup?.gh_burnup || [],
       count: resultIssuesCount?.gh_epic_issues,
       filters: resultFilters || [],
       initialDates,

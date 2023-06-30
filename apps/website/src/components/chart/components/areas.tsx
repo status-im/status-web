@@ -1,5 +1,5 @@
 import { animated } from '@react-spring/web'
-import { curveMonotoneX } from '@visx/curve'
+import { curveBasis } from '@visx/curve'
 import { LinearGradient } from '@visx/gradient'
 import { AreaClosed } from '@visx/shape'
 
@@ -71,7 +71,7 @@ const Areas = (props: Props) => {
         }}
         yScale={yScale}
         fill="url(#gradient)"
-        curve={curveMonotoneX}
+        curve={curveBasis}
         style={{ ...clipPathAnimation, zIndex: 10 }}
       />
 
@@ -88,7 +88,7 @@ const Areas = (props: Props) => {
         }}
         yScale={yScale}
         fill="url(#gradient-open)"
-        curve={curveMonotoneX}
+        curve={curveBasis}
         style={{ ...clipPathAnimation, zIndex: 10 }}
       />
     </>

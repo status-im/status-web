@@ -32,7 +32,6 @@ export const EpicOverview = (props: Props) => {
     showPicker = true,
   } = props
 
-  console.log('isLoading', isLoading)
   const filteredData = burnup?.reduce(
     (
       accumulator: {
