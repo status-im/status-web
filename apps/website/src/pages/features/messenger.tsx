@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import screenshot from '@assets/create-community/screenshot-01.png'
 // import featureImage1 from '@assets/messenger/feature-01.png'
 // import featureImage2 from '@assets/messenger/feature-02.png'
@@ -23,7 +21,6 @@ import Image from 'next/image'
 
 import { Section } from '@/components/cards'
 import { Hero } from '@/components/hero'
-import { ScreenshotImage } from '@/components/screenshot-image'
 import { SectionDesktopScreenshot } from '@/components/section-desktop-screenshot'
 import { SectionLarge } from '@/components/section-large'
 import { VideoSection } from '@/components/video-section'
