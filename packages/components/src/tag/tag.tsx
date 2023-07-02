@@ -61,9 +61,6 @@ const Tag = (props: Props) => {
         role: 'button',
         onPress,
       })}
-      onHoverIn={e => {
-        console.log('onHoverIn', e)
-      }}
     >
       {renderIcon()}
       {label && (
