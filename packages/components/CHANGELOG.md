@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 0.2.4
+
+### Patch Changes
+
+- 15b146f: use tamagui functional variants for Tag color
+- 67a6846: [components] add dark theme variant
+
 ## 0.2.3
 
 ### Patch Changes
