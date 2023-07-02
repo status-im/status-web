@@ -1,16 +1,14 @@
 import { createElement } from 'react'
 
-import { Stack, styled } from '@tamagui/core'
+import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
 import { getColorWithOpacity } from '../../utils/get-color-with-opacity'
-import { usePressableColors } from '../hooks/use-pressable-colors'
 import { Text } from '../text'
-import { getCustomStyles } from './get-custom-styles'
 
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
-import type { ColorTokens, Tokens } from '@tamagui/core'
+import type { ColorTokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
 import type { PressableProps } from 'react-native'
 
@@ -52,26 +50,13 @@ const Tag = (props: Props) => {
     })
   }
 
-  // const pressable = usePressableColors(
-  //   {
-  //     default: color,
-  //     hover: getColorWithOpacity(color, 0.3),
-  //     pressed: getColorWithOpacity(color, 0.3),
-  //   },
-  //   props
-  // )
-
-  // const styles = getCustomStyles(props)
-  // console.log({ customStyles })
-  console.log('COLOR', color)
   return (
     <Base
       size={size}
       selected={selected}
       disabled={disabled}
       iconOnly={Boolean(icon && !label)}
-      // {...getCustomStyles(props)}
-      variant={color as any}
+      variant={color}
       {...(onPress && {
         role: 'button',
         onPress,
@@ -119,8 +104,8 @@ const Base = styled(View, {
 
   variants: {
     variant: (token: ColorTokens | string, { tokens }) => {
-      const color = tokens.colors[token as string]
-        ? tokens.colors[token].val
+      const color = tokens.colors[token as keyof typeof tokens.colors]
+        ? tokens.colors[token as keyof typeof tokens.colors].val
         : token
 
       return {
