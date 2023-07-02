@@ -1,14 +1,16 @@
 import { createElement } from 'react'
 
-import { styled } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 import { View } from 'react-native'
 
+import { getColorWithOpacity } from '../../utils/get-color-with-opacity'
+import { usePressableColors } from '../hooks/use-pressable-colors'
 import { Text } from '../text'
 import { getCustomStyles } from './get-custom-styles'
 
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
-import type { ColorTokens } from '@tamagui/core'
+import type { ColorTokens, Tokens } from '@tamagui/core'
 import type { ComponentType } from 'react'
 import type { PressableProps } from 'react-native'
 
@@ -50,17 +52,33 @@ const Tag = (props: Props) => {
     })
   }
 
+  // const pressable = usePressableColors(
+  //   {
+  //     default: color,
+  //     hover: getColorWithOpacity(color, 0.3),
+  //     pressed: getColorWithOpacity(color, 0.3),
+  //   },
+  //   props
+  // )
+
+  // const styles = getCustomStyles(props)
+  // console.log({ customStyles })
+  console.log('COLOR', color)
   return (
     <Base
       size={size}
       selected={selected}
       disabled={disabled}
       iconOnly={Boolean(icon && !label)}
-      {...getCustomStyles(props)}
+      // {...getCustomStyles(props)}
+      variant={color as any}
       {...(onPress && {
         role: 'button',
         onPress,
       })}
+      onHoverIn={e => {
+        console.log('onHoverIn', e)
+      }}
     >
       {renderIcon()}
       {label && (
@@ -100,6 +118,24 @@ const Base = styled(View, {
   },
 
   variants: {
+    variant: (token: ColorTokens | string, { tokens }) => {
+      const color = tokens.colors[token as string]
+        ? tokens.colors[token].val
+        : token
+
+      return {
+        borderColor: getColorWithOpacity(color, 0.2),
+        pressStyle: {
+          borderColor: getColorWithOpacity(color, 0.3),
+          backgroundColor: getColorWithOpacity(color, 0.1),
+        },
+        hoverStyle: {
+          borderColor: getColorWithOpacity(color, 0.3),
+          backgroundColor: getColorWithOpacity(color, 0.1),
+        },
+      }
+    },
+
     size: {
       32: {
         height: 32,

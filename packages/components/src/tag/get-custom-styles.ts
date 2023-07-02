@@ -17,7 +17,10 @@ function isColorTokens(
  * @returns the styles for the custom tag or null if no color is provided
  **/
 const getCustomStyles = (props: TagProps): StackStyleProps | null => {
-  const { color: colorFromProps, icon } = props
+  // const { color: colorFromProps, icon } = props
+  const { color, icon } = props
+
+  console.log('colorFromProps', colorFromProps)
 
   if (!colorFromProps) {
     return null
@@ -33,20 +36,20 @@ const getCustomStyles = (props: TagProps): StackStyleProps | null => {
     color = tokens.color[colorToken]?.val || colorFromProps
   }
 
-  if (icon) {
-    return {
-      borderColor: getColorWithOpacity(color!, 0.2),
-      backgroundColor: getColorWithOpacity(color!, 0.1),
-      pressStyle: {
-        backgroundColor: getColorWithOpacity(color, 0.2),
-        borderColor: getColorWithOpacity(color, 0.3),
-      },
-      hoverStyle: {
-        backgroundColor: getColorWithOpacity(color, 0.2),
-        borderColor: getColorWithOpacity(color, 0.3),
-      },
-    }
-  }
+  // if (icon) {
+  //   return {
+  //     borderColor: getColorWithOpacity(color!, 0.2),
+  //     backgroundColor: getColorWithOpacity(color!, 0.1),
+  //     pressStyle: {
+  //       backgroundColor: getColorWithOpacity(color, 0.2),
+  //       borderColor: getColorWithOpacity(color, 0.3),
+  //     },
+  //     hoverStyle: {
+  //       backgroundColor: getColorWithOpacity(color, 0.2),
+  //       borderColor: getColorWithOpacity(color, 0.3),
+  //     },
+  //   }
+  // }
 
   return {
     borderColor: getColorWithOpacity(color, 0.2),
