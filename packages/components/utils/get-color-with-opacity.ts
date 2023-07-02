@@ -10,7 +10,7 @@ function getColorWithOpacity(color: string, opacity: number): string {
   const clampedOpacity = Math.max(0, Math.min(1, opacity)) * 100
 
   // Construct the color string with opacity using CSS color-mix function
-  const newColor = `color-mix(in srgb, ${color} ${clampedOpacity}%, transparent);`
+  const newColor = `color-mix(in srgb, ${color} ${clampedOpacity}%, transparent)`
 
   return newColor
 }

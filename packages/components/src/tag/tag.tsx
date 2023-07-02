@@ -3,8 +3,8 @@ import { createElement } from 'react'
 import { styled } from '@tamagui/core'
 import { View } from 'react-native'
 
+import { getColorWithOpacity } from '../../utils/get-color-with-opacity'
 import { Text } from '../text'
-import { getCustomStyles } from './get-custom-styles'
 
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
@@ -56,7 +56,7 @@ const Tag = (props: Props) => {
       selected={selected}
       disabled={disabled}
       iconOnly={Boolean(icon && !label)}
-      {...getCustomStyles(props)}
+      variant={color}
       {...(onPress && {
         role: 'button',
         onPress,
@@ -100,6 +100,24 @@ const Base = styled(View, {
   },
 
   variants: {
+    variant: (token: ColorTokens | string, { tokens }) => {
+      const color = tokens.colors[token as keyof typeof tokens.colors]
+        ? tokens.colors[token as keyof typeof tokens.colors].val
+        : token
+
+      return {
+        borderColor: getColorWithOpacity(color, 0.2),
+        pressStyle: {
+          borderColor: getColorWithOpacity(color, 0.3),
+          backgroundColor: getColorWithOpacity(color, 0.1),
+        },
+        hoverStyle: {
+          borderColor: getColorWithOpacity(color, 0.3),
+          backgroundColor: getColorWithOpacity(color, 0.1),
+        },
+      }
+    },
+
     size: {
       32: {
         height: 32,

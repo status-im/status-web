@@ -44,6 +44,7 @@ module.exports = {
     '#09101C': '{props.color}',
     '#000': '{props.color}',
     '#0D1625': '{props.color}',
+    '#647084': '{props.color}',
   },
   filenameCase: 'kebab',
   template,

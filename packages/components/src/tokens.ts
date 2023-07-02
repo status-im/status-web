@@ -1,8 +1,10 @@
+import { customisation } from '@status-im/colors'
 import { createTokens } from '@tamagui/core'
 import { size, space, zIndex } from '@tamagui/theme-base'
 
 export const tokens = createTokens({
   color: {
+    ...customisation,
     'neutral-5': 'hsla(220, 18%, 97%, 1)',
     'neutral-10': 'hsla(216, 20%, 95%, 1)',
     'neutral-20': 'hsla(214, 17%, 92%, 1)',
