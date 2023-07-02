@@ -43,6 +43,9 @@ const textColors: MapVariant<typeof Base, 'variant'> = {
   magenta: '$white-100',
   yin: '$white-100',
   yang: '$neutral-100',
+
+  // dark theme
+  dark_darkGrey: '$white-100',
 }
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
@@ -213,6 +216,13 @@ const Base = styled(View, {
         backgroundColor: '$yang-50',
         hoverStyle: { backgroundColor: '$yang-60' },
         pressStyle: { backgroundColor: '$yang-50' },
+      },
+
+      // FIXME: DARK THEME
+      dark_darkGrey: {
+        backgroundColor: '$neutral-90',
+        hoverStyle: { backgroundColor: '$neutral-60' },
+        pressStyle: { backgroundColor: '$neutral-50' },
       },
     },
 
