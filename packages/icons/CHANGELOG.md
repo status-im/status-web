@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 0.2.1
+
+### Patch Changes
+
+- ea32fe1: release icons
+
 ## 0.2.0
 
 ### Minor Changes

@@ -1,5 +1,13 @@
 # @status-im/components
 
+## 0.2.5
+
+### Patch Changes
+
+- ea32fe1: release icons
+- Updated dependencies [ea32fe1]
+  - @status-im/icons@0.2.1
+
 ## 0.2.4
 
 ### Patch Changes
