@@ -18,14 +18,13 @@
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
     "build": "turbo run build --filter=@status-im/*",
-    "lint": "turbo run lint --filter=@status-im/* --filter=website --filter=web",
+    "lint": "turbo run lint --filter=@status-im/* --filter=web",
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
     "web": "yarn workspace web dev",
     "mobile": "yarn workspace mobile dev",
     "desktop": "yarn workspace desktop dev",
-    "website": "yarn workspace website dev",
     "storybook": "yarn workspace @status-im/components storybook"
   },
   "resolutions": {

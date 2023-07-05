@@ -59,48 +59,6 @@
       "smartStep": true,
       "console": "integratedTerminal",
       "sourceMaps": true
-    },
-    {
-      "name": "Launch Website via Next.js (server-side)",
-      "type": "node-terminal",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/apps/website",
-      "command": "yarn dev"
-    },
-    {
-      "name": "Attach to Website via Next.js (client-side)",
-      "type": "chrome",
-      "request": "launch",
-      "webRoot": "${workspaceFolder}/apps/website",
-      "url": "http://localhost:3000",
-      "skipFiles": [
-        ".next/**",
-        "${workspaceFolder}/node_modules/**",
-        "<node_internals>/**",
-        "**/webpack-internal://**"
-      ],
-      "runtimeArgs": ["--auto-open-devtools-for-tabs"]
-    },
-    // todo: consider https://code.visualstudio.com/docs/editor/debugging#_compound-launch-configurations instead
-    // todo: consider client+prelaunch as full stack
-    // todo: consider workspaces https://code.visualstudio.com/docs/editor/multi-root-workspaces#_debugging
-    {
-      "name": "Launch Website via Next.js (full stack)",
-      "type": "node-terminal",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/apps/website",
-      "command": "yarn dev -p 3000",
-      "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://.+)",
-        "action": "startDebugging",
-        "name": "Attach to Website via Next.js (client-side)",
-        "killOnServerStop": false
-      },
-      "skipFiles": [
-        ".next/**",
-        "${workspaceFolder}/node_modules/**",
-        "<node_internals>/**"
-      ]
     }
   ]
 }

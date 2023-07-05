@@ -9,11 +9,6 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-    "website#build": {
-      "dependsOn": ["^build"],
-      "env": ["TAMAGUI_TARGET"],
-      "outputs": [".next/**", "!.next/cache/**"]
-    },
     "components#build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", "storybook-static/**"]
