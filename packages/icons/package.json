@@ -34,9 +34,9 @@
     "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
-    "@tamagui/core": "1.36.4",
-    "@tamagui/web": "1.36.4",
-    "tamagui": "1.36.4"
+    "@tamagui/core": "1.38.2",
+    "@tamagui/web": "1.38.2",
+    "tamagui": "1.38.2"
   },
   "peerDependencies": {
     "react": "^16.x || ^17.x || ^18.x",

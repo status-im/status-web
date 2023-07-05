@@ -86,34 +86,50 @@ const Base = styled(View, {
   borderWidth: 1,
   borderColor: '$neutral-20',
   borderRadius: '$full',
-  backgroundColor: '$white-100',
+  // backgroundColor: '$white-100',
 
   animation: 'fast',
 
-  hoverStyle: {
-    borderColor: '$neutral-30',
-    backgroundColor: '$neutral-5',
-  },
-  pressStyle: {
-    borderColor: '$neutral-30',
-    backgroundColor: '$neutral-5',
-  },
+  // hoverStyle: {
+  //   borderColor: '$neutral-30',
+  //   backgroundColor: '$neutral-5',
+  // },
+  // pressStyle: {
+  //   borderColor: '$neutral-30',
+  //   backgroundColor: '$neutral-5',
+  // },
 
   variants: {
     variant: (token: ColorTokens | string, { tokens }) => {
+      console.log('token', token)
+
       const color = tokens.colors[token as keyof typeof tokens.colors]
         ? tokens.colors[token as keyof typeof tokens.colors].val
         : token
 
+      console.log('color', color)
+
+      console.log('backgroundColor', getColorWithOpacity(color, 0.1))
+
       return {
         borderColor: getColorWithOpacity(color, 0.2),
         pressStyle: {
-          borderColor: getColorWithOpacity(color, 0.3),
-          backgroundColor: getColorWithOpacity(color, 0.1),
+          // borderColor: getColorWithOpacity(color, 0.3),
+          backgroundColor:
+            'color-mix(in srgb, rgb(68, 141, 162) 10%, transparent)',
+          // 'color-mix(in srgb, hsla(193, 41%, 45%, 1) 10%, transparent)',
+          // 'red',
+          // '#550000',
+          // + ' !important',
         },
         hoverStyle: {
-          borderColor: getColorWithOpacity(color, 0.3),
-          backgroundColor: getColorWithOpacity(color, 0.1),
+          // borderColor: getColorWithOpacity(color, 0.3),
+          backgroundColor:
+            'color-mix(in srgb, rgb(68, 141, 162) 10%, transparent)',
+          // 'color-mix(in srgb, hsla(193, 41%, 45%, 1) 10%, transparent)',
+          // 'red',
+          // '#550000',
+          // + ' !important',
         },
       }
     },
