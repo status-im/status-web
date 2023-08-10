@@ -3,28 +3,23 @@ import {
   encodeCommunityURLData,
   encodeUserURLData,
 } from './encode-url-data'
-import { signEncodedURLData } from './sign-url-data'
 
 import type { Channel, Community, User } from '../protos/url_pb'
 import type { PlainMessage } from '@bufbuild/protobuf'
 
 const BASE_URL = 'https://status.app'
 
-export function createCommunityURLWithChatKey(chatKey: string): URL {
-  return new URL(`${BASE_URL}/c#${chatKey}`)
+export function createCommunityURLWithChatKey(communityChatKey: string): URL {
+  return new URL(`${BASE_URL}/c#${communityChatKey}`)
 }
 
 export async function createCommunityURLWithData(
   communityData: PlainMessage<Community>,
-  communityPrivateKey: Uint8Array | string
+  communityChatKey: string
 ): Promise<URL> {
   const encodedURLData = encodeCommunityURLData(communityData)
-  const encodedSignature = await signEncodedURLData(
-    encodedURLData,
-    communityPrivateKey
-  )
 
-  return new URL(`${BASE_URL}/c/${encodedURLData}#${encodedSignature}`)
+  return new URL(`${BASE_URL}/c/${encodedURLData}#${communityChatKey}`)
 }
 
 export function createChannelURLWithChatKey(
@@ -36,15 +31,11 @@ export function createChannelURLWithChatKey(
 
 export async function createChannelURLWithData(
   channelData: PlainMessage<Channel>,
-  communityPrivateKey: Uint8Array | string
+  communityChatKey: string
 ): Promise<URL> {
   const encodedURLData = encodeChannelURLData(channelData)
-  const encodedSignature = await signEncodedURLData(
-    encodedURLData,
-    communityPrivateKey
-  )
 
-  return new URL(`${BASE_URL}/cc/${encodedURLData}#${encodedSignature}`)
+  return new URL(`${BASE_URL}/cc/${encodedURLData}#${communityChatKey}`)
 }
 
 export function createUserURLWithENS(ensName: string): URL {
@@ -57,13 +48,9 @@ export function createUserURLWithChatKey(chatKey: string): URL {
 
 export async function createUserURLWithData(
   userData: PlainMessage<User>,
-  userPrivateKey: Uint8Array | string
+  userChatKey: string
 ): Promise<URL> {
   const encodedURLData = encodeUserURLData(userData)
-  const encodedSignature = await signEncodedURLData(
-    encodedURLData,
-    userPrivateKey
-  )
 
-  return new URL(`${BASE_URL}/u/${encodedURLData}#${encodedSignature}`)
+  return new URL(`${BASE_URL}/u/${encodedURLData}#${userChatKey}`)
 }

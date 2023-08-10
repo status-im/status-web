@@ -27,9 +27,3 @@ message URLData {
  // Community, Channel, or User
  bytes content = 1;
 }
-
-message URLParams {
-	string encoded_url_data = 1;
-	// Signature of encoded URL data
-	string encoded_signature = 2;
-}

@@ -30,11 +30,7 @@ type Mutable<T> = {
 
 describe('Create URLs', () => {
   test('should create community URL', async () => {
-    const community = vi.fn() as unknown as Mutable<
-      Community & { privateKey: string }
-    >
-    community.privateKey =
-      '87734578951189d843c7acd05b133a0e0d02c4110ea961df812f7ea15648e0d8'
+    const community = vi.fn() as unknown as Mutable<Community>
     community.chatKey = 'zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
     community.description = {
       members: {
@@ -62,18 +58,16 @@ describe('Create URLs', () => {
             membersCount: 446_744,
             tagIndices: [1, 33, 51],
           },
-          community.privateKey
+          community.chatKey
         )
       ).toString()
     ).toBe(
-      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#QnO2hw5tVAE-MD5i8Mq4s_oGWd0rRFmlObgRUNQXtUNwP1ixFw914Y4-BQpF08KOqpaULCh7UCtlWR-O0YP8MwA='
+      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
     )
   })
 
   test('should create channel URL', async () => {
-    const community = vi.fn() as unknown as Community & { privateKey: string }
-    community.privateKey =
-      '87734578951189d843c7acd05b133a0e0d02c4110ea961df812f7ea15648e0d8'
+    const community = vi.fn() as unknown as Community
     community.chatKey = 'zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
     community.description = {
       members: {
@@ -118,19 +112,17 @@ describe('Create URLs', () => {
               displayName: community.description.identity!.displayName,
             },
           } as unknown as PlainMessage<ChannelProto>,
-          community.privateKey
+          community.chatKey
         )
       ).toString()
     ).toBe(
-      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#7aeB-M6pIbvpSVGM4TeJkKWPya4YRAHbq4amL0cHlSBpRKn7_lyR4kxEDo2hC4koqPWYe_ak2R9cSVKSiV_nNAA='
+      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
     )
   })
 
   test('should create user URL', async () => {
     const account = vi.fn() as unknown as Mutable<Account>
     account.ensName = 'testing.stateofus.eth'
-    account.privateKey =
-      'e922443102af10422970269a8bc575cbdfd70487e4d9051f4b091edd8def5254'
     account.chatKey = 'zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj'
     account.description = {
       chatIdentity: {
@@ -155,11 +147,11 @@ describe('Create URLs', () => {
             displayName: account.description.chatIdentity!.displayName,
             color: account.description.chatIdentity!.color,
           },
-          account.privateKey
+          account.chatKey
         )
       ).toString()
     ).toBe(
-      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#LbQUdJDHCKoi8DzoYyX89bpKrTjVV3ShqH3E64bDifJB2GkedtLBfVKA02RbUfX074pb9i3owGwRdS6x_ntxrQA='
+      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj'
     )
   })
 })

@@ -13,7 +13,6 @@ import type {
 } from '@bufbuild/protobuf'
 import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
 import { ChatIdentity } from './chat-identity_pb.js'
-import { URLParams } from './url_pb.js'
 
 /**
  * @generated from message Grant
@@ -347,11 +346,6 @@ export class CommunityDescription extends Message<CommunityDescription> {
    */
   tags: string[] = []
 
-  /**
-   * @generated from field: URLParams url_params = 15;
-   */
-  urlParams?: URLParams
-
   constructor(data?: PartialMessage<CommunityDescription>) {
     super()
     proto3.util.initPartial(data, this)
@@ -423,7 +417,6 @@ export class CommunityDescription extends Message<CommunityDescription> {
       T: 9 /* ScalarType.STRING */,
       repeated: true,
     },
-    { no: 15, name: 'url_params', kind: 'message', T: URLParams },
   ])
 
   static fromBinary(
@@ -541,11 +534,6 @@ export class CommunityChat extends Message<CommunityChat> {
    */
   position = 0
 
-  /**
-   * @generated from field: URLParams url_params = 6;
-   */
-  urlParams?: URLParams
-
   constructor(data?: PartialMessage<CommunityChat>) {
     super()
     proto3.util.initPartial(data, this)
@@ -570,7 +558,6 @@ export class CommunityChat extends Message<CommunityChat> {
       T: 9 /* ScalarType.STRING */,
     },
     { no: 5, name: 'position', kind: 'scalar', T: 5 /* ScalarType.INT32 */ },
-    { no: 6, name: 'url_params', kind: 'message', T: URLParams },
   ])
 
   static fromBinary(

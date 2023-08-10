@@ -13,7 +13,6 @@ import type {
 } from '@bufbuild/protobuf'
 import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
 import { ChatIdentity } from './chat-identity_pb.js'
-import { URLParams } from './url_pb.js'
 
 /**
  * @generated from message PushNotificationRegistration
@@ -363,11 +362,6 @@ export class ContactCodeAdvertisement extends Message<ContactCodeAdvertisement> 
    */
   chatIdentity?: ChatIdentity
 
-  /**
-   * @generated from field: URLParams url_params = 3;
-   */
-  urlParams?: URLParams
-
   constructor(data?: PartialMessage<ContactCodeAdvertisement>) {
     super()
     proto3.util.initPartial(data, this)
@@ -384,7 +378,6 @@ export class ContactCodeAdvertisement extends Message<ContactCodeAdvertisement> 
       repeated: true,
     },
     { no: 2, name: 'chat_identity', kind: 'message', T: ChatIdentity },
-    { no: 3, name: 'url_params', kind: 'message', T: URLParams },
   ])
 
   static fromBinary(
