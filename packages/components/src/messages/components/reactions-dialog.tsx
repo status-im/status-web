@@ -68,6 +68,7 @@ export const ReactionsDialog = (props: Props) => {
               const Icon = REACTIONS_ICONS[reaction as keyof ReactionsType]
               return (
                 <Tabs.Trigger
+                  type="icon"
                   key={reaction}
                   value={reaction}
                   icon={<Icon size={20} />}

@@ -16,6 +16,7 @@ import type { Ref } from 'react'
 type Variants = GetVariants<typeof TriggerBase>
 
 type Props = {
+  // type: TriggerProps['type']
   children: React.ReactNode[]
   defaultValue: string
   value?: string
@@ -57,16 +58,28 @@ const TabsList = (props: ListProps) => {
   )
 }
 
-type TriggerProps = {
-  value: string
-  children: string
-  icon?: React.ReactElement
-  count?: number
-}
+type TriggerProps =
+  | {
+      type: 'default'
+      value: string
+      children: string
+    }
+  | {
+      type: 'icon'
+      value: string
+      children: string
+      icon: React.ReactElement
+    }
+  | { type: 'counter'; value: string; children: string; count: number }
+  | {
+      type: 'step'
+      value: string
+      children: string
+      step: number
+    }
 
-// TODO: Add counter
 const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
-  const { icon = null, children, count, ...triggerProps } = props
+  const { children, ...triggerProps } = props
 
   // props coming from parent List and Trigger, not passed by the user (line 52)
   const providedProps = props as TriggerProps & {
@@ -96,13 +109,20 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       size={size}
       active={selected}
     >
-      {icon && cloneElement(icon, { size: iconSizes[size] })}
+      {props.type === 'icon' &&
+        props.icon &&
+        cloneElement(props.icon, { size: iconSizes[size] })}
+
+      {/* todo!: Step component https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?type=design&node-id=18158-12502&mode=design&t=e22nrGJzRxYKIPO6-0 */}
+      {props.type === 'step' && <Counter type="default" value={props.step} />}
+
       <Text size={textSize} weight="medium" color={color}>
         {children}
       </Text>
-      {count && (
+
+      {props.type === 'counter' && props.count && (
         <Stack marginRight={-4}>
-          <Counter type="secondary" value={count} />
+          <Counter type="secondary" value={props.count} />
         </Stack>
       )}
     </TriggerBase>
