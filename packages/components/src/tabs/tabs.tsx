@@ -111,7 +111,6 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       active={selected}
     >
       {props.type === 'icon' &&
-        props.icon &&
         cloneElement(props.icon, { size: iconSizes[size] })}
 
       {props.type === 'step' && <Step type="complete" value={props.step} />}
@@ -120,7 +119,7 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
         {children}
       </Text>
 
-      {props.type === 'counter' && props.count && (
+      {props.type === 'counter' && (
         <Stack marginRight={-4}>
           <Counter type="secondary" value={props.count} />
         </Stack>
