@@ -7,6 +7,7 @@ import { styled } from 'tamagui'
 
 import { Counter } from '../counter'
 import { usePressableColors } from '../hooks/use-pressable-colors'
+import { Step } from '../step'
 import { Text } from '../text'
 
 import type { TextProps } from '../text'
@@ -113,8 +114,7 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
         props.icon &&
         cloneElement(props.icon, { size: iconSizes[size] })}
 
-      {/* todo!: Step component https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?type=design&node-id=18158-12502&mode=design&t=e22nrGJzRxYKIPO6-0 */}
-      {props.type === 'step' && <Counter type="default" value={props.step} />}
+      {props.type === 'step' && <Step type="complete" value={props.step} />}
 
       <Text size={textSize} weight="medium" color={color}>
         {children}

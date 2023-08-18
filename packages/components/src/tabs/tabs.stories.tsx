@@ -23,9 +23,6 @@ export const Default: StoryObj<TabsProps> = {
     defaultValue: '1',
   },
   render(args) {
-    // const icon = args.icon ? <PlaceholderIcon size={20} /> : undefined
-    // const count = args.count ? 8 : undefined
-
     return (
       <Tabs {...args}>
         <Tabs.List size={32}>
@@ -140,10 +137,10 @@ export const Step: StoryObj<TabsProps> = {
           <Tabs.Trigger type="step" value="1" step={1}>
             Tab 1
           </Tabs.Trigger>
-          <Tabs.Trigger type="step" value="2" step={2}>
+          <Tabs.Trigger type="step" value="2" step={10}>
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="step" value="3" step={3}>
+          <Tabs.Trigger type="step" value="3" step={999}>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
