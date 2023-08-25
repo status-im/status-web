@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.3.0
+
+### Minor Changes
+
+- 762a698: add Step and Tabs with Step
+
 ## 0.2.5
 
 ### Patch Changes
