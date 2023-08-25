@@ -7,6 +7,7 @@ import { styled } from 'tamagui'
 
 import { Counter } from '../counter'
 import { usePressableColors } from '../hooks/use-pressable-colors'
+import { Step } from '../step'
 import { Text } from '../text'
 
 import type { TextProps } from '../text'
@@ -16,6 +17,7 @@ import type { Ref } from 'react'
 type Variants = GetVariants<typeof TriggerBase>
 
 type Props = {
+  // type: TriggerProps['type']
   children: React.ReactNode[]
   defaultValue: string
   value?: string
@@ -57,16 +59,28 @@ const TabsList = (props: ListProps) => {
   )
 }
 
-type TriggerProps = {
-  value: string
-  children: string
-  icon?: React.ReactElement
-  count?: number
-}
+type TriggerProps =
+  | {
+      type: 'default'
+      value: string
+      children: string
+    }
+  | {
+      type: 'icon'
+      value: string
+      children: string
+      icon: React.ReactElement
+    }
+  | { type: 'counter'; value: string; children: string; count: number }
+  | {
+      type: 'step'
+      value: string
+      children: string
+      step: number
+    }
 
-// TODO: Add counter
 const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
-  const { icon = null, children, count, ...triggerProps } = props
+  const { children, ...triggerProps } = props
 
   // props coming from parent List and Trigger, not passed by the user (line 52)
   const providedProps = props as TriggerProps & {
@@ -96,13 +110,18 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       size={size}
       active={selected}
     >
-      {icon && cloneElement(icon, { size: iconSizes[size] })}
+      {props.type === 'icon' &&
+        cloneElement(props.icon, { size: iconSizes[size] })}
+
+      {props.type === 'step' && <Step type="complete" value={props.step} />}
+
       <Text size={textSize} weight="medium" color={color}>
         {children}
       </Text>
-      {count && (
+
+      {props.type === 'counter' && (
         <Stack marginRight={-4}>
-          <Counter type="secondary" value={count} />
+          <Counter type="secondary" value={props.count} />
         </Stack>
       )}
     </TriggerBase>
