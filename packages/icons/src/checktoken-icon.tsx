@@ -13,7 +13,7 @@ const SvgChecktokenIcon = createIcon(props => {
       aria-hidden={true}
     >
       <path
-        fill="#647084"
+        fill={props.color}
         fillRule="evenodd"
         d="M3 10a7 7 0 1 1 14 0 7 7 0 0 1-14 0Z"
         clipRule="evenodd"

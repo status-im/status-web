@@ -15,7 +15,7 @@ const SvgClearIcon = createIcon(props => {
       <path
         fill={props.color}
         fillRule="evenodd"
-        d="M2.5 10a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"
+        d="M3 10a7 7 0 1 1 14 0 7 7 0 0 1-14 0Z"
         clipRule="evenodd"
       />
       <path
