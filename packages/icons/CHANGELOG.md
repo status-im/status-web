@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 0.3.0
+
+### Minor Changes
+
+- 02ffce3: sync icons
+
 ## 0.2.1
 
 ### Patch Changes
