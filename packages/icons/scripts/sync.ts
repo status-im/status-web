@@ -81,6 +81,28 @@ for (const [nodeId, name] of Object.entries(NODE_IDS)) {
 
     const svgRaw = await fetch(image!).then(res => res.text())
 
+    // note: probably a wrapper layer for https://www.figma.com/file/qLLuMLfpGxK9OfpIavwsmK/Iconset?type=design&node-id=4408-955&mode=dev, thus skipping
+    // icon:: {
+    //   key: 'c73f7bad669c2696c2158cef34967a20cc0f0f0f',
+    //   name: 'Use=Default, Typo=False, Style=Gradient',
+    //   description: '',
+    //   remote: true,
+    //   componentSetId: '4819:992',
+    //   documentationLinks: []
+    // }
+    // raw::
+    // transform::
+    // icon:: {
+    //   key: '53e1bc9f7ee455bc6cc38b90a9b7614ef64afe4e',
+    //   name: '20/status-logo',
+    //   description: '',
+    //   remote: false,
+    //   documentationLinks: []
+    // }
+    if (!svgRaw) {
+      continue
+    }
+
     const svg = await transform(svgRaw, {
       plugins: ['@svgr/plugin-svgo'],
       replaceAttrValues: {
