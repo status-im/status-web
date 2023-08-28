@@ -29,12 +29,36 @@ const SvgConfettiIcon = createIcon(props => {
           d="M10.546 14.197 6.303 9.954l-.848.849 4.242 4.242.849-.848Zm-2.475 1.06L5.242 12.43l-.848.849 2.828 2.828.849-.848Z"
           clipRule="evenodd"
         />
-        <circle cx={14.362} cy={10.312} r={1} fill="#647084" opacity={0.8} />
-        <circle cx={8.787} cy={3.165} r={1.5} fill="#647084" opacity={0.4} />
-        <circle cx={16.545} cy={4.165} r={1} fill="#647084" opacity={0.6} />
-        <circle cx={11.751} cy={7.031} r={1.5} fill="#647084" opacity={0.8} />
-        <circle cx={12.47} cy={3.446} r={1} fill="#647084" opacity={0.4} />
-        <circle cx={16.715} cy={7.897} r={1.5} fill="#647084" opacity={0.6} />
+        <circle
+          cx={14.362}
+          cy={10.312}
+          r={1}
+          fill={props.color}
+          opacity={0.8}
+        />
+        <circle
+          cx={8.787}
+          cy={3.165}
+          r={1.5}
+          fill={props.color}
+          opacity={0.4}
+        />
+        <circle cx={16.545} cy={4.165} r={1} fill={props.color} opacity={0.6} />
+        <circle
+          cx={11.751}
+          cy={7.031}
+          r={1.5}
+          fill={props.color}
+          opacity={0.8}
+        />
+        <circle cx={12.47} cy={3.446} r={1} fill={props.color} opacity={0.4} />
+        <circle
+          cx={16.715}
+          cy={7.897}
+          r={1.5}
+          fill={props.color}
+          opacity={0.6}
+        />
       </g>
       <defs>
         <clipPath id="confetti-icon_svg__a">

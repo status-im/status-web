@@ -16,11 +16,11 @@ const SvgPendingStateIcon = createIcon(props => {
         cx={10}
         cy={10}
         r={7}
-        stroke="#647084"
+        stroke={props.color}
         strokeWidth={1.2}
         opacity={0.4}
       />
-      <path stroke="#647084" strokeWidth={1.2} d="m13 12-3-1.5V7" />
+      <path stroke={props.color} strokeWidth={1.2} d="m13 12-3-1.5V7" />
     </svg>
   )
 })

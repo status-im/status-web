@@ -13,42 +13,36 @@
       clip-rule="evenodd"
     />
     <g clip-path="url(#clip1_4408_955)">
-      <g clip-path="url(#clip2_4408_955)">
-        <mask
-          id="mask0_4408_955"
-          width="16"
-          height="17"
-          x="2"
-          y="1"
-          maskUnits="userSpaceOnUse"
-          style="mask-type: alpha"
-        >
-          <path fill="#fff" d="M10 2c-6 0-8 2-8 8s2 8 8 8 8-2 8-8-2-8-8-8Z" />
-        </mask>
-        <g mask="url(#mask0_4408_955)">
-          <g filter="url(#filter0_f_4408_955)">
-            <circle cx="13.5" cy="6.5" r="9.5" fill="#1992D7" />
-          </g>
-          <g filter="url(#filter1_f_4408_955)">
-            <circle cx="18.5" cy="11.5" r="9.5" fill="#F6B03C" />
-          </g>
-          <g filter="url(#filter2_f_4408_955)">
-            <circle cx="4.5" cy="17.5" r="9.5" fill="#FF7D46" />
-          </g>
-          <g filter="url(#filter3_f_4408_955)">
-            <circle cx="-1.5" cy="6.5" r="9.5" fill="#7140FD" />
-          </g>
-          <g
-            fill="#fff"
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            filter="url(#filter4_d_4408_955)"
-          >
-            <path
-              d="M11.828 10.43c-.13 1.633-1.302 3.075-2.888 3.165-.974.056-1.948-.539-2-1.505-.04-.777.44-1.345 1.28-1.562.198-.052.401-.084.606-.094.891-.05 1.45.154 2.341.103.206-.01.41-.041.61-.092l.051-.014ZM8.176 9.569c.13-1.632 1.302-3.074 2.888-3.165.974-.055 1.947.54 2 1.506.043.777-.44 1.344-1.28 1.562a3.02 3.02 0 0 1-.606.094c-.892.05-1.45-.154-2.341-.104-.206.01-.41.041-.61.092l-.051.015Z"
-            />
-          </g>
+      <mask
+        id="mask0_4408_955"
+        width="16"
+        height="17"
+        x="2"
+        y="1"
+        maskUnits="userSpaceOnUse"
+        style="mask-type: alpha"
+      >
+        <path fill="#fff" d="M10 2c-6 0-8 2-8 8s2 8 8 8 8-2 8-8-2-8-8-8Z" />
+      </mask>
+      <g mask="url(#mask0_4408_955)">
+        <g filter="url(#filter0_f_4408_955)">
+          <circle cx="13.5" cy="6.5" r="9.5" fill="#1992D7" />
         </g>
+        <g filter="url(#filter1_f_4408_955)">
+          <circle cx="18.5" cy="11.5" r="9.5" fill="#F6B03C" />
+        </g>
+        <g filter="url(#filter2_f_4408_955)">
+          <circle cx="4.5" cy="17.5" r="9.5" fill="#FF7D46" />
+        </g>
+        <g filter="url(#filter3_f_4408_955)">
+          <circle cx="-1.5" cy="6.5" r="9.5" fill="#7140FD" />
+        </g>
+        <path
+          fill="#fff"
+          fill-rule="evenodd"
+          d="M11.064 6.404c-1.586.09-2.758 1.533-2.888 3.165A.966.966 0 0 1 8.2 9.56l.026-.007c.2-.05.404-.081.61-.092.445-.025.807.014 1.17.052.362.039.725.078 1.171.052a3.02 3.02 0 0 0 .606-.094c.84-.218 1.323-.785 1.28-1.562-.053-.966-1.026-1.561-2-1.506ZM8.94 13.595c1.586-.09 2.758-1.533 2.888-3.164a.96.96 0 0 1-.051.014c-.2.05-.404.082-.61.092-.446.025-.808-.013-1.171-.052a6.787 6.787 0 0 0-1.17-.051c-.205.01-.408.042-.606.094-.84.217-1.32.785-1.28 1.562.052.966 1.026 1.561 2 1.505Z"
+          clip-rule="evenodd"
+        />
       </g>
     </g>
   </g>
@@ -117,40 +111,10 @@
         stdDeviation="2.358"
       />
     </filter>
-    <filter
-      id="filter4_d_4408_955"
-      width="36.229"
-      height="37.298"
-      x="-8.112"
-      y="-4.636"
-      color-interpolation-filters="sRGB"
-      filterUnits="userSpaceOnUse"
-    >
-      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-      <feColorMatrix
-        in="SourceAlpha"
-        result="hardAlpha"
-        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-      />
-      <feOffset dy="4.013" />
-      <feGaussianBlur stdDeviation="7.525" />
-      <feColorMatrix
-        values="0 0 0 0 0.0352941 0 0 0 0 0.0627451 0 0 0 0 0.109804 0 0 0 0.12 0"
-      />
-      <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_4408_955" />
-      <feBlend
-        in="SourceGraphic"
-        in2="effect1_dropShadow_4408_955"
-        result="shape"
-      />
-    </filter>
     <clipPath id="clip0_4408_955">
       <path fill="#fff" d="M0 0h20v20H0z" />
     </clipPath>
     <clipPath id="clip1_4408_955">
-      <path fill="#fff" d="M2 2h16v16H2z" />
-    </clipPath>
-    <clipPath id="clip2_4408_955">
       <path fill="#fff" d="M2 2h16v16H2z" />
     </clipPath>
   </defs>
