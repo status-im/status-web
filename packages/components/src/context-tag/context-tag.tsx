@@ -1,3 +1,5 @@
+import { cloneElement } from 'react'
+
 import { ChevronRightIcon, PlayIcon } from '@status-im/icons'
 import { Stack, styled } from '@tamagui/core'
 import { View } from 'react-native'
@@ -5,16 +7,17 @@ import { View } from 'react-native'
 import { Avatar } from '../avatar'
 import { Text } from '../text'
 
+import type { AvatarProps } from '../avatar'
 import type { TextProps } from '../text'
+import type { IconProps } from '@status-im/icons'
 
 type Props = {
-  children?: React.ReactNode
-  size?: 24 | 32
+  size?: 20 | 24 | 32
   blur?: boolean
   outline?: boolean
 } & (
-  | { type: 'default'; user: { name: string; src: string } }
-  | { type: 'account'; user: { name: string; emoji: string } }
+  | { type: 'user'; user: { name: string; src: string } }
+  | { type: 'account'; account: { name: string; emoji: string } }
   | {
       type: 'group'
       group: {
@@ -33,16 +36,28 @@ type Props = {
   | { type: 'address'; address: string }
   | { type: 'icon'; icon: React.ReactElement; label: string }
   | { type: 'audio'; audioLength: string }
+  | { type: 'label'; children: string }
 )
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
   '32': 15,
-  '24': 13,
+  '24': 15,
+  '20': 13,
 }
 
-const avatarSizes: Record<NonNullable<Props['size']>, 28 | 20> = {
+const avatarSizes: Record<
+  NonNullable<Props['size']>,
+  Extract<AvatarProps['size'], 28 | 20 | 16>
+> = {
   '32': 28,
   '24': 20,
+  '20': 16,
+}
+
+const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
+  '32': 20,
+  '24': 12,
+  '20': 12,
 }
 
 const Label = ({
@@ -51,7 +66,7 @@ const Label = ({
   type = 'default',
 }: {
   children: string
-  size: 24 | 32
+  size: 20 | 24 | 32
   type?: 'default' | 'monospace'
 }) => (
   <Text size={textSizes[size]} weight="medium" color="$neutral-100" type={type}>
@@ -63,11 +78,11 @@ const ContextTag = (props: Props) => {
   const { size = 24, blur = false, outline, type } = props
 
   const rounded = type === 'account' || type === 'collectible'
-  const hasAvatar = type !== 'address'
+  const hasAvatar = type !== 'address' && type !== 'icon' && type !== 'label'
 
   const renderContent = () => {
     switch (type) {
-      case 'default': {
+      case 'user': {
         return (
           <>
             <Avatar
@@ -150,9 +165,9 @@ const ContextTag = (props: Props) => {
             <Avatar
               type="account"
               size={avatarSizes[size]}
-              name={props.user.emoji}
+              name={props.account.emoji}
             />
-            <Label size={size}>{props.user.name}</Label>
+            <Label size={size}>{props.account.name}</Label>
           </>
         )
       }
@@ -199,16 +214,16 @@ const ContextTag = (props: Props) => {
       case 'icon': {
         return (
           <>
-            <Avatar
-              type="icon"
-              size={avatarSizes[size]}
-              icon={props.icon}
-              backgroundColor="$transparent"
-              color="$neutral-50"
-            />
+            {cloneElement(props.icon, {
+              size: iconSizes[size],
+              color: '$neutral-50',
+            })}
             <Label size={size}>{props.label}</Label>
           </>
         )
+      }
+      case 'label': {
+        return <Label size={size}>{props.children}</Label>
       }
     }
   }
@@ -219,8 +234,7 @@ const ContextTag = (props: Props) => {
       blur={blur}
       borderRadius={rounded ? '$8' : '$full'}
       size={size}
-      paddingVertical={hasAvatar ? 0 : 1}
-      paddingLeft={hasAvatar ? 1 : size === 24 ? 8 : 12}
+      {...(hasAvatar && { paddingLeft: 1 })}
     >
       {renderContent()}
     </Base>
@@ -257,6 +271,11 @@ const Base = styled(View, {
       },
     },
     size: {
+      20: {
+        height: 20,
+        gap: 4,
+        paddingHorizontal: 6,
+      },
       24: {
         height: 24,
         gap: 4,
