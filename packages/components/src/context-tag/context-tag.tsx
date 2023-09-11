@@ -16,7 +16,7 @@ type Props = {
   blur?: boolean
   outline?: boolean
 } & (
-  | { type: 'default'; user: { name: string; src: string } }
+  | { type: 'user'; user: { name: string; src: string } }
   | { type: 'account'; account: { name: string; emoji: string } }
   | {
       type: 'group'
@@ -82,7 +82,7 @@ const ContextTag = (props: Props) => {
 
   const renderContent = () => {
     switch (type) {
-      case 'default': {
+      case 'user': {
         return (
           <>
             <Avatar
