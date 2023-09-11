@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 0.4.0
+
+### Minor Changes
+
+- b223887: a intermediate-circle-icon.tsx
+
 ## 0.3.0
 
 ### Minor Changes
