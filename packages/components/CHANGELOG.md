@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.3.1
+
+### Patch Changes
+
+- 7c96dec: update Context Tag
+
 ## 0.3.0
 
 ### Minor Changes
