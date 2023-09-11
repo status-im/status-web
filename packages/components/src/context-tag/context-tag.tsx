@@ -11,37 +11,51 @@ import type { AvatarProps } from '../avatar'
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
 
-type Props = {
-  size?: 20 | 24 | 32
-  blur?: boolean
-  outline?: boolean
-} & (
-  | { type: 'user'; user: { name: string; src: string } }
-  | { type: 'account'; account: { name: string; emoji: string } }
+type Props = { blur?: boolean; outline?: boolean } & (
   | {
-      type: 'group'
-      group: {
-        name: string
-        icon: React.ReactElement
+      size?: 20 | 32
+    }
+  | {
+      size?: 24
+      textSize: 13 | 15
+    }
+) &
+  (
+    | { type: 'user'; user: { name: string; src: string } }
+    | { type: 'account'; account: { name: string; emoji: string } }
+    | {
+        type: 'group'
+        group: {
+          name: string
+          icon: React.ReactElement
+        }
       }
-    }
-  | { type: 'community'; community: { name: string; src?: string } }
-  | {
-      type: 'channel'
-      channel: { communityName: string; src: string; name: string }
-    }
-  | { type: 'token'; token: { name: string; src: string } }
-  | { type: 'network'; network: { name: string; src: string } }
-  | { type: 'collectible'; collectible: { name: string; src: string } }
-  | { type: 'address'; address: string }
-  | { type: 'icon'; icon: React.ReactElement; label: string }
-  | { type: 'audio'; audioLength: string }
-  | { type: 'label'; children: string }
-)
+    | { type: 'community'; community: { name: string; src?: string } }
+    | {
+        type: 'channel'
+        channel: { communityName: string; src: string; name: string }
+      }
+    | { type: 'token'; token: { name: string; src: string } }
+    | { type: 'network'; network: { name: string; src: string } }
+    | { type: 'collectible'; collectible: { name: string; src: string } }
+    | { type: 'address'; address: string }
+    | { type: 'icon'; icon: React.ReactElement; label: string }
+    | { type: 'audio'; audioLength: string }
+    | { type: 'label'; children: string }
+  )
 
-const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
+const textSizes: Record<
+  Exclude<NonNullable<Props['size']>, 24>,
+  TextProps['size']
+> = {
   '32': 15,
-  '24': 15,
+  /**
+   * note: "These context sizes are the same size as the ones above (24px), but the text size differs.
+   * We can have a bigger or smaller text depending on the context."
+   *
+   * – https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n?node-id=1336:34320&mode=design#541570513
+   */
+  // '24': 15,
   '20': 13,
 }
 
@@ -60,25 +74,29 @@ const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
   '20': 12,
 }
 
-const Label = ({
-  children,
-  size,
-  type = 'default',
-}: {
+const Label = (props: {
   children: string
   size: 20 | 24 | 32
   type?: 'default' | 'monospace'
-}) => (
-  <Text size={textSizes[size]} weight="medium" color="$neutral-100" type={type}>
-    {children}
-  </Text>
-)
+  textSize?: 13 | 15
+}) => {
+  const { children, size, type = 'default' } = props
+
+  const textSize = size === 24 ? props.textSize! : textSizes[size]
+
+  return (
+    <Text size={textSize} weight="medium" color="$neutral-100" type={type}>
+      {children}
+    </Text>
+  )
+}
 
 const ContextTag = (props: Props) => {
   const { size = 24, blur = false, outline, type } = props
 
   const rounded = type === 'account' || type === 'collectible'
   const hasAvatar = type !== 'address' && type !== 'icon' && type !== 'label'
+  const textSize = 'textSize' in props ? props.textSize : undefined
 
   const renderContent = () => {
     switch (type) {
@@ -91,7 +109,9 @@ const ContextTag = (props: Props) => {
               src={props.user.src}
               name={props.user.name}
             />
-            <Label size={size}>{props.user.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.user.name}
+            </Label>
           </>
         )
       }
@@ -104,7 +124,9 @@ const ContextTag = (props: Props) => {
               src={props.community.src}
               name={props.community.name}
             />
-            <Label size={size}>{props.community.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.community.name}
+            </Label>
           </>
         )
       }
@@ -118,9 +140,13 @@ const ContextTag = (props: Props) => {
               name={props.channel.name}
             />
             <Stack flexDirection="row" gap="$0" alignItems="center">
-              <Label size={size}>{props.channel.communityName}</Label>
+              <Label size={size} textSize={textSize}>
+                {props.channel.communityName}
+              </Label>
               <ChevronRightIcon color="$neutral-50" size={20} />
-              <Label size={size}>{`# ` + props.channel.name}</Label>
+              <Label size={size} textSize={textSize}>
+                {`# ` + props.channel.name}
+              </Label>
             </Stack>
           </>
         )
@@ -134,13 +160,15 @@ const ContextTag = (props: Props) => {
               src={props.token.src}
               name={props.token.name}
             />
-            <Label size={size}>{props.token.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.token.name}
+            </Label>
           </>
         )
       }
       case 'address': {
         return (
-          <Label size={size} type="monospace">
+          <Label size={size} textSize={textSize} type="monospace">
             {props.address}
           </Label>
         )
@@ -155,7 +183,9 @@ const ContextTag = (props: Props) => {
               backgroundColor="$primary-50"
               color="$white-100"
             />
-            <Label size={size}>{props.audioLength}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.audioLength}
+            </Label>
           </>
         )
       }
@@ -167,7 +197,9 @@ const ContextTag = (props: Props) => {
               size={avatarSizes[size]}
               name={props.account.emoji}
             />
-            <Label size={size}>{props.account.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.account.name}
+            </Label>
           </>
         )
       }
@@ -181,7 +213,9 @@ const ContextTag = (props: Props) => {
               color="$white-70"
               icon={props.group.icon}
             />
-            <Label size={size}>{props.group.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.group.name}
+            </Label>
           </>
         )
       }
@@ -194,7 +228,9 @@ const ContextTag = (props: Props) => {
               src={props.network.src}
               name={props.network.name}
             />
-            <Label size={size}>{props.network.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.network.name}
+            </Label>
           </>
         )
       }
@@ -207,7 +243,9 @@ const ContextTag = (props: Props) => {
               src={props.collectible.src}
               name={props.collectible.name}
             />
-            <Label size={size}>{props.collectible.name}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.collectible.name}
+            </Label>
           </>
         )
       }
@@ -218,12 +256,18 @@ const ContextTag = (props: Props) => {
               size: iconSizes[size],
               color: '$neutral-50',
             })}
-            <Label size={size}>{props.label}</Label>
+            <Label size={size} textSize={textSize}>
+              {props.label}
+            </Label>
           </>
         )
       }
       case 'label': {
-        return <Label size={size}>{props.children}</Label>
+        return (
+          <Label size={size} textSize={textSize}>
+            {props.children}
+          </Label>
+        )
       }
     }
   }
@@ -234,6 +278,7 @@ const ContextTag = (props: Props) => {
       blur={blur}
       borderRadius={rounded ? '$8' : '$full'}
       size={size}
+      textSize={textSize}
       {...(hasAvatar && { paddingLeft: 1 })}
     >
       {renderContent()}
@@ -279,12 +324,19 @@ const Base = styled(View, {
       24: {
         height: 24,
         gap: 4,
-        paddingHorizontal: 8,
       },
       32: {
         height: 32,
         gap: 8,
         paddingHorizontal: 12,
+      },
+    },
+    textSize: {
+      13: {
+        paddingHorizontal: 8,
+      },
+      15: {
+        paddingHorizontal: 6,
       },
     },
   } as const,
