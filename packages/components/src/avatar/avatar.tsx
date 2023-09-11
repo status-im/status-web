@@ -51,7 +51,7 @@ type ChannelAvatarProps = {
 
 type CommunityAvatarProps = {
   type: 'community'
-  size: 80 | 32 | 28 | 24 | 20
+  size: 80 | 32 | 28 | 24 | 20 | 16
   name: string
   src?: string
   backgroundColor?: ColorTokens
@@ -59,7 +59,7 @@ type CommunityAvatarProps = {
 
 type AccountAvatarProps = {
   type: 'account'
-  size: 80 | 48 | 32 | 28 | 24 | 20
+  size: 80 | 48 | 32 | 28 | 24 | 20 | 16
   name: string
   src?: string
   backgroundColor?: ColorTokens
@@ -67,7 +67,7 @@ type AccountAvatarProps = {
 
 type IconAvatarProps = {
   type: 'icon'
-  size: 48 | 32 | 28 | 24 | 20
+  size: 48 | 32 | 28 | 24 | 20 | 16
   icon: React.ReactElement
   backgroundColor?: ColorTokens
   color?: ColorTokens
@@ -102,6 +102,7 @@ const accountRadiusSizes: Record<AccountAvatarProps['size'], RadiusTokens> = {
   '28': '$8',
   '24': '$8',
   '20': '$6',
+  '16': '$6',
 }
 
 const channelEmojiSizes: Record<ChannelAvatarProps['size'], TextProps['size']> =
