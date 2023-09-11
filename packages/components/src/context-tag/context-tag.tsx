@@ -237,6 +237,7 @@ const ContextTag = (props: Props) => {
       case 'collectible': {
         return (
           <>
+            {/* fixme: not an avatar but a resized image; see https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n?node-id=1336:34320&mode=design#541620575 */}
             <Avatar
               type="account"
               size={avatarSizes[size]}
