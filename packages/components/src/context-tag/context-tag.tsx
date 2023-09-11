@@ -46,7 +46,7 @@ type Props = { blur?: boolean; outline?: boolean } & (
 
 const textSizes: Record<
   Exclude<NonNullable<Props['size']>, 24>,
-  TextProps['size']
+  Extract<TextProps['size'], 13 | 15>
 > = {
   '32': 15,
   /**
@@ -76,16 +76,13 @@ const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
 
 const Label = (props: {
   children: string
-  size: 20 | 24 | 32
+  size: 13 | 15
   type?: 'default' | 'monospace'
-  textSize?: 13 | 15
 }) => {
   const { children, size, type = 'default' } = props
 
-  const textSize = size === 24 ? props.textSize! : textSizes[size]
-
   return (
-    <Text size={textSize} weight="medium" color="$neutral-100" type={type}>
+    <Text size={size} weight="medium" color="$neutral-100" type={type}>
       {children}
     </Text>
   )
@@ -96,7 +93,7 @@ const ContextTag = (props: Props) => {
 
   const rounded = type === 'account' || type === 'collectible'
   const hasAvatar = type !== 'address' && type !== 'icon' && type !== 'label'
-  const textSize = 'textSize' in props ? props.textSize : undefined
+  const textSize = props.size === 24 ? props.textSize : textSizes[props.size!]
 
   const renderContent = () => {
     switch (type) {
@@ -109,9 +106,7 @@ const ContextTag = (props: Props) => {
               src={props.user.src}
               name={props.user.name}
             />
-            <Label size={size} textSize={textSize}>
-              {props.user.name}
-            </Label>
+            <Label size={textSize}>{props.user.name}</Label>
           </>
         )
       }
@@ -124,9 +119,7 @@ const ContextTag = (props: Props) => {
               src={props.community.src}
               name={props.community.name}
             />
-            <Label size={size} textSize={textSize}>
-              {props.community.name}
-            </Label>
+            <Label size={textSize}>{props.community.name}</Label>
           </>
         )
       }
@@ -140,13 +133,9 @@ const ContextTag = (props: Props) => {
               name={props.channel.name}
             />
             <Stack flexDirection="row" gap="$0" alignItems="center">
-              <Label size={size} textSize={textSize}>
-                {props.channel.communityName}
-              </Label>
+              <Label size={textSize}>{props.channel.communityName}</Label>
               <ChevronRightIcon color="$neutral-50" size={20} />
-              <Label size={size} textSize={textSize}>
-                {`# ` + props.channel.name}
-              </Label>
+              <Label size={textSize}>{`# ` + props.channel.name}</Label>
             </Stack>
           </>
         )
@@ -160,15 +149,13 @@ const ContextTag = (props: Props) => {
               src={props.token.src}
               name={props.token.name}
             />
-            <Label size={size} textSize={textSize}>
-              {props.token.name}
-            </Label>
+            <Label size={textSize}>{props.token.name}</Label>
           </>
         )
       }
       case 'address': {
         return (
-          <Label size={size} textSize={textSize} type="monospace">
+          <Label size={textSize} type="monospace">
             {props.address}
           </Label>
         )
@@ -183,9 +170,7 @@ const ContextTag = (props: Props) => {
               backgroundColor="$primary-50"
               color="$white-100"
             />
-            <Label size={size} textSize={textSize}>
-              {props.audioLength}
-            </Label>
+            <Label size={textSize}>{props.audioLength}</Label>
           </>
         )
       }
@@ -197,9 +182,7 @@ const ContextTag = (props: Props) => {
               size={avatarSizes[size]}
               name={props.account.emoji}
             />
-            <Label size={size} textSize={textSize}>
-              {props.account.name}
-            </Label>
+            <Label size={textSize}>{props.account.name}</Label>
           </>
         )
       }
@@ -213,9 +196,7 @@ const ContextTag = (props: Props) => {
               color="$white-70"
               icon={props.group.icon}
             />
-            <Label size={size} textSize={textSize}>
-              {props.group.name}
-            </Label>
+            <Label size={textSize}>{props.group.name}</Label>
           </>
         )
       }
@@ -228,9 +209,7 @@ const ContextTag = (props: Props) => {
               src={props.network.src}
               name={props.network.name}
             />
-            <Label size={size} textSize={textSize}>
-              {props.network.name}
-            </Label>
+            <Label size={textSize}>{props.network.name}</Label>
           </>
         )
       }
@@ -244,9 +223,7 @@ const ContextTag = (props: Props) => {
               src={props.collectible.src}
               name={props.collectible.name}
             />
-            <Label size={size} textSize={textSize}>
-              {props.collectible.name}
-            </Label>
+            <Label size={textSize}>{props.collectible.name}</Label>
           </>
         )
       }
@@ -257,18 +234,12 @@ const ContextTag = (props: Props) => {
               size: iconSizes[size],
               color: '$neutral-50',
             })}
-            <Label size={size} textSize={textSize}>
-              {props.label}
-            </Label>
+            <Label size={textSize}>{props.label}</Label>
           </>
         )
       }
       case 'label': {
-        return (
-          <Label size={size} textSize={textSize}>
-            {props.children}
-          </Label>
-        )
+        return <Label size={textSize}>{props.children}</Label>
       }
     }
   }
