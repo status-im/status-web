@@ -93,7 +93,13 @@ const ContextTag = (props: Props) => {
 
   const rounded = type === 'account' || type === 'collectible'
   const hasAvatar = type !== 'address' && type !== 'icon' && type !== 'label'
-  const textSize = props.size === 24 ? props.textSize : textSizes[props.size!]
+
+  let textSize: Extract<TextProps['size'], 13 | 15>
+  if (size === 24) {
+    textSize = 'textSize' in props ? props.textSize : 13 // default if props.size not set but fallbacked to 24
+  } else {
+    textSize = textSizes[size]
+  }
 
   const renderContent = () => {
     switch (type) {
