@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.3.2
+
+### Patch Changes
+
+- 024c19f: fix ContextTag text size
+
 ## 0.3.1
 
 ### Patch Changes
