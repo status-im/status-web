@@ -1,3 +1,4 @@
+import { PopupIcon } from '@status-im/icons'
 import { action } from '@storybook/addon-actions'
 import { Stack } from 'tamagui'
 
@@ -82,6 +83,14 @@ export const PrimaryIconBefore: Story = {
   },
 }
 
+export const PrimaryIconBeforeDifferentColor: Story = {
+  name: 'Primary icon before/Different color',
+  args: {
+    children: 'Click me',
+    icon: <PopupIcon size={20} color="$yellow-50" />,
+  },
+}
+
 export const PrimaryIconAfter: Story = {
   name: 'Primary/Icon after',
   args: {
@@ -89,6 +98,15 @@ export const PrimaryIconAfter: Story = {
     iconAfter: icon,
   },
 }
+
+export const PrimaryIconAfterDifferentColor: Story = {
+  name: 'Primary/Icon after/Different color',
+  args: {
+    children: 'Click me',
+    iconAfter: <PopupIcon size={20} color="$yellow-50" />,
+  },
+}
+
 export const PrimaryIconOnly: Story = {
   name: 'Primary/Icon only',
   args: {
