@@ -10,6 +10,7 @@ import { Text } from '../text'
 import type { AvatarProps } from '../avatar'
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
+import type { ComponentProps } from 'react'
 
 type Props = { blur?: boolean; outline?: boolean } & (
   | {
@@ -74,6 +75,15 @@ const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
   '20': 12,
 }
 
+const chevronIconSize: Record<
+  NonNullable<Props['size']>,
+  ComponentProps<typeof ChevronRightIcon>['size']
+> = {
+  '32': 20,
+  '24': 16,
+  '20': 12,
+}
+
 const Label = (props: {
   children: string
   size: 13 | 15
@@ -95,8 +105,10 @@ const ContextTag = (props: Props) => {
   const hasAvatar = type !== 'address' && type !== 'icon' && type !== 'label'
 
   let textSize: Extract<TextProps['size'], 13 | 15>
+  let paddingHorizontal: number | undefined
   if (size === 24) {
     textSize = 'textSize' in props ? props.textSize : 13 // default if props.size not set but fallbacked to 24
+    paddingHorizontal = textSize === 13 ? 8 : 6
   } else {
     textSize = textSizes[size]
   }
@@ -140,7 +152,10 @@ const ContextTag = (props: Props) => {
             />
             <Stack flexDirection="row" gap="$0" alignItems="center">
               <Label size={textSize}>{props.channel.communityName}</Label>
-              <ChevronRightIcon color="$neutral-50" size={20} />
+              <ChevronRightIcon
+                color="$neutral-50"
+                size={chevronIconSize[size]}
+              />
               <Label size={textSize}>{`# ` + props.channel.name}</Label>
             </Stack>
           </>
@@ -256,8 +271,9 @@ const ContextTag = (props: Props) => {
       blur={blur}
       borderRadius={rounded ? '$8' : '$full'}
       size={size}
-      textSize={textSize}
-      {...(hasAvatar && { paddingLeft: 1 })}
+      {...(paddingHorizontal && { paddingHorizontal })}
+      {...(hasAvatar && { paddingLeft: 2 })}
+      {...(hasAvatar && outline && { paddingLeft: 1 })}
     >
       {renderContent()}
     </Base>
@@ -272,17 +288,13 @@ const Base = styled(View, {
   display: 'inline-flex',
   flexDirection: 'row',
   alignItems: 'center',
-  borderWidth: '1px',
-  borderStyle: 'solid',
-  borderColor: 'transparent',
 
   variants: {
     outline: {
       true: {
+        borderWidth: '1px',
         borderColor: '$primary-50',
-      },
-      false: {
-        borderColor: 'transparent',
+        borderStyle: 'solid',
       },
     },
     blur: {
@@ -307,14 +319,6 @@ const Base = styled(View, {
         height: 32,
         gap: 8,
         paddingHorizontal: 12,
-      },
-    },
-    textSize: {
-      13: {
-        paddingHorizontal: 8,
-      },
-      15: {
-        paddingHorizontal: 6,
       },
     },
   } as const,
