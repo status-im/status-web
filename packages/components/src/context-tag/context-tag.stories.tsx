@@ -1,4 +1,4 @@
-import { MembersIcon, PendingIcon } from '@status-im/icons'
+import { MembersIcon, PlaceholderIcon } from '@status-im/icons'
 import { Stack } from 'tamagui'
 
 import { ContextTag } from './context-tag'
@@ -45,6 +45,9 @@ export const AllVariants: Story = {
     <Stack space flexDirection="row">
       <Stack space flexDirection="column" alignItems="flex-start" gap={12}>
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={20}>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -112,7 +115,7 @@ export const AllVariants: Story = {
           />
           <ContextTag type="address" address="0x045...1ah" size={20} />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={20}
@@ -121,6 +124,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={24} textSize={13}>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -201,7 +207,7 @@ export const AllVariants: Story = {
             textSize={13}
           />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={24}
@@ -216,6 +222,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={24} textSize={15}>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -296,7 +305,7 @@ export const AllVariants: Story = {
             textSize={15}
           />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={24}
@@ -311,6 +320,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={32}>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -378,7 +390,7 @@ export const AllVariants: Story = {
           />
           <ContextTag type="address" address="0x045...1ah" size={32} />
           <ContextTag
-            icon={<PendingIcon size={16} />}
+            icon={<PlaceholderIcon size={16} />}
             type="icon"
             label="Context"
             size={32}
@@ -389,6 +401,9 @@ export const AllVariants: Story = {
 
       <Stack space flexDirection="column" alignItems="flex-start" gap={12}>
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={20} outline>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -464,7 +479,7 @@ export const AllVariants: Story = {
           />
           <ContextTag type="address" address="0x045...1ah" size={20} outline />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={20}
@@ -474,6 +489,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={24} textSize={13} outline>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -563,7 +581,7 @@ export const AllVariants: Story = {
             outline
           />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={24}
@@ -580,6 +598,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={24} textSize={15} outline>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -669,7 +690,7 @@ export const AllVariants: Story = {
             outline
           />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={24}
@@ -686,6 +707,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={32} outline>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -761,7 +785,7 @@ export const AllVariants: Story = {
           />
           <ContextTag type="address" address="0x045...1ah" size={32} outline />
           <ContextTag
-            icon={<PendingIcon size={16} />}
+            icon={<PlaceholderIcon size={16} />}
             type="icon"
             label="Context"
             size={32}
@@ -773,6 +797,9 @@ export const AllVariants: Story = {
 
       <Stack space flexDirection="column" alignItems="flex-start" gap={12}>
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={20} blur>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -848,7 +875,7 @@ export const AllVariants: Story = {
           />
           <ContextTag type="address" address="0x045...1ah" size={20} blur />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={20}
@@ -858,6 +885,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={24} textSize={13} blur>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -947,7 +977,7 @@ export const AllVariants: Story = {
             blur
           />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={24}
@@ -964,6 +994,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={24} textSize={15} blur>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -1053,7 +1086,7 @@ export const AllVariants: Story = {
             blur
           />
           <ContextTag
-            icon={<PendingIcon size={12} />}
+            icon={<PlaceholderIcon size={12} />}
             type="icon"
             label="Context"
             size={24}
@@ -1070,6 +1103,9 @@ export const AllVariants: Story = {
         </Stack>
 
         <Stack space flexDirection="column" alignItems="flex-start">
+          <ContextTag type="label" size={32} blur>
+            Name
+          </ContextTag>
           <ContextTag
             type="user"
             user={{
@@ -1145,7 +1181,7 @@ export const AllVariants: Story = {
           />
           <ContextTag type="address" address="0x045...1ah" size={32} blur />
           <ContextTag
-            icon={<PendingIcon size={16} />}
+            icon={<PlaceholderIcon size={16} />}
             type="icon"
             label="Context"
             size={32}
