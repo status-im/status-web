@@ -82,11 +82,17 @@ const Button = (props: Props, ref: Ref<View>) => {
       iconOnly={iconOnly}
       width={fullWidth ? '100%' : 'auto'}
     >
-      {icon ? cloneElement(icon, { color: textColor || '$neutral-40' }) : null}
+      {icon
+        ? cloneElement(icon, {
+            color: iconOnly ? textColor : icon.props.color ?? textColor,
+          })
+        : null}
       <Text weight="medium" color={textColor} size={textSize}>
         {children}
       </Text>
-      {iconAfter ? cloneElement(iconAfter, { color: textColor }) : null}
+      {iconAfter
+        ? cloneElement(iconAfter, { color: iconAfter.props.color ?? textColor })
+        : null}
     </Base>
   )
 }
