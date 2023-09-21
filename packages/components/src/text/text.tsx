@@ -16,11 +16,19 @@ type Props = {
   truncate?: boolean
   wrap?: false
 } & (
-  | { size: 27; weight?: Weight }
-  | { size: 19; weight?: Weight }
-  | { size: 15; weight?: Weight; type?: Type }
-  | { size: 13; weight?: Weight; type?: Type }
-  | { size: 11; weight?: Weight; type?: Type; uppercase?: boolean }
+  | { size: 88; weight?: Weight }
+  | { size: 64; weight?: Weight }
+  | { size: 40; weight?: Weight }
+  | { size: 27; weight?: Exclude<Weight, 'bold'> }
+  | { size: 19; weight?: Exclude<Weight, 'bold'> }
+  | { size: 15; weight?: Exclude<Weight, 'bold'>; type?: Type }
+  | { size: 13; weight?: Exclude<Weight, 'bold'>; type?: Type }
+  | {
+      size: 11
+      weight?: Exclude<Weight, 'bold'>
+      type?: Type
+      uppercase?: boolean
+    }
 )
 
 // TODO: monospace should be used only for variant. Extract to separate <Address> component?
@@ -44,6 +52,21 @@ const Base = styled(BaseText, {
     },
 
     size: {
+      88: {
+        fontSize: 88,
+        lineHeight: 84,
+        letterSpacing: -1.848,
+      },
+      64: {
+        fontSize: 64,
+        lineHeight: 68,
+        letterSpacing: -1.28,
+      },
+      40: {
+        fontSize: 40,
+        lineHeight: 44,
+        letterSpacing: -0.8,
+      },
       27: {
         fontSize: 27,
         lineHeight: 32,
@@ -80,6 +103,9 @@ const Base = styled(BaseText, {
       },
       semibold: {
         fontWeight: '600',
+      },
+      bold: {
+        fontWeight: '700',
       },
     },
 

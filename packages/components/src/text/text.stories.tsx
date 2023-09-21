@@ -24,10 +24,32 @@ export const Default: StoryObj<typeof Text> = {
   render: args => (
     <Stack gap={24}>
       <Stack gap={8}>
+        <Text {...args} size={88} weight="regular" />
+        <Text {...args} size={88} weight="medium" />
+        <Text {...args} size={88} weight="semibold" />
+        <Text {...args} size={88} weight="bold" />
+      </Stack>
+
+      <Stack gap={8}>
+        <Text {...args} size={64} weight="regular" />
+        <Text {...args} size={64} weight="medium" />
+        <Text {...args} size={64} weight="semibold" />
+        <Text {...args} size={64} weight="bold" />
+      </Stack>
+
+      <Stack gap={8}>
+        <Text {...args} size={40} weight="regular" />
+        <Text {...args} size={40} weight="medium" />
+        <Text {...args} size={40} weight="semibold" />
+        <Text {...args} size={40} weight="bold" />
+      </Stack>
+
+      <Stack gap={8}>
         <Text {...args} size={27} weight="regular" />
         <Text {...args} size={27} weight="medium" />
         <Text {...args} size={27} weight="semibold" />
       </Stack>
+
       <Stack gap={8}>
         <Text {...args} size={19} weight="regular" />
         <Text {...args} size={19} weight="medium" />
