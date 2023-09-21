@@ -47,27 +47,27 @@ const Base = styled(BaseText, {
       27: {
         fontSize: 27,
         lineHeight: 32,
-        letterSpacing: -0.021,
+        letterSpacing: -0.567,
       },
       19: {
         fontSize: 19,
-        lineHeight: 26,
-        letterSpacing: -0.016,
+        lineHeight: 28,
+        letterSpacing: -0.304,
       },
       15: {
         fontSize: 15,
-        lineHeight: 22,
-        letterSpacing: -0.009,
+        lineHeight: 21.75,
+        letterSpacing: -0.135,
       },
       13: {
         fontSize: 13,
-        lineHeight: 18,
-        letterSpacing: -0.003,
+        lineHeight: 18.2,
+        letterSpacing: -0.039,
       },
       11: {
         fontSize: 11,
-        lineHeight: 18,
-        letterSpacing: -0.003,
+        lineHeight: 15.62,
+        letterSpacing: -0.055,
       },
     },
 
