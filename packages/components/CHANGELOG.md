@@ -1,5 +1,18 @@
 # @status-im/components
 
+## 0.4.0
+
+### Minor Changes
+
+- 19384e1: - upgrade storybook
+  - fix text letter spacing
+  - add text sizes
+
+### Patch Changes
+
+- a43b5a6: fix: keep icon color if defined as part of button
+- b560d62: fix ContextTag style
+
 ## 0.3.2
 
 ### Patch Changes
