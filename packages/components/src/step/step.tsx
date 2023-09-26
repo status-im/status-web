@@ -30,11 +30,14 @@ export { Step }
 export type { Props as StepProps }
 
 const Base = styled(Stack, {
-  padding: 2,
+  paddingVertical: 1,
+  minWidth: 20,
+  maxWidth: 28,
   display: 'inline-flex',
   justifyContent: 'center',
   alignItems: 'center',
   flexBasis: 'fit-content',
+  width: 'fit-content',
 })
 
 const Content = styled(Stack, {
@@ -42,8 +45,7 @@ const Content = styled(Stack, {
   paddingHorizontal: 3,
   paddingVertical: 0,
   borderRadius: '$6',
-  minHeight: 18,
-  maxHeight: 18,
+  height: 18,
   minWidth: 18,
   maxWidth: 28,
   justifyContent: 'center',
