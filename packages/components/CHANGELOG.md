@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.4.2
+
+### Patch Changes
+
+- 2ac9665: fix Step spacing
+
 ## 0.4.1
 
 ### Patch Changes
