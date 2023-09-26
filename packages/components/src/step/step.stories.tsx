@@ -56,17 +56,17 @@ export const AllVariants: Story = {
   args: {},
   render: () => (
     <Stack space flexDirection="row">
-      <Stack space>
+      <Stack space alignItems="center">
         <Step type="neutral" value={1} />
         <Step type="neutral" value={10} />
         <Step type="neutral" value={999} />
       </Stack>
-      <Stack space>
+      <Stack space alignItems="center">
         <Step type="complete" value={1} />
         <Step type="complete" value={10} />
         <Step type="complete" value={999} />
       </Stack>
-      <Stack space>
+      <Stack space alignItems="center">
         <Step type="active" value={1} />
         <Step type="active" value={10} />
         <Step type="active" value={999} />
