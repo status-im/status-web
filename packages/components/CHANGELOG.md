@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.4.1
+
+### Patch Changes
+
+- a159ac9: fix Tab icons color
+
 ## 0.4.0
 
 ### Minor Changes
