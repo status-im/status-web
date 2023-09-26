@@ -111,7 +111,10 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       active={selected}
     >
       {props.type === 'icon' &&
-        cloneElement(props.icon, { size: iconSizes[size] })}
+        cloneElement(props.icon, {
+          size: iconSizes[size],
+          color,
+        })}
 
       {props.type === 'step' && <Step type="complete" value={props.step} />}
 
