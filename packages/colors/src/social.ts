@@ -14,6 +14,6 @@ export const social = {
   'super-rare': 'rgba(0 0 0 / 100%)',
   tumblr: 'rgba(55 71 79 / 100%)',
   twitch: 'rgba(103 58 183 / 100%)',
-  twitter: 'rgba(3 169 244 / 100%)',
+  twitter: 'rgba(0 0 0 / 100%)',
   youtube: 'rgba(255 48 0 / 100%)',
 }
