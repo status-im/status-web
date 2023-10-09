@@ -16,32 +16,25 @@ export function useScrollPosition(options: Options) {
   positionRef.current = position
 
   useEffect(() => {
-    const node = ref.current!
+    const node = ref.current
 
     const handleScroll = () => {
       if (!node) return
 
       const { scrollTop, scrollHeight, clientHeight } = node
 
-      if (scrollTop === 0) {
-        setPosition('top')
-        return
-      }
-
-      if (scrollTop + clientHeight === scrollHeight) {
-        setPosition('bottom')
-        return
-      }
-
-      if (positionRef.current !== 'middle') {
-        setPosition('middle')
-      }
+      setPosition((prevPosition: string) => {
+        if (scrollTop === 0) return 'top'
+        if (scrollTop + clientHeight === scrollHeight) return 'bottom'
+        if (prevPosition !== 'middle') return 'middle'
+        return prevPosition
+      })
     }
 
-    node.addEventListener('scroll', handleScroll, { passive: true })
+    node?.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      node.removeEventListener('scroll', handleScroll)
+      node?.removeEventListener('scroll', handleScroll)
     }
   }, [ref])
 
