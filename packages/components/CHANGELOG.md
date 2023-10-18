@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.4.3
+
+### Patch Changes
+
+- 45be34b: set TabsTrigger cursor
+
 ## 0.4.2
 
 ### Patch Changes
