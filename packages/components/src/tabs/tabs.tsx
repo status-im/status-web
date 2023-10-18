@@ -140,7 +140,8 @@ export type { Props as TabsProps }
 
 const TriggerBase = styled(View, {
   name: 'Trigger',
-  role: 'button',
+  role: 'tab',
+  cursor: 'pointer',
 
   flexDirection: 'row',
   alignItems: 'center',
@@ -163,6 +164,7 @@ const TriggerBase = styled(View, {
     },
     active: {
       true: {
+        cursor: 'default',
         backgroundColor: '$neutral-50',
       },
       false: {
