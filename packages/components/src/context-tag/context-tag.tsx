@@ -288,6 +288,7 @@ const Base = styled(View, {
   display: 'inline-flex',
   flexDirection: 'row',
   alignItems: 'center',
+  cursor: 'default',
 
   variants: {
     outline: {
