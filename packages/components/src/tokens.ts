@@ -39,9 +39,6 @@ export const tokens = createTokens({
       [K in keyof typeof white as `white-${K}`]: (typeof white)[K]
     }),
 
-    // fixme: not in designs; full-text search when replacing
-    'red-50-opa-5': 'hsla(0, 87%, 68%, 0.05)',
-
     transparent: 'hsla(0, 0%, 0%, 0)',
   },
   size,
