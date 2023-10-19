@@ -79,7 +79,7 @@ const Reaction = (props: ReactionProps) => {
                 and
               </Text>
               <Stack
-                backgroundColor="$turquoise-50-opa-10"
+                backgroundColor="$turquoise/10"
                 borderRadius="$6"
                 paddingHorizontal={4}
               >

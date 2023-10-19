@@ -20,6 +20,7 @@ export const customisation = {
   'camel/30': 'rgba(199 143 103 / 30%)',
   'camel/40': 'rgba(199 143 103 / 40%)',
   'camel/5': 'rgba(199 143 103 / 5%)',
+  // fixme: rename to copper in Figma
   'cooper-50': 'rgba(203 98 86 / 100%)',
   'cooper-60': 'rgba(162 78 69 / 100%)',
   'cooper/10': 'rgba(203 98 86 / 10%)',

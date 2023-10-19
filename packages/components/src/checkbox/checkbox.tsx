@@ -90,18 +90,18 @@ const Base = styled(Root, {
     },
     selected: {
       filled: {
-        hoverStyle: { backgroundColor: '$primary-60' },
-        pressStyle: { backgroundColor: '$primary-60' },
+        hoverStyle: { backgroundColor: '$blue-60' },
+        pressStyle: { backgroundColor: '$blue-60' },
       },
       outline: {
-        backgroundColor: '$primary-50',
-        borderColor: '$primary-50',
+        backgroundColor: '$blue-50',
+        borderColor: '$blue-50',
 
         hoverStyle: {
-          backgroundColor: '$primary-60',
+          backgroundColor: '$blue-60',
         },
         pressStyle: {
-          backgroundColor: '$primary-60',
+          backgroundColor: '$blue-60',
         },
       },
     },

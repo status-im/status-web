@@ -218,7 +218,7 @@ const InputContainer = styled(Stack, {
     },
     error: {
       true: {
-        borderColor: '$danger-50-opa-40',
+        borderColor: '$danger-/40',
       },
     },
 

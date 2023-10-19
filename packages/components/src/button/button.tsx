@@ -119,10 +119,10 @@ const Base = styled(View, {
   variants: {
     variant: {
       primary: {
-        backgroundColor: '$primary-50',
-        hoverStyle: { backgroundColor: '$primary-60' },
+        backgroundColor: '$blue-50',
+        hoverStyle: { backgroundColor: '$blue-60' },
         // TODO: update background color
-        pressStyle: { backgroundColor: '$primary-50' },
+        pressStyle: { backgroundColor: '$blue-50' },
       },
       positive: {
         backgroundColor: '$success-50',
@@ -174,9 +174,9 @@ const Base = styled(View, {
         pressStyle: { backgroundColor: '$orange-50' },
       },
       army: {
-        backgroundColor: '$indigo-50',
-        hoverStyle: { backgroundColor: '$indigo-60' },
-        pressStyle: { backgroundColor: '$indigo-50' },
+        backgroundColor: '$army-50',
+        hoverStyle: { backgroundColor: '$army-60' },
+        pressStyle: { backgroundColor: '$army-50' },
       },
       turquoise: {
         backgroundColor: '$turquoise-50',

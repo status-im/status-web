@@ -126,10 +126,10 @@ const Base = styled(Stack, {
   variants: {
     state: {
       active: {
-        backgroundColor: '$primary-50-opa-5',
+        backgroundColor: '$blue/5',
       },
       selected: {
-        backgroundColor: '$primary-50-opa-10',
+        backgroundColor: '$blue/10',
       },
     },
   },

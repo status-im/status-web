@@ -37,7 +37,7 @@ const Base = styled(Stack, {
 })
 
 const Content = styled(Stack, {
-  backgroundColor: '$primary-50',
+  backgroundColor: '$blue-50',
   paddingHorizontal: 3,
   paddingVertical: 0,
   borderRadius: '$6',
@@ -53,10 +53,10 @@ const Content = styled(Stack, {
   variants: {
     type: {
       default: {
-        backgroundColor: '$primary-50',
+        backgroundColor: '$blue-50',
       },
       secondary: {
-        backgroundColor: '$neutral-80-opa-5',
+        backgroundColor: '$neutral-80/5',
       },
       grey: {
         backgroundColor: '$neutral-10',

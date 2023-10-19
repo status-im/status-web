@@ -63,7 +63,7 @@ const Content = styled(Stack, {
         backgroundColor: '$blue-50',
       },
       active: {
-        backgroundColor: '$blue-50-opa-10',
+        backgroundColor: '$blue/10',
       },
     },
   },

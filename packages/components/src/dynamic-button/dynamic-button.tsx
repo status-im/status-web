@@ -67,15 +67,15 @@ const Button = styled(View, {
   variants: {
     type: {
       mention: {
-        backgroundColor: '$primary-50',
-        hoverStyle: { backgroundColor: '$primary-60' },
-        pressStyle: { backgroundColor: '$primary-50' },
+        backgroundColor: '$blue-50',
+        hoverStyle: { backgroundColor: '$blue-60' },
+        pressStyle: { backgroundColor: '$blue-50' },
       },
 
       notification: {
-        backgroundColor: '$neutral-80-opa-70',
-        hoverStyle: { backgroundColor: '$neutral-90-opa-70' },
-        pressStyle: { backgroundColor: '$neutral-80-opa-80' },
+        backgroundColor: '$neutral-80/70',
+        hoverStyle: { backgroundColor: '$neutral-90/70' },
+        pressStyle: { backgroundColor: '$neutral-80/80' },
       },
     },
 

@@ -74,7 +74,7 @@ const Base = styled(Stack, {
   gap: 12,
   width: 351,
   minHeight: 40,
-  backgroundColor: '$neutral-80-opa-70',
+  backgroundColor: '$neutral-80/70',
   borderRadius: '$12',
   justifyContent: 'space-between',
 

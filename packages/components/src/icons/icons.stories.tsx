@@ -32,7 +32,7 @@ export const Overview: Story = {
   args: {
     search: '',
     size: 20,
-    // color: '$primary-50',
+    // color: '$blue-50',
   },
 
   argTypes: {
