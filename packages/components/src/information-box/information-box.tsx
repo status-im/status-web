@@ -126,8 +126,8 @@ const Base = styled(Stack, {
         borderColor: '$blue/10',
       },
       error: {
-        backgroundColor: '$danger/5',
-        borderColor: '$danger/10',
+        backgroundColor: '$danger-/5',
+        borderColor: '$danger-/10',
       },
     },
   },
