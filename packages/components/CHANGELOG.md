@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 0.4.4
+
+### Patch Changes
+
+- d796765: sync colors
+- 29b9734: add default curors to ContextTag
+
 ## 0.4.3
 
 ### Patch Changes
