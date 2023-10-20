@@ -134,16 +134,16 @@ const Base = styled(View, {
     },
     selected: {
       true: {
-        backgroundColor: '$primary-50-opa-10',
-        borderColor: '$primary-50',
+        backgroundColor: '$blue/10',
+        borderColor: '$blue-50',
 
         hoverStyle: {
-          backgroundColor: '$primary-50-opa-20',
-          borderColor: '$primary-60',
+          backgroundColor: '$blue/20',
+          borderColor: '$blue-60',
         },
         pressStyle: {
-          backgroundColor: '$primary-50-opa-20',
-          borderColor: '$primary-60',
+          backgroundColor: '$blue/20',
+          borderColor: '$blue-60',
         },
       },
     },

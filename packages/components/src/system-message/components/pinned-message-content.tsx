@@ -31,7 +31,7 @@ const PinnedMessageContent = (props: Props) => {
         type="icon"
         size={32}
         icon={<PinIcon size={20} />}
-        backgroundColor={state === 'landed' ? '$transparent' : '$blue-50-opa-5'}
+        backgroundColor={state === 'landed' ? '$transparent' : '$blue/5'}
         color="$neutral-100"
       />
       <Stack

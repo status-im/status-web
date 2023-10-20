@@ -194,7 +194,7 @@ const ContextTag = (props: Props) => {
               type="icon"
               size={avatarSizes[size]}
               icon={<PlayIcon size={16} />}
-              backgroundColor="$primary-50"
+              backgroundColor="$blue-50"
               color="$white-100"
             />
             <Label size={textSize}>{props.audioLength}</Label>
@@ -220,7 +220,7 @@ const ContextTag = (props: Props) => {
               type="icon"
               size={avatarSizes[size]}
               backgroundColor="$purple-50"
-              color="$white-70"
+              color="$white/70"
               icon={props.group.icon}
             />
             <Label size={textSize}>{props.group.name}</Label>
@@ -300,13 +300,13 @@ const Base = styled(View, {
     outline: {
       true: {
         borderWidth: '1px',
-        borderColor: '$primary-50',
+        borderColor: '$blue-50',
         borderStyle: 'solid',
       },
     },
     blur: {
       true: {
-        backgroundColor: '$neutral-80-opa-5',
+        backgroundColor: '$neutral-80/5',
       },
       false: {
         backgroundColor: '$neutral-10',

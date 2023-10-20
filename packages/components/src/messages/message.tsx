@@ -39,7 +39,7 @@ const Base = styled(Stack, {
 
     pinned: {
       true: {
-        backgroundColor: '$blue-50-opa-5',
+        backgroundColor: '$blue/5',
       },
     },
   } as const,

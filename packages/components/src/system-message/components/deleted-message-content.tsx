@@ -26,7 +26,7 @@ const DeletedMessageContent = (props: Props) => {
         type="icon"
         size={32}
         icon={<TrashIcon size={20} />}
-        backgroundColor={state === 'landed' ? '$transparent' : '$red-50-opa-5'}
+        backgroundColor={state === 'landed' ? '$transparent' : '$danger-/5'}
         color="$neutral-100"
       />
       <Stack

@@ -188,7 +188,7 @@ const Avatar = (props: AvatarProps) => {
     }
 
     if (props.type === 'channel') {
-      return '$blue-50-opa-20'
+      return '$blue/20'
     }
 
     return '$neutral-95'

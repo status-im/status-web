@@ -71,8 +71,8 @@ const Base = styled(Stack, {
   variants: {
     variant: {
       primary: {
-        backgroundColor: '$primary-50',
-        borderColor: '$primary-60',
+        backgroundColor: '$blue-50',
+        borderColor: '$blue-60',
       },
       secondary: {
         backgroundColor: '$neutral-10',

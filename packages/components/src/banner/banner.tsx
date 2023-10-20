@@ -14,12 +14,7 @@ type Props = {
 }
 
 const Banner = (props: Props) => {
-  const {
-    icon = null,
-    children,
-    count,
-    backgroundColor = '$primary-50-opa-20',
-  } = props
+  const { icon = null, children, count, backgroundColor = '$blue/20' } = props
 
   return (
     <Base backgroundColor={backgroundColor}>

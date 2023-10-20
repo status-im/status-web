@@ -40,7 +40,7 @@ export const NoCount: Story = {
 
 export const NetworkStateConnecting: Story = {
   args: {
-    backgroundColor: '$neutral-80-opa-5',
+    backgroundColor: '$neutral-80/5',
     icon: <RecentIcon size={20} />,
     children: 'Connecting...',
   },
@@ -48,7 +48,7 @@ export const NetworkStateConnecting: Story = {
 
 export const NetworkStateError: Story = {
   args: {
-    backgroundColor: '$danger-50-opa-20',
+    backgroundColor: '$danger-/20',
     icon: <AlertIcon size={20} />,
     children: 'Network is down',
   },
@@ -62,16 +62,10 @@ export const AllVariants: Story = {
         Banner message
       </Banner>
       <Banner count={5}>Banner message</Banner>
-      <Banner
-        backgroundColor="$neutral-80-opa-5"
-        icon={<RecentIcon size={20} />}
-      >
+      <Banner backgroundColor="$neutral-80/20" icon={<RecentIcon size={20} />}>
         Connecting...
       </Banner>
-      <Banner
-        backgroundColor="$danger-50-opa-20"
-        icon={<AlertIcon size={20} />}
-      >
+      <Banner backgroundColor="$danger-/20" icon={<AlertIcon size={20} />}>
         Network is down
       </Banner>
       <Banner icon={<PinIcon size={20} />}>Banner message</Banner>

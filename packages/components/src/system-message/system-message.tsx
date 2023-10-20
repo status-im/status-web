@@ -111,10 +111,10 @@ const Base = styled(View, {
         backgroundColor: '$neutral-5',
       },
       landed: {
-        backgroundColor: '$blue-50-opa-5',
+        backgroundColor: '$blue/5',
       },
       landed_deleted: {
-        backgroundColor: '$red-50-opa-5',
+        backgroundColor: '$danger-/5',
       },
     },
   },

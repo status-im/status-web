@@ -23,7 +23,7 @@ const AddedUsersMessageContent = (props: Props) => {
         // fixme: map relative avatar size to icon size
         icon={<AddUserIcon size={20} />}
         size={32}
-        backgroundColor={state === 'landed' ? '$transparent' : '$blue-50-opa-5'}
+        backgroundColor={state === 'landed' ? '$transparent' : '$blue/5'}
         color="$blue-50"
       />
       <Stack flexDirection="row" gap={2} flexBasis="max-content" flexGrow={1}>

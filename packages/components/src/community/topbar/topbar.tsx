@@ -59,7 +59,7 @@ const Topbar = (props: Props) => {
         padding={16}
         backgroundColor={'$blurBackground'}
         borderBottomWidth={1}
-        borderColor={blur ? 'transparent' : '$neutral-80-opa-10'}
+        borderColor={blur ? 'transparent' : '$neutral-80/10'}
       >
         <Stack flexDirection="row" alignItems="center" flexWrap="wrap">
           <Stack marginRight={12} $gtSm={{ display: 'none' }}>
@@ -76,10 +76,10 @@ const Topbar = (props: Props) => {
             {title}
           </Text>
           <Stack marginLeft={4}>
-            <LockedIcon size={20} color="$neutral-80-opa-40" />
+            <LockedIcon size={20} color="$neutral-80/40" />
           </Stack>
           <Stack
-            backgroundColor="$neutral-80-opa-10"
+            backgroundColor="$neutral-80/10"
             marginHorizontal={12}
             height={16}
             width={1}
@@ -88,7 +88,7 @@ const Topbar = (props: Props) => {
         </Stack>
 
         <Stack flexGrow={1} flexShrink={1} $sm={{ display: 'none' }}>
-          <Text size={13} weight="medium" color="$neutral-80-opa-50" truncate>
+          <Text size={13} weight="medium" color="$neutral-80/50" truncate>
             {description}
           </Text>
         </Stack>

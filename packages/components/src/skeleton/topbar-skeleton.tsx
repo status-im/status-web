@@ -16,7 +16,7 @@ const TopbarSkeleton = () => {
           px={16}
           backgroundColor={'$blurBackground'}
           borderBottomWidth={1}
-          borderColor={'$neutral-80-opa-10'}
+          borderColor={'$neutral-80/10'}
           width="100%"
         >
           <Stack

@@ -28,8 +28,8 @@ const IconButton = (props: Props, ref: Ref<View>) => {
 
   const { pressableProps, color } = usePressableColors(
     {
-      default: blur ? '$neutral-80-opa-70' : '$neutral-50',
-      hover: blur ? '$neutral-80-opa-70' : '$neutral-50',
+      default: blur ? '$neutral-80/70' : '$neutral-50',
+      hover: blur ? '$neutral-80/70' : '$neutral-50',
       press: '$neutral-100',
       active: '$neutral-100',
     },
@@ -130,49 +130,49 @@ const Base = styled(View, {
 
     variantBlur: {
       default: {
-        backgroundColor: '$neutral-80-opa-5',
+        backgroundColor: '$neutral-80/5',
         borderColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-80-opa-10' },
+        hoverStyle: { backgroundColor: '$neutral-80/10' },
         pressStyle: {
-          backgroundColor: '$neutral-80-opa-10',
-          borderColor: '$neutral-80-opa-5',
+          backgroundColor: '$neutral-80/10',
+          borderColor: '$neutral-80/5',
         },
       },
 
       outline: {
         backgroundColor: 'transparent',
-        borderColor: '$neutral-80-opa-10',
-        hoverStyle: { borderColor: '$neutral-80-opa-20' },
+        borderColor: '$neutral-80/10',
+        hoverStyle: { borderColor: '$neutral-80/20' },
         pressStyle: {
-          borderColor: '$neutral-80-opa-10',
-          backgroundColor: '$neutral-80-opa-5',
+          borderColor: '$neutral-80/10',
+          backgroundColor: '$neutral-80/5',
         },
       },
 
       ghost: {
         backgroundColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-80-opa-5' },
+        hoverStyle: { backgroundColor: '$neutral-80/5' },
         pressStyle: {
-          backgroundColor: '$neutral-80-opa-5',
-          borderColor: '$neutral-80-opa-10',
+          backgroundColor: '$neutral-80/5',
+          borderColor: '$neutral-80/10',
         },
       },
     },
 
     activeBlur: {
       default: {
-        backgroundColor: '$neutral-80-opa-10',
-        borderColor: '$neutral-80-opa-5',
+        backgroundColor: '$neutral-80/10',
+        borderColor: '$neutral-80/5',
       },
 
       outline: {
-        borderColor: '$neutral-80-opa-10',
-        backgroundColor: '$neutral-80-opa-5',
+        borderColor: '$neutral-80/10',
+        backgroundColor: '$neutral-80/5',
       },
 
       ghost: {
-        backgroundColor: '$neutral-80-opa-5',
-        borderColor: '$neutral-80-opa-10',
+        backgroundColor: '$neutral-80/5',
+        borderColor: '$neutral-80/10',
       },
     },
 

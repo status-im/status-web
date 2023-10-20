@@ -28,7 +28,7 @@ const UserList = (props: Props) => {
             alignItems="center"
             cursor="pointer"
             hoverStyle={{
-              backgroundColor: '$primary-50-opa-5',
+              backgroundColor: '$blue/5',
             }}
           >
             <Avatar

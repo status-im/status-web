@@ -122,12 +122,12 @@ const Base = styled(Stack, {
         borderColor: '$neutral-20',
       },
       information: {
-        backgroundColor: '$blue-50-opa-5',
-        borderColor: '$blue-50-opa-10',
+        backgroundColor: '$blue/5',
+        borderColor: '$blue/10',
       },
       error: {
-        backgroundColor: '$danger-50-opa-5',
-        borderColor: '$danger-50-opa-10',
+        backgroundColor: '$danger-/5',
+        borderColor: '$danger-/10',
       },
     },
   },
