@@ -92,7 +92,13 @@ const Label = (props: {
   const { children, size, type = 'default' } = props
 
   return (
-    <Text size={size} weight="medium" color="$neutral-100" type={type}>
+    <Text
+      size={size}
+      weight="medium"
+      color="$neutral-100"
+      type={type}
+      select={false}
+    >
       {children}
     </Text>
   )
@@ -288,6 +294,7 @@ const Base = styled(View, {
   display: 'inline-flex',
   flexDirection: 'row',
   alignItems: 'center',
+  cursor: 'default',
 
   variants: {
     outline: {
