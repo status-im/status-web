@@ -15,7 +15,7 @@ type Props = {
   color?: ColorTokens | string
   truncate?: boolean
   wrap?: false
-  select?: boolean
+  select?: false
 } & (
   | { size: 88; weight?: Weight }
   | { size: 64; weight?: Weight }
