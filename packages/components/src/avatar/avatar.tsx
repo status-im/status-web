@@ -214,6 +214,7 @@ const Avatar = (props: AvatarProps) => {
                   size={textSizes[props.size]}
                   weight="medium"
                   color="$white-100"
+                  select={false}
                 >
                   {props.name.slice(0, 2).toUpperCase()}
                 </Text>
@@ -264,6 +265,7 @@ const Avatar = (props: AvatarProps) => {
               size={textSizes[props.size]}
               weight="medium"
               color="$white-100"
+              select={false}
             >
               {props.name.slice(0, 2).toUpperCase()}
             </Text>
@@ -271,11 +273,15 @@ const Avatar = (props: AvatarProps) => {
         )
       case 'channel':
         if (props.emoji) {
-          return <Text size={channelEmojiSizes[props.size]}>{props.emoji}</Text>
+          return (
+            <Text size={channelEmojiSizes[props.size]} select={false}>
+              {props.emoji}
+            </Text>
+          )
         }
 
         return (
-          <Text size={textSizes[props.size]}>
+          <Text size={textSizes[props.size]} select={false}>
             {props.name.slice(0, 1).toUpperCase()}
           </Text>
         )

@@ -15,6 +15,7 @@ type Props = {
   color?: ColorTokens | string
   truncate?: boolean
   wrap?: false
+  select?: boolean
 } & (
   | { size: 88; weight?: Weight }
   | { size: 64; weight?: Weight }
@@ -129,6 +130,12 @@ const Base = styled(BaseText, {
         wordWrap: 'normal',
         maxWidth: '100%',
         minWidth: 0,
+      },
+    },
+
+    select: {
+      false: {
+        userSelect: 'none',
       },
     },
   } as const,
