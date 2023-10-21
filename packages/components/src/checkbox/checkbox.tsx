@@ -54,7 +54,7 @@ const Base = styled(Root, {
   accessibilityRole: 'checkbox',
 
   backgroundColor: 'transparent',
-  borderRadius: '$2',
+  borderRadius: '$6',
 
   cursor: 'pointer',
   animation: 'fast',

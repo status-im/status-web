@@ -2,7 +2,7 @@ import { cloneElement, forwardRef, useRef, useState } from 'react'
 
 import { composeRefs } from '@radix-ui/react-compose-refs'
 import { ClearIcon } from '@status-im/icons'
-import { setupReactNative, Stack, styled } from '@tamagui/core'
+import { Stack, styled } from '@tamagui/core'
 import { focusableInputHOC } from '@tamagui/focusable'
 import { TextInput } from 'react-native'
 
@@ -11,10 +11,6 @@ import { Text } from '../text'
 
 import type { GetProps } from '@tamagui/core'
 import type { Ref } from 'react'
-
-setupReactNative({
-  TextInput,
-})
 
 type Props = GetProps<typeof InputFrame> & {
   button?: {

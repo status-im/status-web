@@ -1,17 +1,15 @@
 import { forwardRef } from 'react'
 
-import { setupReactNative, styled } from '@tamagui/core'
-import { Image as RNImage } from 'react-native'
+import { styled } from '@tamagui/core'
+import { Image as TamaguiImage } from '@tamagui/image'
 
 import type { GetProps, GetVariants } from '../types'
 import type { Ref } from 'react'
 
-setupReactNative({
-  Image: RNImage,
-})
-
 type Variants = GetVariants<typeof Base>
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Expression produces a union type that is too complex to represent.
 type Props = GetProps<typeof Base> & {
   src: string
   width: number | 'full'
@@ -48,7 +46,7 @@ const _Image = forwardRef(Image)
 export { _Image as Image }
 export type { Props as ImageProps }
 
-const Base = styled(RNImage, {
+const Base = styled(TamaguiImage, {
   name: 'Image',
   position: 'relative',
   zIndex: 1,
@@ -78,7 +76,7 @@ const Base = styled(RNImage, {
         borderRadius: 999, // fix this once Image is migrated to tamagui image
       },
     },
-  },
+  } as const,
 
   backgroundColor: '$white-100',
 })
