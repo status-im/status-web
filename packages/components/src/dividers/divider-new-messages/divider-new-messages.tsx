@@ -14,7 +14,7 @@ const DividerNewMessages = (props: Props) => {
 
   return (
     <Stack position="relative" height={42} backgroundColor={color}>
-      <LinearGradient height={42} colors={['$white-95', '$white-100']}>
+      <LinearGradient height={42} colors={['$white-90', '$white-100']}>
         <Stack paddingHorizontal={56} paddingVertical={12} zIndex={10}>
           <Text size={13} weight="medium" color={color}>
             New Messages
