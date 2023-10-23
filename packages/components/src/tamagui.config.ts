@@ -21,6 +21,11 @@ declare module '@tamagui/core' {
 }
 
 export const config = createTamagui({
+  settings: {
+    // note: https://tamagui.dev/docs/core/configuration#type-strictness
+    // allowedStyleValues: 'somewhat-strict',
+    allowedStyleValues: 'somewhat-strict-web',
+  },
   fonts: {
     sans: createInterFont({
       size: {},
