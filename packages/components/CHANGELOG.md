@@ -1,5 +1,16 @@
 # @status-im/components
 
+## 0.5.0
+
+### Minor Changes
+
+- 367145c: update `tamagui`
+
+### Patch Changes
+
+- Updated dependencies [367145c]
+  - @status-im/icons@0.5.0
+
 ## 0.4.4
 
 ### Patch Changes
