@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 0.5.0
+
+### Minor Changes
+
+- 367145c: update `tamagui`
+
 ## 0.4.0
 
 ### Minor Changes
