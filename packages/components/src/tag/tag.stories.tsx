@@ -46,7 +46,7 @@ export const Default: Story = {
           <Tag label="New tag #7140FD" size={24} color="#7140FD" icon="🧙‍♂️" />
 
           <Tag
-            label="custom color purple"
+            label="New tag $purple-50"
             size={24}
             icon="🐷"
             color="$purple-50"

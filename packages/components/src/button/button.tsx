@@ -209,7 +209,7 @@ const Base = styled(View, {
         pressStyle: { backgroundColor: '$camel-50' },
       },
       magenta: {
-        backgroundColor: '$magenta',
+        backgroundColor: '$magenta-50',
         hoverStyle: { backgroundColor: '$magenta-60' },
         pressStyle: { backgroundColor: '$magenta-50' },
       },

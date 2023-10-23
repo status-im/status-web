@@ -174,7 +174,7 @@ const TriggerBase = styled(View, {
         },
       },
     },
-  },
+  } as const,
 })
 
 const triggerTextSizes: Record<Variants['size'], TextProps['size']> = {

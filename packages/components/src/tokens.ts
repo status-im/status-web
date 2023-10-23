@@ -10,7 +10,7 @@ import {
   white,
 } from '@status-im/colors'
 import { createTokens } from '@tamagui/core'
-import { size, space, zIndex } from '@tamagui/theme-base'
+import { size, space, zIndex } from '@tamagui/themes'
 
 function prefixColors(prefix: string, color: Record<string, string>) {
   return Object.entries(color).reduce((acc, [key, value]) => {

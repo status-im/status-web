@@ -40,7 +40,7 @@ const PopoverContent = (props: ContentProps) => {
       backgroundColor="$white-100"
       borderRadius="$12"
       shadowRadius={30}
-      shadowOffset="0px 8px"
+      shadowOffset={{ width: 0, height: 8 }}
       shadowColor="rgba(9, 16, 28, 0.12)"
     >
       {children}

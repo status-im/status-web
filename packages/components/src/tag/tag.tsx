@@ -6,6 +6,7 @@ import { View } from 'react-native'
 import { getColorWithOpacity } from '../../utils/get-color-with-opacity'
 import { Text } from '../text'
 
+import type { HexColor, RGBAColor } from '../../utils/get-color-with-opacity'
 import type { TextProps } from '../text'
 import type { IconProps } from '@status-im/icons'
 import type { ColorTokens } from '@tamagui/core'
@@ -19,7 +20,7 @@ type Props = {
   selected?: boolean
   disabled?: boolean
   onPress?: PressableProps['onPress']
-  color?: ColorTokens | `#${string}`
+  color?: ColorTokens | HexColor
 }
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
@@ -100,20 +101,23 @@ const Base = styled(View, {
   },
 
   variants: {
-    variant: (token: ColorTokens | string, { tokens }) => {
-      const color = tokens.colors[token as keyof typeof tokens.colors]
-        ? tokens.colors[token as keyof typeof tokens.colors].val
-        : token
+    variant: (color: Props['color'], { tokens }) => {
+      if (!color) {
+        return
+      }
+
+      const key = color as keyof typeof tokens.colors
+      const val = (tokens.colors[key]?.val as RGBAColor) ?? (color as HexColor)
 
       return {
-        borderColor: getColorWithOpacity(color, 0.2),
+        borderColor: getColorWithOpacity(val, 20),
         pressStyle: {
-          borderColor: getColorWithOpacity(color, 0.3),
-          backgroundColor: getColorWithOpacity(color, 0.1),
+          borderColor: getColorWithOpacity(val, 30),
+          backgroundColor: getColorWithOpacity(val, 10),
         },
         hoverStyle: {
-          borderColor: getColorWithOpacity(color, 0.3),
-          backgroundColor: getColorWithOpacity(color, 0.1),
+          borderColor: getColorWithOpacity(val, 30),
+          backgroundColor: getColorWithOpacity(val, 10),
         },
       }
     },
