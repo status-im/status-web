@@ -122,9 +122,23 @@ export const PrimaryIconOnlyCirlce: Story = {
   },
 }
 
-export const Success: Story = {
+export const Positive: Story = {
   args: {
     variant: 'positive',
+    children: 'Click me',
+  },
+}
+
+export const Grey: Story = {
+  args: {
+    variant: 'grey',
+    children: 'Click me',
+  },
+}
+
+export const GreyBlur: Story = {
+  args: {
+    variant: 'blur_grey',
     children: 'Click me',
   },
 }
@@ -132,6 +146,13 @@ export const Success: Story = {
 export const Outline: Story = {
   args: {
     variant: 'outline',
+    children: 'Click me',
+  },
+}
+
+export const OutlineBlur: Story = {
+  args: {
+    variant: 'blur_outline',
     children: 'Click me',
   },
 }

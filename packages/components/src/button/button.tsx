@@ -46,6 +46,10 @@ const textColors: MapVariant<typeof Base, 'variant'> = {
 
   // dark theme
   dark_darkGrey: '$white-100',
+
+  // blur variants
+  blur_grey: '$neutral-100',
+  blur_outline: '$neutral-100',
 }
 
 const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
@@ -229,6 +233,30 @@ const Base = styled(View, {
         backgroundColor: '$neutral-90',
         hoverStyle: { backgroundColor: '$neutral-60' },
         pressStyle: { backgroundColor: '$neutral-50' },
+      },
+
+      // FIXME proper subvariant support
+      blur_grey: {
+        backgroundColor: '$neutral-80/5',
+        hoverStyle: { backgroundColor: '$neutral-80/10' },
+        pressStyle: { backgroundColor: '$neutral-80/20' },
+        '$platform-web': {
+          backdropFilter: 'blur(20px)',
+          // Tamagui does not accept this property even though it is valid (and works)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as unknown as any,
+      },
+      blur_outline: {
+        borderWidth: 1,
+        borderColor: '$neutral-80/10',
+        hoverStyle: { borderColor: '$neutral-80/20' },
+        pressStyle: { borderColor: '$neutral-80/30' },
+
+        '$platform-web': {
+          backdropFilter: 'blur(20px)',
+          // Tamagui does not accept this property even though it is valid (and works)
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as unknown as any,
       },
     },
 
