@@ -40,6 +40,7 @@ const Tabs = (props: Props) => {
 
 type ListProps = {
   children: React.ReactElement[]
+  variant: Variants['variant']
   size: Variants['size']
 }
 
@@ -51,7 +52,7 @@ const TabsList = (props: ListProps) => {
       <Stack flexDirection="row" gap={8}>
         {Children.map(children, child => (
           <Trigger asChild value={child.props.value}>
-            {cloneElement(child, { size: props.size })}
+            {cloneElement(child, { size: props.size, variant: props.variant })}
           </Trigger>
         ))}
       </Stack>
@@ -86,19 +87,20 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
   const providedProps = props as TriggerProps & {
     size: 24 | 32
     'aria-selected': boolean
+    variant: Variants['variant']
   }
+
+  const { size, 'aria-selected': selected, variant } = providedProps
 
   const { color, pressableProps } = usePressableColors(
     {
-      default: '$neutral-100',
-      hover: '$neutral-100',
-      press: '$neutral-100',
+      default: variant === 'blur_darkGrey' ? '$white-100' : '$neutral-100',
+      hover: variant === 'blur_darkGrey' ? '$white-100' : '$neutral-100',
+      press: variant === 'blur_darkGrey' ? '$white-100' : '$neutral-100',
       active: '$white-100',
     },
     providedProps
   )
-
-  const { size, 'aria-selected': selected } = providedProps
 
   const textSize = triggerTextSizes[size]
 
@@ -108,6 +110,7 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       {...pressableProps}
       ref={ref}
       size={size}
+      variant={variant}
       active={selected}
     >
       {props.type === 'icon' &&
@@ -148,6 +151,35 @@ const TriggerBase = styled(View, {
   justifyContent: 'center',
 
   variants: {
+    variant: {
+      grey: {
+        backgroundColor: '$neutral-10',
+        hoverStyle: {
+          backgroundColor: '$neutral-20',
+        },
+      },
+      darkGrey: {
+        backgroundColor: '$neutral-20',
+        hoverStyle: {
+          backgroundColor: '$neutral-30',
+        },
+      },
+
+      blur_grey: {
+        backgroundColor: '$neutral-80/5',
+        hoverStyle: {
+          backgroundColor: '$neutral-80/10',
+          // backgroundColor: '$neutral-80/60',
+        },
+      },
+      blur_darkGrey: {
+        backgroundColor: '$white-5',
+        hoverStyle: {
+          backgroundColor: '$white-10',
+          // backgroundColor: '$white-20',
+        },
+      },
+    },
     size: {
       32: {
         height: 32,
@@ -163,15 +195,35 @@ const TriggerBase = styled(View, {
       },
     },
     active: {
-      true: {
-        cursor: 'default',
-        backgroundColor: '$neutral-50',
-      },
-      false: {
-        backgroundColor: '$neutral-10',
-        hoverStyle: {
-          backgroundColor: '$neutral-20',
-        },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      true: (_v, { props }) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const variant = (props as any).variant as Variants['variant']
+
+        if (variant === 'grey' || variant === 'darkGrey') {
+          return {
+            backgroundColor: '$neutral-50',
+            hoverStyle: { backgroundColor: '$neutral-50' },
+            pressStyle: { backgroundColor: '$neutral-50' },
+          }
+        }
+
+        if (variant === 'blur_grey') {
+          return {
+            backgroundColor: '$neutral-80/60',
+            hoverStyle: { backgroundColor: '$neutral-80/60' },
+            pressStyle: { backgroundColor: '$neutral-80/60' },
+          }
+        }
+
+        if (variant === 'blur_darkGrey') {
+          return {
+            backgroundColor: '$white-20',
+            hoverStyle: { backgroundColor: '$white-20' },
+            pressStyle: { backgroundColor: '$white-20' },
+          }
+        }
       },
     },
   } as const,
