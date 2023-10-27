@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 0.5.2
+
+### Patch Changes
+
+- 7afc447: - Add tabs variants
+  - Remove `backdrop-filter`
+
 ## 0.5.1
 
 ### Patch Changes
