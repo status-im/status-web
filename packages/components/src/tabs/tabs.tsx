@@ -176,7 +176,6 @@ const TriggerBase = styled(View, {
         backgroundColor: '$white-5',
         hoverStyle: {
           backgroundColor: '$white-10',
-          // backgroundColor: '$white-20',
         },
       },
     },
@@ -203,6 +202,7 @@ const TriggerBase = styled(View, {
 
         if (variant === 'grey' || variant === 'darkGrey') {
           return {
+            cursor: 'default',
             backgroundColor: '$neutral-50',
             hoverStyle: { backgroundColor: '$neutral-50' },
             pressStyle: { backgroundColor: '$neutral-50' },
@@ -211,6 +211,7 @@ const TriggerBase = styled(View, {
 
         if (variant === 'blur_grey') {
           return {
+            cursor: 'default',
             backgroundColor: '$neutral-80/60',
             hoverStyle: { backgroundColor: '$neutral-80/60' },
             pressStyle: { backgroundColor: '$neutral-80/60' },
@@ -219,6 +220,7 @@ const TriggerBase = styled(View, {
 
         if (variant === 'blur_darkGrey') {
           return {
+            cursor: 'default',
             backgroundColor: '$white-20',
             hoverStyle: { backgroundColor: '$white-20' },
             pressStyle: { backgroundColor: '$white-20' },
