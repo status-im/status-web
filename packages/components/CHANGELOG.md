@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.5.1
+
+### Patch Changes
+
+- 9d66ba0: Add `<Button />` blur subvariants
+
 ## 0.5.0
 
 ### Minor Changes
