@@ -63,7 +63,7 @@ export const ReactionsDialog = (props: Props) => {
     <Dialog.Content width={352} borderRadius="$12">
       <Tabs defaultValue={initialReactionType}>
         <Stack padding={16}>
-          <Tabs.List size={24}>
+          <Tabs.List variant="grey" size={24}>
             {Object.entries(reactions).map(([reaction, value]) => {
               const Icon = REACTIONS_ICONS[reaction as keyof ReactionsType]
               return (

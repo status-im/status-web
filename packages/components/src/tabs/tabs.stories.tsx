@@ -18,14 +18,114 @@ const meta: Meta<typeof Tabs> = {
   },
 }
 
-export const Default: StoryObj<TabsProps> = {
+export const Grey: StoryObj<TabsProps> = {
   args: {
     defaultValue: '1',
   },
   render(args) {
     return (
       <Tabs {...args}>
-        <Tabs.List size={32}>
+        <Tabs.List variant="grey" size={32}>
+          <Tabs.Trigger type="default" value="1">
+            Tab 1
+          </Tabs.Trigger>
+          <Tabs.Trigger type="default" value="2">
+            Tab 2
+          </Tabs.Trigger>
+          <Tabs.Trigger type="default" value="3">
+            Tab 3
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="1">
+          <Text size={15}>Content 1</Text>
+        </Tabs.Content>
+        <Tabs.Content value="2">
+          <Text size={15}>Content 2</Text>
+        </Tabs.Content>
+        <Tabs.Content value="3">
+          <Text size={15}>Content 3</Text>
+        </Tabs.Content>
+      </Tabs>
+    )
+  },
+}
+
+export const GreyBlur: StoryObj<TabsProps> = {
+  args: {
+    defaultValue: '1',
+  },
+  render(args) {
+    return (
+      <Tabs {...args}>
+        <Tabs.List variant="blur_grey" size={32}>
+          <Tabs.Trigger type="default" value="1">
+            Tab 1
+          </Tabs.Trigger>
+          <Tabs.Trigger type="default" value="2">
+            Tab 2
+          </Tabs.Trigger>
+          <Tabs.Trigger type="default" value="3">
+            Tab 3
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="1">
+          <Text size={15}>Content 1</Text>
+        </Tabs.Content>
+        <Tabs.Content value="2">
+          <Text size={15}>Content 2</Text>
+        </Tabs.Content>
+        <Tabs.Content value="3">
+          <Text size={15}>Content 3</Text>
+        </Tabs.Content>
+      </Tabs>
+    )
+  },
+}
+
+export const DarkGrey: StoryObj<TabsProps> = {
+  args: {
+    defaultValue: '1',
+  },
+  render(args) {
+    return (
+      <Tabs {...args}>
+        <Tabs.List variant="darkGrey" size={32}>
+          <Tabs.Trigger type="default" value="1">
+            Tab 1
+          </Tabs.Trigger>
+          <Tabs.Trigger type="default" value="2">
+            Tab 2
+          </Tabs.Trigger>
+          <Tabs.Trigger type="default" value="3">
+            Tab 3
+          </Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value="1">
+          <Text size={15}>Content 1</Text>
+        </Tabs.Content>
+        <Tabs.Content value="2">
+          <Text size={15}>Content 2</Text>
+        </Tabs.Content>
+        <Tabs.Content value="3">
+          <Text size={15}>Content 3</Text>
+        </Tabs.Content>
+      </Tabs>
+    )
+  },
+}
+export const DarkGreyBlur: StoryObj<TabsProps> = {
+  args: {
+    defaultValue: '1',
+  },
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
+  },
+  render(args) {
+    return (
+      <Tabs {...args}>
+        <Tabs.List variant="blur_darkGrey" size={32}>
           <Tabs.Trigger type="default" value="1">
             Tab 1
           </Tabs.Trigger>
@@ -57,7 +157,7 @@ export const Icon: StoryObj<TabsProps> = {
   render(args) {
     return (
       <Tabs {...args}>
-        <Tabs.List size={32}>
+        <Tabs.List variant="grey" size={32}>
           <Tabs.Trigger
             type="icon"
             value="1"
@@ -101,7 +201,7 @@ export const Counter: StoryObj<TabsProps> = {
   render(args) {
     return (
       <Tabs {...args}>
-        <Tabs.List size={32}>
+        <Tabs.List variant="grey" size={32}>
           <Tabs.Trigger type="counter" value="1" count={5}>
             Tab 1
           </Tabs.Trigger>
@@ -133,7 +233,7 @@ export const Step: StoryObj<TabsProps> = {
   render(args) {
     return (
       <Tabs {...args}>
-        <Tabs.List size={32}>
+        <Tabs.List variant="grey" size={32}>
           <Tabs.Trigger type="step" value="1" step={1}>
             Tab 1
           </Tabs.Trigger>
