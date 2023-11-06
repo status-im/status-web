@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.4.2
+
+### Patch Changes
+
+- 80b6f7a: Export serialize public key
+
 ## 0.4.1
 
 ### Patch Changes
