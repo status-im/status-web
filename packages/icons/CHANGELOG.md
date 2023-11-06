@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 0.6.0
+
+### Minor Changes
+
+- 3f75d6b: sync icons
+
 ## 0.5.0
 
 ### Minor Changes
