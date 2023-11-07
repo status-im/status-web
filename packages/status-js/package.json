@@ -46,7 +46,7 @@
     "clean": "rimraf dist node_modules .turbo"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^1.0.0",
+    "@bufbuild/protobuf": "1.4.2",
     "@scure/base": "^1.1.1",
     "ethereum-cryptography": "^1.0.3",
     "ethers": "^6.2.1",
@@ -54,7 +54,7 @@
     "multiformats": "^11.0.1"
   },
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^1.0.0",
+    "@bufbuild/protoc-gen-es": "1.4.2",
     "@status-im/eslint-config": "*",
     "happy-dom": "^9.1.7"
   },
