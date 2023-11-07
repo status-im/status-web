@@ -1,0 +1,13 @@
+diff --git a/node_modules/@libp2p/bootstrap/package.json b/node_modules/@libp2p/bootstrap/package.json
+index 11a2f41..d8ae3f8 100644
+--- a/node_modules/@libp2p/bootstrap/package.json
++++ b/node_modules/@libp2p/bootstrap/package.json
+@@ -24,7 +24,7 @@
+   ],
+   "exports": {
+     ".": {
+-      "types": "./src/index.d.ts",
++      "types": "./dist/src/index.d.ts",
+       "import": "./dist/src/index.js"
+     }
+   },

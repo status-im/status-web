@@ -23,10 +23,10 @@ import { mapChatMessage } from './map-chat-message'
 import type { Account } from '../account'
 import type { Client } from '../client'
 import type { Community } from './community'
-import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
+import type { DecodedMessage } from '@waku/message-encryption/symmetric'
 
 export function handleWakuMessage(
-  wakuMessage: WakuMessage,
+  wakuMessage: DecodedMessage,
   // state
   client: Client,
   community: Community,

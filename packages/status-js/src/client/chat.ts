@@ -1,5 +1,5 @@
-import { PageDirection } from 'js-waku'
-import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
+import { PageDirection } from '@waku/interfaces'
+import { createDecoder } from '@waku/message-encryption/symmetric'
 
 import { containsOnlyEmoji } from '../helpers/contains-only-emoji'
 import { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
@@ -207,8 +207,8 @@ export class Chat {
       endTime = new Date()
     }
 
-    await this.client.waku.store.queryOrderedCallback(
-      [new SymDecoder(this.contentTopic, this.symmetricKey)],
+    await this.client.waku.store.queryWithOrderedCallback(
+      [createDecoder(this.contentTopic, this.symmetricKey)],
       wakuMessage => {
         this.#fetchingMessages = true
         this.client.handleWakuMessage(wakuMessage)
