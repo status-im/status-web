@@ -38,7 +38,7 @@ const textColors: MapVariant<typeof Base, 'variant'> = {
   sky: '$white-100',
   yellow: '$white-100',
   pink: '$white-100',
-  cooper: '$white-100',
+  copper: '$white-100',
   camel: '$white-100',
   magenta: '$white-100',
   yin: '$white-100',
@@ -202,10 +202,10 @@ const Base = styled(View, {
         hoverStyle: { backgroundColor: '$pink-60' },
         pressStyle: { backgroundColor: '$pink-50' },
       },
-      cooper: {
-        backgroundColor: '$cooper-50',
-        hoverStyle: { backgroundColor: '$cooper-60' },
-        pressStyle: { backgroundColor: '$cooper-50' },
+      copper: {
+        backgroundColor: '$copper-50',
+        hoverStyle: { backgroundColor: '$copper-60' },
+        pressStyle: { backgroundColor: '$copper-50' },
       },
       camel: {
         backgroundColor: '$camel-50',
