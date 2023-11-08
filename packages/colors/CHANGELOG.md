@@ -1,5 +1,11 @@
 # @status-im/colors
 
+## 0.4.0
+
+### Minor Changes
+
+- cbc0e06: fix copper color typo
+
 ## 0.3.0
 
 ### Minor Changes
