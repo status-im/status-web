@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.6.0
+
+### Minor Changes
+
+- b539321: fix copper color typo
+
 ## 0.5.2
 
 ### Patch Changes
