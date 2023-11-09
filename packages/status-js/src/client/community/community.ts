@@ -1,5 +1,5 @@
+import { createDecoder } from '@waku/message-encryption/symmetric'
 import { hexToBytes } from 'ethereum-cryptography/utils'
-import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
 
 import { getDifferenceByKeys } from '../../helpers/get-difference-by-keys'
 import { getObjectsDifference } from '../../helpers/get-objects-difference'
@@ -93,8 +93,8 @@ export class Community {
 
   public fetch = async () => {
     // most recent page first
-    await this.client.waku.store.queryOrderedCallback(
-      [new SymDecoder(this.contentTopic, this.symmetricKey)],
+    await this.client.waku.store.queryWithOrderedCallback(
+      [createDecoder(this.contentTopic, this.symmetricKey)],
       wakuMessage => {
         this.client.handleWakuMessage(wakuMessage)
 
@@ -109,7 +109,7 @@ export class Community {
 
   private observe = async () => {
     await this.client.waku.filter.subscribe(
-      [new SymDecoder(this.contentTopic, this.symmetricKey)],
+      [createDecoder(this.contentTopic, this.symmetricKey)],
       this.client.handleWakuMessage
     )
   }
@@ -130,7 +130,7 @@ export class Community {
         this.chats.set(chatUuid, chat)
 
         const unobserveFn = await this.client.waku.filter.subscribe(
-          [new SymDecoder(chat.contentTopic, chat.symmetricKey)],
+          [createDecoder(chat.contentTopic, chat.symmetricKey)],
           this.client.handleWakuMessage
         )
 

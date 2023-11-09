@@ -1,9 +1,8 @@
+import { bootstrap } from '@libp2p/bootstrap'
+import { Protocols } from '@waku/interfaces'
+import { createDecoder } from '@waku/message-encryption/symmetric'
+import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { bytesToHex } from 'ethereum-cryptography/utils'
-import { Protocols } from 'js-waku'
-import { createLightNode } from 'js-waku/lib/create_waku'
-import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list'
-import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
-import { SymDecoder } from 'js-waku/lib/waku_message/version_1'
 
 import { peers } from '../consts/peers'
 import {
@@ -26,21 +25,21 @@ import { mapUser } from './map-user'
 import type { ChannelInfo } from './map-channel'
 import type { CommunityInfo } from './map-community'
 import type { UserInfo } from './map-user'
-import type { WakuLight } from 'js-waku/lib/interfaces'
-import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
+import type { LightNode } from '@waku/interfaces'
+import type { DecodedMessage } from '@waku/message-encryption/symmetric'
 
 export interface RequestClientOptions {
   environment?: 'production' | 'test'
 }
 
 class RequestClient {
-  public waku: WakuLight
+  public waku: LightNode
   /** Cache. */
   public readonly wakuMessages: Set<string>
 
   private started: boolean
 
-  constructor(waku: WakuLight, started = false) {
+  constructor(waku: LightNode, started = false) {
     this.waku = waku
     this.wakuMessages = new Set()
     this.started = started
@@ -49,7 +48,7 @@ class RequestClient {
   static async start(options: RequestClientOptions): Promise<RequestClient> {
     const { environment = 'production' } = options
 
-    let waku: WakuLight | undefined
+    let waku: LightNode | undefined
     let client: RequestClient | undefined
 
     try {
@@ -62,9 +61,7 @@ class RequestClient {
         pingKeepAlive: 0,
         relayKeepAlive: 0,
         libp2p: {
-          peerDiscovery: [
-            new PeerDiscoveryStaticPeers(peers[environment], { maxPeers: 1 }),
-          ],
+          peerDiscovery: [bootstrap({ list: peers[environment] })],
         },
       })
       await waku.start()
@@ -145,8 +142,8 @@ class RequestClient {
     const symmetricKey = await generateKeyFromPassword(publicKey)
 
     let communityDescription: CommunityDescription | undefined = undefined
-    await this.waku.store.queryOrderedCallback(
-      [new SymDecoder(contentTopic, symmetricKey)],
+    await this.waku.store.queryWithOrderedCallback(
+      [createDecoder(contentTopic, symmetricKey)],
       wakuMessage => {
         // handle
         const message = this.handleWakuMessage(wakuMessage)
@@ -202,8 +199,8 @@ class RequestClient {
 
     let contactCodeAdvertisement: ContactCodeAdvertisement | undefined =
       undefined
-    await this.waku.store.queryOrderedCallback(
-      [new SymDecoder(contentTopic, symmetricKey)],
+    await this.waku.store.queryWithOrderedCallback(
+      [createDecoder(contentTopic, symmetricKey)],
       wakuMessage => {
         // handle
         const message = this.handleWakuMessage(wakuMessage)
@@ -255,7 +252,7 @@ class RequestClient {
   }
 
   private handleWakuMessage = (
-    wakuMessage: WakuMessage
+    wakuMessage: DecodedMessage
   ):
     | {
         timestamp: Date

@@ -2,12 +2,11 @@
  * @see https://specs.status.im/spec/1
  */
 
+import { bootstrap } from '@libp2p/bootstrap'
+import { Protocols } from '@waku/interfaces'
+import { createEncoder } from '@waku/message-encryption/symmetric'
+import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { hexToBytes } from 'ethereum-cryptography/utils'
-import { Protocols } from 'js-waku'
-import { createLightNode } from 'js-waku/lib/create_waku'
-import { PeerDiscoveryStaticPeers } from 'js-waku/lib/peer_discovery_static_list'
-import { waitForRemotePeer } from 'js-waku/lib/wait_for_remote_peer'
-import { SymEncoder } from 'js-waku/lib/waku_message/version_1'
 
 import { peers } from '../consts/peers'
 import { ApplicationMetadataMessage } from '../protos/application-metadata-message_pb'
@@ -19,8 +18,8 @@ import { LocalStorage } from './storage'
 
 import type { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
 import type { Storage } from './storage'
-import type { WakuLight } from 'js-waku/lib/interfaces'
-import type { MessageV1 as WakuMessage } from 'js-waku/lib/waku_message/version_1'
+import type { LightNode } from '@waku/interfaces'
+import type { DecodedMessage } from '@waku/message-encryption/symmetric'
 
 const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
 
@@ -38,7 +37,7 @@ export interface ClientOptions {
 }
 
 class Client {
-  public waku: WakuLight
+  public waku: LightNode
   public readonly wakuMessages: Set<string>
   /**
    * Tracks open connections which had their streams silently destroyed
@@ -64,7 +63,7 @@ class Client {
 
   storage: Storage
 
-  constructor(waku: WakuLight, options: ClientOptions) {
+  constructor(waku: LightNode, options: ClientOptions) {
     // Waku
     /**
      * Waku should be connected and protocols awaited at this point, thus connected.
@@ -76,9 +75,9 @@ class Client {
     this.#wakuDisconnectionTimer = setInterval(async () => {
       const connectionsToClose: Promise<void>[] = []
 
-      for (const connection of this.waku.libp2p.connectionManager.getConnections()) {
+      for (const connection of this.waku.libp2p.getConnections()) {
         try {
-          await this.waku.libp2p.ping(connection.remoteAddr)
+          await this.waku.libp2p.services.ping.ping(connection.remoteAddr)
 
           if (!this.connected) {
             this.connected = true
@@ -96,7 +95,7 @@ class Client {
      * Note: Assumes 1 remote node and that the diconnection does not require calling
      * `waitForRemotePeer` again to ensure protocols/codecs.
      */
-    this.waku.libp2p.connectionManager.addEventListener('peer:connect', () => {
+    this.waku.libp2p.addEventListener('peer:connect', () => {
       this.connected = true // reconnect
 
       this.emitConnection(this.connected)
@@ -105,7 +104,7 @@ class Client {
      * >This event will **only** be triggered when the last connection is closed.
      * @see https://github.com/libp2p/js-libp2p/blob/bad9e8c0ff58d60a78314077720c82ae331cc55b/doc/API.md?plain=1#L2100
      */
-    waku.libp2p.connectionManager.addEventListener('peer:disconnect', () => {
+    waku.libp2p.addEventListener('peer:disconnect', () => {
       this.connected = false
 
       this.emitConnection(this.connected)
@@ -135,7 +134,7 @@ class Client {
   static async start(options: ClientOptions): Promise<Client> {
     const { environment = 'production' } = options
 
-    let waku: WakuLight | undefined
+    let waku: LightNode | undefined
     let client: Client | undefined
 
     try {
@@ -161,7 +160,7 @@ class Client {
              * >
              * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
              */
-            new PeerDiscoveryStaticPeers(peers[environment], { maxPeers: 1 }),
+            bootstrap({ list: peers[environment] }),
           ],
         },
       })
@@ -260,17 +259,17 @@ class Client {
       payload,
     }).toBinary()
 
-    await this.waku.lightPush.push(
-      new SymEncoder(
+    await this.waku.lightPush.send(
+      createEncoder({
         contentTopic,
         symKey,
-        hexToBytes(this.#account.privateKey)
-      ),
+        sigPrivKey: hexToBytes(this.#account.privateKey),
+      }),
       { payload: message }
     )
   }
 
-  public handleWakuMessage = (wakuMessage: WakuMessage): void => {
+  public handleWakuMessage = (wakuMessage: DecodedMessage): void => {
     handleWakuMessage(wakuMessage, this, this.community, this.#account)
   }
 }
