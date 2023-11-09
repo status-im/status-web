@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.4.3
+
+### Patch Changes
+
+- 51df6db: use `@waku/sdk`
+
 ## 0.4.2
 
 ### Patch Changes
