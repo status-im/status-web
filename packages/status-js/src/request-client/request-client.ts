@@ -61,7 +61,13 @@ class RequestClient {
         pingKeepAlive: 0,
         relayKeepAlive: 0,
         libp2p: {
-          peerDiscovery: [bootstrap({ list: peers[environment] })],
+          peerDiscovery: [
+            bootstrap({
+              list: peers[environment],
+              timeout: 0,
+              tagTTL: Infinity,
+            }),
+          ],
         },
       })
       await waku.start()

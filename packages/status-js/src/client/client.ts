@@ -160,7 +160,11 @@ class Client {
              * >
              * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
              */
-            bootstrap({ list: peers[environment] }),
+            bootstrap({
+              list: peers[environment],
+              timeout: 0,
+              tagTTL: Infinity,
+            }),
           ],
         },
       })
