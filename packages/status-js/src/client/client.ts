@@ -163,7 +163,8 @@ class Client {
             bootstrap({
               list: peers[environment],
               timeout: 0,
-              tagTTL: Infinity,
+              // note: Infinity prevents connection
+              // tagTTL: Infinity,
             }),
           ],
         },
