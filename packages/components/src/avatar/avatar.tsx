@@ -216,7 +216,16 @@ const Avatar = (props: AvatarProps) => {
                   color="$white-100"
                   select={false}
                 >
-                  {props.name.slice(0, 2).toUpperCase()}
+                  {props.name
+                    .slice(
+                      0,
+                      props.type === 'user' &&
+                        props.size < 28 &&
+                        (!props.indicator || props.indicator === 'none')
+                        ? 1
+                        : 2
+                    )
+                    .toUpperCase()}
                 </Text>
               )}
             </Fallback>
@@ -267,7 +276,7 @@ const Avatar = (props: AvatarProps) => {
               color="$white-100"
               select={false}
             >
-              {props.name.slice(0, 2).toUpperCase()}
+              {props.name.slice(0, props.size < 24 ? 1 : 2).toUpperCase()}
             </Text>
           </Fallback>
         )
