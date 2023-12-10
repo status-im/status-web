@@ -26,7 +26,7 @@ const Toast = (props: Props) => {
 
   const renderIcon = () => {
     if (!props.type) {
-      return cloneElement(props.icon, { color: '$white-70' })
+      return cloneElement(props.icon, { color: '$white/70' })
     }
 
     if (props.type === 'positive') {
