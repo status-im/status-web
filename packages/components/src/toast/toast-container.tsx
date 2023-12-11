@@ -56,6 +56,11 @@ const ToastContainer = () => {
         defaultOpen
         onOpenChange={handleOpenChange}
         style={{ position: 'fixed' }}
+        // note: prevent swipe gestures from closing the toast until animation is implemented
+        onSwipeStart={event => event.preventDefault()}
+        onSwipeMove={event => event.preventDefault()}
+        onSwipeCancel={event => event.preventDefault()}
+        onSwipeEnd={event => event.preventDefault()}
       >
         <Toast {...store.toast} />
       </ToastRoot>
