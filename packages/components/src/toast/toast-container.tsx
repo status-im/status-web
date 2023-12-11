@@ -12,31 +12,46 @@ import type { ToastProps as RootProps } from '@radix-ui/react-toast'
 type ToastRootProps = Partial<Pick<RootProps, 'duration' | 'type'>>
 
 type ToastState = {
-  toast: ToastProps | null
+  toast: (ToastProps & { rootProps?: ToastRootProps }) | null
   dismiss: () => void
-  positive: (
-    message: string,
+  positive: (args: {
+    message: string
     actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-  ) => void
-  negative: (
-    message: string,
+    rootProps?: ToastRootProps
+  }) => void
+  negative: (args: {
+    message: string
     actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-  ) => void
-  custom: (
-    message: string,
-    icon: React.ReactElement,
+    rootProps?: ToastRootProps
+  }) => void
+  custom: (args: {
+    message: string
+    icon: React.ReactElement
     actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-  ) => void
+    rootProps?: ToastRootProps
+  }) => void
 }
 
 const useStore = create<ToastState>()(set => ({
   toast: null,
-  positive: (message, actionProps) =>
-    set({ toast: { ...actionProps, message, type: 'positive' } }),
-  negative: (message, actionProps) =>
-    set({ toast: { ...actionProps, message, type: 'negative' } }),
-  custom: (message, icon, actionProps) =>
-    set({ toast: { ...actionProps, message, icon } }),
+  positive: args =>
+    set({
+      toast: {
+        ...args,
+        type: 'positive',
+      },
+    }),
+  negative: args =>
+    set({
+      toast: {
+        ...args,
+        type: 'negative',
+      },
+    }),
+  custom: args =>
+    set({
+      toast: { ...args },
+    }),
   dismiss: () => set({ toast: null }),
 }))
 
@@ -53,6 +68,8 @@ const ToastContainer = () => {
     }
   }
 
+  const { rootProps, ...restProps } = store.toast
+
   return (
     <Provider>
       <ToastRoot
@@ -64,8 +81,9 @@ const ToastContainer = () => {
         onSwipeMove={event => event.preventDefault()}
         onSwipeCancel={event => event.preventDefault()}
         onSwipeEnd={event => event.preventDefault()}
+        {...rootProps}
       >
-        <Toast {...store.toast} />
+        <Toast {...restProps} />
       </ToastRoot>
       <Viewport />
     </Provider>
