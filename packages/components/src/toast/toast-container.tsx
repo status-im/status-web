@@ -72,6 +72,7 @@ const useToast = () => {
       positive: store.positive,
       negative: store.negative,
       custom: store.custom,
+      dismiss: store.dismiss,
     }),
     [store]
   )
