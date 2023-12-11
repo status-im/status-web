@@ -7,6 +7,9 @@ import { create } from 'zustand'
 import { Toast } from './toast'
 
 import type { ToastProps } from './toast'
+import type { ToastProps as RootProps } from '@radix-ui/react-toast'
+
+type ToastRootProps = Partial<Pick<RootProps, 'duration' | 'type'>>
 
 type ToastState = {
   toast: ToastProps | null
