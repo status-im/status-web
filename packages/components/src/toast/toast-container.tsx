@@ -14,43 +14,51 @@ type ToastRootProps = Partial<Pick<RootProps, 'duration' | 'type'>>
 type ToastState = {
   toast: (ToastProps & { rootProps?: ToastRootProps }) | null
   dismiss: () => void
-  positive: (args: {
-    message: string
-    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-    rootProps?: ToastRootProps
-  }) => void
-  negative: (args: {
-    message: string
-    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-    rootProps?: ToastRootProps
-  }) => void
-  custom: (args: {
-    message: string
-    icon: React.ReactElement
-    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-    rootProps?: ToastRootProps
-  }) => void
+  positive: (
+    message: string,
+    options?: {
+      actionProps?: Pick<ToastProps, 'action' | 'onAction'>
+      rootProps?: ToastRootProps
+    }
+  ) => void
+  negative: (
+    message: string,
+    options?: {
+      actionProps?: Pick<ToastProps, 'action' | 'onAction'>
+      rootProps?: ToastRootProps
+    }
+  ) => void
+  custom: (
+    message: string,
+    icon: React.ReactElement,
+    options?: {
+      actionProps?: Pick<ToastProps, 'action' | 'onAction'>
+      rootProps?: ToastRootProps
+    }
+  ) => void
 }
 
 const useStore = create<ToastState>()(set => ({
   toast: null,
-  positive: args =>
+  positive: (message, options) =>
     set({
       toast: {
-        ...args,
+        message,
+        ...options,
         type: 'positive',
       },
     }),
-  negative: args =>
+  negative: (message, options) =>
     set({
       toast: {
-        ...args,
+        message,
+        ...options,
         type: 'negative',
       },
     }),
-  custom: args =>
+  custom: (message, icon, options) =>
     set({
-      toast: { ...args },
+      toast: { message, icon, ...options },
     }),
   dismiss: () => set({ toast: null }),
 }))

@@ -26,9 +26,7 @@ const ToastWithHook = () => {
   return (
     <Button
       size={32}
-      onPress={() =>
-        toast.positive({ message: 'Great success! This means good stuff!' })
-      }
+      onPress={() => toast.positive('Great success! This means good stuff!')}
     >
       Show Toast
     </Button>
