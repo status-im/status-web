@@ -1,6 +1,6 @@
 {
   "name": "@status-im/components",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "sideEffects": [
     "*.css"
   ],
