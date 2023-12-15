@@ -38,7 +38,7 @@ const Toast = (props: Props) => {
 
   return (
     <Base action={Boolean(action)}>
-      <Stack flex={1} flexDirection="row" gap={4}>
+      <Stack flex={1} flexDirection="row" gap={4} alignItems="center">
         <Stack width={20}>{renderIcon()}</Stack>
         <Description asChild>
           <Text size={13} weight={'medium'} color="$white-100">

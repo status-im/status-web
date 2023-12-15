@@ -7,33 +7,44 @@ import { create } from 'zustand'
 import { Toast } from './toast'
 
 import type { ToastProps } from './toast'
+import type { ToastProps as RootProps } from '@radix-ui/react-toast'
+
+type ToastRootProps = Partial<Pick<RootProps, 'duration'>> & {
+  originType?: RootProps['type']
+}
+
+type Options = ToastRootProps & Pick<ToastProps, 'action' | 'onAction'>
 
 type ToastState = {
-  toast: ToastProps | null
+  toast: (ToastProps & ToastRootProps) | null
   dismiss: () => void
-  positive: (
-    message: string,
-    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-  ) => void
-  negative: (
-    message: string,
-    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-  ) => void
-  custom: (
-    message: string,
-    icon: React.ReactElement,
-    actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-  ) => void
+  positive: (message: string, options?: Options) => void
+  negative: (message: string, options?: Options) => void
+  custom: (message: string, icon: React.ReactElement, options?: Options) => void
 }
 
 const useStore = create<ToastState>()(set => ({
   toast: null,
-  positive: (message, actionProps) =>
-    set({ toast: { ...actionProps, message, type: 'positive' } }),
-  negative: (message, actionProps) =>
-    set({ toast: { ...actionProps, message, type: 'negative' } }),
-  custom: (message, icon, actionProps) =>
-    set({ toast: { ...actionProps, message, icon } }),
+  positive: (message, options) =>
+    set({
+      toast: {
+        message,
+        ...options,
+        type: 'positive',
+      },
+    }),
+  negative: (message, options) =>
+    set({
+      toast: {
+        message,
+        ...options,
+        type: 'negative',
+      },
+    }),
+  custom: (message, icon, options) =>
+    set({
+      toast: { message, icon, ...options },
+    }),
   dismiss: () => set({ toast: null }),
 }))
 
@@ -50,14 +61,23 @@ const ToastContainer = () => {
     }
   }
 
+  const { duration, originType, ...restProps } = store.toast
+
   return (
     <Provider>
       <ToastRoot
         defaultOpen
         onOpenChange={handleOpenChange}
         style={{ position: 'fixed' }}
+        // note: prevent swipe gestures from closing the toast until animation is implemented
+        onSwipeStart={event => event.preventDefault()}
+        onSwipeMove={event => event.preventDefault()}
+        onSwipeCancel={event => event.preventDefault()}
+        onSwipeEnd={event => event.preventDefault()}
+        duration={duration}
+        type={originType}
       >
-        <Toast {...store.toast} />
+        <Toast {...restProps} />
       </ToastRoot>
       <Viewport />
     </Provider>
@@ -72,6 +92,7 @@ const useToast = () => {
       positive: store.positive,
       negative: store.negative,
       custom: store.custom,
+      dismiss: store.dismiss,
     }),
     [store]
   )
