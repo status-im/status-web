@@ -45,79 +45,161 @@ export const User: StoryObj<UserArgs> = {
   render: args => (
     <Stack space flexDirection="row">
       <Stack space flexDirection="column">
-        <Stack space alignItems="flex-start">
-          <Avatar
-            {...args}
-            size={80}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
-          <Avatar
-            {...args}
-            size={56}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
-          <Avatar
-            {...args}
-            size={48}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
-          <Avatar
-            {...args}
-            size={32}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
+        <Stack space flexDirection="row">
+          <Stack space alignItems="flex-start">
+            <Avatar
+              {...args}
+              size={80}
+              indicator="online"
+              colorHash={[
+                [3, 30],
+                [2, 10],
+                [5, 5],
+                [3, 14],
+                [5, 4],
+                [4, 19],
+                [3, 16],
+                [4, 0],
+                [5, 28],
+                [4, 13],
+                [4, 15],
+              ]}
+            />
+            <Avatar
+              {...args}
+              size={56}
+              indicator="online"
+              colorHash={[
+                [3, 30],
+                [2, 10],
+                [5, 5],
+                [3, 14],
+                [5, 4],
+                [4, 19],
+                [3, 16],
+                [4, 0],
+                [5, 28],
+                [4, 13],
+                [4, 15],
+              ]}
+            />
+            <Avatar
+              {...args}
+              size={48}
+              indicator="online"
+              colorHash={[
+                [3, 30],
+                [2, 10],
+                [5, 5],
+                [3, 14],
+                [5, 4],
+                [4, 19],
+                [3, 16],
+                [4, 0],
+                [5, 28],
+                [4, 13],
+                [4, 15],
+              ]}
+            />
+            <Avatar
+              {...args}
+              size={32}
+              indicator="online"
+              colorHash={[
+                [3, 30],
+                [2, 10],
+                [5, 5],
+                [3, 14],
+                [5, 4],
+                [4, 19],
+                [3, 16],
+                [4, 0],
+                [5, 28],
+                [4, 13],
+                [4, 15],
+              ]}
+            />
+          </Stack>
+          <Stack space flexDirection="column">
+            <Stack space alignItems="flex-start">
+              <Avatar
+                {...args}
+                src={undefined}
+                size={80}
+                indicator="online"
+                colorHash={[
+                  [3, 30],
+                  [2, 10],
+                  [5, 5],
+                  [3, 14],
+                  [5, 4],
+                  [4, 19],
+                  [3, 16],
+                  [4, 0],
+                  [5, 28],
+                  [4, 13],
+                  [4, 15],
+                ]}
+              />
+              <Avatar
+                {...args}
+                src={undefined}
+                size={56}
+                indicator="online"
+                colorHash={[
+                  [3, 30],
+                  [2, 10],
+                  [5, 5],
+                  [3, 14],
+                  [5, 4],
+                  [4, 19],
+                  [3, 16],
+                  [4, 0],
+                  [5, 28],
+                  [4, 13],
+                  [4, 15],
+                ]}
+              />
+              <Avatar
+                {...args}
+                src={undefined}
+                size={48}
+                indicator="online"
+                colorHash={[
+                  [3, 30],
+                  [2, 10],
+                  [5, 5],
+                  [3, 14],
+                  [5, 4],
+                  [4, 19],
+                  [3, 16],
+                  [4, 0],
+                  [5, 28],
+                  [4, 13],
+                  [4, 15],
+                ]}
+              />
+              <Avatar
+                {...args}
+                src={undefined}
+                size={32}
+                indicator="online"
+                colorHash={[
+                  [3, 30],
+                  [2, 10],
+                  [5, 5],
+                  [3, 14],
+                  [5, 4],
+                  [4, 19],
+                  [3, 16],
+                  [4, 0],
+                  [5, 28],
+                  [4, 13],
+                  [4, 15],
+                ]}
+              />
+            </Stack>
+          </Stack>
         </Stack>
         <Stack space alignItems="flex-start">
           <Avatar {...args} size={80} indicator="online" />
@@ -127,95 +209,27 @@ export const User: StoryObj<UserArgs> = {
           <Avatar {...args} size={28} indicator="online" />
           <Avatar {...args} size={24} indicator="online" />
         </Stack>
-        <Stack space alignItems="flex-start">
-          <Avatar {...args} size={80} />
-          <Avatar {...args} size={56} />
-          <Avatar {...args} size={48} />
-          <Avatar {...args} size={32} />
-          <Avatar {...args} size={28} />
-          <Avatar {...args} size={24} />
-          <Avatar {...args} size={20} />
-          <Avatar {...args} size={16} />
-        </Stack>
-      </Stack>
-      <Stack space flexDirection="column">
-        <Stack space alignItems="flex-start">
-          <Avatar
-            {...args}
-            src={undefined}
-            size={80}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
-          <Avatar
-            {...args}
-            src={undefined}
-            size={56}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
-          <Avatar
-            {...args}
-            src={undefined}
-            size={48}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
-          <Avatar
-            {...args}
-            src={undefined}
-            size={32}
-            indicator="online"
-            colorHash={[
-              [3, 30],
-              [2, 10],
-              [5, 5],
-              [3, 14],
-              [5, 4],
-              [4, 19],
-              [3, 16],
-              [4, 0],
-              [5, 28],
-              [4, 13],
-              [4, 15],
-            ]}
-          />
+        <Stack space flexDirection="row">
+          <Stack space alignItems="flex-start">
+            <Avatar {...args} size={80} />
+            <Avatar {...args} size={56} />
+            <Avatar {...args} size={48} />
+            <Avatar {...args} size={32} />
+            <Avatar {...args} size={28} />
+            <Avatar {...args} size={24} />
+            <Avatar {...args} size={20} />
+            <Avatar {...args} size={16} />
+          </Stack>
+          <Stack space alignItems="flex-start">
+            <Avatar {...args} src={undefined} size={80} />
+            <Avatar {...args} src={undefined} size={56} />
+            <Avatar {...args} src={undefined} size={48} />
+            <Avatar {...args} src={undefined} size={32} />
+            <Avatar {...args} src={undefined} size={28} />
+            <Avatar {...args} src={undefined} size={24} />
+            <Avatar {...args} src={undefined} size={20} />
+            <Avatar {...args} src={undefined} size={16} />
+          </Stack>
         </Stack>
       </Stack>
     </Stack>
