@@ -74,8 +74,8 @@ const ToastContainer = () => {
         onSwipeMove={event => event.preventDefault()}
         onSwipeCancel={event => event.preventDefault()}
         onSwipeEnd={event => event.preventDefault()}
-        {...(duration && { duration })}
-        {...(originType && { type: originType })}
+        duration={duration}
+        type={originType}
       >
         <Toast {...restProps} />
       </ToastRoot>
