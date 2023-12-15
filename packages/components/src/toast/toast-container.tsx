@@ -9,33 +9,18 @@ import { Toast } from './toast'
 import type { ToastProps } from './toast'
 import type { ToastProps as RootProps } from '@radix-ui/react-toast'
 
-type ToastRootProps = Partial<Pick<RootProps, 'duration' | 'type'>>
+type ToastRootProps = Partial<Pick<RootProps, 'duration'>> & {
+  originType?: RootProps['type']
+}
+
+type Options = ToastRootProps & Pick<ToastProps, 'action' | 'onAction'>
 
 type ToastState = {
-  toast: (ToastProps & { rootProps?: ToastRootProps }) | null
+  toast: (ToastProps & ToastRootProps) | null
   dismiss: () => void
-  positive: (
-    message: string,
-    options?: {
-      actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-      rootProps?: ToastRootProps
-    }
-  ) => void
-  negative: (
-    message: string,
-    options?: {
-      actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-      rootProps?: ToastRootProps
-    }
-  ) => void
-  custom: (
-    message: string,
-    icon: React.ReactElement,
-    options?: {
-      actionProps?: Pick<ToastProps, 'action' | 'onAction'>
-      rootProps?: ToastRootProps
-    }
-  ) => void
+  positive: (message: string, options?: Options) => void
+  negative: (message: string, options?: Options) => void
+  custom: (message: string, icon: React.ReactElement, options?: Options) => void
 }
 
 const useStore = create<ToastState>()(set => ({
@@ -76,7 +61,7 @@ const ToastContainer = () => {
     }
   }
 
-  const { rootProps, ...restProps } = store.toast
+  const { duration, originType, ...restProps } = store.toast
 
   return (
     <Provider>
@@ -89,7 +74,8 @@ const ToastContainer = () => {
         onSwipeMove={event => event.preventDefault()}
         onSwipeCancel={event => event.preventDefault()}
         onSwipeEnd={event => event.preventDefault()}
-        {...rootProps}
+        {...(duration && { duration })}
+        {...(originType && { type: originType })}
       >
         <Toast {...restProps} />
       </ToastRoot>
