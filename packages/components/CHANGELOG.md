@@ -1,5 +1,13 @@
 # @status-im/components
 
+## 0.6.1
+
+### Patch Changes
+
+- 70cb660: update avatar initials
+- f9b9220: update toast options
+- f6b7ca3: fix toast icon color
+
 ## 0.6.0
 
 ### Minor Changes

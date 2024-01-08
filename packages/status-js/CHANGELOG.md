@@ -1,5 +1,12 @@
 # @status-im/js
 
+## 0.4.4
+
+### Patch Changes
+
+- 92ff3bd: fix types export of multi entry point package
+- edb4bee: config `@libp2p/bootstrap`
+
 ## 0.4.3
 
 ### Patch Changes
