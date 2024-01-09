@@ -125,3 +125,7 @@ And run it:
 ```sh
 yarn workspace with-vite run dev
 ```
+
+## Sponsors
+
+This project is sponsored by Browserstack.
