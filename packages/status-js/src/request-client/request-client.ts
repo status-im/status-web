@@ -29,7 +29,7 @@ import type { LightNode } from '@waku/interfaces'
 import type { DecodedMessage } from '@waku/message-encryption/symmetric'
 
 export interface RequestClientOptions {
-  environment?: 'production' | 'test'
+  environment?: 'test' // 'production' | 'test'
 }
 
 class RequestClient {
@@ -46,7 +46,7 @@ class RequestClient {
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
-    const { environment = 'production' } = options
+    const { environment = 'test' } = options
 
     let waku: LightNode | undefined
     let client: RequestClient | undefined
@@ -58,8 +58,8 @@ class RequestClient {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         emitSelf: true,
-        pingKeepAlive: 0,
-        relayKeepAlive: 0,
+        // pingKeepAlive: 0,
+        // relayKeepAlive: 0,
         libp2p: {
           peerDiscovery: [
             bootstrap({
@@ -70,6 +70,7 @@ class RequestClient {
             }),
           ],
         },
+        pubsubTopics: ['/waku/2/rs/16/32', '/waku/2/default-waku/proto'],
       })
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
@@ -150,7 +151,7 @@ class RequestClient {
 
     let communityDescription: CommunityDescription | undefined = undefined
     await this.waku.store.queryWithOrderedCallback(
-      [createDecoder(contentTopic, symmetricKey)],
+      [createDecoder(contentTopic, symmetricKey, '/waku/2/rs/16/32')],
       wakuMessage => {
         // handle
         const message = this.handleWakuMessage(wakuMessage)
@@ -207,7 +208,7 @@ class RequestClient {
     let contactCodeAdvertisement: ContactCodeAdvertisement | undefined =
       undefined
     await this.waku.store.queryWithOrderedCallback(
-      [createDecoder(contentTopic, symmetricKey)],
+      [createDecoder(contentTopic, symmetricKey, '/waku/2/rs/16/32')],
       wakuMessage => {
         // handle
         const message = this.handleWakuMessage(wakuMessage)
