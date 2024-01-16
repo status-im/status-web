@@ -1,3 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* For rgb(255 115 179 / <alpha-value>) */
+    --color-customisation-50: 42 74 245;
+    --color-customisation-60: 34 59 196;
+  }
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
