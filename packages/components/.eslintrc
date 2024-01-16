@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["@status-im/eslint-config"]
+  "extends": ["plugin:tailwindcss/recommended", "@status-im/eslint-config"]
 }
