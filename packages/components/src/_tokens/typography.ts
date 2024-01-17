@@ -27,16 +27,16 @@ export const typography = {
   15: {
     fontSize: '0.9375rem',
     lineHeight: '1.359375rem',
-    // letterSpacing: '-0.0084375rem',
+    letterSpacing: '-0.0084375rem',
   },
   13: {
     fontSize: '0.8125rem',
     lineHeight: '1.1375rem',
-    // letterSpacing: '-0.0024375rem',
+    letterSpacing: '-0.0024375rem',
   },
   11: {
     fontSize: '0.6875rem',
     lineHeight: '0.97625rem',
-    // letterSpacing: '-0.0034375rem',
+    letterSpacing: '-0.0034375rem',
   },
 } as const

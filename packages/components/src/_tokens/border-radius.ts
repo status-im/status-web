@@ -8,4 +8,4 @@ export const borderRadius = {
   7: '16px',
   8: '20px',
   full: '9999px',
-}
+} as const
