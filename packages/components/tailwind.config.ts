@@ -3,7 +3,7 @@ import * as colors from '@status-im/colors'
 import { fontFamily } from 'tailwindcss/defaultTheme'
 import reactAriaComponentsPlugin from 'tailwindcss-react-aria-components'
 
-// import plugin from 'tailwindcss/plugin'
+import { borderRadius } from './src/_tokens/border-radius'
 import { shadows } from './src/_tokens/shadows'
 import { typography } from './src/_tokens/typography'
 
@@ -44,6 +44,8 @@ export default {
     boxShadow: {
       ...shadows.light,
     },
+
+    borderRadius,
   },
 
   //   colors: colors,

@@ -11,4 +11,4 @@ export const shadows = {
     3: '0px 12px 50px 0px rgba(9, 16, 28, 0.64)',
     4: '0px 16px 64px 0px rgba(9, 16, 28, 0.72)',
   },
-}
+} as const
