@@ -1,6 +1,7 @@
 import * as colors from '@status-im/colors'
 // import { scrollbarWidth } from 'tailwind-scrollbar-utilities'
 import { fontFamily } from 'tailwindcss/defaultTheme'
+import plugin from 'tailwindcss/plugin'
 import reactAriaComponentsPlugin from 'tailwindcss-react-aria-components'
 
 import { borderRadius } from './src/_tokens/border-radius'
@@ -10,6 +11,8 @@ import { typography } from './src/_tokens/typography'
 import type { Config } from 'tailwindcss'
 
 export default {
+  darkMode: 'class',
+
   future: {
     hoverOnlyWhenSupported: true,
   },
@@ -68,6 +71,11 @@ export default {
   //   },
 
   plugins: [
+    // @see: https://github.com/tailwindlabs/tailwindcss/blob/0848e4ca26c0869a90818adb7337b5a463be38d0/src/corePlugins.js#L218
+    plugin(({ addVariant }) => {
+      const selector = '[data-background="blur"]'
+      addVariant('blurry', `:is(${selector} &)`)
+    }),
     reactAriaComponentsPlugin,
     // require('tailwindcss-animate'),
     // // add scrollbar utilities before lands in tailwindcss
@@ -75,14 +83,5 @@ export default {
     // scrollbarWidth(),
     // // scrollbarColor(),
     // // scrollbarGutter(),
-    // plugin(({ addUtilities }) => {
-    //   addUtilities({
-    //     '.shadoww': {
-    //       1: {
-    //         background: 'pink',
-    //       },
-    //     },
-    //   })
-    // }),
   ],
 } satisfies Config
