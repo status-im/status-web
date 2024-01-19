@@ -23,6 +23,12 @@ export default {
       sans: ['var(--font-sans)', ...fontFamily.sans],
       //     mono: fontFamily.mono,
     },
+    fontWeight: {
+      regular: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+    },
 
     fontSize: Object.entries(typography).reduce((acc, [key, value]) => {
       acc[key] = [
@@ -36,6 +42,8 @@ export default {
     }, {}),
 
     colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
       ...colors,
       customisation: {
         50: 'rgb(var(--color-customisation-50))',
@@ -52,17 +60,6 @@ export default {
   },
 
   //   colors: colors,
-
-  //   fontWeight: {
-  //     regular: '400',
-  //     400: '400',
-  //     medium: '500',
-  //     500: '500',
-  //     semibold: '600',
-  //     600: '600',
-  //     bold: '700',
-  //     700: '700',
-  //   },
 
   //   boxShadow: {
   //     1: '0px 2px 20px rgba(9, 16, 28, 0.04)',
