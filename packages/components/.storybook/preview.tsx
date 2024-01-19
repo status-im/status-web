@@ -1,5 +1,6 @@
 import React from 'react'
 import type { Preview } from '@storybook/react'
+import { themes } from '@storybook/theming'
 
 import { Provider, ToastContainer } from '../src'
 
@@ -17,18 +18,24 @@ import './reset.css'
 
 const preview: Preview = {
   parameters: {
-    // layout: 'centered',
+    layout: 'centered',
+    // darkMode: {
+    //   darkClass: 'dark',
+    //   lightClass: 'light',
+    //   // dark: { ...themes.dark, appPreviewBg: 'pink' },
+    //   // light: { ...themes.normal },
+    // },
   },
-  decorators: [
-    Story => {
-      return (
-        <Provider>
-          <Story />
-          <ToastContainer />
-        </Provider>
-      )
-    },
-  ],
+  //   decorators: [
+  //     Story => {
+  // return      <Story />
+  //       return (
+  //         // <Provider>
+  //           {/* <ToastContainer /> */}
+  //         {/* </Provider> */}
+  //       )
+  //     },
+  // ],
 }
 
 export default preview
