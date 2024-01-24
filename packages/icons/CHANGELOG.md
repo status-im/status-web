@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 0.7.0
+
+### Minor Changes
+
+- b59b504: Updates and syncs new icons from design system
+
 ## 0.6.0
 
 ### Minor Changes
