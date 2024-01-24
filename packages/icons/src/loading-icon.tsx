@@ -12,11 +12,7 @@ const SvgLoadingIcon = createIcon(props => {
       focusable={false}
       aria-hidden={true}
     >
-      <path
-        stroke={props.color}
-        strokeWidth={1.2}
-        d="M10.1 2.6a7.5 7.5 0 1 0 7.5 7.5"
-      />
+      <path stroke={props.color} strokeWidth={1.2} d="M17 10a7 7 0 1 1-7-7" />
       <mask
         id="loading-icon_svg__b"
         width={10}
@@ -31,11 +27,7 @@ const SvgLoadingIcon = createIcon(props => {
         <path fill="url(#loading-icon_svg__a)" d="M9 1h10v10H9z" />
       </mask>
       <g mask="url(#loading-icon_svg__b)">
-        <path
-          stroke={props.color}
-          strokeWidth={1.2}
-          d="M17.6 10.1a7.5 7.5 0 0 0-7.5-7.5"
-        />
+        <path stroke={props.color} strokeWidth={1.2} d="M10 3a7 7 0 0 1 7 7" />
       </g>
       <defs>
         <linearGradient

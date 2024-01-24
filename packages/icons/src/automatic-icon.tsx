@@ -15,10 +15,10 @@ const SvgAutomaticIcon = createIcon(props => {
       <path
         fill="#A1ABBD"
         fillRule="evenodd"
-        d="M8.958 5.723a5.5 5.5 0 1 0 0 8.554A6.97 6.97 0 0 1 7.5 10a6.97 6.97 0 0 1 1.458-4.277Z"
+        d="M8.813 6.433a4 4 0 1 0 0 7.133A5.478 5.478 0 0 1 7.5 10c0-1.36.494-2.606 1.313-3.567Z"
         clipRule="evenodd"
       />
-      <circle cx={14.5} cy={10} r={5.5} fill="#23ADA0" />
+      <circle cx={13} cy={10} r={4} fill="#23ADA0" />
     </svg>
   )
 })

@@ -5,11 +5,7 @@
   fill="none"
   viewBox="0 0 20 20"
 >
-  <path
-    stroke="#09101C"
-    stroke-width="1.2"
-    d="M10.1 2.6a7.5 7.5 0 1 0 7.5 7.5"
-  />
+  <path stroke="#09101C" stroke-width="1.2" d="M17 10a7 7 0 1 1-7-7" />
   <mask
     id="mask0_1036_13"
     width="10"
@@ -22,11 +18,7 @@
     <path fill="url(#paint0_linear_1036_13)" d="M9 1h10v10H9z" />
   </mask>
   <g mask="url(#mask0_1036_13)">
-    <path
-      stroke="#09101C"
-      stroke-width="1.2"
-      d="M17.6 10.1a7.5 7.5 0 0 0-7.5-7.5"
-    />
+    <path stroke="#09101C" stroke-width="1.2" d="M10 3a7 7 0 0 1 7 7" />
   </g>
   <defs>
     <linearGradient

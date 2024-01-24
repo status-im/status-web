@@ -12,7 +12,7 @@ const SvgCorrectIcon = createIcon(props => {
       focusable={false}
       aria-hidden={true}
     >
-      <circle cx={10} cy={10} r={7.5} stroke="#23ADA0" strokeWidth={1.2} />
+      <circle cx={10} cy={10} r={7} stroke="#23ADA0" strokeWidth={1.2} />
       <path stroke="#23ADA0" strokeWidth={1.2} d="m7.25 10.75 2 1.5 3.5-4.5" />
     </svg>
   )
