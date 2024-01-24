@@ -12,7 +12,7 @@ const SvgAddSmallIcon = createIcon(props => {
       focusable={false}
       aria-hidden={true}
     >
-      <circle cx={10} cy={10} r={7.5} stroke="#A1ABBD" strokeWidth={1.2} />
+      <circle cx={10} cy={10} r={7} stroke="#A1ABBD" strokeWidth={1.2} />
       <path
         fill={props.color}
         fillRule="evenodd"

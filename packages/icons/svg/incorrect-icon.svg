@@ -5,7 +5,7 @@
   fill="none"
   viewBox="0 0 20 20"
 >
-  <circle cx="10" cy="10" r="7.5" stroke="#E95460" stroke-width="1.2" />
+  <circle cx="10" cy="10" r="7" stroke="#E95460" stroke-width="1.2" />
   <path
     fill="#E95460"
     fill-rule="evenodd"

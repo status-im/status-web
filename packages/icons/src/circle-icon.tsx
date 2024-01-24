@@ -15,13 +15,13 @@ const SvgCircleIcon = createIcon(props => {
       <path
         fill="#2A4AF5"
         fillRule="evenodd"
-        d="M10 3.2a6.8 6.8 0 1 0 0 13.6 6.8 6.8 0 0 0 0-13.6ZM10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z"
+        d="M10 3.625a6.375 6.375 0 1 0 0 12.75 6.375 6.375 0 0 0 0-12.75ZM10 2.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15Z"
         clipRule="evenodd"
       />
       <path
         fill="#2A4AF5"
         fillRule="evenodd"
-        d="M10 3.2a6.8 6.8 0 1 0 0 13.6 6.8 6.8 0 0 0 0-13.6Z"
+        d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"
         clipRule="evenodd"
         opacity={0.4}
       />
