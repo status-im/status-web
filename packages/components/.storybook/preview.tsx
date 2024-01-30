@@ -1,41 +1,36 @@
 import React from 'react'
 import type { Preview } from '@storybook/react'
-import { themes } from '@storybook/theming'
-
-import { Provider, ToastContainer } from '../src'
 
 import './reset.css'
-
-// export const parameters: Parameters = {
-//   actions: { argTypesRegex: '^on[A-Z].*' },
-//   controls: {
-//     matchers: {
-//       color: /(background|color)$/i,
-//       date: /Date$/,
-//     },
-//   },
-// }
 
 const preview: Preview = {
   parameters: {
     layout: 'centered',
-    // darkMode: {
-    //   darkClass: 'dark',
-    //   lightClass: 'light',
-    //   // dark: { ...themes.dark, appPreviewBg: 'pink' },
-    //   // light: { ...themes.normal },
-    // },
+    customisation: {
+      default: 'blue',
+      values: [
+        { name: 'blue', value: '#0000ff' },
+        { name: 'red', value: '#ff0000' },
+      ],
+    },
+    backgrounds: {
+      default: 'light',
+      values: [
+        { name: 'light', value: '#fff' },
+        { name: 'dark', value: '#0D1625' },
+      ],
+    },
   },
-  //   decorators: [
-  //     Story => {
-  // return      <Story />
-  //       return (
-  //         // <Provider>
-  //           {/* <ToastContainer /> */}
-  //         {/* </Provider> */}
-  //       )
-  //     },
-  // ],
+  decorators: [
+    (Story, context) => {
+      document.body.classList.toggle(
+        'dark',
+        context.parameters.backgrounds?.default === 'dark'
+      )
+
+      return <Story />
+    },
+  ],
 }
 
 export default preview
