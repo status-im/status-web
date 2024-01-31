@@ -16,7 +16,6 @@ type Props = AriaButtonProps & {
   variant?: Variants['variant']
   iconBefore?: React.ComponentType<IconProps>
   iconAfter?: React.ComponentType<IconProps>
-  // disabled?: boolean
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -25,6 +24,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     iconAfter: IconAfter,
     size = '40',
     variant = 'primary',
+    children,
     ...buttonProps
   } = props
 
@@ -40,7 +40,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
           className={iconStyles({ size, placement: 'before' })}
         />
       )}
-      <span className="flex-1 whitespace-nowrap">{props.children}</span>
+      <span className="flex-1 whitespace-nowrap">{children}</span>
       {IconAfter && (
         <IconAfter
           size={20}
@@ -62,8 +62,7 @@ const styles = cva({
     variant: {
       primary: [
         'bg-customisation-50 text-white-100 hover:bg-customisation-60 pressed:bg-customisation-60/90',
-
-        'dark:bg-customisation-60 dark:hover:bg-customisation-50',
+        'dark:bg-customisation-60 dark:hover:bg-customisation-50 dark:pressed:bg-customisation-50/90',
 
         // 'blurry:bg-danger-50 blurry:dark:bg-blur-white/70',
         // 'disabled:bg-customisation-50/30',
@@ -80,8 +79,12 @@ const styles = cva({
       ],
       outline: [
         'border border-neutral-30 text-neutral-100 hover:border-neutral-40 focus-visible:ring-neutral-80 pressed:border-neutral-50',
+        'focus-visible:ring-neutral-80 dark:border-neutral-70 dark:text-white-100 dark:hover:border-neutral-60 dark:pressed:border-neutral-50',
       ],
-      ghost: ['text-neutral-100 hover:bg-neutral-10 pressed:bg-neutral-20', ''],
+      ghost: [
+        'text-neutral-100 hover:bg-neutral-10 pressed:bg-neutral-20',
+        'dark:text-white-100 dark:hover:bg-neutral-80 dark:pressed:bg-neutral-70',
+      ],
       danger: [
         'bg-danger-50 text-white-100 hover:bg-danger-60 focus-visible:ring-danger-50',
         'dark:bg-danger-60 dark:hover:bg-danger-50',
