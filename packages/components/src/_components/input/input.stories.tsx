@@ -13,42 +13,33 @@ const meta: Meta<Component> = {
     placeholder: 'Type something...',
     label: 'Label',
     meta: '0/280',
-    isInvalid: true,
+    isInvalid: false,
     isDisabled: false,
+    clearable: false,
   },
-  argTypes: {
-    isInvalid: {
-      type: 'boolean',
-    },
-  },
+
+  render: props => (
+    <div className="flex w-[300px] flex-col gap-3">
+      <Input {...props} />
+      <Input {...props} size="32" />
+      <Input {...props} icon={EmailIcon} />
+      <Input {...props} icon={EmailIcon} size="32" />
+    </div>
+  ),
 }
 
 type Story = StoryObj<Component>
 
 export const Light: Story = {
   args: {},
-
-  render: props => (
-    <div className="flex w-[300px] flex-col gap-3">
-      <Input {...props} />
-      <Input {...props} size="32" />
-      <Input {...props} icon={EmailIcon} />
-      <Input {...props} icon={EmailIcon} size="32" />
-    </div>
-  ),
 }
 
 export const Dark: Story = {
-  args: {},
-
-  render: props => (
-    <div className="flex w-[300px] flex-col gap-3">
-      <Input {...props} />
-      <Input {...props} size="32" />
-      <Input {...props} icon={EmailIcon} />
-      <Input {...props} icon={EmailIcon} size="32" />
-    </div>
-  ),
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
+  },
 }
 
 export default meta
