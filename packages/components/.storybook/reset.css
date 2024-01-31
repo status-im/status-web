@@ -29,6 +29,10 @@
     --color-customisation-50: 42 74 245;
     --color-customisation-60: 34 59 196;
   }
+
+  .dark {
+    @apply text-white-100;
+  }
 }
 
 /*
@@ -69,7 +73,8 @@
 */
 html,
 body {
-  min-height: 100%;
+  min-height: 100vh;
+  @apply text-neutral-100;
 }
 /*
   Typographic tweaks!

@@ -5,7 +5,7 @@ import './reset.css'
 
 const preview: Preview = {
   parameters: {
-    layout: 'centered',
+    // layout: 'centered',
     customisation: {
       default: 'blue',
       values: [
