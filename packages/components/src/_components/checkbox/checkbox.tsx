@@ -24,6 +24,8 @@ const Checkbox = (props: Props) => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           className="hidden group-selected:block"
+          aria-hidden
+          focusable="false"
         >
           <path
             d="M1 4.6L3.66667 7L9 1"
@@ -40,10 +42,10 @@ const Checkbox = (props: Props) => {
 const checkStyles = cva({
   base: [
     'inline-flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded-3 text-white-100 transition-colors',
-    'group-selected:border-customisation-50 group-selected:bg-customisation-50',
     'border border-neutral-20 group-hover:border-neutral-30',
+    'group-selected:border-customisation-50 group-selected:bg-customisation-50 group-selected:group-hover:bg-customisation-60',
 
-    'dark:border-neutral-80 dark:group-hover:border-neutral-60',
+    'dark:border-neutral-80 dark:group-hover:border-neutral-60 dark:group-selected:group-hover:bg-customisation-50',
   ],
   variants: {
     variant: {
