@@ -31,7 +31,8 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
-    "clean": "rimraf dist node_modules .turbo"
+    "clean": "rimraf dist node_modules .turbo",
+    "prepack": "yarn build"
   },
   "dependencies": {
     "@tamagui/core": "1.74.21",
