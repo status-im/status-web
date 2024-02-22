@@ -84,6 +84,7 @@ const Button = (props: Props, ref: Ref<View>) => {
       radius={shape === 'circle' ? 'full' : size}
       size={size}
       iconOnly={iconOnly}
+      iconAfter={!!iconAfter}
       width={fullWidth ? '100%' : 'auto'}
     >
       {icon
@@ -294,6 +295,12 @@ const Base = styled(View, {
         gap: 0,
         padding: 0,
         aspectRatio: 1,
+      },
+    },
+
+    iconAfter: {
+      true: {
+        paddingRight: 12,
       },
     },
   } as const,
