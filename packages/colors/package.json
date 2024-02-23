@@ -28,7 +28,8 @@
     "lint": "eslint src",
     "lint:fix": "yarn lint --fix",
     "format": "prettier --write src",
-    "clean": "rimraf dist node_modules .turbo"
+    "clean": "rimraf dist node_modules .turbo",
+    "prepack": "yarn build"
   },
   "peerDependencies": {},
   "devDependencies": {
