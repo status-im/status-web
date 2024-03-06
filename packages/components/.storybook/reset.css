@@ -1,3 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* For rgb(255 115 179 / <alpha-value>) */
+  :root {
+    --font-sans: 'Inter';
+    /* we default to the blue theme */
+    --color-customisation-50: 42 74 245;
+    --color-customisation-60: 34 59 196;
+  }
+
+  [data-customisation='blue'] {
+    --color-customisation-50: 42 74 245;
+    --color-customisation-60: 34 59 196;
+  }
+
+  [data-customisation='purple'] {
+    --color-customisation-50: 255 125 70;
+    --color-customisation-60: 204 100 56;
+  }
+
+  [data-customisation='orange'] {
+    --color-customisation-50: 42 74 245;
+    --color-customisation-60: 34 59 196;
+  }
+  [data-customisation='blue'] {
+    --color-customisation-50: 42 74 245;
+    --color-customisation-60: 34 59 196;
+  }
+
+  .dark {
+    @apply text-white-100;
+  }
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -36,7 +73,8 @@
 */
 html,
 body {
-  min-height: 100%;
+  min-height: 100vh;
+  @apply text-neutral-100;
 }
 /*
   Typographic tweaks!
@@ -68,7 +106,7 @@ button,
 textarea,
 select {
   font: inherit;
-  all: unset;
+  /* all: unset; */
 }
 /*
   8. Avoid text overflows
