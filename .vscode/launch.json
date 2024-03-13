@@ -26,7 +26,7 @@
       "smartStep": true,
       "sourceMaps": true,
       "env": {
-        "DEBUG": "*,-vite*",
+        "DEBUG": "*,-vite*,-connect:*",
         "DEBUG_HIDE_DATE": "0",
         "DEBUG_COLORS": "1",
         "VITE_NODE": "true"
