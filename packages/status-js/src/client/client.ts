@@ -168,6 +168,10 @@ class Client {
             }),
           ],
         },
+        shardInfo: {
+          clusterId: 16,
+          shards: [32],
+        },
       })
       await waku.start()
       await waitForRemotePeer(
@@ -269,6 +273,10 @@ class Client {
         contentTopic,
         symKey,
         sigPrivKey: hexToBytes(this.#account.privateKey),
+        pubsubTopicShardInfo: {
+          clusterId: 16,
+          shard: 32,
+        },
       }),
       { payload: message }
     )

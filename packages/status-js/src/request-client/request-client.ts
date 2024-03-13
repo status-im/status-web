@@ -70,10 +70,6 @@ class RequestClient {
             }),
           ],
         },
-        // pubsubTopics: [
-        //   '/waku/2/rs/16/32',
-        //   //  '/waku/2/default-waku/proto'
-        // ],
         shardInfo: {
           clusterId: 16,
           shards: [32],
@@ -159,15 +155,10 @@ class RequestClient {
     let communityDescription: CommunityDescription | undefined = undefined
     await this.waku.store.queryWithOrderedCallback(
       [
-        createDecoder(
-          contentTopic,
-          symmetricKey,
-          // '/waku/2/rs/16/32'
-          {
-            clusterId: 16,
-            shard: 32,
-          }
-        ),
+        createDecoder(contentTopic, symmetricKey, {
+          clusterId: 16,
+          shard: 32,
+        }),
       ],
       wakuMessage => {
         // handle
@@ -226,15 +217,10 @@ class RequestClient {
       undefined
     await this.waku.store.queryWithOrderedCallback(
       [
-        createDecoder(
-          contentTopic,
-          symmetricKey,
-          //  '/waku/2/rs/16/32'
-          {
-            clusterId: 16,
-            shard: 32,
-          }
-        ),
+        createDecoder(contentTopic, symmetricKey, {
+          clusterId: 16,
+          shard: 32,
+        }),
       ],
       wakuMessage => {
         // handle
