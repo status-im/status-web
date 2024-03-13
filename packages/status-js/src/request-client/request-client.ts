@@ -70,7 +70,10 @@ class RequestClient {
             }),
           ],
         },
-        pubsubTopics: ['/waku/2/rs/16/32', '/waku/2/default-waku/proto'],
+        pubsubTopics: [
+          '/waku/2/rs/16/32',
+          //  '/waku/2/default-waku/proto'
+        ],
       })
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
