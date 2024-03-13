@@ -26,7 +26,10 @@ import type { ChannelInfo } from './map-channel'
 import type { CommunityInfo } from './map-community'
 import type { UserInfo } from './map-user'
 import type { LightNode } from '@waku/interfaces'
-import type { DecodedMessage } from '@waku/message-encryption/symmetric'
+
+type DecodedMessage = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof createDecoder>['fromProtoObj']>>
+>
 
 export interface RequestClientOptions {
   environment?: 'test' // 'production' | 'test'
@@ -70,10 +73,14 @@ class RequestClient {
             }),
           ],
         },
-        pubsubTopics: [
-          '/waku/2/rs/16/32',
-          //  '/waku/2/default-waku/proto'
-        ],
+        // pubsubTopics: [
+        //   '/waku/2/rs/16/32',
+        //   //  '/waku/2/default-waku/proto'
+        // ],
+        shardInfo: {
+          clusterId: 16,
+          shards: [32],
+        },
       })
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
@@ -154,7 +161,17 @@ class RequestClient {
 
     let communityDescription: CommunityDescription | undefined = undefined
     await this.waku.store.queryWithOrderedCallback(
-      [createDecoder(contentTopic, symmetricKey, '/waku/2/rs/16/32')],
+      [
+        createDecoder(
+          contentTopic,
+          symmetricKey,
+          // '/waku/2/rs/16/32'
+          {
+            clusterId: 16,
+            shard: 32,
+          }
+        ),
+      ],
       wakuMessage => {
         // handle
         const message = this.handleWakuMessage(wakuMessage)
@@ -211,7 +228,17 @@ class RequestClient {
     let contactCodeAdvertisement: ContactCodeAdvertisement | undefined =
       undefined
     await this.waku.store.queryWithOrderedCallback(
-      [createDecoder(contentTopic, symmetricKey, '/waku/2/rs/16/32')],
+      [
+        createDecoder(
+          contentTopic,
+          symmetricKey,
+          //  '/waku/2/rs/16/32'
+          {
+            clusterId: 16,
+            shard: 32,
+          }
+        ),
+      ],
       wakuMessage => {
         // handle
         const message = this.handleWakuMessage(wakuMessage)
