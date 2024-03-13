@@ -23,7 +23,11 @@ import { mapChatMessage } from './map-chat-message'
 import type { Account } from '../account'
 import type { Client } from '../client'
 import type { Community } from './community'
-import type { DecodedMessage } from '@waku/message-encryption/symmetric'
+import type { createDecoder } from '@waku/message-encryption/symmetric'
+
+export type DecodedMessage = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof createDecoder>['fromProtoObj']>>
+>
 
 export function handleWakuMessage(
   wakuMessage: DecodedMessage,

@@ -17,9 +17,9 @@ import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
 import type { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
+import type { DecodedMessage } from './community/handle-waku-message'
 import type { Storage } from './storage'
 import type { LightNode } from '@waku/interfaces'
-import type { DecodedMessage } from '@waku/message-encryption/symmetric'
 
 const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
 

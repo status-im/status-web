@@ -22,14 +22,11 @@ import { mapChannel } from './map-channel'
 import { mapCommunity } from './map-community'
 import { mapUser } from './map-user'
 
+import type { DecodedMessage } from '../client/community/handle-waku-message'
 import type { ChannelInfo } from './map-channel'
 import type { CommunityInfo } from './map-community'
 import type { UserInfo } from './map-user'
 import type { LightNode } from '@waku/interfaces'
-
-type DecodedMessage = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof createDecoder>['fromProtoObj']>>
->
 
 export interface RequestClientOptions {
   environment?: 'test' // 'production' | 'test'
