@@ -36,7 +36,7 @@ export class ApplicationMetadataMessage extends Message<ApplicationMetadataMessa
    *
    * @generated from field: ApplicationMetadataMessage.Type type = 3;
    */
-  type = ApplicationMetadataMessage_Type.UNKNOWN_UNSPECIFIED
+  type = ApplicationMetadataMessage_Type.UNKNOWN
 
   constructor(data?: PartialMessage<ApplicationMetadataMessage>) {
     super()
@@ -96,213 +96,497 @@ export class ApplicationMetadataMessage extends Message<ApplicationMetadataMessa
  */
 export enum ApplicationMetadataMessage_Type {
   /**
-   * @generated from enum value: TYPE_UNKNOWN_UNSPECIFIED = 0;
+   * @generated from enum value: UNKNOWN = 0;
    */
-  UNKNOWN_UNSPECIFIED = 0,
+  UNKNOWN = 0,
 
   /**
-   * @generated from enum value: TYPE_CHAT_MESSAGE = 1;
+   * @generated from enum value: CHAT_MESSAGE = 1;
    */
   CHAT_MESSAGE = 1,
 
   /**
-   * @generated from enum value: TYPE_CONTACT_UPDATE = 2;
+   * @generated from enum value: CONTACT_UPDATE = 2;
    */
   CONTACT_UPDATE = 2,
 
   /**
-   * @generated from enum value: TYPE_MEMBERSHIP_UPDATE_MESSAGE = 3;
+   * @generated from enum value: MEMBERSHIP_UPDATE_MESSAGE = 3;
    */
   MEMBERSHIP_UPDATE_MESSAGE = 3,
 
   /**
-   * @generated from enum value: TYPE_PAIR_INSTALLATION = 4;
+   * @generated from enum value: SYNC_PAIR_INSTALLATION = 4;
    */
-  PAIR_INSTALLATION = 4,
+  SYNC_PAIR_INSTALLATION = 4,
 
   /**
-   * @generated from enum value: TYPE_SYNC_INSTALLATION = 5;
+   * @generated from enum value: DEPRECATED_SYNC_INSTALLATION = 5 [deprecated = true];
+   * @deprecated
    */
-  SYNC_INSTALLATION = 5,
+  DEPRECATED_SYNC_INSTALLATION = 5,
 
   /**
-   * @generated from enum value: TYPE_REQUEST_ADDRESS_FOR_TRANSACTION = 6;
+   * @generated from enum value: REQUEST_ADDRESS_FOR_TRANSACTION = 6;
    */
   REQUEST_ADDRESS_FOR_TRANSACTION = 6,
 
   /**
-   * @generated from enum value: TYPE_ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION = 7;
+   * @generated from enum value: ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION = 7;
    */
   ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION = 7,
 
   /**
-   * @generated from enum value: TYPE_DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION = 8;
+   * @generated from enum value: DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION = 8;
    */
   DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION = 8,
 
   /**
-   * @generated from enum value: TYPE_REQUEST_TRANSACTION = 9;
+   * @generated from enum value: REQUEST_TRANSACTION = 9;
    */
   REQUEST_TRANSACTION = 9,
 
   /**
-   * @generated from enum value: TYPE_SEND_TRANSACTION = 10;
+   * @generated from enum value: SEND_TRANSACTION = 10;
    */
   SEND_TRANSACTION = 10,
 
   /**
-   * @generated from enum value: TYPE_DECLINE_REQUEST_TRANSACTION = 11;
+   * @generated from enum value: DECLINE_REQUEST_TRANSACTION = 11;
    */
   DECLINE_REQUEST_TRANSACTION = 11,
 
   /**
-   * @generated from enum value: TYPE_SYNC_INSTALLATION_CONTACT = 12;
+   * @generated from enum value: SYNC_INSTALLATION_CONTACT_V2 = 12;
    */
-  SYNC_INSTALLATION_CONTACT = 12,
+  SYNC_INSTALLATION_CONTACT_V2 = 12,
 
   /**
-   * @generated from enum value: TYPE_SYNC_INSTALLATION_ACCOUNT = 13;
+   * @generated from enum value: SYNC_INSTALLATION_ACCOUNT = 13;
    */
   SYNC_INSTALLATION_ACCOUNT = 13,
 
   /**
-   * @generated from enum value: TYPE_SYNC_INSTALLATION_PUBLIC_CHAT = 14;
-   */
-  SYNC_INSTALLATION_PUBLIC_CHAT = 14,
-
-  /**
-   * @generated from enum value: TYPE_CONTACT_CODE_ADVERTISEMENT = 15;
+   * @generated from enum value: CONTACT_CODE_ADVERTISEMENT = 15;
    */
   CONTACT_CODE_ADVERTISEMENT = 15,
 
   /**
-   * @generated from enum value: TYPE_PUSH_NOTIFICATION_REGISTRATION = 16;
+   * @generated from enum value: PUSH_NOTIFICATION_REGISTRATION = 16;
    */
   PUSH_NOTIFICATION_REGISTRATION = 16,
 
   /**
-   * @generated from enum value: TYPE_PUSH_NOTIFICATION_REGISTRATION_RESPONSE = 17;
+   * @generated from enum value: PUSH_NOTIFICATION_REGISTRATION_RESPONSE = 17;
    */
   PUSH_NOTIFICATION_REGISTRATION_RESPONSE = 17,
 
   /**
-   * @generated from enum value: TYPE_PUSH_NOTIFICATION_QUERY = 18;
+   * @generated from enum value: PUSH_NOTIFICATION_QUERY = 18;
    */
   PUSH_NOTIFICATION_QUERY = 18,
 
   /**
-   * @generated from enum value: TYPE_PUSH_NOTIFICATION_QUERY_RESPONSE = 19;
+   * @generated from enum value: PUSH_NOTIFICATION_QUERY_RESPONSE = 19;
    */
   PUSH_NOTIFICATION_QUERY_RESPONSE = 19,
 
   /**
-   * @generated from enum value: TYPE_PUSH_NOTIFICATION_REQUEST = 20;
+   * @generated from enum value: PUSH_NOTIFICATION_REQUEST = 20;
    */
   PUSH_NOTIFICATION_REQUEST = 20,
 
   /**
-   * @generated from enum value: TYPE_PUSH_NOTIFICATION_RESPONSE = 21;
+   * @generated from enum value: PUSH_NOTIFICATION_RESPONSE = 21;
    */
   PUSH_NOTIFICATION_RESPONSE = 21,
 
   /**
-   * @generated from enum value: TYPE_EMOJI_REACTION = 22;
+   * @generated from enum value: EMOJI_REACTION = 22;
    */
   EMOJI_REACTION = 22,
 
   /**
-   * @generated from enum value: TYPE_GROUP_CHAT_INVITATION = 23;
+   * @generated from enum value: GROUP_CHAT_INVITATION = 23;
    */
   GROUP_CHAT_INVITATION = 23,
 
   /**
-   * @generated from enum value: TYPE_CHAT_IDENTITY = 24;
+   * @generated from enum value: CHAT_IDENTITY = 24;
    */
   CHAT_IDENTITY = 24,
 
   /**
-   * @generated from enum value: TYPE_COMMUNITY_DESCRIPTION = 25;
+   * @generated from enum value: COMMUNITY_DESCRIPTION = 25;
    */
   COMMUNITY_DESCRIPTION = 25,
 
   /**
-   * @generated from enum value: TYPE_COMMUNITY_INVITATION = 26;
+   * @generated from enum value: COMMUNITY_INVITATION = 26 [deprecated = true];
+   * @deprecated
    */
   COMMUNITY_INVITATION = 26,
 
   /**
-   * @generated from enum value: TYPE_COMMUNITY_REQUEST_TO_JOIN = 27;
+   * @generated from enum value: COMMUNITY_REQUEST_TO_JOIN = 27;
    */
   COMMUNITY_REQUEST_TO_JOIN = 27,
 
   /**
-   * @generated from enum value: TYPE_PIN_MESSAGE = 28;
+   * @generated from enum value: PIN_MESSAGE = 28;
    */
   PIN_MESSAGE = 28,
 
   /**
-   * @generated from enum value: TYPE_EDIT_MESSAGE = 29;
+   * @generated from enum value: EDIT_MESSAGE = 29;
    */
   EDIT_MESSAGE = 29,
 
   /**
-   * @generated from enum value: TYPE_STATUS_UPDATE = 30;
+   * @generated from enum value: STATUS_UPDATE = 30;
    */
   STATUS_UPDATE = 30,
 
   /**
-   * @generated from enum value: TYPE_DELETE_MESSAGE = 31;
+   * @generated from enum value: DELETE_MESSAGE = 31;
    */
   DELETE_MESSAGE = 31,
 
   /**
-   * @generated from enum value: TYPE_SYNC_INSTALLATION_COMMUNITY = 32;
+   * @generated from enum value: SYNC_INSTALLATION_COMMUNITY = 32;
    */
   SYNC_INSTALLATION_COMMUNITY = 32,
 
   /**
-   * @generated from enum value: TYPE_ANONYMOUS_METRIC_BATCH = 33;
+   * @generated from enum value: ANONYMOUS_METRIC_BATCH = 33;
    */
   ANONYMOUS_METRIC_BATCH = 33,
+
+  /**
+   * @generated from enum value: SYNC_CHAT_REMOVED = 34;
+   */
+  SYNC_CHAT_REMOVED = 34,
+
+  /**
+   * @generated from enum value: SYNC_CHAT_MESSAGES_READ = 35;
+   */
+  SYNC_CHAT_MESSAGES_READ = 35,
+
+  /**
+   * @generated from enum value: BACKUP = 36;
+   */
+  BACKUP = 36,
+
+  /**
+   * @generated from enum value: SYNC_ACTIVITY_CENTER_READ = 37;
+   */
+  SYNC_ACTIVITY_CENTER_READ = 37,
+
+  /**
+   * @generated from enum value: SYNC_ACTIVITY_CENTER_ACCEPTED = 38;
+   */
+  SYNC_ACTIVITY_CENTER_ACCEPTED = 38,
+
+  /**
+   * @generated from enum value: SYNC_ACTIVITY_CENTER_DISMISSED = 39;
+   */
+  SYNC_ACTIVITY_CENTER_DISMISSED = 39,
+
+  /**
+   * @generated from enum value: SYNC_BOOKMARK = 40;
+   */
+  SYNC_BOOKMARK = 40,
+
+  /**
+   * @generated from enum value: SYNC_CLEAR_HISTORY = 41;
+   */
+  SYNC_CLEAR_HISTORY = 41,
+
+  /**
+   * @generated from enum value: SYNC_SETTING = 42;
+   */
+  SYNC_SETTING = 42,
+
+  /**
+   * @generated from enum value: COMMUNITY_MESSAGE_ARCHIVE_MAGNETLINK = 43;
+   */
+  COMMUNITY_MESSAGE_ARCHIVE_MAGNETLINK = 43,
+
+  /**
+   * @generated from enum value: SYNC_PROFILE_PICTURES = 44;
+   */
+  SYNC_PROFILE_PICTURES = 44,
+
+  /**
+   * @generated from enum value: SYNC_ACCOUNT = 45;
+   */
+  SYNC_ACCOUNT = 45,
+
+  /**
+   * @generated from enum value: ACCEPT_CONTACT_REQUEST = 46;
+   */
+  ACCEPT_CONTACT_REQUEST = 46,
+
+  /**
+   * @generated from enum value: RETRACT_CONTACT_REQUEST = 47;
+   */
+  RETRACT_CONTACT_REQUEST = 47,
+
+  /**
+   * @generated from enum value: COMMUNITY_REQUEST_TO_JOIN_RESPONSE = 48;
+   */
+  COMMUNITY_REQUEST_TO_JOIN_RESPONSE = 48,
+
+  /**
+   * @generated from enum value: SYNC_COMMUNITY_SETTINGS = 49;
+   */
+  SYNC_COMMUNITY_SETTINGS = 49,
+
+  /**
+   * @generated from enum value: REQUEST_CONTACT_VERIFICATION = 50;
+   */
+  REQUEST_CONTACT_VERIFICATION = 50,
+
+  /**
+   * @generated from enum value: ACCEPT_CONTACT_VERIFICATION = 51;
+   */
+  ACCEPT_CONTACT_VERIFICATION = 51,
+
+  /**
+   * @generated from enum value: DECLINE_CONTACT_VERIFICATION = 52;
+   */
+  DECLINE_CONTACT_VERIFICATION = 52,
+
+  /**
+   * @generated from enum value: SYNC_TRUSTED_USER = 53;
+   */
+  SYNC_TRUSTED_USER = 53,
+
+  /**
+   * @generated from enum value: SYNC_VERIFICATION_REQUEST = 54;
+   */
+  SYNC_VERIFICATION_REQUEST = 54,
+
+  /**
+   * @generated from enum value: SYNC_CONTACT_REQUEST_DECISION = 56;
+   */
+  SYNC_CONTACT_REQUEST_DECISION = 56,
+
+  /**
+   * @generated from enum value: COMMUNITY_REQUEST_TO_LEAVE = 57;
+   */
+  COMMUNITY_REQUEST_TO_LEAVE = 57,
+
+  /**
+   * @generated from enum value: SYNC_DELETE_FOR_ME_MESSAGE = 58;
+   */
+  SYNC_DELETE_FOR_ME_MESSAGE = 58,
+
+  /**
+   * @generated from enum value: SYNC_SAVED_ADDRESS = 59;
+   */
+  SYNC_SAVED_ADDRESS = 59,
+
+  /**
+   * @generated from enum value: COMMUNITY_CANCEL_REQUEST_TO_JOIN = 60;
+   */
+  COMMUNITY_CANCEL_REQUEST_TO_JOIN = 60,
+
+  /**
+   * @generated from enum value: CANCEL_CONTACT_VERIFICATION = 61;
+   */
+  CANCEL_CONTACT_VERIFICATION = 61,
+
+  /**
+   * @generated from enum value: SYNC_KEYPAIR = 62;
+   */
+  SYNC_KEYPAIR = 62,
+
+  /**
+   * @generated from enum value: SYNC_SOCIAL_LINKS = 63;
+   */
+  SYNC_SOCIAL_LINKS = 63,
+
+  /**
+   * @generated from enum value: SYNC_ENS_USERNAME_DETAIL = 64;
+   */
+  SYNC_ENS_USERNAME_DETAIL = 64,
+
+  /**
+   * @generated from enum value: COMMUNITY_EVENTS_MESSAGE = 67;
+   */
+  COMMUNITY_EVENTS_MESSAGE = 67,
+
+  /**
+   * @generated from enum value: COMMUNITY_EDIT_SHARED_ADDRESSES = 68;
+   */
+  COMMUNITY_EDIT_SHARED_ADDRESSES = 68,
+
+  /**
+   * @generated from enum value: SYNC_ACCOUNT_CUSTOMIZATION_COLOR = 69;
+   */
+  SYNC_ACCOUNT_CUSTOMIZATION_COLOR = 69,
+
+  /**
+   * @generated from enum value: SYNC_ACCOUNTS_POSITIONS = 70;
+   */
+  SYNC_ACCOUNTS_POSITIONS = 70,
+
+  /**
+   * @generated from enum value: COMMUNITY_EVENTS_MESSAGE_REJECTED = 71;
+   */
+  COMMUNITY_EVENTS_MESSAGE_REJECTED = 71,
+
+  /**
+   * @generated from enum value: COMMUNITY_PRIVILEGED_USER_SYNC_MESSAGE = 72;
+   */
+  COMMUNITY_PRIVILEGED_USER_SYNC_MESSAGE = 72,
+
+  /**
+   * @generated from enum value: COMMUNITY_SHARD_KEY = 73;
+   */
+  COMMUNITY_SHARD_KEY = 73,
+
+  /**
+   * @generated from enum value: SYNC_CHAT = 74;
+   */
+  SYNC_CHAT = 74,
+
+  /**
+   * @generated from enum value: SYNC_ACTIVITY_CENTER_DELETED = 75;
+   */
+  SYNC_ACTIVITY_CENTER_DELETED = 75,
+
+  /**
+   * @generated from enum value: SYNC_ACTIVITY_CENTER_UNREAD = 76;
+   */
+  SYNC_ACTIVITY_CENTER_UNREAD = 76,
+
+  /**
+   * @generated from enum value: SYNC_ACTIVITY_CENTER_COMMUNITY_REQUEST_DECISION = 77;
+   */
+  SYNC_ACTIVITY_CENTER_COMMUNITY_REQUEST_DECISION = 77,
+
+  /**
+   * @generated from enum value: SYNC_TOKEN_PREFERENCES = 78;
+   */
+  SYNC_TOKEN_PREFERENCES = 78,
+
+  /**
+   * @generated from enum value: COMMUNITY_PUBLIC_SHARD_INFO = 79;
+   */
+  COMMUNITY_PUBLIC_SHARD_INFO = 79,
+
+  /**
+   * @generated from enum value: SYNC_COLLECTIBLE_PREFERENCES = 80;
+   */
+  SYNC_COLLECTIBLE_PREFERENCES = 80,
+
+  /**
+   * @generated from enum value: COMMUNITY_USER_KICKED = 81;
+   */
+  COMMUNITY_USER_KICKED = 81,
+
+  /**
+   * @generated from enum value: SYNC_PROFILE_SHOWCASE_PREFERENCES = 82;
+   */
+  SYNC_PROFILE_SHOWCASE_PREFERENCES = 82,
+
+  /**
+   * @generated from enum value: COMMUNITY_PUBLIC_STORENODES_INFO = 83;
+   */
+  COMMUNITY_PUBLIC_STORENODES_INFO = 83,
+
+  /**
+   * @generated from enum value: COMMUNITY_REEVALUATE_PERMISSIONS_REQUEST = 84;
+   */
+  COMMUNITY_REEVALUATE_PERMISSIONS_REQUEST = 84,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ApplicationMetadataMessage_Type)
 proto3.util.setEnumType(
   ApplicationMetadataMessage_Type,
   'ApplicationMetadataMessage.Type',
   [
-    { no: 0, name: 'TYPE_UNKNOWN_UNSPECIFIED' },
-    { no: 1, name: 'TYPE_CHAT_MESSAGE' },
-    { no: 2, name: 'TYPE_CONTACT_UPDATE' },
-    { no: 3, name: 'TYPE_MEMBERSHIP_UPDATE_MESSAGE' },
-    { no: 4, name: 'TYPE_PAIR_INSTALLATION' },
-    { no: 5, name: 'TYPE_SYNC_INSTALLATION' },
-    { no: 6, name: 'TYPE_REQUEST_ADDRESS_FOR_TRANSACTION' },
-    { no: 7, name: 'TYPE_ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION' },
-    { no: 8, name: 'TYPE_DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION' },
-    { no: 9, name: 'TYPE_REQUEST_TRANSACTION' },
-    { no: 10, name: 'TYPE_SEND_TRANSACTION' },
-    { no: 11, name: 'TYPE_DECLINE_REQUEST_TRANSACTION' },
-    { no: 12, name: 'TYPE_SYNC_INSTALLATION_CONTACT' },
-    { no: 13, name: 'TYPE_SYNC_INSTALLATION_ACCOUNT' },
-    { no: 14, name: 'TYPE_SYNC_INSTALLATION_PUBLIC_CHAT' },
-    { no: 15, name: 'TYPE_CONTACT_CODE_ADVERTISEMENT' },
-    { no: 16, name: 'TYPE_PUSH_NOTIFICATION_REGISTRATION' },
-    { no: 17, name: 'TYPE_PUSH_NOTIFICATION_REGISTRATION_RESPONSE' },
-    { no: 18, name: 'TYPE_PUSH_NOTIFICATION_QUERY' },
-    { no: 19, name: 'TYPE_PUSH_NOTIFICATION_QUERY_RESPONSE' },
-    { no: 20, name: 'TYPE_PUSH_NOTIFICATION_REQUEST' },
-    { no: 21, name: 'TYPE_PUSH_NOTIFICATION_RESPONSE' },
-    { no: 22, name: 'TYPE_EMOJI_REACTION' },
-    { no: 23, name: 'TYPE_GROUP_CHAT_INVITATION' },
-    { no: 24, name: 'TYPE_CHAT_IDENTITY' },
-    { no: 25, name: 'TYPE_COMMUNITY_DESCRIPTION' },
-    { no: 26, name: 'TYPE_COMMUNITY_INVITATION' },
-    { no: 27, name: 'TYPE_COMMUNITY_REQUEST_TO_JOIN' },
-    { no: 28, name: 'TYPE_PIN_MESSAGE' },
-    { no: 29, name: 'TYPE_EDIT_MESSAGE' },
-    { no: 30, name: 'TYPE_STATUS_UPDATE' },
-    { no: 31, name: 'TYPE_DELETE_MESSAGE' },
-    { no: 32, name: 'TYPE_SYNC_INSTALLATION_COMMUNITY' },
-    { no: 33, name: 'TYPE_ANONYMOUS_METRIC_BATCH' },
+    { no: 0, name: 'UNKNOWN' },
+    { no: 1, name: 'CHAT_MESSAGE' },
+    { no: 2, name: 'CONTACT_UPDATE' },
+    { no: 3, name: 'MEMBERSHIP_UPDATE_MESSAGE' },
+    { no: 4, name: 'SYNC_PAIR_INSTALLATION' },
+    { no: 5, name: 'DEPRECATED_SYNC_INSTALLATION' },
+    { no: 6, name: 'REQUEST_ADDRESS_FOR_TRANSACTION' },
+    { no: 7, name: 'ACCEPT_REQUEST_ADDRESS_FOR_TRANSACTION' },
+    { no: 8, name: 'DECLINE_REQUEST_ADDRESS_FOR_TRANSACTION' },
+    { no: 9, name: 'REQUEST_TRANSACTION' },
+    { no: 10, name: 'SEND_TRANSACTION' },
+    { no: 11, name: 'DECLINE_REQUEST_TRANSACTION' },
+    { no: 12, name: 'SYNC_INSTALLATION_CONTACT_V2' },
+    { no: 13, name: 'SYNC_INSTALLATION_ACCOUNT' },
+    { no: 15, name: 'CONTACT_CODE_ADVERTISEMENT' },
+    { no: 16, name: 'PUSH_NOTIFICATION_REGISTRATION' },
+    { no: 17, name: 'PUSH_NOTIFICATION_REGISTRATION_RESPONSE' },
+    { no: 18, name: 'PUSH_NOTIFICATION_QUERY' },
+    { no: 19, name: 'PUSH_NOTIFICATION_QUERY_RESPONSE' },
+    { no: 20, name: 'PUSH_NOTIFICATION_REQUEST' },
+    { no: 21, name: 'PUSH_NOTIFICATION_RESPONSE' },
+    { no: 22, name: 'EMOJI_REACTION' },
+    { no: 23, name: 'GROUP_CHAT_INVITATION' },
+    { no: 24, name: 'CHAT_IDENTITY' },
+    { no: 25, name: 'COMMUNITY_DESCRIPTION' },
+    { no: 26, name: 'COMMUNITY_INVITATION' },
+    { no: 27, name: 'COMMUNITY_REQUEST_TO_JOIN' },
+    { no: 28, name: 'PIN_MESSAGE' },
+    { no: 29, name: 'EDIT_MESSAGE' },
+    { no: 30, name: 'STATUS_UPDATE' },
+    { no: 31, name: 'DELETE_MESSAGE' },
+    { no: 32, name: 'SYNC_INSTALLATION_COMMUNITY' },
+    { no: 33, name: 'ANONYMOUS_METRIC_BATCH' },
+    { no: 34, name: 'SYNC_CHAT_REMOVED' },
+    { no: 35, name: 'SYNC_CHAT_MESSAGES_READ' },
+    { no: 36, name: 'BACKUP' },
+    { no: 37, name: 'SYNC_ACTIVITY_CENTER_READ' },
+    { no: 38, name: 'SYNC_ACTIVITY_CENTER_ACCEPTED' },
+    { no: 39, name: 'SYNC_ACTIVITY_CENTER_DISMISSED' },
+    { no: 40, name: 'SYNC_BOOKMARK' },
+    { no: 41, name: 'SYNC_CLEAR_HISTORY' },
+    { no: 42, name: 'SYNC_SETTING' },
+    { no: 43, name: 'COMMUNITY_MESSAGE_ARCHIVE_MAGNETLINK' },
+    { no: 44, name: 'SYNC_PROFILE_PICTURES' },
+    { no: 45, name: 'SYNC_ACCOUNT' },
+    { no: 46, name: 'ACCEPT_CONTACT_REQUEST' },
+    { no: 47, name: 'RETRACT_CONTACT_REQUEST' },
+    { no: 48, name: 'COMMUNITY_REQUEST_TO_JOIN_RESPONSE' },
+    { no: 49, name: 'SYNC_COMMUNITY_SETTINGS' },
+    { no: 50, name: 'REQUEST_CONTACT_VERIFICATION' },
+    { no: 51, name: 'ACCEPT_CONTACT_VERIFICATION' },
+    { no: 52, name: 'DECLINE_CONTACT_VERIFICATION' },
+    { no: 53, name: 'SYNC_TRUSTED_USER' },
+    { no: 54, name: 'SYNC_VERIFICATION_REQUEST' },
+    { no: 56, name: 'SYNC_CONTACT_REQUEST_DECISION' },
+    { no: 57, name: 'COMMUNITY_REQUEST_TO_LEAVE' },
+    { no: 58, name: 'SYNC_DELETE_FOR_ME_MESSAGE' },
+    { no: 59, name: 'SYNC_SAVED_ADDRESS' },
+    { no: 60, name: 'COMMUNITY_CANCEL_REQUEST_TO_JOIN' },
+    { no: 61, name: 'CANCEL_CONTACT_VERIFICATION' },
+    { no: 62, name: 'SYNC_KEYPAIR' },
+    { no: 63, name: 'SYNC_SOCIAL_LINKS' },
+    { no: 64, name: 'SYNC_ENS_USERNAME_DETAIL' },
+    { no: 67, name: 'COMMUNITY_EVENTS_MESSAGE' },
+    { no: 68, name: 'COMMUNITY_EDIT_SHARED_ADDRESSES' },
+    { no: 69, name: 'SYNC_ACCOUNT_CUSTOMIZATION_COLOR' },
+    { no: 70, name: 'SYNC_ACCOUNTS_POSITIONS' },
+    { no: 71, name: 'COMMUNITY_EVENTS_MESSAGE_REJECTED' },
+    { no: 72, name: 'COMMUNITY_PRIVILEGED_USER_SYNC_MESSAGE' },
+    { no: 73, name: 'COMMUNITY_SHARD_KEY' },
+    { no: 74, name: 'SYNC_CHAT' },
+    { no: 75, name: 'SYNC_ACTIVITY_CENTER_DELETED' },
+    { no: 76, name: 'SYNC_ACTIVITY_CENTER_UNREAD' },
+    { no: 77, name: 'SYNC_ACTIVITY_CENTER_COMMUNITY_REQUEST_DECISION' },
+    { no: 78, name: 'SYNC_TOKEN_PREFERENCES' },
+    { no: 79, name: 'COMMUNITY_PUBLIC_SHARD_INFO' },
+    { no: 80, name: 'SYNC_COLLECTIBLE_PREFERENCES' },
+    { no: 81, name: 'COMMUNITY_USER_KICKED' },
+    { no: 82, name: 'SYNC_PROFILE_SHOWCASE_PREFERENCES' },
+    { no: 83, name: 'COMMUNITY_PUBLIC_STORENODES_INFO' },
+    { no: 84, name: 'COMMUNITY_REEVALUATE_PERMISSIONS_REQUEST' },
   ]
 )
