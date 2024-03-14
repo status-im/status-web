@@ -208,7 +208,12 @@ export class Chat {
     }
 
     await this.client.waku.store.queryWithOrderedCallback(
-      [createDecoder(this.contentTopic, this.symmetricKey)],
+      [
+        createDecoder(this.contentTopic, this.symmetricKey, {
+          clusterId: 16,
+          shard: 32,
+        }),
+      ],
       wakuMessage => {
         this.#fetchingMessages = true
         this.client.handleWakuMessage(wakuMessage)

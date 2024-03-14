@@ -26,14 +26,15 @@
       "smartStep": true,
       "sourceMaps": true,
       "env": {
-        "DEBUG": "*",
+        "DEBUG": "*,-vite*,-connect:*",
         "DEBUG_HIDE_DATE": "0",
         "DEBUG_COLORS": "1",
         "VITE_NODE": "true"
       },
       "runtimeArgs": ["--preserve-symlinks"],
       "outFiles": ["${workspaceFolder}/**/*.js"],
-      "resolveSourceMapLocations": ["**/*"]
+      "resolveSourceMapLocations": ["**/*"],
+      "outputCapture": "std"
     },
     {
       "type": "node",

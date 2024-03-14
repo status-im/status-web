@@ -17,9 +17,9 @@ import { handleWakuMessage } from './community/handle-waku-message'
 import { LocalStorage } from './storage'
 
 import type { ApplicationMetadataMessage_Type } from '../protos/application-metadata-message_pb'
+import type { DecodedMessage } from './community/handle-waku-message'
 import type { Storage } from './storage'
 import type { LightNode } from '@waku/interfaces'
-import type { DecodedMessage } from '@waku/message-encryption/symmetric'
 
 const THROWAWAY_ACCOUNT_STORAGE_KEY = 'throwaway_account'
 
@@ -28,7 +28,7 @@ export interface ClientOptions {
    * Public key of a community to join.
    */
   publicKey: string
-  environment?: 'production' | 'test'
+  environment?: 'test' // 'production' | 'test'
   /**
    * Custom storage for data persistance
    * @default window.localStorage
@@ -132,7 +132,7 @@ class Client {
   }
 
   static async start(options: ClientOptions): Promise<Client> {
-    const { environment = 'production' } = options
+    const { environment = 'test' } = options
 
     let waku: LightNode | undefined
     let client: Client | undefined
@@ -167,6 +167,10 @@ class Client {
               // tagTTL: Infinity,
             }),
           ],
+        },
+        shardInfo: {
+          clusterId: 16,
+          shards: [32],
         },
       })
       await waku.start()
@@ -269,6 +273,10 @@ class Client {
         contentTopic,
         symKey,
         sigPrivKey: hexToBytes(this.#account.privateKey),
+        pubsubTopicShardInfo: {
+          clusterId: 16,
+          shard: 32,
+        },
       }),
       { payload: message }
     )
