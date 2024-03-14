@@ -1,6 +1,6 @@
 {
   "name": "@status-im/js",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "license": "MIT OR Apache-2.0",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.4.5
+
+### Patch Changes
+
+- 9adaeb6: use store nodes from `shard.test` fleet
+
 ## 0.4.4
 
 ### Patch Changes
