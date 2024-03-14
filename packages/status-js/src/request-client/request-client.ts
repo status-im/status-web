@@ -307,9 +307,18 @@ class RequestClient {
       // eslint-disable-next-line no-empty
     }
 
-    const decodedMetadata =
-      ApplicationMetadataMessage.fromBinary(messageToDecode)
+    let decodedMetadata
+    try {
+      decodedMetadata = ApplicationMetadataMessage.fromBinary(messageToDecode)
+    } catch {
+      return
+    }
+
     if (!decodedMetadata.payload) {
+      return
+    }
+
+    if (!decodedMetadata.signature.length) {
       return
     }
 
