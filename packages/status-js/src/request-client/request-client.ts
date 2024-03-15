@@ -314,11 +314,11 @@ class RequestClient {
       return
     }
 
-    if (!decodedMetadata.payload) {
-      return
-    }
-
-    if (!decodedMetadata.signature.length) {
+    if (
+      !decodedMetadata ||
+      !decodedMetadata.payload ||
+      !decodedMetadata.signature.length
+    ) {
       return
     }
 
