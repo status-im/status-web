@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.4.6
+
+### Patch Changes
+
+- 22e727e: set MAX_DATA_LENGTH
+
 ## 0.4.5
 
 ### Patch Changes
