@@ -201,39 +201,34 @@ class RequestClient {
 
         // isSignatureValid
         if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
-          const permission = Object.values(
-            decodedCommunityDescription.tokenPermissions
-          ).find(
-            permission =>
-              permission.type ===
-              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
-          )
-
-          if (!permission) {
-            return
-          }
-
-          const criteria = permission.tokenCriteria[0]
-          const contracts = criteria?.contractAddresses
-          const chainId = Object.keys(contracts)[0]
-
-          if (!chainId) {
-            return
-          }
-
-          // get client config based on chainId
-          // get client
-          const client = new EthereumClient(
-            `https://mainnet.infura.io/v3/${process.env.KEY}`
-          )
-          // call status contract for chainId
-          const address = publicKeyToETHAddress(publicKey)
-          // call contracts from previous call with address
-          const ownerPublicKey = '0x0'
-
-          if (ownerPublicKey !== signerPublicKey) {
-            return
-          }
+          // const permission = Object.values(
+          //   decodedCommunityDescription.tokenPermissions
+          // ).find(
+          //   permission =>
+          //     permission.type ===
+          //     CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
+          // )
+          // if (!permission) {
+          //   return
+          // }
+          // const criteria = permission.tokenCriteria[0]
+          // const contracts = criteria?.contractAddresses
+          // const chainId = Object.keys(contracts)[0]
+          // if (!chainId) {
+          //   return
+          // }
+          // // get client config based on chainId
+          // // get client
+          // const client = new EthereumClient(
+          //   `https://mainnet.infura.io/v3/${process.env.KEY}`
+          // )
+          // // call status contract for chainId
+          // const address = publicKeyToETHAddress(publicKey)
+          // // call contracts from previous call with address
+          // const ownerPublicKey = '0x0'
+          // if (ownerPublicKey !== signerPublicKey) {
+          //   return
+          // }
         } else if (publicKey !== signerPublicKey) {
           return
         }
