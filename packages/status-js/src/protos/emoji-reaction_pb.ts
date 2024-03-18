@@ -64,7 +64,8 @@ export class EmojiReaction extends Message<EmojiReaction> {
   /**
    * Grant for organisation chat messages
    *
-   * @generated from field: bytes grant = 7;
+   * @generated from field: bytes grant = 7 [deprecated = true];
+   * @deprecated
    */
   grant = new Uint8Array(0)
 

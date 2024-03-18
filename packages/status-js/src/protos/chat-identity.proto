@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "enums.proto";
+import "profile-showcase.proto";
 
 // ChatIdentity represents the user defined identity associated with their public chat key
 message ChatIdentity {
@@ -29,6 +30,8 @@ message ChatIdentity {
   // 0 - unknown
   // 1 - no messages
   uint32 first_message_timestamp = 9;
+
+  ProfileShowcase profile_showcase = 10;
 }
 
 // ProfileImage represents data associated with a user's profile image
@@ -41,8 +44,8 @@ message IdentityImage {
   // source_type signals the image payload source
   SourceType source_type = 2;
 
-  // image_type signals the image type and method of parsing the payload
-  ImageType image_type = 3;
+  // image_format signals the image format and method of parsing the payload
+  ImageFormat image_format = 3;
 
   // encryption_keys is a list of encrypted keys that can be used to decrypted an encrypted payload
   repeated bytes encryption_keys = 4;

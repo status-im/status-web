@@ -88,6 +88,11 @@ export class PushNotificationRegistration extends Message<PushNotificationRegist
    */
   allowedMentionsChatList: Uint8Array[] = []
 
+  /**
+   * @generated from field: repeated bytes muted_chat_list = 15;
+   */
+  mutedChatList: Uint8Array[] = []
+
   constructor(data?: PartialMessage<PushNotificationRegistration>) {
     super()
     proto3.util.initPartial(data, this)
@@ -154,6 +159,13 @@ export class PushNotificationRegistration extends Message<PushNotificationRegist
     {
       no: 14,
       name: 'allowed_mentions_chat_list',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+      repeated: true,
+    },
+    {
+      no: 15,
+      name: 'muted_chat_list',
       kind: 'scalar',
       T: 12 /* ScalarType.BYTES */,
       repeated: true,

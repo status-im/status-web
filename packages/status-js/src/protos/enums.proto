@@ -12,12 +12,19 @@ enum MessageType {
   SYSTEM_MESSAGE_GAP = 6;
 }
 
-enum ImageType {
-  UNKNOWN_IMAGE_TYPE = 0;
+enum ImageFormat {
+  UNKNOWN_IMAGE_FORMAT = 0;
 
   // Raster image files is payload data that can be read as a raster image
   PNG = 1;
   JPEG = 2;
   WEBP = 3;
   GIF = 4;
+}
+
+enum CommunityTokenType {
+  UNKNOWN_TOKEN_TYPE = 0;
+  ERC20 = 1;
+  ERC721 = 2;
+  ENS = 3;
 }
