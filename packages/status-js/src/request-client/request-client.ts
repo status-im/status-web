@@ -159,88 +159,93 @@ class RequestClient {
     const symmetricKey = await generateKeyFromPassword(publicKey)
 
     let communityDescription: CommunityDescription | undefined = undefined
-    await this.waku.store.queryWithOrderedCallback(
-      [
-        createDecoder(contentTopic, symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
-      ],
-      wakuMessage => {
-        // handle
-        const message = this.handleWakuMessage(wakuMessage)
+    try {
+      await this.waku.store.queryWithOrderedCallback(
+        [
+          createDecoder(contentTopic, symmetricKey, {
+            clusterId: 16,
+            shard: 32,
+          }),
+        ],
+        wakuMessage => {
+          // handle
+          const message = this.handleWakuMessage(wakuMessage)
 
-        if (!message) {
-          return
-        }
+          if (!message) {
+            return
+          }
 
-        if (
-          message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-        ) {
-          return
-        }
+          if (
+            message.type !==
+            ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+          ) {
+            return
+          }
 
-        // decode
-        const decodedCommunityDescription = CommunityDescription.fromBinary(
-          message.payload
-        )
-
-        // validate
-        if (
-          !isClockValid(
-            BigInt(decodedCommunityDescription.clock),
-            message.timestamp
+          // decode
+          const decodedCommunityDescription = CommunityDescription.fromBinary(
+            message.payload
           )
-        ) {
-          return
+
+          // validate
+          if (
+            !isClockValid(
+              BigInt(decodedCommunityDescription.clock),
+              message.timestamp
+            )
+          ) {
+            return
+          }
+
+          const signerPublicKey = `0x${compressPublicKey(
+            message.signerPublicKey
+          )}`
+
+          // isSignatureValid
+          if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
+            // const permission = Object.values(
+            //   decodedCommunityDescription.tokenPermissions
+            // ).find(
+            //   permission =>
+            //     permission.type ===
+            //     CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
+            // )
+            // if (!permission) {
+            //   return
+            // }
+            // const criteria = permission.tokenCriteria[0]
+            // const contracts = criteria?.contractAddresses
+            // const chainId = Object.keys(contracts)[0]
+            // if (!chainId) {
+            //   return
+            // }
+            // // get client config based on chainId
+            // // get client
+            // const client = new EthereumClient(
+            //   `https://mainnet.infura.io/v3/${process.env.KEY}`
+            // )
+            // // call status contract for chainId
+            // const address = publicKeyToETHAddress(publicKey)
+            // // call contracts from previous call with address
+            // const ownerPublicKey = '0x0'
+            // if (ownerPublicKey !== signerPublicKey) {
+            //   return
+            // }
+          } else if (publicKey !== signerPublicKey) {
+            return
+          }
+
+          if (!communityDescription) {
+            communityDescription = decodedCommunityDescription
+          }
+
+          // stop
+          throw new Error('stop')
         }
-
-        const signerPublicKey = `0x${compressPublicKey(
-          message.signerPublicKey
-        )}`
-
-        // isSignatureValid
-        if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
-          // const permission = Object.values(
-          //   decodedCommunityDescription.tokenPermissions
-          // ).find(
-          //   permission =>
-          //     permission.type ===
-          //     CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
-          // )
-          // if (!permission) {
-          //   return
-          // }
-          // const criteria = permission.tokenCriteria[0]
-          // const contracts = criteria?.contractAddresses
-          // const chainId = Object.keys(contracts)[0]
-          // if (!chainId) {
-          //   return
-          // }
-          // // get client config based on chainId
-          // // get client
-          // const client = new EthereumClient(
-          //   `https://mainnet.infura.io/v3/${process.env.KEY}`
-          // )
-          // // call status contract for chainId
-          // const address = publicKeyToETHAddress(publicKey)
-          // // call contracts from previous call with address
-          // const ownerPublicKey = '0x0'
-          // if (ownerPublicKey !== signerPublicKey) {
-          //   return
-          // }
-        } else if (publicKey !== signerPublicKey) {
-          return
-        }
-
-        if (!communityDescription) {
-          communityDescription = decodedCommunityDescription
-        }
-
-        // stop
-        return true
-      }
-    )
+      )
+    } catch {
+      // eslint-disable-next-line no-empty
+    }
 
     return communityDescription
   }
@@ -255,59 +260,63 @@ class RequestClient {
 
     let contactCodeAdvertisement: ContactCodeAdvertisement | undefined =
       undefined
-    await this.waku.store.queryWithOrderedCallback(
-      [
-        createDecoder(contentTopic, symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
-      ],
-      wakuMessage => {
-        // handle
-        const message = this.handleWakuMessage(wakuMessage)
+    try {
+      await this.waku.store.queryWithOrderedCallback(
+        [
+          createDecoder(contentTopic, symmetricKey, {
+            clusterId: 16,
+            shard: 32,
+          }),
+        ],
+        wakuMessage => {
+          // handle
+          const message = this.handleWakuMessage(wakuMessage)
 
-        if (!message) {
-          return
-        }
+          if (!message) {
+            return
+          }
 
-        if (
-          message.type !==
-          ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
-        ) {
-          return
-        }
+          if (
+            message.type !==
+            ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
+          ) {
+            return
+          }
 
-        // decode
-        const decodedContactCode = ContactCodeAdvertisement.fromBinary(
-          message.payload
-        )
-
-        // validate
-        if (!decodedContactCode.chatIdentity) {
-          return
-        }
-
-        if (
-          !isClockValid(
-            BigInt(decodedContactCode.chatIdentity.clock),
-            message.timestamp
+          // decode
+          const decodedContactCode = ContactCodeAdvertisement.fromBinary(
+            message.payload
           )
-        ) {
-          return
-        }
 
-        if (publicKey !== message.signerPublicKey) {
-          return
-        }
+          // validate
+          if (!decodedContactCode.chatIdentity) {
+            return
+          }
 
-        if (!contactCodeAdvertisement) {
-          contactCodeAdvertisement = decodedContactCode
-        }
+          if (
+            !isClockValid(
+              BigInt(decodedContactCode.chatIdentity.clock),
+              message.timestamp
+            )
+          ) {
+            return
+          }
 
-        // stop
-        return true
-      }
-    )
+          if (publicKey !== message.signerPublicKey) {
+            return
+          }
+
+          if (!contactCodeAdvertisement) {
+            contactCodeAdvertisement = decodedContactCode
+          }
+
+          // stop
+          throw new Error('stop')
+        }
+      )
+    } catch {
+      // eslint-disable-next-line no-empty
+    }
 
     return contactCodeAdvertisement
   }
