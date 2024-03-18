@@ -1,5 +1,12 @@
 # @status-im/js
 
+## 0.5.0
+
+### Minor Changes
+
+- 9a495fd: handle updates for encrypted communities
+- 02abf34: update `protos`
+
 ## 0.4.6
 
 ### Patch Changes
