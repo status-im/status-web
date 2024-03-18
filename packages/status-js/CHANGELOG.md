@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.5.1
+
+### Patch Changes
+
+- 6b4e6b1: stop fetching early
+
 ## 0.5.0
 
 ### Minor Changes
