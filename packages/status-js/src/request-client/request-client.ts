@@ -239,15 +239,6 @@ class RequestClient {
 
         // stop
         return true
-      },
-      {
-        timeFilter: {
-          startTime: new Date('2024-03-14'),
-          endTime: new Date(),
-
-          // startTime: new Date(),
-          // endTime: new Date('2024-03-14'),
-        },
       }
     )
 
