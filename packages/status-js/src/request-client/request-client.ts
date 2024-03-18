@@ -6,14 +6,14 @@ import { bytesToHex } from 'ethereum-cryptography/utils'
 
 import { isEncrypted } from '../client/community/is-encrypted'
 import { peers } from '../consts/peers'
-import { EthereumClient } from '../ethereum-client/ethereum-client'
+// import { EthereumClient } from '../ethereum-client/ethereum-client'
 import {
   ApplicationMetadataMessage,
   ApplicationMetadataMessage_Type,
 } from '../protos/application-metadata-message_pb'
 import {
   CommunityDescription,
-  CommunityTokenPermission_Type,
+  // CommunityTokenPermission_Type,
 } from '../protos/communities_pb'
 import { ProtocolMessage } from '../protos/protocol-message_pb'
 import { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
@@ -22,7 +22,7 @@ import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { idToContentTopic } from '../utils/id-to-content-topic'
 import { isClockValid } from '../utils/is-clock-valid'
 import { payloadToId } from '../utils/payload-to-id'
-import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
+// import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
 import { recoverPublicKey } from '../utils/recover-public-key'
 import { mapChannel } from './map-channel'
 import { mapCommunity } from './map-community'
@@ -239,6 +239,15 @@ class RequestClient {
 
         // stop
         return true
+      },
+      {
+        timeFilter: {
+          startTime: new Date('2024-03-14'),
+          endTime: new Date(),
+
+          // startTime: new Date(),
+          // endTime: new Date('2024-03-14'),
+        },
       }
     )
 
