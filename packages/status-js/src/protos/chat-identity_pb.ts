@@ -12,7 +12,8 @@ import type {
   PlainMessage,
 } from '@bufbuild/protobuf'
 import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
-import { ImageType } from './enums_pb.js'
+import { ProfileShowcase } from './profile-showcase_pb.js'
+import { ImageFormat } from './enums_pb.js'
 
 /**
  * ChatIdentity represents the user defined identity associated with their public chat key
@@ -79,6 +80,11 @@ export class ChatIdentity extends Message<ChatIdentity> {
    */
   firstMessageTimestamp = 0
 
+  /**
+   * @generated from field: ProfileShowcase profile_showcase = 10;
+   */
+  profileShowcase?: ProfileShowcase
+
   constructor(data?: PartialMessage<ChatIdentity>) {
     super()
     proto3.util.initPartial(data, this)
@@ -123,6 +129,7 @@ export class ChatIdentity extends Message<ChatIdentity> {
       kind: 'scalar',
       T: 13 /* ScalarType.UINT32 */,
     },
+    { no: 10, name: 'profile_showcase', kind: 'message', T: ProfileShowcase },
   ])
 
   static fromBinary(
@@ -176,11 +183,11 @@ export class IdentityImage extends Message<IdentityImage> {
   sourceType = IdentityImage_SourceType.UNKNOWN_SOURCE_TYPE
 
   /**
-   * image_type signals the image type and method of parsing the payload
+   * image_format signals the image format and method of parsing the payload
    *
-   * @generated from field: ImageType image_type = 3;
+   * @generated from field: ImageFormat image_format = 3;
    */
-  imageType = ImageType.UNKNOWN_IMAGE_TYPE
+  imageFormat = ImageFormat.UNKNOWN_IMAGE_FORMAT
 
   /**
    * encryption_keys is a list of encrypted keys that can be used to decrypted an encrypted payload
@@ -213,9 +220,9 @@ export class IdentityImage extends Message<IdentityImage> {
     },
     {
       no: 3,
-      name: 'image_type',
+      name: 'image_format',
       kind: 'enum',
-      T: proto3.getEnumType(ImageType),
+      T: proto3.getEnumType(ImageFormat),
     },
     {
       no: 4,

@@ -47,6 +47,20 @@ export class MembershipUpdateEvent extends Message<MembershipUpdateEvent> {
    */
   type = MembershipUpdateEvent_EventType.UNKNOWN
 
+  /**
+   * Color of the chat for the CHAT_CREATED/COLOR_CHANGED event types
+   *
+   * @generated from field: string color = 5;
+   */
+  color = ''
+
+  /**
+   * Chat image
+   *
+   * @generated from field: bytes image = 6;
+   */
+  image = new Uint8Array(0)
+
   constructor(data?: PartialMessage<MembershipUpdateEvent>) {
     super()
     proto3.util.initPartial(data, this)
@@ -70,6 +84,8 @@ export class MembershipUpdateEvent extends Message<MembershipUpdateEvent> {
       kind: 'enum',
       T: proto3.getEnumType(MembershipUpdateEvent_EventType),
     },
+    { no: 5, name: 'color', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'image', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
   ])
 
   static fromBinary(
@@ -144,6 +160,16 @@ export enum MembershipUpdateEvent_EventType {
    * @generated from enum value: ADMIN_REMOVED = 7;
    */
   ADMIN_REMOVED = 7,
+
+  /**
+   * @generated from enum value: COLOR_CHANGED = 8;
+   */
+  COLOR_CHANGED = 8,
+
+  /**
+   * @generated from enum value: IMAGE_CHANGED = 9;
+   */
+  IMAGE_CHANGED = 9,
 }
 // Retrieve enum metadata with: proto3.getEnumType(MembershipUpdateEvent_EventType)
 proto3.util.setEnumType(
@@ -158,6 +184,8 @@ proto3.util.setEnumType(
     { no: 5, name: 'MEMBER_REMOVED' },
     { no: 6, name: 'ADMINS_ADDED' },
     { no: 7, name: 'ADMIN_REMOVED' },
+    { no: 8, name: 'COLOR_CHANGED' },
+    { no: 9, name: 'IMAGE_CHANGED' },
   ]
 )
 

@@ -506,7 +506,7 @@ export class Chat {
       payload: {
         case: 'image',
         value: {
-          type: image.type,
+          format: image.format,
           payload: image.payload,
         },
       },
