@@ -12,7 +12,9 @@ import type {
   PlainMessage,
 } from '@bufbuild/protobuf'
 import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
-import { ImageType, MessageType } from './enums_pb.js'
+import { ImageFormat, MessageType } from './enums_pb.js'
+import { ContactRequestPropagatedState } from './contact_pb.js'
+import { Shard } from './shard_pb.js'
 
 /**
  * @generated from message StickerMessage
@@ -79,9 +81,29 @@ export class ImageMessage extends Message<ImageMessage> {
   payload = new Uint8Array(0)
 
   /**
-   * @generated from field: ImageType type = 2;
+   * @generated from field: ImageFormat format = 2;
    */
-  type = ImageType.UNKNOWN_IMAGE_TYPE
+  format = ImageFormat.UNKNOWN_IMAGE_FORMAT
+
+  /**
+   * @generated from field: string album_id = 3;
+   */
+  albumId = ''
+
+  /**
+   * @generated from field: uint32 width = 4;
+   */
+  width = 0
+
+  /**
+   * @generated from field: uint32 height = 5;
+   */
+  height = 0
+
+  /**
+   * @generated from field: uint32 album_images_count = 6;
+   */
+  albumImagesCount = 0
 
   constructor(data?: PartialMessage<ImageMessage>) {
     super()
@@ -92,7 +114,16 @@ export class ImageMessage extends Message<ImageMessage> {
   static readonly typeName = 'ImageMessage'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
-    { no: 2, name: 'type', kind: 'enum', T: proto3.getEnumType(ImageType) },
+    { no: 2, name: 'format', kind: 'enum', T: proto3.getEnumType(ImageFormat) },
+    { no: 3, name: 'album_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'width', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 5, name: 'height', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    {
+      no: 6,
+      name: 'album_images_count',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
   ])
 
   static fromBinary(
@@ -250,7 +281,8 @@ export class EditMessage extends Message<EditMessage> {
   /**
    * Grant for community edit messages
    *
-   * @generated from field: bytes grant = 5;
+   * @generated from field: bytes grant = 5 [deprecated = true];
+   * @deprecated
    */
   grant = new Uint8Array(0)
 
@@ -260,6 +292,21 @@ export class EditMessage extends Message<EditMessage> {
    * @generated from field: MessageType message_type = 6;
    */
   messageType = MessageType.UNKNOWN_MESSAGE_TYPE
+
+  /**
+   * @generated from field: ChatMessage.ContentType content_type = 7;
+   */
+  contentType = ChatMessage_ContentType.UNKNOWN_CONTENT_TYPE
+
+  /**
+   * @generated from field: repeated UnfurledLink unfurled_links = 8;
+   */
+  unfurledLinks: UnfurledLink[] = []
+
+  /**
+   * @generated from field: UnfurledStatusLinks unfurled_status_links = 9;
+   */
+  unfurledStatusLinks?: UnfurledStatusLinks
 
   constructor(data?: PartialMessage<EditMessage>) {
     super()
@@ -279,6 +326,25 @@ export class EditMessage extends Message<EditMessage> {
       name: 'message_type',
       kind: 'enum',
       T: proto3.getEnumType(MessageType),
+    },
+    {
+      no: 7,
+      name: 'content_type',
+      kind: 'enum',
+      T: proto3.getEnumType(ChatMessage_ContentType),
+    },
+    {
+      no: 8,
+      name: 'unfurled_links',
+      kind: 'message',
+      T: UnfurledLink,
+      repeated: true,
+    },
+    {
+      no: 9,
+      name: 'unfurled_status_links',
+      kind: 'message',
+      T: UnfurledStatusLinks,
     },
   ])
 
@@ -333,7 +399,8 @@ export class DeleteMessage extends Message<DeleteMessage> {
   /**
    * Grant for community delete messages
    *
-   * @generated from field: bytes grant = 4;
+   * @generated from field: bytes grant = 4 [deprecated = true];
+   * @deprecated
    */
   grant = new Uint8Array(0)
 
@@ -343,6 +410,11 @@ export class DeleteMessage extends Message<DeleteMessage> {
    * @generated from field: MessageType message_type = 5;
    */
   messageType = MessageType.UNKNOWN_MESSAGE_TYPE
+
+  /**
+   * @generated from field: string deleted_by = 6;
+   */
+  deletedBy = ''
 
   constructor(data?: PartialMessage<DeleteMessage>) {
     super()
@@ -362,6 +434,7 @@ export class DeleteMessage extends Message<DeleteMessage> {
       kind: 'enum',
       T: proto3.getEnumType(MessageType),
     },
+    { no: 6, name: 'deleted_by', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
   ])
 
   static fromBinary(
@@ -394,6 +467,1187 @@ export class DeleteMessage extends Message<DeleteMessage> {
 }
 
 /**
+ * @generated from message SyncDeleteForMeMessage
+ */
+export class SyncDeleteForMeMessage extends Message<SyncDeleteForMeMessage> {
+  /**
+   * @generated from field: uint64 clock = 1;
+   */
+  clock = protoInt64.zero
+
+  /**
+   * @generated from field: string message_id = 2;
+   */
+  messageId = ''
+
+  constructor(data?: PartialMessage<SyncDeleteForMeMessage>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'SyncDeleteForMeMessage'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    { no: 2, name: 'message_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): SyncDeleteForMeMessage {
+    return new SyncDeleteForMeMessage().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): SyncDeleteForMeMessage {
+    return new SyncDeleteForMeMessage().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): SyncDeleteForMeMessage {
+    return new SyncDeleteForMeMessage().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | SyncDeleteForMeMessage
+      | PlainMessage<SyncDeleteForMeMessage>
+      | undefined,
+    b: SyncDeleteForMeMessage | PlainMessage<SyncDeleteForMeMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(SyncDeleteForMeMessage, a, b)
+  }
+}
+
+/**
+ * @generated from message DiscordMessage
+ */
+export class DiscordMessage extends Message<DiscordMessage> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = ''
+
+  /**
+   * @generated from field: string type = 2;
+   */
+  type = ''
+
+  /**
+   * @generated from field: string timestamp = 3;
+   */
+  timestamp = ''
+
+  /**
+   * @generated from field: string timestampEdited = 4;
+   */
+  timestampEdited = ''
+
+  /**
+   * @generated from field: string content = 5;
+   */
+  content = ''
+
+  /**
+   * @generated from field: DiscordMessageAuthor author = 6;
+   */
+  author?: DiscordMessageAuthor
+
+  /**
+   * @generated from field: DiscordMessageReference reference = 7;
+   */
+  reference?: DiscordMessageReference
+
+  /**
+   * @generated from field: repeated DiscordMessageAttachment attachments = 8;
+   */
+  attachments: DiscordMessageAttachment[] = []
+
+  constructor(data?: PartialMessage<DiscordMessage>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'DiscordMessage'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'type', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'timestamp', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 4,
+      name: 'timestampEdited',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'content', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'author', kind: 'message', T: DiscordMessageAuthor },
+    { no: 7, name: 'reference', kind: 'message', T: DiscordMessageReference },
+    {
+      no: 8,
+      name: 'attachments',
+      kind: 'message',
+      T: DiscordMessageAttachment,
+      repeated: true,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DiscordMessage {
+    return new DiscordMessage().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessage {
+    return new DiscordMessage().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessage {
+    return new DiscordMessage().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: DiscordMessage | PlainMessage<DiscordMessage> | undefined,
+    b: DiscordMessage | PlainMessage<DiscordMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(DiscordMessage, a, b)
+  }
+}
+
+/**
+ * @generated from message DiscordMessageAuthor
+ */
+export class DiscordMessageAuthor extends Message<DiscordMessageAuthor> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = ''
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name = ''
+
+  /**
+   * @generated from field: string discriminator = 3;
+   */
+  discriminator = ''
+
+  /**
+   * @generated from field: string nickname = 4;
+   */
+  nickname = ''
+
+  /**
+   * @generated from field: string avatarUrl = 5;
+   */
+  avatarUrl = ''
+
+  /**
+   * @generated from field: bytes avatarImagePayload = 6;
+   */
+  avatarImagePayload = new Uint8Array(0)
+
+  /**
+   * @generated from field: string localUrl = 7;
+   */
+  localUrl = ''
+
+  constructor(data?: PartialMessage<DiscordMessageAuthor>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'DiscordMessageAuthor'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 3,
+      name: 'discriminator',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 4, name: 'nickname', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'avatarUrl', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 6,
+      name: 'avatarImagePayload',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    { no: 7, name: 'localUrl', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DiscordMessageAuthor {
+    return new DiscordMessageAuthor().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessageAuthor {
+    return new DiscordMessageAuthor().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessageAuthor {
+    return new DiscordMessageAuthor().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: DiscordMessageAuthor | PlainMessage<DiscordMessageAuthor> | undefined,
+    b: DiscordMessageAuthor | PlainMessage<DiscordMessageAuthor> | undefined
+  ): boolean {
+    return proto3.util.equals(DiscordMessageAuthor, a, b)
+  }
+}
+
+/**
+ * @generated from message DiscordMessageReference
+ */
+export class DiscordMessageReference extends Message<DiscordMessageReference> {
+  /**
+   * @generated from field: string messageId = 1;
+   */
+  messageId = ''
+
+  /**
+   * @generated from field: string channelId = 2;
+   */
+  channelId = ''
+
+  /**
+   * @generated from field: string guildId = 3;
+   */
+  guildId = ''
+
+  constructor(data?: PartialMessage<DiscordMessageReference>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'DiscordMessageReference'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'messageId', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'channelId', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'guildId', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DiscordMessageReference {
+    return new DiscordMessageReference().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessageReference {
+    return new DiscordMessageReference().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessageReference {
+    return new DiscordMessageReference().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | DiscordMessageReference
+      | PlainMessage<DiscordMessageReference>
+      | undefined,
+    b:
+      | DiscordMessageReference
+      | PlainMessage<DiscordMessageReference>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(DiscordMessageReference, a, b)
+  }
+}
+
+/**
+ * @generated from message DiscordMessageAttachment
+ */
+export class DiscordMessageAttachment extends Message<DiscordMessageAttachment> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = ''
+
+  /**
+   * @generated from field: string messageId = 2;
+   */
+  messageId = ''
+
+  /**
+   * @generated from field: string url = 3;
+   */
+  url = ''
+
+  /**
+   * @generated from field: string fileName = 4;
+   */
+  fileName = ''
+
+  /**
+   * @generated from field: uint64 fileSizeBytes = 5;
+   */
+  fileSizeBytes = protoInt64.zero
+
+  /**
+   * @generated from field: string contentType = 6;
+   */
+  contentType = ''
+
+  /**
+   * @generated from field: bytes payload = 7;
+   */
+  payload = new Uint8Array(0)
+
+  /**
+   * @generated from field: string localUrl = 8;
+   */
+  localUrl = ''
+
+  constructor(data?: PartialMessage<DiscordMessageAttachment>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'DiscordMessageAttachment'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'messageId', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'url', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'fileName', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 5,
+      name: 'fileSizeBytes',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    {
+      no: 6,
+      name: 'contentType',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 7, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 8, name: 'localUrl', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): DiscordMessageAttachment {
+    return new DiscordMessageAttachment().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessageAttachment {
+    return new DiscordMessageAttachment().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): DiscordMessageAttachment {
+    return new DiscordMessageAttachment().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | DiscordMessageAttachment
+      | PlainMessage<DiscordMessageAttachment>
+      | undefined,
+    b:
+      | DiscordMessageAttachment
+      | PlainMessage<DiscordMessageAttachment>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(DiscordMessageAttachment, a, b)
+  }
+}
+
+/**
+ * @generated from message BridgeMessage
+ */
+export class BridgeMessage extends Message<BridgeMessage> {
+  /**
+   * @generated from field: string bridgeName = 1;
+   */
+  bridgeName = ''
+
+  /**
+   * @generated from field: string userName = 2;
+   */
+  userName = ''
+
+  /**
+   * @generated from field: string userAvatar = 3;
+   */
+  userAvatar = ''
+
+  /**
+   * @generated from field: string userID = 4;
+   */
+  userID = ''
+
+  /**
+   * @generated from field: string content = 5;
+   */
+  content = ''
+
+  /**
+   * @generated from field: string messageID = 6;
+   */
+  messageID = ''
+
+  /**
+   * @generated from field: string parentMessageID = 7;
+   */
+  parentMessageID = ''
+
+  constructor(data?: PartialMessage<BridgeMessage>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'BridgeMessage'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'bridgeName', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'userName', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 3, name: 'userAvatar', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'userID', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'content', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'messageID', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 7,
+      name: 'parentMessageID',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): BridgeMessage {
+    return new BridgeMessage().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): BridgeMessage {
+    return new BridgeMessage().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): BridgeMessage {
+    return new BridgeMessage().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: BridgeMessage | PlainMessage<BridgeMessage> | undefined,
+    b: BridgeMessage | PlainMessage<BridgeMessage> | undefined
+  ): boolean {
+    return proto3.util.equals(BridgeMessage, a, b)
+  }
+}
+
+/**
+ * @generated from message UnfurledLinkThumbnail
+ */
+export class UnfurledLinkThumbnail extends Message<UnfurledLinkThumbnail> {
+  /**
+   * @generated from field: bytes payload = 1;
+   */
+  payload = new Uint8Array(0)
+
+  /**
+   * @generated from field: uint32 width = 2;
+   */
+  width = 0
+
+  /**
+   * @generated from field: uint32 height = 3;
+   */
+  height = 0
+
+  constructor(data?: PartialMessage<UnfurledLinkThumbnail>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledLinkThumbnail'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 2, name: 'width', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 3, name: 'height', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledLinkThumbnail {
+    return new UnfurledLinkThumbnail().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledLinkThumbnail {
+    return new UnfurledLinkThumbnail().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledLinkThumbnail {
+    return new UnfurledLinkThumbnail().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: UnfurledLinkThumbnail | PlainMessage<UnfurledLinkThumbnail> | undefined,
+    b: UnfurledLinkThumbnail | PlainMessage<UnfurledLinkThumbnail> | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledLinkThumbnail, a, b)
+  }
+}
+
+/**
+ * @generated from message UnfurledLink
+ */
+export class UnfurledLink extends Message<UnfurledLink> {
+  /**
+   * A valid URL which uniquely identifies this link.
+   *
+   * @generated from field: string url = 1;
+   */
+  url = ''
+
+  /**
+   * Website's title.
+   *
+   * @generated from field: string title = 2;
+   */
+  title = ''
+
+  /**
+   * Description is sometimes available, but can be empty. Most mainstream
+   * websites provide this information.
+   *
+   * @generated from field: string description = 3;
+   */
+  description = ''
+
+  /**
+   * @generated from field: bytes thumbnail_payload = 4;
+   */
+  thumbnailPayload = new Uint8Array(0)
+
+  /**
+   * @generated from field: uint32 thumbnail_width = 5;
+   */
+  thumbnailWidth = 0
+
+  /**
+   * @generated from field: uint32 thumbnail_height = 6;
+   */
+  thumbnailHeight = 0
+
+  /**
+   * @generated from field: UnfurledLink.LinkType type = 7;
+   */
+  type = UnfurledLink_LinkType.LINK
+
+  /**
+   * @generated from field: bytes favicon_payload = 8;
+   */
+  faviconPayload = new Uint8Array(0)
+
+  constructor(data?: PartialMessage<UnfurledLink>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledLink'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'url', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'title', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 3,
+      name: 'description',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'thumbnail_payload',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    {
+      no: 5,
+      name: 'thumbnail_width',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+    {
+      no: 6,
+      name: 'thumbnail_height',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+    {
+      no: 7,
+      name: 'type',
+      kind: 'enum',
+      T: proto3.getEnumType(UnfurledLink_LinkType),
+    },
+    {
+      no: 8,
+      name: 'favicon_payload',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledLink {
+    return new UnfurledLink().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledLink {
+    return new UnfurledLink().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledLink {
+    return new UnfurledLink().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: UnfurledLink | PlainMessage<UnfurledLink> | undefined,
+    b: UnfurledLink | PlainMessage<UnfurledLink> | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledLink, a, b)
+  }
+}
+
+/**
+ * @generated from enum UnfurledLink.LinkType
+ */
+export enum UnfurledLink_LinkType {
+  /**
+   * @generated from enum value: LINK = 0;
+   */
+  LINK = 0,
+
+  /**
+   * @generated from enum value: IMAGE = 1;
+   */
+  IMAGE = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(UnfurledLink_LinkType)
+proto3.util.setEnumType(UnfurledLink_LinkType, 'UnfurledLink.LinkType', [
+  { no: 0, name: 'LINK' },
+  { no: 1, name: 'IMAGE' },
+])
+
+/**
+ * @generated from message UnfurledStatusContactLink
+ */
+export class UnfurledStatusContactLink extends Message<UnfurledStatusContactLink> {
+  /**
+   * @generated from field: bytes public_key = 1;
+   */
+  publicKey = new Uint8Array(0)
+
+  /**
+   * @generated from field: string display_name = 2;
+   */
+  displayName = ''
+
+  /**
+   * @generated from field: string description = 3;
+   */
+  description = ''
+
+  /**
+   * @generated from field: UnfurledLinkThumbnail icon = 4;
+   */
+  icon?: UnfurledLinkThumbnail
+
+  constructor(data?: PartialMessage<UnfurledStatusContactLink>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledStatusContactLink'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'public_key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 2,
+      name: 'display_name',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: 'description',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 4, name: 'icon', kind: 'message', T: UnfurledLinkThumbnail },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledStatusContactLink {
+    return new UnfurledStatusContactLink().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusContactLink {
+    return new UnfurledStatusContactLink().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusContactLink {
+    return new UnfurledStatusContactLink().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | UnfurledStatusContactLink
+      | PlainMessage<UnfurledStatusContactLink>
+      | undefined,
+    b:
+      | UnfurledStatusContactLink
+      | PlainMessage<UnfurledStatusContactLink>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledStatusContactLink, a, b)
+  }
+}
+
+/**
+ * @generated from message UnfurledStatusCommunityLink
+ */
+export class UnfurledStatusCommunityLink extends Message<UnfurledStatusCommunityLink> {
+  /**
+   * @generated from field: bytes community_id = 1;
+   */
+  communityId = new Uint8Array(0)
+
+  /**
+   * @generated from field: string display_name = 2;
+   */
+  displayName = ''
+
+  /**
+   * @generated from field: string description = 3;
+   */
+  description = ''
+
+  /**
+   * @generated from field: uint32 members_count = 4;
+   */
+  membersCount = 0
+
+  /**
+   * @generated from field: string color = 5;
+   */
+  color = ''
+
+  /**
+   * @generated from field: UnfurledLinkThumbnail icon = 7;
+   */
+  icon?: UnfurledLinkThumbnail
+
+  /**
+   * @generated from field: UnfurledLinkThumbnail banner = 8;
+   */
+  banner?: UnfurledLinkThumbnail
+
+  constructor(data?: PartialMessage<UnfurledStatusCommunityLink>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledStatusCommunityLink'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'community_id',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    {
+      no: 2,
+      name: 'display_name',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 3,
+      name: 'description',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'members_count',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
+    { no: 5, name: 'color', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: 'icon', kind: 'message', T: UnfurledLinkThumbnail },
+    { no: 8, name: 'banner', kind: 'message', T: UnfurledLinkThumbnail },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledStatusCommunityLink {
+    return new UnfurledStatusCommunityLink().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusCommunityLink {
+    return new UnfurledStatusCommunityLink().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusCommunityLink {
+    return new UnfurledStatusCommunityLink().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | UnfurledStatusCommunityLink
+      | PlainMessage<UnfurledStatusCommunityLink>
+      | undefined,
+    b:
+      | UnfurledStatusCommunityLink
+      | PlainMessage<UnfurledStatusCommunityLink>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledStatusCommunityLink, a, b)
+  }
+}
+
+/**
+ * @generated from message UnfurledStatusChannelLink
+ */
+export class UnfurledStatusChannelLink extends Message<UnfurledStatusChannelLink> {
+  /**
+   * @generated from field: string channel_uuid = 1;
+   */
+  channelUuid = ''
+
+  /**
+   * @generated from field: string emoji = 2;
+   */
+  emoji = ''
+
+  /**
+   * @generated from field: string display_name = 3;
+   */
+  displayName = ''
+
+  /**
+   * @generated from field: string description = 4;
+   */
+  description = ''
+
+  /**
+   * @generated from field: string color = 5;
+   */
+  color = ''
+
+  /**
+   * @generated from field: UnfurledStatusCommunityLink community = 6;
+   */
+  community?: UnfurledStatusCommunityLink
+
+  constructor(data?: PartialMessage<UnfurledStatusChannelLink>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledStatusChannelLink'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'channel_uuid',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 2, name: 'emoji', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 3,
+      name: 'display_name',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 4,
+      name: 'description',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 5, name: 'color', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 6,
+      name: 'community',
+      kind: 'message',
+      T: UnfurledStatusCommunityLink,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledStatusChannelLink {
+    return new UnfurledStatusChannelLink().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusChannelLink {
+    return new UnfurledStatusChannelLink().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusChannelLink {
+    return new UnfurledStatusChannelLink().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | UnfurledStatusChannelLink
+      | PlainMessage<UnfurledStatusChannelLink>
+      | undefined,
+    b:
+      | UnfurledStatusChannelLink
+      | PlainMessage<UnfurledStatusChannelLink>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledStatusChannelLink, a, b)
+  }
+}
+
+/**
+ * @generated from message UnfurledStatusLink
+ */
+export class UnfurledStatusLink extends Message<UnfurledStatusLink> {
+  /**
+   * @generated from field: string url = 1;
+   */
+  url = ''
+
+  /**
+   * @generated from oneof UnfurledStatusLink.payload
+   */
+  payload:
+    | {
+        /**
+         * @generated from field: UnfurledStatusContactLink contact = 2;
+         */
+        value: UnfurledStatusContactLink
+        case: 'contact'
+      }
+    | {
+        /**
+         * @generated from field: UnfurledStatusCommunityLink community = 3;
+         */
+        value: UnfurledStatusCommunityLink
+        case: 'community'
+      }
+    | {
+        /**
+         * @generated from field: UnfurledStatusChannelLink channel = 4;
+         */
+        value: UnfurledStatusChannelLink
+        case: 'channel'
+      }
+    | { case: undefined; value?: undefined } = { case: undefined }
+
+  constructor(data?: PartialMessage<UnfurledStatusLink>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledStatusLink'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'url', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: 'contact',
+      kind: 'message',
+      T: UnfurledStatusContactLink,
+      oneof: 'payload',
+    },
+    {
+      no: 3,
+      name: 'community',
+      kind: 'message',
+      T: UnfurledStatusCommunityLink,
+      oneof: 'payload',
+    },
+    {
+      no: 4,
+      name: 'channel',
+      kind: 'message',
+      T: UnfurledStatusChannelLink,
+      oneof: 'payload',
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledStatusLink {
+    return new UnfurledStatusLink().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusLink {
+    return new UnfurledStatusLink().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusLink {
+    return new UnfurledStatusLink().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: UnfurledStatusLink | PlainMessage<UnfurledStatusLink> | undefined,
+    b: UnfurledStatusLink | PlainMessage<UnfurledStatusLink> | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledStatusLink, a, b)
+  }
+}
+
+/**
+ * Create a wrapper around repeated property for proper unmarshalling
+ *
+ * @generated from message UnfurledStatusLinks
+ */
+export class UnfurledStatusLinks extends Message<UnfurledStatusLinks> {
+  /**
+   * @generated from field: repeated UnfurledStatusLink unfurled_status_links = 1;
+   */
+  unfurledStatusLinks: UnfurledStatusLink[] = []
+
+  constructor(data?: PartialMessage<UnfurledStatusLinks>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'UnfurledStatusLinks'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'unfurled_status_links',
+      kind: 'message',
+      T: UnfurledStatusLink,
+      repeated: true,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): UnfurledStatusLinks {
+    return new UnfurledStatusLinks().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusLinks {
+    return new UnfurledStatusLinks().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): UnfurledStatusLinks {
+    return new UnfurledStatusLinks().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: UnfurledStatusLinks | PlainMessage<UnfurledStatusLinks> | undefined,
+    b: UnfurledStatusLinks | PlainMessage<UnfurledStatusLinks> | undefined
+  ): boolean {
+    return proto3.util.equals(UnfurledStatusLinks, a, b)
+  }
+}
+
+/**
  * @generated from message ChatMessage
  */
 export class ChatMessage extends Message<ChatMessage> {
@@ -405,8 +1659,8 @@ export class ChatMessage extends Message<ChatMessage> {
   clock = protoInt64.zero
 
   /**
-   * Unix timestamps in milliseconds, currently not used as we use whisper as more reliable, but here
-   * so that we don't rely on it
+   * Unix timestamps in milliseconds, currently not used as we use whisper as
+   * more reliable, but here so that we don't rely on it
    *
    * @generated from field: uint64 timestamp = 2;
    */
@@ -437,7 +1691,8 @@ export class ChatMessage extends Message<ChatMessage> {
    * Chat id, this field is symmetric for public-chats and private group chats,
    * but asymmetric in case of one-to-ones, as the sender will use the chat-id
    * of the received, while the receiver will use the chat-id of the sender.
-   * Probably should be the concatenation of sender-pk & receiver-pk in alphabetical order
+   * Probably should be the concatenation of sender-pk & receiver-pk in
+   * alphabetical order
    *
    * @generated from field: string chat_id = 6;
    */
@@ -489,12 +1744,27 @@ export class ChatMessage extends Message<ChatMessage> {
         value: Uint8Array
         case: 'community'
       }
+    | {
+        /**
+         * @generated from field: DiscordMessage discord_message = 99;
+         */
+        value: DiscordMessage
+        case: 'discordMessage'
+      }
+    | {
+        /**
+         * @generated from field: BridgeMessage bridge_message = 100;
+         */
+        value: BridgeMessage
+        case: 'bridgeMessage'
+      }
     | { case: undefined; value?: undefined } = { case: undefined }
 
   /**
    * Grant for community chat messages
    *
-   * @generated from field: bytes grant = 13;
+   * @generated from field: bytes grant = 13 [deprecated = true];
+   * @deprecated
    */
   grant = new Uint8Array(0)
 
@@ -504,6 +1774,26 @@ export class ChatMessage extends Message<ChatMessage> {
    * @generated from field: string display_name = 14;
    */
   displayName = ''
+
+  /**
+   * @generated from field: ContactRequestPropagatedState contact_request_propagated_state = 15;
+   */
+  contactRequestPropagatedState?: ContactRequestPropagatedState
+
+  /**
+   * @generated from field: repeated UnfurledLink unfurled_links = 16;
+   */
+  unfurledLinks: UnfurledLink[] = []
+
+  /**
+   * @generated from field: Shard shard = 17;
+   */
+  shard?: Shard
+
+  /**
+   * @generated from field: UnfurledStatusLinks unfurled_status_links = 18;
+   */
+  unfurledStatusLinks?: UnfurledStatusLinks
 
   constructor(data?: PartialMessage<ChatMessage>) {
     super()
@@ -564,12 +1854,46 @@ export class ChatMessage extends Message<ChatMessage> {
       T: 12 /* ScalarType.BYTES */,
       oneof: 'payload',
     },
+    {
+      no: 99,
+      name: 'discord_message',
+      kind: 'message',
+      T: DiscordMessage,
+      oneof: 'payload',
+    },
+    {
+      no: 100,
+      name: 'bridge_message',
+      kind: 'message',
+      T: BridgeMessage,
+      oneof: 'payload',
+    },
     { no: 13, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
     {
       no: 14,
       name: 'display_name',
       kind: 'scalar',
       T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 15,
+      name: 'contact_request_propagated_state',
+      kind: 'message',
+      T: ContactRequestPropagatedState,
+    },
+    {
+      no: 16,
+      name: 'unfurled_links',
+      kind: 'message',
+      T: UnfurledLink,
+      repeated: true,
+    },
+    { no: 17, name: 'shard', kind: 'message', T: Shard },
+    {
+      no: 18,
+      name: 'unfurled_status_links',
+      kind: 'message',
+      T: UnfurledStatusLinks,
     },
   ])
 
@@ -664,6 +1988,54 @@ export enum ChatMessage_ContentType {
    * @generated from enum value: SYSTEM_MESSAGE_GAP = 10;
    */
   SYSTEM_MESSAGE_GAP = 10,
+
+  /**
+   * @generated from enum value: CONTACT_REQUEST = 11;
+   */
+  CONTACT_REQUEST = 11,
+
+  /**
+   * @generated from enum value: DISCORD_MESSAGE = 12;
+   */
+  DISCORD_MESSAGE = 12,
+
+  /**
+   * @generated from enum value: IDENTITY_VERIFICATION = 13;
+   */
+  IDENTITY_VERIFICATION = 13,
+
+  /**
+   * Only local
+   *
+   * @generated from enum value: SYSTEM_MESSAGE_PINNED_MESSAGE = 14;
+   */
+  SYSTEM_MESSAGE_PINNED_MESSAGE = 14,
+
+  /**
+   * Only local
+   *
+   * @generated from enum value: SYSTEM_MESSAGE_MUTUAL_EVENT_SENT = 15;
+   */
+  SYSTEM_MESSAGE_MUTUAL_EVENT_SENT = 15,
+
+  /**
+   * Only local
+   *
+   * @generated from enum value: SYSTEM_MESSAGE_MUTUAL_EVENT_ACCEPTED = 16;
+   */
+  SYSTEM_MESSAGE_MUTUAL_EVENT_ACCEPTED = 16,
+
+  /**
+   * Only local
+   *
+   * @generated from enum value: SYSTEM_MESSAGE_MUTUAL_EVENT_REMOVED = 17;
+   */
+  SYSTEM_MESSAGE_MUTUAL_EVENT_REMOVED = 17,
+
+  /**
+   * @generated from enum value: BRIDGE_MESSAGE = 18;
+   */
+  BRIDGE_MESSAGE = 18,
 }
 // Retrieve enum metadata with: proto3.getEnumType(ChatMessage_ContentType)
 proto3.util.setEnumType(ChatMessage_ContentType, 'ChatMessage.ContentType', [
@@ -678,4 +2050,12 @@ proto3.util.setEnumType(ChatMessage_ContentType, 'ChatMessage.ContentType', [
   { no: 8, name: 'AUDIO' },
   { no: 9, name: 'COMMUNITY' },
   { no: 10, name: 'SYSTEM_MESSAGE_GAP' },
+  { no: 11, name: 'CONTACT_REQUEST' },
+  { no: 12, name: 'DISCORD_MESSAGE' },
+  { no: 13, name: 'IDENTITY_VERIFICATION' },
+  { no: 14, name: 'SYSTEM_MESSAGE_PINNED_MESSAGE' },
+  { no: 15, name: 'SYSTEM_MESSAGE_MUTUAL_EVENT_SENT' },
+  { no: 16, name: 'SYSTEM_MESSAGE_MUTUAL_EVENT_ACCEPTED' },
+  { no: 17, name: 'SYSTEM_MESSAGE_MUTUAL_EVENT_REMOVED' },
+  { no: 18, name: 'BRIDGE_MESSAGE' },
 ])

@@ -12,7 +12,9 @@ import type {
   PlainMessage,
 } from '@bufbuild/protobuf'
 import { Message, proto3, protoInt64 } from '@bufbuild/protobuf'
+import { CommunityTokenType } from './enums_pb.js'
 import { ChatIdentity } from './chat-identity_pb.js'
+import { Shard } from './shard_pb.js'
 
 /**
  * @generated from message Grant
@@ -95,6 +97,22 @@ export class CommunityMember extends Message<CommunityMember> {
    */
   roles: CommunityMember_Roles[] = []
 
+  /**
+   * @generated from field: repeated RevealedAccount revealed_accounts = 2 [deprecated = true];
+   * @deprecated
+   */
+  revealedAccounts: RevealedAccount[] = []
+
+  /**
+   * @generated from field: uint64 last_update_clock = 3;
+   */
+  lastUpdateClock = protoInt64.zero
+
+  /**
+   * @generated from field: CommunityMember.ChannelRole channel_role = 4;
+   */
+  channelRole = CommunityMember_ChannelRole.POSTER
+
   constructor(data?: PartialMessage<CommunityMember>) {
     super()
     proto3.util.initPartial(data, this)
@@ -109,6 +127,25 @@ export class CommunityMember extends Message<CommunityMember> {
       kind: 'enum',
       T: proto3.getEnumType(CommunityMember_Roles),
       repeated: true,
+    },
+    {
+      no: 2,
+      name: 'revealed_accounts',
+      kind: 'message',
+      T: RevealedAccount,
+      repeated: true,
+    },
+    {
+      no: 3,
+      name: 'last_update_clock',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    {
+      no: 4,
+      name: 'channel_role',
+      kind: 'enum',
+      T: proto3.getEnumType(CommunityMember_ChannelRole),
     },
   ])
 
@@ -146,32 +183,163 @@ export class CommunityMember extends Message<CommunityMember> {
  */
 export enum CommunityMember_Roles {
   /**
-   * @generated from enum value: UNKNOWN_ROLE = 0;
+   * @generated from enum value: ROLE_NONE = 0;
    */
-  UNKNOWN_ROLE = 0,
+  ROLE_NONE = 0,
 
   /**
-   * @generated from enum value: ROLE_ALL = 1;
+   * @generated from enum value: ROLE_OWNER = 1;
    */
-  ROLE_ALL = 1,
+  ROLE_OWNER = 1,
 
   /**
-   * @generated from enum value: ROLE_MANAGE_USERS = 2;
+   * @generated from enum value: ROLE_ADMIN = 4;
    */
-  ROLE_MANAGE_USERS = 2,
+  ROLE_ADMIN = 4,
 
   /**
-   * @generated from enum value: ROLE_MODERATE_CONTENT = 3;
+   * @generated from enum value: ROLE_TOKEN_MASTER = 5;
    */
-  ROLE_MODERATE_CONTENT = 3,
+  ROLE_TOKEN_MASTER = 5,
 }
 // Retrieve enum metadata with: proto3.getEnumType(CommunityMember_Roles)
 proto3.util.setEnumType(CommunityMember_Roles, 'CommunityMember.Roles', [
-  { no: 0, name: 'UNKNOWN_ROLE' },
-  { no: 1, name: 'ROLE_ALL' },
-  { no: 2, name: 'ROLE_MANAGE_USERS' },
-  { no: 3, name: 'ROLE_MODERATE_CONTENT' },
+  { no: 0, name: 'ROLE_NONE' },
+  { no: 1, name: 'ROLE_OWNER' },
+  { no: 4, name: 'ROLE_ADMIN' },
+  { no: 5, name: 'ROLE_TOKEN_MASTER' },
 ])
+
+/**
+ * @generated from enum CommunityMember.ChannelRole
+ */
+export enum CommunityMember_ChannelRole {
+  /**
+   * We make POSTER the first role to be the default one.
+   * This is for backwards compatibility. Older protobufs won't have this field and will default to 0.
+   *
+   * @generated from enum value: CHANNEL_ROLE_POSTER = 0;
+   */
+  POSTER = 0,
+
+  /**
+   * @generated from enum value: CHANNEL_ROLE_VIEWER = 1;
+   */
+  VIEWER = 1,
+}
+// Retrieve enum metadata with: proto3.getEnumType(CommunityMember_ChannelRole)
+proto3.util.setEnumType(
+  CommunityMember_ChannelRole,
+  'CommunityMember.ChannelRole',
+  [
+    { no: 0, name: 'CHANNEL_ROLE_POSTER' },
+    { no: 1, name: 'CHANNEL_ROLE_VIEWER' },
+  ]
+)
+
+/**
+ * @generated from message CommunityTokenMetadata
+ */
+export class CommunityTokenMetadata extends Message<CommunityTokenMetadata> {
+  /**
+   * @generated from field: map<uint64, string> contract_addresses = 1;
+   */
+  contractAddresses: { [key: string]: string } = {}
+
+  /**
+   * @generated from field: string description = 2;
+   */
+  description = ''
+
+  /**
+   * @generated from field: string image = 3;
+   */
+  image = ''
+
+  /**
+   * @generated from field: CommunityTokenType tokenType = 4;
+   */
+  tokenType = CommunityTokenType.UNKNOWN_TOKEN_TYPE
+
+  /**
+   * @generated from field: string symbol = 5;
+   */
+  symbol = ''
+
+  /**
+   * @generated from field: string name = 6;
+   */
+  name = ''
+
+  /**
+   * @generated from field: uint32 decimals = 7;
+   */
+  decimals = 0
+
+  constructor(data?: PartialMessage<CommunityTokenMetadata>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityTokenMetadata'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'contract_addresses',
+      kind: 'map',
+      K: 4 /* ScalarType.UINT64 */,
+      V: { kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    },
+    {
+      no: 2,
+      name: 'description',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 3, name: 'image', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 4,
+      name: 'tokenType',
+      kind: 'enum',
+      T: proto3.getEnumType(CommunityTokenType),
+    },
+    { no: 5, name: 'symbol', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 7, name: 'decimals', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityTokenMetadata {
+    return new CommunityTokenMetadata().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityTokenMetadata {
+    return new CommunityTokenMetadata().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityTokenMetadata {
+    return new CommunityTokenMetadata().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | CommunityTokenMetadata
+      | PlainMessage<CommunityTokenMetadata>
+      | undefined,
+    b: CommunityTokenMetadata | PlainMessage<CommunityTokenMetadata> | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityTokenMetadata, a, b)
+  }
+}
 
 /**
  * @generated from message CommunityPermissions
@@ -251,19 +419,20 @@ export enum CommunityPermissions_Access {
   UNKNOWN_ACCESS = 0,
 
   /**
-   * @generated from enum value: NO_MEMBERSHIP = 1;
+   * @generated from enum value: AUTO_ACCEPT = 1;
    */
-  NO_MEMBERSHIP = 1,
+  AUTO_ACCEPT = 1,
 
   /**
-   * @generated from enum value: INVITATION_ONLY = 2;
+   * @generated from enum value: INVITATION_ONLY = 2 [deprecated = true];
+   * @deprecated
    */
   INVITATION_ONLY = 2,
 
   /**
-   * @generated from enum value: ON_REQUEST = 3;
+   * @generated from enum value: MANUAL_ACCEPT = 3;
    */
-  ON_REQUEST = 3,
+  MANUAL_ACCEPT = 3,
 }
 // Retrieve enum metadata with: proto3.getEnumType(CommunityPermissions_Access)
 proto3.util.setEnumType(
@@ -271,9 +440,284 @@ proto3.util.setEnumType(
   'CommunityPermissions.Access',
   [
     { no: 0, name: 'UNKNOWN_ACCESS' },
-    { no: 1, name: 'NO_MEMBERSHIP' },
+    { no: 1, name: 'AUTO_ACCEPT' },
     { no: 2, name: 'INVITATION_ONLY' },
-    { no: 3, name: 'ON_REQUEST' },
+    { no: 3, name: 'MANUAL_ACCEPT' },
+  ]
+)
+
+/**
+ * @generated from message TokenCriteria
+ */
+export class TokenCriteria extends Message<TokenCriteria> {
+  /**
+   * @generated from field: map<uint64, string> contract_addresses = 1;
+   */
+  contractAddresses: { [key: string]: string } = {}
+
+  /**
+   * @generated from field: CommunityTokenType type = 2;
+   */
+  type = CommunityTokenType.UNKNOWN_TOKEN_TYPE
+
+  /**
+   * @generated from field: string symbol = 3;
+   */
+  symbol = ''
+
+  /**
+   * @generated from field: string name = 4;
+   */
+  name = ''
+
+  /**
+   * @generated from field: string amount = 5 [deprecated = true];
+   * @deprecated
+   */
+  amount = ''
+
+  /**
+   * @generated from field: repeated uint64 token_ids = 6;
+   */
+  tokenIds: bigint[] = []
+
+  /**
+   * @generated from field: string ens_pattern = 7;
+   */
+  ensPattern = ''
+
+  /**
+   * @generated from field: uint64 decimals = 8;
+   */
+  decimals = protoInt64.zero
+
+  /**
+   * @generated from field: string amountInWei = 9;
+   */
+  amountInWei = ''
+
+  constructor(data?: PartialMessage<TokenCriteria>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'TokenCriteria'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'contract_addresses',
+      kind: 'map',
+      K: 4 /* ScalarType.UINT64 */,
+      V: { kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    },
+    {
+      no: 2,
+      name: 'type',
+      kind: 'enum',
+      T: proto3.getEnumType(CommunityTokenType),
+    },
+    { no: 3, name: 'symbol', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'amount', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 6,
+      name: 'token_ids',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+      repeated: true,
+    },
+    {
+      no: 7,
+      name: 'ens_pattern',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 8, name: 'decimals', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 9,
+      name: 'amountInWei',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): TokenCriteria {
+    return new TokenCriteria().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): TokenCriteria {
+    return new TokenCriteria().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): TokenCriteria {
+    return new TokenCriteria().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: TokenCriteria | PlainMessage<TokenCriteria> | undefined,
+    b: TokenCriteria | PlainMessage<TokenCriteria> | undefined
+  ): boolean {
+    return proto3.util.equals(TokenCriteria, a, b)
+  }
+}
+
+/**
+ * @generated from message CommunityTokenPermission
+ */
+export class CommunityTokenPermission extends Message<CommunityTokenPermission> {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id = ''
+
+  /**
+   * @generated from field: CommunityTokenPermission.Type type = 2;
+   */
+  type = CommunityTokenPermission_Type.UNKNOWN_TOKEN_PERMISSION
+
+  /**
+   * @generated from field: repeated TokenCriteria token_criteria = 3;
+   */
+  tokenCriteria: TokenCriteria[] = []
+
+  /**
+   * @generated from field: repeated string chat_ids = 4;
+   */
+  chatIds: string[] = []
+
+  /**
+   * @generated from field: bool is_private = 5;
+   */
+  isPrivate = false
+
+  constructor(data?: PartialMessage<CommunityTokenPermission>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityTokenPermission'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 2,
+      name: 'type',
+      kind: 'enum',
+      T: proto3.getEnumType(CommunityTokenPermission_Type),
+    },
+    {
+      no: 3,
+      name: 'token_criteria',
+      kind: 'message',
+      T: TokenCriteria,
+      repeated: true,
+    },
+    {
+      no: 4,
+      name: 'chat_ids',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+      repeated: true,
+    },
+    { no: 5, name: 'is_private', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityTokenPermission {
+    return new CommunityTokenPermission().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityTokenPermission {
+    return new CommunityTokenPermission().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityTokenPermission {
+    return new CommunityTokenPermission().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a:
+      | CommunityTokenPermission
+      | PlainMessage<CommunityTokenPermission>
+      | undefined,
+    b:
+      | CommunityTokenPermission
+      | PlainMessage<CommunityTokenPermission>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityTokenPermission, a, b)
+  }
+}
+
+/**
+ * @generated from enum CommunityTokenPermission.Type
+ */
+export enum CommunityTokenPermission_Type {
+  /**
+   * @generated from enum value: UNKNOWN_TOKEN_PERMISSION = 0;
+   */
+  UNKNOWN_TOKEN_PERMISSION = 0,
+
+  /**
+   * @generated from enum value: BECOME_ADMIN = 1;
+   */
+  BECOME_ADMIN = 1,
+
+  /**
+   * @generated from enum value: BECOME_MEMBER = 2;
+   */
+  BECOME_MEMBER = 2,
+
+  /**
+   * @generated from enum value: CAN_VIEW_CHANNEL = 3;
+   */
+  CAN_VIEW_CHANNEL = 3,
+
+  /**
+   * @generated from enum value: CAN_VIEW_AND_POST_CHANNEL = 4;
+   */
+  CAN_VIEW_AND_POST_CHANNEL = 4,
+
+  /**
+   * @generated from enum value: BECOME_TOKEN_MASTER = 5;
+   */
+  BECOME_TOKEN_MASTER = 5,
+
+  /**
+   * @generated from enum value: BECOME_TOKEN_OWNER = 6;
+   */
+  BECOME_TOKEN_OWNER = 6,
+}
+// Retrieve enum metadata with: proto3.getEnumType(CommunityTokenPermission_Type)
+proto3.util.setEnumType(
+  CommunityTokenPermission_Type,
+  'CommunityTokenPermission.Type',
+  [
+    { no: 0, name: 'UNKNOWN_TOKEN_PERMISSION' },
+    { no: 1, name: 'BECOME_ADMIN' },
+    { no: 2, name: 'BECOME_MEMBER' },
+    { no: 3, name: 'CAN_VIEW_CHANNEL' },
+    { no: 4, name: 'CAN_VIEW_AND_POST_CHANNEL' },
+    { no: 5, name: 'BECOME_TOKEN_MASTER' },
+    { no: 6, name: 'BECOME_TOKEN_OWNER' },
   ]
 )
 
@@ -307,7 +751,8 @@ export class CommunityDescription extends Message<CommunityDescription> {
   chats: { [key: string]: CommunityChat } = {}
 
   /**
-   * @generated from field: repeated string ban_list = 7;
+   * @generated from field: repeated string ban_list = 7 [deprecated = true];
+   * @deprecated
    */
   banList: string[] = []
 
@@ -337,7 +782,8 @@ export class CommunityDescription extends Message<CommunityDescription> {
   outroMessage = ''
 
   /**
-   * @generated from field: bool encrypted = 13;
+   * @generated from field: bool encrypted = 13 [deprecated = true];
+   * @deprecated
    */
   encrypted = false
 
@@ -345,6 +791,38 @@ export class CommunityDescription extends Message<CommunityDescription> {
    * @generated from field: repeated string tags = 14;
    */
   tags: string[] = []
+
+  /**
+   * @generated from field: map<string, CommunityTokenPermission> token_permissions = 15;
+   */
+  tokenPermissions: { [key: string]: CommunityTokenPermission } = {}
+
+  /**
+   * @generated from field: repeated CommunityTokenMetadata community_tokens_metadata = 16;
+   */
+  communityTokensMetadata: CommunityTokenMetadata[] = []
+
+  /**
+   * @generated from field: uint64 active_members_count = 17;
+   */
+  activeMembersCount = protoInt64.zero
+
+  /**
+   * @generated from field: string ID = 18;
+   */
+  ID = ''
+
+  /**
+   * @generated from field: map<string, CommunityBanInfo> banned_members = 19;
+   */
+  bannedMembers: { [key: string]: CommunityBanInfo } = {}
+
+  /**
+   * key is hash ratchet key_id + seq_no
+   *
+   * @generated from field: map<string, bytes> privateData = 100;
+   */
+  privateData: { [key: string]: Uint8Array } = {}
 
   constructor(data?: PartialMessage<CommunityDescription>) {
     super()
@@ -417,6 +895,41 @@ export class CommunityDescription extends Message<CommunityDescription> {
       T: 9 /* ScalarType.STRING */,
       repeated: true,
     },
+    {
+      no: 15,
+      name: 'token_permissions',
+      kind: 'map',
+      K: 9 /* ScalarType.STRING */,
+      V: { kind: 'message', T: CommunityTokenPermission },
+    },
+    {
+      no: 16,
+      name: 'community_tokens_metadata',
+      kind: 'message',
+      T: CommunityTokenMetadata,
+      repeated: true,
+    },
+    {
+      no: 17,
+      name: 'active_members_count',
+      kind: 'scalar',
+      T: 4 /* ScalarType.UINT64 */,
+    },
+    { no: 18, name: 'ID', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 19,
+      name: 'banned_members',
+      kind: 'map',
+      K: 9 /* ScalarType.STRING */,
+      V: { kind: 'message', T: CommunityBanInfo },
+    },
+    {
+      no: 100,
+      name: 'privateData',
+      kind: 'map',
+      K: 9 /* ScalarType.STRING */,
+      V: { kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    },
   ])
 
   static fromBinary(
@@ -445,6 +958,60 @@ export class CommunityDescription extends Message<CommunityDescription> {
     b: CommunityDescription | PlainMessage<CommunityDescription> | undefined
   ): boolean {
     return proto3.util.equals(CommunityDescription, a, b)
+  }
+}
+
+/**
+ * @generated from message CommunityBanInfo
+ */
+export class CommunityBanInfo extends Message<CommunityBanInfo> {
+  /**
+   * @generated from field: bool delete_all_messages = 1;
+   */
+  deleteAllMessages = false
+
+  constructor(data?: PartialMessage<CommunityBanInfo>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityBanInfo'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'delete_all_messages',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityBanInfo {
+    return new CommunityBanInfo().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityBanInfo {
+    return new CommunityBanInfo().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityBanInfo {
+    return new CommunityBanInfo().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: CommunityBanInfo | PlainMessage<CommunityBanInfo> | undefined,
+    b: CommunityBanInfo | PlainMessage<CommunityBanInfo> | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityBanInfo, a, b)
   }
 }
 
@@ -534,6 +1101,11 @@ export class CommunityChat extends Message<CommunityChat> {
    */
   position = 0
 
+  /**
+   * @generated from field: bool viewers_can_post_reactions = 6;
+   */
+  viewersCanPostReactions = false
+
   constructor(data?: PartialMessage<CommunityChat>) {
     super()
     proto3.util.initPartial(data, this)
@@ -558,6 +1130,12 @@ export class CommunityChat extends Message<CommunityChat> {
       T: 9 /* ScalarType.STRING */,
     },
     { no: 5, name: 'position', kind: 'scalar', T: 5 /* ScalarType.INT32 */ },
+    {
+      no: 6,
+      name: 'viewers_can_post_reactions',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
   ])
 
   static fromBinary(
@@ -656,74 +1234,80 @@ export class CommunityCategory extends Message<CommunityCategory> {
 }
 
 /**
- * @generated from message CommunityInvitation
+ * @generated from message RevealedAccount
  */
-export class CommunityInvitation extends Message<CommunityInvitation> {
+export class RevealedAccount extends Message<RevealedAccount> {
   /**
-   * @generated from field: bytes community_description = 1;
+   * @generated from field: string address = 1;
    */
-  communityDescription = new Uint8Array(0)
+  address = ''
 
   /**
-   * @generated from field: bytes grant = 2;
+   * @generated from field: bytes signature = 2;
    */
-  grant = new Uint8Array(0)
+  signature = new Uint8Array(0)
 
   /**
-   * @generated from field: string chat_id = 3;
+   * @generated from field: repeated uint64 chain_ids = 3;
    */
-  chatId = ''
+  chainIds: bigint[] = []
 
   /**
-   * @generated from field: bytes public_key = 4;
+   * @generated from field: bool isAirdropAddress = 4;
    */
-  publicKey = new Uint8Array(0)
+  isAirdropAddress = false
 
-  constructor(data?: PartialMessage<CommunityInvitation>) {
+  constructor(data?: PartialMessage<RevealedAccount>) {
     super()
     proto3.util.initPartial(data, this)
   }
 
   static readonly runtime: typeof proto3 = proto3
-  static readonly typeName = 'CommunityInvitation'
+  static readonly typeName = 'RevealedAccount'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'address', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 2, name: 'signature', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
     {
-      no: 1,
-      name: 'community_description',
+      no: 3,
+      name: 'chain_ids',
       kind: 'scalar',
-      T: 12 /* ScalarType.BYTES */,
+      T: 4 /* ScalarType.UINT64 */,
+      repeated: true,
     },
-    { no: 2, name: 'grant', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
-    { no: 3, name: 'chat_id', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
-    { no: 4, name: 'public_key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    {
+      no: 4,
+      name: 'isAirdropAddress',
+      kind: 'scalar',
+      T: 8 /* ScalarType.BOOL */,
+    },
   ])
 
   static fromBinary(
     bytes: Uint8Array,
     options?: Partial<BinaryReadOptions>
-  ): CommunityInvitation {
-    return new CommunityInvitation().fromBinary(bytes, options)
+  ): RevealedAccount {
+    return new RevealedAccount().fromBinary(bytes, options)
   }
 
   static fromJson(
     jsonValue: JsonValue,
     options?: Partial<JsonReadOptions>
-  ): CommunityInvitation {
-    return new CommunityInvitation().fromJson(jsonValue, options)
+  ): RevealedAccount {
+    return new RevealedAccount().fromJson(jsonValue, options)
   }
 
   static fromJsonString(
     jsonString: string,
     options?: Partial<JsonReadOptions>
-  ): CommunityInvitation {
-    return new CommunityInvitation().fromJsonString(jsonString, options)
+  ): RevealedAccount {
+    return new RevealedAccount().fromJsonString(jsonString, options)
   }
 
   static equals(
-    a: CommunityInvitation | PlainMessage<CommunityInvitation> | undefined,
-    b: CommunityInvitation | PlainMessage<CommunityInvitation> | undefined
+    a: RevealedAccount | PlainMessage<RevealedAccount> | undefined,
+    b: RevealedAccount | PlainMessage<RevealedAccount> | undefined
   ): boolean {
-    return proto3.util.equals(CommunityInvitation, a, b)
+    return proto3.util.equals(RevealedAccount, a, b)
   }
 }
 
@@ -756,6 +1340,11 @@ export class CommunityRequestToJoin extends Message<CommunityRequestToJoin> {
    */
   displayName = ''
 
+  /**
+   * @generated from field: repeated RevealedAccount revealed_accounts = 6;
+   */
+  revealedAccounts: RevealedAccount[] = []
+
   constructor(data?: PartialMessage<CommunityRequestToJoin>) {
     super()
     proto3.util.initPartial(data, this)
@@ -778,6 +1367,13 @@ export class CommunityRequestToJoin extends Message<CommunityRequestToJoin> {
       name: 'display_name',
       kind: 'scalar',
       T: 9 /* ScalarType.STRING */,
+    },
+    {
+      no: 6,
+      name: 'revealed_accounts',
+      kind: 'message',
+      T: RevealedAccount,
+      repeated: true,
     },
   ])
 
@@ -810,6 +1406,87 @@ export class CommunityRequestToJoin extends Message<CommunityRequestToJoin> {
     b: CommunityRequestToJoin | PlainMessage<CommunityRequestToJoin> | undefined
   ): boolean {
     return proto3.util.equals(CommunityRequestToJoin, a, b)
+  }
+}
+
+/**
+ * @generated from message CommunityEditSharedAddresses
+ */
+export class CommunityEditSharedAddresses extends Message<CommunityEditSharedAddresses> {
+  /**
+   * @generated from field: uint64 clock = 1;
+   */
+  clock = protoInt64.zero
+
+  /**
+   * @generated from field: bytes community_id = 2;
+   */
+  communityId = new Uint8Array(0)
+
+  /**
+   * @generated from field: repeated RevealedAccount revealed_accounts = 3;
+   */
+  revealedAccounts: RevealedAccount[] = []
+
+  constructor(data?: PartialMessage<CommunityEditSharedAddresses>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityEditSharedAddresses'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 2,
+      name: 'community_id',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    {
+      no: 3,
+      name: 'revealed_accounts',
+      kind: 'message',
+      T: RevealedAccount,
+      repeated: true,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityEditSharedAddresses {
+    return new CommunityEditSharedAddresses().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityEditSharedAddresses {
+    return new CommunityEditSharedAddresses().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityEditSharedAddresses {
+    return new CommunityEditSharedAddresses().fromJsonString(
+      jsonString,
+      options
+    )
+  }
+
+  static equals(
+    a:
+      | CommunityEditSharedAddresses
+      | PlainMessage<CommunityEditSharedAddresses>
+      | undefined,
+    b:
+      | CommunityEditSharedAddresses
+      | PlainMessage<CommunityEditSharedAddresses>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityEditSharedAddresses, a, b)
   }
 }
 
@@ -906,6 +1583,66 @@ export class CommunityCancelRequestToJoin extends Message<CommunityCancelRequest
 }
 
 /**
+ * @generated from message CommunityUserKicked
+ */
+export class CommunityUserKicked extends Message<CommunityUserKicked> {
+  /**
+   * @generated from field: uint64 clock = 1;
+   */
+  clock = protoInt64.zero
+
+  /**
+   * @generated from field: bytes community_id = 2;
+   */
+  communityId = new Uint8Array(0)
+
+  constructor(data?: PartialMessage<CommunityUserKicked>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityUserKicked'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 2,
+      name: 'community_id',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityUserKicked {
+    return new CommunityUserKicked().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityUserKicked {
+    return new CommunityUserKicked().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityUserKicked {
+    return new CommunityUserKicked().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: CommunityUserKicked | PlainMessage<CommunityUserKicked> | undefined,
+    b: CommunityUserKicked | PlainMessage<CommunityUserKicked> | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityUserKicked, a, b)
+  }
+}
+
+/**
  * @generated from message CommunityRequestToJoinResponse
  */
 export class CommunityRequestToJoinResponse extends Message<CommunityRequestToJoinResponse> {
@@ -939,6 +1676,16 @@ export class CommunityRequestToJoinResponse extends Message<CommunityRequestToJo
    */
   magnetUri = ''
 
+  /**
+   * @generated from field: bytes protected_topic_private_key = 7;
+   */
+  protectedTopicPrivateKey = new Uint8Array(0)
+
+  /**
+   * @generated from field: Shard shard = 8;
+   */
+  shard?: Shard
+
   constructor(data?: PartialMessage<CommunityRequestToJoinResponse>) {
     super()
     proto3.util.initPartial(data, this)
@@ -958,6 +1705,13 @@ export class CommunityRequestToJoinResponse extends Message<CommunityRequestToJo
       T: 12 /* ScalarType.BYTES */,
     },
     { no: 6, name: 'magnet_uri', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    {
+      no: 7,
+      name: 'protected_topic_private_key',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    { no: 8, name: 'shard', kind: 'message', T: Shard },
   ])
 
   static fromBinary(
@@ -1504,5 +2258,321 @@ export class WakuMessageArchiveIndex extends Message<WakuMessageArchiveIndex> {
       | undefined
   ): boolean {
     return proto3.util.equals(WakuMessageArchiveIndex, a, b)
+  }
+}
+
+/**
+ * @generated from message CommunityPublicStorenodesInfo
+ */
+export class CommunityPublicStorenodesInfo extends Message<CommunityPublicStorenodesInfo> {
+  /**
+   * Signature of the payload field
+   *
+   * @generated from field: bytes signature = 1;
+   */
+  signature = new Uint8Array(0)
+
+  /**
+   * Marshaled CommunityStorenodes
+   *
+   * @generated from field: bytes payload = 2;
+   */
+  payload = new Uint8Array(0)
+
+  constructor(data?: PartialMessage<CommunityPublicStorenodesInfo>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityPublicStorenodesInfo'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'signature', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 2, name: 'payload', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityPublicStorenodesInfo {
+    return new CommunityPublicStorenodesInfo().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityPublicStorenodesInfo {
+    return new CommunityPublicStorenodesInfo().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityPublicStorenodesInfo {
+    return new CommunityPublicStorenodesInfo().fromJsonString(
+      jsonString,
+      options
+    )
+  }
+
+  static equals(
+    a:
+      | CommunityPublicStorenodesInfo
+      | PlainMessage<CommunityPublicStorenodesInfo>
+      | undefined,
+    b:
+      | CommunityPublicStorenodesInfo
+      | PlainMessage<CommunityPublicStorenodesInfo>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityPublicStorenodesInfo, a, b)
+  }
+}
+
+/**
+ * @generated from message CommunityStorenodes
+ */
+export class CommunityStorenodes extends Message<CommunityStorenodes> {
+  /**
+   * @generated from field: uint64 clock = 1;
+   */
+  clock = protoInt64.zero
+
+  /**
+   * @generated from field: bytes community_id = 2;
+   */
+  communityId = new Uint8Array(0)
+
+  /**
+   * @generated from field: repeated Storenode storenodes = 3;
+   */
+  storenodes: Storenode[] = []
+
+  /**
+   * @generated from field: uint64 chain_id = 4;
+   */
+  chainId = protoInt64.zero
+
+  constructor(data?: PartialMessage<CommunityStorenodes>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityStorenodes'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 1, name: 'clock', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 2,
+      name: 'community_id',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    {
+      no: 3,
+      name: 'storenodes',
+      kind: 'message',
+      T: Storenode,
+      repeated: true,
+    },
+    { no: 4, name: 'chain_id', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityStorenodes {
+    return new CommunityStorenodes().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityStorenodes {
+    return new CommunityStorenodes().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityStorenodes {
+    return new CommunityStorenodes().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: CommunityStorenodes | PlainMessage<CommunityStorenodes> | undefined,
+    b: CommunityStorenodes | PlainMessage<CommunityStorenodes> | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityStorenodes, a, b)
+  }
+}
+
+/**
+ * @generated from message Storenode
+ */
+export class Storenode extends Message<Storenode> {
+  /**
+   * @generated from field: bytes community_id = 1;
+   */
+  communityId = new Uint8Array(0)
+
+  /**
+   * @generated from field: string storenode_id = 2;
+   */
+  storenodeId = ''
+
+  /**
+   * @generated from field: string name = 3;
+   */
+  name = ''
+
+  /**
+   * @generated from field: string address = 4;
+   */
+  address = ''
+
+  /**
+   * @generated from field: string fleet = 5;
+   */
+  fleet = ''
+
+  /**
+   * @generated from field: uint32 version = 6;
+   */
+  version = 0
+
+  /**
+   * @generated from field: bool removed = 7;
+   */
+  removed = false
+
+  /**
+   * @generated from field: int64 deleted_at = 8;
+   */
+  deletedAt = protoInt64.zero
+
+  constructor(data?: PartialMessage<Storenode>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'Storenode'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'community_id',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+    {
+      no: 2,
+      name: 'storenode_id',
+      kind: 'scalar',
+      T: 9 /* ScalarType.STRING */,
+    },
+    { no: 3, name: 'name', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 4, name: 'address', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 5, name: 'fleet', kind: 'scalar', T: 9 /* ScalarType.STRING */ },
+    { no: 6, name: 'version', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    { no: 7, name: 'removed', kind: 'scalar', T: 8 /* ScalarType.BOOL */ },
+    { no: 8, name: 'deleted_at', kind: 'scalar', T: 3 /* ScalarType.INT64 */ },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): Storenode {
+    return new Storenode().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): Storenode {
+    return new Storenode().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): Storenode {
+    return new Storenode().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: Storenode | PlainMessage<Storenode> | undefined,
+    b: Storenode | PlainMessage<Storenode> | undefined
+  ): boolean {
+    return proto3.util.equals(Storenode, a, b)
+  }
+}
+
+/**
+ * @generated from message CommunityReevaluatePermissionsRequest
+ */
+export class CommunityReevaluatePermissionsRequest extends Message<CommunityReevaluatePermissionsRequest> {
+  /**
+   * @generated from field: bytes community_id = 1;
+   */
+  communityId = new Uint8Array(0)
+
+  constructor(data?: PartialMessage<CommunityReevaluatePermissionsRequest>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'CommunityReevaluatePermissionsRequest'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    {
+      no: 1,
+      name: 'community_id',
+      kind: 'scalar',
+      T: 12 /* ScalarType.BYTES */,
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): CommunityReevaluatePermissionsRequest {
+    return new CommunityReevaluatePermissionsRequest().fromBinary(
+      bytes,
+      options
+    )
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): CommunityReevaluatePermissionsRequest {
+    return new CommunityReevaluatePermissionsRequest().fromJson(
+      jsonValue,
+      options
+    )
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): CommunityReevaluatePermissionsRequest {
+    return new CommunityReevaluatePermissionsRequest().fromJsonString(
+      jsonString,
+      options
+    )
+  }
+
+  static equals(
+    a:
+      | CommunityReevaluatePermissionsRequest
+      | PlainMessage<CommunityReevaluatePermissionsRequest>
+      | undefined,
+    b:
+      | CommunityReevaluatePermissionsRequest
+      | PlainMessage<CommunityReevaluatePermissionsRequest>
+      | undefined
+  ): boolean {
+    return proto3.util.equals(CommunityReevaluatePermissionsRequest, a, b)
   }
 }

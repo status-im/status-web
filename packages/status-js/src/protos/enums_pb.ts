@@ -60,13 +60,13 @@ proto3.util.setEnumType(MessageType, 'MessageType', [
 ])
 
 /**
- * @generated from enum ImageType
+ * @generated from enum ImageFormat
  */
-export enum ImageType {
+export enum ImageFormat {
   /**
-   * @generated from enum value: UNKNOWN_IMAGE_TYPE = 0;
+   * @generated from enum value: UNKNOWN_IMAGE_FORMAT = 0;
    */
-  UNKNOWN_IMAGE_TYPE = 0,
+  UNKNOWN_IMAGE_FORMAT = 0,
 
   /**
    * Raster image files is payload data that can be read as a raster image
@@ -90,11 +90,43 @@ export enum ImageType {
    */
   GIF = 4,
 }
-// Retrieve enum metadata with: proto3.getEnumType(ImageType)
-proto3.util.setEnumType(ImageType, 'ImageType', [
-  { no: 0, name: 'UNKNOWN_IMAGE_TYPE' },
+// Retrieve enum metadata with: proto3.getEnumType(ImageFormat)
+proto3.util.setEnumType(ImageFormat, 'ImageFormat', [
+  { no: 0, name: 'UNKNOWN_IMAGE_FORMAT' },
   { no: 1, name: 'PNG' },
   { no: 2, name: 'JPEG' },
   { no: 3, name: 'WEBP' },
   { no: 4, name: 'GIF' },
+])
+
+/**
+ * @generated from enum CommunityTokenType
+ */
+export enum CommunityTokenType {
+  /**
+   * @generated from enum value: UNKNOWN_TOKEN_TYPE = 0;
+   */
+  UNKNOWN_TOKEN_TYPE = 0,
+
+  /**
+   * @generated from enum value: ERC20 = 1;
+   */
+  ERC20 = 1,
+
+  /**
+   * @generated from enum value: ERC721 = 2;
+   */
+  ERC721 = 2,
+
+  /**
+   * @generated from enum value: ENS = 3;
+   */
+  ENS = 3,
+}
+// Retrieve enum metadata with: proto3.getEnumType(CommunityTokenType)
+proto3.util.setEnumType(CommunityTokenType, 'CommunityTokenType', [
+  { no: 0, name: 'UNKNOWN_TOKEN_TYPE' },
+  { no: 1, name: 'ERC20' },
+  { no: 2, name: 'ERC721' },
+  { no: 3, name: 'ENS' },
 ])
