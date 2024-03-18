@@ -4,12 +4,17 @@ import { createDecoder } from '@waku/message-encryption/symmetric'
 import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
+import { isEncrypted } from '../client/community/is-encrypted'
 import { peers } from '../consts/peers'
+// import { EthereumClient } from '../ethereum-client/ethereum-client'
 import {
   ApplicationMetadataMessage,
   ApplicationMetadataMessage_Type,
 } from '../protos/application-metadata-message_pb'
-import { CommunityDescription } from '../protos/communities_pb'
+import {
+  CommunityDescription,
+  // CommunityTokenPermission_Type,
+} from '../protos/communities_pb'
 import { ProtocolMessage } from '../protos/protocol-message_pb'
 import { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
 import { compressPublicKey } from '../utils/compress-public-key'
@@ -17,6 +22,7 @@ import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { idToContentTopic } from '../utils/id-to-content-topic'
 import { isClockValid } from '../utils/is-clock-valid'
 import { payloadToId } from '../utils/payload-to-id'
+// import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
 import { recoverPublicKey } from '../utils/recover-public-key'
 import { mapChannel } from './map-channel'
 import { mapCommunity } from './map-community'
@@ -189,7 +195,41 @@ class RequestClient {
           return
         }
 
-        if (publicKey !== `0x${compressPublicKey(message.signerPublicKey)}`) {
+        const signerPublicKey = `0x${compressPublicKey(
+          message.signerPublicKey
+        )}`
+
+        // isSignatureValid
+        if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
+          // const permission = Object.values(
+          //   decodedCommunityDescription.tokenPermissions
+          // ).find(
+          //   permission =>
+          //     permission.type ===
+          //     CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
+          // )
+          // if (!permission) {
+          //   return
+          // }
+          // const criteria = permission.tokenCriteria[0]
+          // const contracts = criteria?.contractAddresses
+          // const chainId = Object.keys(contracts)[0]
+          // if (!chainId) {
+          //   return
+          // }
+          // // get client config based on chainId
+          // // get client
+          // const client = new EthereumClient(
+          //   `https://mainnet.infura.io/v3/${process.env.KEY}`
+          // )
+          // // call status contract for chainId
+          // const address = publicKeyToETHAddress(publicKey)
+          // // call contracts from previous call with address
+          // const ownerPublicKey = '0x0'
+          // if (ownerPublicKey !== signerPublicKey) {
+          //   return
+          // }
+        } else if (publicKey !== signerPublicKey) {
           return
         }
 
@@ -300,7 +340,10 @@ class RequestClient {
     let decodedProtocol
     try {
       decodedProtocol = ProtocolMessage.fromBinary(messageToDecode)
-      if (decodedProtocol) {
+
+      if (decodedProtocol.encryptedMessage.none) {
+        messageToDecode = decodedProtocol.encryptedMessage.none.payload
+      } else if (decodedProtocol) {
         messageToDecode = decodedProtocol.publicMessage
       }
     } catch {
