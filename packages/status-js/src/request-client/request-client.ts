@@ -46,25 +46,29 @@ class RequestClient {
   public readonly wakuMessages: Set<string>
 
   #started: boolean
-  #providerUrls: Record<number, string>
+
+  #ethProviderURLs: Record<number, string>
   #ethProviderApiKey: string
-  #contractsAddress: Record<number, Record<string, string>>
+  #ethereumClients: Map<number, EthereumClient>
+
+  #contractAddresses: Record<number, Record<string, string>>
 
   constructor(
     waku: LightNode,
     options: {
-      providerUrls: Record<number, string>
+      ethProviderURLs: Record<number, string>
       ethProviderApiKey: string
-      contractsAddress: Record<number, Record<string, string>>
+      contractAddresses: Record<number, Record<string, string>>
       started?: boolean
     }
   ) {
     this.waku = waku
     this.wakuMessages = new Set()
     this.#started = options.started ?? false
-    this.#providerUrls = options.providerUrls
+    this.#ethProviderURLs = options.ethProviderURLs
     this.#ethProviderApiKey = options.ethProviderApiKey
-    this.#contractsAddress = options.contractsAddress
+    this.#ethereumClients = new Map()
+    this.#contractAddresses = options.contractAddresses
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
@@ -102,9 +106,9 @@ class RequestClient {
 
       client = new RequestClient(waku, {
         started: true,
-        providerUrls: providers['production'].infura,
+        ethProviderURLs: providers['production'].infura,
         ethProviderApiKey: options.ethProviderApiKey,
-        contractsAddress: contracts['production'],
+        contractAddresses: contracts['production'],
       })
     } catch (error) {
       if (waku) {
@@ -122,9 +126,28 @@ class RequestClient {
       throw new Error('Waku instance not created by class initialization')
     }
 
-    await this.waku.stop()
+    await Promise.all([
+      async () => this.waku.stop(),
+      [...this.#ethereumClients.values()].map(async provider =>
+        provider.stop()
+      ),
+    ])
 
     this.#started = false
+  }
+
+  private getEthereumClient = (chainId: number): EthereumClient | undefined => {
+    const client = this.#ethereumClients.get(chainId)
+
+    if (!client) {
+      const client = new EthereumClient(
+        this.#ethProviderURLs[chainId] + this.#ethProviderApiKey
+      )
+
+      return this.#ethereumClients.set(chainId, client).get(chainId)
+    }
+
+    return client
   }
 
   public fetchCommunity = async (
@@ -241,17 +264,20 @@ class RequestClient {
               return
             }
 
-            const providerUrl = this.#providerUrls[Number(chainId)]
+            const providerUrl = this.#ethProviderURLs[Number(chainId)]
 
             if (!providerUrl) {
               return
             }
 
-            const client = new EthereumClient(
-              providerUrl + this.#ethProviderApiKey
-            )
-            const ownerPublicKey = await client.resolveOwner(
-              this.#contractsAddress[Number(chainId)]
+            const ethereumClient = this.getEthereumClient(Number(chainId))
+
+            if (!ethereumClient) {
+              return
+            }
+
+            const ownerPublicKey = await ethereumClient.resolveOwner(
+              this.#contractAddresses[Number(chainId)]
                 .CommunityOwnerTokenRegistry,
               communityPublicKey
             )
