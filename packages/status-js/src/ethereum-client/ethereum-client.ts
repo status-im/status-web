@@ -10,6 +10,10 @@ export class EthereumClient {
     this.#provider = new ethers.JsonRpcProvider(url)
   }
 
+  stop() {
+    this.#provider.destroy()
+  }
+
   async resolvePublicKey(
     ensName: string,
     options: { compress: boolean }
