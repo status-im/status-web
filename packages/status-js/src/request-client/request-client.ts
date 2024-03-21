@@ -140,9 +140,13 @@ class RequestClient {
     const client = this.#ethereumClients.get(chainId)
 
     if (!client) {
-      const client = new EthereumClient(
-        this.#ethProviderURLs[chainId] + this.#ethProviderApiKey
-      )
+      const url = this.#ethProviderURLs[chainId]
+
+      if (!url) {
+        return
+      }
+
+      const client = new EthereumClient(url + this.#ethProviderApiKey)
 
       return this.#ethereumClients.set(chainId, client).get(chainId)
     }
@@ -261,12 +265,6 @@ class RequestClient {
             const chainId = Object.keys(contracts)[0]
 
             if (!chainId) {
-              return
-            }
-
-            const providerUrl = this.#ethProviderURLs[Number(chainId)]
-
-            if (!providerUrl) {
               return
             }
 
