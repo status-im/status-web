@@ -2,7 +2,8 @@ import { forwardRef } from 'react'
 
 import { styled, Text as BaseText } from '@tamagui/core'
 
-import type { ColorTokens, GetProps } from '@tamagui/core'
+// todo?: replace all ColorTokens with ColorStyleProp
+import type { ColorStyleProp, ColorTokens, GetProps } from '@tamagui/core'
 import type { Ref } from 'react'
 import type { Text as RNText } from 'react-native'
 
@@ -12,7 +13,7 @@ type Weight = NonNullable<Variants['weight']>
 
 type Props = {
   children: React.ReactNode
-  color?: ColorTokens | string
+  color?: ColorStyleProp
   truncate?: boolean
   wrap?: false
   select?: false
