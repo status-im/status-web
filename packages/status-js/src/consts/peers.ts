@@ -14,6 +14,7 @@ const production = [
   '/dns4/store-02.ac-cn-hongkong-c.shards.test.statusim.net/tcp/443/wss/p2p/16Uiu2HAm9CQhsuwPR54q27kNj9iaQVfyRzTGKrhFmr94oD8ujU6P',
 ]
 
+// todo?: https://github.com/status-im/infra-shards/issues/29#issuecomment-1992729489 `shards.staging`; await integration in desktop and mobile
 // note!: users may experience additional latency due to cross-regional connection
 // todo: use "dynamic" discovery protocol instead
 // todo?: use a regional map together with an environment variable for the peer selection (e.g. `VERCEL_REGION`, but probably limited to  Serverless Functions)

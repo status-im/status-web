@@ -132,7 +132,7 @@ class Client {
   }
 
   static async start(options: ClientOptions): Promise<Client> {
-    // const { environment = 'development' } = options
+    const { environment = 'development' } = options
 
     let waku: LightNode | undefined
     let client: Client | undefined
@@ -161,7 +161,7 @@ class Client {
              * >@see https://forum.vac.dev/t/waku-v2-scalability-studies/142/2
              */
             bootstrap({
-              list: peers['production'],
+              list: peers[environment],
               timeout: 0,
               // note: Infinity prevents connection
               // tagTTL: Infinity,

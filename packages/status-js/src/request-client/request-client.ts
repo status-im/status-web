@@ -37,7 +37,7 @@ import type { LightNode } from '@waku/interfaces'
 
 export interface RequestClientOptions {
   ethProviderApiKey: string
-  // environment?: 'development' | 'preview' | 'production'
+  environment?: 'development' | 'preview' | 'production'
 }
 
 class RequestClient {
@@ -72,7 +72,7 @@ class RequestClient {
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
-    // const { environment = 'development' } = options
+    const { environment = 'development' } = options
 
     let waku: LightNode | undefined
     let client: RequestClient | undefined
@@ -89,7 +89,7 @@ class RequestClient {
         libp2p: {
           peerDiscovery: [
             bootstrap({
-              list: peers['production'],
+              list: peers[environment],
               timeout: 0,
               // note: Infinity prevents connection
               // tagTTL: Infinity,

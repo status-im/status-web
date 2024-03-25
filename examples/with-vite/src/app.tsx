@@ -8,7 +8,10 @@ if (!publicKey) {
   )
 }
 
-const environment = process.env.ENVIRONMENT as 'production' | 'test'
+const environment = process.env.ENVIRONMENT as
+  | 'development'
+  | 'preview'
+  | 'production'
 
 export const App = () => {
   return (
