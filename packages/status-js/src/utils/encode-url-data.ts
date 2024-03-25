@@ -96,8 +96,8 @@ function encodeURLData(data: Uint8Array): string {
 function decodeURLData(data: string): URLData {
   // note: https://github.com/status-im/status-web/pull/345#discussion_r1113129396 observed lengths
   // note?: https://docs.google.com/spreadsheets/d/1JD4kp0aUm90piUZ7FgM_c2NGe2PdN8BFB11wmt5UZIY/view#gid=1260088614 limit for url path segmets not split by ";" or "_"
-  // fixme: set to 301 the above mentioned splitting is implemented
-  z.string().max(500).parse(data)
+  // fixme: set to 301 per url path segment when the above mentioned splitting is implemented
+  z.string().max(500).parse(data) // default max in order not to compute arbitrary values
 
   const decoded = base64url.decode(data)
   const decompressed = brotliDecompressSync(decoded)
