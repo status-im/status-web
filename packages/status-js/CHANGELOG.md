@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.6.1
+
+### Patch Changes
+
+- e863523: update `RequestClient` options
+
 ## 0.6.0
 
 ### Minor Changes
