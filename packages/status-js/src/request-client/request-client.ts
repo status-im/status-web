@@ -37,7 +37,7 @@ import type { LightNode } from '@waku/interfaces'
 
 export interface RequestClientOptions {
   ethProviderApiKey: string
-  // environment?: 'development' | 'preview' | 'production'
+  environment?: 'development' | 'preview' | 'production'
 }
 
 class RequestClient {
@@ -72,7 +72,7 @@ class RequestClient {
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
-    // const { environment = 'development' } = options
+    const { environment = 'development' } = options
 
     let waku: LightNode | undefined
     let client: RequestClient | undefined
@@ -89,7 +89,7 @@ class RequestClient {
         libp2p: {
           peerDiscovery: [
             bootstrap({
-              list: peers['production'],
+              list: peers[environment],
               timeout: 0,
               // note: Infinity prevents connection
               // tagTTL: Infinity,
@@ -205,104 +205,99 @@ class RequestClient {
     const contentTopic = idToContentTopic(communityPublicKey)
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
-    let communityDescription: CommunityDescription | undefined = undefined
-    try {
-      // todo: use queryGenerator() instead
-      await this.waku.store.queryWithOrderedCallback(
-        [
-          createDecoder(contentTopic, symmetricKey, {
-            clusterId: 16,
-            shard: 32,
-          }),
-        ],
-        async wakuMessage => {
-          // handle
-          const message = this.handleWakuMessage(wakuMessage)
+    const wakuMessageGenerator = this.waku.store.queryGenerator([
+      createDecoder(contentTopic, symmetricKey, {
+        clusterId: 16,
+        shard: 32,
+      }),
+    ])
+    for await (const wakuMessages of wakuMessageGenerator) {
+      for await (const wakuMessage of wakuMessages) {
+        if (!wakuMessage) {
+          continue
+        }
 
-          if (!message) {
-            return
-          }
+        // handle
+        const message = this.handleWakuMessage(wakuMessage)
+        if (!message) {
+          continue
+        }
 
-          if (
-            message.type !==
-            ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
-          ) {
-            return
-          }
+        if (
+          message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
+        ) {
+          continue
+        }
 
-          // decode
-          const decodedCommunityDescription = CommunityDescription.fromBinary(
-            message.payload
+        // decode
+        const decodedCommunityDescription = CommunityDescription.fromBinary(
+          message.payload
+        )
+
+        // validate
+        if (
+          !isClockValid(
+            BigInt(decodedCommunityDescription.clock),
+            message.timestamp
+          )
+        ) {
+          continue
+        }
+
+        if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
+          // todo?: zod
+          const permission = Object.values(
+            decodedCommunityDescription.tokenPermissions
+          ).find(
+            permission =>
+              permission.type ===
+              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
           )
 
-          // validate
-          if (
-            !isClockValid(
-              BigInt(decodedCommunityDescription.clock),
-              message.timestamp
-            )
-          ) {
-            return
+          if (!permission) {
+            continue
           }
 
-          // isSignatureValid
-          if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
-            // todo?: zod
-            const permission = Object.values(
-              decodedCommunityDescription.tokenPermissions
-            ).find(
-              permission =>
-                permission.type ===
-                CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
-            )
+          const criteria = permission.tokenCriteria[0]
+          const contracts = criteria?.contractAddresses
+          const chainId = Object.keys(contracts)[0]
 
-            if (!permission) {
-              return
-            }
-
-            const criteria = permission.tokenCriteria[0]
-            const contracts = criteria?.contractAddresses
-            const chainId = Object.keys(contracts)[0]
-
-            if (!chainId) {
-              return
-            }
-
-            const ethereumClient = this.getEthereumClient(Number(chainId))
-
-            if (!ethereumClient) {
-              return
-            }
-
-            const ownerPublicKey = await ethereumClient.resolveOwner(
-              this.#contractAddresses[Number(chainId)]
-                .CommunityOwnerTokenRegistry,
-              communityPublicKey
-            )
-
-            if (ownerPublicKey !== message.signerPublicKey) {
-              return
-            }
-          } else if (
-            communityPublicKey !==
-            `0x${compressPublicKey(message.signerPublicKey)}`
-          ) {
-            return
+          if (!chainId) {
+            continue
           }
 
-          if (!communityDescription) {
-            communityDescription = decodedCommunityDescription
+          const providerUrl = this.#ethProviderURLs[Number(chainId)]
+
+          if (!providerUrl) {
+            continue
           }
 
-          // stop
-          throw new Error('stop')
+          const ethereumClient = this.getEthereumClient(Number(chainId))
+
+          if (!ethereumClient) {
+            continue
+          }
+
+          const ownerPublicKey = await ethereumClient.resolveOwner(
+            this.#contractAddresses[Number(chainId)]
+              .CommunityOwnerTokenRegistry,
+            communityPublicKey
+          )
+
+          if (ownerPublicKey !== message.signerPublicKey) {
+            continue
+          }
+        } else if (
+          communityPublicKey !==
+          `0x${compressPublicKey(message.signerPublicKey)}`
+        ) {
+          continue
         }
-      )
-    } catch {
-      // eslint-disable-next-line no-empty
-    }
 
-    return communityDescription
+        // stop
+        return decodedCommunityDescription
+      }
+    }
   }
 
   private fetchContactCodeAdvertisement = async (
@@ -313,67 +308,59 @@ class RequestClient {
       `${publicKey}-contact-code`
     )
 
-    let contactCodeAdvertisement: ContactCodeAdvertisement | undefined =
-      undefined
-    try {
-      await this.waku.store.queryWithOrderedCallback(
-        [
-          createDecoder(contentTopic, symmetricKey, {
-            clusterId: 16,
-            shard: 32,
-          }),
-        ],
-        wakuMessage => {
-          // handle
-          const message = this.handleWakuMessage(wakuMessage)
-
-          if (!message) {
-            return
-          }
-
-          if (
-            message.type !==
-            ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
-          ) {
-            return
-          }
-
-          // decode
-          const decodedContactCode = ContactCodeAdvertisement.fromBinary(
-            message.payload
-          )
-
-          // validate
-          if (!decodedContactCode.chatIdentity) {
-            return
-          }
-
-          if (
-            !isClockValid(
-              BigInt(decodedContactCode.chatIdentity.clock),
-              message.timestamp
-            )
-          ) {
-            return
-          }
-
-          if (publicKey !== message.signerPublicKey) {
-            return
-          }
-
-          if (!contactCodeAdvertisement) {
-            contactCodeAdvertisement = decodedContactCode
-          }
-
-          // stop
-          throw new Error('stop')
+    const wakuMessageGenerator = this.waku.store.queryGenerator([
+      createDecoder(contentTopic, symmetricKey, {
+        clusterId: 16,
+        shard: 32,
+      }),
+    ])
+    for await (const wakuMessages of wakuMessageGenerator) {
+      for await (const wakuMessage of wakuMessages) {
+        if (!wakuMessage) {
+          continue
         }
-      )
-    } catch {
-      // eslint-disable-next-line no-empty
-    }
 
-    return contactCodeAdvertisement
+        // handle
+        const message = this.handleWakuMessage(wakuMessage)
+
+        if (!message) {
+          continue
+        }
+
+        if (
+          message.type !==
+          ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
+        ) {
+          continue
+        }
+
+        // decode
+        const decodedContactCode = ContactCodeAdvertisement.fromBinary(
+          message.payload
+        )
+
+        // validate
+        if (!decodedContactCode.chatIdentity) {
+          continue
+        }
+
+        if (
+          !isClockValid(
+            BigInt(decodedContactCode.chatIdentity.clock),
+            message.timestamp
+          )
+        ) {
+          continue
+        }
+
+        if (publicKey !== message.signerPublicKey) {
+          continue
+        }
+
+        // stop
+        return decodedContactCode
+      }
+    }
   }
 
   private handleWakuMessage = (
