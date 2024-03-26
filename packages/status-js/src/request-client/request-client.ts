@@ -70,8 +70,7 @@ class RequestClient {
     this.#started = options.started ?? false
     this.#ethProviderURLs =
       options.ethProviderURLs ?? providers[environment].infura
-    this.#ethProviderApiKey =
-      options.ethProviderApiKey ?? options.ethProviderApiKey
+    this.#ethProviderApiKey = options.ethProviderApiKey
     this.#ethereumClients = new Map()
     this.#contractAddresses =
       options.contractAddresses ?? contracts[environment]
