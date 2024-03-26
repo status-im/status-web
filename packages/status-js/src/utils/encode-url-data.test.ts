@@ -32,7 +32,34 @@ describe('Encode URL data', () => {
     expect(decodedData).toEqual(data)
   })
 
-  test('should encode and decode  channel', () => {
+  test('should throw for invalid community data', () => {
+    expect(() => {
+      const encodedData = 'Ow=='
+      decodeCommunityURLData(encodedData)
+    }).toThrowError()
+  })
+
+  test('should throw for unsupported data length', () => {
+    expect(() => {
+      const encodedData =
+        'G2QBQJwFdqwxrBnNb57kP0irrJpuouIjS1WZqHS6A2txojsUHidyu3evaAO3GQQku5NCQXiwAYchBIMNyptts=MD9bZAwoTasraIMkjbS1uAD7oxsAQ53OAmQWCefyBuuXlAu6J7eKQRQhgg5tan75fFp9jwGIjBLbGhnyUht2qj5GWlSBp7_OXsHxgnr21xA2HgR9VGYYikQJA4tcQHDrQzg_ARC9KiOVDD6vgTCM9_CN0HJ1zxwP3w6nzgkDTNuvDCFD3Clqo6Cf_UNY2cNRlKTqj86G4gC2dUNSApwiq72BdGTtrleiRFPUhCbTRbmEG4YwFOs4EjBdJHHRiqjS5GYGc1dAdgcGr2BQ==============================================================================================================================================='
+      decodeCommunityURLData(encodedData)
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"too_big\\",
+          \\"maximum\\": 500,
+          \\"type\\": \\"string\\",
+          \\"inclusive\\": true,
+          \\"exact\\": false,
+          \\"message\\": \\"String must contain at most 500 character(s)\\",
+          \\"path\\": []
+        }
+      ]"
+    `)
+  })
+
+  test('should encode and decode channel', () => {
     const data = {
       emoji: '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
       displayName: 'lorem-ipsum-dolore-nulla',
@@ -56,6 +83,70 @@ describe('Encode URL data', () => {
     expect(decodedData).toEqual(data)
   })
 
+  test('should throw for invalid channel data', () => {
+    expect(() => {
+      const encodedData = 'Ow=='
+      decodeChannelURLData(encodedData)
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"displayName\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"description\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"emoji\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"color\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"object\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"community\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"uuid\\"
+          ],
+          \\"message\\": \\"Required\\"
+        }
+      ]"
+    `)
+  })
+
   test('should encode and decode user', () => {
     const data = {
       displayName: 'Lorem ipsum dolore nulla',
@@ -71,5 +162,69 @@ describe('Encode URL data', () => {
       'GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg=='
     )
     expect(decodedData).toEqual(data)
+  })
+
+  test('should throw for invalid user data', () => {
+    expect(() => {
+      const encodedData = 'Ow=='
+      decodeChannelURLData(encodedData)
+    }).toThrowErrorMatchingInlineSnapshot(`
+      "[
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"displayName\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"description\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"emoji\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"color\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"object\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"community\\"
+          ],
+          \\"message\\": \\"Required\\"
+        },
+        {
+          \\"code\\": \\"invalid_type\\",
+          \\"expected\\": \\"string\\",
+          \\"received\\": \\"undefined\\",
+          \\"path\\": [
+            \\"uuid\\"
+          ],
+          \\"message\\": \\"Required\\"
+        }
+      ]"
+    `)
   })
 })
