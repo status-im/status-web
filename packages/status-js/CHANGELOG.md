@@ -1,5 +1,15 @@
 # @status-im/js
 
+## 0.6.0
+
+### Minor Changes
+
+- 195e3f9: validate metadata for communities with owner token
+
+### Patch Changes
+
+- 7da6546: iterate metadata sequentially
+
 ## 0.5.1
 
 ### Patch Changes
