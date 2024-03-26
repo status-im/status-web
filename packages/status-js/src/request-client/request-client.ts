@@ -56,19 +56,25 @@ class RequestClient {
   constructor(
     waku: LightNode,
     options: {
-      ethProviderURLs: Record<number, string>
       ethProviderApiKey: string
-      contractAddresses: Record<number, Record<string, string>>
+      ethProviderURLs?: Record<number, string>
+      contractAddresses?: Record<number, Record<string, string>>
       started?: boolean
+      environment?: 'development' | 'preview' | 'production'
     }
   ) {
+    const { environment = 'development' } = options
+
     this.waku = waku
     this.wakuMessages = new Set()
     this.#started = options.started ?? false
-    this.#ethProviderURLs = options.ethProviderURLs
-    this.#ethProviderApiKey = options.ethProviderApiKey
+    this.#ethProviderURLs =
+      options.ethProviderURLs ?? providers[environment].infura
+    this.#ethProviderApiKey =
+      options.ethProviderApiKey ?? options.ethProviderApiKey
     this.#ethereumClients = new Map()
-    this.#contractAddresses = options.contractAddresses
+    this.#contractAddresses =
+      options.contractAddresses ?? contracts[environment]
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
@@ -106,9 +112,9 @@ class RequestClient {
 
       client = new RequestClient(waku, {
         started: true,
-        ethProviderURLs: providers['production'].infura,
+        ethProviderURLs: providers[environment].infura,
         ethProviderApiKey: options.ethProviderApiKey,
-        contractAddresses: contracts['production'],
+        contractAddresses: contracts[environment],
       })
     } catch (error) {
       if (waku) {
