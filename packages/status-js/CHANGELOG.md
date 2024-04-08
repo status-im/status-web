@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.6.2
+
+### Patch Changes
+
+- f9af5e0: validate encoded data
+
 ## 0.6.1
 
 ### Patch Changes
