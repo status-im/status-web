@@ -37,7 +37,7 @@ export function decodeCommunityURLData(data: string): PlainMessage<Community> {
 const channelSchema = z.object({
   displayName: z.string().max(24).nonempty(),
   description: z.string().max(140).nonempty(),
-  emoji: z.string().emoji(),
+  emoji: z.string().emoji().optional(),
   color: colorSchema,
   community: z.object({
     displayName: communityDisplayName,
