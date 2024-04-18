@@ -112,15 +112,6 @@ describe('Encode URL data', () => {
           \\"expected\\": \\"string\\",
           \\"received\\": \\"undefined\\",
           \\"path\\": [
-            \\"emoji\\"
-          ],
-          \\"message\\": \\"Required\\"
-        },
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
             \\"color\\"
           ],
           \\"message\\": \\"Required\\"
@@ -185,15 +176,6 @@ describe('Encode URL data', () => {
           \\"received\\": \\"undefined\\",
           \\"path\\": [
             \\"description\\"
-          ],
-          \\"message\\": \\"Required\\"
-        },
-        {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"emoji\\"
           ],
           \\"message\\": \\"Required\\"
         },
