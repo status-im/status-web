@@ -60,7 +60,7 @@ export function decodeChannelURLData(data: string) {
 
 const userSchema = z.object({
   displayName: z.string().max(24).nonempty(),
-  description: z.string().max(240).nonempty(),
+  description: z.string().max(240).optional(),
   // fixme: await integration in native platforms
   color: colorSchema.optional().default('#ffffff'),
 })
@@ -69,7 +69,7 @@ export function encodeUserURLData(data: PlainMessage<User>): EncodedURLData {
   return encodeURLData(new User(data).toBinary()) as EncodedURLData
 }
 
-export function decodeUserURLData(data: string): PlainMessage<User> {
+export function decodeUserURLData(data: string) {
   const deserialized = decodeURLData(data)
 
   const user = User.fromBinary(deserialized.content).toJson()
