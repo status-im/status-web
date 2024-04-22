@@ -25,8 +25,7 @@ export function encodeCommunityURLData(
   return encodeURLData(new Community(data).toBinary()) as EncodedURLData
 }
 
-// note: PlainMessage<T> type does not ensure returning of only own properties
-export function decodeCommunityURLData(data: string): PlainMessage<Community> {
+export function decodeCommunityURLData(data: string) {
   const deserialized = decodeURLData(data)
 
   const community = Community.fromBinary(deserialized.content).toJson()
@@ -37,7 +36,7 @@ export function decodeCommunityURLData(data: string): PlainMessage<Community> {
 const channelSchema = z.object({
   displayName: z.string().max(24).nonempty(),
   description: z.string().max(140).nonempty(),
-  emoji: z.string().emoji(),
+  emoji: z.string().emoji().optional(),
   color: colorSchema,
   community: z.object({
     displayName: communityDisplayName,
@@ -51,12 +50,7 @@ export function encodeChannelURLData(
   return encodeURLData(new Channel(data).toBinary()) as EncodedURLData
 }
 
-export function decodeChannelURLData(data: string): Omit<
-  PlainMessage<Channel>,
-  'community'
-> & {
-  community: Pick<PlainMessage<Community>, 'displayName'>
-} {
+export function decodeChannelURLData(data: string) {
   const deserialized = decodeURLData(data)
 
   const channel = Channel.fromBinary(deserialized.content).toJson()
