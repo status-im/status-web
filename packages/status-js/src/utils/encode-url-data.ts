@@ -75,7 +75,7 @@ export function encodeUserURLData(data: PlainMessage<User>): EncodedURLData {
   return encodeURLData(new User(data).toBinary()) as EncodedURLData
 }
 
-export function decodeUserURLData(data: string): PlainMessage<User> {
+export function decodeUserURLData(data: string) {
   const deserialized = decodeURLData(data)
 
   const user = User.fromBinary(deserialized.content).toJson()
