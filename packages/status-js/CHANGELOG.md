@@ -1,5 +1,12 @@
 # @status-im/js
 
+## 0.6.3
+
+### Patch Changes
+
+- 13f7ed5: Update encode-url-data.ts
+- 18504de: fix user schema in `encode-url-data.ts`
+
 ## 0.6.2
 
 ### Patch Changes
