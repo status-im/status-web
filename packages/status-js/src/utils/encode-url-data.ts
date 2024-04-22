@@ -66,7 +66,7 @@ export function decodeChannelURLData(data: string): Omit<
 
 const userSchema = z.object({
   displayName: z.string().max(24).nonempty(),
-  description: z.string().max(240).nonempty(),
+  description: z.string().max(240).optional(),
   // fixme: await integration in native platforms
   color: colorSchema.optional().default('#ffffff'),
 })
