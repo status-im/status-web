@@ -56,20 +56,39 @@ export const AllVariants: Story = {
   args: {},
   render: () => (
     <Stack space flexDirection="row">
-      <Stack space alignItems="center">
-        <Step type="neutral" value={1} />
-        <Step type="neutral" value={10} />
-        <Step type="neutral" value={999} />
+      <Stack space flexDirection="column">
+        <Stack space alignItems="center">
+          <Step size={18} type="neutral" value={1} />
+          <Step size={18} type="neutral" value={10} />
+          <Step size={18} type="neutral" value={999} />
+        </Stack>
+        <Stack space alignItems="center">
+          <Step size={18} type="complete" value={1} />
+          <Step size={18} type="complete" value={10} />
+          <Step size={18} type="complete" value={999} />
+        </Stack>
+        <Stack space alignItems="center">
+          <Step size={18} type="active" value={1} />
+          <Step size={18} type="active" value={10} />
+          <Step size={18} type="active" value={999} />
+        </Stack>
       </Stack>
-      <Stack space alignItems="center">
-        <Step type="complete" value={1} />
-        <Step type="complete" value={10} />
-        <Step type="complete" value={999} />
-      </Stack>
-      <Stack space alignItems="center">
-        <Step type="active" value={1} />
-        <Step type="active" value={10} />
-        <Step type="active" value={999} />
+      <Stack space flexDirection="column">
+        <Stack space alignItems="center">
+          <Step size={22} type="neutral" value={1} />
+          <Step size={22} type="neutral" value={10} />
+          <Step size={22} type="neutral" value={999} />
+        </Stack>
+        <Stack space alignItems="center">
+          <Step size={22} type="complete" value={1} />
+          <Step size={22} type="complete" value={10} />
+          <Step size={22} type="complete" value={999} />
+        </Stack>
+        <Stack space alignItems="center">
+          <Step size={22} type="active" value={1} />
+          <Step size={22} type="active" value={10} />
+          <Step size={22} type="active" value={999} />
+        </Stack>
       </Stack>
     </Stack>
   ),

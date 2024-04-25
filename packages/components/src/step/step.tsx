@@ -8,16 +8,17 @@ import type { ColorTokens } from '@tamagui/core'
 export type StepVariants = 'neutral' | 'complete' | 'active'
 
 type Props = {
+  size: 18 | 22
   value: number
   type?: StepVariants
 }
 
 const Step = (props: Props) => {
-  const { value, type = 'neutral' } = props
+  const { size, value, type = 'neutral' } = props
 
   return (
-    <Base>
-      <Content type={type}>
+    <Base size={size}>
+      <Content size={size} type={type}>
         <Text size={11} weight="medium" color={textColors[type]}>
           {value}
         </Text>
@@ -30,7 +31,6 @@ export { Step }
 export type { Props as StepProps }
 
 const Base = styled(Stack, {
-  paddingVertical: 1,
   minWidth: 20,
   maxWidth: 28,
   display: 'inline-flex',
@@ -38,6 +38,20 @@ const Base = styled(Stack, {
   alignItems: 'center',
   flexBasis: 'fit-content',
   width: 'fit-content',
+
+  variants: {
+    size: {
+      18: {
+        paddingVertical: 1,
+        minWidth: 20,
+        maxWidth: 28,
+      },
+      22: {
+        minWidth: 24,
+        maxWidth: 32,
+      },
+    },
+  },
 })
 
 const Content = styled(Stack, {
@@ -45,9 +59,6 @@ const Content = styled(Stack, {
   paddingHorizontal: 3,
   paddingVertical: 0,
   borderRadius: '$6',
-  height: 18,
-  minWidth: 18,
-  maxWidth: 28,
   justifyContent: 'center',
   alignItems: 'center',
   borderWidth: 1,
@@ -64,6 +75,18 @@ const Content = styled(Stack, {
       },
       active: {
         backgroundColor: '$blue/10',
+      },
+    },
+    size: {
+      18: {
+        height: 18,
+        minWidth: 18,
+        maxWidth: 28,
+      },
+      22: {
+        height: 22,
+        minWidth: 22,
+        maxWidth: 32,
       },
     },
   },
