@@ -14,7 +14,7 @@ type Props = {
 }
 
 const Step = (props: Props) => {
-  const { size, value, type = 'neutral' } = props
+  const { size = 18, value, type = 'neutral' } = props
 
   return (
     <Base size={size}>
