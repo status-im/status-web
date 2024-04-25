@@ -8,8 +8,8 @@ import type { ColorTokens } from '@tamagui/core'
 export type StepVariants = 'neutral' | 'complete' | 'active'
 
 type Props = {
-  size: 18 | 22
   value: number
+  size?: 18 | 22
   type?: StepVariants
 }
 
