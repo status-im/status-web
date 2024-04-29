@@ -16,7 +16,7 @@ const communitySchema = z.object({
   description: z.string().max(140).nonempty(),
   membersCount: z.number().nonnegative(),
   color: colorSchema,
-  tagIndices: z.number().nonnegative().array(),
+  tagIndices: z.number().nonnegative().array().optional(),
 })
 
 export function encodeCommunityURLData(
