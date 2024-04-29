@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.6.4
+
+### Patch Changes
+
+- 8249e9f: fix community schema in encode-url-data.ts
+
 ## 0.6.3
 
 ### Patch Changes
