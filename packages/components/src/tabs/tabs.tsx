@@ -119,7 +119,9 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
           color,
         })}
 
-      {props.type === 'step' && <Step type="complete" value={props.step} />}
+      {props.type === 'step' && (
+        <Step size={18} type="complete" value={props.step} />
+      )}
 
       <Text size={textSize} weight="medium" color={color}>
         {children}
