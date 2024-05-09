@@ -2,7 +2,7 @@ import { bootstrap } from '@libp2p/bootstrap'
 import { Protocols } from '@waku/interfaces'
 import { createDecoder } from '@waku/message-encryption/symmetric'
 import { createLightNode, waitForRemotePeer } from '@waku/sdk'
-import { bytesToHex } from 'ethereum-cryptography/utils'
+import { bytesToHex, concatBytes } from 'ethereum-cryptography/utils'
 
 import { isEncrypted } from '../client/community/is-encrypted'
 import { contracts } from '../consts/contracts'
@@ -19,6 +19,7 @@ import {
 } from '../protos/communities_pb'
 import { ProtocolMessage } from '../protos/protocol-message_pb'
 import { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
+import { SegmentMessage } from '../protos/segment-message_pb'
 import { compressPublicKey } from '../utils/compress-public-key'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { idToContentTopic } from '../utils/id-to-content-topic'
@@ -44,6 +45,7 @@ class RequestClient {
   public waku: LightNode
   /** Cache. */
   public readonly wakuMessages: Set<string>
+  #segmentedWakuMessages: Map<string, Map<number, SegmentMessage>>
 
   #started: boolean
 
@@ -67,6 +69,7 @@ class RequestClient {
 
     this.waku = waku
     this.wakuMessages = new Set()
+    this.#segmentedWakuMessages = new Map()
     this.#started = options.started ?? false
     this.#ethProviderURLs =
       options.ethProviderURLs ?? providers[environment].infura
@@ -392,7 +395,57 @@ class RequestClient {
     }
 
     // decode (layers)
-    let messageToDecode = wakuMessage.payload
+    let messageToDecode = wakuMessage.payload // default
+
+    try {
+      const decodedSegment = SegmentMessage.fromBinary(messageToDecode)
+
+      if (decodedSegment) {
+        const unsegmentedMessageHash = bytesToHex(
+          decodedSegment.entireMessageHash
+        )
+
+        const segmentedWakuMessages = this.#segmentedWakuMessages.get(
+          unsegmentedMessageHash
+        )
+
+        if (!segmentedWakuMessages) {
+          this.#segmentedWakuMessages.set(
+            unsegmentedMessageHash,
+            new Map([[decodedSegment.index, decodedSegment]])
+          )
+
+          return
+        }
+
+        if (segmentedWakuMessages.has(decodedSegment.index)) {
+          return
+        }
+
+        segmentedWakuMessages.set(decodedSegment.index, decodedSegment)
+
+        if (segmentedWakuMessages.size !== decodedSegment.segmentsCount) {
+          return
+        }
+
+        try {
+          const segmentedPayloads: Uint8Array[] = []
+          segmentedWakuMessages.forEach(segment => {
+            segmentedPayloads[segment.index] = segment.payload
+          })
+          const unsegmentedPayload = concatBytes(...segmentedPayloads)
+
+          messageToDecode = unsegmentedPayload
+
+          this.#segmentedWakuMessages.delete(unsegmentedMessageHash)
+        } catch (error) {
+          return
+        }
+      }
+    } catch {
+      // eslint-disable-next-line no-empty
+    }
+
     let decodedProtocol
     try {
       decodedProtocol = ProtocolMessage.fromBinary(messageToDecode)

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+message SegmentMessage {
+  // hash of the entire original message
+  bytes entire_message_hash = 1;
+  // Index of this segment within the entire original message
+  uint32 index = 2;
+  // Total number of segments the entire original message is divided into
+  uint32 segments_count = 3;
+  // The payload data for this particular segment
+  bytes payload = 4;
+}
