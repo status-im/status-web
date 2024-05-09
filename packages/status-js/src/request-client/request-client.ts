@@ -4,7 +4,6 @@ import { createDecoder } from '@waku/message-encryption/symmetric'
 import { createLightNode, waitForRemotePeer } from '@waku/sdk'
 import { bytesToHex } from 'ethereum-cryptography/utils'
 
-import { isEncrypted } from '../client/community/is-encrypted'
 import { contracts } from '../consts/contracts'
 import { peers } from '../consts/peers'
 import { providers } from '../consts/providers'
@@ -249,21 +248,14 @@ class RequestClient {
           continue
         }
 
-        if (isEncrypted(decodedCommunityDescription.tokenPermissions)) {
-          // todo?: zod
-          const permission = Object.values(
-            decodedCommunityDescription.tokenPermissions
-          ).find(
-            permission =>
-              permission.type ===
-              CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
-          )
-
-          if (!permission) {
-            continue
-          }
-
-          const criteria = permission.tokenCriteria[0]
+        const ownerTokenPermission = Object.values(
+          decodedCommunityDescription.tokenPermissions
+        ).find(
+          permission =>
+            permission.type === CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
+        )
+        if (ownerTokenPermission) {
+          const criteria = ownerTokenPermission.tokenCriteria[0]
           const contracts = criteria?.contractAddresses
           const chainId = Object.keys(contracts)[0]
 
