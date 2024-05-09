@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.6.6
+
+### Patch Changes
+
+- ef5c31f: trim whitespace of encoded emoji
+
 ## 0.6.5
 
 ### Patch Changes
