@@ -1,5 +1,12 @@
 # @status-im/js
 
+## 0.6.5
+
+### Patch Changes
+
+- a7008b5: handle segmented waku messages
+- 4106248: optimize handling of token owner waku messages
+
 ## 0.6.4
 
 ### Patch Changes
