@@ -1,6 +1,6 @@
 import { createIcon } from '../lib/create-icon'
 
-const SvgPauseIcon = createIcon(props => {
+const SvgPlayMediaIcon = createIcon(props => {
   return (
     <svg
       {...props}
@@ -14,12 +14,10 @@ const SvgPauseIcon = createIcon(props => {
     >
       <path
         fill={props.color}
-        fillRule="evenodd"
-        d="M10 3.6a6.4 6.4 0 1 0 0 12.8 6.4 6.4 0 0 0 0-12.8ZM2.4 10a7.6 7.6 0 1 1 15.2 0 7.6 7.6 0 0 1-15.2 0Zm5 3V7h1.2v6H7.4Zm4-6v6h1.2V7h-1.2Z"
-        clipRule="evenodd"
+        d="M7.193 16c-1.807 0-1.808-12 0-12C9 4 16.5 8.5 16.5 10S9 16 7.193 16Z"
       />
     </svg>
   )
 })
 
-export default SvgPauseIcon
+export default SvgPlayMediaIcon

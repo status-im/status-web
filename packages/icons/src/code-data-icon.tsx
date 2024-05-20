@@ -1,6 +1,6 @@
 import { createIcon } from '../lib/create-icon'
 
-const SvgPauseIcon = createIcon(props => {
+const SvgCodeDataIcon = createIcon(props => {
   return (
     <svg
       {...props}
@@ -15,11 +15,11 @@ const SvgPauseIcon = createIcon(props => {
       <path
         fill={props.color}
         fillRule="evenodd"
-        d="M10 3.6a6.4 6.4 0 1 0 0 12.8 6.4 6.4 0 0 0 0-12.8ZM2.4 10a7.6 7.6 0 1 1 15.2 0 7.6 7.6 0 0 1-15.2 0Zm5 3V7h1.2v6H7.4Zm4-6v6h1.2V7h-1.2Z"
+        d="m2.076 9.576 4.5-4.5.848.848L3.348 10l4.076 4.076-.848.848-4.5-4.5L1.65 10l.425-.424Zm15.849 0-4.5-4.5-.849.848L16.652 10l-4.076 4.076.848.848 4.5-4.5.425-.424-.424-.424Z"
         clipRule="evenodd"
       />
     </svg>
   )
 })
 
-export default SvgPauseIcon
+export default SvgCodeDataIcon
