@@ -1,5 +1,12 @@
 # @status-im/icons
 
+## 0.9.0
+
+### Minor Changes
+
+- 6260801: Sync icons
+- cd85b36: Sync icons
+
 ## 0.8.0
 
 ### Minor Changes
