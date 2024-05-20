@@ -423,25 +423,37 @@ export class X3DHHeader extends Message<X3DHHeader> {
  */
 export class HRHeader extends Message<HRHeader> {
   /**
-   * community key ID
+   * deprecated group key ID
    *
-   * @generated from field: uint32 key_id = 1;
+   * @generated from field: uint32 deprecated_key_id = 1;
    */
-  keyId = 0
+  deprecatedKeyId = 0
 
   /**
-   * Community message number for this key_id
+   * group message number for this key_id
    *
    * @generated from field: uint32 seq_no = 2;
    */
   seqNo = 0
 
   /**
-   * Community ID
+   * group ID
    *
    * @generated from field: bytes group_id = 3;
    */
   groupId = new Uint8Array(0)
+
+  /**
+   * group key ID
+   *
+   * @generated from field: bytes key_id = 4;
+   */
+  keyId = new Uint8Array(0)
+
+  /**
+   * @generated from field: HRKeys keys = 5;
+   */
+  keys?: HRKeys
 
   constructor(data?: PartialMessage<HRHeader>) {
     super()
@@ -451,9 +463,16 @@ export class HRHeader extends Message<HRHeader> {
   static readonly runtime: typeof proto3 = proto3
   static readonly typeName = 'HRHeader'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: 'key_id', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    {
+      no: 1,
+      name: 'deprecated_key_id',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
     { no: 2, name: 'seq_no', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
     { no: 3, name: 'group_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 4, name: 'key_id', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 5, name: 'keys', kind: 'message', T: HRKeys },
   ])
 
   static fromBinary(
@@ -486,6 +505,67 @@ export class HRHeader extends Message<HRHeader> {
 }
 
 /**
+ * @generated from message RekeyGroup
+ */
+export class RekeyGroup extends Message<RekeyGroup> {
+  /**
+   * @generated from field: uint64 timestamp = 2;
+   */
+  timestamp = protoInt64.zero
+
+  /**
+   * @generated from field: map<uint32, bytes> keys = 4;
+   */
+  keys: { [key: number]: Uint8Array } = {}
+
+  constructor(data?: PartialMessage<RekeyGroup>) {
+    super()
+    proto3.util.initPartial(data, this)
+  }
+
+  static readonly runtime: typeof proto3 = proto3
+  static readonly typeName = 'RekeyGroup'
+  static readonly fields: FieldList = proto3.util.newFieldList(() => [
+    { no: 2, name: 'timestamp', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
+    {
+      no: 4,
+      name: 'keys',
+      kind: 'map',
+      K: 13 /* ScalarType.UINT32 */,
+      V: { kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    },
+  ])
+
+  static fromBinary(
+    bytes: Uint8Array,
+    options?: Partial<BinaryReadOptions>
+  ): RekeyGroup {
+    return new RekeyGroup().fromBinary(bytes, options)
+  }
+
+  static fromJson(
+    jsonValue: JsonValue,
+    options?: Partial<JsonReadOptions>
+  ): RekeyGroup {
+    return new RekeyGroup().fromJson(jsonValue, options)
+  }
+
+  static fromJsonString(
+    jsonString: string,
+    options?: Partial<JsonReadOptions>
+  ): RekeyGroup {
+    return new RekeyGroup().fromJsonString(jsonString, options)
+  }
+
+  static equals(
+    a: RekeyGroup | PlainMessage<RekeyGroup> | undefined,
+    b: RekeyGroup | PlainMessage<RekeyGroup> | undefined
+  ): boolean {
+    return proto3.util.equals(RekeyGroup, a, b)
+  }
+}
+
+/**
  * @generated from message HRKeys
  */
 export class HRKeys extends Message<HRKeys> {
@@ -493,6 +573,11 @@ export class HRKeys extends Message<HRKeys> {
    * @generated from field: repeated HRKey keys = 1;
    */
   keys: HRKey[] = []
+
+  /**
+   * @generated from field: RekeyGroup rekey_group = 2;
+   */
+  rekeyGroup?: RekeyGroup
 
   constructor(data?: PartialMessage<HRKeys>) {
     super()
@@ -503,6 +588,7 @@ export class HRKeys extends Message<HRKeys> {
   static readonly typeName = 'HRKeys'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
     { no: 1, name: 'keys', kind: 'message', T: HRKey, repeated: true },
+    { no: 2, name: 'rekey_group', kind: 'message', T: RekeyGroup },
   ])
 
   static fromBinary(
@@ -539,14 +625,19 @@ export class HRKeys extends Message<HRKeys> {
  */
 export class HRKey extends Message<HRKey> {
   /**
-   * @generated from field: uint32 key_id = 1;
+   * @generated from field: uint32 deprecated_key_id = 1;
    */
-  keyId = 0
+  deprecatedKeyId = 0
 
   /**
    * @generated from field: bytes key = 2;
    */
   key = new Uint8Array(0)
+
+  /**
+   * @generated from field: uint64 timestamp = 3;
+   */
+  timestamp = protoInt64.zero
 
   constructor(data?: PartialMessage<HRKey>) {
     super()
@@ -556,8 +647,14 @@ export class HRKey extends Message<HRKey> {
   static readonly runtime: typeof proto3 = proto3
   static readonly typeName = 'HRKey'
   static readonly fields: FieldList = proto3.util.newFieldList(() => [
-    { no: 1, name: 'key_id', kind: 'scalar', T: 13 /* ScalarType.UINT32 */ },
+    {
+      no: 1,
+      name: 'deprecated_key_id',
+      kind: 'scalar',
+      T: 13 /* ScalarType.UINT32 */,
+    },
     { no: 2, name: 'key', kind: 'scalar', T: 12 /* ScalarType.BYTES */ },
+    { no: 3, name: 'timestamp', kind: 'scalar', T: 4 /* ScalarType.UINT64 */ },
   ])
 
   static fromBinary(

@@ -2,16 +2,23 @@ import { bootstrap } from '@libp2p/bootstrap'
 import { Protocols } from '@waku/interfaces'
 import { createDecoder } from '@waku/message-encryption/symmetric'
 import { createLightNode, waitForRemotePeer } from '@waku/sdk'
-import { bytesToHex } from 'ethereum-cryptography/utils'
+import { bytesToHex, concatBytes } from 'ethereum-cryptography/utils'
 
+import { contracts } from '../consts/contracts'
 import { peers } from '../consts/peers'
+import { providers } from '../consts/providers'
+import { EthereumClient } from '../ethereum-client/ethereum-client'
 import {
   ApplicationMetadataMessage,
   ApplicationMetadataMessage_Type,
 } from '../protos/application-metadata-message_pb'
-import { CommunityDescription } from '../protos/communities_pb'
+import {
+  CommunityDescription,
+  CommunityTokenPermission_Type,
+} from '../protos/communities_pb'
 import { ProtocolMessage } from '../protos/protocol-message_pb'
 import { ContactCodeAdvertisement } from '../protos/push-notifications_pb'
+import { SegmentMessage } from '../protos/segment-message_pb'
 import { compressPublicKey } from '../utils/compress-public-key'
 import { generateKeyFromPassword } from '../utils/generate-key-from-password'
 import { idToContentTopic } from '../utils/id-to-content-topic'
@@ -29,24 +36,50 @@ import type { UserInfo } from './map-user'
 import type { LightNode } from '@waku/interfaces'
 
 export interface RequestClientOptions {
-  environment?: 'test' // 'production' | 'test'
+  ethProviderApiKey: string
+  environment?: 'development' | 'preview' | 'production'
 }
 
 class RequestClient {
   public waku: LightNode
   /** Cache. */
   public readonly wakuMessages: Set<string>
+  #segmentedWakuMessages: Map<string, Map<number, SegmentMessage>>
 
-  private started: boolean
+  #started: boolean
 
-  constructor(waku: LightNode, started = false) {
+  #ethProviderURLs: Record<number, string>
+  #ethProviderApiKey: string
+  #ethereumClients: Map<number, EthereumClient>
+
+  #contractAddresses: Record<number, Record<string, string>>
+
+  constructor(
+    waku: LightNode,
+    options: {
+      ethProviderApiKey: string
+      ethProviderURLs?: Record<number, string>
+      contractAddresses?: Record<number, Record<string, string>>
+      started?: boolean
+      environment?: 'development' | 'preview' | 'production'
+    }
+  ) {
+    const { environment = 'development' } = options
+
     this.waku = waku
     this.wakuMessages = new Set()
-    this.started = started
+    this.#segmentedWakuMessages = new Map()
+    this.#started = options.started ?? false
+    this.#ethProviderURLs =
+      options.ethProviderURLs ?? providers[environment].infura
+    this.#ethProviderApiKey = options.ethProviderApiKey
+    this.#ethereumClients = new Map()
+    this.#contractAddresses =
+      options.contractAddresses ?? contracts[environment]
   }
 
   static async start(options: RequestClientOptions): Promise<RequestClient> {
-    const { environment = 'test' } = options
+    const { environment = 'development' } = options
 
     let waku: LightNode | undefined
     let client: RequestClient | undefined
@@ -78,8 +111,12 @@ class RequestClient {
       await waku.start()
       await waitForRemotePeer(waku, [Protocols.Store], 10 * 1000)
 
-      const started = true
-      client = new RequestClient(waku, started)
+      client = new RequestClient(waku, {
+        started: true,
+        ethProviderURLs: providers[environment].infura,
+        ethProviderApiKey: options.ethProviderApiKey,
+        contractAddresses: contracts[environment],
+      })
     } catch (error) {
       if (waku) {
         await waku.stop()
@@ -92,13 +129,36 @@ class RequestClient {
   }
 
   public async stop() {
-    if (!this.started) {
+    if (!this.#started) {
       throw new Error('Waku instance not created by class initialization')
     }
 
-    await this.waku.stop()
+    await Promise.all([
+      async () => this.waku.stop(),
+      [...this.#ethereumClients.values()].map(async provider =>
+        provider.stop()
+      ),
+    ])
 
-    this.started = false
+    this.#started = false
+  }
+
+  private getEthereumClient = (chainId: number): EthereumClient | undefined => {
+    const client = this.#ethereumClients.get(chainId)
+
+    if (!client) {
+      const url = this.#ethProviderURLs[chainId]
+
+      if (!url) {
+        return
+      }
+
+      const client = new EthereumClient(url + this.#ethProviderApiKey)
+
+      return this.#ethereumClients.set(chainId, client).get(chainId)
+    }
+
+    return client
   }
 
   public fetchCommunity = async (
@@ -147,31 +207,33 @@ class RequestClient {
 
   public fetchCommunityDescription = async (
     /** Compressed */
-    publicKey: string
+    communityPublicKey: string
   ): Promise<CommunityDescription | undefined> => {
-    const contentTopic = idToContentTopic(publicKey)
-    const symmetricKey = await generateKeyFromPassword(publicKey)
+    const contentTopic = idToContentTopic(communityPublicKey)
+    const symmetricKey = await generateKeyFromPassword(communityPublicKey)
 
-    let communityDescription: CommunityDescription | undefined = undefined
-    await this.waku.store.queryWithOrderedCallback(
-      [
-        createDecoder(contentTopic, symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
-      ],
-      wakuMessage => {
+    const wakuMessageGenerator = this.waku.store.queryGenerator([
+      createDecoder(contentTopic, symmetricKey, {
+        clusterId: 16,
+        shard: 32,
+      }),
+    ])
+    for await (const wakuMessages of wakuMessageGenerator) {
+      for await (const wakuMessage of wakuMessages) {
+        if (!wakuMessage) {
+          continue
+        }
+
         // handle
         const message = this.handleWakuMessage(wakuMessage)
-
         if (!message) {
-          return
+          continue
         }
 
         if (
           message.type !== ApplicationMetadataMessage_Type.COMMUNITY_DESCRIPTION
         ) {
-          return
+          continue
         }
 
         // decode
@@ -186,23 +248,56 @@ class RequestClient {
             message.timestamp
           )
         ) {
-          return
+          continue
         }
 
-        if (publicKey !== `0x${compressPublicKey(message.signerPublicKey)}`) {
-          return
-        }
+        const ownerTokenPermission = Object.values(
+          decodedCommunityDescription.tokenPermissions
+        ).find(
+          permission =>
+            permission.type === CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
+        )
+        if (ownerTokenPermission) {
+          const criteria = ownerTokenPermission.tokenCriteria[0]
+          const contracts = criteria?.contractAddresses
+          const chainId = Object.keys(contracts)[0]
 
-        if (!communityDescription) {
-          communityDescription = decodedCommunityDescription
+          if (!chainId) {
+            continue
+          }
+
+          const providerUrl = this.#ethProviderURLs[Number(chainId)]
+
+          if (!providerUrl) {
+            continue
+          }
+
+          const ethereumClient = this.getEthereumClient(Number(chainId))
+
+          if (!ethereumClient) {
+            continue
+          }
+
+          const ownerPublicKey = await ethereumClient.resolveOwner(
+            this.#contractAddresses[Number(chainId)]
+              .CommunityOwnerTokenRegistry,
+            communityPublicKey
+          )
+
+          if (ownerPublicKey !== message.signerPublicKey) {
+            continue
+          }
+        } else if (
+          communityPublicKey !==
+          `0x${compressPublicKey(message.signerPublicKey)}`
+        ) {
+          continue
         }
 
         // stop
-        return true
+        return decodedCommunityDescription
       }
-    )
-
-    return communityDescription
+    }
   }
 
   private fetchContactCodeAdvertisement = async (
@@ -213,28 +308,30 @@ class RequestClient {
       `${publicKey}-contact-code`
     )
 
-    let contactCodeAdvertisement: ContactCodeAdvertisement | undefined =
-      undefined
-    await this.waku.store.queryWithOrderedCallback(
-      [
-        createDecoder(contentTopic, symmetricKey, {
-          clusterId: 16,
-          shard: 32,
-        }),
-      ],
-      wakuMessage => {
+    const wakuMessageGenerator = this.waku.store.queryGenerator([
+      createDecoder(contentTopic, symmetricKey, {
+        clusterId: 16,
+        shard: 32,
+      }),
+    ])
+    for await (const wakuMessages of wakuMessageGenerator) {
+      for await (const wakuMessage of wakuMessages) {
+        if (!wakuMessage) {
+          continue
+        }
+
         // handle
         const message = this.handleWakuMessage(wakuMessage)
 
         if (!message) {
-          return
+          continue
         }
 
         if (
           message.type !==
           ApplicationMetadataMessage_Type.CONTACT_CODE_ADVERTISEMENT
         ) {
-          return
+          continue
         }
 
         // decode
@@ -244,7 +341,7 @@ class RequestClient {
 
         // validate
         if (!decodedContactCode.chatIdentity) {
-          return
+          continue
         }
 
         if (
@@ -253,23 +350,17 @@ class RequestClient {
             message.timestamp
           )
         ) {
-          return
+          continue
         }
 
         if (publicKey !== message.signerPublicKey) {
-          return
-        }
-
-        if (!contactCodeAdvertisement) {
-          contactCodeAdvertisement = decodedContactCode
+          continue
         }
 
         // stop
-        return true
+        return decodedContactCode
       }
-    )
-
-    return contactCodeAdvertisement
+    }
   }
 
   private handleWakuMessage = (
@@ -296,20 +387,82 @@ class RequestClient {
     }
 
     // decode (layers)
-    let messageToDecode = wakuMessage.payload
+    let messageToDecode = wakuMessage.payload // default
+
+    try {
+      const decodedSegment = SegmentMessage.fromBinary(messageToDecode)
+
+      if (decodedSegment) {
+        const unsegmentedMessageHash = bytesToHex(
+          decodedSegment.entireMessageHash
+        )
+
+        const segmentedWakuMessages = this.#segmentedWakuMessages.get(
+          unsegmentedMessageHash
+        )
+
+        if (!segmentedWakuMessages) {
+          this.#segmentedWakuMessages.set(
+            unsegmentedMessageHash,
+            new Map([[decodedSegment.index, decodedSegment]])
+          )
+
+          return
+        }
+
+        if (segmentedWakuMessages.has(decodedSegment.index)) {
+          return
+        }
+
+        segmentedWakuMessages.set(decodedSegment.index, decodedSegment)
+
+        if (segmentedWakuMessages.size !== decodedSegment.segmentsCount) {
+          return
+        }
+
+        try {
+          const segmentedPayloads: Uint8Array[] = []
+          segmentedWakuMessages.forEach(segment => {
+            segmentedPayloads[segment.index] = segment.payload
+          })
+          const unsegmentedPayload = concatBytes(...segmentedPayloads)
+
+          messageToDecode = unsegmentedPayload
+
+          this.#segmentedWakuMessages.delete(unsegmentedMessageHash)
+        } catch (error) {
+          return
+        }
+      }
+    } catch {
+      // eslint-disable-next-line no-empty
+    }
+
     let decodedProtocol
     try {
       decodedProtocol = ProtocolMessage.fromBinary(messageToDecode)
-      if (decodedProtocol) {
+
+      if (decodedProtocol.encryptedMessage.none) {
+        messageToDecode = decodedProtocol.encryptedMessage.none.payload
+      } else if (decodedProtocol) {
         messageToDecode = decodedProtocol.publicMessage
       }
     } catch {
       // eslint-disable-next-line no-empty
     }
 
-    const decodedMetadata =
-      ApplicationMetadataMessage.fromBinary(messageToDecode)
-    if (!decodedMetadata.payload) {
+    let decodedMetadata
+    try {
+      decodedMetadata = ApplicationMetadataMessage.fromBinary(messageToDecode)
+    } catch {
+      return
+    }
+
+    if (
+      !decodedMetadata ||
+      !decodedMetadata.payload ||
+      !decodedMetadata.signature.length
+    ) {
       return
     }
 

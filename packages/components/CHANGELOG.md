@@ -1,5 +1,17 @@
 # @status-im/components
 
+## 0.6.3
+
+### Patch Changes
+
+- 7093144: add size variants to Step
+
+## 0.6.2
+
+### Patch Changes
+
+- 9a495fd: export `Tooltip`
+
 ## 0.6.1
 
 ### Patch Changes

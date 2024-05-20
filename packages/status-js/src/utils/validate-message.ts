@@ -2,7 +2,7 @@ import {
   AudioMessage_AudioType,
   ChatMessage_ContentType,
 } from '../protos/chat-message_pb'
-import { ImageType, MessageType } from '../protos/enums_pb'
+import { ImageFormat, MessageType } from '../protos/enums_pb'
 
 import type {
   AudioMessage,
@@ -24,7 +24,7 @@ export function validateMessage(message: ChatMessage): boolean {
       // fixme?
       const payload = message.payload.value as ImageMessage
 
-      if (payload.type === ImageType.UNKNOWN_IMAGE_TYPE) {
+      if (payload.format === ImageFormat.UNKNOWN_IMAGE_FORMAT) {
         return false
       }
 

@@ -9,7 +9,10 @@ if (!publicKey) {
   )
 }
 
-const environment = process.env.NEXT_PUBLIC_ENVIRONMENT as 'production' | 'test'
+const environment = process.env.NEXT_PUBLIC_ENVIRONMENT as
+  | 'development'
+  | 'preview'
+  | 'production'
 
 /**
  * For some reason the regular import fails with a server error:

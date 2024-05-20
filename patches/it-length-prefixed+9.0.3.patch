@@ -1,0 +1,15 @@
+diff --git a/node_modules/it-length-prefixed/dist/src/decode.js b/node_modules/it-length-prefixed/dist/src/decode.js
+index 313fdff..9f2a618 100644
+--- a/node_modules/it-length-prefixed/dist/src/decode.js
++++ b/node_modules/it-length-prefixed/dist/src/decode.js
+@@ -6,7 +6,9 @@ import { isAsyncIterable } from './utils.js';
+ // Maximum length of the length section of the message
+ export const MAX_LENGTH_LENGTH = 8; // Varint.encode(Number.MAX_SAFE_INTEGER).length
+ // Maximum length of the data section of the message
+-export const MAX_DATA_LENGTH = 1024 * 1024 * 4;
++// export const MAX_DATA_LENGTH = 1024 * 1024 * 4;
++// note: https://github.com/status-im/status-go/blob/afd72ace28ed6629297820af73053cea3e73e63b/waku/common/const.go#L43C33-L43C49
++export const MAX_DATA_LENGTH = 10 * 1024 * 1024;
+ var ReadMode;
+ (function (ReadMode) {
+     ReadMode[ReadMode["LENGTH"] = 0] = "LENGTH";

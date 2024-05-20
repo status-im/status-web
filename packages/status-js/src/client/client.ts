@@ -28,7 +28,7 @@ export interface ClientOptions {
    * Public key of a community to join.
    */
   publicKey: string
-  environment?: 'test' // 'production' | 'test'
+  environment?: 'development' | 'preview' | 'production'
   /**
    * Custom storage for data persistance
    * @default window.localStorage
@@ -132,7 +132,7 @@ class Client {
   }
 
   static async start(options: ClientOptions): Promise<Client> {
-    const { environment = 'test' } = options
+    const { environment = 'development' } = options
 
     let waku: LightNode | undefined
     let client: Client | undefined

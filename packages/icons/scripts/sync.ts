@@ -33,6 +33,8 @@ if (isCancel(personalAccessToken)) {
 const FILE_KEY = 'qLLuMLfpGxK9OfpIavwsmK'
 
 const NODE_IDS = {
+  // currently generates only set of size 20
+  // https://github.com/status-im/status-web/issues/466
   '3239:987': 'icons',
   '3227:1083': 'social',
   // '942:77': 'reactions',
