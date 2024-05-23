@@ -50,7 +50,7 @@ const IconButton = (props: Props, ref: Ref<View>) => {
       activeBlur={blur ? (selected ? variant : undefined) : undefined}
     >
       {cloneElement(icon, {
-        color,
+        color: icon.props.color ?? color,
         size: 20,
       })}
     </Base>
