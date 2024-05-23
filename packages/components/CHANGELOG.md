@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.6.4
+
+### Patch Changes
+
+- 1a17092: fix the color of the icon in IconButton
+
 ## 0.6.3
 
 ### Patch Changes
