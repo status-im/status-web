@@ -22,7 +22,7 @@
       />
     </mask>
     <g mask="url(#mask0_7419_55)">
-      <path stroke="#000" d="M4.5 10s1-5 5.5-5 5.5 5 5.5 5" />
+      <path stroke="#09101C" d="M4.5 10s1-5 5.5-5 5.5 5 5.5 5" />
     </g>
     <circle cx="4.5" cy="12.5" r="2.5" stroke="#09101C" stroke-width="1.2" />
     <circle cx="15.5" cy="12.5" r="2.5" stroke="#09101C" stroke-width="1.2" />
