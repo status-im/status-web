@@ -65,24 +65,28 @@ type TriggerProps =
       type: 'default'
       value: string
       children: string
+      disabled?: boolean
     }
   | {
       type: 'icon'
       value: string
       children: string
       icon: React.ReactElement
+      disabled?: boolean
     }
   | {
       type: 'counter'
       value: string
       children: string
       count: number
+      disabled?: boolean
     }
   | {
       type: 'step'
       value: string
       children: string
       step: number
+      disabled?: boolean
     }
 
 const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
@@ -92,16 +96,11 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
   const providedProps = props as TriggerProps & {
     size: 24 | 32
     'aria-selected': boolean
-    'aria-disabled': boolean
+    disabled: boolean
     variant: Variants['variant']
   }
 
-  const {
-    size,
-    'aria-selected': selected,
-    'aria-disabled': disabled,
-    variant,
-  } = providedProps
+  const { size, 'aria-selected': selected, disabled, variant } = providedProps
 
   const { color, pressableProps } = usePressableColors(
     {

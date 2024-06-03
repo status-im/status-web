@@ -32,7 +32,7 @@ export const Grey: StoryObj<TabsProps> = {
           <Tabs.Trigger type="default" value="2">
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" aria-disabled>
+          <Tabs.Trigger type="default" value="3" disabled>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
@@ -64,7 +64,7 @@ export const GreyBlur: StoryObj<TabsProps> = {
           <Tabs.Trigger type="default" value="2">
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" aria-disabled>
+          <Tabs.Trigger type="default" value="3" disabled>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
@@ -96,7 +96,7 @@ export const DarkGrey: StoryObj<TabsProps> = {
           <Tabs.Trigger type="default" value="2">
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" aria-disabled>
+          <Tabs.Trigger type="default" value="3" disabled>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
@@ -132,7 +132,7 @@ export const DarkGreyBlur: StoryObj<TabsProps> = {
           <Tabs.Trigger type="default" value="2">
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" aria-disabled>
+          <Tabs.Trigger type="default" value="3" disabled>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
@@ -176,7 +176,7 @@ export const Icon: StoryObj<TabsProps> = {
             type="icon"
             value="3"
             icon={<PlaceholderIcon size={16} />}
-            aria-disabled
+            disabled
           >
             Tab 3
           </Tabs.Trigger>
@@ -209,7 +209,7 @@ export const Counter: StoryObj<TabsProps> = {
           <Tabs.Trigger type="counter" value="2" count={10}>
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="counter" value="3" count={100} aria-disabled>
+          <Tabs.Trigger type="counter" value="3" count={100} disabled>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
@@ -241,7 +241,7 @@ export const Step: StoryObj<TabsProps> = {
           <Tabs.Trigger type="step" value="2" step={10}>
             Tab 2
           </Tabs.Trigger>
-          <Tabs.Trigger type="step" value="3" step={999} aria-disabled>
+          <Tabs.Trigger type="step" value="3" step={999} disabled>
             Tab 3
           </Tabs.Trigger>
         </Tabs.List>
