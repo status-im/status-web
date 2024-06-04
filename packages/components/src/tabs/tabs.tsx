@@ -65,19 +65,28 @@ type TriggerProps =
       type: 'default'
       value: string
       children: string
+      disabled?: boolean
     }
   | {
       type: 'icon'
       value: string
       children: string
       icon: React.ReactElement
+      disabled?: boolean
     }
-  | { type: 'counter'; value: string; children: string; count: number }
+  | {
+      type: 'counter'
+      value: string
+      children: string
+      count: number
+      disabled?: boolean
+    }
   | {
       type: 'step'
       value: string
       children: string
       step: number
+      disabled?: boolean
     }
 
 const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
@@ -87,10 +96,11 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
   const providedProps = props as TriggerProps & {
     size: 24 | 32
     'aria-selected': boolean
+    disabled: boolean
     variant: Variants['variant']
   }
 
-  const { size, 'aria-selected': selected, variant } = providedProps
+  const { size, 'aria-selected': selected, disabled, variant } = providedProps
 
   const { color, pressableProps } = usePressableColors(
     {
@@ -112,6 +122,7 @@ const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
       size={size}
       variant={variant}
       active={selected}
+      disabled={disabled}
     >
       {props.type === 'icon' &&
         cloneElement(props.icon, {
@@ -228,6 +239,12 @@ const TriggerBase = styled(View, {
             pressStyle: { backgroundColor: '$white-20' },
           }
         }
+      },
+    },
+    disabled: {
+      true: {
+        opacity: 0.3,
+        cursor: 'default',
       },
     },
   } as const,
