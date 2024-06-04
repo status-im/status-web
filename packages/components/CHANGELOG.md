@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 0.6.5
+
+### Patch Changes
+
+- 8540f86: draft: add disabled state to Tabs
+
 ## 0.6.4
 
 ### Patch Changes
