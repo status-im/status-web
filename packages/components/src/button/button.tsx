@@ -1,7 +1,6 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { styled } from '@tamagui/core'
-import { View } from 'react-native'
+import { styled, View } from '@tamagui/core'
 
 import { Text } from '../text'
 

@@ -1,8 +1,7 @@
 import { Children, cloneElement, forwardRef } from 'react'
 
 import { Content, List, Root, Trigger } from '@radix-ui/react-tabs'
-import { Stack } from '@tamagui/web'
-import { View } from 'react-native'
+import { Stack, View } from '@tamagui/core'
 import { styled } from 'tamagui'
 
 import { Counter } from '../counter'
@@ -49,7 +48,7 @@ const TabsList = (props: ListProps) => {
 
   return (
     <List asChild>
-      <Stack flexDirection="row" gap={8}>
+      <Stack flexDirection="row" space={8}>
         {Children.map(children, child => (
           <Trigger asChild value={child.props.value}>
             {cloneElement(child, { size: props.size, variant: props.variant })}
@@ -89,7 +88,7 @@ type TriggerProps =
       disabled?: boolean
     }
 
-const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
+const TabsTrigger = (props: TriggerProps, ref: Ref<HTMLDivElement>) => {
   const { children, ...triggerProps } = props
 
   // props coming from parent List and Trigger, not passed by the user (line 52)
