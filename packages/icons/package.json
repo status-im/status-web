@@ -35,9 +35,9 @@
     "prepack": "yarn build"
   },
   "dependencies": {
-    "@tamagui/core": "1.74.21",
-    "@tamagui/web": "1.74.21",
-    "tamagui": "1.74.21"
+    "@tamagui/core": "1.94.1",
+    "@tamagui/web": "1.94.1",
+    "tamagui": "1.94.1"
   },
   "peerDependencies": {
     "react": "^16.x || ^17.x || ^18.x",

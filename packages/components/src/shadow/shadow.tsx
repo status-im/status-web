@@ -5,7 +5,6 @@ import { Stack, styled } from 'tamagui'
 import type { GetVariants } from '../types'
 import type { StackProps } from '@tamagui/core'
 import type { Ref } from 'react'
-import type { View } from 'react-native'
 
 type Variants = GetVariants<typeof Base>
 
@@ -14,7 +13,7 @@ type Props = StackProps & {
   inverted?: boolean
 }
 
-const Shadow = (props: Props, ref: Ref<View>) => {
+const Shadow = (props: Props, ref: Ref<HTMLDivElement>) => {
   const { variant = '$1', inverted = false, ...stackProps } = props
 
   return (

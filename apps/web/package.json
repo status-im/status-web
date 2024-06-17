@@ -13,7 +13,7 @@
   "dependencies": {
     "@status-im/components": "*",
     "@status-im/icons": "*",
-    "@tamagui/core": "1.74.21",
+    "@tamagui/core": "1.94.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-native-web": "^0.18.12",
@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@status-im/eslint-config": "*",
-    "@tamagui/vite-plugin": "1.74.21",
+    "@tamagui/vite-plugin": "1.94.1",
     "@types/react": "^18.0.33",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.2.0",

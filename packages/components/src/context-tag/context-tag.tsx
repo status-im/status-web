@@ -1,8 +1,7 @@
 import { cloneElement } from 'react'
 
 import { ChevronRightIcon, PlayIcon } from '@status-im/icons'
-import { Stack, styled } from '@tamagui/core'
-import { View } from 'react-native'
+import { Stack, styled, View } from '@tamagui/core'
 
 import { Avatar } from '../avatar'
 import { Text } from '../text'

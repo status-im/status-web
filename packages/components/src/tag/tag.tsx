@@ -1,7 +1,6 @@
 import { createElement } from 'react'
 
-import { styled } from '@tamagui/core'
-import { View } from 'react-native'
+import { styled, View } from '@tamagui/core'
 
 import { getColorWithOpacity } from '../../utils/get-color-with-opacity'
 import { Text } from '../text'
