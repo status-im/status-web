@@ -6,6 +6,7 @@
     "ms-vscode.hexeditor",
     "mikestead.dotenv",
     "bradlc.vscode-tailwindcss",
-    "vitest.explorer"
+    "vitest.explorer",
+    "github.vscode-github-actions"
   ]
 }
