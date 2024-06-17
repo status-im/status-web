@@ -16,11 +16,7 @@ jobs:
   build:
     name: Build and Test
     timeout-minutes: 15
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out code
@@ -28,7 +24,7 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
