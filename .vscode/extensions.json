@@ -4,8 +4,8 @@
     "dbaeumer.vscode-eslint",
     "zxh404.vscode-proto3",
     "ms-vscode.hexeditor",
-    "zixuanchen.vitest-explorer",
     "mikestead.dotenv",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "vitest.explorer"
   ]
 }
