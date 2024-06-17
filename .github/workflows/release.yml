@@ -14,6 +14,9 @@ env:
   TAMAGUI_TARGET: 'web'
 
 jobs:
+  ci:
+    # https://docs.github.com/en/actions/using-workflows/reusing-workflows#calling-a-reusable-workflow
+    uses: ./.github/workflows/ci.yml
   release:
     runs-on: ubuntu-latest
     steps:
@@ -23,9 +26,6 @@ jobs:
           node-version: 18
       - run: yarn install --frozen-lockfile
       - run: yarn build
-      - run: yarn typecheck
-      - run: yarn lint && yarn format --check
-      - run: yarn test
       - uses: changesets/action@v1
         id: changesets
         with:
