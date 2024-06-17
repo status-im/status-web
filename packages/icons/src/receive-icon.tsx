@@ -15,7 +15,7 @@ const SvgReceiveIcon = createIcon(props => {
       <path
         fill={props.color}
         fillRule="evenodd"
-        d="m9.597 15.948-5.5-5 .807-.888 5.097 4.633 5.096-4.633.807.888-5.5 5-.403.367-.404-.367Z"
+        d="m9.597 14.948-5.5-5 .807-.888 5.097 4.633 5.096-4.633.807.888-5.5 5-.403.367-.404-.367Z"
         clipRule="evenodd"
       />
       <mask
@@ -23,7 +23,7 @@ const SvgReceiveIcon = createIcon(props => {
         width={2}
         height={13}
         x={9}
-        y={3}
+        y={2}
         maskUnits="userSpaceOnUse"
         style={{
           maskType: 'alpha',
@@ -32,11 +32,11 @@ const SvgReceiveIcon = createIcon(props => {
         <path
           fill="url(#receive-icon_svg__a)"
           d="M0 0h2v12H0z"
-          transform="matrix(-1 0 0 1 11 3.5)"
+          transform="matrix(-1 0 0 1 11 2.5)"
         />
       </mask>
       <g mask="url(#receive-icon_svg__b)">
-        <path stroke={props.color} strokeWidth={1.2} d="M10 3.5V15" />
+        <path stroke={props.color} strokeWidth={1.2} d="M10 2.5V14" />
       </g>
       <defs>
         <linearGradient
