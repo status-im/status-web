@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 0.6.7
+
+### Patch Changes
+
+- 6523d5c: update peers
+
 ## 0.6.6
 
 ### Patch Changes
