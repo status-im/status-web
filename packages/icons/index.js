@@ -1,3 +1,4 @@
+// @see https://github.com/tailwindlabs/heroicons/blob/master/react/index.esm.js
 module.exports = new Proxy(
   {},
   {
