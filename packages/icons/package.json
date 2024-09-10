@@ -83,8 +83,8 @@
     "fs-extra": "^11.1.1",
     "svgo": "^3.0.2",
     "p-map": "^7.0.2",
-    "vite": "^4.1.4",
-    "vite-node": "^0.29.7"
+    "vite": "^5.4.3",
+    "vite-node": "^2.0.5"
   },
   "publishConfig": {
     "access": "public"
