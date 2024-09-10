@@ -6,8 +6,8 @@ import reactAriaComponentsPlugin from 'tailwindcss-react-aria-components'
 
 import { borderRadius } from './src/_tokens/border-radius'
 import { shadows } from './src/_tokens/shadows'
-import { typography } from './src/_tokens/typography'
 
+// import { typography } from './src/_tokens/typography'
 import type { Config } from 'tailwindcss'
 
 export default {
@@ -19,10 +19,17 @@ export default {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
 
   theme: {
+    extend: {
+      borderColor: {
+        DEFAULT: 'transparent',
+      },
+    },
+
     fontFamily: {
       sans: ['var(--font-sans)', ...fontFamily.sans],
-      //     mono: fontFamily.mono,
+      mono: fontFamily.mono,
     },
+
     fontWeight: {
       regular: '400',
       medium: '500',
@@ -30,16 +37,64 @@ export default {
       bold: '700',
     },
 
-    fontSize: Object.entries(typography).reduce((acc, [key, value]) => {
-      acc[key] = [
-        value.fontSize,
+    fontSize: {
+      88: [
+        '5.5rem',
         {
-          lineHeight: value.lineHeight,
-          letterSpacing: value.letterSpacing,
+          lineHeight: '5.25rem',
+          letterSpacing: '-0.1155rem',
         },
-      ]
-      return acc
-    }, {}),
+      ],
+      64: [
+        '4rem',
+        {
+          lineHeight: '4.25rem',
+          letterSpacing: '-0.08rem',
+        },
+      ],
+      40: [
+        '2.5rem',
+        {
+          lineHeight: '2.75rem',
+          letterSpacing: '-0.05rem',
+        },
+      ],
+      27: [
+        '1.6875rem',
+        {
+          lineHeight: '2rem',
+          letterSpacing: '0rem',
+        },
+      ],
+      19: [
+        '1.1875rem',
+        {
+          lineHeight: '1.75rem',
+          letterSpacing: '0rem',
+        },
+      ],
+      15: [
+        '0.9375rem',
+        {
+          lineHeight: '1.359375rem',
+          letterSpacing: '0rem',
+        },
+      ],
+      13: [
+        '0.8125rem',
+        {
+          lineHeight: '1.1375rem',
+          letterSpacing: '0rem',
+        },
+      ],
+      11: [
+        '0.6875rem',
+        {
+          lineHeight: '1',
+          letterSpacing: '0rem',
+        },
+      ],
+    },
 
     colors: {
       transparent: 'transparent',
