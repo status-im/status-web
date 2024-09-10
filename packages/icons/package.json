@@ -8,7 +8,7 @@
   "exports": {
     "./package.json": "./package.json",
     ".": {
-      "import": "./index.esm.js",
+      "import": "./index.es.js",
       "require": "./index.js"
     },
     "./12": {
