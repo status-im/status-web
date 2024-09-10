@@ -1,0 +1,20 @@
+import type { SVGProps } from 'react'
+
+const SvgBlockIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={20}
+    height={20}
+    fill="none"
+    viewBox="0 0 20 20"
+    {...props}
+  >
+    <path
+      fill="#09101C"
+      fillRule="evenodd"
+      d="M3.6 10A6.4 6.4 0 0 1 14.08 5.07L5.07 14.081A6.374 6.374 0 0 1 3.6 10Zm2.318 4.93a6.4 6.4 0 0 0 9.011-9.011l-9.01 9.01ZM10 2.4a7.6 7.6 0 1 0 0 15.2 7.6 7.6 0 0 0 0-15.2Z"
+      clipRule="evenodd"
+    />
+  </svg>
+)
+export default SvgBlockIcon

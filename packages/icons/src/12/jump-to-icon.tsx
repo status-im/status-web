@@ -1,0 +1,27 @@
+import type { SVGProps } from 'react'
+
+const SvgJumpToIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={12}
+    height={12}
+    fill="none"
+    viewBox="0 0 12 12"
+    {...props}
+  >
+    <g clipPath="url(#prefix__clip0_1835_857)">
+      <path
+        fill="#09101C"
+        fillRule="evenodd"
+        d="m10.049 2.539.039-.549-.549-.039-3.5-.25L5.96 2.8l1.955.14c-1.559 1.194-2.53 2.356-3.122 3.517C4.08 7.86 3.95 9.21 3.95 10.499h1.1c0-1.211.122-2.361.724-3.544.532-1.045 1.46-2.157 3.096-3.357L8.701 5.96 9.8 6.04l.25-3.5Z"
+        clipRule="evenodd"
+      />
+    </g>
+    <defs>
+      <clipPath id="prefix__clip0_1835_857">
+        <path fill="#fff" d="M0 0h12v12H0z" />
+      </clipPath>
+    </defs>
+  </svg>
+)
+export default SvgJumpToIcon

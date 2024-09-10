@@ -1,0 +1,20 @@
+import type { SVGProps } from 'react'
+
+const SvgMessagesIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={16}
+    height={16}
+    fill="none"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path
+      fill="#09101C"
+      fillRule="evenodd"
+      d="M1.4 6.8a5.4 5.4 0 0 1 5.4-5.4h2.11a5.69 5.69 0 0 1 2.885 10.593l-4.29 2.524-.905.532V12.196A5.4 5.4 0 0 1 1.4 6.8Zm5.4-4.2a4.2 4.2 0 0 0 0 8.4h1V12.95l3.387-1.991a4.49 4.49 0 0 0-2.276-8.36H6.8ZM5.5 4.9h5v1.2h-5V4.9ZM9 7.4H5.5v1.2H9V7.4Z"
+      clipRule="evenodd"
+    />
+  </svg>
+)
+export default SvgMessagesIcon
