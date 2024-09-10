@@ -1,4 +1,4 @@
-import { BoldIcon } from '@status-im/icons'
+import { BoldIcon } from '@status-im/icons/20'
 
 import { IconButton } from './icon-button'
 

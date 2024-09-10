@@ -1,6 +1,6 @@
 import { createElement, forwardRef } from 'react'
 
-import { ClearIcon, type IconProps } from '@status-im/icons'
+import { ClearIcon } from '@status-im/icons/20'
 import { cva } from 'cva'
 import {
   Button as AriaButton,
@@ -22,7 +22,7 @@ type Props = AriaTextFieldProps & {
   size?: Variants['size']
   label?: string
   meta?: string
-  icon?: React.ComponentType<IconProps>
+  icon?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
   placeholder?: string
   type?: AriaInputProps['type']
   inputMode?: AriaInputProps['inputMode']
@@ -52,7 +52,7 @@ const Input = (props: Props, ref: Ref<HTMLInputElement>) => {
             {label}
           </AriaLabel>
 
-          <AriaLabel className="text-right text-13 font-regular text-neutral-50">
+          <AriaLabel className="text-13 font-regular text-neutral-50">
             {meta}
           </AriaLabel>
         </div>
@@ -60,7 +60,7 @@ const Input = (props: Props, ref: Ref<HTMLInputElement>) => {
       <div className="relative">
         {icon && (
           <div className="absolute inset-y-0 left-0 flex items-center pl-3 text-neutral-50">
-            {createElement(icon, { size: 20 })}
+            {createElement(icon)}
           </div>
         )}
         <AriaInput
@@ -77,7 +77,7 @@ const Input = (props: Props, ref: Ref<HTMLInputElement>) => {
             aria-label="Clear input"
             onPress={() => props.onChange?.('')}
           >
-            <ClearIcon size={20} />
+            <ClearIcon />
           </AriaButton>
         )}
       </div>
@@ -89,7 +89,7 @@ const inputStyles = cva({
   base: [
     'block h-10 w-full min-w-0 flex-1 border border-neutral-20 bg-white-100 text-15 text-neutral-100 placeholder-neutral-40',
     'outline-none focus:border-neutral-40',
-    'disabled:border-neutral-20 disabled:opacity-[0.3]',
+    'disabled:border-neutral-20 disabled:opacity-30',
     'invalid:border-danger-/40',
 
     // dark

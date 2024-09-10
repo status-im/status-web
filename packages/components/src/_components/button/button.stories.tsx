@@ -1,4 +1,4 @@
-import { PlaceholderIcon } from '@status-im/icons'
+import { PlaceholderIcon } from '@status-im/icons/20'
 
 import { Button } from './button'
 

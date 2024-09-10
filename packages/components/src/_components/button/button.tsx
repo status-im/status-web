@@ -3,7 +3,6 @@ import { forwardRef } from 'react'
 import { cva } from 'cva'
 import { Button as AriaButton } from 'react-aria-components'
 
-import type { IconProps } from '@status-im/icons'
 import type { VariantProps } from 'cva'
 import type { Ref } from 'react'
 import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
@@ -14,8 +13,8 @@ type Props = AriaButtonProps & {
   children: React.ReactNode
   size?: Variants['size']
   variant?: Variants['variant']
-  iconBefore?: React.ComponentType<IconProps>
-  iconAfter?: React.ComponentType<IconProps>
+  iconBefore?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
+  iconAfter?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -35,17 +34,11 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       className={styles({ variant, size })}
     >
       {IconBefore && (
-        <IconBefore
-          size={20}
-          className={iconStyles({ size, placement: 'before' })}
-        />
+        <IconBefore className={iconStyles({ size, placement: 'before' })} />
       )}
       <span className="flex-1 whitespace-nowrap">{children}</span>
       {IconAfter && (
-        <IconAfter
-          size={20}
-          className={iconStyles({ size, placement: 'after' })}
-        />
+        <IconAfter className={iconStyles({ size, placement: 'after' })} />
       )}
     </AriaButton>
   )
@@ -55,7 +48,7 @@ const styles = cva({
   base: [
     'inline-flex cursor-pointer items-center gap-1 font-medium transition-all',
     'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
-    'disabled:cursor-default disabled:opacity-[0.3]',
+    'disabled:cursor-default disabled:opacity-30',
     // 'flex cursor-pointer items-center gap-3 px-4 py-[10px] text-13 text-white-100 transition-all',
   ],
   variants: {
@@ -64,7 +57,7 @@ const styles = cva({
         'bg-customisation-50 text-white-100 hover:bg-customisation-60 pressed:bg-customisation-60/90',
         'dark:bg-customisation-60 dark:hover:bg-customisation-50 dark:pressed:bg-customisation-50/90',
 
-        // 'blurry:bg-danger-50 blurry:dark:bg-blur-white/70',
+        'blured:bg-danger-50 blured:dark:hover:bg-blur-white/70',
         // 'disabled:bg-customisation-50/30',
         // 'blurry:bg-danger-50 dark:blurry:bg-default-customisation-army-50',
       ],

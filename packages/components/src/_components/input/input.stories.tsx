@@ -1,4 +1,4 @@
-import { EmailIcon } from '@status-im/icons'
+import { EmailIcon } from '@status-im/icons/20'
 
 import { Input } from './input'
 

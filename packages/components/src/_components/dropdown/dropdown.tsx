@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { DropdownIcon } from '@status-im/icons'
+import { DropdownIcon } from '@status-im/icons/20'
 
 import { Button } from '../button'
 
