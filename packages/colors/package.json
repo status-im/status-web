@@ -6,14 +6,14 @@
     "dist",
     "src"
   ],
-  "main": "dist/colors.js",
-  "module": "dist/colors.mjs",
-  "types": "dist/types/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types:": "./dist/types/index.d.ts",
-      "import": "./dist/colors.mjs",
-      "require": "./dist/colors.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },

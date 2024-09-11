@@ -3,9 +3,6 @@
   "include": ["./src"],
 
   "compilerOptions": {
-    "module": "ES2022",
-    "outDir": "./dist",
-    "declarationDir": "./dist/types",
-    "resolveJsonModule": true
+    "outDir": "./dist"
   }
 }
