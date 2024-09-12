@@ -1,1 +1,1 @@
-export { type VariantProps, cva as variants } from 'cva'
+export { cva as cva, type VariantProps } from 'cva'
