@@ -4,11 +4,18 @@
   "sideEffects": [
     "*.css"
   ],
-  "types": "./dist/types/src/index.d.ts",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.tsx",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
-    "types",
     "dist"
   ],
   "scripts": {
@@ -76,6 +83,7 @@
     "react-dom": "^18.2.0",
     "react-native-svg": "^13.8.0",
     "react-native-web": "^0.19.5",
+    "rollup-plugin-preserve-directives": "^0.4.0",
     "storybook": "^8.2.9",
     "storybook-dark-mode": "^4.0.2",
     "tailwindcss": "^3.4.10",

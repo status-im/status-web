@@ -1,14 +1,8 @@
-import { tamaguiPlugin } from '@tamagui/vite-plugin'
 import react from '@vitejs/plugin-react-swc'
+import { preserveDirectives } from 'rollup-plugin-preserve-directives'
 import { defineConfig } from 'vite'
 
 import { dependencies, peerDependencies } from './package.json'
-
-const tamaguiConfig = {
-  components: [],
-  config: './src/tamagui.config.ts',
-  // useReactNativeWebLite: true,
-}
 
 const external = [
   ...Object.keys(dependencies || {}),
@@ -17,29 +11,27 @@ const external = [
 
 export default defineConfig(({ mode }) => {
   return {
-    define: {
-      'process.env.TAMAGUI_TARGET': JSON.stringify('web'),
-      'process.env.INCLUDE_CSS_COLOR_NAMES': JSON.stringify(false),
-    },
     build: {
       target: 'es2020',
       lib: {
         entry: './src/index.tsx',
-        fileName: 'index',
         formats: ['es', 'cjs'],
+        fileName: (format, entryName) => `${entryName}.${format}.js`,
       },
       sourcemap: true,
       emptyOutDir: mode === 'production',
       rollupOptions: {
+        output: {
+          preserveModules: true,
+        },
         external,
+        plugins: [
+          preserveDirectives({ suppressPreserveModulesWarning: true }) as any,
+        ],
       },
     },
 
-    plugins: [
-      react(),
-      tamaguiPlugin(tamaguiConfig),
-      // tamaguiExtractPlugin(tamaguiConfig),
-    ],
+    plugins: [react()],
 
     test: {
       environment: 'happy-dom',
