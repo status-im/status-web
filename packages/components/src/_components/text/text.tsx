@@ -1,6 +1,8 @@
-import { forwardRef } from 'react'
-
 import { cva, type VariantProps } from 'cva'
+
+import { mapColorToken } from '../utils/color-tokens'
+
+import type { ColorToken } from '../utils/color-tokens'
 
 const styles = cva({
   variants: {
@@ -46,12 +48,20 @@ const styles = cva({
 type Props<C extends React.ElementType> = VariantProps<typeof styles> &
   React.ComponentPropsWithoutRef<C> & {
     as?: C
+    color?: ColorToken
   }
 
 const Text = <C extends React.ElementType = 'span'>(props: Props<C>) => {
-  const { as: Component = 'span', children, className, ...rest } = props
+  const { as: Component = 'span', color, children, className, ...rest } = props
+
   return (
-    <Component {...rest} className={styles({ ...props, className })}>
+    <Component
+      {...rest}
+      className={styles({
+        ...props,
+        className: color ? mapColorToken(color) + ' ' + className : className,
+      })}
+    >
       {children}
     </Component>
   )

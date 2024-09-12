@@ -52,7 +52,7 @@ const Input = (props: Props, ref: Ref<HTMLInputElement>) => {
             {label}
           </AriaLabel>
 
-          <AriaLabel className="text-13 font-regular text-neutral-50">
+          <AriaLabel className="text-right text-13 font-regular text-neutral-50">
             {meta}
           </AriaLabel>
         </div>

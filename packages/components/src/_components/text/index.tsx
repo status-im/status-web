@@ -1,1 +1,1 @@
-export { type Props, Text } from './text'
+export { Text, type TextProps } from './text'

@@ -15,6 +15,7 @@ type Props = AriaButtonProps & {
   variant?: Variants['variant']
   iconBefore?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
   iconAfter?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
+  onClick?: () => void
 }
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
