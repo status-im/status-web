@@ -7,5 +7,9 @@
       "mode": "auto",
       "#comment": "See https://github.com/microsoft/vscode-eslint/issues/1161 for reason (i.e. multiple .eslintrc config files)"
     }
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 }
