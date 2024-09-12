@@ -1,6 +1,16 @@
 import { dirname, join } from 'path'
 import type { StorybookConfig } from '@storybook/react-vite'
 
+import type {} from '@storybook/react'
+
+declare module '@storybook/react' {
+  export interface Parameters {
+    backgrounds?: {
+      default: 'light' | 'dark'
+    }
+  }
+}
+
 const config: StorybookConfig = {
   framework: getAbsolutePath('@storybook/react-vite'),
 
@@ -9,14 +19,14 @@ const config: StorybookConfig = {
   },
 
   stories: [
-    '../src/**/*.mdx',
+    // '../src/**/*.mdx',
     '../src/_components/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
     getAbsolutePath('@storybook/addon-links'),
     getAbsolutePath('@storybook/addon-essentials'),
     getAbsolutePath('@storybook/addon-interactions'),
-    getAbsolutePath('storybook-addon-designs'),
+    getAbsolutePath('@storybook/addon-designs'),
     getAbsolutePath('storybook-dark-mode'),
   ],
 
