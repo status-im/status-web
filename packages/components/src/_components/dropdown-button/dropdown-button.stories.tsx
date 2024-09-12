@@ -1,4 +1,4 @@
-import { DropdownButton } from './dropdown'
+import { DropdownButton } from './dropdown-button'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
