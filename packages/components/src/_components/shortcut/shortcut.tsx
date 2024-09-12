@@ -1,0 +1,62 @@
+import { forwardRef } from 'react'
+
+import { match, P } from 'ts-pattern'
+
+import { cva } from '../utils/variants'
+
+import type { VariantProps } from '../utils/variants'
+
+const styles = cva({
+  base: 'flex size-4 flex-shrink-0 items-center justify-center rounded-6 border',
+  variants: {
+    variant: {
+      primary: [
+        'border-customisation-60 bg-customisation-50 text-white-100',
+        'dark:border-customisation-50 dark:bg-customisation-60 dark:text-white-100',
+      ],
+      secondary: [
+        'border-neutral-20 bg-neutral-10 text-neutral-50',
+        'dark:border-neutral-70 dark:bg-neutral-90 dark:text-neutral-40',
+      ],
+      gray: [
+        'border-neutral-10 text-neutral-50',
+        'dark:border-neutral-80 dark:text-neutral-40',
+      ],
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+  },
+})
+
+type Props = VariantProps<typeof styles> &
+  (
+    | {
+        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        symbol?: never
+      }
+    | {
+        symbol: string
+        icon?: never
+      }
+  )
+
+const Shortcut = (props: Props, ref: React.Ref<HTMLDivElement>) => {
+  const { variant = 'primary', ...rest } = props
+
+  return (
+    <div className={styles({ variant })} ref={ref} {...rest}>
+      {match(props)
+        .with({ symbol: P.string }, ({ symbol }) => (
+          <span className="text-11 font-medium">{symbol}</span>
+        ))
+        .with({ icon: P._ }, ({ icon: Icon }) => <Icon className="size-3" />)
+        .exhaustive()}
+    </div>
+  )
+}
+
+const _Shortcut = forwardRef(Shortcut)
+
+export { _Shortcut as Shortcut }
+export type { Props as ShortcutProps }
