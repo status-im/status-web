@@ -1,9 +1,14 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["src", ".storybook"],
+  "include": [
+    "src/index.tsx",
+    "src/_components",
+    ".storybook"
+    // "src/theme-provider"
+  ],
   "compilerOptions": {
-    "outDir": "./dist",
-    "declarationDir": "dist/types"
+    "jsx": "preserve",
+    "outDir": "./dist"
   },
   "references": []
 }

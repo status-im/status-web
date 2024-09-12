@@ -111,7 +111,26 @@ export default {
       ...shadows.light,
     },
 
-    borderRadius,
+    borderRadius: {
+      0: '0',
+      // 2: '4px',
+      // 3: '6px',
+      // 4: '8px',
+      // 5: '10px',
+      // 6: '12px',
+      // 7: '16px',
+      // 8: '20px',
+      // full: '9999px',
+
+      4: '4px',
+      6: '6px',
+      8: '8px',
+      10: '10px',
+      12: '12px',
+      16: '16px',
+      20: '20px',
+      full: '9999px',
+    },
   },
 
   //   colors: colors,
