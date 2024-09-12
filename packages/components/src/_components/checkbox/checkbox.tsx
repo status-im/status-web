@@ -41,7 +41,7 @@ const Checkbox = (props: Props) => {
 
 const checkStyles = cva({
   base: [
-    'inline-flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded-3 text-white-100 transition-colors',
+    'inline-flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded-6 text-white-100 transition-colors',
     'border border-neutral-20 group-hover:border-neutral-30',
     'group-selected:border-customisation-50 group-selected:bg-customisation-50 group-selected:group-hover:bg-customisation-60',
 

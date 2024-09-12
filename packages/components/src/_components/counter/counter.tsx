@@ -20,7 +20,7 @@ export type { Props as CounterProps }
 
 const styles = cva({
   base: [
-    'inline-flex h-4 min-w-4 items-center justify-center whitespace-nowrap rounded-3 px-1 text-11 font-medium leading-none tracking-normal',
+    'inline-flex h-4 min-w-4 items-center justify-center whitespace-nowrap rounded-6 px-1 text-11 font-medium leading-none tracking-normal',
   ],
   variants: {
     variant: {

@@ -87,9 +87,9 @@ const styles = cva({
       ],
     },
     size: {
-      '40': 'h-[40px] rounded-6 px-4 text-15',
-      '32': 'h-[32px] rounded-5 px-3 text-15',
-      '24': 'h-[24px] rounded-4 px-2 text-13',
+      '40': 'h-[40px] rounded-12 px-4 text-15',
+      '32': 'h-[32px] rounded-10 px-3 text-15',
+      '24': 'h-[24px] rounded-8 px-2 text-13',
     },
   },
 })
