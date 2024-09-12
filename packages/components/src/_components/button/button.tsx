@@ -24,11 +24,13 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
     size = '40',
     variant = 'primary',
     children,
+    onClick: onPress,
     ...buttonProps
   } = props
 
   return (
     <AriaButton
+      onPress={onPress}
       {...buttonProps}
       ref={ref}
       className={styles({ variant, size })}
