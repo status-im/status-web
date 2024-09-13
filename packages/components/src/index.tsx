@@ -12,7 +12,16 @@ export * from './_components/popover'
 export * from './_components/shortcut'
 export * from './_components/tabs'
 export * from './_components/text'
+export * from './_components/toast'
 
+export const Tag = (props: { children?: React.ReactNode }) => {
+  return <div>{props.children}</div>
+}
+export const ContextTag = (props: { children?: React.ReactNode }) => {
+  return <div>{props.children}</div>
+}
+
+export * from './_components/types'
 // export * from './_components/theme-provider'
 export * from './_components/utils/variants'
 
