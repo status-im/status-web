@@ -1,5 +1,7 @@
 {
   "semi": false,
   "singleQuote": true,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "tailwindFunctions": ["cx", "cva"]
 }
