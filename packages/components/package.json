@@ -69,7 +69,6 @@
     "@storybook/react": "^8.3.0",
     "@storybook/react-vite": "^8.3.0",
     "@storybook/testing-library": "^0.2.2",
-    "@tamagui/vite-plugin": "1.74.21",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.16",
     "eslint-plugin-tailwindcss": "^3.17.4",

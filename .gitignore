@@ -80,9 +80,6 @@ node_modules/
 # Vercel
 .vercel
 
-# Tamagui
-.tamagui
-
 # Storybook
 storybook-static
 
