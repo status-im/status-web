@@ -3,12 +3,13 @@
   "include": [
     "src/index.tsx",
     "src/_components",
+    "tailwind.config.ts",
     ".storybook"
-    // "src/theme-provider"
   ],
   "compilerOptions": {
     "jsx": "preserve",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "tsBuildInfoFile": "node_modules/.cache"
   },
   "references": []
 }
