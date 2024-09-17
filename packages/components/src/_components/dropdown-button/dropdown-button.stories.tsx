@@ -5,14 +5,13 @@ import type { Meta, StoryObj } from '@storybook/react'
 const sizes = ['40', '32', '24'] as const
 
 // eslint-disable-next-line react/display-name
-const renderVariant = (variant: string) => (props: any) =>
-  (
-    <div className="flex items-center gap-4">
-      {sizes.map(size => (
-        <DropdownButton key={size} {...props} variant={variant} size={size} />
-      ))}
-    </div>
-  )
+const renderVariant = (variant: string) => (props: any) => (
+  <div className="flex items-center gap-4">
+    {sizes.map(size => (
+      <DropdownButton key={size} {...props} variant={variant} size={size} />
+    ))}
+  </div>
+)
 
 const meta = {
   component: DropdownButton,

@@ -26,7 +26,7 @@ const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
       ref={ref}
       size={size}
       variant={variant}
-      iconAfter={DropdownIcon}
+      iconAfter={<DropdownIcon />}
     >
       {children}
     </Button>
