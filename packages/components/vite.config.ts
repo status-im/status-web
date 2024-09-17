@@ -2,12 +2,12 @@ import react from '@vitejs/plugin-react-swc'
 import { preserveDirectives } from 'rollup-plugin-preserve-directives'
 import { defineConfig } from 'vite'
 
-import { dependencies, peerDependencies } from './package.json'
+import { dependencies, devDependencies, peerDependencies } from './package.json'
 
 const external = [
   ...Object.keys(dependencies || {}),
   ...Object.keys(peerDependencies || {}),
-  'tailwindcss',
+  ...Object.keys(devDependencies || {}),
 ].map(name => new RegExp(`^${name}(/.*)?`))
 
 export default defineConfig(({ mode }) => {
@@ -15,9 +15,14 @@ export default defineConfig(({ mode }) => {
     build: {
       target: 'es2020',
       lib: {
-        entry: ['./src/index.tsx', './tailwind.config.ts'],
+        entry: {
+          'src/index': './src/index.tsx',
+          'tailwind.config': './tailwind.config.ts',
+        },
         formats: ['es', 'cjs'],
-        fileName: (format, entryName) => `${entryName}.${format}.js`,
+        fileName: format => {
+          return `[name].${format}.js`
+        },
       },
       sourcemap: true,
       emptyOutDir: mode === 'production',

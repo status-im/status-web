@@ -9,7 +9,7 @@
   "compilerOptions": {
     "jsx": "preserve",
     "outDir": "./dist",
-    "tsBuildInfoFile": "node_modules/.cache"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo"
   },
   "references": []
 }
