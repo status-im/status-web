@@ -7,8 +7,7 @@
       "packages/status-js",
       "packages/colors",
       "packages/icons",
-      "packages/components",
-      "apps/*"
+      "packages/components"
     ]
   },
   "keywords": [],

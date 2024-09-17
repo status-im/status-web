@@ -21,7 +21,9 @@ export * from './_components/dropdown-menu'
 export * from './_components/input'
 export * from './_components/tabs'
 export * from './_components/tag'
-export * from './skeleton'
+// export * from './skeleton'
+
+/* eslint-enable simple-import-sort/exports */
 
 // NEEDS DELETE
 // export * from './anchor-actions'

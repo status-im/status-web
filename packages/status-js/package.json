@@ -55,7 +55,8 @@
     "@waku/sdk": "^0.0.22",
     "ethereum-cryptography": "^1.0.3",
     "ethers": "^6.2.1",
-    "multiformats": "^11.0.1"
+    "multiformats": "^11.0.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "1.4.2",

@@ -5,7 +5,7 @@
     "incremental": true,
     "module": "ES2020",
     "moduleResolution": "Bundler",
-    "target": "ES2023",
+    "target": "ESNext",
     "jsx": "react-jsx",
     "declaration": true,
     "declarationMap": true,

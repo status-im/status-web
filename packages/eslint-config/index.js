@@ -99,6 +99,5 @@ module.exports = {
         ],
       },
     },
-    'import/ignore': ['react-native'],
   },
 }
