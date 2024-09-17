@@ -1,6 +1,5 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  // "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     // "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
     "incremental": true,
@@ -17,14 +16,20 @@
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "noEmit": true,
+
+    // strictness
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
     // "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
-    // "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
     // "noUncheckedIndexedAccess": true,
-    // "noPropertyAccessFromIndexSignature": true /* Enforces using indexed accessors for keys declared using an indexed type */,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
     "skipLibCheck": true,
     "pretty": true,
     "resolveJsonModule": true
