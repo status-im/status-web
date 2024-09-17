@@ -7,14 +7,13 @@ import type { Meta, StoryObj } from '@storybook/react'
 const sizes = ['40', '32', '24'] as const
 
 // eslint-disable-next-line react/display-name
-const renderVariant = (variant: string) => (props: any) =>
-  (
-    <div className="flex items-center gap-4">
-      {sizes.map(size => (
-        <IconButton {...props} key={size} variant={variant} icon={BoldIcon} />
-      ))}
-    </div>
-  )
+const renderVariant = (variant: string) => (props: any) => (
+  <div className="flex items-center gap-4">
+    {sizes.map(size => (
+      <IconButton {...props} key={size} variant={variant} icon={BoldIcon} />
+    ))}
+  </div>
+)
 
 const meta = {
   component: IconButton,
