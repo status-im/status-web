@@ -52,13 +52,30 @@ type Props<C extends React.ElementType> = VariantProps<typeof styles> &
   }
 
 const Text = <C extends React.ElementType = 'span'>(props: Props<C>) => {
-  const { as: Component = 'span', color, children, className, ...rest } = props
+  const {
+    as: Component = 'span',
+    color,
+    size,
+    weight,
+    uppercase,
+    wrap,
+    truncate,
+    select,
+    children,
+    className,
+    ...rest
+  } = props
 
   return (
     <Component
       {...rest}
       className={styles({
-        ...props,
+        size,
+        weight,
+        uppercase,
+        wrap,
+        truncate,
+        select,
         className: color ? mapColorToken(color) + ' ' + className : className,
       })}
     >
