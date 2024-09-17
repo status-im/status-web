@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 @layer base {
-  /* For rgb(255 115 179 / <alpha-value>) */
   :root {
     --font-sans: 'Inter';
-    /* we default to the blue theme */
-    --color-customisation-50: 42 74 245;
-    --color-customisation-60: 34 59 196;
   }
 
-  [data-customisation='blue'] {
+  body {
+    @apply theme-blue;
+  }
+
+  /* [data-customisation='blue'] {
     --color-customisation-50: 42 74 245;
     --color-customisation-60: 34 59 196;
   }
@@ -28,7 +28,7 @@
   [data-customisation='blue'] {
     --color-customisation-50: 42 74 245;
     --color-customisation-60: 34 59 196;
-  }
+  } */
 
   .dark {
     @apply text-white-100;
