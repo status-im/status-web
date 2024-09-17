@@ -99,7 +99,7 @@ const inputStyles = cva({
   variants: {
     size: {
       '40': 'h-10 rounded-6 px-4',
-      '32': 'h-8 rounded-5 px-3',
+      '32': 'rounded-5 h-8 px-3',
     },
     icon: { true: '' },
     clearable: { true: '' },

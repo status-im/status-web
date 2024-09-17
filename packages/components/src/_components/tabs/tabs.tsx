@@ -1,17 +1,11 @@
 'use client'
 
 import { cva } from 'cva'
-import {
-  Tab as AriaTab,
-  TabList as AriaTabList,
-  TabPanel as AriaTabPanel,
-  Tabs as AriaTabs,
-} from 'react-aria-components'
+import * as Aria from 'react-aria-components'
 
-import type { IconProps } from '@status-im/icons'
+import type { IconComponent } from '../types'
 import type { VariantProps } from 'cva'
 import type React from 'react'
-import type * as Aria from 'react-aria-components'
 
 type TabVariants = VariantProps<typeof tabStyles>
 
@@ -20,20 +14,20 @@ type TabsProps = Aria.TabsProps & {
   size?: TabVariants['size']
 }
 
-const Tabs = (props: TabsProps) => {
-  return <AriaTabs {...props} />
+const Root = (props: TabsProps) => {
+  return <Aria.Tabs {...props} />
 }
 
 type TabListProps<T extends object> = Aria.TabListProps<T>
 
 const TabList = <T extends object>(props: TabListProps<T>) => {
-  return <AriaTabList {...props} className="flex gap-3" />
+  return <Aria.TabList {...props} className="flex gap-3" />
 }
 
 type TabProps = Aria.TabProps & {
   variant?: TabVariants['variant']
   size?: TabVariants['size']
-  icon?: React.ComponentType<IconProps>
+  icon?: IconComponent
   children: React.ReactNode
 }
 
@@ -41,7 +35,7 @@ const Tab = (props: TabProps) => {
   const { icon: Icon, children, variant = 'gray', size = '32' } = props
 
   return (
-    <AriaTab
+    <Aria.Tab
       {...props}
       className={tabStyles({
         variant,
@@ -50,12 +44,10 @@ const Tab = (props: TabProps) => {
       })}
     >
       {Icon && (
-        <span className="text-neutral-50 group-aria-selected:text-white-100">
-          <Icon size={16} className="fill-current" />
-        </span>
+        <Icon className="size-4 text-neutral-50 group-aria-selected:text-white-100" />
       )}
       {children}
-    </AriaTab>
+    </Aria.Tab>
   )
 }
 
@@ -95,8 +87,8 @@ const tabStyles = cva({
       ],
     },
     size: {
-      '32': 'h-6 rounded-5 px-3 text-15 font-medium',
-      '24': 'h-6 rounded-4 px-2 text-13 font-medium',
+      '32': 'h-6 rounded-10 px-3 text-15 font-medium',
+      '24': 'h-6 rounded-8 px-2 text-13 font-medium',
     },
   },
 
@@ -109,8 +101,8 @@ const tabStyles = cva({
 type TabPanelProps = Aria.TabPanelProps
 
 const TabPanel = (props: TabPanelProps) => {
-  return <AriaTabPanel {...props} />
+  return <Aria.TabPanel {...props} />
 }
 
-export { Tab, TabList, TabPanel, Tabs }
+export { TabPanel as Content, TabList as List, Root, Tab as Trigger }
 export type { TabListProps, TabPanelProps, TabProps, TabsProps }
