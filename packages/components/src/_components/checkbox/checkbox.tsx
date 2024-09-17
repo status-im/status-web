@@ -1,7 +1,6 @@
 import { cva } from 'cva'
-import { Checkbox as AriaCheckbox } from 'react-aria-components'
+import * as Aria from 'react-aria-components'
 
-import type { Aria } from '../types'
 import type { VariantProps } from 'cva'
 
 type Variants = VariantProps<typeof checkStyles>
@@ -15,7 +14,7 @@ const Checkbox = (props: Props) => {
   const { children = null, variant = 'outline', ...ariaProps } = props
 
   return (
-    <AriaCheckbox {...ariaProps} className="group flex items-center gap-2">
+    <Aria.Checkbox {...ariaProps} className="group flex items-center gap-2">
       <div className={checkStyles({ variant })}>
         <svg
           width="10"
@@ -35,7 +34,7 @@ const Checkbox = (props: Props) => {
         </svg>
       </div>
       <span className="text-13">{children}</span>
-    </AriaCheckbox>
+    </Aria.Checkbox>
   )
 }
 
