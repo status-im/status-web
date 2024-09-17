@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { Action, Description } from '@radix-ui/react-toast'
 import { CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
@@ -6,13 +6,13 @@ import { match, P } from 'ts-pattern'
 
 import { Button } from '../button'
 
-import type { IconComponentType } from '../types'
+import type { IconComponent } from '../types'
 
 type Props = {
   message: string
   action?: string
   onAction?: () => void
-} & ({ type: 'positive' | 'negative' } | { icon: IconComponentType })
+} & ({ type: 'positive' | 'negative' } | { icon: IconComponent })
 
 const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
   const { message, action, onAction } = props
@@ -27,9 +27,9 @@ const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
           {match(props)
             .with({ type: 'positive' }, () => <CorrectIcon />)
             .with({ type: 'negative' }, () => <IncorrectIcon />)
-            .with({ icon: P._ }, ({ icon: Icon }) => (
-              <Icon className="size-5 text-blur-white/70" />
-            ))
+            .with({ icon: P._ }, ({ icon: Icon }) =>
+              cloneElement(Icon, { className: 'size-5 text-blur-white/70' }),
+            )
             .exhaustive()}
         </div>
         <Description className="text-13 font-medium text-white-100">

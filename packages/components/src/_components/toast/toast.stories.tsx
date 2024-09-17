@@ -18,7 +18,7 @@ const Actions = () => {
       </Button>
       <Button
         variant="grey"
-        onPress={() => toast.custom('Custom message', PlaceholderIcon)}
+        onPress={() => toast.custom('Custom message', <PlaceholderIcon />)}
       >
         Custom
       </Button>
@@ -47,7 +47,7 @@ const meta = {
             type="positive"
             message="Great success! This means good stuff!"
           />
-          <Toast icon={PlaceholderIcon} message="Something happened" />
+          <Toast icon={<PlaceholderIcon />} message="Something happened" />
           <Toast
             type="negative"
             action="Retry"
