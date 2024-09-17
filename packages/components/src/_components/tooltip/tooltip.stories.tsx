@@ -8,18 +8,23 @@ const meta: Meta<typeof Tooltip> = {
   title: 'Components/Tooltip',
   argTypes: {},
   parameters: {
+    layout: 'centered',
     design: {
       type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Web?node-id=15032%3A174184&t=PHVNitU0s0KwOi8L-0',
+      url: 'https://www.figma.com/design/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=14370-152271&node-type=frame&m=dev',
     },
   },
   args: {
     content: 'Sebastian Vettel reacted with a heart',
   },
   render: args => (
-    <Tooltip {...args}>
-      <Button variant="primary">Trigger</Button>
-    </Tooltip>
+    <div className="flex flex-wrap gap-4">
+      {(['top', 'right', 'bottom', 'left'] as const).map(side => (
+        <Tooltip key={side} {...args} side={side}>
+          <Button variant="primary">{side}</Button>
+        </Tooltip>
+      ))}
+    </div>
   ),
 }
 
@@ -28,7 +33,9 @@ type Story = StoryObj<typeof Tooltip>
 export const Light: Story = {}
 export const Dark: Story = {
   parameters: {
-    backgrounds: { default: 'dark' },
+    backgrounds: {
+      default: 'dark',
+    },
   },
 }
 
