@@ -1,33 +1,60 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { cva } from 'cva'
-import { Button as AriaButton } from 'react-aria-components'
+import { Button as AriaButton, Link as AriaLink } from 'react-aria-components'
 
+import type { IconComponent } from '../types'
 import type { VariantProps } from 'cva'
 import type { Ref } from 'react'
 import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
 
 type Variants = VariantProps<typeof styles>
 
-type Props = AriaButtonProps & {
-  children: React.ReactNode
+type Props = {
   size?: Variants['size']
   variant?: Variants['variant']
-  iconBefore?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
-  iconAfter?: React.ComponentType<React.ComponentPropsWithoutRef<'svg'>>
   onClick?: () => void
-}
+  onPress?: AriaButtonProps['onPress']
+  disabled?: boolean
+  // isDisabled?: boolean
+} & (
+  | {
+      children: React.ReactNode
+      iconBefore?: IconComponent
+      iconAfter?: IconComponent
+    }
+  | {
+      icon: IconComponent
+      ariaLabel: string
+    }
+)
 
 const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
   const {
-    iconBefore: IconBefore,
-    iconAfter: IconAfter,
     size = '40',
     variant = 'primary',
-    children,
     onClick: onPress,
     ...buttonProps
   } = props
+
+  // icon only
+  if ('icon' in props) {
+    const { icon: Icon } = props
+    return (
+      <AriaButton
+        onPress={onPress}
+        {...buttonProps}
+        ref={ref}
+        className={styles({ variant, size, iconOnly: true })}
+      >
+        {cloneElement(Icon, {
+          className: iconStyles({ size, variant }),
+        })}
+      </AriaButton>
+    )
+  }
+
+  const { children, iconBefore, iconAfter } = props
 
   return (
     <AriaButton
@@ -36,12 +63,16 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
       ref={ref}
       className={styles({ variant, size })}
     >
-      {IconBefore && (
-        <IconBefore className={iconStyles({ size, placement: 'before' })} />
+      {iconBefore && (
+        <span className={iconStyles({ size, placement: 'before', variant })}>
+          {iconBefore}
+        </span>
       )}
       <span className="flex-1 whitespace-nowrap">{children}</span>
-      {IconAfter && (
-        <IconAfter className={iconStyles({ size, placement: 'after' })} />
+      {iconAfter && (
+        <span className={iconStyles({ size, placement: 'after', variant })}>
+          {iconAfter}
+        </span>
       )}
     </AriaButton>
   )
@@ -49,7 +80,7 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
 
 const styles = cva({
   base: [
-    'inline-flex cursor-pointer items-center gap-1 font-medium transition-all',
+    'inline-flex shrink-0 cursor-pointer items-center justify-center gap-1 font-medium transition-all',
     'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
     'disabled:cursor-default disabled:opacity-30',
     // 'flex cursor-pointer items-center gap-3 px-4 py-[10px] text-13 text-white-100 transition-all',
@@ -91,12 +122,24 @@ const styles = cva({
       '32': 'h-[32px] rounded-10 px-3 text-15',
       '24': 'h-[24px] rounded-8 px-2 text-13',
     },
+    iconOnly: {
+      true: 'aspect-square !px-0',
+    },
   },
 })
 
 const iconStyles = cva({
   base: 'shrink-0',
   variants: {
+    variant: {
+      primary: 'text-blur-white/70',
+      positive: 'text-blur-white/70',
+      grey: 'text-neutral-50',
+      darkGrey: 'text-neutral-50',
+      outline: 'text-neutral-50',
+      ghost: 'text-neutral-50',
+      danger: 'text-blur-white/70',
+    },
     placement: {
       before: '',
       after: '',
