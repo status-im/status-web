@@ -11,7 +11,7 @@ import {
 import * as Tabs from '@radix-ui/react-tabs'
 import { cva } from 'cva'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
 
 type TabVariants = VariantProps<typeof tabStyles>
@@ -45,7 +45,7 @@ export const List = forwardRef<
 List.displayName = Tabs.List.displayName
 
 type TabProps = React.ComponentProps<typeof Tabs.Trigger> & {
-  icon?: IconComponent
+  icon?: IconElement
   children: React.ReactNode
 }
 

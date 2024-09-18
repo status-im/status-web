@@ -8,7 +8,7 @@ import { create } from 'zustand'
 
 import { Toast } from './toast'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 import type { ToastProps } from './toast'
 import type { ToastProps as RootProps } from '@radix-ui/react-toast'
 
@@ -23,7 +23,7 @@ type ToastState = {
   dismiss: () => void
   positive: (message: string, options?: Options) => void
   negative: (message: string, options?: Options) => void
-  custom: (message: string, icon: IconComponent, options?: Options) => void
+  custom: (message: string, icon: IconElement, options?: Options) => void
 }
 
 const useStore = create<ToastState>()(set => ({

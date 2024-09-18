@@ -1,4 +1,4 @@
-import { DropdownButton, DropdownButtonProps } from './dropdown-button'
+import { DropdownButton } from './dropdown-button'
 
 import type { Meta, StoryObj } from '@storybook/react'
 

@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import { cva } from 'cva'
 import { Button as AriaButton } from 'react-aria-components'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
 import type { Ref } from 'react'
 import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
@@ -12,7 +12,7 @@ type Variants = VariantProps<typeof styles>
 
 type Props = AriaButtonProps & {
   variant?: Variants['variant']
-  icon: IconComponent
+  icon: IconElement
 }
 
 const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {

@@ -4,7 +4,7 @@ import { ClearIcon } from '@status-im/icons/20'
 import { cva } from 'cva'
 import * as Aria from 'react-aria-components'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
 
 type Variants = VariantProps<typeof inputStyles>
@@ -12,7 +12,7 @@ type Variants = VariantProps<typeof inputStyles>
 type Props = Aria.TextFieldProps & {
   size?: Variants['size']
   label?: string
-  icon?: IconComponent
+  icon?: IconElement
   placeholder?: string
   type?: Aria.InputProps['type']
   inputMode?: Aria.InputProps['inputMode']

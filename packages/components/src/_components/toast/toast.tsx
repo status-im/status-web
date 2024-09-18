@@ -6,13 +6,13 @@ import { match, P } from 'ts-pattern'
 
 import { Button } from '../button'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 
 type Props = {
   message: string
   action?: string
   onAction?: () => void
-} & ({ type: 'positive' | 'negative' } | { icon: IconComponent })
+} & ({ type: 'positive' | 'negative' } | { icon: IconElement })
 
 const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
   const { message, action, onAction } = props

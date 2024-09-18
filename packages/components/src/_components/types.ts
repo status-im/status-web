@@ -1,3 +1,3 @@
-export type IconComponent = React.ReactElement<
+export type IconElement = React.ReactElement<
   React.ComponentPropsWithoutRef<'svg'>
 >

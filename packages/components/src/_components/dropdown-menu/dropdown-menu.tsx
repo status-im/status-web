@@ -8,7 +8,7 @@ import { cva, cx } from 'cva'
 import { Checkbox } from '../checkbox'
 import { Input } from '../input'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 
 type Props = DropdownMenu.DropdownMenuProps & {
   children: [React.ReactElement, React.ReactElement]
@@ -100,7 +100,7 @@ const labelStyles = cva({
 })
 
 type DropdownMenuItemProps = DropdownMenu.DropdownMenuItemProps & {
-  icon?: IconComponent
+  icon?: IconElement
   label: string
   onSelect: () => void
   selected?: boolean
@@ -127,7 +127,7 @@ export const Item = forwardRef<
 Item.displayName = DropdownMenu.Item.displayName
 
 type CheckboxItemProps = DropdownMenu.DropdownMenuCheckboxItemProps & {
-  icon?: IconComponent
+  icon?: IconElement
   label: string
   checked: boolean
   onCheckedChange: (checked: boolean) => void
