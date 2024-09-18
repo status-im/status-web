@@ -17,9 +17,9 @@ export { DropdownMenu } from './_components/dropdown-menu'
 export { Input } from './_components/input'
 export { Tabs } from './_components/tabs'
 export { Tag } from './_components/tag'
+export { ContextTag } from './_components/context-tag'
 
 // NEEDS WORK
-export * from './_components/context-tag'
 export * from './_components/avatar'
 // export * from './skeleton'
 
