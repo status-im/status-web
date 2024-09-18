@@ -12,7 +12,7 @@ import {
 } from '@status-im/icons/20'
 import { action } from '@storybook/addon-actions'
 
-import { Button } from '../button'
+import { DropdownButton } from '../dropdown-button'
 import { DropdownMenu } from './'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -33,7 +33,7 @@ const meta: Meta = {
 
     return (
       <DropdownMenu.Root {...args}>
-        <Button>Open</Button>
+        <DropdownButton>Open</DropdownButton>
 
         <DropdownMenu.Content sideOffset={10}>
           <DropdownMenu.Search placeholder="Search by" />

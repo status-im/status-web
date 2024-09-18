@@ -13,8 +13,8 @@ type Props = ButtonProps & {
     ButtonProps['variant'],
     'primary' | 'grey' | 'outline' | 'ghost'
   >
+  iconAfter?: never
   children: React.ReactNode
-  iconAfter: never
 }
 
 const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
