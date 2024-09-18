@@ -7,15 +7,14 @@ import { Button } from '../button'
 
 import type { ButtonProps } from '../button'
 import type { Ref } from 'react'
-// import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
 
 type Props = ButtonProps & {
   variant?: Extract<
     ButtonProps['variant'],
     'primary' | 'grey' | 'outline' | 'ghost'
   >
-  iconAfter?: never
   children: React.ReactNode
+  iconAfter: never
 }
 
 const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -35,7 +34,9 @@ const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
 }
 
 const iconStyles = cva({
-  base: 'shrink-0',
+  base: [
+    'shrink-0 transition-transform duration-200 [[aria-expanded="true"]_&]:rotate-180',
+  ],
   variants: {
     variant: {
       primary: ['text-blur-white/70', '[&>path[fill="#E7EAEE"]]:fill-white-20'],
