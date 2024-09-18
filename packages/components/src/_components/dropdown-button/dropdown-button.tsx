@@ -1,20 +1,21 @@
 import { forwardRef } from 'react'
 
 import { DropdownIcon } from '@status-im/icons/20'
+import { cva } from 'cva'
 
 import { Button } from '../button'
 
 import type { ButtonProps } from '../button'
 import type { Ref } from 'react'
-import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
+// import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
 
-type Props = AriaButtonProps & {
-  children: string
-  size?: ButtonProps['size']
+type Props = ButtonProps & {
   variant?: Extract<
     ButtonProps['variant'],
-    'primary' | 'gray' | 'outline' | 'ghost'
+    'primary' | 'grey' | 'outline' | 'ghost'
   >
+  iconAfter?: never
+  children: React.ReactNode
 }
 
 const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
@@ -26,12 +27,33 @@ const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
       ref={ref}
       size={size}
       variant={variant}
-      iconAfter={<DropdownIcon />}
+      iconAfter={<DropdownIcon className={iconStyles({ variant })} />}
     >
       {children}
     </Button>
   )
 }
+
+const iconStyles = cva({
+  base: 'shrink-0',
+  variants: {
+    variant: {
+      primary: ['text-blur-white/70', '[&>path[fill="#E7EAEE"]]:fill-white-20'],
+      grey: [
+        'text-neutral-100 dark:text-white-100',
+        '[&>path[fill="#E7EAEE"]]:dark:fill-neutral-80',
+      ],
+      outline: [
+        'text-neutral-100 dark:text-white-100',
+        '[&>path[fill="#E7EAEE"]]:dark:fill-neutral-80',
+      ],
+      ghost: [
+        'text-neutral-100 dark:text-white-100',
+        '[&>path[fill="#E7EAEE"]]:dark:fill-neutral-80',
+      ],
+    },
+  },
+})
 
 const _DropdownButton = forwardRef(DropdownButton)
 

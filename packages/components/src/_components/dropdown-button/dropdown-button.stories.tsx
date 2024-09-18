@@ -1,43 +1,47 @@
-import { DropdownButton } from './dropdown-button'
+import { DropdownButton, DropdownButtonProps } from './dropdown-button'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const sizes = ['40', '32', '24'] as const
+type Story = StoryObj<typeof DropdownButton>
 
-// eslint-disable-next-line react/display-name
-const renderVariant = (variant: string) => (props: any) => (
-  <div className="flex items-center gap-4">
-    {sizes.map(size => (
-      <DropdownButton key={size} {...props} variant={variant} size={size} />
-    ))}
-  </div>
-)
-
-const meta = {
+export default {
   component: DropdownButton,
   title: 'Components/Dropdown Button',
+  argTypes: {
+    children: {
+      control: 'text',
+    },
+    isDisabled: {
+      control: 'boolean',
+    },
+  },
   args: {
     children: 'Dropdown',
     isDisabled: false,
   },
 
-  render: props => (
+  render: args => (
     <div className="grid gap-4">
-      {renderVariant('primary')(props)}
-      {renderVariant('grey')(props)}
-      {renderVariant('outline')(props)}
-      {renderVariant('ghost')(props)}
+      {(['primary', 'grey', 'outline', 'ghost'] as const).map(variant => (
+        <div key={variant} className="flex items-center gap-4">
+          {(['40', '32', '24'] as const).map(size => (
+            <DropdownButton
+              key={size}
+              {...args}
+              variant={variant}
+              size={size}
+            />
+          ))}
+        </div>
+      ))}
     </div>
   ),
 } satisfies Meta<typeof DropdownButton>
 
-type Story = StoryObj<typeof DropdownButton>
-
 export const Light: Story = {}
+
 export const Dark: Story = {
   parameters: {
     backgrounds: { default: 'dark' },
   },
 }
-
-export default meta
