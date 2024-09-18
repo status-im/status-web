@@ -16,11 +16,11 @@ export * from './_components/utils/variants'
 export { DropdownMenu } from './_components/dropdown-menu'
 export { Input } from './_components/input'
 export { Tabs } from './_components/tabs'
+export { Tag } from './_components/tag'
 
 // NEEDS WORK
 export * from './_components/context-tag'
 export * from './_components/avatar'
-export * from './_components/tag'
 // export * from './skeleton'
 
 /* eslint-enable simple-import-sort/exports */

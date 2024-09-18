@@ -4,24 +4,13 @@ import { Tag } from './tag'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const sizes = ['32', '24'] as const
-
-// eslint-disable-next-line react/display-name
-const renderVariant = (selected: boolean) => (props: any) => (
-  <div className="flex items-center gap-4">
-    {sizes.map(size => (
-      <Tag key={size} {...props} selected={selected} size={size} />
-    ))}
-  </div>
-)
-
 const meta = {
   component: Tag,
   title: 'Components/Tag',
   args: {
     label: 'Tag',
     disabled: false,
-    icon: PlaceholderIcon,
+    icon: <PlaceholderIcon />,
     iconPlacement: 'left',
   },
 
@@ -33,9 +22,16 @@ const meta = {
   },
 
   render: props => (
-    <div className="grid gap-4">
-      {renderVariant(false)(props)}
-      {renderVariant(true)(props)}
+    <div className="flex flex-col items-start gap-4">
+      <Tag {...props} />
+      <Tag {...props} selected />
+      <Tag {...props} disabled />
+      <Tag {...props} size="24" />
+      <Tag {...props} size="24" selected />
+      <Tag {...props} size="24" disabled />
+      <Tag {...props} icon={undefined} />
+      <Tag {...props} label={undefined} />
+      <Tag {...props} iconPlacement="right" />
     </div>
   ),
 } satisfies Meta<typeof Tag>

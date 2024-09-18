@@ -1,1 +1,1 @@
-export * from './tag'
+export { Tag } from './tag'
