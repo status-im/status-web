@@ -1,22 +1,15 @@
 import { Button } from '../button'
-import { Popover } from './popover'
+import { Popover } from './'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta = {
-  component: Popover,
   title: 'Components/Popover',
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Web?node-id=611%3A36006&t=Gyy71OAckl3b2TWj-4',
-    },
-  },
   render: props => (
-    <Popover {...props}>
+    <Popover.Root {...props}>
       <Button variant="primary">Trigger</Button>
-      <Popover.Content>some content</Popover.Content>
-    </Popover>
+      <Popover.Content className="p-4">some content</Popover.Content>
+    </Popover.Root>
   ),
 } satisfies Meta<typeof Popover>
 

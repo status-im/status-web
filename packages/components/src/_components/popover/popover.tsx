@@ -1,43 +1,39 @@
-import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover'
+import { forwardRef } from 'react'
 
-import type { PopoverContentProps } from '@radix-ui/react-popover'
+import * as Popover from '@radix-ui/react-popover'
+import { cx } from 'cva'
 
-interface Props {
+type Props = Popover.PopoverProps & {
   children: [React.ReactElement, React.ReactElement]
   onOpenChange?: (open: boolean) => void
-  modal?: false
-  side?: PopoverContentProps['side']
-  sideOffset?: PopoverContentProps['sideOffset']
-  align?: PopoverContentProps['align']
-  alignOffset?: PopoverContentProps['alignOffset']
 }
 
-const Popover = (props: Props) => {
-  const { children, onOpenChange, modal, ...contentProps } = props
+export const Root = (props: Props) => {
+  const { children, ...rootProps } = props
 
   const [trigger, content] = children
 
   return (
-    <Root onOpenChange={onOpenChange} modal={modal}>
-      <Trigger asChild>{trigger}</Trigger>
-      <Portal>
-        <Content {...contentProps}>{content}</Content>
-      </Portal>
-    </Root>
+    <Popover.Root {...rootProps}>
+      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
+      {content}
+    </Popover.Root>
   )
 }
 
-type ContentProps = {
-  children: React.ReactNode
-}
+export const Content = forwardRef<
+  React.ElementRef<typeof Popover.Content>,
+  React.ComponentPropsWithoutRef<typeof Popover.Content>
+>((props, ref) => {
+  return (
+    <Popover.Portal>
+      <Popover.Content
+        ref={ref}
+        {...props}
+        className={cx('rounded-6 bg-white-100 shadow-3', props.className)}
+      />
+    </Popover.Portal>
+  )
+})
 
-const PopoverContent = (props: ContentProps) => {
-  const { children } = props
-
-  return <div className="rounded-6 bg-white-100 shadow-3">{children}</div>
-}
-
-Popover.Content = PopoverContent
-
-export { Popover }
-export type { Props as PopoverProps }
+Content.displayName = Popover.Content.displayName
