@@ -13,11 +13,11 @@ export * from './_components/toast'
 export * from './_components/tooltip'
 export type * from './_components/types'
 export * from './_components/utils/variants'
+export { DropdownMenu } from './_components/dropdown-menu'
 
 // NEEDS WORK
 export * from './_components/context-tag'
 export * from './_components/avatar'
-export * from './_components/dropdown-menu'
 export * from './_components/input'
 export * from './_components/tabs'
 export * from './_components/tag'

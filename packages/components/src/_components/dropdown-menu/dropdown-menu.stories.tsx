@@ -1,22 +1,24 @@
+import { useState } from 'react'
+
 import {
   CopyIcon,
+  DeleteIcon,
   EditIcon,
   ForwardIcon,
   LinkIcon,
+  NotificationsIcon,
   PinIcon,
   ReplyIcon,
-  TrashIcon,
 } from '@status-im/icons/20'
 import { action } from '@storybook/addon-actions'
 
 import { Button } from '../button'
-import { DropdownMenu } from './dropdown-menu'
+import { DropdownMenu } from './'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta<typeof DropdownMenu> = {
-  title: 'Web/dropdown menu',
-  component: DropdownMenu,
+const meta: Meta = {
+  title: 'Components/Dropdown Menu',
   argTypes: {},
   parameters: {
     design: {
@@ -24,19 +26,18 @@ const meta: Meta<typeof DropdownMenu> = {
       url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Web?node-id=1931%3A31188&t=rOKELbVkzya48FJE-0',
     },
   },
-}
-
-type Story = StoryObj<typeof DropdownMenu>
-
-export const Default: Story = {
-  args: {},
 
   render: args => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isChecked, setIsChecked] = useState(false)
+
     return (
-      <DropdownMenu {...args}>
+      <DropdownMenu.Root {...args}>
         <Button>Open</Button>
 
         <DropdownMenu.Content sideOffset={10}>
+          <DropdownMenu.Search placeholder="Search by" />
+
           <DropdownMenu.Item
             icon={<EditIcon />}
             label="Edit message"
@@ -54,6 +55,7 @@ export const Default: Story = {
           />
           <DropdownMenu.Item
             icon={<PinIcon />}
+            selected
             label="Pin to the channel"
             onSelect={action('pin')}
           />
@@ -67,18 +69,37 @@ export const Default: Story = {
             label="Share link to message"
             onSelect={action('share')}
           />
+          <DropdownMenu.CheckboxItem
+            icon={<NotificationsIcon />}
+            label="Enable notifications"
+            checked={isChecked}
+            onCheckedChange={setIsChecked}
+            onSelect={e => e.preventDefault()}
+          />
 
           <DropdownMenu.Separator />
 
           <DropdownMenu.Item
-            icon={<TrashIcon />}
+            icon={<DeleteIcon />}
             label="Delete message"
             danger
             onSelect={action('delete')}
           />
         </DropdownMenu.Content>
-      </DropdownMenu>
+      </DropdownMenu.Root>
     )
+  },
+}
+
+type Story = StoryObj<typeof DropdownMenu>
+
+export const Light: Story = {}
+
+export const Dark: Story = {
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
   },
 }
 
