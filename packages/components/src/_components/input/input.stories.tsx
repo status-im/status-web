@@ -11,11 +11,6 @@ const meta: Meta<Component> = {
   component: Input,
   args: {
     placeholder: 'Type something...',
-    // label: 'Label',
-    // meta: '0/280',
-    // isInvalid: false,
-    // isDisabled: false,
-    // clearable: false,
   },
 
   render: props => (
