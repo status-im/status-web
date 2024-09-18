@@ -1,25 +1,25 @@
 /* eslint-disable simple-import-sort/exports */
 
 // NEEDS REVIEW
-export * from './_components/button'
-export * from './_components/checkbox'
-export * from './_components/counter'
-export * from './_components/dropdown-button'
-export * from './_components/icon-button'
+export { Button } from './_components/button'
+export { Checkbox } from './_components/checkbox'
+export { Counter } from './_components/counter'
+export { DropdownButton } from './_components/dropdown-button'
+export { IconButton } from './_components/icon-button'
 export { Popover } from './_components/popover'
-export * from './_components/shortcut'
-export * from './_components/text'
-export * from './_components/toast'
-export * from './_components/tooltip'
+export { Shortcut } from './_components/shortcut'
+export { Text } from './_components/text'
+export { Toast, ToastContainer, useToast } from './_components/toast'
+export { Tooltip } from './_components/tooltip'
 export type * from './_components/types'
 export * from './_components/utils/variants'
 export { DropdownMenu } from './_components/dropdown-menu'
-export * from './_components/input'
+export { Input } from './_components/input'
+export { Tabs } from './_components/tabs'
 
 // NEEDS WORK
 export * from './_components/context-tag'
 export * from './_components/avatar'
-export * from './_components/tabs'
 export * from './_components/tag'
 // export * from './skeleton'
 
