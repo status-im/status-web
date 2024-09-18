@@ -6,7 +6,6 @@ const meta: Meta<typeof Checkbox> = {
   title: 'Components/Checkbox',
   component: Checkbox,
   args: {
-    isSelected: true,
     children: 'I agree with the community rules',
   },
   parameters: {
@@ -19,8 +18,15 @@ const meta: Meta<typeof Checkbox> = {
   render: props => {
     return (
       <div className="grid gap-3">
-        <Checkbox {...props} variant="outline" />
-        <Checkbox {...props} variant="filled"></Checkbox>
+        <div className="flex gap-3">
+          <Checkbox {...props} variant="outline" />
+          <Checkbox {...props} isSelected variant="outline" />
+        </div>
+
+        <div className="flex gap-3">
+          <Checkbox {...props} variant="filled"></Checkbox>
+          <Checkbox {...props} isSelected variant="filled"></Checkbox>
+        </div>
       </div>
     )
   },
