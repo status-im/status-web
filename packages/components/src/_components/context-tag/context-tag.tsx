@@ -4,23 +4,19 @@ import { cva, cx } from 'cva'
 import { match } from 'ts-pattern'
 
 import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
 
-type Props = (
-  | {
-      size?: '20' | '32'
-    }
-  | {
-      size?: '24'
-      textSize: '13' | '15'
-    }
-) &
-  (
-    | { type: 'label'; children: string }
-    | { type: 'community'; label: string; icon: IconElement }
-    | { type: 'token'; label: string; icon: IconElement }
-    | { type: 'network'; label: string; icon: IconElement }
-    | { type: 'icon'; label: string; icon: IconElement }
-  )
+type Variants = VariantProps<typeof baseStyles>
+
+type Props = {
+  size?: Variants['size']
+} & (
+  | { type: 'label'; children: string }
+  | { type: 'community'; label: string; icon: IconElement }
+  | { type: 'token'; label: string; icon: IconElement }
+  | { type: 'network'; label: string; icon: IconElement }
+  | { type: 'icon'; label: string; icon: IconElement }
+)
 // | { type: 'user'; user: { name: string; src: string } }
 // | { type: 'account'; account: { name: string; emoji: string } }
 // | {
@@ -42,12 +38,13 @@ const baseStyles = cva({
   base: [
     'inline-flex w-fit cursor-default items-center rounded-full',
     'font-medium text-neutral-100 dark:text-white-100',
-    'bg-neutral-10 dark:bg-neutral-90',
+    'bg-neutral-10 blurry:bg-neutral-80/5 dark:bg-neutral-90 dark:blurry:bg-white-5',
   ],
   variants: {
     size: {
       '32': 'h-8 gap-2 px-3 text-15',
-      '24': 'h-6 gap-1 px-2 text-15',
+      '24+': 'h-6 gap-1 px-2 text-15',
+      '24': 'h-6 gap-1 px-2 text-13',
       '20': 'h-5 gap-1 px-1.5 text-13',
     },
     selected: {
@@ -61,11 +58,13 @@ const iconStyles = cva({
   variants: {
     size: {
       '32': 'size-7',
+      '24+': 'size-5',
       '24': 'size-5',
       '20': 'size-4',
     },
     offset: {
       '32': '-ml-2.5',
+      '24+': '-ml-1.5',
       '24': '-ml-1.5',
       '20': '-ml-1',
     },
