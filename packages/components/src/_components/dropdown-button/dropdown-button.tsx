@@ -5,8 +5,7 @@ import { cva } from 'cva'
 
 import { Button } from '../button'
 
-import type { ButtonProps } from '../button'
-import type { Ref } from 'react'
+type ButtonProps = React.ComponentPropsWithoutRef<typeof Button>
 
 type Props = ButtonProps & {
   variant?: Extract<
@@ -17,7 +16,7 @@ type Props = ButtonProps & {
   children: React.ReactNode
 }
 
-const DropdownButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
+const DropdownButton = (props: Props, ref: React.Ref<HTMLButtonElement>) => {
   const { size = '40', variant = 'primary', children, ...buttonProps } = props
 
   return (

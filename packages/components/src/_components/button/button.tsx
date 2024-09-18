@@ -1,48 +1,55 @@
+'use client'
+
 import { cloneElement, forwardRef } from 'react'
 
 import { cva } from 'cva'
-import { Button as AriaButton, Link as AriaLink } from 'react-aria-components'
 
-import type { IconComponent } from '../types'
+import { useConfig } from '../provider'
+
+import type { IconElement, Prettify } from '../types'
 import type { VariantProps } from 'cva'
-import type { Ref } from 'react'
-import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
 
 type Variants = VariantProps<typeof styles>
 
 type Props = {
   size?: Variants['size']
   variant?: Variants['variant']
-  onClick?: () => void
-  onPress?: AriaButtonProps['onPress']
-  disabled?: boolean
-  // isDisabled?: boolean
+  onPress?: () => void
 } & (
   | {
       children: React.ReactNode
-      iconBefore?: IconComponent
-      iconAfter?: IconComponent
+      iconBefore?: IconElement
+      iconAfter?: IconElement
     }
   | {
-      icon: IconComponent
-      ariaLabel: string
+      icon: IconElement
+      'aria-label': string
+      children?: never
     }
 )
 
-const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
-  const {
-    size = '40',
-    variant = 'primary',
-    onClick: onPress,
-    ...buttonProps
-  } = props
+type ButtonProps = Prettify<
+  Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> & { href?: never }
+>
 
-  // icon only
+type LinkProps = Prettify<
+  Omit<React.ComponentPropsWithoutRef<'a'>, 'children'> & { href: string }
+>
+
+function Button(
+  props: Props & (ButtonProps | LinkProps),
+  ref: React.Ref<HTMLButtonElement | HTMLAnchorElement>,
+) {
+  const { size = '40', variant = 'primary' } = props
+
+  const { link } = useConfig()
+
+  const Element = props.href ? link : 'button'
+
   if ('icon' in props) {
-    const { icon: Icon } = props
+    const { icon: Icon, ...buttonProps } = props
     return (
-      <AriaButton
-        onPress={onPress}
+      <Element
         {...buttonProps}
         ref={ref}
         className={styles({ variant, size, iconOnly: true })}
@@ -50,19 +57,14 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
         {cloneElement(Icon, {
           className: iconStyles({ size, variant }),
         })}
-      </AriaButton>
+      </Element>
     )
   }
 
-  const { children, iconBefore, iconAfter } = props
+  const { children, iconBefore, iconAfter, ...buttonProps } = props
 
   return (
-    <AriaButton
-      onPress={onPress}
-      {...buttonProps}
-      ref={ref}
-      className={styles({ variant, size })}
-    >
+    <Element {...buttonProps} ref={ref} className={styles({ variant, size })}>
       {iconBefore && (
         <span className={iconStyles({ size, placement: 'before', variant })}>
           {iconBefore}
@@ -74,16 +76,15 @@ const Button = (props: Props, ref: Ref<HTMLButtonElement>) => {
           {iconAfter}
         </span>
       )}
-    </AriaButton>
+    </Element>
   )
 }
 
 const styles = cva({
   base: [
     'inline-flex shrink-0 cursor-pointer items-center justify-center gap-1 font-medium transition-all',
-    'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
-    'disabled:cursor-default disabled:opacity-30',
-    // 'flex cursor-pointer items-center gap-3 px-4 py-[10px] text-13 text-white-100 transition-all',
+    'outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-100',
+    'disabled:pointer-events-none disabled:cursor-default disabled:opacity-30',
   ],
   variants: {
     variant: {
@@ -97,12 +98,15 @@ const styles = cva({
       ],
       positive: [
         'bg-success-50 text-white-100 hover:bg-success-60 focus-visible:ring-success-50 disabled:bg-success-50/30',
+        'dark:bg-success-60 dark:hover:bg-success-50 dark:pressed:bg-success-50/90',
       ],
       grey: [
         'bg-neutral-10 text-neutral-100 hover:bg-neutral-20 focus-visible:ring-neutral-80 pressed:bg-neutral-30',
+        'dark:bg-neutral-80 dark:text-white-100 dark:hover:bg-neutral-60 dark:pressed:bg-neutral-50',
       ],
       darkGrey: [
         'bg-neutral-20 text-neutral-100 hover:bg-neutral-30 focus-visible:ring-neutral-80 pressed:bg-neutral-40',
+        'dark:bg-neutral-90 dark:text-white-100 dark:hover:bg-neutral-60 dark:pressed:bg-neutral-50',
       ],
       outline: [
         'border border-neutral-30 text-neutral-100 hover:border-neutral-40 focus-visible:ring-neutral-80 pressed:border-neutral-50',
@@ -113,8 +117,8 @@ const styles = cva({
         'dark:text-white-100 dark:hover:bg-neutral-80 dark:pressed:bg-neutral-70',
       ],
       danger: [
-        'bg-danger-50 text-white-100 hover:bg-danger-60 focus-visible:ring-danger-50',
-        'dark:bg-danger-60 dark:hover:bg-danger-50',
+        'bg-danger-50 text-white-100 hover:bg-danger-60 focus-visible:ring-danger-50 pressed:bg-danger-60/90',
+        'dark:bg-danger-60 dark:hover:bg-danger-50 dark:pressed:bg-danger-50/90',
       ],
     },
     size: {
@@ -129,7 +133,7 @@ const styles = cva({
 })
 
 const iconStyles = cva({
-  base: 'shrink-0',
+  base: ['shrink-0', '[&>svg]:size-full'],
   variants: {
     variant: {
       primary: 'text-blur-white/70',
@@ -176,5 +180,4 @@ const iconStyles = cva({
 
 const _Button = forwardRef(Button)
 
-export { _Button as Button, styles as buttonStyles }
-export type { Props as ButtonProps }
+export { _Button as Button }

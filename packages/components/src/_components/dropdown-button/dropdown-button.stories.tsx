@@ -11,13 +11,13 @@ export default {
     children: {
       control: 'text',
     },
-    isDisabled: {
+    disabled: {
       control: 'boolean',
     },
   },
   args: {
     children: 'Dropdown',
-    isDisabled: false,
+    disabled: false,
   },
 
   render: args => (
