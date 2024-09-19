@@ -5,38 +5,39 @@ import { Avatar } from './avatar'
 import type { AvatarProps } from './avatar'
 import type { Meta, StoryObj } from '@storybook/react'
 
-const sizes = ['80', '56', '48', '32', '28', '24', '20', '16'] as const
+const sizesAvatar = {
+  user: ['80', '64', '56', '48', '32', '28', '24', '20', '16'],
+  community: ['32', '24', '20'],
+  channel: ['80', '32', '28', '24', '20'],
+  icon: ['48', '32', '20'],
+  account: ['80', '48', '32', '28', '24', '20', '16'],
+}
 
-const renderVariant = (variant: AvatarProps['type']) => (props: any) => (
-  <div className="flex items-center gap-4">
-    {sizes.map(size => (
-      <div key={size} style={{ width: `${size}px`, height: `${size}px` }}>
-        <Avatar {...props} type={variant} size={size} />
+const renderVariant = (variant: AvatarProps['type']) => {
+  const content = (props: any) => {
+    const sizes = sizesAvatar[variant];
+
+    return (
+      <div className="flex items-center gap-4">
+        {sizes.map(size => (
+          <div key={size} style={{ width: `${size}px`, height: `${size}px` }}>
+            <Avatar {...props} type={variant} size={size} />
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-)
+    );
+  };
+
+  return content;
+};
+
 
 const meta = {
   component: Avatar,
   title: 'Components/Avatar',
   args: {
     name: 'John Doe',
-    src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
-    // indicator: 'online',
-    colorHash: [
-      [3, 30],
-      [2, 10],
-      [5, 5],
-      [3, 14],
-      [5, 4],
-      [4, 19],
-      [3, 16],
-      [4, 0],
-      [5, 28],
-      [4, 13],
-      [4, 15],
-    ],
+    // src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80',
   },
 
   parameters: {
@@ -47,14 +48,43 @@ const meta = {
   },
 
   render: props => (
-    <div className="grid gap-4">
-      {renderVariant('user')(props)}
-      {/* {renderVariant('group')(props)} */}
-      {/* {renderVariant('wallet')(props)} */}
-      {/* {renderVariant('account')(props)} */}
-      {renderVariant('community')(props)}
+    <div className="grid gap-4 theme-yellow">
+      <h1 className="text-19">User Avatar</h1>
+      {renderVariant('user')({...props, src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80', colorHash: [
+                [3, 30],
+                [2, 10],
+                [5, 5],
+                [3, 14],
+                [5, 4],
+                [4, 19],
+                [3, 16],
+                [4, 0],
+                [5, 28],
+                [4, 13],
+                [4, 15],
+              ]})}
+      <h1 className="text-19">User Avatar fallback</h1>
+      {renderVariant('user')({ ...props, colorHash: [
+                [3, 30],
+                [2, 10],
+                [5, 5],
+                [3, 14],
+                [5, 4],
+                [4, 19],
+                [3, 16],
+                [4, 0],
+                [5, 28],
+                [4, 13],
+                [4, 15],
+              ]})}
+      <h1 className="text-19">Community Avatar</h1>
+      {renderVariant('community')({ ...props, src: 'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&h=500&q=80' })}
+      <h1 className="text-19">Channel Avatar</h1>
       {renderVariant('channel')({ ...props, emoji: '🍑' })}
-      {renderVariant('icon')({ ...props, icon: PlaceholderIcon })}
+      <h1 className="text-19">Icon Avatar</h1>
+      {renderVariant('icon')({ ...props, icon: <PlaceholderIcon /> })}
+      <h1 className="text-19">Account Avatar</h1>
+      {renderVariant('account')({ ...props, emoji: '🍿' })}
     </div>
   ),
 } satisfies Meta<typeof Avatar>
