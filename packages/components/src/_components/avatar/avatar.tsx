@@ -64,6 +64,7 @@ const Avatar = (props: Props) => {
   return match(props)
     .with({ type: 'user' }, props => {
       const { size, src, name } = props
+
       return (
         <div
           className={baseStyles({ size, rounded: 'full', padding: size })}
@@ -78,7 +79,7 @@ const Avatar = (props: Props) => {
               className="size-full rounded-full object-cover"
             />
           ) : (
-            <div className="size-full flex select-none items-center justify-center rounded-full bg-customisation-50 text-white-100/70">
+            <div className="flex size-full select-none items-center justify-center rounded-full bg-customisation-50 text-white-100/70">
               {name
                 ? name.slice(0, Number(size) < 28 ? 1 : 2).toUpperCase()
                 : '?'}
@@ -110,7 +111,7 @@ const Avatar = (props: Props) => {
           {src ? (
             <img src={src} alt={name} className="size-full object-cover" />
           ) : (
-            <div className="size-full flex select-none items-center justify-center bg-neutral-95 text-neutral-50">
+            <div className="flex size-full select-none items-center justify-center bg-neutral-95 text-neutral-50">
               {name ? name.charAt(0).toUpperCase() : '?'}
             </div>
           )}
@@ -143,7 +144,7 @@ const Avatar = (props: Props) => {
             background: bgOpacity,
           })}
         >
-          <div className="size-full flex select-none items-center justify-center text-white-100/70">
+          <div className="flex size-full select-none items-center justify-center text-white-100/70">
             {props.emoji}
           </div>
         </div>
@@ -167,7 +168,7 @@ const baseStyles = cva({
   base: 'relative flex items-center justify-center overflow-hidden',
   variants: {
     size: {
-      '80': 'size-20 text-27 ',
+      '80': 'size-20 text-27',
       '64': 'size-16 text-19',
       '56': 'size-14 text-19',
       '48': 'size-12 text-15',
@@ -182,7 +183,7 @@ const baseStyles = cva({
       '64': 'size-16 text-[32px]',
       '56': 'size-14 text-[28px]',
       '48': 'size-12 text-[24px]',
-      '32': 'size-8  text-15',
+      '32': 'size-8 text-15',
       '28': 'size-7 text-[12px]',
       '24': 'size-6 text-[12px]',
       '20': 'size-5 text-[12px]',
