@@ -40,14 +40,14 @@ function Button(
   props: Props & (ButtonProps | LinkProps),
   ref: React.Ref<HTMLButtonElement | HTMLAnchorElement>,
 ) {
-  const { size = '40', variant = 'primary' } = props
+  const { size = '40', variant = 'primary', ...rest } = props
 
   const { link } = useConfig()
 
   const Element = props.href ? link : 'button'
 
-  if ('icon' in props) {
-    const { icon: Icon, ...buttonProps } = props
+  if ('icon' in rest) {
+    const { icon: Icon, ...buttonProps } = rest
     return (
       <Element
         {...buttonProps}
@@ -61,7 +61,7 @@ function Button(
     )
   }
 
-  const { children, iconBefore, iconAfter, ...buttonProps } = props
+  const { children, iconBefore, iconAfter, ...buttonProps } = rest
 
   return (
     <Element {...buttonProps} ref={ref} className={styles({ variant, size })}>

@@ -1,3 +1,5 @@
+'use client'
+
 import { cloneElement, forwardRef } from 'react'
 
 import { ClearIcon } from '@status-im/icons/20'

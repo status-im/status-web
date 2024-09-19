@@ -1,3 +1,5 @@
+'use client'
+
 import { cva } from 'cva'
 import * as Aria from 'react-aria-components'
 

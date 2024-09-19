@@ -39,13 +39,13 @@ const meta: Meta = {
     return (
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
-          <TabsVariant {...args} variant="gray" size="24" />
-          <TabsVariant {...args} variant="gray" size="32" />
+          <TabsVariant {...args} variant="grey" size="24" />
+          <TabsVariant {...args} variant="grey" size="32" />
         </div>
 
         <div className="flex flex-col gap-2">
-          <TabsVariant {...args} variant="dark-gray" size="32" />
-          <TabsVariant {...args} variant="dark-gray" size="24" />
+          <TabsVariant {...args} variant="dark-grey" size="32" />
+          <TabsVariant {...args} variant="dark-grey" size="24" />
         </div>
       </div>
     )

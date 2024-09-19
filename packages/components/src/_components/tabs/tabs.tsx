@@ -9,7 +9,7 @@ import {
 } from 'react'
 
 import * as Tabs from '@radix-ui/react-tabs'
-import { cva } from 'cva'
+import { cva, cx } from 'cva'
 
 import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
@@ -24,7 +24,7 @@ type RootProps = React.ComponentProps<typeof Tabs.Root> & {
 const TabsContext = createContext<Pick<RootProps, 'size' | 'variant'>>({})
 
 export const Root = (props: RootProps) => {
-  const { size = '32', variant = 'gray', ...rootProps } = props
+  const { size = '32', variant = 'grey', ...rootProps } = props
 
   return (
     <TabsContext.Provider
@@ -39,7 +39,15 @@ export const List = forwardRef<
   React.ElementRef<typeof Tabs.List>,
   React.ComponentPropsWithoutRef<typeof Tabs.List>
 >((props, ref) => {
-  return <Tabs.List {...props} ref={ref} className="flex gap-3" />
+  const { size } = useContext(TabsContext)!
+
+  return (
+    <Tabs.List
+      {...props}
+      ref={ref}
+      className={cx('flex', size === '32' && 'gap-3', size === '24' && 'gap-2')}
+    />
+  )
 })
 
 List.displayName = Tabs.List.displayName
@@ -73,7 +81,7 @@ const tabStyles = cva({
   base: ['group inline-flex items-center gap-1 whitespace-nowrap'],
   variants: {
     variant: {
-      gray: [
+      grey: [
         // light
         'bg-neutral-10 text-neutral-100 hover:bg-neutral-20',
         'data-[state=active]:bg-neutral-50 data-[state=active]:text-white-100 data-[state=active]:hover:bg-neutral-50',
@@ -88,7 +96,7 @@ const tabStyles = cva({
         'blurry:dark:bg-white-5 blurry:dark:text-white-100 blurry:dark:hover:bg-white-10',
         'blurry:dark:data-[state=active]:bg-white-20 blurry:dark:hover:data-[state=active]:bg-white-20',
       ],
-      'dark-gray': [
+      'dark-grey': [
         // light
         'bg-neutral-20 text-neutral-100 hover:bg-neutral-30',
         'data-[state=active]:bg-neutral-50 data-[state=active]:text-white-100 data-[state=active]:hover:bg-neutral-50',
@@ -112,7 +120,7 @@ const tabStyles = cva({
 
   defaultVariants: {
     size: '32',
-    variant: 'gray',
+    variant: 'grey',
   },
 })
 
