@@ -138,6 +138,7 @@ const Avatar = (props: Props) => {
         <div
           className={baseStyles({
             accountSize: size,
+            rounded: size,
             className: 'bg-customisation-50',
           })}
         >
@@ -165,29 +166,36 @@ const baseStyles = cva({
   base: 'relative flex items-center justify-center overflow-hidden',
   variants: {
     size: {
-      '80': 'size-20 rounded-16 text-27',
+      '80': 'size-20 text-27 ',
       '64': 'size-16 text-19',
       '56': 'size-14 text-19',
-      '48': 'size-12 rounded-12 text-15',
-      '32': 'size-8 rounded-10 text-13',
-      '28': 'size-7 rounded-8 text-13',
-      '24': 'size-6 rounded-8 text-13',
-      '20': 'size-5 rounded-6 text-11',
-      '16': 'size-4 rounded-6 text-11',
+      '48': 'size-12 text-15',
+      '32': 'size-8 text-13',
+      '28': 'size-7 text-13',
+      '24': 'size-6 text-13',
+      '20': 'size-5 text-11',
+      '16': 'size-4 text-11',
     },
     accountSize: {
-      '80': 'size-20 rounded-16 text-[36px]',
+      '80': 'size-20 text-[36px]',
       '64': 'size-16 text-[32px]',
       '56': 'size-14 text-[28px]',
-      '48': 'size-12 rounded-12 text-[24px]',
-      '32': 'size-8 rounded-10 text-15',
-      '28': 'size-7 rounded-8 text-[12px]',
-      '24': 'size-6 rounded-8 text-[12px]',
-      '20': 'size-5 rounded-6 text-[12px]',
-      '16': 'size-4 rounded-6 text-[12px]',
+      '48': 'size-12 text-[24px]',
+      '32': 'size-8  text-15',
+      '28': 'size-7 text-[12px]',
+      '24': 'size-6 text-[12px]',
+      '20': 'size-5 text-[12px]',
+      '16': 'size-4 text-[12px]',
     },
     rounded: {
       full: 'rounded-full',
+      '80': 'rounded-16',
+      '48': 'rounded-12',
+      '32': 'rounded-10',
+      '28': 'rounded-8',
+      '24': 'rounded-8',
+      '20': 'rounded-6',
+      '16': 'rounded-6',
     },
     padding: {
       '80': 'p-1',
