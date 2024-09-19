@@ -67,7 +67,11 @@ const Avatar = (props: Props) => {
 
       return (
         <div
-          className={baseStyles({ size, rounded: 'full', padding: size })}
+          className={baseStyles({
+            size,
+            rounded: 'full',
+            padding: identiconRing ? size : undefined,
+          })}
           style={{
             background: identiconRing,
           }}
