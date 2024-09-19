@@ -5,7 +5,7 @@ import { match } from 'ts-pattern'
 
 import { generateIdenticonRing } from './utils'
 
-import type { IconComponent } from '../types'
+import type { IconElement } from '../types'
 
 type UserAvatarProps = {
   type: 'user'
@@ -34,12 +34,13 @@ type AccountAvatarProps = {
   size: '80' | '48' | '32' | '28' | '24' | '20' | '16'
   name: string
   emoji: string
+  bgOpacity?: '5' | '10' | '20' | '30' | '40'
 }
 
 type IconAvatarProps = {
   type: 'icon'
   size: '48' | '32' | '20'
-  icon: IconComponent
+  icon: IconElement
 }
 
 type Props =
@@ -132,17 +133,17 @@ const Avatar = (props: Props) => {
       )
     })
     .with({ type: 'account' }, props => {
-      const { size } = props
+      const { size, bgOpacity } = props
 
       return (
         <div
           className={baseStyles({
             accountSize: size,
             rounded: size,
-            className: 'bg-customisation-50',
+            background: bgOpacity,
           })}
         >
-          <div className="size-full flex select-none items-center justify-center bg-customisation-50 text-white-100/70">
+          <div className="size-full flex select-none items-center justify-center text-white-100/70">
             {props.emoji}
           </div>
         </div>
@@ -208,5 +209,16 @@ const baseStyles = cva({
       '20': 'p-0',
       '16': 'p-0',
     },
+    background: {
+      '0': 'bg-customisation-50',
+      '5': 'bg-customisation-50/5',
+      '10': 'bg-customisation-50/10',
+      '20': 'bg-customisation-50/20',
+      '30': 'bg-customisation-50/30',
+      '40': 'bg-customisation-50/40',
+    },
+  },
+  defaultVariants: {
+    background: '0',
   },
 })

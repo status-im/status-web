@@ -85,6 +85,8 @@ const meta = {
       {renderVariant('icon')({ ...props, icon: <PlaceholderIcon /> })}
       <h1 className="text-19">Account Avatar</h1>
       {renderVariant('account')({ ...props, emoji: '🍿' })}
+      <h1 className="text-19">Account Avatar with Opacity</h1>
+      {renderVariant('account')({ ...props, emoji: '🍿', bgOpacity: '10' })}
     </div>
   ),
 } satisfies Meta<typeof Avatar>
