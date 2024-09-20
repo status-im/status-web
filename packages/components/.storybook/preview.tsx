@@ -23,9 +23,9 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
-      document.body.classList.toggle(
-        'dark',
-        context.parameters.backgrounds?.default === 'dark'
+      document.documentElement.setAttribute(
+        'data-theme',
+        context.parameters.backgrounds?.default === 'dark' ? 'dark' : 'light',
       )
 
       return <Story />

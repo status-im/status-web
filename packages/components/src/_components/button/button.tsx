@@ -17,7 +17,7 @@ type Props = {
   onPress?: () => void
 } & (
   | {
-      children: string | React.ReactElement
+      children: React.ReactNode
       iconBefore?: IconElement
       iconAfter?: IconElement
     }
@@ -40,7 +40,7 @@ function Button(
   props: Props & (ButtonProps | LinkProps),
   ref: React.Ref<HTMLButtonElement | HTMLAnchorElement>,
 ) {
-  const { size = '40', variant = 'primary', ...rest } = props
+  const { size = '40', variant = 'primary', onPress: onClick, ...rest } = props
 
   const { link } = useConfig()
 
@@ -50,12 +50,13 @@ function Button(
     const { icon: Icon, ...buttonProps } = rest
     return (
       <Element
+        onClick={onClick}
         {...buttonProps}
         ref={ref}
         className={styles({ variant, size, iconOnly: true })}
       >
         {cloneElement(Icon, {
-          className: iconStyles({ size, variant }),
+          className: iconStyles({ size, variant, iconOnly: true }),
         })}
       </Element>
     )
@@ -64,7 +65,12 @@ function Button(
   const { children, iconBefore, iconAfter, ...buttonProps } = rest
 
   return (
-    <Element {...buttonProps} ref={ref} className={styles({ variant, size })}>
+    <Element
+      onClick={onClick}
+      {...buttonProps}
+      ref={ref}
+      className={styles({ variant, size })}
+    >
       {iconBefore && (
         <span className={iconStyles({ size, placement: 'before', variant })}>
           {iconBefore}
@@ -92,7 +98,8 @@ const styles = cva({
         'bg-customisation-50 text-white-100 hover:bg-customisation-60 pressed:bg-customisation-60/90',
         'dark:bg-customisation-60 dark:hover:bg-customisation-50 dark:pressed:bg-customisation-50/90',
 
-        'blured:bg-danger-50 blured:dark:hover:bg-blur-white/70',
+        // 'blurefdd:bg-danger-50',
+        // 'blured:bg-danger-50 blured:dark:hover:bg-blur-white/70',
         // 'disabled:bg-customisation-50/30',
         // 'blurry:bg-danger-50 dark:blurry:bg-default-customisation-army-50',
       ],
@@ -110,7 +117,10 @@ const styles = cva({
       ],
       outline: [
         'border border-neutral-30 text-neutral-100 hover:border-neutral-40 focus-visible:ring-neutral-80 pressed:border-neutral-50',
-        'focus-visible:ring-neutral-80 dark:border-neutral-70 dark:text-white-100 dark:hover:border-neutral-60 dark:pressed:border-neutral-50',
+        'blur:border-neutral-80/10 blur:hover:border-neutral-80/20',
+        // dark
+        'dark:border-neutral-70 dark:text-white-100 dark:hover:border-neutral-60 dark:focus-visible:ring-neutral-80 dark:pressed:border-neutral-50',
+        'blur:dark:border-white-10 blur:dark:hover:border-white-20',
       ],
       ghost: [
         'text-neutral-100 hover:bg-neutral-10 pressed:bg-neutral-20',
@@ -136,13 +146,21 @@ const iconStyles = cva({
   base: ['shrink-0', '[&>svg]:size-full'],
   variants: {
     variant: {
-      primary: 'text-blur-white/70',
-      positive: 'text-blur-white/70',
-      grey: 'text-neutral-50',
-      darkGrey: 'text-neutral-50',
-      outline: 'text-neutral-50',
-      ghost: 'text-neutral-50',
-      danger: 'text-blur-white/70',
+      primary: ['text-blur-white/70'],
+      positive: ['text-blur-white/70'],
+      grey: ['text-neutral-50'],
+      darkGrey: [
+        'text-neutral-50',
+        'dark:text-neutral-40',
+        'blur:dark:text-neutral-80/40',
+      ],
+      outline: [
+        'text-neutral-50',
+        'dark:text-neutral-40',
+        'blur:dark:text-neutral-80/40',
+      ],
+      ghost: ['text-neutral-50'],
+      danger: ['text-blur-white/70'],
     },
     placement: {
       before: '',
@@ -152,6 +170,9 @@ const iconStyles = cva({
       '40': 'size-5',
       '32': 'size-5',
       '24': 'size-3',
+    },
+    iconOnly: {
+      true: '',
     },
   },
   compoundVariants: [
@@ -174,6 +195,11 @@ const iconStyles = cva({
       size: '24',
       placement: 'after',
       className: '-mr-0.5',
+    },
+    {
+      variant: 'outline',
+      iconOnly: true,
+      className: '!text-neutral-100 dark:!text-white-100',
     },
   ],
 })

@@ -62,7 +62,7 @@ const customisation = {
 }
 
 export default {
-  darkMode: 'selector',
+  darkMode: ['selector', '[data-theme="dark"]'],
 
   future: {
     hoverOnlyWhenSupported: true,
@@ -231,7 +231,8 @@ export default {
     // @see: https://github.com/tailwindlabs/tailwindcss/blob/0848e4ca26c0869a90818adb7337b5a463be38d0/src/corePlugins.js#L218
     plugin(({ addVariant }) => {
       const selector = '[data-background="blur"]'
-      addVariant('blurry', `:is(${selector} &)`)
+      // addVariant('blur', `:is(${selector} &)`)
+      addVariant('blur', `&:where(${selector}, ${selector} *)`)
     }),
 
     reactAriaComponentsPlugin,
