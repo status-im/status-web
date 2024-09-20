@@ -17,7 +17,7 @@ type Props = {
   onPress?: () => void
 } & (
   | {
-      children: React.ReactNode
+      children: string | React.ReactElement
       iconBefore?: IconElement
       iconAfter?: IconElement
     }

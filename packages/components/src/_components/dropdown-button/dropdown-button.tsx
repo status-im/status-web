@@ -5,7 +5,10 @@ import { cva } from 'cva'
 
 import { Button } from '../button'
 
-type ButtonProps = React.ComponentPropsWithoutRef<typeof Button>
+type ButtonProps = Extract<
+  React.ComponentPropsWithoutRef<typeof Button>,
+  { children: string | React.ReactElement }
+>
 
 type Props = ButtonProps & {
   variant?: Extract<
@@ -13,7 +16,6 @@ type Props = ButtonProps & {
     'primary' | 'grey' | 'outline' | 'ghost'
   >
   iconAfter?: never
-  children: React.ReactNode
 }
 
 const DropdownButton = (props: Props, ref: React.Ref<HTMLButtonElement>) => {
