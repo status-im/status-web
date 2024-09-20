@@ -1,49 +1,63 @@
 'use client'
 
+import { forwardRef } from 'react'
+
+import * as Checkbox from '@radix-ui/react-checkbox'
 import { cva } from 'cva'
-import * as Aria from 'react-aria-components'
 
 import type { VariantProps } from 'cva'
 
-type Variants = VariantProps<typeof checkStyles>
+type Variants = VariantProps<typeof styles>
 
-type Props = Aria.CheckboxProps & {
+type Props = Omit<Checkbox.CheckboxProps, 'checked' | 'onCheckedChange'> & {
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
   variant?: Variants['variant']
 }
 
-const Checkbox = (props: Props) => {
-  const { variant = 'outline', ...ariaProps } = props
+const Root = forwardRef<React.ElementRef<typeof Checkbox.Root>, Props>(
+  (props, ref) => {
+    const { variant = 'outline', ...checkboxProps } = props
 
-  return (
-    <Aria.Checkbox {...ariaProps} className={checkStyles({ variant })}>
-      <svg
-        width="10"
-        height="9"
-        viewBox="0 0 10 9"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="hidden group-selected:block"
-        aria-hidden
-        focusable="false"
+    return (
+      <Checkbox.Root
+        {...checkboxProps}
+        ref={ref}
+        className={styles({ variant })}
       >
-        <path
-          d="M1 4.6L3.66667 7L9 1"
-          stroke="currentColor"
-          strokeWidth="1.5"
-        />
-      </svg>
-    </Aria.Checkbox>
-  )
-}
+        <Checkbox.Indicator>
+          <svg
+            width="10"
+            height="9"
+            viewBox="0 0 10 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="hidden group-aria-checked:block"
+            aria-hidden
+            focusable="false"
+          >
+            <path
+              d="M1 4.6L3.66667 7L9 1"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </Checkbox.Indicator>
+      </Checkbox.Root>
+    )
+  },
+)
 
-const checkStyles = cva({
+Root.displayName = Checkbox.Root.displayName
+
+const styles = cva({
   base: [
     'group inline-flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded-6 text-white-100 transition-colors',
     'border border-neutral-20 hover:border-neutral-30',
-    'selected:border-customisation-50 selected:bg-customisation-50 selected:hover:bg-customisation-60',
+    'aria-checked:border-customisation-50 aria-checked:bg-customisation-50 aria-checked:hover:border-customisation-60 aria-checked:hover:bg-customisation-60',
     'focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
     // dark
-    'dark:border-neutral-80 dark:hover:border-neutral-60 dark:selected:hover:bg-customisation-50',
+    'dark:border-neutral-80 dark:hover:border-neutral-60 dark:aria-checked:hover:bg-customisation-50',
     'dark:focus-visible:ring-offset-neutral-95',
   ],
   variants: {
@@ -57,5 +71,5 @@ const checkStyles = cva({
   },
 })
 
-export { Checkbox }
+export { Root as Checkbox }
 export type { Props as CheckboxProps }

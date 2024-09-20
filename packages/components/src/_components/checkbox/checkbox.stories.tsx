@@ -2,6 +2,15 @@ import { Checkbox } from './checkbox'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
+const Variant = (props: React.ComponentProps<typeof Checkbox>) => {
+  return (
+    <div className="flex gap-3">
+      <Checkbox {...props} />
+      <Checkbox {...props} defaultChecked />
+    </div>
+  )
+}
+
 const meta: Meta<typeof Checkbox> = {
   title: 'Components/Checkbox',
   component: Checkbox,
@@ -18,15 +27,8 @@ const meta: Meta<typeof Checkbox> = {
   render: props => {
     return (
       <div className="grid gap-3">
-        <div className="flex gap-3">
-          <Checkbox {...props} variant="outline" />
-          <Checkbox {...props} isSelected variant="outline" />
-        </div>
-
-        <div className="flex gap-3">
-          <Checkbox {...props} variant="filled"></Checkbox>
-          <Checkbox {...props} isSelected variant="filled"></Checkbox>
-        </div>
+        <Variant {...props} variant="outline" />
+        <Variant {...props} variant="filled" />
       </div>
     )
   },
