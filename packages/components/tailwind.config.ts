@@ -171,7 +171,62 @@ export default {
   //   },
 
   plugins: [
-    plugin(({ addUtilities }) => {
+    plugin(({ addUtilities, addBase }) => {
+      addBase({
+        '[data-customisation="army"]': {
+          '--customisation-50': customisation.army['50'],
+          '--customisation-60': customisation.army['60'],
+        },
+        '[data-customisation="blue"]': {
+          '--customisation-50': customisation.blue['50'],
+          '--customisation-60': customisation.blue['60'],
+        },
+        '[data-customisation="camel"]': {
+          '--customisation-50': customisation.camel['50'],
+          '--customisation-60': customisation.camel['60'],
+        },
+        '[data-customisation="copper"]': {
+          '--customisation-50': customisation.copper['50'],
+          '--customisation-60': customisation.copper['60'],
+        },
+        '[data-customisation="magenta"]': {
+          '--customisation-50': customisation.magenta['50'],
+          '--customisation-60': customisation.magenta['60'],
+        },
+        '[data-customisation="orange"]': {
+          '--customisation-50': customisation.orange['50'],
+          '--customisation-60': customisation.orange['60'],
+        },
+        '[data-customisation="pink"]': {
+          '--customisation-50': customisation.pink['50'],
+          '--customisation-60': customisation.pink['60'],
+        },
+        '[data-customisation="purple"]': {
+          '--customisation-50': customisation.purple['50'],
+          '--customisation-60': customisation.purple['60'],
+        },
+        '[data-customisation="sky"]': {
+          '--customisation-50': customisation.sky['50'],
+          '--customisation-60': customisation.sky['60'],
+        },
+        '[data-customisation="turquoise"]': {
+          '--customisation-50': customisation.turquoise['50'],
+          '--customisation-60': customisation.turquoise['60'],
+        },
+        '[data-customisation="yang"]': {
+          '--customisation-50': customisation.yang['50'],
+          '--customisation-60': customisation.yang['60'],
+        },
+        '[data-customisation="yellow"]': {
+          '--customisation-50': customisation.yellow['50'],
+          '--customisation-60': customisation.yellow['60'],
+        },
+        '[data-customisation="yin"]': {
+          '--customisation-50': customisation.yin['50'],
+          '--customisation-60': customisation.yin['60'],
+        },
+      })
+
       addUtilities({
         '.theme-army': {
           '--customisation-50': customisation.army['50'],
