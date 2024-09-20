@@ -69,7 +69,7 @@ const itemStyles = cva({
   base: [
     'flex h-8 cursor-pointer select-none items-center gap-2 rounded-8 px-2 text-15 transition-colors active:bg-neutral-10',
     'outline-none data-[highlighted]:bg-neutral-5',
-    'dark:hover:bg-customisation-blue/5 dark:active:bg-customisation-blue/10',
+    'dark:active:bg-customisation-50/10 dark:hover:bg-customisation-50/5',
   ],
 })
 

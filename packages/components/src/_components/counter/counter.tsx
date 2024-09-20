@@ -38,7 +38,7 @@ const styles = cva({
       ],
       outline: [
         'border border-neutral-20 bg-transparent text-neutral-100',
-        'dark:border-neutral-80 dark:text-white-80',
+        'dark:border-neutral-80 dark:text-white-100',
       ],
     },
   },
