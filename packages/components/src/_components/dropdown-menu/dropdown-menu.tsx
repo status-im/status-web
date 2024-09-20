@@ -91,7 +91,7 @@ const iconStyles = cva({
 })
 
 const labelStyles = cva({
-  base: ['font-medium'],
+  base: ['flex-1 font-medium'],
   variants: {
     danger: {
       false: ['text-neutral-100 dark:text-white-100'],
@@ -124,8 +124,8 @@ export const Item = forwardRef<
         <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
       )}
       <span className={labelStyles({ danger })}>{label}</span>
-      {selected && <CheckIcon className="ml-auto text-customisation-50" />}
-      {external && <ExternalIcon className="ml-auto text-neutral-50" />}
+      {selected && <CheckIcon className="text-customisation-50" />}
+      {external && <ExternalIcon className="text-neutral-50" />}
     </DropdownMenu.Item>
   )
 })
@@ -158,9 +158,14 @@ export const CheckboxItem = forwardRef<
         <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
       )}
       <span className={labelStyles({ danger })}>{label}</span>
-      <div className="ml-auto">
-        <Checkbox id={id} variant="outline" isSelected={itemProps.checked} />
-      </div>
+      <Checkbox
+        id={id}
+        variant="outline"
+        checked={itemProps.checked}
+        onCheckedChange={() => {
+          // handle by parent
+        }}
+      />
     </DropdownMenu.CheckboxItem>
   )
 })
@@ -190,7 +195,7 @@ export const SubTrigger = (props: DropdownMenuSubTriggerProps) => {
         <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
       )}
       <span className={labelStyles({ danger })}>{label}</span>
-      <ArrowRightIcon className="ml-auto text-neutral-50" />
+      <ArrowRightIcon className="text-neutral-50" />
     </DropdownMenu.SubTrigger>
   )
 }
