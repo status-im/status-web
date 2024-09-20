@@ -7,7 +7,7 @@ import { Button } from '../button'
 
 type ButtonProps = Extract<
   React.ComponentPropsWithoutRef<typeof Button>,
-  { children: string | React.ReactElement }
+  { children: React.ReactNode }
 >
 
 type Props = ButtonProps & {
