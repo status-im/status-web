@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import {
+  AlphabeticallyIcon,
   CopyIcon,
   DeleteIcon,
   EditIcon,
@@ -9,6 +10,8 @@ import {
   NotificationsIcon,
   PinIcon,
   ReplyIcon,
+  ZoomInIcon,
+  ZoomOutIcon,
 } from '@status-im/icons/20'
 import { action } from '@storybook/addon-actions'
 
@@ -64,6 +67,27 @@ const meta: Meta = {
             label="Forward"
             onSelect={action('forward')}
           />
+          <DropdownMenu.Sub>
+            <DropdownMenu.SubTrigger
+              icon={<AlphabeticallyIcon />}
+              label="Sub menu"
+            />
+
+            <DropdownMenu.SubContent>
+              <DropdownMenu.Item
+                icon={<ZoomInIcon />}
+                label="Zoom In"
+                onSelect={action('zoom in')}
+                external
+              />
+              <DropdownMenu.Item
+                icon={<ZoomOutIcon />}
+                label="Zoom Out"
+                onSelect={action('zoom out')}
+                external
+              />
+            </DropdownMenu.SubContent>
+          </DropdownMenu.Sub>
           <DropdownMenu.Item
             icon={<LinkIcon />}
             label="Share link to message"

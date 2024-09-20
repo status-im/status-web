@@ -1,8 +1,12 @@
 import { cloneElement, forwardRef, useId } from 'react'
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
-// import { Checkbox, Input } from '@status-im/components'
-import { CheckIcon, SearchIcon } from '@status-im/icons/20'
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  ExternalIcon,
+  SearchIcon,
+} from '@status-im/icons/20'
 import { cva, cx } from 'cva'
 
 import { Checkbox } from '../checkbox'
@@ -105,13 +109,14 @@ type DropdownMenuItemProps = DropdownMenu.DropdownMenuItemProps & {
   onSelect: () => void
   selected?: boolean
   danger?: boolean
+  external?: boolean
 }
 
 export const Item = forwardRef<
   React.ElementRef<typeof DropdownMenu.Item>,
   DropdownMenuItemProps
 >((props, ref) => {
-  const { icon, label, selected, danger, ...itemProps } = props
+  const { icon, label, selected, danger, external, ...itemProps } = props
 
   return (
     <DropdownMenu.Item {...itemProps} ref={ref} className={itemStyles()}>
@@ -120,6 +125,7 @@ export const Item = forwardRef<
       )}
       <span className={labelStyles({ danger })}>{label}</span>
       {selected && <CheckIcon className="ml-auto text-customisation-50" />}
+      {external && <ExternalIcon className="ml-auto text-neutral-50" />}
     </DropdownMenu.Item>
   )
 })
@@ -164,3 +170,49 @@ CheckboxItem.displayName = DropdownMenu.CheckboxItem.displayName
 export const Separator = () => (
   <DropdownMenu.Separator className="-mx-1 my-1.5 h-px bg-neutral-20 dark:bg-neutral-80" />
 )
+
+export const Sub = (props: DropdownMenu.DropdownMenuProps) => {
+  return <DropdownMenu.Sub {...props} />
+}
+
+type DropdownMenuSubTriggerProps = DropdownMenu.DropdownMenuSubTriggerProps & {
+  icon?: IconElement
+  label: string
+  danger?: boolean
+}
+
+export const SubTrigger = (props: DropdownMenuSubTriggerProps) => {
+  const { icon, label, danger, ...itemProps } = props
+
+  return (
+    <DropdownMenu.SubTrigger {...itemProps} className={itemStyles()}>
+      {icon && (
+        <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
+      )}
+      <span className={labelStyles({ danger })}>{label}</span>
+      <ArrowRightIcon className="ml-auto text-neutral-50" />
+    </DropdownMenu.SubTrigger>
+  )
+}
+
+export const SubContent = forwardRef<
+  React.ElementRef<typeof DropdownMenu.SubContent>,
+  DropdownMenu.DropdownMenuSubContentProps
+>((props, ref) => {
+  return (
+    <DropdownMenu.Portal>
+      <DropdownMenu.SubContent
+        ref={ref}
+        className={cx(
+          'w-64 rounded-12 border border-neutral-10 bg-white-100 p-1 shadow-3',
+          'dark:border-neutral-90 dark:bg-neutral-95',
+        )}
+        {...props}
+      >
+        {props.children}
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Portal>
+  )
+})
+
+SubContent.displayName = DropdownMenu.SubContent.displayName
