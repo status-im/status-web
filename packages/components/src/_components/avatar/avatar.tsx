@@ -24,7 +24,7 @@ type ChannelAvatarProps = {
 
 type CommunityAvatarProps = {
   type: 'community'
-  size: '32' | '24' | '20'
+  size: '80' | '32' | '24' | '20'
   name: string
   src?: string
 }
