@@ -62,7 +62,7 @@ const customisation = {
 }
 
 export default {
-  darkMode: 'class',
+  darkMode: 'selector',
 
   future: {
     hoverOnlyWhenSupported: true,
@@ -151,6 +151,16 @@ export default {
       16: '16px',
       20: '20px',
       full: '9999px',
+    },
+
+    keyframes: {
+      skeleton: {
+        '0%, 100%': { backgroundPosition: '0% 50%' },
+        '50%': { backgroundPosition: '100% 50%' },
+      },
+    },
+    animation: {
+      skeleton: 'skeleton 1.5s ease infinite',
     },
   },
 
