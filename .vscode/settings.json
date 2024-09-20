@@ -1,6 +1,5 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "eslint.packageManager": "yarn",
   "npm.packageManager": "yarn",
   "eslint.workingDirectories": [
     {
