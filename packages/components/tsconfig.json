@@ -8,8 +8,7 @@
   ],
   "compilerOptions": {
     "jsx": "preserve",
-    "outDir": "./dist",
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo"
+    "outDir": "./dist"
   },
   "references": []
 }
