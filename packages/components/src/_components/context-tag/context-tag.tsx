@@ -38,7 +38,7 @@ const baseStyles = cva({
   base: [
     'inline-flex w-fit cursor-default items-center rounded-full',
     'font-medium text-neutral-100 dark:text-white-100',
-    'bg-neutral-10 blurry:bg-neutral-80/5 dark:bg-neutral-90 dark:blurry:bg-white-5',
+    'bg-neutral-10 blur:bg-neutral-80/5 dark:bg-neutral-90 blur:dark:bg-white-5',
   ],
   variants: {
     size: {
