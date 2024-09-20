@@ -10,6 +10,9 @@ import {
 
 import * as Tabs from '@radix-ui/react-tabs'
 import { cva, cx } from 'cva'
+import { match, P } from 'ts-pattern'
+
+import { Step } from '../step'
 
 import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
@@ -53,23 +56,41 @@ export const List = forwardRef<
 List.displayName = Tabs.List.displayName
 
 type TabProps = React.ComponentProps<typeof Tabs.Trigger> & {
-  icon?: IconElement
   children: React.ReactNode
-}
+} & (
+    | {
+        icon?: IconElement
+        step?: never
+      }
+    | {
+        step?: number
+        icon?: never
+      }
+  )
 
 export const Trigger = forwardRef<
   React.ElementRef<typeof Tabs.Trigger>,
   TabProps
 >((props, ref) => {
-  const { icon, children, ...rest } = props
+  const { children, ...rest } = props
 
   const { size, variant } = useContext(TabsContext)!
 
   return (
     <Tabs.Trigger {...rest} ref={ref} className={tabStyles({ variant, size })}>
-      {icon && (
+      {match(props)
+        .with({ icon: P.nonNullable }, ({ icon }) => (
+          <span className={iconStyles({ size })}>{cloneElement(icon)}</span>
+        ))
+        .with({ step: P.nonNullable }, ({ step }) => (
+          <span className={stepStyles({ size })}>
+            <Step size={18} variant="primary" value={step} />
+          </span>
+        ))
+        .otherwise(() => null)}
+      {/* {icon && (
         <span className={iconStyles({ size })}>{cloneElement(icon)}</span>
-      )}
+      )} */}
       <span className="flex-1 whitespace-nowrap">{children}</span>
     </Tabs.Trigger>
   )
@@ -78,7 +99,10 @@ export const Trigger = forwardRef<
 Trigger.displayName = Tabs.Trigger.displayName
 
 const tabStyles = cva({
-  base: ['group inline-flex items-center gap-1 whitespace-nowrap'],
+  base: [
+    'group inline-flex items-center gap-1 whitespace-nowrap',
+    'disabled:pointer-events-none disabled:opacity-30',
+  ],
   variants: {
     variant: {
       grey: [
@@ -132,6 +156,16 @@ const iconStyles = cva({
     size: {
       '32': '-ml-0.5 size-4',
       '24': 'size-3',
+    },
+  },
+})
+
+const stepStyles = cva({
+  base: 'inline-flex',
+  variants: {
+    size: {
+      '32': '-ml-1.5',
+      '24': '-ml-1',
     },
   },
 })

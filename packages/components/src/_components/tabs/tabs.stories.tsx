@@ -17,8 +17,13 @@ const TabsVariant = (
         <Tabs.Trigger value="FoR" icon={<PlaceholderIcon />}>
           Founding of Rome
         </Tabs.Trigger>
-        <Tabs.Trigger value="MaR">Monarchy and Republic</Tabs.Trigger>
+        <Tabs.Trigger value="MaR" step={1}>
+          Monarchy and Republic
+        </Tabs.Trigger>
         <Tabs.Trigger value="Emp">Empire</Tabs.Trigger>
+        <Tabs.Trigger value="disabled" disabled>
+          Disabled
+        </Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="FoR">
         Arma virumque cano, Troiae qui primus ab oris.
