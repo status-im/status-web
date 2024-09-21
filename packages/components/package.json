@@ -10,14 +10,14 @@
   "source": "./src/index.tsx",
   "exports": {
     ".": {
+      "types": "./dist/src/index.d.ts",
       "import": "./dist/src/index.es.js",
-      "require": "./dist/src/index.cjs.js",
-      "types": "./dist/src/index.d.ts"
+      "require": "./dist/src/index.cjs.js"
     },
-    "./tailwind-preset": {
+    "./tailwind-base": {
+      "types": "./dist/tailwind.config.d.ts",
       "import": "./dist/tailwind.config.es.js",
-      "require": "./dist/tailwind.config.cjs.js",
-      "types": "./dist/tailwind.config.d.ts"
+      "require": "./dist/tailwind.config.cjs.js"
     }
   },
   "files": [
@@ -27,14 +27,14 @@
     "dev": "vite build --watch --mode development",
     "build": "vite build",
     "postbuild": "yarn build:types",
-    "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
     "lint": "eslint src",
     "format": "prettier --write .",
     "storybook": "node ./scripts/storybook.js",
     "storybook:dev": "storybook dev -p 3001",
     "storybook:build": "storybook build",
-    "clean": "rimraf node_modules dist .turbo storybook-static .tamagui",
+    "clean": "rimraf node_modules dist .turbo storybook-static",
     "prepack": "yarn build"
   },
   "peerDependencies": {

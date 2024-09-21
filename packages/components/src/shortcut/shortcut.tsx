@@ -42,7 +42,7 @@ type Props = VariantProps<typeof styles> &
   )
 
 const Shortcut = (props: Props, ref: React.Ref<HTMLDivElement>) => {
-  const { variant = 'primary', icon, symbol, ...rest } = props
+  const { variant = 'primary', ...rest } = props
 
   return (
     <div className={styles({ variant })} ref={ref} {...rest}>

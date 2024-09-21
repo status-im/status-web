@@ -21,9 +21,6 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
-    "web": "yarn workspace web dev",
-    "mobile": "yarn workspace mobile dev",
-    "desktop": "yarn workspace desktop dev",
     "storybook": "yarn workspace @status-im/components storybook"
   },
   "resolutions": {

@@ -62,7 +62,7 @@ const nodeIds = styles
 
 const { nodes } = (await figma.getFileNodes(
   FILE_KEY,
-  nodeIds
+  nodeIds,
 )) as GetFileNodesResult<'FRAME'>
 s2.stop('Done!')
 
@@ -116,7 +116,7 @@ fs.writeFileSync(
   Object.keys(colors)
     .map(key => `export { ${key} } from './${key}'`)
     .join('\n'),
-  { encoding: 'utf-8' }
+  { encoding: 'utf-8' },
 )
 
 s3.stop('Done!')

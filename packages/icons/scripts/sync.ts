@@ -2,7 +2,6 @@ import { isCancel, log, outro, spinner, text } from '@clack/prompts'
 import { transform } from '@svgr/core'
 import * as Figma from 'figma-api'
 import fs from 'fs-extra'
-import fetch from 'node-fetch'
 import pMap from 'p-map'
 import path from 'path'
 
@@ -180,7 +179,7 @@ for (const [nodeId, { name, folder }] of Object.entries(NODE_IDS)) {
 
       // log.success(filePath)
     },
-    { concurrency: 5 }
+    { concurrency: 5 },
   )
 
   log.success(`${Object.keys(images).length} SVGs generated`)
