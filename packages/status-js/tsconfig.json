@@ -3,6 +3,10 @@
   "include": ["src"],
   "compilerOptions": {
     "outDir": "./dist",
-    "declarationDir": "./dist/types"
+    "declarationDir": "./dist/types",
+
+    // todo: turn on?
+    "noImplicitReturns": false,
+    "noPropertyAccessFromIndexSignature": false
   }
 }

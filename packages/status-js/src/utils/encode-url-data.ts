@@ -20,7 +20,7 @@ const communitySchema = z.object({
 })
 
 export function encodeCommunityURLData(
-  data: PlainMessage<Community>
+  data: PlainMessage<Community>,
 ): EncodedURLData {
   return encodeURLData(new Community(data).toBinary()) as EncodedURLData
 }
@@ -45,7 +45,7 @@ const channelSchema = z.object({
 })
 
 export function encodeChannelURLData(
-  data: PlainMessage<Channel>
+  data: PlainMessage<Channel>,
 ): EncodedURLData {
   return encodeURLData(new Channel(data).toBinary()) as EncodedURLData
 }
@@ -82,7 +82,7 @@ function encodeURLData(data: Uint8Array): string {
     content: data,
   }).toBinary()
   const compressed = brotliCompressSync(serialized)
-  const encoded = base64url.encode(compressed)
+  const encoded = base64url.encode(compressed as unknown as Uint8Array)
 
   return encoded
 }
@@ -95,7 +95,7 @@ function decodeURLData(data: string): URLData {
 
   const decoded = base64url.decode(data)
   const decompressed = brotliDecompressSync(decoded)
-  const deserialized = URLData.fromBinary(decompressed)
+  const deserialized = URLData.fromBinary(decompressed as unknown as Uint8Array)
 
   return deserialized
 }
