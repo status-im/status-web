@@ -47,7 +47,7 @@ function Button(
   const Element = props.href ? link : 'button'
 
   if ('icon' in rest) {
-    const { icon: Icon, ...buttonProps } = rest
+    const { icon, ...buttonProps } = rest
     return (
       <Element
         onClick={onClick}
@@ -55,7 +55,7 @@ function Button(
         ref={ref}
         className={styles({ variant, size, iconOnly: true })}
       >
-        {cloneElement(Icon, {
+        {cloneElement(icon, {
           className: iconStyles({ size, variant, iconOnly: true }),
         })}
       </Element>
@@ -88,7 +88,7 @@ function Button(
 
 const styles = cva({
   base: [
-    'inline-flex shrink-0 cursor-pointer items-center justify-center gap-1 font-medium transition-all',
+    'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-1 font-medium transition-all',
     'outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-100',
     'disabled:pointer-events-none disabled:cursor-default disabled:opacity-30',
   ],
