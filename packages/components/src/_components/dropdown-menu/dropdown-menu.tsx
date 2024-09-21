@@ -7,18 +7,22 @@ import {
   ExternalIcon,
   SearchIcon,
 } from '@status-im/icons/20'
-import { cva, cx } from 'cva'
+import { cva } from 'cva'
 
 import { Checkbox } from '../checkbox'
 import { Input } from '../input'
 
 import type { IconElement } from '../types'
 
-type Props = DropdownMenu.DropdownMenuProps & {
+/**
+ * Root
+ */
+
+type RootProps = DropdownMenu.DropdownMenuProps & {
   children: [React.ReactElement, React.ReactElement]
 }
 
-export const Root = (props: Props) => {
+export const Root = (props: RootProps) => {
   const { children, ...rootProps } = props
 
   const [trigger, content] = children
@@ -30,6 +34,18 @@ export const Root = (props: Props) => {
     </DropdownMenu.Root>
   )
 }
+
+/**
+ * Content
+ */
+
+const contentStyles = cva({
+  base: [
+    'rounded-12 border border-neutral-10 bg-white-100 p-1 shadow-3',
+    'max-h-[var(--radix-dropdown-menu-content-available-height)] w-[var(--radix-dropdown-menu-trigger-width)] overflow-auto',
+    'dark:border-neutral-90 dark:bg-neutral-95',
+  ],
+})
 
 export const Content = forwardRef<
   React.ElementRef<typeof DropdownMenu.Content>,
@@ -49,11 +65,7 @@ export const Content = forwardRef<
         side={side}
         sideOffset={sideOffset}
         {...contentProps}
-        className={cx(
-          'w-64 rounded-12 border border-neutral-10 bg-white-100 p-1 shadow-3',
-          'dark:border-neutral-90 dark:bg-neutral-95',
-          props.className,
-        )}
+        className={contentStyles({ className: props.className })}
       />
     </DropdownMenu.Portal>
   )
@@ -61,12 +73,40 @@ export const Content = forwardRef<
 
 Content.displayName = DropdownMenu.Content.displayName
 
-export const Search = (props: React.ComponentPropsWithoutRef<typeof Input>) => {
+/**
+ * Search
+ */
+
+export const Search = forwardRef<
+  React.ElementRef<typeof Input>,
+  React.ComponentPropsWithoutRef<typeof Input>
+>((props, ref) => {
   return (
     <div className="mb-1 p-1">
-      <Input {...props} size="32" icon={<SearchIcon />} aria-label="Search" />
+      <Input
+        {...props}
+        ref={ref}
+        size="32"
+        icon={<SearchIcon />}
+        aria-label="Search"
+      />
     </div>
   )
+})
+
+Search.displayName = 'Search'
+
+/**
+ * Item
+ */
+
+type ItemProps = DropdownMenu.DropdownMenuItemProps & {
+  icon?: IconElement
+  label: string
+  onSelect: () => void
+  selected?: boolean
+  danger?: boolean
+  external?: boolean
 }
 
 const itemStyles = cva({
@@ -103,18 +143,9 @@ const labelStyles = cva({
   },
 })
 
-type DropdownMenuItemProps = DropdownMenu.DropdownMenuItemProps & {
-  icon?: IconElement
-  label: string
-  onSelect: () => void
-  selected?: boolean
-  danger?: boolean
-  external?: boolean
-}
-
 export const Item = forwardRef<
   React.ElementRef<typeof DropdownMenu.Item>,
-  DropdownMenuItemProps
+  ItemProps
 >((props, ref) => {
   const { icon, label, selected, danger, external, ...itemProps } = props
 
@@ -131,6 +162,10 @@ export const Item = forwardRef<
 })
 
 Item.displayName = DropdownMenu.Item.displayName
+
+/**
+ * CheckboxItem
+ */
 
 type CheckboxItemProps = DropdownMenu.DropdownMenuCheckboxItemProps & {
   icon?: IconElement
@@ -172,21 +207,27 @@ export const CheckboxItem = forwardRef<
 
 CheckboxItem.displayName = DropdownMenu.CheckboxItem.displayName
 
+/**
+ * Separator
+ */
 export const Separator = () => (
   <DropdownMenu.Separator className="-mx-1 my-1.5 h-px bg-neutral-20 dark:bg-neutral-80" />
 )
 
+/**
+ * Submenu
+ */
 export const Sub = (props: DropdownMenu.DropdownMenuProps) => {
   return <DropdownMenu.Sub {...props} />
 }
 
-type DropdownMenuSubTriggerProps = DropdownMenu.DropdownMenuSubTriggerProps & {
+type SubTriggerProps = DropdownMenu.DropdownMenuSubTriggerProps & {
   icon?: IconElement
   label: string
   danger?: boolean
 }
 
-export const SubTrigger = (props: DropdownMenuSubTriggerProps) => {
+export const SubTrigger = (props: SubTriggerProps) => {
   const { icon, label, danger, ...itemProps } = props
 
   return (
@@ -207,12 +248,9 @@ export const SubContent = forwardRef<
   return (
     <DropdownMenu.Portal>
       <DropdownMenu.SubContent
-        ref={ref}
-        className={cx(
-          'w-64 rounded-12 border border-neutral-10 bg-white-100 p-1 shadow-3',
-          'dark:border-neutral-90 dark:bg-neutral-95',
-        )}
         {...props}
+        ref={ref}
+        className={contentStyles({ className: props.className })}
       >
         {props.children}
       </DropdownMenu.SubContent>
