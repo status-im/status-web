@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { PlaceholderIcon } from '@status-im/icons/20'
 
-import { Tabs } from './'
+import { Tabs } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 

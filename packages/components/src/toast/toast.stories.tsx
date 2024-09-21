@@ -1,7 +1,7 @@
 import { PlaceholderIcon } from '@status-im/icons/20'
 
 import { Button } from '../button'
-import { Toast, ToastContainer, useToast } from './'
+import { Toast, ToastContainer, useToast } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 

@@ -1,6 +1,6 @@
 import { PlaceholderIcon } from '@status-im/icons/20'
 
-import { ContextTag } from './'
+import { ContextTag } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 

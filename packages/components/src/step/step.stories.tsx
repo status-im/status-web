@@ -1,4 +1,4 @@
-import { Step } from './'
+import { Step } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 

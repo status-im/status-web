@@ -16,7 +16,7 @@ import {
 import { action } from '@storybook/addon-actions'
 
 import { DropdownButton } from '../dropdown-button'
-import { DropdownMenu } from './'
+import { DropdownMenu } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 

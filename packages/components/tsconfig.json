@@ -1,11 +1,6 @@
 {
   "extends": "../../tsconfig.base",
-  "include": [
-    "src/index.tsx",
-    "src/_components",
-    "tailwind.config.ts",
-    ".storybook"
-  ],
+  "include": ["src", "tailwind.config.ts", ".storybook"],
   "compilerOptions": {
     "jsx": "preserve",
     "outDir": "./dist"

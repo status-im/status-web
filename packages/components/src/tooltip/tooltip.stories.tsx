@@ -19,7 +19,7 @@ const meta: Meta<typeof Tooltip> = {
   },
   render: args => (
     <div className="flex flex-wrap gap-4">
-      {(['top', 'right', 'bottom', 'left'] as const).map(side => (
+      {(['left', 'top', 'bottom', 'right'] as const).map(side => (
         <Tooltip key={side} {...args} side={side}>
           <Button variant="primary">{side}</Button>
         </Tooltip>
