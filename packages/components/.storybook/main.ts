@@ -27,7 +27,7 @@ const config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-essentials'),
     getAbsolutePath('@storybook/addon-interactions'),
     getAbsolutePath('@storybook/addon-designs'),
-    getAbsolutePath('storybook-dark-mode'),
+    // getAbsolutePath('storybook-dark-mode'),
   ],
 
   // docs: {
