@@ -148,7 +148,7 @@ const Avatar = (props: Props) => {
             background: bgOpacity,
           })}
         >
-          <div className="flex size-full select-none items-center justify-center text-white-100/70">
+          <div className="flex size-full select-none items-center justify-center text-white-100">
             {props.emoji}
           </div>
         </div>
