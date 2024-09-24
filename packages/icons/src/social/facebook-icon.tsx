@@ -7,10 +7,12 @@ const SvgFacebookIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_4319_1242)">
-      <circle cx={10} cy={10} r={10} fill="#09101C" />
+      <circle cx={10} cy={10} r={10} fill="currentColor" />
       <path
         fill="#fff"
         fillRule="evenodd"

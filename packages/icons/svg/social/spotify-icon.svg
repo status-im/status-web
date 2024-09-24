@@ -11,7 +11,7 @@
     clip-rule="evenodd"
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       d="M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.55 0 10 0Z"
     />
     <path

@@ -7,10 +7,12 @@ const SvgClearBigIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M2.5 10a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0Z"
       clipRule="evenodd"

@@ -7,10 +7,12 @@ const SvgInfoBadgeIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14Zm-.55-8.5-.2 6h1.5l-.2-6h-1.1Zm-.2-2.25a.75.75 0 1 0 1.5 0 .75.75 0 0 0-1.5 0Z"
       clipRule="evenodd"

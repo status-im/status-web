@@ -7,10 +7,12 @@ const SvgChevronsLeftIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m7.326 4.076-3.5 3.5L3.4 8l.425.424 3.5 3.5.848-.848L5.098 8l3.076-3.076-.848-.848Zm4 0-3.5 3.5L7.4 8l.425.424 3.5 3.5.848-.848L9.098 8l3.076-3.076-.848-.848Z"
       clipRule="evenodd"

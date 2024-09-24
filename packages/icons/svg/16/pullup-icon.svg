@@ -11,5 +11,5 @@
     d="M1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0Z"
     clip-rule="evenodd"
   />
-  <path stroke="#09101C" stroke-width="1.2" d="M5.5 9.5 8 7l2.5 2.5" />
+  <path stroke="currentColor" stroke-width="1.2" d="M5.5 9.5 8 7l2.5 2.5" />
 </svg>

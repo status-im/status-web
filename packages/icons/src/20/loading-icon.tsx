@@ -7,9 +7,11 @@ const SvgLoadingIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.2} d="M17 10a7 7 0 1 1-7-7" />
+    <path stroke="currentColor" strokeWidth={1.2} d="M17 10a7 7 0 1 1-7-7" />
     <mask
       id="prefix__mask0_1036_13"
       width={10}
@@ -24,7 +26,7 @@ const SvgLoadingIcon = (props: SVGProps<SVGSVGElement>) => (
       <path fill="url(#prefix__paint0_linear_1036_13)" d="M9 1h10v10H9z" />
     </mask>
     <g mask="url(#prefix__mask0_1036_13)">
-      <path stroke="#09101C" strokeWidth={1.2} d="M10 3a7 7 0 0 1 7 7" />
+      <path stroke="currentColor" strokeWidth={1.2} d="M10 3a7 7 0 0 1 7 7" />
     </g>
     <defs>
       <linearGradient

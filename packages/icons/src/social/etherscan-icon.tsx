@@ -7,6 +7,8 @@ const SvgEtherscanIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <circle cx={10} cy={10} r={10} fill="#fff" />

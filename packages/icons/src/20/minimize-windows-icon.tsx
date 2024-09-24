@@ -7,9 +7,11 @@ const SvgMinimizeWindowsIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.2} d="M4 10h12" />
+    <path stroke="currentColor" strokeWidth={1.2} d="M4 10h12" />
   </svg>
 )
 export default SvgMinimizeWindowsIcon

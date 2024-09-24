@@ -7,10 +7,12 @@ const SvgMoreIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM4.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM8 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm4.5-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"
       clipRule="evenodd"

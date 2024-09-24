@@ -7,10 +7,12 @@ const SvgSwapIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m14.781 5-.32.384-2.5 3-.922-.768L13.22 5l-2.18-2.616.922-.768 2.5 3 .32.384Z"
       clipRule="evenodd"
@@ -33,10 +35,10 @@ const SvgSwapIcon = (props: SVGProps<SVGSVGElement>) => (
       />
     </mask>
     <g mask="url(#prefix__mask0_3221_3539)">
-      <path stroke="#09101C" strokeWidth={1.2} d="M13.5 5h-10" />
+      <path stroke="currentColor" strokeWidth={1.2} d="M13.5 5h-10" />
     </g>
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m1.219 11 .32-.384 2.5-3 .922.768L2.78 11l2.18 2.616-.922.768-2.5-3-.32-.384Z"
       clipRule="evenodd"
@@ -59,7 +61,7 @@ const SvgSwapIcon = (props: SVGProps<SVGSVGElement>) => (
       />
     </mask>
     <g mask="url(#prefix__mask1_3221_3539)">
-      <path stroke="#09101C" strokeWidth={1.2} d="M2.5 11h10" />
+      <path stroke="currentColor" strokeWidth={1.2} d="M2.5 11h10" />
     </g>
     <defs>
       <linearGradient

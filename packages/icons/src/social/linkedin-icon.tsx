@@ -7,11 +7,13 @@ const SvgLinkedinIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_4319_1238)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         d="M10 0c8.667 0 10 1.333 10 10s-1.333 10-10 10S0 18.667 0 10 1.333 0 10 0Z"
       />
       <path

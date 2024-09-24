@@ -7,10 +7,12 @@ const SvgDragIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M4.5 5.4h11v1.2h-11V5.4Zm0 4h11v1.2h-11V9.4Zm11 4h-11v1.2h11v-1.2Z"
       clipRule="evenodd"

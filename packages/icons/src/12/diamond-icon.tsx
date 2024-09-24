@@ -7,10 +7,12 @@ const SvgDiamondIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_3881_971)">
-      <circle cx={6} cy={6} r={6} fill="#2A4AF5" />
+      <circle cx={6} cy={6} r={6} fill="var(--customisation-50, #2A4AF5)" />
       <path
         stroke="#fff"
         strokeWidth={1.1}

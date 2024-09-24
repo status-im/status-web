@@ -7,9 +7,11 @@ const SvgCheckIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.2} d="m4.5 11 4 3.5 7-9.5" />
+    <path stroke="currentColor" strokeWidth={1.2} d="m4.5 11 4 3.5 7-9.5" />
   </svg>
 )
 export default SvgCheckIcon

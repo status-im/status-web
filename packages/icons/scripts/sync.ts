@@ -127,15 +127,30 @@ for (const [nodeId, { name, folder }] of Object.entries(NODE_IDS)) {
 
       const svg = await transform(svgRaw, {
         plugins: ['@svgr/plugin-svgo'],
-        replaceAttrValues: {
-          '#09101C': 'currentColor',
-          '#2A4AF5': 'var(--customisation-50, #2A4AF5)',
-        },
-        svgProps: {
-          'aria-hidden': '{true}',
-        },
         svgoConfig: {
           plugins: [
+            {
+              name: 'replace-attributes',
+              fn: () => {
+                return {
+                  element: {
+                    enter: node => {
+                      if (node.attributes.fill === '#09101C') {
+                        node.attributes.fill = 'currentColor'
+                      } else if (node.attributes.stroke === '#09101C') {
+                        node.attributes.stroke = 'currentColor'
+                      } else if (node.attributes.fill === '#2A4AF5') {
+                        node.attributes.fill =
+                          'var(--customisation-50, #2A4AF5)'
+                      } else if (node.attributes.stroke === '#2A4AF5') {
+                        node.attributes.stroke =
+                          'var(--customisation-50, #2A4AF5)'
+                      }
+                    },
+                  },
+                }
+              },
+            },
             {
               name: 'preset-default',
               params: {
@@ -163,7 +178,7 @@ for (const [nodeId, { name, folder }] of Object.entries(NODE_IDS)) {
 
       await fs.writeFile(filePath, svg, { encoding: 'utf8' })
 
-      log.success(filePath)
+      // log.success(filePath)
     },
     { concurrency: 5 }
   )

@@ -7,10 +7,12 @@ const SvgProgress100Icon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_4019_975)">
-      <circle cx={6} cy={6} r={5.45} stroke="#09101C" strokeWidth={1.1} />
+      <circle cx={6} cy={6} r={5.45} stroke="currentColor" strokeWidth={1.1} />
     </g>
     <defs>
       <clipPath id="prefix__clip0_4019_975">

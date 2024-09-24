@@ -7,10 +7,12 @@ const SvgFlashlightOffIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M11.6 1.903V7.9h5.722l-.87.995-7 8L8.4 18.097V12.1H2.678l.87-.995 7-8L11.6 1.903ZM5.322 10.9H9.6v4.003L14.678 9.1H10.4V5.097L5.322 10.9Z"
       clipRule="evenodd"

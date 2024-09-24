@@ -7,6 +7,8 @@ const SvgDropdownIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
@@ -15,7 +17,7 @@ const SvgDropdownIcon = (props: SVGProps<SVGSVGElement>) => (
       d="M1.5 8a6.5 6.5 0 1 1 13 0 6.5 6.5 0 0 1-13 0Z"
       clipRule="evenodd"
     />
-    <path stroke="#09101C" strokeWidth={1.2} d="M5.5 6.5 8 9l2.5-2.5" />
+    <path stroke="currentColor" strokeWidth={1.2} d="M5.5 6.5 8 9l2.5-2.5" />
   </svg>
 )
 export default SvgDropdownIcon

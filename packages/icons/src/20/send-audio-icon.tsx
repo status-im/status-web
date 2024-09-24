@@ -7,10 +7,12 @@ const SvgSendAudioIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_6306_11)">
-      <circle cx={10} cy={10} r={10} fill="#2A4AF5" />
+      <circle cx={10} cy={10} r={10} fill="var(--customisation-50, #2A4AF5)" />
       <path
         fill="#fff"
         fillRule="evenodd"

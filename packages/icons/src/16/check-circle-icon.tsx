@@ -7,11 +7,13 @@ const SvgCheckCircleIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_417_92)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         fillRule="evenodd"
         d="M8 .9a7.1 7.1 0 1 0 0 14.2A7.1 7.1 0 0 0 8 .9ZM2.1 8a5.9 5.9 0 1 1 11.8 0A5.9 5.9 0 0 1 2.1 8Zm5.324 2.424 4-4-.848-.848L7 9.15 5.424 7.576l-.848.848 2 2 .424.424.424-.424Z"
         clipRule="evenodd"

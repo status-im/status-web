@@ -6,7 +6,7 @@
   viewBox="0 0 16 16"
 >
   <path
-    fill="#09101C"
+    fill="currentColor"
     fill-rule="evenodd"
     d="m7.605 13.951-4-3.5.79-.903L8 12.703l3.605-3.155.79.903-4 3.5-.395.346-.395-.346Z"
     clip-rule="evenodd"
@@ -23,7 +23,7 @@
     <path fill="url(#prefix__paint0_linear_3221_3537)" d="M7 2.5h2V15H7V2.5Z" />
   </mask>
   <g mask="url(#prefix__mask0_3221_3537)">
-    <path stroke="#09101C" stroke-width="1.2" d="M8 2v11" />
+    <path stroke="currentColor" stroke-width="1.2" d="M8 2v11" />
   </g>
   <defs>
     <linearGradient

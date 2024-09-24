@@ -7,10 +7,12 @@ const SvgKeyControlIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m6 1.77 4.362 3.816-.724.828L6 3.231 2.362 6.414l-.724-.828L6 1.77Z"
       clipRule="evenodd"

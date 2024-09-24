@@ -7,10 +7,12 @@ const SvgDoneIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M8 1.4a6.6 6.6 0 1 0 0 13.2A6.6 6.6 0 0 0 8 1.4ZM2.6 8a5.4 5.4 0 1 1 10.8 0A5.4 5.4 0 0 1 2.6 8Zm5.067 2.108 3-3.5-.835-.716L7.22 8.941l-1.08-1.08-.778.778 1.5 1.5.42.42.386-.451Z"
       clipRule="evenodd"

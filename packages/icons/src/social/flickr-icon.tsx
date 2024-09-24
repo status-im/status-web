@@ -7,10 +7,12 @@ const SvgFlickrIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       d="M15.5 14.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM4.5 14.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z"
     />
   </svg>

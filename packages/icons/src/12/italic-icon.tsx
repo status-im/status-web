@@ -7,10 +7,12 @@ const SvgItalicIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M5.886 2.05H3.5V.95h6v1.1H6.992l-.878 7.9H8.5v1.1h-6v-1.1h2.508l.878-7.9Z"
       clipRule="evenodd"

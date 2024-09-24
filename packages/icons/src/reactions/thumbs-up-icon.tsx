@@ -7,6 +7,8 @@ const SvgThumbsUpIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path

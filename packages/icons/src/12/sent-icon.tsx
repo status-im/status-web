@@ -7,9 +7,11 @@ const SvgSentIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.1} d="M2 6.5 5 9l5-6" />
+    <path stroke="currentColor" strokeWidth={1.1} d="M2 6.5 5 9l5-6" />
   </svg>
 )
 export default SvgSentIcon

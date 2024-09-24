@@ -7,10 +7,12 @@ const SvgRemoveIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M16.5 10.6h-13V9.4h13v1.2Z"
       clipRule="evenodd"

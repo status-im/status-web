@@ -5,5 +5,5 @@
   fill="none"
   viewBox="0 0 16 16"
 >
-  <circle cx="8" cy="8" r="4" fill="#2A4AF5" />
+  <circle cx="8" cy="8" r="4" fill="var(--customisation-50, #2A4AF5)" />
 </svg>

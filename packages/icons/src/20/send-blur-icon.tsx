@@ -7,6 +7,8 @@ const SvgSendBlurIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <mask
@@ -28,7 +30,7 @@ const SvgSendBlurIcon = (props: SVGProps<SVGSVGElement>) => (
     </mask>
     <g mask="url(#prefix__mask0_7508_129)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         fillRule="evenodd"
         d="m9.4 6.857-4.496 4.087-.807-.888 5.5-5 .404-.367.403.367 5.5 5-.807.888L10.6 6.856V17.5H9.4V6.857Z"
         clipRule="evenodd"

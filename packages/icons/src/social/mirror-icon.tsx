@@ -7,6 +7,8 @@ const SvgMirrorIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <mask
@@ -27,12 +29,12 @@ const SvgMirrorIcon = (props: SVGProps<SVGSVGElement>) => (
     </mask>
     <g mask="url(#prefix__mask0_4319_1231)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         d="M3 8.024C3 4.283 6.134 1.25 10 1.25s7 3.033 7 6.774v9.697c0 .568-.476 1.029-1.064 1.029H4.064C3.476 18.75 3 18.29 3 17.72V8.025Z"
       />
     </g>
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M16.168 17.91V8.043c0-3.306-2.761-5.987-6.168-5.987s-6.168 2.68-6.168 5.987v9.865c0 .019.015.034.034.034h12.268a.035.035 0 0 0 .024-.01.034.034 0 0 0 .01-.024ZM10 1.25c-3.866 0-7 3.042-7 6.794v9.865c0 .465.388.841.866.841h12.268a.854.854 0 0 0 .866-.84V8.043c0-3.752-3.134-6.794-7-6.794Z"
       clipRule="evenodd"

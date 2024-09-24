@@ -7,10 +7,12 @@ const SvgCollapseRsIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       clipPath="url(#prefix__clip0_3221_3546)"
       clipRule="evenodd"

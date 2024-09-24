@@ -7,10 +7,12 @@ const SvgBulletIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       d="M6.5 10c0-2.5 1-3.5 3.5-3.5s3.5 1 3.5 3.5-1 3.5-3.5 3.5-3.5-1-3.5-3.5Z"
     />
   </svg>

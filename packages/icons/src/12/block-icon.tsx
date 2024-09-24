@@ -7,11 +7,13 @@ const SvgBlockIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_2265_853)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         fillRule="evenodd"
         d="M1.55 6a4.45 4.45 0 0 1 7.184-3.512L2.488 8.734A4.43 4.43 0 0 1 1.55 6Zm1.716 3.511a4.45 4.45 0 0 0 6.245-6.245L3.266 9.511ZM6 .45a5.55 5.55 0 1 0 0 11.1A5.55 5.55 0 0 0 6 .45Z"
         clipRule="evenodd"

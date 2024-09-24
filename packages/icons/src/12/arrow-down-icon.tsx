@@ -7,10 +7,12 @@ const SvgArrowDownIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m6.55 9.288 3.088-2.702.724.828-4 3.5L6 11.23l-.362-.317-4-3.5.724-.828L5.45 9.288V1.5h1.1v7.788Z"
       clipRule="evenodd"

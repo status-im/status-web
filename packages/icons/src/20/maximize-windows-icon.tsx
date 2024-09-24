@@ -7,10 +7,12 @@ const SvgMaximizeWindowsIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      stroke="#09101C"
+      stroke="currentColor"
       strokeWidth={1.2}
       d="M10 4c6 0 6 0 6 6s0 6-6 6-6 0-6-6 0-6 6-6Z"
     />

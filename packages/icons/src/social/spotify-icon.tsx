@@ -7,6 +7,8 @@ const SvgSpotifyIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g
@@ -15,7 +17,7 @@ const SvgSpotifyIcon = (props: SVGProps<SVGSVGElement>) => (
       clipRule="evenodd"
     >
       <path
-        fill="#09101C"
+        fill="currentColor"
         d="M10 0C4.5 0 0 4.5 0 10s4.5 10 10 10 10-4.5 10-10S15.55 0 10 0Z"
       />
       <path

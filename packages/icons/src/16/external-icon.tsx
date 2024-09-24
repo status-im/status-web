@@ -7,10 +7,12 @@ const SvgExternalIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M12.1 4.5v-.6H7v1.2h3.052l-5.976 5.976.848.848L10.9 5.95V9h1.2V4.5Z"
       clipRule="evenodd"

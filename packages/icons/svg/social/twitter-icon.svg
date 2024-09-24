@@ -6,13 +6,13 @@
   viewBox="0 0 20 20"
 >
   <path
-    fill="#09101C"
+    fill="currentColor"
     fill-rule="evenodd"
     d="M7.979 11.024 1.025 1h5.379L19 18.98h-5.503l-4.722-6.808L2.81 19H1l6.979-7.976Zm6.152 6.758L3.32 2.197h2.453l10.92 15.585H14.13Z"
     clip-rule="evenodd"
   />
   <path
-    fill="#09101C"
+    fill="currentColor"
     d="m18.518 1.018-6.716 7.688-.798-1.14 5.73-6.549 1.784.001Z"
   />
 </svg>

@@ -7,10 +7,12 @@ const SvgCloseIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m8 8.848 3.576 3.576.848-.848L8.848 8l3.576-3.576-.848-.848L8 7.15 4.424 3.576l-.848.848L7.15 8l-3.575 3.576.848.848L8 8.848Z"
       clipRule="evenodd"

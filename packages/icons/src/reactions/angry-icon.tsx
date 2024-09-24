@@ -7,6 +7,8 @@ const SvgAngryIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <circle cx={6} cy={6} r={6} fill="url(#prefix__paint0_linear_2438_897)" />

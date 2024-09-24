@@ -7,10 +7,12 @@ const SvgAddIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M7.4 8.6v4.9h1.2V8.6h4.9V7.4H8.6V2.5H7.4v4.9H2.5v1.2h4.9Z"
       clipRule="evenodd"

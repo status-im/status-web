@@ -7,6 +7,8 @@ const SvgProgress25Icon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_4019_978)">
@@ -14,7 +16,7 @@ const SvgProgress25Icon = (props: SVGProps<SVGSVGElement>) => (
         cx={6}
         cy={6}
         r={5.45}
-        stroke="#09101C"
+        stroke="currentColor"
         strokeWidth={1.1}
         opacity={0.2}
       />
@@ -29,10 +31,16 @@ const SvgProgress25Icon = (props: SVGProps<SVGSVGElement>) => (
           maskType: 'alpha',
         }}
       >
-        <path fill="#09101C" d="M6 0h6v6H6z" />
+        <path fill="currentColor" d="M6 0h6v6H6z" />
       </mask>
       <g mask="url(#prefix__mask0_4019_978)">
-        <circle cx={6} cy={6} r={5.45} stroke="#09101C" strokeWidth={1.1} />
+        <circle
+          cx={6}
+          cy={6}
+          r={5.45}
+          stroke="currentColor"
+          strokeWidth={1.1}
+        />
       </g>
     </g>
     <defs>

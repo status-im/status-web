@@ -7,6 +7,8 @@ const SvgBridgeIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_7419_55)">
@@ -28,10 +30,22 @@ const SvgBridgeIcon = (props: SVGProps<SVGSVGElement>) => (
         />
       </mask>
       <g mask="url(#prefix__mask0_7419_55)">
-        <path stroke="#09101C" d="M4.5 10s1-5 5.5-5 5.5 5 5.5 5" />
+        <path stroke="currentColor" d="M4.5 10s1-5 5.5-5 5.5 5 5.5 5" />
       </g>
-      <circle cx={4.5} cy={12.5} r={2.5} stroke="#09101C" strokeWidth={1.2} />
-      <circle cx={15.5} cy={12.5} r={2.5} stroke="#09101C" strokeWidth={1.2} />
+      <circle
+        cx={4.5}
+        cy={12.5}
+        r={2.5}
+        stroke="currentColor"
+        strokeWidth={1.2}
+      />
+      <circle
+        cx={15.5}
+        cy={12.5}
+        r={2.5}
+        stroke="currentColor"
+        strokeWidth={1.2}
+      />
     </g>
     <defs>
       <linearGradient

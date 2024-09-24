@@ -7,11 +7,13 @@ const SvgSearchIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_1914_850)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         fillRule="evenodd"
         d="M1.55 5.25a3.7 3.7 0 1 1 7.4 0 3.7 3.7 0 0 1-7.4 0Zm3.7-4.8a4.8 4.8 0 1 0 2.983 8.56l2.378 2.379.778-.778-2.378-2.378A4.8 4.8 0 0 0 5.251.45Z"
         clipRule="evenodd"

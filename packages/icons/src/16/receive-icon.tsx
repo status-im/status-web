@@ -7,10 +7,12 @@ const SvgReceiveIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m7.605 13.951-4-3.5.79-.903L8 12.703l3.605-3.155.79.903-4 3.5-.395.346-.395-.346Z"
       clipRule="evenodd"
@@ -32,7 +34,7 @@ const SvgReceiveIcon = (props: SVGProps<SVGSVGElement>) => (
       />
     </mask>
     <g mask="url(#prefix__mask0_3221_3537)">
-      <path stroke="#09101C" strokeWidth={1.2} d="M8 2v11" />
+      <path stroke="currentColor" strokeWidth={1.2} d="M8 2v11" />
     </g>
     <defs>
       <linearGradient

@@ -7,10 +7,12 @@ const SvgClearIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M3 10a7 7 0 1 1 14 0 7 7 0 0 1-14 0Z"
       clipRule="evenodd"

@@ -7,11 +7,13 @@ const SvgOpenseaIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_4319_1243)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         d="M20 10c0 5.523-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0c5.524 0 10 4.477 10 10Z"
       />
       <path

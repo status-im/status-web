@@ -7,10 +7,12 @@ const SvgArrowTopIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M8.375 2.532 8 2.232l-.375.3-5 4 .75.937L7.4 4.249V13h1.2V4.248l4.025 3.22.75-.936-5-4Z"
       clipRule="evenodd"

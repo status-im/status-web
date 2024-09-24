@@ -24,14 +24,26 @@
     </mask>
     <g mask="url(#prefix__mask0_7508_131)">
       <path
-        fill="#09101C"
+        fill="currentColor"
         fill-rule="evenodd"
         d="M4.99 10.098 4.5 10l-.49-.099v-.002l.001-.004.003-.014a3.446 3.446 0 0 1 .054-.224 8.6 8.6 0 0 1 1.075-2.43C6.015 5.887 7.528 4.5 10 4.5c2.473 0 3.986 1.387 4.857 2.728a8.602 8.602 0 0 1 1.129 2.653l.003.014v.004l.001.002-.49.099-.49.098-.002-.008-.008-.034a7.103 7.103 0 0 0-.199-.672 7.598 7.598 0 0 0-.783-1.612C13.265 6.612 12.028 5.5 10 5.5c-2.027 0-3.264 1.113-4.018 2.273a7.6 7.6 0 0 0-.99 2.318l-.002.007Z"
         clip-rule="evenodd"
       />
     </g>
-    <circle cx="4.5" cy="12.5" r="2.5" stroke="#09101C" stroke-width="1.2" />
-    <circle cx="15.5" cy="12.5" r="2.5" stroke="#09101C" stroke-width="1.2" />
+    <circle
+      cx="4.5"
+      cy="12.5"
+      r="2.5"
+      stroke="currentColor"
+      stroke-width="1.2"
+    />
+    <circle
+      cx="15.5"
+      cy="12.5"
+      r="2.5"
+      stroke="currentColor"
+      stroke-width="1.2"
+    />
   </g>
   <defs>
     <linearGradient

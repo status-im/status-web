@@ -7,6 +7,8 @@ const SvgOfflineLeftIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 14 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <circle cx={4} cy={10} r={4} fill="#A1ABBD" />

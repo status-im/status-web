@@ -7,11 +7,13 @@ const SvgPullupIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_145_49)">
       <circle cx={6} cy={6} r={6} fill="#E7EAEE" />
-      <path stroke="#09101C" strokeWidth={1.1} d="M3.5 7 6 4.5 8.5 7" />
+      <path stroke="currentColor" strokeWidth={1.1} d="M3.5 7 6 4.5 8.5 7" />
     </g>
     <defs>
       <clipPath id="prefix__clip0_145_49">

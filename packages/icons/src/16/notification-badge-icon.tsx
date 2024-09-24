@@ -7,9 +7,11 @@ const SvgNotificationBadgeIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <circle cx={8} cy={8} r={4} fill="#2A4AF5" />
+    <circle cx={8} cy={8} r={4} fill="var(--customisation-50, #2A4AF5)" />
   </svg>
 )
 export default SvgNotificationBadgeIcon

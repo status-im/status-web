@@ -7,6 +7,8 @@ const SvgNetherlandsIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path fill="#fff" d="M0 7.778h20v4.444H0V7.778Z" />

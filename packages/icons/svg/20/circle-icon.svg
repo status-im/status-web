@@ -6,13 +6,13 @@
   viewBox="0 0 20 20"
 >
   <path
-    fill="#2A4AF5"
+    fill="var(--customisation-50, #2A4AF5)"
     fill-rule="evenodd"
     d="M10 3.625a6.375 6.375 0 1 0 0 12.75 6.375 6.375 0 0 0 0-12.75ZM10 2.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15Z"
     clip-rule="evenodd"
   />
   <path
-    fill="#2A4AF5"
+    fill="var(--customisation-50, #2A4AF5)"
     fill-rule="evenodd"
     d="M10 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Z"
     clip-rule="evenodd"

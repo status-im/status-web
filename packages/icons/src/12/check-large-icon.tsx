@@ -7,9 +7,11 @@ const SvgCheckLargeIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.1} d="m1.5 7 3 2.5 6-7" />
+    <path stroke="currentColor" strokeWidth={1.1} d="m1.5 7 3 2.5 6-7" />
   </svg>
 )
 export default SvgCheckLargeIcon

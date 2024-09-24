@@ -7,9 +7,11 @@ const SvgChevronRightIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.1} d="m4.5 3 3 3-3 3" />
+    <path stroke="currentColor" strokeWidth={1.1} d="m4.5 3 3 3-3 3" />
   </svg>
 )
 export default SvgChevronRightIcon

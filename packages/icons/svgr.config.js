@@ -4,6 +4,10 @@ module.exports = {
   jsxRuntime: 'automatic',
   expandProps: 'end',
   filenameCase: 'kebab',
+  svgProps: {
+    'aria-hidden': true,
+    focusable: false,
+  },
   // note: SVGO transformation is handled in the sync script
   svgo: false,
 }

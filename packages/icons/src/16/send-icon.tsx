@@ -7,10 +7,12 @@ const SvgSendIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m8 1.703.395.345 4 3.5-.79.903L8 3.297 4.395 6.451l-.79-.903 4-3.5L8 1.703Z"
       clipRule="evenodd"
@@ -32,7 +34,7 @@ const SvgSendIcon = (props: SVGProps<SVGSVGElement>) => (
       />
     </mask>
     <g mask="url(#prefix__mask0_3221_3538)">
-      <path stroke="#09101C" strokeWidth={1.2} d="M8 3v11" />
+      <path stroke="currentColor" strokeWidth={1.2} d="M8 3v11" />
     </g>
     <defs>
       <linearGradient

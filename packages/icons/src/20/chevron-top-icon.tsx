@@ -7,9 +7,11 @@ const SvgChevronTopIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.2} d="M5.5 12 10 7.5l4.5 4.5" />
+    <path stroke="currentColor" strokeWidth={1.2} d="M5.5 12 10 7.5l4.5 4.5" />
   </svg>
 )
 export default SvgChevronTopIcon

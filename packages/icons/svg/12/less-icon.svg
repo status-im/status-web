@@ -6,7 +6,7 @@
   viewBox="0 0 12 12"
 >
   <path
-    fill="#09101C"
+    fill="currentColor"
     fill-rule="evenodd"
     d="M9.5 6.55h-7v-1.1h7v1.1Z"
     clip-rule="evenodd"

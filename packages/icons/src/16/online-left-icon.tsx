@@ -7,6 +7,8 @@ const SvgOnlineLeftIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 8 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <circle cx={4} cy={8} r={4} fill="#23ADA0" />

@@ -7,10 +7,12 @@ const SvgSaveIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="m8.6 10.752 4.025-3.22.75.937-5 4-.375.3-.375-.3-5-4 .75-.938 4.025 3.22V1.5h1.2v9.252ZM2 15.1v-1.2h12v1.2H2Z"
       clipRule="evenodd"

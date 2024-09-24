@@ -7,10 +7,12 @@ const SvgPauseMediaIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      fill="#09101C"
+      fill="currentColor"
       fillRule="evenodd"
       d="M15.839 4.276c.661.493.661 1.873.661 5.724 0 6 0 6-2.5 6s-2.5 0-2.5-6c0-3.851 0-5.23.661-5.724C12.531 4 13.105 4 14 4s1.47 0 1.839.276Zm-8 0C8.5 4.769 8.5 6.149 8.5 10c0 6 0 6-2.5 6s-2.5 0-2.5-6c0-3.851 0-5.23.661-5.724C4.531 4 5.105 4 6 4s1.47 0 1.839.276Z"
       clipRule="evenodd"

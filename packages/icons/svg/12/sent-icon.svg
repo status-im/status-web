@@ -5,5 +5,5 @@
   fill="none"
   viewBox="0 0 12 12"
 >
-  <path stroke="#09101C" stroke-width="1.1" d="M2 6.5 5 9l5-6" />
+  <path stroke="currentColor" stroke-width="1.1" d="M2 6.5 5 9l5-6" />
 </svg>

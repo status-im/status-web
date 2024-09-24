@@ -7,10 +7,12 @@ const SvgLoadingIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_1436_281)">
-      <path stroke="#09101C" strokeWidth={1.1} d="M11 6a5 5 0 1 1-5-5" />
+      <path stroke="currentColor" strokeWidth={1.1} d="M11 6a5 5 0 1 1-5-5" />
       <mask
         id="prefix__mask0_1436_281"
         width={6}
@@ -25,7 +27,7 @@ const SvgLoadingIcon = (props: SVGProps<SVGSVGElement>) => (
         <path fill="url(#prefix__paint0_linear_1436_281)" d="M6 0h6v6H6V0Z" />
       </mask>
       <g mask="url(#prefix__mask0_1436_281)">
-        <path stroke="#09101C" strokeWidth={1.1} d="M6 1a5 5 0 0 1 5 5" />
+        <path stroke="currentColor" strokeWidth={1.1} d="M6 1a5 5 0 0 1 5 5" />
       </g>
     </g>
     <defs>

@@ -7,10 +7,12 @@ const SvgCoverIcon = (props: SVGProps<SVGSVGElement>) => (
     height={16}
     fill="none"
     viewBox="0 0 16 16"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      stroke="#09101C"
+      stroke="currentColor"
       strokeWidth={1.2}
       d="M2 8c0-4.583.5-5 6-5s6 .417 6 5-.5 5-6 5-6-.417-6-5Z"
     />

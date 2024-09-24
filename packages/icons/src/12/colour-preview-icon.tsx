@@ -7,9 +7,11 @@ const SvgColourPreviewIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <circle cx={6} cy={6} r={4} fill="#2A4AF5" />
+    <circle cx={6} cy={6} r={4} fill="var(--customisation-50, #2A4AF5)" />
   </svg>
 )
 export default SvgColourPreviewIcon

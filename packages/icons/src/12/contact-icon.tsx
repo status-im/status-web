@@ -7,10 +7,15 @@ const SvgContactIcon = (props: SVGProps<SVGSVGElement>) => (
     height={12}
     fill="none"
     viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <g clipPath="url(#prefix__clip0_183_90)">
-      <path fill="#2A4AF5" d="M11.5 6a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0Z" />
+      <path
+        fill="var(--customisation-50, #2A4AF5)"
+        d="M11.5 6a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0Z"
+      />
       <path
         fill="#fff"
         fillRule="evenodd"

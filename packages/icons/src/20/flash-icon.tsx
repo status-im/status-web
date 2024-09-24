@@ -7,9 +7,15 @@ const SvgFlashIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
-    <path stroke="#09101C" strokeWidth={1.2} d="M11 8.5v-5l-7 8h5v5l7-8h-5Z" />
+    <path
+      stroke="currentColor"
+      strokeWidth={1.2}
+      d="M11 8.5v-5l-7 8h5v5l7-8h-5Z"
+    />
   </svg>
 )
 export default SvgFlashIcon

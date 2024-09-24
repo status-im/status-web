@@ -7,10 +7,12 @@ const SvgActiveMembersIcon = (props: SVGProps<SVGSVGElement>) => (
     height={20}
     fill="none"
     viewBox="0 0 20 20"
+    aria-hidden={true}
+    focusable={false}
     {...props}
   >
     <path
-      stroke="#09101C"
+      stroke="currentColor"
       strokeWidth={1.2}
       d="M13.5 3.5H7l-3.5 8h5l-1.5 5 9.5-9H11l2.5-4Z"
     />
