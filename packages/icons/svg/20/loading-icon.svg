@@ -1,0 +1,36 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="20"
+  height="20"
+  fill="none"
+  viewBox="0 0 20 20"
+>
+  <path stroke="currentColor" stroke-width="1.2" d="M17 10a7 7 0 1 1-7-7" />
+  <mask
+    id="prefix__mask0_1036_13"
+    width="10"
+    height="10"
+    x="9"
+    y="1"
+    maskUnits="userSpaceOnUse"
+    style="mask-type: alpha"
+  >
+    <path fill="url(#prefix__paint0_linear_1036_13)" d="M9 1h10v10H9z" />
+  </mask>
+  <g mask="url(#prefix__mask0_1036_13)">
+    <path stroke="currentColor" stroke-width="1.2" d="M10 3a7 7 0 0 1 7 7" />
+  </g>
+  <defs>
+    <linearGradient
+      id="prefix__paint0_linear_1036_13"
+      x1="11"
+      x2="15.396"
+      y1="3"
+      y2="5.909"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stop-color="#09101C" stop-opacity="0" />
+      <stop offset="1" stop-color="#09101C" />
+    </linearGradient>
+  </defs>
+</svg>

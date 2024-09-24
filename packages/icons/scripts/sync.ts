@@ -1,10 +1,10 @@
-import { isCancel, outro, spinner, text } from '@clack/prompts'
+import { isCancel, log, outro, spinner, text } from '@clack/prompts'
 import { transform } from '@svgr/core'
 import * as Figma from 'figma-api'
 import fs from 'fs-extra'
 import fetch from 'node-fetch'
+import pMap from 'p-map'
 import path from 'path'
-import prettier from 'prettier'
 
 const SVG_DIR = path.resolve(__dirname, '../svg')
 
@@ -35,14 +35,26 @@ const FILE_KEY = 'qLLuMLfpGxK9OfpIavwsmK'
 const NODE_IDS = {
   // currently generates only set of size 20
   // https://github.com/status-im/status-web/issues/466
-  '3239:987': 'icons',
-  '3227:1083': 'social',
-  // '942:77': 'reactions',
-  '942:218': 'love',
-  '942:217': 'thumbs-up',
-  '942:216': 'thumbs-down',
-  '942:215': 'laugh',
-  '942:213': 'angry',
+  '3239:987': {
+    name: 'icons-20',
+    folder: '20',
+  },
+  '3239:1440': {
+    name: 'icons-16',
+    folder: '16',
+  },
+  '3239:3712': {
+    name: 'icons-12',
+    folder: '12',
+  },
+  '3227:1083': {
+    name: 'social',
+    folder: 'social',
+  },
+  '942:77': {
+    name: 'reactions',
+    folder: 'reactions',
+  },
 }
 
 const figma = new Figma.Api({
@@ -50,13 +62,15 @@ const figma = new Figma.Api({
 })
 
 const s1 = spinner()
-s1.start('Fetching nodes from Figma')
+s1.start('Fetching Figma file nodes')
 const { nodes } = await figma.getFileNodes(FILE_KEY, Object.keys(NODE_IDS))
+// console.log('🚀 ~ nodes:', nodes)
+
 s1.stop('Done!')
 
-for (const [nodeId, name] of Object.entries(NODE_IDS)) {
+for (const [nodeId, { name, folder }] of Object.entries(NODE_IDS)) {
   const s2 = spinner()
-  s2.start('Fetching nodes from Figma')
+  s2.start(`Fetching SVG images for ${name}`)
 
   const { components } = nodes[nodeId]!
   const nodeIds = Object.keys(components)
@@ -75,73 +89,99 @@ for (const [nodeId, name] of Object.entries(NODE_IDS)) {
 
   s2.stop('Done!')
 
-  const s3 = spinner()
-  s3.start(`Generating SVGs for ${name}`)
+  log.info(`Generating SVGs for ${name}`)
 
-  for (const [nodeId, image] of Object.entries(images)) {
-    const icon = components[nodeId]!
+  await pMap(
+    Object.entries(images),
+    async ([nodeId, image]) => {
+      const icon = components[nodeId]!
+      const svgRaw = await fetch(image!)
+        .then(res => res.text())
+        .catch(() => {
+          log.error(`Failed to fetch SVG for ${icon.name}`)
+          return
+        })
 
-    const svgRaw = await fetch(image!).then(res => res.text())
+      // note: probably a wrapper layer for https://www.figma.com/file/qLLuMLfpGxK9OfpIavwsmK/Iconset?type=design&node-id=4408-955&mode=dev, thus skipping
+      // icon:: {
+      //   key: 'c73f7bad669c2696c2158cef34967a20cc0f0f0f',
+      //   name: 'Use=Default, Typo=False, Style=Gradient',
+      //   description: '',
+      //   remote: true,
+      //   componentSetId: '4819:992',
+      //   documentationLinks: []
+      // }
+      // raw::
+      // transform::
+      // icon:: {
+      //   key: '53e1bc9f7ee455bc6cc38b90a9b7614ef64afe4e',
+      //   name: '20/status-logo',
+      //   description: '',
+      //   remote: false,
+      //   documentationLinks: []
+      // }
+      if (!svgRaw) {
+        log.error(`Failed to fetch SVG for ${icon.name}`)
+        return
+      }
 
-    // note: probably a wrapper layer for https://www.figma.com/file/qLLuMLfpGxK9OfpIavwsmK/Iconset?type=design&node-id=4408-955&mode=dev, thus skipping
-    // icon:: {
-    //   key: 'c73f7bad669c2696c2158cef34967a20cc0f0f0f',
-    //   name: 'Use=Default, Typo=False, Style=Gradient',
-    //   description: '',
-    //   remote: true,
-    //   componentSetId: '4819:992',
-    //   documentationLinks: []
-    // }
-    // raw::
-    // transform::
-    // icon:: {
-    //   key: '53e1bc9f7ee455bc6cc38b90a9b7614ef64afe4e',
-    //   name: '20/status-logo',
-    //   description: '',
-    //   remote: false,
-    //   documentationLinks: []
-    // }
-    if (!svgRaw) {
-      continue
-    }
-
-    const svg = await transform(svgRaw, {
-      plugins: ['@svgr/plugin-svgo'],
-      replaceAttrValues: {
-        // '#000': 'currentColor',
-      },
-      svgoConfig: {
-        plugins: [
-          {
-            name: 'preset-default',
-            params: {
-              overrides: {
-                cleanupIds: {
-                  minify: false,
-                },
-                // viewBox is required to resize SVGs with CSS.
-                // @see https://github.com/svg/svgo/issues/1128
-                removeViewBox: false,
+      const svg = await transform(svgRaw, {
+        plugins: ['@svgr/plugin-svgo'],
+        svgoConfig: {
+          plugins: [
+            {
+              name: 'replace-attributes',
+              fn: () => {
+                return {
+                  element: {
+                    enter: node => {
+                      if (node.attributes.fill === '#09101C') {
+                        node.attributes.fill = 'currentColor'
+                      } else if (node.attributes.stroke === '#09101C') {
+                        node.attributes.stroke = 'currentColor'
+                      } else if (node.attributes.fill === '#2A4AF5') {
+                        node.attributes.fill =
+                          'var(--customisation-50, #2A4AF5)'
+                      } else if (node.attributes.stroke === '#2A4AF5') {
+                        node.attributes.stroke =
+                          'var(--customisation-50, #2A4AF5)'
+                      }
+                    },
+                  },
+                }
               },
             },
-          },
-        ],
-      },
-    })
+            {
+              name: 'preset-default',
+              params: {
+                overrides: {
+                  cleanupIds: {
+                    minify: false,
+                  },
+                  // viewBox is required to resize SVGs with CSS.
+                  // @see https://github.com/svg/svgo/issues/1128
+                  removeViewBox: false,
+                },
+              },
+            },
+            'prefixIds',
+          ],
+        },
+      })
 
-    const nameParts = icon.name.replace(' / ', '/').split('/')
-    const iconName = nameParts[nameParts.length - 1]
-    const fileName = `${toKebabCase(iconName)}-icon.svg`
-    const filePath = path.resolve(SVG_DIR, fileName)
+      const nameParts = icon.name.replace(' / ', '/').split('/')
+      const iconName = nameParts.at(-1)!
+      const fileName = `${toKebabCase(iconName)}-icon.svg`
+      const filePath = path.resolve(SVG_DIR, folder, fileName)
 
-    const prettierOptions = prettier.resolveConfig.sync(process.cwd())
-    const formattedSvg = prettier.format(svg, {
-      ...prettierOptions,
-      parser: 'html',
-    })
+      await fs.ensureDir(path.dirname(filePath))
 
-    await fs.writeFile(filePath, formattedSvg, { encoding: 'utf8' })
-  }
+      await fs.writeFile(filePath, svg, { encoding: 'utf8' })
 
-  s3.stop(`${Object.keys(images).length} SVGs generated`)
+      // log.success(filePath)
+    },
+    { concurrency: 5 }
+  )
+
+  log.success(`${Object.keys(images).length} SVGs generated`)
 }

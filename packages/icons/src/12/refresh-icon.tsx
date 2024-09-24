@@ -1,0 +1,29 @@
+import type { SVGProps } from 'react'
+
+const SvgRefreshIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={12}
+    height={12}
+    fill="none"
+    viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
+    {...props}
+  >
+    <g clipPath="url(#prefix__clip0_2860_879)">
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        d="M4.745 1.73A4.45 4.45 0 0 1 9.24 2.95H7.5v1.1h3.55V.5h-1.1v1.601a5.55 5.55 0 1 0-.026 7.823l-.777-.777A4.45 4.45 0 1 1 4.745 1.73Z"
+        clipRule="evenodd"
+      />
+    </g>
+    <defs>
+      <clipPath id="prefix__clip0_2860_879">
+        <path fill="#fff" d="M0 0h12v12H0z" />
+      </clipPath>
+    </defs>
+  </svg>
+)
+export default SvgRefreshIcon

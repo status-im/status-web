@@ -1,0 +1,28 @@
+import type { SVGProps } from 'react'
+
+const SvgAddReactionIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={12}
+    height={12}
+    fill="none"
+    viewBox="0 0 12 12"
+    aria-hidden={true}
+    focusable={false}
+    {...props}
+  >
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M5.81.955C3.551 1.081 1.95 3.42 1.95 6c0 2.652 1.693 5.05 4.05 5.05 2.219 0 3.849-2.124 4.033-4.585A4.039 4.039 0 0 1 8.93 6.46C8.755 8.53 7.407 9.95 6 9.95 4.49 9.95 3.05 8.318 3.05 6c0-2.07 1.148-3.593 2.468-3.895.04-.404.14-.79.29-1.15ZM4.008 7.746 4.5 7.5l.492-.246v-.001a1.73 1.73 0 0 0 .273.359c.19.189.433.338.735.338.303 0 .546-.149.736-.34a1.73 1.73 0 0 0 .273-.358v.001L7.5 7.5l.492.246v.002l-.002.002-.002.005-.008.015a1.795 1.795 0 0 1-.116.191 2.829 2.829 0 0 1-.35.428c-.31.31-.816.66-1.514.66-.697 0-1.204-.35-1.514-.66a2.829 2.829 0 0 1-.465-.62l-.008-.014-.003-.005v-.002l-.001-.001Zm3-.494v-.001.001ZM4.99 7.25v.001Z"
+      clipRule="evenodd"
+    />
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M8.95 3.05V5h1.1V3.05H12v-1.1h-1.95V0h-1.1v1.95H7v1.1h1.95Z"
+      clipRule="evenodd"
+    />
+  </svg>
+)
+export default SvgAddReactionIcon
