@@ -42,7 +42,7 @@ export const Root = (props: RootProps) => {
 const contentStyles = cva({
   base: [
     'rounded-12 border border-neutral-10 bg-white-100 p-1 shadow-3',
-    'max-h-[var(--radix-dropdown-menu-content-available-height)] w-[var(--radix-dropdown-menu-trigger-width)] overflow-auto',
+    'max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[var(--radix-dropdown-menu-trigger-width)] overflow-auto',
     'dark:border-neutral-90 dark:bg-neutral-95',
   ],
 })
