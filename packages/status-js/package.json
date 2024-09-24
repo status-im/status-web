@@ -1,7 +1,7 @@
 {
   "name": "@status-im/js",
-  "version": "0.6.7",
-  "license": "MIT OR Apache-2.0",
+  "version": "0.6.6",
+  "license": "MPL-2.0",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -68,8 +68,6 @@
     "dist/",
     "!dist/**/*.map",
     "!dist/tsconfig.tsbuildinfo",
-    "LICENSE-MIT",
-    "LICENSE-APACHE-v2",
     "package.json"
   ],
   "publishConfig": {

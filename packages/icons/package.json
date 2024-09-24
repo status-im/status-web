@@ -1,6 +1,7 @@
 {
   "name": "@status-im/icons",
   "version": "0.9.2",
+  "license": "MPL-2.0",
   "files": [
     "dist",
     "svg"
