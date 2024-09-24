@@ -14,7 +14,7 @@
       "import": "./dist/src/index.es.js",
       "require": "./dist/src/index.cjs.js"
     },
-    "./tailwind-base": {
+    "./config": {
       "types": "./dist/tailwind.config.d.ts",
       "import": "./dist/tailwind.config.es.js",
       "require": "./dist/tailwind.config.cjs.js"
