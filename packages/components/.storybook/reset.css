@@ -6,33 +6,6 @@
   :root {
     --font-sans: 'Inter';
   }
-
-  body {
-    @apply theme-blue;
-  }
-
-  /* [data-customisation='blue'] {
-    --color-customisation-50: 42 74 245;
-    --color-customisation-60: 34 59 196;
-  }
-
-  [data-customisation='purple'] {
-    --color-customisation-50: 255 125 70;
-    --color-customisation-60: 204 100 56;
-  }
-
-  [data-customisation='orange'] {
-    --color-customisation-50: 42 74 245;
-    --color-customisation-60: 34 59 196;
-  }
-  [data-customisation='blue'] {
-    --color-customisation-50: 42 74 245;
-    --color-customisation-60: 34 59 196;
-  } */
-
-  .dark {
-    @apply text-white-100;
-  }
 }
 
 /*

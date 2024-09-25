@@ -90,18 +90,13 @@ const styles = cva({
   base: [
     'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-1 font-medium transition-all',
     'outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-100',
-    'disabled:pointer-events-none disabled:cursor-default disabled:opacity-30',
+    'disabled:pointer-events-none disabled:cursor-default disabled:opacity-[.3]',
   ],
   variants: {
     variant: {
       primary: [
-        'bg-customisation-50 text-white-100 hover:bg-customisation-60 pressed:bg-customisation-60/[.9]',
-        'dark:bg-customisation-60 dark:hover:bg-customisation-50 dark:pressed:bg-customisation-50/[.9]',
-
-        // 'blurefdd:bg-danger-50',
-        // 'blured:bg-danger-50 blured:dark:hover:bg-blur-white/70',
-        // 'disabled:bg-customisation-50/30',
-        // 'blurry:bg-danger-50 dark:blurry:bg-default-customisation-army-50',
+        'pressed:bg-customisation-60/[.9] bg-customisation-50 text-white-100 hover:bg-customisation-60',
+        'dark:pressed:bg-customisation-50/[.9] dark:bg-customisation-60 dark:hover:bg-customisation-50',
       ],
       positive: [
         'bg-success-50 text-white-100 hover:bg-success-60 focus-visible:ring-success-50',

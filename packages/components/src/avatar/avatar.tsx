@@ -83,7 +83,7 @@ const Avatar = (props: Props) => {
               className="size-full rounded-full object-cover"
             />
           ) : (
-            <div className="flex size-full select-none items-center justify-center rounded-full bg-customisation-50 text-white-100/70">
+            <div className="flex size-full select-none items-center justify-center rounded-full bg-customisation-50 text-blur-white/70">
               {name
                 ? name.slice(0, Number(size) < 28 ? 1 : 2).toUpperCase()
                 : '?'}

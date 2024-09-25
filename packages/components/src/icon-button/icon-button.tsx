@@ -31,7 +31,7 @@ const styles = cva({
   base: [
     'inline-flex size-8 cursor-pointer items-center justify-center rounded-10 border transition-all',
     'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
-    'disabled:cursor-default disabled:opacity-30',
+    'disabled:cursor-default disabled:opacity-[.3]',
   ],
 
   variants: {

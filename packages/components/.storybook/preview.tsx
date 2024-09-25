@@ -44,7 +44,7 @@ const preview: Preview = {
 
       document.body.setAttribute(
         'data-customisation',
-        context.globals.customisation,
+        context.globals.customisation ?? 'blue',
       )
 
       return <Story />

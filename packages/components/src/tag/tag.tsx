@@ -61,7 +61,7 @@ const styles = cva({
   base: [
     'inline-flex shrink-0 items-center justify-center gap-1 border border-neutral-20 font-medium transition-all hover:border-neutral-30',
     'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
-    'disabled:cursor-default disabled:opacity-30',
+    'disabled:cursor-default disabled:opacity-[.3]',
 
     // dark
     'dark:border-neutral-80 dark:text-white-100 dark:hover:border-neutral-60',
@@ -78,7 +78,7 @@ const styles = cva({
       true: 'aspect-square !rounded-full !px-0',
     },
     disabled: {
-      true: 'pointer-events-none cursor-default border-neutral-20 opacity-30',
+      true: 'pointer-events-none cursor-default border-neutral-20 opacity-[.3]',
     },
   },
 })

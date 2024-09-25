@@ -81,12 +81,12 @@ const inputStyles = cva({
   base: [
     'block h-10 w-full min-w-0 flex-1 border border-neutral-20 bg-white-100 text-15 text-neutral-100 placeholder-neutral-40 max-sm:text-[1rem]',
     'outline-none focus:border-neutral-40',
-    'disabled:border-neutral-20 disabled:opacity-30',
-    'invalid:border-danger-/40',
+    'disabled:border-neutral-20 disabled:opacity-[.3]',
+    'invalid:border-danger-50/40',
 
     // dark
     'dark:border-neutral-70 dark:bg-neutral-95 dark:text-white-100 dark:placeholder-neutral-50',
-    'dark:invalid:border-danger-/40',
+    'dark:invalid:border-danger-50/40',
   ],
   variants: {
     size: {
