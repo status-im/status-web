@@ -6,24 +6,24 @@ This monorepo contains packages for building web applications in the Status ecos
 
 ## Packages
 
-| Name                                                   | `npm`                                                                                                                           | Description                                                                                                                                                                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@status-im/components`](./packages/components)       | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components)       | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
-| [`@status-im/js`](./packages/status-js)                | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                       | Libary for Waku protocol integration and blockchain interactions.                                                                                                             |
-| [`@status-im/icons`](./packages/icons)                 | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)                 | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
-| [`@status-im/colors`](./packages/colors)               | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)           | Auto-generated color palette based on our [design system](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev).           |
-| [`@status-im/eslint-config`](./packages/eslint-config) | [![npm version](https://img.shields.io/npm/v/@status-im/eslint-config)](https://www.npmjs.com/package/@status-im/eslint-config) | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
+| Name                                                   | `npm`                                                                                                                     | Description                                                                                                                                                                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@status-im/components`](./packages/components)       | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components) | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
+| [`@status-im/js`](./packages/status-js)                | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                 | Libary for Waku protocol integration and blockchain interactions.                                                                                                             |
+| [`@status-im/icons`](./packages/icons)                 | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)           | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
+| [`@status-im/colors`](./packages/colors)               | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)     | Auto-generated color palette based on our [design system](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev).           |
+| [`@status-im/eslint-config`](./packages/eslint-config) |                                                                                                                           | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
 
 ## Prerequisites
 
 Required:
 
-- **[Node.js](https://nodejs.org/)**: v18.19.0 or later
-- **[Yarn](https://yarnpkg.com/)**: Package manager
+- **[Node.js](https://nodejs.org/)** v18.x
+- **[Yarn](https://yarnpkg.com/)** v1.22.x
 
-Recommended:
+  Recommended:
 
-- **[Visual Studio Code](https://code.visualstudio.com/)**: Code editor
+- **[Visual Studio Code](https://code.visualstudio.com/)**
   - install extensions listed in `.vscode/extensions.json` for optimal development experience
 
 ## Stack
