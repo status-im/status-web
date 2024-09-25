@@ -63,17 +63,10 @@ export default {
     },
 
     boxShadow: {
-      // light
-      1: '0px 2px 20px 0px rgba(9, 16, 28, 0.04)',
-      2: '0px 4px 20px 0px rgba(9, 16, 28, 0.08)',
-      3: '0px 8px 30px 0px rgba(9, 16, 28, 0.12)',
-      4: '0px 12px 56px 0px rgba(9, 16, 28, 0.16)',
-
-      // dark
-      //   1: '0px 4px 40px 0px rgba(9, 16, 28, 0.50)',
-      //   2: '0px 8px 40px 0px rgba(9, 16, 28, 0.64)',
-      //   3: '0px 12px 50px 0px rgba(9, 16, 28, 0.64)',
-      //   4: '0px 16px 64px 0px rgba(9, 16, 28, 0.72)',
+      1: 'var(--shadow-1, 0px 2px 20px 0px rgba(9, 16, 28, 0.04))',
+      2: 'var(--shadow-2, 0px 4px 20px 0px rgba(9, 16, 28, 0.08))',
+      3: 'var(--shadow-3, 0px 8px 30px 0px rgba(9, 16, 28, 0.12))',
+      4: 'var(--shadow-4, 0px 12px 56px 0px rgba(9, 16, 28, 0.16))',
     },
 
     borderRadius: {
@@ -109,15 +102,17 @@ export default {
     },
   },
 
-  //   boxShadow: {
-  //     1: '0px 2px 20px rgba(9, 16, 28, 0.04)',
-  //     2: '0px 4px 20px rgba(9, 16, 28, 0.08)',
-  //     3: '0px 8px 30px rgba(9, 16, 28, 0.12);',
-  //   },
-
   plugins: [
-    plugin(({ addUtilities, addBase }) => {
+    plugin(({ addBase }) => {
       addBase({
+        // '[data-theme="light"]': {},
+        '[data-theme="dark"]': {
+          '--shadow-1': '0px 4px 40px 0px rgba(9, 16, 28, 0.50)',
+          '--shadow-2': '0px 8px 40px 0px rgba(9, 16, 28, 0.64)',
+          '--shadow-3': '0px 12px 50px 0px rgba(9, 16, 28, 0.64)',
+          '--shadow-4': '0px 16px 64px 0px rgba(9, 16, 28, 0.72)',
+        },
+
         '[data-customisation="army"]': {
           '--customisation-50': colors.customisation.army['50'],
           '--customisation-50-5': colors.customisation.army['50/5'],
