@@ -64,7 +64,7 @@ const styles = cva({
     'disabled:cursor-default disabled:opacity-30',
 
     // dark
-    'dark:border-neutral-80 dark:hover:border-neutral-60',
+    'dark:border-neutral-80 dark:text-white-100 dark:hover:border-neutral-60',
   ],
   variants: {
     size: {
