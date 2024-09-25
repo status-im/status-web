@@ -1,5 +1,18 @@
 # @status-im/components
 
+## 1.0.0
+
+### Major Changes
+
+- edfdfd6: switch to tailwind
+
+### Patch Changes
+
+- Updated dependencies [edfdfd6]
+- Updated dependencies [c8f551f]
+  - @status-im/colors@1.0.0
+  - @status-im/icons@1.0.0
+
 ## 0.6.5
 
 ### Patch Changes
