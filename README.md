@@ -21,7 +21,7 @@ Required:
 - **[Node.js](https://nodejs.org/)** v18.x
 - **[Yarn](https://yarnpkg.com/)** v1.22.x
 
-  Recommended:
+Recommended:
 
 - **[Visual Studio Code](https://code.visualstudio.com/)**
   - install extensions listed in `.vscode/extensions.json` for optimal development experience
