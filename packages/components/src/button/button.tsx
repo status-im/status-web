@@ -95,8 +95,8 @@ const styles = cva({
   variants: {
     variant: {
       primary: [
-        'bg-customisation-50 text-white-100 hover:bg-customisation-60 pressed:bg-customisation-60/90',
-        'dark:bg-customisation-60 dark:hover:bg-customisation-50 dark:pressed:bg-customisation-50/90',
+        'bg-customisation-50 text-white-100 hover:bg-customisation-60 pressed:bg-customisation-60/[.9]',
+        'dark:bg-customisation-60 dark:hover:bg-customisation-50 dark:pressed:bg-customisation-50/[.9]',
 
         // 'blurefdd:bg-danger-50',
         // 'blured:bg-danger-50 blured:dark:hover:bg-blur-white/70',
@@ -104,8 +104,8 @@ const styles = cva({
         // 'blurry:bg-danger-50 dark:blurry:bg-default-customisation-army-50',
       ],
       positive: [
-        'bg-success-50 text-white-100 hover:bg-success-60 focus-visible:ring-success-50 disabled:bg-success-50/30',
-        'dark:bg-success-60 dark:hover:bg-success-50 dark:pressed:bg-success-50/90',
+        'bg-success-50 text-white-100 hover:bg-success-60 focus-visible:ring-success-50',
+        'dark:bg-success-60 dark:hover:bg-success-50 dark:pressed:bg-success-50/[.9]',
       ],
       grey: [
         'bg-neutral-10 text-neutral-100 hover:bg-neutral-20 focus-visible:ring-neutral-80 pressed:bg-neutral-30',
@@ -116,10 +116,10 @@ const styles = cva({
         'dark:bg-neutral-90 dark:text-white-100 dark:hover:bg-neutral-60 dark:pressed:bg-neutral-50',
       ],
       outline: [
-        'border border-neutral-30 text-neutral-100 hover:border-neutral-40 focus-visible:ring-neutral-80 pressed:border-neutral-50',
+        'border border-neutral-30 text-neutral-100 hover:border-neutral-40 focus-visible:ring-neutral-80 pressed:border-neutral-50 disabled:border-neutral-20',
         'blur:border-neutral-80/10 blur:hover:border-neutral-80/20',
         // dark
-        'dark:border-neutral-70 dark:text-white-100 dark:hover:border-neutral-60 dark:focus-visible:ring-neutral-80 dark:pressed:border-neutral-50',
+        'dark:border-neutral-70 dark:text-white-100 dark:hover:border-neutral-60 dark:focus-visible:ring-neutral-80 dark:pressed:border-neutral-50 dark:disabled:border-neutral-80',
         'blur:dark:border-white-10 blur:dark:hover:border-white-20',
       ],
       ghost: [
@@ -127,8 +127,8 @@ const styles = cva({
         'dark:text-white-100 dark:hover:bg-neutral-80 dark:pressed:bg-neutral-70',
       ],
       danger: [
-        'bg-danger-50 text-white-100 hover:bg-danger-60 focus-visible:ring-danger-50 pressed:bg-danger-60/90',
-        'dark:bg-danger-60 dark:hover:bg-danger-50 dark:pressed:bg-danger-50/90',
+        'bg-danger-50 text-white-100 hover:bg-danger-60 focus-visible:ring-danger-50 pressed:bg-danger-60/[.9]',
+        'dark:bg-danger-60 dark:hover:bg-danger-50 dark:pressed:bg-danger-50/[.9]',
       ],
     },
     size: {
