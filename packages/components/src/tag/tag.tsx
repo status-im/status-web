@@ -1,168 +1,106 @@
-import { createElement } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
-import { styled } from '@tamagui/core'
-import { View } from 'react-native'
+import { cva } from 'cva'
 
-import { getColorWithOpacity } from '../../utils/get-color-with-opacity'
-import { Text } from '../text'
+import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
+import type { Ref } from 'react'
 
-import type { HexColor, RGBAColor } from '../../utils/get-color-with-opacity'
-import type { TextProps } from '../text'
-import type { IconProps } from '@status-im/icons'
-import type { ColorTokens } from '@tamagui/core'
-import type { ComponentType } from 'react'
-import type { PressableProps } from 'react-native'
+type Variants = VariantProps<typeof styles>
 
-type Props = {
-  size: 32 | 24
-  icon?: string | ComponentType<IconProps>
+type Props = React.ComponentProps<'button'> & {
+  size?: Variants['size']
   label?: string
+  icon?: IconElement
+  iconPlacement?: 'left' | 'right'
   selected?: boolean
-  disabled?: boolean
-  onPress?: PressableProps['onPress']
-  color?: ColorTokens | HexColor
+  onPress?: () => void
 }
 
-const textSizes: Record<NonNullable<Props['size']>, TextProps['size']> = {
-  '32': 15,
-  '24': 13,
-}
+const Tag = (props: Props, ref: Ref<HTMLButtonElement>) => {
+  const {
+    size = '32',
+    icon,
+    iconPlacement = 'left',
+    label,
+    selected = false,
+    disabled = false,
+    onPress: onClick,
+    ...buttonProps
+  } = props
 
-const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
-  '32': 20,
-  '24': 12,
-}
-
-const Tag = (props: Props) => {
-  const { size, icon, label, selected, disabled, onPress, color } = props
-
-  const renderIcon = () => {
-    if (!icon) {
-      return null
-    }
-
-    if (typeof icon === 'string') {
-      return <Text size={textSizes[size]}>{icon}</Text>
-    }
-
-    return createElement(icon, {
-      size: iconSizes[size],
-      color,
-    })
-  }
+  const iconOnly = Boolean(icon && !label)
 
   return (
-    <Base
-      size={size}
-      selected={selected}
+    <button
+      onClick={onClick}
+      {...buttonProps}
       disabled={disabled}
-      iconOnly={Boolean(icon && !label)}
-      variant={color}
-      {...(onPress && {
-        role: 'button',
-        onPress,
-      })}
+      ref={ref}
+      data-selected={selected}
+      className={styles({ size, selected, disabled, iconOnly })}
     >
-      {renderIcon()}
-      {label && (
-        <Text size={textSizes[size]} weight="medium" {...(color && { color })}>
-          {label}
-        </Text>
+      {icon && iconPlacement === 'left' && (
+        <span className={iconStyles({ size, placement: 'left', iconOnly })}>
+          {cloneElement(icon)}
+        </span>
       )}
-    </Base>
+
+      {label && <span className="flex-1 whitespace-nowrap">{label}</span>}
+
+      {icon && iconPlacement === 'right' && (
+        <span className={iconStyles({ size, placement: 'right', iconOnly })}>
+          {cloneElement(icon)}
+        </span>
+      )}
+    </button>
   )
 }
 
-export { Tag }
-export type { Props as TagProps }
+const styles = cva({
+  base: [
+    'inline-flex shrink-0 items-center justify-center gap-1 border border-neutral-20 font-medium transition-all hover:border-neutral-30',
+    'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
+    'disabled:cursor-default disabled:opacity-[.3]',
 
-const Base = styled(View, {
-  name: 'Tag',
-
-  userSelect: 'none',
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderWidth: 1,
-  borderColor: '$neutral-20',
-  borderRadius: '$full',
-  backgroundColor: '$white-100',
-
-  animation: 'fast',
-
-  hoverStyle: {
-    borderColor: '$neutral-30',
-    backgroundColor: '$neutral-5',
-  },
-  pressStyle: {
-    borderColor: '$neutral-30',
-    backgroundColor: '$neutral-5',
-  },
-
+    // dark
+    'dark:border-neutral-80 dark:text-white-100 dark:hover:border-neutral-60',
+  ],
   variants: {
-    variant: (color: Props['color'], { tokens }) => {
-      if (!color) {
-        return
-      }
-
-      const key = color as keyof typeof tokens.colors
-      const val = (tokens.colors[key]?.val as RGBAColor) ?? (color as HexColor)
-
-      return {
-        borderColor: getColorWithOpacity(val, 20),
-        pressStyle: {
-          borderColor: getColorWithOpacity(val, 30),
-          backgroundColor: getColorWithOpacity(val, 10),
-        },
-        hoverStyle: {
-          borderColor: getColorWithOpacity(val, 30),
-          backgroundColor: getColorWithOpacity(val, 10),
-        },
-      }
-    },
-
     size: {
-      32: {
-        height: 32,
-        minWidth: 32,
-        paddingHorizontal: 12,
-        gap: 6,
-      },
-      24: {
-        height: 24,
-        minWidth: 24,
-        paddingHorizontal: 8,
-        gap: 5,
-      },
+      '32': 'h-8 rounded-20 px-3 text-15',
+      '24': 'h-6 rounded-20 px-2 text-13',
     },
     selected: {
-      true: {
-        backgroundColor: '$blue/10',
-        borderColor: '$blue-50',
-
-        hoverStyle: {
-          backgroundColor: '$blue/20',
-          borderColor: '$blue-60',
-        },
-        pressStyle: {
-          backgroundColor: '$blue/20',
-          borderColor: '$blue-60',
-        },
-      },
+      true: '!border-customisation-50 bg-customisation-50/10 dark:!border-customisation-60',
     },
-
-    disabled: {
-      true: {
-        opacity: 0.3,
-        cursor: 'default',
-      },
-    },
-
     iconOnly: {
-      true: {
-        paddingHorizontal: 0,
-      },
+      true: 'aspect-square !rounded-full !px-0',
+    },
+    disabled: {
+      true: 'pointer-events-none cursor-default border-neutral-20 opacity-[.3]',
     },
   },
 })
+
+const iconStyles = cva({
+  base: 'shrink-0 text-neutral-50 dark:text-blur-white/70 [&>svg]:size-full',
+  variants: {
+    placement: {
+      left: '-ml-0.5',
+      right: '-mr-0.5',
+    },
+    iconOnly: {
+      true: '!m-0',
+    },
+    size: {
+      '32': 'size-5',
+      '24': 'size-3',
+    },
+  },
+})
+
+const _Tag = forwardRef(Tag)
+
+export { _Tag as Tag }
+export type { Props as TagProps }

@@ -1,23 +1,26 @@
-import { AppProvider } from './app-context'
-import { ChatProvider } from './chat-context'
-import { ThemeProvider } from './theme-context'
+'use client'
 
-import type { ThemeProviderProps } from './theme-context'
+import { createContext, useContext } from 'react'
 
-type Props = ThemeProviderProps & {
-  children: React.ReactNode
+type ConfigType = {
+  link: React.ElementType
 }
 
-const Provider = (props: Props) => {
-  const { children } = props
+const Context = createContext<ConfigType>({
+  link: 'a',
+})
 
+type Props = {
+  children: React.ReactNode
+  config: ConfigType
+}
+
+export function StatusProvider(props: Props) {
   return (
-    <ThemeProvider defaultTheme={props.defaultTheme}>
-      <AppProvider>
-        <ChatProvider>{children}</ChatProvider>
-      </AppProvider>
-    </ThemeProvider>
+    <Context.Provider value={props.config}>{props.children}</Context.Provider>
   )
 }
 
-export { Provider }
+export const useConfig = () => {
+  return useContext(Context)
+}

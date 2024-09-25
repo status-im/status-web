@@ -1,60 +1,60 @@
-import './skeleton.css'
+import { cva, cx, type VariantProps } from 'cva'
 
-import { Stack, useTheme } from '@tamagui/core'
+const styles = cva({
+  base: 'animate-skeleton overflow-hidden',
 
-import type { RadiusTokens } from '../tokens'
-import type { ColorTokens, StackProps } from '@tamagui/core'
+  variants: {
+    variant: {
+      primary: 'bg-neutral-10',
+      secondary: 'bg-neutral-20',
+    },
+    //   radius: {
+    //     none: 'rounded-none',
+    //     sm: 'rounded',
+    //     md: 'rounded-md',
+    //     lg: 'rounded-lg',
+    //     xl: 'rounded-xl',
+    //     '2xl': 'rounded-2xl',
+    //     full: 'rounded-full',
+    //   },
+  },
+  defaultVariants: {
+    variant: 'primary',
+    // radius: '2xl',
+  },
+})
 
-type Props = StackProps & {
+type SkeletonProps = VariantProps<typeof styles> & {
   width?: number | string
   height?: number | string
-  borderRadius?: RadiusTokens
-  variant?: 'primary' | 'secondary'
+  className?: string
 }
 
-const skeletonColor: Record<NonNullable<Props['variant']>, ColorTokens> = {
-  primary: '$neutral-10',
-  secondary: '$neutral-20',
-}
-
-const Skeleton = (props: Props) => {
+export function Skeleton(props: SkeletonProps) {
   const {
     width = 32,
     height = 32,
-    borderRadius = '$16',
-    variant = 'primary',
+    //   variant,
+    //   radius,
+    className,
     ...rest
   } = props
 
-  const theme = useTheme()
-  /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const color = theme[skeletonColor[variant]]?.val
-
   return (
-    <Stack
-      height={height}
-      maxWidth={width}
-      width="100%"
-      borderRadius={borderRadius}
-      overflow="hidden"
+    <div
+      className={cx(
+        'animate-skeleton overflow-hidden bg-neutral-10',
+        className,
+      )}
+      style={{
+        width: typeof width === 'number' ? `${width}px` : width,
+        height: typeof height === 'number' ? `${height}px` : height,
+        background: `linear-gradient(-90deg, #F0F2F5, #FCFCFC, #F0F2F5)`,
+        backgroundSize: '400% 400%',
+      }}
       {...rest}
-    >
-      <div
-        style={{
-          maxWidth: width,
-          width: '100%',
-          height,
-          borderRadius,
-          background: `linear-gradient(-90deg, ${color}, #FCFCFC, ${color})`,
-          backgroundSize: '400% 400%',
-          animation: 'gradient 1.5s ease infinite',
-        }}
-      />
-    </Stack>
+    />
   )
 }
 
-export { Skeleton }
-export type { Props as SkeletonProps }
+export type { SkeletonProps }

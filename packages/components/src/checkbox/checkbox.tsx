@@ -1,124 +1,75 @@
-import { Indicator as _Indicator, Root } from '@radix-ui/react-checkbox'
-import { CheckIcon } from '@status-im/icons'
-import { styled } from '@tamagui/core'
+'use client'
 
-import type { GetVariants } from '../types'
-import type { IconProps } from '@status-im/icons'
-import type { ColorTokens } from '@tamagui/core'
+import { forwardRef } from 'react'
 
-type Variants = GetVariants<typeof Base>
+import * as Checkbox from '@radix-ui/react-checkbox'
+import { cva } from 'cva'
 
-interface Props {
-  selected?: boolean
-  onCheckedChange?: (checked: boolean) => void
-  id: string
-  size?: 32 | 20
+import type { VariantProps } from 'cva'
+
+type Variants = VariantProps<typeof styles>
+
+type Props = Omit<Checkbox.CheckboxProps, 'checked' | 'onCheckedChange'> & {
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
   variant?: Variants['variant']
 }
 
-const iconColor: Record<Variants['variant'], ColorTokens> = {
-  filled: '$neutral-50',
-  outline: '$white-100',
-}
+const Root = forwardRef<React.ElementRef<typeof Checkbox.Root>, Props>(
+  (props, ref) => {
+    const { variant = 'outline', ...checkboxProps } = props
 
-const iconSize: Record<Variants['size'], IconProps['size']> = {
-  32: 20,
-  20: 16,
-}
+    return (
+      <Checkbox.Root
+        {...checkboxProps}
+        ref={ref}
+        className={styles({ variant })}
+      >
+        <Checkbox.Indicator>
+          <svg
+            width="10"
+            height="9"
+            viewBox="0 0 10 9"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="hidden group-aria-checked:block"
+            aria-hidden
+            focusable="false"
+          >
+            <path
+              d="M1 4.6L3.66667 7L9 1"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </Checkbox.Indicator>
+      </Checkbox.Root>
+    )
+  },
+)
 
-const Checkbox = (props: Props) => {
-  const { id, selected, onCheckedChange, size = 20, variant = 'filled' } = props
+Root.displayName = Checkbox.Root.displayName
 
-  return (
-    <Base
-      id={id}
-      selected={selected ? variant : undefined}
-      size={size}
-      onCheckedChange={onCheckedChange}
-      variant={variant}
-      checked={selected}
-    >
-      <Indicator>
-        <CheckIcon size={iconSize[size]} color={iconColor[variant]} />
-      </Indicator>
-    </Base>
-  )
-}
-
-export { Checkbox }
-export type { Props as CheckboxProps }
-
-const Base = styled(Root, {
-  name: 'Checkbox',
-  tag: 'span',
-  accessibilityRole: 'checkbox',
-
-  backgroundColor: 'transparent',
-  borderRadius: '$6',
-
-  cursor: 'pointer',
-  animation: 'fast',
-
-  height: 32,
-  width: 32,
-  borderWidth: 1,
-
+const styles = cva({
+  base: [
+    'group inline-flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded-6 text-white-100 transition-colors',
+    'border border-neutral-20 hover:border-neutral-30',
+    'aria-checked:border-customisation-50 aria-checked:bg-customisation-50 aria-checked:hover:border-customisation-60 aria-checked:hover:bg-customisation-60',
+    'focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
+    // dark
+    'dark:border-neutral-80 dark:hover:border-neutral-60 dark:aria-checked:hover:bg-customisation-50',
+    'dark:focus-visible:ring-offset-neutral-95',
+  ],
   variants: {
-    size: {
-      32: {
-        height: 32,
-        width: 32,
-      },
-      20: {
-        height: 20,
-        width: 20,
-      },
-    },
     variant: {
-      filled: {
-        backgroundColor: '$neutral-20',
-
-        hoverStyle: { backgroundColor: '$neutral-30' },
-        pressStyle: { backgroundColor: '$neutral-30' },
-      },
-      outline: {
-        borderColor: '$neutral-20',
-
-        hoverStyle: { borderColor: '$neutral-30' },
-        pressStyle: { borderColor: '$neutral-30' },
-      },
+      outline: [],
+      filled: [
+        'bg-neutral-20 hover:bg-neutral-30',
+        'dark:bg-neutral-70 dark:hover:bg-neutral-60',
+      ],
     },
-    selected: {
-      filled: {
-        hoverStyle: { backgroundColor: '$blue-60' },
-        pressStyle: { backgroundColor: '$blue-60' },
-      },
-      outline: {
-        backgroundColor: '$blue-50',
-        borderColor: '$blue-50',
-
-        hoverStyle: {
-          backgroundColor: '$blue-60',
-        },
-        pressStyle: {
-          backgroundColor: '$blue-60',
-        },
-      },
-    },
-
-    disabled: {
-      true: {
-        opacity: 0.3,
-        cursor: 'default',
-      },
-    },
-  } as const,
+  },
 })
 
-const Indicator = styled(_Indicator, {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: '100%',
-  width: '100%',
-})
+export { Root as Checkbox }
+export type { Props as CheckboxProps }

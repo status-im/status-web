@@ -8,8 +8,8 @@ export default new Proxy(
       }
 
       throw new Error(
-        `Importing from \`@status-im/icons\` directly is not supported. Please import from either \`@status-im/icons/12\`, \`@status-im/icons/16\`, \`@status-im/icons/20\`, \`@status-im/icons/reactions\` or \`@status-im/icons/social\` instead.`
+        `Importing from \`@status-im/icons\` directly is not supported. Please import from either \`@status-im/icons/12\`, \`@status-im/icons/16\`, \`@status-im/icons/20\`, \`@status-im/icons/reactions\` or \`@status-im/icons/social\` instead.`,
       )
     },
-  }
+  },
 )

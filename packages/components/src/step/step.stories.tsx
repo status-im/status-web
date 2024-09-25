@@ -1,97 +1,50 @@
-import { Stack } from '@tamagui/core'
+import { Step } from '.'
 
-import { Step } from './step'
-
-import type { StepProps } from './step'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof Step> = {
   title: 'Components/Step',
   component: Step,
-  argTypes: {
-    value: {
-      control: {
-        type: 'number',
-        min: 0,
-        max: 1000,
-      },
-    },
-    type: {
-      control: 'select',
-      options: ['neutral', 'complete', 'active'],
-    },
-  },
+
   parameters: {
     design: {
       type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?type=design&node-id=18126-5278&mode=design&t=QNu79iGJYnhdNqOn-4',
+      url: 'https://www.figma.com/design/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=18158-12502&node-type=canvas&m=dev',
     },
   },
-}
 
-type Story = StoryObj<StepProps>
-
-export const Neutral: Story = {
-  args: {
-    value: 1,
-    type: 'neutral',
+  render: () => {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex gap-4">
+          <Step value={1} variant="outline" />
+          <Step value={2} variant="primary" />
+          <Step value={3} variant="secondary" />
+          <Step value={4} size={22} variant="outline" />
+          <Step value={5} size={22} variant="primary" />
+          <Step value={6} size={22} variant="secondary" />
+        </div>
+        <div className="flex gap-4">
+          <Step value={999} variant="outline" />
+          <Step value={999} variant="primary" />
+          <Step value={999} variant="secondary" />
+          <Step value={999} size={22} variant="outline" />
+          <Step value={999} size={22} variant="primary" />
+          <Step value={999} size={22} variant="secondary" />
+        </div>
+      </div>
+    )
   },
-}
-
-export const Complete: Story = {
-  args: {
-    value: 1,
-    type: 'complete',
-  },
-}
-
-export const Active: Story = {
-  args: {
-    value: 1,
-    type: 'active',
-  },
-}
-
-export const AllVariants: Story = {
-  args: {},
-  render: () => (
-    <Stack space flexDirection="row">
-      <Stack space flexDirection="column">
-        <Stack space alignItems="center">
-          <Step size={18} type="neutral" value={1} />
-          <Step size={18} type="neutral" value={10} />
-          <Step size={18} type="neutral" value={999} />
-        </Stack>
-        <Stack space alignItems="center">
-          <Step size={18} type="complete" value={1} />
-          <Step size={18} type="complete" value={10} />
-          <Step size={18} type="complete" value={999} />
-        </Stack>
-        <Stack space alignItems="center">
-          <Step size={18} type="active" value={1} />
-          <Step size={18} type="active" value={10} />
-          <Step size={18} type="active" value={999} />
-        </Stack>
-      </Stack>
-      <Stack space flexDirection="column">
-        <Stack space alignItems="center">
-          <Step size={22} type="neutral" value={1} />
-          <Step size={22} type="neutral" value={10} />
-          <Step size={22} type="neutral" value={999} />
-        </Stack>
-        <Stack space alignItems="center">
-          <Step size={22} type="complete" value={1} />
-          <Step size={22} type="complete" value={10} />
-          <Step size={22} type="complete" value={999} />
-        </Stack>
-        <Stack space alignItems="center">
-          <Step size={22} type="active" value={1} />
-          <Step size={22} type="active" value={10} />
-          <Step size={22} type="active" value={999} />
-        </Stack>
-      </Stack>
-    </Stack>
-  ),
 }
 
 export default meta
+
+type Story = StoryObj<typeof Step>
+
+export const Light: Story = {}
+
+export const Dark: Story = {
+  parameters: {
+    backgrounds: { default: 'dark' },
+  },
+}

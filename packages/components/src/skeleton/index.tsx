@@ -1,2 +1,1 @@
-export * from './message-skeleton'
-export * from './skeleton'
+export { Skeleton } from './skeleton'

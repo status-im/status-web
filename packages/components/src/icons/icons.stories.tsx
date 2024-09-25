@@ -1,100 +1,93 @@
-import { createElement } from 'react'
+import * as icons12 from '@status-im/icons/12'
+import * as icons16 from '@status-im/icons/16'
+import * as icons20 from '@status-im/icons/20'
+import * as reactions from '@status-im/icons/reactions'
+import * as social from '@status-im/icons/social'
 
-import * as Icon from '@status-im/icons'
-
-import { Text } from '../text'
-
-import type { IconProps } from '@status-im/icons'
 import type { Meta, StoryObj } from '@storybook/react'
-import type { ColorTokens } from 'tamagui'
+import type React from 'react'
 
-const meta: Meta = {
-  title: 'Iconography/Overview',
+function unpascal(str: string) {
+  return str.replace(/([A-Z])/g, ' $1').trim()
+}
+
+type Args = {
+  search: string
+  color: string
+  icons: [string, React.ComponentType][]
+}
+
+const meta: Meta<Args> = {
+  title: 'Icons / All',
   parameters: {
     design: {
       type: 'figma',
       url: 'https://www.figma.com/file/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&t=ZG8wYDswtYEV1Per-11',
     },
   },
-}
 
-type Story = StoryObj<{
-  search: string
-  size: IconProps['size']
-  color: ColorTokens
-}>
-
-function unpascal(str: string) {
-  return str.replace(/([A-Z])/g, ' $1').trim()
-}
-
-export const Overview: Story = {
   args: {
     search: '',
-    size: 20,
-    // color: '$blue-50',
+    color: '#000',
   },
 
   argTypes: {
-    search: {
-      control: 'text',
-    },
-    size: {
-      control: 'select',
-      options: [16, 20, 12],
+    icons: {
+      table: {
+        disable: true,
+      },
     },
     color: {
-      control: 'select',
-      options: [],
+      control: 'color',
     },
   },
 
-  render: args => {
-    return (
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          gap: 20,
-        }}
-      >
-        {Object.entries(Icon)
-          .filter(icon => {
-            if (!args.search) return true
-            return icon[0].toLowerCase().includes(args.search.toLowerCase())
-          })
-          .map(([name, component]) => {
-            return (
-              <div
-                key={name}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 10,
-                }}
-              >
-                <div
-                  style={{
-                    padding: 8,
-                    border: '1px solid #eee',
-                    borderRadius: 6,
-                  }}
-                >
-                  {createElement(component, {
-                    size: args.size,
-                    color: args.color,
-                  })}
-                </div>
-                <Text size={11} wrap={false}>
-                  {unpascal(name).replace(' Icon', '')}
-                </Text>
-              </div>
-            )
-          })}
-      </div>
-    )
-  },
+  render: ({ search, icons, color }) => (
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-5">
+      {icons
+        .filter(([key]) =>
+          unpascal(key).toLowerCase().includes(search.toLowerCase()),
+        )
+        .map(([key, Icon]) => (
+          <div key={key} className="flex flex-row items-center gap-2.5">
+            <div
+              className="rounded-6 border border-neutral-10 p-2"
+              style={{ color }}
+            >
+              <Icon />
+            </div>
+            <span className="whitespace-nowrap text-11 text-neutral-80">
+              {unpascal(key).replace(' Icon', '')}
+            </span>
+          </div>
+        ))}
+    </div>
+  ),
+}
+
+type Story = StoryObj<Args>
+
+export const Icons20: Story = {
+  name: 'Icons / 20',
+  args: { icons: Object.entries(icons20) },
+}
+
+export const Icons16: Story = {
+  name: 'Icons / 16',
+  args: { icons: Object.entries(icons16) },
+}
+
+export const Icons12: Story = {
+  name: 'Icons / 12',
+  args: { icons: Object.entries(icons12) },
+}
+
+export const Reactions: Story = {
+  args: { icons: Object.entries(reactions) },
+}
+
+export const Social: Story = {
+  args: { icons: Object.entries(social) },
 }
 
 export default meta

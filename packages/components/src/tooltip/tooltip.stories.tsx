@@ -5,26 +5,38 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 const meta: Meta<typeof Tooltip> = {
   component: Tooltip,
+  title: 'Components/Tooltip',
   argTypes: {},
   parameters: {
+    layout: 'centered',
     design: {
       type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Web?node-id=15032%3A174184&t=PHVNitU0s0KwOi8L-0',
+      url: 'https://www.figma.com/design/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=14370-152271&node-type=frame&m=dev',
     },
   },
-}
-
-type Story = StoryObj<typeof Tooltip>
-
-export const Default: Story = {
   args: {
     content: 'Sebastian Vettel reacted with a heart',
   },
   render: args => (
-    <Tooltip {...args}>
-      <Button variant="outline">Trigger</Button>
-    </Tooltip>
+    <div className="flex flex-wrap gap-4">
+      {(['left', 'top', 'bottom', 'right'] as const).map(side => (
+        <Tooltip key={side} {...args} side={side}>
+          <Button variant="primary">{side}</Button>
+        </Tooltip>
+      ))}
+    </div>
   ),
+}
+
+type Story = StoryObj<typeof Tooltip>
+
+export const Light: Story = {}
+export const Dark: Story = {
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
+  },
 }
 
 export default meta

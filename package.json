@@ -7,8 +7,7 @@
       "packages/status-js",
       "packages/colors",
       "packages/icons",
-      "packages/components",
-      "apps/*"
+      "packages/components"
     ]
   },
   "keywords": [],
@@ -22,9 +21,6 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
-    "web": "yarn workspace web dev",
-    "mobile": "yarn workspace mobile dev",
-    "desktop": "yarn workspace desktop dev",
     "storybook": "yarn workspace @status-im/components storybook"
   },
   "resolutions": {
@@ -39,12 +35,12 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
     "patch-package": "^6.5.1",
-    "prettier": "^2.8.8",
-    "prettier-plugin-tailwindcss": "0.3.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.6",
     "rimraf": "^4.4.1",
     "turbo": "^1.8.8",
-    "typescript": "^5.0.3",
-    "vite": "^4.2.1",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.3",
     "vite-node": "^0.29.8",
     "vitest": "^0.29.8"
   },

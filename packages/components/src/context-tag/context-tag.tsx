@@ -1,332 +1,142 @@
-import { cloneElement } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
-import { ChevronRightIcon, PlayIcon } from '@status-im/icons'
-import { Stack, styled } from '@tamagui/core'
-import { View } from 'react-native'
+import { cva, cx } from 'cva'
+import { match } from 'ts-pattern'
 
-import { Avatar } from '../avatar'
-import { Text } from '../text'
+import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
 
-import type { AvatarProps } from '../avatar'
-import type { TextProps } from '../text'
-import type { IconProps } from '@status-im/icons'
-import type { ComponentProps } from 'react'
+type Variants = VariantProps<typeof baseStyles>
 
-type Props = { blur?: boolean; outline?: boolean } & (
-  | {
-      size?: 20 | 32
-    }
-  | {
-      size?: 24
-      textSize: 13 | 15
-    }
-) &
-  (
-    | { type: 'user'; user: { name: string; src: string } }
-    | { type: 'account'; account: { name: string; emoji: string } }
-    | {
-        type: 'group'
-        group: {
-          name: string
-          icon: React.ReactElement
-        }
-      }
-    | { type: 'community'; community: { name: string; src?: string } }
-    | {
-        type: 'channel'
-        channel: { communityName: string; src: string; name: string }
-      }
-    | { type: 'token'; token: { name: string; src: string } }
-    | { type: 'network'; network: { name: string; src: string } }
-    | { type: 'collectible'; collectible: { name: string; src: string } }
-    | { type: 'address'; address: string }
-    | { type: 'icon'; icon: React.ReactElement; label: string }
-    | { type: 'audio'; audioLength: string }
-    | { type: 'label'; children: string }
-  )
+type Props = {
+  size?: Variants['size']
+} & (
+  | { type: 'label'; children: string }
+  | { type: 'community'; label: string; icon: IconElement }
+  | { type: 'token'; label: string; icon: IconElement }
+  | { type: 'network'; label: string; icon: IconElement }
+  | { type: 'icon'; label: string; icon: IconElement }
+)
+// | { type: 'user'; user: { name: string; src: string } }
+// | { type: 'account'; account: { name: string; emoji: string } }
+// | {
+//     type: 'group'
+//     group: {
+//       name: string
+//       icon: React.ReactElement
+//     }
+//   }
+// | {
+//     type: 'channel'
+//     channel: { communityName: string; src: string; name: string }
+//   }
+// | { type: 'collectible'; collectible: { name: string; src: string } }
+// | { type: 'address'; address: string }
+// | { type: 'audio'; audioLength: string }
 
-const textSizes: Record<
-  Exclude<NonNullable<Props['size']>, 24>,
-  Extract<TextProps['size'], 13 | 15>
-> = {
-  '32': 15,
-  /**
-   * note: "These context sizes are the same size as the ones above (24px), but the text size differs.
-   * We can have a bigger or smaller text depending on the context."
-   *
-   * – https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n?node-id=1336:34320&mode=design#541570513
-   */
-  // '24': 15,
-  '20': 13,
-}
-
-const avatarSizes: Record<
-  NonNullable<Props['size']>,
-  Extract<AvatarProps['size'], 28 | 20 | 16>
-> = {
-  '32': 28,
-  '24': 20,
-  '20': 16,
-}
-
-const iconSizes: Record<NonNullable<Props['size']>, IconProps['size']> = {
-  '32': 20,
-  '24': 12,
-  '20': 12,
-}
-
-const chevronIconSize: Record<
-  NonNullable<Props['size']>,
-  ComponentProps<typeof ChevronRightIcon>['size']
-> = {
-  '32': 20,
-  '24': 16,
-  '20': 12,
-}
-
-const Label = (props: {
-  children: string
-  size: 13 | 15
-  type?: 'default' | 'monospace'
-}) => {
-  const { children, size, type = 'default' } = props
-
-  return (
-    <Text
-      size={size}
-      weight="medium"
-      color="$neutral-100"
-      type={type}
-      select={false}
-    >
-      {children}
-    </Text>
-  )
-}
-
-const ContextTag = (props: Props) => {
-  const { size = 24, blur = false, outline, type } = props
-
-  const rounded = type === 'account' || type === 'collectible'
-  const hasAvatar = type !== 'address' && type !== 'icon' && type !== 'label'
-
-  let textSize: Extract<TextProps['size'], 13 | 15>
-  let paddingHorizontal: number | undefined
-  if (size === 24) {
-    textSize = 'textSize' in props ? props.textSize : 13 // default if props.size not set but fallbacked to 24
-    paddingHorizontal = textSize === 13 ? 8 : 6
-  } else {
-    textSize = textSizes[size]
-  }
-
-  const renderContent = () => {
-    switch (type) {
-      case 'user': {
-        return (
-          <>
-            <Avatar
-              type="user"
-              size={avatarSizes[size]}
-              src={props.user.src}
-              name={props.user.name}
-            />
-            <Label size={textSize}>{props.user.name}</Label>
-          </>
-        )
-      }
-      case 'community': {
-        return (
-          <>
-            <Avatar
-              type="community"
-              size={avatarSizes[size]}
-              src={props.community.src}
-              name={props.community.name}
-            />
-            <Label size={textSize}>{props.community.name}</Label>
-          </>
-        )
-      }
-      case 'channel': {
-        return (
-          <>
-            <Avatar
-              type="community"
-              size={avatarSizes[size]}
-              src={props.channel.src}
-              name={props.channel.name}
-            />
-            <Stack flexDirection="row" gap="$0" alignItems="center">
-              <Label size={textSize}>{props.channel.communityName}</Label>
-              <ChevronRightIcon
-                color="$neutral-50"
-                size={chevronIconSize[size]}
-              />
-              <Label size={textSize}>{`# ` + props.channel.name}</Label>
-            </Stack>
-          </>
-        )
-      }
-      case 'token': {
-        return (
-          <>
-            <Avatar
-              type="community"
-              size={avatarSizes[size]}
-              src={props.token.src}
-              name={props.token.name}
-            />
-            <Label size={textSize}>{props.token.name}</Label>
-          </>
-        )
-      }
-      case 'address': {
-        return (
-          <Label size={textSize} type="monospace">
-            {props.address}
-          </Label>
-        )
-      }
-      case 'audio': {
-        return (
-          <>
-            <Avatar
-              type="icon"
-              size={avatarSizes[size]}
-              icon={<PlayIcon size={16} />}
-              backgroundColor="$blue-50"
-              color="$white-100"
-            />
-            <Label size={textSize}>{props.audioLength}</Label>
-          </>
-        )
-      }
-      case 'account': {
-        return (
-          <>
-            <Avatar
-              type="account"
-              size={avatarSizes[size]}
-              name={props.account.emoji}
-            />
-            <Label size={textSize}>{props.account.name}</Label>
-          </>
-        )
-      }
-      case 'group': {
-        return (
-          <>
-            <Avatar
-              type="icon"
-              size={avatarSizes[size]}
-              backgroundColor="$purple-50"
-              color="$white/70"
-              icon={props.group.icon}
-            />
-            <Label size={textSize}>{props.group.name}</Label>
-          </>
-        )
-      }
-      case 'network': {
-        return (
-          <>
-            <Avatar
-              type="community"
-              size={avatarSizes[size]}
-              src={props.network.src}
-              name={props.network.name}
-            />
-            <Label size={textSize}>{props.network.name}</Label>
-          </>
-        )
-      }
-      case 'collectible': {
-        return (
-          <>
-            {/* fixme: not an avatar but a resized image; see https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n?node-id=1336:34320&mode=design#541620575 */}
-            <Avatar
-              type="account"
-              size={avatarSizes[size]}
-              src={props.collectible.src}
-              name={props.collectible.name}
-            />
-            <Label size={textSize}>{props.collectible.name}</Label>
-          </>
-        )
-      }
-      case 'icon': {
-        return (
-          <>
-            {cloneElement(props.icon, {
-              size: iconSizes[size],
-              color: '$neutral-50',
-            })}
-            <Label size={textSize}>{props.label}</Label>
-          </>
-        )
-      }
-      case 'label': {
-        return <Label size={textSize}>{props.children}</Label>
-      }
-    }
-  }
-
-  return (
-    <Base
-      outline={outline}
-      blur={blur}
-      borderRadius={rounded ? '$8' : '$full'}
-      size={size}
-      {...(paddingHorizontal && { paddingHorizontal })}
-      {...(hasAvatar && { paddingLeft: 2 })}
-      {...(hasAvatar && outline && { paddingLeft: 1 })}
-    >
-      {renderContent()}
-    </Base>
-  )
-}
-
-export { ContextTag }
-export type { Props as ContextTagProps }
-
-const Base = styled(View, {
-  backgroundColor: '$neutral-10',
-  display: 'inline-flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  cursor: 'default',
-
+const baseStyles = cva({
+  base: [
+    'inline-flex w-fit cursor-default items-center rounded-full',
+    'font-medium text-neutral-100 dark:text-white-100',
+    'bg-neutral-10 blur:bg-neutral-80/5 dark:bg-neutral-90 blur:dark:bg-white-5',
+  ],
   variants: {
-    outline: {
-      true: {
-        borderWidth: '1px',
-        borderColor: '$blue-50',
-        borderStyle: 'solid',
-      },
-    },
-    blur: {
-      true: {
-        backgroundColor: '$neutral-80/5',
-      },
-      false: {
-        backgroundColor: '$neutral-10',
-      },
-    },
     size: {
-      20: {
-        height: 20,
-        gap: 4,
-        paddingHorizontal: 6,
-      },
-      24: {
-        height: 24,
-        gap: 4,
-      },
-      32: {
-        height: 32,
-        gap: 8,
-        paddingHorizontal: 12,
-      },
+      '32': 'h-8 gap-2 px-3 text-15',
+      '24+': 'h-6 gap-1 px-2 text-15',
+      '24': 'h-6 gap-1 px-2 text-13',
+      '20': 'h-5 gap-1 px-1.5 text-13',
     },
-  } as const,
+    selected: {
+      true: 'border border-customisation-50',
+    },
+  },
 })
+
+const iconStyles = cva({
+  base: 'shrink-0 [&>*]:size-full',
+  variants: {
+    size: {
+      '32': 'size-7',
+      '24+': 'size-5',
+      '24': 'size-5',
+      '20': 'size-4',
+    },
+    offset: {
+      '32': '-ml-2.5',
+      '24+': '-ml-1.5',
+      '24': '-ml-1.5',
+      '20': '-ml-1',
+    },
+    rounded: {
+      '6': 'overflow-hidden rounded-6',
+      true: 'overflow-hidden rounded-full',
+    },
+  },
+})
+
+const ContextTag = (props: Props, ref: React.Ref<HTMLDivElement>) => {
+  const { size = '24', ...rest } = props
+
+  return match(props)
+    .with({ type: 'label' }, ({ children }) => {
+      return (
+        <div {...rest} ref={ref} className={baseStyles({ size })}>
+          <span>{children}</span>
+        </div>
+      )
+    })
+    .with({ type: 'community' }, ({ icon, label }) => {
+      return (
+        <div {...rest} ref={ref} className={baseStyles({ size })}>
+          <span className={iconStyles({ size, rounded: true, offset: size })}>
+            {cloneElement(icon)}
+          </span>
+          <span>{label}</span>
+        </div>
+      )
+    })
+    .with({ type: 'token' }, ({ icon, label }) => {
+      return (
+        <div {...rest} ref={ref} className={baseStyles({ size })}>
+          <span className={iconStyles({ size, rounded: true, offset: size })}>
+            {cloneElement(icon)}
+          </span>
+          <span>{label}</span>
+        </div>
+      )
+    })
+    .with({ type: 'network' }, ({ icon, label }) => {
+      return (
+        <div {...rest} ref={ref} className={baseStyles({ size })}>
+          <span className={iconStyles({ size, rounded: true, offset: size })}>
+            {cloneElement(icon)}
+          </span>
+          <span>{label}</span>
+        </div>
+      )
+    })
+    .with({ type: 'icon' }, ({ icon, label }) => {
+      return (
+        <div {...rest} ref={ref} className={baseStyles({ size })}>
+          <span
+            className={cx(
+              iconStyles({
+                size,
+                className: 'text-neutral-50',
+              }),
+            )}
+          >
+            {cloneElement(icon)}
+          </span>
+          <span>{label}</span>
+        </div>
+      )
+    })
+    .exhaustive()
+}
+
+const _ContextTag = forwardRef(ContextTag)
+
+export { _ContextTag as ContextTag }
+export type { Props as ContextTagProps }

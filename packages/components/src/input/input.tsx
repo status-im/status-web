@@ -1,228 +1,152 @@
-import { cloneElement, forwardRef, useRef, useState } from 'react'
+'use client'
 
-import { composeRefs } from '@radix-ui/react-compose-refs'
-import { ClearIcon } from '@status-im/icons'
-import { Stack, styled } from '@tamagui/core'
-import { focusableInputHOC } from '@tamagui/focusable'
-import { TextInput } from 'react-native'
+import { cloneElement, forwardRef } from 'react'
 
-import { Button } from '../button'
-import { Text } from '../text'
+import { ClearIcon } from '@status-im/icons/20'
+import { cva } from 'cva'
+import * as Aria from 'react-aria-components'
 
-import type { GetProps } from '@tamagui/core'
-import type { Ref } from 'react'
+import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
 
-type Props = GetProps<typeof InputFrame> & {
-  button?: {
-    label: string
-    onPress: () => void
-  }
-  endLabel?: string
-  icon?: React.ReactElement
+type Variants = VariantProps<typeof inputStyles>
+
+type Props = Aria.TextFieldProps & {
+  size?: Variants['size']
   label?: string
-  onClear?: () => void
-  variant?: 'default' | 'retractable'
-  size?: 40 | 32
-  error?: boolean
-  direction?: 'ltr' | 'rtl'
+  icon?: IconElement
+  placeholder?: string
+  type?: Aria.InputProps['type']
+  inputMode?: Aria.InputProps['inputMode']
+  autoComplete?: Aria.InputProps['autoComplete']
+  clearable?: boolean
 }
 
-const _Input = (props: Props, ref: Ref<TextInput>) => {
+const Input = (props: Props, ref: React.Ref<HTMLInputElement>) => {
   const {
-    button,
-    color = '$neutral-50',
-    endLabel,
-    error,
-    icon,
+    size = '40',
     label,
-    onClear,
-    size = 40,
+    icon,
     placeholder,
-    value,
-    direction = 'ltr',
-    variant = 'default',
-    ...rest
+    type = 'text',
+    inputMode,
+    autoComplete = 'off',
+    clearable = false,
+    maxLength,
+    ...fieldProps
   } = props
 
-  const [isMinimized, setIsMinimized] = useState(variant === 'retractable')
-
-  const isRetractable = variant === 'retractable'
-
-  const inputRef = useRef<TextInput>(null)
-
   return (
-    <Stack flexDirection={direction === 'ltr' ? 'row' : 'row-reverse'}>
-      {Boolean(label || endLabel) && (
-        <Stack flexDirection="row" justifyContent="space-between" pb={8}>
-          {label && (
-            <Text size={13} color="$neutral-50" weight="medium">
-              {label}
-            </Text>
+    <Aria.TextField {...fieldProps} className="grid gap-2">
+      {(label || maxLength) && (
+        <div className="grid grid-cols-2">
+          <Aria.Label className="text-13 font-medium text-neutral-50 dark:text-neutral-40">
+            {label}
+          </Aria.Label>
+
+          {maxLength && (
+            <Aria.Label className="text-right text-13 font-regular text-neutral-50 dark:text-neutral-40">
+              {fieldProps.value?.length}/{maxLength}
+            </Aria.Label>
           )}
-          {endLabel && (
-            <Text size={13} color="$neutral-50">
-              {endLabel}
-            </Text>
-          )}
-        </Stack>
+        </div>
       )}
-      <InputContainer
-        size={size}
-        error={error}
-        minimized={isMinimized}
-        onPress={event => {
-          event.stopPropagation()
-          event.preventDefault()
-
-          if (isRetractable && isMinimized) {
-            setIsMinimized(false)
-
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore ref is not inferred correctly here
-            inputRef?.current?.focus()
-          }
-        }}
-      >
-        {icon ? (
-          <Stack flexShrink={0}>{cloneElement(icon, { color })}</Stack>
-        ) : null}
-        <InputBase
-          value={value}
-          placeholder={isMinimized && !value ? '' : placeholder}
-          flex={1}
-          ref={composeRefs(ref, inputRef)}
-          onBlur={() => {
-            if (!value && isRetractable && !isMinimized) {
-              setIsMinimized(true)
-            }
-          }}
-          {...rest}
+      <div className="relative">
+        {icon && (
+          <span className={iconStyles({ size })}>{cloneElement(icon)}</span>
+        )}
+        <Aria.Input
+          ref={ref}
+          type={type}
+          inputMode={inputMode}
+          autoComplete={autoComplete}
+          placeholder={placeholder}
+          className={inputStyles({ size, icon: Boolean(icon), clearable })}
         />
-        <Stack flexDirection="row" alignItems="center">
-          {Boolean(onClear) && !!value && (
-            <Stack
-              role="button"
-              pr={4}
-              onPress={onClear}
-              cursor="pointer"
-              hoverStyle={{ opacity: 0.6 }}
-              animation="fast"
-            >
-              <ClearIcon size={20} />
-            </Stack>
-          )}
-          {button && (
-            <Button onPress={button.onPress} variant="outline" size={24}>
-              {button.label}
-            </Button>
-          )}
-        </Stack>
-      </InputContainer>
-    </Stack>
+        {clearable && (
+          <Aria.Button
+            className={clearableButtonStyles({ size })}
+            aria-label="Clear input"
+            onPress={() => props.onChange?.('')}
+          >
+            <ClearIcon />
+          </Aria.Button>
+        )}
+      </div>
+    </Aria.TextField>
   )
 }
 
-const Input = forwardRef(_Input)
+const inputStyles = cva({
+  base: [
+    'block h-10 w-full min-w-0 flex-1 border border-neutral-20 bg-white-100 text-15 text-neutral-100 placeholder-neutral-40 max-sm:text-[1rem]',
+    'outline-none focus:border-neutral-40',
+    'disabled:border-neutral-20 disabled:opacity-[.3]',
+    'invalid:border-danger-50/40',
 
-export { Input }
-export type { Props as InputProps }
-
-const InputFrame = styled(
-  TextInput,
-  {
-    tag: 'input',
-    name: 'Input',
-
-    outlineWidth: 0,
-    borderColor: '$neutral-20',
-
-    color: '$neutral-100',
-    placeholderTextColor: '$placeHolderColor',
-
-    backgroundColor: 'transparent',
-
-    // this fixes a flex bug where it overflows container
-    minWidth: 0,
-
-    variants: {
-      blurred: {
-        true: {
-          placeholderTextColor: '$placeHolderColorBlurred',
-        },
-      },
-    },
-
-    defaultVariants: {
-      blurred: false,
-    },
-  } as const,
-  {
-    isInput: true,
-  }
-)
-
-const InputBase = focusableInputHOC(InputFrame)
-
-const InputContainer = styled(Stack, {
-  name: 'InputContainer',
-  tag: 'div',
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 8,
-
-  borderWidth: 1,
-  borderColor: '$neutral-30',
-
-  paddingHorizontal: 12,
-
-  animation: 'fast',
-  width: '100%',
-
-  hoverStyle: {
-    borderColor: '$neutral-40',
-  },
-
-  focusStyle: {
-    borderColor: '$neutral-40',
-  },
-
-  pressStyle: {
-    borderColor: '$neutral-40',
-  },
-
+    // dark
+    'dark:border-neutral-70 dark:bg-neutral-95 dark:text-white-100 dark:placeholder-neutral-50',
+    'dark:invalid:border-danger-50/40',
+  ],
   variants: {
     size: {
-      40: {
-        height: 40,
-        paddingHorizontal: 16,
-        borderRadius: '$12',
-      },
-      32: {
-        height: 32,
-        paddingHorizontal: 8,
-        borderRadius: '$10',
-      },
+      '40': 'h-10 rounded-12 px-3',
+      '32': 'h-8 rounded-10 px-2',
     },
-    minimized: {
-      true: {
-        width: 32,
-        paddingHorizontal: 0,
-        paddingLeft: 5,
-
-        cursor: 'pointer',
-      },
+    icon: { true: '' },
+    clearable: { true: '' },
+  },
+  compoundVariants: [
+    {
+      size: '40',
+      icon: true,
+      className: 'pl-10',
     },
-    error: {
-      true: {
-        borderColor: '$danger-/40',
-      },
+    {
+      icon: true,
+      size: '32',
+      className: 'pl-8',
     },
-
-    disabled: {
-      true: {
-        opacity: 0.3,
-        cursor: 'default',
-      },
+    {
+      size: '40',
+      clearable: true,
+      className: 'pr-10',
     },
-  } as const,
+    {
+      size: '32',
+      clearable: true,
+      className: 'pr-8',
+    },
+  ],
 })
+
+const iconStyles = cva({
+  base: [
+    'absolute top-1/2 -translate-y-1/2 text-neutral-50 [&>svg]:size-full',
+    'dark:text-neutral-40',
+  ],
+  variants: {
+    size: {
+      '40': 'left-3',
+      '32': 'left-2',
+    },
+  },
+})
+
+const clearableButtonStyles = cva({
+  base: [
+    'absolute top-1/2 size-5 -translate-y-1/2 text-neutral-40 dark:text-neutral-60',
+    'outline-none',
+  ],
+  variants: {
+    size: {
+      '40': 'right-3',
+      '32': 'right-2',
+    },
+  },
+})
+
+const _Input = forwardRef(Input)
+
+export { _Input as Input }
+export type { Props as InputProps }

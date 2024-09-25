@@ -1,11 +1,14 @@
+'use client'
+
 import { useMemo } from 'react'
+import { createPortal } from 'react-dom'
 
 import { Provider, Root, Viewport } from '@radix-ui/react-toast'
-import { styled } from 'tamagui'
 import { create } from 'zustand'
 
 import { Toast } from './toast'
 
+import type { IconElement } from '../types'
 import type { ToastProps } from './toast'
 import type { ToastProps as RootProps } from '@radix-ui/react-toast'
 
@@ -20,7 +23,7 @@ type ToastState = {
   dismiss: () => void
   positive: (message: string, options?: Options) => void
   negative: (message: string, options?: Options) => void
-  custom: (message: string, icon: React.ReactElement, options?: Options) => void
+  custom: (message: string, icon: IconElement, options?: Options) => void
 }
 
 const useStore = create<ToastState>()(set => ({
@@ -63,12 +66,16 @@ const ToastContainer = () => {
 
   const { duration, originType, ...restProps } = store.toast
 
-  return (
+  if (typeof document === 'undefined') {
+    return null
+  }
+
+  return createPortal(
     <Provider>
-      <ToastRoot
+      <Root
         defaultOpen
         onOpenChange={handleOpenChange}
-        style={{ position: 'fixed' }}
+        className="fixed bottom-3 right-3 z-[1000]"
         // note: prevent swipe gestures from closing the toast until animation is implemented
         onSwipeStart={event => event.preventDefault()}
         onSwipeMove={event => event.preventDefault()}
@@ -78,9 +85,10 @@ const ToastContainer = () => {
         type={originType}
       >
         <Toast {...restProps} />
-      </ToastRoot>
+      </Root>
       <Viewport />
-    </Provider>
+    </Provider>,
+    document.body,
   )
 }
 
@@ -94,17 +102,8 @@ const useToast = () => {
       custom: store.custom,
       dismiss: store.dismiss,
     }),
-    [store]
+    [store],
   )
 }
 
 export { ToastContainer, useToast }
-
-const ToastRoot = styled(Root, {
-  name: 'ToastRoot',
-  acceptsClassName: true,
-
-  bottom: 12,
-  right: 12,
-  zIndex: 1000,
-})

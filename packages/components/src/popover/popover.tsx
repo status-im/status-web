@@ -1,54 +1,39 @@
-import { Content, Portal, Root, Trigger } from '@radix-ui/react-popover'
-import { Stack } from 'tamagui'
+import { forwardRef } from 'react'
 
-import type { PopoverContentProps } from '@radix-ui/react-popover'
+import * as Popover from '@radix-ui/react-popover'
+import { cx } from 'cva'
 
-interface Props {
+type Props = Popover.PopoverProps & {
   children: [React.ReactElement, React.ReactElement]
   onOpenChange?: (open: boolean) => void
-  modal?: false
-  side?: PopoverContentProps['side']
-  sideOffset?: PopoverContentProps['sideOffset']
-  align?: PopoverContentProps['align']
-  alignOffset?: PopoverContentProps['alignOffset']
 }
 
-const Popover = (props: Props) => {
-  const { children, onOpenChange, modal, ...contentProps } = props
+export const Root = (props: Props) => {
+  const { children, ...rootProps } = props
 
   const [trigger, content] = children
 
   return (
-    <Root onOpenChange={onOpenChange} modal={modal}>
-      <Trigger asChild>{trigger}</Trigger>
-      <Portal>
-        <Content {...contentProps}>{content}</Content>
-      </Portal>
-    </Root>
+    <Popover.Root {...rootProps}>
+      <Popover.Trigger asChild>{trigger}</Popover.Trigger>
+      {content}
+    </Popover.Root>
   )
 }
 
-type ContentProps = {
-  children: React.ReactNode
-}
-
-const PopoverContent = (props: ContentProps) => {
-  const { children } = props
-
+export const Content = forwardRef<
+  React.ElementRef<typeof Popover.Content>,
+  React.ComponentPropsWithoutRef<typeof Popover.Content>
+>((props, ref) => {
   return (
-    <Stack
-      backgroundColor="$white-100"
-      borderRadius="$12"
-      shadowRadius={30}
-      shadowOffset={{ width: 0, height: 8 }}
-      shadowColor="rgba(9, 16, 28, 0.12)"
-    >
-      {children}
-    </Stack>
+    <Popover.Portal>
+      <Popover.Content
+        ref={ref}
+        {...props}
+        className={cx('rounded-6 bg-white-100 shadow-3', props.className)}
+      />
+    </Popover.Portal>
   )
-}
+})
 
-Popover.Content = PopoverContent
-
-export { Popover as Popover }
-export type { Props as PopoverProps }
+Content.displayName = Popover.Content.displayName

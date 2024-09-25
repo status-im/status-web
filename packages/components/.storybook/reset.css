@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-sans: 'Inter';
+  }
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -36,7 +46,8 @@
 */
 html,
 body {
-  min-height: 100%;
+  min-height: 100vh;
+  @apply text-neutral-100;
 }
 /*
   Typographic tweaks!
@@ -68,7 +79,7 @@ button,
 textarea,
 select {
   font: inherit;
-  all: unset;
+  /* all: unset; */
 }
 /*
   8. Avoid text overflows

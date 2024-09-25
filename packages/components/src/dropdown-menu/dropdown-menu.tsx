@@ -1,175 +1,261 @@
-import { cloneElement, forwardRef } from 'react'
+import { cloneElement, forwardRef, useId } from 'react'
 
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {
-  CheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  Portal,
-  Root,
-  Trigger,
-} from '@radix-ui/react-dropdown-menu'
-import { CheckIcon } from '@status-im/icons'
-import { Stack, styled } from '@tamagui/core'
+  ArrowRightIcon,
+  CheckIcon,
+  ExternalIcon,
+  SearchIcon,
+} from '@status-im/icons/20'
+import { cva } from 'cva'
 
 import { Checkbox } from '../checkbox'
-import { Text } from '../text'
+import { Input } from '../input'
 
-interface Props {
+import type { IconElement } from '../types'
+
+/**
+ * Root
+ */
+
+type RootProps = DropdownMenu.DropdownMenuProps & {
   children: [React.ReactElement, React.ReactElement]
-  modal?: false
-  onOpenChange?: (open: boolean) => void
 }
 
-const DropdownMenu = (props: Props) => {
-  const { children, onOpenChange, modal } = props
+export const Root = (props: RootProps) => {
+  const { children, ...rootProps } = props
 
   const [trigger, content] = children
 
   return (
-    <Root onOpenChange={onOpenChange} modal={modal}>
-      <Trigger asChild>{trigger}</Trigger>
-      <Portal>{content}</Portal>
-    </Root>
+    <DropdownMenu.Root {...rootProps}>
+      <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
+      {content}
+    </DropdownMenu.Root>
   )
 }
 
-interface DropdownMenuItemProps {
-  icon?: React.ReactElement
+/**
+ * Content
+ */
+
+const contentStyles = cva({
+  base: [
+    'rounded-12 border border-neutral-10 bg-white-100 p-1 shadow-3',
+    'max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[var(--radix-dropdown-menu-trigger-width)] overflow-auto',
+    'dark:border-neutral-90 dark:bg-neutral-95',
+  ],
+})
+
+export const Content = forwardRef<
+  React.ElementRef<typeof DropdownMenu.Content>,
+  DropdownMenu.DropdownMenuContentProps
+>((props, ref) => {
+  const {
+    align = 'start',
+    side = 'bottom',
+    sideOffset = 4,
+    ...contentProps
+  } = props
+  return (
+    <DropdownMenu.Portal>
+      <DropdownMenu.Content
+        ref={ref}
+        align={align}
+        side={side}
+        sideOffset={sideOffset}
+        {...contentProps}
+        className={contentStyles({ className: props.className })}
+      />
+    </DropdownMenu.Portal>
+  )
+})
+
+Content.displayName = DropdownMenu.Content.displayName
+
+/**
+ * Search
+ */
+
+export const Search = forwardRef<
+  React.ElementRef<typeof Input>,
+  React.ComponentPropsWithoutRef<typeof Input>
+>((props, ref) => {
+  return (
+    <div className="mb-1 p-1">
+      <Input
+        {...props}
+        ref={ref}
+        size="32"
+        icon={<SearchIcon />}
+        aria-label="Search"
+      />
+    </div>
+  )
+})
+
+Search.displayName = 'Search'
+
+/**
+ * Item
+ */
+
+type ItemProps = DropdownMenu.DropdownMenuItemProps & {
+  icon?: IconElement
   label: string
   onSelect: () => void
   selected?: boolean
   danger?: boolean
+  external?: boolean
 }
 
-const MenuItem = (props: DropdownMenuItemProps) => {
-  const { icon, label, onSelect, danger, selected } = props
+const itemStyles = cva({
+  base: [
+    'flex h-8 cursor-pointer select-none items-center gap-2 rounded-8 px-2 text-15 transition-colors active:bg-neutral-10',
+    'outline-none data-[highlighted]:bg-neutral-5',
+    'dark:active:bg-customisation-50/10 dark:hover:bg-customisation-50/5',
+  ],
+})
 
-  const iconColor = danger ? '$danger-50' : '$neutral-50'
-  const textColor = danger ? '$danger-50' : '$neutral-100'
+const iconStyles = cva({
+  base: ['size-5 [&>svg]:size-full'],
+  variants: {
+    danger: {
+      false: ['text-neutral-50 dark:text-neutral-40'],
+      true: ['text-danger-50'],
+    },
+  },
+  defaultVariants: {
+    danger: false,
+  },
+})
+
+const labelStyles = cva({
+  base: ['flex-1 font-medium'],
+  variants: {
+    danger: {
+      false: ['text-neutral-100 dark:text-white-100'],
+      true: ['text-danger-50 dark:text-danger-60'],
+    },
+  },
+  defaultVariants: {
+    danger: false,
+  },
+})
+
+export const Item = forwardRef<
+  React.ElementRef<typeof DropdownMenu.Item>,
+  ItemProps
+>((props, ref) => {
+  const { icon, label, selected, danger, external, ...itemProps } = props
 
   return (
-    <ItemBase onSelect={onSelect}>
-      <Stack flexDirection="row" gap={8} alignItems="center">
-        {icon && cloneElement(icon, { color: iconColor })}
-        <Text size={15} weight="medium" color={textColor}>
-          {label}
-        </Text>
-      </Stack>
-      {selected && <CheckIcon size={20} color={iconColor} />}
-    </ItemBase>
+    <DropdownMenu.Item {...itemProps} ref={ref} className={itemStyles()}>
+      {icon && (
+        <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
+      )}
+      <span className={labelStyles({ danger })}>{label}</span>
+      {selected && <CheckIcon className="text-customisation-50" />}
+      {external && <ExternalIcon className="text-neutral-50" />}
+    </DropdownMenu.Item>
   )
-}
+})
 
-interface DropdownMenuCheckboxItemProps {
-  icon?: React.ReactElement
+Item.displayName = DropdownMenu.Item.displayName
+
+/**
+ * CheckboxItem
+ */
+
+type CheckboxItemProps = DropdownMenu.DropdownMenuCheckboxItemProps & {
+  icon?: IconElement
   label: string
-  onSelect: () => void
-  checked?: boolean
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
   danger?: boolean
 }
 
-const DropdownMenuCheckboxItem = forwardRef<
-  HTMLDivElement,
-  DropdownMenuCheckboxItemProps
->(function _DropdownMenuCheckboxItem(props, forwardedRef) {
-  const { checked, label, icon, onSelect } = props
+export const CheckboxItem = forwardRef<
+  React.ElementRef<typeof DropdownMenu.CheckboxItem>,
+  CheckboxItemProps
+>((props, ref) => {
+  const { label, icon, danger, ...itemProps } = props
 
-  const handleSelect = (event: Event) => {
-    event.preventDefault()
-    onSelect()
-  }
+  const id = useId()
 
   return (
-    <ItemBaseCheckbox {...props} ref={forwardedRef} onSelect={handleSelect}>
-      <Stack flexDirection="row" gap={8} alignItems="center">
-        {icon && cloneElement(icon)}
-        <Text size={15} weight="medium" color="$neutral-100">
-          {label}
-        </Text>
-      </Stack>
-      <Checkbox id={label} selected={checked} variant="outline" />
-    </ItemBaseCheckbox>
+    <DropdownMenu.CheckboxItem
+      ref={ref}
+      className={itemStyles()}
+      {...itemProps}
+    >
+      {icon && (
+        <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
+      )}
+      <span className={labelStyles({ danger })}>{label}</span>
+      <Checkbox
+        id={id}
+        variant="outline"
+        checked={itemProps.checked}
+        onCheckedChange={() => {
+          // handle by parent
+        }}
+      />
+    </DropdownMenu.CheckboxItem>
   )
 })
 
-const Content = styled(DropdownMenuContent, {
-  name: 'DropdownMenuContent',
-  acceptsClassName: true,
+CheckboxItem.displayName = DropdownMenu.CheckboxItem.displayName
 
-  width: 256,
-  padding: 4,
-  borderRadius: '$12',
-  backgroundColor: '$white-100',
+/**
+ * Separator
+ */
+export const Separator = () => (
+  <DropdownMenu.Separator className="-mx-1 my-1.5 h-px bg-neutral-20 dark:bg-neutral-80" />
+)
 
-  shadowRadius: 30,
-  shadowOffset: { width: 0, height: 8 },
-  shadowColor: 'rgba(9, 16, 28, 0.12)',
+/**
+ * Submenu
+ */
+export const Sub = (props: DropdownMenu.DropdownMenuProps) => {
+  return <DropdownMenu.Sub {...props} />
+}
+
+type SubTriggerProps = DropdownMenu.DropdownMenuSubTriggerProps & {
+  icon?: IconElement
+  label: string
+  danger?: boolean
+}
+
+export const SubTrigger = (props: SubTriggerProps) => {
+  const { icon, label, danger, ...itemProps } = props
+
+  return (
+    <DropdownMenu.SubTrigger {...itemProps} className={itemStyles()}>
+      {icon && (
+        <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
+      )}
+      <span className={labelStyles({ danger })}>{label}</span>
+      <ArrowRightIcon className="text-neutral-50" />
+    </DropdownMenu.SubTrigger>
+  )
+}
+
+export const SubContent = forwardRef<
+  React.ElementRef<typeof DropdownMenu.SubContent>,
+  DropdownMenu.DropdownMenuSubContentProps
+>((props, ref) => {
+  return (
+    <DropdownMenu.Portal>
+      <DropdownMenu.SubContent
+        {...props}
+        ref={ref}
+        className={contentStyles({ className: props.className })}
+      >
+        {props.children}
+      </DropdownMenu.SubContent>
+    </DropdownMenu.Portal>
+  )
 })
 
-const ItemBase = styled(DropdownMenuItem, {
-  name: 'DropdownMenuItem',
-  acceptsClassName: true,
-
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-
-  height: 32,
-  paddingHorizontal: 8,
-  borderRadius: '$10',
-  cursor: 'pointer',
-  userSelect: 'none',
-  gap: 8,
-
-  hoverStyle: {
-    backgroundColor: '$neutral-5',
-  },
-
-  pressStyle: {
-    backgroundColor: '$neutral-10',
-  },
-})
-
-const ItemBaseCheckbox = styled(CheckboxItem, {
-  name: 'DropdownMenuCheckboxItem',
-  acceptsClassName: true,
-
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-
-  height: 32,
-  paddingHorizontal: 8,
-  borderRadius: '$10',
-  cursor: 'pointer',
-  userSelect: 'none',
-  gap: 8,
-
-  hoverStyle: {
-    backgroundColor: '$neutral-5',
-  },
-
-  pressStyle: {
-    backgroundColor: '$neutral-10',
-  },
-})
-
-const Separator = styled(DropdownMenuSeparator, {
-  name: 'DropdownMenuSeparator',
-  acceptsClassName: true,
-
-  height: 1,
-  backgroundColor: '$neutral-10',
-  marginVertical: 4,
-  marginLeft: -4,
-  marginRight: -4,
-})
-
-DropdownMenu.Content = Content
-DropdownMenu.Item = MenuItem
-DropdownMenu.Separator = Separator
-DropdownMenu.CheckboxItem = DropdownMenuCheckboxItem
-
-export { DropdownMenu }
-export type DropdownMenuProps = Omit<Props, 'children'>
+SubContent.displayName = DropdownMenu.SubContent.displayName

@@ -1,77 +1,45 @@
-import { Stack, styled } from '@tamagui/core'
+import { cva } from 'cva'
 
-import { Text } from '../text'
+import type { VariantProps } from 'cva'
 
-import type { ColorTokens } from '@tamagui/core'
-
-export type CounterVariants = 'default' | 'grey' | 'secondary' | 'outline'
+type Variants = VariantProps<typeof styles>
 
 type Props = {
+  variant?: Variants['variant']
   value: number
-  type?: CounterVariants
 }
 
 const Counter = (props: Props) => {
-  const { value, type = 'default' } = props
+  const { value, variant = 'default' } = props
 
-  return (
-    <Base>
-      <Content type={type}>
-        <Text size={11} weight="medium" color={textColors[type]}>
-          {value > 99 ? '99+' : value}
-        </Text>
-      </Content>
-    </Base>
-  )
+  return <div className={styles({ variant })}>{value > 99 ? '99+' : value}</div>
 }
 
 export { Counter }
 export type { Props as CounterProps }
 
-const Base = styled(Stack, {
-  padding: 2,
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexBasis: 'fit-content',
-})
-
-const Content = styled(Stack, {
-  backgroundColor: '$blue-50',
-  paddingHorizontal: 3,
-  paddingVertical: 0,
-  borderRadius: '$6',
-  minHeight: 16,
-  maxHeight: 16,
-  minWidth: 16,
-  maxWidth: 28,
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderWidth: 1,
-  borderColor: 'transparent',
-
+const styles = cva({
+  base: [
+    'inline-flex h-4 min-w-4 items-center justify-center whitespace-nowrap rounded-6 px-1 text-11 font-medium leading-none tracking-normal',
+  ],
   variants: {
-    type: {
-      default: {
-        backgroundColor: '$blue-50',
-      },
-      secondary: {
-        backgroundColor: '$neutral-80/5',
-      },
-      grey: {
-        backgroundColor: '$neutral-10',
-      },
-      outline: {
-        backgroundColor: 'transparent',
-        borderColor: '$neutral-20',
-      },
+    variant: {
+      default: [
+        'bg-customisation-50 text-white-100',
+        'dark:bg-customisation-60 dark:text-white-100',
+      ],
+      secondary: [
+        'bg-neutral-80/5 text-neutral-100',
+        'dark:bg-white-5 dark:text-white-100',
+      ],
+      grey: [
+        'bg-neutral-10 text-neutral-100',
+        'dark:bg-neutral-80 dark:text-white-100',
+      ],
+      outline: [
+        'border border-neutral-20 bg-transparent text-neutral-100',
+        'dark:border-neutral-80 dark:text-white-100',
+      ],
     },
   },
 })
-
-const textColors: Record<NonNullable<Props['type']>, ColorTokens> = {
-  default: '$white-100',
-  secondary: '$neutral-100',
-  outline: '$neutral-100',
-  grey: '$neutral-100',
-}

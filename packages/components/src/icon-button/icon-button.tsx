@@ -1,186 +1,58 @@
-import { cloneElement, forwardRef } from 'react'
+'use client'
 
-import { View } from 'react-native'
-import { styled } from 'tamagui'
+import { forwardRef } from 'react'
 
-import { usePressableColors } from '../hooks/use-pressable-colors'
+import { cva } from 'cva'
+import { Button as AriaButton } from 'react-aria-components'
 
-import type { GetVariants, PressableProps } from '../types'
+import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
 import type { Ref } from 'react'
+import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
 
-type Variants = GetVariants<typeof Base>
+type Variants = VariantProps<typeof styles>
 
-type Props = PressableProps & {
-  icon: React.ReactElement
+type Props = AriaButtonProps & {
   variant?: Variants['variant']
-  selected?: boolean
-  blur?: boolean
-  disabled?: boolean
-  // FIXME: enforce aria-label for accessibility
-  // 'aria-label'?: string
-  // FIXME: update to latest RN
-  'aria-expanded'?: boolean
-  'aria-selected'?: boolean
+  icon: IconElement
 }
 
-const IconButton = (props: Props, ref: Ref<View>) => {
-  const { icon, blur, variant = 'default', ...buttonProps } = props
-
-  const { pressableProps, color } = usePressableColors(
-    {
-      default: blur ? '$neutral-80/70' : '$neutral-50',
-      hover: blur ? '$neutral-80/70' : '$neutral-50',
-      press: '$neutral-100',
-      active: '$neutral-100',
-    },
-    props
-  )
-
-  const selected =
-    props.selected || props['aria-expanded'] || props['aria-selected']
+const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
+  const { variant = 'default', icon, ...buttonProps } = props
 
   return (
-    <Base
-      {...buttonProps}
-      {...pressableProps}
-      ref={ref}
-      variant={blur ? undefined : variant}
-      active={blur ? undefined : selected ? variant : undefined}
-      variantBlur={blur ? variant : undefined}
-      activeBlur={blur ? (selected ? variant : undefined) : undefined}
-    >
-      {cloneElement(icon, {
-        color: icon.props.color ?? color,
-        size: 20,
-      })}
-    </Base>
+    <AriaButton {...buttonProps} ref={ref} className={styles({ variant })}>
+      {icon}
+    </AriaButton>
   )
 }
+
+const styles = cva({
+  base: [
+    'inline-flex size-8 cursor-pointer items-center justify-center rounded-10 border transition-all',
+    'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
+    'disabled:cursor-default disabled:opacity-[.3]',
+  ],
+
+  variants: {
+    variant: {
+      default: [
+        'border-transparent bg-neutral-10 text-neutral-50 hover:bg-neutral-20 pressed:border-neutral-20 pressed:bg-neutral-10 pressed:text-neutral-100',
+        'dark:bg-neutral-90 dark:text-neutral-40 dark:hover:bg-neutral-80 dark:pressed:border-neutral-60 dark:pressed:bg-neutral-80/70 dark:pressed:text-white-100',
+      ],
+      outline: [
+        'border-neutral-30 text-neutral-50 hover:border-neutral-40 pressed:border-neutral-20 pressed:bg-neutral-10 pressed:text-neutral-100',
+        'dark:border-neutral-70 dark:text-neutral-40 dark:hover:bg-neutral-60 dark:pressed:border-neutral-60 dark:pressed:bg-neutral-80/70 dark:pressed:text-white-100',
+      ],
+      ghost: [
+        'border-transparent text-neutral-50 hover:bg-neutral-10 pressed:border-neutral-20 pressed:bg-neutral-10 pressed:text-neutral-100',
+        'dark:text-neutral-40 dark:hover:bg-neutral-80/70 dark:pressed:border-neutral-60 dark:pressed:bg-neutral-80/70 dark:pressed:text-white-100',
+      ],
+    },
+  },
+})
 
 const _IconButton = forwardRef(IconButton)
 
 export { _IconButton as IconButton }
 export type { Props as IconButtonProps }
-
-const Base = styled(View, {
-  name: 'IconButton',
-  role: 'button',
-
-  cursor: 'pointer',
-  userSelect: 'none',
-  borderRadius: '$10',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: 4,
-  width: 32,
-  height: 32,
-  borderWidth: 1,
-  borderColor: 'transparent',
-  animation: 'fast',
-
-  variants: {
-    variant: {
-      default: {
-        backgroundColor: '$neutral-10',
-        borderColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-20' },
-        pressStyle: {
-          backgroundColor: '$neutral-20',
-          borderColor: '$neutral-30',
-        },
-      },
-
-      outline: {
-        backgroundColor: 'transparent',
-        borderColor: '$neutral-30',
-        hoverStyle: { borderColor: '$neutral-40' },
-        pressStyle: {
-          borderColor: '$neutral-20',
-          backgroundColor: '$neutral-10',
-        },
-      },
-
-      ghost: {
-        backgroundColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-10' },
-        pressStyle: {
-          backgroundColor: '$neutral-10',
-          borderColor: '$neutral-20',
-        },
-      },
-    },
-
-    active: {
-      default: {
-        backgroundColor: '$neutral-20',
-        borderColor: '$neutral-30',
-      },
-
-      outline: {
-        borderColor: '$neutral-20',
-        backgroundColor: '$neutral-10',
-      },
-
-      ghost: {
-        backgroundColor: '$neutral-10',
-        borderColor: '$neutral-20',
-      },
-    },
-
-    variantBlur: {
-      default: {
-        backgroundColor: '$neutral-80/5',
-        borderColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-80/10' },
-        pressStyle: {
-          backgroundColor: '$neutral-80/10',
-          borderColor: '$neutral-80/5',
-        },
-      },
-
-      outline: {
-        backgroundColor: 'transparent',
-        borderColor: '$neutral-80/10',
-        hoverStyle: { borderColor: '$neutral-80/20' },
-        pressStyle: {
-          borderColor: '$neutral-80/10',
-          backgroundColor: '$neutral-80/5',
-        },
-      },
-
-      ghost: {
-        backgroundColor: 'transparent',
-        hoverStyle: { backgroundColor: '$neutral-80/5' },
-        pressStyle: {
-          backgroundColor: '$neutral-80/5',
-          borderColor: '$neutral-80/10',
-        },
-      },
-    },
-
-    activeBlur: {
-      default: {
-        backgroundColor: '$neutral-80/10',
-        borderColor: '$neutral-80/5',
-      },
-
-      outline: {
-        borderColor: '$neutral-80/10',
-        backgroundColor: '$neutral-80/5',
-      },
-
-      ghost: {
-        backgroundColor: '$neutral-80/5',
-        borderColor: '$neutral-80/10',
-      },
-    },
-
-    disabled: {
-      true: {
-        opacity: 0.3,
-        cursor: 'default',
-      },
-    },
-  } as const,
-})

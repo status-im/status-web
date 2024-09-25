@@ -1,22 +1,27 @@
+import { useState } from 'react'
+
 import {
+  AlphabeticallyIcon,
   CopyIcon,
+  DeleteIcon,
   EditIcon,
   ForwardIcon,
   LinkIcon,
+  NotificationsIcon,
   PinIcon,
   ReplyIcon,
-  TrashIcon,
-} from '@status-im/icons'
+  ZoomInIcon,
+  ZoomOutIcon,
+} from '@status-im/icons/20'
 import { action } from '@storybook/addon-actions'
 
-import { Button } from '../button'
-import { DropdownMenu } from './dropdown-menu'
+import { DropdownButton } from '../dropdown-button'
+import { DropdownMenu } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta<typeof DropdownMenu> = {
-  title: 'Web/dropdown menu',
-  component: DropdownMenu,
+const meta: Meta = {
+  title: 'Components/Dropdown Menu',
   argTypes: {},
   parameters: {
     design: {
@@ -24,61 +29,101 @@ const meta: Meta<typeof DropdownMenu> = {
       url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Web?node-id=1931%3A31188&t=rOKELbVkzya48FJE-0',
     },
   },
-}
-
-type Story = StoryObj<typeof DropdownMenu>
-
-export const Default: Story = {
-  args: {},
 
   render: args => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [isChecked, setIsChecked] = useState(false)
+
     return (
-      <DropdownMenu {...args}>
-        <Button>Open</Button>
+      <DropdownMenu.Root {...args}>
+        <DropdownButton>Open</DropdownButton>
 
         <DropdownMenu.Content sideOffset={10}>
+          <DropdownMenu.Search placeholder="Search by" />
+
           <DropdownMenu.Item
-            icon={<EditIcon size={20} />}
+            icon={<EditIcon />}
             label="Edit message"
             onSelect={action('edit')}
           />
           <DropdownMenu.Item
-            icon={<ReplyIcon size={20} />}
+            icon={<ReplyIcon />}
             label="Reply"
             onSelect={action('reply')}
           />
           <DropdownMenu.Item
-            icon={<CopyIcon size={20} />}
+            icon={<CopyIcon />}
             label="Copy text"
             onSelect={action('copy')}
           />
           <DropdownMenu.Item
-            icon={<PinIcon size={20} />}
+            icon={<PinIcon />}
+            selected
             label="Pin to the channel"
             onSelect={action('pin')}
           />
           <DropdownMenu.Item
-            icon={<ForwardIcon size={20} />}
+            icon={<ForwardIcon />}
             label="Forward"
             onSelect={action('forward')}
           />
+          <DropdownMenu.Sub>
+            <DropdownMenu.SubTrigger
+              icon={<AlphabeticallyIcon />}
+              label="Sub menu"
+            />
+
+            <DropdownMenu.SubContent>
+              <DropdownMenu.Item
+                icon={<ZoomInIcon />}
+                label="Zoom In"
+                onSelect={action('zoom in')}
+                external
+              />
+              <DropdownMenu.Item
+                icon={<ZoomOutIcon />}
+                label="Zoom Out"
+                onSelect={action('zoom out')}
+                external
+              />
+            </DropdownMenu.SubContent>
+          </DropdownMenu.Sub>
           <DropdownMenu.Item
-            icon={<LinkIcon size={20} />}
+            icon={<LinkIcon />}
             label="Share link to message"
             onSelect={action('share')}
+          />
+          <DropdownMenu.CheckboxItem
+            icon={<NotificationsIcon />}
+            label="Enable notifications"
+            checked={isChecked}
+            onCheckedChange={setIsChecked}
+            onSelect={e => e.preventDefault()}
           />
 
           <DropdownMenu.Separator />
 
           <DropdownMenu.Item
-            icon={<TrashIcon size={20} />}
+            icon={<DeleteIcon />}
             label="Delete message"
             danger
             onSelect={action('delete')}
           />
         </DropdownMenu.Content>
-      </DropdownMenu>
+      </DropdownMenu.Root>
     )
+  },
+}
+
+type Story = StoryObj<typeof DropdownMenu>
+
+export const Light: Story = {}
+
+export const Dark: Story = {
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
   },
 }
 

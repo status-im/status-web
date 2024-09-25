@@ -1,50 +1,58 @@
-import { createElement, forwardRef } from 'react'
+import { forwardRef } from 'react'
 
-import { Stack, styled } from 'tamagui'
+import { match, P } from 'ts-pattern'
 
-import { Text } from '../text'
+import { cva } from '../utils/variants'
 
-import type { GetVariants, MapVariant } from '../types'
-import type { IconProps } from '@status-im/icons'
-import type { Ref } from 'react'
-import type { View } from 'react-native'
+import type { VariantProps } from '../utils/variants'
 
-type Variants = GetVariants<typeof Base>
+const styles = cva({
+  base: 'flex size-4 flex-shrink-0 items-center justify-center rounded-6 border',
+  variants: {
+    variant: {
+      primary: [
+        'border-customisation-60 bg-customisation-50 text-white-100',
+        'dark:border-customisation-50 dark:bg-customisation-60 dark:text-white-100',
+      ],
+      secondary: [
+        'border-neutral-20 bg-neutral-10 text-neutral-50',
+        'dark:border-neutral-70 dark:bg-neutral-90 dark:text-neutral-40',
+      ],
+      gray: [
+        'border-neutral-10 text-neutral-50',
+        'dark:border-neutral-80 dark:text-neutral-40',
+      ],
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+  },
+})
 
-type Props = {
-  variant?: Variants['variant']
-} & (
-  | {
-      icon: React.ComponentType<IconProps>
-      symbol?: never
-    }
-  | {
-      symbol: string
-      icon?: never
-    }
-)
+type Props = VariantProps<typeof styles> &
+  (
+    | {
+        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        symbol?: never
+      }
+    | {
+        symbol: string
+        icon?: never
+      }
+  )
 
-const Shortcut = (props: Props, ref: Ref<View>) => {
-  const { variant = 'primary' } = props
-
-  const color = textColors[variant]
-
-  const renderContent = () => {
-    if ('symbol' in props) {
-      return (
-        <Text size={11} weight="medium" color={color}>
-          {props.symbol}
-        </Text>
-      )
-    }
-
-    return createElement(props.icon, { color, size: 12 })
-  }
+const Shortcut = (props: Props, ref: React.Ref<HTMLDivElement>) => {
+  const { variant = 'primary', ...rest } = props
 
   return (
-    <Base variant={variant} {...props} ref={ref}>
-      {renderContent()}
-    </Base>
+    <div className={styles({ variant })} ref={ref} {...rest}>
+      {match(props)
+        .with({ symbol: P.string }, ({ symbol }) => (
+          <span className="text-11 font-medium">{symbol}</span>
+        ))
+        .with({ icon: P._ }, ({ icon: Icon }) => <Icon className="size-3" />)
+        .exhaustive()}
+    </div>
   )
 }
 
@@ -52,39 +60,3 @@ const _Shortcut = forwardRef(Shortcut)
 
 export { _Shortcut as Shortcut }
 export type { Props as ShortcutProps }
-
-const textColors: MapVariant<typeof Base, 'variant'> = {
-  primary: '$white-100',
-  secondary: '$neutral-50',
-  gray: '$neutral-50',
-}
-
-const Base = styled(Stack, {
-  width: 16,
-  height: 16,
-  flexShrink: 0,
-  borderRadius: '$6',
-  borderWidth: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-
-  variants: {
-    variant: {
-      primary: {
-        backgroundColor: '$blue-50',
-        borderColor: '$blue-60',
-      },
-      secondary: {
-        backgroundColor: '$neutral-10',
-        borderColor: '$neutral-20',
-      },
-      gray: {
-        borderColor: '$neutral-10',
-      },
-    },
-  } as const,
-
-  defaultVariants: {
-    variant: 'primary',
-  },
-})

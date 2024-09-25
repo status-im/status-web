@@ -1,60 +1,66 @@
-import { NftIcon } from '@status-im/icons'
-import { Stack } from '@tamagui/core'
+import { PlaceholderIcon } from '@status-im/icons/20'
 
 import { Tag } from './tag'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta<typeof Tag> = {
+const meta = {
   component: Tag,
-  argTypes: {},
+  title: 'Components/Tag',
+  args: {
+    label: 'Tag',
+    disabled: false,
+    icon: <PlaceholderIcon />,
+    iconPlacement: 'left',
+  },
+
   parameters: {
     design: {
       type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=180-9685&t=tDEqIV09qddTZgXF-4',
+      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=4%3A32&mode=dev',
     },
   },
-}
+
+  render: props => (
+    <div className="flex flex-col items-start gap-4">
+      <Tag {...props} />
+      <Tag {...props} selected />
+      <Tag {...props} disabled />
+      <Tag {...props} size="24" />
+      <Tag {...props} size="24" selected />
+      <Tag {...props} size="24" disabled />
+      <Tag {...props} icon={undefined} />
+      <Tag {...props} label={undefined} />
+      <Tag {...props} iconPlacement="right" />
+    </div>
+  ),
+} satisfies Meta<typeof Tag>
 
 type Story = StoryObj<typeof Tag>
 
-export const Default: Story = {
-  render: () => {
-    return (
-      <Stack space flexDirection="row">
-        <Stack space alignItems="flex-start">
-          <Tag icon="🐷" label="Tag" size={32} />
-          <Tag icon="🐷" label="Tag" size={32} selected />
-          <Tag icon="🐷" label="Tag" size={32} disabled />
-          <Tag icon="🐷" size={32} />
-          <Tag icon={NftIcon} size={32} label="bajoras" />
+export const Light: Story = {}
 
-          <Tag icon="🐷" label="Tag" size={24} />
-          <Tag icon="🐷" size={24} />
-        </Stack>
+// export const IconOnly: Story = {
+//   args: {
+//     label: undefined,
+//   },
+// }
 
-        <Stack space alignItems="flex-start">
-          <Tag label="Tag" size={32} />
-          <Tag label="Tag" size={32} selected />
-          <Tag label="Tag" size={32} disabled />
+// export const RightIcon: Story = {
+//   args: {
+//     iconPlacement: 'right',
+//   },
+// }
 
-          <Tag label="Tag" size={24} />
-          <Tag label="New tag" size={24} disabled selected />
-          <Tag label="New tag" size={24} color="#FF7D46" />
+// export const Disabled: Story = {
+//   args: {
+//     disabled: true,
+//   },
+// }
 
-          <Tag label="New tag #BA34F5" size={24} color="#BA34F5" />
-          <Tag label="New tag #7140FD" size={24} color="#7140FD" icon="🧙‍♂️" />
-
-          <Tag
-            label="New tag $purple-50"
-            size={24}
-            icon="🐷"
-            color="$purple-50"
-          />
-          <Tag label="New tag with icon" size={24} color="#FF7D46" icon="🥷🏾" />
-        </Stack>
-      </Stack>
-    )
+export const Dark: Story = {
+  parameters: {
+    backgrounds: { default: 'dark' },
   },
 }
 

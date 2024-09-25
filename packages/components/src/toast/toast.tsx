@@ -1,61 +1,51 @@
 import { cloneElement, forwardRef } from 'react'
 
 import { Action, Description } from '@radix-ui/react-toast'
-import { CorrectIcon, IncorrectIcon } from '@status-im/icons'
-import { Stack, styled } from '@tamagui/core'
+import { CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
+import { match, P } from 'ts-pattern'
 
 import { Button } from '../button'
-import { Text } from '../text'
+
+import type { IconElement } from '../types'
 
 type Props = {
   message: string
   action?: string
   onAction?: () => void
-} & (
-  | {
-      type: 'positive' | 'negative'
-    }
-  | {
-      type?: never
-      icon: React.ReactElement
-    }
-)
+} & ({ type: 'positive' | 'negative' } | { icon: IconElement })
 
-const Toast = (props: Props) => {
+const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
   const { message, action, onAction } = props
 
-  const renderIcon = () => {
-    if (!props.type) {
-      return cloneElement(props.icon, { color: '$white/70' })
-    }
-
-    if (props.type === 'positive') {
-      return <CorrectIcon size={20} />
-    }
-
-    return <IncorrectIcon size={20} />
-  }
-
   return (
-    <Base action={Boolean(action)}>
-      <Stack flex={1} flexDirection="row" gap={4} alignItems="center">
-        <Stack width={20}>{renderIcon()}</Stack>
-        <Description asChild>
-          <Text size={13} weight={'medium'} color="$white-100">
-            {message}
-          </Text>
+    <div
+      ref={ref}
+      className="flex min-h-[40px] w-[351px] flex-row items-center justify-between gap-3 rounded-12 bg-neutral-80/70 p-2 pr-3"
+    >
+      <div className="flex flex-1 flex-row items-center gap-1">
+        <div className="shrink-0">
+          {match(props)
+            .with({ type: 'positive' }, () => <CorrectIcon />)
+            .with({ type: 'negative' }, () => <IncorrectIcon />)
+            .with({ icon: P._ }, ({ icon: Icon }) =>
+              cloneElement(Icon, { className: 'size-5 text-blur-white/70' }),
+            )
+            .exhaustive()}
+        </div>
+        <Description className="text-13 font-medium text-white-100">
+          {message}
         </Description>
-      </Stack>
+      </div>
       {action && (
-        <Stack alignSelf="flex-start">
+        <div className="-mr-1 self-start">
           <Action asChild altText={action}>
-            <Button size={24} variant={'grey'} onPress={onAction}>
+            <Button size="24" variant="grey" onPress={() => onAction?.()}>
               {action}
             </Button>
           </Action>
-        </Stack>
+        </div>
       )}
-    </Base>
+    </div>
   )
 }
 
@@ -63,29 +53,3 @@ const _Toast = forwardRef(Toast)
 
 export { _Toast as Toast }
 export type { Props as ToastProps }
-
-const Base = styled(Stack, {
-  name: 'Toast',
-
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  paddingHorizontal: 8,
-  gap: 12,
-  width: 351,
-  minHeight: 40,
-  backgroundColor: '$neutral-80/70',
-  borderRadius: '$12',
-  justifyContent: 'space-between',
-
-  variants: {
-    action: {
-      true: {
-        paddingVertical: 8,
-      },
-      false: {
-        paddingVertical: 10,
-      },
-    },
-  },
-})

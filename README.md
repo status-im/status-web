@@ -1,130 +1,85 @@
-# Status Web 🌐
+# `status-web`
 
 [![CI](https://github.com/status-im/status-web/actions/workflows/ci.yml/badge.svg)](https://github.com/status-im/status-web/actions/workflows/ci.yml)
 
-## About
+This monorepo contains packages for building web applications in the Status ecosystem. These packages can be used separately or combined to create consistent and beautiful user interfaces.
 
-Embeddable, customizable and themable component for your Status Community.
+## Packages
 
-### Who
+| Name                                                   | `npm`                                                                                                                     | Description                                                                                                                                                                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@status-im/components`](./packages/components)       | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components) | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
+| [`@status-im/js`](./packages/status-js)                | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                 | Libary for Waku protocol integration and blockchain interactions.                                                                                                             |
+| [`@status-im/icons`](./packages/icons)                 | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)           | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
+| [`@status-im/colors`](./packages/colors)               | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)     | Auto-generated color palette based on our [design system](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev).           |
+| [`@status-im/eslint-config`](./packages/eslint-config) |                                                                                                                           | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
 
-- For community leaders
-- online content creators
-- and their followers
+## Prerequisites
 
-### What
+Required:
 
-- It is 100% open source
-- 100% decentralized
-- Peer-to-peer
-- Private
-- Pseudoanonymous
-- End-to-end encrypted
-- Free
-- Permissionless
-- Serverless
-- Group chat platform
-- And a virtual space outside the jurisdiction of any government
+- **[Node.js](https://nodejs.org/)** v18.x
+- **[Yarn](https://yarnpkg.com/)** v1.22.x
 
-### Why
+Recommended:
 
-- To communicate and collaborate freely without worrying about
-  - Censorship
-  - Persecution
-  - Chilling effects
-  - Interference
-  - Oppression
-  - Being deplatformed, or shut down
-- Support
-  - Autonomy
-  - Free speech
-  - Freedom of association
-  - Freedom to transact
-  - Right to privacy
-  - Crypto native and frictionless integration
-  - Monetization
-  - Facilitation of sharing of common interests, needs, desires and values
-- Be trusted alternative to centralized group chat application
+- **[Visual Studio Code](https://code.visualstudio.com/)**
+  - install extensions listed in `.vscode/extensions.json` for optimal development experience
 
-## Usage
+## Stack
 
-### For Community owners 👥
+- **Turborepo**: Manages our monorepo and speeds up builds
+- **TypeScript**: Adds type safety to our code
+- **React**: Our main library for building UIs
+- **Radix UI / React Aria**: Provides accessible UI primitives
+- **Tailwind CSS**: Used for styling
+- **Vite**: Our build tool and dev server
+- **Storybook**: For developing and showcasing components
+- **ESLint**: Keeps our code consistent and catches potential issues
+- **Prettier**: Formats our code
+- **Changesets**: Manages versioning and changelogs
 
-**Get public key to your pre-existing Community:**
+## Getting Started
 
-1. Open Status Desktop
-2. Select Community
-3. Click on its overview in upper left corner
-4. Invite new people
-5. Share community
-6. Get only the public key from the URL (e.g. `0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801`)
+1. Clone the repository:
 
-**Or create new one first:**
+   ```
+   git clone https://github.com/status-im/status-web.git
+   cd status-web
+   ```
 
-1. Get Status Desktop at <https://status.im/get>
-2. Go to Chat
-3. Click on plus icon
-4. Click on Communities
+2. Install dependencies:
 
-**Use the Community component:**
+   ```
+   yarn install
+   ```
 
-In your project,
+3. Build all packages:
 
-Install package:
+   ```
+   yarn build
+   ```
 
-```sh
-npm install @status-im/react
+4. Run tests:
+
+   ```
+   yarn test
+   ```
+
+5. Start development mode:
+   ```
+   yarn dev
+   ```
+
+## Storybook
+
+To view and interact with the components, you can run Storybook:
+
+```
+yarn storybook
 ```
 
-Import component:
-
-```js
-import { Community } from '@status-im/react'
-```
-
-Set component props:
-
-```js
-<Community
-  publicKey="0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801"
-  theme="light"
-/>
-```
-
-For an example, see [examples/with-vite/src/app.tsx](./examples/with-vite/src/app.tsx).
-
-### For User 👤
-
-**Simply visit your Community's URL from the browser:**
-
-If the Community doesn't require a joining request, that would be it. So look around and get the feel for the space.
-
-**Once ready to chat, create a throwaway profile:**
-
-Use Throwaway Profile > wait for your request to be approved and the chat input enabled > react to and write messages
-
-**Optionally, you could even run the application locally yourself.**
-
-Get the source ready:
-
-```sh
-git clone https://github.com/status-im/status-web.git
-cd ./status-web
-yarn install
-yarn run build
-```
-
-Add your Community's public key to your environment:
-
-```sh
-echo 'PUBLIC_KEY="0x033c88c950480493e2e759923bd38f9aad88e1b36295757a598679a569e6a96801"' >> examples/with-vite/.env
-```
-
-And run it:
-
-```sh
-yarn workspace with-vite run dev
-```
+This will start the Storybook server, allowing you to browse and test components in isolation.
 
 ## Sponsors
 

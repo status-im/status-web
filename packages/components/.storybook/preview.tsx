@@ -1,32 +1,53 @@
 import React from 'react'
 import type { Preview } from '@storybook/react'
-
-import { Provider, ToastContainer } from '../src'
-
+import { customisation } from '@status-im/colors'
 import './reset.css'
 
-// export const parameters: Parameters = {
-//   actions: { argTypesRegex: '^on[A-Z].*' },
-//   controls: {
-//     matchers: {
-//       color: /(background|color)$/i,
-//       date: /Date$/,
-//     },
-//   },
-// }
-
 const preview: Preview = {
+  globalTypes: {
+    customisation: {
+      toolbar: {
+        title: 'Customisation',
+        // icon: 'paintbrush',
+        defaultValue: 'blue',
+        items: Object.keys(customisation),
+        dynamicTitle: true,
+        defaultItem: 'army',
+      },
+    },
+  },
+
   parameters: {
     // layout: 'centered',
+    customisation: {
+      default: 'blue',
+      values: [
+        { name: 'blue', value: '#0000ff' },
+        { name: 'red', value: '#ff0000' },
+      ],
+    },
+    backgrounds: {
+      default: 'light',
+      values: [
+        { name: 'light', value: '#fff' },
+        { name: 'dark', value: '#0D1625' },
+      ],
+    },
   },
+
   decorators: [
-    Story => {
-      return (
-        <Provider>
-          <Story />
-          <ToastContainer />
-        </Provider>
+    (Story, context) => {
+      document.body.setAttribute(
+        'data-theme',
+        context.parameters.backgrounds?.default === 'dark' ? 'dark' : 'light',
       )
+
+      document.body.setAttribute(
+        'data-customisation',
+        context.globals.customisation ?? 'blue',
+      )
+
+      return <Story />
     },
   ],
 }

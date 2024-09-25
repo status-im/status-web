@@ -1,152 +1,88 @@
-import { forwardRef } from 'react'
+import { cva, type VariantProps } from 'cva'
 
-import { styled, Text as BaseText } from '@tamagui/core'
+import { mapColorToken } from '../utils/color-tokens'
 
-import type { ColorTokens, GetProps } from '@tamagui/core'
-import type { Ref } from 'react'
-import type { Text as RNText } from 'react-native'
+import type { ColorToken } from '../utils/color-tokens'
 
-type Variants = GetProps<typeof Base>
-type Type = NonNullable<Variants['type']>
-type Weight = NonNullable<Variants['weight']>
-
-type Props = {
-  children: React.ReactNode
-  color?: ColorTokens | string
-  truncate?: boolean
-  wrap?: false
-  select?: false
-} & (
-  | { size: 88; weight?: Weight }
-  | { size: 64; weight?: Weight }
-  | { size: 40; weight?: Weight }
-  | { size: 27; weight?: Exclude<Weight, 'bold'> }
-  | { size: 19; weight?: Exclude<Weight, 'bold'> }
-  | { size: 15; weight?: Exclude<Weight, 'bold'>; type?: Type }
-  | { size: 13; weight?: Exclude<Weight, 'bold'>; type?: Type }
-  | {
-      size: 11
-      weight?: Exclude<Weight, 'bold'>
-      type?: Type
-      uppercase?: boolean
-    }
-)
-
-// TODO: monospace should be used only for variant. Extract to separate <Address> component?
-// TODO: Ubuntu Mono should be used only for code snippets. Extract to separate <Code> component?
-const Text = (props: Props, ref: Ref<RNText>) => {
-  const { color = '$neutral-100', ...rest } = props
-  return <Base {...rest} ref={ref} color={color} />
-}
-
-const Base = styled(BaseText, {
-  name: 'Text',
-
+const styles = cva({
   variants: {
     type: {
-      default: {
-        fontFamily: '$sans',
-      },
-      monospace: {
-        fontFamily: '$mono',
-      },
+      default: 'font-sans',
+      monospace: 'font-mono',
     },
-
     size: {
-      88: {
-        fontSize: 88,
-        lineHeight: 84,
-        letterSpacing: -1.848,
-      },
-      64: {
-        fontSize: 64,
-        lineHeight: 68,
-        letterSpacing: -1.28,
-      },
-      40: {
-        fontSize: 40,
-        lineHeight: 44,
-        letterSpacing: -0.8,
-      },
-      27: {
-        fontSize: 27,
-        lineHeight: 32,
-        letterSpacing: -0.567,
-      },
-      19: {
-        fontSize: 19,
-        lineHeight: 28,
-        letterSpacing: -0.304,
-      },
-      15: {
-        fontSize: 15,
-        lineHeight: 21.75,
-        letterSpacing: -0.135,
-      },
-      13: {
-        fontSize: 13,
-        lineHeight: 18.2,
-        letterSpacing: -0.039,
-      },
-      11: {
-        fontSize: 11,
-        lineHeight: 15.62,
-        letterSpacing: -0.055,
-      },
+      88: 'text-88',
+      64: 'text-64',
+      40: 'text-40',
+      27: 'text-27',
+      19: 'text-19',
+      15: 'text-15',
+      13: 'text-13',
+      11: 'text-11',
     },
-
     weight: {
-      regular: {
-        fontWeight: '400',
-      },
-      medium: {
-        fontWeight: '500',
-      },
-      semibold: {
-        fontWeight: '600',
-      },
-      bold: {
-        fontWeight: '700',
-      },
+      regular: 'font-regular',
+      medium: 'font-medium',
+      semibold: 'font-semibold',
+      bold: 'font-bold',
     },
-
     uppercase: {
-      true: {
-        textTransform: 'uppercase',
-      },
+      true: 'uppercase',
     },
-
     wrap: {
-      false: {
-        whiteSpace: 'nowrap',
-      },
+      false: 'whitespace-nowrap',
     },
-
     truncate: {
-      true: {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-        wordWrap: 'normal',
-        maxWidth: '100%',
-        minWidth: 0,
-      },
+      true: 'truncate',
     },
-
     select: {
-      false: {
-        userSelect: 'none',
-      },
+      false: 'select-none',
     },
-  } as const,
-
+  },
   defaultVariants: {
     type: 'default',
     weight: 'regular',
   },
 })
 
-const _Text = forwardRef(Text)
+type Props<C extends React.ElementType> = VariantProps<typeof styles> &
+  React.ComponentPropsWithoutRef<C> & {
+    as?: C
+    color?: ColorToken
+  }
 
-export { _Text as Text }
+const Text = <C extends React.ElementType = 'span'>(props: Props<C>) => {
+  const {
+    as: Component = 'span',
+    color,
+    size,
+    weight,
+    uppercase,
+    wrap,
+    truncate,
+    select,
+    children,
+    className,
+    ...rest
+  } = props
+
+  return (
+    <Component
+      {...rest}
+      className={styles({
+        size,
+        weight,
+        uppercase,
+        wrap,
+        truncate,
+        select,
+        className: color ? mapColorToken(color) + ' ' + className : className,
+      })}
+    >
+      {children}
+    </Component>
+  )
+}
+
+export { Text }
 export type { Props as TextProps }

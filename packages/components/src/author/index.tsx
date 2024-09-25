@@ -1,1 +1,0 @@
-export { Author } from './author'

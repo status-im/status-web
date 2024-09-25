@@ -1,262 +1,180 @@
-import { Children, cloneElement, forwardRef } from 'react'
+'use client'
 
-import { Content, List, Root, Trigger } from '@radix-ui/react-tabs'
-import { Stack } from '@tamagui/web'
-import { View } from 'react-native'
-import { styled } from 'tamagui'
+import {
+  cloneElement,
+  createContext,
+  forwardRef,
+  useContext,
+  useMemo,
+} from 'react'
 
-import { Counter } from '../counter'
-import { usePressableColors } from '../hooks/use-pressable-colors'
+import * as Tabs from '@radix-ui/react-tabs'
+import { cva, cx } from 'cva'
+import { match, P } from 'ts-pattern'
+
 import { Step } from '../step'
-import { Text } from '../text'
 
-import type { TextProps } from '../text'
-import type { GetVariants } from '../types'
-import type { Ref } from 'react'
+import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
 
-type Variants = GetVariants<typeof TriggerBase>
+type TabVariants = VariantProps<typeof tabStyles>
 
-type Props = {
-  // type: TriggerProps['type']
-  children: React.ReactNode[]
-  defaultValue: string
-  value?: string
-  onValueChange?: (value: string) => void
+type RootProps = React.ComponentProps<typeof Tabs.Root> & {
+  variant?: TabVariants['variant']
+  size?: TabVariants['size']
 }
 
-const Tabs = (props: Props) => {
-  const { children, defaultValue, value, onValueChange } = props
+const TabsContext = createContext<Pick<RootProps, 'size' | 'variant'>>({})
+
+export const Root = (props: RootProps) => {
+  const { size = '32', variant = 'grey', ...rootProps } = props
 
   return (
-    <Root
-      defaultValue={defaultValue}
-      value={value}
-      onValueChange={onValueChange}
+    <TabsContext.Provider
+      value={useMemo(() => ({ size, variant }), [size, variant])}
     >
-      {children}
-    </Root>
+      <Tabs.Root {...rootProps} />
+    </TabsContext.Provider>
   )
 }
 
-type ListProps = {
-  children: React.ReactElement[]
-  variant: Variants['variant']
-  size: Variants['size']
-}
-
-const TabsList = (props: ListProps) => {
-  const { children } = props
+export const List = forwardRef<
+  React.ElementRef<typeof Tabs.List>,
+  React.ComponentPropsWithoutRef<typeof Tabs.List>
+>((props, ref) => {
+  const { size } = useContext(TabsContext)!
 
   return (
-    <List asChild>
-      <Stack flexDirection="row" gap={8}>
-        {Children.map(children, child => (
-          <Trigger asChild value={child.props.value}>
-            {cloneElement(child, { size: props.size, variant: props.variant })}
-          </Trigger>
-        ))}
-      </Stack>
-    </List>
-  )
-}
-
-type TriggerProps =
-  | {
-      type: 'default'
-      value: string
-      children: string
-      disabled?: boolean
-    }
-  | {
-      type: 'icon'
-      value: string
-      children: string
-      icon: React.ReactElement
-      disabled?: boolean
-    }
-  | {
-      type: 'counter'
-      value: string
-      children: string
-      count: number
-      disabled?: boolean
-    }
-  | {
-      type: 'step'
-      value: string
-      children: string
-      step: number
-      disabled?: boolean
-    }
-
-const TabsTrigger = (props: TriggerProps, ref: Ref<View>) => {
-  const { children, ...triggerProps } = props
-
-  // props coming from parent List and Trigger, not passed by the user (line 52)
-  const providedProps = props as TriggerProps & {
-    size: 24 | 32
-    'aria-selected': boolean
-    disabled: boolean
-    variant: Variants['variant']
-  }
-
-  const { size, 'aria-selected': selected, disabled, variant } = providedProps
-
-  const { color, pressableProps } = usePressableColors(
-    {
-      default: variant === 'blur_darkGrey' ? '$white-100' : '$neutral-100',
-      hover: variant === 'blur_darkGrey' ? '$white-100' : '$neutral-100',
-      press: variant === 'blur_darkGrey' ? '$white-100' : '$neutral-100',
-      active: '$white-100',
-    },
-    providedProps
-  )
-
-  const textSize = triggerTextSizes[size]
-
-  return (
-    <TriggerBase
-      {...triggerProps}
-      {...pressableProps}
+    <Tabs.List
+      {...props}
       ref={ref}
-      size={size}
-      variant={variant}
-      active={selected}
-      disabled={disabled}
-    >
-      {props.type === 'icon' &&
-        cloneElement(props.icon, {
-          size: iconSizes[size],
-          color,
-        })}
-
-      {props.type === 'step' && (
-        <Step size={18} type="complete" value={props.step} />
-      )}
-
-      <Text size={textSize} weight="medium" color={color}>
-        {children}
-      </Text>
-
-      {props.type === 'counter' && (
-        <Stack marginRight={-4}>
-          <Counter type="secondary" value={props.count} />
-        </Stack>
-      )}
-    </TriggerBase>
+      className={cx('flex', size === '32' && 'gap-3', size === '24' && 'gap-2')}
+    />
   )
-}
-
-Tabs.List = TabsList
-Tabs.Trigger = forwardRef(TabsTrigger)
-Tabs.Content = Content
-
-export { Tabs }
-export type { Props as TabsProps }
-
-const TriggerBase = styled(View, {
-  name: 'Trigger',
-  role: 'tab',
-  cursor: 'pointer',
-
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'center',
-
-  variants: {
-    variant: {
-      grey: {
-        backgroundColor: '$neutral-10',
-        hoverStyle: {
-          backgroundColor: '$neutral-20',
-        },
-      },
-      darkGrey: {
-        backgroundColor: '$neutral-20',
-        hoverStyle: {
-          backgroundColor: '$neutral-30',
-        },
-      },
-
-      blur_grey: {
-        backgroundColor: '$neutral-80/5',
-        hoverStyle: {
-          backgroundColor: '$neutral-80/10',
-          // backgroundColor: '$neutral-80/60',
-        },
-      },
-      blur_darkGrey: {
-        backgroundColor: '$white-5',
-        hoverStyle: {
-          backgroundColor: '$white-10',
-        },
-      },
-    },
-    size: {
-      32: {
-        height: 32,
-        borderRadius: '$10',
-        paddingHorizontal: 12,
-        gap: 6,
-      },
-      24: {
-        height: 24,
-        borderRadius: '$8',
-        paddingHorizontal: 8,
-        gap: 4,
-      },
-    },
-    active: {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      true: (_v, { props }) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const variant = (props as any).variant as Variants['variant']
-
-        if (variant === 'grey' || variant === 'darkGrey') {
-          return {
-            cursor: 'default',
-            backgroundColor: '$neutral-50',
-            hoverStyle: { backgroundColor: '$neutral-50' },
-            pressStyle: { backgroundColor: '$neutral-50' },
-          }
-        }
-
-        if (variant === 'blur_grey') {
-          return {
-            cursor: 'default',
-            backgroundColor: '$neutral-80/60',
-            hoverStyle: { backgroundColor: '$neutral-80/60' },
-            pressStyle: { backgroundColor: '$neutral-80/60' },
-          }
-        }
-
-        if (variant === 'blur_darkGrey') {
-          return {
-            cursor: 'default',
-            backgroundColor: '$white-20',
-            hoverStyle: { backgroundColor: '$white-20' },
-            pressStyle: { backgroundColor: '$white-20' },
-          }
-        }
-      },
-    },
-    disabled: {
-      true: {
-        opacity: 0.3,
-        cursor: 'default',
-      },
-    },
-  } as const,
 })
 
-const triggerTextSizes: Record<Variants['size'], TextProps['size']> = {
-  '32': 15,
-  '24': 13,
-}
+List.displayName = Tabs.List.displayName
 
-// FIXME: icons will accept size as number
-const iconSizes: Record<Variants['size'], number> = {
-  '32': 16,
-  '24': 12,
-}
+type TabProps = React.ComponentProps<typeof Tabs.Trigger> & {
+  children: React.ReactNode
+} & (
+    | {
+        icon?: IconElement
+        step?: never
+      }
+    | {
+        step?: number
+        icon?: never
+      }
+  )
+
+export const Trigger = forwardRef<
+  React.ElementRef<typeof Tabs.Trigger>,
+  TabProps
+>((props, ref) => {
+  const { children, ...rest } = props
+
+  const { size, variant } = useContext(TabsContext)!
+
+  return (
+    <Tabs.Trigger {...rest} ref={ref} className={tabStyles({ variant, size })}>
+      {match(props)
+        .with({ icon: P.nonNullable }, ({ icon }) => (
+          <span className={iconStyles({ size })}>{cloneElement(icon)}</span>
+        ))
+        .with({ step: P.nonNullable }, ({ step }) => (
+          <span className={stepStyles({ size })}>
+            <Step size={18} variant="primary" value={step} />
+          </span>
+        ))
+        .otherwise(() => null)}
+      {/* {icon && (
+        <span className={iconStyles({ size })}>{cloneElement(icon)}</span>
+      )} */}
+      <span className="flex-1 whitespace-nowrap">{children}</span>
+    </Tabs.Trigger>
+  )
+})
+
+Trigger.displayName = Tabs.Trigger.displayName
+
+const tabStyles = cva({
+  base: [
+    'group inline-flex items-center gap-1 whitespace-nowrap',
+    'disabled:pointer-events-none disabled:opacity-[.3]',
+  ],
+  variants: {
+    variant: {
+      grey: [
+        // light
+        'bg-neutral-10 text-neutral-100 hover:bg-neutral-20',
+        'data-[state=active]:bg-neutral-50 data-[state=active]:text-white-100 data-[state=active]:hover:bg-neutral-50',
+        // light blur
+        'blurry:bg-neutral-80/5 blurry:hover:bg-neutral-80/10',
+        'blurry:data-[state=active]:bg-neutral-80/60 blurry:data-[state=active]:text-white-100 blurry:data-[state=active]:hover:bg-neutral-80/60',
+
+        //dark
+        'dark:bg-neutral-80 dark:text-white-100 dark:hover:bg-neutral-70',
+        'dark:data-[state=active]:bg-neutral-60 dark:hover:data-[state=active]:bg-neutral-60',
+        // dark blur
+        'blurry:dark:bg-white-5 blurry:dark:text-white-100 blurry:dark:hover:bg-white-10',
+        'blurry:dark:data-[state=active]:bg-white-20 blurry:dark:hover:data-[state=active]:bg-white-20',
+      ],
+      'dark-grey': [
+        // light
+        'bg-neutral-20 text-neutral-100 hover:bg-neutral-30',
+        'data-[state=active]:bg-neutral-50 data-[state=active]:text-white-100 data-[state=active]:hover:bg-neutral-50',
+        // light blur
+        'blurry:bg-neutral-80/5 blurry:hover:bg-neutral-80/10',
+        'blurry:data-[state=active]:bg-neutral-80/60 blurry:data-[state=active]:text-white-100 blurry:data-[state=active]:hover:bg-neutral-80/60',
+
+        //dark
+        'dark:bg-neutral-90 dark:text-white-100 dark:hover:bg-neutral-80',
+        'dark:data-[state=active]:bg-neutral-60 dark:hover:data-[state=active]:bg-neutral-60',
+        // dark blur
+        'blurry:dark:bg-white-5 blurry:dark:text-white-100 blurry:dark:hover:bg-white-10',
+        'blurry:dark:data-[state=active]:bg-white-20 blurry:dark:hover:data-[state=active]:bg-white-20',
+      ],
+    },
+    size: {
+      '32': 'h-8 rounded-10 px-3 text-15 font-medium',
+      '24': 'h-6 rounded-8 px-2 text-13 font-medium',
+    },
+  },
+
+  defaultVariants: {
+    size: '32',
+    variant: 'grey',
+  },
+})
+
+const iconStyles = cva({
+  base: [
+    'text-neutral-50 group-data-[state=active]:text-white-100 [&>svg]:size-full',
+  ],
+  variants: {
+    size: {
+      '32': '-ml-0.5 size-4',
+      '24': 'size-3',
+    },
+  },
+})
+
+const stepStyles = cva({
+  base: 'inline-flex',
+  variants: {
+    size: {
+      '32': '-ml-1.5',
+      '24': '-ml-1',
+    },
+  },
+})
+
+export const Content = forwardRef<
+  React.ElementRef<typeof Tabs.Content>,
+  React.ComponentPropsWithoutRef<typeof Tabs.Content>
+>((props, ref) => {
+  return <Tabs.Content {...props} ref={ref} />
+})
+
+Content.displayName = Tabs.Content.displayName

@@ -1,262 +1,70 @@
-import { PlaceholderIcon } from '@status-im/icons'
+import { useState } from 'react'
 
-import { Text } from '../text'
-import { Tabs } from './tabs'
+import { PlaceholderIcon } from '@status-im/icons/20'
 
-import type { TabsProps } from './tabs'
+import { Tabs } from '.'
+
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta<typeof Tabs> = {
-  component: Tabs,
-  argTypes: {},
+const TabsVariant = (
+  props: React.ComponentPropsWithoutRef<typeof Tabs.Root>,
+) => {
+  const [value, setValue] = useState('FoR')
 
-  parameters: {
-    design: {
-      type: 'figma',
-      url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=57-13214&t=q5DFi3jlBAcdghLy-11',
-    },
-  },
+  return (
+    <Tabs.Root {...props} value={value} onValueChange={setValue}>
+      <Tabs.List aria-label="History of Ancient Rome">
+        <Tabs.Trigger value="FoR" icon={<PlaceholderIcon />}>
+          Founding of Rome
+        </Tabs.Trigger>
+        <Tabs.Trigger value="MaR" step={1}>
+          Monarchy and Republic
+        </Tabs.Trigger>
+        <Tabs.Trigger value="Emp">Empire</Tabs.Trigger>
+        <Tabs.Trigger value="disabled" disabled>
+          Disabled
+        </Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="FoR">
+        Arma virumque cano, Troiae qui primus ab oris.
+      </Tabs.Content>
+      <Tabs.Content value="MaR">Senatus Populusque Romanus.</Tabs.Content>
+      <Tabs.Content value="Emp">Alea jacta est.</Tabs.Content>
+    </Tabs.Root>
+  )
 }
 
-export const Grey: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  render(args) {
-    return (
-      <Tabs {...args}>
-        <Tabs.List variant="grey" size={32}>
-          <Tabs.Trigger type="default" value="1">
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="2">
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" disabled>
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
-    )
-  },
-}
+const meta: Meta = {
+  title: 'Components/Tabs',
+  // parameters: {
+  //   layout: 'centered',
+  // },
 
-export const GreyBlur: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  render(args) {
+  render: args => {
     return (
-      <Tabs {...args}>
-        <Tabs.List variant="blur_grey" size={32}>
-          <Tabs.Trigger type="default" value="1">
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="2">
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" disabled>
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
-    )
-  },
-}
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <TabsVariant {...args} variant="grey" size="24" />
+          <TabsVariant {...args} variant="grey" size="32" />
+        </div>
 
-export const DarkGrey: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  render(args) {
-    return (
-      <Tabs {...args}>
-        <Tabs.List variant="darkGrey" size={32}>
-          <Tabs.Trigger type="default" value="1">
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="2">
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" disabled>
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
-    )
-  },
-}
-export const DarkGreyBlur: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  parameters: {
-    backgrounds: {
-      default: 'dark',
-    },
-  },
-  render(args) {
-    return (
-      <Tabs {...args}>
-        <Tabs.List variant="blur_darkGrey" size={32}>
-          <Tabs.Trigger type="default" value="1">
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="2">
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger type="default" value="3" disabled>
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
-    )
-  },
-}
-
-export const Icon: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  render(args) {
-    return (
-      <Tabs {...args}>
-        <Tabs.List variant="grey" size={32}>
-          <Tabs.Trigger
-            type="icon"
-            value="1"
-            icon={<PlaceholderIcon size={16} />}
-          >
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger
-            type="icon"
-            value="2"
-            icon={<PlaceholderIcon size={16} />}
-          >
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger
-            type="icon"
-            value="3"
-            icon={<PlaceholderIcon size={16} />}
-            disabled
-          >
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
-    )
-  },
-}
-
-export const Counter: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  render(args) {
-    return (
-      <Tabs {...args}>
-        <Tabs.List variant="grey" size={32}>
-          <Tabs.Trigger type="counter" value="1" count={5}>
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger type="counter" value="2" count={10}>
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger type="counter" value="3" count={100} disabled>
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
-    )
-  },
-}
-
-export const Step: StoryObj<TabsProps> = {
-  args: {
-    defaultValue: '1',
-  },
-  render(args) {
-    return (
-      <Tabs {...args}>
-        <Tabs.List variant="grey" size={32}>
-          <Tabs.Trigger type="step" value="1" step={1}>
-            Tab 1
-          </Tabs.Trigger>
-          <Tabs.Trigger type="step" value="2" step={10}>
-            Tab 2
-          </Tabs.Trigger>
-          <Tabs.Trigger type="step" value="3" step={999} disabled>
-            Tab 3
-          </Tabs.Trigger>
-        </Tabs.List>
-        <Tabs.Content value="1">
-          <Text size={15}>Content 1</Text>
-        </Tabs.Content>
-        <Tabs.Content value="2">
-          <Text size={15}>Content 2</Text>
-        </Tabs.Content>
-        <Tabs.Content value="3">
-          <Text size={15}>Content 3</Text>
-        </Tabs.Content>
-      </Tabs>
+        <div className="flex flex-col gap-2">
+          <TabsVariant {...args} variant="dark-grey" size="32" />
+          <TabsVariant {...args} variant="dark-grey" size="24" />
+        </div>
+      </div>
     )
   },
 }
 
 export default meta
+
+type Story = StoryObj
+
+export const Light: Story = {}
+
+export const Dark: Story = {
+  parameters: {
+    backgrounds: { default: 'dark' },
+  },
+}

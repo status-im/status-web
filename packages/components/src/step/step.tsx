@@ -1,99 +1,44 @@
-import { Stack, styled } from '@tamagui/core'
+import { cva } from 'cva'
 
-import { Text } from '../text'
+import type { VariantProps } from 'cva'
 
-import type { ColorTokens } from '@tamagui/core'
-
-// todo?: rename netural to default
-export type StepVariants = 'neutral' | 'complete' | 'active'
+type Variants = VariantProps<typeof styles>
 
 type Props = {
   value: number
   size?: 18 | 22
-  type?: StepVariants
+  variant?: Variants['variant']
 }
 
 const Step = (props: Props) => {
-  const { size = 18, value, type = 'neutral' } = props
+  const { size = 18, value, variant = 'outline' } = props
 
-  return (
-    <Base size={size}>
-      <Content size={size} type={type}>
-        <Text size={11} weight="medium" color={textColors[type]}>
-          {value}
-        </Text>
-      </Content>
-    </Base>
-  )
+  return <span className={styles({ variant, size })}>{value}</span>
 }
+
+const styles = cva({
+  base: [
+    'inline-flex w-fit basis-[fit-content] items-center justify-center rounded-6 border text-11 font-medium',
+    'min-w-[20px] max-w-[28px] px-[3px] py-0',
+  ],
+  variants: {
+    variant: {
+      outline:
+        'border-neutral-20 bg-transparent text-neutral-100 dark:border-neutral-80 dark:text-white-100',
+      primary:
+        'border-transparent bg-customisation-50 text-white-100 dark:bg-customisation-60',
+      secondary:
+        'border-transparent bg-customisation-50/10 text-neutral-100 dark:text-white-100',
+    },
+    size: {
+      18: [
+        'min-w-[20px] max-w-[28px] py-px',
+        'h-[18px] min-w-[18px] max-w-[28px]',
+      ],
+      22: ['min-w-[24px] max-w-[32px]', 'h-[22px] min-w-[22px] max-w-[32px]'],
+    },
+  },
+})
 
 export { Step }
 export type { Props as StepProps }
-
-const Base = styled(Stack, {
-  minWidth: 20,
-  maxWidth: 28,
-  display: 'inline-flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexBasis: 'fit-content',
-  width: 'fit-content',
-
-  variants: {
-    size: {
-      18: {
-        paddingVertical: 1,
-        minWidth: 20,
-        maxWidth: 28,
-      },
-      22: {
-        minWidth: 24,
-        maxWidth: 32,
-      },
-    },
-  },
-})
-
-const Content = styled(Stack, {
-  backgroundColor: '$white-100',
-  paddingHorizontal: 3,
-  paddingVertical: 0,
-  borderRadius: '$6',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderWidth: 1,
-  borderColor: 'transparent',
-
-  variants: {
-    type: {
-      neutral: {
-        backgroundColor: '$transparent',
-        borderColor: '$neutral-20',
-      },
-      complete: {
-        backgroundColor: '$blue-50',
-      },
-      active: {
-        backgroundColor: '$blue/10',
-      },
-    },
-    size: {
-      18: {
-        height: 18,
-        minWidth: 18,
-        maxWidth: 28,
-      },
-      22: {
-        height: 22,
-        minWidth: 22,
-        maxWidth: 32,
-      },
-    },
-  },
-})
-
-const textColors: Record<NonNullable<Props['type']>, ColorTokens> = {
-  neutral: '$neutral-100',
-  complete: '$white-100',
-  active: '$neutral-100',
-}

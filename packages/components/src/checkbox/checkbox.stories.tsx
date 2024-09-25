@@ -1,57 +1,48 @@
-import { useState } from 'react'
-
 import { Checkbox } from './checkbox'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
+const Variant = (props: React.ComponentProps<typeof Checkbox>) => {
+  return (
+    <div className="flex gap-3">
+      <Checkbox {...props} />
+      <Checkbox {...props} defaultChecked />
+    </div>
+  )
+}
+
 const meta: Meta<typeof Checkbox> = {
+  title: 'Components/Checkbox',
   component: Checkbox,
-  argTypes: {},
+  args: {
+    children: 'I agree with the community rules',
+  },
   parameters: {
     design: {
       type: 'figma',
       url: 'https://www.figma.com/file/IBmFKgGL1B4GzqD8LQTw6n/Design-System-for-Desktop%2FWeb?node-id=180-9685&t=tDEqIV09qddTZgXF-4',
     },
   },
+
+  render: props => {
+    return (
+      <div className="grid gap-3">
+        <Variant {...props} variant="outline" />
+        <Variant {...props} variant="filled" />
+      </div>
+    )
+  },
 }
 
 type Story = StoryObj<typeof Checkbox>
 
-const CheckBoxWithHookFilled = () => {
-  const [checked, setChecked] = useState(false)
+export const Light: Story = {}
 
-  return (
-    <Checkbox
-      id="checkbox"
-      selected={checked}
-      onCheckedChange={() => setChecked(!checked)}
-      variant="filled"
-    />
-  )
-}
-
-const CheckBoxWithHookOutlined = () => {
-  const [checked, setChecked] = useState(false)
-
-  return (
-    <Checkbox
-      id="checkbox"
-      selected={checked}
-      onCheckedChange={() => setChecked(!checked)}
-      variant="outline"
-    />
-  )
-}
-
-export const Filled: Story = {
-  render: () => {
-    return <CheckBoxWithHookFilled />
-  },
-}
-
-export const Outlined: Story = {
-  render: () => {
-    return <CheckBoxWithHookOutlined />
+export const Dark: Story = {
+  parameters: {
+    backgrounds: {
+      default: 'dark',
+    },
   },
 }
 

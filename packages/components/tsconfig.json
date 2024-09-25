@@ -1,9 +1,9 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["src", ".storybook"],
+  "include": ["src", "tailwind.config.ts", ".storybook"],
   "compilerOptions": {
-    "outDir": "./dist",
-    "declarationDir": "dist/types"
+    "jsx": "preserve",
+    "outDir": "./dist"
   },
   "references": []
 }
