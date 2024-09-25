@@ -23,9 +23,12 @@ const styles = cva({
   ],
   variants: {
     variant: {
-      outline: 'border-neutral-20 bg-transparent text-neutral-100',
-      primary: 'border-transparent bg-customisation-50 text-white-100',
-      secondary: 'border-transparent bg-customisation-50/10 text-neutral-100',
+      outline:
+        'border-neutral-20 bg-transparent text-neutral-100 dark:border-neutral-80 dark:text-white-100',
+      primary:
+        'border-transparent bg-customisation-50 text-white-100 dark:bg-customisation-60',
+      secondary:
+        'border-transparent bg-customisation-50/10 text-neutral-100 dark:text-white-100',
     },
     size: {
       18: [
