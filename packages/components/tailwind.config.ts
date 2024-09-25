@@ -6,61 +6,6 @@ import reactAriaComponentsPlugin from 'tailwindcss-react-aria-components'
 
 import type { Config } from 'tailwindcss'
 
-const customisation = {
-  army: {
-    '50': '33 98 102',
-    '60': '26 78 82',
-  },
-  blue: {
-    '50': '42 74 245',
-    '60': '34 59 196',
-  },
-  camel: {
-    '50': '199 143 103',
-    '60': '159 114 82',
-  },
-  copper: {
-    '50': '203 98 86',
-    '60': '162 78 69',
-  },
-  magenta: {
-    '50': '236 38 108',
-    '60': '189 30 86',
-  },
-  orange: {
-    '50': '255 125 70',
-    '60': '204 100 56',
-  },
-  pink: {
-    '50': '246 111 143',
-    '60': '197 89 114',
-  },
-  purple: {
-    '50': '113 64 253',
-    '60': '90 51 202',
-  },
-  sky: {
-    '50': '25 146 215',
-    '60': '20 117 172',
-  },
-  turquoise: {
-    '50': '42 121 155',
-    '60': '34 97 124',
-  },
-  yang: {
-    '50': '255 255 255',
-    '60': '235 235 235',
-  },
-  yellow: {
-    '50': '246 176 60',
-    '60': '197 141 48',
-  },
-  yin: {
-    '50': '9 16 28',
-    '60': '29 35 46',
-  },
-}
-
 export default {
   darkMode: ['selector', '[data-theme="dark"]'],
 
@@ -99,21 +44,21 @@ export default {
       11: ['0.6875rem', { lineHeight: '1', letterSpacing: '0rem' }],
     },
 
+    opacity: {},
+
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
       ...colors,
       customisation: {
         ...colors.customisation,
-        50: {
-          DEFAULT: 'rgb(var(--customisation-50))',
-          '5': 'rgb(var(--customisation-50), 0.5)',
-          '10': 'rgb(var(--customisation-50), 0.1)',
-          '20': 'rgb(var(--customisation-50), 0.2)',
-          '30': 'rgb(var(--customisation-50), 0.3)',
-          '40': 'rgb(var(--customisation-50), 0.4)',
-        },
-        60: 'rgb(var(--customisation-60))',
+        '50': 'var(--customisation-50)',
+        '50/5': 'var(--customisation-50-5)',
+        '50/10': 'var(--customisation-50-10)',
+        '50/20': 'var(--customisation-50-20)',
+        '50/30': 'var(--customisation-50-30)',
+        '50/40': 'var(--customisation-50-40)',
+        '60': 'var(--customisation-60)',
       },
     },
 
@@ -174,111 +119,121 @@ export default {
     plugin(({ addUtilities, addBase }) => {
       addBase({
         '[data-customisation="army"]': {
-          '--customisation-50': customisation.army['50'],
-          '--customisation-60': customisation.army['60'],
+          '--customisation-50': colors.customisation.army['50'],
+          '--customisation-50-5': colors.customisation.army['50/5'],
+          '--customisation-50-10': colors.customisation.army['50/10'],
+          '--customisation-50-20': colors.customisation.army['50/20'],
+          '--customisation-50-30': colors.customisation.army['50/30'],
+          '--customisation-50-40': colors.customisation.army['50/40'],
+          '--customisation-60': colors.customisation.army['60'],
         },
         '[data-customisation="blue"]': {
-          '--customisation-50': customisation.blue['50'],
-          '--customisation-60': customisation.blue['60'],
+          '--customisation-50': colors.customisation.blue['50'],
+          '--customisation-50-5': colors.customisation.blue['50/5'],
+          '--customisation-50-10': colors.customisation.blue['50/10'],
+          '--customisation-50-20': colors.customisation.blue['50/20'],
+          '--customisation-50-30': colors.customisation.blue['50/30'],
+          '--customisation-50-40': colors.customisation.blue['50/40'],
+          '--customisation-60': colors.customisation.blue['60'],
         },
         '[data-customisation="camel"]': {
-          '--customisation-50': customisation.camel['50'],
-          '--customisation-60': customisation.camel['60'],
+          '--customisation-50': colors.customisation.camel['50'],
+          '--customisation-50-5': colors.customisation.camel['50/5'],
+          '--customisation-50-10': colors.customisation.camel['50/10'],
+          '--customisation-50-20': colors.customisation.camel['50/20'],
+          '--customisation-50-30': colors.customisation.camel['50/30'],
+          '--customisation-50-40': colors.customisation.camel['50/40'],
+          '--customisation-60': colors.customisation.camel['60'],
         },
         '[data-customisation="copper"]': {
-          '--customisation-50': customisation.copper['50'],
-          '--customisation-60': customisation.copper['60'],
+          '--customisation-50': colors.customisation.copper['50'],
+          '--customisation-50-5': colors.customisation.copper['50/5'],
+          '--customisation-50-10': colors.customisation.copper['50/10'],
+          '--customisation-50-20': colors.customisation.copper['50/20'],
+          '--customisation-50-30': colors.customisation.copper['50/30'],
+          '--customisation-50-40': colors.customisation.copper['50/40'],
+          '--customisation-60': colors.customisation.copper['60'],
         },
         '[data-customisation="magenta"]': {
-          '--customisation-50': customisation.magenta['50'],
-          '--customisation-60': customisation.magenta['60'],
+          '--customisation-50': colors.customisation.magenta['50'],
+          '--customisation-50-5': colors.customisation.magenta['50/5'],
+          '--customisation-50-10': colors.customisation.magenta['50/10'],
+          '--customisation-50-20': colors.customisation.magenta['50/20'],
+          '--customisation-50-30': colors.customisation.magenta['50/30'],
+          '--customisation-50-40': colors.customisation.magenta['50/40'],
+          '--customisation-60': colors.customisation.magenta['60'],
         },
         '[data-customisation="orange"]': {
-          '--customisation-50': customisation.orange['50'],
-          '--customisation-60': customisation.orange['60'],
+          '--customisation-50': colors.customisation.orange['50'],
+          '--customisation-50-5': colors.customisation.orange['50/5'],
+          '--customisation-50-10': colors.customisation.orange['50/10'],
+          '--customisation-50-20': colors.customisation.orange['50/20'],
+          '--customisation-50-30': colors.customisation.orange['50/30'],
+          '--customisation-50-40': colors.customisation.orange['50/40'],
+          '--customisation-60': colors.customisation.orange['60'],
         },
         '[data-customisation="pink"]': {
-          '--customisation-50': customisation.pink['50'],
-          '--customisation-60': customisation.pink['60'],
+          '--customisation-50': colors.customisation.pink['50'],
+          '--customisation-50-5': colors.customisation.pink['50/5'],
+          '--customisation-50-10': colors.customisation.pink['50/10'],
+          '--customisation-50-20': colors.customisation.pink['50/20'],
+          '--customisation-50-30': colors.customisation.pink['50/30'],
+          '--customisation-50-40': colors.customisation.pink['50/40'],
+          '--customisation-60': colors.customisation.pink['60'],
         },
         '[data-customisation="purple"]': {
-          '--customisation-50': customisation.purple['50'],
-          '--customisation-60': customisation.purple['60'],
+          '--customisation-50': colors.customisation.purple['50'],
+          '--customisation-50-5': colors.customisation.purple['50/5'],
+          '--customisation-50-10': colors.customisation.purple['50/10'],
+          '--customisation-50-20': colors.customisation.purple['50/20'],
+          '--customisation-50-30': colors.customisation.purple['50/30'],
+          '--customisation-50-40': colors.customisation.purple['50/40'],
+          '--customisation-60': colors.customisation.purple['60'],
         },
         '[data-customisation="sky"]': {
-          '--customisation-50': customisation.sky['50'],
-          '--customisation-60': customisation.sky['60'],
+          '--customisation-50': colors.customisation.sky['50'],
+          '--customisation-50-5': colors.customisation.sky['50/5'],
+          '--customisation-50-10': colors.customisation.sky['50/10'],
+          '--customisation-50-20': colors.customisation.sky['50/20'],
+          '--customisation-50-30': colors.customisation.sky['50/30'],
+          '--customisation-50-40': colors.customisation.sky['50/40'],
+          '--customisation-60': colors.customisation.sky['60'],
         },
         '[data-customisation="turquoise"]': {
-          '--customisation-50': customisation.turquoise['50'],
-          '--customisation-60': customisation.turquoise['60'],
+          '--customisation-50': colors.customisation.turquoise['50'],
+          '--customisation-50-5': colors.customisation.turquoise['50/5'],
+          '--customisation-50-10': colors.customisation.turquoise['50/10'],
+          '--customisation-50-20': colors.customisation.turquoise['50/20'],
+          '--customisation-50-30': colors.customisation.turquoise['50/30'],
+          '--customisation-50-40': colors.customisation.turquoise['50/40'],
+          '--customisation-60': colors.customisation.turquoise['60'],
         },
         '[data-customisation="yang"]': {
-          '--customisation-50': customisation.yang['50'],
-          '--customisation-60': customisation.yang['60'],
+          '--customisation-50': colors.customisation.yang['50'],
+          '--customisation-50-5': colors.customisation.yang['50/5'],
+          '--customisation-50-10': colors.customisation.yang['50/10'],
+          '--customisation-50-20': colors.customisation.yang['50/20'],
+          '--customisation-50-30': colors.customisation.yang['50/30'],
+          '--customisation-50-40': colors.customisation.yang['50/40'],
+          '--customisation-60': colors.customisation.yang['60'],
         },
         '[data-customisation="yellow"]': {
-          '--customisation-50': customisation.yellow['50'],
-          '--customisation-60': customisation.yellow['60'],
+          '--customisation-50': colors.customisation.yellow['50'],
+          '--customisation-50-5': colors.customisation.yellow['50/5'],
+          '--customisation-50-10': colors.customisation.yellow['50/10'],
+          '--customisation-50-20': colors.customisation.yellow['50/20'],
+          '--customisation-50-30': colors.customisation.yellow['50/30'],
+          '--customisation-50-40': colors.customisation.yellow['50/40'],
+          '--customisation-60': colors.customisation.yellow['60'],
         },
         '[data-customisation="yin"]': {
-          '--customisation-50': customisation.yin['50'],
-          '--customisation-60': customisation.yin['60'],
-        },
-      })
-
-      addUtilities({
-        '.theme-army': {
-          '--customisation-50': customisation.army['50'],
-          '--customisation-60': customisation.army['60'],
-        },
-        '.theme-blue': {
-          '--customisation-50': customisation.blue['50'],
-          '--customisation-60': customisation.blue['60'],
-        },
-        '.theme-camel': {
-          '--customisation-50': customisation.camel['50'],
-          '--customisation-60': customisation.camel['60'],
-        },
-        '.theme-copper': {
-          '--customisation-50': customisation.copper['50'],
-          '--customisation-60': customisation.copper['60'],
-        },
-        '.theme-magenta': {
-          '--customisation-50': customisation.magenta['50'],
-          '--customisation-60': customisation.magenta['60'],
-        },
-        '.theme-orange': {
-          '--customisation-50': customisation.orange['50'],
-          '--customisation-60': customisation.orange['60'],
-        },
-        '.theme-pink': {
-          '--customisation-50': customisation.pink['50'],
-          '--customisation-60': customisation.pink['60'],
-        },
-        '.theme-purple': {
-          '--customisation-50': customisation.purple['50'],
-          '--customisation-60': customisation.purple['60'],
-        },
-        '.theme-sky': {
-          '--customisation-50': customisation.sky['50'],
-          '--customisation-60': customisation.sky['60'],
-        },
-        '.theme-turquoise': {
-          '--customisation-50': customisation.turquoise['50'],
-          '--customisation-60': customisation.turquoise['60'],
-        },
-        '.theme-yang': {
-          '--customisation-50': customisation.yang['50'],
-          '--customisation-60': customisation.yang['60'],
-        },
-        '.theme-yellow': {
-          '--customisation-50': customisation.yellow['50'],
-          '--customisation-60': customisation.yellow['60'],
-        },
-        '.theme-yin': {
-          '--customisation-50': customisation.yin['50'],
-          '--customisation-60': customisation.yin['60'],
+          '--customisation-50': colors.customisation.yin['50'],
+          '--customisation-50-5': colors.customisation.yin['50/5'],
+          '--customisation-50-10': colors.customisation.yin['50/10'],
+          '--customisation-50-20': colors.customisation.yin['50/20'],
+          '--customisation-50-30': colors.customisation.yin['50/30'],
+          '--customisation-50-40': colors.customisation.yin['50/40'],
+          '--customisation-60': colors.customisation.yin['60'],
         },
       })
     }),
