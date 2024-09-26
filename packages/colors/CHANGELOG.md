@@ -1,5 +1,11 @@
 # @status-im/colors
 
+## 1.0.0
+
+### Major Changes
+
+- edfdfd6: switch to tailwind
+
 ## 0.4.0
 
 ### Minor Changes

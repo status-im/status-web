@@ -1,5 +1,14 @@
 # @status-im/icons
 
+## 1.0.0
+
+### Major Changes
+
+- edfdfd6: switch to tailwind
+- c8f551f: Generated each icon group separately for better correctness
+  Added separate export paths for the following icon sets: ./12, ./16, ./20, ./social, and ./reactions.
+  Removed Tamagui runtime
+
 ## 0.9.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 1.0.0
+
+### Major Changes
+
+- edfdfd6: switch to tailwind
+
 ## 0.6.7
 
 ### Patch Changes
