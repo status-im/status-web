@@ -249,7 +249,7 @@ export const SwitchItem = forwardRef<
   )
 })
 
-SwitchItem.displayName = DropdownMenu.CheckboxItem.displayName
+SwitchItem.displayName = 'DropdownMenuSwitchItem'
 
 /**
  * Separator
