@@ -38,7 +38,13 @@ const Tag = (props: Props, ref: Ref<HTMLButtonElement>) => {
       disabled={disabled}
       ref={ref}
       data-selected={selected}
-      className={styles({ size, selected, disabled, iconOnly })}
+      className={styles({
+        size,
+        selected,
+        disabled,
+        iconOnly,
+        pressable: Boolean(onClick),
+      })}
     >
       {icon && iconPlacement === 'left' && (
         <span className={iconStyles({ size, placement: 'left', iconOnly })}>
@@ -79,6 +85,9 @@ const styles = cva({
     },
     disabled: {
       true: 'pointer-events-none cursor-default border-neutral-20 opacity-[.3]',
+    },
+    pressable: {
+      false: 'cursor-default',
     },
   },
 })

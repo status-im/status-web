@@ -1,4 +1,5 @@
 import { PlaceholderIcon } from '@status-im/icons/20'
+import { action } from '@storybook/addon-actions'
 
 import { Tag } from './tag'
 
@@ -10,6 +11,7 @@ const meta = {
   args: {
     label: 'Tag',
     disabled: false,
+    selected: false,
     icon: <PlaceholderIcon />,
     iconPlacement: 'left',
   },
@@ -32,6 +34,7 @@ const meta = {
       <Tag {...props} icon={undefined} />
       <Tag {...props} label={undefined} />
       <Tag {...props} iconPlacement="right" />
+      <Tag {...props} onPress={action('pressed')} label="Pressable tag" />
     </div>
   ),
 } satisfies Meta<typeof Tag>
