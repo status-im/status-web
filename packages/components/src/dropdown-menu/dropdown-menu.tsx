@@ -74,6 +74,25 @@ export const Content = forwardRef<
 Content.displayName = DropdownMenu.Content.displayName
 
 /**
+ * Label
+ */
+
+export const Label = forwardRef<
+  React.ElementRef<typeof DropdownMenu.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenu.Label>
+>((props, ref) => {
+  return (
+    <DropdownMenu.Label
+      {...props}
+      ref={ref}
+      className="p-2 text-13 font-medium text-neutral-50 dark:text-neutral-40"
+    />
+  )
+})
+
+Label.displayName = DropdownMenu.Label.displayName
+
+/**
  * Search
  */
 
