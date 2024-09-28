@@ -231,7 +231,10 @@ export const SubTrigger = (props: SubTriggerProps) => {
   const { icon, label, danger, ...itemProps } = props
 
   return (
-    <DropdownMenu.SubTrigger {...itemProps} className={itemStyles()}>
+    <DropdownMenu.SubTrigger
+      {...itemProps}
+      className={itemStyles({ className: 'aria-expanded:bg-neutral-5' })}
+    >
       {icon && (
         <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
       )}
