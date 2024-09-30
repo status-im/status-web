@@ -8,58 +8,82 @@ import type { Ref } from 'react'
 
 type Variants = VariantProps<typeof styles>
 
-type Props = React.ComponentProps<'button'> & {
+type Props = {
   size?: Variants['size']
   label?: string
   icon?: IconElement
   iconPlacement?: 'left' | 'right'
-  selected?: boolean
-  onPress?: () => void
-}
+} & (
+  | (React.ComponentProps<'button'> & {
+      disabled?: boolean
+      selected?: boolean
+      onPress: () => void
+    })
+  | (React.ComponentProps<'div'> & {
+      onPress?: never
+    })
+)
 
-const Tag = (props: Props, ref: Ref<HTMLButtonElement>) => {
+function Tag(props: Props, ref: Ref<HTMLButtonElement | HTMLDivElement>) {
   const {
     size = '32',
     icon,
     iconPlacement = 'left',
     label,
-    selected = false,
-    disabled = false,
-    onPress: onClick,
-    ...buttonProps
+    onPress,
+    ...rest
   } = props
 
   const iconOnly = Boolean(icon && !label)
 
-  return (
-    <button
-      onClick={onClick}
-      {...buttonProps}
-      disabled={disabled}
-      ref={ref}
-      data-selected={selected}
-      className={styles({
-        size,
-        selected,
-        disabled,
-        iconOnly,
-        pressable: Boolean(onClick),
-      })}
-    >
+  const content = (
+    <>
       {icon && iconPlacement === 'left' && (
         <span className={iconStyles({ size, placement: 'left', iconOnly })}>
           {cloneElement(icon)}
         </span>
       )}
-
       {label && <span className="flex-1 whitespace-nowrap">{label}</span>}
-
       {icon && iconPlacement === 'right' && (
         <span className={iconStyles({ size, placement: 'right', iconOnly })}>
           {cloneElement(icon)}
         </span>
       )}
-    </button>
+    </>
+  )
+
+  if ('onPress' in props) {
+    const { ...tagProps } = props
+
+    return (
+      <button
+        {...tagProps}
+        onClick={onPress}
+        ref={ref as Ref<HTMLButtonElement>}
+        data-selected={tagProps.selected ? tagProps.selected : undefined}
+        className={styles({
+          size,
+          selected: tagProps.selected,
+          disabled: tagProps.disabled,
+          iconOnly,
+        })}
+      >
+        {content}
+      </button>
+    )
+  }
+
+  return (
+    <div
+      {...rest}
+      ref={ref as Ref<HTMLDivElement>}
+      className={styles({
+        size,
+        iconOnly,
+      })}
+    >
+      {content}
+    </div>
   )
 }
 
@@ -68,8 +92,6 @@ const styles = cva({
     'inline-flex shrink-0 items-center justify-center gap-1 border border-neutral-20 font-medium transition-all hover:border-neutral-30',
     'outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
     'disabled:cursor-default disabled:opacity-[.3]',
-
-    // dark
     'dark:border-neutral-80 dark:text-white-100 dark:hover:border-neutral-60',
   ],
   variants: {
@@ -85,9 +107,6 @@ const styles = cva({
     },
     disabled: {
       true: 'pointer-events-none cursor-default border-neutral-20 opacity-[.3]',
-    },
-    pressable: {
-      false: 'cursor-default',
     },
   },
 })

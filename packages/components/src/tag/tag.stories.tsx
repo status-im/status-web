@@ -26,11 +26,11 @@ const meta = {
   render: props => (
     <div className="flex flex-col items-start gap-4">
       <Tag {...props} />
-      <Tag {...props} selected />
-      <Tag {...props} disabled />
+      <Tag {...props} onPress={action('pressed')} selected />
+      <Tag {...props} onPress={action('pressed')} disabled={true} />
       <Tag {...props} size="24" />
-      <Tag {...props} size="24" selected />
-      <Tag {...props} size="24" disabled />
+      <Tag {...props} size="24" onPress={action('pressed')} selected />
+      <Tag {...props} size="24" onPress={action('pressed')} disabled={true} />
       <Tag {...props} icon={undefined} />
       <Tag {...props} label={undefined} />
       <Tag {...props} iconPlacement="right" />
@@ -41,7 +41,12 @@ const meta = {
 
 type Story = StoryObj<typeof Tag>
 
-export const Light: Story = {}
+export const Light: Story = {
+  args: {
+    selected: true,
+    disabled: true,
+  },
+}
 
 // export const IconOnly: Story = {
 //   args: {
