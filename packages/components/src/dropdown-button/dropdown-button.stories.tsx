@@ -22,18 +22,20 @@ export default {
 
   render: args => (
     <div className="grid gap-4">
-      {(['primary', 'grey', 'outline', 'ghost'] as const).map(variant => (
-        <div key={variant} className="flex items-center gap-4">
-          {(['40', '32', '24'] as const).map(size => (
-            <DropdownButton
-              key={size}
-              {...args}
-              variant={variant}
-              size={size}
-            />
-          ))}
-        </div>
-      ))}
+      {(['primary', 'grey', 'darkGrey', 'outline', 'ghost'] as const).map(
+        variant => (
+          <div key={variant} className="flex items-center gap-4">
+            {(['40', '32', '24'] as const).map(size => (
+              <DropdownButton
+                key={size}
+                {...args}
+                variant={variant}
+                size={size}
+              />
+            ))}
+          </div>
+        ),
+      )}
     </div>
   ),
 } satisfies Meta<typeof DropdownButton>

@@ -13,7 +13,7 @@ type ButtonProps = Extract<
 type Props = ButtonProps & {
   variant?: Extract<
     ButtonProps['variant'],
-    'primary' | 'grey' | 'outline' | 'ghost'
+    'primary' | 'grey' | 'outline' | 'ghost' | 'darkGrey'
   >
   iconAfter?: never
 }
@@ -50,6 +50,10 @@ const iconStyles = cva({
         '[&>path[fill="#E7EAEE"]]:dark:fill-neutral-80',
       ],
       ghost: [
+        'text-neutral-100 dark:text-white-100',
+        '[&>path[fill="#E7EAEE"]]:dark:fill-neutral-80',
+      ],
+      darkGrey: [
         'text-neutral-100 dark:text-white-100',
         '[&>path[fill="#E7EAEE"]]:dark:fill-neutral-80',
       ],
