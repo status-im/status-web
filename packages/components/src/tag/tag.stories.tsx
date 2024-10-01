@@ -5,7 +5,7 @@ import { Tag } from './tag'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta = {
+const meta: Meta<typeof Tag> = {
   component: Tag,
   title: 'Components/Tag',
   args: {
@@ -27,17 +27,17 @@ const meta = {
     <div className="flex flex-col items-start gap-4">
       <Tag {...props} />
       <Tag {...props} onPress={action('pressed')} selected />
-      <Tag {...props} onPress={action('pressed')} disabled={true} />
+      <Tag {...props} onPress={action('pressed')} disabled />
       <Tag {...props} size="24" />
       <Tag {...props} size="24" onPress={action('pressed')} selected />
-      <Tag {...props} size="24" onPress={action('pressed')} disabled={true} />
+      <Tag {...props} size="24" onPress={action('pressed')} disabled />
       <Tag {...props} icon={undefined} />
       <Tag {...props} label={undefined} />
       <Tag {...props} iconPlacement="right" />
       <Tag {...props} onPress={action('pressed')} label="Pressable tag" />
     </div>
   ),
-} satisfies Meta<typeof Tag>
+}
 
 type Story = StoryObj<typeof Tag>
 

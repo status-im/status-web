@@ -8,24 +8,27 @@ import type { Ref } from 'react'
 
 type Variants = VariantProps<typeof styles>
 
-type ButtonProps = React.ComponentProps<'button'> & {
-  disabled?: boolean
-  selected?: boolean
-  onPress: () => void
-}
-
-type DivProps = React.ComponentProps<'div'> & {
-  onPress?: never
-}
-
 type Props = {
   size?: Variants['size']
   label?: string
   icon?: IconElement
   iconPlacement?: 'left' | 'right'
-} & (ButtonProps | DivProps)
+}
 
-function Tag(props: Props, ref: Ref<HTMLButtonElement | HTMLDivElement>) {
+type ButtonProps = {
+  onPress: () => void
+  selected?: boolean
+  disabled?: boolean
+} & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
+
+type DivProps = {
+  onPress?: never
+} & Omit<React.ComponentPropsWithoutRef<'div'>, 'children'>
+
+function Tag(
+  props: Props & (ButtonProps | DivProps),
+  ref: Ref<HTMLButtonElement | HTMLDivElement>,
+) {
   const {
     size = '32',
     icon,
