@@ -8,21 +8,22 @@ import type { Ref } from 'react'
 
 type Variants = VariantProps<typeof styles>
 
+type ButtonProps = React.ComponentProps<'button'> & {
+  disabled?: boolean
+  selected?: boolean
+  onPress: () => void
+}
+
+type DivProps = React.ComponentProps<'div'> & {
+  onPress?: never
+}
+
 type Props = {
   size?: Variants['size']
   label?: string
   icon?: IconElement
   iconPlacement?: 'left' | 'right'
-} & (
-  | (React.ComponentProps<'button'> & {
-      disabled?: boolean
-      selected?: boolean
-      onPress: () => void
-    })
-  | (React.ComponentProps<'div'> & {
-      onPress?: never
-    })
-)
+} & (ButtonProps | DivProps)
 
 function Tag(props: Props, ref: Ref<HTMLButtonElement | HTMLDivElement>) {
   const {
@@ -53,18 +54,18 @@ function Tag(props: Props, ref: Ref<HTMLButtonElement | HTMLDivElement>) {
   )
 
   if ('onPress' in props) {
-    const { ...tagProps } = props
+    const { selected, disabled, ...buttonProps } = props as ButtonProps
 
     return (
       <button
-        {...tagProps}
+        {...buttonProps}
         onClick={onPress}
         ref={ref as Ref<HTMLButtonElement>}
-        data-selected={tagProps.selected ? tagProps.selected : undefined}
+        data-selected={selected ? selected : undefined}
         className={styles({
           size,
-          selected: tagProps.selected,
-          disabled: tagProps.disabled,
+          selected,
+          disabled,
           iconOnly,
         })}
       >
@@ -75,7 +76,7 @@ function Tag(props: Props, ref: Ref<HTMLButtonElement | HTMLDivElement>) {
 
   return (
     <div
-      {...rest}
+      {...(rest as DivProps)}
       ref={ref as Ref<HTMLDivElement>}
       className={styles({
         size,
