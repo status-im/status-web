@@ -41,12 +41,6 @@ const meta: Meta<typeof Tag> = {
 
 type Story = StoryObj<typeof Tag>
 
-export const Light: Story = {
-  args: {
-    selected: true,
-    disabled: true,
-  },
-}
 
 // export const IconOnly: Story = {
 //   args: {

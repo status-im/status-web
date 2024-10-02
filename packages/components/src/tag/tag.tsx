@@ -21,9 +21,7 @@ type ButtonProps = {
   disabled?: boolean
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
 
-type DivProps = {
-  onPress?: never
-} & Omit<React.ComponentPropsWithoutRef<'div'>, 'children'>
+type DivProps = Omit<React.ComponentPropsWithoutRef<'div'>, 'children'>
 
 function Tag(
   props: Props & (ButtonProps | DivProps),
@@ -34,7 +32,6 @@ function Tag(
     icon,
     iconPlacement = 'left',
     label,
-    onPress,
     ...rest
   } = props
 
@@ -62,7 +59,7 @@ function Tag(
     return (
       <button
         {...buttonProps}
-        onClick={onPress}
+        onClick={props.onPress}
         ref={ref as Ref<HTMLButtonElement>}
         data-selected={selected ? selected : undefined}
         className={styles({
