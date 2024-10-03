@@ -1,15 +1,17 @@
 import { PlaceholderIcon } from '@status-im/icons/20'
+import { action } from '@storybook/addon-actions'
 
 import { Tag } from './tag'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta = {
+const meta: Meta<typeof Tag> = {
   component: Tag,
   title: 'Components/Tag',
   args: {
     label: 'Tag',
     disabled: false,
+    selected: false,
     icon: <PlaceholderIcon />,
     iconPlacement: 'left',
   },
@@ -24,17 +26,17 @@ const meta = {
   render: props => (
     <div className="flex flex-col items-start gap-4">
       <Tag {...props} />
-      <Tag {...props} selected />
-      <Tag {...props} disabled />
+      <Tag {...props} onPress={action('pressed')} selected />
+      <Tag {...props} onPress={action('pressed')} disabled />
       <Tag {...props} size="24" />
-      <Tag {...props} size="24" selected />
-      <Tag {...props} size="24" disabled />
+      <Tag {...props} size="24" onPress={action('pressed')} selected />
+      <Tag {...props} size="24" onPress={action('pressed')} disabled />
       <Tag {...props} icon={undefined} />
       <Tag {...props} label={undefined} />
       <Tag {...props} iconPlacement="right" />
     </div>
   ),
-} satisfies Meta<typeof Tag>
+}
 
 type Story = StoryObj<typeof Tag>
 

@@ -101,7 +101,7 @@ Trigger.displayName = Tabs.Trigger.displayName
 const tabStyles = cva({
   base: [
     'group inline-flex items-center gap-1 whitespace-nowrap',
-    'disabled:pointer-events-none disabled:opacity-[.3]',
+    'disabled:opacity-[.3]',
   ],
   variants: {
     variant: {
