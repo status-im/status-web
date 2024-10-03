@@ -1,11 +1,12 @@
 {
-  "name": "status-browser-extension",
+  "name": "connector",
   "version": "0.0.1",
   "license": "MPL-2.0",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/status-im/status-browser-extension.git"
+    "url": "https://github.com/status-im/status-web.git",
+    "directory": "apps/connector"
   },
   "scripts": {
     "dev:chrome": "plasmo dev --target=chrome-mv3",
