@@ -1,0 +1,73 @@
+#!/usr/bin/env groovy
+library 'status-jenkins-lib@v1.9.1'
+
+pipeline {
+  agent { label 'linux' }
+
+  options {
+    timestamps()
+    /* Prevent Jenkins jobs from running forever */
+    timeout(time: 10, unit: 'MINUTES')
+    /* manage how many builds we keep */
+    buildDiscarder(logRotator(
+      numToKeepStr: '20',
+      daysToKeepStr: '30',
+    ))
+    disableConcurrentBuilds()
+  }
+
+  environment {
+    PLATFORM = 'chrome'
+    ZIP_NAME = utils.pkgFilename(
+      type: 'Extension',
+      version: 'none',
+      arch: 'chrome',
+      ext: 'zip',
+    )
+  }
+
+  stages {
+    stage('Install') {
+      steps { script {
+        nix.shell('yarn install --frozen-lockfile', pure: false)
+      } }
+    }
+
+    stage('Build') {
+      steps { script {
+        nix.shell('yarn build:chrome', pure: false)
+      } }
+    }
+
+    stage('Zip') {
+      steps {
+        zip(
+          zipFile: env.ZIP_NAME,
+          dir: 'build/chrome-mv3-prod',
+          archive: false,
+        )
+      }
+    }
+
+    stage('Archive') {
+      steps {
+        archiveArtifacts(
+          artifacts: env.ZIP_NAME,
+          fingerprint: true,
+        )
+      }
+    }
+
+    stage('Upload') {
+      steps { script {
+        env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
+      } }
+    }
+  }
+
+  post {
+    success { script { github.notifyPR(true) } }
+    failure { script { github.notifyPR(false) } }
+    cleanup { cleanWs() }
+  }
+}
