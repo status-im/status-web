@@ -34,7 +34,6 @@ const meta: Meta<typeof Tag> = {
       <Tag {...props} icon={undefined} />
       <Tag {...props} label={undefined} />
       <Tag {...props} iconPlacement="right" />
-      <Tag {...props} onPress={action('pressed')} label="Pressable tag" />
     </div>
   ),
 }
