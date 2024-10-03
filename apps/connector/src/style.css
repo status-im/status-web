@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+::before,
+::after {
+  font-family: theme(fontFamily.sans);
+  color: theme(colors.neutral.100);
+}
+
+* {
+  font-family: theme(fontFamily.sans) !important;
+  font-size: initial !important;
+}

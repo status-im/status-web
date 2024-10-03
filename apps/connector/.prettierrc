@@ -1,0 +1,7 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "tailwindConfig": "./tailwind.config.ts",
+  "endOfLine": "auto"
+}
