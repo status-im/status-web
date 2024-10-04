@@ -22,8 +22,8 @@ const tabContainerStyles = cva({
       'dark-grey': 'bg-neutral-20 dark:bg-neutral-90',
     },
     size: {
-      24: 'h-6',
-      32: 'h-8',
+      '24': 'h-6',
+      '32': 'h-8',
     },
   },
 })
@@ -36,8 +36,8 @@ const tabStyles = cva({
       'dark-grey': 'bg-neutral-50 dark:bg-neutral-60',
     },
     size: {
-      24: 'h-[20px]',
-      32: 'h-[28px]',
+      '24': 'h-[20px]',
+      '32': 'h-[28px]',
     },
   },
 })
@@ -58,39 +58,39 @@ const segmentStyles = cva({
       icon: 'gap-1',
     },
     size: {
-      24: 'text-13',
-      32: 'text-15',
+      '24': 'text-13',
+      '32': 'text-15',
     },
   },
   compoundVariants: [
     {
       variant: 'default',
-      size: 24,
+      size: '24',
       className: 'px-2',
     },
     {
       variant: 'default',
-      size: 32,
+      size: '32',
       className: 'px-3',
     },
     {
       variant: 'emoji',
-      size: 24,
+      size: '24',
       className: 'pl-[6px] pr-2',
     },
     {
       variant: 'emoji',
-      size: 32,
+      size: '32',
       className: 'pl-[10px] pr-3',
     },
     {
       variant: 'icon',
-      size: 24,
+      size: '24',
       className: 'pl-[6px] pr-2',
     },
     {
       variant: 'icon',
-      size: 32,
+      size: '32',
       className: 'pl-[10px] pr-3',
     },
   ],
@@ -100,11 +100,11 @@ type SegmentButtonProps = {
   children: ReactNode
   onClick?: () => void
   active?: boolean
-  size?: 24 | 32
+  size?: '24' | '32'
 }
 
 const Button = forwardRef<HTMLButtonElement, SegmentButtonProps>(
-  ({ children, onClick, active, size = 32 }, ref) => (
+  ({ children, onClick, active, size = '32' }, ref) => (
     <button
       ref={ref}
       onClick={onClick}
@@ -120,7 +120,7 @@ Button.displayName = 'Button'
 const IconButton = forwardRef<
   HTMLButtonElement,
   SegmentButtonProps & { icon: ReactNode }
->(({ children, icon, onClick, active, size = 32 }, ref) => {
+>(({ children, icon, onClick, active, size = '32' }, ref) => {
   const iconWithCurrentColor = cloneElement(icon as ReactElement, {
     color: 'currentColor',
   })
@@ -142,7 +142,7 @@ IconButton.displayName = 'IconButton'
 const EmojiButton = forwardRef<
   HTMLButtonElement,
   SegmentButtonProps & { emoji: string }
->(({ children, emoji, onClick, active, size = 32 }, ref) => (
+>(({ children, emoji, onClick, active, size = '32' }, ref) => (
   <button
     ref={ref}
     onClick={onClick}
@@ -158,7 +158,7 @@ type Props<T> = {
   children: ReactNode
   activeSegment: T
   onSegmentChange: (value: T) => void
-  size?: 24 | 32
+  size?: '24' | '32'
   type?: 'grey' | 'dark-grey'
 }
 
@@ -167,7 +167,7 @@ const SegmentedControl = <T extends string | number>(props: Props<T>) => {
     children,
     activeSegment,
     onSegmentChange,
-    size = 32,
+    size = '32',
     type = 'grey',
   } = props
 

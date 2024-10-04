@@ -28,9 +28,9 @@ const meta = {
     return (
       <div className="inline-flex flex-col gap-4">
         <SegmentedControlVariant {...args} />
-        <SegmentedControlVariant {...args} size={24} />
+        <SegmentedControlVariant {...args} size="24" />
         <SegmentedControlVariant {...args} type="dark-grey" />
-        <SegmentedControlVariant {...args} type="dark-grey" size={24} />
+        <SegmentedControlVariant {...args} type="dark-grey" size="24" />
       </div>
     )
   },
