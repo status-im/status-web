@@ -14,13 +14,12 @@ import type { ReactElement, ReactNode } from 'react'
 
 const tabContainerStyles = cva({
   base: [
-    'relative inline-flex items-center justify-center gap-0.5 rounded-10 bg-neutral-10 p-0.5',
+    'relative inline-flex items-center justify-center gap-0.5 rounded-10 p-0.5',
   ],
-
   variants: {
     type: {
-      grey: 'bg-neutral-10',
-      'dark-grey': 'bg-neutral-20',
+      grey: 'bg-neutral-10 blur:bg-neutral-80/5 blur:backdrop-blur-[20px] dark:bg-neutral-80 blur:dark:bg-white-5',
+      'dark-grey': 'bg-neutral-20 dark:bg-neutral-90',
     },
     size: {
       24: 'h-6',
@@ -30,10 +29,12 @@ const tabContainerStyles = cva({
 })
 
 const tabStyles = cva({
-  base: [
-    'absolute left-0 rounded-8 bg-neutral-50 transition-all duration-300 ease-out',
-  ],
+  base: ['absolute left-0 rounded-8 transition-all duration-300 ease-out'],
   variants: {
+    type: {
+      grey: 'bg-neutral-50 blur:bg-neutral-80/60 dark:bg-neutral-60',
+      'dark-grey': 'bg-neutral-50 dark:bg-neutral-60',
+    },
     size: {
       24: 'h-[20px]',
       32: 'h-[28px]',
@@ -48,8 +49,9 @@ const segmentStyles = cva({
   variants: {
     active: {
       true: 'text-white-100',
-      false: 'bg-transparent text-neutral-80',
+      false: 'bg-transparent text-neutral-100 dark:text-white-100',
     },
+
     variant: {
       default: '',
       emoji: '',
@@ -200,9 +202,11 @@ const SegmentedControl = <T extends string | number>(props: Props<T>) => {
   )
 
   return (
-    <div className={tabContainerStyles({ size, type })}>
-      <div className={tabStyles({ size })} style={indicatorStyle} />
-      {clonedChildren}
+    <div>
+      <div className={tabContainerStyles({ size, type })}>
+        <div className={tabStyles({ size, type })} style={indicatorStyle} />
+        {clonedChildren}
+      </div>
     </div>
   )
 }
