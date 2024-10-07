@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react'
 
-import { cva } from 'cva'
+import { cva, cx } from 'cva'
 
 import type { ReactElement, ReactNode } from 'react'
 
@@ -26,7 +26,7 @@ const tabContainerStyles = cva({
   },
 })
 
-const tabStyles = cva({
+const tabActiveStyles = cva({
   base: 'absolute left-0 flex-1 rounded-8 transition-all duration-300 ease-out',
   variants: {
     type: {
@@ -46,8 +46,11 @@ const segmentStyles = cva({
   variants: {
     active: {
       true: 'text-white-100',
-      false:
-        'bg-transparent text-neutral-80 hover:bg-neutral-20 dark:text-neutral-40 dark:hover:bg-neutral-70 dark:hover:text-white-100',
+      false: 'bg-transparent text-neutral-100 dark:text-white-100',
+    },
+    type: {
+      grey: '',
+      'dark-grey': '',
     },
     variant: {
       default: '',
@@ -62,6 +65,16 @@ const segmentStyles = cva({
     },
   },
   compoundVariants: [
+    {
+      type: 'grey',
+      active: false,
+      className: 'hover:bg-neutral-20 dark:hover:bg-neutral-70',
+    },
+    {
+      type: 'dark-grey',
+      active: false,
+      className: 'hover:bg-neutral-30 dark:hover:bg-neutral-80',
+    },
     {
       variant: 'default',
       size: '24',
@@ -142,29 +155,39 @@ const IconButton = forwardRef<
   SegmentButtonProps & {
     icon: ReactNode
     value?: string | number
+    type?: 'grey' | 'dark-grey'
   }
->(({ icon, children, value, onClick, active, size = '32' }, ref) => {
-  const iconWithCurrentColor = cloneElement(icon as ReactElement, {
-    color: 'currentColor',
-    className: 'size-4',
-  })
+>(
+  (
+    { icon, children, value, onClick, active, size = '32', type = 'grey' },
+    ref,
+  ) => {
+    const iconWithColor = cloneElement(icon as ReactElement, {
+      className: cx([
+        'size-4 text-neutral-50 dark:text-white-40',
+        active && '!text-white-100',
+      ]),
+    })
 
-  return (
-    <button
-      ref={ref}
-      onClick={onClick}
-      className={segmentStyles({
-        active,
-        variant: children ? 'icon' : 'icon-only',
-        size,
-      })}
-      value={value}
-    >
-      {iconWithCurrentColor}
-      {children}
-    </button>
-  )
-})
+    console.log('Active: ', active)
+    return (
+      <button
+        ref={ref}
+        onClick={onClick}
+        className={segmentStyles({
+          active,
+          variant: children ? 'icon' : 'icon-only',
+          size,
+          type,
+        })}
+        value={value}
+      >
+        {iconWithColor}
+        {children}
+      </button>
+    )
+  },
+)
 
 IconButton.displayName = 'IconButton'
 
@@ -173,21 +196,28 @@ const EmojiButton = forwardRef<
   SegmentButtonProps & {
     emoji: string
     value?: string | number
+    type?: 'grey' | 'dark-grey'
   }
->(({ children, emoji, onClick, active, size = '32', value }, ref) => (
-  <button
-    ref={ref}
-    onClick={onClick}
-    className={segmentStyles({
-      active,
-      variant: children ? 'emoji' : 'emoji-only',
-      size,
-    })}
-    value={value}
-  >
-    {emoji} {children}
-  </button>
-))
+>(
+  (
+    { children, emoji, onClick, active, size = '32', value, type = 'grey' },
+    ref,
+  ) => (
+    <button
+      ref={ref}
+      onClick={onClick}
+      className={segmentStyles({
+        active,
+        variant: children ? 'emoji' : 'emoji-only',
+        size,
+        type,
+      })}
+      value={value}
+    >
+      {emoji} {children}
+    </button>
+  ),
+)
 
 EmojiButton.displayName = 'EmojiButton'
 
@@ -242,12 +272,13 @@ const SegmentedControl = <T extends string | number>(props: Props<T>) => {
           : child.props.children === activeSegment,
         ref: (el: HTMLButtonElement) => (segmentRefs.current[index] = el),
         size,
+        type,
       }),
   )
 
   return (
     <div className={tabContainerStyles({ size, type })}>
-      <div className={tabStyles({ size, type })} style={indicatorStyle} />
+      <div className={tabActiveStyles({ size, type })} style={indicatorStyle} />
       {clonedChildren}
     </div>
   )
