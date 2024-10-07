@@ -41,7 +41,7 @@ const tabStyles = cva({
 })
 
 const segmentStyles = cva({
-  base: 'relative z-10 flex h-full flex-1 select-none items-center justify-center whitespace-nowrap rounded-8 font-medium transition-all duration-300 ease-out',
+  base: 'relative z-10 flex flex-1 select-none items-center justify-center whitespace-nowrap rounded-8 font-medium transition-all duration-300 ease-out',
 
   variants: {
     active: {

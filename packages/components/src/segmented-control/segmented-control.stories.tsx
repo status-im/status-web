@@ -1,6 +1,13 @@
 import { createElement, memo, useState } from 'react'
 
-import { BuyIcon, GasIcon } from '@status-im/icons/20'
+import {
+  BuyIcon,
+  DarkIcon,
+  DesktopIcon,
+  GasIcon,
+  LightIcon,
+  ProfileIcon,
+} from '@status-im/icons/20'
 import { match } from 'ts-pattern'
 
 import { SegmentedControl } from './segmented-control'
@@ -9,7 +16,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 type Data = {
   value: string
-  label: string
+  label?: string
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>
   emoji?: string
 }
@@ -112,6 +119,13 @@ const meta = {
     const iconData = [
       { value: 'buy', label: 'Buy', icon: BuyIcon },
       { value: 'gas', label: 'Gas', icon: GasIcon },
+      { value: 'profile', label: 'Profile', icon: ProfileIcon },
+    ]
+
+    const themeSelectorData = [
+      { value: 'system', icon: DesktopIcon },
+      { value: 'light', icon: LightIcon },
+      { value: 'dark', icon: DarkIcon },
     ]
 
     const emojiData = [
@@ -121,6 +135,7 @@ const meta = {
     ]
     return (
       <div className="inline-flex flex-col gap-4">
+        <p className="text-27 dark:text-white-100">Segmented Control</p>
         {/* Only text */}
         <SegmentedControlVariant {...args} data={textData} />
         <SegmentedControlVariant {...args} size="24" data={textData} />
@@ -235,6 +250,17 @@ const meta = {
           variant="emoji-text"
           data={emojiData}
         />
+
+        <div className="gap-4 pt-4">
+          <p className="text-27 dark:text-white-100">Theme Selector</p>
+          <div className="inline-flex pt-4">
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-only"
+              data={themeSelectorData}
+            />
+          </div>
+        </div>
       </div>
     )
   },
