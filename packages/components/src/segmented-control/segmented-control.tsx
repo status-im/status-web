@@ -26,15 +26,15 @@ const tabContainerStyles = cva({
   },
 })
 
-const tabActiveStyles = cva({
+const activeTabStyles = cva({
   base: 'absolute left-0 flex-1 rounded-8 transition-all duration-300 ease-out',
   variants: {
     type: {
-      grey: 'bg-neutral-50 blur:bg-neutral-80/60 dark:bg-neutral-60',
+      grey: 'bg-neutral-50 blur:bg-neutral-80/60 dark:bg-neutral-60 blur:dark:bg-white-20',
       'dark-grey': 'bg-neutral-50 dark:bg-neutral-60',
     },
     size: {
-      '24': 'h-5',
+      '24': 'h-[22px]',
       '32': 'h-7',
     },
   },
@@ -60,7 +60,7 @@ const segmentStyles = cva({
       'icon-only': '',
     },
     size: {
-      '24': 'h-5 text-13',
+      '24': 'h-[22px] text-13',
       '32': 'h-7 text-15',
     },
   },
@@ -68,7 +68,8 @@ const segmentStyles = cva({
     {
       type: 'grey',
       active: false,
-      className: 'hover:bg-neutral-20 dark:hover:bg-neutral-70',
+      className:
+        'hover:bg-neutral-20 blur:hover:bg-neutral-80/5 dark:hover:bg-neutral-70 dark:blur:hover:bg-white-5',
     },
     {
       type: 'dark-grey',
@@ -134,14 +135,15 @@ type SegmentButtonProps = {
   onClick?: () => void
   active?: boolean
   size?: '24' | '32'
+  type?: 'grey' | 'dark-grey'
 }
 
 const Button = forwardRef<HTMLButtonElement, SegmentButtonProps>(
-  ({ children, onClick, active, size = '32' }, ref) => (
+  ({ children, onClick, active, size = '32', type = 'grey' }, ref) => (
     <button
       ref={ref}
       onClick={onClick}
-      className={segmentStyles({ active, variant: 'default', size })}
+      className={segmentStyles({ active, variant: 'default', size, type })}
     >
       {children}
     </button>
@@ -164,12 +166,11 @@ const IconButton = forwardRef<
   ) => {
     const iconWithColor = cloneElement(icon as ReactElement, {
       className: cx([
-        'size-4 text-neutral-50 dark:text-white-40',
+        'size-5 text-neutral-50 dark:text-white-40',
         active && '!text-white-100',
       ]),
     })
 
-    console.log('Active: ', active)
     return (
       <button
         ref={ref}
@@ -278,7 +279,7 @@ const SegmentedControl = <T extends string | number>(props: Props<T>) => {
 
   return (
     <div className={tabContainerStyles({ size, type })}>
-      <div className={tabActiveStyles({ size, type })} style={indicatorStyle} />
+      <div className={activeTabStyles({ size, type })} style={indicatorStyle} />
       {clonedChildren}
     </div>
   )

@@ -1,13 +1,6 @@
 import { createElement, memo, useState } from 'react'
 
-import {
-  BuyIcon,
-  DarkIcon,
-  DesktopIcon,
-  GasIcon,
-  LightIcon,
-  ProfileIcon,
-} from '@status-im/icons/20'
+import { PlaceholderIcon } from '@status-im/icons/20'
 import { match } from 'ts-pattern'
 
 import { SegmentedControl } from './segmented-control'
@@ -110,154 +103,417 @@ SegmentedControlVariant.displayName = 'SegmentedControlVariant'
 const meta = {
   title: 'Components/SegmentedControl',
   render: args => {
-    const textData = [
-      { value: 'option-a', label: 'Option A' },
-      { value: 'option-b', label: 'Option B' },
-      { value: 'option-c', label: 'Option C' },
-    ]
+    const tabIcon = {
+      label: 'Tab',
+      icon: PlaceholderIcon,
+    }
+    const tabText = { label: 'Tab' }
+    const tabEmoji = {
+      label: 'Tab',
+      emoji: '🐷',
+    }
 
-    const iconData = [
-      { value: 'buy', label: 'Buy', icon: BuyIcon },
-      { value: 'gas', label: 'Gas', icon: GasIcon },
-      { value: 'profile', label: 'Profile', icon: ProfileIcon },
-    ]
-
-    const themeSelectorData = [
-      { value: 'system', icon: DesktopIcon },
-      { value: 'light', icon: LightIcon },
-      { value: 'dark', icon: DarkIcon },
-    ]
-
-    const emojiData = [
-      { value: 'apple', label: 'Apple', emoji: '🍎' },
-      { value: 'orange', label: 'Orange', emoji: '🍊' },
-      { value: 'grapes', label: 'Grapes', emoji: '🍇' },
-    ]
     return (
-      <div className="inline-flex flex-col gap-4">
-        <p className="text-27 dark:text-white-100">Segmented Control</p>
-        {/* Only text */}
-        <SegmentedControlVariant {...args} data={textData} />
-        <SegmentedControlVariant {...args} size="24" data={textData} />
-        <SegmentedControlVariant {...args} type="dark-grey" data={textData} />
-        <SegmentedControlVariant
-          {...args}
-          type="dark-grey"
-          size="24"
-          data={textData}
-        />
+      <div className="flex flex-wrap gap-5">
+        <div className="inline-flex flex-col gap-12 rounded-[24px] bg-white-100 p-12 dark:bg-neutral-90">
+          <div className="flex flex-col gap-6">
+            {/* Only text */}
+            <SegmentedControlVariant
+              {...args}
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabText,
+                  value: `placeholder-tab-grey-32-${index}`,
+                }))}
+            />
 
-        {/* Only icon */}
-        <SegmentedControlVariant
-          {...args}
-          variant="icon-only"
-          data={iconData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          variant="icon-only"
-          size="24"
-          data={iconData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          variant="icon-only"
-          type="dark-grey"
-          data={iconData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          variant="icon-only"
-          type="dark-grey"
-          size="24"
-          data={iconData}
-        />
+            {/* Emoji and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-text"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-grey-32-${index}`,
+                }))}
+            />
 
-        {/* Only emoji */}
-        <SegmentedControlVariant
-          {...args}
-          variant="emoji-only"
-          data={emojiData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          variant="emoji-only"
-          size="24"
-          data={emojiData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          variant="emoji-only"
-          type="dark-grey"
-          data={emojiData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          variant="emoji-only"
-          type="dark-grey"
-          size="24"
-          data={emojiData}
-        />
+            {/* Icon and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-text"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-grey-32-${index}`,
+                }))}
+            />
 
-        {/* Icon and text */}
-        <SegmentedControlVariant
-          {...args}
-          variant="icon-text"
-          data={iconData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          size="24"
-          variant="icon-text"
-          data={iconData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          type="dark-grey"
-          variant="icon-text"
-          data={iconData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          type="dark-grey"
-          size="24"
-          variant="icon-text"
-          data={iconData}
-        />
+            {/* Only emoji */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-only"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-only-grey-32-${index}`,
+                }))}
+            />
 
-        {/* Emoji and text */}
-        <SegmentedControlVariant
-          {...args}
-          variant="emoji-text"
-          data={emojiData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          size="24"
-          variant="emoji-text"
-          data={emojiData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          type="dark-grey"
-          variant="emoji-text"
-          data={emojiData}
-        />
-        <SegmentedControlVariant
-          {...args}
-          type="dark-grey"
-          size="24"
-          variant="emoji-text"
-          data={emojiData}
-        />
-
-        <div className="gap-4 pt-4">
-          <p className="text-27 dark:text-white-100">Theme Selector</p>
-          <div className="inline-flex pt-4">
+            {/* Only icon */}
             <SegmentedControlVariant
               {...args}
               variant="icon-only"
-              data={themeSelectorData}
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-only-grey-32-${index}`,
+                }))}
+            />
+          </div>
+
+          <div className="flex flex-col gap-6">
+            {/* Only text */}
+            <SegmentedControlVariant
+              {...args}
+              size="24"
+              data={Array(8)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabText,
+                  value: `placeholder-tab-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Emoji and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-text"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Icon and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-text"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Only emoji */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-only"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-only-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Only icon */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-only"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-only-grey-24-${index}`,
+                }))}
+            />
+          </div>
+        </div>
+        {/* dark grey light */}
+        <div className="inline-flex flex-col gap-12 rounded-[24px] bg-neutral-5 p-12 dark:bg-neutral-95">
+          <div className="flex flex-col gap-6">
+            {/* Only text */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabText,
+                  value: `placeholder-tab-dark-grey-32-${index}`,
+                }))}
+            />
+
+            {/* Emoji and text */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="emoji-text"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-dark-grey-32-${index}`,
+                }))}
+            />
+
+            {/* Icon and text */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="icon-text"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-dark-grey-32-${index}`,
+                }))}
+            />
+
+            {/* Only emoji */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="emoji-only"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-only-dark-grey-32-${index}`,
+                }))}
+            />
+
+            {/* Only icon */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="icon-only"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-only-dark-grey-32-${index}`,
+                }))}
+            />
+          </div>
+
+          <div className="flex flex-col gap-6">
+            {/* Only text */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              size="24"
+              data={Array(8)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabText,
+                  value: `placeholder-tab-dark-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Emoji and text */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="emoji-text"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-dark-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Icon and text */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="icon-text"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-dark-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Only emoji */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="emoji-only"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-only-dark-grey-24-${index}`,
+                }))}
+            />
+
+            {/* Only icon */}
+            <SegmentedControlVariant
+              {...args}
+              type="dark-grey"
+              variant="icon-only"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-only-dark-grey-24-${index}`,
+                }))}
+            />
+          </div>
+        </div>
+        {/* with blur */}
+        <div
+          data-background="blur"
+          className="relative inline-flex flex-col gap-12 overflow-hidden rounded-[24px] p-12"
+        >
+          <div className="absolute left-0 top-0 z-10 size-full bg-blur-white/70 backdrop-blur-[20px] dark:bg-blur-neutral-80/80" />
+          {/* Background image */}
+          <div className="absolute left-0 top-0 size-full bg-[url(./assets/background-blur.png)] bg-cover bg-center bg-no-repeat" />
+          <div className="relative z-10 flex flex-col gap-6">
+            {/* Only text */}
+            <SegmentedControlVariant
+              {...args}
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabText,
+                  value: `placeholder-tab-dark-grey-32-blur-${index}`,
+                }))}
+            />
+
+            {/* Emoji and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-text"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-dark-grey-32-blur-${index}`,
+                }))}
+            />
+
+            {/* Icon and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-text"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-dark-grey-32-blur-${index}`,
+                }))}
+            />
+
+            {/* Only emoji */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-only"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-only-dark-grey-32-blur-${index}`,
+                }))}
+            />
+
+            {/* Only icon */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-only"
+              data={Array(2)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-only-dark-grey-32-blur-${index}`,
+                }))}
+            />
+          </div>
+
+          <div className="relative z-10 flex flex-col gap-6">
+            {/* Only text */}
+            <SegmentedControlVariant
+              {...args}
+              size="24"
+              data={Array(8)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabText,
+                  value: `placeholder-tab-dark-grey-24-blur-${index}`,
+                }))}
+            />
+
+            {/* Emoji and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-text"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-dark-grey-24-blur-${index}`,
+                }))}
+            />
+
+            {/* Icon and text */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-text"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-dark-grey-24-blur-${index}`,
+                }))}
+            />
+
+            {/* Only emoji */}
+            <SegmentedControlVariant
+              {...args}
+              variant="emoji-only"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabEmoji,
+                  value: `placeholder-tab-emoji-only-dark-grey-24-blur-${index}`,
+                }))}
+            />
+
+            {/* Only icon */}
+            <SegmentedControlVariant
+              {...args}
+              variant="icon-only"
+              size="24"
+              data={Array(5)
+                .fill(null)
+                .map((_, index) => ({
+                  ...tabIcon,
+                  value: `placeholder-tab-icon-only-dark-grey-24-blur-${index}`,
+                }))}
             />
           </div>
         </div>
