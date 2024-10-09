@@ -14,7 +14,7 @@ type Variants = VariantProps<typeof styles>
 type Props = {
   size?: Variants['size']
   variant?: Variants['variant']
-  onPress?: () => void
+  onPress?: (event: React.MouseEvent<HTMLButtonElement>) => void
 } & (
   | {
       children: React.ReactNode

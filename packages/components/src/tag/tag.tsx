@@ -14,7 +14,7 @@ type Props = React.ComponentProps<'button'> & {
   icon?: IconElement
   iconPlacement?: 'left' | 'right'
   selected?: boolean
-  onPress?: () => void
+  onPress?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 const Tag = (props: Props, ref: Ref<HTMLButtonElement>) => {
