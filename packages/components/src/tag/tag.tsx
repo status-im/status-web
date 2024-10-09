@@ -16,7 +16,7 @@ type Props = {
 }
 
 type ButtonProps = {
-  onPress: () => void
+  onPress: (event: React.MouseEvent<HTMLButtonElement>) => void
   selected?: boolean
   disabled?: boolean
 } & Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>

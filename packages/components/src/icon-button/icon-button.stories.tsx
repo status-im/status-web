@@ -1,4 +1,5 @@
 import { BoldIcon } from '@status-im/icons/20'
+import { action } from '@storybook/addon-actions'
 
 import { IconButton } from './icon-button'
 
@@ -10,7 +11,13 @@ const sizes = ['40', '32', '24'] as const
 const renderVariant = (variant: string) => (props: any) => (
   <div className="flex items-center gap-4">
     {sizes.map(size => (
-      <IconButton {...props} key={size} variant={variant} icon={BoldIcon} />
+      <IconButton
+        {...props}
+        key={size}
+        variant={variant}
+        icon={<BoldIcon />}
+        onPress={action('press')}
+      />
     ))}
   </div>
 )
@@ -19,7 +26,7 @@ const meta = {
   component: IconButton,
   title: 'Components/Icon Button',
   args: {
-    isDisabled: false,
+    disabled: false,
   },
 
   parameters: {
