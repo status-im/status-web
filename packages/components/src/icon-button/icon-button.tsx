@@ -13,7 +13,7 @@ type Variants = VariantProps<typeof styles>
 type Props = {
   variant?: Variants['variant']
   icon: IconElement
-  onPress?: () => void
+  onPress?: (event: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 type ButtonProps = Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
