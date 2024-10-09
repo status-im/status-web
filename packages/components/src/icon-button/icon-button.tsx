@@ -3,27 +3,31 @@
 import { forwardRef } from 'react'
 
 import { cva } from 'cva'
-import { Button as AriaButton } from 'react-aria-components'
 
 import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
 import type { Ref } from 'react'
-import type { ButtonProps as AriaButtonProps } from 'react-aria-components'
 
 type Variants = VariantProps<typeof styles>
 
-type Props = AriaButtonProps & {
+type Props = {
   variant?: Variants['variant']
   icon: IconElement
+  onPress?: () => void
 }
 
-const IconButton = (props: Props, ref: Ref<HTMLButtonElement>) => {
+type ButtonProps = Omit<React.ComponentPropsWithoutRef<'button'>, 'children'>
+
+const IconButton = (
+  props: Props & ButtonProps,
+  ref: Ref<HTMLButtonElement>,
+) => {
   const { variant = 'default', icon, ...buttonProps } = props
 
   return (
-    <AriaButton {...buttonProps} ref={ref} className={styles({ variant })}>
+    <button {...buttonProps} ref={ref} className={styles({ variant })}>
       {icon}
-    </AriaButton>
+    </button>
   )
 }
 
