@@ -11,6 +11,7 @@ import { cva } from 'cva'
 
 import { Checkbox } from '../checkbox'
 import { Input } from '../input'
+import { Switch } from '../switch'
 
 import type { IconElement } from '../types'
 
@@ -74,6 +75,25 @@ export const Content = forwardRef<
 Content.displayName = DropdownMenu.Content.displayName
 
 /**
+ * Label
+ */
+
+export const Label = forwardRef<
+  React.ElementRef<typeof DropdownMenu.Label>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenu.Label>
+>((props, ref) => {
+  return (
+    <DropdownMenu.Label
+      {...props}
+      ref={ref}
+      className="p-2 text-13 font-medium text-neutral-50 dark:text-neutral-40"
+    />
+  )
+})
+
+Label.displayName = DropdownMenu.Label.displayName
+
+/**
  * Search
  */
 
@@ -111,7 +131,7 @@ type ItemProps = DropdownMenu.DropdownMenuItemProps & {
 
 const itemStyles = cva({
   base: [
-    'flex h-8 cursor-pointer select-none items-center gap-2 rounded-8 px-2 text-15 transition-colors active:bg-neutral-10',
+    'flex h-8 select-none items-center gap-2 rounded-8 px-2 text-15 transition-colors active:bg-neutral-10',
     'outline-none data-[highlighted]:bg-neutral-5',
     'dark:active:bg-customisation-50/10 dark:hover:bg-customisation-50/5',
   ],
@@ -198,7 +218,7 @@ export const CheckboxItem = forwardRef<
         variant="outline"
         checked={itemProps.checked}
         onCheckedChange={() => {
-          // handle by parent
+          // handled by parent
         }}
       />
     </DropdownMenu.CheckboxItem>
@@ -206,6 +226,49 @@ export const CheckboxItem = forwardRef<
 })
 
 CheckboxItem.displayName = DropdownMenu.CheckboxItem.displayName
+
+/**
+ * SwitchItem
+ */
+
+type SwitchItemProps = DropdownMenu.DropdownMenuCheckboxItemProps & {
+  icon?: IconElement
+  label: string
+  checked: boolean
+  onCheckedChange: (checked: boolean) => void
+  danger?: boolean
+}
+
+export const SwitchItem = forwardRef<
+  React.ElementRef<typeof DropdownMenu.CheckboxItem>,
+  SwitchItemProps
+>((props, ref) => {
+  const { label, icon, danger, ...itemProps } = props
+
+  const id = useId()
+
+  return (
+    <DropdownMenu.CheckboxItem
+      ref={ref}
+      className={itemStyles()}
+      {...itemProps}
+    >
+      {icon && (
+        <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
+      )}
+      <span className={labelStyles({ danger })}>{label}</span>
+      <Switch
+        id={id}
+        checked={itemProps.checked}
+        onCheckedChange={() => {
+          // handled by parent
+        }}
+      />
+    </DropdownMenu.CheckboxItem>
+  )
+})
+
+SwitchItem.displayName = 'DropdownMenuSwitchItem'
 
 /**
  * Separator
@@ -231,7 +294,10 @@ export const SubTrigger = (props: SubTriggerProps) => {
   const { icon, label, danger, ...itemProps } = props
 
   return (
-    <DropdownMenu.SubTrigger {...itemProps} className={itemStyles()}>
+    <DropdownMenu.SubTrigger
+      {...itemProps}
+      className={itemStyles({ className: 'aria-expanded:bg-neutral-5' })}
+    >
       {icon && (
         <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
       )}

@@ -20,8 +20,12 @@ import { DropdownMenu } from '.'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
-const meta: Meta = {
+const meta: Meta<{ label: boolean; search: boolean }> = {
   title: 'Components/Dropdown Menu',
+  args: {
+    label: true,
+    search: true,
+  },
   argTypes: {},
   parameters: {
     design: {
@@ -31,15 +35,16 @@ const meta: Meta = {
   },
 
   render: args => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [isChecked, setIsChecked] = useState(false)
-
+    const [isChecked, setIsChecked] = useState(false) // eslint-disable-line react-hooks/rules-of-hooks
+    const [isChecked2, setIsChecked2] = useState(false) // eslint-disable-line react-hooks/rules-of-hooks
     return (
       <DropdownMenu.Root {...args}>
         <DropdownButton>Open</DropdownButton>
 
         <DropdownMenu.Content sideOffset={10}>
-          <DropdownMenu.Search placeholder="Search by" />
+          {args.label && <DropdownMenu.Label>Label</DropdownMenu.Label>}
+
+          {args.search && <DropdownMenu.Search placeholder="Search by" />}
 
           <DropdownMenu.Item
             icon={<EditIcon />}
@@ -98,6 +103,13 @@ const meta: Meta = {
             label="Enable notifications"
             checked={isChecked}
             onCheckedChange={setIsChecked}
+            onSelect={e => e.preventDefault()}
+          />
+          <DropdownMenu.SwitchItem
+            icon={<NotificationsIcon />}
+            label="Toggle alerts"
+            checked={isChecked2}
+            onCheckedChange={setIsChecked2}
             onSelect={e => e.preventDefault()}
           />
 

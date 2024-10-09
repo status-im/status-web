@@ -1,5 +1,16 @@
 # @status-im/components
 
+## 1.0.1
+
+### Patch Changes
+
+- 447cce7: fix `<DropdowMenu.SubTrigger />` expanded state
+- 1ce026c: add `<DropdownMenu.Label />`
+- 4e53b3e: Fix tag and tabs
+- 273db4e: add dark grey dropdown button
+- 4452f05: fix `<Button />` text alignment
+- 433558a: Add `<Switch />` and `<DropdownMenu.SwitchItem />`
+
 ## 1.0.0
 
 ### Major Changes

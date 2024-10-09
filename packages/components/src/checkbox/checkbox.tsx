@@ -7,7 +7,7 @@ import { cva } from 'cva'
 
 import type { VariantProps } from 'cva'
 
-type Variants = VariantProps<typeof styles>
+type Variants = VariantProps<typeof rootStyles>
 
 type Props = Omit<Checkbox.CheckboxProps, 'checked' | 'onCheckedChange'> & {
   checked: boolean
@@ -23,7 +23,7 @@ const Root = forwardRef<React.ElementRef<typeof Checkbox.Root>, Props>(
       <Checkbox.Root
         {...checkboxProps}
         ref={ref}
-        className={styles({ variant })}
+        className={rootStyles({ variant })}
       >
         <Checkbox.Indicator>
           <svg
@@ -50,9 +50,9 @@ const Root = forwardRef<React.ElementRef<typeof Checkbox.Root>, Props>(
 
 Root.displayName = Checkbox.Root.displayName
 
-const styles = cva({
+const rootStyles = cva({
   base: [
-    'group inline-flex size-[18px] shrink-0 items-center justify-center overflow-hidden rounded-6 text-white-100 transition-colors',
+    'group inline-flex size-[18px] shrink-0 cursor-default items-center justify-center overflow-hidden rounded-6 text-white-100 transition-colors',
     'border border-neutral-20 hover:border-neutral-30',
     'aria-checked:border-customisation-50 aria-checked:bg-customisation-50 aria-checked:hover:border-customisation-60 aria-checked:hover:bg-customisation-60',
     'focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2',
