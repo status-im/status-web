@@ -22,10 +22,15 @@ const IconButton = (
   props: Props & ButtonProps,
   ref: Ref<HTMLButtonElement>,
 ) => {
-  const { variant = 'default', icon, ...buttonProps } = props
+  const { variant = 'default', onPress: onClick, icon, ...buttonProps } = props
 
   return (
-    <button {...buttonProps} ref={ref} className={styles({ variant })}>
+    <button
+      {...buttonProps}
+      onClick={onClick}
+      ref={ref}
+      className={styles({ variant })}
+    >
       {icon}
     </button>
   )
@@ -41,16 +46,16 @@ const styles = cva({
   variants: {
     variant: {
       default: [
-        'border-transparent bg-neutral-10 text-neutral-50 hover:bg-neutral-20 pressed:border-neutral-20 pressed:bg-neutral-10 pressed:text-neutral-100',
-        'dark:bg-neutral-90 dark:text-neutral-40 dark:hover:bg-neutral-80 dark:pressed:border-neutral-60 dark:pressed:bg-neutral-80/70 dark:pressed:text-white-100',
+        'border-transparent bg-neutral-10 text-neutral-50 active:border-neutral-20 active:bg-neutral-10 active:text-neutral-100 hover:bg-neutral-20',
+        'dark:bg-neutral-90 dark:text-neutral-40 dark:active:border-neutral-60 dark:active:bg-neutral-80/70 dark:active:text-white-100 dark:hover:bg-neutral-80',
       ],
       outline: [
-        'border-neutral-30 text-neutral-50 hover:border-neutral-40 pressed:border-neutral-20 pressed:bg-neutral-10 pressed:text-neutral-100',
-        'dark:border-neutral-70 dark:text-neutral-40 dark:hover:bg-neutral-60 dark:pressed:border-neutral-60 dark:pressed:bg-neutral-80/70 dark:pressed:text-white-100',
+        'border-neutral-30 text-neutral-50 active:border-neutral-20 active:bg-neutral-10 active:text-neutral-100 hover:border-neutral-40',
+        'dark:border-neutral-70 dark:text-neutral-40 dark:active:border-neutral-60 dark:active:bg-neutral-80/70 dark:active:text-white-100 dark:hover:bg-neutral-60',
       ],
       ghost: [
-        'border-transparent text-neutral-50 hover:bg-neutral-10 pressed:border-neutral-20 pressed:bg-neutral-10 pressed:text-neutral-100',
-        'dark:text-neutral-40 dark:hover:bg-neutral-80/70 dark:pressed:border-neutral-60 dark:pressed:bg-neutral-80/70 dark:pressed:text-white-100',
+        'border-transparent text-neutral-50 active:border-neutral-20 active:bg-neutral-10 active:text-neutral-100 hover:bg-neutral-10',
+        'dark:text-neutral-40 dark:active:border-neutral-60 dark:active:bg-neutral-80/70 dark:active:text-white-100 dark:hover:bg-neutral-80/70',
       ],
     },
   },
