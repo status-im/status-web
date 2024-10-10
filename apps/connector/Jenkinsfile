@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-library 'status-jenkins-lib@v1.9.1'
+library 'status-jenkins-lib@v1.9.11'
 
 pipeline {
   agent { label 'linux' }
@@ -31,9 +31,11 @@ pipeline {
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
-              withEnv(["WORKSPACE=${env.WORKSPACE}/apps/connector"]) { // Override WORKSPACE
-                nix.shell('yarn install --frozen-lockfile', pure: false)
-              }
+              nix.shell(
+                'yarn install --frozen-lockfile',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
+              )
             }
           }
       }
@@ -43,9 +45,11 @@ pipeline {
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
-              withEnv(["WORKSPACE=${env.WORKSPACE}/apps/connector"]) { // Override WORKSPACE
-                nix.shell('yarn build:chrome', pure: false)
-              }
+              nix.shell(
+                'yarn build:chrome',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
+              )
             }
           }
       }
@@ -53,7 +57,7 @@ pipeline {
 
     stage('Zip') {
       steps {
-        dir("${env.WORKSPACE}/apps/connector") { // Set the working directory to apps/connector
+        dir("${env.WORKSPACE}/apps/connector") {
           zip(
             zipFile: env.ZIP_NAME,
             dir: 'build/chrome-mv3-prod',
@@ -65,7 +69,7 @@ pipeline {
 
     stage('Archive') {
       steps {
-        dir("${env.WORKSPACE}/apps/connector") { // Set the working directory to apps/connector
+        dir("${env.WORKSPACE}/apps/connector") {
           archiveArtifacts(
             artifacts: env.ZIP_NAME,
             fingerprint: true,
@@ -76,7 +80,7 @@ pipeline {
 
     stage('Upload') {
       steps {
-        dir("${env.WORKSPACE}/apps/connector") { // Set the working directory to apps/connector
+        dir("${env.WORKSPACE}/apps/connector") {
           script {
             env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
           }
