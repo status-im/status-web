@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.0.4
+
+### Patch Changes
+
+- a3f9252: fix `<Button />` icon color for blur variant
+
 ## 1.0.3
 
 ### Patch Changes
