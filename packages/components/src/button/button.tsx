@@ -143,16 +143,18 @@ const iconStyles = cva({
     variant: {
       primary: ['text-blur-white/70'],
       positive: ['text-blur-white/70'],
-      grey: ['text-neutral-50'],
-      darkGrey: [
+      grey: [
         'text-neutral-50',
+        'blur:text-neutral-80/40',
         'dark:text-neutral-40',
-        'blur:dark:text-neutral-80/40',
+        'blur:dark:text-white-40',
       ],
+      darkGrey: ['text-neutral-40'],
       outline: [
         'text-neutral-50',
+        'blur:text-neutral-80/40',
         'dark:text-neutral-40',
-        'blur:dark:text-neutral-80/40',
+        'blur:dark:text-white-40',
       ],
       ghost: ['text-neutral-50'],
       danger: ['text-blur-white/70'],
