@@ -69,18 +69,19 @@ function Button(
       onClick={onClick}
       {...buttonProps}
       ref={ref}
-      className={styles({ variant, size })}
+      className={styles({
+        variant,
+        size,
+        placement:
+          (iconBefore && 'before') || (iconAfter && 'after') || undefined,
+      })}
     >
       {iconBefore && (
-        <span className={iconStyles({ size, placement: 'before', variant })}>
-          {iconBefore}
-        </span>
+        <span className={iconStyles({ size, variant })}>{iconBefore}</span>
       )}
       <span className="flex-1 whitespace-nowrap">{children}</span>
       {iconAfter && (
-        <span className={iconStyles({ size, placement: 'after', variant })}>
-          {iconAfter}
-        </span>
+        <span className={iconStyles({ size, variant })}>{iconAfter}</span>
       )}
     </Element>
   )
@@ -126,6 +127,10 @@ const styles = cva({
         'dark:bg-danger-60 dark:hover:bg-danger-50 dark:pressed:bg-danger-50/[.9]',
       ],
     },
+    placement: {
+      before: '',
+      after: '',
+    },
     size: {
       '40': 'h-[40px] rounded-12 px-4 text-15',
       '32': 'h-[32px] rounded-10 px-3 text-15',
@@ -135,6 +140,28 @@ const styles = cva({
       true: 'aspect-square !px-0',
     },
   },
+  compoundVariants: [
+    {
+      size: ['40', '32'],
+      placement: 'before',
+      className: 'pl-3 pr-4',
+    },
+    {
+      size: ['40', '32'],
+      placement: 'after',
+      className: 'pl-4 pr-3',
+    },
+    {
+      size: '24',
+      placement: 'before',
+      className: 'pl-2 pr-3',
+    },
+    {
+      size: '24',
+      placement: 'after',
+      className: 'pl-3 pr-2',
+    },
+  ],
 })
 
 const iconStyles = cva({
@@ -159,10 +186,6 @@ const iconStyles = cva({
       ghost: ['text-neutral-50'],
       danger: ['text-blur-white/70'],
     },
-    placement: {
-      before: '',
-      after: '',
-    },
     size: {
       '40': 'size-5',
       '32': 'size-5',
@@ -173,26 +196,6 @@ const iconStyles = cva({
     },
   },
   compoundVariants: [
-    {
-      size: ['40', '32'],
-      placement: 'before',
-      className: '-ml-1',
-    },
-    {
-      size: ['40', '32'],
-      placement: 'after',
-      className: '-mr-1',
-    },
-    {
-      size: '24',
-      placement: 'before',
-      className: '-ml-0.5',
-    },
-    {
-      size: '24',
-      placement: 'after',
-      className: '-mr-0.5',
-    },
     {
       variant: 'outline',
       iconOnly: true,
