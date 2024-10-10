@@ -33,15 +33,96 @@ export default {
       bold: '700',
     },
 
+    // note: https://tailwindcss.com/docs/font-size#providing-a-default-line-height for `[fontSize, { lineHeight?, letterSpacing?, fontWeight? }]`
     fontSize: {
-      88: ['5.5rem', { lineHeight: '5.25rem', letterSpacing: '-0.1155rem' }],
-      64: ['4rem', { lineHeight: '4.25rem', letterSpacing: '-0.08rem' }],
-      40: ['2.5rem', { lineHeight: '2.75rem', letterSpacing: '-0.05rem' }],
-      27: ['1.6875rem', { lineHeight: '2rem', letterSpacing: '0rem' }],
-      19: ['1.1875rem', { lineHeight: '1.75rem', letterSpacing: '0rem' }],
-      15: ['0.9375rem', { lineHeight: '1.36rem', letterSpacing: '0rem' }],
-      13: ['0.8125rem', { lineHeight: '1.1375rem', letterSpacing: '0rem' }],
-      11: ['0.6875rem', { lineHeight: '1', letterSpacing: '0rem' }],
+      // note: not in design system
+      240: [
+        '15rem',
+        {
+          lineHeight: '13.25rem',
+          letterSpacing: '-0.6rem',
+        },
+      ],
+      // note: not in design system
+      120: [
+        '7.5rem',
+        {
+          lineHeight: '5.25rem',
+          letterSpacing: '-0.1575rem',
+        },
+      ],
+      88: [
+        '5.5rem',
+        {
+          lineHeight: '5.25rem',
+          letterSpacing: '-0.1155rem',
+        },
+      ],
+      // note: not in design system
+      76: [
+        '4.75rem',
+        {
+          lineHeight: '4.25rem',
+          letterSpacing: '-0.095rem',
+        },
+      ],
+      64: [
+        '4rem',
+        {
+          lineHeight: '4.25rem',
+          letterSpacing: '-0.08rem',
+        },
+      ],
+      // note: not in design system
+      48: [
+        '3rem',
+        {
+          lineHeight: '3.125rem',
+          letterSpacing: '-0.06rem',
+        },
+      ],
+      40: [
+        '2.5rem',
+        {
+          lineHeight: '2.75rem',
+          letterSpacing: '-0.05rem',
+        },
+      ],
+      27: [
+        '1.6875rem',
+        {
+          lineHeight: '2rem',
+          letterSpacing: '-0.0354375rem',
+        },
+      ],
+      19: [
+        '1.1875rem',
+        {
+          lineHeight: '1.75rem',
+          letterSpacing: '-0.019rem',
+        },
+      ],
+      15: [
+        '0.9375rem',
+        {
+          lineHeight: '1.359375rem',
+          letterSpacing: '-0.0084375rem',
+        },
+      ],
+      13: [
+        '0.8125rem',
+        {
+          lineHeight: '1.1375rem',
+          letterSpacing: '-0.0024375rem',
+        },
+      ],
+      11: [
+        '0.6875rem',
+        {
+          lineHeight: '0.97625rem',
+          letterSpacing: '-0.0034375rem',
+        },
+      ],
     },
 
     opacity: {},
