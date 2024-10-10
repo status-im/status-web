@@ -76,7 +76,7 @@ function Button(
           {iconBefore}
         </span>
       )}
-      <span className="flex-1 whitespace-nowrap">{children}</span>
+      <span className="whitespace-nowrap">{children}</span>
       {iconAfter && (
         <span className={iconStyles({ size, placement: 'after', variant })}>
           {iconAfter}
