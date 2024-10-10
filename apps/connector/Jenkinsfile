@@ -1,5 +1,5 @@
 #!/usr/bin/env groovy
-library 'status-jenkins-lib@v1.9.1'
+library 'status-jenkins-lib@v1.9.11'
 
 pipeline {
   agent { label 'linux' }
@@ -28,40 +28,64 @@ pipeline {
 
   stages {
     stage('Install') {
-      steps { script {
-        nix.shell('yarn install --frozen-lockfile', pure: false)
-      } }
+      steps {
+          dir("${env.WORKSPACE}/apps/connector") {
+            script {
+              nix.shell(
+                'yarn install --frozen-lockfile',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
+              )
+            }
+          }
+      }
     }
 
     stage('Build') {
-      steps { script {
-        nix.shell('yarn build:chrome', pure: false)
-      } }
+      steps {
+          dir("${env.WORKSPACE}/apps/connector") {
+            script {
+              nix.shell(
+                'yarn build:chrome',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
+              )
+            }
+          }
+      }
     }
 
     stage('Zip') {
       steps {
-        zip(
-          zipFile: env.ZIP_NAME,
-          dir: 'build/chrome-mv3-prod',
-          archive: false,
-        )
+        dir("${env.WORKSPACE}/apps/connector") {
+          zip(
+            zipFile: env.ZIP_NAME,
+            dir: 'build/chrome-mv3-prod',
+            archive: false,
+          )
+        }
       }
     }
 
     stage('Archive') {
       steps {
-        archiveArtifacts(
-          artifacts: env.ZIP_NAME,
-          fingerprint: true,
-        )
+        dir("${env.WORKSPACE}/apps/connector") {
+          archiveArtifacts(
+            artifacts: env.ZIP_NAME,
+            fingerprint: true,
+          )
+        }
       }
     }
 
     stage('Upload') {
-      steps { script {
-        env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
-      } }
+      steps {
+        dir("${env.WORKSPACE}/apps/connector") {
+          script {
+            env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
+          }
+        }
+      }
     }
   }
 
