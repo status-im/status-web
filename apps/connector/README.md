@@ -1,5 +1,7 @@
 # A wallet connector by Status
 
+![status](https://img.shields.io/badge/status-beta-orange)
+
 Status Desktop Wallet extended to decentralized applications in your browser.
 
 ## Compatibility
