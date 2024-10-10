@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.0.2
+
+### Patch Changes
+
+- 15c9640: Switch icon button from aria button to regular button
+
 ## 1.0.1
 
 ### Patch Changes
