@@ -1,16 +1,21 @@
 import {
   Children,
   cloneElement,
+  createContext,
   forwardRef,
   isValidElement,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 
+import * as ToggleGroup from '@radix-ui/react-toggle-group'
 import { cva, cx } from 'cva'
 
-import type { ReactElement, ReactNode } from 'react'
+import type { IconElement } from '../types'
+import type { VariantProps } from 'cva'
+import type { ReactNode } from 'react'
 
 const tabContainerStyles = cva({
   base: 'relative flex flex-1 items-center justify-center gap-0.5 rounded-10 p-0.5',
@@ -131,40 +136,39 @@ const segmentStyles = cva({
 
 type SegmentButtonProps = {
   children?: ReactNode
-  value?: string | number
-  onClick?: () => void
   active?: boolean
+  value: string
   size?: '24' | '32'
   type?: 'grey' | 'dark-grey'
-}
+} & React.RefAttributes<HTMLButtonElement>
 
-const Button = forwardRef<HTMLButtonElement, SegmentButtonProps>(
-  ({ children, onClick, active, size = '32', type = 'grey' }, ref) => (
-    <button
-      ref={ref}
-      onClick={onClick}
-      className={segmentStyles({ active, variant: 'default', size, type })}
-    >
-      {children}
-    </button>
-  ),
-)
+export const Button = forwardRef<
+  React.ElementRef<typeof ToggleGroup.Item>,
+  SegmentButtonProps
+>(({ children, active, size = '32', type = 'grey', ...itemProps }, ref) => (
+  <ToggleGroup.Item
+    {...itemProps}
+    ref={ref}
+    className={segmentStyles({ active, variant: 'default', size, type })}
+  >
+    {children}
+  </ToggleGroup.Item>
+))
 
 Button.displayName = 'Button'
 
-const IconButton = forwardRef<
-  HTMLButtonElement,
+export const IconButton = forwardRef<
+  React.ElementRef<typeof ToggleGroup.Item>,
   SegmentButtonProps & {
-    icon: ReactNode
-    value?: string | number
+    icon: IconElement
     type?: 'grey' | 'dark-grey'
   }
 >(
   (
-    { icon, children, value, onClick, active, size = '32', type = 'grey' },
+    { icon, children, active, size = '32', type = 'grey', ...itemProps },
     ref,
   ) => {
-    const iconWithColor = cloneElement(icon as ReactElement, {
+    const iconWithColor = cloneElement(icon, {
       className: cx([
         'size-5 text-neutral-50 dark:text-white-40',
         active && '!text-white-100',
@@ -172,28 +176,27 @@ const IconButton = forwardRef<
     })
 
     return (
-      <button
+      <ToggleGroup.Item
+        {...itemProps}
         ref={ref}
-        onClick={onClick}
         className={segmentStyles({
           active,
           variant: children ? 'icon' : 'icon-only',
           size,
           type,
         })}
-        value={value}
       >
         {iconWithColor}
         {children}
-      </button>
+      </ToggleGroup.Item>
     )
   },
 )
 
 IconButton.displayName = 'IconButton'
 
-const EmojiButton = forwardRef<
-  HTMLButtonElement,
+export const EmojiButton = forwardRef<
+  React.ElementRef<typeof ToggleGroup.Item>,
   SegmentButtonProps & {
     emoji: string
     value?: string | number
@@ -201,93 +204,86 @@ const EmojiButton = forwardRef<
   }
 >(
   (
-    { children, emoji, onClick, active, size = '32', value, type = 'grey' },
+    { children, emoji, active, size = '32', type = 'grey', ...itemProps },
     ref,
   ) => (
-    <button
+    <ToggleGroup.Item
+      {...itemProps}
       ref={ref}
-      onClick={onClick}
       className={segmentStyles({
         active,
         variant: children ? 'emoji' : 'emoji-only',
         size,
         type,
       })}
-      value={value}
     >
       {emoji} {children}
-    </button>
+    </ToggleGroup.Item>
   ),
 )
 
 EmojiButton.displayName = 'EmojiButton'
 
-type Props<T> = {
-  children: ReactNode
-  activeSegment: T
-  onSegmentChange: (value: T) => void
-  size?: '24' | '32'
-  type?: 'grey' | 'dark-grey'
+type TabVariants = VariantProps<typeof tabContainerStyles>
+
+interface CustomProps {
+  type?: TabVariants['type']
+  size?: TabVariants['size']
 }
 
-const SegmentedControl = <T extends string | number>(props: Props<T>) => {
-  const {
-    children,
-    activeSegment,
-    onSegmentChange,
-    size = '32',
-    type = 'grey',
-  } = props
+// Use Omit to remove the 'type' prop from ToggleGroupSingleProps
+// Use Omit to remove the 'type' prop from ToggleGroupSingleProps
+type RootProps = Omit<ToggleGroup.ToggleGroupSingleProps, 'type'> & CustomProps
+
+const TabsContext = createContext<Pick<RootProps, 'size' | 'type'>>({})
+
+export const Root = (props: RootProps) => {
+  const { children, size = '32', type = 'grey', ...rootProps } = props
 
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({})
   const segmentRefs = useRef<(HTMLButtonElement | null)[]>([])
 
   useEffect(() => {
-    const activeSegmentIndex = Children.toArray(children).findIndex(
-      child =>
-        isValidElement(child) &&
-        (child.props.value
-          ? child.props.value === activeSegment
-          : child.props.children === activeSegment),
+    const activeSegment = segmentRefs.current.find(
+      segment => segment?.getAttribute('data-state') === 'on',
     )
 
-    const activeSegmentRef = segmentRefs.current[activeSegmentIndex]
-    if (activeSegmentRef) {
+    if (activeSegment) {
       setIndicatorStyle({
-        width: `${activeSegmentRef.offsetWidth}px`,
-        transform: `translateX(${activeSegmentRef.offsetLeft}px)`,
+        width: activeSegment.offsetWidth,
+        transform: `translateX(${activeSegment.offsetLeft}px)`,
       })
     }
-  }, [activeSegment, children])
+  }, [children])
 
-  const clonedChildren = Children.map(
-    children,
-    (child, index) =>
-      isValidElement(child) &&
-      cloneElement(child, {
-        ...child.props,
-        onClick: () =>
-          onSegmentChange(child.props.value || child.props.children),
-        active: child.props.value
-          ? child.props.value === activeSegment
-          : child.props.children === activeSegment,
-        ref: (el: HTMLButtonElement) => (segmentRefs.current[index] = el),
+  const clonedChildren = useMemo(() => {
+    return Children.map(children, (child, index) => {
+      if (!isValidElement<SegmentButtonProps>(child)) return child
+
+      return cloneElement(child, {
+        ref: (el: HTMLButtonElement | null) => {
+          segmentRefs.current[index] = el
+        },
+        active: child.props.value === props.value,
         size,
         type,
-      }),
-  )
+      })
+    })
+  }, [children, props.value, size, type])
 
   return (
-    <div className={tabContainerStyles({ size, type })}>
-      <div className={activeTabStyles({ size, type })} style={indicatorStyle} />
-      {clonedChildren}
-    </div>
+    <TabsContext.Provider value={useMemo(() => ({ size, type }), [size, type])}>
+      <ToggleGroup.Root
+        {...rootProps}
+        type="single"
+        className={tabContainerStyles({ size, type })}
+      >
+        <div
+          className={activeTabStyles({ size, type })}
+          style={indicatorStyle}
+        />
+        {clonedChildren}
+      </ToggleGroup.Root>
+    </TabsContext.Provider>
   )
 }
-
-SegmentedControl.Root = SegmentedControl
-SegmentedControl.Button = Button
-SegmentedControl.IconButton = IconButton
-SegmentedControl.EmojiButton = EmojiButton
-
-export { SegmentedControl }

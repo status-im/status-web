@@ -1,10 +1,11 @@
-import { createElement, memo, useState } from 'react'
+import { createElement, useState } from 'react'
 
 import { PlaceholderIcon } from '@status-im/icons/20'
 import { match } from 'ts-pattern'
 
-import { SegmentedControl } from './segmented-control'
+import { SegmentedControl } from './'
 
+import type { IconElement } from '../types'
 import type { Meta, StoryObj } from '@storybook/react'
 
 type Data = {
@@ -14,97 +15,99 @@ type Data = {
   emoji?: string
 }
 
-const SegmentedControlVariant = memo(
-  (
-    props: React.ComponentPropsWithoutRef<typeof SegmentedControl.Root> & {
-      variant?:
-        | 'default'
-        | 'icon-text'
-        | 'emoji-text'
-        | 'icon-only'
-        | 'emoji-only'
-      data: Data[]
-    },
-  ) => {
-    const [activeSegment, setActiveSegment] = useState(props.data[0].value)
+type SegmentedControlVariantProps = {
+  variant?: 'icon-text' | 'emoji-text' | 'icon-only' | 'emoji-only'
+  data: Data[]
+  size?: '24' | '32'
+  type?: 'grey' | 'dark-grey'
+}
 
-    const { variant = 'default', data, size, type } = props
+const SegmentedControlVariant = (props: SegmentedControlVariantProps) => {
+  const [activeSegment, setActiveSegment] = useState(props.data[0].value)
 
-    return (
-      <SegmentedControl.Root
-        activeSegment={activeSegment}
-        onSegmentChange={setActiveSegment}
-        size={size}
-        type={type}
-      >
-        {match(variant)
-          .with('icon-text', () =>
-            data.map(({ value, icon, label }) => {
-              const iconElement = icon ? createElement(icon) : null
+  const { type = 'grey', data, size, variant } = props
 
-              return (
-                <SegmentedControl.IconButton
-                  icon={iconElement}
-                  key={value}
-                  value={value}
-                >
-                  {label}
-                </SegmentedControl.IconButton>
-              )
-            }),
-          )
-          .with('emoji-text', () =>
-            data.map(({ value, emoji, label }) => (
-              <SegmentedControl.EmojiButton
-                emoji={emoji as string}
+  return (
+    <SegmentedControl.Root
+      value={activeSegment}
+      onValueChange={setActiveSegment}
+      size={size}
+      type={type}
+    >
+      {match(variant)
+        .with('icon-text', () =>
+          data.map(({ value, icon, label }) => {
+            if (!icon) {
+              return null
+            }
+
+            const iconElement = createElement(icon)
+
+            return (
+              <SegmentedControl.IconButton
+                icon={iconElement as IconElement}
                 key={value}
                 value={value}
               >
                 {label}
-              </SegmentedControl.EmojiButton>
-            )),
-          )
-          .with('icon-only', () =>
-            data.map(({ value, icon }) => {
-              const iconElement = icon ? createElement(icon) : null
+              </SegmentedControl.IconButton>
+            )
+          }),
+        )
+        .with('emoji-text', () =>
+          data.map(({ value, emoji = '', label }) => (
+            <SegmentedControl.EmojiButton
+              emoji={emoji}
+              key={value}
+              value={value}
+            >
+              {label}
+            </SegmentedControl.EmojiButton>
+          )),
+        )
+        .with('icon-only', () =>
+          data.map(({ value, icon }) => {
+            if (!icon) {
+              return null
+            }
 
-              return (
-                <SegmentedControl.IconButton
-                  icon={iconElement}
-                  key={value}
-                  value={value}
-                />
-              )
-            }),
-          )
-          .with('emoji-only', () =>
-            data.map(({ value, emoji }) => (
-              <SegmentedControl.EmojiButton
-                emoji={emoji as string}
+            const iconElement = createElement(icon)
+
+            return (
+              <SegmentedControl.IconButton
+                icon={iconElement as IconElement}
                 key={value}
                 value={value}
               />
-            )),
-          )
-          .otherwise(() =>
-            data.map(({ value, label }) => (
-              <SegmentedControl.Button key={value} value={value}>
-                {label}
-              </SegmentedControl.Button>
-            )),
-          )}
-      </SegmentedControl.Root>
-    )
-  },
-)
+            )
+          }),
+        )
+        .with('emoji-only', () =>
+          data.map(({ value, emoji = '' }) => (
+            <SegmentedControl.EmojiButton
+              emoji={emoji}
+              key={value}
+              value={value}
+            />
+          )),
+        )
+        .otherwise(() =>
+          data.map(({ value, label }) => (
+            <SegmentedControl.Button key={value} value={value}>
+              {label}
+            </SegmentedControl.Button>
+          )),
+        )}
+    </SegmentedControl.Root>
+  )
+}
 
-SegmentedControlVariant.displayName = 'SegmentedControlVariant'
-
-const meta = {
+const meta: Meta = {
   title: 'Components/SegmentedControl',
   render: args => {
     const tabIcon = {
       label: 'Tab',
+      // I have to use PlaceholderIcon instead of <PlaceholderIcon /> otherwise it will throw an error in storybook for maximum call stack size exceeded. That's why we createElement above and then cast it to IconElement.
       icon: PlaceholderIcon,
     }
     const tabText = { label: 'Tab' }
