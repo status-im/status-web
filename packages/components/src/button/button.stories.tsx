@@ -1,3 +1,5 @@
+import { PlaceholderIcon } from '@status-im/icons/20'
+
 import { Button } from './button'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -52,6 +54,52 @@ const meta: Meta<
         <div key={variant} className="flex items-center gap-4">
           {(['40', '32', '24'] as const).map(size => (
             <Button key={size} {...args} variant={variant} size={size} />
+          ))}
+        </div>
+      ))}
+      {(
+        [
+          'primary',
+          'positive',
+          'grey',
+          'darkGrey',
+          'outline',
+          'ghost',
+          'danger',
+        ] as const
+      ).map(variant => (
+        <div key={variant} className="flex items-center gap-4">
+          {(['40', '32', '24'] as const).map(size => (
+            <Button
+              key={size}
+              {...args}
+              variant={variant}
+              size={size}
+              iconAfter={<PlaceholderIcon />}
+            />
+          ))}
+        </div>
+      ))}
+      {(
+        [
+          'primary',
+          'positive',
+          'grey',
+          'darkGrey',
+          'outline',
+          'ghost',
+          'danger',
+        ] as const
+      ).map(variant => (
+        <div key={variant} className="flex items-center gap-4">
+          {(['40', '32', '24'] as const).map(size => (
+            <Button
+              key={size}
+              {...args}
+              variant={variant}
+              size={size}
+              iconBefore={<PlaceholderIcon />}
+            />
           ))}
         </div>
       ))}
