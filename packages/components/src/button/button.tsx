@@ -146,11 +146,13 @@ const iconStyles = cva({
       grey: ['text-neutral-50'],
       darkGrey: [
         'text-neutral-50',
+        'blur:text-neutral-80/40',
         'dark:text-neutral-40',
         'blur:dark:text-neutral-80/40',
       ],
       outline: [
         'text-neutral-50',
+        'blur:text-neutral-80/40',
         'dark:text-neutral-40',
         'blur:dark:text-neutral-80/40',
       ],
