@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.0.3
+
+### Patch Changes
+
+- 8f1980e: Update fontSize in tailwind.config.ts
+
 ## 1.0.2
 
 ### Patch Changes
