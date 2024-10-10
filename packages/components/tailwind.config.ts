@@ -33,24 +33,7 @@ export default {
       bold: '700',
     },
 
-    // note: https://tailwindcss.com/docs/font-size#providing-a-default-line-height for `[fontSize, { lineHeight?, letterSpacing?, fontWeight? }]`
     fontSize: {
-      // note: not in design system
-      240: [
-        '15rem',
-        {
-          lineHeight: '13.25rem',
-          letterSpacing: '-0.6rem',
-        },
-      ],
-      // note: not in design system
-      120: [
-        '7.5rem',
-        {
-          lineHeight: '5.25rem',
-          letterSpacing: '-0.1575rem',
-        },
-      ],
       88: [
         '5.5rem',
         {
@@ -58,27 +41,11 @@ export default {
           letterSpacing: '-0.1155rem',
         },
       ],
-      // note: not in design system
-      76: [
-        '4.75rem',
-        {
-          lineHeight: '4.25rem',
-          letterSpacing: '-0.095rem',
-        },
-      ],
       64: [
         '4rem',
         {
           lineHeight: '4.25rem',
           letterSpacing: '-0.08rem',
-        },
-      ],
-      // note: not in design system
-      48: [
-        '3rem',
-        {
-          lineHeight: '3.125rem',
-          letterSpacing: '-0.06rem',
         },
       ],
       40: [
