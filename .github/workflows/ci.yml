@@ -21,6 +21,9 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v3
+        with:
+          # https://github.com/changesets/changesets/issues/1055
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
