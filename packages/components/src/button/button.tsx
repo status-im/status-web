@@ -164,12 +164,12 @@ const styles = cva({
     {
       size: '24',
       placement: 'before',
-      className: 'pl-[6px] pr-[8px]',
+      className: 'pl-[6px] pr-2',
     },
     {
       size: '24',
       placement: 'after',
-      className: 'pl-[8px] pr-[6px]',
+      className: 'pl-2 pr-[6px]',
     },
   ],
 })
