@@ -30,6 +30,9 @@ pipeline {
 
   stages {
     stage('Checkout') {
+      when {
+          expression { currentBuild.previousCompletedBuild == null }
+      }
       steps {
         script {
           checkout scmGit(
