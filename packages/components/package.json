@@ -1,6 +1,6 @@
 {
   "name": "@status-im/components",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MPL-2.0",
   "sideEffects": [
     "*.css"

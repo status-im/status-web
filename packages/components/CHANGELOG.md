@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.0.5
+
+### Patch Changes
+
+- 3ad28ea: chore: Remove flex-1 class from button component (#602)
+
 ## 1.0.4
 
 ### Patch Changes
