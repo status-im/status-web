@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 library 'status-jenkins-lib@v1.9.11'
 
+def changesDetected = false
+
 pipeline {
   agent { label 'linux' }
 
@@ -27,7 +29,32 @@ pipeline {
   }
 
   stages {
+    stage('Check Changed Files') {
+        steps {
+          script {
+            // Get the list of changed files
+            def changedFiles = sh(
+                script: "git diff --name-only origin/main...HEAD",
+                returnStdout: true
+            ).trim()
+            
+            // Check if the changes are relevant
+            def isRelevant = changedFiles.split('\n').any { file ->
+                file.startsWith('apps/connector/')
+            }
+
+            // If no relevant changes, skip the build
+            if (isRelevant) {
+                changesDetected = true
+            }
+          }
+        }
+    }
+
     stage('Install') {
+      when {
+          expression { changesDetected }
+      }
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
@@ -42,6 +69,9 @@ pipeline {
     }
 
     stage('Build') {
+      when {
+          expression { changesDetected }
+      }
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
@@ -56,6 +86,9 @@ pipeline {
     }
 
     stage('Zip') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           zip(
@@ -68,6 +101,9 @@ pipeline {
     }
 
     stage('Archive') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           archiveArtifacts(
@@ -79,6 +115,9 @@ pipeline {
     }
 
     stage('Upload') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           script {
@@ -90,8 +129,20 @@ pipeline {
   }
 
   post {
-    success { script { github.notifyPR(true) } }
-    failure { script { github.notifyPR(false) } }
+    success {
+      script {
+        if(changesDetected) {
+          github.notifyPR(true) 
+        } 
+      }
+    }
+    failure {
+      script {
+        if(changesDetected) {
+          github.notifyPR(false) 
+        } 
+      }
+    }
     cleanup { cleanWs() }
   }
 }
