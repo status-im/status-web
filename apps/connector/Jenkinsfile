@@ -29,6 +29,24 @@ pipeline {
   }
 
   stages {
+    stage('Checkout') {
+      steps {
+        script {
+          checkout scmGit(
+              branches: scm.branches,
+              extensions: [
+                  cloneOption(depth: 100, noTags: true, reference: '', shallow: true),
+                  changelogToBranch(changelogBase(
+                      compareRemote: 'origin',
+                      compareTarget: CHANGE_TARGET
+                  ))
+              ],
+              userRemoteConfigs: scm.userRemoteConfigs
+          )
+        }
+      }
+    }
+
     stage('Check changes') {
       when {
           changeset pattern: "apps/connector/**", comparator: "GLOB"
