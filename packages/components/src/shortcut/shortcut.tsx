@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { match, P } from 'ts-pattern'
 
@@ -8,7 +8,7 @@ import type { IconElement } from '../types'
 import type { VariantProps } from '../utils/variants'
 
 const styles = cva({
-  base: 'flex size-4 flex-shrink-0 items-center justify-center rounded-6 border',
+  base: 'grid size-4 flex-shrink-0 place-items-center rounded-6 border',
   variants: {
     variant: {
       primary: [
@@ -43,17 +43,17 @@ type Props = VariantProps<typeof styles> &
   )
 
 const Shortcut = (props: Props, ref: React.Ref<HTMLDivElement>) => {
-  const { variant = 'primary', icon, symbol, ...rest } = props
+  const { variant = 'primary' } = props
 
   return (
-    <div className={styles({ variant })} ref={ref} {...rest}>
-      {match({ icon, symbol })
+    <div className={styles({ variant })} ref={ref}>
+      {match(props)
         .with({ symbol: P.string }, ({ symbol }) => (
           <span className="text-11 font-medium">{symbol}</span>
         ))
-        .with({ icon: P._ }, ({ icon }) => (
-          <span className="size-3">{icon}</span>
-        ))
+        .with({ icon: P._ }, ({ icon }) =>
+          cloneElement(icon, { className: 'size-3' }),
+        )
         .exhaustive()}
     </div>
   )
