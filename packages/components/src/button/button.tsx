@@ -69,18 +69,19 @@ function Button(
       onClick={onClick}
       {...buttonProps}
       ref={ref}
-      className={styles({ variant, size })}
+      className={styles({
+        variant,
+        size,
+        iconPlacement:
+          (iconBefore && 'before') || (iconAfter && 'after') || 'unset',
+      })}
     >
       {iconBefore && (
-        <span className={iconStyles({ size, placement: 'before', variant })}>
-          {iconBefore}
-        </span>
+        <span className={iconStyles({ size, variant })}>{iconBefore}</span>
       )}
       <span className="whitespace-nowrap">{children}</span>
       {iconAfter && (
-        <span className={iconStyles({ size, placement: 'after', variant })}>
-          {iconAfter}
-        </span>
+        <span className={iconStyles({ size, variant })}>{iconAfter}</span>
       )}
     </Element>
   )
@@ -126,15 +127,67 @@ const styles = cva({
         'dark:bg-danger-60 dark:hover:bg-danger-50 dark:pressed:bg-danger-50/[.9]',
       ],
     },
+    iconPlacement: {
+      before: '',
+      after: '',
+      unset: '',
+    },
     size: {
-      '40': 'h-[40px] rounded-12 px-4 text-15',
-      '32': 'h-[32px] rounded-10 px-3 text-15',
-      '24': 'h-[24px] rounded-8 px-2 text-13',
+      '40': 'h-[40px] rounded-12 text-15',
+      '32': 'h-[32px] rounded-10 text-15',
+      '24': 'h-[24px] rounded-8 text-13',
     },
     iconOnly: {
       true: 'aspect-square !px-0',
     },
   },
+  compoundVariants: [
+    {
+      size: '40',
+      iconPlacement: 'unset',
+      className: 'px-4',
+    },
+    {
+      size: '32',
+      iconPlacement: 'unset',
+      className: 'px-3',
+    },
+    {
+      size: '24',
+      iconPlacement: 'unset',
+      className: 'px-2',
+    },
+    {
+      size: '40',
+      iconPlacement: 'before',
+      className: 'pl-3 pr-4',
+    },
+    {
+      size: '40',
+      iconPlacement: 'after',
+      className: 'pl-4 pr-3',
+    },
+    {
+      size: '32',
+      iconPlacement: 'before',
+      className: 'pl-2 pr-3',
+    },
+    {
+      size: '32',
+      iconPlacement: 'after',
+      className: 'pl-3 pr-2',
+    },
+    {
+      size: '24',
+      iconPlacement: 'before',
+      className: 'pl-1.5 pr-2',
+    },
+    {
+      size: '24',
+      iconPlacement: 'after',
+      className: 'pl-2 pr-1.5',
+    },
+  ],
 })
 
 const iconStyles = cva({
@@ -159,10 +212,6 @@ const iconStyles = cva({
       ghost: ['text-neutral-50'],
       danger: ['text-blur-white/70'],
     },
-    placement: {
-      before: '',
-      after: '',
-    },
     size: {
       '40': 'size-5',
       '32': 'size-5',
@@ -173,26 +222,6 @@ const iconStyles = cva({
     },
   },
   compoundVariants: [
-    {
-      size: ['40', '32'],
-      placement: 'before',
-      className: '-ml-1',
-    },
-    {
-      size: ['40', '32'],
-      placement: 'after',
-      className: '-mr-1',
-    },
-    {
-      size: '24',
-      placement: 'before',
-      className: '-ml-0.5',
-    },
-    {
-      size: '24',
-      placement: 'after',
-      className: '-mr-0.5',
-    },
     {
       variant: 'outline',
       iconOnly: true,
