@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.0.6
+
+### Patch Changes
+
+- 7f21132: fix `<Shortcut />`icon prop and symbol centering
+
 ## 1.0.5
 
 ### Patch Changes
