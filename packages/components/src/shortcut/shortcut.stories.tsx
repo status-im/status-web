@@ -9,7 +9,7 @@ const variants = ['primary', 'secondary', 'gray'] as const
 // eslint-disable-next-line react/display-name
 const renderVariant = (variant: (typeof variants)[number]) => (props: any) => (
   <div className="flex items-center gap-2">
-    <Shortcut {...props} variant={variant} icon={CommandIcon} />
+    <Shortcut {...props} variant={variant} icon={<CommandIcon />} />
     <Shortcut {...props} variant={variant} symbol="K" />
   </div>
 )
