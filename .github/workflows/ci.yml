@@ -46,4 +46,4 @@ jobs:
         run: yarn test
 
       - name: Changeset
-        run: yarn changeset status --since=main
+        run: yarn changeset status --since origin/main
