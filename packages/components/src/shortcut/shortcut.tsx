@@ -4,6 +4,7 @@ import { match, P } from 'ts-pattern'
 
 import { cva } from '../utils/variants'
 
+import type { IconElement } from '../types'
 import type { VariantProps } from '../utils/variants'
 
 const styles = cva({
@@ -32,7 +33,7 @@ const styles = cva({
 type Props = VariantProps<typeof styles> &
   (
     | {
-        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        icon: IconElement
         symbol?: never
       }
     | {
@@ -42,15 +43,17 @@ type Props = VariantProps<typeof styles> &
   )
 
 const Shortcut = (props: Props, ref: React.Ref<HTMLDivElement>) => {
-  const { variant = 'primary', ...rest } = props
+  const { variant = 'primary', icon, symbol, ...rest } = props
 
   return (
     <div className={styles({ variant })} ref={ref} {...rest}>
-      {match(props)
+      {match({ icon, symbol })
         .with({ symbol: P.string }, ({ symbol }) => (
           <span className="text-11 font-medium">{symbol}</span>
         ))
-        .with({ icon: P._ }, ({ icon: Icon }) => <Icon className="size-3" />)
+        .with({ icon: P._ }, ({ icon }) => (
+          <span className="size-3">{icon}</span>
+        ))
         .exhaustive()}
     </div>
   )
