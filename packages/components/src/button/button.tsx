@@ -72,8 +72,8 @@ function Button(
       className={styles({
         variant,
         size,
-        placement:
-          (iconBefore && 'before') || (iconAfter && 'after') || undefined,
+        iconPlacement:
+          (iconBefore && 'before') || (iconAfter && 'after') || 'unset',
       })}
     >
       {iconBefore && (
@@ -127,14 +127,15 @@ const styles = cva({
         'dark:bg-danger-60 dark:hover:bg-danger-50 dark:pressed:bg-danger-50/[.9]',
       ],
     },
-    placement: {
+    iconPlacement: {
       before: '',
       after: '',
+      unset: '',
     },
     size: {
-      '40': 'h-[40px] rounded-12 px-4 text-15',
-      '32': 'h-[32px] rounded-10 px-3 text-15',
-      '24': 'h-[24px] rounded-8 px-2 text-13',
+      '40': 'h-[40px] rounded-12 text-15',
+      '32': 'h-[32px] rounded-10 text-15',
+      '24': 'h-[24px] rounded-8 text-13',
     },
     iconOnly: {
       true: 'aspect-square !px-0',
@@ -143,33 +144,48 @@ const styles = cva({
   compoundVariants: [
     {
       size: '40',
-      placement: 'before',
+      iconPlacement: 'unset',
+      className: 'px-4',
+    },
+    {
+      size: '32',
+      iconPlacement: 'unset',
+      className: 'px-3',
+    },
+    {
+      size: '24',
+      iconPlacement: 'unset',
+      className: 'px-2',
+    },
+    {
+      size: '40',
+      iconPlacement: 'before',
       className: 'pl-3 pr-4',
     },
     {
       size: '40',
-      placement: 'after',
+      iconPlacement: 'after',
       className: 'pl-4 pr-3',
     },
     {
       size: '32',
-      placement: 'before',
+      iconPlacement: 'before',
       className: 'pl-2 pr-3',
     },
     {
       size: '32',
-      placement: 'after',
+      iconPlacement: 'after',
       className: 'pl-3 pr-2',
     },
     {
       size: '24',
-      placement: 'before',
-      className: 'pl-[6px] pr-2',
+      iconPlacement: 'before',
+      className: 'pl-1.5 pr-2',
     },
     {
       size: '24',
-      placement: 'after',
-      className: 'pl-2 pr-[6px]',
+      iconPlacement: 'after',
+      className: 'pl-2 pr-1.5',
     },
   ],
 })
