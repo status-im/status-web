@@ -142,24 +142,34 @@ const styles = cva({
   },
   compoundVariants: [
     {
-      size: ['40', '32'],
+      size: '40',
       placement: 'before',
       className: 'pl-3 pr-4',
     },
     {
-      size: ['40', '32'],
+      size: '40',
       placement: 'after',
       className: 'pl-4 pr-3',
     },
     {
-      size: '24',
+      size: '32',
       placement: 'before',
       className: 'pl-2 pr-3',
     },
     {
-      size: '24',
+      size: '32',
       placement: 'after',
       className: 'pl-3 pr-2',
+    },
+    {
+      size: '24',
+      placement: 'before',
+      className: 'pl-[6px] pr-[8px]',
+    },
+    {
+      size: '24',
+      placement: 'after',
+      className: 'pl-[8px] pr-[6px]',
     },
   ],
 })
