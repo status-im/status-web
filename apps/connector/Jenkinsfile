@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 library 'status-jenkins-lib@v1.9.11'
 
+def changesDetected = false
+
 pipeline {
   agent { label 'linux' }
 
@@ -27,7 +29,20 @@ pipeline {
   }
 
   stages {
+    stage('Check changes') {
+      when {
+          changeset pattern: "apps/connector/**", comparator: "GLOB"
+      }
+      steps {
+        script {
+            changesDetected = true
+        }
+      }
+    }
     stage('Install') {
+      when {
+          expression { changesDetected }
+      }
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
@@ -42,6 +57,9 @@ pipeline {
     }
 
     stage('Build') {
+      when {
+          expression { changesDetected }
+      }
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
@@ -56,6 +74,9 @@ pipeline {
     }
 
     stage('Zip') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           zip(
@@ -68,6 +89,9 @@ pipeline {
     }
 
     stage('Archive') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           archiveArtifacts(
@@ -79,6 +103,9 @@ pipeline {
     }
 
     stage('Upload') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           script {
@@ -90,8 +117,20 @@ pipeline {
   }
 
   post {
-    success { script { github.notifyPR(true) } }
-    failure { script { github.notifyPR(false) } }
+    success {
+      script {
+        if(changesDetected) {
+          github.notifyPR(true) 
+        } 
+      }
+    }
+    failure {
+      script {
+        if(changesDetected) {
+          github.notifyPR(false) 
+        } 
+      }
+    }
     cleanup { cleanWs() }
   }
 }
