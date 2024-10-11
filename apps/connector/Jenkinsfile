@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
-library 'status-jenkins-lib@v1.9.1'
+library 'status-jenkins-lib@v1.9.11'
+
+def changesDetected = false
 
 pipeline {
   agent { label 'linux' }
@@ -27,47 +29,108 @@ pipeline {
   }
 
   stages {
+    stage('Check changes') {
+      when {
+          changeset pattern: "apps/connector/**", comparator: "GLOB"
+      }
+      steps {
+        script {
+            changesDetected = true
+        }
+      }
+    }
     stage('Install') {
-      steps { script {
-        nix.shell('yarn install --frozen-lockfile', pure: false)
-      } }
+      when {
+          expression { changesDetected }
+      }
+      steps {
+          dir("${env.WORKSPACE}/apps/connector") {
+            script {
+              nix.shell(
+                'yarn install --frozen-lockfile',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
+              )
+            }
+          }
+      }
     }
 
     stage('Build') {
-      steps { script {
-        nix.shell('yarn build:chrome', pure: false)
-      } }
+      when {
+          expression { changesDetected }
+      }
+      steps {
+          dir("${env.WORKSPACE}/apps/connector") {
+            script {
+              nix.shell(
+                'yarn build:chrome',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
+              )
+            }
+          }
+      }
     }
 
     stage('Zip') {
+      when {
+          expression { changesDetected }
+      }
       steps {
-        zip(
-          zipFile: env.ZIP_NAME,
-          dir: 'build/chrome-mv3-prod',
-          archive: false,
-        )
+        dir("${env.WORKSPACE}/apps/connector") {
+          zip(
+            zipFile: env.ZIP_NAME,
+            dir: 'build/chrome-mv3-prod',
+            archive: false,
+          )
+        }
       }
     }
 
     stage('Archive') {
+      when {
+          expression { changesDetected }
+      }
       steps {
-        archiveArtifacts(
-          artifacts: env.ZIP_NAME,
-          fingerprint: true,
-        )
+        dir("${env.WORKSPACE}/apps/connector") {
+          archiveArtifacts(
+            artifacts: env.ZIP_NAME,
+            fingerprint: true,
+          )
+        }
       }
     }
 
     stage('Upload') {
-      steps { script {
-        env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
-      } }
+      when {
+          expression { changesDetected }
+      }
+      steps {
+        dir("${env.WORKSPACE}/apps/connector") {
+          script {
+            env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
+          }
+        }
+      }
     }
   }
 
   post {
-    success { script { github.notifyPR(true) } }
-    failure { script { github.notifyPR(false) } }
+    success {
+      script {
+        if(changesDetected) {
+          github.notifyPR(true) 
+        } 
+      }
+    }
+    success {
+      script {
+        if(changesDetected) {
+          github.notifyPR(false) 
+        } 
+      }
+    }
     cleanup { cleanWs() }
   }
 }
