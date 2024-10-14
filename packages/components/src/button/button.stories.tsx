@@ -1,3 +1,7 @@
+import { Fragment } from 'react'
+
+import { PlaceholderIcon } from '@status-im/icons/20'
+
 import { Button } from './button'
 
 import type { Meta, StoryObj } from '@storybook/react'
@@ -51,7 +55,22 @@ const meta: Meta<
       ).map(variant => (
         <div key={variant} className="flex items-center gap-4">
           {(['40', '32', '24'] as const).map(size => (
-            <Button key={size} {...args} variant={variant} size={size} />
+            <Fragment key={size}>
+              <Button {...args} variant={variant} size={size} />
+              {/* With icon */}
+              <Button
+                {...args}
+                size={size}
+                variant={variant}
+                iconBefore={<PlaceholderIcon />}
+              />
+              <Button
+                aria-label="Button with icon only"
+                size={size}
+                variant={variant}
+                icon={<PlaceholderIcon />}
+              />
+            </Fragment>
           ))}
         </div>
       ))}

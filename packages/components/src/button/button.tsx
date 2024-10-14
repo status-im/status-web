@@ -194,9 +194,39 @@ const iconStyles = cva({
       className: '-mr-0.5',
     },
     {
+      variant: 'grey',
+      iconOnly: true,
+      className: '!text-neutral-100 dark:!text-white-100',
+    },
+    {
       variant: 'outline',
       iconOnly: true,
       className: '!text-neutral-100 dark:!text-white-100',
+    },
+    {
+      variant: 'darkGrey',
+      iconOnly: true,
+      className: '!text-neutral-100 dark:!text-white-100',
+    },
+    {
+      variant: 'ghost',
+      iconOnly: true,
+      className: '!text-neutral-100 dark:!text-white-100',
+    },
+    {
+      variant: 'primary',
+      iconOnly: true,
+      className: '!text-white-100',
+    },
+    {
+      variant: 'positive',
+      iconOnly: true,
+      className: '!text-white-100',
+    },
+    {
+      variant: 'danger',
+      iconOnly: true,
+      className: '!text-white-100',
     },
   ],
 })
