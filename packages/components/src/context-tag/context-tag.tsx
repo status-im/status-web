@@ -3,6 +3,8 @@ import { cloneElement, forwardRef } from 'react'
 import { cva, cx } from 'cva'
 import { match } from 'ts-pattern'
 
+import { Avatar } from '../avatar'
+
 import type { IconElement } from '../types'
 import type { VariantProps } from 'cva'
 
@@ -15,10 +17,10 @@ type Props = {
   | { type: 'community'; label: string; icon: IconElement }
   | { type: 'token'; label: string; icon: IconElement }
   | { type: 'network'; label: string; icon: IconElement }
+  | { type: 'account'; label: string; emoji: string }
   | { type: 'icon'; label: string; icon: IconElement }
 )
 // | { type: 'user'; user: { name: string; src: string } }
-// | { type: 'account'; account: { name: string; emoji: string } }
 // | {
 //     type: 'group'
 //     group: {
@@ -36,7 +38,7 @@ type Props = {
 
 const baseStyles = cva({
   base: [
-    'inline-flex w-fit cursor-default items-center rounded-full',
+    'inline-flex w-fit cursor-default items-center',
     'font-medium text-neutral-100 dark:text-white-100',
     'bg-neutral-10 blur:bg-neutral-80/5 dark:bg-neutral-90 blur:dark:bg-white-5',
   ],
@@ -50,6 +52,13 @@ const baseStyles = cva({
     selected: {
       true: 'border border-customisation-50',
     },
+    rounded: {
+      '8': 'rounded-8',
+      full: 'rounded-full',
+    },
+  },
+  defaultVariants: {
+    rounded: 'full',
   },
 })
 
@@ -111,6 +120,23 @@ const ContextTag = (props: Props, ref: React.Ref<HTMLDivElement>) => {
         <div {...rest} ref={ref} className={baseStyles({ size })}>
           <span className={iconStyles({ size, rounded: true, offset: size })}>
             {cloneElement(icon)}
+          </span>
+          <span>{label}</span>
+        </div>
+      )
+    })
+    .with({ type: 'account' }, ({ label, emoji }) => {
+      return (
+        <div {...rest} ref={ref} className={baseStyles({ size, rounded: '8' })}>
+          <span className={iconStyles({ size, rounded: '6', offset: size })}>
+            <Avatar
+              type="account"
+              size={match(size)
+                .with('32', () => '28' as const)
+                .otherwise(() => '20' as const)}
+              name={label}
+              emoji={emoji}
+            />
           </span>
           <span>{label}</span>
         </div>
