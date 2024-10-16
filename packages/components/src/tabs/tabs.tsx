@@ -26,6 +26,16 @@ type RootProps = React.ComponentProps<typeof Tabs.Root> & {
 
 const TabsContext = createContext<Pick<RootProps, 'size' | 'variant'>>({})
 
+function useTabsContext() {
+  const context = useContext(TabsContext)
+
+  if (!context) {
+    throw new Error('useTabsContext must be used within a <Tabs.Root />')
+  }
+
+  return context
+}
+
 export const Root = (props: RootProps) => {
   const { size = '32', variant = 'grey', ...rootProps } = props
 
@@ -42,7 +52,7 @@ export const List = forwardRef<
   React.ElementRef<typeof Tabs.List>,
   React.ComponentPropsWithoutRef<typeof Tabs.List>
 >((props, ref) => {
-  const { size } = useContext(TabsContext)!
+  const { size } = useTabsContext()
 
   return (
     <Tabs.List
@@ -74,7 +84,7 @@ export const Trigger = forwardRef<
 >((props, ref) => {
   const { children, ...rest } = props
 
-  const { size, variant } = useContext(TabsContext)!
+  const { size, variant } = useTabsContext()
 
   return (
     <Tabs.Trigger {...rest} ref={ref} className={tabStyles({ variant, size })}>
