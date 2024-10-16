@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 1.0.7
+
+### Patch Changes
+
+- e9979fd: updates icon color for missing compound variants
+- bf14368: add `type="account"` to `<ContextTag />`
+
 ## 1.0.6
 
 ### Patch Changes
