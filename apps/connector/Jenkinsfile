@@ -30,25 +30,14 @@ pipeline {
 
   stages {
     stage('Check Changed Files') {
-        steps {
-          script {
-            // Get the list of changed files
-            def changedFiles = sh(
-                script: "git diff --name-only origin/main...HEAD",
-                returnStdout: true
-            ).trim()
-            
-            // Check if the changes are relevant
-            def isRelevant = changedFiles.split('\n').any { file ->
-                file.startsWith('apps/connector/')
-            }
-
-            // If no relevant changes, skip the build
-            if (isRelevant) {
-                changesDetected = true
-            }
-          }
+      when {
+          changeset pattern: "apps/connector/**", comparator: "GLOB"
+      }
+      steps {
+        script {
+            changesDetected = true
         }
+      }
     }
 
     stage('Install') {
