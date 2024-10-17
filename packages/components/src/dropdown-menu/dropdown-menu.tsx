@@ -123,7 +123,6 @@ Search.displayName = 'Search'
 type ItemProps = DropdownMenu.DropdownMenuItemProps & {
   icon?: IconElement
   label: string
-  // onSelect: NonNullable<DropdownMenu.DropdownMenuItemProps['onSelect']>
   selected?: boolean
   danger?: boolean
   external?: boolean
