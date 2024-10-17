@@ -55,7 +55,7 @@ const rootStyles = cva({
   },
 })
 
-const activeTabStyles = cva({
+const activeSegmentStyles = cva({
   base: 'pointer-events-none absolute inset-y-0.5 left-0 flex-1 rounded-8 transition-all duration-200 ease-out',
   variants: {
     variant: {
@@ -113,7 +113,10 @@ export const Root = forwardRef<
           }
         }}
       >
-        <div className={activeTabStyles({ variant })} style={indicatorStyle} />
+        <div
+          className={activeSegmentStyles({ variant })}
+          style={indicatorStyle}
+        />
         {children}
       </ToggleGroup.Root>
     </SegmentedControlContext.Provider>
