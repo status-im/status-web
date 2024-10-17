@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 1.0.8
+
+### Patch Changes
+
+- b159258: fix `<DropdownMenu.Item />` onSelect prop
+- 4953fe7: adds segmented control component
+
 ## 1.0.7
 
 ### Patch Changes
