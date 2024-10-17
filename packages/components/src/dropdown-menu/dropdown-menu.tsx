@@ -123,7 +123,6 @@ Search.displayName = 'Search'
 type ItemProps = DropdownMenu.DropdownMenuItemProps & {
   icon?: IconElement
   label: string
-  onSelect: () => void
   selected?: boolean
   danger?: boolean
   external?: boolean
