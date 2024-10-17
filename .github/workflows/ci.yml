@@ -22,7 +22,8 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 2
+          # https://github.com/changesets/changesets/issues/1055
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -44,3 +45,6 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      - name: Changeset
+        run: yarn changeset status --since origin/main
