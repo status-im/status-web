@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.0.9
+
+### Patch Changes
+
+- 2c56ff2: adds segmented control to index file
+
 ## 1.0.8
 
 ### Patch Changes
