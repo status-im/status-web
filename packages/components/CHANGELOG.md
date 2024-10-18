@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 1.0.10
+
+### Patch Changes
+
+- e30555c: fix <DropdownMenu.SubTrigger /> icon; unknown network typo
+- 3c968a2: add missing directive to `<SegmentedControl />`
+
 ## 1.0.9
 
 ### Patch Changes
