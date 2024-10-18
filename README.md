@@ -15,7 +15,7 @@ This monorepo contains packages for building web applications in the Status ecos
 | [`@status-im/eslint-config`](./packages/eslint-config) | [![npm version](https://img.shields.io/npm/v/@status-im/eslint-config.svg)](https://www.npmjs.com/package/@status-im/eslint-config) | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
 
 ## Apps
-
+test
 | Name                                   | Description                                                                   |
 | -------------------------------------- | ----------------------------------------------------------------------------- |
 | [`./apps/connector`](./apps/connector) | Status Desktop Wallet extended to decentralised applications in your browser. |
