@@ -2,8 +2,8 @@ import { cloneElement, forwardRef, useId } from 'react'
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {
-  ArrowRightIcon,
   CheckIcon,
+  ChevronRightIcon,
   ExternalIcon,
   SearchIcon,
 } from '@status-im/icons/20'
@@ -236,7 +236,7 @@ export const SubTrigger = (props: SubTriggerProps) => {
         <span className={iconStyles({ danger })}>{cloneElement(icon)}</span>
       )}
       <span className={labelStyles({ danger })}>{label}</span>
-      <ArrowRightIcon className="text-neutral-50" />
+      <ChevronRightIcon className="text-neutral-50" />
     </DropdownMenu.SubTrigger>
   )
 }
