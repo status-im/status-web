@@ -86,7 +86,3 @@ https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w_what-are-my-opt
 Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Tools for all add-ons) > Install Add-on From File... > select build (build/firefox-mv3-prod.zip)
 
 > Note: Does not reload automatically, requires build and load on change.
-
-## Testing
-
-Download latest build from last merged PR or build from source. To use the extension see the load steps from [Development](#development) section.
