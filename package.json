@@ -22,7 +22,7 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
-    "storybook": "pnpm --workspace @status-im/components storybook"
+    "storybook": "pnpm --filter @status-im/components storybook"
   },
   "resolutions": {
     "@types/react": "18.0.33",

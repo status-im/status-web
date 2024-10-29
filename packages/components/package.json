@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "@status-im/eslint-config": "workspace:*",
+    "@storybook/addon-actions": "^8.3.0",
     "@storybook/addon-designs": "^8.0.3",
     "@storybook/addon-essentials": "^8.3.0",
     "@storybook/addon-interactions": "^8.3.0",
@@ -73,6 +74,8 @@
     "@storybook/react": "^8.3.0",
     "@storybook/react-vite": "^8.3.0",
     "@storybook/testing-library": "^0.2.2",
+    "@types/react": "^18.0.33",
+    "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.16",
     "eslint-plugin-tailwindcss": "^3.17.4",
