@@ -9,6 +9,7 @@
     "directory": "apps/connector"
   },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev:chrome": "plasmo dev --target=chrome-mv3",
     "dev:safari": "plasmo dev --target=safari-mv3",
     "dev:firefox": "plasmo dev --target=firefox-mv3",

@@ -12,6 +12,7 @@
   },
   "keywords": [],
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "postinstall": "patch-package",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
@@ -21,7 +22,7 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --ignore-path .gitignore --write .",
     "clean": "turbo run clean && rimraf node_modules",
-    "storybook": "yarn workspace @status-im/components storybook"
+    "storybook": "pnpm --workspace @status-im/components storybook"
   },
   "resolutions": {
     "@types/react": "18.0.33",
@@ -29,7 +30,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "@tsconfig/strictest": "^2.0.0",
     "@types/prettier": "^2.7.2",
     "husky": "^8.0.3",
@@ -44,7 +45,14 @@
     "vite-node": "^0.29.8",
     "vitest": "^0.29.8"
   },
-  "packageManager": "yarn@1.22.17",
+  "packageManager": "pnpm@9.12.3",
+  "pnpm": {
+    "patchedDependencies": {
+      "@achingbrain/ssdp@4.0.1": "patches/@achingbrain__ssdp@4.0.1.patch",
+      "@libp2p/bootstrap@9.0.10": "patches/@libp2p+bootstrap+9.0.10.patch",
+      "it-length-prefixed@9.0.3": "patches/it-length-prefixed+9.0.3.patch"
+    }
+  },
   "lint-staged": {
     "*.{md,mdx,yml,yaml,json}": [
       "prettier --write"

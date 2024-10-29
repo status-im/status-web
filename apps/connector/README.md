@@ -20,13 +20,13 @@ Tested with these browsers:
 #### Develop
 
 ```bash
-yarn dev:chrome
+pnpm dev:chrome
 ```
 
 #### Build
 
 ```bash
-yarn build:chrome
+pnpm build:chrome
 ```
 
 #### Load
@@ -42,7 +42,7 @@ Google Chrome > Window > Extensions > Load unpacked > select build (build/chrome
 #### Develop
 
 ```bash
-yarn dev:safari
+pnpm dev:safari
 ```
 
 #### Convert
@@ -70,13 +70,13 @@ Safari > Settings... > Extensions > check Status
 #### Develop
 
 ```bash
-yarn dev:firefox
+pnpm dev:firefox
 ```
 
 #### Build
 
 ```bash
-yarn build:firefox
+pnpm build:firefox
 ```
 
 #### Load

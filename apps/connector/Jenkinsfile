@@ -48,7 +48,7 @@ pipeline {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
               nix.shell(
-                'yarn install --frozen-lockfile',
+                'pnpm install --frozen-lockfile',
                 pure: false,
                 entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
               )
@@ -65,7 +65,7 @@ pipeline {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
               nix.shell(
-                'yarn build:chrome',
+                'pnpm build:chrome',
                 pure: false,
                 entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
               )
@@ -121,15 +121,15 @@ pipeline {
     success {
       script {
         if(changesDetected) {
-          github.notifyPR(true) 
-        } 
+          github.notifyPR(true)
+        }
       }
     }
     failure {
       script {
         if(changesDetected) {
-          github.notifyPR(false) 
-        } 
+          github.notifyPR(false)
+        }
       }
     }
     cleanup { cleanWs() }

@@ -25,7 +25,7 @@ This monorepo contains packages for building web applications in the Status ecos
 Required:
 
 - **[Node.js](https://nodejs.org/)** v18.x
-- **[Yarn](https://yarnpkg.com/)** v1.22.x
+- **[pnpm](https://pnpm.io)** v9.12.x
 
 Recommended:
 
@@ -57,24 +57,24 @@ Recommended:
 2. Install dependencies:
 
    ```
-   yarn install
+   pnpm install
    ```
 
 3. Build all packages:
 
    ```
-   yarn build
+   pnpm build
    ```
 
 4. Run tests:
 
    ```
-   yarn test
+   pnpm test
    ```
 
 5. Start development mode:
    ```
-   yarn dev
+   pnpm dev
    ```
 
 ## Storybook
@@ -82,7 +82,7 @@ Recommended:
 To view and interact with the components, you can run Storybook:
 
 ```
-yarn storybook
+pnpm storybook
 ```
 
 This will start the Storybook server, allowing you to browse and test components in isolation.
