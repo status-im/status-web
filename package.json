@@ -48,7 +48,7 @@
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
     "*.{md,mdx,yml,yaml,json}": [
-      "prettier --write"
+      "prettier --ignore-path .gitignore --write"
     ]
   },
   "pnpm": {
