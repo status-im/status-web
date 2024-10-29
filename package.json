@@ -13,14 +13,13 @@
   "keywords": [],
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "patch-package",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
     "build": "turbo run build --filter=@status-im/*",
     "lint": "turbo run lint --filter=@status-im/* --filter=web",
     "typecheck": "turbo run typecheck",
-    "format": "prettier --ignore-path .gitignore --write .",
+    "format": "prettier --write .",
     "clean": "turbo run clean && rimraf node_modules",
     "storybook": "pnpm --filter @status-im/components storybook"
   },
@@ -35,7 +34,6 @@
     "@types/prettier": "^2.7.2",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
-    "patch-package": "^6.5.1",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "@types/react": "^18.0.33",
@@ -52,7 +50,7 @@
   "packageManager": "pnpm@9.12.3",
   "lint-staged": {
     "*.{md,mdx,yml,yaml,json}": [
-      "prettier --ignore-path .gitignore --write"
+      "prettier --write"
     ]
   },
   "pnpm": {
