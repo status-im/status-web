@@ -46,16 +46,16 @@
     "vitest": "^0.29.8"
   },
   "packageManager": "pnpm@9.12.3",
-  "pnpm": {
-    "patchedDependencies": {
-      "@achingbrain/ssdp@4.0.1": "patches/@achingbrain__ssdp@4.0.1.patch",
-      "@libp2p/bootstrap@9.0.10": "patches/@libp2p+bootstrap+9.0.10.patch",
-      "it-length-prefixed@9.0.3": "patches/it-length-prefixed+9.0.3.patch"
-    }
-  },
   "lint-staged": {
     "*.{md,mdx,yml,yaml,json}": [
       "prettier --write"
     ]
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@achingbrain/ssdp@4.0.1": "patches/@achingbrain__ssdp@4.0.1.patch",
+      "@libp2p/bootstrap@9.0.10": "patches/@libp2p__bootstrap@9.0.10.patch",
+      "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch"
+    }
   }
 }

@@ -1,7 +1,7 @@
-diff --git a/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js b/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js
-index bcce6af..f687757 100644
---- a/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js
-+++ b/node_modules/@achingbrain/ssdp/dist/src/default-ssdp-options.js
+diff --git a/dist/src/default-ssdp-options.js b/dist/src/default-ssdp-options.js
+index bcce6af79fa2f406a428501b098c3a4b26bb72d4..f687757d3d852eda3229487ca43ba0fd70a2ab78 100644
+--- a/dist/src/default-ssdp-options.js
++++ b/dist/src/default-ssdp-options.js
 @@ -1,11 +1,8 @@
  import { v4 } from 'uuid';
  import { defaultSocketOptions } from './default-socket-options.js';
