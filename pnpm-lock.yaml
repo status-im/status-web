@@ -34,6 +34,12 @@ importers:
       '@types/prettier':
         specifier: ^2.7.2
         version: 2.7.2
+      '@types/react':
+        specifier: 18.0.33
+        version: 18.0.33
+      '@types/react-dom':
+        specifier: 18.0.11
+        version: 18.0.11
       husky:
         specifier: ^8.0.3
         version: 8.0.3
@@ -49,6 +55,12 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.6
         version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.1.1(@vue/compiler-sfc@3.3.4)(prettier@3.3.3))(prettier@3.3.3)
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
       rimraf:
         specifier: ^4.4.1
         version: 4.4.1
