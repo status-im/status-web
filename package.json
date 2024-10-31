@@ -11,6 +11,9 @@
     ]
   },
   "keywords": [],
+  "engines": {
+    "node": "20.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",

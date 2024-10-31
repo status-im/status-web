@@ -24,7 +24,7 @@ This monorepo contains packages for building web applications in the Status ecos
 
 Required:
 
-- **[Node.js](https://nodejs.org/)** v18.x
+- **[Node.js](https://nodejs.org/)** v20.x
 - **[pnpm](https://pnpm.io)** v9.12.x
 
 Recommended:
