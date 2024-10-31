@@ -19,6 +19,7 @@
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
+    "prebuild": "node --version",
     "build": "turbo run build --filter=@status-im/*",
     "lint": "turbo run lint --filter=@status-im/* --filter=web",
     "typecheck": "turbo run typecheck",
