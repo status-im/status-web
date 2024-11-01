@@ -1,5 +1,16 @@
 # @status-im/components
 
+## 1.0.10
+
+### Patch Changes
+
+- 2fad122: use pnpm and update node
+- e30555c: fix <DropdownMenu.SubTrigger /> icon; unknown network typo
+- 3c968a2: add missing directive to `<SegmentedControl />`
+- Updated dependencies [2fad122]
+  - @status-im/colors@1.0.1
+  - @status-im/icons@1.0.1
+
 ## 1.0.9
 
 ### Patch Changes
