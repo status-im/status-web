@@ -1,6 +1,6 @@
 {
   "name": "@status-im/eslint-config",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "license": "MPL-2.0",
   "exports": {

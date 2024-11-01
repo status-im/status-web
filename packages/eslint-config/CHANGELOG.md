@@ -1,5 +1,11 @@
 # @status-im/eslint-config
 
+## 1.0.1
+
+### Patch Changes
+
+- 2fad122: use pnpm and update node
+
 ## 1.0.0
 
 ### Major Changes
