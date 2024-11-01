@@ -33,11 +33,15 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "test": "vitest",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "yarn build:types",
+    "postbuild": "pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly || true",
     "lint": "eslint src",
     "typecheck": "tsc",
@@ -60,7 +64,7 @@
   },
   "devDependencies": {
     "@bufbuild/protoc-gen-es": "1.4.2",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "@waku/interfaces": "^0.0.21",
     "happy-dom": "^9.1.7"
   },

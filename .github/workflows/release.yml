@@ -21,18 +21,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: pnpm/action-setup@v4
         with:
-          node-version: 18
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
+          version: 9.12.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.18.0
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
       - uses: changesets/action@v1
         id: changesets
         with:
           title: Release
           commit: Release
-          version: yarn changeset version
-          publish: yarn changeset publish
+          version: pnpm changeset version
+          publish: pnpm changeset publish
           createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

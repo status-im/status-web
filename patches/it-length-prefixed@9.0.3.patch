@@ -1,7 +1,7 @@
-diff --git a/node_modules/it-length-prefixed/dist/src/decode.js b/node_modules/it-length-prefixed/dist/src/decode.js
-index 313fdff..9f2a618 100644
---- a/node_modules/it-length-prefixed/dist/src/decode.js
-+++ b/node_modules/it-length-prefixed/dist/src/decode.js
+diff --git a/dist/src/decode.js b/dist/src/decode.js
+index 313fdff5f4bbac228bd6e6e4954bce89ea341cab..d15be8a606b81987f16bd932a7836186d9419b09 100644
+--- a/dist/src/decode.js
++++ b/dist/src/decode.js
 @@ -6,7 +6,9 @@ import { isAsyncIterable } from './utils.js';
  // Maximum length of the length section of the message
  export const MAX_LENGTH_LENGTH = 8; // Varint.encode(Number.MAX_SAFE_INTEGER).length

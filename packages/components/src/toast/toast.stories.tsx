@@ -26,7 +26,11 @@ const Actions = () => {
   )
 }
 
-const meta = {
+/**
+ * > error TS2742: The inferred type of 'meta' cannot be named without a reference to '.pnpm/@storybook+csf@0.1.11/node_modules/@storybook/csf'. This is likely not portable. A type annotation is necessary.
+ * > – @see https://github.com/storybookjs/storybook/issues/24656
+ */
+const meta: Meta<typeof Toast> = {
   component: Toast,
   title: 'Components/Toast',
   parameters: {
@@ -75,7 +79,7 @@ const meta = {
       </>
     ),
   ],
-} satisfies Meta<typeof Toast>
+}
 
 type Story = StoryObj<typeof Toast>
 
