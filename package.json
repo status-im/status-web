@@ -11,12 +11,15 @@
     ]
   },
   "keywords": [],
+  "engines": {
+    "node": "20.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
-    "build": "turbo run build --filter=@status-im/*",
+    "build": "turbo run build --filter=@status-im/* && node --version",
     "lint": "turbo run lint --filter=@status-im/* --filter=web",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
