@@ -10,6 +10,9 @@
     },
     "./package.json": "./package.json"
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "clean": "rimraf node_modules"

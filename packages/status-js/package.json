@@ -33,6 +33,9 @@
   "bugs": {
     "url": "https://github.com/status-im/status-web/issues"
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "test": "vitest",

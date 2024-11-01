@@ -53,6 +53,9 @@
       "import": "./svg/reactions/*.svg"
     }
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "sync": "vite-node scripts/sync.ts && prettier --parser=html --write 'svg/**/*.svg'",

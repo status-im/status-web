@@ -19,6 +19,9 @@
     },
     "./package.json": "./package.json"
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "sync": "rimraf src && vite-node scripts/sync.ts",

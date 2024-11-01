@@ -24,6 +24,9 @@
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite build --watch --mode development",
