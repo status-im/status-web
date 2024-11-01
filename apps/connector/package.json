@@ -8,9 +8,6 @@
     "url": "https://github.com/status-im/status-web.git",
     "directory": "apps/connector"
   },
-  "engines": {
-    "node": ">=18.18.0"
-  },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev:chrome": "plasmo dev --target=chrome-mv3",
