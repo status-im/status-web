@@ -62,7 +62,7 @@ pipeline {
           expression { changesDetected }
       }
       steps {
-          dir("${env.WORKSPACE}/apps/connector") {
+          dir("${env.WORKSPACE}") {
             script {
               nix.shell(
                 'pnpm build:chrome',

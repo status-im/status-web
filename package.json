@@ -7,7 +7,8 @@
       "packages/status-js",
       "packages/colors",
       "packages/icons",
-      "packages/components"
+      "packages/components",
+      "apps/connector"
     ]
   },
   "keywords": [],
@@ -16,8 +17,8 @@
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* -- --run",
     "dev": "turbo run dev --filter=@status-im/* --parallel",
-    "build": "turbo run build --filter=@status-im/*",
-    "lint": "turbo run lint --filter=@status-im/* --filter=web",
+    "build": "turbo run build --filter=@status-im/* --filter=connector",
+    "lint": "turbo run lint --filter=@status-im/* --filter=connector",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
     "clean": "turbo run clean && rimraf node_modules",
