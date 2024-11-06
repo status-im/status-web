@@ -2,16 +2,13 @@ import config, { tailwindcssConfig } from '@status-im/eslint-config'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  ...config,
   {
-    ignores: ['dist', 'index.js', 'index.es.js'],
+    ...tailwindcssConfig,
   },
   {
     files: ['*.ts', '*.tsx'],
-    ...config,
-    ...tailwindcssConfig,
     rules: {
-      ...config.rules,
-      ...tailwindcssConfig.rules,
       'no-constant-binary-expression': 'error',
       'no-restricted-globals': ['error', 'process'],
       'jsx-a11y/alt-text': [
@@ -23,7 +20,7 @@ export default [
     },
   },
   {
-    files: ['*.js'],
+    files: ['*.mjs'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',

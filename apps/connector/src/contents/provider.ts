@@ -127,7 +127,7 @@ export class Provider {
               return
             }
           }
-        } catch (error) {
+        } catch {
           // we don't reject here because incoming message is not from the proxy
           return
         }

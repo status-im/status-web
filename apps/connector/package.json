@@ -16,7 +16,7 @@
     "build": "pnpm build:chrome",
     "build:chrome": "plasmo build --target=chrome-mv3",
     "build:firefox": "plasmo build --target=firefox-mv3 --zip",
-    "lint": "eslint ./src",
+    "lint": "eslint src",
     "format": "prettier --write .",
     "package": "plasmo package",
     "clean": "rimraf apps build .plasmo node_modules"
