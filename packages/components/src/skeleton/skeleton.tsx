@@ -1,5 +1,6 @@
 import { cva, cx, type VariantProps } from 'cva'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const styles = cva({
   base: 'animate-skeleton overflow-hidden',
 

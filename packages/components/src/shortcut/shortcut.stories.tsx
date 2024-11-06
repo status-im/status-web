@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 const variants = ['primary', 'secondary', 'gray'] as const
 
-// eslint-disable-next-line react/display-name
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 const renderVariant = (variant: (typeof variants)[number]) => (props: any) => (
   <div className="flex items-center gap-2">
     <Shortcut {...props} variant={variant} icon={<CommandIcon />} />

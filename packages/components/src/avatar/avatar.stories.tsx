@@ -14,6 +14,7 @@ const sizesAvatar = {
 }
 
 const renderVariant = (variant: AvatarProps['type']) => {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const content = (props: any) => {
     const sizes = sizesAvatar[variant]
 
@@ -47,7 +48,7 @@ const meta = {
   },
 
   render: props => (
-    <div className="grid gap-4 theme-yellow">
+    <div className="theme-yellow grid gap-4">
       <h1 className="text-19">User Avatar</h1>
       {renderVariant('user')({
         ...props,

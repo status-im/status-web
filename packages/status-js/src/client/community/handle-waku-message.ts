@@ -34,7 +34,7 @@ export function handleWakuMessage(
   // state
   client: Client,
   community: Community,
-  account?: Account
+  account?: Account,
 ): void {
   // decode (layers)
   // validate
@@ -57,9 +57,8 @@ export function handleWakuMessage(
     if (decodedProtocol) {
       messageToDecode = decodedProtocol.publicMessage
     }
-  } catch {
     // eslint-disable-next-line no-empty
-  }
+  } catch {}
 
   const decodedMetadata = ApplicationMetadataMessage.fromBinary(messageToDecode)
   if (!decodedMetadata.payload) {
@@ -69,12 +68,12 @@ export function handleWakuMessage(
 
   const signerPublicKeyBytes = recoverPublicKey(
     decodedMetadata.signature,
-    decodedMetadata.payload
+    decodedMetadata.payload,
   )
 
   const messageId = payloadToId(
     decodedProtocol?.publicMessage ?? wakuMessage.payload,
-    signerPublicKeyBytes
+    signerPublicKeyBytes,
   )
   const messageTimestamp = wakuMessage.timestamp
   const signerPublicKey = `0x${bytesToHex(signerPublicKeyBytes)}`
@@ -181,7 +180,7 @@ export function handleWakuMessage(
               messageId,
               decodedPayload.text,
               decodedPayload.clock,
-              signerPublicKey
+              signerPublicKey,
             )
             chat.setClock(decodedPayload.clock)
 
@@ -220,7 +219,7 @@ export function handleWakuMessage(
             chat.handleDeletedMessage(
               messageId,
               decodedPayload.clock,
-              signerPublicKey
+              signerPublicKey,
             )
             chat.setClock(decodedPayload.clock)
 
@@ -259,7 +258,7 @@ export function handleWakuMessage(
             chat.handlePinnedMessage(
               messageId,
               decodedPayload.clock,
-              decodedPayload.pinned
+              decodedPayload.pinned,
             )
             chat.setClock(decodedPayload.clock)
 
@@ -299,7 +298,7 @@ export function handleWakuMessage(
               messageId,
               decodedPayload,
               decodedPayload.clock,
-              signerPublicKey
+              signerPublicKey,
             )
             chat.setClock(decodedPayload.clock)
 
@@ -320,7 +319,6 @@ export function handleWakuMessage(
     }
   } catch {
     // protons-runtime throws when trying to decode invalid protocol buffers
-    // eslint-disable-next-line no-empty
   }
 
   return

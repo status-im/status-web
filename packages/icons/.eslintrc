@@ -1,5 +1,0 @@
-{
-  "root": true,
-  "extends": ["@status-im/eslint-config"],
-  "ignorePatterns": ["dist", "index.js", "index.es.js"]
-}

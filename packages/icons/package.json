@@ -62,7 +62,7 @@
     "generate": "rimraf src && svgr svg --out-dir src && pnpm lint:fix && pnpm format",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "pnpm build:types && node --version",
+    "postbuild": "pnpm build:types",
     "build:types": "tsc src/**/index.ts --emitDeclarationOnly --declaration --jsx react-jsx --skipLibCheck --declarationDir ./dist",
     "#test": "vitest",
     "typecheck": "tsc",

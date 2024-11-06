@@ -31,7 +31,7 @@
     "preinstall": "npx only-allow pnpm",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
-    "postbuild": "pnpm build:types && node --version",
+    "postbuild": "pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
     "lint": "eslint src",
