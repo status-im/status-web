@@ -1,41 +1,67 @@
-// why: https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
-import { FlatCompat } from '@eslint/eslintrc'
-import path from 'path'
-import { fileURLToPath } from 'url'
+// // @ts-check
 
-import eslintJs from '@eslint/js'
+import js from '@eslint/js'
 import globals from 'globals'
-import typescriptParser from '@typescript-eslint/parser'
-import typescriptPlugin from '@typescript-eslint/eslint-plugin'
-import eslintCommentsPlugin from 'eslint-plugin-eslint-comments'
-import importPlugin from 'eslint-plugin-import'
+import typescript from 'typescript-eslint'
+import commentsPlugin from 'eslint-plugin-eslint-comments'
+import * as importPlugin from 'eslint-plugin-import'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 import reactPlugin from 'eslint-plugin-react'
 import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort'
-import prettierPlugin from 'eslint-config-prettier'
+import prettierPlugin from 'eslint-plugin-prettier/recommended'
 import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-})
+import { compat } from './util.mjs'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  eslintJs.configs.recommended,
-  ...compat.extends('plugin:@typescript-eslint/recommended'),
-  ...compat.extends('plugin:import/recommended'),
-  importPlugin.configs.typescript,
-  ...compat.extends('plugin:jsx-a11y/recommended'),
-  ...compat.extends('plugin:react/jsx-runtime'),
-  ...compat.extends('plugin:react-hooks/recommended'),
   {
     name: '@status-im/eslint-config',
+  },
+  {
+    ...js.configs.recommended,
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
+  },
+  ...typescript.configs.recommended.map(config => ({
+    ...config,
+    files: ['**/*.ts', '**/*.tsx'],
+  })),
+  {
+    ...importPlugin.flatConfigs.recommended,
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
+  },
+  {
+    ...importPlugin.flatConfigs.typescript,
+    files: ['**/*.ts', '**/*.tsx'],
+  },
+  {
+    ...jsxA11yPlugin.flatConfigs.recommended,
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
+  },
+  {
+    ...reactPlugin.configs.flat['jsx-runtime'],
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
+  },
+  ...compat.extends('plugin:react-hooks/recommended').map(config => ({
+    ...config,
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
+  })),
+  {
+    ...prettierPlugin,
+    files: [
+      '**/*.js',
+      '**/*.mjs',
+      '**/*.cjs',
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.md',
+      '**/*.mdx',
+    ],
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      parser: typescriptParser,
+      parser: typescript.parser,
       parserOptions: {
         // TODO: Enable type-aware linting (https://typescript-eslint.io/docs/linting/type-linting)
         // "tsconfigRootDir": ".",
@@ -52,15 +78,11 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': typescriptPlugin,
-      'eslint-comments': eslintCommentsPlugin,
-      import: importPlugin,
-      'jsx-a11y': jsxA11yPlugin,
+      '@typescript-eslint': typescript.plugin,
+      'eslint-comments': commentsPlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
       'simple-import-sort': simpleImportSortPlugin,
-      prettier: prettierPlugin,
-      react: reactPlugin,
     },
     rules: {
       'react/prop-types': 0,
@@ -128,8 +150,9 @@ export default [
   },
 ]
 
+/** @type {import('eslint').Linter.Config} */
 export const tailwindcssConfig = {
-  plugins: { tailwindcss: tailwindcssPlugin },
+  ...tailwindcssPlugin.configs['flat/recommended'],
   rules: {
     'tailwindcss/classnames-order': 'off',
   },
