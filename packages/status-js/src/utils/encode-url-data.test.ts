@@ -27,7 +27,7 @@ describe('Encode URL data', () => {
     const decodedData = decodeCommunityURLData(encodedData)
 
     expect(encodedData).toBe(
-      'G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi'
+      'G8QAgC0OzDOfHB4N5V1zajCKmHvbUAXB6XK6XYLS60WrOmCEEVgFEJaHsLkpTevR-XHc03r4B2pKTOoYJwqbLrLw9u2DhyzlK5rEWE09Dy7oPbVSPhwlOKozCQuAsMX84eJimcwKWNer82gPcCrbhPM-Zx1s3-glfEojrEYRDp61MM2DTNiD92_BDIN3eYvvcQsfT-quKYmaf1_i9Kpzk0Fi',
     )
     expect(decodedData).toEqual(data)
   })
@@ -73,12 +73,12 @@ describe('Encode URL data', () => {
     }
 
     const encodedData = encodeChannelURLData(
-      data as unknown as PlainMessage<Channel>
+      data as unknown as PlainMessage<Channel>,
     )
     const decodedData = decodeChannelURLData(encodedData)
 
     expect(encodedData).toBe(
-      'GxoBQCwO7MbOG73h9C_ECmmNLFveFT5wVETFRTal3e2y0Xyou1sfFAV-SsZH0MTwwDRpTuEnp26giuDkQ9algElBJsdfwJYmFggG1GoJJJjnNgaO49Oj0C6qYIaxnbTEvF-6xH6jxmPg5oHSFAguuFhgFpIIby42hURPGM87X47XATSzJGec5_OsF9ZthVfGzWIIRgcltFjTBbPZTiKBcdj_5iQ5DTbPW4LaTsu46RK2OuuSPOXd-ddgstj0g6uYHm2WBUDBjYa1oPniW2ZdVpFpY-ubJq587eM-JytEhXc_Kuq8tiU='
+      'GxoBQCwO7MbOG73h9C_ECmmNLFveFT5wVETFRTal3e2y0Xyou1sfFAV-SsZH0MTwwDRpTuEnp26giuDkQ9algElBJsdfwJYmFggG1GoJJJjnNgaO49Oj0C6qYIaxnbTEvF-6xH6jxmPg5oHSFAguuFhgFpIIby42hURPGM87X47XATSzJGec5_OsF9ZthVfGzWIIRgcltFjTBbPZTiKBcdj_5iQ5DTbPW4LaTsu46RK2OuuSPOXd-ddgstj0g6uYHm2WBUDBjYa1oPniW2ZdVpFpY-ubJq587eM-JytEhXc_Kuq8tiU=',
     )
     expect(decodedData).toEqual(data)
   })
@@ -150,7 +150,7 @@ describe('Encode URL data', () => {
     const decodedData = decodeUserURLData(encodedData)
 
     expect(encodedData).toBe(
-      'GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg=='
+      'GxgBoJwHdsOLl4DWt55mGELN6clGsb1UKTEkT0KUMDfwhWFpUyWH_cefTnvlcSf2JUXCOAWoY5ywzry-LnJ-PjgOGT1Pkb8riQp7ghv6Zu-x70x4m8lncZaRWpDN-sEfT85idUCWvppT_QFNa2A6J3Gr69UJGvWmL3S4DBwX2Jr7LBTNOvFPo6lejNUb-xizlAMUTrokunCH-qNmgtU6UK0J6Vkn8Ce35XGBFObxpxnAtnC_J_D-SrBCBnjiUlwH0ViNr3lHBg==',
     )
     expect(decodedData).toEqual(data)
   })

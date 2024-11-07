@@ -14,7 +14,7 @@ export type Reactions = {
 export function getReactions(
   reaction: EmojiReaction,
   reactions: Reactions,
-  publicKey: string
+  publicKey: string,
 ): Reactions {
   const { type, retracted } = reaction
 

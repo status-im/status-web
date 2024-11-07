@@ -8,7 +8,7 @@ test('should create symmetric key from password', async () => {
   const symKey = await generateKeyFromPassword(password)
 
   expect(bytesToHex(symKey)).toEqual(
-    'c49ad65ebf2a7b7253bf400e3d27719362a91b2c9b9f54d50a69117021666c33'
+    'c49ad65ebf2a7b7253bf400e3d27719362a91b2c9b9f54d50a69117021666c33',
   )
 })
 
@@ -18,6 +18,6 @@ test('should generate symmetric key from chat ID', async () => {
   const symKey = await generateKeyFromPassword(chatId)
 
   expect(bytesToHex(symKey)).toEqual(
-    '76ff5bf0a74a8e724367c7fc003f066d477641f468768a8da2817addf5c2ce76'
+    '76ff5bf0a74a8e724367c7fc003f066d477641f468768a8da2817addf5c2ce76',
   )
 })

@@ -18,7 +18,7 @@ test('should recover public key', async () => {
   const signature = await account.sign(payload)
 
   expect(bytesToHex(recoverPublicKey(signature, payload))).toEqual(
-    account.publicKey
+    account.publicKey,
   )
 })
 
@@ -56,7 +56,7 @@ test('should recover public key from fixture', async () => {
 
   const result = recoverPublicKey(
     metadataFixture.signature,
-    metadataFixture.payload
+    metadataFixture.payload,
   )
 
   expect(result).toEqual(publicKeySnapshot)
@@ -80,6 +80,6 @@ test('should throw error when signature length is not 65 bytes', async () => {
   ])
 
   expect(() =>
-    recoverPublicKey(signature, payload)
+    recoverPublicKey(signature, payload),
   ).toThrowErrorMatchingInlineSnapshot(`"Signature must be 65 bytes long"`)
 })

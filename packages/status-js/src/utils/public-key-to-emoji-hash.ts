@@ -19,7 +19,7 @@ export function publicKeyToEmojiHash(publicKey: string): string {
   const emojiHash = hexToEmojiHash(
     emojiHashHex,
     MIN_EMOJI_HASH_EMOJIS_COUNT,
-    EMOJI_HASH_LENGTH
+    EMOJI_HASH_LENGTH,
   )
 
   return emojiHash
@@ -28,7 +28,7 @@ export function publicKeyToEmojiHash(publicKey: string): string {
 export function hexToEmojiHash(
   hex: string,
   emojisCount: number,
-  hashLength: number
+  hashLength: number,
 ): string {
   const emojiIndices = numberToIndices(BigInt(`0x${hex}`), BigInt(emojisCount))
   const emojiHash = emojiIndicesToEmojiHash(emojiIndices, hashLength)

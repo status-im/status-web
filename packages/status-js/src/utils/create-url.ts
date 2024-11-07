@@ -15,7 +15,7 @@ export function createCommunityURLWithChatKey(communityChatKey: string): URL {
 
 export async function createCommunityURLWithData(
   communityData: PlainMessage<Community>,
-  communityChatKey: string
+  communityChatKey: string,
 ): Promise<URL> {
   const encodedURLData = encodeCommunityURLData(communityData)
 
@@ -24,14 +24,14 @@ export async function createCommunityURLWithData(
 
 export function createChannelURLWithChatKey(
   channelUuid: string,
-  communityChatKey: string
+  communityChatKey: string,
 ): URL {
   return new URL(`${BASE_URL}/cc/${channelUuid}#${communityChatKey}`)
 }
 
 export async function createChannelURLWithData(
   channelData: PlainMessage<Channel>,
-  communityChatKey: string
+  communityChatKey: string,
 ): Promise<URL> {
   const encodedURLData = encodeChannelURLData(channelData)
 
@@ -48,7 +48,7 @@ export function createUserURLWithChatKey(chatKey: string): URL {
 
 export async function createUserURLWithData(
   userData: PlainMessage<User>,
-  userChatKey: string
+  userChatKey: string,
 ): Promise<URL> {
   const encodedURLData = encodeUserURLData(userData)
 

@@ -13,7 +13,7 @@ import { recoverPublicKey } from './recover-public-key'
  */
 export async function signData(
   data: Uint8Array | string,
-  privateKey: Uint8Array | string
+  privateKey: Uint8Array | string,
 ): Promise<Uint8Array> {
   const bytes = ensureBytes(data)
   const hash = keccak256(bytes)
@@ -29,7 +29,7 @@ export async function signData(
 export function verifySignedData(
   signature: Uint8Array,
   data: Uint8Array | string,
-  publicKey?: string
+  publicKey?: string,
 ): boolean {
   const bytes = ensureBytes(data)
   const hash = keccak256(bytes)
