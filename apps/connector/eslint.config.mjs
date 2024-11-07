@@ -5,6 +5,7 @@ export default [
   ...config,
   {
     ...tailwindcssConfig,
+    files: ['*.ts', '*.tsx'],
   },
   {
     files: ['*.ts', '*.tsx'],
