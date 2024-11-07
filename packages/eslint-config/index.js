@@ -2,7 +2,11 @@
 
 import js from '@eslint/js'
 import globals from 'globals'
-import typescript from 'typescript-eslint'
+import {
+  parser as typescriptParser,
+  plugin as typescriptPlugin,
+  configs as typescriptConfigs,
+} from 'typescript-eslint'
 import commentsPlugin from 'eslint-plugin-eslint-comments'
 import * as importPlugin from 'eslint-plugin-import'
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
@@ -11,7 +15,6 @@ import reactHooksPlugin from 'eslint-plugin-react-hooks'
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort'
 import prettierPlugin from 'eslint-plugin-prettier/recommended'
 import tailwindcssPlugin from 'eslint-plugin-tailwindcss'
-import { compat } from './util.mjs'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -19,21 +22,31 @@ export default [
     name: '@status-im/eslint-config',
   },
   {
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      ...importPlugin.configs.recommended.rules,
+    },
+    files: [
+      '**/*.js',
+      '**/*.cjs',
+      '**/*.mjs',
+      '**/*.jsx',
+      '**/*.ts',
+      '**/*.mts',
+      '**/*.tsx',
+      '**/*.mdx',
+    ], // js, ts, mdx
+  },
+  {
     ...js.configs.recommended,
-    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'], // js
   },
-  ...typescript.configs.recommended.map(config => ({
+  ...typescriptConfigs.recommended.map(config => ({
     ...config,
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts', '**/*.mts', '**/*.tsx'],
   })),
-  {
-    ...importPlugin.flatConfigs.recommended,
-    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
-  },
-  {
-    ...importPlugin.flatConfigs.typescript,
-    files: ['**/*.ts', '**/*.tsx'],
-  },
   {
     ...jsxA11yPlugin.flatConfigs.recommended,
     files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
@@ -42,10 +55,6 @@ export default [
     ...reactPlugin.configs.flat['jsx-runtime'],
     files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
   },
-  ...compat.extends('plugin:react-hooks/recommended').map(config => ({
-    ...config,
-    files: ['**/*.js', '**/*.mjs', '**/*.cjs', '**/*.ts', '**/*.tsx'],
-  })),
   {
     ...prettierPlugin,
     files: [
@@ -59,9 +68,9 @@ export default [
     ],
   },
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts', '**/*.mts', '**/*.tsx'], // ts
     languageOptions: {
-      parser: typescript.parser,
+      parser: typescriptParser,
       parserOptions: {
         // TODO: Enable type-aware linting (https://typescript-eslint.io/docs/linting/type-linting)
         // "tsconfigRootDir": ".",
@@ -78,13 +87,15 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': typescript.plugin,
+      '@typescript-eslint': typescriptPlugin,
       'eslint-comments': commentsPlugin,
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,
       'simple-import-sort': simpleImportSortPlugin,
     },
     rules: {
+      ...importPlugin.configs.typescript.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
       'react/prop-types': 0,
       // "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
       '@typescript-eslint/consistent-type-imports': 'error',
@@ -141,19 +152,23 @@ export default [
       },
     },
   },
+]
+
+/** @type {import('eslint').Linter.Config[]} */
+export const tailwindcssConfigs = [
   {
-    files: ['examples/**/*.tsx'],
+    files: ['**/*.ts', '**/*.mts', '**/*.tsx'],
+  },
+  ...tailwindcssPlugin.configs['flat/recommended'],
+  {
     rules: {
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
+      'tailwindcss/classnames-order': 'off',
+      'tailwindcss/migration-from-tailwind-2': 'off',
+    },
+    settings: {
+      tailwindcss: {
+        callees: ['cx', 'cva'],
+      },
     },
   },
 ]
-
-/** @type {import('eslint').Linter.Config} */
-export const tailwindcssConfig = {
-  ...tailwindcssPlugin.configs['flat/recommended'],
-  rules: {
-    'tailwindcss/classnames-order': 'off',
-  },
-}

@@ -1,12 +1,9 @@
-import config, { tailwindcssConfig } from '@status-im/eslint-config'
+import configs, { tailwindcssConfigs } from '@status-im/eslint-config'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  ...config,
-  {
-    ...tailwindcssConfig,
-    files: ['*.ts', '*.tsx'],
-  },
+  ...configs,
+  ...tailwindcssConfigs,
   {
     files: ['*.ts', '*.tsx'],
     rules: {
