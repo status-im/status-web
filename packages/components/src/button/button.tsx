@@ -88,7 +88,7 @@ function Button(
 
 const styles = cva({
   base: [
-    'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-1 border-4 text-center font-medium transition-all',
+    'inline-flex shrink-0 cursor-pointer select-none items-center justify-center gap-1 text-center font-medium transition-all',
     'outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-customisation-50 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-100',
     'disabled:pointer-events-none disabled:cursor-default disabled:opacity-[.3]',
   ],
