@@ -48,7 +48,7 @@ const meta = {
   },
 
   render: props => (
-    <div className="theme-yellow grid gap-4">
+    <div className="grid gap-4">
       <h1 className="text-19">User Avatar</h1>
       {renderVariant('user')({
         ...props,
