@@ -77,7 +77,7 @@ export default function Popup() {
           <StatusTag status={connected ? 'on' : 'off'} />
         </div>
 
-        <div className="mx-1 mb-1 overflow-hidden rounded-20 bg-white-100 p-5">
+        <div className="mx-1 mb-1 overflow-hidden rounded-[20px] bg-white-100 p-5">
           {connected ? <Connected /> : <NotConnected />}
           {showPinInstructions && <PinInstructions />}
         </div>
