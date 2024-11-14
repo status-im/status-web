@@ -1,5 +1,11 @@
 # @status-im/eslint-config
 
+## 1.0.2
+
+### Patch Changes
+
+- 3c71b8c: update ESLint
+
 ## 1.0.1
 
 ### Patch Changes
