@@ -10,7 +10,7 @@ export function mapChatMessage(
     signerPublicKey: string
     community: Community
     chat: Chat
-  }
+  },
 ): ChatMessage {
   const { messageId, chatUuid, signerPublicKey, community, chat } = props
 

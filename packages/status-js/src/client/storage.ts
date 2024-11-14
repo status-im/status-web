@@ -33,7 +33,7 @@ export class LocalStorage implements Storage {
     try {
       window.localStorage.setItem(
         this.#getStorageKey(key),
-        JSON.stringify(value)
+        JSON.stringify(value),
       )
       return true
     } catch {

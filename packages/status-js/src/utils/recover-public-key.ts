@@ -8,7 +8,7 @@ import { recoverPublicKey as secpRecoverPublicKey } from 'ethereum-cryptography/
  */
 export function recoverPublicKey(
   sig: Uint8Array,
-  payload: Uint8Array
+  payload: Uint8Array,
 ): Uint8Array {
   if (sig.length !== 65) {
     throw new Error('Signature must be 65 bytes long')

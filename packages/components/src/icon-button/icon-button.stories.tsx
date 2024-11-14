@@ -7,7 +7,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 const sizes = ['40', '32', '24'] as const
 
-// eslint-disable-next-line react/display-name
+// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 const renderVariant = (variant: string) => (props: any) => (
   <div className="flex items-center gap-4">
     {sizes.map(size => (

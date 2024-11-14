@@ -8,8 +8,8 @@ import {
 test('should return color hash from public key', () => {
   expect(
     publicKeyToColorHash(
-      '0x04e25da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8'
-    )
+      '0x04e25da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8',
+    ),
   ).toEqual([
     [3, 30],
     [2, 10],
@@ -30,13 +30,13 @@ test('should throw for invalid public keys', () => {
   expect(() => publicKeyToColorHash('0x01')).toThrow()
   expect(() =>
     publicKeyToColorHash(
-      '0x01e25da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8'
-    )
+      '0x01e25da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8',
+    ),
   ).toThrow()
   expect(() =>
     publicKeyToColorHash(
-      '0x04425da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8'
-    )
+      '0x04425da6994ea2dc4ac70727e07eca153ae92bf7609db7befb7ebdceaad348f4fc55bbe90abf9501176301db5aa103fc0eb3bc3750272a26c424a10887db2a7ea8',
+    ),
   ).toThrow()
 })
 

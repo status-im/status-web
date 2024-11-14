@@ -27,13 +27,7 @@ function Tag(
   props: Props & (ButtonProps | DivProps),
   ref: Ref<HTMLButtonElement | HTMLDivElement>,
 ) {
-  const {
-    size = '32',
-    icon,
-    iconPlacement = 'left',
-    label,
-    ...rest
-  } = props
+  const { size = '32', icon, iconPlacement = 'left', label, ...rest } = props
 
   const iconOnly = Boolean(icon && !label)
 

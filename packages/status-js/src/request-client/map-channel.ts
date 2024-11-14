@@ -16,7 +16,7 @@ export type ChannelInfo = {
 
 export function mapChannel(
   communityChat: CommunityChat,
-  communityDescription: CommunityDescription
+  communityDescription: CommunityDescription,
 ): ChannelInfo | undefined {
   const community = mapCommunity(communityDescription)
 

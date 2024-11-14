@@ -1,6 +1,6 @@
 export function getDifferenceByKeys<T extends Record<string, unknown>>(
   a: T,
-  b: T
+  b: T,
 ): T {
   const initialValue: Record<string, unknown> = {}
 

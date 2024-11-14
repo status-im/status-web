@@ -86,7 +86,7 @@ export class ActivityCenter {
 
   public addMessageNotification = (
     newMessage: ChatMessage,
-    referencedMessage?: ChatMessage
+    referencedMessage?: ChatMessage,
   ) => {
     let isMention: boolean | undefined
     let isReply: boolean | undefined

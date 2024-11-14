@@ -62,7 +62,7 @@ class RequestClient {
       contractAddresses?: Record<number, Record<string, string>>
       started?: boolean
       environment?: 'development' | 'preview' | 'production'
-    }
+    },
   ) {
     const { environment = 'development' } = options
 
@@ -136,7 +136,7 @@ class RequestClient {
     await Promise.all([
       async () => this.waku.stop(),
       [...this.#ethereumClients.values()].map(async provider =>
-        provider.stop()
+        provider.stop(),
       ),
     ])
 
@@ -163,7 +163,7 @@ class RequestClient {
 
   public fetchCommunity = async (
     /** Compressed */
-    publicKey: string
+    publicKey: string,
   ): Promise<CommunityInfo | undefined> => {
     const communityDescription = await this.fetchCommunityDescription(publicKey)
 
@@ -177,7 +177,7 @@ class RequestClient {
   public fetchChannel = async (
     /** Compressed */
     publicKey: string,
-    uuid: string
+    uuid: string,
   ): Promise<ChannelInfo | undefined> => {
     const communityDescription = await this.fetchCommunityDescription(publicKey)
 
@@ -192,11 +192,10 @@ class RequestClient {
 
   public fetchUser = async (
     /** Uncompressed */
-    publicKey: string
+    publicKey: string,
   ): Promise<UserInfo | undefined> => {
-    const contactCodeAdvertisement = await this.fetchContactCodeAdvertisement(
-      publicKey
-    )
+    const contactCodeAdvertisement =
+      await this.fetchContactCodeAdvertisement(publicKey)
 
     if (!contactCodeAdvertisement) {
       return
@@ -207,7 +206,7 @@ class RequestClient {
 
   public fetchCommunityDescription = async (
     /** Compressed */
-    communityPublicKey: string
+    communityPublicKey: string,
   ): Promise<CommunityDescription | undefined> => {
     const contentTopic = idToContentTopic(communityPublicKey)
     const symmetricKey = await generateKeyFromPassword(communityPublicKey)
@@ -238,24 +237,25 @@ class RequestClient {
 
         // decode
         const decodedCommunityDescription = CommunityDescription.fromBinary(
-          message.payload
+          message.payload,
         )
 
         // validate
         if (
           !isClockValid(
             BigInt(decodedCommunityDescription.clock),
-            message.timestamp
+            message.timestamp,
           )
         ) {
           continue
         }
 
         const ownerTokenPermission = Object.values(
-          decodedCommunityDescription.tokenPermissions
+          decodedCommunityDescription.tokenPermissions,
         ).find(
           permission =>
-            permission.type === CommunityTokenPermission_Type.BECOME_TOKEN_OWNER
+            permission.type ===
+            CommunityTokenPermission_Type.BECOME_TOKEN_OWNER,
         )
         if (ownerTokenPermission) {
           const criteria = ownerTokenPermission.tokenCriteria[0]
@@ -281,7 +281,7 @@ class RequestClient {
           const ownerPublicKey = await ethereumClient.resolveOwner(
             this.#contractAddresses[Number(chainId)]
               .CommunityOwnerTokenRegistry,
-            communityPublicKey
+            communityPublicKey,
           )
 
           if (ownerPublicKey !== message.signerPublicKey) {
@@ -301,11 +301,11 @@ class RequestClient {
   }
 
   private fetchContactCodeAdvertisement = async (
-    publicKey: string
+    publicKey: string,
   ): Promise<ContactCodeAdvertisement | undefined> => {
     const contentTopic = idToContentTopic(`${publicKey}-contact-code`)
     const symmetricKey = await generateKeyFromPassword(
-      `${publicKey}-contact-code`
+      `${publicKey}-contact-code`,
     )
 
     const wakuMessageGenerator = this.waku.store.queryGenerator([
@@ -336,7 +336,7 @@ class RequestClient {
 
         // decode
         const decodedContactCode = ContactCodeAdvertisement.fromBinary(
-          message.payload
+          message.payload,
         )
 
         // validate
@@ -347,7 +347,7 @@ class RequestClient {
         if (
           !isClockValid(
             BigInt(decodedContactCode.chatIdentity.clock),
-            message.timestamp
+            message.timestamp,
           )
         ) {
           continue
@@ -364,7 +364,7 @@ class RequestClient {
   }
 
   private handleWakuMessage = (
-    wakuMessage: DecodedMessage
+    wakuMessage: DecodedMessage,
   ):
     | {
         timestamp: Date
@@ -394,17 +394,17 @@ class RequestClient {
 
       if (decodedSegment) {
         const unsegmentedMessageHash = bytesToHex(
-          decodedSegment.entireMessageHash
+          decodedSegment.entireMessageHash,
         )
 
         const segmentedWakuMessages = this.#segmentedWakuMessages.get(
-          unsegmentedMessageHash
+          unsegmentedMessageHash,
         )
 
         if (!segmentedWakuMessages) {
           this.#segmentedWakuMessages.set(
             unsegmentedMessageHash,
-            new Map([[decodedSegment.index, decodedSegment]])
+            new Map([[decodedSegment.index, decodedSegment]]),
           )
 
           return
@@ -430,13 +430,12 @@ class RequestClient {
           messageToDecode = unsegmentedPayload
 
           this.#segmentedWakuMessages.delete(unsegmentedMessageHash)
-        } catch (error) {
+        } catch {
           return
         }
       }
-    } catch {
       // eslint-disable-next-line no-empty
-    }
+    } catch {}
 
     let decodedProtocol
     try {
@@ -447,9 +446,8 @@ class RequestClient {
       } else if (decodedProtocol) {
         messageToDecode = decodedProtocol.publicMessage
       }
-    } catch {
       // eslint-disable-next-line no-empty
-    }
+    } catch {}
 
     let decodedMetadata
     try {
@@ -468,12 +466,12 @@ class RequestClient {
 
     const signerPublicKeyBytes = recoverPublicKey(
       decodedMetadata.signature,
-      decodedMetadata.payload
+      decodedMetadata.payload,
     )
 
     const messageId = payloadToId(
       decodedProtocol?.publicMessage ?? wakuMessage.payload,
-      signerPublicKeyBytes
+      signerPublicKeyBytes,
     )
 
     // already handled
@@ -493,7 +491,7 @@ class RequestClient {
 }
 
 export async function createRequestClient(
-  options: RequestClientOptions
+  options: RequestClientOptions,
 ): Promise<RequestClient> {
   return await RequestClient.start(options)
 }

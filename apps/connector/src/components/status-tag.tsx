@@ -9,8 +9,8 @@ const styles = cva({
   base: 'flex h-6 items-center gap-1 rounded-[20px] border px-2 text-13',
   variants: {
     status: {
-      on: 'border-success-/20 bg-success-/10 text-success-60',
-      off: 'border-danger-/20 bg-danger-/10 text-danger-60',
+      on: 'border-success-50/20 bg-success-50/10 text-success-60',
+      off: 'border-danger-50/20 bg-danger-50/10 text-danger-60',
     },
   },
 })

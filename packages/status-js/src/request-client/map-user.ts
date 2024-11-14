@@ -15,7 +15,7 @@ export type UserInfo = {
 
 export function mapUser(
   contactCodeAdvertisement: ContactCodeAdvertisement,
-  userPublicKey: string
+  userPublicKey: string,
 ): UserInfo | undefined {
   const { chatIdentity: identity } = contactCodeAdvertisement
 

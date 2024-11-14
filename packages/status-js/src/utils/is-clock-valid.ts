@@ -2,7 +2,7 @@ const MAX_OFFSET = BigInt(120 * 1000)
 
 export function isClockValid(
   messageClock: bigint,
-  messageTimestamp: Date
+  messageTimestamp: Date,
 ): boolean {
   if (messageClock <= 0) {
     return false

@@ -1,7 +1,13 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "npm.packageManager": "pnpm",
+  "eslint.useESLintClass": true,
   "eslint.workingDirectories": [
+    "./packages/colors",
+    "./packages/icons",
+    "./packages/components",
+    "./packages/status-js",
+    "./apps/connector",
     {
       "mode": "auto",
       "#comment": "See https://github.com/microsoft/vscode-eslint/issues/1161 for reason (i.e. multiple .eslintrc config files)"

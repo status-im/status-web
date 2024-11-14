@@ -62,10 +62,10 @@ pipeline {
           expression { changesDetected }
       }
       steps {
-          dir("${env.WORKSPACE}/apps/connector") {
+          dir("${env.WORKSPACE}") {
             script {
               nix.shell(
-                'pnpm build:chrome',
+                'pnpm turbo run build --filter=connector',
                 pure: false,
                 entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
               )
