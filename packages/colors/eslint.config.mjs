@@ -1,4 +1,4 @@
-import config from '@status-im/eslint-config'
+import configs from '@status-im/eslint-config'
 
 /** @type {import('eslint').Linter.Config[]} */
-export default [...config]
+export default [...configs]

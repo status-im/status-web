@@ -1,8 +1,8 @@
-import config from '@status-im/eslint-config'
+import configs from '@status-im/eslint-config'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  ...config,
+  ...configs,
   {
     files: ['./src/protos/**/*_pb.ts'],
     rules: {
