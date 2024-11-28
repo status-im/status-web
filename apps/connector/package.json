@@ -58,8 +58,8 @@
   },
   "manifest": {
     "manifest_version": 3,
-    "name": "A wallet connector by Status BETA",
-    "description": "THIS EXTENSION IS FOR BETA TESTING. Status Desktop Wallet extended to decentralised applications in your browser.",
+    "name": "A wallet connector by Status",
+    "description": "Status Desktop Wallet extended to decentralised applications in your browser.",
     "host_permissions": [
       "https://*/*",
       "https://chromewebstore.google.com/*"
