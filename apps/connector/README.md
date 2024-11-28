@@ -87,6 +87,18 @@ Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Too
 
 > Note: Does not reload automatically, requires build and load on change.
 
+### Status Desktop
+
+#### Run
+
+##### macOS
+
+```bash
+FLAG_CONNECTOR_ENABLED=1 '/Volumes/Status Desktop/Status.app/Contents/MacOS/nim_status_client'
+```
+
+> Tip: Point to the installer package location without dropping and replacing current app.
+
 ## Testing
 
 Download latest build from last merged PR or build from source. To use the extension see the load steps from [Development](#development) section.
