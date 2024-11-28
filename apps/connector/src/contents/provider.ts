@@ -177,6 +177,12 @@ export class Provider {
     this.#listeners.delete(event)
   }
 
+  public async enable() {
+    console.log('enable::')
+
+    return true
+  }
+
   private async disconnect() {
     if (!this.connected) {
       return
