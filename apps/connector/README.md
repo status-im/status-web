@@ -6,7 +6,7 @@ Status Desktop Wallet extended to decentralized applications in your browser.
 
 Depends on:
 
-- Status Desktop https://github.com/status-im/status-desktop/tree/release/2.30.x
+- **[Status Desktop](https://github.com/status-im/status-desktop/releases)** >=2.32.x
 
 Tested with these browsers:
 
