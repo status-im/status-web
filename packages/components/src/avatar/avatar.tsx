@@ -34,7 +34,7 @@ type AccountAvatarProps = {
   size: '80' | '48' | '32' | '28' | '24' | '20' | '16'
   name: string
   emoji: string
-  bgOpacity?: '5' | '10' | '20' | '30' | '40'
+  bgOpacity?: '0' | '5' | '10' | '20' | '30' | '40' | '100'
 }
 
 type IconAvatarProps = {
@@ -215,15 +215,16 @@ const baseStyles = cva({
       '16': 'p-0',
     },
     background: {
-      '0': 'bg-customisation-50',
+      '0': 'bg-transparent',
       '5': 'bg-customisation-50/5',
       '10': 'bg-customisation-50/10',
       '20': 'bg-customisation-50/20',
       '30': 'bg-customisation-50/30',
       '40': 'bg-customisation-50/40',
+      '100': 'bg-customisation-50',
     },
   },
   defaultVariants: {
-    background: '0',
+    background: '100',
   },
 })
