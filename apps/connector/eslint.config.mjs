@@ -35,4 +35,7 @@ export default [
       },
     },
   },
+  {
+    ignores: ['.plasmo'],
+  },
 ]
