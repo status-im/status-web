@@ -60,9 +60,12 @@
     "manifest_version": 3,
     "name": "A wallet connector by Status",
     "description": "Status Desktop Wallet extended to decentralised applications in your browser.",
+    "externally_connectable": {
+      "ids": [],
+      "matches": []
+    },
     "host_permissions": [
-      "https://*/*",
-      "https://chromewebstore.google.com/*"
+      "https://*/*"
     ],
     "permissions": [
       "storage"
