@@ -14,7 +14,7 @@ const SvgExternalIcon = (props: SVGProps<SVGSVGElement>) => (
     <path
       fill="currentColor"
       fillRule="evenodd"
-      d="M11.551 7.6H7V6.4h6.6V13h-1.2V8.449l-6.476 6.475-.848-.848L11.55 7.6Z"
+      d="M11.551 6.6H7V5.4h6.6V12h-1.2V7.449l-6.476 6.475-.848-.848L11.55 6.6Z"
       clipRule="evenodd"
     />
   </svg>
