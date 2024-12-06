@@ -410,9 +410,6 @@ importers:
       '@svgr/core':
         specifier: ^8.1.0
         version: 8.1.0
-      '@svgr/plugin-prettier':
-        specifier: ^8.1.0
-        version: 8.1.0(@svgr/core@8.1.0)
       '@svgr/plugin-svgo':
         specifier: ^8.1.0
         version: 8.1.0(@svgr/core@8.1.0)
@@ -7702,8 +7699,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
 
-  prettier@2.8.7:
-    resolution: {integrity: sha512-yPngTo3aXUUmyuTjeTUT75txrf+aMh9FiD7q9ZE/i6r0bPb22g4FsE6Y338PQX1bmfy08i9QQCB7/rcUAVntfw==}
+  prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
@@ -9436,7 +9433,7 @@ snapshots:
       fs-extra: 7.0.1
       lodash.startcase: 4.4.0
       outdent: 0.5.0
-      prettier: 2.8.7
+      prettier: 2.8.8
       resolve-from: 5.0.0
       semver: 7.6.3
 
@@ -9571,7 +9568,7 @@ snapshots:
       '@changesets/types': 5.2.1
       fs-extra: 7.0.1
       human-id: 1.0.2
-      prettier: 2.8.7
+      prettier: 2.8.8
 
   '@clack/core@0.3.4':
     dependencies:
@@ -13863,7 +13860,7 @@ snapshots:
     dependencies:
       '@svgr/core': 8.1.0
       deepmerge: 4.3.1
-      prettier: 2.8.7
+      prettier: 2.8.8
 
   '@svgr/plugin-svgo@6.5.1(@svgr/core@6.5.1)':
     dependencies:
@@ -18431,7 +18428,7 @@ snapshots:
     optionalDependencies:
       '@ianvs/prettier-plugin-sort-imports': 4.1.1(@vue/compiler-sfc@3.3.4)(prettier@3.3.3)
 
-  prettier@2.8.7: {}
+  prettier@2.8.8: {}
 
   prettier@3.2.4: {}
 

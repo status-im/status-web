@@ -1,3 +1,4 @@
+export { default as ArbiscanIcon } from './arbiscan-icon'
 export { default as DiscordIcon } from './discord-icon'
 export { default as EtherscanIcon } from './etherscan-icon'
 export { default as FacebookIcon } from './facebook-icon'
