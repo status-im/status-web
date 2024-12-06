@@ -1,5 +1,11 @@
 # @status-im/icons
 
+## 1.0.3
+
+### Patch Changes
+
+- 1942ffb: Sync icons
+
 ## 1.0.2
 
 ### Patch Changes

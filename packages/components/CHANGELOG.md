@@ -1,5 +1,12 @@
 # @status-im/components
 
+## 1.0.12
+
+### Patch Changes
+
+- Updated dependencies [1942ffb]
+  - @status-im/icons@1.0.3
+
 ## 1.0.11
 
 ### Patch Changes
