@@ -19,7 +19,6 @@ export class DesktopClient {
       return
     }
 
-    console.log('stop::')
     this.#rpcClient?.destroy()
     this.#rpcClient = null
 
@@ -28,7 +27,6 @@ export class DesktopClient {
 
   public async send(args: DesktopRequestArguments) {
     if (!this.#rpcClient) {
-      console.log('start::')
       this.#rpcClient = new WebSocketProvider(
         config.desktop.rpc.url,
         'mainnet',
@@ -42,11 +40,6 @@ export class DesktopClient {
     }
 
     await waitUntilOpen(this.#rpcClient.websocket)
-
-    console.log('client::', {
-      method: config.desktop.rpc.method,
-      params: [JSON.stringify(args)],
-    })
 
     return await this.#rpcClient.send(config.desktop.rpc.method, [
       JSON.stringify(args),
@@ -77,10 +70,6 @@ async function waitUntilOpen(websocket: WebSocketLike) {
     const timeout = setTimeout(() => {
       reject(new Error('Timed out to connect to the RPC server'))
     }, 30 * 1000)
-
-    if (websocket.readyState === WebSocket.CONNECTING) {
-      console.info('Waiting for the RPC server to connect')
-    }
 
     const onopen = websocket.onopen?.bind(websocket)
     websocket.onopen = event => {

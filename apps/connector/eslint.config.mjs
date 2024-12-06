@@ -5,7 +5,7 @@ export default [
   ...configs,
   ...tailwindcssConfigs,
   {
-    files: ['*.ts', '*.tsx'],
+    files: ['**/*.ts', '**/*.tsx'],
     rules: {
       'no-constant-binary-expression': 'error',
       'no-restricted-globals': ['error', 'process'],
@@ -15,10 +15,11 @@ export default [
           img: [],
         },
       ],
+      'no-empty': 'warn',
     },
   },
   {
-    files: ['*.mjs'],
+    files: ['**/*.mjs'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
@@ -27,11 +28,14 @@ export default [
     },
   },
   {
-    files: ['*.js'],
+    files: ['**/*.js'],
     languageOptions: {
       parserOptions: {
         ecmaVersion: 'latest',
       },
     },
+  },
+  {
+    ignores: ['.plasmo'],
   },
 ]

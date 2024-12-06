@@ -96,15 +96,11 @@ export class Provider {
                 this.#listeners.get('connect')?.({ chainId: '0x1' })
                 this.#listeners.get('connected')?.({ chainId: '0x1' })
                 this.connected = true
-
-                console.log('connected::')
               }
 
               if (method === 'wallet_switchEthereumChain') {
                 this.#listeners.get('chainChanged')?.(message.data)
                 this.#listeners.get('networkChanged')?.(message.data)
-
-                console.log('chainChanged::')
               }
 
               resolve(message.data)
@@ -112,8 +108,6 @@ export class Provider {
               return
             }
             case 'status:proxy:error': {
-              console.error(message.error)
-
               // note: for those dApps that make call after having permissions revoked
               if (
                 message.error.message === 'dApp is not permitted by user' &&
@@ -154,21 +148,15 @@ export class Provider {
   }
 
   public on(event: Event, handler: (args: unknown) => void): void {
-    console.log('on::', event, handler)
-
     this.#listeners.set(event, handler)
   }
 
   /** @deprecated */
-  public async close(...args: unknown[]): Promise<void> {
-    console.log('close::', args)
-
+  public async close(): Promise<void> {
     this.disconnect()
   }
 
-  public removeListener(event: Event, handler: (args: unknown) => void): void {
-    console.log('removeListener::', event, handler)
-
+  public removeListener(event: Event): void {
     // note: not all dapps remove these on disconnect
     if (event === 'close' || event === 'disconnect') {
       this.disconnect()
@@ -177,14 +165,16 @@ export class Provider {
     this.#listeners.delete(event)
   }
 
+  public async enable() {
+    return true
+  }
+
   private async disconnect() {
     if (!this.connected) {
       return
     }
 
     this.connected = false
-
-    console.log('disconnect::')
 
     await this.request({
       method: 'wallet_revokePermissions',
