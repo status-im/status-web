@@ -18,7 +18,7 @@ export type Tag = {
 }
 
 export function mapCommunity(
-  communityDescription: CommunityDescription
+  communityDescription: CommunityDescription,
 ): CommunityInfo | undefined {
   const { identity, tags, members } = communityDescription
 

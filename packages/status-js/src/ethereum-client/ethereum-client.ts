@@ -16,7 +16,7 @@ export class EthereumClient {
 
   async resolvePublicKey(
     ensName: string,
-    options: { compress: boolean }
+    options: { compress: boolean },
   ): Promise<string | undefined> {
     try {
       const resolver = await this.#provider.getResolver(ensName)
@@ -51,22 +51,22 @@ export class EthereumClient {
 
   async resolveOwner(
     registryContractAddress: string,
-    communityPublicKey: string
+    communityPublicKey: string,
   ): Promise<string | undefined> {
     try {
       const registryContract = new ethers.Contract(
         registryContractAddress,
         ['function getEntry(address _communityAddress) view returns (address)'],
-        this.#provider
+        this.#provider,
       )
       const ownerContractAddress = await registryContract.getEntry(
-        publicKeyToETHAddress(communityPublicKey)
+        publicKeyToETHAddress(communityPublicKey),
       )
 
       const ownerContract = new ethers.Contract(
         ownerContractAddress,
         ['function signerPublicKey() view returns (bytes)'],
-        this.#provider
+        this.#provider,
       )
       const owner = await ownerContract.signerPublicKey()
 

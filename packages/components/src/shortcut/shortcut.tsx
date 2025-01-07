@@ -1,13 +1,14 @@
-import { forwardRef } from 'react'
+import { cloneElement, forwardRef } from 'react'
 
 import { match, P } from 'ts-pattern'
 
 import { cva } from '../utils/variants'
 
+import type { IconElement } from '../types'
 import type { VariantProps } from '../utils/variants'
 
 const styles = cva({
-  base: 'flex size-4 flex-shrink-0 items-center justify-center rounded-6 border',
+  base: 'grid size-4 flex-shrink-0 place-items-center rounded-6 border',
   variants: {
     variant: {
       primary: [
@@ -32,7 +33,7 @@ const styles = cva({
 type Props = VariantProps<typeof styles> &
   (
     | {
-        icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+        icon: IconElement
         symbol?: never
       }
     | {
@@ -42,15 +43,17 @@ type Props = VariantProps<typeof styles> &
   )
 
 const Shortcut = (props: Props, ref: React.Ref<HTMLDivElement>) => {
-  const { variant = 'primary', ...rest } = props
+  const { variant = 'primary' } = props
 
   return (
-    <div className={styles({ variant })} ref={ref} {...rest}>
+    <div className={styles({ variant })} ref={ref}>
       {match(props)
         .with({ symbol: P.string }, ({ symbol }) => (
           <span className="text-11 font-medium">{symbol}</span>
         ))
-        .with({ icon: P._ }, ({ icon: Icon }) => <Icon className="size-3" />)
+        .with({ icon: P._ }, ({ icon }) =>
+          cloneElement(icon, { className: 'size-3' }),
+        )
         .exhaustive()}
     </div>
   )

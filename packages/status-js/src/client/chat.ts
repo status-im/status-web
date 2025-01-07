@@ -101,7 +101,7 @@ export class Chat {
     client: Client,
     uuid: string,
     type: MessageType.COMMUNITY_CHAT,
-    description: CommunityChat
+    description: CommunityChat,
   ) => {
     const id = `${community.publicKey}${uuid}`
     const contentTopic = idToContentTopic(id)
@@ -171,7 +171,7 @@ export class Chat {
   }
 
   public onMessage = (
-    callback: (messages: ChatMessage[]) => void
+    callback: (messages: ChatMessage[]) => void,
   ): (() => void) => {
     this.messageCallbacks.add(callback)
     // todo?: set from ui, think use case without an ui
@@ -227,7 +227,7 @@ export class Chat {
         pageSize: 50,
         // most recent page first
         pageDirection: PageDirection.BACKWARD,
-      }
+      },
     )
 
     this.#previousFetchedStartTime = startTime
@@ -278,7 +278,7 @@ export class Chat {
       this.#oldestFetchedMessage = this.getOldestFetchedMessage(
         this.#oldestFetchedMessage,
         newMessage.messageId,
-        timestamp
+        timestamp,
       )
     }
 
@@ -340,7 +340,7 @@ export class Chat {
     if (!this.#isActive && !isAuthor) {
       this.client.activityCenter.addMessageNotification(
         newMessage,
-        this.#messages.get(newMessage.responseTo)
+        this.#messages.get(newMessage.responseTo),
       )
     }
   }
@@ -349,7 +349,7 @@ export class Chat {
     messageId: string,
     text: string,
     clock: bigint,
-    signerPublicKey: string
+    signerPublicKey: string,
   ) => {
     const message = this.#messages.get(messageId)
 
@@ -374,7 +374,7 @@ export class Chat {
   public handleDeletedMessage = (
     messageId: string,
     clock: bigint,
-    signerPublicKey: string
+    signerPublicKey: string,
   ) => {
     const message = this.#messages.get(messageId)
     if (message && this.isAuthor(message, signerPublicKey)) {
@@ -394,7 +394,7 @@ export class Chat {
   public handlePinnedMessage = (
     messageId: string,
     clock: bigint,
-    pinned?: boolean
+    pinned?: boolean,
   ) => {
     const message = this.#messages.get(messageId)
     if (message) {
@@ -419,14 +419,14 @@ export class Chat {
     messageId: string,
     reaction: EmojiReaction,
     clock: bigint,
-    signerPublicKey: string
+    signerPublicKey: string,
   ) => {
     const message = this.#messages.get(messageId)
     if (message) {
       const reactions = getReactions(
         reaction,
         message.reactions,
-        signerPublicKey
+        signerPublicKey,
       )
       message.reactions = reactions
 
@@ -447,7 +447,7 @@ export class Chat {
           SAD: new Set<string>(),
           ANGRY: new Set<string>(),
         },
-        signerPublicKey
+        signerPublicKey,
       )
 
       this.#reactEvents.set(messageId, { clock, reactions })
@@ -455,7 +455,7 @@ export class Chat {
       const reactions = getReactions(
         reaction,
         reactEvent.reactions,
-        signerPublicKey
+        signerPublicKey,
       )
 
       this.#reactEvents.set(messageId, { clock, reactions })
@@ -489,7 +489,7 @@ export class Chat {
       ApplicationMetadataMessage_Type.CHAT_MESSAGE,
       payload,
       this.contentTopic,
-      this.symmetricKey
+      this.symmetricKey,
     )
   }
 
@@ -518,7 +518,7 @@ export class Chat {
       ApplicationMetadataMessage_Type.CHAT_MESSAGE,
       payload,
       this.contentTopic,
-      this.symmetricKey
+      this.symmetricKey,
     )
   }
 
@@ -554,14 +554,14 @@ export class Chat {
       ApplicationMetadataMessage_Type.EDIT_MESSAGE,
       payload,
       this.contentTopic,
-      this.symmetricKey
+      this.symmetricKey,
     )
   }
 
   public deleteMessage = async (messageId: string) => {
     if (!this.client.account) {
       throw new Error(
-        'Text message cannot be deleted without a created account'
+        'Text message cannot be deleted without a created account',
       )
     }
 
@@ -587,13 +587,13 @@ export class Chat {
       ApplicationMetadataMessage_Type.DELETE_MESSAGE,
       payload,
       this.contentTopic,
-      this.symmetricKey
+      this.symmetricKey,
     )
   }
 
   public sendReaction = async (
     messageId: string,
-    reaction: keyof ChatMessage['reactions']
+    reaction: keyof ChatMessage['reactions'],
   ) => {
     if (!this.client.account) {
       throw new Error('Account not initialized')
@@ -606,7 +606,7 @@ export class Chat {
     }
 
     const retracted = message.reactions[reaction].has(
-      `0x${this.client.account.publicKey}`
+      `0x${this.client.account.publicKey}`,
     )
 
     const payload = new EmojiReaction({
@@ -623,13 +623,13 @@ export class Chat {
       ApplicationMetadataMessage_Type.EMOJI_REACTION,
       payload,
       this.contentTopic,
-      this.symmetricKey
+      this.symmetricKey,
     )
   }
 
   public isAuthor = (
     message: ChatMessage,
-    signerPublicKey: string
+    signerPublicKey: string,
   ): boolean => {
     return message.signer === signerPublicKey
   }
@@ -637,7 +637,7 @@ export class Chat {
   private getOldestFetchedMessage(
     oldestMessage: FetchedMessage | undefined,
     messageId: string,
-    messageTimestamp?: Date
+    messageTimestamp?: Date,
   ): FetchedMessage {
     let message: FetchedMessage
 

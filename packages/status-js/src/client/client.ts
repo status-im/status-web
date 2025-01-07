@@ -177,7 +177,7 @@ class Client {
       await waitForRemotePeer(
         waku,
         [Protocols.Store, Protocols.Filter, Protocols.LightPush],
-        10 * 1000
+        10 * 1000,
       )
 
       // Client
@@ -250,7 +250,7 @@ class Client {
     type: ApplicationMetadataMessage_Type,
     payload: Uint8Array,
     contentTopic: string,
-    symKey: Uint8Array
+    symKey: Uint8Array,
   ) => {
     if (!this.waku) {
       throw new Error('Waku not started')
@@ -278,7 +278,7 @@ class Client {
           shard: 32,
         },
       }),
-      { payload: message }
+      { payload: message },
     )
   }
 

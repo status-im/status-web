@@ -1,5 +1,64 @@
 # @status-im/components
 
+## 1.0.12
+
+### Patch Changes
+
+- Updated dependencies [1942ffb]
+  - @status-im/icons@1.0.3
+
+## 1.0.11
+
+### Patch Changes
+
+- 3c71b8c: update ESLint
+- Updated dependencies [3c71b8c]
+  - @status-im/colors@1.0.2
+  - @status-im/icons@1.0.2
+
+## 1.0.10
+
+### Patch Changes
+
+- 2fad122: use pnpm and update node
+- e30555c: fix <DropdownMenu.SubTrigger /> icon; unknown network typo
+- 3c968a2: add missing directive to `<SegmentedControl />`
+- Updated dependencies [2fad122]
+  - @status-im/colors@1.0.1
+  - @status-im/icons@1.0.1
+
+## 1.0.9
+
+### Patch Changes
+
+- 2c56ff2: adds segmented control to index file
+
+## 1.0.8
+
+### Patch Changes
+
+- b159258: fix `<DropdownMenu.Item />` onSelect prop
+- 4953fe7: adds segmented control component
+
+## 1.0.7
+
+### Patch Changes
+
+- e9979fd: updates icon color for missing compound variants
+- bf14368: add `type="account"` to `<ContextTag />`
+
+## 1.0.6
+
+### Patch Changes
+
+- 7f21132: fix `<Shortcut />`icon prop and symbol centering
+
+## 1.0.5
+
+### Patch Changes
+
+- 3ad28ea: chore: Remove flex-1 class from button component (#602)
+
 ## 1.0.4
 
 ### Patch Changes

@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 library 'status-jenkins-lib@v1.9.11'
 
+def changesDetected = false
+
 pipeline {
   agent { label 'linux' }
 
@@ -27,12 +29,26 @@ pipeline {
   }
 
   stages {
+    stage('Check Changed Files') {
+      when {
+          changeset pattern: "apps/connector/**", comparator: "GLOB"
+      }
+      steps {
+        script {
+            changesDetected = true
+        }
+      }
+    }
+
     stage('Install') {
+      when {
+          expression { changesDetected }
+      }
       steps {
           dir("${env.WORKSPACE}/apps/connector") {
             script {
               nix.shell(
-                'yarn install --frozen-lockfile',
+                'pnpm install --frozen-lockfile',
                 pure: false,
                 entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
               )
@@ -42,11 +58,14 @@ pipeline {
     }
 
     stage('Build') {
+      when {
+          expression { changesDetected }
+      }
       steps {
-          dir("${env.WORKSPACE}/apps/connector") {
+          dir("${env.WORKSPACE}") {
             script {
               nix.shell(
-                'yarn build:chrome',
+                'pnpm turbo run build --filter=connector',
                 pure: false,
                 entryPoint: "${env.WORKSPACE}/apps/connector/shell.nix"
               )
@@ -56,6 +75,9 @@ pipeline {
     }
 
     stage('Zip') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           zip(
@@ -68,6 +90,9 @@ pipeline {
     }
 
     stage('Archive') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           archiveArtifacts(
@@ -79,6 +104,9 @@ pipeline {
     }
 
     stage('Upload') {
+      when {
+          expression { changesDetected }
+      }
       steps {
         dir("${env.WORKSPACE}/apps/connector") {
           script {
@@ -90,8 +118,20 @@ pipeline {
   }
 
   post {
-    success { script { github.notifyPR(true) } }
-    failure { script { github.notifyPR(false) } }
+    success {
+      script {
+        if(changesDetected) {
+          github.notifyPR(true)
+        }
+      }
+    }
+    failure {
+      script {
+        if(changesDetected) {
+          github.notifyPR(false)
+        }
+      }
+    }
     cleanup { cleanWs() }
   }
 }

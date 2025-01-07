@@ -45,6 +45,7 @@ const ContextTagVariant = (props: Props) => {
           />
         }
       />
+      <ContextTag {...props} type="account" label="Account name" emoji="🐷" />
       <ContextTag
         {...props}
         type="icon"

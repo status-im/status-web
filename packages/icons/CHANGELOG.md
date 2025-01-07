@@ -1,5 +1,23 @@
 # @status-im/icons
 
+## 1.0.3
+
+### Patch Changes
+
+- 1942ffb: Sync icons
+
+## 1.0.2
+
+### Patch Changes
+
+- 3c71b8c: update ESLint
+
+## 1.0.1
+
+### Patch Changes
+
+- 2fad122: use pnpm and update node
+
 ## 1.0.0
 
 ### Major Changes

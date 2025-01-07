@@ -2,7 +2,7 @@ type Input<Value> = Record<string, Value>
 
 export function getObjectsDifference<Value>(
   oldObject: Input<Value>,
-  newObject: Input<Value>
+  newObject: Input<Value>,
 ) {
   const added: Record<string, Value> = {}
   const removed: string[] = []

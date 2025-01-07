@@ -17,7 +17,7 @@ export function publicKeyToColorHash(publicKey: string): ColorHash {
   const colorHash = hexToColorHash(
     colorHashHex,
     COLOR_HASH_COLORS_COUNT,
-    COLOR_HASH_SEGMENT_MAX_LENGTH
+    COLOR_HASH_SEGMENT_MAX_LENGTH,
   )
 
   return colorHash
@@ -26,11 +26,11 @@ export function publicKeyToColorHash(publicKey: string): ColorHash {
 export function hexToColorHash(
   hex: string,
   colorsCount: number,
-  segmentLength: number
+  segmentLength: number,
 ): ColorHash {
   const colorIndices = numberToIndices(
     BigInt(`0x${hex}`),
-    BigInt(colorsCount * segmentLength)
+    BigInt(colorsCount * segmentLength),
   )
   const colorHash = colorIndicesToColorHash(colorIndices, colorsCount)
 
@@ -57,7 +57,7 @@ export function numberToIndices(number: bigint, base: bigint): bigint[] {
 
 function colorIndicesToColorHash(
   colorIndices: bigint[],
-  colorsCount: number
+  colorsCount: number,
 ): ColorHash {
   const colorHash: ColorHash = []
   let previousColorIndex: number | undefined = undefined

@@ -1,6 +1,6 @@
 {
   "name": "@status-im/colors",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "license": "MPL-2.0",
   "files": [
     "types",
@@ -19,25 +19,29 @@
     },
     "./package.json": "./package.json"
   },
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "sync": "rimraf src && vite-node scripts/sync.ts",
     "dev": "vite build --watch --mode development",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "build": "vite build",
-    "postbuild": "yarn build:types",
+    "postbuild": "pnpm build:types",
     "#test": "vitest",
     "typecheck": "tsc",
     "lint": "eslint src",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "pnpm lint --fix",
     "format": "prettier --write src",
     "clean": "rimraf dist node_modules .turbo",
-    "prepack": "yarn build"
+    "prepack": "pnpm build"
   },
   "peerDependencies": {},
   "devDependencies": {
     "@clack/prompts": "^0.6.3",
     "colorjs.io": "^0.4.3",
-    "@status-im/eslint-config": "*",
+    "@status-im/eslint-config": "workspace:*",
     "figma-api": "^1.11.0",
     "fs-extra": "^11.1.1",
     "vite": "^5.4.3",

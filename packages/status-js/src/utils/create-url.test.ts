@@ -46,7 +46,7 @@ describe('Create URLs', () => {
     } as unknown as CommunityDescription
 
     expect(createCommunityURLWithChatKey(community.chatKey).toString()).toBe(
-      'https://status.app/c#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
+      'https://status.app/c#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11',
     )
     expect(
       (
@@ -58,11 +58,11 @@ describe('Create URLs', () => {
             membersCount: 446_744,
             tagIndices: [1, 33, 51],
           },
-          community.chatKey
+          community.chatKey,
         )
-      ).toString()
+      ).toString(),
     ).toBe(
-      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
+      'https://status.app/c/iyKACkQKB0Rvb2RsZXMSJ0NvbG9yaW5nIHRoZSB3b3JsZCB3aXRoIGpveSDigKIg4bSXIOKAohiYohsiByMxMzFEMkYqAwEhMwM=#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11',
     )
   })
 
@@ -95,9 +95,9 @@ describe('Create URLs', () => {
     } as unknown as CommunityChat
 
     expect(
-      createChannelURLWithChatKey(chat.uuid, community.chatKey).toString()
+      createChannelURLWithChatKey(chat.uuid, community.chatKey).toString(),
     ).toBe(
-      'https://status.app/cc/003cdcd5-e065-48f9-b166-b1a94ac75a11#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
+      'https://status.app/cc/003cdcd5-e065-48f9-b166-b1a94ac75a11#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11',
     )
     expect(
       (
@@ -112,11 +112,11 @@ describe('Create URLs', () => {
               displayName: community.description.identity!.displayName,
             },
           } as unknown as PlainMessage<ChannelProto>,
-          community.chatKey
+          community.chatKey,
         )
-      ).toString()
+      ).toString(),
     ).toBe(
-      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11'
+      'https://status.app/cc/G54AAKwObLdpiGjXnckYzRcOSq0QQAS_CURGfqVU42ceGHCObstUIknTTZDOKF3E8y2MSicncpO7fTskXnoACiPKeejvjtLTGWNxUhlT7fyQS7Jrr33UVHluxv_PLjV2ePGw5GQ33innzeK34pInIgUGs5RjdQifMVmURalxxQKwiuoY5zwIjixWWRHqjHM=#zQ3shYSHp7GoiXaauJMnDcjwU2yNjdzpXLosAWapPS4CFxc11',
     )
   })
 
@@ -134,10 +134,10 @@ describe('Create URLs', () => {
     } as unknown as ContactCodeAdvertisement
 
     expect(createUserURLWithENS(account.ensName).toString()).toBe(
-      'https://status.app/u#testing.stateofus.eth'
+      'https://status.app/u#testing.stateofus.eth',
     )
     expect(createUserURLWithChatKey(account.chatKey).toString()).toBe(
-      'https://status.app/u#zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj'
+      'https://status.app/u#zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj',
     )
     expect(
       (
@@ -147,11 +147,11 @@ describe('Create URLs', () => {
             displayName: account.description.chatIdentity!.displayName,
             color: account.description.chatIdentity!.color,
           },
-          account.chatKey
+          account.chatKey,
         )
-      ).toString()
+      ).toString(),
     ).toBe(
-      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj'
+      'https://status.app/u/G10A4B0JdgwyRww90WXtnP1oNH1ZLQNM0yX0Ja9YyAMjrqSZIYINOHCbFhrnKRAcPGStPxCMJDSZlGCKzmZrJcimHY8BbcXlORrElv_BbQEegnMDPx1g9C5VVNl0fE4y#zQ3shwQPhRuDJSjVGVBnTjCdgXy5i9WQaeVPdGJD6yTarJQSj',
     )
   })
 })

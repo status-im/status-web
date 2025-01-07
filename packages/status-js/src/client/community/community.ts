@@ -106,7 +106,7 @@ export class Community {
         if (this.description) {
           return true
         }
-      }
+      },
     )
 
     return this.description
@@ -120,12 +120,12 @@ export class Community {
           shard: 32,
         }),
       ],
-      this.client.handleWakuMessage
+      this.client.handleWakuMessage,
     )
   }
 
   private observeChatMessages = async (
-    chatDescriptions: CommunityDescription['chats']
+    chatDescriptions: CommunityDescription['chats'],
   ) => {
     const chatPromises = Object.entries(chatDescriptions).map(
       async ([chatUuid, chatDescription]: [string, CommunityChat]) => {
@@ -134,7 +134,7 @@ export class Community {
           this.client,
           chatUuid,
           MessageType.COMMUNITY_CHAT,
-          chatDescription
+          chatDescription,
         )
 
         this.chats.set(chatUuid, chat)
@@ -146,18 +146,18 @@ export class Community {
               shard: 32,
             }),
           ],
-          this.client.handleWakuMessage
+          this.client.handleWakuMessage,
         )
 
         this.#chatUnobserveFns.set(chat.contentTopic, unobserveFn)
-      }
+      },
     )
 
     await Promise.all(chatPromises)
   }
 
   private unobserveChatMessages = (
-    chatDescription: CommunityDescription['chats']
+    chatDescription: CommunityDescription['chats'],
   ) => {
     const contentTopics: string[] = []
 
@@ -179,7 +179,7 @@ export class Community {
     }
 
     contentTopics.forEach(contentTopic =>
-      this.#chatUnobserveFns.get(contentTopic)?.()
+      this.#chatUnobserveFns.get(contentTopic)?.(),
     )
   }
 
@@ -207,7 +207,7 @@ export class Community {
       // observe
       const removedChats = getDifferenceByKeys(
         this.description.chats,
-        description.chats
+        description.chats,
       )
       if (Object.keys(removedChats).length) {
         this.unobserveChatMessages(removedChats)
@@ -215,7 +215,7 @@ export class Community {
 
       const addedChats = getDifferenceByKeys(
         description.chats,
-        this.description.chats
+        this.description.chats,
       )
       if (Object.keys(addedChats).length) {
         this.observeChatMessages(addedChats)
@@ -232,7 +232,7 @@ export class Community {
 
       const members = getObjectsDifference(
         this.description.members,
-        description.members
+        description.members,
       )
 
       this.addMembers(members.added)
@@ -251,7 +251,7 @@ export class Community {
     // handle
     Object.entries(this.description.chats).forEach(
       ([chatUuid, chatDescription]) =>
-        this.chats.get(chatUuid)?.handleChange(chatDescription)
+        this.chats.get(chatUuid)?.handleChange(chatDescription),
     )
   }
 
@@ -275,13 +275,13 @@ export class Community {
       ApplicationMetadataMessage_Type.COMMUNITY_REQUEST_TO_JOIN,
       payload,
       this.contentTopic,
-      this.symmetricKey
+      this.symmetricKey,
     )
   }
 
   public isOwner = (
     /** Uncompressed. */
-    signerPublicKey: string
+    signerPublicKey: string,
   ): boolean => {
     return this.publicKey === `0x${compressPublicKey(signerPublicKey)}`
   }
