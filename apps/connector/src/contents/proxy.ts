@@ -39,16 +39,12 @@ const handleMessage = async (event: MessageEvent) => {
   }
 
   try {
-    console.log('request::', message.data)
-
     const response = await desktopClient.send({
       ...message.data,
       name: window.location.hostname,
       url: window.origin,
       iconUrl: getFaviconUrl() ?? '',
     })
-
-    console.log('response::', response)
 
     event.ports[0].postMessage({
       type: 'status:proxy:success',

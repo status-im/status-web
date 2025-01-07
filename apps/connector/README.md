@@ -6,7 +6,7 @@ Status Desktop Wallet extended to decentralized applications in your browser.
 
 Depends on:
 
-- Status Desktop https://github.com/status-im/status-desktop/tree/release/2.30.x
+- **[Status Desktop](https://github.com/status-im/status-desktop/releases)** >=2.32.x
 
 Tested with these browsers:
 
@@ -86,6 +86,18 @@ https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox#w_what-are-my-opt
 Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Tools for all add-ons) > Install Add-on From File... > select build (build/firefox-mv3-prod.zip)
 
 > Note: Does not reload automatically, requires build and load on change.
+
+### Status Desktop
+
+#### Run
+
+##### macOS
+
+```bash
+FLAG_CONNECTOR_ENABLED=1 '/Volumes/Status Desktop/Status.app/Contents/MacOS/nim_status_client'
+```
+
+> Tip: Point to the installer package location without dropping and replacing current app.
 
 ## Testing
 
