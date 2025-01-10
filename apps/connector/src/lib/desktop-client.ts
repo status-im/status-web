@@ -2,6 +2,8 @@ import { WebSocketProvider } from 'ethers'
 
 import { config } from '~config'
 
+import { logger } from './logger'
+
 import type { RequestArguments } from '~lib/request-arguments'
 import type { WebSocketLike } from 'ethers'
 
@@ -19,6 +21,7 @@ export class DesktopClient {
       return
     }
 
+    logger.info('stop::')
     this.#rpcClient?.destroy()
     this.#rpcClient = null
 
@@ -27,6 +30,7 @@ export class DesktopClient {
 
   public async send(args: DesktopRequestArguments) {
     if (!this.#rpcClient) {
+      logger.info('start::')
       this.#rpcClient = new WebSocketProvider(
         config.desktop.rpc.url,
         'mainnet',
@@ -40,6 +44,11 @@ export class DesktopClient {
     }
 
     await waitUntilOpen(this.#rpcClient.websocket)
+
+    logger.info('client::', {
+      method: config.desktop.rpc.method,
+      params: [JSON.stringify(args)],
+    })
 
     return await this.#rpcClient.send(config.desktop.rpc.method, [
       JSON.stringify(args),
@@ -70,6 +79,10 @@ async function waitUntilOpen(websocket: WebSocketLike) {
     const timeout = setTimeout(() => {
       reject(new Error('Timed out to connect to the RPC server'))
     }, 30 * 1000)
+
+    if (websocket.readyState === WebSocket.CONNECTING) {
+      logger.warn('Waiting for the RPC server to connect')
+    }
 
     const onopen = websocket.onopen?.bind(websocket)
     websocket.onopen = event => {

@@ -46,3 +46,11 @@ chrome.action.onClicked.addListener(async tab => {
     type: 'status:icon:clicked',
   } satisfies ServiceWorkerMessage)
 })
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.method === 'toggleLogging') {
+    storage.set('status:logging', message.params[0])
+
+    sendResponse(message.params[0])
+  }
+})

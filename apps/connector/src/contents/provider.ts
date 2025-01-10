@@ -1,3 +1,4 @@
+import { logger } from '~lib/logger'
 import { ProviderRpcError } from '~lib/provider-rpc-error'
 import { RequestArguments } from '~lib/request-arguments'
 import { ProxyMessage } from '~messages/proxy-message'
@@ -96,11 +97,15 @@ export class Provider {
                 this.#listeners.get('connect')?.({ chainId: '0x1' })
                 this.#listeners.get('connected')?.({ chainId: '0x1' })
                 this.connected = true
+
+                logger.info('connected::')
               }
 
               if (method === 'wallet_switchEthereumChain') {
                 this.#listeners.get('chainChanged')?.(message.data)
                 this.#listeners.get('networkChanged')?.(message.data)
+
+                logger.info('chainChanged::')
               }
 
               resolve(message.data)
@@ -108,6 +113,8 @@ export class Provider {
               return
             }
             case 'status:proxy:error': {
+              logger.error(message.error)
+
               // note: for those dApps that make call after having permissions revoked
               if (
                 message.error.message === 'dApp is not permitted by user' &&
@@ -148,15 +155,21 @@ export class Provider {
   }
 
   public on(event: Event, handler: (args: unknown) => void): void {
+    logger.info('on::', event, handler)
+
     this.#listeners.set(event, handler)
   }
 
   /** @deprecated */
-  public async close(): Promise<void> {
+  public async close(...args: unknown[]): Promise<void> {
+    logger.info('close::', args)
+
     this.disconnect()
   }
 
-  public removeListener(event: Event): void {
+  public removeListener(event: Event, handler: (args: unknown) => void): void {
+    logger.info('removeListener::', event, handler)
+
     // note: not all dapps remove these on disconnect
     if (event === 'close' || event === 'disconnect') {
       this.disconnect()
@@ -166,6 +179,8 @@ export class Provider {
   }
 
   public async enable() {
+    logger.info('enable::')
+
     return true
   }
 
@@ -175,6 +190,8 @@ export class Provider {
     }
 
     this.connected = false
+
+    logger.info('disconnect::')
 
     await this.request({
       method: 'wallet_revokePermissions',

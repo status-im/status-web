@@ -1,4 +1,6 @@
 import { getFaviconUrl } from '~lib/get-favicon-url'
+import { logger } from '~lib/logger'
+import { MainMessage } from '~messages/main-message'
 import { ProviderMessage } from '~messages/provider-message'
 
 import { DesktopClient } from '../lib/desktop-client'
@@ -13,7 +15,7 @@ export const config: PlasmoCSConfig = {
 
 const desktopClient = new DesktopClient()
 
-const handleMessage = async (event: MessageEvent) => {
+const handleProviderMessage = async (event: MessageEvent) => {
   if (event.origin !== window.origin) {
     return
   }
@@ -39,12 +41,16 @@ const handleMessage = async (event: MessageEvent) => {
   }
 
   try {
+    logger.info('request::', message.data)
+
     const response = await desktopClient.send({
       ...message.data,
       name: window.location.hostname,
       url: window.origin,
       iconUrl: getFaviconUrl() ?? '',
     })
+
+    logger.info('response::', response)
 
     event.ports[0].postMessage({
       type: 'status:proxy:success',
@@ -71,12 +77,10 @@ const handleMessage = async (event: MessageEvent) => {
       }
     }
 
-    const proxyMessage: ProxyMessage = {
+    event.ports[0].postMessage({
       type: 'status:proxy:error',
       error: proxyError,
-    }
-
-    event.ports[0].postMessage(proxyMessage)
+    } satisfies ProxyMessage)
   }
 }
 
@@ -108,4 +112,43 @@ function isRpcError(
   )
 }
 
-window.addEventListener('message', handleMessage)
+window.addEventListener('message', handleProviderMessage)
+
+const handleMainMessage = async (event: MessageEvent) => {
+  if (event.origin !== window.origin) {
+    return
+  }
+
+  let message: MainMessage
+  try {
+    message = MainMessage.parse(event.data)
+  } catch {
+    return
+  }
+
+  if (message.type !== 'status:main') {
+    return
+  }
+
+  try {
+    const response = await chrome.runtime.sendMessage(
+      chrome.runtime.id,
+      message.data,
+    )
+
+    event.ports[0].postMessage({
+      type: 'status:proxy:success',
+      data: response,
+    } satisfies ProxyMessage)
+  } catch (error) {
+    event.ports[0].postMessage({
+      type: 'status:proxy:error',
+      error: {
+        code: -32603,
+        message: isError(error) ? error.message : 'Internal error',
+      },
+    } satisfies ProxyMessage)
+  }
+}
+
+window.addEventListener('message', handleMainMessage)

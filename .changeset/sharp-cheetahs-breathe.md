@@ -1,0 +1,5 @@
+---
+'connector': patch
+---
+
+add logger
