@@ -337,7 +337,11 @@ function injectProvider() {
 if (window.localStorage.getItem('status:default-wallet') !== 'false') {
   // redefinedProvider = window.ethereum
 
-  injectProvider()
+  try {
+    injectProvider()
+  } catch (error) {
+    logger.error(error)
+  }
 
   // note: remove listener if UI wouldn't window.location.reload()
   window.addEventListener('eip6963:requestProvider', () => {
