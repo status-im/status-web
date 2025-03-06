@@ -63,7 +63,7 @@ export class Provider {
     this.#listeners = new Map()
   }
 
-  public async request(args: RequestArguments) {
+  public request = async (args: RequestArguments): Promise<unknown> => {
     try {
       args = RequestArguments.parse(args)
     } catch {
@@ -147,27 +147,30 @@ export class Provider {
   }
 
   /** @deprecated */
-  public async send(...args: unknown[]): Promise<unknown> {
+  public send = async (...args: unknown[]): Promise<unknown> => {
     return await this.request({
       method: args[0] as string,
       params: args[1] as Record<string, unknown>,
     })
   }
 
-  public on(event: Event, handler: (args: unknown) => void): void {
+  public on = (event: Event, handler: (args: unknown) => void): void => {
     logger.info('on::', event, handler)
 
     this.#listeners.set(event, handler)
   }
 
   /** @deprecated */
-  public async close(...args: unknown[]): Promise<void> {
+  public close = async (...args: unknown[]): Promise<void> => {
     logger.info('close::', args)
 
     this.disconnect()
   }
 
-  public removeListener(event: Event, handler: (args: unknown) => void): void {
+  public removeListener = (
+    event: Event,
+    handler: (args: unknown) => void,
+  ): void => {
     logger.info('removeListener::', event, handler)
 
     // note: not all dapps remove these on disconnect
@@ -178,13 +181,13 @@ export class Provider {
     this.#listeners.delete(event)
   }
 
-  public async enable() {
+  public enable = async (): Promise<boolean> => {
     logger.info('enable::')
 
     return true
   }
 
-  private async disconnect() {
+  private disconnect = async (): Promise<void> => {
     if (!this.connected) {
       return
     }
