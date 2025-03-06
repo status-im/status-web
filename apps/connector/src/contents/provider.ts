@@ -220,7 +220,7 @@ export class Provider {
 const provider = new Provider()
 
 /**
- * @see https://eips.ethereum.org/EIPS/eip-6963 for spec
+ * @see https://eips.ethereum.org/EIPS/eip-6963 for standard
  */
 function announceProvider() {
   const asStatus = {
@@ -237,11 +237,13 @@ function announceProvider() {
   )
 }
 
+/**
+ * non-standard
+ */
 function announceAsDefaultProvider() {
   const asDefault = {
-    // uuid: 'e0c0d0a0-b0c0-40d0-90e0-f0a0b0c0d0e0',
     uuid: '00000000-0000-0000-0000-000000000000', // nil
-    name: 'Default',
+    name: 'Default Browser Wallet',
     // icon: null,
     icon: asStatusIcon,
     // rdns: null,
