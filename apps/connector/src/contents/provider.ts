@@ -324,8 +324,6 @@ function injectProvider() {
 
   Object.seal(provider)
 
-  logger.info('provider::', window.ethereum)
-
   Object.defineProperties(window, {
     ethereum: {
       get() {
