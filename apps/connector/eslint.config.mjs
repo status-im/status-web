@@ -5,6 +5,11 @@ export default [
   ...configs,
   ...tailwindcssConfigs,
   {
+    rules: {
+      'no-console': 'error',
+    },
+  },
+  {
     files: ['**/*.ts', '**/*.tsx'],
     rules: {
       'no-constant-binary-expression': 'error',

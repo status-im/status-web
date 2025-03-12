@@ -102,3 +102,11 @@ FLAG_CONNECTOR_ENABLED=1 '/Volumes/Status Desktop/Status.app/Contents/MacOS/nim_
 ## Testing
 
 Download latest build from last merged PR or build from source. To use the extension see the load steps from [Development](#development) section.
+
+### Logging
+
+Browser > Console
+
+```
+await connector.enableLogging(true)
+```
