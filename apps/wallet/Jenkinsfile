@@ -1,0 +1,137 @@
+#!/usr/bin/env groovy
+library 'status-jenkins-lib@v1.9.11'
+
+def changesDetected = false
+
+pipeline {
+  agent { label 'linux' }
+
+  options {
+    timestamps()
+    /* Prevent Jenkins jobs from running forever */
+    timeout(time: 10, unit: 'MINUTES')
+    /* manage how many builds we keep */
+    buildDiscarder(logRotator(
+      numToKeepStr: '20',
+      daysToKeepStr: '30',
+    ))
+    disableConcurrentBuilds()
+  }
+
+  environment {
+    PLATFORM = 'chrome'
+    ZIP_NAME = utils.pkgFilename(
+      type: 'Extension',
+      version: 'none',
+      arch: 'chrome',
+      ext: 'zip',
+    )
+  }
+
+  stages {
+    stage('Check Changed Files') {
+      when {
+          changeset pattern: "apps/wallet/**", comparator: "GLOB"
+      }
+      steps {
+        script {
+            changesDetected = true
+        }
+      }
+    }
+
+    stage('Install') {
+      when {
+          expression { changesDetected }
+      }
+      steps {
+          dir("${env.WORKSPACE}/apps/wallet") {
+            script {
+              nix.shell(
+                'pnpm install --frozen-lockfile',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/wallet/shell.nix"
+              )
+            }
+          }
+      }
+    }
+
+    stage('Build') {
+      when {
+          expression { changesDetected }
+      }
+      steps {
+          dir("${env.WORKSPACE}") {
+            script {
+              nix.shell(
+                'pnpm turbo run build --filter=wallet',
+                pure: false,
+                entryPoint: "${env.WORKSPACE}/apps/wallet/shell.nix"
+              )
+            }
+          }
+      }
+    }
+
+    stage('Zip') {
+      when {
+          expression { changesDetected }
+      }
+      steps {
+        dir("${env.WORKSPACE}/apps/wallet") {
+          zip(
+            zipFile: env.ZIP_NAME,
+            dir: '.output/chrome-mv3',
+            archive: false,
+          )
+        }
+      }
+    }
+
+    stage('Archive') {
+      when {
+          expression { changesDetected }
+      }
+      steps {
+        dir("${env.WORKSPACE}/apps/wallet") {
+          archiveArtifacts(
+            artifacts: env.ZIP_NAME,
+            fingerprint: true,
+          )
+        }
+      }
+    }
+
+    stage('Upload') {
+      when {
+          expression { changesDetected }
+      }
+      steps {
+        dir("${env.WORKSPACE}/apps/wallet") {
+          script {
+            env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
+          }
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      script {
+        if(changesDetected) {
+          github.notifyPR(true)
+        }
+      }
+    }
+    failure {
+      script {
+        if(changesDetected) {
+          github.notifyPR(false)
+        }
+      }
+    }
+    cleanup { cleanWs() }
+  }
+}
