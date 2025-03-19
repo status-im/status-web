@@ -18,7 +18,6 @@
     "build:firefox": "plasmo build --target=firefox-mv3 --zip",
     "lint": "eslint src",
     "format": "prettier --write .",
-    "package": "plasmo package",
     "clean": "rimraf apps build .plasmo node_modules"
   },
   "dependencies": {
@@ -65,7 +64,8 @@
       "matches": []
     },
     "host_permissions": [
-      "https://*/*"
+      "https://*/*",
+      "*://localhost:*/*"
     ],
     "permissions": [
       "storage"
