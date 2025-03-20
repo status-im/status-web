@@ -2,4 +2,4 @@
 'connector': patch
 ---
 
-config for localhost
+config for localhost dapps
