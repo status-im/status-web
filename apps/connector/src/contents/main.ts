@@ -4,7 +4,7 @@ import type { RequestArguments } from '~lib/request-arguments'
 import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {
-  matches: ['https://*/*'],
+  matches: ['https://*/*', '*://localhost:*/*'],
   world: 'MAIN',
   run_at: 'document_start',
   all_frames: false,
