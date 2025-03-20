@@ -10,6 +10,7 @@ import type { EthersError } from 'ethers'
 import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {
+  matches: ['https://*/*', '*://localhost:*/*'],
   run_at: 'document_start',
 }
 
