@@ -1,5 +1,14 @@
 # connector
 
+## 0.0.3
+
+### Patch Changes
+
+- 67066de: bind `Provider` methods
+- 67066de: add logger
+- 67066de: extend default wallet setting
+- c2d4183: config for localhost dapps
+
 ## 0.0.2
 
 ### Patch Changes
