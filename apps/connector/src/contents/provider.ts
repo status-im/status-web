@@ -9,7 +9,6 @@ import type { ProviderMessage } from '~messages/provider-message'
 import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {
-  matches: ['https://*/*', '*://localhost:*/*'],
   world: 'MAIN',
   run_at: 'document_start',
   all_frames: false,

@@ -1,6 +1,6 @@
 {
   "name": "connector",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MPL-2.0",
   "private": true,
   "repository": {
@@ -65,7 +65,8 @@
     },
     "host_permissions": [
       "https://*/*",
-      "*://localhost:*/*"
+      "http://localhost/*",
+      "https://localhost/*"
     ],
     "permissions": [
       "storage"
