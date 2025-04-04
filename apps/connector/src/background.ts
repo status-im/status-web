@@ -54,3 +54,11 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse(message.params[0])
   }
 })
+
+chrome.runtime.onInstalled.addListener(details => {
+  if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    chrome.runtime.setUninstallURL(
+      'https://docs.google.com/forms/d/e/1FAIpQLSd4HM0Yvu5tu6NAP-xUYAcyvLnHA8sfrZvGeg8yKAgVEBPxgg/viewform',
+    )
+  }
+})
