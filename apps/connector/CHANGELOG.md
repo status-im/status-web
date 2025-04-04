@@ -1,5 +1,11 @@
 # connector
 
+## 0.0.4
+
+### Patch Changes
+
+- e9ba45a: Gather feedback from survey when uninstalling connector extension
+
 ## 0.0.3
 
 ### Patch Changes
