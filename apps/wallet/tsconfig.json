@@ -1,0 +1,17 @@
+{
+  "extends": ["./.wxt/tsconfig.json"],
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    // "paths": {
+    //   "@portfolio/*": ["../portfolio/src/*"],
+    //   // "@/*": ["../portfolio/src/*"],
+    // },
+    // "types": ["vite/client"],
+  },
+  "include": ["./**/*", "./.wxt/wxt.d.ts", "global.d.ts", "env.d.ts"],
+  "exclude": ["node_modules", ".output"],
+}

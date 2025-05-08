@@ -1,0 +1,30 @@
+diff --git a/dist/unstable-core-do-not-import/procedureBuilder.mjs b/dist/unstable-core-do-not-import/procedureBuilder.mjs
+index dee2251696459f1e9abe8a05873a47e06dba0a1c..88ddde4d095b57461cf65f85c9ccceafff1ea2b5 100644
+--- a/dist/unstable-core-do-not-import/procedureBuilder.mjs
++++ b/dist/unstable-core-do-not-import/procedureBuilder.mjs
+@@ -162,9 +162,24 @@ async function callRecursive(index, _def, opts) {
+         });
+         return result;
+     } catch (cause) {
++        const error = getTRPCErrorFromUnknown(cause)
++
++        // todo?:
++        // opts.onError?.({
++        //     ctx,
++        //     error,
++        //     input: rawInput,
++        //     path: '',
++        //     type: proc._def.type,
++        //   });
++
++        if (error.code === 'INTERNAL_SERVER_ERROR') {
++            throw error.cause;
++        }
++
+         return {
+             ok: false,
+-            error: getTRPCErrorFromUnknown(cause),
++            error,
+             marker: middlewareMarker
+         };
+     }

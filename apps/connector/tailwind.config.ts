@@ -2,6 +2,7 @@ import * as colors from '@status-im/colors'
 import { scrollbarWidth } from 'tailwind-scrollbar-utilities'
 import { fontFamily } from 'tailwindcss/defaultTheme'
 import plugin from 'tailwindcss/plugin'
+import animatePlugin from 'tailwindcss-animate'
 
 import type { Config } from 'tailwindcss'
 
@@ -273,7 +274,7 @@ export default {
     },
   },
   plugins: [
-    require('tailwindcss-animate'),
+    animatePlugin,
     // add scrollbar utilities before lands in tailwindcss
     // @see https://github.com/tailwindlabs/tailwindcss/pull/5732
     scrollbarWidth(),
