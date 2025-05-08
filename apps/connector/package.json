@@ -10,6 +10,7 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "dev": "pnpm dev:chrome",
     "dev:chrome": "plasmo dev --target=chrome-mv3",
     "dev:safari": "plasmo dev --target=safari-mv3",
     "dev:firefox": "plasmo dev --target=firefox-mv3",
@@ -18,7 +19,7 @@
     "build:firefox": "plasmo build --target=firefox-mv3 --zip",
     "lint": "eslint src",
     "format": "prettier --write .",
-    "clean": "rimraf apps build .plasmo node_modules"
+    "clean": "rimraf apps build .plasmo node_modules .turbo"
   },
   "dependencies": {
     "@plasmohq/messaging": "^0.6.2",

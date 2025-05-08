@@ -60,6 +60,41 @@
       "smartStep": true,
       "console": "integratedTerminal",
       "sourceMaps": true
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3030",
+      "skipFiles": [
+        ".next/**",
+        "${workspaceFolder}/node_modules/**",
+        "<node_internals>/**",
+        "**/webpack-internal://**"
+      ]
+      // "runtimeArgs": ["--auto-open-devtools-for-tabs"]
+      // "cascadeTerminateToConfigurations": ["Next.js: debug full stack"]
+    },
+    // todo: consider compound config https://code.visualstudio.com/docs/editor/debugging#_compound-launch-configurations
+    // todo: consider client+prelaunch
+    {
+      "name": "Next.js: debug full stack",
+      // note: config https://github.com/microsoft/vscode-js-debug/blob/e620efe1841742402a332b532df2aa2ec95361f6/OPTIONS.md
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "NODE_OPTIONS='' PORT=3030 pnpm dev",
+      "serverReadyAction": {
+        "pattern": "\\s- Local:\\s+(https?://\\S+)",
+        "action": "startDebugging",
+        "name": "Next.js: debug client-side",
+        "killOnServerStop": true
+      },
+      // "cascadeTerminateToConfigurations": ["Next.js: debug client-side"],
+      "skipFiles": [
+        ".next/**",
+        "${workspaceFolder}/node_modules/**",
+        "<node_internals>/**"
+      ]
     }
   ]
 }
