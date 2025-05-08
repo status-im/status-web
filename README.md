@@ -2,16 +2,17 @@
 
 [![CI](https://github.com/status-im/status-web/actions/workflows/ci.yml/badge.svg)](https://github.com/status-im/status-web/actions/workflows/ci.yml)
 
-This monorepo contains packages for building web applications in the Status ecosystem. These packages can be used separately or combined to create consistent and beautiful user interfaces.
+Packages for building user interfaces, websites, web applications, dapps, browser extensions, and APIs in the Status ecosystem.
 
 ## Packages
 
 | Name                                                   | `npm`                                                                                                                               | Description                                                                                                                                                                   |
 | ------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@status-im/components`](./packages/components)       | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components)           | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
-| [`@status-im/js`](./packages/status-js)                | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                           | Library for Waku protocol integration and blockchain interactions.                                                                                                             |
-| [`@status-im/icons`](./packages/icons)                 | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)                     | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
 | [`@status-im/colors`](./packages/colors)               | [![npm version](https://img.shields.io/npm/v/@status-im/colors.svg)](https://www.npmjs.com/package/@status-im/colors)               | Auto-generated color palette based on our [design system](https://www.figma.com/design/v98g9ZiaSHYUdKWrbFg9eM/Foundations?node-id=619-5995&node-type=canvas&m=dev).           |
+| [`@status-im/icons`](./packages/icons)                 | [![npm version](https://img.shields.io/npm/v/@status-im/icons)](https://www.npmjs.com/package/@status-im/icons)                     | Auto-generated icon library based on our [design system](https://www.figma.com/design/qLLuMLfpGxK9OfpIavwsmK/Iconset?node-id=3239-987&node-type=frame&t=0h8iIiZ3Sf0g4MRV-11). |
+| [`@status-im/components`](./packages/components)       | [![npm version](https://img.shields.io/npm/v/@status-im/components)](https://www.npmjs.com/package/@status-im/components)           | Component library built with Radix UI, React Aria, Tailwind CSS.                                                                                                              |
+| [`@status-im/js`](./packages/status-js)                | [![npm version](https://img.shields.io/npm/v/@status-im/js)](https://www.npmjs.com/package/@status-im/js)                           |                                                                                                                                                                               |
+| [`@status-im/wallet`](./packages/wallet)               |                                                                                                                                     |                                                                                                                                                                               |
 | [`@status-im/eslint-config`](./packages/eslint-config) | [![npm version](https://img.shields.io/npm/v/@status-im/eslint-config.svg)](https://www.npmjs.com/package/@status-im/eslint-config) | Shared ESLint configuration for consistent code style across projects.                                                                                                        |
 
 ## Apps
@@ -19,6 +20,9 @@ This monorepo contains packages for building web applications in the Status ecos
 | Name                                   | Description                                                                   |
 | -------------------------------------- | ----------------------------------------------------------------------------- |
 | [`./apps/connector`](./apps/connector) | Status Desktop Wallet extended to decentralised applications in your browser. |
+| [`./apps/portfolio`](./apps/portfolio) |                                                                               |
+| [`./apps/wallet`](./apps/wallet)       |                                                                               |
+| [`./apps/api`](./apps/api)             |                                                                               |
 
 ## Prerequisites
 
