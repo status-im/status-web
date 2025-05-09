@@ -3,7 +3,7 @@ import { match } from 'ts-pattern'
 
 import { Image } from '../image'
 
-import type { NetworkType } from '@status-im/wallet/data'
+import type { NetworkType } from '../../data'
 
 type Props = {
   name: NetworkType
