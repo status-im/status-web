@@ -48,8 +48,8 @@
   "exclude": ["node_modules", ".next"],
   // @see https://github.com/nrwl/nx/issues/3106#issuecomment-703154400
   "references": [
-    {
-      "path": "../../packages/wallet"
-    }
+    // {
+    //   "path": "../../packages/wallet"
+    // }
   ]
 }

@@ -10,7 +10,7 @@
     "lint": "next lint --dir=src --ext=.ts --ext=.tsx",
     "lint:fix": "pnpm lint --fix",
     "format": "prettier --write .",
-    "types:check": "tsc",
+    "typecheck": "tsc",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && node -r dotenv/config ./src/config/env.client.mjs dotenv_config_path=./.env && :",
     "clean": "rimraf .next .vercel/output node_modules .turbo"
   },

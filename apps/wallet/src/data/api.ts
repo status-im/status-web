@@ -1,8 +1,9 @@
 // import { Cardano } from '@cardano-sdk/core'
 // import { SodiumBip32Ed25519 } from '@cardano-sdk/crypto'
 // import { AddressType, InMemoryKeyAgent } from '@cardano-sdk/key-management'
-import { createTRPCProxyClient } from '@trpc/client'
+import { createTRPCClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
+// import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
 import { chromeLink } from 'trpc-chrome/link'
 import { z } from 'zod'
@@ -34,6 +35,7 @@ type Context = Awaited<ReturnType<typeof createContext>>
 const t = initTRPC.context<Context>().create({
   isServer: false,
   allowOutsideOfServer: true,
+  // transformer: superjson,
 })
 
 // const publicProcedure = t.procedure
@@ -582,7 +584,7 @@ export async function createAPI() {
 export function createAPIClient() {
   const port = chrome.runtime.connect()
 
-  return createTRPCProxyClient<APIRouter>({
+  return createTRPCClient<APIRouter>({
     links: [chromeLink({ port })],
   })
 }

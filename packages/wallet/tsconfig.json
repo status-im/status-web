@@ -8,7 +8,7 @@
     "**/*.json"
   ],
   "compilerOptions": {
-    "composite": true,
+    // "composite": true,
     "jsx": "preserve",
     "outDir": "./dist",
     "incremental": true,

@@ -10,7 +10,7 @@ import { PercentageChange } from '../percentage-change'
 import * as Table from '../table'
 import { TokenAmount } from '../token-amount'
 
-import type { ApiOutput } from '@status-im/wallet/data'
+import type { ApiOutput } from '../../data'
 
 type Props = {
   assets: ApiOutput['assets']['all']['assets']

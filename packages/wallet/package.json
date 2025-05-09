@@ -40,6 +40,7 @@
     "postbuild": "pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
+    "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && :",
     "lint": "eslint src",
     "format": "prettier --write .",
     "sync:cloudinary": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/image/types.ts'",
@@ -107,6 +108,9 @@
     "access": "public"
   },
   "lint-staged": {
+    "{.env,src/config/env.server.mjs}": [
+      "pnpm env:check"
+    ],
     "*.{ts,tsx,js,jsx,mjs}": [
       "eslint",
       "prettier --write"

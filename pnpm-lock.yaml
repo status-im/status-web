@@ -922,6 +922,9 @@ importers:
       react-hook-form:
         specifier: ^7.54.2
         version: 7.56.3(react@19.1.0)
+      superjson:
+        specifier: ^2.2.1
+        version: 2.2.2
       trpc-chrome:
         specifier: ^1.0.0
         version: 1.0.0(@trpc/client@11.1.0(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.8.3))(typescript@5.8.3))(@trpc/server@11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.8.3))
