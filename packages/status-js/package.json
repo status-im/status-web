@@ -16,12 +16,19 @@
       "browser": null,
       "import": "./dist/encode-url-data.js"
     },
+    "./create-url": {
+      "types": "./dist/types/utils/create-url.d.ts",
+      "import": "./dist/create-url.js"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
       "encode-url-data": [
         "./dist/types/utils/encode-url-data.d.ts"
+      ],
+      "create-url": [
+        "./dist/types/utils/create-url.d.ts"
       ]
     }
   },
