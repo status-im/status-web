@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 1.1.0
+
+### Minor Changes
+
+- 48e47cf: export functions for creating urls
+
 ## 1.0.2
 
 ### Patch Changes
