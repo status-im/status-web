@@ -1,6 +1,6 @@
 {
   "name": "@status-im/js",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "license": "MPL-2.0",
   "type": "module",
   "main": "./dist/index.js",
