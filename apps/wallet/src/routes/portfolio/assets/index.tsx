@@ -99,7 +99,7 @@ function RouteComponent() {
 
   return (
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-      <div className="px-3 py-2 xl:block">
+      <div className="hidden px-3 py-2 xl:block">
         {/* {nav} */}
         nav
       </div>

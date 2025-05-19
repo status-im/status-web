@@ -73,7 +73,7 @@ const AssetsList = (props: Props) => {
   }, [assets, searchParamValue, orderByColumn, ascending])
 
   return (
-    <>
+    <div className="pb-10">
       <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:block">
         {filteredAssets.length !== 0 && (
           <Table.Root>
@@ -183,7 +183,7 @@ const AssetsList = (props: Props) => {
                     src={asset.icon}
                   />
                   <div className="flex min-w-0 flex-col items-start text-left">
-                    <span className="w-full truncate text-15 font-600">
+                    <span className="w-full max-w-40 truncate text-15 font-600 sm:max-w-full">
                       {asset.name}
                     </span>
                     <span className="flex text-13 font-400 text-neutral-50">
@@ -215,7 +215,7 @@ const AssetsList = (props: Props) => {
           })}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
