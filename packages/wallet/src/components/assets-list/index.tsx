@@ -74,7 +74,7 @@ const AssetsList = (props: Props) => {
 
   return (
     <>
-      <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto xl:block">
+      <div className="hidden min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:block">
         {filteredAssets.length !== 0 && (
           <Table.Root>
             <Table.Header>
@@ -158,7 +158,7 @@ const AssetsList = (props: Props) => {
           </div>
         )}
       </div>
-      <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto xl:hidden">
+      <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:hidden">
         <div className="w-full">
           {filteredAssets.map(asset => {
             const href = `${pathname?.replace(

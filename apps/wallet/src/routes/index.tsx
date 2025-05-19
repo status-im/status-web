@@ -4,6 +4,12 @@ import { apiClient } from '../providers/api-client'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
+  loader: () => {
+    redirect({
+      to: '/portfolio/assets',
+      throw: true,
+    })
+  },
   head: () => ({
     meta: [
       {
