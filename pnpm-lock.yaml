@@ -315,9 +315,6 @@ importers:
       '@status-im/icons':
         specifier: workspace:*
         version: link:../../packages/icons
-      '@status-im/js':
-        specifier: workspace:*
-        version: link:../../packages/status-js
       '@status-im/wallet':
         specifier: workspace:*
         version: link:../../packages/wallet
