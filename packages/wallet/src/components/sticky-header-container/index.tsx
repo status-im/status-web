@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { cva, cx } from 'class-variance-authority'
 
 const backgroundStyles = cva(
-  'sticky top-0 z-40 flex flex-col justify-start gap-1 overflow-hidden border-b px-12 py-4 transition-all duration-200 ease-in-out',
+  'pointer-events-none sticky top-0 z-30 flex flex-col justify-start gap-1 overflow-hidden border-b px-12 py-4 transition-all duration-200 ease-in-out',
   {
     variants: {
       collapsed: {
@@ -102,7 +102,7 @@ const StickyHeaderContainer = (props: Props) => {
   return (
     <div
       ref={containerRef}
-      className="relative h-[calc(100vh-100px)] overflow-auto scrollbar-stable"
+      className="relative h-[calc(100vh-56px)] overflow-auto scrollbar-stable"
     >
       <div
         className={cx(
