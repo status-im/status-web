@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { cva, cx } from 'class-variance-authority'
 
 const backgroundStyles = cva(
-  'sticky top-0 z-30 flex flex-col justify-start gap-1 overflow-hidden border-b px-12 py-4 transition-all duration-200 ease-in-out',
+  'sticky top-0 z-40 flex flex-col justify-start gap-1 overflow-hidden border-b px-12 py-4 transition-all duration-200 ease-in-out',
   {
     variants: {
       collapsed: {
@@ -36,7 +36,7 @@ const leftSlotStyles = cva('transition-opacity duration-100 ease-in-out', {
   },
 })
 
-const secondaryleftSlotStyles = cva('transition-all duration-100 ease-in-out', {
+const secondaryLeftSlotStyles = cva('transition-all duration-100 ease-in-out', {
   variants: {
     showSecondaryLeftSlot: {
       false: 'pointer-events-none max-h-0 translate-y-full opacity-[0]',
@@ -70,60 +70,54 @@ const StickyHeaderContainer = (props: Props) => {
 
   const hasSecondaryLeftSlot = Boolean(secondaryLeftSlot)
 
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const [collapsed, setCollapsed] = useState(false)
   const [showRightSlot, setShowRightSlot] = useState(false)
   const [showSecondaryLeftSlot, setShowSecondaryLeftSlot] = useState(false)
 
   useEffect(() => {
-    const scrollContainer = scrollContainerRef.current
-    const threshold = SMALL_THRESHOLD
-    const rightSlotThreshold = !showSecondaryLeftSlot
-      ? threshold
-      : LARGE_THRESHOLD
-
-    if (!scrollContainer) return
+    const container = containerRef.current
+    if (!container) return
 
     const handleScroll = () => {
-      const scrollPosition = Math.round(scrollContainer.scrollTop)
+      const scrollTop = container.scrollTop
 
-      setCollapsed(scrollPosition > threshold)
-      setShowRightSlot(scrollPosition > rightSlotThreshold)
+      const threshold = SMALL_THRESHOLD
+      const rightThreshold = hasSecondaryLeftSlot ? LARGE_THRESHOLD : threshold
 
+      setCollapsed(scrollTop > threshold)
+      setShowRightSlot(scrollTop > rightThreshold)
       setShowSecondaryLeftSlot(
-        hasSecondaryLeftSlot && scrollPosition >= LARGE_THRESHOLD,
+        hasSecondaryLeftSlot && scrollTop >= LARGE_THRESHOLD,
       )
     }
 
-    scrollContainer.addEventListener('scroll', handleScroll, {
-      passive: true,
-    })
+    container.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
 
-    return () => {
-      scrollContainer.removeEventListener('scroll', handleScroll)
-    }
-  }, [hasSecondaryLeftSlot, scrollContainerRef, showSecondaryLeftSlot])
+    return () => container.removeEventListener('scroll', handleScroll)
+  }, [hasSecondaryLeftSlot])
 
   return (
     <div
-      ref={scrollContainerRef}
-      className="flex flex-1 flex-col overflow-auto scrollbar-stable"
+      ref={containerRef}
+      className="relative h-[calc(100vh-100px)] overflow-auto scrollbar-stable"
     >
       <div
-        className={cx([
+        className={cx(
           backgroundStyles({
             collapsed,
             size: showSecondaryLeftSlot ? 'large' : 'default',
           }),
           className,
-        ])}
+        )}
       >
         <div className="flex items-center justify-between">
           <div className={leftSlotStyles({ collapsed })}>{leftSlot}</div>
           <div className={rightSlotStyles({ showRightSlot })}>{rightSlot}</div>
         </div>
-        <div className={secondaryleftSlotStyles({ showSecondaryLeftSlot })}>
+        <div className={secondaryLeftSlotStyles({ showSecondaryLeftSlot })}>
           {secondaryLeftSlot}
         </div>
       </div>
