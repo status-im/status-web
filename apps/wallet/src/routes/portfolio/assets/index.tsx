@@ -2,12 +2,8 @@
 
 import { Suspense } from 'react'
 
-import { Skeleton } from '@status-im/components'
-import {
-  Address,
-  AssetsList,
-  StickyHeaderContainer,
-} from '@status-im/wallet/components'
+import { Avatar, Skeleton } from '@status-im/components'
+import { AssetsList, StickyHeaderContainer } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -99,9 +95,9 @@ function RouteComponent() {
   }
 
   const account: Account = {
-    name: 'Account Name',
-    emoji: '👤',
-    color: 'blue',
+    name: 'Peachy Wallet',
+    emoji: '🍑',
+    color: 'magenta',
     address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
   }
 
@@ -132,14 +128,13 @@ function RouteComponent() {
       {/* Main content */}
       <div className="flex divide-x divide-default-neutral-20">
         <div className="flex grow flex-col 2xl:basis-1/2">
-          <div className="relative h-[calc(100vh-100px)] overflow-auto">
+          <div className="relative h-[calc(100vh-56px)] overflow-auto">
             {isLoading ? (
               <div className="flex min-h-full items-center justify-center">
                 <div className="size-5 animate-spin rounded-full border-b-2 border-neutral-50"></div>
               </div>
             ) : (
               <StickyHeaderContainer
-                className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
                 leftSlot={
                   <Suspense
                     fallback={
@@ -159,7 +154,21 @@ function RouteComponent() {
                       </div>
                     }
                   >
-                    <div className="font-medium">{data.summary}</div>
+                    <div
+                      className="flex items-center gap-1.5"
+                      data-customisation={account.color}
+                    >
+                      <Avatar
+                        type="account"
+                        name={account.name}
+                        emoji={account.emoji}
+                        size="24"
+                        bgOpacity="20"
+                      />
+                      <div className="text-15 font-semibold text-neutral-100">
+                        {account.name}
+                      </div>
+                    </div>
                   </Suspense>
                 }
                 rightSlot={
@@ -195,54 +204,27 @@ function RouteComponent() {
                   </Suspense>
                 }
               >
-                <div className="relative flex flex-1 flex-col">
-                  <div className="flex flex-col gap-2">
-                    <Address variant="address-info" account={account} />
-                    <div className="mb-6">
-                      <div className="flex items-start gap-2">
-                        <Suspense
-                          fallback={
-                            <div className="mt-[10px] flex flex-col gap-3">
-                              <Skeleton
-                                height={20}
-                                width={160}
-                                className="rounded-10"
-                                variant="secondary"
-                              />
-                              <div className="flex items-center gap-1">
-                                <Skeleton
-                                  height={14}
-                                  width={14}
-                                  className="rounded-10"
-                                  variant="secondary"
-                                />
-                                <Skeleton
-                                  height={14}
-                                  width={36}
-                                  className="rounded-10"
-                                  variant="secondary"
-                                />
-                                <Skeleton
-                                  height={2}
-                                  width={2}
-                                  className="rounded-10"
-                                  variant="secondary"
-                                />
-                                <Skeleton
-                                  height={14}
-                                  width={60}
-                                  className="rounded-10"
-                                  variant="secondary"
-                                />
-                              </div>
-                            </div>
-                          }
-                        >
-                          <div className="pt-1">{data.totalBalance}</div>
-                        </Suspense>
-                        <div className="pt-2">{/* <NetworksFilter /> */}</div>
+                <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
+                  <div className="mb-5 flex flex-col gap-2">
+                    <div
+                      className="flex items-center gap-1.5"
+                      data-customisation={account.color}
+                    >
+                      <Avatar
+                        type="account"
+                        name={account.name}
+                        emoji={account.emoji}
+                        size="24"
+                        bgOpacity="20"
+                      />
+                      <div className="text-15 font-semibold text-neutral-100">
+                        {account.name}
                       </div>
                     </div>
+                    <div className="mb-4 text-27 font-600">
+                      {data.totalBalance}
+                    </div>
+
                     <ActionButtons {...actionsButtonsData} />
                   </div>
 

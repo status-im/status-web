@@ -1,25 +1,25 @@
 'use client'
 
-import { Input } from '@status-im/components'
-import { SearchIcon } from '@status-im/icons/20'
+// import { Input } from '@status-im/components'
+// import { SearchIcon } from '@status-im/icons/20'
 import { DropdownSort } from '@status-im/wallet/components'
-import { match, P } from 'ts-pattern'
 
+// import { match, P } from 'ts-pattern'
 import { TabLink } from './tab-link'
 
-const checkPathnameAndReturnTabValue = (
-  pathname: string,
-): 'assets' | 'collectibles' => {
-  return match(pathname)
-    .with(P.string.includes('/assets'), () => 'assets')
-    .with(P.string.includes('/collectibles'), () => 'collectibles')
-    .otherwise(() => 'assets') as 'assets' | 'collectibles'
-}
+// const checkPathnameAndReturnTabValue = (
+//   pathname: string,
+// ): 'assets' | 'collectibles' => {
+//   return match(pathname)
+//     .with(P.string.includes('/assets'), () => 'assets')
+//     .with(P.string.includes('/collectibles'), () => 'collectibles')
+//     .otherwise(() => 'assets') as 'assets' | 'collectibles'
+// }
 
-const placeholderText = {
-  assets: 'Search asset name or symbol',
-  collectibles: 'Search collection or collectible name',
-} as const
+// const placeholderText = {
+//   assets: 'Search asset name or symbol',
+//   collectibles: 'Search collection or collectible name',
+// } as const
 
 type Props = {
   address: string
@@ -35,9 +35,10 @@ type Props = {
 }
 
 const ActionButtons = (props: Props) => {
-  const { address, pathname, searchAndSortValues } = props
+  //   const { address, pathname, searchAndSortValues } = props
+  const { address, searchAndSortValues } = props
 
-  const placeholder = placeholderText[checkPathnameAndReturnTabValue(pathname)]
+  //   const placeholder = placeholderText[checkPathnameAndReturnTabValue(pathname)]
 
   return (
     <div className="flex place-content-between">
@@ -46,7 +47,7 @@ const ActionButtons = (props: Props) => {
         <TabLink href={`/${address}/collectibles`}>Collectibles</TabLink>
       </div>
       <div className="flex items-center gap-2">
-        <Input
+        {/* <Input
           placeholder={placeholder}
           icon={<SearchIcon />}
           size="32"
@@ -54,7 +55,7 @@ const ActionButtons = (props: Props) => {
           onChange={searchAndSortValues.updateSearchParam}
           clearable={!!searchAndSortValues.inputValue}
           aria-label="Search"
-        />
+        /> */}
         <DropdownSort
           data={searchAndSortValues.sortOptions}
           onOrderByChange={searchAndSortValues.onOrderByChange}
