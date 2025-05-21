@@ -10,6 +10,7 @@ export {
 } from './create-password-form'
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
+export { DropdownSort } from './dropdown-sort'
 export { Image, type ImageProps } from './image'
 export { Logo, type LogoProps } from './logo'
 export { Navbar } from './nav-bar'

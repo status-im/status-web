@@ -53,6 +53,7 @@
     "react-hook-form": "^7.54.2",
     "superjson": "^2.2.1",
     "trpc-chrome": "^1.0.0",
+    "ts-pattern": "^5.7.1",
     "vite-plugin-node-polyfills": "^0.23.0",
     "zod": "^3.23.8"
   },

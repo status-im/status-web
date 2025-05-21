@@ -12,6 +12,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
 
+import { ActionButtons } from '@/components/action-buttons'
 import { TabLink } from '@/components/tab-link'
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
@@ -125,6 +126,25 @@ function RouteComponent() {
     emoji: '👤',
     color: 'blue',
     address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+  }
+
+  const actionsButtonsData = {
+    address: 'portfolio', // This should be the address of the account coming from the URL. Wrote to have active state
+    pathname: '/portfolio/assets',
+    searchAndSortValues: {
+      inputValue: '',
+      updateSearchParam: () => {},
+      orderByColumn: 'name',
+      ascending: true,
+      onOrderByChange: () => {},
+      sortOptions: {
+        name: 'Name',
+        balance: 'Balance',
+        '24h': '24H%',
+        value: 'Value',
+        price: 'Price',
+      },
+    },
   }
 
   return (
@@ -246,7 +266,7 @@ function RouteComponent() {
                         <div className="pt-2">{/* <NetworksFilter /> */}</div>
                       </div>
                     </div>
-                    {/* <ActionButtons /> */}
+                    <ActionButtons {...actionsButtonsData} />
                   </div>
 
                   {assets ? (
@@ -260,18 +280,7 @@ function RouteComponent() {
                       pathname="/portfolio/"
                     />
                   ) : (
-                    <div className="mt-4 flex flex-col gap-3">
-                      {Array(30)
-                        .fill(0)
-                        .map((_, i) => (
-                          <div
-                            key={i}
-                            className="rounded h-16 bg-neutral-10 p-4"
-                          >
-                            Test item {i + 1}
-                          </div>
-                        ))}
-                    </div>
+                    <div className="mt-4 flex flex-col gap-3">Empty state</div>
                   )}
                 </div>
               </StickyHeaderContainer>
