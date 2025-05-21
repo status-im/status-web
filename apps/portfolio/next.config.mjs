@@ -143,7 +143,6 @@ let config = {
     '@status-im/icons',
     '@status-im/components',
     '@status-im/colors',
-    '@status-im/js',
     '@status-im/wallet',
     // why: https://github.com/hashicorp/next-mdx-remote/issues/467#issuecomment-2432166413
     'next-mdx-remote',
