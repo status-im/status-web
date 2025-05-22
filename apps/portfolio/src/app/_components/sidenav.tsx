@@ -2,6 +2,7 @@
 
 import { Avatar } from '@status-im/components'
 import { InsightsIcon } from '@status-im/icons/20'
+import { CurrencyAmount } from '@status-im/wallet/components'
 import { cva, cx } from 'class-variance-authority'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -9,7 +10,6 @@ import { usePathname } from 'next/navigation'
 import { Tooltip } from '../_components/tooltip'
 import { useMediaQuery } from '../_hooks/use-media-query'
 import { AddAddress } from './add-address'
-import { CurrencyAmount } from './currency-amount'
 import { FeatureEnabled } from './feature-enabled'
 
 import type { CustomisationColorType } from '@status-im/components'

@@ -3,6 +3,7 @@ export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
+export { Balance } from './balance'
 export { CollectiblesGrid } from './collectibles-grid'
 export {
   CreatePasswordForm,

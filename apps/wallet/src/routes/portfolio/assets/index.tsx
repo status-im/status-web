@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { Avatar, Skeleton } from '@status-im/components'
 import {
   AssetsList,
+  Balance,
   PinExtension,
   StickyHeaderContainer,
 } from '@status-im/wallet/components'
@@ -14,9 +15,8 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 import { ActionButtons } from '@/components/action-buttons'
 import { TabLink } from '@/components/tab-link'
 import { usePinExtension } from '@/hooks/use-pin-extension'
-
-import { apiClient } from '../../providers/api-client'
-import { useWallet } from '../../providers/wallet-context'
+import { apiClient } from '@/providers/api-client'
+import { useWallet } from '@/providers/wallet-context'
 
 import type { CustomisationColorType } from '@status-im/wallet/components'
 
@@ -56,6 +56,12 @@ function RouteComponent() {
     // Handle the selection of an asset
     console.log('Selected asset URL:', url)
     console.log('Scroll option:', options?.scroll)
+  }
+
+  const [showHiddenSummary, setShowHiddenSummary] = useState(false)
+
+  const handleShowHiddenSummary = () => {
+    setShowHiddenSummary(!showHiddenSummary)
   }
 
   // todo: export trpc client with api router and used instead
@@ -115,9 +121,19 @@ function RouteComponent() {
     return <div>No wallet selected</div>
   }
 
-  const data = {
-    summary: 'Summary',
-    totalBalance: '€203.00',
+  const summary = {
+    hidden: {
+      total_balance: 0,
+      total_eur: 0,
+      total_eur_24h_change: 0.0,
+      total_percentage_24h_change: 0.0,
+    },
+    visible: {
+      total_balance: 203.0,
+      total_eur: 203.0,
+      total_eur_24h_change: 10.0,
+      total_percentage_24h_change: 2.4,
+    },
   }
 
   const account: Account = {
@@ -161,6 +177,8 @@ function RouteComponent() {
               </div>
             ) : (
               <StickyHeaderContainer
+                isLarge
+                className="px-6 xl:px-12"
                 leftSlot={
                   <Suspense
                     fallback={
@@ -181,7 +199,7 @@ function RouteComponent() {
                     }
                   >
                     <div
-                      className="flex items-center gap-1.5"
+                      className="hidden items-center gap-1.5 xl:flex"
                       data-customisation={account.color}
                     >
                       <Avatar
@@ -195,45 +213,32 @@ function RouteComponent() {
                         {account.name}
                       </div>
                     </div>
+                    <Balance
+                      summary={
+                        showHiddenSummary ? summary.visible : summary.hidden
+                      }
+                      onShowHiddenSummary={handleShowHiddenSummary}
+                    />
                   </Suspense>
                 }
                 rightSlot={
-                  <div className="flex items-center gap-2">
-                    <TabLink href="/portfolio/assets">Assets</TabLink>
+                  <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+                    <TabLink
+                      href="/portfolio/assets"
+                      className="w-full justify-center text-center sm:w-fit"
+                    >
+                      Assets
+                    </TabLink>
                     <TabLink href="/portfolio/collectibles">
                       Collectibles
                     </TabLink>
                   </div>
                 }
-                secondaryLeftSlot={
-                  <Suspense
-                    fallback={
-                      <div className="flex items-center gap-2">
-                        <Skeleton
-                          height={20}
-                          width={20}
-                          className="rounded-10"
-                          variant="secondary"
-                        />
-                        <Skeleton
-                          height={20}
-                          width={160}
-                          className="rounded-10"
-                          variant="secondary"
-                        />
-                      </div>
-                    }
-                  >
-                    <div className="text-19 font-medium">
-                      {data.totalBalance}
-                    </div>
-                  </Suspense>
-                }
               >
                 <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
-                  <div className="mb-5 flex flex-col gap-2">
+                  <div className="mb-5 flex flex-col gap-2 px-3">
                     <div
-                      className="flex items-center gap-1.5"
+                      className="hidden items-center gap-1.5 xl:flex"
                       data-customisation={account.color}
                     >
                       <Avatar
@@ -247,8 +252,14 @@ function RouteComponent() {
                         {account.name}
                       </div>
                     </div>
-                    <div className="mb-4 text-27 font-600">
-                      {data.totalBalance}
+
+                    <div className="mb-4">
+                      <Balance
+                        summary={
+                          showHiddenSummary ? summary.visible : summary.hidden
+                        }
+                        onShowHiddenSummary={handleShowHiddenSummary}
+                      />
                     </div>
 
                     <ActionButtons {...actionsButtonsData} />
