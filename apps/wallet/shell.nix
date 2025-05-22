@@ -7,7 +7,7 @@
 }:
 
 pkgs.mkShell {
-  name = "connector-shell";
+  name = "wallet-shell";
 
   buildInputs = with pkgs; [
     nodejs_20
