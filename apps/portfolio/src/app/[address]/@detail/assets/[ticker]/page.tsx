@@ -2,17 +2,19 @@ import { Suspense } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
 import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
-import { StickyHeaderContainer } from '@status-im/wallet/components'
+import {
+  Balance,
+  CurrencyAmount,
+  StickyHeaderContainer,
+} from '@status-im/wallet/components'
 import { cx } from 'class-variance-authority'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { api } from '../../../../..//data/api'
-import { Balance } from '../../../../_components/balance'
 import { BuyCryptoDrawer } from '../../../../_components/buy-crypto-drawer'
 import { portfolioComponents } from '../../../../_components/content'
-import { CurrencyAmount } from '../../../../_components/currency-amount'
 import { ReceiveCryptoDrawer } from '../../../../_components/receive-crypto-drawer'
 import { TokenAmount } from '../../../../_components/token-amount'
 import { Chart } from '../_components/chart'

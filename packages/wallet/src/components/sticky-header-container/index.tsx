@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { cva, cx } from 'class-variance-authority'
 
 const backgroundStyles = cva(
-  'pointer-events-none sticky top-0 z-30 flex flex-col justify-start gap-1 overflow-hidden border-b px-12 py-4 transition-all duration-200 ease-in-out',
+  'sticky top-0 z-30 flex flex-col justify-start gap-1 overflow-hidden border-b px-12 py-4 transition-all duration-200 ease-in-out',
   {
     variants: {
       collapsed: {
@@ -57,6 +57,7 @@ const rightSlotStyles = cva('transition-all', {
 type Props = {
   leftSlot: React.ReactNode
   secondaryLeftSlot?: React.ReactNode
+  isLarge?: boolean
   rightSlot: React.ReactNode
   children: React.ReactNode
   className?: string
@@ -66,7 +67,14 @@ const SMALL_THRESHOLD = 42
 const LARGE_THRESHOLD = 132
 
 const StickyHeaderContainer = (props: Props) => {
-  const { leftSlot, rightSlot, secondaryLeftSlot, className, children } = props
+  const {
+    leftSlot,
+    rightSlot,
+    secondaryLeftSlot,
+    className,
+    children,
+    isLarge,
+  } = props
 
   const hasSecondaryLeftSlot = Boolean(secondaryLeftSlot)
 
@@ -108,7 +116,11 @@ const StickyHeaderContainer = (props: Props) => {
         className={cx(
           backgroundStyles({
             collapsed,
-            size: showSecondaryLeftSlot ? 'large' : 'default',
+            size: isLarge
+              ? 'large'
+              : showSecondaryLeftSlot
+                ? 'large'
+                : 'default',
           }),
           className,
         )}
