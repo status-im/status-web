@@ -1,36 +1,23 @@
 import { AssetsList } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
 
 export const Route = createFileRoute('/portfolio/assets/')({
-  component: RouteComponent,
-  beforeLoad: async () => {
-    const wallets = await apiClient.wallet.all.query()
-    if (!wallets || wallets.length === 0) {
-      throw redirect({ to: '/onboarding' })
-    }
-  },
-  head: () => ({
-    meta: [
-      {
-        title: 'Extension | Wallet | Portfolio',
-      },
-    ],
-  }),
+  component: Component,
 })
 
-function RouteComponent() {
-  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+function Component() {
+  const router = useRouter()
 
-  const handleSelect = (url: string, options?: { scroll?: boolean }) => {
-    // Handle the selection of an asset
-    console.log('Selected asset URL:', url)
-    console.log('Scroll option:', options?.scroll)
-  }
+  // const handleSelect = (url: string, options?: { scroll?: boolean }) => {
+  //   // Handle the selection of an asset
+  //   console.log('Selected asset URL:', url)
+  //   console.log('Scroll option:', options?.scroll)
+  // }
 
   // todo: export trpc client with api router and used instead
   // todo: cache
@@ -46,7 +33,6 @@ function RouteComponent() {
       )
       url.searchParams.set(
         'input',
-        // encodeURIComponent(
         JSON.stringify({
           json: {
             address: currentWallet.activeAccounts[0].address,
@@ -60,7 +46,6 @@ function RouteComponent() {
             ],
           },
         }),
-        // ),
       )
 
       const response = await fetch(url, {
@@ -91,12 +76,19 @@ function RouteComponent() {
         assets ? (
           <AssetsList
             assets={assets}
-            onSelect={handleSelect}
+            onSelect={url => {
+              const ticker = url.split('/').pop()
+              if (!ticker) return
+              router.navigate({
+                to: '/portfolio/assets/$ticker',
+                params: { ticker },
+              })
+            }}
             clearSearch={() => {
               console.log('Search cleared')
             }}
             searchParams={new URLSearchParams()}
-            pathname="/portfolio/"
+            pathname="/portfolio/assets"
           />
         ) : (
           <div className="mt-4 flex flex-col gap-3">Empty state</div>
