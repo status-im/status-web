@@ -2,7 +2,7 @@ import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/componen
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute, Link as LinkBase } from '@tanstack/react-router'
 
-import { TabLink } from '@/components/tab-link'
+import SplittedLayout from '@/components/splitted-layout'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -153,49 +153,27 @@ function RouteComponent() {
   }, [data?.pages])
 
   return (
-    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-      <div className="hidden px-3 py-2 xl:block">
-        {/* {nav} */}
-        nav
-      </div>
-
-      <div className="flex divide-x divide-default-neutral-20">
-        {/* {list} */}
-        <div className="flex grow flex-col 2xl:basis-1/2">
-          <div className="sticky top-0 z-20 flex gap-3 px-3 py-2">
-            <TabLink href="/portfolio/assets">Assets</TabLink>
-            <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
-          </div>
-          <div className="h-[calc(100vh-100px)] overflow-auto px-3">
-            {isLoading ? (
-              <div className="flex min-h-full items-center justify-center">
-                <div className="size-5 animate-spin rounded-full border-b-2 border-neutral-50"></div>
-              </div>
-            ) : (
-              <CollectiblesList
-                LinkComponent={Link}
-                address={address}
-                collectibles={collectibles}
-                fetchNextPage={fetchNextPage}
-                isFetchingNextPage={isFetchingNextPage}
-                pathname={pathname}
-                search={search}
-                searchParams={searchParams}
-                clearSearch={() => {
-                  // Clear the search input
-                  console.log('Search cleared')
-                }}
-                hasNextPage={hasNextPage}
-                onSelect={handleSelect}
-              />
-            )}
-          </div>
-        </div>
-
-        <div className="hidden basis-1/2 flex-col bg-neutral-10 2xl:flex">
-          {/* {detail} */}
-        </div>
-      </div>
-    </div>
+    <SplittedLayout
+      list={
+        <CollectiblesList
+          LinkComponent={Link}
+          address={address}
+          collectibles={collectibles}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          pathname={pathname}
+          search={search}
+          searchParams={searchParams}
+          clearSearch={() => {
+            // Clear the search input
+            console.log('Search cleared')
+          }}
+          hasNextPage={hasNextPage}
+          onSelect={handleSelect}
+        />
+      }
+      detail={<>Detail</>}
+      isLoading={isLoading}
+    />
   )
 }
