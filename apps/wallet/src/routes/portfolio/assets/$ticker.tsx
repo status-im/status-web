@@ -17,53 +17,43 @@ function Component() {
   const router = useRouter()
   const { data: assets, isLoading } = useAssets()
 
-  const [isDesktop, setIsDesktop] = useState(false)
-
-  useEffect(() => {
-    const check = () => setIsDesktop(window.innerWidth >= 1280)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  if (!isDesktop) {
-    return (
-      <Suspense fallback={<p>Loading...</p>}>
-        <Token ticker={ticker} />
-      </Suspense>
-    )
-  }
-
   return (
-    <SplittedLayout
-      list={
-        assets ? (
-          <AssetsList
-            assets={assets}
-            onSelect={url => {
-              const ticker = url.split('/').pop()
-              if (!ticker) return
-              router.navigate({
-                to: '/portfolio/assets/$ticker',
-                params: { ticker },
-              })
-            }}
-            clearSearch={() => {
-              console.log('Search cleared')
-            }}
-            searchParams={new URLSearchParams()}
-            pathname="/portfolio/assets"
-          />
-        ) : (
-          <div className="mt-4 flex flex-col gap-3">Empty state</div>
-        )
-      }
-      detail={
-        <Suspense fallback={<p>Loading token...</p>}>
-          <Token ticker={ticker} />
-        </Suspense>
-      }
-      isLoading={isLoading}
-    />
+    <>
+      <div className="hidden 2xl:block">
+        <SplittedLayout
+          list={
+            assets ? (
+              <AssetsList
+                assets={assets}
+                onSelect={url => {
+                  const ticker = url.split('/').pop()
+                  if (!ticker) return
+                  router.navigate({
+                    to: '/portfolio/assets/$ticker',
+                    params: { ticker },
+                  })
+                }}
+                clearSearch={() => {
+                  console.log('Search cleared')
+                }}
+                searchParams={new URLSearchParams()}
+                pathname="/portfolio/assets"
+              />
+            ) : (
+              <div className="mt-4 flex flex-col gap-3">Empty state</div>
+            )
+          }
+          detail={
+            <Suspense fallback={<p>Loading token...</p>}>
+              <Token ticker={ticker} />
+            </Suspense>
+          }
+          isLoading={isLoading}
+        />
+      </div>
+      <div className="block 2xl:hidden">
+        <Token ticker={ticker} />
+      </div>
+    </>
   )
 }
