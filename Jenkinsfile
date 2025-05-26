@@ -87,7 +87,7 @@ pipeline {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           zip(
             zipFile: env.ZIP_NAME,
-            dir: 'build/chrome-mv3-prod',
+            dir: getBuildDir(params.APP_NAME),
             archive: false,
           )
         }
@@ -141,4 +141,15 @@ def choiceFromJobName(String previousChoice, List defaultChoices) {
     }
   }
   return defaultChoices
+}
+
+def getBuildDir(String appName) {
+  switch(appName) {
+    case 'connector':
+      return 'build/chrome-mv3-prod'
+    case 'wallet':
+      return '.output/chrome-mv3'
+    default:
+      error("Unknown app: ${appName}.")
+  }
 }
