@@ -27,7 +27,6 @@ function Component() {
   }, [])
 
   if (!isDesktop) {
-    // ✅ Mobile: render just the detail
     return (
       <Suspense fallback={<p>Loading...</p>}>
         <Token ticker={ticker} />
