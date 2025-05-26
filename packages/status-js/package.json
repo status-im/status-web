@@ -45,7 +45,7 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "test": "vitest",
+    "test": "vitest run",
     "dev": "vite build --watch --mode development",
     "build": "vite build",
     "postbuild": "pnpm build:types",
