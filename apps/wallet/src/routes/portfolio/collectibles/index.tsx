@@ -1,6 +1,10 @@
 import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { createFileRoute, Link as LinkBase } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  Link as LinkBase,
+  useRouter,
+} from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 
@@ -33,15 +37,28 @@ type LinkProps = {
 
 const Link = (props: LinkProps) => {
   const { href, className, children } = props
+  const router = useRouter()
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    console.log('URL recebido:', href)
+    const [network, contract, id] = href.split('/').slice(-3)
+    console.log('Parâmetros extraídos:', { network, contract, id })
+    router.navigate({
+      to: '/portfolio/collectibles/$network/$contract/$id',
+      params: { network, contract, id },
+    })
+  }
+
   return (
-    <LinkBase to={href} className={className}>
+    <LinkBase to={href} className={className} onClick={handleClick}>
       {children}
     </LinkBase>
   )
 }
 
 export const Route = createFileRoute('/portfolio/collectibles/')({
-  component: RouteComponent,
+  component: Component,
   head: () => ({
     meta: [
       {
@@ -91,15 +108,9 @@ const getCollectibles = async (
   return body.result.data.json.collectibles
 }
 
-function RouteComponent() {
-  const handleSelect = (url: string, options?: { scroll?: boolean }) => {
-    // Handle the selection of an asset
-    console.log('Selected asset URL:', url)
-    console.log('Scroll option:', options?.scroll)
-  }
+function Component() {
+  const router = useRouter()
 
-  // todo: export trpc client with api router and used instead
-  // todo: cache
   const searchParams = new URLSearchParams(window.location.search)
   const search = searchParams.get('search') ?? undefined
   const sortParam = searchParams.get('sort')
@@ -169,7 +180,13 @@ function RouteComponent() {
             console.log('Search cleared')
           }}
           hasNextPage={hasNextPage}
-          onSelect={handleSelect}
+          onSelect={url => {
+            const [network, contract, id] = url.split('/').slice(-3)
+            router.navigate({
+              to: '/portfolio/collectibles/$network/$contract/$id',
+              params: { network, contract, id },
+            })
+          }}
         />
       }
       detail={<>Detail</>}
