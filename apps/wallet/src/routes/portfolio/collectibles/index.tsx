@@ -35,6 +35,8 @@ type LinkProps = {
   children: React.ReactNode
 }
 
+const PAGE_LIMIT = 20
+
 const Link = (props: LinkProps) => {
   const { href, className, children } = props
   const router = useRouter()
@@ -76,6 +78,7 @@ const getCollectibles = async (
     column: 'name' | 'collection'
     direction: 'asc' | 'desc'
   },
+  offset = 0,
 ) => {
   const url = new URL('http://localhost:3030/api/trpc/collectibles.page')
 
@@ -85,8 +88,8 @@ const getCollectibles = async (
       json: {
         address,
         networks,
-        limit: 20,
-        offset: 0,
+        limit: PAGE_LIMIT,
+        offset,
         search,
         sort,
       },
@@ -139,11 +142,13 @@ function Component() {
     useInfiniteQuery({
       queryKey: ['collectibles', address, networks, search, sort],
       queryFn: async ({ pageParam = 0 }) => {
+        const offset = pageParam * PAGE_LIMIT
         const collectibles = await getCollectibles(
           address,
           networks as NetworkType[],
           search,
           sort,
+          offset,
         )
         return {
           collectibles,
