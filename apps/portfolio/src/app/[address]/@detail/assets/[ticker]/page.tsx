@@ -5,7 +5,9 @@ import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
+  NetworkBreakdown,
   StickyHeaderContainer,
+  TokenLogo,
 } from '@status-im/wallet/components'
 import { cx } from 'class-variance-authority'
 import { notFound } from 'next/navigation'
@@ -19,8 +21,6 @@ import { ReceiveCryptoDrawer } from '../../../../_components/receive-crypto-draw
 import { TokenAmount } from '../../../../_components/token-amount'
 import { Chart } from '../_components/chart'
 import { Loading } from '../_components/chart/loading'
-import { NetworkBreakdown } from './_components/network-breakdown'
-import { TokenLogo } from './_components/token-logo'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 

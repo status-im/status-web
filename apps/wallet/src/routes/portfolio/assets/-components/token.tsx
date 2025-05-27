@@ -3,31 +3,15 @@ import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
+  NetworkBreakdown,
   StickyHeaderContainer,
+  TokenAmount,
+  TokenLogo,
 } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
 
-import type { NetworkType } from '@status-im/wallet/data'
-
-type TokenResponse = {
-  summary: {
-    name: string
-    symbol: string
-    icon: string
-  }
-  assets: Record<
-    NetworkType,
-    {
-      metadata: {
-        market_cap: number
-        fully_dilluted: number
-        circulation: number
-        total_supply: number
-      }
-    }
-  >
-}
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   ticker: string
@@ -35,10 +19,16 @@ type Props = {
 
 const Token = (props: Props) => {
   const { ticker } = props
-  const { data: token, isLoading } = useQuery<TokenResponse>({
+
+  const token = useQuery<
+    ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
+  >({
     queryKey: ['token', ticker],
     queryFn: async () => {
-      const url = new URL('http://localhost:3030/api/trpc/assets.token')
+      const endpoint = ticker.startsWith('0x')
+        ? 'assets.token'
+        : 'assets.nativeToken'
+      const url = new URL(`http://localhost:3030/api/trpc/${endpoint}`)
       url.searchParams.set(
         'input',
         JSON.stringify({
@@ -78,52 +68,26 @@ const Token = (props: Props) => {
     refetchOnReconnect: false,
   })
 
-  if (isLoading || !token) {
+  const { data: typedToken, isLoading } = token
+
+  if (isLoading || !typedToken) {
     return <p>Loading</p>
   }
 
-  const typedToken = token as {
-    summary: {
-      name: string
-      symbol: string
-      icon: string
-      total_balance: number
-      total_eur: number
-      total_eur_24h_change: number
-      total_percentage_24h_change: number
-    }
-    assets: Record<
-      NetworkType,
-      {
-        balance: number
-        eur: number
-        eur_24h_change: number
-        percentage_24h_change: number
-        metadata: {
-          market_cap: number
-          fully_dilluted: number
-          circulation: number
-          total_supply: number
-        }
-      }
-    >
-  }
-
   const metadata = Object.values(typedToken.assets)[0].metadata
-  //   const uppercasedTicker = typedToken.summary.symbol
-  //   const icon = typedToken.summary.icon
+  const uppercasedTicker = typedToken.summary.symbol
+  const icon = typedToken.summary.icon
 
   return (
     <StickyHeaderContainer
       className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
       leftSlot={
-        // <TokenLogo
-        //   variant="small"
-        //   name={typedToken.summary.name}
-        //   ticker={uppercasedTicker}
-        //   icon={icon}
-        // />
-        <p>Token logo</p>
+        <TokenLogo
+          variant="small"
+          name={typedToken.summary.name}
+          ticker={uppercasedTicker}
+          icon={icon}
+        />
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
@@ -132,6 +96,7 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </span>
           </Button>
+
           <Button size="32" iconBefore={<ReceiveBlurIcon />}>
             Receive
           </Button>
@@ -140,20 +105,20 @@ const Token = (props: Props) => {
     >
       <div className="-mt-8 grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
-          {/* <TokenLogo
-              name={typedToken.summary.name}
-              ticker={uppercasedTicker}
-              icon={icon}
-            /> */}
-          <p>Token Logo</p>
+          <TokenLogo
+            name={typedToken.summary.name}
+            ticker={uppercasedTicker}
+            icon={icon}
+          />
           <div className="my-6 2xl:mt-0">
             <Balance variant="token" summary={typedToken.summary} />
           </div>
 
           <div className="flex items-center gap-1">
-            <Button size="32" iconBefore={<BuyIcon />}>
+            <Button size="32" iconBefore={<BuyIcon />} variant="primary">
               Buy {typedToken.summary.name}
             </Button>
+
             <Button
               size="32"
               variant="outline"
@@ -165,9 +130,25 @@ const Token = (props: Props) => {
         </div>
 
         {typedToken.summary.total_balance > 0 && (
-          //   <NetworkBreakdown token={typedToken} />
-          <p>Network breakdown</p>
+          <NetworkBreakdown token={typedToken} />
         )}
+
+        {/* <ErrorBoundary fallback={<div>Error loading chart</div>}>
+          <Suspense
+            key={keyHash}
+            fallback={
+              <div className="mt-8">
+                <Loading />
+              </div>
+            }
+          >
+            <AssetChart
+              address={address}
+              slug={slug}
+              symbol={token.summary.symbol}
+            />
+          </Suspense>
+        </ErrorBoundary> */}
 
         <div>
           <div className="grid grid-cols-2 2xl:grid-cols-4">
@@ -205,32 +186,66 @@ const Token = (props: Props) => {
               {
                 label: 'Circulation',
                 value: (
-                  <CurrencyAmount
-                    value={metadata.circulation}
-                    format="compact"
-                  />
+                  <TokenAmount value={metadata.circulation} format="compact" />
                 ),
                 tooltip: (
-                  <CurrencyAmount
-                    value={metadata.circulation}
-                    format="standard"
-                  />
+                  <TokenAmount value={metadata.circulation} format="standard" />
                 ),
               },
               {
                 label: 'Total supply',
                 value: (
-                  <CurrencyAmount
-                    value={metadata.total_supply}
-                    format="compact"
-                  />
+                  <TokenAmount value={metadata.total_supply} format="compact" />
                 ),
                 tooltip: (
-                  <CurrencyAmount
+                  <TokenAmount
                     value={metadata.total_supply}
                     format="standard"
                   />
                 ),
+              },
+              {
+                label: 'All time high',
+                value: (
+                  <CurrencyAmount
+                    value={metadata.all_time_high}
+                    format="standard"
+                  />
+                ),
+                tooltip: (
+                  <CurrencyAmount
+                    value={metadata.all_time_high}
+                    format="standard"
+                  />
+                ),
+              },
+              {
+                label: 'All time low',
+                value: (
+                  <CurrencyAmount
+                    value={metadata.all_time_low}
+                    format="standard"
+                  />
+                ),
+                tooltip: (
+                  <CurrencyAmount
+                    value={metadata.all_time_low}
+                    format="standard"
+                  />
+                ),
+              },
+              {
+                label: '24h Volume',
+                value: (
+                  <TokenAmount value={metadata.volume_24} format="compact" />
+                ),
+                tooltip: (
+                  <TokenAmount value={metadata.volume_24} format="standard" />
+                ),
+              },
+              {
+                label: 'Rank by Mcap',
+                value: metadata?.rank_by_market_cap,
               },
             ].map((item, index) => (
               <div
@@ -256,6 +271,14 @@ const Token = (props: Props) => {
                 </Tooltip>
               </div>
             ))}
+          </div>
+          <div className="mt-5 flex-col gap-2">
+            <p className="text-15 font-600">What is {uppercasedTicker}?</p>
+
+            {/* <MDXRemote
+              source={metadata.about || ''}
+              components={portfolioComponents}
+            /> */}
           </div>
         </div>
       </div>
