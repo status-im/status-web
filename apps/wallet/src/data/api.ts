@@ -1,17 +1,17 @@
 // import { Cardano } from '@cardano-sdk/core'
 // import { SodiumBip32Ed25519 } from '@cardano-sdk/crypto'
 // import { AddressType, InMemoryKeyAgent } from '@cardano-sdk/key-management'
-import { createTRPCClient } from '@trpc/client'
+import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
-// import superjson from 'superjson'
+import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
 import { chromeLink } from 'trpc-chrome/link'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
 import * as ethereum from './ethereum/ethereum'
+import { getKeystore } from './keystore'
 import * as solana from './solana/solana'
-import { getKeystore } from './storage'
 import {
   getWalletCore,
   //  type WalletCore
@@ -33,9 +33,9 @@ type Context = Awaited<ReturnType<typeof createContext>>
  * @see https://trpc.io/docs/server/routers#runtime-configuration
  */
 const t = initTRPC.context<Context>().create({
+  transformer: superjson,
   isServer: false,
   allowOutsideOfServer: true,
-  // transformer: superjson,
 })
 
 // const publicProcedure = t.procedure
@@ -102,6 +102,25 @@ const apiRouter = router({
           // note: reference and store accounts with
           id,
           mnemonic,
+        }
+      }),
+
+    get: t.procedure
+      .input(
+        z.object({
+          walletId: z.string(),
+          password: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const { keyStore } = ctx
+
+        const wallet = await keyStore.load(input.walletId)
+
+        return {
+          id: wallet.id,
+          name: wallet.name,
+          mnemonic: await keyStore.exportMnemonic(wallet.id, input.password),
         }
       }),
 
@@ -584,7 +603,8 @@ export async function createAPI() {
 export function createAPIClient() {
   const port = chrome.runtime.connect()
 
-  return createTRPCClient<APIRouter>({
+  return createTRPCProxyClient<APIRouter>({
     links: [chromeLink({ port })],
+    transformer: superjson,
   })
 }

@@ -1,4 +1,4 @@
-import { api } from '../../../../data/api'
+import { getAPIClient } from '../../../../data/api'
 import { AssetsTable } from './_components/assets-table'
 
 import type { NetworkType } from '@status-im/wallet/data'
@@ -25,7 +25,9 @@ export default async function AssetsList(props: Props) {
     'bsc',
   ]
 
-  const all = await api.assets.all({
+  const apiClient = await getAPIClient()
+
+  const all = await apiClient.assets.all({
     address: address,
     networks: networks as NetworkType[],
   })

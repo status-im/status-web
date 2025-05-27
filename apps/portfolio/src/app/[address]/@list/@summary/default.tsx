@@ -1,6 +1,6 @@
 import { Address } from 'src/app/_components/address'
 
-import { api } from '../../../../data/api'
+import { getAPIClient } from '../../../../data/api'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -24,7 +24,9 @@ export default async function Summary({ params, searchParams }: Props) {
     'bsc',
   ]
 
-  const { summary } = await api.assets.all({
+  const apiClient = await getAPIClient()
+
+  const { summary } = await apiClient.assets.all({
     address,
     networks: networks as NetworkType[],
   })

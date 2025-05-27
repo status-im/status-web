@@ -9,11 +9,5 @@ export const apiRouter = router({
 
 export type ApiRouter = typeof apiRouter
 
-/**
- * Create a server-side caller for the tRPC API.
- * @example
- * const trpc = createCaller(createContext);
- * const res = await trpc.releases.all();
- *       ^? Release[]
- */
-export const createCaller = createCallerFactory(apiRouter)
+export const createCaller: ReturnType<typeof createCallerFactory<ApiRouter>> =
+  createCallerFactory(apiRouter)

@@ -4,7 +4,7 @@ import crypto from 'crypto'
 import { match } from 'ts-pattern'
 
 import { serverEnv } from '../config/env.server.mjs'
-import { api } from '../data/api'
+import { getAPIClient } from '../data/api'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -181,12 +181,16 @@ export async function getAccountsData(
     throw new Error('No addresses provided')
   }
   const results = await Promise.all(
-    addresses.map(address =>
-      api.assets.all({
+    addresses.map(async address => {
+      const apiClient = await getAPIClient()
+
+      const result = await apiClient.assets.all({
         address,
         networks,
       })
-    )
+
+      return result
+    })
   )
 
   return Object.fromEntries(
