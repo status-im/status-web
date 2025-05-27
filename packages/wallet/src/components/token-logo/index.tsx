@@ -1,6 +1,3 @@
-// We need to add this eslint-disable rule since we can't use next/image in this use case because we don't know the source of the image. Therefore we use the native <img> tag.
-/* eslint-disable @next/next/no-img-element */
-
 import { cx } from 'class-variance-authority'
 
 type Props = {
