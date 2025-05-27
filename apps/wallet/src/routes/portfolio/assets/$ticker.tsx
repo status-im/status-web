@@ -1,7 +1,11 @@
 import { Suspense } from 'react'
 
 import { AssetsList } from '@status-im/wallet/components'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  useRouter,
+  useRouterState,
+} from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
@@ -16,7 +20,9 @@ function Component() {
   const params = Route.useParams()
   const ticker = params.ticker
   const router = useRouter()
+  const routerState = useRouterState()
   const { data: assets, isLoading } = useAssets()
+  const pathname = routerState.location.pathname
 
   return (
     <>
@@ -38,7 +44,7 @@ function Component() {
                   console.log('Search cleared')
                 }}
                 searchParams={new URLSearchParams()}
-                pathname="/portfolio/assets"
+                pathname={pathname}
               />
             ) : (
               <div className="mt-4 flex flex-col gap-3">Empty state</div>

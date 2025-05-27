@@ -1,7 +1,11 @@
 import { Suspense } from 'react'
 
 import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import {
+  createFileRoute,
+  useRouter,
+  useRouterState,
+} from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 
@@ -18,13 +22,15 @@ export const Route = createFileRoute(
 
 function Component() {
   const router = useRouter()
+  const routerState = useRouterState()
   const params = Route.useParams()
   const { network, contract, id } = params
 
   const searchParams = new URLSearchParams(window.location.search)
   const search = searchParams.get('search') ?? undefined
 
-  const pathname = window.location.pathname
+  const pathname = routerState.location.pathname
+
   // todo?: replace address
   const address = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
