@@ -150,7 +150,7 @@ const CollectiblesGrid = (props: Props) => {
               target="_blank"
               size="32"
               rel="noopener noreferrer"
-              onClick={() => clearSearch()}
+              onClick={clearSearch}
             >
               Clear search
             </Button>
