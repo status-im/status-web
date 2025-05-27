@@ -4,8 +4,9 @@ import { AssetsList } from '@status-im/wallet/components'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
-import { Token } from '@/components/token'
 import { useAssets } from '@/hooks/use-assets'
+
+import { Token } from './-components/token'
 
 export const Route = createFileRoute('/portfolio/assets/$ticker')({
   component: Component,

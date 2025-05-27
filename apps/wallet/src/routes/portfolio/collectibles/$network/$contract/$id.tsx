@@ -1,11 +1,12 @@
 import { Suspense } from 'react'
 
-import { Button } from '@status-im/components'
-import { ExternalIcon, OptionsIcon, SadIcon } from '@status-im/icons/20'
-import { OpenseaIcon } from '@status-im/icons/social'
-import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
-import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+
+import SplittedLayout from '@/components/splitted-layout'
+
+import { Collectible } from '../../-components/collectible'
+import { LinkCollectible } from '../../-components/link-collectibe'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -16,191 +17,72 @@ export const Route = createFileRoute(
 })
 
 function Component() {
+  const router = useRouter()
   const params = Route.useParams()
   const { network, contract, id } = params
-  console.log('Parâmetros na rota:', { network, contract, id })
+
+  const searchParams = new URLSearchParams(window.location.search)
+  const search = searchParams.get('search') ?? undefined
+
+  const pathname = window.location.pathname
+  // todo?: replace address
+  const address = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
+    useCollectibles({
+      address,
+    })
+
+  const collectibles = useMemo(() => {
+    return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
+  }, [data?.pages])
 
   return (
-    <Suspense fallback={<p>Loading</p>}>
-      <Collectible
-        network={network as NetworkType}
-        contract={contract}
-        id={id}
-      />
-    </Suspense>
-  )
-}
-
-function Collectible({
-  network,
-  contract,
-  id,
-}: {
-  network: NetworkType
-  contract: string
-  id: string
-}) {
-  const { data: collectible, isLoading } = useQuery({
-    queryKey: ['collectible', network, contract, id],
-    queryFn: async () => {
-      const url = new URL(
-        'http://localhost:3030/api/trpc/collectibles.collectible',
-      )
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            contract,
-            tokenId: id,
-            network,
-          },
-        }),
-      )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
-  })
-
-  if (isLoading || !collectible) {
-    return <p>Loading</p>
-  }
-
-  return (
-    <div className="overflow-auto p-4 pr-3 2xl:p-12">
-      <div className="mb-10 flex gap-4">
-        <div className="flex-1">
-          <div className="2xl:mb-6">
-            <div className="mb-2 flex items-center gap-1.5">
-              <div className="text-15 font-semibold text-neutral-100">
-                {collectible.collection.name}
-              </div>
-            </div>
-
-            <div className="mb-1 mt-6 2xl:mt-0">
-              <div className="text-27 font-semibold text-neutral-100">
-                {collectible.name}
-              </div>
-            </div>
-
-            {collectible.floor_price && collectible.price_eur && (
-              <div className="mb-6 flex items-center gap-1.5">
-                <div className="flex items-center gap-1">
-                  <div className="text-13 font-medium text-neutral-50">
-                    {collectible.floor_price} {collectible.currency}
-                  </div>
-                  <div
-                    className="size-0.5 rounded-full bg-neutral-40"
-                    aria-hidden
-                  />
-                  <div className="text-13 font-medium text-neutral-50">
-                    <CurrencyAmount
-                      value={collectible.price_eur}
-                      format="standard"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="flex gap-2">
-              <Button
-                size="32"
-                variant="outline"
-                iconBefore={<OpenseaIcon className="text-social-opensea" />}
-                iconAfter={<ExternalIcon />}
-                href={collectible.links.opensea}
-              >
-                View on OpenSea
-              </Button>
-              <Button
-                size="32"
-                variant="outline"
-                icon={<OptionsIcon />}
-                aria-label="More options"
-              />
-            </div>
-          </div>
-        </div>
-
-        {collectible.image && collectible.thumbnail ? (
-          <div className="aspect-square size-[140px] rounded-16">
-            <img
-              src={collectible.thumbnail}
-              alt={collectible.name}
-              className="size-full rounded-16 object-cover"
+    <>
+      <div className="hidden 2xl:block">
+        <SplittedLayout
+          list={
+            <CollectiblesList
+              LinkComponent={LinkCollectible}
+              address={address}
+              collectibles={collectibles}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              pathname={pathname}
+              search={search}
+              searchParams={searchParams}
+              clearSearch={() => {
+                // Clear the search input
+                console.log('Search cleared')
+              }}
+              hasNextPage={hasNextPage}
+              onSelect={url => {
+                const [network, contract, id] = url.split('/').slice(-3)
+                router.navigate({
+                  to: '/portfolio/collectibles/$network/$contract/$id',
+                  params: { network, contract, id },
+                })
+              }}
             />
-          </div>
-        ) : (
-          <div className="flex aspect-square size-[140px] flex-col items-center justify-center gap-1 rounded-16 border border-dashed border-neutral-20 bg-neutral-2.5 p-1 text-13 font-semibold text-neutral-40">
-            <SadIcon />
-            No image available
-          </div>
-        )}
-      </div>
-
-      <div className="grid gap-8">
-        <div>
-          <div className="mb-1 text-15 font-semibold text-neutral-100">
-            About
-          </div>
-          <div className="mb-5">{collectible.about}</div>
-
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-            <div className="flex items-center gap-1">
-              <NetworkLogo name={collectible.network} size={16} />
-              <span className="capitalize">{collectible.network}</span>
-            </div>
-            {collectible.standard !== 'NOT_A_CONTRACT' && (
-              <>
-                <div className="font-mono">{collectible.contract}</div>
-                <div>{collectible.standard}</div>
-              </>
-            )}
-            {collectible.collection.size && (
-              <div>{collectible.collection.size}</div>
-            )}
-          </div>
-        </div>
-
-        <div
-          className="h-px w-full border-t border-dashed border-neutral-20"
-          aria-hidden="true"
+          }
+          isLoading={isLoading}
+          detail={
+            <Suspense fallback={<p>Loading collectible...</p>}>
+              <Collectible
+                network={network as NetworkType}
+                contract={contract}
+                id={id}
+              />
+            </Suspense>
+          }
         />
-
-        {collectible.traits && (
-          <div>
-            <div className="mb-3 text-15 font-semibold text-neutral-100">
-              Traits
-            </div>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-              {Object.entries(collectible.traits as Record<string, string>).map(
-                ([trait, value], index) => (
-                  <div key={index}>
-                    <div className="text-13 font-medium text-neutral-50">
-                      {trait}
-                    </div>
-                    <div className="text-13 font-medium text-neutral-100">
-                      {value}
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+      <div className="block 2xl:hidden">
+        <Collectible
+          network={network as NetworkType}
+          contract={contract}
+          id={id}
+        />
+      </div>
+    </>
   )
 }
