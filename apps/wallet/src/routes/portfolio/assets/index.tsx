@@ -36,7 +36,6 @@ function Component() {
           <div className="mt-4 flex flex-col gap-3">Empty state</div>
         )
       }
-      detail={<>Detail for asset</>}
       isLoading={isLoading}
     />
   )

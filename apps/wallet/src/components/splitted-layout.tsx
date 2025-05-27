@@ -5,7 +5,7 @@ import type { Account } from '@status-im/wallet/components'
 
 type Props = {
   list: React.ReactNode
-  detail: React.ReactNode
+  detail?: React.ReactNode
   isLoading?: boolean
 }
 
