@@ -42,7 +42,9 @@ const Token = (props: Props) => {
               'polygon',
               'bsc',
             ] as NetworkType[],
-            contract: ticker,
+            ...(ticker.startsWith('0x')
+              ? { contract: ticker }
+              : { symbol: ticker }),
           },
         }),
       )
@@ -53,6 +55,8 @@ const Token = (props: Props) => {
           'Content-Type': 'application/json',
         },
       })
+
+      console.log('response', response)
 
       if (!response.ok) {
         throw new Error('Failed to fetch.')
@@ -69,6 +73,9 @@ const Token = (props: Props) => {
   })
 
   const { data: typedToken, isLoading } = token
+
+  console.log('typedToken', typedToken)
+  console.log('isLoading', isLoading)
 
   if (isLoading || !typedToken) {
     return <p>Loading</p>
