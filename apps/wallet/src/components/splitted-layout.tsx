@@ -155,11 +155,16 @@ const SplittedLayout = (props: Props) => {
           </div>
         </div>
 
-        <div className="relative hidden basis-1/2 flex-col 2xl:flex">
+        <div className="relative hidden basis-1/2 flex-col bg-white-100 2xl:flex">
           <div className="relative z-20">{detail}</div>
 
-          <div className="absolute z-0 size-full bg-customisation-blue-50/5" />
-          <div className="absolute z-10 size-full bg-gradient-to-r from-[#F5F6F8] to-transparent" />
+          <div
+            className="absolute z-10 size-full"
+            style={{
+              backgroundColor: 'rgba(245, 246, 248, 0.24)',
+            }}
+          />
+          <div className="absolute z-0 size-full bg-gradient-to-r from-[#F5F6F83D] to-transparent" />
         </div>
       </div>
     </div>
