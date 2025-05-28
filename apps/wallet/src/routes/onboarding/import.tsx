@@ -77,7 +77,7 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
           Type or paste your 12-, 18-, or 24-word Ethereum recovery phrase
         </Text>
         <textarea
-          className="mt-4 h-32 resize-none rounded-12 border border-neutral-20 bg-white-100 p-2 text-neutral-100 placeholder:text-neutral-40 dark:border-neutral-60 dark:bg-neutral-100"
+          className="mt-4 h-32 resize-none rounded-12 border border-neutral-20 bg-white-100 px-4 py-2 text-neutral-100 placeholder:text-neutral-40 invalid:border-danger-50/40 focus:border-neutral-40 dark:border-neutral-60 dark:bg-neutral-100"
           placeholder="Recovery phrase"
           {...register('mnemonic', {
             required: 'Recovery phrase is required',
