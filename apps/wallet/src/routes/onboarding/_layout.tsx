@@ -10,7 +10,7 @@ export const Route = createFileRoute('/onboarding')({
 
 function RouteComponent() {
   return (
-    <div className="p-5">
+    <div className="h-full p-5">
       <Outlet />
     </div>
   )
