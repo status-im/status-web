@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { Button, Input, Text } from '@status-im/components'
+import { ArrowLeftIcon } from '@status-im/icons/20'
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 
@@ -60,6 +61,15 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex flex-col gap-1">
+        <div className="pb-4">
+          <Button
+            href="/onboarding"
+            variant="grey"
+            icon={<ArrowLeftIcon color="$neutral-100" />}
+            aria-label="Back"
+            size="32"
+          />
+        </div>
         <Text size={27} weight="semibold">
           Import via recovery phrase
         </Text>
@@ -74,12 +84,14 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
           })}
         />
       </div>
-      {errors.mnemonic && (
-        <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
-      )}
-      <Button variant="primary" onClick={onSubmit}>
-        Continue
-      </Button>
+      <div className="flex flex-col gap-6">
+        {errors.mnemonic && (
+          <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
+        )}
+        <Button variant="primary" onClick={onSubmit}>
+          Continue
+        </Button>
+      </div>
     </div>
   )
 }
