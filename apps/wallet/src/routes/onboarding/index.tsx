@@ -22,7 +22,7 @@ function RouteComponent() {
           <br />
           Your crypto.
         </Text>
-        <Text size={15} className="text-neutral-50">
+        <Text size={15} color="$neutral-50">
           Some awesome sub copy
         </Text>
       </div>
@@ -34,14 +34,14 @@ function RouteComponent() {
           Import wallet
         </Button>
       </div>
-      <Text size={13} className="text-neutral-50">
+      <Text size={13} color="$neutral-50">
         By continuing you agree with Status
         <br />
-        <Link to="/onboarding" className="text-neutral-100">
+        <Link to="/onboarding" color="$neutral-100">
           Terms of use
         </Link>{' '}
         and{' '}
-        <Link to="/onboarding" className="text-neutral-100">
+        <Link to="/onboarding" color="$neutral-100">
           Privacy policy
         </Link>
       </Text>

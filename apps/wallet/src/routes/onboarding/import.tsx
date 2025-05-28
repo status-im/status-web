@@ -27,7 +27,7 @@ function RouteComponent() {
   })
 
   return (
-    <div>
+    <div className="h-full">
       {onboardingState.type === 'import-wallet' && (
         <ImportWallet
           onNext={mnemonic =>
@@ -58,18 +58,22 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   })
 
   return (
-    <div className="flex flex-col gap-4">
-      <Text size={15}>Import via recovery phrase</Text>
-      <Text size={13} className="text-neutral-50">
-        Type or paste your 12-, 18-, or 24-word Ethereum recovery phrase
-      </Text>
-      <textarea
-        className="h-32 resize-none rounded-12 border border-neutral-20 bg-white-100 p-2 text-neutral-100 placeholder:text-neutral-40 dark:border-neutral-60 dark:bg-neutral-100"
-        placeholder="Recovery phrase"
-        {...register('mnemonic', {
-          required: 'Recovery phrase is required',
-        })}
-      />
+    <div className="flex h-full flex-col justify-between">
+      <div className="flex flex-col gap-1">
+        <Text size={27} weight="semibold">
+          Import via recovery phrase
+        </Text>
+        <Text size={15} color="$neutral-50">
+          Type or paste your 12-, 18-, or 24-word Ethereum recovery phrase
+        </Text>
+        <textarea
+          className="mt-4 h-32 resize-none rounded-12 border border-neutral-20 bg-white-100 p-2 text-neutral-100 placeholder:text-neutral-40 dark:border-neutral-60 dark:bg-neutral-100"
+          placeholder="Recovery phrase"
+          {...register('mnemonic', {
+            required: 'Recovery phrase is required',
+          })}
+        />
+      </div>
       {errors.mnemonic && (
         <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
       )}
