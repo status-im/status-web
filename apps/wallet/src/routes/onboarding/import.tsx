@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { Button, Input, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
@@ -27,13 +27,16 @@ function RouteComponent() {
     mnemonic: '',
   })
 
+  const navigate = useNavigate()
+
   return (
     <div className="h-full">
       {onboardingState.type === 'import-wallet' && (
         <ImportWallet
-          onNext={mnemonic =>
+          onNext={mnemonic => {
             setOnboardingState({ type: 'create-password', mnemonic })
-          }
+            navigate({ to: '/portfolio' })
+          }}
         />
       )}
       {onboardingState.type === 'create-password' && (
