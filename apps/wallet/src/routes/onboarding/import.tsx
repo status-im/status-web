@@ -1,9 +1,11 @@
 import { useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
 
@@ -55,6 +57,24 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
     defaultValues: {
       mnemonic: '',
     },
+    mode: 'onChange',
+    resolver: zodResolver(
+      z.object({
+        mnemonic: z.string().refine(
+          value => {
+            const words = value.split(' ').filter(Boolean)
+            const wordsWithComma = value.split(',').filter(Boolean)
+            return (
+              [12, 18, 24].includes(words.length) ||
+              [12, 18, 24].includes(wordsWithComma.length)
+            )
+          },
+          {
+            message: 'Invalid phrase. Check word count and spelling.',
+          },
+        ),
+      }),
+    ),
   })
 
   const onSubmit = handleSubmit(data => {
@@ -91,7 +111,11 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
         {errors.mnemonic && (
           <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
         )}
-        <Button variant="primary" onClick={onSubmit}>
+        <Button
+          variant="primary"
+          onClick={onSubmit}
+          disabled={Object.keys(errors).length > 0}
+        >
           Continue
         </Button>
       </div>
