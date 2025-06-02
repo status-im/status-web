@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 import { Button, Tooltip } from '@status-im/components'
 import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
 import {
@@ -11,6 +13,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
 
+import { renderMarkdown } from '@/lib/markdown'
+
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
@@ -19,6 +23,7 @@ type Props = {
 
 const Token = (props: Props) => {
   const { ticker } = props
+  const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -56,8 +61,6 @@ const Token = (props: Props) => {
         },
       })
 
-      console.log('response', response)
-
       if (!response.ok) {
         throw new Error('Failed to fetch.')
       }
@@ -74,8 +77,18 @@ const Token = (props: Props) => {
 
   const { data: typedToken, isLoading } = token
 
-  console.log('typedToken', typedToken)
-  console.log('isLoading', isLoading)
+  useEffect(() => {
+    const processMarkdown = async () => {
+      if (typedToken) {
+        const metadata = Object.values(typedToken.assets)[0].metadata
+        const content = await renderMarkdown(
+          metadata.about || 'No description available.',
+        )
+        setMarkdownContent(content)
+      }
+    }
+    processMarkdown()
+  }, [typedToken])
 
   if (isLoading || !typedToken) {
     return <p>Loading</p>
@@ -280,12 +293,7 @@ const Token = (props: Props) => {
             ))}
           </div>
           <div className="mt-5 flex-col gap-2">
-            <p className="text-15 font-600">What is {uppercasedTicker}?</p>
-
-            {/* <MDXRemote
-              source={metadata.about || ''}
-              components={portfolioComponents}
-            /> */}
+            <div className="text-neutral-100">{markdownContent}</div>
           </div>
         </div>
       </div>
