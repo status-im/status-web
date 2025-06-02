@@ -9,5 +9,9 @@ export const Route = createFileRoute('/onboarding')({
 })
 
 function RouteComponent() {
-  return <Outlet />
+  return (
+    <div className="m-auto h-[650px] w-full max-w-[440px] rounded-[24px] border border-neutral-5 p-5 shadow-2">
+      <Outlet />
+    </div>
+  )
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
-import { Button, Input } from '@status-im/components'
+import { Button, Input, Switch } from '@status-im/components'
+import { ArrowLeftIcon, InfoIcon } from '@status-im/icons/20'
 import { createFileRoute } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 
@@ -18,7 +19,7 @@ function RouteComponent() {
   })
 
   return (
-    <div>
+    <div className="flex h-full">
       {onboardingState.type === 'create-password' && (
         <CreatePassword
           onNext={mnemonic =>
@@ -34,6 +35,7 @@ function RouteComponent() {
 }
 
 function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
+  const [isDefaultWallet, setIsDefaultWallet] = useState(true)
   const {
     register,
     // handleSubmit,
@@ -56,11 +58,24 @@ function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
 
   return (
     <div className="flex flex-col gap-4">
+      <div>
+        <Button
+          href="/onboarding"
+          variant="grey"
+          icon={<ArrowLeftIcon color="$neutral-100" />}
+          aria-label="Back"
+          size="32"
+        />
+      </div>
+      <h1 className="text-27 font-600">Create password</h1>
+      <div className="text-15 text-neutral-50">
+        To unlock the extension and sign transactions, the password is stored
+        only on your device. Status can't recover it.
+      </div>
       {/* @ts-expect-error: fixme: Types of property 'onChange' are incompatible. */}
       <Input
-        label="New password"
         type="password"
-        placeholder="New password"
+        placeholder="Type password"
         {...register('password', {
           required: 'Password is required',
           minLength: {
@@ -72,11 +87,14 @@ function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
       {errors.password && (
         <p className="text-13 text-danger-50">{errors.password.message}</p>
       )}
+      <div className="flex items-center gap-1 text-13 text-neutral-50">
+        <InfoIcon /> Minimum 10 characters
+      </div>
+
       {/* @ts-expect-error: fixme: Types of property 'onChange' are incompatible. */}
       <Input
-        label="Confirm password"
         type="password"
-        placeholder="Confirm password"
+        placeholder="Repeat password"
         {...register('confirmPassword', {
           required: 'Please confirm your password',
           validate: value =>
@@ -88,16 +106,27 @@ function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
           {errors.confirmPassword.message}
         </p>
       )}
-      <Button
-        variant="danger"
-        onClick={async () => {
-          const wallet = await createWalletAsync('password')
-          console.log(wallet)
-          onNext(wallet)
-        }}
-      >
-        Continue
-      </Button>
+      <div className="mt-auto flex flex-col gap-5">
+        <div className="flex w-full items-center gap-2 rounded-12 border border-neutral-20 bg-neutral-5 px-4 py-3 text-13">
+          <div className="text-13">
+            Set status as your default wallet to ensure seamless dApp
+            connections
+          </div>
+          <Switch
+            checked={isDefaultWallet}
+            onCheckedChange={() => setIsDefaultWallet(!isDefaultWallet)}
+          />
+        </div>
+        <Button
+          onClick={async () => {
+            const wallet = await createWalletAsync('password')
+            console.log(wallet)
+            onNext(wallet)
+          }}
+        >
+          Continue
+        </Button>
+      </div>
     </div>
   )
 }
