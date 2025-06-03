@@ -51,6 +51,9 @@ const Collectible = (props: Props) => {
     return <p>Loading</p>
   }
 
+  const imageUrl = collectible.image || collectible.thumbnail
+  const imageAlt = collectible.name || 'Collectible image'
+
   return (
     <div className="overflow-auto p-4 pr-3 2xl:p-12">
       <div className="mb-10 flex gap-4">
@@ -108,11 +111,11 @@ const Collectible = (props: Props) => {
           </div>
         </div>
 
-        {collectible.image && collectible.thumbnail ? (
+        {imageUrl ? (
           <div className="aspect-square size-[140px] rounded-16">
             <img
-              src={collectible.thumbnail}
-              alt={collectible.name}
+              src={imageUrl}
+              alt={imageAlt}
               className="size-full rounded-16 object-cover"
             />
           </div>
