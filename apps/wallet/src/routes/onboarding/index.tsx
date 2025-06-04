@@ -1,5 +1,5 @@
 import { Button, Text } from '@status-im/components'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/onboarding/')({
   component: RouteComponent,
@@ -15,7 +15,8 @@ export const Route = createFileRoute('/onboarding/')({
 function RouteComponent() {
   return (
     <div className="flex flex-col items-center gap-6 py-3 text-center">
-      <div className="size-64 rounded-full bg-neutral-5" />
+      {/* <div className="size-64 rounded-full bg-neutral-5" /> */}
+      <img src="/images/onboarding.png" alt="Onboarding" />
       <div className="flex flex-col gap-4">
         <Text size={40} weight="bold">
           Your Wallet.
@@ -35,13 +36,23 @@ function RouteComponent() {
       <Text size={13} color="$neutral-50">
         By continuing you agree with Status
         <br />
-        <Link to="/onboarding" color="$neutral-100">
+        <a
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/terms-of-use.md"
+          className="text-neutral-100"
+          target="_blank"
+          rel="noopenernoreferrer"
+        >
           Terms of use
-        </Link>{' '}
+        </a>{' '}
         and{' '}
-        <Link to="/onboarding" color="$neutral-100">
+        <a
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/privacy-policy.md"
+          className="text-neutral-100"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Privacy policy
-        </Link>
+        </a>
       </Text>
     </div>
   )
