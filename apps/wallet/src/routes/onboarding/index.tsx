@@ -15,8 +15,11 @@ export const Route = createFileRoute('/onboarding/')({
 function RouteComponent() {
   return (
     <div className="flex flex-col items-center gap-6 py-3 text-center">
-      {/* <div className="size-64 rounded-full bg-neutral-5" /> */}
-      <img src="/images/onboarding.png" alt="Onboarding" />
+      <img
+        src="/images/onboarding.png"
+        alt="Onboarding"
+        className="size-[264px]"
+      />
       <div className="flex flex-col gap-4">
         <Text size={40} weight="bold">
           Your Wallet.

@@ -81,7 +81,7 @@ function RootComponent() {
           </div>
           <div className="px-1">
             <div className="flex-1 flex-col 2md:flex xl:pb-1">
-              <div className="flex h-[calc(100vh-60px)] flex-col overflow-clip rounded-[24px] bg-white-100">
+              <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
                 {/* <OnboardingPage /> */}
                 <Outlet />
               </div>
