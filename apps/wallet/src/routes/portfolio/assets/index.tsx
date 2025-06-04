@@ -1,13 +1,10 @@
-// import { Suspense } from 'react'
-
 import { AssetsList } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
-// import { DetailDrawer } from '../../../../portfolio/src/app/[address]/@detail/_drawer'
-// import { Loading as LoadingNav } from '../../../../portfolio/src/app/[address]/@nav/loading'
+import SplittedLayout from '@/components/splitted-layout'
 
-export const Route = createFileRoute('/portfolio/')({
+export const Route = createFileRoute('/portfolio/assets/')({
   component: RouteComponent,
   head: () => ({
     meta: [
@@ -76,29 +73,24 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex min-h-full overflow-hidden px-1">
-      <div className="grid flex-1 grid-cols-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-        <div className="flex divide-x divide-default-neutral-20 overflow-auto">
-          <div className="flex w-full">
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : (
-              <AssetsList
-                assets={assets}
-                onSelect={handleSelect}
-                clearSearch={() => {
-                  // Clear the search input
-                  console.log('Search cleared')
-                }}
-                searchParams={new URLSearchParams()}
-                pathname="/portfolio/"
-              />
-            )}
-          </div>
-
-          <div className="hidden basis-1/2 flex-col xl:flex">Detail</div>
-        </div>
-      </div>
-    </div>
+    <SplittedLayout
+      list={
+        assets ? (
+          <AssetsList
+            assets={assets}
+            onSelect={handleSelect}
+            clearSearch={() => {
+              console.log('Search cleared')
+            }}
+            searchParams={new URLSearchParams()}
+            pathname="/portfolio/"
+          />
+        ) : (
+          <div className="mt-4 flex flex-col gap-3">Empty state</div>
+        )
+      }
+      detail={<>Detail for asset</>}
+      isLoading={isLoading}
+    />
   )
 }

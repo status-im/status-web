@@ -1,31 +1,44 @@
-/* eslint-disable @next/next/no-img-element */
-'use client'
-
-import { useMemo } from 'react'
-
 import { Button, Skeleton } from '@status-im/components'
 import { SadIcon } from '@status-im/icons/20'
-import { useInfiniteLoading } from '@status-im/wallet/hooks'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { ErrorBoundary } from 'react-error-boundary'
 
-import { Link } from '../../../../_components/link'
-import { DEFAULT_SORT, GRADIENTS } from '../../../../_constants'
-import { useSearchAndSort } from '../../../../_hooks/use-search-and-sort'
+import { useInfiniteLoading } from '../../hooks/use-infinite-loading'
 
-import type { GetCollectiblesProps, GetCollectiblesResponse } from '../_actions'
-import type { Collectible, NetworkType } from '@status-im/wallet/data'
+import type { Collectible } from '@status-im/wallet/data'
+import type { ComponentType, ReactNode } from 'react'
+
+export const GRADIENTS = [
+  'linear-gradient(120deg, #F6B03C, #1992D7, #7140FD)',
+  'linear-gradient(190deg, #FF7D46, #7140FD, #2A4AF5)',
+  'linear-gradient(145deg, #2A4AF5, #EC266C, #F6B03C)',
+  'linear-gradient(195deg, #216266, #FF7D46, #2A4AF5)',
+  'linear-gradient(45deg, #7140FD, #216266, #F6B03C)',
+  'linear-gradient(145deg, #F6B03C, #1992D7, #7140FD)',
+  'linear-gradient(45deg, #F6B03C, #1992D7, #7140FD)',
+  'linear-gradient(145deg, #FF7D46, #7140FD, #2A4AF5)',
+  'linear-gradient(45deg, #2A4AF5, #EC266C, #F6B03C)',
+  'linear-gradient(125deg, #216266, #FF7D46, #2A4AF5)',
+  'linear-gradient(145deg, #F6B03C, #1992D7, #7140FD)',
+  'linear-gradient(145deg, #F6B03C, #1992D7, #7140FD)',
+]
+type LinkComponentProps = {
+  href: string
+  className?: string
+  children: ReactNode
+}
 
 type Props = {
-  initialCollectibles: Collectible[]
+  collectibles: Collectible[]
   address: string
-  networks?: NetworkType[]
-  getCollectibles: (
-    props: GetCollectiblesProps
-  ) => Promise<GetCollectiblesResponse>
-  hasMore?: boolean
+  pathname: string
+  onSelect: (url: string, options?: { scroll?: boolean }) => void
+  search?: string
+  hasNextPage?: boolean
+  fetchNextPage: () => void
+  isFetchingNextPage: boolean
+  searchParams: URLSearchParams
+  clearSearch: () => void
+  LinkComponent: ComponentType<LinkComponentProps>
 }
 
 const FallbackImage = () => {
@@ -51,82 +64,26 @@ const CollectibleImage = ({ url, name }: { url: string; name: string }) => {
   )
 }
 
-const CollectiblesGrid = ({
-  initialCollectibles,
-  address,
-  networks = ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
-  getCollectibles,
-  hasMore: initialHasMore,
-}: Props) => {
-  const searchParams = useSearchParams()
-  const search = searchParams.get('search') ?? undefined
-  const sortParam = searchParams.get('sort')
-
-  const pathname = usePathname()
-  const { clearSearch } = useSearchAndSort()
-
-  const sort = {
-    column:
-      (sortParam?.split(',')[0] as 'name' | 'collection') ||
-      DEFAULT_SORT.collectibles.column,
-    direction:
-      (sortParam?.split(',')[1] as 'asc' | 'desc') ||
-      DEFAULT_SORT.collectibles.direction,
-  }
-
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      refetchOnWindowFocus: false,
-      queryKey: ['collectibles', address, networks, search, sort],
-      queryFn: async ({ pageParam = { offset: 0 } }) => {
-        const response = await getCollectibles({
-          address,
-          networks,
-          limit: 20,
-          offset: pageParam.offset,
-          search,
-          sort,
-        })
-
-        return {
-          collectibles: response.collectibles,
-          hasMore: response.hasMore,
-          offset: pageParam.offset + 20,
-        }
-      },
-      getNextPageParam: lastPage => {
-        if (!lastPage.hasMore) {
-          return undefined
-        }
-
-        return {
-          offset: lastPage.offset,
-        }
-      },
-      initialData: {
-        pages: [
-          {
-            collectibles: initialCollectibles,
-            hasMore: initialHasMore,
-            offset: 20,
-          },
-        ],
-        pageParams: [{ offset: 0 }],
-      },
-      initialPageParam: { offset: 0 },
-      staleTime: 0,
-    })
+const CollectiblesGrid = (props: Props) => {
+  const {
+    collectibles,
+    address,
+    fetchNextPage,
+    isFetchingNextPage,
+    pathname,
+    search,
+    searchParams,
+    clearSearch,
+    hasNextPage,
+    LinkComponent,
+  } = props
 
   const { endOfPageRef, isLoading } = useInfiniteLoading({
-    rootMargin: '-100px',
+    rootMargin: '200px',
     fetchNextPage,
     isFetchingNextPage,
     hasNextPage: hasNextPage ?? false,
   })
-
-  const collectibles = useMemo(() => {
-    return data.pages.flatMap(page => page.collectibles ?? [])
-  }, [data.pages])
 
   return (
     <>
@@ -143,7 +100,7 @@ const CollectiblesGrid = ({
           const imageUrl = collectible.thumbnail ?? collectible.image
 
           return (
-            <Link
+            <LinkComponent
               key={
                 collectible.contract +
                 '_' +
@@ -156,13 +113,11 @@ const CollectiblesGrid = ({
                 'rounded-16 border p-1 pb-0',
                 isActive
                   ? 'border-customisation-blue-50/20 bg-customisation-blue-50/5'
-                  : 'border-transparent'
+                  : 'border-transparent',
               )}
             >
               {imageUrl ? (
-                <ErrorBoundary fallback={<FallbackImage />}>
-                  <CollectibleImage name={collectible.name} url={imageUrl} />
-                </ErrorBoundary>
+                <CollectibleImage name={collectible.name} url={imageUrl} />
               ) : (
                 <FallbackImage />
               )}
@@ -179,7 +134,7 @@ const CollectiblesGrid = ({
                   {collectible.name}
                 </div>
               </div>
-            </Link>
+            </LinkComponent>
           )
         })}
         {collectibles.length === 0 && !!search && (
@@ -234,7 +189,7 @@ const CollectiblesGrid = ({
           })}
         </div>
       )}
-      {hasNextPage && <div ref={endOfPageRef} className="h-10" />}
+      {hasNextPage && <div ref={endOfPageRef} className="h-20" />}
     </>
   )
 }
