@@ -5,7 +5,8 @@ import { ExternalIcon, OptionsIcon, SadIcon } from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
 import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
 
-import { api } from '../../../../../../../data/api'
+import { getAPIClient } from '../../../../../../../data/api'
+import { NetworkLogo } from '../../../../../../_components/network-logo'
 import { ImageLightbox } from './_components/image-lightbox'
 import { InfoCard } from './_components/info-card'
 
@@ -59,7 +60,9 @@ async function Collectible({
   contract: string
   id: string
 }) {
-  const collectible = await api.collectibles.collectible({
+  const apiClient = await getAPIClient()
+
+  const collectible = await apiClient.collectibles.collectible({
     contract,
     tokenId: id,
     network,
