@@ -2,10 +2,11 @@ import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Text } from '@status-im/components'
-import { ArrowLeftIcon } from '@status-im/icons/20'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+
+import Header from '@/components/header'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
 
@@ -84,15 +85,7 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="flex flex-col gap-1">
-        <div className="pb-4">
-          <Button
-            href="/onboarding"
-            variant="grey"
-            icon={<ArrowLeftIcon color="$neutral-100" />}
-            aria-label="Back"
-            size="32"
-          />
-        </div>
+        <Header />
         <Text size={27} weight="semibold">
           Import via recovery phrase
         </Text>
