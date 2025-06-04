@@ -1,6 +1,6 @@
 'use server'
 
-import { api } from '../../../../data/api'
+import { getAPIClient } from '../../../../data/api'
 
 import type { Collectible, NetworkType } from '@status-im/wallet/data'
 
@@ -26,7 +26,9 @@ export async function getCollectibles(
 ): Promise<GetCollectiblesResponse> {
   const { address, networks, limit = 20, offset = 0, search, sort } = props
 
-  const response = await api.collectibles.page({
+  const apiClient = await getAPIClient()
+
+  const response = await apiClient.collectibles.page({
     address,
     networks,
     limit,

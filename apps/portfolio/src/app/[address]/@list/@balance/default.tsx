@@ -1,4 +1,4 @@
-import { api } from '../../../../data/api'
+import { getAPIClient } from '../../../../data/api'
 import { Balance } from '../../../_components/balance'
 
 import type { NetworkType } from '@status-im/wallet/data'
@@ -23,7 +23,9 @@ export default async function TotalBalance({ params, searchParams }: Props) {
     'bsc',
   ]
 
-  const { summary } = await api.assets.all({
+  const apiClient = await getAPIClient()
+
+  const { summary } = await apiClient.assets.all({
     address,
     networks: networks as NetworkType[],
   })

@@ -7,7 +7,7 @@ import { Buffer } from 'buffer'
 
 import { createAPI } from '../data/api'
 import { encoder } from '../data/encoder'
-import { getKeystore } from '../data/storage'
+import { getKeystore } from '../data/keystore'
 import { getWalletCore } from '../data/wallet'
 
 export default defineBackground({
