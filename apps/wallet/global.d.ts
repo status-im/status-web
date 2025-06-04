@@ -2,7 +2,7 @@
 
 import type { createAPI } from './src/data/api'
 import type { encoder } from './src/data/encoder'
-import type { getKeystore } from './src/data/storage'
+import type { getKeystore } from './src/data/keystore'
 import type { getWalletCore } from './src/data/wallet'
 
 declare global {

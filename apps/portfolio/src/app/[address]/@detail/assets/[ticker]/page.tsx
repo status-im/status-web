@@ -8,7 +8,7 @@ import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { api } from '../../../../..//data/api'
+import { getAPIClient } from '../../../../..//data/api'
 import { Balance } from '../../../../_components/balance'
 import { BuyCryptoDrawer } from '../../../../_components/buy-crypto-drawer'
 import { portfolioComponents } from '../../../../_components/content'
@@ -77,16 +77,18 @@ async function Token({
   networks: NetworkType[]
   keyHash: string
 }) {
+  const apiClient = await getAPIClient()
+
   let token: ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
 
   if (slug.startsWith('0x')) {
-    token = await api.assets.token({
+    token = await apiClient.assets.token({
       address: address,
       networks: networks as NetworkType[],
       contract: slug,
     })
   } else if (slug.toUpperCase() === 'ETH') {
-    token = await api.assets.nativeToken({
+    token = await apiClient.assets.nativeToken({
       address,
       networks: networks as NetworkType[],
       symbol: slug.toUpperCase(),
@@ -325,25 +327,27 @@ async function AssetChart({
     | ApiOutput['assets']['nativeTokenPriceChart']
   let balanceChart: ApiOutput['assets']['tokenBalanceChart']
 
+  const apiClient = await getAPIClient()
+
   if (slug.startsWith('0x')) {
-    priceChart = await api.assets.tokenPriceChart({
+    priceChart = await apiClient.assets.tokenPriceChart({
       symbol,
       days: '1',
     })
 
-    balanceChart = await api.assets.tokenBalanceChart({
+    balanceChart = await apiClient.assets.tokenBalanceChart({
       address,
       networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
       contract: slug,
       days: '30',
     })
   } else if (slug.toUpperCase() === 'ETH') {
-    priceChart = await api.assets.nativeTokenPriceChart({
+    priceChart = await apiClient.assets.nativeTokenPriceChart({
       symbol: slug.toUpperCase(),
       days: '1',
     })
 
-    balanceChart = await api.assets.nativeTokenBalanceChart({
+    balanceChart = await apiClient.assets.nativeTokenBalanceChart({
       address,
       networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
       days: '30',

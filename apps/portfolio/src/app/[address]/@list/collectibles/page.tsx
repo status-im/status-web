@@ -1,7 +1,7 @@
 import { Button } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 
-import { api } from '../../../../data/api'
+import { getAPIClient } from '../../../../data/api'
 import { Image } from '../../../_components/assets'
 import { DEFAULT_SORT } from '../../../_constants'
 import { getCollectibles } from './_actions'
@@ -42,7 +42,9 @@ export default async function CollectiblesPage(props: Props) {
     direction: sortParam[1] as 'asc' | 'desc',
   }
 
-  const { collectibles, hasMore } = await api.collectibles.page({
+  const apiClient = await getAPIClient()
+
+  const { collectibles, hasMore } = await apiClient.collectibles.page({
     address,
     networks: networks as NetworkType[],
     limit: 20,
