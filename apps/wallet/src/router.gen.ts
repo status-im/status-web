@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as OnboardingLayoutImport } from './routes/onboarding/_layout'
 import { Route as IndexImport } from './routes/index'
 import { Route as OnboardingIndexImport } from './routes/onboarding/index'
+import { Route as ActivityIndexImport } from './routes/activity/index'
 import { Route as OnboardingNewImport } from './routes/onboarding/new'
 import { Route as OnboardingImportImport } from './routes/onboarding/import'
 import { Route as PortfolioCollectiblesIndexImport } from './routes/portfolio/collectibles/index'
@@ -39,6 +40,12 @@ const OnboardingIndexRoute = OnboardingIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => OnboardingLayoutRoute,
+} as any)
+
+const ActivityIndexRoute = ActivityIndexImport.update({
+  id: '/activity/',
+  path: '/activity/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const OnboardingNewRoute = OnboardingNewImport.update({
@@ -112,6 +119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingNewImport
       parentRoute: typeof OnboardingLayoutImport
     }
+    '/activity/': {
+      id: '/activity/'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/onboarding/': {
       id: '/onboarding/'
       path: '/'
@@ -172,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
+  '/activity': typeof ActivityIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/assets': typeof PortfolioAssetsIndexRoute
@@ -183,6 +198,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
+  '/activity': typeof ActivityIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/assets': typeof PortfolioAssetsIndexRoute
@@ -196,6 +212,7 @@ export interface FileRoutesById {
   '/onboarding': typeof OnboardingLayoutRouteWithChildren
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
+  '/activity/': typeof ActivityIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
   '/portfolio/assets/': typeof PortfolioAssetsIndexRoute
@@ -210,6 +227,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/onboarding/import'
     | '/onboarding/new'
+    | '/activity'
     | '/onboarding/'
     | '/portfolio/assets/$ticker'
     | '/portfolio/assets'
@@ -220,6 +238,7 @@ export interface FileRouteTypes {
     | '/'
     | '/onboarding/import'
     | '/onboarding/new'
+    | '/activity'
     | '/onboarding'
     | '/portfolio/assets/$ticker'
     | '/portfolio/assets'
@@ -231,6 +250,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/onboarding/import'
     | '/onboarding/new'
+    | '/activity/'
     | '/onboarding/'
     | '/portfolio/assets/$ticker'
     | '/portfolio/assets/'
@@ -246,6 +266,7 @@ export interface RootRouteChildren {
   PortfolioAssetsIndexRoute: typeof PortfolioAssetsIndexRoute
   PortfolioCollectiblesIndexRoute: typeof PortfolioCollectiblesIndexRoute
   PortfolioCollectiblesNetworkContractIdRoute: typeof PortfolioCollectiblesNetworkContractIdRoute
+  ActivityIndexRoute: typeof ActivityIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -256,6 +277,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioCollectiblesIndexRoute: PortfolioCollectiblesIndexRoute,
   PortfolioCollectiblesNetworkContractIdRoute:
     PortfolioCollectiblesNetworkContractIdRoute,
+  ActivityIndexRoute: ActivityIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -274,6 +296,7 @@ export const routeTree = rootRoute
         "/portfolio/assets/",
         "/portfolio/collectibles/",
         "/portfolio/collectibles/$network/$contract/$id"
+        "/activity/",
       ]
     },
     "/": {
@@ -294,6 +317,9 @@ export const routeTree = rootRoute
     "/onboarding/new": {
       "filePath": "onboarding/new.tsx",
       "parent": "/onboarding"
+    },
+    "/activity/": {
+      "filePath": "activity/index.tsx"
     },
     "/onboarding/": {
       "filePath": "onboarding/index.tsx",
