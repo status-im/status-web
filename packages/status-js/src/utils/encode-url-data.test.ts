@@ -45,17 +45,17 @@ describe('Encode URL data', () => {
         'G2QBQJwFdqwxrBnNb57kP0irrJpuouIjS1WZqHS6A2txojsUHidyu3evaAO3GQQku5NCQXiwAYchBIMNyptts=MD9bZAwoTasraIMkjbS1uAD7oxsAQ53OAmQWCefyBuuXlAu6J7eKQRQhgg5tan75fFp9jwGIjBLbGhnyUht2qj5GWlSBp7_OXsHxgnr21xA2HgR9VGYYikQJA4tcQHDrQzg_ARC9KiOVDD6vgTCM9_CN0HJ1zxwP3w6nzgkDTNuvDCFD3Clqo6Cf_UNY2cNRlKTqj86G4gC2dUNSApwiq72BdGTtrleiRFPUhCbTRbmEG4YwFOs4EjBdJHHRiqjS5GYGc1dAdgcGr2BQ==============================================================================================================================================='
       decodeCommunityURLData(encodedData)
     }).toThrowErrorMatchingInlineSnapshot(`
-      "[
+      [ZodError: [
         {
-          \\"code\\": \\"too_big\\",
-          \\"maximum\\": 500,
-          \\"type\\": \\"string\\",
-          \\"inclusive\\": true,
-          \\"exact\\": false,
-          \\"message\\": \\"String must contain at most 500 character(s)\\",
-          \\"path\\": []
+          "code": "too_big",
+          "maximum": 500,
+          "type": "string",
+          "inclusive": true,
+          "exact": false,
+          "message": "String must contain at most 500 character(s)",
+          "path": []
         }
-      ]"
+      ]]
     `)
   })
 
@@ -88,53 +88,53 @@ describe('Encode URL data', () => {
       const encodedData = 'Ow=='
       decodeChannelURLData(encodedData)
     }).toThrowErrorMatchingInlineSnapshot(`
-      "[
+      [ZodError: [
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"displayName\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "displayName"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"description\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "description"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"color\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "color"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"object\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"community\\"
+          "code": "invalid_type",
+          "expected": "object",
+          "received": "undefined",
+          "path": [
+            "community"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"uuid\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "uuid"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         }
-      ]"
+      ]]
     `)
   })
 
@@ -160,53 +160,53 @@ describe('Encode URL data', () => {
       const encodedData = 'Ow=='
       decodeChannelURLData(encodedData)
     }).toThrowErrorMatchingInlineSnapshot(`
-      "[
+      [ZodError: [
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"displayName\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "displayName"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"description\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "description"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"color\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "color"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"object\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"community\\"
+          "code": "invalid_type",
+          "expected": "object",
+          "received": "undefined",
+          "path": [
+            "community"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         },
         {
-          \\"code\\": \\"invalid_type\\",
-          \\"expected\\": \\"string\\",
-          \\"received\\": \\"undefined\\",
-          \\"path\\": [
-            \\"uuid\\"
+          "code": "invalid_type",
+          "expected": "string",
+          "received": "undefined",
+          "path": [
+            "uuid"
           ],
-          \\"message\\": \\"Required\\"
+          "message": "Required"
         }
-      ]"
+      ]]
     `)
   })
 })
