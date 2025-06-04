@@ -26,5 +26,5 @@ test('should accept public key with a base prefix', () => {
 test('should throw error if public key is not a valid hex', () => {
   expect(() => {
     decompressPublicKey('not a valid public key')
-  }).toThrowErrorMatchingInlineSnapshot(`"Invalid public key"`)
+  }).toThrowErrorMatchingInlineSnapshot(`[Error: Invalid public key]`)
 })
