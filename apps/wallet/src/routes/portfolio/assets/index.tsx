@@ -1,10 +1,10 @@
 // import { Suspense } from 'react'
 
-import { AssetsList } from '@status-im/wallet/components'
+import { AssetsList, TabLink } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouterState } from '@tanstack/react-router'
 
-import { TabLink } from '@/components/tab-link'
+import { Link } from '@/components/link'
 
 // import { DetailDrawer } from '../../../../portfolio/src/app/[address]/@detail/_drawer'
 // import { Loading as LoadingNav } from '../../../../portfolio/src/app/[address]/@nav/loading'
@@ -21,6 +21,9 @@ export const Route = createFileRoute('/portfolio/assets/')({
 })
 
 function RouteComponent() {
+  const { location } = useRouterState()
+  const pathname = location.pathname
+
   const handleSelect = (url: string, options?: { scroll?: boolean }) => {
     // Handle the selection of an asset
     console.log('Selected asset URL:', url)
@@ -86,8 +89,16 @@ function RouteComponent() {
         {/* {list} */}
         <div className="flex grow flex-col 2xl:basis-1/2">
           <div className="sticky top-0 z-20 flex gap-3 px-3 py-2">
-            <TabLink href="/portfolio/assets">Assets</TabLink>
-            <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
+            <TabLink
+              href="/portfolio/assets"
+              LinkComponent={Link}
+              isActive={pathname === '/portfolio/assets'}
+            >
+              Assets
+            </TabLink>
+            <TabLink href="/portfolio/collectibles" LinkComponent={Link}>
+              Collectibles
+            </TabLink>
           </div>
           <div className="h-[calc(100vh-100px)] overflow-auto px-3">
             {isLoading ? (

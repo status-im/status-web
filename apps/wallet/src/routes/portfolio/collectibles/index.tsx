@@ -1,8 +1,11 @@
-import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
+import {
+  CollectiblesGrid as CollectiblesList,
+  TabLink,
+} from '@status-im/wallet/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { createFileRoute, Link as LinkBase } from '@tanstack/react-router'
+import { createFileRoute, useRouterState } from '@tanstack/react-router'
 
-import { TabLink } from '@/components/tab-link'
+import { Link } from '@/components/link'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -24,21 +27,6 @@ export const SORT_OPTIONS = {
     collection: 'Collection',
   },
 } as const
-
-type LinkProps = {
-  href: string
-  className?: string
-  children: React.ReactNode
-}
-
-const Link = (props: LinkProps) => {
-  const { href, className, children } = props
-  return (
-    <LinkBase to={href} className={className}>
-      {children}
-    </LinkBase>
-  )
-}
 
 export const Route = createFileRoute('/portfolio/collectibles/')({
   component: RouteComponent,
@@ -92,6 +80,9 @@ const getCollectibles = async (
 }
 
 function RouteComponent() {
+  const { location } = useRouterState()
+  const pathname = location.pathname
+
   const handleSelect = (url: string, options?: { scroll?: boolean }) => {
     // Handle the selection of an asset
     console.log('Selected asset URL:', url)
@@ -104,7 +95,6 @@ function RouteComponent() {
   const search = searchParams.get('search') ?? undefined
   const sortParam = searchParams.get('sort')
 
-  const pathname = window.location.pathname
   const address = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
   const sort = {
     column:
@@ -163,8 +153,16 @@ function RouteComponent() {
         {/* {list} */}
         <div className="flex grow flex-col 2xl:basis-1/2">
           <div className="sticky top-0 z-20 flex gap-3 px-3 py-2">
-            <TabLink href="/portfolio/assets">Assets</TabLink>
-            <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
+            <TabLink href="/portfolio/assets" LinkComponent={Link}>
+              Assets
+            </TabLink>
+            <TabLink
+              href="/portfolio/collectibles"
+              LinkComponent={Link}
+              isActive={pathname === '/portfolio/collectibles'}
+            >
+              Collectibles
+            </TabLink>
           </div>
           <div className="h-[calc(100vh-100px)] overflow-auto px-3">
             {isLoading ? (

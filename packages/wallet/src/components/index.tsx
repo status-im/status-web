@@ -20,5 +20,5 @@ export {
 } from './shorten-address'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
-export { getTabLinkClassName } from './tab-link'
+export { TabLink } from './tab-link'
 export { Tooltip } from './tooltip'
