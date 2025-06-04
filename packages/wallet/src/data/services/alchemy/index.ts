@@ -729,6 +729,49 @@ export async function getTransactionStatus(
 }
 
 /**
+ * @see https://www.alchemy.com/docs/data/transfers-api/transfers-endpoints/alchemy-get-asset-transfers
+ *
+ * 150 CU per request https://docs.alchemy.com/reference/compute-unit-costs#transfers-api
+ */
+export async function getAssetTransfers(
+  fromAddress: string,
+  toAddress: string,
+  network: NetworkType,
+) {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<TokenBalanceHistoryResponseBody>(url, 'POST', 3600, {
+      jsonrpc: '2.0',
+      method: 'alchemy_getAssetTransfers',
+      params: [
+        {
+          category: [
+            'external',
+            'internal',
+            'erc20',
+            'erc721',
+            'erc1155',
+            'specialnft',
+          ],
+          // fromAddress: fromAddress,
+          // toAddress: toAddress,
+          excludeZeroValue: true,
+          withMetadata: true,
+          maxCount: '0x3e8',
+        },
+        'latest',
+      ],
+      id: 1,
+    }),
+  )
+
+  return body.result.transfers
+}
+
+/**
  * note: only available on Ethereum (Seaport, Wyvern, X2Y2, Blur, LooksRare, Cryptopunks), Polygon (Seaport) & Optimism (Seaport) mainnets
  *
  * important: We plan to release a new API that integrates NFT sales before turning off this endpoint (eta December 2024), so we'll keep you posted and let you know when that is scheduled!
