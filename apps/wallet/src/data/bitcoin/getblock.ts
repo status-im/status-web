@@ -1,7 +1,7 @@
 // Service/Provider
 
 export async function getUtxos(fromAccount: string) {
-  const getBlockUrl = `https://go.getblock.io/${import.meta.env.GETBLOCK_API_KEY}`
+  const getBlockUrl = `https://go.getblock.io/${import.meta.env.WXT_GETBLOCK_API_KEY}`
   const response = await fetch(getBlockUrl, {
     method: 'POST',
     headers: {
@@ -26,7 +26,7 @@ export async function getUtxos(fromAccount: string) {
 export async function broadcastTransaction(
   signedTxHex: string,
 ): Promise<string> {
-  const getBlockUrl = `https://go.getblock.io/${import.meta.env.GETBLOCK_API_KEY}`
+  const getBlockUrl = `https://go.getblock.io/${import.meta.env.WXT_GETBLOCK_API_KEY}`
 
   const response = await fetch(getBlockUrl, {
     method: 'POST',

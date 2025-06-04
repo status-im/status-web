@@ -4,7 +4,7 @@ import { Button } from '@status-im/components'
 import { ExternalIcon, OptionsIcon, SadIcon } from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
 
-import { api } from '../../../../../../../data/api'
+import { getAPIClient } from '../../../../../../../data/api'
 import { CurrencyAmount } from '../../../../../../_components/currency-amount'
 import { NetworkLogo } from '../../../../../../_components/network-logo'
 import { ImageLightbox } from './_components/image-lightbox'
@@ -60,7 +60,9 @@ async function Collectible({
   contract: string
   id: string
 }) {
-  const collectible = await api.collectibles.collectible({
+  const apiClient = await getAPIClient()
+
+  const collectible = await apiClient.collectibles.collectible({
     contract,
     tokenId: id,
     network,

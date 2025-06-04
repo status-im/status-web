@@ -35,7 +35,9 @@ function RouteComponent() {
   const { data: assets, isLoading } = useQuery({
     queryKey: ['assets'],
     queryFn: async () => {
-      const url = new URL('http://localhost:3030/api/trpc/assets.all')
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
+      )
       url.searchParams.set(
         'input',
         // encodeURIComponent(

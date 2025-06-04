@@ -31,6 +31,8 @@ type ApiContext = Awaited<ReturnType<typeof createTRPCContext>>
  */
 const t = initTRPC.context<ApiContext>().create({
   transformer: superjson,
+  isServer: true,
+  allowOutsideOfServer: false,
   errorFormatter({ shape, error }) {
     return {
       ...shape,
@@ -48,7 +50,7 @@ const t = initTRPC.context<ApiContext>().create({
  *
  * @see https://trpc.io/docs/server/server-side-calls
  */
-export const createCallerFactory = t.createCallerFactory
+export const { createCallerFactory } = t
 
 /**
  * 3. ROUTER & PROCEDURES
