@@ -6,7 +6,6 @@ import { OpenseaIcon } from '@status-im/icons/social'
 import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
 
 import { getAPIClient } from '../../../../../../../data/api'
-import { NetworkLogo } from '../../../../../../_components/network-logo'
 import { ImageLightbox } from './_components/image-lightbox'
 import { InfoCard } from './_components/info-card'
 

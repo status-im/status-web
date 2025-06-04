@@ -930,6 +930,12 @@ importers:
       trpc-chrome:
         specifier: ^1.0.0
         version: 1.0.0(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)
+      ts-pattern:
+        specifier: ^5.7.1
+        version: 5.7.1
+      unified:
+        specifier: ^11.0.5
+        version: 11.0.5
       vite-plugin-node-polyfills:
         specifier: ^0.23.0
         version: 0.23.0(rollup@4.40.2)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.5.1))
