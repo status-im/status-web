@@ -6,26 +6,42 @@ import {
   Balance,
   CurrencyAmount,
   NetworkBreakdown,
+  ReceiveCryptoDrawer,
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
+import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
 
-import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
+import type { Account } from '@status-im/wallet/components'
+import type { ApiOutput } from '@status-im/wallet/data'
 
 type Props = {
   address: string
   ticker: string
 }
 
+const NETWORKS = [
+  'ethereum',
+  'optimism',
+  'arbitrum',
+  'base',
+  'polygon',
+  'bsc',
+] as const
+
+// todo?: Example address, replace with actual address when available
+const ADDRESS = 'd8da6bf26964af9d7eed9e03e53415d37aa96045'
+
 const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+  const [, copy] = useCopyToClipboard()
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -41,14 +57,7 @@ const Token = (props: Props) => {
         JSON.stringify({
           json: {
             address,
-            networks: [
-              'ethereum',
-              'optimism',
-              'arbitrum',
-              'base',
-              'polygon',
-              'bsc',
-            ] as NetworkType[],
+            networks: NETWORKS,
             ...(ticker.startsWith('0x')
               ? { contract: ticker }
               : { symbol: ticker }),
@@ -100,6 +109,13 @@ const Token = (props: Props) => {
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
 
+  const account: Account = {
+    address: ADDRESS,
+    emoji: '🪙',
+    color: 'magenta',
+    name: 'My Wallet',
+  }
+
   return (
     <StickyHeaderContainer
       className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
@@ -118,10 +134,15 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </span>
           </Button>
-
-          <Button size="32" iconBefore={<ReceiveBlurIcon />} variant="outline">
-            Receive
-          </Button>
+          <ReceiveCryptoDrawer account={account} onCopy={copy}>
+            <Button
+              size="32"
+              iconBefore={<ReceiveBlurIcon />}
+              variant="outline"
+            >
+              Receive
+            </Button>
+          </ReceiveCryptoDrawer>
         </div>
       }
     >
@@ -150,13 +171,15 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </Button>
 
-            <Button
-              size="32"
-              variant="outline"
-              iconBefore={<ReceiveBlurIcon />}
-            >
-              Receive
-            </Button>
+            <ReceiveCryptoDrawer account={account} onCopy={copy}>
+              <Button
+                size="32"
+                variant="outline"
+                iconBefore={<ReceiveBlurIcon />}
+              >
+                Receive
+              </Button>
+            </ReceiveCryptoDrawer>
           </div>
         </div>
 
