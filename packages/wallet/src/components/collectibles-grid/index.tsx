@@ -31,7 +31,6 @@ type Props = {
   collectibles: Collectible[]
   address: string
   pathname: string
-  onSelect: (url: string, options?: { scroll?: boolean }) => void
   search?: string
   hasNextPage?: boolean
   fetchNextPage: () => void

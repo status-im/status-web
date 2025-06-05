@@ -9,6 +9,7 @@ import {
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
 import { Token } from './-components/token'
 
@@ -23,6 +24,7 @@ function Component() {
   const routerState = useRouterState()
   const { data: assets, isLoading } = useAssets()
   const pathname = routerState.location.pathname
+  const isDesktop = useMediaQuery('xl')
 
   return (
     <>
@@ -38,6 +40,9 @@ function Component() {
                   router.navigate({
                     to: '/portfolio/assets/$ticker',
                     params: { ticker },
+                    ...(!isDesktop && {
+                      viewTransition: true,
+                    }),
                   })
                 }}
                 clearSearch={() => {

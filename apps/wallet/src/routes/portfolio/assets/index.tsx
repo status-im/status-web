@@ -3,6 +3,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
 export const Route = createFileRoute('/portfolio/assets/')({
   component: Component,
@@ -11,6 +12,7 @@ export const Route = createFileRoute('/portfolio/assets/')({
 function Component() {
   const router = useRouter()
   const { data: assets, isLoading } = useAssets()
+  const isDesktop = useMediaQuery('xl')
 
   return (
     <SplittedLayout
@@ -21,9 +23,13 @@ function Component() {
             onSelect={url => {
               const ticker = url.split('/').pop()
               if (!ticker) return
+
               router.navigate({
                 to: '/portfolio/assets/$ticker',
                 params: { ticker },
+                ...(!isDesktop && {
+                  viewTransition: true,
+                }),
               })
             }}
             clearSearch={() => {

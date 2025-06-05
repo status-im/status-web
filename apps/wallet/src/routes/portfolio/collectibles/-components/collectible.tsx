@@ -1,8 +1,14 @@
 import { Button } from '@status-im/components'
-import { ExternalIcon, OptionsIcon, SadIcon } from '@status-im/icons/20'
+import {
+  ArrowLeftIcon,
+  ExternalIcon,
+  OptionsIcon,
+  SadIcon,
+} from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
 import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -56,6 +62,14 @@ const Collectible = (props: Props) => {
 
   return (
     <div className="overflow-auto p-4 pr-3 2xl:p-12">
+      <Link
+        to="/portfolio/collectibles"
+        viewTransition
+        className="z-30 flex items-center gap-1 py-4 font-600 text-neutral-50 transition-colors hover:text-neutral-60 xl:hidden 2xl:mt-0 2xl:p-12 2xl:pt-0"
+      >
+        <ArrowLeftIcon />
+        Back
+      </Link>
       <div className="mb-10 flex gap-4">
         <div className="flex-1">
           <div className="2xl:mb-6">

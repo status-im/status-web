@@ -1,5 +1,5 @@
 import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useCollectibles } from '@/hooks/use-collectibles'
@@ -17,8 +17,6 @@ export const Route = createFileRoute('/portfolio/collectibles/')({
 })
 
 function Component() {
-  const router = useRouter()
-
   const searchParams = new URLSearchParams(window.location.search)
   const search = searchParams.get('search') ?? undefined
 
@@ -52,13 +50,6 @@ function Component() {
             console.log('Search cleared')
           }}
           hasNextPage={hasNextPage}
-          onSelect={url => {
-            const [network, contract, id] = url.split('/').slice(-3)
-            router.navigate({
-              to: '/portfolio/collectibles/$network/$contract/$id',
-              params: { network, contract, id },
-            })
-          }}
         />
       }
       isLoading={isLoading}
