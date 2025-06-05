@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form'
 
 import type { Control, FieldValues } from 'react-hook-form'
 
+// TODO: consider if we want to make it as a part of Input from @status-im/components
 function TextField({
   control,
   name,
