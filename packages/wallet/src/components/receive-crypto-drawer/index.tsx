@@ -40,7 +40,7 @@ export const ReceiveCryptoDrawer = (props: Props) => {
     <Drawer.Root modal open={open} onOpenChange={setOpen}>
       {children && <Drawer.Trigger asChild>{children}</Drawer.Trigger>}
 
-      <Drawer.Content className="overflow-y-auto p-3">
+      <Drawer.Content className="!w-[calc(100%-24px)] !max-w-full overflow-y-auto p-3 md:!max-w-[494px]">
         <Drawer.Header className="sticky top-1 flex flex-col bg-white-60 px-1 pb-3 pt-1 backdrop-blur-[20px]">
           <Drawer.Title>Receive</Drawer.Title>
           <div
@@ -65,8 +65,11 @@ export const ReceiveCryptoDrawer = (props: Props) => {
           data-customisation={account.color}
           className="grid gap-3 rounded-16 bg-customisation-50/5 p-3"
         >
-          <div className="relative flex h-[444px] items-center justify-center overflow-hidden rounded-16 bg-white-100 shadow-3">
-            <QRCodeSVG value={account.address} size={408} className="" />
+          <div className="relative flex max-h-[444px] items-center justify-center overflow-hidden rounded-16 bg-white-100 shadow-3">
+            <QRCodeSVG
+              value={account.address}
+              style={{ width: '100%', height: '100%' }}
+            />
             <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform rounded-16 bg-white-100">
               <Avatar
                 type="account"
