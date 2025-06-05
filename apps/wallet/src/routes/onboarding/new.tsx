@@ -43,31 +43,31 @@ function RouteComponent() {
 }
 
 function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
+  const passwordSchema = z
+    .object({
+      password: z.string().min(10, 'Password must be at least 10 characters'),
+      confirmPassword: z.string(),
+    })
+    .refine(data => data.password === data.confirmPassword, {
+      message: 'Passwords do not match',
+      path: ['confirmPassword'],
+    })
+
+  type PasswordFormData = z.infer<typeof passwordSchema>
+
   const {
     control,
     getValues,
     watch,
     handleSubmit,
     formState: { errors, touchedFields },
-  } = useForm({
+  } = useForm<PasswordFormData>({
     defaultValues: {
       password: '',
       confirmPassword: '',
     },
     mode: 'onBlur',
-    resolver: zodResolver(
-      z
-        .object({
-          password: z
-            .string()
-            .min(10, 'Password must be at least 10 characters'),
-          confirmPassword: z.string(),
-        })
-        .refine(data => data.password === data.confirmPassword, {
-          message: 'Passwords do not match',
-          path: ['confirmPassword'],
-        }),
-    ),
+    resolver: zodResolver(passwordSchema),
   })
 
   const password = watch('password')
@@ -78,7 +78,7 @@ function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
   const { passwordStrength, isPasswordValid } = usePasswordStrength(password)
   const { createWalletAsync } = useCreateWallet()
 
-  const onSubmit = handleSubmit(async (data: { password: string }) => {
+  const onSubmit = handleSubmit(async (data: PasswordFormData) => {
     if (!disabled || !isPasswordValid) {
       return
     }

@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import Header from '@/components/header'
+import TextArea from '@/components/TextArea'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
 
@@ -50,32 +51,34 @@ function RouteComponent() {
 }
 
 function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
+  const mnemonicSchema = z.object({
+    mnemonic: z.string().refine(
+      value => {
+        const words = value.split(' ').filter(Boolean)
+        const wordsWithComma = value.split(',').filter(Boolean)
+        return (
+          [12, 18, 24].includes(words.length) ||
+          [12, 18, 24].includes(wordsWithComma.length)
+        )
+      },
+      {
+        message: 'Invalid phrase. Check word count and spelling.',
+      },
+    ),
+  })
+
+  type MnemonicFormData = z.infer<typeof mnemonicSchema>
+
   const {
-    register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
+    control,
+    formState: { errors, isValid },
+  } = useForm<MnemonicFormData>({
     defaultValues: {
       mnemonic: '',
     },
     mode: 'onChange',
-    resolver: zodResolver(
-      z.object({
-        mnemonic: z.string().refine(
-          value => {
-            const words = value.split(' ').filter(Boolean)
-            const wordsWithComma = value.split(',').filter(Boolean)
-            return (
-              [12, 18, 24].includes(words.length) ||
-              [12, 18, 24].includes(wordsWithComma.length)
-            )
-          },
-          {
-            message: 'Invalid phrase. Check word count and spelling.',
-          },
-        ),
-      }),
-    ),
+    resolver: zodResolver(mnemonicSchema),
   })
 
   const onSubmit = handleSubmit(data => {
@@ -92,23 +95,17 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
         <Text size={15} color="$neutral-50">
           Type or paste your 12-, 18-, or 24-word Ethereum recovery phrase
         </Text>
-        <textarea
-          className="mt-4 h-32 resize-none rounded-12 border border-neutral-20 bg-white-100 px-4 py-2 text-neutral-100 placeholder:text-neutral-40 invalid:border-danger-50/40 focus:border-neutral-40 dark:border-neutral-60 dark:bg-neutral-100"
+        <TextArea
           placeholder="Recovery phrase"
-          {...register('mnemonic', {
-            required: 'Recovery phrase is required',
-          })}
+          control={control}
+          name="mnemonic"
         />
       </div>
       <div className="flex flex-col gap-6">
         {errors.mnemonic && (
           <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
         )}
-        <Button
-          variant="primary"
-          onClick={onSubmit}
-          disabled={Object.keys(errors).length > 0}
-        >
+        <Button variant="primary" onClick={onSubmit} disabled={!isValid}>
           Continue
         </Button>
       </div>
