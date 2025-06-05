@@ -23,7 +23,6 @@ export const Route = createFileRoute(
 
 function Component() {
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
-
   const router = useRouter()
   const routerState = useRouterState()
   const params = Route.useParams()

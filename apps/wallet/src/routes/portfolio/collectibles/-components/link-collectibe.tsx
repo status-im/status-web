@@ -22,7 +22,12 @@ const LinkCollectible = (props: LinkProps) => {
   }
 
   return (
-    <LinkBase to={href} className={className} onClick={handleClick}>
+    <LinkBase
+      to={href}
+      className={className}
+      onClick={handleClick}
+      viewTransition
+    >
       {children}
     </LinkBase>
   )

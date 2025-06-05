@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
-import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
+import { ArrowLeftIcon, BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
@@ -11,6 +11,7 @@ import {
   TokenLogo,
 } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
@@ -18,11 +19,12 @@ import { renderMarkdown } from '@/lib/markdown'
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
+  address: string
   ticker: string
 }
 
 const Token = (props: Props) => {
-  const { ticker } = props
+  const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
 
   const token = useQuery<
@@ -38,7 +40,7 @@ const Token = (props: Props) => {
         'input',
         JSON.stringify({
           json: {
-            address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+            address,
             networks: [
               'ethereum',
               'optimism',
@@ -117,19 +119,28 @@ const Token = (props: Props) => {
             </span>
           </Button>
 
-          <Button size="32" iconBefore={<ReceiveBlurIcon />}>
+          <Button size="32" iconBefore={<ReceiveBlurIcon />} variant="outline">
             Receive
           </Button>
         </div>
       }
     >
-      <div className="-mt-8 grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
+      <Link
+        to="/portfolio/assets"
+        viewTransition
+        className="z-30 flex items-center gap-1 p-4 font-600 text-neutral-50 transition-colors hover:text-neutral-60 xl:hidden 2xl:mt-0 2xl:p-12 2xl:pt-0"
+      >
+        <ArrowLeftIcon />
+        Back
+      </Link>
+      <div className="grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
           <TokenLogo
             name={typedToken.summary.name}
             ticker={uppercasedTicker}
             icon={icon}
           />
+
           <div className="my-6 2xl:mt-0">
             <Balance variant="token" summary={typedToken.summary} />
           </div>

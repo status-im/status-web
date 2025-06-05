@@ -12,7 +12,11 @@ const TabLink = ({ href, children, className }: Props) => {
   const isActive = location.pathname.startsWith(href)
 
   return (
-    <Link to={href} className={getTabLinkClassName(isActive, className)}>
+    <Link
+      to={href}
+      className={getTabLinkClassName(isActive, className)}
+      viewTransition
+    >
       {children}
     </Link>
   )
