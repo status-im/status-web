@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Avatar, Button } from '@status-im/components'
 import { CheckIcon, CopyIcon } from '@status-im/icons/20'
@@ -21,6 +21,16 @@ export const ReceiveCryptoDrawer = (props: Props) => {
   const [open, setOpen] = useState(false)
   const [success, setSuccess] = useState(false)
   const { account, children, onCopy } = props
+
+  // Reset success state
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (success) {
+        setSuccess(false)
+      }
+    }, 2000)
+    return () => clearTimeout(timeout)
+  }, [success])
 
   if (!account) {
     return null
