@@ -1,86 +1,79 @@
-// import { Suspense } from 'react'
-
 import { Button } from '@status-im/components'
-import { ExternalIcon, OptionsIcon, SadIcon } from '@status-im/icons/20'
+import {
+  ArrowLeftIcon,
+  ExternalIcon,
+  OptionsIcon,
+  SadIcon,
+} from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
 import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
-
-import { getAPIClient } from '../../../../../../../data/api'
-import { ImageLightbox } from './_components/image-lightbox'
-import { InfoCard } from './_components/info-card'
+import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
 type Props = {
-  params: Promise<{
-    network: NetworkType
-    contract: string
-    id: string
-  }>
-  // searchParams: Promise<{ [key: string]: string | undefined }>
-}
-
-export default async function CollectiblesDetailPage(props: Props) {
-  const { params } = props
-  const { network, contract, id } = await params
-
-  // const searchParams = await props.searchParams
-  // const networks = searchParams['networks']?.split(',') ?? [
-  //   'ethereum',
-  //   'optimism',
-  //   'arbitrum',
-  //   'base',
-  //   'polygon',
-  //   'bsc',
-  // ]
-  // const keyHash = JSON.stringify({
-  //   route: 'ticker',
-  //   networks,
-  // })
-
-  return (
-    // <Suspense
-    //   // note: comment to prevent loading fallback for the whole slot
-    //   // note: when commented disables fallback for the other slot
-    //   key={keyHash}
-    //   fallback={<div>Loading...</div>}
-    // >
-    <Collectible network={network} contract={contract} id={id} />
-    // </Suspense>
-  )
-}
-
-async function Collectible({
-  network,
-  contract,
-  id,
-}: {
   network: NetworkType
   contract: string
   id: string
-}) {
-  const apiClient = await getAPIClient()
+}
 
-  const collectible = await apiClient.collectibles.collectible({
-    contract,
-    tokenId: id,
-    network,
+const Collectible = (props: Props) => {
+  const { network, contract, id } = props
+
+  const { data: collectible, isLoading } = useQuery({
+    queryKey: ['collectible', network, contract, id],
+    queryFn: async () => {
+      const url = new URL(
+        'http://localhost:3030/api/trpc/collectibles.collectible',
+      )
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            contract,
+            tokenId: id,
+            network,
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch.')
+      }
+
+      const body = await response.json()
+      return body.result.data.json
+    },
   })
+  if (isLoading || !collectible) {
+    return <p>Loading</p>
+  }
+
+  const imageUrl = collectible.image || collectible.thumbnail
+  const imageAlt = collectible.name || 'Collectible image'
 
   return (
     <div className="overflow-auto p-4 pr-3 2xl:p-12">
+      <Link
+        to="/portfolio/collectibles"
+        viewTransition
+        className="z-30 flex items-center gap-1 py-4 font-600 text-neutral-50 transition-colors hover:text-neutral-60 xl:hidden 2xl:mt-0 2xl:p-12 2xl:pt-0"
+      >
+        <ArrowLeftIcon />
+        Back
+      </Link>
       <div className="mb-10 flex gap-4">
         <div className="flex-1">
           <div className="2xl:mb-6">
             <div className="mb-2 flex items-center gap-1.5">
-              {/* {collectible.collection.image && (
-                <img
-                  src={collectible.collection.image}
-                  alt={collectible.collection.name}
-                  className="size-5 rounded-6"
-                />
-              )} */}
-
               <div className="text-15 font-semibold text-neutral-100">
                 {collectible.collection.name}
               </div>
@@ -132,14 +125,14 @@ async function Collectible({
           </div>
         </div>
 
-        {collectible.image && collectible.thumbnail ? (
-          <ImageLightbox
-            thumbnailSrc={collectible.thumbnail}
-            fullSizeSrc={collectible.image}
-            name={collectible.name}
-            openSeaUrl={collectible.links.opensea}
-            // etherscanUrl={`https://etherscan.io/token/${collectible.contract}?a=${collectible.id}`}
-          />
+        {imageUrl ? (
+          <div className="aspect-square size-[140px] rounded-16">
+            <img
+              src={imageUrl}
+              alt={imageAlt}
+              className="size-full rounded-16 object-cover"
+            />
+          </div>
         ) : (
           <div className="flex aspect-square size-[140px] flex-col items-center justify-center gap-1 rounded-16 border border-dashed border-neutral-20 bg-neutral-2.5 p-1 text-13 font-semibold text-neutral-40">
             <SadIcon />
@@ -156,31 +149,18 @@ async function Collectible({
           <div className="mb-5">{collectible.about}</div>
 
           <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-            <InfoCard
-              label="Network"
-              value={
-                <div className="flex items-center gap-1">
-                  <NetworkLogo name={collectible.network} size={16} />
-                  <span className="capitalize">{collectible.network}</span>
-                </div>
-              }
-            />
+            <div className="flex items-center gap-1">
+              <NetworkLogo name={collectible.network} size={16} />
+              <span className="capitalize">{collectible.network}</span>
+            </div>
             {collectible.standard !== 'NOT_A_CONTRACT' && (
               <>
-                <InfoCard
-                  label="Contract"
-                  value={collectible.contract}
-                  fontStyle="mono"
-                  url={`https://etherscan.io/address/${collectible.contract}`}
-                />
-                <InfoCard label="Token Standard" value={collectible.standard} />
+                <div className="font-mono">{collectible.contract}</div>
+                <div>{collectible.standard}</div>
               </>
             )}
             {collectible.collection.size && (
-              <InfoCard
-                label="Collection Size"
-                value={collectible.collection.size}
-              />
+              <div>{collectible.collection.size}</div>
             )}
           </div>
         </div>
@@ -196,10 +176,17 @@ async function Collectible({
               Traits
             </div>
             <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-              {Object.entries(collectible.traits).map(
+              {Object.entries(collectible.traits as Record<string, string>).map(
                 ([trait, value], index) => (
-                  <InfoCard key={index} label={trait} value={value} />
-                )
+                  <div key={index}>
+                    <div className="text-13 font-medium text-neutral-50">
+                      {trait}
+                    </div>
+                    <div className="text-13 font-medium text-neutral-100">
+                      {value}
+                    </div>
+                  </div>
+                ),
               )}
             </div>
           </div>
@@ -208,3 +195,5 @@ async function Collectible({
     </div>
   )
 }
+
+export { Collectible }
