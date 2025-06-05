@@ -1,0 +1,49 @@
+{
+  "name": "@status-im/trpc-webext",
+  "description": "description",
+  "version": "0.0.1",
+  "license": "MIT",
+  "keywords": [
+    "trpc",
+    "extension",
+    "webext",
+    "webextension"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./adapter": {
+      "types": "./dist/adapter/index.d.ts",
+      "import": "./dist/adapter/index.js",
+      "require": "./dist/adapter/index.js"
+    },
+    "./link": {
+      "types": "./dist/link/index.d.ts",
+      "import": "./dist/link/index.js",
+      "require": "./dist/link/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "tsc -w",
+    "build": "tsc",
+    "lint": "eslint src",
+    "format": "prettier --write ."
+  },
+  "peerDependencies": {
+    "@trpc/client": "^11.0.0",
+    "@trpc/server": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/webextension-polyfill": "^0.12.3"
+  }
+}

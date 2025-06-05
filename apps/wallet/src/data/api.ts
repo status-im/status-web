@@ -1,14 +1,14 @@
 // import { Cardano } from '@cardano-sdk/core'
 // import { SodiumBip32Ed25519 } from '@cardano-sdk/crypto'
 // import { AddressType, InMemoryKeyAgent } from '@cardano-sdk/key-management'
-import { createTRPCProxyClient } from '@trpc/client'
+import { createWebExtHandler, webExtensionLink } from '@status-im/trpc-webext'
+import { createTRPCClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
-import { createChromeHandler } from 'trpc-chrome/adapter'
+import { browser } from 'wxt/browser'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
-import { chromeLinkWithRetries } from './chromeLink'
 import * as ethereum from './ethereum/ethereum'
 import { getKeystore } from './keystore'
 import * as solana from './solana/solana'
@@ -16,12 +16,17 @@ import {
   getWalletCore,
   //  type WalletCore
 } from './wallet'
+import { runtimePortToClientContextType } from './webext'
 
-const createContext = async () => {
+import type { CreateWebExtContextOptions } from '@status-im/trpc-webext/adapter'
+
+const createContext = async (webextOpts?: CreateWebExtContextOptions) => {
   const keyStore = await getKeystore()
   const walletCore = await getWalletCore()
 
   return {
+    ...webextOpts,
+    contextType: runtimePortToClientContextType(webextOpts?.req),
     keyStore,
     walletCore,
   }
@@ -598,8 +603,11 @@ const apiRouter = router({
 export type APIRouter = typeof apiRouter
 
 export async function createAPI() {
-  // @ts-expect-error: fixme!:
-  createChromeHandler({ router: apiRouter, createContext })
+  createWebExtHandler({
+    router: apiRouter,
+    createContext,
+    runtime: browser.runtime,
+  })
 
   const ctx = await createContext()
   const api = createCallerFactory(apiRouter)(ctx)
@@ -608,8 +616,13 @@ export async function createAPI() {
 }
 
 export function createAPIClient() {
-  return createTRPCProxyClient<APIRouter>({
-    links: [chromeLinkWithRetries()],
-    transformer: superjson,
+  return createTRPCClient<APIRouter>({
+    links: [
+      webExtensionLink({
+        runtime: browser.runtime,
+        timeoutMS: 30000,
+        transformer: superjson,
+      }),
+    ],
   })
 }
