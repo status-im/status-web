@@ -1,24 +1,24 @@
 import { Input, type InputProps } from '@status-im/components'
-import { useController } from 'react-hook-form'
+import {
+  type Control,
+  type FieldValues,
+  type Path,
+  useController,
+} from 'react-hook-form'
 
-import type { Control, FieldValues } from 'react-hook-form'
+type TextFieldProps<T extends FieldValues> = {
+  control: Control<T>
+  name: Path<T>
+  label?: string
+} & InputProps
 
-// TODO: consider if we want to make it as a part of Input from @status-im/components
-function TextField({
+function TextField<T extends FieldValues>({
   control,
   name,
   label,
   ...props
-}: {
-  control: Control<FieldValues>
-  name: string
-  label: string
-} & InputProps) {
-  const {
-    field,
-    // fieldState: { invalid, isTouched, isDirty },
-    // formState: { touchedFields, dirtyFields },
-  } = useController({
+}: TextFieldProps<T>) {
+  const { field } = useController({
     name,
     control,
     rules: { required: true },
