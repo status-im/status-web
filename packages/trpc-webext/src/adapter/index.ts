@@ -1,5 +1,6 @@
 import { isObservable } from '@trpc/server/observable'
 import {
+  callProcedure,
   getErrorShape,
   getTRPCErrorFromUnknown,
   TRPCError,
@@ -7,7 +8,6 @@ import {
 
 import type { Unsubscribable } from '@trpc/server/observable'
 import type {
-  AnyProcedure,
   AnyRouter,
   BaseHandlerOptions,
   ProcedureType,
@@ -66,7 +66,6 @@ function onPortMessage<TRouter extends AnyRouter>(
         trpc: { id, jsonrpc, ...response },
       })
 
-    let params: { path: string; input: unknown } | undefined
     let input: unknown
     let ctx: unknown
 
@@ -85,23 +84,21 @@ function onPortMessage<TRouter extends AnyRouter>(
         return
       }
 
-      params = trpc.params as { path: string; input: unknown }
-
-      input = transformer.input.deserialize(params.input)
+      input = transformer.input.deserialize(trpc.params.input)
 
       ctx = await createContext?.({
         req: port,
         res: undefined,
       })
-      const caller = router.createCaller(ctx)
 
-      const segments = params.path.split('.')
-      const procedureFn = segments.reduce(
-        (acc, segment) => acc[segment],
-        caller as unknown,
-      ) as AnyProcedure
-
-      const result = await procedureFn(input)
+      const result = await callProcedure({
+        router,
+        path: trpc.params.path,
+        getRawInput: async () => input,
+        ctx,
+        type: method,
+        signal: undefined,
+      })
 
       if (method !== 'subscription') {
         const data = transformer.output.serialize(result)
@@ -116,7 +113,7 @@ function onPortMessage<TRouter extends AnyRouter>(
 
       if (!isObservable(result)) {
         throw new TRPCError({
-          message: `Subscription ${params.path} did not return an observable`,
+          message: `Subscription ${trpc.params.path} did not return an observable`,
           code: 'INTERNAL_SERVER_ERROR',
         })
       }
@@ -136,7 +133,7 @@ function onPortMessage<TRouter extends AnyRouter>(
           onError?.({
             error,
             type: method as ProcedureType,
-            path: params?.path,
+            path: trpc.params?.path,
             input,
             ctx,
             req: port,
@@ -146,7 +143,7 @@ function onPortMessage<TRouter extends AnyRouter>(
             error: getErrorShape({
               error,
               type: method as ProcedureType,
-              path: params?.path,
+              path: trpc.params?.path,
               input,
               ctx,
               config: router._def._config,
@@ -189,7 +186,7 @@ function onPortMessage<TRouter extends AnyRouter>(
       onError?.({
         error,
         type: method as ProcedureType,
-        path: params?.path,
+        path: 'params' in trpc ? trpc.params?.path : undefined,
         input,
         ctx,
         req: port,
@@ -199,7 +196,7 @@ function onPortMessage<TRouter extends AnyRouter>(
         error: getErrorShape({
           error,
           type: method as ProcedureType,
-          path: params?.path,
+          path: 'params' in trpc ? trpc.params?.path : undefined,
           input,
           ctx,
           config: router._def._config,
