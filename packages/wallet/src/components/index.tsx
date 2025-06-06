@@ -41,6 +41,7 @@ export {
   ImportRecoveryPhraseForm,
   type ImportRecoveryPhraseFormValues,
 } from './import-recovery-phrase-form'
+export { LifiWidget } from './lifi-widget'
 export { Logo, type LogoProps } from './logo'
 export { Navbar } from './nav-bar'
 export { NetworkBreakdown } from './network-breakdown'
