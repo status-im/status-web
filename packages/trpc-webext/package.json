@@ -38,7 +38,7 @@
     "build": "tsc",
     "lint": "eslint src",
     "format": "prettier --write .",
-    "test": "vitest",
+    "test": "vitest run",
     "test:watch": "vitest --watch"
   },
   "peerDependencies": {

@@ -1,16 +1,18 @@
-import {
-  describe,
-  it,
-  expect,
-  vi,
-  beforeEach,
-  afterEach,
-  type Mock,
-} from 'vitest'
 import { initTRPC, TRPCError } from '@trpc/server'
 import { observable } from '@trpc/server/observable'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type Mock,
+  vi,
+} from 'vitest'
 import { z } from 'zod'
+
 import { createWebExtHandler } from './'
+
 import type { Runtime } from 'webextension-polyfill'
 
 // Mock runtime

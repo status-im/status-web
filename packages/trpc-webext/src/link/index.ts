@@ -1,11 +1,16 @@
 import { TRPCClientError } from '@trpc/client'
 import { observable } from '@trpc/server/observable'
 
+import { safeDeserialize, safeSerialize } from '../utils'
+
 import type { Operation, OperationResultEnvelope, TRPCLink } from '@trpc/client'
 import type { AnyTRPCRouter } from '@trpc/server'
 import type { Observer } from '@trpc/server/observable'
 import type { TRPCResponseMessage } from '@trpc/server/rpc'
-import type { DataTransformer } from '@trpc/server/unstable-core-do-not-import'
+import type {
+  DataTransformer,
+  TRPCResult,
+} from '@trpc/server/unstable-core-do-not-import'
 import type { Runtime } from 'webextension-polyfill'
 
 export interface WebExtensionLinkOptions {
@@ -45,7 +50,7 @@ function isBackgroundMessage(message: unknown): message is BackgroundMessage {
     typeof message === 'object' &&
     message !== null &&
     'trpc' in message &&
-    typeof (message as any).trpc === 'object'
+    typeof (message as BackgroundMessage).trpc === 'object'
   )
 }
 
@@ -77,7 +82,7 @@ function createPortMessageHandler(
     if ('error' in trpc) {
       // Handle error response
       const error = shouldDeserialize(trpc.error)
-        ? transformer.deserialize(trpc.error)
+        ? safeDeserialize(transformer, trpc.error)
         : trpc.error
 
       observer.error(TRPCClientError.from({ ...trpc, error }))
@@ -90,9 +95,9 @@ function createPortMessageHandler(
         ...trpc.result,
         ...((!trpc.result?.type || trpc.result.type === 'data') && {
           type: 'data' as const,
-          data: transformer.deserialize(trpc.result?.data || {}),
+          data: safeDeserialize(transformer, trpc.result?.data || {}),
         }),
-      },
+      } as TRPCResult<unknown>,
     })
 
     // Complete for non-subscription or stopped subscription
@@ -159,7 +164,7 @@ export function webExtensionLink(
     return ({ op }) => {
       const { id, type, path, input } = op
 
-      const serializedInput = transformer.serialize(input) ?? input
+      const serializedInput = safeSerialize(transformer, input) ?? input
 
       const trpcPayload = {
         id,
