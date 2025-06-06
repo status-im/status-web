@@ -346,7 +346,7 @@ export async function getNFTMetadata(
 /**
  * @see https://www.alchemy.com/docs/data/transfers-api/transfers-endpoints/alchemy-get-asset-transfers
  *
- * 150 CU per request https://docs.alchemy.com/reference/compute-unit-costs#transfers-api
+ * 120 CU per request https://www.alchemy.com/docs/reference/compute-unit-costs#transfers-api
  */
 export async function getAssetTransfers(
   fromAddress: string,
