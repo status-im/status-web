@@ -37,13 +37,16 @@
     "dev": "tsc -w",
     "build": "tsc",
     "lint": "eslint src",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "peerDependencies": {
     "@trpc/client": "^11.0.0",
     "@trpc/server": "^11.0.0"
   },
   "devDependencies": {
-    "@types/webextension-polyfill": "^0.12.3"
+    "@types/webextension-polyfill": "^0.12.3",
+    "zod": "^3.23.8"
   }
 }
