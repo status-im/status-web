@@ -738,6 +738,17 @@ export async function getAssetTransfers(
   toAddress: string,
   network: NetworkType,
 ) {
+  const supportedCategories = allCategories.filter(
+    category => !unsupportedCategoriesByNetwork[network]?.includes(category),
+  )
+
+  if (unsupportedCategoriesByNetwork[network]) {
+    console.warn(
+      `[Alchemy] Skipping unsupported categories for ${network}:`,
+      unsupportedCategoriesByNetwork[network],
+    )
+  }
+
   const url = new URL(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
@@ -748,16 +759,9 @@ export async function getAssetTransfers(
       method: 'alchemy_getAssetTransfers',
       params: [
         {
-          category: [
-            'external',
-            'internal',
-            'erc20',
-            'erc721',
-            'erc1155',
-            'specialnft',
-          ],
-          fromAddress: fromAddress,
-          toAddress: toAddress,
+          category: supportedCategories,
+          fromAddress,
+          toAddress,
           excludeZeroValue: true,
           withMetadata: true,
           maxCount: '0x3e8',
@@ -767,6 +771,16 @@ export async function getAssetTransfers(
       id: 1,
     }),
   )
+
+  if ('error' in body) {
+    console.error('[Alchemy Error]', body.error)
+    throw new Error(`Alchemy API Error`)
+  }
+
+  if (!body.result || !body.result.transfers) {
+    console.error('[Alchemy Warning] Missing transfers in response:', body)
+    return []
+  }
 
   return body.result.transfers
 }
