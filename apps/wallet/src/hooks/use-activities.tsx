@@ -60,11 +60,11 @@ export const useActivities = ({ fromAddress, toAddress }: Props) => {
 
   const networks = searchParams.get('networks')?.split(',') ?? [
     'ethereum',
-    // 'optimism',
-    // 'arbitrum',
-    // 'base',
-    // 'polygon',
-    // 'bsc',
+    'optimism',
+    'arbitrum',
+    'base',
+    'polygon',
+    'bsc',
   ]
 
   return useInfiniteQuery({
