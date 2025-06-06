@@ -6,6 +6,8 @@ import {
   TRPCError,
 } from '@trpc/server/unstable-core-do-not-import'
 
+import { safeDeserialize, safeSerialize } from '../utils'
+
 import type { Unsubscribable } from '@trpc/server/observable'
 import type {
   AnyRouter,
@@ -172,7 +174,7 @@ async function handleRegularProcedure<TRouter extends AnyRouter>(
     })
   }
 
-  const input = context.transformer.input.deserialize(trpc.params.input)
+  const input = safeDeserialize(context.transformer.input, trpc.params.input)
   const ctx = await context.createContext?.({
     req: port,
     res: undefined,
@@ -187,7 +189,7 @@ async function handleRegularProcedure<TRouter extends AnyRouter>(
     signal: undefined,
   })
 
-  const serializedData = context.transformer.output.serialize(result)
+  const serializedData = safeSerialize(context.transformer.output, result)
   sendResponse({
     result: {
       type: 'data',
@@ -211,7 +213,7 @@ async function handleSubscription<TRouter extends AnyRouter>(
     })
   }
 
-  const input = context.transformer.input.deserialize(trpc.params.input)
+  const input = safeDeserialize(context.transformer.input, trpc.params.input)
   const ctx = await context.createContext?.({
     req: port,
     res: undefined,
