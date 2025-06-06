@@ -1,16 +1,18 @@
-import {
-  describe,
-  it,
-  expect,
-  vi,
-  beforeEach,
-  afterEach,
-  type Mock,
-} from 'vitest'
 import { TRPCClientError } from '@trpc/client'
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  type Mock,
+  vi,
+} from 'vitest'
+
 import { webExtensionLink } from './'
+
+import type { Operation, TRPCClientRuntime } from '@trpc/client'
 import type { Runtime } from 'webextension-polyfill'
-import type { Operation } from '@trpc/client'
 
 // Mock runtime
 const mockRuntime = {
@@ -147,7 +149,7 @@ describe('webExtensionLink', () => {
         runtime: mockRuntime,
         transformer: mockTransformer,
       })
-      operationLink = link()
+      operationLink = link({} as TRPCClientRuntime)
     })
 
     it('should serialize input before sending', () => {
@@ -253,7 +255,7 @@ describe('webExtensionLink', () => {
         runtime: mockRuntime,
         transformer: mockTransformer,
       })
-      operationLink = link()
+      operationLink = link({} as TRPCClientRuntime)
     })
 
     it('should ignore non-tRPC messages', () => {
@@ -525,7 +527,7 @@ describe('webExtensionLink', () => {
         runtime: mockRuntime,
         transformer: mockTransformer,
       })
-      operationLink = link()
+      operationLink = link({} as TRPCClientRuntime)
     })
 
     it('should not complete subscription on data', () => {
@@ -642,7 +644,7 @@ describe('webExtensionLink', () => {
         transformer: mockTransformer,
         timeoutMS: 1000,
       })
-      operationLink = link()
+      operationLink = link({} as TRPCClientRuntime)
     })
 
     afterEach(() => {
@@ -752,10 +754,8 @@ describe('webExtensionLink', () => {
   })
 
   describe('Port Disconnection', () => {
-    let link: ReturnType<typeof webExtensionLink>
-
     beforeEach(() => {
-      link = webExtensionLink({
+      webExtensionLink({
         runtime: mockRuntime,
         transformer: mockTransformer,
       })
@@ -777,7 +777,7 @@ describe('webExtensionLink', () => {
       ;(mockRuntime.connect as Mock).mockReturnValue(newMockPort)
 
       // Create new link - should reconnect
-      const newLink = webExtensionLink({
+      webExtensionLink({
         runtime: mockRuntime,
         transformer: mockTransformer,
       })
@@ -795,7 +795,7 @@ describe('webExtensionLink', () => {
         runtime: mockRuntime,
         transformer: mockTransformer,
       })
-      operationLink = link()
+      operationLink = link({} as TRPCClientRuntime)
     })
 
     it('should handle transformer that returns undefined', () => {
