@@ -1346,6 +1346,9 @@ importers:
       '@types/webextension-polyfill':
         specifier: ^0.12.3
         version: 0.12.3
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
 
   packages/wallet:
     dependencies:
