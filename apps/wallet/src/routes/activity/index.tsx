@@ -16,6 +16,7 @@ export const Route = createFileRoute('/activity/')({
 })
 
 function RouteComponent() {
+  // Hardcoded addresses for testing purposes : https://etherscan.io/address/0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
   const fromAddress = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
   const toAddress = '0x1810c87a85B1d3AFf71F3bd7fe45e4dc03EFF10E'
 
