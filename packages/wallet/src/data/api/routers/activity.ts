@@ -82,8 +82,8 @@ async function page({
     networks.map(async network => {
       try {
         const transfers = await getAssetTransfers(
-          toAddress,
           fromAddress,
+          toAddress,
           network,
         )
 
