@@ -88,9 +88,9 @@ function createPortMessageHandler(
     observer.next({
       result: {
         ...trpc.result,
-        ...((!trpc.result.type || trpc.result.type === 'data') && {
+        ...((!trpc.result?.type || trpc.result.type === 'data') && {
           type: 'data' as const,
-          data: transformer.deserialize(trpc.result.data),
+          data: transformer.deserialize(trpc.result?.data || {}),
         }),
       },
     })

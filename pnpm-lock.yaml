@@ -1316,6 +1316,9 @@ importers:
       '@types/webextension-polyfill':
         specifier: ^0.12.3
         version: 0.12.3
+      zod:
+        specifier: 3.23.8
+        version: 3.23.8
 
   packages/wallet:
     dependencies:
@@ -9010,6 +9013,7 @@ packages:
 
   auri@1.0.2:
     resolution: {integrity: sha512-OC54Bv+hAPvYlo98ZwK3cTo2ijg0CBylaAO5dZ/xZQ7e897k0o4qtxkUPQHruJrFUnL5BebCXz+bUAeXQHp9dg==}
+    deprecated: No longer supported
     hasBin: true
 
   auto-bind@4.0.0:
