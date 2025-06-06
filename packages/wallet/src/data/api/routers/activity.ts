@@ -21,11 +21,11 @@ export const activitiesRouter = router({
         networks: z.array(
           z.enum([
             'ethereum',
-            // 'optimism',
-            // 'arbitrum',
-            // 'base',
-            // 'polygon',
-            // 'bsc',
+            'optimism',
+            'arbitrum',
+            'base',
+            'polygon',
+            'bsc',
           ]),
         ),
         limit: z.number().optional(),
@@ -44,11 +44,11 @@ export const activitiesRouter = router({
         fromAddress: z.string(),
         network: z.enum([
           'ethereum',
-          // 'optimism',
-          // 'arbitrum',
-          // 'base',
-          // 'polygon',
-          // 'bsc',
+          'optimism',
+          'arbitrum',
+          'base',
+          'polygon',
+          'bsc',
         ]),
       }),
     )
