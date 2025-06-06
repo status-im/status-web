@@ -48,5 +48,8 @@
   "devDependencies": {
     "@types/webextension-polyfill": "^0.12.3",
     "zod": "^3.23.8"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
