@@ -350,7 +350,6 @@ export async function getNFTMetadata(
  */
 export async function getAssetTransfers(
   fromAddress: string,
-  toAddress: string,
   network: NetworkType,
 ) {
   const supportedCategories = allCategories.filter(
@@ -376,7 +375,6 @@ export async function getAssetTransfers(
         {
           category: supportedCategories,
           fromAddress,
-          toAddress,
           excludeZeroValue: true,
           withMetadata: true,
           maxCount: '0x3e8',

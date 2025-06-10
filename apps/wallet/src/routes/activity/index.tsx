@@ -36,12 +36,16 @@ function RouteComponent() {
   const activities = data?.pages.flatMap(page => page.activities) ?? []
 
   return (
-    <div className="flex min-h-full overflow-auto px-1 py-4">
+    <div className="relative flex min-h-full overflow-auto px-1 py-4">
       <pre className="text-sm whitespace-pre-wrap break-all">
         {JSON.stringify(activities, null, 2)}
       </pre>
       {hasNextPage && (
-        <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+        <button
+          className="text-white text-xl fixed right-10 top-20 z-[100] bg-neutral-30 px-5 py-3"
+          onClick={() => fetchNextPage()}
+          disabled={isFetchingNextPage}
+        >
           {isFetchingNextPage ? 'Loading more...' : 'Load more'}
         </button>
       )}
