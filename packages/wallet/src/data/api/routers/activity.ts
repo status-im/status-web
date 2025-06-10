@@ -59,18 +59,16 @@ export const activitiesRouter = router({
 })
 
 const cachedPage = cache(async (key: string) => {
-  const { fromAddress, toAddress, networks, limit, offset } = JSON.parse(key)
-  return await page({ fromAddress, toAddress, networks, limit, offset })
+  const { fromAddress, networks, limit, offset } = JSON.parse(key)
+  return await page({ fromAddress, networks, limit, offset })
 })
 
 async function page({
-  toAddress,
   fromAddress,
   networks,
   limit = 20,
   offset = 0,
 }: {
-  toAddress: string
   fromAddress: string
   networks: NetworkType[]
   limit?: number
@@ -81,11 +79,7 @@ async function page({
   await Promise.all(
     networks.map(async network => {
       try {
-        const transfers = await getAssetTransfers(
-          fromAddress,
-          toAddress,
-          network,
-        )
+        const transfers = await getAssetTransfers(fromAddress, network)
 
         for (const tx of transfers) {
           activities.push({
@@ -120,16 +114,12 @@ async function page({
 }
 
 const cachedActivity = cache(async (key: string) => {
-  const { fromAddress, toAddress, network } = JSON.parse(key)
-  return await activity(fromAddress, toAddress, network)
+  const { fromAddress, network } = JSON.parse(key)
+  return await activity(fromAddress, network)
 })
 
-async function activity(
-  fromAddress: string,
-  toAddress: string,
-  network: NetworkType,
-) {
-  const transfers = await getAssetTransfers(fromAddress, toAddress, network)
+async function activity(fromAddress: string, network: NetworkType) {
+  const transfers = await getAssetTransfers(fromAddress, network)
 
   const activities: Activity[] = transfers.map(tx => ({
     ...tx,
