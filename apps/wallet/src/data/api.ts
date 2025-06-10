@@ -573,7 +573,7 @@ const apiRouter = router({
         // )
 
         const { id } = await keyStore.importKey(
-          new Uint8Array(Buffer.from(input.privateKey)),
+          Buffer.from(input.privateKey),
           input.name,
           input.password,
           walletCore.CoinType.ethereum,
@@ -605,5 +605,6 @@ export function createAPIClient() {
 
   return createTRPCProxyClient<APIRouter>({
     links: [chromeLink({ port })],
+    transformer: superjson,
   })
 }
