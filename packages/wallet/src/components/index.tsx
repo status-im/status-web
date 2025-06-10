@@ -3,6 +3,10 @@ export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
+export {
+  CreatePasswordForm,
+  type CreatePasswordFormValues,
+} from './create-password-form'
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
 export { Image, type ImageProps } from './image'
