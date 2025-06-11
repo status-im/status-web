@@ -18,6 +18,7 @@ export {
   shortenAddress,
   type ShortenAddressProps,
 } from './shorten-address'
+export { SideNav, type SideNavLinkProps } from './sidenav'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
 export { TabLink } from './tab-link'
