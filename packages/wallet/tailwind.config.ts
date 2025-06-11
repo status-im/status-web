@@ -1,12 +1,12 @@
-import statusComponentsConfig from '@status-im/components/config'
+import config from '@status-im/components/config'
 import { scrollbarGutter, scrollbarWidth } from 'tailwind-scrollbar-utilities'
 import plugin from 'tailwindcss/plugin'
-import animatePlugin from 'tailwindcss-animate'
+import * as animatePlugin from 'tailwindcss-animate'
 
 import type { Config } from 'tailwindcss'
 
-const config: Config = {
-  presets: [statusComponentsConfig],
+const tailwindConfig: Config = {
+  presets: [config],
 
   future: {
     hoverOnlyWhenSupported: true,
@@ -255,8 +255,6 @@ const config: Config = {
     },
   },
   plugins: [
-    animatePlugin,
-
     // add scrollbar utilities before lands in tailwindcss
     // @see https://github.com/tailwindlabs/tailwindcss/pull/5732
     scrollbarWidth(),
@@ -286,8 +284,9 @@ const config: Config = {
       // )
     }),
 
+    animatePlugin,
     // reactAriaComponentsPlugin,
   ],
 }
 
-export default config
+export default tailwindConfig

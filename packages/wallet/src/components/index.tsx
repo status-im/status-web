@@ -3,6 +3,7 @@ export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
+export { CollectiblesGrid } from './collectibles-grid'
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
 export { Image, type ImageProps } from './image'
@@ -17,6 +18,8 @@ export {
   shortenAddress,
   type ShortenAddressProps,
 } from './shorten-address'
+export { SideNav, type SideNavLinkProps } from './sidenav'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
+export { TabLink } from './tab-link'
 export { Tooltip } from './tooltip'
