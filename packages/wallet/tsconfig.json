@@ -8,6 +8,8 @@
     "**/*.json"
   ],
   "compilerOptions": {
+    "rootDir": ".",
+    // "composite": true,
     "jsx": "preserve",
     "outDir": "./dist",
     "allowJs": true,
