@@ -246,6 +246,35 @@ export type NFTFloorPriceResponseBody = {
   }
 }
 
+export type AssetTransfer = {
+  blockNum: string
+  category: string
+  from: string
+  to: string
+  value: number
+  hash: string
+  asset: string
+  tokenId?: string
+  erc1155Metadata?: { tokenId: string; value: string }[]
+  erc721TokenId?: string
+  metadata: {
+    blockTimestamp: string
+  }
+  rawContract: {
+    value: string
+    address: string | null
+    decimal: string
+  }
+}
+
+export type AssetTransfersResponseBody = {
+  jsonrpc: '2.0'
+  id: number
+  result: {
+    transfers: AssetTransfer[]
+  }
+}
+
 export type ResponseBody =
   | ERC20TokenBalanceResponseBody
   | NativeTokenBalanceResponseBody
@@ -253,3 +282,5 @@ export type ResponseBody =
   | NFTMetadataResponseBody
   | deprecated_NFTSaleResponseBody
   | NFTFloorPriceResponseBody
+  | TokenBalanceHistoryResponseBody
+  | AssetTransfersResponseBody
