@@ -1,6 +1,6 @@
 // import { Suspense } from 'react'
 
-import { AssetsList } from '@status-im/wallet/components'
+import { AssetsList, LifiWidget } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -76,7 +76,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="flex min-h-full overflow-hidden px-1">
+    <div className="flex min-h-full flex-col overflow-hidden px-1">
       <div className="grid flex-1 grid-cols-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
         <div className="flex divide-x divide-default-neutral-20 overflow-auto">
           <div className="flex w-full">
@@ -95,8 +95,11 @@ function RouteComponent() {
               />
             )}
           </div>
-
-          <div className="hidden basis-1/2 flex-col xl:flex">Detail</div>
+          <div className="hidden basis-1/2 flex-col xl:flex">
+            Detail
+            {/* TODO: find the right place for this */}
+            <LifiWidget />
+          </div>
         </div>
       </div>
     </div>

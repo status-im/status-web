@@ -13,7 +13,7 @@ export function useIntersectionObserver<T extends Element | null>(
     root = null,
     rootMargin = '0%',
     freezeOnceVisible = false,
-  }: Args
+  }: Args,
 ): IntersectionObserverEntry | undefined {
   const [entry, setEntry] = useState<IntersectionObserverEntry>()
 
