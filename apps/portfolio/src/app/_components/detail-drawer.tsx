@@ -31,7 +31,7 @@ const DetailDrawer = (props: Props) => {
       .with(
         P.when(p => {
           const segments = p.split('/').filter(Boolean)
-          return p.includes('/assets/') && segments.length >= 4
+          return p.includes('/assets/') && segments.length === 3
         }),
         () => true
       )
