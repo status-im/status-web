@@ -1,7 +1,6 @@
 'use client'
 
-import { CurrencyAmount } from '../../../../../_components/currency-amount'
-import { NetworkLogo } from '../../../../../_components/network-logo'
+import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
