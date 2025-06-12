@@ -23,12 +23,9 @@ import {
 } from '@status-im/js'
 import { useQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
-import { match, P } from 'ts-pattern'
 
 import { LEARN_MORE_MOBILE_APP_URL } from '~/config/routes'
 import { Image } from '~components/assets'
-import { useDesktopOperatingSystem } from '~hooks/use-desktop-operating-system'
-import { useMobileOperatingSystem } from '~hooks/use-mobile-operating-system'
 import { ERROR_CODES } from '~sharing/_error-codes'
 import { useURLData } from '~sharing/_hooks/use-url-data'
 import { getRequestClient } from '~sharing/_lib/request-client'
@@ -110,9 +107,6 @@ export function PreviewPage(props: PreviewPageProps) {
   const { type, decodedData, encodedData } = props
 
   const toast = useToast()
-
-  const desktopOs = useDesktopOperatingSystem()
-  const mobileOs = useMobileOperatingSystem()
 
   // todo: default og image, not dynamic
   // const ogImageUrl = getOgImageUrl(props.decodedData)
@@ -472,27 +466,33 @@ export function PreviewPage(props: PreviewPageProps) {
                   </h3>
                   <ul>
                     <ListItem order={1} alignment="top">
-                      <div className="mt-[-4px] flex flex-col items-start gap-2 sm:flex-row">
-                        {match({ desktopOs, mobileOs })
-                          .with({ desktopOs: P.string, mobileOs: null }, () => (
-                            <>
-                              <DownloadDesktopButton size="24" />
-                              <div className="flex items-center gap-2">
-                                <span>or</span>
-                                <DownloadMobileButton size="24" />
-                              </div>
-                            </>
-                          ))
-                          .with({ desktopOs: null, mobileOs: P.string }, () => (
-                            <>
-                              <DownloadMobileButton size="24" />
-                              <div className="flex items-center gap-2">
-                                <span>or</span>
-                                <DownloadDesktopButton size="24" />
-                              </div>
-                            </>
-                          ))
-                          .otherwise(() => null)}
+                      <div className="flex flex-wrap gap-2">
+                        <DownloadDesktopButton
+                          size="24"
+                          variant="primary"
+                          show="all"
+                        />
+                        <span>Our next-gen mobile app is in the works</span>
+                        <div className="flex flex-wrap gap-2">
+                          <Button
+                            size="24"
+                            variant="outline"
+                            href={LEARN_MORE_MOBILE_APP_URL}
+                            iconAfter={<ExternalIcon className="ml-[2px]" />}
+                          >
+                            Learn more
+                          </Button>
+
+                          <DownloadMobileButton>
+                            <Button
+                              size="24"
+                              variant="outline"
+                              iconAfter={<DownloadIcon className="ml-[2px]" />}
+                            >
+                              Current Mobile App
+                            </Button>
+                          </DownloadMobileButton>
+                        </div>
                       </div>
                     </ListItem>
                     <ListItem order={2}>
