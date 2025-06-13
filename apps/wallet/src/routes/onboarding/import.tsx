@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Text } from '@status-im/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { validateMnemonic } from 'bip39'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -52,19 +53,9 @@ function RouteComponent() {
 
 function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   const mnemonicSchema = z.object({
-    mnemonic: z.string().refine(
-      value => {
-        const words = value.split(' ').filter(Boolean)
-        const wordsWithComma = value.split(',').filter(Boolean)
-        return (
-          [12, 15, 18, 21, 24].includes(words.length) ||
-          [12, 15, 18, 21, 24].includes(wordsWithComma.length)
-        )
-      },
-      {
-        message: 'Invalid phrase. Check word count and spelling.',
-      },
-    ),
+    mnemonic: z.string().refine(value => validateMnemonic(value), {
+      message: 'Invalid phrase. Check word count and spelling.',
+    }),
   })
 
   type MnemonicFormData = z.infer<typeof mnemonicSchema>
