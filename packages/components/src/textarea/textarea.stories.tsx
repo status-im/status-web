@@ -13,23 +13,20 @@ const meta: Meta<Component> = {
 
   render: props => (
     <div className="flex w-[300px] flex-col gap-3">
-      <h3 className="mb-2 text-15 font-medium">Basic Inputs</h3>
+      <h3 className="mb-2 text-15 font-medium">Basic Textarea</h3>
       <Textarea {...props} />
-      <Textarea {...props} size="32" />
 
-      <h3 className="mb-2 mt-4 text-15 font-medium">Clearable Inputs</h3>
+      <h3 className="mb-2 mt-4 text-15 font-medium">Clearable Textarea</h3>
       <Textarea {...props} clearable />
-      <Textarea {...props} clearable size="32" />
 
       <h3 className="mb-2 mt-4 text-15 font-medium">Special States</h3>
       <Textarea {...props} isDisabled />
       <Textarea {...props} isInvalid />
 
       <h3 className="mb-2 mt-4 text-15 font-medium">
-        Inputs with Label and Meta
+        Textarea with Label and Meta
       </h3>
       <Textarea {...props} label="Label" />
-      <Textarea {...props} maxLength={280} />
       <Textarea {...props} label="Label" maxLength={280} />
     </div>
   ),
