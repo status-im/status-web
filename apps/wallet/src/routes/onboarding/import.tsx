@@ -57,8 +57,8 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
         const words = value.split(' ').filter(Boolean)
         const wordsWithComma = value.split(',').filter(Boolean)
         return (
-          [12, 18, 24].includes(words.length) ||
-          [12, 18, 24].includes(wordsWithComma.length)
+          [12, 15, 18, 21, 24].includes(words.length) ||
+          [12, 15, 18, 21, 24].includes(wordsWithComma.length)
         )
       },
       {
@@ -93,7 +93,7 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
           Import via recovery phrase
         </Text>
         <Text size={15} color="$neutral-50">
-          Type or paste your 12-, 18-, or 24-word Ethereum recovery phrase
+          Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
         </Text>
         <TextArea
           placeholder="Recovery phrase"
