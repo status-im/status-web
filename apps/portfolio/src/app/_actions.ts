@@ -8,7 +8,7 @@ import { getAPIClient } from '../data/api'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
-export type Provider = 'mercuryo' | 'ramp' | 'moonpay'
+export type Provider = 'mercuryo' | 'moonpay'
 
 type ApiInput = {
   name: Provider
@@ -44,10 +44,6 @@ export async function handleCryptoOnRamp(input: ApiInput) {
 
   if (name === 'moonpay') {
     redirectUrl = `https://buy.moonpay.com?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR`
-  }
-
-  if (name === 'ramp') {
-    redirectUrl = `https://app.ramp.network/?hostApiKey=zrtf9u2uqebeyzcs37fu5857tktr3eg9w5tffove&hostAppName=Status&swapAsset=ETH_*,ARBITRUM_*,OPTIMISM_*`
   }
 
   if (!address) {
