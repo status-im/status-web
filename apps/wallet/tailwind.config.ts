@@ -10,7 +10,7 @@ export default {
   // todo: extend @status-im/components too
   presets: [config],
 
-  darkMode: 'media',
+  darkMode: ['selector', '[data-theme="dark"]'],
 
   future: {
     hoverOnlyWhenSupported: true,

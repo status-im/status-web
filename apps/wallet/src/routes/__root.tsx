@@ -69,7 +69,7 @@ function RootComponent() {
       <head>
         <HeadContent />
       </head>
-      <div id="app" className="isolate">
+      <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
         <WagmiProvider>
           {/* <QueryClientProvider> */}

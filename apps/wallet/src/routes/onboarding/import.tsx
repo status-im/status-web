@@ -1,8 +1,14 @@
 import { useState } from 'react'
 
-import { Button, Input } from '@status-im/components'
-import { createFileRoute } from '@tanstack/react-router'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button, Input, Text } from '@status-im/components'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { validateMnemonic } from 'bip39'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+
+import Header from '@/components/header'
+import TextArea from '@/components/TextArea'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
 
@@ -26,13 +32,16 @@ function RouteComponent() {
     mnemonic: '',
   })
 
+  const navigate = useNavigate()
+
   return (
-    <div>
+    <div className="h-full">
       {onboardingState.type === 'import-wallet' && (
         <ImportWallet
-          onNext={mnemonic =>
+          onNext={mnemonic => {
             setOnboardingState({ type: 'create-password', mnemonic })
-          }
+            navigate({ to: '/portfolio' })
+          }}
         />
       )}
       {onboardingState.type === 'create-password' && (
@@ -43,14 +52,24 @@ function RouteComponent() {
 }
 
 function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
+  const mnemonicSchema = z.object({
+    mnemonic: z.string().refine(value => validateMnemonic(value), {
+      message: 'Invalid phrase. Check word count and spelling.',
+    }),
+  })
+
+  type MnemonicFormData = z.infer<typeof mnemonicSchema>
+
   const {
-    register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
+    control,
+    formState: { errors, isValid },
+  } = useForm<MnemonicFormData>({
     defaultValues: {
       mnemonic: '',
     },
+    mode: 'onChange',
+    resolver: zodResolver(mnemonicSchema),
   })
 
   const onSubmit = handleSubmit(data => {
@@ -58,20 +77,29 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   })
 
   return (
-    <div className="flex flex-col gap-4">
-      <textarea
-        className="h-32 rounded-12 border border-neutral-80 bg-neutral-90 p-2 text-white-100 placeholder:text-neutral-40 dark:border-neutral-60 dark:bg-neutral-100"
-        placeholder="Enter your recovery phrase"
-        {...register('mnemonic', {
-          required: 'Recovery phrase is required',
-        })}
-      />
-      {errors.mnemonic && (
-        <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
-      )}
-      <Button variant="danger" onClick={onSubmit}>
-        Continue
-      </Button>
+    <div className="flex h-full flex-col justify-between">
+      <div className="flex flex-col gap-1">
+        <Header />
+        <Text size={27} weight="semibold">
+          Import via recovery phrase
+        </Text>
+        <Text size={15} color="$neutral-50">
+          Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
+        </Text>
+        <TextArea
+          placeholder="Recovery phrase"
+          control={control}
+          name="mnemonic"
+        />
+      </div>
+      <div className="flex flex-col gap-6">
+        {errors.mnemonic && (
+          <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
+        )}
+        <Button variant="primary" onClick={onSubmit} disabled={!isValid}>
+          Continue
+        </Button>
+      </div>
     </div>
   )
 }
@@ -130,7 +158,7 @@ function CreatePassword({ mnemonic }: { mnemonic: string }) {
           {errors.confirmPassword.message}
         </p>
       )}
-      <Button variant="danger" onClick={onSubmit}>
+      <Button variant="primary" onClick={onSubmit}>
         Import Wallet
       </Button>
     </div>
