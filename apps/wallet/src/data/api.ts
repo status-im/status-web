@@ -12,6 +12,7 @@ import * as bitcoin from './bitcoin/bitcoin'
 import * as ethereum from './ethereum/ethereum'
 import { getKeystore } from './keystore'
 import * as solana from './solana/solana'
+import { createPasswordAuthPlugin } from './trpc/middlewares/password-auth'
 import {
   getWalletCore,
   //  type WalletCore
@@ -34,6 +35,8 @@ const createContext = async (webextOpts?: CreateWebExtContextOptions) => {
 
 type Context = Awaited<ReturnType<typeof createContext>>
 
+const passwordAuthPlugin = createPasswordAuthPlugin<Context>()
+
 /**
  * @see https://trpc.io/docs/server/routers#runtime-configuration
  */
@@ -43,14 +46,15 @@ const t = initTRPC.context<Context>().create({
   allowOutsideOfServer: true,
 })
 
-// const publicProcedure = t.procedure
+const publicProcedure = t.procedure.concat(passwordAuthPlugin)
+
 const { createCallerFactory, router } = t
 
 // todo: lock with password as trpc auth procedure
 // todo?: expose password in context or use other (session) token derived from it for encrypting and storing
 const apiRouter = router({
   wallet: router({
-    all: t.procedure.query(async ({ ctx }) => {
+    all: publicProcedure.query(async ({ ctx }) => {
       const { keyStore } = ctx
 
       const wallets = await keyStore.loadAll()
@@ -61,7 +65,7 @@ const apiRouter = router({
     // todo: validation (e.g. password, mnemonic, already exists)
     // todo: words count option
     // todo: handle cancelation
-    add: t.procedure
+    add: publicProcedure
       .input(
         z.object({
           password: z.string(),
@@ -70,6 +74,7 @@ const apiRouter = router({
       )
       .mutation(async ({ input, ctx }) => {
         const { walletCore, keyStore } = ctx
+        console.log('ctx = ', ctx)
 
         const wallet = walletCore.HDWallet.create(128, input.password)
         const mnemonic = wallet.mnemonic()
@@ -110,7 +115,7 @@ const apiRouter = router({
         }
       }),
 
-    get: t.procedure
+    get: publicProcedure
       .input(
         z.object({
           walletId: z.string(),
@@ -129,7 +134,7 @@ const apiRouter = router({
         }
       }),
 
-    import: t.procedure
+    import: publicProcedure
       .input(
         z.object({
           mnemonic: z.string(),
@@ -182,7 +187,7 @@ const apiRouter = router({
       }),
 
     account: router({
-      all: t.procedure
+      all: publicProcedure
         .input(
           z.object({
             walletId: z.string(),
@@ -197,7 +202,7 @@ const apiRouter = router({
         }),
 
       ethereum: router({
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -265,7 +270,7 @@ const apiRouter = router({
           }),
 
         // note: our first tx https://holesky.etherscan.io/tx/0xdc2aa244933260c50e665aa816767dce6b76d5d498e6358392d5f79bfc9626d5
-        send: t.procedure
+        send: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -333,7 +338,7 @@ const apiRouter = router({
 
       bitcoin: router({
         // note?: create all variants (e.g. segwit, nested segwit, legacy, taproot) for each added account by default
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -391,7 +396,7 @@ const apiRouter = router({
           }),
 
         // note: our first tx https://mempool.space/testnet4/tx/4d1797f4a6e92ab5164cfa8030e5954670f162e2aae792c8d6d6a81aae32fbd4
-        send: t.procedure
+        send: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -435,7 +440,7 @@ const apiRouter = router({
       }),
 
       solana: router({
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -459,7 +464,7 @@ const apiRouter = router({
           }),
 
         // note: our first tx https://solscan.io/tx/LNgKUb6bewbcgVXi9NBF4qYNJC5kjMPpH5GDVZBsVXFC7MDhYtdygkuP1avq7c31bHDkr9pkKYvMSdT16mt294g?cluster=devnet
-        send: t.procedure
+        send: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -503,7 +508,7 @@ const apiRouter = router({
       }),
 
       cardano: router({
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -557,7 +562,7 @@ const apiRouter = router({
   }),
 
   privateKey: router({
-    import: t.procedure
+    import: publicProcedure
       .input(
         z.object({
           privateKey: z.string(),
