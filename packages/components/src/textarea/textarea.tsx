@@ -79,8 +79,8 @@ const textareaStyles = cva({
   ],
   variants: {
     size: {
-      '40': 'h-10 rounded-12 px-3',
-      '32': 'h-8 rounded-10 px-2',
+      '40': 'rounded-12 px-3',
+      '32': 'rounded-10 px-2',
     },
     clearable: { true: '' },
   },
