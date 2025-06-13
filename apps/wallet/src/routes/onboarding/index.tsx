@@ -1,5 +1,5 @@
 import { Button, Text } from '@status-im/components'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/onboarding/')({
   component: RouteComponent,
@@ -37,13 +37,21 @@ function RouteComponent() {
       <Text size={13} color="$neutral-50">
         By continuing you agree with Status
         <br />
-        <Link to="/onboarding" color="$neutral-100">
+        <a
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/terms-of-use.md"
+          className="text-neutral-100"
+          target="_blank"
+        >
           Terms of use
-        </Link>{' '}
+        </a>{' '}
         and{' '}
-        <Link to="/onboarding" color="$neutral-100">
+        <a
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/privacy-policy.md"
+          className="text-neutral-100"
+          target="_blank"
+        >
           Privacy policy
-        </Link>
+        </a>
       </Text>
     </div>
   )
