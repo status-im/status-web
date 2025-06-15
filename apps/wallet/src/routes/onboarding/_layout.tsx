@@ -1,10 +1,14 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+
+import { apiClient } from '../../providers/api-client'
 
 export const Route = createFileRoute('/onboarding')({
   component: RouteComponent,
-  beforeLoad: () => {
-    // TODO: check if user is already onboarded
-    // throw redirect({ to: '/' })
+  beforeLoad: async () => {
+    const wallets = await apiClient.wallet.all.query()
+    if (wallets && wallets.length > 0) {
+      throw redirect({ to: '/portfolio' })
+    }
   },
 })
 
