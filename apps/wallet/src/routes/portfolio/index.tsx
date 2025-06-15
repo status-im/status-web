@@ -2,13 +2,22 @@
 
 import { AssetsList } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+
+import { apiClient } from '../../providers/api-client'
+import { useWallet } from '../../providers/wallet-context'
 
 // import { DetailDrawer } from '../../../../portfolio/src/app/[address]/@detail/_drawer'
 // import { Loading as LoadingNav } from '../../../../portfolio/src/app/[address]/@nav/loading'
 
 export const Route = createFileRoute('/portfolio/')({
   component: RouteComponent,
+  beforeLoad: async () => {
+    const wallets = await apiClient.wallet.all.query()
+    if (!wallets || wallets.length === 0) {
+      throw redirect({ to: '/onboarding' })
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -19,6 +28,8 @@ export const Route = createFileRoute('/portfolio/')({
 })
 
 function RouteComponent() {
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+
   const handleSelect = (url: string, options?: { scroll?: boolean }) => {
     // Handle the selection of an asset
     console.log('Selected asset URL:', url)
@@ -28,8 +39,12 @@ function RouteComponent() {
   // todo: export trpc client with api router and used instead
   // todo: cache
   const { data: assets, isLoading } = useQuery({
-    queryKey: ['assets'],
+    queryKey: ['assets', currentWallet?.activeAccounts[0].address],
     queryFn: async () => {
+      if (!currentWallet?.activeAccounts[0].address) {
+        throw new Error('No wallet address available')
+      }
+
       const url = new URL(
         `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
       )
@@ -38,7 +53,7 @@ function RouteComponent() {
         // encodeURIComponent(
         JSON.stringify({
           json: {
-            address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+            address: currentWallet.activeAccounts[0].address,
             networks: [
               'ethereum',
               'optimism',
@@ -52,7 +67,6 @@ function RouteComponent() {
         // ),
       )
 
-      // note: http://localhost:3030/api/trpc/assets.all?input={"json":{"address":"0xd8da6bf26964af9d7eed9e03e53415d37aa96045","networks":["ethereum","optimism","arbitrum","base","polygon","bsc"]}}
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -61,13 +75,13 @@ function RouteComponent() {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch.')
+        throw new Error('Failed to fetch assets.')
       }
 
       const body = await response.json()
-
       return body.result.data.json.assets
     },
+    enabled: !!currentWallet?.activeAccounts[0].address && !isWalletLoading,
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
     refetchOnMount: false,
@@ -75,12 +89,16 @@ function RouteComponent() {
     refetchOnReconnect: false,
   })
 
+  if (!currentWallet) {
+    return <div>No wallet selected</div>
+  }
+
   return (
     <div className="flex min-h-full overflow-hidden px-1">
       <div className="grid flex-1 grid-cols-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
         <div className="flex divide-x divide-default-neutral-20 overflow-auto">
           <div className="flex w-full">
-            {isLoading ? (
+            {isWalletLoading || isLoading ? (
               <div>Loading...</div>
             ) : (
               <AssetsList

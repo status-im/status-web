@@ -1,4 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+
+import { apiClient } from '../providers/api-client'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
@@ -9,6 +11,12 @@ export const Route = createFileRoute('/')({
       },
     ],
   }),
+  beforeLoad: async () => {
+    const wallets = await apiClient.wallet.all.query()
+    if (wallets && wallets.length > 0) {
+      throw redirect({ to: '/portfolio' })
+    } else throw redirect({ to: '/onboarding' })
+  },
 })
 
 function RouteComponent() {
