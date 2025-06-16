@@ -20,6 +20,7 @@ type Props = Aria.TextFieldProps & {
   inputMode?: Aria.InputProps['inputMode']
   autoComplete?: Aria.InputProps['autoComplete']
   clearable?: boolean
+  hideCounter?: boolean
 }
 
 const Input = (props: Props, ref: React.Ref<HTMLInputElement>) => {
@@ -33,18 +34,19 @@ const Input = (props: Props, ref: React.Ref<HTMLInputElement>) => {
     autoComplete = 'off',
     clearable = false,
     maxLength,
+    hideCounter = false,
     ...fieldProps
   } = props
 
   return (
     <Aria.TextField {...fieldProps} className="grid gap-2">
-      {(label || maxLength) && (
+      {(label || maxLength) && !hideCounter && (
         <div className="grid grid-cols-2">
           <Aria.Label className="text-13 font-medium text-neutral-50 dark:text-neutral-40">
             {label}
           </Aria.Label>
 
-          {maxLength && (
+          {!hideCounter && maxLength && (
             <Aria.Label className="text-right text-13 font-regular text-neutral-50 dark:text-neutral-40">
               {fieldProps.value?.length}/{maxLength}
             </Aria.Label>
