@@ -1,16 +1,16 @@
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Input, Text } from '@status-im/components'
+import { ArrowLeftIcon } from '@status-im/icons/20'
+import {
+  ImportRecoveryForm,
+  type MnemonicFormData,
+} from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-import { validateMnemonic } from 'bip39'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-
-import Header from '@/components/header'
-import TextArea from '@/components/TextArea'
 
 import { useImportWallet } from '../../hooks/use-import-wallet'
+
+import type { SubmitHandler } from 'react-hook-form'
 
 export const Route = createFileRoute('/onboarding/import')({
   component: RouteComponent,
@@ -27,21 +27,18 @@ type OnboardingState =
     }
 
 function RouteComponent() {
-  const [onboardingState, setOnboardingState] = useState<OnboardingState>({
+  const [onboardingState /*, setOnboardingState*/] = useState<OnboardingState>({
     type: 'import-wallet',
     mnemonic: '',
   })
-
-  const navigate = useNavigate()
 
   return (
     <div className="h-full">
       {onboardingState.type === 'import-wallet' && (
         <ImportWallet
-          onNext={mnemonic => {
-            setOnboardingState({ type: 'create-password', mnemonic })
-            navigate({ to: '/portfolio' })
-          }}
+        // onNext={mnemonic => {
+        //   setOnboardingState({ type: 'create-password', mnemonic })
+        // }}
         />
       )}
       {onboardingState.type === 'create-password' && (
@@ -51,54 +48,41 @@ function RouteComponent() {
   )
 }
 
-function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
-  const mnemonicSchema = z.object({
-    mnemonic: z.string().refine(value => validateMnemonic(value), {
-      message: 'Invalid phrase. Check word count and spelling.',
-    }),
-  })
+function ImportWallet() {
+  const [isPending, startTransition] = useTransition()
+  const navigate = useNavigate()
 
-  type MnemonicFormData = z.infer<typeof mnemonicSchema>
-
-  const {
-    handleSubmit,
-    control,
-    formState: { errors, isValid },
-  } = useForm<MnemonicFormData>({
-    defaultValues: {
-      mnemonic: '',
-    },
-    mode: 'onChange',
-    resolver: zodResolver(mnemonicSchema),
-  })
-
-  const onSubmit = handleSubmit(data => {
-    onNext(data.mnemonic)
-  })
+  const onSubmit: SubmitHandler<MnemonicFormData> = async data => {
+    try {
+      startTransition(async () => {
+        navigate({ to: '/onboarding/new', state: { mnemonic: data.mnemonic } })
+        // onNext?(mnemonic)
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className="flex h-full flex-col justify-between">
-      <div className="flex flex-col gap-1">
-        <Header />
+      <div className="flex h-full flex-col gap-1">
+        <div className="pb-4">
+          <Button
+            href="/onboarding"
+            variant="grey"
+            icon={<ArrowLeftIcon color="$neutral-100" />}
+            aria-label="Back"
+            size="32"
+          />
+        </div>
         <Text size={27} weight="semibold">
           Import via recovery phrase
         </Text>
-        <Text size={15} color="$neutral-50">
+        <Text size={15} color="$neutral-50" className="mb-4">
           Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
         </Text>
-        <TextArea
-          placeholder="Recovery phrase"
-          control={control}
-          name="mnemonic"
-        />
-      </div>
-      <div className="flex flex-col gap-6">
-        {errors.mnemonic && (
-          <p className="text-13 text-danger-50">{errors.mnemonic.message}</p>
-        )}
-        <Button variant="primary" onClick={onSubmit} disabled={!isValid}>
-          Continue
-        </Button>
+
+        <ImportRecoveryForm onSubmit={onSubmit} loading={isPending} />
       </div>
     </div>
   )

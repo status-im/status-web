@@ -15,7 +15,11 @@ export const Route = createFileRoute('/onboarding/')({
 function RouteComponent() {
   return (
     <div className="flex flex-col items-center gap-6 py-3 text-center">
-      <div className="size-52 rounded-full bg-neutral-5" />
+      <img
+        src="/images/onboarding.png"
+        alt="Onboarding"
+        className="size-[264px]"
+      />
       <div className="flex flex-col gap-4">
         <Text size={40} weight="bold">
           Your Wallet.
@@ -41,6 +45,7 @@ function RouteComponent() {
           href="https://github.com/status-im/status-software-legal-documents/blob/master/terms-of-use.md"
           className="text-neutral-100"
           target="_blank"
+          rel="noopenernoreferrer"
         >
           Terms of use
         </a>{' '}
@@ -49,6 +54,7 @@ function RouteComponent() {
           href="https://github.com/status-im/status-software-legal-documents/blob/master/privacy-policy.md"
           className="text-neutral-100"
           target="_blank"
+          rel="noopener noreferrer"
         >
           Privacy policy
         </a>

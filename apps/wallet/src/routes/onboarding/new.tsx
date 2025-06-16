@@ -1,17 +1,12 @@
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Text } from '@status-im/components'
-import { InfoIcon } from '@status-im/icons/12'
-import { createFileRoute } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { Button } from '@status-im/components'
+import { ArrowLeftIcon } from '@status-im/icons/20'
+import { CreatePasswordForm } from '@status-im/wallet/components'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
-import passwordIcon from '@/assets/Illustration.png'
-import Progress from '@/assets/progress'
-import Header from '@/components/header'
-import TextField from '@/components/TextField'
-import usePasswordStrength from '@/hooks/usePasswordStrength'
+import type { CreatePasswordFormValues } from '@status-im/wallet/components'
+import type { SubmitHandler } from 'react-hook-form'
 
 export const Route = createFileRoute('/onboarding/new')({
   component: RouteComponent,
@@ -22,17 +17,17 @@ type OnboardingState =
   | { type: 'recovery-phrase'; mnemonic: string }
 
 function RouteComponent() {
-  const [onboardingState, setOnboardingState] = useState<OnboardingState>({
+  const [onboardingState /*, setOnboardingState*/] = useState<OnboardingState>({
     type: 'create-password',
   })
 
   return (
-    <div className="h-full">
+    <div className="flex h-full">
       {onboardingState.type === 'create-password' && (
         <CreatePassword
-          onNext={mnemonic =>
-            setOnboardingState({ type: 'recovery-phrase', mnemonic })
-          }
+        // onNext={mnemonic =>
+        //   setOnboardingState({ type: 'recovery-phrase', mnemonic })
+        // }
         />
       )}
       {onboardingState.type === 'recovery-phrase' && (
@@ -42,119 +37,43 @@ function RouteComponent() {
   )
 }
 
-function CreatePassword({ onNext }: { onNext: (wallet: string) => void }) {
-  const passwordSchema = z
-    .object({
-      password: z.string().min(10, 'Password must be at least 10 characters'),
-      confirmPassword: z.string(),
-    })
-    .refine(data => data.password === data.confirmPassword, {
-      message: 'Passwords do not match',
-      path: ['confirmPassword'],
-    })
-
-  type PasswordFormData = z.infer<typeof passwordSchema>
-
-  const {
-    control,
-    getValues,
-    watch,
-    handleSubmit,
-    formState: { errors, touchedFields },
-  } = useForm<PasswordFormData>({
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
-    mode: 'onBlur',
-    resolver: zodResolver(passwordSchema),
-  })
-
-  const password = watch('password')
-  const confirmPassword = watch('confirmPassword')
-  const disabled =
-    Object.values(errors).length > 0 ||
-    Object.values(touchedFields).length !== Object.keys(getValues()).length
-  const { passwordStrength, isPasswordValid } = usePasswordStrength(password)
+function CreatePassword() {
   const { createWalletAsync } = useCreateWallet()
+  const navigate = useNavigate()
+  const [isPending, startTransition] = useTransition()
 
-  const onSubmit = handleSubmit(async (data: PasswordFormData) => {
-    if (!disabled || !isPasswordValid) {
-      return
+  const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
+    try {
+      startTransition(async () => {
+        const mnemonic = await createWalletAsync(data.password)
+        navigate({ to: '/portfolio', state: { mnemonic } })
+        // onNext?(mnemonic)
+      })
+    } catch (error) {
+      console.error(error)
     }
-    const wallet = await createWalletAsync(data.password)
-    onNext(wallet)
-  })
+  }
 
   return (
-    <div className="flex h-full flex-col justify-between">
-      <div className="flex flex-col gap-1">
-        <Header className="mb-4" />
-        <img src={passwordIcon} alt="password-icon" className="mb-3 size-12" />
-        <Text size={27} weight="semibold">
-          Create password
-        </Text>
-        <Text size={15} color="$neutral-50">
-          To unlock the extension and sign transactions
-        </Text>
-        <div className="mt-4 flex flex-col gap-2">
-          <TextField
-            type="password"
-            name="password"
-            placeholder="Type password"
-            control={control}
-          />
-          <p
-            className={`mb-2 flex items-center gap-1 text-13 ${errors.password ? 'text-danger-50' : 'text-neutral-50'} ${password.length >= 10 && 'text-success-50'}`}
-          >
-            <InfoIcon className="size-3.5" />
-            <span>Minimum 10 characters</span>
-          </p>
-          <TextField
-            name="confirmPassword"
-            control={control}
-            type="password"
-            placeholder="Repeat password"
-          />
+    <div className="flex flex-col gap-4">
+      <div className="pb-4">
+        <Button
+          href="/onboarding"
+          variant="grey"
+          icon={<ArrowLeftIcon color="$neutral-100" />}
+          aria-label="Back"
+          size="32"
+        />
+      </div>
+      <div className="mb-1 flex flex-col gap-1">
+        <h1 className="text-27 font-600">Create password</h1>
+        <div className="text-15 text-neutral-50">
+          To unlock the extension and sign transactions, the password is stored
+          only on your device. Status can't recover it.
         </div>
-        {touchedFields.confirmPassword && confirmPassword && (
-          <p
-            className={`mb-2 flex items-center gap-1 text-13 ${errors.confirmPassword ? 'text-danger-50' : 'text-success-50'}`}
-          >
-            <InfoIcon className="size-3.5" />
-            <span>
-              {errors.confirmPassword
-                ? errors.confirmPassword.message
-                : 'Passwords match'}
-            </span>
-          </p>
-        )}
       </div>
-      <div className="flex flex-col gap-3">
-        {!disabled ? (
-          <div className="mb-2 flex items-center gap-2 rounded-12 border border-customisation-blue-50/[.1] bg-customisation-blue-60/[.05] px-4 py-2.5 text-neutral-50">
-            <InfoIcon className="size-4" />
-            <span className="text-13 text-neutral-100">
-              Status cannot recover your password for you
-            </span>
-          </div>
-        ) : password ? (
-          <div className="flex items-center gap-1">
-            <Progress
-              stroke={passwordStrength.color}
-              progress={passwordStrength.progress}
-            />
-            <span>{passwordStrength.label}</span>
-          </div>
-        ) : (
-          <span className="text-neutral-50">
-            Tip: Include a mixture of numbers, capitals and symbols
-          </span>
-        )}
-        <Button variant="primary" disabled={disabled} onClick={onSubmit}>
-          Continue
-        </Button>
-      </div>
+
+      <CreatePasswordForm onSubmit={handleSubmit} loading={isPending} />
     </div>
   )
 }
