@@ -6,14 +6,12 @@ const PAGE_LIMIT = 20
 
 type Props = {
   fromAddress: string
-  toAddress: string
 }
 
 const getTransfers = async (
   fromAddress: string,
-  toAddress: string,
   networks: NetworkType[],
-  offset = 0,
+  pageKeys: Partial<Record<NetworkType, string>> = {},
 ) => {
   const url = new URL('http://localhost:3030/api/trpc/activities.page')
 
@@ -22,10 +20,9 @@ const getTransfers = async (
     JSON.stringify({
       json: {
         fromAddress,
-        toAddress,
         networks,
         limit: PAGE_LIMIT,
-        offset,
+        pageKeys,
       },
     }),
   )
@@ -43,47 +40,52 @@ const getTransfers = async (
   }
 
   const body = await response.json()
-
   const data = body.result?.data?.json
+
   if (!data) {
     throw new Error('Unexpected response structure.')
   }
 
   return {
     activities: data.activities,
-    hasMore: data.hasMore,
+    nextPageKeys: data.nextPageKeys,
   }
 }
 
-export const useActivities = ({ fromAddress, toAddress }: Props) => {
+export const useActivities = ({ fromAddress }: Props) => {
   const searchParams = new URLSearchParams(window.location.search)
 
   const networks = searchParams.get('networks')?.split(',') ?? [
     'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
+    // 'optimism',
+    // 'arbitrum',
+    // 'base',
+    // 'polygon',
+    // 'bsc',
   ]
 
   return useInfiniteQuery({
-    queryKey: ['activities', fromAddress, toAddress, networks],
-    queryFn: async ({ pageParam = 0 }) => {
-      const offset = pageParam * PAGE_LIMIT
+    queryKey: ['activities', fromAddress, networks],
+    queryFn: async ({ pageParam = {} }) => {
       const result = await getTransfers(
         fromAddress,
-        toAddress,
         networks as NetworkType[],
-        offset,
+        pageParam,
       )
       return {
         activities: result.activities,
-        nextPage: result.hasMore ? pageParam + 1 : undefined,
+        nextPage: result.nextPageKeys,
       }
     },
-    getNextPageParam: lastPage => lastPage.nextPage,
-    initialPageParam: 0,
+    getNextPageParam: (lastPage: {
+      activities: []
+      nextPage: Partial<Record<NetworkType, string | undefined>>
+    }) => {
+      const hasMore = Object.values(lastPage.nextPage).some(Boolean)
+      return hasMore ? lastPage.nextPage : undefined
+    },
+
+    initialPageParam: {},
     staleTime: 1000 * 60 * 60,
     gcTime: 1000 * 60 * 60,
     refetchOnMount: false,

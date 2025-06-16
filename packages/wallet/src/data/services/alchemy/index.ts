@@ -343,6 +343,33 @@ export async function getNFTMetadata(
   return body
 }
 
+export async function getLatestBlockNumber(
+  network: NetworkType,
+): Promise<number> {
+  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_blockNumber',
+      params: [],
+      id: 1,
+    }),
+  })
+
+  const data = await res.json()
+
+  if (!data.result) {
+    throw new Error(`Failed to fetch latest block number for ${network}`)
+  }
+
+  return parseInt(data.result, 16)
+}
+
 /**
  * @see https://www.alchemy.com/docs/data/transfers-api/transfers-endpoints/alchemy-get-asset-transfers
  *
@@ -351,37 +378,49 @@ export async function getNFTMetadata(
 export async function getAssetTransfers(
   fromAddress: string,
   network: NetworkType,
+  pageKey?: string,
+  limit: number = 100,
 ) {
   const supportedCategories = allCategories.filter(
     category => !unsupportedCategoriesByNetwork[network]?.includes(category),
   )
 
-  if (unsupportedCategoriesByNetwork[network]) {
-    console.warn(
-      `[Alchemy] Skipping unsupported categories for ${network}:`,
-      unsupportedCategoriesByNetwork[network],
-    )
-  }
-
   const url = new URL(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
 
+  const params: {
+    category: (typeof allCategories)[number][]
+    fromAddress: string
+    excludeZeroValue: boolean
+    withMetadata: boolean
+    maxCount: string
+    pageKey?: string
+  } = {
+    category: supportedCategories,
+    fromAddress,
+    excludeZeroValue: true,
+    withMetadata: true,
+    maxCount: `0x${limit.toString(16)}`,
+  }
+
+  if (pageKey) {
+    params.pageKey = pageKey
+  }
+
   const body = await _retry(async () =>
-    _fetch<TokenBalanceHistoryResponseBody>(url, 'POST', 3600, {
+    _fetch<
+      TokenBalanceHistoryResponseBody & {
+        result: {
+          transfers: TokenBalanceHistoryResponseBody['result']['transfers']
+          pageKey?: string
+        }
+      }
+    >(url, 'POST', 3600, {
       jsonrpc: '2.0',
       method: 'alchemy_getAssetTransfers',
-      params: [
-        {
-          category: supportedCategories,
-          fromAddress,
-          excludeZeroValue: true,
-          withMetadata: true,
-          maxCount: '0x3e8',
-        },
-        'latest',
-      ],
-      id: 1,
+      params: [params, 'latest'],
+      id: Date.now(),
     }),
   )
 
@@ -390,12 +429,47 @@ export async function getAssetTransfers(
     throw new Error(`Alchemy API Error`)
   }
 
-  if (!body.result || !body.result.transfers) {
-    console.error('[Alchemy Warning] Missing transfers in response:', body)
-    return []
+  const result = body.result
+
+  if (!result?.transfers) {
+    console.error('[Alchemy Warning] Missing transfers in response:', result)
+    return { transfers: [], pageKey: undefined }
   }
 
-  return body.result.transfers
+  result.transfers.sort(
+    (a, b) => parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16),
+  )
+
+  return {
+    transfers: result.transfers,
+    pageKey: result.pageKey, // undefined if last page
+  }
+}
+
+export async function getTransactionStatus(
+  txHash: string,
+  network: NetworkType,
+): Promise<'pending' | 'success' | 'failed' | 'unknown'> {
+  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_getTransactionReceipt',
+      params: [txHash],
+      id: 1,
+    }),
+  })
+
+  const data = await res.json()
+
+  if (data?.result == null) return 'pending'
+  if (data?.result?.status === '0x1') return 'success'
+  if (data?.result?.status === '0x0') return 'failed'
+
+  return 'unknown'
 }
 
 /**
