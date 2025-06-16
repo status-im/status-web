@@ -19,6 +19,7 @@ export default defineConfig(({ mode }) => {
           'components/index': './src/components/index.tsx',
           'tailwind.config': './tailwind.config.ts',
           'data/index': './src/data/index.ts',
+          'hooks/index': './src/hooks/index.ts',
         },
         formats: ['es', 'cjs'],
         fileName: format => {
