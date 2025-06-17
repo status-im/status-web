@@ -11,6 +11,10 @@ type Context = {
   keyStore: KeyStore.Default
 }
 
+export type ValidPasswordContext = {
+  validPassword?: string
+}
+
 export function createPasswordAuthPlugin<TContext extends Context>() {
   const t = initTRPC.context<TContext>().create({
     isServer: false,
