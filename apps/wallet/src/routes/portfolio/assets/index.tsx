@@ -3,6 +3,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useDefaultTokens } from '@/hooks/use-default-tokens'
 
 export const Route = createFileRoute('/portfolio/assets/')({
   component: Component,
@@ -10,12 +11,26 @@ export const Route = createFileRoute('/portfolio/assets/')({
 
 function Component() {
   const router = useRouter()
-  const { data: assets, isLoading } = useAssets()
+  const { data, isLoading } = useAssets()
+
+  // todo improve default
+  const { assets = [], summary = {} } = data || {}
+
+  const isSomeBalance = summary?.total_balance
+
+  const {
+    data: { defaultTokens },
+    // isLoading: isLoadingDefaultTokens,
+  } = useDefaultTokens(isSomeBalance)
+
+  const assetsToShow = isSomeBalance
+    ? [...assets, ...defaultTokens]
+    : defaultTokens
 
   return (
     <SplittedLayout
       list={
-        assets ? (
+        assetsToShow ? (
           <AssetsList
             assets={assets}
             onSelect={url => {

@@ -2,10 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 
 // todo: export trpc client with api router and used instead
 // todo: cache
-const useAssets = () => {
+const useDefaultTokens = (enabled: boolean) => {
   return useQuery({
     queryKey: ['assets'],
+    enabled,
     queryFn: async () => {
+      // todo use correct api
       const url = new URL('http://localhost:3030/api/trpc/assets.all')
       url.searchParams.set(
         'input',
@@ -38,8 +40,8 @@ const useAssets = () => {
       const body = await response.json()
 
       return {
-        assets: body.result.data.json.assets,
-        summary: body.result.data.json.summary,
+        defaultTokens: body.result.data.json.assets,
+        defaultSummary: body.result.data.json.summary,
       }
     },
     staleTime: 60 * 60 * 1000,
@@ -50,4 +52,4 @@ const useAssets = () => {
   })
 }
 
-export { useAssets }
+export { useDefaultTokens }
