@@ -104,3 +104,5 @@ web-build/
 
 # Contentlayer
 .contentlayer
+
+/.lsp/

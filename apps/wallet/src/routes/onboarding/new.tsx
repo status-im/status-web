@@ -29,6 +29,9 @@ function RouteComponent() {
       {onboardingState.type === 'recovery-phrase' && (
         <RecoveryPhrase mnemonic={onboardingState.mnemonic} />
       )}
+      <Button variant="danger" onClick={async () => {}}>
+        Show password input
+      </Button>
     </div>
   )
 }
