@@ -1,6 +1,6 @@
 // import { Suspense } from 'react'
 
-import { AssetsList } from '@status-im/wallet/components'
+import { AssetsList, FeedbackSection } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -95,8 +95,10 @@ function RouteComponent() {
               />
             )}
           </div>
+        </div>
 
-          <div className="hidden basis-1/2 flex-col xl:flex">Detail</div>
+        <div className="hidden h-full xl:flex">
+          <FeedbackSection />
         </div>
       </div>
     </div>
