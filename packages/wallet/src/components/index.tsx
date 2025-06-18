@@ -15,6 +15,7 @@ export { NetworkBreakdown } from './network-breakdown'
 export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
 export { PercentageChange } from './percentage-change'
+export { SendAssetsModal } from './send-assets-modal'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,

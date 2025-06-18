@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
-import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
+import { BuyIcon, ReceiveBlurIcon, SendBlurIcon } from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
   NetworkBreakdown,
+  SendAssetsModal,
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
@@ -120,6 +121,11 @@ const Token = (props: Props) => {
           <Button size="32" iconBefore={<ReceiveBlurIcon />}>
             Receive
           </Button>
+          <SendAssetsModal asset={{ name: typedToken.summary.name, icon }}>
+            <Button size="32" iconBefore={<SendBlurIcon />}>
+              Send
+            </Button>
+          </SendAssetsModal>
         </div>
       }
     >
@@ -146,6 +152,11 @@ const Token = (props: Props) => {
             >
               Receive
             </Button>
+            <SendAssetsModal asset={{ name: typedToken.summary.name, icon }}>
+              <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
+                Send
+              </Button>
+            </SendAssetsModal>
           </div>
         </div>
 
