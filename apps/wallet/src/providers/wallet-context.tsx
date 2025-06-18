@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
+import { useQuery } from '@tanstack/react-query'
+
 import { apiClient } from './api-client'
 
 import type { KeyStore } from '@trustwallet/wallet-core'
@@ -12,7 +14,6 @@ type WalletContext = {
   isLoading: boolean
   hasWallets: boolean
   setCurrentWallet: (id: Wallet['id']) => void
-  loadWallets: () => Promise<void>
 }
 
 const WalletContext = createContext<WalletContext | undefined>(undefined)
@@ -26,39 +27,38 @@ export function useWallet() {
 }
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
-  const [wallets, setWallets] = useState<Wallet[]>([])
-  const [currentWallet, setCurrentWalletState] = useState<Wallet | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null)
+
+  const { data: wallets = [], isLoading } = useQuery({
+    queryKey: ['wallets'],
+    queryFn: () => apiClient.wallet.all.query(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
 
   const hasWallets = wallets.length > 0
 
-  const loadWallets = async () => {
-    try {
-      setIsLoading(true)
-      const loadedWallets = await apiClient.wallet.all.query()
-      setWallets(loadedWallets)
+  const currentWallet = useMemo(() => {
+    if (!hasWallets) return null
 
-      if (loadedWallets && loadedWallets.length > 0 && !currentWallet) {
-        setCurrentWalletState(loadedWallets[0])
-      }
-    } catch (error) {
-      console.error('Failed to load wallets:', error)
-      setWallets([])
-    } finally {
-      setIsLoading(false)
+    if (selectedWalletId) {
+      const selectedWallet = wallets.find(
+        wallet => wallet.id === selectedWalletId,
+      )
+      if (selectedWallet) return selectedWallet
     }
-  }
 
-  const setCurrentWallet = (id: string) => {
-    const wallet = wallets.find(wallet => wallet.id === id)
-    if (wallet) {
-      setCurrentWalletState(wallet)
-    }
-  }
+    return wallets[0] || null
+  }, [hasWallets, selectedWalletId, wallets])
 
   useEffect(() => {
-    loadWallets()
-  }, [])
+    if (hasWallets && !selectedWalletId && wallets[0]) {
+      setSelectedWalletId(wallets[0].id)
+    }
+  }, [hasWallets, selectedWalletId, wallets])
+
+  const setCurrentWallet = (id: string) => {
+    setSelectedWalletId(id)
+  }
 
   const contextValue: WalletContext = {
     currentWallet,
@@ -66,7 +66,6 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     hasWallets,
     setCurrentWallet,
-    loadWallets,
   }
 
   return (
