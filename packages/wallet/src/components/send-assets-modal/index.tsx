@@ -131,189 +131,193 @@ const SendAssetsModal = (props: Props) => {
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="space-y-6 px-6 pb-6"
+              className="flex h-full flex-col place-content-between content-between justify-between space-y-6 px-4 pb-4"
             >
-              <div className="space-y-2">
-                <Label htmlFor="to" className="text-13 font-medium">
-                  To
-                </Label>
-                <div className="relative">
-                  <Controller
-                    name="to"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id="to"
-                        {...field}
-                        className="pr-8 font-mono text-13"
-                        placeholder="0x..."
-                        clearable={!!watchedTo}
-                      />
-                    )}
-                  />
+              <div>
+                <div className="space-y-2">
+                  <Label htmlFor="to" className="text-13 font-medium">
+                    To
+                  </Label>
+                  <div className="relative">
+                    <Controller
+                      name="to"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          id="to"
+                          {...field}
+                          className="pr-8 font-mono text-13"
+                          placeholder="0x..."
+                          clearable={!!watchedTo}
+                        />
+                      )}
+                    />
+                  </div>
+                  {errors.to && (
+                    <p className="text-13 text-danger-50">
+                      {errors.to.message}
+                    </p>
+                  )}
                 </div>
-                {errors.to && (
-                  <p className="text-13 text-danger-50">{errors.to.message}</p>
-                )}
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="amount" className="text-13 font-medium">
-                  Amount
-                </Label>
-                <div className="relative">
-                  <Controller
-                    name="amount"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id="amount"
-                        {...field}
-                        placeholder="0"
-                        className={cx([
-                          'pr-20 text-27 font-medium',
-                          hasInsufficientBalance &&
-                            'border-danger-50 text-danger-50',
-                        ])}
-                      />
-                    )}
-                  />
-                  <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                    <div className="flex items-center gap-1">
-                      <div className="flex size-6 items-center justify-center rounded-full bg-customisation-blue-50">
-                        <span className="text-13 font-bold text-white-100">
-                          S
-                        </span>
+                <div className="space-y-2">
+                  <Label htmlFor="amount" className="text-13 font-medium">
+                    Amount
+                  </Label>
+                  <div className="relative">
+                    <Controller
+                      name="amount"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          id="amount"
+                          {...field}
+                          placeholder="0"
+                          className={cx([
+                            'pr-20 text-27 font-medium',
+                            hasInsufficientBalance &&
+                              'border-danger-50 text-danger-50',
+                          ])}
+                        />
+                      )}
+                    />
+                    <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
+                      <div className="flex items-center gap-1">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-customisation-blue-50">
+                          <span className="text-13 font-bold text-white-100">
+                            S
+                          </span>
+                        </div>
+                        <span className="font-medium">SNT</span>
                       </div>
-                      <span className="font-medium">SNT</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        onClick={handleMaxClick}
+                        className="h-6 px-2 text-13"
+                      >
+                        MAX
+                      </Button>
                     </div>
+                  </div>
+
+                  <div className="flex justify-between text-13">
+                    <span>
+                      €
+                      {watchedAmount
+                        ? (
+                            Number.parseFloat(watchedAmount || '0') *
+                            (balanceEur / balance)
+                          ).toFixed(2)
+                        : '0'}
+                    </span>
+                    <span>
+                      {balance.toLocaleString()} SNT / €{balanceEur}
+                    </span>
+                  </div>
+
+                  {hasInsufficientBalance && (
+                    <Alert variant="destructive">
+                      <p className="text-danger-50">
+                        More than available balance
+                      </p>
+                    </Alert>
+                  )}
+
+                  {watchedAmount && !hasInsufficientBalance && (
+                    <p className="text-13">
+                      Remaining ~{' '}
+                      {(
+                        balance - Number.parseFloat(watchedAmount || '0')
+                      ).toLocaleString()}{' '}
+                      SNT / €
+                      {(
+                        (balance - Number.parseFloat(watchedAmount || '0')) *
+                        (balanceEur / balance)
+                      ).toFixed(2)}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-13 font-medium">From</p>
+                  <div className="flex items-center gap-3 rounded-16 border p-3">
+                    <img
+                      className="size-8 rounded-full"
+                      alt={asset.name}
+                      src={asset.icon}
+                    />
+                    <div>
+                      <p className="font-medium">Account 1</p>
+                      <p className="font-mono text-13">0x41b...72h</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="contractAddress"
+                    className="text-13 font-medium"
+                  >
+                    Contract address
+                  </Label>
+                  <div className="relative">
+                    <Controller
+                      name="contractAddress"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          id="contractAddress"
+                          {...field}
+                          className="pr-8 font-mono text-13"
+                          isReadOnly
+                        />
+                      )}
+                    />
                     <Button
                       type="button"
                       variant="ghost"
-                      onClick={handleMaxClick}
-                      className="h-6 px-2 text-13"
+                      className="absolute right-1 top-1 size-6"
                     >
-                      MAX
+                      <ExternalIcon className="size-3" />
                     </Button>
                   </div>
-                </div>
-
-                <div className="flex justify-between text-13">
-                  <span>
-                    €
-                    {watchedAmount
-                      ? (
-                          Number.parseFloat(watchedAmount || '0') *
-                          (balanceEur / balance)
-                        ).toFixed(2)
-                      : '0'}
-                  </span>
-                  <span>
-                    {balance.toLocaleString()} SNT / €{balanceEur}
-                  </span>
-                </div>
-
-                {hasInsufficientBalance && (
-                  <Alert variant="destructive">
-                    <p className="text-danger-50">
-                      More than available balance
+                  {errors.contractAddress && (
+                    <p className="text-13 text-danger-50">
+                      {errors.contractAddress.message}
                     </p>
+                  )}
+                </div>
+
+                {hasInsufficientGas && (
+                  <Alert variant="destructive">
+                    <div className="flex items-center justify-between">
+                      <span className="text-danger-50">
+                        Not enough ETH to pay gas fees
+                      </span>
+                      <Button variant="ghost" className="ml-2">
+                        Add ETH
+                      </Button>
+                    </div>
                   </Alert>
                 )}
 
-                {watchedAmount && !hasInsufficientBalance && (
-                  <p className="text-13">
-                    Remaining ~{' '}
-                    {(
-                      balance - Number.parseFloat(watchedAmount || '0')
-                    ).toLocaleString()}{' '}
-                    SNT / €
-                    {(
-                      (balance - Number.parseFloat(watchedAmount || '0')) *
-                      (balanceEur / balance)
-                    ).toFixed(2)}
-                  </p>
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-13 font-medium">From</p>
-                <div className="flex items-center gap-3 rounded-16 border p-3">
-                  <img
-                    className="size-8 rounded-full"
-                    alt={asset.name}
-                    src={asset.icon}
-                  />
+                <div className="flex items-center justify-between pt-4">
                   <div>
-                    <p className="font-medium">Account 1</p>
-                    <p className="font-mono text-13">0x41b...72h</p>
+                    <p className="text-13">Max fees</p>
+                    <p
+                      className={cx([
+                        'font-medium',
+                        hasInsufficientGas && 'text-danger-50',
+                      ])}
+                    >
+                      €{hasInsufficientGas ? gasFeesEth : maxFees}
+                    </p>
                   </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label
-                  htmlFor="contractAddress"
-                  className="text-13 font-medium"
-                >
-                  Contract address
-                </Label>
-                <div className="relative">
-                  <Controller
-                    name="contractAddress"
-                    control={control}
-                    render={({ field }) => (
-                      <Input
-                        id="contractAddress"
-                        {...field}
-                        className="pr-8 font-mono text-13"
-                        isReadOnly
-                      />
-                    )}
-                  />
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    className="absolute right-1 top-1 size-6"
-                  >
-                    <ExternalIcon className="size-3" />
-                  </Button>
-                </div>
-                {errors.contractAddress && (
-                  <p className="text-13 text-danger-50">
-                    {errors.contractAddress.message}
-                  </p>
-                )}
-              </div>
-
-              {hasInsufficientGas && (
-                <Alert variant="destructive">
-                  <div className="flex items-center justify-between">
-                    <span className="text-danger-50">
-                      Not enough ETH to pay gas fees
-                    </span>
-                    <Button variant="ghost" className="ml-2">
-                      Add ETH
-                    </Button>
+                  <div className="text-right">
+                    <p className="text-13">Estimated</p>
+                    <p className="font-medium">~60s</p>
                   </div>
-                </Alert>
-              )}
-
-              <div className="flex items-center justify-between pt-4">
-                <div>
-                  <p className="text-13">Max fees</p>
-                  <p
-                    className={cx([
-                      'font-medium',
-                      hasInsufficientGas && 'text-danger-50',
-                    ])}
-                  >
-                    €{hasInsufficientGas ? gasFeesEth : maxFees}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-13">Estimated</p>
-                  <p className="font-medium">~60s</p>
                 </div>
               </div>
 
