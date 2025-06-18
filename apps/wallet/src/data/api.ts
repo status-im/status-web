@@ -605,5 +605,6 @@ export function createAPIClient() {
 
   return createTRPCProxyClient<APIRouter>({
     links: [chromeLink({ port })],
+    transformer: superjson,
   })
 }
