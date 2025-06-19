@@ -1,5 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Switch } from '@status-im/components'
+import {
+  Button,
+  // , Switch
+} from '@status-im/components'
 import { AlertIcon, InfoIcon, PositiveStateIcon } from '@status-im/icons/16'
 import { LoadingIcon } from '@status-im/icons/20'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -151,7 +154,7 @@ const CreatePasswordForm = ({
 
           <div className="mt-auto flex flex-col gap-5">
             <PasswordStrength password={form.watch('password')} />
-            <div className="flex w-full items-center gap-2 rounded-12 border border-neutral-20 bg-neutral-5 px-4 py-3 text-13">
+            {/* <div className="flex w-full items-center gap-2 rounded-12 border border-neutral-20 bg-neutral-5 px-4 py-3 text-13">
               <div className="text-13">
                 Set status as your default wallet to ensure seamless dApp
                 connections
@@ -163,7 +166,7 @@ const CreatePasswordForm = ({
                   form.setValue('isDefaultWallet', value)
                 }
               />
-            </div>
+            </div> */}
             <Button
               type="submit"
               disabled={
