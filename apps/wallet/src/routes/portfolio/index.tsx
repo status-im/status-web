@@ -1,8 +1,10 @@
 // import { Suspense } from 'react'
 
-import { AssetsList } from '@status-im/wallet/components'
+import { AssetsList, PinExtension } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, redirect } from '@tanstack/react-router'
+
+import { usePinExtension } from '@/hooks/use-pin-extension'
 
 import { apiClient } from '../../providers/api-client'
 import { useWallet } from '../../providers/wallet-context'
@@ -29,6 +31,7 @@ export const Route = createFileRoute('/portfolio/')({
 
 function RouteComponent() {
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const { isPinExtension, handleClose } = usePinExtension()
 
   const handleSelect = (url: string, options?: { scroll?: boolean }) => {
     // Handle the selection of an asset
@@ -117,6 +120,11 @@ function RouteComponent() {
           <div className="hidden basis-1/2 flex-col xl:flex">Detail</div>
         </div>
       </div>
+      {isPinExtension && (
+        <div className="absolute right-5 top-20">
+          <PinExtension onClose={handleClose} />
+        </div>
+      )}
     </div>
   )
 }

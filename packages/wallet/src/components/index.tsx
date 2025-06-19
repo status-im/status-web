@@ -15,6 +15,7 @@ export { Navbar } from './nav-bar'
 export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
 export { PercentageChange } from './percentage-change'
+export { PinExtension } from './pin-extension'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,
