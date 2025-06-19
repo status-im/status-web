@@ -87,6 +87,12 @@ Firefox Developer Edition > Tools > Add-ons and Themes > click on gear icon (Too
 
 > Note: Does not reload automatically, requires build and load on change.
 
+#### Enable hot reload
+
+Open `about:config` in Firefox, search for `content-security-policy.v3` update `extensions.webextensions.base-content-security-policy.v3` and `extensions.webextensions.default-content-security-policy.v3` to `script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval';`
+
+> Note: These settings affect other installed extensions as well.
+
 ### Status Desktop
 
 #### Run
