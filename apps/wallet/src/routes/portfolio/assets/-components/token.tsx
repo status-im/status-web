@@ -15,6 +15,8 @@ import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
 
+import { ExchangeDialog } from './exchange-dialog'
+
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
@@ -24,6 +26,7 @@ type Props = {
 const Token = (props: Props) => {
   const { ticker } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+  const [isExchangeOpen, setIsExchangeOpen] = useState(false)
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -120,6 +123,14 @@ const Token = (props: Props) => {
           <Button size="32" iconBefore={<ReceiveBlurIcon />}>
             Receive
           </Button>
+
+          <Button
+            size="32"
+            variant="outline"
+            onClick={() => setIsExchangeOpen(true)}
+          >
+            Swap
+          </Button>
         </div>
       }
     >
@@ -145,6 +156,14 @@ const Token = (props: Props) => {
               iconBefore={<ReceiveBlurIcon />}
             >
               Receive
+            </Button>
+
+            <Button
+              size="32"
+              variant="outline"
+              onClick={() => setIsExchangeOpen(true)}
+            >
+              Exchange
             </Button>
           </div>
         </div>
@@ -297,6 +316,9 @@ const Token = (props: Props) => {
           </div>
         </div>
       </div>
+      {isExchangeOpen && (
+        <ExchangeDialog onClose={() => setIsExchangeOpen(false)} />
+      )}
     </StickyHeaderContainer>
   )
 }
