@@ -573,7 +573,7 @@ const apiRouter = router({
         // )
 
         const { id } = await keyStore.importKey(
-          Buffer.from(input.privateKey),
+          new Uint8Array(Buffer.from(input.privateKey)),
           input.name,
           input.password,
           walletCore.CoinType.ethereum,

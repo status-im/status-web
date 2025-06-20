@@ -13,10 +13,10 @@ const mnemonicSchema = z.object({
   }),
 })
 
-type MnemonicFormData = z.infer<typeof mnemonicSchema>
+type FormValues = z.infer<typeof mnemonicSchema>
 
 type ImportRecoveryFormProps = {
-  onSubmit: (data: MnemonicFormData) => void
+  onSubmit: (data: FormValues) => void
   loading: boolean
 }
 
@@ -24,7 +24,7 @@ const ImportRecoveryForm = ({
   onSubmit,
   loading = false,
 }: ImportRecoveryFormProps) => {
-  const form = useForm<MnemonicFormData>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(mnemonicSchema),
     mode: 'onChange',
     defaultValues: {
@@ -74,4 +74,4 @@ const ImportRecoveryForm = ({
 }
 
 export { ImportRecoveryForm }
-export type { MnemonicFormData }
+export type { FormValues as ImportRecoveryFormValues }

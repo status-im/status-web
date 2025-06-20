@@ -30,11 +30,9 @@ function RouteComponent() {
           Some awesome sub copy
         </Text>
       </div>
-      <div className="flex w-full flex-col gap-3">
-        <Button href="/onboarding/new" className="w-full">
-          New wallet
-        </Button>
-        <Button href="/onboarding/import" className="w-full" variant="grey">
+      <div className="flex w-full max-w-[270px] flex-col gap-3">
+        <Button href="/onboarding/new">New wallet</Button>
+        <Button href="/onboarding/import" variant="grey">
           Import wallet
         </Button>
       </div>

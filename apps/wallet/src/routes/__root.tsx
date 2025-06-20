@@ -19,6 +19,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
+import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
 import type { QueryClient } from '@tanstack/react-query'
@@ -76,19 +77,21 @@ function RootComponent() {
           {/* <Suspense fallback={<div>Loading...</div>}> */}
           {/* <AccountsProvider> */}
           {/* <ConnectKitProvider> */}
-          <div className="flex min-h-[56px] items-center px-2">
-            <Navbar pathname={pathname} />
-          </div>
-          <div className="px-1">
-            <div className="flex-1 flex-col 2md:flex xl:pb-1">
-              <div className="flex h-[calc(100vh-60px)] flex-col overflow-clip rounded-[24px] bg-white-100">
-                {/* <OnboardingPage /> */}
-                <Outlet />
-              </div>
+          <WalletProvider>
+            <div className="flex min-h-[56px] items-center px-2">
+              <Navbar pathname={pathname} />
             </div>
-            {/* <NotAllowed /> */}
-            <ToastContainer />
-          </div>
+            <div className="px-1">
+              <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
+                  {/* <OnboardingPage /> */}
+                  <Outlet />
+                </div>
+              </div>
+              {/* <NotAllowed /> */}
+              <ToastContainer />
+            </div>
+          </WalletProvider>
           {/* </ConnectKitProvider> */}
           {/* </AccountsProvider> */}
           {/* </Suspense> */}

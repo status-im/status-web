@@ -1,7 +1,9 @@
+'use client'
+
 import { useState } from 'react'
 
-import { Input } from '@status-im/components'
 import { HideIcon, RevealIcon } from '@status-im/icons/20'
+import { cx } from 'class-variance-authority'
 import { useController } from 'react-hook-form'
 
 import type { UseControllerProps } from 'react-hook-form'
@@ -15,8 +17,8 @@ type Props = React.ComponentPropsWithoutRef<'input'> &
     placeholder?: string
   }
 
-function PasswordInput(props: Props) {
-  const { label, placeholder } = props
+const PasswordInput = (props: Props) => {
+  const { label, placeholder, ...inputProps } = props
   const [showPassword, setShowPassword] = useState(false)
 
   const { field, fieldState } = useController(props)
@@ -24,15 +26,20 @@ function PasswordInput(props: Props) {
 
   return (
     <div className="relative">
-      <Input
+      <input
         {...field}
+        {...inputProps}
         type={showPassword ? 'text' : 'password'}
         placeholder={placeholder}
         data-invalid={invalid}
         aria-label={label}
         autoComplete="off"
         maxLength={MAX_PASSWORD_LENGTH}
-        hideCounter
+        className={cx(
+          'h-10 w-full rounded-12 border border-solid bg-white-100 px-4 text-15 font-medium placeholder:font-regular max-sm:text-[1rem]',
+          'border-neutral-30 data-[invalid=true]:border-danger-50 focus:border-neutral-40',
+          'disabled:cursor-not-allowed disabled:border-0 disabled:bg-neutral-5 disabled:text-neutral-50',
+        )}
       />
       <button
         type="button"

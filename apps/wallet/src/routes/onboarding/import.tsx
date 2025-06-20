@@ -1,8 +1,10 @@
 import { useState, useTransition } from 'react'
 
-import { Button, Input, Text } from '@status-im/components'
+import { Button, Text } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
 import {
+  CreatePasswordForm,
+  type CreatePasswordFormValues,
   ImportRecoveryForm,
   type MnemonicFormData,
 } from '@status-im/wallet/components'
@@ -27,7 +29,7 @@ type OnboardingState =
     }
 
 function RouteComponent() {
-  const [onboardingState /*, setOnboardingState*/] = useState<OnboardingState>({
+  const [onboardingState, setOnboardingState] = useState<OnboardingState>({
     type: 'import-wallet',
     mnemonic: '',
   })
@@ -36,27 +38,33 @@ function RouteComponent() {
     <div className="h-full">
       {onboardingState.type === 'import-wallet' && (
         <ImportWallet
-        // onNext={mnemonic => {
-        //   setOnboardingState({ type: 'create-password', mnemonic })
-        // }}
+          onNext={(mnemonic: string) => {
+            setOnboardingState({ type: 'create-password', mnemonic })
+          }}
         />
       )}
       {onboardingState.type === 'create-password' && (
-        <CreatePassword mnemonic={onboardingState.mnemonic} />
+        <CreatePassword
+          mnemonic={onboardingState.mnemonic}
+          onBack={() =>
+            setOnboardingState({
+              type: 'import-wallet',
+              mnemonic: '',
+            })
+          }
+        />
       )}
     </div>
   )
 }
 
-function ImportWallet() {
+function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   const [isPending, startTransition] = useTransition()
-  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<MnemonicFormData> = async data => {
     try {
       startTransition(async () => {
-        navigate({ to: '/onboarding/new', state: { mnemonic: data.mnemonic } })
-        // onNext?(mnemonic)
+        onNext(data.mnemonic)
       })
     } catch (error) {
       console.error(error)
@@ -88,63 +96,54 @@ function ImportWallet() {
   )
 }
 
-function CreatePassword({ mnemonic }: { mnemonic: string }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm({
-    defaultValues: {
-      password: '',
-      confirmPassword: '',
-    },
-  })
-
+function CreatePassword({
+  mnemonic,
+  onBack,
+}: {
+  mnemonic: string
+  onBack: () => void
+}) {
   const { importWalletAsync } = useImportWallet()
+  const navigate = useNavigate()
+  const [isPending, startTransition] = useTransition()
 
-  const onSubmit = handleSubmit(async data => {
-    await importWalletAsync({
-      mnemonic,
-      password: data.password,
-    })
-  })
+  const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
+    try {
+      startTransition(async () => {
+        await importWalletAsync({
+          mnemonic,
+          password: data.password,
+        })
+        navigate({ to: '/portfolio' })
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className="flex flex-col gap-4">
-      {/* @ts-expect-error: fixme: Types of property 'onChange' are incompatible. */}
-      <Input
-        type="password"
-        placeholder="New password"
-        {...register('password', {
-          required: 'Password is required',
-          minLength: {
-            value: 8,
-            message: 'Password must be at least 8 characters',
-          },
-        })}
+      <div>
+        <Button
+          onClick={onBack}
+          variant="grey"
+          icon={<ArrowLeftIcon color="$neutral-100" />}
+          aria-label="Back"
+          size="32"
+        />
+      </div>
+
+      <h1 className="text-27 font-600">Create password</h1>
+      <div className="text-15 text-neutral-50">
+        To unlock the extension and sign transactions, the password is stored
+        only on your device. Status can't recover it.
+      </div>
+
+      <CreatePasswordForm
+        onSubmit={handleSubmit}
+        loading={isPending}
+        confirmButtonLabel="Import Wallet"
       />
-      {errors.password && (
-        <p className="text-13 text-danger-50">{errors.password.message}</p>
-      )}
-      {/* @ts-expect-error: fixme: Types of property 'onChange' are incompatible. */}
-      <Input
-        type="password"
-        placeholder="Confirm password"
-        {...register('confirmPassword', {
-          required: 'Please confirm your password',
-          validate: value =>
-            value === watch('password') || 'Passwords do not match',
-        })}
-      />
-      {errors.confirmPassword && (
-        <p className="text-13 text-danger-50">
-          {errors.confirmPassword.message}
-        </p>
-      )}
-      <Button variant="primary" onClick={onSubmit}>
-        Import Wallet
-      </Button>
     </div>
   )
 }
