@@ -5,6 +5,10 @@ export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { Balance } from './balance'
 export { CollectiblesGrid } from './collectibles-grid'
+export {
+  CreatePasswordForm,
+  type CreatePasswordFormValues,
+} from './create-password-form'
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
 export { DropdownSort } from './dropdown-sort'
@@ -15,6 +19,7 @@ export { NetworkBreakdown } from './network-breakdown'
 export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
 export { PercentageChange } from './percentage-change'
+export { PinExtension } from './pin-extension'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,
