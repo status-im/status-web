@@ -10,6 +10,10 @@ export {
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
 export { Image, type ImageProps } from './image'
+export {
+  ImportRecoveryForm,
+  type MnemonicFormData,
+} from './import-recovery-form'
 export { Logo, type LogoProps } from './logo'
 export { Navbar } from './nav-bar'
 export { NetworkExplorerLogo } from './network-explorer-logo'
