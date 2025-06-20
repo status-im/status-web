@@ -45,7 +45,7 @@ const createPasswordSchema = z
     isDefaultWallet: z.boolean().default(true),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
+    message: "Passwords don't match",
     path: ['confirmPassword'],
   })
 
@@ -54,13 +54,11 @@ type FormValues = z.infer<typeof createPasswordSchema>
 type CreatePasswordFormProps = {
   onSubmit: (data: FormValues) => void
   loading: boolean
-  confirmButtonLabel?: string
 }
 
 const CreatePasswordForm = ({
   onSubmit,
   loading = false,
-  confirmButtonLabel = 'Continue',
 }: CreatePasswordFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(createPasswordSchema),
@@ -181,7 +179,7 @@ const CreatePasswordForm = ({
               {loading ? (
                 <LoadingIcon className="animate-spin text-white-100" />
               ) : (
-                confirmButtonLabel
+                'Continue'
               )}
             </Button>
           </div>
