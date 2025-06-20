@@ -24,12 +24,18 @@ pipeline {
       description: 'Name of app from apps folder.',
       choices: choiceFromJobName(params.APP_NAME, ['connector', 'wallet']),
     )
+    booleanParam(
+      name: 'FORCE_BUILD',
+      description: 'Build even if no changes detected.',
+      defaultValue: params.FORCE_BUILD ?: false
+    )
   }
 
   environment {
     PLATFORM = "${params.APP_NAME}"
     ZIP_NAME = utils.pkgFilename(
-      type: 'Extension',
+      name: 'StatusWeb',
+      type: params.APP_NAME,
       version: 'none',
       arch: 'chrome',
       ext: 'zip',
@@ -52,7 +58,7 @@ pipeline {
     }
 
     stage('Install') {
-      when { expression { changesDetected } }
+      when { expression { changesDetected || params.FORCE_BUILD } }
       steps {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {
@@ -67,7 +73,7 @@ pipeline {
     }
 
     stage('Build') {
-      when { expression { changesDetected } }
+      when { expression { changesDetected || params.FORCE_BUILD } }
       steps {
         dir("${env.WORKSPACE}") {
           script {
@@ -82,7 +88,7 @@ pipeline {
     }
 
     stage('Zip') {
-      when { expression { changesDetected } }
+      when { expression { changesDetected || params.FORCE_BUILD } }
       steps {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           zip(
@@ -95,7 +101,7 @@ pipeline {
     }
 
     stage('Archive') {
-      when { expression { changesDetected } }
+      when { expression { changesDetected || params.FORCE_BUILD } }
       steps {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           archiveArtifacts(
@@ -107,11 +113,12 @@ pipeline {
     }
 
     stage('Upload') {
-      when { expression { changesDetected } }
+      when { expression { changesDetected || params.FORCE_BUILD } }
       steps {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {
             env.PKG_URL = s5cmd.upload(env.ZIP_NAME)
+            jenkins.setBuildDesc(ZIP: env.PKG_URL)
           }
         }
       }
@@ -119,8 +126,8 @@ pipeline {
   }
 
   post {
-    success { script { if(changesDetected) { github.notifyPR(true) } } }
-    failure { script { if(changesDetected) { github.notifyPR(false) } } }
+    success { script { if (changesDetected && CHANGE_ID) { github.notifyPR(true) } } }
+    failure { script { if (changesDetected && CHANGE_ID) { github.notifyPR(false) } } }
     cleanup { cleanWs() }
   }
 }

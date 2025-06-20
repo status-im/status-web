@@ -91,6 +91,10 @@ pnpm storybook
 
 This will start the Storybook server, allowing you to browse and test components in isolation.
 
+## Continuous Integration
+
+The builds of `main` branch are available in [Jenkins CI](https://ci.status.im/job/status-web/job/main/).
+
 ## Sponsors
 
 This project is sponsored by Browserstack.
