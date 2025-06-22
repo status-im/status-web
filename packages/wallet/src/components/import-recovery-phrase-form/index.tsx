@@ -5,7 +5,7 @@ import { validateMnemonic } from 'bip39'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { MnemonicTextarea } from '../recovery-textarea'
+import { RecoveryPhraseTextarea } from '../recovery-phrase-textarea'
 
 const mnemonicSchema = z.object({
   mnemonic: z.string().refine(value => validateMnemonic(value), {
@@ -15,15 +15,15 @@ const mnemonicSchema = z.object({
 
 type FormValues = z.infer<typeof mnemonicSchema>
 
-type ImportRecoveryFormProps = {
+type ImportRecoveryPhraseFormProps = {
   onSubmit: (data: FormValues) => void
   loading: boolean
 }
 
-const ImportRecoveryForm = ({
+const ImportRecoveryPhraseForm = ({
   onSubmit,
   loading = false,
-}: ImportRecoveryFormProps) => {
+}: ImportRecoveryPhraseFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(mnemonicSchema),
     mode: 'onChange',
@@ -42,13 +42,13 @@ const ImportRecoveryForm = ({
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex h-full flex-1 flex-col justify-between"
       >
-        <MnemonicTextarea
+        <RecoveryPhraseTextarea
           label="Recovery phrase"
           placeholder="Recovery phrase"
           name="mnemonic"
         />
 
-        <div className="flex flex-col gap-6">
+        <div className="mt-auto flex flex-col gap-6">
           {errors.mnemonic && (
             <p className="flex items-center gap-1 text-danger-50">
               <AlertIcon />
@@ -73,5 +73,5 @@ const ImportRecoveryForm = ({
   )
 }
 
-export { ImportRecoveryForm }
-export type { FormValues as ImportRecoveryFormValues }
+export { ImportRecoveryPhraseForm }
+export type { FormValues as ImportRecoveryPhraseFormValues }

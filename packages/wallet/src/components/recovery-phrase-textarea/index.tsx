@@ -9,7 +9,7 @@ export type Props = React.ComponentPropsWithoutRef<'textarea'> &
     placeholder?: string
   }
 
-function MnemonicTextarea(props: Props) {
+function RecoveryPhraseTextarea(props: Props) {
   const { label, placeholder } = props
   const { field, fieldState } = useController(props)
   const invalid = fieldState.invalid
@@ -24,4 +24,4 @@ function MnemonicTextarea(props: Props) {
   )
 }
 
-export { MnemonicTextarea }
+export { RecoveryPhraseTextarea }

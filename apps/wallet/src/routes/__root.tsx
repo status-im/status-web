@@ -10,6 +10,7 @@ import {
   Link,
   // Navigate,
   Outlet,
+  redirect,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
@@ -19,6 +20,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
+import { apiClient } from '../providers/api-client'
 import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
@@ -34,6 +36,26 @@ import type { QueryClient } from '@tanstack/react-query'
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
+  beforeLoad: async ({ location }) => {
+    const wallets = await apiClient.wallet.all.query()
+    const hasWallets = wallets && wallets.length > 0
+
+    if (location.pathname === '/') {
+      if (hasWallets) {
+        throw redirect({ to: '/portfolio' })
+      } else {
+        throw redirect({ to: '/onboarding' })
+      }
+    }
+
+    if (location.pathname.startsWith('/portfolio') && !hasWallets) {
+      throw redirect({ to: '/onboarding' })
+    }
+
+    if (location.pathname.startsWith('/onboarding') && hasWallets) {
+      throw redirect({ to: '/portfolio' })
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -52,7 +74,6 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
-  const pathname = window.location.pathname
   return (
     <>
       {/* <div className="min-h-screen bg-neutral-100 text-white-100">
@@ -79,7 +100,7 @@ function RootComponent() {
           {/* <ConnectKitProvider> */}
           <WalletProvider>
             <div className="flex min-h-[56px] items-center px-2">
-              <Navbar pathname={pathname} />
+              <Navbar />
             </div>
             <div className="px-1">
               <div className="flex-1 flex-col 2md:flex xl:pb-1">

@@ -5,8 +5,8 @@ import { ArrowLeftIcon } from '@status-im/icons/20'
 import {
   CreatePasswordForm,
   type CreatePasswordFormValues,
-  ImportRecoveryForm,
-  type MnemonicFormData,
+  ImportRecoveryPhraseForm,
+  type ImportRecoveryPhraseFormValues,
 } from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
@@ -35,7 +35,7 @@ function RouteComponent() {
   })
 
   return (
-    <div className="h-full">
+    <div className="flex h-full flex-1">
       {onboardingState.type === 'import-wallet' && (
         <ImportWallet
           onNext={(mnemonic: string) => {
@@ -61,7 +61,9 @@ function RouteComponent() {
 function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   const [isPending, startTransition] = useTransition()
 
-  const onSubmit: SubmitHandler<MnemonicFormData> = async data => {
+  const onSubmit: SubmitHandler<
+    ImportRecoveryPhraseFormValues
+  > = async data => {
     try {
       startTransition(async () => {
         onNext(data.mnemonic)
@@ -72,26 +74,24 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
   }
 
   return (
-    <div className="flex h-full flex-col justify-between">
-      <div className="flex h-full flex-col gap-1">
-        <div className="pb-4">
-          <Button
-            href="/onboarding"
-            variant="grey"
-            icon={<ArrowLeftIcon color="$neutral-100" />}
-            aria-label="Back"
-            size="32"
-          />
-        </div>
-        <Text size={27} weight="semibold">
-          Import via recovery phrase
-        </Text>
-        <Text size={15} color="$neutral-50" className="mb-4">
-          Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
-        </Text>
-
-        <ImportRecoveryForm onSubmit={onSubmit} loading={isPending} />
+    <div className="flex flex-1 flex-col gap-1">
+      <div className="pb-4">
+        <Button
+          href="/onboarding"
+          variant="grey"
+          icon={<ArrowLeftIcon color="$neutral-100" />}
+          aria-label="Back"
+          size="32"
+        />
       </div>
+      <Text size={27} weight="semibold">
+        Import via recovery phrase
+      </Text>
+      <Text size={15} color="$neutral-50" className="mb-4">
+        Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
+      </Text>
+
+      <ImportRecoveryPhraseForm onSubmit={onSubmit} loading={isPending} />
     </div>
   )
 }
