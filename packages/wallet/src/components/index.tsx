@@ -14,14 +14,17 @@ export { Logo, type LogoProps } from './logo'
 export { Navbar } from './nav-bar'
 export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
+export { PasswordInput } from './password-input'
 export { PercentageChange } from './percentage-change'
 export { PinExtension } from './pin-extension'
+export { RecoveryPhraseDialog } from './recovery-phrase-dialog'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,
   shortenAddress,
   type ShortenAddressProps,
 } from './shorten-address'
+export { SignTransactionDialog } from './sign-transaction'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
 export { Tooltip } from './tooltip'

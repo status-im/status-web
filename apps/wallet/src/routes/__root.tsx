@@ -52,7 +52,6 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
-  const pathname = window.location.pathname
   return (
     <>
       {/* <div className="min-h-screen bg-neutral-100 text-white-100">
@@ -79,7 +78,7 @@ function RootComponent() {
           {/* <ConnectKitProvider> */}
           <WalletProvider>
             <div className="flex min-h-[56px] items-center px-2">
-              <Navbar pathname={pathname} />
+              <Navbar />
             </div>
             <div className="px-1">
               <div className="flex-1 flex-col 2md:flex xl:pb-1">

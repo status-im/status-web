@@ -6,6 +6,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router'
 
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
+import { RecoveryPhraseBackup } from '../../components/recovery-phrase-backup'
 import { apiClient } from '../../providers/api-client'
 import { useWallet } from '../../providers/wallet-context'
 
@@ -104,16 +105,22 @@ function RouteComponent() {
             {isWalletLoading || isLoading ? (
               <div>Loading...</div>
             ) : (
-              <AssetsList
-                assets={assets}
-                onSelect={handleSelect}
-                clearSearch={() => {
-                  // Clear the search input
-                  console.log('Search cleared')
-                }}
-                searchParams={new URLSearchParams()}
-                pathname="/portfolio/"
-              />
+              <div>
+                <div className="my-4 flex">
+                  <RecoveryPhraseBackup />
+                </div>
+
+                <AssetsList
+                  assets={assets}
+                  onSelect={handleSelect}
+                  clearSearch={() => {
+                    // Clear the search input
+                    console.log('Search cleared')
+                  }}
+                  searchParams={new URLSearchParams()}
+                  pathname="/portfolio/"
+                />
+              </div>
             )}
           </div>
 
