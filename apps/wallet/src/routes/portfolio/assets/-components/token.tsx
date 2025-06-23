@@ -653,7 +653,10 @@ const Token = (props: Props) => {
         </div>
       </div>
       {isExchangeOpen && (
-        <ExchangeDialog onClose={() => setIsExchangeOpen(false)} />
+        <ExchangeDialog
+          onClose={() => setIsExchangeOpen(false)}
+          ticker={ticker}
+        />
       )}
     </StickyHeaderContainer>
   )

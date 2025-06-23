@@ -1,14 +1,17 @@
+import { createClient } from 'viem'
 import { createConfig, http, injected } from 'wagmi'
-import { mainnet } from 'wagmi/chains'
+import { arbitrum, mainnet, optimism } from 'wagmi/chains'
+
+export const supportedChains = [mainnet, optimism, arbitrum] as const
 
 export const config = createConfig({
-  chains: [mainnet],
+  chains: supportedChains,
   ssr: false,
-  transports: {
-    // todo: replace public clients
-    [mainnet.id]: http(),
-  },
   connectors: [injected()],
+  // todo: replace public clients
+  client({ chain }) {
+    return createClient({ chain, transport: http() })
+  },
 })
 
 declare module 'wagmi' {
