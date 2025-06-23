@@ -9,6 +9,7 @@ import {
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { apiClient } from '@/providers/api-client'
 
 import { Token } from './-components/token'
 
@@ -23,6 +24,11 @@ function Component() {
   const routerState = useRouterState()
   const { data: assets, isLoading } = useAssets()
   const pathname = routerState.location.pathname
+
+  const wallets = apiClient.wallet.all.query()
+  wallets.then(wallets => {
+    console.log(wallets)
+  })
 
   return (
     <>

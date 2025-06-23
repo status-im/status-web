@@ -11,7 +11,7 @@ const ExchangeDialog = ({ onClose }: Props) => {
       <div className="relative w-full max-w-[400px] rounded-20 p-4">
         <div className="flex items-center justify-end pb-3">
           <button onClick={onClose} className="p-1">
-            <CloseIcon size={20} />
+            <CloseIcon />
           </button>
         </div>
         <LifiWidget />

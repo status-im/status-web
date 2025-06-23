@@ -1,4 +1,4 @@
-import { createConfig, http } from 'wagmi'
+import { createConfig, http, injected } from 'wagmi'
 import { arbitrum, mainnet, optimism } from 'wagmi/chains'
 
 export const config = createConfig({
@@ -10,6 +10,7 @@ export const config = createConfig({
     [optimism.id]: http(),
     [arbitrum.id]: http(),
   },
+  connectors: [injected()],
 })
 
 declare module 'wagmi' {
