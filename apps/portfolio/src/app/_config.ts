@@ -1,4 +1,4 @@
-import { createConfig, http } from 'wagmi'
+import { createConfig, http, injected } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 
 export const config = createConfig({
@@ -8,6 +8,7 @@ export const config = createConfig({
     // todo: replace public clients
     [mainnet.id]: http(),
   },
+  connectors: [injected()],
 })
 
 declare module 'wagmi' {

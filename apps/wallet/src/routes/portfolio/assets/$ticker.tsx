@@ -8,6 +8,7 @@ import {
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { apiClient } from '@/providers/api-client'
 
 import { useWallet } from '../../../providers/wallet-context'
 import { Token } from './-components/token'
@@ -35,6 +36,11 @@ function Component() {
   if (!currentWallet || !address) {
     return null
   }
+
+  const wallets = apiClient.wallet.all.query()
+  wallets.then(wallets => {
+    console.log(wallets)
+  })
 
   return (
     <>
