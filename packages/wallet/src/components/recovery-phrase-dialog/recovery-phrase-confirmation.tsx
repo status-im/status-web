@@ -29,7 +29,7 @@ function RecoveryPhraseConfirmation({ onConfirm }: Props) {
         </label>
       </div>
       <Button variant="primary" disabled={!isChecked} onClick={handleConfirm}>
-        Finish backup and remove recovery phrase
+        Finish backup
       </Button>
     </div>
   )

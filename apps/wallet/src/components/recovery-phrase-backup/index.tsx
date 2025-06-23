@@ -59,7 +59,10 @@ export function RecoveryPhraseBackup() {
 
   return (
     <>
-      <SignTransactionDialog onConfirm={onPasswordConfirm}>
+      <SignTransactionDialog
+        onConfirm={onPasswordConfirm}
+        description="To backup recovery phrase"
+      >
         <button className="flex gap-1 rounded-20 border border-solid border-danger-50/20 bg-danger-50/10 px-2 py-[3px] text-13 text-danger-50">
           <NegativeStateIcon className="text-danger-50/20" /> Backup recovery
           phrase
