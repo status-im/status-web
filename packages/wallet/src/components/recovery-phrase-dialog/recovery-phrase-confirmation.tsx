@@ -20,14 +20,18 @@ function RecoveryPhraseConfirmation({ onConfirm }: Props) {
       <div className="flex items-center gap-2 text-15 text-neutral-100">
         <label
           htmlFor="recovery-phrase-backed"
-          className="flex cursor-pointer select-none items-center gap-2 text-15"
+          className="flex cursor-pointer select-none items-start gap-2 text-15"
         >
-          <Checkbox
-            id="recovery-phrase-backed"
-            checked={isChecked}
-            onCheckedChange={() => setIsChecked(!isChecked)}
-          />
-          I backed up my recovery phrase
+          <div className="mt-[3px]">
+            <Checkbox
+              id="recovery-phrase-backed"
+              checked={isChecked}
+              onCheckedChange={() => setIsChecked(!isChecked)}
+            />
+          </div>
+          I've backed up my recovery phrase and understand that clicking “Finish
+          Backup” will completely and permanently delete it from this wallet
+          interface.
         </label>
       </div>
       <Button variant="primary" disabled={!isChecked} onClick={handleConfirm}>
