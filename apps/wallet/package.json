@@ -41,7 +41,7 @@
     "@tanstack/react-router": "^1.109.2",
     "@trpc/client": "10.45.2",
     "@trpc/server": "10.45.2",
-    "@trustwallet/wallet-core": "^4.2.10",
+    "@trustwallet/wallet-core": "^4.3.6",
     "@wxt-dev/storage": "^1.1.0",
     "bitcoinjs-lib": "^6.1.7",
     "bitcore-lib": "^10.8.0",
