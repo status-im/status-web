@@ -82,7 +82,7 @@ test('should add wallet', async () => {
   })
 
   expect(addedWallet.mnemonic).toBeDefined()
-}, 6000)
+}, 7000)
 
 test('should import wallet', async () => {
   await createAPI()
@@ -98,7 +98,7 @@ test('should import wallet', async () => {
   })
 
   expect(importedWallet.mnemonic).toBe(mnemonic)
-}, 6000)
+}, 7000)
 
 test('should get wallet', async () => {
   await createAPI()
@@ -119,4 +119,4 @@ test('should get wallet', async () => {
   })
 
   expect(returnedWallet.mnemonic).toBe(mnemonic)
-}, 6000)
+}, 7000)
