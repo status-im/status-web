@@ -394,6 +394,7 @@ export async function getAssetTransfers(
     fromAddress: string
     excludeZeroValue: boolean
     withMetadata: boolean
+    order: 'asc' | 'desc'
     maxCount: string
     pageKey?: string
   } = {
@@ -401,6 +402,7 @@ export async function getAssetTransfers(
     fromAddress,
     excludeZeroValue: true,
     withMetadata: true,
+    order: 'desc',
     maxCount: `0x${limit.toString(16)}`,
   }
 
