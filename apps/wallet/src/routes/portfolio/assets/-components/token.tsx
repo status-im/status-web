@@ -50,6 +50,7 @@ const Token = (props: Props) => {
               'polygon',
               'bsc',
             ] as NetworkType[],
+            includeZeroBalance: true,
             ...(ticker.startsWith('0x')
               ? { contract: ticker }
               : { symbol: ticker }),
@@ -319,7 +320,7 @@ const Token = (props: Props) => {
       {isExchangeOpen && (
         <ExchangeDialog
           onClose={() => setIsExchangeOpen(false)}
-          ticker={ticker}
+          tokenData={typedToken}
         />
       )}
     </StickyHeaderContainer>
