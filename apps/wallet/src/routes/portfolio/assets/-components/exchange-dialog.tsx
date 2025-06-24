@@ -1,31 +1,75 @@
 import { CloseIcon } from '@status-im/icons/20'
 import { LifiWidget } from '@status-im/wallet/components'
 
-import { useWallet } from '@/providers/wallet-context'
-
 import { supportedChains } from '../../../../../../portfolio/src/app/_config'
+
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   onClose: () => void
-  ticker: string
+  tokenData: ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
 }
 
-const ExchangeDialog = ({ onClose, ticker }: Props) => {
-  const { currentWallet } = useWallet()
-
-  // todo support auto select for other chains
-  const availableChainId = supportedChains[0].id
-
-  const getTokenAddress = () => {
-    if (!ticker.startsWith('0x')) {
-      // Native token
-      return '0x0000000000000000000000000000000000000000'
-    }
-    // For ERC-20 tokens ticker is the contract address
-    return ticker
+const getChainIdForNetwork = (network: NetworkType) => {
+  const chainMap: Record<string, number> = {
+    ethereum: 1,
+    optimism: 10,
+    arbitrum: 42161,
+    base: 8453,
+    polygon: 137,
+    bsc: 56,
   }
 
-  console.log('currentWallet', currentWallet)
+  const chainId = chainMap[network]
+  return supportedChains.find(chain => chain.id === chainId)?.id
+}
+
+const resolveChainId = (
+  token: ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken'],
+  supportedChainIds: number[],
+): number | undefined => {
+  if (!token?.assets) return undefined
+
+  const tokenNetworks = Object.keys(token.assets) as NetworkType[]
+
+  for (const network of tokenNetworks) {
+    const chainId = getChainIdForNetwork(network)
+
+    if (!chainId) continue
+    if (!supportedChainIds.includes(chainId)) continue
+
+    return chainId
+  }
+
+  return undefined
+}
+
+const ExchangeDialog = ({ onClose, tokenData }: Props) => {
+  const supportedChainIds = supportedChains.map(chain => chain.id)
+  const resolvedChainId = resolveChainId(tokenData, supportedChainIds)
+
+  const getTokenAddress = (): string | undefined => {
+    if (!resolvedChainId) return undefined
+
+    const tokenNetworks = Object.keys(tokenData.assets) as NetworkType[]
+
+    const resolvedNetwork = tokenNetworks.find(network => {
+      const chainId = getChainIdForNetwork(network as NetworkType)
+      return chainId === resolvedChainId
+    })
+
+    if (!resolvedNetwork) return undefined
+
+    if (tokenData.assets[resolvedNetwork]?.native) {
+      return '0x0000000000000000000000000000000000000000'
+    }
+
+    if (tokenData.assets[resolvedNetwork]?.contract) {
+      return tokenData.assets[resolvedNetwork].contract!
+    }
+
+    return undefined
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm">
@@ -38,11 +82,11 @@ const ExchangeDialog = ({ onClose, ticker }: Props) => {
         <LifiWidget
           config={{
             chains: {
-              allow: supportedChains.map(chain => chain.id),
+              allow: supportedChainIds,
             },
-            fromChain: availableChainId,
-            fromToken: getTokenAddress(),
-            fromAmount: 0.1,
+            ...(resolvedChainId && { fromChain: resolvedChainId }),
+            ...(getTokenAddress() && { fromToken: getTokenAddress() }),
+            fromAmount: 1,
           }}
         />
       </div>

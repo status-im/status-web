@@ -98,6 +98,7 @@ export const assetsRouter = router({
         address: z.string(),
         networks: z.array(z.enum(['ethereum'])),
         symbol: z.string(),
+        includeZeroBalance: z.boolean().optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -111,6 +112,7 @@ export const assetsRouter = router({
         address: z.string(),
         networks: z.array(z.enum(['ethereum'])),
         contract: z.string(),
+        includeZeroBalance: z.boolean().optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -408,19 +410,21 @@ async function all({
 }
 
 const cachedNativeToken = cache(async (key: string) => {
-  const { address, networks, symbol } = JSON.parse(key)
+  const { address, networks, symbol, includeZeroBalance } = JSON.parse(key)
 
-  return await nativeToken({ address, networks, symbol })
+  return await nativeToken({ address, networks, symbol, includeZeroBalance })
 })
 
 async function nativeToken({
   address,
   networks,
   symbol,
+  includeZeroBalance,
 }: {
   address: string
   networks: NetworkType[]
   symbol: string
+  includeZeroBalance?: boolean
 }) {
   // console.log(' DELAY nativeToken()')
   // await delay()
@@ -450,7 +454,11 @@ async function nativeToken({
         STATUS_NETWORKS[token.chainId],
       )
 
-      if (!Number(balance) && token.symbol.toUpperCase() !== 'ETH') {
+      if (
+        !Number(balance) &&
+        token.symbol.toUpperCase() !== 'ETH' &&
+        !includeZeroBalance
+      ) {
         throw new Error('Balance not found')
       }
 
@@ -498,19 +506,21 @@ async function nativeToken({
 }
 
 const cachedToken = cache(async (key: string) => {
-  const { address, networks, contract } = JSON.parse(key)
+  const { address, networks, contract, includeZeroBalance } = JSON.parse(key)
 
-  return await token({ address, networks, contract })
+  return await token({ address, networks, contract, includeZeroBalance })
 })
 
 async function token({
   address,
   networks,
   contract,
+  includeZeroBalance,
 }: {
   address: string
   networks: NetworkType[]
   contract: string
+  includeZeroBalance?: boolean
 }) {
   // console.log(' DELAY token()')
   // await delay()
@@ -544,7 +554,8 @@ async function token({
 
       if (
         !Number(balance[0].tokenBalance) &&
-        !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
+        !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol) &&
+        !includeZeroBalance
       ) {
         throw new Error(`Balance not found for token ${token.symbol}`)
       }
