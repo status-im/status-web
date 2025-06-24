@@ -2,17 +2,12 @@ import './styles/global.css'
 
 import { StrictMode } from 'react'
 
-import { Buffer } from 'buffer'
 import ReactDOM from 'react-dom/client'
 
 import { APIClientProvider } from './providers/api-client'
 import { QueryClientProvider } from './providers/query-client'
 import { RouterProvider } from './providers/router'
 import { StatusProvider } from './providers/status'
-
-if (typeof window !== 'undefined') {
-  window.Buffer = Buffer
-}
 
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
