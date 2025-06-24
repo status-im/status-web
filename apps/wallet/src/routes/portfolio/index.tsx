@@ -2,11 +2,10 @@
 
 import { AssetsList, PinExtension } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
-import { apiClient } from '../../providers/api-client'
 import { useWallet } from '../../providers/wallet-context'
 
 // import { DetailDrawer } from '../../../../portfolio/src/app/[address]/@detail/_drawer'
@@ -14,12 +13,6 @@ import { useWallet } from '../../providers/wallet-context'
 
 export const Route = createFileRoute('/portfolio/')({
   component: RouteComponent,
-  beforeLoad: async () => {
-    const wallets = await apiClient.wallet.all.query()
-    if (!wallets || wallets.length === 0) {
-      throw redirect({ to: '/onboarding' })
-    }
-  },
   head: () => ({
     meta: [
       {
