@@ -51,6 +51,10 @@ export function RecoveryPhraseBackup() {
 
   const onComplete = async () => {
     await markAsBackedUp()
+    toast.positive(
+      'Your recovery phrase has been deleted from the wallet interface.',
+      { duration: 3000 },
+    )
   }
 
   if (isRecoveryPhraseBackedUp) {
