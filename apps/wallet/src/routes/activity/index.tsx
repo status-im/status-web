@@ -32,12 +32,7 @@ function RouteComponent() {
 
   if (error) return <div>Error loading activities</div>
 
-  // Reverse the page order so the latest transactions are on top
-  const activities =
-    data?.pages
-      .slice()
-      .reverse()
-      .flatMap(page => page.activities) ?? []
+  const activities = data?.pages.flatMap(page => page.activities) ?? []
 
   return (
     <div className="relative flex min-h-full overflow-auto px-1 py-4">
