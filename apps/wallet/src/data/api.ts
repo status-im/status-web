@@ -66,7 +66,7 @@ const apiRouter = router({
       .mutation(async ({ input, ctx }) => {
         const { walletCore, keyStore } = ctx
 
-        const wallet = walletCore.HDWallet.create(256, input.password)
+        const wallet = walletCore.HDWallet.create(128, input.password)
         const mnemonic = wallet.mnemonic()
         const name = input.name
 
