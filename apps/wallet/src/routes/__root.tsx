@@ -52,9 +52,9 @@ export const Route = createRootRouteWithContext<{
       throw redirect({ to: '/onboarding' })
     }
 
-    if (location.pathname.startsWith('/onboarding') && hasWallets) {
-      throw redirect({ to: '/portfolio' })
-    }
+    // if (location.pathname.startsWith('/onboarding') && hasWallets) {
+    //   throw redirect({ to: '/portfolio' })
+    // }
   },
   head: () => ({
     meta: [
