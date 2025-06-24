@@ -17,7 +17,6 @@ type Props = Aria.TextFieldProps & {
   clearable?: boolean
 }
 
-// Base implementation for Textarea, should be discussed with design team
 const Textarea = (props: Props, ref: React.Ref<HTMLTextAreaElement>) => {
   const {
     size = '40',
