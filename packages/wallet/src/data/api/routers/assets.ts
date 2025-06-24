@@ -110,6 +110,7 @@ export const assetsRouter = router({
           ]),
         ),
         symbol: z.string(),
+        includeZeroBalance: z.boolean().optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -132,6 +133,7 @@ export const assetsRouter = router({
           ]),
         ),
         contract: z.string(),
+        includeZeroBalance: z.boolean().optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -390,19 +392,21 @@ async function all({
 }
 
 const cachedNativeToken = cache(async (key: string) => {
-  const { address, networks, symbol } = JSON.parse(key)
+  const { address, networks, symbol, includeZeroBalance } = JSON.parse(key)
 
-  return await nativeToken({ address, networks, symbol })
+  return await nativeToken({ address, networks, symbol, includeZeroBalance })
 })
 
 async function nativeToken({
   address,
   networks,
   symbol,
+  includeZeroBalance,
 }: {
   address: string
   networks: NetworkType[]
   symbol: string
+  includeZeroBalance?: boolean
 }) {
   // console.log(' DELAY nativeToken()')
   // await delay()
@@ -432,7 +436,13 @@ async function nativeToken({
         STATUS_NETWORKS[token.chainId],
       )
 
-      if (!parseInt(balance) && token.symbol.toUpperCase() !== 'ETH') {
+      const tokenBalance = parseInt(balance)
+
+      if (
+        !tokenBalance &&
+        token.symbol.toUpperCase() !== 'ETH' &&
+        !includeZeroBalance
+      ) {
         throw new Error('Balance not found')
       }
 
@@ -480,19 +490,21 @@ async function nativeToken({
 }
 
 const cachedToken = cache(async (key: string) => {
-  const { address, networks, contract } = JSON.parse(key)
+  const { address, networks, contract, includeZeroBalance } = JSON.parse(key)
 
-  return await token({ address, networks, contract })
+  return await token({ address, networks, contract, includeZeroBalance })
 })
 
 async function token({
   address,
   networks,
   contract,
+  includeZeroBalance,
 }: {
   address: string
   networks: NetworkType[]
   contract: string
+  includeZeroBalance?: boolean
 }) {
   // console.log(' DELAY token()')
   // await delay()
@@ -524,7 +536,9 @@ async function token({
         [token.address],
       )
 
-      if (!parseInt(balance[0].tokenBalance)) {
+      const tokenBalance = parseInt(balance[0].tokenBalance)
+
+      if (!tokenBalance && !includeZeroBalance) {
         throw new Error('Balance not found')
       }
 

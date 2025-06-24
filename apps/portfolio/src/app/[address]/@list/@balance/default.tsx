@@ -1,5 +1,6 @@
+import { Balance } from '@status-im/wallet/components'
+
 import { getAPIClient } from '../../../../data/api'
-import { Balance } from '../../../_components/balance'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
