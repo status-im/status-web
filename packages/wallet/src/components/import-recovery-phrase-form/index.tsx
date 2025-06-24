@@ -1,14 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { validateMnemonic } from '@scure/bip39'
+import { wordlist as english } from '@scure/bip39/wordlists/english'
 import { Button } from '@status-im/components'
 import { AlertIcon, LoadingIcon } from '@status-im/icons/20'
-import { validateMnemonic } from 'bip39'
 import { FormProvider, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { RecoveryPhraseTextarea } from '../recovery-phrase-textarea'
 
 const mnemonicSchema = z.object({
-  mnemonic: z.string().refine(value => validateMnemonic(value), {
+  mnemonic: z.string().refine(value => validateMnemonic(value, english), {
     message: 'Invalid phrase. Check word count and spelling.',
   }),
 })
