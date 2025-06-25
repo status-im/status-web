@@ -3,6 +3,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useWallet } from '@/providers/wallet-context'
 
 export const Route = createFileRoute('/portfolio/assets/')({
   component: Component,
@@ -10,7 +11,10 @@ export const Route = createFileRoute('/portfolio/assets/')({
 
 function Component() {
   const router = useRouter()
-  const { data: assets, isLoading } = useAssets()
+  const { currentWallet } = useWallet()
+  const { data: assets, isLoading } = useAssets(
+    currentWallet?.activeAccounts[0].address ?? '',
+  )
 
   return (
     <SplittedLayout

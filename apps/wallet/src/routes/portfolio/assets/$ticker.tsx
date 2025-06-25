@@ -9,6 +9,7 @@ import {
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useWallet } from '@/providers/wallet-context'
 
 import { Token } from './-components/token'
 
@@ -21,7 +22,10 @@ function Component() {
   const ticker = params.ticker
   const router = useRouter()
   const routerState = useRouterState()
-  const { data: assets, isLoading } = useAssets()
+  const { currentWallet } = useWallet()
+  const { data: assets, isLoading } = useAssets(
+    currentWallet?.activeAccounts[0].address ?? '',
+  )
   const pathname = routerState.location.pathname
 
   return (

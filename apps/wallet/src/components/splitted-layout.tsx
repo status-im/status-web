@@ -1,6 +1,8 @@
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
+import { useWallet } from '@/providers/wallet-context'
+
 import type { Account } from '@status-im/wallet/components'
 
 type Props = {
@@ -46,15 +48,23 @@ const actionsButtonsData = {
 }
 
 // Mock data. todo? Replace with actual data
-const account: Account = {
-  name: 'Peachy Wallet',
-  emoji: '🍑',
-  color: 'magenta',
-  address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
-}
+// const account: Account = {
+//   name: 'Peachy Wallet',
+//   emoji: '🍑',
+//   color: 'magenta',
+//   address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+// }
 
 const SplittedLayout = (props: Props) => {
   const { list, detail, isLoading } = props
+  const { currentWallet } = useWallet()
+
+  const account: Account = {
+    name: currentWallet?.name ?? 'Peachy Wallet',
+    emoji: '🍑',
+    color: 'magenta',
+    address: currentWallet?.activeAccounts[0]?.address ?? '',
+  }
 
   const [showHiddenSummary, setShowHiddenSummary] = useState(false)
 

@@ -12,13 +12,14 @@ import {
   Outlet,
 } from '@tanstack/react-router'
 
+import { QueryClientProvider } from '../providers/query-client'
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { NotAllowed } from '../../../portfolio/src/app/_components/not-allowed'
 // import { AccountsProvider } from '../../../portfolio/src/app/_providers/accounts-context'
 // import { ConnectKitProvider } from '../../../portfolio/src/app/_providers/connectkit-provider'
 // import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
-import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
+import { WagmiProvider } from '../providers/wagmi-provider'
 import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
@@ -52,7 +53,6 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
-  const pathname = window.location.pathname
   return (
     <>
       {/* <div className="min-h-screen bg-neutral-100 text-white-100">
@@ -72,31 +72,31 @@ function RootComponent() {
       </head>
       <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
-        <WagmiProvider>
-          {/* <QueryClientProvider> */}
-          {/* <Suspense fallback={<div>Loading...</div>}> */}
-          {/* <AccountsProvider> */}
-          {/* <ConnectKitProvider> */}
-          <WalletProvider>
-            <div className="flex min-h-[56px] items-center px-2">
-              <Navbar pathname={pathname} />
-            </div>
-            <div className="px-1">
-              <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
-                  {/* <OnboardingPage /> */}
-                  <Outlet />
-                </div>
+        <WalletProvider>
+          <QueryClientProvider>
+            <WagmiProvider>
+              {/* <Suspense fallback={<div>Loading...</div>}> */}
+              {/* <AccountsProvider> */}
+              {/* <ConnectKitProvider> */}
+              <div className="flex min-h-[56px] items-center px-2">
+                <Navbar />
               </div>
-              {/* <NotAllowed /> */}
-              <ToastContainer />
-            </div>
-          </WalletProvider>
-          {/* </ConnectKitProvider> */}
-          {/* </AccountsProvider> */}
-          {/* </Suspense> */}
-          {/* </QueryClientProvider> */}
-        </WagmiProvider>
+              <div className="px-1">
+                <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                  <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
+                    {/* <OnboardingPage /> */}
+                    <Outlet />
+                  </div>
+                </div>
+                {/* <NotAllowed /> */}
+                <ToastContainer />
+              </div>
+              {/* </ConnectKitProvider> */}
+              {/* </AccountsProvider> */}
+              {/* </Suspense> */}
+            </WagmiProvider>
+          </QueryClientProvider>
+        </WalletProvider>
         {/* </StatusProvider> */}
       </div>
       {/* <ReactQueryDevtools buttonPosition="bottom-right" /> */}

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 // todo: export trpc client with api router and used instead
 // todo: cache
-const useAssets = () => {
+const useAssets = (address: string) => {
   return useQuery({
     queryKey: ['assets'],
     queryFn: async () => {
@@ -11,7 +11,7 @@ const useAssets = () => {
         'input',
         JSON.stringify({
           json: {
-            address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+            address,
             networks: [
               'ethereum',
               'optimism',
