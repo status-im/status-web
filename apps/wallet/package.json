@@ -31,6 +31,7 @@
     "@cardano-sdk/crypto": "^0.2.3",
     "@cardano-sdk/key-management": "^0.27.5",
     "@hookform/resolvers": "^3.1.1",
+    "@lifi/widget": "^3.23.3",
     "@radix-ui/react-dialog": "^1.1.1",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
@@ -62,7 +63,9 @@
     "trpc-chrome": "^1.0.0",
     "ts-pattern": "^5.7.1",
     "unified": "^11.0.5",
+    "viem": "^2.21.1",
     "vite-plugin-node-polyfills": "^0.23.0",
+    "wagmi": "^2.12.8",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import { CloseIcon } from '@status-im/icons/20'
-import { LifiWidget } from '@status-im/wallet/components'
 
-import { supportedChains } from '../../../../../../portfolio/src/app/_config'
+import { LifiWidget } from '@/components/lifi-widget'
+import { supportedChains } from '@/providers/wagmi-provider'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
