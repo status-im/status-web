@@ -16,6 +16,7 @@ import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
 
+import type { Account } from '@status-im/wallet/components'
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
@@ -98,6 +99,7 @@ const Token = (props: Props) => {
   const metadata = Object.values(typedToken.assets)[0].metadata
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
+
   const asset = {
     name: typedToken.summary.name,
     icon,
@@ -107,6 +109,14 @@ const Token = (props: Props) => {
     symbol: typedToken.summary.symbol,
     // TODO: get network
     network: Object.keys(typedToken.assets)[0] as NetworkType,
+  }
+
+  // Mock wallet data. Replace with actual wallet data from the user's account.
+  const account: Account = {
+    address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045', // Example wallet address
+    name: 'Peachy Wallet',
+    color: 'orange',
+    emoji: '🍑',
   }
 
   return (
@@ -131,7 +141,7 @@ const Token = (props: Props) => {
           <Button size="32" iconBefore={<ReceiveBlurIcon />}>
             Receive
           </Button>
-          <SendAssetsModal asset={asset}>
+          <SendAssetsModal asset={asset} account={account}>
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
             </Button>
@@ -162,7 +172,7 @@ const Token = (props: Props) => {
             >
               Receive
             </Button>
-            <SendAssetsModal asset={asset}>
+            <SendAssetsModal asset={asset} account={account}>
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send
               </Button>

@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button, Input } from '@status-im/components'
+import { Avatar, Button, Input } from '@status-im/components'
 import { AlertIcon, CloseIcon, ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
@@ -15,10 +15,12 @@ import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 
 import type { NetworkType } from '../../data'
+import type { Account } from '../address'
 import type React from 'react'
 
 type Props = {
   children: React.ReactNode
+  account: Account
   asset: {
     name: string
     icon: string
@@ -31,7 +33,7 @@ type Props = {
 }
 
 const SendAssetsModal = (props: Props) => {
-  const { children, asset } = props
+  const { children, asset, account } = props
   const [open, setOpen] = useState(false)
   const [errorState, setErrorState] = useState<'insufficient-gas' | null>(null)
 
@@ -74,7 +76,7 @@ const SendAssetsModal = (props: Props) => {
       // TODO: Delete this when integrating with actual wallet
       to: '0x39cf6E0Ba4C4530735616e1Ee7ff5FbCB726fBd3',
       amount: '',
-      contractAddress: '0x62cD9A9c5bD68c482cB830248570Ac6b54dF6Bd2',
+      contractAddress: asset.contractAddress || '',
     },
   })
 
@@ -121,9 +123,7 @@ const SendAssetsModal = (props: Props) => {
         />
         <Dialog.Content
           data-customisation="blue"
-          className={cx([
-            'fixed inset-x-0 left-3 top-3 flex size-full justify-center',
-          ])}
+          className="fixed left-0 top-3 flex size-full justify-center"
         >
           <div className="shadow fixed z-auto flex h-[calc(100vh-24px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
             <div className="flex items-center justify-between p-4">
@@ -254,49 +254,66 @@ const SendAssetsModal = (props: Props) => {
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <p className="text-13 font-medium">From</p>
-                  <div className="flex items-center gap-3 rounded-16 border p-3">
-                    <img
-                      className="size-8 rounded-full"
-                      alt={asset.name}
-                      src={asset.icon}
+                <div className="mt-6">
+                  <p className="mb-2 text-13 font-medium text-neutral-50">
+                    From
+                  </p>
+                  <div
+                    className="flex items-center gap-1.5 rounded-16 border border-neutral-10 px-3 py-2"
+                    data-customisation={account.color}
+                  >
+                    <Avatar
+                      type="account"
+                      name={account.name}
+                      emoji={account.emoji}
+                      size="32"
+                      bgOpacity="20"
                     />
                     <div>
-                      <p className="font-medium">Account 1</p>
-                      <p className="font-mono text-13">0x41b...72h</p>
+                      <div className="text-15 font-semibold text-neutral-100">
+                        {account.name}
+                      </div>
+
+                      <span className="text-13 font-medium text-neutral-50">
+                        {account.address.slice(0, 6)}...
+                        {account.address.slice(-3)}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="mt-6">
                   <Label
                     htmlFor="contractAddress"
-                    className="text-13 font-medium"
+                    className="mb-2 text-13 font-medium"
                   >
                     Contract address
                   </Label>
-                  <div className="relative">
-                    <Controller
-                      name="contractAddress"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
+
+                  <Controller
+                    name="contractAddress"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="relative flex items-center justify-between gap-1.5 rounded-16 border border-neutral-10 px-3 py-2 text-13">
+                        <input
                           id="contractAddress"
                           {...field}
-                          className="pr-8 font-mono text-13"
-                          isReadOnly
+                          className="w-full"
+                          readOnly
                         />
-                      )}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      className="absolute right-1 top-1 size-6"
-                    >
-                      <ExternalIcon className="size-3" />
-                    </Button>
-                  </div>
+                        <a
+                          href={`https://etherscan.io/token/${asset.contractAddress}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="View contract on Etherscan"
+                          className="text-neutral-50 hover:text-neutral-60"
+                        >
+                          <ExternalIcon />
+                        </a>
+                      </div>
+                    )}
+                  />
+
                   {errors.contractAddress && (
                     <p className="text-13 text-danger-50">
                       {errors.contractAddress.message}
@@ -339,7 +356,12 @@ const SendAssetsModal = (props: Props) => {
               <Button
                 variant="primary"
                 type="submit"
-                disabled={hasInsufficientBalance || hasInsufficientGas}
+                disabled={
+                  hasInsufficientBalance ||
+                  hasInsufficientGas ||
+                  !watchedAmount ||
+                  !watchedTo
+                }
               >
                 Sign Transaction
               </Button>
