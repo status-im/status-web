@@ -114,7 +114,7 @@ function CreatePassword({
           mnemonic,
           password: data.password,
         })
-        navigate({ to: '/portfolio' })
+        navigate({ to: '/portfolio/assets' })
       })
     } catch (error) {
       console.error(error)

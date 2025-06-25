@@ -5,6 +5,11 @@
     "source.fixAll.eslint": "explicit"
   },
   "eslint.useESLintClass": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
   "eslint.workingDirectories": [
     "./packages/colors",
     "./packages/icons",

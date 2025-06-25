@@ -4,6 +4,7 @@ export { AccountMenu } from './account-menu'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { BlurredCircle } from './blurred-circle'
+export { CollectiblesGrid } from './collectibles-grid'
 export {
   CreatePasswordForm,
   type CreatePasswordFormValues,
@@ -30,4 +31,5 @@ export {
 } from './shorten-address'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
+export { TabLink } from './tab-link'
 export { Tooltip } from './tooltip'

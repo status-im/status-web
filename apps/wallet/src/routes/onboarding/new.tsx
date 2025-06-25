@@ -23,7 +23,7 @@ function RouteComponent() {
     try {
       startTransition(async () => {
         await createWalletAsync(data.password)
-        navigate({ to: '/portfolio' })
+        navigate({ to: '/portfolio/assets' })
       })
     } catch (error) {
       console.error(error)

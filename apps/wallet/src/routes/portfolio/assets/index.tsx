@@ -1,17 +1,18 @@
 // import { Suspense } from 'react'
 
-import { AssetsList, PinExtension } from '@status-im/wallet/components'
+import { AssetsList, PinExtension, TabLink } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useRouterState } from '@tanstack/react-router'
 
+import { Link } from '@/components/link'
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
-import { useWallet } from '../../providers/wallet-context'
+import { useWallet } from '../../../providers/wallet-context'
 
 // import { DetailDrawer } from '../../../../portfolio/src/app/[address]/@detail/_drawer'
 // import { Loading as LoadingNav } from '../../../../portfolio/src/app/[address]/@nav/loading'
 
-export const Route = createFileRoute('/portfolio/')({
+export const Route = createFileRoute('/portfolio/assets/')({
   component: RouteComponent,
   head: () => ({
     meta: [
@@ -23,6 +24,8 @@ export const Route = createFileRoute('/portfolio/')({
 })
 
 function RouteComponent() {
+  const { location } = useRouterState()
+  const pathname = location.pathname
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
   const { isPinExtension, handleClose } = usePinExtension()
 
@@ -90,12 +93,27 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex min-h-full overflow-hidden px-1">
-      <div className="grid flex-1 grid-cols-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-        <div className="flex divide-x divide-default-neutral-20 overflow-auto">
-          <div className="flex w-full">
-            {isWalletLoading || isLoading ? (
-              <div>Loading...</div>
+    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
+      <div className="flex divide-x divide-default-neutral-20">
+        <div className="flex grow flex-col">
+          <div className="sticky top-0 z-20 flex gap-3 px-3 py-2">
+            <TabLink
+              href="/portfolio/assets"
+              LinkComponent={Link}
+              isActive={pathname === '/portfolio/assets'}
+            >
+              Assets
+            </TabLink>
+            <TabLink href="/portfolio/collectibles" LinkComponent={Link}>
+              Collectibles
+            </TabLink>
+          </div>
+
+          <div className="h-[calc(100vh-100px)] overflow-auto px-3">
+            {isLoading ? (
+              <div className="flex min-h-full items-center justify-center">
+                <div className="size-5 animate-spin rounded-full border-b-2 border-neutral-50"></div>
+              </div>
             ) : (
               <AssetsList
                 assets={assets}
@@ -109,10 +127,13 @@ function RouteComponent() {
               />
             )}
           </div>
+        </div>
 
-          <div className="hidden basis-1/2 flex-col xl:flex">Detail</div>
+        <div className="hidden basis-1/2 flex-col bg-neutral-10 2xl:flex">
+          {/* {detail} */}
         </div>
       </div>
+
       {isPinExtension && (
         <div className="absolute right-5 top-20">
           <PinExtension onClose={handleClose} />

@@ -42,7 +42,7 @@ export const Route = createRootRouteWithContext<{
 
     if (location.pathname === '/') {
       if (hasWallets) {
-        throw redirect({ to: '/portfolio' })
+        throw redirect({ to: '/portfolio/assets' })
       } else {
         throw redirect({ to: '/onboarding' })
       }
@@ -53,7 +53,7 @@ export const Route = createRootRouteWithContext<{
     }
 
     if (location.pathname.startsWith('/onboarding') && hasWallets) {
-      throw redirect({ to: '/portfolio' })
+      throw redirect({ to: '/portfolio/assets' })
     }
   },
   head: () => ({
@@ -125,7 +125,7 @@ function RootComponent() {
       <div className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-blur-neutral-100/70 p-4 text-white-100">
         <Link to="/">/index</Link>
         <Link to="/onboarding">/onboarding</Link>
-        <Link to="/portfolio">/portfolio</Link>
+        <Link to="/portfolio/assets">/portfolio/assets</Link>
       </div>
     </>
   )
