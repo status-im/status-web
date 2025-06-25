@@ -255,6 +255,7 @@ export type AssetTransfer = {
   hash: string
   asset: string
   tokenId?: string
+  uniqueId: string
   erc1155Metadata?: { tokenId: string; value: string }[]
   erc721TokenId?: string
   metadata: {

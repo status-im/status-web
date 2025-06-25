@@ -108,6 +108,7 @@ const SplittedLayout = (props: Props) => {
                     <TabLink href="/portfolio/collectibles">
                       Collectibles
                     </TabLink>
+                    <TabLink href="/portfolio/activity">Activity</TabLink>
                   </div>
                 }
               >

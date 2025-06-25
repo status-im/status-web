@@ -5,11 +5,11 @@ import type { NetworkType } from '@status-im/wallet/data'
 const PAGE_LIMIT = 20
 
 type Props = {
-  fromAddress: string
+  address: string
 }
 
 const getTransfers = async (
-  fromAddress: string,
+  address: string,
   networks: NetworkType[],
   pageKeys: Partial<Record<NetworkType, string>> = {},
 ) => {
@@ -19,7 +19,7 @@ const getTransfers = async (
     'input',
     JSON.stringify({
       json: {
-        fromAddress,
+        address,
         networks,
         limit: PAGE_LIMIT,
         pageKeys,
@@ -52,7 +52,7 @@ const getTransfers = async (
   }
 }
 
-export const useActivities = ({ fromAddress }: Props) => {
+export const useActivities = ({ address }: Props) => {
   const searchParams = new URLSearchParams(window.location.search)
 
   const networks = searchParams.get('networks')?.split(',') ?? [
@@ -65,10 +65,10 @@ export const useActivities = ({ fromAddress }: Props) => {
   ]
 
   return useInfiniteQuery({
-    queryKey: ['activities', fromAddress, networks],
+    queryKey: ['activities', address, networks],
     queryFn: async ({ pageParam = {} }) => {
       const result = await getTransfers(
-        fromAddress,
+        address,
         networks as NetworkType[],
         pageParam,
       )

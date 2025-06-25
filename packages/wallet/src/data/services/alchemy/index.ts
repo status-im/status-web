@@ -375,7 +375,7 @@ export async function getLatestBlockNumber(
  *
  * 120 CU per request https://www.alchemy.com/docs/reference/compute-unit-costs#transfers-api
  */
-export async function getAssetTransfers(
+export async function getOutgoingAssetTransfers(
   fromAddress: string,
   network: NetworkType,
   pageKey?: string,
@@ -396,6 +396,7 @@ export async function getAssetTransfers(
     withMetadata: boolean
     order: 'asc' | 'desc'
     maxCount: string
+    order: 'desc'
     pageKey?: string
   } = {
     category: supportedCategories,
@@ -404,6 +405,7 @@ export async function getAssetTransfers(
     withMetadata: true,
     order: 'desc',
     maxCount: `0x${limit.toString(16)}`,
+    order: 'desc',
   }
 
   if (pageKey) {
@@ -438,13 +440,148 @@ export async function getAssetTransfers(
     return { transfers: [], pageKey: undefined }
   }
 
-  result.transfers.sort(
-    (a, b) => parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16),
-  )
+  result.transfers.sort((a, b) => {
+    // First sort by block number (newest first)
+    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    if (blockDiff !== 0) return blockDiff
+
+    // If same block, sort by timestamp (newest first)
+    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+    return timestampB - timestampA
+  })
 
   return {
     transfers: result.transfers,
     pageKey: result.pageKey, // undefined if last page
+  }
+}
+
+/**
+ * Get incoming asset transfers (transactions sent TO an address)
+ *
+ * @see https://docs.alchemy.com/reference/alchemy-gettransfers
+ */
+export async function getIncomingAssetTransfers(
+  toAddress: string,
+  network: NetworkType,
+  pageKey?: string,
+  limit: number = 100,
+) {
+  const supportedCategories = allCategories.filter(
+    category => !unsupportedCategoriesByNetwork[network]?.includes(category),
+  )
+
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const params: {
+    category: (typeof allCategories)[number][]
+    toAddress: string
+    excludeZeroValue: boolean
+    withMetadata: boolean
+    maxCount: string
+    order: 'desc'
+    pageKey?: string
+  } = {
+    category: supportedCategories,
+    toAddress,
+    excludeZeroValue: true,
+    withMetadata: true,
+    maxCount: `0x${limit.toString(16)}`,
+    order: 'desc',
+  }
+
+  if (pageKey) {
+    params.pageKey = pageKey
+  }
+
+  const body = await _retry(async () =>
+    _fetch<
+      TokenBalanceHistoryResponseBody & {
+        result: {
+          transfers: TokenBalanceHistoryResponseBody['result']['transfers']
+          pageKey?: string
+        }
+      }
+    >(url, 'POST', 3600, {
+      jsonrpc: '2.0',
+      method: 'alchemy_getAssetTransfers',
+      params: [params, 'latest'],
+      id: Date.now(),
+    }),
+  )
+
+  if ('error' in body) {
+    console.error('[Alchemy Error]', body.error)
+    throw new Error(`Alchemy API Error`)
+  }
+
+  const result = body.result
+
+  if (!result?.transfers) {
+    console.error('[Alchemy Warning] Missing transfers in response:', result)
+    return { transfers: [], pageKey: undefined }
+  }
+
+  result.transfers.sort((a, b) => {
+    // First sort by block number (newest first)
+    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    if (blockDiff !== 0) return blockDiff
+
+    // If same block, sort by timestamp (newest first)
+    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+    return timestampB - timestampA
+  })
+
+  return {
+    transfers: result.transfers,
+    pageKey: result.pageKey,
+  }
+}
+
+export async function getAssetTransfers(
+  address: string,
+  network: NetworkType,
+  pageKey?: string,
+  limit: number = 100,
+) {
+  const outgoingResult = await getOutgoingAssetTransfers(
+    address,
+    network,
+    pageKey,
+    Math.ceil(limit / 2),
+  )
+
+  const incomingResult = await getIncomingAssetTransfers(
+    address,
+    network,
+    pageKey,
+    Math.ceil(limit / 2),
+  )
+
+  const allTransfers = [
+    ...outgoingResult.transfers,
+    ...incomingResult.transfers,
+  ]
+  allTransfers.sort((a, b) => {
+    // First sort by block number (newest first)
+    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    if (blockDiff !== 0) return blockDiff
+
+    // If same block, sort by timestamp (newest first)
+    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+    return timestampB - timestampA
+  })
+
+  const transfers = allTransfers.slice(0, limit)
+
+  return {
+    transfers,
+    pageKey: outgoingResult.pageKey || incomingResult.pageKey,
   }
 }
 
@@ -477,7 +614,7 @@ export async function getTransactionStatus(
 /**
  * note: only available on Ethereum (Seaport, Wyvern, X2Y2, Blur, LooksRare, Cryptopunks), Polygon (Seaport) & Optimism (Seaport) mainnets
  *
- * important: We plan to release a new API that integrates NFT sales before turning off this endpoint (eta December 2024), so we’ll keep you posted and let you know when that is scheduled!
+ * important: We plan to release a new API that integrates NFT sales before turning off this endpoint (eta December 2024), so we'll keep you posted and let you know when that is scheduled!
  *
  * @see https://docs.alchemy.com/reference/getnftsales-v3
  *

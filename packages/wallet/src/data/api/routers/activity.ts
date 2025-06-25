@@ -16,8 +16,8 @@ export type Activity = AssetTransfer & {
 const MAX_CONCURRENT_REQUESTS = 5
 
 const cachedActivity = cache(async (key: string) => {
-  const { fromAddress, network } = JSON.parse(key)
-  return await activity(fromAddress, network)
+  const { address, network } = JSON.parse(key)
+  return await activity(address, network)
 })
 
 async function runWithConcurrency<T>(
@@ -44,7 +44,7 @@ export const activitiesRouter = router({
   page: publicProcedure
     .input(
       z.object({
-        fromAddress: z.string(),
+        address: z.string(),
         networks: z.array(
           z.enum([
             'ethereum',
@@ -67,7 +67,7 @@ export const activitiesRouter = router({
   activities: publicProcedure
     .input(
       z.object({
-        fromAddress: z.string(),
+        address: z.string(),
         network: z.enum([
           'ethereum',
           'optimism',
@@ -85,17 +85,17 @@ export const activitiesRouter = router({
 })
 
 const cachedPage = cache(async (key: string) => {
-  const { fromAddress, networks, limit, pageKeys } = JSON.parse(key)
-  return await page({ fromAddress, networks, limit, pageKeys })
+  const { address, networks, limit, pageKeys } = JSON.parse(key)
+  return await page({ address, networks, limit, pageKeys })
 })
 
 export async function page({
-  fromAddress,
+  address,
   networks,
   limit = 20,
   pageKeys = {},
 }: {
-  fromAddress: string
+  address: string
   networks: NetworkType[]
   limit?: number
   pageKeys?: Partial<Record<NetworkType, string>>
@@ -109,7 +109,7 @@ export async function page({
   for (const network of networks) {
     try {
       const { transfers, pageKey } = await getAssetTransfers(
-        fromAddress,
+        address,
         network,
         pageKeys[network],
         limit,
@@ -144,7 +144,14 @@ export async function page({
     }
   }
 
-  activities.sort((a, b) => parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16))
+  activities.sort((a, b) => {
+    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    if (blockDiff !== 0) return blockDiff
+
+    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+    return timestampB - timestampA
+  })
 
   return {
     activities,
@@ -153,13 +160,13 @@ export async function page({
 }
 
 export async function activity(
-  fromAddress: string,
+  address: string,
   network: NetworkType,
   pageKey?: string,
   limit = 100,
 ): Promise<{ activities: Activity[]; nextPageKey?: string }> {
   const { transfers, pageKey: nextPageKey } = await getAssetTransfers(
-    fromAddress,
+    address,
     network,
     pageKey,
     limit,
