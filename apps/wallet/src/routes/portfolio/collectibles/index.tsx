@@ -143,12 +143,7 @@ function RouteComponent() {
   }, [data?.pages])
 
   return (
-    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-      <div className="hidden px-3 py-2 xl:block">
-        {/* {nav} */}
-        nav
-      </div>
-
+    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
       <div className="flex divide-x divide-default-neutral-20">
         {/* {list} */}
         <div className="flex grow flex-col 2xl:basis-1/2">
