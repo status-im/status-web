@@ -98,6 +98,16 @@ const Token = (props: Props) => {
   const metadata = Object.values(typedToken.assets)[0].metadata
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
+  const asset = {
+    name: typedToken.summary.name,
+    icon,
+    totalBalance: typedToken.summary.total_balance,
+    totalBalanceEur: typedToken.summary.total_eur,
+    contractAddress: ticker.startsWith('0x') ? ticker : undefined,
+    symbol: typedToken.summary.symbol,
+    // TODO: get network
+    network: Object.keys(typedToken.assets)[0] as NetworkType,
+  }
 
   return (
     <StickyHeaderContainer
@@ -121,7 +131,7 @@ const Token = (props: Props) => {
           <Button size="32" iconBefore={<ReceiveBlurIcon />}>
             Receive
           </Button>
-          <SendAssetsModal asset={{ name: typedToken.summary.name, icon }}>
+          <SendAssetsModal asset={asset}>
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
             </Button>
@@ -152,7 +162,7 @@ const Token = (props: Props) => {
             >
               Receive
             </Button>
-            <SendAssetsModal asset={{ name: typedToken.summary.name, icon }}>
+            <SendAssetsModal asset={asset}>
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send
               </Button>

@@ -10,45 +10,66 @@ import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { CurrencyAmount } from '../currency-amount'
+// import { NetworkType } from '../../data'
+import { NetworkLogo } from '../network-logo'
+
+import type { NetworkType } from '../../data'
 import type React from 'react'
-
-const formSchema = z.object({
-  to: z
-    .string()
-    .min(1, 'Recipient address is required')
-    .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
-  amount: z.string().min(1, 'Amount is required'),
-  contractAddress: z
-    .string()
-    .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid contract address'),
-})
-
-type FormData = z.infer<typeof formSchema>
 
 type Props = {
   children: React.ReactNode
   asset: {
     name: string
     icon: string
+    symbol: string
+    totalBalance: number
+    totalBalanceEur: number
+    contractAddress?: string
+    network: NetworkType
   }
 }
 
 const SendAssetsModal = (props: Props) => {
   const { children, asset } = props
   const [open, setOpen] = useState(false)
-  const [errorState, setErrorState] = useState<
-    'insufficient-balance' | 'insufficient-gas' | null
-  >(null)
+  const [errorState, setErrorState] = useState<'insufficient-gas' | null>(null)
+
+  const balance = asset.totalBalance
+
+  const formSchema = z.object({
+    to: z
+      .string()
+      .min(1, 'Recipient address is required')
+      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
+    amount: z
+      .string()
+      .min(1, 'Amount is required')
+      .refine(
+        val => {
+          const num = Number.parseFloat(val)
+          return num > 0 && num <= balance
+        },
+        {
+          message: 'More than available balance',
+        },
+      ),
+    contractAddress: z
+      .string()
+      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid contract address'),
+  })
+
+  type FormData = z.infer<typeof formSchema>
 
   const {
     control,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
     reset,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    mode: 'all',
     defaultValues: {
       // TODO: Delete this when integrating with actual wallet
       to: '0x39cf6E0Ba4C4530735616e1Ee7ff5FbCB726fBd3',
@@ -60,18 +81,12 @@ const SendAssetsModal = (props: Props) => {
   const watchedAmount = watch('amount')
   const watchedTo = watch('to')
   // TODO: Replace with actual balance and gas estimation logic from props
-  const balance = 897349.63
-  const balanceEur = 234.46
+  const balanceEur = asset.totalBalanceEur
   const maxFees = 1.45
   const gasFeesEth = 166.7
 
   const onSubmit = (data: FormData) => {
     const amount = Number.parseFloat(data.amount)
-
-    if (amount > balance) {
-      setErrorState('insufficient-balance')
-      return
-    }
 
     // TODO: Replace with actual gas estimation logic
     if (amount > 100) {
@@ -83,10 +98,6 @@ const SendAssetsModal = (props: Props) => {
     console.log('Form submitted:', data)
   }
 
-  const handleMaxClick = () => {
-    setValue('amount', balance.toString())
-  }
-
   const handleOnOpenChange = (open: boolean) => {
     setOpen(open)
     if (!open) {
@@ -95,7 +106,8 @@ const SendAssetsModal = (props: Props) => {
     }
   }
 
-  const hasInsufficientBalance = errorState === 'insufficient-balance'
+  const hasInsufficientBalance =
+    watchedAmount && Number.parseFloat(watchedAmount) > balance
   const hasInsufficientGas = errorState === 'insufficient-gas'
 
   return (
@@ -134,11 +146,9 @@ const SendAssetsModal = (props: Props) => {
               className="flex h-full flex-col place-content-between content-between justify-between space-y-6 px-4 pb-4"
             >
               <div>
-                <div className="space-y-2">
-                  <Label htmlFor="to" className="text-13 font-medium">
-                    To
-                  </Label>
-                  <div className="relative">
+                <div className="mb-2 mt-4">
+                  <Label htmlFor="to">To</Label>
+                  <div className="relative mt-2">
                     <Controller
                       name="to"
                       control={control}
@@ -146,6 +156,7 @@ const SendAssetsModal = (props: Props) => {
                         <Input
                           id="to"
                           {...field}
+                          isInvalid={!!errors.to}
                           className="pr-8 font-mono text-13"
                           placeholder="0x..."
                           clearable={!!watchedTo}
@@ -154,87 +165,91 @@ const SendAssetsModal = (props: Props) => {
                     />
                   </div>
                   {errors.to && (
-                    <p className="text-13 text-danger-50">
-                      {errors.to.message}
-                    </p>
+                    <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                      <AlertIcon className="size-4" />
+                      <p>{errors.to.message}</p>
+                    </div>
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="amount" className="text-13 font-medium">
-                    Amount
-                  </Label>
-                  <div className="relative">
+                <div className="mb-2 mt-4">
+                  <Label htmlFor="amount">Amount</Label>
+                  <div
+                    className={cx([
+                      'relative block w-full min-w-0 flex-1 overflow-hidden border border-neutral-20 bg-white-100 text-15 text-neutral-100 placeholder-neutral-40 max-sm:text-[1rem]',
+                      'outline-none focus:border-neutral-40',
+                      'rounded-12',
+                      'mt-2',
+                    ])}
+                  >
                     <Controller
                       name="amount"
                       control={control}
                       render={({ field }) => (
-                        <Input
+                        <input
                           id="amount"
                           {...field}
+                          type="number"
+                          min={0}
                           placeholder="0"
                           className={cx([
-                            'pr-20 text-27 font-medium',
-                            hasInsufficientBalance &&
-                              'border-danger-50 text-danger-50',
+                            'w-full px-4 py-3 text-27 font-medium',
+                            '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+                            hasInsufficientBalance && 'text-danger-50',
                           ])}
                         />
                       )}
                     />
-                    <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center gap-2">
-                      <div className="flex items-center gap-1">
-                        <div className="flex size-6 items-center justify-center rounded-full bg-customisation-blue-50">
-                          <span className="text-13 font-bold text-white-100">
-                            S
-                          </span>
+
+                    <div className="absolute right-4 top-3 flex items-center gap-2">
+                      <div className="relative">
+                        <img
+                          className="size-8 rounded-full"
+                          alt={asset.name}
+                          src={asset.icon}
+                        />
+                        <div className="absolute bottom-[-3px] right-[-3px] rounded-full border-2 border-white-100">
+                          <NetworkLogo name={asset.network} size={12} />
                         </div>
-                        <span className="font-medium">SNT</span>
                       </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={handleMaxClick}
-                        className="h-6 px-2 text-13"
+                      <span className="text-19 font-600">{asset.symbol}</span>
+                    </div>
+
+                    <div className="h-px w-full bg-neutral-20" />
+                    <div className="flex justify-between px-4 py-3 text-13 font-medium">
+                      <span className="text-neutral-50">
+                        €
+                        {watchedAmount
+                          ? Number.parseFloat(watchedAmount || '0') *
+                            (balanceEur / balance)
+                          : '0'}
+                      </span>
+                      <span
+                        className={cx([
+                          'flex items-center gap-1',
+                          hasInsufficientBalance && 'text-danger-50',
+                        ])}
                       >
-                        MAX
-                      </Button>
+                        {balance.toLocaleString()} {asset.symbol} /{' '}
+                        <CurrencyAmount value={balanceEur} format="standard" />
+                      </span>
                     </div>
                   </div>
 
-                  <div className="flex justify-between text-13">
-                    <span>
-                      €
-                      {watchedAmount
-                        ? (
-                            Number.parseFloat(watchedAmount || '0') *
-                            (balanceEur / balance)
-                          ).toFixed(2)
-                        : '0'}
-                    </span>
-                    <span>
-                      {balance.toLocaleString()} SNT / €{balanceEur}
-                    </span>
-                  </div>
-
-                  {hasInsufficientBalance && (
-                    <Alert variant="destructive">
-                      <p className="text-danger-50">
-                        More than available balance
-                      </p>
-                    </Alert>
+                  {errors.amount && (
+                    <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                      <AlertIcon className="size-4" />
+                      <p>{errors.amount.message}</p>
+                    </div>
                   )}
 
                   {watchedAmount && !hasInsufficientBalance && (
-                    <p className="text-13">
-                      Remaining ~{' '}
+                    <p className="mt-6 text-13 font-medium text-neutral-50">
+                      Remaining:{' '}
                       {(
                         balance - Number.parseFloat(watchedAmount || '0')
                       ).toLocaleString()}{' '}
-                      SNT / €
-                      {(
-                        (balance - Number.parseFloat(watchedAmount || '0')) *
-                        (balanceEur / balance)
-                      ).toFixed(2)}
+                      {asset.symbol}
                     </p>
                   )}
                 </div>
@@ -377,7 +392,7 @@ const Label = ({
 }) => (
   <label
     htmlFor={htmlFor}
-    className={cx('block text-13 font-medium text-neutral-100', className)}
+    className={cx('block text-13 font-medium text-neutral-50', className)}
   >
     {children}
   </label>
