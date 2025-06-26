@@ -1,7 +1,7 @@
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
-import type { Account } from '@status-im/wallet/components'
+import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
 
 type Props = {
   list: React.ReactNode
@@ -45,12 +45,10 @@ const actionsButtonsData = {
   },
 }
 
-// Mock data. todo? Replace with actual data
-const account: Account = {
-  name: 'Peachy Wallet',
+const account = {
+  name: 'Account 1',
   emoji: '🍑',
   color: 'magenta',
-  address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
 }
 
 const SplittedLayout = (props: Props) => {
@@ -112,6 +110,7 @@ const SplittedLayout = (props: Props) => {
                     <TabLink href="/portfolio/collectibles">
                       Collectibles
                     </TabLink>
+                    <TabLink href="/portfolio/activity">Activity</TabLink>
                   </div>
                 }
               >
@@ -143,6 +142,10 @@ const SplittedLayout = (props: Props) => {
                     </div>
 
                     <ActionButtons {...actionsButtonsData} />
+
+                    <div className="my-4 flex">
+                      <RecoveryPhraseBackup />
+                    </div>
                   </div>
 
                   {list}
@@ -153,9 +156,7 @@ const SplittedLayout = (props: Props) => {
         </div>
 
         <div className="relative hidden basis-1/2 flex-col bg-white-100 2xl:flex">
-          <div className="relative z-20 flex h-full items-center justify-center">
-            {detail}
-          </div>
+          <div className="relative z-20 size-full">{detail}</div>
 
           <div
             className="absolute z-10 size-full"

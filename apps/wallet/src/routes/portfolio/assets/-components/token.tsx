@@ -54,7 +54,9 @@ const Token = (props: Props) => {
       const endpoint = ticker.startsWith('0x')
         ? 'assets.token'
         : 'assets.nativeToken'
-      const url = new URL(`http://localhost:3030/api/trpc/${endpoint}`)
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
+      )
       url.searchParams.set(
         'input',
         JSON.stringify({
@@ -125,10 +127,10 @@ const Token = (props: Props) => {
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
-    address, // Example wallet address
-    name: 'Peachy Wallet',
-    color: 'orange',
+    address,
+    name: 'Account 1',
     emoji: '🍑',
+    color: 'magenta',
   }
 
   return (
