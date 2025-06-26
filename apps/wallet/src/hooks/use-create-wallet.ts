@@ -1,9 +1,10 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { useAPI } from '../providers/api-client'
 
 export const useCreateWallet = () => {
   const api = useAPI()
+  const queryClient = useQueryClient()
 
   const { mutate, mutateAsync, ...result } = useMutation({
     mutationKey: ['create-wallet'],
@@ -14,6 +15,9 @@ export const useCreateWallet = () => {
       })
 
       return mnemonic
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['wallets'] })
     },
   })
 

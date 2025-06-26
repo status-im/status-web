@@ -41,7 +41,7 @@ const SortItem = <T,>(props: SortItemProps<T>) => {
               'hidden aria-[current=true]:flex group-hover:flex',
               selectedFilterAsc && 'opacity-[100%]',
               selectedFilterDesc && 'opacity-[50%] hover:opacity-[100%]',
-              notSelectedFilter && 'opacity-[50%] hover:opacity-[100%]'
+              notSelectedFilter && 'opacity-[50%] hover:opacity-[100%]',
             )}
             aria-current={selectedFilterAsc}
             onClick={() => onSelect(id, true)}
@@ -59,7 +59,7 @@ const SortItem = <T,>(props: SortItemProps<T>) => {
               'hidden aria-[current=true]:flex group-hover:flex',
               selectedFilterDesc && 'opacity-[100%]',
               selectedFilterAsc && 'opacity-[50%] hover:opacity-[100%]',
-              notSelectedFilter && 'opacity-[50%] hover:opacity-[100%]'
+              notSelectedFilter && 'opacity-[50%] hover:opacity-[100%]',
             )}
             aria-current={selectedFilterDesc}
             onClick={() => onSelect(id, false)}
@@ -78,7 +78,7 @@ const SortItem = <T,>(props: SortItemProps<T>) => {
   )
 }
 
-const AdminDropdownSort = <T,>(props: Props<T>) => {
+const DropdownSort = <T,>(props: Props<T>) => {
   const { data, orderByColumn, ascending, onOrderByChange } = props
 
   const onChange = (value: keyof T, ascending: boolean) => {
@@ -106,4 +106,4 @@ const AdminDropdownSort = <T,>(props: Props<T>) => {
   )
 }
 
-export { AdminDropdownSort }
+export { DropdownSort }

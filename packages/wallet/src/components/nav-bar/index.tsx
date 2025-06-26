@@ -4,14 +4,10 @@ import { FeedbackPopover } from '../feedback'
 import { Logo } from '../logo'
 
 type Props = {
-  pathname: string
+  hasFeedback?: boolean
 }
 
 const Navbar = (props: Props) => {
-  const { pathname } = props
-
-  const isRoot = pathname === '-/'
-
   return (
     <div
       data-theme="dark"
@@ -25,7 +21,7 @@ const Navbar = (props: Props) => {
           <Logo isTopbarDesktop />
         </a>
       </div>
-      {!isRoot && <FeedbackPopover />}
+      {props.hasFeedback && <FeedbackPopover />}
     </div>
   )
 }

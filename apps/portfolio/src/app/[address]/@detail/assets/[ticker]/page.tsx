@@ -2,23 +2,25 @@ import { Suspense } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
 import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
-import { StickyHeaderContainer } from '@status-im/wallet/components'
+import {
+  Balance,
+  CurrencyAmount,
+  NetworkBreakdown,
+  StickyHeaderContainer,
+  TokenLogo,
+} from '@status-im/wallet/components'
 import { cx } from 'class-variance-authority'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import { getAPIClient } from '../../../../..//data/api'
-import { Balance } from '../../../../_components/balance'
 import { BuyCryptoDrawer } from '../../../../_components/buy-crypto-drawer'
 import { portfolioComponents } from '../../../../_components/content'
-import { CurrencyAmount } from '../../../../_components/currency-amount'
 import { ReceiveCryptoDrawer } from '../../../../_components/receive-crypto-drawer'
 import { TokenAmount } from '../../../../_components/token-amount'
 import { Chart } from '../_components/chart'
 import { Loading } from '../_components/chart/loading'
-import { NetworkBreakdown } from './_components/network-breakdown'
-import { TokenLogo } from './_components/token-logo'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
