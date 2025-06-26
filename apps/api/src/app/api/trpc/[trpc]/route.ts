@@ -37,9 +37,23 @@ async function handler(request: NextRequest) {
           'cache-control': 'public, max-age=3600', // for public data (e.g. configs, token lists?)
           // 'cache-control': 'private, no-store', // for user-specific data
         },
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
     },
   })
 }
 
 export { handler as GET, handler as POST }
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
+}

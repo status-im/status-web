@@ -11,20 +11,26 @@ export default defineConfig({
   extensionApi: 'chrome',
   modules: ['@wxt-dev/module-react'],
   manifestVersion: 3,
-  manifest: {
-    name: 'A wallet by Status',
-    permissions: ['sidePanel', 'storage'],
-    web_accessible_resources: [
-      {
-        resources: ['/wallet-core.wasm'],
-        // fixme:
-        matches: ['<all_urls>'],
+  manifest: ({ mode }) => {
+    const connectSrc =
+      mode === 'production'
+        ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
+        : 'ws: http://localhost:3030/ https://localhost:3030/'
+
+    return {
+      name: 'A wallet by Status',
+      permissions: ['sidePanel', 'storage'],
+      web_accessible_resources: [
+        {
+          resources: ['/wallet-core.wasm'],
+          // fixme:
+          matches: ['<all_urls>'],
+        },
+      ],
+      content_security_policy: {
+        extension_pages: `script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' ${connectSrc}`,
       },
-    ],
-    content_security_policy: {
-      extension_pages:
-        "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
-    },
+    }
   },
   runner: {
     disabled: true,
