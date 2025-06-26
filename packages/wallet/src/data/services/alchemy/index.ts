@@ -396,7 +396,6 @@ export async function getOutgoingAssetTransfers(
     withMetadata: boolean
     order: 'asc' | 'desc'
     maxCount: string
-    order: 'desc'
     pageKey?: string
   } = {
     category: supportedCategories,
@@ -405,7 +404,6 @@ export async function getOutgoingAssetTransfers(
     withMetadata: true,
     order: 'desc',
     maxCount: `0x${limit.toString(16)}`,
-    order: 'desc',
   }
 
   if (pageKey) {
