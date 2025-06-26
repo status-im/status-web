@@ -267,7 +267,6 @@ export interface RootRouteChildren {
   PortfolioAssetsIndexRoute: typeof PortfolioAssetsIndexRoute
   PortfolioCollectiblesIndexRoute: typeof PortfolioCollectiblesIndexRoute
   PortfolioCollectiblesNetworkContractIdRoute: typeof PortfolioCollectiblesNetworkContractIdRoute
-  ActivityIndexRoute: typeof ActivityIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -279,7 +278,6 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioCollectiblesIndexRoute: PortfolioCollectiblesIndexRoute,
   PortfolioCollectiblesNetworkContractIdRoute:
     PortfolioCollectiblesNetworkContractIdRoute,
-  ActivityIndexRoute: ActivityIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -299,7 +297,6 @@ export const routeTree = rootRoute
         "/portfolio/assets/",
         "/portfolio/collectibles/",
         "/portfolio/collectibles/$network/$contract/$id"
-        "/activity/",
       ]
     },
     "/": {
