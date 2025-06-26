@@ -2,13 +2,12 @@
 
 import { Input } from '@status-im/components'
 import { SearchIcon } from '@status-im/icons/20'
-import { TabLink } from '@status-im/wallet/components'
+import { DropdownSort, TabLink } from '@status-im/wallet/components'
 import NextLink from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import { match, P } from 'ts-pattern'
 
 import { useSearchAndSort } from '../_hooks/use-search-and-sort'
-import { AdminDropdownSort } from './dropdown-sort'
 
 const checkPathnameAndReturnTabValue = (
   pathname: string
@@ -67,7 +66,7 @@ const ActionButtons = () => {
           clearable={!!inputValue}
           aria-label="Search"
         />
-        <AdminDropdownSort
+        <DropdownSort
           data={sortOptions}
           onOrderByChange={onOrderByChange}
           orderByColumn={orderByColumn}

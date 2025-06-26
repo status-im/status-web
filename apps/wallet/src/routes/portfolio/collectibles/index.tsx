@@ -1,11 +1,10 @@
-import {
-  CollectiblesGrid as CollectiblesList,
-  TabLink,
-} from '@status-im/wallet/components'
+import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouterState } from '@tanstack/react-router'
+import { createFileRoute, Link as LinkBase } from '@tanstack/react-router'
 
-import { Link } from '@/components/link'
+import SplittedLayout from '@/components/splitted-layout'
+
+import { useWallet } from '../../../providers/wallet-context'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -27,6 +26,21 @@ export const SORT_OPTIONS = {
     collection: 'Collection',
   },
 } as const
+
+type LinkProps = {
+  href: string
+  className?: string
+  children: React.ReactNode
+}
+
+const Link = (props: LinkProps) => {
+  const { href, className, children } = props
+  return (
+    <LinkBase to={href} className={className}>
+      {children}
+    </LinkBase>
+  )
+}
 
 export const Route = createFileRoute('/portfolio/collectibles/')({
   component: RouteComponent,
@@ -80,8 +94,7 @@ const getCollectibles = async (
 }
 
 function RouteComponent() {
-  const { location } = useRouterState()
-  const pathname = location.pathname
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
 
   const handleSelect = (url: string, options?: { scroll?: boolean }) => {
     // Handle the selection of an asset
@@ -95,7 +108,8 @@ function RouteComponent() {
   const search = searchParams.get('search') ?? undefined
   const sortParam = searchParams.get('sort')
 
-  const address = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+  const pathname = window.location.pathname
+  const address = currentWallet?.activeAccounts[0].address
   const sort = {
     column:
       (sortParam?.split(',')[0] as 'name' | 'collection') ||
@@ -118,6 +132,10 @@ function RouteComponent() {
     useInfiniteQuery({
       queryKey: ['collectibles', address, networks, search, sort],
       queryFn: async ({ pageParam = 0 }) => {
+        if (!address) {
+          throw new Error('No wallet address available')
+        }
+
         const collectibles = await getCollectibles(
           address,
           networks as NetworkType[],
@@ -131,6 +149,7 @@ function RouteComponent() {
       },
       getNextPageParam: lastPage => lastPage.nextPage,
       initialPageParam: 0,
+      enabled: !!address && !isWalletLoading,
       staleTime: 60 * 60 * 1000,
       gcTime: 60 * 60 * 1000,
       refetchOnMount: false,
@@ -142,53 +161,32 @@ function RouteComponent() {
     return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
   }, [data?.pages])
 
-  return (
-    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
-      <div className="flex divide-x divide-default-neutral-20">
-        {/* {list} */}
-        <div className="flex grow flex-col 2xl:basis-1/2">
-          <div className="sticky top-0 z-20 flex gap-3 px-3 py-2">
-            <TabLink href="/portfolio/assets" LinkComponent={Link}>
-              Assets
-            </TabLink>
-            <TabLink
-              href="/portfolio/collectibles"
-              LinkComponent={Link}
-              isActive={pathname === '/portfolio/collectibles'}
-            >
-              Collectibles
-            </TabLink>
-          </div>
-          <div className="h-[calc(100vh-100px)] overflow-auto px-3">
-            {isLoading ? (
-              <div className="flex min-h-full items-center justify-center">
-                <div className="size-5 animate-spin rounded-full border-b-2 border-neutral-50"></div>
-              </div>
-            ) : (
-              <CollectiblesList
-                LinkComponent={Link}
-                address={address}
-                collectibles={collectibles}
-                fetchNextPage={fetchNextPage}
-                isFetchingNextPage={isFetchingNextPage}
-                pathname={pathname}
-                search={search}
-                searchParams={searchParams}
-                clearSearch={() => {
-                  // Clear the search input
-                  console.log('Search cleared')
-                }}
-                hasNextPage={hasNextPage}
-                onSelect={handleSelect}
-              />
-            )}
-          </div>
-        </div>
+  if (!currentWallet) {
+    return <div>No wallet selected</div>
+  }
 
-        <div className="hidden basis-1/2 flex-col bg-neutral-10 2xl:flex">
-          {/* {detail} */}
-        </div>
-      </div>
-    </div>
+  return (
+    <SplittedLayout
+      list={
+        <CollectiblesList
+          LinkComponent={Link}
+          address={address!}
+          collectibles={collectibles}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          pathname={pathname}
+          search={search}
+          searchParams={searchParams}
+          clearSearch={() => {
+            // Clear the search input
+            console.log('Search cleared')
+          }}
+          hasNextPage={hasNextPage}
+          onSelect={handleSelect}
+        />
+      }
+      detail={<>Detail</>}
+      isLoading={isLoading}
+    />
   )
 }

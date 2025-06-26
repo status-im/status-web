@@ -930,6 +930,9 @@ importers:
       trpc-chrome:
         specifier: ^1.0.0
         version: 1.0.0(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)
+      ts-pattern:
+        specifier: ^5.7.1
+        version: 5.7.1
       vite-plugin-node-polyfills:
         specifier: ^0.23.0
         version: 0.23.0(rollup@4.40.2)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.5.1))
@@ -16783,6 +16786,9 @@ packages:
 
   ts-pattern@5.3.1:
     resolution: {integrity: sha512-1RUMKa8jYQdNfmnK4jyzBK3/PS/tnjcZ1CW0v1vWDeYe5RBklc/nquw03MEoB66hVBm4BnlCfmOqDVxHyT1DpA==}
+
+  ts-pattern@5.7.1:
+    resolution: {integrity: sha512-EGs8PguQqAAUIcQfK4E9xdXxB6s2GK4sJfT/vcc9V1ELIvC4LH/zXu2t/5fajtv6oiRCxdv7BgtVK3vWgROxag==}
 
   tsconfck@3.1.5:
     resolution: {integrity: sha512-CLDfGgUp7XPswWnezWwsCRxNmgQjhYq3VXHM0/XIRxhVrKw0M1if9agzryh1QS3nxjCROvV+xWxoJO1YctzzWg==}
@@ -39320,6 +39326,8 @@ snapshots:
   ts-pattern@4.3.0: {}
 
   ts-pattern@5.3.1: {}
+
+  ts-pattern@5.7.1: {}
 
   tsconfck@3.1.5(typescript@5.8.3):
     optionalDependencies:

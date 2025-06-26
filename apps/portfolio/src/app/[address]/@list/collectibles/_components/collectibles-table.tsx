@@ -5,8 +5,8 @@ import { useMemo } from 'react'
 import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { Link } from 'src/app/_components/link'
 
+import { Link } from '../../../../_components/link'
 import { DEFAULT_SORT } from '../../../../_constants'
 import { useSearchAndSort } from '../../../../_hooks/use-search-and-sort'
 

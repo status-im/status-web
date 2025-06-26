@@ -1,16 +1,13 @@
 // import { Suspense } from 'react'
 
-import { AssetsList, PinExtension, TabLink } from '@status-im/wallet/components'
+import { AssetsList, PinExtension } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouterState } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
-import { Link } from '@/components/link'
+import SplittedLayout from '@/components/splitted-layout'
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
 import { useWallet } from '../../../providers/wallet-context'
-
-// import { DetailDrawer } from '../../../../portfolio/src/app/[address]/@detail/_drawer'
-// import { Loading as LoadingNav } from '../../../../portfolio/src/app/[address]/@nav/loading'
 
 export const Route = createFileRoute('/portfolio/assets/')({
   component: RouteComponent,
@@ -24,8 +21,6 @@ export const Route = createFileRoute('/portfolio/assets/')({
 })
 
 function RouteComponent() {
-  const { location } = useRouterState()
-  const pathname = location.pathname
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
   const { isPinExtension, handleClose } = usePinExtension()
 
@@ -93,52 +88,31 @@ function RouteComponent() {
   }
 
   return (
-    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
-      <div className="flex divide-x divide-default-neutral-20">
-        <div className="flex grow flex-col">
-          <div className="sticky top-0 z-20 flex gap-3 px-3 py-2">
-            <TabLink
-              href="/portfolio/assets"
-              LinkComponent={Link}
-              isActive={pathname === '/portfolio/assets'}
-            >
-              Assets
-            </TabLink>
-            <TabLink href="/portfolio/collectibles" LinkComponent={Link}>
-              Collectibles
-            </TabLink>
-          </div>
-
-          <div className="h-[calc(100vh-100px)] overflow-auto px-3">
-            {isLoading ? (
-              <div className="flex min-h-full items-center justify-center">
-                <div className="size-5 animate-spin rounded-full border-b-2 border-neutral-50"></div>
-              </div>
-            ) : (
-              <AssetsList
-                assets={assets}
-                onSelect={handleSelect}
-                clearSearch={() => {
-                  // Clear the search input
-                  console.log('Search cleared')
-                }}
-                searchParams={new URLSearchParams()}
-                pathname="/portfolio/"
-              />
-            )}
-          </div>
-        </div>
-
-        <div className="hidden basis-1/2 flex-col bg-neutral-10 2xl:flex">
-          {/* {detail} */}
-        </div>
-      </div>
-
+    <>
+      <SplittedLayout
+        list={
+          assets ? (
+            <AssetsList
+              assets={assets}
+              onSelect={handleSelect}
+              clearSearch={() => {
+                console.log('Search cleared')
+              }}
+              searchParams={new URLSearchParams()}
+              pathname="/portfolio/"
+            />
+          ) : (
+            <div className="mt-4 flex flex-col gap-3">Empty state</div>
+          )
+        }
+        detail={<>Detail for asset</>}
+        isLoading={isLoading}
+      />
       {isPinExtension && (
         <div className="absolute right-5 top-20">
           <PinExtension onClose={handleClose} />
         </div>
       )}
-    </div>
+    </>
   )
 }

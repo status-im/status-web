@@ -3,6 +3,7 @@ export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
+export { Balance } from './balance'
 export { BlurredCircle } from './blurred-circle'
 export { CollectiblesGrid } from './collectibles-grid'
 export {
@@ -11,6 +12,7 @@ export {
 } from './create-password-form'
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
+export { DropdownSort } from './dropdown-sort'
 export { Image, type ImageProps } from './image'
 export {
   ImportRecoveryPhraseForm,
@@ -31,5 +33,5 @@ export {
 } from './shorten-address'
 export { Slider, type SliderProps } from './slider'
 export { StickyHeaderContainer } from './sticky-header-container'
-export { TabLink } from './tab-link'
+export { getTabLinkClassName, TabLink } from './tab-link'
 export { Tooltip } from './tooltip'
