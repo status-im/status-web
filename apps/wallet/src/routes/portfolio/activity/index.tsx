@@ -1,4 +1,4 @@
-import { ActivityList } from '@status-im/wallet/components'
+import { ActivityList, FeedbackSection } from '@status-im/wallet/components'
 import { createFileRoute } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
@@ -23,6 +23,7 @@ function RouteComponent() {
           <div className="mt-4 flex flex-col gap-3">Empty state</div>
         )
       }
+      detail={<FeedbackSection />}
       isLoading={isLoading}
     />
   )
