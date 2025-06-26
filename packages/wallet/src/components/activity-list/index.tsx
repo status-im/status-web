@@ -26,7 +26,7 @@ const ActivityList = (props: Props) => {
 
   return (
     <div className="pb-10">
-      <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:hidden">
+      <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto">
         <div className="w-full">
           {activities.map(activity => {
             return <ActivityItem key={activity.uniqueId} activity={activity} />
