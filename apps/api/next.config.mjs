@@ -28,6 +28,28 @@ let config = {
     // dirs: ['src', 'docs'],
   },
 
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization',
+          },
+        ],
+      },
+    ]
+  },
+
   experimental: {
     // note: requires Next.js Canary https://nextjs.org/docs/messages/ppr-preview
     // ppr: 'incremental',
@@ -79,7 +101,14 @@ let config = {
 
     return config
   },
-  transpilePackages: ['@status-im/wallet'],
+  transpilePackages: [
+    '@status-im/icons',
+    '@status-im/components',
+    '@status-im/colors',
+    '@status-im/wallet',
+    // why: https://github.com/hashicorp/next-mdx-remote/issues/467#issuecomment-2432166413
+    'next-mdx-remote',
+  ],
 }
 
 const plugins = []
