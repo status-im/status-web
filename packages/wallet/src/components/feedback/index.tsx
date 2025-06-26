@@ -11,7 +11,7 @@ import { DropdownIcon } from './dropdown-icon'
 const FEEDBACK_LINKS = [
   {
     label: 'Message us',
-    href: 'https://status.app', // TODO: change to actual form link
+    href: 'https://forms.gle/TCAKYZtwnpf6RhXL6',
   },
   {
     label: 'Submit bug',
