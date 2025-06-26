@@ -5,6 +5,8 @@ import { ArrowLeftIcon } from '@status-im/icons/20'
 import { CreatePasswordForm } from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
+import { useWallet } from '@/providers/wallet-context'
+
 import { useCreateWallet } from '../../hooks/use-create-wallet'
 
 import type { CreatePasswordFormValues } from '@status-im/wallet/components'
@@ -16,13 +18,15 @@ export const Route = createFileRoute('/onboarding/new')({
 
 function RouteComponent() {
   const { createWalletAsync } = useCreateWallet()
+  const { setMnemonic } = useWallet()
   const navigate = useNavigate()
   const [isPending, startTransition] = useTransition()
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
     try {
       startTransition(async () => {
-        await createWalletAsync(data.password)
+        const mnemonic = await createWalletAsync(data.password)
+        setMnemonic(mnemonic)
         navigate({ to: '/portfolio/assets' })
       })
     } catch (error) {
