@@ -25,7 +25,7 @@ const Collectible = (props: Props) => {
     queryKey: ['collectible', network, contract, id],
     queryFn: async () => {
       const url = new URL(
-        'http://localhost:3030/api/trpc/collectibles.collectible',
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/collectibles.collectible`,
       )
       url.searchParams.set(
         'input',
