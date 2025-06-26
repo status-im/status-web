@@ -43,6 +43,7 @@ type ActivityItemProps = {
 
 const ActivityItem = (props: ActivityItemProps) => {
   const { activity } = props
+  const isSent = activity.from?.toLowerCase?.() === fromAddress.toLowerCase?.()
 
   return (
     <div className="flex w-full items-center justify-between rounded-12 px-3 py-2 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5">
@@ -58,9 +59,7 @@ const ActivityItem = (props: ActivityItemProps) => {
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-2 text-15 font-600 sm:max-w-full">
-            <ActivityDirection
-              direction={activity.from === fromAddress ? 'sent' : 'received'}
-            />
+            <ActivityDirection direction={isSent ? 'sent' : 'received'} />
             <span className="text-13 font-400 text-neutral-40">
               {formatRelative(
                 new Date(activity.metadata.blockTimestamp),
@@ -80,7 +79,7 @@ const ActivityItem = (props: ActivityItemProps) => {
       <div className="flex min-w-[250px] flex-col items-end self-end">
         {activity.asset ? (
           <ContextTag type="label" size="24">
-            {`${activity.value} ${activity.asset}`}
+            {`${isSent ? '-' : '+'} ${activity.value} ${activity.asset}`}
           </ContextTag>
         ) : (
           <ContextTag type="label" size="24">
@@ -88,6 +87,7 @@ const ActivityItem = (props: ActivityItemProps) => {
           </ContextTag>
         )}
       </div>
+
       <div className="flex self-end text-13 font-400 text-neutral-50">
         <ActivityStatus status={activity.status} />
       </div>
