@@ -9,6 +9,7 @@ import {
 
 import SplittedLayout from '@/components/splitted-layout'
 
+import { useWallet } from '../../../../../providers/wallet-context'
 import { Collectible } from '../../-components/collectible'
 import { LinkCollectible } from '../../-components/link-collectibe'
 
@@ -21,6 +22,8 @@ export const Route = createFileRoute(
 })
 
 function Component() {
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+
   const router = useRouter()
   const routerState = useRouterState()
   const params = Route.useParams()
@@ -30,17 +33,21 @@ function Component() {
   const search = searchParams.get('search') ?? undefined
 
   const pathname = routerState.location.pathname
+  const address = currentWallet?.activeAccounts[0].address
 
-  // todo?: replace address
-  const address = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useCollectibles({
       address,
+      isWalletLoading,
     })
 
   const collectibles = useMemo(() => {
     return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
   }, [data?.pages])
+
+  if (!currentWallet || !address) {
+    return <div>No wallet selected</div>
+  }
 
   return (
     <>

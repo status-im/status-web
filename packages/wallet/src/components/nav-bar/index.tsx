@@ -2,17 +2,8 @@
 
 // import { ConnectButton } from '../connect-button'
 import { Logo } from '../logo'
-import { SettingsPopover } from '../settings-popover'
 
-type Props = {
-  pathname: string
-}
-
-const Navbar = (props: Props) => {
-  const { pathname } = props
-
-  const isRoot = pathname === '-/'
-
+const Navbar = () => {
   return (
     <div
       data-theme="dark"
@@ -26,13 +17,6 @@ const Navbar = (props: Props) => {
           <Logo isTopbarDesktop />
         </a>
       </div>
-
-      {!isRoot && (
-        <div className="flex items-center gap-2 pr-2 xl:pr-6">
-          {/* <ConnectButton variant="outline" size="32" label="Connect" /> */}
-          <SettingsPopover />
-        </div>
-      )}
     </div>
   )
 }

@@ -10,6 +10,7 @@ import {
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
 
+import { useWallet } from '../../../providers/wallet-context'
 import { Token } from './-components/token'
 
 export const Route = createFileRoute('/portfolio/assets/$ticker')({
@@ -17,12 +18,23 @@ export const Route = createFileRoute('/portfolio/assets/$ticker')({
 })
 
 function Component() {
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+
   const params = Route.useParams()
   const ticker = params.ticker
   const router = useRouter()
   const routerState = useRouterState()
-  const { data: assets, isLoading } = useAssets()
   const pathname = routerState.location.pathname
+  const address = currentWallet?.activeAccounts[0].address
+
+  const { data: assets, isLoading } = useAssets({
+    address,
+    isWalletLoading,
+  })
+
+  if (!currentWallet || !address) {
+    return <div>No wallet selected</div>
+  }
 
   return (
     <>

@@ -22,6 +22,14 @@
       "#comment": "See https://github.com/microsoft/vscode-eslint/issues/1161 for reason (i.e. multiple .eslintrc config files)"
     }
   ],
+  "eslint.validate": [
+    // "markdown",
+    // "mdx",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]

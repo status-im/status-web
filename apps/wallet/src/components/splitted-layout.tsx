@@ -1,8 +1,6 @@
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
-import type { Account } from '@status-im/wallet/components'
-
 type Props = {
   list: React.ReactNode
   detail?: React.ReactNode
@@ -45,12 +43,10 @@ const actionsButtonsData = {
   },
 }
 
-// Mock data. todo? Replace with actual data
-const account: Account = {
-  name: 'Peachy Wallet',
+const account = {
+  name: 'Account 1',
   emoji: '🍑',
   color: 'magenta',
-  address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
 }
 
 const SplittedLayout = (props: Props) => {
@@ -63,10 +59,7 @@ const SplittedLayout = (props: Props) => {
   }
 
   return (
-    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-      {/* Sidebar nav */}
-      <div className="hidden px-3 py-2 xl:block">nav</div>
-
+    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
       {/* Main content */}
       <div className="flex divide-x divide-default-neutral-20">
         <div className="flex grow flex-col 2xl:basis-1/2">
