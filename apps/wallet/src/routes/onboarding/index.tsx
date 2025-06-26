@@ -3,13 +3,6 @@ import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/onboarding/')({
   component: RouteComponent,
-  head: () => ({
-    meta: [
-      {
-        title: 'Extension | Wallet | Onboarding',
-      },
-    ],
-  }),
 })
 
 function RouteComponent() {
