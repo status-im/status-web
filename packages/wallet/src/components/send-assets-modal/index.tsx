@@ -99,28 +99,22 @@ const SendAssetsModal = (props: Props) => {
   const maxFees = 1.45
   const gasFeesEth = 166.7
 
-  // Função mock para simular a verificação de password
   const verifyPassword = async (inputPassword: string): Promise<boolean> => {
-    // Simula delay de verificação
     await new Promise(resolve => setTimeout(resolve, 1000))
 
-    // Password mock correto é "wallet123"
     return inputPassword === 'wallet123'
   }
 
-  // Função mock para simular a transação
   const simulateTransaction = async (data: FormData): Promise<string> => {
-    // Simula delay de rede (2-4 segundos)
     const delay = Math.random() * 2000 + 2000
     await new Promise(resolve => setTimeout(resolve, delay))
 
-    // Simula 10% de chance de erro
     if (Math.random() < 0.1) {
       throw new Error('Transaction failed: Network error')
     }
 
     console.log('data', data)
-    // Gera hash de transação mock
+
     const mockTxHash =
       '0x' +
       Array.from({ length: 64 }, () =>
@@ -133,7 +127,6 @@ const SendAssetsModal = (props: Props) => {
   const onSubmit = async (data: FormData) => {
     const amount = Number.parseFloat(data.amount)
 
-    // Validação de gas
     if (amount > 100) {
       setErrorState('insufficient-gas')
       return
@@ -141,14 +134,13 @@ const SendAssetsModal = (props: Props) => {
 
     setErrorState(null)
 
-    // Armazena os dados da transação e abre modal de password
     setPendingTransactionData(data)
     setShowPasswordModal(true)
   }
 
   const handlePasswordSubmit = async () => {
     if (!password.trim()) {
-      setPasswordError('Password is required')
+      setPasswordError('Password is incorrect. Try again ot learn more.')
       return
     }
 
@@ -164,7 +156,6 @@ const SendAssetsModal = (props: Props) => {
         return
       }
 
-      // Password válido, fechar modal de password e processar transação
       setShowPasswordModal(false)
       setPassword('')
       setTransactionState('pending')
@@ -184,7 +175,6 @@ const SendAssetsModal = (props: Props) => {
           asset: asset.symbol,
         })
 
-        // Auto-close modal after 3 seconds on success
         setTimeout(() => {
           handleOnOpenChange(false)
         }, 3000)
@@ -195,7 +185,6 @@ const SendAssetsModal = (props: Props) => {
       setShowPasswordModal(false)
       setPassword('')
 
-      // Reset to idle after 3 seconds on error
       setTimeout(() => {
         setTransactionState('idle')
       }, 3000)
@@ -232,12 +221,10 @@ const SendAssetsModal = (props: Props) => {
   const isTransactionSuccess = transactionState === 'success'
   const isTransactionError = transactionState === 'error'
 
-  // Loading spinner component
   const LoadingSpinner = () => (
     <div className="size-5 animate-spin rounded-full border-2 border-white-100 border-t-transparent" />
   )
 
-  // Success check icon
   const SuccessIcon = () => (
     <div className="flex size-5 items-center justify-center rounded-full bg-success-50">
       <CheckIcon className="size-3 text-white-100" />
