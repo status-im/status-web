@@ -25,6 +25,7 @@ export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
 export { PercentageChange } from './percentage-change'
 export { PinExtension } from './pin-extension'
+export { ReceiveCryptoDrawer } from './receive-crypto-drawer'
 export { RecoveryPhraseTextarea } from './recovery-phrase-textarea'
 export { SettingsPopover } from './settings-popover'
 export {

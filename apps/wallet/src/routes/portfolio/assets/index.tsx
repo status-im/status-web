@@ -3,6 +3,7 @@ import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useMediaQuery } from '@/hooks/use-media-query'
 import { usePinExtension } from '@/hooks/use-pin-extension'
 
 import { useWallet } from '../../../providers/wallet-context'
@@ -22,6 +23,7 @@ function Component() {
     address,
     isWalletLoading,
   })
+  const isDesktop = useMediaQuery('xl')
 
   if (!currentWallet || !address) {
     return <div>No wallet selected</div>
@@ -40,6 +42,9 @@ function Component() {
                 router.navigate({
                   to: '/portfolio/assets/$ticker',
                   params: { ticker },
+                  ...(!isDesktop && {
+                    viewTransition: true,
+                  }),
                 })
               }}
               clearSearch={() => {

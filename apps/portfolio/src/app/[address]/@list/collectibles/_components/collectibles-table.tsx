@@ -105,9 +105,6 @@ const CollectiblesGrid = ({
       searchParams={searchParams}
       clearSearch={clearSearch}
       hasNextPage={hasNextPage}
-      onSelect={() => {
-        // Handle select action if needed
-      }}
     />
   )
 }

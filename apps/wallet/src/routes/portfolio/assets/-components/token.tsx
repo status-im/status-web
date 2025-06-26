@@ -1,29 +1,47 @@
 import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
-import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
+import { ArrowLeftIcon, BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
   NetworkBreakdown,
+  ReceiveCryptoDrawer,
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
+import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
 
-import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
+import type { Account } from '@status-im/wallet/components'
+import type { ApiOutput } from '@status-im/wallet/data'
 
 type Props = {
+  address: string
   ticker: string
 }
 
+const NETWORKS = [
+  'ethereum',
+  'optimism',
+  'arbitrum',
+  'base',
+  'polygon',
+  'bsc',
+] as const
+
+// todo?: Example address, replace with actual address when available
+const ADDRESS = 'd8da6bf26964af9d7eed9e03e53415d37aa96045'
+
 const Token = (props: Props) => {
-  const { ticker } = props
+  const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+  const [, copy] = useCopyToClipboard()
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -38,15 +56,8 @@ const Token = (props: Props) => {
         'input',
         JSON.stringify({
           json: {
-            address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
-            networks: [
-              'ethereum',
-              'optimism',
-              'arbitrum',
-              'base',
-              'polygon',
-              'bsc',
-            ] as NetworkType[],
+            address,
+            networks: NETWORKS,
             ...(ticker.startsWith('0x')
               ? { contract: ticker }
               : { symbol: ticker }),
@@ -98,6 +109,13 @@ const Token = (props: Props) => {
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
 
+  const account: Account = {
+    address: ADDRESS,
+    name: 'Account 1',
+    emoji: '🍑',
+    color: 'magenta',
+  }
+
   return (
     <StickyHeaderContainer
       className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
@@ -116,20 +134,34 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </span>
           </Button>
-
-          <Button size="32" iconBefore={<ReceiveBlurIcon />}>
-            Receive
-          </Button>
+          <ReceiveCryptoDrawer account={account} onCopy={copy}>
+            <Button
+              size="32"
+              iconBefore={<ReceiveBlurIcon />}
+              variant="outline"
+            >
+              Receive
+            </Button>
+          </ReceiveCryptoDrawer>
         </div>
       }
     >
-      <div className="-mt-8 grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
+      <Link
+        to="/portfolio/assets"
+        viewTransition
+        className="z-30 flex items-center gap-1 p-4 font-600 text-neutral-50 transition-colors hover:text-neutral-60 xl:hidden 2xl:mt-0 2xl:p-12 2xl:pt-0"
+      >
+        <ArrowLeftIcon />
+        Back
+      </Link>
+      <div className="grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
           <TokenLogo
             name={typedToken.summary.name}
             ticker={uppercasedTicker}
             icon={icon}
           />
+
           <div className="my-6 2xl:mt-0">
             <Balance variant="token" summary={typedToken.summary} />
           </div>
@@ -139,13 +171,15 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </Button>
 
-            <Button
-              size="32"
-              variant="outline"
-              iconBefore={<ReceiveBlurIcon />}
-            >
-              Receive
-            </Button>
+            <ReceiveCryptoDrawer account={account} onCopy={copy}>
+              <Button
+                size="32"
+                variant="outline"
+                iconBefore={<ReceiveBlurIcon />}
+              >
+                Receive
+              </Button>
+            </ReceiveCryptoDrawer>
           </div>
         </div>
 
