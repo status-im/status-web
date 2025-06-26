@@ -13,6 +13,7 @@ export {
 export { CurrencyAmount } from './currency-amount'
 export { DeleteAddressAlert } from './delete-address-alert'
 export { DropdownSort } from './dropdown-sort'
+export { FeedbackPopover, FeedbackSection } from './feedback'
 export { Image, type ImageProps } from './image'
 export {
   ImportRecoveryPhraseForm,

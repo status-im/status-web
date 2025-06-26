@@ -1,5 +1,6 @@
 import {
   CollectiblesGrid as CollectiblesList,
+  FeedbackSection,
   PinExtension,
 } from '@status-im/wallet/components'
 import { createFileRoute } from '@tanstack/react-router'
@@ -66,6 +67,7 @@ function Component() {
             hasNextPage={hasNextPage}
           />
         }
+        detail={<FeedbackSection />}
         isLoading={isLoading}
       />
       {isPinExtension && (

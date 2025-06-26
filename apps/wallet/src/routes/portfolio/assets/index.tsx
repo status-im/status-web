@@ -1,4 +1,8 @@
-import { AssetsList, PinExtension } from '@status-im/wallet/components'
+import {
+  AssetsList,
+  FeedbackSection,
+  PinExtension,
+} from '@status-im/wallet/components'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
@@ -57,6 +61,7 @@ function Component() {
             <div className="mt-4 flex flex-col gap-3">Empty state</div>
           )
         }
+        detail={<FeedbackSection />}
         isLoading={isLoading}
       />
       {isPinExtension && (
