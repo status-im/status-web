@@ -111,9 +111,9 @@ const Token = (props: Props) => {
 
   const account: Account = {
     address: ADDRESS,
-    emoji: '🪙',
+    name: 'Account 1',
+    emoji: '🍑',
     color: 'magenta',
-    name: 'My Wallet',
   }
 
   return (
