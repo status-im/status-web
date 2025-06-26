@@ -4,6 +4,8 @@ import { createFileRoute, Link as LinkBase } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 
+import { useWallet } from '../../../providers/wallet-context'
+
 import type { NetworkType } from '@status-im/wallet/data'
 
 const DEFAULT_SORT = {
@@ -92,6 +94,8 @@ const getCollectibles = async (
 }
 
 function RouteComponent() {
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+
   const handleSelect = (url: string, options?: { scroll?: boolean }) => {
     // Handle the selection of an asset
     console.log('Selected asset URL:', url)
@@ -105,7 +109,7 @@ function RouteComponent() {
   const sortParam = searchParams.get('sort')
 
   const pathname = window.location.pathname
-  const address = '0xd8da6bf26964af9d7eed9e03e53415d37aa96045'
+  const address = currentWallet?.activeAccounts[0].address
   const sort = {
     column:
       (sortParam?.split(',')[0] as 'name' | 'collection') ||
@@ -128,6 +132,10 @@ function RouteComponent() {
     useInfiniteQuery({
       queryKey: ['collectibles', address, networks, search, sort],
       queryFn: async ({ pageParam = 0 }) => {
+        if (!address) {
+          throw new Error('No wallet address available')
+        }
+
         const collectibles = await getCollectibles(
           address,
           networks as NetworkType[],
@@ -141,6 +149,7 @@ function RouteComponent() {
       },
       getNextPageParam: lastPage => lastPage.nextPage,
       initialPageParam: 0,
+      enabled: !!address && !isWalletLoading,
       staleTime: 60 * 60 * 1000,
       gcTime: 60 * 60 * 1000,
       refetchOnMount: false,
@@ -152,12 +161,16 @@ function RouteComponent() {
     return data?.pages.flatMap(page => page.collectibles ?? []) ?? []
   }, [data?.pages])
 
+  if (!currentWallet) {
+    return <div>No wallet selected</div>
+  }
+
   return (
     <SplittedLayout
       list={
         <CollectiblesList
           LinkComponent={Link}
-          address={address}
+          address={address!}
           collectibles={collectibles}
           fetchNextPage={fetchNextPage}
           isFetchingNextPage={isFetchingNextPage}

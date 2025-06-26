@@ -7,6 +7,8 @@
     "mikestead.dotenv",
     "bradlc.vscode-tailwindcss",
     "vitest.explorer",
-    "github.vscode-github-actions"
+    "github.vscode-github-actions",
+    "eamodio.gitlens",
+    "github.vscode-pull-request-github"
   ]
 }

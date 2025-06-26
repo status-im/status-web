@@ -63,10 +63,7 @@ const SplittedLayout = (props: Props) => {
   }
 
   return (
-    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden xl:grid-cols-[auto_1fr]">
-      {/* Sidebar nav */}
-      <div className="hidden px-3 py-2 xl:block">nav</div>
-
+    <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
       {/* Main content */}
       <div className="flex divide-x divide-default-neutral-20">
         <div className="flex grow flex-col 2xl:basis-1/2">

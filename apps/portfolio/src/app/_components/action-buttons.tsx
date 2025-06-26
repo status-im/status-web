@@ -2,12 +2,12 @@
 
 import { Input } from '@status-im/components'
 import { SearchIcon } from '@status-im/icons/20'
-import { DropdownSort } from '@status-im/wallet/components'
+import { DropdownSort, TabLink } from '@status-im/wallet/components'
+import NextLink from 'next/link'
 import { useParams, usePathname } from 'next/navigation'
 import { match, P } from 'ts-pattern'
 
 import { useSearchAndSort } from '../_hooks/use-search-and-sort'
-import { TabLink } from './tab-link'
 
 const checkPathnameAndReturnTabValue = (
   pathname: string
@@ -41,8 +41,20 @@ const ActionButtons = () => {
   return (
     <div className="flex place-content-between">
       <div className="flex gap-1.5">
-        <TabLink href={`/${address}/assets`}>Assets</TabLink>
-        <TabLink href={`/${address}/collectibles`}>Collectibles</TabLink>
+        <TabLink
+          href={`/${address}/assets`}
+          LinkComponent={NextLink}
+          isActive={pathname.includes('/assets')}
+        >
+          Assets
+        </TabLink>
+        <TabLink
+          href={`/${address}/collectibles`}
+          LinkComponent={NextLink}
+          isActive={pathname.includes('/collectibles')}
+        >
+          Collectibles
+        </TabLink>
       </div>
       <div className="flex items-center gap-2">
         <Input

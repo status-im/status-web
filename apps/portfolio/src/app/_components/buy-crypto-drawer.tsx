@@ -31,13 +31,6 @@ const PROVIDERS = [
     fee: '4.5%',
     image: '/images/providers/mercuryo.png',
   },
-
-  {
-    name: 'ramp',
-    description: 'Global crypto to fiat flow',
-    fee: '0.49% - 4.5%',
-    image: '/images/providers/ramp.png',
-  },
   {
     name: 'moonpay',
     description: 'The new standard for fiat to crypto',
