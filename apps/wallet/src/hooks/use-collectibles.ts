@@ -24,7 +24,8 @@ export const SORT_OPTIONS = {
 } as const
 
 type Props = {
-  address: string
+  isWalletLoading: boolean
+  address?: string
 }
 
 const getCollectibles = async (
@@ -69,7 +70,7 @@ const getCollectibles = async (
 }
 
 const useCollectibles = (props: Props) => {
-  const { address } = props
+  const { address, isWalletLoading } = props
 
   const searchParams = new URLSearchParams(window.location.search)
   const search = searchParams.get('search') ?? undefined
@@ -96,6 +97,10 @@ const useCollectibles = (props: Props) => {
   return useInfiniteQuery({
     queryKey: ['collectibles', address, networks, search, sort],
     queryFn: async ({ pageParam = 0 }) => {
+      if (!address) {
+        throw new Error('No wallet address available')
+      }
+
       const offset = pageParam * PAGE_LIMIT
       const collectibles = await getCollectibles(
         address,
@@ -111,6 +116,7 @@ const useCollectibles = (props: Props) => {
     },
     getNextPageParam: lastPage => lastPage.nextPage,
     initialPageParam: 0,
+    enabled: !!address && !isWalletLoading,
     staleTime: 60 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
     refetchOnMount: false,

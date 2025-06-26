@@ -1,6 +1,7 @@
 import config from '@status-im/components/config'
 import { scrollbarGutter, scrollbarWidth } from 'tailwind-scrollbar-utilities'
 import plugin from 'tailwindcss/plugin'
+import * as animatePlugin from 'tailwindcss-animate'
 
 import type { Config } from 'tailwindcss'
 
@@ -283,8 +284,7 @@ const tailwindConfig: Config = {
       // )
     }),
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require('tailwindcss-animate'),
+    animatePlugin,
     // reactAriaComponentsPlugin,
   ],
 }

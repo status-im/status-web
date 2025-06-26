@@ -1,17 +1,25 @@
 import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
-import { BuyIcon, ReceiveBlurIcon, SendBlurIcon } from '@status-im/icons/20'
+import {
+  ArrowLeftIcon,
+  BuyIcon,
+  ReceiveBlurIcon,
+  SendBlurIcon,
+} from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
   NetworkBreakdown,
+  ReceiveCryptoDrawer,
   SendAssetsModal,
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
+import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
+import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
@@ -20,12 +28,23 @@ import type { Account } from '@status-im/wallet/components'
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
+  address: string
   ticker: string
 }
 
+const NETWORKS = [
+  'ethereum',
+  'optimism',
+  'arbitrum',
+  'base',
+  'polygon',
+  'bsc',
+] as const
+
 const Token = (props: Props) => {
-  const { ticker } = props
+  const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+  const [, copy] = useCopyToClipboard()
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -40,15 +59,8 @@ const Token = (props: Props) => {
         'input',
         JSON.stringify({
           json: {
-            address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
-            networks: [
-              'ethereum',
-              'optimism',
-              'arbitrum',
-              'base',
-              'polygon',
-              'bsc',
-            ] as NetworkType[],
+            address,
+            networks: NETWORKS,
             ...(ticker.startsWith('0x')
               ? { contract: ticker }
               : { symbol: ticker }),
@@ -113,7 +125,7 @@ const Token = (props: Props) => {
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
-    address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045', // Example wallet address
+    address, // Example wallet address
     name: 'Peachy Wallet',
     color: 'orange',
     emoji: '🍑',
@@ -137,10 +149,15 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </span>
           </Button>
-
-          <Button size="32" iconBefore={<ReceiveBlurIcon />}>
-            Receive
-          </Button>
+          <ReceiveCryptoDrawer account={account} onCopy={copy}>
+            <Button
+              size="32"
+              iconBefore={<ReceiveBlurIcon />}
+              variant="outline"
+            >
+              Receive
+            </Button>
+          </ReceiveCryptoDrawer>
           <SendAssetsModal asset={asset} account={account}>
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
@@ -149,7 +166,15 @@ const Token = (props: Props) => {
         </div>
       }
     >
-      <div className="-mt-8 grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
+      <Link
+        to="/portfolio/assets"
+        viewTransition
+        className="z-30 flex items-center gap-1 p-4 font-600 text-neutral-50 transition-colors hover:text-neutral-60 xl:hidden 2xl:mt-0 2xl:p-12 2xl:pt-0"
+      >
+        <ArrowLeftIcon />
+        Back
+      </Link>
+      <div className="grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
           <TokenLogo
             name={typedToken.summary.name}
@@ -165,13 +190,15 @@ const Token = (props: Props) => {
               Buy {typedToken.summary.name}
             </Button>
 
-            <Button
-              size="32"
-              variant="outline"
-              iconBefore={<ReceiveBlurIcon />}
-            >
-              Receive
-            </Button>
+            <ReceiveCryptoDrawer account={account} onCopy={copy}>
+              <Button
+                size="32"
+                variant="outline"
+                iconBefore={<ReceiveBlurIcon />}
+              >
+                Receive
+              </Button>
+            </ReceiveCryptoDrawer>
             <SendAssetsModal asset={asset} account={account}>
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send

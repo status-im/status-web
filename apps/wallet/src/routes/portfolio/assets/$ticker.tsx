@@ -9,7 +9,9 @@ import {
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
+import { useMediaQuery } from '@/hooks/use-media-query'
 
+import { useWallet } from '../../../providers/wallet-context'
 import { Token } from './-components/token'
 
 export const Route = createFileRoute('/portfolio/assets/$ticker')({
@@ -17,12 +19,24 @@ export const Route = createFileRoute('/portfolio/assets/$ticker')({
 })
 
 function Component() {
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const isDesktop = useMediaQuery('xl')
+
   const params = Route.useParams()
   const ticker = params.ticker
   const router = useRouter()
   const routerState = useRouterState()
-  const { data: assets, isLoading } = useAssets()
   const pathname = routerState.location.pathname
+  const address = currentWallet?.activeAccounts[0].address
+
+  const { data: assets, isLoading } = useAssets({
+    address,
+    isWalletLoading,
+  })
+
+  if (!currentWallet || !address) {
+    return <div>No wallet selected</div>
+  }
 
   return (
     <>
@@ -38,6 +52,9 @@ function Component() {
                   router.navigate({
                     to: '/portfolio/assets/$ticker',
                     params: { ticker },
+                    ...(!isDesktop && {
+                      viewTransition: true,
+                    }),
                   })
                 }}
                 clearSearch={() => {
@@ -52,14 +69,14 @@ function Component() {
           }
           detail={
             <Suspense fallback={<p>Loading token...</p>}>
-              <Token ticker={ticker} />
+              <Token ticker={ticker} address={address} />
             </Suspense>
           }
           isLoading={isLoading}
         />
       </div>
       <div className="block 2xl:hidden">
-        <Token ticker={ticker} />
+        <Token ticker={ticker} address={address} />
       </div>
     </>
   )
