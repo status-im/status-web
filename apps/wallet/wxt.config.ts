@@ -14,7 +14,7 @@ export default defineConfig({
   manifest: ({ mode }) => {
     const connectSrc =
       mode === 'production'
-        ? 'https://status-api-status-im-web.vercel.app/api/'
+        ? 'https://status-api-status-im-web.vercel.app/'
         : 'ws: http://localhost:3030/ https://localhost:3030/'
 
     return {
