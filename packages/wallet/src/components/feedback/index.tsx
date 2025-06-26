@@ -11,7 +11,7 @@ import { DropdownIcon } from './dropdown-icon'
 const FEEDBACK_LINKS = [
   {
     label: 'Message us',
-    href: 'https://forms.gle/jJLiuHffWrL1wmbP7',
+    href: 'https://forms.gle/TCAKYZtwnpf6RhXL6',
   },
   {
     label: 'Submit bug',
