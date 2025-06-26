@@ -23,7 +23,7 @@ export default defineConfig({
     ],
     content_security_policy: {
       extension_pages:
-        "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+        "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://status-api-status-im-web.vercel.app",
     },
   },
   runner: {
