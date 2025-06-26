@@ -22,7 +22,6 @@ import { TabLink } from './tab-link'
 // } as const
 
 type Props = {
-  address: string
   pathname: string
   searchAndSortValues: {
     inputValue: string
@@ -36,15 +35,16 @@ type Props = {
 
 const ActionButtons = (props: Props) => {
   //   const { address, pathname, searchAndSortValues } = props
-  const { address, searchAndSortValues } = props
+  const { searchAndSortValues } = props
 
   //   const placeholder = placeholderText[checkPathnameAndReturnTabValue(pathname)]
 
   return (
     <div className="flex place-content-between">
       <div className="flex gap-1.5">
-        <TabLink href={`/${address}/assets`}>Assets</TabLink>
-        <TabLink href={`/${address}/collectibles`}>Collectibles</TabLink>
+        <TabLink href={`/portfolio/assets`}>Assets</TabLink>
+        <TabLink href={`/portfolio/collectibles`}>Collectibles</TabLink>
+        <TabLink href={`/portfolio/activity`}>Activity</TabLink>
       </div>
       <div className="flex items-center gap-2">
         {/* <Input
