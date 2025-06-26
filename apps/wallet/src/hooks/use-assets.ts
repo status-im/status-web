@@ -1,0 +1,62 @@
+import { useQuery } from '@tanstack/react-query'
+
+type Props = {
+  isWalletLoading: boolean
+  address?: string
+}
+
+// todo: export trpc client with api router and used instead
+// todo: cache
+const useAssets = (props: Props) => {
+  const { address, isWalletLoading } = props
+
+  return useQuery({
+    queryKey: ['assets', address],
+    queryFn: async () => {
+      if (!address) {
+        throw new Error('No wallet address available')
+      }
+
+      const url = new URL('http://localhost:3030/api/trpc/assets.all')
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            address,
+            networks: [
+              'ethereum',
+              'optimism',
+              'arbitrum',
+              'base',
+              'polygon',
+              'bsc',
+            ],
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch.')
+      }
+
+      const body = await response.json()
+
+      return body.result.data.json.assets
+    },
+    enabled: !!address && !isWalletLoading,
+    staleTime: 60 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
+}
+
+export { useAssets }

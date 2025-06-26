@@ -12,6 +12,7 @@
   "source": "./src/index.tsx",
   "exports": {
     "./tailwind.config": {
+      "types": "./dist/tailwind.config.d.ts",
       "import": "./dist/tailwind.config.es.js",
       "require": "./dist/tailwind.config.cjs.js"
     },

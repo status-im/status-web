@@ -1,11 +1,9 @@
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
-import type { Account } from '@status-im/wallet/components'
-
 type Props = {
   list: React.ReactNode
-  detail: React.ReactNode
+  detail?: React.ReactNode
   isLoading?: boolean
 }
 
@@ -45,12 +43,10 @@ const actionsButtonsData = {
   },
 }
 
-// Mock data. todo? Replace with actual data
-const account: Account = {
-  name: 'Peachy Wallet',
+const account = {
+  name: 'Account 1',
   emoji: '🍑',
   color: 'magenta',
-  address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
 }
 
 const SplittedLayout = (props: Props) => {
@@ -152,9 +148,16 @@ const SplittedLayout = (props: Props) => {
           </div>
         </div>
 
-        <div className="hidden basis-1/2 flex-col bg-neutral-10 2xl:flex">
-          {/* {detail} */}
-          {detail}
+        <div className="relative hidden basis-1/2 flex-col bg-white-100 2xl:flex">
+          <div className="relative z-20">{detail}</div>
+
+          <div
+            className="absolute z-10 size-full"
+            style={{
+              backgroundColor: 'rgba(245, 246, 248, 0.24)',
+            }}
+          />
+          <div className="absolute z-0 size-full bg-gradient-to-r from-[#F5F6F83D] to-transparent" />
         </div>
       </div>
     </div>

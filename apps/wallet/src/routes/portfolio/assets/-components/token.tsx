@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
 import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
@@ -7,101 +7,96 @@ import {
   CurrencyAmount,
   NetworkBreakdown,
   StickyHeaderContainer,
+  TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
+import { useQuery } from '@tanstack/react-query'
 import { cx } from 'class-variance-authority'
-import { notFound } from 'next/navigation'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { ErrorBoundary } from 'react-error-boundary'
 
-import { getAPIClient } from '../../../../..//data/api'
-import { BuyCryptoDrawer } from '../../../../_components/buy-crypto-drawer'
-import { portfolioComponents } from '../../../../_components/content'
-import { ReceiveCryptoDrawer } from '../../../../_components/receive-crypto-drawer'
-import { TokenAmount } from '../../../../_components/token-amount'
-import { Chart } from '../_components/chart'
-import { Loading } from '../_components/chart/loading'
+import { renderMarkdown } from '@/lib/markdown'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
-// export const experimental_ppr = true
-
 type Props = {
-  params: Promise<{
-    address: string
-    ticker: string
-  }>
-  searchParams: Promise<{ [key: string]: string | undefined }>
+  ticker: string
 }
 
-export default async function AssetDetailPage(props: Props) {
-  const { params } = props
-  const { address, ticker: slug } = await params
+const Token = (props: Props) => {
+  const { ticker } = props
+  const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
 
-  const searchParams = await props.searchParams
-  const networks = searchParams['networks']?.split(',') ?? [
-    'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
-  ]
-  const keyHash = JSON.stringify({
-    route: 'ticker',
-    networks,
+  const token = useQuery<
+    ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
+  >({
+    queryKey: ['token', ticker],
+    queryFn: async () => {
+      const endpoint = ticker.startsWith('0x')
+        ? 'assets.token'
+        : 'assets.nativeToken'
+      const url = new URL(`http://localhost:3030/api/trpc/${endpoint}`)
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            address: '0xd8da6bf26964af9d7eed9e03e53415d37aa96045',
+            networks: [
+              'ethereum',
+              'optimism',
+              'arbitrum',
+              'base',
+              'polygon',
+              'bsc',
+            ] as NetworkType[],
+            ...(ticker.startsWith('0x')
+              ? { contract: ticker }
+              : { symbol: ticker }),
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch.')
+      }
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    staleTime: 60 * 60 * 1000, // 1 hour
+    gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 
-  return (
-    // <Suspense
-    //   // note: comment to prevent loading fallback for the whole slot
-    //   key={keyHash}
-    //   fallback={<div>Loading...</div>}
-    // >
-    <Token
-      slug={slug}
-      address={address}
-      networks={networks as NetworkType[]}
-      keyHash={keyHash}
-    />
-    //  </Suspense>
-  )
-}
+  const { data: typedToken, isLoading } = token
 
-async function Token({
-  slug,
-  address,
-  networks,
-  keyHash,
-}: {
-  slug: string
-  address: string
-  networks: NetworkType[]
-  keyHash: string
-}) {
-  const apiClient = await getAPIClient()
+  useEffect(() => {
+    const processMarkdown = async () => {
+      if (typedToken) {
+        const metadata = Object.values(typedToken.assets)[0].metadata
+        const content = await renderMarkdown(
+          metadata.about || 'No description available.',
+        )
+        setMarkdownContent(content)
+      }
+    }
+    processMarkdown()
+  }, [typedToken])
 
-  let token: ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
-
-  if (slug.startsWith('0x')) {
-    token = await apiClient.assets.token({
-      address: address,
-      networks: networks as NetworkType[],
-      contract: slug,
-    })
-  } else if (slug.toUpperCase() === 'ETH') {
-    token = await apiClient.assets.nativeToken({
-      address,
-      networks: networks as NetworkType[],
-      symbol: slug.toUpperCase(),
-    })
-  } else {
-    notFound()
+  if (isLoading || !typedToken) {
+    return <p>Loading</p>
   }
 
-  const metadata = Object.values(token.assets)[0].metadata
-  const uppercasedTicker = token.summary.symbol
-  const icon = token.summary.icon
+  const metadata = Object.values(typedToken.assets)[0].metadata
+  const uppercasedTicker = typedToken.summary.symbol
+  const icon = typedToken.summary.icon
 
   return (
     <StickyHeaderContainer
@@ -109,60 +104,56 @@ async function Token({
       leftSlot={
         <TokenLogo
           variant="small"
-          name={token.summary.name}
+          name={typedToken.summary.name}
           ticker={uppercasedTicker}
           icon={icon}
         />
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <BuyCryptoDrawer>
-            <Button size="32" iconBefore={<BuyIcon />}>
-              <span className="block max-w-20 truncate">
-                Buy {token.summary.name}
-              </span>
-            </Button>
-          </BuyCryptoDrawer>
-          <ReceiveCryptoDrawer>
-            <Button size="32" iconBefore={<ReceiveBlurIcon />}>
-              Receive
-            </Button>
-          </ReceiveCryptoDrawer>
+          <Button size="32" iconBefore={<BuyIcon />}>
+            <span className="block max-w-20 truncate">
+              Buy {typedToken.summary.name}
+            </span>
+          </Button>
+
+          <Button size="32" iconBefore={<ReceiveBlurIcon />}>
+            Receive
+          </Button>
         </div>
       }
     >
       <div className="-mt-8 grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
           <TokenLogo
-            name={token.summary.name}
+            name={typedToken.summary.name}
             ticker={uppercasedTicker}
             icon={icon}
           />
           <div className="my-6 2xl:mt-0">
-            <Balance variant="token" summary={token.summary} />
+            <Balance variant="token" summary={typedToken.summary} />
           </div>
 
           <div className="flex items-center gap-1">
-            <BuyCryptoDrawer>
-              <Button size="32" iconBefore={<BuyIcon />}>
-                Buy {token.summary.name}
-              </Button>
-            </BuyCryptoDrawer>
-            <ReceiveCryptoDrawer>
-              <Button
-                size="32"
-                variant="outline"
-                iconBefore={<ReceiveBlurIcon />}
-              >
-                Receive
-              </Button>
-            </ReceiveCryptoDrawer>
+            <Button size="32" iconBefore={<BuyIcon />} variant="primary">
+              Buy {typedToken.summary.name}
+            </Button>
+
+            <Button
+              size="32"
+              variant="outline"
+              iconBefore={<ReceiveBlurIcon />}
+            >
+              Receive
+            </Button>
           </div>
         </div>
 
-        {token.summary.total_balance > 0 && <NetworkBreakdown token={token} />}
+        {typedToken.summary.total_balance > 0 && (
+          <NetworkBreakdown token={typedToken} />
+        )}
 
-        <ErrorBoundary fallback={<div>Error loading chart</div>}>
+        {/* <ErrorBoundary fallback={<div>Error loading chart</div>}>
           <Suspense
             key={keyHash}
             fallback={
@@ -177,7 +168,7 @@ async function Token({
               symbol={token.summary.symbol}
             />
           </Suspense>
-        </ErrorBoundary>
+        </ErrorBoundary> */}
 
         <div>
           <div className="grid grid-cols-2 2xl:grid-cols-4">
@@ -285,7 +276,7 @@ async function Token({
                   index % 2 !== 1 && 'border-r pr-4',
                   index % 4 !== 3 && '2xl:border-r 2xl:pr-4',
                   index < 6 && 'border-b',
-                  index < 4 && '2xl:border-b'
+                  index < 4 && '2xl:border-b',
                 )}
               >
                 <Tooltip content={item.tooltip} side="top">
@@ -302,12 +293,7 @@ async function Token({
             ))}
           </div>
           <div className="mt-5 flex-col gap-2">
-            <p className="text-15 font-600">What is {uppercasedTicker}?</p>
-
-            <MDXRemote
-              source={metadata.about || ''}
-              components={portfolioComponents}
-            />
+            <div className="text-neutral-100">{markdownContent}</div>
           </div>
         </div>
       </div>
@@ -315,48 +301,4 @@ async function Token({
   )
 }
 
-async function AssetChart({
-  address,
-  slug,
-  symbol,
-}: {
-  address: string
-  slug: string
-  symbol: string
-}) {
-  let priceChart:
-    | ApiOutput['assets']['tokenPriceChart']
-    | ApiOutput['assets']['nativeTokenPriceChart']
-  let balanceChart: ApiOutput['assets']['tokenBalanceChart']
-
-  const apiClient = await getAPIClient()
-
-  if (slug.startsWith('0x')) {
-    priceChart = await apiClient.assets.tokenPriceChart({
-      symbol,
-      days: '1',
-    })
-
-    balanceChart = await apiClient.assets.tokenBalanceChart({
-      address,
-      networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
-      contract: slug,
-      days: '30',
-    })
-  } else if (slug.toUpperCase() === 'ETH') {
-    priceChart = await apiClient.assets.nativeTokenPriceChart({
-      symbol: slug.toUpperCase(),
-      days: '1',
-    })
-
-    balanceChart = await apiClient.assets.nativeTokenBalanceChart({
-      address,
-      networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
-      days: '30',
-    })
-  } else {
-    notFound()
-  }
-
-  return <Chart price={priceChart} balance={balanceChart} />
-}
+export { Token }
