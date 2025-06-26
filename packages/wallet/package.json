@@ -12,6 +12,7 @@
   "source": "./src/index.tsx",
   "exports": {
     "./tailwind.config": {
+      "types": "./dist/tailwind.config.d.ts",
       "import": "./dist/tailwind.config.es.js",
       "require": "./dist/tailwind.config.cjs.js"
     },
@@ -25,6 +26,11 @@
       "types": "./dist/src/components/index.d.ts",
       "import": "./dist/components/index.es.js",
       "require": "./dist/components/index.cjs.js"
+    },
+    "./hooks": {
+      "types": "./dist/src/hooks/index.d.ts",
+      "import": "./dist/hooks/index.es.js",
+      "require": "./dist/hooks/index.cjs.js"
     }
   },
   "files": [
@@ -84,7 +90,8 @@
     "superjson": "^2.2.1",
     "ts-pattern": "^5.3.1",
     "zod": "^3.23.8",
-    "zustand": "^4.3.7"
+    "zustand": "^4.3.7",
+    "@scure/bip39": "^1.2.0"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",

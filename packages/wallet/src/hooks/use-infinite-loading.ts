@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 
 import { useIntersectionObserver } from './use-intersection-observer'

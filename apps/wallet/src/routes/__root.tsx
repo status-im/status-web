@@ -10,6 +10,8 @@ import {
   Link,
   // Navigate,
   Outlet,
+  redirect,
+  useRouterState,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
@@ -19,6 +21,7 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
+import { apiClient } from '../providers/api-client'
 import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
@@ -34,6 +37,26 @@ import type { QueryClient } from '@tanstack/react-query'
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
+  beforeLoad: async ({ location }) => {
+    const wallets = await apiClient.wallet.all.query()
+    const hasWallets = wallets && wallets.length > 0
+
+    if (location.pathname === '/') {
+      if (hasWallets) {
+        throw redirect({ to: '/portfolio/assets' })
+      } else {
+        throw redirect({ to: '/onboarding' })
+      }
+    }
+
+    if (location.pathname.startsWith('/portfolio') && !hasWallets) {
+      throw redirect({ to: '/onboarding' })
+    }
+
+    if (location.pathname.startsWith('/onboarding') && hasWallets) {
+      throw redirect({ to: '/portfolio/assets' })
+    }
+  },
   head: () => ({
     meta: [
       {
@@ -52,6 +75,9 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
+  const routerState = useRouterState()
+  const pathname = routerState.location.pathname
+
   return (
     <>
       {/* <div className="min-h-screen bg-neutral-100 text-white-100">
@@ -78,7 +104,13 @@ function RootComponent() {
           {/* <ConnectKitProvider> */}
           <WalletProvider>
             <div className="flex min-h-[56px] items-center px-2">
-              <Navbar />
+              <Navbar
+                hasFeedback={
+                  !['/portfolio/assets', '/portfolio/collectibles'].includes(
+                    pathname?.replace(/\/$/, '') ?? '',
+                  )
+                }
+              />
             </div>
             <div className="px-1">
               <div className="flex-1 flex-col 2md:flex xl:pb-1">
@@ -103,7 +135,7 @@ function RootComponent() {
       <div className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-blur-neutral-100/70 p-4 text-white-100">
         <Link to="/">/index</Link>
         <Link to="/onboarding">/onboarding</Link>
-        <Link to="/portfolio">/portfolio</Link>
+        <Link to="/portfolio/assets">/portfolio</Link>
       </div>
     </>
   )

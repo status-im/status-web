@@ -23,7 +23,7 @@ function RouteComponent() {
     try {
       startTransition(async () => {
         await createWalletAsync(data.password)
-        navigate({ to: '/portfolio' })
+        navigate({ to: '/portfolio/assets' })
       })
     } catch (error) {
       console.error(error)
@@ -31,7 +31,7 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full flex-1">
       <div className="flex flex-col gap-4">
         <div>
           <Button
