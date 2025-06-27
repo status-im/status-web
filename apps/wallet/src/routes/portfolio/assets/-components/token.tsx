@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
-import { ArrowLeftIcon, BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
+import {
+  ArrowLeftIcon,
+  BuyIcon,
+  ReceiveBlurIcon,
+  SendBlurIcon,
+} from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
   NetworkBreakdown,
   ReceiveCryptoDrawer,
+  SendAssetsModal,
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
@@ -19,7 +25,7 @@ import { cx } from 'class-variance-authority'
 import { renderMarkdown } from '@/lib/markdown'
 
 import type { Account } from '@status-im/wallet/components'
-import type { ApiOutput } from '@status-im/wallet/data'
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   address: string
@@ -108,6 +114,18 @@ const Token = (props: Props) => {
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
 
+  const asset = {
+    name: typedToken.summary.name,
+    icon,
+    totalBalance: typedToken.summary.total_balance,
+    totalBalanceEur: typedToken.summary.total_eur,
+    contractAddress: ticker.startsWith('0x') ? ticker : undefined,
+    symbol: typedToken.summary.symbol,
+    // TODO: get network
+    network: Object.keys(typedToken.assets)[0] as NetworkType,
+  }
+
+  // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
     name: 'Account 1',
@@ -142,6 +160,17 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
+          <SendAssetsModal
+            asset={asset}
+            account={{
+              ...account,
+              ethBalance: typedToken.assets.ethereum?.balance || 0,
+            }}
+          >
+            <Button size="32" iconBefore={<SendBlurIcon />}>
+              Send
+            </Button>
+          </SendAssetsModal>
         </div>
       }
     >
@@ -160,7 +189,6 @@ const Token = (props: Props) => {
             ticker={uppercasedTicker}
             icon={icon}
           />
-
           <div className="my-6 2xl:mt-0">
             <Balance variant="token" summary={typedToken.summary} />
           </div>
@@ -179,6 +207,17 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
+            <SendAssetsModal
+              asset={asset}
+              account={{
+                ...account,
+                ethBalance: typedToken.assets.ethereum?.balance || 0,
+              }}
+            >
+              <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
+                Send
+              </Button>
+            </SendAssetsModal>
           </div>
         </div>
 

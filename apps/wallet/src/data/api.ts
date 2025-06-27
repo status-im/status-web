@@ -578,6 +578,7 @@ const apiRouter = router({
           input.password,
           walletCore.CoinType.ethereum,
           walletCore.StoredKeyEncryption.aes256Ctr,
+          walletCore.Derivation.default,
         )
 
         return {
