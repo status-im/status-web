@@ -20,7 +20,7 @@ const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
   return (
     <div
       ref={ref}
-      className="flex min-h-[40px] w-[351px] flex-row items-center justify-between gap-3 rounded-12 bg-neutral-80/70 p-2 pr-3"
+      className="flex min-h-[40px] w-[351px] flex-row items-center justify-between gap-3 rounded-12 bg-neutral-80/70 p-2 pr-3 backdrop-blur-[20px]"
     >
       <div className="flex flex-1 flex-row items-center gap-1">
         <div className="shrink-0">

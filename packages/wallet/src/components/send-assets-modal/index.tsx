@@ -1,22 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Avatar, Button, Input } from '@status-im/components'
-import {
-  AlertIcon,
-  CheckIcon,
-  CloseIcon,
-  ExternalIcon,
-} from '@status-im/icons/20'
+import { Avatar, Button, Input, useToast } from '@status-im/components'
+import { AlertIcon, CloseIcon, ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
+import { PasswordModal } from '../password-modal'
 
 import type { NetworkType } from '../../data'
 import type { Account } from '../address'
@@ -24,7 +20,9 @@ import type React from 'react'
 
 type Props = {
   children: React.ReactNode
-  account: Account
+  account: Account & {
+    ethBalance: number
+  }
   asset: {
     name: string
     icon: string
@@ -38,20 +36,29 @@ type Props = {
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
+type GasFees = {
+  eth: number
+  eur: number
+  time: string
+}
+
 const SendAssetsModal = (props: Props) => {
   const { children, asset, account } = props
   const [open, setOpen] = useState(false)
-  const [errorState, setErrorState] = useState<'insufficient-gas' | null>(null)
+  const [errorState, setErrorState] = useState<'insufficient-eth' | null>(null)
   const [transactionState, setTransactionState] =
     useState<TransactionState>('idle')
-  const [transactionHash, setTransactionHash] = useState<string>('')
   const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [password, setPassword] = useState('')
-  const [passwordError, setPasswordError] = useState('')
   const [pendingTransactionData, setPendingTransactionData] =
     useState<FormData | null>(null)
+  const [gasFees, setGasFees] = useState<GasFees | null>(null)
 
+  const [isLoadingFees, setIsLoadingFees] = useState(false)
+
+  const toast = useToast()
   const balance = asset.totalBalance
+  // Default ETH balance if not provided
+  const ethBalance = account.ethBalance || 1
 
   const formSchema = z.object({
     to: z
@@ -87,7 +94,7 @@ const SendAssetsModal = (props: Props) => {
     resolver: zodResolver(formSchema),
     mode: 'all',
     defaultValues: {
-      to: '0x39cf6E0Ba4C4530735616e1Ee7ff5FbCB726fBd3',
+      to: '',
       amount: '',
       contractAddress: asset.contractAddress || '',
     },
@@ -96,20 +103,68 @@ const SendAssetsModal = (props: Props) => {
   const watchedAmount = watch('amount')
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
-  const maxFees = 1.45
-  const gasFeesEth = 166.7
 
-  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
+  // TODO: This is mock dynamic gas fee estimation. Replace with actual API call when available
+  const generateGasFees = (): GasFees => {
+    const gasLimit = 21000
+    const gasPriceInGwei = 20 + Math.random() * 30
+    const ethPrice = 2500 + Math.random() * 200
 
-    return inputPassword === 'wallet123'
+    const eth = (gasPriceInGwei * gasLimit) / 1e9
+    const eur = eth * ethPrice
+
+    return {
+      eth,
+      eur,
+      time: '≈ 1 min',
+    }
   }
+
+  // Fetch gas fees when address and amount are provided
+  const fetchGasFees = useCallback(async () => {
+    if (!watchedTo || !watchedAmount) {
+      setGasFees(null)
+      return
+    }
+
+    setIsLoadingFees(true)
+
+    // Simulate API call delay
+    await new Promise(resolve =>
+      setTimeout(resolve, 500 + Math.random() * 1000),
+    )
+
+    const fees = generateGasFees()
+    setGasFees(fees)
+    setIsLoadingFees(false)
+  }, [watchedTo, watchedAmount])
+
+  // Update gas fees when inputs change
+  useEffect(() => {
+    fetchGasFees()
+  }, [watchedTo, watchedAmount, fetchGasFees])
+
+  // Periodically update gas fees
+  useEffect(() => {
+    if (!gasFees || !watchedTo || !watchedAmount) return
+
+    const interval = setInterval(
+      () => {
+        const fees = generateGasFees()
+        setGasFees(fees)
+      },
+      5000 + Math.random() * 5000,
+    )
+
+    return () => clearInterval(interval)
+  }, [gasFees, watchedTo, watchedAmount])
 
   const simulateTransaction = async (data: FormData): Promise<string> => {
     const delay = Math.random() * 2000 + 2000
     await new Promise(resolve => setTimeout(resolve, delay))
 
     if (Math.random() < 0.1) {
+      toast.negative('Transaction failed')
       throw new Error('Transaction failed: Network error')
     }
 
@@ -125,76 +180,69 @@ const SendAssetsModal = (props: Props) => {
   }
 
   const onSubmit = async (data: FormData) => {
-    const amount = Number.parseFloat(data.amount)
-
-    if (amount > 100) {
-      setErrorState('insufficient-gas')
+    // Check if user has enough ETH for gas fees
+    if (gasFees && ethBalance < gasFees.eth) {
+      setErrorState('insufficient-eth')
       return
     }
 
     setErrorState(null)
-
     setPendingTransactionData(data)
     setShowPasswordModal(true)
   }
 
-  const handlePasswordSubmit = async () => {
-    if (!password.trim()) {
-      setPasswordError('Password is incorrect. Try again ot learn more.')
-      return
-    }
+  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return inputPassword === 'wallet123'
+  }
 
+  // TODO: replaece with actual transaction signing logic when available
+  const handlePasswordConfirm = async (password: string) => {
     setTransactionState('signing')
-    setPasswordError('')
 
     try {
       const isValid = await verifyPassword(password)
 
       if (!isValid) {
-        setPasswordError('Invalid password')
         setTransactionState('idle')
-        return
+        throw new Error('Invalid password')
       }
 
       setShowPasswordModal(false)
-      setPassword('')
       setTransactionState('pending')
 
       if (pendingTransactionData) {
         console.log('Transaction signed, processing...', pendingTransactionData)
-        const txHash = await simulateTransaction(pendingTransactionData)
-
-        setTransactionHash(txHash)
-        setTransactionState('success')
-
-        console.log('Transaction successful:', {
-          hash: txHash,
-          from: account.address,
-          to: pendingTransactionData.to,
-          amount: pendingTransactionData.amount,
-          asset: asset.symbol,
+        toast.positive('Transaction signed', {
+          duration: 2000,
         })
 
+        handleOnOpenChange(false)
+        await simulateTransaction(pendingTransactionData)
+
+        setTransactionState('success')
+
         setTimeout(() => {
-          handleOnOpenChange(false)
-        }, 3000)
+          toast.positive('Transaction successful')
+        }, 5000)
       }
     } catch (error) {
       console.error('Transaction failed:', error)
       setTransactionState('error')
-      setShowPasswordModal(false)
-      setPassword('')
+      if (error instanceof Error && error.message !== 'Invalid password') {
+        setShowPasswordModal(false)
+      }
 
       setTimeout(() => {
         setTransactionState('idle')
       }, 3000)
+
+      throw error
     }
   }
 
   const handlePasswordModalClose = () => {
     setShowPasswordModal(false)
-    setPassword('')
-    setPasswordError('')
     setTransactionState('idle')
     setPendingTransactionData(null)
   }
@@ -205,31 +253,16 @@ const SendAssetsModal = (props: Props) => {
       reset()
       setErrorState(null)
       setTransactionState('idle')
-      setTransactionHash('')
       setShowPasswordModal(false)
-      setPassword('')
-      setPasswordError('')
       setPendingTransactionData(null)
+      setGasFees(null)
     }
   }
 
   const hasInsufficientBalance =
     watchedAmount && Number.parseFloat(watchedAmount) > balance
-  const hasInsufficientGas = errorState === 'insufficient-gas'
-  const isTransactionInProgress = transactionState === 'pending'
+  const hasInsufficientEth = errorState === 'insufficient-eth'
   const isTransactionSigning = transactionState === 'signing'
-  const isTransactionSuccess = transactionState === 'success'
-  const isTransactionError = transactionState === 'error'
-
-  const LoadingSpinner = () => (
-    <div className="size-5 animate-spin rounded-full border-2 border-white-100 border-t-transparent" />
-  )
-
-  const SuccessIcon = () => (
-    <div className="flex size-5 items-center justify-center rounded-full bg-success-50">
-      <CheckIcon className="size-3 text-white-100" />
-    </div>
-  )
 
   return (
     <>
@@ -243,12 +276,12 @@ const SendAssetsModal = (props: Props) => {
           />
           <Dialog.Content
             data-customisation="blue"
-            className="fixed left-0 top-3 flex size-full justify-center"
+            className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow fixed z-auto flex h-[calc(100vh-24px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
-                  {isTransactionSuccess ? 'Transaction Sent!' : 'Send assets'}
+                  Send assets
                 </Dialog.Title>
 
                 <Dialog.Close asChild>
@@ -261,402 +294,260 @@ const SendAssetsModal = (props: Props) => {
                 </Dialog.Close>
               </div>
 
-              {/* Transaction Success State */}
-              {isTransactionSuccess && (
-                <div className="flex flex-1 flex-col items-center justify-center px-4 pb-4 text-center">
-                  <SuccessIcon />
-                  <h3 className="mt-4 text-19 font-semibold text-neutral-100">
-                    Transaction Successful
-                  </h3>
-                  <p className="mt-2 text-13 text-neutral-50">
-                    Your transaction has been sent successfully
-                  </p>
-                  <div className="mt-4 w-full rounded-12 bg-neutral-5 p-3">
-                    <p className="mb-1 text-13 font-medium text-neutral-50">
-                      Transaction Hash
-                    </p>
-                    <p className="break-all font-mono text-11 text-neutral-100">
-                      {transactionHash}
-                    </p>
-                  </div>
-                  <p className="mt-4 text-11 text-neutral-40">
-                    This modal will close automatically in a few seconds
-                  </p>
-                </div>
-              )}
-
-              {/* Transaction Error State */}
-              {isTransactionError && (
-                <div className="flex flex-1 flex-col items-center justify-center px-4 pb-4 text-center">
-                  <div className="flex size-12 items-center justify-center rounded-full bg-white-10">
-                    <AlertIcon className="size-6 text-danger-50" />
-                  </div>
-                  <h3 className="mt-4 text-19 font-semibold text-danger-50">
-                    Transaction Failed
-                  </h3>
-                  <p className="mt-2 text-13 text-neutral-50">
-                    Something went wrong. Please try again.
-                  </p>
-                  <Button
-                    variant="primary"
-                    className="mt-4"
-                    onClick={() => setTransactionState('idle')}
-                  >
-                    Try Again
-                  </Button>
-                </div>
-              )}
-
-              {/* Processing State */}
-              {isTransactionInProgress && (
-                <div className="flex flex-1 flex-col items-center justify-center px-4 pb-4 text-center">
-                  <LoadingSpinner />
-                  <h3 className="mt-4 text-19 font-semibold text-neutral-100">
-                    Processing Transaction
-                  </h3>
-                  <p className="mt-2 text-13 text-neutral-50">
-                    Please wait while your transaction is being processed...
-                  </p>
-                  <p className="mt-4 text-11 text-neutral-40">
-                    This may take a few seconds
-                  </p>
-                </div>
-              )}
-
-              {/* Normal Form State */}
-              {!isTransactionSuccess &&
-                !isTransactionError &&
-                !isTransactionInProgress && (
-                  <form
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="flex h-full flex-col place-content-between content-between justify-between space-y-6 px-4 pb-4"
-                  >
-                    <div>
-                      <div className="mb-2 mt-4">
-                        <Label htmlFor="to">To</Label>
-                        <div className="relative mt-2">
-                          <Controller
-                            name="to"
-                            control={control}
-                            render={({ field }) => (
-                              <Input
-                                id="to"
-                                {...field}
-                                isInvalid={!!errors.to}
-                                className="pr-8 font-mono text-13"
-                                placeholder="0x..."
-                                clearable={!!watchedTo}
-                              />
-                            )}
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex h-full flex-col place-content-between content-between justify-between space-y-6 px-4 pb-4"
+              >
+                <div>
+                  <div className="mb-2 mt-4">
+                    <Label htmlFor="to">To</Label>
+                    <div className="relative mt-2">
+                      <Controller
+                        name="to"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            id="to"
+                            {...field}
+                            isInvalid={!!errors.to}
+                            className="pr-8 font-mono text-13"
+                            placeholder="0x..."
+                            clearable={!!watchedTo}
                           />
-                        </div>
-                        {errors.to && (
-                          <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
-                            <AlertIcon className="size-4" />
-                            <p>{errors.to.message}</p>
-                          </div>
                         )}
+                      />
+                    </div>
+                    {errors.to && (
+                      <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                        <AlertIcon className="size-4" />
+                        <p>{errors.to.message}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mb-2 mt-4">
+                    <Label htmlFor="amount">Amount</Label>
+                    <div
+                      className={cx([
+                        'relative block w-full min-w-0 flex-1 overflow-hidden border border-neutral-20 bg-white-100 text-15 text-neutral-100 placeholder-neutral-40 max-sm:text-[1rem]',
+                        'outline-none focus:border-neutral-40',
+                        'rounded-12',
+                        'mt-2',
+                      ])}
+                    >
+                      <Controller
+                        name="amount"
+                        control={control}
+                        render={({ field }) => (
+                          <input
+                            id="amount"
+                            {...field}
+                            type="number"
+                            min={0}
+                            placeholder="0"
+                            className={cx([
+                              'w-full px-4 py-3 text-27 font-medium',
+                              '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
+                              hasInsufficientBalance && 'text-danger-50',
+                            ])}
+                          />
+                        )}
+                      />
+
+                      <div className="absolute right-4 top-3 flex items-center gap-2">
+                        <div className="relative">
+                          <img
+                            className="size-8 rounded-full"
+                            alt={asset.name}
+                            src={asset.icon}
+                          />
+                          <div className="absolute bottom-[-3px] right-[-3px] rounded-full border-2 border-white-100">
+                            <NetworkLogo name={asset.network} size={12} />
+                          </div>
+                        </div>
+                        <span className="text-19 font-600">{asset.symbol}</span>
                       </div>
 
-                      <div className="mb-2 mt-4">
-                        <Label htmlFor="amount">Amount</Label>
-                        <div
+                      <div className="h-px w-full bg-neutral-20" />
+                      <div className="flex justify-between px-4 py-3 text-13 font-medium">
+                        <span className="text-neutral-50">
+                          €
+                          {watchedAmount
+                            ? Number.parseFloat(watchedAmount || '0') *
+                              (balanceEur / balance)
+                            : '0'}
+                        </span>
+                        <span
                           className={cx([
-                            'relative block w-full min-w-0 flex-1 overflow-hidden border border-neutral-20 bg-white-100 text-15 text-neutral-100 placeholder-neutral-40 max-sm:text-[1rem]',
-                            'outline-none focus:border-neutral-40',
-                            'rounded-12',
-                            'mt-2',
+                            'flex items-center gap-1',
+                            hasInsufficientBalance && 'text-danger-50',
                           ])}
                         >
-                          <Controller
-                            name="amount"
-                            control={control}
-                            render={({ field }) => (
-                              <input
-                                id="amount"
-                                {...field}
-                                type="number"
-                                min={0}
-                                placeholder="0"
-                                className={cx([
-                                  'w-full px-4 py-3 text-27 font-medium',
-                                  '[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none',
-                                  hasInsufficientBalance && 'text-danger-50',
-                                ])}
-                              />
-                            )}
+                          {balance.toLocaleString()} {asset.symbol} /{' '}
+                          <CurrencyAmount
+                            value={balanceEur}
+                            format="standard"
                           />
-
-                          <div className="absolute right-4 top-3 flex items-center gap-2">
-                            <div className="relative">
-                              <img
-                                className="size-8 rounded-full"
-                                alt={asset.name}
-                                src={asset.icon}
-                              />
-                              <div className="absolute bottom-[-3px] right-[-3px] rounded-full border-2 border-white-100">
-                                <NetworkLogo name={asset.network} size={12} />
-                              </div>
-                            </div>
-                            <span className="text-19 font-600">
-                              {asset.symbol}
-                            </span>
-                          </div>
-
-                          <div className="h-px w-full bg-neutral-20" />
-                          <div className="flex justify-between px-4 py-3 text-13 font-medium">
-                            <span className="text-neutral-50">
-                              €
-                              {watchedAmount
-                                ? Number.parseFloat(watchedAmount || '0') *
-                                  (balanceEur / balance)
-                                : '0'}
-                            </span>
-                            <span
-                              className={cx([
-                                'flex items-center gap-1',
-                                hasInsufficientBalance && 'text-danger-50',
-                              ])}
-                            >
-                              {balance.toLocaleString()} {asset.symbol} /{' '}
-                              <CurrencyAmount
-                                value={balanceEur}
-                                format="standard"
-                              />
-                            </span>
-                          </div>
-                        </div>
-
-                        {errors.amount && (
-                          <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
-                            <AlertIcon className="size-4" />
-                            <p>{errors.amount.message}</p>
-                          </div>
-                        )}
-
-                        {watchedAmount && !hasInsufficientBalance && (
-                          <p className="mt-6 text-13 font-medium text-neutral-50">
-                            Remaining:{' '}
-                            {(
-                              balance - Number.parseFloat(watchedAmount || '0')
-                            ).toLocaleString()}{' '}
-                            {asset.symbol}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="mt-6">
-                        <p className="mb-2 text-13 font-medium text-neutral-50">
-                          From
-                        </p>
-                        <div
-                          className="flex items-center gap-1.5 rounded-16 border border-neutral-10 px-3 py-2"
-                          data-customisation={account.color}
-                        >
-                          <Avatar
-                            type="account"
-                            name={account.name}
-                            emoji={account.emoji}
-                            size="32"
-                            bgOpacity="20"
-                          />
-                          <div>
-                            <div className="text-15 font-semibold text-neutral-100">
-                              {account.name}
-                            </div>
-
-                            <span className="text-13 font-medium text-neutral-50">
-                              {account.address.slice(0, 6)}...
-                              {account.address.slice(-3)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="mt-6">
-                        <Label
-                          htmlFor="contractAddress"
-                          className="mb-2 text-13 font-medium"
-                        >
-                          Contract address
-                        </Label>
-
-                        <Controller
-                          name="contractAddress"
-                          control={control}
-                          render={({ field }) => (
-                            <div className="relative flex items-center justify-between gap-1.5 rounded-16 border border-neutral-10 px-3 py-2 text-13">
-                              <input
-                                id="contractAddress"
-                                {...field}
-                                className="w-full"
-                                readOnly
-                              />
-                              <a
-                                href={`https://etherscan.io/token/${asset.contractAddress}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                aria-label="View contract on Etherscan"
-                                className="text-neutral-50 hover:text-neutral-60"
-                              >
-                                <ExternalIcon />
-                              </a>
-                            </div>
-                          )}
-                        />
-
-                        {errors.contractAddress && (
-                          <p className="text-13 text-danger-50">
-                            {errors.contractAddress.message}
-                          </p>
-                        )}
-                      </div>
-
-                      {hasInsufficientGas && (
-                        <Alert variant="destructive">
-                          <div className="flex items-center justify-between">
-                            <span className="text-danger-50">
-                              Not enough ETH to pay gas fees
-                            </span>
-                            <Button variant="ghost" className="ml-2">
-                              Add ETH
-                            </Button>
-                          </div>
-                        </Alert>
-                      )}
-
-                      <div className="flex items-center justify-between pt-4">
-                        <div>
-                          <p className="text-13">Max fees</p>
-                          <p
-                            className={cx([
-                              'font-medium',
-                              hasInsufficientGas && 'text-danger-50',
-                            ])}
-                          >
-                            €{hasInsufficientGas ? gasFeesEth : maxFees}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-13">Estimated</p>
-                          <p className="font-medium">~60s</p>
-                        </div>
+                        </span>
                       </div>
                     </div>
 
-                    <Button
-                      variant="primary"
-                      type="submit"
-                      disabled={
-                        hasInsufficientBalance ||
-                        hasInsufficientGas ||
-                        !watchedAmount ||
-                        !watchedTo
-                      }
+                    {errors.amount && (
+                      <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
+                        <AlertIcon className="size-4" />
+                        <p>{errors.amount.message}</p>
+                      </div>
+                    )}
+
+                    {watchedAmount && !hasInsufficientBalance && (
+                      <div className="mt-2 flex items-center gap-1 text-13 font-medium text-neutral-50">
+                        Remaining ~{' '}
+                        {(
+                          balance - Number.parseFloat(watchedAmount || '0')
+                        ).toLocaleString()}{' '}
+                        {asset.symbol} /{' '}
+                        <CurrencyAmount
+                          value={
+                            balanceEur -
+                            Number.parseFloat(watchedAmount || '0') *
+                              (balanceEur / balance)
+                          }
+                          format="standard"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-6">
+                    <p className="mb-2 text-13 font-medium text-neutral-50">
+                      From
+                    </p>
+                    <div
+                      className="flex items-center gap-1.5 rounded-16 border border-neutral-10 px-3 py-2"
+                      data-customisation={account.color}
                     >
-                      Sign Transaction
-                    </Button>
-                  </form>
-                )}
+                      <Avatar
+                        type="account"
+                        name={account.name}
+                        emoji={account.emoji}
+                        size="32"
+                        bgOpacity="20"
+                      />
+                      <div className="flex-1">
+                        <div className="text-15 font-semibold text-neutral-100">
+                          {account.name}
+                        </div>
+                        <span className="text-13 font-medium text-neutral-50">
+                          {account.address.slice(0, 6)}...
+                          {account.address.slice(-3)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <Label
+                      htmlFor="contractAddress"
+                      className="mb-2 text-13 font-medium"
+                    >
+                      Contract address
+                    </Label>
+
+                    <Controller
+                      name="contractAddress"
+                      control={control}
+                      render={({ field }) => (
+                        <div className="relative flex items-center justify-between gap-1.5 rounded-16 border border-neutral-10 px-3 py-2 text-13">
+                          <input
+                            id="contractAddress"
+                            {...field}
+                            className="w-full"
+                            readOnly
+                          />
+                          <a
+                            href={`https://etherscan.io/token/${asset.contractAddress}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="View contract on Etherscan"
+                            className="text-neutral-50 hover:text-neutral-60"
+                          >
+                            <ExternalIcon />
+                          </a>
+                        </div>
+                      )}
+                    />
+                  </div>
+                </div>
+                <div className="flex w-full flex-col">
+                  {hasInsufficientEth && watchedAmount && (
+                    <Alert variant="destructive">
+                      <div className="flex w-full items-center justify-between">
+                        <p className="w-full flex-1">
+                          Not enough ETH to pay gas fees
+                        </p>
+                        <Button variant="danger" size="24" className="ml-2">
+                          Add ETH
+                        </Button>
+                      </div>
+                    </Alert>
+                  )}
+                  {/* Gas Fees Section */}
+                  {watchedTo && watchedAmount && (
+                    <div className="mb-4 flex items-center justify-between text-13">
+                      <div>
+                        <p className="text-neutral-50">Max fees</p>
+                        <p>
+                          {gasFees ? (
+                            <>
+                              <CurrencyAmount
+                                value={gasFees.eur}
+                                format="standard"
+                              />{' '}
+                            </>
+                          ) : (
+                            'Estimating...'
+                          )}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-neutral-50"> Estimated </p>
+                        <p>{gasFees ? gasFees.time : '-'}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    disabled={
+                      hasInsufficientBalance ||
+                      hasInsufficientEth ||
+                      !watchedAmount ||
+                      !watchedTo ||
+                      !gasFees ||
+                      isLoadingFees
+                    }
+                  >
+                    Sign Transaction
+                  </Button>
+                </div>
+              </form>
             </div>
           </Dialog.Content>
         </Dialog.Portal>
       </Dialog.Root>
 
       {/* Password Verification Modal */}
-      <Dialog.Root
+      <PasswordModal
         open={showPasswordModal}
         onOpenChange={handlePasswordModalClose}
-      >
-        <Dialog.Portal>
-          <Dialog.Overlay
-            className={cx(
-              'fixed inset-0 bg-blur-neutral-100/70 backdrop-blur-[2px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in',
-            )}
-          />
-          <Dialog.Content
-            data-customisation="blue"
-            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[24px]"
-          >
-            <div className="w-full max-w-[436px] rounded-16 border border-neutral-10 bg-white-100 p-6 shadow-3">
-              <div className="mb-4 flex items-center justify-between">
-                <Dialog.Title className="text-19 font-semibold">
-                  Enter password
-                </Dialog.Title>
-                <Dialog.Close asChild>
-                  <Button
-                    icon={<CloseIcon />}
-                    aria-label="Close"
-                    variant="outline"
-                    size="32"
-                    disabled={isTransactionSigning}
-                  />
-                </Dialog.Close>
-              </div>
-
-              <p className="mb-4 text-13 text-neutral-50">
-                To sign transaction
-              </p>
-
-              <div className="mb-4">
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={setPassword}
-                  placeholder="Enter your password"
-                  isInvalid={!!passwordError}
-                  isDisabled={isTransactionSigning}
-                  onKeyDown={e => {
-                    if (e.key === 'Enter' && !isTransactionSigning) {
-                      handlePasswordSubmit()
-                    }
-                  }}
-                />
-
-                {passwordError && (
-                  <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
-                    <AlertIcon className="size-4" />
-                    <p>{passwordError}</p>
-                  </div>
-                )}
-              </div>
-
-              <p className="mb-4 text-11 text-neutral-40">
-                💡 Tip: Use password "wallet123" for this demo
-              </p>
-
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={handlePasswordModalClose}
-                  disabled={isTransactionSigning}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="primary"
-                  className="flex-1"
-                  onClick={handlePasswordSubmit}
-                  disabled={isTransactionSigning || !password.trim()}
-                >
-                  {isTransactionSigning ? (
-                    <div className="flex items-center gap-2">
-                      <LoadingSpinner />
-                      <span>Signing...</span>
-                    </div>
-                  ) : (
-                    'Sign & Send'
-                  )}
-                </Button>
-              </div>
-            </div>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog.Root>
+        onConfirm={handlePasswordConfirm}
+        isLoading={isTransactionSigning}
+      />
     </>
   )
 }
+
 export { SendAssetsModal }
 
 const Alert = ({
@@ -670,17 +561,15 @@ const Alert = ({
 }) => (
   <div
     className={cx(
-      'flex items-center gap-2 rounded-16 p-3 text-13',
-      variant === 'destructive' && 'border border-danger-50 bg-danger-50',
+      '-mx-4 flex w-[calc(100%+32px)] items-center gap-2 p-3 text-13',
+      variant === 'destructive' &&
+        'bg-gradient-to-b from-danger-50/5 to-[transparent]',
       className,
     )}
   >
-    <AlertIcon className="size-4" />
+    <AlertIcon className="size-4 text-danger-50" />
     <span
-      className={cx(
-        'text-neutral-100',
-        variant === 'destructive' && 'text-danger-50',
-      )}
+      className={cx(variant === 'destructive' && 'text-danger-50', 'flex-1')}
     >
       {children}
     </span>

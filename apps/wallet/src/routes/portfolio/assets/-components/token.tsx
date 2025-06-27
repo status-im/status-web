@@ -160,7 +160,13 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
-          <SendAssetsModal asset={asset} account={account}>
+          <SendAssetsModal
+            asset={asset}
+            account={{
+              ...account,
+              ethBalance: typedToken.assets.ethereum?.balance || 0,
+            }}
+          >
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
             </Button>
@@ -201,7 +207,13 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
-            <SendAssetsModal asset={asset} account={account}>
+            <SendAssetsModal
+              asset={asset}
+              account={{
+                ...account,
+                ethBalance: typedToken.assets.ethereum?.balance || 0,
+              }}
+            >
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send
               </Button>
