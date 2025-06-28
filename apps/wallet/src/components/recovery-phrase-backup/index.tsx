@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useToast } from '@status-im/components'
 import { NegativeStateIcon } from '@status-im/icons/20'
@@ -15,6 +15,19 @@ export function RecoveryPhraseBackup() {
   const { currentWallet, mnemonic, setMnemonic } = useWallet()
   const [showRecoveryDialog, setShowRecoveryDialog] = useState(false)
   const toast = useToast()
+
+  useEffect(() => {
+    if (mnemonic) {
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        e.preventDefault()
+        return "You haven't backed up your wallet! Your recovery phrase will be lost forever."
+      }
+
+      window.addEventListener('beforeunload', handleBeforeUnload)
+      return () =>
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [mnemonic])
 
   const onPasswordConfirm = async (password: string) => {
     if (!currentWallet?.id) {
