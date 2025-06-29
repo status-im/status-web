@@ -1,6 +1,7 @@
 export type * from '../types'
 export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
+export { ActivityList } from './activity-list'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { Balance } from './balance'
