@@ -2,14 +2,16 @@
 
 import { ContextTag } from '@status-im/components'
 import { CheckIcon, NegativeStateIcon, PendingIcon } from '@status-im/icons/12'
-import { ReceiveIcon, SendIcon } from '@status-im/icons/20'
+import { ExternalIcon, ReceiveIcon, SendIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 import { formatRelative } from 'date-fns'
 import { match } from 'ts-pattern'
 
 import erc20TokenList from '../../constants/erc20.json'
+import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { shortenAddress } from '../shorten-address'
+import { formatTokenAmount } from '../token-amount'
 
 import type { ApiOutput } from '../../data'
 
@@ -43,14 +45,18 @@ type ActivityItemProps = {
 
 const ActivityItem = (props: ActivityItemProps) => {
   const { activity } = props
-  const isSent = activity.from?.toLowerCase?.() === fromAddress.toLowerCase?.()
+
+  const outgoingTransaction = activity.from === fromAddress
+  const assetSymbol =
+    activity.asset || (activity.category === 'external' ? 'ETH' : null)
+  const eurValue = Number(activity.eurRate) * Number(activity.value)
 
   return (
-    <div className="flex w-full items-center justify-between rounded-12 px-3 py-2 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5">
+    <div className="grid grid-cols-[2fr_1fr_1fr] gap-8 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5">
       <div className="flex items-center gap-3">
         <div className="relative">
           <TokenLogo
-            symbol={activity.asset}
+            symbol={assetSymbol || 'ETH'}
             address={activity.rawContract?.address ?? ''}
           />
           <div className="absolute bottom-[-4px] right-[-4px] size-[18px] rounded-full border border-white-100">
@@ -59,7 +65,9 @@ const ActivityItem = (props: ActivityItemProps) => {
         </div>
         <div className="flex flex-col">
           <div className="flex items-center gap-2 text-15 font-600 sm:max-w-full">
-            <ActivityDirection direction={isSent ? 'sent' : 'received'} />
+            <ActivityDirection
+              direction={outgoingTransaction ? 'sent' : 'received'}
+            />
             <span className="text-13 font-400 text-neutral-40">
               {formatRelative(
                 new Date(activity.metadata.blockTimestamp),
@@ -70,26 +78,49 @@ const ActivityItem = (props: ActivityItemProps) => {
           <div className="flex items-end text-13 font-400 text-neutral-50">
             <ContextTag type="label" size="24">
               {shortenAddress(
-                activity.from === fromAddress ? activity.to : activity.from,
+                outgoingTransaction ? activity.to : activity.from,
               )}
             </ContextTag>
           </div>
         </div>
       </div>
-      <div className="flex min-w-[250px] flex-col items-end self-end">
-        {activity.asset ? (
-          <ContextTag type="label" size="24">
-            {`${isSent ? '-' : '+'} ${activity.value} ${activity.asset}`}
-          </ContextTag>
+      <div className="flex flex-col items-end justify-center">
+        {assetSymbol ? (
+          <div className="flex flex-col items-end gap-1">
+            <ContextTag type="label" size="24">
+              {`${formatTokenAmount(activity.value, 'precise')} ${assetSymbol}`}
+            </ContextTag>
+            {eurValue > 0 && (
+              <div
+                className={cx(
+                  'flex items-center gap-1 text-13 font-500',
+                  outgoingTransaction ? 'text-danger-50' : 'text-success-50',
+                )}
+              >
+                {outgoingTransaction ? '-' : '+'}
+                <CurrencyAmount
+                  value={eurValue}
+                  format="standard"
+                  className="text-13 font-500"
+                />
+              </div>
+            )}
+          </div>
         ) : (
           <ContextTag type="label" size="24">
             NFT
           </ContextTag>
         )}
       </div>
-
-      <div className="flex self-end text-13 font-400 text-neutral-50">
-        <ActivityStatus status={activity.status} />
+      <div className="flex items-center justify-end text-13 font-400 text-neutral-50">
+        <a
+          href={`https://etherscan.io/tx/${activity.hash}`}
+          target="_blank"
+          className="flex items-center gap-1"
+        >
+          <ActivityStatus status={activity.status} />
+          <ExternalIcon className="text-neutral-50" />
+        </a>
       </div>
     </div>
   )
@@ -149,6 +180,10 @@ const TokenLogo = (props: TokenLogoProps) => {
   const { symbol, address } = props
 
   const getTokenLogo = (symbol: string, contractAddress?: string) => {
+    if (symbol === 'ETH') {
+      return 'https://assets.coingecko.com/coins/images/279/large/ethereum.png'
+    }
+
     const token = erc20TokenList.tokens.find(
       token =>
         token.symbol === symbol ||
@@ -156,14 +191,24 @@ const TokenLogo = (props: TokenLogoProps) => {
           token.address.toLowerCase() === contractAddress.toLowerCase()),
     )
 
-    return token?.logoURI || ''
+    return token?.logoURI ?? ''
+  }
+
+  const src = getTokenLogo(symbol, address)
+
+  if (!src) {
+    return (
+      <div className="flex size-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-10 text-11 font-600 text-neutral-50">
+        {symbol.slice(0, 4).toUpperCase()}
+      </div>
+    )
   }
 
   return (
     <img
       className="size-8 flex-shrink-0 rounded-full bg-neutral-10"
       alt={symbol}
-      src={getTokenLogo(symbol, address)}
+      src={src}
     />
   )
 }
