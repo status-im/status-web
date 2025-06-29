@@ -13,6 +13,7 @@
     "./packages/components",
     "./packages/status-js",
     "./packages/wallet",
+    "./packages/trpc-webext",
     "./apps/connector",
     "./apps/portfolio",
     "./apps/wallet",
