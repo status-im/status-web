@@ -1,8 +1,12 @@
 import { cache } from 'react'
 
+import { format } from 'date-fns'
 import { z } from 'zod'
 
+import erc20TokenList from '../../../constants/erc20.json'
+import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
+import { fetchTokensPriceForDate } from '../../services/cryptocompare'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'
@@ -11,9 +15,31 @@ import type { NetworkType } from '../types'
 export type Activity = AssetTransfer & {
   network: NetworkType
   status: 'pending' | 'success' | 'failed' | 'unknown'
+  eurRate?: number
 }
 
 const MAX_CONCURRENT_REQUESTS = 5
+
+function checkToken(symbol: string, contractAddress?: string | null): boolean {
+  if (symbol === 'ETH') return true
+  if (!contractAddress) return false
+
+  const knownToken = erc20TokenList.tokens.find(
+    token =>
+      token.symbol === symbol &&
+      token.address.toLowerCase() === contractAddress.toLowerCase(),
+  )
+
+  return Boolean(knownToken)
+}
+
+const cachedPriceData = cache(async (key: string) => {
+  const { symbols, timestamp } = JSON.parse(key)
+
+  if (symbols.length === 0) return {}
+
+  return await fetchTokensPriceForDate(symbols, timestamp)
+})
 
 const cachedActivity = cache(async (key: string) => {
   const { address, network } = JSON.parse(key)
@@ -144,7 +170,63 @@ export async function page({
     }
   }
 
-  activities.sort((a, b) => {
+  const activityGroups = groupBy(
+    activities,
+    activity => {
+      return format(new Date(activity.metadata.blockTimestamp), 'yyyy-MM-dd')
+    },
+    {},
+  )
+
+  const enhancedActivities: Activity[] = []
+
+  for (const dateActivities of Object.values(activityGroups)) {
+    const allAssetSymbols = [
+      ...new Set(
+        dateActivities.map(activity => activity.asset).filter(Boolean),
+      ),
+    ]
+
+    const validAssetSymbols = allAssetSymbols.filter(symbol => {
+      const activity = dateActivities.find(a => a.asset === symbol)
+      const contractAddress = activity?.rawContract?.address
+      return checkToken(symbol, contractAddress)
+    })
+
+    const hasEthTransfers = dateActivities.some(
+      activity => !activity.asset && activity.category === 'external',
+    )
+    if (hasEthTransfers) {
+      validAssetSymbols.push('ETH')
+    }
+
+    const timestamp = Math.floor(
+      new Date(dateActivities[0].metadata.blockTimestamp).getTime() / 1000,
+    )
+
+    const priceData = await cachedPriceData(
+      JSON.stringify({ symbols: validAssetSymbols, timestamp }),
+    )
+
+    const dateEnhancedActivities = dateActivities.map(activity => {
+      const assetSymbol =
+        activity.asset || (activity.category === 'external' ? 'ETH' : null)
+
+      if (assetSymbol && priceData[assetSymbol]) {
+        const eurRate = priceData[assetSymbol].EUR?.PRICE ?? 0
+
+        return {
+          ...activity,
+          eurRate,
+        }
+      }
+      return activity
+    })
+
+    enhancedActivities.push(...dateEnhancedActivities)
+  }
+
+  enhancedActivities.sort((a, b) => {
     const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
     if (blockDiff !== 0) return blockDiff
 
@@ -154,7 +236,7 @@ export async function page({
   })
 
   return {
-    activities,
+    activities: enhancedActivities,
     nextPageKeys,
   }
 }
@@ -178,7 +260,7 @@ export async function activity(
     return {
       ...tx,
       status,
-      value: Number(tx.value),
+      value: tx.value,
       tokenId: tx.tokenId ?? undefined,
       erc721TokenId: tx.erc721TokenId ?? undefined,
       erc1155Metadata: tx.erc1155Metadata ?? undefined,
@@ -193,8 +275,63 @@ export async function activity(
 
   const activities = await runWithConcurrency(tasks, MAX_CONCURRENT_REQUESTS)
 
-  return {
+  const activityGroups = groupBy(
     activities,
+    activity => {
+      return format(new Date(activity.metadata.blockTimestamp), 'yyyy-MM-dd')
+    },
+    {},
+  )
+  const enhancedActivities: Activity[] = []
+
+  for (const dateActivities of Object.values(activityGroups)) {
+    const allAssetSymbols = [
+      ...new Set(
+        dateActivities.map(activity => activity.asset).filter(Boolean),
+      ),
+    ]
+
+    const validAssetSymbols = allAssetSymbols.filter(symbol => {
+      const activity = dateActivities.find(a => a.asset === symbol)
+      const contractAddress = activity?.rawContract?.address
+      return checkToken(symbol, contractAddress)
+    })
+
+    const hasEthTransfers = dateActivities.some(
+      activity => !activity.asset && activity.category === 'external',
+    )
+    if (hasEthTransfers) {
+      validAssetSymbols.push('ETH')
+    }
+
+    const timestamp = Math.floor(
+      new Date(dateActivities[0].metadata.blockTimestamp).getTime() / 1000,
+    )
+
+    const priceData = await cachedPriceData(
+      JSON.stringify({ symbols: validAssetSymbols, timestamp }),
+    )
+
+    const dateEnhancedActivities = dateActivities.map(activity => {
+      const assetSymbol =
+        activity.asset || (activity.category === 'external' ? 'ETH' : null)
+
+      if (assetSymbol && priceData[assetSymbol]) {
+        const eurRate = priceData[assetSymbol].EUR?.PRICE ?? 0
+
+        return {
+          ...activity,
+          eurRate,
+        }
+      }
+      return activity
+    })
+
+    enhancedActivities.push(...dateEnhancedActivities)
+  }
+
+  return {
+    activities: enhancedActivities,
     nextPageKey,
   }
 }
