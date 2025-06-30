@@ -283,6 +283,9 @@ const SendAssetsModal = (props: Props) => {
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
                 </Dialog.Title>
+                <Dialog.Description className="hidden">
+                  Send {asset.name} to another wallet
+                </Dialog.Description>
 
                 <Dialog.Close asChild>
                   <Button
@@ -496,7 +499,7 @@ const SendAssetsModal = (props: Props) => {
                     <div className="mb-4 flex items-center justify-between text-13">
                       <div>
                         <p className="text-neutral-50">Max fees</p>
-                        <p>
+                        <div>
                           {gasFees ? (
                             <>
                               <CurrencyAmount
@@ -507,7 +510,7 @@ const SendAssetsModal = (props: Props) => {
                           ) : (
                             'Estimating...'
                           )}
-                        </p>
+                        </div>
                       </div>
                       <div>
                         <p className="text-neutral-50"> Estimated </p>

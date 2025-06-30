@@ -92,9 +92,9 @@ function RootComponent() {
         <hr />
         <Outlet />
       </div> */}
-      <head>
-        <HeadContent />
-      </head>
+
+      <HeadContent />
+
       <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
         <WagmiProvider>
