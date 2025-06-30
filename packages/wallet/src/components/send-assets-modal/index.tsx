@@ -45,7 +45,7 @@ type GasFees = {
 const SendAssetsModal = (props: Props) => {
   const { children, asset, account } = props
   const [open, setOpen] = useState(false)
-  const [errorState, setErrorState] = useState<'insufficient-eth' | null>(null)
+  const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
   const [transactionState, setTransactionState] =
     useState<TransactionState>('idle')
   const [showPasswordModal, setShowPasswordModal] = useState(false)
@@ -57,8 +57,7 @@ const SendAssetsModal = (props: Props) => {
 
   const toast = useToast()
   const balance = asset.totalBalance
-  // Default ETH balance if not provided
-  const ethBalance = account.ethBalance || 1
+  const ethBalance = account.ethBalance
 
   const formSchema = z.object({
     to: z
@@ -77,9 +76,14 @@ const SendAssetsModal = (props: Props) => {
           message: 'More than available balance',
         },
       ),
+
     contractAddress: z
       .string()
-      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid contract address'),
+      .optional()
+      .refine(
+        val => !val || /^0x[a-fA-F0-9]{40}$/.test(val),
+        'Invalid contract address',
+      ),
   })
 
   type FormData = z.infer<typeof formSchema>
@@ -96,7 +100,7 @@ const SendAssetsModal = (props: Props) => {
     defaultValues: {
       to: '',
       amount: '',
-      contractAddress: asset.contractAddress || '',
+      contractAddress: asset.contractAddress || undefined,
     },
   })
 
@@ -144,6 +148,38 @@ const SendAssetsModal = (props: Props) => {
     fetchGasFees()
   }, [watchedTo, watchedAmount, fetchGasFees])
 
+  //  Check for insufficient ETH balance
+  useEffect(() => {
+    if (!watchedAmount || !gasFees) {
+      if (hasInsufficientEth) {
+        setHasInsufficientEth(false)
+      }
+      return
+    }
+
+    const isETH = !asset.contractAddress || asset.symbol === 'ETH'
+    const amountToSend = Number.parseFloat(watchedAmount)
+
+    const hasInsufficientEthNow = isETH
+      ? ethBalance < amountToSend + gasFees.eth
+      : ethBalance < gasFees.eth
+
+    if (hasInsufficientEthNow) {
+      if (!hasInsufficientEth) {
+        setHasInsufficientEth(true)
+      }
+    } else if (hasInsufficientEth) {
+      setHasInsufficientEth(false)
+    }
+  }, [
+    watchedAmount,
+    gasFees,
+    ethBalance,
+    asset.contractAddress,
+    hasInsufficientEth,
+    asset.symbol,
+  ])
+
   // Periodically update gas fees
   useEffect(() => {
     if (!gasFees || !watchedTo || !watchedAmount) return
@@ -180,13 +216,6 @@ const SendAssetsModal = (props: Props) => {
   }
 
   const onSubmit = async (data: FormData) => {
-    // Check if user has enough ETH for gas fees
-    if (gasFees && ethBalance < gasFees.eth) {
-      setErrorState('insufficient-eth')
-      return
-    }
-
-    setErrorState(null)
     setPendingTransactionData(data)
     setShowPasswordModal(true)
   }
@@ -251,7 +280,7 @@ const SendAssetsModal = (props: Props) => {
     setOpen(open)
     if (!open) {
       reset()
-      setErrorState(null)
+      setHasInsufficientEth(false)
       setTransactionState('idle')
       setShowPasswordModal(false)
       setPendingTransactionData(null)
@@ -261,7 +290,7 @@ const SendAssetsModal = (props: Props) => {
 
   const hasInsufficientBalance =
     watchedAmount && Number.parseFloat(watchedAmount) > balance
-  const hasInsufficientEth = errorState === 'insufficient-eth'
+
   const isTransactionSigning = transactionState === 'signing'
 
   return (
@@ -448,39 +477,43 @@ const SendAssetsModal = (props: Props) => {
                     </div>
                   </div>
 
-                  <div className="mt-6">
-                    <Label
-                      htmlFor="contractAddress"
-                      className="mb-2 text-13 font-medium"
-                    >
-                      Contract address
-                    </Label>
+                  {/* Contract Address Section */}
+                  {asset.contractAddress && (
+                    <div className="mt-6">
+                      <Label
+                        htmlFor="contractAddress"
+                        className="mb-2 text-13 font-medium"
+                      >
+                        Contract address
+                      </Label>
 
-                    <Controller
-                      name="contractAddress"
-                      control={control}
-                      render={({ field }) => (
-                        <div className="relative flex items-center justify-between gap-1.5 rounded-16 border border-neutral-10 px-3 py-2 text-13">
-                          <input
-                            id="contractAddress"
-                            {...field}
-                            className="w-full"
-                            readOnly
-                          />
-                          <a
-                            href={`https://etherscan.io/token/${asset.contractAddress}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="View contract on Etherscan"
-                            className="text-neutral-50 hover:text-neutral-60"
-                          >
-                            <ExternalIcon />
-                          </a>
-                        </div>
-                      )}
-                    />
-                  </div>
+                      <Controller
+                        name="contractAddress"
+                        control={control}
+                        render={({ field }) => (
+                          <div className="relative flex items-center justify-between gap-1.5 rounded-16 border border-neutral-10 px-3 py-2 text-13">
+                            <input
+                              id="contractAddress"
+                              {...field}
+                              className="w-full"
+                              readOnly
+                            />
+                            <a
+                              href={`https://etherscan.io/token/${asset.contractAddress}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              aria-label="View contract on Etherscan"
+                              className="text-neutral-50 hover:text-neutral-60"
+                            >
+                              <ExternalIcon />
+                            </a>
+                          </div>
+                        )}
+                      />
+                    </div>
+                  )}
                 </div>
+
                 <div className="flex w-full flex-col">
                   {hasInsufficientEth && watchedAmount && (
                     <Alert variant="destructive">

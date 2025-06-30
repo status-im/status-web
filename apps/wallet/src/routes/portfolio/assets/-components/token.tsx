@@ -22,6 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
+import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 
 import type { Account } from '@status-im/wallet/components'
@@ -93,6 +94,14 @@ const Token = (props: Props) => {
 
   const { data: typedToken, isLoading } = token
 
+  const isETH = typedToken?.summary.symbol === 'ETH'
+
+  const ethBalanceQuery = useEthBalance(address, !isETH)
+
+  const ethBalance = isETH
+    ? typedToken.summary.total_balance
+    : ethBalanceQuery.data?.summary.total_balance || 0
+
   useEffect(() => {
     const processMarkdown = async () => {
       if (typedToken) {
@@ -121,6 +130,7 @@ const Token = (props: Props) => {
     totalBalanceEur: typedToken.summary.total_eur,
     contractAddress: ticker.startsWith('0x') ? ticker : undefined,
     symbol: typedToken.summary.symbol,
+    ethBalance,
     // TODO: get network
     network: Object.keys(typedToken.assets)[0] as NetworkType,
   }
@@ -164,7 +174,7 @@ const Token = (props: Props) => {
             asset={asset}
             account={{
               ...account,
-              ethBalance: typedToken.assets.ethereum?.balance || 0,
+              ethBalance: asset.ethBalance,
             }}
           >
             <Button size="32" iconBefore={<SendBlurIcon />}>
@@ -211,7 +221,7 @@ const Token = (props: Props) => {
               asset={asset}
               account={{
                 ...account,
-                ethBalance: typedToken.assets.ethereum?.balance || 0,
+                ethBalance: asset.ethBalance,
               }}
             >
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
