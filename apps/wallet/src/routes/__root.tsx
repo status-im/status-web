@@ -8,6 +8,7 @@ import {
   createRootRouteWithContext,
   HeadContent,
   // Navigate,
+  Link,
   Outlet,
   redirect,
   useRouterState,
