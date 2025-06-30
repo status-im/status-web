@@ -7,6 +7,7 @@ type Props = {
   list: React.ReactNode
   detail?: React.ReactNode
   isLoading?: boolean
+  loadingState?: React.ReactNode
 }
 
 // Mock data. todo? Replace with actual data
@@ -52,7 +53,7 @@ const account = {
 }
 
 const SplittedLayout = (props: Props) => {
-  const { list, detail, isLoading } = props
+  const { list, detail, isLoading, loadingState } = props
 
   const [showHiddenSummary, setShowHiddenSummary] = useState(false)
 
@@ -67,9 +68,7 @@ const SplittedLayout = (props: Props) => {
         <div className="flex grow flex-col 2xl:basis-1/2">
           <div className="relative h-[calc(100vh-56px)] overflow-auto">
             {isLoading ? (
-              <div className="flex min-h-full items-center justify-center">
-                <div className="size-5 animate-spin rounded-full border-b-2 border-neutral-50"></div>
-              </div>
+              <>{loadingState}</>
             ) : (
               <StickyHeaderContainer
                 isLarge

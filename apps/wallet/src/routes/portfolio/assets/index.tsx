@@ -1,5 +1,6 @@
 import {
   AssetsList,
+  AssetsListLoading,
   FeedbackSection,
   PinExtension,
 } from '@status-im/wallet/components'
@@ -62,6 +63,7 @@ function Component() {
           )
         }
         detail={<FeedbackSection />}
+        loadingState={<AssetsListLoading />}
         isLoading={isLoading}
       />
       {isPinExtension && (
