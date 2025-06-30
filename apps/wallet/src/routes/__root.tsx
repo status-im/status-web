@@ -7,7 +7,6 @@ import { Navbar } from '@status-im/wallet/components'
 import {
   createRootRouteWithContext,
   HeadContent,
-  // Link,
   // Navigate,
   Outlet,
   redirect,
@@ -108,6 +107,7 @@ function RootComponent() {
                 hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
                   pathname ?? '',
                 )}
+                linkComponent={Link}
               />
             </div>
             <div className="px-1">
