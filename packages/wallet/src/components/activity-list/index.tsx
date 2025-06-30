@@ -88,7 +88,9 @@ const ActivityItem = (props: ActivityItemProps) => {
         {assetSymbol ? (
           <div className="flex flex-col items-end gap-1">
             <ContextTag type="label" size="24">
-              {`${formatTokenAmount(activity.value, 'precise')} ${assetSymbol}`}
+              {`${
+                outgoingTransaction ? '-' : '+'
+              } ${formatTokenAmount(activity.value, 'precise')} ${assetSymbol}`}
             </ContextTag>
             {eurValue > 0 && (
               <div
