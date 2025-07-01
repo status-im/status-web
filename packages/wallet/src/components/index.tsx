@@ -31,7 +31,11 @@ export { PinExtension } from './pin-extension'
 export { ReceiveCryptoDrawer } from './receive-crypto-drawer'
 export { RecoveryPhraseDialog } from './recovery-phrase-dialog'
 export { RecoveryPhraseTextarea } from './recovery-phrase-textarea'
-export { SendAssetsModal } from './send-assets-modal'
+export {
+  type SendAssetsFormData,
+  SendAssetsModal,
+  type SendAssetsModalProps,
+} from './send-assets-modal'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,

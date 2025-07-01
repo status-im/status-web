@@ -32,6 +32,7 @@ type Props = {
     contractAddress?: string
     network: NetworkType
   }
+  signTransaction: (data: FormData & { password: string }) => Promise<string>
 }
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
@@ -42,24 +43,9 @@ type GasFees = {
   time: string
 }
 
-const SendAssetsModal = (props: Props) => {
-  const { children, asset, account } = props
-  const [open, setOpen] = useState(false)
-  const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
-  const [transactionState, setTransactionState] =
-    useState<TransactionState>('idle')
-  const [showPasswordModal, setShowPasswordModal] = useState(false)
-  const [pendingTransactionData, setPendingTransactionData] =
-    useState<FormData | null>(null)
-  const [gasFees, setGasFees] = useState<GasFees | null>(null)
-
-  const [isLoadingFees, setIsLoadingFees] = useState(false)
-
-  const toast = useToast()
-  const balance = asset.totalBalance
-  const ethBalance = account.ethBalance
-
-  const formSchema = z.object({
+// Definir o schema fora do componente
+const createFormSchema = (balance: number) =>
+  z.object({
     to: z
       .string()
       .min(1, 'Recipient address is required')
@@ -76,7 +62,6 @@ const SendAssetsModal = (props: Props) => {
           message: 'More than available balance',
         },
       ),
-
     contractAddress: z
       .string()
       .optional()
@@ -86,7 +71,26 @@ const SendAssetsModal = (props: Props) => {
       ),
   })
 
-  type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<ReturnType<typeof createFormSchema>>
+
+const SendAssetsModal = (props: Props) => {
+  const { children, asset, account, signTransaction } = props
+  const [open, setOpen] = useState(false)
+  const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
+  const [transactionState, setTransactionState] =
+    useState<TransactionState>('idle')
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
+  const [pendingTransactionData, setPendingTransactionData] =
+    useState<FormData | null>(null)
+  const [gasFees, setGasFees] = useState<GasFees | null>(null)
+
+  const [isLoadingFees, setIsLoadingFees] = useState(false)
+
+  const toast = useToast()
+  const balance = asset.totalBalance
+  const ethBalance = account.ethBalance
+
+  const formSchema = createFormSchema(balance)
 
   const {
     control,
@@ -195,26 +199,6 @@ const SendAssetsModal = (props: Props) => {
     return () => clearInterval(interval)
   }, [gasFees, watchedTo, watchedAmount])
 
-  const simulateTransaction = async (data: FormData): Promise<string> => {
-    const delay = Math.random() * 2000 + 2000
-    await new Promise(resolve => setTimeout(resolve, delay))
-
-    if (Math.random() < 0.1) {
-      toast.negative('Transaction failed')
-      throw new Error('Transaction failed: Network error')
-    }
-
-    console.log('data', data)
-
-    const mockTxHash =
-      '0x' +
-      Array.from({ length: 64 }, () =>
-        Math.floor(Math.random() * 16).toString(16),
-      ).join('')
-
-    return mockTxHash
-  }
-
   const onSubmit = async (data: FormData) => {
     setPendingTransactionData(data)
     setShowPasswordModal(true)
@@ -247,7 +231,11 @@ const SendAssetsModal = (props: Props) => {
         })
 
         handleOnOpenChange(false)
-        await simulateTransaction(pendingTransactionData)
+
+        await signTransaction({
+          ...pendingTransactionData,
+          password,
+        })
 
         setTransactionState('success')
 
@@ -376,6 +364,7 @@ const SendAssetsModal = (props: Props) => {
                             {...field}
                             type="number"
                             min={0}
+                            step="any"
                             placeholder="0"
                             className={cx([
                               'w-full px-4 py-3 text-27 font-medium',
@@ -628,3 +617,8 @@ const Label = ({
     {children}
   </label>
 )
+
+export type { FormData as SendAssetsFormData }
+export type SendAssetsModalProps = Omit<Props, 'signTransaction'> & {
+  signTransaction: (data: FormData & { password: string }) => Promise<string>
+}

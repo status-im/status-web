@@ -24,8 +24,10 @@ import { cx } from 'class-variance-authority'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
+import { apiClient } from '@/providers/api-client'
+import { useWallet } from '@/providers/wallet-context'
 
-import type { Account } from '@status-im/wallet/components'
+import type { Account, SendAssetsFormData } from '@status-im/wallet/components'
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
@@ -46,6 +48,8 @@ const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
   const [, copy] = useCopyToClipboard()
+
+  const { currentWallet } = useWallet()
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -143,6 +147,24 @@ const Token = (props: Props) => {
     color: 'magenta',
   }
 
+  const signTransaction = async (
+    formData: SendAssetsFormData & { password: string },
+  ) => {
+    const result = await apiClient.wallet.account.ethereum.send.mutate({
+      amount: formData.amount,
+      toAddress: formData.to,
+      fromAddress: address,
+      password: formData.password,
+      walletId: currentWallet?.id || '',
+    })
+
+    if (!result.id || !result.id.txid) {
+      throw new Error('Transaction failed')
+    }
+
+    return result.id.txid
+  }
+
   return (
     <StickyHeaderContainer
       className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
@@ -176,6 +198,7 @@ const Token = (props: Props) => {
               ...account,
               ethBalance: asset.ethBalance,
             }}
+            signTransaction={signTransaction}
           >
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
@@ -223,6 +246,7 @@ const Token = (props: Props) => {
                 ...account,
                 ethBalance: asset.ethBalance,
               }}
+              signTransaction={signTransaction}
             >
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send
