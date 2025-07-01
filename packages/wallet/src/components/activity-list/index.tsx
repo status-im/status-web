@@ -23,6 +23,27 @@ type Props = {
   activities: Activity[]
 }
 
+function getTokenActivityLabel(activity: Activity): string {
+  if (activity.category === 'erc721') {
+    return '1 NFT'
+  }
+
+  if (
+    activity.category === 'erc1155' &&
+    Array.isArray(activity.erc1155Metadata) &&
+    activity.erc1155Metadata.length > 0
+  ) {
+    const total = activity.erc1155Metadata.reduce(
+      (sum, meta) => sum + parseInt(meta.value, 16),
+      0,
+    )
+    // ERC1155 can have multiple NFTs or FTs, so we show the total count
+    return `${total} Token${total > 1 ? 's' : ''}`
+  }
+
+  return '1 Asset'
+}
+
 const ActivityList = (props: Props) => {
   const { activities } = props
 
@@ -110,7 +131,7 @@ const ActivityItem = (props: ActivityItemProps) => {
           </div>
         ) : (
           <ContextTag type="label" size="24">
-            NFT
+            {getTokenActivityLabel(activity)}
           </ContextTag>
         )}
       </div>
