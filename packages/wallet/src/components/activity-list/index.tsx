@@ -8,6 +8,7 @@ import { formatRelative } from 'date-fns'
 import { match } from 'ts-pattern'
 
 import erc20TokenList from '../../constants/erc20.json'
+import { useInfiniteLoading } from '../../hooks/use-infinite-loading'
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { shortenAddress } from '../shorten-address'
@@ -21,6 +22,9 @@ type Activity = ApiOutput['activities']['activities']['activities'][0]
 
 type Props = {
   activities: Activity[]
+  onLoadMore: () => void
+  hasNextPage: boolean
+  isLoadingMore: boolean
 }
 
 function getTokenActivityLabel(activity: Activity): string {
@@ -45,15 +49,42 @@ function getTokenActivityLabel(activity: Activity): string {
 }
 
 const ActivityList = (props: Props) => {
-  const { activities } = props
+  const { activities, onLoadMore, hasNextPage, isLoadingMore } = props
+
+  const { endOfPageRef, isLoading } = useInfiniteLoading({
+    rootMargin: '200px',
+    fetchNextPage: onLoadMore,
+    isFetchingNextPage: isLoadingMore,
+    hasNextPage: hasNextPage,
+  })
 
   return (
     <div className="pb-10">
-      <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto 2xl:hidden">
+      <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto">
         <div className="w-full">
           {activities.map(activity => {
             return <ActivityItem key={activity.uniqueId} activity={activity} />
           })}
+          {hasNextPage && (
+            <div
+              ref={endOfPageRef}
+              className="flex h-20 items-center justify-center"
+            >
+              {isLoading ? (
+                <div className="text-13 font-400 text-neutral-50">
+                  Loading more activities...
+                </div>
+              ) : (
+                <div className="h-1" />
+              )}
+            </div>
+          )}
+
+          {!hasNextPage && activities.length > 0 && (
+            <div className="py-8 text-center text-13 font-400 text-neutral-40">
+              No more activities to load
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -73,7 +104,7 @@ const ActivityItem = (props: ActivityItemProps) => {
   const eurValue = Number(activity.eurRate) * Number(activity.value)
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1fr] gap-8 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5">
+    <div className="grid grid-cols-[2fr_1fr_1fr] gap-4 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5">
       <div className="flex items-center gap-3">
         <div className="relative">
           <TokenLogo
@@ -107,7 +138,7 @@ const ActivityItem = (props: ActivityItemProps) => {
       </div>
       <div className="flex flex-col items-end justify-center">
         {assetSymbol ? (
-          <div className="flex flex-col items-end gap-1">
+          <div className="flex flex-col items-end gap-1 truncate">
             <ContextTag type="label" size="24">
               {`${
                 outgoingTransaction ? '-' : '+'

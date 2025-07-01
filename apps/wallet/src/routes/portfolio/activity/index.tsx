@@ -11,16 +11,22 @@ export const Route = createFileRoute('/portfolio/activity/')({
 function RouteComponent() {
   const address = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
 
-  const { data, isLoading } = useActivities({ address })
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useActivities({ address })
   const activities = data?.pages.flatMap(page => page.activities) ?? []
 
   return (
     <SplittedLayout
       list={
-        activities ? (
-          <ActivityList activities={activities} />
+        activities.length > 0 ? (
+          <ActivityList
+            activities={activities}
+            onLoadMore={fetchNextPage}
+            hasNextPage={hasNextPage}
+            isLoadingMore={isFetchingNextPage}
+          />
         ) : (
-          <div className="mt-4 flex flex-col gap-3">Empty state</div>
+          <div className="mt-4 flex flex-col gap-3">No activity</div>
         )
       }
       detail={<FeedbackSection />}
