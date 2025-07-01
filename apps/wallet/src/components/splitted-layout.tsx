@@ -67,18 +67,53 @@ const SplittedLayout = (props: Props) => {
       <div className="flex divide-x divide-default-neutral-20">
         <div className="flex grow flex-col 2xl:basis-1/2">
           <div className="relative h-[calc(100vh-56px)] overflow-auto">
-            {isLoading ? (
-              <>{loadingState}</>
-            ) : (
-              <StickyHeaderContainer
-                isLarge
-                className="px-6 xl:px-12"
-                leftSlot={
-                  <>
-                    <div
-                      className="hidden items-center gap-1.5 xl:flex"
-                      data-customisation={account.color}
-                    >
+            <StickyHeaderContainer
+              isLarge
+              className="px-6 xl:px-12"
+              leftSlot={
+                <>
+                  <div
+                    className="hidden items-center gap-1.5 xl:flex"
+                    data-customisation={account.color}
+                  >
+                    <Avatar
+                      type="account"
+                      name={account.name}
+                      emoji={account.emoji}
+                      size="24"
+                      bgOpacity="20"
+                    />
+                    <div className="text-15 font-semibold text-neutral-100">
+                      {account.name}
+                    </div>
+                  </div>
+                  <Balance
+                    summary={
+                      showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
+                    }
+                    onShowHiddenSummary={handleShowHiddenSummary}
+                  />
+                </>
+              }
+              rightSlot={
+                <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
+                  <TabLink
+                    href="/portfolio/assets"
+                    className="w-full justify-center text-center sm:w-fit"
+                  >
+                    Assets
+                  </TabLink>
+                  <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
+                </div>
+              }
+            >
+              <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
+                <div className="mb-5 flex flex-col gap-2 px-3">
+                  <div
+                    className="flex items-center justify-between gap-1.5"
+                    data-customisation={account.color}
+                  >
+                    <div className="hidden items-center gap-1.5 xl:flex">
                       <Avatar
                         type="account"
                         name={account.name}
@@ -90,66 +125,26 @@ const SplittedLayout = (props: Props) => {
                         {account.name}
                       </div>
                     </div>
+                    <div data-customisation="blue">
+                      <RecoveryPhraseBackup />
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
                     <Balance
                       summary={
                         showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
                       }
                       onShowHiddenSummary={handleShowHiddenSummary}
                     />
-                  </>
-                }
-                rightSlot={
-                  <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
-                    <TabLink
-                      href="/portfolio/assets"
-                      className="w-full justify-center text-center sm:w-fit"
-                    >
-                      Assets
-                    </TabLink>
-                    <TabLink href="/portfolio/collectibles">
-                      Collectibles
-                    </TabLink>
-                  </div>
-                }
-              >
-                <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
-                  <div className="mb-5 flex flex-col gap-2 px-3">
-                    <div
-                      className="hidden items-center gap-1.5 xl:flex"
-                      data-customisation={account.color}
-                    >
-                      <Avatar
-                        type="account"
-                        name={account.name}
-                        emoji={account.emoji}
-                        size="24"
-                        bgOpacity="20"
-                      />
-                      <div className="text-15 font-semibold text-neutral-100">
-                        {account.name}
-                      </div>
-                    </div>
-
-                    <div className="mb-4">
-                      <Balance
-                        summary={
-                          showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
-                        }
-                        onShowHiddenSummary={handleShowHiddenSummary}
-                      />
-                    </div>
-
-                    <ActionButtons {...actionsButtonsData} />
-
-                    <div className="my-4 flex">
-                      <RecoveryPhraseBackup />
-                    </div>
                   </div>
 
-                  {list}
+                  <ActionButtons {...actionsButtonsData} />
                 </div>
-              </StickyHeaderContainer>
-            )}
+
+                {isLoading ? loadingState : list}
+              </div>
+            </StickyHeaderContainer>
           </div>
         </div>
 
