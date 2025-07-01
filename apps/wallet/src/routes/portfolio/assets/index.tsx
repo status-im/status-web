@@ -30,9 +30,7 @@ function Component() {
   })
   const isDesktop = useMediaQuery('xl')
 
-  if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
-  }
+  if (!currentWallet || !address) return null
 
   return (
     <>
