@@ -555,7 +555,10 @@ async function token({
         [token.address],
       )
 
-      if (!parseInt(balance[0].tokenBalance)) {
+      if (
+        !parseInt(balance[0].tokenBalance) &&
+        !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
+      ) {
         throw new Error('Balance not found')
       }
 
