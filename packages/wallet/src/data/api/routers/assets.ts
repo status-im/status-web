@@ -64,6 +64,8 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
   56: 'bsc',
 }
 
+const DEFAULT_TOKEN_SYMBOLS = ['SNT', 'USDC', 'USDT']
+
 export const assetsRouter = router({
   all: publicProcedure
     .input(
@@ -378,6 +380,35 @@ async function all({
     },
     [] as Omit<Asset, 'metadata'>[],
   )
+
+  const existingSymbols = aggregatedAssets.map(a => a.symbol)
+  const missingSymbols = DEFAULT_TOKEN_SYMBOLS.filter(
+    s => !existingSymbols.includes(s),
+  )
+
+  if (missingSymbols.length > 0) {
+    const prices = await legacy_fetchTokensPrice(missingSymbols)
+
+    for (const symbol of missingSymbols) {
+      const token = erc20TokenList.tokens.find(
+        t => t.symbol === symbol && t.chainId === 1,
+      )
+      if (token && prices[symbol]) {
+        aggregatedAssets.push({
+          networks: ['ethereum'],
+          native: false,
+          contract: token.address,
+          icon: token.logoURI,
+          name: token.name,
+          symbol: token.symbol,
+          price_eur: prices[symbol].EUR.PRICE,
+          price_percentage_24h_change: prices[symbol].EUR.CHANGEPCT24HOUR,
+          balance: 0,
+          total_eur: 0,
+        })
+      }
+    }
+  }
 
   const summary = sum(aggregatedAssets)
 
