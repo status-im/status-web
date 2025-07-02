@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "wallet",
+  "version": "1.0.0",
+  "description": "",
+  "permissions": ["storage"],
+  "icons": {
+    "48": "",
+    "128": ""
+  }
+}
