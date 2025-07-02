@@ -244,7 +244,7 @@ async function all({
   const filteredNativeTokens = nativeTokenList.tokens.filter(token =>
     Object.entries(STATUS_NETWORKS)
       .filter(([, network]) => networks.includes(network))
-      .map(([chainId]) => parseInt(chainId))
+      .map(([chainId]) => Number(chainId))
       .includes(token.chainId),
   )
   await Promise.all(
@@ -266,9 +266,9 @@ async function all({
         symbol: token.symbol,
         price_eur: price.EUR['PRICE'],
         price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
-        balance: parseInt(balance) / 10 ** token.decimals,
+        balance: Number(balance) / 10 ** token.decimals,
         total_eur:
-          (parseInt(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
+          (Number(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
       }
 
       assets.push(asset)
@@ -281,7 +281,7 @@ async function all({
       .filter(token =>
         Object.entries(STATUS_NETWORKS)
           .filter(([, network]) => networks.includes(network))
-          .map(([chainId]) => parseInt(chainId))
+          .map(([chainId]) => Number(chainId))
           .includes(token.chainId),
       )
       .map(token => [token.address, token]),
@@ -315,7 +315,7 @@ async function all({
       )
 
       for (const balance of batchBalances) {
-        const tokenBalance = parseInt(balance.tokenBalance)
+        const tokenBalance = Number(balance.tokenBalance)
 
         if (tokenBalance > 0) {
           const token = filteredERC20Tokens.get(balance.contractAddress)
@@ -445,7 +445,7 @@ async function nativeToken({
 
     return Object.entries(STATUS_NETWORKS)
       .filter(([, network]) => networks.includes(network))
-      .map(([chainId]) => parseInt(chainId))
+      .map(([chainId]) => Number(chainId))
       .includes(token.chainId)
   })
 
@@ -463,7 +463,7 @@ async function nativeToken({
         STATUS_NETWORKS[token.chainId],
       )
 
-      if (!parseInt(balance) && token.symbol.toUpperCase() !== 'ETH') {
+      if (!Number(balance) && token.symbol.toUpperCase() !== 'ETH') {
         throw new Error('Balance not found')
       }
 
@@ -556,7 +556,7 @@ async function token({
       )
 
       if (
-        !parseInt(balance[0].tokenBalance) &&
+        !Number(balance[0].tokenBalance) &&
         !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
       ) {
         throw new Error(`Balance not found for token ${token.symbol}`)
@@ -858,8 +858,8 @@ function map(data: {
     symbol: token.symbol,
     price_eur: price.EUR['PRICE'],
     price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
-    balance: parseInt(balance) / 10 ** token.decimals,
-    total_eur: (parseInt(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
+    balance: Number(balance) / 10 ** token.decimals,
+    total_eur: (Number(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
     metadata: {
       market_cap: price.EUR['MKTCAP'],
       fully_dilluted: price.EUR['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
