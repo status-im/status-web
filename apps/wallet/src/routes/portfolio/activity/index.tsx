@@ -20,15 +20,18 @@ function RouteComponent() {
   return (
     <SplittedLayout
       list={
-        activities.length > 0 ? (
+        activities.length > 0 && address ? (
           <ActivityList
             activities={activities}
+            userAddress={address}
             onLoadMore={fetchNextPage}
             hasNextPage={hasNextPage}
             isLoadingMore={isFetchingNextPage}
           />
         ) : (
-          <div className="mt-4 flex flex-col gap-3">No activity</div>
+          <div className="mt-4 flex flex-col gap-3">
+            {!address ? 'No wallet selected' : 'No activity'}
+          </div>
         )
       }
       detail={<FeedbackSection />}
