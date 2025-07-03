@@ -15,11 +15,13 @@ import type { NetworkType } from '../../api/types'
 import type {
   deprecated_NFTSaleResponseBody,
   ERC20TokenBalanceResponseBody,
+  GasPriceResponseBody,
   NativeTokenBalanceResponseBody,
   NFTFloorPriceResponseBody,
   NFTMetadataResponseBody,
   NFTsResponseBody,
   ResponseBody,
+  SendRawTransactionResponseBody,
   TokenBalanceHistoryResponseBody,
 } from './types'
 
@@ -330,7 +332,7 @@ export async function getNFTMetadata(
 /**
  * note: only available on Ethereum (Seaport, Wyvern, X2Y2, Blur, LooksRare, Cryptopunks), Polygon (Seaport) & Optimism (Seaport) mainnets
  *
- * important: We plan to release a new API that integrates NFT sales before turning off this endpoint (eta December 2024), so we’ll keep you posted and let you know when that is scheduled!
+ * important: We plan to release a new API that integrates NFT sales before turning off this endpoint (eta December 2024), so we'll keep you posted and let you know when that is scheduled!
  *
  * @see https://docs.alchemy.com/reference/getnftsales-v3
  *
@@ -375,6 +377,45 @@ export async function getNFTFloorPrice(contract: string, network: NetworkType) {
 
   const body = await _retry(async () =>
     _fetch<NFTFloorPriceResponseBody>(url, 'GET', 3600),
+  )
+
+  return body
+}
+
+export async function getFeeRate(network: NetworkType = 'ethereum') {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+  const body = await _retry(async () =>
+    _fetch<GasPriceResponseBody>(url, 'POST', 3600, {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_gasPrice',
+      params: [],
+    }),
+  )
+
+  return body
+}
+
+/**
+ * @see https://docs.alchemy.com/reference/eth-sendrawtransaction
+ */
+export async function broadcastTransaction(
+  txHex: string,
+  network: NetworkType = 'ethereum',
+) {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<SendRawTransactionResponseBody>(url, 'POST', 0, {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendRawTransaction',
+      params: [txHex],
+    }),
   )
 
   return body

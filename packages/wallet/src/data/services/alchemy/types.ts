@@ -246,6 +246,10 @@ export type NFTFloorPriceResponseBody = {
   }
 }
 
+export type SendRawTransactionResponseBody = string
+
+export type GasPriceResponseBody = string
+
 export type ResponseBody =
   | ERC20TokenBalanceResponseBody
   | NativeTokenBalanceResponseBody
@@ -253,3 +257,5 @@ export type ResponseBody =
   | NFTMetadataResponseBody
   | deprecated_NFTSaleResponseBody
   | NFTFloorPriceResponseBody
+  | SendRawTransactionResponseBody
+  | GasPriceResponseBody

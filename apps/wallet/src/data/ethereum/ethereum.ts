@@ -1,10 +1,6 @@
 import { Buffer } from 'buffer'
 
 import { encoder } from '../encoder'
-import {
-  broadcastTransaction,
-  // getFeeRate
-} from './etherscan'
 
 import type { WalletCore } from '@trustwallet/wallet-core'
 
@@ -21,7 +17,7 @@ export async function send({
   toAddress: string
   amount: string
 }) {
-  // const feeRate = await getFeeRate()
+  // const feeRate = nodes.getFeeRate
 
   // fixme: calc nonce and fees
   const txInput = encoder.Ethereum.Proto.SigningInput.create({
@@ -62,7 +58,32 @@ export async function send({
   const rawTx = walletCore.HexCoding.encode(output.encoded)
 
   // broadcast
-  const txid = await broadcastTransaction(rawTx)
+  const url = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.broadcastTransaction`,
+  )
+  url.searchParams.set(
+    'input',
+    JSON.stringify({
+      json: {
+        txHex: rawTx,
+        network: 'ethereum',
+      },
+    }),
+  )
+
+  const response = await fetch(url.toString(), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to broadcast transaction')
+  }
+
+  const body = await response.json()
+  const txid = body.result.data.json
 
   return {
     txid,
