@@ -33,6 +33,7 @@ type Props = {
     network: NetworkType
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
+  verifyPassword: (inputPassword: string) => Promise<boolean>
 }
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
@@ -74,7 +75,7 @@ const createFormSchema = (balance: number) =>
 type FormData = z.infer<ReturnType<typeof createFormSchema>>
 
 const SendAssetsModal = (props: Props) => {
-  const { children, asset, account, signTransaction } = props
+  const { children, asset, account, signTransaction, verifyPassword } = props
   const [open, setOpen] = useState(false)
   const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
   const [transactionState, setTransactionState] =
@@ -202,11 +203,6 @@ const SendAssetsModal = (props: Props) => {
   const onSubmit = async (data: FormData) => {
     setPendingTransactionData(data)
     setShowPasswordModal(true)
-  }
-
-  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    return inputPassword === 'wallet123'
   }
 
   // TODO: replaece with actual transaction signing logic when available

@@ -165,6 +165,20 @@ const Token = (props: Props) => {
     return result.id.txid
   }
 
+  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
+    if (!currentWallet?.id) return false
+    try {
+      await apiClient.wallet.get.query({
+        walletId: currentWallet.id,
+        password: inputPassword,
+      })
+
+      return true
+    } catch {
+      return false
+    }
+  }
+
   return (
     <StickyHeaderContainer
       className="-translate-x-0 !py-3 !pl-3 pr-[50px] 2xl:w-auto 2xl:!px-12 2xl:!py-4"
@@ -199,6 +213,7 @@ const Token = (props: Props) => {
               ethBalance: asset.ethBalance,
             }}
             signTransaction={signTransaction}
+            verifyPassword={verifyPassword}
           >
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
@@ -247,6 +262,7 @@ const Token = (props: Props) => {
                 ethBalance: asset.ethBalance,
               }}
               signTransaction={signTransaction}
+              verifyPassword={verifyPassword}
             >
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send
