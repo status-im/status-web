@@ -10,7 +10,7 @@ const RETRY_DELAY = 100
 export function chromeLinkWithRetries<TRouter extends AnyRouter>(
   options: Omit<ChromeLinkOptions, 'port'> = {},
 ): TRPCLink<TRouter> {
-  const { ...chromeLinkOptions } = options
+  const chromeLinkOptions = options
 
   let port: chrome.runtime.Port | null = null
   let currentLink: TRPCLink<TRouter> | null = null
