@@ -10,13 +10,39 @@ export async function send({
   chainID,
   toAddress,
   amount,
+  fromAddress,
+  network = 'ethereum',
 }: {
   walletCore: WalletCore
   walletPrivateKey: InstanceType<WalletCore['PrivateKey']>
   chainID: string
   toAddress: string
   amount: string
+  fromAddress: string
+  network?: string
 }) {
+  const nonceUrl = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
+  )
+  nonceUrl.searchParams.set(
+    'input',
+    JSON.stringify({ json: { address: fromAddress, network } }),
+  )
+  const nonceResponse = await fetch(nonceUrl.toString(), {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+
+  if (!nonceResponse.ok) {
+    throw new Error('Failed to fetch nonce')
+  }
+
+  const nonceBody = await nonceResponse.json()
+
+  const nonce = nonceBody.result.data.json
+
   // const feeRate = nodes.getFeeRate
 
   // fixme: calc nonce and fees
@@ -26,7 +52,7 @@ export async function send({
     // gasPrice: Buffer.from(feeRate.replace('0x', ''), 'hex'),
     // nonce: Buffer.from('09', 'hex'),
     // nonce: Buffer.from('00', 'hex'),
-    nonce: Buffer.from('02', 'hex'),
+    nonce: Buffer.from(nonce.replace(/^0x/, '0'), 'hex'),
     // maxFeePerGas: Buffer.from(feeRate, 'hex'),
     // // maxInclusionFeePerGas: Buffer.from('3b9aca00', 'hex'),
     // maxInclusionFeePerGas: Buffer.from('01', 'hex'),

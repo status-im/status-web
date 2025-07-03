@@ -23,6 +23,7 @@ import type {
   ResponseBody,
   SendRawTransactionResponseBody,
   TokenBalanceHistoryResponseBody,
+  TransactionCountResponseBody,
 } from './types'
 
 const alchemyNetworks = {
@@ -420,6 +421,31 @@ export async function broadcastTransaction(
   )
 
   return body
+}
+
+/**
+ * @see https://www.alchemy.com/docs/node/ethereum/ethereum-api-endpoints/eth-get-transaction-count
+ */
+export async function getTransactionCount(
+  address: string,
+  network: NetworkType,
+) {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<TransactionCountResponseBody>(url, 'POST', 0, {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_getTransactionCount',
+      params: [address, 'latest'],
+    }),
+  )
+
+  const nonce = body.result
+
+  return nonce
 }
 
 async function _fetch<T extends ResponseBody>(

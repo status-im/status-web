@@ -2,7 +2,11 @@ import { cache } from 'react'
 
 import { z } from 'zod'
 
-import { broadcastTransaction, getFeeRate } from '../../services/alchemy'
+import {
+  broadcastTransaction,
+  getFeeRate,
+  getTransactionCount,
+} from '../../services/alchemy'
 import { publicProcedure, router } from '../lib/trpc'
 
 export const nodesRouter = router({
@@ -50,9 +54,28 @@ export const nodesRouter = router({
         input.network ?? 'ethereum',
       )
     }),
+
+  getNonce: publicProcedure
+    .input(
+      z.object({
+        address: z.string(),
+        network: z
+          .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
+          .optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const inputHash = JSON.stringify(input)
+      return await cachedGetNonce(inputHash)
+    }),
 })
 
 const cachedGetFeeRate = cache(async (key: string) => {
   const { network } = JSON.parse(key)
   return await getFeeRate(network ?? 'ethereum')
+})
+
+const cachedGetNonce = cache(async (key: string) => {
+  const { address, network } = JSON.parse(key)
+  return await getTransactionCount(address, network ?? 'ethereum')
 })

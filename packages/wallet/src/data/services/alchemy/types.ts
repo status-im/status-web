@@ -250,6 +250,12 @@ export type SendRawTransactionResponseBody = string
 
 export type GasPriceResponseBody = string
 
+export type TransactionCountResponseBody = {
+  jsonrpc: string
+  id: number
+  result: string
+}
+
 export type ResponseBody =
   | ERC20TokenBalanceResponseBody
   | NativeTokenBalanceResponseBody
@@ -259,3 +265,4 @@ export type ResponseBody =
   | NFTFloorPriceResponseBody
   | SendRawTransactionResponseBody
   | GasPriceResponseBody
+  | TransactionCountResponseBody
