@@ -54,65 +54,61 @@ export function chromeLinkWithRetries<TRouter extends AnyRouter>(
     return ctx => {
       let retryCount = 0
 
-      const retryOperation = async (): Promise<unknown> => {
-        try {
-          checkConnection()
+      const isConnectionError = (error: unknown): boolean => {
+        return (
+          error instanceof Error &&
+          (error.message.includes('Attempting to use a disconnected port') ||
+            error.message.includes('Failed to establish connection') ||
+            error.message.includes('Extension context invalidated') ||
+            chrome.runtime.lastError !== undefined)
+        )
+      }
 
-          if (!currentLink) {
-            throw new Error('Failed to establish connection')
-          }
-
-          const result = await new Promise((resolve, reject) => {
-            currentLink!(runtime)(ctx).subscribe({
-              next(value) {
-                resolve(value)
-              },
-              error(err) {
-                reject(err)
-              },
-            })
-          })
-
-          return result
-        } catch (error) {
-          const isConnectionError =
-            error instanceof Error &&
-            (error.message.includes('Attempting to use a disconnected port') ||
-              error.message.includes('Could not establish connection') ||
-              error.message.includes('Extension context invalidated') ||
-              chrome.runtime.lastError !== undefined)
-
-          if (isConnectionError && retryCount < MAX_RETRIES) {
-            retryCount++
-
-            port = null
-            currentLink = null
-            await new Promise(resolve =>
-              setTimeout(resolve, RETRY_DELAY * retryCount),
-            )
-
-            return retryOperation()
-          }
-
-          throw error
+      const handleConnectionError = (error: unknown) => {
+        if (isConnectionError(error) && retryCount < MAX_RETRIES) {
+          retryCount++
+          port = null
+          currentLink = null
+          setTimeout(() => retryOperation(), RETRY_DELAY * retryCount)
+        } else {
+          observer.error?.(error)
         }
       }
 
       return {
         subscribe(observer) {
+          let subscription: { unsubscribe: () => void } | null = null
+
+          const retryOperation = () => {
+            try {
+              checkConnection()
+
+              if (!currentLink) {
+                throw new Error('Failed to establish connection')
+              }
+
+              subscription = currentLink!(runtime)(ctx).subscribe({
+                next(value) {
+                  observer.next?.(
+                    value as Parameters<NonNullable<typeof observer.next>>[0],
+                  )
+                  observer.complete?.()
+                },
+                error(err) {
+                  handleConnectionError(err)
+                },
+              })
+            } catch (error) {
+              handleConnectionError(error)
+            }
+          }
+
           retryOperation()
-            .then(value => {
-              observer.next?.(
-                value as Parameters<NonNullable<typeof observer.next>>[0],
-              )
-              observer.complete?.()
-            })
-            .catch(err => {
-              observer.error?.(err)
-            })
 
           return {
-            unsubscribe: () => {},
+            unsubscribe: () => {
+              subscription?.unsubscribe()
+            },
           }
         },
       }
