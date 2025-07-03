@@ -19,18 +19,18 @@ type FormValues = z.infer<typeof mnemonicSchema>
 type ImportRecoveryPhraseFormProps = {
   onSubmit: (data: FormValues) => void
   loading: boolean
+  defaultValues: FormValues
 }
 
 const ImportRecoveryPhraseForm = ({
   onSubmit,
   loading = false,
+  defaultValues,
 }: ImportRecoveryPhraseFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(mnemonicSchema),
     mode: 'onChange',
-    defaultValues: {
-      mnemonic: '',
-    },
+    defaultValues,
   })
 
   const {
