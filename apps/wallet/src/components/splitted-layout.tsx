@@ -1,7 +1,16 @@
+import { useState } from 'react'
+
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
+import { useQuery } from '@tanstack/react-query'
 
+import { useWallet } from '@/providers/wallet-context'
+
+import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { TabLink } from '../components/tab-link'
+
+import type { ApiOutput } from '@status-im/wallet/data'
 
 type Props = {
   list: React.ReactNode
@@ -9,20 +18,11 @@ type Props = {
   isLoading?: boolean
 }
 
-// Mock data. todo? Replace with actual data
-const SUMMARY = {
-  hidden: {
-    total_balance: 0,
-    total_eur: 0,
-    total_eur_24h_change: 0.0,
-    total_percentage_24h_change: 0.0,
-  },
-  visible: {
-    total_balance: 203.0,
-    total_eur: 203.0,
-    total_eur_24h_change: 10.0,
-    total_percentage_24h_change: 2.4,
-  },
+const DEFAULT_SUMMARY = {
+  total_balance: 0,
+  total_eur: 0,
+  total_eur_24h_change: 0.0,
+  total_percentage_24h_change: 0.0,
 }
 
 //   Includes mock data for actions buttons and options. todo? Replace with actual data
@@ -60,6 +60,47 @@ const SplittedLayout = (props: Props) => {
     setShowHiddenSummary(!showHiddenSummary)
   }
 
+  const { currentWallet } = useWallet()
+
+  const address = currentWallet?.activeAccounts[0].address
+
+  const { data: summary } = useQuery<ApiOutput['assets']['all']>({
+    queryKey: ['summary', address],
+    queryFn: async () => {
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
+      )
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            address,
+            networks: ['ethereum'],
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch.')
+      }
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    staleTime: 60 * 60 * 1000, // 1 hour
+    gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
+
   return (
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
       {/* Main content */}
@@ -92,9 +133,7 @@ const SplittedLayout = (props: Props) => {
                       </div>
                     </div>
                     <Balance
-                      summary={
-                        showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
-                      }
+                      summary={summary?.summary ?? DEFAULT_SUMMARY}
                       onShowHiddenSummary={handleShowHiddenSummary}
                     />
                   </>
@@ -134,9 +173,7 @@ const SplittedLayout = (props: Props) => {
 
                     <div className="mb-4">
                       <Balance
-                        summary={
-                          showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
-                        }
+                        summary={summary?.summary ?? DEFAULT_SUMMARY}
                         onShowHiddenSummary={handleShowHiddenSummary}
                       />
                     </div>
