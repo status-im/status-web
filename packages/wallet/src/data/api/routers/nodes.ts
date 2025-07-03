@@ -49,17 +49,14 @@ export const nodesRouter = router({
       }),
     )
     .query(async ({ input }) => {
-      const inputHash = JSON.stringify(input)
-      return await cachedGetNonce(inputHash)
+      return await getTransactionCount(
+        input.address,
+        input.network ?? 'ethereum',
+      )
     }),
 })
 
 const cachedGetFeeRate = cache(async (key: string) => {
   const { network } = JSON.parse(key)
   return await getFeeRate(network ?? 'ethereum')
-})
-
-const cachedGetNonce = cache(async (key: string) => {
-  const { address, network } = JSON.parse(key)
-  return await getTransactionCount(address, network ?? 'ethereum')
 })

@@ -33,6 +33,7 @@ export async function send({
     headers: {
       'Content-Type': 'application/json',
     },
+    cache: 'no-store',
   })
 
   if (!nonceResponse.ok) {
@@ -99,6 +100,7 @@ export async function send({
         network: 'ethereum',
       },
     }),
+    cache: 'no-store',
   })
 
   if (!response.ok) {
