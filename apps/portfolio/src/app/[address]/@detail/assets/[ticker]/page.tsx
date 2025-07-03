@@ -46,6 +46,7 @@ export default async function AssetDetailPage(props: Props) {
     'base',
     'polygon',
     'bsc',
+    'sepolia',
   ]
   const keyHash = JSON.stringify({
     route: 'ticker',

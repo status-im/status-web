@@ -10,7 +10,15 @@ export const nodesRouter = router({
     .input(
       z.object({
         network: z
-          .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
+          .enum([
+            'ethereum',
+            'optimism',
+            'arbitrum',
+            'base',
+            'polygon',
+            'bsc',
+            'sepolia',
+          ])
           .optional(),
       }),
     )
@@ -24,7 +32,15 @@ export const nodesRouter = router({
       z.object({
         txHex: z.string(),
         network: z
-          .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
+          .enum([
+            'ethereum',
+            'optimism',
+            'arbitrum',
+            'base',
+            'polygon',
+            'bsc',
+            'sepolia',
+          ])
           .optional(),
       }),
     )

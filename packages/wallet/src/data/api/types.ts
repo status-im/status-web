@@ -14,5 +14,6 @@ export type NetworkType =
   | 'base'
   | 'polygon'
   | 'bsc'
+  | 'sepolia'
 
 export type { Collectible }

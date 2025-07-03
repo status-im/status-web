@@ -29,6 +29,7 @@
       "decimals": 18,
       "logoURI": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"
     },
+
     {
       "chainId": 56,
       "name": "Ether",
@@ -46,6 +47,13 @@
     {
       "chainId": 8453,
       "name": "Ether",
+      "symbol": "ETH",
+      "decimals": 18,
+      "logoURI": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"
+    },
+    {
+      "chainId": 11155111,
+      "name": "Sepolia Ether",
       "symbol": "ETH",
       "decimals": 18,
       "logoURI": "https://assets.coingecko.com/coins/images/279/standard/ethereum.png?1696501628"

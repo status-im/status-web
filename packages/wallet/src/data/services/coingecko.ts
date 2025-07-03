@@ -61,6 +61,7 @@ const coingeckoNetworks = {
   base: 'base',
   polygon: 'polygon-pos',
   bsc: 'binance-smart-chain',
+  sepolia: 'ethereum-sepolia',
 }
 
 const coingeckoNativeTokens = {
@@ -70,6 +71,7 @@ const coingeckoNativeTokens = {
   base: 'ethereum',
   polygon: 'ethereum',
   bsc: 'ethereum',
+  sepolia: 'ethereum',
 }
 
 export const getCoins = async (): Promise<Coin[]> => {

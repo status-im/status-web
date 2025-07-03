@@ -53,6 +53,7 @@ export const collectiblesRouter = router({
             'base',
             'polygon',
             'bsc',
+            'sepolia',
           ]),
         ),
         pages: z.record(z.string(), z.string()).optional(),
@@ -83,6 +84,7 @@ export const collectiblesRouter = router({
           'base',
           'polygon',
           'bsc',
+          'sepolia',
         ]),
       }),
     )
@@ -183,7 +185,7 @@ async function collectible(
   const currency = 'EUR'
   let price: number | undefined
   let floorPrice: number | undefined
-  if (network === 'ethereum') {
+  if (network === 'ethereum' || network === 'sepolia') {
     const symbol = 'ETH'
     price = (await legacy_fetchTokensPrice([symbol]))[symbol][currency].PRICE
     floorPrice = nft.contract.openSeaMetadata.floorPrice ?? undefined

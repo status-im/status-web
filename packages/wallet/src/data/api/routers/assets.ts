@@ -62,6 +62,7 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
   8453: 'base',
   137: 'polygon',
   56: 'bsc',
+  11155111: 'sepolia',
 }
 
 export const assetsRouter = router({
@@ -77,6 +78,7 @@ export const assetsRouter = router({
             'base',
             'polygon',
             'bsc',
+            'sepolia',
           ]),
         ),
       }),
@@ -107,6 +109,7 @@ export const assetsRouter = router({
             'base',
             'polygon',
             'bsc',
+            'sepolia',
           ]),
         ),
         symbol: z.string(),
@@ -129,6 +132,7 @@ export const assetsRouter = router({
             'base',
             'polygon',
             'bsc',
+            'sepolia',
           ]),
         ),
         contract: z.string(),
@@ -175,6 +179,7 @@ export const assetsRouter = router({
             'base',
             'polygon',
             'bsc',
+            'sepolia',
           ]),
         ),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
@@ -197,6 +202,7 @@ export const assetsRouter = router({
             'base',
             'polygon',
             'bsc',
+            'sepolia',
           ]),
         ),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
@@ -245,6 +251,7 @@ async function all({
       .map(([chainId]) => parseInt(chainId))
       .includes(token.chainId),
   )
+
   await Promise.all(
     filteredNativeTokens.map(async token => {
       const balance = await getNativeTokenBalance(

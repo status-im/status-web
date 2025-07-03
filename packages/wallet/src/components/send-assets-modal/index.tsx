@@ -10,11 +10,11 @@ import { cx } from 'cva'
 import { Controller, useForm } from 'react-hook-form'
 import * as z from 'zod'
 
+import { type NetworkType } from '../../data'
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { PasswordModal } from '../password-modal'
 
-import type { NetworkType } from '../../data'
 import type { Account } from '../address'
 import type React from 'react'
 
