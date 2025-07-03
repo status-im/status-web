@@ -41,15 +41,16 @@ function RouteComponent() {
           onNext={(mnemonic: string) => {
             setOnboardingState({ type: 'create-password', mnemonic })
           }}
+          mnemonic={onboardingState.mnemonic}
         />
       )}
       {onboardingState.type === 'create-password' && (
         <CreatePassword
           mnemonic={onboardingState.mnemonic}
-          onBack={() =>
+          onBack={mnemonic =>
             setOnboardingState({
               type: 'import-wallet',
-              mnemonic: '',
+              mnemonic,
             })
           }
         />
@@ -58,7 +59,13 @@ function RouteComponent() {
   )
 }
 
-function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
+function ImportWallet({
+  onNext,
+  mnemonic,
+}: {
+  onNext: (mnemonic: string) => void
+  mnemonic: string
+}) {
   const [isPending, startTransition] = useTransition()
 
   const onSubmit: SubmitHandler<
@@ -91,7 +98,11 @@ function ImportWallet({ onNext }: { onNext: (mnemonic: string) => void }) {
         Type or paste your 12, 15, 18, 21 or 24 words Ethereum recovery phrase
       </Text>
 
-      <ImportRecoveryPhraseForm onSubmit={onSubmit} loading={isPending} />
+      <ImportRecoveryPhraseForm
+        onSubmit={onSubmit}
+        loading={isPending}
+        defaultValues={{ mnemonic }}
+      />
     </div>
   )
 }
@@ -101,7 +112,7 @@ function CreatePassword({
   onBack,
 }: {
   mnemonic: string
-  onBack: () => void
+  onBack: (mnemonic: string) => void
 }) {
   const { importWalletAsync } = useImportWallet()
   const navigate = useNavigate()
@@ -126,7 +137,7 @@ function CreatePassword({
     <div className="flex flex-col gap-4">
       <div>
         <Button
-          onClick={onBack}
+          onClick={() => onBack(mnemonic)}
           variant="grey"
           icon={<ArrowLeftIcon color="$neutral-100" />}
           aria-label="Back"

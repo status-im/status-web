@@ -8,13 +8,6 @@ export const Route = createFileRoute('/')({
       throw: true,
     })
   },
-  head: () => ({
-    meta: [
-      {
-        title: 'Extension | Wallet | Index',
-      },
-    ],
-  }),
 })
 
 function RouteComponent() {

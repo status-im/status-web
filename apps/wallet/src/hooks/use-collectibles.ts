@@ -38,7 +38,9 @@ const getCollectibles = async (
   },
   offset = 0,
 ) => {
-  const url = new URL('http://localhost:3030/api/trpc/collectibles.page')
+  const url = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/collectibles.page`,
+  )
 
   url.searchParams.set(
     'input',
