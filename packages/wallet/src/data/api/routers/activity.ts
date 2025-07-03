@@ -41,6 +41,32 @@ const cachedPriceData = cache(async (key: string) => {
   return await fetchTokensPriceForDate(symbols, timestamp)
 })
 
+type PriceDataResponse = Record<string, { EUR?: { PRICE: number } }>
+
+const batchPriceRequests = async (
+  priceRequests: Array<{ symbols: string[]; timestamp: number }>,
+): Promise<Record<string, PriceDataResponse>> => {
+  const BATCH_SIZE = 5
+  const results: Record<string, PriceDataResponse> = {}
+
+  for (let i = 0; i < priceRequests.length; i += BATCH_SIZE) {
+    const batch = priceRequests.slice(i, i + BATCH_SIZE)
+
+    const batchPromises = batch.map(async ({ symbols, timestamp }) => {
+      const key = JSON.stringify({ symbols, timestamp })
+      const data = await cachedPriceData(key)
+      return { key, data }
+    })
+
+    const batchResults = await Promise.all(batchPromises)
+    batchResults.forEach(({ key, data }) => {
+      results[key] = data
+    })
+  }
+
+  return results
+}
+
 const cachedActivity = cache(async (key: string) => {
   const { address, network } = JSON.parse(key)
   return await activity(address, network)
@@ -178,9 +204,13 @@ export async function page({
     {},
   )
 
-  const enhancedActivities: Activity[] = []
+  const priceRequests: Array<{
+    symbols: string[]
+    timestamp: number
+    date: string
+  }> = []
 
-  for (const dateActivities of Object.values(activityGroups)) {
+  for (const [date, dateActivities] of Object.entries(activityGroups)) {
     const allAssetSymbols = [
       ...new Set(
         dateActivities.map(activity => activity.asset).filter(Boolean),
@@ -204,9 +234,24 @@ export async function page({
       new Date(dateActivities[0].metadata.blockTimestamp).getTime() / 1000,
     )
 
-    const priceData = await cachedPriceData(
-      JSON.stringify({ symbols: validAssetSymbols, timestamp }),
-    )
+    if (validAssetSymbols.length > 0) {
+      priceRequests.push({ symbols: validAssetSymbols, timestamp, date })
+    }
+  }
+
+  const batchedPriceData = await batchPriceRequests(priceRequests)
+
+  const enhancedActivities: Activity[] = []
+  for (const [date, dateActivities] of Object.entries(activityGroups)) {
+    const requestKey = priceRequests.find(req => req.date === date)
+    const priceData = requestKey
+      ? batchedPriceData[
+          JSON.stringify({
+            symbols: requestKey.symbols,
+            timestamp: requestKey.timestamp,
+          })
+        ] || {}
+      : {}
 
     const dateEnhancedActivities = dateActivities.map(activity => {
       const assetSymbol =
