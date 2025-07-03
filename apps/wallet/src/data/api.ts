@@ -308,8 +308,7 @@ const apiRouter = router({
             const id = await ethereum.send({
               walletCore,
               walletPrivateKey: privateKey,
-              // fimxe: set from settings in context (e.g. testnet)
-              chainID: '0x1',
+              chainID: '01',
               toAddress: input.toAddress,
               amount: input.amount,
             })
