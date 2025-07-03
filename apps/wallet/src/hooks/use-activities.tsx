@@ -13,7 +13,9 @@ const getTransfers = async (
   networks: NetworkType[],
   pageKeys: Partial<Record<NetworkType, string>> = {},
 ) => {
-  const url = new URL('http://localhost:3030/api/trpc/activities.page')
+  const url = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/activities.page`,
+  )
 
   url.searchParams.set(
     'input',
