@@ -61,21 +61,18 @@ export async function send({
   const url = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.broadcastTransaction`,
   )
-  url.searchParams.set(
-    'input',
-    JSON.stringify({
-      json: {
-        txHex: rawTx,
-        network: 'ethereum',
-      },
-    }),
-  )
 
   const response = await fetch(url.toString(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      json: {
+        txHex: rawTx,
+        network: 'ethereum',
+      },
+    }),
   })
 
   if (!response.ok) {
