@@ -24,8 +24,9 @@ function RouteComponent() {
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
     try {
-      startTransition(async () => {
-        const mnemonic = await createWalletAsync(data.password)
+      const mnemonic = await createWalletAsync(data.password)
+
+      startTransition(() => {
         setMnemonic(mnemonic)
         navigate({ to: '/portfolio/assets' })
       })
