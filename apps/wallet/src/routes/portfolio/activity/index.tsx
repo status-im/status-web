@@ -3,13 +3,15 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useActivities } from '@/hooks/use-activities'
+import { useWallet } from '@/providers/wallet-context'
 
 export const Route = createFileRoute('/portfolio/activity/')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const address = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045'
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
+  const address = currentWallet?.activeAccounts[0].address
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useActivities({ address })
@@ -30,7 +32,7 @@ function RouteComponent() {
         )
       }
       detail={<FeedbackSection />}
-      isLoading={isLoading}
+      isLoading={isLoading || isWalletLoading}
     />
   )
 }
