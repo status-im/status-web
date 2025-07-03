@@ -21,6 +21,10 @@ const FEEDBACK_LINKS = [
     label: 'Request feature',
     href: 'https://discuss.status.app/c/features/51',
   },
+  {
+    label: 'Join our community',
+    href: 'https://discuss.status.app/c/browser-extension/80',
+  },
 ]
 
 const FeedbackPopover = () => {

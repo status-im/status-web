@@ -7,20 +7,20 @@ export const Route = createFileRoute('/onboarding/')({
 
 function RouteComponent() {
   return (
-    <div className="flex flex-col items-center gap-6 py-3 text-center">
+    <div className="flex flex-col items-center gap-6 pb-3 text-center">
       <img
-        src="/images/onboarding.png"
+        src="/images/intro.png"
         alt="Onboarding"
-        className="size-[264px]"
+        className="mt-[-20px] h-[322px] w-full min-w-[440px]"
       />
       <div className="flex flex-col gap-4">
         <Text size={40} weight="bold">
           Your Wallet.
           <br />
-          Your crypto.
+          Your Game.
         </Text>
         <Text size={15} color="$neutral-50">
-          Some awesome sub copy
+          Track portfolio to stay ahead - own your edge
         </Text>
       </div>
       <div className="flex w-full max-w-[270px] flex-col gap-3">
