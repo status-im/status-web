@@ -42,7 +42,6 @@ const NETWORKS = [
   'base',
   'polygon',
   'bsc',
-  'sepolia',
 ] as const
 
 const Token = (props: Props) => {
@@ -151,23 +150,19 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
-    let transactionId = null
+    const result = await apiClient.wallet.account.ethereum.send.mutate({
+      amount: formData.amount,
+      toAddress: formData.to,
+      fromAddress: address,
+      password: formData.password,
+      walletId: currentWallet?.id || '',
+    })
 
-    try {
-      const result = await apiClient.wallet.account.ethereum.send.mutate({
-        amount: formData.amount,
-        toAddress: formData.to,
-        fromAddress: address,
-        password: formData.password,
-        walletId: currentWallet?.id || '',
-      })
-      transactionId = result.id.txid
-    } catch (error) {
-      console.error('Error signing transaction:', error)
-      throw new Error('Failed to sign transaction')
+    if (!result.id || !result.id.txid) {
+      throw new Error('Transaction failed')
     }
 
-    return transactionId
+    return result.id.txid
   }
 
   const verifyPassword = async (inputPassword: string): Promise<boolean> => {

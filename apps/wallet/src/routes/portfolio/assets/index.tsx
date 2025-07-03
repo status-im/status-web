@@ -27,7 +27,6 @@ function Component() {
     address,
     isWalletLoading,
   })
-
   const isDesktop = useMediaQuery('xl')
 
   if (!currentWallet || !address) {

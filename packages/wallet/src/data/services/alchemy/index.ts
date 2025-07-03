@@ -33,7 +33,6 @@ const alchemyNetworks = {
   base: 'base-mainnet',
   polygon: 'polygon-mainnet',
   bsc: 'bnb-mainnet',
-  sepolia: 'eth-sepolia',
 }
 
 // todo: use `genesisTimestamp` for `all` days parame

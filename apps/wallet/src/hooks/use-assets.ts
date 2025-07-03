@@ -32,11 +32,7 @@ const useAssets = (props: Props) => {
               'base',
               'polygon',
               'bsc',
-              'sepolia',
             ],
-            // Uncomment the line below to include timestamp in the request and force a fresh fetch
-            // This can be useful for debugging or ensuring the latest data is fetched
-            // _timestamp: Date.now(),
           },
         }),
       )

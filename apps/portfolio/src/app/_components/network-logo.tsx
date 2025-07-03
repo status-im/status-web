@@ -70,14 +70,6 @@ export const NetworkLogo = ({ name, size }: Props) => {
             alt="mainnet"
           />
         ))
-        .with('sepolia', () => (
-          <Image
-            id="Wallet/Icons/Logos/01:120:120"
-            width={size}
-            height={size}
-            alt="mainnet"
-          />
-        ))
         .exhaustive()}
     </div>
   )
