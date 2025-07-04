@@ -19,7 +19,7 @@ const FEEDBACK_LINKS = [
   },
   {
     label: 'Request feature',
-    href: 'https://discuss.status.app/c/features/51/browser-wallet',
+    href: 'https://discuss.status.app/tags/c/features/51/browser-wallet',
   },
   {
     label: 'Join our community',
