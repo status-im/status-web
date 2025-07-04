@@ -92,10 +92,10 @@ export const useActivities = ({ address }: Props) => {
     },
 
     initialPageParam: {},
-    staleTime: 1000 * 60 * 60,
-    gcTime: 1000 * 60 * 60,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    staleTime: 15 * 1000, // 15 seconds
+    gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }

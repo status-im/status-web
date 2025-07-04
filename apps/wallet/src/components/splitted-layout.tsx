@@ -1,7 +1,12 @@
+import { useState } from 'react'
+
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { useWallet } from '../providers/wallet-context'
+import { ActionButtons } from './action-buttons'
+import { TabLink } from './tab-link'
 
 type Props = {
   list: React.ReactNode
@@ -26,8 +31,8 @@ const SUMMARY = {
 }
 
 //   Includes mock data for actions buttons and options. todo? Replace with actual data
-const actionsButtonsData = {
-  address: 'portfolio', // This should be the address of the account coming from the URL. Wrote to have active state
+const getActionsButtonsData = (address: string) => ({
+  address,
   pathname: '/portfolio/assets',
   searchAndSortValues: {
     inputValue: '',
@@ -43,7 +48,7 @@ const actionsButtonsData = {
       price: 'Price',
     },
   },
-}
+})
 
 const account = {
   name: 'Account 1',
@@ -53,8 +58,10 @@ const account = {
 
 const SplittedLayout = (props: Props) => {
   const { list, detail, isLoading } = props
-
+  const { currentWallet } = useWallet()
   const [showHiddenSummary, setShowHiddenSummary] = useState(false)
+
+  const address = currentWallet?.activeAccounts[0].address || ''
 
   const handleShowHiddenSummary = () => {
     setShowHiddenSummary(!showHiddenSummary)
@@ -141,7 +148,7 @@ const SplittedLayout = (props: Props) => {
                       />
                     </div>
 
-                    <ActionButtons {...actionsButtonsData} />
+                    <ActionButtons {...getActionsButtonsData(address)} />
 
                     <div className="my-4 flex">
                       <RecoveryPhraseBackup />
