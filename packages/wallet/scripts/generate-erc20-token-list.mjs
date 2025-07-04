@@ -23,6 +23,10 @@ const standardTokenLists = [
     url: 'https://static.optimism.io/optimism.tokenlist.json',
   },
   { name: 'Arbitrum', url: 'https://bridge.arbitrum.io/token-list-42161.json' },
+  {
+    name: 'CoinMarketCap',
+    url: 'https://api.coinmarketcap.com/data-api/v3/uniswap/all.json',
+  },
   // {
   //   name: 'Base',
   // },
@@ -32,10 +36,18 @@ const standardTokenLists = [
   // {
   //   name: 'BSC',
   // },
-  // {
-  //   name: 'Aave',
-  //   url: 'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
-  // },
+  {
+    name: 'Aave',
+    url: 'https://raw.githubusercontent.com/bgd-labs/aave-address-book/main/tokenlist.json',
+  },
+  {
+    name: 'CoinGecko',
+    url: 'https://tokens.coingecko.com/uniswap/all.json',
+  },
+  {
+    name: 'Gemini',
+    url: 'https://www.gemini.com/uniswap/manifest.json',
+  },
 ]
 
 // will assume non-checksummed addresses and always lowercase them
