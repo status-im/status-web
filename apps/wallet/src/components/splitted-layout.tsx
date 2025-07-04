@@ -21,8 +21,8 @@ const DEFAULT_SUMMARY = {
 }
 
 //   Includes mock data for actions buttons and options. todo? Replace with actual data
-const actionsButtonsData = {
-  address: 'portfolio', // This should be the address of the account coming from the URL. Wrote to have active state
+const getActionsButtonsData = (address: string | undefined) => ({
+  address: address ?? '',
   pathname: '/portfolio/assets',
   searchAndSortValues: {
     inputValue: '',
@@ -38,7 +38,7 @@ const actionsButtonsData = {
       price: 'Price',
     },
   },
-}
+})
 
 const account = {
   name: 'Account 1',
@@ -131,7 +131,7 @@ const SplittedLayout = (props: Props) => {
                       <Balance summary={summary ?? DEFAULT_SUMMARY} />
                     </div>
 
-                    <ActionButtons {...actionsButtonsData} />
+                    <ActionButtons {...getActionsButtonsData(address)} />
 
                     <div className="my-4 flex">
                       <RecoveryPhraseBackup />

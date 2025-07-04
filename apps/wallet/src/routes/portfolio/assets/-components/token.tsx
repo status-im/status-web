@@ -93,11 +93,11 @@ const Token = (props: Props) => {
       const body = await response.json()
       return body.result.data.json
     },
-    staleTime: 60 * 60 * 1000, // 1 hour
+    staleTime: 15 * 1000, // 15 seconds
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 
   const { data: typedToken, isLoading } = token

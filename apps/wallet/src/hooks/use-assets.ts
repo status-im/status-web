@@ -58,11 +58,11 @@ const useAssets = (
       return body.result.data.json
     },
     enabled: !!address && !isWalletLoading,
-    staleTime: 60 * 60 * 1000,
+    staleTime: 15 * 1000, // 15 seconds
     gcTime: 60 * 60 * 1000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }
 
