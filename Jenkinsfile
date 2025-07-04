@@ -126,8 +126,8 @@ pipeline {
   }
 
   post {
-    success { script { if (changesDetected && CHANGE_ID) { github.notifyPR(true) } } }
-    failure { script { if (changesDetected && CHANGE_ID) { github.notifyPR(false) } } }
+    success { script { if (changesDetected && env.CHANGE_ID) { github.notifyPR(true) } } }
+    failure { script { if (changesDetected && env.CHANGE_ID) { github.notifyPR(false) } } }
     cleanup { cleanWs() }
   }
 }
