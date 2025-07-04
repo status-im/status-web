@@ -334,25 +334,60 @@ async function main() {
   console.log('Starting ERC20 token list generation...')
 
   const statusTokens = new Set()
-  for (const url of statusTokenLists) {
-    const content = await fetchStatusTokenLists(url)
-    if (content) {
-      try {
+
+  // Fetch Status token lists in parallel
+  console.log('Fetching Status token lists in parallel...')
+  const statusFetchPromises = statusTokenLists.map(async url => {
+    try {
+      const content = await fetchStatusTokenLists(url)
+      if (content) {
         const tokens = parseGoFile(content)
-        tokens.forEach(token => statusTokens.add(token.toLowerCase()))
-      } catch (error) {
-        console.error(`Error parsing tokens from ${url}:`, error.message)
+        return tokens
       }
+      return []
+    } catch (error) {
+      console.error(
+        `Error fetching/parsing Status tokens from ${url}:`,
+        error.message,
+      )
+      return []
     }
-  }
+  })
+
+  const statusResults = await Promise.all(statusFetchPromises)
+
+  // Combine all Status tokens
+  statusResults.forEach(tokens => {
+    tokens.forEach(token => statusTokens.add(token.toLowerCase()))
+  })
 
   let standardTokens = new Map()
   let successfulFetches = 0
 
-  for (const list of standardTokenLists) {
-    const tokens = await fetchStandardTokenList(list.url)
-    if (tokens.length > 0) {
+  // Fetch all token lists in parallel to minimize rate limits and improve performance
+  console.log('Fetching standard token lists in parallel...')
+  const fetchPromises = standardTokenLists.map(async (list, index) => {
+    // Add small delay between requests to be respectful to rate limits
+    if (index > 0) {
+      await new Promise(resolve => setTimeout(resolve, 100 * index))
+    }
+
+    try {
+      const tokens = await fetchStandardTokenList(list.url)
+      return { list, tokens, success: tokens.length > 0 }
+    } catch (error) {
+      console.error(`Failed to fetch ${list.name}:`, error.message)
+      return { list, tokens: [], success: false }
+    }
+  })
+
+  const results = await Promise.all(fetchPromises)
+
+  // Process results sequentially to avoid memory issues with large datasets
+  for (const { list, tokens, success } of results) {
+    if (success) {
       successfulFetches++
+      console.log(`Processing ${tokens.length} tokens from ${list.name}...`)
       tokens.forEach(token => {
         const checksumAddress = toChecksumAddress(token.address)
         if (!standardTokens.has(checksumAddress)) {
