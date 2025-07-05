@@ -1,5 +1,11 @@
 # @status-im/components
 
+## 1.1.0
+
+### Minor Changes
+
+- 0a14da44: add import wallet flow
+
 ## 1.0.12
 
 ### Patch Changes

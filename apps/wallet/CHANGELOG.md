@@ -1,14 +1,27 @@
-# portfolio
+# wallet
 
-## 0.1.2
+## 0.1.0
+
+### Minor Changes
+
+- 0a14da44: add import wallet flow
 
 ### Patch Changes
 
+- d3549134: add new wallet flow
+- 5c5585af: add wallet page listeners
 - 4740bd7d: update sticky bar for assets and collectibles
-- 610315e7: update deployment build command
+- 57e62774: add wallet feedback
+- 28715e88: update wxt config
+- 45004181: add build steps
+- fbec37a3: add wallet recovery flow
+- 31f9b897: Fixes onBack in import recovery phrase flow
 - b10aa44d: remove ramp
+- ee2a2bdc: add link to feedback, change onboarding copy
 - ea4c1928: port wallet receive button
 - dec09cf9: port wallet detail routes
+- f843f877: fix failing api calls due to inactive service worker
+- 59474500: use env mode
 - Updated dependencies [d3549134]
 - Updated dependencies [4740bd7d]
 - Updated dependencies [0a14da44]
@@ -22,10 +35,3 @@
 - Updated dependencies [dec09cf9]
   - @status-im/wallet@0.1.0
   - @status-im/components@1.1.0
-
-## 0.1.1
-
-### Patch Changes
-
-- Updated dependencies [48e47cf]
-  - @status-im/js@1.1.0
