@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
-import { ArrowLeftIcon, BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
+import {
+  ArrowLeftIcon,
+  BuyIcon,
+  ReceiveBlurIcon,
+  SendBlurIcon,
+} from '@status-im/icons/20'
 import {
   Balance,
   CurrencyAmount,
   NetworkBreakdown,
   ReceiveCryptoDrawer,
+  SendAssetsModal,
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
@@ -16,10 +22,13 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
+import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
+import { apiClient } from '@/providers/api-client'
+import { useWallet } from '@/providers/wallet-context'
 
-import type { Account } from '@status-im/wallet/components'
-import type { ApiOutput } from '@status-im/wallet/data'
+import type { Account, SendAssetsFormData } from '@status-im/wallet/components'
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   address: string
@@ -39,6 +48,8 @@ const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
   const [, copy] = useCopyToClipboard()
+
+  const { currentWallet } = useWallet()
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -87,6 +98,14 @@ const Token = (props: Props) => {
 
   const { data: typedToken, isLoading } = token
 
+  const isETH = typedToken?.summary.symbol === 'ETH'
+
+  const ethBalanceQuery = useEthBalance(address, !isETH)
+
+  const ethBalance = isETH
+    ? typedToken.summary.total_balance
+    : ethBalanceQuery.data?.summary.total_balance || 0
+
   useEffect(() => {
     const processMarkdown = async () => {
       if (typedToken) {
@@ -108,11 +127,56 @@ const Token = (props: Props) => {
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
 
+  const asset = {
+    name: typedToken.summary.name,
+    icon,
+    totalBalance: typedToken.summary.total_balance,
+    totalBalanceEur: typedToken.summary.total_eur,
+    contractAddress: ticker.startsWith('0x') ? ticker : undefined,
+    symbol: typedToken.summary.symbol,
+    ethBalance,
+    // TODO: get network
+    network: Object.keys(typedToken.assets)[0] as NetworkType,
+  }
+
+  // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
     name: 'Account 1',
     emoji: '🍑',
     color: 'magenta',
+  }
+
+  const signTransaction = async (
+    formData: SendAssetsFormData & { password: string },
+  ) => {
+    const result = await apiClient.wallet.account.ethereum.send.mutate({
+      amount: formData.amount,
+      toAddress: formData.to,
+      fromAddress: address,
+      password: formData.password,
+      walletId: currentWallet?.id || '',
+    })
+
+    if (!result.id || !result.id.txid) {
+      throw new Error('Transaction failed')
+    }
+
+    return result.id.txid
+  }
+
+  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
+    if (!currentWallet?.id) return false
+    try {
+      await apiClient.wallet.get.query({
+        walletId: currentWallet.id,
+        password: inputPassword,
+      })
+
+      return true
+    } catch {
+      return false
+    }
   }
 
   return (
@@ -142,6 +206,19 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
+          <SendAssetsModal
+            asset={asset}
+            account={{
+              ...account,
+              ethBalance: asset.ethBalance,
+            }}
+            signTransaction={signTransaction}
+            verifyPassword={verifyPassword}
+          >
+            <Button size="32" iconBefore={<SendBlurIcon />}>
+              Send
+            </Button>
+          </SendAssetsModal>
         </div>
       }
     >
@@ -160,7 +237,6 @@ const Token = (props: Props) => {
             ticker={uppercasedTicker}
             icon={icon}
           />
-
           <div className="my-6 2xl:mt-0">
             <Balance variant="token" summary={typedToken.summary} />
           </div>
@@ -179,6 +255,19 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
+            <SendAssetsModal
+              asset={asset}
+              account={{
+                ...account,
+                ethBalance: asset.ethBalance,
+              }}
+              signTransaction={signTransaction}
+              verifyPassword={verifyPassword}
+            >
+              <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
+                Send
+              </Button>
+            </SendAssetsModal>
           </div>
         </div>
 

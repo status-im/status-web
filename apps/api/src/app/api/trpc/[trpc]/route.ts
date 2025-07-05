@@ -31,11 +31,25 @@ async function handler(request: NextRequest) {
     // onError: opts => {
     //   // console.error('opts::', opts)
     // },
-    responseMeta: () => {
+    responseMeta: opts => {
+      let cacheControl = 'public, max-age=3600'
+
+      if (
+        opts?.paths?.some(path =>
+          [
+            'nodes.broadcastTransaction',
+            'nodes.getNonce',
+            'nodes.getTransactionCount',
+          ].includes(path)
+        ) ||
+        opts?.type === 'mutation'
+      ) {
+        cacheControl = 'private, no-store'
+      }
+
       return {
         headers: {
-          'cache-control': 'public, max-age=3600', // for public data (e.g. configs, token lists?)
-          // 'cache-control': 'private, no-store', // for user-specific data
+          'cache-control': cacheControl,
         },
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
