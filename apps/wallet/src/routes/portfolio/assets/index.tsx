@@ -1,5 +1,6 @@
 import {
   AssetsList,
+  AssetsListLoading,
   FeedbackSection,
   PinExtension,
 } from '@status-im/wallet/components'
@@ -29,9 +30,7 @@ function Component() {
   })
   const isDesktop = useMediaQuery('xl')
 
-  if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
-  }
+  if (!currentWallet || !address) return null
 
   return (
     <>
@@ -62,6 +61,7 @@ function Component() {
           )
         }
         detail={<FeedbackSection />}
+        loadingState={<AssetsListLoading />}
         isLoading={isLoading}
       />
       {isPinExtension && (
