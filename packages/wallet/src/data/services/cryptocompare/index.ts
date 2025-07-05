@@ -146,6 +146,44 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
   return data
 }
 
+/**
+ * Returns the price of a tokens at a specific timestamp.
+ * @see https://min-api.cryptocompare.com/documentation?key=Historical&cat=dataHistoday
+ */
+export async function fetchTokensPriceForDate(
+  symbols: string[],
+  timestamp: number,
+) {
+  const data: Record<string, { EUR: { PRICE: number } }> = {}
+
+  for (const symbol of symbols) {
+    try {
+      const url = new URL('https://min-api.cryptocompare.com/data/v2/histoday')
+      url.searchParams.set('fsym', symbol)
+      url.searchParams.set('tsym', 'EUR')
+      url.searchParams.set('toTs', timestamp.toString())
+      url.searchParams.set('limit', '1')
+      url.searchParams.set('tryConversion', 'true') // tries to convert to EUR if specific market does not exist i.e. ETH <-> EUR
+      url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
+
+      const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
+      const prices = body.Data.Data
+
+      if (prices.length > 0) {
+        data[symbol] = {
+          EUR: {
+            PRICE: prices[0].close,
+          },
+        }
+      }
+    } catch (err) {
+      console.warn(`No price data for ${symbol}:`, String(err))
+    }
+  }
+
+  return data
+}
+
 async function _fetch<
   T extends
     | legacy_TokensPriceResponseBody
