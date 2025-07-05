@@ -1,4 +1,5 @@
 import type { ApiRouter } from '.'
+import type { Activity } from './routers/activity'
 import type { Collectible } from './routers/collectibles'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 
@@ -15,4 +16,4 @@ export type NetworkType =
   | 'polygon'
   | 'bsc'
 
-export type { Collectible }
+export type { Activity, Collectible }
