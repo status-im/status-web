@@ -11,5 +11,5 @@ export const Route = createFileRoute('/')({
 })
 
 function RouteComponent() {
-  return <>Index</>
+  return <>index</>
 }
