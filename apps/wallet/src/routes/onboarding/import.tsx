@@ -72,7 +72,7 @@ function ImportWallet({
     ImportRecoveryPhraseFormValues
   > = async data => {
     try {
-      startTransition(async () => {
+      startTransition(() => {
         onNext(data.mnemonic)
       })
     } catch (error) {
@@ -120,11 +120,12 @@ function CreatePassword({
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
     try {
-      startTransition(async () => {
-        await importWalletAsync({
-          mnemonic,
-          password: data.password,
-        })
+      await importWalletAsync({
+        mnemonic,
+        password: data.password,
+      })
+
+      startTransition(() => {
         navigate({ to: '/portfolio/assets' })
       })
     } catch (error) {

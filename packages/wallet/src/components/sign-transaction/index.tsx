@@ -25,7 +25,7 @@ export function SignTransactionDialog({
 
   const handleConfirm = async (data: { password: string }) => {
     try {
-      startTransition(async () => {
+      startTransition(() => {
         onConfirm(data.password)
         setIsOpen(false)
       })
