@@ -4,6 +4,9 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { useRefetchToast } from './use-refetch-toast'
 
+const REFRESH_INTERVAL_MS = 15 * 1000
+const REFRESH_COMPLETE_DELAY_MS = 50
+
 export function useSynchronizedRefetch(address: string) {
   const queryClient = useQueryClient()
   const [isWindowActive, setIsWindowActive] = useState(true)
@@ -38,7 +41,7 @@ export function useSynchronizedRefetch(address: string) {
       ),
     )
 
-    setTimeout(() => setIsAutoRefreshing(false), 100)
+    setTimeout(() => setIsAutoRefreshing(false), REFRESH_COMPLETE_DELAY_MS)
   }, [address, queryClient])
 
   useRefetchToast({
@@ -74,7 +77,7 @@ export function useSynchronizedRefetch(address: string) {
   useEffect(() => {
     if (!isWindowActive) return
 
-    const interval = setInterval(refetchQueries, 15 * 1000)
+    const interval = setInterval(refetchQueries, REFRESH_INTERVAL_MS)
 
     return () => clearInterval(interval)
   }, [isWindowActive, address, queryClient, refetchQueries])

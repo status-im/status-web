@@ -1,5 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+
 import type { NetworkType } from '@status-im/wallet/data'
 
 const PAGE_LIMIT = 20
@@ -119,8 +121,8 @@ const useCollectibles = (props: Props) => {
     getNextPageParam: lastPage => lastPage.nextPage,
     initialPageParam: 0,
     enabled: !!address && !isWalletLoading,
-    staleTime: 15 * 1000, // 15 seconds
-    gcTime: 60 * 60 * 1000,
+    staleTime: QUERY_STALE_TIME_MS,
+    gcTime: QUERY_GC_TIME_MS,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
+import { useCacheSync } from '../hooks/use-cache-sync'
 import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
 import { apiClient } from './api-client'
 
@@ -68,7 +69,10 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     setSelectedWalletId(id)
   }
 
-  useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
+  const currentAddress = currentWallet?.activeAccounts[0]?.address ?? ''
+
+  useSynchronizedRefetch(currentAddress)
+  useCacheSync(currentAddress)
 
   const contextValue: WalletContext = {
     currentWallet,

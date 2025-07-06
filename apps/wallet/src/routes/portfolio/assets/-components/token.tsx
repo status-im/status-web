@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
 import {
@@ -19,7 +19,7 @@ import {
 } from '@status-im/wallet/components'
 import { type ApiOutput, type NetworkType } from '@status-im/wallet/data'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
@@ -29,6 +29,12 @@ import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
 
 import type { Account, SendAssetsFormData } from '@status-im/wallet/components'
+
+type TokenData =
+  | ApiOutput['assets']['token']
+  | ApiOutput['assets']['nativeToken']
+type AssetsData = ApiOutput['assets']['all']['assets']
+type AssetData = ApiOutput['assets']['all']['assets'][number]
 
 type Props = {
   address: string
@@ -44,6 +50,18 @@ const NETWORKS = [
   'bsc',
 ] as const
 
+function matchesAsset(asset: AssetData, ticker: string): boolean {
+  if (ticker.startsWith('0x')) {
+    return (
+      ('contract' in asset &&
+        asset.contract?.toLowerCase() === ticker.toLowerCase()) ||
+      false
+    )
+  } else {
+    return asset.symbol?.toLowerCase() === ticker.toLowerCase()
+  }
+}
+
 const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
@@ -55,11 +73,88 @@ const Token = (props: Props) => {
     value: string
   } | null>(null)
 
-  const token = useQuery<
-    ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
-  >({
+  const queryClient = useQueryClient()
+
+  const cachedAssetLookup = useMemo(() => {
+    const assetsCache = queryClient.getQueryData<AssetsData>([
+      'assets',
+      address,
+    ])
+
+    if (!assetsCache || !Array.isArray(assetsCache)) return null
+
+    return assetsCache.find(asset => matchesAsset(asset, ticker))
+  }, [queryClient, address, ticker])
+
+  const token = useQuery<TokenData>({
     queryKey: ['token', ticker],
     queryFn: async () => {
+      const assetsCache = queryClient.getQueryData<AssetsData>([
+        'assets',
+        address,
+      ])
+
+      if (assetsCache && Array.isArray(assetsCache)) {
+        const cachedAsset = cachedAssetLookup
+
+        if (cachedAsset) {
+          const existingTokenData = queryClient.getQueryData<TokenData>([
+            'token',
+            ticker,
+          ])
+
+          if (
+            existingTokenData &&
+            existingTokenData.summary &&
+            existingTokenData.assets
+          ) {
+            const updatedTokenData = {
+              ...existingTokenData,
+              summary: {
+                ...existingTokenData.summary,
+                total_balance:
+                  cachedAsset.balance ??
+                  existingTokenData.summary.total_balance,
+                total_eur:
+                  cachedAsset.total_eur ?? existingTokenData.summary.total_eur,
+              },
+            }
+
+            if (existingTokenData.assets) {
+              const assetKeys = Object.keys(existingTokenData.assets)
+              for (const key of assetKeys) {
+                const asset =
+                  existingTokenData.assets[
+                    key as keyof typeof existingTokenData.assets
+                  ]
+                if (
+                  asset &&
+                  (asset.symbol === cachedAsset.symbol ||
+                    asset.contract === cachedAsset.contract)
+                ) {
+                  updatedTokenData.assets = {
+                    ...existingTokenData.assets,
+                    [key]: {
+                      ...asset,
+                      balance: cachedAsset.balance ?? asset.balance,
+                      total_eur: cachedAsset.total_eur ?? asset.total_eur,
+                      price_eur: cachedAsset.price_eur ?? asset.price_eur,
+                      price_percentage_24h_change:
+                        cachedAsset.price_percentage_24h_change ??
+                        asset.price_percentage_24h_change,
+                    },
+                  }
+                  break
+                }
+              }
+            }
+
+            queryClient.setQueryData(['token', ticker], updatedTokenData)
+            return updatedTokenData
+          }
+        }
+      }
+
       const endpoint = ticker.startsWith('0x')
         ? 'assets.token'
         : 'assets.nativeToken'
@@ -151,24 +246,34 @@ const Token = (props: Props) => {
 
   useEffect(() => {
     const processMarkdown = async () => {
-      if (typedToken) {
-        const metadata = Object.values(typedToken.assets)[0].metadata
-        const content = await renderMarkdown(
-          metadata.about || 'No description available.',
-        )
-        setMarkdownContent(content)
+      if (typedToken && typedToken.assets) {
+        const assets = Object.values(typedToken.assets)
+        if (assets.length > 0 && assets[0]) {
+          const metadata = assets[0].metadata
+          const content = await renderMarkdown(
+            metadata?.about || 'No description available.',
+          )
+          setMarkdownContent(content)
+        }
       }
     }
     processMarkdown()
   }, [typedToken])
 
-  if (isLoading || !typedToken) {
+  if (isLoading || !typedToken || !typedToken.assets) {
     return <p>Loading</p>
   }
 
-  const metadata = Object.values(typedToken.assets)[0].metadata
-  const uppercasedTicker = typedToken.summary.symbol
-  const icon = typedToken.summary.icon
+  const assets = Object.values(typedToken.assets)
+  if (!assets || assets.length === 0 || !assets[0]) {
+    return <p>No asset data available</p>
+  }
+
+  const metadata = assets[0].metadata || {}
+  const summary = typedToken.summary || {}
+  const uppercasedTicker = summary.symbol || ticker
+  const icon = summary.icon || ''
+  const name = summary.name || ticker
 
   const asset = {
     name: typedToken.summary.name,
@@ -235,7 +340,7 @@ const Token = (props: Props) => {
       leftSlot={
         <TokenLogo
           variant="small"
-          name={typedToken.summary.name}
+          name={name}
           ticker={uppercasedTicker}
           icon={icon}
         />
@@ -243,9 +348,7 @@ const Token = (props: Props) => {
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
           <Button size="32" iconBefore={<BuyIcon />}>
-            <span className="block max-w-20 truncate">
-              Buy {typedToken.summary.name}
-            </span>
+            <span className="block max-w-20 truncate">Buy {name}</span>
           </Button>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
@@ -285,18 +388,14 @@ const Token = (props: Props) => {
       </Link>
       <div className="grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
-          <TokenLogo
-            name={typedToken.summary.name}
-            ticker={uppercasedTicker}
-            icon={icon}
-          />
+          <TokenLogo name={name} ticker={uppercasedTicker} icon={icon} />
           <div className="my-6 2xl:mt-0">
-            <Balance variant="token" summary={typedToken.summary} />
+            <Balance variant="token" summary={summary} />
           </div>
 
           <div className="flex items-center gap-1">
             <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-              Buy {typedToken.summary.name}
+              Buy {name}
             </Button>
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -327,9 +426,7 @@ const Token = (props: Props) => {
           </div>
         </div>
 
-        {typedToken.summary.total_balance > 0 && (
-          <NetworkBreakdown token={typedToken} />
-        )}
+        {summary.total_balance > 0 && <NetworkBreakdown token={typedToken} />}
 
         {/* <ErrorBoundary fallback={<div>Error loading chart</div>}>
           <Suspense
