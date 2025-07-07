@@ -86,7 +86,7 @@ const ExchangeDialog = ({ onClose, tokenData }: Props) => {
             },
             ...(resolvedChainId && { fromChain: resolvedChainId }),
             ...(getTokenAddress() && { fromToken: getTokenAddress() }),
-            fromAmount: 1,
+            fromAmount: 0,
           }}
         />
       </div>
