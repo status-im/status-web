@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'A wallet by Status',
+        title: 'Status Portfolio Wallet',
       },
     ],
   }),
