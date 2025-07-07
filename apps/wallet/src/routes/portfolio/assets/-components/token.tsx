@@ -193,15 +193,20 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
+    const amountHex = BigInt(
+      Math.floor(parseFloat(formData.amount) * 1e18),
+    ).toString(16)
+
     const result = await apiClient.wallet.account.ethereum.send.mutate({
-      amount: formData.amount,
+      amount: amountHex,
       toAddress: formData.to,
       fromAddress: address,
       password: formData.password,
       walletId: currentWallet?.id || '',
-      gasLimit: gasFeeQuery.data?.txParams.gasLimit,
-      maxFeePerGas: gasFeeQuery.data?.txParams.maxFeePerGas,
-      maxInclusionFeePerGas: gasFeeQuery.data?.txParams.maxInclusionFeePerGas,
+      gasLimit: gasFeeQuery.data.txParams.gasLimit.replace(/^0x/, ''),
+      maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas.replace(/^0x/, ''),
+      maxInclusionFeePerGas:
+        gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
     })
 
     if (!result.id || !result.id.txid) {
