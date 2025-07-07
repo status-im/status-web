@@ -64,20 +64,20 @@ export function chromeLinkWithRetries<TRouter extends AnyRouter>(
         )
       }
 
-      const handleConnectionError = (error: unknown) => {
-        if (isConnectionError(error) && retryCount < MAX_RETRIES) {
-          retryCount++
-          port = null
-          currentLink = null
-          setTimeout(() => retryOperation(), RETRY_DELAY * retryCount)
-        } else {
-          observer.error?.(error)
-        }
-      }
-
       return {
         subscribe(observer) {
           let subscription: { unsubscribe: () => void } | null = null
+
+          const handleConnectionError = (error: unknown) => {
+            if (isConnectionError(error) && retryCount < MAX_RETRIES) {
+              retryCount++
+              port = null
+              currentLink = null
+              setTimeout(() => retryOperation(), RETRY_DELAY * retryCount)
+            } else {
+              observer.error?.(error)
+            }
+          }
 
           const retryOperation = () => {
             try {
