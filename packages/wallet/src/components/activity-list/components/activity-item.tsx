@@ -1,10 +1,10 @@
 import { ContextTag } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
-import { formatRelative } from 'date-fns'
 
 import { CurrencyAmount } from '../../currency-amount'
 import { NetworkLogo } from '../../network-logo'
+import { RelativeDate } from '../../relative-date'
 import { shortenAddress } from '../../shorten-address'
 import { formatTokenAmount } from '../../token-amount'
 import { ActivityDirection } from './activity-direction'
@@ -49,7 +49,11 @@ const ActivityItem = (props: ActivityItemProps) => {
   const eurValue = Number(activity.eurRate) * Number(activity.value)
 
   return (
-    <div className="grid grid-cols-[2fr_1fr_1fr] gap-4 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5">
+    <a
+      href={`https://etherscan.io/tx/${activity.hash}`}
+      target="_blank"
+      className="grid grid-cols-[2fr_1fr_1fr] gap-4 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5"
+    >
       <div className="flex items-center gap-3">
         <div className="relative">
           <ActivityTokenLogo
@@ -65,12 +69,10 @@ const ActivityItem = (props: ActivityItemProps) => {
             <ActivityDirection
               direction={outgoingTransaction ? 'sent' : 'received'}
             />
-            <span className="text-13 font-400 text-neutral-40">
-              {formatRelative(
-                new Date(activity.metadata.blockTimestamp),
-                new Date(),
-              )}
-            </span>
+            <RelativeDate
+              timestamp={activity.metadata.blockTimestamp}
+              className="text-13 font-400 text-neutral-40"
+            />
           </div>
           <div className="flex items-end text-13 font-400 text-neutral-50">
             <ContextTag type="label" size="24">
@@ -111,17 +113,11 @@ const ActivityItem = (props: ActivityItemProps) => {
           </ContextTag>
         )}
       </div>
-      <div className="flex items-center justify-end text-13 font-400 text-neutral-50">
-        <a
-          href={`https://etherscan.io/tx/${activity.hash}`}
-          target="_blank"
-          className="flex items-center gap-1"
-        >
-          <ActivityStatus status={activity.status} />
-          <ExternalIcon className="text-neutral-50" />
-        </a>
+      <div className="flex items-center justify-end gap-1 text-13 font-400 text-neutral-50">
+        <ActivityStatus status={activity.status} />
+        <ExternalIcon className="text-neutral-50" />
       </div>
-    </div>
+    </a>
   )
 }
 
