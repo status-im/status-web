@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -34,17 +34,17 @@ type Props = {
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
   verifyPassword: (inputPassword: string) => Promise<boolean>
+  onEstimateGas: (to: string, value: string) => void
+  gasFees?: {
+    maxFeeEur: number
+    confirmationTime: string
+    feeEth: number
+  }
+  isLoadingFees?: boolean
 }
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
-type GasFees = {
-  eth: number
-  eur: number
-  time: string
-}
-
-// Definir o schema fora do componente
 const createFormSchema = (balance: number) =>
   z.object({
     to: z
@@ -75,7 +75,16 @@ const createFormSchema = (balance: number) =>
 type FormData = z.infer<ReturnType<typeof createFormSchema>>
 
 const SendAssetsModal = (props: Props) => {
-  const { children, asset, account, signTransaction, verifyPassword } = props
+  const {
+    children,
+    asset,
+    account,
+    signTransaction,
+    verifyPassword,
+    onEstimateGas,
+    gasFees,
+    isLoadingFees,
+  } = props
   const [open, setOpen] = useState(false)
   const [hasInsufficientEth, setHasInsufficientEth] = useState(false)
   const [transactionState, setTransactionState] =
@@ -83,9 +92,6 @@ const SendAssetsModal = (props: Props) => {
   const [showPasswordModal, setShowPasswordModal] = useState(false)
   const [pendingTransactionData, setPendingTransactionData] =
     useState<FormData | null>(null)
-  const [gasFees, setGasFees] = useState<GasFees | null>(null)
-
-  const [isLoadingFees, setIsLoadingFees] = useState(false)
 
   const toast = useToast()
   const balance = asset.totalBalance
@@ -113,49 +119,37 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
-  // TODO: This is mock dynamic gas fee estimation. Replace with actual API call when available
-  const generateGasFees = (): GasFees => {
-    const gasLimit = 21000
-    const gasPriceInGwei = 20 + Math.random() * 30
-    const ethPrice = 2500 + Math.random() * 200
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
 
-    const eth = (gasPriceInGwei * gasLimit) / 1e9
-    const eur = eth * ethPrice
+  const memoizedOnEstimateGas = useRef(onEstimateGas)
 
-    return {
-      eth,
-      eur,
-      time: '≈ 1 min',
-    }
-  }
-
-  // Fetch gas fees when address and amount are provided
-  const fetchGasFees = useCallback(async () => {
-    if (!watchedTo || !watchedAmount) {
-      setGasFees(null)
-      return
-    }
-
-    setIsLoadingFees(true)
-
-    // Simulate API call delay
-    await new Promise(resolve =>
-      setTimeout(resolve, 500 + Math.random() * 1000),
-    )
-
-    const fees = generateGasFees()
-    setGasFees(fees)
-    setIsLoadingFees(false)
-  }, [watchedTo, watchedAmount])
-
-  // Update gas fees when inputs change
+  // Estimate gas fees when 'to' or 'amount' changes
   useEffect(() => {
-    fetchGasFees()
-  }, [watchedTo, watchedAmount, fetchGasFees])
+    if (!watchedTo || !watchedAmount) return
+
+    const parsed = Number.parseFloat(watchedAmount)
+    if (Number.isNaN(parsed)) return
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current)
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      const amountInWei = BigInt(Math.floor(parsed * 1e18)).toString(16)
+      memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
+    }, 300)
+
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current)
+        debounceTimeout.current = null
+      }
+    }
+  }, [watchedTo, watchedAmount])
 
   //  Check for insufficient ETH balance
   useEffect(() => {
-    if (!watchedAmount || !gasFees) {
+    if (!watchedAmount || !gasFees?.feeEth) {
       if (hasInsufficientEth) {
         setHasInsufficientEth(false)
       }
@@ -166,8 +160,8 @@ const SendAssetsModal = (props: Props) => {
     const amountToSend = Number.parseFloat(watchedAmount)
 
     const hasInsufficientEthNow = isETH
-      ? ethBalance < amountToSend + gasFees.eth
-      : ethBalance < gasFees.eth
+      ? ethBalance < amountToSend + gasFees.feeEth
+      : ethBalance < gasFees.feeEth
 
     if (hasInsufficientEthNow) {
       if (!hasInsufficientEth) {
@@ -184,21 +178,6 @@ const SendAssetsModal = (props: Props) => {
     hasInsufficientEth,
     asset.symbol,
   ])
-
-  // Periodically update gas fees
-  useEffect(() => {
-    if (!gasFees || !watchedTo || !watchedAmount) return
-
-    const interval = setInterval(
-      () => {
-        const fees = generateGasFees()
-        setGasFees(fees)
-      },
-      5000 + Math.random() * 5000,
-    )
-
-    return () => clearInterval(interval)
-  }, [gasFees, watchedTo, watchedAmount])
 
   const onSubmit = async (data: FormData) => {
     setPendingTransactionData(data)
@@ -268,7 +247,6 @@ const SendAssetsModal = (props: Props) => {
       setTransactionState('idle')
       setShowPasswordModal(false)
       setPendingTransactionData(null)
-      setGasFees(null)
     }
   }
 
@@ -521,8 +499,8 @@ const SendAssetsModal = (props: Props) => {
                           {gasFees ? (
                             <>
                               <CurrencyAmount
-                                value={gasFees.eur}
-                                format="standard"
+                                value={gasFees.maxFeeEur}
+                                format="precise"
                               />{' '}
                             </>
                           ) : (
@@ -532,7 +510,7 @@ const SendAssetsModal = (props: Props) => {
                       </div>
                       <div>
                         <p className="text-neutral-50"> Estimated </p>
-                        <p>{gasFees ? gasFees.time : '-'}</p>
+                        <p>{gasFees?.confirmationTime || '-'}</p>
                       </div>
                     </div>
                   )}

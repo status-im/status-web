@@ -12,6 +12,9 @@ export async function send({
   amount,
   fromAddress,
   network = 'ethereum',
+  gasLimit,
+  maxFeePerGas,
+  maxInclusionFeePerGas,
 }: {
   walletCore: WalletCore
   walletPrivateKey: InstanceType<WalletCore['PrivateKey']>
@@ -20,6 +23,9 @@ export async function send({
   amount: string
   fromAddress: string
   network?: string
+  gasLimit: string
+  maxFeePerGas: string
+  maxInclusionFeePerGas: string
 }) {
   const nonceUrl = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
@@ -48,7 +54,7 @@ export async function send({
 
   // fixme: calc nonce and fees
   const txInput = encoder.Ethereum.Proto.SigningInput.create({
-    chainId: Buffer.from(chainID, 'hex'),
+    chainId: Uint8Array.from(Buffer.from(chainID, 'hex')),
     // chainId: Buffer.from('01', 'hex'),
     // gasPrice: Buffer.from(feeRate.replace('0x', ''), 'hex'),
     // nonce: Buffer.from('09', 'hex'),
@@ -60,13 +66,15 @@ export async function send({
     // gasLimit: Buffer.from('5208', 'hex'),
     // gasPrice: Buffer.from('04a817c800', 'hex'),
     // gasLimit: Buffer.from('5208', 'hex'),
-    maxInclusionFeePerGas: Buffer.from('0077359400', 'hex'),
-    maxFeePerGas: Buffer.from('00b2d05e00', 'hex'),
-    gasLimit: Buffer.from('0130B9', 'hex'),
+    gasLimit: Uint8Array.from(Buffer.from(gasLimit, 'hex')),
+    maxFeePerGas: Uint8Array.from(Buffer.from(maxFeePerGas, 'hex')),
+    maxInclusionFeePerGas: Uint8Array.from(
+      Buffer.from(maxInclusionFeePerGas, 'hex'),
+    ),
     toAddress: toAddress,
     transaction: {
       transfer: {
-        amount: Buffer.from(amount, 'hex'),
+        amount: Uint8Array.from(Buffer.from(amount, 'hex')),
       },
     },
     privateKey: walletPrivateKey.data(),

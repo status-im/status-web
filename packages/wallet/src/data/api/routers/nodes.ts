@@ -16,6 +16,11 @@ export const nodesRouter = router({
         network: z
           .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
           .optional(),
+        params: z.object({
+          from: z.string(),
+          to: z.string(),
+          value: z.string(),
+        }),
       }),
     )
     .query(async ({ input }) => {
@@ -57,6 +62,6 @@ export const nodesRouter = router({
 })
 
 const cachedGetFeeRate = cache(async (key: string) => {
-  const { network } = JSON.parse(key)
-  return await getFeeRate(network ?? 'ethereum')
+  const { network, params } = JSON.parse(key)
+  return await getFeeRate(network ?? 'ethereum', params)
 })

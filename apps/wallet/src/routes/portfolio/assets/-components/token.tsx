@@ -17,6 +17,7 @@ import {
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
+import { type ApiOutput, type NetworkType } from '@status-im/wallet/data'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -28,7 +29,6 @@ import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
 
 import type { Account, SendAssetsFormData } from '@status-im/wallet/components'
-import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   address: string
@@ -50,6 +50,10 @@ const Token = (props: Props) => {
   const [, copy] = useCopyToClipboard()
 
   const { currentWallet } = useWallet()
+  const [gasInput, setGasInput] = useState<{
+    to: string
+    value: string
+  } | null>(null)
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -106,6 +110,45 @@ const Token = (props: Props) => {
     ? typedToken.summary.total_balance
     : ethBalanceQuery.data?.summary.total_balance || 0
 
+  // Get gas fees for the current network
+  const gasFeeQuery = useQuery({
+    queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
+    queryFn: async ({ queryKey }) => {
+      const [, from, to, value] = queryKey as [string, string, string, string]
+
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
+      )
+
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            network: 'ethereum',
+            params: { from, to, value },
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      if (!response.ok) throw new Error('Failed to fetch gas fees')
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    enabled: !!gasInput?.to && !!gasInput?.value && !!address,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  const prepareGasEstimate = (to: string, value: string) => {
+    setGasInput({ to, value })
+  }
+
   useEffect(() => {
     const processMarkdown = async () => {
       if (typedToken) {
@@ -156,6 +199,9 @@ const Token = (props: Props) => {
       fromAddress: address,
       password: formData.password,
       walletId: currentWallet?.id || '',
+      gasLimit: gasFeeQuery.data?.txParams.gasLimit,
+      maxFeePerGas: gasFeeQuery.data?.txParams.maxFeePerGas,
+      maxInclusionFeePerGas: gasFeeQuery.data?.txParams.maxInclusionFeePerGas,
     })
 
     if (!result.id || !result.id.txid) {
@@ -214,6 +260,9 @@ const Token = (props: Props) => {
             }}
             signTransaction={signTransaction}
             verifyPassword={verifyPassword}
+            gasFees={gasFeeQuery.data}
+            isLoadingFees={gasFeeQuery.isFetching}
+            onEstimateGas={prepareGasEstimate}
           >
             <Button size="32" iconBefore={<SendBlurIcon />}>
               Send
@@ -263,6 +312,9 @@ const Token = (props: Props) => {
               }}
               signTransaction={signTransaction}
               verifyPassword={verifyPassword}
+              gasFees={gasFeeQuery.data}
+              isLoadingFees={gasFeeQuery.isFetching}
+              onEstimateGas={prepareGasEstimate}
             >
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send

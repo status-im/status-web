@@ -268,6 +268,9 @@ const apiRouter = router({
               fromAddress: z.string(),
               toAddress: z.string(),
               amount: z.string(),
+              gasLimit: z.string(),
+              maxFeePerGas: z.string(),
+              maxInclusionFeePerGas: z.string(),
             }),
           )
           .mutation(async ({ input, ctx }) => {
@@ -312,6 +315,9 @@ const apiRouter = router({
               toAddress: input.toAddress,
               amount: input.amount,
               fromAddress: input.fromAddress,
+              gasLimit: input.gasLimit,
+              maxFeePerGas: input.maxFeePerGas,
+              maxInclusionFeePerGas: input.maxInclusionFeePerGas,
             })
 
             return {
