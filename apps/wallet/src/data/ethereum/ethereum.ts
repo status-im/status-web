@@ -4,6 +4,13 @@ import { encoder } from '../encoder'
 
 import type { WalletCore } from '@trustwallet/wallet-core'
 
+const hexToUint8Array = (hex: string): Uint8Array => {
+  const cleaned = hex.replace(/^0x/, '')
+  // Ensure even length by padding with 0 if necessary
+  const padded = cleaned.length % 2 === 0 ? cleaned : '0' + cleaned
+  return new Uint8Array(Buffer.from(padded, 'hex'))
+}
+
 export async function send({
   walletCore,
   walletPrivateKey,
@@ -15,6 +22,7 @@ export async function send({
   gasLimit,
   maxFeePerGas,
   maxInclusionFeePerGas,
+  data,
 }: {
   walletCore: WalletCore
   walletPrivateKey: InstanceType<WalletCore['PrivateKey']>
@@ -26,6 +34,7 @@ export async function send({
   gasLimit: string
   maxFeePerGas: string
   maxInclusionFeePerGas: string
+  data?: string
 }) {
   const nonceUrl = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
@@ -52,7 +61,30 @@ export async function send({
 
   // const feeRate = nodes.getFeeRate
 
-  // fixme: calc nonce and fees
+  // const chainIdDecimal = parseInt(chainID, 16).toString()
+  // const currentNonce = await getNonce(fromAddress, chainIdDecimal)
+  // // todo?: retrieve balance from internal wallet instead of etherscan
+  // const balance = await getAccountBalance(fromAddress, chainIdDecimal)
+  // const { priorityFeeWei, finalMaxFeePerGas } = await getFeeRate(chainIdDecimal)
+
+  // if (priorityFeeWei >= finalMaxFeePerGas) {
+  //   throw new Error('priority fee >= max fee')
+  // }
+
+  // const gasLimitWithCushionHex = await estimateGasRPC({
+  //   from: fromAddress,
+  //   to: toAddress,
+  //   value: amount !== '0' ? `0x${BigInt(amount).toString(16)}` : undefined,
+  //   data: data && data !== '0x' ? data : undefined,
+  //   chainId: chainIdDecimal,
+  // })
+  // const gasLimitWithCushion = parseInt(gasLimitWithCushionHex, 16)
+
+  // const totalCost =
+  //   BigInt(amount) + finalMaxFeePerGas * BigInt(gasLimitWithCushion)
+  // const balanceBigInt = BigInt(balance)
+  // if (balanceBigInt < totalCost) throw new Error(`Insufficient funds`)
+
   const txInput = encoder.Ethereum.Proto.SigningInput.create({
     chainId: Uint8Array.from(Buffer.from(chainID, 'hex')),
     // chainId: Buffer.from('01', 'hex'),
@@ -77,14 +109,25 @@ export async function send({
         amount: Uint8Array.from(Buffer.from(amount, 'hex')),
       },
     },
+    transaction:
+      data && data !== '0x'
+        ? {
+            contractGeneric: {
+              amount: hexToUint8Array(BigInt(amount).toString(16)),
+              data: hexToUint8Array(data),
+            },
+          }
+        : {
+            transfer: {
+              amount: hexToUint8Array(BigInt(amount).toString(16)),
+            },
+          },
     privateKey: walletPrivateKey.data(),
     txMode: encoder.Ethereum.Proto.TransactionMode.Enveloped,
   })
 
   const inputEncoded =
     encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
-
-  // sign
   const outputData = walletCore.AnySigner.sign(
     inputEncoded,
     walletCore.CoinType.ethereum,
