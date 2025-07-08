@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -97,7 +97,7 @@ const SendAssetsModal = (props: Props) => {
   const balance = asset.totalBalance
   const ethBalance = account.ethBalance
 
-  const formSchema = createFormSchema(balance)
+  const formSchema = useMemo(() => createFormSchema(balance), [balance])
 
   const {
     control,

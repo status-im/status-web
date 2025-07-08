@@ -102,13 +102,13 @@ const Token = (props: Props) => {
 
   const { data: typedToken, isLoading } = token
 
-  const isETH = typedToken?.summary.symbol === 'ETH'
+  const needsEthBalance = typedToken?.summary.symbol !== 'ETH'
 
-  const ethBalanceQuery = useEthBalance(address, !isETH)
+  const ethBalanceQuery = useEthBalance(address, needsEthBalance)
 
-  const ethBalance = isETH
-    ? typedToken.summary.total_balance
-    : ethBalanceQuery.data?.summary.total_balance || 0
+  const ethBalance = needsEthBalance
+    ? ethBalanceQuery.data?.summary.total_balance || 0
+    : typedToken.summary.total_balance
 
   // Get gas fees for the current network
   const gasFeeQuery = useQuery({
