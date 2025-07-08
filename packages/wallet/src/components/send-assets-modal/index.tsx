@@ -184,7 +184,6 @@ const SendAssetsModal = (props: Props) => {
     setShowPasswordModal(true)
   }
 
-  // TODO: replaece with actual transaction signing logic when available
   const handlePasswordConfirm = async (password: string) => {
     setTransactionState('signing')
 
@@ -200,7 +199,6 @@ const SendAssetsModal = (props: Props) => {
       setTransactionState('pending')
 
       if (pendingTransactionData) {
-        console.log('Transaction signed, processing...', pendingTransactionData)
         toast.positive('Transaction signed', {
           duration: 2000,
         })
@@ -219,7 +217,6 @@ const SendAssetsModal = (props: Props) => {
         }, 5000)
       }
     } catch (error) {
-      console.error('Transaction failed:', error)
       setTransactionState('error')
       if (error instanceof Error && error.message !== 'Invalid password') {
         setShowPasswordModal(false)

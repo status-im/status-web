@@ -178,8 +178,7 @@ const Token = (props: Props) => {
     contractAddress: ticker.startsWith('0x') ? ticker : undefined,
     symbol: typedToken.summary.symbol,
     ethBalance,
-    // TODO: get network
-    network: Object.keys(typedToken.assets)[0] as NetworkType,
+    network: (Object.keys(typedToken.assets)[0] ?? 'ethereum') as NetworkType,
   }
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
