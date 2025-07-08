@@ -302,6 +302,38 @@ const Token = (props: Props) => {
       throw new Error('Transaction failed')
     }
 
+    // Set pending transaction hash to window.chrome!.storage!.local for activity page
+    await new Promise<void>(resolve => {
+      window.chrome!.storage!.local.set(
+        {
+          pendingTransactions: [
+            {
+              hash: result.id.txid,
+              from: address,
+              to: formData.to,
+              value: parseFloat(formData.amount),
+              asset: typedToken.summary.symbol,
+              network: 'ethereum',
+              status: 'pending',
+              uniqueId: `pending-${Date.now()}`,
+              category: 'external',
+              blockNum: '0',
+              metadata: {
+                blockTimestamp: new Date().toISOString(),
+              },
+              rawContract: {
+                value: amountHex,
+                address: ticker.startsWith('0x') ? ticker : null,
+                decimal: '18',
+              },
+              eurRate: 0,
+            },
+          ],
+        },
+        resolve,
+      )
+    })
+
     return result.id.txid
   }
 
