@@ -1,6 +1,6 @@
 import { chromeLink } from 'trpc-chrome/link'
 
-import type { TRPCLink } from '@trpc/client'
+import type { TRPCClientError, TRPCLink } from '@trpc/client'
 import type { AnyRouter } from '@trpc/server'
 import type { ChromeLinkOptions } from 'trpc-chrome/link'
 
@@ -75,7 +75,7 @@ export function chromeLinkWithRetries<TRouter extends AnyRouter>(
               currentLink = null
               setTimeout(() => retryOperation(), RETRY_DELAY * retryCount)
             } else {
-              observer.error?.(error)
+              observer.error?.(error as TRPCClientError<TRouter>)
             }
           }
 
