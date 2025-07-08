@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
 import {
@@ -19,7 +19,7 @@ import {
 } from '@status-im/wallet/components'
 import { type ApiOutput, type NetworkType } from '@status-im/wallet/data'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
@@ -73,88 +73,49 @@ const Token = (props: Props) => {
     value: string
   } | null>(null)
 
-  const queryClient = useQueryClient()
-
-  const cachedAssetLookup = useMemo(() => {
-    const assetsCache = queryClient.getQueryData<AssetsData>([
-      'assets',
-      address,
-    ])
-
-    if (!assetsCache || !Array.isArray(assetsCache)) return null
-
-    return assetsCache.find(asset => matchesAsset(asset, ticker))
-  }, [queryClient, address, ticker])
-
-  const token = useQuery<TokenData>({
-    queryKey: ['token', ticker],
+  const { data: assets } = useQuery<AssetsData>({
+    queryKey: ['assets', address],
     queryFn: async () => {
-      const assetsCache = queryClient.getQueryData<AssetsData>([
-        'assets',
-        address,
-      ])
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
+      )
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            address,
+            networks: NETWORKS,
+          },
+        }),
+      )
 
-      if (assetsCache && Array.isArray(assetsCache)) {
-        const cachedAsset = cachedAssetLookup
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
 
-        if (cachedAsset) {
-          const existingTokenData = queryClient.getQueryData<TokenData>([
-            'token',
-            ticker,
-          ])
-
-          if (
-            existingTokenData &&
-            existingTokenData.summary &&
-            existingTokenData.assets
-          ) {
-            const updatedTokenData = {
-              ...existingTokenData,
-              summary: {
-                ...existingTokenData.summary,
-                total_balance:
-                  cachedAsset.balance ??
-                  existingTokenData.summary.total_balance,
-                total_eur:
-                  cachedAsset.total_eur ?? existingTokenData.summary.total_eur,
-              },
-            }
-
-            if (existingTokenData.assets) {
-              const assetKeys = Object.keys(existingTokenData.assets)
-              for (const key of assetKeys) {
-                const asset =
-                  existingTokenData.assets[
-                    key as keyof typeof existingTokenData.assets
-                  ]
-                if (
-                  asset &&
-                  (asset.symbol === cachedAsset.symbol ||
-                    asset.contract === cachedAsset.contract)
-                ) {
-                  updatedTokenData.assets = {
-                    ...existingTokenData.assets,
-                    [key]: {
-                      ...asset,
-                      balance: cachedAsset.balance ?? asset.balance,
-                      total_eur: cachedAsset.total_eur ?? asset.total_eur,
-                      price_eur: cachedAsset.price_eur ?? asset.price_eur,
-                      price_percentage_24h_change:
-                        cachedAsset.price_percentage_24h_change ??
-                        asset.price_percentage_24h_change,
-                    },
-                  }
-                  break
-                }
-              }
-            }
-
-            queryClient.setQueryData(['token', ticker], updatedTokenData)
-            return updatedTokenData
-          }
-        }
+      if (!response.ok) {
+        throw new Error('Failed to fetch assets.')
       }
 
+      const body = await response.json()
+      return body.result.data.json.assets
+    },
+    enabled: !!address,
+    staleTime: 15 * 1000,
+    gcTime: 60 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  })
+
+  const asset = assets?.find(a => matchesAsset(a, ticker))
+
+  const { data: tokenDetail, isLoading: isTokenLoading } = useQuery<TokenData>({
+    queryKey: ['token', ticker],
+    queryFn: async () => {
       const endpoint = ticker.startsWith('0x')
         ? 'assets.token'
         : 'assets.nativeToken'
@@ -182,28 +143,29 @@ const Token = (props: Props) => {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch.')
+        throw new Error('Failed to fetch token detail.')
       }
 
       const body = await response.json()
       return body.result.data.json
     },
-    staleTime: 15 * 1000, // 15 seconds
-    gcTime: 60 * 60 * 1000, // 1 hour
+    enabled: !!asset,
+    staleTime: 15 * 1000,
+    gcTime: 60 * 60 * 1000,
     refetchOnMount: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
   })
 
-  const { data: typedToken, isLoading } = token
+  const isLoading = !assets || isTokenLoading || !tokenDetail
 
-  const needsEthBalance = typedToken?.summary.symbol !== 'ETH'
+  const needsEthBalance = tokenDetail?.summary.symbol !== 'ETH'
 
   const ethBalanceQuery = useEthBalance(address, needsEthBalance)
 
   const ethBalance = needsEthBalance
     ? ethBalanceQuery.data?.summary.total_balance || 0
-    : typedToken.summary.total_balance
+    : tokenDetail.summary.total_balance
 
   // Get gas fees for the current network
   const gasFeeQuery = useQuery({
@@ -246,10 +208,10 @@ const Token = (props: Props) => {
 
   useEffect(() => {
     const processMarkdown = async () => {
-      if (typedToken && typedToken.assets) {
-        const assets = Object.values(typedToken.assets)
-        if (assets.length > 0 && assets[0]) {
-          const metadata = assets[0].metadata
+      if (tokenDetail?.assets) {
+        const tokenAssets = Object.values(tokenDetail.assets)
+        if (tokenAssets.length > 0 && tokenAssets[0]) {
+          const metadata = tokenAssets[0].metadata
           const content = await renderMarkdown(
             metadata?.about || 'No description available.',
           )
@@ -258,32 +220,41 @@ const Token = (props: Props) => {
       }
     }
     processMarkdown()
-  }, [typedToken])
+  }, [tokenDetail])
 
-  if (isLoading || !typedToken || !typedToken.assets) {
+  if (isLoading || !asset) {
     return <p>Loading</p>
   }
 
-  const assets = Object.values(typedToken.assets)
-  if (!assets || assets.length === 0 || !assets[0]) {
-    return <p>No asset data available</p>
+  const tokenAssets = tokenDetail?.assets
+    ? Object.values(tokenDetail.assets)
+    : []
+  const metadata = tokenAssets[0]?.metadata || {}
+
+  const summary = {
+    symbol: asset.symbol,
+    name: asset.name,
+    icon: asset.icon,
+    total_balance: asset.balance,
+    total_eur: asset.total_eur,
+    total_eur_24h_change:
+      asset.total_eur * (asset.price_percentage_24h_change / 100),
+    total_percentage_24h_change: asset.price_percentage_24h_change,
   }
 
-  const metadata = assets[0].metadata || {}
-  const summary = typedToken.summary || {}
-  const uppercasedTicker = summary.symbol || ticker
-  const icon = summary.icon || ''
-  const name = summary.name || ticker
+  const uppercasedTicker = asset.symbol || ticker
+  const icon = asset.icon || ''
+  const name = asset.name || ticker
 
-  const asset = {
-    name: typedToken.summary.name,
+  const sendAsset = {
+    name: tokenDetail.summary.name,
     icon,
-    totalBalance: typedToken.summary.total_balance,
-    totalBalanceEur: typedToken.summary.total_eur,
+    totalBalance: tokenDetail.summary.total_balance,
+    totalBalanceEur: tokenDetail.summary.total_eur,
     contractAddress: ticker.startsWith('0x') ? ticker : undefined,
-    symbol: typedToken.summary.symbol,
+    symbol: tokenDetail.summary.symbol,
     ethBalance,
-    network: (Object.keys(typedToken.assets)[0] ?? 'ethereum') as NetworkType,
+    network: (Object.keys(tokenDetail.assets)[0] ?? 'ethereum') as NetworkType,
   }
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
@@ -360,10 +331,10 @@ const Token = (props: Props) => {
             </Button>
           </ReceiveCryptoDrawer>
           <SendAssetsModal
-            asset={asset}
+            asset={sendAsset}
             account={{
               ...account,
-              ethBalance: asset.ethBalance,
+              ethBalance: sendAsset.ethBalance,
             }}
             signTransaction={signTransaction}
             verifyPassword={verifyPassword}
@@ -408,10 +379,10 @@ const Token = (props: Props) => {
               </Button>
             </ReceiveCryptoDrawer>
             <SendAssetsModal
-              asset={asset}
+              asset={sendAsset}
               account={{
                 ...account,
-                ethBalance: asset.ethBalance,
+                ethBalance: sendAsset.ethBalance,
               }}
               signTransaction={signTransaction}
               verifyPassword={verifyPassword}
@@ -426,7 +397,9 @@ const Token = (props: Props) => {
           </div>
         </div>
 
-        {summary.total_balance > 0 && <NetworkBreakdown token={typedToken} />}
+        {summary.total_balance > 0 && tokenDetail && (
+          <NetworkBreakdown token={tokenDetail} />
+        )}
 
         {/* <ErrorBoundary fallback={<div>Error loading chart</div>}>
           <Suspense

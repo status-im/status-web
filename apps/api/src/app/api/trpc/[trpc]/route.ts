@@ -32,28 +32,31 @@ async function handler(request: NextRequest) {
     //   // console.error('opts::', opts)
     // },
     responseMeta: opts => {
-      let cacheControl = 'public, max-age=3600'
+      // let cacheControl = 'public, max-age=3600'
 
-      if (
-        opts?.paths?.some(path =>
-          [
-            'nodes.broadcastTransaction',
-            'nodes.getNonce',
-            'nodes.getTransactionCount',
-          ].includes(path)
-        ) ||
-        opts?.type === 'mutation'
-      ) {
-        cacheControl = 'private, no-store'
-      }
+      // if (
+      //   opts?.paths?.some(path =>
+      //     [
+      //       'nodes.broadcastTransaction',
+      //       'nodes.getNonce',
+      //       'nodes.getTransactionCount',
+      //     ].includes(path)
+      //   ) ||
+      //   opts?.type === 'mutation'
+      // ) {
+      //   cacheControl = 'private, no-store'
+      // }
 
       return {
         headers: {
-          'cache-control': cacheControl,
+          // 'cache-control': cacheControl,
+          'cache-control': 'no-store, no-cache, must-revalidate', // for user-specific data
+          expires: '0',
+          pragma: 'no-cache',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
     },
   })
