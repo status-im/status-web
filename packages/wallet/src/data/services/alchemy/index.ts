@@ -13,6 +13,7 @@ import { serverEnv } from '../../../config/env.server.mjs'
 
 import type { NetworkType } from '../../api/types'
 import type {
+  AssetTransfer,
   deprecated_NFTSaleResponseBody,
   ERC20TokenBalanceResponseBody,
   NativeTokenBalanceResponseBody,
@@ -540,46 +541,155 @@ export async function getIncomingAssetTransfers(
   }
 }
 
+type TransferBuffer = {
+  incoming: AssetTransfer[]
+  outgoing: AssetTransfer[]
+  incomingPageKey?: string
+  outgoingPageKey?: string
+  hasReachedEnd: {
+    incoming: boolean
+    outgoing: boolean
+  }
+}
+
+const transferBuffers = new Map<string, TransferBuffer>()
+
 export async function getAssetTransfers(
   address: string,
   network: NetworkType,
   pageKey?: string,
-  limit: number = 100,
+  limit: number = 20,
 ) {
-  const outgoingResult = await getOutgoingAssetTransfers(
-    address,
-    network,
-    pageKey,
-    Math.ceil(limit / 2),
-  )
+  try {
+    const cacheKey = `${address.toLowerCase()}-${network}`
+    let buffer = transferBuffers.get(cacheKey)
 
-  const incomingResult = await getIncomingAssetTransfers(
-    address,
-    network,
-    pageKey,
-    Math.ceil(limit / 2),
-  )
+    if (!pageKey || !buffer) {
+      buffer = {
+        incoming: [],
+        outgoing: [],
+        hasReachedEnd: { incoming: false, outgoing: false },
+      }
+      transferBuffers.set(cacheKey, buffer)
+    }
 
-  const allTransfers = [
-    ...outgoingResult.transfers,
-    ...incomingResult.transfers,
-  ]
-  allTransfers.sort((a, b) => {
-    // First sort by block number (newest first)
-    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
-    if (blockDiff !== 0) return blockDiff
+    let incomingPageKey: string | undefined
+    let outgoingPageKey: string | undefined
 
-    // If same block, sort by timestamp (newest first)
-    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
-    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
-    return timestampB - timestampA
-  })
+    if (pageKey) {
+      try {
+        const parsed = JSON.parse(pageKey)
+        if (parsed) {
+          incomingPageKey = parsed.incoming
+          outgoingPageKey = parsed.outgoing
+        }
+      } catch {
+        incomingPageKey = buffer.incomingPageKey
+        outgoingPageKey = buffer.outgoingPageKey
+      }
+    }
 
-  const transfers = allTransfers.slice(0, limit)
+    const needsFetch =
+      buffer.incoming.length < limit || buffer.outgoing.length < limit
 
-  return {
-    transfers,
-    pageKey: outgoingResult.pageKey || incomingResult.pageKey,
+    if (
+      needsFetch &&
+      (!buffer.hasReachedEnd.incoming || !buffer.hasReachedEnd.outgoing)
+    ) {
+      const isOutgoingFetching =
+        !buffer.hasReachedEnd.outgoing && buffer.outgoing.length < limit
+      const isIncomingFetching =
+        !buffer.hasReachedEnd.incoming && buffer.incoming.length < limit
+
+      const [outgoingResult, incomingResult] = await Promise.all([
+        isOutgoingFetching
+          ? getOutgoingAssetTransfers(
+              address,
+              network,
+              outgoingPageKey || buffer.outgoingPageKey,
+              limit,
+            )
+          : { transfers: [], pageKey: undefined },
+        isIncomingFetching
+          ? getIncomingAssetTransfers(
+              address,
+              network,
+              incomingPageKey || buffer.incomingPageKey,
+              limit,
+            )
+          : { transfers: [], pageKey: undefined },
+      ])
+
+      buffer.incoming.push(
+        ...incomingResult.transfers.map(t => ({
+          ...t,
+          tokenId: t.tokenId ?? undefined,
+          erc721TokenId: t.erc721TokenId ?? undefined,
+          erc1155Metadata: t.erc1155Metadata ?? undefined,
+        })),
+      )
+      buffer.outgoing.push(
+        ...outgoingResult.transfers.map(t => ({
+          ...t,
+          tokenId: t.tokenId ?? undefined,
+          erc721TokenId: t.erc721TokenId ?? undefined,
+          erc1155Metadata: t.erc1155Metadata ?? undefined,
+        })),
+      )
+
+      buffer.incomingPageKey = incomingResult.pageKey
+      buffer.outgoingPageKey = outgoingResult.pageKey
+      buffer.hasReachedEnd.incoming = incomingResult.pageKey === undefined
+      buffer.hasReachedEnd.outgoing = outgoingResult.pageKey === undefined
+    }
+
+    const allTransfers = [...buffer.incoming, ...buffer.outgoing]
+    const transfersMap = new Map<string, AssetTransfer>()
+    for (const transfer of allTransfers) {
+      transfersMap.set(transfer.uniqueId, transfer)
+    }
+
+    const uniqueTransfers = Array.from(transfersMap.values())
+
+    uniqueTransfers.sort((a, b) => {
+      const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+      if (blockDiff !== 0) return blockDiff
+
+      const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+      const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+      return timestampB - timestampA
+    })
+
+    const transfers = uniqueTransfers.slice(0, limit)
+
+    const consumedIds = new Set(transfers.map(t => t.uniqueId))
+    buffer.incoming = buffer.incoming.filter(t => !consumedIds.has(t.uniqueId))
+    buffer.outgoing = buffer.outgoing.filter(t => !consumedIds.has(t.uniqueId))
+
+    const hasMoreTransfers =
+      !buffer.hasReachedEnd.incoming ||
+      !buffer.hasReachedEnd.outgoing ||
+      buffer.incoming.length > 0 ||
+      buffer.outgoing.length > 0
+
+    let nextPageKey: string | undefined
+    if (hasMoreTransfers) {
+      nextPageKey = JSON.stringify({
+        incoming: buffer.incomingPageKey,
+        outgoing: buffer.outgoingPageKey,
+      })
+    }
+
+    return {
+      transfers,
+      pageKey: nextPageKey,
+    }
+  } catch (error) {
+    console.error('getAssetTransfers error:', error)
+    return {
+      transfers: [],
+      pageKey: undefined,
+    }
   }
 }
 

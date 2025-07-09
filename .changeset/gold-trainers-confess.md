@@ -1,5 +1,5 @@
 ---
-"@status-im/wallet": patch
+'@status-im/wallet': patch
 ---
 
 change feedback link

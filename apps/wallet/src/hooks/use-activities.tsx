@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import type { NetworkType } from '@status-im/wallet/data'
+import type { Activity, NetworkType } from '@status-im/wallet/data'
 
 const PAGE_LIMIT = 20
 
 type Props = {
-  address: string
+  address: string | undefined
 }
 
 const getTransfers = async (
@@ -13,7 +13,9 @@ const getTransfers = async (
   networks: NetworkType[],
   pageKeys: Partial<Record<NetworkType, string>> = {},
 ) => {
-  const url = new URL('http://localhost:3030/api/trpc/activities.page')
+  const url = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/activities.page`,
+  )
 
   url.searchParams.set(
     'input',
@@ -67,6 +69,9 @@ export const useActivities = ({ address }: Props) => {
   return useInfiniteQuery({
     queryKey: ['activities', address, networks],
     queryFn: async ({ pageParam = {} }) => {
+      if (!address) {
+        return { activities: [], nextPage: {} }
+      }
       const result = await getTransfers(
         address,
         networks as NetworkType[],
@@ -77,8 +82,9 @@ export const useActivities = ({ address }: Props) => {
         nextPage: result.nextPageKeys,
       }
     },
+    enabled: !!address,
     getNextPageParam: (lastPage: {
-      activities: []
+      activities: Activity[]
       nextPage: Partial<Record<NetworkType, string | undefined>>
     }) => {
       const hasMore = Object.values(lastPage.nextPage).some(Boolean)
