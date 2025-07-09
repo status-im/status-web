@@ -2,15 +2,12 @@ import { useState } from 'react'
 
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
-import { useQuery } from '@tanstack/react-query'
 
 import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
 import { TabLink } from './tab-link'
-
-import type { ApiOutput } from '@status-im/wallet/data'
 
 type Props = {
   list: React.ReactNode
@@ -60,46 +57,16 @@ const SplittedLayout = (props: Props) => {
     setShowHiddenSummary(!showHiddenSummary)
   }
 
-  const { currentWallet } = useWallet()
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
 
   const address = currentWallet?.activeAccounts[0].address
 
-  const { data: summary } = useQuery<ApiOutput['assets']['all']>({
-    queryKey: ['summary', address],
-    queryFn: async () => {
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
-      )
-      url.searchParams.set(
-        'input',
-        JSON.stringify({
-          json: {
-            address,
-            networks: ['ethereum'],
-          },
-        }),
-      )
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+  const { data } = useAssets({
+    address,
+    isWalletLoading,
   })
+  const summary =
+    data?.summary && showHiddenSummary ? data.summary : DEFAULT_SUMMARY
 
   return (
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
@@ -133,7 +100,7 @@ const SplittedLayout = (props: Props) => {
                       </div>
                     </div>
                     <Balance
-                      summary={summary?.summary ?? DEFAULT_SUMMARY}
+                      summary={summary}
                       onShowHiddenSummary={handleShowHiddenSummary}
                     />
                   </>
@@ -173,7 +140,7 @@ const SplittedLayout = (props: Props) => {
 
                     <div className="mb-4">
                       <Balance
-                        summary={summary?.summary ?? DEFAULT_SUMMARY}
+                        summary={summary ?? DEFAULT_SUMMARY}
                         onShowHiddenSummary={handleShowHiddenSummary}
                       />
                     </div>

@@ -8,7 +8,6 @@ import {
   createRootRouteWithContext,
   HeadContent,
   // Navigate,
-  Link,
   Outlet,
   redirect,
   useRouterState,
@@ -21,6 +20,7 @@ import {
 // import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
+import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
 import { WalletProvider } from '../providers/wallet-context'
 

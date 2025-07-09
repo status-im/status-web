@@ -59,7 +59,7 @@ export async function send({
     // gasPrice: Buffer.from(feeRate.replace('0x', ''), 'hex'),
     // nonce: Buffer.from('09', 'hex'),
     // nonce: Buffer.from('00', 'hex'),
-    nonce: Buffer.from(nonce.replace(/^0x/, '0'), 'hex'),
+    nonce: Uint8Array.from(Buffer.from(nonce.replace(/^0x/, '0'), 'hex')),
     // maxFeePerGas: Buffer.from(feeRate, 'hex'),
     // // maxInclusionFeePerGas: Buffer.from('3b9aca00', 'hex'),
     // maxInclusionFeePerGas: Buffer.from('01', 'hex'),

@@ -1,5 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 
+import type { ApiOutput } from '@status-im/wallet/data'
+import type { UseQueryResult } from '@tanstack/react-query'
+
 type Props = {
   isWalletLoading: boolean
   address?: string
@@ -7,7 +10,9 @@ type Props = {
 
 // todo: export trpc client with api router and used instead
 // todo: cache
-const useAssets = (props: Props) => {
+const useAssets = (
+  props: Props,
+): UseQueryResult<ApiOutput['assets']['all'], Error> => {
   const { address, isWalletLoading } = props
 
   return useQuery({
@@ -50,7 +55,7 @@ const useAssets = (props: Props) => {
 
       const body = await response.json()
 
-      return body.result.data.json.assets
+      return body.result.data.json
     },
     enabled: !!address && !isWalletLoading,
     staleTime: 60 * 60 * 1000,
