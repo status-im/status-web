@@ -64,7 +64,15 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
   56: 'bsc',
 }
 
-const DEFAULT_TOKEN_SYMBOLS = ['SNT', 'USDC', 'USDT']
+const DEFAULT_TOKEN_SYMBOLS = [
+  'SNT',
+  'USDC',
+  'USDT',
+  'LINK',
+  'PEPE',
+  'WBNB',
+  'SHIB',
+]
 
 export const assetsRouter = router({
   all: publicProcedure
