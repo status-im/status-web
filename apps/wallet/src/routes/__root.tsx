@@ -3,18 +3,18 @@
 // import OnboardingPage from '../../../portfolio/src/app/page'
 import { ToastContainer } from '@status-im/components'
 import { Navbar } from '@status-im/wallet/components'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   createRootRouteWithContext,
   HeadContent,
-  Link,
+  // Link,
   // Navigate,
   Outlet,
   redirect,
   useRouterState,
 } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 
+// import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { NotAllowed } from '../../../portfolio/src/app/_components/not-allowed'
 // import { AccountsProvider } from '../../../portfolio/src/app/_providers/accounts-context'
 // import { ConnectKitProvider } from '../../../portfolio/src/app/_providers/connectkit-provider'
@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Status Portfolio Wallet',
       },
     ],
   }),
@@ -105,11 +105,9 @@ function RootComponent() {
           <WalletProvider>
             <div className="flex min-h-[56px] items-center px-2">
               <Navbar
-                hasFeedback={
-                  !['/portfolio/assets', '/portfolio/collectibles'].includes(
-                    pathname?.replace(/\/$/, '') ?? '',
-                  )
-                }
+                hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
+                  pathname ?? '',
+                )}
               />
             </div>
             <div className="px-1">
@@ -130,13 +128,13 @@ function RootComponent() {
         </WagmiProvider>
         {/* </StatusProvider> */}
       </div>
-      <ReactQueryDevtools buttonPosition="bottom-right" />
+      {/* <ReactQueryDevtools buttonPosition="bottom-right" />
       <TanStackRouterDevtools position="bottom-left" />
       <div className="fixed inset-x-0 bottom-0 flex justify-center gap-4 bg-blur-neutral-100/70 p-4 text-white-100">
         <Link to="/">/index</Link>
         <Link to="/onboarding">/onboarding</Link>
         <Link to="/portfolio/assets">/portfolio</Link>
-      </div>
+      </div> */}
     </>
   )
 }

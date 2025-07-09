@@ -14,13 +14,6 @@ import { useWallet } from '../../../providers/wallet-context'
 
 export const Route = createFileRoute('/portfolio/collectibles/')({
   component: Component,
-  head: () => ({
-    meta: [
-      {
-        title: 'Extension | Wallet | Portfolio',
-      },
-    ],
-  }),
 })
 
 function Component() {

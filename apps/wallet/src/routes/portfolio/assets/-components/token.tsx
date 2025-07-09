@@ -35,9 +35,6 @@ const NETWORKS = [
   'bsc',
 ] as const
 
-// todo?: Example address, replace with actual address when available
-const ADDRESS = 'd8da6bf26964af9d7eed9e03e53415d37aa96045'
-
 const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
@@ -51,7 +48,9 @@ const Token = (props: Props) => {
       const endpoint = ticker.startsWith('0x')
         ? 'assets.token'
         : 'assets.nativeToken'
-      const url = new URL(`http://localhost:3030/api/trpc/${endpoint}`)
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
+      )
       url.searchParams.set(
         'input',
         JSON.stringify({
@@ -110,7 +109,7 @@ const Token = (props: Props) => {
   const icon = typedToken.summary.icon
 
   const account: Account = {
-    address: ADDRESS,
+    address,
     name: 'Account 1',
     emoji: '🍑',
     color: 'magenta',

@@ -17,7 +17,9 @@ const useAssets = (props: Props) => {
         throw new Error('No wallet address available')
       }
 
-      const url = new URL('http://localhost:3030/api/trpc/assets.all')
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
+      )
       url.searchParams.set(
         'input',
         JSON.stringify({

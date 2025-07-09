@@ -11,7 +11,7 @@ import { DropdownIcon } from './dropdown-icon'
 const FEEDBACK_LINKS = [
   {
     label: 'Message us',
-    href: 'https://status.app', // TODO: change to actual form link
+    href: 'https://forms.gle/TCAKYZtwnpf6RhXL6',
   },
   {
     label: 'Submit bug',
@@ -19,7 +19,11 @@ const FEEDBACK_LINKS = [
   },
   {
     label: 'Request feature',
-    href: 'https://discuss.status.app/c/features/51',
+    href: 'https://discuss.status.app/tags/c/features/51/browser-wallet',
+  },
+  {
+    label: 'Join our community',
+    href: 'https://discuss.status.app/c/browser-extension/80',
   },
 ]
 

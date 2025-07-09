@@ -5,10 +5,10 @@ import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
-import { chromeLink } from 'trpc-chrome/link'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
+import { chromeLinkWithRetries } from './chromeLink'
 import * as ethereum from './ethereum/ethereum'
 import { getKeystore } from './keystore'
 import * as solana from './solana/solana'
@@ -66,7 +66,7 @@ const apiRouter = router({
       .mutation(async ({ input, ctx }) => {
         const { walletCore, keyStore } = ctx
 
-        const wallet = walletCore.HDWallet.create(256, input.password)
+        const wallet = walletCore.HDWallet.create(128, input.password)
         const mnemonic = wallet.mnemonic()
         const name = input.name
 
@@ -601,10 +601,8 @@ export async function createAPI() {
 }
 
 export function createAPIClient() {
-  const port = chrome.runtime.connect()
-
   return createTRPCProxyClient<APIRouter>({
-    links: [chromeLink({ port })],
+    links: [chromeLinkWithRetries()],
     transformer: superjson,
   })
 }

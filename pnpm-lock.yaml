@@ -886,8 +886,8 @@ importers:
         specifier: 10.45.2
         version: 10.45.2
       '@trustwallet/wallet-core':
-        specifier: ^4.2.10
-        version: 4.3.3
+        specifier: ^4.3.6
+        version: 4.3.6
       '@wxt-dev/storage':
         specifier: ^1.1.0
         version: 1.1.1
@@ -7764,8 +7764,8 @@ packages:
   '@trpc/server@10.45.2':
     resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
 
-  '@trustwallet/wallet-core@4.3.3':
-    resolution: {integrity: sha512-42FXVM8NVcqvYSxs6uf1sWCd02u3aNUY26X5jwOWrGy9F1WBz89bkhbb4Kion0i3OxS8ImEHcNhsVvVt8bd2fA==}
+  '@trustwallet/wallet-core@4.3.6':
+    resolution: {integrity: sha512-X+n2CzDhIfUtnQtqqM3Su6XmBdzUijMu8uQEnA9yQWfOv7d33LfaQ9vNbzvpFk4I52K7n6AWLaylM1unuIuTJQ==}
 
   '@tryghost/content-api@1.11.22':
     resolution: {integrity: sha512-sssy/4kV8P03GWhw63HTNTZao5OMamEjI3NjzGoCRK4B5U4V9yjF/WuMDSdhMWXLtx0rIcK5uFP8tgiArM86UA==}
@@ -26930,7 +26930,7 @@ snapshots:
 
   '@trpc/server@10.45.2': {}
 
-  '@trustwallet/wallet-core@4.3.3':
+  '@trustwallet/wallet-core@4.3.6':
     dependencies:
       protobufjs: 7.2.5
 
