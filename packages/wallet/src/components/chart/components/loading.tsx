@@ -78,4 +78,4 @@ const Loading = () => {
   )
 }
 
-export { Loading }
+export { Loading as ChartLoading }

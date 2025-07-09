@@ -1,25 +1,31 @@
 import { useEffect, useState } from 'react'
 
-import { Button, Tooltip } from '@status-im/components'
+import { Button, SegmentedControl, Tooltip } from '@status-im/components'
 import { ArrowLeftIcon, BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
 import {
+  type Account,
   Balance,
-  Chart,
+  type ChartDataType,
+  type ChartTimeFrame,
   CurrencyAmount,
+  DEFAULT_DATA_TYPE,
+  DEFAULT_TIME_FRAME,
   NetworkBreakdown,
   ReceiveCryptoDrawer,
   StickyHeaderContainer,
+  TIME_FRAMES,
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
-import { Link, notFound } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
 import { renderMarkdown } from '@/lib/markdown'
 
-import type { Account } from '@status-im/wallet/components'
+import { AssetChart } from './asset-chart'
+
 import type { ApiOutput } from '@status-im/wallet/data'
 
 type Props = {
@@ -36,16 +42,15 @@ const NETWORKS = [
   'bsc',
 ] as const
 
-const Loading = () => (
-  <div className="flex h-64 items-center justify-center">
-    <div className="text-neutral-50">Loading...</div>
-  </div>
-)
-
 const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
   const [, copy] = useCopyToClipboard()
+
+  const [activeDataType, setActiveDataType] =
+    useState<ChartDataType>(DEFAULT_DATA_TYPE)
+  const [activeTimeFrame, setActiveTimeFrame] =
+    useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -193,11 +198,49 @@ const Token = (props: Props) => {
           <NetworkBreakdown token={typedToken} />
         )}
 
-        <AssetChart
-          address={address}
-          slug={ticker}
-          symbol={typedToken.summary.symbol}
-        />
+        <div className="relative">
+          <div className="flex items-center justify-between">
+            <div className="inline-flex">
+              <SegmentedControl.Root
+                value={activeDataType}
+                onValueChange={value =>
+                  setActiveDataType(value as ChartDataType)
+                }
+                size="24"
+              >
+                <SegmentedControl.Item value="price">
+                  Price
+                </SegmentedControl.Item>
+                <SegmentedControl.Item value="balance">
+                  Balance
+                </SegmentedControl.Item>
+              </SegmentedControl.Root>
+            </div>
+            <div className="inline-flex">
+              <SegmentedControl.Root
+                value={activeTimeFrame}
+                onValueChange={value =>
+                  setActiveTimeFrame(value as ChartTimeFrame)
+                }
+                size="24"
+              >
+                {TIME_FRAMES.map(frame => (
+                  <SegmentedControl.Item key={frame} value={frame}>
+                    {frame}
+                  </SegmentedControl.Item>
+                ))}
+              </SegmentedControl.Root>
+            </div>
+          </div>
+
+          <AssetChart
+            address={address}
+            slug={ticker}
+            symbol={typedToken.summary.symbol}
+            timeFrame={activeTimeFrame}
+            activeDataType={activeDataType}
+          />
+        </div>
 
         <div>
           <div className="grid grid-cols-2 2xl:grid-cols-4">
@@ -328,124 +371,6 @@ const Token = (props: Props) => {
       </div>
     </StickyHeaderContainer>
   )
-}
-
-function AssetChart({
-  address,
-  slug,
-  symbol,
-}: {
-  address: string
-  slug: string
-  symbol: string
-}) {
-  const isContractToken = slug.startsWith('0x')
-  const isETH = slug.toUpperCase() === 'ETH'
-
-  if (!isContractToken && !isETH) {
-    notFound()
-  }
-
-  const priceChart = useQuery<
-    | ApiOutput['assets']['tokenPriceChart']
-    | ApiOutput['assets']['nativeTokenPriceChart']
-  >({
-    queryKey: ['priceChart', symbol, slug],
-    queryFn: async () => {
-      const endpoint = isContractToken
-        ? 'assets.tokenPriceChart'
-        : 'assets.nativeTokenPriceChart'
-
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
-      )
-
-      const input = {
-        json: {
-          symbol: isContractToken ? symbol : slug.toUpperCase(),
-          days: '1',
-        },
-      }
-
-      url.searchParams.set('input', JSON.stringify(input))
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch price chart data.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  })
-
-  const balanceChart = useQuery<ApiOutput['assets']['tokenBalanceChart']>({
-    queryKey: ['balanceChart', address, slug],
-    queryFn: async () => {
-      const endpoint = isContractToken
-        ? 'assets.tokenBalanceChart'
-        : 'assets.nativeTokenBalanceChart'
-
-      const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/${endpoint}`,
-      )
-
-      const input = {
-        json: {
-          address,
-          networks: NETWORKS,
-          days: '30',
-          ...(isContractToken && { contract: slug }),
-        },
-      }
-
-      url.searchParams.set('input', JSON.stringify(input))
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch balance chart data.')
-      }
-
-      const body = await response.json()
-      return body.result.data.json
-    },
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-  })
-
-  if (priceChart.isLoading || balanceChart.isLoading) {
-    return <Loading />
-  }
-
-  if (priceChart.error || balanceChart.error) {
-    return (
-      <div className="flex h-64 items-center justify-center">
-        <div className="text-danger-50">Error loading chart data</div>
-      </div>
-    )
-  }
-
-  return <Chart price={priceChart.data} balance={balanceChart.data} />
 }
 
 export { Token }

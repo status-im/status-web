@@ -5,7 +5,15 @@ export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { Balance } from './balance'
 export { BlurredCircle } from './blurred-circle'
-export { Chart } from './chart'
+export {
+  Chart,
+  type ChartDataType,
+  ChartLoading,
+  type ChartTimeFrame,
+  DEFAULT_DATA_TYPE,
+  DEFAULT_TIME_FRAME,
+  TIME_FRAMES,
+} from './chart'
 export { CollectiblesGrid } from './collectibles-grid'
 export {
   CreatePasswordForm,

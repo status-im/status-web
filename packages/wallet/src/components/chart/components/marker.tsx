@@ -3,7 +3,7 @@ import { GlyphCircle } from '@visx/glyph'
 import { Group } from '@visx/group'
 import { Line } from '@visx/shape'
 
-import { colors } from './constants'
+import { negativeColors, positiveColors } from '../constants'
 
 import type { SpringValue } from '@react-spring/web'
 
@@ -16,6 +16,7 @@ type Props = {
   opacityAnimation: {
     opacity: SpringValue<number>
   }
+  isPositive: boolean
 }
 
 const AnimatedCircle = animated(GlyphCircle)
@@ -23,7 +24,8 @@ const AnimatedLine = animated(Line)
 const AnimatedGroup = animated(Group)
 
 const Marker = (props: Props) => {
-  const { innerHeight, circleSpringPrice, opacityAnimation } = props
+  const { innerHeight, circleSpringPrice, opacityAnimation, isPositive } = props
+  const colors = isPositive ? positiveColors : negativeColors
 
   return (
     <>

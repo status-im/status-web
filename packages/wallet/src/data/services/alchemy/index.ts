@@ -121,6 +121,7 @@ export async function fetchTokenBalanceHistory(
   network: NetworkType,
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
   contract?: string,
+  currentTime?: number,
 ) {
   const transfers: TokenBalanceHistoryResponseBody['result']['transfers'] = []
 
@@ -210,13 +211,35 @@ export async function fetchTokenBalanceHistory(
       new Date(a.metadata.blockTimestamp).getTime(),
   )
 
+  const uniqueTransfers = transfers.filter(
+    (transfer, index, array) =>
+      array.findIndex(
+        t =>
+          t.hash === transfer.hash &&
+          t.metadata.blockTimestamp === transfer.metadata.blockTimestamp &&
+          t.value === transfer.value,
+      ) === index,
+  )
+
   const now = Math.floor(Date.now() / (1000 * 3600)) * 3600
   const hoursInPeriod = Number(days) * 24
+  const requestedStartTime = now - (hoursInPeriod - 1) * 3600
+
+  if (uniqueTransfers.length === 0) {
+    return []
+  }
+
+  const earliestTransferTime = Math.min(
+    ...uniqueTransfers.map(
+      t => new Date(t.metadata.blockTimestamp).getTime() / 1000,
+    ),
+  )
+
   const timestamps = Array.from(
     { length: hoursInPeriod },
-    (_, i) => now - (hoursInPeriod - i) * 3600,
+    (_, i) => requestedStartTime + i * 3600,
   )
-  timestamps.push(Date.now() / 1000)
+  timestamps.push(currentTime || Date.now() / 1000)
 
   timestamps.reverse()
 
@@ -241,21 +264,26 @@ export async function fetchTokenBalanceHistory(
         price: latestBalance,
       }
     }
+
+    if (timestamp < earliestTransferTime) {
+      return {
+        date: new Date(timestamp * 1000).toISOString(),
+        price: 0,
+      }
+    }
+
     while (
-      transferIndex < transfers.length &&
-      new Date(transfers[transferIndex].metadata.blockTimestamp).getTime() /
+      transferIndex < uniqueTransfers.length &&
+      new Date(
+        uniqueTransfers[transferIndex].metadata.blockTimestamp,
+      ).getTime() /
         1000 >
-        timestamp &&
-      currentBalance > 0
+        timestamp
     ) {
-      const transfer = transfers[transferIndex]
+      const transfer = uniqueTransfers[transferIndex]
       const amount = Number(transfer.value)
 
       if (transfer.to.toLowerCase() === address.toLowerCase()) {
-        if (currentBalance - amount < 0) {
-          break
-        }
-
         currentBalance -= amount
       } else {
         currentBalance += amount
@@ -264,11 +292,13 @@ export async function fetchTokenBalanceHistory(
       transferIndex++
     }
 
+    const balanceAtTime = Math.max(0, currentBalance)
+
     return {
       date: new Date(timestamp * 1000).toISOString(),
-      // balance: currentBalance,
+      // balance: balanceAtTime,
       // fixme: naming price until chart supports balance
-      price: currentBalance,
+      price: balanceAtTime,
     }
   })
 

@@ -3,10 +3,10 @@ import { useCallback } from 'react'
 import { localPoint } from '@visx/event'
 import { scaleTime } from '@visx/scale'
 import { useTooltip } from '@visx/tooltip'
-import { bisector, extent } from 'd3-array'
+import { extent } from 'd3-array'
 import { timeFormat } from 'd3-time-format'
 
-import type { PriceType } from '../index'
+import type { ChartDataPoint as PriceType } from '../utils'
 import type { EventType } from '@visx/event/lib/types'
 
 type Props = {
@@ -49,7 +49,6 @@ const useTokenChartTooltip = (props: Props) => {
   const filteredDates = dates.filter(Boolean) // filters out undefined values
 
   const getDate = useCallback((d: PriceType) => new Date(d?.date), [])
-  const bisectDate = bisector((d: PriceType) => new Date(d?.date)).left
 
   const xDomain = extent(filteredDates) as [Date, Date]
   const xScale = scaleTime({
@@ -63,19 +62,18 @@ const useTokenChartTooltip = (props: Props) => {
       const { x } = localPoint(event) || { x: 0 }
       const x0 = xScale.invert(x - margin.left)
 
-      const index = bisectDate(data, x0, 1)
-      const d0 = data[index - 1]
-      const d1 = data[index]
-      let d = d0
+      let closestIndex = 0
+      let minDistance = Math.abs(getDate(data[0]).valueOf() - x0.valueOf())
 
-      if (d1 && getDate(d1)) {
-        d =
-          x0.valueOf() - getDate(d0).valueOf() >
-          getDate(d1).valueOf() - x0.valueOf()
-            ? d1
-            : d0
+      for (let i = 1; i < data.length; i++) {
+        const distance = Math.abs(getDate(data[i]).valueOf() - x0.valueOf())
+        if (distance < minDistance) {
+          minDistance = distance
+          closestIndex = i
+        }
       }
 
+      const d = data[closestIndex]
       const price = getPrice(d)
 
       showTooltip({
@@ -86,7 +84,7 @@ const useTokenChartTooltip = (props: Props) => {
         },
       })
     },
-    [xScale, margin.left, bisectDate, data, getDate, showTooltip],
+    [xScale, margin.left, data, getDate, showTooltip],
   )
 
   return {
