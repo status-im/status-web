@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useToast } from '@status-im/components'
 import { NegativeStateIcon } from '@status-im/icons/20'
@@ -8,21 +8,26 @@ import {
   SignTransactionDialog,
 } from '@status-im/wallet/components'
 
-import { useRecoveryPhraseBackup } from '@/hooks/use-recovery-phrase-backup'
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
 
 export function RecoveryPhraseBackup() {
-  const { currentWallet } = useWallet()
+  const { currentWallet, mnemonic, setMnemonic } = useWallet()
+  const [showRecoveryDialog, setShowRecoveryDialog] = useState(false)
   const toast = useToast()
 
-  const [mnemonic, setMnemonic] = useState<string | null>(null)
-  const {
-    isRecoveryPhraseBackedUp,
-    showRecoveryDialog,
-    setShowRecoveryDialog,
-    markAsBackedUp,
-  } = useRecoveryPhraseBackup()
+  useEffect(() => {
+    if (mnemonic) {
+      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        e.preventDefault()
+        return "You haven't backed up your wallet! Your recovery phrase will be lost forever."
+      }
+
+      window.addEventListener('beforeunload', handleBeforeUnload)
+      return () =>
+        window.removeEventListener('beforeunload', handleBeforeUnload)
+    }
+  }, [mnemonic])
 
   const onPasswordConfirm = async (password: string) => {
     if (!currentWallet?.id) {
@@ -31,11 +36,11 @@ export function RecoveryPhraseBackup() {
     }
 
     try {
-      const { mnemonic } = await apiClient.wallet.get.query({
+      await apiClient.wallet.get.query({
         password: password,
         walletId: currentWallet?.id,
       })
-      setMnemonic(mnemonic)
+
       setShowRecoveryDialog(true)
     } catch (error) {
       console.error(error)
@@ -50,14 +55,14 @@ export function RecoveryPhraseBackup() {
   }
 
   const onComplete = async () => {
-    await markAsBackedUp()
+    setMnemonic(null)
     toast.positive(
       'Your recovery phrase has been deleted from the wallet interface.',
       { duration: 3000 },
     )
   }
 
-  if (isRecoveryPhraseBackedUp) {
+  if (!mnemonic) {
     return null
   }
 

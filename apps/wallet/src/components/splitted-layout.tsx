@@ -2,6 +2,8 @@ import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { ActionButtons } from './action-buttons'
+import { TabLink } from './tab-link'
 
 type Props = {
   list: React.ReactNode
