@@ -2,6 +2,8 @@ import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
+import { ActionButtons } from './action-buttons'
+import { TabLink } from './tab-link'
 
 type Props = {
   list: React.ReactNode
@@ -110,6 +112,7 @@ const SplittedLayout = (props: Props) => {
                     <TabLink href="/portfolio/collectibles">
                       Collectibles
                     </TabLink>
+                    <TabLink href="/portfolio/activity">Activity</TabLink>
                   </div>
                 }
               >
