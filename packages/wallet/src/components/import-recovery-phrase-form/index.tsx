@@ -9,9 +9,12 @@ import { z } from 'zod'
 import { RecoveryPhraseTextarea } from '../recovery-phrase-textarea'
 
 const mnemonicSchema = z.object({
-  mnemonic: z.string().refine(value => validateMnemonic(value, english), {
-    message: 'Invalid phrase. Check word count and spelling.',
-  }),
+  mnemonic: z
+    .string()
+    .trim()
+    .refine(value => validateMnemonic(value, english), {
+      message: 'Invalid phrase. Check word count and spelling.',
+    }),
 })
 
 type FormValues = z.infer<typeof mnemonicSchema>
@@ -19,18 +22,18 @@ type FormValues = z.infer<typeof mnemonicSchema>
 type ImportRecoveryPhraseFormProps = {
   onSubmit: (data: FormValues) => void
   loading: boolean
+  defaultValues: FormValues
 }
 
 const ImportRecoveryPhraseForm = ({
   onSubmit,
   loading = false,
+  defaultValues,
 }: ImportRecoveryPhraseFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(mnemonicSchema),
     mode: 'onChange',
-    defaultValues: {
-      mnemonic: '',
-    },
+    defaultValues,
   })
 
   const {

@@ -7,8 +7,8 @@ import { Navbar } from '@status-im/wallet/components'
 import {
   createRootRouteWithContext,
   HeadContent,
-  // Link,
   // Navigate,
+  Link,
   Outlet,
   redirect,
   useRouterState,
@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'A wallet by Status',
+        title: 'Status Portfolio Wallet',
       },
     ],
   }),
@@ -108,6 +108,7 @@ function RootComponent() {
                 hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
                   pathname ?? '',
                 )}
+                linkComponent={Link}
               />
             </div>
             <div className="px-1">
