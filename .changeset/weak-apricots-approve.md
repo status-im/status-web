@@ -2,4 +2,4 @@
 '@status-im/wallet': patch
 ---
 
-change feedback link
+add default tokens

@@ -8,7 +8,7 @@ import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
-import { TabLink } from '../components/tab-link'
+import { TabLink } from './tab-link'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 

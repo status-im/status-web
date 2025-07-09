@@ -64,6 +64,16 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
   56: 'bsc',
 }
 
+const DEFAULT_TOKEN_SYMBOLS = [
+  'SNT',
+  'USDC',
+  'USDT',
+  'LINK',
+  'PEPE',
+  'WBNB',
+  'SHIB',
+]
+
 export const assetsRouter = router({
   all: publicProcedure
     .input(
@@ -242,7 +252,7 @@ async function all({
   const filteredNativeTokens = nativeTokenList.tokens.filter(token =>
     Object.entries(STATUS_NETWORKS)
       .filter(([, network]) => networks.includes(network))
-      .map(([chainId]) => parseInt(chainId))
+      .map(([chainId]) => Number(chainId))
       .includes(token.chainId),
   )
   await Promise.all(
@@ -264,9 +274,9 @@ async function all({
         symbol: token.symbol,
         price_eur: price.EUR['PRICE'],
         price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
-        balance: parseInt(balance) / 10 ** token.decimals,
+        balance: Number(balance) / 10 ** token.decimals,
         total_eur:
-          (parseInt(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
+          (Number(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
       }
 
       assets.push(asset)
@@ -279,7 +289,7 @@ async function all({
       .filter(token =>
         Object.entries(STATUS_NETWORKS)
           .filter(([, network]) => networks.includes(network))
-          .map(([chainId]) => parseInt(chainId))
+          .map(([chainId]) => Number(chainId))
           .includes(token.chainId),
       )
       .map(token => [token.address, token]),
@@ -313,7 +323,7 @@ async function all({
       )
 
       for (const balance of batchBalances) {
-        const tokenBalance = parseInt(balance.tokenBalance)
+        const tokenBalance = Number(balance.tokenBalance)
 
         if (tokenBalance > 0) {
           const token = filteredERC20Tokens.get(balance.contractAddress)
@@ -379,6 +389,35 @@ async function all({
     [] as Omit<Asset, 'metadata'>[],
   )
 
+  const existingSymbols = aggregatedAssets.map(a => a.symbol)
+  const missingSymbols = DEFAULT_TOKEN_SYMBOLS.filter(
+    s => !existingSymbols.includes(s),
+  )
+
+  if (missingSymbols.length > 0) {
+    const prices = await legacy_fetchTokensPrice(missingSymbols)
+
+    for (const symbol of missingSymbols) {
+      const token = erc20TokenList.tokens.find(
+        t => t.symbol === symbol && t.chainId === 1,
+      )
+      if (token && prices[symbol]) {
+        aggregatedAssets.push({
+          networks: ['ethereum'],
+          native: false,
+          contract: token.address,
+          icon: token.logoURI,
+          name: token.name,
+          symbol: token.symbol,
+          price_eur: prices[symbol].EUR.PRICE,
+          price_percentage_24h_change: prices[symbol].EUR.CHANGEPCT24HOUR,
+          balance: 0,
+          total_eur: 0,
+        })
+      }
+    }
+  }
+
   const summary = sum(aggregatedAssets)
 
   return {
@@ -414,7 +453,7 @@ async function nativeToken({
 
     return Object.entries(STATUS_NETWORKS)
       .filter(([, network]) => networks.includes(network))
-      .map(([chainId]) => parseInt(chainId))
+      .map(([chainId]) => Number(chainId))
       .includes(token.chainId)
   })
 
@@ -432,7 +471,7 @@ async function nativeToken({
         STATUS_NETWORKS[token.chainId],
       )
 
-      if (!parseInt(balance) && token.symbol.toUpperCase() !== 'ETH') {
+      if (!Number(balance) && token.symbol.toUpperCase() !== 'ETH') {
         throw new Error('Balance not found')
       }
 
@@ -524,8 +563,11 @@ async function token({
         [token.address],
       )
 
-      if (!parseInt(balance[0].tokenBalance)) {
-        throw new Error('Balance not found')
+      if (
+        !Number(balance[0].tokenBalance) &&
+        !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
+      ) {
+        throw new Error(`Balance not found for token ${token.symbol}`)
       }
 
       const price = (await legacy_fetchTokensPrice([token.symbol]))[
@@ -824,8 +866,8 @@ function map(data: {
     symbol: token.symbol,
     price_eur: price.EUR['PRICE'],
     price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
-    balance: parseInt(balance) / 10 ** token.decimals,
-    total_eur: (parseInt(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
+    balance: Number(balance) / 10 ** token.decimals,
+    total_eur: (Number(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
     metadata: {
       market_cap: price.EUR['MKTCAP'],
       fully_dilluted: price.EUR['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],

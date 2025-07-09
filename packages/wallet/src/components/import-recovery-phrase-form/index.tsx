@@ -9,9 +9,12 @@ import { z } from 'zod'
 import { RecoveryPhraseTextarea } from '../recovery-phrase-textarea'
 
 const mnemonicSchema = z.object({
-  mnemonic: z.string().refine(value => validateMnemonic(value, english), {
-    message: 'Invalid phrase. Check word count and spelling.',
-  }),
+  mnemonic: z
+    .string()
+    .trim()
+    .refine(value => validateMnemonic(value, english), {
+      message: 'Invalid phrase. Check word count and spelling.',
+    }),
 })
 
 type FormValues = z.infer<typeof mnemonicSchema>

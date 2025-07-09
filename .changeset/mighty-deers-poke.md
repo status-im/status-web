@@ -3,4 +3,4 @@
 'wallet': patch
 ---
 
-Fixes onBack in import recovery phrase flow
+fix mnemonic validation & navbar route

@@ -16,6 +16,7 @@ import { estimateConfirmationTime, processFeeHistory } from './utils'
 
 import type { NetworkType } from '../../api/types'
 import type {
+  AssetTransfer,
   BlockResponseBody,
   deprecated_NFTSaleResponseBody,
   ERC20TokenBalanceResponseBody,
@@ -40,6 +41,22 @@ const alchemyNetworks = {
   polygon: 'polygon-mainnet',
   bsc: 'bnb-mainnet',
 }
+
+const unsupportedCategoriesByNetwork: Partial<Record<NetworkType, string[]>> = {
+  bsc: ['internal'],
+  arbitrum: ['internal'],
+  base: ['internal'],
+  optimism: ['internal'],
+}
+
+const allCategories = [
+  'external',
+  'internal',
+  'erc20',
+  'erc721',
+  'erc1155',
+  'specialnft',
+] as const
 
 // todo: use `genesisTimestamp` for `all` days parame
 // const networkConfigs = {
@@ -334,6 +351,381 @@ export async function getNFTMetadata(
   )
 
   return body
+}
+
+export async function getLatestBlockNumber(
+  network: NetworkType,
+): Promise<number> {
+  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_blockNumber',
+      params: [],
+      id: 1,
+    }),
+  })
+
+  const data = await res.json()
+
+  if (!data.result) {
+    throw new Error(`Failed to fetch latest block number for ${network}`)
+  }
+
+  return parseInt(data.result, 16)
+}
+
+/**
+ * @see https://www.alchemy.com/docs/data/transfers-api/transfers-endpoints/alchemy-get-asset-transfers
+ *
+ * 120 CU per request https://www.alchemy.com/docs/reference/compute-unit-costs#transfers-api
+ */
+export async function getOutgoingAssetTransfers(
+  fromAddress: string,
+  network: NetworkType,
+  pageKey?: string,
+  limit: number = 100,
+) {
+  const supportedCategories = allCategories.filter(
+    category => !unsupportedCategoriesByNetwork[network]?.includes(category),
+  )
+
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const params: {
+    category: (typeof allCategories)[number][]
+    fromAddress: string
+    excludeZeroValue: boolean
+    withMetadata: boolean
+    order: 'asc' | 'desc'
+    maxCount: string
+    pageKey?: string
+  } = {
+    category: supportedCategories,
+    fromAddress,
+    excludeZeroValue: true,
+    withMetadata: true,
+    order: 'desc',
+    maxCount: `0x${limit.toString(16)}`,
+  }
+
+  if (pageKey) {
+    params.pageKey = pageKey
+  }
+
+  const body = await _retry(async () =>
+    _fetch<
+      TokenBalanceHistoryResponseBody & {
+        result: {
+          transfers: TokenBalanceHistoryResponseBody['result']['transfers']
+          pageKey?: string
+        }
+      }
+    >(url, 'POST', 3600, {
+      jsonrpc: '2.0',
+      method: 'alchemy_getAssetTransfers',
+      params: [params, 'latest'],
+      id: Date.now(),
+    }),
+  )
+
+  if ('error' in body) {
+    console.error('[Alchemy Error]', body.error)
+    throw new Error(`Alchemy API Error`)
+  }
+
+  const result = body.result
+
+  if (!result?.transfers) {
+    console.error('[Alchemy Warning] Missing transfers in response:', result)
+    return { transfers: [], pageKey: undefined }
+  }
+
+  result.transfers.sort((a, b) => {
+    // First sort by block number (newest first)
+    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    if (blockDiff !== 0) return blockDiff
+
+    // If same block, sort by timestamp (newest first)
+    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+    return timestampB - timestampA
+  })
+
+  return {
+    transfers: result.transfers,
+    pageKey: result.pageKey, // undefined if last page
+  }
+}
+
+/**
+ * Get incoming asset transfers (transactions sent TO an address)
+ *
+ * @see https://docs.alchemy.com/reference/alchemy-gettransfers
+ */
+export async function getIncomingAssetTransfers(
+  toAddress: string,
+  network: NetworkType,
+  pageKey?: string,
+  limit: number = 100,
+) {
+  const supportedCategories = allCategories.filter(
+    category => !unsupportedCategoriesByNetwork[network]?.includes(category),
+  )
+
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const params: {
+    category: (typeof allCategories)[number][]
+    toAddress: string
+    excludeZeroValue: boolean
+    withMetadata: boolean
+    maxCount: string
+    order: 'desc'
+    pageKey?: string
+  } = {
+    category: supportedCategories,
+    toAddress,
+    excludeZeroValue: true,
+    withMetadata: true,
+    maxCount: `0x${limit.toString(16)}`,
+    order: 'desc',
+  }
+
+  if (pageKey) {
+    params.pageKey = pageKey
+  }
+
+  const body = await _retry(async () =>
+    _fetch<
+      TokenBalanceHistoryResponseBody & {
+        result: {
+          transfers: TokenBalanceHistoryResponseBody['result']['transfers']
+          pageKey?: string
+        }
+      }
+    >(url, 'POST', 3600, {
+      jsonrpc: '2.0',
+      method: 'alchemy_getAssetTransfers',
+      params: [params, 'latest'],
+      id: Date.now(),
+    }),
+  )
+
+  if ('error' in body) {
+    console.error('[Alchemy Error]', body.error)
+    throw new Error(`Alchemy API Error`)
+  }
+
+  const result = body.result
+
+  if (!result?.transfers) {
+    console.error('[Alchemy Warning] Missing transfers in response:', result)
+    return { transfers: [], pageKey: undefined }
+  }
+
+  result.transfers.sort((a, b) => {
+    // First sort by block number (newest first)
+    const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+    if (blockDiff !== 0) return blockDiff
+
+    // If same block, sort by timestamp (newest first)
+    const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+    const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+    return timestampB - timestampA
+  })
+
+  return {
+    transfers: result.transfers,
+    pageKey: result.pageKey,
+  }
+}
+
+type TransferBuffer = {
+  incoming: AssetTransfer[]
+  outgoing: AssetTransfer[]
+  incomingPageKey?: string
+  outgoingPageKey?: string
+  hasReachedEnd: {
+    incoming: boolean
+    outgoing: boolean
+  }
+}
+
+const transferBuffers = new Map<string, TransferBuffer>()
+
+export async function getAssetTransfers(
+  address: string,
+  network: NetworkType,
+  pageKey?: string,
+  limit: number = 20,
+) {
+  try {
+    const cacheKey = `${address.toLowerCase()}-${network}`
+    let buffer = transferBuffers.get(cacheKey)
+
+    if (!pageKey || !buffer) {
+      buffer = {
+        incoming: [],
+        outgoing: [],
+        hasReachedEnd: { incoming: false, outgoing: false },
+      }
+      transferBuffers.set(cacheKey, buffer)
+    }
+
+    let incomingPageKey: string | undefined
+    let outgoingPageKey: string | undefined
+
+    if (pageKey) {
+      try {
+        const parsed = JSON.parse(pageKey)
+        if (parsed) {
+          incomingPageKey = parsed.incoming
+          outgoingPageKey = parsed.outgoing
+        }
+      } catch {
+        incomingPageKey = buffer.incomingPageKey
+        outgoingPageKey = buffer.outgoingPageKey
+      }
+    }
+
+    const needsFetch =
+      buffer.incoming.length < limit || buffer.outgoing.length < limit
+
+    if (
+      needsFetch &&
+      (!buffer.hasReachedEnd.incoming || !buffer.hasReachedEnd.outgoing)
+    ) {
+      const isOutgoingFetching =
+        !buffer.hasReachedEnd.outgoing && buffer.outgoing.length < limit
+      const isIncomingFetching =
+        !buffer.hasReachedEnd.incoming && buffer.incoming.length < limit
+
+      const [outgoingResult, incomingResult] = await Promise.all([
+        isOutgoingFetching
+          ? getOutgoingAssetTransfers(
+              address,
+              network,
+              outgoingPageKey || buffer.outgoingPageKey,
+              limit,
+            )
+          : { transfers: [], pageKey: undefined },
+        isIncomingFetching
+          ? getIncomingAssetTransfers(
+              address,
+              network,
+              incomingPageKey || buffer.incomingPageKey,
+              limit,
+            )
+          : { transfers: [], pageKey: undefined },
+      ])
+
+      buffer.incoming.push(
+        ...incomingResult.transfers.map(t => ({
+          ...t,
+          tokenId: t.tokenId ?? undefined,
+          erc721TokenId: t.erc721TokenId ?? undefined,
+          erc1155Metadata: t.erc1155Metadata ?? undefined,
+        })),
+      )
+      buffer.outgoing.push(
+        ...outgoingResult.transfers.map(t => ({
+          ...t,
+          tokenId: t.tokenId ?? undefined,
+          erc721TokenId: t.erc721TokenId ?? undefined,
+          erc1155Metadata: t.erc1155Metadata ?? undefined,
+        })),
+      )
+
+      buffer.incomingPageKey = incomingResult.pageKey
+      buffer.outgoingPageKey = outgoingResult.pageKey
+      buffer.hasReachedEnd.incoming = incomingResult.pageKey === undefined
+      buffer.hasReachedEnd.outgoing = outgoingResult.pageKey === undefined
+    }
+
+    const allTransfers = [...buffer.incoming, ...buffer.outgoing]
+    const transfersMap = new Map<string, AssetTransfer>()
+    for (const transfer of allTransfers) {
+      transfersMap.set(transfer.uniqueId, transfer)
+    }
+
+    const uniqueTransfers = Array.from(transfersMap.values())
+
+    uniqueTransfers.sort((a, b) => {
+      const blockDiff = parseInt(b.blockNum, 16) - parseInt(a.blockNum, 16)
+      if (blockDiff !== 0) return blockDiff
+
+      const timestampA = new Date(a.metadata.blockTimestamp).getTime()
+      const timestampB = new Date(b.metadata.blockTimestamp).getTime()
+      return timestampB - timestampA
+    })
+
+    const transfers = uniqueTransfers.slice(0, limit)
+
+    const consumedIds = new Set(transfers.map(t => t.uniqueId))
+    buffer.incoming = buffer.incoming.filter(t => !consumedIds.has(t.uniqueId))
+    buffer.outgoing = buffer.outgoing.filter(t => !consumedIds.has(t.uniqueId))
+
+    const hasMoreTransfers =
+      !buffer.hasReachedEnd.incoming ||
+      !buffer.hasReachedEnd.outgoing ||
+      buffer.incoming.length > 0 ||
+      buffer.outgoing.length > 0
+
+    let nextPageKey: string | undefined
+    if (hasMoreTransfers) {
+      nextPageKey = JSON.stringify({
+        incoming: buffer.incomingPageKey,
+        outgoing: buffer.outgoingPageKey,
+      })
+    }
+
+    return {
+      transfers,
+      pageKey: nextPageKey,
+    }
+  } catch (error) {
+    console.error('getAssetTransfers error:', error)
+    return {
+      transfers: [],
+      pageKey: undefined,
+    }
+  }
+}
+
+export async function getTransactionStatus(
+  txHash: string,
+  network: NetworkType,
+): Promise<'pending' | 'success' | 'failed' | 'unknown'> {
+  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'eth_getTransactionReceipt',
+      params: [txHash],
+      id: 1,
+    }),
+  })
+
+  const data = await res.json()
+
+  if (data?.result == null) return 'pending'
+  if (data?.result?.status === '0x1') return 'success'
+  if (data?.result?.status === '0x0') return 'failed'
+
+  return 'unknown'
 }
 
 /**
