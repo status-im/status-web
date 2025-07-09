@@ -19,8 +19,8 @@ export default defineConfig({
         : 'ws: http://localhost:3030/ https://localhost:3030/'
 
     return {
-      name: 'A wallet by Status',
-      permissions: ['sidePanel', 'storage'],
+      name: 'Status Portfolio Wallet',
+      permissions: ['storage'],
       action: {},
       web_accessible_resources: [
         {
