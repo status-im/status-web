@@ -5,6 +5,7 @@ export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { Balance } from './balance'
 export { BlurredCircle } from './blurred-circle'
+export { Chart } from './chart'
 export { CollectiblesGrid } from './collectibles-grid'
 export {
   CreatePasswordForm,
