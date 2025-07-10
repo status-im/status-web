@@ -1,5 +1,5 @@
 ---
-"wallet": patch
+'wallet': patch
 ---
 
 listen to wallet uninstall

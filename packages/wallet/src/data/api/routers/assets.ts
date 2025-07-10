@@ -685,9 +685,16 @@ async function nativeTokenBalanceChart({
   // console.log(' DELAY nativeTokenBalanceChart()')
   // await delay()
 
+  const currentTime = Math.floor(Date.now() / 1000)
   const responses = await Promise.all(
     networks.map(async network => {
-      const data = await fetchTokenBalanceHistory(address, network, days)
+      const data = await fetchTokenBalanceHistory(
+        address,
+        network,
+        days,
+        undefined,
+        currentTime,
+      )
 
       return { [network]: data } as Record<
         NetworkType,
@@ -739,6 +746,7 @@ async function tokenBalanceChart({
     ? bridgedERC20Tokens
     : [erc20Token]
 
+  const currentTime = Math.floor(Date.now() / 1000)
   const responses = await Promise.all(
     filteredERC20Tokens.map(async token => {
       const data = await fetchTokenBalanceHistory(
@@ -746,6 +754,7 @@ async function tokenBalanceChart({
         STATUS_NETWORKS[token.chainId],
         days,
         token.address,
+        currentTime,
       )
 
       return { [STATUS_NETWORKS[token.chainId]]: data } as Record<
@@ -819,15 +828,12 @@ function getBridgedERC20Tokens(
 function aggregateTokenBalanceHistory(
   responses: Array<Record<NetworkType, Array<{ date: string; price: number }>>>,
 ) {
-  const now = new Date()
-  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000)
   const aggregate = responses.reduce(
     (acc, response) => {
       const data = Object.values(response)[0]
 
       data.forEach(item => {
-        const itemDate = new Date(item.date)
-        const key = itemDate > oneHourAgo ? now.toISOString() : item.date
+        const key = item.date
 
         if (!acc[key]) {
           acc[key] = {
@@ -844,7 +850,9 @@ function aggregateTokenBalanceHistory(
     {} as Record<string, { date: string; price: number }>,
   )
 
-  return Object.values(aggregate)
+  return Object.values(aggregate).sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  )
 }
 
 function map(data: {

@@ -12,6 +12,15 @@ export {
   type Currency,
   type Provider,
 } from './buy-crypto-drawer'
+export {
+  Chart,
+  type ChartDataType,
+  ChartLoading,
+  type ChartTimeFrame,
+  DEFAULT_DATA_TYPE,
+  DEFAULT_TIME_FRAME,
+  TIME_FRAMES,
+} from './chart'
 export { CollectiblesGrid } from './collectibles-grid'
 export {
   CreatePasswordForm,

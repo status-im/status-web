@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Button, Tooltip } from '@status-im/components'
+import { Button, SegmentedControl, Tooltip } from '@status-im/components'
 import {
   ArrowLeftIcon,
   BuyIcon,
@@ -11,16 +11,20 @@ import {
   type Account,
   Balance,
   BuyCryptoDrawer,
+  type ChartDataType,
+  type ChartTimeFrame,
   CurrencyAmount,
+  DEFAULT_DATA_TYPE,
+  DEFAULT_TIME_FRAME,
   NetworkBreakdown,
   ReceiveCryptoDrawer,
   type SendAssetsFormData,
   SendAssetsModal,
   StickyHeaderContainer,
+  TIME_FRAMES,
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
-import { type ApiOutput, type NetworkType } from '@status-im/wallet/data'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -30,6 +34,10 @@ import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
+
+import { AssetChart } from './asset-chart'
+
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   address: string
@@ -50,6 +58,10 @@ const Token = (props: Props) => {
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
   const [, copy] = useCopyToClipboard()
 
+  const [activeDataType, setActiveDataType] =
+    useState<ChartDataType>(DEFAULT_DATA_TYPE)
+  const [activeTimeFrame, setActiveTimeFrame] =
+    useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
   const { currentWallet } = useWallet()
   const [gasInput, setGasInput] = useState<{
     to: string
@@ -344,22 +356,49 @@ const Token = (props: Props) => {
           <NetworkBreakdown token={typedToken} />
         )}
 
-        {/* <ErrorBoundary fallback={<div>Error loading chart</div>}>
-          <Suspense
-            key={keyHash}
-            fallback={
-              <div className="mt-8">
-                <Loading />
-              </div>
-            }
-          >
-            <AssetChart
-              address={address}
-              slug={slug}
-              symbol={token.summary.symbol}
-            />
-          </Suspense>
-        </ErrorBoundary> */}
+        <div className="relative">
+          <div className="flex items-center justify-between">
+            <div className="inline-flex">
+              <SegmentedControl.Root
+                value={activeDataType}
+                onValueChange={value =>
+                  setActiveDataType(value as ChartDataType)
+                }
+                size="24"
+              >
+                <SegmentedControl.Item value="price">
+                  Price
+                </SegmentedControl.Item>
+                <SegmentedControl.Item value="balance">
+                  Balance
+                </SegmentedControl.Item>
+              </SegmentedControl.Root>
+            </div>
+            <div className="inline-flex">
+              <SegmentedControl.Root
+                value={activeTimeFrame}
+                onValueChange={value =>
+                  setActiveTimeFrame(value as ChartTimeFrame)
+                }
+                size="24"
+              >
+                {TIME_FRAMES.map(frame => (
+                  <SegmentedControl.Item key={frame} value={frame}>
+                    {frame}
+                  </SegmentedControl.Item>
+                ))}
+              </SegmentedControl.Root>
+            </div>
+          </div>
+
+          <AssetChart
+            address={address}
+            slug={ticker}
+            symbol={typedToken.summary.symbol}
+            timeFrame={activeTimeFrame}
+            activeDataType={activeDataType}
+          />
+        </div>
 
         <div>
           <div className="grid grid-cols-2 2xl:grid-cols-4">
