@@ -140,10 +140,32 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
   url.searchParams.set('relaxedValidation', 'true')
   url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
-  const body = await _fetch<legacy_TokensPriceResponseBody>(url, 15)
-  const data = body.RAW
+  try {
+    const body = await _fetch<legacy_TokensPriceResponseBody>(url, 15)
+    const data = body.RAW
 
-  return data
+    return data
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      error.message.includes('market does not exist')
+    ) {
+      console.warn('Removed failing symbols, retrying without them')
+
+      const errorMatch = error.message.match(/\((\w+)-EUR\)/)
+      if (errorMatch && errorMatch[1]) {
+        const failedSymbol = errorMatch[1]
+        const filteredSymbols = symbols.filter(s => s !== failedSymbol)
+
+        if (filteredSymbols.length > 0) {
+          return await legacy_fetchTokensPrice(filteredSymbols)
+        }
+      }
+    }
+
+    console.error('Failed to fetch prices:', error)
+    return {}
+  }
 }
 
 /**
