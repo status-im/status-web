@@ -26,7 +26,7 @@ type Props = {
 const CollectiblesGrid = ({
   initialCollectibles,
   address,
-  networks = ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
+  networks = ['ethereum'],
   getCollectibles,
   hasMore: initialHasMore,
 }: Props) => {

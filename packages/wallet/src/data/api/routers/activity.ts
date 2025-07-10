@@ -97,16 +97,7 @@ export const activitiesRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         limit: z.number().optional(),
         pageKeys: z.record(z.string()).optional(),
       }),
@@ -120,14 +111,7 @@ export const activitiesRouter = router({
     .input(
       z.object({
         address: z.string(),
-        network: z.enum([
-          'ethereum',
-          'optimism',
-          'arbitrum',
-          'base',
-          'polygon',
-          'bsc',
-        ]),
+        network: z.enum(['ethereum']),
       }),
     )
     .query(async ({ input }) => {

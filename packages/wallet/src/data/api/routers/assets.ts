@@ -57,11 +57,6 @@ type Asset = {
 
 const STATUS_NETWORKS: Record<number, NetworkType> = {
   1: 'ethereum',
-  10: 'optimism',
-  42161: 'arbitrum',
-  8453: 'base',
-  137: 'polygon',
-  56: 'bsc',
 }
 
 const DEFAULT_TOKEN_SYMBOLS = [
@@ -79,16 +74,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
       }),
     )
     .query(async ({ input }) => {
@@ -109,16 +95,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         symbol: z.string(),
       }),
     )
@@ -131,16 +108,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         contract: z.string(),
       }),
     )
@@ -177,16 +145,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
       }),
     )
@@ -199,16 +158,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
         contract: z.string(),
       }),

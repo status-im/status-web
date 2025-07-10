@@ -20,11 +20,6 @@ type ApiInput = {
 function getChainIdFromCode(chainCode: string): number | undefined {
   return match(chainCode)
     .with('ETHEREUM', () => 1)
-    .with('ARBITRUM', () => 42161)
-    .with('OPTIMISM', () => 10)
-    .with('BASE', () => 8453)
-    .with('POLYGON', () => 137)
-    .with('BSC', () => 56)
     .otherwise(() => undefined)
 }
 

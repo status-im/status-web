@@ -32,14 +32,7 @@ const getTimeFrameDays = (timeFrame: string): string => {
   }
 }
 
-const NETWORKS = [
-  'ethereum',
-  'optimism',
-  'arbitrum',
-  'base',
-  'polygon',
-  'bsc',
-] as const
+const NETWORKS = ['ethereum'] as const
 
 function AssetChart({
   address,

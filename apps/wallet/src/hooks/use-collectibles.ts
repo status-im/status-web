@@ -87,14 +87,7 @@ const useCollectibles = (props: Props) => {
       DEFAULT_SORT.collectibles.direction,
   }
 
-  const networks = searchParams.get('networks')?.split(',') ?? [
-    'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
-  ]
+  const networks = searchParams.get('networks')?.split(',') ?? ['ethereum']
 
   return useInfiniteQuery({
     queryKey: ['collectibles', address, networks, search, sort],

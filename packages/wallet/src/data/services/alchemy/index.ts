@@ -43,10 +43,10 @@ const alchemyNetworks = {
 }
 
 const unsupportedCategoriesByNetwork: Partial<Record<NetworkType, string[]>> = {
-  bsc: ['internal'],
-  arbitrum: ['internal'],
-  base: ['internal'],
-  optimism: ['internal'],
+  // bsc: ['internal'],
+  // arbitrum: ['internal'],
+  // base: ['internal'],
+  // optimism: ['internal'],
 }
 
 const allCategories = [

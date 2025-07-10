@@ -28,48 +28,6 @@ export const NetworkLogo = ({ name, size }: Props) => {
             alt="mainnet"
           />
         ))
-        .with('optimism', () => (
-          <Image
-            id="Wallet/Icons/Logos/02:120:120"
-            width={size}
-            height={size}
-            alt="optimism"
-          />
-        ))
-        .with('arbitrum', () => (
-          <Image
-            id="Wallet/Icons/Logos/03:120:120"
-            width={size}
-            height={size}
-            alt="arbitrum"
-          />
-        ))
-        .with('base', () => (
-          <Image
-            // fixme: export correct image
-            id="Wallet/Icons/Logos/01:120:120"
-            width={size}
-            height={size}
-            // fixme:
-            alt="mainnet"
-          />
-        ))
-        .with('polygon', () => (
-          <Image
-            id="Wallet/Icons/Logos/01:120:120"
-            width={size}
-            height={size}
-            alt="mainnet"
-          />
-        ))
-        .with('bsc', () => (
-          <Image
-            id="Wallet/Icons/Logos/01:120:120"
-            width={size}
-            height={size}
-            alt="mainnet"
-          />
-        ))
         .exhaustive()}
     </div>
   )

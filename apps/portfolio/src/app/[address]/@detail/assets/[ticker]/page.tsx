@@ -39,14 +39,7 @@ export default async function AssetDetailPage(props: Props) {
   const { address, ticker: slug } = await params
 
   const searchParams = await props.searchParams
-  const networks = searchParams['networks']?.split(',') ?? [
-    'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
-  ]
+  const networks = searchParams['networks']?.split(',') ?? ['ethereum']
   const keyHash = JSON.stringify({
     route: 'ticker',
     networks,
@@ -339,7 +332,7 @@ async function AssetChart({
 
     balanceChart = await apiClient.assets.tokenBalanceChart({
       address,
-      networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
+      networks: ['ethereum'],
       contract: slug,
       days: '30',
     })
@@ -351,7 +344,7 @@ async function AssetChart({
 
     balanceChart = await apiClient.assets.nativeTokenBalanceChart({
       address,
-      networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
+      networks: ['ethereum'],
       days: '30',
     })
   } else {

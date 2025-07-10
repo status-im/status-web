@@ -15,31 +15,6 @@ const NETWORKS = [
     name: 'Ethereum',
     icon: <Image id="Wallet/Icons/Logos/01:120:120" alt="mainnet" />,
   },
-  {
-    id: 'optimism',
-    name: 'Optimism',
-    icon: <Image id="Wallet/Icons/Logos/02:120:120" alt="optimism" />,
-  },
-  {
-    id: 'arbitrum',
-    name: 'Arbitrum',
-    icon: <Image id="Wallet/Icons/Logos/03:120:120" alt="arbitrum" />,
-  },
-  {
-    id: 'base',
-    name: 'Base',
-    icon: <Image id="Wallet/Icons/Logos/01:120:120" alt="mainnet" />,
-  },
-  {
-    id: 'polygon',
-    name: 'Polygon',
-    icon: <Image id="Wallet/Icons/Logos/01:120:120" alt="mainnet" />,
-  },
-  {
-    id: 'bsc',
-    name: 'BSC',
-    icon: <Image id="Wallet/Icons/Logos/01:120:120" alt="mainnet" />,
-  },
 ] as const
 
 // const CURRENCY = 'EUR'
@@ -56,26 +31,6 @@ const BALANCE_NETWORKS: Array<{ network: NetworkType; balance: number }> = [
   {
     network: 'ethereum',
     balance: 412342.23,
-  },
-  {
-    network: 'optimism',
-    balance: 40827.83,
-  },
-  {
-    network: 'arbitrum',
-    balance: 1654.42,
-  },
-  {
-    network: 'base',
-    balance: 1654.42,
-  },
-  {
-    network: 'polygon',
-    balance: 1654.42,
-  },
-  {
-    network: 'bsc',
-    balance: 1654.42,
   },
 ]
 
