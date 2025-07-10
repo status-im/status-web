@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { Avatar, useToast } from '@status-im/components'
 import { FeesIcon } from '@status-im/icons/12'
