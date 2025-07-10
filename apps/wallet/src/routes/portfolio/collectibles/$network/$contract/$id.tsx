@@ -1,11 +1,7 @@
 import { Suspense } from 'react'
 
 import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
-import {
-  createFileRoute,
-  useRouter,
-  useRouterState,
-} from '@tanstack/react-router'
+import { createFileRoute, useRouterState } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
 
@@ -23,7 +19,7 @@ export const Route = createFileRoute(
 
 function Component() {
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
-  const router = useRouter()
+
   const routerState = useRouterState()
   const params = Route.useParams()
   const { network, contract, id } = params
@@ -67,13 +63,6 @@ function Component() {
                 console.log('Search cleared')
               }}
               hasNextPage={hasNextPage}
-              onSelect={url => {
-                const [network, contract, id] = url.split('/').slice(-3)
-                router.navigate({
-                  to: '/portfolio/collectibles/$network/$contract/$id',
-                  params: { network, contract, id },
-                })
-              }}
             />
           }
           isLoading={isLoading}

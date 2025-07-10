@@ -7,7 +7,6 @@ import { Navbar } from '@status-im/wallet/components'
 import {
   createRootRouteWithContext,
   HeadContent,
-  // Link,
   // Navigate,
   Outlet,
   redirect,
@@ -21,6 +20,7 @@ import {
 // import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
+import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
 import { WalletProvider } from '../providers/wallet-context'
 
@@ -67,7 +67,7 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'A wallet by Status',
+        title: 'Status Portfolio Wallet',
       },
     ],
   }),
@@ -92,9 +92,9 @@ function RootComponent() {
         <hr />
         <Outlet />
       </div> */}
-      <head>
-        <HeadContent />
-      </head>
+
+      <HeadContent />
+
       <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
         <WagmiProvider>
@@ -108,6 +108,7 @@ function RootComponent() {
                 hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
                   pathname ?? '',
                 )}
+                linkComponent={Link}
               />
             </div>
             <div className="px-1">

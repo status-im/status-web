@@ -1,6 +1,7 @@
 export type * from '../types'
 export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
+export { ActivityList, type ActivityListProps } from './activity-list'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { AssetsListLoading } from './assets-list-loading'
@@ -26,11 +27,17 @@ export { NetworkBreakdown } from './network-breakdown'
 export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
 export { PasswordInput } from './password-input'
+export { PasswordModal } from './password-modal'
 export { PercentageChange } from './percentage-change'
 export { PinExtension } from './pin-extension'
 export { ReceiveCryptoDrawer } from './receive-crypto-drawer'
 export { RecoveryPhraseDialog } from './recovery-phrase-dialog'
 export { RecoveryPhraseTextarea } from './recovery-phrase-textarea'
+export {
+  type SendAssetsFormData,
+  SendAssetsModal,
+  type SendAssetsModalProps,
+} from './send-assets-modal'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,

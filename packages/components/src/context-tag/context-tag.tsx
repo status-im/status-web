@@ -111,7 +111,7 @@ const ContextTag = (props: Props, ref: React.Ref<HTMLDivElement>) => {
           <span className={iconStyles({ size, rounded: true, offset: size })}>
             {cloneElement(icon)}
           </span>
-          <span>{label}</span>
+          <span className="whitespace-nowrap">{label}</span>
         </div>
       )
     })
