@@ -81,7 +81,6 @@ async function fetchStandardTokenList(url) {
   try {
     console.log(`Fetching token list from: ${url}`)
     const response = await fetch(url, {
-      timeout: 30000, // 30 second timeout
       headers: {
         'User-Agent': 'Status-Wallet-Token-List-Generator/1.0',
       },
@@ -104,7 +103,6 @@ async function fetchStatusTokenLists(url) {
   try {
     console.log(`Fetching Status token list from: ${url}`)
     const response = await fetch(url, {
-      timeout: 30000, // 30 second timeout
       headers: {
         'User-Agent': 'Status-Wallet-Token-List-Generator/1.0',
       },
