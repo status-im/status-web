@@ -48,6 +48,12 @@ export default defineBackground({
       await chrome.tabs.create({ url: extensionUrl })
     })
 
+    chrome.runtime.onInstalled.addListener(details => {
+      if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+        chrome.runtime.setUninstallURL('https://forms.gle/WrZD2uZV11BEEe9h9')
+      }
+    })
+
     // debugger
   },
 })
