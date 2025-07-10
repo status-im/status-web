@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
@@ -51,12 +49,6 @@ const account = {
 const SplittedLayout = (props: Props) => {
   const { list, detail, isLoading } = props
 
-  const [showHiddenSummary, setShowHiddenSummary] = useState(false)
-
-  const handleShowHiddenSummary = () => {
-    setShowHiddenSummary(!showHiddenSummary)
-  }
-
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
 
   const address = currentWallet?.activeAccounts[0].address
@@ -65,8 +57,8 @@ const SplittedLayout = (props: Props) => {
     address,
     isWalletLoading,
   })
-  const summary =
-    data?.summary && showHiddenSummary ? data.summary : DEFAULT_SUMMARY
+
+  const summary = data?.summary ? data.summary : DEFAULT_SUMMARY
 
   return (
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
@@ -99,10 +91,7 @@ const SplittedLayout = (props: Props) => {
                         {account.name}
                       </div>
                     </div>
-                    <Balance
-                      summary={summary}
-                      onShowHiddenSummary={handleShowHiddenSummary}
-                    />
+                    <Balance summary={summary} />
                   </>
                 }
                 rightSlot={
@@ -139,10 +128,7 @@ const SplittedLayout = (props: Props) => {
                     </div>
 
                     <div className="mb-4">
-                      <Balance
-                        summary={summary ?? DEFAULT_SUMMARY}
-                        onShowHiddenSummary={handleShowHiddenSummary}
-                      />
+                      <Balance summary={summary ?? DEFAULT_SUMMARY} />
                     </div>
 
                     <ActionButtons {...actionsButtonsData} />
