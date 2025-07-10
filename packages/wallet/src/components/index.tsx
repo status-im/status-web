@@ -26,11 +26,17 @@ export { NetworkBreakdown } from './network-breakdown'
 export { NetworkExplorerLogo } from './network-explorer-logo'
 export { NetworkLogo } from './network-logo'
 export { PasswordInput } from './password-input'
+export { PasswordModal } from './password-modal'
 export { PercentageChange } from './percentage-change'
 export { PinExtension } from './pin-extension'
 export { ReceiveCryptoDrawer } from './receive-crypto-drawer'
 export { RecoveryPhraseDialog } from './recovery-phrase-dialog'
 export { RecoveryPhraseTextarea } from './recovery-phrase-textarea'
+export {
+  type SendAssetsFormData,
+  SendAssetsModal,
+  type SendAssetsModalProps,
+} from './send-assets-modal'
 export { SettingsPopover } from './settings-popover'
 export {
   ShortenAddress,

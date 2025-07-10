@@ -1,4 +1,3 @@
-import { RevealIcon } from '@status-im/icons/20'
 import { cva } from 'class-variance-authority'
 
 import { CurrencyAmount } from '../currency-amount'
@@ -7,7 +6,6 @@ import { PercentageChange } from '../percentage-change'
 import type { ApiOutput } from '@status-im/wallet/data'
 
 type Props = {
-  onShowHiddenSummary?: () => void
   variant?: 'token'
   summary:
     | ApiOutput['assets']['all']['summary']
@@ -25,7 +23,7 @@ const textColor = cva('text-13 font-medium', {
 })
 
 export const Balance = (props: Props) => {
-  const { variant, summary, onShowHiddenSummary } = props
+  const { variant, summary } = props
 
   return (
     <div>
@@ -40,11 +38,6 @@ export const Balance = (props: Props) => {
           <div className="self-end text-15 font-medium text-neutral-50">
             {summary.total_balance}
           </div>
-        )}
-        {!!onShowHiddenSummary && (
-          <button onClick={onShowHiddenSummary}>
-            <RevealIcon className="text-neutral-50 transition-colors hover:text-neutral-60" />
-          </button>
         )}
       </div>
 

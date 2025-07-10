@@ -268,6 +268,9 @@ const apiRouter = router({
               fromAddress: z.string(),
               toAddress: z.string(),
               amount: z.string(),
+              gasLimit: z.string(),
+              maxFeePerGas: z.string(),
+              maxInclusionFeePerGas: z.string(),
             }),
           )
           .mutation(async ({ input, ctx }) => {
@@ -308,10 +311,13 @@ const apiRouter = router({
             const id = await ethereum.send({
               walletCore,
               walletPrivateKey: privateKey,
-              // fimxe: set from settings in context (e.g. testnet)
-              chainID: '0x1',
+              chainID: '01',
               toAddress: input.toAddress,
               amount: input.amount,
+              fromAddress: input.fromAddress,
+              gasLimit: input.gasLimit,
+              maxFeePerGas: input.maxFeePerGas,
+              maxInclusionFeePerGas: input.maxInclusionFeePerGas,
             })
 
             return {
@@ -578,6 +584,7 @@ const apiRouter = router({
           input.password,
           walletCore.CoinType.ethereum,
           walletCore.StoredKeyEncryption.aes256Ctr,
+          walletCore.Derivation.default,
         )
 
         return {

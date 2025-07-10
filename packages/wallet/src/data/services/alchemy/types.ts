@@ -246,6 +246,67 @@ export type NFTFloorPriceResponseBody = {
   }
 }
 
+export type SendRawTransactionResponseBody = string
+
+export type GasPriceResponseBody = string
+
+export type TransactionCountResponseBody = {
+  jsonrpc: string
+  id: number
+  result: string
+}
+
+export type GasEstimateResponseBody = {
+  jsonrpc: string
+  id: number
+  result: string
+}
+
+export type MaxPriorityFeeResponseBody = {
+  jsonrpc: string
+  id: number
+  result: string
+}
+
+export type BlockResponseBody = {
+  jsonrpc: string
+  id: number
+  result: {
+    baseFeePerGas: string
+    difficulty: string
+    extraData: string
+    gasLimit: string
+    gasUsed: string
+    hash: string
+    logsBloom: string
+    miner: string
+    mixHash: string
+    nonce: string
+    number: string
+    parentHash: string
+    receiptsRoot: string
+    sha3Uncles: string
+    size: string
+    stateRoot: string
+    timestamp: string
+    totalDifficulty: string
+    transactions: string[]
+    transactionsRoot: string
+    uncles: string[]
+  }
+}
+
+export type FeeHistoryResponseBody = {
+  jsonrpc: string
+  id: number
+  result: {
+    baseFeePerGas: string[]
+    gasUsedRatio: number[]
+    oldestBlock: string
+    reward?: string[][]
+  }
+}
+
 export type AssetTransfer = {
   blockNum: string
   category: string
@@ -283,5 +344,12 @@ export type ResponseBody =
   | NFTMetadataResponseBody
   | deprecated_NFTSaleResponseBody
   | NFTFloorPriceResponseBody
+  | SendRawTransactionResponseBody
+  | GasPriceResponseBody
+  | TransactionCountResponseBody
+  | GasEstimateResponseBody
+  | MaxPriorityFeeResponseBody
+  | BlockResponseBody
+  | FeeHistoryResponseBody
   | TokenBalanceHistoryResponseBody
   | AssetTransfersResponseBody

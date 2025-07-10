@@ -45,7 +45,7 @@ function Component() {
           list={
             assets ? (
               <AssetsList
-                assets={assets}
+                assets={assets.assets}
                 onSelect={url => {
                   const ticker = url.split('/').pop()
                   if (!ticker) return
