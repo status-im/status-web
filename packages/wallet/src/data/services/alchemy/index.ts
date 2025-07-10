@@ -117,7 +117,7 @@ export async function getERC20TokensBalance(
   network: NetworkType,
   contracts: string[],
 ) {
-  if (contracts.length > 100) {
+  if (contracts.length > 1000) {
     throw new Error('Too many contracts')
   }
   const url = new URL(

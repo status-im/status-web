@@ -269,8 +269,8 @@ async function all({
     for (const [network, tokens] of Object.entries(
       ERC20TokensByNetwork,
     ) as Array<[string, ERC20Token[]]>) {
-      for (let i = 0; i < tokens.length; i += 100) {
-        const batch = tokens.slice(i, i + 100)
+      for (let i = 0; i < tokens.length; i += 1000) {
+        const batch = tokens.slice(i, i + 1000)
         const batchBalances = await getERC20TokensBalance(
           address,
           network as NetworkType,
