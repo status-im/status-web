@@ -15,14 +15,7 @@ type Props = {
 
 export default async function Summary({ params, searchParams }: Props) {
   const address = (await params).address
-  const networks = (await searchParams)['networks']?.split(',') ?? [
-    'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
-  ]
+  const networks = (await searchParams)['networks']?.split(',') ?? ['ethereum']
 
   const apiClient = await getAPIClient()
 

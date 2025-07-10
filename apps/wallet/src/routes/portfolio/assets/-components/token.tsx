@@ -16,7 +16,6 @@ import {
   CurrencyAmount,
   DEFAULT_DATA_TYPE,
   DEFAULT_TIME_FRAME,
-  NetworkBreakdown,
   ReceiveCryptoDrawer,
   type SendAssetsFormData,
   SendAssetsModal,
@@ -44,14 +43,7 @@ type Props = {
   ticker: string
 }
 
-const NETWORKS = [
-  'ethereum',
-  'optimism',
-  'arbitrum',
-  'base',
-  'polygon',
-  'bsc',
-] as const
+const NETWORKS = ['ethereum'] as const
 
 const Token = (props: Props) => {
   const { ticker, address } = props
@@ -351,10 +343,6 @@ const Token = (props: Props) => {
             </SendAssetsModal>
           </div>
         </div>
-
-        {typedToken.summary.total_balance > 0 && (
-          <NetworkBreakdown token={typedToken} />
-        )}
 
         <div className="relative">
           <div className="flex items-center justify-between">

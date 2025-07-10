@@ -16,14 +16,7 @@ export default async function AssetsList(props: Props) {
   const address = (await props.params).address
 
   const searchParams = await props.searchParams
-  const networks = searchParams['networks']?.split(',') ?? [
-    'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
-  ]
+  const networks = searchParams['networks']?.split(',') ?? ['ethereum']
 
   const apiClient = await getAPIClient()
 

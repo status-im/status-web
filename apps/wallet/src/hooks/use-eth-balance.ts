@@ -2,14 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 
-const NETWORKS = [
-  'ethereum',
-  'optimism',
-  'arbitrum',
-  'base',
-  'polygon',
-  'bsc',
-] as const
+const NETWORKS = ['ethereum'] as const
 
 export const useEthBalance = (address: string, enabled: boolean = true) => {
   return useQuery<ApiOutput['assets']['nativeToken']>({
