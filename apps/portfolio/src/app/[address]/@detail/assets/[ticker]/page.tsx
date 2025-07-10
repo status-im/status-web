@@ -2,23 +2,25 @@ import { Suspense } from 'react'
 
 import { Button, Tooltip } from '@status-im/components'
 import { BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
-import { StickyHeaderContainer } from '@status-im/wallet/components'
+import {
+  Balance,
+  CurrencyAmount,
+  NetworkBreakdown,
+  StickyHeaderContainer,
+  TokenLogo,
+} from '@status-im/wallet/components'
 import { cx } from 'class-variance-authority'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { api } from '../../../../..//data/api'
-import { Balance } from '../../../../_components/balance'
+import { getAPIClient } from '../../../../..//data/api'
 import { BuyCryptoDrawer } from '../../../../_components/buy-crypto-drawer'
 import { portfolioComponents } from '../../../../_components/content'
-import { CurrencyAmount } from '../../../../_components/currency-amount'
 import { ReceiveCryptoDrawer } from '../../../../_components/receive-crypto-drawer'
 import { TokenAmount } from '../../../../_components/token-amount'
 import { Chart } from '../_components/chart'
 import { Loading } from '../_components/chart/loading'
-import { NetworkBreakdown } from './_components/network-breakdown'
-import { TokenLogo } from './_components/token-logo'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
@@ -77,16 +79,18 @@ async function Token({
   networks: NetworkType[]
   keyHash: string
 }) {
+  const apiClient = await getAPIClient()
+
   let token: ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
 
   if (slug.startsWith('0x')) {
-    token = await api.assets.token({
+    token = await apiClient.assets.token({
       address: address,
       networks: networks as NetworkType[],
       contract: slug,
     })
   } else if (slug.toUpperCase() === 'ETH') {
-    token = await api.assets.nativeToken({
+    token = await apiClient.assets.nativeToken({
       address,
       networks: networks as NetworkType[],
       symbol: slug.toUpperCase(),
@@ -325,25 +329,27 @@ async function AssetChart({
     | ApiOutput['assets']['nativeTokenPriceChart']
   let balanceChart: ApiOutput['assets']['tokenBalanceChart']
 
+  const apiClient = await getAPIClient()
+
   if (slug.startsWith('0x')) {
-    priceChart = await api.assets.tokenPriceChart({
+    priceChart = await apiClient.assets.tokenPriceChart({
       symbol,
       days: '1',
     })
 
-    balanceChart = await api.assets.tokenBalanceChart({
+    balanceChart = await apiClient.assets.tokenBalanceChart({
       address,
       networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
       contract: slug,
       days: '30',
     })
   } else if (slug.toUpperCase() === 'ETH') {
-    priceChart = await api.assets.nativeTokenPriceChart({
+    priceChart = await apiClient.assets.nativeTokenPriceChart({
       symbol: slug.toUpperCase(),
       days: '1',
     })
 
-    balanceChart = await api.assets.nativeTokenBalanceChart({
+    balanceChart = await apiClient.assets.nativeTokenBalanceChart({
       address,
       networks: ['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'],
       days: '30',

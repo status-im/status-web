@@ -1,17 +1,17 @@
 // import { Cardano } from '@cardano-sdk/core'
 // import { SodiumBip32Ed25519 } from '@cardano-sdk/crypto'
 // import { AddressType, InMemoryKeyAgent } from '@cardano-sdk/key-management'
-import { createTRPCClient } from '@trpc/client'
+import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
-// import superjson from 'superjson'
+import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
-import { chromeLink } from 'trpc-chrome/link'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
+import { chromeLinkWithRetries } from './chromeLink'
 import * as ethereum from './ethereum/ethereum'
+import { getKeystore } from './keystore'
 import * as solana from './solana/solana'
-import { getKeystore } from './storage'
 import {
   getWalletCore,
   //  type WalletCore
@@ -33,9 +33,9 @@ type Context = Awaited<ReturnType<typeof createContext>>
  * @see https://trpc.io/docs/server/routers#runtime-configuration
  */
 const t = initTRPC.context<Context>().create({
+  transformer: superjson,
   isServer: false,
   allowOutsideOfServer: true,
-  // transformer: superjson,
 })
 
 // const publicProcedure = t.procedure
@@ -66,7 +66,7 @@ const apiRouter = router({
       .mutation(async ({ input, ctx }) => {
         const { walletCore, keyStore } = ctx
 
-        const wallet = walletCore.HDWallet.create(256, input.password)
+        const wallet = walletCore.HDWallet.create(128, input.password)
         const mnemonic = wallet.mnemonic()
         const name = input.name
 
@@ -102,6 +102,25 @@ const apiRouter = router({
           // note: reference and store accounts with
           id,
           mnemonic,
+        }
+      }),
+
+    get: t.procedure
+      .input(
+        z.object({
+          walletId: z.string(),
+          password: z.string(),
+        }),
+      )
+      .query(async ({ input, ctx }) => {
+        const { keyStore } = ctx
+
+        const wallet = await keyStore.load(input.walletId)
+
+        return {
+          id: wallet.id,
+          name: wallet.name,
+          mnemonic: await keyStore.exportMnemonic(wallet.id, input.password),
         }
       }),
 
@@ -249,6 +268,9 @@ const apiRouter = router({
               fromAddress: z.string(),
               toAddress: z.string(),
               amount: z.string(),
+              gasLimit: z.string(),
+              maxFeePerGas: z.string(),
+              maxInclusionFeePerGas: z.string(),
             }),
           )
           .mutation(async ({ input, ctx }) => {
@@ -289,10 +311,13 @@ const apiRouter = router({
             const id = await ethereum.send({
               walletCore,
               walletPrivateKey: privateKey,
-              // fimxe: set from settings in context (e.g. testnet)
-              chainID: '0x1',
+              chainID: '01',
               toAddress: input.toAddress,
               amount: input.amount,
+              fromAddress: input.fromAddress,
+              gasLimit: input.gasLimit,
+              maxFeePerGas: input.maxFeePerGas,
+              maxInclusionFeePerGas: input.maxInclusionFeePerGas,
             })
 
             return {
@@ -554,11 +579,12 @@ const apiRouter = router({
         // )
 
         const { id } = await keyStore.importKey(
-          Buffer.from(input.privateKey),
+          new Uint8Array(Buffer.from(input.privateKey)),
           input.name,
           input.password,
           walletCore.CoinType.ethereum,
           walletCore.StoredKeyEncryption.aes256Ctr,
+          walletCore.Derivation.default,
         )
 
         return {
@@ -582,9 +608,8 @@ export async function createAPI() {
 }
 
 export function createAPIClient() {
-  const port = chrome.runtime.connect()
-
-  return createTRPCClient<APIRouter>({
-    links: [chromeLink({ port })],
+  return createTRPCProxyClient<APIRouter>({
+    links: [chromeLinkWithRetries()],
+    transformer: superjson,
   })
 }

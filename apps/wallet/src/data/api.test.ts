@@ -6,7 +6,7 @@ type OnMessageListener = (message: unknown) => void
 type OnConnectListener = (port: unknown) => void
 
 // @see https://github.com/jlalmes/trpc-chrome/blob/af6cc54c66b652fee90be39b837b1b7ff8269cb5/test/__setup.ts
-const chrome = vi.fn(() => {
+const createChromeMock = () => {
   const linkPortOnMessageListeners: OnMessageListener[] = []
   const handlerPortOnMessageListeners: OnMessageListener[] = []
   const handlerPortOnConnectListeners: OnConnectListener[] = []
@@ -57,31 +57,66 @@ const chrome = vi.fn(() => {
       },
     },
   }
-})()
-
-// globalThis.chrome = chrome
+}
 
 beforeEach(() => {
-  vi.stubGlobal('chrome', chrome)
+  vi.stubGlobal('chrome', createChromeMock())
+  // vi.stubGlobal('browser', createChromeMock())
+  // globalThis.chrome = createChromeMock()
+  // globalThis.browser = createChromeMock()
+  // fakeBrowser.reset()
 })
 
-afterEach(() => {
+afterEach(async () => {
   vi.unstubAllGlobals()
+  vi.clearAllMocks()
 })
 
-test.skip('should import wallet', async () => {
+test('should add wallet', async () => {
   await createAPI()
-  const client = createAPIClient()
+  const apiClient = createAPIClient()
+
+  const addedWallet = await apiClient.wallet.add.mutate({
+    password: 'password',
+    name: 'Untitled',
+  })
+
+  expect(addedWallet.mnemonic).toBeDefined()
+}, 7000)
+
+test('should import wallet', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
 
   const mnemonic = 'test test test test test test test test test test test junk'
   const password = 'password'
 
-  const result = await client.wallet.import.mutate({
+  const importedWallet = await apiClient.wallet.import.mutate({
     mnemonic,
     password,
     name: 'Untitled',
   })
 
-  expect(result.mnemonic).toBe(mnemonic)
-  // todo: spy storage
-})
+  expect(importedWallet.mnemonic).toBe(mnemonic)
+}, 7000)
+
+test('should get wallet', async () => {
+  await createAPI()
+  const apiClient = createAPIClient()
+
+  const mnemonic = 'test test test test test test test test test test test junk'
+  const password = 'password'
+
+  const importedWallet = await apiClient.wallet.import.mutate({
+    mnemonic,
+    password,
+    name: 'Untitled',
+  })
+
+  const returnedWallet = await apiClient.wallet.get.query({
+    walletId: importedWallet.id,
+    password,
+  })
+
+  expect(returnedWallet.mnemonic).toBe(mnemonic)
+}, 7000)

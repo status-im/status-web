@@ -81,5 +81,7 @@ test('should throw error when signature length is not 65 bytes', async () => {
 
   expect(() =>
     recoverPublicKey(signature, payload),
-  ).toThrowErrorMatchingInlineSnapshot(`"Signature must be 65 bytes long"`)
+  ).toThrowErrorMatchingInlineSnapshot(
+    `[Error: Signature must be 65 bytes long]`,
+  )
 })

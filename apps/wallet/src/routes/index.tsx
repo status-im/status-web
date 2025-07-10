@@ -1,16 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
-  head: () => ({
-    meta: [
-      {
-        title: 'Extension | Wallet | Index',
-      },
-    ],
-  }),
+  loader: () => {
+    redirect({
+      to: '/portfolio/assets',
+      throw: true,
+    })
+  },
 })
 
 function RouteComponent() {
-  return <>Index</>
+  return <>index</>
 }

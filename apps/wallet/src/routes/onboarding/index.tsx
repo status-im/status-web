@@ -1,31 +1,55 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Button, Text } from '@status-im/components'
+import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/onboarding/')({
   component: RouteComponent,
-  head: () => ({
-    meta: [
-      {
-        title: 'Extension | Wallet | Onboarding',
-      },
-    ],
-  }),
 })
 
 function RouteComponent() {
   return (
-    <div className="grid gap-2">
-      <Link
-        to="/onboarding/new"
-        className="flex h-10 items-center rounded-12 bg-neutral-50 px-3 text-15 font-medium transition-colors active:bg-neutral-50 hover:bg-neutral-90"
-      >
-        Create a wallet
-      </Link>
-      <Link
-        to="/onboarding/import"
-        className="flex h-10 items-center rounded-12 bg-neutral-50 px-3 text-15 font-medium transition-colors active:bg-neutral-50 hover:bg-neutral-90"
-      >
-        I already have a wallet
-      </Link>
+    <div className="flex flex-col items-center gap-6 pb-3 text-center">
+      <img
+        src="/images/intro.png"
+        alt="Onboarding"
+        className="mt-[-20px] h-[322px] w-full min-w-[440px]"
+      />
+      <div className="flex flex-col gap-4">
+        <Text size={40} weight="bold">
+          Your Wallet.
+          <br />
+          Your Game.
+        </Text>
+        <Text size={15} color="$neutral-50">
+          Track portfolio to stay ahead - own your edge
+        </Text>
+      </div>
+      <div className="flex w-full max-w-[270px] flex-col gap-3">
+        <Button href="/onboarding/new">New wallet</Button>
+        <Button href="/onboarding/import" variant="grey">
+          Import wallet
+        </Button>
+      </div>
+      <Text size={13} color="$neutral-50">
+        By continuing you agree with Status
+        <br />
+        <a
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/terms-of-use.md"
+          className="text-neutral-100"
+          target="_blank"
+          rel="noopenernoreferrer"
+        >
+          Terms of use
+        </a>{' '}
+        and{' '}
+        <a
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/privacy-policy.md"
+          className="text-neutral-100"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Privacy policy
+        </a>
+      </Text>
     </div>
   )
 }

@@ -1,7 +1,12 @@
 'use client'
 
 import { AssetsList } from '@status-im/wallet/components'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from 'next/navigation'
 
 import { useSearchAndSort } from '../../../../_hooks/use-search-and-sort'
 
@@ -17,6 +22,7 @@ const AssetsTable = (props: Props) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { address } = useParams()
 
   const { clearSearch } = useSearchAndSort()
 
@@ -24,7 +30,11 @@ const AssetsTable = (props: Props) => {
     <AssetsList
       assets={assets}
       pathname={pathname}
-      onSelect={router.push}
+      onSelect={url => {
+        const ticker = url.split('/').pop()
+        if (!ticker) return
+        router.push(`/${address}/assets/${ticker}`)
+      }}
       searchParams={searchParams}
       clearSearch={clearSearch}
     />

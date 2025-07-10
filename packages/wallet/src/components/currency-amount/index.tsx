@@ -16,6 +16,7 @@ type Props = {
 
 // TODO: get this from the user's settings
 const SYMBOL: 'EUR' | 'USD' = 'EUR'
+const MIN_VALUE = 0.01
 
 export const CurrencyAmount = (props: Props) => {
   const { value, format = 'standard', className } = props
@@ -60,6 +61,10 @@ export const CurrencyAmount = (props: Props) => {
         .exhaustive(),
     [format],
   )
+
+  if (value > 0 && value < MIN_VALUE && format !== 'precise') {
+    return <div className={className}>{'< ' + formatter.format(MIN_VALUE)}</div>
+  }
 
   return <div className={className}>{formatter.format(value)}</div>
 }
