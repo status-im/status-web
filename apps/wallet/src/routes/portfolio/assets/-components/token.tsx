@@ -41,7 +41,7 @@ import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 type TokenData =
   | ApiOutput['assets']['token']
   | ApiOutput['assets']['nativeToken']
-type AssetsData = ApiOutput['assets']['all']['assets']
+type AssetsResponse = ApiOutput['assets']['all']
 type AssetData = ApiOutput['assets']['all']['assets'][number]
 
 type Props = {
@@ -78,7 +78,7 @@ const Token = (props: Props) => {
     value: string
   } | null>(null)
 
-  const { data: assets } = useQuery<AssetsData>({
+  const { data } = useQuery<AssetsResponse>({
     queryKey: ['assets', address],
     queryFn: async () => {
       const url = new URL(
@@ -106,7 +106,7 @@ const Token = (props: Props) => {
       }
 
       const body = await response.json()
-      return body.result.data.json.assets
+      return body.result.data.json
     },
     enabled: !!address,
     staleTime: 15 * 1000,
@@ -116,7 +116,7 @@ const Token = (props: Props) => {
     refetchOnReconnect: true,
   })
 
-  const asset = assets?.find(a => matchesAsset(a, ticker))
+  const asset = data?.assets?.find((a: AssetData) => matchesAsset(a, ticker))
 
   const { data: tokenDetail, isLoading: isTokenLoading } = useQuery<TokenData>({
     queryKey: ['token', ticker],
@@ -162,7 +162,7 @@ const Token = (props: Props) => {
     refetchOnReconnect: true,
   })
 
-  const isLoading = !assets || isTokenLoading || !tokenDetail
+  const isLoading = !data?.assets || isTokenLoading || !tokenDetail
 
   const needsEthBalance = tokenDetail?.summary.symbol !== 'ETH'
 
@@ -333,9 +333,7 @@ const Token = (props: Props) => {
         <div className="flex items-center gap-1 pt-px">
           <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
             <Button size="32" iconBefore={<BuyIcon />}>
-              <span className="block max-w-20 truncate">
-                Buy {typedToken.summary.name}
-              </span>
+              <span className="block max-w-20 truncate">Buy {name}</span>
             </Button>
           </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -384,7 +382,7 @@ const Token = (props: Props) => {
           <div className="flex items-center gap-1">
             <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-                Buy {typedToken.summary.name}
+                Buy {name}
               </Button>
             </BuyCryptoDrawer>
 
@@ -416,9 +414,6 @@ const Token = (props: Props) => {
           </div>
         </div>
 
-        {summary.total_balance > 0 && tokenDetail && (
-          <NetworkBreakdown token={tokenDetail} />
-        )}
         <div className="relative">
           <div className="flex items-center justify-between">
             <div className="inline-flex">
@@ -457,7 +452,7 @@ const Token = (props: Props) => {
           <AssetChart
             address={address}
             slug={ticker}
-            symbol={typedToken.summary.symbol}
+            symbol={uppercasedTicker}
             timeFrame={activeTimeFrame}
             activeDataType={activeDataType}
           />
