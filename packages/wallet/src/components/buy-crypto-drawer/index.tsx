@@ -77,14 +77,14 @@ export const BuyCryptoDrawer = (props: Props) => {
   } = props
 
   const [open, setOpen] = useState(false)
-  const [network] = useState<NetworkOptions[0]>(NETWORKS[0])
-  const [currency] = useState<Currency>({
+  const network: NetworkOptions[0] = NETWORKS[0]
+  const currency: Currency = {
     contract_address: '',
     code: 'EUR',
     label: 'Euro',
     network: 'ETHEREUM',
     imageUrl: '/images/tokens/eur.png',
-  })
+  }
 
   const toast = useToast()
 
