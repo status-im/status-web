@@ -8,10 +8,13 @@ import {
   SendBlurIcon,
 } from '@status-im/icons/20'
 import {
+  type Account,
   Balance,
+  BuyCryptoDrawer,
   CurrencyAmount,
   NetworkBreakdown,
   ReceiveCryptoDrawer,
+  type SendAssetsFormData,
   SendAssetsModal,
   StickyHeaderContainer,
   TokenAmount,
@@ -27,8 +30,6 @@ import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
-
-import type { Account, SendAssetsFormData } from '@status-im/wallet/components'
 
 type Props = {
   address: string
@@ -149,6 +150,14 @@ const Token = (props: Props) => {
     setGasInput({ to, value })
   }
 
+  const handleOpenTab = (url: string) => {
+    if (typeof chrome !== 'undefined' && chrome.tabs) {
+      chrome.tabs.create({ url })
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   useEffect(() => {
     const processMarkdown = async () => {
       if (typedToken) {
@@ -242,11 +251,13 @@ const Token = (props: Props) => {
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <Button size="32" iconBefore={<BuyIcon />}>
-            <span className="block max-w-20 truncate">
-              Buy {typedToken.summary.name}
-            </span>
-          </Button>
+          <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+            <Button size="32" iconBefore={<BuyIcon />}>
+              <span className="block max-w-20 truncate">
+                Buy {typedToken.summary.name}
+              </span>
+            </Button>
+          </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
               size="32"
@@ -295,9 +306,11 @@ const Token = (props: Props) => {
           </div>
 
           <div className="flex items-center gap-1">
-            <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-              Buy {typedToken.summary.name}
-            </Button>
+            <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+              <Button size="32" iconBefore={<BuyIcon />} variant="primary">
+                Buy {typedToken.summary.name}
+              </Button>
+            </BuyCryptoDrawer>
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
               <Button
