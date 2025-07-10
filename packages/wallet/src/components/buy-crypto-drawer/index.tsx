@@ -128,11 +128,7 @@ export const BuyCryptoDrawer = (props: Props) => {
     }
   }
 
-  useEffect(() => {
-    if (open === false) {
-      // setIsMercuryoSelected(false) // Removed as per edit hint
-    }
-  }, [open])
+  // Removed unused useEffect hook as it had no side effects
 
   if (!account) {
     return null
