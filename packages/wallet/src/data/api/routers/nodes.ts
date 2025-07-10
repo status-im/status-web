@@ -13,9 +13,7 @@ export const nodesRouter = router({
   getFeeRate: publicProcedure
     .input(
       z.object({
-        network: z
-          .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
-          .optional(),
+        network: z.enum(['ethereum']).optional(),
         params: z.object({
           from: z.string(),
           to: z.string(),
@@ -32,9 +30,7 @@ export const nodesRouter = router({
     .input(
       z.object({
         txHex: z.string(),
-        network: z
-          .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
-          .optional(),
+        network: z.enum(['ethereum']).optional(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -48,9 +44,7 @@ export const nodesRouter = router({
     .input(
       z.object({
         address: z.string(),
-        network: z
-          .enum(['ethereum', 'optimism', 'arbitrum', 'base', 'polygon', 'bsc'])
-          .optional(),
+        network: z.enum(['ethereum']).optional(),
       }),
     )
     .query(async ({ input }) => {

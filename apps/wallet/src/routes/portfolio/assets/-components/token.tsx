@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { Button, Tooltip } from '@status-im/components'
+import { Button, SegmentedControl, Tooltip } from '@status-im/components'
 import {
   ArrowLeftIcon,
   BuyIcon,
@@ -8,16 +8,22 @@ import {
   SendBlurIcon,
 } from '@status-im/icons/20'
 import {
+  type Account,
   Balance,
+  BuyCryptoDrawer,
+  type ChartDataType,
+  type ChartTimeFrame,
   CurrencyAmount,
-  NetworkBreakdown,
+  DEFAULT_DATA_TYPE,
+  DEFAULT_TIME_FRAME,
   ReceiveCryptoDrawer,
+  type SendAssetsFormData,
   SendAssetsModal,
   StickyHeaderContainer,
+  TIME_FRAMES,
   TokenAmount,
   TokenLogo,
 } from '@status-im/wallet/components'
-import { type ApiOutput, type NetworkType } from '@status-im/wallet/data'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -28,7 +34,9 @@ import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
 
-import type { Account, SendAssetsFormData } from '@status-im/wallet/components'
+import { AssetChart } from './asset-chart'
+
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type TokenData =
   | ApiOutput['assets']['token']
@@ -41,14 +49,7 @@ type Props = {
   ticker: string
 }
 
-const NETWORKS = [
-  'ethereum',
-  'optimism',
-  'arbitrum',
-  'base',
-  'polygon',
-  'bsc',
-] as const
+const NETWORKS = ['ethereum'] as const
 
 function matchesAsset(asset: AssetData, ticker: string): boolean {
   if (ticker.startsWith('0x')) {
@@ -67,6 +68,10 @@ const Token = (props: Props) => {
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
   const [, copy] = useCopyToClipboard()
 
+  const [activeDataType, setActiveDataType] =
+    useState<ChartDataType>(DEFAULT_DATA_TYPE)
+  const [activeTimeFrame, setActiveTimeFrame] =
+    useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
   const { currentWallet } = useWallet()
   const [gasInput, setGasInput] = useState<{
     to: string
@@ -206,6 +211,14 @@ const Token = (props: Props) => {
     setGasInput({ to, value })
   }
 
+  const handleOpenTab = (url: string) => {
+    if (typeof chrome !== 'undefined' && chrome.tabs) {
+      chrome.tabs.create({ url })
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   useEffect(() => {
     const processMarkdown = async () => {
       if (tokenDetail?.assets) {
@@ -318,9 +331,13 @@ const Token = (props: Props) => {
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <Button size="32" iconBefore={<BuyIcon />}>
-            <span className="block max-w-20 truncate">Buy {name}</span>
-          </Button>
+          <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+            <Button size="32" iconBefore={<BuyIcon />}>
+              <span className="block max-w-20 truncate">
+                Buy {typedToken.summary.name}
+              </span>
+            </Button>
+          </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
               size="32"
@@ -365,9 +382,11 @@ const Token = (props: Props) => {
           </div>
 
           <div className="flex items-center gap-1">
-            <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-              Buy {name}
-            </Button>
+            <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+              <Button size="32" iconBefore={<BuyIcon />} variant="primary">
+                Buy {typedToken.summary.name}
+              </Button>
+            </BuyCryptoDrawer>
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
               <Button
@@ -400,23 +419,49 @@ const Token = (props: Props) => {
         {summary.total_balance > 0 && tokenDetail && (
           <NetworkBreakdown token={tokenDetail} />
         )}
+        <div className="relative">
+          <div className="flex items-center justify-between">
+            <div className="inline-flex">
+              <SegmentedControl.Root
+                value={activeDataType}
+                onValueChange={value =>
+                  setActiveDataType(value as ChartDataType)
+                }
+                size="24"
+              >
+                <SegmentedControl.Item value="price">
+                  Price
+                </SegmentedControl.Item>
+                <SegmentedControl.Item value="balance">
+                  Balance
+                </SegmentedControl.Item>
+              </SegmentedControl.Root>
+            </div>
+            <div className="inline-flex">
+              <SegmentedControl.Root
+                value={activeTimeFrame}
+                onValueChange={value =>
+                  setActiveTimeFrame(value as ChartTimeFrame)
+                }
+                size="24"
+              >
+                {TIME_FRAMES.map(frame => (
+                  <SegmentedControl.Item key={frame} value={frame}>
+                    {frame}
+                  </SegmentedControl.Item>
+                ))}
+              </SegmentedControl.Root>
+            </div>
+          </div>
 
-        {/* <ErrorBoundary fallback={<div>Error loading chart</div>}>
-          <Suspense
-            key={keyHash}
-            fallback={
-              <div className="mt-8">
-                <Loading />
-              </div>
-            }
-          >
-            <AssetChart
-              address={address}
-              slug={slug}
-              symbol={token.summary.symbol}
-            />
-          </Suspense>
-        </ErrorBoundary> */}
+          <AssetChart
+            address={address}
+            slug={ticker}
+            symbol={typedToken.summary.symbol}
+            timeFrame={activeTimeFrame}
+            activeDataType={activeDataType}
+          />
+        </div>
 
         <div>
           <div className="grid grid-cols-2 2xl:grid-cols-4">

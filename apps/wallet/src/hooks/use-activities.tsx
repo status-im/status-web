@@ -59,14 +59,7 @@ const getTransfers = async (
 export const useActivities = ({ address }: Props) => {
   const searchParams = new URLSearchParams(window.location.search)
 
-  const networks = searchParams.get('networks')?.split(',') ?? [
-    'ethereum',
-    // 'optimism',
-    // 'arbitrum',
-    // 'base',
-    // 'polygon',
-    // 'bsc',
-  ]
+  const networks = searchParams.get('networks')?.split(',') ?? ['ethereum']
 
   return useInfiniteQuery({
     queryKey: ['activities', address, networks],

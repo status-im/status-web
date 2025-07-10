@@ -39,11 +39,6 @@ export const AccountsProvider = ({ children }: { children: ReactNode }) => {
   const searchParams = useSearchParams()
   const networks = (searchParams.get('networks')?.split(',') ?? [
     'ethereum',
-    'optimism',
-    'arbitrum',
-    'base',
-    'polygon',
-    'bsc',
   ]) as NetworkType[]
 
   const activeAccounts = accounts.filter(

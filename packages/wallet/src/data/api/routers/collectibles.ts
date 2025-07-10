@@ -45,16 +45,7 @@ export const collectiblesRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         pages: z.record(z.string(), z.string()).optional(),
         limit: z.number().optional(),
         offset: z.number().optional(),
@@ -76,14 +67,7 @@ export const collectiblesRouter = router({
       z.object({
         contract: z.string(),
         tokenId: z.string(),
-        network: z.enum([
-          'ethereum',
-          'optimism',
-          'arbitrum',
-          'base',
-          'polygon',
-          'bsc',
-        ]),
+        network: z.enum(['ethereum']),
       }),
     )
     .query(async ({ input }) => {

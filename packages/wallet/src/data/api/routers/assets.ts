@@ -57,11 +57,6 @@ type Asset = {
 
 const STATUS_NETWORKS: Record<number, NetworkType> = {
   1: 'ethereum',
-  10: 'optimism',
-  42161: 'arbitrum',
-  8453: 'base',
-  137: 'polygon',
-  56: 'bsc',
 }
 
 const DEFAULT_TOKEN_SYMBOLS = [
@@ -79,16 +74,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
       }),
     )
     .query(async ({ input }) => {
@@ -109,16 +95,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         symbol: z.string(),
       }),
     )
@@ -131,16 +108,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         contract: z.string(),
       }),
     )
@@ -177,16 +145,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
       }),
     )
@@ -199,16 +158,7 @@ export const assetsRouter = router({
     .input(
       z.object({
         address: z.string(),
-        networks: z.array(
-          z.enum([
-            'ethereum',
-            'optimism',
-            'arbitrum',
-            'base',
-            'polygon',
-            'bsc',
-          ]),
-        ),
+        networks: z.array(z.enum(['ethereum'])),
         days: z.enum(['1', '7', '30', '90', '365', 'all']).optional(),
         contract: z.string(),
       }),
@@ -302,7 +252,7 @@ async function all({
       acc[network].push(token)
       return acc
     },
-    {} as Record<NetworkType, typeof erc20TokenList.tokens>,
+    {} as Record<NetworkType, ERC20Token[]>,
   )
 
   const partialERC20Assets: Map<
@@ -313,7 +263,9 @@ async function all({
     >
   > = new Map()
 
-  for (const [network, tokens] of Object.entries(ERC20TokensByNetwork)) {
+  for (const [network, tokens] of Object.entries(ERC20TokensByNetwork) as Array<
+    [string, ERC20Token[]]
+  >) {
     for (let i = 0; i < tokens.length; i += 100) {
       const batch = tokens.slice(i, i + 100)
       const batchBalances = await getERC20TokensBalance(
@@ -683,9 +635,16 @@ async function nativeTokenBalanceChart({
   // console.log(' DELAY nativeTokenBalanceChart()')
   // await delay()
 
+  const currentTime = Math.floor(Date.now() / 1000)
   const responses = await Promise.all(
     networks.map(async network => {
-      const data = await fetchTokenBalanceHistory(address, network, days)
+      const data = await fetchTokenBalanceHistory(
+        address,
+        network,
+        days,
+        undefined,
+        currentTime,
+      )
 
       return { [network]: data } as Record<
         NetworkType,
@@ -737,6 +696,7 @@ async function tokenBalanceChart({
     ? bridgedERC20Tokens
     : [erc20Token]
 
+  const currentTime = Math.floor(Date.now() / 1000)
   const responses = await Promise.all(
     filteredERC20Tokens.map(async token => {
       const data = await fetchTokenBalanceHistory(
@@ -744,6 +704,7 @@ async function tokenBalanceChart({
         STATUS_NETWORKS[token.chainId],
         days,
         token.address,
+        currentTime,
       )
 
       return { [STATUS_NETWORKS[token.chainId]]: data } as Record<
@@ -817,15 +778,12 @@ function getBridgedERC20Tokens(
 function aggregateTokenBalanceHistory(
   responses: Array<Record<NetworkType, Array<{ date: string; price: number }>>>,
 ) {
-  const now = new Date()
-  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000)
   const aggregate = responses.reduce(
     (acc, response) => {
       const data = Object.values(response)[0]
 
       data.forEach(item => {
-        const itemDate = new Date(item.date)
-        const key = itemDate > oneHourAgo ? now.toISOString() : item.date
+        const key = item.date
 
         if (!acc[key]) {
           acc[key] = {
@@ -842,7 +800,9 @@ function aggregateTokenBalanceHistory(
     {} as Record<string, { date: string; price: number }>,
   )
 
-  return Object.values(aggregate)
+  return Object.values(aggregate).sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  )
 }
 
 function map(data: {
