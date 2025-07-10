@@ -21,10 +21,10 @@ export function useRefetchToast({
     queryKeys
       ? {
           predicate: query =>
-            queryKeys.some(key =>
-              JSON.stringify(query.queryKey).startsWith(
-                JSON.stringify(key).slice(0, -1),
-              ),
+            queryKeys.some(
+              key =>
+                query.queryKey.length >= key.length &&
+                key.every((k, index) => query.queryKey[index] === k),
             ),
         }
       : undefined,

@@ -29,7 +29,6 @@ import { TabLink } from './tab-link'
 
 type Props = {
   address: string
-  pathname: string
   searchAndSortValues: {
     inputValue: string
     updateSearchParam: (value: string) => void
