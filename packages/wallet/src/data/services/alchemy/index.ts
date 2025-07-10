@@ -8,20 +8,29 @@
 // import 'server-only'
 
 import retry from 'async-retry'
+import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
+import { getNativeTokenPrice } from '../coingecko'
+import { estimateConfirmationTime, processFeeHistory } from './utils'
 
 import type { NetworkType } from '../../api/types'
 import type {
   AssetTransfer,
+  BlockResponseBody,
   deprecated_NFTSaleResponseBody,
   ERC20TokenBalanceResponseBody,
+  FeeHistoryResponseBody,
+  GasEstimateResponseBody,
+  MaxPriorityFeeResponseBody,
   NativeTokenBalanceResponseBody,
   NFTFloorPriceResponseBody,
   NFTMetadataResponseBody,
   NFTsResponseBody,
   ResponseBody,
+  SendRawTransactionResponseBody,
   TokenBalanceHistoryResponseBody,
+  TransactionCountResponseBody,
 } from './types'
 
 const alchemyNetworks = {
@@ -800,6 +809,142 @@ export async function getNFTFloorPrice(contract: string, network: NetworkType) {
   )
 
   return body
+}
+
+export async function getFeeRate(
+  network: NetworkType = 'ethereum',
+  params: {
+    from: string
+    to: string
+    value: string
+  },
+) {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  let gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData
+
+  try {
+    ;[gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData] =
+      await Promise.all([
+        _fetch<GasEstimateResponseBody>(url, 'POST', 3600, {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'eth_estimateGas',
+          params: [params],
+        }),
+        _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 3600, {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'eth_maxPriorityFeePerGas',
+          params: [],
+        }),
+        _fetch<BlockResponseBody>(url, 'POST', 3600, {
+          jsonrpc: '2.0',
+          id: 3,
+          method: 'eth_getBlockByNumber',
+          params: ['latest', false],
+        }),
+        _fetch<FeeHistoryResponseBody>(url, 'POST', 3600, {
+          jsonrpc: '2.0',
+          id: 4,
+          method: 'eth_feeHistory',
+          params: ['0x4', 'latest', [10, 50, 90]],
+        }),
+        getNativeTokenPrice('ethereum'),
+      ])
+  } catch (error) {
+    console.error('Failed to fetch fee rate:', error)
+    throw new Error('Failed to fetch fee rate.', { cause: error })
+  }
+
+  const baseFeeHex = latestBlock?.result?.baseFeePerGas
+  const priorityFeeHex = maxPriorityFee?.result
+  const gasLimitHex = gasEstimate?.result
+
+  if (!baseFeeHex || !priorityFeeHex || !gasLimitHex) {
+    throw new Error('Missing baseFee or gas limit or priorityFee')
+  }
+
+  const baseFee = BigInt(baseFeeHex)
+  const priorityFee = BigInt(priorityFeeHex)
+  const gasLimit = BigInt(gasLimitHex)
+  const maxFeePerGas = baseFee * 2n + priorityFee
+
+  const feeHistoryData = processFeeHistory({
+    ...feeHistory?.result,
+    gasUsedRatio: feeHistory?.result?.gasUsedRatio?.map(String) ?? [],
+    reward: feeHistory?.result?.reward ?? null,
+  })
+
+  const ethPrice =
+    typeof ethPriceData?.eur === 'number'
+      ? ethPriceData.eur
+      : parseFloat(ethPriceData?.eur) || 0
+
+  const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
+  const feeEur = ethPrice > 0 ? feeEth * ethPrice : 0
+  const confirmationTime = estimateConfirmationTime(priorityFee, feeHistoryData)
+
+  return {
+    maxFeeEur: parseFloat(feeEur.toFixed(6)),
+    feeEth,
+    confirmationTime,
+    txParams: {
+      gasLimit: gasLimitHex,
+      maxFeePerGas: `0x${maxFeePerGas.toString(16)}`,
+      maxPriorityFeePerGas: priorityFeeHex,
+    },
+  }
+}
+
+/**
+ * @see https://docs.alchemy.com/reference/eth-sendrawtransaction
+ */
+export async function broadcastTransaction(
+  txHex: string,
+  network: NetworkType = 'ethereum',
+) {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<SendRawTransactionResponseBody>(url, 'POST', 0, {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_sendRawTransaction',
+      params: [txHex],
+    }),
+  )
+
+  return body
+}
+
+/**
+ * @see https://www.alchemy.com/docs/node/ethereum/ethereum-api-endpoints/eth-get-transaction-count
+ */
+export async function getTransactionCount(
+  address: string,
+  network: NetworkType,
+) {
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<TransactionCountResponseBody>(url, 'POST', 0, {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'eth_getTransactionCount',
+      params: [address, 'latest'],
+    }),
+  )
+
+  const nonce = body.result
+
+  return nonce
 }
 
 async function _fetch<T extends ResponseBody>(

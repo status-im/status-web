@@ -1,5 +1,5 @@
 ---
-"wallet": patch
+'wallet': patch
 ---
 
 fix recovery phrase backup

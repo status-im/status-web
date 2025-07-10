@@ -1,6 +1,7 @@
 ---
 '@status-im/wallet': patch
+'portfolio': patch
 'wallet': patch
 ---
 
-fix mnemonic validation & navbar route
+move buy to wallet

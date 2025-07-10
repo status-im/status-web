@@ -1,8 +1,10 @@
 import { Avatar } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
+import { useWallet } from '@/providers/wallet-context'
+
+import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
-import { ActionButtons } from './action-buttons'
 import { TabLink } from './tab-link'
 
 type Props = {
@@ -11,20 +13,11 @@ type Props = {
   isLoading?: boolean
 }
 
-// Mock data. todo? Replace with actual data
-const SUMMARY = {
-  hidden: {
-    total_balance: 0,
-    total_eur: 0,
-    total_eur_24h_change: 0.0,
-    total_percentage_24h_change: 0.0,
-  },
-  visible: {
-    total_balance: 203.0,
-    total_eur: 203.0,
-    total_eur_24h_change: 10.0,
-    total_percentage_24h_change: 2.4,
-  },
+const DEFAULT_SUMMARY = {
+  total_balance: 0,
+  total_eur: 0,
+  total_eur_24h_change: 0.0,
+  total_percentage_24h_change: 0.0,
 }
 
 //   Includes mock data for actions buttons and options. todo? Replace with actual data
@@ -56,11 +49,16 @@ const account = {
 const SplittedLayout = (props: Props) => {
   const { list, detail, isLoading } = props
 
-  const [showHiddenSummary, setShowHiddenSummary] = useState(false)
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
 
-  const handleShowHiddenSummary = () => {
-    setShowHiddenSummary(!showHiddenSummary)
-  }
+  const address = currentWallet?.activeAccounts[0].address
+
+  const { data } = useAssets({
+    address,
+    isWalletLoading,
+  })
+
+  const summary = data?.summary ? data.summary : DEFAULT_SUMMARY
 
   return (
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
@@ -93,12 +91,7 @@ const SplittedLayout = (props: Props) => {
                         {account.name}
                       </div>
                     </div>
-                    <Balance
-                      summary={
-                        showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
-                      }
-                      onShowHiddenSummary={handleShowHiddenSummary}
-                    />
+                    <Balance summary={summary} />
                   </>
                 }
                 rightSlot={
@@ -135,12 +128,7 @@ const SplittedLayout = (props: Props) => {
                     </div>
 
                     <div className="mb-4">
-                      <Balance
-                        summary={
-                          showHiddenSummary ? SUMMARY.visible : SUMMARY.hidden
-                        }
-                        onShowHiddenSummary={handleShowHiddenSummary}
-                      />
+                      <Balance summary={summary ?? DEFAULT_SUMMARY} />
                     </div>
 
                     <ActionButtons {...actionsButtonsData} />

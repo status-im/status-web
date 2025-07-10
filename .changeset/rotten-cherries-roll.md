@@ -2,4 +2,4 @@
 '@status-im/wallet': patch
 ---
 
-add default tokens
+update token lists

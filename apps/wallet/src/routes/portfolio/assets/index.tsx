@@ -23,7 +23,7 @@ function Component() {
   const address = currentWallet?.activeAccounts[0].address
 
   const router = useRouter()
-  const { data: assets, isLoading } = useAssets({
+  const { data, isLoading } = useAssets({
     address,
     isWalletLoading,
   })
@@ -37,9 +37,9 @@ function Component() {
     <>
       <SplittedLayout
         list={
-          assets ? (
+          data?.assets ? (
             <AssetsList
-              assets={assets}
+              assets={data.assets}
               onSelect={url => {
                 const ticker = url.split('/').pop()
                 if (!ticker) return

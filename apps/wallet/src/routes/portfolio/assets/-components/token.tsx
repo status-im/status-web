@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react'
 
 import { Button, SegmentedControl, Tooltip } from '@status-im/components'
-import { ArrowLeftIcon, BuyIcon, ReceiveBlurIcon } from '@status-im/icons/20'
+import {
+  ArrowLeftIcon,
+  BuyIcon,
+  ReceiveBlurIcon,
+  SendBlurIcon,
+} from '@status-im/icons/20'
 import {
   type Account,
   Balance,
+  BuyCryptoDrawer,
   type ChartDataType,
   type ChartTimeFrame,
   CurrencyAmount,
@@ -12,6 +18,8 @@ import {
   DEFAULT_TIME_FRAME,
   NetworkBreakdown,
   ReceiveCryptoDrawer,
+  type SendAssetsFormData,
+  SendAssetsModal,
   StickyHeaderContainer,
   TIME_FRAMES,
   TokenAmount,
@@ -22,11 +30,14 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
 
+import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
+import { apiClient } from '@/providers/api-client'
+import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
 
-import type { ApiOutput } from '@status-im/wallet/data'
+import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
 type Props = {
   address: string
@@ -51,6 +62,11 @@ const Token = (props: Props) => {
     useState<ChartDataType>(DEFAULT_DATA_TYPE)
   const [activeTimeFrame, setActiveTimeFrame] =
     useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
+  const { currentWallet } = useWallet()
+  const [gasInput, setGasInput] = useState<{
+    to: string
+    value: string
+  } | null>(null)
 
   const token = useQuery<
     ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
@@ -99,6 +115,61 @@ const Token = (props: Props) => {
 
   const { data: typedToken, isLoading } = token
 
+  const needsEthBalance = typedToken?.summary.symbol !== 'ETH'
+
+  const ethBalanceQuery = useEthBalance(address, needsEthBalance)
+
+  const ethBalance = needsEthBalance
+    ? ethBalanceQuery.data?.summary.total_balance || 0
+    : typedToken.summary.total_balance
+
+  // Get gas fees for the current network
+  const gasFeeQuery = useQuery({
+    queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
+    queryFn: async ({ queryKey }) => {
+      const [, from, to, value] = queryKey as [string, string, string, string]
+
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
+      )
+
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            network: 'ethereum',
+            params: { from, to, value },
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      if (!response.ok) throw new Error('Failed to fetch gas fees')
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    enabled: !!gasInput?.to && !!gasInput?.value && !!address,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+  })
+
+  const prepareGasEstimate = (to: string, value: string) => {
+    setGasInput({ to, value })
+  }
+
+  const handleOpenTab = (url: string) => {
+    if (typeof chrome !== 'undefined' && chrome.tabs) {
+      chrome.tabs.create({ url })
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   useEffect(() => {
     const processMarkdown = async () => {
       if (typedToken) {
@@ -120,11 +191,63 @@ const Token = (props: Props) => {
   const uppercasedTicker = typedToken.summary.symbol
   const icon = typedToken.summary.icon
 
+  const asset = {
+    name: typedToken.summary.name,
+    icon,
+    totalBalance: typedToken.summary.total_balance,
+    totalBalanceEur: typedToken.summary.total_eur,
+    contractAddress: ticker.startsWith('0x') ? ticker : undefined,
+    symbol: typedToken.summary.symbol,
+    ethBalance,
+    network: (Object.keys(typedToken.assets)[0] ?? 'ethereum') as NetworkType,
+  }
+
+  // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
     name: 'Account 1',
     emoji: '🍑',
     color: 'magenta',
+  }
+
+  const signTransaction = async (
+    formData: SendAssetsFormData & { password: string },
+  ) => {
+    const amountHex = BigInt(
+      Math.floor(parseFloat(formData.amount) * 1e18),
+    ).toString(16)
+
+    const result = await apiClient.wallet.account.ethereum.send.mutate({
+      amount: amountHex,
+      toAddress: formData.to,
+      fromAddress: address,
+      password: formData.password,
+      walletId: currentWallet?.id || '',
+      gasLimit: gasFeeQuery.data.txParams.gasLimit.replace(/^0x/, ''),
+      maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas.replace(/^0x/, ''),
+      maxInclusionFeePerGas:
+        gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
+    })
+
+    if (!result.id || !result.id.txid) {
+      throw new Error('Transaction failed')
+    }
+
+    return result.id.txid
+  }
+
+  const verifyPassword = async (inputPassword: string): Promise<boolean> => {
+    if (!currentWallet?.id) return false
+    try {
+      await apiClient.wallet.get.query({
+        walletId: currentWallet.id,
+        password: inputPassword,
+      })
+
+      return true
+    } catch {
+      return false
+    }
   }
 
   return (
@@ -140,11 +263,13 @@ const Token = (props: Props) => {
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <Button size="32" iconBefore={<BuyIcon />}>
-            <span className="block max-w-20 truncate">
-              Buy {typedToken.summary.name}
-            </span>
-          </Button>
+          <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+            <Button size="32" iconBefore={<BuyIcon />}>
+              <span className="block max-w-20 truncate">
+                Buy {typedToken.summary.name}
+              </span>
+            </Button>
+          </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
               size="32"
@@ -154,6 +279,22 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
+          <SendAssetsModal
+            asset={asset}
+            account={{
+              ...account,
+              ethBalance: asset.ethBalance,
+            }}
+            signTransaction={signTransaction}
+            verifyPassword={verifyPassword}
+            gasFees={gasFeeQuery.data}
+            isLoadingFees={gasFeeQuery.isFetching}
+            onEstimateGas={prepareGasEstimate}
+          >
+            <Button size="32" iconBefore={<SendBlurIcon />}>
+              Send
+            </Button>
+          </SendAssetsModal>
         </div>
       }
     >
@@ -172,15 +313,16 @@ const Token = (props: Props) => {
             ticker={uppercasedTicker}
             icon={icon}
           />
-
           <div className="my-6 2xl:mt-0">
             <Balance variant="token" summary={typedToken.summary} />
           </div>
 
           <div className="flex items-center gap-1">
-            <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-              Buy {typedToken.summary.name}
-            </Button>
+            <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+              <Button size="32" iconBefore={<BuyIcon />} variant="primary">
+                Buy {typedToken.summary.name}
+              </Button>
+            </BuyCryptoDrawer>
 
             <ReceiveCryptoDrawer account={account} onCopy={copy}>
               <Button
@@ -191,6 +333,22 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
+            <SendAssetsModal
+              asset={asset}
+              account={{
+                ...account,
+                ethBalance: asset.ethBalance,
+              }}
+              signTransaction={signTransaction}
+              verifyPassword={verifyPassword}
+              gasFees={gasFeeQuery.data}
+              isLoadingFees={gasFeeQuery.isFetching}
+              onEstimateGas={prepareGasEstimate}
+            >
+              <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
+                Send
+              </Button>
+            </SendAssetsModal>
           </div>
         </div>
 
