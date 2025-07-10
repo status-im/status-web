@@ -302,7 +302,7 @@ async function all({
       acc[network].push(token)
       return acc
     },
-    {} as Record<NetworkType, typeof erc20TokenList.tokens>,
+    {} as Record<NetworkType, ERC20Token[]>,
   )
 
   const partialERC20Assets: Map<
@@ -313,7 +313,9 @@ async function all({
     >
   > = new Map()
 
-  for (const [network, tokens] of Object.entries(ERC20TokensByNetwork)) {
+  for (const [network, tokens] of Object.entries(ERC20TokensByNetwork) as Array<
+    [string, ERC20Token[]]
+  >) {
     for (let i = 0; i < tokens.length; i += 100) {
       const batch = tokens.slice(i, i + 100)
       const batchBalances = await getERC20TokensBalance(
