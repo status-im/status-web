@@ -37,7 +37,7 @@ function Component() {
       <SplittedLayout
         list={
           <AssetsList
-            assets={data!.assets}
+            assets={data?.assets ?? []}
             onSelect={url => {
               const ticker = url.split('/').pop()
               if (!ticker) return
