@@ -52,7 +52,7 @@ const ActivityItem = (props: ActivityItemProps) => {
     <a
       href={`https://etherscan.io/tx/${activity.hash}`}
       target="_blank"
-      className="grid grid-cols-[2fr_1fr_1fr] gap-4 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5"
+      className="grid grid-cols-[2fr_1fr_1fr] gap-4 rounded-12 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5"
     >
       <div className="flex items-center gap-3">
         <div className="relative">

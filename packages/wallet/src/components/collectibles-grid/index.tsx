@@ -2,25 +2,12 @@ import { Button, Skeleton } from '@status-im/components'
 import { SadIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 
+import { GRADIENTS } from '../../constants/gradients'
 import { useInfiniteLoading } from '../../hooks/use-infinite-loading'
 
 import type { Collectible } from '@status-im/wallet/data'
 import type { ComponentType, ReactNode } from 'react'
 
-export const GRADIENTS = [
-  'linear-gradient(120deg, #F6B03C, #1992D7, #7140FD)',
-  'linear-gradient(190deg, #FF7D46, #7140FD, #2A4AF5)',
-  'linear-gradient(145deg, #2A4AF5, #EC266C, #F6B03C)',
-  'linear-gradient(195deg, #216266, #FF7D46, #2A4AF5)',
-  'linear-gradient(45deg, #7140FD, #216266, #F6B03C)',
-  'linear-gradient(145deg, #F6B03C, #1992D7, #7140FD)',
-  'linear-gradient(45deg, #F6B03C, #1992D7, #7140FD)',
-  'linear-gradient(145deg, #FF7D46, #7140FD, #2A4AF5)',
-  'linear-gradient(45deg, #2A4AF5, #EC266C, #F6B03C)',
-  'linear-gradient(125deg, #216266, #FF7D46, #2A4AF5)',
-  'linear-gradient(145deg, #F6B03C, #1992D7, #7140FD)',
-  'linear-gradient(145deg, #F6B03C, #1992D7, #7140FD)',
-]
 type LinkComponentProps = {
   href: string
   className?: string
@@ -156,7 +143,7 @@ const CollectiblesGrid = (props: Props) => {
           </div>
         )}
       </div>
-      {isLoading && hasNextPage && (
+      {hasNextPage && isLoading && (
         <div className="grid grid-cols-2 gap-3 overscroll-contain lg:grid-cols-4">
           {GRADIENTS.slice(0, 4).map((gradient, index) => {
             return (

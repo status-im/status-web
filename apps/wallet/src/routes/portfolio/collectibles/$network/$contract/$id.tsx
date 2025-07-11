@@ -1,6 +1,9 @@
 import { Suspense } from 'react'
 
-import { CollectiblesGrid as CollectiblesList } from '@status-im/wallet/components'
+import {
+  CollectiblesGrid as CollectiblesList,
+  CollectiblesGridSkeleton,
+} from '@status-im/wallet/components'
 import { createFileRoute, useRouterState } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
@@ -41,7 +44,7 @@ function Component() {
   }, [data?.pages])
 
   if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
+    return null
   }
 
   return (
@@ -65,6 +68,7 @@ function Component() {
               hasNextPage={hasNextPage}
             />
           }
+          loadingState={<CollectiblesGridSkeleton />}
           isLoading={isLoading}
           detail={
             <Suspense fallback={<p>Loading collectible...</p>}>

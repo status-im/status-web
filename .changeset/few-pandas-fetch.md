@@ -4,4 +4,4 @@
 'wallet': patch
 ---
 
-limit wallet networks
+loading states

@@ -6,7 +6,11 @@ import {
   SadIcon,
 } from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
-import { CurrencyAmount, NetworkLogo } from '@status-im/wallet/components'
+import {
+  CollectibleSkeleton,
+  CurrencyAmount,
+  NetworkLogo,
+} from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
@@ -58,8 +62,9 @@ const Collectible = (props: Props) => {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
   })
+
   if (isLoading || !collectible) {
-    return <p>Loading</p>
+    return <CollectibleSkeleton />
   }
 
   const imageUrl = collectible.image || collectible.thumbnail
