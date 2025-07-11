@@ -17,7 +17,7 @@ const useInfiniteLoading = (props: Props) => {
   const endOfPageRef = useRef<HTMLDivElement>(null)
   const entry = useIntersectionObserver(endOfPageRef, {
     rootMargin,
-    threshold: 0.1,
+    threshold: 0.5,
   })
 
   const isVisible = !!entry?.isIntersecting
@@ -34,6 +34,7 @@ const useInfiniteLoading = (props: Props) => {
   return {
     endOfPageRef,
     isLoading,
+    isVisible,
   }
 }
 

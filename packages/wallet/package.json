@@ -31,6 +31,11 @@
       "types": "./dist/src/hooks/index.d.ts",
       "import": "./dist/hooks/index.es.js",
       "require": "./dist/hooks/index.cjs.js"
+    },
+    "./constants": {
+      "types": "./dist/src/constants/index.d.ts",
+      "import": "./dist/constants/index.es.js",
+      "require": "./dist/constants/index.cjs.js"
     }
   },
   "files": [

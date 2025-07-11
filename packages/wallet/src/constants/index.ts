@@ -1,0 +1,1 @@
+export { GRADIENTS } from './gradients'

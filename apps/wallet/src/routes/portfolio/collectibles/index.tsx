@@ -11,6 +11,7 @@ import { usePinExtension } from '@/hooks/use-pin-extension'
 import { LinkCollectible } from '@/routes/portfolio/collectibles/-components/link-collectibe'
 
 import { useWallet } from '../../../providers/wallet-context'
+import { GridSkeleton } from './-components/skeletons'
 
 export const Route = createFileRoute('/portfolio/collectibles/')({
   component: Component,
@@ -60,6 +61,7 @@ function Component() {
             hasNextPage={hasNextPage}
           />
         }
+        loadingState={<GridSkeleton />}
         detail={<FeedbackSection />}
         isLoading={isLoading}
       />

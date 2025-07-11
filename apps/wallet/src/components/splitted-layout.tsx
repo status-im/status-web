@@ -171,7 +171,6 @@ const MainContentBody = () => {
     return (
       <div className="flex flex-col gap-2 px-3">
         <div className="flex items-center justify-between gap-1.5">
-          <AccountSkeleton variant="secondary" />
           <Skeleton
             height={27}
             width={186}
