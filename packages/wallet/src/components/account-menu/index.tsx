@@ -18,7 +18,6 @@ import {
 
 import { DeleteAddressAlert } from '../delete-address-alert'
 import { NetworkExplorerLogo } from '../network-explorer-logo'
-import { NetworkLogo } from '../network-logo'
 // import { AddressDrawer } from './address-drawer'
 import { ReceiveCryptoDrawer } from '../receive-crypto-drawer'
 import { shortenAddress } from '../shorten-address'
@@ -135,53 +134,6 @@ const AccountMenu = (props: Props) => {
                   </>
                 }
                 href={'https://etherscan.io/address/' + account.address}
-              />
-              <DropdownMenuLink
-                label={
-                  <>
-                    <NetworkLogo name="optimism" size={16} />
-                    Optimism Explorer
-                  </>
-                }
-                href={
-                  'https://optimistic.etherscan.io/address/' + account.address
-                }
-              />
-              <DropdownMenuLink
-                label={
-                  <>
-                    <NetworkExplorerLogo name="arbiscan" />
-                    Arbiscan
-                  </>
-                }
-                href={'https://arbiscan.io/address/' + account.address}
-              />
-              <DropdownMenuLink
-                label={
-                  <>
-                    <NetworkExplorerLogo name="basescan" />
-                    Base Explorer
-                  </>
-                }
-                href={'https://basescan.org/tx/' + account.address}
-              />
-              <DropdownMenuLink
-                label={
-                  <>
-                    <NetworkExplorerLogo name="polygonscan" />
-                    Polygon Explorer
-                  </>
-                }
-                href={'https://polygonscan.com/tx/' + account.address}
-              />
-              <DropdownMenuLink
-                label={
-                  <>
-                    <NetworkExplorerLogo name="bscscan" />
-                    BSC Explorer
-                  </>
-                }
-                href={'https://bscscan.com/tx/' + account.address}
               />
             </DropdownMenu.SubContent>
           </DropdownMenu.Sub>

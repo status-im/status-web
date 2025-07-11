@@ -30,14 +30,7 @@ const useAssets = (
         JSON.stringify({
           json: {
             address,
-            networks: [
-              'ethereum',
-              'optimism',
-              'arbitrum',
-              'base',
-              'polygon',
-              'bsc',
-            ],
+            networks: ['ethereum'],
           },
         }),
       )
