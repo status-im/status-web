@@ -9,6 +9,7 @@ export { AssetsList } from './assets-list'
 export { AssetsListLoading } from './assets-list-loading'
 export { Balance } from './balance'
 export { BlurredCircle } from './blurred-circle'
+export { CollectibleSkeleton } from './collectible-skeleton'
 export { CollectiblesGrid } from './collectibles-grid'
 export { CollectiblesGridSkeleton } from './collectibles-grid/collectibles-grid-skeleton'
 export {
