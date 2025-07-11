@@ -4,7 +4,11 @@ import * as Table from '../table'
 
 const AssetsListLoading = () => {
   return (
-    <div className="min-h-[calc(100svh-362px)]">
+    <div
+      aria-busy="true"
+      aria-label="Loading assets"
+      className="min-h-[calc(100svh-362px)]"
+    >
       <Table.Root>
         <Table.Header>
           <Table.HeaderCell>Assets</Table.HeaderCell>

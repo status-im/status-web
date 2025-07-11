@@ -16,6 +16,7 @@ import {
   StickyHeaderContainer,
   TokenAmount,
   TokenLogo,
+  TokenSkeleton,
 } from '@status-im/wallet/components'
 import { type ApiOutput, type NetworkType } from '@status-im/wallet/data'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
@@ -162,8 +163,10 @@ const Token = (props: Props) => {
     processMarkdown()
   }, [typedToken])
 
-  if (isLoading || !typedToken) {
-    return <p>Loading</p>
+  const bajoras = true
+
+  if (isLoading || !typedToken || bajoras) {
+    return <TokenSkeleton />
   }
 
   const metadata = Object.values(typedToken.assets)[0].metadata

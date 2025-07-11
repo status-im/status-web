@@ -35,7 +35,7 @@ function Component() {
   })
 
   if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
+    return null
   }
 
   return (

@@ -4,7 +4,11 @@ import { GRADIENTS } from '../../constants'
 
 const CollectiblesGridSkeleton = () => {
   return (
-    <div className="grid grid-cols-2 gap-3 overscroll-contain lg:grid-cols-4">
+    <div
+      aria-busy="true"
+      aria-label="Loading collectibles"
+      className="grid grid-cols-2 gap-3 overscroll-contain lg:grid-cols-4"
+    >
       {GRADIENTS.slice(0, 8).map((gradient, index) => {
         return (
           <div key={index} className="relative">
