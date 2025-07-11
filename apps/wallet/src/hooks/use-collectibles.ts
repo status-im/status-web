@@ -70,7 +70,7 @@ const getCollectibles = async (
   }
 
   const body = await response.json()
-  return body.result.data.json.collectibles
+  return body.result.data.json
 }
 
 const useCollectibles = (props: Props) => {
@@ -99,7 +99,7 @@ const useCollectibles = (props: Props) => {
       }
 
       const offset = pageParam * PAGE_LIMIT
-      const collectibles = await getCollectibles(
+      const response = await getCollectibles(
         address,
         networks as NetworkType[],
         search,
@@ -107,11 +107,13 @@ const useCollectibles = (props: Props) => {
         offset,
       )
       return {
-        collectibles,
+        collectibles: response.collectibles,
+        hasMore: response.hasMore,
         nextPage: pageParam + 1,
       }
     },
-    getNextPageParam: lastPage => lastPage.nextPage,
+    getNextPageParam: lastPage =>
+      lastPage.hasMore ? lastPage.nextPage : undefined,
     initialPageParam: 0,
     enabled: !!address && !isWalletLoading,
     staleTime: QUERY_STALE_TIME_MS,
