@@ -2,6 +2,7 @@ import { Avatar, Skeleton } from '@status-im/components'
 import { Balance, StickyHeaderContainer } from '@status-im/wallet/components'
 
 import { usePortfolio } from '@/hooks/use-portfolio'
+import { useWallet } from '@/providers/wallet-context'
 
 import { ActionButtons } from '../components/action-buttons'
 import { RecoveryPhraseBackup } from '../components/recovery-phrase-backup'
@@ -20,8 +21,8 @@ type Props = {
   loadingState?: React.ReactNode
 }
 
-const actionsButtonsData = {
-  address: 'portfolio',
+const getActionsButtonsData = (address: string | undefined) => ({
+  address: address ?? '',
   pathname: '/portfolio/assets',
   searchAndSortValues: {
     inputValue: '',
@@ -37,7 +38,7 @@ const actionsButtonsData = {
       price: 'Price',
     },
   },
-}
+})
 
 const SplittedLayout = (props: Props) => {
   const { list, detail, isLoading, loadingState } = props
@@ -165,8 +166,11 @@ const HeaderRightSlot = () => {
 
 const MainContentBody = () => {
   const { account, isLoading } = usePortfolio()
+  const { currentWallet, isLoading: isWalletLoading } = useWallet()
 
-  if (isLoading) {
+  const address = currentWallet?.activeAccounts[0].address
+
+  if (isLoading || isWalletLoading) {
     return (
       <div className="flex flex-col gap-2 px-3">
         <div className="flex items-center justify-between gap-1.5">
@@ -209,7 +213,7 @@ const MainContentBody = () => {
         <PortfolioBalance variant="secondary" />
       </div>
 
-      <ActionButtons {...actionsButtonsData} />
+      <ActionButtons {...getActionsButtonsData(address)} />
     </div>
   )
 }

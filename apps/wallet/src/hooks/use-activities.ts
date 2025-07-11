@@ -1,5 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+
 import type { Activity, NetworkType } from '@status-im/wallet/data'
 
 const PAGE_LIMIT = 20
@@ -85,10 +87,10 @@ export const useActivities = ({ address }: Props) => {
     },
 
     initialPageParam: {},
-    staleTime: 1000 * 60 * 60,
-    gcTime: 1000 * 60 * 60,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    staleTime: QUERY_STALE_TIME_MS,
+    gcTime: QUERY_GC_TIME_MS,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }

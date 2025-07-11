@@ -39,12 +39,30 @@ import { AssetChart } from './asset-chart'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
+type TokenData =
+  | ApiOutput['assets']['token']
+  | ApiOutput['assets']['nativeToken']
+type AssetsResponse = ApiOutput['assets']['all']
+type AssetData = ApiOutput['assets']['all']['assets'][number]
+
 type Props = {
   address: string
   ticker: string
 }
 
 const NETWORKS = ['ethereum'] as const
+
+function matchesAsset(asset: AssetData, ticker: string): boolean {
+  if (ticker.startsWith('0x')) {
+    return (
+      ('contract' in asset &&
+        asset.contract?.toLowerCase() === ticker.toLowerCase()) ||
+      false
+    )
+  } else {
+    return asset.symbol?.toLowerCase() === ticker.toLowerCase()
+  }
+}
 
 const Token = (props: Props) => {
   const { ticker, address } = props
@@ -61,9 +79,47 @@ const Token = (props: Props) => {
     value: string
   } | null>(null)
 
-  const token = useQuery<
-    ApiOutput['assets']['token'] | ApiOutput['assets']['nativeToken']
-  >({
+  const { data } = useQuery<AssetsResponse>({
+    queryKey: ['assets', address],
+    queryFn: async () => {
+      const url = new URL(
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.all`,
+      )
+      url.searchParams.set(
+        'input',
+        JSON.stringify({
+          json: {
+            address,
+            networks: NETWORKS,
+          },
+        }),
+      )
+
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch assets.')
+      }
+
+      const body = await response.json()
+      return body.result.data.json
+    },
+    enabled: !!address,
+    staleTime: 15 * 1000,
+    gcTime: 60 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
+  })
+
+  const asset = data?.assets?.find((a: AssetData) => matchesAsset(a, ticker))
+
+  const { data: tokenDetail, isLoading: isTokenLoading } = useQuery<TokenData>({
     queryKey: ['token', ticker],
     queryFn: async () => {
       const endpoint = ticker.startsWith('0x')
@@ -93,28 +149,29 @@ const Token = (props: Props) => {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch.')
+        throw new Error('Failed to fetch token detail.')
       }
 
       const body = await response.json()
       return body.result.data.json
     },
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    enabled: !!asset,
+    staleTime: 15 * 1000,
+    gcTime: 60 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 
-  const { data: typedToken, isLoading } = token
+  const isLoading = !data?.assets || isTokenLoading || !tokenDetail
 
-  const needsEthBalance = typedToken?.summary.symbol !== 'ETH'
+  const needsEthBalance = tokenDetail?.summary.symbol !== 'ETH'
 
   const ethBalanceQuery = useEthBalance(address, needsEthBalance)
 
   const ethBalance = needsEthBalance
     ? ethBalanceQuery.data?.summary.total_balance || 0
-    : typedToken.summary.total_balance
+    : tokenDetail.summary.total_balance
 
   // Get gas fees for the current network
   const gasFeeQuery = useQuery({
@@ -165,34 +222,53 @@ const Token = (props: Props) => {
 
   useEffect(() => {
     const processMarkdown = async () => {
-      if (typedToken) {
-        const metadata = Object.values(typedToken.assets)[0].metadata
-        const content = await renderMarkdown(
-          metadata.about || 'No description available.',
-        )
-        setMarkdownContent(content)
+      if (tokenDetail?.assets) {
+        const tokenAssets = Object.values(tokenDetail.assets)
+        if (tokenAssets.length > 0 && tokenAssets[0]) {
+          const metadata = tokenAssets[0].metadata
+          const content = await renderMarkdown(
+            metadata?.about || 'No description available.',
+          )
+          setMarkdownContent(content)
+        }
       }
     }
     processMarkdown()
-  }, [typedToken])
+  }, [tokenDetail])
 
-  if (isLoading || !typedToken) {
+  if (isLoading || !asset) {
     return <TokenSkeleton />
   }
 
-  const metadata = Object.values(typedToken.assets)[0].metadata
-  const uppercasedTicker = typedToken.summary.symbol
-  const icon = typedToken.summary.icon
+  const tokenAssets = tokenDetail?.assets
+    ? Object.values(tokenDetail.assets)
+    : []
+  const metadata = tokenAssets[0]?.metadata || {}
 
-  const asset = {
-    name: typedToken.summary.name,
+  const summary = {
+    symbol: asset.symbol,
+    name: asset.name,
+    icon: asset.icon,
+    total_balance: asset.balance,
+    total_eur: asset.total_eur,
+    total_eur_24h_change:
+      asset.total_eur * (asset.price_percentage_24h_change / 100),
+    total_percentage_24h_change: asset.price_percentage_24h_change,
+  }
+
+  const uppercasedTicker = asset.symbol || ticker
+  const icon = asset.icon || ''
+  const name = asset.name || ticker
+
+  const sendAsset = {
+    name: tokenDetail.summary.name,
     icon,
-    totalBalance: typedToken.summary.total_balance,
-    totalBalanceEur: typedToken.summary.total_eur,
+    totalBalance: tokenDetail.summary.total_balance,
+    totalBalanceEur: tokenDetail.summary.total_eur,
     contractAddress: ticker.startsWith('0x') ? ticker : undefined,
-    symbol: typedToken.summary.symbol,
+    symbol: tokenDetail.summary.symbol,
     ethBalance,
-    network: (Object.keys(typedToken.assets)[0] ?? 'ethereum') as NetworkType,
+    network: (Object.keys(tokenDetail.assets)[0] ?? 'ethereum') as NetworkType,
   }
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
@@ -249,7 +325,7 @@ const Token = (props: Props) => {
       leftSlot={
         <TokenLogo
           variant="small"
-          name={typedToken.summary.name}
+          name={name}
           ticker={uppercasedTicker}
           icon={icon}
         />
@@ -258,9 +334,7 @@ const Token = (props: Props) => {
         <div className="flex items-center gap-1 pt-px">
           <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
             <Button size="32" iconBefore={<BuyIcon />}>
-              <span className="block max-w-20 truncate">
-                Buy {typedToken.summary.name}
-              </span>
+              <span className="block max-w-20 truncate">Buy {name}</span>
             </Button>
           </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -273,10 +347,10 @@ const Token = (props: Props) => {
             </Button>
           </ReceiveCryptoDrawer>
           <SendAssetsModal
-            asset={asset}
+            asset={sendAsset}
             account={{
               ...account,
-              ethBalance: asset.ethBalance,
+              ethBalance: sendAsset.ethBalance,
             }}
             signTransaction={signTransaction}
             verifyPassword={verifyPassword}
@@ -301,19 +375,15 @@ const Token = (props: Props) => {
       </Link>
       <div className="grid gap-10 p-4 pt-0 2xl:mt-0 2xl:p-12 2xl:pt-0">
         <div>
-          <TokenLogo
-            name={typedToken.summary.name}
-            ticker={uppercasedTicker}
-            icon={icon}
-          />
+          <TokenLogo name={name} ticker={uppercasedTicker} icon={icon} />
           <div className="my-6 2xl:mt-0">
-            <Balance variant="token" summary={typedToken.summary} />
+            <Balance variant="token" summary={summary} />
           </div>
 
           <div className="flex items-center gap-1">
             <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-                Buy {typedToken.summary.name}
+                Buy {name}
               </Button>
             </BuyCryptoDrawer>
 
@@ -327,10 +397,10 @@ const Token = (props: Props) => {
               </Button>
             </ReceiveCryptoDrawer>
             <SendAssetsModal
-              asset={asset}
+              asset={sendAsset}
               account={{
                 ...account,
-                ethBalance: asset.ethBalance,
+                ethBalance: sendAsset.ethBalance,
               }}
               signTransaction={signTransaction}
               verifyPassword={verifyPassword}
@@ -383,7 +453,7 @@ const Token = (props: Props) => {
           <AssetChart
             address={address}
             slug={ticker}
-            symbol={typedToken.summary.symbol}
+            symbol={uppercasedTicker}
             timeFrame={activeTimeFrame}
             activeDataType={activeDataType}
           />

@@ -40,6 +40,12 @@ async function handler(request: NextRequest) {
             'nodes.broadcastTransaction',
             'nodes.getNonce',
             'nodes.getTransactionCount',
+            'activities.page',
+            'activities.activities',
+            'assets.all',
+            'assets.nativeToken',
+            'assets.token',
+            'collectibles.page',
           ].includes(path)
         ) ||
         opts?.type === 'mutation'
@@ -50,10 +56,10 @@ async function handler(request: NextRequest) {
       return {
         headers: {
           'cache-control': cacheControl,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       }
     },
   })

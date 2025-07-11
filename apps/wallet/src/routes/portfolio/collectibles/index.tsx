@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import {
   CollectiblesGrid as CollectiblesList,
   CollectiblesGridSkeleton,
