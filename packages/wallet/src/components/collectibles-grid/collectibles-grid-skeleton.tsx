@@ -9,7 +9,7 @@ const CollectiblesGridSkeleton = () => {
       aria-label="Loading collectibles"
       className="grid grid-cols-2 gap-3 overscroll-contain lg:grid-cols-4"
     >
-      {GRADIENTS.slice(0, 8).map((gradient, index) => {
+      {GRADIENTS.slice(0, 4).map((gradient, index) => {
         return (
           <div key={index} className="relative">
             <div
