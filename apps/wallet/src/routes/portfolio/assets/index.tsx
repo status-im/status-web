@@ -1,5 +1,6 @@
 import {
   AssetsList,
+  AssetsListLoading,
   FeedbackSection,
   PinExtension,
 } from '@status-im/wallet/components'
@@ -29,39 +30,34 @@ function Component() {
   })
   const isDesktop = useMediaQuery('xl')
 
-  if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
-  }
+  if (!currentWallet || !address) return null
 
   return (
     <>
       <SplittedLayout
         list={
-          data?.assets ? (
-            <AssetsList
-              assets={data.assets}
-              onSelect={url => {
-                const ticker = url.split('/').pop()
-                if (!ticker) return
-                router.navigate({
-                  to: '/portfolio/assets/$ticker',
-                  params: { ticker },
-                  ...(!isDesktop && {
-                    viewTransition: true,
-                  }),
-                })
-              }}
-              clearSearch={() => {
-                console.log('Search cleared')
-              }}
-              searchParams={new URLSearchParams()}
-              pathname="/portfolio/assets"
-            />
-          ) : (
-            <div className="mt-4 flex flex-col gap-3">Empty state</div>
-          )
+          <AssetsList
+            assets={data?.assets ?? []}
+            onSelect={url => {
+              const ticker = url.split('/').pop()
+              if (!ticker) return
+              router.navigate({
+                to: '/portfolio/assets/$ticker',
+                params: { ticker },
+                ...(!isDesktop && {
+                  viewTransition: true,
+                }),
+              })
+            }}
+            clearSearch={() => {
+              console.log('Search cleared')
+            }}
+            searchParams={new URLSearchParams()}
+            pathname="/portfolio/assets"
+          />
         }
         detail={<FeedbackSection />}
+        loadingState={<AssetsListLoading />}
         isLoading={isLoading}
       />
       {isPinExtension && (

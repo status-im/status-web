@@ -23,6 +23,7 @@ import {
   TIME_FRAMES,
   TokenAmount,
   TokenLogo,
+  TokenSkeleton,
 } from '@status-im/wallet/components'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
@@ -236,7 +237,7 @@ const Token = (props: Props) => {
   }, [tokenDetail])
 
   if (isLoading || !asset) {
-    return <p>Loading</p>
+    return <TokenSkeleton />
   }
 
   const tokenAssets = tokenDetail?.assets

@@ -110,7 +110,7 @@ const StickyHeaderContainer = (props: Props) => {
   return (
     <div
       ref={containerRef}
-      className="relative h-[calc(100vh-56px)] w-full overflow-auto scrollbar-stable"
+      className="relative flex h-[calc(100vh-56px)] w-full flex-col overflow-auto scrollbar-stable"
     >
       <div
         className={cx(

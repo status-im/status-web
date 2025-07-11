@@ -1,6 +1,4 @@
-import { Suspense } from 'react'
-
-import { AssetsList } from '@status-im/wallet/components'
+import { AssetsList, AssetsListLoading } from '@status-im/wallet/components'
 import {
   createFileRoute,
   useRouter,
@@ -35,7 +33,7 @@ function Component() {
   })
 
   if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
+    return null
   }
 
   return (
@@ -67,11 +65,8 @@ function Component() {
               <div className="mt-4 flex flex-col gap-3">Empty state</div>
             )
           }
-          detail={
-            <Suspense fallback={<p>Loading token...</p>}>
-              <Token ticker={ticker} address={address} />
-            </Suspense>
-          }
+          loadingState={<AssetsListLoading />}
+          detail={<Token ticker={ticker} address={address} />}
           isLoading={isLoading}
         />
       </div>

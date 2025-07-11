@@ -286,6 +286,14 @@ export default {
           from: { opacity: '0', transform: 'translateY(2px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
         },
+        // skeleton with gradient colors animation in loop
+        'gradient-skeleton': {
+          '0%': { backgroundPosition: '0% 0%' },
+          '25%': { backgroundPosition: '100% 0%' },
+          '50%': { backgroundPosition: '100% 100%' },
+          '75%': { backgroundPosition: '0% 100%' },
+          '100%': { backgroundPosition: '0% 0%' },
+        },
       },
 
       animation: {
@@ -310,8 +318,8 @@ export default {
         float: 'float 6s ease-in-out infinite',
         'float-reverse': 'float-reverse 6s ease-in-out infinite',
         pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-
         slideUpAndFade: 'slideUpAndFade 400ms cubic-bezier(0.16, 1, 0.3, 1)',
+        'gradient-skeleton': 'gradient-skeleton 5s linear infinite',
       },
 
       backgroundImage: {
