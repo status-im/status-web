@@ -36,29 +36,25 @@ function Component() {
     <>
       <SplittedLayout
         list={
-          data?.assets ? (
-            <AssetsList
-              assets={data.assets}
-              onSelect={url => {
-                const ticker = url.split('/').pop()
-                if (!ticker) return
-                router.navigate({
-                  to: '/portfolio/assets/$ticker',
-                  params: { ticker },
-                  ...(!isDesktop && {
-                    viewTransition: true,
-                  }),
-                })
-              }}
-              clearSearch={() => {
-                console.log('Search cleared')
-              }}
-              searchParams={new URLSearchParams()}
-              pathname="/portfolio/assets"
-            />
-          ) : (
-            <div className="mt-4 flex flex-col gap-3">Empty state</div>
-          )
+          <AssetsList
+            assets={data!.assets}
+            onSelect={url => {
+              const ticker = url.split('/').pop()
+              if (!ticker) return
+              router.navigate({
+                to: '/portfolio/assets/$ticker',
+                params: { ticker },
+                ...(!isDesktop && {
+                  viewTransition: true,
+                }),
+              })
+            }}
+            clearSearch={() => {
+              console.log('Search cleared')
+            }}
+            searchParams={new URLSearchParams()}
+            pathname="/portfolio/assets"
+          />
         }
         detail={<FeedbackSection />}
         loadingState={<AssetsListLoading />}

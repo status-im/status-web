@@ -1,6 +1,7 @@
 import {
   CollectiblesGrid as CollectiblesList,
   CollectiblesGridSkeleton,
+  EmptyState,
   FeedbackSection,
   PinExtension,
 } from '@status-im/wallet/components'
@@ -38,28 +39,32 @@ function Component() {
   }, [data?.pages])
 
   if (!currentWallet || !address) {
-    return <div>No wallet selected</div>
+    return null
   }
 
   return (
     <>
       <SplittedLayout
         list={
-          <CollectiblesList
-            LinkComponent={LinkCollectible}
-            address={address}
-            collectibles={collectibles}
-            fetchNextPage={fetchNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            pathname={pathname}
-            search={search}
-            searchParams={searchParams}
-            clearSearch={() => {
-              // Clear the search input
-              console.log('Search cleared')
-            }}
-            hasNextPage={hasNextPage}
-          />
+          collectibles.length === 0 && !isLoading ? (
+            <EmptyState variant="collectible" />
+          ) : (
+            <CollectiblesList
+              LinkComponent={LinkCollectible}
+              address={address}
+              collectibles={collectibles}
+              fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              pathname={pathname}
+              search={search}
+              searchParams={searchParams}
+              clearSearch={() => {
+                // Clear the search input
+                console.log('Search cleared')
+              }}
+              hasNextPage={hasNextPage}
+            />
+          )
         }
         loadingState={<CollectiblesGridSkeleton />}
         detail={<FeedbackSection />}

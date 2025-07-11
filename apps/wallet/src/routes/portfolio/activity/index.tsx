@@ -1,6 +1,7 @@
 import {
   ActivityList,
   ActivityListSkeleton,
+  EmptyState,
   FeedbackSection,
 } from '@status-im/wallet/components'
 import { createFileRoute } from '@tanstack/react-router'
@@ -33,8 +34,12 @@ function RouteComponent() {
             isLoadingMore={isFetchingNextPage}
           />
         ) : (
-          <div className="mt-4 flex flex-col gap-3">
-            {!address ? 'No wallet selected' : 'No activity'}
+          <div className="flex flex-1 flex-col gap-3">
+            {!address ? (
+              <p className="mt-4">No wallet selected</p>
+            ) : (
+              <EmptyState variant="activity" />
+            )}
           </div>
         )
       }

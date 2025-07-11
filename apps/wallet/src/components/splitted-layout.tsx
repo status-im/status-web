@@ -46,7 +46,7 @@ const SplittedLayout = (props: Props) => {
     <div className="grid flex-1 divide-x divide-neutral-10 overflow-hidden">
       <div className="flex divide-x divide-default-neutral-20">
         <div className="flex grow flex-col 2xl:basis-1/2">
-          <div className="relative h-[calc(100vh-56px)] overflow-auto">
+          <div className="relative flex h-[calc(100vh-56px)] flex-col overflow-auto">
             <StickyHeaderContainer
               isLarge
               className="px-6 xl:px-12"
@@ -55,7 +55,6 @@ const SplittedLayout = (props: Props) => {
             >
               <div className="relative -mt-8 flex flex-1 flex-col px-3 xl:mt-0 xl:px-12">
                 <MainContentBody />
-
                 {isLoading ? loadingState : list}
               </div>
             </StickyHeaderContainer>
