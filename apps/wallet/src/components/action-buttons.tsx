@@ -2,8 +2,14 @@
 
 // import { Input } from '@status-im/components'
 // import { SearchIcon } from '@status-im/icons/20'
-import { DropdownSort } from '@status-im/wallet/components'
+import { useState } from 'react'
 
+import { Button } from '@status-im/components'
+import { RefreshIcon } from '@status-im/icons/20'
+import { DropdownSort } from '@status-im/wallet/components'
+import { useIsFetching, useQueryClient } from '@tanstack/react-query'
+
+import { useRefetchToast } from '../hooks/use-refetch-toast'
 // import { match, P } from 'ts-pattern'
 import { TabLink } from './tab-link'
 
@@ -22,7 +28,7 @@ import { TabLink } from './tab-link'
 // } as const
 
 type Props = {
-  pathname: string
+  address: string
   searchAndSortValues: {
     inputValue: string
     updateSearchParam: (value: string) => void
@@ -34,10 +40,55 @@ type Props = {
 }
 
 const ActionButtons = (props: Props) => {
-  //   const { address, pathname, searchAndSortValues } = props
-  const { searchAndSortValues } = props
+  const { address, searchAndSortValues } = props
+  const queryClient = useQueryClient()
+  const [isManualRefreshing, setIsManualRefreshing] = useState(false)
+
+  const totalFetchingCount = useIsFetching()
+  const isAnyQueryFetching = totalFetchingCount > 0
+
+  // Use the refetch toast hook for manual refresh
+  useRefetchToast({
+    isRefreshing: isManualRefreshing,
+    queryKeys: [
+      ['assets', address],
+      ['collectibles', address],
+      ['activities', address],
+      ['collectible'],
+      ['token'],
+    ],
+  })
 
   //   const placeholder = placeholderText[checkPathnameAndReturnTabValue(pathname)]
+
+  const handleRefresh = async () => {
+    setIsManualRefreshing(true)
+
+    const queries = queryClient.getQueryCache().getAll()
+    const activeQueries = queries.filter(query => {
+      const key = query.queryKey
+      const hasObservers = query.getObserversCount() > 0
+
+      const isWalletQuery =
+        (Array.isArray(key) && key[0] === 'assets' && key[1] === address) ||
+        (Array.isArray(key) &&
+          key[0] === 'collectibles' &&
+          key[1] === address) ||
+        (Array.isArray(key) && key[0] === 'activities' && key[1] === address) ||
+        (Array.isArray(key) && key[0] === 'collectible') ||
+        (Array.isArray(key) && key[0] === 'token')
+
+      return hasObservers && isWalletQuery
+    })
+
+    await Promise.all(
+      activeQueries.map(query =>
+        queryClient.refetchQueries({ queryKey: query.queryKey }),
+      ),
+    )
+
+    setTimeout(() => setIsManualRefreshing(false), 100)
+  }
 
   return (
     <div className="flex place-content-between">
@@ -56,6 +107,22 @@ const ActionButtons = (props: Props) => {
           clearable={!!searchAndSortValues.inputValue}
           aria-label="Search"
         /> */}
+        <Button
+          size="32"
+          variant="outline"
+          onPress={handleRefresh}
+          icon={
+            <RefreshIcon
+              style={
+                isAnyQueryFetching
+                  ? { animation: 'spin 1s linear infinite' }
+                  : {}
+              }
+            />
+          }
+          aria-label="Refresh data"
+          disabled={isAnyQueryFetching}
+        />
         <DropdownSort
           data={searchAndSortValues.sortOptions}
           onOrderByChange={searchAndSortValues.onOrderByChange}

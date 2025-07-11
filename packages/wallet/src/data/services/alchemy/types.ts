@@ -14,6 +14,30 @@ export type ERC20TokenBalanceResponseBody = {
     }>
   }
 }
+
+export type TokensBalanceResponseBody = {
+  data: {
+    tokens: Array<{
+      address: string
+      network: string
+      tokenAddress: string | null
+      tokenBalance: string
+      tokenMetadata: {
+        symbol: string | null
+        decimals: number | null
+        name: string | null
+        logo: string | null
+      }
+      tokenPrices: Array<{
+        currency: string
+        value: string
+        lastUpdatedAt: string
+      }>
+    }>
+    pageKey: string | null
+  }
+}
+
 export type TokenBalanceHistoryResponseBody = {
   jsonrpc: string
   id: null
@@ -353,3 +377,4 @@ export type ResponseBody =
   | FeeHistoryResponseBody
   | TokenBalanceHistoryResponseBody
   | AssetTransfersResponseBody
+  | TokensBalanceResponseBody
