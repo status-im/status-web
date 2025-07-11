@@ -163,9 +163,7 @@ const Token = (props: Props) => {
     processMarkdown()
   }, [typedToken])
 
-  const bajoras = true
-
-  if (isLoading || !typedToken || bajoras) {
+  if (isLoading || !typedToken) {
     return <TokenSkeleton />
   }
 
