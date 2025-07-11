@@ -21,6 +21,7 @@ type PasswordModalProps = {
   onOpenChange: (open: boolean) => void
   onConfirm: (password: string) => Promise<void>
   isLoading?: boolean
+  buttonLabel?: string
 }
 
 const PasswordModal = (props: PasswordModalProps) => {
@@ -37,7 +38,13 @@ const PasswordModal = (props: PasswordModalProps) => {
     },
   })
 
-  const { open, onOpenChange, onConfirm, isLoading = false } = props
+  const {
+    open,
+    onOpenChange,
+    onConfirm,
+    isLoading = false,
+    buttonLabel = 'Confirm',
+  } = props
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -154,7 +161,7 @@ const PasswordModal = (props: PasswordModalProps) => {
                     <span>Signing...</span>
                   </div>
                 ) : (
-                  'Confirm'
+                  buttonLabel
                 )}
               </Button>
             </form>
