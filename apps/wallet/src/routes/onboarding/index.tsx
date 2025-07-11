@@ -36,7 +36,7 @@ function RouteComponent() {
           href="https://github.com/status-im/status-software-legal-documents/blob/master/browser-extension-wallet-terms-of-use"
           className="text-neutral-100"
           target="_blank"
-          rel="noopenernoreferrer"
+          rel="noopener noreferrer"
         >
           Terms of use
         </a>{' '}
