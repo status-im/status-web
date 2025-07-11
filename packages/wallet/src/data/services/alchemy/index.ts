@@ -30,6 +30,7 @@ import type {
   ResponseBody,
   SendRawTransactionResponseBody,
   TokenBalanceHistoryResponseBody,
+  TokensBalanceResponseBody,
   TransactionCountResponseBody,
 } from './types'
 
@@ -135,6 +136,38 @@ export async function getERC20TokensBalance(
   const balances = body.result.tokenBalances
 
   return balances
+}
+
+/**
+ * @see https://www.alchemy.com/docs/data/portfolio-apis/portfolio-api-endpoints/portfolio-api-endpoints/get-tokens-by-address
+ *
+ * 360 CU per request https://www.alchemy.com/docs/reference/compute-unit-costs#portfolio-apis
+ */
+export async function getTokensBalance(
+  address: string,
+  networks: NetworkType[],
+  pageKey?: string,
+) {
+  const url = new URL(
+    `https://api.g.alchemy.com/data/v2/${serverEnv.ALCHEMY_API_KEY}/assets/tokens/by-address`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<TokensBalanceResponseBody>(url, 'POST', 15, {
+      addresses: [
+        {
+          address,
+          networks: networks.map(network => alchemyNetworks[network]),
+        },
+      ],
+      withMetadata: false,
+      withPrices: false,
+      includeNativeTokens: true,
+      ...(pageKey && { pageKey }),
+    }),
+  )
+
+  return body.data
 }
 
 /**

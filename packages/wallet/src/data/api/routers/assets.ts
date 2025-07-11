@@ -8,6 +8,7 @@ import {
   fetchTokenBalanceHistory,
   getERC20TokensBalance,
   getNativeTokenBalance,
+  getTokensBalance,
 } from '../../services/alchemy'
 import {
   fetchTokenMetadata,
@@ -184,6 +185,7 @@ const cachedAll = cache(async (key: string) => {
   return await all({ address, networks })
 })
 
+// note: https://docs.alchemy.com/reference/alchemy-gettokenbalances can now return native tokens together with ERC20 tokens
 async function all({
   address,
   networks,
@@ -198,66 +200,94 @@ async function all({
   try {
     const assets: Omit<Asset, 'metadata'>[] = []
 
-    // note: https://docs.alchemy.com/reference/alchemy-gettokenbalances can now return native tokens together with ERC20 tokens
-    // Native tokens
     const filteredNativeTokens = nativeTokenList.tokens.filter(token =>
       Object.entries(STATUS_NETWORKS)
         .filter(([, network]) => networks.includes(network))
         .map(([chainId]) => Number(chainId))
         .includes(token.chainId),
     )
-    await Promise.all(
-      filteredNativeTokens.map(async token => {
-        const balance = await getNativeTokenBalance(
-          address,
-          STATUS_NETWORKS[token.chainId],
-        )
-        const price = (await legacy_fetchTokensPrice([token.symbol]))[
-          token.symbol
-        ]
 
-        const asset: Omit<Asset, 'metadata'> = {
-          networks: [STATUS_NETWORKS[token.chainId]],
-          native: true,
-          contract: null,
-          icon: token.logoURI,
-          name: token.name,
-          symbol: token.symbol,
-          price_eur: price.EUR['PRICE'],
-          price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
-          balance: Number(balance) / 10 ** token.decimals,
-          total_eur:
-            (Number(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
+    const tokenBalances = new Map<
+      string,
+      { balance: number; network: NetworkType; isNative: boolean }
+    >()
+    let pageKey: string | undefined
+
+    do {
+      const result = await getTokensBalance(address, networks, pageKey)
+
+      for (const tokenBalance of result.tokens) {
+        const balance = Number(tokenBalance.tokenBalance)
+
+        if (balance > 0) {
+          if (tokenBalance.tokenAddress) {
+            // ERC20 token
+            const token = erc20TokenList.tokens.find(
+              t =>
+                t.address.toLowerCase() ===
+                  tokenBalance.tokenAddress?.toLowerCase() ||
+                t.address === tokenBalance.tokenAddress,
+            )
+            if (token) {
+              tokenBalances.set(tokenBalance.tokenAddress, {
+                balance: balance / 10 ** token.decimals,
+                network: STATUS_NETWORKS[token.chainId] || 'ethereum',
+                isNative: false,
+              })
+            }
+          } else {
+            // Native token
+            const network = networks[0]
+            const chainId = Object.entries(STATUS_NETWORKS).find(
+              ([, n]) => n === network,
+            )?.[0]
+            if (chainId) {
+              const nativeToken = nativeTokenList.tokens.find(
+                token => token.chainId === Number(chainId),
+              )
+              if (nativeToken) {
+                tokenBalances.set(nativeToken.symbol, {
+                  balance: balance / 10 ** nativeToken.decimals,
+                  network: STATUS_NETWORKS[nativeToken.chainId],
+                  isNative: true,
+                })
+              }
+            }
+          }
         }
+      }
 
-        assets.push(asset)
-      }),
-    )
+      pageKey = result.pageKey || undefined
+    } while (pageKey)
+
+    // Native tokens
+    for (const [symbol, balanceInfo] of tokenBalances) {
+      if (balanceInfo.isNative) {
+        const token = filteredNativeTokens.find(t => t.symbol === symbol)
+        if (token) {
+          const price = (await legacy_fetchTokensPrice([token.symbol]))[
+            token.symbol
+          ]
+
+          const asset: Omit<Asset, 'metadata'> = {
+            networks: [balanceInfo.network],
+            native: true,
+            contract: null,
+            icon: token.logoURI,
+            name: token.name,
+            symbol: token.symbol,
+            price_eur: price.EUR['PRICE'],
+            price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
+            balance: balanceInfo.balance,
+            total_eur: balanceInfo.balance * price.EUR['PRICE'],
+          }
+
+          assets.push(asset)
+        }
+      }
+    }
 
     // ERC20 tokens
-    const filteredERC20Tokens = new Map(
-      erc20TokenList.tokens
-        .filter(token =>
-          Object.entries(STATUS_NETWORKS)
-            .filter(([, network]) => networks.includes(network))
-            .map(([chainId]) => Number(chainId))
-            .includes(token.chainId),
-        )
-        .map(token => [token.address, token]),
-    )
-
-    const ERC20TokensByNetwork = Array.from(
-      filteredERC20Tokens.values(),
-    ).reduce(
-      (acc, token) => {
-        const network = STATUS_NETWORKS[token.chainId]
-        if (!acc[network]) acc[network] = []
-        acc[network].push(token)
-        return acc
-      },
-      {} as Record<NetworkType, ERC20Token[]>,
-    )
-
     const partialERC20Assets: Map<
       string,
       Omit<
@@ -266,34 +296,23 @@ async function all({
       >
     > = new Map()
 
-    for (const [network, tokens] of Object.entries(
-      ERC20TokensByNetwork,
-    ) as Array<[string, ERC20Token[]]>) {
-      for (let i = 0; i < tokens.length; i += 1000) {
-        const batch = tokens.slice(i, i + 1000)
-        const batchBalances = await getERC20TokensBalance(
-          address,
-          network as NetworkType,
-          batch.map(token => token.address),
+    for (const [contractAddress, balanceInfo] of tokenBalances) {
+      if (!balanceInfo.isNative) {
+        const token = erc20TokenList.tokens.find(
+          t =>
+            t.address.toLowerCase() === contractAddress.toLowerCase() ||
+            t.address === contractAddress,
         )
-
-        for (const balance of batchBalances) {
-          const tokenBalance = Number(balance.tokenBalance)
-
-          if (tokenBalance > 0) {
-            const token = filteredERC20Tokens.get(balance.contractAddress)
-            if (token) {
-              partialERC20Assets.set(balance.contractAddress, {
-                networks: [network as NetworkType],
-                native: false,
-                contract: token.address,
-                icon: token.logoURI,
-                name: token.name,
-                symbol: token.symbol,
-                balance: tokenBalance / 10 ** token.decimals,
-              })
-            }
-          }
+        if (token) {
+          partialERC20Assets.set(contractAddress, {
+            networks: [balanceInfo.network],
+            native: false,
+            contract: token.address,
+            icon: token.logoURI,
+            name: token.name,
+            symbol: token.symbol,
+            balance: balanceInfo.balance,
+          })
         }
       }
     }
