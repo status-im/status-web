@@ -2,12 +2,15 @@ export type * from '../types'
 export * from '../utils/variants'
 export { AccountMenu } from './account-menu'
 export { ActivityList, type ActivityListProps } from './activity-list'
+export { ActivityItemSkeleton } from './activity-list/components/activity-item-skeleton'
+export { ActivityListSkeleton } from './activity-list/components/activity-list-skeleton'
 export { type Account, Address, type AddressProps } from './address'
 export { AssetsList } from './assets-list'
 export { AssetsListLoading } from './assets-list-loading'
 export { Balance } from './balance'
 export { BlurredCircle } from './blurred-circle'
 export { CollectiblesGrid } from './collectibles-grid'
+export { CollectiblesGridSkeleton } from './collectibles-grid/collectibles-grid-skeleton'
 export {
   CreatePasswordForm,
   type CreatePasswordFormValues,

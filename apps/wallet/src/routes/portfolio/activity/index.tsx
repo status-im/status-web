@@ -1,4 +1,8 @@
-import { ActivityList, FeedbackSection } from '@status-im/wallet/components'
+import {
+  ActivityList,
+  ActivityListSkeleton,
+  FeedbackSection,
+} from '@status-im/wallet/components'
 import { createFileRoute } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
@@ -34,6 +38,7 @@ function RouteComponent() {
           </div>
         )
       }
+      loadingState={<ActivityListSkeleton />}
       detail={<FeedbackSection />}
       isLoading={isLoading || isWalletLoading}
     />
