@@ -30,6 +30,7 @@ import type {
   ResponseBody,
   SendRawTransactionResponseBody,
   TokenBalanceHistoryResponseBody,
+  TokensBalanceResponseBody,
   TransactionCountResponseBody,
 } from './types'
 
@@ -94,7 +95,7 @@ export async function getNativeTokenBalance(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
   const body = await _retry(async () =>
-    _fetch<NativeTokenBalanceResponseBody>(url, 'POST', 3600, {
+    _fetch<NativeTokenBalanceResponseBody>(url, 'POST', 15, {
       id: 1,
       jsonrpc: '2.0',
       method: 'eth_getBalance',
@@ -117,7 +118,7 @@ export async function getERC20TokensBalance(
   network: NetworkType,
   contracts: string[],
 ) {
-  if (contracts.length > 100) {
+  if (contracts.length > 1000) {
     throw new Error('Too many contracts')
   }
   const url = new URL(
@@ -125,7 +126,7 @@ export async function getERC20TokensBalance(
   )
 
   const body = await _retry(async () =>
-    _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 3600, {
+    _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 15, {
       jsonrpc: '2.0',
       method: 'alchemy_getTokenBalances',
       params: [address, contracts],
@@ -135,6 +136,38 @@ export async function getERC20TokensBalance(
   const balances = body.result.tokenBalances
 
   return balances
+}
+
+/**
+ * @see https://www.alchemy.com/docs/data/portfolio-apis/portfolio-api-endpoints/portfolio-api-endpoints/get-tokens-by-address
+ *
+ * 360 CU per request https://www.alchemy.com/docs/reference/compute-unit-costs#portfolio-apis
+ */
+export async function getTokensBalance(
+  address: string,
+  networks: NetworkType[],
+  pageKey?: string,
+) {
+  const url = new URL(
+    `https://api.g.alchemy.com/data/v2/${serverEnv.ALCHEMY_API_KEY}/assets/tokens/by-address`,
+  )
+
+  const body = await _retry(async () =>
+    _fetch<TokensBalanceResponseBody>(url, 'POST', 15, {
+      addresses: [
+        {
+          address,
+          networks: networks.map(network => alchemyNetworks[network]),
+        },
+      ],
+      withMetadata: false,
+      withPrices: false,
+      includeNativeTokens: true,
+      ...(pageKey && { pageKey }),
+    }),
+  )
+
+  return body.data
 }
 
 /**
@@ -354,7 +387,7 @@ export async function getNFTs(
   }
 
   const body = await _retry(async () =>
-    _fetch<NFTsResponseBody>(url, 'GET', 3600),
+    _fetch<NFTsResponseBody>(url, 'GET', 15),
   )
 
   return body
@@ -805,7 +838,7 @@ export async function getNFTFloorPrice(contract: string, network: NetworkType) {
   url.searchParams.set('contractAddress', contract)
 
   const body = await _retry(async () =>
-    _fetch<NFTFloorPriceResponseBody>(url, 'GET', 3600),
+    _fetch<NFTFloorPriceResponseBody>(url, 'GET', 15),
   )
 
   return body
@@ -961,7 +994,7 @@ async function _fetch<T extends ResponseBody>(
     ...(body && { body: JSON.stringify(body) }),
     // why: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#reusing-data-across-multiple-functions
     // why: https://github.com/vercel/next.js/issues/70946
-    cache: 'force-cache', // memoize
+    cache: 'no-store', //  no caching
     next: {
       revalidate,
     },

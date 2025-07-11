@@ -52,6 +52,11 @@ const Collectible = (props: Props) => {
       const body = await response.json()
       return body.result.data.json
     },
+    staleTime: 15 * 1000, // 15 seconds
+    gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
   if (isLoading || !collectible) {
     return <p>Loading</p>

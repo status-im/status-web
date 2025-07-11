@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+
 import type { ApiOutput } from '@status-im/wallet/data'
 import type { UseQueryResult } from '@tanstack/react-query'
 
@@ -51,11 +53,11 @@ const useAssets = (
       return body.result.data.json
     },
     enabled: !!address && !isWalletLoading,
-    staleTime: 60 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    staleTime: QUERY_STALE_TIME_MS,
+    gcTime: QUERY_GC_TIME_MS,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }
 

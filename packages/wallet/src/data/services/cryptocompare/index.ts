@@ -140,10 +140,32 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
   url.searchParams.set('relaxedValidation', 'true')
   url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
-  const body = await _fetch<legacy_TokensPriceResponseBody>(url, 3600)
-  const data = body.RAW
+  try {
+    const body = await _fetch<legacy_TokensPriceResponseBody>(url, 15)
+    const data = body.RAW
 
-  return data
+    return data
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      error.message.includes('market does not exist')
+    ) {
+      console.warn('Removed failing symbols, retrying without them')
+
+      const errorMatch = error.message.match(/\((\w+)-EUR\)/)
+      if (errorMatch && errorMatch[1]) {
+        const failedSymbol = errorMatch[1]
+        const filteredSymbols = symbols.filter(s => s !== failedSymbol)
+
+        if (filteredSymbols.length > 0) {
+          return await legacy_fetchTokensPrice(filteredSymbols)
+        }
+      }
+    }
+
+    console.error('Failed to fetch prices:', error)
+    return {}
+  }
 }
 
 /**
@@ -166,7 +188,7 @@ export async function fetchTokensPriceForDate(
       url.searchParams.set('tryConversion', 'true') // tries to convert to EUR if specific market does not exist i.e. ETH <-> EUR
       url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
-      const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
+      const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 15)
       const prices = body.Data.Data
 
       if (prices.length > 0) {
@@ -195,7 +217,7 @@ async function _fetch<
   const response = await fetch(url, {
     // why: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#reusing-data-across-multiple-functions
     // why: https://github.com/vercel/next.js/issues/70946
-    cache: 'force-cache', // memoize
+    cache: 'no-store', // no caching
     next: {
       revalidate,
     },

@@ -1,5 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
+import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+
 import type { NetworkType } from '@status-im/wallet/data'
 
 const PAGE_LIMIT = 20
@@ -68,7 +70,7 @@ const getCollectibles = async (
   }
 
   const body = await response.json()
-  return body.result.data.json.collectibles
+  return body.result.data.json
 }
 
 const useCollectibles = (props: Props) => {
@@ -97,7 +99,7 @@ const useCollectibles = (props: Props) => {
       }
 
       const offset = pageParam * PAGE_LIMIT
-      const collectibles = await getCollectibles(
+      const response = await getCollectibles(
         address,
         networks as NetworkType[],
         search,
@@ -105,18 +107,20 @@ const useCollectibles = (props: Props) => {
         offset,
       )
       return {
-        collectibles,
+        collectibles: response.collectibles,
+        hasMore: response.hasMore,
         nextPage: pageParam + 1,
       }
     },
-    getNextPageParam: lastPage => lastPage.nextPage,
+    getNextPageParam: lastPage =>
+      lastPage.hasMore ? lastPage.nextPage : undefined,
     initialPageParam: 0,
     enabled: !!address && !isWalletLoading,
-    staleTime: 60 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+    staleTime: QUERY_STALE_TIME_MS,
+    gcTime: QUERY_GC_TIME_MS,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }
 
