@@ -19,6 +19,7 @@ export default defineConfig({
         : 'ws: http://localhost:3030/ https://localhost:3030/'
 
     return {
+      version: '0.1.0',
       name: 'Status Portfolio Wallet',
       description:
         'Your simple Ethereum wallet and portfolio tracker to buy, send, receive, view, and manage your crypto assets — all in one place.',
