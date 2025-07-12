@@ -13,22 +13,22 @@
       "outputs": ["dist/**"]
     },
     "./packages/components#build": {
-      "dependsOn": ["colors#build", "icons#build"],
+      "dependsOn": ["^colors#build", "^icons#build"],
       "outputs": ["dist/**", "storybook-static/**"]
     },
     "./packages/wallet#build": {
-      "dependsOn": ["components#build"],
+      "dependsOn": ["^components#build"],
       "outputs": ["dist/**"]
     },
     "./apps/wallet#build": {
-      "dependsOn": ["wallet#build"],
+      "dependsOn": ["^wallet#build"],
       "outputs": [".output/**"]
     },
     "./apps/portfolio#build": {
-      "dependsOn": ["wallet#build"]
+      "dependsOn": ["^wallet#build"]
     },
     "./apps/api#build": {
-      "dependsOn": ["wallet#build"]
+      "dependsOn": ["^wallet#build"]
     },
     "dev": {
       "cache": false
