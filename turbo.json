@@ -25,7 +25,12 @@
       "outputs": [".output/**"]
     },
     "./apps/portfolio#build": {
-      "dependsOn": ["^wallet#build"]
+      "dependsOn": [
+        "^colors#build",
+        "^icons#build",
+        "^components#build",
+        "^wallet#build"
+      ]
     },
     "./apps/api#build": {
       "dependsOn": ["^wallet#build"]
