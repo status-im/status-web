@@ -6,6 +6,10 @@
     "dist",
     "svg"
   ],
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "./index.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
