@@ -26,7 +26,7 @@ const Chart = ({
 
   return (
     <div className="relative">
-      <ParentSize className="w-full bg-white-100">
+      <ParentSize className="w-full bg-transparent">
         {({ width }) => (
           <TokenChart
             data={activeDataType === 'price' ? price : balance}

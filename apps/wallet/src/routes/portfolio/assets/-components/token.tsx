@@ -423,7 +423,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveDataType(value as ChartDataType)
                 }
-                size="24"
+                size="32"
               >
                 <SegmentedControl.Item value="price">
                   Price
@@ -439,7 +439,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveTimeFrame(value as ChartTimeFrame)
                 }
-                size="24"
+                size="32"
               >
                 {TIME_FRAMES.map(frame => (
                   <SegmentedControl.Item key={frame} value={frame}>

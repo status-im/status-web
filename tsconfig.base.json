@@ -4,7 +4,7 @@
     // "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
     "incremental": true,
     "module": "ES2020",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "target": "ESNext",
     "jsx": "react-jsx",
     "declaration": true,

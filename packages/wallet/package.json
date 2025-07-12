@@ -47,8 +47,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite build --watch --mode development",
-    "build": "vite build",
-    "postbuild": "pnpm build:types",
+    "build": "vite build && pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && :",

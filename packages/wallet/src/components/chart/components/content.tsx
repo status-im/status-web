@@ -1,6 +1,5 @@
 import { animated, config, useSpring } from '@react-spring/web'
 import { curveCatmullRom } from '@visx/curve'
-import { LinearGradient } from '@visx/gradient'
 import { AreaClosed, LinePath } from '@visx/shape'
 
 import { negativeColors, positiveColors } from '../constants'
@@ -12,8 +11,6 @@ import type { ScaleLinear, ScaleTime } from 'd3-scale'
 type Props = BaseChartProps & {
   yScale: ScaleLinear<number, number, never>
   xScale: ScaleTime<number, number, never>
-  innerHeight: number
-  innerWidth: number
   pricesData: ChartDatum[]
 }
 
@@ -21,14 +18,7 @@ const AnimatedAreaClosed = animated(AreaClosed)
 const AnimatedLinePath = animated(LinePath)
 
 const Content = (props: Props) => {
-  const {
-    pricesData,
-    xScale,
-    yScale,
-    innerHeight,
-    innerWidth,
-    isPositive = true,
-  } = props
+  const { pricesData, xScale, yScale, isPositive = true } = props
 
   const colors = isPositive ? positiveColors : negativeColors
   const lastData = pricesData[pricesData.length - 1]
@@ -61,20 +51,6 @@ const Content = (props: Props) => {
             p => `inset(0 ${100 - p * 100}% 0 0)`,
           ),
         }}
-      />
-      <LinearGradient
-        id="gradient-columns"
-        from="rgba(255, 255, 255, 0)"
-        to="rgba(255, 255, 255, 1)"
-        fromOpacity={0}
-        toOpacity={1}
-      />
-      <rect
-        x={0}
-        y={0}
-        width={innerWidth}
-        height={innerHeight}
-        fill="url(#gradient-columns)"
       />
 
       <AnimatedLinePath

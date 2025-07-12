@@ -878,7 +878,9 @@ function sum(assets: Asset[] | Omit<Asset, 'metadata'>[]) {
       acc + asset.total_eur * (asset.price_percentage_24h_change / 100),
     0,
   )
-  const total_percentage_24h_change = (total_eur_24h_change / total_eur) * 100
+  const total_percentage_24h_change = total_eur
+    ? (total_eur_24h_change / total_eur) * 100
+    : 0
 
   return {
     total_balance,
