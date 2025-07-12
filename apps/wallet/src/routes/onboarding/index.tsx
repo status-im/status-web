@@ -33,7 +33,7 @@ function RouteComponent() {
         By continuing you agree with Status
         <br />
         <a
-          href="https://github.com/status-im/status-software-legal-documents/blob/master/browser-extension-wallet-terms-of-use"
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/terms-of-use.md"
           className="text-neutral-100"
           target="_blank"
           rel="noopener noreferrer"
@@ -42,7 +42,7 @@ function RouteComponent() {
         </a>{' '}
         and{' '}
         <a
-          href="https://github.com/status-im/status-software-legal-documents/blob/master/browser-extension-wallet-privacy-policy"
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/privacy-policy.md"
           className="text-neutral-100"
           target="_blank"
           rel="noopener noreferrer"
