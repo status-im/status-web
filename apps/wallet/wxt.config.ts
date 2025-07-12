@@ -10,7 +10,7 @@ export default defineConfig({
   srcDir: 'src',
   // extensionApi: 'chrome',
   // extensionApi: 'webextension-polyfill',
-  modules: ['@wxt-dev/module-react'],
+  modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
   manifestVersion: 3,
   manifest: ({ mode }) => {
     const connectSrc =
