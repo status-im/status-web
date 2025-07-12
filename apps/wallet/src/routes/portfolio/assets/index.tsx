@@ -61,7 +61,7 @@ function Component() {
         isLoading={isLoading}
       />
       {isPinExtension && (
-        <div className="absolute right-5 top-20">
+        <div className="absolute right-5 top-20 z-20">
           <PinExtension onClose={handleClose} />
         </div>
       )}
