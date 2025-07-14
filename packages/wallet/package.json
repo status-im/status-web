@@ -36,6 +36,11 @@
       "types": "./dist/src/constants/index.d.ts",
       "import": "./dist/constants/index.es.js",
       "require": "./dist/constants/index.cjs.js"
+    },
+    "./utils": {
+      "types": "./dist/src/utils/index.d.ts",
+      "import": "./dist/utils/index.es.js",
+      "require": "./dist/utils/index.cjs.js"
     }
   },
   "files": [

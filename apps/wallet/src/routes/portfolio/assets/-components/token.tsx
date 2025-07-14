@@ -33,6 +33,7 @@ import { cx } from 'class-variance-authority'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
@@ -74,6 +75,7 @@ const Token = (props: Props) => {
   const [activeTimeFrame, setActiveTimeFrame] =
     useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
   const { currentWallet } = useWallet()
+  const { addPendingTransaction } = usePendingTransactions()
   const [gasInput, setGasInput] = useState<{
     to: string
     value: string
@@ -298,40 +300,35 @@ const Token = (props: Props) => {
         gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
     })
 
-    if (!result.id || !result.id.txid) {
+    if (!result.id) {
       throw new Error('Transaction failed')
     }
 
-    // Set pending transaction hash to window.chrome!.storage!.local for activity page
-    await new Promise<void>(resolve => {
-      window.chrome!.storage!.local.set(
-        {
-          pendingTransactions: [
-            {
-              hash: result.id.txid,
-              from: address,
-              to: formData.to,
-              value: parseFloat(formData.amount),
-              asset: typedToken.summary.symbol,
-              network: 'ethereum',
-              status: 'pending',
-              uniqueId: `pending-${Date.now()}`,
-              category: 'external',
-              blockNum: '0',
-              metadata: {
-                blockTimestamp: new Date().toISOString(),
-              },
-              rawContract: {
-                value: amountHex,
-                address: ticker.startsWith('0x') ? ticker : null,
-                decimal: '18',
-              },
-              eurRate: 0,
-            },
-          ],
-        },
-        resolve,
-      )
+    const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+    if (!txHash) {
+      throw new Error('Transaction hash not found')
+    }
+
+    addPendingTransaction({
+      hash: txHash,
+      from: address,
+      to: formData.to,
+      value: parseFloat(formData.amount),
+      asset: tokenDetail.summary.symbol,
+      network: 'ethereum',
+      status: 'pending',
+      category: 'external',
+      blockNum: '0',
+      metadata: {
+        blockTimestamp: new Date().toISOString(),
+      },
+      rawContract: {
+        value: amountHex,
+        address: ticker.startsWith('0x') ? ticker : null,
+        decimal: '18',
+      },
+      eurRate: 0,
     })
 
     return result.id.txid

@@ -22,6 +22,7 @@ import {
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
 import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
+import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
 import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
@@ -103,24 +104,26 @@ function RootComponent() {
           {/* <AccountsProvider> */}
           {/* <ConnectKitProvider> */}
           <WalletProvider>
-            <div className="flex min-h-[56px] items-center px-2">
-              <Navbar
-                hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
-                  pathname ?? '',
-                )}
-                linkComponent={Link}
-              />
-            </div>
-            <div className="px-1">
-              <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
-                  {/* <OnboardingPage /> */}
-                  <Outlet />
-                </div>
+            <PendingTransactionsProvider>
+              <div className="flex min-h-[56px] items-center px-2">
+                <Navbar
+                  hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
+                    pathname ?? '',
+                  )}
+                  linkComponent={Link}
+                />
               </div>
-              {/* <NotAllowed /> */}
-              <ToastContainer />
-            </div>
+              <div className="px-1">
+                <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                  <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
+                    {/* <OnboardingPage /> */}
+                    <Outlet />
+                  </div>
+                </div>
+                {/* <NotAllowed /> */}
+                <ToastContainer />
+              </div>
+            </PendingTransactionsProvider>
           </WalletProvider>
           {/* </ConnectKitProvider> */}
           {/* </AccountsProvider> */}
