@@ -5,6 +5,7 @@ packages:
   - 'packages/icons'
   - 'packages/components'
   - 'packages/wallet'
+  - 'packages/trpc-webext'
   - 'apps/connector'
   - 'apps/portfolio'
   - 'apps/wallet'

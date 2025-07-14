@@ -1,33 +1,42 @@
 // import { Cardano } from '@cardano-sdk/core'
 // import { SodiumBip32Ed25519 } from '@cardano-sdk/crypto'
 // import { AddressType, InMemoryKeyAgent } from '@cardano-sdk/key-management'
-import { createTRPCProxyClient } from '@trpc/client'
-import { initTRPC } from '@trpc/server'
+import { createWebExtHandler, webExtensionLink } from '@status-im/trpc-webext'
+import { createTRPCClient } from '@trpc/client'
+import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
-import { createChromeHandler } from 'trpc-chrome/adapter'
+import { browser } from 'wxt/browser'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
-import { chromeLinkWithRetries } from './chromeLink'
 import * as ethereum from './ethereum/ethereum'
 import { getKeystore } from './keystore'
 import * as solana from './solana/solana'
+import { createPasswordAuthPlugin } from './trpc/middlewares/password-auth'
 import {
   getWalletCore,
   //  type WalletCore
 } from './wallet'
+import { runtimePortToClientContextType } from './webext'
 
-const createContext = async () => {
+import type { ValidPasswordContext } from './trpc/middlewares/password-auth'
+import type { CreateWebExtContextOptions } from '@status-im/trpc-webext/adapter'
+
+const createContext = async (webextOpts?: CreateWebExtContextOptions) => {
   const keyStore = await getKeystore()
   const walletCore = await getWalletCore()
 
   return {
+    ...webextOpts,
+    contextType: runtimePortToClientContextType(webextOpts?.req),
     keyStore,
     walletCore,
   }
 }
 
-type Context = Awaited<ReturnType<typeof createContext>>
+type Context = Awaited<ReturnType<typeof createContext>> & ValidPasswordContext
+
+const passwordAuthPlugin = createPasswordAuthPlugin<Context>()
 
 /**
  * @see https://trpc.io/docs/server/routers#runtime-configuration
@@ -38,14 +47,20 @@ const t = initTRPC.context<Context>().create({
   allowOutsideOfServer: true,
 })
 
-// const publicProcedure = t.procedure
+const trpcGlobalPlugins = [passwordAuthPlugin]
+
+const publicProcedure = trpcGlobalPlugins.reduce(
+  (procedure, plugin) => procedure.concat(plugin),
+  t.procedure,
+)
+
 const { createCallerFactory, router } = t
 
 // todo: lock with password as trpc auth procedure
 // todo?: expose password in context or use other (session) token derived from it for encrypting and storing
 const apiRouter = router({
   wallet: router({
-    all: t.procedure.query(async ({ ctx }) => {
+    all: publicProcedure.query(async ({ ctx }) => {
       const { keyStore } = ctx
 
       const wallets = await keyStore.loadAll()
@@ -56,7 +71,7 @@ const apiRouter = router({
     // todo: validation (e.g. password, mnemonic, already exists)
     // todo: words count option
     // todo: handle cancelation
-    add: t.procedure
+    add: publicProcedure
       .input(
         z.object({
           password: z.string(),
@@ -105,7 +120,7 @@ const apiRouter = router({
         }
       }),
 
-    get: t.procedure
+    get: publicProcedure
       .input(
         z.object({
           walletId: z.string(),
@@ -117,14 +132,20 @@ const apiRouter = router({
 
         const wallet = await keyStore.load(input.walletId)
 
+        if (!ctx.validPassword)
+          throw new TRPCError({
+            message: 'Invalid password',
+            code: 'UNAUTHORIZED',
+          })
+
         return {
           id: wallet.id,
           name: wallet.name,
-          mnemonic: await keyStore.exportMnemonic(wallet.id, input.password),
+          mnemonic: await keyStore.exportMnemonic(wallet.id, ctx.validPassword),
         }
       }),
 
-    import: t.procedure
+    import: publicProcedure
       .input(
         z.object({
           mnemonic: z.string(),
@@ -177,7 +198,7 @@ const apiRouter = router({
       }),
 
     account: router({
-      all: t.procedure
+      all: publicProcedure
         .input(
           z.object({
             walletId: z.string(),
@@ -192,7 +213,7 @@ const apiRouter = router({
         }),
 
       ethereum: router({
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -203,18 +224,24 @@ const apiRouter = router({
           .mutation(async ({ input, ctx }) => {
             const { keyStore, walletCore } = ctx
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             const wallet = await keyStore.load(input.walletId)
 
             // todo!: test calling multiple times
             // const { id } = await keyStore.addAccounts(
             //   wallet.id,
-            //   input.password,
+            //   ctx.validPassword,
             //   [walletCore.CoinType.ethereum],
             // )
 
             const { id } = await keyStore.addAccountsWithDerivations(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               [
                 {
                   // coin: wallet.activeAccounts[0].coin,
@@ -227,7 +254,7 @@ const apiRouter = router({
             // note: add account with custom derivation path
             // const mnemonic = (await keyStore.export(
             //   wallet.id,
-            //   input.password,
+            //   ctx.validPassword,
             // )) as string
             // // fixme: calculate index based on last account
             // const index = 0
@@ -236,19 +263,19 @@ const apiRouter = router({
             // const key = walletCore.StoredKey.importHDWallet(
             //   mnemonic,
             //   input.name,
-            //   Buffer.from(input.password),
+            //   Buffer.from(ctx.validPassword),
             //   walletCore.CoinType.ethereum,
             // )
 
             // const privateKey = key
-            //   .wallet(Buffer.from(input.password))
+            //   .wallet(Buffer.from(ctx.validPassword))
             //   .getKey(walletCore.CoinType.ethereum, derivationPath)
 
             // // note!: would be categorized separatley from mnemonic wallet and as as private key, so if used instead of adding accounts add private keys from the start
             // const { id } = await keyStore.importKey(
             //   privateKey.data(),
             //   'untitled',
-            //   input.password,
+            //   ctx.validPassword,
             //   walletCore.CoinType.ethereum,
             //   walletCore.StoredKeyEncryption.aes256Ctr,
             // )
@@ -260,7 +287,7 @@ const apiRouter = router({
           }),
 
         // note: our first tx https://holesky.etherscan.io/tx/0xdc2aa244933260c50e665aa816767dce6b76d5d498e6358392d5f79bfc9626d5
-        send: t.procedure
+        send: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -286,25 +313,31 @@ const apiRouter = router({
               throw new Error('From address not found')
             }
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             // const mnemonic = (await keyStore.export(
             //   wallet.id,
-            //   input.password,
+            //   ctx.validPassword,
             // )) as string
 
             // const key = walletCore.StoredKey.importHDWallet(
             //   mnemonic,
             //   wallet.name,
-            //   Buffer.from(input.password),
+            //   Buffer.from(ctx.validPassword),
             //   walletCore.CoinType.ethereum,
             // )
 
             // const privateKey = key
-            //   .wallet(Buffer.from(input.password))
+            //   .wallet(Buffer.from(ctx.validPassword))
             //   .getKey(walletCore.CoinType.ethereum, account.derivationPath)
 
             const privateKey = await keyStore.getKey(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               account,
             )
 
@@ -328,7 +361,7 @@ const apiRouter = router({
 
       bitcoin: router({
         // note?: create all variants (e.g. segwit, nested segwit, legacy, taproot) for each added account by default
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -340,9 +373,15 @@ const apiRouter = router({
 
             const wallet = await keyStore.load(input.walletId)
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             const { id } = await keyStore.addAccountsWithDerivations(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               [
                 {
                   coin: walletCore.CoinType.bitcoin,
@@ -371,7 +410,7 @@ const apiRouter = router({
             // note!: second default derivation; does not add new account
             // await keyStore.addAccountsWithDerivations(
             //   wallet.id,
-            //   input.password,
+            //   ctx.validPassword,
             //   [
             //     {
             //       coin: walletCore.CoinType.bitcoin,
@@ -386,7 +425,7 @@ const apiRouter = router({
           }),
 
         // note: our first tx https://mempool.space/testnet4/tx/4d1797f4a6e92ab5164cfa8030e5954670f162e2aae792c8d6d6a81aae32fbd4
-        send: t.procedure
+        send: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -409,9 +448,15 @@ const apiRouter = router({
               throw new Error('From address not found')
             }
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             const privateKey = await keyStore.getKey(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               account,
             )
 
@@ -430,7 +475,7 @@ const apiRouter = router({
       }),
 
       solana: router({
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -442,9 +487,15 @@ const apiRouter = router({
 
             const wallet = await keyStore.load(input.walletId)
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             const { id } = await keyStore.addAccounts(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               [walletCore.CoinType.solana],
             )
 
@@ -454,7 +505,7 @@ const apiRouter = router({
           }),
 
         // note: our first tx https://solscan.io/tx/LNgKUb6bewbcgVXi9NBF4qYNJC5kjMPpH5GDVZBsVXFC7MDhYtdygkuP1avq7c31bHDkr9pkKYvMSdT16mt294g?cluster=devnet
-        send: t.procedure
+        send: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -477,9 +528,15 @@ const apiRouter = router({
               throw new Error('From address not found')
             }
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             const privateKey = await keyStore.getKey(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               account,
             )
 
@@ -498,7 +555,7 @@ const apiRouter = router({
       }),
 
       cardano: router({
-        add: t.procedure
+        add: publicProcedure
           .input(
             z.object({
               walletId: z.string(),
@@ -510,9 +567,15 @@ const apiRouter = router({
 
             const wallet = await keyStore.load(input.walletId)
 
+            if (!ctx.validPassword)
+              throw new TRPCError({
+                message: 'Invalid password',
+                code: 'UNAUTHORIZED',
+              })
+
             const { id } = await keyStore.addAccounts(
               wallet.id,
-              input.password,
+              ctx.validPassword,
               [walletCore.CoinType.cardano],
             )
 
@@ -552,7 +615,7 @@ const apiRouter = router({
   }),
 
   privateKey: router({
-    import: t.procedure
+    import: publicProcedure
       .input(
         z.object({
           privateKey: z.string(),
@@ -598,8 +661,11 @@ const apiRouter = router({
 export type APIRouter = typeof apiRouter
 
 export async function createAPI() {
-  // @ts-expect-error: fixme!:
-  createChromeHandler({ router: apiRouter, createContext })
+  createWebExtHandler({
+    router: apiRouter,
+    createContext,
+    runtime: browser.runtime,
+  })
 
   const ctx = await createContext()
   const api = createCallerFactory(apiRouter)(ctx)
@@ -608,8 +674,13 @@ export async function createAPI() {
 }
 
 export function createAPIClient() {
-  return createTRPCProxyClient<APIRouter>({
-    links: [chromeLinkWithRetries()],
-    transformer: superjson,
+  return createTRPCClient<APIRouter>({
+    links: [
+      webExtensionLink({
+        runtime: browser.runtime,
+        timeoutMS: 30000,
+        transformer: superjson,
+      }),
+    ],
   })
 }
