@@ -10,5 +10,6 @@ export const getTransactionHash = (hash: unknown): string => {
       return hash.txid
     }
   }
+  console.warn('[getTransactionHash] Unrecognized hash object format:', hash)
   return String(hash)
 }
