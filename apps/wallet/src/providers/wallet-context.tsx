@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
@@ -64,9 +71,17 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [hasWallets, selectedWalletId, wallets])
 
-  const setCurrentWallet = (id: string) => {
-    setSelectedWalletId(id)
-  }
+  const setCurrentWallet = useCallback(
+    (id: string) => {
+      const walletExists = wallets.some(w => w.id === id)
+      if (walletExists) {
+        setSelectedWalletId(id)
+      } else {
+        console.error(`Wallet with id ${id} not found`)
+      }
+    },
+    [wallets],
+  )
 
   // Auto-refresh
   // useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
