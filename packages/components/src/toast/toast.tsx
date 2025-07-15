@@ -1,7 +1,7 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Action, Description } from '@radix-ui/react-toast'
-import { CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
+import { Action, Close, Description } from '@radix-ui/react-toast'
+import { CloseIcon, CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
 import { match, P } from 'ts-pattern'
 
 import { Button } from '../button'
@@ -45,6 +45,16 @@ const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
           </Action>
         </div>
       )}
+      <Close asChild>
+        <Button
+          size="24"
+          variant="grey"
+          aria-label="Close"
+          className="shrink-0 !px-0"
+        >
+          <CloseIcon />
+        </Button>
+      </Close>
     </div>
   )
 }

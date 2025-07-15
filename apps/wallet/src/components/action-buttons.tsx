@@ -4,7 +4,7 @@
 // import { SearchIcon } from '@status-im/icons/20'
 import { useState } from 'react'
 
-import { Button } from '@status-im/components'
+import { Button, useToast } from '@status-im/components'
 import { RefreshIcon } from '@status-im/icons/20'
 import { DropdownSort } from '@status-im/wallet/components'
 import { useIsFetching, useQueryClient } from '@tanstack/react-query'
@@ -46,6 +46,8 @@ const ActionButtons = (props: Props) => {
 
   const totalFetchingCount = useIsFetching()
   const isAnyQueryFetching = totalFetchingCount > 0
+
+  const toast = useToast()
 
   // Use the refetch toast hook for manual refresh
   useRefetchToast({
@@ -96,6 +98,18 @@ const ActionButtons = (props: Props) => {
         <TabLink href={`/portfolio/assets`}>Assets</TabLink>
         <TabLink href={`/portfolio/collectibles`}>Collectibles</TabLink>
         <TabLink href={`/portfolio/activity`}>Activity</TabLink>
+        <Button
+          onPress={() => {
+            toast.negative('This feature is not implemented yet.', {
+              autoClose: true,
+            })
+            toast.positive('This is a positive toast', {
+              autoClose: true,
+            })
+          }}
+        >
+          Test negative toast
+        </Button>
       </div>
       <div className="flex items-center gap-2">
         {/* <Input
