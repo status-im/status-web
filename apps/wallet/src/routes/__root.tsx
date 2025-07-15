@@ -39,23 +39,33 @@ export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
   beforeLoad: async ({ location }) => {
-    const wallets = await apiClient.wallet.all.query()
-    const hasWallets = wallets && wallets.length > 0
+    try {
+      const wallets = await apiClient.wallet.all.query()
+      const hasWallets = Array.isArray(wallets) && wallets.length > 0
 
-    if (location.pathname === '/') {
-      if (hasWallets) {
-        throw redirect({ to: '/portfolio/assets' })
-      } else {
+      if (location.pathname === '/') {
+        if (hasWallets) {
+          throw redirect({ to: '/portfolio/assets' })
+        } else {
+          throw redirect({ to: '/onboarding' })
+        }
+      }
+
+      if (location.pathname.startsWith('/portfolio') && !hasWallets) {
         throw redirect({ to: '/onboarding' })
       }
-    }
 
-    if (location.pathname.startsWith('/portfolio') && !hasWallets) {
-      throw redirect({ to: '/onboarding' })
-    }
-
-    if (location.pathname.startsWith('/onboarding') && hasWallets) {
-      throw redirect({ to: '/portfolio/assets' })
+      if (location.pathname.startsWith('/onboarding') && hasWallets) {
+        throw redirect({ to: '/portfolio/assets' })
+      }
+    } catch (error) {
+      console.error('Error loading wallets in beforeLoad:', error)
+      if (
+        location.pathname === '/' ||
+        location.pathname.startsWith('/portfolio')
+      ) {
+        throw redirect({ to: '/onboarding' })
+      }
     }
   },
   head: () => ({

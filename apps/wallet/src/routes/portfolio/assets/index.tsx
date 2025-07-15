@@ -21,7 +21,7 @@ function Component() {
   const { currentWallet, isLoading: isWalletLoading } = useWallet()
   const { isPinExtension, handleClose } = usePinExtension()
 
-  const address = currentWallet?.activeAccounts[0].address
+  const address = currentWallet?.activeAccounts?.[0]?.address
 
   const router = useRouter()
   const { data, isLoading } = useAssets({
@@ -39,15 +39,22 @@ function Component() {
           <AssetsList
             assets={data?.assets ?? []}
             onSelect={url => {
-              const ticker = url.split('/').pop()
-              if (!ticker) return
-              router.navigate({
-                to: '/portfolio/assets/$ticker',
-                params: { ticker },
-                ...(!isDesktop && {
-                  viewTransition: true,
-                }),
-              })
+              try {
+                const ticker = url.split('/').pop()
+                if (!ticker) {
+                  console.error('Invalid ticker from URL:', url)
+                  return
+                }
+                router.navigate({
+                  to: '/portfolio/assets/$ticker',
+                  params: { ticker },
+                  ...(!isDesktop && {
+                    viewTransition: true,
+                  }),
+                })
+              } catch (error) {
+                console.error('Navigation error:', error)
+              }
             }}
             clearSearch={() => {
               console.log('Search cleared')
