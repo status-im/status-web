@@ -59,6 +59,9 @@ export const Route = createRootRouteWithContext<{
         throw redirect({ to: '/portfolio/assets' })
       }
     } catch (error) {
+      if (error && typeof error === 'object' && 'isRedirect' in error) {
+        throw error
+      }
       console.error('Error loading wallets in beforeLoad:', error)
       if (
         location.pathname === '/' ||
