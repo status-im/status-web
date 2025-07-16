@@ -60,7 +60,7 @@ const [images, videos, zipFiles] = await Promise.all(
 )
 
 fs.writeFile(
-  'src/image/types.ts',
+  'src/components/image/types.ts',
   `
 export type ImageType =
   ${images

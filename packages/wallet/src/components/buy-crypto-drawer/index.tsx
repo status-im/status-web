@@ -7,7 +7,7 @@ import { FeesIcon } from '@status-im/icons/12'
 import { ExternalIcon } from '@status-im/icons/20'
 
 import * as Drawer from '../drawer'
-import { type ImageId } from '../image'
+import { Image, type ImageId } from '../image'
 
 import type { Account } from '../address'
 
@@ -42,7 +42,7 @@ export type BuyCryptoDrawerProps = {
     name: string
     description: string
     fee: string
-    image: string
+    image: ImageId
   }>
   onProviderSelect?: (
     provider: Provider,
@@ -63,13 +63,13 @@ export const BuyCryptoDrawer = (props: Props) => {
         name: 'mercuryo',
         description: 'Buy crypto within 15 seconds',
         fee: '4.5%',
-        image: '/images/providers/mercuryo.png',
+        image: 'Wallet/Icons/Logos/mercuryo:64:64',
       },
       {
         name: 'moonpay',
         description: 'The new standard for fiat to crypto',
         fee: '1% - 4.5%',
-        image: '/images/providers/moonpay.png',
+        image: 'Wallet/Icons/Logos/moonpay:64:64',
       },
     ],
     onProviderSelect,
@@ -177,11 +177,9 @@ export const BuyCryptoDrawer = (props: Props) => {
                   }
                 >
                   <div className="flex items-center gap-2">
-                    <img
-                      src={provider.image}
+                    <Image
+                      id={provider.image}
                       alt={provider.name}
-                      width={32}
-                      height={32}
                       className="size-8 rounded-full"
                     />
                     <div className="flex flex-col">

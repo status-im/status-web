@@ -1,4 +1,11 @@
 export type ImageType =
+  | { id: 'Wallet/Icons/Logos/mercuryo:64:64'; alt: '' }
+  | { id: 'Wallet/Icons/Logos/moonpay:64:64'; alt: '' }
+  | { id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'; alt: '' }
+  | {
+      id: 'Help/Documentation Screens/Wallet/1532/1532_1_Screen_Light:1872:1208'
+      alt: 'A diagram showing the relationship between wallet accounts, keys, and derivation paths'
+    }
   | {
       id: 'Help/Documentation Screens/Wallet/1512/1512_1_Screen:1480:1480'
       alt: ''
