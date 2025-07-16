@@ -67,6 +67,7 @@ const scheduleAutoDismiss = (
 }
 
 const DELAY_TO_DISMISS = 4000
+const ANIMATION_DURATION = 150
 
 const useStore = create<ToastState>()((set, get) => ({
   toasts: [],
@@ -165,7 +166,7 @@ const ToastContainer = () => {
           if (!open) {
             store.dismiss(toast.id)
 
-            setTimeout(() => store.remove(toast.id), 150)
+            setTimeout(() => store.remove(toast.id), ANIMATION_DURATION)
           }
         }
 
