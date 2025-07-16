@@ -276,7 +276,7 @@ const Token = (props: Props) => {
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
-    name: 'Account 1',
+    name: currentWallet?.name || 'Account 1',
     emoji: '🍑',
     color: 'magenta',
   }
