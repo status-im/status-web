@@ -14,7 +14,7 @@ export default defineConfig({
   manifestVersion: 3,
   manifest: ({ mode }) => {
     const baseConnectSrc =
-      'https://li.quest/ https://eth.merkle.io/ https://registry.npmjs.org https://ethereum-rpc.publicnode.com/ https://eth.drpc.org/'
+      'https://li.quest/ https://eth.merkle.io/ https://registry.npmjs.org https://ethereum-rpc.publicnode.com/ https://eth.drpc.org/ https://api.etherscan.io'
     const connectSrc =
       mode === 'production'
         ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
