@@ -656,7 +656,7 @@ const Token = (props: Props) => {
       {isExchangeOpen && (
         <ExchangeDialog
           onClose={() => setIsExchangeOpen(false)}
-          tokenData={typedToken}
+          tokenData={tokenDetail}
         />
       )}
     </StickyHeaderContainer>
