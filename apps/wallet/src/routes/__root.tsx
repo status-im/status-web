@@ -112,12 +112,12 @@ function RootComponent() {
 
       <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
-        <WagmiProvider>
-          <QueryClientProvider>
-            {/* <Suspense fallback={<div>Loading...</div>}> */}
-            {/* <AccountsProvider> */}
-            {/* <ConnectKitProvider> */}
-            <WalletProvider>
+        <WalletProvider>
+          <WagmiProvider>
+            <QueryClientProvider>
+              {/* <Suspense fallback={<div>Loading...</div>}> */}
+              {/* <AccountsProvider> */}
+              {/* <ConnectKitProvider> */}
               <PendingTransactionsProvider>
                 <div className="flex min-h-[56px] items-center px-2">
                   <Navbar
@@ -138,12 +138,12 @@ function RootComponent() {
                   <ToastContainer />
                 </div>
               </PendingTransactionsProvider>
-            </WalletProvider>
-            {/* </ConnectKitProvider> */}
-            {/* </AccountsProvider> */}
-            {/* </Suspense> */}
-          </QueryClientProvider>
-        </WagmiProvider>
+              {/* </ConnectKitProvider> */}
+              {/* </AccountsProvider> */}
+              {/* </Suspense> */}
+            </QueryClientProvider>
+          </WagmiProvider>
+        </WalletProvider>
         {/* </StatusProvider> */}
       </div>
       {/* <ReactQueryDevtools buttonPosition="bottom-right" />
