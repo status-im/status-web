@@ -402,14 +402,6 @@ const Token = (props: Props) => {
             variant="outline"
             onClick={() => setIsExchangeOpen(true)}
           >
-            Swap
-          </Button>
-
-          <Button
-            size="32"
-            variant="outline"
-            onClick={() => setIsExchangeOpen(true)}
-          >
             Exchange
           </Button>
         </div>
@@ -463,14 +455,6 @@ const Token = (props: Props) => {
                 Send
               </Button>
             </SendAssetsModal>
-
-            <Button
-              size="32"
-              variant="outline"
-              onClick={() => setIsExchangeOpen(true)}
-            >
-              Swap
-            </Button>
 
             <Button
               size="32"
