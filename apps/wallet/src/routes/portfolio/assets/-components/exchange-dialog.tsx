@@ -82,7 +82,7 @@ const ExchangeDialog = ({ onClose, tokenData }: Props) => {
         <LifiWidget
           config={{
             chains: {
-              allow: supportedChainIds,
+              allow: [1],
             },
             ...(resolvedChainId && { fromChain: resolvedChainId }),
             ...(getTokenAddress() && { fromToken: getTokenAddress() }),
