@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { useAccount, useConnect } from 'wagmi'
 
+import { estimateGasRPC, getFeeRate } from '../data/ethereum/etherscan'
 import { useAPI } from './api-client'
 import { useWallet } from './wallet-context'
 
@@ -119,30 +120,38 @@ const handleSendTransaction = async (
     )
   }
 
-  const url = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
-  )
+  // const url = new URL(
+  //   `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
+  // )
+  // url.searchParams.set(
+  //   'input',
+  //   JSON.stringify({
+  //     json: {
+  //       network: 'ethereum',
+  //       params: { from: txParams.from, to: txParams.to, value: txParams.value },
+  //     },
+  //   }),
+  // )
+  // const response = await fetch(url, {
+  //   method: 'GET',
+  //   headers: { 'Content-Type': 'application/json' },
+  // })
+  // if (!response.ok) throw new Error('Failed to fetch gas fees')
+  // const body = await response.json()
+  // const gasFeeQuery = body.result.data.json
 
-  url.searchParams.set(
-    'input',
-    JSON.stringify({
-      json: {
-        network: 'ethereum',
-        params: { from: txParams.from, to: txParams.to, value: txParams.value },
-      },
-    }),
-  )
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+  const chainIdDecimal = parseInt(chainId.toString(16), 16).toString()
+  const { priorityFeeWei, finalMaxFeePerGas } = await getFeeRate(chainIdDecimal)
+  const gasLimitWithCushionHex = await estimateGasRPC({
+    from: txParams.from,
+    to: txParams.to,
+    value: txParams.value
+      ? `0x${BigInt(txParams.value).toString(16)}`
+      : undefined,
+    data: txParams.data && txParams.data !== '0x' ? txParams.data : undefined,
+    chainId: chainIdDecimal,
   })
-
-  if (!response.ok) throw new Error('Failed to fetch gas fees')
-
-  const body = await response.json()
-
-  const gasFeeQuery = body.result.data.json
+  const gasLimitWithCushion = parseInt(gasLimitWithCushionHex, 16)
 
   const result = await apiClient.wallet.account.ethereum.send.mutate({
     walletId: getCurrentWalletId(),
@@ -151,14 +160,22 @@ const handleSendTransaction = async (
     toAddress: txParams.to,
     amount: txParams.value ? BigInt(txParams.value).toString() : '0',
     data: txParams.data,
-    gasLimit: gasFeeQuery.txParams.gasLimit.replace(/^0x/, ''),
-    maxFeePerGas: gasFeeQuery.txParams.maxFeePerGas.replace(/^0x/, ''),
-    maxInclusionFeePerGas: gasFeeQuery.txParams.maxPriorityFeePerGas.replace(
-      /^0x/,
-      '',
-    ),
+    // gasLimit: gasFeeQuery.txParams.gasLimit.replace(/^0x/, ''),
+    // maxFeePerGas: gasFeeQuery.txParams.maxFeePerGas.replace(/^0x/, ''),
+    // maxInclusionFeePerGas: gasFeeQuery.txParams.maxPriorityFeePerGas.replace(
+    //   /^0x/,
+    //   '',
+    // ),
+    gasLimit: gasLimitWithCushion.toString(),
+    maxFeePerGas: finalMaxFeePerGas.toString(),
+    maxInclusionFeePerGas: priorityFeeWei.toString(),
   })
-  return result.id.txid
+
+  if (result.id.txid.error) {
+    throw new Error(result.id.txid.error.message)
+  }
+
+  return result.id.txid.result
 }
 
 const handleSignTypedData = async (
