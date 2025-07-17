@@ -119,17 +119,45 @@ const handleSendTransaction = async (
     )
   }
 
-  const apiParams = {
+  const url = new URL(
+    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
+  )
+
+  url.searchParams.set(
+    'input',
+    JSON.stringify({
+      json: {
+        network: 'ethereum',
+        params: { from: txParams.from, to: txParams.to, value: txParams.value },
+      },
+    }),
+  )
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  })
+
+  if (!response.ok) throw new Error('Failed to fetch gas fees')
+
+  const body = await response.json()
+
+  const gasFeeQuery = body.result.data.json
+
+  const result = await apiClient.wallet.account.ethereum.send.mutate({
     walletId: getCurrentWalletId(),
     password,
     fromAddress: txParams.from,
     toAddress: txParams.to,
     amount: txParams.value ? BigInt(txParams.value).toString() : '0',
-    chainId: formatChainId(chainId),
     data: txParams.data,
-  }
-
-  const result = await apiClient.wallet.account.ethereum.send.mutate(apiParams)
+    gasLimit: gasFeeQuery.txParams.gasLimit.replace(/^0x/, ''),
+    maxFeePerGas: gasFeeQuery.txParams.maxFeePerGas.replace(/^0x/, ''),
+    maxInclusionFeePerGas: gasFeeQuery.txParams.maxPriorityFeePerGas.replace(
+      /^0x/,
+      '',
+    ),
+  })
   return result.id.txid
 }
 
