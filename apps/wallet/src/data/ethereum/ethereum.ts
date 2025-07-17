@@ -1,6 +1,7 @@
 import { Buffer } from 'buffer'
 
 import { encoder } from '../encoder'
+import { getNonce } from './etherscan'
 
 import type { WalletCore } from '@trustwallet/wallet-core'
 
@@ -18,7 +19,7 @@ export async function send({
   toAddress,
   amount,
   fromAddress,
-  network = 'ethereum',
+  // network = 'ethereum',
   gasLimit,
   maxFeePerGas,
   maxInclusionFeePerGas,
@@ -36,30 +37,33 @@ export async function send({
   maxInclusionFeePerGas: string
   data?: string
 }) {
-  const nonceUrl = new URL(
-    `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
-  )
-  nonceUrl.searchParams.set(
-    'input',
-    JSON.stringify({ json: { address: fromAddress, network } }),
-  )
-  const nonceResponse = await fetch(nonceUrl.toString(), {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    cache: 'no-store',
-  })
+  // const nonceUrl = new URL(
+  //   `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
+  // )
+  // nonceUrl.searchParams.set(
+  //   'input',
+  //   JSON.stringify({ json: { address: fromAddress, network } }),
+  // )
+  // const nonceResponse = await fetch(nonceUrl.toString(), {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   cache: 'no-store',
+  // })
 
-  if (!nonceResponse.ok) {
-    throw new Error('Failed to fetch nonce')
-  }
+  // if (!nonceResponse.ok) {
+  //   throw new Error('Failed to fetch nonce')
+  // }
 
-  const nonceBody = await nonceResponse.json()
+  // const nonceBody = await nonceResponse.json()
 
-  const nonce = nonceBody.result.data.json
+  // const nonce = nonceBody.result.data.json
 
   // const feeRate = nodes.getFeeRate
+
+  const chainIdDecimal = parseInt(chainID, 16).toString()
+  const currentNonce = await getNonce(fromAddress, chainIdDecimal)
 
   // const chainIdDecimal = parseInt(chainID, 16).toString()
   // const currentNonce = await getNonce(fromAddress, chainIdDecimal)
@@ -91,17 +95,26 @@ export async function send({
     // gasPrice: Buffer.from(feeRate.replace('0x', ''), 'hex'),
     // nonce: Buffer.from('09', 'hex'),
     // nonce: Buffer.from('00', 'hex'),
-    nonce: Uint8Array.from(Buffer.from(nonce.replace(/^0x/, '0'), 'hex')),
+    // nonce: Uint8Array.from(Buffer.from(nonce.replace(/^0x/, '0'), 'hex')),
+    nonce: hexToUint8Array(currentNonce),
     // maxFeePerGas: Buffer.from(feeRate, 'hex'),
     // // maxInclusionFeePerGas: Buffer.from('3b9aca00', 'hex'),
     // maxInclusionFeePerGas: Buffer.from('01', 'hex'),
     // gasLimit: Buffer.from('5208', 'hex'),
     // gasPrice: Buffer.from('04a817c800', 'hex'),
     // gasLimit: Buffer.from('5208', 'hex'),
-    gasLimit: Uint8Array.from(Buffer.from(gasLimit, 'hex')),
-    maxFeePerGas: Uint8Array.from(Buffer.from(maxFeePerGas, 'hex')),
-    maxInclusionFeePerGas: Uint8Array.from(
-      Buffer.from(maxInclusionFeePerGas, 'hex'),
+    // gasLimit: Uint8Array.from(Buffer.from(gasLimit, 'hex')),
+    // maxFeePerGas: Uint8Array.from(Buffer.from(maxFeePerGas, 'hex')),
+    // maxInclusionFeePerGas: Uint8Array.from(
+    //   Buffer.from(maxInclusionFeePerGas, 'hex'),
+    // ),
+    // gasLimit: hexToUint8Array(gasLimitWithCushion.toString(16)),
+    // maxFeePerGas: hexToUint8Array(finalMaxFeePerGas.toString(16)),
+    // maxInclusionFeePerGas: hexToUint8Array(priorityFeeWei.toString(16)),
+    gasLimit: hexToUint8Array(BigInt(gasLimit).toString(16)),
+    maxFeePerGas: hexToUint8Array(BigInt(maxFeePerGas).toString(16)),
+    maxInclusionFeePerGas: hexToUint8Array(
+      BigInt(maxInclusionFeePerGas).toString(16),
     ),
     toAddress: toAddress,
     transaction:
