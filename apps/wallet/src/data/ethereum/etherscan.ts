@@ -39,10 +39,7 @@ const RPC_URLS = {
     'https://eth.llamarpc.com',
     'https://ethereum.publicnode.com',
   ],
-  [CHAIN_IDS.BASE]: [
-    'https://base.llamarpc.com',
-    'https://mainnet.base.org',
-  ],
+  [CHAIN_IDS.BASE]: ['https://base.llamarpc.com', 'https://mainnet.base.org'],
   [CHAIN_IDS.OPTIMISM]: [
     'https://optimism.llamarpc.com',
     'https://mainnet.optimism.io',
@@ -111,7 +108,10 @@ function createGasEstimatesFromPrice(gasPriceHex: string) {
       MIN_GAS_PRICE,
       Math.round(gasPriceGwei * GAS_MULTIPLIERS.FAST),
     ).toString(),
-    suggestBaseFee: Math.max(MIN_GAS_PRICE, gasPriceGwei * GAS_MULTIPLIERS.BASE_FEE).toString(),
+    suggestBaseFee: Math.max(
+      MIN_GAS_PRICE,
+      gasPriceGwei * GAS_MULTIPLIERS.BASE_FEE,
+    ).toString(),
     gasUsedRatio: '0.5',
   }
 }
@@ -130,7 +130,8 @@ export async function getGasOracle(chainId: string) {
 export async function getFeeRate(chainId: string) {
   const { suggestBaseFee, FastGasPrice } = await getGasOracle(chainId)
 
-  const gweiToWei = (gwei: string) => BigInt(Math.round(parseFloat(gwei) * GWEI_TO_WEI))
+  const gweiToWei = (gwei: string) =>
+    BigInt(Math.round(parseFloat(gwei) * GWEI_TO_WEI))
   const baseFeeWei = gweiToWei(suggestBaseFee)
   let priorityFeeWei = gweiToWei(FastGasPrice) - baseFeeWei
 
@@ -169,12 +170,17 @@ function getKnownGasEstimate(data?: string): number {
 
   if (data.length >= 10) {
     const methodId = data.slice(0, 10)
-    
-    if (methodId === METHOD_IDS.ERC20_TRANSFER) return KNOWN_GAS_ESTIMATES.ERC20_TRANSFER
-    if (methodId === METHOD_IDS.ERC20_APPROVE) return KNOWN_GAS_ESTIMATES.ERC20_APPROVE
-    if (methodId === METHOD_IDS.ERC20_TRANSFER_FROM) return KNOWN_GAS_ESTIMATES.ERC20_TRANSFER_FROM
-    if (methodId === METHOD_IDS.ERC721_TRANSFER) return KNOWN_GAS_ESTIMATES.ERC721_TRANSFER
-    if (methodId === METHOD_IDS.ERC721_APPROVE_ALL) return KNOWN_GAS_ESTIMATES.ERC721_APPROVE_ALL
+
+    if (methodId === METHOD_IDS.ERC20_TRANSFER)
+      return KNOWN_GAS_ESTIMATES.ERC20_TRANSFER
+    if (methodId === METHOD_IDS.ERC20_APPROVE)
+      return KNOWN_GAS_ESTIMATES.ERC20_APPROVE
+    if (methodId === METHOD_IDS.ERC20_TRANSFER_FROM)
+      return KNOWN_GAS_ESTIMATES.ERC20_TRANSFER_FROM
+    if (methodId === METHOD_IDS.ERC721_TRANSFER)
+      return KNOWN_GAS_ESTIMATES.ERC721_TRANSFER
+    if (methodId === METHOD_IDS.ERC721_APPROVE_ALL)
+      return KNOWN_GAS_ESTIMATES.ERC721_APPROVE_ALL
   }
 
   return KNOWN_GAS_ESTIMATES.GENERIC_CONTRACT
@@ -210,7 +216,9 @@ export async function estimateGas({
   if (data && data !== '0x') params.append('data', data)
 
   try {
-    const response = await fetch(`${ETHERSCAN_API_BASE_URL}?${params.toString()}`)
+    const response = await fetch(
+      `${ETHERSCAN_API_BASE_URL}?${params.toString()}`,
+    )
 
     if (!response.ok) throw new Error('Failed to estimate gas')
 
@@ -227,7 +235,7 @@ export async function estimateGas({
     console.warn('Gas estimation failed, using known estimates:', error)
     const knownEstimate = getKnownGasEstimate(data)
     const cushionedGas = applyCushion(knownEstimate)
-    
+
     return `0x${cushionedGas.toString(16)}`
   }
 }
@@ -246,18 +254,22 @@ export async function estimateGasRPC({
   chainId: string
 }) {
   const getRPCUrls = (chainId: string) => {
-    return RPC_URLS[chainId as keyof typeof RPC_URLS] || RPC_URLS[CHAIN_IDS.ETHEREUM]
+    return (
+      RPC_URLS[chainId as keyof typeof RPC_URLS] || RPC_URLS[CHAIN_IDS.ETHEREUM]
+    )
   }
 
   const payload = {
     jsonrpc: '2.0',
     method: 'eth_estimateGas',
-    params: [{
-      from,
-      to,
-      ...(value && { value }),
-      ...(data && data !== '0x' && { data }),
-    }],
+    params: [
+      {
+        from,
+        to,
+        ...(value && { value }),
+        ...(data && data !== '0x' && { data }),
+      },
+    ],
     id: 1,
   }
 
@@ -265,7 +277,7 @@ export async function estimateGasRPC({
   const estimates: number[] = []
 
   await Promise.allSettled(
-    urls.map(async (url) => {
+    urls.map(async url => {
       try {
         const response = await fetch(url, {
           method: 'POST',
@@ -283,7 +295,7 @@ export async function estimateGasRPC({
       } catch (error) {
         console.warn(`RPC estimation failed for ${url}:`, error)
       }
-    })
+    }),
   )
 
   if (estimates.length === 0) {
@@ -295,7 +307,7 @@ export async function estimateGasRPC({
   estimates.sort((a, b) => a - b)
   const medianEstimate = estimates[Math.floor(estimates.length / 2)]
   const cushionedGas = applyCushion(medianEstimate)
-  
+
   return `0x${cushionedGas.toString(16)}`
 }
 
@@ -310,7 +322,9 @@ export async function getNonce(address: string, chainId: string) {
       apikey: import.meta.env.WXT_ETHERSCAN_API_KEY || '',
     })
 
-    const response = await fetch(`${ETHERSCAN_API_BASE_URL}?${params.toString()}`)
+    const response = await fetch(
+      `${ETHERSCAN_API_BASE_URL}?${params.toString()}`,
+    )
     if (!response.ok) continue
     const responseData = await response.json()
 
