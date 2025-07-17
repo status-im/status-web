@@ -20,7 +20,7 @@ export default defineConfig({
 
     return {
       version: '0.1.0',
-      name: 'Status Portfolio Wallet',
+      name: 'Status Portfolio Wallet (Beta)',
       description:
         'Your simple Ethereum wallet and portfolio tracker to buy, send, receive, view, and manage your crypto assets — all in one place.',
       permissions: ['storage'],
