@@ -462,23 +462,23 @@ const Token = (props: Props) => {
               <Button size="32" variant="outline" iconBefore={<SendBlurIcon />}>
                 Send
               </Button>
-
-              <Button
-                size="32"
-                variant="outline"
-                onClick={() => setIsExchangeOpen(true)}
-              >
-                Swap
-              </Button>
-
-              <Button
-                size="32"
-                variant="outline"
-                onClick={() => setIsExchangeOpen(true)}
-              >
-                Exchange
-              </Button>
             </SendAssetsModal>
+
+            <Button
+              size="32"
+              variant="outline"
+              onClick={() => setIsExchangeOpen(true)}
+            >
+              Swap
+            </Button>
+
+            <Button
+              size="32"
+              variant="outline"
+              onClick={() => setIsExchangeOpen(true)}
+            >
+              Exchange
+            </Button>
           </div>
         </div>
 
