@@ -13,6 +13,8 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
   manifestVersion: 3,
   manifest: ({ mode }) => {
+    const baseConnectSrc =
+      'https://li.quest/ https://eth.merkle.io/ https://registry.npmjs.org https://ethereum-rpc.publicnode.com/ https://eth.drpc.org/'
     const connectSrc =
       mode === 'production'
         ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
@@ -33,7 +35,7 @@ export default defineConfig({
         },
       ],
       content_security_policy: {
-        extension_pages: `script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' ${connectSrc}`,
+        extension_pages: `script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' ${connectSrc} ${baseConnectSrc}`,
       },
     }
   },
