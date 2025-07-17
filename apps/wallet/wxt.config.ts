@@ -10,7 +10,7 @@ export default defineConfig({
   srcDir: 'src',
   // extensionApi: 'chrome',
   // extensionApi: 'webextension-polyfill',
-  modules: ['@wxt-dev/module-react'],
+  modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
   manifestVersion: 3,
   manifest: ({ mode }) => {
     const connectSrc =
@@ -19,7 +19,10 @@ export default defineConfig({
         : 'ws: http://localhost:3030/ https://localhost:3030/'
 
     return {
-      name: 'Status Portfolio Wallet',
+      version: '0.1.0',
+      name: 'Status Portfolio Wallet (Beta)',
+      description:
+        'Your simple Ethereum wallet and portfolio tracker to buy, send, receive, view, and manage your crypto assets — all in one place.',
       permissions: ['storage'],
       action: {},
       web_accessible_resources: [
