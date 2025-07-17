@@ -104,11 +104,6 @@ export async function send({
       Buffer.from(maxInclusionFeePerGas, 'hex'),
     ),
     toAddress: toAddress,
-    transaction: {
-      transfer: {
-        amount: Uint8Array.from(Buffer.from(amount, 'hex')),
-      },
-    },
     transaction:
       data && data !== '0x'
         ? {
