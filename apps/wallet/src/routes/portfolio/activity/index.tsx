@@ -1,9 +1,11 @@
+import { useToast } from '@status-im/components'
 import {
   ActivityList,
   ActivityListSkeleton,
   EmptyState,
   FeedbackSection,
 } from '@status-im/wallet/components'
+import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { createFileRoute } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
@@ -21,11 +23,26 @@ function RouteComponent() {
   const { pendingTransactions } = usePendingTransactions()
   const address = currentWallet?.activeAccounts[0].address
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useActivities({ address })
+  const toast = useToast()
+
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+  } = useActivities({ address })
   const activities = data?.pages.flatMap(page => page.activities) ?? []
 
   usePendingTransactionsCleanup(activities)
+
+  // Show error toast if there is an error fetching activities
+  useEffect(() => {
+    if (isError) {
+      toast.negative(ERROR_MESSAGES.ACTIVITIES)
+    }
+  }, [isError, toast])
 
   return (
     <SplittedLayout

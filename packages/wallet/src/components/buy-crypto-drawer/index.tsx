@@ -6,6 +6,7 @@ import { Avatar, useToast } from '@status-im/components'
 import { FeesIcon } from '@status-im/icons/12'
 import { ExternalIcon } from '@status-im/icons/20'
 
+import { ERROR_MESSAGES } from '../../constants'
 import * as Drawer from '../drawer'
 import { Image, type ImageId } from '../image'
 
@@ -105,7 +106,7 @@ export const BuyCryptoDrawer = (props: Props) => {
 
         url = providerUrls[provider]
         if (!url) {
-          toast.negative('Provider not supported')
+          toast.negative(ERROR_MESSAGES.PROVIDER_NOT_SUPPORTED)
           return
         }
       }
@@ -116,15 +117,11 @@ export const BuyCryptoDrawer = (props: Props) => {
         const newTab = window.open(url, '_blank', 'noopener,noreferrer')
 
         if (!newTab) {
-          toast.negative(
-            'Unable to open a new tab. Please check your browser settings.',
-          )
+          toast.negative(ERROR_MESSAGES.NEW_TAB)
         }
       }
     } catch {
-      toast.negative(
-        'Unable to open a new tab. Please check your browser settings.',
-      )
+      toast.negative(ERROR_MESSAGES.NEW_TAB)
     }
   }
 
