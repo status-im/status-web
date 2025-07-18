@@ -11,7 +11,7 @@ export const useCreateWallet = () => {
     mutationFn: async (password: string) => {
       const { mnemonic } = await api.wallet.add.mutate({
         password,
-        name: 'Created Wallet',
+        name: 'Account 1',
       })
 
       return mnemonic

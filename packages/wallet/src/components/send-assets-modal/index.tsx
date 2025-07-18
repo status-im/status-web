@@ -363,7 +363,7 @@ const SendAssetsModal = (props: Props) => {
                       <div className="h-px w-full bg-neutral-20" />
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
-                          €
+                          $
                           {watchedAmount
                             ? Number.parseFloat(watchedAmount || '0') *
                               (balanceEur / balance)

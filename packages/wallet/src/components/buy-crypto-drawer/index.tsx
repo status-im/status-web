@@ -6,8 +6,9 @@ import { Avatar, useToast } from '@status-im/components'
 import { FeesIcon } from '@status-im/icons/12'
 import { ExternalIcon } from '@status-im/icons/20'
 
+import { ERROR_MESSAGES } from '../../constants'
 import * as Drawer from '../drawer'
-import { type ImageId } from '../image'
+import { Image, type ImageId } from '../image'
 
 import type { Account } from '../address'
 
@@ -42,7 +43,7 @@ export type BuyCryptoDrawerProps = {
     name: string
     description: string
     fee: string
-    image: string
+    image: ImageId
   }>
   onProviderSelect?: (
     provider: Provider,
@@ -50,6 +51,7 @@ export type BuyCryptoDrawerProps = {
     asset?: string,
   ) => Promise<{ url: string }>
   onOpenTab?: (url: string) => void | Promise<void>
+  symbol?: string
 }
 
 type Props = BuyCryptoDrawerProps
@@ -63,27 +65,28 @@ export const BuyCryptoDrawer = (props: Props) => {
         name: 'mercuryo',
         description: 'Buy crypto within 15 seconds',
         fee: '4.5%',
-        image: '/images/providers/mercuryo.png',
+        image: 'Wallet/Icons/Logos/mercuryo:64:64',
       },
       {
         name: 'moonpay',
         description: 'The new standard for fiat to crypto',
         fee: '1% - 4.5%',
-        image: '/images/providers/moonpay.png',
+        image: 'Wallet/Icons/Logos/moonpay:64:64',
       },
     ],
     onProviderSelect,
     onOpenTab,
+    symbol,
   } = props
 
   const [open, setOpen] = useState(false)
   const network: NetworkOptions[0] = NETWORKS[0]
   const currency: Currency = {
     contract_address: '',
-    code: 'EUR',
-    label: 'Euro',
+    code: symbol || 'ETH',
+    label: symbol || 'Ethereum',
     network: 'ETHEREUM',
-    imageUrl: '/images/tokens/eur.png',
+    imageUrl: '/images/tokens/usd.png',
   }
 
   const toast = useToast()
@@ -105,7 +108,7 @@ export const BuyCryptoDrawer = (props: Props) => {
 
         url = providerUrls[provider]
         if (!url) {
-          toast.negative('Provider not supported')
+          toast.negative(ERROR_MESSAGES.PROVIDER_NOT_SUPPORTED)
           return
         }
       }
@@ -116,15 +119,11 @@ export const BuyCryptoDrawer = (props: Props) => {
         const newTab = window.open(url, '_blank', 'noopener,noreferrer')
 
         if (!newTab) {
-          toast.negative(
-            'Unable to open a new tab. Please check your browser settings.',
-          )
+          toast.negative(ERROR_MESSAGES.NEW_TAB)
         }
       }
     } catch {
-      toast.negative(
-        'Unable to open a new tab. Please check your browser settings.',
-      )
+      toast.negative(ERROR_MESSAGES.NEW_TAB)
     }
   }
 
@@ -177,11 +176,9 @@ export const BuyCryptoDrawer = (props: Props) => {
                   }
                 >
                   <div className="flex items-center gap-2">
-                    <img
-                      src={provider.image}
+                    <Image
+                      id={provider.image}
                       alt={provider.name}
-                      width={32}
-                      height={32}
                       className="size-8 rounded-full"
                     />
                     <div className="flex flex-col">

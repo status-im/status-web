@@ -26,7 +26,7 @@
     "typecheck": "turbo run typecheck",
     "format": "prettier --write .",
     "clean": "turbo run clean && rimraf node_modules .turbo",
-    "storybook": "pnpm --filter @status-im/components storybook"
+    "storybook": "pnpm --filter=@status-im/components storybook"
   },
   "resolutions": {
     "@types/react": "19.1.0",

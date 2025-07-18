@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 
-import { Button, SegmentedControl, Tooltip } from '@status-im/components'
+import {
+  Button,
+  SegmentedControl,
+  Tooltip,
+  useToast,
+} from '@status-im/components'
 import {
   ArrowLeftIcon,
   BuyIcon,
@@ -25,6 +30,7 @@ import {
   TokenLogo,
   TokenSkeleton,
 } from '@status-im/wallet/components'
+import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
@@ -33,6 +39,7 @@ import { cx } from 'class-variance-authority'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
@@ -74,12 +81,15 @@ const Token = (props: Props) => {
   const [activeTimeFrame, setActiveTimeFrame] =
     useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
   const { currentWallet } = useWallet()
+  const { addPendingTransaction } = usePendingTransactions()
   const [gasInput, setGasInput] = useState<{
     to: string
     value: string
   } | null>(null)
 
-  const { data } = useQuery<AssetsResponse>({
+  const toast = useToast()
+
+  const { data, isError: hasErrorFetchingAssets } = useQuery<AssetsResponse>({
     queryKey: ['assets', address],
     queryFn: async () => {
       const url = new URL(
@@ -117,9 +127,20 @@ const Token = (props: Props) => {
     refetchOnReconnect: true,
   })
 
+  // Show error toast if fetching assets fails
+  useEffect(() => {
+    if (hasErrorFetchingAssets) {
+      toast.negative(ERROR_MESSAGES.ASSETS_FETCH)
+    }
+  }, [hasErrorFetchingAssets, toast])
+
   const asset = data?.assets?.find((a: AssetData) => matchesAsset(a, ticker))
 
-  const { data: tokenDetail, isLoading: isTokenLoading } = useQuery<TokenData>({
+  const {
+    data: tokenDetail,
+    isLoading: isTokenLoading,
+    isError: hasErrorFetchingToken,
+  } = useQuery<TokenData>({
     queryKey: ['token', ticker],
     queryFn: async () => {
       const endpoint = ticker.startsWith('0x')
@@ -162,6 +183,13 @@ const Token = (props: Props) => {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
   })
+
+  // Show error toast if fetching token detail fails
+  useEffect(() => {
+    if (hasErrorFetchingToken) {
+      toast.negative(ERROR_MESSAGES.TOKEN_INFO)
+    }
+  }, [hasErrorFetchingToken, toast])
 
   const isLoading = !data?.assets || isTokenLoading || !tokenDetail
 
@@ -208,6 +236,12 @@ const Token = (props: Props) => {
     refetchOnWindowFocus: false,
   })
 
+  // Show error toast if fetching gas fees fails
+  useEffect(() => {
+    if (gasFeeQuery.isError) {
+      toast.negative(ERROR_MESSAGES.GAS_FEES_FETCH)
+    }
+  }, [gasFeeQuery.isError, toast])
   const prepareGasEstimate = (to: string, value: string) => {
     setGasInput({ to, value })
   }
@@ -274,7 +308,7 @@ const Token = (props: Props) => {
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
-    name: 'Account 1',
+    name: currentWallet?.name || 'Account 1',
     emoji: '🍑',
     color: 'magenta',
   }
@@ -298,9 +332,38 @@ const Token = (props: Props) => {
         gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
     })
 
-    if (!result.id || !result.id.txid) {
+    if (!result.id) {
+      toast.negative(ERROR_MESSAGES.TX_FAILED)
       throw new Error('Transaction failed')
     }
+
+    const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+    if (!txHash) {
+      toast.negative(ERROR_MESSAGES.TX_FAILED)
+      throw new Error('Transaction hash not found')
+    }
+
+    addPendingTransaction({
+      hash: txHash,
+      from: address,
+      to: formData.to,
+      value: parseFloat(formData.amount),
+      asset: tokenDetail.summary.symbol,
+      network: 'ethereum',
+      status: 'pending',
+      category: 'external',
+      blockNum: '0',
+      metadata: {
+        blockTimestamp: new Date().toISOString(),
+      },
+      rawContract: {
+        value: amountHex,
+        address: ticker.startsWith('0x') ? ticker : null,
+        decimal: '18',
+      },
+      eurRate: 0,
+    })
 
     return result.id.txid
   }
@@ -332,7 +395,11 @@ const Token = (props: Props) => {
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+          <BuyCryptoDrawer
+            account={account}
+            onOpenTab={handleOpenTab}
+            symbol={tokenDetail.summary.symbol}
+          >
             <Button size="32" iconBefore={<BuyIcon />}>
               <span className="block max-w-20 truncate">Buy {name}</span>
             </Button>
@@ -381,7 +448,11 @@ const Token = (props: Props) => {
           </div>
 
           <div className="flex items-center gap-1">
-            <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+            <BuyCryptoDrawer
+              account={account}
+              onOpenTab={handleOpenTab}
+              symbol={tokenDetail.summary.symbol}
+            >
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
                 Buy {name}
               </Button>
@@ -423,7 +494,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveDataType(value as ChartDataType)
                 }
-                size="24"
+                size="32"
               >
                 <SegmentedControl.Item value="price">
                   Price
@@ -439,7 +510,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveTimeFrame(value as ChartTimeFrame)
                 }
-                size="24"
+                size="32"
               >
                 {TIME_FRAMES.map(frame => (
                   <SegmentedControl.Item key={frame} value={frame}>

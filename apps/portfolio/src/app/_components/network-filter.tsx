@@ -17,7 +17,7 @@ const NETWORKS = [
   },
 ] as const
 
-// const CURRENCY = 'EUR'
+// const CURRENCY = 'USD'
 
 // const formatCurrency = (amount: number, currency?: string) => {
 //   return Intl.NumberFormat('en-US', {

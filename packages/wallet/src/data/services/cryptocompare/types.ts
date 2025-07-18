@@ -669,7 +669,7 @@ export type legacy_research_TokenMetadataResponseBody = {
 export type legacy_TokensPriceResponseBody = {
   RAW: {
     [symbol: string]: {
-      EUR: {
+      USD: {
         TYPE: string
         MARKET: string
         FROMSYMBOL: string
@@ -723,7 +723,7 @@ export type legacy_TokensPriceResponseBody = {
   }
   DISPLAY: {
     [symbol: string]: {
-      EUR: {
+      USD: {
         FROMSYMBOL: string
         TOSYMBOL: string
         MARKET: string
