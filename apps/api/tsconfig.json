@@ -27,7 +27,7 @@
     "forceConsistentCasingInFileNames": true,
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     // @see https://github.com/orgs/pnpm/discussions/4331#discussioncomment-3379386 for pnpm's config recommendation

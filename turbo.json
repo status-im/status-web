@@ -4,31 +4,8 @@
   "globalPassThroughEnv": ["PORT"],
   "tasks": {
     "build": {
-      "dependsOn": ["^build"]
-    },
-    "./packages/colors#build": {
-      "outputs": ["dist/**"]
-    },
-    "./packages/icons#build": {
-      "outputs": ["dist/**"]
-    },
-    "./packages/components#build": {
-      "dependsOn": ["colors#build", "icons#build"],
-      "outputs": ["dist/**", "storybook-static/**"]
-    },
-    "./packages/wallet#build": {
-      "dependsOn": ["components#build"],
-      "outputs": ["dist/**"]
-    },
-    "./apps/wallet#build": {
-      "dependsOn": ["wallet#build"],
-      "outputs": [".output/**"]
-    },
-    "./apps/portfolio#build": {
-      "dependsOn": ["wallet#build"]
-    },
-    "./apps/api#build": {
-      "dependsOn": ["wallet#build"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".output/**", "build/**"]
     },
     "dev": {
       "cache": false

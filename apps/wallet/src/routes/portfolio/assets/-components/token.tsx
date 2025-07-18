@@ -33,6 +33,7 @@ import { cx } from 'class-variance-authority'
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
@@ -74,6 +75,7 @@ const Token = (props: Props) => {
   const [activeTimeFrame, setActiveTimeFrame] =
     useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
   const { currentWallet } = useWallet()
+  const { addPendingTransaction } = usePendingTransactions()
   const [gasInput, setGasInput] = useState<{
     to: string
     value: string
@@ -274,7 +276,7 @@ const Token = (props: Props) => {
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
-    name: 'Account 1',
+    name: currentWallet?.name || 'Account 1',
     emoji: '🍑',
     color: 'magenta',
   }
@@ -298,9 +300,36 @@ const Token = (props: Props) => {
         gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
     })
 
-    if (!result.id || !result.id.txid) {
+    if (!result.id) {
       throw new Error('Transaction failed')
     }
+
+    const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+    if (!txHash) {
+      throw new Error('Transaction hash not found')
+    }
+
+    addPendingTransaction({
+      hash: txHash,
+      from: address,
+      to: formData.to,
+      value: parseFloat(formData.amount),
+      asset: tokenDetail.summary.symbol,
+      network: 'ethereum',
+      status: 'pending',
+      category: 'external',
+      blockNum: '0',
+      metadata: {
+        blockTimestamp: new Date().toISOString(),
+      },
+      rawContract: {
+        value: amountHex,
+        address: ticker.startsWith('0x') ? ticker : null,
+        decimal: '18',
+      },
+      eurRate: 0,
+    })
 
     return result.id.txid
   }
@@ -423,7 +452,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveDataType(value as ChartDataType)
                 }
-                size="24"
+                size="32"
               >
                 <SegmentedControl.Item value="price">
                   Price
@@ -439,7 +468,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveTimeFrame(value as ChartTimeFrame)
                 }
-                size="24"
+                size="32"
               >
                 {TIME_FRAMES.map(frame => (
                   <SegmentedControl.Item key={frame} value={frame}>
