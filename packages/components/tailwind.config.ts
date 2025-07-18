@@ -144,9 +144,32 @@ export default {
         '0%, 100%': { backgroundPosition: '0% 50%' },
         '50%': { backgroundPosition: '100% 50%' },
       },
+      'toast-slide-in': {
+        from: {
+          transform: 'translateX(calc(100% + var(--viewport-padding)))',
+        },
+        to: {
+          transform: 'translateX(0)',
+        },
+      },
+      'toast-hide': {
+        from: { opacity: '1' },
+        to: { opacity: '0' },
+      },
+      'toast-swipe-out': {
+        from: {
+          transform: 'translateX(var(--radix-toast-swipe-end-x))',
+        },
+        to: {
+          transform: 'translateX(calc(100% + var(--viewport-padding)))',
+        },
+      },
     },
     animation: {
       skeleton: 'skeleton 1.5s ease infinite',
+      'toast-slide-in': 'toast-slide-in 300ms cubic-bezier(0.16,1,0.3,1)',
+      'toast-hide': 'toast-hide 200ms ease-in',
+      'toast-swipe-out': 'toast-swipe-out 200ms ease-out',
     },
   },
 
