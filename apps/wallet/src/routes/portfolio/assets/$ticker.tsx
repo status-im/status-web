@@ -7,9 +7,8 @@ import {
 
 import SplittedLayout from '@/components/splitted-layout'
 import { useAssets } from '@/hooks/use-assets'
-import { useMediaQuery } from '@/hooks/use-media-query'
+import { useWallet } from '@/providers/wallet-context'
 
-import { useWallet } from '../../../providers/wallet-context'
 import { Token } from './-components/token'
 
 export const Route = createFileRoute('/portfolio/assets/$ticker')({

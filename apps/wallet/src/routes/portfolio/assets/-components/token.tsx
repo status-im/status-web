@@ -43,6 +43,7 @@ import { usePendingTransactions } from '@/providers/pending-transactions-context
 import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
+import { ExchangeDialog } from './exchange-dialog'
 
 import type { ApiOutput, NetworkType } from '@status-im/wallet/data'
 
@@ -74,6 +75,7 @@ function matchesAsset(asset: AssetData, ticker: string): boolean {
 const Token = (props: Props) => {
   const { ticker, address } = props
   const [markdownContent, setMarkdownContent] = useState<React.ReactNode>(null)
+  const [isExchangeOpen, setIsExchangeOpen] = useState(false)
   const [, copy] = useCopyToClipboard()
 
   const [activeDataType, setActiveDataType] =
@@ -155,6 +157,7 @@ const Token = (props: Props) => {
           json: {
             address,
             networks: NETWORKS,
+            includeZeroBalance: true,
             ...(ticker.startsWith('0x')
               ? { contract: ticker }
               : { symbol: ticker }),
@@ -404,6 +407,7 @@ const Token = (props: Props) => {
               <span className="block max-w-20 truncate">Buy {name}</span>
             </Button>
           </BuyCryptoDrawer>
+
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
             <Button
               size="32"
@@ -413,6 +417,7 @@ const Token = (props: Props) => {
               Receive
             </Button>
           </ReceiveCryptoDrawer>
+
           <SendAssetsModal
             asset={sendAsset}
             account={{
@@ -429,6 +434,14 @@ const Token = (props: Props) => {
               Send
             </Button>
           </SendAssetsModal>
+
+          <Button
+            size="32"
+            variant="outline"
+            onClick={() => setIsExchangeOpen(true)}
+          >
+            Exchange
+          </Button>
         </div>
       }
     >
@@ -467,6 +480,7 @@ const Token = (props: Props) => {
                 Receive
               </Button>
             </ReceiveCryptoDrawer>
+
             <SendAssetsModal
               asset={sendAsset}
               account={{
@@ -483,6 +497,14 @@ const Token = (props: Props) => {
                 Send
               </Button>
             </SendAssetsModal>
+
+            <Button
+              size="32"
+              variant="outline"
+              onClick={() => setIsExchangeOpen(true)}
+            >
+              Exchange
+            </Button>
           </div>
         </div>
 
@@ -657,6 +679,12 @@ const Token = (props: Props) => {
           </div>
         </div>
       </div>
+      {isExchangeOpen && (
+        <ExchangeDialog
+          onClose={() => setIsExchangeOpen(false)}
+          tokenData={tokenDetail}
+        />
+      )}
     </StickyHeaderContainer>
   )
 }
