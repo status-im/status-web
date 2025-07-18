@@ -7,7 +7,7 @@ export const ERROR_MESSAGES = {
     'Something went wrong loading token info. Refresh or try again later.',
   BALANCE: 'Couldn’t retrieve balance. Refresh or try again later.',
   COLLECTIBLES:
-    'We had issue loading your collectibles. Refresh or try again later.',
+    'We had an issue loading your collectibles. Refresh or try again later.',
   COLLECTIBLES_PARTIAL:
     'Some collectible data couldn’t be fetched. Refresh or try again later.',
   COLLECTIBLE_INFO:
@@ -19,7 +19,7 @@ export const ERROR_MESSAGES = {
     'We hit an unexpected issue. Please restart extension and try again.',
   ACTION_GENERIC: 'That didn’t work. Please try again.',
   NEW_TAB: 'Unable to open a new tab. Please check your browser settings.',
-  PROVIDER_NOT_SUPPORTED: 'Provider not supported',
+  PROVIDER_NOT_SUPPORTED: 'Provider not supported.',
   NO_WALLET_SELECTED: 'No wallet selected. Please select a wallet to continue.',
   INVALID_PASSWORD: 'Invalid password. Please try again.',
   GAS_FEES_FETCH:
