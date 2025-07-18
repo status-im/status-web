@@ -81,10 +81,10 @@ export const BuyCryptoDrawer = (props: Props) => {
   const network: NetworkOptions[0] = NETWORKS[0]
   const currency: Currency = {
     contract_address: '',
-    code: 'EUR',
-    label: 'Euro',
+    code: 'USD',
+    label: 'US Dollar',
     network: 'ETHEREUM',
-    imageUrl: '/images/tokens/eur.png',
+    imageUrl: '/images/tokens/usd.png',
   }
 
   const toast = useToast()

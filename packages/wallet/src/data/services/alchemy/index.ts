@@ -912,9 +912,9 @@ export async function getFeeRate(
   })
 
   const ethPrice =
-    typeof ethPriceData?.eur === 'number'
-      ? ethPriceData.eur
-      : parseFloat(ethPriceData?.eur) || 0
+    typeof ethPriceData?.usd === 'number'
+      ? ethPriceData.usd
+      : parseFloat(ethPriceData?.usd) || 0
 
   const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
   const feeEur = ethPrice > 0 ? feeEth * ethPrice : 0

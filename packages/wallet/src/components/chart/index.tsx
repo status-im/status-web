@@ -22,7 +22,7 @@ const Chart = ({
   activeTimeFrame,
   activeDataType,
 }: ChartProps) => {
-  const currency = 'EUR'
+  const currency = 'USD'
 
   return (
     <div className="relative">
