@@ -395,7 +395,11 @@ const Token = (props: Props) => {
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+          <BuyCryptoDrawer
+            account={account}
+            onOpenTab={handleOpenTab}
+            symbol={tokenDetail.summary.symbol}
+          >
             <Button size="32" iconBefore={<BuyIcon />}>
               <span className="block max-w-20 truncate">Buy {name}</span>
             </Button>
@@ -444,7 +448,11 @@ const Token = (props: Props) => {
           </div>
 
           <div className="flex items-center gap-1">
-            <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+            <BuyCryptoDrawer
+              account={account}
+              onOpenTab={handleOpenTab}
+              symbol={tokenDetail.summary.symbol}
+            >
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
                 Buy {name}
               </Button>

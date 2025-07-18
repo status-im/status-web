@@ -51,6 +51,7 @@ export type BuyCryptoDrawerProps = {
     asset?: string,
   ) => Promise<{ url: string }>
   onOpenTab?: (url: string) => void | Promise<void>
+  symbol?: string
 }
 
 type Props = BuyCryptoDrawerProps
@@ -75,14 +76,15 @@ export const BuyCryptoDrawer = (props: Props) => {
     ],
     onProviderSelect,
     onOpenTab,
+    symbol,
   } = props
 
   const [open, setOpen] = useState(false)
   const network: NetworkOptions[0] = NETWORKS[0]
   const currency: Currency = {
     contract_address: '',
-    code: 'USD',
-    label: 'US Dollar',
+    code: symbol || 'ETH',
+    label: symbol || 'Ethereum',
     network: 'ETHEREUM',
     imageUrl: '/images/tokens/usd.png',
   }
