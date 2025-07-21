@@ -5,6 +5,7 @@ import { createTRPCProxyClient } from '@trpc/client'
 import { initTRPC } from '@trpc/server'
 import superjson from 'superjson'
 import { createChromeHandler } from 'trpc-chrome/adapter'
+import { privateKeyToAccount } from 'viem/accounts'
 import { z } from 'zod'
 
 import * as bitcoin from './bitcoin/bitcoin'
@@ -271,6 +272,8 @@ const apiRouter = router({
               gasLimit: z.string(),
               maxFeePerGas: z.string(),
               maxInclusionFeePerGas: z.string(),
+              chainId: z.string().optional(),
+              data: z.string().optional(),
             }),
           )
           .mutation(async ({ input, ctx }) => {
@@ -318,10 +321,99 @@ const apiRouter = router({
               gasLimit: input.gasLimit,
               maxFeePerGas: input.maxFeePerGas,
               maxInclusionFeePerGas: input.maxInclusionFeePerGas,
+              data: input.data,
             })
 
             return {
               id,
+            }
+          }),
+
+        signTypedData: t.procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              password: z.string(),
+              fromAddress: z.string(),
+              typedData: z.string(),
+            }),
+          )
+          .mutation(async ({ input, ctx }) => {
+            try {
+              const { keyStore, walletCore } = ctx
+
+              const wallet = await keyStore.load(input.walletId)
+
+              const account = wallet.activeAccounts.find(
+                account => account.address === input.fromAddress,
+              )
+
+              if (!account) throw new Error('From address not found')
+
+              const privateKey = await keyStore.getKey(
+                wallet.id,
+                input.password,
+                account,
+              )
+
+              const privateKeyBytes = privateKey.data()
+              let pkHex = walletCore.HexCoding.encode(privateKeyBytes)
+
+              // Ensure the hex string is properly formatted for viem
+              if (!pkHex.startsWith('0x')) {
+                pkHex = `0x${pkHex}`
+              }
+
+              if (pkHex.length !== 66) {
+                throw new Error(
+                  `Invalid private key length: expected 66 characters (including 0x), got ${pkHex.length}`,
+                )
+              }
+
+              let parsed: {
+                domain: Record<string, unknown>
+                types: Record<string, Array<{ name: string; type: string }>>
+                primaryType: string
+                message: Record<string, unknown>
+              }
+              try {
+                parsed = JSON.parse(input.typedData)
+              } catch (error) {
+                throw new Error(
+                  `Invalid typed data JSON: ${error instanceof Error ? error.message : 'Unknown parsing error'}`,
+                )
+              }
+
+              if (
+                !parsed.domain ||
+                !parsed.types ||
+                !parsed.primaryType ||
+                !parsed.message
+              ) {
+                throw new Error(
+                  'Missing required fields in typed data: domain, types, primaryType, or message',
+                )
+              }
+
+              // Remove EIP712Domain from types as per viem requirement
+              const otherTypes = Object.fromEntries(
+                Object.entries(parsed.types).filter(
+                  ([key]) => key !== 'EIP712Domain',
+                ),
+              ) as Record<string, Array<{ name: string; type: string }>>
+
+              const accountViem = privateKeyToAccount(pkHex as `0x${string}`)
+              const signature = await accountViem.signTypedData({
+                domain: parsed.domain as any,
+                types: otherTypes,
+                primaryType: parsed.primaryType,
+                message: parsed.message as any,
+              })
+
+              return { signature }
+            } catch (error) {
+              if (error instanceof Error) throw error
+              throw new Error(`SignTypedData failed: ${String(error)}`)
             }
           }),
       }),
