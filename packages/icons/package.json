@@ -17,27 +17,27 @@
       "require": "./index.js"
     },
     "./12": {
-      "types": "./dist/12/index.d.ts",
+      "types": "./dist/src/12/index.d.ts",
       "import": "./dist/12/index.es.js",
       "require": "./dist/12/index.cjs.js"
     },
     "./16": {
-      "types": "./dist/16/index.d.ts",
+      "types": "./dist/src/16/index.d.ts",
       "import": "./dist/16/index.es.js",
       "require": "./dist/16/index.cjs.js"
     },
     "./20": {
-      "types": "./dist/20/index.d.ts",
+      "types": "./dist/src/20/index.d.ts",
       "import": "./dist/20/index.es.js",
       "require": "./dist/20/index.cjs.js"
     },
     "./social": {
-      "types": "./dist/social/index.d.ts",
+      "types": "./dist/src/social/index.d.ts",
       "import": "./dist/social/index.es.js",
       "require": "./dist/social/index.cjs.js"
     },
     "./reactions": {
-      "types": "./dist/reactions/index.d.ts",
+      "types": "./dist/src/reactions/index.d.ts",
       "import": "./dist/reactions/index.es.js",
       "require": "./dist/reactions/index.cjs.js"
     },
