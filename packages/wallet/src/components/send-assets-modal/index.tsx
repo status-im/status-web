@@ -248,7 +248,9 @@ const SendAssetsModal = (props: Props) => {
   }
 
   const hasInsufficientBalance =
-    watchedAmount && Number.parseFloat(watchedAmount) > balance
+    watchedAmount &&
+    Number.parseFloat(watchedAmount) > balance &&
+    Number.parseFloat(watchedAmount) > 0
 
   const isTransactionSigning = transactionState === 'signing'
 
@@ -384,7 +386,7 @@ const SendAssetsModal = (props: Props) => {
                       </div>
                     </div>
 
-                    {errors.amount && (
+                    {errors.amount && hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>{errors.amount.message}</p>
