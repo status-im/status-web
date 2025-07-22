@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { RefreshIcon } from '@status-im/icons/20'
-import { DropdownSort } from '@status-im/wallet/components'
+// import { DropdownSort } from '@status-im/wallet/components'
 import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 
 import { useRefetchToast } from '../hooks/use-refetch-toast'
@@ -40,7 +40,10 @@ type Props = {
 }
 
 const ActionButtons = (props: Props) => {
-  const { address, searchAndSortValues } = props
+  const {
+    address,
+    // searchAndSortValues
+  } = props
   const queryClient = useQueryClient()
   const [isManualRefreshing, setIsManualRefreshing] = useState(false)
 
@@ -123,12 +126,12 @@ const ActionButtons = (props: Props) => {
           aria-label="Refresh data"
           disabled={isAnyQueryFetching}
         />
-        <DropdownSort
+        {/* <DropdownSort
           data={searchAndSortValues.sortOptions}
           onOrderByChange={searchAndSortValues.onOrderByChange}
           orderByColumn={searchAndSortValues.orderByColumn}
           ascending={searchAndSortValues.ascending}
-        />
+        /> */}
       </div>
     </div>
   )
