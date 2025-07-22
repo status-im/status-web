@@ -15,8 +15,8 @@ export default defineConfig({
   manifest: ({ mode }) => {
     const scriptSrc =
       mode === 'production'
-        ? 'self'
-        : 'http://localhost:4000/ http://localhost:8097/'
+        ? "'self' 'wasm-unsafe-eval'"
+        : "'self' 'wasm-unsafe-eval' http://localhost:4000/ http://localhost:8097/"
     const connectSrc =
       mode === 'production'
         ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
@@ -37,7 +37,7 @@ export default defineConfig({
         },
       ],
       content_security_policy: {
-        extension_pages: `script-src 'self' 'wasm-unsafe-eval' ${scriptSrc}; object-src 'self'; connect-src 'self' ${connectSrc}`,
+        extension_pages: `script-src ${scriptSrc}; object-src 'self'; connect-src 'self' ${connectSrc}`,
       },
     }
   },
