@@ -539,7 +539,7 @@ const SendAssetsModal = (props: Props) => {
         onOpenChange={handlePasswordModalClose}
         onConfirm={handlePasswordConfirm}
         isLoading={isTransactionSigning}
-        buttonLabel="Sign Transaction"
+        buttonLabel="Send Transaction"
       />
     </>
   )
