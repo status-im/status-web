@@ -1,10 +1,10 @@
-// /// <reference types="vite/client" />
+/// <reference types="vite/client" />
 
-// // import 'vite/client'
+interface ImportMetaEnv {
+  readonly WXT_STATUS_API_URL: string
+  readonly WXT_GETBLOCK_API_KEY: string
+}
 
 interface ImportMeta {
-  readonly env: {
-    readonly WXT_STATUS_API_URL: string
-    readonly WXT_GETBLOCK_API_KEY: string
-  }
+  readonly env: ImportMetaEnv
 }

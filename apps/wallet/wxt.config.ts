@@ -13,10 +13,14 @@ export default defineConfig({
   modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
   manifestVersion: 3,
   manifest: ({ mode }) => {
+    const scriptSrc =
+      mode === 'production'
+        ? 'self'
+        : 'http://localhost:4000/ http://localhost:8097/'
     const connectSrc =
       mode === 'production'
         ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
-        : 'ws: http://localhost:3030/ https://localhost:3030/'
+        : 'ws: http://localhost:3030/ https://localhost:3030/ ws://localhost:8097/ http://localhost:8097/'
 
     return {
       version: '0.1.0',
@@ -33,7 +37,7 @@ export default defineConfig({
         },
       ],
       content_security_policy: {
-        extension_pages: `script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' ${connectSrc}`,
+        extension_pages: `script-src 'self' 'wasm-unsafe-eval' ${scriptSrc}; object-src 'self'; connect-src 'self' ${connectSrc}`,
       },
     }
   },
