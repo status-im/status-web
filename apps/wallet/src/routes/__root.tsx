@@ -17,7 +17,7 @@ import {
 // import { NotAllowed } from '../../../portfolio/src/app/_components/not-allowed'
 // import { AccountsProvider } from '../../../portfolio/src/app/_providers/accounts-context'
 // import { ConnectKitProvider } from '../../../portfolio/src/app/_providers/connectkit-provider'
-// import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
+import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
 import { Link } from '../components/link'
@@ -147,36 +147,36 @@ function RootComponent() {
       <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
         <WagmiProvider>
-          {/* <QueryClientProvider> */}
-          {/* <Suspense fallback={<div>Loading...</div>}> */}
-          {/* <AccountsProvider> */}
-          {/* <ConnectKitProvider> */}
-          <WalletProvider>
-            <PendingTransactionsProvider>
-              <div className="flex min-h-[56px] items-center px-2">
-                <Navbar
-                  hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
-                    pathname ?? '',
-                  )}
-                  linkComponent={Link}
-                />
-              </div>
-              <div className="px-1">
-                <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                  <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
-                    {/* <OnboardingPage /> */}
-                    <Outlet />
-                  </div>
+          <QueryClientProvider>
+            {/* <Suspense fallback={<div>Loading...</div>}> */}
+            {/* <AccountsProvider> */}
+            {/* <ConnectKitProvider> */}
+            <WalletProvider>
+              <PendingTransactionsProvider>
+                <div className="flex min-h-[56px] items-center px-2">
+                  <Navbar
+                    hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
+                      pathname ?? '',
+                    )}
+                    linkComponent={Link}
+                  />
                 </div>
-                {/* <NotAllowed /> */}
-                <ToastContainer />
-              </div>
-            </PendingTransactionsProvider>
-          </WalletProvider>
-          {/* </ConnectKitProvider> */}
-          {/* </AccountsProvider> */}
-          {/* </Suspense> */}
-          {/* </QueryClientProvider> */}
+                <div className="px-1">
+                  <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                    <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
+                      {/* <OnboardingPage /> */}
+                      <Outlet />
+                    </div>
+                  </div>
+                  {/* <NotAllowed /> */}
+                  <ToastContainer />
+                </div>
+              </PendingTransactionsProvider>
+            </WalletProvider>
+            {/* </ConnectKitProvider> */}
+            {/* </AccountsProvider> */}
+            {/* </Suspense> */}
+          </QueryClientProvider>
         </WagmiProvider>
         {/* </StatusProvider> */}
       </div>
