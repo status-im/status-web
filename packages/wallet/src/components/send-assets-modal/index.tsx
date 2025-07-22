@@ -302,7 +302,7 @@ const SendAssetsModal = (props: Props) => {
                             {...field}
                             isInvalid={!!errors.to}
                             className="pr-8 font-mono text-13"
-                            placeholder="0x..."
+                            placeholder="Address"
                             clearable={!!watchedTo}
                           />
                         )}
