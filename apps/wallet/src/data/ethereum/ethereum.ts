@@ -26,7 +26,7 @@ export async function send({
   gasLimit: string
   maxFeePerGas: string
   maxInclusionFeePerGas: string
-}): Promise<{ txid: string }> {
+}) {
   const nonceUrl = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
   )
