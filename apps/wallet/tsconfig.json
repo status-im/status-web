@@ -7,11 +7,23 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     // "paths": {
-    //   "@portfolio/*": ["../portfolio/src/*"],
-    //   // "@/*": ["../portfolio/src/*"],
+    //   "@status-im/wallet/*": ["../../packages/wallet/src/*"],
     // },
-    // "types": ["vite/client"],
   },
   "include": ["./**/*", "./.wxt/wxt.d.ts", "global.d.ts", "env.d.ts"],
   "exclude": ["node_modules", ".output"],
+  "references": [
+    {
+      "path": "../../packages/wallet",
+    },
+    {
+      "path": "../../packages/colors",
+    },
+    {
+      "path": "../../packages/components",
+    },
+    {
+      "path": "../../packages/icons",
+    },
+  ],
 }

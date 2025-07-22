@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/colors" },
+    { "path": "./packages/icons" },
+    { "path": "./packages/components" },
+    { "path": "./packages/status-js" },
+    { "path": "./packages/wallet" },
+    { "path": "./apps/connector" },
+    { "path": "./apps/portfolio" },
+    { "path": "./apps/wallet" },
+    { "path": "./apps/api" }
+  ]
+}

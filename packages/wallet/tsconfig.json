@@ -9,11 +9,22 @@
   ],
   "compilerOptions": {
     "rootDir": ".",
-    // "composite": true,
+    "composite": true,
     "jsx": "preserve",
     "outDir": "./dist",
     "allowJs": true,
-    "plugins": [{ "name": "next" }]
+    "plugins": [{ "name": "next" }],
+    "noEmit": false
   },
-  "references": []
+  "references": [
+    {
+      "path": "../components"
+    },
+    {
+      "path": "../icons"
+    },
+    {
+      "path": "../colors"
+    }
+  ]
 }
