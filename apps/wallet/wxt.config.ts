@@ -20,7 +20,7 @@ export default defineConfig({
     const connectSrc =
       mode === 'production'
         ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
-        : 'ws: http://localhost:3030/ https://localhost:3030/ ws://localhost:8097/ http://localhost:8097/'
+        : 'ws: http://localhost:3030/ https://localhost:3030/'
 
     return {
       version: '0.1.0',
