@@ -61,6 +61,7 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
 }
 
 const DEFAULT_TOKEN_SYMBOLS = [
+  'ETH',
   'SNT',
   'USDC',
   'USDT',
