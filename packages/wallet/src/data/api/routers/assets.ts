@@ -30,6 +30,7 @@ type Asset = {
   price_percentage_24h_change: number
   balance: number
   total_eur: number
+  decimals?: number
   metadata: {
     market_cap: number
     fully_dilluted: number
@@ -281,6 +282,7 @@ async function all({
             price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
             balance: balanceInfo.balance,
             total_eur: balanceInfo.balance * price.USD['PRICE'],
+            decimals: token.decimals,
           }
 
           assets.push(asset)
@@ -313,6 +315,7 @@ async function all({
             name: token.name,
             symbol: token.symbol,
             balance: balanceInfo.balance,
+            decimals: token.decimals, // <-- Adicionado aqui
           })
         }
       }
@@ -335,6 +338,7 @@ async function all({
             price_eur: price['USD']['PRICE'] ?? 0,
             price_percentage_24h_change: price['USD']['CHANGEPCT24HOUR'] ?? 0,
             total_eur: partialAsset.balance * (price['USD']['PRICE'] ?? 0),
+            decimals: partialAsset.decimals, // <-- Mantém decimals
           }
 
           assets.push(asset)
@@ -389,6 +393,7 @@ async function all({
             price_percentage_24h_change: prices[symbol].USD.CHANGEPCT24HOUR,
             balance: 0,
             total_eur: 0,
+            decimals: token.decimals, // <-- Adicionado aqui
           })
         }
       }
@@ -856,6 +861,7 @@ function map(data: {
     price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
     balance: Number(balance) / 10 ** token.decimals,
     total_eur: (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+    decimals: token.decimals, // <-- Adicionado aqui
     metadata: {
       market_cap: price.USD['MKTCAP'],
       fully_dilluted: price.USD['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],

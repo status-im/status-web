@@ -35,7 +35,7 @@ import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
-import { parseUnits } from 'ethers'
+import { Interface, parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
@@ -59,6 +59,8 @@ type Props = {
 }
 
 const NETWORKS = ['ethereum'] as const
+
+const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
 
 function matchesAsset(asset: AssetData, ticker: string): boolean {
   if (ticker.startsWith('0x')) {
@@ -206,7 +208,37 @@ const Token = (props: Props) => {
   const gasFeeQuery = useQuery({
     queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
     queryFn: async ({ queryKey }) => {
+      const isNative = tokenDetail?.summary.symbol === 'ETH'
       const [, from, to, value] = queryKey as [string, string, string, string]
+
+      let params
+
+      if (isNative) {
+        params = {
+          from,
+          to,
+          value,
+        }
+      } else {
+        const contract = tokenDetail?.summary.contracts.ethereum
+        if (!contract) {
+          throw new Error('Contract address not found')
+        }
+
+        const amount =
+          typeof value === 'string' && value.startsWith('0x')
+            ? BigInt(value)
+            : BigInt(value)
+
+        const data = erc20.encodeFunctionData('transfer', [to, amount])
+
+        params = {
+          from,
+          to: contract,
+          value: '0x0',
+          data,
+        }
+      }
 
       const url = new URL(
         `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
@@ -217,7 +249,7 @@ const Token = (props: Props) => {
         JSON.stringify({
           json: {
             network: 'ethereum',
-            params: { from, to, value },
+            params,
           },
         }),
       )
@@ -232,7 +264,7 @@ const Token = (props: Props) => {
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: !!gasInput?.to && !!gasInput?.value && !!address,
+    enabled: !!gasInput?.to && !!gasInput?.value && !!address && !!tokenDetail,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
@@ -317,54 +349,117 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
-    const amountHex = parseUnits(formData.amount, 18).toString(16)
+    const isNative = tokenDetail?.summary.symbol === 'ETH'
 
-    const result = await apiClient.wallet.account.ethereum.send.mutate({
-      amount: amountHex,
-      toAddress: formData.to,
-      fromAddress: address,
-      password: formData.password,
-      walletId: currentWallet?.id || '',
-      gasLimit: gasFeeQuery.data.txParams.gasLimit,
-      maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
-      maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
-    })
+    if (isNative) {
+      const amountHex = parseUnits(formData.amount, 18).toString(16)
+      const params = {
+        amount: amountHex,
+        toAddress: formData.to,
+        fromAddress: address,
+        password: formData.password,
+        walletId: currentWallet?.id || '',
+        gasLimit: gasFeeQuery.data.txParams.gasLimit,
+        maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
+        maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
+      }
 
-    if (!result.id || result.id.txid?.error) {
-      console.error(result.id.txid?.error)
-      toast.negative(ERROR_MESSAGES.TX_FAILED)
-      throw new Error('Transaction failed')
+      const result = await apiClient.wallet.account.ethereum.send.mutate(params)
+      if (!result.id || result.id.txid?.error) {
+        console.error(result.id.txid?.error)
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction failed')
+      }
+
+      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+      if (!txHash) {
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction hash not found')
+      }
+
+      addPendingTransaction({
+        hash: txHash,
+        from: address,
+        to: formData.to,
+        value: parseFloat(formData.amount),
+        asset: tokenDetail.summary.symbol,
+        network: 'ethereum',
+        status: 'pending',
+        category: 'external',
+        blockNum: '0',
+        metadata: {
+          blockTimestamp: new Date().toISOString(),
+        },
+        rawContract: {
+          value: amountHex,
+          address: ticker.startsWith('0x') ? ticker : null,
+          decimal: '18',
+        },
+        eurRate: 0,
+      })
+    } else {
+      const tokenDecimals = asset.decimals ?? 18
+      const amount = parseUnits(formData.amount, tokenDecimals)
+      const amountHex = amount.toString(16)
+      const contractAddress = tokenDetail?.summary.contracts.ethereum
+
+      if (!contractAddress) {
+        throw new Error('Token contract address not found')
+      }
+
+      const data = erc20.encodeFunctionData('transfer', [formData.to, amount])
+
+      const params = {
+        amount: '0',
+        toAddress: contractAddress,
+        fromAddress: address,
+        password: formData.password,
+        walletId: currentWallet?.id || '',
+        gasLimit: gasFeeQuery.data.txParams.gasLimit,
+        maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
+        maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
+        data,
+      }
+
+      const result =
+        await apiClient.wallet.account.ethereum.sendErc20.mutate(params)
+
+      if (!result.id || result.id.txid?.error) {
+        console.error(result.id.txid?.error)
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction failed')
+      }
+
+      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+      if (!txHash) {
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction hash not found')
+      }
+
+      addPendingTransaction({
+        hash: txHash,
+        from: address,
+        to: formData.to,
+        value: parseFloat(formData.amount),
+        asset: tokenDetail.summary.symbol,
+        network: 'ethereum',
+        status: 'pending',
+        category: 'external',
+        blockNum: '0',
+        metadata: {
+          blockTimestamp: new Date().toISOString(),
+        },
+        rawContract: {
+          value: amountHex,
+          address: ticker.startsWith('0x') ? ticker : null,
+          decimal: asset.decimals?.toString() ?? '18',
+        },
+        eurRate: 0,
+      })
+      return result.id.txid
     }
-
-    const txHash = typeof result.id === 'string' ? result.id : result.id.txid
-
-    if (!txHash) {
-      toast.negative(ERROR_MESSAGES.TX_FAILED)
-      throw new Error('Transaction hash not found')
-    }
-
-    addPendingTransaction({
-      hash: txHash,
-      from: address,
-      to: formData.to,
-      value: parseFloat(formData.amount),
-      asset: tokenDetail.summary.symbol,
-      network: 'ethereum',
-      status: 'pending',
-      category: 'external',
-      blockNum: '0',
-      metadata: {
-        blockTimestamp: new Date().toISOString(),
-      },
-      rawContract: {
-        value: amountHex,
-        address: ticker.startsWith('0x') ? ticker : null,
-        decimal: '18',
-      },
-      eurRate: 0,
-    })
-
-    return result.id.txid
   }
 
   const verifyPassword = async (inputPassword: string): Promise<boolean> => {

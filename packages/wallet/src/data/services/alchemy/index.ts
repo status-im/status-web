@@ -850,11 +850,20 @@ export async function getFeeRate(
     from: string
     to: string
     value: string
+    data?: string
   },
 ) {
   const url = new URL(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
+
+  const gasParams: Record<string, string> = {
+    from: params.from,
+    to: params.to,
+    value: params.value,
+  }
+
+  if (params['data']) gasParams['data'] = params['data']
 
   let gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData
 
@@ -865,7 +874,7 @@ export async function getFeeRate(
           jsonrpc: '2.0',
           id: 1,
           method: 'eth_estimateGas',
-          params: [params],
+          params: [gasParams],
         }),
         _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 3600, {
           jsonrpc: '2.0',
