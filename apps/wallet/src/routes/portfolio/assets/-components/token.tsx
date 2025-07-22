@@ -35,6 +35,7 @@ import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
+import { parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
@@ -316,9 +317,7 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
-    const amountHex = BigInt(
-      Math.floor(parseFloat(formData.amount) * 1e18),
-    ).toString(16)
+    const amountHex = parseUnits(formData.amount, 18).toString(16)
 
     const result = await apiClient.wallet.account.ethereum.send.mutate({
       amount: amountHex,
@@ -326,10 +325,9 @@ const Token = (props: Props) => {
       fromAddress: address,
       password: formData.password,
       walletId: currentWallet?.id || '',
-      gasLimit: gasFeeQuery.data.txParams.gasLimit.replace(/^0x/, ''),
-      maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas.replace(/^0x/, ''),
-      maxInclusionFeePerGas:
-        gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
+      gasLimit: gasFeeQuery.data.txParams.gasLimit,
+      maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
+      maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
     })
 
     if (!result.id || result.id.txid?.error) {

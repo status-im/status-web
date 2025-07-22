@@ -26,7 +26,7 @@ export async function send({
   gasLimit: string
   maxFeePerGas: string
   maxInclusionFeePerGas: string
-}) {
+}): Promise<{ txid: string }> {
   const nonceUrl = new URL(
     `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getNonce`,
   )
@@ -34,6 +34,7 @@ export async function send({
     'input',
     JSON.stringify({ json: { address: fromAddress, network } }),
   )
+
   const nonceResponse = await fetch(nonceUrl.toString(), {
     method: 'GET',
     headers: {
@@ -47,34 +48,26 @@ export async function send({
   }
 
   const nonceBody = await nonceResponse.json()
+  const nonceHex = nonceBody.result.data.json
+    .replace(/^0x/, '')
+    .padStart(2, '0')
 
-  const nonce = nonceBody.result.data.json
+  const chainIdHex = BigInt(chainID).toString(16).padStart(2, '0')
 
-  // const feeRate = nodes.getFeeRate
+  const cleanAmount = amount.replace(/^0x/, '').padStart(16, '0')
 
-  // fixme: calc nonce and fees
   const txInput = encoder.Ethereum.Proto.SigningInput.create({
-    chainId: Uint8Array.from(Buffer.from(chainID, 'hex')),
-    // chainId: Buffer.from('01', 'hex'),
-    // gasPrice: Buffer.from(feeRate.replace('0x', ''), 'hex'),
-    // nonce: Buffer.from('09', 'hex'),
-    // nonce: Buffer.from('00', 'hex'),
-    nonce: Uint8Array.from(Buffer.from(nonce.replace(/^0x/, '0'), 'hex')),
-    // maxFeePerGas: Buffer.from(feeRate, 'hex'),
-    // // maxInclusionFeePerGas: Buffer.from('3b9aca00', 'hex'),
-    // maxInclusionFeePerGas: Buffer.from('01', 'hex'),
-    // gasLimit: Buffer.from('5208', 'hex'),
-    // gasPrice: Buffer.from('04a817c800', 'hex'),
-    // gasLimit: Buffer.from('5208', 'hex'),
-    gasLimit: Uint8Array.from(Buffer.from(gasLimit, 'hex')),
-    maxFeePerGas: Uint8Array.from(Buffer.from(maxFeePerGas, 'hex')),
+    chainId: Uint8Array.from(Buffer.from(chainIdHex, 'hex')),
+    nonce: Uint8Array.from(Buffer.from(nonceHex, 'hex')),
+    gasLimit: Uint8Array.from(Buffer.from(gasLimit.replace(/^0x/, ''), 'hex')),
+    maxFeePerGas: Uint8Array.from(Buffer.from(padHex(maxFeePerGas), 'hex')),
     maxInclusionFeePerGas: Uint8Array.from(
-      Buffer.from(maxInclusionFeePerGas, 'hex'),
+      Buffer.from(padHex(maxInclusionFeePerGas), 'hex'),
     ),
-    toAddress: toAddress,
+    toAddress,
     transaction: {
       transfer: {
-        amount: Uint8Array.from(Buffer.from(amount, 'hex')),
+        amount: Uint8Array.from(Buffer.from(cleanAmount, 'hex')),
       },
     },
     privateKey: walletPrivateKey.data(),
@@ -83,7 +76,6 @@ export async function send({
 
   const inputEncoded =
     encoder.Ethereum.Proto.SigningInput.encode(txInput).finish()
-
   // sign
   const outputData = walletCore.AnySigner.sign(
     inputEncoded,
@@ -105,7 +97,7 @@ export async function send({
     body: JSON.stringify({
       json: {
         txHex: rawTx,
-        network: 'ethereum',
+        network,
       },
     }),
     cache: 'no-store',
@@ -121,4 +113,10 @@ export async function send({
   return {
     txid,
   }
+}
+
+// Utility function to pad hex strings to even length
+const padHex = (hexStr: string) => {
+  hexStr = hexStr.replace(/^0x/, '')
+  return hexStr.length % 2 === 1 ? '0' + hexStr : hexStr
 }

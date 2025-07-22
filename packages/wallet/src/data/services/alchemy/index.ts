@@ -925,9 +925,9 @@ export async function getFeeRate(
     feeEth,
     confirmationTime,
     txParams: {
-      gasLimit: gasLimitHex,
+      gasLimit: `0x${gasLimit.toString(16)}`,
       maxFeePerGas: `0x${maxFeePerGas.toString(16)}`,
-      maxPriorityFeePerGas: priorityFeeHex,
+      maxPriorityFeePerGas: `0x${priorityFee.toString(16)}`,
     },
   }
 }
