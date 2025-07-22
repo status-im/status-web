@@ -21,11 +21,23 @@ export const usePendingTransactionsCleanup = (activities: Activity[]) => {
       activities.map(activity => getTransactionHash(activity.hash)),
     )
 
+    const TEN_MINUTES_MS = 10 * 60 * 1000
+    const now = Date.now()
+
     pendingTransactions.forEach(pendingTx => {
       const pendingHash = getTransactionHash(pendingTx.hash)
 
       if (confirmedHashes.has(pendingHash)) {
         removePendingTransaction(pendingHash)
+        return
+      }
+
+      const timestamp = pendingTx.metadata?.blockTimestamp
+      if (timestamp) {
+        const txTime = new Date(timestamp).getTime()
+        if (!isNaN(txTime) && now - txTime > TEN_MINUTES_MS) {
+          removePendingTransaction(pendingHash)
+        }
       }
     })
   }, [activities, pendingTransactions, removePendingTransaction])
