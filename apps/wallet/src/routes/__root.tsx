@@ -86,6 +86,41 @@ export const Route = createRootRouteWithContext<{
     ],
   }),
   component: RootComponent,
+  /**
+   * what
+   *
+   * - Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
+   * - etc.
+   *
+   * when
+   *
+   * - on refreshing
+   */
+  errorComponent: function RootErrorComponent({ error }) {
+    console.error('RootComponent: Error:', error)
+
+    return (
+      <>
+        <div className="flex min-h-[56px] items-center px-2">
+          <Navbar hasFeedback linkComponent={Link} />
+        </div>
+        <div className="px-1">
+          <div className="flex-1 flex-col 2md:flex xl:pb-1">
+            <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
+              {/* todo: global error illustration or split view */}
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  },
+  notFoundComponent: function RootNotFoundComponent() {
+    console.info('RootNotFoundComponent: Info: not found')
+
+    // todo: global not found illustration
+    // fixme?: show feedback in navbar
+    return
+  },
 })
 
 function RootComponent() {
