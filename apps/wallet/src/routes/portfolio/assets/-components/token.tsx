@@ -332,7 +332,8 @@ const Token = (props: Props) => {
         gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
     })
 
-    if (!result.id) {
+    if (!result.id || result.id.txid?.error) {
+      console.error(result.id.txid?.error)
       toast.negative(ERROR_MESSAGES.TX_FAILED)
       throw new Error('Transaction failed')
     }
