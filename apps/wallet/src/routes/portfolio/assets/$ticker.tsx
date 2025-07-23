@@ -62,7 +62,9 @@ function Component() {
                 pathname={pathname}
               />
             ) : (
-              <div className="mt-4 flex flex-col gap-3">Empty state</div>
+              <div className="mt-4 flex flex-col gap-3">
+                {/* todo: empty state */}
+              </div>
             )
           }
           loadingState={<AssetsListLoading />}
