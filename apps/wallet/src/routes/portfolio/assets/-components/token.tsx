@@ -225,10 +225,7 @@ const Token = (props: Props) => {
           throw new Error('Contract address not found')
         }
 
-        const amount =
-          typeof value === 'string' && value.startsWith('0x')
-            ? BigInt(value)
-            : BigInt(value)
+        const amount = BigInt(value)
 
         const data = erc20.encodeFunctionData('transfer', [to, amount])
 
@@ -336,6 +333,7 @@ const Token = (props: Props) => {
     symbol: tokenDetail.summary.symbol,
     ethBalance,
     network: (Object.keys(tokenDetail.assets)[0] ?? 'ethereum') as NetworkType,
+    decimals: asset.decimals ?? 18,
   }
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
