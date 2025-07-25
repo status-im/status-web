@@ -31,6 +31,7 @@ type Props = {
     totalBalanceEur: number
     contractAddress?: string
     network: NetworkType
+    decimals: number
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
   verifyPassword: (inputPassword: string) => Promise<boolean>
@@ -135,7 +136,9 @@ const SendAssetsModal = (props: Props) => {
     }
 
     debounceTimeout.current = setTimeout(() => {
-      const amountInWei = BigInt(Math.floor(parsed * 1e18)).toString(16)
+      const amountInWei = BigInt(
+        Math.floor(parsed * Math.pow(10, asset.decimals)),
+      ).toString(16)
       memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
     }, 300)
 
@@ -248,7 +251,9 @@ const SendAssetsModal = (props: Props) => {
   }
 
   const hasInsufficientBalance =
-    watchedAmount && Number.parseFloat(watchedAmount) > balance
+    watchedAmount &&
+    Number.parseFloat(watchedAmount) > balance &&
+    Number.parseFloat(watchedAmount) > 0
 
   const isTransactionSigning = transactionState === 'signing'
 
@@ -266,7 +271,7 @@ const SendAssetsModal = (props: Props) => {
             data-customisation="blue"
             className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow opacity-100 fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
@@ -302,7 +307,7 @@ const SendAssetsModal = (props: Props) => {
                             {...field}
                             isInvalid={!!errors.to}
                             className="pr-8 font-mono text-13"
-                            placeholder="0x..."
+                            placeholder="Address"
                             clearable={!!watchedTo}
                           />
                         )}
@@ -363,7 +368,7 @@ const SendAssetsModal = (props: Props) => {
                       <div className="h-px w-full bg-neutral-20" />
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
-                          €
+                          $
                           {watchedAmount
                             ? Number.parseFloat(watchedAmount || '0') *
                               (balanceEur / balance)
@@ -384,7 +389,7 @@ const SendAssetsModal = (props: Props) => {
                       </div>
                     </div>
 
-                    {errors.amount && (
+                    {errors.amount && hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>{errors.amount.message}</p>
@@ -539,7 +544,7 @@ const SendAssetsModal = (props: Props) => {
         onOpenChange={handlePasswordModalClose}
         onConfirm={handlePasswordConfirm}
         isLoading={isTransactionSigning}
-        buttonLabel="Sign Transaction"
+        buttonLabel="Send Transaction"
       />
     </>
   )

@@ -22,11 +22,11 @@ const Chart = ({
   activeTimeFrame,
   activeDataType,
 }: ChartProps) => {
-  const currency = 'EUR'
+  const currency = 'USD'
 
   return (
     <div className="relative">
-      <ParentSize className="w-full bg-white-100">
+      <ParentSize className="w-full bg-transparent">
         {({ width }) => (
           <TokenChart
             data={activeDataType === 'price' ? price : balance}

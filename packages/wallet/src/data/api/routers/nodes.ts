@@ -18,6 +18,7 @@ export const nodesRouter = router({
           from: z.string(),
           to: z.string(),
           value: z.string(),
+          data: z.string().optional(),
         }),
       }),
     )

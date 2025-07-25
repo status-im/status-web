@@ -850,11 +850,20 @@ export async function getFeeRate(
     from: string
     to: string
     value: string
+    data?: string
   },
 ) {
   const url = new URL(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
+
+  const gasParams: Record<string, string> = {
+    from: params.from,
+    to: params.to,
+    value: params.value,
+  }
+
+  if (params['data']) gasParams['data'] = params['data']
 
   let gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData
 
@@ -865,7 +874,7 @@ export async function getFeeRate(
           jsonrpc: '2.0',
           id: 1,
           method: 'eth_estimateGas',
-          params: [params],
+          params: [gasParams],
         }),
         _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 3600, {
           jsonrpc: '2.0',
@@ -912,9 +921,9 @@ export async function getFeeRate(
   })
 
   const ethPrice =
-    typeof ethPriceData?.eur === 'number'
-      ? ethPriceData.eur
-      : parseFloat(ethPriceData?.eur) || 0
+    typeof ethPriceData?.usd === 'number'
+      ? ethPriceData.usd
+      : parseFloat(ethPriceData?.usd) || 0
 
   const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
   const feeEur = ethPrice > 0 ? feeEth * ethPrice : 0
@@ -925,9 +934,9 @@ export async function getFeeRate(
     feeEth,
     confirmationTime,
     txParams: {
-      gasLimit: gasLimitHex,
+      gasLimit: `0x${gasLimit.toString(16)}`,
       maxFeePerGas: `0x${maxFeePerGas.toString(16)}`,
-      maxPriorityFeePerGas: priorityFeeHex,
+      maxPriorityFeePerGas: `0x${priorityFee.toString(16)}`,
     },
   }
 }

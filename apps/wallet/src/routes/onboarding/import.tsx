@@ -116,20 +116,21 @@ function CreatePassword({
 }) {
   const { importWalletAsync } = useImportWallet()
   const navigate = useNavigate()
-  const [isPending, startTransition] = useTransition()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
+    setIsLoading(true)
     try {
       await importWalletAsync({
         mnemonic,
         password: data.password,
       })
 
-      startTransition(() => {
-        navigate({ to: '/portfolio/assets' })
-      })
+      navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -153,7 +154,7 @@ function CreatePassword({
 
       <CreatePasswordForm
         onSubmit={handleSubmit}
-        loading={isPending}
+        loading={isLoading}
         confirmButtonLabel="Import Wallet"
       />
     </div>

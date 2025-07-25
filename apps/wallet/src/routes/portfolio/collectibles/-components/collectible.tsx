@@ -1,4 +1,4 @@
-import { Button } from '@status-im/components'
+import { Button, useToast } from '@status-im/components'
 import {
   ArrowLeftIcon,
   ExternalIcon,
@@ -11,6 +11,7 @@ import {
   CurrencyAmount,
   NetworkLogo,
 } from '@status-im/wallet/components'
+import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 
@@ -25,7 +26,13 @@ type Props = {
 const Collectible = (props: Props) => {
   const { network, contract, id } = props
 
-  const { data: collectible, isLoading } = useQuery({
+  const toast = useToast()
+
+  const {
+    data: collectible,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['collectible', network, contract, id],
     queryFn: async () => {
       const url = new URL(
@@ -62,6 +69,13 @@ const Collectible = (props: Props) => {
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
   })
+
+  // Show error toast if fetching fails
+  useEffect(() => {
+    if (isError) {
+      toast.negative(ERROR_MESSAGES.COLLECTIBLE_INFO)
+    }
+  }, [isError, toast])
 
   if (isLoading || !collectible) {
     return <CollectibleSkeleton />

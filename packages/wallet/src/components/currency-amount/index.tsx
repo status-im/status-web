@@ -15,7 +15,7 @@ type Props = {
 }
 
 // TODO: get this from the user's settings
-const SYMBOL: 'EUR' | 'USD' = 'EUR'
+const SYMBOL: 'EUR' | 'USD' = 'USD'
 const MIN_VALUE = 0.01
 
 export const CurrencyAmount = (props: Props) => {

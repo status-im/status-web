@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { useToast } from '@status-im/components'
 import { RefreshIcon } from '@status-im/icons/20'
-import { useIsFetching } from '@tanstack/react-query'
+import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 
 interface UseRefetchToastOptions {
   isRefreshing: boolean
@@ -14,8 +14,10 @@ export function useRefetchToast({
   queryKeys,
 }: UseRefetchToastOptions) {
   const toast = useToast()
+  const queryClient = useQueryClient()
   const hasShownLoadingToast = useRef(false)
   const hasShownSuccessToast = useRef(false)
+  const hasShownErrorToast = useRef(false)
 
   const fetchingCount = useIsFetching(
     queryKeys
@@ -30,10 +32,25 @@ export function useRefetchToast({
       : undefined,
   )
 
+  const hasError = queryKeys
+    ? queryClient
+        .getQueryCache()
+        .getAll()
+        .some(
+          query =>
+            queryKeys.some(
+              key =>
+                query.queryKey.length >= key.length &&
+                key.every((k, index) => query.queryKey[index] === k),
+            ) && query.state.status === 'error',
+        )
+    : false
+
   useEffect(() => {
     if (!isRefreshing) {
       hasShownLoadingToast.current = false
       hasShownSuccessToast.current = false
+      hasShownErrorToast.current = false
       return
     }
 
@@ -48,10 +65,16 @@ export function useRefetchToast({
     if (
       fetchingCount === 0 &&
       hasShownLoadingToast.current &&
-      !hasShownSuccessToast.current
+      !hasShownSuccessToast.current &&
+      !hasError
     ) {
       hasShownSuccessToast.current = true
       toast.positive('Prices and balances have been updated')
     }
-  }, [fetchingCount, isRefreshing, toast])
+
+    if (hasError && !hasShownErrorToast.current) {
+      hasShownErrorToast.current = true
+      toast.negative('Failed to update prices and balances')
+    }
+  }, [fetchingCount, isRefreshing, toast, hasError])
 }

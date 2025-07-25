@@ -118,8 +118,6 @@ const TokenChart = ({
               pricesData={priceData}
               xScale={xScale}
               yScale={yScale}
-              innerHeight={innerHeight}
-              innerWidth={innerWidth}
               isPositive={isPositive}
             />
 

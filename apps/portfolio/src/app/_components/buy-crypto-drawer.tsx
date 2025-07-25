@@ -25,7 +25,7 @@ export const BuyCryptoDrawer = (props: Props) => {
       name: provider,
       network,
       address: account.address,
-      asset: asset || 'EUR',
+      asset: asset || 'USD',
     })
   }
 

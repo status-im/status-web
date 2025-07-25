@@ -175,7 +175,8 @@ const CreatePasswordForm = ({
                 !isPasswordValid ||
                 !doPasswordsMatch ||
                 !!form.formState.errors.password ||
-                !!form.formState.errors.confirmPassword
+                !!form.formState.errors.confirmPassword ||
+                loading
               }
             >
               {loading ? (

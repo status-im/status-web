@@ -62,7 +62,7 @@ const FeedbackPopover = () => {
 const FeedbackSection = () => {
   return (
     <div className="flex size-full items-center justify-center">
-      <div className="flex w-[256px] flex-col gap-4 rounded-16 border border-neutral-10 bg-neutral-2.5 p-4">
+      <div className="flex w-[290px] flex-col gap-4 rounded-16 border border-neutral-10 bg-white-100 p-4">
         <span className="text-19 font-600 text-neutral-100">
           We're building with you.
         </span>
@@ -74,7 +74,7 @@ const FeedbackSection = () => {
               target="_blank"
               className="flex justify-between px-2 py-[5px] text-15 font-500 text-neutral-100 hover:text-neutral-50"
             >
-              {label} <ExternalIcon />
+              {label} <ExternalIcon className="text-neutral-50" />
             </Link>
           ))}
         </div>

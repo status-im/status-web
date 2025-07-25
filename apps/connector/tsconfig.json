@@ -12,4 +12,9 @@
     "strict": true,
     "target": "ESNext",
   },
+  "references": [
+    {
+      "path": "../../packages/colors",
+    },
+  ],
 }

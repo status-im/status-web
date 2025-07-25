@@ -7,6 +7,7 @@ import {
   RecoveryPhraseDialog,
   SignTransactionDialog,
 } from '@status-im/wallet/components'
+import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
@@ -31,7 +32,7 @@ export function RecoveryPhraseBackup() {
 
   const onPasswordConfirm = async (password: string) => {
     if (!currentWallet?.id) {
-      toast.negative('No wallet selected', { duration: 3000 })
+      toast.negative(ERROR_MESSAGES.NO_WALLET_SELECTED, { duration: 3000 })
       return
     }
 
@@ -44,7 +45,7 @@ export function RecoveryPhraseBackup() {
       setShowRecoveryDialog(true)
     } catch (error) {
       console.error(error)
-      toast.negative('Invalid password', {
+      toast.negative(ERROR_MESSAGES.INVALID_PASSWORD, {
         duration: 3000,
       })
     }
