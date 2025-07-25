@@ -31,7 +31,6 @@ type Props = {
     totalBalanceEur: number
     contractAddress?: string
     network: NetworkType
-    decimals: number
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
   verifyPassword: (inputPassword: string) => Promise<boolean>
@@ -136,9 +135,7 @@ const SendAssetsModal = (props: Props) => {
     }
 
     debounceTimeout.current = setTimeout(() => {
-      const amountInWei = BigInt(
-        Math.floor(parsed * Math.pow(10, asset.decimals)),
-      ).toString(16)
+      const amountInWei = BigInt(Math.floor(parsed * 1e18)).toString(16)
       memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
     }, 300)
 
