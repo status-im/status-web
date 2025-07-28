@@ -57,7 +57,7 @@ const Collectible = (props: Props) => {
       })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch.')
+        throw new Error(response.statusText, { cause: response.status })
       }
 
       const body = await response.json()
@@ -65,9 +65,6 @@ const Collectible = (props: Props) => {
     },
     staleTime: 15 * 1000, // 15 seconds
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
 
   // Show error toast if fetching fails

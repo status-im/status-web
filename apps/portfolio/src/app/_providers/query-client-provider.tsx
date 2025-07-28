@@ -7,6 +7,9 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       retryOnMount: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     },
   },
 })

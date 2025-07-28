@@ -1009,8 +1009,11 @@ async function _fetch<T extends ResponseBody>(
     },
   })
 
+  // throw new Error('limited', { cause: 429 })
+
   if (!response.ok) {
     console.error(response.statusText)
+    // todo: https://trpc.io/docs/v10/server/error-handling#throwing-errors for passing original error as `cause`
     throw new Error('Failed to fetch.', { cause: response.status })
   }
 

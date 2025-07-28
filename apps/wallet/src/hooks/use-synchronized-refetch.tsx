@@ -15,6 +15,11 @@ export function useSynchronizedRefetch(address: string) {
   const refetchQueries = useCallback(async () => {
     if (!address) return
 
+    if (has429Error(address, queryClient)) {
+      setIsAutoRefreshing(false)
+      return
+    }
+
     setIsAutoRefreshing(true)
 
     const queries = queryClient.getQueryCache().getAll()
@@ -81,4 +86,58 @@ export function useSynchronizedRefetch(address: string) {
 
     return () => clearInterval(interval)
   }, [isWindowActive, address, queryClient, refetchQueries])
+}
+
+function has429Error(
+  address: string,
+  queryClient: ReturnType<typeof useQueryClient>,
+) {
+  const queries = queryClient.getQueryCache().getAll()
+  return queries.some(query => {
+    const key = query.queryKey
+    const isRelevant =
+      (Array.isArray(key) && key[0] === 'assets' && key[1] === address) ||
+      (Array.isArray(key) && key[0] === 'collectibles' && key[1] === address) ||
+      (Array.isArray(key) && key[0] === 'activities' && key[1] === address) ||
+      (Array.isArray(key) && key[0] === 'collectible') ||
+      (Array.isArray(key) && key[0] === 'token')
+
+    if (!isRelevant) {
+      return false
+    }
+
+    const error = query.state.error
+
+    if (!error) {
+      return false
+    }
+
+    if (error.cause === 429) {
+      return true
+    }
+
+    if (typeof error === 'object' && error !== null) {
+      if (
+        'status' in error &&
+        typeof (error as { status?: unknown }).status === 'number' &&
+        (error as { status: number }).status === 429
+      ) {
+        return true
+      }
+
+      if (
+        'message' in error &&
+        typeof (error as { message?: unknown }).message === 'string' &&
+        (error as { message: string }).message.includes('429')
+      ) {
+        return true
+      }
+    }
+
+    if (typeof error === 'string' && (error as string).includes('429')) {
+      return true
+    }
+
+    return false
+  })
 }

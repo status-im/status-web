@@ -130,9 +130,6 @@ const Token = (props: Props) => {
     enabled: !!address,
     staleTime: 15 * 1000,
     gcTime: 60 * 60 * 1000,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
 
   // Show error toast if fetching assets fails
@@ -187,9 +184,6 @@ const Token = (props: Props) => {
     enabled: !!asset,
     staleTime: 15 * 1000,
     gcTime: 60 * 60 * 1000,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
 
   // Show error toast if fetching token detail fails
@@ -267,8 +261,6 @@ const Token = (props: Props) => {
       return body.result.data.json
     },
     enabled: !!gasInput?.to && !!gasInput?.value && !!address && !!tokenDetail,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
   })
 
   // Show error toast if fetching gas fees fails

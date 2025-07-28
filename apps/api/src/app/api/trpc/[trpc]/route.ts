@@ -18,7 +18,10 @@ export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 async function handler(request: NextRequest) {
-  return fetchRequestHandler({
+  // let error: Error | undefined
+
+  // const response = await fetchRequestHandler({
+  return await fetchRequestHandler({
     endpoint: '/api/trpc',
     router: apiRouter,
     req: request,
@@ -28,10 +31,17 @@ async function handler(request: NextRequest) {
 
       return { headers }
     },
+    /**
+     * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
+     */
     // onError: opts => {
-    //   // console.error('opts::', opts)
+    //   error = opts.error.cause
     // },
     responseMeta: opts => {
+      // note: opts.error does not have original cause (status code), contrary to onError
+      // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
+      // const error = opts.errors?.[0]
+
       let cacheControl = 'public, max-age=3600'
 
       if (
@@ -54,6 +64,7 @@ async function handler(request: NextRequest) {
       }
 
       return {
+        // status: 429,
         headers: {
           'cache-control': cacheControl,
           'Access-Control-Allow-Origin': '*',
@@ -62,7 +73,16 @@ async function handler(request: NextRequest) {
         },
       }
     },
+    // unstable_onChunk: undefined,
   })
+
+  // const result = await response.json()
+
+  // return Response.json(
+  //   result
+  //   // { status: result.httpStatus }
+  //   // { status: 429 }
+  // )
 }
 
 export { handler as GET, handler as POST }

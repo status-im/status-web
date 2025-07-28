@@ -67,6 +67,12 @@ const ActionButtons = (props: Props) => {
   const handleRefresh = async () => {
     setIsManualRefreshing(true)
 
+    queryClient.resetQueries({ queryKey: ['assets', address] })
+    queryClient.resetQueries({ queryKey: ['collectibles', address] })
+    queryClient.resetQueries({ queryKey: ['activities', address] })
+    queryClient.resetQueries({ queryKey: ['collectible'] })
+    queryClient.resetQueries({ queryKey: ['token'] })
+
     const queries = queryClient.getQueryCache().getAll()
     const activeQueries = queries.filter(query => {
       const key = query.queryKey

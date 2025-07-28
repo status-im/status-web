@@ -94,9 +94,6 @@ function AssetChart({
     enabled: activeDataType === 'price',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
   const balanceChart = useQuery<ApiOutput['assets']['tokenBalanceChart']>({
@@ -138,9 +135,6 @@ function AssetChart({
     enabled: activeDataType === 'balance',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
   const isLoading =
