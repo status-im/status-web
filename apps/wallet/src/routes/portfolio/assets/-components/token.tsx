@@ -90,6 +90,11 @@ const Token = (props: Props) => {
     value: string
   } | null>(null)
 
+  useEffect(() => {
+    setActiveDataType(DEFAULT_DATA_TYPE)
+    setActiveTimeFrame(DEFAULT_TIME_FRAME)
+  }, [ticker])
+
   const toast = useToast()
 
   const { data, isError: hasErrorFetchingAssets } = useQuery<AssetsResponse>({
