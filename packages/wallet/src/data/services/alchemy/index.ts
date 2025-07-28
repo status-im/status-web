@@ -177,6 +177,7 @@ export async function getTokensBalance(
  */
 export async function fetchTokenBalanceHistory(
   address: string,
+  decimals: number,
   network: NetworkType,
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
   contract?: string,
@@ -310,8 +311,7 @@ export async function fetchTokenBalanceHistory(
     balance = await getNativeTokenBalance(address, network)
   }
 
-  // fixme: use token's decimals
-  const latestBalance = Number(balance) / 1e18
+  const latestBalance = Number(balance) / Math.pow(10, decimals)
 
   let currentBalance = latestBalance
   let transferIndex = 0

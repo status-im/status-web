@@ -673,6 +673,7 @@ async function nativeTokenBalanceChart({
     networks.map(async network => {
       const data = await fetchTokenBalanceHistory(
         address,
+        18,
         network,
         days,
         undefined,
@@ -734,6 +735,7 @@ async function tokenBalanceChart({
     filteredERC20Tokens.map(async token => {
       const data = await fetchTokenBalanceHistory(
         address,
+        token.decimals,
         STATUS_NETWORKS[token.chainId],
         days,
         token.address,
