@@ -46,12 +46,16 @@ type Props = {
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
-const createFormSchema = (balance: number) =>
+const createFormSchema = (balance: number, fromAddress: string) =>
   z.object({
     to: z
       .string()
       .min(1, 'Recipient address is required')
-      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
+      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address')
+      .refine(
+        val => val.toLowerCase() !== fromAddress.toLowerCase(),
+        'You are sending assets to yourself',
+      ),
     amount: z
       .string()
       .min(1, 'Amount is required')
@@ -98,7 +102,10 @@ const SendAssetsModal = (props: Props) => {
   const balance = asset.totalBalance
   const ethBalance = account.ethBalance
 
-  const formSchema = useMemo(() => createFormSchema(balance), [balance])
+  const formSchema = useMemo(
+    () => createFormSchema(balance, account.address),
+    [balance, account.address],
+  )
 
   const {
     control,
