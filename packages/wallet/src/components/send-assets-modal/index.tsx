@@ -104,6 +104,7 @@ const SendAssetsModal = (props: Props) => {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -119,6 +120,10 @@ const SendAssetsModal = (props: Props) => {
   const watchedAmount = watch('amount')
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
+
+  useEffect(() => {
+    setValue('contractAddress', asset.contractAddress || undefined)
+  }, [asset.contractAddress, setValue])
 
   // Estimate gas fees when 'to' or 'amount' changes
   useEffect(() => {
