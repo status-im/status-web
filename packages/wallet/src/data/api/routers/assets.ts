@@ -673,11 +673,11 @@ async function nativeTokenBalanceChart({
     networks.map(async network => {
       const data = await fetchTokenBalanceHistory(
         address,
-        18,
         network,
         days,
         undefined,
         currentTime,
+        18,
       )
 
       return { [network]: data } as Record<
@@ -735,11 +735,11 @@ async function tokenBalanceChart({
     filteredERC20Tokens.map(async token => {
       const data = await fetchTokenBalanceHistory(
         address,
-        token.decimals,
         STATUS_NETWORKS[token.chainId],
         days,
         token.address,
         currentTime,
+        token.decimals,
       )
 
       return { [STATUS_NETWORKS[token.chainId]]: data } as Record<

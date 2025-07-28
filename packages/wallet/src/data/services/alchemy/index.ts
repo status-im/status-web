@@ -177,11 +177,11 @@ export async function getTokensBalance(
  */
 export async function fetchTokenBalanceHistory(
   address: string,
-  decimals: number,
   network: NetworkType,
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
   contract?: string,
   currentTime?: number,
+  decimals: number = 18,
 ) {
   const transfers: TokenBalanceHistoryResponseBody['result']['transfers'] = []
 
