@@ -89,6 +89,7 @@ const Token = (props: Props) => {
     to: string
     value: string
   } | null>(null)
+  const gasEstimateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     setActiveDataType(DEFAULT_DATA_TYPE)
@@ -269,8 +270,22 @@ const Token = (props: Props) => {
       toast.negative(ERROR_MESSAGES.GAS_FEES_FETCH)
     }
   }, [gasFeeQuery.isError, toast])
+
+  useEffect(() => {
+    return () => {
+      if (gasEstimateTimeoutRef.current) {
+        clearTimeout(gasEstimateTimeoutRef.current)
+      }
+    }
+  }, [])
   const prepareGasEstimate = (to: string, value: string) => {
-    setGasInput({ to, value })
+    if (gasEstimateTimeoutRef.current) {
+      clearTimeout(gasEstimateTimeoutRef.current)
+    }
+
+    gasEstimateTimeoutRef.current = setTimeout(() => {
+      setGasInput({ to, value })
+    }, 500)
   }
 
   const handleOpenTab = (url: string) => {

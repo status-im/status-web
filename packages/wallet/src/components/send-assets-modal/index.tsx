@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -120,10 +120,6 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
-
-  const memoizedOnEstimateGas = useRef(onEstimateGas)
-
   // Estimate gas fees when 'to' or 'amount' changes
   useEffect(() => {
     if (!watchedTo || !watchedAmount) return
@@ -131,24 +127,11 @@ const SendAssetsModal = (props: Props) => {
     const parsed = Number.parseFloat(watchedAmount)
     if (Number.isNaN(parsed)) return
 
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current)
-    }
-
-    debounceTimeout.current = setTimeout(() => {
-      const amountInWei = BigInt(
-        Math.floor(parsed * Math.pow(10, asset.decimals)),
-      ).toString(16)
-      memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
-    }, 300)
-
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current)
-        debounceTimeout.current = null
-      }
-    }
-  }, [watchedTo, watchedAmount])
+    const amountInWei = BigInt(
+      Math.floor(parsed * Math.pow(10, asset.decimals)),
+    ).toString(16)
+    onEstimateGas(watchedTo, `0x${amountInWei}`)
+  }, [watchedTo, watchedAmount, onEstimateGas, asset.decimals])
 
   //  Check for insufficient ETH balance
   useEffect(() => {
