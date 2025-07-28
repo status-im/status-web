@@ -50,6 +50,7 @@ async function handler(request: NextRequest) {
             'nodes.broadcastTransaction',
             'nodes.getNonce',
             'nodes.getTransactionCount',
+            'nodes.getFeeRate',
             'activities.page',
             'activities.activities',
             'assets.all',
