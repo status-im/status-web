@@ -7,11 +7,15 @@ import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 interface UseRefetchToastOptions {
   isRefreshing: boolean
   queryKeys?: string[][]
+  onComplete?: () => void
+  showLoadingAndSuccess?: boolean
 }
 
 export function useRefetchToast({
   isRefreshing,
   queryKeys,
+  onComplete,
+  showLoadingAndSuccess = true,
 }: UseRefetchToastOptions) {
   const toast = useToast()
   const queryClient = useQueryClient()
@@ -56,10 +60,12 @@ export function useRefetchToast({
 
     if (fetchingCount > 0 && !hasShownLoadingToast.current) {
       hasShownLoadingToast.current = true
-      toast.custom(
-        'Refreshing prices and balances',
-        <RefreshIcon style={{ animation: 'spin 1s linear infinite' }} />,
-      )
+      if (showLoadingAndSuccess) {
+        toast.custom(
+          'Refreshing prices and balances',
+          <RefreshIcon style={{ animation: 'spin 1s linear infinite' }} />,
+        )
+      }
     }
 
     if (
@@ -69,12 +75,22 @@ export function useRefetchToast({
       !hasError
     ) {
       hasShownSuccessToast.current = true
-      toast.positive('Prices and balances have been updated')
+      if (showLoadingAndSuccess) {
+        toast.positive('Prices and balances have been updated')
+      }
+
+      if (onComplete) {
+        onComplete()
+      }
     }
 
     if (hasError && !hasShownErrorToast.current) {
       hasShownErrorToast.current = true
       toast.negative('Failed to update prices and balances')
+
+      if (onComplete) {
+        onComplete()
+      }
     }
-  }, [fetchingCount, isRefreshing, toast, hasError])
+  }, [fetchingCount, isRefreshing, toast, hasError, onComplete])
 }
