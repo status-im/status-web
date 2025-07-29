@@ -28,7 +28,7 @@ const TokenChart = ({
   dataType,
   timeFrame,
 }: TokenChartProps) => {
-  const innerWidth = width - 60
+  const innerWidth = Math.max(100, width - 60)
   const innerHeight = 256
 
   const sortedData = useMemo(

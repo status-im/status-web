@@ -67,7 +67,13 @@ const XAxis = (props: Props) => {
             <div
               key={day}
               className="absolute text-center"
-              style={{ left: xPosition - 25, width: 50 }}
+              style={{
+                left: Math.max(
+                  0,
+                  Math.min(xPosition - 25, availableWidth - 50),
+                ),
+                width: 50,
+              }}
             >
               <p className="text-11 font-medium uppercase text-neutral-40">
                 {activeRange === '7D'
@@ -85,7 +91,13 @@ const XAxis = (props: Props) => {
             <div
               key={day}
               className="absolute text-center"
-              style={{ left: xPosition - 12, width: 24 }}
+              style={{
+                left: Math.max(
+                  0,
+                  Math.min(xPosition - 12, availableWidth - 24),
+                ),
+                width: 24,
+              }}
             >
               <p className="text-11 font-medium text-neutral-40">
                 {format(new Date(d.date), 'd')}
@@ -96,7 +108,13 @@ const XAxis = (props: Props) => {
             <div
               key={day}
               className="absolute text-center"
-              style={{ left: xPosition - 25, width: 50 }}
+              style={{
+                left: Math.max(
+                  0,
+                  Math.min(xPosition - 25, availableWidth - 50),
+                ),
+                width: 50,
+              }}
             >
               <p className="whitespace-nowrap text-11 font-medium text-neutral-40">
                 {format(new Date(d.date), 'HH:mm')}
@@ -104,7 +122,13 @@ const XAxis = (props: Props) => {
             </div>
           ))
           .with('bullet', () => (
-            <div key={day} className="absolute" style={{ left: xPosition - 2 }}>
+            <div
+              key={day}
+              className="absolute"
+              style={{
+                left: Math.max(0, Math.min(xPosition - 2, availableWidth - 4)),
+              }}
+            >
               <p className="text-13 font-medium text-neutral-10">•</p>
             </div>
           ))
