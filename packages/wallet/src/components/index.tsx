@@ -32,6 +32,7 @@ export {
   type CreatePasswordFormValues,
 } from './create-password-form'
 export { CurrencyAmount } from './currency-amount'
+export { DefaultTokenDetail } from './default-token-detail'
 export { DeleteAddressAlert } from './delete-address-alert'
 export { DropdownSort } from './dropdown-sort'
 export { EmptyState } from './empty-state'
