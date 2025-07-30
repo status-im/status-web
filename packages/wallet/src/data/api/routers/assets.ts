@@ -68,7 +68,7 @@ const DEFAULT_TOKEN_SYMBOLS = [
   'USDT',
   'LINK',
   'PEPE',
-  'WBNB',
+  'UNI',
   'SHIB',
 ]
 
