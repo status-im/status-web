@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 
-import { IconButton } from '@status-im/components'
+import { IconButton, useToast } from '@status-im/components'
 import { CheckIcon, CopyIcon } from '@status-im/icons/20'
 import { QRCodeSVG } from 'qrcode.react'
 
@@ -16,16 +16,23 @@ const DepositTokens = (props: Props) => {
   const { address } = props
   const [, copy] = useCopyToClipboard()
   const [success, setSuccess] = useState(false)
+  const toast = useToast()
 
   useEffect(() => {
-    setTimeout(() => setSuccess(false), 2000)
+    const timer = setTimeout(() => setSuccess(false), 2000)
+
+    return () => {
+      clearTimeout(timer)
+    }
   }, [success])
 
   const handleCopy = () => {
-    console.log('copying address', address)
-    console.log('success', success)
-    copy(address)
-    setSuccess(true)
+    try {
+      copy(address)
+      setSuccess(true)
+    } catch {
+      toast.negative('Failed to copy address.')
+    }
   }
 
   return (
@@ -57,13 +64,12 @@ const DepositTokens = (props: Props) => {
             aria-label="Copy code"
           />
         </div>
-
         <div className="flex size-[200px] flex-col items-center justify-center gap-3 rounded-16 bg-customisation-orange-50/5 p-3">
           <div className="flex items-center justify-center rounded-[14px] bg-white-100 p-[14px] shadow-3">
             <QRCodeSVG value={address} size={148} />
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="mb-4 flex items-center gap-2">
           <span className="text-13 font-500 text-neutral-100">
             Supported network:
           </span>

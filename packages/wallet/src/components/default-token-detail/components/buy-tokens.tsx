@@ -62,7 +62,7 @@ const Provider = (props: ProviderProps) => {
         <Image id={image} className="size-[72px]" />
         <h2 className="text-15 font-600">{name}</h2>
       </div>
-      <ul className="mt-2 items-start text-13/5 font-400 text-neutral-50">
+      <ul className="mt-2 items-start text-13/[21px] font-400 text-neutral-50">
         {list.map(item => (
           <li key={item} className="ml-3 list-disc">
             {item}
