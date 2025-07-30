@@ -47,7 +47,6 @@ const DepositTokens = (props: Props) => {
           <IconButton
             variant="outline"
             onPress={handleCopy}
-            size="32"
             icon={
               success ? (
                 <CheckIcon className="text-success-50" />

@@ -1,12 +1,12 @@
-import { Button } from '@status-im/components'
-import { ExternalIcon } from '@status-im/icons/20'
+import { ExternalIcon } from '@status-im/icons/12'
+import { cx } from 'class-variance-authority'
 
-import { Image } from '../../image'
+import { Image, type ImageId } from '../../image'
 
-const PROVIDERS = [
+const PROVIDERS: ProviderProps[] = [
   {
     name: 'MoonPay',
-    image: 'Wallet/Icons/Logos/moonpay:64:64',
+    image: 'Wallet/Icons/Logos/moonpay-bigger:144:144',
     list: [
       'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +9 more',
       'Fees: from 1%',
@@ -16,7 +16,7 @@ const PROVIDERS = [
   },
   {
     name: 'Mercuryo',
-    image: 'Wallet/Icons/Logos/mercuryo:64:64',
+    image: 'Wallet/Icons/Logos/mercuryo-bigger:144:144',
     list: [
       'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +10 more',
       'Fees: from 1%',
@@ -59,7 +59,7 @@ const Provider = (props: ProviderProps) => {
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-16 bg-white-100 p-4">
       <div className="flex flex-col items-center justify-center gap-2">
-        <Image id={image} className="size-16" />
+        <Image id={image} className="size-[72px]" />
         <h2 className="text-15 font-600">{name}</h2>
       </div>
       <ul className="mt-2 items-start text-13/5 font-400 text-neutral-50">
@@ -70,14 +70,21 @@ const Provider = (props: ProviderProps) => {
         ))}
       </ul>
       <div className="flex items-center justify-center">
-        <Button
+        <a
           href={url}
-          iconAfter={<ExternalIcon />}
-          variant="outline"
-          size="24"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cx(
+            'inline-flex h-6 shrink-0 cursor-pointer items-center justify-center gap-1',
+            'rounded-8 border border-neutral-30 bg-transparent px-2 pr-[6px] text-13 font-500 text-neutral-100 outline-none transition-all',
+            'active:border-neutral-20 active:bg-neutral-10 active:text-neutral-100 hover:border-neutral-40',
+            'focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-80 focus-visible:ring-offset-2',
+            'disabled:cursor-default disabled:opacity-[.3]',
+          )}
         >
           Go to {name}
-        </Button>
+          <ExternalIcon className="shrink-0 text-neutral-50 [&>svg]:size-full" />
+        </a>
       </div>
     </div>
   )
