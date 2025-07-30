@@ -8,7 +8,7 @@ import {
 import { OpenseaIcon } from '@status-im/icons/social'
 import {
   CollectibleSkeleton,
-  CurrencyAmount,
+  // CurrencyAmount,
   NetworkLogo,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
@@ -84,7 +84,7 @@ const Collectible = (props: Props) => {
   const imageAlt = collectible.name || 'Collectible image'
 
   return (
-    <div className="overflow-auto p-4 pr-3 2xl:p-12">
+    <div className="relative flex h-[calc(100vh-56px)] w-full flex-col overflow-auto p-4 pr-3 2xl:p-12">
       <Link
         to="/portfolio/collectibles"
         viewTransition
@@ -102,13 +102,13 @@ const Collectible = (props: Props) => {
               </div>
             </div>
 
-            <div className="mb-1 mt-6 2xl:mt-0">
+            <div className="mb-6 2xl:mt-0">
               <div className="text-27 font-semibold text-neutral-100">
                 {collectible.name}
               </div>
             </div>
 
-            {collectible.floor_price && collectible.price_eur && (
+            {/* {collectible.floor_price && collectible.price_eur && (
               <div className="mb-6 flex items-center gap-1.5">
                 <div className="flex items-center gap-1">
                   <div className="text-13 font-medium text-neutral-50">
@@ -126,7 +126,7 @@ const Collectible = (props: Props) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
 
             <div className="flex gap-2">
               <Button
