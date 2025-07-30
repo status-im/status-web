@@ -505,7 +505,7 @@ const Token = (props: Props) => {
             symbol={tokenDetail.summary.symbol}
           >
             <Button size="32" iconBefore={<BuyIcon />}>
-              <span className="block max-w-20 truncate">Buy {name}</span>
+              <span className="block max-w-20 truncate">Buy</span>
             </Button>
           </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -558,7 +558,7 @@ const Token = (props: Props) => {
               symbol={tokenDetail.summary.symbol}
             >
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-                Buy {name}
+                Buy
               </Button>
             </BuyCryptoDrawer>
 

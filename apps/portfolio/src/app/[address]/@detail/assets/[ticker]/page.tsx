@@ -111,9 +111,7 @@ async function Token({
         <div className="flex items-center gap-1 pt-px">
           <BuyCryptoDrawer>
             <Button size="32" iconBefore={<BuyIcon />}>
-              <span className="block max-w-20 truncate">
-                Buy {token.summary.name}
-              </span>
+              <span className="block max-w-20 truncate">Buy</span>
             </Button>
           </BuyCryptoDrawer>
           <ReceiveCryptoDrawer>
@@ -138,7 +136,7 @@ async function Token({
           <div className="flex items-center gap-1">
             <BuyCryptoDrawer>
               <Button size="32" iconBefore={<BuyIcon />}>
-                Buy {token.summary.name}
+                Buy
               </Button>
             </BuyCryptoDrawer>
             <ReceiveCryptoDrawer>
