@@ -2,7 +2,7 @@ import { Button, useToast } from '@status-im/components'
 import {
   ArrowLeftIcon,
   ExternalIcon,
-  OptionsIcon,
+  // OptionsIcon,
   SadIcon,
 } from '@status-im/icons/20'
 import { OpenseaIcon } from '@status-im/icons/social'
@@ -14,6 +14,8 @@ import {
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
+
+import { CardDetail } from './card-detail'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -78,7 +80,7 @@ const Collectible = (props: Props) => {
     return <CollectibleSkeleton />
   }
 
-  const imageUrl = collectible.image || collectible.thumbnail
+  const imageUrl = collectible.thumbnail || collectible.image
   const imageAlt = collectible.name || 'Collectible image'
 
   return (
@@ -136,12 +138,12 @@ const Collectible = (props: Props) => {
               >
                 View on OpenSea
               </Button>
-              <Button
+              {/* <Button
                 size="32"
                 variant="outline"
                 icon={<OptionsIcon />}
                 aria-label="More options"
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -169,52 +171,65 @@ const Collectible = (props: Props) => {
           </div>
           <div className="mb-5">{collectible.about}</div>
 
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-            <div className="flex items-center gap-1">
-              <NetworkLogo name={collectible.network} size={16} />
-              <span className="capitalize">{collectible.network}</span>
-            </div>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3 pb-8">
+            <CardDetail title="Network">
+              <div className="flex items-center gap-1">
+                <NetworkLogo name={collectible.network} size={16} />
+                <div className="capitalize">{collectible.network}</div>
+              </div>
+            </CardDetail>
             {collectible.standard !== 'NOT_A_CONTRACT' && (
               <>
-                <div className="font-mono">{collectible.contract}</div>
-                <div>{collectible.standard}</div>
+                <CardDetail
+                  title="Contract"
+                  href={`https://etherscan.io/address/${collectible.contract}`}
+                >
+                  <div className="font-mono">
+                    {truncateAddress(collectible.contract)}
+                  </div>
+                </CardDetail>
+                <CardDetail title="Token Standard">
+                  <div className="font-mono">{collectible.standard}</div>
+                </CardDetail>
               </>
             )}
             {collectible.collection.size && (
-              <div>{collectible.collection.size}</div>
+              <CardDetail title="Collection size">
+                <div>{collectible.collection.size}</div>
+              </CardDetail>
             )}
           </div>
         </div>
-
-        <div
-          className="h-px w-full border-t border-dashed border-neutral-20"
-          aria-hidden="true"
-        />
-
-        {collectible.traits && (
-          <div>
-            <div className="mb-3 text-15 font-semibold text-neutral-100">
-              Traits
-            </div>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-              {Object.entries(collectible.traits as Record<string, string>).map(
-                ([trait, value], index) => (
-                  <div key={index}>
-                    <div className="text-13 font-medium text-neutral-50">
-                      {trait}
-                    </div>
-                    <div className="text-13 font-medium text-neutral-100">
-                      {value}
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          </div>
-        )}
       </div>
+
+      <div
+        className="h-px w-full border-t border-dashed border-neutral-20 pb-8"
+        aria-hidden="true"
+      />
+
+      {collectible.traits && (
+        <div>
+          <div className="mb-3 text-15 font-semibold text-neutral-100">
+            Traits
+          </div>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
+            {Object.entries(collectible.traits as Record<string, string>).map(
+              ([trait, value], index) => (
+                <CardDetail key={index} title={trait}>
+                  <div className="text-13 font-medium text-neutral-100">
+                    {value}
+                  </div>
+                </CardDetail>
+              ),
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
 export { Collectible }
+
+const truncateAddress = (address: string, chars = 5) =>
+  `${address.slice(0, chars)}...${address.slice(-chars)}`

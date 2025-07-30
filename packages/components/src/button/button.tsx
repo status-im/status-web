@@ -44,7 +44,19 @@ function Button(
 
   const { link } = useConfig()
 
-  const Element = props.href ? link : 'button'
+  const isExternal =
+    typeof props.href === 'string' && props.href.startsWith('http')
+  const Element = isExternal ? 'a' : props.href ? link : 'button'
+
+  const linkProps = props.href
+    ? {
+        href: props.href,
+        ...(isExternal && {
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        }),
+      }
+    : {}
 
   if ('icon' in rest) {
     const { icon, ...buttonProps } = rest
@@ -52,6 +64,7 @@ function Button(
       <Element
         onClick={onClick}
         {...buttonProps}
+        {...linkProps}
         ref={ref}
         className={styles({ variant, size, iconOnly: true })}
       >
@@ -68,6 +81,7 @@ function Button(
     <Element
       onClick={onClick}
       {...buttonProps}
+      {...linkProps}
       ref={ref}
       className={styles({ variant, size })}
     >
