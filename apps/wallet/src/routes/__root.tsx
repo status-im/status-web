@@ -106,7 +106,7 @@ export const Route = createRootRouteWithContext<{
         </div>
         <div className="px-1">
           <div className="flex-1 flex-col 2md:flex xl:pb-1">
-            <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center overflow-y-auto rounded-[24px] bg-white-100">
+            <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center overflow-y-hidden rounded-[24px] bg-white-100">
               {/* todo: global error illustration or split view */}
               <h2 className="pt-[68px] text-15 font-semibold text-neutral-100 first-line:mb-0.5">
                 Something went wrong.
@@ -169,7 +169,7 @@ function RootComponent() {
                 </div>
                 <div className="px-1">
                   <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                    <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
+                    <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-hidden rounded-[24px] bg-white-100">
                       {/* <OnboardingPage /> */}
                       <Outlet />
                     </div>
