@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { useToast } from '@status-im/components'
 import {
   AssetsList,
