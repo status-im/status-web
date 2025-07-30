@@ -12,7 +12,7 @@ const PROVIDERS: ProviderProps[] = [
       'Fees: from 1%',
       'Supported Countries: 180',
     ],
-    url: 'https://moonpay.com',
+    url: 'https://buy.moonpay.com/v2/buy?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR',
   },
   {
     name: 'Mercuryo',
@@ -22,7 +22,7 @@ const PROVIDERS: ProviderProps[] = [
       'Fees: from 1%',
       'Supported Countries: 135+',
     ],
-    url: 'https://mercuryo.io',
+    url: 'https://exchange.mercuryo.io/?type=buy&network=ETHEREUM&currency=ETH&address=0xE878d485eF31D66DC4734CC9a1464809C9c63A36&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47',
   },
 ]
 
