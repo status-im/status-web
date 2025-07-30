@@ -1,4 +1,5 @@
 export type ImageType =
+  | { id: 'Portfolio/Empty States/No_Balance:750:232'; alt: '' }
   | { id: 'Wallet/Icons/Logos/mercuryo-bigger:144:144'; alt: '' }
   | { id: 'Wallet/Icons/Logos/moonpay-bigger:144:144'; alt: '' }
   | { id: 'Wallet/Icons/Logos/mercuryo:64:64'; alt: '' }

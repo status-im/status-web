@@ -35,6 +35,8 @@ const Content = (props: Props) => {
   const tagY = yScale(lastData.value)
   const formattedValue = formatSmallNumber(lastData.value)
   const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
+  const tagXOffset = Math.max(0, 20 - tagWidth / 2)
+  const textX = tagXOffset + tagWidth / 2
 
   return (
     <g>
@@ -82,7 +84,7 @@ const Content = (props: Props) => {
 
       <g transform={`translate(${tagX}, ${tagY})`}>
         <rect
-          x={20 - tagWidth / 2}
+          x={tagXOffset}
           y={-10}
           width={tagWidth}
           height={20}
@@ -90,7 +92,7 @@ const Content = (props: Props) => {
           rx={6}
         />
         <text
-          x={20}
+          x={textX}
           y={5}
           fill={colors.white}
           fontSize={12}

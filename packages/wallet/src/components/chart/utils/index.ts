@@ -160,23 +160,12 @@ export const formatChartValue = (
 export const formatSmallNumber = (value: number): string => {
   if (value === 0) return '0'
 
-  if (value < 0.01) {
-    const str = value.toString()
-    const match = str.match(/0\.0*/)
-    if (match) {
-      const leadingZeros = match[0].length - 2
-      const decimalPlaces = leadingZeros + 2
-      return value.toLocaleString('en-US', {
-        minimumFractionDigits: decimalPlaces,
-        maximumFractionDigits: Math.min(decimalPlaces, 8),
-      })
-    }
-  }
+  // Use the same decimal precision logic as Y-axis ticks
+  const fractionalDigits = value.toString().split('.')[1]?.length || 0
+  const maxDecimals = Math.min(fractionalDigits, 4)
 
-  return value.toLocaleString('en-US', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  })
+  if (maxDecimals === 0) return Math.round(value).toString()
+  return value.toFixed(value === 0 ? 0 : maxDecimals)
 }
 
 export const calculateChartRange = (

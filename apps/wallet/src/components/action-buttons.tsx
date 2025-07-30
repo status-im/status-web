@@ -47,10 +47,7 @@ const ActionButtons = (props: Props) => {
   const queryClient = useQueryClient()
   const [isManualRefreshing, setIsManualRefreshing] = useState(false)
 
-  const totalFetchingCount = useIsFetching()
-  const isAnyQueryFetching = totalFetchingCount > 0
-
-  // Use the refetch toast hook for manual refresh
+  // Use the refetch toast hook for manual refreshes
   useRefetchToast({
     isRefreshing: isManualRefreshing,
     queryKeys: [
@@ -60,18 +57,35 @@ const ActionButtons = (props: Props) => {
       ['collectible'],
       ['token'],
     ],
+    onComplete: () => {
+      setIsManualRefreshing(false)
+    },
   })
+
+  const isAnyQueryFetching =
+    useIsFetching({
+      predicate: query => {
+        const key = query.queryKey
+        return (
+          (Array.isArray(key) &&
+            key[0] === 'assets' &&
+            (key[1] === address || key[1] === undefined)) ||
+          (Array.isArray(key) &&
+            key[0] === 'collectibles' &&
+            (key[1] === address || key[1] === undefined)) ||
+          (Array.isArray(key) &&
+            key[0] === 'activities' &&
+            (key[1] === address || key[1] === undefined)) ||
+          (Array.isArray(key) && key[0] === 'collectible') ||
+          (Array.isArray(key) && key[0] === 'token')
+        )
+      },
+    }) > 0
 
   //   const placeholder = placeholderText[checkPathnameAndReturnTabValue(pathname)]
 
   const handleRefresh = async () => {
     setIsManualRefreshing(true)
-
-    queryClient.resetQueries({ queryKey: ['assets', address] })
-    queryClient.resetQueries({ queryKey: ['collectibles', address] })
-    queryClient.resetQueries({ queryKey: ['activities', address] })
-    queryClient.resetQueries({ queryKey: ['collectible'] })
-    queryClient.resetQueries({ queryKey: ['token'] })
 
     const queries = queryClient.getQueryCache().getAll()
     const activeQueries = queries.filter(query => {
@@ -79,11 +93,15 @@ const ActionButtons = (props: Props) => {
       const hasObservers = query.getObserversCount() > 0
 
       const isWalletQuery =
-        (Array.isArray(key) && key[0] === 'assets' && key[1] === address) ||
+        (Array.isArray(key) &&
+          key[0] === 'assets' &&
+          (key[1] === address || key[1] === undefined)) ||
         (Array.isArray(key) &&
           key[0] === 'collectibles' &&
-          key[1] === address) ||
-        (Array.isArray(key) && key[0] === 'activities' && key[1] === address) ||
+          (key[1] === address || key[1] === undefined)) ||
+        (Array.isArray(key) &&
+          key[0] === 'activities' &&
+          (key[1] === address || key[1] === undefined)) ||
         (Array.isArray(key) && key[0] === 'collectible') ||
         (Array.isArray(key) && key[0] === 'token')
 
@@ -95,8 +113,6 @@ const ActionButtons = (props: Props) => {
         queryClient.refetchQueries({ queryKey: query.queryKey }),
       ),
     )
-
-    setTimeout(() => setIsManualRefreshing(false), 100)
   }
 
   return (

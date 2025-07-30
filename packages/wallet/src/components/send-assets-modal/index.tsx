@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -46,12 +46,16 @@ type Props = {
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
-const createFormSchema = (balance: number) =>
+const createFormSchema = (balance: number, fromAddress: string) =>
   z.object({
     to: z
       .string()
       .min(1, 'Recipient address is required')
-      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
+      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address')
+      .refine(
+        val => val.toLowerCase() !== fromAddress.toLowerCase(),
+        'You are sending assets to yourself',
+      ),
     amount: z
       .string()
       .min(1, 'Amount is required')
@@ -98,12 +102,16 @@ const SendAssetsModal = (props: Props) => {
   const balance = asset.totalBalance
   const ethBalance = account.ethBalance
 
-  const formSchema = useMemo(() => createFormSchema(balance), [balance])
+  const formSchema = useMemo(
+    () => createFormSchema(balance, account.address),
+    [balance, account.address],
+  )
 
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -120,9 +128,9 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
-
-  const memoizedOnEstimateGas = useRef(onEstimateGas)
+  useEffect(() => {
+    setValue('contractAddress', asset.contractAddress || undefined)
+  }, [asset.contractAddress, setValue])
 
   // Estimate gas fees when 'to' or 'amount' changes
   useEffect(() => {
@@ -131,24 +139,11 @@ const SendAssetsModal = (props: Props) => {
     const parsed = Number.parseFloat(watchedAmount)
     if (Number.isNaN(parsed)) return
 
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current)
-    }
-
-    debounceTimeout.current = setTimeout(() => {
-      const amountInWei = BigInt(
-        Math.floor(parsed * Math.pow(10, asset.decimals)),
-      ).toString(16)
-      memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
-    }, 300)
-
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current)
-        debounceTimeout.current = null
-      }
-    }
-  }, [watchedTo, watchedAmount])
+    const amountInWei = BigInt(
+      Math.floor(parsed * Math.pow(10, asset.decimals)),
+    ).toString(16)
+    onEstimateGas(watchedTo, `0x${amountInWei}`)
+  }, [watchedTo, watchedAmount, onEstimateGas, asset.decimals])
 
   //  Check for insufficient ETH balance
   useEffect(() => {
@@ -271,7 +266,7 @@ const SendAssetsModal = (props: Props) => {
             data-customisation="blue"
             className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow opacity-100 fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets

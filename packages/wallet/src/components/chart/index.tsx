@@ -2,6 +2,7 @@
 
 import { ParentSize } from '@visx/responsive'
 
+import { EmptyState } from '../empty-state'
 import { ChartLoading, TokenChart } from './components'
 
 import type { DataType, TimeFrame } from './utils'
@@ -34,6 +35,7 @@ const Chart = ({
             currency={currency}
             timeFrame={activeTimeFrame}
             dataType={activeDataType}
+            emptyState={<EmptyState variant={activeDataType} />}
           />
         )}
       </ParentSize>

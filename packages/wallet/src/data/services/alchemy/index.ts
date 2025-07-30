@@ -870,25 +870,25 @@ export async function getFeeRate(
   try {
     ;[gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData] =
       await Promise.all([
-        _fetch<GasEstimateResponseBody>(url, 'POST', 3600, {
+        _fetch<GasEstimateResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 1,
           method: 'eth_estimateGas',
           params: [gasParams],
         }),
-        _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 3600, {
+        _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 2,
           method: 'eth_maxPriorityFeePerGas',
           params: [],
         }),
-        _fetch<BlockResponseBody>(url, 'POST', 3600, {
+        _fetch<BlockResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 3,
           method: 'eth_getBlockByNumber',
           params: ['latest', false],
         }),
-        _fetch<FeeHistoryResponseBody>(url, 'POST', 3600, {
+        _fetch<FeeHistoryResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 4,
           method: 'eth_feeHistory',

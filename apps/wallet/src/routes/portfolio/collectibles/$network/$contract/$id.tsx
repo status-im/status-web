@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import { useToast } from '@status-im/components'
 import {
   CollectiblesGrid as CollectiblesList,
@@ -104,13 +102,11 @@ function Component() {
           loadingState={<CollectiblesGridSkeleton />}
           isLoading={isLoading}
           detail={
-            <Suspense fallback={<p>Loading collectible...</p>}>
-              <Collectible
-                network={network as NetworkType}
-                contract={contract}
-                id={id}
-              />
-            </Suspense>
+            <Collectible
+              network={network as NetworkType}
+              contract={contract}
+              id={id}
+            />
           }
         />
       </div>

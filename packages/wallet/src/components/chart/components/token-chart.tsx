@@ -14,11 +14,13 @@ import { XAxis } from './x-axis'
 import { YAxis } from './y-axis'
 
 import type { BaseChartProps, ChartDataPoint, TimeFrame } from '../utils'
+import type React from 'react'
 
 type TokenChartProps = BaseChartProps & {
   data: ChartDataPoint[]
   width: number
   timeFrame?: TimeFrame
+  emptyState: React.ReactNode
 }
 
 const TokenChart = ({
@@ -27,8 +29,9 @@ const TokenChart = ({
   width,
   dataType,
   timeFrame,
+  emptyState,
 }: TokenChartProps) => {
-  const innerWidth = width - 60
+  const innerWidth = Math.max(100, width - 60)
   const innerHeight = 256
 
   const sortedData = useMemo(
@@ -95,11 +98,7 @@ const TokenChart = ({
   })
 
   if (!data.length) {
-    return (
-      <div className="relative mt-4 flex h-[296px] w-full items-center justify-center">
-        <p className="text-15 font-600 text-neutral-50">No data available</p>
-      </div>
-    )
+    return <div className="mt-[72px]">{emptyState}</div>
   }
 
   return (

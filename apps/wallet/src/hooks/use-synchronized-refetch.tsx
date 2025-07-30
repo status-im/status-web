@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRefetchToast } from './use-refetch-toast'
 
 const REFRESH_INTERVAL_MS = 15 * 1000
-const REFRESH_COMPLETE_DELAY_MS = 50
 
 export function useSynchronizedRefetch(address: string) {
   const queryClient = useQueryClient()
@@ -16,7 +15,6 @@ export function useSynchronizedRefetch(address: string) {
     if (!address) return
 
     if (has429Error(address, queryClient)) {
-      setIsAutoRefreshing(false)
       return
     }
 
@@ -45,21 +43,21 @@ export function useSynchronizedRefetch(address: string) {
         queryClient.refetchQueries({ queryKey: query.queryKey }),
       ),
     )
-
-    setTimeout(() => setIsAutoRefreshing(false), REFRESH_COMPLETE_DELAY_MS)
   }, [address, queryClient])
 
   useRefetchToast({
     isRefreshing: isAutoRefreshing,
-    queryKeys: address
-      ? [
-          ['assets', address],
-          ['collectibles', address],
-          ['activities', address],
-          ['collectible'],
-          ['token'],
-        ]
-      : [],
+    queryKeys: [
+      ['assets', address],
+      ['collectibles', address],
+      ['activities', address],
+      ['collectible'],
+      ['token'],
+    ],
+    showLoadingAndSuccess: false,
+    onComplete: () => {
+      setIsAutoRefreshing(false)
+    },
   })
 
   useEffect(() => {
