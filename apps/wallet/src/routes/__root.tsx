@@ -10,7 +10,6 @@ import {
   // Navigate,
   Outlet,
   redirect,
-  useRouterState,
 } from '@tanstack/react-router'
 
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
@@ -130,9 +129,6 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
-  const routerState = useRouterState()
-  const pathname = routerState.location.pathname
-
   return (
     <>
       {/* <div className="min-h-screen bg-neutral-100 text-white-100">
@@ -160,12 +156,7 @@ function RootComponent() {
             <WalletProvider>
               <PendingTransactionsProvider>
                 <div className="flex min-h-[56px] items-center px-2">
-                  <Navbar
-                    hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
-                      pathname ?? '',
-                    )}
-                    linkComponent={Link}
-                  />
+                  <Navbar hasFeedback linkComponent={Link} />
                 </div>
                 <div className="px-1">
                   <div className="flex-1 flex-col 2md:flex xl:pb-1">

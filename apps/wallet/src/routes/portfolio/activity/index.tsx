@@ -3,7 +3,7 @@ import {
   ActivityList,
   ActivityListSkeleton,
   EmptyState,
-  FeedbackSection,
+  EmptyStateActions,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { createFileRoute } from '@tanstack/react-router'
@@ -67,7 +67,7 @@ function RouteComponent() {
         )
       }
       loadingState={<ActivityListSkeleton />}
-      detail={<FeedbackSection />}
+      detail={<EmptyStateActions />}
       isLoading={isLoading || isWalletLoading}
     />
   )

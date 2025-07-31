@@ -4,7 +4,7 @@ import { useToast } from '@status-im/components'
 import {
   AssetsList,
   AssetsListLoading,
-  DefaultTokenDetail,
+  EmptyStateActions,
   PinExtension,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
@@ -76,7 +76,7 @@ function Component() {
             pathname="/portfolio/assets"
           />
         }
-        detail={<DefaultTokenDetail address={address} />}
+        detail={<EmptyStateActions address={address} />}
         loadingState={<AssetsListLoading />}
         isLoading={isLoading}
       />

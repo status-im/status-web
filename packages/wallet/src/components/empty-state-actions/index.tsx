@@ -5,7 +5,7 @@ type Props = {
   address: string
 }
 
-const DefaultTokenDetail = (props: Props) => {
+const EmptyStateActions = (props: Props) => {
   const { address } = props
 
   return (
@@ -16,4 +16,4 @@ const DefaultTokenDetail = (props: Props) => {
   )
 }
 
-export { DefaultTokenDetail }
+export { EmptyStateActions }
