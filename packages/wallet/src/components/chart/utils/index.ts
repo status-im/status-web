@@ -3,7 +3,7 @@ import { differenceInCalendarMonths } from 'date-fns'
 export const TIME_FRAMES = ['24H', '7D', '1M', '3M', '1Y', 'All'] as const
 export type TimeFrame = (typeof TIME_FRAMES)[number]
 
-export type DataType = 'price' | 'balance'
+export type DataType = 'price' | 'balance' | 'value'
 export type ChartDataPoint = { date: string; price: number }
 export type ChartDatum = { date: Date; value: number }
 
@@ -137,7 +137,7 @@ export const checkDateOutput = (
 
 export const formatChartValue = (
   value: number,
-  dataType: 'price' | 'balance',
+  dataType: DataType,
   currency?: string,
 ): string => {
   const fractionalDigits = value.toString().split('.')[1]?.length || 0
@@ -182,7 +182,7 @@ export const calculateChartRange = (
   const adjustedMin = minPrice - priceRange * marginFactor
   const adjustedMax = maxPrice + priceRange * marginFactor
 
-  const finalMin = minPrice > 0 && adjustedMin < 0 ? 0 : adjustedMin
+  const finalMin = Math.max(0, adjustedMin)
   const finalMax = adjustedMax
 
   // Generate ticks
