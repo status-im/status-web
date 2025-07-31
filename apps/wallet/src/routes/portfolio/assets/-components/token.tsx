@@ -721,7 +721,7 @@ const Token = (props: Props) => {
               {
                 label: '24h Volume',
                 value: (
-                  <TokenAmount value={metadata.volume_24} format="compact" />
+                  <CurrencyAmount value={metadata.volume_24} format="compact" />
                 ),
                 tooltip: (
                   <TokenAmount value={metadata.volume_24} format="standard" />

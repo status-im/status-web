@@ -393,7 +393,7 @@ async function all({
             price_percentage_24h_change: prices[symbol].USD.CHANGEPCT24HOUR,
             balance: 0,
             total_eur: 0,
-            decimals: token.decimals, // <-- Adicionado aqui
+            decimals: token.decimals,
           })
         }
       }
@@ -851,6 +851,9 @@ function map(data: {
   tokenMetadata: any
 }): Asset {
   const { token, balance, price, priceHistory, tokenMetadata } = data
+
+  const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
+
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
     ...('address' in token
@@ -863,15 +866,15 @@ function map(data: {
     price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
     balance: Number(balance) / 10 ** token.decimals,
     total_eur: (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
-    decimals: token.decimals, // <-- Adicionado aqui
+    decimals: token.decimals,
     metadata: {
       market_cap: price.USD['MKTCAP'],
       fully_dilluted: price.USD['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
       circulation: price.USD['CIRCULATINGSUPPLY'],
       total_supply: tokenMetadata['SUPPLY_TOTAL'],
       all_time_high: Math.max(...priceHistory.map(({ high }) => high)),
-      all_time_low: Math.min(...priceHistory.map(({ low }) => low)),
-      volume_24: price.USD['TOTALVOLUME24H'],
+      all_time_low: lows.length ? Math.min(...lows) : price.USD['PRICE'],
+      volume_24: price.USD['TOTALVOLUME24HTO'],
       rank_by_market_cap:
         tokenMetadata['TOPLIST_BASE_RANK']['TOTAL_MKT_CAP_USD'],
       about: tokenMetadata['ASSET_DESCRIPTION'],
