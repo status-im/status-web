@@ -44,6 +44,8 @@ function RouteComponent() {
     }
   }, [isError, toast])
 
+  if (!currentWallet || !address) return null
+
   return (
     <SplittedLayout
       list={
@@ -67,7 +69,7 @@ function RouteComponent() {
         )
       }
       loadingState={<ActivityListSkeleton />}
-      detail={<EmptyStateActions />}
+      detail={<EmptyStateActions address={address} />}
       isLoading={isLoading || isWalletLoading}
     />
   )
