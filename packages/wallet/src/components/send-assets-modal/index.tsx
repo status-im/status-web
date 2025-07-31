@@ -291,13 +291,13 @@ const SendAssetsModal = (props: Props) => {
               >
                 <div>
                   <div className="mb-2 mt-4">
-                    <Label htmlFor="to">To</Label>
                     <div className="relative mt-2">
                       <Controller
                         name="to"
                         control={control}
                         render={({ field }) => (
                           <Input
+                            label="To"
                             id="to"
                             {...field}
                             isInvalid={!!errors.to}
