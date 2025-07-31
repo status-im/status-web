@@ -40,7 +40,7 @@ const EmptyState = (props: Props) => {
       imageId: 'Portfolio/Empty States/No_Balance:750:232' as ImageId,
       imageAlt: 'No balance',
       title: 'No balance',
-      description: 'Hodl this asset to view your balance history here',
+      description: 'Hold this asset to view your balance history here',
     }))
     .with('price', () => ({
       imageId: 'Portfolio/Empty States/No_Balance:750:232' as ImageId,
