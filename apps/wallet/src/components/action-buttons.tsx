@@ -15,15 +15,15 @@ import { TabLink } from './tab-link'
 
 // const checkPathnameAndReturnTabValue = (
 //   pathname: string,
-// ): 'assets' | 'collectibles' => {
+// ): 'tokens' | 'collectibles' => {
 //   return match(pathname)
-//     .with(P.string.includes('/assets'), () => 'assets')
+//     .with(P.string.includes('/tokens'), () => 'tokens')
 //     .with(P.string.includes('/collectibles'), () => 'collectibles')
-//     .otherwise(() => 'assets') as 'assets' | 'collectibles'
+//     .otherwise(() => 'tokens') as 'tokens' | 'collectibles'
 // }
 
 // const placeholderText = {
-//   assets: 'Search asset name or symbol',
+//   tokens: 'Search token name or symbol',
 //   collectibles: 'Search collection or collectible name',
 // } as const
 
@@ -118,9 +118,9 @@ const ActionButtons = (props: Props) => {
   return (
     <div className="flex place-content-between">
       <div className="flex gap-1.5">
-        <TabLink href={`/portfolio/assets`}>Assets</TabLink>
+        <TabLink href={`/portfolio/tokens`}>Tokens</TabLink>
         <TabLink href={`/portfolio/collectibles`}>Collectibles</TabLink>
-        <TabLink href={`/portfolio/activity`}>Activity</TabLink>
+        <TabLink href={`/portfolio/history`}>History</TabLink>
       </div>
       <div className="flex items-center gap-2">
         {/* <Input

@@ -15,7 +15,7 @@ import { usePinExtension } from '@/hooks/use-pin-extension'
 
 import { useWallet } from '../../../providers/wallet-context'
 
-export const Route = createFileRoute('/portfolio/assets/')({
+export const Route = createFileRoute('/portfolio/tokens/')({
   component: Component,
 })
 
@@ -57,7 +57,7 @@ function Component() {
                   return
                 }
                 router.navigate({
-                  to: '/portfolio/assets/$ticker',
+                  to: '/portfolio/tokens/$ticker',
                   params: { ticker },
                   ...(!isDesktop && {
                     viewTransition: true,
@@ -71,7 +71,7 @@ function Component() {
               console.log('Search cleared')
             }}
             searchParams={new URLSearchParams()}
-            pathname="/portfolio/assets"
+            pathname="/portfolio/tokens"
           />
         }
         detail={<FeedbackSection />}

@@ -8,7 +8,7 @@ import type { ImageId } from '../image'
 const styles = cva({
   variants: {
     variant: {
-      activity: 'size-20',
+      history: 'size-20',
       collectible: 'size-20',
       balance: 'h-[112px]',
       price: 'h-[112px]',
@@ -17,17 +17,17 @@ const styles = cva({
 })
 
 type Props = {
-  variant: 'activity' | 'collectible' | 'balance' | 'price'
+  variant: 'history' | 'collectible' | 'balance' | 'price'
 }
 
 const EmptyState = (props: Props) => {
   const { variant } = props
 
   const content = match(variant)
-    .with('activity', () => ({
+    .with('history', () => ({
       imageId: 'admin/empty/devices:241:240' as ImageId,
-      imageAlt: 'No activity',
-      title: 'No Activity',
+      imageAlt: 'No history',
+      title: 'No history',
       description: 'Transaction history will be visible on this page',
     }))
     .with('collectible', () => ({

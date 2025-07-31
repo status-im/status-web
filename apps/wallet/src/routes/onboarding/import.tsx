@@ -126,7 +126,7 @@ function CreatePassword({
         password: data.password,
       })
 
-      navigate({ to: '/portfolio/assets' })
+      navigate({ to: '/portfolio/tokens' })
     } catch (error) {
       console.error(error)
     } finally {

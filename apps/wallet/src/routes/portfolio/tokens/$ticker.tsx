@@ -12,7 +12,7 @@ import { useMediaQuery } from '@/hooks/use-media-query'
 import { useWallet } from '../../../providers/wallet-context'
 import { Token } from './-components/token'
 
-export const Route = createFileRoute('/portfolio/assets/$ticker')({
+export const Route = createFileRoute('/portfolio/tokens/$ticker')({
   component: Component,
 })
 
@@ -48,7 +48,7 @@ function Component() {
                   const ticker = url.split('/').pop()
                   if (!ticker) return
                   router.navigate({
-                    to: '/portfolio/assets/$ticker',
+                    to: '/portfolio/tokens/$ticker',
                     params: { ticker },
                     ...(!isDesktop && {
                       viewTransition: true,

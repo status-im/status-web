@@ -4,7 +4,7 @@ export const Route = createFileRoute('/')({
   component: RouteComponent,
   loader: () => {
     redirect({
-      to: '/portfolio/assets',
+      to: '/portfolio/tokens',
       throw: true,
     })
   },

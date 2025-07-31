@@ -23,7 +23,7 @@ type Props = {
 
 const getActionsButtonsData = (address: string | undefined) => ({
   address: address ?? '',
-  pathname: '/portfolio/assets',
+  pathname: '/portfolio/tokens',
   searchAndSortValues: {
     inputValue: '',
     updateSearchParam: () => {},
@@ -153,13 +153,13 @@ const HeaderRightSlot = () => {
   return (
     <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
       <TabLink
-        href="/portfolio/assets"
+        href="/portfolio/tokens"
         className="w-full justify-center text-center sm:w-fit"
       >
-        Assets
+        Tokens
       </TabLink>
       <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
-      <TabLink href="/portfolio/activity">Activity</TabLink>
+      <TabLink href="/portfolio/history">History</TabLink>
     </div>
   )
 }

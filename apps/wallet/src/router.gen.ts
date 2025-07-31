@@ -16,10 +16,10 @@ import { Route as IndexImport } from './routes/index'
 import { Route as OnboardingIndexImport } from './routes/onboarding/index'
 import { Route as OnboardingNewImport } from './routes/onboarding/new'
 import { Route as OnboardingImportImport } from './routes/onboarding/import'
+import { Route as PortfolioTokensIndexImport } from './routes/portfolio/tokens/index'
+import { Route as PortfolioHistoryIndexImport } from './routes/portfolio/history/index'
 import { Route as PortfolioCollectiblesIndexImport } from './routes/portfolio/collectibles/index'
-import { Route as PortfolioAssetsIndexImport } from './routes/portfolio/assets/index'
-import { Route as PortfolioActivityIndexImport } from './routes/portfolio/activity/index'
-import { Route as PortfolioAssetsTickerImport } from './routes/portfolio/assets/$ticker'
+import { Route as PortfolioTokensTickerImport } from './routes/portfolio/tokens/$ticker'
 import { Route as PortfolioCollectiblesNetworkContractIdImport } from './routes/portfolio/collectibles/$network/$contract/$id'
 
 // Create/Update Routes
@@ -54,6 +54,18 @@ const OnboardingImportRoute = OnboardingImportImport.update({
   getParentRoute: () => OnboardingLayoutRoute,
 } as any)
 
+const PortfolioTokensIndexRoute = PortfolioTokensIndexImport.update({
+  id: '/portfolio/tokens/',
+  path: '/portfolio/tokens/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PortfolioHistoryIndexRoute = PortfolioHistoryIndexImport.update({
+  id: '/portfolio/history/',
+  path: '/portfolio/history/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const PortfolioCollectiblesIndexRoute = PortfolioCollectiblesIndexImport.update(
   {
     id: '/portfolio/collectibles/',
@@ -62,21 +74,9 @@ const PortfolioCollectiblesIndexRoute = PortfolioCollectiblesIndexImport.update(
   } as any,
 )
 
-const PortfolioAssetsIndexRoute = PortfolioAssetsIndexImport.update({
-  id: '/portfolio/assets/',
-  path: '/portfolio/assets/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PortfolioActivityIndexRoute = PortfolioActivityIndexImport.update({
-  id: '/portfolio/activity/',
-  path: '/portfolio/activity/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const PortfolioAssetsTickerRoute = PortfolioAssetsTickerImport.update({
-  id: '/portfolio/assets/$ticker',
-  path: '/portfolio/assets/$ticker',
+const PortfolioTokensTickerRoute = PortfolioTokensTickerImport.update({
+  id: '/portfolio/tokens/$ticker',
+  path: '/portfolio/tokens/$ticker',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -126,25 +126,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingIndexImport
       parentRoute: typeof OnboardingLayoutImport
     }
-    '/portfolio/assets/$ticker': {
-      id: '/portfolio/assets/$ticker'
-      path: '/portfolio/assets/$ticker'
-      fullPath: '/portfolio/assets/$ticker'
-      preLoaderRoute: typeof PortfolioAssetsTickerImport
-      parentRoute: typeof rootRoute
-    }
-    '/portfolio/activity/': {
-      id: '/portfolio/activity/'
-      path: '/portfolio/activity'
-      fullPath: '/portfolio/activity'
-      preLoaderRoute: typeof PortfolioActivityIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/portfolio/assets/': {
-      id: '/portfolio/assets/'
-      path: '/portfolio/assets'
-      fullPath: '/portfolio/assets'
-      preLoaderRoute: typeof PortfolioAssetsIndexImport
+    '/portfolio/tokens/$ticker': {
+      id: '/portfolio/tokens/$ticker'
+      path: '/portfolio/tokens/$ticker'
+      fullPath: '/portfolio/tokens/$ticker'
+      preLoaderRoute: typeof PortfolioTokensTickerImport
       parentRoute: typeof rootRoute
     }
     '/portfolio/collectibles/': {
@@ -152,6 +138,20 @@ declare module '@tanstack/react-router' {
       path: '/portfolio/collectibles'
       fullPath: '/portfolio/collectibles'
       preLoaderRoute: typeof PortfolioCollectiblesIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/portfolio/history/': {
+      id: '/portfolio/history/'
+      path: '/portfolio/history'
+      fullPath: '/portfolio/history'
+      preLoaderRoute: typeof PortfolioHistoryIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/portfolio/tokens/': {
+      id: '/portfolio/tokens/'
+      path: '/portfolio/tokens'
+      fullPath: '/portfolio/tokens'
+      preLoaderRoute: typeof PortfolioTokensIndexImport
       parentRoute: typeof rootRoute
     }
     '/portfolio/collectibles/$network/$contract/$id': {
@@ -187,10 +187,10 @@ export interface FileRoutesByFullPath {
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
-  '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
-  '/portfolio/activity': typeof PortfolioActivityIndexRoute
-  '/portfolio/assets': typeof PortfolioAssetsIndexRoute
+  '/portfolio/tokens/$ticker': typeof PortfolioTokensTickerRoute
   '/portfolio/collectibles': typeof PortfolioCollectiblesIndexRoute
+  '/portfolio/history': typeof PortfolioHistoryIndexRoute
+  '/portfolio/tokens': typeof PortfolioTokensIndexRoute
   '/portfolio/collectibles/$network/$contract/$id': typeof PortfolioCollectiblesNetworkContractIdRoute
 }
 
@@ -199,10 +199,10 @@ export interface FileRoutesByTo {
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding': typeof OnboardingIndexRoute
-  '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
-  '/portfolio/activity': typeof PortfolioActivityIndexRoute
-  '/portfolio/assets': typeof PortfolioAssetsIndexRoute
+  '/portfolio/tokens/$ticker': typeof PortfolioTokensTickerRoute
   '/portfolio/collectibles': typeof PortfolioCollectiblesIndexRoute
+  '/portfolio/history': typeof PortfolioHistoryIndexRoute
+  '/portfolio/tokens': typeof PortfolioTokensIndexRoute
   '/portfolio/collectibles/$network/$contract/$id': typeof PortfolioCollectiblesNetworkContractIdRoute
 }
 
@@ -213,10 +213,10 @@ export interface FileRoutesById {
   '/onboarding/import': typeof OnboardingImportRoute
   '/onboarding/new': typeof OnboardingNewRoute
   '/onboarding/': typeof OnboardingIndexRoute
-  '/portfolio/assets/$ticker': typeof PortfolioAssetsTickerRoute
-  '/portfolio/activity/': typeof PortfolioActivityIndexRoute
-  '/portfolio/assets/': typeof PortfolioAssetsIndexRoute
+  '/portfolio/tokens/$ticker': typeof PortfolioTokensTickerRoute
   '/portfolio/collectibles/': typeof PortfolioCollectiblesIndexRoute
+  '/portfolio/history/': typeof PortfolioHistoryIndexRoute
+  '/portfolio/tokens/': typeof PortfolioTokensIndexRoute
   '/portfolio/collectibles/$network/$contract/$id': typeof PortfolioCollectiblesNetworkContractIdRoute
 }
 
@@ -228,10 +228,10 @@ export interface FileRouteTypes {
     | '/onboarding/import'
     | '/onboarding/new'
     | '/onboarding/'
-    | '/portfolio/assets/$ticker'
-    | '/portfolio/activity'
-    | '/portfolio/assets'
+    | '/portfolio/tokens/$ticker'
     | '/portfolio/collectibles'
+    | '/portfolio/history'
+    | '/portfolio/tokens'
     | '/portfolio/collectibles/$network/$contract/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -239,10 +239,10 @@ export interface FileRouteTypes {
     | '/onboarding/import'
     | '/onboarding/new'
     | '/onboarding'
-    | '/portfolio/assets/$ticker'
-    | '/portfolio/activity'
-    | '/portfolio/assets'
+    | '/portfolio/tokens/$ticker'
     | '/portfolio/collectibles'
+    | '/portfolio/history'
+    | '/portfolio/tokens'
     | '/portfolio/collectibles/$network/$contract/$id'
   id:
     | '__root__'
@@ -251,10 +251,10 @@ export interface FileRouteTypes {
     | '/onboarding/import'
     | '/onboarding/new'
     | '/onboarding/'
-    | '/portfolio/assets/$ticker'
-    | '/portfolio/activity/'
-    | '/portfolio/assets/'
+    | '/portfolio/tokens/$ticker'
     | '/portfolio/collectibles/'
+    | '/portfolio/history/'
+    | '/portfolio/tokens/'
     | '/portfolio/collectibles/$network/$contract/$id'
   fileRoutesById: FileRoutesById
 }
@@ -262,20 +262,20 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   OnboardingLayoutRoute: typeof OnboardingLayoutRouteWithChildren
-  PortfolioAssetsTickerRoute: typeof PortfolioAssetsTickerRoute
-  PortfolioActivityIndexRoute: typeof PortfolioActivityIndexRoute
-  PortfolioAssetsIndexRoute: typeof PortfolioAssetsIndexRoute
+  PortfolioTokensTickerRoute: typeof PortfolioTokensTickerRoute
   PortfolioCollectiblesIndexRoute: typeof PortfolioCollectiblesIndexRoute
+  PortfolioHistoryIndexRoute: typeof PortfolioHistoryIndexRoute
+  PortfolioTokensIndexRoute: typeof PortfolioTokensIndexRoute
   PortfolioCollectiblesNetworkContractIdRoute: typeof PortfolioCollectiblesNetworkContractIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   OnboardingLayoutRoute: OnboardingLayoutRouteWithChildren,
-  PortfolioAssetsTickerRoute: PortfolioAssetsTickerRoute,
-  PortfolioActivityIndexRoute: PortfolioActivityIndexRoute,
-  PortfolioAssetsIndexRoute: PortfolioAssetsIndexRoute,
+  PortfolioTokensTickerRoute: PortfolioTokensTickerRoute,
   PortfolioCollectiblesIndexRoute: PortfolioCollectiblesIndexRoute,
+  PortfolioHistoryIndexRoute: PortfolioHistoryIndexRoute,
+  PortfolioTokensIndexRoute: PortfolioTokensIndexRoute,
   PortfolioCollectiblesNetworkContractIdRoute:
     PortfolioCollectiblesNetworkContractIdRoute,
 }
@@ -292,10 +292,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/onboarding",
-        "/portfolio/assets/$ticker",
-        "/portfolio/activity/",
-        "/portfolio/assets/",
+        "/portfolio/tokens/$ticker",
         "/portfolio/collectibles/",
+        "/portfolio/history/",
+        "/portfolio/tokens/",
         "/portfolio/collectibles/$network/$contract/$id"
       ]
     },
@@ -322,17 +322,17 @@ export const routeTree = rootRoute
       "filePath": "onboarding/index.tsx",
       "parent": "/onboarding"
     },
-    "/portfolio/assets/$ticker": {
-      "filePath": "portfolio/assets/$ticker.tsx"
-    },
-    "/portfolio/activity/": {
-      "filePath": "portfolio/activity/index.tsx"
-    },
-    "/portfolio/assets/": {
-      "filePath": "portfolio/assets/index.tsx"
+    "/portfolio/tokens/$ticker": {
+      "filePath": "portfolio/tokens/$ticker.tsx"
     },
     "/portfolio/collectibles/": {
       "filePath": "portfolio/collectibles/index.tsx"
+    },
+    "/portfolio/history/": {
+      "filePath": "portfolio/history/index.tsx"
+    },
+    "/portfolio/tokens/": {
+      "filePath": "portfolio/tokens/index.tsx"
     },
     "/portfolio/collectibles/$network/$contract/$id": {
       "filePath": "portfolio/collectibles/$network/$contract/$id.tsx"

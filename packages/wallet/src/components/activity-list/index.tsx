@@ -69,7 +69,7 @@ const ActivityList = (props: ActivityListProps) => {
             >
               {isLoading ? (
                 <div className="text-13 font-400 text-neutral-50">
-                  Loading more activities...
+                  Loading more history...
                 </div>
               ) : (
                 <div className="h-1" />
@@ -79,7 +79,7 @@ const ActivityList = (props: ActivityListProps) => {
 
           {!hasNextPage && activities.length > 0 && (
             <div className="py-8 text-center text-13 font-400 text-neutral-40">
-              No more activities to load
+              No more history to load
             </div>
           )}
         </div>
