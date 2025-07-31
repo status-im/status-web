@@ -197,7 +197,7 @@ const SendAssetsModal = (props: Props) => {
       setTransactionState('pending')
 
       if (pendingTransactionData) {
-        toast.positive('Transaction signed', {
+        toast.positive('Transaction signed and sent', {
           duration: 2000,
         })
 
@@ -211,7 +211,7 @@ const SendAssetsModal = (props: Props) => {
         setTransactionState('success')
 
         setTimeout(() => {
-          toast.positive('Transaction successful')
+          toast.positive('Transaction succeeded')
         }, 5000)
       }
     } catch (error) {
