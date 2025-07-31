@@ -57,8 +57,8 @@
   },
   "manifest": {
     "manifest_version": 3,
-    "name": "A wallet connector by Status",
-    "description": "Status Desktop Wallet extended to decentralised applications in your browser.",
+    "name": "!Status dApp Connector",
+    "description": "A trustless, decentralized option for connecting your Status Desktop to dApps—an alternative to WalletConnect.",
     "externally_connectable": {
       "ids": [],
       "matches": []

@@ -1,4 +1,4 @@
-# A wallet connector by Status
+# !Status dApp Connector
 
 Status Desktop Wallet extended to decentralized applications in your browser.
 
