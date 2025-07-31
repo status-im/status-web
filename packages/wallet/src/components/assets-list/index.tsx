@@ -78,7 +78,7 @@ const AssetsList = (props: Props) => {
         {filteredAssets.length !== 0 && (
           <Table.Root>
             <Table.Header>
-              <Table.HeaderCell>Assets</Table.HeaderCell>
+              <Table.HeaderCell>Tokens</Table.HeaderCell>
               <Table.HeaderCell>Price</Table.HeaderCell>
               <Table.HeaderCell>24H%</Table.HeaderCell>
               <Table.HeaderCell>Balance</Table.HeaderCell>
