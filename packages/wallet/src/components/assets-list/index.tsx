@@ -87,8 +87,8 @@ const AssetsList = (props: Props) => {
             <Table.Body>
               {filteredAssets.map(asset => {
                 const href = `${pathname?.replace(
-                  /\/assets\/.*/,
-                  '/assets',
+                  /\/tokens\/.*/,
+                  '/tokens',
                 )}/${asset.native ? asset.symbol : asset.contract}`
                 const isActive = pathname?.startsWith(href)
 
@@ -141,10 +141,10 @@ const AssetsList = (props: Props) => {
         {filteredAssets.length === 0 && (
           <div className="flex flex-1 flex-col items-center py-8">
             <h2 className="pt-[68px] text-15 font-semibold text-neutral-100 first-line:mb-0.5">
-              No assets found
+              No tokens found
             </h2>
             <p className="mb-5 text-13 font-regular text-neutral-100">
-              We didn&apos;t find any assets that match your search
+              We didn&apos;t find any tokens that match your search
             </p>
             <Button
               variant="outline"
@@ -162,8 +162,8 @@ const AssetsList = (props: Props) => {
         <div className="w-full">
           {filteredAssets.map(asset => {
             const href = `${pathname?.replace(
-              /\/assets\/.*/,
-              '/assets',
+              /\/tokens\/.*/,
+              '/tokens',
             )}/${asset.native ? asset.symbol : asset.contract}`
 
             return (
