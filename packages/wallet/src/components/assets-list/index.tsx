@@ -87,8 +87,8 @@ const AssetsList = (props: Props) => {
             <Table.Body>
               {filteredAssets.map(asset => {
                 const href = `${pathname?.replace(
-                  /\/tokens\/.*/,
-                  '/tokens',
+                  /\/assets\/.*/,
+                  '/assets',
                 )}/${asset.native ? asset.symbol : asset.contract}`
                 const isActive = pathname?.startsWith(href)
 
@@ -162,8 +162,8 @@ const AssetsList = (props: Props) => {
         <div className="w-full">
           {filteredAssets.map(asset => {
             const href = `${pathname?.replace(
-              /\/tokens\/.*/,
-              '/tokens',
+              /\/assets\/.*/,
+              '/assets',
             )}/${asset.native ? asset.symbol : asset.contract}`
 
             return (

@@ -14,7 +14,7 @@ import { usePendingTransactionsCleanup } from '@/hooks/use-pending-transactions-
 import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
-export const Route = createFileRoute('/portfolio/history/')({
+export const Route = createFileRoute('/portfolio/activity/')({
   component: RouteComponent,
 })
 
@@ -61,7 +61,7 @@ function RouteComponent() {
             {!address ? (
               <p className="mt-4">No wallet selected</p>
             ) : (
-              <EmptyState variant="history" />
+              <EmptyState variant="activity" />
             )}
           </div>
         )

@@ -159,7 +159,7 @@ const HeaderRightSlot = () => {
         Tokens
       </TabLink>
       <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
-      <TabLink href="/portfolio/history">History</TabLink>
+      <TabLink href="/portfolio/activity">History</TabLink>
     </div>
   )
 }
