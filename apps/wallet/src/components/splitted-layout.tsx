@@ -23,7 +23,7 @@ type Props = {
 
 const getActionsButtonsData = (address: string | undefined) => ({
   address: address ?? '',
-  pathname: '/portfolio/tokens',
+  pathname: '/portfolio/assets',
   searchAndSortValues: {
     inputValue: '',
     updateSearchParam: () => {},
@@ -153,7 +153,7 @@ const HeaderRightSlot = () => {
   return (
     <div className="flex flex-col items-end gap-2 sm:flex-row sm:items-center">
       <TabLink
-        href="/portfolio/tokens"
+        href="/portfolio/assets"
         className="w-full justify-center text-center sm:w-fit"
       >
         Tokens

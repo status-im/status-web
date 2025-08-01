@@ -118,7 +118,7 @@ const ActionButtons = (props: Props) => {
   return (
     <div className="flex place-content-between">
       <div className="flex gap-1.5">
-        <TabLink href={`/portfolio/tokens`}>Tokens</TabLink>
+        <TabLink href={`/portfolio/assets`}>Tokens</TabLink>
         <TabLink href={`/portfolio/collectibles`}>Collectibles</TabLink>
         <TabLink href={`/portfolio/history`}>History</TabLink>
       </div>

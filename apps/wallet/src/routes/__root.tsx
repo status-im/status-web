@@ -45,7 +45,7 @@ export const Route = createRootRouteWithContext<{
 
       if (location.pathname === '/') {
         if (hasWallets) {
-          throw redirect({ to: '/portfolio/tokens' })
+          throw redirect({ to: '/portfolio/assets' })
         } else {
           throw redirect({ to: '/onboarding' })
         }
@@ -56,7 +56,7 @@ export const Route = createRootRouteWithContext<{
       }
 
       if (location.pathname.startsWith('/onboarding') && hasWallets) {
-        throw redirect({ to: '/portfolio/tokens' })
+        throw redirect({ to: '/portfolio/assets' })
       }
     } catch (error) {
       if (error && typeof error === 'object' && 'isRedirect' in error) {

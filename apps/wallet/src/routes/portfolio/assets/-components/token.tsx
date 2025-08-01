@@ -537,7 +537,7 @@ const Token = (props: Props) => {
       }
     >
       <Link
-        to="/portfolio/tokens"
+        to="/portfolio/assets"
         viewTransition
         className="z-30 flex items-center gap-1 p-4 font-600 text-neutral-50 transition-colors hover:text-neutral-60 xl:hidden 2xl:mt-0 2xl:p-12 2xl:pt-0"
       >

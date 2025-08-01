@@ -28,7 +28,7 @@ function RouteComponent() {
       const mnemonic = await createWalletAsync(data.password)
 
       setMnemonic(mnemonic)
-      navigate({ to: '/portfolio/tokens' })
+      navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)
     } finally {
