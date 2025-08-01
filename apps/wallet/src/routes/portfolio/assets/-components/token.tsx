@@ -699,7 +699,7 @@ const Token = (props: Props) => {
                 tooltip: (
                   <CurrencyAmount
                     value={metadata.all_time_high}
-                    format="standard"
+                    format="precise"
                   />
                 ),
               },
@@ -714,7 +714,7 @@ const Token = (props: Props) => {
                 tooltip: (
                   <CurrencyAmount
                     value={metadata.all_time_low}
-                    format="standard"
+                    format="precise"
                   />
                 ),
               },
