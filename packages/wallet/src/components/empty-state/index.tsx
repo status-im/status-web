@@ -26,8 +26,8 @@ const EmptyState = (props: Props) => {
   const content = match(variant)
     .with('activity', () => ({
       imageId: 'admin/empty/devices:241:240' as ImageId,
-      imageAlt: 'No activity',
-      title: 'No Activity',
+      imageAlt: 'No history',
+      title: 'No history',
       description: 'Transaction history will be visible on this page',
     }))
     .with('collectible', () => ({

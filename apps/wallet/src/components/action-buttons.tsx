@@ -23,7 +23,7 @@ import { TabLink } from './tab-link'
 // }
 
 // const placeholderText = {
-//   assets: 'Search asset name or symbol',
+//   assets: 'Search token name or symbol',
 //   collectibles: 'Search collection or collectible name',
 // } as const
 
@@ -118,9 +118,9 @@ const ActionButtons = (props: Props) => {
   return (
     <div className="flex place-content-between">
       <div className="flex gap-1.5">
-        <TabLink href={`/portfolio/assets`}>Assets</TabLink>
+        <TabLink href={`/portfolio/assets`}>Tokens</TabLink>
         <TabLink href={`/portfolio/collectibles`}>Collectibles</TabLink>
-        <TabLink href={`/portfolio/activity`}>Activity</TabLink>
+        <TabLink href={`/portfolio/activity`}>History</TabLink>
       </div>
       <div className="flex items-center gap-2">
         {/* <Input
