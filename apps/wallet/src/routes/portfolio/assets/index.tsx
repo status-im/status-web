@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
+
 import { useToast } from '@status-im/components'
 import {
   AssetsList,
   AssetsListLoading,
-  FeedbackSection,
+  EmptyStateActions,
   PinExtension,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
@@ -74,12 +76,12 @@ function Component() {
             pathname="/portfolio/assets"
           />
         }
-        detail={<FeedbackSection />}
+        detail={<EmptyStateActions address={address} />}
         loadingState={<AssetsListLoading />}
         isLoading={isLoading}
       />
       {isPinExtension && (
-        <div className="absolute right-5 top-20 z-20">
+        <div className="absolute right-2 top-14 z-20">
           <PinExtension onClose={handleClose} />
         </div>
       )}

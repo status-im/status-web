@@ -5,7 +5,7 @@ import {
   CollectiblesGrid as CollectiblesList,
   CollectiblesGridSkeleton,
   EmptyState,
-  FeedbackSection,
+  EmptyStateActions,
   PinExtension,
 } from '@status-im/wallet/components'
 import { ERROR_MESSAGES } from '@status-im/wallet/constants'
@@ -102,11 +102,11 @@ function Component() {
           )
         }
         loadingState={<CollectiblesGridSkeleton />}
-        detail={<FeedbackSection />}
+        detail={<EmptyStateActions address={address} />}
         isLoading={isLoading}
       />
       {isPinExtension && (
-        <div className="absolute right-5 top-20 z-20">
+        <div className="absolute right-2 top-14 z-20">
           <PinExtension onClose={handleClose} />
         </div>
       )}
