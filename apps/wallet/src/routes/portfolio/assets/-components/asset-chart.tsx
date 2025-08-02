@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 import {
   Chart,
   ChartLoading,
@@ -91,7 +93,7 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: activeDataType === 'price',
+    enabled: activeDataType === 'price' || activeDataType === 'value',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
   })
@@ -132,14 +134,49 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: activeDataType === 'balance',
+    enabled: activeDataType === 'balance' || activeDataType === 'value',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
   })
 
+  const valueChartData = useMemo(() => {
+    if (activeDataType !== 'value' || !priceChart.data || !balanceChart.data) {
+      return []
+    }
+
+    return priceChart.data.map(pricePoint => {
+      if (balanceChart.data.length === 0) {
+        return {
+          date: pricePoint.date,
+          price: 0,
+        }
+      }
+
+      const target = new Date(pricePoint.date).getTime()
+      let bestTime = -1
+      let balance = 0
+
+      for (const point of balanceChart.data) {
+        const pointTime = new Date(point.date).getTime()
+
+        if (pointTime <= target && pointTime > bestTime) {
+          balance = point.price
+          bestTime = pointTime
+        }
+      }
+
+      return {
+        date: pricePoint.date,
+        price: balance * pricePoint.price,
+      }
+    })
+  }, [activeDataType, priceChart.data, balanceChart.data])
+
   const isLoading =
     (activeDataType === 'price' && priceChart.isLoading) ||
-    (activeDataType === 'balance' && balanceChart.isLoading)
+    (activeDataType === 'balance' && balanceChart.isLoading) ||
+    (activeDataType === 'value' &&
+      (priceChart.isLoading || balanceChart.isLoading))
 
   if (isLoading) {
     return <ChartLoading />
@@ -147,7 +184,8 @@ function AssetChart({
 
   const hasError =
     (activeDataType === 'price' && priceChart.error) ||
-    (activeDataType === 'balance' && balanceChart.error)
+    (activeDataType === 'balance' && balanceChart.error) ||
+    (activeDataType === 'value' && (priceChart.error || balanceChart.error))
 
   if (hasError) {
     return (
@@ -164,6 +202,7 @@ function AssetChart({
       <Chart
         price={priceChart.data || []}
         balance={balanceChart.data || []}
+        value={valueChartData}
         activeTimeFrame={timeFrame as ChartTimeFrame}
         activeDataType={activeDataType}
       />
