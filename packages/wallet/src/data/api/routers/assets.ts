@@ -399,6 +399,8 @@ async function all({
       }
     }
 
+    aggregatedAssets.sort((a, b) => b.total_eur - a.total_eur)
+
     const summary = sum(aggregatedAssets)
 
     return {
