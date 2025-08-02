@@ -55,7 +55,6 @@ export const AccountsProvider = ({ children }: { children: ReactNode }) => {
     queryFn: () => getAccountsData(addresses, networks),
     enabled: addresses.length > 0,
     staleTime: 60000,
-    refetchOnWindowFocus: false,
   })
 
   const addAccount = (account: Account) => {

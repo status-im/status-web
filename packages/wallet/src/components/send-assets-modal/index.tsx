@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -31,6 +31,7 @@ type Props = {
     totalBalanceEur: number
     contractAddress?: string
     network: NetworkType
+    decimals: number
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
   verifyPassword: (inputPassword: string) => Promise<boolean>
@@ -45,12 +46,16 @@ type Props = {
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
-const createFormSchema = (balance: number) =>
+const createFormSchema = (balance: number, fromAddress: string) =>
   z.object({
     to: z
       .string()
       .min(1, 'Recipient address is required')
-      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
+      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address')
+      .refine(
+        val => val.toLowerCase() !== fromAddress.toLowerCase(),
+        'You are sending assets to yourself',
+      ),
     amount: z
       .string()
       .min(1, 'Amount is required')
@@ -97,12 +102,16 @@ const SendAssetsModal = (props: Props) => {
   const balance = asset.totalBalance
   const ethBalance = account.ethBalance
 
-  const formSchema = useMemo(() => createFormSchema(balance), [balance])
+  const formSchema = useMemo(
+    () => createFormSchema(balance, account.address),
+    [balance, account.address],
+  )
 
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -119,9 +128,9 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
-
-  const memoizedOnEstimateGas = useRef(onEstimateGas)
+  useEffect(() => {
+    setValue('contractAddress', asset.contractAddress || undefined)
+  }, [asset.contractAddress, setValue])
 
   // Estimate gas fees when 'to' or 'amount' changes
   useEffect(() => {
@@ -130,22 +139,11 @@ const SendAssetsModal = (props: Props) => {
     const parsed = Number.parseFloat(watchedAmount)
     if (Number.isNaN(parsed)) return
 
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current)
-    }
-
-    debounceTimeout.current = setTimeout(() => {
-      const amountInWei = BigInt(Math.floor(parsed * 1e18)).toString(16)
-      memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
-    }, 300)
-
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current)
-        debounceTimeout.current = null
-      }
-    }
-  }, [watchedTo, watchedAmount])
+    const amountInWei = BigInt(
+      Math.floor(parsed * Math.pow(10, asset.decimals)),
+    ).toString(16)
+    onEstimateGas(watchedTo, `0x${amountInWei}`)
+  }, [watchedTo, watchedAmount, onEstimateGas, asset.decimals])
 
   //  Check for insufficient ETH balance
   useEffect(() => {
@@ -199,7 +197,7 @@ const SendAssetsModal = (props: Props) => {
       setTransactionState('pending')
 
       if (pendingTransactionData) {
-        toast.positive('Transaction signed', {
+        toast.positive('Transaction signed and sent', {
           duration: 2000,
         })
 
@@ -213,7 +211,7 @@ const SendAssetsModal = (props: Props) => {
         setTransactionState('success')
 
         setTimeout(() => {
-          toast.positive('Transaction successful')
+          toast.positive('Transaction succeeded')
         }, 5000)
       }
     } catch (error) {
@@ -248,7 +246,9 @@ const SendAssetsModal = (props: Props) => {
   }
 
   const hasInsufficientBalance =
-    watchedAmount && Number.parseFloat(watchedAmount) > balance
+    watchedAmount &&
+    Number.parseFloat(watchedAmount) > balance &&
+    Number.parseFloat(watchedAmount) > 0
 
   const isTransactionSigning = transactionState === 'signing'
 
@@ -291,18 +291,18 @@ const SendAssetsModal = (props: Props) => {
               >
                 <div>
                   <div className="mb-2 mt-4">
-                    <Label htmlFor="to">To</Label>
                     <div className="relative mt-2">
                       <Controller
                         name="to"
                         control={control}
                         render={({ field }) => (
                           <Input
+                            label="To"
                             id="to"
                             {...field}
                             isInvalid={!!errors.to}
                             className="pr-8 font-mono text-13"
-                            placeholder="0x..."
+                            placeholder="Address"
                             clearable={!!watchedTo}
                           />
                         )}
@@ -363,7 +363,7 @@ const SendAssetsModal = (props: Props) => {
                       <div className="h-px w-full bg-neutral-20" />
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
-                          €
+                          $
                           {watchedAmount
                             ? Number.parseFloat(watchedAmount || '0') *
                               (balanceEur / balance)
@@ -384,7 +384,7 @@ const SendAssetsModal = (props: Props) => {
                       </div>
                     </div>
 
-                    {errors.amount && (
+                    {errors.amount && hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>{errors.amount.message}</p>
@@ -539,7 +539,7 @@ const SendAssetsModal = (props: Props) => {
         onOpenChange={handlePasswordModalClose}
         onConfirm={handlePasswordConfirm}
         isLoading={isTransactionSigning}
-        buttonLabel="Sign Transaction"
+        buttonLabel="Send Transaction"
       />
     </>
   )

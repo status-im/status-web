@@ -2,11 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "include": ["src"],
   "compilerOptions": {
+    "composite": true,
     "outDir": "./dist",
     "declarationDir": "./dist/types",
+    "noEmit": false,
 
     // todo: turn on?
     "noImplicitReturns": false,
     "noPropertyAccessFromIndexSignature": false
-  }
+  },
+  "references": []
 }

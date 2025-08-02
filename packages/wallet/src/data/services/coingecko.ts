@@ -99,7 +99,7 @@ export const getMarket = async (): Promise<Market> => {
 
 export const getNativeTokenPrice = async (network: NetworkType) => {
   const response = await fetch(
-    `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoNativeTokens[network]}&vs_currencies=eur&include_24hr_change=true`,
+    `https://api.coingecko.com/api/v3/simple/price?ids=${coingeckoNativeTokens[network]}&vs_currencies=usd&include_24hr_change=true`,
     {
       headers: {
         'Content-Type': 'application/json',
@@ -127,7 +127,7 @@ export const getNativeTokenPriceChartData = async (
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
 ) => {
   const response = await fetch(
-    `https://api.coingecko.com/api/v3/coins/${coingeckoNativeTokens[network]}/market_chart?vs_currency=eur&days=${days}`,
+    `https://api.coingecko.com/api/v3/coins/${coingeckoNativeTokens[network]}/market_chart?vs_currency=usd&days=${days}`,
     {
       next: {
         revalidate: 3600,
@@ -152,7 +152,7 @@ export const getERC20TokenPriceChartData = async (
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
 ) => {
   const response = await fetch(
-    `https://api.coingecko.com/api/v3/coins/${coingeckoNetworks[network]}/contract/${address}/market_chart?vs_currency=eur&days=${days}`,
+    `https://api.coingecko.com/api/v3/coins/${coingeckoNetworks[network]}/contract/${address}/market_chart?vs_currency=usd&days=${days}`,
     {
       next: {
         revalidate: 3600,
@@ -231,7 +231,7 @@ export const getERC20TokensPrice = async (
           coingeckoNetworks[network]
         }?contract_addresses=${addresses.join(
           ',',
-        )}&vs_currencies=eur&include_24hr_change=true`,
+        )}&vs_currencies=usd&include_24hr_change=true`,
         {
           headers: {
             'Content-Type': 'application/json',

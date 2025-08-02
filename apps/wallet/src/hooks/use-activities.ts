@@ -89,8 +89,5 @@ export const useActivities = ({ address }: Props) => {
     initialPageParam: {},
     staleTime: QUERY_STALE_TIME_MS,
     gcTime: QUERY_GC_TIME_MS,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
 }

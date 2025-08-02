@@ -18,7 +18,7 @@ export const useImportWallet = () => {
       await api.wallet.import.mutate({
         mnemonic,
         password,
-        name: 'Imported Wallet',
+        name: 'Account 1',
       })
     },
     onSuccess: () => {

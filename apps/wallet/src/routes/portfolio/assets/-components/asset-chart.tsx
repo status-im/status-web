@@ -91,11 +91,9 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
+    enabled: activeDataType === 'price',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
   const balanceChart = useQuery<ApiOutput['assets']['tokenBalanceChart']>({
@@ -134,18 +132,24 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
+    enabled: activeDataType === 'balance',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
-  if (priceChart.isLoading || balanceChart.isLoading) {
+  const isLoading =
+    (activeDataType === 'price' && priceChart.isLoading) ||
+    (activeDataType === 'balance' && balanceChart.isLoading)
+
+  if (isLoading) {
     return <ChartLoading />
   }
 
-  if (priceChart.error || balanceChart.error) {
+  const hasError =
+    (activeDataType === 'price' && priceChart.error) ||
+    (activeDataType === 'balance' && balanceChart.error)
+
+  if (hasError) {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-center">

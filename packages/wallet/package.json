@@ -36,6 +36,11 @@
       "types": "./dist/src/constants/index.d.ts",
       "import": "./dist/constants/index.es.js",
       "require": "./dist/constants/index.cjs.js"
+    },
+    "./utils": {
+      "types": "./dist/src/utils/index.d.ts",
+      "import": "./dist/utils/index.es.js",
+      "require": "./dist/utils/index.cjs.js"
     }
   },
   "files": [
@@ -47,14 +52,13 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "vite build --watch --mode development",
-    "build": "vite build",
-    "postbuild": "pnpm build:types",
+    "build": "vite build && pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
     "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && :",
     "lint": "eslint src",
     "format": "prettier --write .",
-    "sync:cloudinary": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/image/types.ts'",
+    "sync:cloudinary": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/components/image/types.ts'",
     "sync:tokens:erc20": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-erc20-token-list.mjs && prettier -w 'src/constants/erc20.json'",
     "clean": "rimraf node_modules dist .turbo",
     "prepack": "pnpm build"

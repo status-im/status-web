@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority'
 
 import { CurrencyAmount } from '../currency-amount'
 import { PercentageChange } from '../percentage-change'
+import { TokenAmount } from '../token-amount'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 
@@ -35,9 +36,11 @@ export const Balance = (props: Props) => {
         />
 
         {variant === 'token' && (
-          <div className="self-end text-15 font-medium text-neutral-50">
-            {summary.total_balance}
-          </div>
+          <TokenAmount
+            className="self-end text-15 font-medium text-neutral-50"
+            value={summary.total_balance}
+            format="precise"
+          />
         )}
       </div>
 

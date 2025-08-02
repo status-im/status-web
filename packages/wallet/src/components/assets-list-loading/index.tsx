@@ -6,16 +6,16 @@ const AssetsListLoading = () => {
   return (
     <div
       aria-busy="true"
-      aria-label="Loading assets"
+      aria-label="Loading tokens"
       className="min-h-[calc(100svh-362px)]"
     >
       <Table.Root>
         <Table.Header>
-          <Table.HeaderCell>Assets</Table.HeaderCell>
+          <Table.HeaderCell>Tokens</Table.HeaderCell>
           <Table.HeaderCell>Price</Table.HeaderCell>
           <Table.HeaderCell>24H%</Table.HeaderCell>
           <Table.HeaderCell>Balance</Table.HeaderCell>
-          <Table.HeaderCell>Total</Table.HeaderCell>
+          <Table.HeaderCell>Value</Table.HeaderCell>
         </Table.Header>
         <Table.Body>
           {Array.from({ length: 12 }).map((_, index) => {

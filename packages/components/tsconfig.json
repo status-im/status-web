@@ -2,8 +2,17 @@
   "extends": "../../tsconfig.base",
   "include": ["src", "tailwind.config.ts", ".storybook"],
   "compilerOptions": {
+    "composite": true,
     "jsx": "preserve",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noEmit": false
   },
-  "references": []
+  "references": [
+    {
+      "path": "../icons"
+    },
+    {
+      "path": "../colors"
+    }
+  ]
 }
