@@ -364,7 +364,7 @@ const SendAssetsModal = (props: Props) => {
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
                           $
-                          {watchedAmount
+                          {watchedAmount && balance !== 0
                             ? Number.parseFloat(watchedAmount || '0') *
                               (balanceEur / balance)
                             : '0'}
@@ -400,9 +400,12 @@ const SendAssetsModal = (props: Props) => {
                         {asset.symbol} /{' '}
                         <CurrencyAmount
                           value={
-                            balanceEur -
-                            Number.parseFloat(watchedAmount || '0') *
-                              (balanceEur / balance)
+                            balance === 0
+                              ? 0
+                              : balanceEur -
+                                (Number.parseFloat(watchedAmount || '0') *
+                                  balanceEur) /
+                                  balance
                           }
                           format="standard"
                         />
