@@ -10,7 +10,7 @@ const EmptyStateActions = (props: Props) => {
 
   return (
     <div className="flex max-h-[calc(100vh-56px)] flex-col gap-4 overflow-y-auto p-8 scrollbar-stable">
-      <BuyTokens />
+      <BuyTokens address={address} />
       <DepositTokens address={address} />
     </div>
   )

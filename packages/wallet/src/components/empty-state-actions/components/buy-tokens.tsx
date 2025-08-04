@@ -3,30 +3,36 @@ import { cx } from 'class-variance-authority'
 
 import { Image, type ImageId } from '../../image'
 
-const PROVIDERS: ProviderProps[] = [
-  {
-    name: 'MoonPay',
-    image: 'Wallet/Icons/Logos/moonpay-bigger:144:144',
-    list: [
-      'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +9 more',
-      'Fees: from 1%',
-      'Supported Countries: 180',
-    ],
-    url: 'https://buy.moonpay.com/v2/buy?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR',
-  },
-  {
-    name: 'Mercuryo',
-    image: 'Wallet/Icons/Logos/mercuryo-bigger:144:144',
-    list: [
-      'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +10 more',
-      'Fees: from 1%',
-      'Supported Countries: 135+',
-    ],
-    url: 'https://exchange.mercuryo.io/?type=buy&network=ETHEREUM&currency=ETH&address=0xE878d485eF31D66DC4734CC9a1464809C9c63A36&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47',
-  },
-]
+type Props = {
+  address: string
+}
 
-const BuyTokens = () => {
+const BuyTokens = (props: Props) => {
+  const { address } = props
+
+  const PROVIDERS: ProviderProps[] = [
+    {
+      name: 'MoonPay',
+      image: 'Wallet/Icons/Logos/moonpay-bigger:144:144',
+      list: [
+        'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +9 more',
+        'Fees: from 1%',
+        'Supported Countries: 180',
+      ],
+      url: 'https://buy.moonpay.com/v2/buy?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR',
+    },
+    {
+      name: 'Mercuryo',
+      image: 'Wallet/Icons/Logos/mercuryo-bigger:144:144',
+      list: [
+        'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +10 more',
+        'Fees: from 1%',
+        'Supported Countries: 135+',
+      ],
+      url: `https://exchange.mercuryo.io/?type=buy&network=ETHEREUM&currency=ETH&address=${address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`,
+    },
+  ]
+
   return (
     <div className="flex flex-col items-start justify-start gap-4 rounded-16 bg-customisation-blue-50/5">
       <div className="flex flex-col gap-1 p-4 pb-1">
