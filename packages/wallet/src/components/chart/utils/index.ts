@@ -185,7 +185,7 @@ export const calculateChartRange = (
   const adjustedMin = minPrice - priceRange * marginFactor
   const adjustedMax = maxPrice + priceRange * marginFactor
 
-  const finalMin = minPrice > 0 && adjustedMin < 0 ? 0 : adjustedMin
+  const finalMin = Math.max(0, adjustedMin)
   const finalMax = adjustedMax
 
   // Generate ticks
