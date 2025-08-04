@@ -18,7 +18,13 @@ const AnimatedAreaClosed = animated(AreaClosed)
 const AnimatedLinePath = animated(LinePath)
 
 const Content = (props: Props) => {
-  const { pricesData, xScale, yScale, isPositive = true } = props
+  const {
+    pricesData,
+    xScale,
+    yScale,
+    isPositive = true,
+    dataType = 'price',
+  } = props
 
   const colors = isPositive ? positiveColors : negativeColors
   const lastData = pricesData[pricesData.length - 1]
@@ -33,7 +39,7 @@ const Content = (props: Props) => {
 
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
-  const formattedValue = formatSmallNumber(lastData.value)
+  const formattedValue = formatSmallNumber(lastData.value, dataType)
   const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
   const tagXOffset = Math.max(0, 20 - tagWidth / 2)
   const textX = tagXOffset + tagWidth / 2

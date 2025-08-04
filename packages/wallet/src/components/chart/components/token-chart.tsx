@@ -31,7 +31,7 @@ const TokenChart = ({
   timeFrame,
   emptyState,
 }: TokenChartProps) => {
-  const innerWidth = Math.max(100, width - 60)
+  const innerWidth = Math.max(100, width - 70)
   const innerHeight = 256
 
   const sortedData = useMemo(
@@ -53,7 +53,7 @@ const TokenChart = ({
     nice: false,
   })
 
-  const { min, max, ticks } = calculateChartRange(sortedData)
+  const { min, max, ticks } = calculateChartRange(sortedData, 0.1, dataType)
   const yScale = scaleLinear({
     domain: [min, max],
     range: [innerHeight, 0],
@@ -118,6 +118,7 @@ const TokenChart = ({
               xScale={xScale}
               yScale={yScale}
               isPositive={isPositive}
+              dataType={dataType}
             />
 
             {tooltipOpen && (
