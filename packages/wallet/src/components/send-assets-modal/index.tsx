@@ -271,7 +271,7 @@ const SendAssetsModal = (props: Props) => {
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
                 </Dialog.Title>
-                <Dialog.Description className="hidden">
+                <Dialog.Description className="sr-only">
                   Send {asset.name} to another wallet
                 </Dialog.Description>
 
