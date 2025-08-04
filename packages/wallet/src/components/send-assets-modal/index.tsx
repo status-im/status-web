@@ -13,6 +13,7 @@ import * as z from 'zod'
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { PasswordModal } from '../password-modal'
+import { TokenAmount } from '../token-amount'
 
 import type { NetworkType } from '../../data'
 import type { Account } from '../address'
@@ -375,7 +376,8 @@ const SendAssetsModal = (props: Props) => {
                             hasInsufficientBalance && 'text-danger-50',
                           ])}
                         >
-                          {balance.toLocaleString()} {asset.symbol} /{' '}
+                          <TokenAmount value={balance} format="precise" />{' '}
+                          {asset.symbol} /{' '}
                           <CurrencyAmount
                             value={balanceEur}
                             format="standard"
@@ -394,9 +396,12 @@ const SendAssetsModal = (props: Props) => {
                     {watchedAmount && !hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 font-medium text-neutral-50">
                         Remaining ~{' '}
-                        {(
-                          balance - Number.parseFloat(watchedAmount || '0')
-                        ).toLocaleString()}{' '}
+                        <TokenAmount
+                          value={
+                            balance - Number.parseFloat(watchedAmount || '0')
+                          }
+                          format="precise"
+                        />{' '}
                         {asset.symbol} /{' '}
                         <CurrencyAmount
                           value={
