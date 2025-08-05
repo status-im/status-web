@@ -4,7 +4,12 @@ export const TIME_FRAMES = ['24H', '7D', '1M', '3M', '1Y', 'All'] as const
 export type TimeFrame = (typeof TIME_FRAMES)[number]
 
 export type DataType = 'price' | 'balance' | 'value'
-export type ChartDataPoint = { date: string; price: number }
+export type ChartDataPoint = {
+  date: string
+  price: number
+  balance?: number
+  value?: number
+}
 export type ChartDatum = { date: Date; value: number }
 
 export const DEFAULT_TIME_FRAME: TimeFrame = TIME_FRAMES[0]
@@ -135,38 +140,38 @@ export const checkDateOutput = (
   return 'bullet'
 }
 
-export const formatChartValue = (
-  value: number,
-  dataType: DataType,
-  currency?: string,
-): string => {
-  const fractionalDigits = value.toString().split('.')[1]?.length || 0
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  notation: 'standard',
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
 
-  if (dataType === 'balance') {
-    return value.toLocaleString('en-US', {
-      minimumFractionDigits: fractionalDigits,
-      maximumFractionDigits: fractionalDigits,
-    })
+const preciseTokenFormatter = new Intl.NumberFormat('en-US', {
+  style: 'decimal',
+  notation: 'standard',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 4,
+  minimumSignificantDigits: 1,
+  maximumSignificantDigits: 4,
+})
+
+export const formatChartValue = (value: number, dataType: DataType): string => {
+  switch (dataType) {
+    case 'balance':
+      return preciseTokenFormatter.format(value)
+
+    case 'price':
+    case 'value':
+      return currencyFormatter.format(value)
+
+    default:
+      return currencyFormatter.format(value)
   }
-
-  if (dataType === 'value') {
-    return value.toLocaleString('en-US', {
-      style: 'currency',
-      currency: currency || 'USD',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })
-  }
-
-  return value.toLocaleString('en-US', {
-    style: 'currency',
-    currency: currency || 'USD',
-    minimumFractionDigits: fractionalDigits,
-    maximumFractionDigits: fractionalDigits,
-  })
 }
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+const smallCurrencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   notation: 'standard',
@@ -175,7 +180,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   roundingPriority: 'morePrecision',
 })
 
-const numberFormatter = new Intl.NumberFormat('en-US', {
+const smallNumberFormatter = new Intl.NumberFormat('en-US', {
   style: 'decimal',
   notation: 'standard',
   minimumFractionDigits: 4,
@@ -191,21 +196,56 @@ export const formatSmallNumber = (
 ): string => {
   if (value === 0) return '0'
 
-  // Use the same decimal precision logic as Y-axis ticks
-  const formatter = dataType === 'balance' ? numberFormatter : currencyFormatter
+  const formatter =
+    dataType === 'balance' ? smallNumberFormatter : smallCurrencyFormatter
   return formatter.format(value)
 }
 
+export const getChartValue = (
+  point: ChartDataPoint,
+  dataType: DataType,
+): number => {
+  switch (dataType) {
+    case 'price':
+      return point.price
+    case 'balance':
+      return point.balance ?? point.price
+    case 'value':
+      return point.value ?? point.price
+  }
+}
+
+export const createChartDataPoint = (
+  date: string,
+  value: number,
+  dataType: DataType,
+  additionalData?: { price?: number; balance?: number },
+): ChartDataPoint => {
+  switch (dataType) {
+    case 'price':
+      return { date, price: value }
+    case 'balance':
+      return { date, price: value, balance: value }
+    case 'value':
+      return {
+        date,
+        price: additionalData?.price ?? 0,
+        balance: additionalData?.balance ?? 0,
+        value,
+      }
+  }
+}
+
 export const calculateChartRange = (
-  data: Array<{ price: number }>,
+  data: ChartDataPoint[],
   marginFactor = 0.1,
   dataType: DataType = 'price',
 ) => {
   if (data.length === 0) return { min: 0, max: 1, ticks: [] }
 
-  const prices = data.map(d => d.price)
-  const maxPrice = Math.max(...prices)
-  const minPrice = Math.min(...prices)
+  const values = data.map(d => getChartValue(d, dataType))
+  const maxPrice = Math.max(...values)
+  const minPrice = Math.min(...values)
   const priceRange = maxPrice - minPrice
 
   const adjustedMin = minPrice - priceRange * marginFactor
@@ -221,16 +261,15 @@ export const calculateChartRange = (
   const ticks = Array.from({ length: tickCount }, (_, i) => {
     const tickValue = finalMin + i * tickInterval
 
-    // Use formatChartValue for specific data types, otherwise use generic formatting
-    if (dataType) {
-      return formatChartValue(tickValue, dataType, 'USD')
+    if (dataType === 'balance') {
+      return tickValue < 1
+        ? smallNumberFormatter.format(tickValue)
+        : preciseTokenFormatter.format(tickValue)
+    } else {
+      return tickValue < 1
+        ? smallCurrencyFormatter.format(tickValue)
+        : currencyFormatter.format(tickValue)
     }
-
-    // if (maxDecimals === 0) return Math.round(tickValue).toString()
-    // return tickValue.toFixed(tickValue === 0 ? 0 : maxDecimals)
-    const formatter =
-      dataType === 'balance' ? numberFormatter : currencyFormatter
-    return formatter.format(tickValue)
   })
 
   return { min: finalMin, max: finalMax, ticks }

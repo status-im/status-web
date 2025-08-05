@@ -50,10 +50,13 @@ export function useValueChartData({
     return priceData.map(pricePoint => {
       const targetTime = new Date(pricePoint.date).getTime()
       const balance = findBalance(targetTime)
+      const value = balance * pricePoint.price
 
       return {
         date: pricePoint.date,
-        price: balance * pricePoint.price,
+        price: pricePoint.price,
+        balance: balance,
+        value: value,
       }
     })
   }, [activeDataType, priceData, balanceData])
