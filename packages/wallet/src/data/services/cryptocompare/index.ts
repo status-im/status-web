@@ -35,7 +35,7 @@ export async function legacy_fetchTokenPriceHistory(
     url.searchParams.set('fsym', symbol)
     url.searchParams.set('tsym', 'USD')
     url.searchParams.set('allData', 'true')
-    url.searchParams.set('tryConversion', 'true')
+    url.searchParams.set('tryConversion', 'false')
     url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
@@ -56,7 +56,7 @@ export async function legacy_fetchTokenPriceHistory(
     url.searchParams.set('tsym', 'USD')
     url.searchParams.set('toTs', to.toString())
     url.searchParams.set('limit', '2000')
-    url.searchParams.set('tryConversion', 'true')
+    url.searchParams.set('tryConversion', 'false')
     url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
@@ -185,7 +185,7 @@ export async function fetchTokensPriceForDate(
       url.searchParams.set('tsym', 'USD')
       url.searchParams.set('toTs', timestamp.toString())
       url.searchParams.set('limit', '1')
-      url.searchParams.set('tryConversion', 'true') // tries to convert to USD if specific market does not exist i.e. ETH <-> USD
+      url.searchParams.set('tryConversion', 'false')
       url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
       const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 15)

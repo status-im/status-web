@@ -27,8 +27,8 @@ const EmptyState = (props: Props) => {
   const content = match(variant)
     .with('activity', () => ({
       imageId: 'admin/empty/devices:241:240' as ImageId,
-      imageAlt: 'No activity',
-      title: 'No Activity',
+      imageAlt: 'No history',
+      title: 'No history',
       description: 'Transaction history will be visible on this page',
     }))
     .with('collectible', () => ({
@@ -41,7 +41,7 @@ const EmptyState = (props: Props) => {
       imageId: 'Portfolio/Empty States/No_Balance:750:232' as ImageId,
       imageAlt: 'No balance',
       title: 'No balance',
-      description: 'Hodl this asset to view your balance history here',
+      description: 'Hold this asset to view your balance history here',
     }))
     .with('price', () => ({
       imageId: 'Portfolio/Empty States/No_Balance:750:232' as ImageId,

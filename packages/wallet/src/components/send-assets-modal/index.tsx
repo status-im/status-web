@@ -13,6 +13,7 @@ import * as z from 'zod'
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { PasswordModal } from '../password-modal'
+import { TokenAmount } from '../token-amount'
 
 import type { NetworkType } from '../../data'
 import type { Account } from '../address'
@@ -197,7 +198,7 @@ const SendAssetsModal = (props: Props) => {
       setTransactionState('pending')
 
       if (pendingTransactionData) {
-        toast.positive('Transaction signed', {
+        toast.positive('Transaction signed and sent', {
           duration: 2000,
         })
 
@@ -211,7 +212,7 @@ const SendAssetsModal = (props: Props) => {
         setTransactionState('success')
 
         setTimeout(() => {
-          toast.positive('Transaction successful')
+          toast.positive('Transaction succeeded')
         }, 5000)
       }
     } catch (error) {
@@ -271,7 +272,7 @@ const SendAssetsModal = (props: Props) => {
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
                 </Dialog.Title>
-                <Dialog.Description className="hidden">
+                <Dialog.Description className="sr-only">
                   Send {asset.name} to another wallet
                 </Dialog.Description>
 
@@ -291,13 +292,13 @@ const SendAssetsModal = (props: Props) => {
               >
                 <div>
                   <div className="mb-2 mt-4">
-                    <Label htmlFor="to">To</Label>
                     <div className="relative mt-2">
                       <Controller
                         name="to"
                         control={control}
                         render={({ field }) => (
                           <Input
+                            label="To"
                             id="to"
                             {...field}
                             isInvalid={!!errors.to}
@@ -364,7 +365,7 @@ const SendAssetsModal = (props: Props) => {
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
                           $
-                          {watchedAmount
+                          {watchedAmount && balance !== 0
                             ? Number.parseFloat(watchedAmount || '0') *
                               (balanceEur / balance)
                             : '0'}
@@ -375,7 +376,8 @@ const SendAssetsModal = (props: Props) => {
                             hasInsufficientBalance && 'text-danger-50',
                           ])}
                         >
-                          {balance.toLocaleString()} {asset.symbol} /{' '}
+                          <TokenAmount value={balance} format="precise" />{' '}
+                          {asset.symbol} /{' '}
                           <CurrencyAmount
                             value={balanceEur}
                             format="standard"
@@ -394,15 +396,21 @@ const SendAssetsModal = (props: Props) => {
                     {watchedAmount && !hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 font-medium text-neutral-50">
                         Remaining ~{' '}
-                        {(
-                          balance - Number.parseFloat(watchedAmount || '0')
-                        ).toLocaleString()}{' '}
+                        <TokenAmount
+                          value={
+                            balance - Number.parseFloat(watchedAmount || '0')
+                          }
+                          format="precise"
+                        />{' '}
                         {asset.symbol} /{' '}
                         <CurrencyAmount
                           value={
-                            balanceEur -
-                            Number.parseFloat(watchedAmount || '0') *
-                              (balanceEur / balance)
+                            balance === 0
+                              ? 0
+                              : balanceEur -
+                                (Number.parseFloat(watchedAmount || '0') *
+                                  balanceEur) /
+                                  balance
                           }
                           format="standard"
                         />

@@ -166,21 +166,40 @@ export const formatChartValue = (
   })
 }
 
-export const formatSmallNumber = (value: number): string => {
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  notation: 'standard',
+  minimumSignificantDigits: 4,
+  maximumSignificantDigits: 4,
+  roundingPriority: 'morePrecision',
+})
+
+const numberFormatter = new Intl.NumberFormat('en-US', {
+  style: 'decimal',
+  notation: 'standard',
+  minimumFractionDigits: 4,
+  maximumFractionDigits: 4,
+  minimumSignificantDigits: 4,
+  maximumSignificantDigits: 4,
+  roundingPriority: 'morePrecision',
+})
+
+export const formatSmallNumber = (
+  value: number,
+  dataType: DataType = 'price',
+): string => {
   if (value === 0) return '0'
 
   // Use the same decimal precision logic as Y-axis ticks
-  const fractionalDigits = value.toString().split('.')[1]?.length || 0
-  const maxDecimals = Math.min(fractionalDigits, 4)
-
-  if (maxDecimals === 0) return Math.round(value).toString()
-  return value.toFixed(value === 0 ? 0 : maxDecimals)
+  const formatter = dataType === 'balance' ? numberFormatter : currencyFormatter
+  return formatter.format(value)
 }
 
 export const calculateChartRange = (
   data: Array<{ price: number }>,
   marginFactor = 0.1,
-  dataType?: DataType,
+  dataType: DataType = 'price',
 ) => {
   if (data.length === 0) return { min: 0, max: 1, ticks: [] }
 
@@ -198,14 +217,6 @@ export const calculateChartRange = (
   // Generate ticks
   const tickCount = 7
   const tickInterval = (finalMax - finalMin) / (tickCount - 1)
-  const maxDecimals = Math.min(
-    Math.max(
-      ...data.map(d =>
-        d.price % 1 !== 0 ? d.price.toString().split('.')[1]?.length || 0 : 0,
-      ),
-    ),
-    4,
-  )
 
   const ticks = Array.from({ length: tickCount }, (_, i) => {
     const tickValue = finalMin + i * tickInterval
@@ -215,8 +226,11 @@ export const calculateChartRange = (
       return formatChartValue(tickValue, dataType, 'USD')
     }
 
-    if (maxDecimals === 0) return Math.round(tickValue).toString()
-    return tickValue.toFixed(tickValue === 0 ? 0 : maxDecimals)
+    // if (maxDecimals === 0) return Math.round(tickValue).toString()
+    // return tickValue.toFixed(tickValue === 0 ? 0 : maxDecimals)
+    const formatter =
+      dataType === 'balance' ? numberFormatter : currencyFormatter
+    return formatter.format(tickValue)
   })
 
   return { min: finalMin, max: finalMax, ticks }
