@@ -53,7 +53,7 @@ const EmptyState = (props: Props) => {
       imageId: 'Portfolio/Empty States/No_Balance:750:232' as ImageId,
       imageAlt: 'No value',
       title: 'No value',
-      description: 'Portfolio value history will be visible on this page',
+      description: 'Hold this asset to view your value history here',
     }))
     .exhaustive()
 

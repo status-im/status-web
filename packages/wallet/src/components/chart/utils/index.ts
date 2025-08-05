@@ -149,6 +149,15 @@ export const formatChartValue = (
     })
   }
 
+  if (dataType === 'value') {
+    return value.toLocaleString('en-US', {
+      style: 'currency',
+      currency: currency || 'USD',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
+
   return value.toLocaleString('en-US', {
     style: 'currency',
     currency: currency || 'USD',
@@ -171,6 +180,7 @@ export const formatSmallNumber = (value: number): string => {
 export const calculateChartRange = (
   data: Array<{ price: number }>,
   marginFactor = 0.1,
+  dataType?: DataType,
 ) => {
   if (data.length === 0) return { min: 0, max: 1, ticks: [] }
 
@@ -199,6 +209,12 @@ export const calculateChartRange = (
 
   const ticks = Array.from({ length: tickCount }, (_, i) => {
     const tickValue = finalMin + i * tickInterval
+
+    // Use formatChartValue for specific data types, otherwise use generic formatting
+    if (dataType) {
+      return formatChartValue(tickValue, dataType, 'USD')
+    }
+
     if (maxDecimals === 0) return Math.round(tickValue).toString()
     return tickValue.toFixed(tickValue === 0 ? 0 : maxDecimals)
   })

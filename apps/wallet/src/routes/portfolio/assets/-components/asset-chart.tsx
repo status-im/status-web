@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import {
   Chart,
   ChartLoading,
@@ -8,6 +6,8 @@ import {
 } from '@status-im/wallet/components'
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from '@tanstack/react-router'
+
+import { useValueChartData } from '../../../../hooks/use-value-chart-data'
 
 import type {
   ChartDataType,
@@ -139,38 +139,11 @@ function AssetChart({
     gcTime: 60 * 60 * 1000, // 1 hour
   })
 
-  const valueChartData = useMemo(() => {
-    if (activeDataType !== 'value' || !priceChart.data || !balanceChart.data) {
-      return []
-    }
-
-    return priceChart.data.map(pricePoint => {
-      if (balanceChart.data.length === 0) {
-        return {
-          date: pricePoint.date,
-          price: 0,
-        }
-      }
-
-      const target = new Date(pricePoint.date).getTime()
-      let bestTime = -1
-      let balance = 0
-
-      for (const point of balanceChart.data) {
-        const pointTime = new Date(point.date).getTime()
-
-        if (pointTime <= target && pointTime > bestTime) {
-          balance = point.price
-          bestTime = pointTime
-        }
-      }
-
-      return {
-        date: pricePoint.date,
-        price: balance * pricePoint.price,
-      }
-    })
-  }, [activeDataType, priceChart.data, balanceChart.data])
+  const valueChartData = useValueChartData({
+    activeDataType,
+    priceData: priceChart.data,
+    balanceData: balanceChart.data,
+  })
 
   const isLoading =
     (activeDataType === 'price' && priceChart.isLoading) ||
