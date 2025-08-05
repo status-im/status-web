@@ -20,25 +20,19 @@ const ChartTooltip = ({
   tooltipData,
   opacityAnimation,
   tooltipAnimation,
-  currency,
   dataType = 'price',
 }: Props) => {
   const getFormattedValue = () => {
     switch (dataType) {
       case 'price':
-        return formatChartValue(tooltipData.price, 'price', currency)
+        return formatChartValue(tooltipData.price, 'price')
       case 'balance':
         return formatChartValue(
           tooltipData.balance ?? tooltipData.price,
           'balance',
-          currency,
         )
       case 'value':
-        return formatChartValue(
-          tooltipData.value ?? tooltipData.price,
-          'value',
-          currency,
-        )
+        return formatChartValue(tooltipData.value ?? tooltipData.price, 'value')
     }
   }
 
@@ -54,11 +48,11 @@ const ChartTooltip = ({
       >
         <div className="flex flex-col gap-1">
           <p className="text-19 font-semibold text-neutral-100">
-            {formatChartValue(tooltipData.value, 'value', currency)}
+            {formatChartValue(tooltipData.value, 'value')}
           </p>
           <div className="flex flex-col gap-1">
             <p className="text-13 font-medium text-neutral-50">
-              Price: {formatChartValue(tooltipData.price, 'price', currency)}
+              Price: {formatChartValue(tooltipData.price, 'price')}
             </p>
             <p className="text-13 font-medium text-neutral-50">
               Balance: {formatTokenAmount(tooltipData.balance, 'precise')}

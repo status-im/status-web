@@ -25,7 +25,6 @@ const Content = (props: Props) => {
     yScale,
     isPositive = true,
     dataType = 'price',
-    currency,
   } = props
 
   const colors = isPositive ? positiveColors : negativeColors
@@ -42,9 +41,8 @@ const Content = (props: Props) => {
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
   const formattedValue = dataType
-    ? formatChartValue(lastData.value, dataType, currency)
+    ? formatChartValue(lastData.value, dataType)
     : formatSmallNumber(lastData.value)
-  //const formattedValue = formatSmallNumber(lastData.value, dataType)
   const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
   const tagXOffset = Math.max(0, 20 - tagWidth / 2)
   const textX = tagXOffset + tagWidth / 2
