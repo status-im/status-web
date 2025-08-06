@@ -2,8 +2,8 @@
   "name": "wallet",
   "version": "0.0.0",
   "license": "MPL-2.0",
-  "private": true,
   "type": "module",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/status-im/status-web.git",
