@@ -45,10 +45,14 @@ pipeline {
   stages {
     stage('Check Changed Files') {
       when {
-        changeset(
-          pattern: "apps/${params.APP_NAME}/**",
-          comparator: "GLOB"
-        )
+        anyOf {
+          changeset "apps/${params.APP_NAME}/**"
+          changeset "packages/${params.APP_NAME}/**"
+          changeset "packages/components/**"
+          changeset "packages/icons/**"
+          changeset "packages/colors/**"
+          changeset "Jenkinsfile"
+        }
       }
       steps {
         script {
