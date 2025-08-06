@@ -25,4 +25,6 @@ export const ERROR_MESSAGES = {
   GAS_FEES_FETCH:
     'We couldn’t fetch gas fee. Please try again later or check your network connection.',
   ACTIVITIES: 'We couldn’t fetch your activities. Refresh or try again later.',
+  RECOVERY_PHRASE_BACKUP:
+    'Failed to mark recovery phrase as backed up. Please try again later.',
 }
