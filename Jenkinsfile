@@ -181,5 +181,3 @@ def getBuildDir(String appName) {
       error("Unknown app: ${appName}.")
   }
 }
-
-
