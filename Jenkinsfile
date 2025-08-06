@@ -43,23 +43,16 @@ pipeline {
   }
 
   stages {
-    stage('Check Changed Files') {
-      when {
-        anyOf {
-          changeset "apps/${params.APP_NAME}/**"
-          changeset "packages/${params.APP_NAME}/**"
-          changeset "packages/components/**"
-          changeset "packages/icons/**"
-          changeset "packages/colors/**"
-          changeset "Jenkinsfile"
+          stage('Check Changed Files') {
+        when {
+          getChangesetConditions(params.APP_NAME)
+        }
+        steps {
+          script {
+            changesDetected = true
+          }
         }
       }
-      steps {
-        script {
-          changesDetected = true
-        }
-      }
-    }
 
     stage('Install') {
       when { expression { changesDetected || params.FORCE_BUILD } }
@@ -162,5 +155,65 @@ def getBuildDir(String appName) {
       return '.output/chrome-mv3'
     default:
       error("Unknown app: ${appName}.")
+  }
+}
+
+def getChangesetConditions(String appName) {
+  if (appName == 'connector') {
+    return {
+      anyOf {
+        changeset(
+          pattern: "Jenkinsfile",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "apps/connector/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/colors/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/eslint-config/**",
+          comparator: "GLOB"
+        )
+      }
+    }
+  } else if (appName == 'wallet') {
+    return {
+      anyOf {
+        changeset(
+          pattern: "Jenkinsfile",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "apps/wallet/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/colors/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/eslint-config/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/components/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/icons/**",
+          comparator: "GLOB"
+        )
+        changeset(
+          pattern: "packages/wallet/**",
+          comparator: "GLOB"
+        )
+      }
+    }
+  } else {
+    error("Unsupported app: ${appName}. Only 'connector' and 'wallet' are supported.")
   }
 }
