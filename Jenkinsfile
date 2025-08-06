@@ -46,22 +46,10 @@ pipeline {
           stage('Check Connector Dependencies') {
         when {
           anyOf {
-            changeset(
-              pattern: "Jenkinsfile",
-              comparator: "GLOB"
-            )
-            changeset(
-              pattern: "apps/${params.APP_NAME}/**",
-              comparator: "GLOB"
-            )
-            changeset(
-              pattern: "packages/colors/**",
-              comparator: "GLOB"
-            )
-            changeset(
-              pattern: "packages/eslint-config/**",
-              comparator: "GLOB"
-            )
+            changeset "Jenkinsfile"
+            changeset "apps/${params.APP_NAME}/**"
+            changeset "packages/colors/**"
+            changeset "packages/eslint-config/**"
           }
         }
         steps {
@@ -76,26 +64,11 @@ pipeline {
           allOf {
             expression { params.APP_NAME == 'wallet' }
             anyOf {
-              changeset(
-                pattern: "packages/colors/**",
-                comparator: "GLOB"
-              )
-              changeset(
-                pattern: "packages/eslint-config/**",
-                comparator: "GLOB"
-              )
-              changeset(
-                pattern: "packages/components/**",
-                comparator: "GLOB"
-              )
-              changeset(
-                pattern: "packages/icons/**",
-                comparator: "GLOB"
-              )
-              changeset(
-                pattern: "packages/wallet/**",
-                comparator: "GLOB"
-              )
+              changeset "packages/colors/**"
+              changeset "packages/eslint-config/**"
+              changeset "packages/components/**"
+              changeset "packages/icons/**"
+              changeset "packages/wallet/**"
             }
           }
         }
