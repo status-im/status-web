@@ -43,9 +43,61 @@ pipeline {
   }
 
   stages {
-          stage('Check Changed Files') {
+          stage('Check Connector Dependencies') {
         when {
-          getChangesetConditions(params.APP_NAME)
+          anyOf {
+            changeset(
+              pattern: "Jenkinsfile",
+              comparator: "GLOB"
+            )
+            changeset(
+              pattern: "apps/${params.APP_NAME}/**",
+              comparator: "GLOB"
+            )
+            changeset(
+              pattern: "packages/colors/**",
+              comparator: "GLOB"
+            )
+            changeset(
+              pattern: "packages/eslint-config/**",
+              comparator: "GLOB"
+            )
+          }
+        }
+        steps {
+          script {
+            changesDetected = true
+          }
+        }
+      }
+      
+      stage('Check Wallet Dependencies') {
+        when {
+          allOf {
+            expression { params.APP_NAME == 'wallet' }
+            anyOf {
+              changeset(
+                pattern: "packages/colors/**",
+                comparator: "GLOB"
+              )
+              changeset(
+                pattern: "packages/eslint-config/**",
+                comparator: "GLOB"
+              )
+              changeset(
+                pattern: "packages/components/**",
+                comparator: "GLOB"
+              )
+              changeset(
+                pattern: "packages/icons/**",
+                comparator: "GLOB"
+              )
+              changeset(
+                pattern: "packages/wallet/**",
+                comparator: "GLOB"
+              )
+            }
+          }
         }
         steps {
           script {
@@ -158,62 +210,4 @@ def getBuildDir(String appName) {
   }
 }
 
-def getChangesetConditions(String appName) {
-  if (appName == 'connector') {
-    return {
-      anyOf {
-        changeset(
-          pattern: "Jenkinsfile",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "apps/connector/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/colors/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/eslint-config/**",
-          comparator: "GLOB"
-        )
-      }
-    }
-  } else if (appName == 'wallet') {
-    return {
-      anyOf {
-        changeset(
-          pattern: "Jenkinsfile",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "apps/wallet/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/colors/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/eslint-config/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/components/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/icons/**",
-          comparator: "GLOB"
-        )
-        changeset(
-          pattern: "packages/wallet/**",
-          comparator: "GLOB"
-        )
-      }
-    }
-  } else {
-    error("Unsupported app: ${appName}. Only 'connector' and 'wallet' are supported.")
-  }
-}
+
