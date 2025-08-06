@@ -43,33 +43,23 @@ pipeline {
   }
 
   stages {
-          stage('Check Connector Dependencies') {
+          stage('Check Changed Files') {
         when {
           anyOf {
             changeset "Jenkinsfile"
             changeset "apps/${params.APP_NAME}/**"
-            changeset "packages/colors/**"
-            changeset "packages/eslint-config/**"
-          }
-        }
-        steps {
-          script {
-            changesDetected = true
-          }
-        }
-      }
-      
-      stage('Check Wallet Dependencies') {
-        when {
-          allOf {
-            expression { params.APP_NAME == 'wallet' }
-            anyOf {
-              changeset "packages/colors/**"
+            expression { params.APP_NAME == 'connector' && (
+              changeset "packages/colors/**" ||
               changeset "packages/eslint-config/**"
-              changeset "packages/components/**"
-              changeset "packages/icons/**"
+            )}
+            expression { params.APP_NAME == 'wallet' && (
+              changeset "packages/colors/**" ||
+              changeset "packages/eslint-config/**" ||
+              changeset "packages/components/**" ||
+              changeset "packages/icons/**" ||
+              changeset "packages/wallet/**" ||
               changeset "packages/wallet/**"
-            }
+            )}
           }
         }
         steps {
