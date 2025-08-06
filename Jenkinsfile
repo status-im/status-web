@@ -43,7 +43,7 @@ pipeline {
   }
 
   stages {
-    stage('Check Connector Dependencies') {
+    stage('Check Connector Changes') {
       when {
         anyOf {
           changeset "Jenkinsfile"
@@ -59,7 +59,7 @@ pipeline {
       }
     }
       
-    stage('Check Wallet Dependencies') {
+    stage('Check Wallet Changes') {
       when {
         anyOf {
           changeset "Jenkinsfile"
