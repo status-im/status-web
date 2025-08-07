@@ -30,8 +30,7 @@ function RecoveryPhraseConfirmation({ onConfirm }: Props) {
             />
           </div>
           I've backed up my recovery phrase and understand that clicking “Finish
-          Backup” will completely and permanently delete it from this wallet
-          interface.
+          Backup” will hide it from this wallet interface.
         </label>
       </div>
       <Button variant="primary" disabled={!isChecked} onClick={handleConfirm}>
