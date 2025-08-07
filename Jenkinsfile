@@ -43,12 +43,33 @@ pipeline {
   }
 
   stages {
-    stage('Check Changed Files') {
+    stage('Check Connector Changes') {
       when {
-        changeset(
-          pattern: "apps/${params.APP_NAME}/**",
-          comparator: "GLOB"
-        )
+        anyOf {
+          changeset "Jenkinsfile"
+          changeset "apps/${params.APP_NAME}/**"
+          changeset "packages/colors/**"
+          changeset "packages/eslint-config/**"
+      }
+      }
+      steps {
+        script {
+          changesDetected = true
+        }
+      }
+    }
+      
+    stage('Check Wallet Changes') {
+      when {
+        anyOf {
+          changeset "Jenkinsfile"
+          changeset "apps/${params.APP_NAME}/**"
+          changeset "packages/colors/**"
+          changeset "packages/eslint-config/**"
+          changeset "packages/components/**"
+          changeset "packages/icons/**"
+          changeset "packages/wallet/**"
+      }
       }
       steps {
         script {
