@@ -489,7 +489,12 @@ const SendAssetsModal = (props: Props) => {
                         <p className="w-full flex-1">
                           Not enough ETH to pay gas fees
                         </p>
-                        <Button variant="danger" size="24" className="ml-2">
+                        <Button
+                          variant="danger"
+                          size="24"
+                          className="ml-2"
+                          href={`https://exchange.mercuryo.io/?type=buy&network=${asset.network}&currency=${asset.symbol}&address=${account.address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`}
+                        >
                           Add ETH
                         </Button>
                       </div>
