@@ -6,11 +6,11 @@ import { useTooltip } from '@visx/tooltip'
 import { extent } from 'd3-array'
 import { timeFormat } from 'd3-time-format'
 
-import type { ChartDataPoint as PriceType } from '../utils'
+import type { ChartDataPoint } from '../utils'
 import type { EventType } from '@visx/event/lib/types'
 
 type Props = {
-  data: PriceType[]
+  data: ChartDataPoint[]
   dates: Date[]
   innerWidth: number
   currency?: string
@@ -22,16 +22,12 @@ type Props = {
   }
 }
 
-type TooltipData = {
-  date: string
-  price: number
+type TooltipData = ChartDataPoint & {
   formattedDate: string
 }
 
 // Eg. 'Jan 17th, 2024 - 14:45 '
 const formatDate = timeFormat('%b %d, %Y - %H:%M')
-
-const getPrice = (d: PriceType) => d.price
 
 const useTokenChartTooltip = (props: Props) => {
   const { data, margin, dates, innerWidth } = props
@@ -42,13 +38,15 @@ const useTokenChartTooltip = (props: Props) => {
       tooltipData: {
         date: '',
         price: 0,
+        balance: 0,
+        value: 0,
         formattedDate: '',
       },
     })
 
   const filteredDates = dates.filter(Boolean) // filters out undefined values
 
-  const getDate = useCallback((d: PriceType) => new Date(d?.date), [])
+  const getDate = useCallback((d: ChartDataPoint) => new Date(d?.date), [])
 
   const xDomain = extent(filteredDates) as [Date, Date]
   const xScale = scaleTime({
@@ -74,13 +72,11 @@ const useTokenChartTooltip = (props: Props) => {
       }
 
       const d = data[closestIndex]
-      const price = getPrice(d)
 
       showTooltip({
         tooltipData: {
-          date: d?.date,
+          ...d,
           formattedDate: formatDate(getDate(d)),
-          price,
         },
       })
     },

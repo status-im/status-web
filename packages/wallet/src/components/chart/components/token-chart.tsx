@@ -6,7 +6,7 @@ import { scaleLinear, scaleTime } from '@visx/scale'
 import { extent } from 'd3-array'
 
 import { useTokenChartTooltip } from '../hooks/use-token-chart-tooltip'
-import { calculateChartRange } from '../utils'
+import { calculateChartRange, getChartValue } from '../utils'
 import { Content } from './content'
 import { Marker } from './marker'
 import { ChartTooltip } from './tooltip'
@@ -27,7 +27,7 @@ const TokenChart = ({
   data,
   currency,
   width,
-  dataType,
+  dataType = 'price',
   timeFrame,
   emptyState,
 }: TokenChartProps) => {
@@ -61,14 +61,20 @@ const TokenChart = ({
   })
 
   const priceData = useMemo(
-    () => sortedData.map(d => ({ date: new Date(d.date), value: d.price })),
-    [sortedData],
+    () =>
+      sortedData.map(d => ({
+        date: new Date(d.date),
+        value: getChartValue(d, dataType),
+      })),
+    [sortedData, dataType],
   )
 
   const isPositive = useMemo(() => {
     if (dataType === 'balance') return true
     if (sortedData.length === 0) return true
-    return sortedData[sortedData.length - 1].price >= sortedData[0].price
+    const lastValue = getChartValue(sortedData[sortedData.length - 1], dataType)
+    const firstValue = getChartValue(sortedData[0], dataType)
+    return lastValue >= firstValue
   }, [sortedData, dataType])
 
   const { tooltipData, updateTooltip, hideTooltip, tooltipOpen } =
@@ -81,7 +87,7 @@ const TokenChart = ({
 
   const circleSpring = useSpring({
     x: xScale(new Date(tooltipData?.date)),
-    y: yScale(tooltipData?.price),
+    y: yScale(tooltipData ? getChartValue(tooltipData, dataType) : 0),
     config: config.gentle,
   })
 
@@ -93,7 +99,7 @@ const TokenChart = ({
 
   const tooltipAnimation = useSpring({
     x: xScale(new Date(tooltipData?.date)),
-    y: yScale(tooltipData?.price),
+    y: yScale(tooltipData ? getChartValue(tooltipData, dataType) : 0),
     config: config.gentle,
   })
 
@@ -119,6 +125,7 @@ const TokenChart = ({
               yScale={yScale}
               isPositive={isPositive}
               dataType={dataType}
+              currency={currency}
             />
 
             {tooltipOpen && (

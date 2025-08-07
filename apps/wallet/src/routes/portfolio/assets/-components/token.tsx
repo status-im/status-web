@@ -606,6 +606,9 @@ const Token = (props: Props) => {
                 <SegmentedControl.Item value="balance">
                   Balance
                 </SegmentedControl.Item>
+                <SegmentedControl.Item value="value">
+                  Value
+                </SegmentedControl.Item>
               </SegmentedControl.Root>
             </div>
             <div className="inline-flex">
