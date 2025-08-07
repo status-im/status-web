@@ -55,7 +55,7 @@ export function RecoveryPhraseBackup() {
     await markAsBackedUp()
     setMnemonic(null)
     toast.positive(
-      'Your recovery phrase has been deleted from the wallet interface.',
+      'Your recovery phrase has been hidden from this wallet interface.',
       { duration: 3000 },
     )
   }
