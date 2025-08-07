@@ -6,6 +6,7 @@ import { CreatePasswordForm } from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { useCreateWallet } from '../../hooks/use-create-wallet'
+import { useRecoveryPhraseBackup } from '../../hooks/use-recovery-phrase-backup'
 
 import type { CreatePasswordFormValues } from '@status-im/wallet/components'
 import type { SubmitHandler } from 'react-hook-form'
