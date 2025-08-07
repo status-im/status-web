@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import { useInfiniteLoading } from '../../hooks/use-infinite-loading'
 import { ActivityItem } from './components/activity-item'
 
@@ -13,11 +15,27 @@ export type ActivityListProps = {
   onLoadMore: () => void
   hasNextPage: boolean
   isLoadingMore: boolean
+  pendingTransactions?: (Activity & { status: 'pending' })[]
+}
+
+const sortActivitiesByTime = (activities: Activity[]) => {
+  return activities.sort(
+    (a, b) =>
+      new Date(b.metadata.blockTimestamp).getTime() -
+      new Date(a.metadata.blockTimestamp).getTime(),
+  )
 }
 
 const ActivityList = (props: ActivityListProps) => {
-  const { activities, userAddress, onLoadMore, hasNextPage, isLoadingMore } =
-    props
+  const {
+    activities,
+    userAddress,
+    onLoadMore,
+    hasNextPage,
+    isLoadingMore,
+    pendingTransactions = [],
+  } = props
+  const [allActivities, setAllActivities] = useState<Activity[]>([])
 
   const { endOfPageRef, isLoading } = useInfiniteLoading({
     rootMargin: '200px',
@@ -26,11 +44,16 @@ const ActivityList = (props: ActivityListProps) => {
     hasNextPage: hasNextPage,
   })
 
+  useEffect(() => {
+    const combined = [...pendingTransactions, ...activities]
+    setAllActivities(sortActivitiesByTime(combined))
+  }, [activities, pendingTransactions])
+
   return (
     <div className="pb-10">
       <div className="flex min-h-[calc(100svh-362px)] w-full overflow-auto">
         <div className="w-full">
-          {activities.map(activity => {
+          {allActivities.map(activity => {
             return (
               <ActivityItem
                 key={activity.uniqueId}
@@ -46,7 +69,7 @@ const ActivityList = (props: ActivityListProps) => {
             >
               {isLoading ? (
                 <div className="text-13 font-400 text-neutral-50">
-                  Loading more activities...
+                  Loading more history...
                 </div>
               ) : (
                 <div className="h-1" />
@@ -56,7 +79,7 @@ const ActivityList = (props: ActivityListProps) => {
 
           {!hasNextPage && activities.length > 0 && (
             <div className="py-8 text-center text-13 font-400 text-neutral-40">
-              No more activities to load
+              No more history to load
             </div>
           )}
         </div>

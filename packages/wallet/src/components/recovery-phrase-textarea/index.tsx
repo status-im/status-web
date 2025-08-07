@@ -14,12 +14,20 @@ function RecoveryPhraseTextarea(props: Props) {
   const { field, fieldState } = useController(props)
   const invalid = fieldState.invalid
 
+  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const pastedText = event.clipboardData.getData('text')
+    const trimmedText = pastedText.trim()
+    field.onChange(trimmedText)
+  }
+
   return (
     <Textarea
       {...field}
       placeholder={placeholder}
       data-invalid={invalid}
       aria-label={label}
+      onPaste={handlePaste}
     />
   )
 }

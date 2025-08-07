@@ -181,6 +181,7 @@ export async function fetchTokenBalanceHistory(
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
   contract?: string,
   currentTime?: number,
+  decimals: number = 18,
 ) {
   const transfers: TokenBalanceHistoryResponseBody['result']['transfers'] = []
 
@@ -280,10 +281,6 @@ export async function fetchTokenBalanceHistory(
       ) === index,
   )
 
-  const now = Math.floor(Date.now() / (1000 * 3600)) * 3600
-  const hoursInPeriod = Number(days) * 24
-  const requestedStartTime = now - (hoursInPeriod - 1) * 3600
-
   if (uniqueTransfers.length === 0) {
     return []
   }
@@ -294,11 +291,36 @@ export async function fetchTokenBalanceHistory(
     ),
   )
 
-  const timestamps = Array.from(
-    { length: hoursInPeriod },
-    (_, i) => requestedStartTime + i * 3600,
-  )
-  timestamps.push(currentTime || Date.now() / 1000)
+  const now = Math.floor(Date.now() / 1000)
+
+  const requestedDays = days === 'all' ? 3650 : Number(days)
+  const effectiveDays = requestedDays
+
+  let intervalSeconds: number
+  if (requestedDays <= 1) {
+    intervalSeconds = 3600
+  } else if (requestedDays <= 7) {
+    intervalSeconds = 3600
+  } else if (requestedDays <= 30) {
+    intervalSeconds = 4 * 3600
+  } else if (requestedDays <= 90) {
+    intervalSeconds = 12 * 3600
+  } else if (requestedDays <= 365) {
+    intervalSeconds = 24 * 3600
+  } else {
+    intervalSeconds = 7 * 24 * 3600
+  }
+
+  const requestedStartTime = now - effectiveDays * 24 * 3600
+  const timestamps: number[] = []
+
+  for (let time = requestedStartTime; time <= now; time += intervalSeconds) {
+    timestamps.push(time)
+  }
+
+  if (timestamps[timestamps.length - 1] !== now) {
+    timestamps.push(currentTime || now)
+  }
 
   timestamps.reverse()
 
@@ -310,8 +332,7 @@ export async function fetchTokenBalanceHistory(
     balance = await getNativeTokenBalance(address, network)
   }
 
-  // fixme: use token's decimals
-  const latestBalance = Number(balance) / 1e18
+  const latestBalance = Number(balance) / Math.pow(10, decimals)
 
   let currentBalance = latestBalance
   let transferIndex = 0
@@ -850,36 +871,45 @@ export async function getFeeRate(
     from: string
     to: string
     value: string
+    data?: string
   },
 ) {
   const url = new URL(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
 
+  const gasParams: Record<string, string> = {
+    from: params.from,
+    to: params.to,
+    value: params.value,
+  }
+
+  if (params['data']) gasParams['data'] = params['data']
+
   let gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData
 
   try {
     ;[gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData] =
       await Promise.all([
-        _fetch<GasEstimateResponseBody>(url, 'POST', 3600, {
+        _fetch<GasEstimateResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 1,
           method: 'eth_estimateGas',
-          params: [params],
+          params: [gasParams],
         }),
-        _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 3600, {
+        _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 2,
           method: 'eth_maxPriorityFeePerGas',
           params: [],
         }),
-        _fetch<BlockResponseBody>(url, 'POST', 3600, {
+        _fetch<BlockResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 3,
           method: 'eth_getBlockByNumber',
           params: ['latest', false],
         }),
-        _fetch<FeeHistoryResponseBody>(url, 'POST', 3600, {
+        _fetch<FeeHistoryResponseBody>(url, 'POST', 0, {
           jsonrpc: '2.0',
           id: 4,
           method: 'eth_feeHistory',
@@ -912,9 +942,9 @@ export async function getFeeRate(
   })
 
   const ethPrice =
-    typeof ethPriceData?.eur === 'number'
-      ? ethPriceData.eur
-      : parseFloat(ethPriceData?.eur) || 0
+    typeof ethPriceData?.usd === 'number'
+      ? ethPriceData.usd
+      : parseFloat(ethPriceData?.usd) || 0
 
   const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
   const feeEur = ethPrice > 0 ? feeEth * ethPrice : 0
@@ -925,9 +955,9 @@ export async function getFeeRate(
     feeEth,
     confirmationTime,
     txParams: {
-      gasLimit: gasLimitHex,
+      gasLimit: `0x${gasLimit.toString(16)}`,
       maxFeePerGas: `0x${maxFeePerGas.toString(16)}`,
-      maxPriorityFeePerGas: priorityFeeHex,
+      maxPriorityFeePerGas: `0x${priorityFee.toString(16)}`,
     },
   }
 }
@@ -1000,8 +1030,11 @@ async function _fetch<T extends ResponseBody>(
     },
   })
 
+  // throw new Error('limited', { cause: 429 })
+
   if (!response.ok) {
     console.error(response.statusText)
+    // todo: https://trpc.io/docs/v10/server/error-handling#throwing-errors for passing original error as `cause`
     throw new Error('Failed to fetch.', { cause: response.status })
   }
 

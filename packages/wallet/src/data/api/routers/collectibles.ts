@@ -164,7 +164,7 @@ async function collectible(
   const nft = await getNFTMetadata(contract, tokenId, network)
 
   // todo: replace floor price provider https://github.com/status-im/status-website/issues/1547
-  const currency = 'EUR'
+  const currency = 'USD'
   let price: number | undefined
   let floorPrice: number | undefined
   if (network === 'ethereum') {

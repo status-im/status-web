@@ -1,11 +1,9 @@
-import { useTransition } from 'react'
+import { useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { ArrowLeftIcon } from '@status-im/icons/20'
 import { CreatePasswordForm } from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
-
-import { useWallet } from '@/providers/wallet-context'
 
 import { useCreateWallet } from '../../hooks/use-create-wallet'
 
@@ -18,20 +16,18 @@ export const Route = createFileRoute('/onboarding/new')({
 
 function RouteComponent() {
   const { createWalletAsync } = useCreateWallet()
-  const { setMnemonic } = useWallet()
   const navigate = useNavigate()
-  const [isPending, startTransition] = useTransition()
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
+    setIsLoading(true)
     try {
-      const mnemonic = await createWalletAsync(data.password)
-
-      startTransition(() => {
-        setMnemonic(mnemonic)
-        navigate({ to: '/portfolio/assets' })
-      })
+      await createWalletAsync(data.password)
+      navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -53,7 +49,7 @@ function RouteComponent() {
           only on your device. Status can't recover it.
         </div>
 
-        <CreatePasswordForm onSubmit={handleSubmit} loading={isPending} />
+        <CreatePasswordForm onSubmit={handleSubmit} loading={isLoading} />
       </div>
     </div>
   )

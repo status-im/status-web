@@ -56,7 +56,7 @@ const PasswordModal = (props: PasswordModalProps) => {
       if (error instanceof Error) {
         if (error.message === 'Invalid password') {
           setError('password', {
-            message: 'Password is incorrect. Try again or learn more.',
+            message: 'Password is incorrect. Try again.',
           })
         } else {
           setError('password', {

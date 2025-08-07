@@ -33,11 +33,11 @@ Google Chrome > Window > Extensions > Load unpacked > select build (.output/chro
 
 #### Visit
 
-Google Chrome > Extensions > Status Portfolio Wallet > Inspect views > service worker
+Google Chrome > Extensions > !Status Portfolio Wallet (Beta) > Inspect views > service worker
 
-Google Chrome > Toolbar > Extensions > Status Portfolio Wallet
+Google Chrome > Toolbar > Extensions > !Status Portfolio Wallet (Beta)
 
-Google Chrome > Toolbar > Extensions > Status Portfolio Wallet > Open side panel
+Google Chrome > Toolbar > Extensions > !Status Portfolio Wallet (Beta) > Open side panel
 
 chrome-extension://\[ID]/page.html#/portfolio
 

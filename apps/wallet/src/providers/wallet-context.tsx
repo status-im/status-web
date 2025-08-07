@@ -1,8 +1,15 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
-// import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
+import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
 import { apiClient } from './api-client'
 
 import type { KeyStore } from '@trustwallet/wallet-core'
@@ -15,8 +22,6 @@ type WalletContext = {
   isLoading: boolean
   hasWallets: boolean
   setCurrentWallet: (id: Wallet['id']) => void
-  setMnemonic: (mnemonic: string | null) => void
-  mnemonic: string | null
 }
 
 const WalletContext = createContext<WalletContext | undefined>(undefined)
@@ -31,16 +36,12 @@ export function useWallet() {
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null)
-  const [mnemonic, setMnemonic] = useState<string | null>(null)
 
   const { data: wallets = [], isLoading } = useQuery({
     queryKey: ['wallets'],
     queryFn: () => apiClient.wallet.all.query(),
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
   const hasWallets = wallets.length > 0
@@ -64,12 +65,20 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [hasWallets, selectedWalletId, wallets])
 
-  const setCurrentWallet = (id: string) => {
-    setSelectedWalletId(id)
-  }
+  const setCurrentWallet = useCallback(
+    (id: string) => {
+      const walletExists = wallets.some(w => w.id === id)
+      if (walletExists) {
+        setSelectedWalletId(id)
+      } else {
+        console.error(`Wallet with id ${id} not found`)
+      }
+    },
+    [wallets],
+  )
 
   // Auto-refresh
-  // useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
+  useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
 
   const contextValue: WalletContext = {
     currentWallet,
@@ -77,8 +86,6 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     hasWallets,
     setCurrentWallet,
-    setMnemonic,
-    mnemonic,
   }
 
   return (
