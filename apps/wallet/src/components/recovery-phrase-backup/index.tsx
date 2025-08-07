@@ -17,7 +17,7 @@ import { useRecoveryPhraseBackup } from '../../hooks/use-recovery-phrase-backup'
 export function RecoveryPhraseBackup() {
   const { currentWallet } = useWallet()
   const {
-    isRecoveryPhraseBackedUp,
+    needsBackup,
     showRecoveryDialog,
     setShowRecoveryDialog,
     markAsBackedUp,
@@ -60,7 +60,7 @@ export function RecoveryPhraseBackup() {
     )
   }
 
-  if (isRecoveryPhraseBackedUp) {
+  if (!needsBackup) {
     return null
   }
 

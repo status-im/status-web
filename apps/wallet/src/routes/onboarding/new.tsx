@@ -18,11 +18,13 @@ function RouteComponent() {
   const { createWalletAsync } = useCreateWallet()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
+  const { markAsNeedsBackup } = useRecoveryPhraseBackup()
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
     setIsLoading(true)
     try {
       await createWalletAsync(data.password)
+      await markAsNeedsBackup()
       navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)

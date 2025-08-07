@@ -5,14 +5,13 @@ import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 
 export const useRecoveryPhraseBackup = () => {
   const toast = useToast()
-  const [isRecoveryPhraseBackedUp, setIsRecoveryPhraseBackedUp] =
-    useState<boolean>(true)
+  const [needsBackup, setNeedsBackup] = useState<boolean>(false)
   const [showRecoveryDialog, setShowRecoveryDialog] = useState<boolean>(false)
 
   const markAsBackedUp = async () => {
     try {
-      await chrome.storage.local.set({ 'recovery-phrase:backed-up': true })
-      setIsRecoveryPhraseBackedUp(true)
+      await chrome.storage.local.remove(['recovery-phrase:needs-backup'])
+      setNeedsBackup(false)
     } catch (error) {
       console.error('Failed to mark recovery phrase as backed up', error)
       toast.negative(ERROR_MESSAGES.RECOVERY_PHRASE_BACKUP, {
@@ -21,19 +20,28 @@ export const useRecoveryPhraseBackup = () => {
     }
   }
 
+  const markAsNeedsBackup = async () => {
+    try {
+      await chrome.storage.local.set({ 'recovery-phrase:needs-backup': true })
+      setNeedsBackup(true)
+    } catch (error) {
+      console.error('Failed to mark recovery phrase as needing backup', error)
+    }
+  }
+
   useEffect(() => {
     async function checkSettings() {
       try {
-        const { 'recovery-phrase:backed-up': recoveryPhraseBackedUp } =
-          await chrome.storage.local.get(['recovery-phrase:backed-up'])
-        if (recoveryPhraseBackedUp) {
-          setIsRecoveryPhraseBackedUp(true)
+        const { 'recovery-phrase:needs-backup': needsBackup } =
+          await chrome.storage.local.get(['recovery-phrase:needs-backup'])
+        if (needsBackup) {
+          setNeedsBackup(true)
           return
         }
-        setIsRecoveryPhraseBackedUp(false)
+        setNeedsBackup(false)
       } catch (error) {
         console.error('Failed to get recovery phrase backup status', error)
-        setIsRecoveryPhraseBackedUp(false)
+        setNeedsBackup(false)
       }
     }
 
@@ -41,8 +49,9 @@ export const useRecoveryPhraseBackup = () => {
   }, [])
 
   return {
-    isRecoveryPhraseBackedUp,
+    needsBackup,
     markAsBackedUp,
+    markAsNeedsBackup,
     showRecoveryDialog,
     setShowRecoveryDialog,
   }
