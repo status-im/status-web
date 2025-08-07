@@ -6,7 +6,6 @@ import { CreatePasswordForm } from '@status-im/wallet/components'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 import { useCreateWallet } from '../../hooks/use-create-wallet'
-import { useRecoveryPhraseBackup } from '../../hooks/use-recovery-phrase-backup'
 
 import type { CreatePasswordFormValues } from '@status-im/wallet/components'
 import type { SubmitHandler } from 'react-hook-form'
@@ -19,13 +18,11 @@ function RouteComponent() {
   const { createWalletAsync } = useCreateWallet()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
-  const { markAsNeedsBackup } = useRecoveryPhraseBackup()
 
   const handleSubmit: SubmitHandler<CreatePasswordFormValues> = async data => {
     setIsLoading(true)
     try {
       await createWalletAsync(data.password)
-      await markAsNeedsBackup()
       navigate({ to: '/portfolio/assets' })
     } catch (error) {
       console.error(error)
