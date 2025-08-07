@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { Button, useToast } from '@status-im/components'
 import {
   ArrowLeftIcon,
