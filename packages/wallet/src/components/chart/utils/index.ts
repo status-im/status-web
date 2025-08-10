@@ -1,4 +1,5 @@
 import { differenceInCalendarMonths } from 'date-fns'
+import { match } from 'ts-pattern'
 
 export const TIME_FRAMES = ['24H', '7D', '1M', '3M', '1Y', 'All'] as const
 export type TimeFrame = (typeof TIME_FRAMES)[number]
@@ -140,7 +141,26 @@ export const checkDateOutput = (
   return 'bullet'
 }
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+const priceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  notation: 'standard',
+  currency: 'USD',
+  minimumSignificantDigits: 4,
+  maximumSignificantDigits: 4,
+  roundingPriority: 'morePrecision',
+})
+
+const balanceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'decimal',
+  notation: 'standard',
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+  minimumSignificantDigits: 1,
+  maximumSignificantDigits: 4,
+  roundingPriority: 'morePrecision',
+})
+
+const valueFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   notation: 'standard',
@@ -148,71 +168,23 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 })
 
-const preciseTokenFormatter = new Intl.NumberFormat('en-US', {
-  style: 'decimal',
-  notation: 'standard',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 4,
-  minimumSignificantDigits: 1,
-  maximumSignificantDigits: 4,
-})
-
 export const formatChartValue = (value: number, dataType: DataType): string => {
-  switch (dataType) {
-    case 'balance':
-      return preciseTokenFormatter.format(value)
-
-    case 'price':
-    case 'value':
-      return currencyFormatter.format(value)
-
-    default:
-      return currencyFormatter.format(value)
-  }
-}
-
-const smallCurrencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  notation: 'standard',
-  minimumSignificantDigits: 4,
-  maximumSignificantDigits: 4,
-  roundingPriority: 'morePrecision',
-})
-
-const smallNumberFormatter = new Intl.NumberFormat('en-US', {
-  style: 'decimal',
-  notation: 'standard',
-  minimumFractionDigits: 4,
-  maximumFractionDigits: 4,
-  minimumSignificantDigits: 4,
-  maximumSignificantDigits: 4,
-  roundingPriority: 'morePrecision',
-})
-
-export const formatSmallNumber = (
-  value: number,
-  dataType: DataType = 'price',
-): string => {
-  if (value === 0) return '0'
-
-  const formatter =
-    dataType === 'balance' ? smallNumberFormatter : smallCurrencyFormatter
-  return formatter.format(value)
+  return match(dataType)
+    .with('balance', () => balanceFormatter.format(value))
+    .with('price', () => priceFormatter.format(value))
+    .with('value', () => valueFormatter.format(value))
+    .exhaustive()
 }
 
 export const getChartValue = (
   point: ChartDataPoint,
   dataType: DataType,
 ): number => {
-  switch (dataType) {
-    case 'price':
-      return point.price
-    case 'balance':
-      return point.balance ?? point.price
-    case 'value':
-      return point.value ?? point.price
-  }
+  return match(dataType)
+    .with('price', () => point.price)
+    .with('balance', () => point.balance ?? point.price)
+    .with('value', () => point.value ?? point.price)
+    .exhaustive()
 }
 
 export const createChartDataPoint = (
@@ -221,19 +193,16 @@ export const createChartDataPoint = (
   dataType: DataType,
   additionalData?: { price?: number; balance?: number },
 ): ChartDataPoint => {
-  switch (dataType) {
-    case 'price':
-      return { date, price: value }
-    case 'balance':
-      return { date, price: value, balance: value }
-    case 'value':
-      return {
-        date,
-        price: additionalData?.price ?? 0,
-        balance: additionalData?.balance ?? 0,
-        value,
-      }
-  }
+  return match(dataType)
+    .with('price', () => ({ date, price: value }))
+    .with('balance', () => ({ date, price: value, balance: value }))
+    .with('value', () => ({
+      date,
+      price: additionalData?.price ?? 0,
+      balance: additionalData?.balance ?? 0,
+      value,
+    }))
+    .exhaustive()
 }
 
 export const calculateChartRange = (
@@ -261,15 +230,7 @@ export const calculateChartRange = (
   const ticks = Array.from({ length: tickCount }, (_, i) => {
     const tickValue = finalMin + i * tickInterval
 
-    if (dataType === 'balance') {
-      return tickValue < 1
-        ? smallNumberFormatter.format(tickValue)
-        : preciseTokenFormatter.format(tickValue)
-    } else {
-      return tickValue < 1
-        ? smallCurrencyFormatter.format(tickValue)
-        : currencyFormatter.format(tickValue)
-    }
+    return formatChartValue(tickValue, dataType)
   })
 
   return { min: finalMin, max: finalMax, ticks }
