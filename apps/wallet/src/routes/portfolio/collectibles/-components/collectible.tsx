@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { Button, useToast } from '@status-im/components'
 import {
   ArrowLeftIcon,
@@ -207,21 +209,39 @@ const Collectible = (props: Props) => {
         aria-hidden="true"
       />
 
-      {collectible.traits && (
+      {collectible.traits && Object.keys(collectible.traits).length > 0 && (
         <div>
           <div className="mb-3 text-15 font-semibold text-neutral-100">
             Traits
           </div>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(155px,1fr))] gap-3">
-            {Object.entries(collectible.traits as Record<string, string>).map(
-              ([trait, value], index) => (
-                <CardDetail key={index} title={trait}>
-                  <div className="text-13 font-medium text-neutral-100">
-                    {value}
-                  </div>
-                </CardDetail>
-              ),
-            )}
+            {Object.entries(collectible.traits as Record<string, unknown>)
+              .filter(([, value]) => {
+                if (typeof value === 'object' && value !== null) {
+                  const valueObj = value as Record<string, unknown>
+                  if ('parent' in valueObj && 'child' in valueObj) {
+                    return false
+                  }
+                }
+                return true
+              })
+              .map(([trait, value], index) => {
+                let displayValue: string
+
+                if (typeof value === 'object' && value !== null) {
+                  displayValue = JSON.stringify(value)
+                } else {
+                  displayValue = String(value)
+                }
+
+                return (
+                  <CardDetail key={index} title={trait}>
+                    <div className="text-13 font-medium text-neutral-100">
+                      {displayValue}
+                    </div>
+                  </CardDetail>
+                )
+              })}
           </div>
         </div>
       )}

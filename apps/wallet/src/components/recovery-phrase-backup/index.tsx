@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { useToast } from '@status-im/components'
 import { NegativeStateIcon } from '@status-im/icons/20'
@@ -12,23 +12,18 @@ import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { apiClient } from '@/providers/api-client'
 import { useWallet } from '@/providers/wallet-context'
 
+import { useRecoveryPhraseBackup } from '../../hooks/use-recovery-phrase-backup'
+
 export function RecoveryPhraseBackup() {
-  const { currentWallet, mnemonic, setMnemonic } = useWallet()
-  const [showRecoveryDialog, setShowRecoveryDialog] = useState(false)
+  const { currentWallet } = useWallet()
+  const {
+    needsBackup,
+    showRecoveryDialog,
+    setShowRecoveryDialog,
+    markAsBackedUp,
+  } = useRecoveryPhraseBackup()
+  const [mnemonic, setMnemonic] = useState<string | null>(null)
   const toast = useToast()
-
-  useEffect(() => {
-    if (mnemonic) {
-      const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-        e.preventDefault()
-        return "You haven't backed up your wallet! Your recovery phrase will be lost forever."
-      }
-
-      window.addEventListener('beforeunload', handleBeforeUnload)
-      return () =>
-        window.removeEventListener('beforeunload', handleBeforeUnload)
-    }
-  }, [mnemonic])
 
   const onPasswordConfirm = async (password: string) => {
     if (!currentWallet?.id) {
@@ -37,11 +32,12 @@ export function RecoveryPhraseBackup() {
     }
 
     try {
-      await apiClient.wallet.get.query({
+      const { mnemonic } = await apiClient.wallet.get.query({
         password: password,
         walletId: currentWallet?.id,
       })
 
+      setMnemonic(mnemonic)
       setShowRecoveryDialog(true)
     } catch (error) {
       console.error(error)
@@ -56,14 +52,15 @@ export function RecoveryPhraseBackup() {
   }
 
   const onComplete = async () => {
+    await markAsBackedUp()
     setMnemonic(null)
     toast.positive(
-      'Your recovery phrase has been deleted from the wallet interface.',
+      'Your recovery phrase has been removed from this wallet interface.',
       { duration: 3000 },
     )
   }
 
-  if (!mnemonic) {
+  if (!needsBackup) {
     return null
   }
 

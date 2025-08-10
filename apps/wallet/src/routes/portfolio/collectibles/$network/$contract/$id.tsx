@@ -1,3 +1,5 @@
+import { useEffect, useMemo } from 'react'
+
 import { useToast } from '@status-im/components'
 import {
   CollectiblesGrid as CollectiblesList,
@@ -7,6 +9,7 @@ import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { createFileRoute, useRouterState } from '@tanstack/react-router'
 
 import SplittedLayout from '@/components/splitted-layout'
+import { useCollectibles } from '@/hooks/use-collectibles'
 
 import { useWallet } from '../../../../../providers/wallet-context'
 import { Collectible } from '../../-components/collectible'

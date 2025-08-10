@@ -22,8 +22,6 @@ type WalletContext = {
   isLoading: boolean
   hasWallets: boolean
   setCurrentWallet: (id: Wallet['id']) => void
-  setMnemonic: (mnemonic: string | null) => void
-  mnemonic: string | null
 }
 
 const WalletContext = createContext<WalletContext | undefined>(undefined)
@@ -38,7 +36,6 @@ export function useWallet() {
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
   const [selectedWalletId, setSelectedWalletId] = useState<string | null>(null)
-  const [mnemonic, setMnemonic] = useState<string | null>(null)
 
   const { data: wallets = [], isLoading } = useQuery({
     queryKey: ['wallets'],
@@ -89,8 +86,6 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     hasWallets,
     setCurrentWallet,
-    setMnemonic,
-    mnemonic,
   }
 
   return (
