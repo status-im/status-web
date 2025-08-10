@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
 
+import type { ChartDataType } from '@status-im/wallet/components'
 import type { ApiOutput } from '@status-im/wallet/data'
 
 type UseValueChartDataParams = {
-  activeDataType: string
+  activeDataType: ChartDataType
   priceData: ApiOutput['assets']['tokenPriceChart'] | null | undefined
   balanceData: ApiOutput['assets']['tokenBalanceChart'] | null | undefined
 }
