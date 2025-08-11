@@ -1,6 +1,6 @@
 ---
-'@status-im/wallet': patch
-'wallet': patch
+"@status-im/wallet": patch
+"wallet": patch
 ---
 
 Rename tabs
