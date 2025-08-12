@@ -39,6 +39,8 @@ type Props = {
   onEstimateGas: (to: string, value: string) => void
   gasFees?: {
     maxFeeEur: number
+    feeEur: number
+    maxFeeEth: number
     confirmationTime: string
     feeEth: number
   }
@@ -47,7 +49,12 @@ type Props = {
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
-const createFormSchema = (balance: number, fromAddress: string) =>
+const createFormSchema = (
+  balance: number,
+  fromAddress: string,
+  maxGasFeeEth?: number,
+  assetSymbol?: string,
+) =>
   z.object({
     to: z
       .string()
@@ -62,11 +69,19 @@ const createFormSchema = (balance: number, fromAddress: string) =>
       .min(1, 'Amount is required')
       .refine(
         val => {
-          const num = Number.parseFloat(val)
-          return num > 0 && num <= balance
+          const amount = Number.parseFloat(val)
+          if (!maxGasFeeEth) return amount > 0 && amount <= balance
+
+          const isETH = assetSymbol === 'ETH'
+          const totalCost = isETH ? amount + maxGasFeeEth : maxGasFeeEth
+          const availableBalance = balance
+
+          return amount > 0 && totalCost <= availableBalance
         },
         {
-          message: 'More than available balance',
+          message: maxGasFeeEth
+            ? `Insufficient balance. Max gas fees: ${maxGasFeeEth.toFixed(6)} ETH`
+            : 'More than available balance',
         },
       ),
     contractAddress: z
@@ -104,8 +119,14 @@ const SendAssetsModal = (props: Props) => {
   const ethBalance = account.ethBalance
 
   const formSchema = useMemo(
-    () => createFormSchema(balance, account.address),
-    [balance, account.address],
+    () =>
+      createFormSchema(
+        balance,
+        account.address,
+        gasFees?.maxFeeEth,
+        asset.symbol,
+      ),
+    [balance, account.address, gasFees?.maxFeeEth, asset.symbol],
   )
 
   const {
@@ -140,11 +161,13 @@ const SendAssetsModal = (props: Props) => {
     const parsed = Number.parseFloat(watchedAmount)
     if (Number.isNaN(parsed)) return
 
+    if (parsed <= 0 || parsed > balance) return
+
     const amountInWei = BigInt(
       Math.floor(parsed * Math.pow(10, asset.decimals)),
     ).toString(16)
     onEstimateGas(watchedTo, `0x${amountInWei}`)
-  }, [watchedTo, watchedAmount, onEstimateGas, asset.decimals])
+  }, [watchedTo, watchedAmount, onEstimateGas, asset.decimals, balance])
 
   //  Check for insufficient ETH balance
   useEffect(() => {
@@ -159,8 +182,8 @@ const SendAssetsModal = (props: Props) => {
     const amountToSend = Number.parseFloat(watchedAmount)
 
     const hasInsufficientEthNow = isETH
-      ? ethBalance < amountToSend + gasFees.feeEth
-      : ethBalance < gasFees.feeEth
+      ? ethBalance <= amountToSend + gasFees.maxFeeEth
+      : ethBalance <= gasFees.maxFeeEth
 
     if (hasInsufficientEthNow) {
       if (!hasInsufficientEth) {
@@ -208,12 +231,6 @@ const SendAssetsModal = (props: Props) => {
           ...pendingTransactionData,
           password,
         })
-
-        setTransactionState('success')
-
-        setTimeout(() => {
-          toast.positive('Transaction succeeded')
-        }, 5000)
       }
     } catch (error) {
       setTransactionState('error')
@@ -267,7 +284,7 @@ const SendAssetsModal = (props: Props) => {
             data-customisation="blue"
             className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow opacity-100 fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[494px] flex-col gap-3 overflow-auto rounded-16 bg-white-100 transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
@@ -364,11 +381,15 @@ const SendAssetsModal = (props: Props) => {
                       <div className="h-px w-full bg-neutral-20" />
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
-                          $
-                          {watchedAmount && balance !== 0
-                            ? Number.parseFloat(watchedAmount || '0') *
-                              (balanceEur / balance)
-                            : '0'}
+                          <CurrencyAmount
+                            value={
+                              watchedAmount && balance !== 0
+                                ? Number.parseFloat(watchedAmount || '0') *
+                                  (balanceEur / balance)
+                                : 0
+                            }
+                            format="standard"
+                          />
                         </span>
                         <span
                           className={cx([
@@ -501,18 +522,23 @@ const SendAssetsModal = (props: Props) => {
                     </Alert>
                   )}
                   {/* Gas Fees Section */}
-                  {watchedTo && watchedAmount && (
+                  {!hasInsufficientBalance && watchedTo && watchedAmount && (
                     <div className="mb-4 flex items-center justify-between text-13">
                       <div>
                         <p className="text-neutral-50">Max fees</p>
                         <div>
                           {gasFees ? (
-                            <>
-                              <CurrencyAmount
-                                value={gasFees.maxFeeEur}
+                            <span className="flex items-center gap-1">
+                              <TokenAmount
+                                value={gasFees.maxFeeEth}
                                 format="precise"
                               />{' '}
-                            </>
+                              ETH /{' '}
+                              <CurrencyAmount
+                                value={gasFees.maxFeeEur}
+                                format="standard"
+                              />
+                            </span>
                           ) : (
                             'Estimating...'
                           )}

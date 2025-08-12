@@ -529,7 +529,7 @@ const Token = (props: Props) => {
             isLoadingFees={gasFeeQuery.isFetching}
             onEstimateGas={prepareGasEstimate}
           >
-            <Button size="32" iconBefore={<SendBlurIcon />}>
+            <Button size="32" iconBefore={<SendBlurIcon />} variant="outline">
               Send
             </Button>
           </SendAssetsModal>

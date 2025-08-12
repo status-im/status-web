@@ -947,12 +947,19 @@ export async function getFeeRate(
       : parseFloat(ethPriceData?.usd) || 0
 
   const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
-  const feeEur = ethPrice > 0 ? feeEth * ethPrice : 0
+  const feeEur = parseFloat((ethPrice > 0 ? feeEth * ethPrice : 0).toFixed(6))
+  const maxFeeEth = parseFloat(formatEther(gasLimit * maxFeePerGas))
+  const maxFeeEur = parseFloat(
+    (ethPrice > 0 ? maxFeeEth * ethPrice : 0).toFixed(6),
+  )
+
   const confirmationTime = estimateConfirmationTime(priorityFee, feeHistoryData)
 
   return {
-    maxFeeEur: parseFloat(feeEur.toFixed(6)),
     feeEth,
+    feeEur,
+    maxFeeEth,
+    maxFeeEur,
     confirmationTime,
     txParams: {
       gasLimit: `0x${gasLimit.toString(16)}`,
