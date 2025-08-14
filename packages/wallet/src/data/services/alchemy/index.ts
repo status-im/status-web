@@ -126,7 +126,7 @@ export async function getERC20TokensBalance(
   )
 
   const body = await _retry(async () =>
-    _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 15, {
+    _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 0, {
       jsonrpc: '2.0',
       method: 'alchemy_getTokenBalances',
       params: [address, contracts],
