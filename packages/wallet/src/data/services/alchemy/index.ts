@@ -95,7 +95,7 @@ export async function getNativeTokenBalance(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
   const body = await _retry(async () =>
-    _fetch<NativeTokenBalanceResponseBody>(url, 'POST', 15, {
+    _fetch<NativeTokenBalanceResponseBody>(url, 'POST', 0, {
       id: 1,
       jsonrpc: '2.0',
       method: 'eth_getBalance',
@@ -153,7 +153,7 @@ export async function getTokensBalance(
   )
 
   const body = await _retry(async () =>
-    _fetch<TokensBalanceResponseBody>(url, 'POST', 15, {
+    _fetch<TokensBalanceResponseBody>(url, 'POST', 0, {
       addresses: [
         {
           address,
@@ -407,9 +407,7 @@ export async function getNFTs(
     url.searchParams.set('pageKey', page)
   }
 
-  const body = await _retry(async () =>
-    _fetch<NFTsResponseBody>(url, 'GET', 15),
-  )
+  const body = await _retry(async () => _fetch<NFTsResponseBody>(url, 'GET', 0))
 
   return body
 }
@@ -431,7 +429,7 @@ export async function getNFTMetadata(
   url.searchParams.set('tokenId', tokenId)
 
   const body = await _retry(async () =>
-    _fetch<NFTMetadataResponseBody>(url, 'GET', 3600),
+    _fetch<NFTMetadataResponseBody>(url, 'GET', 0),
   )
 
   return body
@@ -512,7 +510,7 @@ export async function getOutgoingAssetTransfers(
           pageKey?: string
         }
       }
-    >(url, 'POST', 3600, {
+    >(url, 'POST', 0, {
       jsonrpc: '2.0',
       method: 'alchemy_getAssetTransfers',
       params: [params, 'latest'],
@@ -597,7 +595,7 @@ export async function getIncomingAssetTransfers(
           pageKey?: string
         }
       }
-    >(url, 'POST', 3600, {
+    >(url, 'POST', 0, {
       jsonrpc: '2.0',
       method: 'alchemy_getAssetTransfers',
       params: [params, 'latest'],
@@ -838,7 +836,7 @@ export async function deprecated_getNFTSale(
   url.searchParams.set('taker', 'BUYER')
 
   const body = await _retry(async () =>
-    _fetch<deprecated_NFTSaleResponseBody>(url, 'GET', 3600),
+    _fetch<deprecated_NFTSaleResponseBody>(url, 'GET', 0),
   )
 
   return body
@@ -859,7 +857,7 @@ export async function getNFTFloorPrice(contract: string, network: NetworkType) {
   url.searchParams.set('contractAddress', contract)
 
   const body = await _retry(async () =>
-    _fetch<NFTFloorPriceResponseBody>(url, 'GET', 15),
+    _fetch<NFTFloorPriceResponseBody>(url, 'GET', 0),
   )
 
   return body
