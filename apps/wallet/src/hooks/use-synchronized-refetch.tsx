@@ -26,6 +26,9 @@ export function useSynchronizedRefetch(address: string) {
       const key = query.queryKey
       const hasObservers = query.getObserversCount() > 0
 
+      const hasValidAddress =
+        Array.isArray(key) && key[1] && key[1] !== 'undefined'
+
       const isWalletQuery =
         (Array.isArray(key) && key[0] === 'assets' && key[1] === address) ||
         (Array.isArray(key) &&
@@ -35,13 +38,17 @@ export function useSynchronizedRefetch(address: string) {
         (Array.isArray(key) && key[0] === 'collectible') ||
         (Array.isArray(key) && key[0] === 'token')
 
-      return hasObservers && isWalletQuery
+      return hasObservers && isWalletQuery && hasValidAddress
     })
 
     await Promise.all(
-      activeQueries.map(query =>
-        queryClient.refetchQueries({ queryKey: query.queryKey }),
-      ),
+      activeQueries.map(async query => {
+        await queryClient.invalidateQueries({ queryKey: query.queryKey })
+        return queryClient.refetchQueries({
+          queryKey: query.queryKey,
+          exact: true,
+        })
+      }),
     )
   }, [address, queryClient])
 
