@@ -1,16 +1,10 @@
 import { differenceInCalendarMonths } from 'date-fns'
-import { match } from 'ts-pattern'
 
 export const TIME_FRAMES = ['24H', '7D', '1M', '3M', '1Y', 'All'] as const
 export type TimeFrame = (typeof TIME_FRAMES)[number]
 
-export type DataType = 'price' | 'balance' | 'value'
-export type ChartDataPoint = {
-  date: string
-  price: number
-  balance?: number
-  value?: number
-}
+export type DataType = 'price' | 'balance'
+export type ChartDataPoint = { date: string; price: number }
 export type ChartDatum = { date: Date; value: number }
 
 export const DEFAULT_TIME_FRAME: TimeFrame = TIME_FRAMES[0]
@@ -141,80 +135,68 @@ export const checkDateOutput = (
   return 'bullet'
 }
 
-const priceFormatter = new Intl.NumberFormat('en-US', {
+export const formatChartValue = (
+  value: number,
+  dataType: 'price' | 'balance',
+  currency?: string,
+): string => {
+  const fractionalDigits = value.toString().split('.')[1]?.length || 0
+
+  if (dataType === 'balance') {
+    return value.toLocaleString('en-US', {
+      minimumFractionDigits: fractionalDigits,
+      maximumFractionDigits: fractionalDigits,
+    })
+  }
+
+  return value.toLocaleString('en-US', {
+    style: 'currency',
+    currency: currency || 'USD',
+    minimumFractionDigits: fractionalDigits,
+    maximumFractionDigits: fractionalDigits,
+  })
+}
+
+const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
-  notation: 'standard',
   currency: 'USD',
+  notation: 'standard',
   minimumSignificantDigits: 4,
   maximumSignificantDigits: 4,
   roundingPriority: 'morePrecision',
 })
 
-const balanceFormatter = new Intl.NumberFormat('en-US', {
+const numberFormatter = new Intl.NumberFormat('en-US', {
   style: 'decimal',
   notation: 'standard',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 2,
-  minimumSignificantDigits: 1,
+  minimumFractionDigits: 4,
+  maximumFractionDigits: 4,
+  minimumSignificantDigits: 4,
   maximumSignificantDigits: 4,
   roundingPriority: 'morePrecision',
 })
 
-const valueFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  notation: 'standard',
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-})
-
-export const formatChartValue = (value: number, dataType: DataType): string => {
-  return match(dataType)
-    .with('balance', () => balanceFormatter.format(value))
-    .with('price', () => priceFormatter.format(value))
-    .with('value', () => valueFormatter.format(value))
-    .exhaustive()
-}
-
-export const getChartValue = (
-  point: ChartDataPoint,
-  dataType: DataType,
-): number => {
-  return match(dataType)
-    .with('price', () => point.price)
-    .with('balance', () => point.balance ?? point.price)
-    .with('value', () => point.value ?? point.price)
-    .exhaustive()
-}
-
-export const createChartDataPoint = (
-  date: string,
+export const formatSmallNumber = (
   value: number,
-  dataType: DataType,
-  additionalData?: { price?: number; balance?: number },
-): ChartDataPoint => {
-  return match(dataType)
-    .with('price', () => ({ date, price: value }))
-    .with('balance', () => ({ date, price: value, balance: value }))
-    .with('value', () => ({
-      date,
-      price: additionalData?.price ?? 0,
-      balance: additionalData?.balance ?? 0,
-      value,
-    }))
-    .exhaustive()
+  dataType: DataType = 'price',
+): string => {
+  if (value === 0) return '0'
+
+  // Use the same decimal precision logic as Y-axis ticks
+  const formatter = dataType === 'balance' ? numberFormatter : currencyFormatter
+  return formatter.format(value)
 }
 
 export const calculateChartRange = (
-  data: ChartDataPoint[],
+  data: Array<{ price: number }>,
   marginFactor = 0.1,
   dataType: DataType = 'price',
 ) => {
   if (data.length === 0) return { min: 0, max: 1, ticks: [] }
 
-  const values = data.map(d => getChartValue(d, dataType))
-  const maxPrice = Math.max(...values)
-  const minPrice = Math.min(...values)
+  const prices = data.map(d => d.price)
+  const maxPrice = Math.max(...prices)
+  const minPrice = Math.min(...prices)
   const priceRange = maxPrice - minPrice
 
   const adjustedMin = minPrice - priceRange * marginFactor
@@ -229,8 +211,9 @@ export const calculateChartRange = (
 
   const ticks = Array.from({ length: tickCount }, (_, i) => {
     const tickValue = finalMin + i * tickInterval
-
-    return formatChartValue(tickValue, dataType)
+    const formatter =
+      dataType === 'balance' ? numberFormatter : currencyFormatter
+    return formatter.format(tickValue)
   })
 
   return { min: finalMin, max: finalMax, ticks }

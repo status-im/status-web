@@ -12,13 +12,12 @@ const styles = cva({
       collectible: 'size-20',
       balance: 'h-[112px]',
       price: 'h-[112px]',
-      value: 'h-[112px]',
     },
   },
 })
 
 type Props = {
-  variant: 'activity' | 'collectible' | 'balance' | 'price' | 'value'
+  variant: 'activity' | 'collectible' | 'balance' | 'price'
 }
 
 const EmptyState = (props: Props) => {
@@ -48,12 +47,6 @@ const EmptyState = (props: Props) => {
       imageAlt: 'No prices',
       title: 'No prices',
       description: 'Prices will be visible on this page',
-    }))
-    .with('value', () => ({
-      imageId: 'Portfolio/Empty States/No_Balance:750:232' as ImageId,
-      imageAlt: 'No value',
-      title: 'No value',
-      description: 'Hold this asset to view your value history here',
     }))
     .exhaustive()
 

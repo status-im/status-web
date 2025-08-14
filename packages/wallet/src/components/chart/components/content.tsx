@@ -3,7 +3,7 @@ import { curveCatmullRom } from '@visx/curve'
 import { AreaClosed, LinePath } from '@visx/shape'
 
 import { negativeColors, positiveColors } from '../constants'
-import { formatChartValue } from '../utils'
+import { formatSmallNumber } from '../utils'
 
 import type { BaseChartProps, ChartDatum } from '../utils'
 import type { ScaleLinear, ScaleTime } from 'd3-scale'
@@ -12,7 +12,6 @@ type Props = BaseChartProps & {
   yScale: ScaleLinear<number, number, never>
   xScale: ScaleTime<number, number, never>
   pricesData: ChartDatum[]
-  currency?: string
 }
 
 const AnimatedAreaClosed = animated(AreaClosed)
@@ -40,7 +39,7 @@ const Content = (props: Props) => {
 
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
-  const formattedValue = formatChartValue(lastData.value, dataType)
+  const formattedValue = formatSmallNumber(lastData.value, dataType)
   const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
   const tagXOffset = Math.max(0, 20 - tagWidth / 2)
   const textX = tagXOffset + tagWidth / 2

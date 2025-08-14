@@ -7,8 +7,6 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from '@tanstack/react-router'
 
-import { useValueChartData } from '../../../../hooks/use-value-chart-data'
-
 import type {
   ChartDataType,
   ChartTimeFrame,
@@ -93,7 +91,7 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: activeDataType === 'price' || activeDataType === 'value',
+    enabled: activeDataType === 'price',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
   })
@@ -134,22 +132,14 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: activeDataType === 'balance' || activeDataType === 'value',
+    enabled: activeDataType === 'balance',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
   })
 
-  const valueChartData = useValueChartData({
-    activeDataType,
-    priceData: priceChart.data,
-    balanceData: balanceChart.data,
-  })
-
   const isLoading =
     (activeDataType === 'price' && priceChart.isLoading) ||
-    (activeDataType === 'balance' && balanceChart.isLoading) ||
-    (activeDataType === 'value' &&
-      (priceChart.isLoading || balanceChart.isLoading))
+    (activeDataType === 'balance' && balanceChart.isLoading)
 
   if (isLoading) {
     return <ChartLoading />
@@ -157,8 +147,7 @@ function AssetChart({
 
   const hasError =
     (activeDataType === 'price' && priceChart.error) ||
-    (activeDataType === 'balance' && balanceChart.error) ||
-    (activeDataType === 'value' && (priceChart.error || balanceChart.error))
+    (activeDataType === 'balance' && balanceChart.error)
 
   if (hasError) {
     return (
@@ -175,7 +164,6 @@ function AssetChart({
       <Chart
         price={priceChart.data || []}
         balance={balanceChart.data || []}
-        value={valueChartData}
         activeTimeFrame={timeFrame as ChartTimeFrame}
         activeDataType={activeDataType}
       />
