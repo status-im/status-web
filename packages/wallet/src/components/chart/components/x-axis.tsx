@@ -78,8 +78,8 @@ const XAxis = (props: Props) => {
               <p className="text-11 font-medium uppercase text-neutral-40">
                 {activeRange === '7D'
                   ? format(new Date(d.date), 'MMM d')
-                  : // : activeRange === 'All' &&
-                    previousDate &&
+                  : activeRange === 'All' &&
+                      previousDate &&
                       new Date(d.date).getFullYear() !==
                         previousDate.getFullYear()
                     ? format(new Date(d.date), 'yyyy')

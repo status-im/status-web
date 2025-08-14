@@ -1,13 +1,6 @@
-// import { differenceInCalendarMonths } from 'date-fns'
+import { differenceInCalendarMonths } from 'date-fns'
 
-export const TIME_FRAMES = [
-  '24H',
-  '7D',
-  '1M',
-  '3M',
-  '1Y',
-  // 'All'
-] as const
+export const TIME_FRAMES = ['24H', '7D', '1M', '3M', '1Y', 'All'] as const
 export type TimeFrame = (typeof TIME_FRAMES)[number]
 
 export type DataType = 'price' | 'balance'
@@ -39,7 +32,7 @@ export const checkDateOutput = (
   const {
     date,
     previousDate,
-    // firstDate,
+    firstDate,
     index,
     variant,
     totalDataPoints = 0,
@@ -120,24 +113,24 @@ export const checkDateOutput = (
     return 'empty'
   }
 
-  // if (variant === 'All') {
-  //   if (isFirstDataPoint) {
-  //     return 'month'
-  //   }
+  if (variant === 'All') {
+    if (isFirstDataPoint) {
+      return 'month'
+    }
 
-  //   const currentYear = date.getFullYear()
-  //   const previousYear = previousDate ? previousDate.getFullYear() : -1
-  //   const isYearTransition = currentYear !== previousYear
+    const currentYear = date.getFullYear()
+    const previousYear = previousDate ? previousDate.getFullYear() : -1
+    const isYearTransition = currentYear !== previousYear
 
-  //   if (isYearTransition) {
-  //     return 'month'
-  //   }
+    if (isYearTransition) {
+      return 'month'
+    }
 
-  //   const monthInterval = Math.max(6, getSafeInterval(60))
-  //   const monthsFromReference = differenceInCalendarMonths(date, firstDate)
+    const monthInterval = Math.max(6, getSafeInterval(60))
+    const monthsFromReference = differenceInCalendarMonths(date, firstDate)
 
-  //   return monthsFromReference % monthInterval === 0 ? 'month' : 'empty'
-  // }
+    return monthsFromReference % monthInterval === 0 ? 'month' : 'empty'
+  }
 
   return 'bullet'
 }
