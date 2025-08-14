@@ -211,7 +211,7 @@ export async function fetchTokenBalanceHistory(
           ],
         }),
         next: {
-          revalidate: 3600,
+          revalidate: 0,
         },
       },
     )
@@ -249,7 +249,7 @@ export async function fetchTokenBalanceHistory(
           ],
         }),
         next: {
-          revalidate: 3600,
+          revalidate: 0,
         },
       },
     )
