@@ -17,6 +17,7 @@ import { estimateConfirmationTime, processFeeHistory } from './utils'
 import type { NetworkType } from '../../api/types'
 import type {
   AssetTransfer,
+  BlockNumberResponseBody,
   BlockResponseBody,
   deprecated_NFTSaleResponseBody,
   ERC20TokenBalanceResponseBody,
@@ -32,6 +33,7 @@ import type {
   TokenBalanceHistoryResponseBody,
   TokensBalanceResponseBody,
   TransactionCountResponseBody,
+  TransactionStatusResponseBody,
 } from './types'
 
 const alchemyNetworks = {
@@ -186,37 +188,29 @@ export async function fetchTokenBalanceHistory(
   const transfers: TokenBalanceHistoryResponseBody['result']['transfers'] = []
 
   {
-    const response = await fetch(
+    const url = new URL(
       `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'alchemy_getAssetTransfers',
-          params: [
-            {
-              fromBlock: '0x0',
-              toBlock: 'latest',
-              toAddress: address,
-              category: [contract ? 'erc20' : 'external'],
-              order: 'desc',
-              withMetadata: true,
-              excludeZeroValue: true,
-              maxCount: '0x3e8',
-              ...(contract && { contractAddresses: [contract] }),
-            },
-          ],
-        }),
-        next: {
-          revalidate: 0,
-        },
-      },
     )
 
-    const body: TokenBalanceHistoryResponseBody = await response.json()
+    const body = await _retry(async () =>
+      _fetch<TokenBalanceHistoryResponseBody>(url, 'POST', 0, {
+        jsonrpc: '2.0',
+        method: 'alchemy_getAssetTransfers',
+        params: [
+          {
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            toAddress: address,
+            category: [contract ? 'erc20' : 'external'],
+            order: 'desc',
+            withMetadata: true,
+            excludeZeroValue: true,
+            maxCount: '0x3e8',
+            ...(contract && { contractAddresses: [contract] }),
+          },
+        ],
+      }),
+    )
 
     transfers.push(...body.result.transfers)
   }
@@ -224,37 +218,29 @@ export async function fetchTokenBalanceHistory(
   await new Promise(resolve => setTimeout(resolve, 1000))
 
   {
-    const response = await fetch(
+    const url = new URL(
       `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          jsonrpc: '2.0',
-          method: 'alchemy_getAssetTransfers',
-          params: [
-            {
-              fromBlock: '0x0',
-              toBlock: 'latest',
-              fromAddress: address,
-              category: [contract ? 'erc20' : 'external'],
-              order: 'desc',
-              withMetadata: true,
-              excludeZeroValue: true,
-              maxCount: '0x3e8',
-              ...(contract && { contractAddresses: [contract] }),
-            },
-          ],
-        }),
-        next: {
-          revalidate: 0,
-        },
-      },
     )
 
-    const body: TokenBalanceHistoryResponseBody = await response.json()
+    const body = await _retry(async () =>
+      _fetch<TokenBalanceHistoryResponseBody>(url, 'POST', 0, {
+        jsonrpc: '2.0',
+        method: 'alchemy_getAssetTransfers',
+        params: [
+          {
+            fromBlock: '0x0',
+            toBlock: 'latest',
+            fromAddress: address,
+            category: [contract ? 'erc20' : 'external'],
+            order: 'desc',
+            withMetadata: true,
+            excludeZeroValue: true,
+            maxCount: '0x3e8',
+            ...(contract && { contractAddresses: [contract] }),
+          },
+        ],
+      }),
+    )
 
     transfers.push(...body.result.transfers)
   }
@@ -440,26 +426,22 @@ export async function getLatestBlockNumber(
 ): Promise<number> {
   const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+  const body = await _retry(async () =>
+    _fetch<BlockNumberResponseBody>(new URL(url), 'POST', 0, {
       jsonrpc: '2.0',
       method: 'eth_blockNumber',
       params: [],
       id: 1,
     }),
-  })
+  )
 
-  const data = await res.json()
-
-  if (!data.result) {
+  if (!body.result) {
     throw new Error(`Failed to fetch latest block number for ${network}`)
   }
 
-  return parseInt(data.result, 16)
+  const blockNumber = parseInt(body.result, 16)
+
+  return blockNumber
 }
 
 /**
@@ -788,24 +770,24 @@ export async function getTransactionStatus(
   txHash: string,
   network: NetworkType,
 ): Promise<'pending' | 'success' | 'failed' | 'unknown'> {
-  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
+  const url = new URL(
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+  )
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
+  const body = await _retry(async () =>
+    _fetch<TransactionStatusResponseBody>(url, 'POST', 0, {
       jsonrpc: '2.0',
       method: 'eth_getTransactionReceipt',
       params: [txHash],
       id: 1,
     }),
-  })
+  )
 
-  const data = await res.json()
+  const transactionReceipt = body.result
 
-  if (data?.result == null) return 'pending'
-  if (data?.result?.status === '0x1') return 'success'
-  if (data?.result?.status === '0x0') return 'failed'
+  if (transactionReceipt == null) return 'pending'
+  if (transactionReceipt?.status === '0x1') return 'success'
+  if (transactionReceipt?.status === '0x0') return 'failed'
 
   return 'unknown'
 }
