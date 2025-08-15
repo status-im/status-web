@@ -17,6 +17,47 @@ export type { ApiRouter }
 export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
+const format = (url: string, method: string, body?: unknown) => {
+  const u = new URL(url, 'http://localhost')
+  let fullUrl = u.origin + u.pathname + (u.search || '')
+
+  if (method === 'POST' && body) {
+    try {
+      const bodyStr = typeof body === 'string' ? body : JSON.stringify(body)
+      const separator = fullUrl.includes('?') ? '&' : '?'
+      fullUrl += `${separator}body=${encodeURIComponent(bodyStr)}`
+    } catch {
+      // ignore
+    }
+  }
+
+  return fullUrl
+}
+
+const originalFetch = globalThis.fetch
+globalThis.fetch = async (input, init) => {
+  const method = (init && init.method) || 'GET'
+  const url =
+    typeof input === 'string'
+      ? input
+      : input instanceof URL
+        ? input.toString()
+        : input.url
+
+  try {
+    const response = await originalFetch(input, init)
+    const fullUrl = format(url, method, init?.body)
+    console.log(` ${method} ${fullUrl} ${response.status}`)
+
+    return response
+  } catch (err) {
+    const fullUrl = format(url, method, init?.body)
+    console.log(` ${method} ${fullUrl} 500`)
+
+    throw err
+  }
+}
+
 async function handler(request: NextRequest) {
   // let error: Error | undefined
 
