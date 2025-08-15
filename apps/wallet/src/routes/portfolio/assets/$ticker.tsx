@@ -36,6 +36,11 @@ function Component() {
     return null
   }
 
+  console.log('$ticker:balance:0:', assets?.assets?.[0]?.balance)
+  console.log('$ticker:price:0:', assets?.assets?.[0]?.price_eur)
+  console.log('$ticker:balance:1:', assets?.assets?.[1]?.balance)
+  console.log('$ticker:price:1:', assets?.assets?.[1]?.price_eur)
+
   return (
     <>
       <div className="hidden 2xl:block">
