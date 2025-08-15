@@ -45,11 +45,6 @@ function Component() {
 
   if (!currentWallet || !address) return null
 
-  console.log('index:balance:0:', data?.assets?.[0]?.balance)
-  console.log('index:price:0:', data?.assets?.[0]?.price_eur)
-  console.log('index:balance:1:', data?.assets?.[1]?.balance)
-  console.log('index:price:1:', data?.assets?.[1]?.price_eur)
-
   return (
     <>
       <SplittedLayout
