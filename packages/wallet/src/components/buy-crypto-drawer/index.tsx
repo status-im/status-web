@@ -186,9 +186,9 @@ export const BuyCryptoDrawer = (props: Props) => {
                         <div className="text-15 font-600 capitalize">
                           {provider.name}
                         </div>
-                        <div className="text-13 text-neutral-50">
+                        {/* <div className="text-13 text-neutral-50">
                           {provider.description}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
