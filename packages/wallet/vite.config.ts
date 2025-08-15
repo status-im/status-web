@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
           'data/index': './src/data/index.ts',
           'hooks/index': './src/hooks/index.ts',
           'constants/index': './src/constants/index.ts',
+          'utils/index': './src/utils/index.ts',
         },
         formats: ['es', 'cjs'],
         fileName: format => {

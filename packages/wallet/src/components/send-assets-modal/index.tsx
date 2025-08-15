@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -13,6 +13,7 @@ import * as z from 'zod'
 import { CurrencyAmount } from '../currency-amount'
 import { NetworkLogo } from '../network-logo'
 import { PasswordModal } from '../password-modal'
+import { TokenAmount } from '../token-amount'
 
 import type { NetworkType } from '../../data'
 import type { Account } from '../address'
@@ -31,12 +32,15 @@ type Props = {
     totalBalanceEur: number
     contractAddress?: string
     network: NetworkType
+    decimals: number
   }
   signTransaction: (data: FormData & { password: string }) => Promise<string>
   verifyPassword: (inputPassword: string) => Promise<boolean>
   onEstimateGas: (to: string, value: string) => void
   gasFees?: {
     maxFeeEur: number
+    feeEur: number
+    maxFeeEth: number
     confirmationTime: string
     feeEth: number
   }
@@ -45,22 +49,39 @@ type Props = {
 
 type TransactionState = 'idle' | 'signing' | 'pending' | 'success' | 'error'
 
-const createFormSchema = (balance: number) =>
+const createFormSchema = (
+  balance: number,
+  fromAddress: string,
+  maxGasFeeEth?: number,
+  assetSymbol?: string,
+) =>
   z.object({
     to: z
       .string()
       .min(1, 'Recipient address is required')
-      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
+      .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address')
+      .refine(
+        val => val.toLowerCase() !== fromAddress.toLowerCase(),
+        'You are sending assets to yourself',
+      ),
     amount: z
       .string()
       .min(1, 'Amount is required')
       .refine(
         val => {
-          const num = Number.parseFloat(val)
-          return num > 0 && num <= balance
+          const amount = Number.parseFloat(val)
+          if (!maxGasFeeEth) return amount > 0 && amount <= balance
+
+          const isETH = assetSymbol === 'ETH'
+          const totalCost = isETH ? amount + maxGasFeeEth : maxGasFeeEth
+          const availableBalance = balance
+
+          return amount > 0 && totalCost <= availableBalance
         },
         {
-          message: 'More than available balance',
+          message: maxGasFeeEth
+            ? `Insufficient balance. Max gas fees: ${maxGasFeeEth.toFixed(6)} ETH`
+            : 'More than available balance',
         },
       ),
     contractAddress: z
@@ -97,12 +118,22 @@ const SendAssetsModal = (props: Props) => {
   const balance = asset.totalBalance
   const ethBalance = account.ethBalance
 
-  const formSchema = useMemo(() => createFormSchema(balance), [balance])
+  const formSchema = useMemo(
+    () =>
+      createFormSchema(
+        balance,
+        account.address,
+        gasFees?.maxFeeEth,
+        asset.symbol,
+      ),
+    [balance, account.address, gasFees?.maxFeeEth, asset.symbol],
+  )
 
   const {
     control,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormData>({
@@ -119,9 +150,9 @@ const SendAssetsModal = (props: Props) => {
   const watchedTo = watch('to')
   const balanceEur = asset.totalBalanceEur
 
-  const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
-
-  const memoizedOnEstimateGas = useRef(onEstimateGas)
+  useEffect(() => {
+    setValue('contractAddress', asset.contractAddress || undefined)
+  }, [asset.contractAddress, setValue])
 
   // Estimate gas fees when 'to' or 'amount' changes
   useEffect(() => {
@@ -130,22 +161,13 @@ const SendAssetsModal = (props: Props) => {
     const parsed = Number.parseFloat(watchedAmount)
     if (Number.isNaN(parsed)) return
 
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current)
-    }
+    if (parsed <= 0 || parsed > balance) return
 
-    debounceTimeout.current = setTimeout(() => {
-      const amountInWei = BigInt(Math.floor(parsed * 1e18)).toString(16)
-      memoizedOnEstimateGas.current(watchedTo, `0x${amountInWei}`)
-    }, 300)
-
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current)
-        debounceTimeout.current = null
-      }
-    }
-  }, [watchedTo, watchedAmount])
+    const amountInWei = BigInt(
+      Math.floor(parsed * Math.pow(10, asset.decimals)),
+    ).toString(16)
+    onEstimateGas(watchedTo, `0x${amountInWei}`)
+  }, [watchedTo, watchedAmount, onEstimateGas, asset.decimals, balance])
 
   //  Check for insufficient ETH balance
   useEffect(() => {
@@ -160,8 +182,8 @@ const SendAssetsModal = (props: Props) => {
     const amountToSend = Number.parseFloat(watchedAmount)
 
     const hasInsufficientEthNow = isETH
-      ? ethBalance < amountToSend + gasFees.feeEth
-      : ethBalance < gasFees.feeEth
+      ? ethBalance <= amountToSend + gasFees.maxFeeEth
+      : ethBalance <= gasFees.maxFeeEth
 
     if (hasInsufficientEthNow) {
       if (!hasInsufficientEth) {
@@ -199,7 +221,7 @@ const SendAssetsModal = (props: Props) => {
       setTransactionState('pending')
 
       if (pendingTransactionData) {
-        toast.positive('Transaction signed', {
+        toast.positive('Transaction signed and sent', {
           duration: 2000,
         })
 
@@ -209,12 +231,6 @@ const SendAssetsModal = (props: Props) => {
           ...pendingTransactionData,
           password,
         })
-
-        setTransactionState('success')
-
-        setTimeout(() => {
-          toast.positive('Transaction successful')
-        }, 5000)
       }
     } catch (error) {
       setTransactionState('error')
@@ -248,7 +264,9 @@ const SendAssetsModal = (props: Props) => {
   }
 
   const hasInsufficientBalance =
-    watchedAmount && Number.parseFloat(watchedAmount) > balance
+    watchedAmount &&
+    Number.parseFloat(watchedAmount) > balance &&
+    Number.parseFloat(watchedAmount) > 0
 
   const isTransactionSigning = transactionState === 'signing'
 
@@ -266,12 +284,12 @@ const SendAssetsModal = (props: Props) => {
             data-customisation="blue"
             className="fixed left-0 top-[38px] flex size-full justify-center"
           >
-            <div className="shadow fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[423px] flex-col gap-3 overflow-auto rounded-16 border border-neutral-10 bg-white-100 opacity-[1] transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
+            <div className="shadow opacity-100 fixed z-auto flex h-[calc(100vh-76px)] w-[calc(100%-23px)] max-w-[494px] flex-col gap-3 overflow-auto rounded-16 bg-white-100 transition data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in">
               <div className="flex items-center justify-between p-4">
                 <Dialog.Title className="text-27 font-semibold">
                   Send assets
                 </Dialog.Title>
-                <Dialog.Description className="hidden">
+                <Dialog.Description className="sr-only">
                   Send {asset.name} to another wallet
                 </Dialog.Description>
 
@@ -291,18 +309,18 @@ const SendAssetsModal = (props: Props) => {
               >
                 <div>
                   <div className="mb-2 mt-4">
-                    <Label htmlFor="to">To</Label>
                     <div className="relative mt-2">
                       <Controller
                         name="to"
                         control={control}
                         render={({ field }) => (
                           <Input
+                            label="To"
                             id="to"
                             {...field}
                             isInvalid={!!errors.to}
                             className="pr-8 font-mono text-13"
-                            placeholder="0x..."
+                            placeholder="Address"
                             clearable={!!watchedTo}
                           />
                         )}
@@ -363,11 +381,15 @@ const SendAssetsModal = (props: Props) => {
                       <div className="h-px w-full bg-neutral-20" />
                       <div className="flex justify-between px-4 py-3 text-13 font-medium">
                         <span className="text-neutral-50">
-                          €
-                          {watchedAmount
-                            ? Number.parseFloat(watchedAmount || '0') *
-                              (balanceEur / balance)
-                            : '0'}
+                          <CurrencyAmount
+                            value={
+                              watchedAmount && balance !== 0
+                                ? Number.parseFloat(watchedAmount || '0') *
+                                  (balanceEur / balance)
+                                : 0
+                            }
+                            format="standard"
+                          />
                         </span>
                         <span
                           className={cx([
@@ -375,7 +397,8 @@ const SendAssetsModal = (props: Props) => {
                             hasInsufficientBalance && 'text-danger-50',
                           ])}
                         >
-                          {balance.toLocaleString()} {asset.symbol} /{' '}
+                          <TokenAmount value={balance} format="precise" />{' '}
+                          {asset.symbol} /{' '}
                           <CurrencyAmount
                             value={balanceEur}
                             format="standard"
@@ -384,7 +407,7 @@ const SendAssetsModal = (props: Props) => {
                       </div>
                     </div>
 
-                    {errors.amount && (
+                    {errors.amount && hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 text-danger-50">
                         <AlertIcon className="size-4" />
                         <p>{errors.amount.message}</p>
@@ -394,15 +417,21 @@ const SendAssetsModal = (props: Props) => {
                     {watchedAmount && !hasInsufficientBalance && (
                       <div className="mt-2 flex items-center gap-1 text-13 font-medium text-neutral-50">
                         Remaining ~{' '}
-                        {(
-                          balance - Number.parseFloat(watchedAmount || '0')
-                        ).toLocaleString()}{' '}
+                        <TokenAmount
+                          value={
+                            balance - Number.parseFloat(watchedAmount || '0')
+                          }
+                          format="precise"
+                        />{' '}
                         {asset.symbol} /{' '}
                         <CurrencyAmount
                           value={
-                            balanceEur -
-                            Number.parseFloat(watchedAmount || '0') *
-                              (balanceEur / balance)
+                            balance === 0
+                              ? 0
+                              : balanceEur -
+                                (Number.parseFloat(watchedAmount || '0') *
+                                  balanceEur) /
+                                  balance
                           }
                           format="standard"
                         />
@@ -481,25 +510,35 @@ const SendAssetsModal = (props: Props) => {
                         <p className="w-full flex-1">
                           Not enough ETH to pay gas fees
                         </p>
-                        <Button variant="danger" size="24" className="ml-2">
+                        <Button
+                          variant="danger"
+                          size="24"
+                          className="ml-2"
+                          href={`https://exchange.mercuryo.io/?type=buy&network=${asset.network}&currency=ETH&address=${account.address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`}
+                        >
                           Add ETH
                         </Button>
                       </div>
                     </Alert>
                   )}
                   {/* Gas Fees Section */}
-                  {watchedTo && watchedAmount && (
+                  {!hasInsufficientBalance && watchedTo && watchedAmount && (
                     <div className="mb-4 flex items-center justify-between text-13">
                       <div>
                         <p className="text-neutral-50">Max fees</p>
                         <div>
                           {gasFees ? (
-                            <>
-                              <CurrencyAmount
-                                value={gasFees.maxFeeEur}
+                            <span className="flex items-center gap-1">
+                              <TokenAmount
+                                value={gasFees.maxFeeEth}
                                 format="precise"
                               />{' '}
-                            </>
+                              ETH /{' '}
+                              <CurrencyAmount
+                                value={gasFees.maxFeeEur}
+                                format="standard"
+                              />
+                            </span>
                           ) : (
                             'Estimating...'
                           )}
@@ -539,7 +578,7 @@ const SendAssetsModal = (props: Props) => {
         onOpenChange={handlePasswordModalClose}
         onConfirm={handlePasswordConfirm}
         isLoading={isTransactionSigning}
-        buttonLabel="Sign Transaction"
+        buttonLabel="Send Transaction"
       />
     </>
   )

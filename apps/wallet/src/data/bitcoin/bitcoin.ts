@@ -105,7 +105,7 @@ export async function send({
   const utxo = selectedUtxos.map(utxo => {
     return encoder.Bitcoin.Proto.UnspentTransaction.create({
       outPoint: {
-        hash: Buffer.from(utxo.txid, 'hex').reverse(),
+        hash: new Uint8Array(Buffer.from(utxo.txid, 'hex').reverse()),
         index: utxo.vout,
         sequence: 4294967295, // default sequence
         // sequence: UINT32_MAX,

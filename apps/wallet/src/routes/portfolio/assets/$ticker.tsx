@@ -41,29 +41,25 @@ function Component() {
       <div className="hidden 2xl:block">
         <SplittedLayout
           list={
-            assets ? (
-              <AssetsList
-                assets={assets.assets}
-                onSelect={url => {
-                  const ticker = url.split('/').pop()
-                  if (!ticker) return
-                  router.navigate({
-                    to: '/portfolio/assets/$ticker',
-                    params: { ticker },
-                    ...(!isDesktop && {
-                      viewTransition: true,
-                    }),
-                  })
-                }}
-                clearSearch={() => {
-                  console.log('Search cleared')
-                }}
-                searchParams={new URLSearchParams()}
-                pathname={pathname}
-              />
-            ) : (
-              <div className="mt-4 flex flex-col gap-3">Empty state</div>
-            )
+            <AssetsList
+              assets={assets?.assets ?? []}
+              onSelect={url => {
+                const ticker = url.split('/').pop()
+                if (!ticker) return
+                router.navigate({
+                  to: '/portfolio/assets/$ticker',
+                  params: { ticker },
+                  ...(!isDesktop && {
+                    viewTransition: true,
+                  }),
+                })
+              }}
+              clearSearch={() => {
+                console.log('Search cleared')
+              }}
+              searchParams={new URLSearchParams()}
+              pathname={pathname}
+            />
           }
           loadingState={<AssetsListLoading />}
           detail={<Token ticker={ticker} address={address} />}

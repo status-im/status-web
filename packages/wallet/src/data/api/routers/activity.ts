@@ -41,7 +41,7 @@ const cachedPriceData = cache(async (key: string) => {
   return await fetchTokensPriceForDate(symbols, timestamp)
 })
 
-type PriceDataResponse = Record<string, { EUR?: { PRICE: number } }>
+type PriceDataResponse = Record<string, { USD?: { PRICE: number } }>
 
 const batchPriceRequests = async (
   priceRequests: Array<{ symbols: string[]; timestamp: number }>,
@@ -242,7 +242,7 @@ export async function page({
         activity.asset || (activity.category === 'external' ? 'ETH' : null)
 
       if (assetSymbol && priceData[assetSymbol]) {
-        const eurRate = priceData[assetSymbol].EUR?.PRICE ?? 0
+        const eurRate = priceData[assetSymbol].USD?.PRICE ?? 0
 
         return {
           ...activity,
@@ -346,7 +346,7 @@ export async function activity(
         activity.asset || (activity.category === 'external' ? 'ETH' : null)
 
       if (assetSymbol && priceData[assetSymbol]) {
-        const eurRate = priceData[assetSymbol].EUR?.PRICE ?? 0
+        const eurRate = priceData[assetSymbol].USD?.PRICE ?? 0
 
         return {
           ...activity,

@@ -7,19 +7,27 @@ import { defineConfig } from 'wxt'
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
+  imports: false,
   srcDir: 'src',
   // extensionApi: 'chrome',
   // extensionApi: 'webextension-polyfill',
-  modules: ['@wxt-dev/module-react'],
+  modules: ['@wxt-dev/module-react', '@wxt-dev/auto-icons'],
   manifestVersion: 3,
   manifest: ({ mode }) => {
+    const scriptSrc =
+      mode === 'production'
+        ? "'self' 'wasm-unsafe-eval'"
+        : "'self' 'wasm-unsafe-eval' http://localhost:4000/ http://localhost:8097/"
     const connectSrc =
       mode === 'production'
         ? 'https://status-api-status-im-web.vercel.app/ https://status-api-status-im-web.vercel.app/api/'
         : 'ws: http://localhost:3030/ https://localhost:3030/'
 
     return {
-      name: 'Status Portfolio Wallet',
+      version: '0.1.0',
+      name: '!Status Portfolio Wallet (Beta)',
+      description:
+        'Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one.',
       permissions: ['storage'],
       action: {},
       web_accessible_resources: [
@@ -30,7 +38,7 @@ export default defineConfig({
         },
       ],
       content_security_policy: {
-        extension_pages: `script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' ${connectSrc}`,
+        extension_pages: `script-src ${scriptSrc}; object-src 'self'; connect-src 'self' ${connectSrc}`,
       },
     }
   },

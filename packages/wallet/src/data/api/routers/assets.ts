@@ -30,6 +30,7 @@ type Asset = {
   price_percentage_24h_change: number
   balance: number
   total_eur: number
+  decimals?: number
   metadata: {
     market_cap: number
     fully_dilluted: number
@@ -61,12 +62,13 @@ const STATUS_NETWORKS: Record<number, NetworkType> = {
 }
 
 const DEFAULT_TOKEN_SYMBOLS = [
+  'ETH',
   'SNT',
   'USDC',
   'USDT',
   'LINK',
   'PEPE',
-  'WBNB',
+  'UNI',
   'SHIB',
 ]
 
@@ -276,10 +278,11 @@ async function all({
             icon: token.logoURI,
             name: token.name,
             symbol: token.symbol,
-            price_eur: price.EUR['PRICE'],
-            price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
+            price_eur: price.USD['PRICE'],
+            price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
             balance: balanceInfo.balance,
-            total_eur: balanceInfo.balance * price.EUR['PRICE'],
+            total_eur: balanceInfo.balance * price.USD['PRICE'],
+            decimals: token.decimals,
           }
 
           assets.push(asset)
@@ -312,6 +315,7 @@ async function all({
             name: token.name,
             symbol: token.symbol,
             balance: balanceInfo.balance,
+            decimals: token.decimals, // <-- Adicionado aqui
           })
         }
       }
@@ -331,9 +335,10 @@ async function all({
         if (price) {
           const asset: Omit<Asset, 'metadata'> = {
             ...partialAsset,
-            price_eur: price['EUR']['PRICE'] ?? 0,
-            price_percentage_24h_change: price['EUR']['CHANGEPCT24HOUR'] ?? 0,
-            total_eur: partialAsset.balance * (price['EUR']['PRICE'] ?? 0),
+            price_eur: price['USD']['PRICE'] ?? 0,
+            price_percentage_24h_change: price['USD']['CHANGEPCT24HOUR'] ?? 0,
+            total_eur: partialAsset.balance * (price['USD']['PRICE'] ?? 0),
+            decimals: partialAsset.decimals, // <-- Mantém decimals
           }
 
           assets.push(asset)
@@ -384,14 +389,17 @@ async function all({
             icon: token.logoURI,
             name: token.name,
             symbol: token.symbol,
-            price_eur: prices[symbol].EUR.PRICE,
-            price_percentage_24h_change: prices[symbol].EUR.CHANGEPCT24HOUR,
+            price_eur: prices[symbol].USD.PRICE,
+            price_percentage_24h_change: prices[symbol].USD.CHANGEPCT24HOUR,
             balance: 0,
             total_eur: 0,
+            decimals: token.decimals,
           })
         }
       }
     }
+
+    aggregatedAssets.sort((a, b) => b.total_eur - a.total_eur)
 
     const summary = sum(aggregatedAssets)
 
@@ -671,6 +679,7 @@ async function nativeTokenBalanceChart({
         days,
         undefined,
         currentTime,
+        18,
       )
 
       return { [network]: data } as Record<
@@ -732,6 +741,7 @@ async function tokenBalanceChart({
         days,
         token.address,
         currentTime,
+        token.decimals,
       )
 
       return { [STATUS_NETWORKS[token.chainId]]: data } as Record<
@@ -843,6 +853,9 @@ function map(data: {
   tokenMetadata: any
 }): Asset {
   const { token, balance, price, priceHistory, tokenMetadata } = data
+
+  const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
+
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
     ...('address' in token
@@ -851,18 +864,19 @@ function map(data: {
     icon: token.logoURI,
     name: token.name,
     symbol: token.symbol,
-    price_eur: price.EUR['PRICE'],
-    price_percentage_24h_change: price.EUR['CHANGEPCT24HOUR'],
+    price_eur: price.USD['PRICE'],
+    price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
     balance: Number(balance) / 10 ** token.decimals,
-    total_eur: (Number(balance) / 10 ** token.decimals) * price.EUR['PRICE'],
+    total_eur: (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+    decimals: token.decimals,
     metadata: {
-      market_cap: price.EUR['MKTCAP'],
-      fully_dilluted: price.EUR['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
-      circulation: price.EUR['CIRCULATINGSUPPLY'],
+      market_cap: price.USD['MKTCAP'],
+      fully_dilluted: price.USD['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
+      circulation: price.USD['CIRCULATINGSUPPLY'],
       total_supply: tokenMetadata['SUPPLY_TOTAL'],
       all_time_high: Math.max(...priceHistory.map(({ high }) => high)),
-      all_time_low: Math.min(...priceHistory.map(({ low }) => low)),
-      volume_24: price.EUR['TOTALVOLUME24H'],
+      all_time_low: lows.length ? Math.min(...lows) : price.USD['PRICE'],
+      volume_24: price.USD['TOTALVOLUME24HTO'],
       rank_by_market_cap:
         tokenMetadata['TOPLIST_BASE_RANK']['TOTAL_MKT_CAP_USD'],
       about: tokenMetadata['ASSET_DESCRIPTION'],
@@ -878,7 +892,9 @@ function sum(assets: Asset[] | Omit<Asset, 'metadata'>[]) {
       acc + asset.total_eur * (asset.price_percentage_24h_change / 100),
     0,
   )
-  const total_percentage_24h_change = (total_eur_24h_change / total_eur) * 100
+  const total_percentage_24h_change = total_eur
+    ? (total_eur_24h_change / total_eur) * 100
+    : 0
 
   return {
     total_balance,

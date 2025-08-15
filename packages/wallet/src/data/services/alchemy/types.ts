@@ -361,6 +361,33 @@ export type AssetTransfersResponseBody = {
   }
 }
 
+export type BlockNumberResponseBody = {
+  jsonrpc: '2.0'
+  id: number
+  result: string | null
+}
+
+export type TransactionStatusResponseBody = {
+  jsonrpc: '2.0'
+  id: '1'
+  result: {
+    blockHash: string
+    blockNumber: string
+    contractAddress: string | null
+    cumulativeGasUsed: string
+    from: string
+    gasUsed: string
+    effectiveGasPrice: string
+    logs: unknown[]
+    logsBloom: string
+    status: string
+    to: string
+    transactionHash: string
+    transactionIndex: string
+    type: string
+  }
+}
+
 export type ResponseBody =
   | ERC20TokenBalanceResponseBody
   | NativeTokenBalanceResponseBody
@@ -378,3 +405,5 @@ export type ResponseBody =
   | TokenBalanceHistoryResponseBody
   | AssetTransfersResponseBody
   | TokensBalanceResponseBody
+  | BlockNumberResponseBody
+  | TransactionStatusResponseBody

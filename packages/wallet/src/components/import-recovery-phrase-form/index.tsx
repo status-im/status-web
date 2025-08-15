@@ -12,7 +12,7 @@ const mnemonicSchema = z.object({
   mnemonic: z
     .string()
     .trim()
-    .refine(value => validateMnemonic(value, english), {
+    .refine(value => value === '' || validateMnemonic(value, english), {
       message: 'Invalid phrase. Check word count and spelling.',
     }),
 })
@@ -38,7 +38,10 @@ const ImportRecoveryPhraseForm = ({
 
   const {
     formState: { errors },
+    watch,
   } = form
+
+  const mnemonicValue = watch('mnemonic')
 
   return (
     <FormProvider {...form}>
@@ -63,7 +66,7 @@ const ImportRecoveryPhraseForm = ({
           <Button
             variant="primary"
             type="submit"
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || !mnemonicValue}
           >
             {loading ? (
               <LoadingIcon className="animate-spin text-white-100" />

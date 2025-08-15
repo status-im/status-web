@@ -3,6 +3,9 @@
   "include": ["./src"],
 
   "compilerOptions": {
-    "outDir": "./dist"
-  }
+    "composite": true,
+    "outDir": "./dist",
+    "noEmit": false
+  },
+  "references": []
 }

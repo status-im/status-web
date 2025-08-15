@@ -14,7 +14,6 @@ export const renderMarkdown = async (
   const result = await unified()
     .use(remarkParse)
     .use(remarkRehype)
-    // @ts-expect-error - rehype-react types are not compatible with unified types
     .use(rehypeReact, {
       ...production,
       components,
