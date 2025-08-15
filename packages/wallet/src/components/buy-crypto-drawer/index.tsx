@@ -63,13 +63,13 @@ export const BuyCryptoDrawer = (props: Props) => {
     providers = [
       {
         name: 'mercuryo',
-        description: 'Buy crypto within 15 seconds',
-        fee: '4.5%',
+        // description: 'Buy crypto within 15 seconds',
+        fee: '1% - 4.5%',
         image: 'Wallet/Icons/Logos/mercuryo:64:64',
       },
       {
         name: 'moonpay',
-        description: 'The new standard for fiat to crypto',
+        // description: 'The new standard for fiat to crypto',
         fee: '1% - 4.5%',
         image: 'Wallet/Icons/Logos/moonpay:64:64',
       },
@@ -139,7 +139,7 @@ export const BuyCryptoDrawer = (props: Props) => {
 
       <Drawer.Content className="p-3">
         <Drawer.Header className="sticky top-1 flex flex-col gap-2 bg-white-60 backdrop-blur-[20px]">
-          <Drawer.Title className="!pb-0 pl-1">Buy crypto</Drawer.Title>
+          <Drawer.Title className="!pb-0 pl-1">Ways to buy tokens</Drawer.Title>
 
           <div className="flex items-center gap-2">
             <div
