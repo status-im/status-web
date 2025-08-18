@@ -746,7 +746,7 @@ const Token = (props: Props) => {
                   index < 4 && '2xl:border-b',
                 )}
               >
-                <Tooltip content={item.tooltip} side="top">
+                <OptionalTooltip content={item.tooltip}>
                   <div>
                     <div className="text-13 font-regular text-neutral-50">
                       {item.label}
@@ -755,7 +755,7 @@ const Token = (props: Props) => {
                       {item.value}
                     </div>
                   </div>
-                </Tooltip>
+                </OptionalTooltip>
               </div>
             ))}
           </div>
@@ -765,6 +765,23 @@ const Token = (props: Props) => {
         </div>
       </div>
     </StickyHeaderContainer>
+  )
+}
+
+const OptionalTooltip = ({
+  content,
+  children,
+}: {
+  content?: React.ReactNode
+  children: React.ReactElement
+}) => {
+  if (!content) {
+    return children
+  }
+  return (
+    <Tooltip content={content} side="top">
+      {children}
+    </Tooltip>
   )
 }
 
