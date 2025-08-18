@@ -724,7 +724,10 @@ const Token = (props: Props) => {
                   <CurrencyAmount value={metadata.volume_24} format="compact" />
                 ),
                 tooltip: (
-                  <TokenAmount value={metadata.volume_24} format="standard" />
+                  <CurrencyAmount
+                    value={metadata.volume_24}
+                    format="standard"
+                  />
                 ),
               },
               {
