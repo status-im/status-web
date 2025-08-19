@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 
 import { match } from 'ts-pattern'
 
+import { getSubscriptData, SubscriptNumber } from '../subscript-notation'
+
 type Props = {
   value: number
   /**
@@ -12,6 +14,7 @@ type Props = {
    */
   format: 'compact' | 'standard' | 'precise'
   className?: string
+  subscriptNotation?: boolean
 }
 
 // TODO: get this from the user's settings
@@ -19,7 +22,12 @@ const SYMBOL: 'EUR' | 'USD' = 'USD'
 const MIN_VALUE = 0.01
 
 export const CurrencyAmount = (props: Props) => {
-  const { value, format = 'standard', className } = props
+  const {
+    value,
+    format = 'standard',
+    className,
+    subscriptNotation = false,
+  } = props
 
   const formatter = useMemo(
     () =>
@@ -64,6 +72,22 @@ export const CurrencyAmount = (props: Props) => {
 
   if (value > 0 && value < MIN_VALUE && format !== 'precise') {
     return <div className={className}>{'< ' + formatter.format(MIN_VALUE)}</div>
+  }
+
+  if (
+    format === 'precise' &&
+    Math.abs(value) < 0.0001 &&
+    value !== 0 &&
+    subscriptNotation
+  ) {
+    const subscriptData = getSubscriptData(Math.abs(value))
+    if (subscriptData) {
+      return (
+        <div className={className}>
+          <SubscriptNumber value={value} dataType="price" />
+        </div>
+      )
+    }
   }
 
   return <div className={className}>{formatter.format(value)}</div>

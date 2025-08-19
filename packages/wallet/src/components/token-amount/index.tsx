@@ -2,6 +2,12 @@ import { useMemo } from 'react'
 
 import { match } from 'ts-pattern'
 
+import {
+  formatSubscriptString,
+  getSubscriptData,
+  SubscriptNumber,
+} from '../subscript-notation'
+
 type TokenAmountFormat = 'compact' | 'standard' | 'precise'
 
 const createTokenAmountFormatter = (format: TokenAmountFormat) => {
@@ -42,7 +48,23 @@ const createTokenAmountFormatter = (format: TokenAmountFormat) => {
     .exhaustive()
 }
 
-const formatTokenAmount = (value: number, format: TokenAmountFormat) => {
+const formatTokenAmount = (
+  value: number,
+  format: TokenAmountFormat,
+  subscriptNotation = false,
+) => {
+  if (
+    format === 'precise' &&
+    Math.abs(value) < 0.0001 &&
+    value !== 0 &&
+    subscriptNotation
+  ) {
+    const formattedString = formatSubscriptString(value, 'balance')
+    if (formattedString) {
+      return formattedString
+    }
+  }
+
   return createTokenAmountFormatter(format).format(value)
 }
 
@@ -56,12 +78,29 @@ type Props = {
    */
   format: TokenAmountFormat
   className?: string
+  subscriptNotation?: boolean
 }
 
 const TokenAmount = (props: Props) => {
-  const { value, format, className } = props
+  const { value, format, className, subscriptNotation = false } = props
 
   const formatter = useMemo(() => createTokenAmountFormatter(format), [format])
+
+  if (
+    format === 'precise' &&
+    Math.abs(value) < 0.0001 &&
+    value !== 0 &&
+    subscriptNotation
+  ) {
+    const subscriptData = getSubscriptData(Math.abs(value))
+    if (subscriptData) {
+      return (
+        <div className={className}>
+          <SubscriptNumber value={value} dataType="balance" />
+        </div>
+      )
+    }
+  }
 
   return <div className={className}>{formatter.format(value)}</div>
 }

@@ -124,7 +124,11 @@ const AssetsList = (props: Props) => {
                       />
                     </Table.Cell>
                     <Table.Cell size={36}>
-                      <TokenAmount value={asset.balance} format="precise" />
+                      <TokenAmount
+                        value={asset.balance}
+                        format="precise"
+                        subscriptNotation
+                      />
                     </Table.Cell>
                     <Table.Cell size={36}>
                       <CurrencyAmount

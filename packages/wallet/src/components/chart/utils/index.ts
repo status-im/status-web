@@ -130,7 +130,7 @@ export const formatChartValue = (
   })
 }
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+export const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
   notation: 'standard',
@@ -139,7 +139,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
   roundingPriority: 'morePrecision',
 })
 
-const numberFormatter = new Intl.NumberFormat('en-US', {
+export const numberFormatter = new Intl.NumberFormat('en-US', {
   style: 'decimal',
   notation: 'standard',
   minimumFractionDigits: 4,
@@ -148,17 +148,6 @@ const numberFormatter = new Intl.NumberFormat('en-US', {
   maximumSignificantDigits: 4,
   roundingPriority: 'morePrecision',
 })
-
-export const formatSmallNumber = (
-  value: number,
-  dataType: DataType = 'price',
-): string => {
-  if (value === 0) return '0'
-
-  // Use the same decimal precision logic as Y-axis ticks
-  const formatter = dataType === 'balance' ? numberFormatter : currencyFormatter
-  return formatter.format(value)
-}
 
 export const calculateChartRange = (
   data: Array<{ price: number }>,
@@ -184,9 +173,10 @@ export const calculateChartRange = (
 
   const ticks = Array.from({ length: tickCount }, (_, i) => {
     const tickValue = finalMin + i * tickInterval
-    const formatter =
-      dataType === 'balance' ? numberFormatter : currencyFormatter
-    return formatter.format(tickValue)
+    return {
+      value: tickValue,
+      dataType,
+    }
   })
 
   return { min: finalMin, max: finalMax, ticks }

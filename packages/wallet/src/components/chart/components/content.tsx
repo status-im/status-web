@@ -2,8 +2,9 @@ import { animated, config, useSpring } from '@react-spring/web'
 import { curveCatmullRom } from '@visx/curve'
 import { AreaClosed, LinePath } from '@visx/shape'
 
+import { getSubscriptData, SvgSubscriptNumber } from '../../subscript-notation'
 import { negativeColors, positiveColors } from '../constants'
-import { formatSmallNumber } from '../utils'
+import { currencyFormatter, numberFormatter } from '../utils'
 
 import type { BaseChartProps, ChartDatum } from '../utils'
 import type { ScaleLinear, ScaleTime } from 'd3-scale'
@@ -39,8 +40,20 @@ const Content = (props: Props) => {
 
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
-  const formattedValue = formatSmallNumber(lastData.value, dataType)
-  const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
+  const subscriptData = getSubscriptData(Math.abs(lastData.value))
+
+  const formattedValue = subscriptData
+    ? null
+    : (dataType === 'balance' ? numberFormatter : currencyFormatter).format(
+        lastData.value,
+      )
+  const displayText = subscriptData
+    ? `${subscriptData.prefix}${subscriptData.subscript}${subscriptData.suffix}`
+    : formattedValue || ''
+  const tagWidth = Math.min(
+    40 + (subscriptData ? displayText.length : formattedValue?.length || 0) * 4,
+    80,
+  )
   const tagXOffset = Math.max(0, 20 - tagWidth / 2)
   const textX = tagXOffset + tagWidth / 2
 
@@ -91,9 +104,9 @@ const Content = (props: Props) => {
       <g transform={`translate(${tagX}, ${tagY})`}>
         <rect
           x={tagXOffset}
-          y={-10}
+          y={subscriptData ? -12 : -10}
           width={tagWidth}
-          height={20}
+          height={subscriptData ? 24 : 20}
           fill={colors.line}
           rx={6}
         />
@@ -104,7 +117,11 @@ const Content = (props: Props) => {
           fontSize={12}
           textAnchor="middle"
         >
-          {formattedValue}
+          {subscriptData ? (
+            <SvgSubscriptNumber value={lastData.value} dataType={dataType} />
+          ) : (
+            formattedValue
+          )}
         </text>
       </g>
     </g>
