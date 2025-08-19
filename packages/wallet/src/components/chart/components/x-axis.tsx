@@ -75,15 +75,10 @@ const XAxis = (props: Props) => {
                 width: 50,
               }}
             >
-              <p className="text-11 font-medium uppercase text-neutral-40">
-                {activeRange === '7D'
-                  ? format(new Date(d.date), 'MMM d')
-                  : activeRange === 'All' &&
-                      previousDate &&
-                      new Date(d.date).getFullYear() !==
-                        previousDate.getFullYear()
-                    ? format(new Date(d.date), 'yyyy')
-                    : format(new Date(d.date), 'MMM')}
+              <p className="text-11 font-medium text-neutral-40">
+                {activeRange === '7D' || activeRange === '1M'
+                  ? format(new Date(d.date), 'd MMM')
+                  : format(new Date(d.date), 'MMM yy')}
               </p>
             </div>
           ))
@@ -96,11 +91,11 @@ const XAxis = (props: Props) => {
                   0,
                   Math.min(xPosition - 12, availableWidth - 24),
                 ),
-                width: 24,
+                width: 50,
               }}
             >
               <p className="text-11 font-medium text-neutral-40">
-                {format(new Date(d.date), 'd')}
+                {format(new Date(d.date), 'd MMM')}
               </p>
             </div>
           ))

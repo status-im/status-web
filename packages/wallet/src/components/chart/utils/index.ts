@@ -1,5 +1,3 @@
-import { differenceInCalendarMonths } from 'date-fns'
-
 export const TIME_FRAMES = ['24H', '7D', '1M', '3M', '1Y', 'All'] as const
 export type TimeFrame = (typeof TIME_FRAMES)[number]
 
@@ -31,8 +29,6 @@ export const checkDateOutput = (
 ): 'bullet' | 'month' | 'day' | 'hour' | 'empty' => {
   const {
     date,
-    previousDate,
-    firstDate,
     index,
     variant,
     totalDataPoints = 0,
@@ -49,8 +45,6 @@ export const checkDateOutput = (
     return Math.max(1, Math.ceil(totalDataPoints / maxLabels))
   }
 
-  const isFirstDataPoint = index === 0
-
   if (variant === '24H') {
     const hourInterval = getSafeInterval(60)
     if (index % hourInterval === 0) {
@@ -60,22 +54,20 @@ export const checkDateOutput = (
   }
 
   if (variant === '7D') {
-    const currentDay = date.getDate()
-    const previousDay = previousDate ? previousDate.getDate() : -1
-    const isDayTransition = currentDay !== previousDay
+    const dayInterval = getSafeInterval(70)
 
-    if (isFirstDataPoint || isDayTransition) {
+    if (index % dayInterval === 0) {
       return 'month'
     }
     return 'empty'
   }
 
   if (variant === '1M') {
-    const interval = getSafeInterval(40)
+    const interval = getSafeInterval(60)
 
     if (index % interval === 0) {
       const currentDayOfMonth = date.getDate()
-      if (isFirstDataPoint || currentDayOfMonth === 1) {
+      if (currentDayOfMonth === 1) {
         return 'month'
       }
       return 'day'
@@ -85,14 +77,6 @@ export const checkDateOutput = (
   }
 
   if (variant === '3M') {
-    const currentMonth = date.getMonth()
-    const previousMonth = previousDate ? previousDate.getMonth() : -1
-    const isMonthTransition = currentMonth !== previousMonth
-
-    if (isFirstDataPoint || isMonthTransition) {
-      return 'month'
-    }
-
     const dayInterval = Math.max(10, getSafeInterval(60))
     if (index % dayInterval === 0) {
       return 'day'
@@ -102,11 +86,9 @@ export const checkDateOutput = (
   }
 
   if (variant === '1Y') {
-    const currentMonth = date.getMonth()
-    const previousMonth = previousDate ? previousDate.getMonth() : -1
-    const isMonthTransition = currentMonth !== previousMonth
+    const monthInterval = getSafeInterval(50)
 
-    if (isFirstDataPoint || isMonthTransition) {
+    if (index > 0 && index % monthInterval === 0) {
       return 'month'
     }
 
@@ -114,22 +96,13 @@ export const checkDateOutput = (
   }
 
   if (variant === 'All') {
-    if (isFirstDataPoint) {
+    const yearInterval = getSafeInterval(50)
+
+    if (index > 0 && index % yearInterval === 0) {
       return 'month'
     }
 
-    const currentYear = date.getFullYear()
-    const previousYear = previousDate ? previousDate.getFullYear() : -1
-    const isYearTransition = currentYear !== previousYear
-
-    if (isYearTransition) {
-      return 'month'
-    }
-
-    const monthInterval = Math.max(6, getSafeInterval(60))
-    const monthsFromReference = differenceInCalendarMonths(date, firstDate)
-
-    return monthsFromReference % monthInterval === 0 ? 'month' : 'empty'
+    return 'empty'
   }
 
   return 'bullet'
