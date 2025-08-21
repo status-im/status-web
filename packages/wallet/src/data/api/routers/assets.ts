@@ -272,30 +272,38 @@ async function all({
     for (const [network] of Object.entries(ERC20TokensByNetwork) as Array<
       [string, ERC20Token[]]
     >) {
-      const allBalances = await getERC20TokensBalance(
-        address,
-        network as NetworkType,
-      )
+      let pageKey: string | undefined
 
-      for (const balance of allBalances) {
-        const tokenBalance = Number(balance.tokenBalance)
+      do {
+        const result = await getERC20TokensBalance(
+          address,
+          network as NetworkType,
+          undefined,
+          pageKey,
+        )
 
-        if (tokenBalance > 0) {
-          const token = filteredERC20Tokens.get(balance.contractAddress)
-          if (token) {
-            partialERC20Assets.set(balance.contractAddress, {
-              networks: [network as NetworkType],
-              native: false,
-              contract: token.address,
-              icon: token.logoURI,
-              name: token.name,
-              symbol: token.symbol,
-              balance: tokenBalance / 10 ** token.decimals,
-              decimals: token.decimals,
-            })
+        for (const balance of result.tokenBalances) {
+          const tokenBalance = Number(balance.tokenBalance)
+
+          if (tokenBalance > 0) {
+            const token = filteredERC20Tokens.get(balance.contractAddress)
+            if (token) {
+              partialERC20Assets.set(balance.contractAddress, {
+                networks: [network as NetworkType],
+                native: false,
+                contract: token.address,
+                icon: token.logoURI,
+                name: token.name,
+                symbol: token.symbol,
+                balance: tokenBalance / 10 ** token.decimals,
+                decimals: token.decimals,
+              })
+            }
           }
         }
-      }
+
+        pageKey = result.pageKey
+      } while (pageKey)
     }
 
     const batchSize = 300
@@ -521,14 +529,14 @@ async function token({
   // fixme: not found contract but at least 1 other returns
   await Promise.allSettled(
     filteredERC20Tokens.map(async token => {
-      const balance = await getERC20TokensBalance(
+      const result = await getERC20TokensBalance(
         address,
         STATUS_NETWORKS[token.chainId],
         [token.address],
       )
 
       if (
-        !Number(balance[0].tokenBalance) &&
+        !Number(result.tokenBalances[0].tokenBalance) &&
         !DEFAULT_TOKEN_SYMBOLS.includes(token.symbol)
       ) {
         throw new Error(`Balance not found for token ${token.symbol}`)
@@ -545,7 +553,7 @@ async function token({
 
       const asset = map({
         token,
-        balance: balance[0].tokenBalance,
+        balance: result.tokenBalances[0].tokenBalance,
         price,
         priceHistory,
         tokenMetadata,

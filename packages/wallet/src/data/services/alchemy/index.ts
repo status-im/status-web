@@ -119,6 +119,7 @@ export async function getERC20TokensBalance(
   address: string,
   network: NetworkType,
   contracts?: string[],
+  pageKey?: string,
 ) {
   if (contracts && contracts.length > 100) {
     throw new Error('Too many contracts')
@@ -127,18 +128,25 @@ export async function getERC20TokensBalance(
     `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
   )
 
+  const params: (string | string[])[] =
+    contracts && contracts.length > 0 ? [address, contracts] : [address]
+
+  if (pageKey) {
+    params.push(pageKey)
+  }
+
   const body = await _retry(async () =>
     _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 0, {
       jsonrpc: '2.0',
       method: 'alchemy_getTokenBalances',
-      params:
-        contracts && contracts.length > 0 ? [address, contracts] : [address],
+      params,
     }),
   )
 
-  const balances = body.result.tokenBalances
-
-  return balances
+  return {
+    tokenBalances: body.result.tokenBalances,
+    pageKey: body.result.pageKey,
+  }
 }
 
 /**
@@ -313,8 +321,8 @@ export async function fetchTokenBalanceHistory(
 
   let balance: string
   if (contract) {
-    balance = (await getERC20TokensBalance(address, network, [contract]))[0]
-      .tokenBalance
+    balance = (await getERC20TokensBalance(address, network, [contract]))
+      .tokenBalances[0].tokenBalance
   } else {
     balance = await getNativeTokenBalance(address, network)
   }

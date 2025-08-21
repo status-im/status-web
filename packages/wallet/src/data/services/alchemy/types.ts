@@ -12,6 +12,7 @@ export type ERC20TokenBalanceResponseBody = {
       contractAddress: string
       tokenBalance: string
     }>
+    pageKey?: string
   }
 }
 
