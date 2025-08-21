@@ -118,9 +118,9 @@ export async function getNativeTokenBalance(
 export async function getERC20TokensBalance(
   address: string,
   network: NetworkType,
-  contracts: string[],
+  contracts?: string[],
 ) {
-  if (contracts.length > 1000) {
+  if (contracts && contracts.length > 100) {
     throw new Error('Too many contracts')
   }
   const url = new URL(
@@ -131,7 +131,8 @@ export async function getERC20TokensBalance(
     _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 0, {
       jsonrpc: '2.0',
       method: 'alchemy_getTokenBalances',
-      params: [address, contracts],
+      params:
+        contracts && contracts.length > 0 ? [address, contracts] : [address],
     }),
   )
 
