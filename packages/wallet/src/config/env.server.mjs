@@ -9,11 +9,9 @@ if (typeof window !== 'undefined') {
 
 export const envSchema = z.object({
   INFURA_API_KEY: z.string(),
-  ALCHEMY_API_KEY: z.string(),
-  ALCHEMY_API_KEY_ROTATION_2: z.string(),
+  ALCHEMY_API_KEYS: z.string(),
   COINGECKO_API_KEY: z.string(),
-  CRYPTOCOMPARE_API_KEY: z.string(),
-  CRYPTOCOMPARE_API_KEY_ROTATION_2: z.string(),
+  CRYPTOCOMPARE_API_KEYS: z.string(),
   PORT: z.coerce.number().optional(),
   MERCURYO_SECRET_KEY: z.string(),
 })
