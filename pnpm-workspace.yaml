@@ -8,6 +8,7 @@ packages:
   - 'packages/wallet'
   - 'apps/hub'
   - 'apps/status.app'
+  - 'apps/status.network'
   - 'apps/connector'
   - 'apps/portfolio'
   - 'apps/wallet'
