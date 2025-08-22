@@ -10,7 +10,8 @@
 
 // import 'server-only'
 
-import { getApiKey } from '../api-key-rotation'
+import { serverEnv } from '../../../config/env.server.mjs'
+import { getRandomApiKey } from '../api-key-rotation'
 
 import type {
   deprecated_TokensMetadataResponseBody,
@@ -36,7 +37,10 @@ export async function legacy_fetchTokenPriceHistory(
     url.searchParams.set('tsym', 'USD')
     url.searchParams.set('allData', 'true')
     url.searchParams.set('tryConversion', 'false')
-    url.searchParams.set('api_key', getApiKey('cryptocompare'))
+    url.searchParams.set(
+      'api_key',
+      getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+    )
 
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
     const data = body.Data.Data
@@ -57,7 +61,10 @@ export async function legacy_fetchTokenPriceHistory(
     url.searchParams.set('toTs', to.toString())
     url.searchParams.set('limit', '2000')
     url.searchParams.set('tryConversion', 'false')
-    url.searchParams.set('api_key', getApiKey('cryptocompare'))
+    url.searchParams.set(
+      'api_key',
+      getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+    )
 
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
     const data = body.Data.Data
@@ -84,7 +91,10 @@ export async function fetchTokenMetadata(symbol: string) {
   url.searchParams.set('asset', symbol)
   url.searchParams.set('asset_lookup_priority', 'SYMBOL')
   url.searchParams.set('quote_asset', 'USD')
-  url.searchParams.set('api_key', getApiKey('cryptocompare'))
+  url.searchParams.set(
+    'api_key',
+    getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+  )
 
   const body = await _fetch<TokenMetadataResponseBody>(url, 3600)
   const data = body.Data
@@ -101,7 +111,10 @@ export async function deprecated_fetchTokenMetadata(symbol: string) {
     'https://data-api.cryptocompare.com/asset/v1/data/by/symbol',
   )
   url.searchParams.set('asset_symbol', symbol)
-  url.searchParams.set('api_key', getApiKey('cryptocompare'))
+  url.searchParams.set(
+    'api_key',
+    getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+  )
 
   const body = await _fetch<deprecated_TokensMetadataResponseBody>(url, 3600)
   const data = body.Data[symbol]
@@ -118,7 +131,10 @@ export async function deprecated_fetchTokenMetadata(symbol: string) {
 export async function legacy_research_fetchTokenMetadata(symbol: string) {
   const url = new URL('https://min-api.cryptocompare.com/data/all/coinlist')
   url.searchParams.set('fsym', symbol)
-  url.searchParams.set('api_key', getApiKey('cryptocompare'))
+  url.searchParams.set(
+    'api_key',
+    getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+  )
 
   const body = await _fetch<legacy_research_TokenMetadataResponseBody>(
     url,
@@ -138,7 +154,10 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
   url.searchParams.set('fsyms', symbols.join(','))
   url.searchParams.set('tsyms', 'USD')
   url.searchParams.set('relaxedValidation', 'true')
-  url.searchParams.set('api_key', getApiKey('cryptocompare'))
+  url.searchParams.set(
+    'api_key',
+    getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+  )
 
   try {
     const body = await _fetch<legacy_TokensPriceResponseBody>(url, 15)
@@ -186,7 +205,10 @@ export async function fetchTokensPriceForDate(
       url.searchParams.set('toTs', timestamp.toString())
       url.searchParams.set('limit', '1')
       url.searchParams.set('tryConversion', 'false')
-      url.searchParams.set('api_key', getApiKey('cryptocompare'))
+      url.searchParams.set(
+        'api_key',
+        getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
+      )
 
       const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 15)
       const prices = body.Data.Data
