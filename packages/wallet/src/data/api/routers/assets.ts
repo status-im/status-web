@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import erc20TokenList from '../../../constants/erc20.json'
 import nativeTokenList from '../../../constants/native.json'
+import { toChecksumAddress } from '../../../utils'
 import {
   fetchTokenBalanceHistory,
   getERC20TokensBalance,
@@ -246,7 +247,7 @@ async function all({
             .map(([chainId]) => Number(chainId))
             .includes(token.chainId),
         )
-        .map(token => [token.address, token]),
+        .map(token => [toChecksumAddress(token.address), token]),
     )
 
     const ERC20TokensByNetwork = Array.from(
@@ -286,12 +287,17 @@ async function all({
           const tokenBalance = Number(balance.tokenBalance)
 
           if (tokenBalance > 0) {
-            const token = filteredERC20Tokens.get(balance.contractAddress)
+            const token = filteredERC20Tokens.get(
+              toChecksumAddress(balance.contractAddress),
+            )
             if (token) {
-              partialERC20Assets.set(balance.contractAddress, {
+              const checksummedAddress = toChecksumAddress(
+                balance.contractAddress,
+              )
+              partialERC20Assets.set(checksummedAddress, {
                 networks: [network as NetworkType],
                 native: false,
-                contract: token.address,
+                contract: checksummedAddress,
                 icon: token.logoURI,
                 name: token.name,
                 symbol: token.symbol,
