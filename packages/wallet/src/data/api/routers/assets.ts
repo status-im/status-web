@@ -171,6 +171,15 @@ export const assetsRouter = router({
 
       return await cachedTokenBalanceChart(inputHash)
     }),
+  remoteConfig: publicProcedure.query(async () => {
+    return await remoteConfig()
+  }),
+})
+
+const remoteConfig = cache(async () => {
+  return {
+    refreshIntervalMs: 15 * 1000,
+  }
 })
 
 // const cachedAll = cache(async (address: string, networks: NetworkType[]) => {
