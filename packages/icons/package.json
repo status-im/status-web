@@ -6,6 +6,10 @@
     "dist",
     "svg"
   ],
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "./index.js",
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -13,27 +17,27 @@
       "require": "./index.js"
     },
     "./12": {
-      "types": "./dist/12/index.d.ts",
+      "types": "./dist/src/12/index.d.ts",
       "import": "./dist/12/index.es.js",
       "require": "./dist/12/index.cjs.js"
     },
     "./16": {
-      "types": "./dist/16/index.d.ts",
+      "types": "./dist/src/16/index.d.ts",
       "import": "./dist/16/index.es.js",
       "require": "./dist/16/index.cjs.js"
     },
     "./20": {
-      "types": "./dist/20/index.d.ts",
+      "types": "./dist/src/20/index.d.ts",
       "import": "./dist/20/index.es.js",
       "require": "./dist/20/index.cjs.js"
     },
     "./social": {
-      "types": "./dist/social/index.d.ts",
+      "types": "./dist/src/social/index.d.ts",
       "import": "./dist/social/index.es.js",
       "require": "./dist/social/index.cjs.js"
     },
     "./reactions": {
-      "types": "./dist/reactions/index.d.ts",
+      "types": "./dist/src/reactions/index.d.ts",
       "import": "./dist/reactions/index.es.js",
       "require": "./dist/reactions/index.cjs.js"
     },
@@ -61,9 +65,8 @@
     "sync": "vite-node scripts/sync.ts && prettier --parser=html --write 'svg/**/*.svg'",
     "generate": "rimraf src && svgr --no-prettier svg --out-dir src && pnpm lint:fix && pnpm format",
     "dev": "vite build --watch --mode development",
-    "build": "vite build",
-    "postbuild": "pnpm build:types",
-    "build:types": "tsc src/**/index.ts --emitDeclarationOnly --declaration --jsx react-jsx --skipLibCheck --declarationDir ./dist",
+    "build": "vite build && pnpm build:types",
+    "build:types": "tsc --emitDeclarationOnly --declaration --jsx react-jsx --skipLibCheck --declarationDir ./dist",
     "#test": "vitest",
     "typecheck": "tsc",
     "lint": "eslint src",

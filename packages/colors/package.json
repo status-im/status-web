@@ -7,10 +7,10 @@
     "dist",
     "src"
   ],
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
-  "types": "dist/index.d.ts",
-  "source": "src/index.ts",
+  "main": "./dist/index.cjs.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/index.d.ts",
+  "source": "./src/index.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -27,8 +27,7 @@
     "sync": "rimraf src && vite-node scripts/sync.ts",
     "dev": "vite build --watch --mode development",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
-    "build": "vite build",
-    "postbuild": "pnpm build:types",
+    "build": "vite build && pnpm build:types",
     "#test": "vitest",
     "typecheck": "tsc",
     "lint": "eslint src",

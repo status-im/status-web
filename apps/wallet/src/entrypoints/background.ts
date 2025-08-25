@@ -4,6 +4,7 @@
 /// <reference path="../../.wxt/wxt.d.ts" />
 
 import { Buffer } from 'buffer'
+import { defineBackground } from 'wxt/sandbox'
 
 // import { browser as wxtBrowser } from 'wxt/browser'
 import { createAPI } from '../data/api'

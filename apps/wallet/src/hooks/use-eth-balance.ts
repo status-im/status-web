@@ -39,8 +39,5 @@ export const useEthBalance = (address: string, enabled: boolean = true) => {
     enabled,
     staleTime: 30 * 1000,
     gcTime: 60 * 1000,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
 }

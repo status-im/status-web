@@ -324,6 +324,55 @@ const apiRouter = router({
               id,
             }
           }),
+
+        sendErc20: t.procedure
+          .input(
+            z.object({
+              walletId: z.string(),
+              password: z.string(),
+              fromAddress: z.string(),
+              toAddress: z.string(),
+              gasLimit: z.string(),
+              maxFeePerGas: z.string(),
+              maxInclusionFeePerGas: z.string(),
+              data: z.string(),
+            }),
+          )
+          .mutation(async ({ input, ctx }) => {
+            const { keyStore, walletCore } = ctx
+
+            const wallet = await keyStore.load(input.walletId)
+
+            const account = wallet.activeAccounts.find(
+              account => account.address === input.fromAddress,
+            )
+
+            if (!account) {
+              throw new Error('From address not found')
+            }
+
+            const privateKey = await keyStore.getKey(
+              wallet.id,
+              input.password,
+              account,
+            )
+
+            const id = await ethereum.sendErc20({
+              walletCore,
+              walletPrivateKey: privateKey,
+              chainID: '01',
+              toAddress: input.toAddress,
+              fromAddress: input.fromAddress,
+              gasLimit: input.gasLimit,
+              maxFeePerGas: input.maxFeePerGas,
+              maxInclusionFeePerGas: input.maxInclusionFeePerGas,
+              data: input.data,
+            })
+
+            return {
+              id,
+            }
+          }),
       }),
 
       bitcoin: router({

@@ -67,17 +67,18 @@ const XAxis = (props: Props) => {
             <div
               key={day}
               className="absolute text-center"
-              style={{ left: xPosition - 25, width: 50 }}
+              style={{
+                left: Math.max(
+                  0,
+                  Math.min(xPosition - 25, availableWidth - 50),
+                ),
+                width: 50,
+              }}
             >
-              <p className="text-11 font-medium uppercase text-neutral-40">
-                {activeRange === '7D'
-                  ? format(new Date(d.date), 'MMM d')
-                  : activeRange === 'All' &&
-                      previousDate &&
-                      new Date(d.date).getFullYear() !==
-                        previousDate.getFullYear()
-                    ? format(new Date(d.date), 'yyyy')
-                    : format(new Date(d.date), 'MMM')}
+              <p className="text-11 font-medium text-neutral-40">
+                {activeRange === '7D' || activeRange === '1M'
+                  ? format(new Date(d.date), 'd MMM')
+                  : format(new Date(d.date), 'MMM yy')}
               </p>
             </div>
           ))
@@ -85,10 +86,16 @@ const XAxis = (props: Props) => {
             <div
               key={day}
               className="absolute text-center"
-              style={{ left: xPosition - 12, width: 24 }}
+              style={{
+                left: Math.max(
+                  0,
+                  Math.min(xPosition - 12, availableWidth - 24),
+                ),
+                width: 50,
+              }}
             >
               <p className="text-11 font-medium text-neutral-40">
-                {format(new Date(d.date), 'd')}
+                {format(new Date(d.date), 'd MMM')}
               </p>
             </div>
           ))
@@ -96,7 +103,13 @@ const XAxis = (props: Props) => {
             <div
               key={day}
               className="absolute text-center"
-              style={{ left: xPosition - 25, width: 50 }}
+              style={{
+                left: Math.max(
+                  0,
+                  Math.min(xPosition - 25, availableWidth - 50),
+                ),
+                width: 50,
+              }}
             >
               <p className="whitespace-nowrap text-11 font-medium text-neutral-40">
                 {format(new Date(d.date), 'HH:mm')}
@@ -104,7 +117,13 @@ const XAxis = (props: Props) => {
             </div>
           ))
           .with('bullet', () => (
-            <div key={day} className="absolute" style={{ left: xPosition - 2 }}>
+            <div
+              key={day}
+              className="absolute"
+              style={{
+                left: Math.max(0, Math.min(xPosition - 2, availableWidth - 4)),
+              }}
+            >
               <p className="text-13 font-medium text-neutral-10">•</p>
             </div>
           ))

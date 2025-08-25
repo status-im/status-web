@@ -48,7 +48,6 @@ const CollectiblesGrid = ({
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      refetchOnWindowFocus: false,
       queryKey: ['collectibles', address, networks, search, sort],
       queryFn: async ({ pageParam = { offset: 0 } }) => {
         const response = await getCollectibles({

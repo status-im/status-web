@@ -4,7 +4,7 @@
     // "tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
     "incremental": true,
     "module": "ES2020",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "target": "ESNext",
     "jsx": "react-jsx",
     "declaration": true,
@@ -33,6 +33,21 @@
     "skipLibCheck": true,
     "pretty": true,
     // "noErrorTruncation": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@status-im/colors": ["./packages/colors/src"],
+      "@status-im/colors/*": ["./packages/colors/src/*"],
+      "@status-im/icons": ["./packages/icons/src"],
+      "@status-im/icons/*": ["./packages/icons/src/*"],
+      "@status-im/components": ["./packages/components/src"],
+      "@status-im/components/*": ["./packages/components/src/*"],
+      "@status-im/wallet": ["./packages/wallet/src"],
+      "@status-im/wallet/*": ["./packages/wallet/src/*"],
+      "@status-im/status-js": ["./packages/status-js/src"],
+      "@status-im/status-js/*": ["./packages/status-js/src/*"]
+      // "@status-im/eslint-config": ["./packages/eslint-config/src"],
+      // "@status-im/eslint-config/*": ["./packages/eslint-config/src/*"]
+    }
   }
 }

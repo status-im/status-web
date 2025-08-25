@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import { Button } from '@status-im/components'
 import { RefreshIcon } from '@status-im/icons/20'
-import { DropdownSort } from '@status-im/wallet/components'
+// import { DropdownSort } from '@status-im/wallet/components'
 import { useIsFetching, useQueryClient } from '@tanstack/react-query'
 
 import { useRefetchToast } from '../hooks/use-refetch-toast'
@@ -23,7 +23,7 @@ import { TabLink } from './tab-link'
 // }
 
 // const placeholderText = {
-//   assets: 'Search asset name or symbol',
+//   assets: 'Search token name or symbol',
 //   collectibles: 'Search collection or collectible name',
 // } as const
 
@@ -40,14 +40,14 @@ type Props = {
 }
 
 const ActionButtons = (props: Props) => {
-  const { address, searchAndSortValues } = props
+  const {
+    address,
+    // searchAndSortValues
+  } = props
   const queryClient = useQueryClient()
   const [isManualRefreshing, setIsManualRefreshing] = useState(false)
 
-  const totalFetchingCount = useIsFetching()
-  const isAnyQueryFetching = totalFetchingCount > 0
-
-  // Use the refetch toast hook for manual refresh
+  // Use the refetch toast hook for manual refreshes
   useRefetchToast({
     isRefreshing: isManualRefreshing,
     queryKeys: [
@@ -57,7 +57,30 @@ const ActionButtons = (props: Props) => {
       ['collectible'],
       ['token'],
     ],
+    onComplete: () => {
+      setIsManualRefreshing(false)
+    },
   })
+
+  const isAnyQueryFetching =
+    useIsFetching({
+      predicate: query => {
+        const key = query.queryKey
+        return (
+          (Array.isArray(key) &&
+            key[0] === 'assets' &&
+            (key[1] === address || key[1] === undefined)) ||
+          (Array.isArray(key) &&
+            key[0] === 'collectibles' &&
+            (key[1] === address || key[1] === undefined)) ||
+          (Array.isArray(key) &&
+            key[0] === 'activities' &&
+            (key[1] === address || key[1] === undefined)) ||
+          (Array.isArray(key) && key[0] === 'collectible') ||
+          (Array.isArray(key) && key[0] === 'token')
+        )
+      },
+    }) > 0
 
   //   const placeholder = placeholderText[checkPathnameAndReturnTabValue(pathname)]
 
@@ -70,11 +93,15 @@ const ActionButtons = (props: Props) => {
       const hasObservers = query.getObserversCount() > 0
 
       const isWalletQuery =
-        (Array.isArray(key) && key[0] === 'assets' && key[1] === address) ||
+        (Array.isArray(key) &&
+          key[0] === 'assets' &&
+          (key[1] === address || key[1] === undefined)) ||
         (Array.isArray(key) &&
           key[0] === 'collectibles' &&
-          key[1] === address) ||
-        (Array.isArray(key) && key[0] === 'activities' && key[1] === address) ||
+          (key[1] === address || key[1] === undefined)) ||
+        (Array.isArray(key) &&
+          key[0] === 'activities' &&
+          (key[1] === address || key[1] === undefined)) ||
         (Array.isArray(key) && key[0] === 'collectible') ||
         (Array.isArray(key) && key[0] === 'token')
 
@@ -86,16 +113,14 @@ const ActionButtons = (props: Props) => {
         queryClient.refetchQueries({ queryKey: query.queryKey }),
       ),
     )
-
-    setTimeout(() => setIsManualRefreshing(false), 100)
   }
 
   return (
     <div className="flex place-content-between">
       <div className="flex gap-1.5">
-        <TabLink href={`/portfolio/assets`}>Assets</TabLink>
+        <TabLink href={`/portfolio/assets`}>Tokens</TabLink>
         <TabLink href={`/portfolio/collectibles`}>Collectibles</TabLink>
-        <TabLink href={`/portfolio/activity`}>Activity</TabLink>
+        <TabLink href={`/portfolio/activity`}>History</TabLink>
       </div>
       <div className="flex items-center gap-2">
         {/* <Input
@@ -123,12 +148,12 @@ const ActionButtons = (props: Props) => {
           aria-label="Refresh data"
           disabled={isAnyQueryFetching}
         />
-        <DropdownSort
+        {/* <DropdownSort
           data={searchAndSortValues.sortOptions}
           onOrderByChange={searchAndSortValues.onOrderByChange}
           orderByColumn={searchAndSortValues.orderByColumn}
           ascending={searchAndSortValues.ascending}
-        />
+        /> */}
       </div>
     </div>
   )

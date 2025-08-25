@@ -7,6 +7,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import { notFound } from '@tanstack/react-router'
 
+import { useValueChartData } from '../../../../hooks/use-value-chart-data'
+
 import type {
   ChartDataType,
   ChartTimeFrame,
@@ -91,11 +93,9 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
+    enabled: activeDataType === 'price' || activeDataType === 'value',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
   const balanceChart = useQuery<ApiOutput['assets']['tokenBalanceChart']>({
@@ -134,18 +134,33 @@ function AssetChart({
       const body = await response.json()
       return body.result.data.json
     },
+    enabled: activeDataType === 'balance' || activeDataType === 'value',
     staleTime: 60 * 60 * 1000, // 1 hour
     gcTime: 60 * 60 * 1000, // 1 hour
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   })
 
-  if (priceChart.isLoading || balanceChart.isLoading) {
+  const valueChartData = useValueChartData({
+    activeDataType,
+    priceData: priceChart.data,
+    balanceData: balanceChart.data,
+  })
+
+  const isLoading =
+    (activeDataType === 'price' && priceChart.isLoading) ||
+    (activeDataType === 'balance' && balanceChart.isLoading) ||
+    (activeDataType === 'value' &&
+      (priceChart.isLoading || balanceChart.isLoading))
+
+  if (isLoading) {
     return <ChartLoading />
   }
 
-  if (priceChart.error || balanceChart.error) {
+  const hasError =
+    (activeDataType === 'price' && priceChart.error) ||
+    (activeDataType === 'balance' && balanceChart.error) ||
+    (activeDataType === 'value' && (priceChart.error || balanceChart.error))
+
+  if (hasError) {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="text-center">
@@ -160,6 +175,7 @@ function AssetChart({
       <Chart
         price={priceChart.data || []}
         balance={balanceChart.data || []}
+        value={valueChartData}
         activeTimeFrame={timeFrame as ChartTimeFrame}
         activeDataType={activeDataType}
       />

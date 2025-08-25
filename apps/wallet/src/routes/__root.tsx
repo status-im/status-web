@@ -10,18 +10,18 @@ import {
   // Navigate,
   Outlet,
   redirect,
-  useRouterState,
 } from '@tanstack/react-router'
 
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { NotAllowed } from '../../../portfolio/src/app/_components/not-allowed'
 // import { AccountsProvider } from '../../../portfolio/src/app/_providers/accounts-context'
 // import { ConnectKitProvider } from '../../../portfolio/src/app/_providers/connectkit-provider'
-// import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
+import { QueryClientProvider } from '../../../portfolio/src/app/_providers/query-client-provider'
 // import { StatusProvider } from '../../../portfolio/src/app/_providers/status-provider'
 import { WagmiProvider } from '../../../portfolio/src/app/_providers/wagmi-provider'
 import { Link } from '../components/link'
 import { apiClient } from '../providers/api-client'
+import { PendingTransactionsProvider } from '../providers/pending-transactions-context'
 import { WalletProvider } from '../providers/wallet-context'
 
 // import { Inter } from 'next/font/google'
@@ -38,23 +38,36 @@ export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
 }>()({
   beforeLoad: async ({ location }) => {
-    const wallets = await apiClient.wallet.all.query()
-    const hasWallets = wallets && wallets.length > 0
+    try {
+      const wallets = await apiClient.wallet.all.query()
+      const hasWallets = Array.isArray(wallets) && wallets.length > 0
 
-    if (location.pathname === '/') {
-      if (hasWallets) {
-        throw redirect({ to: '/portfolio/assets' })
-      } else {
+      if (location.pathname === '/') {
+        if (hasWallets) {
+          throw redirect({ to: '/portfolio/assets' })
+        } else {
+          throw redirect({ to: '/onboarding' })
+        }
+      }
+
+      if (location.pathname.startsWith('/portfolio') && !hasWallets) {
         throw redirect({ to: '/onboarding' })
       }
-    }
 
-    if (location.pathname.startsWith('/portfolio') && !hasWallets) {
-      throw redirect({ to: '/onboarding' })
-    }
-
-    if (location.pathname.startsWith('/onboarding') && hasWallets) {
-      throw redirect({ to: '/portfolio/assets' })
+      if (location.pathname.startsWith('/onboarding') && hasWallets) {
+        throw redirect({ to: '/portfolio/assets' })
+      }
+    } catch (error) {
+      if (error && typeof error === 'object' && 'isRedirect' in error) {
+        throw error
+      }
+      console.error('Error loading wallets in beforeLoad:', error)
+      if (
+        location.pathname === '/' ||
+        location.pathname.startsWith('/portfolio')
+      ) {
+        throw redirect({ to: '/onboarding' })
+      }
     }
   },
   head: () => ({
@@ -67,17 +80,55 @@ export const Route = createRootRouteWithContext<{
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Status Portfolio Wallet',
+        title: '!Status Portfolio Wallet (Beta)',
       },
     ],
   }),
   component: RootComponent,
+  /**
+   * what
+   *
+   * - Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.
+   * - etc.
+   *
+   * when
+   *
+   * - on refreshing
+   */
+  errorComponent: function RootErrorComponent({ error }) {
+    console.error('RootComponent: Error:', error)
+
+    return (
+      <>
+        <div className="flex min-h-[56px] items-center px-2">
+          <Navbar hasFeedback linkComponent={Link} />
+        </div>
+        <div className="px-1">
+          <div className="flex-1 flex-col 2md:flex xl:pb-1">
+            <div className="flex h-[calc(100vh-60px)] flex-col items-center justify-center overflow-y-hidden rounded-[24px] bg-white-100">
+              {/* todo: global error illustration or split view */}
+              <h2 className="pt-[68px] text-15 font-semibold text-neutral-100 first-line:mb-0.5">
+                Something went wrong.
+              </h2>
+              <p className="mb-5 text-13 font-regular text-neutral-100">
+                Refresh or try again later.
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  },
+  notFoundComponent: function RootNotFoundComponent() {
+    console.info('RootNotFoundComponent: Info: not found')
+
+    // todo: global not found illustration
+    // fixme?: show feedback in navbar
+    return
+  },
 })
 
 function RootComponent() {
-  const routerState = useRouterState()
-  const pathname = routerState.location.pathname
-
   return (
     <>
       {/* <div className="min-h-screen bg-neutral-100 text-white-100">
@@ -98,34 +149,31 @@ function RootComponent() {
       <div id="app" className="isolate" data-customisation="blue">
         {/* <StatusProvider> */}
         <WagmiProvider>
-          {/* <QueryClientProvider> */}
-          {/* <Suspense fallback={<div>Loading...</div>}> */}
-          {/* <AccountsProvider> */}
-          {/* <ConnectKitProvider> */}
-          <WalletProvider>
-            <div className="flex min-h-[56px] items-center px-2">
-              <Navbar
-                hasFeedback={/^\/portfolio\/(assets|collectibles)\/[^/]+$/.test(
-                  pathname ?? '',
-                )}
-                linkComponent={Link}
-              />
-            </div>
-            <div className="px-1">
-              <div className="flex-1 flex-col 2md:flex xl:pb-1">
-                <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-auto rounded-[24px] bg-white-100">
-                  {/* <OnboardingPage /> */}
-                  <Outlet />
+          <QueryClientProvider>
+            {/* <Suspense fallback={<div>Loading...</div>}> */}
+            {/* <AccountsProvider> */}
+            {/* <ConnectKitProvider> */}
+            <WalletProvider>
+              <PendingTransactionsProvider>
+                <div className="flex min-h-[56px] items-center px-2">
+                  <Navbar hasFeedback linkComponent={Link} />
                 </div>
-              </div>
-              {/* <NotAllowed /> */}
-              <ToastContainer />
-            </div>
-          </WalletProvider>
-          {/* </ConnectKitProvider> */}
-          {/* </AccountsProvider> */}
-          {/* </Suspense> */}
-          {/* </QueryClientProvider> */}
+                <div className="px-1">
+                  <div className="flex-1 flex-col 2md:flex xl:pb-1">
+                    <div className="flex h-[calc(100vh-60px)] flex-col overflow-y-hidden rounded-[24px] bg-white-100">
+                      {/* <OnboardingPage /> */}
+                      <Outlet />
+                    </div>
+                  </div>
+                  {/* <NotAllowed /> */}
+                  <ToastContainer />
+                </div>
+              </PendingTransactionsProvider>
+            </WalletProvider>
+            {/* </ConnectKitProvider> */}
+            {/* </AccountsProvider> */}
+            {/* </Suspense> */}
+          </QueryClientProvider>
         </WagmiProvider>
         {/* </StatusProvider> */}
       </div>

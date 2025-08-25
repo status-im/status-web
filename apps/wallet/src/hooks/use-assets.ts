@@ -45,7 +45,7 @@ const useAssets = (
       })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch.')
+        throw new Error(response.statusText, { cause: response.status })
       }
 
       const body = await response.json()
@@ -55,9 +55,6 @@ const useAssets = (
     enabled: !!address && !isWalletLoading,
     staleTime: QUERY_STALE_TIME_MS,
     gcTime: QUERY_GC_TIME_MS,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
 }
 

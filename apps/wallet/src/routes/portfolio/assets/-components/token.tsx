@@ -1,6 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { Button, SegmentedControl, Tooltip } from '@status-im/components'
+import {
+  Button,
+  SegmentedControl,
+  Tooltip,
+  useToast,
+} from '@status-im/components'
 import {
   ArrowLeftIcon,
   BuyIcon,
@@ -25,14 +30,17 @@ import {
   TokenLogo,
   TokenSkeleton,
 } from '@status-im/wallet/components'
+import { ERROR_MESSAGES } from '@status-im/wallet/constants'
 import { useCopyToClipboard } from '@status-im/wallet/hooks'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import { cx } from 'class-variance-authority'
+import { Interface, parseUnits } from 'ethers'
 
 import { useEthBalance } from '@/hooks/use-eth-balance'
 import { renderMarkdown } from '@/lib/markdown'
 import { apiClient } from '@/providers/api-client'
+import { usePendingTransactions } from '@/providers/pending-transactions-context'
 import { useWallet } from '@/providers/wallet-context'
 
 import { AssetChart } from './asset-chart'
@@ -51,6 +59,8 @@ type Props = {
 }
 
 const NETWORKS = ['ethereum'] as const
+
+const erc20 = new Interface(['function transfer(address to, uint256 amount)'])
 
 function matchesAsset(asset: AssetData, ticker: string): boolean {
   if (ticker.startsWith('0x')) {
@@ -74,12 +84,21 @@ const Token = (props: Props) => {
   const [activeTimeFrame, setActiveTimeFrame] =
     useState<ChartTimeFrame>(DEFAULT_TIME_FRAME)
   const { currentWallet } = useWallet()
+  const { addPendingTransaction } = usePendingTransactions()
   const [gasInput, setGasInput] = useState<{
     to: string
     value: string
   } | null>(null)
+  const gasEstimateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const { data } = useQuery<AssetsResponse>({
+  useEffect(() => {
+    setActiveDataType(DEFAULT_DATA_TYPE)
+    setActiveTimeFrame(DEFAULT_TIME_FRAME)
+  }, [ticker])
+
+  const toast = useToast()
+
+  const { data, isError: hasErrorFetchingAssets } = useQuery<AssetsResponse>({
     queryKey: ['assets', address],
     queryFn: async () => {
       const url = new URL(
@@ -112,14 +131,22 @@ const Token = (props: Props) => {
     enabled: !!address,
     staleTime: 15 * 1000,
     gcTime: 60 * 60 * 1000,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
+
+  // Show error toast if fetching assets fails
+  useEffect(() => {
+    if (hasErrorFetchingAssets) {
+      toast.negative(ERROR_MESSAGES.ASSETS_FETCH)
+    }
+  }, [hasErrorFetchingAssets, toast])
 
   const asset = data?.assets?.find((a: AssetData) => matchesAsset(a, ticker))
 
-  const { data: tokenDetail, isLoading: isTokenLoading } = useQuery<TokenData>({
+  const {
+    data: tokenDetail,
+    isLoading: isTokenLoading,
+    isError: hasErrorFetchingToken,
+  } = useQuery<TokenData>({
     queryKey: ['token', ticker],
     queryFn: async () => {
       const endpoint = ticker.startsWith('0x')
@@ -158,10 +185,14 @@ const Token = (props: Props) => {
     enabled: !!asset,
     staleTime: 15 * 1000,
     gcTime: 60 * 60 * 1000,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-    refetchOnReconnect: true,
   })
+
+  // Show error toast if fetching token detail fails
+  useEffect(() => {
+    if (hasErrorFetchingToken) {
+      toast.negative(ERROR_MESSAGES.TOKEN_INFO)
+    }
+  }, [hasErrorFetchingToken, toast])
 
   const isLoading = !data?.assets || isTokenLoading || !tokenDetail
 
@@ -177,7 +208,34 @@ const Token = (props: Props) => {
   const gasFeeQuery = useQuery({
     queryKey: ['gas-fees', address, gasInput?.to, gasInput?.value],
     queryFn: async ({ queryKey }) => {
+      const isNative = tokenDetail?.summary.symbol === 'ETH'
       const [, from, to, value] = queryKey as [string, string, string, string]
+
+      let params
+
+      if (isNative) {
+        params = {
+          from,
+          to,
+          value,
+        }
+      } else {
+        const contract = tokenDetail?.summary.contracts.ethereum
+        if (!contract) {
+          throw new Error('Contract address not found')
+        }
+
+        const amount = BigInt(value)
+
+        const data = erc20.encodeFunctionData('transfer', [to, amount])
+
+        params = {
+          from,
+          to: contract,
+          value: '0x0',
+          data,
+        }
+      }
 
       const url = new URL(
         `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/nodes.getFeeRate`,
@@ -188,7 +246,7 @@ const Token = (props: Props) => {
         JSON.stringify({
           json: {
             network: 'ethereum',
-            params: { from, to, value },
+            params,
           },
         }),
       )
@@ -203,13 +261,31 @@ const Token = (props: Props) => {
       const body = await response.json()
       return body.result.data.json
     },
-    enabled: !!gasInput?.to && !!gasInput?.value && !!address,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
+    enabled: !!gasInput?.to && !!gasInput?.value && !!address && !!tokenDetail,
   })
 
+  // Show error toast if fetching gas fees fails
+  useEffect(() => {
+    if (gasFeeQuery.isError) {
+      toast.negative(ERROR_MESSAGES.GAS_FEES_FETCH)
+    }
+  }, [gasFeeQuery.isError, toast])
+
+  useEffect(() => {
+    return () => {
+      if (gasEstimateTimeoutRef.current) {
+        clearTimeout(gasEstimateTimeoutRef.current)
+      }
+    }
+  }, [])
   const prepareGasEstimate = (to: string, value: string) => {
-    setGasInput({ to, value })
+    if (gasEstimateTimeoutRef.current) {
+      clearTimeout(gasEstimateTimeoutRef.current)
+    }
+
+    gasEstimateTimeoutRef.current = setTimeout(() => {
+      setGasInput({ to, value })
+    }, 500)
   }
 
   const handleOpenTab = (url: string) => {
@@ -269,12 +345,13 @@ const Token = (props: Props) => {
     symbol: tokenDetail.summary.symbol,
     ethBalance,
     network: (Object.keys(tokenDetail.assets)[0] ?? 'ethereum') as NetworkType,
+    decimals: asset.decimals ?? 18,
   }
 
   // Mock wallet data. Replace with actual wallet data from the user's account.
   const account: Account = {
     address,
-    name: 'Account 1',
+    name: currentWallet?.name || 'Account 1',
     emoji: '🍑',
     color: 'magenta',
   }
@@ -282,27 +359,117 @@ const Token = (props: Props) => {
   const signTransaction = async (
     formData: SendAssetsFormData & { password: string },
   ) => {
-    const amountHex = BigInt(
-      Math.floor(parseFloat(formData.amount) * 1e18),
-    ).toString(16)
+    const isNative = tokenDetail?.summary.symbol === 'ETH'
 
-    const result = await apiClient.wallet.account.ethereum.send.mutate({
-      amount: amountHex,
-      toAddress: formData.to,
-      fromAddress: address,
-      password: formData.password,
-      walletId: currentWallet?.id || '',
-      gasLimit: gasFeeQuery.data.txParams.gasLimit.replace(/^0x/, ''),
-      maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas.replace(/^0x/, ''),
-      maxInclusionFeePerGas:
-        gasFeeQuery.data.txParams.maxPriorityFeePerGas.replace(/^0x/, ''),
-    })
+    if (isNative) {
+      const amountHex = parseUnits(formData.amount, 18).toString(16)
+      const params = {
+        amount: amountHex,
+        toAddress: formData.to,
+        fromAddress: address,
+        password: formData.password,
+        walletId: currentWallet?.id || '',
+        gasLimit: gasFeeQuery.data.txParams.gasLimit,
+        maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
+        maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
+      }
 
-    if (!result.id || !result.id.txid) {
-      throw new Error('Transaction failed')
+      const result = await apiClient.wallet.account.ethereum.send.mutate(params)
+      if (!result.id || result.id.txid?.error) {
+        console.error(result.id.txid?.error)
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction failed')
+      }
+
+      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+      if (!txHash) {
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction hash not found')
+      }
+
+      addPendingTransaction({
+        hash: txHash,
+        from: address,
+        to: formData.to,
+        value: parseFloat(formData.amount),
+        asset: tokenDetail.summary.symbol,
+        network: 'ethereum',
+        status: 'pending',
+        category: 'external',
+        blockNum: '0',
+        metadata: {
+          blockTimestamp: new Date().toISOString(),
+        },
+        rawContract: {
+          value: amountHex,
+          address: ticker.startsWith('0x') ? ticker : null,
+          decimal: '18',
+        },
+        eurRate: 0,
+      })
+    } else {
+      const tokenDecimals = asset.decimals ?? 18
+      const amount = parseUnits(formData.amount, tokenDecimals)
+      const amountHex = amount.toString(16)
+      const contractAddress = tokenDetail?.summary.contracts.ethereum
+
+      if (!contractAddress) {
+        throw new Error('Token contract address not found')
+      }
+
+      const data = erc20.encodeFunctionData('transfer', [formData.to, amount])
+
+      const params = {
+        amount: '0',
+        toAddress: contractAddress,
+        fromAddress: address,
+        password: formData.password,
+        walletId: currentWallet?.id || '',
+        gasLimit: gasFeeQuery.data.txParams.gasLimit,
+        maxFeePerGas: gasFeeQuery.data.txParams.maxFeePerGas,
+        maxInclusionFeePerGas: gasFeeQuery.data.txParams.maxPriorityFeePerGas,
+        data,
+      }
+
+      const result =
+        await apiClient.wallet.account.ethereum.sendErc20.mutate(params)
+
+      if (!result.id || result.id.txid?.error) {
+        console.error(result.id.txid?.error)
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction failed')
+      }
+
+      const txHash = typeof result.id === 'string' ? result.id : result.id.txid
+
+      if (!txHash) {
+        toast.negative(ERROR_MESSAGES.TX_FAILED)
+        throw new Error('Transaction hash not found')
+      }
+
+      addPendingTransaction({
+        hash: txHash,
+        from: address,
+        to: formData.to,
+        value: parseFloat(formData.amount),
+        asset: tokenDetail.summary.symbol,
+        network: 'ethereum',
+        status: 'pending',
+        category: 'external',
+        blockNum: '0',
+        metadata: {
+          blockTimestamp: new Date().toISOString(),
+        },
+        rawContract: {
+          value: amountHex,
+          address: ticker.startsWith('0x') ? ticker : null,
+          decimal: asset.decimals?.toString() ?? '18',
+        },
+        eurRate: 0,
+      })
+      return result.id.txid
     }
-
-    return result.id.txid
   }
 
   const verifyPassword = async (inputPassword: string): Promise<boolean> => {
@@ -332,9 +499,13 @@ const Token = (props: Props) => {
       }
       rightSlot={
         <div className="flex items-center gap-1 pt-px">
-          <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+          <BuyCryptoDrawer
+            account={account}
+            onOpenTab={handleOpenTab}
+            symbol={tokenDetail.summary.symbol}
+          >
             <Button size="32" iconBefore={<BuyIcon />}>
-              <span className="block max-w-20 truncate">Buy {name}</span>
+              <span className="block max-w-20 truncate">Buy</span>
             </Button>
           </BuyCryptoDrawer>
           <ReceiveCryptoDrawer account={account} onCopy={copy}>
@@ -358,7 +529,7 @@ const Token = (props: Props) => {
             isLoadingFees={gasFeeQuery.isFetching}
             onEstimateGas={prepareGasEstimate}
           >
-            <Button size="32" iconBefore={<SendBlurIcon />}>
+            <Button size="32" iconBefore={<SendBlurIcon />} variant="outline">
               Send
             </Button>
           </SendAssetsModal>
@@ -381,9 +552,13 @@ const Token = (props: Props) => {
           </div>
 
           <div className="flex items-center gap-1">
-            <BuyCryptoDrawer account={account} onOpenTab={handleOpenTab}>
+            <BuyCryptoDrawer
+              account={account}
+              onOpenTab={handleOpenTab}
+              symbol={tokenDetail.summary.symbol}
+            >
               <Button size="32" iconBefore={<BuyIcon />} variant="primary">
-                Buy {name}
+                Buy
               </Button>
             </BuyCryptoDrawer>
 
@@ -423,7 +598,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveDataType(value as ChartDataType)
                 }
-                size="24"
+                size="32"
               >
                 <SegmentedControl.Item value="price">
                   Price
@@ -431,6 +606,9 @@ const Token = (props: Props) => {
                 <SegmentedControl.Item value="balance">
                   Balance
                 </SegmentedControl.Item>
+                {/* <SegmentedControl.Item value="value">
+                  Value
+                </SegmentedControl.Item> */}
               </SegmentedControl.Root>
             </div>
             <div className="inline-flex">
@@ -439,7 +617,7 @@ const Token = (props: Props) => {
                 onValueChange={value =>
                   setActiveTimeFrame(value as ChartTimeFrame)
                 }
-                size="24"
+                size="32"
               >
                 {TIME_FRAMES.map(frame => (
                   <SegmentedControl.Item key={frame} value={frame}>
@@ -524,7 +702,7 @@ const Token = (props: Props) => {
                 tooltip: (
                   <CurrencyAmount
                     value={metadata.all_time_high}
-                    format="standard"
+                    format="precise"
                   />
                 ),
               },
@@ -539,17 +717,20 @@ const Token = (props: Props) => {
                 tooltip: (
                   <CurrencyAmount
                     value={metadata.all_time_low}
-                    format="standard"
+                    format="precise"
                   />
                 ),
               },
               {
                 label: '24h Volume',
                 value: (
-                  <TokenAmount value={metadata.volume_24} format="compact" />
+                  <CurrencyAmount value={metadata.volume_24} format="compact" />
                 ),
                 tooltip: (
-                  <TokenAmount value={metadata.volume_24} format="standard" />
+                  <CurrencyAmount
+                    value={metadata.volume_24}
+                    format="standard"
+                  />
                 ),
               },
               {
@@ -568,7 +749,7 @@ const Token = (props: Props) => {
                   index < 4 && '2xl:border-b',
                 )}
               >
-                <Tooltip content={item.tooltip} side="top">
+                <OptionalTooltip content={item.tooltip}>
                   <div>
                     <div className="text-13 font-regular text-neutral-50">
                       {item.label}
@@ -577,7 +758,7 @@ const Token = (props: Props) => {
                       {item.value}
                     </div>
                   </div>
-                </Tooltip>
+                </OptionalTooltip>
               </div>
             ))}
           </div>
@@ -587,6 +768,23 @@ const Token = (props: Props) => {
         </div>
       </div>
     </StickyHeaderContainer>
+  )
+}
+
+const OptionalTooltip = ({
+  content,
+  children,
+}: {
+  content?: React.ReactNode
+  children: React.ReactElement
+}) => {
+  if (!content) {
+    return children
+  }
+  return (
+    <Tooltip content={content} side="top">
+      {children}
+    </Tooltip>
   )
 }
 

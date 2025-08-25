@@ -1,4 +1,4 @@
-import { initTRPC } from '@trpc/server'
+import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { ZodError } from 'zod'
 
@@ -59,6 +59,30 @@ export const { createCallerFactory } = t
  */
 export const router = t.router
 
+const errorMiddleware = t.middleware(async opts => {
+  const result = await opts.next()
+
+  if (!result.ok && result.error) {
+    const error = result.error.cause
+
+    if (error instanceof Error && error.cause === 429) {
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+        message: error.message,
+        cause: error,
+      })
+    }
+
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: error?.message || 'Unknown error',
+      cause: error,
+    })
+  }
+
+  return result
+})
+
 /**
  * Unauthenticated procedure
  *
@@ -66,4 +90,4 @@ export const router = t.router
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure
+export const publicProcedure = t.procedure.use(errorMiddleware)

@@ -24,7 +24,7 @@ import type {
  * @see https://min-api.cryptocompare.com/documentation?key=Historical&cat=dataHistoday
  * @see https://min-api.cryptocompare.com/documentation?key=Historical&cat=dataHistohour
  *
- * note: Tries to convert to EUR if CCCAGG market does not exist for coin pair.
+ * note: Tries to convert to USD if CCCAGG market does not exist for coin pair.
  */
 export async function legacy_fetchTokenPriceHistory(
   symbol: string,
@@ -33,9 +33,9 @@ export async function legacy_fetchTokenPriceHistory(
   if (days === 'all') {
     const url = new URL('https://min-api.cryptocompare.com/data/v2/histoday')
     url.searchParams.set('fsym', symbol)
-    url.searchParams.set('tsym', 'EUR')
+    url.searchParams.set('tsym', 'USD')
     url.searchParams.set('allData', 'true')
-    url.searchParams.set('tryConversion', 'true')
+    url.searchParams.set('tryConversion', 'false')
     url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
@@ -53,10 +53,10 @@ export async function legacy_fetchTokenPriceHistory(
   do {
     const url = new URL('https://min-api.cryptocompare.com/data/v2/histohour')
     url.searchParams.set('fsym', symbol)
-    url.searchParams.set('tsym', 'EUR')
+    url.searchParams.set('tsym', 'USD')
     url.searchParams.set('toTs', to.toString())
     url.searchParams.set('limit', '2000')
-    url.searchParams.set('tryConversion', 'true')
+    url.searchParams.set('tryConversion', 'false')
     url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
@@ -72,7 +72,7 @@ export async function legacy_fetchTokenPriceHistory(
   return data
 }
 
-// todo?: use for current price as well (lacks EUR)
+// todo?: use for current price as well (lacks USD)
 // todo?: use https://developers.cryptocompare.com/documentation/data-api/asset_v1_summary_list if full metadata is not needed
 // fixme?: use CCData id instead of symbol by extending token list
 // todo?: use contract address lookup https://developers.cryptocompare.com/documentation/data-api/onchain_v2_data_by_address instead
@@ -83,7 +83,7 @@ export async function fetchTokenMetadata(symbol: string) {
   const url = new URL('https://data-api.cryptocompare.com/asset/v1/metadata')
   url.searchParams.set('asset', symbol)
   url.searchParams.set('asset_lookup_priority', 'SYMBOL')
-  url.searchParams.set('quote_asset', 'EUR')
+  url.searchParams.set('quote_asset', 'USD')
   url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
   const body = await _fetch<TokenMetadataResponseBody>(url, 3600)
@@ -92,7 +92,7 @@ export async function fetchTokenMetadata(symbol: string) {
   return data
 }
 
-// todo?: use https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=OP,ARB,SNT,USDT&tsym=EUR instead (no docs)
+// todo?: use https://min-api.cryptocompare.com/data/coin/generalinfo?fsyms=OP,ARB,SNT,USDT&tsym=USD instead (no docs)
 /**
  * @see https://developers.cryptocompare.com/documentation/data-api/asset_v1_data_by_symbol
  */
@@ -136,7 +136,7 @@ export async function legacy_research_fetchTokenMetadata(symbol: string) {
 export async function legacy_fetchTokensPrice(symbols: string[]) {
   const url = new URL('https://min-api.cryptocompare.com/data/pricemultifull')
   url.searchParams.set('fsyms', symbols.join(','))
-  url.searchParams.set('tsyms', 'EUR')
+  url.searchParams.set('tsyms', 'USD')
   url.searchParams.set('relaxedValidation', 'true')
   url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
@@ -152,7 +152,7 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
     ) {
       console.warn('Removed failing symbols, retrying without them')
 
-      const errorMatch = error.message.match(/\((\w+)-EUR\)/)
+      const errorMatch = error.message.match(/\((\w+)-USD\)/)
       if (errorMatch && errorMatch[1]) {
         const failedSymbol = errorMatch[1]
         const filteredSymbols = symbols.filter(s => s !== failedSymbol)
@@ -176,16 +176,16 @@ export async function fetchTokensPriceForDate(
   symbols: string[],
   timestamp: number,
 ) {
-  const data: Record<string, { EUR: { PRICE: number } }> = {}
+  const data: Record<string, { USD: { PRICE: number } }> = {}
 
   for (const symbol of symbols) {
     try {
       const url = new URL('https://min-api.cryptocompare.com/data/v2/histoday')
       url.searchParams.set('fsym', symbol)
-      url.searchParams.set('tsym', 'EUR')
+      url.searchParams.set('tsym', 'USD')
       url.searchParams.set('toTs', timestamp.toString())
       url.searchParams.set('limit', '1')
-      url.searchParams.set('tryConversion', 'true') // tries to convert to EUR if specific market does not exist i.e. ETH <-> EUR
+      url.searchParams.set('tryConversion', 'false')
       url.searchParams.set('api_key', serverEnv.CRYPTOCOMPARE_API_KEY)
 
       const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 15)
@@ -193,7 +193,7 @@ export async function fetchTokensPriceForDate(
 
       if (prices.length > 0) {
         data[symbol] = {
-          EUR: {
+          USD: {
             PRICE: prices[0].close,
           },
         }
