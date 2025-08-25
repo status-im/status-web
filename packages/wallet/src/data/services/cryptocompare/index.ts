@@ -11,7 +11,11 @@
 // import 'server-only'
 
 import { serverEnv } from '../../../config/env.server.mjs'
-import { getRandomApiKey } from '../api-key-rotation'
+import {
+  getRandomApiKey,
+  markApiKeyAsRateLimited,
+  markApiKeyAsSuccessful,
+} from '../api-key-rotation'
 
 import type {
   deprecated_TokensMetadataResponseBody,
@@ -247,6 +251,14 @@ async function _fetch<
 
   if (!response.ok) {
     console.error(response.statusText)
+
+    if (response.status === 429) {
+      const apiKey = url.searchParams.get('api_key')
+      if (apiKey) {
+        markApiKeyAsRateLimited(apiKey)
+      }
+    }
+
     throw new Error('Failed to fetch.')
   }
 
@@ -254,7 +266,21 @@ async function _fetch<
 
   if ('Response' in body && body.Response !== 'Success') {
     console.error(body.Message)
+
+    const message = 'Message' in body ? String(body.Message).toLowerCase() : ''
+    if (message.includes('rate limit')) {
+      const apiKey = url.searchParams.get('api_key')
+      if (apiKey) {
+        markApiKeyAsRateLimited(apiKey)
+      }
+    }
+
     throw new Error('Failed to fetch.')
+  }
+
+  const apiKey = url.searchParams.get('api_key')
+  if (apiKey) {
+    markApiKeyAsSuccessful(apiKey)
   }
 
   return body

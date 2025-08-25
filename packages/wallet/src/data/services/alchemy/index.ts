@@ -11,7 +11,11 @@ import retry from 'async-retry'
 import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
-import { getRandomApiKey } from '../api-key-rotation'
+import {
+  getRandomApiKey,
+  markApiKeyAsRateLimited,
+  markApiKeyAsSuccessful,
+} from '../api-key-rotation'
 import { getNativeTokenPrice } from '../coingecko'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
@@ -1031,11 +1035,42 @@ async function _fetch<T extends ResponseBody>(
 
   if (!response.ok) {
     console.error(response.statusText)
+
+    if (response.status === 429) {
+      const apiKey = url.pathname.split('/')[2]
+      if (apiKey) {
+        markApiKeyAsRateLimited(apiKey)
+      }
+    }
+
     // todo: https://trpc.io/docs/v10/server/error-handling#throwing-errors for passing original error as `cause`
     throw new Error('Failed to fetch.', { cause: response.status })
   }
 
   const _body: T = await response.json()
+
+  if (
+    typeof _body === 'object' &&
+    _body !== null &&
+    'error' in _body &&
+    _body.error
+  ) {
+    const error = _body.error as { code?: number; message?: string }
+    if (
+      error.code === 429 ||
+      error.message?.toLowerCase().includes('rate limit')
+    ) {
+      const apiKey = url.pathname.split('/')[2]
+      if (apiKey) {
+        markApiKeyAsRateLimited(apiKey)
+      }
+    }
+  } else {
+    const apiKey = url.pathname.split('/')[2]
+    if (apiKey) {
+      markApiKeyAsSuccessful(apiKey)
+    }
+  }
 
   return _body
 }
