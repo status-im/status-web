@@ -1,17 +1,40 @@
-# portfolio
+# wallet
 
-## 0.1.2
+## 0.1.0
+
+### Minor Changes
+
+- 0a14da44: add import wallet flow
 
 ### Patch Changes
 
+- d3549134: add new wallet flow
 - 264da507: move buy to wallet
+- 6e65af8e: add received transaction history
+- 5c5585af: add wallet page listeners
+- 8467e461: Add value chart
+- 57ac3249: listen to wallet uninstall
 - 4740bd7d: update sticky bar for assets and collectibles
-- 610315e7: update deployment build command
 - 8d4d607a: loading states
+- 8467e461: Add CTA to main view
+- 8467e461: integrate pending wallet activity
+- 57e62774: add wallet feedback
+- 28715e88: update wxt config
+- 8467e461: Persistent recovery phrase
+- 8467e461: Rename tabs
+- 45004181: add build steps
+- fda7e3b0: fix mnemonic validation & navbar route
+- fbec37a3: add wallet recovery flow
+- 31f9b897: Fixes onBack in import recovery phrase flow
 - b10aa44d: remove ramp
+- ee2a2bdc: add link to feedback, change onboarding copy
 - dbe7dae0: limit wallet networks
+- adc8c21d: add /activity to wallet
 - ea4c1928: port wallet receive button
 - dec09cf9: port wallet detail routes
+- ddd9dfe6: fix recovery phrase backup
+- f843f877: fix failing api calls due to inactive service worker
+- 59474500: use env mode
 - Updated dependencies [d3549134]
 - Updated dependencies [264da507]
 - Updated dependencies [6e65af8e]
@@ -39,10 +62,3 @@
 - Updated dependencies [0c007f85]
   - @status-im/wallet@0.1.0
   - @status-im/components@1.1.0
-
-## 0.1.1
-
-### Patch Changes
-
-- Updated dependencies [48e47cf]
-  - @status-im/js@1.1.0
