@@ -26,6 +26,8 @@ const useConfigEnv = (): UseQueryResult<ApiOutput['config']['env'], Error> => {
 
       return body.result.data.json
     },
+    staleTime: 5 * 60 * 1000, // 5 min
+    gcTime: 60 * 60 * 1000, // 1 hour
   })
 }
 
