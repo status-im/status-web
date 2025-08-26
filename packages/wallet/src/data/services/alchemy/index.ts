@@ -1011,6 +1011,17 @@ export async function getTransactionCount(
   return nonce
 }
 
+function extractAlchemyApiKey(url: URL): string | undefined {
+  const pathParts = url.pathname.split('/')
+  if (pathParts.includes('data')) {
+    return pathParts[3]
+  } else if (pathParts.includes('nft')) {
+    return pathParts[3]
+  } else {
+    return pathParts[2]
+  }
+}
+
 async function _fetch<T extends ResponseBody>(
   url: URL,
   method: 'GET' | 'POST',
@@ -1037,7 +1048,7 @@ async function _fetch<T extends ResponseBody>(
     console.error(response.statusText)
 
     if (response.status === 429) {
-      const apiKey = url.pathname.split('/')[2]
+      const apiKey = extractAlchemyApiKey(url)
       if (apiKey) {
         markApiKeyAsRateLimited(apiKey)
       }
@@ -1060,13 +1071,13 @@ async function _fetch<T extends ResponseBody>(
       error.code === 429 ||
       error.message?.toLowerCase().includes('rate limit')
     ) {
-      const apiKey = url.pathname.split('/')[2]
+      const apiKey = extractAlchemyApiKey(url)
       if (apiKey) {
         markApiKeyAsRateLimited(apiKey)
       }
     }
   } else {
-    const apiKey = url.pathname.split('/')[2]
+    const apiKey = extractAlchemyApiKey(url)
     if (apiKey) {
       markApiKeyAsSuccessful(apiKey)
     }
