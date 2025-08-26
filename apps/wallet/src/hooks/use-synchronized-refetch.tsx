@@ -2,20 +2,18 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 
+import { useConfigEnv } from './use-config-env'
 import { useRefetchToast } from './use-refetch-toast'
-import { useRemoteConfig } from './use-remote-config'
-
-const FALLBACK_REFRESH_INTERVAL_MS = 15 * 1000
 
 export function useSynchronizedRefetch(address: string) {
   const queryClient = useQueryClient()
   const [isWindowActive, setIsWindowActive] = useState(true)
   const [isAutoRefreshing, setIsAutoRefreshing] = useState(false)
-  const { data: remoteConfig } = useRemoteConfig()
+  const { data: config } = useConfigEnv()
 
   const refreshIntervalMs = useMemo(
-    () => remoteConfig?.refreshIntervalMs ?? FALLBACK_REFRESH_INTERVAL_MS,
-    [remoteConfig],
+    () => config?.refreshIntervalMs ?? 0,
+    [config?.refreshIntervalMs],
   )
 
   const refetchQueries = useCallback(async () => {

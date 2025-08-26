@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+import { useConfigEnv } from './use-config-env'
 
 import type { NetworkType } from '@status-im/wallet/data'
 
@@ -75,6 +75,7 @@ const getCollectibles = async (
 
 const useCollectibles = (props: Props) => {
   const { address, isWalletLoading } = props
+  const { data: configEnv } = useConfigEnv()
 
   const searchParams = new URLSearchParams(window.location.search)
   const search = searchParams.get('search') ?? undefined
@@ -116,8 +117,8 @@ const useCollectibles = (props: Props) => {
       lastPage.hasMore ? lastPage.nextPage : undefined,
     initialPageParam: 0,
     enabled: !!address && !isWalletLoading,
-    staleTime: QUERY_STALE_TIME_MS,
-    gcTime: QUERY_GC_TIME_MS,
+    staleTime: configEnv?.staleTimeMs ?? 0,
+    gcTime: configEnv?.gcTimeMs ?? 0,
   })
 }
 

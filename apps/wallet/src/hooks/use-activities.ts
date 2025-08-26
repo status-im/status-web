@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+import { useConfigEnv } from './use-config-env'
 
 import type { Activity, NetworkType } from '@status-im/wallet/data'
 
@@ -57,6 +57,7 @@ const getTransfers = async (
 }
 
 export const useActivities = ({ address }: Props) => {
+  const { data: configEnv } = useConfigEnv()
   const searchParams = new URLSearchParams(window.location.search)
 
   const networks = searchParams.get('networks')?.split(',') ?? ['ethereum']
@@ -87,7 +88,7 @@ export const useActivities = ({ address }: Props) => {
     },
 
     initialPageParam: {},
-    staleTime: QUERY_STALE_TIME_MS,
-    gcTime: QUERY_GC_TIME_MS,
+    staleTime: configEnv?.staleTimeMs ?? 0,
+    gcTime: configEnv?.gcTimeMs ?? 0,
   })
 }

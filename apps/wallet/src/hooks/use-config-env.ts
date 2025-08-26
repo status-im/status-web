@@ -3,15 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import type { ApiOutput } from '@status-im/wallet/data'
 import type { UseQueryResult } from '@tanstack/react-query'
 
-const useRemoteConfig = (): UseQueryResult<
-  ApiOutput['assets']['remoteConfig'],
-  Error
-> => {
+const useConfigEnv = (): UseQueryResult<ApiOutput['config']['env'], Error> => {
   return useQuery({
-    queryKey: ['remote-config'],
+    queryKey: ['config-env'],
     queryFn: async () => {
       const url = new URL(
-        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/assets.remoteConfig`,
+        `${import.meta.env.WXT_STATUS_API_URL}/api/trpc/config.env`,
       )
 
       const response = await fetch(url, {
@@ -32,4 +29,4 @@ const useRemoteConfig = (): UseQueryResult<
   })
 }
 
-export { useRemoteConfig }
+export { useConfigEnv }
