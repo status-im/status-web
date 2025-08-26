@@ -90,7 +90,7 @@ export function useSynchronizedRefetch(address: string) {
   }, [address, queryClient, refetchQueries])
 
   useEffect(() => {
-    if (!isWindowActive) return
+    if (!isWindowActive || refreshIntervalMs === 0) return
 
     const interval = setInterval(refetchQueries, refreshIntervalMs)
 
