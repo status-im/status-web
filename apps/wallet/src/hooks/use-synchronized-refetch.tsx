@@ -70,10 +70,6 @@ export function useSynchronizedRefetch(address: string) {
   useEffect(() => {
     const updateActiveState = () => {
       const isNowActive = document.hasFocus()
-      console.log('Focus state changed:', {
-        isNowActive,
-        hidden: document.hidden,
-      })
       setIsWindowActive(isNowActive)
       if (isNowActive) {
         refetchQueries()
