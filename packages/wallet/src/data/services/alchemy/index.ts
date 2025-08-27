@@ -11,6 +11,11 @@ import retry from 'async-retry'
 import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
+import {
+  getRandomApiKey,
+  markApiKeyAsRateLimited,
+  markApiKeyAsSuccessful,
+} from '../api-key-rotation'
 import { getNativeTokenPrice } from '../coingecko'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
@@ -94,7 +99,7 @@ export async function getNativeTokenBalance(
   network: NetworkType,
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
   const body = await _retry(async () =>
     _fetch<NativeTokenBalanceResponseBody>(url, 'POST', 0, {
@@ -125,7 +130,7 @@ export async function getERC20TokensBalance(
     throw new Error('Too many contracts')
   }
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const params: (string | string[])[] =
@@ -160,7 +165,7 @@ export async function getTokensBalance(
   pageKey?: string,
 ) {
   const url = new URL(
-    `https://api.g.alchemy.com/data/v2/${serverEnv.ALCHEMY_API_KEY}/assets/tokens/by-address`,
+    `https://api.g.alchemy.com/data/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/assets/tokens/by-address`,
   )
 
   const body = await _retry(async () =>
@@ -198,7 +203,7 @@ export async function fetchTokenBalanceHistory(
 
   {
     const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
     )
 
     const body = await _retry(async () =>
@@ -228,7 +233,7 @@ export async function fetchTokenBalanceHistory(
 
   {
     const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
     )
 
     const body = await _retry(async () =>
@@ -393,7 +398,7 @@ export async function getNFTs(
   pageSize?: string,
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${serverEnv.ALCHEMY_API_KEY}/getNFTsForOwner`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getNFTsForOwner`,
   )
   url.searchParams.set('owner', address)
   url.searchParams.set('withMetadata', 'true')
@@ -418,7 +423,7 @@ export async function getNFTMetadata(
   network: NetworkType,
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${serverEnv.ALCHEMY_API_KEY}/getNFTMetadata`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getNFTMetadata`,
   )
   url.searchParams.set('contractAddress', contract)
   url.searchParams.set('tokenId', tokenId)
@@ -433,7 +438,7 @@ export async function getNFTMetadata(
 export async function getLatestBlockNumber(
   network: NetworkType,
 ): Promise<number> {
-  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`
+  const url = `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`
 
   const body = await _retry(async () =>
     _fetch<BlockNumberResponseBody>(new URL(url), 'POST', 0, {
@@ -469,7 +474,7 @@ export async function getOutgoingAssetTransfers(
   )
 
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const params: {
@@ -554,7 +559,7 @@ export async function getIncomingAssetTransfers(
   )
 
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const params: {
@@ -780,7 +785,7 @@ export async function getTransactionStatus(
   network: NetworkType,
 ): Promise<'pending' | 'success' | 'failed' | 'unknown'> {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const body = await _retry(async () =>
@@ -818,7 +823,7 @@ export async function deprecated_getNFTSale(
   network: NetworkType,
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${serverEnv.ALCHEMY_API_KEY}/getNFTSales`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getNFTSales`,
   )
   url.searchParams.set('contractAddress', contract)
   url.searchParams.set('tokenId', tokenId)
@@ -843,7 +848,7 @@ export async function deprecated_getNFTSale(
  */
 export async function getNFTFloorPrice(contract: string, network: NetworkType) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${serverEnv.ALCHEMY_API_KEY}/getFloorPrice`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getFloorPrice`,
   )
   url.searchParams.set('contractAddress', contract)
 
@@ -864,7 +869,7 @@ export async function getFeeRate(
   },
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const gasParams: Record<string, string> = {
@@ -966,7 +971,7 @@ export async function broadcastTransaction(
   network: NetworkType = 'ethereum',
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const body = await _retry(async () =>
@@ -989,7 +994,7 @@ export async function getTransactionCount(
   network: NetworkType,
 ) {
   const url = new URL(
-    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${serverEnv.ALCHEMY_API_KEY}`,
+    `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
   )
 
   const body = await _retry(async () =>
@@ -1004,6 +1009,17 @@ export async function getTransactionCount(
   const nonce = body.result
 
   return nonce
+}
+
+function extractAlchemyApiKey(url: URL): string | undefined {
+  const pathParts = url.pathname.split('/')
+  if (pathParts.includes('data')) {
+    return pathParts[3]
+  } else if (pathParts.includes('nft')) {
+    return pathParts[3]
+  } else {
+    return pathParts[2]
+  }
 }
 
 async function _fetch<T extends ResponseBody>(
@@ -1030,11 +1046,42 @@ async function _fetch<T extends ResponseBody>(
 
   if (!response.ok) {
     console.error(response.statusText)
+
+    if (response.status === 429) {
+      const apiKey = extractAlchemyApiKey(url)
+      if (apiKey) {
+        markApiKeyAsRateLimited(apiKey)
+      }
+    }
+
     // todo: https://trpc.io/docs/v10/server/error-handling#throwing-errors for passing original error as `cause`
     throw new Error('Failed to fetch.', { cause: response.status })
   }
 
   const _body: T = await response.json()
+
+  if (
+    typeof _body === 'object' &&
+    _body !== null &&
+    'error' in _body &&
+    _body.error
+  ) {
+    const error = _body.error as { code?: number; message?: string }
+    if (
+      error.code === 429 ||
+      error.message?.toLowerCase().includes('rate limit')
+    ) {
+      const apiKey = extractAlchemyApiKey(url)
+      if (apiKey) {
+        markApiKeyAsRateLimited(apiKey)
+      }
+    }
+  } else {
+    const apiKey = extractAlchemyApiKey(url)
+    if (apiKey) {
+      markApiKeyAsSuccessful(apiKey)
+    }
+  }
 
   return _body
 }
