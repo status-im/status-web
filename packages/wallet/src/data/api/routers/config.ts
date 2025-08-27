@@ -28,6 +28,7 @@ export async function getEnv(): Promise<ConfigEnv> {
     cachedConfigEnv = await loadEnv()
     return cachedConfigEnv
   } catch {
+    console.error('Failed to load config env')
     return {
       refreshIntervalMs: 0,
       staleTimeMs: 0,
