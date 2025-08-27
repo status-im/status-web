@@ -3,8 +3,7 @@
  */
 
 import * as fs from 'fs/promises'
-import { keccak256 } from 'ethereum-cryptography/keccak'
-import { utf8ToBytes, bytesToHex } from 'ethereum-cryptography/utils'
+import { toChecksumAddress } from '../src/utils/to-checksum-address.ts'
 
 const supportedNetworks = [
   42161, // Arbitrum
@@ -60,22 +59,6 @@ const statusTokenLists = [
 ]
 
 const outputFilePath = './src/constants/erc20.json'
-
-function toChecksumAddress(address) {
-  address = address.toLowerCase().replace('0x', '')
-  const hash = bytesToHex(keccak256(utf8ToBytes(address)))
-  let checksumAddress = '0x'
-
-  for (let i = 0; i < address.length; i++) {
-    if (parseInt(hash[i], 16) >= 8) {
-      checksumAddress += address[i].toUpperCase()
-    } else {
-      checksumAddress += address[i]
-    }
-  }
-
-  return checksumAddress
-}
 
 async function fetchStandardTokenList(url) {
   try {

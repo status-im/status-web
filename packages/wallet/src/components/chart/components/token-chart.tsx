@@ -6,7 +6,7 @@ import { scaleLinear, scaleTime } from '@visx/scale'
 import { extent } from 'd3-array'
 
 import { useTokenChartTooltip } from '../hooks/use-token-chart-tooltip'
-import { calculateChartRange } from '../utils'
+import { calculateChartRange, getChartValue } from '../utils'
 import { Content } from './content'
 import { Marker } from './marker'
 import { ChartTooltip } from './tooltip'
@@ -14,21 +14,24 @@ import { XAxis } from './x-axis'
 import { YAxis } from './y-axis'
 
 import type { BaseChartProps, ChartDataPoint, TimeFrame } from '../utils'
+import type React from 'react'
 
 type TokenChartProps = BaseChartProps & {
   data: ChartDataPoint[]
   width: number
   timeFrame?: TimeFrame
+  emptyState: React.ReactNode
 }
 
 const TokenChart = ({
   data,
   currency,
   width,
-  dataType,
+  dataType = 'price',
   timeFrame,
+  emptyState,
 }: TokenChartProps) => {
-  const innerWidth = width - 60
+  const innerWidth = Math.max(100, width - 70)
   const innerHeight = 256
 
   const sortedData = useMemo(
@@ -50,7 +53,7 @@ const TokenChart = ({
     nice: false,
   })
 
-  const { min, max, ticks } = calculateChartRange(sortedData)
+  const { min, max, ticks } = calculateChartRange(sortedData, 0.1, dataType)
   const yScale = scaleLinear({
     domain: [min, max],
     range: [innerHeight, 0],
@@ -58,14 +61,20 @@ const TokenChart = ({
   })
 
   const priceData = useMemo(
-    () => sortedData.map(d => ({ date: new Date(d.date), value: d.price })),
-    [sortedData],
+    () =>
+      sortedData.map(d => ({
+        date: new Date(d.date),
+        value: getChartValue(d, dataType),
+      })),
+    [sortedData, dataType],
   )
 
   const isPositive = useMemo(() => {
     if (dataType === 'balance') return true
     if (sortedData.length === 0) return true
-    return sortedData[sortedData.length - 1].price >= sortedData[0].price
+    const lastValue = getChartValue(sortedData[sortedData.length - 1], dataType)
+    const firstValue = getChartValue(sortedData[0], dataType)
+    return lastValue >= firstValue
   }, [sortedData, dataType])
 
   const { tooltipData, updateTooltip, hideTooltip, tooltipOpen } =
@@ -78,7 +87,7 @@ const TokenChart = ({
 
   const circleSpring = useSpring({
     x: xScale(new Date(tooltipData?.date)),
-    y: yScale(tooltipData?.price),
+    y: yScale(tooltipData ? getChartValue(tooltipData, dataType) : 0),
     config: config.gentle,
   })
 
@@ -90,16 +99,12 @@ const TokenChart = ({
 
   const tooltipAnimation = useSpring({
     x: xScale(new Date(tooltipData?.date)),
-    y: yScale(tooltipData?.price),
+    y: yScale(tooltipData ? getChartValue(tooltipData, dataType) : 0),
     config: config.gentle,
   })
 
   if (!data.length) {
-    return (
-      <div className="relative mt-4 flex h-[296px] w-full items-center justify-center">
-        <p className="text-15 font-600 text-neutral-50">No data available</p>
-      </div>
-    )
+    return <div className="mt-[72px]">{emptyState}</div>
   }
 
   return (
@@ -118,9 +123,9 @@ const TokenChart = ({
               pricesData={priceData}
               xScale={xScale}
               yScale={yScale}
-              innerHeight={innerHeight}
-              innerWidth={innerWidth}
               isPositive={isPositive}
+              dataType={dataType}
+              currency={currency}
             />
 
             {tooltipOpen && (

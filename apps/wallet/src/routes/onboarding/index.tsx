@@ -33,16 +33,16 @@ function RouteComponent() {
         By continuing you agree with Status
         <br />
         <a
-          href="https://github.com/status-im/status-software-legal-documents/blob/master/terms-of-use.md"
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/browser-extension-wallet-terms-of-use.md"
           className="text-neutral-100"
           target="_blank"
-          rel="noopenernoreferrer"
+          rel="noopener noreferrer"
         >
           Terms of use
         </a>{' '}
         and{' '}
         <a
-          href="https://github.com/status-im/status-software-legal-documents/blob/master/privacy-policy.md"
+          href="https://github.com/status-im/status-software-legal-documents/blob/master/browser-extension-wallet-privacy-policy.md"
           className="text-neutral-100"
           target="_blank"
           rel="noopener noreferrer"

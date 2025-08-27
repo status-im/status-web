@@ -1,6 +1,7 @@
 import { cloneElement, forwardRef } from 'react'
 
-import { Action, Description } from '@radix-ui/react-toast'
+import { Action, Close, Description } from '@radix-ui/react-toast'
+import { CloseIcon } from '@status-im/icons/16'
 import { CorrectIcon, IncorrectIcon } from '@status-im/icons/20'
 import { match, P } from 'ts-pattern'
 
@@ -20,9 +21,9 @@ const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
   return (
     <div
       ref={ref}
-      className="flex min-h-[40px] w-[351px] flex-row items-center justify-between gap-3 rounded-12 bg-neutral-80/70 p-2 pr-3 backdrop-blur-[20px]"
+      className="flex min-h-[40px] w-[351px] flex-row items-start justify-between gap-3 rounded-12 bg-neutral-80/70 p-[10px] pr-3 backdrop-blur-[20px]"
     >
-      <div className="flex flex-1 flex-row items-center gap-1">
+      <div className="flex flex-1 flex-row items-start gap-1">
         <div className="shrink-0">
           {match(props)
             .with({ type: 'positive' }, () => <CorrectIcon />)
@@ -45,6 +46,9 @@ const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
           </Action>
         </div>
       )}
+      <Close>
+        <CloseIcon className="cursor-pointer text-white-100" />
+      </Close>
     </div>
   )
 }

@@ -58,7 +58,7 @@ const Chart = ({
   const [activeTimeFrame, setActiveTimeFrame] = useState<TimeFrame>('24H')
 
   // Todo: Currency should be dynamic
-  const currency = 'EUR'
+  const currency = 'USD'
 
   return (
     <div className="relative">

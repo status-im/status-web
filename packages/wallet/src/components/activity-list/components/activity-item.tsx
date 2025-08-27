@@ -2,6 +2,7 @@ import { ContextTag } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 import { cx } from 'class-variance-authority'
 
+import { getTransactionHash } from '../../../utils/transaction-hash'
 import { CurrencyAmount } from '../../currency-amount'
 import { NetworkLogo } from '../../network-logo'
 import { RelativeDate } from '../../relative-date'
@@ -42,6 +43,7 @@ function getTokenActivityLabel(activity: Activity): string {
 const ActivityItem = (props: ActivityItemProps) => {
   const { activity, userAddress } = props
 
+  const transactionHash = getTransactionHash(activity.hash)
   const outgoingTransaction =
     activity.from.toLowerCase() === userAddress.toLowerCase()
   const assetSymbol =
@@ -50,7 +52,7 @@ const ActivityItem = (props: ActivityItemProps) => {
 
   return (
     <a
-      href={`https://etherscan.io/tx/${activity.hash}`}
+      href={`https://etherscan.io/tx/${transactionHash}`}
       target="_blank"
       className="grid grid-cols-[2fr_1fr_1fr] gap-4 rounded-12 p-3 transition-colors focus-within:bg-neutral-5 hover:bg-neutral-5"
     >

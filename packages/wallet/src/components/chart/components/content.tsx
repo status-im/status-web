@@ -1,10 +1,9 @@
 import { animated, config, useSpring } from '@react-spring/web'
 import { curveCatmullRom } from '@visx/curve'
-import { LinearGradient } from '@visx/gradient'
 import { AreaClosed, LinePath } from '@visx/shape'
 
 import { negativeColors, positiveColors } from '../constants'
-import { formatSmallNumber } from '../utils'
+import { formatChartValue } from '../utils'
 
 import type { BaseChartProps, ChartDatum } from '../utils'
 import type { ScaleLinear, ScaleTime } from 'd3-scale'
@@ -12,9 +11,8 @@ import type { ScaleLinear, ScaleTime } from 'd3-scale'
 type Props = BaseChartProps & {
   yScale: ScaleLinear<number, number, never>
   xScale: ScaleTime<number, number, never>
-  innerHeight: number
-  innerWidth: number
   pricesData: ChartDatum[]
+  currency?: string
 }
 
 const AnimatedAreaClosed = animated(AreaClosed)
@@ -25,9 +23,8 @@ const Content = (props: Props) => {
     pricesData,
     xScale,
     yScale,
-    innerHeight,
-    innerWidth,
     isPositive = true,
+    dataType = 'price',
   } = props
 
   const colors = isPositive ? positiveColors : negativeColors
@@ -43,8 +40,10 @@ const Content = (props: Props) => {
 
   const tagX = xScale(lastData.date)
   const tagY = yScale(lastData.value)
-  const formattedValue = formatSmallNumber(lastData.value)
+  const formattedValue = formatChartValue(lastData.value, dataType)
   const tagWidth = Math.min(40 + formattedValue.length * 4, 80)
+  const tagXOffset = Math.max(0, 20 - tagWidth / 2)
+  const textX = tagXOffset + tagWidth / 2
 
   return (
     <g>
@@ -61,20 +60,6 @@ const Content = (props: Props) => {
             p => `inset(0 ${100 - p * 100}% 0 0)`,
           ),
         }}
-      />
-      <LinearGradient
-        id="gradient-columns"
-        from="rgba(255, 255, 255, 0)"
-        to="rgba(255, 255, 255, 1)"
-        fromOpacity={0}
-        toOpacity={1}
-      />
-      <rect
-        x={0}
-        y={0}
-        width={innerWidth}
-        height={innerHeight}
-        fill="url(#gradient-columns)"
       />
 
       <AnimatedLinePath
@@ -106,7 +91,7 @@ const Content = (props: Props) => {
 
       <g transform={`translate(${tagX}, ${tagY})`}>
         <rect
-          x={20 - tagWidth / 2}
+          x={tagXOffset}
           y={-10}
           width={tagWidth}
           height={20}
@@ -114,7 +99,7 @@ const Content = (props: Props) => {
           rx={6}
         />
         <text
-          x={20}
+          x={textX}
           y={5}
           fill={colors.white}
           fontSize={12}

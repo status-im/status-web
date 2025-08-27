@@ -1,7 +1,9 @@
 'use client'
 
 import { ParentSize } from '@visx/responsive'
+import { match } from 'ts-pattern'
 
+import { EmptyState } from '../empty-state'
 import { ChartLoading, TokenChart } from './components'
 
 import type { DataType, TimeFrame } from './utils'
@@ -12,6 +14,7 @@ type ChartProps = {
     | ApiOutput['assets']['nativeTokenPriceChart']
     | ApiOutput['assets']['tokenPriceChart']
   balance: ApiOutput['assets']['tokenBalanceChart']
+  value: { date: string; price: number }[]
   activeTimeFrame: TimeFrame
   activeDataType: DataType
 }
@@ -19,23 +22,33 @@ type ChartProps = {
 const Chart = ({
   price,
   balance,
+  value,
   activeTimeFrame,
   activeDataType,
 }: ChartProps) => {
-  const currency = 'EUR'
+  const currency = 'USD'
 
   return (
     <div className="relative">
-      <ParentSize className="w-full bg-white-100">
-        {({ width }) => (
-          <TokenChart
-            data={activeDataType === 'price' ? price : balance}
-            width={width}
-            currency={currency}
-            timeFrame={activeTimeFrame}
-            dataType={activeDataType}
-          />
-        )}
+      <ParentSize className="w-full bg-transparent">
+        {({ width }) => {
+          const data = match(activeDataType)
+            .with('balance', () => balance)
+            .with('value', () => value)
+            .with('price', () => price)
+            .exhaustive()
+
+          return (
+            <TokenChart
+              data={data}
+              width={width}
+              currency={currency}
+              timeFrame={activeTimeFrame}
+              dataType={activeDataType}
+              emptyState={<EmptyState variant={activeDataType} />}
+            />
+          )
+        }}
       </ParentSize>
     </div>
   )

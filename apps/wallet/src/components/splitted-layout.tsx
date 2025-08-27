@@ -156,10 +156,10 @@ const HeaderRightSlot = () => {
         href="/portfolio/assets"
         className="w-full justify-center text-center sm:w-fit"
       >
-        Assets
+        Tokens
       </TabLink>
       <TabLink href="/portfolio/collectibles">Collectibles</TabLink>
-      <TabLink href="/portfolio/activity">Activity</TabLink>
+      <TabLink href="/portfolio/activity">History</TabLink>
     </div>
   )
 }
