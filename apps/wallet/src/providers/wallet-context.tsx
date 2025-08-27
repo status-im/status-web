@@ -1,8 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
-// import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
+import { useSynchronizedRefetch } from '../hooks/use-synchronized-refetch'
 import { apiClient } from './api-client'
 
 import type { KeyStore } from '@trustwallet/wallet-core'
@@ -69,7 +69,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   }
 
   // Auto-refresh
-  // useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
+  useSynchronizedRefetch(currentWallet?.activeAccounts[0]?.address ?? '')
 
   const contextValue: WalletContext = {
     currentWallet,
