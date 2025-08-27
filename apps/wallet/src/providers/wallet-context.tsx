@@ -65,7 +65,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [hasWallets, selectedWalletId, wallets])
 
-useCallback(
+  const setCurrentWallet = useCallback(
     (id: string) => {
       const walletExists = wallets.some(w => w.id === id)
       if (walletExists) {
