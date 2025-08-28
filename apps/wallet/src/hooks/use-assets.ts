@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { QUERY_GC_TIME_MS, QUERY_STALE_TIME_MS } from './constants'
+import { useConfigEnv } from './use-config-env'
 
 import type { ApiOutput } from '@status-im/wallet/data'
 import type { UseQueryResult } from '@tanstack/react-query'
@@ -16,6 +16,7 @@ const useAssets = (
   props: Props,
 ): UseQueryResult<ApiOutput['assets']['all'], Error> => {
   const { address, isWalletLoading } = props
+  const { data: configEnv } = useConfigEnv()
 
   return useQuery({
     queryKey: ['assets', address],
@@ -53,8 +54,8 @@ const useAssets = (
       return body.result.data.json
     },
     enabled: !!address && !isWalletLoading,
-    staleTime: QUERY_STALE_TIME_MS,
-    gcTime: QUERY_GC_TIME_MS,
+    staleTime: configEnv.staleTimeMs,
+    gcTime: configEnv.gcTimeMs,
   })
 }
 

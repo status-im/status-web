@@ -1,15 +1,20 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 
+import { useConfigEnv } from './use-config-env'
 import { useRefetchToast } from './use-refetch-toast'
-
-const REFRESH_INTERVAL_MS = 15 * 1000
 
 export function useSynchronizedRefetch(address: string) {
   const queryClient = useQueryClient()
   const [isWindowActive, setIsWindowActive] = useState(true)
   const [isAutoRefreshing, setIsAutoRefreshing] = useState(false)
+  const { data: configEnv } = useConfigEnv()
+
+  const refreshIntervalMs = useMemo(
+    () => configEnv.refreshIntervalMs,
+    [configEnv.refreshIntervalMs],
+  )
 
   const refetchQueries = useCallback(async () => {
     if (!address) return
@@ -89,12 +94,12 @@ export function useSynchronizedRefetch(address: string) {
   }, [address, queryClient, refetchQueries])
 
   useEffect(() => {
-    if (!isWindowActive) return
+    if (!isWindowActive || refreshIntervalMs === 0) return
 
-    const interval = setInterval(refetchQueries, REFRESH_INTERVAL_MS)
+    const interval = setInterval(refetchQueries, refreshIntervalMs)
 
     return () => clearInterval(interval)
-  }, [isWindowActive, address, queryClient, refetchQueries])
+  }, [isWindowActive, address, queryClient, refetchQueries, refreshIntervalMs])
 }
 
 function has429Error(

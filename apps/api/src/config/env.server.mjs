@@ -18,9 +18,9 @@ export const envSchema = z.object({
     .optional(),
   INFURA_API_KEY: z.string(),
   MERCURYO_SECRET_KEY: z.string(),
-  ALCHEMY_API_KEY: z.string(),
+  ALCHEMY_API_KEYS: z.string(),
   COINGECKO_API_KEY: z.string(),
-  CRYPTOCOMPARE_API_KEY: z.string(),
+  CRYPTOCOMPARE_API_KEYS: z.string(),
 })
 
 const result = envSchema.safeParse(process.env)
