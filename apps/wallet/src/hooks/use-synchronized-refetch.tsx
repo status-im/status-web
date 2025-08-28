@@ -73,19 +73,23 @@ export function useSynchronizedRefetch(address: string) {
   })
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      const isNowActive = !document.hidden
+    const updateActiveState = () => {
+      const isNowActive = document.hasFocus()
       setIsWindowActive(isNowActive)
-
       if (isNowActive) {
         refetchQueries()
       }
     }
+    updateActiveState()
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
+    document.addEventListener('visibilitychange', updateActiveState)
+    window.addEventListener('focus', updateActiveState)
+    window.addEventListener('blur', updateActiveState)
 
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      document.removeEventListener('visibilitychange', updateActiveState)
+      window.removeEventListener('focus', updateActiveState)
+      window.removeEventListener('blur', updateActiveState)
     }
   }, [address, queryClient, refetchQueries])
 
