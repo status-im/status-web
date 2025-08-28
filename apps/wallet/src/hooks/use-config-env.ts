@@ -40,7 +40,7 @@ const useConfigEnv = (): UseConfigEnvResult => {
         return DEFAULT_ENV
       }
     },
-    initialData: DEFAULT_ENV,
+    placeholderData: DEFAULT_ENV,
     staleTime: 5 * 60 * 1000, // 5 min
     gcTime: 60 * 60 * 1000, // 1 hour
     refetchOnWindowFocus: false,
