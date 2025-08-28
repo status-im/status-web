@@ -9,7 +9,7 @@ const DEFAULT_ENV = {
   gcTimeMs: 0,
 }
 
-const useConfigEnv = (): UseQueryResult<ApiOutput['config']['env'], Error> => {
+const useConfigEnv = (): UseQueryResult<ApiOutput['config']['env']> => {
   return useQuery({
     queryKey: ['config-env'],
     queryFn: async () => {
