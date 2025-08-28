@@ -88,7 +88,7 @@ export const useActivities = ({ address }: Props) => {
     },
 
     initialPageParam: {},
-    staleTime: configEnv?.staleTimeMs ?? 0,
-    gcTime: configEnv?.gcTimeMs ?? 0,
+    staleTime: configEnv.staleTimeMs,
+    gcTime: configEnv.gcTimeMs,
   })
 }

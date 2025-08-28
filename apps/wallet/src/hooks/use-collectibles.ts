@@ -117,8 +117,8 @@ const useCollectibles = (props: Props) => {
       lastPage.hasMore ? lastPage.nextPage : undefined,
     initialPageParam: 0,
     enabled: !!address && !isWalletLoading,
-    staleTime: configEnv?.staleTimeMs ?? 0,
-    gcTime: configEnv?.gcTimeMs ?? 0,
+    staleTime: configEnv.staleTimeMs,
+    gcTime: configEnv.gcTimeMs,
   })
 }
 

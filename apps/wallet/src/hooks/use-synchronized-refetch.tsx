@@ -9,11 +9,11 @@ export function useSynchronizedRefetch(address: string) {
   const queryClient = useQueryClient()
   const [isWindowActive, setIsWindowActive] = useState(true)
   const [isAutoRefreshing, setIsAutoRefreshing] = useState(false)
-  const { data: config } = useConfigEnv()
+  const { data: configEnv } = useConfigEnv()
 
   const refreshIntervalMs = useMemo(
-    () => config?.refreshIntervalMs ?? 0,
-    [config?.refreshIntervalMs],
+    () => configEnv.refreshIntervalMs,
+    [configEnv.refreshIntervalMs],
   )
 
   const refetchQueries = useCallback(async () => {

@@ -54,8 +54,8 @@ const useAssets = (
       return body.result.data.json
     },
     enabled: !!address && !isWalletLoading,
-    staleTime: configEnv?.staleTimeMs ?? 0,
-    gcTime: configEnv?.gcTimeMs ?? 0,
+    staleTime: configEnv.staleTimeMs,
+    gcTime: configEnv.gcTimeMs,
   })
 }
 

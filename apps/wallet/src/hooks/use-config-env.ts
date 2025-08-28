@@ -3,14 +3,20 @@ import { useQuery } from '@tanstack/react-query'
 import type { ApiOutput } from '@status-im/wallet/data'
 import type { UseQueryResult } from '@tanstack/react-query'
 
-const DEFAULT_ENV = {
+type ConfigEnv = ApiOutput['config']['env']
+
+const DEFAULT_ENV: ConfigEnv = {
   refreshIntervalMs: 0,
-  staleTimeMs: 0,
-  gcTimeMs: 0,
+  staleTimeMs: Infinity,
+  gcTimeMs: Infinity,
 }
 
-const useConfigEnv = (): UseQueryResult<ApiOutput['config']['env']> => {
-  return useQuery({
+type UseConfigEnvResult = Omit<UseQueryResult<ConfigEnv, never>, 'data'> & {
+  data: ConfigEnv
+}
+
+const useConfigEnv = (): UseConfigEnvResult => {
+  const query = useQuery<ConfigEnv, never>({
     queryKey: ['config-env'],
     queryFn: async () => {
       try {
@@ -34,9 +40,14 @@ const useConfigEnv = (): UseQueryResult<ApiOutput['config']['env']> => {
         return DEFAULT_ENV
       }
     },
+    initialData: DEFAULT_ENV,
     staleTime: 5 * 60 * 1000, // 5 min
     gcTime: 60 * 60 * 1000, // 1 hour
+    refetchOnWindowFocus: false,
+    retry: false,
   })
+
+  return { ...query, data: query.data ?? DEFAULT_ENV }
 }
 
 export { useConfigEnv }

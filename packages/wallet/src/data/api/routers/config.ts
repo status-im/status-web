@@ -1,8 +1,19 @@
+import { cache } from 'react'
+
 import { publicProcedure, router } from '../lib/trpc'
 
 export const configRouter = router({
   env: publicProcedure.query(async () => {
-    return await getEnv()
+    try {
+      return await getEnvCached()
+    } catch {
+      console.error('Failed to load config env')
+      return {
+        refreshIntervalMs: 0,
+        staleTimeMs: Infinity,
+        gcTimeMs: Infinity,
+      }
+    }
   }),
 })
 
@@ -12,8 +23,6 @@ type ConfigEnv = {
   gcTimeMs: number
 }
 
-let cachedConfigEnv: ConfigEnv | null = null
-
 async function loadEnv(): Promise<ConfigEnv> {
   return {
     refreshIntervalMs: 15 * 1000, // 15 seconds
@@ -22,17 +31,4 @@ async function loadEnv(): Promise<ConfigEnv> {
   }
 }
 
-export async function getEnv(): Promise<ConfigEnv> {
-  if (cachedConfigEnv) return cachedConfigEnv
-  try {
-    cachedConfigEnv = await loadEnv()
-    return cachedConfigEnv
-  } catch {
-    console.error('Failed to load config env')
-    return {
-      refreshIntervalMs: 0,
-      staleTimeMs: 0,
-      gcTimeMs: 0,
-    }
-  }
-}
+const getEnvCached = cache(loadEnv)
