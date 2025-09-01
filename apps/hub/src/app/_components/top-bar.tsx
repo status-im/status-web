@@ -1,9 +1,9 @@
 'use client'
 
-import { Button } from '@status-im/components'
+import { Button, IconButton, Tag } from '@status-im/components'
+import { SettingsIcon } from '@status-im/icons/20'
 import Image from 'next/image'
-
-import { SettingsIcon } from './icons'
+import Link from 'next/link'
 
 interface TopBarProps {
   onMenuToggle: () => void
@@ -11,10 +11,13 @@ interface TopBarProps {
 
 export function TopBar({ onMenuToggle }: TopBarProps) {
   return (
-    <div className="sticky inset-x-0 top-0 z-50 h-[56px] bg-neutral-100">
-      <div className="flex items-center justify-between px-6 py-4">
+    <div
+      data-theme="dark"
+      className="sticky inset-x-0 top-0 z-40 flex h-[56px] items-center bg-neutral-100"
+    >
+      <div className="flex w-full items-center justify-between px-6 pl-4">
         {/* Left side - Menu button and branding */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <button
             onClick={onMenuToggle}
             className="rounded mr-3 p-1 text-white-80 hover:bg-white-10 lg:hidden"
@@ -36,18 +39,22 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           </button>
 
           {/* Status Network Logo */}
-          <Image
-            src="/logo.svg"
-            alt="Status Network Logo"
-            width={210}
-            height={32}
-          />
+          <Link href="/">
+            <Image
+              src="/logo.svg"
+              alt="Status Network Logo"
+              width={210}
+              height={32}
+            />
+          </Link>
+
+          <Tag size="24" label="Testnet" />
         </div>
 
         {/* Right side - Actions */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {/* Share Feedback */}
-          <div data-theme="dark">
+          <div>
             <Button variant="outline" size="24">
               Share feedback
             </Button>
@@ -59,9 +66,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           </button>
 
           {/* Settings Button */}
-          <button className="rounded p-2 text-white-80 hover:bg-white-10">
-            <SettingsIcon className="size-5" />
-          </button>
+          <IconButton variant="ghost" icon={<SettingsIcon />} />
         </div>
       </div>
     </div>

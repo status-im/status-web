@@ -19,7 +19,7 @@ export function HubLayout({ children }: HubLayoutProps) {
       <TopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* Main Content Area */}
-      <div className="relative z-20 w-full overflow-hidden rounded-20 bg-white-100">
+      <div className="relative w-full overflow-hidden rounded-20 bg-white-100">
         <div className="flex h-[calc(100vh-64px)] w-full flex-row overflow-hidden">
           {/* Sidebar */}
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
