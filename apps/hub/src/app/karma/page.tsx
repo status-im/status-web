@@ -20,12 +20,12 @@ export default function KarmaPage() {
         <div className="mx-auto w-full max-w-[1176px]">
           {/* Karma Visual Card */}
           <div className="mb-12">
-            <div className="bg-white rounded-24 border border-neutral-20 p-8 shadow-2">
+            <div className="rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
               <div className="flex items-center justify-between">
                 {/* Left Side - Karma Info */}
                 <div className="flex-1">
                   <div className="mb-6">
-                    <div className="text-48 mb-2 font-bold text-neutral-90">
+                    <div className="mb-2 text-64 font-bold text-neutral-90">
                       55,129.16 KARMA
                     </div>
                     <div className="text-19 font-medium text-neutral-70">
@@ -45,7 +45,7 @@ export default function KarmaPage() {
                     <div className="mb-2 h-3 w-full rounded-full bg-neutral-10">
                       <div className="h-full w-3/5 rounded-full bg-purple"></div>
                     </div>
-                    <div className="flex justify-between text-11 text-neutral-50">
+                    <div className="flex justify-between text-13 text-neutral-50">
                       <span>0</span>
                       <span>25,000</span>
                       <span>50,000</span>
@@ -60,16 +60,16 @@ export default function KarmaPage() {
 
                   {/* Action Tags */}
                   <div className="flex flex-wrap gap-3">
-                    <span className="bg-purple/10 rounded-16 px-3 py-2 text-13 font-medium text-purple">
+                    <span className="rounded-16 bg-customisation-purple-50/10 px-3 py-2 text-13 font-medium text-purple">
                       Serial Staker
                     </span>
-                    <span className="bg-purple/10 rounded-16 px-3 py-2 text-13 font-medium text-purple">
+                    <span className="rounded-16 bg-customisation-purple-50/10 px-3 py-2 text-13 font-medium text-purple">
                       Bridge Master
                     </span>
-                    <span className="bg-purple/10 rounded-16 px-3 py-2 text-13 font-medium text-purple">
+                    <span className="rounded-16 bg-customisation-purple-50/10 px-3 py-2 text-13 font-medium text-purple">
                       Liquidity Duck
                     </span>
-                    <span className="bg-purple/10 rounded-16 px-3 py-2 text-13 font-medium text-purple">
+                    <span className="rounded-16 bg-customisation-purple-50/10 px-3 py-2 text-13 font-medium text-purple">
                       Hype Catalyst
                     </span>
                   </div>
@@ -78,12 +78,12 @@ export default function KarmaPage() {
                 {/* Right Side - Karma Visual */}
                 <div className="flex items-center justify-center">
                   <div className="relative">
-                    <div className="from-red-500 to-orange-500 flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br">
-                      <div className="text-6xl">🔥</div>
+                    <div className="flex size-32 items-center justify-center rounded-full bg-gradient-to-br from-danger-50 to-customisation-orange-50">
+                      <div className="text-40">🔥</div>
                     </div>
-                    <div className="bg-white absolute -bottom-2 -right-2 flex h-8 w-8 items-center justify-center rounded-full shadow-1">
+                    <div className="absolute -bottom-2 -right-2 flex size-8 items-center justify-center rounded-full bg-white-100 shadow-1">
                       <svg
-                        className="h-5 w-5 text-neutral-60"
+                        className="size-5 text-neutral-60"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -111,17 +111,17 @@ export default function KarmaPage() {
               {/* Bridging */}
               <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2">
                 <div className="mb-4 text-center">
-                  <div className="text-32 mb-2 font-bold text-neutral-90">
+                  <div className="mb-2 text-40 font-bold text-neutral-90">
                     240.20 KARMA
                   </div>
-                  <div className="text-15 text-neutral-60">
+                  <div className="text-19 text-neutral-60">
                     Earned through bridging
                   </div>
                 </div>
-                <button className="text-white mb-4 w-full rounded-16 bg-purple px-4 py-3 text-15 font-medium transition-colors hover:bg-purple-dark">
+                <button className="mb-4 w-full rounded-16 bg-purple px-4 py-3 text-19 font-medium text-white-100 transition-colors hover:bg-purple-dark">
                   <div className="flex items-center justify-center gap-2">
                     <svg
-                      className="h-5 w-5"
+                      className="size-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -149,17 +149,17 @@ export default function KarmaPage() {
               {/* Staking */}
               <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2">
                 <div className="mb-4 text-center">
-                  <div className="text-32 mb-2 font-bold text-neutral-90">
+                  <div className="mb-2 text-40 font-bold text-neutral-90">
                     40,240.20 KARMA
                   </div>
-                  <div className="text-15 text-neutral-60">
+                  <div className="text-19 text-neutral-60">
                     Earned through staking
                   </div>
                 </div>
-                <button className="text-white mb-4 w-full rounded-16 bg-purple px-4 py-3 text-15 font-medium transition-colors hover:bg-purple-dark">
+                <button className="mb-4 w-full rounded-16 bg-purple px-4 py-3 text-19 font-medium text-white-100 transition-colors hover:bg-purple-dark">
                   <div className="flex items-center justify-center gap-2">
                     <svg
-                      className="h-5 w-5"
+                      className="size-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -187,17 +187,17 @@ export default function KarmaPage() {
               {/* Promoting */}
               <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2">
                 <div className="mb-4 text-center">
-                  <div className="text-32 mb-2 font-bold text-neutral-90">
+                  <div className="mb-2 text-40 font-bold text-neutral-90">
                     40,240.20 KARMA
                   </div>
-                  <div className="text-15 text-neutral-60">
+                  <div className="text-19 text-neutral-60">
                     Earned through promoting
                   </div>
                 </div>
-                <button className="text-white mb-4 w-full rounded-16 bg-purple px-4 py-3 text-15 font-medium transition-colors hover:bg-purple-dark">
+                <button className="mb-4 w-full rounded-16 bg-purple px-4 py-3 text-19 font-medium text-white-100 transition-colors hover:bg-purple-dark">
                   <div className="flex items-center justify-center gap-2">
                     <svg
-                      className="h-5 w-5"
+                      className="size-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -248,14 +248,14 @@ export default function KarmaPage() {
                       className="flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-10 text-11 font-medium text-neutral-70">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-neutral-10 text-13 font-medium text-neutral-70">
                           {entry.rank}
                         </div>
-                        <span className="text-15 font-medium text-neutral-90">
+                        <span className="text-19 font-medium text-neutral-90">
                           {entry.name}
                         </span>
                       </div>
-                      <span className="text-15 font-medium text-neutral-70">
+                      <span className="text-19 font-medium text-neutral-70">
                         {entry.karma}
                       </span>
                     </div>
@@ -281,14 +281,14 @@ export default function KarmaPage() {
                       className="flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-neutral-10 text-11 font-medium text-neutral-70">
+                        <div className="flex size-6 items-center justify-center rounded-full bg-neutral-10 text-13 font-medium text-neutral-70">
                           {entry.rank}
                         </div>
-                        <span className="text-15 font-medium text-neutral-90">
+                        <span className="text-19 font-medium text-neutral-90">
                           {entry.name}
                         </span>
                       </div>
-                      <span className="text-green-600 text-15 font-medium">
+                      <span className="text-19 font-medium text-success-60">
                         {entry.karma}
                       </span>
                     </div>
@@ -302,10 +302,3 @@ export default function KarmaPage() {
     </HubLayout>
   )
 }
-
-
-
-
-
-
-

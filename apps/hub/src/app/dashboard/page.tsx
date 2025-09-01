@@ -10,18 +10,18 @@ export default function DashboardPage() {
       <div className="flex h-full flex-col p-8">
         {/* Hero Section */}
         <div className="mb-12 flex flex-col items-center text-center">
-          <h1 className="text-48 mb-4 font-bold text-neutral-90">
+          <h1 className="mb-4 text-64 font-bold text-neutral-90">
             Welcome, fren
           </h1>
-          <h2 className="text-23 mb-8 font-medium text-neutral-60">
+          <h2 className="mb-8 text-27 font-medium text-neutral-60">
             You're so early — it's a biiiiiig advantage.
           </h2>
 
           {/* Hero Image Asset */}
           <div className="relative w-full max-w-4xl">
-            <div className="from-purple/10 via-purple/5 flex aspect-[16/9] w-full items-center justify-center rounded-24 border border-neutral-20 bg-gradient-to-br to-neutral-10">
+            <div className="flex aspect-[16/9] w-full items-center justify-center rounded-20 border border-neutral-20 bg-gradient-to-br from-customisation-purple-50/10 via-customisation-purple-50/5 to-neutral-10">
               <div className="text-center">
-                <div className="bg-purple/20 mx-auto mb-4 flex size-20 items-center justify-center rounded-full">
+                <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full bg-customisation-purple-50/20">
                   <svg
                     className="size-10 text-purple"
                     fill="none"
@@ -36,7 +36,7 @@ export default function DashboardPage() {
                     />
                   </svg>
                 </div>
-                <p className="text-17 font-medium text-neutral-80">
+                <p className="text-19 font-medium text-neutral-80">
                   DeFi Dashboard Hero Image
                 </p>
                 <p className="text-13 text-neutral-60">
@@ -52,7 +52,7 @@ export default function DashboardPage() {
           <div className="mb-8 rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
-                <h3 className="text-23 mb-2 font-bold text-neutral-90">
+                <h3 className="mb-2 text-27 font-bold text-neutral-90">
                   Deposit funds for yield and rewards
                 </h3>
                 <p className="text-15 text-neutral-60">
@@ -60,7 +60,7 @@ export default function DashboardPage() {
                   apps
                 </p>
               </div>
-              <button className="flex items-center gap-2 text-15 font-medium text-purple transition-colors hover:text-purple-dark">
+              <button className="flex items-center gap-2 text-19 font-medium text-purple transition-colors hover:text-purple-dark">
                 Learn more
                 <svg
                   className="size-4"
@@ -113,7 +113,7 @@ export default function DashboardPage() {
 
           {/* Featured Apps Section */}
           <div className="rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
-            <h3 className="text-23 mb-6 font-bold text-neutral-90">
+            <h3 className="mb-6 text-27 font-bold text-neutral-90">
               Featured Applications
             </h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -1,15 +1,10 @@
-import configs, { tailwindcssConfigs } from '@status-im/eslint-config'
 import nextPlugin from '@next/eslint-plugin-next'
+import configs, { tailwindcssConfigs } from '@status-im/eslint-config'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    ignores: [
-      '**/.next',
-      '**/dist',
-      '**/node_modules',
-      '**/coverage',
-    ],
+    ignores: ['**/.next', '**/dist', '**/node_modules', '**/coverage'],
   },
   ...configs,
   ...tailwindcssConfigs,

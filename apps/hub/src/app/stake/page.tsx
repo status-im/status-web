@@ -18,18 +18,22 @@ export default function StakePage() {
 
         {/* Main Content */}
         <div className="mx-auto w-full max-w-[1176px]">
-          <div className="rounded-lg p-30 bg-neutral-2.5">
+          <div className="rounded-20 bg-neutral-2.5 p-32">
             <div className="flex justify-center">
-              <div className="bg-white w-[494px] rounded-32 border border-neutral-10 p-8 shadow-[0px_2px_20px_0px_rgba(9,16,28,0.04)]">
+              <div className="w-[494px] rounded-20 border border-neutral-10 bg-white-100 p-8 shadow-1">
                 {/* Amount to Stake */}
-                <div className="opacity-40 mb-6">
-                  <label className="mb-2 block text-13 font-medium text-neutral-50">
+                <div className="mb-6 opacity-[40%]">
+                  <label
+                    htmlFor="stake-amount"
+                    className="mb-2 block text-13 font-medium text-neutral-50"
+                  >
                     Amount to stake
                   </label>
-                  <div className="bg-white rounded-xl border border-neutral-10 p-3">
+                  <div className="rounded-24 border border-neutral-10 bg-white-100 p-3">
                     <div className="flex items-center justify-between">
                       <div className="flex-1 pr-4">
                         <input
+                          id="stake-amount"
                           type="text"
                           placeholder="0"
                           className="w-full border-none bg-transparent text-27 font-semibold leading-[32px] tracking-[-0.567px] text-neutral-40 outline-none"
@@ -37,13 +41,13 @@ export default function StakePage() {
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="relative">
-                          <div className="to-purple-50 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-50">
+                          <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-50 to-customisation-purple-50">
                             <span className="text-19 font-semibold text-neutral-90">
                               S
                             </span>
                           </div>
-                          <div className="border-white absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 bg-purple">
-                            <div className="h-full w-full rounded-full bg-purple"></div>
+                          <div className="absolute -bottom-1 -right-1 size-3 rounded-full border-2 border-white-100 bg-purple">
+                            <div className="size-full rounded-full bg-purple"></div>
                           </div>
                         </div>
                         <span className="text-19 font-semibold text-neutral-90">
@@ -55,15 +59,21 @@ export default function StakePage() {
                 </div>
 
                 {/* Select Vault */}
-                <div className="opacity-40 mb-6">
-                  <label className="mb-2 block text-13 font-medium text-neutral-50">
+                <div className="mb-6 opacity-[40%]">
+                  <label
+                    htmlFor="vault-select"
+                    className="mb-2 block text-13 font-medium text-neutral-50"
+                  >
                     Select vault
                   </label>
-                  <div className="bg-white rounded-xl border border-neutral-10 p-3">
+                  <div
+                    id="vault-select"
+                    className="rounded-24 border border-neutral-10 bg-white-100 p-3"
+                  >
                     <div className="flex items-center justify-between">
-                      <span className="text-15 text-neutral-90">New vault</span>
+                      <span className="text-19 text-neutral-90">New vault</span>
                       <svg
-                        className="h-5 w-5 text-neutral-60"
+                        className="size-5 text-neutral-60"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -81,7 +91,7 @@ export default function StakePage() {
 
                 {/* Action Button */}
                 <div>
-                  <button className="text-white rounded-xl w-full bg-purple px-4 py-2.5 text-15 font-medium transition-colors hover:bg-purple-dark">
+                  <button className="w-full rounded-24 bg-customisation-purple-50 px-4 py-2.5 text-19 font-medium text-white-100 transition-colors hover:bg-purple-dark">
                     Connect Wallet
                   </button>
                 </div>
