@@ -1,4 +1,5 @@
 import config from '@status-im/components/config'
+
 import type { Config } from 'tailwindcss'
 
 export default {

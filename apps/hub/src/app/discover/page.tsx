@@ -1,7 +1,8 @@
 'use client'
 
-import { HubLayout } from '~components/hub-layout'
 import { useState } from 'react'
+
+import { HubLayout } from '~components/hub-layout'
 
 export default function DiscoverPage() {
   const [activeTab, setActiveTab] = useState('all')
@@ -148,7 +149,7 @@ export default function DiscoverPage() {
       <div className="flex h-full flex-col p-8">
         {/* Hero Section */}
         <div className="mb-8 text-center">
-          <h1 className="text-32 mb-3 font-bold text-neutral-90">Discover</h1>
+          <h1 className="mb-3 text-40 font-bold text-neutral-90">Discover</h1>
           <p className="text-19 text-neutral-60">
             Explore new applications and opportunities
           </p>
@@ -158,10 +159,10 @@ export default function DiscoverPage() {
         <div className="mx-auto w-full max-w-[1176px]">
           {/* Hero Section */}
           <div className="mb-12 text-center">
-            <h1 className="text-48 mb-4 font-bold text-neutral-90">
+            <h1 className="mb-4 text-56 font-bold text-neutral-90">
               Decentralised + gasless = ❤️
             </h1>
-            <p className="text-23 text-neutral-60">
+            <p className="text-27 text-neutral-60">
               Explore curated dApps and services built on Status Network
             </p>
           </div>
@@ -170,7 +171,7 @@ export default function DiscoverPage() {
           <div className="mb-12">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-27 font-bold text-neutral-90">Featured</h2>
-              <button className="rounded-16 bg-neutral-10 px-4 py-2 text-15 font-medium text-neutral-90 hover:bg-neutral-20">
+              <button className="rounded-16 bg-neutral-10 px-4 py-2 text-19 font-medium text-neutral-90 hover:bg-neutral-20">
                 Get featured
               </button>
             </div>
@@ -180,10 +181,10 @@ export default function DiscoverPage() {
               {/* Cat Fishing */}
               <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30">
                 <div className="mb-4">
-                  <div className="to-green-50 mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-blue-50">
+                  <div className="mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-blue-50 to-success-50">
                     <div className="text-center">
-                      <div className="text-4xl mb-2">🎣</div>
-                      <p className="text-15 font-medium text-neutral-80">
+                      <div className="mb-2 text-40">🎣</div>
+                      <p className="text-19 font-medium text-neutral-80">
                         Cat Fishing
                       </p>
                     </div>
@@ -191,7 +192,7 @@ export default function DiscoverPage() {
                   <h3 className="mb-2 text-19 font-semibold text-neutral-90">
                     Cat Fishing
                   </h3>
-                  <p className="mb-3 text-15 text-neutral-70">
+                  <p className="mb-3 text-19 text-neutral-70">
                     You love cats, cats love fish.
                   </p>
                   <div className="flex items-center justify-between">
@@ -249,9 +250,9 @@ export default function DiscoverPage() {
               {/* Status Network Bridge */}
               <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30">
                 <div className="mb-4">
-                  <div className="from-purple-50 to-green-50 mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br">
+                  <div className="mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-customisation-purple-50 to-success-50">
                     <div className="text-center">
-                      <div className="text-4xl mb-2">🌉</div>
+                      <div className="mb-2 text-40">🌉</div>
                       <p className="text-15 font-medium text-neutral-80">
                         Status Network Bridge
                       </p>
@@ -318,9 +319,9 @@ export default function DiscoverPage() {
               {/* Hash Vegas */}
               <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30">
                 <div className="mb-4">
-                  <div className="from-purple-50 to-yellow-50 mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br">
+                  <div className="mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-customisation-purple-50 to-customisation-yellow-50">
                     <div className="text-center">
-                      <div className="text-4xl mb-2">🎰</div>
+                      <div className="mb-2 text-40">🎰</div>
                       <p className="text-15 font-medium text-neutral-80">
                         Hash Vegas
                       </p>
@@ -399,7 +400,7 @@ export default function DiscoverPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`rounded-12 px-4 py-2 text-15 font-medium transition-colors ${
                       activeTab === tab.id
-                        ? 'text-white bg-neutral-90'
+                        ? 'bg-neutral-90 text-white-100'
                         : 'text-neutral-90 hover:text-neutral-70'
                     }`}
                   >
@@ -436,7 +437,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('all-apps')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'all-apps'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -447,7 +448,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('ai')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'ai'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -458,7 +459,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('bridge')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'bridge'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -469,7 +470,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('community')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'community'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -480,7 +481,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('defi')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'defi'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -491,7 +492,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('gaming')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'gaming'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -502,7 +503,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('infra')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'infra'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -513,7 +514,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('nft')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'nft'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -524,7 +525,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('payment')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'payment'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -535,7 +536,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('privacy')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'privacy'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -546,7 +547,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('social')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'social'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -561,7 +562,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('spending')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'spending'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -572,7 +573,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('tooling')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'tooling'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -583,7 +584,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedTag('wallet')}
                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
                   selectedTag === 'wallet'
-                    ? 'text-white bg-neutral-90'
+                    ? 'bg-neutral-90 text-white-100'
                     : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
                 }`}
               >
@@ -602,7 +603,7 @@ export default function DiscoverPage() {
               >
                 <div className="mb-4 flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="bg-purple/20 text-2xl flex size-12 items-center justify-center rounded-full">
+                    <div className="flex size-12 items-center justify-center rounded-full bg-customisation-purple-50/20 text-27">
                       {app.icon}
                     </div>
                     <div>
@@ -611,12 +612,12 @@ export default function DiscoverPage() {
                       </h3>
                       <div className="flex items-center gap-2">
                         <span
-                          className={`rounded-full px-2 py-1 text-11 font-medium ${getCategoryColor(app.category)}`}
+                          className={`rounded-full px-2 py-1 text-13 font-medium ${getCategoryColor(app.category)}`}
                         >
                           {app.category}
                         </span>
                         <span
-                          className={`rounded-full px-2 py-1 text-11 font-medium ${getStatusColor(app.status)}`}
+                          className={`rounded-full px-2 py-1 text-13 font-medium ${getStatusColor(app.status)}`}
                         >
                           {app.status}
                         </span>
@@ -628,9 +629,9 @@ export default function DiscoverPage() {
                       <span className="text-15 font-medium text-neutral-90">
                         {app.rating}
                       </span>
-                      <span className="text-yellow-500">⭐</span>
+                      <span className="text-customisation-yellow-50">⭐</span>
                     </div>
-                    <p className="text-11 text-neutral-60">{app.users} users</p>
+                    <p className="text-13 text-neutral-60">{app.users} users</p>
                   </div>
                 </div>
 
@@ -638,7 +639,7 @@ export default function DiscoverPage() {
                   {app.description}
                 </p>
 
-                <button className="text-white w-full rounded-16 bg-purple px-4 py-3 text-15 font-medium transition-colors hover:bg-purple-dark">
+                <button className="w-full rounded-16 bg-purple px-4 py-3 text-15 font-medium text-white-100 transition-colors hover:bg-purple-dark">
                   Launch App
                 </button>
               </div>
