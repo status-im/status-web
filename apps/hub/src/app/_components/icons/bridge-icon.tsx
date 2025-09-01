@@ -4,21 +4,31 @@ export default function BridgeIcon({
 }: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
+      xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
-      viewBox="0 0 20 20"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg"
       className={className}
       {...props}
     >
-      {/* Replace this with the actual SVG path from Figma */}
       <path
-        d="M2 10H18M2 10L6 6M2 10L6 14M18 10L14 6M18 10L14 14"
         stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M4.5 10s1-5 5.5-5 5.5 5 5.5 5"
+      />
+      <circle
+        cx="4.5"
+        cy="12.5"
+        r="2.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      />
+      <circle
+        cx="15.5"
+        cy="12.5"
+        r="2.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
       />
     </svg>
   )
