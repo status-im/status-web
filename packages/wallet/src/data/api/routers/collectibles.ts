@@ -59,9 +59,8 @@ export const collectiblesRouter = router({
       }),
     )
     .query(async ({ input }) => {
-      const timestamp = Math.floor(Date.now() / (30 * 1000))
-      const inputWithTime = { ...input, _cacheTime: timestamp }
-      return await cachedPage(JSON.stringify(inputWithTime))
+      const inputHash = JSON.stringify(input)
+      return await cachedPage(inputHash)
     }),
   collectible: publicProcedure
     .input(
@@ -79,9 +78,10 @@ export const collectiblesRouter = router({
 })
 
 const cachedPage = cache(async (key: string) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { _cacheTime, ...input } = JSON.parse(key)
-  return await page(input)
+  const { address, networks, pages, limit, offset, search, sort } =
+    JSON.parse(key)
+
+  return await page({ address, networks, pages, limit, offset, search, sort })
 })
 
 async function page({
