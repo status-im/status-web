@@ -48,10 +48,10 @@ export function useSynchronizedRefetch(address: string) {
 
     await Promise.all(
       activeQueries.map(async query => {
-        await queryClient.invalidateQueries({ queryKey: query.queryKey })
         await queryClient.refetchQueries({
           queryKey: query.queryKey,
           exact: true,
+          stale: true,
         })
       }),
     )
