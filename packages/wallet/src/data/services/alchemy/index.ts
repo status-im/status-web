@@ -403,6 +403,7 @@ export async function getNFTs(
   url.searchParams.set('owner', address)
   url.searchParams.set('withMetadata', 'true')
   url.searchParams.set('pageSize', pageSize ?? '100')
+  url.searchParams.set('orderBy', 'transferTime')
   if (page) {
     url.searchParams.set('pageKey', page)
   }
