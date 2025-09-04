@@ -41,6 +41,10 @@ import type {
   TransactionStatusResponseBody,
 } from './types'
 
+const API_KEY_COUNT = serverEnv.ALCHEMY_API_KEYS.split(',')
+  .map(k => k.trim())
+  .filter(Boolean).length
+
 const alchemyNetworks = {
   ethereum: 'eth-mainnet',
   optimism: 'opt-mainnet',
@@ -1120,7 +1124,7 @@ async function _retry<T extends ResponseBody>(
       }
     },
     {
-      retries: 3,
+      retries: API_KEY_COUNT,
       factor: 2,
       minTimeout: 1000,
       maxTimeout: 60000,
