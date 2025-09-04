@@ -18,7 +18,7 @@ const dividerStyles = cva({
 })
 
 const Divider = (props: Props) => {
-  const { variant = 'fullscreen', hasMiddleCircle = true } = props
+  const { variant = 'fullscreen', hasMiddleCircle } = props
 
   return (
     <div className="relative">
