@@ -1,17 +1,15 @@
-# portfolio
+# api
 
-## 0.1.2
+## 0.2.0
+
+### Minor Changes
+
+- 610315e7: update deployment build command
 
 ### Patch Changes
 
-- 264da507: move buy to wallet
-- 4740bd7d: update sticky bar for assets and collectibles
-- 610315e7: update deployment build command
-- 8d4d607a: loading states
-- b10aa44d: remove ramp
-- dbe7dae0: limit wallet networks
-- ea4c1928: port wallet receive button
-- dec09cf9: port wallet detail routes
+- 6598026a: add simple api key rotation
+- 997b4a13: remote config env
 - Updated dependencies [d3549134]
 - Updated dependencies [264da507]
 - Updated dependencies [6e65af8e]
@@ -22,7 +20,6 @@
 - Updated dependencies [8467e461]
 - Updated dependencies [d234d390]
 - Updated dependencies [8467e461]
-- Updated dependencies [fdc3fe99]
 - Updated dependencies [57e62774]
 - Updated dependencies [610315e7]
 - Updated dependencies [8467e461]
@@ -40,15 +37,6 @@
 - Updated dependencies [dd59d1bf]
 - Updated dependencies [6598026a]
 - Updated dependencies [c7a6e718]
-- Updated dependencies [8467e461]
 - Updated dependencies [0c007f85]
 - Updated dependencies [997b4a13]
   - @status-im/wallet@0.1.0
-  - @status-im/components@1.1.0
-
-## 0.1.1
-
-### Patch Changes
-
-- Updated dependencies [48e47cf]
-  - @status-im/js@1.1.0
