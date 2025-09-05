@@ -1,6 +1,7 @@
 'use client'
-
 import { useState } from 'react'
+
+import { Divider } from '@status-im/status-network/components'
 
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
@@ -26,6 +27,11 @@ export function HubLayout({ children }: HubLayoutProps) {
           {/* Main Content */}
           <main className="min-w-0 flex-1 overflow-auto">{children}</main>
         </div>
+
+        <footer className="sticky p-4 text-center text-13 text-neutral-60">
+          <Divider />
+          &copy; {new Date().getFullYear()} Status. All rights reserved.
+        </footer>
       </div>
     </div>
   )

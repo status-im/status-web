@@ -17,6 +17,7 @@
     "@status-im/colors": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/components": "workspace:*",
+    "@status-im/status-network": "workspace:*",
     "@vercel/analytics": "^1.5.0",
     "cva": "1.0.0-beta.1",
     "framer-motion": "^12.0.6",

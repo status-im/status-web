@@ -18,6 +18,7 @@
     "./packages/icons",
     "./packages/components",
     "./packages/status-js",
+    "./packages/status-network",
     "./packages/wallet",
     "./apps/status.app",
     "./apps/status.network",
