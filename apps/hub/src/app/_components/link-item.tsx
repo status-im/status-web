@@ -1,7 +1,6 @@
 import { ExternalIcon } from '@status-im/icons/20'
+import { Link } from '@status-im/status-network/components'
 import { usePathname } from 'next/navigation'
-
-import { Link } from './link'
 
 type LinkItemProps = {
   id: string

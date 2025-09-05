@@ -1,5 +1,8 @@
 'use client'
 
+import { ExternalIcon } from '@status-im/icons/20'
+import { Link } from '@status-im/status-network/components'
+
 import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
 import { VaultCard } from '~components/vault-card'
@@ -109,32 +112,72 @@ export default function DashboardPage() {
                 onDeposit={() => console.log('Deposit to LINEA vault')}
               />
             </div>
-          </div>
 
-          {/* Featured Apps Section */}
-          <div className="rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
-            <h3 className="mb-6 text-27 font-bold text-neutral-90">
-              Featured Applications
-            </h3>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <AppCard
-                name="Portfolio"
-                description="Track your DeFi investments and performance"
-                category="Finance"
-                onLaunch={() => console.log('Launch Portfolio')}
-              />
-              <AppCard
-                name="Bridge"
-                description="Cross-chain asset transfers and swaps"
-                category="DeFi"
-                onLaunch={() => console.log('Launch Bridge')}
-              />
-              <AppCard
-                name="Governance"
-                description="Participate in protocol decisions and voting"
-                category="DAO"
-                onLaunch={() => console.log('Launch Governance')}
-              />
+            {/* Featured Apps Section */}
+            <div className="rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
+              <h3 className="mb-6 text-27 font-bold text-neutral-90">
+                Featured Applications
+              </h3>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <AppCard
+                  name="Portfolio"
+                  description="Track your DeFi investments and performance"
+                  category="Finance"
+                  onLaunch={() => console.log('Launch Portfolio')}
+                />
+                <AppCard
+                  name="Bridge"
+                  description="Cross-chain asset transfers and swaps"
+                  category="DeFi"
+                  onLaunch={() => console.log('Launch Bridge')}
+                />
+                <AppCard
+                  name="Governance"
+                  description="Participate in protocol decisions and voting"
+                  category="DAO"
+                  onLaunch={() => console.log('Launch Governance')}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="py-12">
+          <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center">
+            <div className="max-w-2xl">
+              <h3 className="mb-3 text-64 font-bold text-neutral-90">
+                Build with us
+              </h3>
+              <p className="mb-8 text-27 font-medium text-neutral-60">
+                Launch your app on the free network
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-12 bg-purple px-5 py-3 text-15 font-600 text-white-100 transition-colors hover:bg-purple-dark"
+                >
+                  Explore documentation
+                  <ExternalIcon className="text-blur-white/70" />
+                </Link>
+
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 rounded-12 bg-neutral-10 px-5 py-3 text-15 font-600 text-neutral-90 ring-1 ring-inset ring-neutral-20 transition-colors hover:bg-neutral-80/20"
+                >
+                  Submit an app
+                  <ExternalIcon className="text-neutral-50" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Ilustração — troque o placeholder pelo asset correto quando disponível no app `hub` */}
+            <div className="relative w-full max-w-[420px]">
+              <div className="flex aspect-[4/3] w-full items-center justify-center rounded-20 border border-neutral-20 bg-gradient-to-br from-customisation-purple-50/10 via-customisation-purple-50/5 to-neutral-10">
+                <span className="text-15 text-neutral-60">
+                  Unicorn illustration
+                </span>
+              </div>
             </div>
           </div>
         </div>
