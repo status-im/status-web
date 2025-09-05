@@ -16,7 +16,6 @@ import {
   markApiKeyAsRateLimited,
   markApiKeyAsSuccessful,
 } from '../api-key-rotation'
-import { getNativeTokenPrice } from '../coingecko'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
 import type { NetworkType } from '../../api/types'
@@ -923,7 +922,7 @@ export async function getFeeRate(
             params: ['0x4', 'latest', [10, 50, 90]],
           })
         }),
-        getNativeTokenPrice('ethereum'),
+        legacy_fetchTokensPrice(['ETH']),
       ])
   } catch (error) {
     console.error('Failed to fetch fee rate:', error)
@@ -949,10 +948,7 @@ export async function getFeeRate(
     reward: feeHistory?.result?.reward ?? null,
   })
 
-  const ethPrice =
-    typeof ethPriceData?.usd === 'number'
-      ? ethPriceData.usd
-      : parseFloat(ethPriceData?.usd) || 0
+  const ethPrice = ethPriceData?.['ETH']?.['USD']?.['PRICE'] || 0
 
   const feeEth = parseFloat(formatEther(gasLimit * (baseFee + priorityFee)))
   const feeEur = parseFloat((ethPrice > 0 ? feeEth * ethPrice : 0).toFixed(6))
