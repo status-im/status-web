@@ -11,6 +11,7 @@ import {
   getNativeTokenBalance,
 } from '../../services/alchemy'
 import {
+  CRYPTOCOMPARE_REVALIDATION_TIMES,
   fetchTokenMetadata,
   legacy_fetchTokenPriceHistory,
   legacy_fetchTokensPrice,
@@ -366,7 +367,10 @@ async function all({
     )
 
     if (missingSymbols.length > 0) {
-      const prices = await legacy_fetchTokensPrice(missingSymbols)
+      const prices = await legacy_fetchTokensPrice(
+        missingSymbols,
+        CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+      )
 
       for (const symbol of missingSymbols) {
         const token = erc20TokenList.tokens.find(
@@ -453,14 +457,21 @@ async function nativeToken({
         throw new Error('Balance not found')
       }
 
-      const price = (await legacy_fetchTokensPrice([token.symbol]))[
-        token.symbol
-      ]
+      const price = (
+        await legacy_fetchTokensPrice(
+          [token.symbol],
+          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+        )
+      )[token.symbol]
       const priceHistory = await legacy_fetchTokenPriceHistory(
         token.symbol,
         'all',
+        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMetadata = await fetchTokenMetadata(token.symbol)
+      const tokenMetadata = await fetchTokenMetadata(
+        token.symbol,
+        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+      )
 
       const asset: Asset = map({
         token,
@@ -548,14 +559,21 @@ async function token({
         throw new Error(`Balance not found for token ${token.symbol}`)
       }
 
-      const price = (await legacy_fetchTokensPrice([token.symbol]))[
-        token.symbol
-      ]
+      const price = (
+        await legacy_fetchTokensPrice(
+          [token.symbol],
+          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+        )
+      )[token.symbol]
       const priceHistory = await legacy_fetchTokenPriceHistory(
         token.symbol,
         'all',
+        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMetadata = await fetchTokenMetadata(token.symbol)
+      const tokenMetadata = await fetchTokenMetadata(
+        token.symbol,
+        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+      )
 
       const asset = map({
         token,
