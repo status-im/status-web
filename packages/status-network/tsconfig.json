@@ -1,0 +1,24 @@
+{
+  "extends": "../../tsconfig.base",
+  "include": [
+    "src",
+    "tailwind.config.ts",
+    ".storybook",
+    "next-env.d.ts",
+    "**/*.json"
+  ],
+  "compilerOptions": {
+    "rootDir": ".",
+    "composite": true,
+    "jsx": "preserve",
+    "outDir": "./dist",
+    "allowJs": true,
+    "plugins": [{ "name": "next" }],
+    "noEmit": false
+  },
+  "references": [
+    {
+      "path": "../components"
+    }
+  ]
+}

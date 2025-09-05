@@ -13,6 +13,8 @@ export default {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     // Collect classes from the components package
     './node_modules/@status-im/components/dist/**/*.js',
+    // Collect classes from the status-network package
+    './node_modules/@status-im/status-network/dist/**/*.js',
   ],
 
   theme: {
