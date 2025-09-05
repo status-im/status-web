@@ -1044,7 +1044,7 @@ async function _fetch<T extends ResponseBody>(
     ...(body && { body: JSON.stringify(body) }),
     // why: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#reusing-data-across-multiple-functions
     // why: https://github.com/vercel/next.js/issues/70946
-    cache: 'no-store', //  no caching
+    cache: 'force-cache',
     next: {
       revalidate,
     },
