@@ -16,6 +16,10 @@ import {
   markApiKeyAsRateLimited,
   markApiKeyAsSuccessful,
 } from '../api-key-rotation'
+import {
+  CRYPTOCOMPARE_REVALIDATION_TIMES,
+  legacy_fetchTokensPrice,
+} from '../cryptocompare'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
 import type { NetworkType } from '../../api/types'
@@ -922,7 +926,10 @@ export async function getFeeRate(
             params: ['0x4', 'latest', [10, 50, 90]],
           })
         }),
-        legacy_fetchTokensPrice(['ETH']),
+        legacy_fetchTokensPrice(
+          ['ETH'],
+          CRYPTOCOMPARE_REVALIDATION_TIMES.TRADING_PRICE,
+        ),
       ])
   } catch (error) {
     console.error('Failed to fetch fee rate:', error)

@@ -25,6 +25,18 @@ import type {
   TokenMetadataResponseBody,
 } from './types'
 
+export const CRYPTOCOMPARE_REVALIDATION_TIMES = {
+  TRADING_PRICE: 15,
+  CURRENT_PRICE: 60,
+  PRICE_HISTORY: 3600,
+  PRICE_HISTORY_DAILY: 3600,
+  TOKEN_METADATA: 3600,
+  PRICE_FOR_DATE: 15,
+} as const
+
+type Revalidation =
+  (typeof CRYPTOCOMPARE_REVALIDATION_TIMES)[keyof typeof CRYPTOCOMPARE_REVALIDATION_TIMES]
+
 /**
  * @see https://min-api.cryptocompare.com/documentation?key=Historical&cat=dataHistoday
  * @see https://min-api.cryptocompare.com/documentation?key=Historical&cat=dataHistohour
@@ -34,6 +46,7 @@ import type {
 export async function legacy_fetchTokenPriceHistory(
   symbol: string,
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
+  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
 ) {
   if (days === 'all') {
     const url = new URL('https://min-api.cryptocompare.com/data/v2/histoday')
@@ -46,7 +59,10 @@ export async function legacy_fetchTokenPriceHistory(
       getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
     )
 
-    const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
+    const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(
+      url,
+      revalidate,
+    )
     const data = body.Data.Data
 
     return data
@@ -70,7 +86,10 @@ export async function legacy_fetchTokenPriceHistory(
       getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
     )
 
-    const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 3600)
+    const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(
+      url,
+      revalidate,
+    )
     const data = body.Data.Data
 
     _data = [...data, ..._data]
@@ -90,7 +109,10 @@ export async function legacy_fetchTokenPriceHistory(
 /**
  * @see https://developers.cryptocompare.com/documentation/data-api/asset_v1_metadata
  */
-export async function fetchTokenMetadata(symbol: string) {
+export async function fetchTokenMetadata(
+  symbol: string,
+  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+) {
   const url = new URL('https://data-api.cryptocompare.com/asset/v1/metadata')
   url.searchParams.set('asset', symbol)
   url.searchParams.set('asset_lookup_priority', 'SYMBOL')
@@ -100,7 +122,7 @@ export async function fetchTokenMetadata(symbol: string) {
     getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
   )
 
-  const body = await _fetch<TokenMetadataResponseBody>(url, 3600)
+  const body = await _fetch<TokenMetadataResponseBody>(url, revalidate)
   const data = body.Data
 
   return data
@@ -110,7 +132,10 @@ export async function fetchTokenMetadata(symbol: string) {
 /**
  * @see https://developers.cryptocompare.com/documentation/data-api/asset_v1_data_by_symbol
  */
-export async function deprecated_fetchTokenMetadata(symbol: string) {
+export async function deprecated_fetchTokenMetadata(
+  symbol: string,
+  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+) {
   const url = new URL(
     'https://data-api.cryptocompare.com/asset/v1/data/by/symbol',
   )
@@ -120,7 +145,10 @@ export async function deprecated_fetchTokenMetadata(symbol: string) {
     getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
   )
 
-  const body = await _fetch<deprecated_TokensMetadataResponseBody>(url, 3600)
+  const body = await _fetch<deprecated_TokensMetadataResponseBody>(
+    url,
+    revalidate,
+  )
   const data = body.Data[symbol]
 
   return data
@@ -132,7 +160,10 @@ export async function deprecated_fetchTokenMetadata(symbol: string) {
  *
  * @see https://min-api.cryptocompare.com/documentation?key=Other&cat=allCoinsWithContentEndpoint
  */
-export async function legacy_research_fetchTokenMetadata(symbol: string) {
+export async function legacy_research_fetchTokenMetadata(
+  symbol: string,
+  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+) {
   const url = new URL('https://min-api.cryptocompare.com/data/all/coinlist')
   url.searchParams.set('fsym', symbol)
   url.searchParams.set(
@@ -142,7 +173,7 @@ export async function legacy_research_fetchTokenMetadata(symbol: string) {
 
   const body = await _fetch<legacy_research_TokenMetadataResponseBody>(
     url,
-    3600,
+    revalidate,
   )
   const data = body.Data[symbol]
 
@@ -153,7 +184,10 @@ export async function legacy_research_fetchTokenMetadata(symbol: string) {
 /**
  * @see https://min-api.cryptocompare.com/documentation?key=Price&cat=multipleSymbolsFullPriceEndpoint
  */
-export async function legacy_fetchTokensPrice(symbols: string[]) {
+export async function legacy_fetchTokensPrice(
+  symbols: string[],
+  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+) {
   const url = new URL('https://min-api.cryptocompare.com/data/pricemultifull')
   url.searchParams.set('fsyms', symbols.join(','))
   url.searchParams.set('tsyms', 'USD')
@@ -164,7 +198,7 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
   )
 
   try {
-    const body = await _fetch<legacy_TokensPriceResponseBody>(url, 15)
+    const body = await _fetch<legacy_TokensPriceResponseBody>(url, revalidate)
     const data = body.RAW
 
     return data
@@ -181,7 +215,7 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
         const filteredSymbols = symbols.filter(s => s !== failedSymbol)
 
         if (filteredSymbols.length > 0) {
-          return await legacy_fetchTokensPrice(filteredSymbols)
+          return await legacy_fetchTokensPrice(filteredSymbols, revalidate)
         }
       }
     }
@@ -198,6 +232,7 @@ export async function legacy_fetchTokensPrice(symbols: string[]) {
 export async function fetchTokensPriceForDate(
   symbols: string[],
   timestamp: number,
+  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_FOR_DATE,
 ) {
   const data: Record<string, { USD: { PRICE: number } }> = {}
 
@@ -214,7 +249,10 @@ export async function fetchTokensPriceForDate(
         getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
       )
 
-      const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(url, 15)
+      const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(
+        url,
+        revalidate,
+      )
       const prices = body.Data.Data
 
       if (prices.length > 0) {
