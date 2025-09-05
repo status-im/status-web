@@ -5,6 +5,10 @@ packages:
   - 'packages/icons'
   - 'packages/components'
   - 'packages/wallet'
+
+
+  - 'apps/hub'
+
   - 'apps/connector'
   - 'apps/portfolio'
   - 'apps/wallet'
