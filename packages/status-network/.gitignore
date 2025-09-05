@@ -1,0 +1,9 @@
+dist/
+.DS_Store
+THUMBS_DB
+node_modules/
+types/
+
+# local env files
+!.env.*
+.env*.local

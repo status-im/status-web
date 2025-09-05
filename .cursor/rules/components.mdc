@@ -1,0 +1,11 @@
+---
+description: Implementing designs and building UI
+alwaysApply: false
+---
+
+- reuse existing UI components and Tailwind configuration from `packages/components/`
+- reuse colors from `packages/colors/`
+- reuse icons from `packages/icons/`
+- search for components in `apps/` and extract or create new ones by orchestrating ui components if you can't find any existing that solves the problem
+- ask the human how they want to proceed when there are missing components and designs
+
