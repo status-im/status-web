@@ -4,6 +4,9 @@
   "typescript.suggest.autoImports": true,
   "typescript.preferences.importModuleSpecifier": "relative",
   "npm.packageManager": "pnpm",
+  "markdown.preferredMdPathExtensionStyle": "removeExtension",
+  "markdown.validate.enabled": true,
+  "markdown.validate.ignoredLinks": ["/assets/**/*"],
   "eslint.useESLintClass": true,
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -16,6 +19,9 @@
     "./packages/components",
     "./packages/status-js",
     "./packages/wallet",
+    "./apps/status.app",
+    "./apps/status.network",
+    "./apps/hub",
     "./apps/connector",
     "./apps/portfolio",
     "./apps/wallet",
@@ -33,6 +39,28 @@
     "typescript",
     "typescriptreact"
   ],
+  // "[markdown]": {
+  //   "editor.formatOnSave": false,
+  //   "editor.defaultFormatter": null
+  // },
+  // "[mdx]": {
+  //   "editor.formatOnSave": false,
+  //   "editor.defaultFormatter": null
+  // },
+  "[markdown]": {
+    "editor.defaultFormatter": "unifiedjs.vscode-remark",
+    "editor.formatOnSave": true
+  },
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "mdx.experimentalLanguageServer": true,
+  "files.associations": {
+    // note!: breaks jsx highlighting but enables autocompleting of file paths
+    "*.mdx": "markdown",
+    "*.css": "tailwindcss"
+  },
   "tailwindCSS.experimental.classRegex": [
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
@@ -41,6 +69,8 @@
     "**/node_modules": true,
     "**/bower_components": true,
     "**/*.code-search": true,
-    "**/.output": true
-  }
+    "**/.output": true,
+    "**/build": true
+  },
+  "vitest.maximumConfigs": 6
 }

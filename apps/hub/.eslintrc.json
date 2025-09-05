@@ -1,0 +1,18 @@
+{
+    "extends": [
+      "plugin:tailwindcss/recommended",
+      "next/core-web-vitals",
+      "next/typescript"
+    ],
+    "rules": {
+      "no-constant-binary-expression": "error",
+      "no-restricted-globals": ["off", "process"],
+      "tailwindcss/classnames-order": "off", // handled by official prettier-plugin-tailwindcss
+      "tailwindcss/migration-from-tailwind-2": "off"
+    },
+    "settings": {
+      "tailwindcss": {
+        "callees": ["cva", "cx"]
+      }
+    }
+  }
