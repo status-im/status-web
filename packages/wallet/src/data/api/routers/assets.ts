@@ -11,10 +11,15 @@ import {
   getNativeTokenBalance,
 } from '../../services/alchemy'
 import {
-  CRYPTOCOMPARE_REVALIDATION_TIMES,
-  fetchTokenMetadata,
+  alchemy_fetchTokenMetadata,
+  alchemy_fetchTokenPriceHistory,
+  alchemy_fetchTokensPrice,
+} from '../../services/alchemy-prices'
+import {
+  // CRYPTOCOMPARE_REVALIDATION_TIMES,
+  // fetchTokenMetadata,
   legacy_fetchTokenPriceHistory,
-  legacy_fetchTokensPrice,
+  // legacy_fetchTokensPrice,
 } from '../../services/cryptocompare'
 import { publicProcedure, router } from '../lib/trpc'
 
@@ -216,9 +221,13 @@ async function all({
           address,
           STATUS_NETWORKS[token.chainId],
         )
-        const price = (await legacy_fetchTokensPrice([token.symbol]))[
+        const price = (await alchemy_fetchTokensPrice([token.symbol]))[
           token.symbol
         ]
+
+        if (!price || !price.USD) {
+          console.warn(`Price data missing for native token: ${token.symbol}`)
+        }
 
         const asset: Omit<Asset, 'metadata'> = {
           networks: [STATUS_NETWORKS[token.chainId]],
@@ -227,11 +236,12 @@ async function all({
           icon: token.logoURI,
           name: token.name,
           symbol: token.symbol,
-          price_eur: price.USD['PRICE'],
-          price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
+          price_eur: price?.USD?.['PRICE'] ?? 0,
+          price_percentage_24h_change: price?.USD?.['CHANGEPCT24HOUR'] ?? 0,
           balance: Number(balance) / 10 ** token.decimals,
           total_eur:
-            (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+            (Number(balance) / 10 ** token.decimals) *
+            (price?.USD?.['PRICE'] ?? 0),
           decimals: token.decimals,
         }
 
@@ -319,12 +329,12 @@ async function all({
       const batch = partialAssetEntries.slice(i, i + batchSize)
       const symbols = [...new Set(batch.map(([, asset]) => asset.symbol))]
 
-      const prices = await legacy_fetchTokensPrice(symbols)
+      const prices = await alchemy_fetchTokensPrice(symbols)
 
       for (const [, partialAsset] of batch) {
         const price = prices[partialAsset.symbol]
 
-        if (price) {
+        if (price && price.USD) {
           const asset: Omit<Asset, 'metadata'> = {
             ...partialAsset,
             price_eur: price['USD']['PRICE'] ?? 0,
@@ -367,10 +377,11 @@ async function all({
     )
 
     if (missingSymbols.length > 0) {
-      const prices = await legacy_fetchTokensPrice(
-        missingSymbols,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
-      )
+      // const prices = await legacy_fetchTokensPrice(
+      //   missingSymbols,
+      //   CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+      // )
+      const prices = await alchemy_fetchTokensPrice(missingSymbols)
 
       for (const symbol of missingSymbols) {
         const token = erc20TokenList.tokens.find(
@@ -384,8 +395,9 @@ async function all({
             icon: token.logoURI,
             name: token.name,
             symbol: token.symbol,
-            price_eur: prices[symbol].USD.PRICE,
-            price_percentage_24h_change: prices[symbol].USD.CHANGEPCT24HOUR,
+            price_eur: prices[symbol]?.USD?.PRICE ?? 0,
+            price_percentage_24h_change:
+              prices[symbol]?.USD?.CHANGEPCT24HOUR ?? 0,
             balance: 0,
             total_eur: 0,
             decimals: token.decimals,
@@ -457,21 +469,33 @@ async function nativeToken({
         throw new Error('Balance not found')
       }
 
-      const price = (
-        await legacy_fetchTokensPrice(
-          [token.symbol],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
-        )
-      )[token.symbol]
-      const priceHistory = await legacy_fetchTokenPriceHistory(
+      // const price = (
+      //   await legacy_fetchTokensPrice(
+      //     [token.symbol],
+      //     CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+      //   )
+      // )[token.symbol]
+      // const priceHistory = await legacy_fetchTokenPriceHistory(
+      //   token.symbol,
+      //   'all',
+      //   CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
+      // )
+      const price = (await alchemy_fetchTokensPrice([token.symbol]))[
+        token.symbol
+      ]
+      const priceHistory = await alchemy_fetchTokenPriceHistory(
         token.symbol,
         'all',
-        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMetadata = await fetchTokenMetadata(
-        token.symbol,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
-      )
+      // const tokenMetadata = await fetchTokenMetadata(
+      //   token.symbol,
+      //   CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+      // )
+      const tokenMetadata = await alchemy_fetchTokenMetadata(token.symbol)
+
+      if (!price || !price.USD) {
+        console.warn(`Price data missing for native token: ${token.symbol}`)
+      }
 
       const asset: Asset = map({
         token,
@@ -559,21 +583,33 @@ async function token({
         throw new Error(`Balance not found for token ${token.symbol}`)
       }
 
-      const price = (
-        await legacy_fetchTokensPrice(
-          [token.symbol],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
-        )
-      )[token.symbol]
-      const priceHistory = await legacy_fetchTokenPriceHistory(
+      // const price = (
+      //   await legacy_fetchTokensPrice(
+      //     [token.symbol],
+      //     CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+      //   )
+      // )[token.symbol]
+      // const priceHistory = await legacy_fetchTokenPriceHistory(
+      //   token.symbol,
+      //   'all',
+      //   CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
+      // )
+      const price = (await alchemy_fetchTokensPrice([token.symbol]))[
+        token.symbol
+      ]
+      const priceHistory = await alchemy_fetchTokenPriceHistory(
         token.symbol,
         'all',
-        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMetadata = await fetchTokenMetadata(
-        token.symbol,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
-      )
+      // const tokenMetadata = await fetchTokenMetadata(
+      //   token.symbol,
+      //   CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+      // )
+      const tokenMetadata = await alchemy_fetchTokenMetadata(token.symbol)
+
+      if (!price || !price.USD) {
+        console.warn(`Price data missing for ERC20 token: ${token.symbol}`)
+      }
 
       const asset = map({
         token,
@@ -625,7 +661,11 @@ async function tokenPriceChart({
   // console.log(' DELAY tokenPriceChart()')
   // await delay()
 
-  const data = await legacy_fetchTokenPriceHistory(symbol, days)
+  // Use CryptoCompare for 24H charts since Alchemy only provides daily granularity
+  const data =
+    days === '1'
+      ? await legacy_fetchTokenPriceHistory(symbol, days)
+      : await alchemy_fetchTokenPriceHistory(symbol, days)
 
   const mappedData = data.map(({ time, close }) => ({
     date: new Date(time * 1000).toISOString(),
@@ -651,7 +691,11 @@ async function nativeTokenPriceChart({
   // console.log(' DELAY nativeTokenPriceChart()')
   // await delay()
 
-  const data = await legacy_fetchTokenPriceHistory(symbol, days)
+  // Use CryptoCompare for 24H charts since Alchemy only provides daily granularity
+  const data =
+    days === '1'
+      ? await legacy_fetchTokenPriceHistory(symbol, days)
+      : await alchemy_fetchTokenPriceHistory(symbol, days)
 
   const mappedData = data.map(({ time, close }) => ({
     date: new Date(time * 1000).toISOString(),
@@ -856,14 +900,16 @@ function map(data: {
     | (typeof nativeTokenList.tokens)[number]
     | (typeof erc20TokenList.tokens)[number]
   balance: string
-  price: Awaited<ReturnType<typeof legacy_fetchTokensPrice>>[string]
-  priceHistory: Awaited<ReturnType<typeof legacy_fetchTokenPriceHistory>>
+  price: Awaited<ReturnType<typeof alchemy_fetchTokensPrice>>[string]
+  priceHistory: Awaited<ReturnType<typeof alchemy_fetchTokenPriceHistory>>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tokenMetadata: any
 }): Asset {
   const { token, balance, price, priceHistory, tokenMetadata } = data
 
-  const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
+  const lows = priceHistory
+    .map(({ low }: { low: number }) => low)
+    .filter((low: number) => low > 0)
 
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
@@ -873,22 +919,28 @@ function map(data: {
     icon: token.logoURI,
     name: token.name,
     symbol: token.symbol,
-    price_eur: price.USD['PRICE'],
-    price_percentage_24h_change: price.USD['CHANGEPCT24HOUR'],
+    price_eur: price?.USD?.['PRICE'] ?? 0,
+    price_percentage_24h_change: price?.USD?.['CHANGEPCT24HOUR'] ?? 0,
     balance: Number(balance) / 10 ** token.decimals,
-    total_eur: (Number(balance) / 10 ** token.decimals) * price.USD['PRICE'],
+    total_eur:
+      (Number(balance) / 10 ** token.decimals) * (price?.USD?.['PRICE'] ?? 0),
     decimals: token.decimals,
     metadata: {
-      market_cap: price.USD['MKTCAP'],
-      fully_dilluted: price.USD['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
-      circulation: price.USD['CIRCULATINGSUPPLY'],
-      total_supply: tokenMetadata['SUPPLY_TOTAL'],
-      all_time_high: Math.max(...priceHistory.map(({ high }) => high)),
-      all_time_low: lows.length ? Math.min(...lows) : price.USD['PRICE'],
-      volume_24: price.USD['TOTALVOLUME24HTO'],
+      market_cap: price?.USD?.['MKTCAP'],
+      fully_dilluted:
+        (price?.USD?.['PRICE'] ?? 0) * (tokenMetadata?.['SUPPLY_TOTAL'] ?? 0),
+      circulation: price?.USD?.['CIRCULATINGSUPPLY'] ?? 0,
+      total_supply: tokenMetadata?.['SUPPLY_TOTAL'] ?? 0,
+      all_time_high: priceHistory?.length
+        ? Math.max(...priceHistory.map(({ high }: { high: number }) => high))
+        : (price?.USD?.['PRICE'] ?? 0),
+      all_time_low: lows.length
+        ? Math.min(...lows)
+        : (price?.USD?.['PRICE'] ?? 0),
+      volume_24: price?.USD?.['TOTALVOLUME24HTO'] ?? 0,
       rank_by_market_cap:
-        tokenMetadata['TOPLIST_BASE_RANK']['TOTAL_MKT_CAP_USD'],
-      about: tokenMetadata['ASSET_DESCRIPTION'],
+        tokenMetadata?.['TOPLIST_BASE_RANK']?.['TOTAL_MKT_CAP_USD'] ?? 0,
+      about: tokenMetadata?.['ASSET_DESCRIPTION'] ?? '',
     },
   }
 }

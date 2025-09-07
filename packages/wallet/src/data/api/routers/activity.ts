@@ -6,7 +6,8 @@ import { z } from 'zod'
 import erc20TokenList from '../../../constants/erc20.json'
 import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
-import { fetchTokensPriceForDate } from '../../services/cryptocompare'
+// import { fetchTokensPriceForDate } from '../../services/cryptocompare'
+import { alchemy_fetchTokensPriceForDate } from '../../services/alchemy-prices'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'
@@ -38,7 +39,9 @@ const cachedPriceData = cache(async (key: string) => {
 
   if (symbols.length === 0) return {}
 
-  return await fetchTokensPriceForDate(symbols, timestamp)
+  // Test Alchemy Prices API instead of CryptoCompare
+  return await alchemy_fetchTokensPriceForDate(symbols, timestamp)
+  // return await fetchTokensPriceForDate(symbols, timestamp)
 })
 
 type PriceDataResponse = Record<string, { USD?: { PRICE: number } }>
