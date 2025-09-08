@@ -20,78 +20,83 @@ export const dynamic = 'force-dynamic'
 async function handler(request: NextRequest) {
   // let error: Error | undefined
 
-  const response = await fetchRequestHandler({
-    // return await fetchRequestHandler({
-    endpoint: '/api/trpc',
-    router: apiRouter,
-    req: request,
-    // allowBatching: true,
-    createContext: async () => {
-      const headers = new Headers(await nextHeaders())
+  try {
+    const response = await fetchRequestHandler({
+      // return await fetchRequestHandler({
+      endpoint: '/api/trpc',
+      router: apiRouter,
+      req: request,
+      // allowBatching: true,
+      createContext: async () => {
+        const headers = new Headers(await nextHeaders())
 
-      return { headers }
-    },
-    /**
-     * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
-     */
-    // onError: opts => {
-    //   error = opts.error.cause
-    // },
-    responseMeta: opts => {
-      // note: opts.error does not have original cause (status code), contrary to onError
-      // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
-      // const error = opts.errors?.[0]
+        return { headers }
+      },
+      /**
+       * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
+       */
+      // onError: opts => {
+      //   error = opts.error.cause
+      // },
+      responseMeta: opts => {
+        // note: opts.error does not have original cause (status code), contrary to onError
+        // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
+        // const error = opts.errors?.[0]
 
-      let cacheControl = 'public, max-age=3600'
+        let cacheControl = 'public, max-age=3600'
 
-      if (opts.errors && opts.errors.length > 0) {
-        // cacheControl = 'no-store, no-cache, must-revalidate, max-age=0'
-        // revalidate
-        console.log('nocache')
-      }
+        if (opts.errors && opts.errors.length > 0) {
+          // cacheControl = 'no-store, no-cache, must-revalidate, max-age=0'
+          // revalidate
+          console.log('nocache')
+        }
 
-      if (
-        opts?.paths?.some(path =>
-          [
-            'nodes.broadcastTransaction',
-            'nodes.getNonce',
-            'nodes.getTransactionCount',
-            'nodes.getFeeRate',
-            'activities.page',
-            'activities.activities',
-            'assets.all',
-            'assets.nativeToken',
-            'assets.token',
-            'collectibles.page',
-          ].includes(path)
-        ) ||
-        opts?.type === 'mutation'
-      ) {
-        cacheControl = 'private, no-store'
-      }
+        if (
+          opts?.paths?.some(path =>
+            [
+              'nodes.broadcastTransaction',
+              'nodes.getNonce',
+              'nodes.getTransactionCount',
+              'nodes.getFeeRate',
+              'activities.page',
+              'activities.activities',
+              'assets.all',
+              'assets.nativeToken',
+              'assets.token',
+              'collectibles.page',
+            ].includes(path)
+          ) ||
+          opts?.type === 'mutation'
+        ) {
+          cacheControl = 'private, no-store'
+        }
 
-      return {
-        // status: 429,
-        headers: {
-          'cache-control': cacheControl,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        },
-      }
-    },
-    // unstable_onChunk: undefined,
-  })
+        return {
+          // status: 429,
+          headers: {
+            'cache-control': cacheControl,
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        }
+      },
+      // unstable_onChunk: undefined,
+    })
 
-  console.log('headers::trpc::', [...response.headers.entries()])
+    console.log('headers::trpc::', [...response.headers.entries()])
 
-  const result = await response.json()
+    const result = await response.json()
 
-  return Response.json(
-    result
-    // { status: result.httpStatus }
-    // { status: 429 }
-  )
+    return Response.json(
+      result
+      // { status: result.httpStatus }
+      // { status: 429 }
+    )
+  } catch (error) {
+    console.error(error)
+    return Response.json({ error: 'Internal server error' }, { status: 500 })
+  }
 }
 
 export { handler as GET, handler as POST }
