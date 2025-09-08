@@ -20,8 +20,8 @@ export const dynamic = 'force-dynamic'
 async function handler(request: NextRequest) {
   // let error: Error | undefined
 
-  // const response = await fetchRequestHandler({
-  return await fetchRequestHandler({
+  const response = await fetchRequestHandler({
+    // return await fetchRequestHandler({
     endpoint: '/api/trpc',
     router: apiRouter,
     req: request,
@@ -43,6 +43,12 @@ async function handler(request: NextRequest) {
       // const error = opts.errors?.[0]
 
       let cacheControl = 'public, max-age=3600'
+
+      if (opts.errors && opts.errors.length > 0) {
+        // cacheControl = 'no-store, no-cache, must-revalidate, max-age=0'
+        // revalidate
+        console.log('nocache')
+      }
 
       if (
         opts?.paths?.some(path =>
@@ -77,13 +83,15 @@ async function handler(request: NextRequest) {
     // unstable_onChunk: undefined,
   })
 
-  // const result = await response.json()
+  console.log('headers::trpc::', [...response.headers.entries()])
 
-  // return Response.json(
-  //   result
-  //   // { status: result.httpStatus }
-  //   // { status: 429 }
-  // )
+  const result = await response.json()
+
+  return Response.json(
+    result
+    // { status: result.httpStatus }
+    // { status: 429 }
+  )
 }
 
 export { handler as GET, handler as POST }

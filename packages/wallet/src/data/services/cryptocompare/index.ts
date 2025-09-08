@@ -62,6 +62,7 @@ export async function legacy_fetchTokenPriceHistory(
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(
       url,
       revalidate,
+      'legacy_fetchTokenPriceHistory_today',
     )
     const data = body.Data.Data
 
@@ -89,6 +90,7 @@ export async function legacy_fetchTokenPriceHistory(
     const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(
       url,
       revalidate,
+      'legacy_fetchTokenPriceHistory_hour',
     )
     const data = body.Data.Data
 
@@ -122,7 +124,11 @@ export async function fetchTokenMetadata(
     getRandomApiKey(serverEnv.CRYPTOCOMPARE_API_KEYS),
   )
 
-  const body = await _fetch<TokenMetadataResponseBody>(url, revalidate)
+  const body = await _fetch<TokenMetadataResponseBody>(
+    url,
+    revalidate,
+    'fetchTokenMetadata',
+  )
   const data = body.Data
 
   return data
@@ -148,6 +154,7 @@ export async function deprecated_fetchTokenMetadata(
   const body = await _fetch<deprecated_TokensMetadataResponseBody>(
     url,
     revalidate,
+    'deprecated_fetchTokenMetadata',
   )
   const data = body.Data[symbol]
 
@@ -174,6 +181,7 @@ export async function legacy_research_fetchTokenMetadata(
   const body = await _fetch<legacy_research_TokenMetadataResponseBody>(
     url,
     revalidate,
+    'legacy_research_fetchTokenMetadata',
   )
   const data = body.Data[symbol]
 
@@ -198,7 +206,11 @@ export async function legacy_fetchTokensPrice(
   )
 
   try {
-    const body = await _fetch<legacy_TokensPriceResponseBody>(url, revalidate)
+    const body = await _fetch<legacy_TokensPriceResponseBody>(
+      url,
+      revalidate,
+      'legacy_fetchTokensPrice',
+    )
     const data = body.RAW
 
     return data
@@ -252,6 +264,7 @@ export async function fetchTokensPriceForDate(
       const body = await _fetch<legacy_TokenPriceHistoryResponseBody>(
         url,
         revalidate,
+        'fetchTokensPriceForDate',
       )
       const prices = body.Data.Data
 
@@ -277,17 +290,19 @@ async function _fetch<
     | legacy_research_TokenMetadataResponseBody
     | legacy_TokenPriceHistoryResponseBody
     | TokenMetadataResponseBody,
->(url: URL, revalidate: number): Promise<T> {
+>(url: URL, revalidate: number, tag: string): Promise<T> {
   const response = await fetch(url, {
     // why: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#reusing-data-across-multiple-functions
     // why: https://github.com/vercel/next.js/issues/70946
     cache: 'force-cache',
     next: {
       revalidate,
+      tags: [tag],
     },
   })
 
   if (!response.ok) {
+    console.log('headers::service::', [...response.headers.entries()])
     console.error(response.statusText)
 
     if (response.status === 429) {
