@@ -47,7 +47,6 @@ export default {
       ],
       40: [
         '2.5rem',
-
         {
           lineHeight: '2.75rem',
           letterSpacing: '-0.08rem',
@@ -135,7 +134,7 @@ export default {
     boxShadow: {
       1: '0px 2px 20px rgba(9, 16, 28, 0.04)',
       2: '0px 4px 20px rgba(9, 16, 28, 0.08)',
-      3: '0px 8px 30px rgba(9, 16, 28, 0.12);',
+      3: '0px 8px 30px rgba(9, 16, 28, 0.12)',
     },
 
     opacity: {},
