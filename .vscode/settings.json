@@ -20,8 +20,6 @@
     "./packages/status-js",
     "./packages/status-network",
     "./packages/wallet",
-    "./apps/status.app",
-    "./apps/status.network",
     "./apps/hub",
     "./apps/connector",
     "./apps/portfolio",
