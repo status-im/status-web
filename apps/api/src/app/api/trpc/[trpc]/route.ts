@@ -20,8 +20,8 @@ export const dynamic = 'force-dynamic'
 async function handler(request: NextRequest) {
   // let error: Error | undefined
 
-  const response = await fetchRequestHandler({
-    // return await fetchRequestHandler({
+  // const response = await fetchRequestHandler({
+  return await fetchRequestHandler({
     endpoint: '/api/trpc',
     router: apiRouter,
     req: request,
@@ -77,13 +77,13 @@ async function handler(request: NextRequest) {
     // unstable_onChunk: undefined,
   })
 
-  const result = await response.json()
+  // const result = await response.json()
 
-  return Response.json(
-    result
-    // { status: result.httpStatus }
-    // { status: 429 }
-  )
+  // return Response.json(
+  //   result
+  //   // { status: result.httpStatus }
+  //   // { status: 429 }
+  // )
 }
 
 export { handler as GET, handler as POST }
