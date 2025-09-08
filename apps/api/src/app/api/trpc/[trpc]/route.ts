@@ -13,8 +13,6 @@ import type { NextRequest } from 'next/server'
 
 export type { ApiRouter }
 
-// todo: use nodejs runtime
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 async function handler(request: NextRequest) {
