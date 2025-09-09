@@ -9,6 +9,7 @@ import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { headers as nextHeaders } from 'next/headers'
 
+// import superjson from 'superjson'
 import type { NextRequest } from 'next/server'
 
 export type { ApiRouter }
@@ -41,13 +42,9 @@ async function handler(request: NextRequest) {
         // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
         // const error = opts.errors?.[0]
 
+        // todo?: unset cache and revalidate and revalidate based on tag
+        // @see https://github.com/vercel/next.js/discussions/57792 for vercel caching error response
         let cacheControl = 'public, max-age=3600'
-
-        if (opts.errors && opts.errors.length > 0) {
-          // cacheControl = 'no-store, no-cache, must-revalidate, max-age=0'
-          // revalidate
-          console.log('nocache')
-        }
 
         if (
           opts?.paths?.some(path =>
@@ -82,18 +79,36 @@ async function handler(request: NextRequest) {
       // unstable_onChunk: undefined,
     })
 
-    console.log('headers::trpc::', [...response.headers.entries()])
-
+    const status = response.status
     const result = await response.json()
 
     return Response.json(
-      result
+      result,
       // { status: result.httpStatus }
       // { status: 429 }
+      { status: status }
     )
   } catch (error) {
     console.error(error)
-    return Response.json({ error: 'Internal server error' }, { status: 500 })
+
+    const status = 500
+    // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
+    const result = {
+      error: {
+        json: {
+          message: 'Internal server error',
+          code: -32603,
+          data: {
+            code: 'INTERNAL_SERVER_ERROR',
+            httpStatus: status,
+            // stack: undefined
+          },
+        },
+      },
+    }
+
+    // @see https://vercel.com/docs/errors/FUNCTION_INVOCATION_TIMEOUT for ensuring response is always returned
+    return Response.json(result, { status: status })
   }
 }
 

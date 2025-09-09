@@ -297,12 +297,13 @@ async function _fetch<
     cache: 'force-cache',
     next: {
       revalidate,
+      // todo?: revalidate on error
+      // @see https://github.com/vercel/next.js/discussions/57792 for vercel caching error response
       tags: [tag],
     },
   })
 
   if (!response.ok) {
-    console.log('headers::service::', [...response.headers.entries()])
     console.error(response.statusText)
 
     if (response.status === 429) {
