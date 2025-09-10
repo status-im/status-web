@@ -58,7 +58,7 @@
     "@status-im/icons": "workspace:*",
     "cva": "^1.0.0-beta.1",
     "framer-motion": "^12.0.6",
-    "next": "15.1.6",
+    "next": "15.4.7",
     "ts-pattern": "^5.3.1",
     "zod": "^3.23.8"
   },
