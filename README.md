@@ -19,6 +19,7 @@ Packages for building user interfaces, websites, web applications, dapps, browse
 
 | Name                                   | Deployments                                                                                                                                | Builds                                                                                                                   | Description                                                                                                       |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| [`./apps/hub`](./apps/hub)             |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
 | [`./apps/connector`](./apps/connector) | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/connector/) | Status Desktop Wallet extended to decentralised applications in your browser.                                     |
 | [`./apps/portfolio`](./apps/portfolio) |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
 | [`./apps/wallet`](./apps/wallet)       | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/wallet/)    | Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one. |
@@ -46,43 +47,31 @@ Required:
 
 ## Getting Started
 
-1. Clone the repository:
+1.  Clone the repository:
 
-   ```
-   git clone https://github.com/status-im/status-web.git
-   cd status-web
-   ```
+          git clone https://github.com/status-im/status-web.git
+          cd status-web
 
-2. Install dependencies:
+2.  Install dependencies:
 
-   ```
-   pnpm install
-   ```
+         pnpm install
 
-3. Build all packages:
+3.  Build all packages:
 
-   ```
-   pnpm build
-   ```
+         pnpm build
 
-4. Run tests:
+4.  Run tests:
 
-   ```
-   pnpm test
-   ```
+         pnpm test
 
-5. Start development mode:
-   ```
-   pnpm dev
-   ```
+5.  Start development mode:
+    pnpm dev
 
 ## Storybook
 
 To view and interact with the components, you can run Storybook:
 
-```
-pnpm storybook
-```
+    pnpm storybook
 
 This will start the Storybook server, allowing you to browse and test components in isolation.
 

@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background-color: #ffffff;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: #1b273d; /* neutral-80 for text */
+  }
+}
+
+@layer components {
+  .bg-neutral-100 {
+    background-color: #09101c !important;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

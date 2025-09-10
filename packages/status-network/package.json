@@ -1,0 +1,99 @@
+{
+  "name": "@status-im/status-network",
+  "version": "0.0.1",
+  "license": "MPL-2.0",
+  "private": true,
+  "main": "./dist/src/index.cjs.js",
+  "module": "./dist/src/index.es.js",
+  "types": "./dist/src/index.d.ts",
+  "source": "./src/index.tsx",
+  "exports": {
+    "./tailwind.config": {
+      "types": "./dist/tailwind.config.d.ts",
+      "import": "./dist/tailwind.config.es.js",
+      "require": "./dist/tailwind.config.cjs.js"
+    },
+    "./package.json": "./package.json",
+    "./components": {
+      "types": "./dist/src/components/index.d.ts",
+      "import": "./dist/components/index.es.js",
+      "require": "./dist/components/index.cjs.js"
+    },
+    "./hooks": {
+      "types": "./dist/src/hooks/index.d.ts",
+      "import": "./dist/hooks/index.es.js",
+      "require": "./dist/hooks/index.cjs.js"
+    },
+    "./utils": {
+      "types": "./dist/src/utils/index.d.ts",
+      "import": "./dist/utils/index.es.js",
+      "require": "./dist/utils/index.cjs.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": "20.x"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "dev": "vite build --watch --mode development",
+    "build": "vite build && pnpm build:types",
+    "build:types": "tsc --noEmit false --emitDeclarationOnly",
+    "typecheck": "tsc",
+    "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && :",
+    "lint": "eslint src",
+    "format": "prettier --write .",
+    "sync:cloudinary": "DOTENV_CONFIG_PATH='.env.local' node -r dotenv/config scripts/generate-cloudinary-type.mjs && prettier -w 'src/components/image/types.ts'",
+    "clean": "rimraf node_modules dist .turbo",
+    "prepack": "pnpm build"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  },
+  "dependencies": {
+    "@status-im/colors": "workspace:*",
+    "@status-im/components": "workspace:*",
+    "@status-im/icons": "workspace:*",
+    "cva": "^1.0.0-beta.1",
+    "framer-motion": "^12.0.6",
+    "next": "15.1.6",
+    "ts-pattern": "^5.3.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@hookform/devtools": "^4.3.1",
+    "@status-im/eslint-config": "workspace:*",
+    "@types/node": "^20",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
+    "@vitejs/plugin-react-swc": "^3.7.0",
+    "autoprefixer": "^10.4.16",
+    "dotenv": "^16.4.5",
+    "eslint-plugin-tailwindcss": "^3.17.4",
+    "globals": "^15.12.0",
+    "postcss": "^8.4.33",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.1",
+    "rollup-plugin-preserve-directives": "^0.4.0",
+    "tailwind-scrollbar-utilities": "^0.2.0",
+    "tailwindcss": "^3.4.11",
+    "vite": "6.2.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "lint-staged": {
+    "{.env,src/config/env.server.mjs}": [
+      "pnpm env:check"
+    ],
+    "*.{ts,tsx,js,jsx,mjs}": [
+      "eslint",
+      "prettier --write"
+    ],
+    "*.{md,mdx,yml,yaml,json}": [
+      "prettier --write"
+    ]
+  }
+}
