@@ -5,37 +5,36 @@ import { Link } from './link'
 const POSTS: BlogPost[] = [
   {
     category: 'Updates',
+    title: 'Status Steps Up as Founding Member of Linea Consortium',
+    author: {
+      name: 'Us',
+      avatar: '/blog/avatar.webp',
+    },
+    date: 'Jul 29, 2025',
+    image: '/blog/consortium.png',
+    link: 'https://status.app/blog/status-steps-up-as-founding-member-of-linea-consortium',
+  },
+  {
+    category: 'Updates',
+    title: 'Status Launches First Gasless Layer 2 on Linea',
+    author: {
+      name: 'Us',
+      avatar: '/blog/avatar.webp',
+    },
+    date: 'Jul 09, 2025',
+    image: '/blog/gasless.png',
+    link: 'https://status.app/blog/status-network-first-gasless-l2',
+  },
+  {
+    category: 'Updates',
     title: 'V1.13 Release - Socks, Spam and Keycard',
     author: {
       name: 'Us',
       avatar: '/blog/avatar.webp',
     },
-    date: 'Feb 17, 2025',
+    date: 'Jan 28, 2025',
     image: '/blog/1.png',
     link: 'https://status.app/blog/status-vs-telegram-preserving-privacy-for-crypto-users',
-  },
-  {
-    category: 'Updates',
-    title: 'Status Partners with Linea to Launch Status Network',
-    author: {
-      name: 'Us',
-      avatar: '/blog/avatar.webp',
-    },
-    date: 'Aug 20, 2024',
-    image: '/blog/linea.jpg',
-    link: 'https://status.app/blog/linea-partnership-status-network',
-  },
-  {
-    category: 'Updates',
-    title:
-      'Embracing Community Choices: Status to Develop SNT Staking and Status L2',
-    author: {
-      name: 'Status',
-      avatar: '/blog/avatar.webp',
-    },
-    date: 'Jul 30, 2024',
-    image: '/blog/staking.jpg',
-    link: 'https://status.app/blog/snt-staking-and-status-network',
   },
 ]
 
