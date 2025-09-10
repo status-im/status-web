@@ -2,5 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "ignoreCommand": "git diff --quiet HEAD^ HEAD ../../{patches,package.json,turbo.json} ../../packages/wallet ./",
   "installCommand": "pnpm install --dir ../../ --frozen-lockfile",
-  "buildCommand": "turbo run build --cwd ../../ --filter=./apps/api..."
+  "buildCommand": "turbo run build --cwd ../../ --filter=./apps/api...",
+  "functions": {
+    "app/api/**/*": {
+      "maxDuration": 800
+    }
+  }
 }

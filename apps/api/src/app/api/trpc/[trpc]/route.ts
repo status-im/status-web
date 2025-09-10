@@ -9,81 +9,107 @@ import { type ApiRouter, apiRouter } from '@status-im/wallet/data'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { headers as nextHeaders } from 'next/headers'
 
+// import superjson from 'superjson'
 import type { NextRequest } from 'next/server'
 
 export type { ApiRouter }
 
-// todo: use nodejs runtime
-export const runtime = 'edge'
 export const dynamic = 'force-dynamic'
 
 async function handler(request: NextRequest) {
   // let error: Error | undefined
 
-  // const response = await fetchRequestHandler({
-  return await fetchRequestHandler({
-    endpoint: '/api/trpc',
-    router: apiRouter,
-    req: request,
-    // allowBatching: true,
-    createContext: async () => {
-      const headers = new Headers(await nextHeaders())
+  try {
+    const response = await fetchRequestHandler({
+      // return await fetchRequestHandler({
+      endpoint: '/api/trpc',
+      router: apiRouter,
+      req: request,
+      // allowBatching: true,
+      createContext: async () => {
+        const headers = new Headers(await nextHeaders())
 
-      return { headers }
-    },
-    /**
-     * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
-     */
-    // onError: opts => {
-    //   error = opts.error.cause
-    // },
-    responseMeta: opts => {
-      // note: opts.error does not have original cause (status code), contrary to onError
-      // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
-      // const error = opts.errors?.[0]
+        return { headers }
+      },
+      /**
+       * @see https://trpc.io/docs/v10/server/error-handling#handling-errors
+       */
+      // onError: opts => {
+      //   error = opts.error.cause
+      // },
+      responseMeta: opts => {
+        // note: opts.error does not have original cause (status code), contrary to onError
+        // note!: status code is inferred from TRPCError.code (TOO_MANY_REQUESTS, INTERNAL_SERVER_ERROR, etc.)
+        // const error = opts.errors?.[0]
 
-      let cacheControl = 'public, max-age=3600'
+        // todo?: unset cache and revalidate and revalidate based on tag
+        // @see https://github.com/vercel/next.js/discussions/57792 for vercel caching error response
+        let cacheControl = 'public, max-age=3600'
 
-      if (
-        opts?.paths?.some(path =>
-          [
-            'nodes.broadcastTransaction',
-            'nodes.getNonce',
-            'nodes.getTransactionCount',
-            'nodes.getFeeRate',
-            'activities.page',
-            'activities.activities',
-            'assets.all',
-            'assets.nativeToken',
-            'assets.token',
-            'collectibles.page',
-          ].includes(path)
-        ) ||
-        opts?.type === 'mutation'
-      ) {
-        cacheControl = 'private, no-store'
-      }
+        if (
+          opts?.paths?.some(path =>
+            [
+              'nodes.broadcastTransaction',
+              'nodes.getNonce',
+              'nodes.getTransactionCount',
+              'nodes.getFeeRate',
+              'activities.page',
+              'activities.activities',
+              'assets.all',
+              'assets.nativeToken',
+              'assets.token',
+              'collectibles.page',
+            ].includes(path)
+          ) ||
+          opts?.type === 'mutation'
+        ) {
+          cacheControl = 'private, no-store'
+        }
 
-      return {
-        // status: 429,
-        headers: {
-          'cache-control': cacheControl,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        return {
+          // status: 429,
+          headers: {
+            'cache-control': cacheControl,
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        }
+      },
+      // unstable_onChunk: undefined,
+    })
+
+    const status = response.status
+    const result = await response.json()
+
+    return Response.json(
+      result,
+      // { status: result.httpStatus }
+      // { status: 429 }
+      { status: status }
+    )
+  } catch (error) {
+    console.error(error)
+
+    const status = 500
+    // @see https://github.com/trpc/trpc/discussions/3640#discussioncomment-5511435 for returning explicit trpc error in superjson construct as result and preventing possible timeouts due to additional parsing
+    const result = {
+      error: {
+        json: {
+          message: 'Internal server error',
+          code: -32603,
+          data: {
+            code: 'INTERNAL_SERVER_ERROR',
+            httpStatus: status,
+            // stack: undefined
+          },
         },
-      }
-    },
-    // unstable_onChunk: undefined,
-  })
+      },
+    }
 
-  // const result = await response.json()
-
-  // return Response.json(
-  //   result
-  //   // { status: result.httpStatus }
-  //   // { status: 429 }
-  // )
+    // @see https://vercel.com/docs/errors/FUNCTION_INVOCATION_TIMEOUT for ensuring response is always returned
+    return Response.json(result, { status: status })
+  }
 }
 
 export { handler as GET, handler as POST }

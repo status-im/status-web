@@ -7,7 +7,10 @@ import {
   getNFTMetadata,
   getNFTs,
 } from '../../services/alchemy'
-import { legacy_fetchTokensPrice } from '../../services/cryptocompare'
+import {
+  CRYPTOCOMPARE_REVALIDATION_TIMES,
+  legacy_fetchTokensPrice,
+} from '../../services/cryptocompare'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type {
@@ -169,7 +172,12 @@ async function collectible(
   let floorPrice: number | undefined
   if (network === 'ethereum') {
     const symbol = 'ETH'
-    price = (await legacy_fetchTokensPrice([symbol]))[symbol][currency].PRICE
+    price = (
+      await legacy_fetchTokensPrice(
+        [symbol],
+        CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+      )
+    )[symbol][currency].PRICE
     floorPrice = nft.contract.openSeaMetadata.floorPrice ?? undefined
     // note: looksRare data is significantly inconsistent with opensea data
     // floorPrice = (await getNFTFloorPrice(contract, network)).openSea.floorPrice
