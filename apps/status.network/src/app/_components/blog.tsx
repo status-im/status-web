@@ -27,14 +27,14 @@ const POSTS: BlogPost[] = [
   },
   {
     category: 'Updates',
-    title: 'V1.13 Release - Socks, Spam and Keycard',
+    title: 'Embracing Community Choices: Status to Develop SNT Staking and Status L2',
     author: {
       name: 'Us',
       avatar: '/blog/avatar.webp',
     },
-    date: 'Jan 28, 2025',
-    image: '/blog/1.png',
-    link: 'https://status.app/blog/status-vs-telegram-preserving-privacy-for-crypto-users',
+    date: 'Jul 30, 2024',
+    image: '/blog/staking.jpg',
+    link: 'https://status.app/blog/snt-staking-and-status-network',
   },
 ]
 
