@@ -15,6 +15,7 @@ export type FeatureType =
   | 'messenger'
   | 'browser'
   | 'keycard'
+  | 'extension'
 
 type Feature = {
   theme: CustomisationColorType
@@ -52,5 +53,10 @@ export const features: Record<FeatureType, Feature> = {
     icon: <KeycardIcon className="text-customisation-army-50" />,
     theme: 'army',
     name: 'Keycard',
+  },
+  extension: {
+    icon: <BrowserIcon className="text-customisation-blue-50" />,
+    theme: 'blue',
+    name: 'Extension',
   },
 } as const
