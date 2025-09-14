@@ -1,4 +1,4 @@
-import { format, isToday, isYesterday } from 'date-fns'
+import { format, isThisYear, isToday, isYesterday } from 'date-fns'
 
 type Props = {
   timestamp: Date | string | number
@@ -16,7 +16,12 @@ export const RelativeDate = (props: Props) => {
     if (isYesterday(date)) {
       return `Yesterday ${format(date, 'HH:mm')}`
     }
-    return format(date, 'dd MMMM HH:mm')
+
+    if (isThisYear(date)) {
+      return format(date, 'dd MMMM HH:mm')
+    }
+
+    return format(date, 'dd MMMM yyyy HH:mm')
   }
 
   return <span className={className}>{formatDate()}</span>
