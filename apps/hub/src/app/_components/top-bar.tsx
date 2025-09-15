@@ -2,8 +2,11 @@
 
 import { Button, IconButton, Tag } from '@status-im/components'
 import { SettingsIcon } from '@status-im/icons/20'
+import {
+  Button as ButtonPrimary,
+  Link,
+} from '@status-im/status-network/components'
 import Image from 'next/image'
-import Link from 'next/link'
 
 interface TopBarProps {
   onMenuToggle: () => void
@@ -55,15 +58,13 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         <div className="flex items-center gap-2">
           {/* Share Feedback */}
           <div>
-            <Button variant="outline" size="24">
+            <Button variant="outline" size="32">
               Share feedback
             </Button>
           </div>
 
           {/* Connect Wallet Button */}
-          <button className="flex h-[24px] items-center rounded-8 bg-purple p-2 px-4 text-13 font-medium text-white-100 transition-colors hover:bg-purple-dark">
-            Connect Wallet
-          </button>
+          <ButtonPrimary size="32">Connect Wallet</ButtonPrimary>
 
           {/* Settings Button */}
           <IconButton variant="ghost" icon={<SettingsIcon />} />

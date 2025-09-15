@@ -1,7 +1,7 @@
 'use client'
 
 import { ExternalIcon } from '@status-im/icons/20'
-import { Link } from '@status-im/status-network/components'
+import { ButtonLink, Link } from '@status-im/status-network/components'
 
 import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
@@ -17,8 +17,8 @@ export default function DashboardPage() {
         <Hero />
 
         {/* Main Content Card */}
-        <div className="mx-auto w-full max-w-[1176px]">
-          <div className="mb-8 rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
+        <div className="mx-auto mt-7 w-full max-w-[1176px]">
+          <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
                 <h3 className="mb-2 text-27 font-bold text-neutral-90">
@@ -29,22 +29,14 @@ export default function DashboardPage() {
                   apps
                 </p>
               </div>
-              <button className="flex items-center gap-2 text-19 font-medium text-purple transition-colors hover:text-purple-dark">
+              <ButtonLink
+                variant="outline"
+                size="32"
+                href="https://status-im.gitbook.io/status-network/user-guides/hub"
+              >
                 Learn more
-                <svg
-                  className="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 17l9.2-9.2M17 17V7H7"
-                  />
-                </svg>
-              </button>
+                <ExternalIcon className="text-neutral-50" />
+              </ButtonLink>
             </div>
 
             {/* Vault Cards Grid */}

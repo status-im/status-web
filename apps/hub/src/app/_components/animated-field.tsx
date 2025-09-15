@@ -19,7 +19,7 @@ const AnimatedField = () => {
       speed: 1.1,
       src: '/hero/waifu.png',
       className:
-        'right-0 mt-[280px] xl:mt-0 max-w-[320px] lg:max-w-[320px] xl:max-w-[500px] aspect-[500/754]',
+        'right-0 mt-[280px] xl:mt-0 max-w-[320px] xl:max-w-[500px] !aspect-[500/754]',
     },
     {
       y: 420,
