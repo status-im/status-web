@@ -7,48 +7,14 @@ import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
 import { VaultCard } from '~components/vault-card'
 
+import { Hero } from '../_components/hero'
+
 export default function DashboardPage() {
   return (
     <HubLayout>
-      <div className="flex h-full flex-col p-8">
+      <div className="flex flex-col p-8">
         {/* Hero Section */}
-        <div className="mb-12 flex flex-col items-center text-center">
-          <h1 className="mb-4 text-64 font-bold text-neutral-90">
-            Welcome, fren
-          </h1>
-          <h2 className="mb-8 text-27 font-medium text-neutral-60">
-            You're so early — it's a biiiiiig advantage.
-          </h2>
-
-          {/* Hero Image Asset */}
-          <div className="relative w-full max-w-4xl">
-            <div className="flex aspect-[16/9] w-full items-center justify-center rounded-20 border border-neutral-20 bg-gradient-to-br from-customisation-purple-50/10 via-customisation-purple-50/5 to-neutral-10">
-              <div className="text-center">
-                <div className="mx-auto mb-4 flex size-20 items-center justify-center rounded-full bg-customisation-purple-50/20">
-                  <svg
-                    className="size-10 text-purple"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                </div>
-                <p className="text-19 font-medium text-neutral-80">
-                  DeFi Dashboard Hero Image
-                </p>
-                <p className="text-13 text-neutral-60">
-                  Large visual asset placeholder
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Hero />
 
         {/* Main Content Card */}
         <div className="mx-auto w-full max-w-[1176px]">
