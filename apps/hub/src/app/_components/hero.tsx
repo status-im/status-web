@@ -5,12 +5,12 @@ import { AnimatedField } from './animated-field'
 const Hero = () => {
   return (
     <section className="relative z-20 mx-auto mt-0 w-full max-w-[1176px]">
-      <div className="relative min-h-[342px] rounded-32 lg:min-h-[682px]">
-        <div className="absolute inset-0 h-full overflow-hidden rounded-32">
+      <div className="relative min-h-[682px] rounded-32">
+        <div className="absolute inset-0 flex justify-center overflow-hidden rounded-32 bg-sea">
           <Image
             src="/hero/landscape.png"
             alt="Landscape"
-            className="absolute left-1/2 -translate-x-1/2 rounded-32 object-cover lg:top-0"
+            className="mx-auto h-full w-[1512px] max-w-fit rounded-32 object-cover"
             priority
             width={1400}
             height={486}

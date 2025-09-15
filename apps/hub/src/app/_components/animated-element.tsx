@@ -16,7 +16,7 @@ const AnimatedElement = (props: Props) => {
 
   return (
     <motion.div
-      className={cx('absolute w-full', className)}
+      className={cx('absolute aspect-square w-full', className)}
       initial={{ y: 1000, scale: 0 }}
       animate={{
         y: [y, y - 20, y],
@@ -38,7 +38,6 @@ const AnimatedElement = (props: Props) => {
       }}
       style={{
         translateY: parallaxSpeed / 10,
-        aspectRatio: 1,
         backgroundImage: `url(${src})`,
         backgroundSize: 'contain',
         backgroundRepeat: 'no-repeat',
