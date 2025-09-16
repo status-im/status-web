@@ -2,12 +2,14 @@
 
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink, Link } from '@status-im/status-network/components'
+import Image from 'next/image'
 
-import { AppCard } from '~components/app-card'
 import { HubLayout } from '~components/hub-layout'
 import { VaultCard } from '~components/vault-card'
 
 import { Hero } from '../_components/hero'
+
+const REWARDS = ['karma', 'linea', 'snt']
 
 export default function DashboardPage() {
   return (
@@ -21,13 +23,27 @@ export default function DashboardPage() {
           <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
-                <h3 className="mb-2 text-27 font-bold text-neutral-90">
+                <h3 className="mb-2 text-27 font-600 text-neutral-90">
                   Deposit funds for yield and rewards
                 </h3>
-                <p className="text-15 text-neutral-60">
-                  Rewards in KARMA, SNT, LINEA, MetaFi and points from native
-                  apps
-                </p>
+                <div className="flex items-center">
+                  <div className="flex -space-x-2">
+                    {REWARDS.map((reward, index) => (
+                      <Image
+                        key={index}
+                        src={`/tokens/${reward}.png`}
+                        alt={reward}
+                        width="22"
+                        height="22"
+                        className="size-5 rounded-full border border-neutral-10"
+                      />
+                    ))}
+                  </div>
+                  <p className="ml-1 text-15 text-neutral-60">
+                    Rewards in KARMA, SNT, LINEA, MetaFi and points from native
+                    apps
+                  </p>
+                </div>
               </div>
               <ButtonLink
                 variant="outline"
@@ -40,63 +56,45 @@ export default function DashboardPage() {
             </div>
 
             {/* Vault Cards Grid */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <VaultCard
-                name="ETH vault"
-                apy="5.2%"
-                rewards={['KARMA', 'SNT', 'LINEA']}
-                icon="ETH"
-                onDeposit={() => console.log('Deposit to ETH vault')}
+            <section className="relative ml-auto w-full max-w-[906px]">
+              <Image
+                src="/dragon.png"
+                alt="Dragon"
+                width="354"
+                height="320"
+                className="absolute left-[-290px] top-[120px]"
               />
-              <VaultCard
-                name="SNT vault"
-                apy="8.7%"
-                rewards={['KARMA', 'MetaFi', 'Points']}
-                icon="SNT"
-                onDeposit={() => console.log('Deposit to SNT vault')}
-              />
-              <VaultCard
-                name="USDC vault"
-                apy="3.9%"
-                rewards={['KARMA', 'SNT', 'Points']}
-                icon="USDC"
-                onDeposit={() => console.log('Deposit to USDC vault')}
-              />
-              <VaultCard
-                name="LINEA vault"
-                apy="6.1%"
-                rewards={['KARMA', 'MetaFi', 'LINEA']}
-                icon="LINEA"
-                onDeposit={() => console.log('Deposit to LINEA vault')}
-              />
-            </div>
-
-            {/* Featured Apps Section */}
-            <div className="rounded-20 border border-neutral-20 bg-white-100 p-8 shadow-2">
-              <h3 className="mb-6 text-27 font-bold text-neutral-90">
-                Featured Applications
-              </h3>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                <AppCard
-                  name="Portfolio"
-                  description="Track your DeFi investments and performance"
-                  category="Finance"
-                  onLaunch={() => console.log('Launch Portfolio')}
+              <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
+                <VaultCard
+                  name="ETH vault"
+                  apy="5.2%"
+                  rewards={['KARMA', 'SNT', 'LINEA']}
+                  icon="ETH"
+                  onDeposit={() => console.log('Deposit to ETH vault')}
                 />
-                <AppCard
-                  name="Bridge"
-                  description="Cross-chain asset transfers and swaps"
-                  category="DeFi"
-                  onLaunch={() => console.log('Launch Bridge')}
+                <VaultCard
+                  name="SNT vault"
+                  apy="8.7%"
+                  rewards={['KARMA', 'MetaFi', 'Points']}
+                  icon="SNT"
+                  onDeposit={() => console.log('Deposit to SNT vault')}
                 />
-                <AppCard
-                  name="Governance"
-                  description="Participate in protocol decisions and voting"
-                  category="DAO"
-                  onLaunch={() => console.log('Launch Governance')}
+                <VaultCard
+                  name="USDC vault"
+                  apy="3.9%"
+                  rewards={['KARMA', 'SNT', 'Points']}
+                  icon="USDC"
+                  onDeposit={() => console.log('Deposit to USDC vault')}
+                />
+                <VaultCard
+                  name="LINEA vault"
+                  apy="6.1%"
+                  rewards={['KARMA', 'MetaFi', 'LINEA']}
+                  icon="LINEA"
+                  onDeposit={() => console.log('Deposit to LINEA vault')}
                 />
               </div>
-            </div>
+            </section>
           </div>
         </div>
 
