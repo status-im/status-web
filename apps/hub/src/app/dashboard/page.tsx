@@ -7,6 +7,7 @@ import Image from 'next/image'
 import { HubLayout } from '~components/hub-layout'
 import { VaultCard } from '~components/vault-card'
 
+import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
 const REWARDS = ['karma', 'linea', 'snt']
@@ -96,6 +97,7 @@ export default function DashboardPage() {
               </div>
             </section>
           </div>
+          <Apps />
         </div>
 
         <div className="py-12">
