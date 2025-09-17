@@ -131,11 +131,13 @@ export default function DashboardPage() {
 
             {/* Ilustração — troque o placeholder pelo asset correto quando disponível no app `hub` */}
             <div className="relative w-full max-w-[420px]">
-              <div className="flex aspect-[4/3] w-full items-center justify-center rounded-20 border border-neutral-20 bg-gradient-to-br from-customisation-purple-50/10 via-customisation-purple-50/5 to-neutral-10">
-                <span className="text-15 text-neutral-60">
-                  Unicorn illustration
-                </span>
-              </div>
+              <Image
+                src="/build-unicorn.png"
+                alt="Unicorn"
+                width="298"
+                height="318"
+                className="mx-auto mt-8 lg:mt-0"
+              />
             </div>
           </div>
         </div>
