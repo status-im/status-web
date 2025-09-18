@@ -129,7 +129,6 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Ilustração — troque o placeholder pelo asset correto quando disponível no app `hub` */}
             <div className="relative w-full max-w-[420px]">
               <Image
                 src="/build-unicorn.png"
