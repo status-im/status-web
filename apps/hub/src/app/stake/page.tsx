@@ -6,6 +6,8 @@ import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
 
+import { LaunchIcon } from '../_components/icons'
+
 export default function StakePage() {
   return (
     <HubLayout>
@@ -60,7 +62,7 @@ export default function StakePage() {
                 <Button className="self-end">Claim testnet SNT</Button>
               </div>
 
-              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.55fr)]">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,1fr)]">
                 <div className="flex flex-col rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:p-8">
                   <div className="flex flex-1 flex-col gap-4">
                     <div className="space-y-2 opacity-[40%]">
@@ -77,9 +79,10 @@ export default function StakePage() {
                             type="text"
                             value="0"
                             readOnly
-                            className="w-full border-none bg-transparent text-27 font-semibold text-neutral-60 outline-none"
+                            className="w-full border-none bg-transparent text-27 font-semibold text-neutral-40 outline-none"
                           />
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1">
+                            <SNTIcon />
                             <span className="text-19 font-semibold text-neutral-80">
                               SNT
                             </span>
@@ -112,15 +115,12 @@ export default function StakePage() {
                 <div className="flex flex-col gap-[18px]">
                   <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
                     <div className="mb-2 flex items-start justify-between">
-                      <div>
-                        <p className="text-13 font-500 text-neutral-60">
-                          Total staked
-                        </p>
-                      </div>
+                      <p className="text-13 font-500 text-neutral-60">
+                        Total staked
+                      </p>
                     </div>
-                    <div className="mb-4 flex items-end gap-3">
-                      <div className="size-8 rounded-full bg-customisation-purple-50/20 p-1" />
-
+                    <div className="mb-4 flex items-end gap-2">
+                      <SNTIcon />
                       <span className="text-27 font-600">0 SNT</span>
                     </div>
                     <p className="text-13 font-500 text-neutral-40">
@@ -130,14 +130,12 @@ export default function StakePage() {
 
                   <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
                     <div className="mb-2 flex items-start justify-between">
-                      <div>
-                        <p className="text-13 font-500 text-neutral-60">
-                          Weighted aggregated boost
-                        </p>
-                      </div>
+                      <p className="text-13 font-500 text-neutral-60">
+                        Weighted aggregated boost
+                      </p>
                     </div>
                     <div className="mb-4 flex items-end gap-3">
-                      <div className="size-8 rounded-full bg-customisation-purple-50/20 p-1" />
+                      <LaunchIcon className="text-purple" />
 
                       <span className="text-27 font-600">x0</span>
                     </div>
@@ -152,5 +150,26 @@ export default function StakePage() {
         </div>
       </div>
     </HubLayout>
+  )
+}
+
+const SNTIcon = () => {
+  return (
+    <div className="relative size-8">
+      <Image
+        src="/vaults/snt.png"
+        alt="SNT"
+        width="64"
+        height="64"
+        quality="100"
+      />
+      <Image
+        src="/tokens/karma.png"
+        width="24"
+        height="24"
+        alt="Karma"
+        className="absolute -bottom-0.5 -right-1 size-[14px] rounded-full border-2 border-white-100"
+      />
+    </div>
   )
 }
