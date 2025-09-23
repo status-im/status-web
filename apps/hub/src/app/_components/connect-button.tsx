@@ -2,8 +2,7 @@
 
 import { Button, ShortenAddress } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
-
-import { useAccount } from '../_providers/account-provider'
+import { useAccount } from 'wagmi'
 
 import type { ComponentProps } from 'react'
 

@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     'next-mdx-remote',
     '@status-im/components',
     '@status-im/icons',
+    'portfolio',
   ],
 }
 

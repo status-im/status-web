@@ -5,7 +5,6 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 
 import { APIClientProvider } from './providers/api-client'
-import { QueryClientProvider } from './providers/query-client'
 import { RouterProvider } from './providers/router'
 import { StatusProvider } from './providers/status'
 
@@ -22,13 +21,11 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
     <StrictMode>
-      <QueryClientProvider>
-        <StatusProvider>
-          <APIClientProvider>
-            <RouterProvider />
-          </APIClientProvider>
-        </StatusProvider>
-      </QueryClientProvider>
+      <StatusProvider>
+        <APIClientProvider>
+          <RouterProvider />
+        </APIClientProvider>
+      </StatusProvider>
     </StrictMode>,
   )
 }
