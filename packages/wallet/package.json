@@ -41,6 +41,11 @@
       "types": "./dist/src/utils/index.d.ts",
       "import": "./dist/utils/index.es.js",
       "require": "./dist/utils/index.cjs.js"
+    },
+    "./providers": {
+      "types": "./dist/src/providers/index.d.ts",
+      "import": "./dist/providers/index.es.js",
+      "require": "./dist/providers/index.cjs.js"
     }
   },
   "files": [
@@ -64,7 +69,10 @@
     "prepack": "pnpm build"
   },
   "peerDependencies": {
-    "react": "^18.2.0"
+    "@tanstack/react-query": "^5.29.0",
+    "react": "^19.1.0",
+    "viem": "^2.21.1",
+    "wagmi": "^2.12.8"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -132,8 +140,8 @@
     "globals": "^15.12.0",
     "postcss": "^8.4.33",
     "prettier-plugin-tailwindcss": "^0.6.6",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "rollup-plugin-preserve-directives": "^0.4.0",
     "tailwind-scrollbar-utilities": "^0.2.0",
     "tailwindcss": "^3.4.11",

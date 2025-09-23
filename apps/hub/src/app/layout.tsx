@@ -2,7 +2,7 @@ import './globals.css'
 
 import { Inter } from 'next/font/google'
 
-import { ConnectKitProvider } from './_providers'
+import { Providers } from './_providers'
 
 import type { Metadata } from 'next'
 
@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="font-inter antialiased">
-        <ConnectKitProvider>{children}</ConnectKitProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )

@@ -3,6 +3,7 @@ import './_styles/global.css'
 import { Suspense } from 'react'
 
 import { ToastContainer } from '@status-im/components'
+import { QueryClientProvider, WagmiProvider } from '@status-im/wallet/providers'
 import { Analytics } from '@vercel/analytics/next'
 import { Inter } from 'next/font/google'
 
@@ -10,9 +11,7 @@ import { Navbar } from './_components/navbar'
 import { NotAllowed } from './_components/not-allowed'
 import { AccountsProvider } from './_providers/accounts-context'
 import { ConnectKitProvider } from './_providers/connectkit-provider'
-import { QueryClientProvider } from './_providers/query-client-provider'
 import { StatusProvider } from './_providers/status-provider'
-import { WagmiProvider } from './_providers/wagmi-provider'
 
 import type { Metadata } from 'next'
 

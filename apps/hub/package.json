@@ -18,6 +18,7 @@
     "@status-im/components": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/status-network": "workspace:*",
+    "@status-im/wallet": "workspace:*",
     "@tanstack/react-query": "^5.29.0",
     "@vercel/analytics": "^1.5.0",
     "connectkit": "^1.9.0",
