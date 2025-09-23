@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import { cva, cx } from 'cva'
 
 type Props = {
-  variant?: 'primary' | 'secondary' | 'white'
+  variant?: 'primary' | 'secondary' | 'white' | 'outline'
   backdropFilter?: boolean
   children?: React.ReactNode
   active?: boolean
@@ -22,6 +22,8 @@ const buttonStyles = cva({
         'border-white-10 bg-white-5 text-white-100 hover:border-white-20 hover:bg-white-10',
       white:
         'border-neutral-30 bg-white-100 text-dark-100 hover:border-neutral-40 hover:bg-white-80',
+      outline:
+        'border-white-50 bg-[transparent] text-white-100 hover:border-white-60',
     },
     withIcon: {
       true: '',

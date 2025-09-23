@@ -1,8 +1,9 @@
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
-import { Button } from '@status-im/components'
+import { Tag } from '@status-im/components'
 import { CloseIcon, ExternalIcon } from '@status-im/icons/20'
+import { Button, ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 type Props = {
@@ -25,54 +26,29 @@ const ConnectWalletModal = (props: Props) => {
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
 
         <Dialog.Content className="fixed left-1/2 top-1/2 z-50 min-h-[432px] w-full max-w-[1112px] -translate-x-1/2 -translate-y-1/2 px-4 focus:outline-none">
-          <div className="min-h-[inherit] w-full rounded-24 p-px shadow-3">
-            <div className="absolute inset-0 h-full rounded-24 bg-[url('/modal/bg-gradient.png')] bg-cover bg-center" />
-
-            <div className="relative z-10 w-full">
-              <Dialog.Close
-                asChild
+          <div
+            data-background="blur"
+            className="absolute right-8 top-4 z-50 size-10"
+          >
+            <Dialog.Close asChild>
+              <button
                 aria-label="Close"
-                className="absolute right-6 top-6 flex size-10 items-center justify-center rounded-full bg-blur-white/70 text-white-100 transition hover:bg-white-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white-100"
+                className="flex size-10 items-center justify-center rounded-12 bg-white-20 p-2 backdrop-blur-2xl hover:bg-white-30"
               >
-                <Button
-                  icon={<CloseIcon />}
-                  aria-label="Close"
-                  variant="grey"
-                  size="40"
-                />
-              </Dialog.Close>
-              <div className="relative mb-10 flex justify-center sm:absolute sm:left-10 sm:top-1/2 sm:mb-0 sm:h-[398px] sm:w-[444px] sm:-translate-y-1/2">
-                <Image
-                  src="/modal/connector-1.png"
-                  alt="Status Wallet Connector"
-                  width="265"
-                  height="235"
-                  className="absolute left-1/2 top-0"
-                />
-                <Image
-                  src="/modal/connector-2.png"
-                  alt="Status Wallet Connector"
-                  width="359"
-                  height="248"
-                  className="absolute left-1/2 top-1/3 translate-x-20"
-                />
-                <Image
-                  src="/modal/dragon.png"
-                  alt="Dragon"
-                  width="304"
-                  height="211"
-                  className="absolute left-1/2 top-4"
-                />
-              </div>
+                <CloseIcon />
+              </button>
+            </Dialog.Close>
+          </div>
+          <div className="relative min-h-[inherit] w-full overflow-hidden rounded-40 shadow-3">
+            <div className="absolute inset-0 h-full rounded-40 bg-[url('/modal/bg-gradient.png')] bg-cover bg-center" />
 
-              <div className="flex flex-1 flex-col gap-6">
-                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white-100 px-4 py-2 text-13 font-medium uppercase tracking-[0.08em] text-white-100">
-                  Status Wallet Connector
-                </span>
+            <div className="relative z-10 flex flex-col gap-12 rounded-40 p-10 text-white-100 md:flex-row md:items-end md:justify-between">
+              <div className="h-full max-w-[575px] space-y-4">
+                <Tag label="Status Wallet Connector" />
 
-                <div className="space-y-4">
+                <div className="space-y-1">
                   <Dialog.Title asChild>
-                    <h2 className="text-56 font-bold leading-tight text-white-100">
+                    <h2 className="text-40 font-bold text-white-100">
                       Connect to
                       <br />
                       Status Network
@@ -80,29 +56,55 @@ const ConnectWalletModal = (props: Props) => {
                   </Dialog.Title>
 
                   <Dialog.Description asChild>
-                    <p className="max-w-[360px] text-19 text-white-100">
+                    <p className="max-w-[325px] text-19 font-medium text-white-100">
                       Use Status L2 features in Chrome with the safety and
                       control of Status.
                     </p>
                   </Dialog.Description>
                 </div>
 
-                <div className="flex flex-col gap-4 sm:flex-row">
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-3 rounded-24 bg-white-100 px-6 py-3 text-19 font-semibold text-neutral-90 transition hover:bg-white-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white-100"
+                <div className="mt-6 flex flex-col gap-6 sm:flex-row">
+                  <ButtonLink
+                    variant="white"
+                    href="https://chromewebstore.google.com/detail/a-wallet-connector-by-sta/kahehnbpamjplefhpkhafinaodkkenpg"
+                    className="text-purple"
                   >
                     Install Status Wallet Connector
                     <ExternalIcon className="size-4" />
-                  </button>
+                  </ButtonLink>
 
-                  <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-24 border border-white-100 px-6 py-3 text-19 font-semibold text-white-100 transition hover:border-white-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white-100"
+                  <Button
+                    variant="outline"
+                    onClick={onClose}
+                    className="text-white-100"
                   >
                     Choose other wallet
-                  </button>
+                  </Button>
                 </div>
+              </div>
+
+              <div className="relative mx-auto h-[398px] w-full max-w-[444px] md:mx-0">
+                <Image
+                  src="/modal/connector-1.png"
+                  alt="Status Wallet Connector"
+                  width="265"
+                  height="235"
+                  className="absolute -left-1/4 top-0 translate-x-14 scale-[120%]"
+                />
+                <Image
+                  src="/modal/connector-2.png"
+                  alt="Status Wallet Connector"
+                  width="359"
+                  height="248"
+                  className="absolute bottom-2 right-8 scale-[120%]"
+                />
+                <Image
+                  src="/modal/dragon.png"
+                  alt="Dragon"
+                  width="304"
+                  height="211"
+                  className="absolute right-0 top-[-32px]"
+                />
               </div>
             </div>
           </div>
