@@ -1,14 +1,19 @@
 'use client'
 
+import { useState } from 'react'
+
 import { DropdownIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import Image from 'next/image'
 
+import { ConnectWalletModal } from '~components/connect-wallet-modal'
 import { HubLayout } from '~components/hub-layout'
 
 import { LaunchIcon } from '../_components/icons'
 
 export default function StakePage() {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   return (
     <HubLayout>
       <div className="flex h-full flex-col p-8">
@@ -107,7 +112,10 @@ export default function StakePage() {
                     </div>
                   </div>
 
-                  <Button className="w-full justify-center">
+                  <Button
+                    className="w-full justify-center"
+                    onClick={() => setIsModalOpen(true)}
+                  >
                     Connect Wallet
                   </Button>
                 </div>
@@ -149,6 +157,10 @@ export default function StakePage() {
           </section>
         </div>
       </div>
+      <ConnectWalletModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </HubLayout>
   )
 }

@@ -236,6 +236,9 @@ importers:
 
   apps/hub:
     dependencies:
+      '@radix-ui/react-dialog':
+        specifier: ^1.1.1
+        version: 1.1.13(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@status-im/colors':
         specifier: workspace:*
         version: link:../../packages/colors
@@ -24631,7 +24634,7 @@ snapshots:
       '@radix-ui/react-roving-focus': 1.1.0(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-slot': 1.1.0(@types/react@19.1.0)(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.1.0(@types/react@19.1.0)(react@18.2.0)
-      aria-hidden: 1.1.3
+      aria-hidden: 1.2.4
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-remove-scroll: 2.5.7(@types/react@19.1.0)(react@18.2.0)
@@ -24657,7 +24660,7 @@ snapshots:
       '@radix-ui/react-roving-focus': 1.1.0(@types/react-dom@19.1.1(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-slot': 1.1.0(@types/react@19.1.0)(react@18.3.1)
       '@radix-ui/react-use-callback-ref': 1.1.0(@types/react@19.1.0)(react@18.3.1)
-      aria-hidden: 1.1.3
+      aria-hidden: 1.2.4
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-remove-scroll: 2.5.7(@types/react@19.1.0)(react@18.3.1)
