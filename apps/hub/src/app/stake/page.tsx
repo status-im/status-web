@@ -2,9 +2,9 @@
 
 import { useCallback, useState } from 'react'
 
-import { useToast } from '@status-im/components'
-import { DropdownIcon } from '@status-im/icons/20'
-import { Button } from '@status-im/status-network/components'
+import { Tooltip, useToast } from '@status-im/components'
+import { DropdownIcon, ExternalIcon, InfoIcon } from '@status-im/icons/20'
+import { Button, ButtonLink } from '@status-im/status-network/components'
 import Image from 'next/image'
 import { match } from 'ts-pattern'
 
@@ -198,6 +198,7 @@ export default function StakePage() {
                       <p className="text-13 font-500 text-neutral-60">
                         Weighted aggregated boost
                       </p>
+                      <InfoTooltip />
                     </div>
                     <div className="mb-4 flex items-end gap-3">
                       <LaunchIcon className="text-purple" />
@@ -238,3 +239,28 @@ const SNTIcon = () => {
     </div>
   )
 }
+
+const InfoTooltip = () => (
+  <Tooltip
+    delayDuration={150}
+    side="top"
+    className="border border-neutral-100"
+    content={
+      <div className="max-w-[286px] space-y-4 p-4">
+        <p className="text-13 font-500">
+          The longer SNT is staked or locked in vaults, the higher this
+          multiplier goes. This rewards long term believers. The maximum
+          multiplier is x9.
+        </p>
+
+        {/* TODO: change link */}
+        <ButtonLink href="https://status.app/" variant="outline" size="24">
+          Learn more
+          <ExternalIcon className="size-4 text-neutral-50" />
+        </ButtonLink>
+      </div>
+    }
+  >
+    <InfoIcon className="text-neutral-40" />
+  </Tooltip>
+)

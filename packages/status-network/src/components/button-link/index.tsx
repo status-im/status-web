@@ -3,13 +3,13 @@ import { cva, cx } from 'cva'
 import { Link } from '../link'
 
 type Props = {
-  variant?: 'primary' | 'secondary' | 'white'
+  variant?: 'primary' | 'secondary' | 'white' | 'outline'
   backdropFilter?: boolean
   children?: React.ReactNode
   active?: boolean
   icon?: React.ReactNode
   iconBefore?: React.ReactNode
-  size?: '32' | '40'
+  size?: '24' | '32' | '40'
 } & React.ComponentProps<typeof Link>
 
 const buttonStyles = cva({
@@ -22,6 +22,8 @@ const buttonStyles = cva({
         'border-white-10 bg-white-5 text-white-100 hover:border-white-20 hover:bg-white-10',
       white:
         'border-neutral-30 bg-white-100 text-dark-100 hover:border-neutral-40 hover:bg-white-80',
+      outline:
+        'border-neutral-30 bg-[transparent] text-neutral-100 hover:border-neutral-40',
     },
     withIcon: {
       true: '',
@@ -32,6 +34,7 @@ const buttonStyles = cva({
       false: '',
     },
     size: {
+      '24': 'h-6 rounded-8 py-[3px]',
       '32': 'h-8 rounded-10 py-[5px]',
       '40': 'h-10 rounded-12 py-[9px]',
     },
@@ -47,10 +50,13 @@ const buttonStyles = cva({
   compoundVariants: [
     { size: '40', withIcon: false, className: 'px-4' },
     { size: '32', withIcon: false, className: 'px-3' },
+    { size: '24', withIcon: false, className: 'px-2' },
     { size: '40', withIcon: true, className: 'pl-4 pr-3' },
     { size: '32', withIcon: true, className: 'pl-3 pr-2' },
+    { size: '24', withIcon: true, className: 'pl-2 pr-1' },
     { size: '40', withIconBefore: true, className: 'pl-3 pr-4' },
     { size: '32', withIconBefore: true, className: 'pl-2 pr-3' },
+    { size: '24', withIconBefore: true, className: 'pl-1 pr-2' },
   ],
 })
 
