@@ -5,13 +5,18 @@ import { useState } from 'react'
 import { DropdownIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { match } from 'ts-pattern'
 
-import { ConnectWalletModal } from '~components/connect-wallet-modal'
 import { HubLayout } from '~components/hub-layout'
+import { PromoModal } from '~components/promo-modal'
 
 import { LaunchIcon } from '../_components/icons'
 
 export default function StakePage() {
+  // Simulate wallet connection state
+  const [status, setStatus] = useState<
+    'unninstalled' | 'installed' | 'connected'
+  >('unninstalled')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
@@ -111,13 +116,35 @@ export default function StakePage() {
                       </div>
                     </div>
                   </div>
-
-                  <Button
-                    className="w-full justify-center"
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    Connect Wallet
-                  </Button>
+                  {match(status)
+                    .with('unninstalled', () => (
+                      <PromoModal
+                        open={isModalOpen}
+                        onClose={() => {
+                          setIsModalOpen(false)
+                          setStatus('installed')
+                        }}
+                      >
+                        <Button
+                          className="w-full justify-center"
+                          onClick={() => setIsModalOpen(true)}
+                        >
+                          Connect Wallet
+                        </Button>
+                      </PromoModal>
+                    ))
+                    .with('installed', () => (
+                      <p className="mt-4 text-13 font-500 text-neutral-40">
+                        Connect your wallet to stake SNT and increase your Karma
+                      </p>
+                    ))
+                    .with('connected', () => (
+                      <p className="mt-4 text-13 font-500 text-neutral-40">
+                        You are connected. You can now stake SNT to increase
+                        your Karma
+                      </p>
+                    ))
+                    .exhaustive()}
                 </div>
 
                 <div className="flex flex-col gap-[18px]">
@@ -157,10 +184,6 @@ export default function StakePage() {
           </section>
         </div>
       </div>
-      <ConnectWalletModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </HubLayout>
   )
 }

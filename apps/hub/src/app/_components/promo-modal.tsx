@@ -9,10 +9,11 @@ import Image from 'next/image'
 type Props = {
   open: boolean
   onClose: () => void
+  children: React.ReactNode
 }
 
-const ConnectWalletModal = (props: Props) => {
-  const { open, onClose } = props
+const PromoModal = (props: Props) => {
+  const { open, onClose, children } = props
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
@@ -22,6 +23,7 @@ const ConnectWalletModal = (props: Props) => {
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
+      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
 
@@ -73,6 +75,7 @@ const ConnectWalletModal = (props: Props) => {
                     <ExternalIcon className="size-4" />
                   </ButtonLink>
 
+                  {/* TODO: Implement connect wallet flow through provider */}
                   <Button
                     variant="outline"
                     onClick={onClose}
@@ -114,4 +117,4 @@ const ConnectWalletModal = (props: Props) => {
   )
 }
 
-export { ConnectWalletModal }
+export { PromoModal }
