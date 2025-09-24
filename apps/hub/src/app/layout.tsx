@@ -1,5 +1,6 @@
 import './globals.css'
 
+import { ToastContainer } from '@status-im/components'
 import { Inter } from 'next/font/google'
 
 import type { Metadata } from 'next'
@@ -22,7 +23,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-inter antialiased">{children}</body>
+      <body className="font-inter antialiased">
+        {children}
+        <ToastContainer />
+      </body>
     </html>
   )
 }

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
+import { useToast } from '@status-im/components'
 import { DropdownIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import Image from 'next/image'
@@ -15,9 +16,31 @@ import { LaunchIcon } from '../_components/icons'
 export default function StakePage() {
   // Simulate wallet connection state
   const [status, setStatus] = useState<
-    'unninstalled' | 'installed' | 'connected'
+    'unninstalled' | 'unconnected' | 'connected'
   >('unninstalled')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
+  const [isConnecting, setIsConnecting] = useState(false)
+
+  const toast = useToast()
+
+  const handleConnect = useCallback(async () => {
+    if (isConnecting) return
+
+    setIsConnecting(true)
+
+    await new Promise(resolve => setTimeout(resolve, 1200))
+
+    const isSuccess = Math.random() > 0.4
+
+    if (isSuccess) {
+      setStatus('connected')
+      toast.positive('Wallet connected successfully')
+    } else {
+      toast.negative('Connection failed. Please try again.')
+    }
+
+    setIsConnecting(false)
+  }, [isConnecting, toast])
 
   return (
     <HubLayout>
@@ -119,30 +142,37 @@ export default function StakePage() {
                   {match(status)
                     .with('unninstalled', () => (
                       <PromoModal
-                        open={isModalOpen}
+                        open={isPromoModalOpen}
                         onClose={() => {
-                          setIsModalOpen(false)
-                          setStatus('installed')
+                          setIsPromoModalOpen(false)
+                          setStatus('unconnected')
                         }}
                       >
                         <Button
                           className="w-full justify-center"
-                          onClick={() => setIsModalOpen(true)}
+                          onClick={() => setIsPromoModalOpen(true)}
                         >
                           Connect Wallet
                         </Button>
                       </PromoModal>
                     ))
-                    .with('installed', () => (
-                      <p className="mt-4 text-13 font-500 text-neutral-40">
-                        Connect your wallet to stake SNT and increase your Karma
-                      </p>
+                    .with('unconnected', () => (
+                      <Button
+                        className="w-full justify-center"
+                        onClick={handleConnect}
+                        disabled={isConnecting}
+                      >
+                        {isConnecting ? 'Connecting...' : 'Connect Wallet'}
+                      </Button>
                     ))
                     .with('connected', () => (
-                      <p className="mt-4 text-13 font-500 text-neutral-40">
-                        You are connected. You can now stake SNT to increase
-                        your Karma
-                      </p>
+                      <Button
+                        className="w-full justify-center"
+                        onClick={handleConnect}
+                        disabled={isConnecting}
+                      >
+                        Create New Vault
+                      </Button>
                     ))
                     .exhaustive()}
                 </div>
