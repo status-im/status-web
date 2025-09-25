@@ -1,5 +1,17 @@
 # @status-im/components
 
+## 1.1.0
+
+### Minor Changes
+
+- 0a14da44: add import wallet flow
+
+### Patch Changes
+
+- 6e65af8e: add received transaction history
+- fdc3fe99: Updates toast to include blur
+- 8467e461: Adds close toast action and multiple toasts
+
 ## 1.0.12
 
 ### Patch Changes
