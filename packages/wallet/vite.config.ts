@@ -23,7 +23,6 @@ export default defineConfig(({ mode }) => {
           'constants/index': './src/constants/index.ts',
           'utils/index': './src/utils/index.ts',
           'providers/index': './src/providers/index.tsx',
-          'connectors/index': './src/connectors/index.ts',
         },
         formats: ['es', 'cjs'],
         fileName: format => {
