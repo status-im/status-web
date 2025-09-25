@@ -11,8 +11,6 @@
       "packages/wallet",
       "packages/status-network",
       "apps/hub",
-      "apps/status.app",
-      "apps/status.network",
       "apps/connector",
       "apps/portfolio",
       "apps/wallet",
@@ -24,7 +22,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* --filter=./apps/* -- --run",
-    "dev": "turbo run dev dev:next dev:content --filter=@status-im/* --filter=./apps/*",
+    "dev": "turbo run dev --filter=@status-im/* --filter=./apps/*",
     "build": "turbo run build --filter=@status-im/* --filter=./apps/*",
     "lint": "turbo run lint --filter=@status-im/* --filter=./apps/*",
     "typecheck": "turbo run typecheck",
@@ -39,10 +37,7 @@
     "zod": "3.23.8",
     "vite": "6.3.5",
     "vitest": "3.1.4",
-    "vite-node": "3.1.4",
-    "protons-runtime": "3.1.0",
-    "it-length-prefixed": "9.0.3",
-    "remark-lint": "9.1.2"
+    "vite-node": "3.1.4"
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
@@ -60,7 +55,7 @@
     "react-devtools": "^6.1.5",
     "react-dom": "^18.3.1",
     "rimraf": "^4.4.1",
-    "turbo": "^2.5.6",
+    "turbo": "^2.3.0",
     "typescript": "^5.6.2",
     "vite": "6.3.5",
     "vite-node": "3.1.4",
@@ -76,11 +71,7 @@
     "patchedDependencies": {
       "@achingbrain/ssdp@4.0.1": "patches/@achingbrain__ssdp@4.0.1.patch",
       "@libp2p/bootstrap@9.0.10": "patches/@libp2p__bootstrap@9.0.10.patch",
-      "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch",
-      "arctic@1.2.0": "patches/arctic@1.2.0.patch",
-      "tinykeys@3.0.0": "patches/tinykeys@3.0.0.patch",
-      "oslo@1.0.1": "patches/oslo@1.0.1.patch",
-      "@trpc/server@11.1.0": "patches/@trpc__server@11.1.0.patch"
+      "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch"
     }
   }
 }

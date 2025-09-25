@@ -2,6 +2,8 @@ import './globals.css'
 
 import { Inter } from 'next/font/google'
 
+import { ConnectKitProvider } from './_providers'
+
 import type { Metadata } from 'next'
 
 const inter = Inter({
@@ -22,7 +24,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="font-inter antialiased">{children}</body>
+      <body className="font-inter antialiased">
+        <ConnectKitProvider>{children}</ConnectKitProvider>
+      </body>
     </html>
   )
 }

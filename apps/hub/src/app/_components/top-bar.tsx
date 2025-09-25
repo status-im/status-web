@@ -2,11 +2,10 @@
 
 import { Button, IconButton, Tag } from '@status-im/components'
 import { SettingsIcon } from '@status-im/icons/20'
-import {
-  Button as ButtonPrimary,
-  Link,
-} from '@status-im/status-network/components'
+import { Link } from '@status-im/status-network/components'
 import Image from 'next/image'
+
+import { ConnectButton } from './connect-button'
 
 interface TopBarProps {
   onMenuToggle: () => void
@@ -64,7 +63,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           </div>
 
           {/* Connect Wallet Button */}
-          <ButtonPrimary size="32">Connect Wallet</ButtonPrimary>
+          <ConnectButton />
 
           {/* Settings Button */}
           <IconButton variant="ghost" icon={<SettingsIcon />} />
