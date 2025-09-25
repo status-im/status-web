@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { Tooltip, useToast } from '@status-im/components'
 import { DropdownIcon, ExternalIcon, InfoIcon } from '@status-im/icons/20'
@@ -13,6 +13,13 @@ import { PromoModal } from '~components/promo-modal'
 
 import { LaunchIcon } from '../_components/icons'
 
+const MOCK_SNT_PRICE = 0.12345
+const MOCK_MAX_SNT = 897_349.63
+
+type InputChangeEvent = {
+  target: { value: string }
+}
+
 export default function StakePage() {
   // Simulate wallet connection state
   const [status, setStatus] = useState<
@@ -20,8 +27,29 @@ export default function StakePage() {
   >('unninstalled')
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
   const [isConnecting, setIsConnecting] = useState(false)
+  const [amount, setAmount] = useState('0')
 
   const toast = useToast()
+
+  const amountFormatter = useMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 0,
+    })
+  }, [])
+
+  const currencyFormatter = useMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 2,
+    })
+  }, [])
+
+  const formattedMaxSnt = useMemo(() => {
+    return new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 2,
+    }).format(MOCK_MAX_SNT)
+  }, [])
 
   const handleConnect = useCallback(async () => {
     if (isConnecting) return
@@ -41,6 +69,60 @@ export default function StakePage() {
 
     setIsConnecting(false)
   }, [isConnecting, toast])
+
+  const handleAmountChange = useCallback((event: InputChangeEvent) => {
+    const inputValue = event.target.value.replace(/,/g, '')
+
+    if (!/^\d*(\.\d*)?$/.test(inputValue)) {
+      return
+    }
+
+    if (inputValue === '') {
+      setAmount('')
+      return
+    }
+
+    if (inputValue === '.') {
+      setAmount('0.')
+      return
+    }
+
+    const [integerPart = '', decimalPart] = inputValue.split('.')
+    const trimmedInteger = integerPart.replace(/^0+(?=\d)/, '') || '0'
+    const limitedDecimal =
+      decimalPart !== undefined ? decimalPart.slice(0, 6) : undefined
+
+    const nextValue =
+      limitedDecimal !== undefined
+        ? `${trimmedInteger}.${limitedDecimal}`
+        : trimmedInteger
+
+    setAmount(nextValue)
+  }, [])
+
+  const handleUseMax = useCallback(() => {
+    setAmount(MOCK_MAX_SNT.toString())
+  }, [])
+
+  const handleCreateVault = useCallback(() => {
+    toast.positive('Vault creation coming soon')
+  }, [toast])
+
+  const formattedAmount = useMemo(() => {
+    if (amount === '') return ''
+
+    const [integerPart, decimalPart] = amount.split('.')
+    const formattedInteger = amountFormatter.format(Number(integerPart || '0'))
+
+    if (decimalPart === undefined) {
+      return formattedInteger
+    }
+
+    return `${formattedInteger}.${decimalPart}`
+  }, [amount, amountFormatter])
+
+  const amountNumber = parseFloat(amount || '0')
+  const formattedUsd = currencyFormatter.format(amountNumber * MOCK_SNT_PRICE)
 
   return (
     <HubLayout>
@@ -98,45 +180,101 @@ export default function StakePage() {
               <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,1fr)]">
                 <div className="flex flex-col rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:p-8">
                   <div className="flex flex-1 flex-col gap-4">
-                    <div className="space-y-2 opacity-[40%]">
+                    <div
+                      className={match(status)
+                        .with('connected', () => 'space-y-2')
+                        .otherwise(() => 'space-y-2 opacity-[40%]')}
+                    >
                       <label
                         htmlFor="stake-amount"
                         className="block text-13 font-medium text-neutral-50"
                       >
                         Amount to stake
                       </label>
-                      <div className="rounded-12 border border-neutral-20 bg-white-100 px-5 py-3">
-                        <div className="flex items-center justify-between">
-                          <input
-                            id="stake-amount"
-                            type="text"
-                            value="0"
-                            readOnly
-                            className="w-full border-none bg-transparent text-27 font-semibold text-neutral-40 outline-none"
-                          />
-                          <div className="flex items-center gap-1">
-                            <SNTIcon />
-                            <span className="text-19 font-semibold text-neutral-80">
-                              SNT
-                            </span>
+                      {match(status)
+                        .with('connected', () => (
+                          <div className="rounded-16 border border-neutral-20 bg-white-100 px-4 py-3">
+                            <div className="flex items-center justify-between">
+                              <input
+                                id="stake-amount"
+                                type="text"
+                                inputMode="decimal"
+                                value={formattedAmount}
+                                onChange={handleAmountChange}
+                                placeholder="0"
+                                className="w-full border-none bg-transparent text-27 font-semibold leading-[38px] text-neutral-100 outline-none placeholder:text-neutral-40"
+                              />
+                              <div className="flex items-center gap-1">
+                                <SNTIcon />
+                                <span className="text-19 font-semibold text-neutral-80">
+                                  SNT
+                                </span>
+                              </div>
+                            </div>
+                            <div className="-mx-4 my-3 h-px w-[calc(100%+32px)] bg-neutral-10" />
+                            <div className="flex items-center justify-between border-neutral-10 text-13 font-500 text-neutral-50">
+                              <span>{formattedUsd}</span>
+                              <button
+                                type="button"
+                                onClick={handleUseMax}
+                                className="uppercase text-neutral-100"
+                              >
+                                MAX {formattedMaxSnt} SNT
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      </div>
+                        ))
+                        .otherwise(() => (
+                          <div className="rounded-12 border border-neutral-20 bg-white-100 px-5 py-3">
+                            <div className="flex items-center justify-between">
+                              <input
+                                id="stake-amount"
+                                type="text"
+                                value="0"
+                                readOnly
+                                className="w-full border-none bg-transparent text-27 font-semibold text-neutral-40 outline-none"
+                              />
+                              <div className="flex items-center gap-1">
+                                <SNTIcon />
+                                <span className="text-19 font-semibold text-neutral-80">
+                                  SNT
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                     </div>
 
-                    <div className="space-y-2 opacity-[40%]">
+                    <div
+                      className={match(status)
+                        .with('connected', () => 'space-y-2')
+                        .otherwise(() => 'space-y-2 opacity-[40%]')}
+                    >
                       <label
                         htmlFor="vault-select"
                         className="block text-13 font-medium text-neutral-50"
                       >
                         Select vault
                       </label>
-                      <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-19">New vault</span>
-                          <DropdownIcon className="text-neutral-40" />
-                        </div>
-                      </div>
+                      {match(status)
+                        .with('connected', () => (
+                          <button
+                            type="button"
+                            disabled
+                            className="flex w-full items-center justify-between rounded-16 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3 text-left text-15 font-medium text-neutral-80 transition hover:border-neutral-30 disabled:opacity-[40%]"
+                          >
+                            <span>New vault</span>
+                            <DropdownIcon className="text-neutral-40" />
+                          </button>
+                        ))
+                        .otherwise(() => (
+                          <div className="rounded-12 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3">
+                            <div className="flex items-center justify-between">
+                              <span className="text-19">New vault</span>
+                              <DropdownIcon className="text-neutral-40" />
+                            </div>
+                          </div>
+                        ))}
                     </div>
                   </div>
                   {match(status)
@@ -168,10 +306,9 @@ export default function StakePage() {
                     .with('connected', () => (
                       <Button
                         className="w-full justify-center"
-                        onClick={handleConnect}
-                        disabled={isConnecting}
+                        onClick={handleCreateVault}
                       >
-                        Create New Vault
+                        Create new vault
                       </Button>
                     ))
                     .exhaustive()}
