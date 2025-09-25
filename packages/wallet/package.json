@@ -46,6 +46,11 @@
       "types": "./dist/src/providers/index.d.ts",
       "import": "./dist/providers/index.es.js",
       "require": "./dist/providers/index.cjs.js"
+    },
+    "./connectors": {
+      "types": "./dist/src/connectors/index.d.ts",
+      "import": "./dist/connectors/index.es.js",
+      "require": "./dist/connectors/index.cjs.js"
     }
   },
   "files": [
@@ -69,10 +74,10 @@
     "prepack": "pnpm build"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^5.29.0",
+    "@tanstack/react-query": "5.66.0",
     "react": "^19.1.0",
     "viem": "^2.21.1",
-    "wagmi": "^2.12.8"
+    "wagmi": "2.15.2"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",

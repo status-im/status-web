@@ -1,8 +1,9 @@
 'use client'
 
+import { statusConnector } from '@status-im/wallet/connectors'
 import { createConfig, http, WagmiProvider as WagmiProviderBase } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
-import { injected, metaMask, walletConnect } from 'wagmi/connectors'
+import { injected } from 'wagmi/connectors'
 
 import type React from 'react'
 
@@ -11,17 +12,13 @@ export const config = createConfig({
   ssr: false,
   connectors: [
     injected(),
-    metaMask(),
-    walletConnect({
-      projectId: '8df20b513ed696e861c8d97865870271',
-      showQrModal: false, // Disable WalletConnect's native modal, let ConnectKit handle the UI
-    }),
+    statusConnector(), // Status Wallet connector - disabled due to build errors
   ],
   transports: {
     // todo: replace public clients
     [mainnet.id]: http(),
   },
-}) as unknown
+})
 
 declare module 'wagmi' {
   interface Register {
@@ -36,12 +33,17 @@ type Props = {
 function WagmiProvider(props: Props) {
   const { children } = props
 
-  const wagmiConfig = (() => {
-    const cast = config as unknown
-    return cast as React.ComponentProps<typeof WagmiProviderBase>['config']
-  })()
-
-  return <WagmiProviderBase config={wagmiConfig}>{children}</WagmiProviderBase>
+  return (
+    <WagmiProviderBase
+      config={
+        config as unknown as React.ComponentProps<
+          typeof WagmiProviderBase
+        >['config']
+      }
+    >
+      {children}
+    </WagmiProviderBase>
+  )
 }
 
 export { config as wagmiConfig, WagmiProvider }
