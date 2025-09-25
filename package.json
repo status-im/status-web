@@ -9,14 +9,8 @@
       "packages/icons",
       "packages/components",
       "packages/wallet",
-
-
-
-
       "packages/status-network",
-
       "apps/hub",
-
       "apps/connector",
       "apps/portfolio",
       "apps/wallet",
