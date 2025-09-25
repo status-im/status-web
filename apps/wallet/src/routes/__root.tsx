@@ -1,7 +1,7 @@
 // import { Suspense } from 'react'
 
 // import OnboardingPage from '../../../portfolio/src/app/page'
-import { ToastContainer } from '@status-im/components'
+import { Button, ToastContainer } from '@status-im/components'
 import { Navbar } from '@status-im/wallet/components'
 // import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { NotAllowed } from '../../../portfolio/src/app/_components/not-allowed'
@@ -155,7 +155,11 @@ function RootComponent() {
             <WalletProvider>
               <PendingTransactionsProvider>
                 <div className="flex min-h-[56px] items-center px-2">
-                  <Navbar hasFeedback linkComponent={Link} />
+                  <Navbar
+                    hasFeedback
+                    linkComponent={Link}
+                    rightSlot={<Button variant="outline">Test</Button>}
+                  />
                 </div>
                 <div className="px-1">
                   <div className="flex-1 flex-col 2md:flex xl:pb-1">

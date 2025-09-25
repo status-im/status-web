@@ -1,8 +1,14 @@
 'use client'
 
+import { Button } from '@status-im/components'
+import { ConnectButton } from '@status-im/status-network/components'
+import { useAccount } from 'wagmi'
+
 import { HubLayout } from '~components/hub-layout'
 
 export default function StakePage() {
+  const { isConnected } = useAccount()
+
   return (
     <HubLayout>
       <div className="flex h-full flex-col p-8">
@@ -91,9 +97,13 @@ export default function StakePage() {
 
                 {/* Action Button */}
                 <div>
-                  <button className="w-full rounded-24 bg-customisation-purple-50 px-4 py-2.5 text-19 font-medium text-white-100 transition-colors hover:bg-purple-dark">
-                    Connect Wallet
-                  </button>
+                  {isConnected ? (
+                    <Button size="40" variant="primary">
+                      Stake SNT
+                    </Button>
+                  ) : (
+                    <ConnectButton size="40" />
+                  )}
                 </div>
               </div>
             </div>

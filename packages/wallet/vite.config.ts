@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
           'constants/index': './src/constants/index.ts',
           'utils/index': './src/utils/index.ts',
           'providers/index': './src/providers/index.tsx',
+          'connectors/index': './src/connectors/index.ts',
         },
         formats: ['es', 'cjs'],
         fileName: format => {
@@ -36,12 +37,23 @@ export default defineConfig(({ mode }) => {
         // makes 'use client' directive work
         output: {
           preserveModules: true,
+          // Preserve type assertions in the output
+          interop: 'auto',
         },
         plugins: [preserveDirectives({ suppressPreserveModulesWarning: true })],
       },
     },
 
-    plugins: [react()],
+    plugins: [
+      react({
+        tsDecorators: true,
+      }),
+    ],
+    esbuild: {
+      // Keep type assertions that are needed at runtime
+      keepNames: true,
+      target: 'es2020',
+    },
 
     test: {
       environment: 'happy-dom',

@@ -17,9 +17,6 @@ const ConnectButton = (props: Props) => {
   const { address: accountAddress, isConnected: accountIsConnected } =
     useAccount()
 
-  console.log('accountAddress', accountAddress)
-  console.log('accountIsConnected', accountIsConnected)
-
   return (
     <ConnectKitButton.Custom>
       {({ show }) => {
