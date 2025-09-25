@@ -46,11 +46,6 @@
       "types": "./dist/src/providers/index.d.ts",
       "import": "./dist/providers/index.es.js",
       "require": "./dist/providers/index.cjs.js"
-    },
-    "./connectors": {
-      "types": "./dist/src/connectors/index.d.ts",
-      "import": "./dist/connectors/index.es.js",
-      "require": "./dist/connectors/index.cjs.js"
     }
   },
   "files": [
