@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
       lib: {
         entry: {
           'components/index': './src/components/index.tsx',
+          'config/index': './src/config/index.ts',
           'tailwind.config': './tailwind.config.ts',
           'hooks/index': './src/hooks/index.ts',
           'utils/index': './src/utils/index.ts',
