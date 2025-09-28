@@ -14,7 +14,7 @@ export const config = createConfig({
     metaMask(),
     walletConnect({
       projectId: '8df20b513ed696e861c8d97865870271',
-      showQrModal: false, // Disable WalletConnect's native modal, let ConnectKit handle the UI
+      showQrModal: false,
     }),
   ],
   transports: {
