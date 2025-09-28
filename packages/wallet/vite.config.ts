@@ -36,23 +36,12 @@ export default defineConfig(({ mode }) => {
         // makes 'use client' directive work
         output: {
           preserveModules: true,
-          // Preserve type assertions in the output
-          interop: 'auto',
         },
         plugins: [preserveDirectives({ suppressPreserveModulesWarning: true })],
       },
     },
 
-    plugins: [
-      react({
-        tsDecorators: true,
-      }),
-    ],
-    esbuild: {
-      // Keep type assertions that are needed at runtime
-      keepNames: true,
-      target: 'es2020',
-    },
+    plugins: [react()],
 
     test: {
       environment: 'happy-dom',
