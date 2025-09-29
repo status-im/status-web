@@ -1,0 +1,124 @@
+---
+id: 130
+revision: '2'
+language: en
+title: Vote to feature a Status Community
+author: cheny0, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+If you're passionate about a community and wish for more people to discover it, you can vote for it to be featured in the Status app.
+
+Up to five top communities get a spot in the Featured section in <CommunitiesDesktopIcon /> Communities, making them more visible to everyone.
+
+![A screenshot of the Featured section in Communities](https://res.cloudinary.com/dhgck7ebz/image/upload/v1697186928/Help/Documentation%20Screens/Communities/130/130_1_Screen_Light.png)
+
+## What to expect
+
+- All SNT holders, not just community members or Status users, can participate in the voting.
+- Votes happen on the [Community Directory Curation dApp](https://curate.status.app)<ExternalIcon />.
+- Your voting power is determined by how many SNT tokens you stake. You don't spend the tokens to vote but must hold the tokens you stake during the [verification](#step-4-verify-the-vote) and [finalization](#step-5-finalize-the-vote) periods.
+- You should pay a [gas fee](../wallet/understand-network-fees.mdx) in ETH to initiate, validate, and finalize a vote.
+- Each time there are 400 more users (counted by wallet accounts) voting, one user or two different users need to do an extra round of verification and finalization.
+
+<Admonition type="info">
+  Status does not charge you any fees for voting.
+</Admonition>
+
+A round of votes involves five steps. These steps are not required for every voter.
+
+<Table>
+  <TableHead>
+    <TableHeader>Voting step</TableHeader>
+    <TableHeader>Who can participate</TableHeader>
+    <TableHeader>Gas fee required</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>[Connect your wallet](#step-1-connect-your-wallet)</TableCell>
+      <TableCell>Any SNT holder</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Initiate a voting process](#step-2-initiate-a-round-of-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Cast your vote](#step-3-cast-your-vote)</TableCell>
+      <TableCell>Any SNT holder</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Verify the vote](#step-4-verify-the-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Finalize the vote](#step-5-finalize-the-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="tip">
+  To know more about the dApp and the rules of each step, check out [About voting to change the community visibility](./about-voting-to-change-the-community-visibility.mdx).
+</Admonition>
+
+## Step 1: Connect your wallet
+
+Make sure you open the [Community Directory Curation dApp](https://curate.status.app)<ExternalIcon /> and your wallet contains enough SNT for voting and ETH to pay for the gas fees.
+
+The process is for Status Wallet, but you can also try other wallets such as MetaMask or Trust Wallet.
+
+1. Open your wallet and switch the network to Optimism.
+1. Open the dApp and select <ContextTag>Connect</ContextTag> from the top navigation.
+1. From your wallet, confirm to connect.
+
+<Admonition type="info">
+  You may need to connect your wallet again when you revisit the dApp, depending on your browser settings.
+</Admonition>
+
+## Step 2: Initiate a round of vote
+
+If you don't see the <ContextTag>Finalize weekly featured</ContextTag> option at the top of the Directory section in the dApp, you can start a new voting round. Otherwise, someone must [finalize the existing voting process](#step-5-finalize-the-vote) first.
+
+A round of votes starts when the first voter [cast a vote](#step-3-cast-your-vote).
+
+## Step 3: Cast your vote
+
+The voting period lasts for five days. You can find the communities you like in the Directory section of the dApp and vote.
+
+1. From the top navigation of the dApp, select <ContextTag>Directory</ContextTag> to view all public communities.
+1. Find the community you want to vote for and select <ContextTag>Feature this community!</ContextTag>
+1. Choose the amount of SNT to stake and select <ContextTag>Confirm vote to feature community</ContextTag>.
+1. From your wallet, sign the vote.
+
+## Step 4: Verify the vote
+
+After voting, a two-day verification period begins for identifying valid votes. If no one verifies the vote within this period, only the first vote of this round counts.
+
+1. From the top navigation of the dApp, select <ContextTag>Directory</ContextTag>.
+1. Select <ContextTag>Verify Weekly Featured</ContextTag>.
+1. From your wallet, confirm and pay the gas fee.
+
+## Step 5: Finalize the vote
+
+After the verification period, at least one person must finalize the vote for it to reach a result. Otherwise, the current round of votes remains pending and no one can initiate a new round.
+
+1. From the top navigation of the dApp, select <ContextTag>Directory</ContextTag>.
+1. Select <ContextTag>Finalize Weekly Featured</ContextTag>.
+1. From your wallet, confirm and pay the gas fee.
+
+<Admonition type="info">
+  After the finalization period, up to five communities with the highest number of SNT tokens are showcased in the Featured section.
+</Admonition>

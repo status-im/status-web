@@ -1,0 +1,65 @@
+---
+id: 1087
+revision: '1'
+language: en
+title: Change your Keycard PIN
+author: cheny0, Fabiomorais87, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+The Keycard PIN functions as a password for your Keycard. You can change it at any time as long as you know the current Keycard PIN.
+
+<Admonition type="caution">
+  If you enter the wrong PIN three times, your Keycard locks. You need to [unlock it](./unlock-your-keycard.mdx) or [perform a factory reset](./factory-reset-your-keycard.mdx). Your funds are safe as long as you know the [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-recovery-phrase).
+</Admonition>
+
+## Change your Keycard PIN
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    #### Step 1: Connect your Keycard
+
+    1. Open the Status app and log in to your profile.
+    1. Tap your profile picture > <ContextTag icon={<KeycardIcon />}>Keycard</ContextTag>.
+    1. Tap <ContextTag>Manage Keycard</ContextTag>.
+    1. Tap <ContextTag>Ready to scan</ContextTag>.
+    1. Tap and hold your Keycard near the top (iPhone) or back (Android) of your phone to scan your Keycard.
+
+    ### Step 2: Change your Keycard PIN
+
+    1. Tap <ContextTag icon={<KeycardIcon />}>Change PIN</ContextTag>.
+    1. Tap <ContextTag>Continue</ContextTag>.
+    1. Enter the current PIN or use biometrics to confirm your identity.
+    1. Enter and confirm your new PIN.
+    1. Configure your device's biometrics (fingerprint, face or other) to fill in your password. If you want to enable biometrics later, tap <ContextTag>Maybe later</ContextTag>.
+    1. Tap <ContextTag>Scan Keycard</ContextTag>. Then tap and hold your Keycard against the back of your phone again.
+    1. Tap <ContextTag>Done</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection if you see a security alert from your computer.
+    1. In Status, from the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>.
+    1. Click the Keycard whose PIN you want to change and click <ContextTag>Change PIN</ContextTag>.
+    1. Enter the current PIN.
+    1. Enter and confirm your new PIN.
+    1. Click <ContextTag>Finalise</ContextTag>.
+    1. Click <ContextTag>Done</ContextTag> to confirm.
+  </TabsContent>
+</Tabs>

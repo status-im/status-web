@@ -1,0 +1,67 @@
+---
+id: 350
+revision: '1'
+language: en
+title: Understand Status profile labels
+author: earakel, cheny0, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+In Status, you can label profiles as trusted or untrusted. This is useful when you want to quickly tell your contacts from possible impersonators.
+
+Identity verification and profile labels help you remember whether you should trust someone without alerting them to your decision.
+
+For example, if you're managing a corporate community and someone requests to join claiming to be an employee, you can try [verifying their identity](./verify-your-contacts-identity.mdx). If they fail to pass, you can mark them as untrusted but keep them in your contacts to understand who was trying to impersonate an employee and infiltrate your company's token-gated community.
+
+<Admonition type="info">
+  To see a label on someone's profile, [mark this profile as trusted or untrusted](../profile/verify-your-contacts-identity.mdx).
+</Admonition>
+
+## The basics
+
+- You can mark your contacts' Status profiles with two labels: trusted or untrusted.
+- Only you can set and see these labels on your Status contacts' profiles. The person you mark doesn't see the label and isn't notified about your decision.
+- These labels have no impact on your contact's status. For example, marking a contact as untrusted doesn't remove them from your contact list.
+
+## Status profile labels
+
+If you doubt your Status contact's identity, you can [send them an identity verification request](./verify-your-contacts-identity.mdx). In this request, you ask a question only this person can know the answer to.
+
+Depending on their response, you then mark them as trusted or untrusted. Once you do, a label appears next to their profile name: <VerifiedIcon /> Trusted or <UntrustworthyIcon /> Untrusted.
+
+<Table>
+  <TableHead>
+    <TableHeader>Profile label</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell><ContactIcon />Contact</TableCell>
+      <TableCell>By default, those you add to your contacts get this label.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell><VerifiedIcon />Trusted</TableCell>
+      <TableCell>If you mark your contact as trusted, this label appears on their profile.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell><UntrustworthyIcon />Untrusted</TableCell>
+      <TableCell>If you mark your contact as untrusted and remove them from your contact list, this label appears on their profile.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell><UntrustworthyIcon /><ContactIcon />Untrusted contact</TableCell>
+      <TableCell>If you mark your contact as untrusted and keep them on your contact list, these two labels appear on their profile.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell><BlockIcon />Blocked</TableCell>
+      <TableCell>Once you block someone, this label appears on their profile.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>

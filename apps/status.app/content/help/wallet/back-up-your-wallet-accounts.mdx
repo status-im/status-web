@@ -1,0 +1,82 @@
+---
+id: 1512
+revision: '0'
+language: en
+title: Back up your Wallet accounts
+author: jorge-campo, Fabiomorais87
+roles:
+---
+
+After you [create your Status profile](../getting-started/run-the-status-app-for-the-first-time.mdx#create-a-new-status-profile), you automatically get a Status Wallet account. Your Status [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx) protects this account and all the accounts you create using your profile as the account origin.
+
+<Admonition type="tip">
+  To understand the different account origins in your Wallet, check out [Understand your Status Wallet accounts and keys](./understand-your-status-wallet-accounts-and-keys.mdx).
+</Admonition>
+
+If you create or [import an account](./import-an-account-into-your-status-wallet.mdx) using a different origin (a different master key or private key), you must back up the account separately. This is necessary because the recovery phrase linked to your Status profile only works for accounts created under that profile.
+
+<Admonition type="info">
+  Each master key has its own recovery phrase that you must back up. Additionally, you must back up accounts that you import using a private key separately.
+</Admonition>
+
+## What to expect
+
+- To back up your Status Wallet accounts, you need to know the account origin. This information is available in your [Wallet settings](./understand-your-status-wallet-accounts-and-keys.mdx).
+- If all your Wallet accounts use your Status profile origin, you only need to back up your Status profile recovery phrase. This recovery phrase protects all the accounts created under that profile.
+- If you create accounts using a [new master key](./organize-funds-and-accounts-with-a-new-master-key.mdx) or import accounts from another wallet, you must back up each new recovery phrase or private key separately.
+
+<Admonition type="caution">
+  Status doesn't have access to your recovery phrase or private keys and can't recover them for you. It is your responsibility to keep this information safe. If you lose your recovery phrase or private key, you lose access to your Wallet accounts and funds.
+</Admonition>
+
+## Back up your Wallet accounts
+
+To back up all your Status Wallet accounts, you need to look at how each account was created.
+
+The illustration below shows an example of different account origins in the Status Wallet settings. Depending on your Wallet, you may have one or more of these origins. To open your Wallet settings:
+
+- In the mobile app, tap your profile picture in the top left corner of the app, then tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag> > <ContextTag>Key pairs and accounts</ContextTag>.
+- In the desktop app, from the navigation sidebar, go to <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+
+![Status Wallet accounts and keys under the Wallet settings](https://res.cloudinary.com/dhgck7ebz/image/upload/v1743408351/Help/Documentation%20Screens/Wallet/1512/1512_1_Screen.png)
+
+This table shows what to back up for each wallet account displayed in the image, based on their origin.
+
+<Table>
+  <TableHead>
+    <TableHeader>Account origin</TableHeader>
+    <TableHeader>What to back up</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>1. Status profile</TableCell>
+      <TableCell>Your Status profile recovery phrase. This is the recovery phrase you wrote down when you set up your profile.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>2. Recovery phrase</TableCell>
+      <TableCell>The recovery phrase you used to import these accounts. This is different from your Status profile recovery phrase.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>3. Private key</TableCell>
+      <TableCell>The private key you use to import the account. A private key is a secret code represented by a string of characters.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>4. Master key</TableCell>
+      <TableCell>The recovery phrase linked to the master key. This is different from your Status profile recovery phrase.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+Accounts stored on your [Keycard](../keycard/keycard-your-quick-start-guide.mdx) are marked with the <KeycardCardIcon /> Keycard symbol. These accounts are physically protected by the Keycard and [Keycard PIN](../keycard/about-your-keycard-pin-and-puk.mdx).
+
+<Admonition type="info">
+  If you have [more than one Status profile](../profile/create-and-use-additional-status-profiles.mdx), you need to back up the Wallet accounts for each profile separately.
+</Admonition>
+
+<Admonition type="tip">
+  For tips on how to back up your recovery phrase, check out [Back up and secure your recovery phrase](../profile/back-up-and-secure-your-recovery-phrase.mdx).
+</Admonition>

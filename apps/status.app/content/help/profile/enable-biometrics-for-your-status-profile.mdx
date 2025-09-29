@@ -1,0 +1,64 @@
+---
+id: 1249
+revision: '0'
+language: en
+title: Enable biometrics for your Status profile
+author: cheny0, Fabiomorais87, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can use biometrics to confirm transactions using Status desktop on macOS.
+</Admonition>
+
+Using biometrics provides a second method for securing your profile and Wallet accounts. You can use your biometrics (fingerprint, face or other) to confirm security-sensitive actions, such as sending a transaction or logging in to your Status profile.
+
+Enabling biometrics increases the possibility of restoring access to your funds and Status profile when accidents happen, such as forgetting your password or losing your Keycard.
+
+## What to expect
+
+- To use biometric authentication in Status, you must first set up biometrics on your device.
+- Unless you use Status desktop on macOS, Status requires your password to confirm transactions even if you have enabled biometrics.
+- After you enable biometrics, it becomes the default method for authentication. However, you can still choose to use your password or Keycard when logging in to your profile.
+
+## Enable biometrics for your Status profile
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Tap your profile picture, then tap <ContextTag icon={<PasswordIcon />}>Password</ContextTag>.
+    1. Switch on the toggle next to <ContextTag icon={<TouchIdBigIcon />}>Fingerprint</ContextTag> (Android) or <ContextTag icon={<FaceIdIcon />}>Face ID</ContextTag> (iPhone).
+    1. Enter your password or use your Keycard to confirm and tap <ContextTag>Enable Fingerprint</ContextTag> or <ContextTag>Enable Face ID</ContextTag>.
+    1. Confirm with your biometric option (fingerprint, face or other) on your mobile device.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<PasswordDesktopIcon />}>Password</ContextTag>.
+    1. Switch on the toggle next to <ContextTag>Enable biometrics</ContextTag>.
+    1. Click <ContextTag>Yes, enable biometrics</ContextTag>.
+    1. Enter your password or use your Keycard to confirm and click <ContextTag>Authenticate</ContextTag>.
+    1. Confirm with your biometric option (fingerprint, face or other) on your computer.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  To disable biometrics, switch off the toggle next to <ContextTag icon={<TouchIdBigIcon />}>Fingerprint</ContextTag>, <ContextTag icon={<FaceIdIcon />}>Face ID</ContextTag> or <ContextTag>Enable biometrics</ContextTag>, depending on the device you use.
+</Admonition>

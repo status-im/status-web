@@ -1,0 +1,80 @@
+---
+id: 443
+revision: '1'
+language: en
+title: Set up a token-gated community
+author: jorge-campo, cheny0
+roles:
+  - Owner
+  - TokenMaster
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only set up token-gated communities using Status desktop.
+</Admonition>
+
+By default, a new Status Community is open and available for everyone to join. As a community Owner or TokenMaster, you can use [token-based permissions](./set-up-your-community-permissions.mdx) to create a token-gated community.
+
+Only people with the required tokens can join and participate in the token-gated community. For instance, you can configure a token-based permission that requires members to hold a certain amount of USDS and ETH tokens to join. Or, you can restrict access to users in a particular ENS domain, such as acme.eth.
+
+<Admonition type="info">
+  In addition to tokens, community Owners can require [manual approval](./set-up-your-community-join-requests.mdx) to join their communities. Token-based permissions and manual approval work independently.
+</Admonition>
+
+Token requirements can be useful to ensure that your community members have a certain level of commitment or interest in the topic of the community. If you run an organization with an ENS domain, you can also set up a token-gated community for holders of your ENS domain only (for example, alice.acme.eth or bob.acme.eth).
+
+<Admonition type="caution">
+  Before enabling token-gating, ensure your members hold the required token. If you enable token-gating later, members without the token lose access automatically. To prevent this, [airdrop](./how-to-airdrop-tokens-in-status.mdx) the token first, then apply token-gate permissions.
+</Admonition>
+
+## What to expect
+
+- Use the <ContextTag>Become member</ContextTag> token-based permission to set up a token-gated community. Ensure your existing community members hold the required tokens.
+- You can set up token-based permissions with existing tokens or tokens you have [minted](./mint-tokens-for-your-community.mdx) and distributed via [airdrops](./how-to-airdrop-tokens-in-status.mdx).
+- In a token-gated community, members must always meet and keep the token requirements. Community members not holding the required tokens lose access to the community automatically.
+- Use [channel permissions](set-up-your-channel-permissions.mdx) to make one or more channels private while keeping your community open.
+- To transform a token-gated community into an open one, [delete the <ContextTag>Become member</ContextTag> token-based permissions](./set-up-your-community-permissions.mdx#delete-community-permissions).
+
+<Admonition type="info">
+  You can create a maximum of five different <ContextTag>Become member</ContextTag> permissions.
+</Admonition>
+
+## Set up a token-gated community
+
+This procedure outlines how to use permissions to set up a token-gated community. For additional information on configuring these permissions, check out [Set up your community permissions](./set-up-your-community-permissions.mdx).
+
+Community Owners customize permissions using three different variables: <ContextTag>Who holds</ContextTag>, <ContextTag>Is allowed to</ContextTag> and <ContextTag>In</ContextTag>.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. Click <ContextTag>Add new permission</ContextTag>.
+    1. For the <ContextTag icon={<InContactsDesktopIcon />}>Who holds</ContextTag> variable, select the tokens and amounts (for assets and collectibles) members must hold to join your community. You can choose and combine up to five assets, collectibles or ENS names.
+    1. For the <ContextTag icon={<SecurityDesktopIcon />}>Is allowed to</ContextTag> variable, select <ContextTag icon={<InContactsDesktopIcon />}>Become member</ContextTag> and click <ContextTag>Add</ContextTag>.
+    1. For the <ContextTag icon={<InContactsDesktopIcon />}>Who holds</ContextTag> variable, make sure your community is selected.
+    1. Click <ContextTag>Create permission</ContextTag>. The new permission takes effect immediately.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  For each permission, tokens are linked by <ContextTag>AND</ContextTag> operators. This means the new permission takes effect when the holder owns all the tokens. If you want to use the <ContextTag>OR</ContextTag> operator instead, create additional permissions with different <ContextTag>Who holds</ContextTag> values.
+</Admonition>

@@ -1,0 +1,117 @@
+---
+id: 500
+revision: '1'
+language: en
+title: Customize group chat notifications
+author: Fabiomorais87, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+You can choose which message and mention notifications you want to receive for any group chat. This allows to display only the notifications that are relevant to you.
+
+## Mute notifications in specific group chats
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Long press the group chat you want to mute.
+    1. Tap <ContextTag icon={<MutedIcon />}>Mute</ContextTag>.
+    1. Select the length of time you'd like to mute your notifications.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag>.
+    1. Under the messages list, right-click the group you want to mute.
+    1. Select <ContextTag>Mute chat</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  When you mute notifications for a group chat, it appears greyed with a <MutedIcon />Muted icon.
+</Admonition>
+
+## Mute group chat notifications except personal mentions
+
+To avoid missing important messages, you can mute some notifications. Here's how to mute all group chat notifications except personal mentions.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Long press the group chat you want to mute.
+    1. Tap <ContextTag icon={<NotificationsIcon />}>Notifications</ContextTag>.
+    1. Select <ContextTag>Global mentions</ContextTag> > <ContextTag>Notifications off</ContextTag>.
+    1. Select <ContextTag>All other messages</ContextTag> > <ContextTag>Notifications off</ContextTag>.
+    1. Verify <ContextTag>Personal mentions</ContextTag> is set to <ContextTag>On</ContextTag>. If it is not, select <ContextTag>Personal mentions</ContextTag> > <ContextTag>Notifications on</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag>.
+    1. From the <ContextTag>Settings sidebar</ContextTag>, click <ContextTag icon={<NotificationDesktopIcon />}>Notifications and Sounds</ContextTag>.
+    1. Scroll down to the <ContextTag>Exceptions</ContextTag> area and click <ContextTag icon={<AddDesktopIcon />}>Add</ContextTag> next to the group chat you want to mute.
+    1. Select <ContextTag>Global mentions</ContextTag> > <ContextTag>Turn off</ContextTag>.
+    1. Select <ContextTag>All other messages</ContextTag> > <ContextTag>Turn off</ContextTag>.
+    1. In the same pop-up menu, make sure <ContextTag>Personal mentions</ContextTag> is set to <ContextTag>Send alerts</ContextTag>. If it's not, then select <ContextTag>Personal mentions</ContextTag> > <ContextTag>Send Alerts</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Mute all group chats notifications
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap your profile picture.
+    1. Scroll down the list of settings and tap <ContextTag icon={<ActivityCenterIcon />}>Notifications</ContextTag>.
+    1. Select <ContextTag>Group chats</ContextTag> > <ContextTag>Your default notification settings</ContextTag>.
+    1. Turn off <ContextTag>Personal mentions</ContextTag>, <ContextTag>Global mentions</ContextTag> and <ContextTag>All other messages</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag>.
+    1. From the<ContextTag>Settings sidebar</ContextTag>, click <ContextTag icon={<NotificationDesktopIcon />}>Notifications and Sounds</ContextTag>.
+    1. Under the<ContextTag>Messages</ContextTag> area, click on the drop-down menu next to<ContextTag>Group chats</ContextTag>.
+    1. Select <ContextTag>Turn off</ContextTag>.
+
+    <Admonition type="info">
+      For desktop, you mute a specific group chat by creating an exception.
+    </Admonition>
+  </TabsContent>
+</Tabs>

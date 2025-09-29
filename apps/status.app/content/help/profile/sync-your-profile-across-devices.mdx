@@ -1,0 +1,232 @@
+---
+id: 252
+revision: '4'
+language: en
+title: Sync your profile across devices
+author: cheny0, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+If you use Status on more than one device, sync your profile so it's up to date on every device, and you can switch between them seamlessly. Without syncing, you are likely to set up the same options more than once and receive multiple notifications for one single message.
+
+<Admonition type="tip">
+  You can use this procedure to [sign in to your profile on a new device](./sign-in-to-your-status-profile-on-a-new-device.mdx).
+</Admonition>
+
+<Admonition type="info">
+  Make sure your Status mobile app version is 2.0 or higher. The legacy Status mobile app (version 1.2 and below) doesn't support syncing profiles.
+</Admonition>
+
+## What to expect
+
+- You can pair and sync up to three devices, including mobile devices and computers. You can sync a mobile device or computer with another device or computer.
+- Once you set up the syncing, your Status profile data on your devices are in sync automatically until you unpair the devices.
+- Your profile data includes your message status (read or unread) and configuration for the profile, messaging, notification and wallets.
+- When you sign in to your profile on another device, that device immediately appears in the list of devices for syncing.
+- If you have multiple profiles, you need to set up syncing for each one of them.
+
+<Admonition type="info">
+  Your password and messages are not part of your profile data. If you [change your password](./change-your-status-password.mdx) on one device, you need to manually update it on all devices where you use Status.
+</Admonition>
+
+<Admonition type="tip">
+  When you sync a new device, only the messages sent or received in the last 30 days are available on your new device. Messages you receive from that initial sync are always available.
+</Admonition>
+
+## Before you sync
+
+To avoid issues when pairing and syncing your devices, follow these recommendations:
+
+- Only sync two devices at a time.
+- Both devices must have the Status app open and running with the profile you want to sync.
+- Make sure both devices are connected to the same Wi-Fi network. You can set up syncing over mobile networks after the first sync.
+- Disable any VPN or firewall on the network where the devices are connected.
+
+<Admonition type="tip">
+  After the first sync, your devices remain in sync even if they are on different networks.
+</Admonition>
+
+## Sync your profile
+
+When setting up syncing, you need to reveal the QR code or sync code on the primary device and scan or enter the code on the other device. Sync codes and QR codes are only valid for a limited time. If the time expires, confirm your profile credentials again to get new one.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    ### Step 1: Reveal the sync code on your main device
+
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap your profile picture and go to <ContextTag icon={<SyncingIcon />}>Syncing</ContextTag> > <ContextTag>Paired devices</ContextTag>.
+    1. Proceed depending on your situation.
+       - If you have never used Status on your other device before, tap <ContextTag icon={<AddSmallIcon />}>Add</ContextTag>.
+       - If you already use Status on your other device, find it in the <ContextTag>Not paired with this device</ContextTag> list and tap <ContextTag>Sync</ContextTag> next to it.
+    1. Complete the steps on the screen and check the boxes. Then tap <ContextTag>continue</ContextTag>.
+    1. <ContextTag icon={<PasswordIcon />}>Slide to reveal code</ContextTag> and authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+
+    ### Step 2: Use the code on the other device
+
+    If you want to sign in to your profile on a new device, follow the steps in the <ContextTag>Doesn't run Status</ContextTag> section.
+
+    1. Proceed depending on your situation.
+
+           <Table>
+             <TableHead>
+               <TableHeader>Device to sync</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Doesn't run Status</TableCell>
+
+                 <TableCell>
+                   1. Install and open Status.
+                   1. Check the box to accept the Status <ContextTag>Terms of Use and Privacy Policy</ContextTag> and tap <ContextTag>Sync or recover profile</ContextTag>.
+                   1. Tap <ContextTag>Share usage data</ContextTag> or <ContextTag>Not now</ContextTag>.
+                   1. Tap <ContextTag>Scan sync code</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Running Status</TableCell>
+
+                 <TableCell>
+                   1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+                   1. Tap your profile picture and then tap <ContextTag icon={<LogOutIcon />}>Log out</ContextTag>.
+                   1. Tap <ContextTag icon={<MultiProfileIcon />}>Profile</ContextTag> > <ContextTag icon={<AddSmallIcon />}>Add</ContextTag> > <ContextTag icon={<MultiProfileIcon />}>Add existing Status profile</ContextTag>.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    1. Complete the steps on the screen and check the boxes. Then tap <ContextTag>continue</ContextTag>.
+
+    1. Tap <ContextTag icon={<CameraIcon />}>Enable camera</ContextTag> to scan the QR code shown on your main device or tap <ContextTag>Enter sync code</ContextTag> to enter the sync code.
+
+    1. Wait for your devices to synchronize and tap <ContextTag>Continue</ContextTag>.
+
+    1. Set up your device's biometrics (fingerprint, face or other method) to fill in your password. If you want to enable biometrics later, tap <ContextTag>Maybe later</ContextTag>.
+
+    1. On the <ContextTag>Enable notifications</ContextTag> screen, tap <ContextTag icon={<NotificationsIcon />}>Enable notifications</ContextTag> and allow notifications from Status. Alternatively, tap <ContextTag>Maybe later</ContextTag>.
+
+    1. Tap <ContextTag>Start using Status</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Reveal the code for syncing on your main computer
+
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<RotateDesktopIcon />}>Syncing</ContextTag>.
+    1. Proceed depending on your situation.
+       - If you have never used Status on your other computer before, click <ContextTag>Setup Syncing</ContextTag>.
+       - If you already use Status on your other computer, find it in the <ContextTag>Devices</ContextTag> list and click <ContextTag>Setup Syncing</ContextTag> next to it.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+    1. Click <ContextTag icon={<RefreshDesktopIcon />}>Reveal QR</ContextTag>, or click <ContextTag>Copy</ContextTag> to copy the sync code.
+
+    ### Step 2: Use the code on the other computer
+
+    If you want to sign in to your profile on a new device, follow the steps in the <ContextTag>Doesn't run Status</ContextTag> section.
+
+    1. Proceed depending on your situation.
+
+           <Table>
+             <TableHead>
+               <TableHeader>Computer to sync</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Doesn't run Status</TableCell>
+
+                 <TableCell>
+                   1. Install Status.
+                   1. Open the Status app. Your operating system may ask you to set your notification preferences for Status. In the <ContextTag>Allow notifications</ContextTag> screen, click <ContextTag>OK, got it</ContextTag>.
+                   1. Click <ContextTag>I already use Status</ContextTag>, and then click <ContextTag>Scan or enter a sync code</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Running Status</TableCell>
+
+                 <TableCell>
+                   1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<LogOutDesktopIcon />}>Sign out & Quit</ContextTag>.
+                   1. Click <ContextTag>Sign out & Quit</ContextTag> again to confirm.
+                   1. Restart Status and click <ContextTag>Cancel</ContextTag> if the app asks you to log in to the existing profile.
+                   1. Click <ContextTag icon={<ChevronDownDesktopIcon />}>Expand</ContextTag> next to your profile and click <ContextTag icon={<WalletDesktopIcon />}>Add existing Status user</ContextTag>.
+                   1. Click <ContextTag>Scan or enter a sync code</ContextTag>.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    1. Click <ContextTag>Enable camera access</ContextTag> and scan the sync code on your other device. Alternatively, click <ContextTag>Enter sync code</ContextTag> to enter the sync code.
+
+    1. Wait for your devices to synchronize and click <ContextTag>Sign in</ContextTag>.
+
+    1. On the <ContextTag>Your emojihash and identicon ring</ContextTag> screen, you can learn more about your Status profile. Click <ContextTag>Next</ContextTag>.
+
+    1. Click <ContextTag>Start using Status</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  By default, the Status mobile app only syncs over Wi-Fi. You can change this setting by tapping your profile picture > <ContextTag icon={<SyncingIcon />}>Syncing</ContextTag> > <ContextTag icon={<SyncingIcon />}>Sync and backup</ContextTag>.
+</Admonition>
+
+## Turn off profile syncing
+
+Turning off syncing degrades your experience with Status. But you can turn it off when you want to dispose of a device, or you see a device you don't recognize.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. In Status on one of your devices, tap your profile picture.
+    1. Tap <ContextTag icon={<SyncingIcon />}>Syncing</ContextTag> > <ContextTag>Paired with this device</ContextTag>.
+    1. Find the device and tap <ContextTag>Unpair</ContextTag>.
+    1. Tap <ContextTag>Unpair</ContextTag> again to confirm.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    <Admonition type="info">
+      Currently, this feature is not available on Status desktop.
+    </Admonition>
+  </TabsContent>
+</Tabs>
+
+{/*
+    <TabsContent value="Desktop">
+      1. In Status on one of your devices, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<RotateDesktopIcon />}>Syncing</ContextTag>.
+      1. In the list of devices, click <ContextTag>Unpair</ContextTag> next to the device you want to stop syncing with your Status profile.
+      1. Click <ContextTag>Unpair</ContextTag> again to confirm your action.
+    </TabsContent>
+  */}

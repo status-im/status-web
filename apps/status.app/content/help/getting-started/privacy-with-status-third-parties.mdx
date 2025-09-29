@@ -1,0 +1,328 @@
+---
+id: 1330
+revision: '0'
+language: en
+title: 'Privacy With Status Third Parties'
+author: status-im
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500140/Help/Documentation%20Screens/Marketing/1330/1330_Header.png)
+
+This page is part of our wider communications about Status' commitment to privacy transparency. For more information, see [Privacy in Status Software](./prioritising-user-privacy-in-status-software.mdx) and [Privacy With Status Infrastructure and Insights](./privacy-with-status-infrastructure-and-insights.mdx).
+
+This page outlines the implications of personal data sharing with third-party service providers, focusing on the types of personal data involved, how it is shared, and the measures in place to protect user privacy.
+
+By understanding the relationship between Status and third-parties, users can make informed decisions about how they use Status Software and how their data is handled to ensure their privacy preferences are respected. Transparency in data practices is one of our key priorities, and this guide aims to provide clarity on the privacy risks and protections in place when interacting with Status Software and its third-party components.
+
+## Cryptocurrency On / Off Ramps
+
+Status Software uses cryptocurrency on-ramp providers to facilitate the seamless conversion of traditional fiat currency into cryptocurrencies. These providers help lower the barrier to entry for new users who may be unfamiliar with the complexities of cryptocurrency exchanges, making it easier for them to enter the digital asset ecosystem.
+
+These on-ramp services integrate with Status Software to allow users to purchase EVM-compatible cryptocurrencies like Ether, SNT, and USDS using payment methods such as credit cards, bank transfers, or other payment methods (dependent on the provider and your jurisdiction).
+
+Integrating an on-ramp provider in Status Software enhances users' experience by providing a convenient and efficient way to acquire digital assets and enables them to quickly begin participating in blockchain-based services and functionality.
+
+### What Status Software Shares With On-Ramp Providers
+
+In our current implementation, Status Software redirects users to the on-ramp provider via their device's web browser of choice. This means all the interactions a user will have with the on-ramp will be directly between them and the on-ramp provider.
+
+Any information the user shares with the on-ramp provider via the third-party browser will be inaccessible to Status Software.
+
+Status Software does however share some information about users to the on-ramp service providers.
+
+- **A reference number that identifies you as a Status Software user (Shared)**. Status Software embeds this unique identifier into a referral link. This associates any activity you have on the on-ramp provider's platform with Status.
+- **Your Ethereum address (Shared)**. Status Software embeds user's chosen Ethereum address into a referral link. This is a convenience feature that allows on-ramp providers to preselect where your digital assets should be sent to.
+- **Your IP address (Incidental)**. Depending on your web browser of choice, as part of sending an HTTPS call to open the web pages, your IP address will be shared with the third-party's server.
+
+### When Does Status Software Share This Data?
+
+Status Software only shares the above personal data when the user explicitly navigates to use one of the on-ramp providers mentioned below.
+
+### On-Ramp Providers
+
+For more information about the on-ramp providers, their APIs and widgets, and privacy policies, please see below:
+
+#### Mercuryo
+
+- [https://uk.mercuryo.io/on-off-ramps/](https://uk.mercuryo.io/on-off-ramps/)
+- [https://help.mercuryo.io/hc/en-gb/articles/14833411947037-How-does-the-Mercuryo-widget-work-for-on-ramp](https://help.mercuryo.io/hc/en-gb/articles/14833411947037-How-does-the-Mercuryo-widget-work-for-on-ramp)
+- [https://help.mercuryo.io/hc/en-gb/articles/14495463995805-How-does-Mercuryo-keep-my-information-safe](https://help.mercuryo.io/hc/en-gb/articles/14495463995805-How-does-Mercuryo-keep-my-information-safe)
+
+#### Moonpay
+
+- [https://www.moonpay.com/en-gb](https://www.moonpay.com/en-gb)
+- [https://dev.moonpay.com/v1.0/docs/integrating-the-widget](https://dev.moonpay.com/v1.0/docs/integrating-the-widget)
+- [https://www.moonpay.com/en-gb/legal/privacy\_policy](https://www.moonpay.com/en-gb/legal/privacy_policy)
+
+#### Ramp
+
+- [https://ramp.network/](https://ramp.network/)
+- [https://docs.ramp.network/](https://docs.ramp.network/)
+- [https://ramp.network/privacy-policy](https://ramp.network/privacy-policy)
+
+## Cryptocurrency Prices
+
+Status Software uses cryptocurrency price services to access comprehensive and real-time data on cryptocurrencies. Status Software uses this data to provide users with up-to-date information on prices and historical performance that allows the app to show users their balances in a fiat currency of their choice.
+
+Cryptocurrency price services provide APIs that deliver detailed metrics such as current market prices and trading volumes across a wide range of digital assets and exchanges. By integrating this data, Status Software is able to offer users insightful analytics, portfolio tracking, price alerts, and decision-making tools.
+
+### What Status Software Shares With Cryptocurrency Price Services
+
+Unless through The Status Software Proxy Server:
+
+- **Your IP address (Ambient Metadata)**. As part of sending an HTTPS API call, your IP address will be available to the third-party's server.
+
+### When Does Status Software Share This Data?
+
+Status Software only shares the above personal data with one of the below service providers in the following circumstances:
+
+- Any time the user navigates to the wallet page.
+- Any time the user refreshes their wallet page.
+- Any time the user navigates to a specific address.
+
+### Providers
+
+#### Cryptocompare
+
+- [https://www.cryptocompare.com/](https://www.cryptocompare.com/)
+- [https://min-api.cryptocompare.com/documentation](https://min-api.cryptocompare.com/documentation)
+- [https://www.cryptocompare.com/privacy-policy/](https://www.cryptocompare.com/privacy-policy/)
+
+#### Coingecko
+
+- [https://www.coingecko.com/](https://www.coingecko.com/)
+- [https://www.coingecko.com/en/api](https://www.coingecko.com/en/api)
+- [https://www.coingecko.com/en/privacy](https://www.coingecko.com/en/privacy)
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500397/Help/Documentation%20Screens/Marketing/1330/1330_1_Screen_Light.png)
+
+## EVM RPC Providers
+
+Status Software uses RPC (Remote Procedure Call) services to seamlessly interact with EVM-compatible networks without needing to manage full node infrastructure. These services provide a reliable and scalable API that allows Status Software to connect to Ethereum network(s) for tasks such as sending transactions, querying blockchain data, and deploying smart contracts.
+
+Status Software leverages RPC services to perform blockchain operations in real-time, ensuring a smooth user experience even as the underlying blockchain grows in size and complexity. This is especially important for dApps, where consistent and low-latency access to the blockchain is crucial. Running a full-node service comes with many considerations and is difficult to scale without dedicated expertise and infrastructure.
+
+### What Status Software Shares with RPC Providers
+
+Unless through The Status Software Proxy Server:
+
+- **Your IP address (Ambient Metadata)**. As part of sending an HTTPS API call, your IP address will be shared with the third-party's server.
+- **Your full transaction details (Ambient Metadata)**. This includes values of your transaction, sender and recipient(s) of your transaction, which contracts you interact with, and what functions you call on those contracts.
+- **Your data queries (Ambient Metadata)**. An example is an ERC-20 token balance call.
+- **Any response from your data query (Ambient Metadata)**. Example, the balance of the address's ETH and/or tokens.
+- **Your EVM (wallet) address (Ambient Metadata)**.
+
+### Goals to Improve EVM RPC Privacy, AKA Fluffy
+
+**Fluffy** is an ultra-light Ethereum client being developed by our Nimbus team as part of the Ethereum Foundation's Portal Network. It allows resource-constrained devices like mobile phones to access Ethereum data without needing to sync or store the entire blockchain.
+
+Fluffy focuses on minimal resource consumption (bandwidth, CPU, RAM), improving the security and privacy of users by reducing reliance on third-party services like Infura or our own proxy server. It contributes back to Ethereum's decentralisation by allowing light clients to play an active role in the network.
+
+For more details, read our [Fluffy article](https://our.status.im/nimbus-fluffly/).
+
+### When Does Status Software Share This Data?
+
+Status Software only shares the above personal data with one of the below service providers in the following circumstances:
+
+- Any time the user navigates to the wallet page.
+- Any time the user refreshes their wallet page.
+- Any time the user navigates to a specific address.
+
+### RPC Providers
+
+#### Infura
+
+- [https://www.infura.io/](https://www.infura.io/)
+- [https://docs.infura.io/api/networks/ipfs/http-api-methods](https://docs.infura.io/api/networks/ipfs/http-api-methods)
+- [https://consensys.io/privacy-notice](https://consensys.io/privacy-notice)
+
+#### Grove
+
+- [https://www.grove.city/](https://www.grove.city/)
+- [https://docs.grove.city/guides/getting-started/welcome-to-grove](https://docs.grove.city/guides/getting-started/welcome-to-grove)
+- [https://www.grove.city/privacy](https://www.grove.city/privacy)
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500406/Help/Documentation%20Screens/Marketing/1330/1330_2_Screen_Light.png)
+
+## Collectibles
+
+Status Software uses NFT collectible services to integrate and enhance users' interactions with digital assets, particularly in the realm of NFTs and decentralised applications (dApps).
+
+The services provide APIs that allow Status Software to let users visualise their collection of NFTs along with detailed metadata, ownership history, and transaction capabilities, all within the app's interface.
+
+### What Status Software Shares With NFT Collectible Service Providers
+
+- **Your IP address (Ambient Metadata)**. As part of sending an HTTPS API call, your IP address will be shared with the third-party's server.
+
+### When Does Status Software Share This Data?
+
+Status Software only shares the above personal data with one of the below service providers in the following circumstances:
+
+- When the user views NFT collectables in their wallet.
+- When the user transfers NFT collectables.
+- When the user receives NFT collectables.
+
+### NFT Collectible Service Providers
+
+#### OpenSea
+
+- [https://opensea.io/](https://opensea.io/)
+- [https://docs.opensea.io/reference/openapi-definition](https://docs.opensea.io/reference/openapi-definition)
+- [https://opensea.io/privacy](https://opensea.io/privacy)
+
+#### Alchemy
+
+- [https://www.alchemy.com/](https://www.alchemy.com/)
+- [https://docs.alchemy.com/reference/api-overview](https://docs.alchemy.com/reference/api-overview)
+- [https://www.alchemy.com/terms-conditions/privacy-policy](https://www.alchemy.com/terms-conditions/privacy-policy)
+
+#### Rarible
+
+- [https://rarible.com/](https://rarible.com/)
+- [https://rarible.org/](https://rarible.org/)
+- [https://static.rarible.com/privacy.pdf](https://static.rarible.com/privacy.pdf)
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500414/Help/Documentation%20Screens/Marketing/1330/1330_3_Screen_Light.png)
+
+## Cryptocurrency Swaps
+
+Status Software uses cryptocurrency swap services provided by third parties who facilitate cryptocurrency trading and token swaps by aggregating multiple decentralised exchanges (DEXs) and liquidity providers into a single, seamless interface. This greatly enhances users' experience by making complex trading strategies accessible, efficient, and cost-effective, directly within the app.
+
+Integrated cryptocurrency swap services enables Status Software to offer users the best possible trading rates by automatically splitting and routing transactions across various liquidity sources. This ensures that users can execute trades with minimal slippage and transaction costs. The app can provide advanced trading functionalities, such as multi-hop swaps (swapping one token for another through intermediate tokens), price impact analysis, and gas optimisation, all without requiring users to navigate multiple platforms.
+
+### What Status Software Shares With Swap Service Providers
+
+- **Your Ethereum address (Shared)**. Status Software embeds user's chosen Ethereum address into swap requests. This is a convenience feature that allows swap providers to preselect where your digital assets should be sent.
+- **Your IP address (Ambient Metadata)**. As part of sending an HTTPS API call, your IP address will be shared with the third-party's server.
+
+### When Does Status Software Share This Data?
+
+Status Software only shares the above personal data with one of the below service providers when the user explicitly instigates a token swap within Status Software.
+
+### Swap Service Providers
+
+#### Paraswap
+
+- [https://www.paraswap.io/](https://www.paraswap.io/)
+- [https://developers.paraswap.network/api/master/api-v5](https://developers.paraswap.network/api/master/api-v5)
+- [https://files.paraswap.io/pp\_v2.pdf](https://files.paraswap.io/pp_v2.pdf)
+
+## Bridging Services
+
+Status Software integrates with third-party bridging services to facilitate cross-chain transfers, allowing users to move their assets between different blockchains. These services provide seamless, secure transfers, enabling users to interact with multiple blockchain ecosystems directly from the app without needing to use multiple wallets or platforms.
+
+### What Status Software Shares With Bridging Service Providers
+
+- **Your Ethereum address (Shared)**. Status embeds the user's Ethereum address into requests to bridge assets.
+- **Your IP address (Ambient Metadata)**. Your IP address is shared during API calls to the third-party bridging provider's server.
+
+### When Does Status Software Share This Data?
+
+Status only shares this data when the user explicitly initiates a cross-chain transfer using one of the below bridging services.
+
+### Bridging Service Providers
+
+#### Hop Exchange
+
+- [https://hop.exchange/](https://hop.exchange/)
+- [https://forum.hop.exchange/privacy](https://forum.hop.exchange/privacy)
+
+#### Celer Network
+
+- [https://celer.network/](https://celer.network/)
+- [https://celer.network/doc/Privacy-Policy.pdf](https://celer.network/doc/Privacy-Policy.pdf)
+
+## Blockchain Explorers
+
+Status Software uses third-party blockchain explorers to provide users with detailed insights into their on-chain activities, primarily focusing on providing users with details of pending transactions. This allows users to have peace of mind by monitoring the status of transactions they've sent that have not yet been confirmed.
+
+### What Status Software Shares With Blockchain Explorer Providers
+
+- **Your IP address (Ambient Metadata)**. Your IP address is shared when making requests to the blockchain explorer service for transaction data.
+
+### When Does Status Software Share This Data?
+
+This data is shared whenever a user interacts with on-chain transaction data through Status Software, which then requests information from one of the following block explorers:
+
+### Block Explorer Providers
+
+#### Etherscan
+
+- [https://etherscan.io/](https://etherscan.io/)
+- [https://etherscan.io/privacyPolicy](https://etherscan.io/privacyPolicy)
+
+## Signature Tooling
+
+When a blockchain transaction is sent to a smart contract, the transaction includes a four-byte identifier to specify which function on the contract should be executed. Status Software uses the 4byte directory to match these identifiers with human-readable function names, making it easier to understand, decode, and interact with smart contract functions.
+
+Status Software uses the 4byte directory as a tool to help map and interface with EVM smart contracts. 4byte maintains a registry of known function signatures and their corresponding 4-byte hexadecimal identifiers, derived from the first four bytes of the Keccak-256 hash of a function's interface.
+
+### What Status Software Shares With Signature Tooling Providers
+
+- **Your IP address (Ambient Metadata)**. As part of sending an HTTPS API call, your IP address will be shared with the third-party's server.
+
+### When Does Status Software Share This Data?
+
+When the user views the activity details page of a transaction.
+
+### Providers
+
+#### 4byte
+
+- [https://www.4byte.directory/](https://www.4byte.directory/)
+- [https://www.4byte.directory/docs/](https://www.4byte.directory/docs/) (API Docs)
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500438/Help/Documentation%20Screens/Marketing/1330/1330_4_Screen_Light.png)
+
+## URL Previews
+
+When a message containing one or more HTTP URLs is sent, only the sender will bear the burden of IP address leakage as Status Software automatically unfurls all URLs to generate previews. Once unfurled, the data is embedded in the message itself, ensuring that receivers don't need to re-unfurl URLs, which would share their IP addresses.
+
+Status Software unfurls URLs using the oEmbed and OpenGraph protocols, as well as direct HTTP requests to fetch URL thumbnails, all of which expose the sender's IP address.
+
+Unlike other messengers, Status Software does not use special servers to serve unfurled assets (e.g. as a caching layer).
+
+Currently, Status Software does not support the ability to choose when unfurling should occur, for example, a sender may prefer to unfurl only specific domains they trust.
+
+### What Status Software Shares With Web Hosts
+
+- **The IP address of ONLY the message sender (Ambient Metadata)**. As part of making HTTP requests to unfurl URLs.
+
+### When Does Status Software Do This?
+
+Status Software only performs this action when a user begins the process of sending a URL to a chat, and only when the user has consented to enabling URL unfurling for use within Status Software.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500459/Help/Documentation%20Screens/Marketing/1330/1330_5_Screen_Light.png)
+
+## Embedded GIFs
+
+Status Software uses third-party GIF providers to allow users to send GIFs within chats. When a user searches for and sends a GIF, Status Software embeds Tenor's GIF URLs into a chat message. When Status Software shows a GIF within a chat, this process shares some personal data with Tenor.
+
+### What Status Software Shares with Tenor
+
+- **Your IP address (Ambient Metadata)**. When making a request to Tenor's servers to fetch GIFs. This applies to both the sender and recipient of the message containing a GIF URL.
+
+### When Does Status Software Share This Data?
+
+Status Software only shares this data when a user sends or receives a GIF in the chat interface, and only if Tenor GIF functionality is enabled within the app.
+
+### Providers
+
+#### Tenor
+
+- [https://tenor.com/](https://tenor.com/)
+- [https://tenor.com/gifapi](https://tenor.com/gifapi)
+- [https://policies.google.com/privacy](https://policies.google.com/privacy)
+
+### How Status Software Provides Privacy Protection for Users Who Receive GIFs
+
+To give users the option to protect their IP address(es) from GIF providers, we ask users to give their explicit consent before opening any GIFs in chat.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500479/Help/Documentation%20Screens/Marketing/1330/1330_6_Screen_Light.png)
+Permission to use GIFs in the mobile app.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500517/Help/Documentation%20Screens/Marketing/1330/1330_7_Screen_Light.png)
+Permission to use GIFs in the desktop app.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731500540/Help/Documentation%20Screens/Marketing/1330/1330_8_Screen_Light.png)
+Permission settings for GIF and website link previews.

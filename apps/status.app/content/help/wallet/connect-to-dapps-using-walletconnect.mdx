@@ -1,0 +1,95 @@
+---
+id: 1182
+revision: '1'
+language: en
+title: Connect to dApps using WalletConnect
+author: jorge-campo, cheny0
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+WalletConnect is a secure way to connect your Wallet to [decentralized applications](./about-decentralized-apps-in-status-wallet.mdx) directly from the Status app, using a QR code or link.
+
+<Admonition type="tip">
+  In addition to WalletConnect, you can connect to dApps using the [Status Connector extension](./connect-to-dapps-using-status-connector.mdx) on your desktop browser.
+</Admonition>
+
+Decentralized applications (also known as dApps, Dapps or web3 apps) are applications running on a [blockchain network](../getting-started/about-the-ethereum-blockchain.mdx), such as Ethereum. Using dApps and your Status Wallet, you can interact with decentralized finance (DeFi), games, social networks and other blockchain-based services.
+
+<Admonition type="info">
+  WalletConnect is not developed or provided by Status and works with many other crypto wallets, not just Status Wallet. For more information, check the [WalletConnect website](https://walletconnect.network/)<ExternalIcon />.
+</Admonition>
+
+## Why use WalletConnect
+
+Using WalletConnect to interact with dApps has several advantages.
+
+- **Simplicity**: WalletConnect uses a direct connection between your Status app and the dApp, so you don't need to install extra software or browser extensions.
+- **Browser flexibility**: With WalletConnect and your Status Wallet, you can interact with dApps using any browser of your choice.
+- **Cross-platform**: WalletConnect works on both your phone and computer, so you can access your favorite dApps from any device that uses Status.
+
+<Admonition type="info">
+  You need to have the Status app installed on your device to connect to dApps using the Status Wallet and WalletConnect.
+</Admonition>
+
+## Connect to dApps using WalletConnect
+
+You can use your preferred web browser to connect to dApps using WalletConnect on your mobile device or computer.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    ### Step 1: Scan the WalletConnect QR code
+
+    1. Using your smartphone, open the web browser and navigate to the dApp you wish to connect to.
+    1. Tap <ContextTag>Connect</ContextTag>, <ContextTag>Connect Wallet</ContextTag>, <ContextTag>Login</ContextTag> or any similar option on the dApp website.
+    1. In the <ContextTag>Connect</ContextTag> dialog, choose <ContextTag>WalletConnect</ContextTag> to show the WalletConnect QR code.
+    1. Open the Status app on your phone and, from the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. From the top navigation, tap <ContextTag icon={<DappDesktopIcon />}>dApp</ContextTag>.
+    1. In the <ContextTag>Connected dApps</ContextTag> screen, tap <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> and scan the WalletConnect QR code with your phone camera.
+
+    ### Step 2: Connect to the dApp
+
+    1. In the dApp screen on your Status Wallet, verify the URL of the dApp you wish to connect to.
+    1. Choose the <ContextTag>Account</ContextTag> and <ContextTag>Networks</ContextTag> you want to use and tap <ContextTag>Connect</ContextTag>.
+    1. If the connection is successful, you can see the dApp connection on the <ContextTag>Connected dApps</ContextTag> screen.
+    1. Continue using the dApp from your mobile web browser.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Copy the WalletConnect link
+
+    1. Using your computer, open the web browser and navigate to the dApp you wish to connect to.
+    1. Click <ContextTag>Connect</ContextTag> or <ContextTag>Connect Wallet</ContextTag> or any similar option on the dApp website.
+    1. In the <ContextTag>Connect</ContextTag> dialog, choose <ContextTag>WalletConnect</ContextTag> to show the WalletConnect QR code.
+    1. Copy the WalletConnect link from the QR code. Look for it under <ContextTag>Copy Link</ContextTag> or <ContextTag icon={<CopyDesktopIcon />}>Copy</ContextTag>. Sometimes, it's available by clicking <ContextTag>Open</ContextTag> next to the <ContextTag>Need the official WalletConnect modal?</ContextTag> text.
+
+    ### Step 2: Connect to the dApp
+
+    1. Using your computer, open the Status app and, from left navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Choose the Wallet account you want to use with the dApp and, at the top of the content area, click <ContextTag icon={<DappDesktopIcon />}>dApp connections</ContextTag>.
+    1. Click <ContextTag>Connect a dApp</ContextTag> and choose <ContextTag>WalletConnect</ContextTag>.
+    1. Paste the WalletConnect link in the <ContextTag>WalletConnect URI</ContextTag> field and click <ContextTag>Done</ContextTag>.
+    1. Review the information in the <ContextTag>Connection request</ContextTag> dialog and click <ContextTag>Connect</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  To disconnect from the dApp or edit your existing connections, see [Administer your Wallet dApp connections](./administer-your-wallet-dapp-connections.mdx).
+</Admonition>

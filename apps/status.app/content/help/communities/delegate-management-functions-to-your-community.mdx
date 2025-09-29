@@ -1,0 +1,124 @@
+---
+id: 686
+revision: '4'
+language: en
+title: Delegate management functions to your community
+author: jorge-campo, cheny0
+roles:
+  - Owner
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only delegate management functions using Status desktop.
+</Admonition>
+
+Community Owners have total control over their communities, including settings, membership approvals and permissions. In addition, Owners can delegate management functions to other community members through the TokenMaster and Admin roles.
+
+<Admonition type="info">
+  TokenMasters and Admins play a similar role to Owners, but with some important differences. Check out [About the management roles in Status Communities](./about-the-management-roles-in-status-communities.mdx) for more information.
+</Admonition>
+
+To delegate management functions to others, Owners use tokens. Tokens are digital assets in a blockchain (such as the [Ethereum blockchain](../getting-started/about-the-ethereum-blockchain.mdx)), including assets (virtual coins), collectibles (NFTs) and ENS names.
+
+## What to expect
+
+- To delegate TokenMaster-level functions, assign the TokenMaster token to someone.
+- To delegate Admin-level functions, assign the <ContextTag>Become admin</ContextTag> community permission to a collectible or ENS name owner.
+- You can create a maximum of five different <ContextTag>Become admin</ContextTag> community-level permissions, but you can apply a single permission to multiple members.
+- To stop delegating management functions, [revoke the TokenMaster token](./revoke-the-tokenmaster-role-from-someone.mdx) or [delete the admin permission](./set-up-your-community-permissions.mdx#delete-community-permissions).
+
+## Choose your delegation token
+
+You use the TokenMaster token to delegate the TokenMaster role to others. When you [mint the Owner token](./mint-the-owner-and-tokenmaster-tokens.mdx), you also mint the TokenMaster token in the same process. You can then airdrop the TokenMaster token to people with whom you want to delegate admin responsibilities.
+
+You use a collectible (NFT) or ENS name to delegate the Admin role to others. Assets (virtual coins) don't have the non-transferable (soulbound) and self-destructing properties collectibles have, making it harder to remove management functions from other users. Avoid using assets to delegate management functions.
+
+<Admonition type="info">
+  You can delegate the TokenMaster and Admin roles to people ouside your community, but they must [join the community](./join-a-status-community.mdx) to exercise the role.
+</Admonition>
+
+## Delegate the TokenMaster role using the TokenMaster token
+
+To delegate management permissions with the TokenMaster token, airdrop the token to the person you want to give permissions to. For more information, read [How to grant the TokenMaster role in your community](./how-to-grant-the-tokenmaster-role-in-your-community.mdx).
+
+You can revoke the TokenMaster role anytime by [remotely destructing](./revoke-the-tokenmaster-role-from-someone.mdx) the TokenMaster token.
+
+<Admonition type="tip">
+  The TokenMaster token is a non-transferable (soulbound) collectible. The recipient can't transfer it to others.
+</Admonition>
+
+## Delegate the Admin role using a collectible or ENS name
+
+If you use a collectible, follow this process:
+
+<AwaitedList>
+  1. [Mint](./mint-tokens-for-your-community.mdx) a non-transferable (soulbound) and remotely-destructible collectible.
+  1. [Airdrop the collectible](./how-to-airdrop-tokens-in-status.mdx) to the person you wish to delegate management functions to.
+  1. [Delegate the Admin role](#delegate-the-admin-role) using token-based community permissions.
+</AwaitedList>
+
+### Delegate the Admin role
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. Click <ContextTag>Add new permission</ContextTag>.
+    1. For the <ContextTag icon={<InContactsDesktopIcon />}>Who holds</ContextTag> variable, choose your delegation option and use the table below for reference.
+    1. For the <ContextTag icon={<SecurityDesktopIcon />}>Is allowed to</ContextTag> variable, select <ContextTag icon={<AdminDesktopIcon />}>Become admin</ContextTag>.
+    1. For the <ContextTag icon={<ChannelCategoryDesktopIcon />}>In</ContextTag> variable, make sure your community is selected.
+    1. Click <ContextTag>Create permission</ContextTag>. The new permission takes effect immediately.
+  </TabsContent>
+</Tabs>
+
+<Table>
+  <TableHead>
+    <TableHeader>Delegation option</TableHeader>
+    <TableHeader>Steps</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Collectible</TableCell>
+
+      <TableCell>
+        1. Select <ContextTag>Collectibles</ContextTag>.
+        1. Choose the collectible and amount you want to use to delegate management functions.
+        1. Click <ContextTag>Add</ContextTag>.
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>ENS name</TableCell>
+
+      <TableCell>
+        1. Select <ContextTag>ENS</ContextTag>.
+        1. Enter the ENS name or domain to which you want to delegate management functions.
+        1. Click <ContextTag>Add</ContextTag>.
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="info">
+  When you select the <ContextTag>Become admin</ContextTag> role, the <ContextTag>Hide permission</ContextTag> option is
+  enabled automatically.
+</Admonition>

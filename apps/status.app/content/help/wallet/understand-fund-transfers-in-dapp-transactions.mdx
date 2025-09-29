@@ -1,0 +1,80 @@
+---
+id: 1238
+revision: '0'
+language: en
+title: Understand fund transfers in dApp transactions
+author: jorge-campo, Fabiomorais87
+roles:
+---
+
+When you interact with a dApp using Wallet, some actions may involve transferring your funds. These fund transfers occur when you approve certain [types of transactions](./guide-to-dapp-interactions-in-status-wallet.mdx), such as sending tokens or granting a dApp permission to manage your assets for specific purposes.
+
+<Admonition type="info">
+  The dApp you connect to can only access your funds when you explicitly approve its transaction.
+</Admonition>
+
+## The basics
+
+- Fund transfers in dApp interactions depend on the [type of transaction](#fund-transfers-in-dapp-transactions) you approve. Not all transactions involve transferring funds.
+- Connecting your wallet to a dApp doesn't automatically authorize any transactions. You need to authorize each action separately.
+- You must pay [network fees](./understand-network-fees.mdx) whenever the [Ehtereum blockchain](../getting-started/about-the-ethereum-blockchain.mdx) records your actions on the dApp (on-chain transaction). This means you pay network fees for transactions that involve sending funds, granting token allowances or interacting with a smart contract.
+- Double-check transaction details before approving, and [disconnect your wallet from dApps](./administer-your-wallet-dapp-connections.mdx) afterward to avoid unintended fund transfers.
+
+<Admonition type="tip">
+  A smart contract is code that runs on the blockchain and automatically execute transactions when certain conditions are met. dApps provide the user interface to interact with smart contracts running in the background.
+</Admonition>
+
+## About network fees in dApp transactions
+
+Generally, you must pay network fees for on-chain transactions like swapping tokens or minting collectibles. Off-chain actions, such as verifying wallet ownership, don't create a blockchain record and don't incur network fees.
+
+When you approve a transaction in a Status Wallet, you can see the estimated network fees before confirming the action. This helps you understand the total cost of the transaction and decide whether to proceed.
+
+<Admonition type="info">
+  If a transaction fails, you still pay gas fees for the network's effort to process it.
+</Admonition>
+
+## Fund transfers in dApp transactions
+
+Here is an overview of which dApp transactions need gas fees and if they involve a direct transfer of funds.
+
+<Table>
+  <TableHead>
+    <TableHeader>Transaction</TableHeader>
+    <TableHeader>Are funds moved?</TableHeader>
+    <TableHeader>Network fees?</TableHeader>
+    <TableHeader>Notes</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Sign</TableCell>
+      <TableCell>Sometimes</TableCell>
+      <TableCell>Only if it leads to an on-chain transaction</TableCell>
+      <TableCell>Funds may be moved in later transactions</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Send</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Directly sends funds or assets on-chain</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Typed data</TableCell>
+      <TableCell>Sometimes</TableCell>
+      <TableCell>Only if it leads to an on-chain transaction</TableCell>
+      <TableCell>Funds may be moved in later transactions</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Personal sign</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>An off-chain signature for identity or approval</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+Be cautious of typed data or sign transactions that may set up future fund transfers. Even if they don't immediately transfer funds, they can authorize the dApp to access your assets later. For example, no funds are transferred when you bid for a collectible in [OpenSea](https://opensea.io/)<ExternalIcon />, but if you win the auction, the dApp will automatically transfer the funds from your wallet.

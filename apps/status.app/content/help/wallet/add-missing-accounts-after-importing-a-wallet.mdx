@@ -1,0 +1,52 @@
+---
+id: 1521
+revision: '0'
+language: en
+title: Add missing accounts after importing a wallet
+author: jorge-campo, Fabiomorais87
+roles:
+---
+
+When you [import a wallet](./import-an-account-into-your-status-wallet.mdx) with multiple accounts into Status, you may notice that some accounts are missing. Similar to what other crypto wallets do after importing, Status Wallet only shows the first account.
+
+All the accounts in the wallet you import are available in Status Wallet but are not visible. To view and operate these missing accounts you need to [add them manually](#add-missing-accounts-after-importing-a-wallet) after importing the wallet.
+
+## What to expect
+
+- When you import a wallet with multiple accounts, only the first account is visible in Status Wallet.
+- You can add the missing accounts to Status Wallet by adding additional accounts using the same recovery phrase origin.
+- If you can't find your account after importing and adding extra accounts, you may need to [edit the derivation path](./create-a-wallet-account-with-a-custom-derivation-path.mdx). Check if the original wallet uses a different path or shows the one used for the missing account.
+
+<Admonition type="info">
+  Status Wallet uses the [BIP44 standard](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)<ExternalIcon /> for derivation paths. Check out [How wallet accounts, keys, and derivation paths work](./how-wallet-accounts-keys-and-derivation-paths-work.mdx) for more information.
+</Admonition>
+
+## Add missing accounts after importing a wallet
+
+To add the missing accounts after importing a wallet, create additional accounts using the same recovery phrase.
+
+<AwaitedList>
+  - [Import the wallet](./import-an-account-into-your-status-wallet.mdx) if you haven't done so already. After importing, only the first account is visible in Status Wallet.
+  - Using the same recovery phrase as the account origin, [create additional accounts](./create-wallet-accounts.mdx). The Status app adds the missing accounts using consecutive derivation paths.
+  - If you or your wallet provider have used a different derivation path standard, you may need to [edit the derivation path](./create-a-wallet-account-with-a-custom-derivation-path.mdx) to access your missing accounts.
+</AwaitedList>
+
+## Example importing multiple accounts from MetaMask
+
+Let's say you have a wallet in MetaMask with three accounts (accounts 1, 2, 3), and you want to import the accounts into Status Wallet.
+
+Internally, these accounts use a sequence of numbers and symbols to represent their derivation paths, following the BIP44 standard.
+
+- Account 1: `m/44'/60'/0'/0/0`
+- Account 2: `m/44'/60'/0'/0/1`
+- Account 3: `m/44'/60'/0'/0/2`
+
+During the import process, Status Wallet shows the first account derivation path, `m/44'/60'/0'/0/0`.
+
+To view the other two accounts, create two additional accounts using the same recovery phrase origin. Status Wallet automatically adds the missing accounts using consecutive derivation paths, `m/44'/60'/0'/0/1` and `m/44'/60'/0'/0/2`.
+
+After adding the accounts, you can view and operate them in Status Wallet.
+
+<Admonition type="tip">
+  You typically don't need to edit or worry about derivation paths. Only if the account you're importing into Status Wallet uses a different derivation path than the standard one, you may need to [edit the derivation path](./create-a-wallet-account-with-a-custom-derivation-path.mdx) to access the account.
+</Admonition>

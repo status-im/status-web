@@ -1,0 +1,80 @@
+---
+id: 646
+revision: '2'
+language: en
+title: Join a Status Community
+author: cheny0, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+A Status Community is a virtual space for like-minded people to exchange ideas and collaborate.
+
+There are different [types of communities](../communities/about-the-different-types-of-status-communities.mdx) in Status, and the requirements to join them differ depending on the type. Some communities are open to everyone, while others require holding a specific token or approval by the community Owner.
+
+## What to expect
+
+- You must [share at least one account address](./join-a-status-community.mdx#about-sharing-your-wallet-account-address) from your Status Wallet when joining a community. You can [change the addresses you share](./choose-the-wallet-account-address-you-share-with-a-community.mdx) at any time.
+- The aggregated balance of the shared addresses must meet the token requirements of the community you want to join or the [management role](./about-the-management-roles-in-status-communities.mdx) you are about to take. For example, if a community requires 100 SNT to join, you must hold at least 100 SNT across all shared addresses.
+- After you [request to join](./about-community-request-approvals.mdx) a community, you become a member immediately or you need to wait until the Owner accepts you if the community requires approval.
+- For communities requiring join approval, you can view your request status or cancel your pending request on the community page.
+- If the community Owner rejects you, you can send a new request to join the community.
+
+<Admonition type="info">
+  You receive a notification in the Status app when the community Owner accepts or rejects you.
+</Admonition>
+
+## About sharing your Wallet account address
+
+When you join a community, you share one or more of your Status Wallet addresses. This action confirms you have the tokens for token-gated communities or channels, lets you participate in airdrops or fulfil a [management role](./about-the-management-roles-in-status-communities.mdx) in the community.
+
+No matter which [type of community](./about-the-different-types-of-status-communities.mdx) you want to join, you must share at least one Wallet account address (or address, for short) with the [community's control node](./about-the-control-node-in-status-communities.mdx). If you have only one address, it's automatically selected when joining the community and you can't unselect this address.
+
+The addresses you share are stored in the community [control node](./about-the-control-node-in-status-communities.mdx) and never revealed to the community Owner or members. However, the community Owner might discover their member addresses indirectly.
+
+<Admonition type="tip">
+  Consider creating [dedicated addresses](../wallet/create-wallet-accounts.mdx) for specific communities to protect your security and privacy.
+</Admonition>
+
+## Join a Status Community
+
+To join token-gated communities, you must hold the required tokens by [buying crypto](../wallet/buy-crypto.mdx) or receiving them from others.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. If someone shares a community with you, tap the link or scan the QR code. Otherwise, from the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>, then tap the community you want to join.
+    1. Tap <ContextTag>Request to join community</ContextTag>. If the button is greyed out, this community is token-gated, and you don't meet its token requirements. You need to obtain the required tokens first.
+    1. Select <ContextTag>Join as Member/Admin/TokenMaster</ContextTag> to edit your shared addresses. All of your addresses are selected by default, but you can check or uncheck the boxes next to the addresses to adjust your preferences. Optionally, turn off the <ContextTag>Share all current and future addresses</ContextTag> toggle. Then tap <ContextTag>Confirm changes</ContextTag>.
+    1. Tap <ContextTag>For airdrops</ContextTag> to choose your preferred airdrop address. Tap <ContextTag>Confirm changes</ContextTag>. There is only one address for airdrops.
+    1. Tap <ContextTag>Request to join community</ContextTag> again, and confirm using your biometrics, password or Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. If someone shares a community with you, click the link or scan the QR code. Otherwise, from the navigation sidebar, click <ContextTag icon={<CommunitiesIcon />}>Discover Communities</ContextTag>, then click the community you want to join.
+    1. Click <ContextTag>Request to join community</ContextTag>. If the button is greyed out, this community is token-gated and you don't meet its token requirements. You need to obtain the required tokens first.
+    1. Click <ContextTag>Share all addresses to join</ContextTag> to finish, or click <ContextTag>Select addresses to share</ContextTag> and follow the next steps.
+    1. On the <ContextTag>Select address to share</ContextTag> screen, check or uncheck the boxes next to the addresses to adjust your preferences.
+    1. Click <ContextTag><AirdropIcon /></ContextTag> next to the address to select your preferred airdrop address. There is only one address for airdrops.
+    1. Click <ContextTag>Share selected addresses to join</ContextTag>, and confirm using your biometrics, password or Keycard.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  An airdrop distributes free tokens, including assets (virtual coins), collectibles (NFTs) and ENS names. In Status, only [community Owners and TokenMasters](./about-the-management-roles-in-status-communities.mdx) can airdrop tokens, often to promote or manage their communities.
+</Admonition>

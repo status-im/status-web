@@ -1,0 +1,70 @@
+---
+id: 762
+revision: '1'
+language: en
+title: Bridge crypto in Status Wallet
+author: FabioMorais87, jorge-campo, cheny0
+roles: 
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Some blockchains offer lower transaction fees than others. By bridging the same asset to a more cost-effective blockchain, you can perform transactions and interact with dApps at a lower cost. For example, if you have [SNT](./about-the-status-snt-token.mdx) on Mainnet, you can bridge it to Optimism.
+
+<Admonition type="tip">
+  If you want to exchange your asset for a different one on the same blockchain, see [Swap crypto in Status Wallet](./swap-crypto-in-status-wallet.mdx) instead. If you are unsure, see [Choose between bridging and swapping assets](./bridge-and-swap-scenarios.mdx).
+</Admonition>
+
+## What to expect
+
+- In Status Wallet, you can bridge your crypto across Ethereum Mainnet, Arbitrium and Optimism blockchains.
+- You can only bridge assets, not collectibles.
+- You need to pay a bridge fee, which is automatically deducted from the amount you're bridging.
+
+<Admonition type="info">
+  You pay the fee to the blockchains you're bridging between and the bridge service. For more details, check out [About swap and bridge fees](./about-swap-and-bridge-fees.mdx).
+</Admonition>
+
+## Bridge crypto in Status Wallet
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Select the account that contains the crypto to bridge.
+    1. Tap <ContextTag icon={<BridgeIcon />}>Bridge</ContextTag>.
+    1. Select the asset you want to bridge.
+    1. Select the network you want to bridge to.
+    1. Enter the amount to bridge.
+    1. Double-check the details, then tap <ContextTag icon={<BridgeIcon />}>Review Bridge</ContextTag> and <ContextTag>Slide to bridge</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. From the accounts sidebar, select the account that contains the crypto to bridge.
+    1. Under the content area, click <ContextTag icon={<BridgeDesktopIcon />}>Bridge</ContextTag>.
+    1. Select the asset you want to bridge.
+    1. Enter the amount to bridge.
+    1. Under <ContextTag>Simple</ContextTag>, select the network you want to bridge to.
+    1. Double-check the details and click <ContextTag icon={<BridgeDesktopIcon />}>Bridge</ContextTag>.
+
+    <Admonition type="info">
+      The advanced bridge mode on the Status desktop app is currently in beta. To prevent asset loss, use the simple mode.
+    </Admonition>
+  </TabsContent>
+</Tabs>

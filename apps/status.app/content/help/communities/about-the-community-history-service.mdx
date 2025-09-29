@@ -1,0 +1,83 @@
+---
+id: 409
+revision: '1'
+language: en
+title: About the Community History Service
+author: cheny0, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only configure and benefit from the community history service using Status desktop.
+</Admonition>
+
+Status uses a [peer-to-peer network](../messaging/about-status-messages.mdx) to temporarily store your community messages for 30 days. When your community members get online, messages are automatically downloaded and stored locally on their computers.
+
+The peer-to-peer network deletes messages older than 30 days, so members who don't receive them in time can't access them. With the Community History Service (CHS), every community member can access all historical messages.
+
+## The basics
+
+- The Status mobile app doesn't support the CHS.
+- The CHS is on by default, but community Owners can [turn it off](./turn-off-the-community-history-service.mdx). Other community members can't turn it off or choose not to download historical messages.
+- When new members join, they can immediately see messages from the past 30 days. However, it may take a few days for messages older than 30 days to appear.
+- The Status desktop app automatically downloads messages older than 30 days to designated areas in the file system, referred to as archives, to keep them accessible. This process occurs seamlessly in the background.
+- Messages are only readable after importing the archives in the Status desktop app. This process occurs automatically.
+- The messages in the archives are encrypted, so you can't directly open the message archives to read them.
+
+<Admonition type="info">
+  Downloading and importing messages can take a long time. If messages of a period don't appear, wait a few days.
+</Admonition>
+
+## How the Community History Service works
+
+The CHS uses [BitTorrent](https://en.wikipedia.org/wiki/BitTorrent)<ExternalIcon />, a communication protocol for decentralized data sharing, with a built-in BitTorrent client in the Status desktop app. BitTorrent connects computers with IP addresses and transfers archives to every member's computer.
+
+<Admonition type="tip">
+  To avoid exposing your IP address to other community members, use a VPN when running Status.
+</Admonition>
+
+Every seven days, the CHS prompts your [control node](./about-the-control-node-in-status-communities.mdx) to create an archive for messages in the past seven days. Then, the embedded BitTorrent clients in your Status desktop app and your community members' apps share the archive.
+
+The CHS runs automatically in the background, you can't see its processes or notifications. You or your community members must be online with the Status desktop app running for the CHS to share, download or import archives.
+
+<Admonition type="info">
+  Messages in the CHS archives are out of Status' reach. The archives are encrypted and stored locally on your and your community members' computers.
+</Admonition>
+
+## An example of the workflow
+
+The following example demonstrates how a message archive is generated and how your community members Alice and Bob access it.
+
+### Step 1: Your Status desktop app generates an archive
+
+<AwaitedList>
+  1. Your Status desktop running the community's control node is online.
+  1. The control node generates a message archive.
+  1. The BitTorrent client in your Status app makes the archive sharable over a magnet link. A magnet link is a hyperlink that contains the hash code of the torrent file.
+</AwaitedList>
+
+### Step 2: Community members read messages older than 30 days
+
+<AwaitedList>
+  1. Alice comes online, and the BitTorrent client in her Status app receives the magnet link.
+  1. Using the magnet link and your IP address, the BitTorrent client in Alice's Status app downloads the archive from your computer.
+  1. Alice's Status app processes the archive, and Alice can read the messages in the community interface.
+  1. Bob comes online, and his Status app downloads the archive from your or Alice's computer.
+</AwaitedList>
+
+## Maintain the availability
+
+The CHS archives messages only from the computer that runs the [control node](./about-the-control-node-in-status-communities.mdx). If you miss any messages, your members can't receive a copy via the CHS. To provide a complete history, keep your control node online every day or at least once every six days.
+
+<AwaitedList>
+  Don't remove or edit torrent files, as they're part of the CHS mechanism.
+</AwaitedList>
+
+If you [move your control node](recover-your-status-community.mdx) from one computer to another, copy the Status folder to the new computer to keep the existing archives accessible.
+
+<Admonition type="tip">
+  [Turning off the CHS](./turn-off-the-community-history-service.mdx) significantly reduces community members' experience. Keep it on unless it's really necessary.
+</Admonition>

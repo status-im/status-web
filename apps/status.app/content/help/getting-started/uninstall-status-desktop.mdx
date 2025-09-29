@@ -1,0 +1,101 @@
+---
+id: 600
+revision: '0'
+language: en
+title: Uninstall Status desktop
+author: Fabiomorais87, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+You can remove Status desktop from your computer to free up space or start fresh with a new install if you encounter technical issues.
+
+Uninstalling Status does not affect your wallet balances or assets. Your crypto funds remain secure as long as you have your [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-recovery-phrase).
+
+<Admonition type="caution">
+  Before you uninstall Status, make sure you have a [backup of your recovery phrase](../profile/back-up-and-secure-your-recovery-phrase.mdx). If you uninstall Status without it, you lose access to your crypto funds, Status profile and the communities you own forever.
+</Admonition>
+
+## If you own a Status Community
+
+If you're a community owner and plan to reinstall status, follow these steps to ensure you can still get into your community:
+
+<AwaitedList>
+  1. [Backup your recovery phrase](../profile/back-up-and-secure-your-recovery-phrase.mdx)
+  1. [Mint the Owner token](../communities/mint-the-owner-and-tokenmaster-tokens.mdx)
+  1. [Uninstall Status desktop](#uninstall-status-desktop)
+  1. [Do not delete the Status data folder](#uninstall-status-desktop)
+  1. [Reinstall Status desktop](./download-status-for-windows.mdx)
+  1. [Restore your profile using the recovery phrase](./create-a-status-profile-using-a-recovery-phrase.mdx)
+</AwaitedList>
+
+After you recover your Status profile, the Owner token in your [Status Wallet](../wallet/status-wallet-your-quick-start-guide.mdx) grants you Owner-level access to your community. For more information, check out [Understand the Owner and TokenMaster tokens](../communities/understand-the-owner-and-tokenmaster-tokens.mdx).
+
+## Uninstall Status desktop
+
+<Tabs defaultValue="Windows">
+  <TabsList size={32}>
+    <TabsTrigger value="Windows">
+      Windows
+    </TabsTrigger>
+
+    <TabsTrigger value="macOS">
+      macOS
+    </TabsTrigger>
+
+    <TabsTrigger value="Linux">
+      Linux
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Windows">
+    1. Press `Windows` + `I`.
+    1. Go to <ContextTag>Apps</ContextTag> and then <ContextTag>Apps & Features</ContextTag>.
+    1. Use the search bar to find Status in the list of applications.
+    1. Click <ContextTag icon={<MoreDesktopIcon />}>More options</ContextTag> and select <ContextTag>Uninstall</ContextTag>.
+    1. On the pop-up dialog, click <ContextTag>Yes</ContextTag>.
+    1. When asked to delete the Status data folder, choose <ContextTag>No</ContextTag>.
+
+    <Admonition type="caution">
+      If you plan to reinstall Status with the same profile, keep the Status data folder. Only delete the folder if you are sure you won't use Status again with the same profile. For more information, read [What happens with my Status profile](#what-happens-with-my-status-profile).
+    </Admonition>
+  </TabsContent>
+
+  <TabsContent value="macOS">
+    1. Open the macOS Finder.
+    1. Go to the Applications folder and find the Status app.
+    1. Drag and drop the Status app to the macOS Trash, or right-click the Status app and select <ContextTag>Move to Trash</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Linux">
+    1. Find the Status AppImage file. You can usually find it in your Downloads folder or wherever you placed it after installation.
+    1. Open a Terminal window and run this command:
+
+       ```bash
+       rm [path to image file]/StatusIm-Desktop-*.AppImage
+       ```
+
+    Where `[path to image file]` is the path to the Status AppImage file (`~/Downloads`, usually).
+  </TabsContent>
+</Tabs>
+
+## Common questions
+
+### Do I lose my Wallet funds if I uninstall the Status app?
+
+No. You can always access the crypto funds in your Status Wallet (or any other wallet of your choice) if you have your recovery phrase.
+
+### What happens with my Status profile?
+
+If you don't delete the Status data folder in your computer, you can still get your profile back by reinstalling Status desktop on the same computer, unless future software updates make your Status data incompatible. For more information, read [Reset the Status app](./reset-the-status-app.mdx).
+
+<Admonition type="info">
+  Status doesn't know your recovery phrase or password, and can't recover them for you.
+</Admonition>
+
+### How can I reinstall Status if I decide to use it again?
+
+Follow the steps on how to install Status desktop for [Windows](./download-status-for-windows.mdx), [macOS](./download-status-for-mac.mdx) or [Linux](./download-status-for-linux.mdx).

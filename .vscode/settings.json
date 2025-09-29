@@ -21,6 +21,7 @@
     "./packages/status-network",
     "./packages/wallet",
     "./apps/hub",
+    "./apps/status.app",
     "./apps/connector",
     "./apps/portfolio",
     "./apps/wallet",

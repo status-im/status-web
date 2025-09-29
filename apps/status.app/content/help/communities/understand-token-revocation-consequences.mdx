@@ -1,0 +1,128 @@
+---
+id: 783
+revision: '2'
+language: en
+title: Understand token revocation consequences
+author: jorge-campo, cheny0
+roles:
+---
+
+In Status Communities, you need tokens to access [token-gated communities and channels](./about-the-different-types-of-status-communities.mdx), or to become TokenMaster. You can get tokens through [airdrops](./how-to-airdrop-tokens-in-status.mdx), a way of distributing tokens for free to eligible users. You can also get tokens by [buying them](../wallet/buy-crypto.mdx).
+
+The [Owner or TokenMaster roles](./about-the-management-roles-in-status-communities.mdx) can take back the community tokens they gave you via airdrop anytime. This action can change your role and access in the community or channel, depending on the type and function of the token.
+
+Some tokens don't give you any special access or powers. Nothing changes for you if the Owner or TokenMaster revoke them.
+
+<Admonition type="info">
+  The Owner is the only one who can [revoke the TokenMaster role](./revoke-the-tokenmaster-role-from-someone.mdx). They can also [transfer their Owner role](./transfer-your-community-s-ownership.mdx) and token, but nobody (not even Status) can take away the Owner role or token from them.
+</Admonition>
+
+## The basics
+
+- The Owner or TokenMaster can only revoke community tokens that they gave you. They can't take away tokens you bought or received from someone else.
+- Tokens include ERC-20 assets (virtual coins), collectibles (NFTs) and ENS names. The Owner or TokenMaster can use these tokens to [grant access to communities](./set-up-a-token-gated-community.mdx) or [special roles](./delegate-management-functions-to-your-community.mdx).
+- When the community Owner or TokenMaster role revokes your tokens, you may lose access to certain areas or functions in the community.
+- If you own an ENS name, no one can revoke this from you, but you can lose access to certain areas or functions in the community based on your ENS name.
+
+## Tokens in Status Communities
+
+Here are the tokens that you might encounter in a Status Community:
+
+<Table>
+  <TableHead>
+    <TableHeader>Token type</TableHeader>
+    <TableHeader>Function</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Owner token</TableCell>
+      <TableCell>A collectible that works as proof of community ownership. This token grants the Owner role.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>TokenMaster token</TableCell>
+      <TableCell>A collectible that grants the TokenMaster role to their holders.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Entry token</TableCell>
+      <TableCell>Any token that grants access to a token-gated community or channel.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>No function token</TableCell>
+      <TableCell>It's a token to hold or trade, but it doesn't grant any special rights or privileges.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## What happens when your community tokens are revoked?
+
+When the community Owner or TokenMaster role revokes your tokens, the outcome depends on the type and function of the token and whether the community is token-gated or not. Here is what you can expect:
+
+<Table>
+  <TableHead>
+    <TableHeader>You hold</TableHeader>
+    <TableHeader>Token-gated?</TableHeader>
+    <TableHeader>Token revoked?</TableHeader>
+    <TableHeader>Outcome</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Owner token</TableCell>
+      <TableCell>N/A</TableCell>
+      <TableCell>Irrevocable</TableCell>
+      <TableCell>No change</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>TokenMaster token</TableCell>
+      <TableCell>N/A (1)</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Loses TokenMaster role. May keep or lose membership (1)</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>TokenMaster token</TableCell>
+      <TableCell>N/A</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Retains TokenMaster role and membership</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Entry token</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Kicked from community</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Entry token</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Retains membership</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Entry token</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>N/A</TableCell>
+      <TableCell>Retains membership</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>No function token</TableCell>
+      <TableCell>N/A </TableCell>
+      <TableCell>N/A</TableCell>
+      <TableCell>No change</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+(1) The community Owner can kick or ban the TokenMaster when revoking their token. Even if the TokenMaster isn't banned or kicked, they lose access to token-gated communities or channels if they no longer meet the token requirements.
+
+<Admonition type="info">
+  To understand how kicks and bans work in Status Communities, check out [Kick or ban someone from your community](./kick-or-ban-someone-from-your-community.mdx).
+</Admonition>

@@ -1,0 +1,54 @@
+---
+id: 284
+revision: '2'
+language: en
+title: Pin a message
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+You can pin important information in chats so that it doesn't get lost in the message history. For example, you can pin your chat rules, event announcements or FAQ.
+
+## The basics
+
+- You can pin messages in DMs, group chats and community channels.
+- Group chat members can pin both their own and other members' messages.
+- Once you pin a message, it's highlighted and gets a label saying who pinned it.
+- In communities, whether you can pin someone's message depends on [your role](../communities/permissions-by-role-in-status-communities.mdx#permissions-for-key-features) and the [settings](../communities/create-a-status-community.mdx#configure-additional-settings) chosen by the community owner.
+
+## Pin a message
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag> or <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag> where you want to pin a message.
+    1. In the chat or community channel, tap the message you want to pin.
+    1. Tap <ContextTag icon={<PinIcon />}>Pin to the chat</ContextTag>. To unpin a message, tap it and select <ContextTag icon={<PinIcon />}>Unpin</ContextTag>.
+
+    To view all pinned messages in a group chat or DMs, open this chat and tap <ContextTag icon={<PinIcon />}>Pinned messages</ContextTag>. If the chat is full, tap the ribbon with the <ContextTag icon={<PinIcon />}>Pin</ContextTag> symbol underneath the chat's name.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag> or a community where you want to pin a message.
+    1. In the chat or community channel, hover over the message you want to pin.
+    1. Click <ContextTag icon={<PinDesktopIcon />}>Pin</ContextTag>. To unpin a message, hover over it and click <ContextTag icon={<UnpinDesktopIcon />}>Unpin</ContextTag>.
+
+    To view all pinned messages in a group chat or DMs, open this chat and click <ContextTag icon={<PinDesktopIcon />}>N pinned messages</ContextTag> underneath the chat's name. In communities, you can see <ContextTag icon={<PinDesktopIcon />}>N</ContextTag>, where N is the number of currently pinned messages.
+  </TabsContent>
+</Tabs>

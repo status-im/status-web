@@ -1,0 +1,38 @@
+schema:
+  - https://hasura.bi.status.im/v1/graphql
+
+documents:
+  - ./src/**/*.tsx
+  - ./src/**/*.ts
+
+overwrite: true
+
+# hooks:
+#   afterAllFileWrite:
+#     - prettier --write
+#     - eslint --fix
+
+generates:
+  ./src/app/(website)/insights/_graphql/generated/schemas.ts:
+    plugins:
+      - typescript
+
+  ./src/app/(website)/insights/_graphql/generated/operations.ts:
+    preset: import-types
+    presetConfig:
+      typesPath: ./schemas
+    plugins:
+      - typescript-operations
+
+  ./src/app/(website)/insights/_graphql/generated/hooks.ts:
+    preset: import-types
+    presetConfig:
+      typesPath: ./operations
+    plugins:
+      - typescript-react-query
+    config:
+      fetcher: '../api#createFetcher'
+      exposeQueryKeys: true
+      errorType: GraphqlApiError
+      # addSuspenseQuery: true -> only supported in react-query@5
+      reactQueryVersion: 5

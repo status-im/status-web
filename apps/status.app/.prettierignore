@@ -1,0 +1,16 @@
+node_modules/
+
+.contentlayer/
+.husky
+.next/
+.vercel/
+
+coverage/
+public/
+
+*.md
+*.mdx
+
+.data/
+
+pnpm-lock.yaml

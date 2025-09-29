@@ -1,0 +1,53 @@
+---
+id: 1393
+revision: '0'
+language: en
+title: Connect to dApps using Status Connector
+author: jorge-campo, Fabiomorais87
+roles:
+---
+
+[Status Connector](./install-the-status-connector-extension.mdx) is a browser extension that you can use to securely connect to decentralized applications (dApps) directly from your desktop browser.
+
+<Admonition type="info">
+  Status Connector is an extension developed and provided by Status that works with the Status desktop Wallet. To install it, check out [Install the Status Connector extension](./install-the-status-connector-extension.mdx).
+</Admonition>
+
+Decentralized applications (also known as dApps, Dapps or web3 apps) are applications running on a [blockchain network](../getting-started/about-the-ethereum-blockchain.mdx), such as Ethereum. Using dApps and your Status Wallet, you can interact with decentralized finance (DeFi), games, social networks and other blockchain-based services.
+
+<Admonition type="tip">
+  In addition to the Status Connector, you can connect to dApps using [WalletConnect](./connect-to-dapps-using-walletconnect.mdx) on Status desktop and mobile.
+</Admonition>
+
+## What to expect
+
+- You can configure the Status Connector extension as the default wallet for your browser. To do this, click the extension and enable the <ContextTag>Set as default wallet</ContextTag> option.
+- If you want to connect to a dApp using other wallets in your browser, disable the Status Connector extension as the default wallet.
+- To administer your connected dApps, use the Status desktop app. For more information, check out [Administer your Wallet dApp connections](./administer-your-wallet-dapp-connections.mdx).
+
+## Connect to dApps using Status Connector
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. Using your computer, open Status desktop if it's not already open.
+    1. Open the web browser and navigate to the dApp you wish to connect to.
+    1. If Status Connector is the default wallet for your browser, the extension automatically requests to connect to your Status desktop app. If this is not the case, click <ContextTag>Connect</ContextTag>, <ContextTag>Connect Wallet</ContextTag> or any similar option on the dApp website and choose <ContextTag>Status</ContextTag>.
+    1. In the Status desktop dApp connection dialog, choose the Status Wallet account you wish to <ContextTag>Connect with</ContextTag> and click <ContextTag>Connect</ContextTag>.
+    1. If the connection is successful, you can see <ContextTag>Connected</ContextTag> in the dApp connection dialog. Click <ContextTag>Close</ContextTag> and continue on the dApp website.
+    1. Refresh the dApp page if necessary.
+  </TabsContent>
+</Tabs>

@@ -1,0 +1,122 @@
+---
+id: 815
+revision: '1'
+language: en
+title: Choose the Wallet account address you share with a community
+author: jorge-campo, cheny0
+roles:
+---
+
+When you join a community, you share one or more Status Wallet accounts. This action confirms you have the tokens for token-gated communities or channels and lets you participate in airdrops or fulfill a [management role](./about-the-management-roles-in-status-communities.mdx).
+
+No matter which [type of community](./about-the-different-types-of-status-communities.mdx) you want to join, you must share at least one Wallet account address (or address, for short) with the [community's control node](./about-the-control-node-in-status-communities.mdx). If you have only one address, it's automatically selected when joining the community and you can't unselect this address.
+
+<Admonition type="info">
+  The community's control node stores the addresses you share. These addresses are never revealed to the community Owner or members. However, the community Owner might discover the address and address owner indirectly.
+</Admonition>
+
+## What to expect
+
+- You choose the Wallet account addresses you share with a community when you join it. You can [change these addresses](./change-the-wallet-account-you-share-with-a-community.mdx) at any time.
+- Consider creating [dedicated addresses](../wallet/create-wallet-accounts.mdx) for specific communities to protect your security and privacy.
+- To maintain access to a token-gated community or channel, you must share the address with the required tokens at all times.
+- When you [join a community](./join-a-community-on-status-web.mdx), the Status app selects the role (member, Admin or TokenMaster) with more privileges based on the tokens you own. You can change your role by sharing a different address.
+- Your [community role](./permissions-by-role-in-status-communities.mdx) might change depending on the tokens you hold on the shared address. For example, if you share an address with the [TokenMaster token](./understand-the-owner-and-tokenmaster-tokens.mdx), you become a TokenMaster. If you unselect an address with administration tokens, you lose your [management role](./about-the-management-roles-in-status-communities.mdx) and become a member.
+
+## Choose the Wallet account address you share with a community
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+    1. Long-press the community where you want to change the wallet address and select <ContextTag icon={<WalletIcon />}>Edit shared addresses</ContextTag>.
+    1. To update the addresses for your community permissions, select <ContextTag>You're a Member/Admin/TokenMaster</ContextTag>. To update the address you share for airdrops, select <ContextTag>For airdrops</ContextTag>.
+    1. In the <ContextTag>Addresses for permissions</ContextTag> screen, check or uncheck the boxes next to the addresses. Optionally, turn on the <ContextTag>Share all current and future addresses</ContextTag> toggle.
+    1. In the <ContextTag>Address for airdrop</ContextTag> screen, choose your preferred airdrop address. You can only choose one address for airdrops.
+    1. You can preview your change in the Status app before you confirm it. To confirm your change, tap the available option:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Result</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Confirm changes</TableCell>
+                 <TableCell>Updates the address you share, potentially downgrading your role (for example, from TokenMaster to member) or restricting access to token-gated channels</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell><FaceIdIcon /> Slide to update addresses</TableCell>
+                 <TableCell>Updates the address you share, potentially upgrading your role (for example, from member to admin) or granting access to token-gated channels</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Leave community</TableCell>
+                 <TableCell>You stop sharing the necessary tokens for community membership and leave the community</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Cancel request</TableCell>
+                 <TableCell>Cancels the join request you previously sent to the community owner</TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+    1. If necessary, confirm the changes with your password, biometrics or Keycard, or tap <ContextTag icon={<ArrowLeftIcon />}>Back</ContextTag> to discard them.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, right-click the community you want to update and select <ContextTag icon={<WalletDesktopIcon />}>Edit shared addresses</ContextTag>.
+    1. To update your shared address, check or uncheck the boxes next to the address. To change the address you share for airdrops, click the <ContextTag icon={<AirdropDesktopIcon />}>Airdrop</ContextTag> symbol. You can only choose one address for airdrops.
+    1. Under <ContextTag>Permission</ContextTag>, you can preview your changes before you confirm them. If you gain new permissions, they appear in green colour. If you lose permissions, they appear in red colour.
+    1. To confirm your change, click the available option:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Result</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Save changes</TableCell>
+                 <TableCell>Updates your airdrop address</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell><PasswordDesktopIcon /> Save changes</TableCell>
+                 <TableCell>Updates the address you share, potentially altering your role (for example, from member to admin) or access to token-gated channels</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Save changes and leave community</TableCell>
+                 <TableCell>You stop sharing the necessary tokens for community membership and leave the community</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Save changes and update my permissions</TableCell>
+                 <TableCell>You stop sharing the necessary tokens for channel membership and lose access to one or more channels</TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+    1. If necessary, confirm with your choice with your password, biometrics or Keycard.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Your changes take effect immediately.
+</Admonition>

@@ -1,0 +1,173 @@
+---
+id: 442
+revision: '3'
+language: en
+title: Import an account into your Status Wallet
+author: jorge-campo, cheny0, Fabiomorais87, earakel
+roles: 
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+To use your existing wallet account with Status Wallet, import either your recovery phrase or private key. Both options are valid, but they work differently:
+
+- A recovery phrase restores all the accounts created with that phrase.
+- A private key (a secret code represented by a string of characters) only restores a specific account.
+
+<Admonition type="info">
+  Currently, you can only import accounts with a private key using the Status desktop app.
+</Admonition>
+
+## What to expect
+
+- A recovery phrase may contain more than one wallet account. When you import a recovery phrase into Status Wallet, the app imports all the accounts but displays only the first one.
+- To display all the accounts from your recovery phrase, you need to add them individually. For more information, check out [Add missing accounts after importing a wallet](./add-missing-accounts-after-importing-a-wallet.mdx).
+- You can import a maximum of five recovery phrases or private keys in your Status Wallet.
+
+## Import an account using your recovery phrase
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    ### Step 1: Import your recovery phrase
+
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Swipe left across the accounts until you reach the end, then tap <ContextTag icon={<AddIcon />}>Add</ContextTag> > <ContextTag icon={<AddIcon />}>Add account</ContextTag>.
+    1. Locate the <ContextTag>Origin</ContextTag> area under the account name and color options and click <ContextTag>Edit</ContextTag> next to the current origin.
+    1. On the Key pairs screen, tap <ContextTag icon={<AddIcon />}>Add</ContextTag> in the top right corner and select <ContextTag icon={<SeedIcon />}>Import using a recovery phrase</ContextTag>.
+    1. On the next screen, type your recovery phrase words separated by spaces. Make sure you type the words in the correct order.
+    1. Tap <ContextTag>Continue</ContextTag>.
+    1. Enter a name for your new master key (key pair) and tap <ContextTag>Continue</ContextTag> to customize your account in the next step.
+
+    <Admonition type="tip">
+      Your key name helps you identify this private key and it's independent of the account name.
+    </Admonition>
+
+    ### Step 2: Customize your account
+
+    1. Choose an account emoji, a name and a highlight colour for this account. Only you can see this information.
+    1. Slide the <ContextTag icon={<ArrowRightIcon />}>Arrow</ContextTag> to the right in the <ContextTag icon={<TouchIdBigIcon />}>Slide to create account</ContextTag> area at the bottom of the screen.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Import your recovery phrase
+
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Click <ContextTag icon={<AddDesktopIcon />}>Add</ContextTag>.
+    1. Locate the <ContextTag>Origin</ContextTag> area under the account name and color options and click on this area.
+    1. Select <ContextTag icon={<ObjectsDesktopIcon />}>Add new master key</ContextTag> from the dropdown menu.
+    1. On the <ContextTag>Add a new account</ContextTag> screen, select <ContextTag icon={<SeedPhraseDesktopIcon />}>Import using recovery phrase</ContextTag>.
+    1. On the next screen, select the number of words in your recovery phrase and type your recovery phrase words. Make sure you type the words in the correct order. Click <ContextTag>Continue</ContextTag>.
+    1. Enter a name for your new master key and click <ContextTag>Continue</ContextTag> to customize your account in the next step.
+
+    <Admonition type="tip">
+      Your key name helps you identify this private key and it's independent of the account name.
+    </Admonition>
+
+    ### Step 2: Customize your account
+
+    1. Choose an account emoji, a name and a highlight colour for this account. Only you can see this information.
+    1. Click <ContextTag icon={<PasswordDesktopIcon />}>Add account</ContextTag>.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Status Wallet only shows the first account from your recovery phrase. If you have multiple accounts under the same recovery phrase, you must add them individually. For more information, check out [Add missing accounts after importing a wallet](./add-missing-accounts-after-importing-a-wallet.mdx).
+</Admonition>
+
+## Import an account using your private key
+
+You can only import your private key using Status desktop.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Import your private key
+
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Click <ContextTag icon={<AddDesktopIcon />}>Add</ContextTag>.
+    1. Locate the <ContextTag>Origin</ContextTag> area under the account name and color options and click on this area.
+    1. Select <ContextTag icon={<ObjectsDesktopIcon />}>Add new master key</ContextTag> from the dropdown menu.
+    1. On the <ContextTag>Add a new account</ContextTag> screen, select <ContextTag icon={<ObjectsDesktopIcon />}>Import private key</ContextTag>.
+    1. On the next screen, enter or <ContextTag>Paste</ContextTag> your private key. Add a <ContextTag>Key name</ContextTag>. Your key name helps you identify this private key and it's independent of the account name.
+    1. Click <ContextTag>Continue</ContextTag> to customize your account in the next step.
+
+    ### Step 2: Customize your account
+
+    1. Choose an account emoji, a name and a highlight colour for this account. Only you can see this information.
+    1. Click <ContextTag icon={<PasswordDesktopIcon />}>Add account</ContextTag>.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+  </TabsContent>
+</Tabs>
+
+## Import an account using the private key from your Keycard
+
+Keycard is a hardware wallet you can use with your Status app for extra security. For more details, check out [Keycard: your quick start guide](../keycard/keycard-your-quick-start-guide.mdx).
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Import your private key
+
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Click <ContextTag icon={<AddDesktopIcon />}>Add</ContextTag>.
+    1. Locate the <ContextTag>Origin</ContextTag> area under the account name and color options and click on this area.
+    1. Select <ContextTag icon={<ObjectsDesktopIcon />}>Add new master key</ContextTag> from the dropdown menu.
+    1. On the <ContextTag>Add a new account</ContextTag> screen, select  <ContextTag>Continue in Keycard settings</ContextTag>.
+    1. In Settings, click  <ContextTag>Import from Keycard to Status Desktop</ContextTag>.
+    1. Plug in your Keycard reader, and insert your Keycard. Enter your Keycard PIN and click  <ContextTag>Next</ContextTag>.
+
+    ### Step 2: Customize your account
+
+    1. Click <ContextTag>Name account</ContextTag> (or  <ContextTag>Name accounts</ContextTag> in case you have multiple accounts on this Keycard).
+    1. Choose a name, an account emoji and a highlight colour for your account (or accounts). Only you can see this information.
+    1. Once you're done, click  <ContextTag>Finalise import</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="caution">
+  Never share your private key with anyone. Whoever has your private key can access and manage your crypto. Status will never ask you for your key, and anyone who does is trying to steal your profile and wallet funds.
+</Admonition>

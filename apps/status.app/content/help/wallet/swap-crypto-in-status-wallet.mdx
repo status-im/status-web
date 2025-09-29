@@ -1,0 +1,87 @@
+---
+id: 1026
+revision: '1'
+language: en
+title: Swap crypto in Status Wallet
+author: cheny0, Fabiomorais87, jorge-campo
+roles: 
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only swap on the Status desktop app.
+</Admonition>
+
+By swapping, you exchange one asset for another, often for investment purposes, to obtain specific tokens or to access a community with particular token requirements. For example, you can swap ETH for [SNT](./about-the-status-snt-token.mdx) to join a Status Community that [requires you to hold](../communities/understand-token-requirements-in-communities.mdx) SNT.
+
+<Admonition type="tip">
+  If you want to move your asset to another blockchain network, see [Bridge crypto in Status Wallet](./bridge-crypto-in-status-wallet.mdx) instead. If you are unsure about the option to use, see [Choose between bridging and swapping assets](./bridge-and-swap-scenarios.mdx).
+</Admonition>
+
+## What to expect
+
+- In Status Wallet, you can swap ERC-20 assets on Ethereum Mainnet, Arbitrum and Optimism blockchains.
+- You can only swap assets (virtual coins), not collectibles (NFTs).
+- You can set the maximum slippage to accept when swapping. If the slippage is set too low, the transaction may fail.
+- You need to pay a swap fee, which is automatically deducted from the amount you're swapping. You pay the fee to the blockchain that hosts your assets and the swap service, not Status. For more details, check out [About swap and bridge fees](./about-swap-and-bridge-fees.mdx).
+
+<Admonition type="info">
+  Slippage is the difference between the expected price of the swap and the actual price at which it is executed. It defines how much price movement you accept before the swap fails.
+</Admonition>
+
+## Swap crypto in Status Wallet
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    ### Step 1: Choose the destination
+
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Select the Wallet account that contains the crypto to swap and tap <ContextTag icon={<ReorderIcon />}>Swap</ContextTag>.
+    1. Under <ContextTag>Select asset to pay</ContextTag>, choose the asset you want to swap.
+    1. Enter the amount to swap and select the asset to swap to.
+    1. Optionally, under <ContextTag>Max slippage</ContextTag>, tap <ContextTag icon={<EditIcon />}>Edit</ContextTag> to change the maximum slippage. The default slippage is 0.5%.
+    1. To swap an asset other than ETH, you must approve the smart contract first. Tap <ContextTag>Approve \[token name]</ContextTag> and, on the <ContextTag>Approve spending cap</ContextTag> screen, <ContextTag icon={<FaceIdIcon />}>Slide to sign </ContextTag>.
+
+    ### Step 2: Complete the swap
+
+    1. Tap <ContextTag>Review Swap</ContextTag>.
+    1. Double-check the details, then <ContextTag icon={<FaceIdIcon />}>Slide to swap</ContextTag> and authenticate using your password or Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Set your swap options
+
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag> and then select the account that contains the crypto to swap.
+    1. Under the content area, click <ContextTag icon={<SwapDesktopIcon />}>Swap</ContextTag>.
+    1. In the <ContextTag>Swap</ContextTag> window, choose the network to use for the swap, the asset and the amount to swap in the <ContextTag>Pay</ContextTag> section. Choose the asset to swap to in the <ContextTag>Receive</ContextTag> section.
+    1. Optionally, click <ContextTag icon={<EditDesktopIcon />}>Edit</ContextTag> to change the maximum slippage. The default slippage is 0.5%.
+    1. To swap an asset other than ETH, you must approve the smart contract first. Click <ContextTag>Approve \[token name]</ContextTag> and, on the <ContextTag>Approve spending cap</ContextTag> screen, click <ContextTag>Sign</ContextTag>.
+
+    ### Step 2: Complete the swap
+
+    1. Click <ContextTag>Swap</ContextTag>.
+    1. Double-check the details and click <ContextTag>Sign</ContextTag>.
+    1. Enter your password or plug in your Keycard and click <ContextTag>Authenticate</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Your swapped tokens may take a few minutes to appear in Status Wallet.
+</Admonition>

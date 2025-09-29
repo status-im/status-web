@@ -1,0 +1,107 @@
+---
+id: 416
+revision: '2'
+language: en
+title: Kick or ban someone from your community
+author: jorge-campo, Fabiomorais87
+roles:
+  - Owner
+  - TokenMaster
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Community [Owners and TokenMasters](./about-the-management-roles-in-status-communities.mdx) can kick out or ban members who violate the community guidelines or behave in a toxic manner.
+
+In the case of minor offences or annoyances, consider kicking the offender. For major violations of the community guidelines or repeated offences, you can use the ban option.
+
+<Admonition type="info">
+  Banning or kicking a user on your Status contact list doesn't remove the contact. If you want to remove the user from your contact list, [remove the contact](../profile/remove-a-contact-from-status.mdx) or [block the user](../profile/block-or-unblock-someone-in-status.mdx).
+</Admonition>
+
+## Kick and ban differences
+
+The difference between a kick and a ban in Status Communities is that a kick is temporary, while a ban remains unless you [unban the user](#unban-someone).
+
+When you kick a user from a community, they can request to join it again. When you ban the user, they can't search or see the community again, and can't request to join either. Community owners and TokenMasters can [reverse the ban](#unban-someone) by inviting the user to the community again.
+
+## What to expect
+
+- A user who has been kicked out of a community can ask to join the community again.
+- A user who has been banned can't see or search for the community. A banned user can only rejoin the community when you [unban them](#unban-someone) and they request to join again.
+- Only community Owners can kick or ban TokenMasters.
+- Members receive a notification when they are kicked out but not when they are banned.
+- Users can see they have been kicked out or banned when they try to reaccess the community.
+
+<Admonition type="info">
+  The community disappears from the user's navigation sidebar when they are kicked or banned.
+</Admonition>
+
+## Kick or ban someone
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo.
+    1. Click <ContextTag icon={<GroupChatDesktopIcon />}>Members</ContextTag> to show all the community users.
+    1. Hover over the user and select <ContextTag>Kick</ContextTag> or <ContextTag>Ban</ContextTag>, depending on the action you wish to perform.
+    1. Click <ContextTag>Kick</ContextTag> or <ContextTag>Ban</ContextTag> again to confirm your action.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  If you kick or ban a member while the [control node](./about-the-control-node-in-status-communities.mdx) is offline, the action cannot be processed until the node is back online. The <ContextTag>Kick</ContextTag> or <ContextTag>Ban</ContextTag> option is disabled during this time, showing that the action is pending.
+</Admonition>
+
+## Kick or ban a TokenMaster
+
+In Status Communities, a user becomes a TokenMaster by [owning the TokenMaster token](./understand-the-owner-and-tokenmaster-tokens.mdx).
+
+As a community Owner, you can kick or ban a TokenMaster from your community by destructing their TokenMaster remotely. For more information, see [Destroy the TokenMaster token remotely](./revoke-the-tokenmaster-role-from-someone.mdx#destroy-the-tokenmaster-token-remotely).
+
+## Unban someone
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo.
+    1. Click <ContextTag icon={<GroupChatDesktopIcon />}>Members</ContextTag>.
+    1. Click the <ContextTag>Banned</ContextTag> tab to show all the banned users.
+    1. Hover over the user and select <ContextTag>Unban</ContextTag>.
+    1. Ask the user to join or request to join the community again.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  The user receives a notification of your unban action.
+</Admonition>

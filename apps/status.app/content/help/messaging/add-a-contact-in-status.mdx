@@ -1,0 +1,58 @@
+---
+id: 307
+revision: '2'
+language: en
+title: Add a contact in Status
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+To start a chat with someone, you first need to add them to your contacts.
+
+After sending a contact request, wait for the other person to accept it. Once they do that, both you and them can send each other [direct messages](send-direct-messages-to-your-contacts.mdx) and invite each other to [group chats](add-members-to-a-group-chat.mdx).
+
+If the person you want to chat with doesn't have a Status profile yet, you can [invite them to join Status](../getting-started/invite-friends-to-status.mdx).
+
+To add someone to your contact list, you need their [chat key](../profile/understand-your-status-keys-and-recovery-phrase.mdx), which represents their public Status profile. They can simply send it to you, so ask them to [share their Status profile with you](../profile/share-your-status-profile.mdx). You can also use their QR code to add them to contacts.
+
+<Admonition type="tip">
+  To add someone you know from a group chat or community, simply select their name and then select <ContextTag icon={<ProfileIcon />}>Send contact request</ContextTag>.
+</Admonition>
+
+## Add a contact
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. Ask the person you want to add to your contacts to share their profile.
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap <ContextTag icon={<AddSmallIcon />}>Add</ContextTag> and select <ContextTag icon={<AddUserIcon />}>Add a contact</ContextTag>.
+    1. Paste the link to that person's profile into the field or tap <ContextTag><ScanIcon /></ContextTag> to scan the QR code.
+    1. Tap <ContextTag icon={<ProfileIcon />}>View profile</ContextTag> > <ContextTag icon={<ProfileIcon />}>Send contact request</ContextTag>.
+    1. In your introductory message, briefly explain who you are and why you want to add them to your contacts. This is the first message your contact sees from you. Once you're done, tap <ContextTag>Send contact request</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. Ask the person you want to add to your contacts to share their profile.
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag>.
+    1. Click <ContextTag icon={<Edit1DesktopIcon />}>Start chat</ContextTag>.
+    1. Paste the link to that person's profile into the <ContextTag>To</ContextTag> field.
+    1. In your introductory message, briefly explain who you are and why you want to add them to your contacts. This is the first message your contact sees from you. Once you're done, click <ContextTag>Send contact request</ContextTag>.
+  </TabsContent>
+</Tabs>

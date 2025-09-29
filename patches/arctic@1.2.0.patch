@@ -1,0 +1,49 @@
+diff --git a/dist/providers/keycloak.d.ts b/dist/providers/keycloak.d.ts
+index 5ff561e78b0d75d3026cf3967af3a0ac6c39a948..4dcfee417442ffb57596e82c89ee25f1f911c1b6 100644
+--- a/dist/providers/keycloak.d.ts
++++ b/dist/providers/keycloak.d.ts
+@@ -3,11 +3,11 @@ export declare class Keycloak implements OAuth2ProviderWithPKCE {
+     private client;
+     private realmURL;
+     private clientSecret;
+-    constructor(realmURL: string, clientId: string, clientSecret: string, redirectURI: string);
+-    createAuthorizationURL(state: string, codeVerifier: string, options?: {
++    constructor(realmURL: string, clientId: string, clientSecret: string, redirectURI?: string);
++    createAuthorizationURL(state: string, codeVerifier: string, redirectURI: string, options?: {
+         scopes?: string[];
+     }): Promise<URL>;
+-    validateAuthorizationCode(code: string, codeVerifier: string): Promise<KeycloakTokens>;
++    validateAuthorizationCode(code: string, codeVerifier: string, redirectURI: string): Promise<KeycloakTokens>;
+     refreshAccessToken(refreshToken: string): Promise<KeycloakTokens>;
+ }
+ export interface KeycloakTokens {
+diff --git a/dist/providers/keycloak.js b/dist/providers/keycloak.js
+index 39a2295267c27a9543220bf8b346a224a6b4f40b..ce9087e7ccde35a418af6d1df9fb8b8c84db98d7 100644
+--- a/dist/providers/keycloak.js
++++ b/dist/providers/keycloak.js
+@@ -13,19 +13,21 @@ export class Keycloak {
+         });
+         this.clientSecret = clientSecret;
+     }
+-    async createAuthorizationURL(state, codeVerifier, options) {
++    async createAuthorizationURL(state, codeVerifier, redirectURI, options) {
+         const scopes = options?.scopes ?? [];
+         return await this.client.createAuthorizationURL({
+             state,
+             codeVerifier,
+-            scopes: [...scopes, "openid"]
++            scopes: [...scopes, "openid"],
++            redirectURI
+         });
+     }
+-    async validateAuthorizationCode(code, codeVerifier) {
++    async validateAuthorizationCode(code, codeVerifier, redirectURI) {
+         const result = await this.client.validateAuthorizationCode(code, {
+             codeVerifier,
+             authenticateWith: "request_body",
+-            credentials: this.clientSecret
++            credentials: this.clientSecret,
++            redirectURI
+         });
+         const tokens = {
+             accessToken: result.access_token,

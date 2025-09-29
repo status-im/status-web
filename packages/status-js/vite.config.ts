@@ -31,19 +31,10 @@ export default defineConfig(({ mode }) => {
           './src/utils/encode-url-data.ts',
           './src/utils/create-url.ts',
         ],
-        fileName: (format, entryName) => {
-          if (!['es'].includes(format)) {
-            throw new Error(`Unexpected format: ${format}`)
-          }
-
-          switch (format) {
-            case 'es':
-              return `${entryName}.js`
-            default:
-              throw new Error(`Undefined format: ${format}`)
-          }
+        formats: ['es', 'cjs'],
+        fileName: format => {
+          return `[name].${format}.js`
         },
-        formats: ['es'],
       },
       sourcemap: true,
       emptyOutDir: mode === 'production',

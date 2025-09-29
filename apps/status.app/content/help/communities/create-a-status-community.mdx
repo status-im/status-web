@@ -1,0 +1,150 @@
+---
+id: 373
+revision: '1'
+language: en
+title: Create a Status Community
+author: jorge-campo, cheny0
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only create and administer communities using the Status desktop app.
+</Admonition>
+
+A [Status Community](./how-to-use-status-communities-your-quick-start-guide.mdx) is a place where you can connect and communicate with people who share your interests. Communities are ideal for those with a passion or hobby, study groups, gaming communities, professional network groups or creators looking to generate income from their content without intermediaries.
+
+As a community Owner, you can create open communities or [restrict community access using tokens](./set-up-a-token-gated-community.mdx), control [membership approval](./set-up-your-community-join-requests.mdx) and organize discussion groups in [channels](./create-a-channel.mdx). Owners have complete control over their community and are responsible for maintaining its rules.
+
+<Admonition type="info">
+  When you create a community, it's a [private community](./about-the-different-types-of-status-communities.mdx) by default, but SNT holders can [vote to make it public](./vote-to-make-a-community-private-or-public.mdx).
+</Admonition>
+
+## Create a community
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<CommunitiesDesktopIcon />}>Communities</ContextTag>.
+    1. On top of the content area, click <ContextTag>Create community</ContextTag>.
+    1. Add a <ContextTag>name</ContextTag>, <ContextTag>short description</ContextTag>, <ContextTag>logo</ContextTag> and <ContextTag>banner</ContextTag> for your community.
+    1. Optionally, add a <ContextTag>colour</ContextTag> palette and <ContextTag>tags</ContextTag>. You can [customize these settings](#customize-your-community) at any time.
+    1. Configure [additional community settings](#configure-additional-settings) and [describe your community and rules](#describe-your-community-and-rules)
+    1. Click <ContextTag>Create community</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Configure additional settings
+
+You can configure these community settings:
+
+<Table>
+  <TableHead>
+    <TableHeader>Setting</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>
+        Community history service (CHS)
+      </TableCell>
+
+      <TableCell>
+        Status Communities store up to 30 days of chat history by default. When the [CHS option](./about-the-community-history-service.mdx) is checked, community members can see messages older than 30 days.
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>
+        Request to join required
+      </TableCell>
+
+      <TableCell>
+        Community Owners must manually approve each join request if this setting is checked. This option applies to [open and token-gated](./how-to-use-status-communities-your-quick-start-guide.mdx) communities.
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>
+        Any member can pin a message
+      </TableCell>
+
+      <TableCell>
+        Any community member can [pin messages](../messaging/pin-a-message.mdx) when this setting is checked. If the setting is unchecked, only the [management roles](./about-the-management-roles-in-status-communities.mdx) can pin messages.
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="info">
+  The Community history service uses the [BitTorrent peer-to-peer network](https://en.wikipedia.org/wiki/BitTorrent)<ExternalIcon /> to store and retrieve community messages older than 30 days. Status uses a decentralized network and does not store this information.
+</Admonition>
+
+## Describe your community and rules
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. In the <ContextTag>Community introduction and rules</ContextTag>, introduce your community to new members and describe the community guidelines.
+    1. In the <ContextTag>Leaving community message</ContextTag>, write the message sent to members leaving your community.
+    1. Click <ContextTag>Create community</ContextTag> if you haven't already.
+  </TabsContent>
+</Tabs>
+
+## Customize your community
+
+After you create a community, you can customize its settings at any time.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo.
+    1. Click <ContextTag icon={<ShowDesktopIcon />}>Overview</ContextTag>.
+    1. Expand the window and click <ContextTag>Edit Community</ContextTag>.
+    1. Edit your community look-and-feel, [additional settings](#configure-additional-settings) or [community rules](#describe-your-community-and-rules).
+    1. Click <ContextTag>Save changes</ContextTag>.
+  </TabsContent>
+</Tabs>

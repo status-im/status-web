@@ -1,0 +1,69 @@
+---
+id: 1196
+revision: '0'
+language: en
+title: Guide to dApp interactions in Status Wallet
+author: jorge-campo, Fabiomorais87
+roles:
+---
+
+When you [connect to a dApp](./connect-to-dapps-using-walletconnect.mdx) using your Status Wallet, you're granting the dApp permission to view your wallet public information, such as account address and balance.
+
+<Admonition type="info">
+  The dApp can't access your assets unless you approve its proposed transactions.
+</Admonition>
+
+After connecting, the dApp may request your authorization to perform certain actions, such as signing transactions, sending assets or other types of authorization. For example, when you connect to [Uniswap](https://app.uniswap.org/)<ExternalIcon /> (a popular decentralized exchange), you may need to sign a transaction to swap your tokens.
+
+<Admonition type="caution">
+  Connecting to malicious or low-reputation dApps puts your crypto assets at risk. Only connect to trusted dApps and always review the details of any transaction or message before approving.
+</Admonition>
+
+## The basics
+
+- When you connect to a dApp, you grant it permission to view your wallet address, assets and balances. You can revoke this permission at any time by [disconnecting from the dApp](./administer-your-wallet-dapp-connections.mdx).
+- While you interact with a dApp, it sends requests to your Status Wallet that you can approve or reject. The [type of request](#dapp-interactions) depends on the dApp you connect to and the actions you perform.
+- dApps can only access your assets if you approve the transactions it proposes. This is a security measure to prevent unauthorized access to your funds.
+- Not all dApps transactions require moving funds. For more information, check out [Understand fund transfers in dApp transactions](./understand-fund-transfers-in-dapp-transactions.mdx).
+
+## dApp interactions
+
+Here is an overview of the interactions you can expect between your Status Wallet and dApps:
+
+<Table>
+  <TableHead>
+    <TableHeader>Transaction</TableHeader>
+    <TableHeader>Description</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Sign</TableCell>
+      <TableCell>You approve a specific action for the dApp, such as transferring crypto to someone else</TableCell>
+      <TableCell>If you purchase a collectible in [OpenSea](https://opensea.io/)<ExternalIcon />, the platform prompts you to sign the purchase transaction</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Send</TableCell>
+      <TableCell>You transfer crypto assets from your Status Wallet to another wallet address or smart contract</TableCell>
+      <TableCell>On Uniswap, you must send the specified amount of one token to a smart contract in exchange for another token</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Typed data</TableCell>
+      <TableCell>You agree to a digital contract before performing an action in the dApp</TableCell>
+      <TableCell>When listing a collectible on OpenSea, you sign a typed data transaction with details like the price and selling fees</TableCell>
+    </TableRow>
+  </TableContent>
+
+  <TableRow>
+    <TableCell>Personal sign</TableCell>
+    <TableCell>You prove wallet ownership, without committing any action</TableCell>
+    <TableCell>When you connect your wallet to [Aave](https://app.aave.com/)<ExternalIcon />, you might need to approve a personal sign transaction to confirm you're the owner of the wallet</TableCell>
+  </TableRow>
+</Table>
+
+<Admonition type="tip">
+  A smart contract is computer code that runs on the blockchain and automatically executes transactions when certain conditions are met. dApps provide the user interface to interact with the smart contracts running in the background.
+</Admonition>

@@ -1,0 +1,118 @@
+---
+id: 124
+revision: '0'
+language: en
+title: Configure community and channel notifications
+author: Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+You can customize the messages and mentions notifications you receive in communities and channels. By doing so, you only receive the notifications relevant to you.
+
+The notifications you customize for a community apply to all its channels. For example, suppose you decide to [mute all community notifications](#mute-community-notifications). In that case, you won't receive any notification from any channel, even if someone mentions you. To customize notifications for specific channels, check out Set up and customize notification exceptions.
+
+This article describes common examples.
+
+- [Mute community notifications.](#mute-community-notifications)
+- [Mute community notifications except global mentions.](#mute-community-notifications-except-global-mentions)
+- [Set the same notification setting for all messages in a community.](#set-the-same-notification-setting-for-all-messages-in-a-community)
+
+## Mute community notifications
+
+You can turn off your notifications for specific communities for a designated period. When you mute all notifications for a community, a <ContextTag icon={<NotificationMuteDesktopIcon />}>Mute</ContextTag> symbol appears next to the community name.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+    1. Tap the community you want to mute and, in the top navigation, tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag>.
+    1. Tap <ContextTag icon={<ActivityCenterIcon />}>Mute community</ContextTag>.
+    1. Choose for how long you'd like to mute your notifications.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag>.
+    1. From the settings sidebar, click <ContextTag icon={<CommunitiesDesktopIcon />}>Communities</ContextTag>.
+    1. Choose the community you want to mute and click <ContextTag icon={<NotificationDesktopIcon />}>Mute</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  To turn notifications back on, open the muted community, then tap <OptionsIcon /> More options > <MutedIcon /> Unmute community.
+</Admonition>
+
+## Mute community notifications except global mentions
+
+If you want to avoid missing general announcements, you can selectively mute some notifications, except global mentions (such as <ContextTag>@everyone</ContextTag>). This example explains how to turn off all notifications for a specific community while maintaining global mentions. This can be helpful in very active communities where you're only interested in global mentions, such as <ContextTag>@everyone</ContextTag>.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+    1. Tap the community you want to mute and, in the top navigation, tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag>.
+    1. Tap <ContextTag icon={<NotificationsIcon />}>Notification settings</ContextTag>.
+    1. Select <ContextTag>Personal mentions</ContextTag> > <ContextTag>Notifications off</ContextTag>.
+    1. Select <ContextTag>All other messages</ContextTag> > <ContextTag>Notifications off</ContextTag>.
+    1. Make sure <ContextTag>Global mentions</ContextTag> is set to <ContextTag>On</ContextTag>. If it is not, select <ContextTag>Global mentions</ContextTag> > <ContextTag>Notifications on</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag>.
+    1. From the <ContextTag>Settings sidebar</ContextTag>, click <ContextTag icon={<NotificationDesktopIcon />}>Notifications and Sounds</ContextTag>.
+    1. Scroll down to the <ContextTag>Exceptions</ContextTag> area and click <ContextTag icon={<AddDesktopIcon />}>Add</ContextTag> next to the group chat you want to mute.
+    1. Select <ContextTag>Personal mentions</ContextTag> > <ContextTag>Turn off</ContextTag>.
+    1. Select <ContextTag>All other messages</ContextTag> > <ContextTag>Turn off</ContextTag>.
+    1. On the same pop-up menu, verify <ContextTag>Global mentions</ContextTag> is set to <ContextTag>Send alerts</ContextTag>.
+       If it is not, then select <ContextTag>Global mentions</ContextTag> > <ContextTag>Send Alerts</ContextTag>.
+    1. Click <ContextTag>Done</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Set the same notification setting for all messages in a community
+
+Currently, you can only set the same settings for all community message types using Status mobile.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+    1. Tap the community you want to customize and, in the top navigation, tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag>.
+    1. Tap <ContextTag icon={<NotificationsIcon />}>Notification settings</ContextTag>.
+    1. Turn on <ContextTag>Same settings for all messages types</ContextTag>.
+    1. Choose your preferred notification option.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  You can customize notifications for channels in a community using exceptions. For more details, check out [Set up and customize notification exceptions](./set-up-and-customize-notification-exceptions.mdx).
+</Admonition>

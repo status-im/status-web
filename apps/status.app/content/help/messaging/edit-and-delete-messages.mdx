@@ -1,0 +1,132 @@
+---
+id: 283
+revision: '3'
+language: en
+title: Edit and delete messages
+author: earakel, cheny0, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+Instead of a centralized server, Status uses a [peer-to-peer network](./about-status-messages.mdx) to store and send messages. When you edit or delete a message, the peer-to-peer network distributes your changes to other users running the Status app.
+
+In some cases, users may still see your original messages even after you edit or delete them. For example, some users can:
+
+- Run an out-of-date version of Status that isn't fully compatible with the peer-to-peer network features.
+- Run a custom build of Status that doesn't support message editing and deletion by choice.
+- Disconnect from the network before receiving your latest changes.
+
+<Admonition type="info">
+  Be careful with what you share, especially in communities and group chats. Once published to the network, what you shared may still remain on someone's device even if you choose to delete it later.
+</Admonition>
+
+## What to expect
+
+- You can edit and delete the messages you sent whenever you want: there is no time limit.
+- Once you edit a text message, a permanent note appears next to your message saying it was edited.
+- If you want to edit a message that contains images or audio, [delete](./edit-and-delete-messages.mdx#delete-your-messages) and re-send it.
+- Once you delete a message, a permanent note appears where your message was saying it was deleted.
+- Community Owners and group chat administrators can [delete someone else's messages](#delete-a-message-in-your-community-or-group-chat). If you don't hold these roles, you can only delete your own messages.
+- In Status mobile, you can hide a message you don't want to see with <ContextTag>Delete for me</ContextTag>. Everyone else can still see this message. To delete your message for everyone, select <ContextTag>Delete for everyone</ContextTag>.
+
+<Admonition type="info">
+  Your Status messages are temporarily saved in the [Waku](https://waku.org)<ExternalIcon /> peer-to-peer network and stored permanently on your device. They are not saved on the blockchain or transmitted via [Ethereum](../getting-started/about-the-ethereum-blockchain.mdx).
+</Admonition>
+
+## Edit your messages
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag> or <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag> where you want to edit a message.
+    1. In the chat or community channel, long press your message.
+    1. Select <ContextTag icon={<EditIcon />}>Edit message</ContextTag>.
+    1. Make your changes.
+    1. Tap <ContextTag icon={<SendIcon />}>Send</ContextTag> to publish your changes.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag> or the community where you want to edit a message.
+    1. In the chat or community channel, hover over your message and click <ContextTag icon={<Edit2DesktopIcon />}>Edit</ContextTag>.
+    1. Make your changes and click <ContextTag>Save</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Delete your messages
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag> or <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag> where you want to delete a message.
+    1. In the chat or community channel, long press the message.
+    1. Select <ContextTag icon={<DeleteIcon />}>Delete for me</ContextTag> or <ContextTag icon={<DeleteIcon />}>Delete for everyone</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag> or the community where you want to delete a message.
+    1. In the chat or community channel, hover over your message and click <ContextTag icon={<DeleteDesktopIcon />}>Delete</ContextTag>.
+    1. Click <ContextTag>Confirm</ContextTag> to delete the message. You can also check the <ContextTag>Do not show this again</ContextTag> box to delete messages without confirmation in the future.
+  </TabsContent>
+</Tabs>
+
+## Delete a message in your community or group chat
+
+A [community Owner](../communities/about-the-management-roles-in-status-communities.mdx) or group chat administrator can delete any message in their community or group chat.
+
+If you are a community member, Admin, TokenMaster or a group chat member, you can't delete someone else's message. You can only delete your own messages. If you don't want to see a message, you can [block the sender](../profile/block-or-unblock-someone-in-status.mdx).
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag> or <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag> where you want to delete a message.
+    1. In the chat or community channel, long press the message.
+    1. Select <ContextTag icon={<DeleteIcon />}>Delete for me</ContextTag> or <ContextTag icon={<DeleteIcon />}>Delete for everyone</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag> or the community where you want to delete a message.
+    1. In the chat or community channel, hover over the message and click <ContextTag icon={<DeleteDesktopIcon />}>Delete</ContextTag>.
+  </TabsContent>
+</Tabs>

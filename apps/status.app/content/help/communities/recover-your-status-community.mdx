@@ -1,0 +1,40 @@
+---
+id: 483
+revision: '1'
+language: en
+title: Recover your Status Community
+author: jorge-campo, cheny0
+roles:
+- Owner
+---
+
+<Admonition type="beta" status="Experimental">
+  Recovering your Status Community is an experimental feature.
+</Admonition>
+
+As a community Owner, you can recover your Status Community if the [control node](./about-the-control-node-in-status-communities.mdx) becomes inaccessible due to data corruption, operating system error or hardware problem.
+
+<Admonition type="info">
+  If you still have access to the Status desktop installation in the damaged control node, try to [transfer you community's ownership](./transfer-your-community-s-ownership.mdx) first.
+</Admonition>
+
+To recover your Status Community, you must meet all these conditions:
+
+- Know the [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx) (your mnemonic phrase) for the community's Owner profile.
+- Recover the control node within 30 days of the last time your community connected to the internet.
+- Have the [Owner token](./understand-the-owner-and-tokenmaster-tokens.mdx) in your Status Wallet.
+
+If you don't meet all these conditions, you lose control of your Status Community irretrievably. In this scenario, the community remains active with [minimal functionality](./common-issues-when-the-community-s-control-node-is-offline.mdx), but without Owner and control node (orphaned community).
+
+<Admonition type="info">
+  Even if your community has a [TokenMaster or Admins](./about-the-management-roles-in-status-communities.mdx), they can't recover the community because there is no control node, and these roles don't have permission to transfer it.
+</Admonition>
+
+## Steps to recover your Status Community
+
+<AwaitedList>
+  - Using a new computer, install Status desktop using the recovery phrase of the community Owner profile.
+  - Verify the [Owner token](./understand-the-owner-and-tokenmaster-tokens.mdx) is in your Status Wallet.
+  - [Finalise the control node replacement](./replace-your-community-s-control-node.mdx#step-2-finalise-control-node-replacement) in the new Status desktop installation.
+  - After transferring, check that your community is fully functional and connected to the internet.
+</AwaitedList>

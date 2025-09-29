@@ -1,0 +1,49 @@
+---
+id: 227
+revision: '2'
+language: en
+title: Add members to a group chat
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+Any member of a group chat can add their [Status contacts](../messaging/add-a-contact-in-status.mdx) to the chat. A group chat can have 20 members at most, including the creator. Because of Status' privacy-focused design, new joiners can't see the previous message history.
+
+If you want to create a new chat, see [Create a group chat](./create-a-group-chat.mdx) instead.
+
+## Add members
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap the group chat you want to add new members to.
+    1. From the top navigation, tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag>.
+    1. Tap <ContextTag icon={<AddUserIcon />}>Add members</ContextTag>. If you're the group chat owner, this reads <ContextTag icon={<AddUserIcon />}>Add / remove members</ContextTag> for you.
+    1. Check the boxes next to the contacts you want to invite. Once you're done, tap <ContextTag>Confirm changes</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag>.
+    1. Click the group chat you want to add new members to.
+    1. From the navigation bar at the top, click <ContextTag icon={<MoreDesktopIcon />}>More options</ContextTag>.
+    1. Click <ContextTag icon={<GroupChatDesktopIcon />}>Add / remove from group</ContextTag>.
+    1. Type the Status username of the contact you want to invite and select them. Once you're done, click <ContextTag>Confirm</ContextTag>.
+  </TabsContent>
+</Tabs>
