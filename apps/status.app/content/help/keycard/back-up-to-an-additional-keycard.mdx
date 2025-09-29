@@ -1,0 +1,81 @@
+---
+id: 1382
+revision: '1'
+language: en
+title: Back up to an additional Keycard
+author: cheny0, jorge-campo, Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+When you back up your Keycard to another Keycard, you create a copy of the original Keycard. You can use the backup Keycard if you lose the original one, or to keep the two in different locations for convenience and safety.
+
+<Admonition type="tip">
+  If you lose your Keycard and don't have a backup Keycard, you can still recover your Status profile and Wallet funds as long as you have the recovery phrase. For more details, check out [If you lose your Keycard](./if-you-lose-your-keycard.mdx).
+</Admonition>
+
+## What to expect
+
+- You can create unlimited backups of your Keycard.
+- The original and backup Keycards have the same functionalities. You can use them interchangeably.
+- The original Keycard and the backup Keycards are shown under the same name in <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>. You can click the name to view the details of each Keycard.
+- You can [rename the Keycards](./rename-your-keycard.mdx) to distinguish them from each other.
+
+## Back up to an additional Keycard
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    ### Step 1: Connect your original Keycard
+
+    1. Open the Status app and log in to your profile.
+    1. Tap your profile picture > <ContextTag icon={<KeycardIcon />}>Keycard</ContextTag>.
+    1. Tap <ContextTag>Manage Keycard</ContextTag>.
+    1. Tap <ContextTag>Ready to scan</ContextTag>.
+    1. Tap and hold your original Keycard near the top (iPhone) or back (Android) of your phone to scan your Keycard.
+
+    ### Step 2: Create a backup Keycard
+
+    1. Tap <ContextTag icon={<KeycardIcon />}>Backup Keycard</ContextTag>. Then tap <ContextTag>Continue</ContextTag>.
+    1. Tap <ContextTag>Ready to scan</ContextTag>.
+    1. Tap and hold your backup Keycard near the top (iPhone) or back (Android) of your phone to scan your Keycard.
+    1. Enter and confirm the PIN for the backup Keycard. You can use any PIN but using the same one as the original can simplify management.
+    1. Enter the recovery phrase for the profile or Wallet accounts on your Keycard and tap <ContextTag>Continue</ContextTag>.
+    1. Tap <ContextTag>Scan Keycard</ContextTag>. Then tap and hold your backup Keycard against the back of your phone again.
+    1. Tap <ContextTag>Done</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Connect your original Keycard
+
+    1. Open the Status app and plug in your original Keycard using a card reader. Allow the connection if you see a security alert from your computer.
+    1. In Status, from the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>.
+    1. Select the Keycard to back up.
+    1. Click <ContextTag>Create a backup copy of this Keycard</ContextTag>.
+    1. Enter your Keycard PIN and click <ContextTag>Next</ContextTag>.
+    1. Review the Status profile or Wallet accounts on your Keycard and click <ContextTag>Next</ContextTag>.
+
+    ### Step 2: Create a backup Keycard
+
+    1. Remove the original Keycard from the card reader and unplug the card reader from your computer. Then click <ContextTag>Next</ContextTag>.
+    1. Plug the card reader again into your computer and insert the backup Keycard into the card reader.
+    1. Confirm the Status profile or Wallet accounts on your Keycard and click <ContextTag>Next</ContextTag>.
+    1. Enter the recovery phrase for the profile or Wallet accounts.
+    1. Click <ContextTag>Done</ContextTag>.
+  </TabsContent>
+</Tabs>

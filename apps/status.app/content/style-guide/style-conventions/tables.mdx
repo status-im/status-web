@@ -1,0 +1,135 @@
+---
+language: en
+title: Tables
+---
+
+Tables provide a simple way to summarize information. Use a table instead of [bullet lists](./bullet-lists.mdx) when you need to describe the elements on the list.
+
+- Bullet list example (incorrect):
+
+  There are four types of items:
+
+  - **Item 1** <br />Item 1 description
+  - **Item 2** <br />Item 2 description
+  - **Item 3** <br />Item 3 description
+  - **Item 4** <br />Item 4 description
+
+- Table format example (**correct**):
+
+  There are four types of items:
+
+<Table>
+  <TableHead>
+    <TableHeader>Item</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Item 1</TableCell>
+      <TableCell>Item 1 description</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Item 2</TableCell>
+      <TableCell>Item 2 description</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Item 3</TableCell>
+      <TableCell>Item 3 description</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Item 4</TableCell>
+      <TableCell>Item 4 description</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+You can also use tables to compare the available options across different elements. For example, you may want to compare the available features in the Status apps (desktop, mobile, and web) using a table like this one:
+
+<Table>
+  <TableHead>
+    <TableHeader>Features</TableHeader>
+    <TableHeader>Desktop</TableHeader>
+    <TableHeader>Mobile</TableHeader>
+    <TableHeader>Web</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Feature A</TableCell>
+
+      <TableCell>
+        <ContextTag icon={<CheckIcon />} />
+      </TableCell>
+
+      <TableCell>
+        <ContextTag icon={<CheckIcon />} />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Feature B</TableCell>
+
+      <TableCell>
+        <ContextTag icon={<CheckIcon />} />
+      </TableCell>
+
+      <TableCell />
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Feature C</TableCell>
+
+      <TableCell />
+
+      <TableCell>
+        <ContextTag icon={<CheckIcon />} />
+      </TableCell>
+
+      <TableCell>
+        <ContextTag icon={<CheckIcon />} />
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+Remember that users may access the information using a smartphone. Therefore, if your table contains a lot of information or more than three or four columns, consider organizing it differently or using more than one table.
+
+<Admonition type="tip">
+  You can use links in tables except if the table is part of a procedure step.
+</Admonition>
+
+Use the following guidelines when using periods in a table for punctuation:
+
+- Don't use a period when the text in table cells are not complete sentences or one complete sentence.
+- Use periods when there are multiple sentences in one table cell.
+
+## Table formatting
+
+<pre>
+  <Table>
+    <TableHead>
+      <TableHeader>Item</TableHeader>
+      <TableHeader>Description</TableHeader>
+    </TableHead>
+
+    <TableContent>
+      <TableRow>
+        <TableCell>Item 1</TableCell>
+        <TableCell>Item 1 description</TableCell>
+      </TableRow>
+
+      <TableRow>
+        <TableCell>Item 2</TableCell>
+        <TableCell>Item 2 description</TableCell>
+      </TableRow>
+    </TableContent>
+  </Table>
+</pre>

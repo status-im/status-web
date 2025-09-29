@@ -1,0 +1,92 @@
+---
+id: 1132
+revision: '0'
+language: en
+title: Stop using Keycard for your Wallet account or profile
+author: cheny0, Fabiomorais87, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only disconnect your Keycard with your Status profile or Wallet accounts using the Status desktop app.
+</Admonition>
+
+To stop using Keycard for a Wallet account or Status profile, you copy your [private key](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-status-keys) from the Keycard to your device. After that, you use your password or biometrics to perform security-sensitive actions such as signing in to your profile or signing a transaction. The Keycard is disconnected from your profile and is no longer shown in <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>.
+
+## What to expect
+
+- Disconnecting your Keycard only affects how you authenticate when using your Wallet account or profile.
+- When you copy the private key of a Wallet account to your device, the Status app links the Wallet account with the Status profile you are using. You then access and use the Wallet account with the profile's password or biometrics.
+- When you copy the private key of a Status profile to your device, see [If your Keycard holds your profile](#if-your-keycard-holds-your-profile).
+- You can keep the Keycard as a backup or [factory reset this Keycard](./factory-reset-your-keycard.mdx) and use it for another Wallet account or Status profile.
+
+<Admonition type="caution">
+  Status doesn't know your password and cannot reset it for you. If you forget your password and don't have your recovery phrase, you lose access to your Status profile and Wallet accounts. Always keep your password safe.
+</Admonition>
+
+## If your Keycard holds your profile
+
+To copy your profile private key, you must enter your [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-recovery-phrase). Next, the Status app prompts you to create a password and optionally enable biometrics for future access. If you use the profile across multiple devices, you need to repeat this process on each device.
+
+If your devices are not [in sync](../profile/sync-your-profile-across-devices.mdx), you still need to use your Keycard to sign in to the profile before you can set up a password. To simplify your login process, [use the same password for the same profile on all devices](../profile/about-changing-your-status-password.mdx).
+
+## Stop using Keycard
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection request if you see a security alert from your computer.
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag> and select the Wallet account or profile under <ContextTag>Your Keycard(s)</ContextTag>.
+    1. Click <ContextTag>Stop using Keycard for this key pair</ContextTag>.
+    1. Confirm the Wallet account or profile and click <ContextTag>Next</ContextTag>.
+    1. Enter the recovery phrase for the Wallet account or profile and click <ContextTag>Next</ContextTag>.
+    1. Proceed with the option that works best for you, and move on to transfer the private key.
+
+           <Table>
+             <TableHead>
+               <TableHeader>Your Keycard holds</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Wallet account</TableCell>
+
+                 <TableCell>
+                   1. Authenticate with your Status profile's biometrics or password to link the Wallet account to your profile.
+                   1. Click <ContextTag>Factory reset this Keycard</ContextTag> or <ContextTag>Done</ContextTag> to finish. You can also perform a factory reset later.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Status profile</TableCell>
+
+                 <TableCell>
+                   1. Enter a password for your profile and repeat it to confirm.
+                   1. Click <ContextTag>Create password</ContextTag>.
+                   1. Enter your password to confirm it again and click <ContextTag>Finalize Status Password Creation</ContextTag>.
+                   1. Click <ContextTag>Yes, use Touch ID</ContextTag> and confirm with your Keycard to enable your device's biometrics (fingerprint) for filling in your password. Alternatively, click <ContextTag>I prefer to use my password</ContextTag>.
+                   1. Click <ContextTag>Restart app & sign in using your new password</ContextTag>.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+  </TabsContent>
+</Tabs>

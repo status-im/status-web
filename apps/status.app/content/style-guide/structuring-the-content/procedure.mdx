@@ -1,0 +1,391 @@
+---
+language: en
+title: Procedure / help me do
+---
+
+A procedure describes how to complete an action using a series of steps. Procedures help users use and discover the Status app and are the core of our user documentation. These are the main characteristics of procedures in Status user documentation:
+
+- Two parts make up the procedure. The first part includes reference (non-procedural) <br />, while the second part includes procedural <br />.
+- Non-procedural descriptions must be short and to the point. If the functionality requires further discussion, use an additional concept article.
+- A procedure explains a single task and, if necessary, additional subtasks. If the task is complex, consider splitting it into different procedures or group them into a guide.
+- For tasks that may cause an error (for example, changing a password, choosing a user name, or sending crypto), consider adding a *Common questions* section at the end of the article, with answers to the most common issues. If the list of possible errors for a specific task is too long, make an FAQ (concept) article instead.
+- If the user can complete the procedure in one go, use a numbered list to describe the steps. Use checkboxes if the user can't complete the procedure in one go or the steps don't follow a particular order.
+
+### Procedure structure
+
+<Table>
+  <TableHead>
+    <TableHeader>Element</TableHeader>
+    <TableHeader>#</TableHeader>
+    <TableHeader>Style</TableHeader>
+    <TableHeader>Required</TableHeader>
+    <TableHeader>Notes</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Title</TableCell>
+      <TableCell>1</TableCell>
+      <TableCell>H1</TableCell>
+      <TableCell>**Yes**</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Screenshot</TableCell>
+      <TableCell>2</TableCell>
+      <TableCell>PNG / GIF</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>The screenshot shows the area in the app where the discussion or action takes place.<br />Reference-only topics (tables) don't require this screenshot.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Admonition</TableCell>
+      <TableCell>3</TableCell>
+      <TableCell>Admonition</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>This admonition is exclusively to alert readers about the feature availability.<br />For example, a feature is only available to specific application roles or available after completing another task.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Introduction</TableCell>
+      <TableCell>4</TableCell>
+      <TableCell>Paragraph</TableCell>
+      <TableCell>**Yes**</TableCell>
+      <TableCell>A brief discussion of the functionality and its relationship with other functionalities. <br /> >The introduction answers the question 'what is this about?' </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Example</TableCell>
+      <TableCell>5</TableCell>
+      <TableCell>Paragraph</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>An example explaining the functionality in context.<br />The example answers the question 'why does this matter?'</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>'What to expect' title</TableCell>
+      <TableCell>6</TableCell>
+      <TableCell>H2</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>H2 title reads 'What to expect'.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>'What to expect' list</TableCell>
+      <TableCell>7</TableCell>
+      <TableCell>Unordered list</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>List the expected results after completing the task.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Admonition</TableCell>
+      <TableCell>8</TableCell>
+      <TableCell>Admonition</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>General notes, tips, or warnings about the task.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Task title</TableCell>
+      <TableCell>9</TableCell>
+      <TableCell>H2</TableCell>
+      <TableCell>**Yes**</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Task introduction</TableCell>
+      <TableCell>10</TableCell>
+      <TableCell>Paragraph</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>A short sentence describing prerequisites or things to consider before the task.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Task steps</TableCell>
+      <TableCell>11</TableCell>
+      <TableCell>Ordered list</TableCell>
+      <TableCell>**Yes**</TableCell>
+      <TableCell>Procedural description.<br />Tasks and subtasks answer "how to use it."</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Task screenshot</TableCell>
+      <TableCell>12</TableCell>
+      <TableCell>PNG / GIF</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>The screenshot goes after the last step in the procedure</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Task admonition</TableCell>
+      <TableCell>13</TableCell>
+      <TableCell>Admonition</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Info, tips, or warnings about the task</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Subtask title</TableCell>
+      <TableCell>14</TableCell>
+      <TableCell>H3</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Subtask steps (*)</TableCell>
+      <TableCell>15</TableCell>
+      <TableCell>Ordered list</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Procedural description. Tasks and subtasks answer "how to use it."</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Subtask screenshot</TableCell>
+      <TableCell>16</TableCell>
+      <TableCell>PNG / GIF</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell></TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Subtask admonition</TableCell>
+      <TableCell>17</TableCell>
+      <TableCell>Admonition</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Info, tips, or warnings about the task</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Common questions title</TableCell>
+      <TableCell>18</TableCell>
+      <TableCell>H2</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>H2 title reads "Common questions".</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Common questions subtitle</TableCell>
+      <TableCell>19</TableCell>
+      <TableCell>H3</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Common questions subtitle</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Common questions paragraph</TableCell>
+      <TableCell>20</TableCell>
+      <TableCell>Paragraph</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Answers to common questions.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+(*) Subtasks don't include an introduction sentence.
+
+### **Procedure title**
+
+- Focus on the result, not on the task.
+- Start the title with an action verb in the imperative form. Don't use the *-ing* form of the verb.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>Delete a group chat conversation</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Deleting a group chat conversation</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>Add new members to your Community</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Adding new members to your Community</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- A title should contain the name of the action and *how* or *where* the action occurs. Avoid using titles with one or two words.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>Configure your notifications settings</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Notifications</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Notification settings</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>Invite new members to your Community</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Invite new members</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- Be specific on the task's goal and, if possible, avoid empty verbs like *make*, *manage*, or *put*.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>Administer your Status Community tokens</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Manage your Status Community tokens</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>Create an NFT for your Community</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Make an NFT for your Community</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+### **Writing tasks**
+
+- If you introduce the task with a sentence (this is optional; see [Procedure structure](#procedure-structure)), don't repeat the title <br />. For example, if the task title is "Search for a contact using the Status display name," don't introduce the task with "To search for a contact using the Status display name [...]"
+- In the first step, tell the user where to start.
+- Follow the [UI elements guidelines](./style-conventions.md#ui-elements) to describe the user interactions.
+
+<Admonition type="note">
+   For clarity purposes, the user interface elements in these examples don't follow the [UI guidelines](./style-conventions.md#ui-elements).
+</Admonition>
+
+- Use words consistently when describing user actions. For example, if you use *remove* in one step, don't use *clear*, *empty* or another synonym in a different step.
+- Don't describe to users what's happening on the screen, unless the result is unexpected.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>1. Select Change.<br />2. On the Options dialog, uncheck the Automatic box.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>1. Select Change. A new Options dialog opens.<br />2. On this dialog, uncheck the Automatic box.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- Use one step for each user action. It's OK to combine simple actions into a single step.
+- When describing steps across different screens or menu options, use angle brackets (>) to describe the sequence of UI elements.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>1. Tap your profile picture > Privacy and security.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>1. Tap your profile picture and then, tap Privacy and security.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+    If you use angle brackets, follow these guidelines:
+
+    - Put a space before and after each angle bracket.
+    - Don't bold each menu name separately; instead, enclose the entire sequence in a single bold element.
+
+- Limit the procedure to a maximum of six steps. If you need more steps to explain the task, create a subtask (see [Procedure structure](#procedure-structure)).
+- Don't use sublists inside lists; instead, use a new list on a subtask.
+- Use a period at the end of each step (check the [Punctuation](./style-conventions.md#punctuation) section for more <br />).
+- When the action occurs in a specific menu or area in the user interface, write the location before the action.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>From the Status Settings, change your profile picture.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Change your profile picture in the Status Settings.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>In Available tokens, tap Change token.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Tap Change token in the Available tokens menu.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- Write the result of the action first and then the condition for the result.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>You can see the blue badge after you successfully complete mutual authentication.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>After you complete mutual authentication, you can see the blue badge.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>To remove the user from your contact list, tap Block user.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>Tap Block user to remove the user from your contact list.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- Don't use links in procedural steps, except when you need to reference a related subtask in the same article. You can use links in the optional paragraph before the steps.
+- To describe menus or buttons in a particular user interface area, follow the order of the interface itself, going from left to right and from top to bottom. This means that if the user has the option to choose between *save* and *cancel* buttons, and the *save* button appears first, you should describe them in that order.

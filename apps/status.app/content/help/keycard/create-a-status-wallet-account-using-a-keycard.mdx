@@ -1,0 +1,106 @@
+---
+id: 826
+revision: '1'
+language: en
+title: Create a Status Wallet account using a Keycard
+author: cheny0, earakel
+---
+
+<Admonition type="beta" status="Status app is currently in beta">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+When you create a [Status Wallet](../wallet/status-wallet-your-quick-start-guide.mdx) account with a Keycard, you generate and store the account directly on the Keycard instead of your device, ensuring it never connects to the internet.
+
+You can [create multiple Wallet accounts on a new Keycard](#create-a-wallet-account-using-an-empty-keycard), or start with one and [add additional accounts](#add-a-wallet-account-to-a-used-keycard) later. If you don't have a Keycard, you can [order one](https://status.app/keycard)<ExternalIcon />.
+
+## What to expect
+
+- You need a [card reader](./keycard-faq.mdx) to connect a Keycard to your computer.
+- Once you create a Wallet account using a Keycard, you must use the Keycard to confirm transactions for this account.
+- If you want to generate a new [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-recovery-phrase) for the new Wallet account, you need an empty Keycard. If your Keycard is not new, [view the wallet accounts on your Keycard](./view-the-profile-or-wallet-accounts-on-your-keycard.mdx) and [factory reset](./factory-reset-your-keycard.mdx) it when needed.
+- A single Keycard can hold multiple Wallet accounts that use the same recovery phrase.
+
+## Create a Wallet account using an empty Keycard
+
+When creating a Wallet account using an empty Keycard, you generate a new recovery phrase for the account.
+
+### Step 1: Generate keys and a recovery phrase
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection if you see a security alert from your computer.
+    1. From the tab bar, tap <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>, then click <ContextTag>Create a new Keycard account with a new seed phrase</ContextTag>.
+    1. Create a six-digit PIN for your Keycard, and repeat the PIN to confirm. Then click <ContextTag>Next</ContextTag>.
+    1. Click <ContextTag>Reveal seed phrase</ContextTag> when you are sure no one else can see it.
+    1. Carefully write down the 12-word recovery phrase displayed on the screen. The Status app or your Keycard doesn't save this information, and you can't see it again. After you've done, click <ContextTag>Next</ContextTag> to continue.
+    1. Confirm your recovery phrase by entering the words as required. Then click <ContextTag>Next</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+### Step 2: Create a Wallet account
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. Enter a name for your Keycard and click <ContextTag>Next</ContextTag>.
+    1. Name your account, select a colour, and pick an emoji by clicking the default one. To create additional accounts, click <ContextTag>Add another account</ContextTag>. Otherwise, click <ContextTag>Finalise Keycard</ContextTag>.
+    1. Click <ContextTag>Done</ContextTag> to complete.
+  </TabsContent>
+</Tabs>
+
+## Add a Wallet account to a used Keycard
+
+You can create new Wallet accounts as needed on a used Keycard. All Wallet accounts use the same recovery phrase.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection if you see a security alert from your computer.
+    1. From the tab bar, tap <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>, then click <ContextTag>Add new account</ContextTag>.
+    1. Name your account, select a colour, and pick an emoji by clicking the default one.
+    1. Click your profile picture under <ContextTag>Origin</ContextTag> and choose the Keycard to use.
+    1. Click <ContextTag>Add account</ContextTag>.
+    1. Use your Keycard PIN or biometrics to confirm.
+  </TabsContent>
+</Tabs>

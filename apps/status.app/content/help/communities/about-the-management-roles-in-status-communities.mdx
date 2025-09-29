@@ -1,0 +1,85 @@
+---
+id: 689
+revision: '1'
+language: en
+title: About the management roles in Status Communities
+author: jorge-campo, earakel
+---
+
+Three roles collaborate in the Status Community administration and maintenance tasks: Owner, TokenMaster and Admin.
+
+Users who create a community in Status receive the Owner role automatically. Community Owners can designate other users as TokenMasters or Admins.
+
+<Admonition type="info">
+  A community can have just one Owner, but multiple Admins and TokenMasters can exist.
+</Admonition>
+
+As a community Owner, you don't have to appoint TokenMasters and Admins, but they can be helpful if you're managing a large community or event. For example, Admins can help moderate the community and TokenMasters can create tokens and set permissions.
+
+## The basics
+
+- When you create a community, you automatically become the Owner. Owners can perform every action within the community, including [minting and airdropping TokenMaster tokens](./mint-the-owner-and-tokenmaster-tokens.mdx) to other users' wallets.
+- Users with a TokenMaster token in their wallet become TokenMasters when they accept the role. They can [mint new tokens](./mint-tokens-for-your-community.mdx) (except the Owner's token and TokenMaster tokens) and [set permissions](./set-up-your-community-permissions.mdx).
+- Admins have fewer privileges than TokenMasters and the Owner. They can [moderate the community](./kick-or-ban-someone-from-your-community.mdx) and accept or reject [membership requests](./about-community-request-approvals.mdx) but can't create tokens or change permissions.
+  Only community owners can appoint other members as TokenMasters or Admins, while TokenMasters can only appoint Admins. Community members can accept or decline these roles.
+
+## Management roles comparison
+
+You can see the differences between the three management roles below. To learn more about all roles, including those of regular members, check out [Permissions by role in Status Communities](./permissions-by-role-in-status-communities.mdx).
+
+<Table>
+  <TableHead>
+    <TableHeader>Role feature</TableHeader>
+    <TableHeader>Owner</TableHeader>
+    <TableHeader>TokenMaster</TableHeader>
+    <TableHeader>Admin</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Hierarchy level</TableCell>
+      <TableCell>Highest</TableCell>
+      <TableCell>Second-highest</TableCell>
+      <TableCell>Third-highest</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Role count</TableCell>
+      <TableCell>Only one, inherent</TableCell>
+      <TableCell>Multiple, optional</TableCell>
+      <TableCell>Multiple, optional</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Permission scope</TableCell>
+      <TableCell>Full access to all actions</TableCell>
+      <TableCell>All actions, except managing Owner and TokenMaster tokens</TableCell>
+      <TableCell>Limited control, including moderation and membership approval</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Token management</TableCell>
+      <TableCell>Full token control</TableCell>
+      <TableCell>Create, mint, remote-destruct and airdrop all tokens, except the Owner and TokenMaster tokens</TableCell>
+      <TableCell>Not possible</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Member administration</TableCell>
+      <TableCell>Full control over all members</TableCell>
+      <TableCell>Can administer community members, Admin roles and permissions</TableCell>
+      <TableCell>Can administer community members</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Kick or ban members</TableCell>
+      <TableCell>All members, including the TokenMaster</TableCell>
+      <TableCell>Admins and community members</TableCell>
+      <TableCell>Community members</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="tip">
+  Only Owners can [transfer the community's ownership](./transfer-your-community-s-ownership.mdx) and [control node](./about-the-control-node-in-status-communities.mdx) to others.
+</Admonition>

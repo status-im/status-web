@@ -1,0 +1,70 @@
+---
+id: 593
+revision: '0'
+language: en
+title: Burn your community tokens
+author: jorge-campo, Fabiomorais87
+roles:
+  - Owner
+  - TokenMaster
+---
+
+As a community Owner or TokenMaster in Status, you can reduce the supply of community tokens by burning them. You can burn assets (virtual currencies) or collectibles (NFTs) you created in your community.
+
+<Admonition type="tip">
+  Community Owners can burn any community token, while TokenMasters can only burn tokens they have created.
+</Admonition>
+
+Burning a token permanently removes a certain amount of it from circulation. When you burn a token, you send it to an unreachable address where the token can't be retrieved or used again. This process decreases the total supply of that community token, making the remaining tokens more scarce.
+
+<Admonition type="info">
+  The Owner and TokenMaster tokens are non-destructible and you cannot burn them.
+</Admonition>
+
+## What to expect
+
+- Burning tokens is an irreversible blockchain transaction that requires to pay a [network fee (gas fee)](../wallet/understand-network-fees.mdx). Status does not charge any additional fees for this action.
+- After burning a token, the existing holders keep their tokens, but the token's total supply decreases.
+- If you monetize your community tokens, burning them influences their value. Reducing the token supply increases its scarcity and potentially drives demand.
+- Be cautions when burning tokens that you use for [community access](./token-based-access-to-communities-and-channels.mdx) or [special permissions](./set-up-your-community-permissions.mdx). Community members who hold the tokens keep them, but you might limit your options for future use.
+- You can burn a certain amount of tokens or all the remaining tokens. Burning all the remaining tokens is not the same as [destructing the token](./revoke-a-community-token-from-someone.mdx).
+
+<Admonition type="info">
+  When you burn a token's total supply, the token record remains visible in the blockchain. If you [destruct the token](./revoke-a-community-token-from-someone.mdx), the token record and the smart contract (the computer code that defines the token) are removed from the blockchain.
+</Admonition>
+
+<Admonition type="caution">
+  Burning a token permanently removes it from circulation. Tokens may have monetary value, meaning they can be bought, sold or exchanged. Ensure you fully understand the consequences of burning tokens before you proceed.
+</Admonition>
+
+## Burn your community tokens
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag>.
+    1. In the list of tokens, select the asset or collectible you want to burn.
+    1. Click <ContextTag icon={<DeleteDesktopIcon />}>Burn</ContextTag> within the action bar.
+    1. Choose the <ContextTag>Specific amount</ContextTag> of tokens to burn and enter the amount, or choose <ContextTag>All available remaining</ContextTag> to burn all the tokens.
+    1. Select the Wallet account to pay the gas fee and click <ContextTag>Burn tokens</ContextTag>.
+    1. Verify the total cost of your transaction and click <ContextTag>Sign transaction</ContextTag>. <ContextTag>Authenticate</ContextTag> to confirm your action.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Be cautions when burning all the remaining tokens. This makes tokens more scarce, but it limits any future use cases that need more tokens.
+</Admonition>

@@ -1,0 +1,111 @@
+---
+id: 136
+revision: '2'
+language: en
+title: About voting to change the community visibility
+author: cheny0, jorge-campo
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1697187054/Help/Documentation%20Screens/Communities/136/136_Header_Light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+All SNT holders can vote whether to [include, exclude](./vote-to-make-a-community-private-or-public.mdx), or [feature a Status Community](./vote-to-feature-a-status-community.mdx) on the Communities Discover page within the Status app. Only voters decide the outcome of the vote, and Status has no control over the voting results.
+
+Votes happen on the [Community Directory Curation dApp](https://curate.status.app)<ExternalIcon />. This is an independent, decentralized application deployed on the [Optimism network](../wallet/lower-your-fees-with-layer-2-networks.mdx) and is separate from the Status app.
+
+## The basics
+
+- Every SNT holder can participate in all voting steps, not just community members or Status users.
+- Your voting power is determined by how many SNT tokens you stake.
+- Any SNT holder can initiate a vote to [change the community visibility](#voting-to-make-a-community-public-or-private) or [feature a community](#voting-to-feature-a-community).
+- You don't spend or lose control over the SNT tokens when you vote, but you must hold them during the [validation](#about-verifying-a-vote) and [finalization](#about-finalizing-a-vote) periods for your vote to count.
+- You pay a [gas fee](../wallet/understand-network-fees.mdx) in ETH for initiating, validating and finalizing a vote. The amount of gas fee depends on the traffic of the Optimism network.
+
+<Admonition type="info">
+  Status does not charge you any fees for voting.
+</Admonition>
+
+## Voting to make a community public or private
+
+When you create a community, it's a [private community](./about-the-different-types-of-status-communities.mdx) by default, but SNT holders can [vote to make it public](./vote-to-make-a-community-private-or-public.mdx).
+
+During the 14-day voting period, people can vote for or against adding or removing the community in question. Next, there is a seven-day [verification period](#about-verifying-a-vote). Only the initial vote counts if no one verifies the vote within this period.
+
+After the verification period, the vote must be [finalized](#about-finalizing-a-vote) to reach a result. If a vote doesn't pass, the same vote can be initiated again after 30 days.
+
+## Voting to feature a community
+
+SNT holders can [promote their favourite communities by voting](./vote-to-feature-a-status-community.mdx). After each round of votes, up to five communities with the highest number of SNT tokens get a spot in the Featured section in Communities, replacing the previously featured communities.
+
+During the five-day voting period, people can vote for any community in the [Community Directory Curation dApp](https://curate.status.app)<ExternalIcon />. Next, there is a two-day [verification period](#about-verifying-a-vote). If no one verifies the vote within this period, only the first vote of this round is counted.
+
+After the verification period, the vote must be [finalized](#about-finalizing-a-vote) to reach a result.
+
+<Admonition type="info">
+  Once a community leaves the Featured section, you can't vote for it for the next three rounds of vote. The <ContextTag>Feature this community</ContextTag> option next to the name of this community is greyed out and disabled.
+</Admonition>
+
+## Voting process
+
+Whether you're voting to add, remove or feature a community, the process involves the steps in the table below.
+
+<Table>
+  <TableHead>
+    <TableHeader>Voting step</TableHeader>
+    <TableHeader>Who can participate</TableHeader>
+    <TableHeader>Gas fee required</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Connect your wallet</TableCell>
+      <TableCell>Any SNT holder</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Initiate a voting process</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Cast your vote</TableCell>
+      <TableCell>Any SNT holder</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Verify the vote](#about-verifying-a-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Finalize the vote](#about-finalizing-a-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="tip">
+  Voting is a collaborative process. While you are not required to complete all steps, your involvement boosts the vote's integrity.
+</Admonition>
+
+### About verifying a vote
+
+When you verify a vote, everyone's votes are sent to the smart contract of the dApp, which selects the valid votes. A vote is valid only if it includes the voter's signature and the voter has enough SNT to back the vote at the time of verification.
+
+For all valid votes to be counted, it's better if more people verify the vote.
+
+### About finalizing a vote
+
+After the verification period ends, at least one person should finalize the vote. Otherwise, the vote remains pending.
+
+When you finalize an ongoing vote, the smart contract rechecks all valid votes against the SNT balances of voters. Votes from those without sufficient balance are not counted.
+
+Once a vote is finalized, the community is added, removed or featured on the Discover page within the Status app based on the voting result.

@@ -1,0 +1,250 @@
+---
+id: 1329
+revision: '0'
+language: en
+title: 'Privacy With Status Infrastructure and Insights'
+author: status-im
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1731499996/Help/Documentation%20Screens/Marketing/1329/1329_Header.png)
+
+This page is part of our wider communications about Status' commitment to privacy transparency.
+
+For more information, see [Privacy In Status Software](./prioritising-user-privacy-in-status-software.mdx) and [Privacy With Status Third Parties](./privacy-with-status-third-parties.mdx).
+
+At Status Software, privacy is one of our core principles, and the handling of personal data through our first-party infrastructure is a key aspect of ensuring user security. This page provides an overview of the implications associated with the personal data handled by Status' own infrastructure, including nodes and servers directly operated by Status.
+
+We will outline the types of personal data collected, how it is stored and transmitted, and the measures implemented to safeguard this information. This guide offers transparency into how Status Software manages personal data within its own systems, reinforcing our commitment to protecting user privacy.
+
+- [Waku Protocol and Status-Managed Waku Infrastructure](#waku-protocol-and-status-managed-waku-infrastructure)
+- [Waku Telemetry](#waku-telemetry)
+- [The Status Software Proxy Server](#the-status-software-proxy-server)
+
+## Waku Protocol and Status-Managed Waku Infrastructure
+
+**Status Software** uses the Waku protocol to transport a range of message types between devices also hosting Status Software. The Waku protocol has many privacy-preserving qualities, making it a superior choice for privacy-centric messaging applications.
+
+These features include true end-to-end encryption, ensuring that only the intended recipient can read the message. Messages in transport share only the content-topic, while all other metadata remains encrypted and accessible only to the intended recipient. Furthermore, messages in transport contain no sender or recipient identifiers, thus protecting user anonymity.
+
+Waku also employs techniques such as topic masking and selective relay to further hide message origins and destinations, minimising the risk of metadata leakage and making it difficult for external observers to trace communication patterns. This combination of privacy features makes Waku well-suited for secure, decentralised messaging.
+
+To support the wider Waku network Status altruistically hosts a Waku node fleet. The node fleet serves as a foundation-cum-buffer for the wider p2p Waku network and provides stability for Status Software's chat protocol. As part of responsibly managing digital infrastructure Status logs very limited data which is essential for monitoring the fleet's activity, diagnosing issues, and ensuring the overall health of the network.
+
+### Waku Store Nodes
+
+With Waku's many privacy-preserving features, there are some inherent privacy concerns that users should be aware of. One primary concern involves **Waku Store nodes** (previously referred to as mailservers), which store and provide messages for nodes that are offline. While these nodes enable more reliable message delivery for intermittently connected devices, they also have access to certain metadata.
+
+#### What Does Status Software Share With Status and the Waku Network?
+
+Specifically, Store nodes can access a user's IP address when the user connects to retrieve messages. In addition, these nodes are aware of the content-topics that the user is interested in, as users must specify these topics to request stored messages. Although the message content remains encrypted, this exposure of metadata could allow a Store node to correlate a user's IP address with their interests, posing a privacy risk—particularly if the node is malicious or compromised.
+
+- **Your IP address (Logged for 15 days)**. As part of sending a TCP call to a Status-managed Waku Store node, your IP address will be shared with our node.
+- **Your message content-topic (Incidental)**. As the content-topic is the only plain-text element in a Waku message, this information will always be available. Your IP address and your content-topic preferences can be associated.
+
+For details about potential mitigation of privacy concerns, see [Waku Store Nodes](#waku-store-nodes).
+
+### Waku Bootstrap Nodes
+
+**Bootstrap nodes** play an essential role in the Waku network by helping new nodes discover and connect to the broader network. When a node first joins the network, it needs to establish initial connections to begin participating in message relaying, receiving, or broadcasting. Bootstrap nodes serve as the first point of contact, offering a list of peers that the new node can connect to in order to join the decentralised network.
+
+#### What Does Status Software Share With Status?
+
+While bootstrap nodes are crucial for enabling network participation, they also present some privacy considerations. Since a new node must connect to bootstrap nodes directly, the bootstrap node can observe the new node's IP address during the initial handshake.
+
+- **Your IP address (Logged for 15 days)**. As part of sending an TCP call to a Status managed Waku Bootstrap Node, your IP address will be shared with our node.
+
+For details about potential mitigation of privacy concerns, see [Bootstrap Nodes](#bootstrap-nodes).
+
+### Waku Light Push Nodes
+
+**Light Push nodes** are designed to operate with reduced resource requirements, primarily by pushing messages into the network without fully participating in message relaying or receiving.
+What Does Status Software Share With Status and the Waku Network?
+Because Light Push nodes sit on the periphery of the main network, their peers can easily identify their IP addresses and observe the content-topics that Light Push nodes are publishing to. This exposure could allow network observers to infer patterns about the topics being communicated by these nodes, compromising the privacy of users relying on Light Push nodes for message delivery.
+
+- **Your IP address (Incidental)**. As part of sending a TCP call to any Waku node, your IP address will be shared.
+
+For details about potential mitigation of privacy concerns see [All Nodes](#all-nodes).
+
+### Waku Filter Nodes
+
+**Filter nodes** are an essential component of the Waku v2 protocol, enabling more efficient message delivery by allowing nodes to explicitly request only the messages they are interested in, rather than receiving all messages broadcast across the network. This filtering mechanism helps reduce bandwidth and resource usage.
+
+A node can subscribe to specific content-topics, and the Filter node will only forward messages matching those topics. However, this targeted filtering introduces some privacy considerations, as the Filter node becomes aware of the content-topics the requesting node is interested in, along with the node's IP address. While the message content remains encrypted, metadata exposure still occurs, potentially allowing a Filter node to link users to their interests.
+
+### What Does Status Software Share With Status and the Waku Network?
+
+- **Your IP address (Incidental)**. As part of sending calls to any Waku Filter node while using Status Software in Light Push mode your IP address will be shared.
+- **Your message content-topic (Incidental)**. As the content-topic is the only plain-text element in a Waku message this information will always be available. Your IP address and your content-topic preferences can be associated.
+
+For details about potential mitigation of privacy concerns, see [All Nodes](#all-nodes).
+
+### Mitigation of Metadata Leakage
+
+#### Waku Store Nodes
+
+To address privacy concerns with Waku Store nodes, Status is working to enable users to use trusted third-party Store nodes, ideally operated by organisations or individuals that align with their privacy values. This option would help minimise the risk or perception of risk of IP address / content-topic correlation being exploited.
+
+Additionally, Status plans to give users the ability to host their own Store nodes. By doing so, users can have full control over their data, reducing reliance on third parties and the potential exposure of metadata. In both cases, Status is focused on empowering users to make informed decisions about the level of trust in the nodes they interact with, providing greater protection for those prioritising privacy.
+
+In this case, the following personal data will be shared by Status Software to either your own or third-party node(s):
+
+- **Your IP address (Incidental)**. As part of sending a TCP call to any Waku Store node your IP address will be shared.
+- **Your message content-topic (Incidental)**. As the content-topic is the only plain-text element in a Waku message, this information will always be available. Your IP address and your content-topic preferences can be associated.
+
+#### Bootstrap Nodes
+
+To mitigate potential privacy risks, Status is working towards enabling users to host their own Bootstrap nodes or use Bootstrap nodes operated by trusted third parties. This would give users the flexibility to manage how their connection data is handled.
+
+In this case the following personal data will be shared by Status Software to either your own or third-party node(s).
+
+- **Your IP address (Incidental)**. As part of sending an HTTPS call to any Waku Bootstrap Node your IP address will be shared.
+
+#### All Nodes
+
+For some users, exposing their IP address is a concern. These users can employ techniques like VPNs or Tor to obscure their IP addresses when connecting to Store nodes, Bootstrap nodes, and even Filter nodes, This will help to protect their identity and network activity.
+
+### Further Reading
+
+For further information about the level of privacy the Waku protocol provides, please reference the following documents:
+
+- [https://forum.vac.dev/t/on-the-anonymity-of-waku-relay/135](https://forum.vac.dev/t/on-the-anonymity-of-waku-relay/135)<ExternalIcon />
+- [https://rfc.vac.dev/waku/standards/core/11/relay/#security-analysis](https://rfc.vac.dev/waku/standards/core/11/relay/#security-analysis)<ExternalIcon />
+
+## Waku Telemetry
+
+In Status Software, a user can opt-in to enable Waku telemetry. Waku telemetry collects non-personally identifiable information to monitor network performance and reliability. This data includes metrics such as message success rates, peer connections, bandwidth usage, and app version details, all tied to a randomly generated peer ID.
+
+The purpose of collecting this data is to improve Waku's efficiency and stability while maintaining user privacy. Telemetry is kept for a maximum of 30 days, ensuring short-term use of data. While helpful for improving the protocol, it raises concerns about possible metadata exposure, such as the peer ID being used to track patterns.
+
+### Key Metrics Collected
+
+- **Message Success Rates (Logged for 30 days)**: Helps monitor how reliably messages are delivered within the Waku network.
+- **Peer Connections (Logged for 30 days)**: Tracks the number of peers a user is connected to, as well as the type of connection.
+- **Bandwidth Usage (Logged for 30 days)**: Analyses data transfer to optimise network performance, especially for low-bandwidth environments.
+- **Device Operating System (Logged for 30 days)**: To help in troubleshooting and improving compatibility across platforms and devices.
+- **Status Software Version (Logged for 30 days)**: To help in troubleshooting and improving compatibility across versions.
+
+### Random Session Peer ID
+
+Telemetry data is linked to a randomly generated peer ID that changes each time Status Software is started and restarted. This ensures the data is anonymised, as the peer ID is temporary and not associated with any personally identifiable information or specific device. While this safeguards user anonymity, the collection of this telemetry still allows for potential pattern analysis, which could, in theory, reveal certain usage behaviours if aggregated over time.
+
+### Data Retention and Privacy
+
+Data collected through Waku telemetry is stored only for as long as necessary to fulfil its intended purpose, with a maximum retention period of 30 days. After this period, the data is deleted, minimising the risks of long-term metadata retention.
+
+### Privacy Considerations
+
+While Waku telemetry does not collect personal data, it involves metadata that may indirectly reveal usage patterns. Even though the data is non-personally identifiable, it is important to recognise that metadata such as message success rates, peer counts, or bandwidth usage could still reveal behavioural patterns over time. For instance, high message traffic or frequent peer connections might expose behavioural patterns, which could be used to infer a user's activity.
+Furthermore, since telemetry includes network interaction details, despite different random session peer IDs, there's an onerous potential for linking data across multiple sessions if not properly managed.
+
+## The Status Software Proxy Server
+
+The primary purpose of our proxy server is to act as a critical intermediary between users and select service providers, as well as enhancing both the security and performance of our app. By leveraging a proxy server, we can also effectively hide users' IP addresses, thereby helping to safeguard their privacy and aiming to protect them from potential tracking or malicious activities.
+
+Additionally, the proxy server acts as a shield for sensitive access credentials, preventing these from being exposed directly to potential attackers, which could lead to unauthorised access or misuse.
+
+### Masking User IP Addresses
+
+One of the key functions of our proxy server is to mask the IP addresses of users. When a user makes a request through our platform, the proxy server intercepts this request and forwards it to the destination server on behalf of the user.
+
+The destination server only sees the IP address of the proxy server, not the original user's IP. This not only helps to protect user privacy but also to mitigate risks such as targeted cyberattacks, location-based restrictions, or unwanted tracking by third parties.
+
+### Protection of API Keys
+
+Our proxy server also plays a crucial role in securing our API keys. API keys are sensitive credentials that grant access to various backend services and data. By routing all API calls through the proxy server, we ensure these keys are never exposed directly to the client-side or user-facing environment.
+
+The proxy server securely manages the API requests, embedding the necessary keys before forwarding the requests to the appropriate service providers. This approach significantly reduces the risk of API key theft, unauthorised access, and potential abuse.
+
+### Caching of Static and High-Bandwidth Requests
+
+To optimise performance and reduce server load, our proxy server caches static content and high-bandwidth requests. This is achieved via in-memory caching that Status does not permanently store; the caching naturally expires as the memory is garbage collected.
+
+By caching frequently requested resources such as historical price data, latest block data, and historic balance data. The proxy server can deliver these resources directly to users without repeatedly fetching them from the origin server. This caching mechanism not only speeds up the delivery of content but also minimises bandwidth usage, enhancing the overall experience of users. Additionally, it helps in managing traffic spikes, ensuring that our servers remain responsive even under high demand.
+
+### Graceful Rate Limiting
+
+Another important function of our proxy server is to implement graceful rate limiting. To prevent overloading our backend systems and to maintain fair usage across our platform, the proxy server monitors and controls the rate at which requests are forwarded to our servers.
+
+If a user or service exceeds a predefined request limit, the proxy server can throttle the requests, temporarily delay them, or return appropriate error messages. This helps in maintaining the stability and reliability of our services, ensuring that no single user or group of users can negatively impact the performance of our platform.
+
+### What Services Use the Proxy Server and What Do We Have Access To?
+
+The following personal data is processed by the Status Software proxy server.
+
+📈 [**Cryptocompare**](https://www.cryptocompare.com/)<ExternalIcon />
+
+- **Your IP address (Logged for 15 days)**. As part of sending an HTTPS API call, your IP address will be shared with our proxy server.
+- **What tokens you are interested in (Passed-Through)**. As part of the HTTPS API calls we will see what tokens you want price data for.
+
+✍ **[Infura](https://www.infura.io/)<ExternalIcon /> & [Grove](https://www.grove.city/)<ExternalIcon />**
+
+- **Your IP address (Logged for 15 days)**. As part of sending an HTTPS API call your IP address will be shared with our proxy server.
+- **Your full transaction details (Passed-Through)**. This includes values of your transaction, sender and recipient(s) of your transaction, which contracts you interact with, and what functions you call on those contracts.
+- **Your data queries (Passed-Through)**. An example is an ERC-20 token balance call.
+- **Any response from your data query (Passed-Through)**. Example, the balance of the address's ETH and/or tokens.
+- **Your EVM (wallet) address (Passed-Through)**.
+
+#### What Exactly Does the Status Software Proxy Log?
+
+The Status Software proxy server logs certain data as part of its normal activity. Note that Status DOES NOT log the contents of any request or responses handled by the Status Software proxy server.
+
+This logging is essential for monitoring the proxy's activity, diagnosing issues, and ensuring the health of the network. The Status Software proxy logs details such as the client's IP address, the request URL, timestamps, response status codes, and the time taken to serve the request.
+
+However, since these logs contain sensitive metadata, such as IP addresses, Status takes great care to secure them properly to prevent exposure of personal data. This involves restricting access to log files and ensuring logs are rotated and deleted after a set retention period of 15 days.
+
+**Example**: The Status Software proxy access log captures the following information:
+
+- Client IP address
+- Time of request
+- Basic request details
+  - HTTP Method
+  - URL
+- HTTP Status code
+- User-agent string
+
+A typical log entry looks like this:
+
+```plaintext
+192.168.1.1 - - \[05/Sep/2024:12:34:56 +0000] "GET /index.html HTTP/1.1" 200 612 "-" "Mozilla/5.0"
+```
+
+In addition to access logs, the Status Software proxy also maintains error logs, which track issues such as failed connections, timeouts, or server misconfigurations. These logs provide critical insights into why a request might have failed, helping our infrastructure and development teams troubleshoot and resolve problems more effectively.
+
+### Privacy Tradeoffs
+
+When using our proxy server to interact with RPC and cryptocurrency price services, there are important privacy tradeoffs to consider compared to directly calling these services. Routing requests through the proxy server enhances user privacy by masking their IP address and masking transaction data from third-party service providers. This means providers will only see the proxy server's IP address and request information, effectively preventing them from linking these requests to individual users.
+
+This setup is particularly valuable in the context of cryptocurrency transactions, where users prioritise privacy to protect themselves from tracking, profiling, or other forms of data exploitation.
+
+However, while the use of a proxy server shields users' data from external providers, it also introduces a different privacy tradeoff: the proxy server itself now becomes the point of data visibility. This means that the proxy server has access to all the information that would otherwise be visible to the RPC and API services, including the user's IP address, transaction data, and any other details included in the requests.
+
+While this may not be a significant concern to users if they trust that Status Software manages the proxy server with strict privacy policies and robust security measures, it does centralise the visibility of sensitive data in one place. As a result, users must place a high level of trust in Status, as the operator of the proxy server, to handle their data responsibly and securely.
+
+Moreover, the centralisation of data at the proxy server creates a single point of failure from a privacy perspective. If the proxy server is compromised or if the operator's security practices are insufficient, the sensitive information that users sought to protect from external service providers could be exposed or misused. This scenario underscores the importance of implementing strong encryption, access controls, and regular security audits for the proxy server to mitigate the risks associated with this tradeoff.
+
+### Security Audits
+
+Status, as part of the IFT, has a dedicated internal security team that provides regular security audits of Status Software. The results of the security audits inform our feature roadmaps and provide the Status development teams with confidence that Status Software is sufficiently hardened against malicious actors. These audits include the following points of analysis:
+
+- **Penetration Testing**:
+  - Of both gray-box and white-box tests, focusing on:
+    - **Application Layer**:
+      - Detailed assessments of web applications, APIs, and mobile apps to identify and exploit vulnerabilities such as SQL injection, XSS, and authentication flaws.
+    - **Network/Infrastructure**:
+      - Comprehensive testing of network architecture, firewall configurations, and VPNs to detect issues like misconfigurations and potential entry points for attackers.
+    - **Host Build Reviews**:
+      - Evaluations of server configurations, patch management, and hardening practices to ensure they follow security best practices.
+    - **Cloud Security**:
+      - Assessment of cloud environments (e.g. AWS, GCP) for proper configuration, access controls, and compliance with cloud security standards.
+- **Incident Response Planning**:
+  - Development of strategies and procedures to effectively manage and mitigate security incidents.
+
+### Summary and Mitigations
+
+In summary, while using a proxy server offers significant privacy benefits by keeping user data opaque to RPC and cryptocurrency price API services, it also shifts the responsibility for protecting this data to the proxy server operator, in this case Status. Users gain enhanced privacy from external entities but must consider the potential risks of concentrating their sensitive information in a single, albeit trusted, location.
+
+Ultimately, we want users to have the ability to choose to use the Status proxy server or not. As part of this initiative, we are working towards allowing users the ability to target their own EVM RPC endpoint with optional API key management.
+
+See [here](https://github.com/status-im/status-mobile/issues/21062) for details.
+
+This will allow users to make an informed choice and have the ability to weigh the benefits against the mentioned tradeoffs, with careful consideration given to the trustworthiness and security of the proxy server infrastructure.

@@ -1,0 +1,158 @@
+---
+id: 145
+revision: '3'
+language: en
+title: 'How to use Status Communities: your quick start guide'
+author: jorge-campo, cheny0
+roles:
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1693319365/Help/Documentation%20Screens/Getting%20Started/145/145_Header_Light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Status is an app that combines a non-custodial [crypto wallet](../wallet/status-wallet-your-quick-start-guide.mdx), [privacy-first messaging](../messaging/about-status-messages.mdx) and a community platform.
+
+With Status Communities, you can create, join and engage in groups centred around shared interests or topics. You can [create your community](./create-a-status-community.mdx) or [become part of an existing one](./join-a-status-community.mdx).
+
+<Admonition type="info">
+  Status Communities are decentralized and self-sovereign. This means Owners control their communities, not Status. We've built the platform, but control is in your hands. For more information, check out [What is Status](../getting-started/what-is-status.mdx).
+</Admonition>
+
+## Discover Communities
+
+When you open the Status app, the <CommunitiesIcon /> Communities option in the tab bar brings the list of communities where you participate. You can also discover new communities to join in the community directory.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1702481878/Help/Documentation%20Screens/Getting%20Started/145/01%20Communities%20Home/145_2_Screen_Light.png)
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1702481878/Help/Documentation%20Screens/Getting%20Started/145/01%20Communities%20Home/145_3_Screen_Light.png)
+
+<Tabs defaultValue="Create or import communities">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Create or import communities" step={1}>
+      Create or import communities
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Discover" step={2}>
+      Discover
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Tags" step={3}>
+      Tags
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Create or import communities">
+    In the Communities screen, use <ContextTag icon={<AddSmallIcon />}>Add</ContextTag> to [import a community](./import-a-community-someone-shares-with-you.mdx) someone shares with you via a link, QR code or the community public key.
+
+    You can [create your own community](./create-a-status-community.mdx) using the Status desktop app.
+  </TabsContent>
+
+  <TabsContent value="Discover">
+    Use the <ContextTag>Discover</ContextTag> option to search for and join communities by entering the community name.
+    These communities may have token and join requirements set by the community Owner.
+  </TabsContent>
+
+  <TabsContent value="Tags">
+    Use <ContextTag>Tags</ContextTag> to filter and find communities that are relevant to you.
+    These communities may have token and join requirements set by the community Owner.
+  </TabsContent>
+</Tabs>
+
+## Join communities
+
+In Status, community Owners have complete control over how users join their communities and can restrict access [using tokens](examples-of-token-based-access-in-communities-and-channels.mdx).
+
+In token-gated communities, members must own and maintain the required tokens to join and participate in the community. In addition to token requirements, community Owners may require [manual approval to join](./about-community-request-approvals.mdx) their communities.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1693378438/Help/Documentation%20Screens/Getting%20Started/145/02%20Token%20Gated%20Communities/145_2_Screen_Light.png)
+
+<Tabs defaultValue="Token requirements">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Token requirements" step={1}>
+      Token requirements
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Join community" step={2}>
+      Join community
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Token requirements">
+    Token-gated communities require specific tokens and token amounts to join. When you hold the necessary tokens, a <CheckCircleIcon /> green checkmark appears next to the token. Check out [Understand token requirements in communities](./understand-token-requirements-in-communities.mdx) for more information.
+  </TabsContent>
+
+  <TabsContent value="Join community">
+    In token-gated communities, the <ContextTag icon={<UnlockedIcon />}>Join community</ContextTag> option is active only when you meet the token requirements.
+
+    When you join a Status Community, you must [share at least one account address in Status Wallet](./join-a-status-community.mdx#about-sharing-your-wallet-account-address) with the [community's control node](../communities/about-the-control-node-in-status-communities.mdx).
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  When you join a token-gated community, your tokens work as proof of ownership and stay in your Status Wallet. They are never transferred to the community Owner, Status or anyone else.
+</Admonition>
+
+## Participate in channels
+
+Status Communities contain [channels](./channels-your-quick-start-guide.mdx). Think of channels as rooms, each with a unique theme, helping keep discussions focused and organized.
+
+Community Owners can also control [access to channels using tokens](./set-up-a-token-gated-channel.mdx) or other permissions. Some channels might be open to all members, while others can be restricted or read-only.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1693378557/Help/Documentation%20Screens/Getting%20Started/145/03%20Token%20Gated%20Channels/145_3_Screen_Light.png)
+
+<Tabs defaultValue="View only requirements">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="View only requirements" step={1}>
+      View only requirements
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="View and post requirements" step={2}>
+      View and post requirements
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Enter channel" step={3}>
+      Join community
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="View only requirements">
+    Token-gated channels require specific tokens and token amounts to join and read the channel. When you hold the necessary tokens, a <CheckCircleIcon /> green checkmark appears next to the token.
+  </TabsContent>
+
+  <TabsContent value="View and post requirements">
+    Owners can configure different view-only and view and post requirements for channels.
+  </TabsContent>
+
+  <TabsContent value="Enter channel">
+    If you meet some or all of the channel requirements, the <ContextTag icon={<UnlockedIcon />}>Enter channel</ContextTag> option is active and you can participate in the conversation.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  When you join a token-gated community, your tokens work as proof of ownership and stay in your Status Wallet. They are never transferred to the community Owner, Status or someone else.
+</Admonition>
+
+<Admonition type="tip">
+  Use your [notification settings](../profile/configure-community-and-channel-notifications.mdx) to customize the community and channel notifications.
+</Admonition>
+
+## Communities' privacy and security
+
+In a token-gated community, only those possessing the required tokens can access the community content. No outside party (not even Status) can gain access to or view the community exchanges and interactions.
+
+When you participate in a channel, your messages are visible to anyone accessing the same channel. In communities or channels, you don't see [the users you have blocked](../profile/block-or-unblock-someone-in-status.mdx), but a blocked user can still see messages you send in the community.
+
+<Admonition type="info">
+  Your Status profile is visible to anyone in Status, and you can customize [what information others can see](../profile/view-your-profile-as-someone-else.mdx) in your profile.
+</Admonition>
+
+Status messaging uses decentralized peer-to-peer (P2P) technology and strong end-to-end encryption (E2EE) to ensure the privacy and security of your communication. Your communication in channels is encrypted and available only to the channel members.
+
+## Losing access to communities
+
+Only the community Owners regulate access to their communities, not Status. After you join a community, its Owner can [kick you out or ban you](./kick-or-ban-someone-from-your-community.mdx) from the community at their discretion.
+
+You can also lose access to token-gated communities or channels when you no longer hold the [required tokens](./understand-token-requirements-in-communities.mdx).

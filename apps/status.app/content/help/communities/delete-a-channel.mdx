@@ -1,0 +1,51 @@
+---
+id: 453
+revision: '1'
+language: en
+title: Delete a channel
+author: Fabiomorais87, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only delete a channel using Status desktop.
+</Admonition>
+
+Community Owners can delete [channels](./channels-your-quick-start-guide.mdx) within their communities. As a community Owner, when you delete a channel, all messages and files associated with that channel are also deleted.
+
+<Admonition type="info">
+  Once you delete a channel, it can't be retrieved or restored.
+</Admonition>
+
+## What to expect
+
+- You can only delete a channel if you are the community owner.
+- When you delete a channel, it disappears immediately, and all users lose access to its content (messages and files).
+- Community or channel members don't receive a notification for a deleted channel.
+- If you delete a token-gated channel, the [permissions](./set-up-your-channel-permissions.mdx) you configured for the channel are also lost. To recreate the channel, you need to configure its permissions again.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click the community with the channel you want to delete.
+    1. In the <ContextTag>Community</ContextTag> sidebar, right-click the channel.
+    1. Select <ContextTag icon={<DeleteDesktopIcon />}>Delete Channel</ContextTag>.
+    1. In the <ContextTag>Delete</ContextTag> pop-up window, click <ContextTag>Delete</ContextTag>.
+  </TabsContent>
+</Tabs>

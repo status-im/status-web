@@ -1,0 +1,134 @@
+---
+id: 701
+revision: '2'
+language: en
+title: Sign in to your Status profile on a new device
+author: cheny0, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+You can use your Status profile on multiple devices, like your phone and computer.
+
+If you run Status on another device, sign in by [syncing your profile](./sync-your-profile-across-devices.mdx). Otherwise, [use your recovery phrase or Keycard to sign in](#sign-in-using-your-recovery-phrase-or-keycard).
+
+<Admonition type="info">
+  You can sign in to your Status profile on a new device if you have used the profile in the past 30 days. If it's inactive for 30 days, first you have to sign in from the device you created the profile to recover it.
+</Admonition>
+
+## Sign in by syncing
+
+If you already use Status on another device, [sync your profile to sign in](./sync-your-profile-across-devices.mdx#sync-your-profile). By doing so, your profile is up to date on every device, and you can switch between them seamlessly. Without syncing, you are likely to set up the same options more than once and receive multiple notifications for one single message.
+
+<Admonition type="info">
+  Status syncs your password when you sign in by syncing, meaning that you can use your password on the new device. However, once the devices are in sync, if you [change your password](./change-your-status-password.mdx) on one device, you need to manually update it on all devices where you use the same Status profile. For more information, check out [About changing your Status password](./about-changing-your-status-password.mdx).
+</Admonition>
+
+## Sign in using your recovery phrase or Keycard
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. Tap <ContextTag>Log in</ContextTag>.
+    1. Tap <ContextTag>Agree</ContextTag> or <ContextTag>Maybe later</ContextTag>. If you use mobile data, you may see a pop-up window to set up the data syncing connection for your profile. Choose <ContextTag>Mobile and Wi-Fi</ContextTag> or <ContextTag>Wi-Fi only</ContextTag>.
+    1. Proceed with the option that works best for you, and move on to recover your profile.
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Use recovery phrase</TableCell>
+
+                 <TableCell>
+                   1. On the following screen, tap <ContextTag>Use recovery phrase</ContextTag>.
+                   1. Enter the 12, 18 or 24 words in your recovery phrase, separated by a space, and tap <ContextTag>Continue</ContextTag>.
+                   1. Enter your password twice and tap <ContextTag>Confirm password</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Log in with Keycard</TableCell>
+
+                 <TableCell>
+                   1. On the following screen, tap <ContextTag>Log in with Keycard</ContextTag>.
+                   1. Tap <ContextTag>Ready to scan</ContextTag>. Then tap and hold your Keycard near the top (iPhone) or back (Android phones) of your phone.
+                   1. Enter your Keycard PIN.
+                   1. Tap and hold your Keycard near the top (iPhone) or back (Android phones) of your phone again.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    <Admonition type="tip">
+      If the Status app can't recover all your profile information, tap <ContextTag>Try to fetch again</ContextTag>, <ContextTag>Continue anyway</ContextTag> or <ContextTag>Recreate my profile</ContextTag>.
+    </Admonition>
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Confirm your identity
+
+    1. Open the Status app. Your operating system may ask you to set your notification preferences for Status. If you see the <ContextTag>Status notifications</ContextTag> alert, click <ContextTag>Allow</ContextTag>.
+    1. Check the box to accept the Status <ContextTag>Terms of Use and Privacy Policy</ContextTag> and click <ContextTag>Get Started</ContextTag>. You can find and read this information on the Status website.
+    1. On the welcome screen, click <ContextTag>I already use Status</ContextTag>.
+    1. Click <ContextTag>Share usage data</ContextTag> or <ContextTag>Do not share</ContextTag>.
+    1. Click <ContextTag>I don't have other device</ContextTag>.
+    1. Click <ContextTag>Login with Keycard</ContextTag> or <ContextTag>Enter a seed phrase</ContextTag>.
+    1. Proceed with the option that works best for you, and move on to recover your profile.
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Enter a seed phrase</TableCell>
+
+                 <TableCell>
+                   1. Enter the 12, 18 or 24 words in your recovery phrase and click <ContextTag>Restore Status profile</ContextTag>.
+                   1. Enter and confirm your password. Then click <ContextTag>Create password</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Login with Keycard</TableCell>
+
+                 <TableCell>
+                   1. Open the Status app and plug in your Keycard using a card reader. Allow the connection if you see a security alert from your computer.
+                   1. Enter your Keycard PIN.
+                   1. Enable your device's biometrics (fingerprint, face or other method). Alternatively, click <ContextTag>I prefer to use my PIN</ContextTag>.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    ### Step 2: Recover your profile
+
+    1. If your profile recovery completes successfully, click <ContextTag>Continue</ContextTag>.
+    1. If the Status app can't recover all your profile information, tap <ContextTag>Try to fetch missing profile data</ContextTag>, <ContextTag>Continue with missing information</ContextTag> or <ContextTag>Create new profile using the same chat key</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Maintain your device connected to the internet during this process. The Status app tries to fetch your profile information from the [Waku](https://waku.org)<ExternalIcon /> peer-to-peer network, which keeps it for up to 30 days.
+</Admonition>

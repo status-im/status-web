@@ -2,10 +2,11 @@
   "$schema": "https://turbo.build/schema.v2.json",
   "extends": ["//"],
   "globalPassThroughEnv": ["PORT"],
+  "concurrency": "15",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".output/**", "build/**"]
+      "outputs": ["dist/**", ".output/**", "build/**", ".next/**"]
     },
     "dev": {
       "cache": false
@@ -15,6 +16,26 @@
     "test": {},
     "clean": {
       "cache": false
+    },
+    "dev:next": {
+      "persistent": true
+    },
+    "dev:content": {},
+    "watch:content": {},
+    "comment_dev": {
+      "dependsOn": ["^build:content"],
+      "persistent": true
+    },
+    "comment_build:content": {
+      "cache": true,
+      "persistent": true,
+      "inputs": [
+        "content/help/**/*.md",
+        "content/help/**/*.mdx",
+        "content/legal/**/*.md",
+        "content/legal/**/*.mdx"
+      ],
+      "outputs": [".contentlayer/generated/**"]
     }
   },
   "globalEnv": ["GITHUB_TOKEN"],

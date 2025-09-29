@@ -1,0 +1,29 @@
+---
+id: 331
+revision: '1'
+language: en
+title: Common issues when the community's control node is offline
+author: jorge-campo, cheny0
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+When you [create a community](../communities/create-a-status-community.mdx), your computer becomes a [control node](../communities/about-the-control-node-in-status-communities.mdx). As the community Owner, the control node runs automatically in your Status desktop app if you use the same profile and computer where you set up the community.
+
+<Admonition type="info">
+  You can [set up a new control node](../communities/replace-your-community-s-control-node.mdx) if the initial Status desktop fails or becomes inaccessible.
+</Admonition>
+
+If you don't have the Status desktop app running and connected to the internet, your community keeps working, but your members' experience degrades. Here are some of the problems you and your members may find:
+
+- Members can't access messages over one month because the [Community History Service](../communities/about-the-community-history-service.mdx) is not running.
+- [Community join requests](../communities/set-up-your-community-join-requests.mdx) can't be processed and are rejected or ignored.
+- [Banning or kicking out members](../communities/kick-or-ban-someone-from-your-community.mdx) is delayed until the control node is online.
+- Your community can't verify if members in [token-gated channels](../communities/set-up-your-channel-permissions.mdx) still hold the required tokens.
+- Members who could not access a token-gated channel for not [meeting the requirements](../communities/understand-token-requirements-in-channels.mdx) can't join the channel even if they meet them now.
+
+<Admonition type="tip">
+  Keep the Status desktop app working as the [community's control node](../communities/about-the-control-node-in-status-communities.mdx) online daily or at least once every six days.
+</Admonition>

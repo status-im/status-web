@@ -1,0 +1,78 @@
+---
+id: 1385
+revision: '0'
+language: en
+title: Create a replacement for your lost Keycard
+author: cheny0, FabioMorais87, jorge-campo
+roles: 
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only create a replacement for your lost Keycard on the Status desktop app.
+</Admonition>
+
+If you lose your Keycard and don't have a [backup Keycard](./back-up-to-an-additional-keycard.mdx), you can [order a new one](https://status.app/keycard)<ExternalIcon /> and create a replacement for your lost Keycard.
+
+## What to expect
+
+- The replacement Keycard has the same functionalities as your lost Keycard.
+- If you find your lost Keycard, you can use both Keycards to access your Status profile or Wallet accounts.
+- If someone else finds your lost Keycard, they can't access your Status profile or Wallet accounts without your [Keycard PIN](./change-your-keycard-pin.mdx).
+
+## Create a replacement for your Keycard storing a profile
+
+The replacement Keycard stores your Status profile and all Wallet accounts that use the same recovery phrase as your Status profile.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Select your profile
+
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<LogOutDesktopIcon />}>Sign out & Quit</ContextTag>.
+    1. Click  <ContextTag>Sign out & Quit</ContextTag> again to confirm.
+    1. Reopen the Status desktop app.
+    1. Click <ContextTag icon={<ChevronDownDesktopIcon />}>Expand</ContextTag> and select the profile you linked with the lost Keycard.
+    1. Click <ContextTag icon={<ChevronDownDesktopIcon />}>Expand</ContextTag> again and then click <ContextTag icon={<KeycardDesktopIcon />}>Lost Keycard</ContextTag>.
+
+    ### Step 2: Create a replacement
+
+    1. Click <ContextTag>Create replacement Keycard with seed phrase</ContextTag>.
+    1. Plug in the new Keycard using a card reader, and allow the connection request if you see a security alert from your computer.
+    1. Enter the 12, 18 or 24 words in your recovery phrase and click <ContextTag>Next</ContextTag>.
+    1. Enter a six-digit PIN for your Keycard, and repeat the PIN to confirm.
+    1. Click <ContextTag>Start using Status</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Create a replacement for your Keycard storing a different recovery phrase
+
+On Status desktop, you can use a Keycard to store wallet accounts that use a different recovery phrase from your Status profile. For example, you can [import a wallet account from another app onto Keycard](./import-a-wallet-account-from-another-app-onto-keycard-and-use-it-in-status.mdx) or [create a new Status Wallet account](../wallet/create-wallet-accounts.mdx) that uses a different recovery phrase.
+
+If the lost Keycard stores a wallet account that uses a different recovery phrase from your Status profile, you need to add it again to the Status Wallet and the new Keycard. Here are the things to do to continue using the wallet account with Keycard:
+
+<AwaitedList>
+  1. Get a new [Keycard](https://status.app/keycard)<ExternalIcon />.
+  1. [Remove the account from your Status Wallet](../wallet/remove-a-wallet-account-from-your-status-wallet.mdx). Otherwise, you can't add the account onto the new Keycard.
+  1. [Add the account onto the new Keycard and your Status Wallet](./import-a-wallet-account-from-another-app-onto-keycard-and-use-it-in-status.mdx).
+</AwaitedList>
+
+<Admonition type="tip">
+  To view Wallet accounts on your Keycards, go to <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>. To see information about all your Wallet accounts, go to <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>. For more details, check out [Understand your Status Wallet accounts](../wallet/understand-your-status-wallet-accounts-and-keys.mdx).
+</Admonition>

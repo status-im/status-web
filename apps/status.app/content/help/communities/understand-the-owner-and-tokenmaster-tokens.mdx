@@ -1,0 +1,137 @@
+---
+id: 753
+revision: '0'
+language: en
+title: Understand the Owner and TokenMaster tokens
+author: jorge-campo, cheny0, osmaczko
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+To administer your community in Status, you can [mint the Owner and TokenMaster tokens](./mint-the-owner-and-tokenmaster-tokens.mdx). With the Owner token, you have complete control over the community, including [transferring your community's ownership](./transfer-your-community-s-ownership.mdx) or [minting other tokens](./mint-tokens-for-your-community.mdx).
+
+When you [mint the Owner token](./mint-the-owner-and-tokenmaster-tokens.mdx), you also mint the TokenMaster token in the same process. After minting, you can [airdrop the TokenMaster token](./how-to-airdrop-the-tokenmaster-token.mdx) to other community members and share the community administration workload.
+
+<Admonition type="info">
+  Creating a community doesn't create the Owner or TokenMaster tokens automatically.
+</Admonition>
+
+## Why mint the Owner and TokenMaster tokens?
+
+You become the [community owner](./permissions-by-role-in-status-communities.mdx) and your computer becomes the [community's control node](./about-the-control-node-in-status-communities.mdx) when you create a Status Community.
+
+Minting your community Owner and TokenMaster tokens is optional but has significant advantages. With the Owner token, you can:
+
+- Restore your community ownership if you lose access to your computer.
+- Transfer your community ownership to someone else.
+- Mint and airdrop other community tokens.
+- Assign the TokenMaster token and role to someone to help you administer the community.
+
+<Admonition type="caution">
+  If you don't mint the Owner token and your computer becomes unavailable, you lose access to your community forever.
+  In this scenario, the community remains active with [minimal functionality](./common-issues-when-the-community-s-control-node-is-offline.mdx), but without Owner and control node (orphaned community).
+</Admonition>
+
+## Owner and TokenMaster tokens features
+
+The Owner and TokenMaster tokens have different functions and properties. Check out these tables to understand the differences between the two tokens.
+
+<Admonition type="tip">
+  You can identify the Owner token by the <CrownIcon /> crown icon. The TokenMaster token has a <TokenSaleDesktopIcon /> crypto-coins icon.
+</Admonition>
+
+### Community administration features
+
+<Table>
+  <TableHead>
+    <TableHeader>Token feature</TableHeader>
+    <TableHeader>Owner token</TableHeader>
+    <TableHeader>TokenMaster token</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Community ownership</TableCell>
+      <TableCell>Holder is the owner</TableCell>
+      <TableCell>Holder is not the owner</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Transferable</TableCell>
+      <TableCell>Yes, to change community ownership</TableCell>
+      <TableCell>Non-transferrable (soulbound)</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Permissions granted</TableCell>
+      <TableCell>Owner role with full privileges</TableCell>
+      <TableCell>TokenMaster role</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Delegate administrative functions</TableCell>
+      <TableCell>Holder can designate TokenMasters and Admins</TableCell>
+      <TableCell>Holders can designate Admins</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Restore community</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Replace the community's control node</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="info">
+  Check out [About the management roles in Status Communities](./about-the-management-roles-in-status-communities.mdx) to learn the differences among the Owner, TokenMaster and Admin roles.
+</Admonition>
+
+### Token administration features
+
+<Table>
+  <TableHead>
+    <TableHeader>Token feature</TableHeader>
+    <TableHeader>Owner token</TableHeader>
+    <TableHeader>TokenMaster token</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Supply</TableCell>
+      <TableCell>Only one</TableCell>
+      <TableCell>Unlimited</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Token minting</TableCell>
+      <TableCell>Holder can mint community tokens</TableCell>
+      <TableCell>Holders can mint community tokens, except the Owner and TokenMaster tokens</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Airdrop and destroy community tokens</TableCell>
+      <TableCell>Holder can airdrop and destroy community tokens</TableCell>
+      <TableCell>Holders can airdrop and destroy community tokens, except the TokenMaster token</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Token assignment</TableCell>
+      <TableCell>Automatic airdrop to Owner's Status Wallet</TableCell>
+      <TableCell>Owner manually airdrops the token to holders</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Wallet transaction after minting the token</TableCell>
+      <TableCell>Minting and airdrop transactions</TableCell>
+      <TableCell>Minting transaction</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>

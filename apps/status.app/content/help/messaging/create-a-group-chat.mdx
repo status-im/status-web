@@ -1,0 +1,59 @@
+---
+id: 226
+revision: '2'
+language: en
+title: Create a group chat
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+Group chats are conversations of more than two people. To invite someone to a group chat, you need to [have them on your Status contact list](./add-a-contact-in-status.mdx).
+
+Group chats aren't the same as communities: they're meant for smaller groups of people. To learn more about group chats, check out [Understand group chats](./understand-group-chats.mdx).
+
+## What to expect
+
+- A group chat can have 20 members at most, including the creator. If you need to include more people, [create a community](../communities/create-a-status-community.mdx) instead.
+- Once you create your group chat, you can [customize it](./customize-a-group-chat.mdx) and [add members](./add-members-to-a-group-chat.mdx), as well as [remove them](./remove-members-from-a-group-chat.mdx).
+- Group chats are always end-to-end [encrypted](./about-status-messages.mdx#built-in-privacy-and-security) with secure cryptographic keys. Only the group chat members have access to the messages in it.
+
+<Admonition type="info">
+  Status doesn't have your group chat keys and can't access any messages by design.
+</Admonition>
+
+## Create a group chat
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap <ContextTag icon={<AddSmallIcon />}>Add</ContextTag>.
+    1. Select <ContextTag>New chat</ContextTag>.
+    1. Check the boxes next to the contacts you want to invite to your chat. Tap <ContextTag>Setup group chat</ContextTag>.
+    1. Choose a name and highlight colour for your group chat. All members will be able to see both the name and the colour. Once you're finished, tap <ContextTag>Create group chat</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag>.
+    1. Click <ContextTag icon={<Edit1DesktopIcon />}>Start chat</ContextTag>.
+    1. From your contact list, select those you want to add to this group chat.
+    1. Optionally, type a message in the message field to start the group chat. You can also leave it blank.
+    1. Click <ContextTag>Confirm</ContextTag> or press <ContextTag>Enter</ContextTag> on your keyboard to create your group chat.
+  </TabsContent>
+</Tabs>

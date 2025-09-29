@@ -1,0 +1,56 @@
+---
+id: 244
+revision: '2'
+language: en
+title: Remove members from a group chat
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+The [group chat](./understand-group-chats.mdx) owner can remove members from a group chat. As a group chat owner, you're free to decide what's acceptable in your chat and remove members you don't want to see in the conversation. Regular group chat members can't remove other members.
+
+If you remove someone by mistake or change your mind about them later, you can always [re-add them to the chat](./add-members-to-a-group-chat.mdx).
+
+<Admonition type="info">
+  If you remove someone from a group chat, they don't receive a notification. When they open the group chat, they can see a message indicating that they are no longer a member of the group.
+</Admonition>
+
+## Remove members
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap the group chat you want to remove members from.
+    1. Tap the member list underneath the chat's name.
+    1. Tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag> next to the member you want to remove.
+    1. Select <ContextTag icon={<AddUserIcon />}>Remove from the group</ContextTag>.
+    1. Select <ContextTag>Remove</ContextTag> to confirm your decision.
+
+    If you want to remove multiple members in a batch, go to <ContextTag>Messages</ContextTag> > your group chat > <ContextTag>Manage members</ContextTag> and uncheck the boxes next to the members you want to remove. Tap <ContextTag>Confirm changes</ContextTag> to confirm your decision.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag>.
+    1. Click the group chat you want to remove members from.
+    1. At the top of the content area, click <ContextTag icon={<MoreDesktopIcon />}>More options</ContextTag>.
+    1. Click <ContextTag icon={<GroupChatDesktopIcon />}>Add / remove from group</ContextTag>.
+    1. Click the <ContextTag icon={<CloseDesktopIcon />}>Cross</ContextTag> next to the Status handle of the contact you want to remove. Once you're done, click <ContextTag>Confirm</ContextTag>.
+  </TabsContent>
+</Tabs>

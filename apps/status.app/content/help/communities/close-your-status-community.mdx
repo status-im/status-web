@@ -1,0 +1,76 @@
+---
+id: 397
+revision: '1'
+language: en
+title: Close your Status Community
+author: cheny0, jorge-campo, osmaczko, jrainville
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only close your community using Status desktop.
+</Admonition>
+
+The computer where you install Status Desktop and create your community becomes the community's [control node](./about-the-control-node-in-status-communities.mdx). The control node stores the community's configuration and periodically posts this data to the [Waku](https://waku.org/)<ExternalIcon /> peer-to-peer network.
+
+Because of this decentralized architecture, there is no one-click way to close a community and delete all associated data forever.
+
+To close your community, you must remove all members, reassign the community's control node and [Owner token](./understand-the-owner-and-tokenmaster-tokens.mdx) to a temporary Status installation, and wait 30 days for the configuration to expire from the Waku network.
+
+## What happens to offline members?
+
+If a member is offline when you remove them from the community, they don't receive the removal update. If they come online after 30 days, their removal update is no longer cached by the peer-to-peer network, and they can still see the community as active.
+
+In this case, the community is abandoned but still works for those who missed the update. Offline members can continue chatting, but since the control node is gone, no new members can join, and no settings can be changed. The community remains in its last known state.
+
+This behaviour is unavoidable in a decentralized network. Status has no central server to enforce deletions, and updates rely on peers syncing in real time.
+
+## What to expect
+
+- Due to the decentralized nature of Status communities, there is no way to ensure that all community information is permanently removed.
+- You can't permanently delete a Status Community, but you can close it by transferring the control node to a temporary computer, called a burn node.
+- To remove your Owner role from the community, you must create a burn profile, a new Status profile used only for this purpose.
+- Community transactions on the blockchain continue to exist after you abandon the community. For example, if you [minted tokens for your community](./mint-tokens-for-your-community.mdx), the transaction is on-chain and persists in the blockchain.
+
+<Admonition type="info">
+  Community messages are not in the blockchain and are not transported through the Ethereum network. [Messages](../messaging/about-status-messages.mdx) are temporarily stored in the peer-to-peer network.
+</Admonition>
+
+## Close your Status Community
+
+### Step 1: Remove members and management roles
+
+<AwaitedList>
+  1. Set up [manual approval](./set-up-your-community-join-requests.mdx) for the community to prevent other users from joining it.
+  1. [Kick out all the community members](./kick-or-ban-someone-from-your-community.mdx).
+  1. [Revoke the TokenMaster role](./revoke-the-tokenmaster-role-from-someone.mdx) you assigned to members.
+  1. Delete all the <ContextTag>Become admin</ContextTag> [permissions](./set-up-your-community-permissions.mdx#delete-community-permissions) in your community.
+  1. Optionally, [edit your community description](./create-a-status-community.mdx#customize-your-community) with bogus information.
+</AwaitedList>
+
+### Step 2: Reassign the community's control node and Owner token
+
+To close your community, you need to transfer the control node to another computer and your Owner token to another Status profile.
+
+<Admonition type="info">
+  This computer (burn node) and profile (burn profile) are used only temporarily for the purpose of closing the community.
+</Admonition>
+
+<AwaitedList>
+  1. Install Status desktop on a different computer. This computer represents the burn node.
+  1. On the burn node, open Status desktop and [set up a new Status profile](../getting-started/run-the-status-app-for-the-first-time.mdx) (burn profile). Do not use the profile you use for maintaining your community.
+  1. From the current control node, [airdrop the Owner token](./transfer-your-community-s-ownership.mdx) to the burn profile. This action transfers the community ownership to the new burn profile and the control node to the burn node.
+  1. [Uninstall Status desktop](../getting-started/uninstall-status-desktop.mdx) from the burn node.
+  1. Remove the Status folder from the burn node. Read [Uninstall Status desktop](../getting-started/uninstall-status-desktop.mdx) for instructions on where to find the Status folder.
+</AwaitedList>
+
+### Step 3: Wait for the community information to expire
+
+The Waku peer-to-peer network retains the community information for 30 days, so you must wait for it to disappear after closing the community.
+
+<Admonition type="info">
+  Some members may still see the community as active and participate on it after 30 days. For more information, check out [What happens to offline members?](#what-happens-to-offline-members)
+</Admonition>

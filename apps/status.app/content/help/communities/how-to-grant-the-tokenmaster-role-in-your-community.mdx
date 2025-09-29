@@ -1,0 +1,81 @@
+---
+id: 789
+revision: '1'
+language: en
+title: How to grant the TokenMaster role in your community
+author: jorge-campo, cheny0
+roles:
+  - Owner
+---
+
+Community Owners can grant other users the [TokenMaster role](./about-the-management-roles-in-status-communities.mdx) by [airdropping them the TokenMaster token](./how-to-airdrop-the-tokenmaster-token.mdx).
+
+As a community owner, you don't have to appoint TokenMasters, but they can be helpful if you're managing a large community or event. For example, TokenMasters can [moderate the community](./kick-or-ban-someone-from-your-community.mdx), [set permissions](./set-up-your-community-permissions.mdx) and [mint new tokens](./mint-tokens-for-your-community.mdx) (except the TokenMaster token).
+
+<Admonition type="info">
+  You can grant the TokenMaster role to people outside your community, but they must [join the community](./join-a-status-community.mdx) to exercise the role.
+</Admonition>
+
+## Choose the correct wallet account to airdrop the TokenMaster token
+
+When people join your community, they share one or more of [their wallet account addresses](./join-a-status-community.mdx#about-sharing-your-wallet-account-address) with the community [control node](./about-the-control-node-in-status-communities.mdx) and select one as the preferred address for airdrops.
+
+When airdropping the TokenMaster token, you can choose the recipients in two ways:
+
+- **From the list of community members** – Choose this option if you want to airdrop the token to one or more of your community members. The wallet account members shared with the control node receives the TokenMaster token automatically.
+- **Adding their Ethereum address** – If you airdrop the token to a non-community member, manually enter one of their Ethereum account addresses in the recipient list. The token recipient must share this same address when joining.
+
+<Admonition type="tip">
+  If you're a community member, you can [check and change the wallet account](./change-the-wallet-account-you-share-with-a-community.mdx) you share with the community's control node.
+</Admonition>
+
+This table summarizes the different scenarios for Owners and TokenMasters (TM):
+
+<Table>
+  <TableHead>
+    <TableHeader>Recipient</TableHeader>
+    <TableHeader>Choose recipient</TableHeader>
+    <TableHeader>Account for TM token</TableHeader>
+    <TableHeader>TM role activation</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Community member</TableCell>
+      <TableCell>From the list of community members</TableCell>
+      <TableCell>Wallet account address specified at joining</TableCell>
+      <TableCell>Automatic</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Non-member</TableCell>
+      <TableCell>Using the recipient's Ethereum address</TableCell>
+      <TableCell>Address used by Owner for airdrop</TableCell>
+      <TableCell>Token holder must share the same address when joining</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## What to expect
+
+- The TokenMaster token is a non-transferable (soulbound) collectible. The recipient can't transfer it to others.
+- The community Owner is the only one who can mint and airdrop the TokenMaster token.
+- TokenMaster token holders can join the community even if they don't meet its [token requirements](./understand-token-requirements-in-communities.mdx). If the community requires [manual approval](./about-community-request-approvals.mdx), they still need the Owner's approval to join.
+- Only the community Owner can destruct the TokenMaster token and [revoke the role](./revoke-the-tokenmaster-role-from-someone.mdx).
+
+<Admonition type="info">
+  If you're the TokenMaster in a community but no longer want to exercise the role, ask the community Owner to revoke this role from you. Alternatively, you can [leave the community](./leave-a-status-community.mdx).
+</Admonition>
+
+## How to grant the TokenMaster role
+
+<AwaitedList>
+  1. [Mint the Owner and TokenMaster tokens](./mint-the-owner-and-tokenmaster-tokens.mdx) if you haven't done so yet.
+  1. [Airdrop the TokenMaster token](./how-to-airdrop-the-tokenmaster-token.mdx). If the recipient is a community member, choose their name from the member's list. If the recipient is not a community member, enter their preferred Ethereum address.
+  1. If the TokenMaster holder is not a community member yet, ask them to [join your community](./join-a-status-community.mdx). When joining, they must share the wallet account address where they hold the TokenMaster token.
+  1. If your community [requires manual approval](./create-a-status-community.mdx#configure-additional-settings), approve the join request from the token holder.
+</AwaitedList>
+
+<Admonition type="tip">
+  You can [revoke the TokenMaster role from someone](./revoke-the-tokenmaster-role-from-someone.mdx) anytime by destructing the TokenMaster token in their wallet.
+</Admonition>

@@ -1,0 +1,169 @@
+---
+id: 438
+revision: '1'
+language: en
+title: Invite people to a Status Community
+author: cheny0, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Whether you are a community member or not, you can tell people about the community and invite them to join.
+
+<Admonition type="info">
+  People you invite still need to meet the requirements to join [token-gated communities](./understand-token-requirements-in-communities.mdx) and receive the owner's approval in communities with [approval requirements](./about-community-request-approvals.mdx).
+</Admonition>
+
+## Invite options
+
+There are three approaches to inviting someone.
+
+<Table>
+  <TableHead>
+    <TableHeader>Approach</TableHeader>
+    <TableHeader>Description</TableHeader>
+    <TableHeader>Works with</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Share to Status contacts</TableCell>
+
+      <TableCell>
+        Use this option to share the community with people in your Status contact list.
+      </TableCell>
+
+      <TableCell>
+        Mobile and desktop
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Show QR code</TableCell>
+
+      <TableCell>
+        Use this option to show the community QR code to people to scan.
+      </TableCell>
+
+      <TableCell>
+        Mobile
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Share a link</TableCell>
+
+      <TableCell>
+        Use this option to share a link via your other social media, or copy it and share it manually.
+      </TableCell>
+
+      <TableCell>
+        Mobile and desktop
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## Invite people to a community
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+    1. In the <ContextTag>Communities</ContextTag> list, long press the community you want to share. If you don't see the community, enter the name in the search bar.
+    1. In the action sheet, choose an option and proceed as follows:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Share to Status contacts</TableCell>
+
+                 <TableCell>
+                   1. Select <ContextTag icon={<AddUserIcon />}>Invite people from contacts list</ContextTag>.
+                   1. Check the boxes next to the contacts you want to share with.
+                   1. Tap <ContextTag>Invite users</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Show QR code</TableCell>
+
+                 <TableCell>
+                   1. Select <ContextTag icon={<QrCodeIcon />}>Show QR code</ContextTag>.
+                   1. Show or send the QR code to people you want to invite.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Share a link</TableCell>
+
+                 <TableCell>
+                   1. Select <ContextTag icon={<ShareIcon />}>Share community</ContextTag>.
+                   1. To share the link via another app on your phone, tap a profile picture or an app icon. To copy the link, tap <ContextTag>Copy</ContextTag>.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<CommunitiesDesktopIcon />}>Communities</ContextTag>.
+    1. Choose the community you want to share. If you don't see the community, enter the name in the search bar.
+    1. From the navigation sidebar, right-click the community logo and then select <ContextTag icon={<ShareIOsDesktopIcon />}>Share</ContextTag>.
+    1. Choose the contacts or copy the link and proceed as follows:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Share to Status contacts</TableCell>
+
+                 <TableCell>
+                   1. In the <ContextTag>Invite Contacts</ContextTag> pop-up window, type your contacts' names in the search bar or check the boxes next to the names.
+                   1. Click <ContextTag>Next</ContextTag>.
+                   1. Optionally, type an invitation message.
+                   1. Click <ContextTag>Send Invites</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Share a link</TableCell>
+
+                 <TableCell>
+                   1. In the <ContextTag>Invite Contacts</ContextTag> pop-up window, click <ContextTag icon={<CopyIcon />}>Copy</ContextTag> next to the link.
+                   1. Switch to the app or platform where you want to share the link and paste it there.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  After opening the link or scanning the QR code, people can install Status if they haven't already.
+</Admonition>

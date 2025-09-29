@@ -1,0 +1,63 @@
+---
+id: 400
+revision: '3'
+language: en
+title: About the control node in Status Communities
+author: jorge-campo, cheny0, osmaczko, jrainville
+roles:
+- Owners
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only administer communities and run a control node using the Status desktop app.
+</Admonition>
+
+Status Communities require a computer called the control node for administration purposes. When you [create a community](./create-a-status-community.mdx), your computer becomes a control node. The control node is the administration hub and the only computer to change your community's settings and configuration.
+
+As the community Owner, the control node runs automatically in your Status desktop app if you use the same profile and computer where you set up the community.
+
+<Admonition type="info">
+  The control node doesn't determine community ownership by itself. You establish ownership by holding the [Owner token](./understand-the-owner-and-tokenmaster-tokens.mdx).
+</Admonition>
+
+## The basics
+
+- The computer where you [create your Status Community](./create-a-status-community.mdx) or [transfer your community's ownership](./transfer-your-community-s-ownership.mdx) becomes a control node.
+- You can [install a new control node](./replace-your-community-s-control-node.mdx) when you need to reinstall Status desktop or it becomes unavailable.
+- Community Owners can [set up additional computers](#administer-your-community-from-a-different-computer) to administer their community or [delegate management functions to someone else](./delegate-management-functions-to-your-community.mdx). Community Owners still need the Status desktop app working as the control node running and connected to the internet.
+- There can only be one control node per community.
+
+<Admonition type="caution">
+  Don't try to use more than one installation of Status desktop as your community's control node. Running your community with multiple control nodes will cause unforeseen issues.
+</Admonition>
+
+## Keep your community available
+
+The community's control node maintains your community's settings, configuration and functionality. Keep Status desktop running with your owner profile online daily, or at least once every six days.
+
+If the control node goes offline, your [community functionality is affected](./common-issues-when-the-community-s-control-node-is-offline.mdx). You can [set up a new control node](./replace-your-community-s-control-node.mdx) if the initial Status desktop fails or becomes inaccessible.
+
+The control node is the only computer that manages community members. You can use another computer or delegate tasks, but all actions go through the control node. If it's offline, new members can't be accepted, and join requests stay <ContextTag>Pending</ContextTag> until it comes back online.
+
+## Administer your community from a different computer
+
+If you want to administer your community from another computer, [set up the same Status profile](../profile/sign-in-to-your-status-profile-on-a-new-device.mdx) on that computer. This process doesn't create a new control node, and you can complete it on as many computers as you want.
+
+Using a different computer is helpful if you run your Status Community on your desktop computer but want to travel with your laptop, for example. Additionally, you can [delegate management functions to others](./delegate-management-functions-to-your-community.mdx) using tokens.
+
+<Admonition type="info">
+  Even if you administer your community from different computers, Status desktop must be running and connected to the internet on the computer acting as the control node.
+</Admonition>
+
+## Find your community's control node
+
+If you run Status desktop on multiple computers and are unsure which one is the control node, follow these steps:
+
+1. From the navigation sidebar, click your community.
+1. At the top of the channel sidebar, click your community logo.
+1. Click <ContextTag icon={<ShowDesktopIcon />}>Overview</ContextTag>.
+1. At the bottom of the content area, look for the <ContextTag>This device is currently the control node</ContextTag> message.

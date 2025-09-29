@@ -1,0 +1,50 @@
+# note: see https://github.com/status-im/status-website/pull/149#discussion_r1294415170 for why this cannot be executed in private repo
+
+name: CI
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    types: [opened, synchronize]
+
+env:
+  NEXT_PUBLIC_GHOST_API_URL: ''
+  NEXT_PUBLIC_GHOST_API_KEY: ''
+  GREENHOUSE_API_KEY: ''
+  GREENHOUSE_STATUS_BOARD_ID: ''
+  GREENHOUSE_LOGOS_BOARD_ID: ''
+  INFURA_API_KEY: ''
+
+jobs:
+  build:
+    name: Build
+    timeout-minutes: 15
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build

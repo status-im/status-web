@@ -1,0 +1,303 @@
+---
+id: 0
+revision: '0'
+language: en
+title: Getting started
+author: jorge-campo
+roles:
+- Admins
+- TokenMasters
+- Owners
+---
+
+amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea **commodo consequat**. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+## New heading
+
+**Aute consequat cillum enim eu mollit sunt aute. Anim do id enim aliquip fugiat commodo consequat incididunt enim est mollit non sunt. Officia aliqua elit exercitation.**
+
+_Tempor laborum nostrud commodo anim tempor irure id eiusmod qui. Eiusmod nostrud sunt laboris sint ad consectetur amet aute pariatur ad. Quis incididunt aliqua excepteur et enim mollit._
+
+~~Ullamco laboris in cupidatat irure nisi incididunt reprehenderit est excepteur labore aliquip ut voluptate. Enim quis nulla labore aliquip nostrud commodo. Qui mollit reprehenderit id sunt.~~
+
+Laboris dolore eu nulla sunt. **Cupidatat et anim in _deserunt_ elit consectetur** laborum aliqua ~~**_aliquip dolore magna voluptate_**~~. Nostrud cupidatat laboris.
+
+## H2
+
+Elit excepteur exercitation duis ea proident laborum sunt laboris irure tempor nisi. Ex culpa occaecat et sit pariatur adipisicing voluptate. Sit ullamco consectetur deserunt et. Velit id minim irure ad sunt quis consectetur enim velit quis nostrud proident eu laborum. Aliqua incididunt elit et nisi qui mollit. Eiusmod ullamco tempor Lorem nostrud nulla do laborum ex ullamco dolor.
+
+### H3
+
+Consectetur exercitation minim duis excepteur quis culpa veniam dolor. Sit ipsum adipisicing eiusmod aliqua. Labore amet minim reprehenderit magna sunt ad minim nisi aliqua. Cupidatat dolore aliquip excepteur sit duis incididunt qui id ea. Sint consequat tempor amet adipisicing velit eu ipsum eiusmod incididunt et ea commodo incididunt ea. Excepteur voluptate ullamco est ea occaecat velit.
+
+Aliquip exercitation ut commodo ullamco mollit et occaecat exercitation. Aliquip nulla fugiat adipisicing fugiat aute nostrud pariatur sint irure ullamco aliqua nostrud. Ea elit reprehenderit amet est esse culpa sit. Aliqua minim ad eiusmod duis. Officia irure Lorem tempor occaecat voluptate minim nisi voluptate minim adipisicing ea. Consequat ipsum consectetur labore ut consequat est ad excepteur incididunt quis irure. Deserunt ea magna fugiat sunt ea.
+
+#### H4
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem id error dolores! Obcaecati suscipit sunt ratione fugit aspernatur dolorum voluptatem ipsum, non neque. Pariatur aspernatur at repellat nulla debitis accusantium?
+
+## Blockquote
+
+> Here is some blockquote
+
+<br />
+
+> To empower individuals to achieve their aspirations and create a better future for all, by leveraging innovative decentralised technologies to create a virtual space where freedom, liberty, and human sovereignty are protected, and censorship resistance is ensured.
+>
+> We believe a free cyberspace will enable people to innovate and experiment with new forms of human organisation and societal governance, freed from the constraints imposed by centralised institutions and monopolistic tech platforms.
+
+## Images
+
+![community card](/docs/images/media.png)
+
+<Image id="Help/Documentation Screens/Messaging/275/275_image_01_light:488:195" />
+
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem id error dolores! Obcaecati suscipit sunt ratione fugit aspernatur dolorum voluptatem ipsum, non neque. Pariatur aspernatur at repellat nulla debitis accusantium?
+
+## Links
+
+[Link to another heading](./guide.mdx#h2)
+
+## Lists
+
+### Unordered
+
+- one
+  - a
+  - b
+  - c
+- two
+- three
+
+{/* simulates new line without an element in DOM */}
+
+- a
+- b
+- c
+
+### Ordered
+
+1. one
+   1. a
+   1. b
+   1. c
+1. two
+1. three
+
+{/* simulates new line without an element in DOM */}
+
+1. a
+1. b
+1. c
+
+### Tasks
+
+- [ ] one
+- [ ] two
+- [ ] three
+
+### Custom
+
+<AwaitedList>
+  1. one
+  1. two
+  1. three
+</AwaitedList>
+
+## Admonitions
+
+<Admonition type="caution">Here is some warning</Admonition>
+
+<Admonition type="info">Here is some info</Admonition>
+
+<Admonition type="tip">Here is some tip</Admonition>
+
+<Admonition type="beta" status="Status app is currently in beta stage">Here is some development status</Admonition>
+
+## Code
+
+### Inline
+
+`rm -rf`
+
+### Block
+
+```shell
+lsof -i tcp:3000
+```
+
+```ts
+const a = 1
+const b = 2
+const c = a + b
+console.log(c)
+```
+
+```ts
+type Vote = {
+    sender: string // address of the sender
+    vote: string // vote sent eg. 'yes' 'no'
+    sntAmount: BigNumber //number of snt cast on vote
+    sign: string // cryptographic signature of a transaction (signed fields: sender,vote,sntAmount,nonce,sessionID)
+    nonce: number // number of votes cast from this address on current vote (only if we allow multiple votes from the same sender)
+    sessionID: number // ID of voting session
+}
+```
+
+## Comments
+
+{/*
+  your commented text goes here.
+*/}
+
+## Tables
+
+<Table>
+  <TableHead>
+    <TableHeader>Name</TableHeader>
+    <TableHeader>Age</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>John Doe</TableCell>
+      <TableCell>30</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>John Doe</TableCell>
+      <TableCell>25</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Table>
+  <TableHead>
+    <TableHeader>Label</TableHeader>
+    <TableHeader>Label</TableHeader>
+    <TableHeader>Label</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Letterpress park</TableCell>
+
+      <TableCell>Green yr hexagon authentic skateboard. Bird yuccie artisan flexitarian baby vhs vinegar pok. Dreamcatcher aesthetic.</TableCell>
+
+      <TableCell>Affogato sartorial 90's aesthetic vhs sustainable ennui.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Table>
+  <TableHead>
+    <TableHeader>Label</TableHeader>
+    <TableHeader>Label</TableHeader>
+    <TableHeader>Label</TableHeader>
+    <TableHeader>Label</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Green yr hexagon authentic skateboard.<br /><br />Bird yuccie artisan flexitarian baby vhs vinegar pok. Dreamcatcher aesthetic.</TableCell>
+
+      <TableCell>Letterpress park</TableCell>
+
+      <TableCell>
+        - one
+        - two
+        - three
+      </TableCell>
+
+      <TableCell>
+        1. Green yr hexagon authentic skateboard.
+        1. Bird yuccie artisan flexitarian baby vhs vinegar pok. Dreamcatcher aesthetic.
+        1. Letterpress park.
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## Tabs
+
+<Tabs defaultValue="Tab 1">
+  <TabsList size={32}>
+    <TabsTrigger value="Tab 1">
+      Tab 1
+    </TabsTrigger>
+
+    <TabsTrigger value="Tab 2">
+      Tab 2
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Tab 1">Here is some content</TabsContent>
+  <TabsContent value="Tab 2">Here is some content too</TabsContent>
+</Tabs>
+
+<Tabs defaultValue="Step 1">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Step 1" step={1}>
+      Step
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Step 2" step={2}>
+      Step
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Step 1">Here are some steps</TabsContent>
+  <TabsContent value="Step 2">Here are some steps too</TabsContent>
+</Tabs>
+
+## Icons
+
+<MessagesIcon />
+
+<AddUserIcon />
+
+<QrCodeIcon />
+
+<CheckCircleIcon />
+
+<CrossCircleIcon />
+
+<CheckIcon color="$success-50" />
+
+### Desktop
+
+<AddContactDesktopIcon />
+
+<CheckmarkCircleDesktopIcon />
+
+<CloseCircleDesktopIcon />
+
+<ShowDesktopIcon />
+
+<CopyDesktopIcon />
+
+<NotificationDesktopIcon />
+
+<NotificationMuteDesktopIcon />
+
+## Divider
+
+<Divider />
+
+## Steps
+
+<Step type="complete" value={1} />
+
+<Step type="complete" value={10} />
+
+<Step type="complete" value={999} />
+
+## Context tag
+
+### Label
+
+<ContextTag>I'm new to Status</ContextTag>
+
+### Icon
+
+<ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>

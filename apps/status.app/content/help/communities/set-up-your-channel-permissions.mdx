@@ -1,0 +1,127 @@
+---
+id: 467
+revision: '3'
+language: en
+title: Set up your channel permissions
+author: jorge-campo, Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only set up channel permissions using Status desktop.
+</Admonition>
+
+Community Owners can set up permissions using three different variables: <ContextTag>Who holds</ContextTag>, <ContextTag>Is allowed to</ContextTag> and <ContextTag>In</ContextTag>. Check out the table below for reference.
+
+## What to expect
+
+- Using channel permissions, community Owners can restrict channel access and actions to specific people based on token requirements.
+- Only the community Owner, TokenMaster and admins can set up channel permissions.
+- Use [community permissions](set-up-a-token-gated-community.mdx) to make the entire community private. You can combine community-level and channel-level permission in the same community.
+- When you delete a [token-gated channel](./set-up-a-token-gated-channel.mdx), the channel permissions are lost. If you recreate the channel, you need to set up its permission again.
+
+## Set up channel permissions
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click the community where you want to set up a channel permission.
+    1. Right-click the channel, then click <ContextTag icon={<Edit2DesktopIcon />}>Edit channel</ContextTag>.
+    1. Click <ContextTag>Add permission</ContextTag> to start from scratch, or click <ContextTag icon={<CopyDesktopIcon />}>Duplicate</ContextTag> to start from an existing permission.
+    1. For the <ContextTag icon={<InContactsDesktopIcon />}>Who holds</ContextTag> and <ContextTag icon={<SecurityDesktopIcon />}>Is allowed to</ContextTag> variables, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> next to the variable and choose your values. Use the table below for reference.
+    1. Optionally, check <ContextTag icon={<HideDesktopIcon />}>Hide permission</ContextTag> to hide this permission from members who don't meet the requirements.
+    1. Click <ContextTag>Create permission</ContextTag> and then click <ContextTag>Save changes</ContextTag>. The new permission takes effect immediately.
+  </TabsContent>
+</Tabs>
+
+<Table>
+  <TableHead>
+    <TableHeader>Variable</TableHeader>
+    <TableHeader>Description</TableHeader>
+    <TableHeader>Options</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Who holds</TableCell>
+      <TableCell>The tokens and amounts (for assets and collectibles) someone needs to hold, or the ENS name someone owns.</TableCell>
+      <TableCell>Assets, Collectibles, ENS</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Is allowed to</TableCell>
+      <TableCell>The level of access or role that you assign to someone.</TableCell>
+      <TableCell>Become admin, Become member, Moderate</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- If you turn off the <ContextTag>Who holds</ContextTag> option, the permission isn't bound to a token. This option only applies to channel-level permissions.
+- For each permission, tokens are linked by <ContextTag>AND</ContextTag> operators. This means the new permission takes effect when the holder owns all the tokens. If you want to use the <ContextTag>OR</ContextTag> operator instead, create additional permissions.
+- You can include up to five tokens in a single permission.
+
+## Edit channel permissions
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click the community where you want to edit the channel permission.
+    1. Right-click the channel, then click <ContextTag icon={<Edit2DesktopIcon />}>Edit channel</ContextTag>.
+    1. In the permission you want to edit, click <ContextTag icon={<Edit2DesktopIcon />}>Edit</ContextTag>.
+    1. To customize the permission, follow the steps in the [Set up channel permissions](#set-up-channel-permissions) section.
+  </TabsContent>
+</Tabs>
+
+## Delete channel permissions
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click the community where you want to delete the channel permission.
+    1. Right-click the channel, then click <ContextTag icon={<Edit2DesktopIcon />}>Edit channel</ContextTag>.
+    1. In the permission you want to edit, click <ContextTag icon={<DeleteDesktopIcon />}>Delete</ContextTag>.
+    1. Click <ContextTag>Confirm</ContextTag> to delete the permission.
+  </TabsContent>
+</Tabs>

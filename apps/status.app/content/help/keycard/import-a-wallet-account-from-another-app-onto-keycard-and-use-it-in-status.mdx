@@ -1,0 +1,67 @@
+---
+id: 1044
+revision: '0'
+language: en
+title: Import a wallet account from another app onto Keycard and use it in Status
+author: cheny0, Fabiomorais87, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only import an account from another wallet app onto Keycard and use it in the Status desktop app.
+</Admonition>
+
+If you already have a crypto wallet account with another app like Metamask or Trust Wallet, it's possible to access and use it in [Status Wallet](../wallet/status-wallet-your-quick-start-guide.mdx) and protect it with Keycard. The wallet account must be for Ether or other ERC-20 tokens.
+
+To do so, you import the wallet account onto your Keycard by entering the [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-status-keys).
+
+<Admonition type="info">
+  Your wallet account lives on the Ethereum blockchain. You can access it from many wallet apps, including Status. Adding your account to Status doesn't remove it from other wallets you use.
+</Admonition>
+
+<Admonition type="tip">
+  If you want to use your Keycard with your Status profile or Wallet, check out [Secure your Status profile or Wallet with Keycard](./secure-your-status-profile-or-wallet-with-keycard.mdx).
+</Admonition>
+
+## What to expect
+
+- You can still access and use the wallet account in the app where you have been using it.
+- You need a [card reader](./keycard-faq.mdx) to connect a Keycard to your computer.
+- Your Keycard must be empty. If it's not new, [view the wallet accounts on your Keycard](./view-the-profile-or-wallet-accounts-on-your-keycard.mdx) and [factory reset](./factory-reset-your-keycard.mdx) it when needed.
+- After importing the wallet account, you must use the Keycard in Status to confirm transactions for this wallet account. You can always [stop using Keycard for this wallet account](./stop-using-keycard-for-your-wallet-account-or-profile.mdx).
+
+## Import a wallet account onto Keycard and use it in Status
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the tab bar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>, then click <ContextTag>Import or restore via seed phrase</ContextTag>.
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection if you see a security alert from your computer.
+    1. Enter the recovery phrase of the account you want to import or restore.
+    1. Create and confirm a six-digit PIN for your Keycard. Then click <ContextTag>Next</ContextTag>.
+    1. Enter a name to identify your Keycard and click <ContextTag>Next</ContextTag>.
+    1. Name your account, select a colour, and pick an emoji by clicking the default one. To create additional accounts, click <ContextTag>Add another account</ContextTag>. Otherwise, click <ContextTag>Finalise Keycard</ContextTag>.
+    1. Click <ContextTag>Done</ContextTag> to complete.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  After importing the wallet account, you can [generate new accounts using the Keycard](./create-a-status-wallet-account-using-a-keycard.mdx#add-a-wallet-account-to-a-used-keycard).
+</Admonition>

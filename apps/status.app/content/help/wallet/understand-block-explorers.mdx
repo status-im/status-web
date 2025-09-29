@@ -1,0 +1,120 @@
+---
+id: 251
+revision: '1'
+language: en
+title: Understand block explorers
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Block explorers are tools you can use to browse blockchain data. With block explorers, you can learn more about any transaction that was made on the blockchain.
+
+Since all [Ethereum blockchain](../getting-started/about-the-ethereum-blockchain.mdx) data is public and pseudonymous, it doesn't matter whose transactions you're exploring. You can view the details of both your own and others' transactions.
+
+Block explorers are network-specific. This means that for [bridge transactions](./bridge-crypto-in-status-wallet.mdx), you need to use two or more different block explorers, one for each chain. In your Status Wallet, you can find the Bridge field and transaction hashes for each chain. For more details, check out [Understand your transaction details](./understand-your-transaction-details.mdx).
+
+## Use block explorers
+
+To get started with block explorers, copy your address and look it up on a block explorer of your choice. For example, you can use [Etherscan](https://etherscan.io/), [Blockchair](https://blockchair.com/ethereum/) or [beaconcha.in](https://beaconcha.in/) for the Ethereum mainnet. If you're using [an L2 or a sidechain](./understand-l2s-and-sidechains.mdx), you need to find a block explorer for this network.
+
+<Admonition type="tip">
+  For details on where to find your account addresses in Status Wallet, check out [Receive
+  crypto](./receive-crypto.mdx).
+</Admonition>
+
+## Explore transaction data
+
+You can usually find the data below on all block explorers. This list isn't comprehensive. For more details, check out your block explorer's documentation.
+
+<Admonition type="tip">
+  To view your transaction details in your Status Wallet, go to the Wallet home screen and, under the <ContextTag>Activity</ContextTag> tab, click or tap the transaction you're interested in.
+</Admonition>
+
+### Basic data
+
+<Table>
+  <TableHead>
+    <TableHeader>Field</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Transaction hash</TableCell>
+      <TableCell>Your transaction's unique identifier.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Status</TableCell>
+      <TableCell>Your transaction's status: for example, processing or completed. For more details on the statuses you can see in the Status Wallet <ContextTag>Activity</ContextTag> tab, check out [About transaction statuses](./understand-transaction-confirmations-and-statuses.mdx).</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>To</TableCell>
+      <TableCell>The address this transaction was sent to.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Block</TableCell>
+      <TableCell>The block your transaction was added to. Blocks are structures within the blockchain. Each block has a unique ID and includes multiple transactions.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Value</TableCell>
+      <TableCell>The total ETH value that is transferred.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Tokens transferred</TableCell>
+      <TableCell>A list of tokens that are transferred in this transaction, if any.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Timestamp</TableCell>
+      <TableCell>The date and time at which your transaction was completed.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Transaction fee</TableCell>
+      <TableCell>The [network fee](./understand-network-fees.mdx) that was charged for your transaction.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+### Advanced data
+
+<Table>
+  <TableHead>
+    <TableHeader>Field</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Nonce</TableCell>
+
+      <TableCell>
+        Only change this value if you know what you're doing. Using the wrong nonce can cause your transaction to fail.
+
+        Changing the nonce lets you control the order of your transactions. You can prepare a transaction for later execution or speed up a stuck one.
+
+        The nonce is a number that determines the order of transactions sent from your wallet. {/* You can use nonces to cancel or resend transactions that are still processing. For more details, check out [Cancel transactions](./cancel-transactions.mdx) and [Handle pending or stuck transactions](./handle-pending-or-stuck-transactions.mdx). */}
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Gas price</TableCell>
+
+      <TableCell>Cost per [unit of gas for this transaction](./understand-network-fees.mdx), in gwei.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Confirmations</TableCell>
+
+      <TableCell>The [number of confirmations](./understand-transaction-confirmations-and-statuses.mdx) this transaction currently has.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>

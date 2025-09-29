@@ -1,0 +1,113 @@
+---
+id: 198
+revision: '3'
+language: en
+title: Run the Status app for the first time
+author: jorge-campo, cheny0
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+When you run Status for the first time, the app prompts you to create a Status profile and generates a pair of [cryptographic keys](../profile/understand-your-status-keys-and-recovery-phrase.mdx) representing your Status identity. Unlike centralized apps, Status doesn't rely on your username or email address to identify your profile. Instead, it uses your private and public keys.
+
+If you want to create your profile from an existing recovery phrase, check out [Create a Status profile using a recovery phrase](./create-a-status-profile-using-a-recovery-phrase.mdx). If you're going to use a Keycard to create your profile, check out [Create a Status profile using Keycard](../keycard/create-a-status-profile-using-keycard.mdx).
+
+<Admonition type="info">
+  To understand how these cryptographic keys work and how they protect your data and privacy, check out [Understand your Status keys and recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx).
+</Admonition>
+
+## Create a new Status profile
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. Check the box to accept the Status <ContextTag>Terms of Use and Privacy Policy</ContextTag> and tap <ContextTag>Create profile</ContextTag>.
+    1. Tap <ContextTag>Share usage data</ContextTag> or <ContextTag>Not now</ContextTag>. If you use mobile data, you may see a pop-up window to set up the data syncing connection for your profile. Choose <ContextTag>Mobile and Wi-Fi</ContextTag> or <ContextTag>Wi-Fi only</ContextTag>.
+    1. Tap <ContextTag>Let's go!</ContextTag>.
+    1. [Customize your Status profile](#customize-your-profile) with your preferred name, profile picture and colour, and tap <ContextTag>Continue</ContextTag>.
+    1. Enter and repeat your password. Check the box to confirm <ContextTag>I understand my password can't be recovered</ContextTag> and tap <ContextTag>Confirm password</ContextTag>.
+    1. Configure your device's biometrics (fingerprint, face or other) to fill in your password. If you want to enable biometrics later, tap <ContextTag>Maybe later</ContextTag>.
+    1. Tap <ContextTag icon={<NotificationsIcon />}>Enable notifications</ContextTag> to set up Status app notifications. If you want to enable notifications later, tap <ContextTag>Maybe later</ContextTag> and then tap <ContextTag>Start using Status</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Generate new keys
+
+    1. Open the Status app. Your operating system may ask you to set your notification preferences for Status. If you see the <ContextTag>Status notifications</ContextTag> alert, click <ContextTag>Allow</ContextTag>.
+    1. Check the box to accept the Status <ContextTag>Terms of Use and Privacy Policy</ContextTag> and click <ContextTag>Get Started</ContextTag>. You can find and read this information on the Status website.
+    1. On the welcome screen, click <ContextTag>I am new to Status</ContextTag>.
+    1. Click <ContextTag>Share usage data</ContextTag> or <ContextTag>Do not share</ContextTag>.
+    1. Click <ContextTag>Generate new keys</ContextTag>.
+
+    ### Step 2: Create your password and customize other settings
+
+    1. On the <ContextTag>Your profile</ContextTag> screen, [customize your Status profile](#customize-your-profile) with your preferred name, profile picture, and colour, and click <ContextTag>Next</ContextTag>.
+    1. Enter and confirm your password and click <ContextTag>Create password</ContextTag>.
+    1. Confirm your password again and click <ContextTag>Finalise Status Password Creation</ContextTag>.
+    1. Enable your device's biometrics (fingerprint, face or other) to fill in your password. Alternatively, click <ContextTag>I prefer to use my password</ContextTag>.
+    1. On the <ContextTag>Your emojihash and identicon ring</ContextTag> screen, you can learn more about your Status profile. Click <ContextTag>Next</ContextTag>.
+    1. Click <ContextTag>Start using Status</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+To protect your Status data and funds, [back up and secure your recovery phrase](../profile/back-up-and-secure-your-recovery-phrase.mdx) immediately after creating your profile.
+
+<Admonition type="caution">
+  Status doesn't know your password and can't reset it for you. If you forget
+  your password, you may lose access to your Status profile. <br /> Remember your Status password, keep it in a safe place and don't share it with
+  anyone.
+</Admonition>
+
+## Customize your profile
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. On the <ContextTag>Create profile</ContextTag> screen, set your profile name. Don't use special characters or emojis.
+    1. Tap the <ContextTag icon={<CameraIcon />}>Camera</ContextTag> in your avatar and set a profile picture. To add your profile picture, you must authorize the Status app to access your camera or photo gallery.
+    1. Choose a profile colour.
+    1. Tap <ContextTag>Continue</ContextTag> to complete your profile customization.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. On the <ContextTag>Your profile</ContextTag> screen, set your profile name. Don't use special characters or emojis.
+    1. Click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> in your avatar and set a profile picture. Adjust your picture size and click <ContextTag>Make this my profile picture</ContextTag>.
+    1. Click <ContextTag>Next</ContextTag> to complete your profile customization.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  You can [customize additional profile options](../profile/view-and-edit-your-status-profile.mdx) in your Status settings.
+</Admonition>
+
+<Admonition type="info">
+  Your Status profile and messages are temporarily saved in the [Waku](https://waku.org)<ExternalIcon /> peer-to-peer network and stored permanently on your device. They are not saved on the blockchain or transmitted via the [Ethereum network](../getting-started/about-the-ethereum-blockchain.mdx).
+</Admonition>

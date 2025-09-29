@@ -1,0 +1,90 @@
+---
+id: 328
+revision: '0'
+language: en
+title: Configure rich link previews in messages
+author: cheny0, Fabiomorais87, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, on Status desktop, the option to enable or disable link previews applies to all the links you send. On Status mobile, you can remove the preview each time you send a link.
+</Admonition>
+
+Rich link previews include the title, description and image of the link, offering more information and visual appeal than the link itself.
+
+Enabling link previews can expose your IP address to the service hosting the link (such as Facebook or YouTube). If you're concerned about privacy, you can turn off the rich link previews.
+
+## What to expect
+
+- In Status, you can control whether your message links include a preview.
+- Whether you see a preview for a link sent by someone else depends on their rich link preview setting.
+- By default, Status prompts you to choose whether to include a rich link preview each time you send a link.
+
+## Available options on Status mobile and desktop
+
+Options for configuring rich link previews are different on Status mobile and desktop.
+
+<Table>
+  <TableHead>
+    <TableHeader>Option</TableHeader>
+    <TableHeader>Status mobile</TableHeader>
+    <TableHeader>Status desktop</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Configure previews per link</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Set default behavior for all links</TableCell>
+      <TableCell>No</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Remove preview after it appears</TableCell>
+      <TableCell>Yes</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## Configure rich link previews in messages
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap the contact to whom you want to send the link.
+    1. Type or paste the link in the message field.
+    1. The preview appears under the link. To turn it off, tap <ContextTag icon={<CloseCircleIcon />}>Close</ContextTag> on the link preview.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<ChatDesktopIcon />}>Messaging</ContextTag>.
+    1. Under <ContextTag>Website link previews</ContextTag>, choose your desired option: <ContextTag>Always ask</ContextTag>, <ContextTag>Always show previews</ContextTag> or <ContextTag>Never show previews</ContextTag>.
+
+    If you select <ContextTag>Always ask</ContextTag>, each time you type a link in the message field in a chat, you can close the link preview or click <ContextTag>Options</ContextTag> and select <ContextTag icon={<ShowDesktopIcon />}>Show for this message</ContextTag>, <ContextTag icon={<ShowDesktopIcon />}>Always show previews</ContextTag> or <ContextTag icon={<HideDesktopIcon />}>Never show previews</ContextTag> according to your needs.
+  </TabsContent>
+</Tabs>

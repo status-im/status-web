@@ -1,0 +1,189 @@
+---
+id: 424
+revision: '4'
+language: en
+title: Mint tokens for your community
+author: jorge-campo, cheny0
+roles:
+- Owners
+- TokenMasters
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only mint tokens using the Status desktop app.
+</Admonition>
+
+With Status desktop, you can mint custom tokens as a community Owner or TokenMaster. You have complete control over your token creation and distribution.
+
+Your token's purpose and use are specific to your community. For example, you can reward your entire community or individual members with custom tokens or offer [exclusive membership to token holders](./grant-exclusive-access-with-tokens.mdx). After minting your tokens, you can distribute them to community members and other Status users via [airdrops](./how-to-airdrop-tokens-in-status.mdx).
+
+When you mint a token, you create a new and unique digital asset in the blockchain network. The blockchain charges you a transaction fee for this process. For more details about blockchain fees, check out [Understand network fees](../wallet/understand-network-fees.mdx).
+
+<Admonition type="info">
+  You must [mint the Owner and TokenMaster tokens](./mint-the-owner-and-tokenmaster-tokens.mdx) before you can mint other community tokens.
+</Admonition>
+
+## What to expect
+
+- You can mint collectibles and assets for your community.
+- Community tokens you mint belong to your community and depend on it. This is why they don't appear in your [Status Wallet](../wallet/status-wallet-your-quick-start-guide.mdx) once you mint them on your community's behalf.
+- You can find the community tokens under Community > Community settings > <ContextTag>Tokens</ContextTag>.
+- If you create an Admin token, use the <ContextTag>Not transferable (Soulbound)</ContextTag> and <ContextTag>Remote self-destruct</ContextTag> options. For more information, check out [Delegate management functions to your community](./delegate-management-functions-to-your-community.mdx).
+- In addition to the Ethereum network, Status supports the Optimism and Arbitrum [layer-2 scaling solutions](../wallet/lower-your-fees-with-layer-2-networks.mdx) to mint tokens. These scaling solutions provide faster and cheaper transactions than Ethereum.
+
+<Admonition type="tip">
+  Minting a token is an on-chain transaction. The record of your token persists in the blockchain after you delete the community.
+</Admonition>
+
+## Mint a collectible
+
+If the option to mint a collectible is not available, you need to [mint the Owner and TokenMaster tokens](./mint-the-owner-and-tokenmaster-tokens.mdx) first.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag>.
+    1. Click <ContextTag>Mint token</ContextTag> and click <ContextTag>Collectibles</ContextTag>.
+    1. Customize your collectible by adding its artwork, name and description. Edit other [collectible options](#set-up-your-collectible-options).
+    1. Click <ContextTag>Preview</ContextTag> to review your new token description and settings and then click <ContextTag>Mint</ContextTag>.
+    1. Review the transaction and fees and click <ContextTag icon={<PasswordDesktopIcon />}>Sign transaction</ContextTag>.
+    1. <ContextTag>Authenticate</ContextTag> with your password, biometrics or Keycard.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  You can't change the collectible description or options after minting.
+</Admonition>
+
+## Mint an asset
+
+If the option to mint an asset is not available, you need to [mint the Owner and TokenMaster tokens](./mint-the-owner-and-tokenmaster-tokens.mdx) first.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag>.
+    1. Click <ContextTag>Mint token</ContextTag> and click <ContextTag>Assets</ContextTag>.
+    1. Customize your asset by adding an icon, name and description. Edit other [asset options](#set-up-your-asset-options).
+    1. Click <ContextTag>Preview</ContextTag> to review your new token description and settings and then click <ContextTag>Mint</ContextTag>.
+    1. Review the transaction and fees and click <ContextTag icon={<PasswordDesktopIcon />}>Sign transaction</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Set up your collectible options
+
+<Table>
+  <TableHead>
+    <TableHeader>Setting</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Collectible symbol</TableCell>
+      <TableCell>Choose up to six words to identify your token. Tokens minted by the same community can't have the same symbol.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Network</TableCell>
+      <TableCell>Choose Ethereum or your preferred Layer-2 network to mint your token. You can choose between Optimism and Arbitrum Layer-2 networks.<br />Layer-2 networks commonly have lower network fees.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Account</TableCell>
+      <TableCell>Select the wallet account you want to use to mint the token and pay the transaction fees.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Unlimited supply</TableCell>
+      <TableCell>Enable this option to create an unlimited number of tokens or disable it to set a specific number. If you enable this option, you can't [burn your token](./burn-your-community-tokens.mdx) after minting.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Not transferable (Soulbound)</TableCell>
+      <TableCell>If you turn on this option, the token becomes locked to the first wallet account it is sent to, and you can't transfer the token to another address.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Remote self-destruct</TableCell>
+      <TableCell>When you turn on this option, you can destroy the token and make it unusable, even after you transfer it to others.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Fees</TableCell>
+      <TableCell>Under the Fees area, select the account you want to use to pay the [gas fees](../wallet/understand-network-fees.mdx).</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## Set up your asset options
+
+<Table>
+  <TableHead>
+    <TableHeader>Setting</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Asset symbol</TableCell>
+      <TableCell>Choose up to six words to identify your token. Tokens minted by the same community can't have the same symbol.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Network</TableCell>
+      <TableCell>Choose Ethereum or your preferred Layer-2 network to mint your token. You can choose between Optimism and Arbitrum Layer-2 networks.<br />Layer-2 networks commonly have lower network fees.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Account</TableCell>
+      <TableCell>Select the wallet account you want to use to mint the token and pay the transaction fees.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Unlimited supply</TableCell>
+      <TableCell>Enable this option to create an unlimited number of tokens, or disable it to set a specific number. If you enable this option, you can't [burn your token](./burn-your-community-tokens.mdx) after minting.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Decimals (DP)</TableCell>
+      <TableCell>Enter the decimal places the token can be divided into. If Decimals is 0, the asset can only be transferred in whole units.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="tip">
+  The Decimals setting defines the smallest fraction of your asset. For example, if you set Decimals to 2, an asset can be divided into 0.01 units, and you can tranfer partial assets.
+</Admonition>

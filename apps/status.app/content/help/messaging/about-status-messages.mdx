@@ -1,0 +1,130 @@
+---
+id: 247
+revision: '2'
+language: en
+title: About Status messages
+author: jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+Messaging is a critical Status component. The Status app combines [peer-to-peer messaging](./about-status-messages.mdx#understand-peer-to-peer-messaging) technologies with robust end-to-end encryption across all your devices. Peer-to-peer messaging eliminates the need for centralized servers and intermediaries, providing a censorship-resistant alternative to other popular messaging apps.
+
+We've built the Status app to keep your messages and information out of our reach. Other messaging apps offer end-to-end encryption, but their centralized network design allows interpretation of who is talking to whom and where. See how Status compares to other messaging apps in the table below:
+
+<Table>
+  <TableHead>
+    <TableHeader>Privacy feature</TableHeader>
+    <TableHeader>Status</TableHeader>
+    <TableHeader>Other messaging apps</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>End-to-end encryption</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Network metadata encryption</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CrossCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>"Who talks to who" encryption</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <IntermediateCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Censorship resistant</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CrossCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Anonymous</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <IntermediateCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Open source</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <IntermediateCircleIcon />
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+(<CheckCircleIcon /> available, <IntermediateCircleIcon /> available on some apps, <CrossCircleIcon /> not available)
+
+## The basics
+
+- Your messages and data are end-to-end encrypted by default.
+- Your messages and data are not stored on any centralized servers.
+- Only you and the message recipient can read your messages.
+- Status can't identify you or the people you're talking to.
+
+<Admonition type="tip">
+  For answers to general questions about your Status messages, check the [Messages FAQ](./messages-faq.mdx) topic.
+</Admonition>
+
+## Understand peer-to-peer messaging
+
+Status provides resilient messaging without relying on centralized servers, data centres, or service providers. The Status app uses [Waku](https://waku.org/)<ExternalIcon />, a peer-to-peer protocol for private, secure and censorship-resistant communication.
+
+Unlike centralized networks (A), which rely on a centralized server to send messages, peer-to-peer networks (B) encrypt and broadcast every message to all participant nodes. A node is a computer or smartphone that relays messages to other nodes or temporarily stores them for disconnected peers. Even when all nodes can access your messages, the content is encrypted so that only you and the intended recipients can read them.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1694160177/Help/Documentation%20Screens/Messaging/247/247_image_01_light.png)
+
+## Built-in privacy and security
+
+The Status app secures your messages using end-to-end encryption. This industry standard protection uses strong encryption keys and makes sure that only you and the recipients can read your messages. No one else (not even Status) can read your conversations or identify you or other participants.
+
+When you talk to someone on Status, your messages, attachments, sender metadata, group chats and group chat metadata are all end-to-end encrypted.
+
+Status uses the [Perfect Forward Secrecy (PFS)](https://en.wikipedia.org/wiki/Forward_secrecy)<ExternalIcon /> encryption mechanism, ensuring that encryption keys change on every message. If your keys are compromised, only the message they were used for is compromised. All other messages remain private.
+
+<Admonition type="info">
+  Status messaging protects your privacy in one-to-one communications, chat groups, public chats, and communities.
+</Admonition>

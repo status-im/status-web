@@ -1,0 +1,65 @@
+---
+id: 466
+revision: '2'
+language: en
+title: Receive crypto
+author: earakel, jorge-campo, FabioMorais87
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1743500437/Help/Documentation%20Screens/Wallet/466/466_Header_Light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+To receive crypto, you need to share your Ethereum address with the sender. As long as you only share your public address (which starts with `0x` and is 42 characters long), it's perfectly safe.
+
+<Admonition type="caution">
+  You should never share your 12-word recovery phrase with anyone. Anyone who has your recovery phrase can manage your crypto. If someone's asking for your recovery phrase to send you crypto, they're trying to scam you.
+</Admonition>
+
+## Receive Crypto
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap  <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Select the Wallet account you want to receive crypto and tap <ContextTag icon={<ReceiveIcon />}>Receive</ContextTag>.
+    1. Choose either your legacy or multi-chain address. For your multi-chain address, tap <ContextTag icon={<EditIcon />}>Edit</ContextTag> to choose which chains you want your multi-chain address to feature.
+    1. To copy your address, tap <ContextTag icon={<CopyIcon />}>Copy</ContextTag>. You can also ask the sender to scan the QR code of your address.
+    1. Share your address with the person you want to receive crypto from.
+
+    <Admonition type="info">
+      To understand how multi-chain addresses work, check out [Share your multi-chain and legacy addresses](./about-your-multi-chain-and-legacy-addresses.mdx).
+    </Admonition>
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Click <ContextTag icon={<ReceiveDesktopIcon />}>Receive</ContextTag>.
+    1. To copy your address, click <ContextTag icon={<CopyDesktopIcon />}>Copy address</ContextTag>. <ContextTag icon={<AdvancedIcon />}>Copy address</ContextTag>.
+    1. Share your address with the person you want to receive crypto from.
+  </TabsContent>
+</Tabs>
+
+## What to do if you don't receive your crypto
+
+If someone sent you crypto and you can't see it in your Status Wallet, here's what you can do:
+
+- Ask the sender to share a [block explorer](./understand-block-explorers.mdx) link for this transaction with you. Using the link, make sure they sent your crypto to the right address.
+- If the transaction shows up as [processing or pending](./understand-transaction-confirmations-and-statuses.mdx) on the block explorer or your Wallet <ContextTag>Activity</ContextTag> tab, simply wait until it's completed. This can take longer than usual when the network's busy.
+- Close and re-open your Status Wallet app.
+- Check your internet connection. If you're using a VPN, try turning it off and on again.
