@@ -1,8 +1,8 @@
 'use client'
 
-import { QueryClientProvider, WagmiProvider } from '@status-im/wallet/providers'
-
 import { ConnectKitProvider } from './connectkit-provider'
+import { QueryClientProvider } from './query-client-provider'
+import { WagmiProvider } from './wagmi-provider'
 
 interface ProvidersProps {
   children: React.ReactNode
