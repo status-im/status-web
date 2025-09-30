@@ -14,8 +14,7 @@ type Props = {
 const ConnectButton = (props: Props) => {
   const { size = '32', label = 'Connect wallet' } = props
 
-  const { address: accountAddress, isConnected: accountIsConnected } =
-    useAccount()
+  const { address, isConnected } = useAccount()
 
   return (
     <ConnectKitButton.Custom>
@@ -23,11 +22,11 @@ const ConnectButton = (props: Props) => {
         return (
           <Button
             onClick={show}
-            variant={accountIsConnected ? 'secondary' : 'primary'}
+            variant={isConnected ? 'secondary' : 'primary'}
             size={size}
           >
-            {accountAddress && accountIsConnected ? (
-              <ShortenAddress address={accountAddress!} />
+            {address && isConnected ? (
+              <ShortenAddress address={address} />
             ) : (
               label
             )}
