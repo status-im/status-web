@@ -42,7 +42,7 @@
     "prepack": "pnpm build"
   },
   "peerDependencies": {
-    "react": "^19.1.0"
+    "react": "^18.2.0"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.0",
@@ -83,8 +83,8 @@
     "eslint-plugin-tailwindcss": "^3.17.4",
     "postcss": "^8.4.33",
     "prettier-plugin-tailwindcss": "^0.6.6",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "rollup-plugin-preserve-directives": "^0.4.0",
     "storybook": "^8.3.0",
     "tailwind-scrollbar-utilities": "^0.2.0",

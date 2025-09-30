@@ -87,23 +87,30 @@ let config = {
       dynamic: 30,
       static: 180,
     },
-  },
-  // note: https://nextjs.org/blog/turbopack-for-development-stable#breaking-changes
-  turbopack: {
-    rules: {
-      fs: {
-        // note: https://github.com/vercel/next.js/discussions/67196
-        // note: https://github.com/vercel/next.js/pull/64205 available only in canary?
-        browser: false,
+    // note: https://nextjs.org/blog/turbopack-for-development-stable#breaking-changes
+    turbo: {
+      resolve: {
+        alias: {
+          '@achingbrain/nat-port-mapper': {
+            browser: false,
+          },
+        },
       },
-      tls: {
-        browser: false,
-      },
-      net: {
-        browser: false,
-      },
-      child_process: {
-        browser: false,
+      rules: {
+        fs: {
+          // note: https://github.com/vercel/next.js/discussions/67196
+          // note: https://github.com/vercel/next.js/pull/64205 available only in canary?
+          browser: false,
+        },
+        tls: {
+          browser: false,
+        },
+        net: {
+          browser: false,
+        },
+        child_process: {
+          browser: false,
+        },
       },
     },
   },

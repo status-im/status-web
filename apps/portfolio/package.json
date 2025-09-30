@@ -42,9 +42,9 @@
     "@status-im/components": "workspace:*",
     "@status-im/wallet": "workspace:*",
     "@status-im/icons": "workspace:*",
-    "@tanstack/query-core": "5.66.0",
-    "@tanstack/react-query": "5.66.0",
-    "@tanstack/react-query-devtools": "5.66.0",
+    "@tanstack/query-core": "5.29.0",
+    "@tanstack/react-query": "5.29.0",
+    "@tanstack/react-query-devtools": "5.29.0",
     "@tryghost/content-api": "^1.11.13",
     "@types/async-retry": "^1.4.9",
     "@types/title": "^3.4.3",
@@ -113,7 +113,7 @@
     "unified": "^10.1.2",
     "vfile-matter": "^5.0.0",
     "viem": "^2.21.1",
-    "wagmi": "2.15.2",
+    "wagmi": "^2.12.8",
     "zod": "^3.23.8"
   },
   "devDependencies": {
