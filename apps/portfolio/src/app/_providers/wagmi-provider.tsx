@@ -1,45 +1,17 @@
 'use client'
 
-import { createConfig, http, WagmiProvider as WagmiProviderBase } from 'wagmi'
-import { mainnet } from 'wagmi/chains'
-import { injected } from 'wagmi/connectors'
+import { WagmiProvider } from 'wagmi'
 
-import type React from 'react'
-
-export const config = createConfig({
-  chains: [mainnet],
-  ssr: false,
-  connectors: [injected()],
-  transports: {
-    // todo: replace public clients
-    [mainnet.id]: http(),
-  },
-})
-
-declare module 'wagmi' {
-  interface Register {
-    config: typeof config
-  }
-}
+import { config } from '../_config'
 
 type Props = {
   children: React.ReactNode
 }
 
-function WagmiProvider(props: Props) {
+function _WagmiProvider(props: Props) {
   const { children } = props
 
-  return (
-    <WagmiProviderBase
-      config={
-        config as unknown as React.ComponentProps<
-          typeof WagmiProviderBase
-        >['config']
-      }
-    >
-      {children}
-    </WagmiProviderBase>
-  )
+  return <WagmiProvider config={config}>{children}</WagmiProvider>
 }
 
-export { config as wagmiConfig, WagmiProvider }
+export { _WagmiProvider as WagmiProvider }
