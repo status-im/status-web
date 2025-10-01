@@ -2,16 +2,76 @@
 
 import { useState } from 'react'
 
+import { Tag } from '@status-im/components'
+import { ChevronDownIcon, ExternalIcon } from '@status-im/icons/20'
+import { TwitterIcon } from '@status-im/icons/social'
+import { Button, ButtonLink } from '@status-im/status-network/components'
+import { cx } from 'cva'
+
 import { HubLayout } from '~components/hub-layout'
 
 export default function DiscoverPage() {
   const [activeTab, setActiveTab] = useState('all')
   const [selectedTag, setSelectedTag] = useState('all-apps')
+  const [openCategories, setOpenCategories] = useState(false)
+
+  const tags = [
+    { id: 'all-apps', label: '🧩 All apps' },
+    { id: 'ai', label: '✨ AI' },
+    { id: 'bridge', label: '🚗 Bridge' },
+    { id: 'community', label: '🐕 Community' },
+    { id: 'defi', label: '📈 DeFi' },
+    { id: 'gaming', label: '🎮 Gaming' },
+    { id: 'infra', label: '💻 Infra' },
+    { id: 'nft', label: '🖼️ NFT' },
+    { id: 'payment', label: '💰 Payment' },
+    { id: 'privacy', label: '🕵️ Privacy' },
+    { id: 'social', label: '☕ Social' },
+    { id: 'spending', label: '🐷 Spending' },
+    { id: 'tooling', label: '☂️ Tooling' },
+    { id: 'wallet', label: '💎 Wallet' },
+  ]
 
   const tabs = [
     { id: 'popular', label: 'Popular' },
     { id: 'new', label: 'New' },
     { id: 'all', label: 'All' },
+  ]
+
+  const featured = [
+    {
+      id: 1,
+      name: 'Cat Fishing',
+      category: 'Community',
+      status: 'Live',
+      description: 'You love cats, cats love fish.',
+      website: 'https://cats.fishing',
+      twitter: 'catsfishings',
+      icon: '/apps/cats-fishing-avatar.png',
+      cover: '/apps/cats-fishing-cover.png',
+    },
+    {
+      id: 2,
+      name: 'Status Network Bridge',
+      category: 'Social',
+      status: 'Live',
+      description: 'Saving for gas? We’ve got you covered!',
+      website: 'https://bridge.status.network',
+      twitter: 'StatusL2',
+      icon: '/apps/status-network-bridge-avatar.png',
+      cover: '/apps/status-network-bridge-cover.png',
+    },
+    {
+      id: 3,
+      name: 'Hash Vegas',
+      category: 'Gaming',
+      status: 'Live',
+      description: ' Fair and transparent onchain gaming',
+      website: 'https://hashvegas.casino',
+      twitter: 'Hashvegas_Offi',
+      icon: '/apps/hashvegas-avatar.png',
+      cover: '/apps/hashvegas-cover.png',
+    },
   ]
 
   // Simple app data for demonstration
@@ -22,9 +82,9 @@ export default function DiscoverPage() {
       category: 'Community',
       status: 'Live',
       description: 'Join the community that supports animal welfare!',
-      icon: '🐾',
-      rating: 4.8,
-      users: '2.1M',
+      website: 'https://paw-sitive.vibes',
+      cover: '/apps/paw-sitive-vibes-cover.png',
+      icon: '/apps/paw-sitive-vibes-avatar.png',
     },
     {
       id: 2,
@@ -32,9 +92,9 @@ export default function DiscoverPage() {
       category: 'Social',
       status: 'Live',
       description: 'Surf the web with a feline twist',
-      icon: '🐱',
-      rating: 4.7,
-      users: '1.8M',
+      website: 'https://whiskers.waves',
+      cover: '/apps/whiskers-waves-cover.png',
+      icon: '/apps/whiskers-waves-avatar.png',
     },
     {
       id: 3,
@@ -42,9 +102,9 @@ export default function DiscoverPage() {
       category: 'Social',
       status: 'Live',
       description: 'A social platform for cat lovers to connect',
-      icon: '🐈',
-      rating: 4.6,
-      users: '950K',
+      website: 'https://feline-friends.com',
+      cover: '/apps/feline-friends-cover.png',
+      icon: '/apps/feline-friends-avatar.png',
     },
     {
       id: 4,
@@ -52,9 +112,9 @@ export default function DiscoverPage() {
       category: 'DeFi',
       status: 'Live',
       description: 'The cryptocurrency for cat enthusiasts',
-      icon: '🪙',
-      rating: 4.5,
-      users: '750K',
+      website: 'https://kittycoin.org',
+      cover: '/apps/kittycoin-cover.png',
+      icon: '/apps/kittycoin-avatar.png',
     },
     {
       id: 5,
@@ -62,9 +122,9 @@ export default function DiscoverPage() {
       category: 'NFT',
       status: 'Live',
       description: 'Buy, sell, and trade cat-related goods',
-      icon: '🛍️',
-      rating: 4.4,
-      users: '200K',
+      website: 'https://meow.marketplace',
+      cover: '/apps/meow-marketplace-cover.png',
+      icon: '/apps/meow-marketplace-avatar.png',
     },
     {
       id: 6,
@@ -72,9 +132,9 @@ export default function DiscoverPage() {
       category: 'Gaming',
       status: 'Live',
       description: 'Documenting the adventures of cats',
-      icon: '🚗',
-      rating: 4.3,
-      users: '120K',
+      website: 'https://furtastic.tube',
+      cover: '/apps/furtastic-adventures-cover.png',
+      icon: '/apps/furtastic-adventures-avatar.png',
     },
     {
       id: 7,
@@ -82,9 +142,9 @@ export default function DiscoverPage() {
       category: 'NFT',
       status: 'Live',
       description: 'Art inspired by our furry friends',
-      icon: '🎨',
-      rating: 4.2,
-      users: '80K',
+      website: 'https://cats.on.canvas',
+      cover: '/apps/cats-on-canvas-cover.png',
+      icon: '/apps/cats-on-canvas-avatar.png',
     },
     {
       id: 8,
@@ -92,9 +152,9 @@ export default function DiscoverPage() {
       category: 'Social',
       status: 'Live',
       description: "Cat's first music platform",
-      icon: '🎵',
-      rating: 4.1,
-      users: '50K',
+      website: 'https://pawse.fm',
+      cover: '/apps/pawse-cover.png',
+      icon: '/apps/pawse-avatar.png',
     },
     {
       id: 9,
@@ -102,41 +162,11 @@ export default function DiscoverPage() {
       category: 'Community',
       status: 'Live',
       description: 'A subscription box for cat lovers and their pets',
-      icon: '📦',
-      rating: 4.0,
-      users: '30K',
+      website: 'https://cuddleclub.com',
+      cover: '/apps/cuddleclub-cover.png',
+      icon: '/apps/cuddleclub-avatar.png',
     },
   ]
-
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'live':
-        return 'bg-green-100 text-green-700'
-      case 'beta':
-        return 'bg-blue-100 text-blue-700'
-      case 'upcoming':
-        return 'bg-yellow-100 text-yellow-700'
-      default:
-        return 'bg-gray-100 text-gray-700'
-    }
-  }
-
-  const getCategoryColor = (category: string) => {
-    switch (category.toLowerCase()) {
-      case 'defi':
-        return 'bg-purple-100 text-purple-700'
-      case 'nft':
-        return 'bg-pink-100 text-pink-700'
-      case 'gaming':
-        return 'bg-green-100 text-green-700'
-      case 'social':
-        return 'bg-blue-100 text-blue-700'
-      case 'tools':
-        return 'bg-orange-100 text-orange-700'
-      default:
-        return 'bg-gray-100 text-gray-700'
-    }
-  }
 
   const getCurrentApps = () => {
     return apps // For now, return all apps regardless of tab
@@ -147,506 +177,157 @@ export default function DiscoverPage() {
   return (
     <HubLayout>
       <div className="flex h-full flex-col p-8">
-        {/* Hero Section */}
-        <div className="mb-8 text-center">
-          <h1 className="mb-3 text-40 font-bold text-neutral-90">Discover</h1>
-          <p className="text-19 text-neutral-60">
-            Explore new applications and opportunities
-          </p>
-        </div>
-
         {/* Main Content */}
-        <div className="mx-auto w-full max-w-[1176px]">
+        <div className="mx-auto mt-6 flex w-full max-w-[1176px] flex-col gap-8">
           {/* Hero Section */}
-          <div className="mb-12 text-center">
-            <h1 className="mb-4 text-56 font-bold text-neutral-90">
-              Decentralised + gasless = ❤️
+          <div className="flex flex-col gap-2">
+            <h1 className="text-40 font-bold text-neutral-90">
+              Gasless apps FTW
             </h1>
-            <p className="text-27 text-neutral-60">
+            <p className="text-19 text-neutral-60">
               Explore curated dApps and services built on Status Network
             </p>
           </div>
 
           {/* Featured Section */}
-          <div className="mb-12">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-27 font-bold text-neutral-90">Featured</h2>
-              <button className="rounded-16 bg-neutral-10 px-4 py-2 text-19 font-medium text-neutral-90 hover:bg-neutral-20">
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-27 font-600 text-neutral-100">Featured</h2>
+              <Button variant="white" size="32">
                 Get featured
-              </button>
+              </Button>
             </div>
 
             {/* Featured Apps Grid */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {/* Cat Fishing */}
-              <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30">
-                <div className="mb-4">
-                  <div className="mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-blue-50 to-success-50">
-                    <div className="text-center">
-                      <div className="mb-2 text-40">🎣</div>
-                      <p className="text-19 font-medium text-neutral-80">
-                        Cat Fishing
-                      </p>
-                    </div>
-                  </div>
-                  <h3 className="mb-2 text-19 font-semibold text-neutral-90">
-                    Cat Fishing
-                  </h3>
-                  <p className="mb-3 text-19 text-neutral-70">
-                    You love cats, cats love fish.
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-neutral-10 px-3 py-1 text-13 font-medium text-neutral-90">
-                      <a
-                        href="https://example.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-neutral-70"
-                      >
-                        cats.fishing
-                      </a>
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <a
-                        href="https://example.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-neutral-60 hover:text-neutral-90"
-                      >
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
-                        </svg>
-                      </a>
-                      <button className="text-neutral-60 hover:text-neutral-90">
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Status Network Bridge */}
-              <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30">
-                <div className="mb-4">
-                  <div className="mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-customisation-purple-50 to-success-50">
-                    <div className="text-center">
-                      <div className="mb-2 text-40">🌉</div>
-                      <p className="text-15 font-medium text-neutral-80">
-                        Status Network Bridge
-                      </p>
-                    </div>
-                  </div>
-                  <h3 className="mb-2 text-19 font-semibold text-neutral-90">
-                    Status Network Bridge
-                  </h3>
-                  <p className="mb-3 text-15 text-neutral-70">
-                    Saving for gas? We've got you covered!
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-neutral-10 px-3 py-1 text-13 font-medium text-neutral-90">
-                      <a
-                        href="https://example.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-neutral-70"
-                      >
-                        bridge.status.network
-                      </a>
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <a
-                        href="https://example.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-neutral-60 hover:text-neutral-90"
-                      >
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
-                        </svg>
-                      </a>
-                      <button className="text-neutral-60 hover:text-neutral-90">
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Hash Vegas */}
-              <div className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30">
-                <div className="mb-4">
-                  <div className="mb-4 flex aspect-[16/9] w-full items-center justify-center rounded-16 bg-gradient-to-br from-customisation-purple-50 to-customisation-yellow-50">
-                    <div className="text-center">
-                      <div className="mb-2 text-40">🎰</div>
-                      <p className="text-15 font-medium text-neutral-80">
-                        Hash Vegas
-                      </p>
-                    </div>
-                  </div>
-                  <h3 className="mb-2 text-19 font-semibold text-neutral-90">
-                    Hash Vegas
-                  </h3>
-                  <p className="mb-3 text-15 text-neutral-70">
-                    Fair and transparent onchain gaming
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <span className="rounded-full bg-neutral-10 px-3 py-1 text-13 font-medium text-neutral-90">
-                      <a
-                        href="https://example.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:text-neutral-70"
-                      >
-                        hashvegas.casino
-                      </a>
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <a
-                        href="https://example.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-neutral-60 hover:text-neutral-90"
-                      >
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                          />
-                        </svg>
-                      </a>
-                      <button className="text-neutral-60 hover:text-neutral-90">
-                        <svg
-                          className="size-4"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {featured.map(app => (
+                <DiscoverAppCard key={app.id} {...app} />
+              ))}
             </div>
           </div>
 
-          {/* Header with Title and Sorting Options */}
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-27 font-bold text-neutral-90">All Apps</h2>
+          <div className="">
+            {/* Header with Title and Sorting Options */}
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-27 font-600 text-neutral-100">All Apps</h2>
 
-            <div className="flex items-center gap-4">
-              {/* Sorting Options */}
-              <div className="flex space-x-1 rounded-16 bg-neutral-10 p-1">
-                {tabs.map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`rounded-12 px-4 py-2 text-15 font-medium transition-colors ${
-                      activeTab === tab.id
-                        ? 'bg-neutral-90 text-white-100'
-                        : 'text-neutral-90 hover:text-neutral-70'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
+              <div className="flex items-center gap-3">
+                {/* Sorting Options */}
+                <div className="flex gap-3">
+                  {tabs.map(tab => (
+                    <Button
+                      variant="grey"
+                      size="32"
+                      key={tab.id}
+                      active={activeTab === tab.id}
+                      onClick={() => {
+                        setActiveTab(tab.id)
+                        console.log('active tab', tab.id)
+                      }}
+                    >
+                      {tab.label}
+                    </Button>
+                  ))}
+                </div>
+
+                {/* Categories Button */}
+                <Button
+                  variant="white"
+                  size="32"
+                  onClick={() => setOpenCategories(!openCategories)}
+                  icon={
+                    <ChevronDownIcon
+                      className={cx(
+                        'text-neutral-100',
+                        openCategories
+                          ? 'rotate-180 transition-transform'
+                          : 'rotate-0 transition-transform'
+                      )}
+                    />
+                  }
+                >
+                  Categories
+                </Button>
+              </div>
+            </div>
+
+            {/* Category Filter Buttons */}
+            <div className={cx('mb-8', openCategories ? 'block' : 'hidden')}>
+              <div className="flex flex-wrap gap-2">
+                {tags.map(tag => (
+                  <Tag
+                    key={tag.id}
+                    onPress={() => setSelectedTag(tag.id)}
+                    selected={selectedTag === tag.id}
+                    label={tag.label}
+                    size="32"
+                  />
                 ))}
               </div>
-
-              {/* Categories Button */}
-              <button className="flex items-center gap-2 rounded-12 bg-neutral-10 px-4 py-2 text-15 font-medium text-neutral-90 hover:bg-neutral-20">
-                Categories
-                <svg
-                  className="size-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 15l7-7 7 7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          {/* Category Filter Buttons */}
-          <div className="mb-8">
-            {/* First Row */}
-            <div className="mb-3 flex flex-wrap gap-2">
-              <button
-                onClick={() => setSelectedTag('all-apps')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'all-apps'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🧩</span>
-                All apps
-              </button>
-              <button
-                onClick={() => setSelectedTag('ai')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'ai'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">✨</span>
-                AI
-              </button>
-              <button
-                onClick={() => setSelectedTag('bridge')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'bridge'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🚗</span>
-                Bridge
-              </button>
-              <button
-                onClick={() => setSelectedTag('community')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'community'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🐕</span>
-                Community
-              </button>
-              <button
-                onClick={() => setSelectedTag('defi')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'defi'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">📈</span>
-                DeFi
-              </button>
-              <button
-                onClick={() => setSelectedTag('gaming')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'gaming'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🎮</span>
-                Gaming
-              </button>
-              <button
-                onClick={() => setSelectedTag('infra')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'infra'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">💻</span>
-                Infra
-              </button>
-              <button
-                onClick={() => setSelectedTag('nft')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'nft'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🖼️</span>
-                NFT
-              </button>
-              <button
-                onClick={() => setSelectedTag('payment')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'payment'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">💰</span>
-                Payment
-              </button>
-              <button
-                onClick={() => setSelectedTag('privacy')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'privacy'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🕵️</span>
-                Privacy
-              </button>
-              <button
-                onClick={() => setSelectedTag('social')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'social'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">☕</span>
-                Social
-              </button>
             </div>
 
-            {/* Second Row */}
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setSelectedTag('spending')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'spending'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">🐷</span>
-                Spending
-              </button>
-              <button
-                onClick={() => setSelectedTag('tooling')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'tooling'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">☂️</span>
-                Tooling
-              </button>
-              <button
-                onClick={() => setSelectedTag('wallet')}
-                className={`flex items-center gap-2 rounded-full px-3 py-2 text-13 font-medium transition-colors ${
-                  selectedTag === 'wallet'
-                    ? 'bg-neutral-90 text-white-100'
-                    : 'bg-neutral-10 text-neutral-90 hover:bg-neutral-20'
-                }`}
-              >
-                <span className="text-15">💎</span>
-                Wallet
-              </button>
+            {/* Apps Grid */}
+            <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {currentApps.map(app => (
+                <DiscoverAppCard key={app.id} {...app} />
+              ))}
             </div>
-          </div>
-
-          {/* Apps Grid */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {currentApps.map(app => (
-              <div
-                key={app.id}
-                className="rounded-20 border border-neutral-20 bg-white-100 p-6 shadow-2 transition-colors hover:border-neutral-30"
-              >
-                <div className="mb-4 flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex size-12 items-center justify-center rounded-full bg-customisation-purple-50/20 text-27">
-                      {app.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-19 font-semibold text-neutral-90">
-                        {app.name}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={`rounded-full px-2 py-1 text-13 font-medium ${getCategoryColor(app.category)}`}
-                        >
-                          {app.category}
-                        </span>
-                        <span
-                          className={`rounded-full px-2 py-1 text-13 font-medium ${getStatusColor(app.status)}`}
-                        >
-                          {app.status}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="flex items-center gap-1">
-                      <span className="text-15 font-medium text-neutral-90">
-                        {app.rating}
-                      </span>
-                      <span className="text-customisation-yellow-50">⭐</span>
-                    </div>
-                    <p className="text-13 text-neutral-60">{app.users} users</p>
-                  </div>
-                </div>
-
-                <p className="mb-4 text-15 text-neutral-70">
-                  {app.description}
-                </p>
-
-                <button className="w-full rounded-16 bg-purple px-4 py-3 text-15 font-medium text-white-100 transition-colors hover:bg-purple-dark">
-                  Launch App
-                </button>
-              </div>
-            ))}
           </div>
         </div>
       </div>
     </HubLayout>
+  )
+}
+
+type DiscoverAppCardProps = {
+  name: string
+  description: string
+  website: string
+  twitter?: string
+}
+
+const DiscoverAppCard = (props: DiscoverAppCardProps) => {
+  const { name, description, website, twitter } = props
+
+  return (
+    <div className="rounded-28 border border-neutral-20 bg-white-100 p-2 shadow-2 transition-colors hover:border-neutral-30">
+      {/* placeholder for cover image */}
+      <div className="relative mb-4 flex aspect-[12/5] w-full items-center justify-center rounded-24 bg-neutral-20">
+        <span className="rotate-[330deg] text-27 text-neutral-40">
+          Placeholder
+        </span>
+        <div className="absolute bottom-[-15px] left-2 flex size-20 items-center justify-center rounded-24 bg-neutral-40 text-11 text-neutral-60">
+          <span className="rotate-45">Placeholder</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-1 px-2 pb-2 pt-[10px]">
+        <h3 className="mb-1 text-27 font-semibold text-neutral-90">{name}</h3>
+        <p className="text-15 font-400 text-neutral-100">{description}</p>
+        <div className="flex items-start gap-2">
+          <ButtonLink
+            href={website}
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="white"
+            size="32"
+          >
+            {website.replace('https://', '')}{' '}
+            <ExternalIcon className="size-4 text-neutral-50" />
+          </ButtonLink>
+          {twitter && (
+            <ButtonLink
+              href={`https://x.com/${twitter}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="white"
+              size="32"
+            >
+              <TwitterIcon className="size-4 text-neutral-50" />
+            </ButtonLink>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
