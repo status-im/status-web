@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { Tooltip } from '@status-im/components'
 import {
@@ -19,22 +19,43 @@ import { useAccount } from 'wagmi'
 import { HubLayout } from '~components/hub-layout'
 
 import { LaunchIcon, SNTIcon } from '../_components/icons'
+import { ProgressDialog } from '../_components/stake/progress-dialog'
 import { PromoModal } from '../_components/stake/promo-modal'
+import { useProgressDialogContent } from '../_components/stake/use-progress-dialog-content'
+import { useVaultStateMachine } from '../_hooks/use-vault-state-machine'
+
+type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
 
 export default function StakePage() {
-  const [status, setStatus] = useState<
-    'unninstalled' | 'disconnected' | 'connected'
-  >('unninstalled')
-  const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false)
   const { isConnected } = useAccount()
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
 
-  useEffect(() => {
+  // State machine for vault operations
+  const {
+    state: vaultState,
+    send: sendVaultEvent,
+    reset: resetVault,
+  } = useVaultStateMachine()
+  const dialogContent = useProgressDialogContent(vaultState)
+
+  const status: ConnectionStatus = useMemo(() => {
+    if (isConnected) return 'connected'
+    return isPromoModalOpen ? 'uninstalled' : 'disconnected'
+  }, [isConnected, isPromoModalOpen])
+
+  const handleCreateVault = () => {
     if (isConnected) {
-      setStatus('connected')
-    } else {
-      setStatus('disconnected')
+      sendVaultEvent({ type: 'START_CREATE_VAULT' })
     }
-  }, [isConnected])
+  }
+
+  const handleCloseProgressDialog = () => {
+    resetVault()
+  }
+
+  const handleClosePromoModal = () => {
+    setIsPromoModalOpen(false)
+  }
 
   return (
     <HubLayout>
@@ -192,13 +213,10 @@ export default function StakePage() {
                     </div>
                   </div>
                   {match(status)
-                    .with('unninstalled', () => (
+                    .with('uninstalled', () => (
                       <PromoModal
                         open={isPromoModalOpen}
-                        onClose={() => {
-                          setIsPromoModalOpen(false)
-                          setStatus('disconnected')
-                        }}
+                        onClose={handleClosePromoModal}
                       >
                         {/* @ts-expect-error - TODO: fix this */}
                         <Button
@@ -211,24 +229,36 @@ export default function StakePage() {
                     ))
                     .with('disconnected', () => (
                       <ConnectKitButton.Custom>
-                        {({ isConnected, show }) => (
+                        {({ show }) => (
                           // @ts-expect-error - TODO: fix this
                           <Button
                             className="w-full justify-center"
                             onClick={show}
                           >
-                            {isConnected
-                              ? 'Create new vault'
-                              : 'Connect Wallet'}
+                            Connect Wallet
                           </Button>
                         )}
                       </ConnectKitButton.Custom>
                     ))
                     .with('connected', () => (
-                      // @ts-expect-error - TODO: fix this
-                      <Button className="w-full justify-center">
-                        Create new vault
-                      </Button>
+                      <>
+                        {/* @ts-expect-error - TODO: fix this */}
+                        <Button
+                          className="w-full justify-center"
+                          onClick={handleCreateVault}
+                        >
+                          Create new vault
+                        </Button>
+                        {dialogContent && (
+                          <ProgressDialog
+                            open={true}
+                            onClose={handleCloseProgressDialog}
+                            title={dialogContent.title}
+                            description={dialogContent.description}
+                            state={dialogContent.state}
+                          />
+                        )}
+                      </>
                     ))
                     .exhaustive()}
                 </div>
