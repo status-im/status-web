@@ -116,7 +116,7 @@ export default function DiscoverPage() {
 
             {/* Category Filter Buttons */}
             <div className={cx('mb-8', openCategories ? 'block' : 'hidden')}>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2" data-customisation="blue">
                 {categories.map(category => (
                   <Tag
                     key={category.id}
