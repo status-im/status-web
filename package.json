@@ -75,5 +75,10 @@
       "tinykeys@3.0.0": "patches/tinykeys@3.0.0.patch",
       "oslo@1.0.1": "patches/oslo@1.0.1.patch"
     }
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.2",
+    "connectkit": "^1.9.0",
+    "wagmi": "^2.12.8"
   }
 }
