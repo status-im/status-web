@@ -28,7 +28,7 @@ export const featuredApps: App[] = [
     name: 'Hash Vegas',
     category: 'Gaming',
     status: 'Live',
-    description: ' Fair and transparent onchain gaming',
+    description: 'Fair and transparent onchain gaming',
     website: 'https://hashvegas.casino',
     twitter: 'Hashvegas_Offi',
     icon: '/apps/hashvegas-avatar.png',
