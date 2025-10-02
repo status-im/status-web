@@ -3,9 +3,9 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { CloseIcon } from '@status-im/icons/20'
 import { match } from 'ts-pattern'
 
-import { NewActionIcon } from '../icons'
+import { NewActionIcon, ProcessingIcon } from '../icons'
 
-import type { ProgressDialogState } from './use-progress-dialog-content'
+import type { ActionStatusState } from './use-action-status-content'
 
 type Props = {
   open: boolean
@@ -13,11 +13,18 @@ type Props = {
   title: string
   description: string
   children?: React.ReactNode
-  state?: ProgressDialogState
+  state?: ActionStatusState
 }
 
-const ProgressDialog = (props: Props) => {
-  const { open, onClose, title, description, children, state = 'new' } = props
+const ActionStatusDialog = (props: Props) => {
+  const {
+    open,
+    onClose,
+    title,
+    description,
+    children,
+    state = 'pending',
+  } = props
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
@@ -25,12 +32,12 @@ const ProgressDialog = (props: Props) => {
     }
   }
 
-  const mapIconToState = (state: ProgressDialogState) => {
+  const mapIconToState = (state: ActionStatusState) => {
     return match(state)
-      .with('siwe', () => <NewActionIcon />)
-      .with('new', () => <NewActionIcon />)
-      .with('in-progress', () => <NewActionIcon />)
-      .with('failed', () => <NewActionIcon />)
+      .with('pending', () => <NewActionIcon />)
+      .with('processing', () => <ProcessingIcon />)
+      .with('error', () => <CloseIcon />)
+      .with('success', () => <NewActionIcon />)
       .otherwise(() => null)
   }
 
@@ -69,4 +76,4 @@ const ProgressDialog = (props: Props) => {
   )
 }
 
-export { ProgressDialog }
+export { ActionStatusDialog }

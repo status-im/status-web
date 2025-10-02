@@ -2,42 +2,41 @@ import { match } from 'ts-pattern'
 
 import type { VaultState } from '../../_hooks/use-vault-state-machine'
 
-export type ProgressDialogState =
-  | 'siwe'
-  | 'new'
-  | 'in-progress'
-  | 'failed'
-  | 'success'
+export type ActionStatusState =
+  | 'pending' // Waiting for user action (sign, approve)
+  | 'processing' // Transaction in progress
+  | 'error' // Failed/rejected
+  | 'success' // Completed successfully
 
-export type ProgressDialogContent = {
+export type ActionStatusContent = {
   title: string
   description: string
-  state: ProgressDialogState
+  state: ActionStatusState
   showCloseButton: boolean
 }
 
-export function useProgressDialogContent(
+export function useActionStatusContent(
   state: VaultState
-): ProgressDialogContent | null {
+): ActionStatusContent | null {
   return (
-    match<VaultState, ProgressDialogContent | null>(state)
+    match<VaultState, ActionStatusContent | null>(state)
       // SIWE flow
       .with({ type: 'siwe', step: 'initialize' }, () => ({
         title: 'Sign in',
         description: 'Please sign the message in your wallet.',
-        state: 'new',
+        state: 'pending',
         showCloseButton: true,
       }))
       .with({ type: 'siwe', step: 'processing' }, () => ({
         title: 'Signing in',
         description: 'Wait a moment.',
-        state: 'in-progress',
+        state: 'processing',
         showCloseButton: true,
       }))
       .with({ type: 'siwe', step: 'rejected' }, () => ({
         title: 'Request was rejected',
         description: 'Request was rejected by user',
-        state: 'failed',
+        state: 'error',
         showCloseButton: true,
       }))
 
@@ -45,19 +44,19 @@ export function useProgressDialogContent(
       .with({ type: 'createVault', step: 'initialize' }, () => ({
         title: 'Ready to create new vault',
         description: 'Please sign the message in your wallet.',
-        state: 'new',
+        state: 'pending',
         showCloseButton: true,
       }))
       .with({ type: 'createVault', step: 'processing' }, () => ({
         title: 'Creating new vault',
         description: 'Wait a moment.',
-        state: 'in-progress',
+        state: 'processing',
         showCloseButton: true,
       }))
       .with({ type: 'createVault', step: 'rejected' }, () => ({
         title: 'Request was rejected',
         description: 'Request was rejected by user',
-        state: 'failed',
+        state: 'error',
         showCloseButton: true,
       }))
 
@@ -65,19 +64,19 @@ export function useProgressDialogContent(
       .with({ type: 'increaseAllowance', step: 'initialize' }, () => ({
         title: 'Increase token allowance',
         description: 'Please sign the message in your wallet.',
-        state: 'new',
+        state: 'pending',
         showCloseButton: true,
       }))
       .with({ type: 'increaseAllowance', step: 'processing' }, () => ({
         title: 'Increasing token allowance',
         description: 'Wait a moment.',
-        state: 'in-progress',
+        state: 'processing',
         showCloseButton: false,
       }))
       .with({ type: 'increaseAllowance', step: 'rejected' }, () => ({
         title: 'Request was rejected',
         description: 'Request was rejected by user',
-        state: 'failed',
+        state: 'error',
         showCloseButton: true,
       }))
 
@@ -90,21 +89,21 @@ export function useProgressDialogContent(
         state => ({
           title: `Ready to stake ${state.amount || '0'} SNT`,
           description: 'Please sign the message in your wallet.',
-          state: 'new',
+          state: 'pending',
           showCloseButton: true,
         })
       )
 
       .with({ type: 'staking', step: 'processing' }, state => ({
-        title: `Staking ${state.amount} SNT`,
+        title: `Staking ${state.amount || '0'} SNT`,
         description: 'Wait a moment...',
-        state: 'in-progress',
+        state: 'processing',
         showCloseButton: false,
       }))
       .with({ type: 'staking', step: 'rejected' }, () => ({
         title: 'Request was rejected',
         description: 'Request was rejected by user',
-        state: 'failed',
+        state: 'error',
         showCloseButton: true,
       }))
 

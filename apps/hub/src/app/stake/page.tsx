@@ -19,9 +19,9 @@ import { useAccount } from 'wagmi'
 import { HubLayout } from '~components/hub-layout'
 
 import { LaunchIcon, SNTIcon } from '../_components/icons'
-import { ProgressDialog } from '../_components/stake/progress-dialog'
+import { ActionStatusDialog } from '../_components/stake/action-status-dialog'
 import { PromoModal } from '../_components/stake/promo-modal'
-import { useProgressDialogContent } from '../_components/stake/use-progress-dialog-content'
+import { useActionStatusContent } from '../_components/stake/use-action-status-content'
 import { useVaultStateMachine } from '../_hooks/use-vault-state-machine'
 
 type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
@@ -36,7 +36,7 @@ export default function StakePage() {
     send: sendVaultEvent,
     reset: resetVault,
   } = useVaultStateMachine()
-  const dialogContent = useProgressDialogContent(vaultState)
+  const dialogContent = useActionStatusContent(vaultState)
 
   const status: ConnectionStatus = useMemo(() => {
     if (isConnected) return 'connected'
@@ -250,7 +250,7 @@ export default function StakePage() {
                           Create new vault
                         </Button>
                         {dialogContent && (
-                          <ProgressDialog
+                          <ActionStatusDialog
                             open={true}
                             onClose={handleCloseProgressDialog}
                             title={dialogContent.title}
