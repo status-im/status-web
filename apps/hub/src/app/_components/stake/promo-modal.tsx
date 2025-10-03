@@ -5,6 +5,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { Tag } from '@status-im/components'
 import { CloseIcon, ExternalIcon } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
+import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
 
 type Props = {
@@ -76,15 +77,17 @@ const PromoModal = (props: Props) => {
                     <ExternalIcon className="size-4" />
                   </ButtonLink>
 
-                  {/* TODO: Implement connect wallet flow through provider */}
-                  {/* @ts-expect-error - TODO: fix this */}
-                  <Button
-                    variant="outline"
-                    onClick={onClose}
-                    className="text-white-100"
-                  >
-                    Choose other wallet
-                  </Button>
+                  <ConnectKitButton.Custom>
+                    {({ show, isConnected }) => (
+                      // @ts-expect-error - TODO: fix this
+                      <Button
+                        onClick={show}
+                        variant={isConnected ? 'secondary' : 'primary'}
+                      >
+                        {isConnected ? 'Connected' : 'Connect Wallet'}
+                      </Button>
+                    )}
+                  </ConnectKitButton.Custom>
                 </div>
               </div>
 
