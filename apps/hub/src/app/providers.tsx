@@ -8,7 +8,10 @@ import { mainnet } from 'wagmi/chains'
 import { defineWagmiConfig } from '../wagmi'
 import { ActionStatusDialog } from './_components/stake/action-status-dialog'
 import { useActionStatusContent } from './_components/stake/use-action-status-content'
-import { useVaultStateMachine } from './_hooks/use-vault-state-machine'
+import {
+  useVaultStateContext,
+  VaultStateProvider,
+} from './_hooks/vault-state-context'
 
 const config = defineWagmiConfig({
   chains: [mainnet],
@@ -17,25 +20,34 @@ const config = defineWagmiConfig({
 
 const queryClient = new QueryClient()
 
-export const Providers = ({ children }: { children: React.ReactNode }) => {
-  const { state: vaultState, reset: resetVault } = useVaultStateMachine()
+const ProvidersContent = ({ children }: { children: React.ReactNode }) => {
+  const { state: vaultState, reset: resetVault } = useVaultStateContext()
   const dialogContent = useActionStatusContent(vaultState)
 
   return (
+    <>
+      {children}
+
+      {dialogContent && (
+        <ActionStatusDialog
+          open={true}
+          onClose={resetVault}
+          {...dialogContent}
+        />
+      )}
+    </>
+  )
+}
+
+export const Providers = ({ children }: { children: React.ReactNode }) => {
+  return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <ConnectKitProvider>{children}</ConnectKitProvider>
-
-        {dialogContent && (
-          <ActionStatusDialog
-            open={true}
-            onClose={resetVault}
-            title={dialogContent.title}
-            description={dialogContent.description}
-            state={dialogContent.state}
-            showCloseButton={dialogContent.showCloseButton}
-          />
-        )}
+        <ConnectKitProvider>
+          <VaultStateProvider>
+            <ProvidersContent>{children}</ProvidersContent>
+          </VaultStateProvider>
+        </ConnectKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )

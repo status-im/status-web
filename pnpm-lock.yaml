@@ -36,6 +36,9 @@ importers:
 
   .:
     dependencies:
+      '@tanstack/react-query':
+        specifier: ^5.90.2
+        version: 5.90.2(react@19.1.0)
       connectkit:
         specifier: ^1.9.0
         version: 1.9.0(@babel/core@7.27.1)(@tanstack/react-query@5.90.2(react@19.1.0))(react-dom@19.1.1(react@19.1.0))(react-is@18.1.0)(react@19.1.0)(viem@2.29.1(bufferutil@4.0.9)(typescript@5.6.2)(utf-8-validate@5.0.10)(zod@3.25.76))(wagmi@2.15.2(@tanstack/query-core@5.90.2)(@tanstack/react-query@5.90.2(react@19.1.0))(@types/react@19.1.0)(bufferutil@4.0.9)(react@19.1.0)(typescript@5.6.2)(utf-8-validate@5.0.10)(viem@2.29.1(bufferutil@4.0.9)(typescript@5.6.2)(utf-8-validate@5.0.10)(zod@3.25.76))(zod@3.25.76))
@@ -591,7 +594,7 @@ importers:
         version: 0.3.4(contentlayer@0.3.4(esbuild@0.19.12))(esbuild@0.19.12)(next@15.3.0(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-mdx-remote:
         specifier: ^5.0.0
-        version: 5.0.0(@types/react@19.1.0)(acorn@8.14.1)(react@19.1.0)
+        version: 5.0.0(@types/react@19.1.0)(acorn@8.14.0)(react@19.1.0)
       oslo:
         specifier: 1.0.1
         version: 1.0.1(patch_hash=d3ggqvlr26vmqrkdyyommjkaeu)
@@ -18802,9 +18805,6 @@ packages:
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
-  zod@3.23.8:
-    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
-
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
@@ -19854,7 +19854,7 @@ snapshots:
       ts-pattern: 4.3.0
       unified: 10.1.2
       yaml: 2.5.1
-      zod: 3.23.8
+      zod: 3.25.76
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
       - esbuild
@@ -21876,6 +21876,36 @@ snapshots:
       unist-util-visit: 4.1.2
       vfile: 5.3.7
     transitivePeerDependencies:
+      - supports-color
+
+  '@mdx-js/mdx@3.1.0(acorn@8.14.0)':
+    dependencies:
+      '@types/estree': 1.0.7
+      '@types/estree-jsx': 1.0.5
+      '@types/hast': 3.0.4
+      '@types/mdx': 2.0.13
+      collapse-white-space: 2.1.0
+      devlop: 1.1.0
+      estree-util-is-identifier-name: 3.0.0
+      estree-util-scope: 1.0.0
+      estree-walker: 3.0.3
+      hast-util-to-jsx-runtime: 2.3.6
+      markdown-extensions: 2.0.0
+      recma-build-jsx: 1.0.0
+      recma-jsx: 1.0.0(acorn@8.14.0)
+      recma-stringify: 1.0.0
+      rehype-recma: 1.0.0
+      remark-mdx: 3.1.0
+      remark-parse: 11.0.0
+      remark-rehype: 11.1.2
+      source-map: 0.7.4
+      unified: 11.0.5
+      unist-util-position-from-estree: 2.0.0
+      unist-util-stringify-position: 4.0.0
+      unist-util-visit: 5.0.0
+      vfile: 6.0.3
+    transitivePeerDependencies:
+      - acorn
       - supports-color
 
   '@mdx-js/mdx@3.1.0(acorn@8.14.1)':
@@ -38358,6 +38388,20 @@ snapshots:
       - markdown-wasm
       - supports-color
 
+  next-mdx-remote@5.0.0(@types/react@19.1.0)(acorn@8.14.0)(react@19.1.0):
+    dependencies:
+      '@babel/code-frame': 7.27.1
+      '@mdx-js/mdx': 3.1.0(acorn@8.14.0)
+      '@mdx-js/react': 3.0.1(@types/react@19.1.0)(react@19.1.0)
+      react: 19.1.0
+      unist-util-remove: 3.1.1
+      vfile: 6.0.3
+      vfile-matter: 5.0.1
+    transitivePeerDependencies:
+      - '@types/react'
+      - acorn
+      - supports-color
+
   next-mdx-remote@5.0.0(@types/react@19.1.0)(acorn@8.14.1)(react@19.1.0):
     dependencies:
       '@babel/code-frame': 7.27.1
@@ -40297,6 +40341,16 @@ snapshots:
       '@types/estree': 1.0.7
       estree-util-build-jsx: 3.0.1
       vfile: 6.0.3
+
+  recma-jsx@1.0.0(acorn@8.14.0):
+    dependencies:
+      acorn-jsx: 5.3.2(acorn@8.14.0)
+      estree-util-to-js: 2.0.0
+      recma-parse: 1.0.0
+      recma-stringify: 1.0.0
+      unified: 11.0.5
+    transitivePeerDependencies:
+      - acorn
 
   recma-jsx@1.0.0(acorn@8.14.1):
     dependencies:
@@ -44454,8 +44508,6 @@ snapshots:
       zod: 3.25.76
 
   zod@3.22.4: {}
-
-  zod@3.23.8: {}
 
   zod@3.25.76: {}
 

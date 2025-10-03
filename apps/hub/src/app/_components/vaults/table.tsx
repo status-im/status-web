@@ -11,7 +11,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 
-import { useVaultStateMachine } from '../../_hooks/use-vault-state-machine'
+import { useVaultStateContext } from '../../_hooks/vault-state-context'
 import { createVaultTableColumns } from './table-columns'
 
 import type { Vault, VaultColumnMeta } from './types'
@@ -48,7 +48,7 @@ export const VaultsTable = () => {
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const { send: sendVaultEvent } = useVaultStateMachine()
+  const { send: sendVaultEvent } = useVaultStateContext()
 
   const handleAddVaultModal = () => {
     sendVaultEvent({ type: 'START_CREATE_VAULT' })

@@ -22,7 +22,7 @@ import { LaunchIcon, SNTIcon } from '../_components/icons'
 import { PromoModal } from '../_components/stake/promo-modal'
 import { VaultsTable } from '../_components/vaults/table'
 import { useSiwe } from '../_hooks/use-siwe'
-import { useVaultStateMachine } from '../_hooks/use-vault-state-machine'
+import { useVaultStateContext } from '../_hooks/vault-state-context'
 
 type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
 
@@ -38,7 +38,7 @@ export default function StakePage() {
     state: vaultState,
     send: sendVaultEvent,
     reset: resetVault,
-  } = useVaultStateMachine()
+  } = useVaultStateContext()
 
   const status: ConnectionStatus = useMemo(() => {
     if (isConnected) return 'connected'
