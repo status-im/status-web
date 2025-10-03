@@ -1,14 +1,26 @@
 /* eslint-disable import/no-unresolved */
+
 import { OptionsIcon, TimeIcon } from '@status-im/icons/12'
 import { LockedIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 
 import { formatKarma, formatSNT } from '../../../utils/currency'
+import { VaultLockConfigModal } from './lock-modal'
 
 import type { Vault } from './types'
 
-export const createVaultTableColumns = (data: Vault[]) => {
+interface TableColumnsProps {
+  data: Vault[]
+  openModalVaultId: string | null
+  setOpenModalVaultId: (vaultId: string | null) => void
+}
+
+export const createVaultTableColumns = ({
+  data,
+  openModalVaultId,
+  setOpenModalVaultId,
+}: TableColumnsProps) => {
   const totalStaked = data.reduce((acc, vault) => acc + vault.staked, BigInt(0))
   const totalKarma = data.reduce((acc, vault) => acc + vault.karma, 0)
   const columnHelper = createColumnHelper<Vault>()
@@ -169,20 +181,90 @@ export const createVaultTableColumns = (data: Vault[]) => {
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => {
+        const isModalOpen = openModalVaultId === row.original.id
+
         return (
           <div className="flex items-center justify-end gap-4">
             {row.original.locked ? (
-              // @ts-expect-error - Button component is not typed
-              <Button variant="primary" size="32" className="text-[13px]">
-                <TimeIcon />
-                Extend lock time
-              </Button>
+              <VaultLockConfigModal
+                open={isModalOpen}
+                onOpenChange={open =>
+                  setOpenModalVaultId(open ? row.original.id : null)
+                }
+                title="Extend lock time"
+                description="Extending lock time increasing Karma boost"
+                actions={[
+                  {
+                    label: 'Cancel',
+                    onClick: () => setOpenModalVaultId(null),
+                  },
+                  {
+                    label: 'Extend lock',
+                    onClick: () => {
+                      // Handle extend lock logic
+                      setOpenModalVaultId(null)
+                    },
+                  },
+                ]}
+                onClose={() => setOpenModalVaultId(null)}
+                boost="x2.5"
+                unlockDate="30/01/2026"
+                infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
+              >
+                {/* @ts-expect-error - Button component is not typed */}
+                <Button variant="primary" size="32" className="text-[13px]">
+                  <TimeIcon />
+                  Extend lock time
+                </Button>
+              </VaultLockConfigModal>
             ) : (
-              // @ts-expect-error - Button component is not typed
-              <Button variant="primary" size="32" className="text-[13px]">
-                <LockedIcon fill="white" />
-                Lock
-              </Button>
+              <VaultLockConfigModal
+                open={isModalOpen}
+                onOpenChange={open =>
+                  setOpenModalVaultId(open ? row.original.id : null)
+                }
+                title="Do you want to lock the vault?"
+                description="Lock this vault to receive more Karma"
+                sliderConfig={{
+                  minLabel: '90 days',
+                  maxLabel: '4 years',
+                  minDays: 90,
+                  maxDays: 1460,
+                  initialPosition: 50,
+                }}
+                initialYears="2"
+                initialDays="732"
+                actions={[
+                  {
+                    label: "Don't lock",
+                    onClick: () => setOpenModalVaultId(null),
+                  },
+                  {
+                    label: 'Lock',
+                    onClick: () => {
+                      // Handle lock logic
+                      setOpenModalVaultId(null)
+                    },
+                  },
+                ]}
+                onClose={() => setOpenModalVaultId(null)}
+                boost="x2.5"
+                unlockDate="30/01/2025"
+                infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
+                onValidate={(years, days) => {
+                  const totalDays =
+                    parseInt(years || '0') * 365 + parseInt(days || '0')
+                  return totalDays > 1460
+                    ? 'Maximum lock time is 4 years'
+                    : null
+                }}
+              >
+                {/* @ts-expect-error - Button component is not typed */}
+                <Button variant="primary" size="32" className="text-[13px]">
+                  <LockedIcon fill="white" />
+                  Lock
+                </Button>
+              </VaultLockConfigModal>
             )}
             {/* @ts-expect-error - Button component is not typed */}
             <Button variant="outline" size="32">
