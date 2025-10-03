@@ -18,7 +18,6 @@
     "@status-im/components": "workspace:*",
     "@status-im/icons": "workspace:*",
     "@status-im/status-network": "workspace:*",
-    "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-table": "^8.21.3",
     "@vercel/analytics": "^1.5.0",
     "cva": "1.0.0-beta.1",
