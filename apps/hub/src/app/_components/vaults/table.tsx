@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { AddCircleIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
@@ -39,7 +39,17 @@ const vaults: Vault[] = [
 ]
 
 export const VaultsTable = () => {
-  const columns = useMemo(() => createVaultTableColumns(vaults), [])
+  const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
+  const { send: sendVaultEvent } = useVaultStateContext()
+  const columns = useMemo(
+    () =>
+      createVaultTableColumns({
+        data: vaults,
+        openModalVaultId,
+        setOpenModalVaultId,
+      }),
+    [openModalVaultId]
+  )
   const data = useMemo(() => vaults ?? [], [])
 
   const table = useReactTable({
@@ -47,8 +57,6 @@ export const VaultsTable = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-
-  const { send: sendVaultEvent } = useVaultStateContext()
 
   const handleAddVaultModal = () => {
     sendVaultEvent({ type: 'START_CREATE_VAULT' })
