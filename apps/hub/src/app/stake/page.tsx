@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { Tooltip } from '@status-im/components'
 import {
@@ -22,6 +22,7 @@ import { LaunchIcon, SNTIcon } from '../_components/icons'
 import { ActionStatusDialog } from '../_components/stake/action-status-dialog'
 import { PromoModal } from '../_components/stake/promo-modal'
 import { useActionStatusContent } from '../_components/stake/use-action-status-content'
+import { useSiwe } from '../_hooks/use-siwe'
 import { useVaultStateMachine } from '../_hooks/use-vault-state-machine'
 
 type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
@@ -29,6 +30,9 @@ type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
 export default function StakePage() {
   const { isConnected } = useAccount()
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
+  const siweHook = useSiwe()
+  const siweRef = useRef(siweHook)
+  siweRef.current = siweHook
 
   // State machine for vault operations
   const {
@@ -43,11 +47,71 @@ export default function StakePage() {
     return isPromoModalOpen ? 'uninstalled' : 'disconnected'
   }, [isConnected, isPromoModalOpen])
 
-  const handleCreateVault = () => {
+  // Track previous connection state to detect new connections
+  const prevConnectedRef = useRef(isConnected)
+
+  useEffect(() => {
+    // Only trigger SIWE when transitioning from disconnected to connected
+    if (
+      isConnected &&
+      !prevConnectedRef.current &&
+      vaultState.type === 'idle'
+    ) {
+      sendVaultEvent({ type: 'START_SIWE' })
+    }
+    prevConnectedRef.current = isConnected
+  }, [isConnected, vaultState.type, sendVaultEvent])
+
+  const handleCreateVault = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     if (isConnected) {
       sendVaultEvent({ type: 'START_CREATE_VAULT' })
     }
   }
+
+  useEffect(() => {
+    const handleWalletInteraction = async () => {
+      // Handle SIWE flow - initialize
+      if (vaultState.type === 'siwe' && vaultState.step === 'initialize') {
+        try {
+          // Sign in with wallet (this shows wallet UI for signing)
+          await siweRef.current.signIn()
+
+          // Move to processing state after user signs
+          sendVaultEvent({ type: 'SIGN' })
+
+          // Give user visual feedback that it's processing
+          await new Promise(resolve => setTimeout(resolve, 500))
+
+          // Close dialog on success
+          resetVault()
+        } catch {
+          sendVaultEvent({ type: 'REJECT' })
+        }
+      }
+
+      // Handle Create Vault flow
+      if (
+        vaultState.type === 'createVault' &&
+        vaultState.step === 'initialize'
+      ) {
+        try {
+          // TODO: Replace with actual wallet signing logic
+          await new Promise(resolve => setTimeout(resolve, 1000))
+          sendVaultEvent({ type: 'SIGN' })
+
+          // Simulate processing
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          sendVaultEvent({ type: 'COMPLETE' })
+        } catch (error) {
+          console.error(error)
+          sendVaultEvent({ type: 'REJECT' })
+        }
+      }
+    }
+
+    handleWalletInteraction()
+  }, [vaultState, sendVaultEvent, resetVault])
 
   const handleCloseProgressDialog = () => {
     resetVault()
@@ -115,7 +179,7 @@ export default function StakePage() {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,1fr)]">
-                <div className="flex flex-col rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:p-8">
+                <form className="flex flex-col rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:p-8">
                   <div className="flex flex-1 flex-col gap-4">
                     <div
                       className={match(status)
@@ -233,7 +297,12 @@ export default function StakePage() {
                           // @ts-expect-error - TODO: fix this
                           <Button
                             className="w-full justify-center"
-                            onClick={show}
+                            onClick={(
+                              e: React.MouseEvent<HTMLButtonElement>
+                            ) => {
+                              e.preventDefault()
+                              show?.()
+                            }}
                           >
                             Connect Wallet
                           </Button>
@@ -241,27 +310,27 @@ export default function StakePage() {
                       </ConnectKitButton.Custom>
                     ))
                     .with('connected', () => (
-                      <>
-                        {/* @ts-expect-error - TODO: fix this */}
-                        <Button
-                          className="w-full justify-center"
-                          onClick={handleCreateVault}
-                        >
-                          Create new vault
-                        </Button>
-                        {dialogContent && (
-                          <ActionStatusDialog
-                            open={true}
-                            onClose={handleCloseProgressDialog}
-                            title={dialogContent.title}
-                            description={dialogContent.description}
-                            state={dialogContent.state}
-                          />
-                        )}
-                      </>
+                      // @ts-expect-error - TODO: fix this
+                      <Button
+                        className="w-full justify-center"
+                        onClick={handleCreateVault}
+                      >
+                        Create new vault
+                      </Button>
                     ))
                     .exhaustive()}
-                </div>
+                </form>
+
+                {dialogContent && (
+                  <ActionStatusDialog
+                    open={true}
+                    onClose={handleCloseProgressDialog}
+                    title={dialogContent.title}
+                    description={dialogContent.description}
+                    state={dialogContent.state}
+                    showCloseButton={dialogContent.showCloseButton}
+                  />
+                )}
 
                 <div className="flex flex-col gap-[18px]">
                   <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">

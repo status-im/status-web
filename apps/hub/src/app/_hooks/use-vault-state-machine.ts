@@ -58,6 +58,10 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
         type: 'siwe',
         step: 'processing',
       }))
+      .with([{ type: 'siwe', step: 'initialize' }, { type: 'REJECT' }], () => ({
+        type: 'siwe',
+        step: 'rejected',
+      }))
       .with(
         [{ type: 'siwe', step: 'processing' }, { type: 'COMPLETE' }],
         () => ({
@@ -67,6 +71,9 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
       .with([{ type: 'siwe', step: 'processing' }, { type: 'REJECT' }], () => ({
         type: 'siwe',
         step: 'rejected',
+      }))
+      .with([{ type: 'siwe', step: 'processing' }, { type: 'RESET' }], () => ({
+        type: 'idle',
       }))
       .with([{ type: 'siwe', step: 'rejected' }, { type: 'RESET' }], () => ({
         type: 'idle',

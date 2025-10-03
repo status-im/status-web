@@ -9,6 +9,7 @@ import { defineWagmiConfig } from '../wagmi'
 
 const config = defineWagmiConfig({
   chains: [mainnet],
+  ssr: false,
 })
 
 const queryClient = new QueryClient()
