@@ -6,7 +6,7 @@ import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { ContextTag, Input } from '@status-im/components'
 import { InfoIcon } from '@status-im/icons/16'
-import { CloseIcon } from '@status-im/icons/20'
+import { CloseIcon, IncorrectIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 
 import type { HTMLAttributes } from 'react'
@@ -182,7 +182,7 @@ const VaultLockConfigModal = (props: Props) => {
               <div className="flex items-start gap-1">
                 <div className="box-border flex items-start justify-center gap-[10px] self-stretch px-0 py-px">
                   <div className="relative size-4 overflow-hidden">
-                    <InfoIcon stroke="#E95460" />
+                    <IncorrectIcon />
                   </div>
                 </div>
                 <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col justify-center text-[13px] font-medium leading-[0] tracking-[-0.039px] text-[#e95460]">

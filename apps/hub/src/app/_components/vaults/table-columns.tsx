@@ -1,12 +1,13 @@
 /* eslint-disable import/no-unresolved */
 
-import { OptionsIcon, TimeIcon } from '@status-im/icons/12'
+import { AlertIcon, OptionsIcon, TimeIcon } from '@status-im/icons/12'
 import { LockedIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 
 import { formatKarma, formatSNT } from '../../../utils/currency'
-import { VaultLockConfigModal } from './lock-modal'
+import { VaultLockConfigModal } from './vault-lock-modal'
+import { VaultWithdrawModal } from './withdraw-modal'
 
 import type { Vault } from './types'
 
@@ -181,15 +182,40 @@ export const createVaultTableColumns = ({
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => {
-        const isModalOpen = openModalVaultId === row.original.id
+        const withdrawModalId = `withdraw-${row.original.id}`
+        const lockModalId = `lock-${row.original.id}`
+        const isWithdrawModalOpen = openModalVaultId === withdrawModalId
+        const isLockModalOpen = openModalVaultId === lockModalId
 
         return (
           <div className="flex items-center justify-end gap-4">
+            <VaultWithdrawModal
+              open={isWithdrawModalOpen}
+              onOpenChange={open =>
+                setOpenModalVaultId(open ? withdrawModalId : null)
+              }
+              onClose={() => setOpenModalVaultId(null)}
+              onWithdraw={() => {
+                // Handle withdraw logic
+                console.log('Withdrawing from vault:', row.original.id)
+              }}
+              withdrawAddress={row.original.address}
+            >
+              {/* @ts-expect-error - Button component is not typed */}
+              <Button
+                variant="destructive"
+                size="32"
+                className="bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+              >
+                <AlertIcon />
+                Withdraw funds
+              </Button>
+            </VaultWithdrawModal>
             {row.original.locked ? (
               <VaultLockConfigModal
-                open={isModalOpen}
+                open={isLockModalOpen}
                 onOpenChange={open =>
-                  setOpenModalVaultId(open ? row.original.id : null)
+                  setOpenModalVaultId(open ? lockModalId : null)
                 }
                 title="Extend lock time"
                 description="Extending lock time increasing Karma boost"
@@ -219,9 +245,9 @@ export const createVaultTableColumns = ({
               </VaultLockConfigModal>
             ) : (
               <VaultLockConfigModal
-                open={isModalOpen}
+                open={isLockModalOpen}
                 onOpenChange={open =>
-                  setOpenModalVaultId(open ? row.original.id : null)
+                  setOpenModalVaultId(open ? lockModalId : null)
                 }
                 title="Do you want to lock the vault?"
                 description="Lock this vault to receive more Karma"
