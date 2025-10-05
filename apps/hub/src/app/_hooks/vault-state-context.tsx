@@ -2,9 +2,9 @@
 
 import { createContext, useContext } from 'react'
 
-import { useVaultStateMachine } from './use-vault-state-machine'
+import { useVaultStateMachine } from './useVaultStateMachine'
 
-import type { VaultEvent, VaultState } from './use-vault-state-machine'
+import type { VaultEvent, VaultState } from './useVaultStateMachine'
 
 type VaultStateContextType = {
   state: VaultState

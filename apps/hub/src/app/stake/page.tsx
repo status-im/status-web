@@ -14,24 +14,77 @@ import { Button, ButtonLink } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
 import { match } from 'ts-pattern'
-import { useAccount } from 'wagmi'
+import {
+  useAccount,
+  useBalance,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi'
 
 import { HubLayout } from '~components/hub-layout'
 
+import { SNT_TOKEN, STAKING_MANAGER, VAULT_FACTORY } from '../../config'
+import { statusNetworkTestnet } from '../../config/chain'
+import { formatSNT } from '../../utils/currency'
 import { LaunchIcon, SNTIcon } from '../_components/icons'
 import { PromoModal } from '../_components/stake/promo-modal'
 import { VaultsTable } from '../_components/vaults/table'
-import { useSiwe } from '../_hooks/use-siwe'
+import { useAccountVaults } from '../_hooks/useAccountVaults'
+import { useFaucetMutation, useFaucetQuery } from '../_hooks/useFaucet'
+import { useSiwe } from '../_hooks/useSIWE'
+import { useWeightedBoost } from '../_hooks/useWeightedBoost'
 import { useVaultStateContext } from '../_hooks/vault-state-context'
+import { stakingManagerAbi, vaultFactoryAbi } from '../contracts'
 
 type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
 
+const TOKEN_TICKER = 'SNT'
+
 export default function StakePage() {
-  const { isConnected } = useAccount()
-  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
   const siweHook = useSiwe()
   const siweRef = useRef(siweHook)
   siweRef.current = siweHook
+
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
+
+  const { isConnected, address } = useAccount()
+
+  const { mutate: claimTokens } = useFaucetMutation()
+  const { data: faucetData } = useFaucetQuery()
+  const { data: vaults } = useAccountVaults()
+  const weightedBoost = useWeightedBoost(vaults)
+
+  const { data: balance } = useBalance({
+    chainId: statusNetworkTestnet.id,
+    scopeKey: 'balance',
+    address,
+    token: SNT_TOKEN.address,
+    query: {
+      enabled: isConnected,
+    },
+  })
+
+  const { data: totalStaked } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: stakingManagerAbi,
+    functionName: 'totalStaked',
+  }) as { data: bigint }
+
+  const {
+    writeContract,
+    data: createVaultTxHash,
+    isError: isTxError,
+    isSuccess: isTxSuccess,
+  } = useWriteContract()
+
+  const {
+    isSuccess: isTxConfirmed,
+    data: txReceipt,
+    error: txError,
+  } = useWaitForTransactionReceipt({
+    hash: createVaultTxHash,
+  })
 
   // State machine for vault operations
   const {
@@ -49,67 +102,111 @@ export default function StakePage() {
   const prevConnectedRef = useRef(isConnected)
 
   useEffect(() => {
-    // Only trigger SIWE when transitioning from disconnected to connected
+    // Check if user has already completed SIWE for this address
+    const siweCompleted = address
+      ? sessionStorage.getItem(`siwe_${address}`)
+      : null
+
+    // Only trigger SIWE when transitioning from disconnected to connected AND not already signed
     if (
       isConnected &&
       !prevConnectedRef.current &&
-      vaultState.type === 'idle'
+      vaultState.type === 'idle' &&
+      !siweCompleted
     ) {
       sendVaultEvent({ type: 'START_SIWE' })
     }
     prevConnectedRef.current = isConnected
-  }, [isConnected, vaultState.type, sendVaultEvent])
+  }, [isConnected, vaultState.type, sendVaultEvent, address])
 
-  const handleCreateVault = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCreateVault = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     if (isConnected) {
       sendVaultEvent({ type: 'START_CREATE_VAULT' })
     }
   }
 
+  // Handle SIWE flow
   useEffect(() => {
-    const handleWalletInteraction = async () => {
-      // Handle SIWE flow - initialize
-      if (vaultState.type === 'siwe' && vaultState.step === 'initialize') {
+    if (vaultState.type === 'siwe' && vaultState.step === 'initialize') {
+      const handleSiwe = async () => {
         try {
-          // Sign in with wallet (this shows wallet UI for signing)
           await siweRef.current.signIn()
-
-          // Move to processing state after user signs
           sendVaultEvent({ type: 'SIGN' })
-
-          // Give user visual feedback that it's processing
           await new Promise(resolve => setTimeout(resolve, 500))
 
-          // Close dialog on success
+          // Mark SIWE as completed for this address
+          if (address) {
+            sessionStorage.setItem(`siwe_${address}`, 'true')
+          }
+
           resetVault()
         } catch {
           sendVaultEvent({ type: 'REJECT' })
         }
       }
-
-      // Handle Create Vault flow
-      if (
-        vaultState.type === 'createVault' &&
-        vaultState.step === 'initialize'
-      ) {
-        try {
-          // TODO: Replace with actual wallet signing logic
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          sendVaultEvent({ type: 'SIGN' })
-
-          // Simulate processing
-          await new Promise(resolve => setTimeout(resolve, 2000))
-          sendVaultEvent({ type: 'COMPLETE' })
-        } catch (error) {
-          console.error(error)
-          sendVaultEvent({ type: 'REJECT' })
-        }
-      }
+      handleSiwe()
     }
+  }, [vaultState, sendVaultEvent, resetVault, address])
 
-    handleWalletInteraction()
-  }, [vaultState, sendVaultEvent, resetVault])
+  // Handle vault creation - trigger contract write on initialize
+  useEffect(() => {
+    if (vaultState.type === 'createVault' && vaultState.step === 'initialize') {
+      writeContract({
+        chain: statusNetworkTestnet,
+        account: address,
+        address: VAULT_FACTORY.address,
+        abi: vaultFactoryAbi,
+        functionName: 'createVault',
+      })
+    }
+  }, [address, vaultState, writeContract])
+
+  // Transition to processing when user signs in wallet
+  useEffect(() => {
+    if (
+      isTxSuccess &&
+      vaultState.type === 'createVault' &&
+      vaultState.step === 'initialize'
+    ) {
+      sendVaultEvent({ type: 'SIGN' })
+    }
+  }, [isTxSuccess, vaultState, sendVaultEvent])
+
+  // Handle write errors (user rejection, insufficient gas, etc.)
+  useEffect(() => {
+    if (isTxError && vaultState.type === 'createVault') {
+      // TODO: pass error to state machine
+      sendVaultEvent({ type: 'REJECT' })
+    }
+  }, [isTxError, vaultState.type, sendVaultEvent])
+
+  // Handle transaction errors (reverted, failed on-chain)
+  useEffect(() => {
+    if (txError && vaultState.type === 'createVault') {
+      sendVaultEvent({ type: 'REJECT' })
+    }
+  }, [txError, vaultState, sendVaultEvent])
+
+  // Handle transaction confirmation - close dialog immediately
+  useEffect(() => {
+    if (
+      isTxConfirmed &&
+      vaultState.type === 'createVault' &&
+      vaultState.step === 'processing'
+    ) {
+      resetVault()
+      // TODO: show toast message
+    }
+  }, [isTxConfirmed, vaultState, resetVault, txReceipt])
+
+  // Auto-close success dialog after showing success state (for other flows)
+  useEffect(() => {
+    if (vaultState.type === 'success') {
+      const timer = setTimeout(() => resetVault(), 1500)
+      return () => clearTimeout(timer)
+    }
+  }, [vaultState.type, resetVault])
 
   const handleClosePromoModal = () => {
     setIsPromoModalOpen(false)
@@ -148,24 +245,32 @@ export default function StakePage() {
                   <div className="flex flex-wrap gap-4 md:gap-6">
                     <div className="min-w-[128px] space-y-1 text-13 font-500">
                       <p className="text-neutral-50">Daily limit</p>
-                      <p>10,000 SNT</p>
+                      <span>{formatSNT(faucetData?.dailyLimit ?? 0)} SNT</span>
                     </div>
                     <div className="min-w-[128px] space-y-1 text-13 font-500">
                       <p className="text-neutral-50">Used today</p>
-                      <p>0 SNT</p>
+                      <span>
+                        {formatSNT(faucetData?.accountDailyRequests ?? 0)} SNT
+                      </span>
                     </div>
                     <div className="min-w-[128px] space-y-1 text-13 font-500">
                       <p className="text-neutral-50">Available</p>
-                      <p>10,000 SNT</p>
+                      <span>
+                        {formatSNT(faucetData?.remainingRequests ?? 0)} SNT
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* @ts-expect-error - TODO: fix this */}
-              <Button className="self-end">
+              <Button
+                className="self-end"
+                disabled={!faucetData?.canRequest}
+                onClick={claimTokens}
+              >
                 <PlaceholderIcon className="text-blur-white/70" />
-                Claim testnet SNT
+                Claim testnet {TOKEN_TICKER}
               </Button>
             </div>
 
@@ -198,7 +303,7 @@ export default function StakePage() {
                             <div className="flex items-center gap-1">
                               <SNTIcon />
                               <span className="text-19 font-semibold text-neutral-80">
-                                SNT
+                                {TOKEN_TICKER}
                               </span>
                             </div>
                           </div>
@@ -209,7 +314,7 @@ export default function StakePage() {
                               type="button"
                               className="uppercase text-neutral-100"
                             >
-                              MAX 0 SNT
+                              {formatSNT(balance?.value ?? 0)}
                             </button>
                           </div>
                         </div>
@@ -227,7 +332,7 @@ export default function StakePage() {
                             <div className="flex items-center gap-1">
                               <SNTIcon />
                               <span className="text-19 font-semibold text-neutral-80">
-                                SNT
+                                {TOKEN_TICKER}
                               </span>
                             </div>
                           </div>
@@ -319,7 +424,9 @@ export default function StakePage() {
                   </div>
                   <div className="mb-4 flex items-end gap-2">
                     <SNTIcon />
-                    <span className="text-27 font-600">0 SNT</span>
+                    <span className="text-27 font-600">
+                      {formatSNT(totalStaked ?? 0)} {TOKEN_TICKER}
+                    </span>
                   </div>
                   <p className="text-13 font-500 text-neutral-40">
                     Next unlock in 356 days
@@ -336,10 +443,14 @@ export default function StakePage() {
                   <div className="mb-4 flex items-end gap-3">
                     <LaunchIcon className="text-purple" />
 
-                    <span className="text-27 font-600">x0</span>
+                    <span className="text-27 font-600">
+                      x{weightedBoost.formatted}
+                    </span>
                   </div>
                   <p className="text-13 font-500 text-neutral-40">
-                    No points are ready to compound
+                    {weightedBoost.hasStake
+                      ? `${weightedBoost.totalStaked.toFixed(2)} ${TOKEN_TICKER} staked`
+                      : 'No points are ready to compound'}
                   </p>
                 </div>
               </div>

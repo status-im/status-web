@@ -33,7 +33,7 @@ export const createVaultTableColumns = ({
       cell: ({ row }) => {
         return (
           <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
-            #{row.original.id}
+            #{Number(row.original.id) + 1}
           </span>
         )
       },
@@ -188,27 +188,26 @@ export const createVaultTableColumns = ({
         const isLockModalOpen = openModalVaultId === lockModalId
 
         return (
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center justify-end gap-2 lg:gap-4">
             <VaultWithdrawModal
               open={isWithdrawModalOpen}
               onOpenChange={open =>
                 setOpenModalVaultId(open ? withdrawModalId : null)
               }
               onClose={() => setOpenModalVaultId(null)}
-              onWithdraw={() => {
-                // Handle withdraw logic
-                console.log('Withdrawing from vault:', row.original.id)
-              }}
-              withdrawAddress={row.original.address}
+              vaultAdress={row.original.address}
             >
               {/* @ts-expect-error - Button component is not typed */}
               <Button
                 variant="destructive"
                 size="32"
-                className="bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
               >
-                <AlertIcon />
-                Withdraw funds
+                <AlertIcon className="shrink-0" />
+                <span className="hidden whitespace-nowrap xl:inline">
+                  Withdraw funds
+                </span>
+                <span className="whitespace-nowrap xl:hidden">Withdraw</span>
               </Button>
             </VaultWithdrawModal>
             {row.original.locked ? (
@@ -238,9 +237,16 @@ export const createVaultTableColumns = ({
                 infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
               >
                 {/* @ts-expect-error - Button component is not typed */}
-                <Button variant="primary" size="32" className="text-[13px]">
-                  <TimeIcon />
-                  Extend lock time
+                <Button
+                  variant="primary"
+                  size="32"
+                  className="min-w-fit text-[13px]"
+                >
+                  <TimeIcon className="shrink-0" />
+                  <span className="hidden whitespace-nowrap xl:inline">
+                    Extend lock time
+                  </span>
+                  <span className="whitespace-nowrap xl:hidden">Extend</span>
                 </Button>
               </VaultLockConfigModal>
             ) : (
@@ -286,14 +292,18 @@ export const createVaultTableColumns = ({
                 }}
               >
                 {/* @ts-expect-error - Button component is not typed */}
-                <Button variant="primary" size="32" className="text-[13px]">
-                  <LockedIcon fill="white" />
-                  Lock
+                <Button
+                  variant="primary"
+                  size="32"
+                  className="min-w-fit text-[13px]"
+                >
+                  <LockedIcon fill="white" className="shrink-0" />
+                  <span className="whitespace-nowrap">Lock</span>
                 </Button>
               </VaultLockConfigModal>
             )}
             {/* @ts-expect-error - Button component is not typed */}
-            <Button variant="outline" size="32">
+            <Button variant="outline" size="32" className="shrink-0">
               <OptionsIcon />
             </Button>
           </div>

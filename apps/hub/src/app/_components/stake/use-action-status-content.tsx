@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern'
 
-import type { VaultState } from '../../_hooks/use-vault-state-machine'
+import type { VaultState } from '../../_hooks/useVaultStateMachine'
 
 export type ActionStatusState =
   | 'pending' // Waiting for user action (sign, approve)
