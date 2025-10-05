@@ -70,38 +70,17 @@ function AppCardSkeleton() {
   return (
     <div className="rounded-28 border border-neutral-20 bg-white-100 p-2 shadow-2">
       <div className="relative mb-4">
-        <div
-          className="aspect-[12/5] w-full animate-skeleton overflow-hidden rounded-24 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10"
-          style={{ backgroundSize: '400% 400%' }}
-        />
-        <div
-          className="absolute bottom-[-15px] left-2 size-20 animate-skeleton rounded-24 bg-gradient-to-r from-neutral-20 via-white-100 to-neutral-20"
-          style={{ backgroundSize: '400% 400%' }}
-        />
+        <div className="aspect-[12/5] w-full animate-skeleton overflow-hidden rounded-24 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10 bg-[size:400%_400%]" />
+        <div className="absolute bottom-[-15px] left-2 size-20 animate-skeleton rounded-24 bg-gradient-to-r from-neutral-20 via-white-100 to-neutral-20 bg-[size:400%_400%]" />
       </div>
 
       <div className="flex flex-col gap-1 px-2 pb-2 pt-[10px]">
-        <div
-          className="mb-1 h-8 w-3/4 animate-skeleton rounded-12 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10"
-          style={{ backgroundSize: '400% 400%' }}
-        />
-        <div
-          className="h-5 w-full animate-skeleton rounded-8 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10"
-          style={{ backgroundSize: '400% 400%' }}
-        />
-        <div
-          className="h-5 w-2/3 animate-skeleton rounded-8 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10"
-          style={{ backgroundSize: '400% 400%' }}
-        />
+        <div className="mb-1 h-8 w-3/4 animate-skeleton rounded-12 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10 bg-[size:400%_400%]" />
+        <div className="h-5 w-full animate-skeleton rounded-8 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10 bg-[size:400%_400%]" />
+        <div className="h-5 w-2/3 animate-skeleton rounded-8 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10 bg-[size:400%_400%]" />
         <div className="mt-1 flex items-start gap-2">
-          <div
-            className="h-8 w-32 animate-skeleton rounded-12 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10"
-            style={{ backgroundSize: '400% 400%' }}
-          />
-          <div
-            className="size-8 animate-skeleton rounded-12 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10"
-            style={{ backgroundSize: '400% 400%' }}
-          />
+          <div className="h-8 w-32 animate-skeleton rounded-12 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10 bg-[size:400%_400%]" />
+          <div className="size-8 animate-skeleton rounded-12 bg-gradient-to-r from-neutral-10 via-white-100 to-neutral-10 bg-[size:400%_400%]" />
         </div>
       </div>
     </div>
