@@ -88,15 +88,15 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
         })
       )
       .with(
-        [{ type: 'createVault', step: 'processing' }, { type: 'COMPLETE' }],
-        () => ({ type: 'success' })
-      )
-      .with(
         [{ type: 'createVault', step: 'processing' }, { type: 'REJECT' }],
         () => ({
           type: 'createVault',
           step: 'rejected',
         })
+      )
+      .with(
+        [{ type: 'createVault', step: 'processing' }, { type: 'RESET' }],
+        () => ({ type: 'idle' })
       )
       .with(
         [{ type: 'createVault', step: 'rejected' }, { type: 'RESET' }],

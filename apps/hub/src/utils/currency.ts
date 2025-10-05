@@ -1,3 +1,9 @@
+import { formatUnits, parseUnits } from 'viem'
+
+// ============================================================================
+// Types
+// ============================================================================
+
 export interface FormatTokenOptions {
   /**
    * Number of decimal places to display
@@ -41,23 +47,89 @@ export interface FormatTokenOptions {
   tokenDecimals?: number
 }
 
+// ============================================================================
+// Constants
+// ============================================================================
+
+const DEFAULT_LOCALE = 'en-US'
+const DEFAULT_DISPLAY_DECIMALS = 2
+const DEFAULT_TOKEN_DECIMALS = 18
+const COMPACT_THRESHOLD = 1_000_000
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 /**
- * Convert bigint to number with proper decimal handling
+ * Convert bigint to number using viem's formatUnits for precision
+ *
+ * @param value - The bigint value to convert
+ * @param decimals - Number of decimals for the token
+ * @returns Numeric representation of the token amount
  */
-function bigIntToNumber(value: bigint, decimals: number = 18): number {
-  const divisor = BigInt(10 ** decimals)
-  const whole = value / divisor
-  const remainder = value % divisor
-
-  // Convert remainder to decimal
-  const decimalStr = remainder.toString().padStart(decimals, '0')
-  const decimal = Number(`0.${decimalStr}`)
-
-  return Number(whole) + decimal
+function bigIntToNumber(
+  value: bigint,
+  decimals: number = DEFAULT_TOKEN_DECIMALS
+): number {
+  // Use viem's formatUnits for proper decimal handling
+  const formatted = formatUnits(value, decimals)
+  return Number(formatted)
 }
 
 /**
- * Format a token amount with proper decimal handling
+ * Converts various input types to a numeric value
+ *
+ * @param amount - The amount to convert (bigint, number, or string)
+ * @param tokenDecimals - Number of decimals for bigint conversion
+ * @returns Numeric representation of the amount
+ */
+function toNumericAmount(
+  amount: number | bigint | string,
+  tokenDecimals: number
+): number {
+  if (typeof amount === 'bigint') {
+    return bigIntToNumber(amount, tokenDecimals)
+  }
+
+  if (typeof amount === 'string') {
+    return Number(amount)
+  }
+
+  return amount
+}
+
+/**
+ * Applies rounding down to a numeric value
+ *
+ * @param value - The value to round
+ * @param decimals - Number of decimal places to preserve
+ * @returns Rounded down value
+ */
+function roundDownToDecimals(value: number, decimals: number): number {
+  const factor = 10 ** decimals
+  return Math.floor(value * factor) / factor
+}
+
+// ============================================================================
+// Core Formatting Functions
+// ============================================================================
+
+/**
+ * Format a token amount with proper decimal handling using viem utilities
+ *
+ * @param amount - Token amount (supports bigint, number, or string)
+ * @param token - Token symbol (e.g., 'SNT', 'ETH')
+ * @param options - Formatting options
+ * @returns Formatted token amount string
+ *
+ * @example
+ * ```ts
+ * formatTokenAmount(1234567890000000000n, 'SNT', { tokenDecimals: 18 })
+ * // => "1.23"
+ *
+ * formatTokenAmount(1500, 'SNT', { includeSymbol: true, compact: true })
+ * // => "1.5K SNT"
+ * ```
  */
 export function formatTokenAmount(
   amount: number | bigint | string,
@@ -65,32 +137,25 @@ export function formatTokenAmount(
   options: FormatTokenOptions = {}
 ): string {
   const {
-    decimals = 2,
+    decimals = DEFAULT_DISPLAY_DECIMALS,
     minimumFractionDigits = decimals,
     maximumFractionDigits = decimals,
     includeSymbol = false,
-    locale = 'en-US',
+    locale = DEFAULT_LOCALE,
     compact = false,
     roundDown = false,
-    tokenDecimals = 18,
+    tokenDecimals = DEFAULT_TOKEN_DECIMALS,
   } = options
 
-  // Convert to number
-  let numericAmount: number
-  if (typeof amount === 'bigint') {
-    numericAmount = bigIntToNumber(amount, tokenDecimals)
-  } else if (typeof amount === 'string') {
-    numericAmount = Number(amount)
-  } else {
-    numericAmount = amount
-  }
+  // Convert to numeric value
+  let numericAmount = toNumericAmount(amount, tokenDecimals)
 
-  // Round down if requested
+  // Apply rounding down if requested
   if (roundDown) {
-    const factor = Math.pow(10, maximumFractionDigits)
-    numericAmount = Math.floor(numericAmount * factor) / factor
+    numericAmount = roundDownToDecimals(numericAmount, maximumFractionDigits)
   }
 
+  // Format using Intl.NumberFormat
   const formatter = new Intl.NumberFormat(locale, {
     minimumFractionDigits,
     maximumFractionDigits,
@@ -103,92 +168,138 @@ export function formatTokenAmount(
   return includeSymbol ? `${formatted} ${token}` : formatted
 }
 
+// ============================================================================
+// Token-Specific Formatters
+// ============================================================================
+
 /**
- * Format SNT token amount
+ * Format SNT (Status Network Token) amount
+ *
+ * @param amount - Token amount in wei (bigint) or display units (number/string)
+ * @param options - Formatting options
+ * @returns Formatted SNT amount
+ *
+ * @example
+ * ```ts
+ * formatSNT(1234567890000000000n) // => "1.23"
+ * formatSNT(100, { includeSymbol: true }) // => "100.00 SNT"
+ * ```
  */
 export function formatSNT(
   amount: number | bigint | string,
-  options: Omit<FormatTokenOptions, 'includeSymbol'> & {
-    includeSymbol?: boolean
-  } = {}
+  options: Omit<FormatTokenOptions, 'tokenDecimals'> = {}
 ): string {
   return formatTokenAmount(amount, 'SNT', {
     ...options,
-    // Don't apply decimal conversion for SNT - values are already in display units
-    tokenDecimals: 0,
+    tokenDecimals: DEFAULT_TOKEN_DECIMALS, // SNT has 18 decimals
   })
 }
 
 /**
  * Format KARMA token amount
+ *
+ * @param amount - Token amount
+ * @param options - Formatting options
+ * @returns Formatted KARMA amount
  */
 export function formatKarma(
   amount: number | bigint | string,
-  options: Omit<FormatTokenOptions, 'includeSymbol'> & {
-    includeSymbol?: boolean
-  } = {}
+  options: Omit<FormatTokenOptions, 'tokenDecimals'> = {}
 ): string {
   return formatTokenAmount(amount, 'KARMA', {
     ...options,
-    // Don't apply decimal conversion for KARMA - values are already in display units
-    tokenDecimals: 0,
+    tokenDecimals: 0, // KARMA values are already in display units
   })
 }
 
 /**
- * Format ETH amount
+ * Format ETH (Ether) amount
+ *
+ * @param amount - ETH amount in wei (bigint) or display units (number/string)
+ * @param options - Formatting options
+ * @returns Formatted ETH amount
+ *
+ * @example
+ * ```ts
+ * formatETH(1000000000000000000n) // => "1.0000"
+ * formatETH(0.123456789, { decimals: 6 }) // => "0.123457"
+ * ```
  */
 export function formatETH(
   amount: number | bigint | string,
-  options: Omit<FormatTokenOptions, 'includeSymbol'> & {
-    includeSymbol?: boolean
-  } = {}
+  options: Omit<FormatTokenOptions, 'tokenDecimals'> = {}
 ): string {
   return formatTokenAmount(amount, 'ETH', {
+    decimals: 4, // Default to 4 decimals for ETH
     ...options,
-    decimals: options.decimals ?? 4,
+    tokenDecimals: DEFAULT_TOKEN_DECIMALS, // ETH has 18 decimals
   })
 }
 
 /**
  * Format stablecoin amount (USDC, USDT, DAI)
+ *
+ * @param amount - Stablecoin amount in smallest unit (bigint) or display units (number/string)
+ * @param token - Stablecoin symbol
+ * @param options - Formatting options
+ * @returns Formatted stablecoin amount
+ *
+ * @example
+ * ```ts
+ * formatStablecoin(1000000n, 'USDC') // => "1.00" (USDC has 6 decimals)
+ * formatStablecoin(1000000000000000000n, 'DAI') // => "1.00" (DAI has 18 decimals)
+ * ```
  */
 export function formatStablecoin(
   amount: number | bigint | string,
   token: 'USDC' | 'USDT' | 'DAI',
-  options: Omit<FormatTokenOptions, 'includeSymbol'> & {
-    includeSymbol?: boolean
-  } = {}
+  options: Omit<FormatTokenOptions, 'tokenDecimals'> = {}
 ): string {
-  return formatTokenAmount(amount, token, options)
+  // USDC and USDT typically have 6 decimals, DAI has 18
+  const decimals = token === 'DAI' ? DEFAULT_TOKEN_DECIMALS : 6
+
+  return formatTokenAmount(amount, token, {
+    ...options,
+    tokenDecimals: decimals,
+  })
 }
 
 /**
  * Format a currency value for display in UI
  * Automatically handles large numbers with compact notation
+ *
+ * @param amount - Currency amount
+ * @param options - Formatting options with optional currency symbol
+ * @returns Formatted currency string
+ *
+ * @example
+ * ```ts
+ * formatCurrency(1234567) // => "1.23M"
+ * formatCurrency(999, { symbol: '$' }) // => "$999.00"
+ * formatCurrency(1500000n, { symbol: '$', tokenDecimals: 18 }) // => "$0.00"
+ * ```
  */
 export function formatCurrency(
   amount: number | bigint | string,
   options: FormatTokenOptions & { symbol?: string } = {}
 ): string {
-  const { symbol = '', tokenDecimals = 18, ...rest } = options
+  const {
+    symbol = '',
+    tokenDecimals = DEFAULT_TOKEN_DECIMALS,
+    locale = DEFAULT_LOCALE,
+    decimals = DEFAULT_DISPLAY_DECIMALS,
+    ...rest
+  } = options
 
-  let numericAmount: number
-  if (typeof amount === 'bigint') {
-    numericAmount = bigIntToNumber(amount, tokenDecimals)
-  } else if (typeof amount === 'string') {
-    numericAmount = Number(amount)
-  } else {
-    numericAmount = amount
-  }
+  const numericAmount = toNumericAmount(amount, tokenDecimals)
 
-  // Auto-enable compact for large numbers
+  // Auto-enable compact notation for large numbers (>= 1M)
   const shouldCompact =
-    rest.compact !== false && Math.abs(numericAmount) >= 1000000
+    rest.compact !== false && Math.abs(numericAmount) >= COMPACT_THRESHOLD
 
-  const formatter = new Intl.NumberFormat(rest.locale ?? 'en-US', {
-    minimumFractionDigits: rest.minimumFractionDigits ?? rest.decimals ?? 2,
-    maximumFractionDigits: rest.maximumFractionDigits ?? rest.decimals ?? 2,
+  const formatter = new Intl.NumberFormat(locale, {
+    minimumFractionDigits: rest.minimumFractionDigits ?? decimals,
+    maximumFractionDigits: rest.maximumFractionDigits ?? decimals,
     notation: shouldCompact ? 'compact' : 'standard',
     compactDisplay: 'short',
   })
@@ -197,8 +308,38 @@ export function formatCurrency(
   return symbol ? `${symbol}${formatted}` : formatted
 }
 
+// ============================================================================
+// Parsing Functions
+// ============================================================================
+
+/**
+ * Compact notation multipliers
+ */
+const COMPACT_MULTIPLIERS: Record<string, number> = {
+  K: 1_000,
+  M: 1_000_000,
+  B: 1_000_000_000,
+  T: 1_000_000_000_000,
+} as const
+
 /**
  * Parse a formatted token string back to a number
+ *
+ * Handles:
+ * - Comma-separated numbers (1,234.56)
+ * - Compact notation (1.5K, 2M, 3.5B)
+ * - Token symbols (100 SNT)
+ *
+ * @param formattedAmount - The formatted string to parse
+ * @param token - Optional token symbol to remove from the string
+ * @returns Numeric value
+ *
+ * @example
+ * ```ts
+ * parseTokenAmount('1,234.56') // => 1234.56
+ * parseTokenAmount('1.5K') // => 1500
+ * parseTokenAmount('100 SNT', 'SNT') // => 100
+ * ```
  */
 export function parseTokenAmount(
   formattedAmount: string,
@@ -210,23 +351,36 @@ export function parseTokenAmount(
     cleaned = cleaned.replace(token, '').trim()
   }
 
-  // Remove commas and other formatting
+  // Remove commas and spaces
   cleaned = cleaned.replace(/[,\s]/g, '')
 
-  // Handle compact notation (K, M, B)
-  const multipliers: Record<string, number> = {
-    K: 1000,
-    M: 1000000,
-    B: 1000000000,
-    T: 1000000000000,
-  }
-
-  const match = cleaned.match(/^([\d.]+)([KMBT])$/i)
-  if (match) {
-    const [, num, suffix] = match
-    const multiplier = multipliers[suffix.toUpperCase()] || 1
-    return Number(num) * multiplier
+  // Handle compact notation (K, M, B, T)
+  const compactMatch = cleaned.match(/^([\d.]+)([KMBT])$/i)
+  if (compactMatch) {
+    const [, numStr, suffix] = compactMatch
+    const multiplier = COMPACT_MULTIPLIERS[suffix.toUpperCase()] ?? 1
+    return Number(numStr) * multiplier
   }
 
   return Number(cleaned)
+}
+
+/**
+ * Parse a user input amount and convert to wei (bigint) using viem's parseUnits
+ *
+ * @param amount - User input amount (e.g., "1.5", "100")
+ * @param decimals - Number of decimals for the token
+ * @returns Amount in wei as bigint
+ *
+ * @example
+ * ```ts
+ * parseToWei('1.5', 18) // => 1500000000000000000n
+ * parseToWei('100', 6) // => 100000000n (for USDC)
+ * ```
+ */
+export function parseToWei(
+  amount: string,
+  decimals: number = DEFAULT_TOKEN_DECIMALS
+): bigint {
+  return parseUnits(amount, decimals)
 }

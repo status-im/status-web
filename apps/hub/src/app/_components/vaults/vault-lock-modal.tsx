@@ -186,7 +186,7 @@ const VaultLockConfigModal = (props: Props) => {
                   </div>
                 </div>
                 <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col justify-center text-[13px] font-medium leading-[0] tracking-[-0.039px] text-[#e95460]">
-                  <p className="leading-[1.4]">{displayError || '\u00A0'}</p>
+                  <p className="leading-[1.4]">{displayError}</p>
                 </div>
               </div>
             </div>
