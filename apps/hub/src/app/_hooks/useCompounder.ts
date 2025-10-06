@@ -1,10 +1,12 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
-import { useAccount, useWriteContract } from 'wagmi'
+import { type Address } from 'viem'
+import { useAccount, useConfig, useWriteContract } from 'wagmi'
+import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { STAKING_MANAGER } from '../../config'
+import { statusNetworkTestnet } from '../../config/chain'
 import { stakingManagerAbi } from '../contracts'
-
-import type { Address } from 'viem'
+import { useAccountVaults } from './useAccountVaults'
 
 // ============================================================================
 // Types
@@ -18,21 +20,32 @@ export interface CompoundVaultParams {
   vaultAddress: Address
 }
 
+/**
+ * Return type for the useCompounder hook
+ */
+export type UseCompounderReturn = UseMutationResult<
+  Address,
+  Error,
+  CompoundVaultParams,
+  unknown
+>
+
 // ============================================================================
 // Constants
 // ============================================================================
 
 const MUTATION_KEY_PREFIX = 'compound' as const
+const CONFIRMATION_BLOCKS = 1
 
 // ============================================================================
 // Mutation Hook
 // ============================================================================
 
 /**
- * Mutation hook to compound multiplier points (MP) for a specific vault
+ * Mutation hook to compound multiplier points (MP) for a vault
  *
  * **Compounding Process:**
- * Calls StakingManager.updateVault() which:
+ * Calls StakingManager.compound() which:
  * - Updates global state (reward index, MP accrual)
  * - Calculates new MP accrued since last update
  * - Updates the vault's reward index
@@ -43,6 +56,7 @@ const MUTATION_KEY_PREFIX = 'compound' as const
  *
  * @throws {Error} When wallet is not connected
  * @throws {Error} When vault address is invalid
+ * @throws {Error} When transaction is reverted
  *
  * @example
  * Basic usage
@@ -89,17 +103,14 @@ const MUTATION_KEY_PREFIX = 'compound' as const
  * }
  * ```
  */
-export function useCompounder(): UseMutationResult<
-  Address,
-  Error,
-  CompoundVaultParams,
-  unknown
-> {
+export function useCompounder(): UseCompounderReturn {
   const { address } = useAccount()
   const { writeContractAsync } = useWriteContract()
+  const config = useConfig()
+  const { refetch: refetchAccountVaults } = useAccountVaults()
 
   return useMutation({
-    mutationKey: [MUTATION_KEY_PREFIX, 'vault', address],
+    mutationKey: [MUTATION_KEY_PREFIX, address],
     mutationFn: async ({
       vaultAddress,
     }: CompoundVaultParams): Promise<Address> => {
@@ -117,70 +128,27 @@ export function useCompounder(): UseMutationResult<
 
       // Execute compound transaction
       const hash = await writeContractAsync({
+        chain: statusNetworkTestnet,
+        account: address,
         address: STAKING_MANAGER.address,
         abi: stakingManagerAbi,
-        functionName: 'updateVault',
+        functionName: 'compound',
         args: [vaultAddress],
       })
 
-      return hash
-    },
-  })
-}
+      // Wait for transaction confirmation
+      const { status } = await waitForTransactionReceipt(config, {
+        hash,
+        confirmations: CONFIRMATION_BLOCKS,
+      })
 
-// ============================================================================
-// Compound All Mutation Hook
-// ============================================================================
-
-/**
- * Mutation hook to compound multiplier points (MP) for all user vaults
- *
- * Calls StakingManager.updateAccount() which updates all vaults owned by
- * the connected account in a single transaction.
- *
- * @returns Mutation result with mutate function to trigger compound all
- *
- * @throws {Error} When wallet is not connected
- *
- * @example
- * ```tsx
- * function CompoundAllButton() {
- *   const { mutate: compoundAll, isPending } = useCompoundAll()
- *
- *   return (
- *     <button onClick={() => compoundAll()} disabled={isPending}>
- *       {isPending ? 'Compounding...' : 'Compound All Vaults'}
- *     </button>
- *   )
- * }
- * ```
- */
-export function useCompoundAll(): UseMutationResult<
-  Address,
-  Error,
-  void,
-  unknown
-> {
-  const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
-
-  return useMutation({
-    mutationKey: [MUTATION_KEY_PREFIX, 'all', address],
-    mutationFn: async (): Promise<Address> => {
-      // Validate wallet connection
-      if (!address) {
-        throw new Error(
-          'Wallet not connected. Please connect your wallet first.'
-        )
+      // Check if transaction was reverted
+      if (status === 'reverted') {
+        throw new Error('Transaction was reverted')
       }
 
-      // Execute compound all transaction
-      const hash = await writeContractAsync({
-        address: STAKING_MANAGER.address,
-        abi: stakingManagerAbi,
-        functionName: 'updateAccount',
-        args: [address],
-      })
+      // Refetch account vaults to update UI
+      refetchAccountVaults()
 
       return hash
     },

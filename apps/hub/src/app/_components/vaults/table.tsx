@@ -10,10 +10,12 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useAccount } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
 
+import { STAKING_MANAGER } from '../../../config'
 import { useAccountVaults } from '../../_hooks/useAccountVaults'
 import { useVaultMutation } from '../../_hooks/useVault'
+import { stakingManagerAbi } from '../../contracts'
 import { createVaultTableColumns } from './table-columns'
 
 import type { VaultWithAddress } from '../../_hooks/useAccountVaults'
@@ -129,14 +131,21 @@ export function VaultsTable() {
   const { isConnected } = useAccount()
   const { mutate: deployVault } = useVaultMutation()
 
+  const { data: emergencyModeEnabled } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: stakingManagerAbi,
+    functionName: 'emergencyModeEnabled',
+  })
+
   const columns = useMemo(
     () =>
       createVaultTableColumns({
         vaults: vaultDataList,
         openModalVaultId,
         setOpenModalVaultId,
+        emergencyModeEnabled,
       }),
-    [openModalVaultId, vaultDataList]
+    [openModalVaultId, emergencyModeEnabled, vaultDataList]
   )
 
   const table = useReactTable({

@@ -93,6 +93,13 @@ export default function StakePage() {
     functionName: 'totalStaked',
   }) as { data: bigint }
 
+  const { data: mpBalanceOfAccount } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: stakingManagerAbi,
+    functionName: 'mpBalanceOfAccount',
+    args: [address],
+  }) as { data: bigint }
+
   const { mutate: deployVault } = useVaultMutation()
   const { mutate: approveTokens } = useTokenApproval()
   const { mutate: stakeVault } = useVaultTokenStake()
@@ -424,13 +431,17 @@ export default function StakePage() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-13 font-500 text-neutral-40">
-                      {weightedBoost.hasStake
-                        ? `${weightedBoost.totalStaked.toFixed(2)} ${TOKEN_TICKER} staked`
+                    <span className="text-13 font-500 text-neutral-40">
+                      {mpBalanceOfAccount > 0n
+                        ? `${formatSNT(mpBalanceOfAccount)} points are ready to compound`
                         : 'No points are ready to compound'}
-                    </p>
+                    </span>
                     {/* @ts-expect-error - TODO: fix this */}
-                    <Button variant="primary" size="40">
+                    <Button
+                      disabled={mpBalanceOfAccount === 0n}
+                      variant="primary"
+                      size="40"
+                    >
                       Compound
                     </Button>
                   </div>

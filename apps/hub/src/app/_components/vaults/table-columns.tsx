@@ -15,12 +15,14 @@ interface TableColumnsProps {
   vaults: VaultWithAddress[] | undefined
   openModalVaultId: string | null
   setOpenModalVaultId: (vaultId: string | null) => void
+  emergencyModeEnabled: unknown
 }
 
 export const createVaultTableColumns = ({
   vaults = [],
   openModalVaultId,
   setOpenModalVaultId,
+  emergencyModeEnabled,
 }: TableColumnsProps) => {
   const totalStaked = vaults.reduce(
     (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
@@ -219,29 +221,31 @@ export const createVaultTableColumns = ({
           <div className="flex items-center justify-end gap-2 lg:gap-4">
             {isLocked ? (
               <div className="flex items-center gap-2">
-                <VaultWithdrawModal
-                  open={isWithdrawModalOpen}
-                  onOpenChange={open =>
-                    setOpenModalVaultId(open ? withdrawModalId : null)
-                  }
-                  onClose={() => setOpenModalVaultId(null)}
-                  vaultAdress={row.original.address}
-                >
-                  {/* @ts-expect-error - Button component is not typed */}
-                  <Button
-                    variant="destructive"
-                    size="32"
-                    className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                {Boolean(emergencyModeEnabled) && (
+                  <VaultWithdrawModal
+                    open={isWithdrawModalOpen}
+                    onOpenChange={open =>
+                      setOpenModalVaultId(open ? withdrawModalId : null)
+                    }
+                    onClose={() => setOpenModalVaultId(null)}
+                    vaultAdress={row.original.address}
                   >
-                    <AlertIcon className="shrink-0" />
-                    <span className="hidden whitespace-nowrap xl:inline">
-                      Withdraw funds
-                    </span>
-                    <span className="whitespace-nowrap xl:hidden">
-                      Withdraw
-                    </span>
-                  </Button>
-                </VaultWithdrawModal>
+                    {/* @ts-expect-error - Button component is not typed */}
+                    <Button
+                      variant="destructive"
+                      size="32"
+                      className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                    >
+                      <AlertIcon className="shrink-0" />
+                      <span className="hidden whitespace-nowrap xl:inline">
+                        Withdraw funds
+                      </span>
+                      <span className="whitespace-nowrap xl:hidden">
+                        Withdraw
+                      </span>
+                    </Button>
+                  </VaultWithdrawModal>
+                )}
                 <VaultLockConfigModal
                   open={isLockModalOpen}
                   onOpenChange={open =>
@@ -249,6 +253,8 @@ export const createVaultTableColumns = ({
                   }
                   vaultAddress={row.original.address}
                   title="Extend lock time"
+                  initialYears="2"
+                  initialDays="732"
                   description="Extending lock time increasing Karma boost"
                   actions={[
                     {
@@ -290,13 +296,6 @@ export const createVaultTableColumns = ({
                 vaultAddress={row.original.address}
                 title="Do you want to lock the vault?"
                 description="Lock this vault to receive more Karma"
-                sliderConfig={{
-                  minLabel: '90 days',
-                  maxLabel: '4 years',
-                  minDays: 90,
-                  maxDays: 1460,
-                  initialPosition: 50,
-                }}
                 initialYears="2"
                 initialDays="732"
                 actions={[
