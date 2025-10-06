@@ -460,19 +460,23 @@ const InfoTooltip = () => (
   <Tooltip
     delayDuration={150}
     side="top"
-    className="border border-neutral-100"
+    className="border-0"
     content={
-      <div className="max-w-[286px] space-y-4 p-4">
-        <p className="text-13 font-500">
+      <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
+        <span className="text-13 leading-[1.4] tracking-[-0.039px] text-neutral-100">
           The longer SNT is staked or locked in vaults, the higher this
           multiplier goes. This rewards long term believers. The maximum
           multiplier is x9.
-        </p>
+        </span>
 
-        {/* TODO: change link */}
-        <ButtonLink href="https://status.app/" variant="outline" size="24">
+        <ButtonLink
+          href="https://status.app/"
+          variant="outline"
+          className="rounded-8 px-2 py-1"
+          size="24"
+        >
           Learn more
-          <ExternalIcon className="size-4 text-neutral-50" />
+          <ExternalIcon className="size-3 text-neutral-50" />
         </ButtonLink>
       </div>
     }
