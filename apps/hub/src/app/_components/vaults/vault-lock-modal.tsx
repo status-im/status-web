@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -12,6 +12,7 @@ import { Button } from '@status-im/status-network/components'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useSliderConfig } from '../../_hooks/useSliderConfig'
 import { useVaultLock } from '../../_hooks/useVaultLock'
 
 import type { HTMLAttributes } from 'react'
@@ -39,14 +40,6 @@ type Props = {
   title: string
   description: string
   children?: React.ReactNode
-  // Slider configuration
-  sliderConfig?: {
-    minLabel: string
-    maxLabel: string
-    minDays: number
-    maxDays: number
-    initialPosition?: number // 0-100 percentage
-  }
   // Initial values
   initialYears?: string
   initialDays?: string
@@ -70,13 +63,6 @@ const VaultLockConfigModal = (props: Props) => {
     title,
     vaultAddress,
     description,
-    sliderConfig = {
-      minLabel: '90 days',
-      maxLabel: '4 years',
-      minDays: 90,
-      maxDays: 1460,
-      initialPosition: 0,
-    },
     initialYears = '0',
     initialDays = '90',
     boost = 'x2.5',
@@ -86,6 +72,8 @@ const VaultLockConfigModal = (props: Props) => {
     actions,
   } = props
 
+  const [closeAction, submitAction] = actions
+
   const { mutate: lockVault } = useVaultLock()
   const { watch, setValue, handleSubmit } = useForm<FormValues>({
     resolver: zodResolver(createFormSchema()),
@@ -94,6 +82,37 @@ const VaultLockConfigModal = (props: Props) => {
       days: initialDays,
     },
   })
+
+  const { data: sliderConfigQuery } = useSliderConfig()
+
+  const sliderConfig = useMemo(() => {
+    // Convert seconds to days
+    const SECONDS_PER_DAY = 24 * 60 * 60
+    const DAYS_PER_YEAR = 365
+
+    const minSeconds = sliderConfigQuery?.min || 7776000 // fallback: 90 days in seconds
+    const maxSeconds = sliderConfigQuery?.max || 126144000 // fallback: 4 years in seconds
+
+    const minDays = Math.round(minSeconds / SECONDS_PER_DAY)
+    const maxDays = Math.round(maxSeconds / SECONDS_PER_DAY)
+
+    // Format labels
+    const minYears = minDays / DAYS_PER_YEAR
+    const maxYears = maxDays / DAYS_PER_YEAR
+
+    const minLabel =
+      minYears < 1 ? `${minDays} days` : `${minYears.toFixed(1)} years`
+    const maxLabel =
+      maxYears < 1 ? `${maxDays} days` : `${Math.round(maxYears)} years`
+
+    return {
+      minLabel,
+      maxLabel,
+      minDays,
+      maxDays,
+      initialPosition: 50,
+    }
+  }, [sliderConfigQuery])
 
   const years = watch('years')
   const days = watch('days')
@@ -136,7 +155,7 @@ const VaultLockConfigModal = (props: Props) => {
     }
   }
 
-  const handleVaultLockAndExtend = async (data: FormValues) => {
+  const handleVaultLockOrExtend = async (data: FormValues) => {
     const totalDays = parseInt(data.days || '0')
     const lockPeriodInSeconds = BigInt(totalDays * 24 * 60 * 60)
 
@@ -236,7 +255,7 @@ const VaultLockConfigModal = (props: Props) => {
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
         <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-[440px] -translate-x-1/2 -translate-y-1/2 px-4 focus:outline-none">
           <form
-            onSubmit={handleSubmit(handleVaultLockAndExtend)}
+            onSubmit={handleSubmit(handleVaultLockOrExtend)}
             className="relative mx-auto w-full max-w-[440px] overflow-hidden rounded-20 bg-white-100 shadow-3"
           >
             <Dialog.Close asChild>
@@ -305,21 +324,23 @@ const VaultLockConfigModal = (props: Props) => {
               </div>
             </div>
 
-            <div
-              className="box-border flex flex-col gap-2 px-8 py-0"
-              style={{ opacity: hasError ? 1 : 0 }}
-            >
-              <div className="flex items-center gap-1">
-                <div className="box-border flex items-center justify-center gap-[10px] self-stretch px-0 py-px">
-                  <div className="relative overflow-hidden">
-                    <IncorrectIcon />
+            {hasError && (
+              <div
+                className="box-border flex flex-col gap-2 px-8 py-0"
+                style={{ opacity: hasError ? 1 : 0 }}
+              >
+                <div className="flex items-center gap-1">
+                  <div className="box-border flex items-center justify-center gap-[10px] self-stretch px-0 py-px">
+                    <div className="relative overflow-hidden">
+                      <IncorrectIcon />
+                    </div>
+                  </div>
+                  <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col justify-center text-[13px] font-medium leading-[0] tracking-[-0.039px] text-[#e95460]">
+                    <span className="leading-[1.4]">{displayError}</span>
                   </div>
                 </div>
-                <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col justify-center text-[13px] font-medium leading-[0] tracking-[-0.039px] text-[#e95460]">
-                  <span className="leading-[1.4]">{displayError}</span>
-                </div>
               </div>
-            </div>
+            )}
 
             <div className="box-border flex items-center gap-6 px-8 py-4">
               <div className="flex items-center gap-2">
@@ -355,24 +376,27 @@ const VaultLockConfigModal = (props: Props) => {
 
             <div className="flex w-full flex-col items-start bg-[rgba(255,255,255,0.7)] backdrop-blur-[20px]">
               <div className="box-border flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
-                {/* @ts-expect-error - Button component is not typed */}
-                <Button
-                  size="40"
-                  variant="outline"
-                  type="button"
-                  className="flex-1 justify-center"
-                >
-                  {actions[0].label}
-                </Button>
+                <Dialog.Close asChild>
+                  {/* @ts-expect-error - Button component is not typed */}
+                  <Button
+                    size="40"
+                    variant="outline"
+                    type="button"
+                    aria-label="Close"
+                    className="flex-1 justify-center"
+                  >
+                    {closeAction.label}
+                  </Button>
+                </Dialog.Close>
                 {/* @ts-expect-error - Button component is not typed */}
                 <Button
                   size="40"
                   variant="primary"
                   type="submit"
                   className="flex-1 justify-center"
-                  disabled={actions[1].disabled || hasError}
+                  disabled={submitAction.disabled || hasError}
                 >
-                  {actions[1].label}
+                  {submitAction.label}
                 </Button>
               </div>
             </div>
