@@ -1,5 +1,7 @@
 import { match } from 'ts-pattern'
 
+import { formatSNT } from '../../../utils/currency'
+
 import type { VaultState } from '../../_hooks/useVaultStateMachine'
 
 export type ActionStatusState =
@@ -18,6 +20,7 @@ export type ActionStatusContent = {
 export function useActionStatusContent(
   state: VaultState
 ): ActionStatusContent | null {
+  console.log(state)
   return (
     match<VaultState, ActionStatusContent | null>(state)
       // SIWE flow
@@ -65,7 +68,7 @@ export function useActionStatusContent(
         title: 'Increase token allowance',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'increaseAllowance', step: 'processing' }, () => ({
         title: 'Increasing token allowance',
@@ -87,7 +90,7 @@ export function useActionStatusContent(
           step: 'initialize',
         },
         state => ({
-          title: `Ready to stake ${state.amount || '0'} SNT`,
+          title: `Ready to stake ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
           description: 'Please sign the message in your wallet.',
           state: 'pending',
           showCloseButton: true,
@@ -95,12 +98,58 @@ export function useActionStatusContent(
       )
 
       .with({ type: 'staking', step: 'processing' }, state => ({
-        title: `Staking ${state.amount || '0'} SNT`,
+        title: `Staking ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
         description: 'Wait a moment...',
         state: 'processing',
         showCloseButton: false,
       }))
       .with({ type: 'staking', step: 'rejected' }, () => ({
+        title: 'Request was rejected',
+        description: 'Request was rejected by user',
+        state: 'error',
+        showCloseButton: true,
+      }))
+
+      // Withdraw flow
+      .with(
+        {
+          type: 'withdraw',
+          step: 'initialize',
+        },
+        state => ({
+          title: `Ready to withdraw ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+          description: 'Please sign the message in your wallet.',
+          state: 'pending',
+          showCloseButton: true,
+        })
+      )
+      .with({ type: 'withdraw', step: 'processing' }, state => ({
+        title: `Withdrawing ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+        description: 'Wait a moment...',
+        state: 'processing',
+        showCloseButton: false,
+      }))
+      .with({ type: 'withdraw', step: 'rejected' }, () => ({
+        title: 'Request was rejected',
+        description: 'Request was rejected by user',
+        state: 'error',
+        showCloseButton: true,
+      }))
+
+      // Lock flow
+      .with({ type: 'lock', step: 'initialize' }, () => ({
+        title: 'Ready to lock vault',
+        description: 'Please sign the message in your wallet.',
+        state: 'pending',
+        showCloseButton: true,
+      }))
+      .with({ type: 'lock', step: 'processing' }, () => ({
+        title: 'Locking vault',
+        description: 'Wait a moment...',
+        state: 'processing',
+        showCloseButton: false,
+      }))
+      .with({ type: 'lock', step: 'rejected' }, () => ({
         title: 'Request was rejected',
         description: 'Request was rejected by user',
         state: 'error',

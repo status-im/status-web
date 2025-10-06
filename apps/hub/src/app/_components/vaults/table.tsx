@@ -1,7 +1,7 @@
 /* eslint-disable import/no-unresolved */
 'use client'
 
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { AddCircleIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
@@ -10,13 +10,14 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useAccount } from 'wagmi'
 
-import { transformVaults } from '../../../utils/vault'
 import { useAccountVaults } from '../../_hooks/useAccountVaults'
-import { useVaultStateContext } from '../../_hooks/vault-state-context'
+import { useVaultMutation } from '../../_hooks/useVault'
 import { createVaultTableColumns } from './table-columns'
 
-import type { Vault, VaultColumnMeta } from './types'
+import type { VaultWithAddress } from '../../_hooks/useAccountVaults'
+import type { VaultColumnMeta } from './types'
 
 /**
  * Gets the appropriate CSS class for table cell/header based on meta
@@ -40,7 +41,7 @@ function getHeaderClassName(
 // ============================================================================
 
 interface TableHeaderProps {
-  table: ReturnType<typeof useReactTable<Vault>>
+  table: ReturnType<typeof useReactTable<VaultWithAddress>>
 }
 
 function TableHeader({ table }: TableHeaderProps) {
@@ -68,7 +69,7 @@ function TableHeader({ table }: TableHeaderProps) {
 }
 
 interface TableBodyProps {
-  table: ReturnType<typeof useReactTable<Vault>>
+  table: ReturnType<typeof useReactTable<VaultWithAddress>>
 }
 
 function TableBody({ table }: TableBodyProps) {
@@ -91,7 +92,7 @@ function TableBody({ table }: TableBodyProps) {
 }
 
 interface TableFooterProps {
-  table: ReturnType<typeof useReactTable<Vault>>
+  table: ReturnType<typeof useReactTable<VaultWithAddress>>
 }
 
 function TableFooter({ table }: TableFooterProps) {
@@ -124,34 +125,25 @@ function TableFooter({ table }: TableFooterProps) {
 
 export function VaultsTable() {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
-  const { send: sendVaultEvent } = useVaultStateContext()
   const { data: vaultDataList } = useAccountVaults()
-
-  // Transform vault data from contract format to UI format
-  const vaults = useMemo(
-    () => (vaultDataList ? transformVaults(vaultDataList) : []),
-    [vaultDataList]
-  )
+  const { isConnected } = useAccount()
+  const { mutate: deployVault } = useVaultMutation()
 
   const columns = useMemo(
     () =>
       createVaultTableColumns({
-        data: vaults,
+        vaults: vaultDataList,
         openModalVaultId,
         setOpenModalVaultId,
       }),
-    [vaults, openModalVaultId]
+    [openModalVaultId, vaultDataList]
   )
 
   const table = useReactTable({
-    data: vaults,
+    data: vaultDataList ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
-
-  const handleAddVaultModal = useCallback(() => {
-    sendVaultEvent({ type: 'START_CREATE_VAULT' })
-  }, [sendVaultEvent])
 
   return (
     <div className="flex flex-col gap-3">
@@ -159,16 +151,18 @@ export function VaultsTable() {
         <h2 className="text-[19px] font-semibold leading-[1.35] tracking-[-0.304px] text-neutral-100">
           My vaults
         </h2>
-        {/* @ts-expect-error - Button component is not typed */}
-        <Button
-          variant="outline"
-          size="32"
-          onClick={handleAddVaultModal}
-          className="w-full sm:w-auto"
-        >
-          <AddCircleIcon />
-          <span className="whitespace-nowrap">Add vault</span>
-        </Button>
+        {isConnected && (
+          // @ts-expect-error - Button component is not typed
+          <Button
+            variant="outline"
+            size="32"
+            onClick={deployVault}
+            className="w-full sm:w-auto"
+          >
+            <AddCircleIcon />
+            <span className="whitespace-nowrap">Add vault</span>
+          </Button>
+        )}
       </div>
 
       <div className="relative w-full overflow-x-auto overflow-y-visible rounded-16 border border-solid border-neutral-10 bg-white-100">

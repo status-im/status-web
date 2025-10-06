@@ -5,9 +5,10 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { InfoIcon } from '@status-im/icons/12'
 import { CloseIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
 
 import { SNT_TOKEN } from '../../../config'
+import { useVaultWithdraw } from '../../_hooks/useVaultWithdraw'
 import { vaultAbi } from '../../contracts'
 
 import type { Address } from 'viem'
@@ -24,7 +25,7 @@ const VaultWithdrawModal = (props: Props) => {
   const { onClose, vaultAdress, open, onOpenChange, children } = props
 
   const { address } = useAccount()
-  const { writeContract } = useWriteContract()
+  const { mutate: withdrawFromVault } = useVaultWithdraw()
   const { data: availableWithdraw } = useReadContract({
     abi: vaultAbi,
     address: vaultAdress,
@@ -42,13 +43,14 @@ const VaultWithdrawModal = (props: Props) => {
   }
 
   const handleVaultWithdrawal = () => {
-    writeContract({
-      abi: vaultAbi,
-      address: vaultAdress,
-      functionName: 'unstake',
-      args: [availableWithdraw || 0n],
+    if (!availableWithdraw || availableWithdraw === 0n) {
+      return
+    }
+
+    withdrawFromVault({
+      amountWei: availableWithdraw,
+      vaultAddress: vaultAdress,
     })
-    onClose()
   }
 
   return (
@@ -56,7 +58,7 @@ const VaultWithdrawModal = (props: Props) => {
       <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-40 bg-neutral-80/60 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-[440px] -translate-x-1/2 -translate-y-1/2 px-4 focus:outline-none">
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 -translate-y-1/2 px-4 focus:outline-none">
           <div className="relative mx-auto w-full max-w-[440px] overflow-hidden rounded-20 bg-white-100 shadow-3">
             <Dialog.Close asChild>
               <button
@@ -98,9 +100,9 @@ const VaultWithdrawModal = (props: Props) => {
                       Withdraw to
                     </p>
                   </div>
-                  <div className="w-full rounded-12 border border-solid border-neutral-20 bg-white-100">
-                    <div className="box-border flex w-full items-center gap-2 overflow-hidden rounded-8 py-[9px] pl-4 pr-3">
-                      <p className="min-h-px min-w-px shrink-0 grow basis-0 text-[15px] leading-[1.45] tracking-[-0.135px] text-neutral-100">
+                  <div className="w-full rounded-12 border border-solid border-[#e7eaee] bg-white-100 opacity-[0.4]">
+                    <div className="box-border flex w-full items-center gap-2 overflow-hidden rounded-[inherit] py-[9px] pl-4 pr-3">
+                      <p className="min-h-px min-w-px shrink-0 grow basis-0 break-words text-[15px] leading-[1.45] tracking-[-0.135px] text-neutral-100">
                         {address}
                       </p>
                     </div>
@@ -110,7 +112,7 @@ const VaultWithdrawModal = (props: Props) => {
             </div>
 
             <div className="box-border flex w-full flex-col items-start gap-2 p-4">
-              <div className="box-border flex w-full flex-col items-start gap-2 rounded-12 border border-solid border-[rgba(42,74,245,0.1)] bg-[rgba(42,74,245,0.05)] px-4 pb-3 pt-[10px]">
+              <div className="box-border flex w-full flex-col items-start gap-2 rounded-12 border border-solid border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 pb-3 pt-[10px]">
                 <div className="flex w-full items-start gap-2">
                   <div className="box-border flex items-start justify-center gap-[10px] self-stretch px-0 pb-0 pt-[3px]">
                     <div className="relative size-3 overflow-hidden">
@@ -118,7 +120,7 @@ const VaultWithdrawModal = (props: Props) => {
                     </div>
                   </div>
                   <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col items-start gap-2">
-                    <div className="flex min-w-full flex-col justify-center text-[13px] leading-[0] tracking-[-0.039px] text-[#09101c]">
+                    <div className="flex min-w-full flex-col justify-center text-[13px] leading-[0] tracking-[-0.039px] text-neutral-100">
                       <p className="leading-[1.4]">
                         Your funds will sent directly to your connected wallet.
                       </p>
@@ -127,7 +129,7 @@ const VaultWithdrawModal = (props: Props) => {
                     <Button
                       variant="outline"
                       size="24"
-                      className="rounded-8 px-3 text-[13px]"
+                      className="rounded-8 px-2 py-[3px] pr-[6px] text-[13px]"
                     >
                       Learn more
                     </Button>
@@ -136,7 +138,7 @@ const VaultWithdrawModal = (props: Props) => {
               </div>
             </div>
 
-            <div className="flex w-full flex-col items-start bg-[rgba(255,255,255,0.7)] backdrop-blur-[20px]">
+            <div className="flex w-full flex-col items-start">
               <div className="box-border flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
                 {/* @ts-expect-error - Button component is not typed */}
                 <Button

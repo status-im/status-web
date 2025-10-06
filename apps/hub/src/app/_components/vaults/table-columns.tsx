@@ -6,34 +6,40 @@ import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 
 import { formatKarma, formatSNT } from '../../../utils/currency'
+import { calculateVaultBoost } from '../../../utils/vault'
+import { type VaultWithAddress } from '../../_hooks/useAccountVaults'
 import { VaultLockConfigModal } from './vault-lock-modal'
 import { VaultWithdrawModal } from './withdraw-modal'
 
-import type { Vault } from './types'
-
 interface TableColumnsProps {
-  data: Vault[]
+  vaults: VaultWithAddress[] | undefined
   openModalVaultId: string | null
   setOpenModalVaultId: (vaultId: string | null) => void
 }
 
 export const createVaultTableColumns = ({
-  data,
+  vaults = [],
   openModalVaultId,
   setOpenModalVaultId,
 }: TableColumnsProps) => {
-  const totalStaked = data.reduce((acc, vault) => acc + vault.staked, BigInt(0))
-  const totalKarma = data.reduce((acc, vault) => acc + vault.karma, 0)
-  const columnHelper = createColumnHelper<Vault>()
+  const totalStaked = vaults.reduce(
+    (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
+    BigInt(0)
+  )
+  const totalKarma = vaults.reduce(
+    (acc, vault) => acc + (vault.data?.rewardsAccrued || 0n),
+    BigInt(0)
+  )
+  const columnHelper = createColumnHelper<VaultWithAddress>()
 
   return [
-    columnHelper.accessor('id', {
+    columnHelper.accessor('address', {
       id: 'vault',
       header: 'Vault',
       cell: ({ row }) => {
         return (
           <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
-            #{Number(row.original.id) + 1}
+            #{Number(row.index) + 1}
           </span>
         )
       },
@@ -62,13 +68,13 @@ export const createVaultTableColumns = ({
         cellClassName: 'text-left',
       },
     }),
-    columnHelper.accessor('staked', {
+    columnHelper.accessor('data.stakedBalance', {
       header: 'Staked',
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-1">
             <span className="text-[13px] font-medium text-neutral-100">
-              {formatSNT(row.original.staked)}
+              {formatSNT(row.original.data?.stakedBalance || 0n)}
               <span className="ml-0.5 text-neutral-50">SNT</span>
             </span>
           </div>
@@ -87,16 +93,24 @@ export const createVaultTableColumns = ({
         cellClassName: 'text-left',
       },
     }),
-    columnHelper.accessor('unlocksIn', {
+    columnHelper.accessor('data.lockUntil', {
       header: 'Unlocks in',
       cell: ({ row }) => {
-        if (row.original.unlocksIn === null) {
+        const now = Math.floor(Date.now() / 1000)
+        const lockUntilTimestamp = Number(row.original.data?.lockUntil)
+        const isLocked = lockUntilTimestamp > now
+        const daysUntilUnlock = isLocked
+          ? Math.ceil((lockUntilTimestamp - now) / 86400)
+          : null
+
+        if (!daysUntilUnlock) {
           return null
         }
+
         return (
           <div className="flex items-center gap-0.5">
             <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
-              {row.original.unlocksIn}
+              {daysUntilUnlock}
               <span className="ml-0.5 text-neutral-50">d</span>
             </span>
           </div>
@@ -107,20 +121,26 @@ export const createVaultTableColumns = ({
         cellClassName: 'text-left',
       },
     }),
-    columnHelper.accessor('boost', {
+    columnHelper.accessor('data.maxMP', {
       header: 'Boost',
       cell: ({ row }) => {
-        if (!row.original.boost) {
-          return null
-        }
+        const stakedBalance = row.original.data?.stakedBalance || 0n
+        const maxMP = row.original.data?.maxMP || 0n
+        const mpAccrued = row.original.data?.mpAccrued || 0n
+
+        const potentialBoost =
+          stakedBalance > 0n && maxMP > mpAccrued
+            ? Number(maxMP - mpAccrued) / Number(stakedBalance)
+            : undefined
+
         return (
           <div className="flex items-center gap-3">
             <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
-              x{row.original.boost.toFixed(2)}
+              x{calculateVaultBoost(vaults, row.original.address)}
             </span>
-            {row.original.potentialBoost && (
+            {potentialBoost && (
               <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-[#7140fd]">
-                x{row.original.potentialBoost.toFixed(2)} if locked
+                x{potentialBoost.toFixed(2)} if locked
               </span>
             )}
           </div>
@@ -131,13 +151,14 @@ export const createVaultTableColumns = ({
         cellClassName: 'text-left',
       },
     }),
-    columnHelper.accessor('karma', {
+    columnHelper.accessor('data.rewardsAccrued', {
       header: 'Karma',
       cell: ({ row }) => {
+        const karma = Number(row.original.data?.rewardsAccrued) / 1e18
         return (
           <div className="flex items-center gap-1">
             <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
-              {formatKarma(row.original.karma)}
+              {formatKarma(karma)}
               <span className="ml-0.5 text-neutral-50">KARMA</span>
             </span>
           </div>
@@ -156,19 +177,23 @@ export const createVaultTableColumns = ({
         cellClassName: 'text-left',
       },
     }),
-    columnHelper.accessor('locked', {
+    columnHelper.accessor('data.lockUntil', {
       id: 'state',
       header: 'State',
       cell: ({ row }) => {
+        const now = Math.floor(Date.now() / 1000)
+        const lockUntilTimestamp = Number(row.original.data?.lockUntil)
+        const isLocked = lockUntilTimestamp > now
+
         return (
           <div className="flex items-center gap-1">
-            {row.original.locked ? (
+            {isLocked ? (
               <LockedIcon />
             ) : (
-              <UnlockedIcon fill="currentColor" />
+              <UnlockedIcon className="text-purple" />
             )}
             <span className="text-[13px] font-medium capitalize leading-[1.4] tracking-[-0.039px] text-neutral-100">
-              {row.original.locked ? 'Locked' : 'Open'}
+              {isLocked ? 'Locked' : 'Open'}
             </span>
           </div>
         )
@@ -182,79 +207,87 @@ export const createVaultTableColumns = ({
       id: 'actions',
       header: 'Actions',
       cell: ({ row }) => {
-        const withdrawModalId = `withdraw-${row.original.id}`
-        const lockModalId = `lock-${row.original.id}`
+        const withdrawModalId = `withdraw-${row.original.address}`
+        const lockModalId = `lock-${row.original.address}`
         const isWithdrawModalOpen = openModalVaultId === withdrawModalId
         const isLockModalOpen = openModalVaultId === lockModalId
+        const isLocked = row.original?.data?.lockUntil
+          ? row.original.data.lockUntil > 0
+          : false
 
         return (
           <div className="flex items-center justify-end gap-2 lg:gap-4">
-            <VaultWithdrawModal
-              open={isWithdrawModalOpen}
-              onOpenChange={open =>
-                setOpenModalVaultId(open ? withdrawModalId : null)
-              }
-              onClose={() => setOpenModalVaultId(null)}
-              vaultAdress={row.original.address}
-            >
-              {/* @ts-expect-error - Button component is not typed */}
-              <Button
-                variant="destructive"
-                size="32"
-                className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
-              >
-                <AlertIcon className="shrink-0" />
-                <span className="hidden whitespace-nowrap xl:inline">
-                  Withdraw funds
-                </span>
-                <span className="whitespace-nowrap xl:hidden">Withdraw</span>
-              </Button>
-            </VaultWithdrawModal>
-            {row.original.locked ? (
-              <VaultLockConfigModal
-                open={isLockModalOpen}
-                onOpenChange={open =>
-                  setOpenModalVaultId(open ? lockModalId : null)
-                }
-                title="Extend lock time"
-                description="Extending lock time increasing Karma boost"
-                actions={[
-                  {
-                    label: 'Cancel',
-                    onClick: () => setOpenModalVaultId(null),
-                  },
-                  {
-                    label: 'Extend lock',
-                    onClick: () => {
-                      // Handle extend lock logic
-                      setOpenModalVaultId(null)
-                    },
-                  },
-                ]}
-                onClose={() => setOpenModalVaultId(null)}
-                boost="x2.5"
-                unlockDate="30/01/2026"
-                infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
-              >
-                {/* @ts-expect-error - Button component is not typed */}
-                <Button
-                  variant="primary"
-                  size="32"
-                  className="min-w-fit text-[13px]"
+            {isLocked ? (
+              <div className="flex items-center gap-2">
+                <VaultWithdrawModal
+                  open={isWithdrawModalOpen}
+                  onOpenChange={open =>
+                    setOpenModalVaultId(open ? withdrawModalId : null)
+                  }
+                  onClose={() => setOpenModalVaultId(null)}
+                  vaultAdress={row.original.address}
                 >
-                  <TimeIcon className="shrink-0" />
-                  <span className="hidden whitespace-nowrap xl:inline">
-                    Extend lock time
-                  </span>
-                  <span className="whitespace-nowrap xl:hidden">Extend</span>
-                </Button>
-              </VaultLockConfigModal>
+                  {/* @ts-expect-error - Button component is not typed */}
+                  <Button
+                    variant="destructive"
+                    size="32"
+                    className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                  >
+                    <AlertIcon className="shrink-0" />
+                    <span className="hidden whitespace-nowrap xl:inline">
+                      Withdraw funds
+                    </span>
+                    <span className="whitespace-nowrap xl:hidden">
+                      Withdraw
+                    </span>
+                  </Button>
+                </VaultWithdrawModal>
+                <VaultLockConfigModal
+                  open={isLockModalOpen}
+                  onOpenChange={open =>
+                    setOpenModalVaultId(open ? lockModalId : null)
+                  }
+                  vaultAddress={row.original.address}
+                  title="Extend lock time"
+                  description="Extending lock time increasing Karma boost"
+                  actions={[
+                    {
+                      label: 'Cancel',
+                      onClick: () => setOpenModalVaultId(null),
+                    },
+                    {
+                      label: 'Extend lock',
+                      onClick: () => {
+                        // Handle extend lock logic
+                        setOpenModalVaultId(null)
+                      },
+                    },
+                  ]}
+                  onClose={() => setOpenModalVaultId(null)}
+                  boost="x2.5"
+                  infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
+                >
+                  {/* @ts-expect-error - Button component is not typed */}
+                  <Button
+                    variant="primary"
+                    size="32"
+                    className="min-w-fit text-[13px]"
+                  >
+                    <TimeIcon className="shrink-0" />
+                    <span className="hidden whitespace-nowrap xl:inline">
+                      Extend lock time
+                    </span>
+                    <span className="whitespace-nowrap xl:hidden">Extend</span>
+                  </Button>
+                </VaultLockConfigModal>
+              </div>
             ) : (
               <VaultLockConfigModal
                 open={isLockModalOpen}
                 onOpenChange={open =>
                   setOpenModalVaultId(open ? lockModalId : null)
                 }
+                vaultAddress={row.original.address}
                 title="Do you want to lock the vault?"
                 description="Lock this vault to receive more Karma"
                 sliderConfig={{
@@ -281,11 +314,9 @@ export const createVaultTableColumns = ({
                 ]}
                 onClose={() => setOpenModalVaultId(null)}
                 boost="x2.5"
-                unlockDate="30/01/2025"
                 infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
-                onValidate={(years, days) => {
-                  const totalDays =
-                    parseInt(years || '0') * 365 + parseInt(days || '0')
+                onValidate={(_, days) => {
+                  const totalDays = parseInt(days || '0')
                   return totalDays > 1460
                     ? 'Maximum lock time is 4 years'
                     : null

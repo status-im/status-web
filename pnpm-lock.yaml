@@ -255,6 +255,12 @@ importers:
 
   apps/hub:
     dependencies:
+      '@hookform/devtools':
+        specifier: ^4.3.1
+        version: 4.4.0(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@hookform/resolvers':
+        specifier: ^3.1.1
+        version: 3.10.0(react-hook-form@7.64.0(react@19.1.0))
       '@status-im/colors':
         specifier: workspace:*
         version: link:../../packages/colors
@@ -303,6 +309,9 @@ importers:
       react-dom:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
+      react-hook-form:
+        specifier: ^7.45.1
+        version: 7.64.0(react@19.1.0)
       rehype-slug:
         specifier: ^6.0.0
         version: 6.0.0
@@ -15992,6 +16001,12 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
 
+  react-hook-form@7.64.0:
+    resolution: {integrity: sha512-fnN+vvTiMLnRqKNTVhDysdrUay0kUUAymQnFIznmgDvapjveUWOOPqMNzPg+A+0yf9DuE2h6xzBjN1s+Qx8wcg==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -19154,7 +19169,7 @@ snapshots:
 
   '@babel/highlight@7.24.7':
     dependencies:
-      '@babel/helper-validator-identifier': 7.24.7
+      '@babel/helper-validator-identifier': 7.27.1
       chalk: 2.4.2
       js-tokens: 4.0.0
       picocolors: 1.1.1
@@ -21265,6 +21280,10 @@ snapshots:
   '@hookform/resolvers@3.10.0(react-hook-form@7.58.1(react@18.3.1))':
     dependencies:
       react-hook-form: 7.58.1(react@18.3.1)
+
+  '@hookform/resolvers@3.10.0(react-hook-form@7.64.0(react@19.1.0))':
+    dependencies:
+      react-hook-form: 7.64.0(react@19.1.0)
 
   '@humanfs/core@0.19.1': {}
 
@@ -39978,6 +39997,10 @@ snapshots:
   react-hook-form@7.58.1(react@18.3.1):
     dependencies:
       react: 18.3.1
+
+  react-hook-form@7.64.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   react-is@16.13.1: {}
 

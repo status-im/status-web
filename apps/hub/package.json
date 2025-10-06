@@ -14,6 +14,8 @@
     "clean": "rimraf .next .vercel/output node_modules"
   },
   "dependencies": {
+    "@hookform/devtools": "^4.3.1",
+    "@hookform/resolvers": "^3.1.1",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
     "@status-im/icons": "workspace:*",
@@ -35,6 +37,7 @@
     "ts-pattern": "^5.6.2",
     "wagmi": "2.15.2",
     "zod": "^3.24.1",
+    "react-hook-form": "^7.45.1",
     "viem": "^2.21.1"
   },
   "devDependencies": {

@@ -1,3 +1,7 @@
+import { type Address, formatUnits } from 'viem'
+
+import { SNT_TOKEN } from '../config'
+
 import type { Vault } from '../app/_components/vaults/types'
 import type {
   VaultData,
@@ -57,4 +61,21 @@ export const transformVaults = (vaultDataList: VaultWithAddress[]): Vault[] => {
       return transformVaultData(vault.data, vault.address, index)
     })
     .filter((vault): vault is Vault => vault !== null)
+}
+
+export function calculateVaultBoost(
+  vaults: VaultWithAddress[],
+  vaultAddress: Address
+): string {
+  const account = vaults.find(vault => vault.address === vaultAddress)
+  if (!account || account.data?.stakedBalance === 0n) return '1.00'
+  const vaultStaked = Number(
+    formatUnits(account.data?.stakedBalance || 0n, SNT_TOKEN.decimals)
+  )
+  const vaultMp = Number(
+    formatUnits(account.data?.mpAccrued || 0n, SNT_TOKEN.decimals)
+  )
+  // Add 1 to reflect the boost (base multiplier is 1x)
+  const boost = vaultMp / vaultStaked + 1
+  return boost.toFixed(2)
 }
