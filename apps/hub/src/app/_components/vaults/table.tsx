@@ -174,13 +174,15 @@ export function VaultsTable() {
         )}
       </div>
 
-      <div className="relative w-full overflow-x-auto overflow-y-visible rounded-16 border border-solid border-neutral-10 bg-white-100">
-        <div className="min-w-[800px]">
-          <table className="w-full border-collapse">
-            <TableHeader table={table} />
-            <TableBody table={table} />
-            <TableFooter table={table} />
-          </table>
+      <div className="relative w-full overflow-hidden rounded-16 border border-solid border-neutral-10 bg-white-100">
+        <div className="max-h-[600px] overflow-auto">
+          <div className="min-w-[800px]">
+            <table className="w-full border-collapse">
+              <TableHeader table={table} />
+              <TableBody table={table} />
+              <TableFooter table={table} />
+            </table>
+          </div>
         </div>
       </div>
     </div>

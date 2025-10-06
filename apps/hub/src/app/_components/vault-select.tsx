@@ -4,7 +4,12 @@
 import { useState } from 'react'
 
 import { DropdownMenu } from '@status-im/components'
-import { AddSmallIcon, DropdownIcon, UnlockedIcon } from '@status-im/icons/20'
+import {
+  AddSmallIcon,
+  DropdownIcon,
+  LockedIcon,
+  UnlockedIcon,
+} from '@status-im/icons/20'
 
 import { formatSNT } from '../../utils/currency'
 
@@ -95,6 +100,10 @@ export function VaultSelect({
   const selectedVault = vaults.find(vault => vault.address === value)
   const selectedIndex = vaults.findIndex(vault => vault.address === value)
 
+  const now = Math.floor(Date.now() / 1000)
+  const lockUntilTimestamp = Number(selectedVault?.data?.lockUntil)
+  const isLocked = lockUntilTimestamp > now
+
   const displayLabel =
     selectedVault && selectedIndex !== -1
       ? getVaultLabel(selectedVault, selectedIndex)
@@ -107,15 +116,21 @@ export function VaultSelect({
     <button
       type="button"
       disabled={disabled}
-      className="flex w-full items-center justify-between rounded-16 border border-neutral-20 bg-white-100 py-[9px] pl-4 pr-3 text-left text-15 font-medium text-neutral-80 transition data-[state=open]:border-neutral-30 hover:border-neutral-30"
+      className="flex w-full items-center justify-between rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px] text-left text-15 text-neutral-100 transition data-[state=open]:border-neutral-30 hover:border-neutral-30"
     >
       <div className="flex min-w-0 items-center gap-2">
         {selectedVault ? (
-          <UnlockedIcon className="size-5 shrink-0 text-purple" />
+          isLocked ? (
+            <LockedIcon className="size-5 shrink-0 text-purple" />
+          ) : (
+            <UnlockedIcon className="size-5 shrink-0 text-purple" />
+          )
         ) : (
           <AddSmallIcon className="size-5 shrink-0 text-neutral-100" />
         )}
-        <span className="truncate">{displayLabel}</span>
+        <span className="truncate font-regular leading-[2.15] tracking-[-0.135px]">
+          {displayLabel}
+        </span>
       </div>
       <DropdownIcon
         className={`shrink-0 text-neutral-40 transition-transform ${open ? 'rotate-180' : ''}`}
@@ -126,7 +141,7 @@ export function VaultSelect({
   const content = (
     <DropdownMenu.Content
       align="start"
-      className="z-50 w-[var(--radix-dropdown-menu-trigger-width)]"
+      className="z-50 max-h-[400px] w-[var(--radix-dropdown-menu-trigger-width)] overflow-y-auto"
     >
       <DropdownMenu.Item
         icon={<AddSmallIcon className="text-neutral-100" />}
@@ -139,18 +154,30 @@ export function VaultSelect({
       />
       {hasVaults ? (
         <>
-          {vaults.map((vault, index) => (
-            <DropdownMenu.Item
-              key={vault.address}
-              icon={<UnlockedIcon className="text-purple" />}
-              label={getVaultLabel(vault, index)}
-              selected={vault.address === value}
-              onSelect={() => {
-                onChange(vault.address)
-                setOpen(false)
-              }}
-            />
-          ))}
+          {vaults.map((vault, index) => {
+            const now = Math.floor(Date.now() / 1000)
+            const lockUntilTimestamp = Number(vault.data?.lockUntil)
+            const isVaultLocked = lockUntilTimestamp > now
+
+            return (
+              <DropdownMenu.Item
+                key={vault.address}
+                icon={
+                  isVaultLocked ? (
+                    <LockedIcon className="text-purple" />
+                  ) : (
+                    <UnlockedIcon className="text-purple" />
+                  )
+                }
+                label={getVaultLabel(vault, index)}
+                selected={vault.address === value}
+                onSelect={() => {
+                  onChange(vault.address)
+                  setOpen(false)
+                }}
+              />
+            )
+          })}
         </>
       ) : null}
     </DropdownMenu.Content>
