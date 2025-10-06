@@ -1,6 +1,6 @@
 import type { SVGProps } from 'react'
 
-export default function NewActionIcon({
+export default function VaultIcon({
   className,
   ...props
 }: SVGProps<SVGSVGElement>) {

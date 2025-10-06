@@ -266,26 +266,28 @@ export function formatStablecoin(
 
 /**
  * Format a currency value for display in UI
+ * Uses Intl.NumberFormat with USD currency by default
  * Automatically handles large numbers with compact notation
  *
  * @param amount - Currency amount
- * @param options - Formatting options with optional currency symbol
+ * @param options - Formatting options
  * @returns Formatted currency string
  *
  * @example
  * ```ts
- * formatCurrency(1234567) // => "1.23M"
- * formatCurrency(999, { symbol: '$' }) // => "$999.00"
- * formatCurrency(1500000n, { symbol: '$', tokenDecimals: 18 }) // => "$0.00"
+ * formatCurrency(1234567) // => "$1.23M"
+ * formatCurrency(999) // => "$999.00"
+ * formatCurrency(1500000n, { tokenDecimals: 18 }) // => "$0.00"
+ * formatCurrency(100, { currency: 'EUR' }) // => "€100.00"
  * ```
  */
 export function formatCurrency(
   amount: number | bigint | string,
-  options: FormatTokenOptions & { symbol?: string } = {}
+  options: FormatTokenOptions & { currency?: string } = {}
 ): string {
   const {
-    symbol = '',
-    tokenDecimals = DEFAULT_TOKEN_DECIMALS,
+    currency = 'USD',
+    tokenDecimals = 0, // Default to 0 for currency values (already in display units)
     locale = DEFAULT_LOCALE,
     decimals = DEFAULT_DISPLAY_DECIMALS,
     ...rest
@@ -298,14 +300,15 @@ export function formatCurrency(
     rest.compact !== false && Math.abs(numericAmount) >= COMPACT_THRESHOLD
 
   const formatter = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
     minimumFractionDigits: rest.minimumFractionDigits ?? decimals,
     maximumFractionDigits: rest.maximumFractionDigits ?? decimals,
     notation: shouldCompact ? 'compact' : 'standard',
     compactDisplay: 'short',
   })
 
-  const formatted = formatter.format(numericAmount)
-  return symbol ? `${symbol}${formatted}` : formatted
+  return formatter.format(numericAmount)
 }
 
 // ============================================================================

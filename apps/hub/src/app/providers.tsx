@@ -1,5 +1,6 @@
 'use client'
 
+import { ToastContainer } from '@status-im/components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ConnectKitProvider } from 'connectkit'
 import { WagmiProvider } from 'wagmi'
@@ -24,6 +25,9 @@ const ProvidersContent = ({ children }: { children: React.ReactNode }) => {
   const { state: vaultState, reset: resetVault } = useVaultStateContext()
   const dialogContent = useActionStatusContent(vaultState)
 
+  console.log('vaultState', vaultState)
+  console.log('dialogContent', dialogContent)
+
   return (
     <>
       {children}
@@ -46,6 +50,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
         <ConnectKitProvider>
           <VaultStateProvider>
             <ProvidersContent>{children}</ProvidersContent>
+            <ToastContainer />
           </VaultStateProvider>
         </ConnectKitProvider>
       </QueryClientProvider>

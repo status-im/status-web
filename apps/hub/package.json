@@ -14,6 +14,8 @@
     "clean": "rimraf .next .vercel/output node_modules"
   },
   "dependencies": {
+    "@hookform/devtools": "^4.3.1",
+    "@hookform/resolvers": "^3.1.1",
     "@status-im/colors": "workspace:*",
     "@status-im/components": "workspace:*",
     "@status-im/icons": "workspace:*",
@@ -26,10 +28,12 @@
     "next-mdx-remote": "^5.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.45.1",
     "rehype-slug": "^6.0.0",
     "siwe": "^2.3.2",
     "ts-pattern": "^5.6.2",
-    "viem": "^2.21.1"
+    "viem": "^2.21.1",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",

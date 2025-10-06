@@ -3,7 +3,7 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { CloseIcon } from '@status-im/icons/20'
 import { match } from 'ts-pattern'
 
-import { NewActionIcon, ProcessingIcon } from '../icons'
+import { ProcessingIcon, RejectIcon, VaultIcon } from '../icons'
 
 import type { ActionStatusState } from './use-action-status-content'
 
@@ -36,10 +36,10 @@ const ActionStatusDialog = (props: Props) => {
 
   const mapIconToState = (state: ActionStatusState) => {
     return match(state)
-      .with('pending', () => <NewActionIcon />)
+      .with('pending', () => <VaultIcon />)
       .with('processing', () => <ProcessingIcon />)
-      .with('error', () => <CloseIcon />)
-      .with('success', () => <NewActionIcon />)
+      .with('error', () => <RejectIcon />)
+      .with('success', () => <VaultIcon />)
       .otherwise(() => null)
   }
 
@@ -65,7 +65,7 @@ const ActionStatusDialog = (props: Props) => {
             <div className="relative z-10 flex min-h-[198px] flex-col items-center justify-center gap-2 p-8">
               {mapIconToState(state)}
               <Dialog.Title asChild>
-                <h2 className="text-19 font-semibold text-neutral-100">
+                <h2 className="text-center text-19 font-semibold text-neutral-100">
                   {title}
                 </h2>
               </Dialog.Title>
