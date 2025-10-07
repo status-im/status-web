@@ -3,13 +3,7 @@ import { cx } from 'class-variance-authority'
 
 import { Image, type ImageId } from '../../image'
 
-type Props = {
-  address: string
-}
-
-const BuyTokens = (props: Props) => {
-  const { address } = props
-
+const BuyTokens = () => {
   const PROVIDERS: ProviderProps[] = [
     {
       name: 'MoonPay',
@@ -20,16 +14,6 @@ const BuyTokens = (props: Props) => {
         'Supported Countries: 180',
       ],
       url: 'https://buy.moonpay.com/v2/buy?apiKey=pk_live_YQC6CQPA5qqDu0unEwHJyAYQyeIqFGR',
-    },
-    {
-      name: 'Mercuryo',
-      image: 'Wallet/Icons/Logos/mercuryo-bigger:144:144',
-      list: [
-        'Pay with Credit/Debit Card, Bank Transfer, Apple/Google Pay, SEPA, +10 more',
-        'Fees: from 1%',
-        'Supported Countries: 135+',
-      ],
-      url: `https://exchange.mercuryo.io/?type=buy&network=ETHEREUM&currency=ETH&address=${address}&hide_address=false&fix_address=true&widget_id=6a7eb330-2b09-49b7-8fd3-1c77cfb6cd47`,
     },
   ]
 
