@@ -259,14 +259,9 @@ export const createVaultTableColumns = ({
                   actions={[
                     {
                       label: 'Cancel',
-                      onClick: () => setOpenModalVaultId(null),
                     },
                     {
                       label: 'Extend lock',
-                      onClick: () => {
-                        // Handle extend lock logic
-                        setOpenModalVaultId(null)
-                      },
                     },
                   ]}
                   onClose={() => setOpenModalVaultId(null)}
@@ -301,14 +296,9 @@ export const createVaultTableColumns = ({
                 actions={[
                   {
                     label: "Don't lock",
-                    onClick: () => setOpenModalVaultId(null),
                   },
                   {
                     label: 'Lock',
-                    onClick: () => {
-                      // Handle lock logic
-                      setOpenModalVaultId(null)
-                    },
                   },
                 ]}
                 onClose={() => setOpenModalVaultId(null)}
