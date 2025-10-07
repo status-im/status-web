@@ -1,0 +1,15 @@
+diff --git a/dist/src/ssdp.js b/dist/src/ssdp.js
+index f186aa77bb50bc85650e220c842238b1b9da16d9..203b1b7142fb4c63983d9f096354b7211e1c810b 100644
+--- a/dist/src/ssdp.js
++++ b/dist/src/ssdp.js
+@@ -10,8 +10,8 @@ import { discover } from './discover/index.js';
+ import { searchResponse } from './discover/search-response.js';
+ import { parseSsdpMessage } from './parse-ssdp-message.js';
+ import { sendSsdpMessage } from './send-ssdp-message.js';
+-const req = createRequire(import.meta.url);
+-const { name, version } = req('../../package.json');
++const name = '@achingbrain/ssdp';
++const version = '4.2.4';
+ const DEFAULT_SSDP_SIGNATURE = `node.js/${process.version.substring(1)} UPnP/1.1 ${name}/${version}`;
+ export class SSDP extends EventEmitter {
+     udn;

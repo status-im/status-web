@@ -1,5 +1,5 @@
 diff --git a/dist/src/decode.js b/dist/src/decode.js
-index 313fdff5f4bbac228bd6e6e4954bce89ea341cab..d15be8a606b81987f16bd932a7836186d9419b09 100644
+index 3cbc140d0b2339692d65e4696ce4f407fc473bd7..57f2293306a6fa27aada6335bd3f232730342c2d 100644
 --- a/dist/src/decode.js
 +++ b/dist/src/decode.js
 @@ -6,7 +6,9 @@ import { isAsyncIterable } from './utils.js';
