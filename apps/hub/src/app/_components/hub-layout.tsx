@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 import { Divider, Footer } from '@status-im/status-network/components'
 
+import { EmergencyBar } from './emergency-bar'
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
 
@@ -20,6 +21,7 @@ export function HubLayout({ children }: HubLayoutProps) {
 
       {/* Main Content Area */}
       <div className="relative w-full overflow-hidden rounded-20 bg-white-100">
+        <EmergencyBar />
         <div className="flex h-[calc(100vh-64px-123px)] w-full flex-row overflow-hidden lg:h-[calc(100vh-64px-50px)]">
           {/* Sidebar */}
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />

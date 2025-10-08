@@ -9,7 +9,7 @@ type Props = {
   active?: boolean
   icon?: React.ReactNode
   iconBefore?: React.ReactNode
-  size?: '32' | '40'
+  size?: '24' | '32' | '40'
 } & React.ComponentProps<typeof Link>
 
 const buttonStyles = cva({
@@ -35,6 +35,7 @@ const buttonStyles = cva({
       false: '',
     },
     size: {
+      '24': 'h-6 rounded-8 py-[3px]',
       '32': 'h-8 rounded-10 py-[5px]',
       '40': 'h-10 rounded-12 py-[9px]',
     },
@@ -54,6 +55,9 @@ const buttonStyles = cva({
     { size: '32', withIcon: true, className: 'pl-3 pr-2' },
     { size: '40', withIconBefore: true, className: 'pl-3 pr-4' },
     { size: '32', withIconBefore: true, className: 'pl-2 pr-3' },
+    { size: '24', withIcon: false, className: 'px-2' },
+    { size: '24', withIcon: true, className: 'pl-2 pr-[6px]' },
+    { size: '24', withIconBefore: true, className: 'pl-[6px] pr-2' },
   ],
 })
 
