@@ -16,60 +16,63 @@ import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
 import { match } from 'ts-pattern'
-import { parseUnits } from 'viem'
+import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useBalance, useConfig, useReadContract } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 import { z } from 'zod'
 
 import { HubLayout } from '~components/hub-layout'
-
-import { SNT_TOKEN, STAKING_MANAGER } from '../../config'
-import { statusNetworkTestnet } from '../../config/chain'
-import { formatCurrency, formatSNT } from '../../utils/currency'
-import { LaunchIcon, SNTIcon } from '../_components/icons'
-import { PromoModal } from '../_components/stake/promo-modal'
-import { VaultSelect } from '../_components/vault-select'
-import { VaultsTable } from '../_components/vaults/table'
-import { useAccountVaults } from '../_hooks/useAccountVaults'
-import { useExchangeRate } from '../_hooks/useExchangeRate'
-import { useFaucetMutation, useFaucetQuery } from '../_hooks/useFaucet'
-import { useTokenApproval } from '../_hooks/useTokenApproval'
-import { useVaultMutation } from '../_hooks/useVault'
-import { useVaultTokenStake } from '../_hooks/useVaultTokenStake'
-import { useWeightedBoost } from '../_hooks/useWeightedBoost'
-import { useVaultStateContext } from '../_hooks/vault-state-context'
-import { stakingManagerAbi, tokenAbi } from '../contracts'
+import { LaunchIcon, SNTIcon } from '~components/icons'
+import { PromoModal } from '~components/stake/promo-modal'
+import { VaultSelect } from '~components/vault-select'
+import { VaultsTable } from '~components/vaults/vaults-table'
+import {
+  SNT_TOKEN,
+  STAKING_MANAGER,
+  statusNetworkTestnet,
+} from '~constants/index'
+import { useApproveToken } from '~hooks/useApproveToken'
+import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
+import { useCreateVault } from '~hooks/useCreateVault'
+import { useExchangeRate } from '~hooks/useExchangeRate'
+import { useFaucetMutation, useFaucetQuery } from '~hooks/useFaucet'
+import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
+import { useStakingVaults } from '~hooks/useStakingVaults'
+import { useVaultStateContext } from '~hooks/useVaultStateContext'
+import { useVaultTokenStake } from '~hooks/useVaultTokenStake'
+import { useWeightedBoost } from '~hooks/useWeightedBoost'
+import { formatCurrency, formatSNT } from '~utils/currency'
 
 import type { Address } from 'viem'
 
-const createSkakeFormSchema = () => {
+const createStakeFormSchema = () => {
   return z.object({
     amount: z.string(),
     vault: z.string(),
   })
 }
 
-type FormValues = z.infer<ReturnType<typeof createSkakeFormSchema>>
+type FormValues = z.infer<ReturnType<typeof createStakeFormSchema>>
 
 type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
 
-const TOKEN_TICKER = 'SNT'
-// const SUCCESS_TOAST_DURATION_MS = 1500
-
 export default function StakePage() {
-  const [isPromoModalOpen, setIsPromoModalOpen] = useState(false)
+  const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false)
 
   const { isConnected, address } = useAccount()
   const config = useConfig()
+  const { mutate: compoundMultiplierPoints } = useCompoundMultiplierPoints()
+  const { data: multiplierPointsData } = useMultiplierPointsBalance()
 
-  const { mutate: claimTokens } = useFaucetMutation()
+  const { mutate: claimTokens, isPending: isClaimingTokens } =
+    useFaucetMutation()
   const { data: faucetData } = useFaucetQuery()
-  const { data: vaults } = useAccountVaults()
+  const { data: vaults, refetch: refetchStakingVaults } = useStakingVaults()
   const weightedBoost = useWeightedBoost(vaults)
   const { data: exchangeRate } = useExchangeRate()
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(createSkakeFormSchema()),
+    resolver: zodResolver(createStakeFormSchema()),
     mode: 'onChange',
     defaultValues: {
       amount: '',
@@ -89,19 +92,12 @@ export default function StakePage() {
 
   const { data: totalStaked } = useReadContract({
     address: STAKING_MANAGER.address,
-    abi: stakingManagerAbi,
+    abi: STAKING_MANAGER.abi,
     functionName: 'totalStaked',
   }) as { data: bigint }
 
-  const { data: mpBalanceOfAccount } = useReadContract({
-    address: STAKING_MANAGER.address,
-    abi: stakingManagerAbi,
-    functionName: 'mpBalanceOfAccount',
-    args: [address],
-  }) as { data: bigint }
-
-  const { mutate: deployVault } = useVaultMutation()
-  const { mutate: approveTokens } = useTokenApproval()
+  const { mutate: createVault } = useCreateVault()
+  const { mutate: approveToken } = useApproveToken()
   const { mutate: stakeVault } = useVaultTokenStake()
 
   // State machine for vault operations
@@ -127,6 +123,38 @@ export default function StakePage() {
     return 0
   }, [amountValue, exchangeRate])
 
+  const {
+    isDisabled: isDisabledMultiplierPoints,
+    message: messageMultiplierPoints,
+  } = useMemo(() => {
+    const totalUncompounded = multiplierPointsData?.totalUncompounded ?? 0n
+    const hasUncompoundedPoints = totalUncompounded > 0n
+    const formattedAmount = formatSNT(
+      formatUnits(totalUncompounded, SNT_TOKEN.decimals),
+      {
+        decimals: SNT_TOKEN.decimals,
+      }
+    )
+
+    return {
+      isDisabled: !hasUncompoundedPoints || !isConnected,
+      message: hasUncompoundedPoints
+        ? `${formattedAmount} points are ready to compound`
+        : 'No points are ready to compound',
+    }
+  }, [multiplierPointsData, isConnected])
+
+  const hasReachedDailyLimit = useMemo(() => {
+    if (!faucetData) return false
+
+    const currentTimestamp = BigInt(Math.floor(Date.now() / 1000))
+    const isWithinResetWindow = faucetData.accountResetTime > currentTimestamp
+    const hasExceededLimit =
+      faucetData.accountDailyRequests >= faucetData.dailyLimit
+
+    return hasExceededLimit && isWithinResetWindow
+  }, [faucetData])
+
   const handleSubmit = async (data: FormValues) => {
     if (!data.amount || !data.vault || !address) return
 
@@ -136,17 +164,17 @@ export default function StakePage() {
       // Check current allowance
       const currentAllowance = (await readContract(config, {
         address: SNT_TOKEN.address,
-        abi: tokenAbi,
+        abi: SNT_TOKEN.abi,
         functionName: 'allowance',
         args: [address, data.vault as Address],
       })) as bigint
 
       // Transition to increase allowance if not enough allowance
       if (amountWei >= currentAllowance) {
-        approveTokens(
+        approveToken(
           {
             amount: data.amount,
-            vaultAddress: data.vault as Address,
+            spenderAddress: data.vault as Address,
           },
           {
             onSuccess: () => {
@@ -170,9 +198,11 @@ export default function StakePage() {
           vaultAddress: data.vault as Address,
         })
       }
-    } catch (error) {
+    } catch {
       sendVaultEvent({ type: 'REJECT' })
-      console.error('Failed to check allowance:', error)
+    } finally {
+      form.reset()
+      refetchStakingVaults()
     }
   }
 
@@ -230,11 +260,17 @@ export default function StakePage() {
               {/* @ts-expect-error - TODO: fix this */}
               <Button
                 className="self-end"
-                disabled={!faucetData?.canRequest}
-                onClick={claimTokens}
+                disabled={
+                  !isConnected || hasReachedDailyLimit || isClaimingTokens
+                }
+                onClick={() =>
+                  claimTokens({
+                    amount: faucetData?.remainingAmount,
+                  })
+                }
               >
                 <PlaceholderIcon className="text-blur-white/70" />
-                Claim testnet {TOKEN_TICKER}
+                {isClaimingTokens ? 'Claiming...' : 'Claim testnet SNT'}
               </Button>
             </div>
 
@@ -270,7 +306,7 @@ export default function StakePage() {
                             <div className="flex items-center gap-1">
                               <SNTIcon />
                               <span className="text-19 font-semibold text-neutral-80">
-                                {TOKEN_TICKER}
+                                SNT
                               </span>
                             </div>
                           </div>
@@ -287,7 +323,7 @@ export default function StakePage() {
                               }
                               className="uppercase text-neutral-100"
                             >
-                              {`MAX ${formatSNT(balance?.value ?? 0)} ${TOKEN_TICKER}`}
+                              {`MAX ${formatSNT(balance?.value ?? 0)} SNT`}
                             </button>
                           </div>
                         </div>
@@ -305,7 +341,7 @@ export default function StakePage() {
                             <div className="flex items-center gap-1">
                               <SNTIcon />
                               <span className="text-19 font-semibold text-neutral-80">
-                                {TOKEN_TICKER}
+                                SNT
                               </span>
                             </div>
                           </div>
@@ -389,7 +425,7 @@ export default function StakePage() {
                       // @ts-expect-error - TODO: fix this
                       <Button
                         className="w-full justify-center"
-                        onClick={deployVault}
+                        onClick={createVault}
                       >
                         Create new vault
                       </Button>
@@ -408,7 +444,9 @@ export default function StakePage() {
                   <div className="mb-4 flex items-end gap-2">
                     <SNTIcon />
                     <span className="text-27 font-600">
-                      {formatSNT(totalStaked ?? 0)} {TOKEN_TICKER}
+                      {formatSNT(totalStaked ?? 0, {
+                        includeSymbol: true,
+                      })}
                     </span>
                   </div>
                   <p className="text-13 font-500 text-neutral-40">
@@ -425,22 +463,20 @@ export default function StakePage() {
                   </div>
                   <div className="mb-4 flex items-end gap-3">
                     <LaunchIcon className="text-purple" />
-
                     <span className="text-27 font-600">
-                      x{weightedBoost.formatted}
+                      {weightedBoost.formatted}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-13 font-500 text-neutral-40">
-                      {mpBalanceOfAccount > 0n
-                        ? `${formatSNT(mpBalanceOfAccount)} points are ready to compound`
-                        : 'No points are ready to compound'}
+                      {messageMultiplierPoints}
                     </span>
                     {/* @ts-expect-error - TODO: fix this */}
                     <Button
-                      disabled={mpBalanceOfAccount === 0n}
+                      disabled={isDisabledMultiplierPoints}
                       variant="primary"
                       size="40"
+                      onClick={compoundMultiplierPoints}
                     >
                       Compound
                     </Button>

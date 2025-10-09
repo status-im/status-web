@@ -11,9 +11,10 @@ import {
   UnlockedIcon,
 } from '@status-im/icons/20'
 
-import { formatSNT } from '../../utils/currency'
+import { formatSNT } from '~utils/currency'
+import { isVaultLocked } from '~utils/vault'
 
-import type { VaultWithAddress } from '../_hooks/useAccountVaults'
+import type { StakingVault } from '~hooks/useStakingVaults'
 
 // ============================================================================
 // Types
@@ -23,7 +24,7 @@ interface VaultSelectProps {
   /**
    * List of available vaults to select from
    */
-  vaults: VaultWithAddress[]
+  vaults: StakingVault[]
   /**
    * Currently selected vault address
    */
@@ -51,7 +52,7 @@ interface VaultSelectProps {
 /**
  * Gets display label for a vault option
  */
-function getVaultLabel(vault: VaultWithAddress, index: number): string {
+function getVaultLabel(vault: StakingVault, index: number): string {
   const stakedAmount = vault.data?.stakedBalance
     ? formatSNT(vault.data.stakedBalance)
     : '0'
@@ -100,9 +101,7 @@ export function VaultSelect({
   const selectedVault = vaults.find(vault => vault.address === value)
   const selectedIndex = vaults.findIndex(vault => vault.address === value)
 
-  const now = Math.floor(Date.now() / 1000)
-  const lockUntilTimestamp = Number(selectedVault?.data?.lockUntil)
-  const isLocked = lockUntilTimestamp > now
+  const isLocked = isVaultLocked(selectedVault?.data?.lockUntil)
 
   const displayLabel =
     selectedVault && selectedIndex !== -1
@@ -155,15 +154,13 @@ export function VaultSelect({
       {hasVaults ? (
         <>
           {vaults.map((vault, index) => {
-            const now = Math.floor(Date.now() / 1000)
-            const lockUntilTimestamp = Number(vault.data?.lockUntil)
-            const isVaultLocked = lockUntilTimestamp > now
+            const isLocked = isVaultLocked(vault.data?.lockUntil)
 
             return (
               <DropdownMenu.Item
                 key={vault.address}
                 icon={
-                  isVaultLocked ? (
+                  isLocked ? (
                     <LockedIcon className="text-purple" />
                   ) : (
                     <UnlockedIcon className="text-purple" />

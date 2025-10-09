@@ -2,8 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 
-import { STAKING_MANAGER } from '../../config'
-import { stakingManagerAbi } from '../contracts'
+import { STAKING_MANAGER } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -93,14 +92,14 @@ export function useSliderConfig(): UseSliderConfigReturn {
         // Fetch minimum lockup period
         const minLockupPeriod = await readContract(config, {
           address: STAKING_MANAGER.address,
-          abi: stakingManagerAbi,
+          abi: STAKING_MANAGER.abi,
           functionName: 'MIN_LOCKUP_PERIOD',
         })
 
         // Fetch maximum lockup period
         const maxLockupPeriod = await readContract(config, {
           address: STAKING_MANAGER.address,
-          abi: stakingManagerAbi,
+          abi: STAKING_MANAGER.abi,
           functionName: 'MAX_LOCKUP_PERIOD',
         })
 

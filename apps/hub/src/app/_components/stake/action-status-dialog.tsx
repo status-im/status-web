@@ -4,17 +4,17 @@ import { CloseIcon } from '@status-im/icons/20'
 import { match } from 'ts-pattern'
 
 import { ProcessingIcon, RejectIcon, VaultIcon } from '../icons'
-
-import type { ActionStatusState } from './use-action-status-content'
+import { type ActionStatusState } from './types/action-status'
 
 type Props = {
   open: boolean
   onClose: () => void
-  title: string
-  description: string
+  title?: string
+  description?: string
   children?: React.ReactNode
   state?: ActionStatusState
   showCloseButton?: boolean
+  content?: React.ReactNode
 }
 
 const ActionStatusDialog = (props: Props) => {
@@ -26,6 +26,7 @@ const ActionStatusDialog = (props: Props) => {
     children,
     state = 'pending',
     showCloseButton = true,
+    content,
   } = props
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -62,17 +63,25 @@ const ActionStatusDialog = (props: Props) => {
                 </button>
               </Dialog.Close>
             )}
-            <div className="relative z-10 flex min-h-[198px] flex-col items-center justify-center gap-2 p-8">
-              {mapIconToState(state)}
-              <Dialog.Title asChild>
-                <h2 className="text-center text-19 font-semibold text-neutral-100">
-                  {title}
-                </h2>
-              </Dialog.Title>
-              <Dialog.Description asChild>
-                <span className="text-15 text-neutral-100">{description}</span>
-              </Dialog.Description>
-            </div>
+            {content ? (
+              <div className="relative z-10">{content}</div>
+            ) : (
+              <div className="relative z-10 flex min-h-[198px] flex-col items-center justify-center gap-2 p-8">
+                {mapIconToState(state)}
+                <Dialog.Title asChild>
+                  <h2 className="text-center text-19 font-semibold text-neutral-100">
+                    {title}
+                  </h2>
+                </Dialog.Title>
+                {description && (
+                  <Dialog.Description asChild>
+                    <span className="text-15 text-neutral-100">
+                      {description}
+                    </span>
+                  </Dialog.Description>
+                )}
+              </div>
+            )}
           </div>
         </Dialog.Content>
       </Dialog.Portal>

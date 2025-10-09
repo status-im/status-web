@@ -2,15 +2,13 @@ import {
   useMutation,
   type UseMutationResult,
   useQuery,
+  useQueryClient,
   type UseQueryResult,
 } from '@tanstack/react-query'
 import { useAccount, useChainId, useConfig, useWriteContract } from 'wagmi'
 import { readContracts } from 'wagmi/actions'
 
-import { FAUCET } from '../../config'
-import { faucetAbi } from '../contracts'
-
-import type { Address } from 'viem'
+import { FAUCET, statusNetworkTestnet } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -32,12 +30,16 @@ export interface FaucetData {
  * Derived faucet state information
  */
 export interface FaucetState extends FaucetData {
-  /** Whether the account can request tokens (hasn't hit daily limit) */
-  canRequest: boolean
+  /** Whether the account can claim tokens (hasn't hit daily limit) */
+  canClaim: boolean
   /** Number of requests remaining for the account today */
   remainingRequests: bigint
-  /** Time until the daily limit resets (in seconds) */
-  timeUntilReset: number
+  /** Whether the account has used the faucet today */
+  hasUsedFaucet: boolean
+  /** Amount of tokens actually used today */
+  actualUsedToday: bigint
+  /** Amount of tokens remaining for the account today */
+  remainingAmount: bigint
 }
 
 /**
@@ -48,6 +50,10 @@ export interface UseFaucetQueryOptions {
   enabled?: boolean
   /** Refetch interval in milliseconds */
   refetchInterval?: number
+}
+
+export interface UseFaucetMutationOptions {
+  amount?: bigint
 }
 
 // ============================================================================
@@ -82,29 +88,42 @@ const DEFAULT_REFETCH_INTERVAL = 30_000 // 30 seconds
  * ```
  */
 export function useFaucetMutation(): UseMutationResult<
-  Address,
-  Error,
   void,
+  Error,
+  UseFaucetMutationOptions,
   unknown
 > {
   const { address } = useAccount()
-  const { writeContractAsync } = useWriteContract()
+  const { writeContract } = useWriteContract()
+  const chainId = useChainId()
+  const queryClient = useQueryClient()
+  const { refetch: refetchFaucetQuery } = useFaucetQuery()
 
   return useMutation({
     mutationKey: [QUERY_KEY_PREFIX, 'request', address],
-    mutationFn: async (): Promise<Address> => {
+    mutationFn: async ({ amount }: UseFaucetMutationOptions) => {
       if (!address) {
         throw new Error('Wallet not connected')
       }
 
-      const hash = await writeContractAsync({
+      return writeContract({
+        chain: statusNetworkTestnet,
+        account: address,
         address: FAUCET.address,
-        abi: faucetAbi,
+        abi: FAUCET.abi,
         functionName: 'requestTokens',
-        args: [address],
+        args: [amount ?? 0n, address],
       })
-
-      return hash
+    },
+    onSuccess: () => {
+      refetchFaucetQuery()
+      // Invalidate faucet query to refetch updated data
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEY_PREFIX, address, chainId],
+      })
+    },
+    onError: error => {
+      console.error('Failed to request tokens:', error)
     },
   })
 }
@@ -160,20 +179,20 @@ export function useFaucetQuery(
           {
             chainId,
             address: FAUCET.address,
-            abi: faucetAbi,
+            abi: FAUCET.abi,
             functionName: 'DAILY_LIMIT',
           },
           {
             chainId,
             address: FAUCET.address,
-            abi: faucetAbi,
+            abi: FAUCET.abi,
             functionName: 'accountDailyRequests',
             args: [address],
           },
           {
             chainId,
             address: FAUCET.address,
-            abi: faucetAbi,
+            abi: FAUCET.abi,
             functionName: 'accountResetTime',
             args: [address],
           },
@@ -203,19 +222,26 @@ export function useFaucetQuery(
         dailyLimit > accountDailyRequests
           ? dailyLimit - accountDailyRequests
           : 0n
-      const canRequest = remainingRequests > 0n
 
       const now = Math.floor(Date.now() / 1000)
-      const resetTimestamp = Number(accountResetTime)
-      const timeUntilReset = Math.max(0, resetTimestamp - now)
+
+      // const remainingRequests = dailyLimit > accountDailyRequests
+      const remainingAmount =
+        accountResetTime <= now ? dailyLimit : dailyLimit - accountDailyRequests
+      const actualUsedToday =
+        accountResetTime <= now ? 0n : accountDailyRequests
+      const hasUsedFaucet = actualUsedToday > 0n
+      const canClaim = remainingAmount > 0n
 
       return {
         dailyLimit,
         accountDailyRequests,
         accountResetTime,
-        canRequest,
+        hasUsedFaucet,
+        actualUsedToday,
+        remainingAmount,
         remainingRequests,
-        timeUntilReset,
+        canClaim,
       }
     },
     enabled: options?.enabled ?? !!address,

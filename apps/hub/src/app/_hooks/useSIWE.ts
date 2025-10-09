@@ -30,7 +30,7 @@ export function useSiwe() {
       message: preparedMessage,
     })
 
-    // Verify the signature (you would typically do this on the backend)
+    // TODO: Verify the signature (you would typically do this on the backend)
     // For now, we just return the signature
     return {
       message: preparedMessage,

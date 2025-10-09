@@ -19,12 +19,17 @@ export type VaultState =
     }
   | {
       type: 'withdraw'
-      step: 'initialize' | 'processing' | 'rejected'
+      step: 'processing' | 'rejected'
       amount?: string
     }
   | {
       type: 'lock'
       step: 'initialize' | 'processing' | 'rejected'
+    }
+  | {
+      type: 'compound'
+      step: 'initialize' | 'processing' | 'rejected'
+      amount?: string
     }
   | { type: 'success' }
 
@@ -35,12 +40,13 @@ export type VaultEvent =
   | { type: 'START_INCREASE_ALLOWANCE'; amount?: string }
   | { type: 'SIGN' }
   | { type: 'REJECT' }
-  | { type: 'PROCESS' }
+  | { type: 'PROCESS'; amount?: string }
   | { type: 'COMPLETE'; amount?: string }
   | { type: 'READY_TO_STAKE' }
   | { type: 'START_STAKING'; amount?: string }
   | { type: 'START_WITHDRAW'; amount?: string }
   | { type: 'START_LOCK' }
+  | { type: 'START_COMPOUND'; amount?: string }
   | { type: 'RESET' }
 
 // Transition function
@@ -65,6 +71,11 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
       )
       .with([{ type: 'idle' }, { type: 'START_STAKING' }], ([, event]) => ({
         type: 'staking',
+        step: 'initialize',
+        amount: event.amount,
+      }))
+      .with([{ type: 'idle' }, { type: 'START_COMPOUND' }], ([, event]) => ({
+        type: 'compound',
         step: 'initialize',
         amount: event.amount,
       }))
@@ -215,27 +226,15 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
         type: 'idle',
       }))
 
-      // Withdraw flow
+      // Withdraw flow - goes directly to processing when started
       .with([{ type: 'idle' }, { type: 'START_WITHDRAW' }], ([, event]) => ({
         type: 'withdraw',
-        step: 'initialize',
+        step: 'processing',
         amount: event.amount,
       }))
       .with(
-        [{ type: 'withdraw', step: 'initialize' }, { type: 'SIGN' }],
-        ([state]) => ({
-          type: 'withdraw',
-          step: 'processing',
-          amount: state.amount,
-        })
-      )
-      .with(
-        [{ type: 'withdraw', step: 'initialize' }, { type: 'REJECT' }],
-        ([state]) => ({
-          type: 'withdraw',
-          step: 'rejected',
-          amount: state.amount,
-        })
+        [{ type: 'withdraw', step: 'processing' }, { type: 'RESET' }],
+        () => ({ type: 'idle' })
       )
       .with(
         [{ type: 'withdraw', step: 'processing' }, { type: 'REJECT' }],
@@ -243,18 +242,6 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
           type: 'withdraw',
           step: 'rejected',
           amount: state.amount,
-        })
-      )
-      .with(
-        [{ type: 'withdraw', step: 'processing' }, { type: 'RESET' }],
-        () => ({ type: 'idle' })
-      )
-      .with(
-        [{ type: 'withdraw', step: 'rejected' }, { type: 'START_WITHDRAW' }],
-        ([state, event]) => ({
-          type: 'withdraw',
-          step: 'initialize',
-          amount: event.amount || state.amount,
         })
       )
       .with(
@@ -292,6 +279,52 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
       .with([{ type: 'lock', step: 'rejected' }, { type: 'RESET' }], () => ({
         type: 'idle',
       }))
+
+      // compound flow
+      .with(
+        [{ type: 'compound', step: 'initialize' }, { type: 'SIGN' }],
+        ([state]) => ({
+          type: 'compound',
+          step: 'processing',
+          amount: state.amount,
+        })
+      )
+      .with(
+        [{ type: 'compound', step: 'initialize' }, { type: 'REJECT' }],
+        ([state]) => ({
+          type: 'compound',
+          step: 'rejected',
+          amount: state.amount,
+        })
+      )
+      .with(
+        [{ type: 'compound', step: 'processing' }, { type: 'COMPLETE' }],
+        () => ({ type: 'success' })
+      )
+      .with(
+        [{ type: 'compound', step: 'processing' }, { type: 'REJECT' }],
+        ([state]) => ({
+          type: 'compound',
+          step: 'rejected',
+          amount: state.amount,
+        })
+      )
+      .with(
+        [{ type: 'compound', step: 'processing' }, { type: 'RESET' }],
+        () => ({ type: 'idle' })
+      )
+      .with(
+        [{ type: 'compound', step: 'rejected' }, { type: 'START_COMPOUND' }],
+        ([state, event]) => ({
+          type: 'compound',
+          step: 'initialize',
+          amount: event.amount || state.amount,
+        })
+      )
+      .with(
+        [{ type: 'compound', step: 'rejected' }, { type: 'RESET' }],
+        () => ({ type: 'idle' })
+      )
 
       // Reset from success
       .with([{ type: 'success' }, { type: 'RESET' }], () => ({ type: 'idle' }))
