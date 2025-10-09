@@ -12,14 +12,17 @@ import {
 } from '@tanstack/react-table'
 import { useAccount, useReadContract } from 'wagmi'
 
-import { STAKING_MANAGER } from '../../../config'
-import { useAccountVaults } from '../../_hooks/useAccountVaults'
-import { useVaultMutation } from '../../_hooks/useVault'
-import { stakingManagerAbi } from '../../contracts'
+import { STAKING_MANAGER } from '~constants/index'
+import { useCreateVault } from '~hooks/useCreateVault'
+import { type StakingVault, useStakingVaults } from '~hooks/useStakingVaults'
+
 import { createVaultTableColumns } from './table-columns'
 
-import type { VaultWithAddress } from '../../_hooks/useAccountVaults'
-import type { VaultColumnMeta } from './types'
+interface VaultColumnMeta {
+  headerClassName?: string
+  cellClassName?: string
+  footerClassName?: string
+}
 
 /**
  * Gets the appropriate CSS class for table cell/header based on meta
@@ -42,11 +45,11 @@ function getHeaderClassName(
 // Sub-components
 // ============================================================================
 
-interface TableHeaderProps {
-  table: ReturnType<typeof useReactTable<VaultWithAddress>>
+interface TableProps {
+  table: ReturnType<typeof useReactTable<StakingVault>>
 }
 
-function TableHeader({ table }: TableHeaderProps) {
+function TableHeader({ table }: TableProps) {
   return (
     <thead className="h-[40px] border-b border-solid border-neutral-10 bg-neutral-5">
       {table.getHeaderGroups().map(headerGroup => (
@@ -70,11 +73,7 @@ function TableHeader({ table }: TableHeaderProps) {
   )
 }
 
-interface TableBodyProps {
-  table: ReturnType<typeof useReactTable<VaultWithAddress>>
-}
-
-function TableBody({ table }: TableBodyProps) {
+function TableBody({ table }: TableProps) {
   return (
     <tbody className="divide-y divide-neutral-10">
       {table.getRowModel().rows.map(row => (
@@ -93,11 +92,7 @@ function TableBody({ table }: TableBodyProps) {
   )
 }
 
-interface TableFooterProps {
-  table: ReturnType<typeof useReactTable<VaultWithAddress>>
-}
-
-function TableFooter({ table }: TableFooterProps) {
+function TableFooter({ table }: TableProps) {
   return (
     <tfoot className="border-t border-solid border-neutral-10 bg-neutral-5">
       {table.getFooterGroups().map(footerGroup => (
@@ -127,13 +122,13 @@ function TableFooter({ table }: TableFooterProps) {
 
 export function VaultsTable() {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
-  const { data: vaultDataList } = useAccountVaults()
+  const { data: vaultDataList } = useStakingVaults()
   const { isConnected } = useAccount()
-  const { mutate: deployVault } = useVaultMutation()
+  const { mutate: createVault } = useCreateVault()
 
   const { data: emergencyModeEnabled } = useReadContract({
     address: STAKING_MANAGER.address,
-    abi: stakingManagerAbi,
+    abi: STAKING_MANAGER.abi,
     functionName: 'emergencyModeEnabled',
   })
 
@@ -144,8 +139,9 @@ export function VaultsTable() {
         openModalVaultId,
         setOpenModalVaultId,
         emergencyModeEnabled,
+        isConnected,
       }),
-    [openModalVaultId, emergencyModeEnabled, vaultDataList]
+    [vaultDataList, openModalVaultId, emergencyModeEnabled, isConnected]
   )
 
   const table = useReactTable({
@@ -165,7 +161,7 @@ export function VaultsTable() {
           <Button
             variant="outline"
             size="32"
-            onClick={deployVault}
+            onClick={createVault}
             className="w-full sm:w-auto"
           >
             <AddCircleIcon />

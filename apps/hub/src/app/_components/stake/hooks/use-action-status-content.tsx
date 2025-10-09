@@ -1,26 +1,18 @@
 import { match } from 'ts-pattern'
 
-import { formatSNT } from '../../../utils/currency'
+import { type VaultState } from '~hooks/useVaultStateMachine'
+import { formatSNT } from '~utils/currency'
 
-import type { VaultState } from '../../_hooks/useVaultStateMachine'
+import { CompoundStatusContent } from '../compound-status-content'
+import { type ActionStatusContent } from '../types/action-status'
 
-export type ActionStatusState =
-  | 'pending' // Waiting for user action (sign, approve)
-  | 'processing' // Transaction in progress
-  | 'error' // Failed/rejected
-  | 'success' // Completed successfully
-
-export type ActionStatusContent = {
-  title: string
-  description: string
-  state: ActionStatusState
-  showCloseButton: boolean
-}
-
+/**
+ * Hook to generate action status dialog content based on vault state
+ * Maps vault state machine states to user-facing dialog content
+ */
 export function useActionStatusContent(
   state: VaultState
 ): ActionStatusContent | null {
-  console.log(state)
   return (
     match<VaultState, ActionStatusContent | null>(state)
       // SIWE flow
@@ -110,19 +102,7 @@ export function useActionStatusContent(
         showCloseButton: true,
       }))
 
-      // Withdraw flow
-      .with(
-        {
-          type: 'withdraw',
-          step: 'initialize',
-        },
-        state => ({
-          title: `Ready to withdraw ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
-          description: 'Please sign the message in your wallet.',
-          state: 'pending',
-          showCloseButton: true,
-        })
-      )
+      // Withdraw flow (goes directly to processing, no initialize step)
       .with({ type: 'withdraw', step: 'processing' }, state => ({
         title: `Withdrawing ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
         description: 'Wait a moment...',
@@ -150,6 +130,25 @@ export function useActionStatusContent(
         showCloseButton: false,
       }))
       .with({ type: 'lock', step: 'rejected' }, () => ({
+        title: 'Request was rejected',
+        description: 'Request was rejected by user',
+        state: 'error',
+        showCloseButton: true,
+      }))
+
+      // compound flow
+      .with({ type: 'compound', step: 'initialize' }, state => ({
+        state: 'pending',
+        showCloseButton: true,
+        content: <CompoundStatusContent amount={state.amount} />,
+      }))
+      .with({ type: 'compound', step: 'processing' }, state => ({
+        title: `Compounding ${formatSNT(state.amount ?? 0)} points`,
+        description: 'Wait a moment...',
+        state: 'processing',
+        showCloseButton: false,
+      }))
+      .with({ type: 'compound', step: 'rejected' }, () => ({
         title: 'Request was rejected',
         description: 'Request was rejected by user',
         state: 'error',

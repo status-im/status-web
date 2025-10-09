@@ -1,21 +1,30 @@
 /* eslint-disable import/no-unresolved */
 
-import { AlertIcon, OptionsIcon, TimeIcon } from '@status-im/icons/12'
+import { AlertIcon, TimeIcon } from '@status-im/icons/12'
 import { LockedIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
+import { formatUnits } from 'viem'
 
-import { formatKarma, formatSNT } from '../../../utils/currency'
-import { calculateVaultBoost } from '../../../utils/vault'
-import { type VaultWithAddress } from '../../_hooks/useAccountVaults'
-import { VaultLockConfigModal } from './vault-lock-modal'
-import { VaultWithdrawModal } from './withdraw-modal'
+import { SNT_TOKEN } from '~constants/index'
+import { type StakingVault } from '~hooks/useStakingVaults'
+import { shortenAddress } from '~utils/address'
+import { formatSNT } from '~utils/currency'
+import {
+  calculateDaysUntilUnlock,
+  calculateVaultBoost,
+  isVaultLocked,
+} from '~utils/vault'
+
+import { LockVaultModal } from './modals/lock-vault-modal'
+import { WithdrawVaultModal } from './modals/withdraw-vault-modal'
 
 interface TableColumnsProps {
-  vaults: VaultWithAddress[] | undefined
+  vaults: StakingVault[] | undefined
   openModalVaultId: string | null
   setOpenModalVaultId: (vaultId: string | null) => void
   emergencyModeEnabled: unknown
+  isConnected: boolean
 }
 
 export const createVaultTableColumns = ({
@@ -23,6 +32,7 @@ export const createVaultTableColumns = ({
   openModalVaultId,
   setOpenModalVaultId,
   emergencyModeEnabled,
+  isConnected,
 }: TableColumnsProps) => {
   const totalStaked = vaults.reduce(
     (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
@@ -32,7 +42,7 @@ export const createVaultTableColumns = ({
     (acc, vault) => acc + (vault.data?.rewardsAccrued || 0n),
     BigInt(0)
   )
-  const columnHelper = createColumnHelper<VaultWithAddress>()
+  const columnHelper = createColumnHelper<StakingVault>()
 
   return [
     columnHelper.accessor('address', {
@@ -60,8 +70,7 @@ export const createVaultTableColumns = ({
       cell: ({ row }) => {
         return (
           <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
-            {row.original.address.slice(0, 6)}...
-            {row.original.address.slice(-4)}
+            {shortenAddress(row.original.address)}
           </span>
         )
       },
@@ -98,11 +107,9 @@ export const createVaultTableColumns = ({
     columnHelper.accessor('data.lockUntil', {
       header: 'Unlocks in',
       cell: ({ row }) => {
-        const now = Math.floor(Date.now() / 1000)
-        const lockUntilTimestamp = Number(row.original.data?.lockUntil)
-        const isLocked = lockUntilTimestamp > now
+        const isLocked = isVaultLocked(row.original.data?.lockUntil)
         const daysUntilUnlock = isLocked
-          ? Math.ceil((lockUntilTimestamp - now) / 86400)
+          ? calculateDaysUntilUnlock(row.original.data?.lockUntil)
           : null
 
         if (!daysUntilUnlock) {
@@ -132,7 +139,7 @@ export const createVaultTableColumns = ({
 
         const potentialBoost =
           stakedBalance > 0n && maxMP > mpAccrued
-            ? Number(maxMP - mpAccrued) / Number(stakedBalance)
+            ? (maxMP - mpAccrued) / stakedBalance
             : undefined
 
         return (
@@ -142,7 +149,8 @@ export const createVaultTableColumns = ({
             </span>
             {potentialBoost && (
               <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-[#7140fd]">
-                x{potentialBoost.toFixed(2)} if locked
+                x{formatSNT(formatUnits(potentialBoost, SNT_TOKEN.decimals))} if
+                locked
               </span>
             )}
           </div>
@@ -160,7 +168,7 @@ export const createVaultTableColumns = ({
         return (
           <div className="flex items-center gap-1">
             <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
-              {formatKarma(karma)}
+              {formatSNT(karma)}
               <span className="ml-0.5 text-neutral-50">KARMA</span>
             </span>
           </div>
@@ -169,7 +177,7 @@ export const createVaultTableColumns = ({
       footer: () => {
         return (
           <span className="text-[13px] font-medium text-neutral-100">
-            {formatKarma(totalKarma)}
+            {formatSNT(totalKarma)}
             <span className="ml-0.5 text-neutral-50">KARMA</span>
           </span>
         )
@@ -183,9 +191,7 @@ export const createVaultTableColumns = ({
       id: 'state',
       header: 'State',
       cell: ({ row }) => {
-        const now = Math.floor(Date.now() / 1000)
-        const lockUntilTimestamp = Number(row.original.data?.lockUntil)
-        const isLocked = lockUntilTimestamp > now
+        const isLocked = isVaultLocked(row.original.data?.lockUntil)
 
         return (
           <div className="flex items-center gap-1">
@@ -213,27 +219,29 @@ export const createVaultTableColumns = ({
         const lockModalId = `lock-${row.original.address}`
         const isWithdrawModalOpen = openModalVaultId === withdrawModalId
         const isLockModalOpen = openModalVaultId === lockModalId
+
         const isLocked = row.original?.data?.lockUntil
-          ? row.original.data.lockUntil > 0
+          ? row.original.data.lockUntil > BigInt(Math.floor(Date.now() / 1000))
           : false
 
         return (
-          <div className="flex items-center justify-end gap-2 lg:gap-4">
+          <div className="flex items-end justify-end gap-2 lg:gap-4">
             {isLocked ? (
               <div className="flex items-center gap-2">
-                {Boolean(emergencyModeEnabled) && (
-                  <VaultWithdrawModal
+                {!emergencyModeEnabled && (
+                  <WithdrawVaultModal
                     open={isWithdrawModalOpen}
                     onOpenChange={open =>
                       setOpenModalVaultId(open ? withdrawModalId : null)
                     }
                     onClose={() => setOpenModalVaultId(null)}
-                    vaultAdress={row.original.address}
+                    vaultAddress={row.original.address}
                   >
                     {/* @ts-expect-error - Button component is not typed */}
                     <Button
                       variant="destructive"
                       size="32"
+                      disabled={!isConnected}
                       className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
                     >
                       <AlertIcon className="shrink-0" />
@@ -244,9 +252,9 @@ export const createVaultTableColumns = ({
                         Withdraw
                       </span>
                     </Button>
-                  </VaultWithdrawModal>
+                  </WithdrawVaultModal>
                 )}
-                <VaultLockConfigModal
+                <LockVaultModal
                   open={isLockModalOpen}
                   onOpenChange={open =>
                     setOpenModalVaultId(open ? lockModalId : null)
@@ -265,13 +273,13 @@ export const createVaultTableColumns = ({
                     },
                   ]}
                   onClose={() => setOpenModalVaultId(null)}
-                  boost="x2.5"
                   infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
                 >
                   {/* @ts-expect-error - Button component is not typed */}
                   <Button
                     variant="primary"
                     size="32"
+                    disabled={!isConnected}
                     className="min-w-fit text-[13px]"
                   >
                     <TimeIcon className="shrink-0" />
@@ -280,10 +288,10 @@ export const createVaultTableColumns = ({
                     </span>
                     <span className="whitespace-nowrap xl:hidden">Extend</span>
                   </Button>
-                </VaultLockConfigModal>
+                </LockVaultModal>
               </div>
             ) : (
-              <VaultLockConfigModal
+              <LockVaultModal
                 open={isLockModalOpen}
                 onOpenChange={open =>
                   setOpenModalVaultId(open ? lockModalId : null)
@@ -291,8 +299,6 @@ export const createVaultTableColumns = ({
                 vaultAddress={row.original.address}
                 title="Do you want to lock the vault?"
                 description="Lock this vault to receive more Karma"
-                initialYears="2"
-                initialDays="732"
                 actions={[
                   {
                     label: "Don't lock",
@@ -302,10 +308,10 @@ export const createVaultTableColumns = ({
                   },
                 ]}
                 onClose={() => setOpenModalVaultId(null)}
-                boost="x2.5"
                 infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
                 onValidate={(_, days) => {
                   const totalDays = parseInt(days || '0')
+                  // TODO: read this from the contract
                   return totalDays > 1460
                     ? 'Maximum lock time is 4 years'
                     : null
@@ -315,17 +321,14 @@ export const createVaultTableColumns = ({
                 <Button
                   variant="primary"
                   size="32"
+                  disabled={!isConnected}
                   className="min-w-fit text-[13px]"
                 >
                   <LockedIcon fill="white" className="shrink-0" />
                   <span className="whitespace-nowrap">Lock</span>
                 </Button>
-              </VaultLockConfigModal>
+              </LockVaultModal>
             )}
-            {/* @ts-expect-error - Button component is not typed */}
-            <Button variant="outline" size="32" className="shrink-0">
-              <OptionsIcon />
-            </Button>
           </div>
         )
       },

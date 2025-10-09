@@ -138,6 +138,7 @@ export function useExchangeRate(options: UseExchangeRateOptions = {}) {
     refetchInterval,
     staleTime,
     retry: 3,
-    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retryDelay: attemptIndex =>
+      Math.min(1000 * 2 ** attemptIndex, DEFAULT_STALE_TIME),
   })
 }

@@ -3,10 +3,12 @@ export const stakingManagerAbi = [
   { inputs: [], name: 'StakeManager__AmountCannotBeZero', type: 'error' },
   { inputs: [], name: 'StakeManager__DurationCannotBeZero', type: 'error' },
   { inputs: [], name: 'StakeManager__EmergencyModeEnabled', type: 'error' },
+  { inputs: [], name: 'StakeManager__FundsLocked', type: 'error' },
   { inputs: [], name: 'StakeManager__InsufficientBalance', type: 'error' },
   { inputs: [], name: 'StakeManager__InvalidVault', type: 'error' },
   { inputs: [], name: 'StakeManager__MigrationTargetHasFunds', type: 'error' },
   { inputs: [], name: 'StakeManager__RewardPeriodNotEnded', type: 'error' },
+  { inputs: [], name: 'StakeManager__RewardTransferFailed', type: 'error' },
   { inputs: [], name: 'StakeManager__Unauthorized', type: 'error' },
   { inputs: [], name: 'StakeManager__VaultAlreadyRegistered', type: 'error' },
   { inputs: [], name: 'StakeManager__VaultNotRegistered', type: 'error' },
@@ -90,19 +92,136 @@ export const stakingManagerAbi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'Paused',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'duration',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'startTime',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'endTime',
+        type: 'uint256',
+      },
+    ],
+    name: 'RewardSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'address',
-        name: 'previousOwner',
+        name: 'vault',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'RewardsRedeemed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'supplier',
+        type: 'address',
+      },
+    ],
+    name: 'RewardsSupplierSet',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'previousAdminRole',
+        type: 'bytes32',
+      },
+      {
+        indexed: true,
+        internalType: 'bytes32',
+        name: 'newAdminRole',
+        type: 'bytes32',
+      },
+    ],
+    name: 'RoleAdminChanged',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'account',
         type: 'address',
       },
       {
         indexed: true,
         internalType: 'address',
-        name: 'newOwner',
+        name: 'sender',
         type: 'address',
       },
     ],
-    name: 'OwnershipTransferred',
+    name: 'RoleGranted',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'RoleRevoked',
     type: 'event',
   },
   {
@@ -155,6 +274,19 @@ export const stakingManagerAbi = [
       { indexed: false, internalType: 'bool', name: 'trusted', type: 'bool' },
     ],
     name: 'TrustedCodehashUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'Unpaused',
     type: 'event',
   },
   {
@@ -264,6 +396,20 @@ export const stakingManagerAbi = [
   },
   {
     inputs: [],
+    name: 'DEFAULT_ADMIN_ROLE',
+    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'GUARDIAN_ROLE',
+    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'MAX_BALANCE',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
@@ -315,6 +461,13 @@ export const stakingManagerAbi = [
     inputs: [],
     name: 'MP_MPY_ABSOLUTE',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'REWARD_TOKEN',
+    outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -384,6 +537,13 @@ export const stakingManagerAbi = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'bytes32', name: 'role', type: 'bytes32' }],
+    name: 'getRoleAdmin',
+    outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'address', name: 'vaultAddress', type: 'address' },
     ],
@@ -400,7 +560,6 @@ export const stakingManagerAbi = [
             name: 'lastMPUpdateTime',
             type: 'uint256',
           },
-          { internalType: 'uint256', name: 'lockUntil', type: 'uint256' },
           { internalType: 'uint256', name: 'rewardsAccrued', type: 'uint256' },
         ],
         internalType: 'struct StakeManager.VaultData',
@@ -413,8 +572,29 @@ export const stakingManagerAbi = [
   },
   {
     inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'grantRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'hasRole',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
       { internalType: 'address', name: '_owner', type: 'address' },
       { internalType: 'address', name: '_stakingToken', type: 'address' },
+      { internalType: 'address', name: '_rewardToken', type: 'address' },
     ],
     name: 'initialize',
     outputs: [],
@@ -457,9 +637,14 @@ export const stakingManagerAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'uint256', name: 'lockPeriod', type: 'uint256' }],
+    inputs: [
+      { internalType: 'uint256', name: 'lockPeriod', type: 'uint256' },
+      { internalType: 'uint256', name: 'currentLockUntil', type: 'uint256' },
+    ],
     name: 'lock',
-    outputs: [],
+    outputs: [
+      { internalType: 'uint256', name: 'newLockUntil', type: 'uint256' },
+    ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -497,8 +682,15 @@ export const stakingManagerAbi = [
   },
   {
     inputs: [],
-    name: 'owner',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'pause',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'paused',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -510,6 +702,13 @@ export const stakingManagerAbi = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
+    name: 'redeemRewards',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'registerVault',
     outputs: [],
@@ -517,8 +716,21 @@ export const stakingManagerAbi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'renounceOwnership',
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'renounceRole',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'bytes32', name: 'role', type: 'bytes32' },
+      { internalType: 'address', name: 'account', type: 'address' },
+    ],
+    name: 'revokeRole',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -600,9 +812,12 @@ export const stakingManagerAbi = [
     inputs: [
       { internalType: 'uint256', name: 'amount', type: 'uint256' },
       { internalType: 'uint256', name: 'lockPeriod', type: 'uint256' },
+      { internalType: 'uint256', name: 'currentLockUntil', type: 'uint256' },
     ],
     name: 'stake',
-    outputs: [],
+    outputs: [
+      { internalType: 'uint256', name: 'newLockUntil', type: 'uint256' },
+    ],
     stateMutability: 'nonpayable',
     type: 'function',
   },
@@ -612,6 +827,13 @@ export const stakingManagerAbi = [
     ],
     name: 'stakedBalanceOf',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'bytes4', name: 'interfaceId', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -672,8 +894,8 @@ export const stakingManagerAbi = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
-    name: 'transferOwnership',
+    inputs: [],
+    name: 'unpause',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -736,7 +958,6 @@ export const stakingManagerAbi = [
       { internalType: 'uint256', name: 'mpAccrued', type: 'uint256' },
       { internalType: 'uint256', name: 'maxMP', type: 'uint256' },
       { internalType: 'uint256', name: 'lastMPUpdateTime', type: 'uint256' },
-      { internalType: 'uint256', name: 'lockUntil', type: 'uint256' },
       { internalType: 'uint256', name: 'rewardsAccrued', type: 'uint256' },
     ],
     stateMutability: 'view',

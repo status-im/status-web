@@ -30,6 +30,9 @@
     "baseUrl": ".",
     "paths": {
       "~components/*": ["./src/app/_components/*"],
+      "~hooks/*": ["./src/app/_hooks/*"],
+      "~constants/*": ["./src/app/_constants/*"],
+      "~utils/*": ["./src/utils/*"],
       "~/*": ["./src/*"]
     }
   },

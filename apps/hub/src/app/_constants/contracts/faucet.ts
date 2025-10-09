@@ -1,6 +1,4 @@
-import type { Abi } from 'viem'
-
-export const faucetAbi: Abi = [
+export const faucetAbi = [
   {
     inputs: [{ internalType: 'address', name: '_token', type: 'address' }],
     stateMutability: 'nonpayable',

@@ -1,13 +1,13 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
-import { type Address, formatUnits } from 'viem'
+import { type Address } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
-import { SNT_TOKEN } from '../../config'
-import { statusNetworkTestnet } from '../../config/chain'
-import { vaultAbi } from '../contracts'
-import { useAccountVaults } from './useAccountVaults'
-import { useVaultStateContext } from './vault-state-context'
+import { vaultAbi } from '~constants/contracts'
+import { SNT_TOKEN, statusNetworkTestnet } from '~constants/index'
+import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
+import { useStakingVaults } from '~hooks/useStakingVaults'
+import { useVaultStateContext } from '~hooks/useVaultStateContext'
 
 // ============================================================================
 // Types
@@ -21,13 +21,15 @@ export interface WithdrawParams {
   amountWei: bigint
   /** Vault address */
   vaultAddress: Address
+  /** Optional callback called immediately after user signs transaction */
+  onSigned?: () => void
 }
 
 /**
  * Return type for the useVaultWithdraw hook
  */
 export type UseVaultWithdrawReturn = UseMutationResult<
-  Address,
+  void,
   Error,
   WithdrawParams,
   unknown
@@ -50,6 +52,15 @@ const CONFIRMATION_BLOCKS = 1
  * Withdraws (unstakes) tokens from a vault contract.
  * Manages the state machine transitions for the withdrawal process.
  *
+ * **Process Flow:**
+ * 1. Validates wallet connection and amount
+ * 2. Calls vault.withdraw() and waits for user to sign
+ * 3. After signing, sends START_WITHDRAW event → Goes directly to processing state
+ * 4. Calls onSigned callback (typically to close modal)
+ * 5. Waits for transaction confirmation
+ * 6. On success: Refetches data and resets state machine
+ * 7. On error: Sends REJECT event → Shows rejected state
+ *
  * @returns Mutation result with mutate function to trigger withdrawal
  *
  * @throws {Error} When wallet is not connected
@@ -57,43 +68,23 @@ const CONFIRMATION_BLOCKS = 1
  * @throws {Error} When transaction is reverted
  *
  * @example
- * Basic usage
+ * Basic usage with modal closing after sign
  * ```tsx
- * function WithdrawButton({ amount, vaultAddress }: { amount: bigint, vaultAddress: Address }) {
- *   const { mutate: withdraw, isPending } = useVaultWithdraw()
+ * function WithdrawModal({ amount, vaultAddress, onClose }: Props) {
+ *   const { mutate: withdraw } = useVaultWithdraw()
  *
- *   return (
- *     <button
- *       onClick={() => withdraw({ amountWei: amount, vaultAddress })}
- *       disabled={isPending}
- *     >
- *       {isPending ? 'Withdrawing...' : 'Withdraw SNT'}
- *     </button>
- *   )
- * }
- * ```
- *
- * @example
- * With success/error handling
- * ```tsx
- * function WithdrawManager() {
- *   const { mutate: withdraw, isPending } = useVaultWithdraw()
- *
- *   const handleWithdraw = (amount: bigint, vaultAddress: Address) => {
- *     withdraw(
- *       { amountWei: amount, vaultAddress },
- *       {
- *         onSuccess: (txHash) => {
- *           console.log('Withdrawn successfully! Transaction:', txHash)
- *         },
- *         onError: (error) => {
- *           console.error('Failed to withdraw:', error)
- *         },
+ *   const handleWithdraw = () => {
+ *     withdraw({
+ *       amountWei: amount,
+ *       vaultAddress,
+ *       onSigned: () => {
+ *         // Close modal after user signs in wallet
+ *         onClose()
  *       }
- *     )
+ *     })
  *   }
  *
- *   return <WithdrawForm onSubmit={handleWithdraw} />
+ *   return <button onClick={handleWithdraw}>Withdraw SNT</button>
  * }
  * ```
  */
@@ -102,14 +93,16 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
   const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
-  const { refetch: refetchAccountVaults } = useAccountVaults()
+  const { refetch: refetchStakingVaults } = useStakingVaults()
+  const { refetch: refetchMultiplierPoints } = useMultiplierPointsBalance()
 
   return useMutation({
     mutationKey: [MUTATION_KEY_PREFIX, address],
     mutationFn: async ({
       amountWei,
       vaultAddress,
-    }: WithdrawParams): Promise<Address> => {
+      onSigned,
+    }: WithdrawParams): Promise<void> => {
       // Validate wallet connection
       if (!address) {
         throw new Error(
@@ -122,12 +115,6 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
         throw new Error('Amount must be greater than 0')
       }
 
-      // Send state machine event to start withdrawal
-      sendVaultEvent({
-        type: 'START_WITHDRAW',
-        amount: formatUnits(amountWei, SNT_TOKEN.decimals),
-      })
-
       try {
         // Execute withdrawal transaction
         const hash = await writeContractAsync({
@@ -135,12 +122,18 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
           account: address,
           address: vaultAddress,
           abi: vaultAbi,
-          functionName: 'unstake',
-          args: [amountWei],
+          functionName: 'withdraw',
+          args: [SNT_TOKEN.address, amountWei],
         })
 
-        // Transaction submitted successfully, transition to processing
-        sendVaultEvent({ type: 'SIGN' })
+        // Transaction submitted successfully, send START_WITHDRAW event to show processing state
+        sendVaultEvent({
+          type: 'START_WITHDRAW',
+          amount: formatUnits(amountWei, SNT_TOKEN.decimals),
+        })
+
+        // Call onSigned callback to close the modal
+        onSigned?.()
 
         // Wait for transaction confirmation
         const { status } = await waitForTransactionReceipt(config, {
@@ -154,10 +147,9 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
           throw new Error('Transaction was reverted')
         }
 
-        // Transaction successful, close dialog by resetting state
+        // Transaction successful, refetch data and close dialog
+        await Promise.all([refetchStakingVaults(), refetchMultiplierPoints()])
         resetVault()
-        refetchAccountVaults()
-        return hash
       } catch (error) {
         // Transaction failed or user rejected
         sendVaultEvent({ type: 'REJECT' })

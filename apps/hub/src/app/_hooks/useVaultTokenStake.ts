@@ -3,11 +3,12 @@ import { type Address, formatUnits } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
-import { SNT_TOKEN } from '../../config'
-import { statusNetworkTestnet } from '../../config/chain'
-import { vaultAbi } from '../contracts'
-import { useAccountVaults } from './useAccountVaults'
-import { useVaultStateContext } from './vault-state-context'
+import { vaultAbi } from '~constants/contracts'
+import { SNT_TOKEN, statusNetworkTestnet } from '~constants/index'
+import { useStakingVaults } from '~hooks/useStakingVaults'
+import { useVaultStateContext } from '~hooks/useVaultStateContext'
+
+import { useMultiplierPointsBalance } from './useMultiplierPoints'
 
 // ============================================================================
 // Types
@@ -29,7 +30,7 @@ export interface StakeParams {
  * Return type for the useVaultStake hook
  */
 export type UseVaultStakeReturn = UseMutationResult<
-  Address,
+  void,
   Error,
   StakeParams,
   unknown
@@ -103,7 +104,8 @@ export function useVaultTokenStake(): UseVaultStakeReturn {
   const { writeContractAsync } = useWriteContract()
   const config = useConfig()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
-  const { refetch: refetchAccountVaults } = useAccountVaults()
+  const { refetch: refetchStakingVaults } = useStakingVaults()
+  const { refetch: refetchMultiplierPoints } = useMultiplierPointsBalance()
 
   return useMutation({
     mutationKey: [MUTATION_KEY_PREFIX, address],
@@ -111,7 +113,7 @@ export function useVaultTokenStake(): UseVaultStakeReturn {
       amountWei,
       lockPeriod,
       vaultAddress,
-    }: StakeParams): Promise<Address> => {
+    }: StakeParams): Promise<void> => {
       // Validate wallet connection
       if (!address) {
         throw new Error(
@@ -156,10 +158,9 @@ export function useVaultTokenStake(): UseVaultStakeReturn {
           throw new Error('Transaction was reverted')
         }
 
-        // Transaction successful, close dialog by resetting state
+        // Transaction successful, refetch data and close dialog
+        await Promise.all([refetchStakingVaults(), refetchMultiplierPoints()])
         resetVault()
-        refetchAccountVaults()
-        return hash
       } catch (error) {
         // Transaction failed or user rejected
         sendVaultEvent({ type: 'REJECT' })

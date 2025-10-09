@@ -2,9 +2,8 @@ import { useMemo } from 'react'
 
 import { formatUnits } from 'viem'
 
-import { SNT_TOKEN } from '../../config'
-
-import type { VaultWithAddress } from './useAccountVaults'
+import { SNT_TOKEN } from '~constants/index'
+import { type StakingVault } from '~hooks/useStakingVaults'
 
 // ============================================================================
 // Types
@@ -84,7 +83,7 @@ function calculateVaultBoost(
  * @returns Weighted boost calculation result
  */
 function calculateWeightedBoost(
-  vaults: VaultWithAddress[],
+  vaults: StakingVault[],
   decimals: number
 ): WeightedBoost {
   let totalWeightedBoost = 0
@@ -123,7 +122,7 @@ function calculateWeightedBoost(
 
   return {
     value: weightedAverage,
-    formatted: weightedAverage.toFixed(DEFAULT_DECIMALS),
+    formatted: `x${weightedAverage.toFixed(DEFAULT_DECIMALS)}`,
     totalStaked,
     hasStake: true,
   }
@@ -145,7 +144,7 @@ function calculateWeightedBoost(
  * @example
  * ```tsx
  * function BoostDisplay() {
- *   const { data: vaults } = useAccountVaults()
+ *   const { data: vaults } = useStakingVaults()
  *   const boost = useWeightedBoost(vaults)
  *
  *   return (
@@ -157,7 +156,9 @@ function calculateWeightedBoost(
  * }
  * ```
  */
-export function useWeightedBoost(vaults?: VaultWithAddress[]): WeightedBoost {
+export function useWeightedBoost(
+  vaults: StakingVault[] | undefined
+): WeightedBoost {
   return useMemo(() => {
     if (!vaults || vaults.length === 0) {
       return {
