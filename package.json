@@ -40,6 +40,7 @@
     "remark-lint": "9.1.2"
   },
   "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@changesets/cli": "^2.26.2",
     "@status-im/eslint-config": "workspace:*",
     "@tsconfig/strictest": "^2.0.0",

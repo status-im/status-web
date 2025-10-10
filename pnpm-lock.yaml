@@ -39,6 +39,9 @@ importers:
       '@changesets/cli':
         specifier: ^2.26.2
         version: 2.26.2
+      '@ianvs/prettier-plugin-sort-imports':
+        specifier: ^4.1.1
+        version: 4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.5.3)
       '@status-im/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
@@ -65,10 +68,10 @@ importers:
         version: 15.2.10
       prettier:
         specifier: ^3.3.3
-        version: 3.3.3
+        version: 3.5.3
       prettier-plugin-tailwindcss:
         specifier: ^0.6.6
-        version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.3.3))(prettier@3.3.3)
+        version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.5.3))(prettier@3.5.3)
       react-devtools:
         specifier: ^6.1.5
         version: 6.1.5(bufferutil@4.0.9)(utf-8-validate@5.0.10)
@@ -581,7 +584,7 @@ importers:
         version: 1.7.1
       prettier-plugin-tailwindcss:
         specifier: ^0.6.6
-        version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.3.3))(prettier@3.3.3)
+        version: 0.6.6(@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.5.3))(prettier@3.5.3)
       qrcode.react:
         specifier: ^3.1.0
         version: 3.2.0(react@19.1.0)
@@ -654,7 +657,7 @@ importers:
     devDependencies:
       '@1stg/remark-preset':
         specifier: ^2.0.0
-        version: 2.0.0(prettier@3.3.3)
+        version: 2.0.0(prettier@3.5.3)
       '@contentlayer/core':
         specifier: ^0.3.4
         version: 0.3.4(esbuild@0.19.12)
@@ -759,7 +762,7 @@ importers:
         version: 2.3.4(eslint@9.14.0(jiti@2.4.2))
       eslint-plugin-prettier:
         specifier: ^4.2.1
-        version: 4.2.1(eslint-config-prettier@9.1.0(eslint@9.14.0(jiti@2.4.2)))(eslint@9.14.0(jiti@2.4.2))(prettier@3.3.3)
+        version: 4.2.1(eslint-config-prettier@9.1.0(eslint@9.14.0(jiti@2.4.2)))(eslint@9.14.0(jiti@2.4.2))(prettier@3.5.3)
       eslint-plugin-tailwindcss:
         specifier: ^3.17.4
         version: 3.17.5(tailwindcss@3.4.11)
@@ -795,7 +798,7 @@ importers:
         version: 8.4.47
       prettier:
         specifier: ^3.3.3
-        version: 3.3.3
+        version: 3.5.3
       react-easy-emoji:
         specifier: ^1.8.1
         version: 1.8.1(@types/react@19.1.0)(react@19.1.0)
@@ -888,13 +891,13 @@ importers:
         version: 6.1.3
       remark-preset-prettier:
         specifier: ^2.0.1
-        version: 2.0.2(prettier@3.3.3)
+        version: 2.0.2(prettier@3.5.3)
       remark-preset-wooorm:
         specifier: ^9.1.0
         version: 9.1.0
       remark-prettier:
         specifier: ^2.0.0
-        version: 2.0.0(prettier@3.3.3)
+        version: 2.0.0(prettier@3.5.3)
       remark-rehype:
         specifier: ^10.1.0
         version: 10.1.0
@@ -15658,11 +15661,6 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  prettier@3.3.3:
-    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
-    engines: {node: '>=14'}
-    hasBin: true
-
   prettier@3.5.3:
     resolution: {integrity: sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==}
     engines: {node: '>=14'}
@@ -18817,7 +18815,7 @@ snapshots:
       defu: 6.1.4
       many-keys-map: 2.0.1
 
-  '@1stg/remark-preset@2.0.0(prettier@3.3.3)':
+  '@1stg/remark-preset@2.0.0(prettier@3.5.3)':
     dependencies:
       remark-frontmatter: 4.0.1
       remark-gfm: 3.0.1
@@ -18827,7 +18825,7 @@ snapshots:
       remark-preset-lint-consistent: 5.1.2
       remark-preset-lint-markdown-style-guide: 5.1.3
       remark-preset-lint-recommended: 6.1.3
-      remark-preset-prettier: 2.0.2(prettier@3.3.3)
+      remark-preset-prettier: 2.0.2(prettier@3.5.3)
       remark-validate-links: 12.1.1
     transitivePeerDependencies:
       - prettier
@@ -18989,7 +18987,7 @@ snapshots:
 
   '@babel/generator@7.25.6':
     dependencies:
-      '@babel/types': 7.25.6
+      '@babel/types': 7.27.1
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
       jsesc: 2.5.2
@@ -19366,10 +19364,10 @@ snapshots:
   '@babel/traverse@7.25.6':
     dependencies:
       '@babel/code-frame': 7.24.7
-      '@babel/generator': 7.25.6
-      '@babel/parser': 7.25.6
+      '@babel/generator': 7.27.1
+      '@babel/parser': 7.27.2
       '@babel/template': 7.25.0
-      '@babel/types': 7.25.6
+      '@babel/types': 7.27.1
       debug: 4.3.7(supports-color@5.5.0)
       globals: 11.12.0
     transitivePeerDependencies:
@@ -21262,31 +21260,17 @@ snapshots:
 
   '@ianvs/prettier-plugin-sort-imports@4.1.1(@vue/compiler-sfc@3.3.4)(prettier@3.2.4)':
     dependencies:
-      '@babel/core': 7.25.2
-      '@babel/generator': 7.25.6
-      '@babel/parser': 7.25.6
-      '@babel/traverse': 7.25.6
-      '@babel/types': 7.25.6
-      prettier: 3.2.4
-      semver: 7.6.3
-    optionalDependencies:
-      '@vue/compiler-sfc': 3.3.4
-    transitivePeerDependencies:
-      - supports-color
-
-  '@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.3.3)':
-    dependencies:
+      '@babel/core': 7.27.1
       '@babel/generator': 7.27.1
       '@babel/parser': 7.27.2
       '@babel/traverse': 7.27.1(supports-color@5.5.0)
       '@babel/types': 7.27.1
-      prettier: 3.3.3
+      prettier: 3.2.4
       semver: 7.7.1
     optionalDependencies:
       '@vue/compiler-sfc': 3.3.4
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   '@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.5.3)':
     dependencies:
@@ -27631,9 +27615,9 @@ snapshots:
     dependencies:
       storybook: 8.3.0(bufferutil@4.0.9)(utf-8-validate@6.0.3)
 
-  '@svgr/babel-plugin-add-jsx-attribute@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-plugin-add-jsx-attribute@6.5.1(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
+      '@babel/core': 7.27.1
 
   '@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.25.2)':
     dependencies:
@@ -27643,61 +27627,69 @@ snapshots:
     dependencies:
       '@babel/core': 7.25.2
 
+  '@svgr/babel-plugin-remove-jsx-attribute@8.0.0(@babel/core@7.27.1)':
+    dependencies:
+      '@babel/core': 7.27.1
+
   '@svgr/babel-plugin-remove-jsx-empty-expression@8.0.0(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
 
-  '@svgr/babel-plugin-replace-jsx-attribute-value@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-plugin-remove-jsx-empty-expression@8.0.0(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
+      '@babel/core': 7.27.1
+
+  '@svgr/babel-plugin-replace-jsx-attribute-value@6.5.1(@babel/core@7.27.1)':
+    dependencies:
+      '@babel/core': 7.27.1
 
   '@svgr/babel-plugin-replace-jsx-attribute-value@8.0.0(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
 
-  '@svgr/babel-plugin-svg-dynamic-title@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-plugin-svg-dynamic-title@6.5.1(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
+      '@babel/core': 7.27.1
 
   '@svgr/babel-plugin-svg-dynamic-title@8.0.0(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
 
-  '@svgr/babel-plugin-svg-em-dimensions@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-plugin-svg-em-dimensions@6.5.1(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
+      '@babel/core': 7.27.1
 
   '@svgr/babel-plugin-svg-em-dimensions@8.0.0(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
 
-  '@svgr/babel-plugin-transform-react-native-svg@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-plugin-transform-react-native-svg@6.5.1(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
+      '@babel/core': 7.27.1
 
   '@svgr/babel-plugin-transform-react-native-svg@8.1.0(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
 
-  '@svgr/babel-plugin-transform-svg-component@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-plugin-transform-svg-component@6.5.1(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
+      '@babel/core': 7.27.1
 
   '@svgr/babel-plugin-transform-svg-component@8.0.0(@babel/core@7.25.2)':
     dependencies:
       '@babel/core': 7.25.2
 
-  '@svgr/babel-preset@6.5.1(@babel/core@7.25.2)':
+  '@svgr/babel-preset@6.5.1(@babel/core@7.27.1)':
     dependencies:
-      '@babel/core': 7.25.2
-      '@svgr/babel-plugin-add-jsx-attribute': 6.5.1(@babel/core@7.25.2)
-      '@svgr/babel-plugin-remove-jsx-attribute': 8.0.0(@babel/core@7.25.2)
-      '@svgr/babel-plugin-remove-jsx-empty-expression': 8.0.0(@babel/core@7.25.2)
-      '@svgr/babel-plugin-replace-jsx-attribute-value': 6.5.1(@babel/core@7.25.2)
-      '@svgr/babel-plugin-svg-dynamic-title': 6.5.1(@babel/core@7.25.2)
-      '@svgr/babel-plugin-svg-em-dimensions': 6.5.1(@babel/core@7.25.2)
-      '@svgr/babel-plugin-transform-react-native-svg': 6.5.1(@babel/core@7.25.2)
-      '@svgr/babel-plugin-transform-svg-component': 6.5.1(@babel/core@7.25.2)
+      '@babel/core': 7.27.1
+      '@svgr/babel-plugin-add-jsx-attribute': 6.5.1(@babel/core@7.27.1)
+      '@svgr/babel-plugin-remove-jsx-attribute': 8.0.0(@babel/core@7.27.1)
+      '@svgr/babel-plugin-remove-jsx-empty-expression': 8.0.0(@babel/core@7.27.1)
+      '@svgr/babel-plugin-replace-jsx-attribute-value': 6.5.1(@babel/core@7.27.1)
+      '@svgr/babel-plugin-svg-dynamic-title': 6.5.1(@babel/core@7.27.1)
+      '@svgr/babel-plugin-svg-em-dimensions': 6.5.1(@babel/core@7.27.1)
+      '@svgr/babel-plugin-transform-react-native-svg': 6.5.1(@babel/core@7.27.1)
+      '@svgr/babel-plugin-transform-svg-component': 6.5.1(@babel/core@7.27.1)
 
   '@svgr/babel-preset@8.1.0(@babel/core@7.25.2)':
     dependencies:
@@ -27728,8 +27720,8 @@ snapshots:
 
   '@svgr/core@6.5.1':
     dependencies:
-      '@babel/core': 7.25.2
-      '@svgr/babel-preset': 6.5.1(@babel/core@7.25.2)
+      '@babel/core': 7.27.1
+      '@svgr/babel-preset': 6.5.1(@babel/core@7.27.1)
       '@svgr/plugin-jsx': 6.5.1(@svgr/core@6.5.1)
       camelcase: 6.3.0
       cosmiconfig: 7.1.0
@@ -27758,8 +27750,8 @@ snapshots:
 
   '@svgr/plugin-jsx@6.5.1(@svgr/core@6.5.1)':
     dependencies:
-      '@babel/core': 7.25.2
-      '@svgr/babel-preset': 6.5.1(@babel/core@7.25.2)
+      '@babel/core': 7.27.1
+      '@svgr/babel-preset': 6.5.1(@babel/core@7.27.1)
       '@svgr/core': 6.5.1
       '@svgr/hast-util-to-babel-ast': 6.5.1
       svg-parser: 2.0.4
@@ -33423,10 +33415,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-prettier@4.2.1(eslint-config-prettier@9.1.0(eslint@9.14.0(jiti@2.4.2)))(eslint@9.14.0(jiti@2.4.2))(prettier@3.3.3):
+  eslint-plugin-prettier@4.2.1(eslint-config-prettier@9.1.0(eslint@9.14.0(jiti@2.4.2)))(eslint@9.14.0(jiti@2.4.2))(prettier@3.5.3):
     dependencies:
       eslint: 9.14.0(jiti@2.4.2)
-      prettier: 3.3.3
+      prettier: 3.5.3
       prettier-linter-helpers: 1.0.0
     optionalDependencies:
       eslint-config-prettier: 9.1.0(eslint@9.14.0(jiti@2.4.2))
@@ -38832,12 +38824,6 @@ snapshots:
     optionalDependencies:
       '@ianvs/prettier-plugin-sort-imports': 4.1.1(@vue/compiler-sfc@3.3.4)(prettier@3.2.4)
 
-  prettier-plugin-tailwindcss@0.6.6(@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.3.3))(prettier@3.3.3):
-    dependencies:
-      prettier: 3.3.3
-    optionalDependencies:
-      '@ianvs/prettier-plugin-sort-imports': 4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.3.3)
-
   prettier-plugin-tailwindcss@0.6.6(@ianvs/prettier-plugin-sort-imports@4.6.2(@vue/compiler-sfc@3.3.4)(prettier@3.5.3))(prettier@3.5.3):
     dependencies:
       prettier: 3.5.3
@@ -38847,8 +38833,6 @@ snapshots:
   prettier@2.8.8: {}
 
   prettier@3.2.4: {}
-
-  prettier@3.3.3: {}
 
   prettier@3.5.3: {}
 
@@ -40589,9 +40573,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  remark-preset-prettier@2.0.2(prettier@3.3.3):
+  remark-preset-prettier@2.0.2(prettier@3.5.3):
     dependencies:
-      prettier: 3.3.3
+      prettier: 3.5.3
 
   remark-preset-wooorm@9.1.0:
     dependencies:
@@ -40656,12 +40640,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  remark-prettier@2.0.0(prettier@3.3.3):
+  remark-prettier@2.0.0(prettier@3.5.3):
     dependencies:
       '@types/mdast': 3.0.15
       '@types/prettier': 2.7.2
       mdast-util-to-markdown: 1.5.0
-      prettier: 3.3.3
+      prettier: 3.5.3
       prettier-linter-helpers: 1.0.0
       vfile-location: 4.1.0
 
