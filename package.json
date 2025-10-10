@@ -32,18 +32,11 @@
     "devtools": "react-devtools"
   },
   "resolutions": {
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.0",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "viem": "2.29.1",
-    "wagmi": "2.15.2",
-    "zod": "3.23.8",
     "vite": "6.3.5",
     "vitest": "3.1.4",
     "vite-node": "3.1.4",
     "protons-runtime": "3.1.0",
-    "it-length-prefixed": "9.1.1",
+    "it-length-prefixed": "9.0.3",
     "remark-lint": "9.1.2"
   },
   "devDependencies": {
@@ -58,9 +51,7 @@
     "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.6",
-    "react": "^19.1.0",
     "react-devtools": "^6.1.5",
-    "react-dom": "^19.1.0",
     "rimraf": "^4.4.1",
     "turbo": "^2.5.6",
     "typescript": "^5.6.2",
@@ -76,13 +67,12 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@achingbrain/ssdp@4.2.4": "patches/@achingbrain__ssdp@4.2.4.patch",
-      "@libp2p/bootstrap@9.0.12": "patches/@libp2p__bootstrap@9.0.12.patch",
-      "it-length-prefixed@9.1.1": "patches/it-length-prefixed@9.1.1.patch",
+      "@achingbrain/ssdp@4.0.1": "patches/@achingbrain__ssdp@4.0.1.patch",
+      "@libp2p/bootstrap@9.0.10": "patches/@libp2p__bootstrap@9.0.10.patch",
+      "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch",
       "arctic@1.2.0": "patches/arctic@1.2.0.patch",
       "tinykeys@3.0.0": "patches/tinykeys@3.0.0.patch",
-      "oslo@1.0.1": "patches/oslo@1.0.1.patch",
-      "@trpc/server@11.1.0": "patches/@trpc__server@11.1.0.patch"
+      "oslo@1.0.1": "patches/oslo@1.0.1.patch"
     }
   }
 }
