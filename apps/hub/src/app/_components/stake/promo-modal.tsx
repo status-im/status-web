@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'
@@ -79,7 +78,6 @@ const PromoModal = (props: Props) => {
 
                   <ConnectKitButton.Custom>
                     {({ show, isConnected }) => (
-                      // @ts-expect-error - TODO: fix this
                       <Button
                         onClick={show}
                         variant={isConnected ? 'secondary' : 'primary'}

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import { useMemo, useState } from 'react'
@@ -128,7 +127,7 @@ export default function StakePage() {
     message: messageMultiplierPoints,
   } = useMemo(() => {
     const totalUncompounded = multiplierPointsData?.totalUncompounded ?? 0n
-    const hasUncompoundedPoints = totalUncompounded > 0n
+    const hasUncompoundedPoints = totalUncompounded >= 0n
     const formattedAmount = formatSNT(
       formatUnits(totalUncompounded, SNT_TOKEN.decimals),
       {
@@ -257,7 +256,6 @@ export default function StakePage() {
                 </div>
               </div>
 
-              {/* @ts-expect-error - TODO: fix this */}
               <Button
                 className="self-end"
                 disabled={
@@ -384,7 +382,6 @@ export default function StakePage() {
                       open={isPromoModalOpen}
                       onClose={() => setIsPromoModalOpen(false)}
                     >
-                      {/* @ts-expect-error - TODO: fix this */}
                       <Button
                         className="w-full justify-center"
                         onClick={() => setIsPromoModalOpen(true)}
@@ -396,7 +393,6 @@ export default function StakePage() {
                   .with('disconnected', () => (
                     <ConnectKitButton.Custom>
                       {({ show }) => (
-                        // @ts-expect-error - TODO: fix this
                         <Button
                           className="w-full justify-center"
                           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
@@ -417,15 +413,13 @@ export default function StakePage() {
                       selectedVault !== '' && selectedVault !== 'new'
 
                     return hasSelectedVault && hasAmount ? (
-                      // @ts-expect-error - TODO: fix this
                       <Button className="w-full justify-center" type="submit">
                         Stake SNT
                       </Button>
                     ) : (
-                      // @ts-expect-error - TODO: fix this
                       <Button
                         className="w-full justify-center"
-                        onClick={createVault}
+                        onClick={() => createVault()}
                       >
                         Create new vault
                       </Button>
@@ -471,12 +465,11 @@ export default function StakePage() {
                     <span className="text-13 font-500 text-neutral-40">
                       {messageMultiplierPoints}
                     </span>
-                    {/* @ts-expect-error - TODO: fix this */}
                     <Button
                       disabled={isDisabledMultiplierPoints}
                       variant="primary"
                       size="40"
-                      onClick={compoundMultiplierPoints}
+                      onClick={() => compoundMultiplierPoints()}
                     >
                       Compound
                     </Button>
@@ -509,7 +502,7 @@ const InfoTooltip = () => (
           href="https://status.app/"
           variant="outline"
           className="rounded-8 px-2 py-1"
-          size="24"
+          size="32"
         >
           Learn more
           <ExternalIcon className="size-3 text-neutral-50" />

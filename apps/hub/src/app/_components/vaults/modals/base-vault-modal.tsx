@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import * as Dialog from '@radix-ui/react-dialog'

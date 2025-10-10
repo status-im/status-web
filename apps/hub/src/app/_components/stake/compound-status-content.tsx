@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import * as Dialog from '@radix-ui/react-dialog'
 import { InfoIcon } from '@status-im/icons/16'
 import { formatUnits } from 'viem'

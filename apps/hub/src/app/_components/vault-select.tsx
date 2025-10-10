@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import { useState } from 'react'

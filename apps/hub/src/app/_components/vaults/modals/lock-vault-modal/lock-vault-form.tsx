@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -332,7 +331,6 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
       <div className="flex w-full flex-col items-start bg-[rgba(255,255,255,0.7)] backdrop-blur-[20px]">
         <div className="box-border flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
-          {/* @ts-expect-error - Button component is not typed */}
           <Button
             size="40"
             variant="outline"
@@ -343,7 +341,6 @@ export function LockVaultForm(props: LockVaultFormProps) {
           >
             {closeAction.label}
           </Button>
-          {/* @ts-expect-error - Button component is not typed */}
           <Button
             size="40"
             variant="primary"

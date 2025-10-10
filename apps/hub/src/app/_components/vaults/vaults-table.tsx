@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import { useMemo, useState } from 'react'
@@ -157,11 +156,10 @@ export function VaultsTable() {
           My vaults
         </h2>
         {isConnected && (
-          // @ts-expect-error - Button component is not typed
           <Button
             variant="outline"
             size="32"
-            onClick={createVault}
+            onClick={() => createVault()}
             className="w-full sm:w-auto"
           >
             <AddCircleIcon />
