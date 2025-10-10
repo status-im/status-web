@@ -1,5 +1,3 @@
-/* eslint-disable import/no-unresolved */
-
 import { AlertIcon, TimeIcon } from '@status-im/icons/12'
 import { LockedIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
@@ -237,9 +235,8 @@ export const createVaultTableColumns = ({
                     onClose={() => setOpenModalVaultId(null)}
                     vaultAddress={row.original.address}
                   >
-                    {/* @ts-expect-error - Button component is not typed */}
                     <Button
-                      variant="destructive"
+                      variant="danger"
                       size="32"
                       disabled={!isConnected}
                       className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
@@ -275,7 +272,6 @@ export const createVaultTableColumns = ({
                   onClose={() => setOpenModalVaultId(null)}
                   infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
                 >
-                  {/* @ts-expect-error - Button component is not typed */}
                   <Button
                     variant="primary"
                     size="32"
@@ -317,7 +313,6 @@ export const createVaultTableColumns = ({
                     : null
                 }}
               >
-                {/* @ts-expect-error - Button component is not typed */}
                 <Button
                   variant="primary"
                   size="32"

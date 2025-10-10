@@ -123,7 +123,10 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
       }
 
       // Get the current MP balance to show in the dialog
-      const formattedAmount = formatUnits(mpBalance || 0n, SNT_TOKEN.decimals)
+      const formattedAmount = formatUnits(
+        mpBalance?.totalUncompounded || 0n,
+        SNT_TOKEN.decimals
+      )
 
       sendVaultEvent({
         type: 'START_COMPOUND',

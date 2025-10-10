@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseIcon } from '@status-im/icons/20'
 import { match } from 'ts-pattern'

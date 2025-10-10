@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 'use client'
 
 import { useCallback } from 'react'
@@ -94,10 +93,9 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
                   Your funds will sent directly to your connected wallet.
                 </p>
               </div>
-              {/* @ts-expect-error - Button component is not typed */}
               <Button
                 variant="outline"
-                size="24"
+                size="32"
                 className="rounded-8 px-2 py-[3px] pr-[6px] text-[13px]"
               >
                 Learn more
@@ -110,7 +108,6 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
       <div className="flex w-full flex-col items-start">
         <div className="box-border flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
           <Dialog.Close asChild>
-            {/* @ts-expect-error - Button component is not typed */}
             <Button
               size="40"
               variant="outline"
@@ -120,7 +117,6 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
               Cancel
             </Button>
           </Dialog.Close>
-          {/* @ts-expect-error - Button component is not typed */}
           <Button
             size="40"
             variant="primary"
