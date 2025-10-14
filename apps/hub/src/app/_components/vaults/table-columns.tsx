@@ -22,7 +22,7 @@ interface TableColumnsProps {
   openModalVaultId: string | null
   setOpenModalVaultId: (vaultId: string | null) => void
   emergencyModeEnabled: unknown
-  isConnected: boolean
+  // isConnected: boolean
 }
 
 export const createVaultTableColumns = ({
@@ -30,7 +30,7 @@ export const createVaultTableColumns = ({
   openModalVaultId,
   setOpenModalVaultId,
   emergencyModeEnabled,
-  isConnected,
+  // isConnected,
 }: TableColumnsProps) => {
   const totalStaked = vaults.reduce(
     (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
@@ -226,7 +226,7 @@ export const createVaultTableColumns = ({
           <div className="flex items-end justify-end gap-2 lg:gap-4">
             {isLocked ? (
               <div className="flex items-center gap-2">
-                {!emergencyModeEnabled && (
+                {Boolean(emergencyModeEnabled) && (
                   <WithdrawVaultModal
                     open={isWithdrawModalOpen}
                     onOpenChange={open =>
@@ -234,20 +234,14 @@ export const createVaultTableColumns = ({
                     }
                     onClose={() => setOpenModalVaultId(null)}
                     vaultAddress={row.original.address}
+                    amountWei={row.original.data?.stakedBalance || 0n}
                   >
                     <Button
                       variant="danger"
-                      size="32"
-                      disabled={!isConnected}
-                      className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                      size="24"
+                      iconBefore={<AlertIcon />}
                     >
-                      <AlertIcon className="shrink-0" />
-                      <span className="hidden whitespace-nowrap xl:inline">
-                        Withdraw funds
-                      </span>
-                      <span className="whitespace-nowrap xl:hidden">
-                        Withdraw
-                      </span>
+                      Withdraw funds
                     </Button>
                   </WithdrawVaultModal>
                 )}
@@ -272,17 +266,8 @@ export const createVaultTableColumns = ({
                   onClose={() => setOpenModalVaultId(null)}
                   infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
                 >
-                  <Button
-                    variant="primary"
-                    size="32"
-                    disabled={!isConnected}
-                    className="min-w-fit text-[13px]"
-                  >
-                    <TimeIcon className="shrink-0" />
-                    <span className="hidden whitespace-nowrap xl:inline">
-                      Extend lock time
-                    </span>
-                    <span className="whitespace-nowrap xl:hidden">Extend</span>
+                  <Button variant="primary" size="24" iconBefore={<TimeIcon />}>
+                    Extend lock time
                   </Button>
                 </LockVaultModal>
               </div>
@@ -315,12 +300,10 @@ export const createVaultTableColumns = ({
               >
                 <Button
                   variant="primary"
-                  size="32"
-                  disabled={!isConnected}
-                  className="min-w-fit text-[13px]"
+                  size="24"
+                  iconBefore={<LockedIcon fill="white" />}
                 >
-                  <LockedIcon fill="white" className="shrink-0" />
-                  <span className="whitespace-nowrap">Lock</span>
+                  Lock
                 </Button>
               </LockVaultModal>
             )}

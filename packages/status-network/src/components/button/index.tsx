@@ -13,7 +13,7 @@ type Props = {
 } & React.ComponentProps<'button'>
 
 const buttonStyles = cva({
-  base: 'inline-flex w-fit cursor-pointer select-none items-center gap-1 border text-15 font-500 transition-all disabled:cursor-default disabled:opacity-[0.3]',
+  base: 'inline-flex w-fit cursor-pointer select-none items-center gap-1 border font-500 transition-all disabled:cursor-default disabled:opacity-[0.3]',
   variants: {
     variant: {
       primary:
@@ -24,7 +24,8 @@ const buttonStyles = cva({
         'border-neutral-30 bg-white-100 text-dark-100 hover:border-neutral-40 hover:bg-white-80',
       outline:
         'pressed:border-neutral-50 border border-neutral-30 text-neutral-100 hover:border-neutral-40 disabled:border-neutral-20',
-      danger: 'border-[transparent]',
+      danger:
+        'bg-danger-50 text-white-100 hover:bg-danger-60 disabled:opacity-[0.3]',
     },
     withIcon: {
       true: '',
@@ -35,9 +36,9 @@ const buttonStyles = cva({
       false: '',
     },
     size: {
-      '24': 'h-6 rounded-8 py-[3px]',
-      '32': 'h-8 rounded-10 py-[5px]',
-      '40': 'h-10 rounded-12 py-[9px]',
+      '24': 'h-6 rounded-8 py-[3px] text-13',
+      '32': 'h-8 rounded-10 py-[5px] text-15',
+      '40': 'h-10 rounded-12 py-[9px] text-15',
     },
     backdropFilter: {
       true: 'backdrop-blur-[20px]',

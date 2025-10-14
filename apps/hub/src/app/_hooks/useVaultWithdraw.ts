@@ -1,5 +1,5 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
-import { type Address } from 'viem'
+import { type Address, formatUnits } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
