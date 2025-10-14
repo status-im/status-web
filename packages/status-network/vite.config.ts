@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       target: 'es2020',
       lib: {
         entry: {
-          'components/index': './src/components/index.tsx',
+          'components/index': './src/components/index.ts',
           'config/index': './src/config/index.ts',
           'tailwind.config': './tailwind.config.ts',
           'hooks/index': './src/hooks/index.ts',
