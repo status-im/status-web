@@ -2,14 +2,23 @@
 
 import { createConfig, http, WagmiProvider as WagmiProviderBase } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
-import { injected } from 'wagmi/connectors'
+import { injected, metaMask, walletConnect } from 'wagmi/connectors'
+
+import { clientEnv } from '~/config/env.client.mjs'
 
 import type React from 'react'
 
 export const config = createConfig({
   chains: [mainnet],
   ssr: false,
-  connectors: [injected()],
+  connectors: [
+    injected(),
+    metaMask(),
+    walletConnect({
+      projectId: clientEnv.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
+      showQrModal: false,
+    }),
+  ],
   transports: {
     // todo: replace public clients
     [mainnet.id]: http(),
