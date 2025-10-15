@@ -2,30 +2,36 @@
 
 import { Button, ShortenAddress } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
-import { useAccount } from 'wagmi'
 
 import type { ComponentProps } from 'react'
 
 type Props = {
   size?: ComponentProps<typeof Button>['size']
   label?: string
+  className?: string
+  /** If true, shows the label instead of the shortened address when connected */
+  alwaysShowLabel?: boolean
 }
 
 const ConnectButton = (props: Props) => {
-  const { size = '32', label = 'Connect wallet' } = props
-
-  const { address, isConnected } = useAccount()
+  const {
+    size = '32',
+    label = 'Connect wallet',
+    className,
+    alwaysShowLabel = false,
+  } = props
 
   return (
     <ConnectKitButton.Custom>
-      {({ show }) => {
+      {({ show, isConnected, address }) => {
         return (
           <Button
             onClick={show}
             variant={isConnected ? 'secondary' : 'primary'}
             size={size}
+            className={className}
           >
-            {address && isConnected ? (
+            {address && isConnected && !alwaysShowLabel ? (
               <ShortenAddress address={address} />
             ) : (
               label

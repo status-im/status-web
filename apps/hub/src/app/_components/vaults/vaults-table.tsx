@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { AddCircleIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
@@ -48,6 +48,7 @@ interface TableProps {
   table: ReturnType<typeof useReactTable<StakingVault>>
 }
 
+// Simple table components - TanStack Table handles optimization via getCoreRowModel
 function TableHeader({ table }: TableProps) {
   return (
     <thead className="h-[40px] border-b border-solid border-neutral-10 bg-neutral-5">
@@ -129,20 +130,37 @@ export function VaultsTable() {
     address: STAKING_MANAGER.address,
     abi: STAKING_MANAGER.abi,
     functionName: 'emergencyModeEnabled',
+    query: {
+      staleTime: 60_000, // Consider data fresh for 1 minute
+    },
   })
 
+  // Stable callback reference prevents column recreation on every render
+  const handleSetOpenModalVaultId = useCallback(
+    (vaultId: string | null) => setOpenModalVaultId(vaultId),
+    []
+  )
+
+  // Memoize columns to prevent recreation unless dependencies change
   const columns = useMemo(
     () =>
       createVaultTableColumns({
         vaults: vaultDataList,
         openModalVaultId,
-        setOpenModalVaultId,
+        setOpenModalVaultId: handleSetOpenModalVaultId,
         emergencyModeEnabled,
         isConnected,
       }),
-    [vaultDataList, openModalVaultId, emergencyModeEnabled, isConnected]
+    [
+      vaultDataList,
+      openModalVaultId,
+      handleSetOpenModalVaultId,
+      emergencyModeEnabled,
+      isConnected,
+    ]
   )
 
+  // Initialize TanStack Table
   const table = useReactTable({
     data: vaultDataList ?? [],
     columns,
@@ -169,15 +187,34 @@ export function VaultsTable() {
       </div>
 
       <div className="relative w-full overflow-hidden rounded-16 border border-solid border-neutral-10 bg-white-100">
-        <div className="max-h-[600px] overflow-auto">
-          <div className="min-w-[800px]">
-            <table className="w-full border-collapse">
-              <TableHeader table={table} />
-              <TableBody table={table} />
-              <TableFooter table={table} />
-            </table>
+        {!isConnected ? (
+          <div className="flex items-center justify-center p-12 text-center">
+            <div>
+              <p className="text-neutral-50">
+                Connect your wallet to view your vaults
+              </p>
+            </div>
           </div>
-        </div>
+        ) : vaultDataList && vaultDataList.length === 0 ? (
+          <div className="flex items-center justify-center p-12 text-center">
+            <div>
+              <p className="text-neutral-50">No vaults found</p>
+              <p className="mt-2 text-[13px] text-neutral-40">
+                Click "Add vault" to create your first vault
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="max-h-[600px] overflow-auto">
+            <div className="min-w-[800px]">
+              <table className="w-full border-collapse">
+                <TableHeader table={table} />
+                <TableBody table={table} />
+                <TableFooter table={table} />
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

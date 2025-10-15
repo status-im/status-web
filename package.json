@@ -40,8 +40,8 @@
     "remark-lint": "9.1.2"
   },
   "devDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@changesets/cli": "^2.26.2",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@status-im/eslint-config": "workspace:*",
     "@tsconfig/strictest": "^2.0.0",
     "@types/prettier": "^2.7.2",
@@ -75,10 +75,5 @@
       "tinykeys@3.0.0": "patches/tinykeys@3.0.0.patch",
       "oslo@1.0.1": "patches/oslo@1.0.1.patch"
     }
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.90.2",
-    "connectkit": "^1.9.0",
-    "wagmi": "^2.12.8"
   }
 }
