@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, IconButton, Tag } from '@status-im/components'
+import { Button, IconButton } from '@status-im/components'
 import { SettingsIcon } from '@status-im/icons/20'
 import { Link } from '@status-im/status-network/components'
 import Image from 'next/image'
@@ -40,23 +40,48 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
             </svg>
           </button>
 
-          {/* Status Network Logo */}
-          <Link href="/">
+          <div className="hidden items-center gap-2 md:flex">
+            {/* Status Network Logo */}
+            <Link href="/">
+              <Image
+                src="/logo-long.svg"
+                alt="Status Network Logo"
+                width={210}
+                height={32}
+              />
+            </Link>
+            <div className="h-[18px] rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
+              Testnet
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 md:hidden">
             <Image
               src="/logo.svg"
               alt="Status Network Logo"
-              width={210}
-              height={32}
+              width={42}
+              height={41}
             />
-          </Link>
 
-          <Tag size="24" label="Testnet" />
+            <div className="flex flex-col items-start gap-[6px]">
+              <Image
+                src="/logo-text.svg"
+                alt="Status Network Logo"
+                width={145}
+                height={15}
+                className="min-w-[145px]"
+              />
+              <div className="h-[18px] rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
+                Testnet
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right side - Actions */}
         <div className="flex items-center gap-2">
           {/* Share Feedback */}
-          <div>
+          <div className="hidden md:block">
             <Button variant="outline" size="32">
               Share feedback
             </Button>
@@ -66,7 +91,9 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
           <ConnectButton />
 
           {/* Settings Button */}
-          <IconButton variant="ghost" icon={<SettingsIcon />} />
+          <div className="hidden md:block">
+            <IconButton variant="ghost" icon={<SettingsIcon />} />
+          </div>
         </div>
       </div>
     </div>
