@@ -9,9 +9,9 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useAccount } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
 
-// import { STAKING_MANAGER } from '~constants/index'
+import { STAKING_MANAGER } from '~constants/address'
 import { useCreateVault } from '~hooks/useCreateVault'
 import { type StakingVault, useStakingVaults } from '~hooks/useStakingVaults'
 
@@ -120,66 +120,20 @@ function TableFooter({ table }: TableProps) {
 // Main Component
 // ============================================================================
 
-// Mock data for development
-const MOCK_VAULTS: StakingVault[] = [
-  {
-    address: '0x1234567890123456789012345678901234567890' as `0x${string}`,
-    data: {
-      stakedBalance: BigInt('1000000000000000000000'), // 1000 SNT
-      rewardIndex: BigInt('1000000000000000000'),
-      mpAccrued: BigInt('500000000000000000000'),
-      maxMP: BigInt('2000000000000000000000'),
-      lastMPUpdateTime: BigInt(Math.floor(Date.now() / 1000) - 86400),
-      lockUntil: BigInt(Math.floor(Date.now() / 1000) + 86400 * 365), // Locked for 1 year
-      rewardsAccrued: BigInt('50000000000000000000'), // 50 KARMA
-    },
-  },
-  {
-    address: '0x2345678901234567890123456789012345678901' as `0x${string}`,
-    data: {
-      stakedBalance: BigInt('5000000000000000000000'), // 5000 SNT
-      rewardIndex: BigInt('1000000000000000000'),
-      mpAccrued: BigInt('1500000000000000000000'),
-      maxMP: BigInt('10000000000000000000000'),
-      lastMPUpdateTime: BigInt(Math.floor(Date.now() / 1000) - 43200),
-      lockUntil: BigInt(Math.floor(Date.now() / 1000) + 86400 * 730), // Locked for 2 years
-      rewardsAccrued: BigInt('250000000000000000000'), // 250 KARMA
-    },
-  },
-  {
-    address: '0x3456789012345678901234567890123456789012' as `0x${string}`,
-    data: {
-      stakedBalance: BigInt('2500000000000000000000'), // 2500 SNT
-      rewardIndex: BigInt('1000000000000000000'),
-      mpAccrued: BigInt('800000000000000000000'),
-      maxMP: BigInt('5000000000000000000000'),
-      lastMPUpdateTime: BigInt(Math.floor(Date.now() / 1000)),
-      lockUntil: BigInt(0), // Unlocked
-      rewardsAccrued: BigInt('125000000000000000000'), // 125 KARMA
-    },
-  },
-]
-
 export function VaultsTable() {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
   const { data: vaultDataList } = useStakingVaults()
   const { isConnected } = useAccount()
   const { mutate: createVault } = useCreateVault()
 
-  // Use mock data in development when no real vaults exist
-  const displayVaults =
-    vaultDataList && vaultDataList.length > 0 ? vaultDataList : MOCK_VAULTS
-
-  // const { data: emergencyModeEnabled } = useReadContract({
-  //   address: STAKING_MANAGER.address,
-  //   abi: STAKING_MANAGER.abi,
-  //   functionName: 'emergencyModeEnabled',
-  //   query: {
-  //     refetchInterval: 30000,
-  //   },
-  // })
-
-  const emergencyModeEnabled = true
+  const { data: emergencyModeEnabled } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: STAKING_MANAGER.abi,
+    functionName: 'emergencyModeEnabled',
+    query: {
+      refetchInterval: 30000,
+    },
+  })
 
   // Stable callback reference prevents column recreation on every render
   const handleSetOpenModalVaultId = useCallback(
@@ -191,14 +145,14 @@ export function VaultsTable() {
   const columns = useMemo(
     () =>
       createVaultTableColumns({
-        vaults: displayVaults,
+        vaults: vaultDataList,
         openModalVaultId,
         setOpenModalVaultId: handleSetOpenModalVaultId,
         emergencyModeEnabled,
         isConnected,
       }),
     [
-      displayVaults,
+      vaultDataList,
       openModalVaultId,
       handleSetOpenModalVaultId,
       emergencyModeEnabled,
@@ -208,7 +162,7 @@ export function VaultsTable() {
 
   // Initialize TanStack Table
   const table = useReactTable({
-    data: displayVaults,
+    data: vaultDataList || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   })

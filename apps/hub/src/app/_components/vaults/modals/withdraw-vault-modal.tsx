@@ -7,7 +7,7 @@ import { InfoIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
 import { useAccount } from 'wagmi'
 
-import { useVaultWithdraw } from '~hooks/useVaultWithdraw'
+import { useVaultEmergencyExit } from '~hooks/useVaultEmergencyExit'
 
 import { BaseVaultModal } from './base-vault-modal'
 
@@ -30,7 +30,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
     props
 
   const { address } = useAccount()
-  const { mutate: withdraw } = useVaultWithdraw()
+  const { mutate: emergencyExit } = useVaultEmergencyExit()
 
   const handleVaultWithdrawal = useCallback(() => {
     if (!address) {
@@ -38,18 +38,14 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
       return
     }
 
-    try {
-      withdraw({
-        amountWei,
-        vaultAddress,
-        onSigned: () => {
-          onClose()
-        },
-      })
-    } catch (error) {
-      console.error('Error calling withdraw:', error)
-    }
-  }, [address, amountWei, onClose, vaultAddress, withdraw])
+    emergencyExit({
+      amountWei,
+      vaultAddress,
+      onSigned: () => {
+        onClose()
+      },
+    })
+  }, [address, amountWei, onClose, vaultAddress, emergencyExit])
 
   return (
     <BaseVaultModal

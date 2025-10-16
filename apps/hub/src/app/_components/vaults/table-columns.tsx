@@ -18,7 +18,7 @@ interface TableColumnsProps {
   openModalVaultId: string | null
   setOpenModalVaultId: (vaultId: string | null) => void
   emergencyModeEnabled: unknown
-  // isConnected: boolean
+  isConnected: boolean
 }
 
 // Calculate total staked across all vaults
@@ -50,12 +50,15 @@ const validateLockTime = (_: string, days: string): string | null => {
 }
 
 // Modal action configurations - static, never change
-const EXTEND_LOCK_ACTIONS = [
+const EXTEND_LOCK_ACTIONS: [{ label: string }, { label: string }] = [
   { label: 'Cancel' },
   { label: 'Extend lock' },
-] as const
+]
 
-const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
+const LOCK_VAULT_ACTIONS: [{ label: string }, { label: string }] = [
+  { label: "Don't lock" },
+  { label: 'Lock' },
+]
 
 const LOCK_INFO_MESSAGE =
   'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks.' as const
@@ -265,46 +268,40 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-end justify-end gap-2 lg:gap-4">
+            {Boolean(emergencyModeEnabled) && (
+              <WithdrawVaultModal
+                open={isWithdrawModalOpen}
+                onOpenChange={open =>
+                  setOpenModalVaultId(open ? withdrawModalId : null)
+                }
+                onClose={() => setOpenModalVaultId(null)}
+                vaultAddress={row.original.address}
+                amountWei={row.original.data?.stakedBalance || 0n}
+              >
+                <Button variant="danger" size="24" iconBefore={<AlertIcon />}>
+                  Withdraw funds
+                </Button>
+              </WithdrawVaultModal>
+            )}
             {isLocked ? (
-              <div className="flex items-center gap-2">
-                {Boolean(emergencyModeEnabled) && (
-                  <WithdrawVaultModal
-                    open={isWithdrawModalOpen}
-                    onOpenChange={open =>
-                      setOpenModalVaultId(open ? withdrawModalId : null)
-                    }
-                    onClose={() => setOpenModalVaultId(null)}
-                    vaultAddress={row.original.address}
-                    amountWei={row.original.data?.stakedBalance || 0n}
-                  >
-                    <Button
-                      variant="danger"
-                      size="24"
-                      iconBefore={<AlertIcon />}
-                    >
-                      Withdraw funds
-                    </Button>
-                  </WithdrawVaultModal>
-                )}
-                <LockVaultModal
-                  open={isLockModalOpen}
-                  onOpenChange={open =>
-                    setOpenModalVaultId(open ? lockModalId : null)
-                  }
-                  vaultAddress={row.original.address}
-                  title="Extend lock time"
-                  initialYears="2"
-                  initialDays="732"
-                  description="Extending lock time increasing Karma boost"
-                  actions={EXTEND_LOCK_ACTIONS}
-                  onClose={() => setOpenModalVaultId(null)}
-                  infoMessage={LOCK_INFO_MESSAGE}
-                >
-                  <Button variant="primary" size="24" iconBefore={<TimeIcon />}>
-                    Extend lock time
-                  </Button>
-                </LockVaultModal>
-              </div>
+              <LockVaultModal
+                open={isLockModalOpen}
+                onOpenChange={open =>
+                  setOpenModalVaultId(open ? lockModalId : null)
+                }
+                vaultAddress={row.original.address}
+                title="Extend lock time"
+                initialYears="2"
+                initialDays="732"
+                description="Extending lock time increasing Karma boost"
+                actions={EXTEND_LOCK_ACTIONS}
+                onClose={() => setOpenModalVaultId(null)}
+                infoMessage={LOCK_INFO_MESSAGE}
+              >
+                <Button variant="primary" size="24" iconBefore={<TimeIcon />}>
+                  Extend lock time
+                </Button>
+              </LockVaultModal>
             ) : (
               <LockVaultModal
                 open={isLockModalOpen}

@@ -137,10 +137,10 @@ export function useActionStatusContent(
       }))
 
       // compound flow
-      .with({ type: 'compound', step: 'initialize' }, state => ({
+      .with({ type: 'compound', step: 'initialize' }, () => ({
         state: 'pending',
         showCloseButton: true,
-        content: <CompoundStatusContent amount={state.amount} />,
+        content: <CompoundStatusContent />,
       }))
       .with({ type: 'compound', step: 'processing' }, state => ({
         title: `Compounding ${formatSNT(state.amount ?? 0)} points`,
