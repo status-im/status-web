@@ -11,7 +11,6 @@ import {
   PlaceholderIcon,
 } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
-import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
 import { match } from 'ts-pattern'
@@ -20,11 +19,11 @@ import { useAccount, useBalance, useConfig, useReadContract } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 import { z } from 'zod'
 
+import { ConnectButton } from '~components/connect-button'
 import { HubLayout } from '~components/hub-layout'
 import { LaunchIcon, SNTIcon } from '~components/icons'
 import { PromoModal } from '~components/stake/promo-modal'
 import { VaultSelect } from '~components/vault-select'
-import { VaultsTable } from '~components/vaults/vaults-table'
 import {
   SNT_TOKEN,
   STAKING_MANAGER,
@@ -41,6 +40,8 @@ import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { useVaultTokenStake } from '~hooks/useVaultTokenStake'
 import { useWeightedBoost } from '~hooks/useWeightedBoost'
 import { formatCurrency, formatSNT } from '~utils/currency'
+
+import { VaultsTable } from '../_components/vaults/vaults-table'
 
 import type { Address } from 'viem'
 
@@ -127,7 +128,7 @@ export default function StakePage() {
     message: messageMultiplierPoints,
   } = useMemo(() => {
     const totalUncompounded = multiplierPointsData?.totalUncompounded ?? 0n
-    const hasUncompoundedPoints = totalUncompounded >= 0n
+    const hasUncompoundedPoints = totalUncompounded > 0n
     const formattedAmount = formatSNT(
       formatUnits(totalUncompounded, SNT_TOKEN.decimals),
       {
@@ -139,7 +140,7 @@ export default function StakePage() {
       isDisabled: !hasUncompoundedPoints || !isConnected,
       message: hasUncompoundedPoints
         ? `${formattedAmount} points are ready to compound`
-        : 'No points are ready to compound',
+        : 'No points available to compound.',
     }
   }, [multiplierPointsData, isConnected])
 
@@ -391,19 +392,11 @@ export default function StakePage() {
                     </PromoModal>
                   ))
                   .with('disconnected', () => (
-                    <ConnectKitButton.Custom>
-                      {({ show }) => (
-                        <Button
-                          className="w-full justify-center"
-                          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.preventDefault()
-                            show?.()
-                          }}
-                        >
-                          Connect Wallet
-                        </Button>
-                      )}
-                    </ConnectKitButton.Custom>
+                    <ConnectButton
+                      size="40"
+                      label="Connect Wallet"
+                      className="w-full justify-center"
+                    />
                   ))
                   .with('connected', () => {
                     const selectedVault = form.watch('vault')

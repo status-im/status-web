@@ -8,11 +8,7 @@ import { SNT_TOKEN } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 import { shortenAddress } from '~utils/address'
 import { formatSNT } from '~utils/currency'
-import {
-  calculateDaysUntilUnlock,
-  calculateVaultBoost,
-  isVaultLocked,
-} from '~utils/vault'
+import { calculateDaysUntilUnlock, isVaultLocked } from '~utils/vault'
 
 import { LockVaultModal } from './modals/lock-vault-modal'
 import { WithdrawVaultModal } from './modals/withdraw-vault-modal'
@@ -25,6 +21,45 @@ interface TableColumnsProps {
   // isConnected: boolean
 }
 
+// Calculate total staked across all vaults
+const calculateTotalStaked = (vaults: StakingVault[]): bigint => {
+  return vaults.reduce(
+    (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
+    BigInt(0)
+  )
+}
+
+// Calculate total karma across all vaults
+const calculateTotalKarma = (vaults: StakingVault[]): bigint => {
+  return vaults.reduce(
+    (acc, vault) => acc + (vault.data?.rewardsAccrued || 0n),
+    BigInt(0)
+  )
+}
+
+// Cache current time to avoid calling Date.now() on every cell render
+const getCurrentTimestamp = (): bigint => {
+  return BigInt(Math.floor(Date.now() / 1000))
+}
+
+// Validation function for lock time - extracted to avoid recreating on every render
+const validateLockTime = (_: string, days: string): string | null => {
+  const totalDays = parseInt(days || '0')
+  // TODO: read this from the contract
+  return totalDays > 1460 ? 'Maximum lock time is 4 years' : null
+}
+
+// Modal action configurations - static, never change
+const EXTEND_LOCK_ACTIONS = [
+  { label: 'Cancel' },
+  { label: 'Extend lock' },
+] as const
+
+const LOCK_VAULT_ACTIONS = [{ label: "Don't lock" }, { label: 'Lock' }] as const
+
+const LOCK_INFO_MESSAGE =
+  'Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks.' as const
+
 export const createVaultTableColumns = ({
   vaults = [],
   openModalVaultId,
@@ -32,14 +67,10 @@ export const createVaultTableColumns = ({
   emergencyModeEnabled,
   // isConnected,
 }: TableColumnsProps) => {
-  const totalStaked = vaults.reduce(
-    (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
-    BigInt(0)
-  )
-  const totalKarma = vaults.reduce(
-    (acc, vault) => acc + (vault.data?.rewardsAccrued || 0n),
-    BigInt(0)
-  )
+  // Calculate totals and current time once per column creation
+  const totalStaked = calculateTotalStaked(vaults)
+  const totalKarma = calculateTotalKarma(vaults)
+  const currentTimestamp = getCurrentTimestamp()
   const columnHelper = createColumnHelper<StakingVault>()
 
   return [
@@ -140,10 +171,19 @@ export const createVaultTableColumns = ({
             ? (maxMP - mpAccrued) / stakedBalance
             : undefined
 
+        // Calculate boost directly instead of recalculating for all vaults
+        // Boost = (mpAccrued / stakedBalance) + 1 (base multiplier)
+        const currentBoost =
+          stakedBalance > 0n
+            ? Number(formatUnits(mpAccrued, SNT_TOKEN.decimals)) /
+                Number(formatUnits(stakedBalance, SNT_TOKEN.decimals)) +
+              1
+            : 1
+
         return (
           <div className="flex items-center gap-3">
             <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
-              x{calculateVaultBoost(vaults, row.original.address)}
+              x{currentBoost.toFixed(2)}
             </span>
             {potentialBoost && (
               <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-[#7140fd]">
@@ -218,8 +258,9 @@ export const createVaultTableColumns = ({
         const isWithdrawModalOpen = openModalVaultId === withdrawModalId
         const isLockModalOpen = openModalVaultId === lockModalId
 
+        // Use cached timestamp instead of calling Date.now() on every render
         const isLocked = row.original?.data?.lockUntil
-          ? row.original.data.lockUntil > BigInt(Math.floor(Date.now() / 1000))
+          ? row.original.data.lockUntil > currentTimestamp
           : false
 
         return (
@@ -255,16 +296,9 @@ export const createVaultTableColumns = ({
                   initialYears="2"
                   initialDays="732"
                   description="Extending lock time increasing Karma boost"
-                  actions={[
-                    {
-                      label: 'Cancel',
-                    },
-                    {
-                      label: 'Extend lock',
-                    },
-                  ]}
+                  actions={EXTEND_LOCK_ACTIONS}
                   onClose={() => setOpenModalVaultId(null)}
-                  infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
+                  infoMessage={LOCK_INFO_MESSAGE}
                 >
                   <Button variant="primary" size="24" iconBefore={<TimeIcon />}>
                     Extend lock time
@@ -280,23 +314,10 @@ export const createVaultTableColumns = ({
                 vaultAddress={row.original.address}
                 title="Do you want to lock the vault?"
                 description="Lock this vault to receive more Karma"
-                actions={[
-                  {
-                    label: "Don't lock",
-                  },
-                  {
-                    label: 'Lock',
-                  },
-                ]}
+                actions={LOCK_VAULT_ACTIONS}
                 onClose={() => setOpenModalVaultId(null)}
-                infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
-                onValidate={(_, days) => {
-                  const totalDays = parseInt(days || '0')
-                  // TODO: read this from the contract
-                  return totalDays > 1460
-                    ? 'Maximum lock time is 4 years'
-                    : null
-                }}
+                infoMessage={LOCK_INFO_MESSAGE}
+                onValidate={validateLockTime}
               >
                 <Button
                   variant="primary"
