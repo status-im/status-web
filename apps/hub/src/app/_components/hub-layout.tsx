@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 
+import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 
 import { Sidebar } from './sidebar'
@@ -41,6 +42,7 @@ export function HubLayout({ children }: HubLayoutProps) {
           </div>
         </section>
       </div>
+      <ToastContainer />
     </div>
   )
 }

@@ -1,18 +1,54 @@
 'use client'
 
+import { useState } from 'react'
+
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
+import { match, P } from 'ts-pattern'
 
 import { HubLayout } from '~components/hub-layout'
+import { PreDepositModal } from '~components/pre-deposit-modal'
 import { VaultCard } from '~components/vault-card'
+import { TEST_VAULT, type Vault } from '~constants/index'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
 const REWARDS = ['karma', 'linea', 'snt']
 
+const VAULTS: Vault[] = [
+  // {
+  //   id: 'ETH',
+  //   name: 'ETH vault',
+  //   apy: '5.2%',
+  //   rewards: ['KARMA', 'SNT', 'LINEA'],
+  //   icon: 'ETH',
+  //   token: wETH_TOKEN,
+
+  // },
+  // {
+  //   id: 'SNT',
+  //   name: 'SNT vault',
+  //   apy: '8.7%',
+  //   rewards: ['KARMA', 'MetaFi', 'Points'],
+  //   icon: 'SNT',
+  //   token: SNT_TOKEN,
+  // },
+  // {
+  //   id: 'USDC',
+  //   name: 'USDC vault',
+  //   apy: '3.9%',
+  //   rewards: ['KARMA', 'SNT', 'Points'],
+  //   icon: 'USDC',
+  //   token: wETH_TOKEN,
+  // },
+  TEST_VAULT,
+]
+
 export default function DashboardPage() {
+  const [selectedVault, setActiveVault] = useState<Vault | null>(null)
+
   return (
     <HubLayout>
       <div className="flex flex-col px-6 py-8">
@@ -66,34 +102,16 @@ export default function DashboardPage() {
                 className="absolute left-[-290px] top-[120px]"
               />
               <div className="grid grid-cols-1 items-stretch gap-6 sm:grid-cols-2">
-                <VaultCard
-                  name="ETH vault"
-                  apy="5.2%"
-                  rewards={['KARMA', 'SNT', 'LINEA']}
-                  icon="ETH"
-                  onDeposit={() => console.log('Deposit to ETH vault')}
-                />
-                <VaultCard
-                  name="SNT vault"
-                  apy="8.7%"
-                  rewards={['KARMA', 'MetaFi', 'Points']}
-                  icon="SNT"
-                  onDeposit={() => console.log('Deposit to SNT vault')}
-                />
-                <VaultCard
-                  name="USDC vault"
-                  apy="3.9%"
-                  rewards={['KARMA', 'SNT', 'Points']}
-                  icon="USDC"
-                  onDeposit={() => console.log('Deposit to USDC vault')}
-                />
-                <VaultCard
-                  name="LINEA vault"
-                  apy="6.1%"
-                  rewards={['KARMA', 'MetaFi', 'LINEA']}
-                  icon="LINEA"
-                  onDeposit={() => console.log('Deposit to LINEA vault')}
-                />
+                {VAULTS.map(vault => (
+                  <VaultCard
+                    key={vault.id}
+                    name={vault.name}
+                    apy={vault.apy}
+                    rewards={vault.rewards}
+                    icon={vault.icon}
+                    onDeposit={() => setActiveVault(vault)}
+                  />
+                ))}
               </div>
             </section>
           </div>
@@ -141,6 +159,16 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+      {match(selectedVault)
+        .with(P.nonNullable, vault => (
+          <PreDepositModal
+            open={true}
+            onOpenChange={open => !open && setActiveVault(null)}
+            vault={vault}
+            setActiveVault={setActiveVault}
+          />
+        ))
+        .otherwise(() => null)}
     </HubLayout>
   )
 }
