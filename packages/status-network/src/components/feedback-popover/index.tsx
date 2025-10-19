@@ -5,8 +5,10 @@ import { DropdownMenu } from '@status-im/components'
 import { DropdownIcon } from './dropdown-icon'
 
 const FEEDBACK_LINKS = [
-  // TODO: Replace with the actual links
-  { label: 'Message us', href: 'https://www.google.com' },
+  {
+    label: 'Contact us',
+    href: 'https://statusnetwork.typeform.com/contact-us',
+  },
   {
     label: 'Submit bug',
     href: 'https://github.com/status-im/status-web/issues/new?template=bug_report.md',
