@@ -1,5 +1,5 @@
 ---
-'status.app': minor
+"status.app": minor
 ---
 
 add `apps/status.app`
