@@ -1,0 +1,57 @@
+---
+id: 550
+revision: '1'
+language: en
+title: Change a token-gated channel to open
+author: jorge-campo, Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only set up token-gated channels using Status desktop.
+</Admonition>
+
+[Token-gated channels](./set-up-a-token-gated-channel.mdx) require members to meet specific token requirements to join and participate in the conversation. As a community Owner, you can change a token-gated channel into an open one, allowing anyone to join without requiring tokens.
+
+<Admonition type="tip">
+  Token-gated channels show a <LockedIcon /> lock symbol next to the channel name.
+</Admonition>
+
+You might want to change from a token-gated channel to an open one for various reasons. For instance, if you want to grow your community by attracting more individuals who can't or don't want to acquire the required tokens. Alternatively, you may want to simplify your community administration by removing token requirements.
+
+<Admonition type="info">
+  You can use token-gated channels and communities separately. For example, you can keep the channels open but [restrict access to your community](./set-up-a-token-gated-community.mdx).
+</Admonition>
+
+## What to expect
+
+- Remove all the <ContextTag>View and post</ContextTag> and <ContextTag>View only</ContextTag> permissions in the channel you want to open.
+- If you want to change the channel to view-only for everyone, keep the <ContextTag>View only</ContextTag> channel permission. For more information, check out [Set up a view-only channel](./set-up-a-view-only-channel.mdx).
+- You can change your channel from token-gated to open or [the other way around](./set-up-a-token-gated-channel.mdx) at any time.
+
+## Change a token-gated channel to an open one
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. In the list of permissions, locate the <ContextTag>View and post</ContextTag> or <ContextTag>View only</ContextTag> permissions in the channel you want to open.
+    1. If the permission applies only to this channel, click <ContextTag icon={<DeleteDesktopIcon />}>Delete</ContextTag> and click <ContextTag>Delete permission</ContextTag> to confirm your action.
+    1. If the permission applies to other channels as well, click <ContextTag icon={<EditDesktopIcon />}>Edit</ContextTag> and remove the channel you want to open from the <ContextTag>In</ContextTag> variable. Finally, click <ContextTag>Update permission</ContextTag>.
+  </TabsContent>
+</Tabs>

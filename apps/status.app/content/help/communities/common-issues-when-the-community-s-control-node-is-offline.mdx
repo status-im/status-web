@@ -1,0 +1,29 @@
+---
+id: 331
+revision: '1'
+language: en
+title: Common issues when the community's control node is offline
+author: jorge-campo, cheny0
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+When you [create a community](./create-a-status-community.mdx), your computer becomes a [control node](./about-the-control-node-in-status-communities.mdx). As the community Owner, the control node runs automatically in your Status desktop app if you use the same profile and computer where you set up the community.
+
+<Admonition type="info">
+  You can [set up a new control node](./replace-your-community-s-control-node.mdx) if you need to replace your computer. If the control node is unavailable, read [Recover your Status Community](./recover-your-status-community.mdx).
+</Admonition>
+
+If you don't have the Status desktop app running and connected to the internet, your community keeps working, but your members' experience degrades. Here are some of the problems you and your members might find:
+
+- Members can't access messages older than one month because the [Community History Service](./about-the-community-history-service.mdx) is not running.
+- [Community join requests](./set-up-your-community-join-requests.mdx) can't be processed and users see the <ContextTag>Pending</ContextTag> status for their requests.
+- [Banning or kicking out members](./kick-or-ban-someone-from-your-community.mdx) is delayed until the control node is online.
+- Your community can't verify if members in [token-gated channels](./set-up-your-channel-permissions.mdx) still hold the required tokens.
+- Members who could not access a token-gated channel for not [meeting the requirements](./understand-token-requirements-in-channels.mdx) can't join the channel even if they meet them now.
+
+<Admonition type="tip">
+  Keep Status desktop running with your owner profile online daily, or at least once every six days.
+</Admonition>

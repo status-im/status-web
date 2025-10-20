@@ -1,0 +1,147 @@
+---
+id: 131
+revision: '2'
+language: en
+title: Vote to make a community private or public
+author: cheny0, jorge-campo
+---
+
+![A header image of the Communities section.](https://res.cloudinary.com/dhgck7ebz/image/upload/v1697187148/Help/Documentation%20Screens/Communities/131/131_Header_Light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+A [voting process](./about-voting-to-change-the-community-visibility.mdx) determines whether a community is public or private. A public community appears on the [Discover page](./find-communities-to-join.mdx) in <CommunitiesDesktopIcon /> Communities, while a private community does not.
+
+<Admonition type="info">
+  When you create a community, it's a [private community](./about-the-different-types-of-status-communities.mdx) by default, but SNT holders can vote to make it public.
+</Admonition>
+
+## What to expect
+
+- Every SNT holder can participate in all voting steps, not just community members or Status users.
+- Votes happen on the [Community Directory Curation dApp](https://curate.status.app)<ExternalIcon />.
+- Your voting power is determined by how many SNT tokens you stake.
+- You don't spend the tokens to vote but must hold the tokens you stake during the [verification](#step-4-verify-the-vote) and [finalization](#step-5-finalize-the-vote) voting periods.
+- Each time there are 400 more users (counted by wallet accounts) voting, one user or two different users need to do an extra round of verification and finalization.
+
+<Admonition type="info">
+  Status does not charge you any fees for voting.
+</Admonition>
+
+Voting involves five steps. These steps are not required for every voter.
+
+<Table>
+  <TableHead>
+    <TableHeader>Voting step</TableHeader>
+    <TableHeader>Who can participate</TableHeader>
+    <TableHeader>Gas fee required</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>[Connect your wallet](#step-1-connect-your-wallet)</TableCell>
+      <TableCell>Any SNT holder</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Initiate a voting process](#step-2-initiate-a-voting-process)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Cast your vote](#step-3-cast-your-vote)</TableCell>
+      <TableCell>Any SNT holder</TableCell>
+      <TableCell>No</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Verify the vote](#step-4-verify-the-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Finalize the vote](#step-5-finalize-the-vote)</TableCell>
+      <TableCell>Any SNT holder, at least one person</TableCell>
+      <TableCell>Yes</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="tip">
+  To know more about the dApp and the rules of each step, check out [About voting to change community visibility](./about-voting-to-change-the-community-visibility.mdx).
+</Admonition>
+
+## Step 1: Connect your wallet
+
+Make sure you open the [Community Directory Curation dApp](https://curate.status.app)<ExternalIcon /> and that your wallet contains enough SNT for voting and ETH to pay for the gas fees.
+
+This process applies to Status Wallet, but you can also try other wallets, such as MetaMask or Trust Wallet.
+
+1. Open your wallet and select the Optimism network.
+1. Open the dApp and select <ContextTag>Connect</ContextTag> from the top navigation.
+1. Select <ContextTag>Confirm</ContextTag> in your wallet.
+
+<Admonition type="info">
+  You may need to connect your wallet again when you revisit the dApp, depending on your browser settings.
+</Admonition>
+
+## Step 2: Initiate a voting process
+
+Initiate a vote if there isn't an ongoing vote for the community you want to add or remove. If there is an ongoing vote, [cast your vote](#step-3-cast-your-vote).
+
+### Initiate a vote for adding a community to Discover
+
+You need the [community public key](./import-a-community-someone-shares-with-you.mdx) to complete this step. The community link contains the community public key at the end. For example, for the community link `https://status.app/cc/G8gAA[...]dy9L9`, the public key is `G8gAA[...]dy9L9`.
+
+1. From the top navigation of the dApp, select <ContextTag>Votes</ContextTag>.
+1. Select <ContextTag>Propose community</ContextTag>.
+1. Enter the community public key.
+1. Choose the amount of SNT to stake and select <ContextTag>Confirm vote to add community</ContextTag>.
+1. Select <ContextTag>Create vote to add community</ContextTag>.
+1. From your wallet, confirm and pay the gas fee.
+
+### Initiate a vote for removing a community from Discover
+
+1. From the top navigation of the dApp, select <ContextTag>Directory</ContextTag>.
+1. Find the community you want to remove and select <ContextTag icon={<DeleteDesktopIcon />}>Delete</ContextTag> next to the community name.
+1. Choose the amount of SNT you want to stake for voting and select <ContextTag>Confirm vote to remove community</ContextTag>.
+1. From your wallet, confirm and pay the gas fee.
+
+## Step 3: Cast your vote
+
+The voting period lasts for 14 days.
+
+1. From the top navigation of the dApp, select <ContextTag>Votes</ContextTag>.
+1. Find the community you want to vote for and select <ContextTag>Don't add</ContextTag> or <ContextTag>Add</ContextTag> for adding, or <ContextTag>Keep</ContextTag> or <ContextTag>Remove</ContextTag> for removing.
+1. Choose the amount of SNT to stake.
+1. Select <ContextTag>Vote to not add community</ContextTag> or <ContextTag>Vote to add community</ContextTag> for adding. Select <ContextTag>Vote to keep community</ContextTag> or <ContextTag>Vote to remove community</ContextTag> for removing.
+1. From your wallet, sign the vote.
+
+<Admonition type="info">
+  Casting your vote doesn't require a gas fee.
+</Admonition>
+
+## Step 4: Verify the vote
+
+After voting, a seven-day verification period begins to identify valid votes.
+
+1. Open the dApp and find the vote to verify.
+1. Select <ContextTag>Verify the vote</ContextTag>.
+1. From your wallet, confirm and pay the gas fee.
+
+## Step 5: Finalize the vote
+
+After the verification period, at least one person must finalize the vote for it to reach a result.
+
+1. Open the dApp and find the vote to finalize.
+1. Select <ContextTag>Finalize the vote</ContextTag>.
+1. From your wallet, confirm and pay the gas fee.
+
+<Admonition type="info">
+  After finalization, the community is added or removed from the Discover Communities section in the Status app, based on the voting result.
+</Admonition>

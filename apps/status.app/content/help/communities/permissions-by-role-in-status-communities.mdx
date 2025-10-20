@@ -1,0 +1,396 @@
+---
+id: 432
+revision: '2'
+language: en
+title: Permissions by role in Status Communities
+author: jorge-campo, cheny0
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Status Communities have distinct roles, each with unique permissions and access levels.
+
+<Admonition type="info">
+  To learn more about the community administration roles, check out [About the management roles in Status Communities](./about-the-management-roles-in-status-communities.mdx).
+</Admonition>
+
+## Permissions for key features
+
+<Table>
+  <TableHead>
+    <TableHeader>Action</TableHeader>
+    <TableHeader>Owner</TableHeader>
+    <TableHeader>TokenMaster</TableHeader>
+    <TableHeader>Admin</TableHeader>
+    <TableHeader>Member</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>[Send messages](../messaging/send-and-read-messages.mdx), [react or reply to messages](../messaging/react-and-reply-to-messages.mdx), [edit or delete own messages](../messaging/edit-and-delete-messages.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Mention someone, use global mentions](../messaging/mention-people-in-status.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Send images](../messaging/share-images-in-status.mdx), [GIFs and stickers](../messaging/send-gifs-and-stickers.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Block someone](../profile/block-or-unblock-someone-in-status.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Access the community administration screens and functions](./how-to-run-a-status-community-your-quick-start-guide.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Edit community settings](./customize-your-community.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Create](./create-a-channel.mdx), [edit](./customize-your-channel.mdx) and [delete channels or categories](./delete-a-channel.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Reorder channels and categories](./customize-your-channel.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Create, edit and delete <ContextTag>Become member</ContextTag> permissions](set-up-a-token-gated-community.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Create, edit and delete <ContextTag>Become admin</ContextTag> permissions](./delegate-management-functions-to-your-community.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Create, edit and delete other permissions](./set-up-your-community-permissions.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Receive<ContextTag>Request to join</ContextTag> notifications and ability to accept or reject requests](./set-up-your-community-join-requests.mdx) (1)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Kick and ban members](./kick-or-ban-someone-from-your-community.mdx) (1)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Receive any message in the community](../messaging/edit-and-delete-messages.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Pin messages when the [<ContextTag>Any member can pin a message</ContextTag> option](./customize-your-community.mdx) is checked</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Pin messages when the [<ContextTag>Any member can pin a message</ContextTag> option](./customize-your-community.mdx) is unchecked</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Mint tokens](./mint-tokens-for-your-community.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />(2)
+      </TableCell>
+
+      <TableCell />
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Mint the TokenMaster token](./mint-the-owner-and-tokenmaster-tokens.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+
+      <TableCell />
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Airdrop tokens](./how-to-airdrop-tokens-in-status.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+
+      <TableCell />
+    </TableRow>
+
+    <TableRow>
+      <TableCell>[Configure the Community History Service](./about-the-community-history-service.mdx)</TableCell>
+
+      <TableCell>
+        <CheckCircleIcon />
+      </TableCell>
+
+      <TableCell />
+
+      <TableCell />
+
+      <TableCell />
+    </TableRow>
+  </TableContent>
+</Table>
+
+(1) When the Owner, TokenMaster or Admin [approves a member request](./set-up-your-community-join-requests.mdx) or removes a member by [kicking or banning them](./kick-or-ban-someone-from-your-community.mdx), the system sends the command to the control node. If the control node is offline, it executes the command as soon as it returns online.
+
+(2) Except the TokenMaster token.
+
+<Admonition type="info">
+  To provide the best experience for their members, community Owners should keep Status desktop running with their owner profile online daily or at least once every six days.
+</Admonition>

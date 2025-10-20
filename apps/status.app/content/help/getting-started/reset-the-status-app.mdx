@@ -1,0 +1,133 @@
+---
+id: 1236 
+revision: '0'
+language: en
+title: Reset the Status app
+author: cheny0, FabioMorais87, jorge-campo
+roles: 
+---
+
+<Admonition type="info">
+  The Status mobile app resets automatically when you uninstall it. For Status desktop, you need to remove your data manually.
+</Admonition>
+
+Status is a decentralized app without a central server. Your Status profile data is stored locally on your device.
+
+After [uninstalling Status desktop](./uninstall-status-desktop.mdx), your data may remain on your computer. If you install the app again, you may see the profiles you previously use.
+
+To reset the Status desktop app, you need to manually remove your data from your device.
+
+<Admonition type="info">
+  The Waku peer-to-peer network temporarily caches your profile information for 30 days. For more information, check out [Delete your Status profile](../profile/delete-your-status-profile.mdx).
+</Admonition>
+
+## What to expect
+
+- Your Status data is stored in the Status data folder on your device.
+- On Status desktop, you can decide whether to keep or delete this folder upon uninstallation. On Status mobile, the Status data folder is removed automatically.
+- If you run Status on multiple devices, each device has its own Status data folder.
+- Your crypto funds or recovery phrases are not in the Status data folder. Your wallet funds are safe and available if you know [your recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx).
+- Deleting the Status data folder removes all information from your existing profile on your device.
+
+<Admonition type="caution">
+  If you are unsure, don't delete the Status data folder. Only delete the folder if you are sure you won't use Status again with the same profile.
+</Admonition>
+
+## About the Status data folder
+
+The Status data folder contains all the data related to your profile.
+
+Your crypto funds and transaction data, such as transaction amounts and recipient information, are stored on the blockchain, not in the Status data folder.
+
+### Examples of data in the Status data folder
+
+<Table>
+  <TableHead>
+    <TableHeader>Data type</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+
+  <TableRow>
+    <TableCell>Profile</TableCell>
+    <TableCell>Profile name<br />Profile picture</TableCell>
+  </TableRow>
+
+  <TableRow>
+    <TableCell>Wallet</TableCell>
+    <TableCell>The names of your Wallet accounts<br />The Keycards linked to the profile</TableCell>
+  </TableRow>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Messages</TableCell>
+      <TableCell>The messages you sent and received<br />The group chats you are in</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Community</TableCell>
+      <TableCell>Status communities you joined<br />The messages you sent and received in those communities<br />[The communities you created](../communities/about-the-control-node-in-status-communities.mdx)</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+### Changes to the Status data folder when you uninstall Status
+
+Status creates a Status data folder on each device you use. When you uninstall the app, Status handles these folders differently depending on the platform.
+
+<Table>
+  <TableHead>
+    <TableHeader>Platform</TableHeader>
+    <TableHeader>What happens</TableHeader>
+  </TableHead>
+
+  <TableRow>
+    <TableCell>Mobile</TableCell>
+    <TableCell>The Status data folder is removed automatically</TableCell>
+  </TableRow>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Windows</TableCell>
+      <TableCell>The system asks whether you want to remove the Status data folder</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>macOS or Linux</TableCell>
+      <TableCell>The Status data folder remains on your computer</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+### Status data folder location
+
+<Table>
+  <TableHead>
+    <TableHeader>Platform</TableHeader>
+    <TableHeader>Folder path</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Windows</TableCell>
+      <TableCell>C:\Users\\\[your-username]\AppData\Local\Status</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>macOS</TableCell>
+      <TableCell>\~/Library/Application Support/Status</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Linux</TableCell>
+      <TableCell>\~/.config/Status</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## Reset the Status app
+
+<AwaitedList>
+  1. [Uninstall Status](./uninstall-status-desktop.mdx).
+  1. If you use the Status desktop app, [delete the Status data folder](#status-data-folder-location).
+  1. Reinstall Status.
+</AwaitedList>

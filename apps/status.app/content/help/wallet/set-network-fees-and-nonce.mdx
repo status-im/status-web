@@ -1,0 +1,157 @@
+---
+id: 1412
+revision: '0'
+language: en
+title: Set network fees and nonce
+author: Fabiomorais87, cheny0, jorge-campo 
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1739350797/Help/Documentation%20Screens/Wallet/1412/1412_Header_light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+When you [send crypto to someone](./send-crypto-to-someone.mdx), you must pay [network fees](./understand-network-fees.mdx). These fees (also known as network fees or gas fees) are charged by the blockchain network to process your transaction.
+
+In the Status app, you can choose from preset network fees (normal, fast, or urgent) or set a custom fee and advanced parameters to suit your needs.
+
+## What to expect
+
+- Each transaction has a nonce, a unique number that keeps transactions in the correct order.
+- The network fee affects how quickly the network processes your transaction. Higher fees result in faster confirmations.
+- Before sending a transaction, you can choose a preset network fee (normal, fast or urgent) or set a custom fee and nonce (a unique number that keeps transactions in the correct order).
+- Once you sign and authenticate the transaction, the network fee cannot be changed.
+
+## Choose preset network fee option
+
+To start the process in Status Wallet, read [Send crypto to someone](./send-crypto-to-someone.mdx).
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1740405797/Help/Documentation%20Screens/Wallet/1412/1412_1_Screen_Light.png)
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. On the <ContextTag>Slide to Send</ContextTag> screen, before completing your transaction, tap <ContextTag icon={<AdvancedIcon />}>Edit transaction settings</ContextTag>.
+    1. On the <ContextTag>Transaction settings</ContextTag> screen, choose the type of transaction fee you prefer <ContextTag>Normal</ContextTag>, <ContextTag>Fast</ContextTag> or <ContextTag>Urgent</ContextTag>.
+    1. Tap <ContextTag>Confirm</ContextTag>.
+    1. Double-check the transaction details and then <ContextTag>Slide to send</ContextTag>.
+    1. Authenticate using your password, biometrics or Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. On the <ContextTag>Sign Send</ContextTag> screen, before completing your transaction, click <ContextTag icon={<AdvancedIcon />}>Edit transaction settings</ContextTag>.
+    1. On the <ContextTag>Transaction settings</ContextTag> screen, choose the type of transaction fee you prefer <ContextTag>Normal</ContextTag>, <ContextTag>Fast</ContextTag> or <ContextTag>Urgent</ContextTag>.
+    1. Click <ContextTag>Confirm</ContextTag>.
+    1. Double-check the transaction details and then click <ContextTag>Sign</ContextTag>.
+    1. Authenticate using your password, biometrics or Keycard.
+  </TabsContent>
+</Tabs>
+
+## Set custom transaction fees and nonce
+
+You can set a custom network fee by setting the max base fee, priority fee and max gas amount. You can also change the nonce to control the order of your transactions.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. On the <ContextTag>Slide to Send</ContextTag> screen, tap <ContextTag icon={<AdvancedIcon />}>Edit transaction settings</ContextTag>.
+    1. On the <ContextTag>Transaction settings</ContextTag> screen, tap <ContextTag>Custom</ContextTag>.
+    1. Set your preferred values for <ContextTag>Max base fee</ContextTag>, <ContextTag>Priority fee</ContextTag>, <ContextTag>Max gas amount</ContextTag> and <ContextTag>Nonce</ContextTag>.
+    1. Tap <ContextTag>Confirm</ContextTag>.
+    1. Double-check the transaction details and then <ContextTag>Slide to send</ContextTag>.
+    1. Authenticate using your password, biometrics or Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. On the <ContextTag>Sign Send</ContextTag> screen, click <ContextTag icon={<AdvancedIcon />}>Edit transaction settings</ContextTag>.
+    1. On the <ContextTag>Transaction settings</ContextTag> screen, click <ContextTag>Custom</ContextTag>.
+    1. On the <ContextTag>Transaction settings</ContextTag> screen, set your preferred values for <ContextTag>Max base fee</ContextTag>, <ContextTag>Priority fee</ContextTag>, <ContextTag>Max gas amount</ContextTag> and <ContextTag>Nonce</ContextTag>.
+    1. Click <ContextTag>Confirm</ContextTag>.
+    1. Double-check the transaction details and then click <ContextTag>Sign</ContextTag>.
+    1. Authenticate using your password, biometrics or Keycard.
+  </TabsContent>
+</Tabs>
+
+<Table>
+  <TableHead>
+    <TableHeader>Setting</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Max base fee</TableCell>
+
+      <TableCell>
+        Increasing the Max Base fee gives your transaction a better chance of being processed quickly if the network becomes congested. Set this value equal to or higher than the current value to avoid your transaction getting stuck.
+
+        The Max Base fee is the maximum fee (in GWEI units) you're willing to pay for your transaction. The network sets the current base fee, which can change due to network activity.
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Priority fee</TableCell>
+
+      <TableCell>
+        Increasing the Priority Fee gives your transaction a higher priority than others that offer a lower fee. Set this value equal to or higher than the current minimum value to avoid your transaction getting stuck.
+
+        The Priority Fee is a tip (in GWEI units) you add to incentivize the network for processing your transaction.
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Max gas amount</TableCell>
+
+      <TableCell>
+        Setting a higher Max gas amount gives your transaction a better chance of being processed quickly if the network becomes congested.
+
+        Set this value equal to or higher than the estimated amount. If it's too low, the transaction may fail due to insufficient gas.
+
+        Status Wallet estimates how much gas you'll need, but you can adjust this limit. You only pay for the gas you actually use.
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Nonce</TableCell>
+
+      <TableCell>
+        Only change this value if you know what you're doing. Using the wrong nonce can cause your transaction to fail.
+
+        Changing the nonce lets you control the order of your transactions. You can prepare a transaction for later execution or speed up a stuck one.
+
+        The nonce is a number that determines the order of transactions sent from your wallet.
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+<Admonition type="caution">
+  This feature is for advanced users. Adjust setting only if you understand how custom network fees and nonce work. Incorrect settings can cause your transaction to fail or be delayed.
+</Admonition>

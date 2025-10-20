@@ -1,0 +1,65 @@
+---
+id: 156
+revision: '1'
+language: en
+title: About the Ethereum blockchain
+author: jorge-campo, Fabiomorais87
+---
+
+Imagine a giant digital ledger, similar to a shared spreadsheet, that everyone can access but not change at will. This ledger keeps a record of digital transactions, each verified by thousands of computers worldwide. This is a simplified way to describe a blockchain. It's a decentralized, often public, and immutable system where digital transactions occur.
+
+These digital transactions serve various purposes, such as buying or sending tokens or interacting with decentralized apps (dApps).
+
+<Admonition type="tip">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+
+## What's Ethereum?
+
+If the blockchain is the digital ledger, think of Ethereum as the computer running this ledger. The Ethereum blockchain is a network consisting of thousands of computers. Anybody is free to join and contribute to the network, but nobody owns the network. This contrasts with corporations that run centralized servers, control the network and set the rules.
+
+<Admonition type="info">
+  Contributors to the decentralized Ethereum network receive compensation in Ether (ETH), Ethereum's native cryptocurrency.
+</Admonition>
+
+When we talk about Ethereum, we often refer to the main Ethereum blockchain or Mainnet. On Mainnet, Ether has a value, and transactions have an actual cost. Besides the Mainnet, there are other test Ethereum networks or testnets, where Ether holds no real value. Software developers use testnets to check their code runs properly before deploying it to Mainnet.
+
+<Admonition type="tip">
+  You can configure the Status app to run in the [Ethereum testnet mode](../profile/enable-ethereum-testnet-mode-in-status.mdx).
+</Admonition>
+
+## The role of Ethereum in the Status app
+
+When using the Status app, you take advantage of Ethereum's decentralization, transparency and security principles and design.
+
+<Admonition type="info">
+  Alongside the Ethereum blockchain, Status supports other [Layer-2 blockchain networks](../wallet/lower-your-fees-with-layer-2-networks.mdx) fully committed to decentralization, such as Optimism and Arbitrum.
+</Admonition>
+
+### Your Status profile and Ethereum account
+
+In the Ethereum blockchain, accounts validate identities. When you [create your Status profile](./run-the-status-app-for-the-first-time.mdx), you generate a random private cryptographic key, represented by your [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx). The private key derives the corresponding public key, and from this public key, your Ethereum account.
+
+This account (also known as the Ethereum address) is what you use to receive funds, interact with dApps and carry out transactions on the Ethereum network. Your Ethereum address is part of your Status profile and identifies you in the Status network.
+
+<Admonition type="tip">
+  Your Ethereum address or Status profile doesn't necessarily reveal your identity [unless you decide to do so](../profile/view-and-edit-your-status-profile.mdx).
+</Admonition>
+
+### Status messaging and Waku
+
+At the heart of Status messaging is [Waku](https://waku.org)<ExternalIcon />. Waku is an enhanced version of Whisper, an Ethereum networking protocol that aimed to deliver secure messaging between peers without writing any information to the blockchain.
+
+Status doesn't store your messages on the Ethereum blockchain. Your messages pass through Waku securely and privately. To learn more about messaging in Status, check out [About Status messages](../messaging/about-status-messages.mdx).
+
+### Status crypto wallet
+
+Your Ethereum address is similar to a bank account number in traditional banking. You can handle Ethereum-based tokens using the [Status Wallet](../messaging/about-status-messages.mdx) and Ethereum address. Much like a physical wallet holds your cash and cards, the Status Wallet is where your digital assets reside.
+
+You can send, receive and store tokens securely, including Ether and [ERC-20 tokens](../wallet/understand-erc20-tokens.mdx), as well as assets from Ethereum [Layer-2 blockchains (L2s) and sidechains](../wallet/lower-your-fees-with-layer-2-networks.mdx).
+
+### Running dApps on Ethereum
+
+With Status, you can interact with dApps on the Ethereum blockchain. A dApp is similar to a traditional app, but instead of running on a centralized server, it runs on the blockchain.
+
+You can use dApps for various purposes, such as social media, gaming, finance and more. For example, you can share content with a social media dApp without needing a centralized platform like Facebook or X.

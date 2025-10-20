@@ -6,6 +6,8 @@
     { "path": "./packages/components" },
     { "path": "./packages/status-js" },
     { "path": "./packages/wallet" },
+    { "path": "./apps/status.app" },
+    { "path": "./apps/status.network" },
     { "path": "./apps/connector" },
     { "path": "./apps/portfolio" },
     { "path": "./apps/wallet" },

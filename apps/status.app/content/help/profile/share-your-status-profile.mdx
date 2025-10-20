@@ -1,0 +1,48 @@
+---
+id: 348
+revision: '2'
+language: en
+title: Share your Status profile
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+If someone wants to add you as a contact in Status, you need to share your profile with them. You can share your profile link or your QR code containing that link with your [chat key](./your-chatkey-emojihash-and-identicon-ring.mdx). They can use either of those to [add you to their contacts](../messaging/add-a-contact-in-status.mdx).
+
+## Share your Status profile
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. From the top navigation, tap <ContextTag icon={<QrCodeIcon />}>QR code</ContextTag>.
+    1. Share your QR code or profile link with your future contact. You can also tap <ContextTag icon={<ShareIcon />}>Share</ContextTag> to send your profile link to someone via SMS or a different app.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. Click your profile picture in the bottom-left corner.
+    1. Click <ContextTag icon={<ProfileDesktopIcon />}>View profile</ContextTag>.
+    1. Click <ContextTag>Share profile</ContextTag>
+    1. Share your QR code or profile link with your future contact.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Your Status profile is temporarily saved in the [Waku](https://waku.org)<ExternalIcon /> peer-to-peer network and stored permanently on your device. It is not saved on the blockchain or transmitted via the [Ethereum network](../getting-started/about-the-ethereum-blockchain.mdx).
+</Admonition>

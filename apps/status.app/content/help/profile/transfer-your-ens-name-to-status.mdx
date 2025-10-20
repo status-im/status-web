@@ -1,0 +1,68 @@
+---
+id: 968
+revision: '1'
+language: en
+title: Transfer you ENS name to Status
+author: jorge-campo, cheny0
+---
+
+The [Ethereum Name Service](https://ens.domains/)<ExternalIcon /> (ENS) is a decentralized system on the Ethereum blockchain that converts complex machine-readable addresses into human-readable names. ENS makes it easier to send and receive crypto tokens or use decentralized applications (dApps) without remembering long and complicated addresses.
+
+For example, instead of sending cryptocurrency to a long and complicated address like 0x3cB...25a, you can simply send it to an easy-to-remember name like alice.eth.
+
+ENS names are tied to specific wallet accounts. If you have an ENS name and want to use it in the Status app, you need to transfer it to one of your Status Wallet accounts.
+
+<Admonition type="info">
+  Status doesn't oversee or have any formal affiliation with the ENS system. ENS operates independently and is governed by the Ethereum community through a decentralized autonomous organization (DAO).
+</Admonition>
+
+## About ENS Owner and Manager roles
+
+The Owner and Manager are two distinct roles that administer ENS. These roles ensure that ownership and management can be handled separately. For instance, you might own your ENS records but delegate the role of manager to someone else to configure the technical details.
+
+Here's what each role does:
+
+<Table>
+  <TableContent>
+    <TableRow>
+      <TableCell>Owner</TableCell>
+      <TableCell>Owns the ENS name and has the power to transfer ownership or change the Manager.</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Manager</TableCell>
+      <TableCell>Manages different ENS name tasks, such as updating the Ethereum address (ETH record), creating subdomains or other related settings.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+Check out the [ENS documentation](https://support.ens.domains/en/articles/8825632-how-to-edit-roles)<ExternalIcon /> for more information on these roles.
+
+When you transfer your ENS name to your Status Wallet address, you can update the Owner and Manager to this address. This ensures you have full control and ownership from a single wallet address.
+
+<Admonition type="tip">
+  If you're the only one in charge of your ENS name, update the Owner and Manager records to your new wallet address.
+</Admonition>
+
+## What to expect
+
+- To transfer your ENS name to the Status app, you need access to the wallet that currently holds the ENS name.
+- Transfer your ENS name using the <ContextTag>Send</ContextTag> option in the [ENS Manager App](https://app.ens.domains)<ExternalIcon /> instead of importing your wallet into the Status app. The ENS Manager App updates the ENS name along with its Owner and Manager records, something that importing the wallet address cannot achieve.
+- Updating your ENS name address, along with the Owner and Manager records, requires three separate on-chain transactions. You need to confirm each transaction in your wallet.
+- You must pay a gas fee to the network for each transaction you confirm. For more information, check out [Understand network fees](../wallet/understand-network-fees.mdx) to the network.
+
+<Admonition type="info">
+  Transferring ENS names under the stateofus.eth domain is not currently possible.
+</Admonition>
+
+## Transfer your ENS name to the Status app
+
+This procedure provides a general overview of how to transfer your ENS name. For a step-by-step guide, refer to the [How to Send an ENS Name](https://support.ens.domains/en/articles/8626471-how-to-send-an-ens-name)<ExternalIcon /> article on the ENS support page.
+
+1. From your web browser, go to the [ENS Manager App](https://app.ens.domains)<ExternalIcon />.
+1. On the ENS Manger App page, connect the wallet that holds the ENS name.
+1. Select <ContextTag>My names</ContextTag> to find the ENS name you want to transfer and choose the ENS name to transfer.
+1. In the ENS name details page, select <ContextTag>Ownership</ContextTag> and then select <ContextTag>Send</ContextTag>.
+1. Enter your Status Wallet address as the destination address, select the address and then select <ContextTag>Send</ContextTag>.
+1. Review the information about sending the ENS name and select <ContextTag>I understand</ContextTag>.
+1. Review the transaction details and confirm the transaction in your wallet.

@@ -1,0 +1,60 @@
+---
+id: 1254
+revision: '0'
+language: en
+title: Bridge and swap scenarios
+author: FabioMorais87, cheny0, jorge-campo
+roles: 
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+In the Status app, you can bridge or swap crypto assets. When you bridge, you transfer assets between different blockchains. For example, you can move USDS from Ethereum to Optimism using a bridge. In a swap, you exchange one cryptocurrency for another. For example, you can swap USDS for SNT.
+
+<Admonition type="tip">
+  The key difference between bridging and swapping is that bridging transfers assets between blockchains, while swapping exchanges one virtual coin for another.
+</Admonition>
+
+Here are some scenarios you can encounter when deciding whether to bridge or swap crypto assets.
+
+<Table>
+  <TableHead>
+    <TableHeader>Example scenario</TableHeader>
+    <TableHeader>Option</TableHeader>
+    <TableHeader>Notes</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>You want to use ETH on Arbitrum for lower fees</TableCell>
+      <TableCell>[Bridge](./bridge-crypto-in-status-wallet.mdx)</TableCell>
+      <TableCell>Move ETH from Ethereum to Arbitrum to access lower transaction fees and faster processing</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>You hold ETH and want to change it for Arbitrum's native token</TableCell>
+      <TableCell>[Bridge](./bridge-crypto-in-status-wallet.mdx) and [swap](./swap-crypto-in-status-wallet.mdx)</TableCell>
+      <TableCell>Bridge ETH from the Ethereum blockchain to the Arbitrum blockchain, then swap it for ARB (Arbitrum's native token) on a decentralized exchange on Arbitrum</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>You hold ETH and wish to access a dApp on Arbitrum that requires its native token</TableCell>
+      <TableCell>[Bridge](./bridge-crypto-in-status-wallet.mdx)</TableCell>
+      <TableCell>Bridge ETH from Ethereum to Arbitrum to interact with dApps not available on Ethereum</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>You hold ETH and need USDS to operate on a lending platform on Ethereum</TableCell>
+      <TableCell>[Swap](./swap-crypto-in-status-wallet.mdx)</TableCell>
+      <TableCell>Swap ETH for USDS directly on Ethereum to use in the lending platform</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>You want to diversify your crypto portfolio by converting some ETH to SNT</TableCell>
+      <TableCell>[Swap](./swap-crypto-in-status-wallet.mdx)</TableCell>
+      <TableCell>Swap ETH for SNT directly on the Ethereum blockchain</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>

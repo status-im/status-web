@@ -1,0 +1,72 @@
+---
+id: 1133
+revision: '1'
+language: en
+title: Unlock your Keycard
+author: cheny0, Fabiomorais87, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can unlock your Keycard with the PUK on Status desktop only, and with the recovery phrase on both mobile and desktop apps. For more information, see [Keycard functionality by platform](./keycard-functionality-by-platform.mdx).
+</Admonition>
+
+To prevent unauthorized access, your Keycard locks itself after entering a wrong PIN three times. To keep using your Keycard, you must unlock it.
+
+## What to expect
+
+- Once unlocked, your Keycard is ready for use, just like before it was locked.
+- To unlock the Keycard, you can use the [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx) of the profile or Wallet accounts on your Keycard, or the [Keycard PUK](./create-a-keycard-puk.mdx).
+- If you don't remember your recovery phrase or Keycard PUK, read [If you can't unlock your Keycard](./if-you-can-t-unlock-your-keycard.mdx).
+- You can use any device running Status to unlock a Keycard. You don't have to use the device running the Status profile that the Keycard is linked to.
+
+## Unlock your Keycard
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    #### Step 1: Connect your Keycard
+
+    1. Open the Status app and log in to your profile.
+    1. Tap your profile picture > <ContextTag icon={<KeycardIcon />}>Keycard</ContextTag>.
+    1. Tap <ContextTag>Manage Keycard</ContextTag>.
+    1. Tap <ContextTag>Ready to scan</ContextTag>.
+    1. Tap and hold your Keycard near the top (iPhone) or back (Android) of your phone to scan your Keycard.
+
+    ### Step 2: Unlock your Keycard
+
+    1. Tap <ContextTag icon={<KeycardIcon />}>Unlock Keycard</ContextTag>. Then tap <ContextTag>Continue</ContextTag>.
+    1. Enter the recovery phrase and tap <ContextTag>Continue</ContextTag>.
+    1. Enter and confirm your new Keycard PIN.
+    1. If the Keycard stores the keys of your profile, configure your device's biometrics (fingerprint, face or other) to fill in your password. To enable biometrics later, tap <ContextTag>Maybe later</ContextTag>.
+    1. Tap <ContextTag>Scan Keycard</ContextTag>. Then tap and hold your Keycard again against the back of your phone.
+    1. Tap <ContextTag>Done</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>.
+    1. Choose the Keycard to unlock and click <ContextTag>Unlock Keycard</ContextTag>.
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection request if you see a security alert from your computer.
+    1. Select <ContextTag>Unlock using PUK</ContextTag> or <ContextTag>Unlock using seed phrase</ContextTag>.
+    1. Enter the PUK or recovery phrase and click <ContextTag>Next</ContextTag>.
+    1. Enter and confirm your new Keycard PIN.
+    1. Click <ContextTag>Done</ContextTag>.
+  </TabsContent>
+</Tabs>

@@ -1,0 +1,68 @@
+---
+id: 782
+revision: '1'
+language: en
+title: Revoke a community token from someone
+author: jorge-campo, cheny0
+roles:
+  - Owner
+  - TokenMaster
+---
+
+[Community Owners and TokenMasters](./about-the-management-roles-in-status-communities.mdx) can revoke tokens from community and non-community members by remotely destructing the token.
+
+Depending on the token you revoke, the user may lose access to certain privileges or roles in the community. For example, if you revoke a token you minted and this token is required to be a member of your [token-gated community](./token-based-access-to-communities-and-channels.mdx), the user loses access to the community.
+
+<Admonition type="info">
+  To learn more about the consequences of taking back a token from someone, check out [Understand token revocation consequences](./understand-token-revocation-consequences.mdx).
+</Admonition>
+
+Only Community Owners can revoke the TokenMaster token. To learn how to do that, see [Revoke the TokenMaster role from someone](./revoke-the-tokenmaster-role-from-someone.mdx).
+
+## What to expect
+
+- Owners and TokenMasters can revoke any community token they granted, even if the user is not a community member.
+- You can only revoke collectibles (NFTs) you minted for the community.
+- When you revoke the token remotely, it disappears from the owner's Wallet. The user receives a notification telling them you revoked their token.
+- The Status app tracks the current token owner. If you send a non-soulbound token to someone and they pass it on, revoking the token will remove it from the latest token holder.
+- Destructing a token is a transaction on the [Ethereum blockchain](../getting-started/about-the-ethereum-blockchain.mdx), so you need to pay a [gas fee](../wallet/understand-network-fees.mdx) to complete the transaction.
+
+<Admonition type="info">
+  Destructing a token is not the same as burning all the remaining token supply. For more information, check out [Burn your community tokens](./burn-your-community-tokens.mdx).
+</Admonition>
+
+## Revoke a token from someone
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Select the token
+
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag>.
+    1. Click <ContextTag>Collectibles</ContextTag> and select the token you want to revoke.
+    1. In the token page, click <ContextTag icon={<DestroyIcon />}>Remotely destruct</ContextTag>.
+
+    ### Step 2: Select the user
+
+    1. Under the list of users, check the box next to the user or users from whom you want to revoke the token.
+    1. Optionally, select the number of tokens to revoke in the <DropdownIcon /> drop-down menu.
+    1. Review the transaction <ContextTag>Fees</ContextTag> and choose the account to pay for them. You can preview the fees as you change the number of users or tokens.
+    1. Click <ContextTag>Remotely destruct tokens</ContextTag> and confirm your action in the pop-up window.
+    1. Review the transaction total cost and click <ContextTag icon={<PasswordDesktopIcon />}>Sign transaction</ContextTag>.
+    1. <ContextTag>Authenticate</ContextTag> with your password, biometrics or Keycard.
+  </TabsContent>
+</Tabs>

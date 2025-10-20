@@ -1,5 +1,6 @@
 import nextPlugin from '@next/eslint-plugin-next'
 import configs, { tailwindcssConfigs } from '@status-im/eslint-config'
+import globals from 'globals'
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -30,6 +31,15 @@ export default [
           img: [],
         },
       ],
+    },
+  },
+  {
+    files: ['**/*.mjs'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
   },
   {

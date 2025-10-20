@@ -1,0 +1,154 @@
+---
+id: 540
+revision: '1'
+language: en
+title: How to airdrop tokens in Status
+author: jorge-campo, cheny0
+roles:
+- Owners
+- TokenMasters
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only airdrop tokens using the Status desktop app.
+</Admonition>
+
+The community Owner and TokenMaster roles can airdrop tokens to community and non-community members using the Status app. In airdrops, Owners or TokenMasters distribute free tokens for different purposes, such as to reward the community, incentivize community participation, promote a new token or decentralize the token ownership.
+
+Tokens include assets (virtual coins), collectibles and ENS names. You can airdrop assets and collectibles in Status. These can be [assets you mint](./mint-tokens-for-your-community.mdx) or [import to the community](./import-tokens-to-your-community.mdx).
+
+To airdrop tokens, you can choose between [Ethereum](../getting-started/about-the-ethereum-blockchain.mdx) or one of the [Layer-2 networks](../wallet/lower-your-fees-with-layer-2-networks.mdx) supported by Status. Your network of choice determines the cost and speed of your airdrop campaign. For more information, check out [Blockchain networks comparison for airdrops](./blockchain-networks-comparison-for-airdrops.mdx).
+
+## What to expect
+
+- Only the community Owner and TokenMaster roles can run airdrops.
+- If the asset you want to airdrop exists in multiple networks, you can [choose the network to airdrop](./choose-the-network-for-your-airdrop-campaign.mdx). Collectibles are unique digital items on a specific blockchain network.
+- To run a new airdrop campaign, you need to complete a transaction in the blockchain. As with other blockchain transactions, Owners must pay a transaction fee (gas fee). To learn more about this fee, check out [Understand network fees](../wallet/understand-network-fees.mdx).
+- The limit of tokens you can airdrop depends on the number of tokens you own, your Wallet account balance to cover the gas fees and the block gas limit for the network where the airdrop takes place.
+- You can airdrop tokens in more than one network simultaneously. This process requires paying gas fees on each one of the networks.
+
+<Admonition type="info">
+  The blockchain you choose charges the airdrop network fee. Status doesn't charge any fee for airdrops.
+</Admonition>
+
+## Airdrop a token
+
+Complete these three steps to airdrop tokens in Status:
+
+<AwaitedList>
+  1. [Select the token to airdrop](#step-1-select-the-token-to-airdrop).
+  1. [Choose the airdrop recipients](#step-2-choose-the-airdrop-recipients).
+  1. [Complete the airdrop transaction](#step-3-complete-the-airdrop-transaction).
+</AwaitedList>
+
+### Step 1: Select the token to airdrop
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<AirdropDesktopIcon />}>Airdrops</ContextTag>.
+    1. Click <ContextTag>New Airdrop</ContextTag>.
+    1. For the <ContextTag icon={<TokenDesktopIcon />}>What</ContextTag> variable, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag>.
+    1. In the token selection dialogue, choose the <ContextTag>Asset</ContextTag> or <ContextTag>Collectible</ContextTag> tab, depending on what you want to airdrop.
+    1. Select the token you want to airdrop, enter the <ContextTag>Amount</ContextTag> of tokens and click <ContextTag>Add</ContextTag>.
+    1. The network for the airdrop is automatically set to match the token's original network.
+    1. Enter the number of tokens to airdrop and click <ContextTag>Add</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  You can airdrop different tokens in the same airdrop campaign. After adding one token, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> again under the <ContextTag icon={<TokenDesktopIcon />}>What</ContextTag> variable to add a new token.
+</Admonition>
+
+<Admonition type="tip">
+  You can choose the network for the airdrop if the token exists in multiple networks.
+</Admonition>
+
+{/*
+<Admonition type="tip">
+  Next to each asset and collectible, you can see the available token supply to airdrop or the ∞ infinite symbol for tokens with infinite supply. For more information about these options, check out [Mint tokens for your community](./mint-tokens-for-your-community.mdx).
+</Admonition>
+*/}
+
+### Step 2: Choose the airdrop recipients
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. For the <ContextTag icon={<ContactDesktopIcon />}>To</ContextTag> variable, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag>.
+    1. Choose <ContextTag icon={<AddressDesktopIcon />}>ETH addresses</ContextTag> or <ContextTag icon={<ProfileDesktopIcon />}>Community members</ContextTag>.
+    1. For Ethereum addresses, paste or manually enter the address hexadecimal values separated by comma (,).
+    1. For community members, check the box next to the community members you want to airdrop tokens. Check the <ContextTag>Select all</ContextTag> box to select all your community members.
+    1. Click <ContextTag>Add members</ContextTag> to confirm your selection.
+    1. Click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> again if you wish to include additional recipients.
+
+    {/* 1. Optionally, turn on <ContextTag>Members will receive notifications</ContextTag> if you want community members to receive a notification when they receive the token. Non-members don't receive a notification. */}
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  The airdrop recipients list can include both Ethereum addresses and community members.
+</Admonition>
+
+### Step 3: Complete the airdrop transaction
+
+The Status app calculates the total network fees after you choose the airdrop recipients.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. In the <ContextTag icon={<GasIcon />}>Fees</ContextTag> area, verify the gas fee required by the network.
+    1. Select the Wallet account that holds the Owner or TokenMaster token. If the airdrop includes tokens in multiple networks, you can see the gas fees required by each network.
+    1. Click <ContextTag>Create airdrop</ContextTag>.
+    1. Verify the total cost of your transaction and click <ContextTag icon={<PasswordDesktopIcon />}>Sign transaction</ContextTag>.
+    1. <ContextTag>Authenticate</ContextTag> with your password, biometrics or Keycard. The airdrop starts immediately.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  You can check the community tokens owners in the <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag> area.
+</Admonition>

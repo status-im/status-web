@@ -1,0 +1,130 @@
+---
+id: 468
+revision: '2'
+language: en
+title: 'Channels: your quick start guide'
+author: Fabiomorais87, cheny0, jorge-campo
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1698241679/Help/Documentation%20Screens/Communities/468/468_Header_Light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+[Status Communities](./how-to-use-status-communities-your-quick-start-guide.mdx) organize conversations into channels. Channels bring the right people and information together for any project or topic. A channel conversation focuses on specific topics, and you can [join](./join-a-channel.mdx) and [leave](./leave-a-channel.mdx) the conversation anytime.
+
+As a community Owner, you can use channels to break down a large community into smaller, more focused conversation groups. With Status, you can [set up channel permissions](./configure-channel-permissions.mdx) based on token ownership. For example, you can restrict access to a channel, making it token-gated or view-only, by allowing only specific token holders to join or post.
+
+<Admonition type="tip">
+  To add channels to your community, check out [Create a channel](./create-a-channel.mdx).
+</Admonition>
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1698244395/Help/Documentation%20Screens/Communities/468/468_1_Screen_Light.png)
+
+<Tabs defaultValue="Community information 1">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Community information 1" step={1}>
+      Community information
+    </TabsTrigger>
+
+    {/* 
+                                                        <TabsTrigger type="step" value="Channel categories 2" step={2}>
+                                                          Channel categories
+                                                        </TabsTrigger>
+                                                      */}
+
+    <TabsTrigger type="step" value="Channels list 2" step={2}>
+      Channels list
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Channel notifications 3" step={3}>
+      Channel notifications
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Community information 1">Information about the community, such as description, number of members, or the community topics. </TabsContent>
+
+  {/*
+                            <TabsContent value="Channel categories 2">Community Owners can group related channels into categories. This is especially useful for communities with a lot of channels.</TabsContent>
+                          */}
+
+  <TabsContent value="Channels list 2">The list of available channels in a community. [Token-gated channels](./configure-channel-permissions.mdx) have a <LockedIcon /> lock symbol next to the channel name.</TabsContent>
+
+  <TabsContent value="Channel notifications 3">
+    You can view the channels' notification status directly from the channel list.
+
+    - A <OfflineIcon /> grey dot means there are new messages.
+    - When a channel has no new activity, its name appears in dark grey.
+    - If you mute a channel, its name turns to light grey and there's a <MutedIcon /> crossed-out bell symbol next to it.
+    - A number next to the channel's name indicates your mentions on that channel.
+  </TabsContent>
+</Tabs>
+
+## Open and token-gated channels
+
+All members in a [Status Community](./how-to-use-status-communities-your-quick-start-guide.mdx) can browse and enter open channels. For token-gated channels, you must [meet the token requirements](./understand-token-requirements-in-channels.mdx) to join the channel. To maintain access to token-gated channels, hold the required tokens at all times.
+
+<Admonition type="info">
+  Messages in [token-gated communities](./how-to-use-status-communities-your-quick-start-guide.mdx) and [token-gated channels](./set-up-a-token-gated-channel.mdx) are always end-to-end encrypted.
+</Admonition>
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1698243021/Help/Documentation%20Screens/Communities/468/468_2_Screen_Light.png)
+
+<Tabs defaultValue="Token-gated channel 1">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Token-gated channel 1" step={1}>
+      Token-gated channel
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Open channel 2" step={2}>
+      Open channel
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Token-gated channel 1">Token-gated channels have a <LockedIcon /> lock symbol next to the channel name. To access these channels, you need to [meet the token requirements](./understand-token-requirements-in-channels.mdx). To maintain access, keep holding the required tokens.</TabsContent>
+
+  <TabsContent value="Open channel 2">All community members can enter open channels. When you join a community, you automatically get access to these channels.</TabsContent>
+</Tabs>
+
+## Channel information
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1698073610/Help/Documentation%20Screens/Communities/468/468_3_Screen_Light.png)
+
+<Tabs defaultValue="Name 1">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Name 1" step={1}>
+      Name
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Pinned messages 2" step={2}>
+      Pinned messages
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Feed 3" step={3}>
+      Feed
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Message field 4" step={4}>
+      Message field
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Name 1">You can see the channel name and permissions here. Token-gated channels have a <LockedIcon /> lock symbol. From this area, you can select <ContextTag><OptionsIcon /> More options</ContextTag> to view more details about the channel, such as channel members, permissions or notifications. </TabsContent>
+
+  <TabsContent value="Pinned messages 2">Channel members can [pin messages](../messaging/pin-a-message.mdx) to this area to highlight announcements, FAQs or channel rules.</TabsContent>
+
+  <TabsContent value="Feed 3">This area shows the channel activity, including messages, photos, reactions or links.</TabsContent>
+
+  <TabsContent value="Message field 4">From here, you can send messages to channel members with [text](../messaging/send-and-read-messages.mdx), [images](../messaging/share-images-in-status.mdx) or emojis, and [audio messages](../messaging/send-an-audio-message.mdx). </TabsContent>
+</Tabs>
+
+## The #general channel
+
+Every community has a #general channel by default. You can use this channel for various purposes, including sharing news, discussing community policies and events, or making announcements.
+
+This channel works like any other channel. As a community administrator, here's how you can make this channel more helpful:
+
+- Don't rename the channel. The #general channel is widely recognized and understood in communities. Renaming the channel may confuse members.
+- [Set up permissions](./configure-channel-permissions.mdx) to restrict who can post in #general. This removes noise from the channel and keeps it on topic.
+- Use the #general channel to [pin messages](../messaging/pin-a-message.mdx) describing FAQs, community rules or other information relevant to your community.

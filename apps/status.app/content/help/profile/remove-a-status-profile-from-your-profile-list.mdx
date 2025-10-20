@@ -1,0 +1,64 @@
+---
+id: 344
+revision: '2'
+language: en
+title: Remove a Status profile from your profile list
+author: cheny0
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currenly, you can only remove a profile from the Status mobile app.
+</Admonition>
+
+If you don't want a profile to show up on your device, you can remove it from your profile list.
+
+<Admonition type="info">
+  A profile removed from your device is not deleted. Check out [Delete your Status profile](./delete-your-status-profile.mdx).
+</Admonition>
+
+## What to expect
+
+- When you remove a profile from one device, the associated data is deleted from that device. To delete the data from all devices, repeat the procedure on all devices where you use the profile.
+- If you don't log in to your Status profile for 30 days or more (on any device), when you want to use the profile again, you first have to log in from the device you created the profile to recover it. Because the [Waku peer-to-peer network](../messaging/about-status-messages.mdx#understand-peer-to-peer-messaging) stops caching your profile after 30 days of inactivity, the data only exists on this device.
+- Your funds in the Wallet accounts associated with the profile are safe as long as you know your recovery phrase.
+
+## Remove a Status profile
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop" disabled>
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>, then tap your profile photo.
+    1. Scroll down and tap <ContextTag icon={<LogOutIcon />}>Log out</ContextTag>.
+    1. Tap <ContextTag>Log out</ContextTag> again to confirm.
+    1. From the top navigation, tap <ContextTag icon={<MultiProfileIcon />}>Profiles</ContextTag>.
+    1. Tap the <ContextTag icon={<OptionsIcon />}>More options</ContextTag> next to the profile to remove.
+    1. Tap <ContextTag icon={<DeleteIcon />}>Remove profile from this device</ContextTag>.
+    1. Tap <ContextTag>Remove</ContextTag> to confirm.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<LogOutDesktopIcon />}>Sign out and quit</ContextTag>.
+    1. Click <ContextTag>Sign out and quit</ContextTag> again to confirm.
+    1. Open the Status app. Click <ContextTag>Cancel</ContextTag> if you are prompted to sign in.
+    1. Click <ContextTag icon={<ChevronDownDesktopIcon />}>Arrow</ContextTag> and then click <ContextTag icon={<SettingsDesktopIcon />}>Manage profiles</ContextTag>.
+    1. Click <ContextTag icon={<DeleteDesktopIcon />}>Remove</ContextTag> next to the profile to remove.
+    1. Click <ContextTag>Remove Profile</ContextTag> to confirm.
+  </TabsContent>
+</Tabs>

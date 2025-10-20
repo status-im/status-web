@@ -1,0 +1,72 @@
+---
+id: 267
+revision: '2'
+language: en
+title: Delete your Status Wallet accounts
+author: earakel, FabioMorais87, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only delete accounts in the Status desktop app.
+</Admonition>
+
+By design, any [blockchain](../getting-started/about-the-ethereum-blockchain.mdx) is decentralized and immutable. This means that once something is on a blockchain, it can't be deleted. That includes your wallet: once you get an address and make transactions, there's no way to delete your transaction history.
+
+As the name suggests, a blockchain is a chain of blocks. Deleting all blocks that contain your transactions would mean breaking off the entire chain that follows. While it's impossible to erase your wallet data, you can hide any of the accounts in your Status Wallet.
+
+<Admonition type="info">
+  If you believe someone else has access to your Wallet, check out [If someone else has access to your Wallet](./if-someone-else-has-access-to-your-wallet.mdx).
+</Admonition>
+
+## Remove an account in your Status Wallet
+
+When you remove an account in your Wallet, you're simply hiding it in the app. The account itself and all the related data, including your balance and transaction history, stay on the blockchain, but aren't visible to you in the app. You can always [restore your account](./import-an-account-into-your-status-wallet.mdx) later.
+
+<Admonition type="caution">
+  Before removing your account, write down and keep its derivation path. You can always restore your account and the crypto it contains using your derivation path or recovery phrase.
+</Admonition>
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  {/*
+    <TabsContent value="Mobile">
+      1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+      1. Tap the account you want to remove.
+      1. On the top right corner, tap your <ContextTag>Account emoji</ContextTag>.
+      1. Tap <ContextTag>Remove account</ContextTag>.
+      1. Write down your derivation path. Using this path, you will be able to resetore your account later. Once you write it down, check <ContextTag>I have taken note of the derivation path</ContextTag> and tap <ContextTag>Remove</ContextTag>.
+    </TabsContent>
+  */}
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, go to <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Click the account you want to remove.
+    1. Click <ContextTag icon={<DeleteDesktopIcon />}>Remove account</ContextTag>.
+    1. Write down your derivation path. Using this path, you will be able Using this path, you will be able to resetore your account later. Once you write it down, check <ContextTag>I have taken note of the derivation path</ContextTag> and click <ContextTag>Remove</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Stop using Status Wallet
+
+If you no longer need your Status Wallet, simply [send your leftover crypto to some other wallet account](./send-crypto-to-someone.mdx) and uninstall the Status app. You can always [restore your Wallet](./import-an-account-into-your-status-wallet.mdx) later if you keep your recovery phrase.
+
+<Admonition type="tip">
+  Blockchains are pseudonymous: unless you sent crypto to your Status Wallet from a centralized crypto exchange, there's no way to trace your address to your real identity.
+</Admonition>

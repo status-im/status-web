@@ -1,0 +1,65 @@
+---
+language: en
+title: Admonitions
+---
+
+- Status user documentation uses three different types of admonitions (also known as *callouts*):
+
+<Table>
+  <TableHead>
+    <TableHeader>Admonition</TableHeader>
+    <TableHeader>Description</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Tip</TableCell>
+      <TableCell>Information that is not necessary for the task, but it's helpful or nice to have. For example, information about a keyboard shortcut.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Note</TableCell>
+      <TableCell>Information that is relevant to complete the task, but has no impact on the user's actions.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Caution</TableCell>
+      <TableCell>Information that has an impact on the user's actions. Based on this information, the user may decide to complete or don't complete the task.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- Don't use *warning*, *error*, *danger*, *bug*, *important*, or *notes*.
+- Don't use admonitions within procedural steps.
+- In procedures, place the admonition after the procedure (see Structuring the content for more details.)
+- For other content, add the admonition after the relevant information.
+
+### Admonition types
+
+<Admonition type="tip">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+
+<pre>
+<Admonition type="tip">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+</pre>
+
+<Admonition type="note">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+
+<pre><Admonition type="note">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+</pre>
+
+<Admonition type="caution">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+
+<pre>
+<Admonition type="caution">
+  The blockchain records transactions in blocks, hence the term "blockchain".
+</Admonition>
+</pre>
+

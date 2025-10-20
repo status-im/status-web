@@ -1,0 +1,63 @@
+---
+id: 535
+revision: '2'
+language: en
+title: 'FAQ: Status keys and recovery phrase'
+author: jorge-campo, earakel
+---
+
+Your Status keys and recovery phrase (also referred to as a mnemonic phrase or seed phrase) secure and authenticate your communications and transactions.
+
+Your public Status key is like an email address, serving as an identifier you can share with others for communication. When you [share your Status profile](./share-your-status-profile.mdx) with others, you share your public key.
+
+On the other hand, you should never share your private key, which safeguards your sensitive information and crypto assets. This private key generates a recovery phrase, a sequence of words that serves as your private key backup. If you lose access to your device or forget your password, you can [restore your Status profile using this recovery phrase](../getting-started/create-a-status-profile-using-a-recovery-phrase.mdx).
+
+<Admonition type="info">
+  You can't see or copy your private key directly. Your recovery phrase is what you use to interact with your private key.
+</Admonition>
+
+## Common questions
+
+### Why can't I use a username and password like in traditional apps?
+
+Like many web3 apps and crypto wallets, the Status app uses a system based on a public and private key instead of the conventional username and password model. Your private key is only known to you and is not stored on any central server, unlike usernames and passwords. This decentralized approach to security is a core principle of web3 applications.
+
+### Where are my Status keys?
+
+The device where you install the Status app stores your keys and encrypts the private key with your Status password. If your device has secure hardware (like Apple's Secure Enclave or other trusted platform modules), the Status app uses this hardware to save your keys, providing an additional layer of security beyond encrypting the private key with a password.
+
+### Where is my recovery phrase?
+
+After you create your Status profile and [back up your recovery phrase](./back-up-and-secure-your-recovery-phrase.mdx), you won't be able to see your recovery phrase in the Status app any more. This way, you can be sure that your recovery phrase and private key aren't accessible even if someone gains unauthorized access to your device.
+
+<Admonition type="info">
+  The Status app doesn't back up your recovery phrase to online services like iCloud or Google Drive and never exposes your recovery phrase to the internet.
+</Admonition>
+
+### Can someone at Status access my private key or recovery phrase?
+
+Your private key is only accessible to the Status app on your device and protected by your Status password.
+
+<Admonition type="caution">
+  Status doesn't know your password and can't reset it for you. If you forget your password and don't have your recovery phrase, you lose access to your Status profile.
+</Admonition>
+
+## Security
+
+### How can I protect my Status private key?
+
+Remember your Status password and keep it in a safe place, [back up and secure](./back-up-and-secure-your-recovery-phrase.mdx) your recovery phrase or use a hardware wallet like [Keycard](../keycard/keycard-your-quick-start-guide.mdx) for extra security.
+
+### What if someone else gets access to my recovery phrase?
+
+If your recovery phrase gets into the wrong hands, the person who has it can gain full access to your Status profile and crypto funds.
+
+Since the recovery phrase is a backup of your private key, a malicious user can use it to restore your profile and wallet on any device. That's why it's crucial to keep your recovery phrase confidential and store it in a secure location. If you think someone else has access to your recovery phrase, check out [If someone else has access to your Wallet](../wallet/if-someone-else-has-access-to-your-wallet.mdx).
+
+### I forgot my recovery phrase; can Status recover it for me?
+
+No. Status doesn't have access to your recovery phrase or private key and can't recover this information for you. If you can't find your recovery phrase, check out [If you lose your Status password or recovery phrase](./if-you-lose-your-status-password-or-recovery-phrase.mdx).
+
+### What should I do if I forget my password or lose my device?
+
+If you forget your password or lose your device, you can [use your recovery phrase to restore your Status profile](../getting-started/create-a-status-profile-using-a-recovery-phrase.mdx). It's crucial to keep your recovery phrase and password safe and secure.

@@ -1,0 +1,42 @@
+diff --git a/dist/oauth2/index.d.ts b/dist/oauth2/index.d.ts
+index 0ddef94dd9c0174b9c5a8a0e9749d0ba52734f27..51e4c061f8c3d840b036b057576a593a997d6b83 100644
+--- a/dist/oauth2/index.d.ts
++++ b/dist/oauth2/index.d.ts
+@@ -10,11 +10,13 @@ export declare class OAuth2Client {
+         state?: string;
+         codeVerifier?: string;
+         scopes?: string[];
++        redirectURI?: string;
+     }): Promise<URL>;
+     validateAuthorizationCode<_TokenResponseBody extends TokenResponseBody>(authorizationCode: string, options?: {
+         codeVerifier?: string;
+         credentials?: string;
+         authenticateWith?: "http_basic_auth" | "request_body";
++        redirectURI?: string;
+     }): Promise<_TokenResponseBody>;
+     refreshAccessToken<_TokenResponseBody extends TokenResponseBody>(refreshToken: string, options?: {
+         credentials?: string;
+diff --git a/dist/oauth2/index.js b/dist/oauth2/index.js
+index 537188cd13631cd4324e709e054e3bac31d11eb5..f906161ee1e769949490a9235d00e057f71a7211 100644
+--- a/dist/oauth2/index.js
++++ b/dist/oauth2/index.js
+@@ -22,6 +22,9 @@ export class OAuth2Client {
+         if (scopes.length > 0) {
+             authorizationUrl.searchParams.set("scope", scopes.join(" "));
+         }
++        if (options?.redirectURI !== undefined) {
++            authorizationUrl.searchParams.set("redirect_uri", options.redirectURI);
++        }
+         if (this.redirectURI !== null) {
+             authorizationUrl.searchParams.set("redirect_uri", this.redirectURI);
+         }
+@@ -38,6 +41,9 @@ export class OAuth2Client {
+         body.set("code", authorizationCode);
+         body.set("client_id", this.clientId);
+         body.set("grant_type", "authorization_code");
++        if (options?.redirectURI !== undefined) {
++            body.set("redirect_uri", options.redirectURI);
++        }
+         if (this.redirectURI !== null) {
+             body.set("redirect_uri", this.redirectURI);
+         }

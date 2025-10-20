@@ -1,0 +1,168 @@
+---
+id: 477
+revision: '1'
+language: en
+title: Invite people to a channel
+author: Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+Whether you're a community Owner or a member, you can invite anyone to any channel you're a member of. For token-gated channels, the person you invite must hold the required token to join the channel.
+
+<Admonition type="info">
+  To join the channel, the person you invite must be a community member.
+</Admonition>
+
+## Invite options
+
+There are three different options to invite someone to a channel.
+
+<Table>
+  <TableHead>
+    <TableHeader>Option</TableHeader>
+    <TableHeader>Description</TableHeader>
+    <TableHeader>Works with</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Invite your Status contacts</TableCell>
+
+      <TableCell>
+        You can share the channel with anyone on your Status contact list
+      </TableCell>
+
+      <TableCell>
+        Mobile and desktop
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Show QR code</TableCell>
+
+      <TableCell>
+        Show the channel's QR code to the person you want to invite
+      </TableCell>
+
+      <TableCell>
+        Mobile
+      </TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Share a link</TableCell>
+
+      <TableCell>
+        Share the link via messaging apps or social media
+      </TableCell>
+
+      <TableCell>
+        Mobile and desktop
+      </TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+## Invite people to a channel
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+    1. Tap the community with the channel you want to share.
+    1. In the channel list, long press the channel you want to share.
+    1. In the action sheet, choose an option and proceed as follows:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Invite your Status contacts</TableCell>
+
+                 <TableCell>
+                   1. Select <ContextTag icon={<AddUserIcon />}>Invite people from contacts list</ContextTag>.
+                   1. Check the boxes next to the contacts you want to invite.
+                   1. Tap <ContextTag>Invite users</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Show QR code</TableCell>
+
+                 <TableCell>
+                   1. Select <ContextTag icon={<QrCodeIcon />}>Show QR code</ContextTag>.
+                   1. Show the QR code to the person you want to invite.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Share a link</TableCell>
+
+                 <TableCell>
+                   1. Select <ContextTag icon={<ShareIcon />}>Share channel</ContextTag>.
+                   1. Share the channel link via social media, messaging apps or any other app you prefer.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click the community with the channel you want to share.
+    1. In the channel sidebar, right-click the channel and then select <ContextTag icon={<ShareIOsDesktopIcon />}>Share channel</ContextTag>.
+    1. Choose the contacts or copy the link and proceed as follows:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Invite your Status contacts</TableCell>
+
+                 <TableCell>
+                   1. In the <ContextTag>Invite Contacts</ContextTag> pop-up window, type the names of your contacts in the search bar or check the boxes next to the names.
+                   1. Click <ContextTag>Next</ContextTag>.
+                   1. Optionally, type an invitation message.
+                   1. Click <ContextTag>Send Invites</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Share a link</TableCell>
+
+                 <TableCell>
+                   1. In the <ContextTag>Invite Contacts</ContextTag> pop-up window, click <ContextTag>Copy</ContextTag> next to the link.
+                   1. Switch to the app where you want to share the link and paste it there.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  After opening the link or scanning the QR code, people can install Status if they haven't already.
+</Admonition>

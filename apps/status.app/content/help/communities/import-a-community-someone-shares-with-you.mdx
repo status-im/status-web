@@ -1,0 +1,128 @@
+---
+id: 448
+revision: '2'
+language: en
+title: Import a community someone shares with you
+author: jorge-campo, cheny0
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+You can import a Status Community that someone [shares with you](./invite-people-to-a-status-community.mdx) using the community link, QR code or public key. Importing a community can be helpful when you want to join a [private community](./about-the-different-types-of-status-communities.mdx) that is not listed in the communities [Discover page](./how-to-use-status-communities-your-quick-start-guide.mdx#discover-communities).
+
+<Admonition type="info">
+  If you're a community Owner and want to recover your community on a different device, read [Recover your Status Community](./recover-your-status-community.mdx).
+</Admonition>
+
+## Options to import a community
+
+You have three options to import a Status Community.
+
+<Table>
+  <TableHead>
+    <TableHeader>Option</TableHeader>
+    <TableHeader>Description</TableHeader>
+    <TableHeader>Works with</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Link</TableCell>
+      <TableCell>Tap or click the Status Community link to open the community page.</TableCell>
+      <TableCell>Mobile and desktop</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>QR code</TableCell>
+      <TableCell>Use this option to scan the community QR code someone shares with you.</TableCell>
+      <TableCell>Mobile</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Community public key</TableCell>
+      <TableCell>Import the key using the Status app to find the community you want to join.</TableCell>
+      <TableCell>Mobile and desktop</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+Use the community link, QR code or public key to find and import the community you're interested in. The community link contains the community public key at the end. For example, for the community link `https://status.app/cc/G8gAA[...]dy9L9`, the public key is `G8gAA[...]dy9L9`.
+
+<Admonition type="tip">
+  The community link contains the community public key at the end, so you don't have to type it in.
+</Admonition>
+
+## Import a community
+
+To import the community, ask the person sharing the community to [send you the link or show you the QR code](./invite-people-to-a-status-community.mdx).
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. If you receive the community link, tap the link to open the community page.
+
+    1. If you receive the community QR code or public key, follow these steps:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>QR code</TableCell>
+
+                 <TableCell>
+                   1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+                   1. From the top navigation, tap <ContextTag icon={<ScanIcon />}>Scan</ContextTag> and scan the QR code.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Community public key</TableCell>
+
+                 <TableCell>
+                   1. From the tab bar, tap <ContextTag icon={<CommunitiesIcon />}>Communities</ContextTag>.
+                   1. Tap <ContextTag icon={<AddSmallIcon />}>Add</ContextTag> > <ContextTag icon={<DownloadIcon />}>Import community</ContextTag>.
+                   1. In the <ContextTag>Community key</ContextTag> text field, enter the community link or public key.
+                   1. Verify the community you're about to import and tap <ContextTag icon={<DownloadIcon />}>Import community</ContextTag>.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    1. Review the information in the community page and tap <ContextTag icon={<UnlockedIcon />}>Join Community</ContextTag>.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    If you receive the community link, click the link to open the community page. Review the information and tap <ContextTag icon={<UnlockedIcon />}>Join community</ContextTag>.
+
+    If you receive the community public key, follow these steps:
+
+    1. From the navigation sidebar, click <ContextTag icon={<CommunitiesDesktopIcon />}>Communities</ContextTag>.
+    1. On top of the content area, click <ContextTag>Import using key</ContextTag>.
+    1. In the <ContextTag>Community key</ContextTag> text field, enter the community link or public key.
+    1. Click <ContextTag>Import</ContextTag>. If the <ContextTag>Import</ContextTag> option is unavailable, verify you're entering the correct key.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  After opening the link or scanning the QR code, you can install Status if you haven't already.
+</Admonition>

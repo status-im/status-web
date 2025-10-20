@@ -1,0 +1,74 @@
+---
+id: 1150
+revision: '0'
+language: en
+title: 'Keycard: your quick start guide'
+author: cheny0, Fabiomorais87, jorge-campo
+roles: 
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1723452026/Help/Documentation%20Screens/Keycard/1150/1150_Header_Light.png)
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+A Keycard is a physical device that stores the [private key](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-status-keys) of your Status profile or Wallet account separately from your device, protecting your private key from potential threats.
+
+Each Keycard can store one Status profile and all Wallet accounts derived from the same recovery phrase. If you have multiple Status profiles or Wallet accounts from different recovery phrases, you need a separate Keycard for each one. {/* You can use the toggles on this page to understand your situation and what you need to do to start using Keycard. */}
+
+<Admonition type="tip">
+  If you don't have a Keycard, you can [get one](https://status.app/keycard)<ExternalIcon />.
+</Admonition>
+
+## Secure your profile and Wallet
+
+Anyone with your private key can access your Status profile or Wallet accounts. Your Status [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx) is a sequence of words that can be used to recreate your private key, so it's crucial to always keep your private key and recovery phrase safe
+
+Without a Keycard, Status securely stores the private key on your device using your Status password and your device secure hardware module. Although unlikely, if your device is compromised, your private key could be exposed. By storing the private key on the Keycard instead of your device, you ensure it remains secure even if your device is compromised.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1723452314/Help/Documentation%20Screens/Keycard/1150/1150_4_Screen_Light.png)
+
+<Admonition type="caution">
+  When transferring the private key to the Keycard, you need to enter the recovery phrase. However, the Keycard doesn't store your recovery phrase. [If you lose your recovery phrase](../profile/if-you-lose-your-status-password-or-recovery-phrase.mdx), you can't use your Keycard to recover it. You must always back up your recovery phrase and keep it safe.
+</Admonition>
+
+If you are new to Status, you can [create a Status profile](./create-a-status-profile-using-keycard.mdx) or [Wallet account](./create-a-status-wallet-account-using-a-keycard.mdx) using Keycard. If you already have a profile or Wallet account, you can directly [use the Keycard to protect them](./secure-your-status-profile-or-wallet-with-keycard.mdx).
+
+## Import a wallet account
+
+If you want to use the Keycard with a wallet account with another app like Metamask or Trust Wallet, you can [import the wallet account onto Keycard and use it in Status Wallet](./import-a-wallet-account-from-another-app-onto-keycard-and-use-it-in-status.mdx).
+
+## Confirm your identity and transactions with Keycard
+
+When using Keycard with your Status profile or Wallet accounts, you can see the <KeycardDesktopIcon /> Keycard symbol during sign-in, transaction signing or other security-sensitive actions. This symbol means you must use your Keycard to sign and confirm the action.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1723452362/Help/Documentation%20Screens/Keycard/1150/1150_5_Screen_Light.png)
+
+To validate a security-sensitive operation in the Status app, first connect your Keycard to your computer using a card reader. After confirming your action in the app, the Status app sends the required data to your Keycard. The Keycard then uses your private key to sign the data and sends the signed data back to the app. This signed data proves your ownership of the private key and validates your request.
+
+The Keycard doesn't directly connect to the internet, physically or virtually.
+
+## Manage your Keycard
+
+To help you remember the accounts on your Keycard, you name your Keycard and the accounts during the initial setup. You can [rename the Keycard](./rename-your-keycard.mdx) and the [Wallet accounts](../wallet/customize-your-wallet-account.mdx) later.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1723452093/Help/Documentation%20Screens/Keycard/1150/1150_1_Screen_Light.png)
+
+When you first set up a Keycard, you set a PIN to protect the Keycard from unauthorized access, and you can [change the PIN](./change-your-keycard-pin.mdx) anytime. If you enter the wrong PIN three times, your Keycard locks, requiring you to [unlock it](./unlock-your-keycard.mdx). You can also [set up a PUK](./create-a-keycard-puk.mdx) to help unlock your Keycard.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1723452262/Help/Documentation%20Screens/Keycard/1150/1150_3_Screen_Light.png)
+
+## Stop using Keycard
+
+If you want to [stop using Keycard](./stop-using-keycard-for-your-wallet-account-or-profile.mdx) for the Wallet account or Status profile currently stored on it, you must move your private key from the Keycard to your device and set up new authentication methods for your Wallet account or Status profile.
+
+Stop using Keycard doesn't affect the use of your Wallet account or profile. Instead of Keycard, you use your password or biometrics to confirm security-sensitive actions.
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1723452204/Help/Documentation%20Screens/Keycard/1150/1150_2_Screen_Light.png)
+
+After you move your private key, it's better to [factory reset](./factory-reset-your-keycard.mdx) the Keycard so you can use it with other wallet accounts or Status profile.
+
+<Admonition type="caution">
+  Make sure you have your recovery phrase for the account stored on the Keycard before you stop using it or factory reset it. Without the recovery phrase, you may lose access to the account.
+</Admonition>

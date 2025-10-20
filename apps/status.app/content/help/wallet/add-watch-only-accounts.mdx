@@ -1,0 +1,57 @@
+---
+id: 106
+revision: '2'
+language: en
+title: Add watch-only accounts to your Status Wallet
+author: earakel, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only add watch-only accounts in the Status desktop app.
+</Admonition>
+
+In your Status Wallet, watch-only accounts are accounts that you only keep track of, just as you can do using a [block explorer](../wallet/understand-block-explorers.mdx). Once you add a watch-only account, you can view its balance and transaction history in your Status Wallet.
+
+You can add any Ethereum address as a watch-only account, including addresses that don't belong to you. For example, you can keep track of your own hardware wallet account or someone else's account you're simply interested in.
+
+## What to expect
+
+- You can add any Ethereum address as a watch-only account.
+- You can't make transactions from your watch-only accounts.
+- You can keep track of both tokens and collectibles that belong to your watch-only accounts.
+- The balances of your watch-only accounts don't count toward your total balance in Status Wallet.
+
+## Add a watch-only account
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag>.
+    1. Choose a name and a highlight colour for this address. Both are only visible to you.
+    1. Click your profile picture under <ContextTag>Origin</ContextTag> and select <ContextTag>Add watch-only account</ContextTag>.
+    1. Paste the address you want to keep track of into the field and click Add account.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  You can add a maximum of 3 watch-only accounts in your Status Wallet.
+</Admonition>

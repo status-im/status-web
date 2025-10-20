@@ -1,0 +1,66 @@
+---
+id: 585
+revision: '4'
+language: en
+title: Create Wallet accounts
+author: earakel, jorge-campo, Fabiomorais87
+roles:
+---
+
+Once you [create your Status profile](../getting-started/run-the-status-app-for-the-first-time.mdx#create-a-new-status-profile), you automatically get a Status Wallet account. You can create extra accounts if you want to. For example, you can save towards specific goals or keep track of your short-term and long-term token investments.
+
+Each account has a different [Ethereum address](./about-your-wallet-accounts-and-addresses.mdx). This means that to transfer crypto between your accounts, you need to [send crypto](./send-crypto-to-someone.mdx) to them the same way as you would send it to someone else's wallet.
+
+<Admonition type="info">
+  To import your existing crypto account, check out [Import an account into your Status Wallet](./import-an-account-into-your-status-wallet.mdx).
+</Admonition>
+
+## What to expect
+
+- By default, Status uses the master key (key pair) associated with your Status profile as the new account origin.
+- You can change the account origin to an existing [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx), private key or a [new master key](./organize-funds-and-accounts-with-a-new-master-key.mdx).
+- A master key in your Wallet can control multiple accounts, each linked to the same recovery phrase.
+
+<Admonition type="info">
+  To understand the origin of your Status Wallet accounts, check out [Understand your Status Wallet accounts](../wallet/understand-your-status-wallet-accounts-and-keys.mdx).
+</Admonition>
+
+## Create an account
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Swipe left across the accounts until you reach the end, then tap <ContextTag icon={<AddIcon />}>Add</ContextTag> > <ContextTag icon={<AddIcon />}>Add account</ContextTag>.
+    1. Choose an account emoji, a name and a highlight colour for this account. Only you can see these account options.
+    1. If you have more than one master key (key pair), tap <ContextTag>Edit</ContextTag> next to the account <ContextTag>Origin</ContextTag> to select the one you want to use, or use the default one.
+    1. Slide the <ContextTag icon={<ArrowRightIcon />}>Arrow</ContextTag> to the right in the <ContextTag icon={<TouchIdBigIcon />}>Slide to create an account</ContextTag> area at the bottom of the screen.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. On top of the Wallet sidebar, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag>.
+    1. Enter a name for your account and choose a highlight colour. Only you can see these account options.
+    1. If you have more than one master key (key pair), click the <ContextTag>Origin</ContextTag> drop-down menu to select the one you want to use, or use the default one.
+    1. Click <ContextTag icon={<PasswordDesktopIcon />}>Add account</ContextTag>.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  You can create a maximum of 20 accounts in your Status Wallet. To back up all your accounts, check out [Back up your Wallet accounts](./back-up-your-wallet-accounts.mdx).
+</Admonition>

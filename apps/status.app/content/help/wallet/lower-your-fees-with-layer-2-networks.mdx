@@ -1,0 +1,94 @@
+---
+id: 1468
+revision: '0'
+language: en
+title: Lower your fees with Layer-2 networks
+author: jorge-campo, cheny0
+role:
+---
+
+You can send and receive crypto with lower [fees](./understand-network-fees.mdx) using Layer-2 (L2) networks instead of [Ethereum](../getting-started/about-the-ethereum-blockchain.mdx) (Layer-1). These networks reduce costs by processing transactions off-chain before finalizing them on Ethereum.
+
+Currently, [Status Wallet](./status-wallet-your-quick-start-guide.mdx) supports the following Layer-2 networks:
+
+- [Base](https://www.base.org/)<ExternalIcon />
+- [Arbitrum](https://arbitrum.io/)<ExternalIcon />
+- [Optimism](https://optimism.io/)<ExternalIcon />
+
+<Admonition type="info">
+  Layer-2 networks differ from sidechains. Sidechains, like [Polygon](https://polygon.technology/)<ExternalIcon />, are independent blockchains with their own consensus mechanisms (the way everyone in the blockchain agrees on valid transactions). In contrast, Layer-2 networks run on top of Ethereum, relying on its security and consensus.
+</Admonition>
+
+## The basics
+
+- You can lower your [network fees](./understand-network-fees.mdx) and speed up your transactions by moving funds to a Layer-2 network.
+- L2s like Arbitrum or Base inherit Ethereum's security. Your funds stay protected, even if you are saving on costs.
+- You need to [bridge your crypto](./bridge-crypto-in-status-wallet.mdx) whenever you transfer assets between an L2 network and Ethereum or between two different L2 networks.
+
+## Comparing Layer-2 networks with Ethereum
+
+<Table>
+  <TableHead>
+    <TableHeader>Feature</TableHeader>
+    <TableHeader>Ethereum</TableHeader>
+    <TableHeader>L2 networks</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Fees</TableCell>
+      <TableCell>Higher</TableCell>
+      <TableCell>Lower</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Speed</TableCell>
+      <TableCell>Slower</TableCell>
+      <TableCell>Faster</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Security</TableCell>
+      <TableCell>Most secure</TableCell>
+      <TableCell>Inherits Ethereum's security with additional steps (1)</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Governance</TableCell>
+      <TableCell>Highly decentralized</TableCell>
+      <TableCell>Varies (2)</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Best for</TableCell>
+      <TableCell>High-value transactions</TableCell>
+      <TableCell>Everyday use: swaps, DeFi, collectibles, gaming</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+(1) Layer-2 solutions are safe enough for daily transactions, but if you need the strongest possible guarantees, you may prefer to use Ethereum mainnet.
+
+(2) Layer-2 governance models vary significantly. For example, while Optimism and Arbitrum are decentralized and community-driven, Base is a centralized network owned by [Coinbase](https://www.coinbase.com/)<ExternalIcon />.
+
+## Why use Layer-2 networks?
+
+Using Layer-2 networks provides three main benefits:
+
+- **Lower fees**: Layer-2 network fees are considerably cheaper than Ethereum.
+- **Faster transactions**: Layer-2 networks process transactions often in seconds, compared to minutes or hours on Ethereum during peak hours.
+- **Access to more dApps**: Many dApps are available on Layer-2 networks, providing access to more decentralized services.
+
+## How to use Layer-2 networks in Status Wallet
+
+You can use Layer-2 networks in Status Wallet just like you would use Ethereum. When sending crypto, choose the appropriate Layer-2 network for the transaction. For more information, check out [Send crypto to someone](./send-crypto-to-someone.mdx).
+
+<Admonition type="tip">
+  An asset, such as DAI, can be on multiple networks. For instance, you may have DAI on Ethereum and Arbitrum. When sending DAI, you can choose which network to use.
+</Admonition>
+
+You can use Layer-2 networks in Status Wallet only if you hold the corresponding tokens. For example, you need Arbitrum tokens in your wallet to use Arbitrum. If you need to move assets between networks, you must [bridge the asset](./bridge-crypto-in-status-wallet.mdx).
+
+<Admonition type="info">
+  When sending crypto via a Layer-2 network, the recipient must have a wallet that supports the same network. For example, if you send ETH on Arbitrum, the recipient must also use an Arbitrum-compatible wallet.
+</Admonition>

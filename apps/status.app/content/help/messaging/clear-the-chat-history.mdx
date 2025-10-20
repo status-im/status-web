@@ -1,0 +1,55 @@
+---
+id: 229
+revision: '3'
+language: en
+title: Clear the chat history
+author: earakel, jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+If you clear a chat history, you're clearing all messages in the direct message (DM) chat, group chat or community channel just for yourself. Everyone else can still see the full history.
+
+{/*
+For a group chat, only the group chat owner can clear its history for all members. Once you clear the chat history for everyone, there's no way to recover it. If you're not the group chat owner, you clear the chat history just for yourself. Everyone else can still see the full group chat history.
+*/}
+
+<Admonition type="info">
+  Currently, you can only clear the chat history for a community channel using Status Desktop.
+</Admonition>
+
+## Clear the chat history
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<MessengerIcon />}>Messages</ContextTag>.
+    1. Tap the DM or the group chat you want to clear.
+    1. From the top navigation, tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag>.
+    1. Select <ContextTag icon={<DeleteIcon />}>Clear history</ContextTag>.
+    1. Tap <ContextTag>Clear history</ContextTag> again to confirm.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation bar, click <ContextTag icon={<ChatDesktopIcon />}>Messages</ContextTag>.
+    1. Click the DM or the group chat you want to clear.
+    1. At the top of the content area, lick <ContextTag icon={<MoreDesktopIcon />}>More options</ContextTag>.
+    1. Select <ContextTag icon={<DeleteDesktopIcon />}>Clear chat history</ContextTag>.
+    1. Click <ContextTag>Clear</ContextTag> to confirm.
+  </TabsContent>
+</Tabs>

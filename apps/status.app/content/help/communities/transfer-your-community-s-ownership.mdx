@@ -1,0 +1,93 @@
+---
+id: 479
+revision: '2'
+language: en
+title: Transfer your community's ownership
+author: jorge-campo, Fabiomorais87
+roles:
+  - Owner
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+If you can't manage your Status Community anymore, you can transfer the ownership to someone else. To transfer your community ownership, you must [send the Owner token](#step-1-send-the-owner-token) to the new Owner.
+
+<Admonition type="tip">
+  If you need help managing your community, consider adding others as Admins or TokenMasters. For more information, check out [Delegate management functions to community members](./delegate-management-functions-to-your-community.mdx).
+</Admonition>
+
+## What to expect
+
+- Transferring your community's ownership is an irreversible action. Once you do so, you can't undo it and you lose your community Owner status.
+- You can transfer your community ownership to members or non-members. If you transfer ownership to a non-member, they join the community automatically upon accepting the ownership transfer.
+- The new Owner can accept or reject the ownership transfer. If the new Owner accepts the transfer, they must complete a transaction and pay the [gas fees](../wallet/understand-network-fees.mdx).
+- When the new Owner accepts the ownership transfer, their computer automatically becomes the new [control node](./about-the-control-node-in-status-communities.mdx) for the community.
+
+<Admonition type="info">
+  The computer acting as the control node must be online, with the Status desktop app running as frequently as possible. If the control node is offline, the community [loses some functionalities](./common-issues-when-the-community-s-control-node-is-offline.mdx).
+</Admonition>
+
+## Transfer your community's ownership
+
+### Step 1: Send the Owner token
+
+The current Owner must complete this step.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag>.
+    1. Under the <ContextTag>Collectibles</ContextTag> area, click the Owner collectible, identified by the <ContextTag>Owner-</ContextTag> prefix and the <CrownIcon /> crown icon.
+    1. In the Owner collectible screen, click <ContextTag icon={<SendDesktopIcon />}>Send Owner token to transfer \[community name] Community ownership</ContextTag> within the action bar.
+    1. In the <ContextTag>Transfer ownership</ContextTag> screen, review the information on transferring the token. Click the <ContextTag>My ownership rights will be removed and transferred to the recipient</ContextTag> checkbox and click <ContextTag>Send \[community name] Owner token</ContextTag>.
+    1. In the <ContextTag>Send</ContextTag> screen, paste the recipient's Status Wallet address in the <ContextTag>To</ContextTag> field. Review the transaction details and fees and click <ContextTag icon={<PasswordDesktopIcon />}>Send</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+### Step 2: Finalize the ownership transfer
+
+The new Owner must complete this step by submitting a transaction to update the community's smart contract and finalizing the ownership transfer.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. On the top-right corner of the Status app, click <ContextTag icon={<NotificationDesktopIcon />}>Notifications</ContextTag>.
+    1. Under <ContextTag>All</ContextTag>, click the notification titled <ContextTag>You received the Owner token for \[community name]</ContextTag>.
+    1. On the <ContextTag>Finalize \[community name] ownership</ContextTag> screen, review the information about the ownership transfer. The account where you receive the Owner token must have enough funds to pay the transaction fees. If you don't have enough funds, close the screen and top up your account.
+    1. Check the <ContextTag>I acknowledge that \[...]</ContextTag> checkbox and click <ContextTag>Make this device the control node and update smart contract</ContextTag>.
+    1. Wait for the transaction to complete. Once the transaction is confirmed, you can see a notification confirming that your computer is the new control node.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  If you decide not to accept the ownership transfer, inform the current Owner about your decision and [transfer the Owner token back](#step-1-send-the-owner-token).
+</Admonition>

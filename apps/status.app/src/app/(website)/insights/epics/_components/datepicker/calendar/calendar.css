@@ -1,0 +1,354 @@
+.rdp {
+  --rdp-cell-size: 32px;
+  --rdp-caption-font-size: 15px;
+  --rdp-accent-color: #2a4af5;
+  --rdp-background-color: #e7edff;
+  --rdp-background-color-selected-secondary: #f5f6f8;
+  --rdp-hover-color: #f5f6f8;
+  --rdp-hover-color-darker: #f0f2f5;
+  --rdp-accent-color-dark: #223bc4;
+  --rdp-outline: 2px solid var(--rdp-accent-color); /* Outline border for focused elements */
+  --rdp-outline-selected: 3px solid var(--rdp-accent-color); /* Outline border for focused _and_ selected elements */
+  --rdp-text-color: #09101c;
+  color: var(--rdp-text-color);
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  user-select: none;
+}
+
+/* Hide elements for devices that are not screen readers */
+.rdp-vhidden {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute !important;
+  top: 0;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  border: 0 !important;
+}
+
+/* Buttons */
+.rdp-button_reset {
+  appearance: none;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  cursor: default;
+  color: inherit;
+  background: none;
+  font: inherit;
+
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.rdp-button_reset:focus-visible {
+  /* Make sure to reset outline only when :focus-visible is supported */
+  outline: none;
+}
+
+.rdp-button {
+  border: 2px solid transparent;
+  font-size: 0.8125rem;
+}
+
+.rdp-button[disabled]:not(.rdp-day_selected) {
+  opacity: 0.25;
+}
+
+.rdp-button:not([disabled]) {
+  cursor: pointer;
+}
+
+.rdp-button:focus-visible:not([disabled]) {
+  color: inherit;
+  background-color: var(--rdp-background-color);
+  border: var(--rdp-outline);
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: var(--rdp-hover-color);
+}
+
+.rdp-months {
+  display: flex;
+}
+
+.rdp-month {
+  margin: 0 1em;
+}
+
+.rdp-month:first-child {
+  margin-left: 0;
+}
+
+.rdp-month:last-child {
+  margin-right: 0;
+}
+
+.rdp-table {
+  margin: 0;
+  max-width: calc(var(--rdp-cell-size) * 7);
+  border-collapse: separate;
+  border-spacing: 0 2px;
+  padding: 0 0.75rem 0.625rem 0.75rem;
+}
+
+.rdp-with_weeknumber .rdp-table {
+  max-width: calc(var(--rdp-cell-size) * 8);
+  border-collapse: collapse;
+}
+
+.rdp-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  text-align: left;
+}
+
+.rdp-multiple_months .rdp-caption {
+  position: relative;
+  display: block;
+  text-align: center;
+}
+
+.rdp-caption_dropdowns {
+  position: relative;
+  display: inline-flex;
+}
+
+.rdp-caption_label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  white-space: nowrap;
+  color: currentColor;
+  font-family: inherit;
+  font-size: var(--rdp-caption-font-size);
+  font-weight: bold;
+}
+
+.rdp-nav {
+  white-space: nowrap;
+  padding: 0.375rem 0.375rem 0 0.75rem;
+}
+
+.rdp-multiple_months .rdp-caption_start .rdp-nav {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.rdp-multiple_months .rdp-caption_end .rdp-nav {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.rdp-nav_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  padding: 0.25em;
+  border-radius: 10px;
+}
+
+/* ---------- */
+/* Dropdowns  */
+/* ---------- */
+
+.rdp-dropdown_year,
+.rdp-dropdown_month {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.rdp-dropdown {
+  appearance: none;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: inherit;
+  opacity: 0;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.rdp-dropdown[disabled] {
+  opacity: unset;
+  color: unset;
+}
+
+.rdp-dropdown:focus-visible:not([disabled]) + .rdp-caption_label {
+  background-color: var(--rdp-background-color);
+  border: var(--rdp-outline);
+  border-radius: 6px;
+}
+
+.rdp-dropdown_icon {
+  margin: 0 0 0 5px;
+}
+
+.rdp-head {
+  border: 0;
+}
+
+.rdp-head_row,
+.rdp-row {
+  height: 100%;
+  padding-bottom: 2px;
+}
+
+.rdp-head_cell {
+  vertical-align: middle;
+  font-size: 0.8125em;
+  font-weight: 500;
+
+  text-align: center;
+  height: var(--rdp-cell-size);
+  padding: 0;
+
+  line-height: 140%;
+  color: #647084;
+  letter-spacing: -0.003em;
+}
+
+.rdp-tbody {
+  border: 0;
+}
+
+.rdp-tfoot {
+  margin: 0.5em;
+}
+
+.rdp-cell {
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  text-align: center;
+  padding: 0;
+}
+
+.rdp-cell_selected_start {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: var(--rdp-background-color-selected-secondary);
+}
+
+.rdp-cell_selected_end {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: var(--rdp-background-color-selected-secondary);
+}
+
+.rdp-cell_selected_range {
+  background-color: var(--rdp-background-color-selected-secondary);
+}
+
+.rdp-weeknumber {
+  font-size: 0.75em;
+}
+
+.rdp-weeknumber,
+.rdp-day {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--rdp-cell-size);
+  max-width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  margin: 0;
+  border: 2px solid transparent;
+  border-radius: 10px;
+}
+
+.rdp-day_today:not(.rdp-day_outside) {
+  position: relative;
+}
+.rdp-day_today:not(.rdp-day_outside)::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  width: 4px;
+  height: 2px;
+  transform: translateX(-50%);
+
+  border-radius: 10px;
+  background-color: var(--rdp-accent-color);
+}
+
+.rdp-day_selected {
+  opacity: 1;
+  background-color: var(--rdp-accent-color);
+  color: var(--rdp-background-color);
+  transition: all 150ms ease-in-out;
+}
+
+.rdp-day_selected:focus-visible,
+.rdp-day_selected:hover {
+  opacity: 1;
+  background-color: var(--rdp-accent-color-dark);
+  border-radius: 10px;
+}
+
+.rdp-day_outside {
+  opacity: 0.3;
+}
+
+.rdp-day_selected:focus-visible {
+  /* Since the background is the same use again the outline */
+  outline: var(--rdp-outline);
+  outline-offset: 2px;
+  z-index: 1;
+}
+
+.rdp[dir='rtl'] .rdp-day_range_start:not(.rdp-day_range_end) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.rdp[dir='rtl'] .rdp-day_range_end:not(.rdp-day_range_start) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.rdp-day_range_end.rdp-day_range_start {
+  border-radius: 10px;
+}
+
+.rdp-day_range_middle {
+  color: var(--rdp-text-color);
+  background-color: var(--rdp-background-color-selected-secondary);
+}
+
+.rdp-day_range_middle:hover {
+  color: var(--rdp-text-color);
+  background-color: var(--rdp-hover-color-darker);
+}

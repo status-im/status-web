@@ -1,0 +1,88 @@
+---
+id: 859
+revision: '0'
+language: en
+title: Secure your Status profile or Wallet with Keycard
+author: cheny0, earakel, jorge-campo
+roles:
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  Currently, you can only use your Keycard with your Status profile and the Wallet accounts associated the same recovery phrase on the Status mobile app. You can use your Keycard to protect your profile, your profile associated Wallet accounts and [imported wallet accounts](../wallet/import-an-account-into-your-status-wallet.mdx) on the Status desktop app.
+</Admonition>
+
+You can enhance the security of your Status profile and Wallet using the [Keycard hardware wallet](https://status.app/keycard)<ExternalIcon />. To do so, you transfer them from the Status app to the Keycard by entering the [recovery phrase](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-recovery-phrase).
+
+A Keycard is a physical equipment that stores your private keys separately from your device, helping protect your funds even if your device is compromised. To make transactions in Status, you must physically connect your Keycard to your computer using a card reader or scan the Keycard on your phone's NFC component.
+
+If your Status profile has multiple [key pairs](../profile/understand-your-status-keys-and-recovery-phrase.mdx#about-your-status-keys), you can link only one to one Keycard. After setting up the Keycard, you can [view the wallet accounts on your Keycard](./view-the-profile-or-wallet-accounts-on-your-keycard.mdx) and confirm which key pair you link.
+
+<Admonition type="info">
+  In the Status Wallet, a single [master key pair](../profile/understand-your-status-keys-and-recovery-phrase.mdx#status-chat-key-and-wallet-account-address) can generate multiple wallet accounts, each with a unique key pair and address.
+</Admonition>
+
+<Admonition type="tip">
+  If you already have a crypto wallet account and you want to use it in Status Wallet and protect it with Keycard, check out [Import a wallet account onto Keycard and use it in Status](./import-a-wallet-account-from-another-app-onto-keycard-and-use-it-in-status.mdx).
+</Admonition>
+
+## What to expect
+
+- If you use your Keycard with the Status desktop app, you need a [card reader](./keycard-faq.mdx) to connect a Keycard to your computer.
+- Your Keycard must be empty. If it's not new, [view the wallet accounts on your Keycard](./view-the-profile-or-wallet-accounts-on-your-keycard.mdx) and [factory reset](./factory-reset-your-keycard.mdx) it when needed.
+- If you use the Keycard with your profile, the Keycard also protects all Wallet accounts that use the same recovery phrase.
+- You must use the Keycard to confirm your identity and approve transactions for the protected profile or Wallet accounts.
+
+## Secure your Status profile or Status Wallet with Keycard
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    You can only use your Keycard with your Status profile and the Wallet accounts associated the same recovery phrase on the Status mobile app.
+
+    ### Step 1: confirm your profile
+
+    1. Open the Status app and log in to the profile you want to use with your Keycard.
+    1. Tap your profile picture > <ContextTag icon={<KeycardIcon />}>Keycard</ContextTag> > <ContextTag>Setup Keycard</ContextTag>.
+    1. Tap <ContextTag>Ready to scan</ContextTag>. Then tap and hold your Keycard near the top (iPhone) or back (Android phones) of your phone.
+    1. Tap <ContextTag>Import profile key pair</ContextTag>.
+    1. Review the information on the screen and tap <ContextTag>Continue</ContextTag>.
+    1. Type the recovery phrase of your profile, then <ContextTag icon={<PasswordIcon />}>Slide to authorise</ContextTag>.
+    1. Enter the profile password and tap <ContextTag>Confirm</ContextTag>.
+
+    ### Step 2: Set up your Keycard
+
+    1. Create a Keycard PIN and enter it again to confirm.
+    1. Tap <ContextTag>Scan Keycard</ContextTag>. Then tap and hold your Keycard near the top (iPhone) or back (Android phones) of your phone.
+    1. Tap <ContextTag>Log out</ContextTag>.
+    1. Log in to your profile using the Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    You can use your Keycard to protect your profile, your profile associated Wallet accounts and [imported wallet accounts](../wallet/import-an-account-into-your-status-wallet.mdx) on the Status desktop app.
+
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<KeycardDesktopIcon />}>Keycard</ContextTag>.
+    1. Click <ContextTag>Set up a new Keycard with an existing account</ContextTag> or <ContextTag>Migrate an existing account from Status Desktop to Keycard</ContextTag> if you have set up another Keycard with this profile.
+    1. Select the key pair (Wallet accounts) you want to use with your Keycard. For your profile, select <ContextTag>Profile key pair</ContextTag>. Click <ContextTag>Next</ContextTag> when ready and click <ContextTag>Next</ContextTag> again to confirm.
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection request if you see a security alert from your computer.
+    1. Create a six-digit PIN for your Keycard, and repeat the PIN to confirm. Then click <ContextTag>Input seed phrase</ContextTag>.
+    1. Enter the recovery phrase of your profile or Wallet account and click <ContextTag>Yes, migrate key pair to Keycard</ContextTag>.
+    1. Click <ContextTag>Done</ContextTag> or <ContextTag>Restart the app and sign in using your Keycard</ContextTag> if you choose to use the Keycard with your profile.
+  </TabsContent>
+</Tabs>

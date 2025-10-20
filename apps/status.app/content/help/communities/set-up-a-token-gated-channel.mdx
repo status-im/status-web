@@ -1,0 +1,73 @@
+---
+id: 133
+revision: '2'
+language: en
+title: Set up a token-gated channel
+author: jorge-campo, Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only set up token-gated channels using Status desktop.
+</Admonition>
+
+By default, a new [community channel](./channels-your-quick-start-guide.mdx) is open and available for everyone to join, view and post new messages. As a community Owner, you can restrict community members' actions in channels using [tokens](../wallet/understand-coins-and-tokens.mdx) (assets, collectibles or ENS names).
+
+<Admonition type="info">
+  Token-gated channels show a <LockedIcon /> lock symbol in the channel icon.
+</Admonition>
+
+In a token-gated channel, only token holders can participate. You might require members to hold specific tokens to join the channel, or you can [set up a view-only channel](./set-up-a-view-only-channel.mdx) where only members owning specific tokens can write.
+
+<Admonition type="caution">
+  Setting up token-gated channels has immediate effects. Any new permission automatically removes channel members who don't meet the token requirements. To prevent this, [airdrop](./how-to-airdrop-tokens-in-status.mdx) the token first, then apply token-gate permissions.
+</Admonition>
+
+A token-gated channel can be helpful in various scenarios. For instance, if you offer premium content or services, a token-gated channel can be an exclusive space for your subscribers. You can also use tokens to create a view-only channel for community announcements where you want the conversation to stay relevant. For more information, check out [Set up a view-only channel](./set-up-a-view-only-channel.mdx).
+
+<Admonition type="info">
+  You can use token-gated channels and communities independently. For example, you may want to set up an open Status Community but restrict access to specific channels.
+</Admonition>
+
+## What to expect
+
+- You can set up<ContextTag>View only</ContextTag> and<ContextTag>View and post</ContextTag> token-based channel permissions together or independently.
+- If you create separate<ContextTag>View only</ContextTag> and<ContextTag>View and post</ContextTag> token permissions, anyone who meets the<ContextTag>View and post</ContextTag> permission can see the channel and send messages, even if they don't satisfy the<ContextTag>View only</ContextTag> rules.
+- You can set up token-based permissions with existing tokens or [tokens you mint](./mint-tokens-for-your-community.mdx) and distribute via [airdrops](./how-to-airdrop-tokens-in-status.mdx). You can combine up to five assets, collectibles or ENS names in a single permission.
+- Channel members must always meet and keep the token requirements in a token-gated channel. Members not holding the required tokens lose access to the channel automatically.
+- Remove the channel permissions to change a token-gated channel back into an open one. For more information, check out [Change a token-gated channel to open](./change-a-token-gated-channel-to-open.mdx).
+
+## Set up a token-gated channel
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag> and <ContextTag>Add new permission</ContextTag>.
+    1. For the <ContextTag>Who holds</ContextTag> variable, select the tokens and amounts (for assets and collectibles) members must hold and click <ContextTag>Add</ContextTag>.
+    1. For the <ContextTag>Is allowed to</ContextTag>, under the <ContextTag>Channels</ContextTag> area, choose <ContextTag icon={<Edit2DesktopIcon />}>View and post</ContextTag> or <ContextTag icon={<ShowDesktopIcon />}>View only</ContextTag>.
+    1. For the <ContextTag>In</ContextTag> variable, check the box for the channel where you want to add the permission. You can check the appropriate box to use the same permission across multiple channels.
+    1. Optionally, check <ContextTag icon={<HideDesktopIcon />}>Hide permission</ContextTag> to hide this permission from members who don't meet the token requirements.
+    1. Click <ContextTag>Create permission</ContextTag>. The new permission takes effect immediately.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  Tokens are linked by AND operators. This means the permission takes effect when the holder owns all the tokens. If you want to use the OR operator instead, create additional permissions with different<ContextTag>Who holds</ContextTag> values.
+</Admonition>

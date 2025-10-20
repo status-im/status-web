@@ -1,0 +1,70 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+
+    "allowJs": true,
+    // "checkJs": true,
+    "skipLibCheck": true,
+
+    // strictness
+    "strict": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    // "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    // "noImplicitOverride": true,
+    // "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    // "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
+    "noEmit": true,
+    "incremental": true,
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // @see https://github.com/orgs/pnpm/discussions/4331#discussioncomment-3379386 for pnpm's config recommendation
+    // @see https://github.com/pnpm/pnpm/issues/6585#issuecomment-1562126171 for hoisting types
+    "preserveSymlinks": false,
+    "jsx": "preserve",
+    "plugins": [{ "name": "next" }],
+    "baseUrl": ".",
+    "paths": {
+      "~components/*": ["./src/app/_components/*"],
+      "~hooks/*": ["./src/app/_hooks/*"],
+      "~website/*": ["./src/app/(website)/*"],
+      "~sharing/*": ["./src/app/(sharing)/*"],
+      "~admin/*": ["./src/app/admin/*"],
+      "~server/*": ["./src/server/*"],
+      "~app/*": ["./src/app/*"],
+      "~public/*": ["./public/*"],
+      "~content": ["./.contentlayer/generated"],
+      "~content/metadata/*": ["./.contentlayer/*"],
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "env.d.ts",
+    ".contentlayer/generated",
+    ".next/types/**/*.ts",
+    "global.d.ts",
+    // local
+    ".scripts/**/*.ts"
+  ],
+  "exclude": ["node_modules", ".next"]
+  // note: not needed if linted via eslint-plugin-mdx with eslint settings in .eslintrc.js remark configuration in .remarkrc.mjs
+  // note: see https://github.com/mdx-js/mdx-analyzer/blob/d77942b81905dbb7ccd3e7ed5d777985f56f7a85/packages/vscode-mdx/README.md?plain=1#L80
+  // "mdx": {
+  //   "plugins": ["remark-mdx", "remark-gfm", "remark-prettier"]
+  // }
+}

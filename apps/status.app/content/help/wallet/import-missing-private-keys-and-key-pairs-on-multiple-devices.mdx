@@ -1,0 +1,194 @@
+---
+id: 1531
+revision: '0'
+language: en
+title: Import missing private keys and key pairs on multiple devices
+author: jorge-campo, Cheny0
+roles: 
+---
+
+When you [create your Status profile](../getting-started/run-the-status-app-for-the-first-time.mdx), the Status app automatically generates a master key (key pair) and a wallet account for you. This initial master key is securely linked to your profile recovery phrase and synchronized across your devices when you set up [profile synchronization](../profile/sync-your-profile-across-devices.mdx).
+
+<Admonition type="info">
+  In the Status app, the terms "master key" and "key pair" are sometimes used interchangeably. While they are not exactly the same, both represent a set of keys that protect your wallet accounts.
+</Admonition>
+
+When you [create a new master key](./organize-funds-and-accounts-with-a-new-master-key.mdx) (key pair) on one of your devices, the device stores the key locally. To reduce the risk of accidental exposure during synchronization, the Status app does not automatically sync these new keys across devices, even if your Status profile is synchronized.
+
+## What to expect
+
+- The Status app keeps your Status profile master key and all derived Wallet accounts synchronized across devices when you set up profile synchronization.
+- If you [create additional accounts](./create-wallet-accounts.mdx) from a new master key or private key on one device, these are not automatically synchronized to your other devices.
+- To access these accounts on a new device, you must import the private key or key pair from the device where you created them.
+- On your [synced devices](../profile/sync-your-profile-across-devices.mdx), the Status app lists missing key pairs and accounts in Wallet settings to show they aren't available on the current device.
+
+<Admonition type="tip">
+  Importing key pairs and private keys on all your devices simplifies managing your funds and accounts, but it is not mandatory. You can choose to keep some key on specific devices.
+</Admonition>
+
+## Import missing private keys and key pairs
+
+To import missing private keys and key pairs across devices, you must complete these steps on each device that is missing the keys.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Tap your profile picture > <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Tap <ContextTag>Key pairs and accounts</ContextTag>. On this screen, the Status app shows key pairs and private keys missing on the current device. If you don't see the <ContextTag>missing key pairs</ContextTag>, you must [add the keys manually](#add-the-missing-wallet-keys-manually).
+    1. Tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag> next to the key pair or private key you want to import.
+    1. Choose one of the following three options to import the key pair or private key:
+
+    <Table>
+      <TableHead>
+        <TableHeader>Option</TableHeader>
+        <TableHeader>Steps</TableHeader>
+      </TableHead>
+
+      <TableContent>
+        <TableRow>
+          <TableCell>Import by scanning encrypted QR</TableCell>
+
+          <TableCell>
+            1. Scan the QR code from your other device that contains the key pair or private key. To generate the QR code, see [Find the QR code for your keys](#find-the-qr-code-for-your-keys).
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell>Import by entering recovery phrase</TableCell>
+
+          <TableCell>
+            1. On the next screen, type your recovery phrase words separated by spaces. Make sure you type the words in the correct order.
+            1. Slide the <ContextTag icon={<ArrowRightIcon />}>Arrow</ContextTag> to the right in the <ContextTag icon={<TouchIdBigIcon />}>Slide to import</ContextTag> area at the bottom of the screen.
+            1. Authenticate with biometrics (fingerprint, face or other method) or your password.
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell>Import by entering private key</TableCell>
+
+          <TableCell>
+            1. On the next screen, enter the private key for the account you want to import. This is the secret string of characters you used to import the account into Status Wallet.
+            1. Slide the <ContextTag icon={<ArrowRightIcon />}>Arrow</ContextTag> to the right in the <ContextTag icon={<TouchIdBigIcon />}>Slide to import</ContextTag> area at the bottom of the screen.
+            1. Authenticate with biometrics (fingerprint, face or other method) or your password.
+          </TableCell>
+        </TableRow>
+      </TableContent>
+    </Table>
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag>.
+
+    1. Click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>. On the Wallet settings screen, the Status app shows key pairs and private keys that are missing on the current device. If you don't see the <ContextTag>missing key pairs</ContextTag>, you must [add the keys manually](#add-the-missing-wallet-keys-manually).
+
+    1. Tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag> next to the key pair or private key you want to import.
+
+    1. Choose one of the following three options to import the key pair or private key:
+
+    <Table>
+      <TableHead>
+        <TableHeader>Option</TableHeader>
+        <TableHeader>Steps</TableHeader>
+      </TableHead>
+
+      <TableContent>
+        <TableRow>
+          <TableCell>Import key pair from device via encrypted QR</TableCell>
+
+          <TableCell>
+            1. On the next screen, enable access to your webcam and scan the QR code from your other device. To generate the QR code, see [Find the QR code for your keys](#find-the-qr-code-for-your-keys).
+            1. Alternatively, if you're importing from another Status desktop installation, you can click <ContextTag>Enter encrypted key</ContextTag> and enter the key manually.
+            1. Click <ContextTag>Done</ContextTag>.
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell>Import via entering recovery phrase</TableCell>
+
+          <TableCell>
+            1. On the next screen, enter your recovery phrase words separated by spaces. Make sure you type the words in the correct order.
+            1. Click <ContextTag icon={<TouchIdDesktopIcon />}>Import key pair</ContextTag>.
+            1. Authenticate with biometrics (fingerprint, face or other method), or your password.
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell>Import via entering private key</TableCell>
+
+          <TableCell>
+            1. On the next screen, enter the private key for the account you want to import. This is the secret string of characters you used to import the account into Status Wallet.
+            1. Click <ContextTag icon={<TouchIdDesktopIcon />}>Import key pair</ContextTag>.
+            1. Authenticate with biometrics (fingerprint, face or other method) or your password.
+          </TableCell>
+        </TableRow>
+      </TableContent>
+    </Table>
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  To learn how your Wallet accounts and keys work, check out [Understand your Status Wallet accounts and keys](./understand-your-status-wallet-accounts-and-keys.mdx).
+</Admonition>
+
+## Add the missing Wallet keys manually
+
+The Status app shows the missing master keys and key pairs on your [synced devices](../profile/sync-your-profile-across-devices.mdx). On devices that aren't synced with your Status profile, the missing keys don't appear, but you can add them manually.
+
+For information on how to add missing keys manually, read [Import an account into your Status Wallet](./import-an-account-into-your-status-wallet.mdx).
+
+## Find the QR code for your keys
+
+To import a key pair or private key from another device, you need to find the corresponding encrypted QR code.
+
+Complete these steps on the device where you added the key pair or private key.
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Tap your profile picture > <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Tap <ContextTag>Key pairs and accounts</ContextTag>.
+    1. Tap <ContextTag icon={<OptionsIcon />}>More options</ContextTag> next to the key pair or private key you want to export.
+    1. Select <ContextTag icon={<QrCodeIcon />}>Show encrypted QR of key pair</ContextTag>.
+    1. Slide the <ContextTag icon={<ArrowRightIcon />}>Arrow</ContextTag> to the right in the <ContextTag icon={<PasswordIcon />}>Slide to reveal QR code</ContextTag> area at the bottom of the screen.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Click <ContextTag icon={<MoreDesktopIcon />}>More options</ContextTag> next to the key pair or private key you want to export.
+    1. Select <ContextTag icon={<QrDesktopIcon />}>Show encrypted QR on device</ContextTag>.
+    1. Authenticate with biometrics (fingerprint, face or other method), password or your Keycard.
+    1. Click <ContextTag icon={<ShowDesktopIcon />}>Reveal QR</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  If you no longer need some of the accounts or key pairs, you can [delete them](./delete-your-status-wallet-accounts.mdx) from your device.
+</Admonition>

@@ -1,0 +1,73 @@
+---
+id: 75
+revision: '2'
+language: en
+title: Send crypto to someone
+author: earakel, jorge-campo, Fabiomorais87
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1739350844/Help/Documentation%20Screens/Wallet/75/75_Header_light.png)
+
+You can send crypto to other people using your [Status Wallet](./status-wallet-your-quick-start-guide.mdx). The person you're sending crypto to doesn't need to be a Status Wallet user.
+
+<Admonition type="info">
+  Status Wallet doesn't charge any extra transaction fees. The network fees you're paying to send transactions are charged by the Ethereum blockchain. For more details, check out [Understand network fees](./understand-network-fees.mdx).
+</Admonition>
+
+## What to expect
+
+- You can send crypto to any Ethereum address. This means the person receiving your crypto doesn't need to be on your contact list. They can also use any other wallet app they prefer.
+- Status Wallet doesn't support non-Ethereum-based assets. If you send crypto to a non-Ethereum address (for example, a Bitcoin address), you may lose your funds. To verify the address, you can look it up on a [block explorer](./understand-block-explorers.mdx).
+- To send crypto to someone, you need to pay network fees. No matter which asset or token you're sending, you can only pay network fees in ETH. For more details, check out [Understand network fees](./understand-network-fees.mdx).
+
+## Send crypto
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    1. From the tab bar, tap  <ContextTag icon={<WalletIcon />}>Wallet</ContextTag>.
+    1. Select the account you want to send crypto from and tap <ContextTag icon={<SendIcon />}>Send</ContextTag>.
+    1. In the <ContextTag>Send To</ContextTag> page, enter the receiving address and tap <ContextTag>Continue</ContextTag>. You can:
+       - <ContextTag>Paste</ContextTag> the receiving address from the clipboard or <ContextTag icon={<ScanIcon />}>scan</ContextTag> its QR code.
+       - Use a Status contact's name or an ENS name.
+       - Choose from a <ContextTag>Recent</ContextTag> address, one of your <ContextTag>Saved</ContextTag> addresses or one of your <ContextTag>Accounts</ContextTag>.
+    1. From the token list, select which asset or collectible you want to send.
+    1. Enter the amount to send, and tap <ContextTag>Review send</ContextTag>.
+    1. Double-check the transaction details and then <ContextTag>Slide to send</ContextTag>.
+    1. Authenticate using your password, biometrics or Keycard.
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+    1. Select the account you want to send crypto from and click <ContextTag icon={<SendDesktopIcon />}>Send</ContextTag>.
+    1. On the <ContextTag>Send</ContextTag> screen, click the <ContextTag>Select token</ContextTag> drop-down menu to choose which asset or collectible to send, then enter the amount.
+    1. In the <ContextTag>To</ContextTag> field, enter the receiving address. You can:
+       - <ContextTag>Paste</ContextTag> the receiving address from the clipboard.
+       - Use a Status contact's name or an ENS name.
+       - Choose from a <ContextTag>Recent</ContextTag> address, one of your <ContextTag>Saved</ContextTag> addresses or one of your <ContextTag>Accounts</ContextTag>.
+    1. Click <ContextTag>Review Send</ContextTag>.
+    1. Double-check everything, including the network fees, and click <ContextTag>Sign</ContextTag>.
+    1. Authenticate using your password, biometrics or Keycard.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="caution">
+  Double-check the address you're sending crypto to and make sure it's an Ethereum address. Once you send a blockchain transaction, there's no way to cancel it.
+</Admonition>
+
+<Admonition type="info">
+  To customize your transaction, check out [Set transaction fees and nonce](./set-network-fees-and-nonce.mdx).
+</Admonition>

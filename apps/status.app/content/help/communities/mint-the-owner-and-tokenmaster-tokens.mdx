@@ -1,0 +1,73 @@
+---
+id: 681
+revision: '2'
+language: en
+title: Mint the Owner and TokenMaster tokens
+author: jorge-campo, cheny0
+roles:
+- Owners
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only mint the Owner and TokenMaster tokens using Status desktop.
+</Admonition>
+
+As a community owner, you can mint two unique tokens to administer your community: Owner and TokenMaster. Holding these tokens grants the [Owner and TokenMaster roles](./about-the-management-roles-in-status-communities.mdx), respectively.
+
+With the Owner token, you have complete control over the community, including [transferring your community's ownership](./transfer-your-community-s-ownership.mdx) or [minting other tokens](./mint-tokens-for-your-community.mdx).
+
+When you mint the Owner token, you also mint the TokenMaster token in the same process. You can [airdrop the TokenMaster token](./how-to-airdrop-the-tokenmaster-token.mdx) to other members and share the community administration workload.
+
+<Admonition type="info">
+  To understand the function of these tokens in your community, check out [Understand the Owner and Token Master tokens](./understand-the-owner-and-tokenmaster-tokens.mdx).
+</Admonition>
+
+## What to expect
+
+- You must mint the Owner token for your community to import, mint or airdrop other community tokens.
+- After minting, the Owner token is automatically airdropped to your [Status Wallet](../wallet/status-wallet-your-quick-start-guide.mdx). The TokenMaster token is visible in the <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag> screen but not in your Status Wallet.
+- You can airdrop the TokenMaster token to people you want to help administer the community.
+- As a community owner, you can revoke the administrative privileges associated with the TokenMaster token anytime by [remotely destructing the token](./revoke-the-tokenmaster-role-from-someone.mdx).
+
+<Admonition type="caution">
+  If you don't [mint the Owner token](./mint-the-owner-and-tokenmaster-tokens.mdx) and the computer running your community becomes unavailable, you will lose access to your community forever, even if you know your recovery phrase.
+  In this scenario, the community remains active with [minimal functionality](./common-issues-when-the-community-s-control-node-is-offline.mdx), but without an Owner and control node (orphaned community).
+</Admonition>
+
+## Minting the Owner and TokenMaster tokens
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. At the top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag> and <ContextTag>Mint Owner token</ContextTag>.
+    1. In the <ContextTag>Tokens</ContextTag> screen, click <ContextTag>Mint Owner token</ContextTag>.
+    1. Review the information about the tokens and click <ContextTag>Next</ContextTag>. You can't change this information.
+    1. Select the Status Wallet account and network you want to use to mint the tokens. Review the gas fees and click <ContextTag>Mint</ContextTag>.
+    1. Review the transaction details and click <ContextTag icon={<PasswordDesktopIcon />}>Sign transaction</ContextTag>. Enter your Status password to confirm the transaction and click <ContextTag>Authenticate</ContextTag>.
+    1. Wait for the minting process to finish. You can check the minting status in the <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag> screen.
+  </TabsContent>
+</Tabs>
+
+After minting, you can find the Owner and TokenMaster tokens in the <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag> screen.
+
+<Admonition type="tip">
+  You can identify the Owner token by the <CrownIcon /> crown symbol. The TokenMaster token has a <TokenSaleDesktopIcon /> crypto-coins symbol.
+</Admonition>

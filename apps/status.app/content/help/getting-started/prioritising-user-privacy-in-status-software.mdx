@@ -1,0 +1,101 @@
+---
+id: 1355
+revision: '0'
+language: en
+title: 'Prioritising User Privacy in Status Software'
+author: status-im
+---
+
+![](https://res.cloudinary.com/dhgck7ebz/image/upload/v1733239736/Help/Documentation%20Screens/Marketing/1355/1355_Header.png)
+
+## TL;DR
+
+Status prioritises privacy! This article walks you through how we handle your personal data, whether it's logging, sharing, or just passing through our servers. We've made some changes to our software (all good things!), and in line with our core principles, we're being completely upfront about them. In the vast majority of cases only your device's IP address (if you're not using a VPN or Tor) will be handled by Status or third parties. Whether it's censorship-resistant messaging, swaps, or cross-chain magic, we've got your back. Got questions? Hit us up! ... or read all the stuff for nerds below (and maybe the Privacy Policy itself).
+
+Status will never try to access, store, or use your personal data in any way unless absolutely required for the functioning or improvement of Status Software. Under no circumstances will Status ever monetise or exploit the personal data handled by Status Software or Status infrastructure.
+
+## Purpose of This Article
+
+Status Software has undergone some important changes and added exciting new features. As part of this process, the way it handles user data has necessarily changed. We're excited about the recent improvements to Status Software and in staying true to our commitment to openness, we want to explain how these updates impact you and how we continue to uphold our promise of protecting your privacy.
+
+While we continue to enhance our decentralised approach, some features require Status Software to interact with third parties, resulting in the handling of limited metadata. Our priority in handling this data is to deliver the powerful features our users require while always keeping their privacy paramount.
+
+Other applications might simply update their privacy policy and expect you to read through it yourself to decode what's changed with their data handling. To keep everything transparent and demonstrate our commitment to user privacy, we've laid out in clear terms what data is handled by Status Software and when.
+
+## Why Make These Changes?
+
+### Trust Through Transparency
+
+Three of the core principles in our [manifesto](https://status.app/manifesto) are Security, Privacy, and Transparency. In accordance with these values, it is our sincere obligation to our community to be as absolutely open about our data handling as possible.
+
+These principles are a cornerstone of Status Software, and as such we have updated our privacy policy to build and maintain our users' trust by providing a clear and detailed explanation of how Status Software handles data.
+
+By being upfront and open about our data processing practices, we are making an honest, good-faith demonstration of our ongoing commitment to protecting our users' privacy and securing their personal data.
+
+### Enhanced Functionality and User Experience
+
+We are thrilled to have introduced the Status API Proxy Server, a powerful tool that delivers an improved user experience and enhances the performance of the Status app while shielding various user data from third-party RPC service providers.
+
+The API Proxy Server is designed to improve the performance and functionality of Status Software, and therefore it necessitates limited data processing. To deliver a better user experience, certain user information, such as IP addresses and wallet addresses, must be briefly processed.
+
+Importantly, the data that Status Software handles through this server is no different from the data that would typically be handled and processed by EVM RPC service providers. The privacy policy has been updated to reflect this change and ensure users are aware of the data handling involved in optimising the software's performance.
+
+### Introduction of Opt-In Usage Data Collection
+
+In Status Software, users are informed that they have the possibility to opt in to share usage data. This allows Status Software to gather insights on how users interact with the software, which can inform future improvements and enhancements.
+
+In Status Software and as also reflected in the privacy policy, Status ensures that users are fully informed about this optional feature and can make an educated decision about whether to participate.
+
+### Adapting to Technological Changes / Third-Party Integrations
+
+The exciting and user-friendly features coming to Status will often see the applications interacting with third-party services and tools, enhancing the functionality and interoperability of the platform.
+
+As Status Software integrates with more third-party services (such as RPC providers, cloud providers, and analytics tools), it becomes necessary to process certain personal data to ensure these services function correctly.
+
+The privacy policy reflects these technological changes and provides users with a clear understanding of how their personal data might be handled by these third parties.
+
+## Types of Data Handling
+
+To give a clearer idea of how Status Software preserves user privacy, we have highlighted specifically what personal data we handle and how we handle it. We have outlined the four categories of data handling that Status and Status Software performs below.
+
+### Logged
+
+Logged data refers to the information that is automatically recorded about the requests and responses passing through infrastructure that Status manages, such as the Status Software proxy server. This logging is essential for monitoring our infrastructure's activity, diagnosing issues, and ensuring the health of the network.
+
+However, since these logs contain sensitive metadata, such as IP addresses, Status takes great care to secure them properly to prevent exposure of personal data. This involves restricting access to log files and ensuring logs are rotated and deleted after a set retention period of 15 days.
+
+### Passed-Through
+
+Passed-through data refers to information that flows through the Status Software proxy server, managed and maintained by Status, without being altered, stored or manipulated by the server. The Status Software proxy server acts as an intermediary between Status Software and service provider servers, simply forwarding requests and responses without modifying the data in any way.
+
+None of this data is logged, persisted or stored in any way.
+
+### Shared
+
+Shared data refers to personal data that is intentionally distributed between Status Software and third-party services. For the avoidance of doubt, Status does not have any visibility or access to this data. The nature of the shared personal data is limited to only a user's destination EVM address for crypto asset transfers and referral identifiers. This personal data is only ever shared when the user actively engages with the swap and on-ramping services.
+
+### Ambient Metadata
+
+Ambient metadata is information that is incidentally handled or exposed during the course of a digital interaction. This data often includes elements like IP addresses, connection timestamps, or user-agent strings. Unlike data that is explicitly logged or shared, ambient metadata arises naturally as part of the connection process.
+
+## In-Depth Analysis of Status Data Handling
+
+For a detailed analysis of what data Status handles and in what context, please see the following sections:
+
+- [Privacy With Status Infrastructure and Insights](./privacy-with-status-infrastructure-and-insights.mdx)
+- [Privacy With Status Third Parties](./privacy-with-status-third-parties.mdx)
+
+## The Privacy Policy
+
+As noted above, due to important but necessary changes made to Status Software, which now involves the handling and sharing of certain personal data of the users, we have created a privacy policy to reflect these changes and are in line with our legal obligations to do so.
+
+The privacy policy sets out a number of items (among others) for your consideration:
+It states that the Status entity, Status Research & Development GmbH, is responsible for managing and processing certain personal data, as outlined in this article, when using Status Software.
+
+- It provides detailed information on specific instances where personal data—such as analytics, telemetry data, IP addresses, and wallet addresses—may be handled or processed by Status.
+- It also explains the purpose of processing this data and how long it is retained; and
+- It informs you of your rights under privacy laws, including GDPR, such as the ability to access, correct, or delete your data.
+
+We ask that you read the privacy policy in full before you use Status Software.
+
+If you have any questions regarding the privacy policy, please feel free to contact us at [legal@status.im](mailto:legal@status.im).

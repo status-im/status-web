@@ -1,0 +1,59 @@
+---
+id: 1258
+revision: '0'
+language: en
+title: Import tokens to your community
+author: jorge-campo, Fabiomorais87
+roles:
+- Owner
+- TokenMaster
+---
+
+In Status Communities, Owners and TokenMasters can [mint new tokens](./mint-tokens-for-your-community.mdx) and use them to set [token-based](./token-based-access-to-communities-and-channels.mdx) communities and channels or [delegate permissions](./delegate-management-functions-to-your-community.mdx) to other members.
+
+In addition to minting new tokens, Owners and TokenMasters can import existing ERC-20 tokens to their community. Importing is useful if you want to use one of the tokens in token lists such as [Uniswap](https://app.uniswap.org/)<ExternalIcon /> instead of your own minted token.
+
+<Admonition type="info">
+  Token lists are directories of verified crypto tokens that platforms like [Uniswap](https://app.uniswap.org/)<ExternalIcon /> or [CoinGecko](https://www.coingecko.com/)<ExternalIcon /> keep. These lists include token names, symbols and contract addresses to help users interact with tokens securely.
+</Admonition>
+
+## What to expect
+
+- You import a new token to your community when you set up a new community or channel permission.
+- The tokens you import appear in your personal settings under the navigation sidebar <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag> > <ContextTag>Manage tokens</ContextTag> option.
+- Owners and TokenMasters can import assets (virtual currencies, such as USDS or UNI) to their community. Currently, it is not possible to import existing  collectibles (NFTs).
+
+<Admonition type="info">
+  Adding your own list of tokens is not supported yet. You can only add tokens to your community by minting them or importing them from the Uniswap or Status token lists.
+</Admonition>
+
+## Import tokens to your community
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. Click <ContextTag>Add new permission</ContextTag> to start from scratch or click <ContextTag icon={<CopyDesktopIcon />}>Duplicate</ContextTag> to start from an existing permission.
+    1. For the <ContextTag icon={<InContactsDesktopIcon />}>Who holds</ContextTag> variable, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> next to the variable and choose the asset you want to import. The list includes your community assets (if you have minted any) and all other available assets.
+    1. Enter the amount of assets you want to use in your permission and click <ContextTag>Add</ContextTag>.
+    1. Configure the rest of the permission options using the <ContextTag icon={<SecurityDesktopIcon />}>Is allowed to</ContextTag> and <ContextTag icon={<ChannelCategoryDesktopIcon />}>In</ContextTag> variables.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  Check out [Set up your community permissions](./set-up-your-community-permissions.mdx) or [Set up your channel permissions](set-up-your-channel-permissions.mdx) for a step-by-step guide on how to configure permissions.
+</Admonition>

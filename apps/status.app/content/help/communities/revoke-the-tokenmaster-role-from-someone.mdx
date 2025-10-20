@@ -1,0 +1,85 @@
+---
+id: 781
+revision: '1'
+language: en
+title: Revoke the TokenMaster role from someone
+author: jorge-campo, cheny0, osmaczko
+---
+
+In Status Communities, Owners can grant the [TokenMaster role](./about-the-management-roles-in-status-communities.mdx) to others by airdropping them the TokenMaster token. The TokenMaster role in a community is optional, but it can help Owners administer the community tokens, membership and permissions.
+
+When you [airdrop the TokenMaster token](./how-to-airdrop-the-tokenmaster-token.mdx) to someone, they become a TokenMaster and [gain administrative privileges](./about-the-management-roles-in-status-communities.mdx) in your community. To revoke this role, you remotely destruct the TokenMaster token in their wallet.
+
+<Admonition type="info">
+  To revoke other types of tokens, read [Revoke a community token from someone](./revoke-a-community-token-from-someone.mdx).
+</Admonition>
+
+## What to expect
+
+- Destructing the TokenMaster token is a built-in feature of this token, and it's available to community Owners only.
+- When you revoke the TokenMaster token, it disappears from the recipient's wallet, and they lose the TokenMaster role immediately. The user receives a notification informing them of your action.
+- Community Owners can always destruct the TokenMaster token, even if the token holder is not a community member.
+- To revoke the TokenMaster token, you execute a transaction in the [Ethereum blockchain](../getting-started/about-the-ethereum-blockchain.mdx) and pay a [gas fee](../wallet/understand-network-fees.mdx).
+- If you revoke the TokenMaster role from someone by mistake or change your mind, you can airdrop a new TokenMaster token to them.
+
+## Destroy the TokenMaster token remotely
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<TokenDesktopIcon />}>Tokens</ContextTag>.
+
+    1. Under <ContextTag>Collectibles</ContextTag>, select the TokenMaster token, identified by the <ContextTag>TMaster-</ContextTag> prefix and the <TokenSaleDesktopIcon /> crypto-coins icon.
+
+    1. Right-click a token holder in the <ContextTag>TokenMaster token holders</ContextTag> area and choose how to revoke their TokenMaster role:
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Result</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell><AirdropDesktopIcon /> Remotely destruct token</TableCell>
+                 <TableCell>Removes the TokenMaster token from the holder's wallet</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell><WarningDesktopIcon /> Kick</TableCell>
+                 <TableCell>Removes the TokenMaster token from the holder's wallet and kicks out the user from the community</TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell><CancelDesktopIcon /> Ban</TableCell>
+                 <TableCell>Removes the TokenMaster token from the holder's wallet and bans the user from the community</TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    1. On the next screen, review the transaction <ContextTag>Fees</ContextTag>. If you're banning the user, you can optionally <ContextTag>Delete all messages posted by the user</ContextTag> in the community.
+
+    1. To confirm, click the <ContextTag>Remotely destruct token</ContextTag> option that you previously chose.
+
+    1. Review the transaction details and click <ContextTag icon={<PasswordDesktopIcon />}>Sign transaction</ContextTag> to destroy the TokenMaster token and revoke the role.
+  </TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  Use the [ban option](./kick-or-ban-someone-from-your-community.mdx) cautiously. Banned users can't rejoin the community unless the Owner chooses to lift the ban.
+</Admonition>

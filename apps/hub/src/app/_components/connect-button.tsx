@@ -9,10 +9,15 @@ import type { ComponentProps } from 'react'
 type Props = {
   size?: ComponentProps<typeof Button>['size']
   label?: string
+  shortLabel?: string
 }
 
 const ConnectButton = (props: Props) => {
-  const { size = '32', label = 'Connect wallet' } = props
+  const {
+    size = '32',
+    label = 'Connect wallet',
+    shortLabel = 'Connect',
+  } = props
 
   const { address, isConnected } = useAccount()
 
@@ -28,7 +33,14 @@ const ConnectButton = (props: Props) => {
             {address && isConnected ? (
               <ShortenAddress address={address} />
             ) : (
-              label
+              <>
+                <span className="hidden whitespace-nowrap lg:block">
+                  {label}
+                </span>
+                <span className="block whitespace-nowrap lg:hidden">
+                  {shortLabel}
+                </span>
+              </>
             )}
           </Button>
         )

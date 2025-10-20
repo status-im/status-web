@@ -1,0 +1,80 @@
+---
+language: en
+title: Links
+---
+
+Use links to other articles in the Status documentation, but don't abuse links. For example, don't make the topic look like a Wikipedia article with a link in every sentence.
+
+- Limit the links for sources outside the Status documentation.
+- Don't use links in procedural steps, except when you link to a subtask in the same article.
+- In the user documentation, don't use anchor links and don't link to anchor links either (this writing style guide uses anchor links intentionally.)
+- In general, write the link without using the URL. If you must use the URL, omit the `https://` and the `www` parts of the URL (if the website allows this).
+- Don't hide the linked content using the words _here_ or _this_. Instead, write out the content you link.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>For more details about tokens, check out **Understand Status tokens**.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>For more details about tokens, check out **this** article.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- When pointing the user to external sources, start you sentence with *For more details*.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>For more details about tokens, check out **Understand Status tokens**.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>For more details, check out **Understand Status tokens**.</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>To learn more about tokens, check out **this** article.</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- For links outside of the Status documentation site, use the <ContextTag icon={<ExternalLinkDesktopIcon />}></ContextTag> (<code><ContextTag icon={<ExternalLinkDesktopIcon />}></ContextTag></code>) icon at the end of the link description.
+
+<Table>
+  <TableHead>
+    <TableHeader>Usage</TableHeader>
+    <TableHeader>Example</TableHeader>
+  </TableHead>
+  <TableContent>
+    <TableRow>
+      <TableCell>**Correct**</TableCell>
+      <TableCell>See [status.app/features <ExternalLinkDesktopIcon />](https://status.app/features).</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>[https://status.app/features <ExternalLinkDesktopIcon />](https://status.app/features).</TableCell>
+    </TableRow>
+    <TableRow>
+      <TableCell>Incorrect</TableCell>
+      <TableCell>See 'Safely open apps on your Mac' at [https://support.apple.com/en-us/HT202491](https://support.apple.com/en-us/HT202491).</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+
+<Admonition type="tip">
+  To manage URL in the Status documentation, we use a single file per language with all the internal and external links. Refer to the Contributing guide for information about using links in your document.
+</Admonition>

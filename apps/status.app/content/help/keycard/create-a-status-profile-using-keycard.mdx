@@ -1,0 +1,127 @@
+---
+id: 692
+revision: '3'
+language: en
+title: Create a Status profile using Keycard
+author: cheny0, jorge-campo, Fabiomorais87
+---
+
+<Admonition type="beta" status="Status app is currently in beta">
+  The Status app is currently in beta. This means the app is still undergoing active development, and certain features described in this document may function differently or be unavailable in the app.
+</Admonition>
+
+When you create a Status profile, the Status app generates [cryptographic keys](../profile/understand-your-status-keys-and-recovery-phrase.mdx) for your profile authentication and authorization. Using a [Keycard](./keycard-your-quick-start-guide.mdx), the app generates and stores these keys on your Keycard, permanently offline and isolated from the internet.
+
+<Admonition type="tip">
+  If you don't have a Keycard, you can [get one](https://status.app/keycard)<ExternalIcon /> or [create your Status profile](../getting-started/run-the-status-app-for-the-first-time.mdx) without a Keycard.
+</Admonition>
+
+Your Keycard stores the cryptographic keys for your Status profile and also secures your Wallet accounts. However, it doesn't store your Status profile data such as your Status contacts, profile settings or community membership. This data stays on your device until the app is uninstalled, and is temporarily stored in the [Waku peer-to-peer network](https://waku.org)<ExternalIcon />.
+
+## What to expect
+
+- You need an empty Keycard to create a Status profile. If your Keycard is not new, [view the wallet accounts on your Keycard](./view-the-profile-or-wallet-accounts-on-your-keycard.mdx) and [factory reset](./factory-reset-your-keycard.mdx) the Keycard if you no longer need the accounts.
+- You need a [card reader](./keycard-faq.mdx) to connect the Keycard to your computer.
+- After you create the profile with a Keycard, you must use the same Keycard or biometrics for authentication in the Status app.
+- Your Keycard stores the cryptographic keys for your Status profile and Wallet but doesn't store your Status profile data.
+
+## Create a Status profile using Keycard
+
+<Tabs defaultValue="Mobile">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile">
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Mobile">
+    ### Step 1: Prepare your Keycard
+
+    1. Open the Status app and tap <ContextTag>Create profile</ContextTag>.
+    1. On the following screen, tap <ContextTag>Agree</ContextTag> to share basic usage data with Status or tap <ContextTag>Maybe later</ContextTag>.
+    1. Tap <ContextTag>Use an empty Keycard</ContextTag> and then tap <ContextTag icon={<KeycardIcon />}>Scan Keycard</ContextTag>. Tap and hold your Keycard near the top (iPhone) or back (Android phones) of your phone.
+    1. On the screen that confirms your <ContextTag>Keycard is empty</ContextTag> tap <ContextTag>Let's go</ContextTag>.
+
+    <Admonition type="tip">
+      Remove your phone case during the Keycard setup process to ensure a successful connection.
+    </Admonition>
+
+    ### Step 2: Set up your Keycard
+
+    1. If your Keycard has a PIN, enter it and scan your Keycard again. Status adds your keys to the Keycard.
+    1. If your Keycard doesn't have a PIN, set up a new six-digit PIN and scan your Keycard again to add your keys to the Keycard.
+    1. On the <ContextTag>Key pair added to Keycard</ContextTag> screen tap <ContextTag>Done</ContextTag>.
+    1. Set up your device's biometrics (fingerprint, face or other method) to authenticate in addition to Keycard. If you want to enable biometrics later, tap <ContextTag>Maybe later</ContextTag>.
+
+    <Admonition type="info">
+      To customize your Status profile, check out [View and edit your Status profile](../profile/view-and-edit-your-status-profile.mdx).
+    </Admonition>
+  </TabsContent>
+
+  <TabsContent value="Desktop">
+    ### Step 1: Set up your Keycard
+
+    1. Open the Status app. Your operating system may ask you to set your notification preferences for Status. If you see the <ContextTag>Status notifications</ContextTag> alert, click <ContextTag>Allow</ContextTag>.
+    1. Check the box to accept the Status <ContextTag>Terms of Use and Privacy Policy</ContextTag> and click <ContextTag>Get Started</ContextTag>. You can read these terms on the Status website.
+    1. On the welcome screen, click <ContextTag>I am new to Status</ContextTag>.
+    1. Click <ContextTag>Share usage data</ContextTag> or <ContextTag>Do not share</ContextTag>.
+    1. Click <ContextTag>Generate keys for a new Keycard</ContextTag> or <ContextTag>Import a seed phrase</ContextTag> > <ContextTag>Import a seed phrase into a new Keycard</ContextTag>.
+    1. Open the Status app and plug in your Keycard using a card reader. Allow the connection request if you see a security alert from your computer.
+    1. Choose the option that works best for you, and move on to create your profile.
+
+           <Table>
+             <TableHead>
+               <TableHeader>Option</TableHeader>
+               <TableHeader>Choose if</TableHeader>
+               <TableHeader>Steps</TableHeader>
+             </TableHead>
+
+             <TableContent>
+               <TableRow>
+                 <TableCell>Generate keys</TableCell>
+                 <TableCell>You are new to crypto and Keycard</TableCell>
+
+                 <TableCell>
+                   1. Create a six-digit PIN for your Keycard, and repeat the PIN to confirm.
+                   1. Carefully write down the 12-word recovery phrase displayed on the screen. The Status app or your Keycard doesn't save this information, and you can't see it again.
+                   1. Verify your recovery phrase by entering the words as required, and then click <ContextTag>Finish</ContextTag>.
+                 </TableCell>
+               </TableRow>
+
+               <TableRow>
+                 <TableCell>Import a seed phrase</TableCell>
+                 <TableCell>You want to create your profile with your existing Ethereum address</TableCell>
+
+                 <TableCell>
+                   1. Enter the recovery phrase and click <ContextTag>Next</ContextTag>.
+                   1. Enter a six-digit PIN for your Keycard, and repeat the PIN to confirm.
+                 </TableCell>
+               </TableRow>
+             </TableContent>
+           </Table>
+
+    ### Step 2: Customize your profile
+
+    1. On the <ContextTag>Your profile</ContextTag> screen, set your profile name. Don't use special characters or emojis.
+    1. Click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> in your avatar and set a profile picture. Adjust your picture size and click <ContextTag>Make this my profile picture</ContextTag>. Click <ContextTag>Next</ContextTag>.
+    1. Enable your device's biometrics (fingerprint, face or other method). Alternatively, click <ContextTag>I prefer to use my PIN</ContextTag>.
+    1. On the <ContextTag>Your emojihash and identicon ring</ContextTag> screen, you can learn more about your Status profile. Click <ContextTag>Next</ContextTag>.
+    1. Click <ContextTag>Start using Status</ContextTag>.
+
+    <Admonition type="tip">
+      You can [customize additional profile options](../profile/view-and-edit-your-status-profile.mdx) in your Status settings.
+    </Admonition>
+
+    <Admonition type="info">
+      If Status finds an existing profile in the [Waku network](../messaging/about-status-messages.mdx#understand-peer-to-peer-messaging), you can use your existing profile or the one you have just created. When you choose your existing profile, [synchronize this profile](../profile/sync-your-profile-across-devices.mdx) with your device.
+    </Admonition>
+  </TabsContent>
+</Tabs>

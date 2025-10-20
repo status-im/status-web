@@ -1,0 +1,145 @@
+---
+id: 435
+revision: '3'
+language: en
+title: Set up your community permissions
+author: jorge-campo, cheny0
+roles:
+  - Owner
+  - TokenMaster
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only customize community permissions using Status desktop.
+</Admonition>
+
+In Status Communities, the [Owner and TokenMaster roles](./about-the-management-roles-in-status-communities.mdx) can customize community permissions using tokens. Tokens are digital assets in a blockchain (such as the [Ethereum blockchain](../getting-started/about-the-ethereum-blockchain.mdx)), including virtual coins, collectibles and ENS domain names.
+
+Once you set up token-based permissions, certain actions within your community are only available to users who own a particular token. For instance, Owners can [restrict access to their community](./set-up-a-token-gated-community.mdx) or [delegate management functions](./delegate-management-functions-to-your-community.mdx) to specific token holders.
+
+<Admonition type="info">
+  In Status, your tokens are securely stored in your [Status Wallet](../wallet/status-wallet-your-quick-start-guide.mdx).
+</Admonition>
+
+## What to expect
+
+- Using token-based permissions, community Owners and TokenMasters can restrict community access and actions to specific people based on token requirements.
+- Only the community Owner and TokenMaster roles can add, [edit or delete community-level permissions](./permissions-by-role-in-status-communities.mdx).
+- You set up community permissions like you [set up your channel permissions](set-up-your-channel-permissions.mdx). The only difference is the permissions you grant, either community-level (<ContextTag>Become admin</ContextTag> or <ContextTag>Become member</ContextTag>) or channel-level (<ContextTag>Moderate</ContextTag>, <ContextTag>View and post</ContextTag> or <ContextTag>View only</ContextTag>).
+- Use the <ContextTag>Become member</ContextTag> permission to [restrict access to your community](./set-up-a-token-gated-community.mdx). Use the <ContextTag>Become admin</ContextTag> permission to [delegate management functions](./delegate-management-functions-to-your-community.mdx) to someone.
+
+## Set up community permissions
+
+Community Owners and admins customize permissions using three different variables: <ContextTag>Who holds</ContextTag> (optional), <ContextTag>Is allowed to</ContextTag> and <ContextTag>In</ContextTag>. For each variable, follow the same procedure using the table below for reference.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. Click <ContextTag>Add new permission</ContextTag> to start from scratch or click <ContextTag icon={<CopyDesktopIcon />}>Duplicate</ContextTag> to start from an existing permission.
+    1. For the <ContextTag icon={<InContactsDesktopIcon />}>Who holds</ContextTag>, <ContextTag icon={<SecurityDesktopIcon />}>Is allowed to</ContextTag> and <ContextTag icon={<ChannelCategoryDesktopIcon />}>In</ContextTag> variables, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> next to the variable and choose your values. Use the table below for reference.
+    1. Optionally, check <ContextTag icon={<HideDesktopIcon />}>Hide permission</ContextTag> to hide this permission from members who don't meet the requirements.
+    1. Click <ContextTag>Create permission</ContextTag>. The new permission takes effect immediately.
+  </TabsContent>
+</Tabs>
+
+<Table>
+  <TableHead>
+    <TableHeader>Variable</TableHeader>
+    <TableHeader>Description</TableHeader>
+    <TableHeader>Options</TableHeader>
+  </TableHead>
+
+  <TableContent>
+    <TableRow>
+      <TableCell>Who holds (optional)</TableCell>
+      <TableCell>The tokens and amounts (for assets and collectibles) someone needs to hold.</TableCell>
+      <TableCell>Assets, Collectibles, ENS names</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>Is allowed to</TableCell>
+      <TableCell>The community role you assign to someone</TableCell>
+      <TableCell>Become admin, Become member</TableCell>
+    </TableRow>
+
+    <TableRow>
+      <TableCell>In</TableCell>
+      <TableCell>The community this permission applies to</TableCell>
+      <TableCell>Community</TableCell>
+    </TableRow>
+  </TableContent>
+</Table>
+
+- If you turn off the <ContextTag>Who holds</ContextTag> option, the permission isn't bound to a token. This option only applies to channel-level permissions.
+- For each permission, tokens are linked by <ContextTag>AND</ContextTag> operators. This means the new permission takes effect when the holder owns all the tokens. If you want to use the <ContextTag>OR</ContextTag> operator instead, create additional permissions.
+- You can include up to five tokens in a single permission.
+- You can create a maximum of five different <ContextTag>Become member</ContextTag> community-level permissions.
+
+## Edit community permissions
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. In the permission you want to edit, click <ContextTag icon={<Edit2DesktopIcon />}>Edit</ContextTag>.
+    1. To customize the permission, follow the steps in the [Set up community permissions](#set-up-community-permissions) section.
+  </TabsContent>
+</Tabs>
+
+## Delete community permissions
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. In the permission you want to delete, click <ContextTag icon={<DeleteDesktopIcon />}>Delete</ContextTag>.
+    1. Click <ContextTag>Confirm</ContextTag>.
+  </TabsContent>
+</Tabs>

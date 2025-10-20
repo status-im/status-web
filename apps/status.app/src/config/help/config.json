@@ -1,0 +1,112 @@
+{
+  "nav": [
+    {
+      "Getting started": [
+        {
+          "Intro to Status": "/getting-started"
+        },
+        {
+          "For new users": "/getting-started"
+        },
+        {
+          "Start a community": "/getting-started"
+        },
+        {
+          "Privacy": "/getting-started"
+        }
+      ]
+    },
+    {
+      "Wallet": [
+        {
+          "Get started": "/wallet"
+        },
+        {
+          "Send and receive crypto": "/wallet"
+        },
+        {
+          "Handle your crypto": "/wallet"
+        },
+        {
+          "Swap and bridge crypto": "/wallet"
+        },
+        {
+          "Understand crypto assets": "/wallet"
+        },
+        {
+          "Secure your Wallet": "/wallet"
+        }
+      ]
+    },
+    {
+      "Profile": [
+        {
+          "Manage your profile": "/profile"
+        },
+        {
+          "Manage your notifications": "/profile"
+        },
+        {
+          "Security and privacy": "/profile"
+        },
+        {
+          "Handle your contacts": "/profile"
+        }
+      ]
+    },
+    {
+      "Messaging": [
+        {
+          "Direct messages": "/messaging"
+        },
+        {
+          "Group chats": "/messaging"
+        },
+        {
+          "Message features": "/messaging"
+        },
+        {
+          "Styling messages": "/messaging"
+        }
+      ]
+    },
+    {
+      "Communities": [
+        {
+          "Status Communities": "/communities"
+        },
+        {
+          "Channels": "/communities"
+        },
+        {
+          "Create your community": "/communities"
+        },
+        {
+          "Manage your community": "/communities"
+        },
+        {
+          "Manage channels": "/communities"
+        },
+        {
+          "Community tokens": "/communities"
+        },
+        {
+          "Community permissions": "/communities"
+        }
+      ]
+    },
+    {
+      "Keycard": [
+        {
+          "Get started": "/keycard"
+        },
+        {
+          "Use your Keycard": "/keycard"
+        },
+        {
+          "Manage your Keycard": "/keycard"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+---
+id: 1463
+revision: '0'
+language: en
+title: Understand your Status Wallet accounts and keys
+author: jorge-campo, Fabiomorais87
+roles: 
+---
+
+Your Status Wallet settings show all the accounts you have created and imported into your Wallet. The Status app groups these accounts based on their origin and type, helping you understand which accounts you own and how you created them.
+
+## The basics
+
+- When you [create your Status profile](../getting-started/run-the-status-app-for-the-first-time.mdx), Status generates a unique master key. This master key derives from your recovery phrase and is used to create your first Wallet account.
+- If you create a new Wallet account, Status uses the master key associated with your Status profile by default. You can [change the account origin](./import-an-account-into-your-status-wallet.mdx) to an existing recovery phrase, private key or a [new master key](./organize-funds-and-accounts-with-a-new-master-key.mdx).
+- A master key in your Wallet can control multiple accounts, each linked to a recovery phrase. [Importing a recovery phrase](./import-an-account-into-your-status-wallet.mdx) restores all accounts created under that master key.
+- If you [import an account](./import-an-account-into-your-status-wallet.mdx) using a private key, that account is separate from your profile master key. It is not linked to any recovery phrase, meaning you must back up the private key separately.
+
+<Admonition type="tip">
+  Think of your master key as a keychain with multiple keys (accounts). You can use the default keychain, create a new one, or use an old one (recovery phrase). Adding a private key is like carrying a standalone key in your pocket, independent of the keychain.
+</Admonition>
+
+## Identify the origin of your Wallet accounts
+
+The illustration below shows an example of different account origins in the Status Wallet settings. Depending on your Wallet, you may have one or more of these origins. To open your Wallet settings:
+
+- In the mobile app, tap your profile picture in the top left corner of the app, then tap <ContextTag icon={<WalletIcon />}>Wallet</ContextTag> > <ContextTag>Key pairs and accounts</ContextTag>.
+- In the desktop app, from the navigation sidebar, go to <ContextTag icon={<SettingsDesktopIcon />}>Settings</ContextTag> > <ContextTag icon={<WalletDesktopIcon />}>Wallet</ContextTag>.
+
+![Status Wallet accounts and keys under the Wallet settings](https://res.cloudinary.com/dhgck7ebz/image/upload/v1741622464/Help/Documentation%20Screens/Wallet/1463/1463_1_Screen.png)
+
+<Tabs defaultValue="Profile 1">
+  <TabsList size={32}>
+    <TabsTrigger type="step" value="Profile 1" step={1}>
+      Profile
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Recovery phrase 2" step={2}>
+      Recovery phrase
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Private key 3" step={3}>
+      Private key
+    </TabsTrigger>
+
+    <TabsTrigger type="step" value="Master key 4" step={4}>
+      Master key
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Profile 1">These are the Wallet accounts from your [profile master key](../profile/understand-your-status-keys-and-recovery-phrase.mdx). All the accounts in this group are protected by the same recovery phrase, the one you used to create your Status profile.</TabsContent>
+
+  <TabsContent value="Recovery phrase 2">These accounts derive from a recovery phrase that you [imported into your Wallet](./import-an-account-into-your-status-wallet.mdx). You can restore these accounts on any device using the same recovery phrase.</TabsContent>
+
+  <TabsContent value="Private key 3">This account was [imported using a private key](./import-an-account-into-your-status-wallet.mdx) (a secret code represented by a string of characters). Unlike a recovery phrase, a private key gives access to only one wallet account.</TabsContent>
+
+  <TabsContent value="Master key 4">This account uses a master key that is different from the master key associated with your Status profile. You can [create multiple master keys](./organize-funds-and-accounts-with-a-new-master-key.mdx) to manage different accounts separately.</TabsContent>
+</Tabs>
+
+<Admonition type="info">
+  In addition to these accounts, you can add [watch-only accounts](./add-watch-only-accounts.mdx) to monitor the balance and transactions of an external account.
+</Admonition>
+
+You can see each account origin's location under the origin name. Your device or [Keycard](../keycard/secure-your-status-profile-or-wallet-with-keycard.mdx) (this is marked with the <KeycardCardIcon /> Keycard symbol) stores the account.
+
+<Admonition type="tip">
+  To back up your Status Wallet accounts, check out [Back up your Wallet accounts](./back-up-your-wallet-accounts.mdx).
+</Admonition>

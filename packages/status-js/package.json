@@ -3,32 +3,36 @@
   "version": "1.1.0",
   "license": "MPL-2.0",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./dist/index.es.js",
+  "module": "./dist/index.es.js",
+  "types": "./dist/types/src/index.d.ts",
+  "source": "./src/index.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/types/src/index.d.ts",
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.cjs.js"
     },
     "./encode-url-data": {
-      "types": "./dist/types/utils/encode-url-data.d.ts",
+      "types": "./dist/types/src/utils/encode-url-data.d.ts",
       "browser": null,
-      "import": "./dist/encode-url-data.js"
+      "import": "./dist/encode-url-data.es.js",
+      "require": "./dist/encode-url-data.cjs.js"
     },
     "./create-url": {
-      "types": "./dist/types/utils/create-url.d.ts",
-      "import": "./dist/create-url.js"
+      "types": "./dist/types/src/utils/create-url.d.ts",
+      "import": "./dist/create-url.es.js",
+      "require": "./dist/create-url.cjs.js"
     },
     "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
       "encode-url-data": [
-        "./dist/types/utils/encode-url-data.d.ts"
+        "./dist/types/src/utils/encode-url-data.d.ts"
       ],
       "create-url": [
-        "./dist/types/utils/create-url.d.ts"
+        "./dist/types/src/utils/create-url.d.ts"
       ]
     }
   },

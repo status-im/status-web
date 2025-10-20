@@ -1,0 +1,135 @@
+---
+id: 478
+revision: '2'
+language: en
+title: Set up a view-only channel
+author: jorge-campo
+---
+
+<Admonition type="beta" status="Status app is currently in beta stage">
+  The Status app is currently in its beta stage. This means the application is still undergoing active development, and certain features described in this document may function differently or be unavailable within the app.
+</Admonition>
+
+<Admonition type="info">
+  You can only set up a view-only channel using Status desktop.
+</Admonition>
+
+In a view-only channel, everyone with access can view the conversation, but they can't respond or write in the channel. The community [owner or admin](./permissions-by-role-in-status-communities.mdx) can designate certain people or groups to write in the view-only channel.
+
+<Admonition type="tip">
+  Community Owners can configure view-only channels to allow members to [react](../messaging/react-and-reply-to-messages.mdx) to messages. Check out [Customize your channel](./customize-your-channel.mdx) for more information.
+</Admonition>
+
+To learn how to use read-only channels in your community, check out [About view-only channels](./about-view-only-channels.mdx).
+
+## What to expect
+
+- Community Owners and admins can always view and write in the community channels, irrespective of the view-only permissions.
+- You can configure view-only channels with or without tokens. Using tokens requires more steps but provides more options. For example, [minting](./mint-tokens-for-your-community.mdx) and [airdropping](./how-to-airdrop-tokens-in-status.mdx) tokens can incentivize community engagement.
+- When using tokens, [mint a community token](./mint-tokens-for-your-community.mdx) and share the token with everyone you want to have view-only access.
+- Once you set up the view-only permission, only members who meet its criteria can access the channel. However, their access is limited to read-only.
+- Owners can set up [additional post permissions](#grant-someone-post-permissions-in-a-view-only-channel) in read-only channels for specific members.
+
+## Set up a view-only channel without tokens
+
+Using channel permissions, you can set up a view-only channel without tokens.
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channels sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. Click <ContextTag>Add new permission</ContextTag>.
+    1. Turn off the <ContextTag>Who holds</ContextTag> to disable the token requirement.
+    1. For the <ContextTag>Is allowed to</ContextTag> variable, select <ContextTag icon={<ShowDesktopIcon />}>View only</ContextTag>.
+    1. For the <ContextTag>In</ContextTag> variable, select the channel you want to set as read-only.
+    1. Click <ContextTag>Create permission</ContextTag>.
+  </TabsContent>
+</Tabs>
+
+## Set up a view-only channel with token-based permissions
+
+Depending on your community needs, you may want the view-only channel permission linked to a token. You can use an existing token (such as SNT or USDS, for example), or [a token you mint](./mint-tokens-for-your-community.mdx) for the community.
+
+If you mint a [collectible](../wallet/collectibles-your-quick-start-guide.mdx) to manage the view-only access, enable the <ContextTag>Non-transferable (Soulbound)</ContextTag> and <ContextTag>Remotely-destruct</ContextTag> options to maintain control of who has view-only access to the channel. For more information, check out the [available collectible options](./mint-tokens-for-your-community.mdx#set-up-your-collectible-options).
+
+<Tabs defaultValue="Desktop">
+  <TabsList size={32}>
+    <TabsTrigger value="Mobile" disabled>
+      Mobile
+    </TabsTrigger>
+
+    <TabsTrigger value="Desktop">
+      Desktop
+    </TabsTrigger>
+
+    <TabsTrigger value="Web" disabled>
+      Web
+    </TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="Desktop">
+    1. From the navigation sidebar, click your community.
+    1. On top of the channel sidebar, click your community logo and then click <ContextTag icon={<ObjectsDesktopIcon />}>Permissions</ContextTag>.
+    1. Click <ContextTag>Add new permission</ContextTag>.
+    1. For the <ContextTag>Who holds</ContextTag>, <ContextTag>Is allowed to<ContextTag> and </ContextTag>In</ContextTag> variables, click <ContextTag icon={<AddCircleDesktopIcon />}>Add</ContextTag> next to the variable and use the table below for reference.
+    1. Click <ContextTag>Create permission</ContextTag>.
+
+    <Table>
+      <TableHead>
+        <TableHeader>Variable</TableHeader>
+        <TableHeader>Steps</TableHeader>
+      </TableHead>
+
+      <TableContent>
+        <TableRow>
+          <TableCell>Who holds</TableCell>
+
+          <TableCell>
+            1. Select <ContextTag>Assets</ContextTag> or <ContextTag>Collectibles</ContextTag>.
+            1. Choose the asset or collectible and the amount you want to use to enable read-only access
+            1. Alternatively, <ContextTag>Import existing collectible</ContextTag>.
+            1. Click <ContextTag>Add</ContextTag>.
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell>Is allowed to</TableCell>
+
+          <TableCell>
+            <ContextTag icon={<ShowDesktopIcon />}>View only</ContextTag>
+          </TableCell>
+        </TableRow>
+
+        <TableRow>
+          <TableCell>In</TableCell>
+
+          <TableCell>
+            Choose the channel you want to set as read-only.
+          </TableCell>
+        </TableRow>
+      </TableContent>
+    </Table>
+  </TabsContent>
+</Tabs>
+
+<Admonition type="tip">
+  Optionally, check <ContextTag icon={<HideDesktopIcon />}>Hide permission</ContextTag> to hide this permission from members who don't meet the requirements.
+</Admonition>
+
+## Grant someone post permissions in a view-only channel
+
+If you want someone else to post content in a view-only channel, configure this person's <ContextTag>View and post</ContextTag> permission. For information on configuring channel permissions, check out [Set up your channel permissions](set-up-your-channel-permissions.mdx).
