@@ -52,8 +52,11 @@ export default function DiscoverPage() {
           <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
               <h2 className="text-27 font-600 text-neutral-100">Featured</h2>
-              {/* TODO: Add link to typeform */}
-              <ButtonLink variant="white" size="32" href="https://typeform.com">
+              <ButtonLink
+                variant="white"
+                size="32"
+                href="https://statusnetwork.typeform.com/getfeatured"
+              >
                 Get featured
               </ButtonLink>
             </div>
