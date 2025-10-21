@@ -6,7 +6,7 @@ import { tokenAbi } from './contracts/TokenAbi'
 import type { ReactNode } from 'react'
 import type { Abi, Address } from 'viem'
 
-export type TOKEN = {
+export type Token = {
   address: Address
   name: string
   symbol: string
