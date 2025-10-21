@@ -20,6 +20,7 @@ import { type Vault } from '~constants/index'
 import { useApproveToken } from '~hooks/useApprovePreDepositToken'
 import { useExchangeRate } from '~hooks/useExchangeRate'
 import { useMaxPreDepositValue } from '~hooks/useMaxPreDepositValue'
+import { useMinPreDepositValue } from '~hooks/useMinPreDepositValue'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
@@ -39,7 +40,13 @@ const depositFormSchema = z.object({
 
 type FormValues = z.infer<typeof depositFormSchema>
 
-type DepositAction = 'idle' | 'approve' | 'deposit' | 'invalid' | 'exceeds-max'
+type DepositAction =
+  | 'idle'
+  | 'approve'
+  | 'deposit'
+  | 'invalid'
+  | 'exceeds-max'
+  | 'below-min'
 
 const inputContainerStyles = cva({
   base: 'rounded-16 border bg-white-100 px-4 py-3 transition-colors',
@@ -100,6 +107,10 @@ const PreDepositModal = ({
     vault,
   })
 
+  const { data: minDeposit } = useMinPreDepositValue({
+    vault,
+  })
+
   const amountValue = useWatch({
     control: form.control,
     name: 'amount',
@@ -148,17 +159,28 @@ const PreDepositModal = ({
       amountWei,
       balance: balance.value,
       allowance,
-      maxDeposit: maxDeposit ?? 0n,
+      maxDeposit,
+      minDeposit,
     })
       .returnType<DepositAction>()
       .with({ amountWei: P.when(amt => amt > balance.value) }, () => 'invalid')
       .with(
-        { amountWei: P.when(amt => maxDeposit && amt > maxDeposit) },
+        {
+          maxDeposit: P.not(P.nullish),
+          amountWei: P.when(amt => maxDeposit && amt > maxDeposit),
+        },
         () => 'exceeds-max'
+      )
+      .with(
+        {
+          minDeposit: P.not(P.nullish),
+          amountWei: P.when(amt => minDeposit && amt < minDeposit),
+        },
+        () => 'below-min'
       )
       .with({ amountWei: P.when(amt => amt > allowance) }, () => 'approve')
       .otherwise(() => 'deposit')
-  }, [amountValue, balance, vault, currentAllowance, maxDeposit])
+  }, [amountValue, balance, vault, currentAllowance, maxDeposit, minDeposit])
 
   if (!vault) return null
 
@@ -229,20 +251,31 @@ const PreDepositModal = ({
     }
   )
 
+  const formattedMinDeposit = formatTokenAmount(
+    minDeposit ?? 0n,
+    vault.token.symbol,
+    {
+      tokenDecimals: vault.token.decimals,
+      includeSymbol: true,
+    }
+  )
+
   const inputState = match(depositAction)
-    .with(P.union('invalid', 'exceeds-max'), () => 'error' as const)
+    .with(
+      P.union('invalid', 'exceeds-max', 'below-min'),
+      () => 'error' as const
+    )
     .otherwise(() => 'default' as const)
 
   const errorMessage = match(depositAction)
-    .with(
-      'invalid',
-      () =>
-        `Insufficient balance. Maximum: ${formattedBalance} ${vault.token.symbol}`
-    )
+    .with('invalid', () => `Insufficient balance. Maximum: ${formattedBalance}`)
     .with(
       'exceeds-max',
-      () =>
-        `Exceeds vault limit. Maximum: ${formattedMaxDeposit} ${vault.token.symbol}`
+      () => `Exceeds vault limit. Maximum: ${formattedMaxDeposit}`
+    )
+    .with(
+      'below-min',
+      () => `Below minimum deposit. Minimum: ${formattedMinDeposit}`
     )
     .otherwise(() => form.formState.errors.amount?.message)
 
@@ -334,7 +367,6 @@ const PreDepositModal = ({
                         type="button"
                         disabled={isPending}
                         onClick={() => {
-                          // Use the minimum of balance and maxDeposit
                           const maxAmount =
                             balance?.value && maxDeposit
                               ? balance.value < maxDeposit
@@ -390,7 +422,7 @@ const PreDepositModal = ({
                     className="w-full justify-center"
                     disabled={match(depositAction)
                       .with(
-                        P.union('idle', 'invalid', 'exceeds-max'),
+                        P.union('idle', 'invalid', 'exceeds-max', 'below-min'),
                         () => true
                       )
                       .otherwise(() => isPending)}
