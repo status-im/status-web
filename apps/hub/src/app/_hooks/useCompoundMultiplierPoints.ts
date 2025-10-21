@@ -4,6 +4,8 @@ import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import {
+  CONFIRMATION_BLOCKS,
+  DEFAULT_MP_VALUE,
   SNT_TOKEN,
   STAKING_MANAGER,
   statusNetworkTestnet,
@@ -31,10 +33,6 @@ export type UseCompoundMultiplierPointsReturn = UseMutationResult<
 // ============================================================================
 
 const MUTATION_KEY = 'compound-multiplier-points' as const
-
-const TRANSACTION_CONFIG = {
-  CONFIRMATION_BLOCKS: 1,
-} as const
 
 // ============================================================================
 // Mutation Hook
@@ -124,7 +122,7 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
 
       // Get the current MP balance to show in the dialog
       const formattedAmount = formatUnits(
-        mpBalance?.totalUncompounded || 0n,
+        mpBalance?.totalUncompounded || DEFAULT_MP_VALUE,
         SNT_TOKEN.decimals
       )
 
@@ -149,7 +147,7 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
       // Wait for transaction confirmation
       const { status } = await waitForTransactionReceipt(config, {
         hash,
-        confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+        confirmations: CONFIRMATION_BLOCKS,
       })
 
       // Check if transaction was reverted

@@ -3,7 +3,11 @@ import { type Address } from 'viem'
 import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 
-import { STAKING_MANAGER } from '~constants/index'
+import {
+  CACHE_CONFIG,
+  DEFAULT_MP_VALUE,
+  STAKING_MANAGER,
+} from '~constants/index'
 import { type StakingVault, useStakingVaults } from '~hooks/useStakingVaults'
 
 // ============================================================================
@@ -38,8 +42,8 @@ const QUERY_KEYS = {
 
 const DEFAULT_MP_DATA: MultiplierPointsData = {
   vaultBalances: {},
-  totalUncompounded: 0n,
-  totalMpRedeemed: 0n,
+  totalUncompounded: DEFAULT_MP_VALUE,
+  totalMpRedeemed: DEFAULT_MP_VALUE,
 }
 
 // ============================================================================
@@ -70,13 +74,15 @@ function calculateTotalUncompounded(
   vaultBalances: Record<Address, bigint>,
   vaults: StakingVault[]
 ): bigint {
-  return vaults.reduce((total, vault) => {
-    const currentBalance = vaultBalances[vault.address] ?? 0n
-    const stakedAmount = vault.data?.mpAccrued ?? 0n
+  return vaults.reduce((total: bigint, vault) => {
+    const currentBalance = vaultBalances[vault.address] ?? DEFAULT_MP_VALUE
+    const stakedAmount = vault.data?.mpAccrued ?? DEFAULT_MP_VALUE
     const uncompounded =
-      currentBalance > stakedAmount ? currentBalance - stakedAmount : 0n
+      currentBalance > stakedAmount
+        ? currentBalance - stakedAmount
+        : DEFAULT_MP_VALUE
     return total + uncompounded
-  }, 0n)
+  }, DEFAULT_MP_VALUE as bigint)
 }
 
 /**
@@ -102,7 +108,7 @@ async function fetchMpBalanceOfAccount(
       `Failed to fetch account MP redeemed for ${address}:`,
       error instanceof Error ? error.message : String(error)
     )
-    return 0n
+    return DEFAULT_MP_VALUE
   }
 }
 
@@ -211,7 +217,7 @@ export function useMultiplierPointsBalance(): UseMultiplierPointsBalanceReturn {
       }
     },
     enabled: !!address && !!vaults && vaults.length > 0,
-    staleTime: 30_000, // Consider data fresh for 30 seconds
-    refetchInterval: 60_000, // Refetch every 60 seconds
+    staleTime: CACHE_CONFIG.MP_STALE_TIME,
+    refetchInterval: CACHE_CONFIG.MP_REFETCH_INTERVAL,
   })
 }

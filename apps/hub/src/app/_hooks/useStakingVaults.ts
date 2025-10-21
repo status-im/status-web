@@ -4,7 +4,7 @@ import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract, readContracts } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { STAKING_MANAGER } from '~constants/index'
+import { CACHE_CONFIG, STAKING_MANAGER } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -63,10 +63,6 @@ export type UseStakingVaultsReturn = UseQueryResult<StakingVault[], Error>
 // ============================================================================
 
 const QUERY_KEY = 'staking-vaults' as const
-
-const CACHE_CONFIG = {
-  DEFAULT_STALE_TIME: 10_000, // 10 seconds
-} as const
 
 // ============================================================================
 // Helper Functions

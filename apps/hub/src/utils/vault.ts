@@ -1,6 +1,13 @@
 import { type Address, formatUnits } from 'viem'
 
-import { SNT_TOKEN } from '~constants/index'
+import {
+  BASE_BOOST,
+  BOOST_DECIMALS,
+  DEFAULT_MP_VALUE,
+  DEFAULT_VAULT_BOOST,
+  SNT_TOKEN,
+  TIME_CONSTANTS,
+} from '~constants/index'
 
 import type { StakingVault } from '~hooks/useStakingVaults'
 
@@ -16,16 +23,20 @@ export function calculateVaultBoost(
   vaultAddress: Address
 ): string {
   const account = vaults.find(vault => vault.address === vaultAddress)
-  if (!account || account.data?.stakedBalance === 0n) return '1.00'
+  if (!account || account.data?.stakedBalance === DEFAULT_MP_VALUE)
+    return DEFAULT_VAULT_BOOST
   const vaultStaked = Number(
-    formatUnits(account.data?.stakedBalance || 0n, SNT_TOKEN.decimals)
+    formatUnits(
+      account.data?.stakedBalance || DEFAULT_MP_VALUE,
+      SNT_TOKEN.decimals
+    )
   )
   const vaultMp = Number(
-    formatUnits(account.data?.mpAccrued || 0n, SNT_TOKEN.decimals)
+    formatUnits(account.data?.mpAccrued || DEFAULT_MP_VALUE, SNT_TOKEN.decimals)
   )
-  // Add 1 to reflect the boost (base multiplier is 1x)
-  const boost = vaultMp / vaultStaked + 1
-  return boost.toFixed(2)
+  // Add BASE_BOOST to reflect the boost (base multiplier is 1x)
+  const boost = vaultMp / vaultStaked + BASE_BOOST
+  return boost.toFixed(BOOST_DECIMALS)
 }
 
 /**
@@ -36,7 +47,7 @@ export function calculateVaultBoost(
  */
 export function isVaultLocked(lockUntil: bigint | undefined) {
   if (!lockUntil) return false
-  const now = Math.floor(Date.now() / 1000)
+  const now = Math.floor(Date.now() / TIME_CONSTANTS.MILLISECONDS_PER_SECOND)
   const lockUntilTimestamp = Number(lockUntil)
   return lockUntilTimestamp > now
 }
@@ -49,7 +60,7 @@ export function isVaultLocked(lockUntil: bigint | undefined) {
  */
 export function calculateDaysUntilUnlock(lockUntil: bigint | undefined) {
   if (!lockUntil) return null
-  const now = Math.floor(Date.now() / 1000)
+  const now = Math.floor(Date.now() / TIME_CONSTANTS.MILLISECONDS_PER_SECOND)
   const lockUntilTimestamp = Number(lockUntil)
-  return Math.ceil((lockUntilTimestamp - now) / 86400)
+  return Math.ceil((lockUntilTimestamp - now) / TIME_CONSTANTS.SECONDS_PER_DAY)
 }

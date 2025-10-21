@@ -4,7 +4,12 @@ import { type Address, type Hash } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
-import { VAULT_FACTORY } from '~constants/index'
+import {
+  CONFIRMATION_BLOCKS,
+  VAULT_CREATED_EVENT_SIGNATURE,
+  VAULT_CREATION_DELAY,
+  VAULT_FACTORY,
+} from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { shortenAddress } from '~utils/address'
@@ -23,16 +28,6 @@ export type UseCreateVaultReturn = UseMutationResult<Hash, Error, void, unknown>
 // ============================================================================
 
 const MUTATION_KEY = 'create-vault' as const
-
-const DEFAULT_DELAY = 100 as const
-
-const TRANSACTION_CONFIG = {
-  CONFIRMATION_BLOCKS: 1,
-} as const
-
-// Event signature for VaultCreated(address indexed vault, address indexed owner)
-const VAULT_CREATED_EVENT_SIGNATURE =
-  '0x5d9c31ffa0fecffd7cf379989a3c7af252f0335e0d2a1320b55245912c781f53' as const
 
 // ============================================================================
 // Helper Functions
@@ -151,7 +146,7 @@ export function useCreateVault(): UseCreateVaultReturn {
         // Wait for transaction confirmation and get logs
         const { status, logs } = await waitForTransactionReceipt(config, {
           hash,
-          confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+          confirmations: CONFIRMATION_BLOCKS,
         })
 
         // Check for transaction revert
@@ -169,7 +164,7 @@ export function useCreateVault(): UseCreateVaultReturn {
         )
 
         // Small delay to ensure toast is rendered before state reset
-        await new Promise(resolve => setTimeout(resolve, DEFAULT_DELAY))
+        await new Promise(resolve => setTimeout(resolve, VAULT_CREATION_DELAY))
 
         // Reset state machine and refetch vaults
         resetVault()

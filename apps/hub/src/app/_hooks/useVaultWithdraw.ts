@@ -1,10 +1,15 @@
 import { useMutation, type UseMutationResult } from '@tanstack/react-query'
-import { type Address } from 'viem'
+import { type Address, formatUnits } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { SNT_TOKEN, statusNetworkTestnet } from '~constants/index'
+import {
+  CONFIRMATION_BLOCKS,
+  MIN_STAKE_AMOUNT,
+  SNT_TOKEN,
+  statusNetworkTestnet,
+} from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
@@ -40,7 +45,6 @@ export type UseVaultWithdrawReturn = UseMutationResult<
 // ============================================================================
 
 const MUTATION_KEY_PREFIX = 'vault-withdraw' as const
-const CONFIRMATION_BLOCKS = 1
 
 // ============================================================================
 // Mutation Hook
@@ -111,7 +115,7 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
       }
 
       // Validate amount
-      if (amountWei <= 0n) {
+      if (amountWei <= MIN_STAKE_AMOUNT) {
         throw new Error('Amount must be greater than 0')
       }
 

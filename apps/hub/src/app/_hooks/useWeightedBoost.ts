@@ -2,7 +2,12 @@ import { useMemo } from 'react'
 
 import { formatUnits } from 'viem'
 
-import { SNT_TOKEN } from '~constants/index'
+import {
+  BASE_BOOST,
+  BOOST_DECIMALS,
+  DEFAULT_DECIMALS,
+  SNT_TOKEN,
+} from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 
 // ============================================================================
@@ -26,9 +31,7 @@ export interface WeightedBoost {
 // ============================================================================
 // Constants
 // ============================================================================
-
-const BASE_BOOST = 1.0
-const DEFAULT_DECIMALS = 2
+// BASE_BOOST and DEFAULT_DECIMALS are imported from ~constants/index
 
 // ============================================================================
 // Helper Functions
@@ -122,7 +125,7 @@ function calculateWeightedBoost(
 
   return {
     value: weightedAverage,
-    formatted: `x${weightedAverage.toFixed(DEFAULT_DECIMALS)}`,
+    formatted: `x${weightedAverage.toFixed(BOOST_DECIMALS)}`,
     totalStaked,
     hasStake: true,
   }
