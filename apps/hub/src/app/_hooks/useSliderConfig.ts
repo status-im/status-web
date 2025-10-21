@@ -2,7 +2,7 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import { useConfig } from 'wagmi'
 import { readContract } from 'wagmi/actions'
 
-import { STAKING_MANAGER } from '~constants/index'
+import { CACHE_CONFIG, STAKING_MANAGER } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -28,8 +28,6 @@ export type UseSliderConfigReturn = UseQueryResult<SliderConfig, Error>
 // ============================================================================
 
 const QUERY_KEY_PREFIX = 'slider-config' as const
-const STALE_TIME = 5 * 60 * 1000 // 5 minutes
-const CACHE_TIME = 10 * 60 * 1000 // 10 minutes
 
 // ============================================================================
 // Query Hook
@@ -128,7 +126,7 @@ export function useSliderConfig(): UseSliderConfigReturn {
         )
       }
     },
-    staleTime: STALE_TIME,
-    gcTime: CACHE_TIME,
+    staleTime: CACHE_CONFIG.SLIDER_STALE_TIME,
+    gcTime: CACHE_CONFIG.SLIDER_CACHE_TIME,
   })
 }

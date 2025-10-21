@@ -26,9 +26,14 @@ import { PromoModal } from '~components/stake/promo-modal'
 import { VaultSelect } from '~components/vault-select'
 import { VaultsTable } from '~components/vaults/vaults-table'
 import {
+  DEFAULT_MP_VALUE,
+  MAX_BOOST,
   SNT_TOKEN,
+  STAKE_PAGE_CONSTANTS,
   STAKING_MANAGER,
   statusNetworkTestnet,
+  TIME_CONSTANTS,
+  TOOLTIP_CONFIG,
 } from '~constants/index'
 import { useApproveToken } from '~hooks/useApproveToken'
 import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
@@ -126,8 +131,9 @@ export default function StakePage() {
     isDisabled: isDisabledMultiplierPoints,
     message: messageMultiplierPoints,
   } = useMemo(() => {
-    const totalUncompounded = multiplierPointsData?.totalUncompounded ?? 0n
-    const hasUncompoundedPoints = totalUncompounded >= 0n
+    const totalUncompounded =
+      multiplierPointsData?.totalUncompounded ?? DEFAULT_MP_VALUE
+    const hasUncompoundedPoints = totalUncompounded >= DEFAULT_MP_VALUE
     const formattedAmount = formatSNT(
       formatUnits(totalUncompounded, SNT_TOKEN.decimals),
       {
@@ -146,7 +152,9 @@ export default function StakePage() {
   const hasReachedDailyLimit = useMemo(() => {
     if (!faucetData) return false
 
-    const currentTimestamp = BigInt(Math.floor(Date.now() / 1000))
+    const currentTimestamp = BigInt(
+      Math.floor(Date.now() / TIME_CONSTANTS.MILLISECONDS_PER_SECOND)
+    )
     const isWithinResetWindow = faucetData.accountResetTime > currentTimestamp
     const hasExceededLimit =
       faucetData.accountDailyRequests >= faucetData.dailyLimit
@@ -180,7 +188,7 @@ export default function StakePage() {
               // After approval completes, proceed to staking
               stakeVault({
                 amountWei,
-                lockPeriod: 0n,
+                lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
                 vaultAddress: data.vault as Address,
               })
             },
@@ -193,7 +201,7 @@ export default function StakePage() {
         // Allowance already sufficient, go straight to staking
         stakeVault({
           amountWei,
-          lockPeriod: 0n,
+          lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
           vaultAddress: data.vault as Address,
         })
       }
@@ -444,7 +452,7 @@ export default function StakePage() {
                     </span>
                   </div>
                   <p className="text-13 font-500 text-neutral-40">
-                    Next unlock in 356 days
+                    Next unlock in {STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS} days
                   </p>
                 </div>
 
@@ -487,7 +495,7 @@ export default function StakePage() {
 
 const InfoTooltip = () => (
   <Tooltip
-    delayDuration={150}
+    delayDuration={TOOLTIP_CONFIG.DELAY_DURATION}
     side="top"
     className="border-0"
     content={
@@ -495,7 +503,7 @@ const InfoTooltip = () => (
         <span className="text-13 leading-[1.4] tracking-[-0.039px] text-neutral-100">
           The longer SNT is staked or locked in vaults, the higher this
           multiplier goes. This rewards long term believers. The maximum
-          multiplier is x9.
+          multiplier is x{MAX_BOOST}.
         </span>
 
         <ButtonLink

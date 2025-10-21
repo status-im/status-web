@@ -4,7 +4,12 @@ import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { SNT_TOKEN, statusNetworkTestnet } from '~constants/index'
+import {
+  CONFIRMATION_BLOCKS,
+  MIN_STAKE_AMOUNT,
+  SNT_TOKEN,
+  statusNetworkTestnet,
+} from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 
@@ -41,7 +46,6 @@ export type UseVaultStakeReturn = UseMutationResult<
 // ============================================================================
 
 const MUTATION_KEY_PREFIX = 'vault-stake' as const
-const CONFIRMATION_BLOCKS = 1
 
 // ============================================================================
 // Mutation Hook
@@ -122,7 +126,7 @@ export function useVaultTokenStake(): UseVaultStakeReturn {
       }
 
       // Validate amount
-      if (amountWei <= 0n) {
+      if (amountWei <= MIN_STAKE_AMOUNT) {
         throw new Error('Amount must be greater than 0')
       }
 

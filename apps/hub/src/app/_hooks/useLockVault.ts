@@ -5,7 +5,11 @@ import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { statusNetworkTestnet } from '~constants/index'
+import {
+  CONFIRMATION_BLOCKS,
+  MIN_LOCK_PERIOD,
+  statusNetworkTestnet,
+} from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { shortenAddress } from '~utils/address'
@@ -43,10 +47,6 @@ export type UseLockVaultReturn = UseMutationResult<
 // ============================================================================
 
 const MUTATION_KEY = 'lock-vault' as const
-
-const TRANSACTION_CONFIG = {
-  CONFIRMATION_BLOCKS: 1,
-} as const
 
 // ============================================================================
 // Helper Functions
@@ -151,7 +151,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
       }
 
       // Validate lock period
-      if (lockPeriodInSeconds <= 0n) {
+      if (lockPeriodInSeconds <= MIN_LOCK_PERIOD) {
         throw new Error('Lock period must be greater than 0')
       }
 
@@ -176,7 +176,7 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         // Wait for transaction confirmation
         const { status } = await waitForTransactionReceipt(config, {
           hash,
-          confirmations: TRANSACTION_CONFIG.CONFIRMATION_BLOCKS,
+          confirmations: CONFIRMATION_BLOCKS,
         })
 
         // Check for transaction revert
@@ -186,7 +186,8 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         }
 
         // Check if vault was already locked before this transaction
-        const wasAlreadyLocked = currentLockUntil && currentLockUntil > 0n
+        const wasAlreadyLocked =
+          currentLockUntil && currentLockUntil > MIN_LOCK_PERIOD
 
         // Show success toast
         toast.positive(
