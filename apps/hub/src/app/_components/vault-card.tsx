@@ -11,7 +11,7 @@ import type { REWARD } from '../_constants'
 type Props = {
   name: string
   apy: string
-  rewards: Array<REWARD>
+  rewards: Array<Reward>
   icon: string
   onDeposit: () => void
 }
