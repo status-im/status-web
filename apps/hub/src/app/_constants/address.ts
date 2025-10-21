@@ -14,7 +14,7 @@ export type Token = {
   abi: Abi
 }
 
-export type REWARD = {
+export type Reward = {
   name: string
   icon: ReactNode
 }
