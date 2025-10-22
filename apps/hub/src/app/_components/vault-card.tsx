@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 import { PercentIcon, PlusIcon } from './icons'
 
-import type { REWARD } from '../_constants'
+import type { Reward } from '~constants/index'
 
 type Props = {
   name: string
