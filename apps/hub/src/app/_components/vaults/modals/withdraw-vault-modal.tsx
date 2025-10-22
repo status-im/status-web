@@ -62,15 +62,15 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
     >
       <div className="box-border flex w-full flex-col items-center justify-center gap-1 p-4">
         <div className="flex w-full items-start gap-[2px]">
-          <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col items-start gap-2">
+          <div className="flex shrink-0 grow basis-0 flex-col items-start gap-2">
             <div className="flex w-full items-start">
-              <p className="min-h-px min-w-px shrink-0 grow basis-0 text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-50">
+              <p className="shrink-0 grow basis-0 text-13 font-medium text-neutral-50">
                 Withdraw to
               </p>
             </div>
-            <div className="w-full rounded-12 border border-solid border-[#e7eaee] bg-white-100 opacity-[0.4]">
+            <div className="w-full rounded-12 border border-neutral-10 bg-white-100 opacity-[0.4]">
               <div className="box-border flex w-full items-center gap-2 overflow-hidden rounded-[inherit] py-[9px] pl-4 pr-3">
-                <p className="min-h-px min-w-px shrink-0 grow basis-0 break-words text-[15px] leading-[1.45] tracking-[-0.135px] text-neutral-100">
+                <p className="shrink-0 grow basis-0 break-words text-15 text-neutral-100">
                   {address}
                 </p>
               </div>
@@ -80,23 +80,21 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
       </div>
 
       <div className="box-border flex w-full flex-col items-start gap-2 p-4">
-        <div className="box-border flex w-full flex-col items-start gap-2 rounded-12 border border-solid border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 pb-3 pt-[10px]">
+        <div className="box-border flex w-full flex-col items-start gap-2 rounded-12 border border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 pb-3 pt-[10px]">
           <div className="flex w-full items-start gap-2">
             <div className="box-border flex items-start justify-center gap-[10px] self-stretch px-0 pb-0 pt-[3px]">
               <div className="relative size-3 overflow-hidden">
                 <InfoIcon />
               </div>
             </div>
-            <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col items-start gap-2">
-              <div className="flex min-w-full flex-col justify-center text-[13px] leading-[0] tracking-[-0.039px] text-neutral-100">
-                <p className="leading-[1.4]">
-                  Your funds will sent directly to your connected wallet.
-                </p>
+            <div className="flex shrink-0 grow basis-0 flex-col items-start gap-2">
+              <div className="flex w-full flex-col justify-center text-13 text-neutral-100">
+                <p>Your funds will sent directly to your connected wallet.</p>
               </div>
               <Button
                 variant="outline"
                 size="32"
-                className="rounded-8 px-2 py-[3px] pr-[6px] text-[13px]"
+                className="rounded-8 px-2 py-[3px] pr-[6px] text-13"
               >
                 Learn more
               </Button>

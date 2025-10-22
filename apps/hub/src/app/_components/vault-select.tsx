@@ -126,9 +126,7 @@ export function VaultSelect({
         ) : (
           <AddSmallIcon className="size-5 shrink-0 text-neutral-100" />
         )}
-        <span className="truncate font-regular leading-[2.15] tracking-[-0.135px]">
-          {displayLabel}
-        </span>
+        <span className="truncate font-regular">{displayLabel}</span>
       </div>
       <DropdownIcon
         className={`shrink-0 text-neutral-40 transition-transform ${open ? 'rotate-180' : ''}`}

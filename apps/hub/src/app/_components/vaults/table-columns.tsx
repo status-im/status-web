@@ -48,14 +48,14 @@ export const createVaultTableColumns = ({
       header: 'Vault',
       cell: ({ row }) => {
         return (
-          <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
+          <span className="whitespace-pre text-13 font-medium text-neutral-100">
             #{Number(row.index) + 1}
           </span>
         )
       },
       footer: () => {
         return (
-          <span className="text-[13px] font-medium text-neutral-50">Total</span>
+          <span className="text-13 font-medium text-neutral-50">Total</span>
         )
       },
       meta: {
@@ -67,7 +67,7 @@ export const createVaultTableColumns = ({
       header: 'Address',
       cell: ({ row }) => {
         return (
-          <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
+          <span className="whitespace-pre text-13 font-medium text-neutral-100">
             {shortenAddress(row.original.address)}
           </span>
         )
@@ -82,7 +82,7 @@ export const createVaultTableColumns = ({
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-1">
-            <span className="text-[13px] font-medium text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               {formatSNT(row.original.data?.stakedBalance || 0n)}
               <span className="ml-0.5 text-neutral-50">SNT</span>
             </span>
@@ -91,7 +91,7 @@ export const createVaultTableColumns = ({
       },
       footer: () => {
         return (
-          <span className="text-[13px] font-medium text-neutral-100">
+          <span className="text-13 font-medium text-neutral-100">
             {formatSNT(totalStaked)}
             <span className="ml-0.5 text-neutral-50">SNT</span>
           </span>
@@ -116,7 +116,7 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-center gap-0.5">
-            <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               {daysUntilUnlock}
               <span className="ml-0.5 text-neutral-50">d</span>
             </span>
@@ -142,11 +142,11 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-center gap-3">
-            <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               x{calculateVaultBoost(vaults, row.original.address)}
             </span>
             {potentialBoost && (
-              <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-[#7140fd]">
+              <span className="text-13 font-medium text-purple">
                 x{formatSNT(formatUnits(potentialBoost, SNT_TOKEN.decimals))} if
                 locked
               </span>
@@ -165,7 +165,7 @@ export const createVaultTableColumns = ({
         const karma = Number(row.original.data?.rewardsAccrued) / 1e18
         return (
           <div className="flex items-center gap-1">
-            <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               {formatSNT(karma)}
               <span className="ml-0.5 text-neutral-50">KARMA</span>
             </span>
@@ -174,7 +174,7 @@ export const createVaultTableColumns = ({
       },
       footer: () => {
         return (
-          <span className="text-[13px] font-medium text-neutral-100">
+          <span className="text-13 font-medium text-neutral-100">
             {formatSNT(totalKarma)}
             <span className="ml-0.5 text-neutral-50">KARMA</span>
           </span>
@@ -198,7 +198,7 @@ export const createVaultTableColumns = ({
             ) : (
               <UnlockedIcon className="text-purple" />
             )}
-            <span className="text-[13px] font-medium capitalize leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium capitalize text-neutral-100">
               {isLocked ? 'Locked' : 'Open'}
             </span>
           </div>
@@ -239,7 +239,7 @@ export const createVaultTableColumns = ({
                       variant="danger"
                       size="32"
                       disabled={!isConnected}
-                      className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                      className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
                     >
                       <AlertIcon className="shrink-0" />
                       <span className="hidden whitespace-nowrap xl:inline">
@@ -276,7 +276,7 @@ export const createVaultTableColumns = ({
                     variant="primary"
                     size="32"
                     disabled={!isConnected}
-                    className="min-w-fit text-[13px]"
+                    className="min-w-fit text-13"
                   >
                     <TimeIcon className="shrink-0" />
                     <span className="hidden whitespace-nowrap xl:inline">
@@ -317,7 +317,7 @@ export const createVaultTableColumns = ({
                   variant="primary"
                   size="32"
                   disabled={!isConnected}
-                  className="min-w-fit text-[13px]"
+                  className="min-w-fit text-13"
                 >
                   <LockedIcon fill="white" className="shrink-0" />
                   <span className="whitespace-nowrap">Lock</span>
