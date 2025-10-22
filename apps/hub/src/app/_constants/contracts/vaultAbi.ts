@@ -1,0 +1,258 @@
+import type { Abi } from 'viem'
+
+export const vaultAbi: Abi = [
+  {
+    inputs: [
+      { internalType: 'contract IERC20', name: 'token', type: 'address' },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
+  { inputs: [], name: 'StakeVault__FundsLocked', type: 'error' },
+  { inputs: [], name: 'StakeVault__InvalidDestinationAddress', type: 'error' },
+  { inputs: [], name: 'StakeVault__MigrationFailed', type: 'error' },
+  { inputs: [], name: 'StakeVault__NotAllowedToExit', type: 'error' },
+  { inputs: [], name: 'StakeVault__NotAllowedToLeave', type: 'error' },
+  { inputs: [], name: 'StakeVault__NotAuthorized', type: 'error' },
+  { inputs: [], name: 'StakeVault__NotEnoughAvailableBalance', type: 'error' },
+  {
+    inputs: [],
+    name: 'StakeVault__StakeManagerImplementationNotTrusted',
+    type: 'error',
+  },
+  { inputs: [], name: 'StakeVault__StakingFailed', type: 'error' },
+  { inputs: [], name: 'StakeVault__UnstakingFailed', type: 'error' },
+  { inputs: [], name: 'StakeVault__WithdrawFromVaultFailed', type: 'error' },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'uint8', name: 'version', type: 'uint8' },
+    ],
+    name: 'Initialized',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'previousOwner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnershipTransferred',
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'STAKING_TOKEN',
+    outputs: [{ internalType: 'contract IERC20', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'amountStaked',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'contract IERC20', name: '_token', type: 'address' },
+    ],
+    name: 'availableWithdraw',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_destination', type: 'address' },
+    ],
+    name: 'emergencyExit',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_owner', type: 'address' },
+      { internalType: 'address', name: '_stakeManager', type: 'address' },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: '_destination', type: 'address' },
+    ],
+    name: 'leave',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_seconds', type: 'uint256' }],
+    name: 'lock',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'lockUntil',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'migrateTo', type: 'address' }],
+    name: 'migrateToVault',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'owner',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'register',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'uint256', name: '_seconds', type: 'uint256' },
+      { internalType: 'address', name: '_from', type: 'address' },
+    ],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'uint256', name: '_seconds', type: 'uint256' },
+    ],
+    name: 'stake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'stakeManager',
+    outputs: [
+      {
+        internalType: 'contract IStakeManagerProxy',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'stakeManagerImplementationAddress',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: 'newOwner', type: 'address' }],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: 'stakeManagerAddress', type: 'address' },
+    ],
+    name: 'trustStakeManager',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_amount', type: 'uint256' }],
+    name: 'unstake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'address', name: '_destination', type: 'address' },
+    ],
+    name: 'unstake',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '_lockUntil', type: 'uint256' }],
+    name: 'updateLockUntil',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'contract IERC20', name: '_token', type: 'address' },
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'address', name: '_destination', type: 'address' },
+    ],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'contract IERC20', name: '_token', type: 'address' },
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+    ],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'address', name: '_destination', type: 'address' },
+    ],
+    name: 'withdrawFromVault',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+]

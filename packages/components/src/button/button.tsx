@@ -28,7 +28,7 @@ type Props = {
     }
 )
 
-type ButtonProps = Prettify<
+export type ButtonProps = Prettify<
   Omit<React.ComponentPropsWithoutRef<'button'>, 'children'> & { href?: never }
 >
 
