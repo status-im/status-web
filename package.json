@@ -37,7 +37,8 @@
     "vite-node": "3.1.4",
     "protons-runtime": "3.1.0",
     "it-length-prefixed": "9.0.3",
-    "remark-lint": "9.1.2"
+    "remark-lint": "9.1.2",
+    "@scure/base": "^1.2.6"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",

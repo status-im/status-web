@@ -8,7 +8,6 @@ import {
   CONFIRMATION_BLOCKS,
   MIN_STAKE_AMOUNT,
   SNT_TOKEN,
-  statusNetworkTestnet,
 } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
@@ -139,7 +138,6 @@ export function useVaultTokenStake(): UseVaultStakeReturn {
       try {
         // Execute staking transaction
         const hash = await writeContractAsync({
-          chain: statusNetworkTestnet,
           account: address,
           address: vaultAddress,
           abi: vaultAbi,

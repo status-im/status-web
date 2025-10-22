@@ -5,11 +5,7 @@ import { useAccount, useConfig, useReadContract, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import {
-  CONFIRMATION_BLOCKS,
-  MIN_LOCK_PERIOD,
-  statusNetworkTestnet,
-} from '~constants/index'
+import { CONFIRMATION_BLOCKS, MIN_LOCK_PERIOD } from '~constants/index'
 import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { shortenAddress } from '~utils/address'
@@ -162,7 +158,6 @@ export function useLockVault(vaultAddress: Address): UseLockVaultReturn {
         // Call Vault.lock with the increased lock duration in seconds
         // The smart contract's _calculateLock handles all the math
         const hash = await writeContractAsync({
-          chain: statusNetworkTestnet,
           account: address,
           address: vaultAddress,
           abi: vaultAbi,

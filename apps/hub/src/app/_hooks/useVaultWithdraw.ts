@@ -8,7 +8,6 @@ import {
   CONFIRMATION_BLOCKS,
   MIN_STAKE_AMOUNT,
   SNT_TOKEN,
-  statusNetworkTestnet,
 } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 import { useStakingVaults } from '~hooks/useStakingVaults'
@@ -122,7 +121,6 @@ export function useVaultWithdraw(): UseVaultWithdrawReturn {
       try {
         // Execute withdrawal transaction
         const hash = await writeContractAsync({
-          chain: statusNetworkTestnet,
           account: address,
           address: vaultAddress,
           abi: vaultAbi,

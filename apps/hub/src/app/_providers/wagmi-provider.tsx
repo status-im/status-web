@@ -4,7 +4,7 @@ import { createConfig, http, WagmiProvider as WagmiProviderBase } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 import { injected, metaMask, walletConnect } from 'wagmi/connectors'
 
-import { clientEnv } from '~/config/env.client.mjs'
+import { clientEnv } from '~constants/env.client.mjs'
 
 import type React from 'react'
 

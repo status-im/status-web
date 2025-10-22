@@ -8,7 +8,7 @@ import {
 import { useAccount, useChainId, useConfig, useWriteContract } from 'wagmi'
 import { readContracts } from 'wagmi/actions'
 
-import { FAUCET, statusNetworkTestnet } from '~constants/index'
+import { FAUCET } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -107,7 +107,6 @@ export function useFaucetMutation(): UseMutationResult<
       }
 
       return writeContract({
-        chain: statusNetworkTestnet,
         account: address,
         address: FAUCET.address,
         abi: FAUCET.abi,

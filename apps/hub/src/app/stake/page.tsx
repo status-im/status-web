@@ -31,7 +31,6 @@ import {
   SNT_TOKEN,
   STAKE_PAGE_CONSTANTS,
   STAKING_MANAGER,
-  statusNetworkTestnet,
   TIME_CONSTANTS,
   TOOLTIP_CONFIG,
 } from '~constants/index'
@@ -85,7 +84,6 @@ export default function StakePage() {
   })
 
   const { data: balance } = useBalance({
-    chainId: statusNetworkTestnet.id,
     scopeKey: 'balance',
     address,
     token: SNT_TOKEN.address,

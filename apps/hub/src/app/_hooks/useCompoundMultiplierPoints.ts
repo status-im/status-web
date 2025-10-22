@@ -8,7 +8,6 @@ import {
   DEFAULT_MP_VALUE,
   SNT_TOKEN,
   STAKING_MANAGER,
-  statusNetworkTestnet,
 } from '~constants/index'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
 
@@ -133,7 +132,6 @@ export function useCompoundMultiplierPoints(): UseCompoundMultiplierPointsReturn
 
       // Execute compound transaction via updateAccount
       const hash = await writeContractAsync({
-        chain: statusNetworkTestnet,
         account: address,
         address: STAKING_MANAGER.address,
         abi: STAKING_MANAGER.abi,

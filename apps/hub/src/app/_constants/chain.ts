@@ -1,7 +1,7 @@
 import type { Chain } from 'wagmi/chains'
 
 export const statusNetworkTestnet: Chain = {
-  id: 1660990954,
+  id: Number(1660990954),
   name: 'Status Network Testnet',
   nativeCurrency: {
     decimals: 18,
