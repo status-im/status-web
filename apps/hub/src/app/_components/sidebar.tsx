@@ -23,7 +23,7 @@ const NAV_LINKS = [
     id: 'deposit',
     label: 'Deposit',
     icon: DepositIcon,
-    href: 'https://example.com',
+    href: '/deposit',
     tag: 'Mainnet',
   },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
@@ -32,24 +32,31 @@ const NAV_LINKS = [
 ]
 
 const TOKENS_LINKS = [
-  { id: 'swap', label: 'Swap', icon: SwapIcon, href: 'https://example.com' },
+  {
+    id: 'swap',
+    label: 'Swap',
+    icon: SwapIcon,
+    href: '#',
+    soon: true,
+  },
   {
     id: 'launch',
     label: 'Launch',
     icon: LaunchIcon,
-    href: 'https://example.com',
+    href: '#',
+    soon: true,
   },
   {
     id: 'bridge',
     label: 'Bridge',
     icon: BridgeIcon,
-    href: 'https://example.com',
+    href: 'https://bridge.status.network/',
   },
   {
     id: 'mint-usdz',
-    label: 'Mint USDZ',
+    label: 'Pre-mint GUSD',
     icon: MintIcon,
-    href: 'https://example.com',
+    href: '/deposit',
   },
 ]
 
@@ -58,7 +65,7 @@ const OTHER_LINKS = [
     id: 'explorer',
     label: 'Explorer',
     icon: ExplorerIcon,
-    href: 'https://example.com',
+    href: 'https://sepoliascan.status.network/',
   },
   {
     id: 'governance',
@@ -70,9 +77,14 @@ const OTHER_LINKS = [
     id: 'submit-app',
     label: 'Submit an app',
     icon: SubmitAppIcon,
-    href: '/submit-app',
+    href: 'https://statusnetwork.typeform.com/builder',
   },
-  { id: 'docs', label: 'Docs', icon: DocsIcon, href: '/docs' },
+  {
+    id: 'docs',
+    label: 'Docs',
+    icon: DocsIcon,
+    href: 'https://docs.status.network/',
+  },
 ]
 
 type Props = {

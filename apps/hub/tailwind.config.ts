@@ -87,6 +87,13 @@ export default {
             letterSpacing: '-0.024375rem',
           },
         ],
+        11: [
+          '0.6875rem',
+          {
+            lineHeight: '0.',
+            letterSpacing: '-0.0034375rem',
+          },
+        ],
       },
 
       colors: {
