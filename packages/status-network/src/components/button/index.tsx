@@ -9,7 +9,7 @@ type Props = {
   active?: boolean
   icon?: React.ReactNode
   iconBefore?: React.ReactNode
-  size?: '32' | '40'
+  size?: '32' | '40' | '24'
 } & React.ComponentProps<'button'>
 
 const buttonStyles = cva({
@@ -38,6 +38,7 @@ const buttonStyles = cva({
     size: {
       '32': 'h-8 rounded-10 py-[5px]',
       '40': 'h-10 rounded-12 py-[9px]',
+      '24': 'rounded-8 px-2 py-[3px]',
     },
     backdropFilter: {
       true: 'backdrop-blur-[20px]',

@@ -91,11 +91,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
               <div className="flex w-full flex-col justify-center text-13 text-neutral-100">
                 <p>Your funds will sent directly to your connected wallet.</p>
               </div>
-              <Button
-                variant="outline"
-                size="32"
-                className="rounded-8 px-2 py-[3px] pr-[6px] text-13"
-              >
+              <Button variant="outline" size="24">
                 Learn more
               </Button>
             </div>
