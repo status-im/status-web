@@ -35,9 +35,7 @@ const FeedbackPopover = () => {
       <button className="flex cursor-pointer select-none items-center rounded-10 border border-neutral-70 hover:border-neutral-60">
         <div className="flex items-center gap-1 px-2 py-[5px] text-15 font-500 text-white-100 transition">
           Share feedback
-          <span className="text-neutral-40">
-            <DropdownIcon />
-          </span>
+          <DropdownIcon />
         </div>
       </button>
 
