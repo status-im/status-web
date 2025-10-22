@@ -307,7 +307,7 @@ export default function StakePage() {
                               inputMode="decimal"
                               {...form.register('amount')}
                               placeholder="0"
-                              className="w-full border-none bg-transparent text-27 font-semibold leading-[38px] text-neutral-100 outline-none placeholder:text-neutral-40"
+                              className="h-[38px] w-full border-none bg-transparent text-27 font-semibold text-neutral-100 outline-none placeholder:text-neutral-40"
                             />
                             <div className="flex items-center gap-1">
                               <SNTIcon />
@@ -500,7 +500,7 @@ const InfoTooltip = () => (
     className="border-0"
     content={
       <div className="flex w-[286px] flex-col gap-4 rounded-8 bg-white-100 p-4">
-        <span className="text-13 leading-[1.4] tracking-[-0.039px] text-neutral-100">
+        <span className="text-13 text-neutral-100">
           The longer SNT is staked or locked in vaults, the higher this
           multiplier goes. This rewards long term believers. The maximum
           multiplier is x{MAX_BOOST}.
@@ -511,9 +511,9 @@ const InfoTooltip = () => (
           variant="outline"
           className="rounded-8 px-2 py-1"
           size="32"
+          icon={<ExternalIcon className="size-3 text-neutral-50" />}
         >
           Learn more
-          <ExternalIcon className="size-3 text-neutral-50" />
         </ButtonLink>
       </div>
     }

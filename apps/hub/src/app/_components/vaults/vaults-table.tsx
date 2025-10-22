@@ -50,7 +50,7 @@ interface TableProps {
 
 function TableHeader({ table }: TableProps) {
   return (
-    <thead className="h-[40px] border-b border-solid border-neutral-10 bg-neutral-5">
+    <thead className="h-[40px] border border-neutral-10 bg-neutral-5">
       {table.getHeaderGroups().map(headerGroup => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map(header => (
@@ -58,7 +58,7 @@ function TableHeader({ table }: TableProps) {
               key={header.id}
               className={`box-border px-[12px] ${getHeaderClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
             >
-              <span className="text-[13px] font-medium text-neutral-50">
+              <span className="text-13 font-medium text-neutral-50">
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -93,7 +93,7 @@ function TableBody({ table }: TableProps) {
 
 function TableFooter({ table }: TableProps) {
   return (
-    <tfoot className="border-t border-solid border-neutral-10 bg-neutral-5">
+    <tfoot className="border border-neutral-10 bg-neutral-5">
       {table.getFooterGroups().map(footerGroup => (
         <tr key={footerGroup.id}>
           {footerGroup.headers.map(header => (
@@ -152,9 +152,7 @@ export function VaultsTable() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
-        <h2 className="text-[19px] font-semibold leading-[1.35] tracking-[-0.304px] text-neutral-100">
-          My vaults
-        </h2>
+        <h2 className="text-19 font-semibold text-neutral-100">My vaults</h2>
         {isConnected && (
           <Button
             variant="outline"
@@ -168,7 +166,7 @@ export function VaultsTable() {
         )}
       </div>
 
-      <div className="relative w-full overflow-hidden rounded-16 border border-solid border-neutral-10 bg-white-100">
+      <div className="relative w-full overflow-hidden rounded-16 border border-neutral-10 bg-white-100">
         <div className="max-h-[600px] overflow-auto">
           <div className="min-w-[800px]">
             <table className="w-full border-collapse">

@@ -255,7 +255,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       />
 
       <div className="box-border flex items-center justify-center gap-[2px] px-8 pb-2 pt-4">
-        <div className="flex min-h-px min-w-px shrink-0 grow basis-0 gap-2">
+        <div className="flex shrink-0 grow basis-0 gap-2">
           <Input
             label="Years"
             value={years}
@@ -264,7 +264,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
             className={hasError ? 'border-danger-50/40' : ''}
           />
           <div className="box-border flex w-[13px] flex-col items-center justify-center self-stretch px-0 pb-0 pt-[23px]">
-            <span className="w-full text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-[#647084]">
+            <span className="w-full text-13 font-medium text-neutral-50">
               or
             </span>
           </div>
@@ -289,8 +289,8 @@ export function LockVaultForm(props: LockVaultFormProps) {
                 <IncorrectIcon />
               </div>
             </div>
-            <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col justify-center text-[13px] font-medium leading-[0] tracking-[-0.039px] text-[#e95460]">
-              <span className="leading-[1.4]">{displayError}</span>
+            <div className="flex shrink-0 grow basis-0 flex-col justify-center text-13 font-medium text-danger-50">
+              <span>{displayError}</span>
             </div>
           </div>
         </div>
@@ -298,8 +298,8 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
       <div className="box-border flex items-center gap-6 px-8 py-4">
         <div className="flex items-center gap-2">
-          <div className="flex flex-col justify-center text-[15px] leading-[0] tracking-[-0.135px] text-neutral-100">
-            <span className="leading-[1.45]">Boost:</span>
+          <div className="flex flex-col justify-center text-15 text-neutral-100">
+            <span>Boost:</span>
           </div>
           <ContextTag type="label" size="32">
             {/* TODO: calculate boost */}
@@ -307,8 +307,8 @@ export function LockVaultForm(props: LockVaultFormProps) {
           </ContextTag>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex flex-col justify-center text-[15px] leading-[0] tracking-[-0.135px] text-neutral-100">
-            <span className="leading-[1.45]">Unlock:</span>
+          <div className="flex flex-col justify-center text-15 text-neutral-100">
+            <span>Unlock:</span>
           </div>
           <ContextTag type="label" size="32">
             {calculatedUnlockDate}
@@ -317,14 +317,14 @@ export function LockVaultForm(props: LockVaultFormProps) {
       </div>
 
       <div className="box-border flex flex-col gap-2 px-8 py-4">
-        <div className="box-border flex items-start gap-2 rounded-12 border border-solid border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 py-[11px]">
+        <div className="box-border flex items-start gap-2 rounded-12 border border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 py-[11px]">
           <div className="box-border flex items-start justify-center gap-[10px] self-stretch px-0 py-px">
             <div className="relative size-4 overflow-hidden">
               <InfoIcon />
             </div>
           </div>
-          <div className="flex min-h-px min-w-px shrink-0 grow basis-0 flex-col justify-center text-[13px] leading-[0] tracking-[-0.039px] text-neutral-100">
-            <span className="leading-[1.4]">{infoMessage}</span>
+          <div className="flex shrink-0 grow basis-0 flex-col justify-center text-13 text-neutral-100">
+            <span>{infoMessage}</span>
           </div>
         </div>
       </div>
