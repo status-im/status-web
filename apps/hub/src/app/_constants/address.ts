@@ -24,13 +24,13 @@ export type Vault = {
   name: string
   address: Address
   apy: string
-  rewards: REWARD[]
+  rewards: Reward[]
   icon: string
-  token: TOKEN
+  token: Token
   abi: typeof PreDepositVaultAbi
 }
 
-export const wETH_TOKEN: TOKEN = {
+export const wETH_TOKEN: Token = {
   address: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
   name: 'Wrapped Ether',
   symbol: 'WETH',
@@ -38,7 +38,7 @@ export const wETH_TOKEN: TOKEN = {
   abi: tokenAbi,
 } as const
 
-export const SNT_TOKEN: TOKEN = {
+export const SNT_TOKEN: Token = {
   address: '0x1C3Ac2a186c6149Ae7Cb4D716eBbD0766E4f898a',
   name: 'Status Test Token',
   symbol: 'STT',
@@ -46,7 +46,7 @@ export const SNT_TOKEN: TOKEN = {
   abi: tokenAbi,
 } as const
 
-export const LINEA_TOKEN: TOKEN = {
+export const LINEA_TOKEN: Token = {
   address: '0x1789e0043623282D5DCc7F213d703C6D8BAfBB04',
   name: 'Linea',
   symbol: 'LINEA',
@@ -54,7 +54,7 @@ export const LINEA_TOKEN: TOKEN = {
   abi: lineaTokenAbi,
 } as const
 
-export const MOCK_TOKEN: TOKEN = {
+export const MOCK_TOKEN: Token = {
   address: '0x3841E6CD6466599d30FdFF9166E5b38452b7F232',
   name: 'MockERC20',
   symbol: 'MERC',

@@ -6,7 +6,7 @@ import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { usePreDepositStateContext } from './usePreDepositStateContext'
 
-import type { TOKEN } from '~constants/index'
+import type { Token } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -17,7 +17,7 @@ import type { TOKEN } from '~constants/index'
  */
 export interface ApprovePreDepositTokenParams {
   /** Token Address to approve */
-  token: TOKEN
+  token: Token
   /** Amount of tokens to approve (in token units, not wei) */
   amount: string
   /** Address of the spender (vault) to approve tokens for */
