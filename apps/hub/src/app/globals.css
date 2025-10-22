@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    box-sizing: border-box;
+  }
   html {
     background-color: #ffffff;
   }

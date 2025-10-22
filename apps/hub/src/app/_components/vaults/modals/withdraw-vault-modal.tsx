@@ -60,7 +60,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
       description="In the event of a hack or contract compromise, you can use this feature to immediately withdraw your funds from the vault."
       trigger={children}
     >
-      <div className="box-border flex w-full flex-col items-center justify-center gap-1 p-4">
+      <div className="flex w-full flex-col items-center justify-center gap-1 p-4">
         <div className="flex w-full items-start gap-[2px]">
           <div className="flex shrink-0 grow basis-0 flex-col items-start gap-2">
             <div className="flex w-full items-start">
@@ -69,7 +69,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
               </p>
             </div>
             <div className="w-full rounded-12 border border-neutral-10 bg-white-100 opacity-[0.4]">
-              <div className="box-border flex w-full items-center gap-2 overflow-hidden rounded-[inherit] py-[9px] pl-4 pr-3">
+              <div className="flex w-full items-center gap-2 overflow-hidden rounded-[inherit] py-[9px] pl-4 pr-3">
                 <p className="shrink-0 grow basis-0 break-words text-15 text-neutral-100">
                   {address}
                 </p>
@@ -79,10 +79,10 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
         </div>
       </div>
 
-      <div className="box-border flex w-full flex-col items-start gap-2 p-4">
-        <div className="box-border flex w-full flex-col items-start gap-2 rounded-12 border border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 pb-3 pt-[10px]">
+      <div className="flex w-full flex-col items-start gap-2 p-4">
+        <div className="flex w-full flex-col items-start gap-2 rounded-12 border border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 pb-3 pt-[10px]">
           <div className="flex w-full items-start gap-2">
-            <div className="box-border flex items-start justify-center gap-[10px] self-stretch px-0 pb-0 pt-[3px]">
+            <div className="flex items-start justify-center gap-[10px] self-stretch px-0 pb-0 pt-[3px]">
               <div className="relative size-3 overflow-hidden">
                 <InfoIcon />
               </div>
@@ -100,7 +100,7 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
       </div>
 
       <div className="flex w-full flex-col items-start">
-        <div className="box-border flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
+        <div className="flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
           <Dialog.Close asChild>
             <Button
               size="40"

@@ -56,7 +56,7 @@ function TableHeader({ table }: TableProps) {
           {headerGroup.headers.map(header => (
             <th
               key={header.id}
-              className={`box-border px-[12px] ${getHeaderClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
+              className={`px-[12px] ${getHeaderClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
             >
               <span className="text-13 font-medium text-neutral-50">
                 {flexRender(
@@ -80,7 +80,7 @@ function TableBody({ table }: TableProps) {
           {row.getVisibleCells().map(cell => (
             <td
               key={cell.id}
-              className={`box-border px-[12px] py-[11px] ${getCellClassName(cell.column.columnDef.meta as VaultColumnMeta)}`}
+              className={`px-[12px] py-[11px] ${getCellClassName(cell.column.columnDef.meta as VaultColumnMeta)}`}
             >
               {flexRender(cell.column.columnDef.cell, cell.getContext())}
             </td>
@@ -99,7 +99,7 @@ function TableFooter({ table }: TableProps) {
           {footerGroup.headers.map(header => (
             <td
               key={header.id}
-              className={`box-border px-[12px] py-[7px] ${getCellClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
+              className={`px-[12px] py-[7px] ${getCellClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
             >
               {header.column.columnDef.footer
                 ? flexRender(

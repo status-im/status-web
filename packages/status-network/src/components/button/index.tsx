@@ -25,7 +25,7 @@ const buttonStyles = cva({
       outline:
         'pressed:border-neutral-50 border border-neutral-30 text-neutral-100 hover:border-neutral-40 disabled:border-neutral-20',
       danger:
-        'min-w-fit border-[transparent] bg-danger-50 text-white-100 hover:bg-danger-60',
+        'border-[transparent] bg-danger-50 text-white-100 hover:bg-danger-60',
     },
     withIcon: {
       true: '',
@@ -38,7 +38,7 @@ const buttonStyles = cva({
     size: {
       '32': 'h-8 rounded-10 py-[5px]',
       '40': 'h-10 rounded-12 py-[9px]',
-      '24': 'rounded-8 px-2 py-[3px]',
+      '24': 'h-6 rounded-8 px-2 py-[3px]',
     },
     backdropFilter: {
       true: 'backdrop-blur-[20px]',
