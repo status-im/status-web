@@ -32,12 +32,19 @@ const NAV_LINKS = [
 ]
 
 const TOKENS_LINKS = [
-  { id: 'swap', label: 'Swap', icon: SwapIcon, href: 'https://example.com' },
+  {
+    id: 'swap',
+    label: 'Swap',
+    icon: SwapIcon,
+    href: '#',
+    soon: true,
+  },
   {
     id: 'launch',
     label: 'Launch',
     icon: LaunchIcon,
-    href: 'https://example.com',
+    href: '#',
+    soon: true,
   },
   {
     id: 'bridge',
