@@ -42,7 +42,7 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
             <Dialog.Close asChild>
               <button
                 aria-label="Close"
-                className="absolute right-3 top-3 z-50 flex size-8 items-center justify-center rounded-10 border border-neutral-80/100 backdrop-blur-[20px] transition-colors hover:bg-neutral-10 focus:outline-none"
+                className="absolute right-3 top-3 z-50 flex size-8 items-center justify-center rounded-10 border border-neutral-80/10 backdrop-blur-[20px] transition-colors hover:bg-neutral-10 focus:outline-none"
               >
                 <CloseIcon className="text-neutral-100" />
               </button>
@@ -50,7 +50,7 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
 
             <div className="box-border flex flex-col items-center px-4 pb-4 pt-8">
               <Dialog.Title asChild>
-                <div className="flex w-full items-center gap-[6px]">
+                <div className="flex w-full items-center gap-1.5">
                   <span className="shrink-0 grow basis-0 text-19 font-semibold text-neutral-100">
                     {title}
                   </span>

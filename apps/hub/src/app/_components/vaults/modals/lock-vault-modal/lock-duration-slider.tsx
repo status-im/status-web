@@ -34,7 +34,7 @@ export function LockDurationSlider(props: LockDurationSliderProps) {
           step="any"
           value={value}
           onChange={handleSliderChange}
-          className="h-1 w-full cursor-pointer appearance-none rounded-[37px] bg-neutral-10 [&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-[#7140fd] [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#7140fd]"
+          className="h-1 w-full cursor-pointer appearance-none rounded-full bg-neutral-10 [&::-moz-range-thumb]:size-5 [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-purple [&::-webkit-slider-thumb]:size-5 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple"
         />
       </div>
       <div className="flex items-start justify-between text-13 font-medium text-neutral-50">

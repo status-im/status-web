@@ -27,7 +27,7 @@ export const CompoundStatusContent = () => {
       <div className="flex flex-col gap-8 px-8 pb-8">
         <div className="flex flex-col gap-1">
           <Dialog.Title asChild>
-            <h2 className="text-center text-[19px] font-semibold text-neutral-100">
+            <h2 className="text-center text-19 font-semibold text-neutral-100">
               {`Ready to compound ${formatSNT(
                 formatUnits(
                   multiplierPointsData?.totalUncompounded ?? 0n,
@@ -37,7 +37,7 @@ export const CompoundStatusContent = () => {
             </h2>
           </Dialog.Title>
           <Dialog.Description asChild>
-            <p className="text-center text-[15px] font-regular text-neutral-100">
+            <p className="text-center text-15 font-regular text-neutral-100">
               Please sign the message in your wallet.
             </p>
           </Dialog.Description>
@@ -45,10 +45,10 @@ export const CompoundStatusContent = () => {
 
         <div className="flex flex-col gap-[27px] rounded-16 bg-neutral-5 py-4">
           <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-[13px] font-medium text-neutral-50">
+            <p className="text-13 font-medium text-neutral-50">
               Total compounded
             </p>
-            <p className="text-[27px] font-semibold text-neutral-100">
+            <p className="text-27 font-semibold text-neutral-100">
               {`${formatSNT(
                 formatUnits(
                   multiplierPointsData?.totalMpRedeemed ?? 0n,
@@ -59,19 +59,19 @@ export const CompoundStatusContent = () => {
           </div>
 
           <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-[13px] font-medium text-neutral-50">
+            <p className="text-13 font-medium text-neutral-50">
               Your earn rate at {weightedBoost.formatted} boost
             </p>
-            <p className="text-[27px] font-semibold text-neutral-100">
+            <p className="text-27 font-semibold text-neutral-100">
               {earnRateWithBoost} Karma / day
             </p>
           </div>
 
           <div className="flex flex-col items-center gap-2 text-center">
-            <p className="text-[13px] font-medium text-neutral-50">
+            <p className="text-13 font-medium text-neutral-50">
               Equivalent at x0.00 boost
             </p>
-            <p className="text-[27px] font-semibold text-neutral-100">
+            <p className="text-27 font-semibold text-neutral-100">
               {earnRateWithoutBoost} Karma / day
             </p>
           </div>
@@ -81,7 +81,7 @@ export const CompoundStatusContent = () => {
           <div className="flex shrink-0 items-start justify-center py-px">
             <InfoIcon />
           </div>
-          <p className="flex-1 text-[13px] font-regular text-neutral-100">
+          <p className="flex-1 text-13 font-regular text-neutral-100">
             Boost the rate at which you receive Karma. More points you compound,
             the higher your rate. The longer you lock your vault, the higher
             your boost, and the faster you accumulate Karma.
