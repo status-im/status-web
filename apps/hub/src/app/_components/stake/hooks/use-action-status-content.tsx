@@ -102,6 +102,32 @@ export function useActionStatusContent(
         showCloseButton: true,
       }))
 
+      // Unstaking flow
+      .with(
+        {
+          type: 'unstaking',
+          step: 'initialize',
+        },
+        state => ({
+          title: `Ready to unstake ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+          description: 'Please sign the message in your wallet.',
+          state: 'pending',
+          showCloseButton: true,
+        })
+      )
+      .with({ type: 'unstaking', step: 'processing' }, state => ({
+        title: `Unstaking ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
+        description: 'Wait a moment...',
+        state: 'processing',
+        showCloseButton: false,
+      }))
+      .with({ type: 'unstaking', step: 'rejected' }, () => ({
+        title: 'Request was rejected',
+        description: 'Request was rejected by user',
+        state: 'error',
+        showCloseButton: true,
+      }))
+
       // Withdraw flow (goes directly to processing, no initialize step)
       .with({ type: 'withdraw', step: 'processing' }, state => ({
         title: `Withdrawing ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
