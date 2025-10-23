@@ -8,20 +8,13 @@ const RejectIcon = (props: SVGProps<SVGSVGElement>) => (
     fill="none"
     {...props}
   >
-    <g
+    <path
       stroke="#E95460"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={4}
-      clipPath="url(#a)"
-    >
-      <path d="m10.269 10.27 29.46 29.462M25 45.833c11.506 0 20.834-9.328 20.834-20.834S36.506 4.166 25 4.166 4.167 13.493 4.167 24.999c0 11.506 9.327 20.834 20.833 20.834Z" />
-    </g>
-    <defs>
-      <clipPath id="a">
-        <path fill="#fff" d="M0 0h50v50H0z" />
-      </clipPath>
-    </defs>
+      d="m10.27 10.27 29.46 29.462M25 45.835c11.505 0 20.833-9.328 20.833-20.834S36.505 4.168 24.999 4.168 4.166 13.495 4.166 25.001c0 11.506 9.327 20.834 20.833 20.834Z"
+    />
   </svg>
 )
 export default RejectIcon

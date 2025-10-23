@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import * as Dialog from '@radix-ui/react-dialog'
 import { CloseIcon } from '@status-im/icons/20'
 
@@ -32,6 +34,31 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
     }
   }
 
+  // Cleanup pointer-events when modal closes or unmounts
+  useEffect(() => {
+    if (open === false) {
+      // Use setTimeout to ensure this runs after Radix UI's cleanup
+      const timeoutId = setTimeout(() => {
+        const body = document.body
+        if (body) {
+          body.style.removeProperty('pointer-events')
+        }
+      }, 0)
+
+      return () => clearTimeout(timeoutId)
+    }
+  }, [open])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      const body = document.body
+      if (body) {
+        body.style.removeProperty('pointer-events')
+      }
+    }
+  }, [])
+
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       {trigger && <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>}
@@ -48,7 +75,7 @@ export function BaseVaultModal(props: BaseVaultModalProps) {
               </button>
             </Dialog.Close>
 
-            <div className="flex flex-col items-center px-4 pb-4 pt-8">
+            <div className="flex flex-col items-center p-4">
               <Dialog.Title asChild>
                 <div className="flex w-full items-center gap-1.5">
                   <span className="shrink-0 grow basis-0 text-19 font-semibold text-neutral-100">
