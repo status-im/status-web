@@ -254,7 +254,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
         onChange={handleSliderChange}
       />
 
-      <div className="box-border flex items-center justify-center gap-[2px] px-8 pb-2 pt-4">
+      <div className="flex items-center justify-center gap-[2px] px-8 pb-2 pt-4">
         <div className="flex shrink-0 grow basis-0 gap-2">
           <Input
             label="Years"
@@ -263,10 +263,8 @@ export function LockVaultForm(props: LockVaultFormProps) {
             size="40"
             className={hasError ? 'border-danger-50/40' : ''}
           />
-          <div className="box-border flex w-[13px] flex-col items-center justify-center self-stretch px-0 pb-0 pt-[23px]">
-            <span className="w-full text-13 font-medium text-neutral-50">
-              or
-            </span>
+          <div className="flex flex-col items-center justify-center px-0 pb-0 pt-[23px]">
+            <span className="text-13 font-medium text-neutral-50">or</span>
           </div>
           <Input
             label="Days"
@@ -280,11 +278,11 @@ export function LockVaultForm(props: LockVaultFormProps) {
 
       {hasError && (
         <div
-          className="box-border flex flex-col gap-2 px-8 py-0"
+          className="flex flex-col gap-2 px-8 py-0"
           style={{ opacity: hasError ? 1 : 0 }}
         >
           <div className="flex items-center gap-1">
-            <div className="box-border flex items-center justify-center gap-[10px] self-stretch px-0 py-px">
+            <div className="flex items-center justify-center gap-[10px] self-stretch px-0 py-px">
               <div className="relative overflow-hidden">
                 <IncorrectIcon />
               </div>
@@ -296,7 +294,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
         </div>
       )}
 
-      <div className="box-border flex items-center gap-6 px-8 py-4">
+      <div className="flex items-center gap-6 px-8 py-4">
         <div className="flex items-center gap-2">
           <div className="flex flex-col justify-center text-15 text-neutral-100">
             <span>Boost:</span>
@@ -316,9 +314,9 @@ export function LockVaultForm(props: LockVaultFormProps) {
         </div>
       </div>
 
-      <div className="box-border flex flex-col gap-2 px-8 py-4">
-        <div className="box-border flex items-start gap-2 rounded-12 border border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 py-[11px]">
-          <div className="box-border flex items-start justify-center gap-[10px] self-stretch px-0 py-px">
+      <div className="flex flex-col gap-2 px-8 py-4">
+        <div className="flex items-start gap-2 rounded-12 border border-customisation-blue-50/10 bg-customisation-blue-50/5 px-4 py-[11px]">
+          <div className="flex items-start justify-center gap-[10px] self-stretch px-0 py-px">
             <div className="relative size-4 overflow-hidden">
               <InfoIcon />
             </div>
@@ -330,7 +328,7 @@ export function LockVaultForm(props: LockVaultFormProps) {
       </div>
 
       <div className="flex w-full flex-col items-start bg-[rgba(255,255,255,0.7)] backdrop-blur-[20px]">
-        <div className="box-border flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
+        <div className="flex w-full items-center justify-center gap-3 px-4 pb-4 pt-6">
           <Button
             size="40"
             variant="outline"

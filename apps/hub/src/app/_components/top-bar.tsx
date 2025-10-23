@@ -1,8 +1,8 @@
 'use client'
 
-import { Button, IconButton } from '@status-im/components'
+import { IconButton } from '@status-im/components'
 import { SettingsIcon } from '@status-im/icons/20'
-import { Link } from '@status-im/status-network/components'
+import { FeedbackPopover, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { ConnectButton } from './connect-button'
@@ -82,9 +82,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
         <div className="flex items-center gap-2">
           {/* Share Feedback */}
           <div className="hidden md:block">
-            <Button variant="outline" size="32">
-              Share feedback
-            </Button>
+            <FeedbackPopover />
           </div>
 
           {/* Connect Wallet Button */}

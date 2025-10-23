@@ -25,8 +25,8 @@ export function LockDurationSlider(props: LockDurationSliderProps) {
   }
 
   return (
-    <div className="box-border flex flex-col gap-4 px-8 py-4">
-      <div className="box-border flex flex-col items-center justify-center px-0 pb-1 pt-0">
+    <div className="flex flex-col gap-4 px-8 py-4">
+      <div className="flex flex-col items-center justify-center px-0 pb-1 pt-0">
         <input
           type="range"
           min={sliderConfig.minDays}
