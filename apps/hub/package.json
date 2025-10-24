@@ -27,7 +27,6 @@
     "@tanstack/react-table": "^8.21.3",
     "@vercel/analytics": "^1.5.0",
     "connectkit": "^1.9.0",
-    "connectkit-next-siwe": "^0.3.0",
     "cva": "1.0.0-beta.1",
     "framer-motion": "^12.0.6",
     "next": "15.3.0",
