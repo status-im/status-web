@@ -69,5 +69,5 @@ export const siweConfig: SIWEConfig = {
     }
   },
 
-  signOutOnDisconnect: true,
+  signOutOnDisconnect: false,
 }

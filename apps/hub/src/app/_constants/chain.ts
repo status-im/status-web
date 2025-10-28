@@ -1,6 +1,7 @@
 import { getDefaultConfig } from 'connectkit'
 import { defineChain } from 'viem'
 import { createConfig, http } from 'wagmi'
+import { type Chain, mainnet } from 'wagmi/chains'
 
 import { clientEnv } from './env.client.mjs'
 
@@ -9,11 +10,12 @@ import type {
   CreateConnectorFn,
   Transport,
 } from 'wagmi'
-import type { Chain } from 'wagmi/chains'
 
 export const testnet = defineChain({
   id: 1660990954,
   name: 'Status Network Testnet',
+  testnet: true,
+  sourceId: 1660990954,
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
@@ -30,8 +32,9 @@ export const testnet = defineChain({
 
 export const getDefaultWagmiConfig = () =>
   getDefaultConfig({
-    chains: [testnet],
+    chains: [mainnet, testnet],
     transports: {
+      [mainnet.id]: http(mainnet.rpcUrls.default.http[0]),
       [testnet.id]: http(testnet.rpcUrls.default.http[0]),
     },
     walletConnectProjectId:
