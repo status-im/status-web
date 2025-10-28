@@ -4,7 +4,14 @@ library 'status-jenkins-lib@v1.9.24'
 def changesDetected = false
 
 pipeline {
-  agent { label 'linux' }
+  agent {
+    docker {
+      label 'linuxcontainer'
+      image 'harbor.status.im/infra/ci-build-containers:linux-base-1.0.0'
+      args '--volume=/nix:/nix ' +
+           '--volume=/etc/nix:/etc/nix '
+    }
+  }
 
   options {
     timestamps()
