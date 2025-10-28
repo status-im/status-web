@@ -15,7 +15,7 @@ const REWARDS = ['karma', 'linea', 'snt']
 export default function DashboardPage() {
   return (
     <HubLayout>
-      <div className="flex flex-col p-8">
+      <div className="flex flex-col p-6">
         {/* Hero Section */}
         <Hero />
 
