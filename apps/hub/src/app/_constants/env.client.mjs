@@ -5,11 +5,13 @@ export const envSchema = z.object({
   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: z
     .string()
     .min(1, 'WalletConnect Project ID is required.'),
+  NEXT_PUBLIC_API_URL: z.string().url(),
 })
 
 export const result = envSchema.strip().safeParse({
   NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID:
     process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
 })
 
 if (!result.success) {
