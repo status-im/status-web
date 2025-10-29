@@ -1,12 +1,14 @@
-import { useMutation, type UseMutationResult } from '@tanstack/react-query'
+import {
+  useMutation,
+  type UseMutationResult,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { type Address, formatUnits } from 'viem'
 import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
 import { SNT_TOKEN, statusNetworkTestnet } from '~constants/index'
-import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
-import { useStakingVaults } from '~hooks/useStakingVaults'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 
 // ============================================================================
@@ -95,9 +97,8 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
   const { address } = useAccount()
   const { writeContractAsync } = useWriteContract()
   const config = useConfig()
+  const queryClient = useQueryClient()
   const { send: sendVaultEvent, reset: resetVault } = useVaultStateContext()
-  const { refetch: refetchStakingVaults } = useStakingVaults()
-  const { refetch: refetchMultiplierPoints } = useMultiplierPointsBalance()
 
   return useMutation({
     mutationKey: [MUTATION_KEY_PREFIX, address],
@@ -146,8 +147,13 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
           throw new Error('Transaction was reverted')
         }
 
-        // Transaction successful, refetch data and close dialog
-        await Promise.all([refetchStakingVaults(), refetchMultiplierPoints()])
+        // Transaction successful, invalidate cache to force fresh data from blockchain
+        await queryClient.invalidateQueries({
+          queryKey: ['staking-vaults'],
+        })
+        await queryClient.invalidateQueries({
+          queryKey: ['multiplier-points-balance'],
+        })
         resetVault()
       } catch (error) {
         // Transaction failed or user rejected

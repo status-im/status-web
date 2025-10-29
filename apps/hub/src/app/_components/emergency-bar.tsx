@@ -1,4 +1,4 @@
-import { AlertIcon, ExternalIcon } from '@status-im/icons/20'
+import { AlertIcon } from '@status-im/icons/20'
 import { ButtonLink } from '@status-im/status-network/components'
 
 const EmergencyBar = () => {
@@ -16,14 +16,14 @@ const EmergencyBar = () => {
         >
           Withdraw funds
         </ButtonLink>
-        <ButtonLink
+        {/* <ButtonLink
           variant="secondary"
           size="24"
           icon={<ExternalIcon />}
           href="https://status.im/blog/contracts-compromised"
         >
           Learn More
-        </ButtonLink>
+        </ButtonLink> */}
       </div>
     </div>
   )

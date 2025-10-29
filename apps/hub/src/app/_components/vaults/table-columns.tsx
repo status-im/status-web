@@ -22,9 +22,16 @@ interface TableColumnsProps {
 }
 
 // Calculate total staked across all vaults
-const calculateTotalStaked = (vaults: StakingVault[]): bigint => {
+const calculateTotalStaked = (
+  vaults: StakingVault[],
+  emergencyMode: boolean
+): bigint => {
   return vaults.reduce(
-    (acc, vault) => acc + (vault.data?.stakedBalance || 0n),
+    (acc, vault) =>
+      acc +
+      (emergencyMode
+        ? vault.data?.depositedBalance || 0n
+        : vault.data?.stakedBalance || 0n),
     BigInt(0)
   )
 }
@@ -71,7 +78,10 @@ export const createVaultTableColumns = ({
   // isConnected,
 }: TableColumnsProps) => {
   // Calculate totals and current time once per column creation
-  const totalStaked = calculateTotalStaked(vaults)
+  const totalStaked = calculateTotalStaked(
+    vaults,
+    Boolean(emergencyModeEnabled)
+  )
   const totalKarma = calculateTotalKarma(vaults)
   const currentTimestamp = getCurrentTimestamp()
   const columnHelper = createColumnHelper<StakingVault>()
@@ -112,12 +122,15 @@ export const createVaultTableColumns = ({
       },
     }),
     columnHelper.accessor('data.stakedBalance', {
-      header: 'Staked',
+      header: emergencyModeEnabled ? 'Vault balance' : 'Staked',
       cell: ({ row }) => {
+        const balance = emergencyModeEnabled
+          ? row.original.data?.depositedBalance
+          : row.original.data?.stakedBalance
         return (
           <div className="flex items-center gap-1">
             <span className="text-[13px] font-medium text-neutral-100">
-              {formatSNT(row.original.data?.stakedBalance || 0n)}
+              {formatSNT(balance || 0n)}
               <span className="ml-0.5 text-neutral-50">SNT</span>
             </span>
           </div>
@@ -276,9 +289,17 @@ export const createVaultTableColumns = ({
                 }
                 onClose={() => setOpenModalVaultId(null)}
                 vaultAddress={row.original.address}
-                amountWei={row.original.data?.stakedBalance || 0n}
+                amountWei={row.original.data?.depositedBalance || 0n}
               >
-                <Button variant="danger" size="24" iconBefore={<AlertIcon />}>
+                <Button
+                  variant="danger"
+                  size="24"
+                  iconBefore={<AlertIcon />}
+                  disabled={
+                    !row.original.data?.depositedBalance ||
+                    row.original.data.depositedBalance === 0n
+                  }
+                >
                   Withdraw funds
                 </Button>
               </WithdrawVaultModal>
