@@ -90,7 +90,7 @@ export default {
         11: [
           '0.6875rem',
           {
-            lineHeight: '0.',
+            lineHeight: '0.9625rem',
             letterSpacing: '-0.0034375rem',
           },
         ],
