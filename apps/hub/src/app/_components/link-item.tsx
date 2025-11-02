@@ -40,7 +40,9 @@ const LinkItem = (props: LinkItemProps) => {
         aria-disabled={soon}
       >
         <div className="flex flex-1 items-center justify-between">
-          <div className={cx('flex items-center gap-2', soon && 'opacity-50')}>
+          <div
+            className={cx('flex items-center gap-2', soon && 'opacity-[0.5]')}
+          >
             <Icon className="size-5" />
             <span className="text-15 font-medium">{label}</span>
           </div>
