@@ -21,6 +21,9 @@ const Apps = () => {
             Explore curated Apps and services built on Status Network
           </p>
         </div>
+        <ButtonLink href="/discover" variant="outline" size="32">
+          Explore all apps
+        </ButtonLink>
       </div>
       <div className="mb-24 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         <GameCard
