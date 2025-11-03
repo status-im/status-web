@@ -167,6 +167,17 @@ export default {
         2: '0px 4px 20px rgba(9, 16, 28, 0.08)',
         3: '0px 8px 30px rgba(9, 16, 28, 0.12)',
       },
+
+      keyframes: {
+        skeleton: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
+        },
+      },
+
+      animation: {
+        skeleton: 'skeleton 1.5s ease infinite',
+      },
     },
   },
 
