@@ -104,7 +104,7 @@ const Sidebar = (props: Props) => {
       >
         <div className="flex h-full flex-col overflow-auto py-8">
           {/* Main Navigation */}
-          <nav className="flex-1 px-4">
+          <nav className="flex-1 px-6">
             <ul className="space-y-1">
               {NAV_LINKS.map(item => {
                 return <LinkItem key={item.id} {...item} />
