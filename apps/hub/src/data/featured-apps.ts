@@ -23,15 +23,4 @@ export const featuredApps: App[] = [
     icon: '/apps/status-network-bridge-avatar.png',
     cover: '/apps/status-network-bridge-cover.png',
   },
-  {
-    id: 3,
-    name: 'Hash Vegas',
-    category: 'Gaming',
-    status: 'Live',
-    description: 'Fair and transparent onchain gaming',
-    website: 'https://hashvegas.casino',
-    twitter: 'Hashvegas_Offi',
-    icon: '/apps/hashvegas-avatar.png',
-    cover: '/apps/hashvegas-cover.png',
-  },
 ]
