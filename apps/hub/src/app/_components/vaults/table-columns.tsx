@@ -235,12 +235,7 @@ export const createVaultTableColumns = ({
                     onClose={() => setOpenModalVaultId(null)}
                     vaultAddress={row.original.address}
                   >
-                    <Button
-                      variant="danger"
-                      size="32"
-                      disabled={!isConnected}
-                      className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
-                    >
+                    <Button variant="danger" size="32" disabled={!isConnected}>
                       <AlertIcon className="shrink-0" />
                       <span className="hidden whitespace-nowrap xl:inline">
                         Withdraw funds
