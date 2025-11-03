@@ -9,6 +9,7 @@ type LinkItemProps = {
   icon: React.ComponentType<{ className?: string }>
   href: string
   tag?: string
+  onClick?: () => void
 }
 
 const LinkItem = (props: LinkItemProps) => {
@@ -25,10 +26,18 @@ const LinkItem = (props: LinkItemProps) => {
   const isExternal = href.startsWith('http')
   const isActive = isActiveRoute(href)
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (props.onClick) {
+      e.preventDefault()
+      props.onClick()
+    }
+  }
+
   return (
     <li key={id}>
       <Link
         href={href}
+        onClick={handleClick}
         className={cx(
           'flex items-center justify-between gap-2 rounded-16 p-4 transition-colors',
           isActive

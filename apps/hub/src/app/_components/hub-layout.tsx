@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 
+import { TEST_VAULT, type Vault } from '~constants/index'
+
+import { PreDepositModal } from './pre-deposit-modal'
 import { Sidebar } from './sidebar'
 import { TopBar } from './top-bar'
 
@@ -13,6 +16,11 @@ interface HubLayoutProps {
 
 export function HubLayout({ children }: HubLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
+
+  const handleDepositClick = () => {
+    setSelectedVault(TEST_VAULT)
+  }
 
   return (
     <div className="relative isolate z-10 min-h-screen w-full bg-neutral-100 px-1 pb-1">
@@ -23,7 +31,11 @@ export function HubLayout({ children }: HubLayoutProps) {
       <div className="relative w-full overflow-hidden rounded-20 bg-white-100">
         <div className="mx-auto flex h-[calc(100vh-64px-123px)] w-full max-w-[1504px] flex-row overflow-hidden lg:h-[calc(100vh-64px-50px)]">
           {/* Sidebar */}
-          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <Sidebar
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            onDepositClick={handleDepositClick}
+          />
 
           {/* Main Content */}
           <main className="min-w-0 flex-1 overflow-auto">{children}</main>
@@ -43,6 +55,14 @@ export function HubLayout({ children }: HubLayoutProps) {
         </section>
       </div>
       <ToastContainer />
+      {selectedVault && (
+        <PreDepositModal
+          open={true}
+          onOpenChange={open => !open && setSelectedVault(null)}
+          vault={selectedVault}
+          setActiveVault={setSelectedVault}
+        />
+      )}
     </div>
   )
 }
