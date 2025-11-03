@@ -267,12 +267,7 @@ export const createVaultTableColumns = ({
                   onClose={() => setOpenModalVaultId(null)}
                   infoMessage="Boost the rate at which you receive Karma. The longer you lock your vault, the higher your boost, and the faster you accumulate Karma. You can add more SNT at any time, but withdrawing your SNT is only possible once the vault unlocks."
                 >
-                  <Button
-                    variant="primary"
-                    size="32"
-                    disabled={!isConnected}
-                    className="min-w-fit text-13"
-                  >
+                  <Button variant="primary" size="24" disabled={!isConnected}>
                     <TimeIcon className="shrink-0" />
                     <span className="hidden whitespace-nowrap xl:inline">
                       Extend lock time
@@ -308,12 +303,7 @@ export const createVaultTableColumns = ({
                     : null
                 }}
               >
-                <Button
-                  variant="primary"
-                  size="32"
-                  disabled={!isConnected}
-                  className="min-w-fit text-13"
-                >
+                <Button variant="primary" size="24" disabled={!isConnected}>
                   <LockedIcon fill="white" className="shrink-0" />
                   <span className="whitespace-nowrap">Lock</span>
                 </Button>
