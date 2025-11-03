@@ -9,11 +9,8 @@ import {
   GovernanceIcon,
   HomeIcon,
   KarmaIcon,
-  LaunchIcon,
-  MintIcon,
   StakeIcon,
   SubmitAppIcon,
-  SwapIcon,
 } from './icons'
 import { LinkItem } from './link-item'
 
@@ -33,30 +30,10 @@ const NAV_LINKS = [
 
 const TOKENS_LINKS = [
   {
-    id: 'swap',
-    label: 'Swap',
-    icon: SwapIcon,
-    href: '#',
-    soon: true,
-  },
-  {
-    id: 'launch',
-    label: 'Launch',
-    icon: LaunchIcon,
-    href: '#',
-    soon: true,
-  },
-  {
     id: 'bridge',
     label: 'Bridge',
     icon: BridgeIcon,
     href: 'https://bridge.status.network/',
-  },
-  {
-    id: 'mint-usdz',
-    label: 'Pre-mint GUSD',
-    icon: MintIcon,
-    href: '/deposit',
   },
 ]
 

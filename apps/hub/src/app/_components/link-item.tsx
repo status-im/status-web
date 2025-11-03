@@ -9,11 +9,10 @@ type LinkItemProps = {
   icon: React.ComponentType<{ className?: string }>
   href: string
   tag?: string
-  soon?: boolean
 }
 
 const LinkItem = (props: LinkItemProps) => {
-  const { id, label, icon: Icon, href, tag, soon } = props
+  const { id, label, icon: Icon, href, tag } = props
   const pathname = usePathname()
 
   const isActiveRoute = (href: string) => {
@@ -29,20 +28,16 @@ const LinkItem = (props: LinkItemProps) => {
   return (
     <li key={id}>
       <Link
-        href={soon ? '#' : href}
+        href={href}
         className={cx(
           'flex items-center justify-between gap-2 rounded-16 p-4 transition-colors',
           isActive
             ? 'bg-customisation-purple-50/5 text-purple'
-            : 'text-neutral-90 hover:bg-neutral-10 hover:text-neutral-100',
-          soon && 'pointer-events-none'
+            : 'text-neutral-90 hover:bg-neutral-10 hover:text-neutral-100'
         )}
-        aria-disabled={soon}
       >
         <div className="flex flex-1 items-center justify-between">
-          <div
-            className={cx('flex items-center gap-2', soon && 'opacity-[0.5]')}
-          >
+          <div className={cx('flex items-center gap-2')}>
             <Icon className="size-5" />
             <span className="text-15 font-medium">{label}</span>
           </div>
@@ -52,14 +47,9 @@ const LinkItem = (props: LinkItemProps) => {
                 <span className="text-11 text-white-100">{tag}</span>
               </div>
             )}
-            {soon && (
-              <div className="inline-flex items-center gap-1 rounded-full bg-neutral-80/5 px-1.5 py-0.5">
-                <span className="text-11 text-neutral-100">Soon</span>
-              </div>
-            )}
           </div>
         </div>
-        {isExternal && !soon && <ExternalIcon />}
+        {isExternal && <ExternalIcon />}
       </Link>
     </li>
   )
