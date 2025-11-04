@@ -19,14 +19,10 @@ export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  try {
-    const { jobs = [] } = await getStatusJobs()
-    return jobs.map(job => ({
-      id: job.id.toString(),
-    })) satisfies Array<Awaited<Props['params']>>
-  } catch {
-    return []
-  }
+  const { jobs = [] } = await getStatusJobs()
+  return jobs.map(job => ({
+    id: job.id.toString(),
+  })) satisfies Array<Awaited<Props['params']>>
 }
 
 type Props = {
