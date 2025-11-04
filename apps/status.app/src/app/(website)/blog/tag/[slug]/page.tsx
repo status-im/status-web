@@ -16,9 +16,14 @@ export const revalidate = 3600 // 1 hour
 export const dynamicParams = true
 
 export async function generateStaticParams() {
-  const slugs = await getTagSlugs()
-
-  return slugs.map(slug => ({ slug })) satisfies Array<Awaited<Props['params']>>
+  try {
+    const slugs = await getTagSlugs()
+    return slugs.map(slug => ({ slug })) satisfies Array<
+      Awaited<Props['params']>
+    >
+  } catch {
+    return []
+  }
 }
 
 type Props = {
