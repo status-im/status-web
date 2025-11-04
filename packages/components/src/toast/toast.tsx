@@ -46,9 +46,11 @@ const Toast = (props: Props, ref: React.Ref<HTMLDivElement>) => {
           </Action>
         </div>
       )}
-      <Close>
-        <CloseIcon className="cursor-pointer text-white-100" />
-      </Close>
+      {onAction && (
+        <Close>
+          <CloseIcon className="cursor-pointer text-white-100" />
+        </Close>
+      )}
     </div>
   )
 }

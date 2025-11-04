@@ -3,13 +3,13 @@ import { forwardRef } from 'react'
 import { cva, cx } from 'cva'
 
 type Props = {
-  variant?: 'primary' | 'secondary' | 'white' | 'grey'
+  variant?: 'primary' | 'secondary' | 'white' | 'outline' | 'danger' | 'grey'
   backdropFilter?: boolean
   children?: React.ReactNode
   active?: boolean
   icon?: React.ReactNode
   iconBefore?: React.ReactNode
-  size?: '32' | '40'
+  size?: '32' | '40' | '24'
 } & React.ComponentProps<'button'>
 
 const buttonStyles = cva({
@@ -22,6 +22,10 @@ const buttonStyles = cva({
         'border-white-10 bg-white-5 text-white-100 hover:border-white-20 hover:bg-white-10',
       white:
         'border-neutral-30 bg-white-100 text-dark-100 hover:border-neutral-40 hover:bg-white-80',
+      outline:
+        'pressed:border-neutral-50 border border-neutral-30 text-neutral-100 hover:border-neutral-40 disabled:border-neutral-20',
+      danger:
+        'border-[transparent] bg-danger-50 text-white-100 hover:bg-danger-60',
       grey: 'bg-neutral-10 text-neutral-100 hover:bg-neutral-20 hover:text-neutral-100',
     },
     withIcon: {
@@ -35,6 +39,7 @@ const buttonStyles = cva({
     size: {
       '32': 'h-8 rounded-10 py-[5px]',
       '40': 'h-10 rounded-12 py-[9px]',
+      '24': 'h-6 rounded-8 px-2 py-[3px]',
     },
     backdropFilter: {
       true: 'backdrop-blur-[20px]',

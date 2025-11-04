@@ -1,3 +1,4 @@
+import * as colors from '@status-im/colors'
 import { fontFamily } from 'tailwindcss/defaultTheme'
 
 import type { Config } from 'tailwindcss'
@@ -83,6 +84,7 @@ export default {
     },
 
     colors: {
+      ...colors,
       orange: 'rgba(255, 125, 70, 1)',
       purple: 'rgba(113, 64, 253, 1)',
       'purple-dark': 'rgba(90, 51, 202, 1)',

@@ -1,5 +1,6 @@
 'use client'
 
+import { VaultStateProvider } from '../_hooks/useVaultStateContext'
 import { ConnectKitProvider } from './connectkit-provider'
 import { QueryClientProvider } from './query-client-provider'
 import { WagmiProvider } from './wagmi-provider'
@@ -12,7 +13,9 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <WagmiProvider>
       <QueryClientProvider>
-        <ConnectKitProvider>{children}</ConnectKitProvider>
+        <ConnectKitProvider>
+          <VaultStateProvider>{children}</VaultStateProvider>
+        </ConnectKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   )
