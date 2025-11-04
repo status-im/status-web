@@ -20,34 +20,17 @@ const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = 7, tag } = params
 
-  try {
-    const response = await ghost.posts.browse({
-      include: ['tags', 'authors'],
-      order: 'published_at DESC',
-      limit,
-      page,
-      ...(tag
-        ? { filter: `tag:${tag}+visibility:public` }
-        : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
-    })
+  const response = await ghost.posts.browse({
+    include: ['tags', 'authors'],
+    order: 'published_at DESC',
+    limit,
+    page,
+    ...(tag
+      ? { filter: `tag:${tag}+visibility:public` }
+      : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
+  })
 
-    return { posts: [...response], meta: response.meta }
-  } catch (error) {
-    console.error('Failed to fetch posts from Ghost API:', error)
-    return {
-      posts: [],
-      meta: {
-        pagination: {
-          page: 1,
-          limit,
-          pages: 0,
-          total: 0,
-          next: null,
-          prev: null,
-        },
-      },
-    }
-  }
+  return { posts: [...response], meta: response.meta }
 }
 
 export const getPostBySlug = async (slug: string) => {
