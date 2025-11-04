@@ -1,10 +1,8 @@
-import { Button } from '@status-im/components'
 import { ExternalIcon } from '@status-im/icons/20'
 import { TwitterIcon } from '@status-im/icons/social'
 import { ButtonLink } from '@status-im/status-network/components'
 import {
   CATS_FISHING_URL,
-  HASHVEGAS_URL,
   STATUS_NETWORK_BRIDGE_URL,
 } from '@status-im/status-network/config'
 import { cx } from 'cva'
@@ -23,9 +21,9 @@ const Apps = () => {
             Explore curated Apps and services built on Status Network
           </p>
         </div>
-        <Button variant="outline" size="32">
-          All 254 apps
-        </Button>
+        <ButtonLink href="/discover" variant="outline" size="32">
+          Explore all apps
+        </ButtonLink>
       </div>
       <div className="mb-24 grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         <GameCard
@@ -43,14 +41,6 @@ const Apps = () => {
           website={STATUS_NETWORK_BRIDGE_URL}
           twitter="StatusL2"
           icon="/apps/status-network-bridge-avatar.png"
-        />
-        <GameCard
-          title="Hash Vegas"
-          description="Fair and transparent onchain gaming"
-          image="/apps/hashvegas-cover.png"
-          website={HASHVEGAS_URL}
-          twitter="Hashvegas_Offi"
-          icon="/apps/hashvegas-avatar.png"
         />
       </div>
     </section>

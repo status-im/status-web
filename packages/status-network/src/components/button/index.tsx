@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import { cva, cx } from 'cva'
 
 type Props = {
-  variant?: 'primary' | 'secondary' | 'white' | 'outline' | 'danger'
+  variant?: 'primary' | 'secondary' | 'white' | 'outline' | 'danger' | 'grey'
   backdropFilter?: boolean
   children?: React.ReactNode
   active?: boolean
@@ -26,6 +26,7 @@ const buttonStyles = cva({
         'pressed:border-neutral-50 border border-neutral-30 text-neutral-100 hover:border-neutral-40 disabled:border-neutral-20',
       danger:
         'border-[transparent] bg-danger-50 text-white-100 hover:bg-danger-60',
+      grey: 'bg-neutral-10 text-neutral-100 hover:bg-neutral-20 hover:text-neutral-100',
     },
     withIcon: {
       true: '',
@@ -56,6 +57,11 @@ const buttonStyles = cva({
     { size: '32', withIcon: true, className: 'pl-3 pr-2' },
     { size: '40', withIconBefore: true, className: 'pl-3 pr-4' },
     { size: '32', withIconBefore: true, className: 'pl-2 pr-3' },
+    {
+      variant: 'grey',
+      active: true,
+      className: 'bg-neutral-50 text-white-100',
+    },
   ],
 })
 
