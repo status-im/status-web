@@ -11,6 +11,7 @@
       "packages/wallet",
       "packages/status-network",
       "apps/hub",
+      "apps/status.app",
       "apps/connector",
       "apps/portfolio",
       "apps/wallet",
@@ -22,7 +23,7 @@
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
     "test": "turbo run test --filter=@status-im/* --filter=./apps/* -- --run",
-    "dev": "turbo run dev --filter=@status-im/* --filter=./apps/*",
+    "dev": "turbo run dev dev:next dev:content --filter=@status-im/* --filter=./apps/*",
     "build": "turbo run build --filter=@status-im/* --filter=./apps/*",
     "lint": "turbo run lint --filter=@status-im/* --filter=./apps/*",
     "typecheck": "turbo run typecheck",
@@ -74,7 +75,8 @@
       "it-length-prefixed@9.0.3": "patches/it-length-prefixed@9.0.3.patch",
       "arctic@1.2.0": "patches/arctic@1.2.0.patch",
       "tinykeys@3.0.0": "patches/tinykeys@3.0.0.patch",
-      "oslo@1.0.1": "patches/oslo@1.0.1.patch"
+      "oslo@1.0.1": "patches/oslo@1.0.1.patch",
+      "@trpc/server@11.1.0": "patches/@trpc__server@11.1.0.patch"
     }
   },
   "dependencies": {
