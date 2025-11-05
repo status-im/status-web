@@ -18,6 +18,11 @@ export type VaultState =
       amount?: string
     }
   | {
+      type: 'unstaking'
+      step: 'initialize' | 'processing' | 'rejected'
+      amount?: string
+    }
+  | {
       type: 'withdraw'
       step: 'processing' | 'rejected'
       amount?: string
@@ -44,6 +49,7 @@ export type VaultEvent =
   | { type: 'COMPLETE'; amount?: string }
   | { type: 'READY_TO_STAKE' }
   | { type: 'START_STAKING'; amount?: string }
+  | { type: 'START_UNSTAKING'; amount?: string }
   | { type: 'START_WITHDRAW'; amount?: string }
   | { type: 'START_LOCK' }
   | { type: 'START_COMPOUND'; amount?: string }
@@ -225,6 +231,57 @@ function transition(state: VaultState, event: VaultEvent): VaultState {
       .with([{ type: 'staking', step: 'rejected' }, { type: 'RESET' }], () => ({
         type: 'idle',
       }))
+
+      // Unstaking flow
+      .with([{ type: 'idle' }, { type: 'START_UNSTAKING' }], ([, event]) => ({
+        type: 'unstaking',
+        step: 'initialize',
+        amount: event.amount,
+      }))
+      .with(
+        [{ type: 'unstaking', step: 'initialize' }, { type: 'SIGN' }],
+        ([state]) => ({
+          type: 'unstaking',
+          step: 'processing',
+          amount: state.amount,
+        })
+      )
+      .with(
+        [{ type: 'unstaking', step: 'initialize' }, { type: 'REJECT' }],
+        ([state]) => ({
+          type: 'unstaking',
+          step: 'rejected',
+          amount: state.amount,
+        })
+      )
+      .with(
+        [{ type: 'unstaking', step: 'processing' }, { type: 'COMPLETE' }],
+        () => ({ type: 'success' })
+      )
+      .with(
+        [{ type: 'unstaking', step: 'processing' }, { type: 'REJECT' }],
+        ([state]) => ({
+          type: 'unstaking',
+          step: 'rejected',
+          amount: state.amount,
+        })
+      )
+      .with(
+        [{ type: 'unstaking', step: 'processing' }, { type: 'RESET' }],
+        () => ({ type: 'idle' })
+      )
+      .with(
+        [{ type: 'unstaking', step: 'rejected' }, { type: 'START_UNSTAKING' }],
+        ([state, event]) => ({
+          type: 'unstaking',
+          step: 'initialize',
+          amount: event.amount || state.amount,
+        })
+      )
+      .with(
+        [{ type: 'unstaking', step: 'rejected' }, { type: 'RESET' }],
+        () => ({ type: 'idle' })
+      )
 
       // Withdraw flow - goes directly to processing when started
       .with([{ type: 'idle' }, { type: 'START_WITHDRAW' }], ([, event]) => ({
