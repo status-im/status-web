@@ -27,7 +27,7 @@ env:
   KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
   KEYCLOAK_CLIENT_SECRET: ${{ secrets.KEYCLOAK_CLIENT_SECRET }}
   BAMBOOHR_API_KEY: ${{ secrets.BAMBOOHR_API_KEY }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.TOKEN_GITHUB }}
 
 jobs:
   build:
