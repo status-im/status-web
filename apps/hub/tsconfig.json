@@ -33,6 +33,7 @@
       "~hooks/*": ["./src/app/_hooks/*"],
       "~constants/*": ["./src/app/_constants/*"],
       "~utils/*": ["./src/utils/*"],
+      "~types/*": ["./src/types/*"],
       "~/*": ["./src/*"]
     }
   },
