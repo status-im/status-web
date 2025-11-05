@@ -3,7 +3,7 @@ import { clientEnv } from './env.client.mjs'
 import type { SIWEConfig } from 'connectkit'
 
 // API configuration
-const API_BASE_URL = clientEnv.NEXT_PUBLIC_API_URL
+const API_BASE_URL = clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL
 
 const AUTH_ENDPOINTS = {
   verify: `${API_BASE_URL}/auth/ethereum`,
