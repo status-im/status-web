@@ -2,11 +2,14 @@
 
 import { ToastContainer } from '@status-im/components'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ConnectKitProvider, SIWEProvider } from 'connectkit'
+import {
+  ConnectKitProvider,
+  // SIWEProvider
+} from 'connectkit'
 import { WagmiProvider } from 'wagmi'
 
 import { testnet, wagmiConfig } from '~constants/chain'
-import { siweConfig } from '~constants/siwe'
+// import { siweConfig } from '~constants/siwe'
 import { PreDepositStateProvider } from '~hooks/usePreDepositStateContext'
 import { VaultStateProvider } from '~hooks/useVaultStateContext'
 
@@ -44,7 +47,7 @@ export function Providers({ children }: ProvidersProps) {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <SIWEProvider {...siweConfig}>
+        {/* <SIWEProvider {...siweConfig}> */}
           <ConnectKitProvider
             options={{
               initialChainId: testnet.id,
@@ -59,7 +62,7 @@ export function Providers({ children }: ProvidersProps) {
               </VaultStateProvider>
             </PreDepositStateProvider>
           </ConnectKitProvider>
-        </SIWEProvider>
+        {/* </SIWEProvider> */}
       </QueryClientProvider>
     </WagmiProvider>
   )

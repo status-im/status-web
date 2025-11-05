@@ -9,7 +9,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useAccount, useReadContract } from 'wagmi'
+import { useAccount, useChainId, useReadContract } from 'wagmi'
 
 import { STAKING_MANAGER } from '~constants/index'
 import { useCreateVault } from '~hooks/useCreateVault'
@@ -59,7 +59,7 @@ function TableHeader({ table }: TableProps) {
               key={header.id}
               className={`box-border px-[12px] ${getHeaderClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
             >
-              <span className="text-[13px] font-medium text-neutral-50">
+              <span className="text-13 font-medium text-neutral-50">
                 {flexRender(
                   header.column.columnDef.header,
                   header.getContext()
@@ -122,8 +122,10 @@ function TableFooter({ table }: TableProps) {
 
 export function VaultsTable() {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
   const { data: vaultDataList } = useStakingVaults()
   const { isConnected } = useAccount()
+  const chainId = useChainId()
   const { mutate: createVault } = useCreateVault()
 
   const { data: emergencyModeEnabled } = useReadContract({
@@ -146,17 +148,22 @@ export function VaultsTable() {
     () =>
       createVaultTableColumns({
         vaults: vaultDataList,
+        chainId,
         openModalVaultId,
         setOpenModalVaultId: handleSetOpenModalVaultId,
         emergencyModeEnabled,
         isConnected,
+        openDropdownId,
+        setOpenDropdownId,
       }),
     [
       vaultDataList,
+      chainId,
       openModalVaultId,
       handleSetOpenModalVaultId,
       emergencyModeEnabled,
       isConnected,
+      openDropdownId,
     ]
   )
 
@@ -170,7 +177,7 @@ export function VaultsTable() {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex items-center gap-3">
-        <h2 className="text-[19px] font-semibold leading-[1.35] tracking-[-0.304px] text-neutral-100">
+        <h2 className="text-19 font-semibold leading-none text-neutral-100">
           My vaults
         </h2>
         {isConnected && (
@@ -199,7 +206,7 @@ export function VaultsTable() {
           <div className="flex items-center justify-center p-12 text-center">
             <div>
               <p className="text-neutral-50">No vaults found</p>
-              <p className="mt-2 text-[13px] text-neutral-40">
+              <p className="mt-2 text-13 text-neutral-40">
                 Click "Add vault" to create your first vault
               </p>
             </div>
