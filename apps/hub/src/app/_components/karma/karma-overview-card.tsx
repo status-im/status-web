@@ -40,7 +40,7 @@ const KarmaOverviewCard = ({
             </span>
           </div>
 
-          <Button variant="primary" size="32">
+          <Button variant="black" size="32">
             Share
             <TwitterIcon />
           </Button>
