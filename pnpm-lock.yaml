@@ -1025,7 +1025,7 @@ importers:
         version: 4.4.0(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers':
         specifier: ^3.1.1
-        version: 3.10.0(react-hook-form@7.58.1(react@19.1.0))
+        version: 3.10.0(react-hook-form@7.64.0(react@19.1.0))
       '@mdx-js/react':
         specifier: ^2.3.0
         version: 2.3.0(react@19.1.0)
@@ -1063,8 +1063,8 @@ importers:
         specifier: ^9.7.5
         version: 9.7.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@scure/base':
-        specifier: ^1.1.1
-        version: 1.2.5
+        specifier: ^1.2.6
+        version: 1.2.6
       '@status-im/colors':
         specifier: workspace:*
         version: link:../../packages/colors
@@ -1100,13 +1100,13 @@ importers:
         version: 3.4.3
       '@vercel/analytics':
         specifier: ^1.2.2
-        version: 1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4)
+        version: 1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4)
       '@vercel/postgres':
         specifier: ^0.8.0
         version: 0.8.0
       '@vercel/toolbar':
         specifier: ^0.1.5
-        version: 0.1.36(@vercel/analytics@1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))
+        version: 0.1.36(@vercel/analytics@1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))
       '@visx/axis':
         specifier: ^3.0.0
         version: 3.12.0(react@19.1.0)
@@ -1211,10 +1211,10 @@ importers:
         version: 6.3.0
       next:
         specifier: 15.2.4
-        version: 15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
+        version: 15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
       next-contentlayer:
         specifier: ^0.3.4
-        version: 0.3.4(contentlayer@0.3.4(esbuild@0.25.4))(esbuild@0.25.4)(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 0.3.4(contentlayer@0.3.4(esbuild@0.25.4))(esbuild@0.25.4)(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-mdx-remote:
         specifier: ^5.0.0
         version: 5.0.0(@types/react@19.1.0)(acorn@8.14.1)(react@19.1.0)
@@ -1244,7 +1244,7 @@ importers:
         version: 19.1.0(react@19.1.0)
       react-hook-form:
         specifier: ^7.45.1
-        version: 7.58.1(react@19.1.0)
+        version: 7.64.0(react@19.1.0)
       react-remove-scroll:
         specifier: ^2.5.5
         version: 2.6.3(@types/react@19.1.0)(react@19.1.0)
@@ -1425,7 +1425,7 @@ importers:
         version: 5.1.5
       next-sitemap:
         specifier: ^4.2.3
-        version: 4.2.3(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))
+        version: 4.2.3(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))
       postcss:
         specifier: ^8.4.21
         version: 8.5.3
@@ -8524,11 +8524,6 @@ packages:
     resolution: {integrity: sha512-yxlhHB73jaBla6h5B6zPaGmQjokkzAhMHN4veotkPNiQ3Ac/mCxgABRZPsJJrgCTvhpcncBZcDBFxaR2B37vug==}
     peerDependencies:
       react: ^18.0.0
-
-  '@tanstack/react-query@5.66.0':
-    resolution: {integrity: sha512-z3sYixFQJe8hndFnXgWu7C79ctL+pI0KAelYyW+khaNJ1m22lWrhJU2QrsTcRKMuVPtoZvfBYrTStIdKo+x0Xw==}
-    peerDependencies:
-      react: ^18 || ^19
 
   '@tanstack/react-query@5.75.5':
     resolution: {integrity: sha512-QrLCJe40BgBVlWdAdf2ZEVJ0cISOuEy/HKupId1aTKU6gPJZVhSvZpH+Si7csRflCJphzlQ77Yx6gUxGW9o0XQ==}
@@ -20673,14 +20668,14 @@ snapshots:
       '@contentlayer/core': 0.3.4(esbuild@0.25.4)
       '@contentlayer/utils': 0.3.4
       chokidar: 3.6.0
-      fast-glob: 3.3.2
+      fast-glob: 3.3.3
       gray-matter: 4.0.3
       imagescript: 1.3.0
       micromatch: 4.0.8
       ts-pattern: 4.3.0
       unified: 10.1.2
-      yaml: 2.5.1
-      zod: 3.23.8
+      yaml: 2.8.1
+      zod: 3.25.76
     transitivePeerDependencies:
       - '@effect-ts/otel-node'
       - esbuild
@@ -29691,7 +29686,7 @@ snapshots:
       '@trpc/server': 11.1.0(patch_hash=j772m5gatolhdil2x65xum5qqi)(typescript@5.8.3)
       typescript: 5.8.3
 
-  '@trpc/next@10.45.2(@tanstack/react-query@5.75.5(react@19.1.0))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/react-query@11.1.0(@tanstack/react-query@5.75.5(react@19.1.0))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(@trpc/server@10.45.2)(next@15.3.0(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@trpc/next@10.45.2(@tanstack/react-query@5.90.2(react@19.1.0))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/react-query@11.1.0(@tanstack/react-query@5.90.2(react@19.1.0))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3))(@trpc/server@10.45.2)(next@15.3.0(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@tanstack/react-query': 5.90.2(react@19.1.0)
       '@trpc/client': 10.45.2(@trpc/server@10.45.2)
@@ -29718,7 +29713,7 @@ snapshots:
       react-dom: 19.1.0(react@19.1.0)
       typescript: 5.8.3
 
-  '@trpc/react-query@11.1.0(@tanstack/react-query@5.75.5(react@19.1.0))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)':
+  '@trpc/react-query@11.1.0(@tanstack/react-query@5.90.2(react@19.1.0))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)':
     dependencies:
       '@tanstack/react-query': 5.90.2(react@19.1.0)
       '@trpc/client': 10.45.2(@trpc/server@10.45.2)
@@ -30313,9 +30308,9 @@ snapshots:
       mdast-util-to-string: 3.2.0
       unist-util-visit: 4.1.2
 
-  '@vercel/analytics@1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4)':
+  '@vercel/analytics@1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4)':
     optionalDependencies:
-      next: 15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
+      next: 15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
       react: 19.1.0
       svelte: 4.2.2
       vue: 3.3.4
@@ -30327,7 +30322,7 @@ snapshots:
       svelte: 4.2.2
       vue: 3.3.4
 
-  '@vercel/microfrontends@1.1.0(@vercel/analytics@1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))':
+  '@vercel/microfrontends@1.1.0(@vercel/analytics@1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))':
     dependencies:
       ajv: 8.17.1
       commander: 12.1.0
@@ -30338,8 +30333,8 @@ snapshots:
       nanoid: 3.3.11
       path-to-regexp: 6.2.1
     optionalDependencies:
-      '@vercel/analytics': 1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4)
-      next: 15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
+      '@vercel/analytics': 1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4)
+      next: 15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
       vite: 6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1)
@@ -30372,10 +30367,10 @@ snapshots:
       utf-8-validate: 6.0.3
       ws: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
 
-  '@vercel/toolbar@0.1.36(@vercel/analytics@1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))':
+  '@vercel/toolbar@0.1.36(@vercel/analytics@1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))':
     dependencies:
       '@tinyhttp/app': 1.3.0
-      '@vercel/microfrontends': 1.1.0(@vercel/analytics@1.5.0(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))
+      '@vercel/microfrontends': 1.1.0(@vercel/analytics@1.5.0(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react@19.1.0)(svelte@4.2.2)(vue@3.3.4))(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite@6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1))
       chokidar: 3.6.0
       execa: 5.1.1
       fast-glob: 3.3.2
@@ -30384,7 +30379,7 @@ snapshots:
       jsonc-parser: 3.3.1
       strip-ansi: 6.0.1
     optionalDependencies:
-      next: 15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
+      next: 15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
       react: 19.1.0
       vite: 6.3.5(@types/node@22.7.5)(jiti@2.4.2)(less@4.2.0)(lightningcss@1.27.0)(sass@1.80.4)(tsx@4.19.4)(yaml@2.8.1)
     transitivePeerDependencies:
@@ -34979,7 +34974,7 @@ snapshots:
 
   es-get-iterator@1.1.2:
     dependencies:
-      call-bind: 1.0.7
+      call-bind: 1.0.8
       get-intrinsic: 1.3.0
       has-symbols: 1.1.0
       is-arguments: 1.1.1
@@ -35023,7 +35018,7 @@ snapshots:
 
   es-set-tostringtag@2.0.1:
     dependencies:
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       has: 1.0.4
       has-tostringtag: 1.0.0
 
@@ -36381,7 +36376,7 @@ snapshots:
   get-symbol-description@1.0.0:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
 
   get-symbol-description@1.0.2:
     dependencies:
@@ -37254,7 +37249,7 @@ snapshots:
 
   internal-slot@1.0.5:
     dependencies:
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       has: 1.0.4
       side-channel: 1.0.6
 
@@ -37333,8 +37328,8 @@ snapshots:
   is-array-buffer@3.0.2:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
-      is-typed-array: 1.1.10
+      get-intrinsic: 1.3.0
+      is-typed-array: 1.1.15
 
   is-array-buffer@3.0.4:
     dependencies:
@@ -37359,7 +37354,7 @@ snapshots:
 
   is-boolean-object@1.1.2:
     dependencies:
-      call-bind: 1.0.7
+      call-bind: 1.0.8
       has-tostringtag: 1.0.2
 
   is-buffer@2.0.5: {}
@@ -37384,7 +37379,7 @@ snapshots:
 
   is-data-view@1.0.1:
     dependencies:
-      is-typed-array: 1.1.13
+      is-typed-array: 1.1.15
 
   is-date-object@1.0.5:
     dependencies:
@@ -37408,7 +37403,7 @@ snapshots:
 
   is-finalizationregistry@1.0.2:
     dependencies:
-      call-bind: 1.0.7
+      call-bind: 1.0.8
 
   is-fullwidth-code-point@2.0.0: {}
 
@@ -37564,7 +37559,7 @@ snapshots:
 
   is-symbol@1.0.4:
     dependencies:
-      has-symbols: 1.0.3
+      has-symbols: 1.1.0
 
   is-typed-array@1.1.10:
     dependencies:
@@ -37606,12 +37601,12 @@ snapshots:
 
   is-weakset@2.0.2:
     dependencies:
-      call-bind: 1.0.7
+      call-bind: 1.0.8
       get-intrinsic: 1.3.0
 
   is-weakset@2.0.3:
     dependencies:
-      call-bind: 1.0.7
+      call-bind: 1.0.8
       get-intrinsic: 1.3.0
 
   is-what@3.14.1: {}
@@ -39781,12 +39776,12 @@ snapshots:
       - markdown-wasm
       - supports-color
 
-  next-contentlayer@0.3.4(contentlayer@0.3.4(esbuild@0.25.4))(esbuild@0.25.4)(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  next-contentlayer@0.3.4(contentlayer@0.3.4(esbuild@0.25.4))(esbuild@0.25.4)(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4))(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
     dependencies:
       '@contentlayer/core': 0.3.4(esbuild@0.25.4)
       '@contentlayer/utils': 0.3.4
       contentlayer: 0.3.4(esbuild@0.25.4)
-      next: 15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
+      next: 15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
     transitivePeerDependencies:
@@ -39809,13 +39804,13 @@ snapshots:
       - acorn
       - supports-color
 
-  next-sitemap@4.2.3(next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)):
+  next-sitemap@4.2.3(next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)):
     dependencies:
       '@corex/deepmerge': 4.0.43
       '@next/env': 13.5.11
       fast-glob: 3.3.3
       minimist: 1.2.8
-      next: 15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
+      next: 15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)
 
   next-sitemap@4.2.3(next@15.3.0(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4)):
     dependencies:
@@ -39879,7 +39874,7 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@15.2.4(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4):
+  next@15.2.4(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.80.4):
     dependencies:
       '@next/env': 15.2.4
       '@swc/counter': 0.1.3
@@ -43173,7 +43168,7 @@ snapshots:
   safe-regex-test@1.0.0:
     dependencies:
       call-bind: 1.0.7
-      get-intrinsic: 1.2.4
+      get-intrinsic: 1.3.0
       is-regex: 1.1.4
 
   safe-regex-test@1.0.3:
@@ -44376,7 +44371,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       es-errors: 1.3.0
-      is-typed-array: 1.1.13
+      is-typed-array: 1.1.15
 
   typed-array-buffer@1.0.3:
     dependencies:
@@ -44390,7 +44385,7 @@ snapshots:
       for-each: 0.3.3
       gopd: 1.0.1
       has-proto: 1.0.3
-      is-typed-array: 1.1.13
+      is-typed-array: 1.1.15
 
   typed-array-byte-offset@1.0.2:
     dependencies:
@@ -44399,13 +44394,13 @@ snapshots:
       for-each: 0.3.3
       gopd: 1.0.1
       has-proto: 1.0.3
-      is-typed-array: 1.1.13
+      is-typed-array: 1.1.15
 
   typed-array-length@1.0.4:
     dependencies:
       call-bind: 1.0.7
       for-each: 0.3.3
-      is-typed-array: 1.1.10
+      is-typed-array: 1.1.15
 
   typed-array-length@1.0.6:
     dependencies:
@@ -44413,7 +44408,7 @@ snapshots:
       for-each: 0.3.3
       gopd: 1.0.1
       has-proto: 1.0.3
-      is-typed-array: 1.1.13
+      is-typed-array: 1.1.15
       possible-typed-array-names: 1.0.0
 
   typedarray@0.0.6: {}
@@ -45624,7 +45619,7 @@ snapshots:
       isarray: 2.0.5
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.2
-      which-typed-array: 1.1.15
+      which-typed-array: 1.1.19
 
   which-collection@1.0.1:
     dependencies:
