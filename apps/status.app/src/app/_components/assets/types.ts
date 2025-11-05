@@ -775,6 +775,7 @@ export type ImageType =
       id: 'Homepage/Screens/Wallet Feature Section/Wallet_01:762:1400'
       alt: 'Mobile app screenshot showing the wallet feature: the user is able to automatically bridge and manage tokens without any multi-chain hassle'
     }
+  | { id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'; alt: '' }
   | { id: 'Blog/Icons/07_Keycard:192:192'; alt: '' }
   | { id: 'admin/empty/users:241:240'; alt: '' }
   | { id: 'admin/empty/workstreams:241:240'; alt: '' }

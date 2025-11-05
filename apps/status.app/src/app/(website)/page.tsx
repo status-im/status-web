@@ -1,10 +1,7 @@
 import { Button, Text } from '@status-im/components'
-import { DownloadIcon } from '@status-im/icons/12'
-import { ChevronRightIcon, ExternalIcon } from '@status-im/icons/16'
 import { cx } from 'class-variance-authority'
-import Link from 'next/link'
 
-import { LEARN_MORE_MOBILE_APP_URL, ROUTES } from '~/config/routes'
+import { ROUTES } from '~/config/routes'
 import { Image, Video } from '~components/assets'
 import { Body } from '~components/body'
 import { ColorTheme } from '~website/_components/color-theme'
@@ -14,8 +11,9 @@ import { PostGrid } from '~website/blog/_components/post-grid'
 import { CopyrightSymbol } from './_components/copyright-symbol'
 import { DesktopSection } from './_components/desktop-section'
 import { DownloadDesktopButton } from './_components/download-desktop-button'
-import { DownloadMobileButton } from './_components/download-mobile-button'
+import { DownloadExtensionButton } from './_components/download-extension-button'
 import { FeatureList } from './_components/feature-list'
+import { FeatureTag } from './_components/feature-tag'
 import { HandsSection } from './_components/hands-section'
 import { ParallaxCircle } from './_components/parallax-circle'
 
@@ -25,8 +23,6 @@ export const revalidate = 3600 // 1 hour
 
 export default async function HomePage() {
   const { posts } = await getPosts({ limit: 3 })
-
-  const latestPost = posts[0]
 
   return (
     <>
@@ -52,10 +48,10 @@ export default async function HomePage() {
         {/* HERO */}
         <div
           data-theme="dark"
-          className="flex flex-col items-center bg-neutral-100 px-5 pb-[386px] pt-16 lg:pt-44 xl:pb-48"
+          className="flex flex-col items-center bg-neutral-100 px-5 pb-[386px] pt-16 lg:pt-44 xl:pb-24"
         >
           <div className="relative z-20 mb-6 grid max-w-[582px] place-items-center text-center lg:mb-8">
-            {latestPost && (
+            {/* {latestPost && (
               <Link
                 href={`/blog/${latestPost.slug}`}
                 className="mb-4 inline-flex h-8 select-none items-center rounded-[56px] border border-white-10 bg-white-5 pl-2 pr-[6px]"
@@ -65,7 +61,7 @@ export default async function HomePage() {
                 </p>
                 <ChevronRightIcon className="ml-[2px] text-white-40" />
               </Link>
-            )}
+            )} */}
 
             <h1 className="mb-4 text-48 font-bold text-white-100 lg:mb-6 lg:text-88">
               Make the
@@ -85,65 +81,23 @@ export default async function HomePage() {
             >
               <DownloadDesktopButton variant="primary" show="all" />
             </div>
-
-            <div className="mb-[10px] inline-flex h-8 select-none items-center gap-2 rounded-[56px] border border-white-10 bg-white-5 pl-1 pr-[12px] xl:mb-4">
-              <div
-                className="flex h-6 items-center rounded-12 px-2 text-13 font-semibold uppercase text-white-100"
-                style={{
-                  background:
-                    'linear-gradient(78deg, #FF33A3 6.03%, #7140FD 88%)',
-                }}
-              >
-                New
-              </div>
-              <p className="line-clamp-1 text-left text-15 font-medium text-white-100">
-                Our next-gen mobile app is in the works
-              </p>
-              <div className="hidden items-center justify-center gap-2 xl:flex">
-                <Button
-                  size="24"
-                  variant="outline"
-                  href={LEARN_MORE_MOBILE_APP_URL}
-                  iconAfter={
-                    <ExternalIcon className="ml-[2px] text-white-40" />
-                  }
-                >
-                  Learn More
-                </Button>
-
-                <DownloadMobileButton>
-                  <Button
-                    size="24"
-                    variant="outline"
-                    iconAfter={
-                      <DownloadIcon className="ml-[2px] text-white-40" />
-                    }
-                  >
-                    Current Mobile App
-                  </Button>
-                </DownloadMobileButton>
-              </div>
-            </div>
           </div>
-          <div className="flex items-center justify-center gap-2 xl:hidden">
-            <Button
-              size="24"
-              variant="outline"
-              href={ROUTES.Apps[0].href}
-              iconAfter={<ExternalIcon className="ml-[2px] text-white-40" />}
-            >
-              Learn More
-            </Button>
-
-            <DownloadMobileButton>
-              <Button
-                size="24"
-                variant="outline"
-                iconAfter={<DownloadIcon className="ml-[2px] text-white-40" />}
-              >
-                Current Mobile App
-              </Button>
-            </DownloadMobileButton>
+          <div
+            data-theme="dark"
+            className="mt-6 flex max-w-[572px] flex-col items-start gap-4 rounded-20 border border-solid border-white-10 bg-white-5 px-5 py-3 text-left lg:flex-row lg:items-center lg:gap-10"
+          >
+            <div className="flex flex-col text-left">
+              <h3 className="text-19 font-600 text-white-100">
+                Try Status Portfolio Wallet (Beta)
+              </h3>
+              <p className="text-15 font-400 text-white-100">
+                Easily view and manage your crypto portfolio in real time
+                &mdash; Beta crypto wallet and Web3 portfolio tracker in one.
+              </p>
+            </div>
+            <div className="flex items-center">
+              <DownloadExtensionButton source="homepage-hero" />
+            </div>
           </div>
           <Image
             id="Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long:4662:2579"
@@ -287,8 +241,8 @@ export default async function HomePage() {
 
       <Body>
         <ColorTheme theme="turquoise">
-          <div className="relative size-full pb-[61px] pt-[68px]">
-            <div className="absolute left-[-330px] top-0 z-10 xl:left-[-350px]">
+          <div className="relative z-10 size-full pb-[61px] pt-[68px]">
+            <div className="absolute bottom-0 left-[-330px] z-10 xl:left-[-350px]">
               <ParallaxCircle />
             </div>
 
@@ -309,6 +263,50 @@ export default async function HomePage() {
             />
           </div>
         </ColorTheme>
+        <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
+        <ColorTheme theme="blue" id="browser">
+          <div className="relative z-20 size-full pb-[61px] pt-[68px]">
+            <div className="absolute bottom-[200px] left-[-230px] z-10 xl:left-[-350px]">
+              <ParallaxCircle />
+            </div>
+
+            <div className="relative z-20 mx-auto grid max-w-[1424px] grid-cols-1 overflow-hidden rounded-20 bg-white-100 px-5 shadow-2 xl:grid-cols-2 xl:px-0">
+              <div className="p-12 px-5 xl:px-10 xl:pl-12 2xl:pr-28">
+                <div className="mb-4 flex">
+                  <FeatureTag type="extension" />
+                </div>
+                <h3 className="mb-2 text-40 font-bold xl:text-64">
+                  Status Portfolio
+                  <br />
+                  Wallet (Beta)
+                </h3>
+                <p className="mb-20 max-w-[462px] text-19 font-regular xl:mb-44 xl:text-27">
+                  Need an easy way to view and manage your crypto portfolio in
+                  real time? Try Status Portfolio Wallet (Beta) now - a crypto
+                  wallet and portfolio tracker in one.
+                </p>
+
+                <div className="flex flex-col items-start rounded-20 bg-white-20">
+                  <DownloadExtensionButton
+                    source="homepage-section"
+                    variant="primary"
+                    size="40"
+                  >
+                    Download for Chrome
+                  </DownloadExtensionButton>
+                </div>
+              </div>
+              <Image
+                className="max-xl:mb-[-20%] xl:absolute xl:left-[42%] xl:top-[-44%]"
+                width={1063}
+                height={1195}
+                id="Homepage/Screens/Extension Section/Extension_01:2127:2390"
+                alt=""
+              />
+            </div>
+          </div>
+        </ColorTheme>
+        <div className="relative inset-x-1/2 top-0 z-10 h-px w-screen -translate-x-1/2 border-t border-dashed border-neutral-30" />
         <div className="flex flex-col items-center">
           <div
             className={cx([
@@ -361,7 +359,7 @@ export default async function HomePage() {
         </div>
 
         {/* BLOG */}
-        <div className="relative z-10 flex-1 bg-white-100 py-40">
+        <div className="relative z-30 flex-1 bg-white-100 py-40">
           <div className="container">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-27 font-semibold">Stay up to date</h3>

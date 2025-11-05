@@ -1,158 +1,11 @@
 export type ImageType =
-  | { id: 'Brand/Logo Section/Logo/Logo_01:1640:480'; alt: '' }
+  | { id: 'Homepage/Screens/Extension Section/Extension_01:2127:2390'; alt: '' }
   | {
-      id: 'Help/Documentation Screens/Style Guide/style-guide_2_light:2958:1410'
-      alt: 'Image showing an overview of concept, procedure and reference articles'
+      id: 'Help/Documentation Screens/Wallet/1532/1532_1_Screen_Light:1872:1208'
+      alt: 'A diagram showing the relationship between wallet accounts, keys, and derivation paths'
     }
   | {
-      id: 'Help/Documentation Screens/Style Guide/style-guide_4_light:2958:1024'
-      alt: 'Image showing the format of procedure articles'
-    }
-  | {
-      id: 'Help/Documentation Screens/Style Guide/style-guide_6_light:2958:1801'
-      alt: 'Image of Status mobile UI'
-    }
-  | {
-      id: 'Help/Documentation Screens/Style Guide/style-guide_3_light:2958:1442'
-      alt: 'Image showing the format of concept articles'
-    }
-  | {
-      id: 'Help/Documentation Screens/Style Guide/style-guide_5_light:2958:1801'
-      alt: 'Image of Status desktop UI'
-    }
-  | {
-      id: 'Help/Documentation Screens/Style Guide/style-guide_1_light:2560:1126'
-      alt: 'Image showing the Status Help style guide format'
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/1476/1476_1_Screen_Light:1900:1120'
-      alt: ''
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/1476/1476_2_Screen_Light:1900:1120'
-      alt: ''
-    }
-  | { id: 'Portfolio/Loading/Asset:160:160'; alt: '' }
-  | {
-      id: 'Help/Documentation Screens/Wallet/1412/1412_1_Screen_Light:1900:1120'
-      alt: ''
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/75/75_Header_light:1900:1120'
-      alt: ''
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/1412/1412_Header_light:1900:1120'
-      alt: ''
-    }
-  | { id: 'sample:864:576'; alt: '' }
-  | {
-      id: 'Share/Screens/Profile/Sharing_Banner:3841:3572'
-      alt: 'Status.app illustration for a shared profile.'
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/1395/1395_Header_light:1900:1120'
-      alt: ''
-    }
-  | { id: 'Help/Icons/06_Keycard:144:144'; alt: '' }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Stars/Stars_2:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Stars/Stars_1:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Plane_Rocket/Rocket:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Plane_Rocket/Plane:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Networks/Networks_amjkea:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Static/Orbit_z02gvt:1950:1648'
-      alt: ''
-    }
-  | { id: 'Portfolio/Landing/Slider/Assets_03/NFTs/NFT_1:1950:1648'; alt: '' }
-  | { id: 'Portfolio/Landing/Slider/Assets_03/NFTs/NFT_3:1950:1648'; alt: '' }
-  | { id: 'Portfolio/Landing/Slider/Assets_03/NFTs/NFT_2:1950:1648'; alt: '' }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Tokens_Planets/Orange_planet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Tokens_Planets/SNT_coin:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Tokens_Planets/Moon:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Tokens_Planets/Magenta_Green_planet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Tokens_Planets/Green_planet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_03/Tokens_Planets/ETH_diamond:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Stars/Stars_2:1951:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Stars/Stars_1:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Wallets/Purple_wallet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Wallets/Blue_wallet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Accounts/Wallet_Accounts:1950:1648'
-      alt: ''
-    }
-  | { id: 'Portfolio/Landing/Slider/Assets_02/Static/Orbit:1950:1648'; alt: '' }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/ETH_diamond:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/Yellow_planet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/SNT_coin:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/Ring_planet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/Orange_Blue_planet:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/OP_coin:1950:1648'
-      alt: ''
-    }
-  | {
-      id: 'Portfolio/Landing/Slider/Assets_02/Tokens_Planets/Light_Blue_planet:1950:1648'
+      id: 'Help/Documentation Screens/Wallet/1512/1512_1_Screen:1480:1480'
       alt: ''
     }
   | {
@@ -330,18 +183,6 @@ export type ImageType =
     }
   | {
       id: 'Platforms/Screens/Extension Screens/Connector_02:1102:1012'
-      alt: ''
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/466/466_3_Screen_Light:2168:380'
-      alt: ''
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/466/466_2_Screen_Light:2168:380'
-      alt: ''
-    }
-  | {
-      id: 'Help/Documentation Screens/Wallet/466/466_1_Screen_Light:2168:380'
       alt: ''
     }
   | {

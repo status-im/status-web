@@ -20,7 +20,6 @@ export const dynamicParams = true
 
 export async function generateStaticParams() {
   const { jobs = [] } = await getStatusJobs()
-
   return jobs.map(job => ({
     id: job.id.toString(),
   })) satisfies Array<Awaited<Props['params']>>

@@ -66,16 +66,27 @@ const headers: RequestInit['headers'] = {
 
 const GREENHOUSE_API_URL = 'https://boards-api.greenhouse.io/v1/boards'
 
-export const getStatusJobs = async (): Promise<Jobs> =>
-  await fetch(
-    `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs?content=true`,
-    {
-      headers,
-      next: {
-        revalidate: 300, // 5 minutes,
+export const getStatusJobs = async (): Promise<Jobs> => {
+  try {
+    return await fetch(
+      `${GREENHOUSE_API_URL}/${serverEnv.GREENHOUSE_STATUS_BOARD_ID}/jobs?content=true`,
+      {
+        headers,
+        next: {
+          revalidate: 300, // 5 minutes,
+        },
+      }
+    ).then(res => res.json())
+  } catch (error) {
+    console.error('Failed to fetch status jobs from Greenhouse API:', error)
+    return {
+      jobs: [],
+      meta: {
+        total: 0,
       },
     }
-  ).then(res => res.json())
+  }
+}
 
 export const getStatusJob = async (id: string): Promise<Job> =>
   await fetch(
