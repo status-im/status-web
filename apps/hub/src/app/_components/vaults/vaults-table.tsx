@@ -131,7 +131,7 @@ export function VaultsTable() {
     abi: STAKING_MANAGER.abi,
     functionName: 'emergencyModeEnabled',
     query: {
-      staleTime: 60_000, // Consider data fresh for 1 minute
+      refetchInterval: 30000,
     },
   })
 

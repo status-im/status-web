@@ -8,12 +8,12 @@ import {
 import type { Abi, Address } from 'viem'
 
 export const STAKING_MANAGER = {
-  address: '0x5cDf1646E4c1D21eE94DED1DA8da3Ca450dc96D1' as Address,
+  address: '0x07301236DDAD37dCA93690e7a7049Bc13F55158E' as Address,
   abi: stakingManagerAbi as Abi,
 } as const
 
 export const VAULT_FACTORY = {
-  address: '0xddDcd43a0B0dA865decf3e4Ae71FbBE3e2DfFF14' as Address,
+  address: '0x489427Fad204FF494Cd8BE860D4af76b4Ce9F717' as Address,
   abi: vaultFactoryAbi as Abi,
 } as const
 

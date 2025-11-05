@@ -7,7 +7,7 @@ import { InfoIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
 import { useAccount } from 'wagmi'
 
-import { useVaultWithdraw } from '~hooks/useVaultWithdraw'
+import { useVaultEmergencyExit } from '~hooks/useVaultEmergencyExit'
 
 import { BaseVaultModal } from './base-vault-modal'
 
@@ -16,6 +16,7 @@ import type { Address } from 'viem'
 interface WithdrawVaultModalProps {
   onClose: () => void
   vaultAddress: Address
+  amountWei: bigint
   open?: boolean
   onOpenChange?: (open: boolean) => void
   children?: React.ReactNode
@@ -25,21 +26,20 @@ interface WithdrawVaultModalProps {
  * Modal for emergency withdrawal from vault
  */
 export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
-  const { onClose, vaultAddress, open, onOpenChange, children } = props
+  const { onClose, vaultAddress, amountWei, open, onOpenChange, children } =
+    props
 
   const { address } = useAccount()
-  const { mutate: withdraw } = useVaultWithdraw()
+  const { mutate: emergencyExit } = useVaultEmergencyExit()
 
   const handleVaultWithdrawal = useCallback(() => {
-    const amountWei = 1000000000000000000n
-
     if (!address) {
       console.error('No address found - wallet not connected')
       return
     }
 
     try {
-      withdraw({
+      emergencyExit({
         amountWei,
         vaultAddress,
         onSigned: () => {
@@ -47,9 +47,9 @@ export function WithdrawVaultModal(props: WithdrawVaultModalProps) {
         },
       })
     } catch (error) {
-      console.error('Error calling withdraw:', error)
+      console.error('Error calling emergencyExit:', error)
     }
-  }, [address, onClose, vaultAddress, withdraw])
+  }, [address, amountWei, onClose, vaultAddress, emergencyExit])
 
   return (
     <BaseVaultModal

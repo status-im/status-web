@@ -4,7 +4,7 @@ import { useAccount, useChainId, useConfig } from 'wagmi'
 import { readContract, readContracts } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { CACHE_CONFIG, STAKING_MANAGER } from '~constants/index'
+import { CACHE_CONFIG, SNT_TOKEN, STAKING_MANAGER } from '~constants/index'
 
 // ============================================================================
 // Types
@@ -29,6 +29,8 @@ export interface StakingVaultData {
   lockUntil: bigint
   /** Total rewards accrued and available for claiming */
   rewardsAccrued: bigint
+  /** Actual token balance in the vault (from balanceOf) - reliable in emergency mode */
+  depositedBalance: bigint
 }
 
 /**
@@ -112,32 +114,47 @@ async function fetchVaultData(
           functionName: 'lockUntil',
           args: [],
         },
+        {
+          chainId,
+          address: SNT_TOKEN.address,
+          abi: SNT_TOKEN.abi,
+          functionName: 'balanceOf',
+          args: [vaultAddress],
+        },
       ],
     })
 
-    // Check if both contract calls succeeded
-    const [vaultResult, lockUntilResult] = results
+    // Check if all contract calls succeeded
+    const [vaultResult, lockUntilResult, depositedBalanceResult] = results
 
     if (
       vaultResult.status !== 'success' ||
-      lockUntilResult.status !== 'success'
+      lockUntilResult.status !== 'success' ||
+      depositedBalanceResult.status !== 'success'
     ) {
       console.error(
         `Failed to fetch vault data for ${vaultAddress}:`,
         vaultResult.status !== 'success'
           ? vaultResult.error
-          : lockUntilResult.error
+          : lockUntilResult.status !== 'success'
+            ? lockUntilResult.error
+            : depositedBalanceResult.error
       )
       return null
     }
 
     // Extract the actual data from successful results
-    const vaultData = vaultResult.result as Omit<StakingVaultData, 'lockUntil'>
+    const vaultData = vaultResult.result as Omit<
+      StakingVaultData,
+      'lockUntil' | 'depositedBalance'
+    >
     const lockUntil = lockUntilResult.result as bigint
+    const depositedBalance = depositedBalanceResult.result as bigint
 
     return {
       ...vaultData,
       lockUntil,
+      depositedBalance,
     }
   } catch (error) {
     // Log error for debugging but don't throw - allows partial results

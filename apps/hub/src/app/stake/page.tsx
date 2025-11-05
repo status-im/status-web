@@ -74,6 +74,15 @@ export default function StakePage() {
   const weightedBoost = useWeightedBoost(vaults)
   const { data: exchangeRate } = useExchangeRate()
 
+  const { data: emergencyModeEnabled } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: STAKING_MANAGER.abi,
+    functionName: 'emergencyModeEnabled',
+    query: {
+      refetchInterval: 30000,
+    },
+  })
+
   const form = useForm<FormValues>({
     resolver: zodResolver(createStakeFormSchema()),
     mode: 'onChange',
@@ -435,24 +444,27 @@ export default function StakePage() {
               </form>
 
               <div className="flex flex-col gap-[18px]">
-                <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
-                  <div className="mb-2 flex items-start justify-between">
-                    <p className="text-13 font-500 text-neutral-60">
-                      Total staked
+                {!emergencyModeEnabled && (
+                  <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
+                    <div className="mb-2 flex items-start justify-between">
+                      <p className="text-13 font-500 text-neutral-60">
+                        Total staked
+                      </p>
+                    </div>
+                    <div className="mb-4 flex items-end gap-2">
+                      <SNTIcon />
+                      <span className="text-27 font-600">
+                        {formatSNT(totalStaked ?? 0, {
+                          includeSymbol: true,
+                        })}
+                      </span>
+                    </div>
+                    <p className="text-13 font-500 text-neutral-40">
+                      Next unlock in {STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS}{' '}
+                      days
                     </p>
                   </div>
-                  <div className="mb-4 flex items-end gap-2">
-                    <SNTIcon />
-                    <span className="text-27 font-600">
-                      {formatSNT(totalStaked ?? 0, {
-                        includeSymbol: true,
-                      })}
-                    </span>
-                  </div>
-                  <p className="text-13 font-500 text-neutral-40">
-                    Next unlock in {STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS} days
-                  </p>
-                </div>
+                )}
 
                 <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
                   <div className="mb-2 flex items-start justify-between">
