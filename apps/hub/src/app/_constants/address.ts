@@ -4,11 +4,10 @@ import {
   tokenAbi,
   vaultFactoryAbi,
 } from './contracts'
-import { lineaTokenAbi } from './contracts/lineaTokenAbi'
-import { MockTokenAbi } from './contracts/mockTokenAbi'
-import { PreDepositVaultAbi } from './contracts/preDepositVaultAbi'
+import { lineaTokenAbi } from './contracts/LineaTokenAbi'
+import { MockTokenAbi } from './contracts/MockTokenAbi'
+import { PreDepositVaultAbi } from './contracts/PreDepositVaultAbi'
 
-import type { ReactNode } from 'react'
 import type { Abi, Address } from 'viem'
 
 export type Token = {
@@ -19,17 +18,12 @@ export type Token = {
   abi: Abi
 }
 
-export type Reward = {
-  name: string
-  icon: ReactNode
-}
-
 export type Vault = {
   id: string
   name: string
   address: Address
   apy: string
-  rewards: Reward[]
+  rewards: string[]
   icon: string
   token: Token
   abi: typeof PreDepositVaultAbi
@@ -90,14 +84,53 @@ export const TEST_VAULT: Vault = {
   id: 'MERC',
   name: 'MockERC20 vault',
   apy: '10.5%',
-  rewards: [
-    {
-      name: 'SNT',
-      icon: 'SNT',
-    },
-  ],
+  rewards: ['SNT'],
   icon: 'SNT',
   address: '0x88DfF41EE1958b7B7EbA809Ab7F6FCC33fd9969E',
   token: MOCK_TOKEN,
   abi: PreDepositVaultAbi,
 } as const
+
+export const STT_VAULT: Vault = {
+  id: 'STT',
+  name: 'Status Test Token',
+  apy: '10.5%',
+  rewards: ['SNT'],
+  icon: 'SNT',
+  address: '0x3cb680f84f7729b56c18907C899a26bC1f4ad4D4',
+  token: SNT_TOKEN,
+  abi: PreDepositVaultAbi,
+} as const
+
+export const VAULTS: Vault[] = [
+  {
+    id: 'SNT',
+    name: 'SNT vault',
+    apy: '8.7%',
+    rewards: ['KARMA', 'MetaFi', 'Points'],
+    icon: 'SNT',
+    token: SNT_TOKEN,
+    address: '0x0000000000000000000000000000000000000000',
+    abi: PreDepositVaultAbi,
+  },
+  {
+    id: 'LINEA',
+    name: 'LINEA vault',
+    apy: '3.9%',
+    rewards: ['KARMA', 'SNT', 'Points'],
+    icon: 'LINEA',
+    token: LINEA_TOKEN,
+    address: '0x0000000000000000000000000000000000000000',
+    abi: PreDepositVaultAbi,
+  },
+  // {
+  //   id: 'ETH',
+  //   name: 'ETH vault',
+  //   apy: '5.2%',
+  //   rewards: ['KARMA', 'SNT', 'LINEA'],
+  //   icon: 'ETH',
+  //   token: wETH_TOKEN,
+  //   address: '0x0000000000000000000000000000000000000000',
+  //   abi: PreDepositVaultAbi,
+  // },
+]

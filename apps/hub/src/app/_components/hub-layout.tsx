@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { ToastContainer } from '@status-im/components'
 import { Divider, Footer } from '@status-im/status-network/components'
 
-import { TEST_VAULT, type Vault } from '~constants/index'
+import { type Vault, VAULTS } from '~constants/index'
 
 import { PreDepositModal } from './pre-deposit-modal'
 import { Sidebar } from './sidebar'
@@ -19,7 +19,7 @@ export function HubLayout({ children }: HubLayoutProps) {
   const [selectedVault, setSelectedVault] = useState<Vault | null>(null)
 
   const handleDepositClick = () => {
-    setSelectedVault(TEST_VAULT)
+    setSelectedVault(VAULTS[0])
   }
 
   return (
@@ -43,11 +43,11 @@ export function HubLayout({ children }: HubLayoutProps) {
 
         <section className="sticky z-50 overflow-visible">
           <div className="relative">
-            <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-transparent" />
+            <div className="absolute left-0 top-0 h-px w-9 bg-gradient-to-l from-[#E7EAEE] to-[transparent]" />
             <div className="px-10">
               <Divider variant="fullscreen" />
             </div>
-            <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-transparent" />
+            <div className="absolute right-0 top-0 h-px w-9 bg-gradient-to-r from-[#E7EAEE] to-[transparent]" />
           </div>
           <div className="px-0 lg:px-12">
             <Footer />
@@ -61,6 +61,7 @@ export function HubLayout({ children }: HubLayoutProps) {
           onOpenChange={open => !open && setSelectedVault(null)}
           vault={selectedVault}
           setActiveVault={setSelectedVault}
+          vaults={VAULTS}
         />
       )}
     </div>

@@ -5,49 +5,22 @@ import { useState } from 'react'
 import { ExternalIcon } from '@status-im/icons/20'
 import { ButtonLink, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
-import { match, P } from 'ts-pattern'
 
 import { HubLayout } from '~components/hub-layout'
 import { PreDepositModal } from '~components/pre-deposit-modal'
 import { VaultCard } from '~components/vault-card'
-import { TEST_VAULT, type Vault } from '~constants/index'
+import { type Vault, VAULTS } from '~constants/index'
 
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
-const REWARDS = ['karma', 'linea', 'snt']
-
-const VAULTS: Vault[] = [
-  // {
-  //   id: 'ETH',
-  //   name: 'ETH vault',
-  //   apy: '5.2%',
-  //   rewards: ['KARMA', 'SNT', 'LINEA'],
-  //   icon: 'ETH',
-  //   token: wETH_TOKEN,
-
-  // },
-  // {
-  //   id: 'SNT',
-  //   name: 'SNT vault',
-  //   apy: '8.7%',
-  //   rewards: ['KARMA', 'MetaFi', 'Points'],
-  //   icon: 'SNT',
-  //   token: SNT_TOKEN,
-  // },
-  // {
-  //   id: 'USDC',
-  //   name: 'USDC vault',
-  //   apy: '3.9%',
-  //   rewards: ['KARMA', 'SNT', 'Points'],
-  //   icon: 'USDC',
-  //   token: wETH_TOKEN,
-  // },
-  TEST_VAULT,
-]
+const REWARDS = ['KARMA', 'SNT', 'LINEA']
 
 export default function DashboardPage() {
   const [selectedVault, setActiveVault] = useState<Vault | null>(null)
+
+  // Default to SNT vault when opening modal without selection
+  const defaultVault = VAULTS.find(v => v.id === 'SNT') ?? VAULTS[0]
 
   return (
     <HubLayout>
@@ -121,10 +94,10 @@ export default function DashboardPage() {
         <div className="py-12">
           <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-center lg:justify-center">
             <div className="max-w-2xl">
-              <h3 className="mb-3 text-64 font-bold text-neutral-90">
+              <h3 className="mb-3 text-64 font-700 text-neutral-90">
                 Build with us
               </h3>
-              <p className="mb-8 text-27 font-medium text-neutral-60">
+              <p className="mb-8 text-27 font-500 text-neutral-60">
                 Launch your app on the free network
               </p>
 
@@ -159,16 +132,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-      {match(selectedVault)
-        .with(P.nonNullable, vault => (
-          <PreDepositModal
-            open={true}
-            onOpenChange={open => !open && setActiveVault(null)}
-            vault={vault}
-            setActiveVault={setActiveVault}
-          />
-        ))
-        .otherwise(() => null)}
+      <PreDepositModal
+        open={selectedVault !== null}
+        onOpenChange={open => !open && setActiveVault(null)}
+        vault={selectedVault ?? defaultVault}
+        vaults={VAULTS}
+        setActiveVault={setActiveVault}
+      />
     </HubLayout>
   )
 }

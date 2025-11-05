@@ -4,9 +4,8 @@ import { useMemo } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as Dialog from '@radix-ui/react-dialog'
-import { ContextTag } from '@status-im/components'
-import { CloseIcon } from '@status-im/icons/20'
-import { Button } from '@status-im/status-network/components'
+import { CloseIcon, DropdownIcon } from '@status-im/icons/20'
+import { Button, DropdownMenu } from '@status-im/status-network/components'
 import { cva } from 'cva'
 import Image from 'next/image'
 import { useForm, useWatch } from 'react-hook-form'
@@ -15,7 +14,7 @@ import { formatUnits, parseUnits } from 'viem'
 import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { z } from 'zod'
 
-import { VaultIcon } from '~components/icons/index'
+import { PercentIcon, PlusIcon } from '~components/icons/index'
 import { type Vault } from '~constants/index'
 import { useApproveToken } from '~hooks/useApprovePreDepositToken'
 import { useExchangeRate } from '~hooks/useExchangeRate'
@@ -24,6 +23,8 @@ import { useMinPreDepositValue } from '~hooks/useMinPreDepositValue'
 import { usePreDepositVault } from '~hooks/usePreDepositVault'
 import { formatCurrency, formatTokenAmount } from '~utils/currency'
 
+import { VaultImage } from './vault-image'
+
 import type { allowanceAbi } from '~constants/contracts/AllowanceAbi'
 import type { Dispatch, SetStateAction } from 'react'
 
@@ -31,6 +32,7 @@ type PreDepositModalProps = {
   open: boolean
   onOpenChange: (open: boolean) => void
   vault: Vault
+  vaults: Vault[]
   setActiveVault: Dispatch<SetStateAction<Vault | null>>
 }
 
@@ -78,6 +80,8 @@ const PreDepositModal = ({
   open,
   onOpenChange,
   vault,
+  vaults,
+  setActiveVault,
 }: PreDepositModalProps) => {
   const { address, isConnected } = useAccount()
   // TODO: Replace with useExhangeRate({ token: vault.token.symbol }) before prod
@@ -297,17 +301,15 @@ const PreDepositModal = ({
             <div className="box-border flex flex-col items-center px-4 pb-4 pt-8">
               <Dialog.Title asChild>
                 <div className="flex w-full items-center gap-[6px]">
-                  <span className="min-h-px min-w-px shrink-0 grow basis-0 text-[19px] font-semibold leading-[1.35] tracking-[-0.304px] text-neutral-100">
-                    Deposit to {vault.name}
+                  <span className="min-h-px min-w-px shrink-0 grow basis-0 text-19 font-600 text-neutral-100">
+                    Deposit funds
                   </span>
                 </div>
               </Dialog.Title>
 
               <Dialog.Description asChild>
-                <div className="sr-only flex w-full flex-col justify-center text-[15px] leading-[0] tracking-[-0.135px] text-neutral-100">
-                  <span className="leading-[1.45]">
-                    Earn {vault.apy} APY with rewards
-                  </span>
+                <div className="flex w-full flex-col justify-center text-15 text-neutral-100">
+                  Deposit funds for yield and rewards
                 </div>
               </Dialog.Description>
             </div>
@@ -315,23 +317,49 @@ const PreDepositModal = ({
             <form onSubmit={form.handleSubmit(handleSubmit)}>
               <div className="space-y-4 px-4 pb-4">
                 {/* Vault info */}
-                <div className="rounded-16 border border-neutral-20 bg-neutral-2.5 p-4">
-                  <div className="flex items-center gap-3">
-                    <VaultIcon token={vault.token.symbol} vault={vault.icon} />
-                    <div>
-                      <p className="font-600 text-neutral-90">{vault.name}</p>
-                      <p className="text-13 text-neutral-60">
-                        APY: {vault.apy}
-                      </p>
-                    </div>
+                <div className="">
+                  <div className="text-13 font-500 text-neutral-50">
+                    Select token
                   </div>
+                  <DropdownMenu.Root modal>
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between gap-2 rounded-12 border border-neutral-20 bg-white-100 px-3 py-[9px]"
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <Image
+                          src={`/vaults/${vault?.icon}.png`}
+                          alt={vault?.icon}
+                          width="20"
+                          height="20"
+                          className="size-5 shrink-0"
+                        />
+                        <span className="text-15 font-400 text-neutral-100">
+                          {vault.token.name}, {vault.token.symbol}
+                        </span>
+                      </div>
+                      <DropdownIcon className="shrink-0 text-neutral-40 transition-transform" />
+                    </button>
+
+                    <DropdownMenu.Content>
+                      {vaults.map(v => (
+                        <DropdownMenu.Item
+                          key={v.id}
+                          label={`${v.token.name}, ${v.token.symbol}`}
+                          selected={v.id === vault.id}
+                          onSelect={() => setActiveVault(v)}
+                          icon={v.icon}
+                        />
+                      ))}
+                    </DropdownMenu.Content>
+                  </DropdownMenu.Root>
                 </div>
 
                 {/* Amount input */}
                 <div className="space-y-2">
                   <label
                     htmlFor="deposit-amount"
-                    className="block text-13 font-medium text-neutral-50"
+                    className="block text-13 font-500 text-neutral-50"
                   >
                     Amount to deposit
                   </label>
@@ -344,15 +372,15 @@ const PreDepositModal = ({
                         {...form.register('amount')}
                         placeholder="0"
                         disabled={isPending}
-                        className="w-full border-none bg-transparent text-27 font-semibold leading-[38px] text-neutral-100 outline-none placeholder:text-neutral-40"
+                        className="w-full border-none bg-transparent text-27 font-600 text-neutral-100 outline-none placeholder:text-neutral-40"
                       />
                       <div className="flex items-center gap-1">
-                        <VaultIcon
+                        <VaultImage
                           token={vault.token.symbol}
                           vault={vault.icon}
                         />
-                        <span className="text-19 font-semibold text-neutral-80">
-                          {vault.token.symbol}
+                        <span className="text-19 font-600 text-neutral-80">
+                          l{vault.token.symbol}
                         </span>
                       </div>
                     </div>
@@ -392,26 +420,24 @@ const PreDepositModal = ({
 
                 {/* Rewards */}
                 <div>
-                  <p className="mb-2 text-13 font-500 text-neutral-60">
-                    You'll earn rewards in:
+                  <p className="mb-2 text-13 font-500 text-neutral-50">
+                    Rewards
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {vault.rewards.map(reward => (
-                      <ContextTag
-                        type="token"
-                        label={reward.name}
-                        icon={
-                          <Image
-                            priority
-                            width="32"
-                            height="32"
-                            src={`/vaults/${reward.icon}.png`}
-                            alt={reward.name}
-                          />
-                        }
-                        key={reward.name}
-                      />
-                    ))}
+                  <div className="flex flex-col flex-wrap gap-4">
+                    <div className="flex items-center gap-2 text-15">
+                      <span className="text-neutral-50">
+                        <PercentIcon />
+                      </span>
+                      <span className="text-neutral-100">{vault.apy} APY</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-15">
+                      <span className="text-neutral-50">
+                        <PlusIcon />
+                      </span>
+                      <span className="text-neutral-100">
+                        {vault.rewards.join(', ')}
+                      </span>
+                    </div>
                   </div>
                 </div>
 

@@ -6,12 +6,10 @@ import Image from 'next/image'
 
 import { PercentIcon, PlusIcon } from './icons'
 
-import type { Reward } from '~constants/index'
-
 type Props = {
   name: string
   apy: string
-  rewards: Array<Reward>
+  rewards: string[]
   icon: string
   onDeposit: () => void
 }
@@ -19,7 +17,7 @@ type Props = {
 const VaultCard = (props: Props) => {
   const { name, apy, rewards, icon, onDeposit } = props
   const apyValue = apy.endsWith('%') ? apy.slice(0, -1) : apy
-  const rewardsLine = rewards.map(reward => reward.name).join(', ')
+  const rewardsLine = rewards.join(', ')
 
   return (
     <div className="size-full rounded-32 border border-neutral-20 bg-white-100 p-8 shadow-1">
