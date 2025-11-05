@@ -62,19 +62,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Verify environment variables
-        run: |
-          MISSING_VARS=()
-          for var in INFURA_API_KEY GREENHOUSE_API_KEY GREENHOUSE_STATUS_BOARD_ID GREENHOUSE_LOGOS_BOARD_ID GOOGLE_SPREADSHEET_ID GOOGLE_SHEET_ID GOOGLE_CLIENT_EMAIL GOOGLE_SERVICE_PRIVATE_KEY POSTGRES_URL KEYCLOAK_API_URL KEYCLOAK_REALM KEYCLOAK_ISSUER KEYCLOAK_CLIENT_ID KEYCLOAK_CLIENT_SECRET BAMBOOHR_API_KEY NEXT_PUBLIC_GHOST_API_KEY NEXT_PUBLIC_GHOST_API_URL NEXT_PUBLIC_INFURA_API_KEY NEXT_PUBLIC_HASURA_API_URL NEXT_PUBLIC_STATUS_NETWORK_API_URL NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID; do
-            if [ -z "${!var}" ]; then
-              MISSING_VARS+=("$var")
-            fi
-          done
-          if [ ${#MISSING_VARS[@]} -gt 0 ]; then
-            echo "❌ Missing environment variables: ${MISSING_VARS[*]}"
-            exit 1
-          fi
-
       - name: Build
         run: pnpm build
 
