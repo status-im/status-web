@@ -20,17 +20,34 @@ const DISALLOWED_TAGS_FILTER = DISALLOWED_TAGS.map(tag => `tag:-${tag}`).join(
 export const getPosts = async (params: Params = {}) => {
   const { page = 1, limit = 7, tag } = params
 
-  const response = await ghost.posts.browse({
-    include: ['tags', 'authors'],
-    order: 'published_at DESC',
-    limit,
-    page,
-    ...(tag
-      ? { filter: `tag:${tag}+visibility:public` }
-      : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
-  })
+  try {
+    const response = await ghost.posts.browse({
+      include: ['tags', 'authors'],
+      order: 'published_at DESC',
+      limit,
+      page,
+      ...(tag
+        ? { filter: `tag:${tag}+visibility:public` }
+        : { filter: `visibility:public+${DISALLOWED_TAGS_FILTER}` }),
+    })
 
-  return { posts: [...response], meta: response.meta }
+    return { posts: [...response], meta: response.meta }
+  } catch (error) {
+    console.error('Failed to fetch posts from Ghost API:', error)
+    return {
+      posts: [],
+      meta: {
+        pagination: {
+          page: 1,
+          limit,
+          pages: 0,
+          total: 0,
+          next: null,
+          prev: null,
+        },
+      },
+    }
+  }
 }
 
 export const getPostBySlug = async (slug: string) => {
@@ -87,31 +104,46 @@ export const getPostsByAuthorSlug = async (slug: string, page = 1) => {
 }
 
 export const getPostSlugs = async (): Promise<string[]> => {
-  const posts = await ghost.posts.browse({
-    limit: 7,
-    fields: 'slug',
-    filter: `visibility:public+${DISALLOWED_TAGS_FILTER}`,
-  })
+  try {
+    const posts = await ghost.posts.browse({
+      limit: 7,
+      fields: 'slug',
+      filter: `visibility:public+${DISALLOWED_TAGS_FILTER}`,
+    })
 
-  return posts.map(post => post.slug)
+    return posts.map(post => post.slug)
+  } catch (error) {
+    console.error('Failed to fetch post slugs from Ghost API:', error)
+    return []
+  }
 }
 
 export const getTagSlugs = async (): Promise<string[]> => {
-  const tags = await ghost.tags.browse({
-    limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 6,
-    fields: 'slug',
-    filter: `visibility:public`,
-  })
+  try {
+    const tags = await ghost.tags.browse({
+      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 6,
+      fields: 'slug',
+      filter: `visibility:public`,
+    })
 
-  return tags.map(tag => tag.slug)
+    return tags.map(tag => tag.slug)
+  } catch (error) {
+    console.error('Failed to fetch tag slugs from Ghost API:', error)
+    return []
+  }
 }
 
 export const getAuthorSlugs = async (): Promise<string[]> => {
-  const authors = await ghost.authors.browse({
-    limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 6,
-    fields: 'slug',
-    filter: `visibility:public`,
-  })
+  try {
+    const authors = await ghost.authors.browse({
+      limit: clientEnv.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'all' : 6,
+      fields: 'slug',
+      filter: `visibility:public`,
+    })
 
-  return authors.map(author => author.slug)
+    return authors.map(author => author.slug)
+  } catch (error) {
+    console.error('Failed to fetch author slugs from Ghost API:', error)
+    return []
+  }
 }

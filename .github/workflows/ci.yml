@@ -8,8 +8,6 @@ on:
   workflow_call:
 
 env:
-  NEXT_PUBLIC_GHOST_API_URL: ''
-  NEXT_PUBLIC_GHOST_API_KEY: ''
   INFURA_API_KEY: ''
 
 jobs:
