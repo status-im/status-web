@@ -2,9 +2,7 @@ import { z } from 'zod'
 import { handleError } from './env.base.mjs'
 
 export const envSchema = z.object({
-  NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: z
-    .string()
-    .min(1, 'WalletConnect Project ID is required.'),
+  NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID: z.string(),
   NEXT_PUBLIC_STATUS_NETWORK_API_URL: z.string(),
 })
 
