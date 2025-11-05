@@ -28,14 +28,18 @@ export const STATUS_MOBILE_APK_URL = '/api/download/android'
 export const STATUS_CONNECTOR_CHROME_URL =
   'https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg'
 
+export const STATUS_PORTFOLIO_WALLET_CHROME_URL =
+  'https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj'
+
 // https://vercel.live/link/status-website-git-desktop-app-focus-status-im-web.vercel.app?page=%2F%3FvercelThreadId%3DfrG-m&via=in-app-copy-link&p=1
 export const LEARN_MORE_MOBILE_APP_URL =
   'https://github.com/status-im/status-desktop/issues/18082'
 
 export const ROUTES = {
   Apps: [
-    { name: 'Mobile', href: '/apps#mobile' },
+    { name: 'Browser', href: '/#browser' },
     { name: 'Desktop', href: '/apps#desktop' },
+    { name: 'Mobile', href: '/apps#mobile' },
   ],
   Ecosystem: [
     { name: 'Keycard', href: '/keycard' },

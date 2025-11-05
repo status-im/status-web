@@ -12,7 +12,6 @@ export const dynamicParams = true
 
 export async function generateStaticParams() {
   const slugs = await getAuthorSlugs()
-
   return slugs.map(slug => ({ slug })) satisfies Array<Awaited<Props['params']>>
 }
 
