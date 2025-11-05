@@ -15,6 +15,7 @@ import { SNT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 import { useVaultTokenUnStake } from '~hooks/useVaultTokenUnStake'
 import { formatSNT } from '~utils/currency'
+import { validateVaultAmount } from '~utils/vault'
 
 import { BaseVaultModal } from './base-vault-modal'
 
@@ -105,7 +106,7 @@ export function UnstakeVaultModal(props: UnstakeVaultModalProps) {
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     // Allow only numbers and decimal point
-    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+    if (validateVaultAmount(value)) {
       form.setValue('amount', value, { shouldValidate: true })
     }
   }
