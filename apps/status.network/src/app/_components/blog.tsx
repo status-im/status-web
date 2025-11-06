@@ -27,8 +27,7 @@ const POSTS: BlogPost[] = [
   },
   {
     category: 'Updates',
-    title:
-      'Embracing Community Choices: Status to Develop SNT Staking and Status L2',
+    title: 'Embracing Community Choices: Status to Develop SNT Staking and Status L2',
     author: {
       name: 'Us',
       avatar: '/blog/avatar.webp',
