@@ -82,7 +82,7 @@ export const DownloadMobileButton = (props: Props) => {
               <LatestVersionTag platform="mobile" />
             </div>
             <Dialog.Title className="mb-2 max-w-[381px] text-40 font-bold">
-              Download Status for Mobile
+              Download Legacy Status mobile app
             </Dialog.Title>
             <Dialog.Description className="mb-6 max-w-[468px] pr-12 text-19 font-regular">
               Available for iOS or Android.
