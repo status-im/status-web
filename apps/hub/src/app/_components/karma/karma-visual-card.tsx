@@ -1,4 +1,4 @@
-import { IconButton } from '@status-im/components'
+import { IconButton, Skeleton } from '@status-im/components'
 import { DownloadIcon, RefreshIcon } from '@status-im/icons/12'
 import Image from 'next/image'
 
@@ -11,7 +11,22 @@ const KarmaVisualCard = ({
   imageAlt = 'Karma Visual',
   onRefresh,
   onDownload,
+  isLoading = false,
 }: KarmaVisualCardProps) => {
+  if (isLoading) {
+    return (
+      <div className="h-[302px] w-[304px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1">
+        <div className="p-2">
+          <Skeleton
+            height={286}
+            width={288}
+            className="rounded-16"
+            variant="primary"
+          />
+        </div>
+      </div>
+    )
+  }
   return (
     <div className="h-[302px] w-[304px] overflow-hidden rounded-20 border border-neutral-20 bg-white-100 shadow-1">
       <div className="relative size-full p-2">

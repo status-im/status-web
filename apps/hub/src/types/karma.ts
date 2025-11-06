@@ -14,6 +14,7 @@ export type AchievementBadgeType =
  * Data interface for Karma Overview Card
  */
 export interface KarmaOverviewData {
+  isLoading?: boolean
   currentKarma: number
   rank: number
   achievements: AchievementBadgeType[]
@@ -23,6 +24,7 @@ export interface KarmaOverviewData {
  * Data interface for Karma Visual Card
  */
 export interface KarmaVisualData {
+  isLoading?: boolean
   imageSrc: string
   imageAlt?: string
   onRefresh?: () => void

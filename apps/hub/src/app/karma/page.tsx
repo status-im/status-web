@@ -12,6 +12,7 @@ import type { KarmaOverviewData } from '~types/karma'
 export default function KarmaPage() {
   // TODO: Replace with actual data from API/state
   const karmaData: KarmaOverviewData = {
+    isLoading: false,
     currentKarma: 55129.16,
     rank: 512,
     achievements: [
@@ -25,6 +26,7 @@ export default function KarmaPage() {
   const visualData = {
     imageSrc: '/karma/media.png',
     imageAlt: 'Karma Visual',
+    isLoading: false,
     onRefresh: () => {
       // TODO: Implement refresh logic
       console.log('Refresh clicked')
@@ -40,11 +42,11 @@ export default function KarmaPage() {
     {
       title: 'Welcome Karma',
       amount: 240.2,
-      onClaim: (token: string) => {
-        // TODO: Implement claim logic with capjs token
-        console.log('Claim clicked with token:', token)
+      onComplete: (token: string) => {
+        console.log('Complete clicked with token:', token)
       },
-      isClaimed: false,
+      isComplete: false,
+      isLoading: false,
     },
   ]
 
