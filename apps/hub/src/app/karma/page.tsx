@@ -1,15 +1,22 @@
 'use client'
 
+import { useMemo } from 'react'
+
 import { HubLayout } from '~components/hub-layout'
 import {
   KarmaOverviewCard,
   KarmaSourceCard,
   KarmaVisualCard,
 } from '~components/karma'
+import { useClaimKarma } from '~hooks/useClaimKarma'
+import { useCurrentUser } from '~hooks/useCurrentUser'
 
 import type { KarmaOverviewData } from '~types/karma'
 
 export default function KarmaPage() {
+  const { data, isLoading, refetch } = useCurrentUser()
+  const { mutateAsync: claimKarma } = useClaimKarma()
+
   // TODO: Replace with actual data from API/state
   const karmaData: KarmaOverviewData = {
     isLoading: false,
@@ -38,17 +45,27 @@ export default function KarmaPage() {
   }
 
   // TODO: Replace with actual karma sources from API/state
-  const karmaSources = [
-    {
-      title: 'Welcome Karma',
-      amount: 240.2,
-      onComplete: (token: string) => {
-        console.log('Complete clicked with token:', token)
+  const karmaSources = useMemo(
+    () => [
+      {
+        title: 'Welcome Karma',
+        amount: 240.2,
+        onComplete: async (token: string) => {
+          await claimKarma(
+            { token },
+            {
+              onSuccess: () => {
+                refetch()
+              },
+            }
+          )
+        },
+        isComplete: data?.connectedSybilProviders.includes('POW') ?? false,
+        isLoading,
       },
-      isComplete: false,
-      isLoading: false,
-    },
-  ]
+    ],
+    [data, isLoading, claimKarma, refetch]
+  )
 
   return (
     <HubLayout>

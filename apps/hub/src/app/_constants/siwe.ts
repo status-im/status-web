@@ -43,6 +43,13 @@ export const siweConfig: SIWEConfig = {
         method: 'POST',
         body: JSON.stringify({ payload: message, signature }),
       })
+
+      if (response.ok) {
+        // Import dynamically to avoid circular dependencies
+        const { invalidateCurrentUser } = await import('~hooks/useCurrentUser')
+        invalidateCurrentUser()
+      }
+
       return response.ok
     } catch {
       return false
@@ -66,6 +73,13 @@ export const siweConfig: SIWEConfig = {
       const response = await fetchAPI(AUTH_ENDPOINTS.logout, {
         method: 'POST',
       })
+
+      if (response.ok) {
+        // Import dynamically to avoid circular dependencies
+        const { invalidateCurrentUser } = await import('~hooks/useCurrentUser')
+        invalidateCurrentUser()
+      }
+
       return response.ok
     } catch {
       return false

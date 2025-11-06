@@ -42,8 +42,7 @@
     "**/*.ts",
     "**/*.tsx",
     "env.d.ts",
-    ".next/types/**/*.ts",
-    "global.d.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules", ".next"],
   "references": [

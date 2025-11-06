@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react'
+import '@pitininja/cap-react-widget/dist/index.css'
 
+import { useState } from 'react'
+
+import { CapWidget } from '@pitininja/cap-react-widget'
 import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
-import Script from 'next/script'
 import { useAccount } from 'wagmi'
 
 import { clientEnv } from '~constants/env.client.mjs'
+import { useClaimKarma } from '~hooks/useClaimKarma'
 
 type KarmaSourceCardProps = {
   title: string
@@ -28,8 +31,8 @@ const KarmaSourceCard = ({
 }: KarmaSourceCardProps) => {
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
-  const capWidgetRef = useRef<HTMLElement>(null)
   const { isConnected } = useAccount()
+  const { mutateAsync: claimKarma } = useClaimKarma()
   const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
 
   const formatAmount = (value: number) => {
@@ -39,46 +42,17 @@ const KarmaSourceCard = ({
     })
   }
 
-  useEffect(() => {
-    const widget = capWidgetRef.current
+  const handleSolve = (token: string) => {
+    setCapToken(token)
+    setCapError(null)
+  }
 
-    if (!widget) return
-
-    const handleSolve = (event: Event) => {
-      const solveEvent = event as Event & {
-        detail: { token: string }
-      }
-      setCapToken(solveEvent.detail.token)
-      setCapError(null)
-    }
-
-    const handleError = (event: Event) => {
-      const errorEvent = event as Event & {
-        detail: { error: Error }
-      }
-      setCapError(errorEvent.detail.error.message)
-      setCapToken(null)
-    }
-
-    const handleReset = () => {
-      setCapToken(null)
-      setCapError(null)
-    }
-
-    widget.addEventListener('solve', handleSolve)
-    widget.addEventListener('error', handleError)
-    widget.addEventListener('reset', handleReset)
-
-    return () => {
-      widget.removeEventListener('solve', handleSolve)
-      widget.removeEventListener('error', handleError)
-      widget.removeEventListener('reset', handleReset)
-    }
-  }, [])
-
-  const handleClaim = () => {
+  const handleClaim = async () => {
     if (capToken && onComplete) {
-      onComplete(capToken)
+      const response = await claimKarma({ token: capToken })
+      if (response.success) {
+        onComplete(capToken)
+      }
     }
   }
 
@@ -109,7 +83,7 @@ const KarmaSourceCard = ({
     )
   }
 
-  if (isComplete) {
+  if (isComplete && isConnected) {
     return (
       <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
         <div className="flex flex-col">
@@ -158,10 +132,6 @@ const KarmaSourceCard = ({
 
   return (
     <>
-      <Script
-        src="https://cdn.jsdelivr.net/npm/@cap.js/widget@0.1.31"
-        strategy="lazyOnload"
-      />
       <div className="h-[200px] w-full overflow-hidden rounded-20 border border-neutral-10 bg-white-100">
         <div className="flex h-full flex-col items-start p-4">
           <div className="flex w-full flex-col gap-0.5">
@@ -174,11 +144,7 @@ const KarmaSourceCard = ({
           </div>
 
           <div className="mt-2.5 flex w-full flex-col gap-3">
-            {/* @ts-expect-error - cap-widget is not a valid HTML element */}
-            <cap-widget
-              ref={capWidgetRef}
-              data-cap-api-endpoint={capApiEndpoint}
-            />
+            <CapWidget endpoint={capApiEndpoint} onSolve={handleSolve} />
 
             {capError && (
               <span className="text-13 font-regular text-danger-50">
