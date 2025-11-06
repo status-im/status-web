@@ -48,20 +48,20 @@ export function Providers({ children }: ProvidersProps) {
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         {/* <SIWEProvider {...siweConfig}> */}
-          <ConnectKitProvider
-            options={{
-              initialChainId: testnet.id,
-            }}
-          >
-            <PreDepositStateProvider>
-              <VaultStateProvider>
-                <VaultProvider>
-                  {children}
-                  <ToastContainer />
-                </VaultProvider>
-              </VaultStateProvider>
-            </PreDepositStateProvider>
-          </ConnectKitProvider>
+        <ConnectKitProvider
+          options={{
+            initialChainId: testnet.id,
+          }}
+        >
+          <PreDepositStateProvider>
+            <VaultStateProvider>
+              <VaultProvider>
+                {children}
+                <ToastContainer />
+              </VaultProvider>
+            </VaultStateProvider>
+          </PreDepositStateProvider>
+        </ConnectKitProvider>
         {/* </SIWEProvider> */}
       </QueryClientProvider>
     </WagmiProvider>
