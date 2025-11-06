@@ -69,6 +69,23 @@ Required:
 5.  Start development mode:
     pnpm dev
 
+## Development Environment Using Nix
+
+This project includes a Nix flake that provides a reproducible development environment with all required dependencies (Node.js, pnpm, etc.) pre-configured.
+
+### Prerequisites
+
+- [Nix package manager](https://nixos.org/download.html) installed with flakes enabled
+
+### Setup
+
+After cloning the repository:
+
+```bash
+# Enter the Nix development shell
+nix develop
+```
+
 ## Storybook
 
 To view and interact with the components, you can run Storybook:

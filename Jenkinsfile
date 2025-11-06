@@ -90,10 +90,9 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}/apps/${params.APP_NAME}") {
           script {
-            nix.shell(
+            nix.develop(
               'pnpm install --frozen-lockfile',
               pure: false,
-              entryPoint: "${env.WORKSPACE}/apps/${params.APP_NAME}/shell.nix"
             )
           }
         }
@@ -105,10 +104,9 @@ pipeline {
       steps {
         dir("${env.WORKSPACE}") {
           script {
-            nix.shell(
+            nix.develop(
               "pnpm turbo run build --filter=${params.APP_NAME}",
               pure: false,
-              entryPoint: "${env.WORKSPACE}/apps/${params.APP_NAME}/shell.nix"
             )
           }
         }

@@ -4,6 +4,7 @@ import {
   CATS_FISHING_URL,
   DIN_URL,
   GATEWAY_URL,
+  HASHVEGAS_URL,
   LINEA_URL,
   SPLA_LABS_URL,
 } from '~/config/routes'
@@ -46,6 +47,14 @@ const Partners = () => {
               website={SPLA_LABS_URL}
               twitter="splalabs"
               icon="/spla-labs-avatar.png"
+            />
+            <GameCard
+              title="Hash Vegas"
+              description="Fair and transparent onchain gaming"
+              image="/hashvegas-cover.png"
+              website={HASHVEGAS_URL}
+              twitter="Hashvegas_Offi"
+              icon="/hashvegas-avatar.png"
             />
           </div>
 
