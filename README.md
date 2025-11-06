@@ -21,7 +21,7 @@ Packages for building user interfaces, websites, web applications, dapps, browse
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | [`./apps/status.app`](./apps/status.app)         | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.app)                                                                 |                                                                                                                          |                                                                                                                   |
 | [`./apps/status.network`](./apps/status.network) | [![vercel](https://img.shields.io/badge/vercel-black)](https://status.network)                                                             |                                                                                                                          |                                                                                                                   |
-| [`./apps/hub`](./apps/hub)                       |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
+| [`./apps/hub`](./apps/hub)                       | [![vercel](https://img.shields.io/badge/vercel-black)](https://hub.status.network)                                                         |                                                                                                                          |                                                                                                                   |
 | [`./apps/connector`](./apps/connector)           | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/kahehnbpamjplefhpkhafinaodkkenpg) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/connector/) | Status Desktop Wallet extended to decentralised applications in your browser.                                     |
 | [`./apps/portfolio`](./apps/portfolio)           |                                                                                                                                            |                                                                                                                          |                                                                                                                   |
 | [`./apps/wallet`](./apps/wallet)                 | [![chrome web store](https://img.shields.io/badge/chrome-grey)](https://chromewebstore.google.com/detail/opkfeajbclhjdneghppfnfiannideafj) | [![jenkins job](https://img.shields.io/badge/jenkins-grey)](https://ci.status.im/job/status-web/job/main/job/wallet/)    | Easily view and manage your crypto portfolio in real time — Beta crypto wallet and Web3 portfolio tracker in one. |
@@ -68,6 +68,23 @@ Required:
 
 5.  Start development mode:
     pnpm dev
+
+## Development Environment Using Nix
+
+This project includes a Nix flake that provides a reproducible development environment with all required dependencies (Node.js, pnpm, etc.) pre-configured.
+
+### Prerequisites
+
+- [Nix package manager](https://nixos.org/download.html) installed with flakes enabled
+
+### Setup
+
+After cloning the repository:
+
+```bash
+# Enter the Nix development shell
+nix develop
+```
 
 ## Storybook
 
