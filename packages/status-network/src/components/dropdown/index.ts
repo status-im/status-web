@@ -1,1 +1,1 @@
-export * as DropdownMenu from './dropdown'
+export * from './dropdown'

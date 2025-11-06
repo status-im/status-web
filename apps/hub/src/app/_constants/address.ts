@@ -103,26 +103,27 @@ export const STT_VAULT: Vault = {
 } as const
 
 export const VAULTS: Vault[] = [
-  {
-    id: 'SNT',
-    name: 'SNT vault',
-    apy: '8.7%',
-    rewards: ['KARMA', 'MetaFi', 'Points'],
-    icon: 'SNT',
-    token: SNT_TOKEN,
-    address: '0x0000000000000000000000000000000000000000',
-    abi: PreDepositVaultAbi,
-  },
-  {
-    id: 'LINEA',
-    name: 'LINEA vault',
-    apy: '3.9%',
-    rewards: ['KARMA', 'SNT', 'Points'],
-    icon: 'LINEA',
-    token: LINEA_TOKEN,
-    address: '0x0000000000000000000000000000000000000000',
-    abi: PreDepositVaultAbi,
-  },
+  TEST_VAULT,
+  // {
+  //   id: 'SNT',
+  //   name: 'SNT vault',
+  //   apy: '8.7%',
+  //   rewards: ['KARMA', 'MetaFi', 'Points'],
+  //   icon: 'SNT',
+  //   token: SNT_TOKEN,
+  //   address: '0x0000000000000000000000000000000000000000',
+  //   abi: PreDepositVaultAbi,
+  // },
+  // {
+  //   id: 'LINEA',
+  //   name: 'LINEA vault',
+  //   apy: '3.9%',
+  //   rewards: ['KARMA', 'SNT', 'Points'],
+  //   icon: 'LINEA',
+  //   token: LINEA_TOKEN,
+  //   address: '0x0000000000000000000000000000000000000000',
+  //   abi: PreDepositVaultAbi,
+  // },
   // {
   //   id: 'ETH',
   //   name: 'ETH vault',

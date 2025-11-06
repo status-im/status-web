@@ -1,5 +1,5 @@
 export { faucetAbi } from './faucet'
 export { stakingManagerAbi } from './stakingManagerAbi'
-export { tokenAbi } from './tokenAbi'
+export { tokenAbi } from './TokenAbi'
 export { vaultAbi } from './vaultAbi'
 export { vaultFactoryAbi } from './vaultFactoryAbi'
