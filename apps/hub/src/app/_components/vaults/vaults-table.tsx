@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react'
 
+import { Skeleton } from '@status-im/components'
 import { AddCircleIcon } from '@status-im/icons/12'
 import { Button } from '@status-im/status-network/components'
 import {
@@ -117,10 +118,83 @@ function TableFooter({ table }: TableProps) {
 }
 
 // ============================================================================
+// Skeleton Component
+// ============================================================================
+
+function VaultsTableSkeleton() {
+  return (
+    <div className="max-h-[600px] overflow-auto">
+      <div className="min-w-[800px]">
+        <table className="w-full border-collapse">
+          <thead className="h-[40px] border-b border-solid border-neutral-10 bg-neutral-5">
+            <tr>
+              <th className="box-border px-[12px] text-left">
+                <span className="text-13 font-medium text-neutral-50">
+                  Vault name
+                </span>
+              </th>
+              <th className="box-border px-[12px] text-left">
+                <span className="text-13 font-medium text-neutral-50">
+                  Staked
+                </span>
+              </th>
+              <th className="box-border px-[12px] text-left">
+                <span className="text-13 font-medium text-neutral-50">
+                  Boost
+                </span>
+              </th>
+              <th className="box-border px-[12px] text-left">
+                <span className="text-13 font-medium text-neutral-50">
+                  Multiplier points
+                </span>
+              </th>
+              <th className="box-border px-[12px] text-right">
+                <span className="text-13 font-medium text-neutral-50">
+                  Actions
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-neutral-10">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <tr key={index} className="h-[60px]">
+                <td className="box-border px-[12px] py-[11px]">
+                  <Skeleton height={20} width={120} className="rounded-6" />
+                </td>
+                <td className="box-border px-[12px] py-[11px]">
+                  <Skeleton height={20} width={100} className="rounded-6" />
+                </td>
+                <td className="box-border px-[12px] py-[11px]">
+                  <Skeleton height={20} width={60} className="rounded-6" />
+                </td>
+                <td className="box-border px-[12px] py-[11px]">
+                  <Skeleton height={20} width={80} className="rounded-6" />
+                </td>
+                <td className="box-border px-[12px] py-[11px] text-right">
+                  <Skeleton
+                    height={32}
+                    width={80}
+                    className="ml-auto rounded-6"
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+// ============================================================================
 // Main Component
 // ============================================================================
 
-export function VaultsTable() {
+type VaultsTableProps = {
+  isLoading?: boolean
+}
+
+export function VaultsTable({ isLoading = false }: VaultsTableProps) {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
   const { data: vaultDataList } = useStakingVaults()
@@ -194,7 +268,9 @@ export function VaultsTable() {
       </div>
 
       <div className="relative w-full overflow-hidden rounded-16 border border-solid border-neutral-10 bg-white-100">
-        {!isConnected ? (
+        {isLoading ? (
+          <VaultsTableSkeleton />
+        ) : !isConnected ? (
           <div className="flex items-center justify-center p-12 text-center">
             <div>
               <p className="text-neutral-50">
