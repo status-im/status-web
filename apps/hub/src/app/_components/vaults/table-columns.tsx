@@ -278,7 +278,7 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-end justify-end gap-2 lg:gap-4">
-            {Boolean(emergencyModeEnabled) && (
+            {emergencyModeEnabled ? (
               <WithdrawVaultModal
                 open={isWithdrawModalOpen}
                 onOpenChange={open =>
@@ -300,61 +300,66 @@ export const createVaultTableColumns = ({
                   Withdraw funds
                 </Button>
               </WithdrawVaultModal>
-            )}
-            {isLocked ? (
-              <div className="flex items-center gap-2">
-                <LockVaultModal
-                  open={isLockModalOpen}
-                  onOpenChange={open =>
-                    setOpenModalVaultId(open ? lockModalId : null)
-                  }
-                  vaultAddress={row.original.address}
-                  title="Extend lock time"
-                  initialYears="2"
-                  initialDays="732"
-                  description="Extending lock time increasing Karma boost"
-                  actions={[...EXTEND_LOCK_ACTIONS]}
-                  onClose={() => setOpenModalVaultId(null)}
-                  infoMessage={LOCK_INFO_MESSAGE}
-                >
-                  <Button
-                    variant="primary"
-                    size="32"
-                    disabled={!isConnected}
-                    className="min-w-fit text-[13px]"
-                  >
-                    <TimeIcon className="shrink-0" />
-                    <span className="hidden whitespace-nowrap xl:inline">
-                      Extend lock time
-                    </span>
-                    <span className="whitespace-nowrap xl:hidden">Extend</span>
-                  </Button>
-                </LockVaultModal>
-              </div>
             ) : (
-              <LockVaultModal
-                open={isLockModalOpen}
-                onOpenChange={open =>
-                  setOpenModalVaultId(open ? lockModalId : null)
-                }
-                vaultAddress={row.original.address}
-                title="Do you want to lock the vault?"
-                description="Lock this vault to receive more Karma"
-                actions={[...LOCK_VAULT_ACTIONS]}
-                onClose={() => setOpenModalVaultId(null)}
-                infoMessage={LOCK_INFO_MESSAGE}
-                onValidate={validateLockTime}
-              >
-                <Button
-                  variant="primary"
-                  size="32"
-                  disabled={!isConnected}
-                  className="min-w-fit text-[13px]"
-                >
-                  <LockedIcon fill="white" className="shrink-0" />
-                  <span className="whitespace-nowrap">Lock</span>
-                </Button>
-              </LockVaultModal>
+              <>
+                {isLocked ? (
+                  <div className="flex items-center gap-2">
+                    <LockVaultModal
+                      open={isLockModalOpen}
+                      onOpenChange={open =>
+                        setOpenModalVaultId(open ? lockModalId : null)
+                      }
+                      vaultAddress={row.original.address}
+                      title="Extend lock time"
+                      initialYears="2"
+                      initialDays="732"
+                      description="Extending lock time increasing Karma boost"
+                      actions={[...EXTEND_LOCK_ACTIONS]}
+                      onClose={() => setOpenModalVaultId(null)}
+                      infoMessage={LOCK_INFO_MESSAGE}
+                    >
+                      <Button
+                        variant="primary"
+                        size="32"
+                        disabled={!isConnected}
+                        className="min-w-fit text-[13px]"
+                      >
+                        <TimeIcon className="shrink-0" />
+                        <span className="hidden whitespace-nowrap xl:inline">
+                          Extend lock time
+                        </span>
+                        <span className="whitespace-nowrap xl:hidden">
+                          Extend
+                        </span>
+                      </Button>
+                    </LockVaultModal>
+                  </div>
+                ) : (
+                  <LockVaultModal
+                    open={isLockModalOpen}
+                    onOpenChange={open =>
+                      setOpenModalVaultId(open ? lockModalId : null)
+                    }
+                    vaultAddress={row.original.address}
+                    title="Do you want to lock the vault?"
+                    description="Lock this vault to receive more Karma"
+                    actions={[...LOCK_VAULT_ACTIONS]}
+                    onClose={() => setOpenModalVaultId(null)}
+                    infoMessage={LOCK_INFO_MESSAGE}
+                    onValidate={validateLockTime}
+                  >
+                    <Button
+                      variant="primary"
+                      size="32"
+                      disabled={!isConnected}
+                      className="min-w-fit text-[13px]"
+                    >
+                      <LockedIcon fill="white" className="shrink-0" />
+                      <span className="whitespace-nowrap">Lock</span>
+                    </Button>
+                  </LockVaultModal>
+                )}
+              </>
             )}
           </div>
         )

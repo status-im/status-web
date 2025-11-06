@@ -274,7 +274,10 @@ export default function StakePage() {
               <Button
                 className="self-end"
                 disabled={
-                  !isConnected || hasReachedDailyLimit || isClaimingTokens
+                  !isConnected ||
+                  hasReachedDailyLimit ||
+                  isClaimingTokens ||
+                  Boolean(emergencyModeEnabled)
                 }
                 onClick={() =>
                   claimTokens({
@@ -428,13 +431,18 @@ export default function StakePage() {
                       selectedVault !== '' && selectedVault !== 'new'
 
                     return hasSelectedVault && hasAmount ? (
-                      <Button className="w-full justify-center" type="submit">
+                      <Button
+                        className="w-full justify-center"
+                        type="submit"
+                        disabled={Boolean(emergencyModeEnabled)}
+                      >
                         Stake SNT
                       </Button>
                     ) : (
                       <Button
                         className="w-full justify-center"
                         onClick={() => createVault()}
+                        disabled={Boolean(emergencyModeEnabled)}
                       >
                         Create new vault
                       </Button>
@@ -484,7 +492,10 @@ export default function StakePage() {
                       {messageMultiplierPoints}
                     </span>
                     <Button
-                      disabled={isDisabledMultiplierPoints}
+                      disabled={
+                        isDisabledMultiplierPoints ||
+                        Boolean(emergencyModeEnabled)
+                      }
                       variant="primary"
                       size="40"
                       onClick={() => compoundMultiplierPoints()}

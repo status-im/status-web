@@ -179,6 +179,7 @@ export function VaultsTable() {
             size="32"
             onClick={() => createVault()}
             className="w-full sm:w-auto"
+            disabled={Boolean(emergencyModeEnabled)}
           >
             <AddCircleIcon />
             <span className="whitespace-nowrap">Add vault</span>
