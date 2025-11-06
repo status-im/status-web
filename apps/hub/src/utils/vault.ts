@@ -64,3 +64,16 @@ export function calculateDaysUntilUnlock(lockUntil: bigint | undefined) {
   const lockUntilTimestamp = Number(lockUntil)
   return Math.ceil((lockUntilTimestamp - now) / TIME_CONSTANTS.SECONDS_PER_DAY)
 }
+
+/**
+ * Validates a vault amount
+ *
+ * @param amountValue - The amount value to validate
+ * @returns True if the amount is valid, false otherwise
+ */
+export function validateVaultAmount(amountValue: string | undefined) {
+  if (!amountValue) return false
+  // Allow only numbers and decimal point
+  if (amountValue === '' || /^\d*\.?\d*$/.test(amountValue)) return true
+  return false
+}
