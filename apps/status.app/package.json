@@ -254,7 +254,7 @@
       "eslint",
       "prettier --write"
     ],
-    "*.{md,mdx}": [
+    "content/**/*.{md,mdx}": [
       "pnpm build:content",
       "echo \"remark --ext mdx\"",
       "remark --ext md --ext mdx --frail --output --",
