@@ -41,7 +41,7 @@ export const ROUTES = {
     { name: 'Desktop', href: '/apps#desktop' },
     { name: 'Legacy mobile', href: '/apps#mobile' },
     {
-      name: 'Mobile',
+      name: 'New mobile',
       href: 'https://status.app/blog/introducing-unified-status-mobile-app',
     },
   ],
