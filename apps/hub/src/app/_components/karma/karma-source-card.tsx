@@ -2,13 +2,20 @@ import '@pitininja/cap-react-widget/dist/index.css'
 
 import { useState } from 'react'
 
-import { CapWidget } from '@pitininja/cap-react-widget'
 import { Skeleton } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
+import dynamic from 'next/dynamic'
 import { useAccount } from 'wagmi'
 
 import { clientEnv } from '~constants/env.client.mjs'
 import { useClaimKarma } from '~hooks/useClaimKarma'
+
+const CapWidget = dynamic(
+  () => import('@pitininja/cap-react-widget').then(mod => mod.CapWidget),
+  {
+    ssr: false,
+  }
+)
 
 type KarmaSourceCardProps = {
   title: string
