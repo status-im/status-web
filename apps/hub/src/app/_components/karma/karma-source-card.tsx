@@ -38,7 +38,7 @@ const KarmaSourceCard = ({
 }: KarmaSourceCardProps) => {
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
-  const { isConnected } = useAccount()
+  const { isConnected, isConnecting } = useAccount()
   const { mutateAsync: claimKarma } = useClaimKarma()
   const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
 
@@ -63,7 +63,7 @@ const KarmaSourceCard = ({
     }
   }
 
-  if (isLoading) {
+  if (isLoading || isConnecting) {
     return (
       <div className="w-full overflow-hidden rounded-20 border border-neutral-20 bg-white-100">
         <div className="flex flex-col">
