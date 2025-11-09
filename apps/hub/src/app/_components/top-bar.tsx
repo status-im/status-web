@@ -1,7 +1,5 @@
 'use client'
 
-import { IconButton } from '@status-im/components'
-import { SettingsIcon } from '@status-im/icons/20'
 import { FeedbackPopover, Link } from '@status-im/status-network/components'
 import Image from 'next/image'
 
@@ -87,11 +85,6 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
 
           {/* Connect Wallet Button */}
           <ConnectButton />
-
-          {/* Settings Button */}
-          <div className="hidden md:block">
-            <IconButton variant="ghost" icon={<SettingsIcon />} />
-          </div>
         </div>
       </div>
     </div>

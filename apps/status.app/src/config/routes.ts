@@ -39,7 +39,11 @@ export const ROUTES = {
   Apps: [
     { name: 'Browser', href: '/#browser' },
     { name: 'Desktop', href: '/apps#desktop' },
-    { name: 'Mobile', href: '/apps#mobile' },
+    { name: 'Legacy mobile', href: '/apps#mobile' },
+    {
+      name: 'New mobile',
+      href: 'https://status.app/blog/introducing-unified-status-mobile-app',
+    },
   ],
   Ecosystem: [
     { name: 'Keycard', href: '/keycard' },
