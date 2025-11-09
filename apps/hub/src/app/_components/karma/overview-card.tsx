@@ -2,8 +2,8 @@ import { Skeleton } from '@status-im/components'
 import { TwitterIcon } from '@status-im/icons/social'
 import { Button } from '@status-im/status-network/components'
 
-import { AchievementBadges } from './karma-achievement-badges'
-import { getCurrentLevelData, ProgressBar } from './karma-progress-tracker'
+import { AchievementBadges } from './achievement-badges'
+import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
 import type { KarmaOverviewData } from '~types/karma'
 
