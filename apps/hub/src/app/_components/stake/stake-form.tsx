@@ -40,7 +40,6 @@ type FormValues = z.infer<ReturnType<typeof createStakeFormSchema>>
 
 const StakeForm = () => {
   const { mutate: createVault } = useCreateVault()
-
   const { address, isConnected, isConnecting } = useAccount()
   const { mutate: approveToken } = useApproveToken()
   const { mutate: stakeVault } = useVaultTokenStake()

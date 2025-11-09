@@ -291,46 +291,77 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-end justify-end gap-2">
-            {isLocked ? (
-              <div className="flex items-center gap-2">
-                {!emergencyModeEnabled && (
-                  <WithdrawVaultModal
-                    open={isWithdrawModalOpen}
+            {isConnected ? (
+              isLocked ? (
+                <div className="flex items-center gap-2">
+                  {!emergencyModeEnabled && (
+                    <WithdrawVaultModal
+                      open={isWithdrawModalOpen}
+                      onOpenChange={open =>
+                        setOpenModalVaultId(open ? withdrawModalId : null)
+                      }
+                      onClose={() => setOpenModalVaultId(null)}
+                      vaultAddress={row.original.address}
+                    >
+                      <Button
+                        variant="danger"
+                        size="32"
+                        disabled={!isConnected}
+                        className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
+                      >
+                        <AlertIcon className="shrink-0" />
+                        <span className="hidden whitespace-nowrap xl:inline">
+                          Withdraw funds
+                        </span>
+                        <span className="whitespace-nowrap xl:hidden">
+                          Withdraw
+                        </span>
+                      </Button>
+                    </WithdrawVaultModal>
+                  )}
+                  <LockVaultModal
+                    open={isLockModalOpen}
                     onOpenChange={open =>
-                      setOpenModalVaultId(open ? withdrawModalId : null)
+                      setOpenModalVaultId(open ? lockModalId : null)
                     }
-                    onClose={() => setOpenModalVaultId(null)}
                     vaultAddress={row.original.address}
+                    title="Extend lock time"
+                    initialYears="2"
+                    initialDays="732"
+                    description="Extending lock time increasing Karma boost"
+                    actions={[...EXTEND_LOCK_ACTIONS]}
+                    onClose={() => setOpenModalVaultId(null)}
+                    infoMessage={LOCK_INFO_MESSAGE}
                   >
                     <Button
-                      variant="danger"
+                      variant="primary"
                       size="32"
                       disabled={!isConnected}
-                      className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
+                      className="min-w-fit text-13"
                     >
-                      <AlertIcon className="shrink-0" />
+                      <TimeIcon className="shrink-0" />
                       <span className="hidden whitespace-nowrap xl:inline">
-                        Withdraw funds
+                        Extend lock time
                       </span>
                       <span className="whitespace-nowrap xl:hidden">
-                        Withdraw
+                        Extend
                       </span>
                     </Button>
-                  </WithdrawVaultModal>
-                )}
+                  </LockVaultModal>
+                </div>
+              ) : (
                 <LockVaultModal
                   open={isLockModalOpen}
                   onOpenChange={open =>
                     setOpenModalVaultId(open ? lockModalId : null)
                   }
                   vaultAddress={row.original.address}
-                  title="Extend lock time"
-                  initialYears="2"
-                  initialDays="732"
-                  description="Extending lock time increasing Karma boost"
-                  actions={[...EXTEND_LOCK_ACTIONS]}
+                  title="Do you want to lock the vault?"
+                  description="Lock this vault to receive more Karma"
+                  actions={[...LOCK_VAULT_ACTIONS]}
                   onClose={() => setOpenModalVaultId(null)}
                   infoMessage={LOCK_INFO_MESSAGE}
+                  onValidate={validateLockTime}
                 >
                   <Button
                     variant="primary"
@@ -338,39 +369,12 @@ export const createVaultTableColumns = ({
                     disabled={!isConnected}
                     className="min-w-fit text-13"
                   >
-                    <TimeIcon className="shrink-0" />
-                    <span className="hidden whitespace-nowrap xl:inline">
-                      Extend lock time
-                    </span>
-                    <span className="whitespace-nowrap xl:hidden">Extend</span>
+                    <LockedIcon fill="white" className="shrink-0" />
+                    <span className="whitespace-nowrap">Lock</span>
                   </Button>
                 </LockVaultModal>
-              </div>
-            ) : (
-              <LockVaultModal
-                open={isLockModalOpen}
-                onOpenChange={open =>
-                  setOpenModalVaultId(open ? lockModalId : null)
-                }
-                vaultAddress={row.original.address}
-                title="Do you want to lock the vault?"
-                description="Lock this vault to receive more Karma"
-                actions={[...LOCK_VAULT_ACTIONS]}
-                onClose={() => setOpenModalVaultId(null)}
-                infoMessage={LOCK_INFO_MESSAGE}
-                onValidate={validateLockTime}
-              >
-                <Button
-                  variant="primary"
-                  size="32"
-                  disabled={!isConnected}
-                  className="min-w-fit text-13"
-                >
-                  <LockedIcon fill="white" className="shrink-0" />
-                  <span className="whitespace-nowrap">Lock</span>
-                </Button>
-              </LockVaultModal>
-            )}
+              )
+            ) : null}
             <DropdownMenu.Root
               onOpenChange={open => setOpenDropdownId(open ? dropdownId : null)}
               open={isDropdownOpen}
