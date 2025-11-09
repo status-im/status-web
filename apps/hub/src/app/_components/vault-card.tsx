@@ -9,7 +9,7 @@ import { PercentIcon, PlusIcon } from './icons'
 type Props = {
   name: string
   apy: string
-  rewards: Array<string>
+  rewards: string[]
   icon: string
   onDeposit: () => void
 }

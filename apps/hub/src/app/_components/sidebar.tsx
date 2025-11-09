@@ -2,7 +2,7 @@
 
 import {
   BridgeIcon,
-  // DepositIcon,
+  DepositIcon,
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
@@ -16,13 +16,13 @@ import { LinkItem } from './link-item'
 
 const NAV_LINKS = [
   { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/dashboard' },
-  // {
-  //   id: 'deposit',
-  //   label: 'Deposit',
-  //   icon: DepositIcon,
-  //   href: '/deposit',
-  //   tag: 'Mainnet',
-  // },
+  {
+    id: 'deposit',
+    label: 'Deposit',
+    icon: DepositIcon,
+    href: '#',
+    tag: 'Mainnet',
+  },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
   { id: 'karma', label: 'Karma', icon: KarmaIcon, href: '/karma' },
@@ -67,10 +67,11 @@ const OTHER_LINKS = [
 type Props = {
   isOpen: boolean
   onClose: () => void
+  onDepositClick?: () => void
 }
 
 const Sidebar = (props: Props) => {
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, onDepositClick } = props
 
   return (
     <>
@@ -95,9 +96,13 @@ const Sidebar = (props: Props) => {
           {/* Main Navigation */}
           <nav className="flex-1 px-6">
             <ul className="space-y-1">
-              {NAV_LINKS.map(item => {
-                return <LinkItem key={item.id} {...item} />
-              })}
+              {NAV_LINKS.map(item => (
+                <LinkItem
+                  key={item.id}
+                  {...item}
+                  onClick={item.id === 'deposit' ? onDepositClick : undefined}
+                />
+              ))}
             </ul>
 
             {/* Separator with Title */}
