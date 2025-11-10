@@ -1,3 +1,5 @@
+'use client'
+
 import { useReadContract } from 'wagmi'
 
 import { STAKING_MANAGER } from '~constants/index'
