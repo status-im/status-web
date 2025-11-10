@@ -5,7 +5,7 @@ import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatUnits } from 'viem'
 
-import { SNT_TOKEN } from '~constants/index'
+import { EXTEND_LOCK_PERIOD, SNT_TOKEN } from '~constants/index'
 import { type StakingVault } from '~hooks/useStakingVaults'
 import { shortenAddress } from '~utils/address'
 import { formatSNT } from '~utils/currency'
@@ -337,8 +337,8 @@ export const createVaultTableColumns = ({
                       }
                       vaultAddress={row.original.address}
                       title="Extend lock time"
-                      initialYears="2"
-                      initialDays="732"
+                      initialYears={EXTEND_LOCK_PERIOD.INITIAL_YEARS}
+                      initialDays={EXTEND_LOCK_PERIOD.INITIAL_DAYS}
                       description="Extending lock time increasing Karma boost"
                       actions={[...EXTEND_LOCK_ACTIONS]}
                       onClose={() => setOpenModalVaultId(null)}
@@ -373,11 +373,7 @@ export const createVaultTableColumns = ({
                     infoMessage={LOCK_INFO_MESSAGE}
                     onValidate={validateLockTime}
                   >
-                    <Button
-                      variant="primary"
-                      size="24"
-                      disabled={!isConnected}
-                    >
+                    <Button variant="primary" size="24" disabled={!isConnected}>
                       <LockedIcon fill="white" className="shrink-0" />
                       <span className="whitespace-nowrap">Lock</span>
                     </Button>

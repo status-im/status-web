@@ -37,6 +37,7 @@ import {
 import { useApproveToken } from '~hooks/useApproveToken'
 import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
 import { useCreateVault } from '~hooks/useCreateVault'
+import { useEmergencyModeEnabled } from '~hooks/useEmergencyModeEnabled'
 import { useExchangeRate } from '~hooks/useExchangeRate'
 import { useFaucetMutation, useFaucetQuery } from '~hooks/useFaucet'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
@@ -73,15 +74,7 @@ export default function StakePage() {
   const { data: vaults, refetch: refetchStakingVaults } = useStakingVaults()
   const weightedBoost = useWeightedBoost(vaults)
   const { data: exchangeRate } = useExchangeRate()
-
-  const { data: emergencyModeEnabled } = useReadContract({
-    address: STAKING_MANAGER.address,
-    abi: STAKING_MANAGER.abi,
-    functionName: 'emergencyModeEnabled',
-    query: {
-      refetchInterval: 30000,
-    },
-  })
+  const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(createStakeFormSchema()),

@@ -9,10 +9,10 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useAccount, useChainId, useReadContract } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 
-import { STAKING_MANAGER } from '~constants/index'
 import { useCreateVault } from '~hooks/useCreateVault'
+import { useEmergencyModeEnabled } from '~hooks/useEmergencyModeEnabled'
 import { type StakingVault, useStakingVaults } from '~hooks/useStakingVaults'
 
 import { createVaultTableColumns } from './table-columns'
@@ -127,15 +127,7 @@ export function VaultsTable() {
   const { isConnected } = useAccount()
   const chainId = useChainId()
   const { mutate: createVault } = useCreateVault()
-
-  const { data: emergencyModeEnabled } = useReadContract({
-    address: STAKING_MANAGER.address,
-    abi: STAKING_MANAGER.abi,
-    functionName: 'emergencyModeEnabled',
-    query: {
-      refetchInterval: 30000,
-    },
-  })
+  const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
 
   // Stable callback reference prevents column recreation on every render
   const handleSetOpenModalVaultId = useCallback(

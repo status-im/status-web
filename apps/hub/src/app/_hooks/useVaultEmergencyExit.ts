@@ -8,7 +8,7 @@ import { useAccount, useConfig, useWriteContract } from 'wagmi'
 import { waitForTransactionReceipt } from 'wagmi/actions'
 
 import { vaultAbi } from '~constants/contracts'
-import { SNT_TOKEN, testnet } from '~constants/index'
+import { SNT_TOKEN } from '~constants/index'
 import { useVaultStateContext } from '~hooks/useVaultStateContext'
 
 // ============================================================================
@@ -127,7 +127,6 @@ export function useVaultEmergencyExit(): UseVaultEmergencyExitReturn {
         // Execute emergency exit transaction
         // emergencyExit withdraws ALL funds to the specified destination address
         const hash = await writeContractAsync({
-          chain: testnet,
           account: address,
           address: vaultAddress,
           abi: vaultAbi,
