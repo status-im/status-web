@@ -12,6 +12,7 @@ export function useEmergencyModeEnabled() {
     functionName: 'emergencyModeEnabled',
     query: {
       refetchInterval: CACHE_CONFIG.EMERGENCY_MODE_REFETCH_INTERVAL,
+      enabled: typeof window !== 'undefined',
     },
   })
 }
