@@ -2,8 +2,10 @@
 import { useState } from 'react'
 
 import { Divider, Footer } from '@status-im/status-network/components'
+import { useReadContract } from 'wagmi'
 
-import { useEmergencyModeEnabled } from '~hooks/useEmergencyModeEnabled'
+import { STAKING_MANAGER } from '~constants/index'
+import { CACHE_CONFIG } from '~constants/staking'
 
 import { EmergencyBar } from './emergency-bar'
 import { Sidebar } from './sidebar'
@@ -15,7 +17,14 @@ interface HubLayoutProps {
 
 export function HubLayout({ children }: HubLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
+  const { data: emergencyModeEnabled } = useReadContract({
+    address: STAKING_MANAGER.address,
+    abi: STAKING_MANAGER.abi,
+    functionName: 'emergencyModeEnabled',
+    query: {
+      refetchInterval: CACHE_CONFIG.EMERGENCY_MODE_REFETCH_INTERVAL,
+    },
+  })
 
   return (
     <div className="relative isolate z-10 min-h-screen w-full bg-neutral-100 px-1 pb-1">
