@@ -4,12 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Tooltip } from '@status-im/components'
-import {
-  DropdownIcon,
-  ExternalIcon,
-  InfoIcon,
-  PlaceholderIcon,
-} from '@status-im/icons/20'
+import { DropdownIcon, ExternalIcon, InfoIcon } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
@@ -278,7 +273,6 @@ export default function StakePage() {
                   })
                 }
               >
-                <PlaceholderIcon className="text-blur-white/70" />
                 {isClaimingTokens ? 'Claiming...' : 'Claim testnet SNT'}
               </Button>
             </div>
