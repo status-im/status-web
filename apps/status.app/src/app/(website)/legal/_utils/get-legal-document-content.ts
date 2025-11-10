@@ -4,11 +4,11 @@ import 'server-only'
 import fs from 'fs/promises'
 import { compileMDX } from 'next-mdx-remote/rsc'
 import path from 'path'
-import rehypePrettyCode from 'rehype-pretty-code'
+import { rehypePrettyCode } from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import remarkComment from 'remark-comment'
 import remarkDirective from 'remark-directive'
-import remarkGfm from 'remark-gfm-v4'
+import remarkGfm from 'remark-gfm'
 import { z } from 'zod'
 
 import {
