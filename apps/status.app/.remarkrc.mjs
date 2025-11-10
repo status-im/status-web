@@ -55,7 +55,7 @@ import remarkPresetWoorm from 'remark-preset-wooorm'
 import remarkLintMaximumLineLength from 'remark-lint-maximum-line-length'
 // import remarkFrontmatter from 'remark-frontmatter'
 // import remarkLint from 'remark-lint'
-import remarkGfm from 'remark-gfm-v3'
+import remarkGfm from 'remark-gfm'
 import remarkPreset from '@1stg/remark-preset'
 import remarkValidateLinks from 'remark-validate-links'
 import remarkRetext from 'remark-retext'
@@ -79,6 +79,7 @@ remarkPreset.plugins.splice(7, 1)
 
 /** @type {Array<import('unified').Plugin | import('unified').Preset>} */
 const plugins = [
+  remarkMdx,
   // note: incl. code/node indenting
   remarkPresetWoorm,
   // // note: https://github.com/retextjs/retext-quotes/issues/6
@@ -141,7 +142,6 @@ const plugins = [
     remarkStringify,
     { listItemIndent: 'one', rule: '-', incrementListMarker: false },
   ],
-  remarkMdx,
   // remarkParse,
   [remarkLintMaximumLineLength, 'off'],
   remarkGfm,
