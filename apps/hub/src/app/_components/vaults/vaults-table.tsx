@@ -11,10 +11,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import { useSIWE } from 'connectkit'
-import { useAccount, useChainId, useReadContract } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 
-import { STAKING_MANAGER } from '~constants/index'
 import { useCreateVault } from '~hooks/useCreateVault'
+import { useEmergencyModeEnabled } from '~hooks/useEmergencyModeEnabled'
 import { type StakingVault, useStakingVaults } from '~hooks/useStakingVaults'
 
 import { createVaultTableColumns } from './table-columns'
@@ -203,15 +203,7 @@ export function VaultsTable({ isLoading = false }: VaultsTableProps) {
   const { isConnected } = useAccount()
   const chainId = useChainId()
   const { mutate: createVault } = useCreateVault()
-
-  const { data: emergencyModeEnabled } = useReadContract({
-    address: STAKING_MANAGER.address,
-    abi: STAKING_MANAGER.abi,
-    functionName: 'emergencyModeEnabled',
-    query: {
-      staleTime: 60_000, // Consider data fresh for 1 minute
-    },
-  })
+  const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
 
   // Stable callback reference prevents column recreation on every render
   const handleSetOpenModalVaultId = useCallback(
@@ -264,6 +256,7 @@ export function VaultsTable({ isLoading = false }: VaultsTableProps) {
             size="32"
             onClick={() => createVault()}
             className="w-full sm:w-auto"
+            disabled={Boolean(emergencyModeEnabled)}
           >
             <AddCircleIcon />
             <span className="whitespace-nowrap">Add vault</span>

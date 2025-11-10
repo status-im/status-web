@@ -13,7 +13,7 @@ type Props = {
 } & React.ComponentProps<'button'>
 
 const buttonStyles = cva({
-  base: 'inline-flex w-fit cursor-pointer select-none items-center gap-1 whitespace-nowrap border text-15 font-500 transition-all disabled:cursor-default disabled:opacity-[0.3]',
+  base: 'inline-flex w-fit cursor-pointer select-none items-center gap-1 whitespace-nowrap border font-500 transition-all disabled:cursor-default disabled:opacity-[0.3]',
   variants: {
     variant: {
       primary:
@@ -37,9 +37,9 @@ const buttonStyles = cva({
       false: '',
     },
     size: {
-      '32': 'h-8 rounded-10 py-[5px]',
-      '40': 'h-10 rounded-12 py-[9px]',
-      '24': 'h-6 rounded-8 px-2 py-[3px]',
+      '32': 'h-8 rounded-10 py-[5px] text-15',
+      '40': 'h-10 rounded-12 py-[9px] text-15',
+      '24': 'h-6 rounded-8 px-2 py-[3px] text-13',
     },
     backdropFilter: {
       true: 'backdrop-blur-[20px]',
@@ -53,10 +53,13 @@ const buttonStyles = cva({
   compoundVariants: [
     { size: '40', withIcon: false, className: 'px-4' },
     { size: '32', withIcon: false, className: 'px-3' },
+    { size: '24', withIcon: false, className: 'px-2' },
+    { size: '24', withIcon: true, className: 'pl-2 pr-[6px]' },
     { size: '40', withIcon: true, className: 'pl-4 pr-3' },
     { size: '32', withIcon: true, className: 'pl-3 pr-2' },
     { size: '40', withIconBefore: true, className: 'pl-3 pr-4' },
     { size: '32', withIconBefore: true, className: 'pl-2 pr-3' },
+    { size: '24', withIconBefore: true, className: 'pl-[6px] pr-2' },
     {
       variant: 'grey',
       active: true,
