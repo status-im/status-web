@@ -31,7 +31,7 @@ export default function RootLayout({
           strategy="afterInteractive"
           src="https://umami.bi.status.im/script.js"
           data-website-id="5a1d3ceb-20f1-4808-b2c3-3414704740e5"
-          data-domains="hub.status.network,status-network-hub.vercel.app"
+          data-domains="hub.status.network,status-network-hub.vercel.app,status-network-hub-git-feat-add-analytics-status-im-web.vercel.app"
         />
       </body>
     </html>
