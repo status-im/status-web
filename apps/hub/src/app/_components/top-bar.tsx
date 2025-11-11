@@ -38,7 +38,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
             </svg>
           </button>
 
-          <div className="hidden items-center gap-2 md:flex">
+          <div className="hidden items-center md:flex">
             {/* Status Network Logo */}
             <Link href="/">
               <Image
@@ -48,7 +48,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={32}
               />
             </Link>
-            <div className="h-[18px] rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
+            <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 font-medium text-white-100">
               Testnet
             </div>
           </div>
@@ -69,7 +69,7 @@ export function TopBar({ onMenuToggle }: TopBarProps) {
                 height={15}
                 className="min-w-[145px]"
               />
-              <div className="h-[18px] rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
+              <div className="h-5 rounded-full bg-white-10 px-[6px] py-px text-13 text-white-100">
                 Testnet
               </div>
             </div>
