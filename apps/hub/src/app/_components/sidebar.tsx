@@ -2,7 +2,7 @@
 
 import {
   BridgeIcon,
-  // DepositIcon,
+  DepositIcon,
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
@@ -16,13 +16,13 @@ import { LinkItem } from './link-item'
 
 const NAV_LINKS = [
   { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/dashboard' },
-  // {
-  //   id: 'deposit',
-  //   label: 'Deposit',
-  //   icon: DepositIcon,
-  //   href: '/deposit',
-  //   tag: 'Mainnet',
-  // },
+  {
+    id: 'deposit',
+    label: 'Deposit',
+    icon: DepositIcon,
+    href: 'https://status-im.notion.site/Status-Network-Early-Access-List-2a18f96fb65c80f18f00d96f7304a597',
+    tag: 'Mainnet',
+  },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
   { id: 'karma', label: 'Karma', icon: KarmaIcon, href: '/karma' },
