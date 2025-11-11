@@ -1,0 +1,3 @@
+[submodule "apps/status.app/content/specs"]
+	path = apps/status.app/content/specs
+	url = https://github.com/vacp2p/rfc-index.git
