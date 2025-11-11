@@ -6,7 +6,7 @@ import {
   type UseQueryResult,
 } from '@tanstack/react-query'
 import { useAccount, useChainId, useConfig, useWriteContract } from 'wagmi'
-import { readContracts } from 'wagmi/actions'
+import { readContracts, waitForTransactionReceipt } from 'wagmi/actions'
 
 import { FAUCET } from '~constants/index'
 
@@ -94,8 +94,9 @@ export function useFaucetMutation(): UseMutationResult<
   unknown
 > {
   const { address } = useAccount()
-  const { writeContract } = useWriteContract()
+  const { writeContractAsync } = useWriteContract()
   const chainId = useChainId()
+  const config = useConfig()
   const queryClient = useQueryClient()
   const { refetch: refetchFaucetQuery } = useFaucetQuery()
 
@@ -106,13 +107,23 @@ export function useFaucetMutation(): UseMutationResult<
         throw new Error('Wallet not connected')
       }
 
-      return writeContract({
+      const hash = await writeContractAsync({
         account: address,
         address: FAUCET.address,
         abi: FAUCET.abi,
         functionName: 'requestTokens',
         args: [amount ?? 0n, address],
       })
+
+      // Wait for transaction confirmation
+      const { status } = await waitForTransactionReceipt(config, {
+        hash,
+        confirmations: 1,
+      })
+
+      if (status === 'reverted') {
+        throw new Error('Transaction reverted')
+      }
     },
     onSuccess: () => {
       refetchFaucetQuery()
