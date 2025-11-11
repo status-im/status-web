@@ -1,6 +1,7 @@
 import './globals.css'
 
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 
 import { Providers } from './_providers'
 
@@ -26,6 +27,12 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="font-inter antialiased">
         <Providers>{children}</Providers>
+        <Script
+          strategy="afterInteractive"
+          src="https://umami.bi.status.im/script.js"
+          data-website-id="5a1d3ceb-20f1-4808-b2c3-3414704740e5"
+          data-domains="hub.status.network,status-network-hub.vercel.app"
+        />
       </body>
     </html>
   )
