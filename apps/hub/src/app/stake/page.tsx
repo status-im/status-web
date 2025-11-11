@@ -80,7 +80,7 @@ export default function StakePage() {
     },
   })
 
-  const { data: balance } = useBalance({
+  const { data: balance, refetch: refetchBalance } = useBalance({
     scopeKey: 'balance',
     address,
     token: SNT_TOKEN.address,
@@ -96,8 +96,8 @@ export default function StakePage() {
   }) as { data: bigint }
 
   const { mutate: createVault } = useCreateVault()
-  const { mutate: approveToken } = useApproveToken()
-  const { mutate: stakeVault } = useVaultTokenStake()
+  const { mutateAsync: approveToken } = useApproveToken()
+  const { mutateAsync: stakeVault } = useVaultTokenStake()
 
   // State machine for vault operations
   const { send: sendVaultEvent } = useVaultStateContext()
@@ -173,38 +173,26 @@ export default function StakePage() {
 
       // Transition to increase allowance if not enough allowance
       if (amountWei >= currentAllowance) {
-        approveToken(
-          {
-            amount: data.amount,
-            spenderAddress: data.vault as Address,
-          },
-          {
-            onSuccess: () => {
-              // After approval completes, proceed to staking
-              stakeVault({
-                amountWei,
-                lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
-                vaultAddress: data.vault as Address,
-              })
-            },
-            onError: error => {
-              throw error
-            },
-          }
-        )
-      } else {
-        // Allowance already sufficient, go straight to staking
-        stakeVault({
-          amountWei,
-          lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
-          vaultAddress: data.vault as Address,
+        // Await the approval
+        await approveToken({
+          amount: data.amount,
+          spenderAddress: data.vault as Address,
         })
       }
-    } catch {
-      sendVaultEvent({ type: 'REJECT' })
-    } finally {
+
+      // Now stake (after approval if needed)
+      await stakeVault({
+        amountWei,
+        lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
+        vaultAddress: data.vault as Address,
+      })
+
+      // Only reset and refetch after successful staking
       form.reset()
-      refetchStakingVaults()
+      await Promise.all([refetchStakingVaults(), refetchBalance()])
+    } catch (error) {
+      sendVaultEvent({ type: 'REJECT' })
+      console.error('Staking failed:', error)
     }
   }
 
@@ -268,9 +256,16 @@ export default function StakePage() {
                   Boolean(emergencyModeEnabled)
                 }
                 onClick={() =>
-                  claimTokens({
-                    amount: faucetData?.remainingAmount,
-                  })
+                  claimTokens(
+                    {
+                      amount: faucetData?.remainingAmount,
+                    },
+                    {
+                      onSuccess: () => {
+                        refetchBalance()
+                      },
+                    }
+                  )
                 }
               >
                 {isClaimingTokens ? 'Claiming...' : 'Claim testnet SNT'}
