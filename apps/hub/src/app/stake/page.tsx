@@ -510,7 +510,7 @@ const InfoTooltip = () => (
         </span>
 
         <ButtonLink
-          href="https://status.app/"
+          href="https://docs.status.network/tokenomics/snt-staking"
           variant="outline"
           className="rounded-8 px-2 py-1"
           size="32"
