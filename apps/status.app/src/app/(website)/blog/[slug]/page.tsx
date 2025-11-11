@@ -1,4 +1,4 @@
-import { createElement, Fragment, type ReactElement } from 'react'
+import { type ReactElement } from 'react'
 
 import { Avatar, Text } from '@status-im/components'
 import {
@@ -7,6 +7,7 @@ import {
   TwitterIcon,
 } from '@status-im/icons/social'
 import { notFound } from 'next/navigation'
+import production from 'react/jsx-runtime'
 import rehypeParse from 'rehype-parse'
 import rehypeReact from 'rehype-react'
 import { unified } from 'unified'
@@ -86,8 +87,7 @@ export default async function BlogDetailPage(props: Props) {
   const { result } = await unified()
     .use(rehypeParse, { fragment: true })
     .use(rehypeReact as any, {
-      createElement,
-      Fragment,
+      ...production,
       components: blogComponents,
     })
     .process(post.html!)
