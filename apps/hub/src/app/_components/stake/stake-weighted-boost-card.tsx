@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { Skeleton, Tooltip } from '@status-im/components'
 import { ExternalIcon, InfoIcon } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
+import { useSIWE } from 'connectkit'
 import { formatUnits } from 'viem'
 import { useAccount } from 'wagmi'
 
@@ -22,6 +23,7 @@ import { formatSNT } from '~utils/currency'
 const WeightedBoostCard = () => {
   const { isConnecting, isConnected } = useAccount()
   const { data: vaults, isLoading } = useStakingVaults()
+  const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const weightedBoost = useWeightedBoost(vaults)
   const { data: multiplierPointsData } = useMultiplierPointsBalance()
   const { mutate: compoundMultiplierPoints } = useCompoundMultiplierPoints()
@@ -41,14 +43,14 @@ const WeightedBoostCard = () => {
     )
 
     return {
-      isDisabled: !hasUncompoundedPoints || !isConnected,
+      isDisabled: !hasUncompoundedPoints || !isConnected || !isSignedIn,
       message: hasUncompoundedPoints
         ? `${Number(formattedAmount) > 0 ? formattedAmount : parseFloat(formattedAmount).toFixed(2)} points are ready to compound`
         : 'No points are ready to compound',
     }
-  }, [multiplierPointsData, isConnected])
+  }, [multiplierPointsData, isConnected, isSignedIn])
 
-  if (isLoading || isConnecting) {
+  if (isLoading || isConnecting || isLoadingSIWE) {
     return (
       <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
         <div className="mb-2 flex items-start justify-between">

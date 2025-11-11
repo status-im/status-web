@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Skeleton } from '@status-im/components'
 import { DropdownIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
-import { ConnectKitButton } from 'connectkit'
+import { ConnectKitButton, useSIWE } from 'connectkit'
 import { useForm, useWatch } from 'react-hook-form'
 import { match } from 'ts-pattern'
 import { parseUnits } from 'viem'
@@ -27,7 +27,11 @@ import { StakeAmountInput } from './stake-amount-input'
 
 import type { Address } from 'viem'
 
-type ConnectionStatus = 'uninstalled' | 'disconnected' | 'connected'
+type ConnectionStatus =
+  | 'uninstalled'
+  | 'disconnected'
+  | 'connected'
+  | 'signInRequired'
 
 const createStakeFormSchema = () => {
   return z.object({
@@ -43,6 +47,7 @@ const StakeForm = () => {
   const { address, isConnected, isConnecting } = useAccount()
   const { mutate: approveToken } = useApproveToken()
   const { mutate: stakeVault } = useVaultTokenStake()
+  const { isSignedIn, isLoading: isLoadingSIWE, signIn } = useSIWE()
   const { data: vaults, refetch: refetchStakingVaults } = useStakingVaults()
   // State machine for vault operations
   const { send: sendVaultEvent } = useVaultStateContext()
@@ -51,9 +56,10 @@ const StakeForm = () => {
   const [isPromoModalOpen, setIsPromoModalOpen] = useState<boolean>(false)
 
   const status: ConnectionStatus = useMemo(() => {
+    if (isConnected && !isSignedIn) return 'signInRequired'
     if (isConnected) return 'connected'
     return isPromoModalOpen ? 'uninstalled' : 'disconnected'
-  }, [isConnected, isPromoModalOpen])
+  }, [isConnected, isSignedIn, isPromoModalOpen])
 
   const { data: balance, isLoading } = useBalance({
     scopeKey: 'balance',
@@ -140,7 +146,7 @@ const StakeForm = () => {
     }
   }
 
-  if (isLoading || isConnecting) {
+  if (isLoading || isConnecting || isLoadingSIWE) {
     return (
       <div className="flex flex-col gap-4 rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:p-8">
         <div className="flex flex-1 flex-col gap-4">
@@ -222,6 +228,7 @@ const StakeForm = () => {
         <div
           className={match(status)
             .with('connected', () => 'space-y-2')
+            .with('signInRequired', () => 'space-y-2 opacity-[40%]')
             .otherwise(() => 'space-y-2 opacity-[40%]')}
         >
           <label
@@ -277,6 +284,17 @@ const StakeForm = () => {
               </Button>
             )}
           </ConnectKitButton.Custom>
+        ))
+        .with('signInRequired', () => (
+          <Button
+            className="w-full justify-center"
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              e.preventDefault()
+              signIn?.()
+            }}
+          >
+            Sign in to continue
+          </Button>
         ))
         .with('connected', () => {
           return form.watch('vault') && form.watch('amount') ? (

@@ -24,6 +24,7 @@ interface TableColumnsProps {
   chainId: number
   isConnected: boolean
   openDropdownId: string | null
+  isSignedIn: boolean
   setOpenDropdownId: (id: string | null) => void
   setOpenModalVaultId: (vaultId: string | null) => void
 }
@@ -88,6 +89,7 @@ export const createVaultTableColumns = ({
   openDropdownId,
   setOpenDropdownId,
   chainId,
+  isSignedIn,
 }: TableColumnsProps) => {
   // Calculate totals and current time once per column creation
   const totalStaked = calculateTotalStaked(vaults)
@@ -291,7 +293,7 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-end justify-end gap-2">
-            {isConnected ? (
+            {isConnected && isSignedIn ? (
               isLocked ? (
                 <div className="flex items-center gap-2">
                   {!emergencyModeEnabled && (
@@ -306,7 +308,7 @@ export const createVaultTableColumns = ({
                       <Button
                         variant="danger"
                         size="32"
-                        disabled={!isConnected}
+                        disabled={!isConnected || !isSignedIn}
                         className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
                       >
                         <AlertIcon className="shrink-0" />
@@ -336,7 +338,7 @@ export const createVaultTableColumns = ({
                     <Button
                       variant="primary"
                       size="32"
-                      disabled={!isConnected}
+                      disabled={!isConnected || !isSignedIn}
                       className="min-w-fit text-13"
                     >
                       <TimeIcon className="shrink-0" />
@@ -366,7 +368,7 @@ export const createVaultTableColumns = ({
                   <Button
                     variant="primary"
                     size="32"
-                    disabled={!isConnected}
+                    disabled={!isConnected || !isSignedIn}
                     className="min-w-fit text-13"
                   >
                     <LockedIcon fill="white" className="shrink-0" />
