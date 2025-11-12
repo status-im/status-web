@@ -19,7 +19,7 @@ const CapWidget = dynamic(
 
 type KarmaSourceCardProps = {
   title: string
-  amount: number
+  amount: bigint
   onComplete?: (token: string) => void
   isComplete?: boolean
   badgeTitle?: string
@@ -99,7 +99,7 @@ const KarmaSourceCard = ({
               <p className="text-15 font-regular text-neutral-50">{title}</p>
               <div className="flex items-center gap-2">
                 <p className="text-27 font-semibold text-neutral-100">
-                  {formatAmount(amount)}
+                  {formatAmount(Number(amount))}
                 </p>
                 <p className="text-15 font-medium uppercase text-neutral-50">
                   Karma
@@ -145,7 +145,7 @@ const KarmaSourceCard = ({
             <p className="text-15 font-regular text-neutral-50">{title}</p>
             <div className="flex items-center gap-2">
               <p className="text-27 font-semibold text-neutral-100">
-                {formatAmount(amount)}
+                {formatAmount(Number(amount))}
               </p>
             </div>
           </div>

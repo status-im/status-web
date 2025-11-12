@@ -1,9 +1,11 @@
+import { Skeleton } from '@status-im/components'
+
 import {
-  KARMA_LEVEL_BOUNDS,
   KARMA_LEVELS,
   PROGRESS_BAR_DOT_COLORS,
   PROGRESS_BAR_DOT_INSET,
 } from '~constants/karma'
+import { useKarmaTier } from '~hooks/useKarmaTier'
 
 import type { KarmaLevel } from '~types/karma'
 
@@ -12,15 +14,54 @@ type ProgressBarProps = {
 }
 
 const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
+  const { data: karmaTierData, isLoading } = useKarmaTier()
+
   const formatKarma = (karma: number) => {
     return karma.toLocaleString('en-US')
   }
 
+  // Use contract tiers if available, otherwise fall back to constants
+  let karmaLevels: KarmaLevel[] = KARMA_LEVELS
+
+  if (karmaTierData && karmaTierData.count > 0 && karmaTierData.tiers) {
+    const processedTiers = karmaTierData.tiers
+      .map((tier, index) => {
+        const minKarma = Number(tier.minKarma)
+        const maxKarma = Number(tier.maxKarma)
+        const level = index + 1
+
+        // Skip invalid tiers
+        if (
+          isNaN(minKarma) ||
+          isNaN(maxKarma) ||
+          isNaN(level) ||
+          minKarma < 0
+        ) {
+          console.warn('Skipping invalid tier:', { tier, index, level })
+          return null
+        }
+
+        return {
+          level,
+          minKarma,
+          maxKarma: index === karmaTierData.count - 1 ? Infinity : maxKarma + 1,
+        }
+      })
+      .filter((tier): tier is KarmaLevel => tier !== null)
+
+    // Only use processed tiers if we got valid results
+    if (processedTiers.length > 0) {
+      karmaLevels = processedTiers
+    } else {
+      console.warn('No valid tiers found, using fallback KARMA_LEVELS')
+    }
+  }
+
   // Find current level
   const currentLevelData =
-    KARMA_LEVELS.find(
+    karmaLevels.find(
       level => currentKarma >= level.minKarma && currentKarma < level.maxKarma
-    ) || KARMA_LEVELS[KARMA_LEVELS.length - 1]
+    ) || karmaLevels[karmaLevels.length - 1]
 
   const currentLevel = currentLevelData.level
 
@@ -32,31 +73,38 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
           (currentLevelData.maxKarma - currentLevelData.minKarma)) *
         100
 
-  // For mobile: show only previous and current level
-  const mobileStartLevel = Math.max(KARMA_LEVEL_BOUNDS.MIN, currentLevel - 1)
-  const mobileEndLevel = Math.min(KARMA_LEVEL_BOUNDS.MAX, currentLevel)
+  // Show loading state if tiers are being fetched or no tiers available
+  if (isLoading || karmaLevels.length === 0) {
+    return (
+      <div className="flex w-full flex-col gap-2">
+        <Skeleton height={12} width="100%" className="rounded-20" />
+        <div className="flex w-full justify-between">
+          <Skeleton height={24} width={48} className="rounded-6" />
+          <Skeleton height={24} width={48} className="rounded-6" />
+        </div>
+        <div className="flex w-full justify-between">
+          <Skeleton height={18} width={60} className="rounded-6" />
+          <Skeleton height={18} width={60} className="rounded-6" />
+        </div>
+      </div>
+    )
+  }
 
-  // Desktop: all milestones - dynamically derived from KARMA_LEVELS
-  const desktopMilestones = [
-    ...new Set([
-      ...KARMA_LEVELS.map(level => level.minKarma),
-      ...KARMA_LEVELS.filter(level => level.maxKarma !== Infinity).map(
-        level => level.maxKarma
-      ),
-    ]),
-  ].sort((a, b) => a - b)
+  // For mobile: show only previous and current level
+  const mobileStartLevel = Math.max(1, currentLevel - 1)
+  const mobileEndLevel = Math.min(karmaLevels.length, currentLevel)
 
   // Maximum karma for calculations (last finite maxKarma value)
-  const maxKarma = Math.max(
-    ...KARMA_LEVELS.filter(level => level.maxKarma !== Infinity).map(
-      level => level.maxKarma
-    )
-  )
+  const validMaxValues = karmaLevels
+    .filter(level => level.maxKarma !== Infinity && !isNaN(level.maxKarma))
+    .map(level => level.maxKarma)
+  const maxKarma =
+    validMaxValues.length > 0 ? Math.max(...validMaxValues) : 100000
 
   // Mobile: only show current and next milestone
   const mobileMilestones = [
-    KARMA_LEVELS[mobileStartLevel - 1].minKarma,
-    KARMA_LEVELS[mobileEndLevel - 1].maxKarma,
+    karmaLevels[mobileStartLevel - 1]?.minKarma ?? 0,
+    karmaLevels[mobileEndLevel - 1]?.maxKarma ?? 0,
   ]
 
   return (
@@ -72,8 +120,15 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
         />
 
         {/* Step Indicators at each milestone except first */}
-        {desktopMilestones.slice(1).map(milestone => {
-          let position = (milestone / maxKarma) * 100
+        {karmaLevels.slice(1).map((level, index) => {
+          // Use even spacing for dots to align with level labels
+          const actualIndex = index + 1 // Account for slice(1)
+          const evenSpacing =
+            karmaLevels.length > 1
+              ? (actualIndex / (karmaLevels.length - 1)) * 100
+              : 50
+
+          let position = evenSpacing
 
           // Inset edge dots so they appear inside the rounded progress bar
           if (position <= 0) {
@@ -82,11 +137,11 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
             position = PROGRESS_BAR_DOT_INSET.END
           }
 
-          const isReached = currentKarma >= milestone
+          const isReached = currentKarma >= level.minKarma
 
           return (
             <div
-              key={milestone}
+              key={`milestone-dot-${index}`}
               className={`absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300 ${
                 isReached
                   ? PROGRESS_BAR_DOT_COLORS.REACHED
@@ -116,41 +171,6 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
         />
       </div>
 
-      {/* Level Labels - Desktop */}
-      <div className="relative hidden w-full justify-between md:flex">
-        {KARMA_LEVELS.map((level, index) => (
-          <div
-            key={level.level}
-            className={`flex items-center gap-0.5 rounded-6 bg-neutral-5 px-1.5 ${
-              index === 0
-                ? 'justify-start'
-                : index === KARMA_LEVELS.length - 1
-                  ? 'justify-end'
-                  : 'justify-center'
-            }`}
-            style={{
-              position:
-                index === 0 || index === KARMA_LEVELS.length - 1
-                  ? 'relative'
-                  : 'absolute',
-              left:
-                index > 0 && index < KARMA_LEVELS.length - 1
-                  ? `${(level.minKarma / maxKarma) * 100}%`
-                  : undefined,
-              transform:
-                index > 0 && index < KARMA_LEVELS.length - 1
-                  ? 'translateX(-50%)'
-                  : undefined,
-            }}
-          >
-            <span className="text-13 font-medium text-neutral-50">lv</span>
-            <span className="text-15 font-medium text-neutral-100">
-              {level.level}
-            </span>
-          </div>
-        ))}
-      </div>
-
       {/* Level Labels - Mobile */}
       <div className="flex w-full justify-between md:hidden">
         <div className="flex items-center gap-0.5 rounded-6 bg-neutral-5 px-1.5">
@@ -169,40 +189,58 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
 
       {/* Karma Labels - Desktop */}
       <div className="relative hidden w-full justify-between md:flex">
-        {desktopMilestones.map((milestone, index) => (
-          <div
-            key={milestone}
-            className={`flex items-center ${
-              index === 0
-                ? 'justify-start'
-                : index === desktopMilestones.length - 1
-                  ? 'justify-end'
-                  : 'justify-center'
-            }`}
-            style={{
-              position:
-                index === 0 || index === desktopMilestones.length - 1
-                  ? 'relative'
-                  : 'absolute',
-              left:
-                index > 0 && index < desktopMilestones.length - 1
-                  ? `${(milestone / maxKarma) * 100}%`
-                  : undefined,
-              transform:
-                index > 0 && index < desktopMilestones.length - 1
-                  ? 'translateX(-50%)'
-                  : undefined,
-              width:
-                index > 0 && index < desktopMilestones.length - 1
-                  ? '110px'
-                  : 'auto',
-            }}
-          >
-            <span className="text-13 font-medium text-neutral-50">
-              {formatKarma(milestone)}
-            </span>
-          </div>
-        ))}
+        {karmaLevels.map((level, index) => {
+          // Use same even spacing as level labels
+          const evenSpacing =
+            karmaLevels.length > 1
+              ? (index / (karmaLevels.length - 1)) * 100
+              : 50
+
+          return (
+            <div
+              key={`karma-label-${index}`}
+              className={`flex items-center ${
+                index === 0
+                  ? 'justify-start'
+                  : index === karmaLevels.length - 1
+                    ? 'justify-end'
+                    : 'justify-center'
+              }`}
+              style={{
+                position:
+                  index === 0 || index === karmaLevels.length - 1
+                    ? 'relative'
+                    : 'absolute',
+                left:
+                  index > 0 && index < karmaLevels.length - 1
+                    ? `${evenSpacing}%`
+                    : undefined,
+                transform:
+                  index > 0 && index < karmaLevels.length - 1
+                    ? 'translateX(-50%)'
+                    : undefined,
+                width:
+                  index > 0 && index < karmaLevels.length - 1
+                    ? '110px'
+                    : 'auto',
+              }}
+            >
+              <div className="flex flex-col justify-center gap-0.5">
+                <div className="flex items-center gap-1 rounded-6 bg-neutral-5 px-3">
+                  <span className="text-13 font-medium text-neutral-50">
+                    lv
+                    <span className="text-15 font-medium text-neutral-100">
+                      {level.level}
+                    </span>
+                  </span>
+                </div>
+                <span className="text-13 font-medium text-neutral-50">
+                  {formatKarma(level.minKarma)}
+                </span>
+              </div>
+            </div>
+          )
+        })}
       </div>
 
       {/* Karma Labels - Mobile */}
@@ -218,11 +256,13 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
   )
 }
 
-const getCurrentLevelData = (karma: number): KarmaLevel => {
+const getCurrentLevelData = (
+  karma: number,
+  levels: KarmaLevel[] = KARMA_LEVELS
+): KarmaLevel => {
   return (
-    KARMA_LEVELS.find(
-      level => karma >= level.minKarma && karma < level.maxKarma
-    ) || KARMA_LEVELS[KARMA_LEVELS.length - 1]
+    levels.find(level => karma >= level.minKarma && karma < level.maxKarma) ||
+    levels[levels.length - 1]
   )
 }
 

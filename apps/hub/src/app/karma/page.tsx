@@ -10,26 +10,18 @@ import {
 } from '~components/karma'
 import { useClaimKarma } from '~hooks/useClaimKarma'
 import { useCurrentUser } from '~hooks/useCurrentUser'
-
-import type { KarmaOverviewData } from '~types/karma'
+import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 
 export default function KarmaPage() {
   const { data, isLoading, refetch } = useCurrentUser()
   const { mutateAsync: claimKarma } = useClaimKarma()
+  const {
+    data: rewardsData,
+    isLoading: rewardsLoading,
+    refetch: rewardsRefetch,
+  } = useKarmaRewardsDistributor()
 
   // TODO: Replace with actual data from API/state
-  const karmaData: KarmaOverviewData = {
-    isLoading: false,
-    currentKarma: 55129.16,
-    rank: 512,
-    achievements: [
-      'LIQUIDITY_PROVIDER',
-      'SERIAL_STAKER',
-      'APPS_TRAVELER',
-      'GENEROUS_TIPPER',
-    ],
-  }
-
   const visualData = {
     imageSrc: '/karma/media.png',
     imageAlt: 'Karma Visual',
@@ -49,22 +41,31 @@ export default function KarmaPage() {
     () => [
       {
         title: 'Welcome Karma',
-        amount: 240.2,
+        amount: rewardsData?.balance ?? BigInt(0),
         onComplete: async (token: string) => {
           await claimKarma(
             { token },
             {
               onSuccess: () => {
                 refetch()
+                rewardsRefetch()
               },
             }
           )
         },
         isComplete: data?.connectedSybilProviders.includes('POW') ?? false,
-        isLoading,
+        isLoading: rewardsLoading || isLoading,
       },
     ],
-    [data, isLoading, claimKarma, refetch]
+    [
+      rewardsData,
+      data,
+      rewardsLoading,
+      isLoading,
+      claimKarma,
+      refetch,
+      rewardsRefetch,
+    ]
   )
 
   return (
@@ -79,7 +80,7 @@ export default function KarmaPage() {
         </div>
         <div className="flex flex-col gap-6 md:flex-row">
           <KarmaVisualCard {...visualData} />
-          <KarmaOverviewCard {...karmaData} />
+          <KarmaOverviewCard />
         </div>
         <div className="flex flex-col gap-6">
           <h2 className="text-19 font-semibold text-neutral-100">

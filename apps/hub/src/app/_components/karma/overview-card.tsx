@@ -1,28 +1,63 @@
 import { Skeleton } from '@status-im/components'
-import { TwitterIcon } from '@status-im/icons/social'
-import { Button } from '@status-im/status-network/components'
+import { formatEther } from 'viem'
+
+import { KARMA_LEVELS } from '~constants/karma'
+import { useKarmaBalance } from '~hooks/useKarmaBalance'
+import { useKarmaTier } from '~hooks/useKarmaTier'
 
 import { AchievementBadges } from './achievement-badges'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
-import type { KarmaOverviewData } from '~types/karma'
+import type { KarmaLevel } from '~types/karma'
 
-type KarmaOverviewCardProps = KarmaOverviewData
+const KarmaOverviewCard = () => {
+  const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
+  const { data: karmaTierData, isLoading: tiersLoading } = useKarmaTier()
 
-const KarmaOverviewCard = ({
-  currentKarma,
-  rank,
-  achievements,
-  isLoading = false,
-}: KarmaOverviewCardProps) => {
-  const levelData = getCurrentLevelData(currentKarma)
+  const isLoading = karmaLoading || tiersLoading
 
-  const formatKarma = (karma: number) => {
-    return karma.toLocaleString('en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    })
+  // Use contract tiers if available, otherwise fall back to constants
+  let karmaLevels: KarmaLevel[] = KARMA_LEVELS
+
+  if (karmaTierData && karmaTierData.count > 0 && karmaTierData.tiers) {
+    const processedTiers = karmaTierData.tiers
+      .map((tier, index) => {
+        const minKarma = Number(tier.minKarma)
+        const maxKarma = Number(tier.maxKarma)
+        const level = index + 1
+
+        // Skip invalid tiers
+        if (
+          isNaN(minKarma) ||
+          isNaN(maxKarma) ||
+          isNaN(level) ||
+          minKarma < 0
+        ) {
+          console.warn('Skipping invalid tier:', { tier, index, level })
+          return null
+        }
+
+        return {
+          level,
+          minKarma,
+          maxKarma: index === karmaTierData.count - 1 ? Infinity : maxKarma + 1,
+        }
+      })
+      .filter((tier): tier is KarmaLevel => tier !== null)
+
+    // Only use processed tiers if we got valid results
+    if (processedTiers.length > 0) {
+      karmaLevels = processedTiers
+    } else {
+      console.warn('No valid tiers found, using fallback KARMA_LEVELS')
+    }
   }
+
+  // Ensure we have valid levels array before calculating level data
+  const levelData =
+    karmaLevels.length > 0
+      ? getCurrentLevelData(Number(karmaBalance?.balance ?? 0n), karmaLevels)
+      : KARMA_LEVELS[0]
 
   if (isLoading) {
     return (
@@ -34,10 +69,7 @@ const KarmaOverviewCard = ({
               <Skeleton height={16} width={120} className="rounded-6" />
             </div>
 
-            <Button variant="black" size="32">
-              Share
-              <TwitterIcon />
-            </Button>
+            <Skeleton height={32} width={80} className="rounded-6" />
           </div>
 
           <Skeleton height={68} width="100%" className="rounded-6" />
@@ -60,30 +92,27 @@ const KarmaOverviewCard = ({
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <span className="text-27 font-semibold text-neutral-100">
-                {formatKarma(currentKarma)}
+                {formatEther(karmaBalance?.balance ?? 0n)}
               </span>
               <span className="text-15 font-medium uppercase text-neutral-50">
                 Karma
               </span>
             </div>
             <span className="text-15 font-regular text-neutral-50">
-              Level {levelData.level} Kanji
+              Level {levelData?.level ?? 1} Kanji
             </span>
           </div>
-
-          <Button variant="black" size="32">
-            Share
-            <TwitterIcon />
-          </Button>
         </div>
-        <ProgressBar currentKarma={currentKarma} />
-        <div className="flex items-center gap-1 border-t border-dashed border-neutral-20 pt-3">
-          <span className="text-15 font-medium text-neutral-50">#</span>
-          <span className="text-19 font-semibold text-neutral-100">{rank}</span>
+        <ProgressBar
+          currentKarma={Number(formatEther(karmaBalance?.balance ?? 0n))}
+        />
+        <div className="flex h-14 items-center gap-1 border-t border-dashed border-neutral-20 pt-3">
+          {/* <span className="text-15 font-medium text-neutral-50">#</span> */}
+          {/* <span className="text-19 font-semibold text-neutral-100">{rank}</span> */}
         </div>
       </div>
       <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
-        <AchievementBadges badges={achievements} />
+        <AchievementBadges />
       </div>
     </div>
   )

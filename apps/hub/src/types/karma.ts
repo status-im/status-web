@@ -16,7 +16,6 @@ export type AchievementBadgeType =
 export interface KarmaOverviewData {
   isLoading?: boolean
   currentKarma: number
-  rank: number
   achievements: AchievementBadgeType[]
 }
 

@@ -1,15 +1,23 @@
+import { useMemo } from 'react'
+
 import { ACHIEVEMENT_BADGE_TYPES } from '~constants/karma'
 
 import type { AchievementBadgeType } from '~types/karma'
 
-type AchievementBadgesProps = {
-  badges: AchievementBadgeType[]
-}
+const AchievementBadges = () => {
+  // TODO: Replace with actual achievements from API/state
+  const achievements = useMemo<AchievementBadgeType[]>(() => {
+    return [
+      'LIQUIDITY_PROVIDER',
+      'SERIAL_STAKER',
+      'APPS_TRAVELER',
+      'GENEROUS_TIPPER',
+    ]
+  }, [])
 
-const AchievementBadges = ({ badges }: AchievementBadgesProps) => {
   return (
     <div className="flex size-full flex-wrap items-center gap-2">
-      {badges.map(badgeType => {
+      {achievements.map(badgeType => {
         const badge = ACHIEVEMENT_BADGE_TYPES[badgeType]
         return (
           <div
@@ -28,4 +36,3 @@ const AchievementBadges = ({ badges }: AchievementBadgesProps) => {
 }
 
 export { AchievementBadges }
-export type { AchievementBadgesProps }
