@@ -35,7 +35,7 @@ const buttonStyles = cva({
         'border-[transparent] bg-danger-50 text-white-100 hover:bg-danger-60',
       grey: 'bg-neutral-10 text-neutral-100 hover:bg-neutral-20 hover:text-neutral-100',
       black:
-        'bg-neutral-100 text-white-100 hover:bg-neutral-20 hover:text-neutral-40',
+        'bg-neutral-100 text-white-100 hover:bg-neutral-80 hover:text-neutral-40',
     },
     withIcon: {
       true: '',

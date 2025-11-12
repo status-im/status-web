@@ -29,8 +29,8 @@ export const KARMA_LEVEL_BOUNDS = {
  * Progress bar dot colors
  */
 export const PROGRESS_BAR_DOT_COLORS = {
-  REACHED: '#7140FD', // Purple - when milestone is reached
-  UNREACHED: 'rgba(27, 39, 61, 0.2)', // Gray - when milestone is not reached
+  REACHED: 'bg-purple', // Purple - when milestone is reached
+  UNREACHED: 'bg-neutral-80/20', // Gray - when milestone is not reached
 } as const
 
 /**
@@ -39,22 +39,18 @@ export const PROGRESS_BAR_DOT_COLORS = {
 export const ACHIEVEMENT_BADGE_TYPES = {
   LIQUIDITY_PROVIDER: {
     label: 'Liquidity Provider',
-    color: '#F6B03C', // Yellow
-    borderColor: 'rgba(246, 176, 60, 0.2)',
+    color: 'yellow',
   },
   SERIAL_STAKER: {
     label: 'Serial Staker',
-    color: '#7140FD', // Purple
-    borderColor: 'rgba(113, 64, 253, 0.2)',
+    color: 'purple',
   },
   APPS_TRAVELER: {
     label: 'Apps Traveler',
-    color: '#2A799B', // Turquoise
-    borderColor: 'rgba(42, 121, 155, 0.2)',
+    color: 'turquoise',
   },
   GENEROUS_TIPPER: {
     label: 'Generous Tipper',
-    color: '#CB6256', // Copper
-    borderColor: 'rgba(203, 98, 86, 0.2)',
+    color: 'copper',
   },
 } as const

@@ -13,18 +13,11 @@ const AchievementBadges = ({ badges }: AchievementBadgesProps) => {
         const badge = ACHIEVEMENT_BADGE_TYPES[badgeType]
         return (
           <div
+            data-customisation={badge.color}
             key={badgeType}
-            className="rounded-20 border px-2 py-0.5"
-            style={{
-              borderColor: badge.borderColor,
-            }}
+            className="rounded-20 border border-customisation-50/20 px-2 py-0.5"
           >
-            <span
-              className="text-13 font-medium"
-              style={{
-                color: badge.color,
-              }}
-            >
+            <span className="text-13 font-medium text-customisation-50">
               {badge.label}
             </span>
           </div>

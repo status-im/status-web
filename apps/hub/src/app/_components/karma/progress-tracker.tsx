@@ -87,13 +87,12 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
           return (
             <div
               key={milestone}
-              className="absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300"
-              style={{
-                left: `${position}%`,
-                backgroundColor: isReached
+              className={`absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300 ${
+                isReached
                   ? PROGRESS_BAR_DOT_COLORS.REACHED
-                  : PROGRESS_BAR_DOT_COLORS.UNREACHED,
-              }}
+                  : PROGRESS_BAR_DOT_COLORS.UNREACHED
+              }`}
+              style={{ left: `${position}%` }}
             />
           )
         })}
