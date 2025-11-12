@@ -163,11 +163,8 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
 
         {/* End dot for mobile - inset from edge */}
         <div
-          className="absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-          style={{
-            left: `${PROGRESS_BAR_DOT_INSET.END}%`,
-            backgroundColor: PROGRESS_BAR_DOT_COLORS.UNREACHED,
-          }}
+          className="absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-neutral-80/20"
+          style={{ left: `${PROGRESS_BAR_DOT_INSET.END}%` }}
         />
       </div>
 
