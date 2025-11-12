@@ -1,10 +1,6 @@
 import { Skeleton } from '@status-im/components'
 
-import {
-  KARMA_LEVELS,
-  PROGRESS_BAR_DOT_COLORS,
-  PROGRESS_BAR_DOT_INSET,
-} from '~constants/karma'
+import { KARMA_LEVELS, PROGRESS_BAR_DOT_INSET } from '~constants/karma'
 import { useKarmaTier } from '~hooks/useKarmaTier'
 
 import type { KarmaLevel } from '~types/karma'
@@ -143,9 +139,7 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
             <div
               key={`milestone-dot-${index}`}
               className={`absolute top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-colors duration-300 ${
-                isReached
-                  ? PROGRESS_BAR_DOT_COLORS.REACHED
-                  : PROGRESS_BAR_DOT_COLORS.UNREACHED
+                isReached ? 'bg-purple' : 'bg-neutral-80/20'
               }`}
               style={{ left: `${position}%` }}
             />

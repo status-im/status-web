@@ -26,14 +26,6 @@ export const KARMA_LEVEL_BOUNDS = {
 } as const
 
 /**
- * Progress bar dot colors
- */
-export const PROGRESS_BAR_DOT_COLORS = {
-  REACHED: 'bg-purple', // Purple - when milestone is reached
-  UNREACHED: 'bg-neutral-80/20', // Gray - when milestone is not reached
-} as const
-
-/**
  * Achievement badge types and their colors
  */
 export const ACHIEVEMENT_BADGE_TYPES = {
