@@ -11,16 +11,10 @@ const SOLUTIONS = [
     icon: '/logo-status.png',
   },
   {
-    title: 'Waku',
-    description: 'P2P encrypted messaging protocol',
-    website: 'waku.org',
-    icon: '/logo-waku.png',
-  },
-  {
-    title: 'Codex',
-    description: 'Decentralised data storage layer',
-    website: 'codex.storage',
-    icon: '/logo-codex.png',
+    title: 'Logos',
+    description: 'Open tech to restore civil society',
+    website: 'logos.co',
+    icon: '/logo-logos.png',
   },
   {
     title: 'Nimbus',
