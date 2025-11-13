@@ -55,7 +55,7 @@ const Network = () => {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {SOLUTIONS.map(solution => (
             <TechSolution key={solution.title} {...solution} />
           ))}
