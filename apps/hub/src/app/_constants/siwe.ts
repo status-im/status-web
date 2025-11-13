@@ -32,27 +32,9 @@ export const siweConfig: SIWEConfig = {
     return Math.random().toString(36).substring(2, 15)
   },
 
-  createMessage: async ({ nonce, address, chainId }) => {
-    const domain = window.location.host
-    const origin = window.location.origin
-    const statement = 'Sign in to Status Network Hub'
-    const issuedAt = new Date().toISOString()
-
-    // Create SIWE message following EIP-4361
-    const message = [
-      `${domain} wants you to sign in with your Ethereum account:`,
-      address,
-      '',
-      statement,
-      '',
-      `URI: ${origin}`,
-      `Version: 1`,
-      `Chain ID: ${chainId}`,
-      `Nonce: ${nonce}`,
-      `Issued At: ${issuedAt}`,
-    ].join('\n')
-
-    return message
+  createMessage: async () => {
+    const payload = { timestamp: Math.floor(Date.now() / 1000) }
+    return window.btoa(JSON.stringify(payload))
   },
 
   verifyMessage: async ({ message, signature }) => {
