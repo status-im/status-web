@@ -1,5 +1,11 @@
 # @status-im/js
 
+## 1.1.1
+
+### Patch Changes
+
+- aca00b07: update test snapshots
+
 ## 1.1.0
 
 ### Minor Changes
