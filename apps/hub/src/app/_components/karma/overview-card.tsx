@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
 import { Skeleton } from '@status-im/components'
+import { useSIWE } from 'connectkit'
 import { formatEther } from 'viem'
 
-import { KARMA_LEVELS } from '~constants/karma'
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 
@@ -13,15 +13,16 @@ import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 const KarmaOverviewCard = () => {
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
   const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
+  const { isLoading: isSIWELoading } = useSIWE()
 
-  const isLoading = karmaLoading || tiersLoading
+  const isLoading = karmaLoading || tiersLoading || isSIWELoading
 
   // Ensure we have valid levels array before calculating level data
   const levelData = useMemo(
     () =>
       karmaLevels.length > 0
         ? getCurrentLevelData(Number(karmaBalance?.balance ?? 0n), karmaLevels)
-        : KARMA_LEVELS[0],
+        : undefined,
     [karmaBalance?.balance, karmaLevels]
   )
 

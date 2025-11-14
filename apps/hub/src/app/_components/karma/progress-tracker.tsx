@@ -1,6 +1,6 @@
 import { Skeleton } from '@status-im/components'
 
-import { KARMA_LEVELS, PROGRESS_BAR_DOT_INSET } from '~constants/karma'
+import { PROGRESS_BAR_DOT_INSET } from '~constants/karma'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 
 import type { KarmaLevel } from '~types/karma'
@@ -212,7 +212,7 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
 
 const getCurrentLevelData = (
   karma: number,
-  levels: KarmaLevel[] = KARMA_LEVELS
+  levels: KarmaLevel[] = []
 ): KarmaLevel => {
   return (
     levels.find(level => karma >= level.minKarma && karma < level.maxKarma) ||

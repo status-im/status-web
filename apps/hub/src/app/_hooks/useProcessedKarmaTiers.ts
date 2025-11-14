@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 
-import { KARMA_LEVELS } from '~constants/karma'
 import { useKarmaTier } from '~hooks/useKarmaTier'
 
 import type { KarmaLevel } from '~types/karma'
@@ -75,7 +74,7 @@ export function useProcessedKarmaTiers(): UseProcessedKarmaTiersReturn {
 
   const karmaLevels = useMemo<KarmaLevel[]>(() => {
     if (!karmaTierData || karmaTierData.count === 0 || !karmaTierData.tiers) {
-      return KARMA_LEVELS
+      return []
     }
 
     const processedTiers = karmaTierData.tiers
@@ -109,7 +108,7 @@ export function useProcessedKarmaTiers(): UseProcessedKarmaTiersReturn {
     }
 
     console.warn('No valid tiers found, using fallback KARMA_LEVELS')
-    return KARMA_LEVELS
+    return []
   }, [karmaTierData])
 
   return {
