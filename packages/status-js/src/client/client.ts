@@ -264,8 +264,8 @@ class Client {
 
     const message = new ApplicationMetadataMessage({
       type: type,
-      signature,
-      payload,
+      signature: new Uint8Array(signature),
+      payload: new Uint8Array(payload),
     }).toBinary()
 
     await this.waku.lightPush.send(

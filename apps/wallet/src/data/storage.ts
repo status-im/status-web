@@ -73,6 +73,17 @@ export class Storage implements T {
     return Promise.reject(new Error('clear method is not supported'))
   }
 
+  async getBytesInUse(keys?: null | string | string[]): Promise<number> {
+    const items = await this.get(keys ?? null)
+    const jsonString = JSON.stringify(items)
+    return new Blob([jsonString]).size
+  }
+
+  async getKeys(): Promise<string[]> {
+    const items = await this.get(null)
+    return Object.keys(items)
+  }
+
   onChanged = {
     addListener: () => {},
     removeListener: () => {},

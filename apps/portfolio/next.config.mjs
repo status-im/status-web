@@ -1,11 +1,19 @@
 // For "Build dependencies behind this expression are ignored and might cause incorrect cache invalidation." warning
 // @see https://github.com/contentlayerdev/contentlayer/issues/129#issuecomment-1080416633
 
+import { createRequire } from 'module'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
 import './src/config/env.server.mjs'
 import './src/config/env.client.mjs'
 
 // eslint-disable-next-line import/no-unresolved
 import withVercelToolbar from '@vercel/toolbar/plugins/next'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const require = createRequire(import.meta.url)
 
 /** @type {import('next').NextConfig} */
 let config = {
@@ -116,6 +124,24 @@ let config = {
   },
   // note: fallback for non-Turbopack builds
   webpack: (config, { isServer }) => {
+    // Ensure react-hook-form is properly resolved when processing @status-im/wallet
+    try {
+      const reactHookFormPath = require.resolve('react-hook-form')
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-hook-form': reactHookFormPath,
+      }
+    } catch {
+      // Fallback to node_modules path if require.resolve fails
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-hook-form': path.resolve(
+          __dirname,
+          'node_modules/react-hook-form'
+        ),
+      }
+    }
+
     if (!isServer) {
       config.resolve.alias = {
         ...config.resolve.alias,
