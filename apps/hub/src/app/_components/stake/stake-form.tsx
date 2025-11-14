@@ -214,7 +214,6 @@ const StakeForm = () => {
     >
       <div className="flex flex-1 flex-col gap-4">
         <StakeAmountInput
-          value={form.watch('amount')}
           balance={balance?.value}
           amountInUSD={amountInUSDValue}
           onMaxClick={() => {

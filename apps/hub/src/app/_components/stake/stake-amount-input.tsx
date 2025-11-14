@@ -5,7 +5,6 @@ import { SNTIcon } from '~components/icons'
 import { formatCurrency, formatSNT } from '~utils/currency'
 
 type StakeAmountInputProps = {
-  value: string
   balance?: bigint
   amountInUSD?: number
   onMaxClick: () => void
@@ -15,7 +14,6 @@ type StakeAmountInputProps = {
 }
 
 const StakeAmountInput = ({
-  value,
   balance,
   amountInUSD = 0,
   onMaxClick,
@@ -61,13 +59,7 @@ const StakeAmountInput = ({
         </label>
         <div className="rounded-12 border border-neutral-20 bg-white-100 px-5 py-3">
           <div className="flex items-center justify-between">
-            <input
-              id="stake-amount"
-              type="text"
-              value={value}
-              readOnly
-              className="w-full border-none bg-transparent text-27 font-semibold text-neutral-40 outline-none"
-            />
+            <span className="text-27 font-semibold text-neutral-40">0</span>
             <div className="flex items-center gap-1">
               <SNTIcon />
               <span className="text-19 font-semibold text-neutral-80">SNT</span>
