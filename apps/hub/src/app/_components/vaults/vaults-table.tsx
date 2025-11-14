@@ -10,6 +10,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { useSIWE } from 'connectkit'
 import { useAccount, useChainId, useReadContract } from 'wagmi'
 
 import { STAKING_MANAGER } from '~constants/index'
@@ -198,6 +199,7 @@ export function VaultsTable({ isLoading = false }: VaultsTableProps) {
   const [openModalVaultId, setOpenModalVaultId] = useState<string | null>(null)
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
   const { data: vaultDataList } = useStakingVaults()
+  const { isSignedIn } = useSIWE()
   const { isConnected } = useAccount()
   const chainId = useChainId()
   const { mutate: createVault } = useCreateVault()
@@ -226,6 +228,7 @@ export function VaultsTable({ isLoading = false }: VaultsTableProps) {
         openModalVaultId,
         setOpenModalVaultId: handleSetOpenModalVaultId,
         emergencyModeEnabled,
+        isSignedIn,
         isConnected,
         openDropdownId,
         setOpenDropdownId,
@@ -236,6 +239,7 @@ export function VaultsTable({ isLoading = false }: VaultsTableProps) {
       openModalVaultId,
       handleSetOpenModalVaultId,
       emergencyModeEnabled,
+      isSignedIn,
       isConnected,
       openDropdownId,
     ]

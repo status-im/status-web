@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { Skeleton } from '@status-im/components'
 import { PlaceholderIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
+import { useSIWE } from 'connectkit'
 import Image from 'next/image'
 import { useAccount } from 'wagmi'
 
@@ -14,6 +15,7 @@ import { formatSNT } from '~utils/currency'
 
 const FaucetCard = () => {
   const { data: faucetData, isLoading } = useFaucetQuery()
+  const { isSignedIn, isLoading: isLoadingSIWE } = useSIWE()
   const { mutate: claimTokens, isPending: isClaimingTokens } =
     useFaucetMutation()
   const { isConnected, isConnecting } = useAccount()
@@ -31,7 +33,7 @@ const FaucetCard = () => {
     return hasExceededLimit && isWithinResetWindow
   }, [faucetData])
 
-  if (isLoading || isConnecting) {
+  if (isLoading || isConnecting || isLoadingSIWE) {
     return (
       <div className="flex flex-col gap-8 rounded-32 border border-neutral-10 bg-white-100 p-6 shadow-2 md:flex-row md:items-center md:justify-between md:p-8">
         <div className="flex items-start gap-4 md:gap-6">
@@ -112,7 +114,12 @@ const FaucetCard = () => {
 
       <Button
         className="self-end"
-        disabled={!isConnected || hasReachedDailyLimit || isClaimingTokens}
+        disabled={
+          !isConnected ||
+          hasReachedDailyLimit ||
+          isClaimingTokens ||
+          !isSignedIn
+        }
         onClick={() =>
           claimTokens({ amount: faucetData?.remainingAmount ?? BigInt(0) })
         }
