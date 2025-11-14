@@ -33,7 +33,7 @@ export const apps: App[] = [
     category: 'Gaming',
     status: 'Live',
     description: 'Earn NFTs, have some fun!!',
-    website: 'https://www.ponzihero.xyz/',
+    website: 'https://www.ponzihero.xyz',
     twitter: 'Splalabs',
     icon: '/apps/ponzi-hero-avatar.png',
     cover: '/apps/ponzi-hero-cover.png',
