@@ -139,15 +139,19 @@ export class Community {
 
         this.chats.set(chatUuid, chat)
 
-        const unobserveFn = await this.client.waku.filter.subscribe(
-          [
-            createDecoder(chat.contentTopic, chat.symmetricKey, {
-              clusterId: 16,
-              shard: 32,
-            }),
-          ],
+        const decoder = createDecoder(chat.contentTopic, chat.symmetricKey, {
+          clusterId: 16,
+          shard: 32,
+        })
+
+        await this.client.waku.filter.subscribe(
+          [decoder],
           this.client.handleWakuMessage,
         )
+
+        const unobserveFn = () => {
+          this.client.waku.filter.unsubscribe([decoder])
+        }
 
         this.#chatUnobserveFns.set(chat.contentTopic, unobserveFn)
       },
@@ -267,7 +271,7 @@ export class Community {
     const payload = new CommunityRequestToJoin({
       clock: this.setClock(this.#clock),
       chatId,
-      communityId: hexToBytes(this.id),
+      communityId: new Uint8Array(hexToBytes(this.id)),
       ensName: '',
     }).toBinary()
 
