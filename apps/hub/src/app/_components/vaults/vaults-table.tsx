@@ -53,13 +53,13 @@ interface TableProps {
 // Simple table components - TanStack Table handles optimization via getCoreRowModel
 function TableHeader({ table }: TableProps) {
   return (
-    <thead className="h-[40px] border-b border-solid border-neutral-10 bg-neutral-5">
+    <thead className="h-10 border-b border-solid border-neutral-10 bg-neutral-5">
       {table.getHeaderGroups().map(headerGroup => (
         <tr key={headerGroup.id}>
           {headerGroup.headers.map(header => (
             <th
               key={header.id}
-              className={`box-border px-[12px] ${getHeaderClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
+              className={`box-border px-3 ${getHeaderClassName(header.column.columnDef.meta as VaultColumnMeta)}`}
             >
               <span className="text-13 font-medium text-neutral-50">
                 {flexRender(
