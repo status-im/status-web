@@ -198,17 +198,26 @@ export function formatSNT(
 /**
  * Format KARMA token amount
  *
- * @param amount - Token amount
+ * @param amount - Token amount in wei (bigint) or display units (number/string)
  * @param options - Formatting options
  * @returns Formatted KARMA amount
+ *
+ * @example
+ * ```ts
+ * formatKarma(1000000000000000000n) // => "1"
+ * formatKarma(1500000000000000000000n, { compact: true }) // => "1.5K"
+ * formatKarma(1000000, { includeSymbol: true }) // => "1000000 KARMA"
+ * ```
  */
 export function formatKarma(
   amount: number | bigint | string,
   options: Omit<FormatTokenOptions, 'tokenDecimals'> = {}
 ): string {
   return formatTokenAmount(amount, 'KARMA', {
+    compact: true, // Enable compact notation (K, M, B) by default
+    decimals: 0, // No decimal places for karma
     ...options,
-    tokenDecimals: 0, // KARMA values are already in display units
+    tokenDecimals: DEFAULT_TOKEN_DECIMALS, // KARMA has 18 decimals (wei)
   })
 }
 

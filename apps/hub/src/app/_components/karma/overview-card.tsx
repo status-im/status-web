@@ -17,13 +17,19 @@ const KarmaOverviewCard = () => {
 
   const isLoading = karmaLoading || tiersLoading || isSIWELoading
 
+  // Convert karma balance to number for calculations
+  const numericKarma = useMemo(
+    () => Number(formatEther(karmaBalance?.balance ?? 0n)),
+    [karmaBalance?.balance]
+  )
+
   // Ensure we have valid levels array before calculating level data
   const levelData = useMemo(
     () =>
       karmaLevels.length > 0
-        ? getCurrentLevelData(Number(karmaBalance?.balance ?? 0n), karmaLevels)
+        ? getCurrentLevelData(numericKarma, karmaLevels)
         : undefined,
-    [karmaBalance?.balance, karmaLevels]
+    [numericKarma, karmaLevels]
   )
 
   if (isLoading) {
@@ -70,9 +76,7 @@ const KarmaOverviewCard = () => {
             </span>
           </div>
         </div>
-        <ProgressBar
-          currentKarma={Number(formatEther(karmaBalance?.balance ?? 0n))}
-        />
+        <ProgressBar currentKarma={numericKarma} />
         <div className="flex h-14 items-center gap-1 border-t border-dashed border-neutral-20 pt-3">
           {/* <span className="text-15 font-medium text-neutral-50">#</span> */}
           {/* <span className="text-19 font-semibold text-neutral-100">{rank}</span> */}

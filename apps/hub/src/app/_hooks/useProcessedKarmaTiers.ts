@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import { formatEther } from 'viem'
+
 import { useKarmaTier } from '~hooks/useKarmaTier'
 
 import type { KarmaLevel } from '~types/karma'
@@ -79,8 +81,9 @@ export function useProcessedKarmaTiers(): UseProcessedKarmaTiersReturn {
 
     const processedTiers = karmaTierData.tiers
       .map((tier, index) => {
-        const minKarma = Number(tier.minKarma)
-        const maxKarma = Number(tier.maxKarma)
+        // Convert from wei to ether, then to number
+        const minKarma = Number(formatEther(tier.minKarma))
+        const maxKarma = Number(formatEther(tier.maxKarma))
         const level = index + 1
 
         // Skip invalid tiers

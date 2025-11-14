@@ -19,7 +19,7 @@ const CapWidget = dynamic(
 
 type KarmaSourceCardProps = {
   title: string
-  amount: bigint
+  amount: string
   onComplete?: (token: string) => void
   isComplete?: boolean
   badgeTitle?: string
@@ -39,7 +39,8 @@ const KarmaSourceCard = ({
   const [capToken, setCapToken] = useState<string | null>(null)
   const [capError, setCapError] = useState<string | null>(null)
   const { isConnected, isConnecting } = useAccount()
-  const { mutateAsync: claimKarma } = useClaimKarma()
+  const { mutateAsync: claimKarma, isPending: isClaimingKarma } =
+    useClaimKarma()
   const toast = useToast()
   const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
 
@@ -198,10 +199,12 @@ const KarmaSourceCard = ({
               variant="primary"
               size="40"
               onClick={handleClaim}
-              disabled={!capToken || isComplete || !isConnected}
+              disabled={
+                !capToken || isComplete || !isConnected || isClaimingKarma
+              }
               className="w-full items-center justify-center"
             >
-              Claim
+              {isClaimingKarma ? 'Claiming...' : 'Claim'}
             </Button>
           </div>
         </div>

@@ -12,8 +12,13 @@ type ProgressBarProps = {
 const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
   const { karmaLevels, isLoading } = useProcessedKarmaTiers()
 
-  const formatKarma = (karma: number) => {
-    return karma.toLocaleString('en-US')
+  const formatKarmaLabel = (karma: number) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+      notation: 'compact',
+      compactDisplay: 'short',
+      maximumFractionDigits: 1,
+    })
+    return formatter.format(karma)
   }
 
   // Find current level
@@ -53,18 +58,16 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
   const mobileStartLevel = Math.max(1, currentLevel - 1)
   const mobileEndLevel = Math.min(karmaLevels.length, currentLevel)
 
-  // Maximum karma for calculations (last finite maxKarma value)
-  const validMaxValues = karmaLevels
-    .filter(level => level.maxKarma !== Infinity && !isNaN(level.maxKarma))
-    .map(level => level.maxKarma)
-  const maxKarma =
-    validMaxValues.length > 0 ? Math.max(...validMaxValues) : 100000
-
   // Mobile: only show current and next milestone
   const mobileMilestones = [
     karmaLevels[mobileStartLevel - 1]?.minKarma ?? 0,
     karmaLevels[mobileEndLevel - 1]?.maxKarma ?? 0,
   ]
+
+  const oneLevelPercentage = 100 / (karmaLevels.length - 1)
+  const desktopLevelProgress =
+    oneLevelPercentage * (currentLevel - 1) +
+    oneLevelPercentage * (levelProgress / 100)
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -74,7 +77,7 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
         <div
           className="h-full rounded-20 bg-purple transition-all duration-300"
           style={{
-            width: `${Math.min((currentKarma / maxKarma) * 100, 100)}%`,
+            width: `${desktopLevelProgress}%`,
           }}
         />
 
@@ -189,7 +192,7 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
                   </span>
                 </div>
                 <span className="text-13 font-medium text-neutral-50">
-                  {formatKarma(level.minKarma)}
+                  {formatKarmaLabel(level.minKarma)}
                 </span>
               </div>
             </div>
@@ -200,10 +203,10 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
       {/* Karma Labels - Mobile */}
       <div className="flex w-full justify-between md:hidden">
         <span className="text-13 font-medium text-neutral-50">
-          {formatKarma(mobileMilestones[0])}
+          {formatKarmaLabel(mobileMilestones[0])}
         </span>
         <span className="text-13 font-medium text-neutral-50">
-          {formatKarma(mobileMilestones[1])}
+          {formatKarmaLabel(mobileMilestones[1])}
         </span>
       </div>
     </div>

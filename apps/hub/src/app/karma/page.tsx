@@ -2,6 +2,8 @@
 
 import { useMemo } from 'react'
 
+import { formatEther } from 'viem/utils'
+
 import { HubLayout } from '~components/hub-layout'
 import {
   KarmaOverviewCard,
@@ -14,7 +16,8 @@ import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 
 export default function KarmaPage() {
   const { data, isLoading, refetch } = useCurrentUser()
-  const { mutateAsync: claimKarma } = useClaimKarma()
+  const { mutateAsync: claimKarma, isPending: isClaimingKarma } =
+    useClaimKarma()
   const {
     data: rewardsData,
     isLoading: rewardsLoading,
@@ -36,12 +39,11 @@ export default function KarmaPage() {
     },
   }
 
-  // TODO: Replace with actual karma sources from API/state
   const karmaSources = useMemo(
     () => [
       {
         title: 'Welcome Karma',
-        amount: rewardsData?.balance ?? BigInt(0),
+        amount: formatEther(rewardsData?.balance ?? BigInt(0)),
         onComplete: async (token: string) => {
           await claimKarma(
             { token },
@@ -54,7 +56,7 @@ export default function KarmaPage() {
           )
         },
         isComplete: data?.connectedSybilProviders.includes('POW') ?? false,
-        isLoading: rewardsLoading || isLoading,
+        isLoading: rewardsLoading || isLoading || isClaimingKarma,
       },
     ],
     [
@@ -63,6 +65,7 @@ export default function KarmaPage() {
       rewardsLoading,
       isLoading,
       claimKarma,
+      isClaimingKarma,
       refetch,
       rewardsRefetch,
     ]

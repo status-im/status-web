@@ -44,6 +44,6 @@ export const REWARDS = {
 } as const
 
 export const KARMA_TIER = {
-  address: '0x011b9de308BE357BbF24EfB387a270a14A04E5d2' as Address,
+  address: '0xc7fCD786a161f42bDaF66E18a67C767C23cFd30C' as Address,
   abi: karmaTierAbi as Abi,
 } as const

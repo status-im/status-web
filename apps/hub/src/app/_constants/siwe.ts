@@ -87,7 +87,7 @@ export const siweConfig: SIWEConfig = {
   },
   nonceRefetchInterval: NONCE_REFETCH_INTERVAL,
   sessionRefetchInterval: SESSION_REFETCH_INTERVAL,
-  signOutOnDisconnect: false,
+  signOutOnDisconnect: true,
   signOutOnAccountChange: true,
   signOutOnNetworkChange: false,
 }
