@@ -1,7 +1,7 @@
 import { Skeleton } from '@status-im/components'
 
 import { KARMA_LEVELS, PROGRESS_BAR_DOT_INSET } from '~constants/karma'
-import { useKarmaTier } from '~hooks/useKarmaTier'
+import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 
 import type { KarmaLevel } from '~types/karma'
 
@@ -10,47 +10,10 @@ type ProgressBarProps = {
 }
 
 const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
-  const { data: karmaTierData, isLoading } = useKarmaTier()
+  const { karmaLevels, isLoading } = useProcessedKarmaTiers()
 
   const formatKarma = (karma: number) => {
     return karma.toLocaleString('en-US')
-  }
-
-  // Use contract tiers if available, otherwise fall back to constants
-  let karmaLevels: KarmaLevel[] = KARMA_LEVELS
-
-  if (karmaTierData && karmaTierData.count > 0 && karmaTierData.tiers) {
-    const processedTiers = karmaTierData.tiers
-      .map((tier, index) => {
-        const minKarma = Number(tier.minKarma)
-        const maxKarma = Number(tier.maxKarma)
-        const level = index + 1
-
-        // Skip invalid tiers
-        if (
-          isNaN(minKarma) ||
-          isNaN(maxKarma) ||
-          isNaN(level) ||
-          minKarma < 0
-        ) {
-          console.warn('Skipping invalid tier:', { tier, index, level })
-          return null
-        }
-
-        return {
-          level,
-          minKarma,
-          maxKarma: index === karmaTierData.count - 1 ? Infinity : maxKarma + 1,
-        }
-      })
-      .filter((tier): tier is KarmaLevel => tier !== null)
-
-    // Only use processed tiers if we got valid results
-    if (processedTiers.length > 0) {
-      karmaLevels = processedTiers
-    } else {
-      console.warn('No valid tiers found, using fallback KARMA_LEVELS')
-    }
   }
 
   // Find current level

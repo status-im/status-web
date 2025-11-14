@@ -55,7 +55,6 @@ export type UseKarmaBalanceReturn = UseQueryResult<KarmaBalanceData>
 // ============================================================================
 
 const QUERY_KEY_PREFIX = 'karma-balance'
-const DEFAULT_BALANCE = 0n
 
 // ============================================================================
 // Helper Functions
@@ -165,10 +164,7 @@ export function useKarmaBalance(
     queryKey: [QUERY_KEY_PREFIX, targetAddress, chainId] as const,
     queryFn: async (): Promise<KarmaBalanceData> => {
       if (!targetAddress) {
-        return {
-          balance: DEFAULT_BALANCE,
-          account: '0x0' as Address,
-        }
+        throw new Error('No address provided')
       }
 
       try {
@@ -180,10 +176,7 @@ export function useKarmaBalance(
         }
       } catch (error) {
         console.error('Failed to fetch karma balance:', error)
-        return {
-          balance: DEFAULT_BALANCE,
-          account: targetAddress,
-        }
+        throw error
       }
     },
     enabled: enabled && !!targetAddress,

@@ -119,26 +119,21 @@ export function useClaimKarma(): UseClaimKarmaReturn {
         throw new Error('Token is required')
       }
 
-      try {
-        // Make API request
-        const response = await fetch(API_ENDPOINT, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ token }),
-        })
+      // Make API request
+      const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      })
 
-        if (!response.ok) {
-          throw new Error(`Failed to claim karma: ${response.statusText}`)
-        }
-
-        return response.json()
-      } catch (error) {
-        console.error('Failed to claim karma:', error)
-        throw error
+      if (!response.ok) {
+        throw new Error(`Failed to claim karma: ${response.statusText}`)
       }
+
+      return response.json()
     },
     onSuccess: () => {
       // Invalidate current user query to refetch updated connectedSybilProviders

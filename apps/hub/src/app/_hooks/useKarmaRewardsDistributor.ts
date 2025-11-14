@@ -202,10 +202,7 @@ export function useKarmaRewardsDistributor(
         }
       } catch (error) {
         console.error('Failed to fetch karma rewards balance:', error)
-        return {
-          balance: DEFAULT_BALANCE,
-          account: targetAddress,
-        }
+        throw error
       }
     },
     enabled: enabled && !!targetAddress,

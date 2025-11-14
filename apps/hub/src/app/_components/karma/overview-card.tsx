@@ -1,63 +1,29 @@
+import { useMemo } from 'react'
+
 import { Skeleton } from '@status-im/components'
 import { formatEther } from 'viem'
 
 import { KARMA_LEVELS } from '~constants/karma'
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
-import { useKarmaTier } from '~hooks/useKarmaTier'
+import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 
 import { AchievementBadges } from './achievement-badges'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
-import type { KarmaLevel } from '~types/karma'
-
 const KarmaOverviewCard = () => {
   const { data: karmaBalance, isLoading: karmaLoading } = useKarmaBalance()
-  const { data: karmaTierData, isLoading: tiersLoading } = useKarmaTier()
+  const { karmaLevels, isLoading: tiersLoading } = useProcessedKarmaTiers()
 
   const isLoading = karmaLoading || tiersLoading
 
-  // Use contract tiers if available, otherwise fall back to constants
-  let karmaLevels: KarmaLevel[] = KARMA_LEVELS
-
-  if (karmaTierData && karmaTierData.count > 0 && karmaTierData.tiers) {
-    const processedTiers = karmaTierData.tiers
-      .map((tier, index) => {
-        const minKarma = Number(tier.minKarma)
-        const maxKarma = Number(tier.maxKarma)
-        const level = index + 1
-
-        // Skip invalid tiers
-        if (
-          isNaN(minKarma) ||
-          isNaN(maxKarma) ||
-          isNaN(level) ||
-          minKarma < 0
-        ) {
-          console.warn('Skipping invalid tier:', { tier, index, level })
-          return null
-        }
-
-        return {
-          level,
-          minKarma,
-          maxKarma: index === karmaTierData.count - 1 ? Infinity : maxKarma + 1,
-        }
-      })
-      .filter((tier): tier is KarmaLevel => tier !== null)
-
-    // Only use processed tiers if we got valid results
-    if (processedTiers.length > 0) {
-      karmaLevels = processedTiers
-    } else {
-      console.warn('No valid tiers found, using fallback KARMA_LEVELS')
-    }
-  }
-
   // Ensure we have valid levels array before calculating level data
-  const levelData =
-    karmaLevels.length > 0
-      ? getCurrentLevelData(Number(karmaBalance?.balance ?? 0n), karmaLevels)
-      : KARMA_LEVELS[0]
+  const levelData = useMemo(
+    () =>
+      karmaLevels.length > 0
+        ? getCurrentLevelData(Number(karmaBalance?.balance ?? 0n), karmaLevels)
+        : KARMA_LEVELS[0],
+    [karmaBalance?.balance, karmaLevels]
+  )
 
   if (isLoading) {
     return (

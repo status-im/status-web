@@ -2,7 +2,7 @@ import '@pitininja/cap-react-widget/dist/index.css'
 
 import { useState } from 'react'
 
-import { Skeleton } from '@status-im/components'
+import { Skeleton, useToast } from '@status-im/components'
 import { Button } from '@status-im/status-network/components'
 import dynamic from 'next/dynamic'
 import { useAccount } from 'wagmi'
@@ -31,7 +31,7 @@ const KarmaSourceCard = ({
   title,
   amount,
   onComplete,
-  isComplete = true,
+  isComplete = false,
   badgeTitle = 'Just arrived',
   badgeDescription = 'Karma received for joining the network',
   isLoading = false,
@@ -40,6 +40,7 @@ const KarmaSourceCard = ({
   const [capError, setCapError] = useState<string | null>(null)
   const { isConnected, isConnecting } = useAccount()
   const { mutateAsync: claimKarma } = useClaimKarma()
+  const toast = useToast()
   const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
 
   const formatAmount = (value: number) => {
@@ -54,11 +55,41 @@ const KarmaSourceCard = ({
     setCapError(null)
   }
 
+  const handleError = (error?: Error) => {
+    setCapError(error?.message || 'Failed to verify captcha. Please try again.')
+    setCapToken(null)
+  }
+
   const handleClaim = async () => {
     if (capToken && onComplete) {
-      const response = await claimKarma({ token: capToken })
-      if (response.success) {
-        onComplete(capToken)
+      try {
+        await claimKarma(
+          { token: capToken },
+          {
+            onError: () => {
+              const errorMessage = 'Failed to claim. Please try again'
+              setCapError(errorMessage)
+              toast.negative(errorMessage)
+            },
+            onSuccess: data => {
+              if (data.success) {
+                setCapError(null)
+                onComplete(capToken)
+              } else {
+                const errorMessage = 'Claim was unsuccessful. Please try again'
+                setCapError(errorMessage)
+                toast.negative(errorMessage)
+              }
+            },
+          }
+        )
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : 'An unexpected error occurred'
+        setCapError(errorMessage)
+        toast.negative(errorMessage)
       }
     }
   }
@@ -151,7 +182,11 @@ const KarmaSourceCard = ({
           </div>
 
           <div className="mt-2.5 flex w-full flex-col gap-3">
-            <CapWidget endpoint={capApiEndpoint} onSolve={handleSolve} />
+            <CapWidget
+              endpoint={capApiEndpoint}
+              onSolve={handleSolve}
+              onError={error => handleError(new Error(error))}
+            />
 
             {capError && (
               <span className="text-13 font-regular text-danger-50">

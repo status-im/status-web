@@ -1,5 +1,4 @@
-import { IconButton, Skeleton } from '@status-im/components'
-import { DownloadIcon, RefreshIcon } from '@status-im/icons/12'
+import { Skeleton } from '@status-im/components'
 import Image from 'next/image'
 
 import type { KarmaVisualData } from '~types/karma'
@@ -9,8 +8,8 @@ type KarmaVisualCardProps = KarmaVisualData
 const KarmaVisualCard = ({
   imageSrc,
   imageAlt = 'Karma Visual',
-  onRefresh,
-  onDownload,
+  // onRefresh,
+  // onDownload,
   isLoading = false,
 }: KarmaVisualCardProps) => {
   if (isLoading) {
@@ -32,7 +31,7 @@ const KarmaVisualCard = ({
       <div className="relative size-full p-2">
         <div className="relative size-full overflow-hidden rounded-16">
           <Image src={imageSrc} alt={imageAlt} fill className="object-cover" />
-          <div className="absolute bottom-8 right-8 flex gap-2">
+          {/* <div className="absolute bottom-8 right-8 flex gap-2">
             <IconButton
               icon={<RefreshIcon />}
               variant="default"
@@ -43,7 +42,7 @@ const KarmaVisualCard = ({
               variant="default"
               onClick={onDownload}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
