@@ -78,7 +78,7 @@ export default {
         '0.8125rem',
         {
           lineHeight: '1.1375rem',
-          letterSpacing: '-0.024375rem',
+          letterSpacing: '-0.0024375rem',
         },
       ],
     },
@@ -93,6 +93,10 @@ export default {
       sea: 'rgba(61, 150, 165, 1)',
       yellow: 'rgba(246, 176, 60, 1)',
       'blue-50': 'rgba(42, 74, 245, 1)',
+      danger: {
+        50: 'rgba(255, 125, 70, 1)',
+        60: 'rgba(255, 125, 70, 0.6)',
+      },
       neutral: {
         '2.5': 'rgba(250, 251, 252, 1)',
         '5': 'rgba(245, 246, 248, 1)',

@@ -4,12 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Tooltip } from '@status-im/components'
-import {
-  DropdownIcon,
-  ExternalIcon,
-  InfoIcon,
-  PlaceholderIcon,
-} from '@status-im/icons/20'
+import { DropdownIcon, ExternalIcon, InfoIcon } from '@status-im/icons/20'
 import { Button, ButtonLink } from '@status-im/status-network/components'
 import { ConnectKitButton } from 'connectkit'
 import Image from 'next/image'
@@ -37,6 +32,7 @@ import {
 import { useApproveToken } from '~hooks/useApproveToken'
 import { useCompoundMultiplierPoints } from '~hooks/useCompoundMultiplierPoints'
 import { useCreateVault } from '~hooks/useCreateVault'
+import { useEmergencyModeEnabled } from '~hooks/useEmergencyModeEnabled'
 import { useExchangeRate } from '~hooks/useExchangeRate'
 import { useFaucetMutation, useFaucetQuery } from '~hooks/useFaucet'
 import { useMultiplierPointsBalance } from '~hooks/useMultiplierPoints'
@@ -73,6 +69,7 @@ export default function StakePage() {
   const { data: vaults, refetch: refetchStakingVaults } = useStakingVaults()
   const weightedBoost = useWeightedBoost(vaults)
   const { data: exchangeRate } = useExchangeRate()
+  const { data: emergencyModeEnabled } = useEmergencyModeEnabled()
 
   const form = useForm<FormValues>({
     resolver: zodResolver(createStakeFormSchema()),
@@ -83,7 +80,7 @@ export default function StakePage() {
     },
   })
 
-  const { data: balance } = useBalance({
+  const { data: balance, refetch: refetchBalance } = useBalance({
     scopeKey: 'balance',
     address,
     token: SNT_TOKEN.address,
@@ -99,8 +96,8 @@ export default function StakePage() {
   }) as { data: bigint }
 
   const { mutate: createVault } = useCreateVault()
-  const { mutate: approveToken } = useApproveToken()
-  const { mutate: stakeVault } = useVaultTokenStake()
+  const { mutateAsync: approveToken } = useApproveToken()
+  const { mutateAsync: stakeVault } = useVaultTokenStake()
 
   // State machine for vault operations
   const { send: sendVaultEvent } = useVaultStateContext()
@@ -176,38 +173,26 @@ export default function StakePage() {
 
       // Transition to increase allowance if not enough allowance
       if (amountWei >= currentAllowance) {
-        approveToken(
-          {
-            amount: data.amount,
-            spenderAddress: data.vault as Address,
-          },
-          {
-            onSuccess: () => {
-              // After approval completes, proceed to staking
-              stakeVault({
-                amountWei,
-                lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
-                vaultAddress: data.vault as Address,
-              })
-            },
-            onError: error => {
-              throw error
-            },
-          }
-        )
-      } else {
-        // Allowance already sufficient, go straight to staking
-        stakeVault({
-          amountWei,
-          lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
-          vaultAddress: data.vault as Address,
+        // Await the approval
+        await approveToken({
+          amount: data.amount,
+          spenderAddress: data.vault as Address,
         })
       }
-    } catch {
-      sendVaultEvent({ type: 'REJECT' })
-    } finally {
+
+      // Now stake (after approval if needed)
+      await stakeVault({
+        amountWei,
+        lockPeriod: STAKE_PAGE_CONSTANTS.DEFAULT_STAKE_LOCK_PERIOD,
+        vaultAddress: data.vault as Address,
+      })
+
+      // Only reset and refetch after successful staking
       form.reset()
-      refetchStakingVaults()
+      await Promise.all([refetchStakingVaults(), refetchBalance()])
+    } catch (error) {
+      sendVaultEvent({ type: 'REJECT' })
+      console.error('Staking failed:', error)
     }
   }
 
@@ -265,15 +250,24 @@ export default function StakePage() {
               <Button
                 className="self-end"
                 disabled={
-                  !isConnected || hasReachedDailyLimit || isClaimingTokens
+                  !isConnected ||
+                  hasReachedDailyLimit ||
+                  isClaimingTokens ||
+                  Boolean(emergencyModeEnabled)
                 }
                 onClick={() =>
-                  claimTokens({
-                    amount: faucetData?.remainingAmount,
-                  })
+                  claimTokens(
+                    {
+                      amount: faucetData?.remainingAmount,
+                    },
+                    {
+                      onSuccess: () => {
+                        refetchBalance()
+                      },
+                    }
+                  )
                 }
               >
-                <PlaceholderIcon className="text-blur-white/70" />
                 {isClaimingTokens ? 'Claiming...' : 'Claim testnet SNT'}
               </Button>
             </div>
@@ -419,13 +413,18 @@ export default function StakePage() {
                       selectedVault !== '' && selectedVault !== 'new'
 
                     return hasSelectedVault && hasAmount ? (
-                      <Button className="w-full justify-center" type="submit">
+                      <Button
+                        className="w-full justify-center"
+                        type="submit"
+                        disabled={Boolean(emergencyModeEnabled)}
+                      >
                         Stake SNT
                       </Button>
                     ) : (
                       <Button
                         className="w-full justify-center"
                         onClick={() => createVault()}
+                        disabled={Boolean(emergencyModeEnabled)}
                       >
                         Create new vault
                       </Button>
@@ -435,24 +434,27 @@ export default function StakePage() {
               </form>
 
               <div className="flex flex-col gap-[18px]">
-                <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
-                  <div className="mb-2 flex items-start justify-between">
-                    <p className="text-13 font-500 text-neutral-60">
-                      Total staked
+                {!emergencyModeEnabled && (
+                  <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
+                    <div className="mb-2 flex items-start justify-between">
+                      <p className="text-13 font-500 text-neutral-60">
+                        Total staked
+                      </p>
+                    </div>
+                    <div className="mb-4 flex items-end gap-2">
+                      <SNTIcon />
+                      <span className="text-27 font-600">
+                        {formatSNT(totalStaked ?? 0, {
+                          includeSymbol: true,
+                        })}
+                      </span>
+                    </div>
+                    <p className="text-13 font-500 text-neutral-40">
+                      Next unlock in {STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS}{' '}
+                      days
                     </p>
                   </div>
-                  <div className="mb-4 flex items-end gap-2">
-                    <SNTIcon />
-                    <span className="text-27 font-600">
-                      {formatSNT(totalStaked ?? 0, {
-                        includeSymbol: true,
-                      })}
-                    </span>
-                  </div>
-                  <p className="text-13 font-500 text-neutral-40">
-                    Next unlock in {STAKE_PAGE_CONSTANTS.NEXT_UNLOCK_DAYS} days
-                  </p>
-                </div>
+                )}
 
                 <div className="rounded-32 border border-neutral-10 bg-white-100 p-8 shadow-2">
                   <div className="mb-2 flex items-start justify-between">
@@ -472,7 +474,10 @@ export default function StakePage() {
                       {messageMultiplierPoints}
                     </span>
                     <Button
-                      disabled={isDisabledMultiplierPoints}
+                      disabled={
+                        isDisabledMultiplierPoints ||
+                        Boolean(emergencyModeEnabled)
+                      }
                       variant="primary"
                       size="40"
                       onClick={() => compoundMultiplierPoints()}
@@ -505,7 +510,7 @@ const InfoTooltip = () => (
         </span>
 
         <ButtonLink
-          href="https://status.app/"
+          href="https://docs.status.network/tokenomics/snt-staking"
           variant="outline"
           className="rounded-8 px-2 py-1"
           size="32"

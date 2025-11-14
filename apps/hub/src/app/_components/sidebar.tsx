@@ -2,7 +2,7 @@
 
 import {
   BridgeIcon,
-  // DepositIcon,
+  DepositIcon,
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
@@ -16,13 +16,13 @@ import { LinkItem } from './link-item'
 
 const NAV_LINKS = [
   { id: 'dashboard', label: 'Home', icon: HomeIcon, href: '/dashboard' },
-  // {
-  //   id: 'deposit',
-  //   label: 'Deposit',
-  //   icon: DepositIcon,
-  //   href: '/deposit',
-  //   tag: 'Mainnet',
-  // },
+  {
+    id: 'deposit',
+    label: 'Deposit',
+    icon: DepositIcon,
+    href: 'https://status-im.notion.site/Status-Network-Early-Access-List-2a18f96fb65c80f18f00d96f7304a597',
+    tag: 'Mainnet',
+  },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
   { id: 'karma', label: 'Karma', icon: KarmaIcon, href: '/karma' },
@@ -87,7 +87,7 @@ const Sidebar = (props: Props) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-60 transform border-r border-neutral-10 bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-60 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
