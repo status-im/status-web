@@ -79,7 +79,7 @@ export function decodeUserURLData(data: string) {
 
 function encodeURLData(data: Uint8Array): string {
   const serialized = new URLData({
-    content: data,
+    content: new Uint8Array(data),
   }).toBinary()
   const compressed = brotliCompressSync(serialized)
   const encoded = base64url.encode(compressed as unknown as Uint8Array)
