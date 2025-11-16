@@ -36,7 +36,7 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
           100
   }
 
-  const oneLevelPercentage = 100 / (KARMA_LEVELS.length - 1)
+  const oneLevelPercentage = 100 / KARMA_LEVELS.length
   const desktopLevelProgress = Math.min(
     100,
     oneLevelPercentage * currentLevel +
@@ -175,7 +175,7 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
                     </span>
                   </span>
                 </div>
-                <span className="text-13 font-medium text-neutral-50">
+                <span className="text-center text-13 font-medium text-neutral-50">
                   {formatKarmaLabel(level.minKarma)}
                 </span>
               </div>

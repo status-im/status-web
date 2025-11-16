@@ -6,6 +6,7 @@ import { formatEther } from 'viem'
 
 import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
+import { formatSNT } from '~utils/currency'
 
 import { AchievementBadges } from './achievement-badges'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
@@ -65,7 +66,7 @@ const KarmaOverviewCard = () => {
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <span className="text-27 font-semibold text-neutral-100">
-                {formatEther(karmaBalance?.balance ?? 0n)}
+                {formatSNT(formatEther(karmaBalance?.balance ?? 0n))}
               </span>
               <span className="text-15 font-medium uppercase text-neutral-50">
                 Karma

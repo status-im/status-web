@@ -10,13 +10,11 @@ import {
   KarmaSourceCard,
   KarmaVisualCard,
 } from '~components/karma'
-import { useClaimKarma } from '~hooks/useClaimKarma'
 import { useCurrentUser } from '~hooks/useCurrentUser'
 import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 
 export default function KarmaPage() {
   const { data, isLoading, refetch } = useCurrentUser()
-  const { mutateAsync: claimKarma } = useClaimKarma()
   const {
     data: rewardsData,
     isLoading: rewardsLoading,
@@ -43,30 +41,15 @@ export default function KarmaPage() {
       {
         title: 'Welcome Karma',
         amount: formatEther(rewardsData?.balance ?? BigInt(0)),
-        onComplete: async (token: string) => {
-          await claimKarma(
-            { token },
-            {
-              onSuccess: () => {
-                refetch()
-                rewardsRefetch()
-              },
-            }
-          )
+        onComplete: async () => {
+          refetch()
+          rewardsRefetch()
         },
         isComplete: data?.connectedSybilProviders.includes('POW') ?? false,
         isLoading: rewardsLoading || isLoading,
       },
     ],
-    [
-      rewardsData,
-      data,
-      rewardsLoading,
-      isLoading,
-      claimKarma,
-      refetch,
-      rewardsRefetch,
-    ]
+    [rewardsData, data, rewardsLoading, isLoading, refetch, rewardsRefetch]
   )
 
   return (
