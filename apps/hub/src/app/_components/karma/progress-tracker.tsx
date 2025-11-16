@@ -1,7 +1,4 @@
-import { Skeleton } from '@status-im/components'
-
-import { PROGRESS_BAR_DOT_INSET } from '~constants/karma'
-import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
+import { KARMA_LEVELS, PROGRESS_BAR_DOT_INSET } from '~constants/karma'
 
 import type { KarmaLevel } from '~types/karma'
 
@@ -10,8 +7,6 @@ type ProgressBarProps = {
 }
 
 const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
-  const { karmaLevels, isLoading } = useProcessedKarmaTiers()
-
   const formatKarmaLabel = (karma: number) => {
     const formatter = new Intl.NumberFormat('en-US', {
       notation: 'compact',
@@ -23,51 +18,40 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
 
   // Find current level
   const currentLevelData =
-    karmaLevels.find(
+    KARMA_LEVELS.find(
       level => currentKarma >= level.minKarma && currentKarma < level.maxKarma
-    ) || karmaLevels[karmaLevels.length - 1]
+    ) || KARMA_LEVELS[KARMA_LEVELS.length - 1]
 
   const currentLevel = currentLevelData.level
 
   // Calculate progress within current level
-  const levelProgress =
-    currentLevelData.maxKarma === Infinity
-      ? 100
-      : ((currentKarma - currentLevelData.minKarma) /
-          (currentLevelData.maxKarma - currentLevelData.minKarma)) *
-        100
+  let levelProgress = 0
 
-  // Show loading state if tiers are being fetched or no tiers available
-  if (isLoading || karmaLevels.length === 0) {
-    return (
-      <div className="flex w-full flex-col gap-2">
-        <Skeleton height={12} width="100%" className="rounded-20" />
-        <div className="flex w-full justify-between">
-          <Skeleton height={24} width={48} className="rounded-6" />
-          <Skeleton height={24} width={48} className="rounded-6" />
-        </div>
-        <div className="flex w-full justify-between">
-          <Skeleton height={18} width={60} className="rounded-6" />
-          <Skeleton height={18} width={60} className="rounded-6" />
-        </div>
-      </div>
-    )
+  if (currentLevel != 0) {
+    levelProgress =
+      currentLevelData.maxKarma === Infinity
+        ? 100
+        : ((currentKarma - currentLevelData.minKarma) /
+            (currentLevelData.maxKarma - currentLevelData.minKarma)) *
+          100
   }
+
+  const oneLevelPercentage = 100 / (KARMA_LEVELS.length - 1)
+  const desktopLevelProgress = Math.min(
+    100,
+    oneLevelPercentage * currentLevel +
+      oneLevelPercentage * (levelProgress / 100)
+  )
 
   // For mobile: show only previous and current level
   const mobileStartLevel = Math.max(1, currentLevel - 1)
-  const mobileEndLevel = Math.min(karmaLevels.length, currentLevel)
+  const mobileEndLevel = Math.min(KARMA_LEVELS.length, currentLevel)
 
   // Mobile: only show current and next milestone
   const mobileMilestones = [
-    karmaLevels[mobileStartLevel - 1]?.minKarma ?? 0,
-    karmaLevels[mobileEndLevel - 1]?.maxKarma ?? 0,
+    KARMA_LEVELS[mobileStartLevel - 1]?.minKarma ?? 0,
+    KARMA_LEVELS[mobileEndLevel - 1]?.maxKarma ?? 0,
   ]
-
-  const oneLevelPercentage = 100 / (karmaLevels.length - 1)
-  const desktopLevelProgress =
-    oneLevelPercentage * (currentLevel - 1) +
-    oneLevelPercentage * (levelProgress / 100)
 
   return (
     <div className="flex w-full flex-col gap-2">
@@ -82,12 +66,12 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
         />
 
         {/* Step Indicators at each milestone except first */}
-        {karmaLevels.slice(1).map((level, index) => {
+        {KARMA_LEVELS.slice(1).map((level, index) => {
           // Use even spacing for dots to align with level labels
           const actualIndex = index + 1 // Account for slice(1)
           const evenSpacing =
-            karmaLevels.length > 1
-              ? (actualIndex / (karmaLevels.length - 1)) * 100
+            KARMA_LEVELS.length > 1
+              ? (actualIndex / (KARMA_LEVELS.length - 1)) * 100
               : 50
 
           let position = evenSpacing
@@ -146,11 +130,11 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
 
       {/* Karma Labels - Desktop */}
       <div className="relative hidden w-full justify-between md:flex">
-        {karmaLevels.map((level, index) => {
+        {KARMA_LEVELS.map((level, index) => {
           // Use same even spacing as level labels
           const evenSpacing =
-            karmaLevels.length > 1
-              ? (index / (karmaLevels.length - 1)) * 100
+            KARMA_LEVELS.length > 1
+              ? (index / (KARMA_LEVELS.length - 1)) * 100
               : 50
 
           return (
@@ -159,25 +143,25 @@ const ProgressBar = ({ currentKarma = 0 }: ProgressBarProps) => {
               className={`flex items-center ${
                 index === 0
                   ? 'justify-start'
-                  : index === karmaLevels.length - 1
+                  : index === KARMA_LEVELS.length - 1
                     ? 'justify-end'
                     : 'justify-center'
               }`}
               style={{
                 position:
-                  index === 0 || index === karmaLevels.length - 1
+                  index === 0 || index === KARMA_LEVELS.length - 1
                     ? 'relative'
                     : 'absolute',
                 left:
-                  index > 0 && index < karmaLevels.length - 1
+                  index > 0 && index < KARMA_LEVELS.length - 1
                     ? `${evenSpacing}%`
                     : undefined,
                 transform:
-                  index > 0 && index < karmaLevels.length - 1
+                  index > 0 && index < KARMA_LEVELS.length - 1
                     ? 'translateX(-50%)'
                     : undefined,
                 width:
-                  index > 0 && index < karmaLevels.length - 1
+                  index > 0 && index < KARMA_LEVELS.length - 1
                     ? '110px'
                     : 'auto',
               }}

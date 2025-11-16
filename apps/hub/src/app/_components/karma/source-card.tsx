@@ -41,6 +41,7 @@ const KarmaSourceCard = ({
   const { isConnected, isConnecting } = useAccount()
   const { mutateAsync: claimKarma, isPending: isClaimingKarma } =
     useClaimKarma()
+  const [isClaiming, setIsClaiming] = useState<boolean>(false)
   const toast = useToast()
   const capApiEndpoint = `${clientEnv.NEXT_PUBLIC_STATUS_NETWORK_API_URL}/captcha/cap/`
 
@@ -63,6 +64,7 @@ const KarmaSourceCard = ({
 
   const handleClaim = async () => {
     if (capToken && onComplete) {
+      setIsClaiming(true)
       try {
         await claimKarma(
           { token: capToken },
@@ -73,7 +75,7 @@ const KarmaSourceCard = ({
               toast.negative(errorMessage)
             },
             onSuccess: data => {
-              if (data.success) {
+              if (data.result.success) {
                 setCapError(null)
                 onComplete(capToken)
               } else {
@@ -81,6 +83,7 @@ const KarmaSourceCard = ({
                 setCapError(errorMessage)
                 toast.negative(errorMessage)
               }
+              setIsClaiming(false)
             },
           }
         )
@@ -200,7 +203,11 @@ const KarmaSourceCard = ({
               size="40"
               onClick={handleClaim}
               disabled={
-                !capToken || isComplete || !isConnected || isClaimingKarma
+                !capToken ||
+                isComplete ||
+                !isConnected ||
+                isClaimingKarma ||
+                isClaiming
               }
               className="w-full items-center justify-center"
             >

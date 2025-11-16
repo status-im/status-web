@@ -24,7 +24,10 @@ export interface ClaimKarmaParams {
  */
 export interface ClaimKarmaResponse {
   /** Whether the claim was successful */
-  success: boolean
+  result: {
+    /** Result of the claim */
+    success: boolean
+  }
 }
 
 /**

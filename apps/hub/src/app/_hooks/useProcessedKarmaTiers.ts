@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
 
-import { formatEther } from 'viem'
-
-import { useKarmaTier } from '~hooks/useKarmaTier'
+import { KARMA_LEVELS } from '~constants/karma'
 
 import type { KarmaLevel } from '~types/karma'
 
@@ -72,50 +70,14 @@ export interface UseProcessedKarmaTiersReturn {
  * ```
  */
 export function useProcessedKarmaTiers(): UseProcessedKarmaTiersReturn {
-  const { data: karmaTierData, isLoading: tiersLoading } = useKarmaTier()
-
   const karmaLevels = useMemo<KarmaLevel[]>(() => {
-    if (!karmaTierData || karmaTierData.count === 0 || !karmaTierData.tiers) {
-      return []
-    }
-
-    const processedTiers = karmaTierData.tiers
-      .map((tier, index) => {
-        // Convert from wei to ether, then to number
-        const minKarma = Number(formatEther(tier.minKarma))
-        const maxKarma = Number(formatEther(tier.maxKarma))
-        const level = index + 1
-
-        // Skip invalid tiers
-        if (
-          isNaN(minKarma) ||
-          isNaN(maxKarma) ||
-          isNaN(level) ||
-          minKarma < 0
-        ) {
-          console.warn('Skipping invalid tier:', { tier, index, level })
-          return null
-        }
-
-        return {
-          level,
-          minKarma,
-          maxKarma: index === karmaTierData.count - 1 ? Infinity : maxKarma,
-        }
-      })
-      .filter((tier): tier is KarmaLevel => tier !== null)
-
+    const processedTiers = KARMA_LEVELS
     // Only use processed tiers if we got valid results
-    if (processedTiers.length > 0) {
-      return processedTiers
-    }
-
-    console.warn('No valid tiers found, using fallback KARMA_LEVELS')
-    return []
-  }, [karmaTierData])
+    return processedTiers
+  }, [])
 
   return {
     karmaLevels,
-    isLoading: tiersLoading,
+    isLoading: false,
   }
 }

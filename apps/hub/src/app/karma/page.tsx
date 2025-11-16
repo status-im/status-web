@@ -16,8 +16,7 @@ import { useKarmaRewardsDistributor } from '~hooks/useKarmaRewardsDistributor'
 
 export default function KarmaPage() {
   const { data, isLoading, refetch } = useCurrentUser()
-  const { mutateAsync: claimKarma, isPending: isClaimingKarma } =
-    useClaimKarma()
+  const { mutateAsync: claimKarma } = useClaimKarma()
   const {
     data: rewardsData,
     isLoading: rewardsLoading,
@@ -56,7 +55,7 @@ export default function KarmaPage() {
           )
         },
         isComplete: data?.connectedSybilProviders.includes('POW') ?? false,
-        isLoading: rewardsLoading || isLoading || isClaimingKarma,
+        isLoading: rewardsLoading || isLoading,
       },
     ],
     [
@@ -65,7 +64,6 @@ export default function KarmaPage() {
       rewardsLoading,
       isLoading,
       claimKarma,
-      isClaimingKarma,
       refetch,
       rewardsRefetch,
     ]
