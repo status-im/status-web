@@ -8,7 +8,6 @@ import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 import { formatSNT } from '~utils/currency'
 
-import { AchievementBadges } from './achievement-badges'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
 const KarmaOverviewCard = () => {
@@ -60,7 +59,7 @@ const KarmaOverviewCard = () => {
   }
 
   return (
-    <div className="flex flex-1 flex-col rounded-20 border border-neutral-20 bg-white-100 shadow-1">
+    <div className="flex flex-1 flex-col justify-center rounded-20 border border-neutral-20 bg-white-100 shadow-1">
       <div className="flex flex-col gap-3 p-4 pb-2">
         <div className="flex items-start justify-between gap-4">
           <div className="flex flex-col gap-1">
@@ -83,9 +82,9 @@ const KarmaOverviewCard = () => {
           {/* <span className="text-19 font-semibold text-neutral-100">{rank}</span> */}
         </div>
       </div>
-      <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
-        <AchievementBadges />
-      </div>
+      {/* <div className="size-full rounded-b-20 bg-neutral-2.5 p-4"> */}
+      {/* <AchievementBadges /> */}
+      {/* </div> */}
     </div>
   )
 }
