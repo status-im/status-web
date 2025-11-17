@@ -8,7 +8,7 @@ import { useKarmaBalance } from '~hooks/useKarmaBalance'
 import { useProcessedKarmaTiers } from '~hooks/useProcessedKarmaTiers'
 import { formatSNT } from '~utils/currency'
 
-import { AchievementBadges } from './achievement-badges'
+// import { AchievementBadges } from './achievement-badges'
 import { getCurrentLevelData, ProgressBar } from './progress-tracker'
 
 const KarmaOverviewCard = () => {
@@ -83,9 +83,9 @@ const KarmaOverviewCard = () => {
           {/* <span className="text-19 font-semibold text-neutral-100">{rank}</span> */}
         </div>
       </div>
-      <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
+      {/* <div className="size-full rounded-b-20 bg-neutral-2.5 p-4">
         <AchievementBadges />
-      </div>
+      </div> */}
     </div>
   )
 }
