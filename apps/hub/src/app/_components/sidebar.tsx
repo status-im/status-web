@@ -21,7 +21,7 @@ const NAV_LINKS = [
     label: 'Deposit',
     icon: DepositIcon,
     href: 'https://status-im.notion.site/Status-Network-Early-Access-List-2a18f96fb65c80f18f00d96f7304a597',
-    tag: 'Mainnet',
+    // tag: 'Mainnet',
   },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
