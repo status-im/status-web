@@ -1,16 +1,19 @@
 'use client'
 
 import { ExternalIcon } from '@status-im/icons/20'
-import { ButtonLink, Link } from '@status-im/status-network/components'
+import {
+  // ButtonLink,
+  Link,
+} from '@status-im/status-network/components'
 import Image from 'next/image'
 
 import { HubLayout } from '~components/hub-layout'
-import { VaultCard } from '~components/vault-card'
 
+// import { VaultCard } from '~components/vault-card'
 import { Apps } from '../_components/apps'
 import { Hero } from '../_components/hero'
 
-const REWARDS = ['karma', 'linea', 'snt']
+// const REWARDS = ['karma', 'linea', 'snt']
 
 export default function DashboardPage() {
   return (
@@ -21,7 +24,7 @@ export default function DashboardPage() {
 
         {/* Main Content Card */}
         <div className="mx-auto mt-7 w-full max-w-[1176px]">
-          <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
+          {/* <div className="mb-8 rounded-32 bg-neutral-2.5 p-8">
             <div className="mb-6 flex items-start justify-between">
               <div className="max-w-2xl">
                 <h3 className="mb-2 text-27 font-600 text-neutral-90">
@@ -56,7 +59,6 @@ export default function DashboardPage() {
               </ButtonLink>
             </div>
 
-            {/* Vault Cards Grid */}
             <section className="relative ml-auto w-full max-w-[906px]">
               <Image
                 src="/dragon.png"
@@ -96,7 +98,7 @@ export default function DashboardPage() {
                 />
               </div>
             </section>
-          </div>
+          </div> */}
           <Apps />
         </div>
 
