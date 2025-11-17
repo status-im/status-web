@@ -43,13 +43,6 @@ export default function BrandPage() {
               alt: 'Main logo',
             },
             {
-              src: '/brand/main/logo-02.png',
-              height: 96,
-              width: 631,
-              className: 'max-w-[315px]',
-              alt: 'Main logo',
-            },
-            {
               src: '/brand/main/logo-03.png',
               height: 96,
               width: 631,
@@ -72,13 +65,6 @@ export default function BrandPage() {
               alt: 'Mark only',
             },
             {
-              src: '/brand/variation/logo-02.png',
-              height: 96,
-              width: 318,
-              className: 'max-w-[159px]',
-              alt: 'Mark only',
-            },
-            {
               src: '/brand/variation/logo-03.png',
               height: 96,
               width: 318,
@@ -95,13 +81,6 @@ export default function BrandPage() {
           logos={[
             {
               src: '/brand/mark/logo-01.png',
-              height: 96,
-              width: 97,
-              className: 'max-w-[48px]',
-              alt: 'Mark only',
-            },
-            {
-              src: '/brand/mark/logo-02.png',
               height: 96,
               width: 97,
               className: 'max-w-[48px]',
