@@ -6,7 +6,7 @@ import {
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
-  GovernanceIcon,
+  // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
   StakeIcon,
@@ -44,12 +44,12 @@ const OTHER_LINKS = [
     icon: ExplorerIcon,
     href: 'https://sepoliascan.status.network/',
   },
-  {
-    id: 'governance',
-    label: 'Governance',
-    icon: GovernanceIcon,
-    href: '/governance',
-  },
+  // {
+  //   id: 'governance',
+  //   label: 'Governance',
+  //   icon: GovernanceIcon,
+  //   href: '/governance',
+  // },
   {
     id: 'submit-app',
     label: 'Submit an app',
