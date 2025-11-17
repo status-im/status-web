@@ -12,7 +12,7 @@ export const LINEA_URL = 'https://linea.build'
 export const GATEWAY_URL = 'https://gateway.fm'
 export const CATS_FISHING_URL = 'https://cats.fishing'
 export const SPLA_LABS_URL = 'https://splalabs.xyz'
-export const HASHVEGAS_URL = 'https://hash.vegas'
+export const PONZI_HERO_URL = 'https://www.ponzihero.xyz'
 export const DIN_URL = 'https://infura.io'
 
 export const ROUTES = {

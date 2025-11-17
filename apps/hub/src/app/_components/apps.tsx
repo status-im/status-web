@@ -3,6 +3,7 @@ import { TwitterIcon } from '@status-im/icons/social'
 import { ButtonLink } from '@status-im/status-network/components'
 import {
   CATS_FISHING_URL,
+  PONZI_HERO_URL,
   STATUS_NETWORK_BRIDGE_URL,
 } from '@status-im/status-network/config'
 import { cx } from 'cva'
@@ -41,6 +42,14 @@ const Apps = () => {
           website={STATUS_NETWORK_BRIDGE_URL}
           twitter="StatusL2"
           icon="/apps/status-network-bridge-avatar.png"
+        />
+        <GameCard
+          title="Ponzi Hero"
+          description="Earn NFTs, have some fun!"
+          image="/apps/ponzi-hero-cover.png"
+          website={PONZI_HERO_URL}
+          twitter="Splalabs"
+          icon="/apps/ponzi-hero-avatar.png"
         />
       </div>
     </section>
