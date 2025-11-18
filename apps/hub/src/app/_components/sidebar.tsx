@@ -6,7 +6,7 @@ import {
   DiscoverIcon,
   DocsIcon,
   ExplorerIcon,
-  GovernanceIcon,
+  // GovernanceIcon,
   HomeIcon,
   KarmaIcon,
   StakeIcon,
@@ -20,8 +20,8 @@ const NAV_LINKS = [
     id: 'deposit',
     label: 'Deposit',
     icon: DepositIcon,
-    href: '#',
-    tag: 'Mainnet',
+    href: 'https://status-im.notion.site/Status-Network-Early-Access-List-2a18f96fb65c80f18f00d96f7304a597',
+    // tag: 'Mainnet',
   },
   { id: 'discover', label: 'Discover', icon: DiscoverIcon, href: '/discover' },
   { id: 'stake', label: 'Stake', icon: StakeIcon, href: '/stake' },
@@ -44,12 +44,12 @@ const OTHER_LINKS = [
     icon: ExplorerIcon,
     href: 'https://sepoliascan.status.network/',
   },
-  {
-    id: 'governance',
-    label: 'Governance',
-    icon: GovernanceIcon,
-    href: '/governance',
-  },
+  // {
+  //   id: 'governance',
+  //   label: 'Governance',
+  //   icon: GovernanceIcon,
+  //   href: '/governance',
+  // },
   {
     id: 'submit-app',
     label: 'Submit an app',
@@ -88,7 +88,7 @@ const Sidebar = (props: Props) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-60 transform border-r border-neutral-10 bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-60 transform bg-white-100 transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

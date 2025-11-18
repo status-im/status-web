@@ -20,13 +20,13 @@ export function useActionStatusContent(
         title: 'Sign in',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'siwe', step: 'processing' }, () => ({
         title: 'Signing in',
         description: 'Wait a moment.',
         state: 'processing',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'siwe', step: 'rejected' }, () => ({
         title: 'Request was rejected',
@@ -40,13 +40,13 @@ export function useActionStatusContent(
         title: 'Ready to create new vault',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'createVault', step: 'processing' }, () => ({
         title: 'Creating new vault',
         description: 'Wait a moment.',
         state: 'processing',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'createVault', step: 'rejected' }, () => ({
         title: 'Request was rejected',
@@ -85,7 +85,7 @@ export function useActionStatusContent(
           title: `Ready to stake ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
           description: 'Please sign the message in your wallet.',
           state: 'pending',
-          showCloseButton: true,
+          showCloseButton: false,
         })
       )
 
@@ -112,7 +112,7 @@ export function useActionStatusContent(
           title: `Ready to unstake ${formatSNT(state.amount ?? 0, { includeSymbol: true })}`,
           description: 'Please sign the message in your wallet.',
           state: 'pending',
-          showCloseButton: true,
+          showCloseButton: false,
         })
       )
       .with({ type: 'unstaking', step: 'processing' }, state => ({
@@ -147,7 +147,7 @@ export function useActionStatusContent(
         title: 'Ready to lock vault',
         description: 'Please sign the message in your wallet.',
         state: 'pending',
-        showCloseButton: true,
+        showCloseButton: false,
       }))
       .with({ type: 'lock', step: 'processing' }, () => ({
         title: 'Locking vault',

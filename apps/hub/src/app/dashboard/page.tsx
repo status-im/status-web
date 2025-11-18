@@ -65,7 +65,6 @@ export default function DashboardPage() {
               </ButtonLink>
             </div>
 
-            {/* Vault Cards Grid */}
             <section className="relative ml-auto w-full max-w-[906px]">
               <Image
                 src="/dragon.png"
@@ -103,7 +102,7 @@ export default function DashboardPage() {
 
               <div className="flex flex-wrap gap-3">
                 <Link
-                  href="/"
+                  href="https://docs.status.network"
                   className="inline-flex items-center gap-2 rounded-12 bg-purple px-5 py-3 text-15 font-600 text-white-100 transition-colors hover:bg-purple-dark"
                 >
                   Explore documentation
@@ -111,7 +110,7 @@ export default function DashboardPage() {
                 </Link>
 
                 <Link
-                  href="/"
+                  href="https://statusnetwork.typeform.com/partner"
                   className="inline-flex items-center gap-2 rounded-12 bg-neutral-10 px-5 py-3 text-15 font-600 text-neutral-90 ring-1 ring-inset ring-neutral-20 transition-colors hover:bg-neutral-80/20"
                 >
                   Submit an app

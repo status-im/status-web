@@ -88,15 +88,24 @@ export default async function HomePage() {
           >
             <div className="flex flex-col text-left">
               <h3 className="text-19 font-600 text-white-100">
-                Try Status Portfolio Wallet (Beta)
+                Try new Status mobile app
               </h3>
               <p className="text-15 font-400 text-white-100">
-                Easily view and manage your crypto portfolio in real time
-                &mdash; Beta crypto wallet and Web3 portfolio tracker in one.
+                Built from a single codebase for unified experience across
+                Mobile and Desktop. One app, one experience — connecting the
+                Status community across devices
               </p>
             </div>
             <div className="flex items-center">
-              <DownloadExtensionButton source="homepage-hero" />
+              <Button
+                size="32"
+                variant="outline"
+                href="https://status.app/blog/introducing-unified-status-mobile-app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Learn & try
+              </Button>
             </div>
           </div>
           <Image
