@@ -109,7 +109,7 @@ export default async function HomePage() {
             </div>
           </div>
           <Image
-            id="Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long:4662:2579"
+            id="Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long-optimized:1470:813"
             alt=""
             aria-hidden
             width={735}

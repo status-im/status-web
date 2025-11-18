@@ -1,4 +1,8 @@
 export type ImageType =
+  | {
+      id: 'Non Beta Release/Illustrations/Hero_Non_Beta_Release_Mobile_Long-optimized:1470:813'
+      alt: ''
+    }
   | { id: 'Jobs/Top Section/Jobs_01_Mobile-optimized:1745:1867'; alt: '' }
   | { id: 'Jobs/Top Section/Jobs_01-optimized:2448:1422'; alt: '' }
   | { id: 'Portfolio/Empty States/No_Balance:750:232'; alt: '' }
