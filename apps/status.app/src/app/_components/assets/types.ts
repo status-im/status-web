@@ -1,4 +1,6 @@
 export type ImageType =
+  | { id: 'Jobs/Top Section/Jobs_01_Mobile-optimized:1745:1867'; alt: '' }
+  | { id: 'Jobs/Top Section/Jobs_01-optimized:2448:1422'; alt: '' }
   | { id: 'Portfolio/Empty States/No_Balance:750:232'; alt: '' }
   | { id: 'Wallet/Icons/Logos/mercuryo-bigger:144:144'; alt: '' }
   | { id: 'Wallet/Icons/Logos/moonpay-bigger:144:144'; alt: '' }
@@ -718,7 +720,6 @@ export type ImageType =
       id: 'Platforms/Screens/Desktop Screens/Browser/Browser:2880:1800'
       alt: 'Desktop screenshot showing the browser feature included in the Status app'
     }
-  | { id: 'Manifesto/Top Section/Manifesto_01:7592:2717'; alt: '' }
   | {
       id: 'Help/Documentation Screens/Communities/468/468_1_Screen_Light:1480:1280'
       alt: "A screenshot showing a community's information and the channels in the community."
@@ -744,10 +745,6 @@ export type ImageType =
       alt: 'A header showing a channal of a community.'
     }
   | { id: 'Manifesto/Stickers/01:407:407'; alt: '' }
-  | { id: 'Manifesto/Bottom Section/Manifesto_07:892:1391'; alt: '' }
-  | { id: 'Manifesto/Bottom Section/Manifesto_08:933:1154'; alt: '' }
-  | { id: 'Manifesto/Bottom Section/Manifesto_06:1807:1925'; alt: '' }
-  | { id: 'Manifesto/Bottom Section/Manifesto_05:886:845'; alt: '' }
   | {
       id: 'Help/Documentation Screens/Communities/468/468_3_Screen_Light:1480:1480'
       alt: "A screenshot showing different areas of a channel's view."
