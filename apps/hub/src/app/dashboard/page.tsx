@@ -122,7 +122,7 @@ export default function DashboardPage() {
                 </Link>
 
                 <Link
-                  href="/"
+                  href="https://statusnetwork.typeform.com/partner"
                   className="inline-flex items-center gap-2 rounded-12 bg-neutral-10 px-5 py-3 text-15 font-600 text-neutral-90 ring-1 ring-inset ring-neutral-20 transition-colors hover:bg-neutral-80/20"
                 >
                   Submit an app
