@@ -1,5 +1,6 @@
+import { DropdownMenu, IconButton } from '@status-im/components'
 import { AlertIcon, TimeIcon } from '@status-im/icons/12'
-import { LockedIcon, UnlockedIcon } from '@status-im/icons/20'
+import { LockedIcon, OptionsIcon, UnlockedIcon } from '@status-im/icons/20'
 import { Button } from '@status-im/status-network/components'
 import { createColumnHelper } from '@tanstack/react-table'
 import { formatUnits } from 'viem'
@@ -11,14 +12,20 @@ import { formatSNT } from '~utils/currency'
 import { calculateDaysUntilUnlock, isVaultLocked } from '~utils/vault'
 
 import { LockVaultModal } from './modals/lock-vault-modal'
+import { UnstakeVaultModal } from './modals/unstake-vault'
 import { WithdrawVaultModal } from './modals/withdraw-vault-modal'
+
+import type { Address } from 'viem'
 
 interface TableColumnsProps {
   vaults: StakingVault[] | undefined
   openModalVaultId: string | null
-  setOpenModalVaultId: (vaultId: string | null) => void
   emergencyModeEnabled: unknown
+  chainId: number
   isConnected: boolean
+  openDropdownId: string | null
+  setOpenDropdownId: (id: string | null) => void
+  setOpenModalVaultId: (vaultId: string | null) => void
 }
 
 // Calculate total staked across all vaults
@@ -49,6 +56,18 @@ const validateLockTime = (_: string, days: string): string | null => {
   return totalDays > 1460 ? 'Maximum lock time is 4 years' : null
 }
 
+const resolveChainExplorerHref = (
+  chainId: number,
+  address: Address
+): string => {
+  switch (chainId) {
+    case 1660990954:
+      return `https://sepoliascan.status.network/address/${address}`
+    default:
+      return `https://etherscan.io/address/${address}`
+  }
+}
+
 // Modal action configurations - static, never change
 const EXTEND_LOCK_ACTIONS = [
   { label: 'Cancel' },
@@ -66,6 +85,9 @@ export const createVaultTableColumns = ({
   setOpenModalVaultId,
   emergencyModeEnabled,
   isConnected,
+  openDropdownId,
+  setOpenDropdownId,
+  chainId,
 }: TableColumnsProps) => {
   // Calculate totals and current time once per column creation
   const totalStaked = calculateTotalStaked(vaults)
@@ -79,14 +101,14 @@ export const createVaultTableColumns = ({
       header: 'Vault',
       cell: ({ row }) => {
         return (
-          <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
+          <span className="whitespace-pre text-13 font-medium text-neutral-100">
             #{Number(row.index) + 1}
           </span>
         )
       },
       footer: () => {
         return (
-          <span className="text-[13px] font-medium text-neutral-50">Total</span>
+          <span className="text-13 font-medium text-neutral-50">Total</span>
         )
       },
       meta: {
@@ -98,7 +120,7 @@ export const createVaultTableColumns = ({
       header: 'Address',
       cell: ({ row }) => {
         return (
-          <span className="whitespace-pre text-[13px] font-medium text-neutral-100">
+          <span className="whitespace-pre text-13 font-medium text-neutral-100">
             {shortenAddress(row.original.address)}
           </span>
         )
@@ -113,7 +135,7 @@ export const createVaultTableColumns = ({
       cell: ({ row }) => {
         return (
           <div className="flex items-center gap-1">
-            <span className="text-[13px] font-medium text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               {formatSNT(row.original.data?.stakedBalance || 0n)}
               <span className="ml-0.5 text-neutral-50">SNT</span>
             </span>
@@ -122,7 +144,7 @@ export const createVaultTableColumns = ({
       },
       footer: () => {
         return (
-          <span className="text-[13px] font-medium text-neutral-100">
+          <span className="text-13 font-medium text-neutral-100">
             {formatSNT(totalStaked)}
             <span className="ml-0.5 text-neutral-50">SNT</span>
           </span>
@@ -147,7 +169,7 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-center gap-0.5">
-            <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               {daysUntilUnlock}
               <span className="ml-0.5 text-neutral-50">d</span>
             </span>
@@ -182,11 +204,11 @@ export const createVaultTableColumns = ({
 
         return (
           <div className="flex items-center gap-3">
-            <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               x{currentBoost.toFixed(2)}
             </span>
             {potentialBoost && (
-              <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-[#7140fd]">
+              <span className="text-13 font-medium text-purple">
                 x{formatSNT(formatUnits(potentialBoost, SNT_TOKEN.decimals))} if
                 locked
               </span>
@@ -205,7 +227,7 @@ export const createVaultTableColumns = ({
         const karma = Number(row.original.data?.rewardsAccrued) / 1e18
         return (
           <div className="flex items-center gap-1">
-            <span className="text-[13px] font-medium leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium text-neutral-100">
               {formatSNT(karma)}
               <span className="ml-0.5 text-neutral-50">KARMA</span>
             </span>
@@ -214,7 +236,7 @@ export const createVaultTableColumns = ({
       },
       footer: () => {
         return (
-          <span className="text-[13px] font-medium text-neutral-100">
+          <span className="text-13 font-medium text-neutral-100">
             {formatSNT(totalKarma)}
             <span className="ml-0.5 text-neutral-50">KARMA</span>
           </span>
@@ -238,7 +260,7 @@ export const createVaultTableColumns = ({
             ) : (
               <UnlockedIcon className="text-purple" />
             )}
-            <span className="text-[13px] font-medium capitalize leading-[1.4] tracking-[-0.039px] text-neutral-100">
+            <span className="text-13 font-medium capitalize text-neutral-100">
               {isLocked ? 'Locked' : 'Open'}
             </span>
           </div>
@@ -255,8 +277,12 @@ export const createVaultTableColumns = ({
       cell: ({ row }) => {
         const withdrawModalId = `withdraw-${row.original.address}`
         const lockModalId = `lock-${row.original.address}`
+        const unstakeModalId = `unstake-${row.original.address}`
+        const dropdownId = `dropdown-${row.original.address}`
         const isWithdrawModalOpen = openModalVaultId === withdrawModalId
         const isLockModalOpen = openModalVaultId === lockModalId
+        const isUnstakeModalOpen = openModalVaultId === unstakeModalId
+        const isDropdownOpen = openDropdownId === dropdownId
 
         // Use cached timestamp instead of calling Date.now() on every render
         const isLocked = row.original?.data?.lockUntil
@@ -264,7 +290,7 @@ export const createVaultTableColumns = ({
           : false
 
         return (
-          <div className="flex items-end justify-end gap-2 lg:gap-4">
+          <div className="flex items-end justify-end gap-2">
             {isLocked ? (
               <div className="flex items-center gap-2">
                 {!emergencyModeEnabled && (
@@ -280,7 +306,7 @@ export const createVaultTableColumns = ({
                       variant="danger"
                       size="32"
                       disabled={!isConnected}
-                      className="min-w-fit bg-danger-50 text-[13px] text-white-100 hover:bg-danger-60"
+                      className="min-w-fit bg-danger-50 text-13 text-white-100 hover:bg-danger-60"
                     >
                       <AlertIcon className="shrink-0" />
                       <span className="hidden whitespace-nowrap xl:inline">
@@ -310,7 +336,7 @@ export const createVaultTableColumns = ({
                     variant="primary"
                     size="32"
                     disabled={!isConnected}
-                    className="min-w-fit text-[13px]"
+                    className="min-w-fit text-13"
                   >
                     <TimeIcon className="shrink-0" />
                     <span className="hidden whitespace-nowrap xl:inline">
@@ -338,18 +364,57 @@ export const createVaultTableColumns = ({
                   variant="primary"
                   size="32"
                   disabled={!isConnected}
-                  className="min-w-fit text-[13px]"
+                  className="min-w-fit text-13"
                 >
                   <LockedIcon fill="white" className="shrink-0" />
                   <span className="whitespace-nowrap">Lock</span>
                 </Button>
               </LockVaultModal>
             )}
+            <DropdownMenu.Root
+              onOpenChange={open => setOpenDropdownId(open ? dropdownId : null)}
+              open={isDropdownOpen}
+            >
+              <IconButton icon={<OptionsIcon />} variant="outline" />
+              <DropdownMenu.Content
+                collisionPadding={12}
+                sideOffset={10}
+                className="w-[256px]"
+                style={{ zIndex: 100 }}
+              >
+                {!isLocked && (
+                  <DropdownMenu.Item
+                    label="Unstake"
+                    onSelect={() => {
+                      setOpenModalVaultId(unstakeModalId)
+                    }}
+                  />
+                )}
+                <DropdownMenu.Item
+                  label="Open in blockchain explorer"
+                  external
+                  onSelect={() => {
+                    window.open(
+                      resolveChainExplorerHref(chainId, row.original.address),
+                      '_blank'
+                    )
+                  }}
+                />
+              </DropdownMenu.Content>
+            </DropdownMenu.Root>
+            <UnstakeVaultModal
+              open={isUnstakeModalOpen}
+              onOpenChange={open =>
+                setOpenModalVaultId(open ? unstakeModalId : null)
+              }
+              onClose={() => setOpenModalVaultId(null)}
+              vaultAddress={row.original.address}
+            />
           </div>
         )
       },
       meta: {
-        headerClassName: 'text-center',
+        headerClassName: 'text-right',
         cellClassName: 'text-right',
       },
     }),
