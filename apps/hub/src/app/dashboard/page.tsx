@@ -114,7 +114,7 @@ export default function DashboardPage() {
 
               <div className="flex flex-wrap gap-3">
                 <Link
-                  href="/"
+                  href="https://docs.status.network"
                   className="inline-flex items-center gap-2 rounded-12 bg-purple px-5 py-3 text-15 font-600 text-white-100 transition-colors hover:bg-purple-dark"
                 >
                   Explore documentation
