@@ -4,10 +4,12 @@ import { ethers } from 'ethers'
 import { publicKeyToETHAddress } from '../utils/public-key-to-eth-address'
 
 export class EthereumClient {
-  #provider: ethers.JsonRpcApiProvider
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  #provider: any
 
   constructor(url: string) {
-    this.#provider = new ethers.JsonRpcProvider(url)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.#provider = new (ethers as any).providers.JsonRpcProvider(url)
   }
 
   stop() {
@@ -32,7 +34,8 @@ export class EthereumClient {
 
       const resolverContract = new ethers.Contract(address, abi, this.#provider)
 
-      const node = ethers.namehash(ensName)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const node = (ethers as any).utils.namehash(ensName)
       const [x, y] = await resolverContract.pubkey(node)
 
       const px = BigInt(x)
