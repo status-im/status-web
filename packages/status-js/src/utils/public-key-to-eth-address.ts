@@ -6,8 +6,9 @@ export function publicKeyToETHAddress(publicKey: string): string {
   const key = deserializePublicKey(publicKey, {
     compress: false,
   })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const address = (ethers as any).utils.computeAddress(key)
+  const address =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (ethers as any).utils?.computeAddress?.(key) ?? ethers.computeAddress(key)
 
   return address
 }

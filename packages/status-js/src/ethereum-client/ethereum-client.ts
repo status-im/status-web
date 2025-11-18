@@ -8,8 +8,10 @@ export class EthereumClient {
   #provider: any
 
   constructor(url: string) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    this.#provider = new (ethers as any).providers.JsonRpcProvider(url)
+    const JsonRpcProviderClass =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (ethers as any).providers?.JsonRpcProvider ?? ethers.JsonRpcProvider
+    this.#provider = new JsonRpcProviderClass(url)
   }
 
   stop() {
@@ -34,8 +36,9 @@ export class EthereumClient {
 
       const resolverContract = new ethers.Contract(address, abi, this.#provider)
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const node = (ethers as any).utils.namehash(ensName)
+      const node =
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (ethers as any).utils?.namehash?.(ensName) ?? ethers.namehash(ensName)
       const [x, y] = await resolverContract.pubkey(node)
 
       const px = BigInt(x)
