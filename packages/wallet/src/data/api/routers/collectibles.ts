@@ -8,8 +8,8 @@ import {
   getNFTs,
 } from '../../services/alchemy'
 import {
-  CRYPTOCOMPARE_REVALIDATION_TIMES,
   legacy_fetchTokensPrice,
+  MARKET_PROXY_REVALIDATION_TIMES,
 } from '../../services/market-proxy'
 import { publicProcedure, router } from '../lib/trpc'
 
@@ -175,7 +175,7 @@ async function collectible(
     price = (
       await legacy_fetchTokensPrice(
         [symbol],
-        CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+        MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
       )
     )[symbol][currency].PRICE
     floorPrice = nft.contract.openSeaMetadata.floorPrice ?? undefined

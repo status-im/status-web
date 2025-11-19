@@ -27,7 +27,7 @@ const PROXY_AUTH = {
   password: process.env['MARKET_PROXY_AUTH_PASSWORD'],
 }
 
-export const CRYPTOCOMPARE_REVALIDATION_TIMES = {
+export const MARKET_PROXY_REVALIDATION_TIMES = {
   TRADING_PRICE: 15,
   CURRENT_PRICE: 60,
   PRICE_HISTORY: 3600,
@@ -37,7 +37,7 @@ export const CRYPTOCOMPARE_REVALIDATION_TIMES = {
 } as const
 
 type Revalidation =
-  (typeof CRYPTOCOMPARE_REVALIDATION_TIMES)[keyof typeof CRYPTOCOMPARE_REVALIDATION_TIMES]
+  (typeof MARKET_PROXY_REVALIDATION_TIMES)[keyof typeof MARKET_PROXY_REVALIDATION_TIMES]
 
 /**
  * @see https://docs.coingecko.com/reference/coins-id-market-chart
@@ -47,7 +47,7 @@ type Revalidation =
 export async function legacy_fetchTokenPriceHistory(
   symbol: string,
   days: '1' | '7' | '30' | '90' | '365' | 'all' = '1',
-  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
+  revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
 ) {
   // First, get coin id from symbol
   const coinId = await _getCoinIdFromSymbol(symbol)
@@ -68,7 +68,7 @@ export async function legacy_fetchTokenPriceHistory(
     total_volumes: [number, number][]
   }>(url, revalidate, 'legacy_fetchTokenPriceHistory')
 
-  // Convert CoinGecko format to CryptoCompare format
+  // Convert CoinGecko format to legacy format
   const data: legacy_TokenPriceHistoryResponseBody['Data']['Data'] =
     response.prices.map(([timestamp, price], index) => {
       const volume = response.total_volumes[index]?.[1] || 0
@@ -96,7 +96,7 @@ export async function legacy_fetchTokenPriceHistory(
  */
 export async function fetchTokenMetadata(
   symbol: string,
-  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+  revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
 ) {
   // First, get coin id from symbol
   const coinId = await _getCoinIdFromSymbol(symbol)
@@ -170,7 +170,7 @@ export async function fetchTokenMetadata(
 
   const description = getDescription()
 
-  // Convert CoinGecko format to CryptoCompare format
+  // Convert CoinGecko format to legacy format
   const data: TokenMetadataResponseBody['Data'] = {
     ID: 0, // CoinGecko doesn't have numeric ID
     TYPE: 'CRYPTO',
@@ -310,7 +310,7 @@ export async function fetchTokenMetadata(
  */
 export async function deprecated_fetchTokenMetadata(
   symbol: string,
-  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+  revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
 ) {
   const metadata = await fetchTokenMetadata(symbol, revalidate)
 
@@ -457,7 +457,7 @@ export async function deprecated_fetchTokenMetadata(
  */
 export async function legacy_research_fetchTokenMetadata(
   symbol: string,
-  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+  revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
 ) {
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
   // Note: include_platform parameter removed - API only accepts 'true' as valid boolean
@@ -534,7 +534,7 @@ export async function legacy_research_fetchTokenMetadata(
  */
 export async function legacy_fetchTokensPrice(
   symbols: string[],
-  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+  revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
 ) {
   if (symbols.length === 0) {
     return {}
@@ -568,7 +568,7 @@ export async function legacy_fetchTokensPrice(
       >
     >(url, revalidate, 'legacy_fetchTokensPrice')
 
-    // Convert to CryptoCompare format
+    // Convert to legacy format
     const data: legacy_TokensPriceResponseBody['RAW'] = {}
 
     for (const symbol of symbols) {
@@ -652,7 +652,7 @@ export async function legacy_fetchTokensPrice(
 export async function fetchTokensPriceForDate(
   symbols: string[],
   timestamp: number,
-  revalidate: Revalidation = CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_FOR_DATE,
+  revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.PRICE_FOR_DATE,
 ) {
   const data: Record<string, { USD: { PRICE: number } }> = {}
 
@@ -749,7 +749,7 @@ async function _getCoinIdsFromSymbols(
   try {
     coinListCache = await _fetchWithAuth<
       Array<{ id: string; symbol: string; name: string }>
-    >(url, CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA, 'coin_list_cache')
+    >(url, MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA, 'coin_list_cache')
     coinListCacheTime = now
 
     const result: Record<string, string> = {}

@@ -16,8 +16,8 @@ import {
   markApiKeyAsSuccessful,
 } from '../api-key-rotation'
 import {
-  CRYPTOCOMPARE_REVALIDATION_TIMES,
   legacy_fetchTokensPrice,
+  MARKET_PROXY_REVALIDATION_TIMES,
 } from '../market-proxy'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
@@ -1028,7 +1028,7 @@ export async function getFeeRate(
         }),
         legacy_fetchTokensPrice(
           ['ETH'],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.TRADING_PRICE,
+          MARKET_PROXY_REVALIDATION_TIMES.TRADING_PRICE,
         ),
       ])
   } catch (error) {
