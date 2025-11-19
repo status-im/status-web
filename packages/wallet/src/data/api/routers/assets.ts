@@ -12,10 +12,10 @@ import {
 } from '../../services/alchemy'
 import {
   _getCoinIdFromSymbol,
-  CRYPTOCOMPARE_REVALIDATION_TIMES,
   fetchTokenMetadata,
   legacy_fetchTokenPriceHistory,
   legacy_fetchTokensPrice,
+  MARKET_PROXY_REVALIDATION_TIMES,
 } from '../../services/market-proxy'
 import { publicProcedure, router } from '../lib/trpc'
 
@@ -385,7 +385,7 @@ async function all({
     if (missingSymbols.length > 0) {
       const prices = await legacy_fetchTokensPrice(
         missingSymbols,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+        MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
       )
 
       for (const symbol of missingSymbols) {
@@ -476,19 +476,19 @@ async function nativeToken({
       const price = (
         await legacy_fetchTokensPrice(
           [token.symbol],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+          MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
         )
       )[token.symbol]
       const priceHistory = await legacy_fetchTokenPriceHistory(
         token.symbol,
         'all',
-        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
+        MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
       )
       let tokenMetadata
       try {
         tokenMetadata = await fetchTokenMetadata(
           token.symbol,
-          CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+          MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
         )
         // If description is empty, try to fetch it again with fallback
         if (
@@ -527,7 +527,7 @@ async function nativeToken({
               },
               cache: 'force-cache',
               next: {
-                revalidate: CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+                revalidate: MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
                 tags: ['fetchTokenMetadata_supply_fallback'],
               },
             })
@@ -692,19 +692,19 @@ async function token({
       const price = (
         await legacy_fetchTokensPrice(
           [token.symbol],
-          CRYPTOCOMPARE_REVALIDATION_TIMES.CURRENT_PRICE,
+          MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
         )
       )[token.symbol]
       const priceHistory = await legacy_fetchTokenPriceHistory(
         token.symbol,
         'all',
-        CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
+        MARKET_PROXY_REVALIDATION_TIMES.PRICE_HISTORY,
       )
       let tokenMetadata
       try {
         tokenMetadata = await fetchTokenMetadata(
           token.symbol,
-          CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+          MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
         )
         // If description is empty, try to fetch it again with fallback
         if (
@@ -743,7 +743,7 @@ async function token({
               },
               cache: 'force-cache',
               next: {
-                revalidate: CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+                revalidate: MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
                 tags: ['fetchTokenMetadata_supply_fallback'],
               },
             })
