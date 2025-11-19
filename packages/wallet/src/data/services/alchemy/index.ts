@@ -84,8 +84,8 @@ const allCategories = [
 const STATUS_ETH_RPC_PROXY = 'https://test.eth-rpc.status.im'
 
 const STATUS_RPC_AUTH = {
-  username: serverEnv.STATUS_RPC_AUTH_USERNAME,
-  password: serverEnv.STATUS_RPC_AUTH_PASSWORD,
+  username: serverEnv.ETH_RPC_PROXY_AUTH_USERNAME,
+  password: serverEnv.ETH_RPC_PROXY_AUTH_PASSWORD,
 }
 
 function getStatusRpcUrl(network: NetworkType): string {
