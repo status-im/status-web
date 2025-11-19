@@ -12,7 +12,6 @@ import { formatEther } from 'ethers'
 
 import { serverEnv } from '../../../config/env.server.mjs'
 import {
-  getRandomApiKey,
   markApiKeyAsRateLimited,
   markApiKeyAsSuccessful,
 } from '../api-key-rotation'
@@ -57,6 +56,15 @@ const alchemyNetworks = {
   bsc: 'bnb-mainnet',
 }
 
+const statusRpcNetworks = {
+  ethereum: { chain: 'ethereum', network: 'mainnet' },
+  optimism: { chain: 'optimism', network: 'mainnet' },
+  arbitrum: { chain: 'arbitrum', network: 'mainnet' },
+  base: { chain: 'base', network: 'mainnet' },
+  polygon: { chain: 'polygon', network: 'mainnet' },
+  bsc: { chain: 'bsc', network: 'mainnet' },
+}
+
 const unsupportedCategoriesByNetwork: Partial<Record<NetworkType, string[]>> = {
   // bsc: ['internal'],
   // arbitrum: ['internal'],
@@ -72,6 +80,18 @@ const allCategories = [
   'erc1155',
   'specialnft',
 ] as const
+
+const STATUS_ETH_RPC_PROXY = 'https://test.eth-rpc.status.im'
+
+const STATUS_RPC_AUTH = {
+  username: serverEnv.STATUS_RPC_AUTH_USERNAME,
+  password: serverEnv.STATUS_RPC_AUTH_PASSWORD,
+}
+
+function getStatusRpcUrl(network: NetworkType): string {
+  const { chain, network: networkName } = statusRpcNetworks[network]
+  return `${STATUS_ETH_RPC_PROXY}/${chain}/${networkName}/alchemy`
+}
 
 // todo: use `genesisTimestamp` for `all` days parame
 // const networkConfigs = {
@@ -106,15 +126,20 @@ export async function getNativeTokenBalance(
   network: NetworkType,
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+    const url = new URL(getStatusRpcUrl(network))
+
+    return _fetch<NativeTokenBalanceResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        id: 1,
+        jsonrpc: '2.0',
+        method: 'eth_getBalance',
+        params: [address, 'latest'],
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<NativeTokenBalanceResponseBody>(url, 'POST', 0, {
-      id: 1,
-      jsonrpc: '2.0',
-      method: 'eth_getBalance',
-      params: [address, 'latest'],
-    })
   })
 
   const balance = body.result
@@ -145,15 +170,37 @@ export async function getERC20TokensBalance(
   }
 
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+    const url = new URL(getStatusRpcUrl(network))
+    return _fetch<ERC20TokenBalanceResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        method: 'alchemy_getTokenBalances',
+        params,
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<ERC20TokenBalanceResponseBody>(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      method: 'alchemy_getTokenBalances',
-      params,
-    })
   })
+
+  console.log('bdfbdf', body)
+
+  if (
+    typeof body === 'object' &&
+    body !== null &&
+    'error' in body &&
+    body.error
+  ) {
+    const error = body.error as { code?: number; message?: string }
+    throw new Error(`Alchemy API error: ${error.message || 'Unknown error'}`, {
+      cause: error.code,
+    })
+  }
+
+  if (!body.result) {
+    throw new Error('Alchemy API response missing result field')
+  }
 
   return {
     tokenBalances: body.result.tokenBalances,
@@ -172,21 +219,26 @@ export async function getTokensBalance(
   pageKey?: string,
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://api.g.alchemy.com/data/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/assets/tokens/by-address`,
+    // Use first network for URL, as Portfolio API supports multiple networks in request body
+    const url = new URL(getStatusRpcUrl(networks[0]))
+    return _fetch<TokensBalanceResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        addresses: [
+          {
+            address,
+            networks: networks.map(network => alchemyNetworks[network]),
+          },
+        ],
+        withMetadata: false,
+        withPrices: false,
+        includeNativeTokens: true,
+        ...(pageKey && { pageKey }),
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<TokensBalanceResponseBody>(url, 'POST', 0, {
-      addresses: [
-        {
-          address,
-          networks: networks.map(network => alchemyNetworks[network]),
-        },
-      ],
-      withMetadata: false,
-      withPrices: false,
-      includeNativeTokens: true,
-      ...(pageKey && { pageKey }),
-    })
   })
 
   return body.data
@@ -209,26 +261,30 @@ export async function fetchTokenBalanceHistory(
 
   {
     const body = await _retry(async () => {
-      const url = new URL(
-        `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+      const url = new URL(getStatusRpcUrl(network))
+      return _fetch<TokenBalanceHistoryResponseBody>(
+        url,
+        'POST',
+        0,
+        {
+          jsonrpc: '2.0',
+          method: 'alchemy_getAssetTransfers',
+          params: [
+            {
+              fromBlock: '0x0',
+              toBlock: 'latest',
+              toAddress: address,
+              category: [contract ? 'erc20' : 'external'],
+              order: 'desc',
+              withMetadata: true,
+              excludeZeroValue: true,
+              maxCount: '0x3e8',
+              ...(contract && { contractAddresses: [contract] }),
+            },
+          ],
+        },
+        STATUS_RPC_AUTH,
       )
-      return _fetch<TokenBalanceHistoryResponseBody>(url, 'POST', 0, {
-        jsonrpc: '2.0',
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            toAddress: address,
-            category: [contract ? 'erc20' : 'external'],
-            order: 'desc',
-            withMetadata: true,
-            excludeZeroValue: true,
-            maxCount: '0x3e8',
-            ...(contract && { contractAddresses: [contract] }),
-          },
-        ],
-      })
     })
 
     transfers.push(...body.result.transfers)
@@ -238,26 +294,30 @@ export async function fetchTokenBalanceHistory(
 
   {
     const body = await _retry(async () => {
-      const url = new URL(
-        `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+      const url = new URL(getStatusRpcUrl(network))
+      return _fetch<TokenBalanceHistoryResponseBody>(
+        url,
+        'POST',
+        0,
+        {
+          jsonrpc: '2.0',
+          method: 'alchemy_getAssetTransfers',
+          params: [
+            {
+              fromBlock: '0x0',
+              toBlock: 'latest',
+              fromAddress: address,
+              category: [contract ? 'erc20' : 'external'],
+              order: 'desc',
+              withMetadata: true,
+              excludeZeroValue: true,
+              maxCount: '0x3e8',
+              ...(contract && { contractAddresses: [contract] }),
+            },
+          ],
+        },
+        STATUS_RPC_AUTH,
       )
-      return _fetch<TokenBalanceHistoryResponseBody>(url, 'POST', 0, {
-        jsonrpc: '2.0',
-        method: 'alchemy_getAssetTransfers',
-        params: [
-          {
-            fromBlock: '0x0',
-            toBlock: 'latest',
-            fromAddress: address,
-            category: [contract ? 'erc20' : 'external'],
-            order: 'desc',
-            withMetadata: true,
-            excludeZeroValue: true,
-            maxCount: '0x3e8',
-            ...(contract && { contractAddresses: [contract] }),
-          },
-        ],
-      })
     })
 
     transfers.push(...body.result.transfers)
@@ -402,9 +462,7 @@ export async function getNFTs(
   pageSize?: string,
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getNFTsForOwner`,
-    )
+    const url = new URL(getStatusRpcUrl(network))
     url.searchParams.set('owner', address)
     url.searchParams.set('withMetadata', 'true')
     url.searchParams.set('pageSize', pageSize ?? '100')
@@ -412,7 +470,7 @@ export async function getNFTs(
     if (page) {
       url.searchParams.set('pageKey', page)
     }
-    return _fetch<NFTsResponseBody>(url, 'GET', 0)
+    return _fetch<NFTsResponseBody>(url, 'GET', 0, undefined, STATUS_RPC_AUTH)
   })
 
   return body
@@ -429,12 +487,16 @@ export async function getNFTMetadata(
   network: NetworkType,
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getNFTMetadata`,
-    )
+    const url = new URL(getStatusRpcUrl(network))
     url.searchParams.set('contractAddress', contract)
     url.searchParams.set('tokenId', tokenId)
-    return _fetch<NFTMetadataResponseBody>(url, 'GET', 0)
+    return _fetch<NFTMetadataResponseBody>(
+      url,
+      'GET',
+      0,
+      undefined,
+      STATUS_RPC_AUTH,
+    )
   })
 
   return body
@@ -444,15 +506,19 @@ export async function getLatestBlockNumber(
   network: NetworkType,
 ): Promise<number> {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+    const url = new URL(getStatusRpcUrl(network))
+    return _fetch<BlockNumberResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        method: 'eth_blockNumber',
+        params: [],
+        id: 1,
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<BlockNumberResponseBody>(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      method: 'eth_blockNumber',
-      params: [],
-      id: 1,
-    })
   })
 
   if (!body.result) {
@@ -501,9 +567,7 @@ export async function getOutgoingAssetTransfers(
   }
 
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
-    )
+    const url = new URL(getStatusRpcUrl(network))
     return _fetch<
       TokenBalanceHistoryResponseBody & {
         result: {
@@ -511,12 +575,18 @@ export async function getOutgoingAssetTransfers(
           pageKey?: string
         }
       }
-    >(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      method: 'alchemy_getAssetTransfers',
-      params: [params, 'latest'],
-      id: Date.now(),
-    })
+    >(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        method: 'alchemy_getAssetTransfers',
+        params: [params, 'latest'],
+        id: Date.now(),
+      },
+      STATUS_RPC_AUTH,
+    )
   })
 
   if ('error' in body) {
@@ -585,9 +655,7 @@ export async function getIncomingAssetTransfers(
   }
 
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
-    )
+    const url = new URL(getStatusRpcUrl(network))
     return _fetch<
       TokenBalanceHistoryResponseBody & {
         result: {
@@ -595,12 +663,18 @@ export async function getIncomingAssetTransfers(
           pageKey?: string
         }
       }
-    >(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      method: 'alchemy_getAssetTransfers',
-      params: [params, 'latest'],
-      id: Date.now(),
-    })
+    >(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        method: 'alchemy_getAssetTransfers',
+        params: [params, 'latest'],
+        id: Date.now(),
+      },
+      STATUS_RPC_AUTH,
+    )
   })
 
   if ('error' in body) {
@@ -789,15 +863,19 @@ export async function getTransactionStatus(
   network: NetworkType,
 ): Promise<'pending' | 'success' | 'failed' | 'unknown'> {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+    const url = new URL(getStatusRpcUrl(network))
+    return _fetch<TransactionStatusResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        method: 'eth_getTransactionReceipt',
+        params: [txHash],
+        id: 1,
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<TransactionStatusResponseBody>(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      method: 'eth_getTransactionReceipt',
-      params: [txHash],
-      id: 1,
-    })
   })
 
   const transactionReceipt = body.result
@@ -826,15 +904,19 @@ export async function deprecated_getNFTSale(
   network: NetworkType,
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getNFTSales`,
-    )
+    const url = new URL(getStatusRpcUrl(network))
     url.searchParams.set('contractAddress', contract)
     url.searchParams.set('tokenId', tokenId)
     url.searchParams.set('buyerAddress', address)
     url.searchParams.set('order', 'desc')
     url.searchParams.set('taker', 'BUYER')
-    return _fetch<deprecated_NFTSaleResponseBody>(url, 'GET', 0)
+    return _fetch<deprecated_NFTSaleResponseBody>(
+      url,
+      'GET',
+      0,
+      undefined,
+      STATUS_RPC_AUTH,
+    )
   })
 
   return body
@@ -850,11 +932,15 @@ export async function deprecated_getNFTSale(
  */
 export async function getNFTFloorPrice(contract: string, network: NetworkType) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/nft/v3/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}/getFloorPrice`,
-    )
+    const url = new URL(getStatusRpcUrl(network))
     url.searchParams.set('contractAddress', contract)
-    return _fetch<NFTFloorPriceResponseBody>(url, 'GET', 0)
+    return _fetch<NFTFloorPriceResponseBody>(
+      url,
+      'GET',
+      0,
+      undefined,
+      STATUS_RPC_AUTH,
+    )
   })
 
   return body
@@ -883,48 +969,64 @@ export async function getFeeRate(
     ;[gasEstimate, maxPriorityFee, latestBlock, feeHistory, ethPriceData] =
       await Promise.all([
         _retry(async () => {
-          const url = new URL(
-            `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+          const url = new URL(getStatusRpcUrl(network))
+          return _fetch<GasEstimateResponseBody>(
+            url,
+            'POST',
+            0,
+            {
+              jsonrpc: '2.0',
+              id: 1,
+              method: 'eth_estimateGas',
+              params: [gasParams],
+            },
+            STATUS_RPC_AUTH,
           )
-          return _fetch<GasEstimateResponseBody>(url, 'POST', 0, {
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'eth_estimateGas',
-            params: [gasParams],
-          })
         }),
         _retry(async () => {
-          const url = new URL(
-            `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+          const url = new URL(getStatusRpcUrl(network))
+          return _fetch<MaxPriorityFeeResponseBody>(
+            url,
+            'POST',
+            0,
+            {
+              jsonrpc: '2.0',
+              id: 2,
+              method: 'eth_maxPriorityFeePerGas',
+              params: [],
+            },
+            STATUS_RPC_AUTH,
           )
-          return _fetch<MaxPriorityFeeResponseBody>(url, 'POST', 0, {
-            jsonrpc: '2.0',
-            id: 2,
-            method: 'eth_maxPriorityFeePerGas',
-            params: [],
-          })
         }),
         _retry(async () => {
-          const url = new URL(
-            `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+          const url = new URL(getStatusRpcUrl(network))
+          return _fetch<BlockResponseBody>(
+            url,
+            'POST',
+            0,
+            {
+              jsonrpc: '2.0',
+              id: 3,
+              method: 'eth_getBlockByNumber',
+              params: ['latest', false],
+            },
+            STATUS_RPC_AUTH,
           )
-          return _fetch<BlockResponseBody>(url, 'POST', 0, {
-            jsonrpc: '2.0',
-            id: 3,
-            method: 'eth_getBlockByNumber',
-            params: ['latest', false],
-          })
         }),
         _retry(async () => {
-          const url = new URL(
-            `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+          const url = new URL(getStatusRpcUrl(network))
+          return _fetch<FeeHistoryResponseBody>(
+            url,
+            'POST',
+            0,
+            {
+              jsonrpc: '2.0',
+              id: 4,
+              method: 'eth_feeHistory',
+              params: ['0x4', 'latest', [10, 50, 90]],
+            },
+            STATUS_RPC_AUTH,
           )
-          return _fetch<FeeHistoryResponseBody>(url, 'POST', 0, {
-            jsonrpc: '2.0',
-            id: 4,
-            method: 'eth_feeHistory',
-            params: ['0x4', 'latest', [10, 50, 90]],
-          })
         }),
         legacy_fetchTokensPrice(
           ['ETH'],
@@ -988,15 +1090,19 @@ export async function broadcastTransaction(
   network: NetworkType = 'ethereum',
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+    const url = new URL(getStatusRpcUrl(network))
+    return _fetch<SendRawTransactionResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'eth_sendRawTransaction',
+        params: [txHex],
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<SendRawTransactionResponseBody>(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'eth_sendRawTransaction',
-      params: [txHex],
-    })
   })
 
   return body
@@ -1010,15 +1116,19 @@ export async function getTransactionCount(
   network: NetworkType,
 ) {
   const body = await _retry(async () => {
-    const url = new URL(
-      `https://${alchemyNetworks[network]}.g.alchemy.com/v2/${getRandomApiKey(serverEnv.ALCHEMY_API_KEYS)}`,
+    const url = new URL(getStatusRpcUrl(network))
+    return _fetch<TransactionCountResponseBody>(
+      url,
+      'POST',
+      0,
+      {
+        jsonrpc: '2.0',
+        id: 1,
+        method: 'eth_getTransactionCount',
+        params: [address, 'latest'],
+      },
+      STATUS_RPC_AUTH,
     )
-    return _fetch<TransactionCountResponseBody>(url, 'POST', 0, {
-      jsonrpc: '2.0',
-      id: 1,
-      method: 'eth_getTransactionCount',
-      params: [address, 'latest'],
-    })
   })
 
   const nonce = body.result
@@ -1042,12 +1152,22 @@ async function _fetch<T extends ResponseBody>(
   method: 'GET' | 'POST',
   revalidate: number,
   body?: Record<string, unknown>,
+  auth?: { username: string; password: string },
 ): Promise<T> {
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  }
+
+  if (auth) {
+    const credentials = Buffer.from(
+      `${auth.username}:${auth.password}`,
+    ).toString('base64')
+    headers['Authorization'] = `Basic ${credentials}`
+  }
+
   const response = await fetch(url, {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     ...(body && { body: JSON.stringify(body) }),
     // why: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#reusing-data-across-multiple-functions
     // why: https://github.com/vercel/next.js/issues/70946
