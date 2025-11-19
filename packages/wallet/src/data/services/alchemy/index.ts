@@ -18,7 +18,7 @@ import {
 import {
   CRYPTOCOMPARE_REVALIDATION_TIMES,
   legacy_fetchTokensPrice,
-} from '../cryptocompare'
+} from '../market-proxy'
 import { estimateConfirmationTime, processFeeHistory } from './utils'
 
 import type { NetworkType } from '../../api/types'
@@ -183,8 +183,6 @@ export async function getERC20TokensBalance(
       STATUS_RPC_AUTH,
     )
   })
-
-  console.log('bdfbdf', body)
 
   if (
     typeof body === 'object' &&

@@ -302,6 +302,7 @@ const Token = (props: Props) => {
         const tokenAssets = Object.values(tokenDetail.assets)
         if (tokenAssets.length > 0 && tokenAssets[0]) {
           const metadata = tokenAssets[0].metadata
+
           const content = await renderMarkdown(
             metadata?.about || 'No description available.',
           )

@@ -11,11 +11,12 @@ import {
   getNativeTokenBalance,
 } from '../../services/alchemy'
 import {
+  _getCoinIdFromSymbol,
   CRYPTOCOMPARE_REVALIDATION_TIMES,
   fetchTokenMetadata,
   legacy_fetchTokenPriceHistory,
   legacy_fetchTokensPrice,
-} from '../../services/cryptocompare'
+} from '../../services/market-proxy'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type { NetworkType } from '../types'
@@ -219,6 +220,14 @@ async function all({
         const price = (await legacy_fetchTokensPrice([token.symbol]))[
           token.symbol
         ]
+
+        // Skip if price data is not available
+        if (!price || !price.USD) {
+          console.warn(
+            `Price data not available for token ${token.symbol}, skipping`,
+          )
+          return
+        }
 
         const asset: Omit<Asset, 'metadata'> = {
           networks: [STATUS_NETWORKS[token.chainId]],
@@ -475,10 +484,124 @@ async function nativeToken({
         'all',
         CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMetadata = await fetchTokenMetadata(
-        token.symbol,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
-      )
+      let tokenMetadata
+      try {
+        tokenMetadata = await fetchTokenMetadata(
+          token.symbol,
+          CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+        )
+        // If description is empty, try to fetch it again with fallback
+        if (
+          !tokenMetadata?.['ASSET_DESCRIPTION'] ||
+          tokenMetadata['ASSET_DESCRIPTION'].trim() === ''
+        ) {
+          throw new Error('Description is empty')
+        }
+      } catch {
+        // Try to get at least supply information
+        try {
+          const coinId = await _getCoinIdFromSymbol(token.symbol)
+          if (coinId && coinId.toLowerCase() !== token.symbol.toLowerCase()) {
+            const PROXY_BASE_URL = 'https://test.market.status.im'
+            const PROXY_AUTH = {
+              username: process.env['MARKET_PROXY_AUTH_USERNAME'] || 'test',
+              password: process.env['MARKET_PROXY_AUTH_PASSWORD'] || 'test',
+            }
+            const credentials = Buffer.from(
+              `${PROXY_AUTH.username}:${PROXY_AUTH.password}`,
+            ).toString('base64')
+
+            const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
+            url.searchParams.set('localization', 'true')
+            url.searchParams.set('tickers', 'false')
+            url.searchParams.set('market_data', 'true')
+            url.searchParams.set('community_data', 'false')
+            url.searchParams.set('developer_data', 'false')
+            url.searchParams.set('sparkline', 'false')
+
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: {
+                Authorization: `Basic ${credentials}`,
+                'Content-Type': 'application/json',
+              },
+              cache: 'force-cache',
+              next: {
+                revalidate: CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+                tags: ['fetchTokenMetadata_supply_fallback'],
+              },
+            })
+
+            if (response.ok) {
+              const coinData = await response.json()
+
+              // Get description in preferred order: en, then any other language
+              const getDescription = (): string => {
+                if (!coinData.description) {
+                  return ''
+                }
+
+                if (coinData.description['en']) {
+                  return coinData.description['en']
+                }
+                // Try other common languages
+                const languages = [
+                  'ko',
+                  'ja',
+                  'zh',
+                  'es',
+                  'fr',
+                  'de',
+                  'pt',
+                  'ru',
+                ]
+                for (const lang of languages) {
+                  if (coinData.description[lang]) {
+                    return coinData.description[lang]
+                  }
+                }
+                // Return first available description
+                const firstDescription = Object.values(
+                  coinData.description || {},
+                )[0] as string | undefined
+                if (firstDescription) {
+                  return firstDescription
+                }
+
+                return ''
+              }
+              const description = getDescription()
+              tokenMetadata = {
+                SUPPLY_TOTAL: coinData.market_data?.total_supply || 0,
+                SUPPLY_CIRCULATING:
+                  coinData.market_data?.circulating_supply || 0,
+                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+                ASSET_DESCRIPTION: description,
+              }
+            } else if (response.status === 404) {
+              // Coin ID not found in CoinGecko, use empty description
+              tokenMetadata = {
+                SUPPLY_TOTAL: 0,
+                SUPPLY_CIRCULATING: 0,
+                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+                ASSET_DESCRIPTION: '',
+              }
+            } else {
+              throw new Error(`Failed to fetch supply info: ${response.status}`)
+            }
+          } else {
+            throw new Error('Coin ID not found')
+          }
+        } catch {
+          // Provide default metadata structure
+          tokenMetadata = {
+            SUPPLY_TOTAL: 0,
+            SUPPLY_CIRCULATING: 0,
+            TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+            ASSET_DESCRIPTION: '',
+          }
+        }
+      }
 
       const asset: Asset = map({
         token,
@@ -577,10 +700,124 @@ async function token({
         'all',
         CRYPTOCOMPARE_REVALIDATION_TIMES.PRICE_HISTORY,
       )
-      const tokenMetadata = await fetchTokenMetadata(
-        token.symbol,
-        CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
-      )
+      let tokenMetadata
+      try {
+        tokenMetadata = await fetchTokenMetadata(
+          token.symbol,
+          CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+        )
+        // If description is empty, try to fetch it again with fallback
+        if (
+          !tokenMetadata?.['ASSET_DESCRIPTION'] ||
+          tokenMetadata['ASSET_DESCRIPTION'].trim() === ''
+        ) {
+          throw new Error('Description is empty')
+        }
+      } catch {
+        // Try to get at least supply information
+        try {
+          const coinId = await _getCoinIdFromSymbol(token.symbol)
+          if (coinId && coinId.toLowerCase() !== token.symbol.toLowerCase()) {
+            const PROXY_BASE_URL = 'https://test.market.status.im'
+            const PROXY_AUTH = {
+              username: process.env['MARKET_PROXY_AUTH_USERNAME'] || 'test',
+              password: process.env['MARKET_PROXY_AUTH_PASSWORD'] || 'test',
+            }
+            const credentials = Buffer.from(
+              `${PROXY_AUTH.username}:${PROXY_AUTH.password}`,
+            ).toString('base64')
+
+            const url = new URL(`${PROXY_BASE_URL}/v1/coins/${coinId}`)
+            url.searchParams.set('localization', 'true')
+            url.searchParams.set('tickers', 'false')
+            url.searchParams.set('market_data', 'true')
+            url.searchParams.set('community_data', 'false')
+            url.searchParams.set('developer_data', 'false')
+            url.searchParams.set('sparkline', 'false')
+
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: {
+                Authorization: `Basic ${credentials}`,
+                'Content-Type': 'application/json',
+              },
+              cache: 'force-cache',
+              next: {
+                revalidate: CRYPTOCOMPARE_REVALIDATION_TIMES.TOKEN_METADATA,
+                tags: ['fetchTokenMetadata_supply_fallback'],
+              },
+            })
+
+            if (response.ok) {
+              const coinData = await response.json()
+
+              // Get description in preferred order: en, then any other language
+              const getDescription = (): string => {
+                if (!coinData.description) {
+                  return ''
+                }
+
+                if (coinData.description['en']) {
+                  return coinData.description['en']
+                }
+                // Try other common languages
+                const languages = [
+                  'ko',
+                  'ja',
+                  'zh',
+                  'es',
+                  'fr',
+                  'de',
+                  'pt',
+                  'ru',
+                ]
+                for (const lang of languages) {
+                  if (coinData.description[lang]) {
+                    return coinData.description[lang]
+                  }
+                }
+                // Return first available description
+                const firstDescription = Object.values(
+                  coinData.description || {},
+                )[0] as string | undefined
+                if (firstDescription) {
+                  return firstDescription
+                }
+
+                return ''
+              }
+              const description = getDescription()
+              tokenMetadata = {
+                SUPPLY_TOTAL: coinData.market_data?.total_supply || 0,
+                SUPPLY_CIRCULATING:
+                  coinData.market_data?.circulating_supply || 0,
+                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+                ASSET_DESCRIPTION: description,
+              }
+            } else if (response.status === 404) {
+              // Coin ID not found in CoinGecko, use empty description
+              tokenMetadata = {
+                SUPPLY_TOTAL: 0,
+                SUPPLY_CIRCULATING: 0,
+                TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+                ASSET_DESCRIPTION: '',
+              }
+            } else {
+              throw new Error(`Failed to fetch supply info: ${response.status}`)
+            }
+          } else {
+            throw new Error('Coin ID not found')
+          }
+        } catch {
+          // Provide default metadata structure
+          tokenMetadata = {
+            SUPPLY_TOTAL: 0,
+            SUPPLY_CIRCULATING: 0,
+            TOPLIST_BASE_RANK: { TOTAL_MKT_CAP_USD: 0 },
+            ASSET_DESCRIPTION: '',
+          }
+        }
+      }
 
       const asset = map({
         token,
@@ -872,6 +1109,52 @@ function map(data: {
 
   const lows = priceHistory.map(({ low }) => low).filter(low => low > 0)
 
+  // Use price data as fallback when tokenMetadata is missing or has default values
+  // Note: tokenMetadata['SUPPLY_TOTAL'] can be 0 or null from CoinGecko, so we need to check for both
+  const metadataTotalSupply =
+    tokenMetadata?.['SUPPLY_TOTAL'] && tokenMetadata['SUPPLY_TOTAL'] > 0
+      ? tokenMetadata['SUPPLY_TOTAL']
+      : null
+
+  const metadataCirculatingSupply =
+    tokenMetadata?.['SUPPLY_CIRCULATING'] &&
+    tokenMetadata['SUPPLY_CIRCULATING'] > 0
+      ? tokenMetadata['SUPPLY_CIRCULATING']
+      : null
+
+  // Try to get supply from market cap and price if available
+  const supplyFromMarketCap =
+    price.USD['MKTCAP'] && price.USD['PRICE'] && price.USD['PRICE'] > 0
+      ? price.USD['MKTCAP'] / price.USD['PRICE']
+      : null
+
+  const totalSupply =
+    metadataTotalSupply ||
+    price.USD['SUPPLY'] ||
+    price.USD['CIRCULATINGSUPPLY'] ||
+    supplyFromMarketCap ||
+    0
+
+  const circulation =
+    price.USD['CIRCULATINGSUPPLY'] ||
+    metadataCirculatingSupply ||
+    supplyFromMarketCap ||
+    0
+
+  const fullyDiluted =
+    metadataTotalSupply && metadataTotalSupply > 0
+      ? price.USD['PRICE'] * metadataTotalSupply
+      : totalSupply > 0
+        ? price.USD['PRICE'] * totalSupply
+        : 0
+
+  const rankByMarketCap =
+    tokenMetadata?.['TOPLIST_BASE_RANK']?.['TOTAL_MKT_CAP_USD'] ||
+    price.USD['MKTCAP'] ||
+    0
+
+  const about = tokenMetadata?.['ASSET_DESCRIPTION'] || ''
+
   return {
     networks: [STATUS_NETWORKS[token.chainId]],
     ...('address' in token
@@ -887,15 +1170,14 @@ function map(data: {
     decimals: token.decimals,
     metadata: {
       market_cap: price.USD['MKTCAP'],
-      fully_dilluted: price.USD['PRICE'] * tokenMetadata['SUPPLY_TOTAL'],
-      circulation: price.USD['CIRCULATINGSUPPLY'],
-      total_supply: tokenMetadata['SUPPLY_TOTAL'],
+      fully_dilluted: fullyDiluted,
+      circulation: circulation,
+      total_supply: totalSupply,
       all_time_high: Math.max(...priceHistory.map(({ high }) => high)),
       all_time_low: lows.length ? Math.min(...lows) : price.USD['PRICE'],
       volume_24: price.USD['TOTALVOLUME24HTO'],
-      rank_by_market_cap:
-        tokenMetadata['TOPLIST_BASE_RANK']['TOTAL_MKT_CAP_USD'],
-      about: tokenMetadata['ASSET_DESCRIPTION'],
+      rank_by_market_cap: rankByMarketCap,
+      about: about,
     },
   }
 }
