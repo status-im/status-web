@@ -47,7 +47,6 @@
     "build": "vite build && pnpm build:types",
     "build:types": "tsc --noEmit false --emitDeclarationOnly",
     "typecheck": "tsc",
-    "env:check": "node -r dotenv/config ./src/config/env.server.mjs dotenv_config_path=./.env && :",
     "lint": "eslint src",
     "format": "prettier --write .",
     "clean": "rimraf node_modules dist .turbo",
