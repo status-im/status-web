@@ -16,6 +16,8 @@ export const envSchema = z.object({
   MERCURYO_SECRET_KEY: z.string(),
   STATUS_RPC_AUTH_USERNAME: z.string(),
   STATUS_RPC_AUTH_PASSWORD: z.string(),
+  MARKET_PROXY_AUTH_USERNAME: z.string().optional(),
+  MARKET_PROXY_AUTH_PASSWORD: z.string().optional(),
 })
 
 const result = envSchema.safeParse(process.env)

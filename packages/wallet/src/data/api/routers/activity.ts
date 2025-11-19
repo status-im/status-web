@@ -6,7 +6,7 @@ import { z } from 'zod'
 import erc20TokenList from '../../../constants/erc20.json'
 import { groupBy } from '../../../utils/group-by'
 import { getAssetTransfers, getTransactionStatus } from '../../services/alchemy'
-import { fetchTokensPriceForDate } from '../../services/cryptocompare'
+import { fetchTokensPriceForDate } from '../../services/market-proxy'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type { AssetTransfer } from '../../services/alchemy/types'

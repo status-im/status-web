@@ -10,7 +10,7 @@ import {
 import {
   CRYPTOCOMPARE_REVALIDATION_TIMES,
   legacy_fetchTokensPrice,
-} from '../../services/cryptocompare'
+} from '../../services/market-proxy'
 import { publicProcedure, router } from '../lib/trpc'
 
 import type {
