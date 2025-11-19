@@ -276,41 +276,48 @@ async function all({
     >) {
       let pageKey: string | undefined
 
-      do {
-        const result = await getERC20TokensBalance(
-          address,
-          network as NetworkType,
-          undefined,
-          pageKey,
-        )
+      try {
+        do {
+          const result = await getERC20TokensBalance(
+            address,
+            network as NetworkType,
+            undefined,
+            pageKey,
+          )
 
-        for (const balance of result.tokenBalances) {
-          const tokenBalance = Number(balance.tokenBalance)
+          for (const balance of result.tokenBalances) {
+            const tokenBalance = Number(balance.tokenBalance)
 
-          if (tokenBalance > 0) {
-            const token = filteredERC20Tokens.get(
-              toChecksumAddress(balance.contractAddress),
-            )
-            if (token) {
-              const checksummedAddress = toChecksumAddress(
-                balance.contractAddress,
+            if (tokenBalance > 0) {
+              const token = filteredERC20Tokens.get(
+                toChecksumAddress(balance.contractAddress),
               )
-              partialERC20Assets.set(checksummedAddress, {
-                networks: [network as NetworkType],
-                native: false,
-                contract: checksummedAddress,
-                icon: token.logoURI,
-                name: token.name,
-                symbol: token.symbol,
-                balance: tokenBalance / 10 ** token.decimals,
-                decimals: token.decimals,
-              })
+              if (token) {
+                const checksummedAddress = toChecksumAddress(
+                  balance.contractAddress,
+                )
+                partialERC20Assets.set(checksummedAddress, {
+                  networks: [network as NetworkType],
+                  native: false,
+                  contract: checksummedAddress,
+                  icon: token.logoURI,
+                  name: token.name,
+                  symbol: token.symbol,
+                  balance: tokenBalance / 10 ** token.decimals,
+                  decimals: token.decimals,
+                })
+              }
             }
           }
-        }
 
-        pageKey = result.pageKey
-      } while (pageKey)
+          pageKey = result.pageKey
+        } while (pageKey)
+      } catch (error) {
+        console.error(
+          `[assets.all] Failed to fetch ERC20 token balances for ${network}:`,
+          error,
+        )
+      }
     }
 
     const batchSize = 300

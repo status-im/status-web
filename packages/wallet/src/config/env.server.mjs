@@ -14,6 +14,8 @@ export const envSchema = z.object({
   CRYPTOCOMPARE_API_KEYS: z.string(),
   PORT: z.coerce.number().optional(),
   MERCURYO_SECRET_KEY: z.string(),
+  STATUS_RPC_AUTH_USERNAME: z.string(),
+  STATUS_RPC_AUTH_PASSWORD: z.string(),
 })
 
 const result = envSchema.safeParse(process.env)
