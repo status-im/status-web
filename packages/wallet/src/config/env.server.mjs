@@ -14,8 +14,8 @@ export const envSchema = z.object({
   CRYPTOCOMPARE_API_KEYS: z.string(),
   PORT: z.coerce.number().optional(),
   MERCURYO_SECRET_KEY: z.string(),
-  STATUS_RPC_AUTH_USERNAME: z.string(),
-  STATUS_RPC_AUTH_PASSWORD: z.string(),
+  ETH_RPC_PROXY_AUTH_USERNAME: z.string(),
+  ETH_RPC_PROXY_AUTH_PASSWORD: z.string(),
   MARKET_PROXY_AUTH_USERNAME: z.string().optional(),
   MARKET_PROXY_AUTH_PASSWORD: z.string().optional(),
 })
