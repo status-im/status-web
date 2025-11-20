@@ -38,6 +38,86 @@ export const MARKET_PROXY_REVALIDATION_TIMES = {
 type Revalidation =
   (typeof MARKET_PROXY_REVALIDATION_TIMES)[keyof typeof MARKET_PROXY_REVALIDATION_TIMES]
 
+// Default empty values for token metadata
+const EMPTY_METADATA_DEFAULTS: Partial<TokenMetadataResponseBody['Data']> = {
+  ID: 0,
+  ID_LEGACY: 0,
+  ID_PARENT_ASSET: null,
+  ID_ASSET_ISSUER: 0,
+  URI: '',
+  ASSET_ISSUER_NAME: '',
+  PARENT_ASSET_SYMBOL: null,
+  CREATED_ON: 0,
+  PUBLIC_NOTICE: null,
+  LAUNCH_DATE: 0,
+  PREVIOUS_ASSET_SYMBOLS: null,
+  ASSET_ALTERNATIVE_IDS: [],
+  ASSET_DECIMAL_POINTS: 18,
+  SUPPORTED_PLATFORMS: [],
+  ASSET_CUSTODIANS: [],
+  CONTROLLED_ADDRESSES: null,
+  ASSET_SECURITY_METRICS: [],
+  SUPPLY_FUTURE: 0,
+  SUPPLY_LOCKED: 0,
+  SUPPLY_BURNT: 0,
+  SUPPLY_STAKED: 0,
+  LAST_BLOCK_MINT: 0,
+  LAST_BLOCK_BURN: null,
+  BURN_ADDRESSES: [],
+  LOCKED_ADDRESSES: [],
+  HAS_SMART_CONTRACT_CAPABILITIES: false,
+  SMART_CONTRACT_SUPPORT_TYPE: '',
+  TARGET_BLOCK_MINT: 0,
+  TARGET_BLOCK_TIME: 0,
+  LAST_BLOCK_NUMBER: 0,
+  LAST_BLOCK_TIMESTAMP: 0,
+  LAST_BLOCK_TIME: 0,
+  LAST_BLOCK_SIZE: 0,
+  LAST_BLOCK_ISSUER: '',
+  LAST_BLOCK_TRANSACTION_FEE_TOTAL: 0,
+  LAST_BLOCK_TRANSACTION_COUNT: 0,
+  LAST_BLOCK_HASHES_PER_SECOND: 0,
+  LAST_BLOCK_DIFFICULTY: 0,
+  SUPPORTED_STANDARDS: [],
+  LAYER_TWO_SOLUTIONS: [],
+  PRIVACY_SOLUTIONS: [],
+  CODE_REPOSITORIES: [],
+  SUBREDDITS: [],
+  TWITTER_ACCOUNTS: [],
+  DISCORD_SERVERS: [],
+  TELEGRAM_GROUPS: null,
+  OTHER_SOCIAL_NETWORKS: [],
+  HELD_TOKEN_SALE: false,
+  TOKEN_SALES: [],
+  HELD_EQUITY_SALE: false,
+  BLOG_URL: '',
+  OTHER_DOCUMENT_URLS: [],
+  RPC_OPERATORS: [],
+  IS_EXCLUDED_FROM_MKT_CAP_TOPLIST: null,
+  ASSET_INDUSTRIES: [],
+  CONSENSUS_MECHANISMS: [],
+  CONSENSUS_ALGORITHM_TYPES: [],
+  HASHING_ALGORITHM_TYPES: [],
+  MKT_CAP_PENALTY: 0,
+  SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_DIRECT_USD: 0,
+  SPOT_MOVING_24_HOUR_QUOTE_VOLUME_DIRECT_USD: 0,
+  SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_USD: 0,
+  SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD: 0,
+  SPOT_MOVING_7_DAY_QUOTE_VOLUME_DIRECT_USD: 0,
+  SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_USD: 0,
+  SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: 0,
+  SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD: 0,
+  SPOT_MOVING_30_DAY_QUOTE_VOLUME_DIRECT_USD: 0,
+  SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_USD: 0,
+  SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: 0,
+  SPOT_MOVING_7_DAY_CHANGE_USD: 0,
+  SPOT_MOVING_7_DAY_CHANGE_PERCENTAGE_USD: 0,
+  SPOT_MOVING_30_DAY_CHANGE_USD: 0,
+  SPOT_MOVING_30_DAY_CHANGE_PERCENTAGE_USD: 0,
+  PROJECT_LEADERS: [],
+  ASSOCIATED_CONTACT_DETAILS: [],
+}
+
 /**
  * @see https://docs.coingecko.com/reference/coins-id-market-chart
  *
@@ -89,6 +169,102 @@ export async function legacy_fetchTokenPriceHistory(
 }
 
 /**
+ * Helper: Extract description from CoinGecko description object
+ */
+function _getDescription(description: Record<string, string>): string {
+  if (!description) return ''
+  if (description['en']) return description['en']
+
+  const languages = ['en']
+
+  for (const lang of languages) {
+    if (description[lang]) return description[lang]
+  }
+
+  const firstDescription = Object.values(description)[0]
+  return firstDescription || ''
+}
+
+/**
+ * Helper: Convert CoinGecko coin data to token metadata format
+ */
+function _convertCoinGeckoToTokenMetadata(coinData: {
+  id: string
+  symbol: string
+  name: string
+  image: { small: string; large: string; thumb: string }
+  market_cap_rank?: number | null
+  market_data: {
+    current_price: { usd: number }
+    market_cap: { usd: number }
+    market_cap_rank?: number | null
+    total_volume: { usd: number }
+    price_change_24h: number
+    price_change_percentage_24h: number
+    circulating_supply: number
+    total_supply: number
+    max_supply: number | null
+  }
+  description: Record<string, string>
+  links: {
+    homepage: string[]
+    blockchain_site: string[]
+    whitepaper: string | null
+  }
+}): TokenMetadataResponseBody['Data'] {
+  const description = _getDescription(coinData.description)
+  const now = Date.now()
+  const { market_data } = coinData
+
+  // market_cap_rank can be at top level or in market_data
+  const marketCapRank =
+    coinData.market_cap_rank ?? market_data.market_cap_rank ?? undefined
+
+  return {
+    ...EMPTY_METADATA_DEFAULTS,
+    TYPE: 'CRYPTO',
+    ASSET_TYPE: 'CRYPTO',
+    SYMBOL: coinData.symbol.toUpperCase(),
+    UPDATED_ON: now,
+    NAME: coinData.name,
+    LOGO_URL: coinData.image.large || coinData.image.small,
+    ASSET_DESCRIPTION_SNIPPET: description.substring(0, 200),
+    SUPPLY_MAX: market_data.max_supply || 0,
+    SUPPLY_ISSUED: market_data.total_supply || 0,
+    SUPPLY_TOTAL: market_data.total_supply || 0,
+    SUPPLY_CIRCULATING: market_data.circulating_supply || 0,
+    WEBSITE_URL: coinData.links.homepage?.[0] || '',
+    WHITE_PAPER_URL: coinData.links.whitepaper || '',
+    EXPLORER_ADDRESSES: coinData.links.blockchain_site.map(url => ({
+      URL: url,
+    })),
+    PRICE_USD: market_data.current_price.usd,
+    PRICE_USD_SOURCE: 'CoinGecko',
+    PRICE_USD_LAST_UPDATE_TS: now,
+    CIRCULATING_MKT_CAP_USD: market_data.market_cap.usd,
+    TOTAL_MKT_CAP_USD: market_data.market_cap.usd,
+    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: market_data.total_volume.usd,
+    SPOT_MOVING_24_HOUR_CHANGE_USD: market_data.price_change_24h,
+    SPOT_MOVING_24_HOUR_CHANGE_PERCENTAGE_USD:
+      market_data.price_change_percentage_24h,
+    TOPLIST_BASE_RANK: {
+      CREATED_ON: 0,
+      LAUNCH_DATE: 0,
+      CIRCULATING_MKT_CAP_USD: market_data.market_cap.usd,
+      TOTAL_MKT_CAP_USD: market_data.market_cap.usd,
+      SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: market_data.total_volume.usd,
+      SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: 0,
+      SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: 0,
+      RANK: marketCapRank,
+    },
+    ASSET_DESCRIPTION: description,
+    ASSET_DESCRIPTION_SUMMARY: description.substring(0, 500),
+    SEO_TITLE: coinData.name,
+    SEO_DESCRIPTION: description.substring(0, 160),
+  } as TokenMetadataResponseBody['Data']
+}
+
+/**
  * @see https://docs.coingecko.com/reference/coins-id
  *
  * Fetches token metadata using CoinGecko API through proxy.
@@ -97,14 +273,8 @@ export async function fetchTokenMetadata(
   symbol: string,
   revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
 ) {
-  // First, get coin id from symbol
   const coinId = await _getCoinIdFromSymbol(symbol)
-  if (!coinId) {
-    throw new Error(`Coin not found for symbol: ${symbol}`)
-  }
-
-  // Validate coin id is not the same as symbol (which would indicate a lookup issue)
-  if (coinId.toLowerCase() === symbol.toLowerCase()) {
+  if (!coinId || coinId.toLowerCase() === symbol.toLowerCase()) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
 
@@ -121,9 +291,11 @@ export async function fetchTokenMetadata(
     symbol: string
     name: string
     image: { small: string; large: string; thumb: string }
+    market_cap_rank?: number | null
     market_data: {
       current_price: { usd: number }
       market_cap: { usd: number }
+      market_cap_rank?: number | null
       total_volume: { usd: number }
       price_change_24h: number
       price_change_percentage_24h: number
@@ -139,167 +311,7 @@ export async function fetchTokenMetadata(
     }
   }>(url, revalidate, 'fetchTokenMetadata')
 
-  // Get description in preferred order: en, then any other language
-  const getDescription = (): string => {
-    if (!coinData.description) {
-      return ''
-    }
-
-    if (coinData.description['en']) {
-      return coinData.description['en']
-    }
-    // Try other common languages
-    const languages = ['ko', 'ja', 'zh', 'es', 'fr', 'de', 'pt', 'ru']
-
-    for (const lang of languages) {
-      if (coinData.description[lang]) {
-        return coinData.description[lang]
-      }
-    }
-
-    const firstDescription = Object.values(coinData.description)[0] as
-      | string
-      | undefined
-    if (firstDescription) {
-      return firstDescription
-    }
-
-    return ''
-  }
-
-  const description = getDescription()
-
-  // Convert CoinGecko format to legacy format
-  const data: TokenMetadataResponseBody['Data'] = {
-    ID: 0, // CoinGecko doesn't have numeric ID
-    TYPE: 'CRYPTO',
-    ID_LEGACY: 0,
-    ID_PARENT_ASSET: null,
-    ID_ASSET_ISSUER: 0,
-    SYMBOL: coinData.symbol.toUpperCase(),
-    URI: '',
-    ASSET_TYPE: 'CRYPTO',
-    ASSET_ISSUER_NAME: '',
-    PARENT_ASSET_SYMBOL: null,
-    CREATED_ON: 0,
-    UPDATED_ON: Date.now(),
-    PUBLIC_NOTICE: null,
-    NAME: coinData.name,
-    LOGO_URL: coinData.image.large || coinData.image.small,
-    LAUNCH_DATE: 0,
-    PREVIOUS_ASSET_SYMBOLS: null,
-    ASSET_ALTERNATIVE_IDS: [],
-    ASSET_DESCRIPTION_SNIPPET: description?.substring(0, 200) || '',
-    ASSET_DECIMAL_POINTS: 18,
-    SUPPORTED_PLATFORMS: [] as Array<{
-      BLOCKCHAIN: string
-      TOKEN_STANDARD: string
-      BRIDGE_OPERATOR: string
-      EXPLORER_URL: string
-      SMART_CONTRACT_ADDRESS: string
-      LAUNCH_DATE: number
-      RETIRE_DATE?: number
-      TRADING_AS: string
-      DECIMALS: number
-      IS_INHERITED: boolean
-    }>,
-    ASSET_CUSTODIANS: [],
-    CONTROLLED_ADDRESSES: null,
-    ASSET_SECURITY_METRICS: [],
-    SUPPLY_MAX: coinData.market_data.max_supply || 0,
-    SUPPLY_ISSUED: coinData.market_data.total_supply || 0,
-    SUPPLY_TOTAL: coinData.market_data.total_supply || 0,
-    SUPPLY_CIRCULATING: coinData.market_data.circulating_supply || 0,
-    SUPPLY_FUTURE: 0,
-    SUPPLY_LOCKED: 0,
-    SUPPLY_BURNT: 0,
-    SUPPLY_STAKED: 0,
-    LAST_BLOCK_MINT: 0,
-    LAST_BLOCK_BURN: null,
-    BURN_ADDRESSES: [],
-    LOCKED_ADDRESSES: [],
-    HAS_SMART_CONTRACT_CAPABILITIES: false,
-    SMART_CONTRACT_SUPPORT_TYPE: '',
-    TARGET_BLOCK_MINT: 0,
-    TARGET_BLOCK_TIME: 0,
-    LAST_BLOCK_NUMBER: 0,
-    LAST_BLOCK_TIMESTAMP: 0,
-    LAST_BLOCK_TIME: 0,
-    LAST_BLOCK_SIZE: 0,
-    LAST_BLOCK_ISSUER: '',
-    LAST_BLOCK_TRANSACTION_FEE_TOTAL: 0,
-    LAST_BLOCK_TRANSACTION_COUNT: 0,
-    LAST_BLOCK_HASHES_PER_SECOND: 0,
-    LAST_BLOCK_DIFFICULTY: 0,
-    SUPPORTED_STANDARDS: [],
-    LAYER_TWO_SOLUTIONS: [],
-    PRIVACY_SOLUTIONS: [],
-    CODE_REPOSITORIES: [],
-    SUBREDDITS: [],
-    TWITTER_ACCOUNTS: [],
-    DISCORD_SERVERS: [],
-    TELEGRAM_GROUPS: null,
-    OTHER_SOCIAL_NETWORKS: [],
-    HELD_TOKEN_SALE: false,
-    TOKEN_SALES: [],
-    HELD_EQUITY_SALE: false,
-    WEBSITE_URL: coinData.links.homepage?.[0] || '',
-    BLOG_URL: '',
-    WHITE_PAPER_URL: coinData.links.whitepaper || '',
-    OTHER_DOCUMENT_URLS: [],
-    EXPLORER_ADDRESSES: coinData.links.blockchain_site.map(url => ({
-      URL: url,
-    })),
-    RPC_OPERATORS: [],
-    IS_EXCLUDED_FROM_MKT_CAP_TOPLIST: null,
-    ASSET_INDUSTRIES: [],
-    CONSENSUS_MECHANISMS: [],
-    CONSENSUS_ALGORITHM_TYPES: [],
-    HASHING_ALGORITHM_TYPES: [],
-    PRICE_USD: coinData.market_data.current_price.usd,
-    PRICE_USD_SOURCE: 'CoinGecko',
-    PRICE_USD_LAST_UPDATE_TS: Date.now(),
-    MKT_CAP_PENALTY: 0,
-    CIRCULATING_MKT_CAP_USD: coinData.market_data.market_cap.usd,
-    TOTAL_MKT_CAP_USD: coinData.market_data.market_cap.usd,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_DIRECT_USD: 0,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_DIRECT_USD: 0,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_USD: 0,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD: coinData.market_data.total_volume.usd,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD: 0,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_DIRECT_USD: 0,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_USD: 0,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: 0,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD: 0,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_DIRECT_USD: 0,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_USD: 0,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: 0,
-    SPOT_MOVING_24_HOUR_CHANGE_USD: coinData.market_data.price_change_24h,
-    SPOT_MOVING_24_HOUR_CHANGE_PERCENTAGE_USD:
-      coinData.market_data.price_change_percentage_24h,
-    SPOT_MOVING_7_DAY_CHANGE_USD: 0,
-    SPOT_MOVING_7_DAY_CHANGE_PERCENTAGE_USD: 0,
-    SPOT_MOVING_30_DAY_CHANGE_USD: 0,
-    SPOT_MOVING_30_DAY_CHANGE_PERCENTAGE_USD: 0,
-    TOPLIST_BASE_RANK: {
-      CREATED_ON: 0,
-      LAUNCH_DATE: 0,
-      CIRCULATING_MKT_CAP_USD: coinData.market_data.market_cap.usd,
-      TOTAL_MKT_CAP_USD: coinData.market_data.market_cap.usd,
-      SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD:
-        coinData.market_data.total_volume.usd,
-      SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD: 0,
-      SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD: 0,
-    },
-    ASSET_DESCRIPTION: description,
-    ASSET_DESCRIPTION_SUMMARY: description?.substring(0, 500) || '',
-    PROJECT_LEADERS: [],
-    ASSOCIATED_CONTACT_DETAILS: [],
-    SEO_TITLE: coinData.name,
-    SEO_DESCRIPTION: description?.substring(0, 160) || '',
-  }
-
-  return data
+  return _convertCoinGeckoToTokenMetadata(coinData)
 }
 
 /**
@@ -313,141 +325,64 @@ export async function deprecated_fetchTokenMetadata(
 ) {
   const metadata = await fetchTokenMetadata(symbol, revalidate)
 
-  // Convert to deprecated format
-  const data: deprecated_TokensMetadataResponseBody['Data'][string] = {
+  // Convert to deprecated format - most fields are the same, only SUPPORTED_PLATFORMS needs mapping
+  return {
+    ...metadata,
     ID: 0,
-    TYPE: metadata.TYPE,
     ID_LEGACY: 0,
     ID_PARENT_ASSET: null,
     ID_ASSET_ISSUER: 0,
-    SYMBOL: metadata.SYMBOL,
-    URI: metadata.URI,
-    ASSET_TYPE: metadata.ASSET_TYPE,
-    ASSET_ISSUER_NAME: metadata.ASSET_ISSUER_NAME,
     PARENT_ASSET_SYMBOL: null,
-    CREATED_ON: metadata.CREATED_ON,
-    UPDATED_ON: metadata.UPDATED_ON,
-    PUBLIC_NOTICE: metadata.PUBLIC_NOTICE,
-    NAME: metadata.NAME,
-    LOGO_URL: metadata.LOGO_URL,
-    LAUNCH_DATE: metadata.LAUNCH_DATE,
-    PREVIOUS_ASSET_SYMBOLS: metadata.PREVIOUS_ASSET_SYMBOLS,
-    ASSET_ALTERNATIVE_IDS: metadata.ASSET_ALTERNATIVE_IDS,
-    ASSET_DESCRIPTION_SNIPPET: metadata.ASSET_DESCRIPTION_SNIPPET,
-    ASSET_DECIMAL_POINTS: metadata.ASSET_DECIMAL_POINTS,
     SUPPORTED_PLATFORMS: metadata.SUPPORTED_PLATFORMS.map(platform => ({
-      BLOCKCHAIN: platform.BLOCKCHAIN,
-      TOKEN_STANDARD: platform.TOKEN_STANDARD,
-      BRIDGE_OPERATOR: platform.BRIDGE_OPERATOR,
-      EXPLORER_URL: platform.EXPLORER_URL,
-      SMART_CONTRACT_ADDRESS: platform.SMART_CONTRACT_ADDRESS,
+      ...platform,
       LAUNCH_DATE: platform.LAUNCH_DATE ?? 0,
-      RETIRE_DATE: platform.RETIRE_DATE,
-      TRADING_AS: platform.TRADING_AS,
-      DECIMALS: platform.DECIMALS,
-      IS_INHERITED: platform.IS_INHERITED,
     })),
-    ASSET_CUSTODIANS: metadata.ASSET_CUSTODIANS,
-    CONTROLLED_ADDRESSES: metadata.CONTROLLED_ADDRESSES,
-    ASSET_SECURITY_METRICS: metadata.ASSET_SECURITY_METRICS,
-    SUPPLY_MAX: metadata.SUPPLY_MAX,
-    SUPPLY_ISSUED: metadata.SUPPLY_ISSUED,
-    SUPPLY_TOTAL: metadata.SUPPLY_TOTAL,
-    SUPPLY_CIRCULATING: metadata.SUPPLY_CIRCULATING,
-    SUPPLY_FUTURE: metadata.SUPPLY_FUTURE,
-    SUPPLY_LOCKED: metadata.SUPPLY_LOCKED,
-    SUPPLY_BURNT: metadata.SUPPLY_BURNT,
-    SUPPLY_STAKED: metadata.SUPPLY_STAKED,
-    LAST_BLOCK_MINT: metadata.LAST_BLOCK_MINT,
-    LAST_BLOCK_BURN: metadata.LAST_BLOCK_BURN,
-    BURN_ADDRESSES: metadata.BURN_ADDRESSES,
-    LOCKED_ADDRESSES: metadata.LOCKED_ADDRESSES,
-    HAS_SMART_CONTRACT_CAPABILITIES: metadata.HAS_SMART_CONTRACT_CAPABILITIES,
-    SMART_CONTRACT_SUPPORT_TYPE: metadata.SMART_CONTRACT_SUPPORT_TYPE,
-    TARGET_BLOCK_MINT: metadata.TARGET_BLOCK_MINT,
-    TARGET_BLOCK_TIME: metadata.TARGET_BLOCK_TIME,
-    LAST_BLOCK_NUMBER: metadata.LAST_BLOCK_NUMBER,
-    LAST_BLOCK_TIMESTAMP: metadata.LAST_BLOCK_TIMESTAMP,
-    LAST_BLOCK_TIME: metadata.LAST_BLOCK_TIME,
-    LAST_BLOCK_SIZE: metadata.LAST_BLOCK_SIZE,
-    LAST_BLOCK_ISSUER: metadata.LAST_BLOCK_ISSUER,
-    LAST_BLOCK_TRANSACTION_FEE_TOTAL: metadata.LAST_BLOCK_TRANSACTION_FEE_TOTAL,
-    LAST_BLOCK_TRANSACTION_COUNT: metadata.LAST_BLOCK_TRANSACTION_COUNT,
-    LAST_BLOCK_HASHES_PER_SECOND: metadata.LAST_BLOCK_HASHES_PER_SECOND,
-    LAST_BLOCK_DIFFICULTY: metadata.LAST_BLOCK_DIFFICULTY,
-    SUPPORTED_STANDARDS: metadata.SUPPORTED_STANDARDS,
-    LAYER_TWO_SOLUTIONS: metadata.LAYER_TWO_SOLUTIONS,
-    PRIVACY_SOLUTIONS: metadata.PRIVACY_SOLUTIONS,
-    CODE_REPOSITORIES: metadata.CODE_REPOSITORIES,
-    SUBREDDITS: metadata.SUBREDDITS,
-    TWITTER_ACCOUNTS: metadata.TWITTER_ACCOUNTS,
-    DISCORD_SERVERS: metadata.DISCORD_SERVERS,
-    TELEGRAM_GROUPS: metadata.TELEGRAM_GROUPS,
-    OTHER_SOCIAL_NETWORKS: metadata.OTHER_SOCIAL_NETWORKS,
-    HELD_TOKEN_SALE: metadata.HELD_TOKEN_SALE,
-    TOKEN_SALES: metadata.TOKEN_SALES,
-    HELD_EQUITY_SALE: metadata.HELD_EQUITY_SALE,
-    WEBSITE_URL: metadata.WEBSITE_URL,
-    BLOG_URL: metadata.BLOG_URL,
-    WHITE_PAPER_URL: metadata.WHITE_PAPER_URL,
-    OTHER_DOCUMENT_URLS: metadata.OTHER_DOCUMENT_URLS,
-    EXPLORER_ADDRESSES: metadata.EXPLORER_ADDRESSES,
-    RPC_OPERATORS: metadata.RPC_OPERATORS,
-    IS_EXCLUDED_FROM_MKT_CAP_TOPLIST: metadata.IS_EXCLUDED_FROM_MKT_CAP_TOPLIST,
-    ASSET_INDUSTRIES: metadata.ASSET_INDUSTRIES,
-    CONSENSUS_MECHANISMS: metadata.CONSENSUS_MECHANISMS,
-    CONSENSUS_ALGORITHM_TYPES: metadata.CONSENSUS_ALGORITHM_TYPES,
-    HASHING_ALGORITHM_TYPES: metadata.HASHING_ALGORITHM_TYPES,
-    PRICE_USD: metadata.PRICE_USD,
-    PRICE_USD_SOURCE: metadata.PRICE_USD_SOURCE,
-    PRICE_USD_LAST_UPDATE_TS: metadata.PRICE_USD_LAST_UPDATE_TS,
-    MKT_CAP_PENALTY: metadata.MKT_CAP_PENALTY,
-    CIRCULATING_MKT_CAP_USD: metadata.CIRCULATING_MKT_CAP_USD,
-    TOTAL_MKT_CAP_USD: metadata.TOTAL_MKT_CAP_USD,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_DIRECT_USD:
-      metadata.SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_DIRECT_USD,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_DIRECT_USD:
-      metadata.SPOT_MOVING_24_HOUR_QUOTE_VOLUME_DIRECT_USD,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_USD:
-      metadata.SPOT_MOVING_24_HOUR_QUOTE_VOLUME_TOP_TIER_USD,
-    SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD:
-      metadata.SPOT_MOVING_24_HOUR_QUOTE_VOLUME_USD,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD:
-      metadata.SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_DIRECT_USD:
-      metadata.SPOT_MOVING_7_DAY_QUOTE_VOLUME_DIRECT_USD,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_USD:
-      metadata.SPOT_MOVING_7_DAY_QUOTE_VOLUME_TOP_TIER_USD,
-    SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD:
-      metadata.SPOT_MOVING_7_DAY_QUOTE_VOLUME_USD,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD:
-      metadata.SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_DIRECT_USD,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_DIRECT_USD:
-      metadata.SPOT_MOVING_30_DAY_QUOTE_VOLUME_DIRECT_USD,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_USD:
-      metadata.SPOT_MOVING_30_DAY_QUOTE_VOLUME_TOP_TIER_USD,
-    SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD:
-      metadata.SPOT_MOVING_30_DAY_QUOTE_VOLUME_USD,
-    SPOT_MOVING_24_HOUR_CHANGE_USD: metadata.SPOT_MOVING_24_HOUR_CHANGE_USD,
-    SPOT_MOVING_24_HOUR_CHANGE_PERCENTAGE_USD:
-      metadata.SPOT_MOVING_24_HOUR_CHANGE_PERCENTAGE_USD,
-    SPOT_MOVING_7_DAY_CHANGE_USD: metadata.SPOT_MOVING_7_DAY_CHANGE_USD,
-    SPOT_MOVING_7_DAY_CHANGE_PERCENTAGE_USD:
-      metadata.SPOT_MOVING_7_DAY_CHANGE_PERCENTAGE_USD,
-    SPOT_MOVING_30_DAY_CHANGE_USD: metadata.SPOT_MOVING_30_DAY_CHANGE_USD,
-    SPOT_MOVING_30_DAY_CHANGE_PERCENTAGE_USD:
-      metadata.SPOT_MOVING_30_DAY_CHANGE_PERCENTAGE_USD,
-    TOPLIST_BASE_RANK: metadata.TOPLIST_BASE_RANK,
-    ASSET_DESCRIPTION: metadata.ASSET_DESCRIPTION,
-    ASSET_DESCRIPTION_SUMMARY: metadata.ASSET_DESCRIPTION_SUMMARY,
-    PROJECT_LEADERS: metadata.PROJECT_LEADERS,
-    ASSOCIATED_CONTACT_DETAILS: metadata.ASSOCIATED_CONTACT_DETAILS,
-    SEO_TITLE: metadata.SEO_TITLE,
-    SEO_DESCRIPTION: metadata.SEO_DESCRIPTION,
-  }
-
-  return data
+  } as deprecated_TokensMetadataResponseBody['Data'][string]
 }
+
+const EMPTY_LEGACY_RESEARCH_DEFAULTS = {
+  ContentCreatedOn: 0,
+  Description: '',
+  AssetTokenStatus: 'Active' as const,
+  Algorithm: '',
+  ProofType: '',
+  SortOrder: '0',
+  Sponsored: false,
+  Taxonomy: {
+    Access: '',
+    FCA: '',
+    FINMA: '',
+    Industry: '',
+    CollateralizedAsset: '',
+    CollateralizedAssetType: '',
+    CollateralType: '',
+    CollateralInfo: '',
+  },
+  Rating: {
+    Weiss: {
+      Rating: '',
+      TechnologyAdoptionRating: '',
+      MarketPerformanceRating: '',
+    },
+  },
+  IsTrading: true,
+  TotalCoinsMined: 0,
+  CirculatingSupply: 0,
+  BlockNumber: 0,
+  NetHashesPerSecond: 0,
+  BlockReward: 0,
+  BlockTime: 0,
+  AssetLaunchDate: '',
+  AssetWhitepaperUrl: '',
+  AssetWebsiteUrl: '',
+  MaxSupply: 0,
+  MktCapPenalty: 0,
+  IsUsedInDefi: 0,
+  IsUsedInNft: 0,
+  PlatformType: '',
+  DecimalPoints: 18,
+  AlgorithmType: '',
+} as const
 
 /**
  * @see https://docs.coingecko.com/reference/coins-list
@@ -459,71 +394,98 @@ export async function legacy_research_fetchTokenMetadata(
   revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA,
 ) {
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
-  // Note: include_platform parameter removed - API only accepts 'true' as valid boolean
 
   const coins = await _fetchWithAuth<
     Array<{ id: string; symbol: string; name: string }>
   >(url, revalidate, 'legacy_research_fetchTokenMetadata')
 
   const coin = coins.find(c => c.symbol.toLowerCase() === symbol.toLowerCase())
-
   if (!coin) {
     throw new Error(`Coin not found for symbol: ${symbol}`)
   }
 
-  // Convert to legacy format
-  const data: legacy_research_TokenMetadataResponseBody['Data'][string] = {
+  return {
+    ...EMPTY_LEGACY_RESEARCH_DEFAULTS,
     Id: coin.id,
     Url: `https://www.coingecko.com/en/coins/${coin.id}`,
     ImageUrl: `https://assets.coingecko.com/coins/images/${coin.id}/large/${coin.id}.png`,
-    ContentCreatedOn: 0,
     Name: coin.name,
     Symbol: coin.symbol.toUpperCase(),
     CoinName: coin.name,
     FullName: coin.name,
-    Description: '',
-    AssetTokenStatus: 'Active',
-    Algorithm: '',
-    ProofType: '',
-    SortOrder: '0',
-    Sponsored: false,
-    Taxonomy: {
-      Access: '',
-      FCA: '',
-      FINMA: '',
-      Industry: '',
-      CollateralizedAsset: '',
-      CollateralizedAssetType: '',
-      CollateralType: '',
-      CollateralInfo: '',
-    },
-    Rating: {
-      Weiss: {
-        Rating: '',
-        TechnologyAdoptionRating: '',
-        MarketPerformanceRating: '',
-      },
-    },
-    IsTrading: true,
-    TotalCoinsMined: 0,
-    CirculatingSupply: 0,
-    BlockNumber: 0,
-    NetHashesPerSecond: 0,
-    BlockReward: 0,
-    BlockTime: 0,
-    AssetLaunchDate: '',
-    AssetWhitepaperUrl: '',
-    AssetWebsiteUrl: '',
-    MaxSupply: 0,
-    MktCapPenalty: 0,
-    IsUsedInDefi: 0,
-    IsUsedInNft: 0,
-    PlatformType: '',
-    DecimalPoints: 18,
-    AlgorithmType: '',
-  }
+  } as legacy_research_TokenMetadataResponseBody['Data'][string]
+}
 
-  return data
+/**
+ * Helper: Convert CoinGecko price data to legacy format
+ */
+function _convertCoinGeckoToLegacyPrice(
+  symbol: string,
+  coinId: string,
+  price: {
+    usd: number
+    usd_24h_change?: number
+    usd_market_cap?: number
+    usd_24h_vol?: number
+  },
+): legacy_TokensPriceResponseBody['RAW'][string] {
+  const now = Math.floor(Date.now() / 1000)
+  const volume24h = price.usd_24h_vol || 0
+  const volume24hTo = volume24h * price.usd
+  const change24h = (price.usd_24h_change || 0) * price.usd * 0.01
+
+  return {
+    USD: {
+      TYPE: '5',
+      MARKET: 'CCCAGG',
+      FROMSYMBOL: symbol.toUpperCase(),
+      TOSYMBOL: 'USD',
+      FLAGS: '4',
+      PRICE: price.usd,
+      LASTUPDATE: now,
+      MEDIAN: price.usd,
+      LASTVOLUME: 0,
+      LASTVOLUMETO: 0,
+      LASTTRADEID: '',
+      VOLUMEDAY: 0,
+      VOLUMEDAYTO: 0,
+      VOLUME24HOUR: volume24h,
+      VOLUME24HOURTO: volume24hTo,
+      OPENDAY: price.usd,
+      HIGHDAY: price.usd,
+      LOWDAY: price.usd,
+      OPEN24HOUR: price.usd,
+      HIGH24HOUR: price.usd,
+      LOW24HOUR: price.usd,
+      LASTMARKET: 'CoinGecko',
+      VOLUMEHOUR: 0,
+      VOLUMEHOURTO: 0,
+      OPENHOUR: price.usd,
+      HIGHHOUR: price.usd,
+      LOWHOUR: price.usd,
+      TOPTIERVOLUME24HOUR: volume24h,
+      TOPTIERVOLUME24HOURTO: volume24hTo,
+      CHANGE24HOUR: change24h,
+      CHANGEPCT24HOUR: price.usd_24h_change || 0,
+      CHANGEDAY: 0,
+      CHANGEPCTDAY: 0,
+      CHANGEHOUR: 0,
+      CHANGEPCTHOUR: 0,
+      CONVERSIONTYPE: 'direct',
+      CONVERSIONSYMBOL: 'USD',
+      CONVERSIONLASTUPDATE: now,
+      SUPPLY: 0,
+      MKTCAP: price.usd_market_cap || 0,
+      MKTCAPPENALTY: 0,
+      CIRCULATINGSUPPLY: 0,
+      CIRCULATINGSUPPLYMKTCAP: price.usd_market_cap || 0,
+      TOTALVOLUME24H: volume24h,
+      TOTALVOLUME24HTO: volume24hTo,
+      TOTALTOPTIERVOLUME24H: volume24h,
+      TOTALTOPTIERVOLUME24HTO: volume24hTo,
+      IMAGEURL: `https://assets.coingecko.com/coins/images/${coinId}/large/${coinId}.png`,
+    },
+  }
 }
 
 /**
@@ -535,18 +497,12 @@ export async function legacy_fetchTokensPrice(
   symbols: string[],
   revalidate: Revalidation = MARKET_PROXY_REVALIDATION_TIMES.CURRENT_PRICE,
 ) {
-  if (symbols.length === 0) {
-    return {}
-  }
+  if (symbols.length === 0) return {}
 
   try {
-    // Get coin ids from symbols
     const coinIdMap = await _getCoinIdsFromSymbols(symbols)
     const coinIds = Object.values(coinIdMap).filter(Boolean)
-
-    if (coinIds.length === 0) {
-      return {}
-    }
+    if (coinIds.length === 0) return {}
 
     const url = new URL(`${PROXY_BASE_URL}/v1/simple/price`)
     url.searchParams.set('ids', coinIds.join(','))
@@ -567,70 +523,17 @@ export async function legacy_fetchTokensPrice(
       >
     >(url, revalidate, 'legacy_fetchTokensPrice')
 
-    // Convert to legacy format
     const data: legacy_TokensPriceResponseBody['RAW'] = {}
 
     for (const symbol of symbols) {
       const coinId = coinIdMap[symbol.toLowerCase()]
-      if (!coinId || !priceData[coinId]) {
-        continue
-      }
+      if (!coinId || !priceData[coinId]) continue
 
-      const price = priceData[coinId]
-      const now = Math.floor(Date.now() / 1000)
-
-      const priceDataEntry = {
-        USD: {
-          TYPE: '5',
-          MARKET: 'CCCAGG',
-          FROMSYMBOL: symbol.toUpperCase(),
-          TOSYMBOL: 'USD',
-          FLAGS: '4',
-          PRICE: price.usd,
-          LASTUPDATE: now,
-          MEDIAN: price.usd,
-          LASTVOLUME: 0,
-          LASTVOLUMETO: 0,
-          LASTTRADEID: '',
-          VOLUMEDAY: 0,
-          VOLUMEDAYTO: 0,
-          VOLUME24HOUR: price.usd_24h_vol || 0,
-          VOLUME24HOURTO: (price.usd_24h_vol || 0) * price.usd,
-          OPENDAY: price.usd,
-          HIGHDAY: price.usd,
-          LOWDAY: price.usd,
-          OPEN24HOUR: price.usd,
-          HIGH24HOUR: price.usd,
-          LOW24HOUR: price.usd,
-          LASTMARKET: 'CoinGecko',
-          VOLUMEHOUR: 0,
-          VOLUMEHOURTO: 0,
-          OPENHOUR: price.usd,
-          HIGHHOUR: price.usd,
-          LOWHOUR: price.usd,
-          TOPTIERVOLUME24HOUR: price.usd_24h_vol || 0,
-          TOPTIERVOLUME24HOURTO: (price.usd_24h_vol || 0) * price.usd,
-          CHANGE24HOUR: (price.usd_24h_change || 0) * price.usd * 0.01,
-          CHANGEPCT24HOUR: price.usd_24h_change || 0,
-          CHANGEDAY: 0,
-          CHANGEPCTDAY: 0,
-          CHANGEHOUR: 0,
-          CHANGEPCTHOUR: 0,
-          CONVERSIONTYPE: 'direct',
-          CONVERSIONSYMBOL: 'USD',
-          CONVERSIONLASTUPDATE: now,
-          SUPPLY: 0,
-          MKTCAP: price.usd_market_cap || 0,
-          MKTCAPPENALTY: 0,
-          CIRCULATINGSUPPLY: 0,
-          CIRCULATINGSUPPLYMKTCAP: price.usd_market_cap || 0,
-          TOTALVOLUME24H: price.usd_24h_vol || 0,
-          TOTALVOLUME24HTO: (price.usd_24h_vol || 0) * price.usd,
-          TOTALTOPTIERVOLUME24H: price.usd_24h_vol || 0,
-          TOTALTOPTIERVOLUME24HTO: (price.usd_24h_vol || 0) * price.usd,
-          IMAGEURL: `https://assets.coingecko.com/coins/images/${coinId}/large/${coinId}.png`,
-        },
-      }
+      const priceDataEntry = _convertCoinGeckoToLegacyPrice(
+        symbol,
+        coinId,
+        priceData[coinId],
+      )
 
       // Store with both original symbol and uppercase symbol for compatibility
       data[symbol] = priceDataEntry
@@ -712,6 +615,26 @@ export async function _getCoinIdFromSymbol(
 }
 
 /**
+ * Helper: Map symbols to coin IDs from coin list
+ */
+function _mapSymbolsToCoinIds(
+  symbols: string[],
+  coinList: Array<{ id: string; symbol: string; name: string }>,
+): Record<string, string> {
+  const result: Record<string, string> = {}
+  for (const symbol of symbols) {
+    const coin = coinList.find(
+      c => c.symbol.toLowerCase() === symbol.toLowerCase(),
+    )
+    // Only add if coin id is different from symbol (to avoid false matches)
+    if (coin && coin.id.toLowerCase() !== symbol.toLowerCase()) {
+      result[symbol.toLowerCase()] = coin.id
+    }
+  }
+  return result
+}
+
+/**
  * Helper function to get coin ids from symbols
  */
 async function _getCoinIdsFromSymbols(
@@ -725,25 +648,11 @@ async function _getCoinIdsFromSymbols(
     coinListCacheTime > 0 &&
     now - coinListCacheTime < COIN_LIST_CACHE_TTL
   ) {
-    const result: Record<string, string> = {}
-    for (const symbol of symbols) {
-      const coin = coinListCache.find(
-        c => c.symbol.toLowerCase() === symbol.toLowerCase(),
-      )
-      if (coin) {
-        // Only add if coin id is different from symbol (to avoid false matches)
-        // Note: For SNT, coin ID is "status" which is different from symbol "SNT", so this check passes
-        if (coin.id.toLowerCase() !== symbol.toLowerCase()) {
-          result[symbol.toLowerCase()] = coin.id
-        }
-      }
-    }
-    return result
+    return _mapSymbolsToCoinIds(symbols, coinListCache)
   }
 
   // Fetch coin list
   const url = new URL(`${PROXY_BASE_URL}/v1/coins/list`)
-  // Note: include_platform parameter removed - API only accepts 'true' as valid boolean
 
   try {
     coinListCache = await _fetchWithAuth<
@@ -751,20 +660,7 @@ async function _getCoinIdsFromSymbols(
     >(url, MARKET_PROXY_REVALIDATION_TIMES.TOKEN_METADATA, 'coin_list_cache')
     coinListCacheTime = now
 
-    const result: Record<string, string> = {}
-    for (const symbol of symbols) {
-      const coin = coinListCache.find(
-        c => c.symbol.toLowerCase() === symbol.toLowerCase(),
-      )
-      if (coin) {
-        // Only add if coin id is different from symbol (to avoid false matches)
-        // Note: For SNT, coin ID is "status" which is different from symbol "SNT", so this check passes
-        if (coin.id.toLowerCase() !== symbol.toLowerCase()) {
-          result[symbol.toLowerCase()] = coin.id
-        }
-      }
-    }
-    return result
+    return _mapSymbolsToCoinIds(symbols, coinListCache)
   } catch (error) {
     console.error('Failed to fetch coin list:', error)
     return {}
@@ -789,19 +685,14 @@ async function _fetchWithAuth<T>(
       Authorization: `Basic ${credentials}`,
       'Content-Type': 'application/json',
     },
-    // why: https://nextjs.org/docs/app/building-your-application/data-fetching/fetching#reusing-data-across-multiple-functions
-    // why: https://github.com/vercel/next.js/issues/70946
     cache: 'force-cache',
     next: {
       revalidate,
-      // todo?: revalidate on error
-      // @see https://github.com/vercel/next.js/discussions/57792 for vercel caching error response
       tags: [tag],
     },
   })
 
   if (!response.ok) {
-    // Try to read error response body for better error messages
     let errorMessage = response.statusText
     try {
       const errorBody = await response.text()

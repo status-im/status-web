@@ -39,7 +39,7 @@ type Asset = {
     total_supply: number
     all_time_high: number
     all_time_low: number
-    rank_by_market_cap: number
+    rank_by_market_cap: number | null
     about: string
     volume_24: number
     // links: Record<
@@ -889,10 +889,11 @@ function map(data: {
         ? price.USD['PRICE'] * totalSupply
         : 0
 
+  // market_cap_rank can be 0 (valid rank), so we only use fallback for null/undefined
   const rankByMarketCap =
-    tokenMetadata?.['TOPLIST_BASE_RANK']?.['TOTAL_MKT_CAP_USD'] ||
-    price.USD['MKTCAP'] ||
-    0
+    tokenMetadata?.['TOPLIST_BASE_RANK']?.['RANK'] != null
+      ? tokenMetadata['TOPLIST_BASE_RANK']['RANK']!
+      : null
 
   const about = tokenMetadata?.['ASSET_DESCRIPTION'] || ''
 
